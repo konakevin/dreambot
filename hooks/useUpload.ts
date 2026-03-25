@@ -64,15 +64,9 @@ export function useUpload() {
         .eq('id', user!.id)
         .single();
 
-      // Return with vote counts already reflecting the auto-vote so the
-      // badge shows 100% immediately without waiting for a refetch
-      return {
-        ...inserted,
-        gas_votes: 1,
-        pass_votes: 0,
-        total_votes: 1,
-        username: userData?.username ?? '',
-      } as PendingPost;
+      // Return raw vote counts (0) — SwipeCard adds the optimistic +1
+      // from sessionVotes, so the badge will correctly show 1 vote at 100%
+      return { ...inserted, username: userData?.username ?? '' } as PendingPost;
     },
     onSuccess: (newPost) => {
       setPendingPost(newPost);
