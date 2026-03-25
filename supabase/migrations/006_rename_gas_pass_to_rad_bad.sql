@@ -109,6 +109,9 @@ create trigger sync_wilson_score
   for each row
   execute function public.refresh_wilson_score();
 
+-- ── Drop get_feed before recreating (return type changed) ────────────────────
+drop function if exists public.get_feed(uuid, integer);
+
 -- ── Recreate get_feed with updated column names ───────────────────────────────
 create or replace function public.get_feed(
   p_user_id uuid,
