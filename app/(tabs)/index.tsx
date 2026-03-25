@@ -25,19 +25,31 @@ export default function FeedScreen() {
   const { mutate: toggleFollow } = useToggleFollow();
   const resetToken = useFeedStore((s) => s.resetToken);
   const refreshToken = useFeedStore((s) => s.refreshToken);
+  const pendingPost = useFeedStore((s) => s.pendingPost);
+  const setPendingPost = useFeedStore((s) => s.setPendingPost);
   const [deck, setDeck] = useState<FeedItem[]>([]);
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'gas' | 'pass'>>(new Map());
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
   const loadedFeedKey = useRef('');
 
   // When a new upload happens, wipe the deck so the feed refetches from scratch
-  // and the new post appears at the top
   useEffect(() => {
     if (resetToken === 0) return;
     loadedFeedKey.current = '';
     setDeck([]);
     setSessionVotes(new Map());
   }, [resetToken]);
+
+  // Prepend the user's own new post to the top of the deck after upload
+  useEffect(() => {
+    if (!pendingPost) return;
+    setDeck((prev) => {
+      const alreadyIn = prev.some((d) => d.id === pendingPost.id);
+      if (alreadyIn) return prev;
+      return [pendingPost as FeedItem, ...prev];
+    });
+    setPendingPost(null);
+  }, [pendingPost]);
 
   useEffect(() => {
     const newKey = feed.map((f) => f.id).join(',');

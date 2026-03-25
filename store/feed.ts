@@ -1,10 +1,26 @@
 import { create } from 'zustand';
 
+// Mirrors FeedItem shape — defined here to avoid circular imports
+export interface PendingPost {
+  id: string;
+  user_id: string;
+  category: string;
+  image_url: string;
+  caption: string | null;
+  created_at: string;
+  total_votes: number;
+  gas_votes: number;
+  pass_votes: number;
+  username: string;
+}
+
 interface FeedStore {
   resetToken: number;
   bumpReset: () => void;
   refreshToken: number;
   bumpRefresh: () => void;
+  pendingPost: PendingPost | null;
+  setPendingPost: (post: PendingPost | null) => void;
 }
 
 // resetToken — wipes deck + refetches (used after a new upload)
@@ -14,4 +30,6 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpReset: () => set((s) => ({ resetToken: s.resetToken + 1 })),
   refreshToken: 0,
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
+  pendingPost: null,
+  setPendingPost: (post) => set({ pendingPost: post }),
 }));

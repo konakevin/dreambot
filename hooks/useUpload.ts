@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { useFeedStore } from '@/store/feed';
+import { useFeedStore, type PendingPost } from '@/store/feed';
 import type { Category } from '@/types/database';
 
 interface UploadArgs {
@@ -31,22 +31,36 @@ export function useUpload() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
   const bumpReset = useFeedStore((s) => s.bumpReset);
+  const setPendingPost = useFeedStore((s) => s.setPendingPost);
 
   return useMutation({
-    mutationFn: async ({ uri, category, caption }: UploadArgs) => {
+    mutationFn: async ({ uri, category, caption }: UploadArgs): Promise<PendingPost> => {
       const imageUrl = await uploadImage(uri, user!.id);
 
-      const { error } = await supabase.from('uploads').insert({
-        user_id: user!.id,
-        category,
-        image_url: imageUrl,
-        caption: caption.trim() || null,
-        is_approved: true,
-      });
+      const { data: inserted, error } = await supabase
+        .from('uploads')
+        .insert({
+          user_id: user!.id,
+          category,
+          image_url: imageUrl,
+          caption: caption.trim() || null,
+          is_approved: true,
+        })
+        .select('id, user_id, category, image_url, caption, created_at, total_votes, gas_votes, pass_votes')
+        .single();
 
       if (error) throw error;
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('username')
+        .eq('id', user!.id)
+        .single();
+
+      return { ...inserted, username: userData?.username ?? '' } as PendingPost;
     },
-    onSuccess: () => {
+    onSuccess: (newPost) => {
+      setPendingPost(newPost);
       queryClient.invalidateQueries({ queryKey: ['feed'] });
       queryClient.invalidateQueries({ queryKey: ['userPosts', user?.id] });
       bumpReset();
