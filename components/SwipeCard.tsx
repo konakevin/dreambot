@@ -1,7 +1,7 @@
-import { Dimensions, View, Text, StyleSheet, Pressable } from 'react-native';
+import { Dimensions, View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { GestureDetector, Gesture, TouchableOpacity, Pressable } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -85,7 +85,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   const hintTranslateY = useSharedValue(0);
   const hintOpacity = useSharedValue(0);
 
-  // Pop score badge in when the user votes, then auto-dismiss after 1.2s
+  // Pop score badge in when the user votes, then auto-dismiss after 0.9s
   useEffect(() => {
     if (userVote !== null) {
       scoreOpacity.value = withTiming(1, { duration: 80 });
@@ -94,7 +94,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
         translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 300 }, () => {
           runOnJS(onDismiss)();
         });
-      }, 1300);
+      }, 900);
     }
     return () => {
       if (dismissTimer.current) clearTimeout(dismissTimer.current);
@@ -191,20 +191,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
           transition={200}
         />
 
-        {/* Bookmark badge — top left */}
-        <Pressable
-          style={styles.starBadge}
-          onPress={onFavorite}
-          hitSlop={12}
-        >
-          <Ionicons
-            name={isFavorited ? 'bookmark' : 'bookmark-outline'}
-            size={20}
-            color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.5)'}
-          />
-        </Pressable>
-
-        {/* Score badge — top right, fades in after voting with optimistic score */}
+        {/* Score badge — top right, fades in after voting */}
         {rating !== null && (
           <Animated.View style={[styles.ratingBadge, scoreStyle]}>
             <MaskedView maskElement={
@@ -226,30 +213,49 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
           colors={['transparent', 'rgba(0,0,0,0.55)', 'rgba(0,0,0,0.88)']}
           style={styles.infoContainer}
         >
-          <View style={styles.userRow}>
-            <Pressable onPress={onUserPress} hitSlop={8}>
-              <Text style={styles.username}>@{item.username}</Text>
-            </Pressable>
-            {!isOwnPost && (
-              <Pressable
-                onPress={onFollow}
-                hitSlop={8}
-                style={[styles.followPill, isFollowing && styles.followingPill]}
-              >
-                <Text style={[styles.followPillText, isFollowing && styles.followingPillText]}>
-                  {isFollowing ? 'Following' : '+ Follow'}
-                </Text>
+          <View style={styles.infoBlock}>
+            {/* Row 1: username | follow */}
+            <View style={styles.userRow}>
+              <Pressable onPress={onUserPress} hitSlop={8}>
+                <Text style={styles.username}>@{item.username}</Text>
               </Pressable>
-            )}
-          </View>
-          {item.caption ? (
-            <Text style={styles.caption} numberOfLines={2}>{item.caption}</Text>
-          ) : null}
-          <View style={styles.metaRow}>
-            <CategoryPill category={item.category} />
-            <View style={[styles.metaCount, total === 0 && styles.metaCountHidden]}>
-              <Ionicons name="star" size={12} color="rgba(255,255,255,0.65)" />
-              <Text style={styles.metaText}>{total}</Text>
+              {!isOwnPost && (
+                <Pressable
+                  onPress={onFollow}
+                  hitSlop={8}
+                  style={[styles.followPill, isFollowing && styles.followingPill]}
+                >
+                  <Text style={[styles.followPillText, isFollowing && styles.followingPillText]}>
+                    {isFollowing ? 'Following' : '+ Follow'}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+
+            {/* Row 2: caption */}
+            {item.caption ? (
+              <Text style={styles.caption} numberOfLines={2}>{item.caption}</Text>
+            ) : null}
+
+            {/* Row 3: meta | save */}
+            <View style={styles.metaRow}>
+              <View style={styles.metaLeft}>
+                {total > 0 && (
+                  <>
+                    <Ionicons name="star" size={12} color="rgba(255,255,255,0.65)" />
+                    <Text style={styles.metaText}>{total}</Text>
+                    <Text style={styles.metaDot}>·</Text>
+                  </>
+                )}
+                <CategoryPill category={item.category} />
+              </View>
+              <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                <Ionicons
+                  name={isFavorited ? 'bookmark' : 'bookmark-outline'}
+                  size={22}
+                  color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </LinearGradient>
@@ -281,13 +287,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  starBadge: {
-    position: 'absolute',
-    top: 14,
-    left: 14,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 20,
-    padding: 6,
+  saveButton: {
+    padding: 4,
   },
   ratingBadge: {
     position: 'absolute',
@@ -324,17 +325,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 20,
   },
+  infoBlock: {
+    gap: 6,
+  },
   userRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 5,
   },
   username: {
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '700',
     letterSpacing: -0.2,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
   followPill: {
     borderWidth: 1.5,
@@ -358,20 +364,23 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.9)',
     fontSize: 14,
     lineHeight: 20,
-    marginBottom: 8,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  metaCount: {
+  metaLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
   },
-  metaCountHidden: {
-    opacity: 0,
+  metaDot: {
+    color: 'rgba(255,255,255,0.3)',
+    fontSize: 13,
   },
   categoryPill: {
     borderWidth: 1,

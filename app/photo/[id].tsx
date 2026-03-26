@@ -40,20 +40,21 @@ const CATEGORY_COLORS: Record<string, string> = {
 // Stop 0, 8, and 16 are all C1 — so position 0 and position 320 are identical,
 // making the withRepeat reset from -320→0 perfectly seamless.
 const TREADMILL_COLORS = [
-  '#8844BB', '#2277CC', '#0099AA', '#55AA33',
-  '#99BB00', '#BBAA00', '#BB7700', '#BB4400',
-  '#8844BB', '#2277CC', '#0099AA', '#55AA33',
-  '#99BB00', '#BBAA00', '#BB7700', '#BB4400',
-  '#8844BB', // closes the loop
+  '#BB88EE', '#6699EE', '#44BBCC', '#77CC88',
+  '#CCDD55', '#DDBB55', '#DDAA66', '#DD7766',
+  '#BB88EE', '#6699EE', '#44BBCC', '#77CC88',
+  '#CCDD55', '#DDBB55', '#DDAA66', '#DD7766',
+  '#BB88EE', // closes the loop
 ];
-const TREADMILL_WIDTH = 640;   // full gradient width (px)
-const TREADMILL_SCROLL = 320;  // scroll exactly one period before reset
+const TREADMILL_WIDTH = 1280;  // full gradient width (px) — 80px per stop, colours breathe
+const TREADMILL_SCROLL = 640;  // scroll exactly one period before reset
 
 export default function PhotoDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [saving, setSaving] = useState(false);
   const [localVote, setLocalVote] = useState<'rad' | 'bad' | null>(null);
+  const [hintWidth, setHintWidth] = useState(0);
 
   const currentUser = useAuthStore((s) => s.user);
   const { data: post, isLoading } = usePost(id);
@@ -71,13 +72,13 @@ export default function PhotoDetailScreen() {
   const scoreOpacity = useSharedValue(0);
   const scoreScale = useSharedValue(0.4);
 
-  // Treadmill color animation
-  const treadmillX = useSharedValue(0);
+  // Treadmill color animation — starts offset so reset to -TREADMILL_SCROLL is seamless
+  const treadmillX = useSharedValue(-TREADMILL_SCROLL); // start offset so loop reset is seamless
 
   useEffect(() => {
     if (hasVoted && !voteLoading) {
-      scoreOpacity.value = withTiming(1, { duration: 80 });
-      scoreScale.value = withSpring(1, { damping: 31, stiffness: 400 });
+      scoreOpacity.value = withTiming(1, { duration: 60 });
+      scoreScale.value = withSpring(1, { damping: 14, stiffness: 280 });
     }
   }, [hasVoted, voteLoading]);
 
@@ -86,9 +87,9 @@ export default function PhotoDetailScreen() {
     // Animate only in the negative direction — gradient always covers the text,
     // and the color repeat makes the reset from -SCROLL to 0 invisible.
     treadmillX.value = withRepeat(
-      withTiming(-TREADMILL_SCROLL, { duration: 12000, easing: Easing.linear }),
+      withTiming(0, { duration: 12000, easing: Easing.linear }),
       -1,
-      false
+      true
     );
   }, [hasVoted]);
 
@@ -189,99 +190,116 @@ export default function PhotoDetailScreen() {
 
       {/* Bottom gradient overlay */}
       <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.6)', 'rgba(0,0,0,0.92)']}
+        colors={['transparent', 'rgba(0,0,0,0.0)', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.82)']}
+        locations={[0, 0.3, 0.72, 1]}
         style={styles.bottomGradient}
         pointerEvents="box-none"
       >
-        {/* Score area — placeholder or revealed score */}
-        {!voteLoading && (
-          hasVoted && rating !== null ? (
-            <Animated.View style={[styles.ratingBadge, scoreStyle]}>
-              <MaskedView maskElement={
-                <Text style={styles.ratingText}>{rating.percent}%</Text>
-              }>
-                <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                  <Text style={[styles.ratingText, { opacity: 0 }]}>{rating.percent}%</Text>
-                </LinearGradient>
-              </MaskedView>
-            </Animated.View>
-          ) : !isOwnPost ? (
-            <View style={styles.votePlaceholder}>
-              <MaskedView maskElement={
-                <View style={styles.votePlaceholderInner}>
-                  <Ionicons name="eye-off-outline" size={18} color="#FFFFFF" />
-                  <Text style={styles.votePlaceholderText}>vote to reveal rating</Text>
-                </View>
-              }>
-                <Animated.View style={treadmillStyle}>
-                  <LinearGradient
-                    colors={TREADMILL_COLORS}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={styles.shimmerGradient}
-                  />
-                </Animated.View>
-              </MaskedView>
-            </View>
-          ) : null
+        {/* Hidden sizer for hint pill — must be in normal hierarchy so onLayout fires */}
+        {!isOwnPost && !hasVoted && (
+          <View
+            pointerEvents="none"
+            onLayout={(e) => setHintWidth(e.nativeEvent.layout.width)}
+            style={{ position: 'absolute', opacity: 0, flexDirection: 'row', alignItems: 'center', gap: 7 }}
+          >
+            <Ionicons name="eye-off-outline" size={16} color="#FFFFFF" />
+            <Text style={styles.votePlaceholderText}>vote to reveal rating</Text>
+          </View>
         )}
 
-        {/* User row */}
-        <View style={styles.userRow}>
-          <TouchableOpacity onPress={() => router.push(`/user/${post.user_id}`)} hitSlop={8}>
-            <Text style={styles.username}>@{post.users?.username}</Text>
-          </TouchableOpacity>
-          {!isOwnPost && (
-            <TouchableOpacity
-              onPress={handleFollow}
-              hitSlop={8}
-              style={[styles.followPill, isFollowing && styles.followingPill]}
-            >
-              <Text style={[styles.followPillText, isFollowing && styles.followingPillText]}>
-                {isFollowing ? 'Following' : '+ Follow'}
-              </Text>
+        <View style={styles.contentRow}>
+          {/* Left block — all info, tight even spacing */}
+          <View style={styles.infoBlock}>
+            <TouchableOpacity onPress={() => router.push(`/user/${post.user_id}`)} hitSlop={8}>
+              <Text style={styles.username}>@{post.users?.username}</Text>
             </TouchableOpacity>
-          )}
-        </View>
 
-        {post.caption ? (
-          <Text style={styles.caption}>{post.caption}</Text>
-        ) : null}
-
-        <View style={styles.metaRow}>
-          {post.total_votes > 0 && (
-            <>
-              <Ionicons name="star" size={12} color="rgba(255,255,255,0.6)" />
-              <Text style={styles.metaText}>{post.total_votes}</Text>
-              <Text style={styles.metaDot}>·</Text>
-            </>
-          )}
-          <View style={[styles.categoryPill, { backgroundColor: `${categoryColor}26`, borderColor: `${categoryColor}66` }]}>
-            <Text style={[styles.categoryPillText, { color: categoryColor }]}>{categoryLabel}</Text>
-          </View>
-        </View>
-
-        {/* Vote buttons — inside the gradient so they feel grounded */}
-        {!isOwnPost && !hasVoted && !voteLoading && (
-          <View style={styles.voteButtons}>
-            <View style={styles.badGlow}>
-              <TouchableOpacity style={styles.voteButton} activeOpacity={0.8} onPress={() => handleVote('bad')}>
-                <LinearGradient colors={['#66DDCC', '#0077FF', '#6633CC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-                <LinearGradient colors={['rgba(0,0,0,0.25)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.35)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
-                <Ionicons name="thumbs-down" size={26} color="#FFFFFF" />
-                <Text style={styles.voteButtonText}>BAD</Text>
+            {!isOwnPost && (
+              <TouchableOpacity
+                onPress={handleFollow}
+                hitSlop={8}
+                style={[styles.followPill, isFollowing && styles.followingPill]}
+              >
+                <Text style={[styles.followPillText, isFollowing && styles.followingPillText]}>
+                  {isFollowing ? 'Following' : '+ Follow'}
+                </Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.radGlow}>
-              <TouchableOpacity style={styles.voteButton} activeOpacity={0.8} onPress={() => handleVote('rad')}>
-                <LinearGradient colors={['#FFCC77', '#FFB300', '#FF5500']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-                <LinearGradient colors={['rgba(0,0,0,0.25)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.35)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
-                <Ionicons name="thumbs-up" size={26} color="#FFFFFF" />
-                <Text style={styles.voteButtonText}>RAD</Text>
-              </TouchableOpacity>
+            )}
+
+            {post.caption ? (
+              <Text style={styles.caption}>{post.caption}</Text>
+            ) : null}
+
+            <View style={styles.metaRow}>
+              {post.total_votes > 0 && (
+                <>
+                  <Ionicons name="star" size={12} color="rgba(255,255,255,0.6)" />
+                  <Text style={styles.metaText}>{post.total_votes}</Text>
+                  <Text style={styles.metaDot}>·</Text>
+                </>
+              )}
+              <View style={[styles.categoryPill, { backgroundColor: `${categoryColor}26`, borderColor: `${categoryColor}66` }]}>
+                <Text style={[styles.categoryPillText, { color: categoryColor }]}>{categoryLabel}</Text>
+              </View>
             </View>
           </View>
-        )}
+
+          {/* Right column — score, or hint + compact vote buttons */}
+          {!isOwnPost && !voteLoading && (
+            hasVoted && rating !== null ? (
+              <Animated.View style={[styles.scoreRight, scoreStyle]}>
+                <MaskedView maskElement={
+                  <Text style={styles.compactScore}>{rating.percent}%</Text>
+                }>
+                  <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                    <Text style={[styles.compactScore, { opacity: 0 }]}>{rating.percent}%</Text>
+                  </LinearGradient>
+                </MaskedView>
+              </Animated.View>
+            ) : (
+              <View style={styles.voteColumn}>
+                {/* Hint pill */}
+                <View style={[styles.votePlaceholder, hintWidth > 0 && { width: hintWidth + 24 }]}>
+                  <MaskedView maskElement={
+                    <View style={styles.votePlaceholderInner}>
+                      <Ionicons name="eye-off-outline" size={16} color="#FFFFFF" />
+                      <Text style={styles.votePlaceholderText}>vote to reveal rating</Text>
+                    </View>
+                  }>
+                    <Animated.View style={treadmillStyle}>
+                      <LinearGradient
+                        colors={TREADMILL_COLORS}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.shimmerGradient}
+                      />
+                    </Animated.View>
+                  </MaskedView>
+                </View>
+
+                {/* Compact vote buttons */}
+                <View style={styles.voteButtonsCompact}>
+                  <View style={styles.badGlowSm}>
+                    <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('bad')}>
+                      <LinearGradient colors={['#66DDCC', '#0077FF', '#6633CC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+                      <LinearGradient colors={['rgba(0,0,0,0.25)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.35)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+                      <Ionicons name="thumbs-down" size={18} color="#FFFFFF" />
+                      <Text style={styles.voteButtonTextSm}>BAD</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.radGlowSm}>
+                    <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('rad')}>
+                      <LinearGradient colors={['#FFCC77', '#FFB300', '#FF5500']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+                      <LinearGradient colors={['rgba(0,0,0,0.25)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.35)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+                      <Ionicons name="thumbs-up" size={18} color="#FFFFFF" />
+                      <Text style={styles.voteButtonTextSm}>RAD</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            )
+          )}
+        </View>
       </LinearGradient>
 
       <ConfirmDialog
@@ -365,18 +383,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 48,
   },
-  ratingBadge: {
-    alignSelf: 'flex-start',
-    marginBottom: 12,
-  },
-  ratingText: {
-    fontSize: 52,
+  compactScore: {
+    fontSize: 36,
     fontWeight: '900',
     color: '#FFFFFF',
-    lineHeight: 58,
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
   },
   votePlaceholder: {
-    marginBottom: 12,
+    backgroundColor: 'rgba(0,0,0,0.32)',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
   },
   votePlaceholderInner: {
     flexDirection: 'row',
@@ -387,24 +406,30 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '700',
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   shimmerGradient: {
     width: TREADMILL_WIDTH,
-    height: 30,
+    height: 18,
   },
   userRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+    gap: 8,
   },
   username: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: -0.2,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
   followPill: {
+    alignSelf: 'flex-start',
     borderWidth: 1.5,
     borderColor: 'rgba(255,255,255,0.75)',
     borderRadius: 14,
@@ -412,20 +437,22 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   followingPill: { borderColor: 'rgba(255,255,255,0.2)' },
-  followPillText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
+  followPillText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600', textShadowColor: 'rgba(0,0,0,0.4)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 3 },
   followingPillText: { color: 'rgba(255,255,255,0.35)' },
   caption: {
     color: 'rgba(255,255,255,0.9)',
     fontSize: 15,
     lineHeight: 22,
-    marginBottom: 12,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
   },
-  metaText: { color: 'rgba(255,255,255,0.6)', fontSize: 14 },
+  metaText: { color: 'rgba(255,255,255,0.6)', fontSize: 14, textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 4 },
   metaDot: { color: 'rgba(255,255,255,0.3)', fontSize: 14 },
   categoryPill: {
     borderWidth: 1,
@@ -434,41 +461,56 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   categoryPillText: { fontSize: 13, fontWeight: '600' },
-  voteButtons: {
+  contentRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 40,
-    marginTop: 20,
+    alignItems: 'center',
+    gap: 12,
   },
-  badGlow: {
-    borderRadius: 32,
+  infoBlock: {
+    flex: 1,
+    gap: 6,
+  },
+  scoreRight: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  voteColumn: {
+    alignItems: 'center',
+    gap: 16,
+  },
+  voteButtonsCompact: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  badGlowSm: {
+    borderRadius: 29,
     shadowColor: '#0077FF',
     shadowOpacity: 0.5,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 10,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 8,
   },
-  radGlow: {
-    borderRadius: 32,
+  radGlowSm: {
+    borderRadius: 29,
     shadowColor: '#FFB300',
     shadowOpacity: 0.5,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 10,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 8,
   },
-  voteButton: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+  voteButtonSm: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 2,
   },
-  voteButtonText: {
+  voteButtonTextSm: {
     color: '#FFFFFF',
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '800',
-    letterSpacing: 1,
+    letterSpacing: 0.8,
   },
 });

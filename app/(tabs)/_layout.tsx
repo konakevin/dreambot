@@ -20,7 +20,7 @@ export default function TabLayout() {
           borderTopColor: '#2F2F2F',
           borderTopWidth: 0.5,
         },
-        tabBarActiveTintColor: '#FF4500',
+        tabBarActiveTintColor: '#FFFFFF',
         tabBarInactiveTintColor: '#71767B',
       }}
     >
@@ -28,8 +28,8 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
           ),
         }}
         listeners={{
@@ -40,8 +40,8 @@ export default function TabLayout() {
         name="top"
         options={{
           title: 'Top',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="flame" size={size} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'flame' : 'flame-outline'} size={size} color={color} />
           ),
         }}
       />
@@ -49,8 +49,8 @@ export default function TabLayout() {
         name="upload"
         options={{
           title: 'Upload',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle" size={size} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} size={size} color={color} />
           ),
         }}
       />
@@ -58,8 +58,8 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
           ),
         }}
       />
