@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { TouchableOpacity, StyleSheet, Dimensions, View } from 'react-native';
 import { Image } from 'expo-image';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useDeletePost } from '@/hooks/useDeletePost';
@@ -45,11 +46,16 @@ export function PostTile({ item, isOwn = false, albumIds }: PostTileProps) {
       activeOpacity={0.9}
     >
       <Image
-        source={{ uri: item.image_url }}
+        source={{ uri: item.thumbnail_url ?? item.image_url }}
         style={styles.image}
         contentFit="cover"
         transition={150}
       />
+      {item.media_type === 'video' && (
+        <View style={styles.playBadge}>
+          <Ionicons name="play" size={12} color="#FFFFFF" />
+        </View>
+      )}
     </TouchableOpacity>
     <ConfirmDialog
       visible={showDeleteDialog}
@@ -74,5 +80,13 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  playBadge: {
+    position: 'absolute',
+    top: 6,
+    left: 6,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 4,
+    padding: 3,
   },
 });

@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useUpload } from '@/hooks/useUpload';
@@ -14,6 +15,7 @@ import type { Category } from '@/types/database';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CAPTION_LIMIT = 200;
+const MAX_VIDEO_DURATION = 10; // seconds
 
 const CATEGORIES: { value: Category; label: string; color: string }[] = [
   { value: 'people',  label: 'People',  color: '#6699EE' },
@@ -23,46 +25,74 @@ const CATEGORIES: { value: Category; label: string; color: string }[] = [
   { value: 'memes',   label: 'Memes',   color: '#BB88EE' },
 ];
 
+function VideoPreview({ uri }: { uri: string }) {
+  const player = useVideoPlayer(uri, (p) => {
+    p.loop = true;
+    p.muted = true;
+    p.play();
+  });
+  return (
+    <VideoView
+      player={player}
+      style={styles.imagePreview}
+      contentFit="cover"
+      nativeControls={false}
+    />
+  );
+}
+
 export default function UploadScreen() {
-  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [mediaUri, setMediaUri] = useState<string | null>(null);
+  const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
   const [category, setCategory] = useState<Category | null>(null);
   const [caption, setCaption] = useState('');
   const { mutate: upload, isPending } = useUpload();
 
-  const canPost = !!imageUri && !!category;
+  const canPost = !!mediaUri && !!category;
 
-  async function pickImage() {
+  async function pickFromLibrary() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Allow access to your photo library in Settings to upload photos.');
+      Alert.alert('Permission needed', 'Allow access to your photo library in Settings.');
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ['images', 'videos'],
       allowsEditing: true,
       aspect: [3, 4],
       quality: 0.85,
+      videoMaxDuration: MAX_VIDEO_DURATION,
     });
     if (!result.canceled) {
+      const asset = result.assets[0];
+      if (asset.type === 'video' && (asset.duration ?? 0) > MAX_VIDEO_DURATION * 1000) {
+        Alert.alert('Too long', `Videos must be ${MAX_VIDEO_DURATION} seconds or less.`);
+        return;
+      }
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setImageUri(result.assets[0].uri);
+      setMediaUri(asset.uri);
+      setMediaType(asset.type === 'video' ? 'video' : 'image');
     }
   }
 
-  async function takePhoto() {
+  async function recordVideo() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Allow camera access in Settings to take photos.');
+      Alert.alert('Permission needed', 'Allow camera access in Settings.');
       return;
     }
     const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ['images', 'videos'],
       allowsEditing: true,
       aspect: [3, 4],
       quality: 0.85,
+      videoMaxDuration: MAX_VIDEO_DURATION,
     });
     if (!result.canceled) {
+      const asset = result.assets[0];
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setImageUri(result.assets[0].uri);
+      setMediaUri(asset.uri);
+      setMediaType(asset.type === 'video' ? 'video' : 'image');
     }
   }
 
@@ -70,11 +100,12 @@ export default function UploadScreen() {
     if (!canPost) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     upload(
-      { uri: imageUri!, category: category!, caption },
+      { uri: mediaUri!, category: category!, caption, mediaType },
       {
         onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          setImageUri(null);
+          setMediaUri(null);
+          setMediaType('image');
           setCategory(null);
           setCaption('');
           router.replace('/(tabs)');
@@ -99,38 +130,53 @@ export default function UploadScreen() {
             disabled={!canPost || isPending}
             activeOpacity={0.8}
           >
-            {isPending
+              {isPending
               ? <ActivityIndicator color="#fff" size="small" />
               : <Text style={styles.postButtonText}>Post</Text>}
           </TouchableOpacity>
         </View>
+        {isPending && mediaType === 'video' && (
+          <Text style={styles.uploadStatus}>Compressing video…</Text>
+        )}
 
         <ScrollView
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Photo picker */}
-          {imageUri ? (
+          {/* Media picker / preview */}
+          {mediaUri ? (
             <View style={styles.imagePreviewContainer}>
-              <Image source={{ uri: imageUri }} style={styles.imagePreview} contentFit="cover" />
-              <TouchableOpacity style={styles.changePhotoButton} onPress={pickImage} activeOpacity={0.8}>
-                <Text style={styles.changePhotoText}>Change photo</Text>
+              {mediaType === 'video' ? (
+                <VideoPreview uri={mediaUri} />
+              ) : (
+                <Image source={{ uri: mediaUri }} style={styles.imagePreview} contentFit="cover" />
+              )}
+              {mediaType === 'video' && (
+                <View style={styles.videoBadge}>
+                  <Ionicons name="videocam" size={12} color="#FFFFFF" />
+                  <Text style={styles.videoBadgeText}>Video</Text>
+                </View>
+              )}
+              <TouchableOpacity style={styles.changePhotoButton} onPress={pickFromLibrary} activeOpacity={0.8}>
+                <Text style={styles.changePhotoText}>Change</Text>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.pickerRow}>
-              <TouchableOpacity style={styles.pickerButton} onPress={pickImage} activeOpacity={0.8}>
+              <TouchableOpacity style={styles.pickerButton} onPress={pickFromLibrary} activeOpacity={0.8}>
                 <Ionicons name="images-outline" size={26} color="#71767B" />
                 <Text style={styles.pickerButtonText}>Library</Text>
               </TouchableOpacity>
               <View style={styles.pickerDivider} />
-              <TouchableOpacity style={styles.pickerButton} onPress={takePhoto} activeOpacity={0.8}>
+              <TouchableOpacity style={styles.pickerButton} onPress={recordVideo} activeOpacity={0.8}>
                 <Ionicons name="camera-outline" size={26} color="#71767B" />
                 <Text style={styles.pickerButtonText}>Camera</Text>
               </TouchableOpacity>
             </View>
           )}
+
+          <Text style={styles.pickerHint}>Photos or videos up to {MAX_VIDEO_DURATION}s</Text>
 
           {/* Category */}
           <Text style={styles.sectionLabel}>CATEGORY</Text>
@@ -177,10 +223,9 @@ export default function UploadScreen() {
             </Text>
           </View>
 
-          {/* Disabled hint */}
           {!canPost && (
             <Text style={styles.hint}>
-              {!imageUri ? 'Choose a photo to get started' : 'Pick a category to continue'}
+              {!mediaUri ? 'Choose a photo or video to get started' : 'Pick a category to continue'}
             </Text>
           )}
         </ScrollView>
@@ -215,15 +260,12 @@ const styles = StyleSheet.create({
   postButtonDisabled: { backgroundColor: '#2F2F2F' },
   postButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 15 },
   scroll: { padding: 16, paddingBottom: 40 },
-
-  // Picker
   pickerRow: {
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#2F2F2F',
     borderRadius: 16,
     overflow: 'hidden',
-    marginBottom: 28,
     height: 100,
   },
   pickerButton: {
@@ -235,10 +277,28 @@ const styles = StyleSheet.create({
   },
   pickerButtonText: { color: '#71767B', fontSize: 14, fontWeight: '500' },
   pickerDivider: { width: 1, backgroundColor: '#2F2F2F' },
-
-  // Image preview
-  imagePreviewContainer: { marginBottom: 24, borderRadius: 16, overflow: 'hidden' },
-  imagePreview: { width: '100%', height: IMAGE_HEIGHT, borderRadius: 16 },
+  pickerHint: {
+    color: '#3E4144',
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 24,
+  },
+  imagePreviewContainer: { borderRadius: 16, overflow: 'hidden' },
+  imagePreview: { width: '100%', height: IMAGE_HEIGHT },
+  videoBadge: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  videoBadgeText: { color: '#FFFFFF', fontSize: 11, fontWeight: '600' },
   changePhotoButton: {
     position: 'absolute',
     bottom: 12,
@@ -249,8 +309,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   changePhotoText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
-
-  // Section label
   sectionLabel: {
     color: '#71767B',
     fontSize: 11,
@@ -260,13 +318,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   optional: { color: '#3E4144', fontWeight: '400', letterSpacing: 0 },
-
-  // Categories
-  categoryRow: {
-    flexDirection: 'row',
-    gap: 6,
-    marginBottom: 28,
-  },
+  categoryRow: { flexDirection: 'row', gap: 6, marginBottom: 28 },
   categoryChip: {
     flex: 1,
     alignItems: 'center',
@@ -277,8 +329,6 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   categoryChipText: { color: '#71767B', fontSize: 13, fontWeight: '600' },
-
-  // Caption
   captionContainer: {
     borderBottomWidth: 1,
     borderBottomColor: '#2F2F2F',
@@ -300,12 +350,13 @@ const styles = StyleSheet.create({
   },
   charCountWarning: { color: '#FFB800' },
   charCountError: { color: '#F4212E', fontWeight: '700' },
-
-  // Hint
-  hint: {
-    color: '#3E4144',
-    fontSize: 13,
+  hint: { color: '#3E4144', fontSize: 13, textAlign: 'center', marginTop: 20 },
+  uploadStatus: {
+    color: '#71767B',
+    fontSize: 12,
     textAlign: 'center',
-    marginTop: 20,
+    paddingVertical: 6,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#2F2F2F',
   },
 });

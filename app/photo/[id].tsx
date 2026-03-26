@@ -2,9 +2,11 @@ import { View, Text, TouchableOpacity, Pressable, StyleSheet, ActivityIndicator,
 import * as MediaLibrary from 'expo-media-library';
 import { File, Paths } from 'expo-file-system/next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Image } from 'expo-image';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { Ionicons } from '@expo/vector-icons';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -47,6 +49,7 @@ export default function PhotoDetailScreen() {
   const [localVote, setLocalVote] = useState<'rad' | 'bad' | null>(null);
   const [currentId, setCurrentId] = useState(id);
   const [captionExpanded, setCaptionExpanded] = useState(false);
+  const [muted, setMuted] = useState(true);
 
   const queryClient = useQueryClient();
   const currentUser = useAuthStore((s) => s.user);
@@ -146,18 +149,29 @@ export default function PhotoDetailScreen() {
 
   if (isLoading || !post) {
     return (
-      <View style={styles.loadingRoot}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="chevron-back" size={26} color="#FFFFFF" />
-        </TouchableOpacity>
-        <ActivityIndicator color="#FF4500" />
-      </View>
+      <>
+        <StatusBar hidden />
+        <View style={styles.loadingRoot}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
+            <Ionicons name="chevron-back" size={26} color="#FFFFFF" />
+          </TouchableOpacity>
+          <ActivityIndicator color="#FF4500" />
+        </View>
+      </>
     );
   }
 
   // Alias to a non-nullable type — safe because we returned early above if !post
   const p = post;
+  const isVideo = p.media_type === 'video';
   const isOwnPost = currentUser?.id === p.user_id;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const videoPlayer = useVideoPlayer(isVideo ? p.image_url : null, (player) => {
+    player.loop = true;
+    player.muted = true;
+    player.play();
+  });
   const categoryColor = CATEGORY_COLORS[p.category] ?? '#FFFFFF';
   const categoryLabel = CATEGORY_LABELS[p.category] ?? p.category;
 
@@ -206,15 +220,26 @@ export default function PhotoDetailScreen() {
   }
 
   return (
+    <>
+    <StatusBar hidden />
     <GestureDetector gesture={albumGesture}>
     <Animated.View style={[styles.root, slideStyle]}>
     <Pressable style={StyleSheet.absoluteFill} onLongPress={handleSaveImage} delayLongPress={600}>
-      <Image
-        source={{ uri: p.image_url }}
-        style={StyleSheet.absoluteFill}
-        contentFit="cover"
-        transition={200}
-      />
+      {isVideo ? (
+        <VideoView
+          player={videoPlayer}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          nativeControls={false}
+        />
+      ) : (
+        <Image
+          source={{ uri: p.image_url }}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          transition={200}
+        />
+      )}
       {saving && (
         <View style={styles.savingOverlay}>
           <ActivityIndicator color="#FFFFFF" size="large" />
@@ -315,16 +340,32 @@ export default function PhotoDetailScreen() {
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
           </TouchableOpacity>
-          {isOwnPost && (
-            <TouchableOpacity style={styles.topButton} onPress={() => setShowDeleteDialog(true)} hitSlop={12}>
-              <Ionicons name="trash-outline" size={22} color="#FF4500" />
-            </TouchableOpacity>
-          )}
+          <View style={styles.topRightButtons}>
+            {isVideo && (
+              <TouchableOpacity
+                style={styles.topButton}
+                onPress={() => {
+                  const next = !muted;
+                  setMuted(next);
+                  videoPlayer.muted = next;
+                }}
+                hitSlop={12}
+              >
+                <Ionicons name={muted ? 'volume-mute' : 'volume-high'} size={20} color="#FFFFFF" />
+              </TouchableOpacity>
+            )}
+            {isOwnPost && (
+              <TouchableOpacity style={styles.topButton} onPress={() => setShowDeleteDialog(true)} hitSlop={12}>
+                <Ionicons name="trash-outline" size={22} color="#FF4500" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </SafeAreaView>
     </Pressable>
     </Animated.View>
     </GestureDetector>
+    </>
   );
 }
 
@@ -350,6 +391,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 12,
+  },
+  topRightButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   topButton: {
     width: 36,

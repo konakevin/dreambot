@@ -36,13 +36,19 @@ export function RankCard({ post, rank, height = 150, albumIds }: RankCardProps) 
     >
       <View style={[styles.card, { height }]}>
         <Image
-          source={{ uri: post.image_url }}
+          source={{ uri: post.thumbnail_url ?? post.image_url }}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           transition={200}
         />
 
         <Text style={styles.rank}>{rank}</Text>
+
+        {post.media_type === 'video' && (
+          <View style={styles.playBadge}>
+            <Ionicons name="play" size={10} color="#FFFFFF" />
+          </View>
+        )}
 
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.6)', 'rgba(0,0,0,0.92)']}
@@ -154,4 +160,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   invisible: { opacity: 0 },
+  playBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 14,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 4,
+    padding: 3,
+  },
 });

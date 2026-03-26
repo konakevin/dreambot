@@ -13,8 +13,9 @@ import Animated, {
   interpolate,
   Extrapolation,
 } from 'react-native-reanimated';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Image } from 'expo-image';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { FeedItem } from '@/hooks/useFeed';
@@ -74,6 +75,31 @@ function CategoryPill({ category }: { category: string }) {
 
 export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, onDismiss, onFavorite, onFollow, onUserPress, isTop, index, containerHeight, showSwipeHint }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
+  const isVideo = item.media_type === 'video';
+  const [muted, setMuted] = useState(true);
+
+  // Video player — only created for video posts
+  const videoPlayer = useVideoPlayer(isVideo ? item.image_url : null, (p) => {
+    p.loop = true;
+    p.muted = true;
+  });
+
+  // Play/pause based on whether this card is on top
+  useEffect(() => {
+    if (!isVideo) return;
+    if (isTop) {
+      videoPlayer.play();
+    } else {
+      videoPlayer.pause();
+    }
+  }, [isTop, isVideo]);
+
+  // Sync muted state
+  useEffect(() => {
+    if (!isVideo) return;
+    videoPlayer.muted = muted;
+  }, [muted, isVideo]);
+
   // Optimistically include the user's own vote in the score calculation
   const rad   = item.rad_votes + (userVote === 'rad' ? 1 : 0);
   const total = item.total_votes + (userVote !== null ? 1 : 0);
@@ -185,12 +211,21 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.card, { height: cardHeight }, cardStyle]}>
-        <Image
-          source={{ uri: item.image_url }}
-          style={styles.image}
-          contentFit="cover"
-          transition={200}
-        />
+        {isVideo ? (
+          <VideoView
+            player={videoPlayer}
+            style={styles.image}
+            contentFit="cover"
+            nativeControls={false}
+          />
+        ) : (
+          <Image
+            source={{ uri: item.image_url }}
+            style={styles.image}
+            contentFit="cover"
+            transition={200}
+          />
+        )}
 
         {/* Score badge — top right, fades in after voting */}
         {rating !== null && (
@@ -207,6 +242,22 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
               </LinearGradient>
             </MaskedView>
           </Animated.View>
+        )}
+
+        {/* Mute toggle for videos */}
+        {isVideo && (
+          <TouchableOpacity
+            style={styles.muteButton}
+            onPress={() => setMuted((m) => !m)}
+            activeOpacity={0.7}
+            hitSlop={12}
+          >
+            <Ionicons
+              name={muted ? 'volume-mute' : 'volume-high'}
+              size={18}
+              color="#FFFFFF"
+            />
+          </TouchableOpacity>
         )}
 
         {/* Card info — gradient overlay */}
@@ -287,6 +338,14 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     padding: 4,
+  },
+  muteButton: {
+    position: 'absolute',
+    top: 14,
+    left: 14,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 20,
+    padding: 8,
   },
   ratingBadge: {
     position: 'absolute',
