@@ -85,13 +85,38 @@ EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
+## Database
+
+Supabase (Postgres). Migration files live in `supabase/migrations/` and should be run in order via the Supabase dashboard SQL editor whenever a new migration is added.
+
 ## Seed Data
 
-To populate the database with test users and posts covering all rating tiers:
+The seed script (`scripts/seed.js`) wipes and repopulates all test data. Run it any time you want a fresh database state.
 
 ```bash
 SUPABASE_SERVICE_ROLE_KEY=your-key node scripts/seed.js
 ```
+
+`SUPABASE_SERVICE_ROLE_KEY` can also be in `.env.local` and will be picked up automatically.
+
+### What the seed creates
+
+- **100 test users** — `testuser1@radorbad.dev` through `testuser100@radorbad.dev`, password `Testpass123!`
+- **400 posts** — 4 per user, cycling across all 5 categories (people, animals, food, nature, memes)
+- **~25% video posts** — using free Mixkit stock video CDN URLs, mix of portrait and landscape
+- **~75% image posts** — mix of portrait (400×870, fills iPhone without blur) and landscape (1600×900, triggers blurred background)
+- **Realistic vote distributions** — spread across tiny (0–99), small (100–5k), mid (5k–50k), large (50k–500k), and massive (500k–2M) ranges
+- **Wilson scores** — computed and stored on every post, used by the feed ranking algorithm
+- **Follow relationships** — each user follows 5–25 random others
+- **Full media metadata** — `width`, `height`, `media_type`, `thumbnail_url` stored on every post so aspect-ratio-aware display works correctly
+
+### Keeping the seed up to date
+
+The seed script is updated alongside the app as new features are added. Whenever a new column or table is added (e.g. a migration), the seed should be updated to populate it. The seed is the source of truth for what "good" test data looks like — if you add a feature that needs data to test, add it to the seed.
+
+### Re-seeding
+
+Re-running the script fully cleans up previous test users and their data before recreating everything. Your own account (non-test-user) is never touched.
 
 ## Feed Algorithm Tests
 
