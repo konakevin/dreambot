@@ -69,49 +69,34 @@ const thumb = (seed) => `https://picsum.photos/seed/${seed}/400/870`;
 // ── Video content ─────────────────────────────────────────────────────────────
 // Mixkit free stock previews — short clips (5–15s), CDN-hosted, no auth needed
 // Portrait videos: 1080×1920  |  Landscape videos: 1920×1080
-const mx = (slug, w, h, thumbSeed) => ({
-  url: `https://assets.mixkit.co/videos/preview/${slug}-large.mp4`,
-  width: w,
-  height: h,
+// Google Cloud Storage public sample videos — reliable, no auth, correct content-type
+// All are 1920×1080 landscape. Longer than 10s but fine for seed/testing purposes.
+const GCS = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample';
+const vid = (file, thumbSeed) => ({
+  url: `${GCS}/${file}`,
+  width: 1920,
+  height: 1080,
   thumbnail_url: thumb(thumbSeed),
 });
 
+const VIDEO_POOL = [
+  vid('ForBiggerBlazes.mp4',     'vt1'),
+  vid('ForBiggerEscapes.mp4',    'vt2'),
+  vid('ForBiggerJoyrides.mp4',   'vt3'),
+  vid('ForBiggerMeltdowns.mp4',  'vt4'),
+  vid('ElephantsDream.mp4',      'vt5'),
+  vid('SubaruOutbackOnStreetAndDirt.mp4', 'vt6'),
+  vid('WeAreGoingOnBullrun.mp4', 'vt7'),
+  vid('WhatCarCanYouGetForAGrand.mp4', 'vt8'),
+];
+
+// Distribute the shared pool across categories
 const VIDEOS = {
-  people: [
-    mx('mixkit-portrait-of-a-woman-in-the-city-39745', 1080, 1920, 'vppl1'),
-    mx('mixkit-young-woman-looking-at-camera-in-a-park-42931', 1080, 1920, 'vppl2'),
-    mx('mixkit-man-dancing-under-changing-lights-32949', 1920, 1080, 'vppl3'),
-    mx('mixkit-woman-in-slow-motion-walking-in-the-city-4230', 1920, 1080, 'vppl4'),
-    mx('mixkit-hands-holding-a-smartphone-1375', 1920, 1080, 'vppl5'),
-  ],
-  animals: [
-    mx('mixkit-cute-dog-with-natural-background-4347', 1920, 1080, 'vpa1'),
-    mx('mixkit-white-cat-on-the-grass-1374', 1920, 1080, 'vpa2'),
-    mx('mixkit-small-dog-running-outdoors-4381', 1920, 1080, 'vpa3'),
-    mx('mixkit-golden-puppy-playing-in-the-grass-4387', 1920, 1080, 'vpa4'),
-    mx('mixkit-cat-sitting-on-floor-looking-at-camera-1378', 1920, 1080, 'vpa5'),
-  ],
-  food: [
-    mx('mixkit-top-view-of-making-pizza-at-home-4434', 1920, 1080, 'vpf1'),
-    mx('mixkit-pouring-coffee-into-a-glass-cup-2743', 1920, 1080, 'vpf2'),
-    mx('mixkit-chef-cutting-vegetables-in-restaurant-kitchen-4236', 1920, 1080, 'vpf3'),
-    mx('mixkit-woman-arranging-fresh-fruit-on-a-bowl-42924', 1920, 1080, 'vpf4'),
-  ],
-  nature: [
-    mx('mixkit-waves-coming-to-shore-1164', 1920, 1080, 'vpn1'),
-    mx('mixkit-river-flowing-in-a-forest-4228', 1920, 1080, 'vpn2'),
-    mx('mixkit-sunset-on-the-beach-1170', 1920, 1080, 'vpn3'),
-    mx('mixkit-aerial-view-of-a-green-forest-4259', 1920, 1080, 'vpn4'),
-    mx('mixkit-tree-swaying-in-the-wind-1173', 1920, 1080, 'vpn5'),
-    mx('mixkit-clouds-moving-in-the-sky-4219', 1920, 1080, 'vpn6'),
-  ],
-  memes: [
-    mx('mixkit-woman-doing-thumbs-up-394', 1920, 1080, 'vpm1'),
-    mx('mixkit-man-showing-thumbs-up-1886', 1920, 1080, 'vpm2'),
-    mx('mixkit-person-pointing-to-camera-4232', 1920, 1080, 'vpm3'),
-    mx('mixkit-excited-woman-showing-thumbs-up-4456', 1920, 1080, 'vpm4'),
-    mx('mixkit-woman-laughing-and-clapping-394', 1920, 1080, 'vpm5'),
-  ],
+  people:  [VIDEO_POOL[0], VIDEO_POOL[1], VIDEO_POOL[4]],
+  animals: [VIDEO_POOL[2], VIDEO_POOL[3], VIDEO_POOL[5]],
+  food:    [VIDEO_POOL[1], VIDEO_POOL[6], VIDEO_POOL[0]],
+  nature:  [VIDEO_POOL[3], VIDEO_POOL[4], VIDEO_POOL[7], VIDEO_POOL[2]],
+  memes:   [VIDEO_POOL[5], VIDEO_POOL[6], VIDEO_POOL[7]],
 };
 
 // ── Post content pools ────────────────────────────────────────────────────────

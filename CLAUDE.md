@@ -105,3 +105,80 @@ Follow these in every screen and component:
 - Swipe interactions should have rubber-band physics (Reanimated handles this)
 - Large title style for main screens, small title for drill-downs
 - Use SF Symbols (via `@expo/vector-icons/Ionicons`) for icons — they feel native
+
+---
+
+## Working With Kevin — Session Workflow
+
+### Screenshots
+When Kevin says "look at the latest screenshot" or "see the last screenshot", he means:
+```
+ls -t ~/Desktop/*.png | head -1
+```
+Then read that file. The most recently modified `.png` on the Desktop is always the one he's referring to. Don't ask which screenshot — just go get it.
+
+### Running the Seed Script
+The seed script lives at `scripts/seed.js`. It requires a service role key.
+
+Credentials are in `.env.local` at the project root. The service role key is `SUPABASE_SERVICE_ROLE_KEY`. To run:
+
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && \
+  SUPABASE_SERVICE_ROLE_KEY=$(grep SUPABASE_SERVICE_ROLE_KEY .env.local | cut -d= -f2) \
+  node scripts/seed.js
+```
+
+Run this in the background (`run_in_background: true`) — it takes 2–4 minutes. It wipes all test users and recreates everything from scratch. Kevin's own account is never touched.
+
+**Before reseeding:** check if any new migrations need to be applied in Supabase first. Migrations live in `supabase/migrations/` and are run manually via the Supabase dashboard SQL editor.
+
+### Running Node Scripts Generally
+Node is managed via nvm. Always source nvm before running scripts:
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>
+```
+Or for npx commands (installing packages, running expo CLI):
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && npx <command>
+```
+
+### Dev Build vs Expo Go
+This app uses native modules (`react-native-compressor`, `expo-video`) that don't work in Expo Go. Always remind Kevin to use the **dev build** installed via Xcode, not Expo Go. If he reports a "package not linked" error, that's the cause.
+
+To run the dev build:
+1. Open `ios/*.xcworkspace` in Xcode
+2. Select the booted simulator (check `xcrun simctl list devices available | grep Booted`)
+3. Hit play in Xcode
+4. Then run `npx expo start` for Metro
+
+### After Adding a Native Package
+```bash
+cd ios && pod install && cd ..
+```
+Then rebuild in Xcode. Remind Kevin to do this — he won't always remember.
+
+### Simulator UDID
+The booted simulator is usually iPhone 17 Pro. Get its UDID with:
+```bash
+xcrun simctl list devices available | grep Booted
+```
+
+### Database Migrations
+- Files live in `supabase/migrations/` numbered sequentially (001, 002, etc.)
+- They are NOT auto-applied — Kevin runs them manually in the Supabase dashboard SQL editor
+- When adding new columns or changing RPCs, always create a migration file AND remind Kevin to run it before testing
+- The `get_feed` RPC must be DROPped before recreating because Postgres can't change return types in-place
+
+### Seed Script Maintenance
+The seed script (`scripts/seed.js`) must be kept in sync with the DB schema. Any time a new column is added to `uploads`, add it to the seed insert. The seed is the living example of what complete, correct data looks like.
+
+### Video in the Seed
+Video URLs in the seed use Google Cloud Storage public sample videos:
+```
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/<filename>.mp4
+```
+These are reliable, no auth required, correct content-type. All are 1920×1080 landscape.
+Don't use Mixkit slugs — they're not predictable without checking their site.
+
+### Styling Note
+The CLAUDE.md rule says "never use StyleSheet" but several existing components (SwipeCard, PostTile, RankCard, photo/[id].tsx) use StyleSheet.create because they predate or need specific performance characteristics. When editing those files, stay consistent with their existing style rather than mixing NativeWind in.
