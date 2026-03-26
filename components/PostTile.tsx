@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { getRating } from '@/lib/getRating';
+import { useDeletePost } from '@/hooks/useDeletePost';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import type { PostItem } from '@/hooks/useUserPosts';
 
 const TILE_GAP = 2;
@@ -11,15 +15,26 @@ const TILE_SIZE = (Dimensions.get('window').width - TILE_GAP) / 2;
 
 interface PostTileProps {
   item: PostItem;
+  isOwn?: boolean;
 }
 
-export function PostTile({ item }: PostTileProps) {
+export function PostTile({ item, isOwn = false }: PostTileProps) {
   const rating = getRating(item.rad_votes, item.total_votes);
+  const { mutate: deletePost } = useDeletePost();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  function handleLongPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setShowDeleteDialog(true);
+  }
 
   return (
+    <>
     <TouchableOpacity
       style={styles.tile}
       onPress={() => router.push(`/photo/${item.id}`)}
+      onLongPress={isOwn ? handleLongPress : undefined}
+      delayLongPress={400}
       activeOpacity={0.9}
     >
       <Image
@@ -44,6 +59,17 @@ export function PostTile({ item }: PostTileProps) {
         </View>
       )}
     </TouchableOpacity>
+    <ConfirmDialog
+      visible={showDeleteDialog}
+      title="Delete post"
+      message="This will permanently remove your post and all its votes."
+      onConfirm={() => {
+        setShowDeleteDialog(false);
+        deletePost(item.id);
+      }}
+      onCancel={() => setShowDeleteDialog(false)}
+    />
+    </>
   );
 }
 

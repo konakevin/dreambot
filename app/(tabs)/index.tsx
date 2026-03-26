@@ -17,6 +17,7 @@ import { SwipeCard } from '@/components/SwipeCard';
 import { RankCard } from '@/components/RankCard';
 import { router } from 'expo-router';
 import { useCategoryPosts } from '@/hooks/useCategoryPosts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FeedScreen() {
   const currentUser = useAuthStore((s) => s.user);
@@ -33,7 +34,15 @@ export default function FeedScreen() {
   const [deck, setDeck] = useState<FeedItem[]>([]);
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
   const loadedFeedKey = useRef('');
+
+  // Show swipe hint once ever
+  useEffect(() => {
+    AsyncStorage.getItem('swipe_hint_seen').then((val) => {
+      if (!val) setShowSwipeHint(true);
+    });
+  }, []);
 
   // When a new upload happens, wipe the deck so the feed refetches from scratch
   useEffect(() => {
@@ -100,7 +109,11 @@ export default function FeedScreen() {
   // Swipe up to dismiss (skip or after voting)
   const handleDismiss = useCallback((item: FeedItem) => {
     setDeck((prev) => prev.filter((c) => c.id !== item.id));
-  }, []);
+    if (showSwipeHint) {
+      setShowSwipeHint(false);
+      AsyncStorage.setItem('swipe_hint_seen', '1');
+    }
+  }, [showSwipeHint]);
 
   // Tab icon pressed → refetch feed (keeps session votes intact)
   useEffect(() => {
@@ -183,6 +196,7 @@ export default function FeedScreen() {
                   isTop={index === 0}
                   index={index}
                   containerHeight={cardAreaHeight}
+                  showSwipeHint={index === 0 && showSwipeHint}
                 />
               );
             })
@@ -194,7 +208,7 @@ export default function FeedScreen() {
         <View style={styles.actionRow}>
           <View style={styles.badGlow}>
             <TouchableOpacity
-              style={[styles.voteButton, topItemVoted && styles.buttonVoted]}
+              style={styles.voteButton}
               activeOpacity={0.8}
               onPress={() => handleVote(topItem, 'bad')}
               disabled={topItemVoted}
@@ -218,7 +232,7 @@ export default function FeedScreen() {
 
           <View style={styles.radGlow}>
             <TouchableOpacity
-              style={[styles.voteButton, topItemVoted && styles.buttonVoted]}
+              style={styles.voteButton}
               activeOpacity={0.8}
               onPress={() => handleVote(topItem, 'rad')}
               disabled={topItemVoted}
@@ -256,7 +270,7 @@ const CATEGORIES = [
 
 function CaughtUpState() {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.caughtUpContent}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.caughtUpScroll} contentContainerStyle={styles.caughtUpContent}>
       <Text style={styles.caughtUpTitle}>You're all caught up!</Text>
       <Text style={styles.caughtUpSubtitle}>Here's what's trending while you wait</Text>
       {CATEGORIES.map((cat) => (
@@ -275,7 +289,7 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
     <View style={styles.categorySection}>
       <Text style={[styles.categoryLabel, { color: category.color }]}>{category.label}</Text>
       {posts.map((post, i) => (
-        <RankCard key={post.id} post={post} rank={i + 1} height={120} />
+        <RankCard key={post.id} post={post} rank={i + 1} height={135} />
       ))}
     </View>
   );
@@ -297,10 +311,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 10,
     backgroundColor: '#000000',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#2F2F2F',
   },
   headerWordRow: {
     flexDirection: 'row',
@@ -335,13 +347,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 48,
+    gap: 40,
     paddingHorizontal: 40,
-    paddingBottom: 16,
-    paddingTop: 12,
+    paddingBottom: 12,
+    paddingTop: 8,
   },
   badGlow: {
-    borderRadius: 40,
+    borderRadius: 32,
     shadowColor: '#0077FF',
     shadowOpacity: 0.5,
     shadowRadius: 16,
@@ -349,7 +361,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   radGlow: {
-    borderRadius: 40,
+    borderRadius: 32,
     shadowColor: '#FFB300',
     shadowOpacity: 0.5,
     shadowRadius: 16,
@@ -357,22 +369,22 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   voteButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 2,
   },
-  buttonVoted: {
-    opacity: 0.25,
-  },
-  voteButtonText: {
+voteButtonText: {
     color: '#FFFFFF',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,
+  },
+  caughtUpScroll: {
+    alignSelf: 'stretch',
   },
   caughtUpContent: {
     paddingHorizontal: 16,

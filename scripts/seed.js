@@ -56,90 +56,43 @@ const USERS = Array.from({ length: 10 }, (_, i) => ({
   username: `testuser${i + 1}`,
 }));
 
-// ── Posts (2 per user) ────────────────────────────────────────────────────────
-// picsum.photos gives a consistent image per seed string
+// ── Posts ─────────────────────────────────────────────────────────────────────
+// picsum.photos gives a consistent image per seed string.
+// rad/bad vote counts are set via direct UPDATE so we can simulate any volume.
+// Scores are intentionally spread across the full range for realistic testing.
 const img = (seed) => `https://picsum.photos/seed/${seed}/800/1000`;
 
-// ── Gradient preview posts ────────────────────────────────────────────────────
-// 8 posts calibrated so adding ONE Gas vote hits each rating tier exactly.
-// Vote counts are set via direct UPDATE (triggers wilson_score recalc).
-// Wilson score decreases from top to bottom → algorithm naturally surfaces
-// them hottest-first. Each post owned by a different user so diversity cap
-// never blocks them.
-//
-//  Pre-loaded    After your Gas   Tier   Gradient shown
-//  18g / 1p /19  19/20 = 95%      ≥90   red → orange
-//  16g / 3p /19  17/20 = 85%      ≥80   orange → amber
-//  14g / 5p /19  15/20 = 75%      ≥70   amber → yellow
-//  12g / 7p /19  13/20 = 65%      ≥60   yellow → lime
-//  10g / 9p /19  11/20 = 55%      ≥50   lime → green
-//   8g /11p /19   9/20 = 45%      ≥40   cyan → teal
-//   6g /13p /19   7/20 = 35%      ≥30   sky blue → deep blue
-//   3g /16p /19   4/20 = 20%      <30   lavender → purple
-//
-const GRADIENT_POSTS = [
-  { userIdx: 0, category: 'nature',  image: img('grad-hot1'),   caption: 'Golden hour hits different',  rad: 18, bad:  1 },
-  { userIdx: 1, category: 'nature',  image: img('grad-hot2'),   caption: 'Pacific coast highway',       rad: 16, bad:  3 },
-  { userIdx: 2, category: 'nature',  image: img('grad-hot3'),   caption: 'Morning fog rolling in',      rad: 14, bad:  5 },
-  { userIdx: 3, category: 'nature',  image: img('grad-hot4'),   caption: 'Found this on a trail run',   rad: 12, bad:  7 },
-  { userIdx: 4, category: 'nature',  image: img('grad-hot5'),   caption: 'Midday light',                rad: 10, bad:  9 },
-  { userIdx: 5, category: 'nature',  image: img('grad-hot6'),   caption: 'Not sure about this one',     rad:  8, bad: 11 },
-  { userIdx: 6, category: 'nature',  image: img('grad-hot7'),   caption: 'Tried something different',   rad:  6, bad: 13 },
-  { userIdx: 7, category: 'nature',  image: img('grad-hot8'),   caption: 'Yeah this did not go well',   rad:  3, bad: 16 },
-];
-
 const POSTS = [
-  { userIdx: 0, category: 'people',  image: img('portrait1'),    caption: 'Golden hour'     },
-  { userIdx: 0, category: 'animals', image: img('goldenlab1'),   caption: 'Best boy'        },
-  { userIdx: 1, category: 'food',    image: img('brunch1'),      caption: 'Sunday brunch'   },
-  { userIdx: 1, category: 'nature',  image: img('forest1'),      caption: 'Morning hike'    },
-  { userIdx: 2, category: 'memes',   image: img('meme1'),        caption: 'Too real'        },
-  { userIdx: 2, category: 'people',  image: img('portrait2'),    caption: 'Candid shot'     },
-  { userIdx: 3, category: 'animals', image: img('chaoscat1'),    caption: 'Chaos goblin'    },
-  { userIdx: 3, category: 'food',    image: img('ramen1'),       caption: 'Homemade ramen'  },
-  { userIdx: 4, category: 'nature',  image: img('sunset1'),      caption: 'Last light'      },
-  { userIdx: 4, category: 'memes',   image: img('meme2'),        caption: 'Every time'      },
-  { userIdx: 5, category: 'people',  image: img('portrait3'),    caption: 'Street photo'    },
-  { userIdx: 5, category: 'animals', image: img('derpdog1'),     caption: 'Derp mode'       },
-  { userIdx: 6, category: 'food',    image: img('tacos1'),       caption: 'Street tacos'    },
-  { userIdx: 6, category: 'nature',  image: img('mountains1'),   caption: 'Above the clouds'},
-  { userIdx: 7, category: 'memes',   image: img('meme3'),        caption: 'Send help'       },
-  { userIdx: 7, category: 'people',  image: img('portrait4'),    caption: 'Blue hour'       },
-  { userIdx: 8, category: 'animals', image: img('zoomcat1'),     caption: 'Zoom zoom'       },
-  { userIdx: 8, category: 'food',    image: img('datenight1'),   caption: 'Date night'      },
-  { userIdx: 9, category: 'nature',  image: img('beach1'),       caption: 'Low tide'        },
-  { userIdx: 9, category: 'memes',   image: img('meme4'),        caption: 'No notes'        },
-];
+  // People — 94%, 78%, 61%, 33%
+  { userIdx: 0, category: 'people',  image: img('portrait1'),  caption: 'Golden hour portrait',   rad: 47, bad:  3 },
+  { userIdx: 2, category: 'people',  image: img('portrait2'),  caption: 'Street candid',          rad: 39, bad: 11 },
+  { userIdx: 5, category: 'people',  image: img('portrait3'),  caption: 'Quick selfie',           rad: 22, bad: 14 },
+  { userIdx: 7, category: 'people',  image: img('portrait4'),  caption: 'Blue hour',              rad:  8, bad: 16 },
 
-// ── Vote plans ────────────────────────────────────────────────────────────────
-// Each entry: [postIndex, gasVoterIndices[], passVoterIndices[]]
-//
-// With 9 available voters per post (owner can't self-vote), possible tiers:
-//   9/9  = 100% → Untouchable
-//   8/9  ≈  89% → Heat        (Elite needs 10+ voters — not achievable here)
-//   7/9  ≈  78% → Solid
-//   6/9  ≈  67% → Mid
-//   4/9  ≈  44% → Fumble
-//   0/0         → no score (unvoted)
-//
-const VOTE_PLANS = [
-  // post 0  — 9 gas / 0 pass = 100% Untouchable
-  [0,  [1,2,3,4,5,6,7,8,9], []],
-  // post 1  — 8 gas / 1 pass = 89% Heat
-  [1,  [1,2,3,4,5,6,7,8], [9]],
-  // post 2  — 7 gas / 2 pass = 78% Solid
-  [2,  [0,2,3,4,5,6,7], [8,9]],
-  // post 3  — 6 gas / 3 pass = 67% Mid
-  [3,  [0,2,3,4,5,6], [7,8,9]],
-  // post 4  — 4 gas / 5 pass = 44% Fumble
-  [4,  [0,1,3,4], [5,6,7,8,9]],
-  // post 5  — 9 gas / 0 pass = 100% Untouchable (second example)
-  [5,  [0,1,3,4,5,6,7,8,9], []],
-  // post 10 — 8 gas / 1 pass = 89% Heat
-  [10, [0,1,2,3,4,6,7,8], [9]],
-  // post 14 — 3 gas / 5 pass = 38% Fumble
-  [14, [0,1,2], [3,4,5,6,7]],
-  // posts 6,7,8,9,11,12,13,15,16,17,18,19 → no votes (tests unscored state)
+  // Animals — 97%, 85%, 52%, 28%
+  { userIdx: 1, category: 'animals', image: img('goldenlab1'), caption: 'Best boy',               rad: 29, bad:  1 },
+  { userIdx: 3, category: 'animals', image: img('chaoscat1'),  caption: 'Chaos goblin',           rad: 34, bad:  6 },
+  { userIdx: 6, category: 'animals', image: img('zoomcat1'),   caption: 'Zoom zoom',              rad: 13, bad: 12 },
+  { userIdx: 8, category: 'animals', image: img('derpdog1'),   caption: 'Derp mode',              rad:  7, bad: 18 },
+
+  // Food — 91%, 74%, 58%, 41%
+  { userIdx: 1, category: 'food',    image: img('brunch1'),    caption: 'Sunday brunch',          rad: 91, bad:  9 },
+  { userIdx: 4, category: 'food',    image: img('tacos1'),     caption: 'Street tacos',           rad: 37, bad: 13 },
+  { userIdx: 8, category: 'food',    image: img('datenight1'), caption: 'Date night',             rad: 29, bad: 21 },
+  { userIdx: 9, category: 'food',    image: img('ramen1'),     caption: 'Homemade ramen',         rad:  9, bad: 13 },
+
+  // Nature — 96%, 83%, 68%, 45%, 22%
+  { userIdx: 0, category: 'nature',  image: img('grad-hot1'),  caption: 'Golden hour hits different', rad: 48, bad:  2 },
+  { userIdx: 2, category: 'nature',  image: img('grad-hot2'),  caption: 'Pacific coast highway',      rad: 83, bad: 17 },
+  { userIdx: 4, category: 'nature',  image: img('grad-hot3'),  caption: 'Morning fog rolling in',     rad: 34, bad: 16 },
+  { userIdx: 6, category: 'nature',  image: img('grad-hot5'),  caption: 'Midday light',               rad:  9, bad: 11 },
+  { userIdx: 9, category: 'nature',  image: img('beach1'),     caption: 'Low tide',                   rad: 11, bad: 39 },
+
+  // Memes — 89%, 72%, 55%, 38%
+  { userIdx: 3, category: 'memes',   image: img('meme1'),      caption: 'Too real',               rad: 89, bad: 11 },
+  { userIdx: 5, category: 'memes',   image: img('meme2'),      caption: 'Every time',             rad: 36, bad: 14 },
+  { userIdx: 7, category: 'memes',   image: img('meme3'),      caption: 'Send help',              rad: 11, bad:  9 },
+  { userIdx: 9, category: 'memes',   image: img('meme4'),      caption: 'No notes',               rad: 19, bad: 31 },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -162,9 +115,11 @@ async function cleanup() {
     await supabase.auth.admin.deleteUser(id);
     removed++;
   }
-  // Also clean up any uploads from previous runs by caption
-  const captions = POSTS.map((p) => p.caption).filter(Boolean);
-  if (captions.length) await supabase.from('uploads').delete().in('caption', captions);
+  // Also clean up any uploads owned by those users (catches caption changes across runs)
+  if ((existing ?? []).length) {
+    const ids = (existing ?? []).map((u) => u.id);
+    await supabase.from('uploads').delete().in('user_id', ids);
+  }
   log(removed ? `Removed ${removed} existing test user(s).` : 'Nothing to clean up.');
 }
 
@@ -204,71 +159,21 @@ async function createUploads(users) {
       .single();
 
     if (error) { fail(`Upload "${post.caption}": ${error.message}`); continue; }
-    created.push({ ...post, id: data.id });
-    log(`✓ @${user.username} → [${post.category}] "${post.caption}"`);
-  }
-  return created;
-}
-
-async function createVotes(users, uploads) {
-  console.log('\n🗳️  Creating votes...');
-  let count = 0;
-
-  for (const [postIdx, radVoterIdxs, badVoterIdxs] of VOTE_PLANS) {
-    const upload = uploads[postIdx];
-    if (!upload) { fail(`No upload at index ${postIdx}`); continue; }
-
-    const ownerIdx = upload.userIdx;
-
-    const insertVote = async (voterIdx, vote) => {
-      const voter = users[voterIdx];
-      if (!voter || voterIdx === ownerIdx) return; // skip self-votes
-      const { error } = await supabase.from('votes').insert({
-        voter_id:  voter.id,
-        upload_id: upload.id,
-        vote,
-      });
-      if (!error) count++;
-    };
-
-    for (const vi of radVoterIdxs)  await insertVote(vi, 'rad');
-    for (const vi of badVoterIdxs) await insertVote(vi, 'bad');
-
-    const rad   = radVoterIdxs.length;
-    const total = radVoterIdxs.length + badVoterIdxs.length;
-    const pct   = total ? Math.round((rad / total) * 100) : 0;
-    log(`Post ${postIdx}: ${rad}/${total} rad = ${pct}%`);
-  }
-
-  log(`\nTotal votes inserted: ${count}`);
-}
-
-async function createGradientPosts(users) {
-  console.log('\n🌈 Creating gradient preview posts...');
-  for (const p of GRADIENT_POSTS) {
-    const user = users[p.userIdx];
-    if (!user) { fail(`No user at index ${p.userIdx}`); continue; }
-
-    const { data, error } = await supabase
-      .from('uploads')
-      .insert({ user_id: user.id, category: p.category, image_url: p.image, caption: p.caption })
-      .select('id')
-      .single();
-
-    if (error) { fail(`Gradient post "${p.caption}": ${error.message}`); continue; }
 
     // Set vote counts directly — triggers wilson_score recalc via DB trigger
-    const total = p.rad + p.bad;
+    const total = post.rad + post.bad;
     const { error: ve } = await supabase
       .from('uploads')
-      .update({ rad_votes: p.rad, bad_votes: p.bad, total_votes: total })
+      .update({ rad_votes: post.rad, bad_votes: post.bad, total_votes: total })
       .eq('id', data.id);
 
-    if (ve) { fail(`Vote counts for "${p.caption}": ${ve.message}`); continue; }
+    if (ve) { fail(`Vote counts for "${post.caption}": ${ve.message}`); continue; }
 
-    const afterRad = Math.round(((p.rad + 1) / (total + 1)) * 100);
-    log(`✓ ${p.caption} → ${p.rad}/${total} pre-loaded → ${afterRad}% after your Rad`);
+    const pct = Math.round((post.rad / total) * 100);
+    created.push({ ...post, id: data.id });
+    log(`✓ @${user.username} → [${post.category}] "${post.caption}" — ${post.rad}/${total} = ${pct}%`);
   }
+  return created;
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -287,9 +192,7 @@ async function main() {
   // Small delay to let the DB trigger create public.users rows
   await new Promise((r) => setTimeout(r, 1500));
 
-  const uploads = await createUploads(users);
-  await createVotes(users, uploads);
-  await createGradientPosts(users);
+  await createUploads(users);
 
   console.log(`
 ✅ Seed complete!
@@ -298,15 +201,13 @@ Login with any test account:
   Email:    testuser1@radorbad.dev … testuser10@radorbad.dev
   Password: ${PASSWORD}
 
-Rating tiers in the feed:
-  100% Untouchable  → posts by testuser1, testuser3
-  ~89% Heat         → posts by testuser1, testuser6
-  ~78% Solid        → post by testuser2
-  ~67% Mid          → post by testuser2
-  ~38–44% Fumble    → posts by testuser3, testuser8
-  No score (unvoted) → remaining posts
+Scores are spread across the full range per category:
+  People:  94%, 78%, 61%, 33%
+  Animals: 97%, 85%, 52%, 28%
+  Food:    91%, 74%, 58%, 41%
+  Nature:  96%, 83%, 68%, 45%, 22%
+  Memes:   89%, 72%, 55%, 38%
 
-Note: Elite (90–99%) can't be demonstrated with only 9 voters per post.
 Re-run this script at any time to reset all test data.
 `);
 }

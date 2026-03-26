@@ -7,11 +7,13 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
   withTiming,
+  withSequence,
+  withRepeat,
   runOnJS,
   interpolate,
   Extrapolation,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Image } from 'expo-image';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,7 +21,7 @@ import type { FeedItem } from '@/hooks/useFeed';
 import { getRating } from '@/lib/getRating';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const CARD_WIDTH = SCREEN_WIDTH - 32;
+const CARD_WIDTH = SCREEN_WIDTH - 16;
 const DISMISS_THRESHOLD = SCREEN_HEIGHT * 0.18;
 const SPRING_CONFIG = { damping: 20, stiffness: 200 };
 
@@ -52,6 +54,7 @@ interface SwipeCardProps {
   isTop: boolean;
   index: number;
   containerHeight: number;
+  showSwipeHint: boolean;
 }
 
 function CategoryPill({ category }: { category: string }) {
@@ -68,7 +71,7 @@ function CategoryPill({ category }: { category: string }) {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, onDismiss, onFavorite, onFollow, onUserPress, isTop, index, containerHeight }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, onDismiss, onFavorite, onFollow, onUserPress, isTop, index, containerHeight, showSwipeHint }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   // Optimistically include the user's own vote in the score calculation
   const rad   = item.rad_votes + (userVote === 'rad' ? 1 : 0);
@@ -77,16 +80,56 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const scoreOpacity = useSharedValue(0);
+  const scoreScale = useSharedValue(0.4);
+  const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hintTranslateY = useSharedValue(0);
+  const hintOpacity = useSharedValue(0);
 
-  // Fade score badge in when the user votes
+  // Pop score badge in when the user votes, then auto-dismiss after 1.2s
   useEffect(() => {
     if (userVote !== null) {
-      scoreOpacity.value = withTiming(1, { duration: 350 });
+      scoreOpacity.value = withTiming(1, { duration: 80 });
+      scoreScale.value = withSpring(1, { damping: 31, stiffness: 400 });
+      dismissTimer.current = setTimeout(() => {
+        translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 300 }, () => {
+          runOnJS(onDismiss)();
+        });
+      }, 1300);
     }
+    return () => {
+      if (dismissTimer.current) clearTimeout(dismissTimer.current);
+    };
   }, [userVote]);
+
+  // Pulse chevron up twice then fade out
+  useEffect(() => {
+    if (!showSwipeHint) return;
+    hintOpacity.value = withTiming(1, { duration: 300 });
+    hintTranslateY.value = withRepeat(
+      withSequence(
+        withTiming(-14, { duration: 400 }),
+        withTiming(0, { duration: 400 }),
+      ),
+      2,
+      false,
+      () => {
+        hintOpacity.value = withTiming(0, { duration: 400 });
+      }
+    );
+  }, [showSwipeHint]);
+
+  function cancelDismissTimer() {
+    if (dismissTimer.current) {
+      clearTimeout(dismissTimer.current);
+      dismissTimer.current = null;
+    }
+  }
 
   const gesture = Gesture.Pan()
     .enabled(isTop)
+    .onBegin(() => {
+      runOnJS(cancelDismissTimer)();
+    })
     .onUpdate((e) => {
       if (e.translationY < 0) {
         // Upward — left lean is free, rightward drift is heavily resisted
@@ -130,6 +173,12 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
 
   const scoreStyle = useAnimatedStyle(() => ({
     opacity: scoreOpacity.value,
+    transform: [{ scale: scoreScale.value }],
+  }));
+
+  const hintStyle = useAnimatedStyle(() => ({
+    opacity: hintOpacity.value,
+    transform: [{ translateY: hintTranslateY.value }],
   }));
 
   return (
@@ -197,16 +246,19 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
             <Text style={styles.caption} numberOfLines={2}>{item.caption}</Text>
           ) : null}
           <View style={styles.metaRow}>
-            {total > 0 && (
-              <>
-                <Ionicons name="star" size={12} color="rgba(255,255,255,0.65)" />
-                <Text style={styles.metaText}>{total}</Text>
-                <Text style={styles.metaDot}>·</Text>
-              </>
-            )}
             <CategoryPill category={item.category} />
+            <View style={[styles.metaCount, total === 0 && styles.metaCountHidden]}>
+              <Ionicons name="star" size={12} color="rgba(255,255,255,0.65)" />
+              <Text style={styles.metaText}>{total}</Text>
+            </View>
           </View>
         </LinearGradient>
+
+        {/* Swipe-up hint chevron */}
+        <Animated.View style={[styles.hintContainer, hintStyle]} pointerEvents="none">
+          <Ionicons name="chevron-up" size={28} color="rgba(255,255,255,0.85)" />
+          <Text style={styles.hintText}>Swipe up to skip</Text>
+        </Animated.View>
       </Animated.View>
     </GestureDetector>
   );
@@ -241,17 +293,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 14,
     right: 14,
-    backgroundColor: 'rgba(0,0,0,0.65)',
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     alignItems: 'center',
   },
   ratingPercent: {
     color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '800',
-    lineHeight: 18,
+    fontSize: 26,
+    fontWeight: '900',
+    lineHeight: 30,
   },
   ratingLabel: {
     color: '#FFFFFF',
@@ -311,7 +363,15 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    justifyContent: 'space-between',
+  },
+  metaCount: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  metaCountHidden: {
+    opacity: 0,
   },
   categoryPill: {
     borderWidth: 1,
@@ -327,8 +387,18 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.65)',
     fontSize: 13,
   },
-  metaDot: {
-    color: 'rgba(255,255,255,0.35)',
+  hintContainer: {
+    position: 'absolute',
+    bottom: 100,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    gap: 4,
+  },
+  hintText: {
+    color: 'rgba(255,255,255,0.7)',
     fontSize: 13,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
 });

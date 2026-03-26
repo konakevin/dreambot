@@ -38,13 +38,13 @@ export function RankCard({ post, rank, height = 150 }: RankCardProps) {
           style={styles.footer}
         >
           <View style={styles.footerRow}>
-            <View>
+            <View style={styles.usernameRow}>
               {post.users?.username && (
                 <Text style={styles.username} numberOfLines={1}>@{post.users.username}</Text>
               )}
               {post.total_votes > 0 && (
                 <View style={styles.ratingsRow}>
-                  <Ionicons name="star" size={10} color="rgba(255,255,255,0.5)" />
+                  <Ionicons name="star" size={11} color="#FFB300" />
                   <Text style={styles.ratingsText}>{post.total_votes}</Text>
                 </View>
               )}
@@ -91,11 +91,11 @@ const styles = StyleSheet.create({
     top: 10,
     left: 14,
     color: '#FFFFFF',
-    fontSize: 36,
+    fontSize: 28,
     fontWeight: '900',
-    textShadowColor: 'rgba(0,0,0,0.7)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
+    textShadowColor: '#000000',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   footer: {
     position: 'absolute',
@@ -111,6 +111,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
+  usernameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   username: {
     color: '#FFFFFF',
     fontSize: 14,
@@ -119,22 +124,21 @@ const styles = StyleSheet.create({
   ratingsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    marginTop: 2,
+    gap: 2,
   },
   ratingsText: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 11,
-    fontWeight: '500',
+    color: '#FFB300',
+    fontSize: 12,
+    fontWeight: '700',
   },
   score: {
-    fontSize: 32,
+    fontSize: 26,
     fontWeight: '800',
     color: '#FFFFFF',
-    lineHeight: 36,
+    lineHeight: 30,
   },
   scorePct: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '700',
   },
   invisible: { opacity: 0 },

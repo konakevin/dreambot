@@ -123,7 +123,7 @@ export default function ProfileScreen() {
           keyExtractor={(item) => item.id}
           numColumns={2}
           columnWrapperStyle={styles.row}
-          renderItem={({ item }) => <PostTile item={item} />}
+          renderItem={({ item }) => <PostTile item={item} isOwn={activeTab === 'posts'} />}
         />
       )}
     </SafeAreaView>
