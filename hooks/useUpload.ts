@@ -8,7 +8,7 @@ import { Video as CompressorVideo } from 'react-native-compressor';
 
 interface UploadArgs {
   uri: string;
-  category: Category;
+  categories: Category[];
   caption: string;
   mediaType: 'image' | 'video';
   width: number | null;
@@ -50,7 +50,7 @@ export function useUpload() {
   const setPendingPost = useFeedStore((s) => s.setPendingPost);
 
   return useMutation({
-    mutationFn: async ({ uri, category, caption, mediaType, width, height }: UploadArgs): Promise<PendingPost> => {
+    mutationFn: async ({ uri, categories, caption, mediaType, width, height }: UploadArgs): Promise<PendingPost> => {
       const uploadUri = mediaType === 'video'
         ? await CompressorVideo.compress(uri, { compressionMethod: 'auto', maxSize: 1280 })
         : uri;
@@ -65,7 +65,7 @@ export function useUpload() {
         .from('uploads')
         .insert({
           user_id: user!.id,
-          category,
+          categories,
           image_url: mediaUrl,
           media_type: mediaType,
           thumbnail_url: thumbnailUrl,
@@ -74,7 +74,7 @@ export function useUpload() {
           caption: caption.trim() || null,
           is_approved: true,
         })
-        .select('id, user_id, category, image_url, media_type, thumbnail_url, caption, created_at, total_votes, rad_votes, bad_votes')
+        .select('id, user_id, categories, image_url, media_type, thumbnail_url, caption, created_at, total_votes, rad_votes, bad_votes')
         .single();
 
       if (error) throw error;

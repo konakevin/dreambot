@@ -1,4 +1,4 @@
-export type Category = 'people' | 'animals' | 'food' | 'nature' | 'memes';
+export type Category = 'people' | 'animals' | 'food' | 'nature' | 'funny' | 'music' | 'sports' | 'art';
 export type VoteType = 'rad' | 'bad' | 'skip';
 
 export interface Database {

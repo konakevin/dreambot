@@ -266,7 +266,10 @@ const CATEGORIES: { key: Category; label: string; color: string }[] = [
   { key: 'animals', label: 'Animals', color: '#DDAA66' },
   { key: 'food',    label: 'Food',    color: '#DD7766' },
   { key: 'nature',  label: 'Nature',  color: '#77CC88' },
-  { key: 'memes',   label: 'Memes',   color: '#BB88EE' },
+  { key: 'funny',   label: 'Funny',   color: '#CCDD55' },
+  { key: 'music',   label: 'Music',   color: '#CC99FF' },
+  { key: 'sports',  label: 'Sports',  color: '#44BBCC' },
+  { key: 'art',     label: 'Art',     color: '#EECB55' },
 ];
 
 function CaughtUpState() {

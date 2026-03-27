@@ -96,7 +96,10 @@ const VIDEOS = {
   animals: [VIDEO_POOL[2], VIDEO_POOL[3], VIDEO_POOL[5]],
   food:    [VIDEO_POOL[1], VIDEO_POOL[6], VIDEO_POOL[0]],
   nature:  [VIDEO_POOL[3], VIDEO_POOL[4], VIDEO_POOL[7], VIDEO_POOL[2]],
-  memes:   [VIDEO_POOL[5], VIDEO_POOL[6], VIDEO_POOL[7]],
+  funny:   [VIDEO_POOL[5], VIDEO_POOL[6], VIDEO_POOL[7]],
+  music:   [VIDEO_POOL[0], VIDEO_POOL[3], VIDEO_POOL[7]],
+  sports:  [VIDEO_POOL[1], VIDEO_POOL[2], VIDEO_POOL[6]],
+  art:     [VIDEO_POOL[0], VIDEO_POOL[4], VIDEO_POOL[5]],
 };
 
 // ── Post content pools ────────────────────────────────────────────────────────
@@ -205,7 +208,7 @@ const CONTENT = {
       'touch grass, as they say',
     ],
   },
-  memes: {
+  funny: {
     images: [
       portrait('meme1'), landscape('meme2'), portrait('meme3'),
       portrait('meme4'), landscape('meme5'), portrait('meme6'),
@@ -229,6 +232,84 @@ const CONTENT = {
       'the timing on this is everything',
       'living in my head rent free',
       'scientists couldn\'t have predicted this',
+    ],
+  },
+  music: {
+    images: [
+      portrait('music1'), portrait('music2'), landscape('music3'),
+      portrait('music4'), landscape('music5'), portrait('music6'),
+      portrait('music7'), portrait('music8'),
+    ],
+    captions: [
+      'First row and the setlist hit different',
+      'This vinyl find was not leaving the store without me',
+      'Home studio finally came together',
+      'Caught this one mid-solo',
+      'The crowd knew every word',
+      'Found this record at a garage sale for two dollars',
+      'Open mic turned into something else entirely',
+      'Practice session that actually went well',
+      'Sound check hours before anyone else arrived',
+      'New speakers and I have not moved in four hours',
+    ],
+    videoCaptions: [
+      'the drop at 0:47 broke something in me',
+      'caught this busker and could not walk away',
+      'she played this completely unplugged',
+      'session musicians doing what they do',
+      'this bassline is embarrassingly good',
+    ],
+  },
+  art: {
+    images: [
+      portrait('art1'), landscape('art2'), portrait('art3'),
+      portrait('art4'), landscape('art5'), portrait('art6'),
+      landscape('art7'), portrait('art8'),
+    ],
+    captions: [
+      'Found this piece at a tiny gallery and couldn\'t stop staring',
+      'Studio day — paint everywhere, no regrets',
+      'This one took three weeks and I\'m still not sure it\'s done',
+      'Street mural that stopped me in my tracks',
+      'Picked this up at the open market for forty dollars',
+      'The colors in person are completely different from the photo',
+      'Ceramics class is now the best part of my week',
+      'Caught this sculptor mid-session',
+      'This exhibit had zero people in it which meant it was mine',
+      'Commission came out better than the brief',
+    ],
+    videoCaptions: [
+      'time lapse of a piece that took six hours',
+      'the brush work on this is unreal',
+      'open studio and the energy was everything',
+      'watched this street artist work for an hour straight',
+      'the reveal at the end got me',
+    ],
+  },
+  sports: {
+    images: [
+      portrait('sports1'), landscape('sports2'), portrait('sports3'),
+      landscape('sports4'), portrait('sports5'), portrait('sports6'),
+      landscape('sports7'), portrait('sports8'),
+    ],
+    captions: [
+      'Last second and we were already screaming',
+      'Morning run before the city woke up',
+      'The grind does not care what day it is',
+      'First game of the season and they delivered',
+      'This gym has been my second home for three years',
+      'Post-game energy is unmatched',
+      'The training montage that actually happened',
+      'Packed stadium and the atmosphere was unreal',
+      'Recovery day but the view made it worth it',
+      'Caught this right before the whistle',
+    ],
+    videoCaptions: [
+      'the highlight reel wrote itself',
+      'nobody in that stadium was sitting down',
+      'he made that look too easy',
+      'the comeback nobody saw coming',
+      'this play is going to live in my head forever',
     ],
   },
 };
@@ -291,6 +372,16 @@ function pick(arr, n) {
 
 function rand(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Assign 1–2 categories per post: primary is always the content pool key;
+// 30% chance of a second category chosen at random from the others.
+function pickCategories(primary, allCategories) {
+  if (Math.random() < 0.3) {
+    const others = allCategories.filter((c) => c !== primary);
+    return [primary, rand(others)];
+  }
+  return [primary];
 }
 
 // ── Cleanup ───────────────────────────────────────────────────────────────────
@@ -359,7 +450,7 @@ async function createUploads(users) {
         videoPostTotal++;
         return {
           user,
-          category: cat,
+          categories: pickCategories(cat, CATEGORIES),
           media_type: 'video',
           image_url: vid.url,
           thumbnail_url: vid.thumbnail_url,
@@ -376,7 +467,7 @@ async function createUploads(users) {
         imagePostTotal++;
         return {
           user,
-          category: cat,
+          categories: pickCategories(cat, CATEGORIES),
           media_type: 'image',
           image_url: img.url,
           thumbnail_url: null,
@@ -395,7 +486,7 @@ async function createUploads(users) {
       .from('uploads')
       .insert({
         user_id:       post.user.id,
-        category:      post.category,
+        categories:    post.categories,
         image_url:     post.image_url,
         media_type:    post.media_type,
         thumbnail_url: post.thumbnail_url,

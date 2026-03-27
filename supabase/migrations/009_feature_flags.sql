@@ -11,3 +11,6 @@ CREATE TABLE IF NOT EXISTS public.feature_flags (
 -- Disable swipe-to-skip on the home feed
 INSERT INTO public.feature_flags (key, value, description)
 VALUES ('homeSwipeToSkipEnabled', false, 'Allow users to swipe up to skip a card on the home feed without voting');
+
+-- To Enable Later
+-- UPDATE feature_flags SET value = true WHERE key = 'homeSwipeToSkipEnabled';

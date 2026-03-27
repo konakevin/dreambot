@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/auth';
 
 export interface PostItem {
   id: string;
-  category: string;
+  categories: string[];
   image_url: string;
   media_type: 'image' | 'video';
   thumbnail_url: string | null;
@@ -23,7 +23,7 @@ export function useUserPosts() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('uploads')
-        .select('id, category, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at')
+        .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at')
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
       if (error) throw error;

@@ -30,7 +30,10 @@ const CATEGORIES: { value: Category; label: string; color: string }[] = [
   { value: 'animals', label: 'Animals', color: '#DDAA66' },
   { value: 'food',    label: 'Food',    color: '#DD7766' },
   { value: 'nature',  label: 'Nature',  color: '#77CC88' },
-  { value: 'memes',   label: 'Memes',   color: '#BB88EE' },
+  { value: 'funny',   label: 'Funny',   color: '#CCDD55' },
+  { value: 'music',   label: 'Music',   color: '#CC99FF' },
+  { value: 'sports',  label: 'Sports',  color: '#44BBCC' },
+  { value: 'art',     label: 'Art',     color: '#EECB55' },
 ];
 
 function VideoPreview({ uri }: { uri: string }) {
@@ -53,7 +56,7 @@ export default function UploadScreen() {
   const [mediaUri, setMediaUri] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
   const [mediaDimensions, setMediaDimensions] = useState<{ width: number; height: number } | null>(null);
-  const [category, setCategory] = useState<Category | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [caption, setCaption] = useState('');
   const { mutate: upload, isPending } = useUpload();
   const compressMsg = useMemo(
@@ -62,7 +65,7 @@ export default function UploadScreen() {
     [isPending],
   );
 
-  const canPost = !!mediaUri && !!category;
+  const canPost = !!mediaUri && categories.length > 0;
 
   async function pickFromLibrary() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -116,14 +119,14 @@ export default function UploadScreen() {
     if (!canPost) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     upload(
-      { uri: mediaUri!, category: category!, caption, mediaType, width: mediaDimensions?.width ?? null, height: mediaDimensions?.height ?? null },
+      { uri: mediaUri!, categories, caption, mediaType, width: mediaDimensions?.width ?? null, height: mediaDimensions?.height ?? null },
       {
         onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           setMediaUri(null);
           setMediaType('image');
           setMediaDimensions(null);
-          setCategory(null);
+          setCategories([]);
           setCaption('');
           router.replace('/(tabs)');
         },
@@ -199,7 +202,7 @@ export default function UploadScreen() {
           <Text style={styles.sectionLabel}>CATEGORY</Text>
           <View style={styles.categoryRow}>
             {CATEGORIES.map((cat) => {
-              const selected = category === cat.value;
+              const selected = categories.includes(cat.value);
               return (
                 <TouchableOpacity
                   key={cat.value}
@@ -207,7 +210,14 @@ export default function UploadScreen() {
                     styles.categoryChip,
                     selected && { borderColor: cat.color, backgroundColor: `${cat.color}1A` },
                   ]}
-                  onPress={() => { Haptics.selectionAsync(); setCategory(cat.value); }}
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    setCategories((prev) =>
+                      prev.includes(cat.value)
+                        ? prev.filter((c) => c !== cat.value)
+                        : [...prev, cat.value]
+                    );
+                  }}
                   activeOpacity={0.8}
                 >
                   <Text style={[styles.categoryChipText, selected && { color: cat.color, fontWeight: '700' }]} numberOfLines={1}>
@@ -242,7 +252,7 @@ export default function UploadScreen() {
 
           {!canPost && (
             <Text style={styles.hint}>
-              {!mediaUri ? 'Choose a photo or video to get started' : 'Pick a category to continue'}
+              {!mediaUri ? 'Choose a photo or video to get started' : 'Pick at least one category to continue'}
             </Text>
           )}
         </ScrollView>
@@ -335,9 +345,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   optional: { color: '#3E4144', fontWeight: '400', letterSpacing: 0 },
-  categoryRow: { flexDirection: 'row', gap: 6, marginBottom: 28 },
+  categoryRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 28 },
   categoryChip: {
-    flex: 1,
+    width: '23%',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

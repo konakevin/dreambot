@@ -10,8 +10,6 @@ import Animated, {
   withSequence,
   withRepeat,
   runOnJS,
-  interpolate,
-  Extrapolation,
 } from 'react-native-reanimated';
 import { useEffect, useRef, useState } from 'react';
 import { Image } from 'expo-image';
@@ -37,7 +35,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   animals: 'Animals',
   food:    'Food',
   nature:  'Nature',
-  memes:   'Memes',
+  funny:   'Funny',
+  music:   'Music',
+  sports:  'Sports',
+  art:     'Art',
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -45,7 +46,10 @@ const CATEGORY_COLORS: Record<string, string> = {
   animals: '#DDAA66',
   food:    '#DD7766',
   nature:  '#77CC88',
-  memes:   '#BB88EE',
+  funny:   '#CCDD55',
+  music:   '#CC99FF',
+  sports:  '#44BBCC',
+  art:     '#EECB55',
 };
 
 interface SwipeCardProps {
@@ -110,6 +114,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   const rad   = item.rad_votes + (userVote === 'rad' ? 1 : 0);
   const total = item.total_votes + (userVote !== null ? 1 : 0);
   const rating = userVote !== null ? getRating(rad, total) : null;
+  const [catsExpanded, setCatsExpanded] = useState(false);
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const scoreOpacity = useSharedValue(0);
@@ -121,13 +126,16 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   // Pop score badge in when the user votes, then auto-dismiss after 0.9s
   useEffect(() => {
     if (userVote !== null) {
-      scoreOpacity.value = withTiming(1, { duration: 80 });
-      scoreScale.value = withSpring(1, { damping: 31, stiffness: 400 });
+      scoreOpacity.value = withTiming(1, { duration: 50 });
+      scoreScale.value = withSequence(
+        withTiming(1.38, { duration: 100 }),
+        withTiming(1, { duration: 80 }),
+      );
       dismissTimer.current = setTimeout(() => {
-        translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 300 }, () => {
+        translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
           runOnJS(onDismiss)();
         });
-      }, 900);
+      }, 430);
     }
     return () => {
       if (dismissTimer.current) clearTimeout(dismissTimer.current);
@@ -189,20 +197,12 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
       }
     });
 
-  const cardStyle = useAnimatedStyle(() => {
-    const scale = isTop
-      ? 1
-      : interpolate(index, [1, 3], [0.97, 0.93], Extrapolation.CLAMP);
-    const translateYOffset = isTop ? 0 : index * 6;
-
-    return {
-      transform: [
-        { translateX: translateX.value },
-        { translateY: translateY.value + translateYOffset },
-        { scale },
-      ],
-    };
-  });
+  const cardStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+    ],
+  }));
 
   const scoreStyle = useAnimatedStyle(() => ({
     opacity: scoreOpacity.value,
@@ -303,27 +303,50 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
             ) : null}
 
             {/* Row 3: category · star count · save */}
-            <View style={styles.metaRow}>
-              <View style={styles.metaLeft}>
-                <CategoryPill category={item.category} />
-                {total > 0 && (
-                  <>
-                    <Text style={styles.metaDot}>·</Text>
-                    <Ionicons name="star" size={12} color="rgba(255,255,255,0.65)" />
-                    <Text style={styles.metaText}>{formatCount(total)}</Text>
-                  </>
-                )}
-              </View>
-              {!isOwnPost && (
-                <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
-                  <Ionicons
-                    name={isFavorited ? 'bookmark' : 'bookmark-outline'}
-                    size={22}
-                    color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
+            {(() => {
+              const cats = item.categories ?? [];
+              const visible = cats.slice(0, 2);
+              const hidden = cats.slice(2);
+              return (
+                <View>
+                  <View style={styles.metaRow}>
+                    <View style={styles.metaLeft}>
+                      {visible.map((cat) => (
+                        <CategoryPill key={cat} category={cat} />
+                      ))}
+                      {hidden.length > 0 && (
+                        <Pressable onPress={() => setCatsExpanded((v) => !v)} hitSlop={8} style={styles.plusNPill}>
+                          <Text style={styles.plusNText}>{catsExpanded ? '−' : `+${hidden.length}`}</Text>
+                        </Pressable>
+                      )}
+                      {total > 0 && (
+                        <>
+                          <Text style={styles.metaDot}>·</Text>
+                          <Ionicons name="star" size={12} color="rgba(255,255,255,0.65)" />
+                          <Text style={styles.metaText}>{formatCount(total)}</Text>
+                        </>
+                      )}
+                    </View>
+                    {!isOwnPost && (
+                      <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                        <Ionicons
+                          name={isFavorited ? 'bookmark' : 'bookmark-outline'}
+                          size={22}
+                          color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  {catsExpanded && hidden.length > 0 && (
+                    <View style={styles.expandedCats}>
+                      {hidden.map((cat) => (
+                        <CategoryPill key={cat} category={cat} />
+                      ))}
+                    </View>
+                  )}
+                </View>
+              );
+            })()}
           </View>
         </LinearGradient>
 
@@ -447,6 +470,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
+  },
+  plusNPill: {
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 10,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+  },
+  plusNText: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  expandedCats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 5,
+    marginTop: 5,
   },
   metaDot: {
     color: 'rgba(255,255,255,0.3)',

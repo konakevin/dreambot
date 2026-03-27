@@ -3,7 +3,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { File, Paths } from 'expo-file-system/next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Image } from 'expo-image';
 import { VideoView, useVideoPlayer } from 'expo-video';
@@ -35,10 +35,12 @@ import { formatCount } from '@/lib/formatCount';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 
 const CATEGORY_LABELS: Record<string, string> = {
-  people: 'People', animals: 'Animals', food: 'Food', nature: 'Nature', memes: 'Memes',
+  people: 'People', animals: 'Animals', food: 'Food', nature: 'Nature',
+  funny: 'Funny', music: 'Music', sports: 'Sports', art: 'Art',
 };
 const CATEGORY_COLORS: Record<string, string> = {
-  people: '#6699EE', animals: '#DDAA66', food: '#DD7766', nature: '#77CC88', memes: '#BB88EE',
+  people: '#6699EE', animals: '#DDAA66', food: '#DD7766', nature: '#77CC88',
+  funny: '#CCDD55', music: '#CC99FF', sports: '#44BBCC', art: '#EECB55',
 };
 
 function VideoPlayer({ uri, muted, contentFit = 'cover' }: { uri: string; muted: boolean; contentFit?: 'cover' | 'contain' }) {
@@ -176,8 +178,6 @@ export default function PhotoDetailScreen() {
   const p = post;
   const isOwnPost = currentUser?.id === p.user_id;
   const blurBg = p.width && p.height ? (p.width / p.height) > (SCREEN_WIDTH / SCREEN_HEIGHT) : false;
-  const categoryColor = CATEGORY_COLORS[p.category] ?? '#FFFFFF';
-  const categoryLabel = CATEGORY_LABELS[p.category] ?? p.category;
 
   // Optimistic score calculation
   const rad = p.rad_votes + (localVote === 'rad' ? 1 : 0);
@@ -252,78 +252,18 @@ export default function PhotoDetailScreen() {
         pointerEvents="none"
       />
 
-      {/* Bottom gradient overlay */}
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.0)', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.82)']}
-        locations={[0, 0.3, 0.72, 1]}
-        style={styles.bottomGradient}
-        pointerEvents="box-none"
-      >
-        <View style={styles.contentRow}>
-          {/* Left block — all info, tight even spacing */}
-          <View style={styles.infoBlock}>
-            <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
-              <Text style={styles.username}>@{p.users?.username}</Text>
-            </TouchableOpacity>
-
-            {p.caption ? (
-              <TouchableOpacity onPress={() => setCaptionExpanded((v) => !v)} activeOpacity={0.8} hitSlop={8}>
-                <Text style={styles.caption} numberOfLines={captionExpanded ? undefined : 1}>
-                  {p.caption}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-
-            <View style={styles.metaRow}>
-              <View style={[styles.categoryPill, { backgroundColor: `${categoryColor}26`, borderColor: `${categoryColor}66` }]}>
-                <Text style={[styles.categoryPillText, { color: categoryColor }]}>{categoryLabel}</Text>
-              </View>
-              {p.total_votes > 0 && (
-                <>
-                  <Text style={styles.metaDot}>·</Text>
-                  <Ionicons name="star" size={12} color="rgba(255,255,255,0.6)" />
-                  <Text style={styles.metaText}>{formatCount(p.total_votes)}</Text>
-                </>
-              )}
-              <TouchableOpacity onPress={handleShare} hitSlop={12} style={styles.shareButton}>
-                <Ionicons name="share-outline" size={18} color="rgba(255,255,255,0.6)" />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Right column — score after voting, or compact vote buttons */}
-          {!isOwnPost && !voteLoading && (
-            hasVoted && rating !== null ? (
-              <Animated.View style={[styles.scoreRight, scoreStyle]}>
-                <MaskedView maskElement={
-                  <Text style={styles.compactScore}>{rating.percent}%</Text>
-                }>
-                  <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                    <Text style={[styles.compactScore, { opacity: 0 }]}>{rating.percent}%</Text>
-                  </LinearGradient>
-                </MaskedView>
-              </Animated.View>
-            ) : (
-              <View style={styles.voteButtonsCompact}>
-                <View style={styles.radGlowSm}>
-                  <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('rad')}>
-                    <LinearGradient colors={['#CCDD55', '#DDAA66', '#DD7766']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-                    <Ionicons name="thumbs-up" size={22} color="#FFFFFF" />
-                    <Text style={styles.voteButtonTextSm}>RAD</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.badGlowSm}>
-                  <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('bad')}>
-                    <LinearGradient colors={['#BB88EE', '#6699EE', '#44BBCC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-                    <Ionicons name="thumbs-down" size={22} color="#FFFFFF" />
-                    <Text style={styles.voteButtonTextSm}>BAD</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )
-          )}
-        </View>
-      </LinearGradient>
+      <DetailFooter
+        post={p}
+        isOwnPost={isOwnPost}
+        hasVoted={hasVoted}
+        voteLoading={voteLoading}
+        rating={rating}
+        captionExpanded={captionExpanded}
+        setCaptionExpanded={setCaptionExpanded}
+        scoreStyle={scoreStyle}
+        onVote={handleVote}
+        onShare={handleShare}
+      />
 
       <ConfirmDialog
         visible={showDeleteDialog}
@@ -361,6 +301,127 @@ export default function PhotoDetailScreen() {
     </Animated.View>
     </GestureDetector>
     </>
+  );
+}
+
+// ── DetailFooter ─────────────────────────────────────────────────────────────
+// Always positioned at the bottom of the screen regardless of image aspect ratio.
+// Uses a strong enough gradient to read clearly over both images and black bars.
+interface DetailFooterProps {
+  post: PostDetail;
+  isOwnPost: boolean;
+  hasVoted: boolean;
+  voteLoading: boolean;
+  rating: ReturnType<typeof getRating> | null;
+  captionExpanded: boolean;
+  setCaptionExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  scoreStyle: object;
+  onVote: (vote: 'rad' | 'bad') => void;
+  onShare: () => void;
+}
+
+function DetailFooter({ post: p, isOwnPost, hasVoted, voteLoading, rating, captionExpanded, setCaptionExpanded, scoreStyle, onVote, onShare }: DetailFooterProps) {
+  const [catsExpanded, setCatsExpanded] = useState(false);
+  const cats = p.categories ?? [];
+  const visibleCats = cats.slice(0, 2);
+  const hiddenCats = cats.slice(2);
+
+  return (
+    <LinearGradient
+      colors={['transparent', 'rgba(0,0,0,0.55)', 'rgba(0,0,0,0.88)']}
+      locations={[0, 0.4, 1]}
+      style={styles.bottomGradient}
+      pointerEvents="box-none"
+    >
+      <View style={styles.contentRow}>
+        {/* Left — username, caption, meta */}
+        <View style={styles.infoBlock}>
+          <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
+            <Text style={styles.username}>@{p.users?.username}</Text>
+          </TouchableOpacity>
+
+          {p.caption ? (
+            <TouchableOpacity onPress={() => setCaptionExpanded((v) => !v)} activeOpacity={0.8} hitSlop={8}>
+              <Text style={styles.caption} numberOfLines={captionExpanded ? undefined : 1}>
+                {p.caption}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+
+          <View>
+            <View style={styles.metaRow}>
+              {visibleCats.map((cat) => {
+                const color = CATEGORY_COLORS[cat] ?? '#FFFFFF';
+                return (
+                  <Pressable key={cat} onPress={() => router.push(`/(tabs)/top?category=${cat}`)} hitSlop={8}
+                    style={[styles.categoryPill, { backgroundColor: `${color}26`, borderColor: `${color}66` }]}>
+                    <Text style={[styles.categoryPillText, { color }]}>{CATEGORY_LABELS[cat] ?? cat}</Text>
+                  </Pressable>
+                );
+              })}
+              {hiddenCats.length > 0 && (
+                <Pressable onPress={() => setCatsExpanded((v) => !v)} hitSlop={8} style={styles.plusNPill}>
+                  <Text style={styles.plusNText}>{catsExpanded ? '−' : `+${hiddenCats.length}`}</Text>
+                </Pressable>
+              )}
+              {p.total_votes > 0 && (
+                <>
+                  <Text style={styles.metaDot}>·</Text>
+                  <Ionicons name="star" size={12} color="rgba(255,255,255,0.6)" />
+                  <Text style={styles.metaText}>{formatCount(p.total_votes)}</Text>
+                </>
+              )}
+              <TouchableOpacity onPress={onShare} hitSlop={12} style={styles.shareButton}>
+                <Ionicons name="share-outline" size={18} color="rgba(255,255,255,0.6)" />
+              </TouchableOpacity>
+            </View>
+            {catsExpanded && hiddenCats.length > 0 && (
+              <View style={styles.expandedCats}>
+                {hiddenCats.map((cat) => {
+                  const color = CATEGORY_COLORS[cat] ?? '#FFFFFF';
+                  return (
+                    <Pressable key={cat} onPress={() => router.push(`/(tabs)/top?category=${cat}`)} hitSlop={8}
+                      style={[styles.categoryPill, { backgroundColor: `${color}26`, borderColor: `${color}66` }]}>
+                      <Text style={[styles.categoryPillText, { color }]}>{CATEGORY_LABELS[cat] ?? cat}</Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            )}
+          </View>
+        </View>
+
+        {/* Right — score or vote buttons */}
+        {!isOwnPost && !voteLoading && (
+          hasVoted && rating !== null ? (
+            <Animated.View style={[styles.scoreRight, scoreStyle]}>
+              <MaskedView maskElement={<Text style={styles.compactScore}>{rating.percent}%</Text>}>
+                <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                  <Text style={[styles.compactScore, { opacity: 0 }]}>{rating.percent}%</Text>
+                </LinearGradient>
+              </MaskedView>
+            </Animated.View>
+          ) : (
+            <View style={styles.voteButtonsCompact}>
+              <View style={styles.radGlowSm}>
+                <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => onVote('rad')}>
+                  <LinearGradient colors={['#CCDD55', '#DDAA66', '#DD7766']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+                  <Ionicons name="thumbs-up" size={22} color="#FFFFFF" />
+                  <Text style={styles.voteButtonTextSm}>RAD</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.badGlowSm}>
+                <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => onVote('bad')}>
+                  <LinearGradient colors={['#BB88EE', '#6699EE', '#44BBCC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+                  <Ionicons name="thumbs-down" size={22} color="#FFFFFF" />
+                  <Text style={styles.voteButtonTextSm}>BAD</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )
+        )}
+      </View>
+    </LinearGradient>
   );
 }
 
@@ -450,6 +511,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+  },
+  plusNPill: {
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  plusNText: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  expandedCats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginTop: 6,
   },
   shareButton: {
     padding: 4,

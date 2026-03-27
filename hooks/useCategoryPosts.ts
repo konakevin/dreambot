@@ -4,7 +4,7 @@ import type { Category } from '@/types/database';
 
 export interface ExplorePost {
   id: string;
-  category: string;
+  categories: string[];
   image_url: string;
   media_type: 'image' | 'video';
   thumbnail_url: string | null;
@@ -39,9 +39,9 @@ export function useCategoryPosts(category: Category, limit = 10) {
 
         let query = supabase
           .from('uploads')
-          .select('id, category, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username)')
+          .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username)')
           .eq('is_active', true)
-          .eq('category', category)
+          .contains('categories', [category])
           .order('wilson_score', { ascending: false, nullsFirst: false })
           .limit(limit);
 

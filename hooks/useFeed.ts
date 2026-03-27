@@ -5,7 +5,7 @@ import { useAuthStore } from '@/store/auth';
 export interface FeedItem {
   id: string;
   user_id: string;
-  category: string;
+  categories: string[];
   image_url: string;
   media_type: 'image' | 'video';
   thumbnail_url: string | null;
