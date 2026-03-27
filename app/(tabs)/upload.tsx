@@ -4,7 +4,7 @@ import {
   StyleSheet, Alert, ActivityIndicator, Dimensions, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
+import ImageCropPicker from 'react-native-image-crop-picker';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { VideoView, useVideoPlayer } from 'expo-video';
@@ -27,7 +27,7 @@ const COMPRESS_MESSAGES = [
   'Bottling the energy...',
 ];
 
-function VideoPreview({ uri }: { uri: string }) {
+function VideoPreview({ uri, height }: { uri: string; height: number }) {
   const player = useVideoPlayer(uri, (p) => {
     p.loop = true;
     p.muted = true;
@@ -36,8 +36,8 @@ function VideoPreview({ uri }: { uri: string }) {
   return (
     <VideoView
       player={player}
-      style={styles.imagePreview}
-      contentFit="cover"
+      style={[styles.imagePreview, { height }]}
+      contentFit="contain"
       nativeControls={false}
     />
   );
@@ -58,51 +58,70 @@ export default function UploadScreen() {
 
   const canPost = !!mediaUri && categories.length > 0;
 
+  const previewWidth = SCREEN_WIDTH - 32;
+  const previewHeight = mediaDimensions
+    ? Math.min(previewWidth * (mediaDimensions.height / mediaDimensions.width), IMAGE_HEIGHT)
+    : IMAGE_HEIGHT;
+
   async function pickFromLibrary() {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Allow access to your photo library in Settings.');
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 0.85,
-      videoMaxDuration: MAX_VIDEO_DURATION,
-    });
-    if (!result.canceled) {
-      const asset = result.assets[0];
-      if (asset.type === 'video' && (asset.duration ?? 0) > MAX_VIDEO_DURATION * 1000) {
-        Alert.alert('Too long', `Videos must be ${MAX_VIDEO_DURATION} seconds or less.`);
-        return;
+    try {
+      const media = await ImageCropPicker.openPicker({
+        mediaType: 'any',
+        cropping: false, // false = show all media (images + videos); crop images in next step
+        forceJpg: true,
+      });
+
+      if (media.mime.startsWith('video/')) {
+        const durationSec = (media.duration ?? 0) / 1000;
+        if (durationSec > MAX_VIDEO_DURATION) {
+          Alert.alert('Too long', `Videos must be ${MAX_VIDEO_DURATION} seconds or less. Trim it in the Photos app first.`);
+          return;
+        }
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        const uri = media.path.startsWith('file://') ? media.path : `file://${media.path}`;
+        setMediaUri(uri);
+        setMediaType('video');
+        setMediaDimensions({ width: media.width, height: media.height });
+      } else {
+        // Crop images — same library handles the modal stack so no timing issues
+        const cropped = await ImageCropPicker.openCropper({
+          path: media.path,
+          forceJpg: true,
+          cropperCancelText: 'Cancel',
+          cropperChooseText: 'Choose',
+        });
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        const uri = cropped.path.startsWith('file://') ? cropped.path : `file://${cropped.path}`;
+        setMediaUri(uri);
+        setMediaType('image');
+        setMediaDimensions({ width: cropped.width, height: cropped.height });
       }
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setMediaUri(asset.uri);
-      setMediaType(asset.type === 'video' ? 'video' : 'image');
-      setMediaDimensions(asset.width && asset.height ? { width: asset.width, height: asset.height } : null);
+    } catch (e: unknown) {
+      if ((e as { code?: string }).code !== 'E_PICKER_CANCELLED') {
+        Alert.alert('Error', 'Could not open photo library.');
+      }
     }
   }
 
   async function recordVideo() {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Allow camera access in Settings.');
-      return;
-    }
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ['images', 'videos'],
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 0.85,
-      videoMaxDuration: MAX_VIDEO_DURATION,
-    });
-    if (!result.canceled) {
-      const asset = result.assets[0];
+    try {
+      const media = await ImageCropPicker.openCamera({
+        mediaType: 'any',
+        cropping: true,
+        forceJpg: true,
+        cropperCancelText: 'Cancel',
+        cropperChooseText: 'Choose',
+        videoMaxDuration: MAX_VIDEO_DURATION,
+      });
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setMediaUri(asset.uri);
-      setMediaType(asset.type === 'video' ? 'video' : 'image');
-      setMediaDimensions(asset.width && asset.height ? { width: asset.width, height: asset.height } : null);
+      const uri = media.path.startsWith('file://') ? media.path : `file://${media.path}`;
+      setMediaUri(uri);
+      setMediaType(media.mime.startsWith('video/') ? 'video' : 'image');
+      setMediaDimensions({ width: media.width, height: media.height });
+    } catch (e: unknown) {
+      if ((e as { code?: string }).code !== 'E_PICKER_CANCELLED') {
+        Alert.alert('Error', 'Could not open camera.');
+      }
     }
   }
 
@@ -157,11 +176,11 @@ export default function UploadScreen() {
         >
           {/* Media picker / preview */}
           {mediaUri ? (
-            <View style={styles.imagePreviewContainer}>
+            <View style={[styles.imagePreviewContainer, { height: previewHeight }]}>
               {mediaType === 'video' ? (
-                <VideoPreview uri={mediaUri} />
+                <VideoPreview uri={mediaUri} height={previewHeight} />
               ) : (
-                <Image source={{ uri: mediaUri }} style={styles.imagePreview} contentFit="cover" />
+                <Image source={{ uri: mediaUri }} style={[styles.imagePreview, { height: previewHeight }]} contentFit="contain" />
               )}
               {mediaType === 'video' && (
                 <View style={styles.videoBadge}>

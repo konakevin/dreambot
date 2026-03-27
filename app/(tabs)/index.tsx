@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, withSpring, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, withSpring, withDelay, Easing } from 'react-native-reanimated';
 
 const TREADMILL_COLORS = [
   '#BB88EE', '#6699EE', '#44BBCC', '#77CC88',
@@ -11,10 +11,33 @@ const TREADMILL_COLORS = [
 const TREADMILL_WIDTH = 1280;
 const TREADMILL_SCROLL = 640;
 
-const BURST_COUNT = 12;
+const BURST_COUNT = 18;
 const BURST_ANGLES = Array.from({ length: BURST_COUNT }, (_, i) => (i * Math.PI * 2) / BURST_COUNT);
-const RAD_PARTICLE_COLORS  = ['#FFEE88', '#DDAA66', '#FFFFFF', '#FFCC44', '#DDBB55', '#FFF0AA', '#DD7766', '#FFCC44', '#FFFFFF', '#DDAA66', '#FFEE88', '#CCDD55'];
-const BAD_PARTICLE_COLORS  = ['#AABBFF', '#6699EE', '#FFFFFF', '#BB88EE', '#44BBCC', '#DDAAFF', '#9966FF', '#AABBFF', '#FFFFFF', '#6699EE', '#BB88EE', '#44BBCC'];
+
+// Per-particle config: size, shape (streak vs circle), distance, delay
+const PARTICLE_CONFIGS = [
+  { w: 8,  h: 8,  r: 4, dist: 85, delay: 0,  isStreak: false },
+  { w: 4,  h: 14, r: 2, dist: 75, delay: 15, isStreak: true  },
+  { w: 11, h: 11, r: 6, dist: 92, delay: 5,  isStreak: false },
+  { w: 4,  h: 12, r: 2, dist: 68, delay: 25, isStreak: true  },
+  { w: 6,  h: 6,  r: 3, dist: 80, delay: 10, isStreak: false },
+  { w: 13, h: 13, r: 7, dist: 96, delay: 0,  isStreak: false },
+  { w: 4,  h: 16, r: 2, dist: 72, delay: 20, isStreak: true  },
+  { w: 7,  h: 7,  r: 4, dist: 85, delay: 8,  isStreak: false },
+  { w: 5,  h: 5,  r: 3, dist: 70, delay: 30, isStreak: false },
+  { w: 4,  h: 13, r: 2, dist: 78, delay: 12, isStreak: true  },
+  { w: 10, h: 10, r: 5, dist: 88, delay: 5,  isStreak: false },
+  { w: 6,  h: 6,  r: 3, dist: 76, delay: 18, isStreak: false },
+  { w: 4,  h: 15, r: 2, dist: 82, delay: 22, isStreak: true  },
+  { w: 8,  h: 8,  r: 4, dist: 93, delay: 3,  isStreak: false },
+  { w: 5,  h: 5,  r: 3, dist: 65, delay: 35, isStreak: false },
+  { w: 12, h: 12, r: 6, dist: 90, delay: 0,  isStreak: false },
+  { w: 4,  h: 11, r: 2, dist: 74, delay: 28, isStreak: true  },
+  { w: 7,  h: 7,  r: 4, dist: 80, delay: 10, isStreak: false },
+] as const;
+
+const RAD_PARTICLE_COLORS = ['#FFEE88','#DDAA66','#FFFFFF','#FFCC44','#DDBB55','#FFF0AA','#DD7766','#FFCC44','#FFFFFF','#DDAA66','#FFEE88','#CCDD55','#FFD700','#FFFFFF','#FFAA33','#FFE055','#DDAA66','#FFFFFF'];
+const BAD_PARTICLE_COLORS = ['#AABBFF','#6699EE','#FFFFFF','#BB88EE','#44BBCC','#DDAAFF','#9966FF','#AABBFF','#FFFFFF','#6699EE','#BB88EE','#44BBCC','#CCAAFF','#FFFFFF','#7799FF','#BB88EE','#6699EE','#FFFFFF'];
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -278,52 +301,88 @@ export default function FeedScreen() {
   );
 }
 
-function Particle({ angle, distance, color, progress }: { angle: number; distance: number; color: string; progress: Animated.SharedValue<number> }) {
+type ParticleConfig = typeof PARTICLE_CONFIGS[number];
+
+function Particle({ angle, color, progress, config }: {
+  angle: number;
+  color: string;
+  progress: Animated.SharedValue<number>;
+  config: ParticleConfig;
+}) {
+  // For streaks, rotate the long axis to point in direction of travel
+  const rotationDeg = config.isStreak ? `${(angle * 180 / Math.PI) + 90}deg` : '0deg';
   const style = useAnimatedStyle(() => {
     const p = progress.value;
-    const dist = distance * p;
-    const opacity = 1 - p;
+    const dist = config.dist * p;
+    const opacity = p < 0.15 ? p / 0.15 : 1 - (p - 0.15) / 0.85;
     return {
       opacity,
       transform: [
         { translateX: Math.cos(angle) * dist },
         { translateY: Math.sin(angle) * dist },
-        { scale: 0.4 + p * 0.6 },
+        { rotate: rotationDeg },
       ],
     };
   });
-  return <Animated.View style={[styles.burstParticle, { backgroundColor: color }, style]} />;
+  return (
+    <Animated.View
+      style={[{ position: 'absolute', width: config.w, height: config.h, borderRadius: config.r, backgroundColor: color }, style]}
+    />
+  );
 }
 
-function BurstEffect({ progresses, vote }: { progresses: Animated.SharedValue<number>[]; vote: 'rad' | 'bad' }) {
-  const colors = vote === 'rad' ? RAD_PARTICLE_COLORS : BAD_PARTICLE_COLORS;
-  const distances = useMemo(() => BURST_ANGLES.map((_, i) => 70 + (i % 4) * 18), []);
+function BurstEffect({ progresses, ringProgress, vote }: {
+  progresses: Animated.SharedValue<number>[];
+  ringProgress: Animated.SharedValue<number>;
+  vote: 'rad' | 'bad';
+}) {
+  const particleColors = vote === 'rad' ? RAD_PARTICLE_COLORS : BAD_PARTICLE_COLORS;
+  const ringColor = vote === 'rad' ? '#FFCC44' : '#6699EE';
+  const ringStyle = useAnimatedStyle(() => {
+    const p = ringProgress.value;
+    return {
+      opacity: 1 - p,
+      transform: [{ scale: 0.5 + p * 2 }],
+    };
+  });
   return (
     <View style={styles.burstContainer} pointerEvents="none">
+      <Animated.View style={[styles.shockwaveRing, { borderColor: ringColor }, ringStyle]} />
       {BURST_ANGLES.map((angle, i) => (
-        <Particle key={i} angle={angle} distance={distances[i]} color={colors[i]} progress={progresses[i]} />
+        <Particle key={i} angle={angle} color={particleColors[i]} progress={progresses[i]} config={PARTICLE_CONFIGS[i]} />
       ))}
     </View>
   );
 }
 
 function VoteButtonWithBurst({ vote, onPress, disabled }: { vote: 'rad' | 'bad'; onPress: () => void; disabled: boolean }) {
-  // Pre-create one shared value per particle so animation fires on the UI thread immediately
-  const p0 = useSharedValue(0); const p1 = useSharedValue(0); const p2 = useSharedValue(0);
-  const p3 = useSharedValue(0); const p4 = useSharedValue(0); const p5 = useSharedValue(0);
-  const p6 = useSharedValue(0); const p7 = useSharedValue(0); const p8 = useSharedValue(0);
-  const p9 = useSharedValue(0); const p10 = useSharedValue(0); const p11 = useSharedValue(0);
-  const progresses = [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11];
+  // 18 pre-declared shared values — one per particle (hooks can't go in loops)
+  const p0  = useSharedValue(0); const p1  = useSharedValue(0); const p2  = useSharedValue(0);
+  const p3  = useSharedValue(0); const p4  = useSharedValue(0); const p5  = useSharedValue(0);
+  const p6  = useSharedValue(0); const p7  = useSharedValue(0); const p8  = useSharedValue(0);
+  const p9  = useSharedValue(0); const p10 = useSharedValue(0); const p11 = useSharedValue(0);
+  const p12 = useSharedValue(0); const p13 = useSharedValue(0); const p14 = useSharedValue(0);
+  const p15 = useSharedValue(0); const p16 = useSharedValue(0); const p17 = useSharedValue(0);
+  const progresses = [p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17];
+  const ringProgress = useSharedValue(0);
 
   const buttonScale = useSharedValue(1);
   const buttonStyle = useAnimatedStyle(() => ({ transform: [{ scale: buttonScale.value }] }));
   const isRad = vote === 'rad';
 
   function handlePress() {
-    progresses.forEach((p) => {
+    // Staggered particle launch — each fires after its own delay
+    progresses.forEach((p, i) => {
       p.value = 0;
-      p.value = withTiming(1, { duration: 700, easing: Easing.out(Easing.quad) });
+      p.value = withDelay(
+        PARTICLE_CONFIGS[i].delay,
+        withTiming(1, { duration: 650, easing: Easing.out(Easing.quad) }),
+      );
     });
+    // Shockwave ring expands and fades
+    ringProgress.value = 0;
+    ringProgress.value = withTiming(1, { duration: 380, easing: Easing.out(Easing.quad) });
+    // Button crisp press-down and snap back
     buttonScale.value = withSequence(
       withTiming(0.84, { duration: 5 }),
       withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }),
@@ -333,7 +392,7 @@ function VoteButtonWithBurst({ vote, onPress, disabled }: { vote: 'rad' | 'bad';
 
   return (
     <View style={styles.burstWrapper}>
-      <BurstEffect progresses={progresses} vote={vote} />
+      <BurstEffect progresses={progresses} ringProgress={ringProgress} vote={vote} />
       <Animated.View style={[isRad ? styles.radGlow : styles.badGlow, buttonStyle]}>
         <TouchableOpacity style={styles.voteButton} activeOpacity={0.8} onPress={handlePress} disabled={disabled}>
           <LinearGradient
@@ -585,10 +644,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  burstParticle: {
+  shockwaveRing: {
     position: 'absolute',
-    width: 11,
-    height: 11,
-    borderRadius: 6,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
   },
 });
