@@ -8,6 +8,7 @@ import { useDeletePost } from '@/hooks/useDeletePost';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { useAlbumStore } from '@/store/album';
 import type { PostItem } from '@/hooks/useUserPosts';
+import { colors } from '@/constants/theme';
 
 const TILE_GAP = 2;
 const TILE_SIZE = (Dimensions.get('window').width - TILE_GAP) / 2;
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   tile: {
     width: TILE_SIZE,
     height: TILE_SIZE,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: colors.card,
   },
   image: {
     width: '100%',

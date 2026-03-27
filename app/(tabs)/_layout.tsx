@@ -2,6 +2,7 @@ import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
+import { colors } from '@/constants/theme';
 
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
@@ -16,12 +17,12 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#0F0F0F',
-          borderTopColor: '#2F2F2F',
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           borderTopWidth: 0.5,
         },
-        tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#71767B',
+        tabBarActiveTintColor: colors.textPrimary,
+        tabBarInactiveTintColor: colors.textSecondary,
       }}
     >
       <Tabs.Screen

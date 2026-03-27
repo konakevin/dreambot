@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 type Tab = 'posts' | 'followers' | 'following';
 
@@ -34,8 +35,8 @@ export function ProfileStatsRow({ postCount, followerCount, followingCount, acti
 const styles = StyleSheet.create({
   statsRow: { flexDirection: 'row', alignItems: 'center' },
   stat: { flex: 1, alignItems: 'center' },
-  statNumber: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
-  statLabel: { color: '#71767B', fontSize: 12, marginTop: 2 },
-  statLabelActive: { color: '#FFFFFF' },
-  statDivider: { width: 0.5, height: 28, backgroundColor: '#2F2F2F' },
+  statNumber: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
+  statLabel: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
+  statLabelActive: { color: colors.textPrimary },
+  statDivider: { width: 0.5, height: 28, backgroundColor: colors.border },
 });

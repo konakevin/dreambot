@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useUpload } from '@/hooks/useUpload';
 import type { Category } from '@/types/database';
+import { colors } from '@/constants/theme';
+import { CATEGORIES } from '@/constants/categories';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CAPTION_LIMIT = 200;
@@ -23,17 +25,6 @@ const COMPRESS_MESSAGES = [
   'Shrinking the vibes...',
   'Almost ready to be judged...',
   'Bottling the energy...',
-];
-
-const CATEGORIES: { value: Category; label: string; color: string }[] = [
-  { value: 'people',  label: 'People',  color: '#6699EE' },
-  { value: 'animals', label: 'Animals', color: '#DDAA66' },
-  { value: 'food',    label: 'Food',    color: '#DD7766' },
-  { value: 'nature',  label: 'Nature',  color: '#77CC88' },
-  { value: 'funny',   label: 'Funny',   color: '#CCDD55' },
-  { value: 'music',   label: 'Music',   color: '#CC99FF' },
-  { value: 'sports',  label: 'Sports',  color: '#44BBCC' },
-  { value: 'art',     label: 'Art',     color: '#EECB55' },
 ];
 
 function VideoPreview({ uri }: { uri: string }) {
@@ -185,12 +176,12 @@ export default function UploadScreen() {
           ) : (
             <View style={styles.pickerRow}>
               <TouchableOpacity style={styles.pickerButton} onPress={pickFromLibrary} activeOpacity={0.8}>
-                <Ionicons name="images-outline" size={26} color="#71767B" />
+                <Ionicons name="images-outline" size={26} color={colors.textSecondary} />
                 <Text style={styles.pickerButtonText}>Library</Text>
               </TouchableOpacity>
               <View style={styles.pickerDivider} />
               <TouchableOpacity style={styles.pickerButton} onPress={recordVideo} activeOpacity={0.8}>
-                <Ionicons name="camera-outline" size={26} color="#71767B" />
+                <Ionicons name="camera-outline" size={26} color={colors.textSecondary} />
                 <Text style={styles.pickerButtonText}>Camera</Text>
               </TouchableOpacity>
             </View>
@@ -202,10 +193,10 @@ export default function UploadScreen() {
           <Text style={styles.sectionLabel}>CATEGORY</Text>
           <View style={styles.categoryRow}>
             {CATEGORIES.map((cat) => {
-              const selected = categories.includes(cat.value);
+              const selected = categories.includes(cat.key);
               return (
                 <TouchableOpacity
-                  key={cat.value}
+                  key={cat.key}
                   style={[
                     styles.categoryChip,
                     selected && { borderColor: cat.color, backgroundColor: `${cat.color}1A` },
@@ -213,9 +204,9 @@ export default function UploadScreen() {
                   onPress={() => {
                     Haptics.selectionAsync();
                     setCategories((prev) =>
-                      prev.includes(cat.value)
-                        ? prev.filter((c) => c !== cat.value)
-                        : [...prev, cat.value]
+                      prev.includes(cat.key)
+                        ? prev.filter((c) => c !== cat.key)
+                        : [...prev, cat.key]
                     );
                   }}
                   activeOpacity={0.8}
@@ -264,7 +255,7 @@ export default function UploadScreen() {
 const IMAGE_HEIGHT = (SCREEN_WIDTH - 32) * (4 / 3);
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000000' },
+  root: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
   header: {
     flexDirection: 'row',
@@ -273,24 +264,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#2F2F2F',
+    borderBottomColor: colors.border,
   },
-  headerTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
+  headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
   postButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: colors.flame,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 8,
     minWidth: 64,
     alignItems: 'center',
   },
-  postButtonDisabled: { backgroundColor: '#2F2F2F' },
-  postButtonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 15 },
+  postButtonDisabled: { backgroundColor: colors.border },
+  postButtonText: { color: colors.textPrimary, fontWeight: '700', fontSize: 15 },
   scroll: { padding: 16, paddingBottom: 40 },
   pickerRow: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#2F2F2F',
+    borderColor: colors.border,
     borderRadius: 16,
     overflow: 'hidden',
     height: 100,
@@ -302,10 +293,10 @@ const styles = StyleSheet.create({
     gap: 8,
     backgroundColor: '#111111',
   },
-  pickerButtonText: { color: '#71767B', fontSize: 14, fontWeight: '500' },
-  pickerDivider: { width: 1, backgroundColor: '#2F2F2F' },
+  pickerButtonText: { color: colors.textSecondary, fontSize: 14, fontWeight: '500' },
+  pickerDivider: { width: 1, backgroundColor: colors.border },
   pickerHint: {
-    color: '#3E4144',
+    color: colors.textTertiary,
     fontSize: 12,
     textAlign: 'center',
     marginTop: 8,
@@ -325,7 +316,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
-  videoBadgeText: { color: '#FFFFFF', fontSize: 11, fontWeight: '600' },
+  videoBadgeText: { color: colors.textPrimary, fontSize: 11, fontWeight: '600' },
   changePhotoButton: {
     position: 'absolute',
     bottom: 12,
@@ -335,55 +326,55 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
   },
-  changePhotoText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
+  changePhotoText: { color: colors.textPrimary, fontSize: 13, fontWeight: '600' },
   sectionLabel: {
-    color: '#71767B',
+    color: colors.textSecondary,
     fontSize: 11,
     fontWeight: '600',
     letterSpacing: 0.8,
     marginBottom: 10,
     marginTop: 4,
   },
-  optional: { color: '#3E4144', fontWeight: '400', letterSpacing: 0 },
+  optional: { color: colors.textTertiary, fontWeight: '400', letterSpacing: 0 },
   categoryRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 28 },
   categoryChip: {
     width: '23%',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#2F2F2F',
+    borderColor: colors.border,
     borderRadius: 16,
     paddingVertical: 7,
   },
-  categoryChipText: { color: '#71767B', fontSize: 13, fontWeight: '600' },
+  categoryChipText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
   captionContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: '#2F2F2F',
+    borderBottomColor: colors.border,
     paddingBottom: 8,
   },
   captionInput: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 15,
     lineHeight: 22,
     minHeight: 80,
     textAlignVertical: 'top',
   },
   charCount: {
-    color: '#3E4144',
+    color: colors.textTertiary,
     fontSize: 12,
     textAlign: 'right',
     marginTop: 6,
     fontWeight: '500',
   },
-  charCountWarning: { color: '#FFB800' },
-  charCountError: { color: '#F4212E', fontWeight: '700' },
-  hint: { color: '#3E4144', fontSize: 13, textAlign: 'center', marginTop: 20 },
+  charCountWarning: { color: colors.spark },
+  charCountError: { color: colors.error, fontWeight: '700' },
+  hint: { color: colors.textTertiary, fontSize: 13, textAlign: 'center', marginTop: 20 },
   uploadStatus: {
-    color: '#71767B',
+    color: colors.textSecondary,
     fontSize: 12,
     textAlign: 'center',
     paddingVertical: 6,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#2F2F2F',
+    borderBottomColor: colors.border,
   },
 });

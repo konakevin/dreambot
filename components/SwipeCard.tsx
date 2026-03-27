@@ -19,6 +19,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import type { FeedItem } from '@/hooks/useFeed';
 import { getRating } from '@/lib/getRating';
 import { formatCount } from '@/lib/formatCount';
+import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
+import { animateScoreIn } from '@/lib/scoreAnimation';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH;
@@ -29,28 +31,6 @@ function needsBlurBackground(mediaWidth: number | null, mediaHeight: number | nu
 }
 const DISMISS_THRESHOLD = SCREEN_HEIGHT * 0.18;
 const SPRING_CONFIG = { damping: 20, stiffness: 200 };
-
-const CATEGORY_LABELS: Record<string, string> = {
-  people:  'People',
-  animals: 'Animals',
-  food:    'Food',
-  nature:  'Nature',
-  funny:   'Funny',
-  music:   'Music',
-  sports:  'Sports',
-  art:     'Art',
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  people:  '#6699EE',
-  animals: '#DDAA66',
-  food:    '#DD7766',
-  nature:  '#77CC88',
-  funny:   '#CCDD55',
-  music:   '#CC99FF',
-  sports:  '#44BBCC',
-  art:     '#EECB55',
-};
 
 interface SwipeCardProps {
   item: FeedItem;
@@ -126,11 +106,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   // Pop score badge in when the user votes, then auto-dismiss after 0.9s
   useEffect(() => {
     if (userVote !== null) {
-      scoreOpacity.value = withTiming(1, { duration: 50 });
-      scoreScale.value = withSequence(
-        withTiming(1.38, { duration: 100 }),
-        withTiming(1, { duration: 80 }),
-      );
+      animateScoreIn(scoreOpacity, scoreScale);
       dismissTimer.current = setTimeout(() => {
         translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
           runOnJS(onDismiss)();

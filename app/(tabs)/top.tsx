@@ -7,19 +7,9 @@ import { useLocalSearchParams } from 'expo-router';
 import { useState, useEffect, useMemo } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useCategoryPosts } from '@/hooks/useCategoryPosts';
-import type { Category } from '@/types/database';
 import { RankCard } from '@/components/RankCard';
-
-const CATEGORIES: { key: Category; label: string; color: string }[] = [
-  { key: 'people',  label: 'People',  color: '#6699EE' },
-  { key: 'animals', label: 'Animals', color: '#DDAA66' },
-  { key: 'food',    label: 'Food',    color: '#DD7766' },
-  { key: 'nature',  label: 'Nature',  color: '#77CC88' },
-  { key: 'funny',   label: 'Funny',   color: '#CCDD55' },
-  { key: 'music',   label: 'Music',   color: '#CC99FF' },
-  { key: 'sports',  label: 'Sports',  color: '#44BBCC' },
-  { key: 'art',     label: 'Art',     color: '#EECB55' },
-];
+import { colors } from '@/constants/theme';
+import { CATEGORIES } from '@/constants/categories';
 
 export default function TopScreen() {
   const params = useLocalSearchParams<{ category?: string }>();
@@ -31,7 +21,7 @@ export default function TopScreen() {
     if (params.category) setSelected(params.category as Category);
   }, [params.category]);
 
-  const { data, isLoading } = useCategoryPosts(selected, 10);
+  const { data, isLoading } = useCategoryPosts(selected, 9);
   const posts = data?.posts ?? [];
   const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
   const activeCategory = CATEGORIES.find((c) => c.key === selected);
@@ -44,12 +34,9 @@ export default function TopScreen() {
         <Text style={[styles.categoryHero, { color: activeCategory?.color ?? '#FFFFFF' }]}>
           {activeCategory?.label ?? selected}
         </Text>
-        <View style={styles.headerMeta}>
-          <Text style={styles.metaLabel}>Top 10</Text>
-          {data?.windowLabel && (
-            <Text style={styles.metaLabel}> · {data.windowLabel}</Text>
-          )}
-        </View>
+        {data?.windowLabel && (
+          <Text style={styles.metaLabel}>Top Posts · {data.windowLabel}</Text>
+        )}
       </View>
 
       {/* Category chips — horizontal scroll with right fade */}
@@ -93,7 +80,7 @@ export default function TopScreen() {
       {/* Rank list */}
       {isLoading ? (
         <View style={styles.center}>
-          <ActivityIndicator color={activeCategory?.color ?? '#FFFFFF'} size="large" />
+          <ActivityIndicator color="#71767B" size="large" />
         </View>
       ) : posts.length === 0 ? (
         <View style={styles.center}>
@@ -105,16 +92,31 @@ export default function TopScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {posts.map((post, i) => (
+          {/* #1 — full-width hero */}
+          {posts[0] && (
             <RankCard
-              key={post.id}
-              post={post}
-              rank={i + 1}
+              key={posts[0].id}
+              post={posts[0]}
+              rank={1}
               albumIds={albumIds}
               accentColor={activeCategory?.color}
-              featured={i === 0}
+              featured
             />
-          ))}
+          )}
+
+          {/* #2–9 — 2-column grid */}
+          <View style={styles.grid}>
+            {posts.slice(1).map((post, i) => (
+              <RankCard
+                key={post.id}
+                post={post}
+                rank={i + 2}
+                albumIds={albumIds}
+                accentColor={activeCategory?.color}
+                grid
+              />
+            ))}
+          </View>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -122,7 +124,7 @@ export default function TopScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000000' },
+  root: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: 20,
     paddingTop: 12,
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   metaLabel: {
-    color: '#71767B',
+    color: colors.textSecondary,
     fontSize: 13,
     fontWeight: '500',
   },
@@ -161,8 +163,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  chipInactive: { borderColor: '#2F2F2F' },
-  chipText: { color: '#71767B', fontSize: 13, fontWeight: '600' },
+  chipInactive: { borderColor: colors.border },
+  chipText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
   chipFade: {
     position: 'absolute',
     right: 0,
@@ -171,7 +173,13 @@ const styles = StyleSheet.create({
     width: 48,
   },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
-  emptyText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
-  emptySubtext: { color: '#71767B', fontSize: 14 },
-  scrollContent: { paddingTop: 8, paddingBottom: 32, gap: 4 },
+  emptyText: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
+  emptySubtext: { color: colors.textSecondary, fontSize: 14 },
+  scrollContent: { paddingTop: 12, paddingBottom: 32 },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+    marginTop: 4,
+  },
 });

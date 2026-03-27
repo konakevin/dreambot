@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import type { FollowUser } from '@/hooks/useFollowersList';
+import { colors } from '@/constants/theme';
 
 interface Props {
   item: FollowUser;
@@ -40,27 +41,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#1A1A1A',
+    borderBottomColor: colors.card,
     gap: 12,
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#2F2F2F',
+    backgroundColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
-  username: { flex: 1, color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
+  avatarText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
+  username: { flex: 1, color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
   pill: {
     borderWidth: 1,
-    borderColor: '#FF4500',
+    borderColor: colors.flame,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 6,
   },
-  followingPill: { borderColor: '#2F2F2F', backgroundColor: '#1A1A1A' },
-  pillText: { color: '#FF4500', fontSize: 13, fontWeight: '600' },
-  followingPillText: { color: '#71767B' },
+  followingPill: { borderColor: colors.border, backgroundColor: colors.card },
+  pillText: { color: colors.flame, fontSize: 13, fontWeight: '600' },
+  followingPillText: { color: colors.textSecondary },
 });

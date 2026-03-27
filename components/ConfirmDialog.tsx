@@ -1,5 +1,6 @@
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface ConfirmDialogProps {
   visible: boolean;
@@ -27,7 +28,7 @@ export function ConfirmDialog({
 
           <TouchableOpacity style={styles.confirmButton} onPress={onConfirm} activeOpacity={0.85}>
             <LinearGradient
-              colors={['#FF4500', '#CC2200']}
+              colors={[colors.flame, '#CC2200']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={StyleSheet.absoluteFill}
@@ -54,22 +55,22 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: colors.card,
     borderRadius: 20,
     borderWidth: 0.5,
-    borderColor: '#2F2F2F',
+    borderColor: colors.border,
     padding: 24,
     alignItems: 'center',
   },
   title: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '800',
     marginBottom: 8,
     textAlign: 'center',
   },
   message: {
-    color: '#71767B',
+    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     textAlign: 'center',
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   confirmText: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.3,
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cancelText: {
-    color: '#71767B',
+    color: colors.textSecondary,
     fontSize: 15,
     fontWeight: '600',
   },

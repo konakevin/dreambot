@@ -33,9 +33,14 @@ if (fs.existsSync(envFile)) {
 
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const PEXELS_KEY   = process.env.PEXELS_API_KEY;
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
   console.error('❌  Missing env vars.');
+  process.exit(1);
+}
+if (!PEXELS_KEY) {
+  console.error('❌  Missing PEXELS_API_KEY.');
   process.exit(1);
 }
 
@@ -44,12 +49,13 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
 });
 
 // ── Config ────────────────────────────────────────────────────────────────────
-const NUM_USERS  = 100;
-const PASSWORD   = 'Testpass123!';
+const NUM_USERS      = 100;
+const PASSWORD       = 'Testpass123!';
 const POSTS_PER_USER = 4;
+const VIDEO_RATE     = 0.4; // 40% of posts are videos
 
-const FOLLOWS_MIN = 5;
-const FOLLOWS_MAX = 25;
+const FOLLOWS_MIN = 20;
+const FOLLOWS_MAX = 60;
 
 // ── Users ─────────────────────────────────────────────────────────────────────
 const USERS = Array.from({ length: NUM_USERS }, (_, i) => ({
@@ -58,58 +64,98 @@ const USERS = Array.from({ length: NUM_USERS }, (_, i) => ({
   username: `testuser${i + 1}`,
 }));
 
-// ── Image helpers ─────────────────────────────────────────────────────────────
-// Portrait (400×870) — ratio 0.46, fills iPhone without triggering blur bg
-const portrait = (seed) => ({ url: `https://picsum.photos/seed/${seed}/400/870`, width: 400, height: 870 });
-// Landscape (1600×900) — ratio 1.78, triggers blurred background
-const landscape = (seed) => ({ url: `https://picsum.photos/seed/${seed}/1600/900`, width: 1600, height: 900 });
-// Thumbnail for video posts
-const thumb = (seed) => `https://picsum.photos/seed/${seed}/400/870`;
+// ── Pexels image fetching ─────────────────────────────────────────────────────
+async function fetchPexelsImages(keyword, count = 20) {
+  const res = await fetch(
+    `https://api.pexels.com/v1/search?query=${encodeURIComponent(keyword)}&per_page=${count}&orientation=portrait`,
+    { headers: { Authorization: PEXELS_KEY } }
+  );
+  if (!res.ok) throw new Error(`Pexels API error: ${res.status}`);
+  const data = await res.json();
+  return (data.photos ?? []).map((p) => ({
+    url: p.src.large2x,
+    width: p.width,
+    height: p.height,
+  }));
+}
 
-// ── Video content ─────────────────────────────────────────────────────────────
-// Mixkit free stock previews — short clips (5–15s), CDN-hosted, no auth needed
-// Portrait videos: 1080×1920  |  Landscape videos: 1920×1080
-// Google Cloud Storage public sample videos — reliable, no auth, correct content-type
-// All are 1920×1080 landscape. Longer than 10s but fine for seed/testing purposes.
-const GCS = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample';
-const vid = (file, thumbSeed) => ({
-  url: `${GCS}/${file}`,
-  width: 1920,
-  height: 1080,
-  thumbnail_url: thumb(thumbSeed),
-});
+async function fetchAllCategoryImages() {
+  console.log('\n📷 Fetching Pexels images per category...');
+  const images = {};
+  for (const [cat, keyword] of Object.entries(PEXELS_KEYWORDS)) {
+    try {
+      const results = await fetchPexelsImages(keyword, 40);
+      images[cat] = shuffle(results);
+      process.stdout.write(`  ✓ ${cat} (${results.length} images)\n`);
+    } catch (err) {
+      fail(`Pexels image fetch for ${cat}: ${err.message}`);
+      images[cat] = [];
+    }
+  }
+  return images;
+}
 
-const VIDEO_POOL = [
-  vid('ForBiggerBlazes.mp4',     'vt1'),
-  vid('ForBiggerEscapes.mp4',    'vt2'),
-  vid('ForBiggerJoyrides.mp4',   'vt3'),
-  vid('ForBiggerMeltdowns.mp4',  'vt4'),
-  vid('ElephantsDream.mp4',      'vt5'),
-  vid('SubaruOutbackOnStreetAndDirt.mp4', 'vt6'),
-  vid('WeAreGoingOnBullrun.mp4', 'vt7'),
-  vid('WhatCarCanYouGetForAGrand.mp4', 'vt8'),
-];
-
-// Distribute the shared pool across categories
-const VIDEOS = {
-  people:  [VIDEO_POOL[0], VIDEO_POOL[1], VIDEO_POOL[4]],
-  animals: [VIDEO_POOL[2], VIDEO_POOL[3], VIDEO_POOL[5]],
-  food:    [VIDEO_POOL[1], VIDEO_POOL[6], VIDEO_POOL[0]],
-  nature:  [VIDEO_POOL[3], VIDEO_POOL[4], VIDEO_POOL[7], VIDEO_POOL[2]],
-  funny:   [VIDEO_POOL[5], VIDEO_POOL[6], VIDEO_POOL[7]],
-  music:   [VIDEO_POOL[0], VIDEO_POOL[3], VIDEO_POOL[7]],
-  sports:  [VIDEO_POOL[1], VIDEO_POOL[2], VIDEO_POOL[6]],
-  art:     [VIDEO_POOL[0], VIDEO_POOL[4], VIDEO_POOL[5]],
+// ── Pexels video fetching ─────────────────────────────────────────────────────
+const PEXELS_KEYWORDS = {
+  people:  'aesthetic lifestyle portrait golden hour',
+  animals: 'baby animals cute puppy kitten',
+  food:    'colorful food aesthetic gourmet',
+  nature:  'waterfall mountains dramatic landscape sunset',
+  funny:   'funny dog cat derp',
+  music:   'music festival concert crowd lights',
+  sports:  'surfing skateboard extreme sports action',
+  art:     'colorful mural street art vibrant',
 };
 
-// ── Post content pools ────────────────────────────────────────────────────────
+const MAX_VIDEO_DURATION = 10; // seconds — matches app upload limit
+
+async function fetchPexelsVideos(keyword, count = 20) {
+  // Fetch extra to account for filtering by duration
+  const res = await fetch(
+    `https://api.pexels.com/videos/search?query=${encodeURIComponent(keyword)}&per_page=80&orientation=portrait&max_duration=${MAX_VIDEO_DURATION}`,
+    { headers: { Authorization: PEXELS_KEY } }
+  );
+  if (!res.ok) throw new Error(`Pexels API error: ${res.status}`);
+  const data = await res.json();
+  const results = (data.videos ?? [])
+    .filter((v) => v.duration <= MAX_VIDEO_DURATION)
+    .slice(0, count)
+    .map((v) => {
+      const files = v.video_files ?? [];
+      // Prefer HD portrait, fallback to any
+      const file = files.find((f) => f.quality === 'hd' && f.height >= f.width)
+        ?? files.find((f) => f.quality === 'hd')
+        ?? files[0];
+      if (!file?.link) return null;
+      return {
+        url: file.link,
+        width: file.width ?? 1080,
+        height: file.height ?? 1920,
+        thumbnail_url: v.image ?? null,
+      };
+    }).filter(Boolean);
+  return results;
+}
+
+async function fetchAllCategoryVideos() {
+  console.log('\n🎬 Fetching Pexels videos per category...');
+  const videos = {};
+  for (const [cat, keyword] of Object.entries(PEXELS_KEYWORDS)) {
+    try {
+      const results = await fetchPexelsVideos(keyword, 40);
+      videos[cat] = shuffle(results);
+      process.stdout.write(`  ✓ ${cat} (${results.length} videos)\n`);
+    } catch (err) {
+      fail(`Pexels fetch for ${cat}: ${err.message}`);
+      videos[cat] = [];
+    }
+  }
+  return videos;
+}
+
+// ── Post content pools (captions only — images/videos come from Pexels) ───────
 const CONTENT = {
   people: {
-    images: [
-      portrait('portrait1'), portrait('portrait2'), portrait('portrait3'),
-      portrait('portrait4'), portrait('portrait5'), portrait('portrait6'),
-      landscape('portrait7'), landscape('portrait8'),
-    ],
     captions: [
       'Golden hour just hit different today',
       'Caught this one mid-laugh on the street',
@@ -131,11 +177,6 @@ const CONTENT = {
     ],
   },
   animals: {
-    images: [
-      portrait('goldenlab1'), portrait('chaoscat1'), portrait('zoomcat1'),
-      portrait('derpdog1'), portrait('animals2'), portrait('animals3'),
-      landscape('animals4'), landscape('animals5'),
-    ],
     captions: [
       'Best boy ever, no notes',
       'Chaos goblin discovered the Christmas tree',
@@ -157,11 +198,6 @@ const CONTENT = {
     ],
   },
   food: {
-    images: [
-      portrait('brunch1'), portrait('tacos1'), landscape('datenight1'),
-      portrait('ramen1'), portrait('food2'), landscape('food3'),
-      portrait('food4'), portrait('food5'),
-    ],
     captions: [
       'Sunday brunch spread — gone in eleven minutes',
       'Street tacos at 2am after the show',
@@ -182,11 +218,6 @@ const CONTENT = {
     ],
   },
   nature: {
-    images: [
-      portrait('grad-hot1'), landscape('grad-hot2'), portrait('grad-hot3'),
-      landscape('grad-hot5'), portrait('beach1'), portrait('nature2'),
-      landscape('nature3'), portrait('nature4'),
-    ],
     captions: [
       'Golden hour after a four mile hike',
       'PCH on a Tuesday — no traffic, windows down',
@@ -209,11 +240,6 @@ const CONTENT = {
     ],
   },
   funny: {
-    images: [
-      portrait('meme1'), landscape('meme2'), portrait('meme3'),
-      portrait('meme4'), landscape('meme5'), portrait('meme6'),
-      portrait('meme7'), portrait('meme8'),
-    ],
     captions: [
       'Sent this to my entire family and now nobody texts me back',
       'Every time without fail',
@@ -235,11 +261,6 @@ const CONTENT = {
     ],
   },
   music: {
-    images: [
-      portrait('music1'), portrait('music2'), landscape('music3'),
-      portrait('music4'), landscape('music5'), portrait('music6'),
-      portrait('music7'), portrait('music8'),
-    ],
     captions: [
       'First row and the setlist hit different',
       'This vinyl find was not leaving the store without me',
@@ -261,11 +282,6 @@ const CONTENT = {
     ],
   },
   art: {
-    images: [
-      portrait('art1'), landscape('art2'), portrait('art3'),
-      portrait('art4'), landscape('art5'), portrait('art6'),
-      landscape('art7'), portrait('art8'),
-    ],
     captions: [
       'Found this piece at a tiny gallery and couldn\'t stop staring',
       'Studio day — paint everywhere, no regrets',
@@ -287,11 +303,6 @@ const CONTENT = {
     ],
   },
   sports: {
-    images: [
-      portrait('sports1'), landscape('sports2'), portrait('sports3'),
-      landscape('sports4'), portrait('sports5'), portrait('sports6'),
-      landscape('sports7'), portrait('sports8'),
-    ],
     captions: [
       'Last second and we were already screaming',
       'Morning run before the city woke up',
@@ -426,7 +437,7 @@ async function createUsers() {
 }
 
 // ── Create uploads ────────────────────────────────────────────────────────────
-async function createUploads(users) {
+async function createUploads(users, pexelsImages, pexelsVideos) {
   console.log('\n📸 Creating posts...');
 
   const imageCategoryCounters = {};
@@ -436,14 +447,31 @@ async function createUploads(users) {
 
   const posts = users.flatMap((user, ui) => {
     return Array.from({ length: POSTS_PER_USER }, (_, pi) => {
-      const cat = CATEGORIES[(ui * POSTS_PER_USER + pi) % CATEGORIES.length];
+      const cat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
       const pool = CONTENT[cat];
-
-      // Every 4th post is a video
-      const isVideo = (ui + pi) % 4 === 0;
+      const isVideo = Math.random() < VIDEO_RATE;
 
       if (isVideo) {
-        const vidPool = VIDEOS[cat];
+        const vidPool = pexelsVideos[cat] ?? [];
+        if (vidPool.length === 0) {
+          // Fallback to image if no videos available for this category
+          const imgPool = pexelsImages[cat] ?? [];
+          const idx = imageCategoryCounters[cat] = (imageCategoryCounters[cat] ?? 0);
+          imageCategoryCounters[cat]++;
+          const img = imgPool[idx % (imgPool.length || 1)];
+          imagePostTotal++;
+          return {
+            user,
+            categories: pickCategories(cat, CATEGORIES),
+            media_type: 'image',
+            image_url: img?.url ?? `https://picsum.photos/seed/${cat}${idx}/400/870`,
+            thumbnail_url: null,
+            width: img?.width ?? 400,
+            height: img?.height ?? 870,
+            caption: pool.captions[idx % pool.captions.length],
+            ...randomVotes(),
+          };
+        }
         const idx = videoCategoryCounters[cat] = (videoCategoryCounters[cat] ?? 0);
         videoCategoryCounters[cat]++;
         const vid = vidPool[idx % vidPool.length];
@@ -460,19 +488,19 @@ async function createUploads(users) {
           ...randomVotes(),
         };
       } else {
-        const imgPool = pool.images;
+        const imgPool = pexelsImages[cat] ?? [];
         const idx = imageCategoryCounters[cat] = (imageCategoryCounters[cat] ?? 0);
         imageCategoryCounters[cat]++;
-        const img = imgPool[idx % imgPool.length];
+        const img = imgPool[idx % (imgPool.length || 1)];
         imagePostTotal++;
         return {
           user,
           categories: pickCategories(cat, CATEGORIES),
           media_type: 'image',
-          image_url: img.url,
+          image_url: img?.url ?? `https://picsum.photos/seed/${cat}${idx}/400/870`,
           thumbnail_url: null,
-          width: img.width,
-          height: img.height,
+          width: img?.width ?? 400,
+          height: img?.height ?? 870,
           caption: pool.captions[idx % pool.captions.length],
           ...randomVotes(),
         };
@@ -550,14 +578,19 @@ async function main() {
     process.exit(1);
   }
 
+  const [pexelsImages, pexelsVideos] = await Promise.all([
+    fetchAllCategoryImages(),
+    fetchAllCategoryVideos(),
+  ]);
+
   console.log('\n⏳ Waiting for DB trigger...');
   await new Promise((r) => setTimeout(r, 2000));
 
-  await createUploads(users);
+  await createUploads(users, pexelsImages, pexelsVideos);
   await createFollows(users);
 
   const totalPosts = NUM_USERS * POSTS_PER_USER;
-  const videoPosts = Math.floor(totalPosts / 4);
+  const videoPosts = Math.round(totalPosts * VIDEO_RATE);
 
   console.log(`
 ✅ Seed complete!

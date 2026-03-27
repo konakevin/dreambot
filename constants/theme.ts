@@ -18,3 +18,9 @@ export const colors = {
   error: '#F4212E',
   success: '#00BA7C',
 } as const;
+
+/** Brand gradient arrays — pass directly to LinearGradient `colors` prop */
+export const gradients: { rad: string[]; bad: string[] } = {
+  rad: ['#CCDD55', '#DDAA66', '#DD7766'],
+  bad: ['#BB88EE', '#6699EE', '#44BBCC'],
+};

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -8,6 +8,11 @@ import { useAlbumStore } from '@/store/album';
 import { getRating } from '@/lib/getRating';
 import { formatCount } from '@/lib/formatCount';
 import type { ExplorePost } from '@/hooks/useCategoryPosts';
+import { colors } from '@/constants/theme';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+// 2 cells + 4px gap between them
+const CELL_SIZE = (SCREEN_WIDTH - 4) / 2;
 
 interface RankCardProps {
   post: ExplorePost;
@@ -16,10 +21,10 @@ interface RankCardProps {
   albumIds?: string[];
   accentColor?: string;
   featured?: boolean;
+  grid?: boolean;
 }
 
-export function RankCard({ post, rank, height, albumIds, accentColor, featured = false }: RankCardProps) {
-  const cardHeight = height ?? 240;
+export function RankCard({ post, rank, height, albumIds, accentColor, featured = false, grid = false }: RankCardProps) {
   const rating = getRating(post.rad_votes, post.total_votes);
 
   function handlePress() {
@@ -31,13 +36,13 @@ export function RankCard({ post, rank, height, albumIds, accentColor, featured =
     router.push(`/photo/${post.id}`);
   }
 
-  return (
-    <TouchableOpacity
-      style={[styles.shadow, featured && accentColor ? { shadowColor: accentColor, shadowOpacity: 0.5, shadowRadius: 14 } : null]}
-      onPress={handlePress}
-      activeOpacity={0.92}
-    >
-      <View style={[styles.card, { height: cardHeight }]}>
+  if (grid) {
+    return (
+      <TouchableOpacity
+        style={[styles.cell, { width: CELL_SIZE, height: CELL_SIZE }]}
+        onPress={handlePress}
+        activeOpacity={0.85}
+      >
         <Image
           source={{ uri: post.thumbnail_url ?? post.image_url }}
           style={StyleSheet.absoluteFill}
@@ -45,174 +50,224 @@ export function RankCard({ post, rank, height, albumIds, accentColor, featured =
           transition={200}
         />
 
-        <View style={[styles.rankBadgeWrap, featured && { width: 56, height: 56 }]}>
-          <View style={[
-            styles.rankOrb,
-            featured ? styles.rankOrbFeatured : null,
-            { backgroundColor: accentColor ?? '#FFFFFF', shadowColor: accentColor ?? '#FFFFFF' },
-          ]} />
-          <Text style={[styles.rank, featured ? styles.rankFeatured : null]}>{rank}</Text>
-        </View>
-
+        {/* Play icon — centered, faded */}
         {post.media_type === 'video' && (
-          <View style={styles.playBadge}>
-            <Ionicons name="play" size={10} color="#FFFFFF" />
+          <View style={styles.playCenter}>
+            <Ionicons name="play" size={28} color="rgba(255,255,255,0.35)" />
           </View>
         )}
 
-        {rating !== null && (
-          <MaskedView
-            style={styles.scoreTopRight}
-            maskElement={
-              <Text style={styles.score}>{rating.percent}<Text style={styles.scorePct}>%</Text></Text>
-            }
-          >
-            <LinearGradient
-              colors={rating.gradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <Text style={[styles.score, styles.invisible]}>
-                {rating.percent}<Text style={styles.scorePct}>%</Text>
-              </Text>
-            </LinearGradient>
-          </MaskedView>
-        )}
-
+        {/* Username + stars + score — bottom */}
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.75)', 'rgba(0,0,0,0.92)']}
-          locations={[0, 0.55, 1]}
-          style={styles.footer}
+          colors={['transparent', 'rgba(0,0,0,0.72)']}
+          locations={[0.2, 1]}
+          style={styles.cellFooter}
         >
-          <View style={styles.footerRow}>
-            <View style={styles.usernameRow}>
-              {post.users?.username && (
-                <Text style={styles.username} numberOfLines={1}>@{post.users.username}</Text>
-              )}
-              {post.total_votes > 0 && (
-                <View style={styles.ratingsRow}>
-                  <Ionicons name="star" size={11} color="#FFB300" />
-                  <Text style={styles.ratingsText}>{formatCount(post.total_votes)}</Text>
-                </View>
-              )}
-            </View>
+          <View style={styles.cellFooterRow}>
+            {post.total_votes > 0 && (
+              <View style={styles.cellVotesRow}>
+                <Ionicons name="star" size={9} color="rgba(255,255,255,0.6)" />
+                <Text style={styles.cellVotesText}>{formatCount(post.total_votes)}</Text>
+              </View>
+            )}
+
+            {rating !== null && (
+              <MaskedView maskElement={
+                <Text style={styles.cellScore}>{rating.percent}<Text style={styles.cellScorePct}>%</Text></Text>
+              }>
+                <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                  <Text style={[styles.cellScore, styles.invisible]}>
+                    {rating.percent}<Text style={styles.cellScorePct}>%</Text>
+                  </Text>
+                </LinearGradient>
+              </MaskedView>
+            )}
           </View>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
+    );
+  }
+
+  // Hero / stacked card — full width
+  const heroHeight = height ?? (featured ? 260 : 160);
+  return (
+    <TouchableOpacity style={[styles.hero, { height: heroHeight }]} onPress={handlePress} activeOpacity={0.85}>
+      <Image
+        source={{ uri: post.thumbnail_url ?? post.image_url }}
+        style={StyleSheet.absoluteFill}
+        contentFit="cover"
+        transition={200}
+      />
+
+      {/* Rank badge — only shown for non-featured (non-#1) hero cards */}
+      {!featured && (
+        <View style={styles.heroRankBadge}>
+          <Text style={[styles.heroRankText, accentColor ? { color: accentColor } : null]}>
+            {rank}
+          </Text>
+        </View>
+      )}
+
+      {post.media_type === 'video' && (
+        <View style={styles.playCenter}>
+          <Ionicons name="play" size={36} color="rgba(255,255,255,0.35)" />
+        </View>
+      )}
+
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.65)', 'rgba(0,0,0,0.9)']}
+        locations={[0, 0.5, 1]}
+        style={styles.heroFooter}
+      >
+        <View style={styles.heroFooterRow}>
+          <View style={styles.heroFooterLeft}>
+            {post.total_votes > 0 && (
+              <View style={styles.votesRow}>
+                <Ionicons name="star" size={11} color="rgba(255,255,255,0.6)" />
+                <Text style={styles.votesText}>{formatCount(post.total_votes)}</Text>
+              </View>
+            )}
+          </View>
+
+          {rating !== null && (
+            <MaskedView maskElement={
+              <Text style={styles.heroScore}>{rating.percent}<Text style={styles.heroScorePct}>%</Text></Text>
+            }>
+              <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                <Text style={[styles.heroScore, styles.invisible]}>
+                  {rating.percent}<Text style={styles.heroScorePct}>%</Text>
+                </Text>
+              </LinearGradient>
+            </MaskedView>
+          )}
+        </View>
+      </LinearGradient>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  shadow: {
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 6,
-  },
-  card: {
-    borderRadius: 8,
+  // ── Hero (#1) ──────────────────────────────────────────────────────────────
+  hero: {
+    width: '100%',
+    height: 260,
+    backgroundColor: colors.background,
     overflow: 'hidden',
-    backgroundColor: '#111',
   },
-  rankBadgeWrap: {
+  heroRankBadge: {
     position: 'absolute',
-    top: 12,
+    top: 10,
     left: 14,
-    width: 44,
-    height: 44,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  rankOrb: {
-    position: 'absolute',
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    opacity: 0.3,
-    shadowOpacity: 0.8,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  rankOrbFeatured: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    opacity: 0.35,
-    shadowRadius: 18,
-  },
-  rank: {
+  heroRankText: {
     color: '#FFFFFF',
-    fontSize: 28,
+    fontSize: 40,
     fontWeight: '900',
-    textShadowColor: '#000000',
+    lineHeight: 44,
+    textShadowColor: 'rgba(0,0,0,0.9)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    textShadowRadius: 8,
   },
-  rankFeatured: {
-    fontSize: 48,
+  heroRankFeatured: {
+    fontSize: 56,
+    lineHeight: 60,
+    color: '#FFB700',
+    textShadowColor: 'rgba(255,140,0,0.7)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 14,
   },
-  footer: {
+  heroFooter: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    paddingTop: 28,
-    paddingHorizontal: 12,
-    paddingBottom: 10,
+    paddingTop: 40,
+    paddingHorizontal: 14,
+    paddingBottom: 14,
   },
-  footerRow: {
+  heroFooterRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
-  usernameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  heroFooterLeft: {
+    flex: 1,
+    gap: 4,
+    marginRight: 12,
   },
-  username: {
+  heroUsername: {
     color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  ratingsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-  },
-  ratingsText: {
-    color: '#FFB300',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  scoreTopRight: {
-    position: 'absolute',
-    top: 8,
-    right: 12,
-  },
-  score: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    lineHeight: 30,
-    textShadowColor: '#000000',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
-  },
-  scorePct: {
     fontSize: 15,
     fontWeight: '700',
   },
-  invisible: { opacity: 0 },
-  playBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 14,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 4,
-    padding: 3,
+  heroScore: {
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    lineHeight: 34,
   },
+  heroScorePct: {
+    fontSize: 17,
+    fontWeight: '700',
+  },
+
+  // ── Grid cells (#2–9) ──────────────────────────────────────────────────────
+  cell: {
+    backgroundColor: colors.background,
+    overflow: 'hidden',
+  },
+  cellFooter: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 24,
+    paddingHorizontal: 10,
+    paddingBottom: 8,
+  },
+  cellFooterRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  cellVotesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  cellVotesText: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  cellScore: {
+    fontSize: 17,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    lineHeight: 21,
+  },
+  cellScorePct: {
+    fontSize: 10,
+    fontWeight: '700',
+  },
+
+  // ── Shared ─────────────────────────────────────────────────────────────────
+  playCenter: {
+    position: 'absolute',
+    top: 0, bottom: 0, left: 0, right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  votesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  votesText: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  invisible: { opacity: 0 },
 });

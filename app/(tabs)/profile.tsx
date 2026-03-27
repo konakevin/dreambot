@@ -16,6 +16,7 @@ import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { PostTile } from '@/components/PostTile';
+import { colors } from '@/constants/theme';
 import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import type { PostItem } from '@/hooks/useUserPosts';
@@ -96,7 +97,7 @@ export default function ProfileScreen() {
             onPress={() => setActiveTab('posts')}
             activeOpacity={0.7}
           >
-            <Ionicons name="grid-outline" size={16} color={activeTab === 'posts' ? '#FFFFFF' : '#71767B'} />
+            <Ionicons name="grid-outline" size={16} color={activeTab === 'posts' ? colors.textPrimary : colors.textSecondary} />
             <Text style={[styles.tabText, activeTab === 'posts' && styles.tabTextActive]}>My Posts</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -107,7 +108,7 @@ export default function ProfileScreen() {
             <Ionicons
               name={activeTab === 'saved' ? 'bookmark' : 'bookmark-outline'}
               size={16}
-              color={activeTab === 'saved' ? '#FFFFFF' : '#71767B'}
+              color={activeTab === 'saved' ? colors.textPrimary : colors.textSecondary}
             />
             <Text style={[styles.tabText, activeTab === 'saved' && styles.tabTextActive]}>Saved</Text>
           </TouchableOpacity>
@@ -133,7 +134,7 @@ export default function ProfileScreen() {
           ListHeaderComponent={header}
           ListEmptyComponent={
             isLoading ? (
-              <View style={styles.center}><ActivityIndicator color="#FF4500" /></View>
+              <View style={styles.center}><ActivityIndicator color="#71767B" /></View>
             ) : (
               <View style={styles.center}>
                 <Text style={styles.emptyText}>
@@ -165,7 +166,7 @@ export default function ProfileScreen() {
         ListEmptyComponent={
           <View style={styles.center}>
             {isLoadingList
-              ? <ActivityIndicator color="#FF4500" />
+              ? <ActivityIndicator color="#71767B" />
               : <Text style={styles.emptyText}>{emptyLabel}</Text>
             }
           </View>
@@ -183,13 +184,13 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000000' },
+  root: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#2F2F2F',
+    borderBottomColor: colors.border,
     marginBottom: 2,
   },
   headerTop: {
@@ -198,12 +199,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 16,
   },
-  username: { color: '#FFFFFF', fontSize: 20, fontWeight: '800' },
-  email: { color: '#71767B', fontSize: 13, marginTop: 2 },
+  username: { color: colors.textPrimary, fontSize: 20, fontWeight: '800' },
+  email: { color: colors.textSecondary, fontSize: 13, marginTop: 2 },
   tabRow: {
     flexDirection: 'row',
     borderBottomWidth: 0.5,
-    borderBottomColor: '#2F2F2F',
+    borderBottomColor: colors.border,
   },
   tab: {
     flex: 1,
@@ -215,10 +216,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
   },
-  tabActive: { borderBottomColor: '#FF4500' },
-  tabText: { color: '#71767B', fontSize: 14, fontWeight: '600' },
-  tabTextActive: { color: '#FFFFFF' },
+  tabActive: { borderBottomColor: colors.flame },
+  tabText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
+  tabTextActive: { color: colors.textPrimary },
   row: { gap: TILE_GAP, marginBottom: TILE_GAP },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  emptyText: { color: '#71767B', fontSize: 15 },
+  emptyText: { color: colors.textSecondary, fontSize: 15 },
 });

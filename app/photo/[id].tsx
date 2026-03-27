@@ -15,7 +15,6 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  withSpring,
   runOnJS,
 } from 'react-native-reanimated';
 
@@ -33,15 +32,11 @@ import { fetchPost } from '@/hooks/usePost';
 import { getRating } from '@/lib/getRating';
 import { formatCount } from '@/lib/formatCount';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
-
-const CATEGORY_LABELS: Record<string, string> = {
-  people: 'People', animals: 'Animals', food: 'Food', nature: 'Nature',
-  funny: 'Funny', music: 'Music', sports: 'Sports', art: 'Art',
-};
-const CATEGORY_COLORS: Record<string, string> = {
-  people: '#6699EE', animals: '#DDAA66', food: '#DD7766', nature: '#77CC88',
-  funny: '#CCDD55', music: '#CC99FF', sports: '#44BBCC', art: '#EECB55',
-};
+import { colors, gradients } from '@/constants/theme';
+import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
+import { animateScoreIn } from '@/lib/scoreAnimation';
+import { useFavoriteIds } from '@/hooks/useFavoriteIds';
+import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 
 function VideoPlayer({ uri, muted, contentFit = 'cover' }: { uri: string; muted: boolean; contentFit?: 'cover' | 'contain' }) {
   const player = useVideoPlayer(uri, (p) => {
@@ -69,6 +64,9 @@ export default function PhotoDetailScreen() {
   const { mutate: deletePost } = useDeletePost();
   const { data: existingVote, isLoading: voteLoading } = useUserVote(currentId);
   const { mutate: castVote } = useVote();
+  const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
+  const { mutate: toggleFavorite } = useToggleFavorite();
+  const isFavorited = favoriteIds.has(currentId);
 
   // Combine server vote + local optimistic vote
   const userVote = localVote ?? existingVote ?? null;
@@ -140,9 +138,8 @@ export default function PhotoDetailScreen() {
   useEffect(() => {
     if (!hasVoted || voteLoading) return;
     if (localVote !== null) {
-      // Just voted this session — bounce in
-      scoreOpacity.value = withTiming(1, { duration: 60 });
-      scoreScale.value = withSpring(1, { damping: 14, stiffness: 280 });
+      // Just voted this session — same punch animation as SwipeCard
+      animateScoreIn(scoreOpacity, scoreScale, { fadeDuration: 80, punchDuration: 160, settleDuration: 130 });
     } else {
       // Already voted previously — show instantly, no animation
       scoreOpacity.value = 1;
@@ -169,7 +166,7 @@ export default function PhotoDetailScreen() {
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="chevron-back" size={26} color="#FFFFFF" />
           </TouchableOpacity>
-          <ActivityIndicator color="#FF4500" />
+          <ActivityIndicator color="#71767B" />
         </View>
       </>
     );
@@ -216,6 +213,10 @@ export default function PhotoDetailScreen() {
     }
   }
 
+  function handleFavorite() {
+    toggleFavorite({ uploadId: currentId, currentlyFavorited: isFavorited });
+  }
+
   function handleShare() {
     // TODO: replace with a real URL once deep linking or a web domain is set up
     Share.share({
@@ -256,14 +257,43 @@ export default function PhotoDetailScreen() {
         post={p}
         isOwnPost={isOwnPost}
         hasVoted={hasVoted}
-        voteLoading={voteLoading}
-        rating={rating}
         captionExpanded={captionExpanded}
         setCaptionExpanded={setCaptionExpanded}
-        scoreStyle={scoreStyle}
-        onVote={handleVote}
+        isFavorited={isFavorited}
+        onFavorite={handleFavorite}
         onShare={handleShare}
       />
+
+      {/* Vote buttons — absolute so gradient height never clips them */}
+      {!isOwnPost && !voteLoading && !hasVoted && (
+        <View style={styles.voteButtonsCompact}>
+          <View style={styles.radGlowSm}>
+            <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('rad')}>
+              <LinearGradient colors={gradients.rad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+              <Ionicons name="thumbs-up" size={22} color="#FFFFFF" />
+              <Text style={styles.voteButtonTextSm}>RAD</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.badGlowSm}>
+            <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('bad')}>
+              <LinearGradient colors={gradients.bad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+              <Ionicons name="thumbs-down" size={22} color="#FFFFFF" />
+              <Text style={styles.voteButtonTextSm}>BAD</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {/* Score badge — absolute top-right, animates in after voting */}
+      {!isOwnPost && hasVoted && rating !== null && (
+        <Animated.View style={[styles.scoreBadge, scoreStyle]} pointerEvents="none">
+          <MaskedView maskElement={<Text style={styles.scoreBadgeText}>{rating.percent}%</Text>}>
+            <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <Text style={[styles.scoreBadgeText, styles.invisible]}>{rating.percent}%</Text>
+            </LinearGradient>
+          </MaskedView>
+        </Animated.View>
+      )}
 
       <ConfirmDialog
         visible={showDeleteDialog}
@@ -311,16 +341,14 @@ interface DetailFooterProps {
   post: PostDetail;
   isOwnPost: boolean;
   hasVoted: boolean;
-  voteLoading: boolean;
-  rating: ReturnType<typeof getRating> | null;
   captionExpanded: boolean;
   setCaptionExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  scoreStyle: object;
-  onVote: (vote: 'rad' | 'bad') => void;
+  isFavorited: boolean;
+  onFavorite: () => void;
   onShare: () => void;
 }
 
-function DetailFooter({ post: p, isOwnPost, hasVoted, voteLoading, rating, captionExpanded, setCaptionExpanded, scoreStyle, onVote, onShare }: DetailFooterProps) {
+function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptionExpanded, isFavorited, onFavorite, onShare }: DetailFooterProps) {
   const [catsExpanded, setCatsExpanded] = useState(false);
   const cats = p.categories ?? [];
   const visibleCats = cats.slice(0, 2);
@@ -335,7 +363,7 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, voteLoading, rating, capti
     >
       <View style={styles.contentRow}>
         {/* Left — username, caption, meta */}
-        <View style={styles.infoBlock}>
+        <View style={[styles.infoBlock, !isOwnPost && !hasVoted && styles.infoBlockWithButtons]}>
           <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
             <Text style={styles.username}>@{p.users?.username}</Text>
           </TouchableOpacity>
@@ -374,6 +402,15 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, voteLoading, rating, capti
               <TouchableOpacity onPress={onShare} hitSlop={12} style={styles.shareButton}>
                 <Ionicons name="share-outline" size={18} color="rgba(255,255,255,0.6)" />
               </TouchableOpacity>
+              {!isOwnPost && (
+                <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.shareButton}>
+                  <Ionicons
+                    name={isFavorited ? 'bookmark' : 'bookmark-outline'}
+                    size={18}
+                    color={isFavorited ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)'}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
             {catsExpanded && hiddenCats.length > 0 && (
               <View style={styles.expandedCats}>
@@ -391,49 +428,21 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, voteLoading, rating, capti
           </View>
         </View>
 
-        {/* Right — score or vote buttons */}
-        {!isOwnPost && !voteLoading && (
-          hasVoted && rating !== null ? (
-            <Animated.View style={[styles.scoreRight, scoreStyle]}>
-              <MaskedView maskElement={<Text style={styles.compactScore}>{rating.percent}%</Text>}>
-                <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                  <Text style={[styles.compactScore, { opacity: 0 }]}>{rating.percent}%</Text>
-                </LinearGradient>
-              </MaskedView>
-            </Animated.View>
-          ) : (
-            <View style={styles.voteButtonsCompact}>
-              <View style={styles.radGlowSm}>
-                <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => onVote('rad')}>
-                  <LinearGradient colors={['#CCDD55', '#DDAA66', '#DD7766']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-                  <Ionicons name="thumbs-up" size={22} color="#FFFFFF" />
-                  <Text style={styles.voteButtonTextSm}>RAD</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.badGlowSm}>
-                <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => onVote('bad')}>
-                  <LinearGradient colors={['#BB88EE', '#6699EE', '#44BBCC']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-                  <Ionicons name="thumbs-down" size={22} color="#FFFFFF" />
-                  <Text style={styles.voteButtonTextSm}>BAD</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )
-        )}
       </View>
+
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000', overflow: 'hidden' },
+  root: { flex: 1, backgroundColor: colors.background, overflow: 'hidden' },
   savingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loadingRoot: { flex: 1, backgroundColor: '#000', alignItems: 'center', justifyContent: 'center' },
+  loadingRoot: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
   backButton: {
     width: 44,
     height: 44,
@@ -477,21 +486,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 48,
   },
-  compactScore: {
-    fontSize: 50,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 8,
+  scoreBadge: {
+    position: 'absolute',
+    top: 72,
+    right: 14,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    alignItems: 'center',
   },
+  scoreBadgeText: {
+    fontSize: 40,
+    fontWeight: '900',
+    color: colors.textPrimary,
+    lineHeight: 44,
+  },
+  invisible: { opacity: 0 },
   userRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
   username: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: -0.2,
@@ -548,27 +566,22 @@ const styles = StyleSheet.create({
   },
   categoryPillText: { fontSize: 13, fontWeight: '600' },
   contentRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
+    position: 'relative',
   },
   infoBlock: {
-    flex: 1,
     gap: 6,
   },
-  scoreRight: {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.7,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 10,
-  },
   voteButtonsCompact: {
+    position: 'absolute',
+    right: 16,
+    bottom: 48,
     flexDirection: 'column',
     gap: 10,
-    marginRight: 4,
+    alignItems: 'flex-end',
+  },
+  infoBlockWithButtons: {
+    // Reserve space for the 68px buttons + 16px edge margin + 4px breathing room
+    paddingRight: 88,
   },
   badGlowSm: {
     borderRadius: 34,
@@ -596,7 +609,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   voteButtonTextSm: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.8,

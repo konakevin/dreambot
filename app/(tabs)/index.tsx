@@ -7,7 +7,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { useFeed, type FeedItem } from '@/hooks/useFeed';
 import { useFeatureFlags } from '@/hooks/useFeatureFlags';
-import type { Category } from '@/types/database';
 import { useVote } from '@/hooks/useVote';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
@@ -20,8 +19,9 @@ import { RankCard } from '@/components/RankCard';
 import { router } from 'expo-router';
 import { useCategoryPosts } from '@/hooks/useCategoryPosts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { colors, gradients } from '@/constants/theme';
+import { CATEGORIES } from '@/constants/categories';
 
-const PALETTE = ['#BB88EE', '#6699EE', '#44BBCC', '#77CC88', '#CCDD55', '#DDBB55', '#DDAA66', '#DD7766'];
 
 export default function FeedScreen() {
   const currentUser = useAuthStore((s) => s.user);
@@ -43,7 +43,7 @@ export default function FeedScreen() {
   const loadedFeedKey = useRef('');
   const sessionVotesRef = useRef(sessionVotes);
   useEffect(() => { sessionVotesRef.current = sessionVotes; }, [sessionVotes]);
-  const spinnerColor = useMemo(() => PALETTE[Math.floor(Math.random() * PALETTE.length)], []);
+  const spinnerColor = colors.textSecondary;
 
   // Show swipe hint once ever
   useEffect(() => {
@@ -160,7 +160,7 @@ export default function FeedScreen() {
           {/* RAD — warm amber → orange, not full red */}
           <MaskedView maskElement={<Text style={styles.headerTitle}>RAD</Text>}>
             <LinearGradient
-              colors={['#CCDD55', '#DDAA66', '#DD7766']}
+              colors={gradients.rad}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
@@ -172,7 +172,7 @@ export default function FeedScreen() {
 
           <MaskedView maskElement={<Text style={styles.headerTitle}>BAD</Text>}>
             <LinearGradient
-              colors={['#BB88EE', '#6699EE', '#44BBCC']}
+              colors={gradients.bad}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
@@ -180,7 +180,7 @@ export default function FeedScreen() {
             </LinearGradient>
           </MaskedView>
         </View>
-        {isRefetching && <ActivityIndicator size="small" color="#71767B" style={styles.headerSpinner} />}
+        {isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
       </View>
 
       {/* Card stack */}
@@ -227,7 +227,7 @@ export default function FeedScreen() {
               disabled={topItemVoted}
             >
               <LinearGradient
-                colors={['#BB88EE', '#6699EE', '#44BBCC']}
+                colors={gradients.bad}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={StyleSheet.absoluteFill}
@@ -245,7 +245,7 @@ export default function FeedScreen() {
               disabled={topItemVoted}
             >
               <LinearGradient
-                colors={['#CCDD55', '#DDAA66', '#DD7766']}
+                colors={gradients.rad}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={StyleSheet.absoluteFill}
@@ -260,17 +260,6 @@ export default function FeedScreen() {
     </SafeAreaView>
   );
 }
-
-const CATEGORIES: { key: Category; label: string; color: string }[] = [
-  { key: 'people',  label: 'People',  color: '#6699EE' },
-  { key: 'animals', label: 'Animals', color: '#DDAA66' },
-  { key: 'food',    label: 'Food',    color: '#DD7766' },
-  { key: 'nature',  label: 'Nature',  color: '#77CC88' },
-  { key: 'funny',   label: 'Funny',   color: '#CCDD55' },
-  { key: 'music',   label: 'Music',   color: '#CC99FF' },
-  { key: 'sports',  label: 'Sports',  color: '#44BBCC' },
-  { key: 'art',     label: 'Art',     color: '#EECB55' },
-];
 
 function CaughtUpState() {
   return (
@@ -294,7 +283,7 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
     <View style={styles.categorySection}>
       <Text style={[styles.categoryLabel, { color: category.color }]}>{category.label}</Text>
       {posts.map((post, i) => (
-        <RankCard key={post.id} post={post} rank={i + 1} height={135} albumIds={albumIds} />
+        <RankCard key={post.id} post={post} rank={i + 1} albumIds={albumIds} height={130} />
       ))}
     </View>
   );
@@ -304,11 +293,11 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: colors.background,
   },
   center: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -317,7 +306,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: '#000000',
+    backgroundColor: colors.background,
   },
   headerWordRow: {
     flexDirection: 'row',
@@ -325,13 +314,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 24,
     fontWeight: '900',
     letterSpacing: 2,
   },
   headerOr: {
-    color: '#7A8194',
+    color: colors.textSecondary,
     fontSize: 17,
     fontWeight: '700',
     letterSpacing: 2,
@@ -383,7 +372,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   voteButtonText: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,
@@ -397,14 +386,14 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   caughtUpTitle: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 22,
     fontWeight: '800',
     textAlign: 'center',
     marginBottom: 6,
   },
   caughtUpSubtitle: {
-    color: '#71767B',
+    color: colors.textSecondary,
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 24,

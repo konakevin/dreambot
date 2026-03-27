@@ -14,6 +14,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useAuthStore } from '@/store/auth';
 import { PostTile } from '@/components/PostTile';
+import { colors } from '@/constants/theme';
 import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
@@ -58,7 +59,7 @@ export default function PublicProfileScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.center}>
-          <ActivityIndicator color="#FF4500" />
+          <ActivityIndicator color="#71767B" />
         </View>
       </SafeAreaView>
     );
@@ -142,7 +143,7 @@ export default function PublicProfileScreen() {
         ListEmptyComponent={
           <View style={styles.center}>
             {isLoadingList
-              ? <ActivityIndicator color="#FF4500" />
+              ? <ActivityIndicator color="#71767B" />
               : <Text style={styles.emptyText}>{emptyLabel}</Text>
             }
           </View>
@@ -161,7 +162,7 @@ export default function PublicProfileScreen() {
 
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000000' },
+  root: { flex: 1, backgroundColor: colors.background },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   backRow: {
     paddingHorizontal: 16,
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#2F2F2F',
+    borderBottomColor: colors.border,
     marginBottom: 2,
   },
   headerTop: {
@@ -181,29 +182,29 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   username: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 22,
     fontWeight: '800',
   },
   followButton: {
     borderWidth: 1.5,
-    borderColor: '#FF4500',
+    borderColor: colors.flame,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 8,
   },
   followingButton: {
-    borderColor: '#2F2F2F',
-    backgroundColor: '#1A1A1A',
+    borderColor: colors.border,
+    backgroundColor: colors.card,
   },
   followButtonText: {
-    color: '#FF4500',
+    color: colors.flame,
     fontSize: 14,
     fontWeight: '700',
   },
   followingButtonText: {
-    color: '#71767B',
+    color: colors.textSecondary,
   },
   row: { gap: TILE_GAP, marginBottom: TILE_GAP },
-  emptyText: { color: '#71767B', fontSize: 15 },
+  emptyText: { color: colors.textSecondary, fontSize: 15 },
 });
