@@ -1,44 +1,32 @@
-import { useState, useMemo } from 'react';
-import {
-  View, Text, TouchableOpacity, Alert, FlatList,
-  StyleSheet, ActivityIndicator,
-} from 'react-native';
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
-import { useUserPosts } from '@/hooks/useUserPosts';
-import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
-import { PostTile } from '@/components/PostTile';
+import { PostGrid } from '@/components/PostGrid';
 import { colors } from '@/constants/theme';
 import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
-import type { PostItem } from '@/hooks/useUserPosts';
+import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
-const TILE_GAP = 2;
 type Tab = 'posts' | 'saved' | 'followers' | 'following';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuthStore();
   const [activeTab, setActiveTab] = useState<Tab>('posts');
 
-  const { data: userPosts = [], isLoading: postsLoading } = useUserPosts();
-  const { data: favoritePosts = [], isLoading: favLoading } = useFavoritePosts();
   const { data: profile } = usePublicProfile(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(user?.id ?? '');
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(user?.id ?? '');
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-
-  const postAlbumIds = useMemo(() => userPosts.map((p) => p.id), [userPosts]);
-  const favAlbumIds = useMemo(() => favoritePosts.map((p) => p.id), [favoritePosts]);
 
   function handleSignOut() {
     Alert.alert('Sign out', 'Are you sure?', [
@@ -59,7 +47,6 @@ export default function ProfileScreen() {
     toggleFollow({ userId: targetId, currentlyFollowing: followingIds.has(targetId) });
   }
 
-  // Stats row maps Posts→'posts', Followers→'followers', Following→'following'
   function handleStatsTabChange(tab: 'posts' | 'followers' | 'following') {
     setActiveTab(tab);
   }
@@ -81,7 +68,7 @@ export default function ProfileScreen() {
         </View>
 
         <ProfileStatsRow
-          postCount={userPosts.length}
+          postCount={profile?.postCount ?? 0}
           followerCount={profile?.followerCount ?? 0}
           followingCount={profile?.followingCount ?? 0}
           activeTab={statsActiveTab}
@@ -89,7 +76,6 @@ export default function ProfileScreen() {
         />
       </View>
 
-      {/* My Posts / Saved sub-tabs — only shown in posts context */}
       {(activeTab === 'posts' || activeTab === 'saved') && (
         <View style={styles.tabRow}>
           <TouchableOpacity
@@ -117,41 +103,19 @@ export default function ProfileScreen() {
     </>
   );
 
-  // Posts grid
   if (activeTab === 'posts' || activeTab === 'saved') {
-    const items = activeTab === 'posts' ? userPosts : favoritePosts;
-    const isLoading = activeTab === 'posts' ? postsLoading : favLoading;
-    const albumIds = activeTab === 'posts' ? postAlbumIds : favAlbumIds;
-
     return (
       <SafeAreaView style={styles.root}>
-        <FlatList<PostItem>
-          key="posts"
-          data={items}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
+        <PostGrid
+          source={activeTab === 'posts' ? { type: 'own' } : { type: 'saved' }}
+          isOwn={activeTab === 'posts'}
+          emptyText={activeTab === 'posts' ? 'No posts yet' : 'Nothing saved yet'}
           ListHeaderComponent={header}
-          ListEmptyComponent={
-            isLoading ? (
-              <View style={styles.center}><ActivityIndicator color="#71767B" /></View>
-            ) : (
-              <View style={styles.center}>
-                <Text style={styles.emptyText}>
-                  {activeTab === 'posts' ? 'No posts yet' : 'Nothing saved yet'}
-                </Text>
-              </View>
-            )
-          }
-          renderItem={({ item }) => (
-            <PostTile item={item} isOwn={activeTab === 'posts'} albumIds={albumIds} />
-          )}
         />
       </SafeAreaView>
     );
   }
 
-  // Followers / Following list
   const listData = activeTab === 'followers' ? followers : following;
   const isLoadingList = activeTab === 'followers' ? loadingFollowers : loadingFollowing;
   const emptyLabel = activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet';
@@ -166,7 +130,7 @@ export default function ProfileScreen() {
         ListEmptyComponent={
           <View style={styles.center}>
             {isLoadingList
-              ? <ActivityIndicator color="#71767B" />
+              ? <ActivityIndicator color={colors.textSecondary} />
               : <Text style={styles.emptyText}>{emptyLabel}</Text>
             }
           </View>
@@ -219,7 +183,6 @@ const styles = StyleSheet.create({
   tabActive: { borderBottomColor: colors.flame },
   tabText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
   tabTextActive: { color: colors.textPrimary },
-  row: { gap: TILE_GAP, marginBottom: TILE_GAP },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
+  center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
 });

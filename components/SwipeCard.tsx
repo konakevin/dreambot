@@ -38,6 +38,7 @@ interface SwipeCardProps {
   isFavorited: boolean;
   isFollowing: boolean;
   isOwnPost: boolean;
+  isAlreadyVoted?: boolean;
   onDismiss: () => void;
   onFavorite: () => void;
   onFollow: () => void;
@@ -63,7 +64,7 @@ function CategoryPill({ category }: { category: string }) {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, onDismiss, onFavorite, onFollow, onUserPress, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onFavorite, onFollow, onUserPress, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -103,15 +104,22 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   const hintTranslateY = useSharedValue(0);
   const hintOpacity = useSharedValue(0);
 
-  // Pop score badge in when the user votes, then auto-dismiss after 0.9s
+  // Pop score badge in when the user votes, then auto-dismiss after 0.9s.
+  // Skipped for externally-voted cards — they stay until the user swipes up.
   useEffect(() => {
     if (userVote !== null) {
-      animateScoreIn(scoreOpacity, scoreScale);
-      dismissTimer.current = setTimeout(() => {
-        translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
-          runOnJS(onDismiss)();
-        });
-      }, 430);
+      if (isAlreadyVoted) {
+        // Already voted externally — show score instantly, no dismiss
+        scoreOpacity.value = 1;
+        scoreScale.value = 1;
+      } else {
+        animateScoreIn(scoreOpacity, scoreScale);
+        dismissTimer.current = setTimeout(() => {
+          translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
+            runOnJS(onDismiss)();
+          });
+        }, 430);
+      }
     }
     return () => {
       if (dismissTimer.current) clearTimeout(dismissTimer.current);
@@ -326,13 +334,45 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
           </View>
         </LinearGradient>
 
-        {/* Swipe-up hint chevron */}
+        {/* One-time swipe-up hint for new users */}
         <Animated.View style={[styles.hintContainer, hintStyle]} pointerEvents="none">
           <Ionicons name="chevron-up" size={28} color="rgba(255,255,255,0.85)" />
           <Text style={styles.hintText}>Swipe up to skip</Text>
         </Animated.View>
+
       </Animated.View>
     </GestureDetector>
+  );
+}
+
+function AlreadyVotedOverlay() {
+  const chevronY = useSharedValue(0);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    opacity.value = withTiming(1, { duration: 300 });
+    chevronY.value = withRepeat(
+      withSequence(
+        withTiming(-10, { duration: 420 }),
+        withTiming(0, { duration: 420 }),
+      ),
+      -1, // infinite
+      false,
+    );
+  }, []);
+
+  const chevronStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: chevronY.value }],
+    opacity: opacity.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.alreadyVotedOverlay, { opacity }]} pointerEvents="none">
+      <Animated.View style={chevronStyle}>
+        <Ionicons name="chevron-up" size={32} color="rgba(255,255,255,0.9)" />
+      </Animated.View>
+      <Text style={styles.alreadyVotedSub}>Swipe up to continue</Text>
+    </Animated.View>
   );
 }
 
@@ -504,5 +544,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     letterSpacing: 0.3,
+  },
+  alreadyVotedOverlay: {
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    gap: 2,
+  },
+  alreadyVotedSub: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: 12,
+    fontWeight: '500',
   },
 });

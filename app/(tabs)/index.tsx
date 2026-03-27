@@ -1,4 +1,15 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, Easing } from 'react-native-reanimated';
+
+const TREADMILL_COLORS = [
+  '#BB88EE', '#6699EE', '#44BBCC', '#77CC88',
+  '#CCDD55', '#DDBB55', '#DDAA66', '#DD7766',
+  '#BB88EE', '#6699EE', '#44BBCC', '#77CC88',
+  '#CCDD55', '#DDBB55', '#DDAA66', '#DD7766',
+  '#BB88EE',
+] as const;
+const TREADMILL_WIDTH = 1280;
+const TREADMILL_SCROLL = 640;
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +19,7 @@ import * as Haptics from 'expo-haptics';
 import { useFeed, type FeedItem } from '@/hooks/useFeed';
 import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import { useVote } from '@/hooks/useVote';
+import { useUserVote } from '@/hooks/useUserVote';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
@@ -36,6 +48,7 @@ export default function FeedScreen() {
   const refreshToken = useFeedStore((s) => s.refreshToken);
   const pendingPost = useFeedStore((s) => s.pendingPost);
   const setPendingPost = useFeedStore((s) => s.setPendingPost);
+  const externalVotes = useFeedStore((s) => s.externalVotes);
   const [deck, setDeck] = useState<FeedItem[]>([]);
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
@@ -88,7 +101,8 @@ export default function FeedScreen() {
         const retained = prev.filter((item) =>
           feedIds.has(item.id) ||
           sessionVotesRef.current.has(item.id) ||
-          item.user_id === currentUser?.id
+          item.user_id === currentUser?.id ||
+          useFeedStore.getState().externalVotes.has(item.id)
         );
         return [...retained, ...freshItems];
       });
@@ -140,6 +154,17 @@ export default function FeedScreen() {
     refetch();
   }, [refreshToken]);
 
+  const topCards = deck.slice(0, 3);
+  const topItem = topCards[0];
+  const topItemVoted = topItem ? sessionVotes.has(topItem.id) : false;
+
+  // Check if the top card was voted on outside this session (e.g. from the detail view).
+  // useUserVote is invalidated by useVote.onSuccess so this stays in sync automatically.
+  const { data: topItemDbVote } = useUserVote(topItem?.id ?? '');
+  const topItemExternallyVoted = topItem
+    ? (!!topItemDbVote || externalVotes.has(topItem.id)) && !sessionVotes.has(topItem.id)
+    : false;
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.center}>
@@ -147,10 +172,6 @@ export default function FeedScreen() {
       </SafeAreaView>
     );
   }
-
-  const topCards = deck.slice(0, 3);
-  const topItem = topCards[0];
-  const topItemVoted = topItem ? sessionVotes.has(topItem.id) : false;
 
   return (
     <SafeAreaView style={styles.root}>
@@ -197,10 +218,11 @@ export default function FeedScreen() {
                 <SwipeCard
                   key={item.id}
                   item={item}
-                  userVote={sessionVotes.get(item.id) ?? null}
+                  userVote={sessionVotes.get(item.id) ?? (index === 0 && topItemExternallyVoted ? (topItemDbVote ?? externalVotes.get(item.id) ?? null) : null)}
                   isFavorited={favoriteIds.has(item.id)}
                   isFollowing={followingIds.has(item.user_id)}
                   isOwnPost={currentUser?.id === item.user_id}
+                  isAlreadyVoted={index === 0 && topItemExternallyVoted}
                   onDismiss={() => handleDismiss(item)}
                   onFavorite={() => handleFavorite(item)}
                   onFollow={() => handleFollow(item)}
@@ -209,55 +231,112 @@ export default function FeedScreen() {
                   index={index}
                   containerHeight={cardAreaHeight}
                   showSwipeHint={index === 0 && showSwipeHint}
-                  swipeEnabled={flags?.homeSwipeToSkipEnabled ?? false}
+                  swipeEnabled={true}
                 />
               );
             })
         )}
       </View>
 
-      {/* Action buttons */}
+      {/* Action buttons / already-voted state */}
       {topItem && (
-        <View style={styles.actionRow}>
-          <View style={styles.badGlow}>
-            <TouchableOpacity
-              style={styles.voteButton}
-              activeOpacity={0.8}
-              onPress={() => handleVote(topItem, 'bad')}
-              disabled={topItemVoted}
-            >
-              <LinearGradient
-                colors={gradients.bad}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={StyleSheet.absoluteFill}
-              />
-              <Ionicons name="thumbs-down" size={26} color="#FFFFFF" />
-              <Text style={styles.voteButtonText}>BAD</Text>
-            </TouchableOpacity>
-          </View>
+        topItemExternallyVoted ? (
+          <AlreadyVotedRow />
+        ) : (
+          <View style={styles.actionRow}>
+            <View style={styles.badGlow}>
+              <TouchableOpacity
+                style={styles.voteButton}
+                activeOpacity={0.8}
+                onPress={() => handleVote(topItem, 'bad')}
+                disabled={topItemVoted}
+              >
+                <LinearGradient
+                  colors={gradients.bad}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={StyleSheet.absoluteFill}
+                />
+                <Ionicons name="thumbs-down" size={26} color="#FFFFFF" />
+                <Text style={styles.voteButtonText}>BAD</Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={styles.radGlow}>
-            <TouchableOpacity
-              style={styles.voteButton}
-              activeOpacity={0.8}
-              onPress={() => handleVote(topItem, 'rad')}
-              disabled={topItemVoted}
-            >
-              <LinearGradient
-                colors={gradients.rad}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={StyleSheet.absoluteFill}
-              />
-              <Ionicons name="thumbs-up" size={26} color="#FFFFFF" />
-              <Text style={styles.voteButtonText}>RAD</Text>
-            </TouchableOpacity>
+            <View style={styles.radGlow}>
+              <TouchableOpacity
+                style={styles.voteButton}
+                activeOpacity={0.8}
+                onPress={() => handleVote(topItem, 'rad')}
+                disabled={topItemVoted}
+              >
+                <LinearGradient
+                  colors={gradients.rad}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={StyleSheet.absoluteFill}
+                />
+                <Ionicons name="thumbs-up" size={26} color="#FFFFFF" />
+                <Text style={styles.voteButtonText}>RAD</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        )
       )}
 
     </SafeAreaView>
+  );
+}
+
+function AlreadyVotedRow() {
+  const chevronY = useSharedValue(0);
+  const treadmillX = useSharedValue(-TREADMILL_SCROLL);
+  const [labelWidth, setLabelWidth] = useState(0);
+
+  useEffect(() => {
+    chevronY.value = withRepeat(
+      withSequence(
+        withTiming(-8, { duration: 500, easing: Easing.inOut(Easing.sin) }),
+        withTiming(0,  { duration: 500, easing: Easing.inOut(Easing.sin) }),
+      ),
+      -1, false,
+    );
+    treadmillX.value = withRepeat(
+      withTiming(0, { duration: 12000, easing: Easing.linear }),
+      -1, true,
+    );
+  }, []);
+
+  const chevronStyle = useAnimatedStyle(() => ({ transform: [{ translateY: chevronY.value }] }));
+  const treadmillStyle = useAnimatedStyle(() => ({ transform: [{ translateX: treadmillX.value }] }));
+
+  return (
+    <View style={styles.alreadyVotedRow}>
+      <Animated.View style={chevronStyle}>
+        <Ionicons name="chevron-up" size={24} color="rgba(255,255,255,0.5)" />
+      </Animated.View>
+      <View style={styles.alreadyVotedTextGroup}>
+        {/* Hidden sizer to measure label width before showing masked version */}
+        <View pointerEvents="none" style={{ position: 'absolute', opacity: 0 }}>
+          <Text style={styles.alreadyVotedLabel} onLayout={(e) => setLabelWidth(e.nativeEvent.layout.width)}>
+            You already rated this one
+          </Text>
+        </View>
+        <MaskedView
+          style={labelWidth > 0 ? { width: labelWidth, height: 24 } : { opacity: 0 }}
+          maskElement={<Text style={styles.alreadyVotedLabel}>You already rated this one</Text>}
+        >
+          <Animated.View style={treadmillStyle}>
+            <LinearGradient
+              colors={TREADMILL_COLORS}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{ width: TREADMILL_WIDTH, height: 24 }}
+            />
+          </Animated.View>
+        </MaskedView>
+        <Text style={styles.alreadyVotedSub}>Swipe up to continue</Text>
+      </View>
+    </View>
   );
 }
 
@@ -376,6 +455,30 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,
+  },
+  alreadyVotedRow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 8,
+    paddingBottom: 12,
+    paddingTop: 8,
+    height: 74 + 12 + 4,
+  },
+  alreadyVotedTextGroup: {
+    alignItems: 'center',
+    gap: 3,
+  },
+  alreadyVotedLabel: {
+    color: 'rgba(255,255,255,0.75)',
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+  alreadyVotedSub: {
+    color: 'rgba(255,255,255,0.45)',
+    fontSize: 11,
+    fontWeight: '500',
   },
   caughtUpScroll: {
     alignSelf: 'stretch',

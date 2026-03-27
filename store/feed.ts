@@ -25,6 +25,9 @@ interface FeedStore {
   bumpRefresh: () => void;
   pendingPost: PendingPost | null;
   setPendingPost: (post: PendingPost | null) => void;
+  // Votes cast outside the feed screen (e.g. photo detail view)
+  externalVotes: Map<string, 'rad' | 'bad'>;
+  addExternalVote: (uploadId: string, vote: 'rad' | 'bad') => void;
 }
 
 // resetToken — wipes deck + refetches (used after a new upload)
@@ -36,4 +39,7 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
   pendingPost: null,
   setPendingPost: (post) => set({ pendingPost: post }),
+  externalVotes: new Map(),
+  addExternalVote: (uploadId, vote) =>
+    set((s) => ({ externalVotes: new Map(s.externalVotes).set(uploadId, vote) })),
 }));

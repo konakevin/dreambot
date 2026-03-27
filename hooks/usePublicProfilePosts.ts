@@ -1,34 +1,19 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { useAuthStore } from '@/store/auth';
+import type { PostItem } from '@/hooks/useUserPosts';
 
-export interface PostItem {
-  id: string;
-  categories: string[];
-  image_url: string;
-  media_type: 'image' | 'video';
-  thumbnail_url: string | null;
-  width: number | null;
-  height: number | null;
-  caption: string | null;
-  total_votes: number;
-  rad_votes: number;
-  created_at: string;
-}
-
-// 2 columns × ~3 visible rows × 3 screens = 18 posts per page
 const PAGE_SIZE = 18;
 
-export function useUserPosts(enabled = true) {
-  const user = useAuthStore((s) => s.user);
+export function usePublicProfilePosts(userId: string, enabled = true) {
   return useInfiniteQuery({
-    queryKey: ['userPosts', user?.id],
+    queryKey: ['publicProfilePosts', userId],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       const { data, error } = await supabase
         .from('uploads')
         .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at')
-        .eq('user_id', user!.id)
+        .eq('user_id', userId)
+        .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
@@ -37,7 +22,7 @@ export function useUserPosts(enabled = true) {
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.rows.length < PAGE_SIZE ? undefined : lastPage.offset + PAGE_SIZE,
-    enabled: !!user && enabled,
+    enabled: !!userId && enabled,
     staleTime: 60_000,
   });
 }

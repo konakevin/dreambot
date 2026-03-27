@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useFeedStore } from '@/store/feed';
 
 interface VoteArgs {
   uploadId: string;
@@ -20,10 +21,12 @@ export function useVote() {
       });
       if (error) throw error;
     },
-    onSuccess: (_, { uploadId }) => {
+    onSuccess: (_, { uploadId, vote }) => {
       queryClient.invalidateQueries({ queryKey: ['feed', user?.id] });
       queryClient.invalidateQueries({ queryKey: ['post', uploadId] });
       queryClient.invalidateQueries({ queryKey: ['userVote', uploadId] });
+      // Tell the feed screen about votes cast outside it (e.g. from photo detail)
+      useFeedStore.getState().addExternalVote(uploadId, vote);
     },
   });
 }

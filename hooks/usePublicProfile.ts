@@ -1,21 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { PostItem } from '@/hooks/useUserPosts';
 
 export interface PublicProfile {
   id: string;
   username: string;
   created_at: string;
+  postCount: number;
   followerCount: number;
   followingCount: number;
-  posts: PostItem[];
 }
 
 export function usePublicProfile(userId: string) {
   return useQuery({
     queryKey: ['publicProfile', userId],
     queryFn: async () => {
-      const [profileRes, postsRes, followerRes, followingRes] = await Promise.all([
+      const [profileRes, postCountRes, followerRes, followingRes] = await Promise.all([
         supabase
           .from('users')
           .select('id, username, created_at')
@@ -23,10 +22,9 @@ export function usePublicProfile(userId: string) {
           .single(),
         supabase
           .from('uploads')
-          .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at')
+          .select('id', { count: 'exact', head: true })
           .eq('user_id', userId)
-          .eq('is_active', true)
-          .order('created_at', { ascending: false }),
+          .eq('is_active', true),
         supabase
           .from('follows')
           .select('id', { count: 'exact', head: true })
@@ -41,7 +39,7 @@ export function usePublicProfile(userId: string) {
 
       return {
         ...profileRes.data,
-        posts: (postsRes.data ?? []) as PostItem[],
+        postCount: postCountRes.count ?? 0,
         followerCount: followerRes.count ?? 0,
         followingCount: followingRes.count ?? 0,
       } as PublicProfile;
