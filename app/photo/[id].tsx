@@ -179,10 +179,11 @@ export default function PhotoDetailScreen() {
   const isOwnPost = currentUser?.id === p.user_id;
   const blurBg = p.width && p.height ? (p.width / p.height) > (SCREEN_WIDTH / SCREEN_HEIGHT) : false;
 
-  // Optimistic score calculation — include pending vote
+  // Optimistic score: only add +1 if DB hasn't caught up yet (existingVote still null)
   const activeVote = localVote ?? votePending;
-  const rad = p.rad_votes + (activeVote === 'rad' ? 1 : 0);
-  const total = p.total_votes + (activeVote !== null ? 1 : 0);
+  const needsOptimistic = activeVote !== null && existingVote === null;
+  const rad = p.rad_votes + (needsOptimistic && activeVote === 'rad' ? 1 : 0);
+  const total = p.total_votes + (needsOptimistic ? 1 : 0);
   const rating = (hasVoted || votePending) ? getRating(rad, total) : null;
 
   function handleVote(vote: 'rad' | 'bad') {

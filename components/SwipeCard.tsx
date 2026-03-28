@@ -423,8 +423,8 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
           </View>
         </LinearGradient>
 
-        {/* Swipe-up chevron pill for already-voted / milestone / streak match cards */}
-        {(isAlreadyVoted || hasMilestone) && <SwipeUpChevron />}
+        {/* Swipe-up chevron pill for already-voted cards (milestone has its own) */}
+        {isAlreadyVoted && !hasMilestone && <SwipeUpChevron />}
 
         {/* One-time swipe-up hint for new users */}
         <Animated.View style={[styles.hintContainer, hintStyle]} pointerEvents="none">

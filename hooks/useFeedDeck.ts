@@ -12,6 +12,7 @@ import { useFeedStore } from '@/store/feed';
 export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined) {
   const [deck, setDeck] = useState<FeedItem[]>([]);
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
+  const [resetCounter, setResetCounter] = useState(0);
   const loadedFeedKey = useRef('');
   const sessionVotesRef = useRef(sessionVotes);
 
@@ -59,7 +60,7 @@ export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined)
         return [...retained, ...freshItems];
       });
     }
-  }, [feed]);
+  }, [feed, resetCounter]);
 
   // Computed: top card + 2 unvoted behind it
   const topCard = deck[0];
@@ -79,6 +80,7 @@ export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined)
   const resetDeck = useCallback(() => {
     loadedFeedKey.current = '';
     setDeck([]);
+    setResetCounter((c) => c + 1); // force feed merge effect to re-run
   }, []);
 
   return {

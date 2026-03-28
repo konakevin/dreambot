@@ -233,14 +233,14 @@ export function MilestoneBurst({ hit }: MilestoneBurstProps) {
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-    // Number slams in with overshoot bounce
+    // Number slams in with overshoot bounce (total: 350ms)
     textOpacity.value = withTiming(1, { duration: 50 });
     textScale.value = withSequence(
-      withTiming(2.0, { duration: 120, easing: Easing.out(Easing.quad) }),  // slam in big
-      withTiming(0.85, { duration: 100, easing: Easing.inOut(Easing.quad) }), // squish
-      withTiming(1.08, { duration: 100, easing: Easing.inOut(Easing.quad) }), // overshoot
-      withTiming(0.97, { duration: 80 }),                                      // settle
-      withTiming(1.0, { duration: 60 }),                                       // rest
+      withTiming(2.0, { duration: 100, easing: Easing.out(Easing.quad) }),
+      withTiming(0.88, { duration: 80, easing: Easing.inOut(Easing.quad) }),
+      withTiming(1.05, { duration: 70, easing: Easing.inOut(Easing.quad) }),
+      withTiming(0.98, { duration: 50 }),
+      withTiming(1.0, { duration: 50 }),
     );
 
     // Energy pulse ring — blasts out from number on impact
@@ -251,8 +251,8 @@ export function MilestoneBurst({ hit }: MilestoneBurstProps) {
 
 
 
-    // Label + chevron appear together after number settles (460ms)
-    const settleDelay = 460;
+    // Label + chevron appear together after number settles (350ms)
+    const settleDelay = 350;
     labelOpacity.value = withDelay(settleDelay, withTiming(1, { duration: 200 }));
     labelTranslateY.value = withDelay(settleDelay, withTiming(0, { duration: 250, easing: Easing.out(Easing.quad) }));
 
@@ -306,7 +306,7 @@ export function MilestoneBurst({ hit }: MilestoneBurstProps) {
   if (!hit) return null;
 
   return (
-    <View style={styles.overlay} pointerEvents="none">
+    <View style={styles.overlay} pointerEvents="auto">
       {/* Confetti particles */}
       <View style={styles.particleCenter}>
         {particles}

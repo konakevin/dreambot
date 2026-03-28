@@ -47,6 +47,7 @@ export default function FeedScreen() {
   const currentUser = useAuthStore((s) => s.user);
   const externalVotes = useFeedStore((s) => s.externalVotes);
   const refreshToken = useFeedStore((s) => s.refreshToken);
+  const resetToken = useFeedStore((s) => s.resetToken);
 
   // ── Extracted hooks ──────────────────────────────────────────────────────
   const activeFeed = useActiveFeed();
@@ -78,6 +79,12 @@ export default function FeedScreen() {
       -1, true,
     );
   }, []);
+
+  // ── After upload, switch to Explore feed ──────────────────────────────────
+  useEffect(() => {
+    if (resetToken === 0) return;
+    activeFeed.setFeedMode('default');
+  }, [resetToken]);
 
   // ── One-time swipe hint ──────────────────────────────────────────────────
   useEffect(() => {
@@ -158,7 +165,6 @@ export default function FeedScreen() {
   const { topItem, topCards } = deck;
   const topItemVoted = deck.topItemVoted;
   const { feedMode } = activeFeed;
-  const buttonsVisible = !milestone.isActive(topItem?.id ?? '');
 
   // ── Loading state ────────────────────────────────────────────────────────
   if (activeFeed.isLoading) {
@@ -276,7 +282,7 @@ export default function FeedScreen() {
                   showSwipeHint={index === 0 && showSwipeHint}
                   swipeEnabled={true}
                   hasMilestone={index === 0 && milestone.isActive(item.id)}
-                  friendVotes={index === 0 && feedMode === 'friends' ? streakVoting.applyLocalStreaks(item.friend_votes) : undefined}
+                  friendVotes={feedMode === 'friends' ? streakVoting.applyLocalStreaks(item.friend_votes) : undefined}
                   autoDismissDelay={index === 0 && milestone.isActive(item.id) ? null : undefined}
                   milestoneHit={index === 0 && milestone.milestoneHit?.postId === item.id ? milestone.milestoneHit : null}
                 />
@@ -293,9 +299,9 @@ export default function FeedScreen() {
         ) : topItemExternallyVoted && !dismissing ? (
           <GradientMessageRow message="You already rated this one" />
         ) : (
-          <View key={topItem.id} style={styles.actionRow}>
-            <VoteButton vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} jiggleTick={jiggleTick} visible={buttonsVisible} />
-            <VoteButton vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} jiggleTick={jiggleTick} visible={buttonsVisible} />
+          <View style={styles.actionRow}>
+            <VoteButton vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} jiggleTick={jiggleTick} />
+            <VoteButton vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} jiggleTick={jiggleTick} />
           </View>
         )
       )}

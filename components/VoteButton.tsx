@@ -132,13 +132,13 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
     );
   }, [jiggleTick]);
 
-  // Visibility: when visible flips to false, shrink and fade
+  // Visibility: when visible flips to false, fade out smoothly
   useEffect(() => {
     if (visible === false) {
-      buttonScale.value = withTiming(0, { duration: 400, easing: Easing.in(Easing.cubic) });
-      buttonOpacity.value = withDelay(100, withTiming(0, { duration: 300 }));
+      // Cancel any bounce, go straight to invisible
+      buttonScale.value = withTiming(0.6, { duration: 300, easing: Easing.in(Easing.quad) });
+      buttonOpacity.value = withTiming(0, { duration: 300, easing: Easing.in(Easing.quad) });
     }
-    // No else — fresh component instances start at scale=1, opacity=1
   }, [visible]);
 
   function handlePressIn() {
@@ -151,11 +151,16 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
       );
     });
 
-    // Quick press then bounce back
-    buttonScale.value = withSequence(
-      withTiming(0.84, { duration: 60 }),
-      withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }),
-    );
+    if (visible) {
+      // Normal: quick press then bounce back
+      buttonScale.value = withSequence(
+        withTiming(0.84, { duration: 60 }),
+        withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }),
+      );
+    } else {
+      // Fading out: just press down, no bounce (shrink takes over)
+      buttonScale.value = withTiming(0.84, { duration: 60 });
+    }
   }
 
   return (
