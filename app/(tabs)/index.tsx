@@ -58,6 +58,7 @@ export default function FeedScreen() {
 
   // ── Remaining local state (UI-only, minimal) ────────────────────────────
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
+  const cardAreaMeasured = useRef(false);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [jiggleTick, setJiggleTick] = useState(0);
   const [dismissing, setDismissing] = useState(false);
@@ -249,7 +250,13 @@ export default function FeedScreen() {
       </View>
 
       {/* Card stack */}
-      <View style={styles.cardArea} onLayout={(e) => { if (!cardAreaHeight) setCardAreaHeight(e.nativeEvent.layout.height); }}>
+      <View style={styles.cardArea} onLayout={(e) => {
+        const h = e.nativeEvent.layout.height;
+        if (!cardAreaMeasured.current || Math.abs(h - cardAreaHeight) > 2) {
+          cardAreaMeasured.current = true;
+          setCardAreaHeight(h);
+        }
+      }}>
         {!cardAreaHeight ? null : feedMode === 'friends' && !streakUnlock.streakUnlocked ? (
           <StreakLockedState votesNeeded={10 - streakUnlock.totalVoteCount} onGoVote={() => activeFeed.setFeedMode('default')} />
         ) : deck.deck.length === 0 && !activeFeed.isLoading && !activeFeed.isRefetching && activeFeed.feed.length === 0 ? (
@@ -639,6 +646,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   actionRow: {
     flexDirection: 'row',
