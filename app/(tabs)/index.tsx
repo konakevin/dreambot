@@ -254,7 +254,7 @@ export default function FeedScreen() {
     refetch();
   }, [refreshToken]);
 
-  const topCards = deck.slice(0, 3);
+  const topCards = deck.filter((item) => !sessionVotes.has(item.id)).slice(0, 3);
   const topItem = topCards[0];
   const topItemVoted = topItem ? sessionVotes.has(topItem.id) : false;
   // Reset dismissing flag when top item changes
