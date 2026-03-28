@@ -86,8 +86,9 @@ function FriendAvatarBubble({ friend, userVote, index }: {
   const enterScale = useSharedValue(0);
   const enterOpacity = useSharedValue(0);
 
-  // Border color animation on vote
-  const borderProgress = useSharedValue(0);
+  // Reveal animation (border flip + badge)
+  const revealProgress = useSharedValue(0);
+  const badgeScale = useSharedValue(0);
 
   useEffect(() => {
     const delay = index * 60;
@@ -100,8 +101,14 @@ function FriendAvatarBubble({ friend, userVote, index }: {
 
   useEffect(() => {
     if (!hasVoted) return;
-    const delay = 300 + index * 200;
-    borderProgress.value = withDelay(delay, withTiming(1, { duration: 300, easing: Easing.out(Easing.quad) }));
+    const delay = 200 + index * 150;
+    revealProgress.value = withDelay(delay, withTiming(1, { duration: 250, easing: Easing.out(Easing.quad) }));
+    if (isMatch && streak > 0) {
+      badgeScale.value = withDelay(delay, withSequence(
+        withTiming(1.2, { duration: 150, easing: Easing.out(Easing.back(2)) }),
+        withTiming(1, { duration: 100 }),
+      ));
+    }
   }, [hasVoted]);
 
   const containerStyle = useAnimatedStyle(() => ({
@@ -110,12 +117,17 @@ function FriendAvatarBubble({ friend, userVote, index }: {
   }));
 
   const borderStyle = useAnimatedStyle(() => {
-    const p = borderProgress.value;
+    const p = revealProgress.value;
     if (p === 0) return { borderColor: 'rgba(255,255,255,0.4)' };
     return {
       borderColor: isMatch ? `rgba(76, 175, 80, ${p})` : `rgba(244, 33, 46, ${p})`,
     };
   });
+
+  const badgeStyle = useAnimatedStyle(() => ({
+    opacity: badgeScale.value > 0 ? 1 : 0,
+    transform: [{ scale: badgeScale.value }],
+  }));
 
   const initial = friend.username[0]?.toUpperCase() ?? '?';
 
@@ -131,11 +143,11 @@ function FriendAvatarBubble({ friend, userVote, index }: {
         )}
       </Animated.View>
 
-      {/* Streak count badge — only on matched avatars after voting */}
-      {hasVoted && isMatch && streak > 0 && (
-        <View style={styles.streakBadge}>
+      {/* Streak count badge — pops in after border reveal */}
+      {isMatch && streak > 0 && (
+        <Animated.View style={[styles.streakBadge, badgeStyle]}>
           <Text style={styles.streakBadgeText}>{streak}</Text>
-        </View>
+        </Animated.View>
       )}
     </View>
   );

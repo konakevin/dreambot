@@ -10,6 +10,7 @@ export interface PublicProfile {
   postCount: number;
   followerCount: number;
   followingCount: number;
+  friendCount: number;
 }
 
 export function usePublicProfile(userId: string) {
@@ -37,6 +38,7 @@ export function usePublicProfile(userId: string) {
         postCount: Number(row.post_count),
         followerCount: Number(row.follower_count),
         followingCount: Number(row.following_count),
+        friendCount: Number(row.friend_count ?? 0),
       } as PublicProfile;
     },
     enabled: !!userId,

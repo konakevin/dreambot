@@ -16,11 +16,18 @@ import { colors } from '@/constants/theme';
 import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { StreakRow, StreakEmptyState, VoteWithFriendsButton } from '@/components/StreakRow';
+import { FriendButton } from '@/components/FriendButton';
 import { useTopStreaks } from '@/hooks/useTopStreaks';
+import { useFriendIds } from '@/hooks/useFriendIds';
+import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
+import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
+import { useFriendshipStatus } from '@/hooks/useFriendshipStatus';
+import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
+import { useRemoveFriend } from '@/hooks/useRemoveFriend';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import type { VibeSyncStreak } from '@/hooks/useTopStreaks';
 
-type Tab = 'posts' | 'followers' | 'following' | 'streaks';
+type Tab = 'posts' | 'friends' | 'followers' | 'following' | 'streaks';
 
 export default function PublicProfileScreen() {
   const { userId, viewedPost } = useLocalSearchParams<{ userId: string; viewedPost?: string }>();
@@ -35,6 +42,12 @@ export default function PublicProfileScreen() {
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
   const { data: streaks = [], isLoading: loadingStreaks } = useTopStreaks(userId);
+  const { data: friendIds = new Set<string>() } = useFriendIds();
+  const { data: friendsList = [], isLoading: loadingFriends } = useFriendsList(userId);
+  const { mutate: sendFriendRequest } = useSendFriendRequest();
+  const { mutate: respondRequest } = useRespondFriendRequest();
+  const { mutate: removeFriend } = useRemoveFriend();
+  const { data: friendshipStatus = 'none' } = useFriendshipStatus(userId);
 
   const isFollowing = followingIds.has(userId);
 
@@ -76,20 +89,31 @@ export default function PublicProfileScreen() {
         <View style={styles.headerTop}>
           <GradientUsername username={profile.username} rank={profile.user_rank} style={styles.username} avatarUrl={profile.avatar_url} showAvatar avatarSize={32} />
           {!isOwnProfile && (
-            <TouchableOpacity
-              style={[styles.followButton, isFollowing && styles.followingButton]}
-              onPress={handleFollow}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.followButtonText, isFollowing && styles.followingButtonText]}>
-                {isFollowing ? 'Following' : 'Follow'}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.headerButtons}>
+              <TouchableOpacity
+                style={[styles.followButton, isFollowing && styles.followingButton]}
+                onPress={handleFollow}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.followButtonText, isFollowing && styles.followingButtonText]}>
+                  {isFollowing ? 'Following' : 'Follow'}
+                </Text>
+              </TouchableOpacity>
+              <FriendButton
+                status={friendshipStatus}
+                onSendRequest={() => sendFriendRequest(userId)}
+                onCancelRequest={() => removeFriend(userId)}
+                onAccept={() => respondRequest({ requesterId: userId, accept: true })}
+                onDecline={() => respondRequest({ requesterId: userId, accept: false })}
+                onRemove={() => removeFriend(userId)}
+              />
+            </View>
           )}
         </View>
 
         <ProfileStatsRow
           postCount={profile.postCount}
+          friendCount={profile.friendCount}
           followerCount={profile.followerCount}
           followingCount={profile.followingCount}
           activeTab={activeTab}
@@ -107,6 +131,35 @@ export default function PublicProfileScreen() {
           emptyText="No posts yet"
           ListHeaderComponent={header}
           highlightPostId={viewedPost}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  if (activeTab === 'friends') {
+    return (
+      <SafeAreaView style={styles.root}>
+        {backButton}
+        <FlatList<FriendUser>
+          key="friends"
+          data={friendsList}
+          keyExtractor={(item) => item.id}
+          ListHeaderComponent={header}
+          ListEmptyComponent={
+            <View style={styles.center}>
+              {loadingFriends
+                ? <ActivityIndicator color={colors.textSecondary} />
+                : <Text style={styles.emptyText}>No friends yet</Text>
+              }
+            </View>
+          }
+          renderItem={({ item }) => (
+            <FollowUserRow
+              item={item}
+              isFollowing={followingIds.has(item.id)}
+              onFollow={handleFollowUser}
+            />
+          )}
         />
       </SafeAreaView>
     );
@@ -184,6 +237,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 16,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   username: { color: colors.textPrimary, fontSize: 22, fontWeight: '800' },
   followButton: {

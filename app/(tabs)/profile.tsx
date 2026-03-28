@@ -16,12 +16,17 @@ import { colors } from '@/constants/theme';
 import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { StreakRow, StreakEmptyState, VoteWithFriendsButton } from '@/components/StreakRow';
+import { FriendRequestRow } from '@/components/FriendRequestRow';
 import { useTopStreaks } from '@/hooks/useTopStreaks';
+import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
+import { usePendingRequests } from '@/hooks/usePendingRequests';
+import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
+import { useRemoveFriend } from '@/hooks/useRemoveFriend';
 import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import type { VibeSyncStreak } from '@/hooks/useTopStreaks';
 
-type Tab = 'posts' | 'saved' | 'followers' | 'following' | 'streaks';
+type Tab = 'posts' | 'saved' | 'friends' | 'followers' | 'following' | 'streaks';
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -33,6 +38,10 @@ export default function ProfileScreen() {
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
   const { data: streaks = [], isLoading: loadingStreaks } = useTopStreaks(user?.id ?? '');
+  const { data: friends = [], isLoading: loadingFriends } = useFriendsList(user?.id ?? '');
+  const { data: pendingRequests = [] } = usePendingRequests();
+  const { mutate: respondRequest } = useRespondFriendRequest();
+  const { mutate: removeFriend } = useRemoveFriend();
 
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -44,7 +53,7 @@ export default function ProfileScreen() {
   }
 
   const statsActiveTab: StatsTab =
-    activeTab === 'saved' ? 'posts' : activeTab;
+    activeTab === 'saved' ? 'posts' : (activeTab as StatsTab);
 
   const header = (
     <>
@@ -68,10 +77,12 @@ export default function ProfileScreen() {
 
         <ProfileStatsRow
           postCount={profile?.postCount ?? 0}
+          friendCount={profile?.friendCount ?? 0}
           followerCount={profile?.followerCount ?? 0}
           followingCount={profile?.followingCount ?? 0}
           activeTab={statsActiveTab}
           onTabChange={handleStatsTabChange}
+          pendingCount={pendingRequests.length}
         />
       </View>
 
@@ -110,6 +121,51 @@ export default function ProfileScreen() {
           isOwn={activeTab === 'posts'}
           emptyText={activeTab === 'posts' ? 'No posts yet' : 'Nothing saved yet'}
           ListHeaderComponent={header}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  if (activeTab === 'friends') {
+    // Combine pending requests + accepted friends into one list
+    const sections = [
+      ...pendingRequests.map((r) => ({ type: 'request' as const, data: r })),
+      ...friends.map((f) => ({ type: 'friend' as const, data: f })),
+    ];
+
+    return (
+      <SafeAreaView style={styles.root}>
+        <FlatList
+          key="friends"
+          data={sections}
+          keyExtractor={(item) => item.type === 'request' ? `req-${item.data.requesterId}` : `fr-${item.data.id}`}
+          ListHeaderComponent={header}
+          ListEmptyComponent={
+            <View style={styles.center}>
+              {loadingFriends
+                ? <ActivityIndicator color={colors.textSecondary} />
+                : <Text style={styles.emptyText}>No friends yet</Text>
+              }
+            </View>
+          }
+          renderItem={({ item }) => {
+            if (item.type === 'request') {
+              return (
+                <FriendRequestRow
+                  request={item.data}
+                  onAccept={(id) => respondRequest({ requesterId: id, accept: true })}
+                  onDecline={(id) => respondRequest({ requesterId: id, accept: false })}
+                />
+              );
+            }
+            return (
+              <FollowUserRow
+                item={item.data}
+                isFollowing={followingIds.has(item.data.id)}
+                onFollow={handleFollowUser}
+              />
+            );
+          }}
         />
       </SafeAreaView>
     );
