@@ -26,11 +26,14 @@ class SightengineProvider implements ModerationProvider {
   private apiUser: string;
   private apiSecret: string;
 
+  // Bikinis/lingerie OK, actual nudity blocked.
+  // suggestive/very_suggestive thresholds are lenient (fashion/swimwear).
+  // sexual_display/sexual_activity/erotica thresholds are strict (nudity).
   private imageThresholds: Record<string, number> = {
-    'nudity.sexual_activity': 0.3,
-    'nudity.sexual_display': 0.3,
-    'nudity.erotica': 0.5,
-    'nudity.very_suggestive': 0.7,
+    'nudity.sexual_activity': 0.2,
+    'nudity.sexual_display': 0.2,
+    'nudity.erotica': 0.4,
+    'nudity.very_suggestive': 0.85,
     'gore.prob': 0.3,
     'weapon.prob': 0.7,
     'drugs.prob': 0.7,
