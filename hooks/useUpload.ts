@@ -5,6 +5,7 @@ import { useFeedStore, type PendingPost } from '@/store/feed';
 import type { Category } from '@/types/database';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { Video as CompressorVideo } from 'react-native-compressor';
+import { moderateUpload } from '@/lib/moderation';
 
 interface UploadArgs {
   uri: string;
@@ -60,6 +61,15 @@ export function useUpload() {
       const thumbnailUrl = mediaType === 'video'
         ? await generateAndUploadThumbnail(uploadUri, user!.id)
         : null;
+
+      // Content moderation — check image + caption before making visible
+      const modResult = await moderateUpload(mediaUrl, caption.trim() || null);
+      if (!modResult.passed) {
+        // Clean up uploaded file
+        const fileName = mediaUrl.split('/').slice(-2).join('/');
+        await supabase.storage.from('uploads').remove([fileName]);
+        throw new Error(modResult.reason ?? 'Content rejected by moderation');
+      }
 
       const { data: inserted, error } = await supabase
         .from('uploads')
