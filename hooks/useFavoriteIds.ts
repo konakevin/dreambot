@@ -10,7 +10,8 @@ export function useFavoriteIds() {
       const { data, error } = await supabase
         .from('favorites')
         .select('upload_id')
-        .eq('user_id', user!.id);
+        .eq('user_id', user!.id)
+        .limit(500);
       if (error) throw error;
       return new Set((data ?? []).map((r) => r.upload_id as string));
     },

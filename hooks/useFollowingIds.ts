@@ -10,7 +10,8 @@ export function useFollowingIds() {
       const { data, error } = await supabase
         .from('follows')
         .select('following_id')
-        .eq('follower_id', user!.id);
+        .eq('follower_id', user!.id)
+        .limit(500);
       if (error) throw error;
       return new Set((data ?? []).map((r) => r.following_id as string));
     },

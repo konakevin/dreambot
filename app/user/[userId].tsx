@@ -11,6 +11,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useAuthStore } from '@/store/auth';
 import { PostGrid } from '@/components/PostGrid';
+import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
 import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
@@ -47,7 +48,7 @@ export default function PublicProfileScreen() {
     return (
       <SafeAreaView style={styles.root}>
         <View style={styles.backRow}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
             <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
@@ -58,17 +59,18 @@ export default function PublicProfileScreen() {
     );
   }
 
-  const header = (
-    <>
-      <View style={styles.backRow}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
+  const backButton = (
+    <View style={styles.backRow}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+      </TouchableOpacity>
+    </View>
+  );
 
-      <View style={styles.header}>
+  const header = (
+    <View style={styles.header}>
         <View style={styles.headerTop}>
-          <Text style={styles.username}>@{profile.username}</Text>
+          <GradientUsername username={profile.username} rank={profile.user_rank} style={styles.username} />
           {!isOwnProfile && (
             <TouchableOpacity
               style={[styles.followButton, isFollowing && styles.followingButton]}
@@ -90,12 +92,12 @@ export default function PublicProfileScreen() {
           onTabChange={setActiveTab}
         />
       </View>
-    </>
   );
 
   if (activeTab === 'posts') {
     return (
       <SafeAreaView style={styles.root}>
+        {backButton}
         <PostGrid
           source={{ type: 'user', userId }}
           emptyText="No posts yet"
@@ -111,6 +113,7 @@ export default function PublicProfileScreen() {
 
   return (
     <SafeAreaView style={styles.root}>
+      {backButton}
       <FlatList<FollowUser>
         key="users"
         data={listData}
@@ -139,7 +142,8 @@ export default function PublicProfileScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  backRow: { paddingHorizontal: 16, paddingVertical: 12 },
+  backRow: { paddingHorizontal: 8, paddingVertical: 4 },
+  backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: {
     paddingHorizontal: 16,
     paddingBottom: 20,

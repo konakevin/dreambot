@@ -17,6 +17,7 @@ import { VideoView, useVideoPlayer } from 'expo-video';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { FeedItem } from '@/hooks/useFeed';
+import { GradientUsername } from '@/components/GradientUsername';
 import { getRating } from '@/lib/getRating';
 import { formatCount } from '@/lib/formatCount';
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
@@ -43,6 +44,7 @@ interface SwipeCardProps {
   onFavorite: () => void;
   onFollow: () => void;
   onUserPress: () => void;
+  onSwipeUpBlocked?: () => void;
   isTop: boolean;
   index: number;
   containerHeight: number;
@@ -64,7 +66,7 @@ function CategoryPill({ category }: { category: string }) {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onFavorite, onFollow, onUserPress, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -183,6 +185,10 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
       } else {
         translateX.value = withSpring(0, SPRING_CONFIG);
         translateY.value = withSpring(0, SPRING_CONFIG);
+        // User tried to swipe up without voting — nudge the vote buttons
+        if (e.translationY < -60 && !canSwipeUp.value && onSwipeUpBlocked) {
+          runOnJS(onSwipeUpBlocked)();
+        }
       }
     });
 
@@ -271,7 +277,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
             {/* Row 1: username | follow */}
             <View style={styles.userRow}>
               <Pressable onPress={onUserPress} hitSlop={8}>
-                <Text style={styles.username}>@{item.username}</Text>
+                <GradientUsername username={item.username} rank={item.user_rank} style={styles.username} photoOverlay />
               </Pressable>
               {!isOwnPost && (
                 <Pressable

@@ -5,6 +5,7 @@ export interface PublicProfile {
   id: string;
   username: string;
   created_at: string;
+  user_rank: string | null;
   postCount: number;
   followerCount: number;
   followingCount: number;
@@ -14,34 +15,26 @@ export function usePublicProfile(userId: string) {
   return useQuery({
     queryKey: ['publicProfile', userId],
     queryFn: async () => {
-      const [profileRes, postCountRes, followerRes, followingRes] = await Promise.all([
-        supabase
-          .from('users')
-          .select('id, username, created_at')
-          .eq('id', userId)
-          .single(),
-        supabase
-          .from('uploads')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', userId)
-          .eq('is_active', true),
-        supabase
-          .from('follows')
-          .select('id', { count: 'exact', head: true })
-          .eq('following_id', userId),
-        supabase
-          .from('follows')
-          .select('id', { count: 'exact', head: true })
-          .eq('follower_id', userId),
-      ]);
+      const { data, error } = await supabase.rpc('get_public_profile', {
+        p_user_id: userId,
+      });
 
-      if (profileRes.error) throw profileRes.error;
+      if (error) throw error;
+
+      // rpc returns an array; we expect exactly one row
+      const row = Array.isArray(data) ? data[0] : data;
+      if (!row) throw new Error('User not found');
 
       return {
-        ...profileRes.data,
-        postCount: postCountRes.count ?? 0,
-        followerCount: followerRes.count ?? 0,
-        followingCount: followingRes.count ?? 0,
+        id: row.id as string,
+        username: row.username as string,
+        // created_at is not returned by the RPC but kept in the interface for
+        // backwards compatibility — consumers do not currently read it.
+        created_at: '',
+        user_rank: (row.user_rank as string | null) ?? null,
+        postCount: Number(row.post_count),
+        followerCount: Number(row.follower_count),
+        followingCount: Number(row.following_count),
       } as PublicProfile;
     },
     enabled: !!userId,

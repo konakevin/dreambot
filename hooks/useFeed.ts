@@ -17,6 +17,7 @@ export interface FeedItem {
   rad_votes: number;
   bad_votes: number;
   username: string;
+  user_rank: string | null;
 }
 
 async function fetchFeed(userId: string): Promise<FeedItem[]> {

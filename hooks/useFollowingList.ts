@@ -10,7 +10,8 @@ export function useFollowingList(userId: string) {
         .from('follows')
         .select('users!following_id(id, username)')
         .eq('follower_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(500);
       if (error) throw error;
       return (data ?? []).map((r) => r.users as FollowUser);
     },

@@ -10,6 +10,7 @@ import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { PostGrid } from '@/components/PostGrid';
+import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
 import { ProfileStatsRow } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
@@ -59,7 +60,7 @@ export default function ProfileScreen() {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.username}>@{user?.user_metadata?.username ?? 'you'}</Text>
+            <GradientUsername username={user?.user_metadata?.username ?? 'you'} rank={profile?.user_rank} style={styles.username} />
             <Text style={styles.email}>{user?.email}</Text>
           </View>
           <TouchableOpacity onPress={handleSignOut} hitSlop={12}>

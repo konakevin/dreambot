@@ -32,6 +32,7 @@ import { fetchPost } from '@/hooks/usePost';
 import { getRating } from '@/lib/getRating';
 import { formatCount } from '@/lib/formatCount';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { GradientUsername } from '@/components/GradientUsername';
 import { colors, gradients } from '@/constants/theme';
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
 import { animateScoreIn } from '@/lib/scoreAnimation';
@@ -365,7 +366,7 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
         {/* Left — username, caption, meta */}
         <View style={[styles.infoBlock, !isOwnPost && !hasVoted && styles.infoBlockWithButtons]}>
           <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
-            <Text style={styles.username}>@{p.users?.username}</Text>
+            <GradientUsername username={p.users?.username ?? ''} rank={p.users?.user_rank} style={styles.username} photoOverlay />
           </TouchableOpacity>
 
           {p.caption ? (

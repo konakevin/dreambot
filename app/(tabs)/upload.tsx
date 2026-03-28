@@ -126,7 +126,16 @@ export default function UploadScreen() {
   }
 
   function handlePost() {
-    if (!canPost) return;
+    if (!mediaUri) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      Alert.alert('No content, no glory.', 'Pick a photo or video first.');
+      return;
+    }
+    if (categories.length === 0) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      Alert.alert('Whoa there.', 'Category-less posts are illegal here. Pick one.');
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     upload(
       { uri: mediaUri!, categories, caption, mediaType, width: mediaDimensions?.width ?? null, height: mediaDimensions?.height ?? null },
@@ -157,7 +166,7 @@ export default function UploadScreen() {
           <TouchableOpacity
             style={[styles.postButton, !canPost && styles.postButtonDisabled]}
             onPress={handlePost}
-            disabled={!canPost || isPending}
+            disabled={isPending}
             activeOpacity={0.8}
           >
               {isPending
@@ -209,18 +218,28 @@ export default function UploadScreen() {
           <Text style={styles.pickerHint}>Photos or videos up to {MAX_VIDEO_DURATION}s</Text>
 
           {/* Category */}
-          <Text style={styles.sectionLabel}>CATEGORY</Text>
+          <View style={styles.categoryHeader}>
+            <Text style={styles.sectionLabel}>CATEGORY</Text>
+            <Text style={styles.categoryLimit}>{categories.length}/2</Text>
+          </View>
           <View style={styles.categoryRow}>
             {CATEGORIES.map((cat) => {
               const selected = categories.includes(cat.key);
+              const atMax = categories.length >= 2 && !selected;
               return (
                 <TouchableOpacity
                   key={cat.key}
                   style={[
                     styles.categoryChip,
                     selected && { borderColor: cat.color, backgroundColor: `${cat.color}1A` },
+                    atMax && styles.categoryChipDisabled,
                   ]}
                   onPress={() => {
+                    if (atMax) {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+                      Alert.alert('Max 2 categories', 'Remove one before adding another.');
+                      return;
+                    }
                     Haptics.selectionAsync();
                     setCategories((prev) =>
                       prev.includes(cat.key)
@@ -230,7 +249,7 @@ export default function UploadScreen() {
                   }}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.categoryChipText, selected && { color: cat.color, fontWeight: '700' }]} numberOfLines={1}>
+                  <Text style={[styles.categoryChipText, selected && { color: cat.color, fontWeight: '700' }, atMax && styles.categoryChipTextDisabled]} numberOfLines={1}>
                     {cat.label}
                   </Text>
                 </TouchableOpacity>
@@ -260,10 +279,11 @@ export default function UploadScreen() {
             </Text>
           </View>
 
-          {!canPost && (
-            <Text style={styles.hint}>
-              {!mediaUri ? 'Choose a photo or video to get started' : 'Pick at least one category to continue'}
-            </Text>
+          {!canPost && mediaUri && categories.length === 0 && (
+            <Text style={styles.hint}>Pick at least one category to continue</Text>
+          )}
+          {!mediaUri && (
+            <Text style={styles.hint}>Choose a photo or video to get started</Text>
           )}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -351,11 +371,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     letterSpacing: 0.8,
-    marginBottom: 10,
-    marginTop: 4,
   },
   optional: { color: colors.textTertiary, fontWeight: '400', letterSpacing: 0 },
+  categoryHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, marginTop: 4 },
+  categoryLimit: { color: colors.textTertiary, fontSize: 12, fontWeight: '600' },
   categoryRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 28 },
+  categoryChipDisabled: { opacity: 0.35 },
+  categoryChipTextDisabled: { color: colors.textTertiary },
   categoryChip: {
     width: '23%',
     alignItems: 'center',

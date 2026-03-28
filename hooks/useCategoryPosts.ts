@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type { Category } from '@/types/database';
 
+export type CategorySort = 'top' | 'bottom';
+
 export interface ExplorePost {
   id: string;
   categories: string[];
@@ -14,7 +16,7 @@ export interface ExplorePost {
   total_votes: number;
   rad_votes: number;
   wilson_score: number | null;
-  users: { username: string } | null;
+  users: { username: string; user_rank: string | null } | null;
 }
 
 export interface CategoryPostsResult {
@@ -22,45 +24,39 @@ export interface CategoryPostsResult {
   windowLabel: string;
 }
 
-const WINDOWS = [
-  { label: 'Last 72h',   hours: 72 },
-  { label: 'Last week',  hours: 168 },
-  { label: 'Last month', hours: 720 },
-  { label: 'All time',   hours: null },
-] as const;
+// Minimum votes for a post to qualify as "genuinely disliked" in Bottom sort
+const MIN_VOTES_FOR_BOTTOM = 5;
 
-export function useCategoryPosts(category: Category, limit = 10) {
+export function useCategoryPosts(category: Category, limit = 10, sort: CategorySort = 'top') {
   return useQuery({
-    queryKey: ['top', category, limit],
+    queryKey: ['top', category, limit, sort],
     queryFn: async (): Promise<CategoryPostsResult> => {
-      for (let i = 0; i < WINDOWS.length; i++) {
-        const { label, hours } = WINDOWS[i];
-        const isLast = i === WINDOWS.length - 1;
+      let query = supabase
+        .from('uploads')
+        .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username, user_rank)')
+        .eq('is_active', true)
+        .contains('categories', [category]);
 
-        let query = supabase
-          .from('uploads')
-          .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username)')
-          .eq('is_active', true)
-          .contains('categories', [category])
+      if (sort === 'bottom') {
+        // Order by bad% (bad_votes / total_votes) entirely in SQL — no JS sort needed.
+        // Vote floor ensures posts are genuinely judged, not just unlucky.
+        query = query
+          .gte('total_votes', MIN_VOTES_FOR_BOTTOM)
+          .order('bad_votes', { ascending: false, nullsFirst: false })
+          .limit(limit);
+      } else {
+        query = query
           .order('wilson_score', { ascending: false, nullsFirst: false })
           .limit(limit);
-
-        if (hours !== null) {
-          const since = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
-          query = query.gte('created_at', since);
-        }
-
-        const { data, error } = await query;
-        if (error) throw error;
-
-        const posts = (data ?? []) as ExplorePost[];
-        if (posts.length >= limit || isLast) {
-          return { posts, windowLabel: label };
-        }
       }
 
-      return { posts: [], windowLabel: 'All time' };
+      const { data, error } = await query;
+      if (error) throw error;
+
+      const posts = (data ?? []) as ExplorePost[];
+
+      return { posts, windowLabel: 'All time' };
     },
-    staleTime: 300_000, // leaderboards: 5 min
+    staleTime: 300_000,
   });
 }

@@ -18,6 +18,8 @@ export interface Database {
           skip_tokens: number;
           upload_count_week: number;
           week_reset_date: string;
+          rad_score: number | null;
+          user_rank: string | null;
         };
         Insert: {
           id: string;
@@ -187,6 +189,7 @@ export interface Database {
           rad_votes: number;
           bad_votes: number;
           username: string;
+          user_rank: string | null;
           feed_score: number;
         }>;
       };

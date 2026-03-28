@@ -81,10 +81,11 @@ export default function FeedScreen() {
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
+  const [jiggleTick, setJiggleTick] = useState(0);
   const [headerRowSize, setHeaderRowSize] = useState({ width: 0, height: 0 });
   const loadedFeedKey = useRef('');
   const sessionVotesRef = useRef(sessionVotes);
-  const headerTreadmillX = useSharedValue(-(Math.random() * TREADMILL_SCROLL));
+  const headerTreadmillX = useSharedValue(-560);
   const headerTreadmillStyle = useAnimatedStyle(() => ({ transform: [{ translateX: headerTreadmillX.value }] }));
   useEffect(() => {
     headerTreadmillX.value = withRepeat(
@@ -173,6 +174,10 @@ export default function FeedScreen() {
 
   const handleUserPress = useCallback((item: FeedItem) => {
     router.push(`/user/${item.user_id}`);
+  }, []);
+
+  const handleSwipeUpBlocked = useCallback(() => {
+    setJiggleTick((t) => t + 1);
   }, []);
 
   // Swipe up to dismiss (skip or after voting)
@@ -274,6 +279,7 @@ export default function FeedScreen() {
                   onFavorite={() => handleFavorite(item)}
                   onFollow={() => handleFollow(item)}
                   onUserPress={() => handleUserPress(item)}
+                  onSwipeUpBlocked={index === 0 ? handleSwipeUpBlocked : undefined}
                   isTop={index === 0}
                   index={index}
                   containerHeight={cardAreaHeight}
@@ -288,11 +294,11 @@ export default function FeedScreen() {
       {/* Action buttons / already-voted state */}
       {topItem && (
         topItemExternallyVoted ? (
-          <AlreadyVotedRow />
+          <AlreadyVotedRow cardAreaHeight={cardAreaHeight} />
         ) : (
           <View style={styles.actionRow}>
-            <VoteButtonWithBurst vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} />
-            <VoteButtonWithBurst vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} />
+            <VoteButtonWithBurst vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} jiggleTick={jiggleTick} />
+            <VoteButtonWithBurst vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} jiggleTick={jiggleTick} />
           </View>
         )
       )}
@@ -331,23 +337,13 @@ function Particle({ angle, color, progress, config }: {
   );
 }
 
-function BurstEffect({ progresses, ringProgress, vote }: {
+function BurstEffect({ progresses, vote }: {
   progresses: Animated.SharedValue<number>[];
-  ringProgress: Animated.SharedValue<number>;
   vote: 'rad' | 'bad';
 }) {
   const particleColors = vote === 'rad' ? RAD_PARTICLE_COLORS : BAD_PARTICLE_COLORS;
-  const ringColor = vote === 'rad' ? '#FFCC44' : '#6699EE';
-  const ringStyle = useAnimatedStyle(() => {
-    const p = ringProgress.value;
-    return {
-      opacity: 1 - p,
-      transform: [{ scale: 0.5 + p * 2 }],
-    };
-  });
   return (
     <View style={styles.burstContainer} pointerEvents="none">
-      <Animated.View style={[styles.shockwaveRing, { borderColor: ringColor }, ringStyle]} />
       {BURST_ANGLES.map((angle, i) => (
         <Particle key={i} angle={angle} color={particleColors[i]} progress={progresses[i]} config={PARTICLE_CONFIGS[i]} />
       ))}
@@ -355,7 +351,7 @@ function BurstEffect({ progresses, ringProgress, vote }: {
   );
 }
 
-function VoteButtonWithBurst({ vote, onPress, disabled }: { vote: 'rad' | 'bad'; onPress: () => void; disabled: boolean }) {
+function VoteButtonWithBurst({ vote, onPress, disabled, jiggleTick }: { vote: 'rad' | 'bad'; onPress: () => void; disabled: boolean; jiggleTick: number }) {
   // 18 pre-declared shared values — one per particle (hooks can't go in loops)
   const p0  = useSharedValue(0); const p1  = useSharedValue(0); const p2  = useSharedValue(0);
   const p3  = useSharedValue(0); const p4  = useSharedValue(0); const p5  = useSharedValue(0);
@@ -364,14 +360,30 @@ function VoteButtonWithBurst({ vote, onPress, disabled }: { vote: 'rad' | 'bad';
   const p12 = useSharedValue(0); const p13 = useSharedValue(0); const p14 = useSharedValue(0);
   const p15 = useSharedValue(0); const p16 = useSharedValue(0); const p17 = useSharedValue(0);
   const progresses = [p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17];
-  const ringProgress = useSharedValue(0);
-
   const buttonScale = useSharedValue(1);
+  const pulseProgress = useSharedValue(0);
   const buttonStyle = useAnimatedStyle(() => ({ transform: [{ scale: buttonScale.value }] }));
+  const pulseStyle = useAnimatedStyle(() => {
+    const p = pulseProgress.value;
+    return {
+      opacity: (1 - p) * 0.55,
+      transform: [{ scale: 0.9 + p * 0.85 }],
+    };
+  });
   const isRad = vote === 'rad';
 
-  function handlePress() {
-    // Staggered particle launch — each fires after its own delay
+  useEffect(() => {
+    if (jiggleTick === 0) return;
+    pulseProgress.value = 0;
+    pulseProgress.value = withTiming(1, { duration: 520, easing: Easing.out(Easing.quad) });
+    buttonScale.value = withSequence(
+      withTiming(0.88, { duration: 80 }),
+      withSpring(1, { damping: 18, stiffness: 260 }),
+    );
+  }, [jiggleTick]);
+
+  function handlePressIn() {
+    // Particles + press-down fire immediately on touch down
     progresses.forEach((p, i) => {
       p.value = 0;
       p.value = withDelay(
@@ -379,22 +391,23 @@ function VoteButtonWithBurst({ vote, onPress, disabled }: { vote: 'rad' | 'bad';
         withTiming(1, { duration: 650, easing: Easing.out(Easing.quad) }),
       );
     });
-    // Shockwave ring expands and fades
-    ringProgress.value = 0;
-    ringProgress.value = withTiming(1, { duration: 380, easing: Easing.out(Easing.quad) });
-    // Button crisp press-down and snap back
     buttonScale.value = withSequence(
-      withTiming(0.84, { duration: 5 }),
+      withTiming(0.84, { duration: 60 }),
       withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }),
     );
-    onPress();
   }
+
+  const pulseColor = isRad ? '#FFCC44' : '#6699EE';
 
   return (
     <View style={styles.burstWrapper}>
-      <BurstEffect progresses={progresses} ringProgress={ringProgress} vote={vote} />
+      <BurstEffect progresses={progresses} vote={vote} />
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.shockwaveRing, { borderColor: pulseColor }, pulseStyle]}
+      />
       <Animated.View style={[isRad ? styles.radGlow : styles.badGlow, buttonStyle]}>
-        <TouchableOpacity style={styles.voteButton} activeOpacity={0.8} onPress={handlePress} disabled={disabled}>
+        <TouchableOpacity style={styles.voteButton} activeOpacity={0.8} onPressIn={handlePressIn} onPress={onPress} disabled={disabled}>
           <LinearGradient
             colors={isRad ? gradients.rad : gradients.bad}
             start={{ x: 0, y: 0 }}
@@ -409,7 +422,7 @@ function VoteButtonWithBurst({ vote, onPress, disabled }: { vote: 'rad' | 'bad';
   );
 }
 
-function AlreadyVotedRow() {
+function AlreadyVotedRow({ cardAreaHeight }: { cardAreaHeight: number }) {
   const chevronY = useSharedValue(0);
   const treadmillX = useSharedValue(-(Math.random() * TREADMILL_SCROLL));
   const [labelWidth, setLabelWidth] = useState(0);
@@ -417,8 +430,8 @@ function AlreadyVotedRow() {
   useEffect(() => {
     chevronY.value = withRepeat(
       withSequence(
-        withTiming(-8, { duration: 500, easing: Easing.inOut(Easing.sin) }),
-        withTiming(0,  { duration: 500, easing: Easing.inOut(Easing.sin) }),
+        withTiming(-10, { duration: 500, easing: Easing.inOut(Easing.sin) }),
+        withTiming(0,   { duration: 500, easing: Easing.inOut(Easing.sin) }),
       ),
       -1, false,
     );
@@ -433,8 +446,12 @@ function AlreadyVotedRow() {
 
   return (
     <View style={styles.alreadyVotedRow}>
-      <Animated.View style={chevronStyle}>
-        <Ionicons name="chevron-up" size={24} color="rgba(255,255,255,0.5)" />
+      <Animated.View pointerEvents="none" style={[chevronStyle, {
+        position: 'absolute',
+        top: -(cardAreaHeight / 2 + 34),
+        alignSelf: 'center',
+      }]}>
+        <Ionicons name="chevron-up" size={68} color="rgba(255,255,255,0.5)" />
       </Animated.View>
       <View style={styles.alreadyVotedTextGroup}>
         {/* Hidden sizer to measure label width before showing masked version */}
@@ -580,11 +597,11 @@ const styles = StyleSheet.create({
   },
   alreadyVotedRow: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
-    gap: 8,
+    overflow: 'visible',
     paddingBottom: 12,
-    paddingTop: 8,
+    paddingTop: 15,
     height: 74 + 12 + 4,
   },
   alreadyVotedTextGroup: {

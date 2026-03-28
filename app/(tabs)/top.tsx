@@ -4,11 +4,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useCategoryPosts } from '@/hooks/useCategoryPosts';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { useCategoryPosts, type CategorySort } from '@/hooks/useCategoryPosts';
+import type { Category } from '@/types/database';
 import { RankCard } from '@/components/RankCard';
-import { colors } from '@/constants/theme';
+import { colors, gradients } from '@/constants/theme';
 import { CATEGORIES } from '@/constants/categories';
 
 export default function TopScreen() {
@@ -16,27 +18,66 @@ export default function TopScreen() {
   const [selected, setSelected] = useState<Category>(
     (params.category as Category | undefined) ?? CATEGORIES[0].key
   );
+  const [sort, setSort] = useState<CategorySort>('top');
 
   useEffect(() => {
     if (params.category) setSelected(params.category as Category);
   }, [params.category]);
 
-  const { data, isLoading } = useCategoryPosts(selected, 9);
+  const scrollRef = useRef<ScrollView>(null);
+  const { data, isLoading, refetch } = useCategoryPosts(selected, 9, sort);
   const posts = data?.posts ?? [];
   const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
   const activeCategory = CATEGORIES.find((c) => c.key === selected);
 
+  // Preserve the last known windowLabel so the header height doesn't change
+  // while a new category is loading (which causes a visible layout jump).
+  const stableWindowLabel = useRef('');
+  if (data?.windowLabel) stableWindowLabel.current = data.windowLabel;
+
+  function selectCategory(key: Category) {
+    setSelected(key);
+    refetch();
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
+  }
+
   return (
     <SafeAreaView style={styles.root}>
 
-      {/* Header — big category name + time window */}
+      {/* Header — big category name + sort toggle */}
       <View style={styles.header}>
-        <Text style={[styles.categoryHero, { color: activeCategory?.color ?? '#FFFFFF' }]}>
-          {activeCategory?.label ?? selected}
-        </Text>
-        {data?.windowLabel && (
-          <Text style={styles.metaLabel}>Top Posts · {data.windowLabel}</Text>
-        )}
+        <View style={styles.headerRow}>
+          <View>
+            <Text style={[styles.categoryHero, { color: activeCategory?.color ?? '#FFFFFF' }]}>
+              {activeCategory?.label ?? selected}
+            </Text>
+            <Text style={[styles.metaLabel, !stableWindowLabel.current && styles.invisible]}>
+              {sort === 'top' ? 'Top' : 'Bottom'} Posts · {stableWindowLabel.current}
+            </Text>
+          </View>
+          <View style={styles.sortToggle}>
+            <TouchableOpacity onPress={() => setSort('top')} activeOpacity={0.75} style={styles.sortButton}>
+              <MaskedView maskElement={<Text style={styles.sortButtonText}>RAD</Text>}>
+                <LinearGradient colors={gradients.rad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                  <Text style={[styles.sortButtonText, styles.invisible]}>RAD</Text>
+                </LinearGradient>
+              </MaskedView>
+              {sort === 'top' && (
+                <LinearGradient colors={gradients.rad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.sortUnderline} />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSort('bottom')} activeOpacity={0.75} style={styles.sortButton}>
+              <MaskedView maskElement={<Text style={styles.sortButtonText}>BAD</Text>}>
+                <LinearGradient colors={gradients.bad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                  <Text style={[styles.sortButtonText, styles.invisible]}>BAD</Text>
+                </LinearGradient>
+              </MaskedView>
+              {sort === 'bottom' && (
+                <LinearGradient colors={gradients.bad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.sortUnderline} />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
 
       {/* Category chips — horizontal scroll with right fade */}
@@ -51,7 +92,7 @@ export default function TopScreen() {
             return (
               <TouchableOpacity
                 key={cat.key}
-                onPress={() => setSelected(cat.key)}
+                onPress={() => selectCategory(cat.key)}
                 activeOpacity={0.75}
                 style={[
                   styles.chip,
@@ -89,6 +130,7 @@ export default function TopScreen() {
         </View>
       ) : (
         <ScrollView
+          ref={scrollRef}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
@@ -130,6 +172,32 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 8,
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  sortToggle: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  sortButton: {
+    alignItems: 'center',
+    paddingBottom: 4,
+    gap: 4,
+  },
+  sortUnderline: {
+    height: 3,
+    borderRadius: 2,
+    width: '100%',
+  },
+  sortButtonText: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  invisible: { opacity: 0 },
   categoryHero: {
     fontSize: 40,
     fontWeight: '900',

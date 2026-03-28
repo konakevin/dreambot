@@ -14,7 +14,8 @@ export function useFollowersList(userId: string) {
         .from('follows')
         .select('users!follower_id(id, username)')
         .eq('following_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(500);
       if (error) throw error;
       return (data ?? []).map((r) => r.users as FollowUser);
     },
