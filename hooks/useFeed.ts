@@ -53,6 +53,23 @@ export function useFeed() {
   });
 }
 
+export function useFollowingFeed() {
+  const user = useAuthStore((s) => s.user);
+  return useQuery({
+    queryKey: ['followingFeed', user?.id],
+    queryFn: async (): Promise<FeedItem[]> => {
+      const { data, error } = await supabase.rpc('get_following_feed', {
+        p_user_id: user!.id,
+        p_limit: 50,
+      });
+      if (error) throw error;
+      return (data ?? []) as FeedItem[];
+    },
+    enabled: !!user,
+    staleTime: 120_000,
+  });
+}
+
 export function useFriendsFeed() {
   const user = useAuthStore((s) => s.user);
   return useQuery({

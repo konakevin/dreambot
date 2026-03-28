@@ -18,7 +18,7 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams } from 'expo-router';
-import { useFeed, useFriendsFeed, type FeedItem } from '@/hooks/useFeed';
+import { useFeed, useFriendsFeed, useFollowingFeed, type FeedItem } from '@/hooks/useFeed';
 import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import { useVote } from '@/hooks/useVote';
 import { useUserVote } from '@/hooks/useUserVote';
@@ -43,7 +43,7 @@ import { CATEGORIES } from '@/constants/categories';
 export default function FeedScreen() {
   const currentUser = useAuthStore((s) => s.user);
   const { mode } = useLocalSearchParams<{ mode?: string }>();
-  const [feedMode, setFeedMode] = useState<'default' | 'friends'>(mode === 'friends' ? 'friends' : 'default');
+  const [feedMode, setFeedMode] = useState<'default' | 'friends' | 'friendsPosts'>(mode === 'friends' ? 'friends' : 'default');
 
   // Reset mode when route param changes
   useEffect(() => {
@@ -53,7 +53,8 @@ export default function FeedScreen() {
   const { data: flags } = useFeatureFlags();
   const defaultFeed = useFeed();
   const friendsFeed = useFriendsFeed();
-  const activeFeed = feedMode === 'friends' ? friendsFeed : defaultFeed;
+  const followingFeed = useFollowingFeed();
+  const activeFeed = feedMode === 'friends' ? friendsFeed : feedMode === 'friendsPosts' ? followingFeed : defaultFeed;
   const { data: feed = [], isLoading, refetch, isRefetching } = activeFeed;
   const { mutate: castVote } = useVote();
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
@@ -261,18 +262,33 @@ export default function FeedScreen() {
         {isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
       </View>
 
-      {/* Friends feed mode pill */}
-      {feedMode === 'friends' && (
-        <View style={styles.friendsPillRow}>
-          <View style={styles.friendsPill}>
-            <Ionicons name="flash" size={14} color="#FFD700" />
-            <Text style={styles.friendsPillText}>Friends' picks</Text>
-            <TouchableOpacity onPress={() => setFeedMode('default')} hitSlop={8}>
-              <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+      {/* Feed mode toggle */}
+      <View style={styles.feedToggleRow}>
+        <TouchableOpacity
+          style={[styles.feedToggle, feedMode === 'default' && styles.feedToggleActive]}
+          onPress={() => setFeedMode('default')}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="globe" size={14} color={feedMode === 'default' ? colors.textPrimary : colors.textSecondary} />
+          <Text style={[styles.feedToggleText, feedMode === 'default' && styles.feedToggleTextActive]}>Everyone</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.feedToggle, feedMode === 'friendsPosts' && styles.feedToggleActive]}
+          onPress={() => setFeedMode('friendsPosts')}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="people" size={14} color={feedMode === 'friendsPosts' ? colors.textPrimary : colors.textSecondary} />
+          <Text style={[styles.feedToggleText, feedMode === 'friendsPosts' && styles.feedToggleTextActive]}>Following</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.feedToggle, feedMode === 'friends' && styles.feedToggleActive]}
+          onPress={() => setFeedMode('friends')}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="flash" size={14} color={feedMode === 'friends' ? '#FFD700' : colors.textSecondary} />
+          <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Streak</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Card stack */}
       <View style={styles.cardArea} onLayout={(e) => setCardAreaHeight(e.nativeEvent.layout.height)}>
@@ -495,25 +511,34 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: colors.background,
   },
-  friendsPillRow: {
-    alignItems: 'center',
-    paddingBottom: 6,
-  },
-  friendsPill: {
+  feedToggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    paddingHorizontal: 12,
+    paddingBottom: 6,
+  },
+  feedToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 14,
     paddingVertical: 6,
+    borderRadius: 16,
     borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  feedToggleActive: {
+    backgroundColor: colors.surface,
     borderColor: colors.border,
   },
-  friendsPillText: {
-    color: colors.textPrimary,
+  feedToggleText: {
+    color: colors.textSecondary,
     fontSize: 13,
     fontWeight: '600',
+  },
+  feedToggleTextActive: {
+    color: colors.textPrimary,
   },
   headerWordRow: {
     flexDirection: 'row',
