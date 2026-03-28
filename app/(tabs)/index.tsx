@@ -207,7 +207,7 @@ export default function FeedScreen() {
       // Streak feed: optimistically update local streak counts
       if (feedMode === 'friends' && item.friend_votes?.length) {
         for (const f of item.friend_votes) {
-          updateStreak(f, f.vote === vote, f.streak ?? 0, vote);
+          updateStreak(f, f.vote === vote, vote);
         }
       }
 
@@ -390,7 +390,14 @@ export default function FeedScreen() {
                   showSwipeHint={index === 0 && showSwipeHint}
                   swipeEnabled={true}
                   hasMilestone={index === 0 && milestoneHit?.postId === item.id}
-                  friendVotes={index === 0 && feedMode === 'friends' ? item.friend_votes?.map((f) => ({ ...f, streak: localStreaks.get(f.username)?.count ?? f.streak })) : undefined}
+                  friendVotes={index === 0 && feedMode === 'friends' ? item.friend_votes?.map((f) => {
+                    const local = localStreaks.get(f.username);
+                    return {
+                      ...f,
+                      rad_streak: local?.radStreak ?? f.rad_streak,
+                      bad_streak: local?.badStreak ?? f.bad_streak,
+                    };
+                  }) : undefined}
                   autoDismissDelay={index === 0 && milestoneHit?.postId === item.id ? null : index === 0 && feedMode === 'friends' ? 900 : undefined}
                 />
               );

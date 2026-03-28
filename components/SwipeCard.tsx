@@ -80,7 +80,10 @@ function FriendAvatarBubble({ friend, userVote, index }: {
 }) {
   const hasVoted = userVote !== null;
   const isMatch = hasVoted && friend.vote === userVote;
-  const streak = friend.streak ?? 0;
+  // Show the relevant streak type based on how they matched
+  const streak = hasVoted && isMatch
+    ? (userVote === 'rad' ? (friend.rad_streak ?? 0) : (friend.bad_streak ?? 0))
+    : 0;
 
   const borderColor = !hasVoted ? 'rgba(255,255,255,0.4)' : isMatch ? 'rgba(76, 170, 100, 1)' : 'rgba(180, 120, 120, 1)';
 

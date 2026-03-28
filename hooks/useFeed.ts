@@ -8,6 +8,8 @@ export interface FriendVote {
   user_rank: string | null;
   vote: 'rad' | 'bad';
   streak?: number;
+  rad_streak?: number;
+  bad_streak?: number;
 }
 
 export interface FeedItem {

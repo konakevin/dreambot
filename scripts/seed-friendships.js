@@ -211,20 +211,45 @@ async function main() {
   // Voting pattern:
   //   sarah, bill, maya → vote RAD (you'll match these when voting RAD)
   //   jake, luna → vote BAD (you'll mismatch these when voting RAD)
-  // Vary rad vote counts so milestones are rare.
-  // Most posts get 7-8 or 11-12 rad votes (miss the #10 milestone).
-  // Only 2 posts get exactly 9 rad votes (Kevin's vote = #10 = milestone).
+  // Each friend has a voting personality — some lean rad, some lean bad, some flip.
+  // This creates a natural mix of rad and bad streaks with Kevin.
+  //   sarah: mostly rad    bill: mostly rad     maya: flips every few posts
+  //   jake: mostly bad     luna: mostly bad     alex: flips
+  //   nova: mostly rad     finn: mostly bad     zoe: flips
+  //   omar: mostly rad     iris: mostly bad     kai: flips
+  //   ruby: mostly rad     cole: mostly bad     jada: flips
+  //   milo: mostly bad     eden: flips          theo: mostly bad
+  const votePatterns = {
+    sarah: (p) => p % 5 !== 0 ? 'rad' : 'bad',       // mostly rad, occasional bad
+    bill:  (p) => p % 4 !== 0 ? 'rad' : 'bad',       // mostly rad
+    maya:  (p) => p % 2 === 0 ? 'rad' : 'bad',        // flips every post
+    jake:  (p) => p % 5 !== 0 ? 'bad' : 'rad',       // mostly bad, occasional rad
+    luna:  (p) => p % 4 !== 0 ? 'bad' : 'rad',       // mostly bad
+    alex:  (p) => p % 3 === 0 ? 'rad' : 'bad',        // flips
+    nova:  (p) => p % 6 !== 0 ? 'rad' : 'bad',       // mostly rad
+    finn:  (p) => p % 3 !== 0 ? 'bad' : 'rad',       // mostly bad
+    zoe:   (p) => p % 2 === 0 ? 'bad' : 'rad',        // flips (opposite of maya)
+    omar:  (p) => p % 5 !== 1 ? 'rad' : 'bad',       // mostly rad
+    iris:  (p) => p % 4 !== 1 ? 'bad' : 'rad',       // mostly bad
+    kai:   (p) => p % 3 === 1 ? 'rad' : 'bad',        // flips
+    ruby:  (p) => p % 7 !== 0 ? 'rad' : 'bad',       // mostly rad
+    cole:  (p) => p % 3 !== 1 ? 'bad' : 'rad',       // mostly bad
+    jada:  (p) => [0,1,4,5,8,9].includes(p % 10) ? 'rad' : 'bad', // chunks
+    milo:  (p) => p % 5 !== 2 ? 'bad' : 'rad',       // mostly bad
+    eden:  (p) => p % 4 < 2 ? 'rad' : 'bad',          // half and half
+    theo:  (p) => p % 6 !== 0 ? 'bad' : 'rad',       // mostly bad
+  };
+
   const allPosts = [...strangerPosts, ...friendPosts];
-  const milestonePostIndices = new Set([5, 25]); // 2 out of 40
 
   console.log('\nFriends voting...');
   let voteCount = 0;
   for (let p = 0; p < allPosts.length; p++) {
     const post = allPosts[p];
-    const radCount = milestonePostIndices.has(p) ? 9 : [7, 8, 11, 12][p % 4];
     for (let i = 0; i < friends.length; i++) {
       if (friends[i].id === post.user_id) continue;
-      const vote = i < radCount ? 'rad' : 'bad';
+      const pattern = votePatterns[friends[i].username];
+      const vote = pattern ? pattern(p) : (i < 9 ? 'rad' : 'bad');
       const { error } = await supabase.from('votes').upsert({
         voter_id: friends[i].id, upload_id: post.id, vote,
       }, { onConflict: 'voter_id,upload_id' });

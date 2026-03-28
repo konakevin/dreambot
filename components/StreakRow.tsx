@@ -33,17 +33,20 @@ export function StreakRow({ streak }: Props) {
           rank={streak.friendRank}
           style={styles.username}
         />
-        <Text style={styles.best}>Best: {streak.bestStreak}</Text>
       </View>
-      <View style={[styles.streakBadge, { borderColor: accentColor }]}>
-        <Ionicons
-          name={isRad ? 'flame' : 'thumbs-down'}
-          size={14}
-          color={accentColor}
-        />
-        <Text style={[styles.streakCount, { color: accentColor }]}>
-          {streak.currentStreak}
-        </Text>
+      <View style={styles.streakBadges}>
+        {streak.radStreak > 0 && (
+          <View style={[styles.streakBadge, { borderColor: '#FF4500' }]}>
+            <Ionicons name="flame" size={14} color="#FF4500" />
+            <Text style={[styles.streakCount, { color: '#FF4500' }]}>{streak.radStreak}</Text>
+          </View>
+        )}
+        {streak.badStreak > 0 && (
+          <View style={[styles.streakBadge, { borderColor: '#6699EE' }]}>
+            <Ionicons name="thumbs-down" size={14} color="#6699EE" />
+            <Text style={[styles.streakCount, { color: '#6699EE' }]}>{streak.badStreak}</Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -110,6 +113,10 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '500',
+  },
+  streakBadges: {
+    flexDirection: 'row',
+    gap: 6,
   },
   streakBadge: {
     flexDirection: 'row',

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 export interface LocalStreak {
-  count: number;
-  streakType: 'rad' | 'bad' | null;
+  radStreak: number;
+  badStreak: number;
   username: string;
   avatarUrl: string | null;
   userRank: string | null;
@@ -39,7 +39,7 @@ interface FeedStore {
   addExternalVote: (uploadId: string, vote: 'rad' | 'bad') => void;
   // Optimistic streak data — overrides server values during active session
   localStreaks: Map<string, LocalStreak>;
-  updateStreak: (friend: { username: string; avatar_url: string | null; user_rank: string | null }, matched: boolean, serverStreak: number, voteType: 'rad' | 'bad') => void;
+  updateStreak: (friend: { username: string; avatar_url: string | null; user_rank: string | null; rad_streak?: number; bad_streak?: number }, matched: boolean, voteType: 'rad' | 'bad') => void;
   clearLocalStreaks: () => void;
 }
 
@@ -56,15 +56,29 @@ export const useFeedStore = create<FeedStore>((set) => ({
   addExternalVote: (uploadId, vote) =>
     set((s) => ({ externalVotes: new Map(s.externalVotes).set(uploadId, vote) })),
   localStreaks: new Map(),
-  updateStreak: (friend, matched, serverStreak, voteType) =>
+  updateStreak: (friend, matched, voteType) =>
     set((s) => {
       const existing = s.localStreaks.get(friend.username);
-      const currentCount = existing?.count ?? serverStreak;
-      const next = matched ? currentCount + 1 : 0;
+      const curRad = existing?.radStreak ?? (friend.rad_streak ?? 0);
+      const curBad = existing?.badStreak ?? (friend.bad_streak ?? 0);
+
+      let newRad = curRad;
+      let newBad = curBad;
+
+      if (matched) {
+        // Both voted the same — increment that type's streak
+        if (voteType === 'rad') newRad = curRad + 1;
+        else newBad = curBad + 1;
+      } else {
+        // Disagreed — reset both streaks
+        newRad = 0;
+        newBad = 0;
+      }
+
       return {
         localStreaks: new Map(s.localStreaks).set(friend.username, {
-          count: next,
-          streakType: matched ? voteType : null,
+          radStreak: newRad,
+          badStreak: newBad,
           username: friend.username,
           avatarUrl: friend.avatar_url,
           userRank: friend.user_rank,
