@@ -18,7 +18,7 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams } from 'expo-router';
-import { useFeed, useFriendsFeed, useFollowingFeed, type FeedItem } from '@/hooks/useFeed';
+import { useFeed, useFriendsFeed, useFollowingFeed, type FeedItem, type FriendVote } from '@/hooks/useFeed';
 import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import { useVote } from '@/hooks/useVote';
 import { useUserVote } from '@/hooks/useUserVote';
@@ -73,6 +73,7 @@ export default function FeedScreen() {
   const [jiggleTick, setJiggleTick] = useState(0);
   const [dismissing, setDismissing] = useState(false);
   const [milestoneHit, setMilestoneHit] = useState<(MilestoneHit & { postId: string }) | null>(null);
+  const [streakMatch, setStreakMatch] = useState<{ matched: FriendVote[]; mismatched: FriendVote[]; vote: 'rad' | 'bad'; postId: string } | null>(null);
   const [headerRowSize, setHeaderRowSize] = useState({ width: 0, height: 0 });
   const loadedFeedKey = useRef('');
   const sessionVotesRef = useRef(sessionVotes);
@@ -160,8 +161,15 @@ export default function FeedScreen() {
 
       const hit = vote === 'rad' ? checkMilestone(item.rad_votes) : null;
       if (hit) setMilestoneHit({ ...hit, postId: item.id });
+
+      // Streak feed: compare vote with friends' votes
+      if (feedMode === 'friends' && item.friend_votes?.length) {
+        const matched = item.friend_votes.filter((f) => f.vote === vote);
+        const mismatched = item.friend_votes.filter((f) => f.vote !== vote);
+        setStreakMatch({ matched, mismatched, vote, postId: item.id });
+      }
     },
-    [castVote, sessionVotes]
+    [castVote, sessionVotes, feedMode]
   );
 
   const handleFavorite = useCallback((item: FeedItem) => {
@@ -186,6 +194,7 @@ export default function FeedScreen() {
   const handleDismiss = useCallback((item: FeedItem) => {
     setDeck((prev) => prev.filter((c) => c.id !== item.id));
     setMilestoneHit(null);
+    setStreakMatch(null);
     if (showSwipeHint) {
       setShowSwipeHint(false);
       AsyncStorage.setItem('swipe_hint_seen', '1');
@@ -310,7 +319,7 @@ export default function FeedScreen() {
                   isOwnPost={currentUser?.id === item.user_id}
                   isAlreadyVoted={index === 0 && topItemExternallyVoted}
                   onDismiss={() => handleDismiss(item)}
-                  onDismissStart={index === 0 ? () => { setDismissing(true); setMilestoneHit(null); } : undefined}
+                  onDismissStart={index === 0 ? () => { setDismissing(true); setMilestoneHit(null); setStreakMatch(null); } : undefined}
                   onFavorite={() => handleFavorite(item)}
                   onFollow={() => handleFollow(item)}
                   onUserPress={() => handleUserPress(item)}
@@ -321,7 +330,7 @@ export default function FeedScreen() {
                   containerHeight={cardAreaHeight}
                   showSwipeHint={index === 0 && showSwipeHint}
                   swipeEnabled={true}
-                  hasMilestone={index === 0 && milestoneHit?.postId === item.id}
+                  hasMilestone={index === 0 && (milestoneHit?.postId === item.id || streakMatch?.postId === item.id)}
                 />
               );
             })
@@ -330,10 +339,12 @@ export default function FeedScreen() {
         </>)}
       </View>
 
-      {/* Action buttons / already-voted / milestone state */}
+      {/* Action buttons / already-voted / milestone / streak match state */}
       {topItem && (
         milestoneHit?.postId === topItem.id && !dismissing ? (
           <GradientMessageRow message={milestoneHit.message} />
+        ) : streakMatch?.postId === topItem.id && !dismissing ? (
+          <StreakMatchRow matched={streakMatch.matched} mismatched={streakMatch.mismatched} vote={streakMatch.vote} />
         ) : topItemExternallyVoted && !dismissing ? (
           <GradientMessageRow message="You already rated this one" />
         ) : (
@@ -463,6 +474,49 @@ function StarDripParticle({ config, labelWidth }: { config: typeof DRIP_CONFIGS[
   );
 }
 
+
+function StreakMatchRow({ matched, mismatched, vote }: { matched: FriendVote[]; mismatched: FriendVote[]; vote: 'rad' | 'bad' }) {
+  const hasMatches = matched.length > 0;
+  const names = matched.map((f) => `@${f.username}`);
+  const message = hasMatches
+    ? names.length === 1
+      ? `You and ${names[0]} both voted ${vote}!`
+      : `You matched with ${names.slice(0, -1).join(', ')} & ${names[names.length - 1]}!`
+    : mismatched.length === 1
+      ? `You and @${mismatched[0].username} voted differently!`
+      : 'No matches this time!';
+
+  return (
+    <View style={styles.alreadyVotedRow}>
+      <View style={styles.alreadyVotedTextGroup}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+          <Ionicons
+            name={hasMatches ? 'flash' : 'sad-outline'}
+            size={18}
+            color={hasMatches ? '#FFD700' : colors.textSecondary}
+          />
+          <Text style={{
+            color: hasMatches ? '#FFD700' : colors.textSecondary,
+            fontSize: 15,
+            fontWeight: '700',
+          }}>
+            {hasMatches ? 'Streak!' : 'Broken!'}
+          </Text>
+        </View>
+        <Text style={{
+          color: colors.textPrimary,
+          fontSize: 14,
+          fontWeight: '600',
+          textAlign: 'center',
+          paddingHorizontal: 20,
+        }}>
+          {message}
+        </Text>
+        <Text style={[styles.alreadyVotedSub, { marginTop: 6 }]}>Swipe up to continue</Text>
+      </View>
+    </View>
+  );
+}
 
 function CaughtUpState() {
   return (

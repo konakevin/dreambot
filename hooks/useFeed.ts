@@ -2,6 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
+export interface FriendVote {
+  username: string;
+  avatar_url: string | null;
+  user_rank: string | null;
+  vote: 'rad' | 'bad';
+}
+
 export interface FeedItem {
   id: string;
   user_id: string;
@@ -19,6 +26,7 @@ export interface FeedItem {
   username: string;
   user_rank: string | null;
   avatar_url: string | null;
+  friend_votes?: FriendVote[];
 }
 
 async function fetchFeed(userId: string): Promise<FeedItem[]> {
@@ -40,7 +48,10 @@ async function fetchFriendsFeed(userId: string): Promise<FeedItem[]> {
 
   if (error) throw error;
 
-  return (data ?? []) as FeedItem[];
+  return (data ?? []).map((row: Record<string, unknown>) => ({
+    ...row,
+    friend_votes: (row.friend_votes as FriendVote[] | null) ?? [],
+  })) as FeedItem[];
 }
 
 export function useFeed() {
