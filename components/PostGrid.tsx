@@ -19,9 +19,10 @@ interface PostGridProps {
   isOwn?: boolean;
   emptyText?: string;
   ListHeaderComponent?: React.ReactElement;
+  highlightPostId?: string;
 }
 
-export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', ListHeaderComponent }: PostGridProps) {
+export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', ListHeaderComponent, highlightPostId }: PostGridProps) {
   // All three hooks are always called — rules of hooks. Only the active one is enabled.
   const isOwn_ = source.type === 'own';
   const isSaved = source.type === 'saved';
@@ -77,7 +78,7 @@ export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', Li
         ) : null
       }
       renderItem={({ item }) => (
-        <PostTile item={item} isOwn={isOwn} albumIds={albumIds} />
+        <PostTile item={item} isOwn={isOwn} albumIds={albumIds} isHighlighted={item.id === highlightPostId} />
       )}
     />
   );

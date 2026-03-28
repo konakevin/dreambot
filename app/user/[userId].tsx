@@ -20,7 +20,7 @@ import type { FollowUser } from '@/hooks/useFollowersList';
 type Tab = 'posts' | 'followers' | 'following';
 
 export default function PublicProfileScreen() {
-  const { userId } = useLocalSearchParams<{ userId: string }>();
+  const { userId, viewedPost } = useLocalSearchParams<{ userId: string; viewedPost?: string }>();
   const currentUser = useAuthStore((s) => s.user);
   const isOwnProfile = currentUser?.id === userId;
 
@@ -102,6 +102,7 @@ export default function PublicProfileScreen() {
           source={{ type: 'user', userId }}
           emptyText="No posts yet"
           ListHeaderComponent={header}
+          highlightPostId={viewedPost}
         />
       </SafeAreaView>
     );

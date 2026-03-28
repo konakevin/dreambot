@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TouchableOpacity, StyleSheet, Dimensions, View } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Dimensions, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -17,9 +17,10 @@ interface PostTileProps {
   item: PostItem;
   isOwn?: boolean;
   albumIds?: string[];
+  isHighlighted?: boolean;
 }
 
-export function PostTile({ item, isOwn = false, albumIds }: PostTileProps) {
+export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -57,6 +58,14 @@ export function PostTile({ item, isOwn = false, albumIds }: PostTileProps) {
           <Ionicons name="play" size={12} color="#FFFFFF" />
         </View>
       )}
+      {isHighlighted && (
+        <View style={styles.highlightOverlay}>
+          <View style={styles.highlightPill}>
+            <Ionicons name="eye-outline" size={13} color="#FFFFFF" />
+            <Text style={styles.highlightText}>Just viewed</Text>
+          </View>
+        </View>
+      )}
     </TouchableOpacity>
     <ConfirmDialog
       visible={showDeleteDialog}
@@ -89,5 +98,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 4,
     padding: 3,
+  },
+  highlightOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  highlightPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    borderRadius: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  highlightText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

@@ -267,19 +267,35 @@ function archetypeVotes(archetype) {
 
 // ── Cleanup ───────────────────────────────────────────────────────────────────
 async function cleanup() {
-  console.log('🧹 Cleaning up existing test users...');
-  const usernames = USERS.map((u) => u.username);
-  const { data: existing } = await supabase.from('users').select('id').in('username', usernames);
-  let removed = 0;
-  for (const { id } of existing ?? []) {
-    await supabase.auth.admin.deleteUser(id);
-    removed++;
+  console.log('🧹 Wiping all data...');
+
+  // Clear dependent tables first (FK order)
+  for (const { table, col } of [
+    { table: 'votes',   col: 'voter_id'    },
+    { table: 'follows', col: 'follower_id' },
+    { table: 'uploads', col: 'user_id'     },
+  ]) {
+    const { error } = await supabase.from(table).delete().not(col, 'is', null);
+    if (error) fail(`Clear ${table}: ${error.message}`);
+    else log(`Cleared ${table}`);
   }
-  if ((existing ?? []).length) {
-    const ids = (existing ?? []).map((u) => u.id);
-    await supabase.from('uploads').delete().in('user_id', ids);
+
+  // Delete every auth user (cascades to public.users)
+  let deleted = 0;
+  let page = 1;
+  while (true) {
+    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
+    if (error || !data?.users?.length) break;
+    for (const u of data.users) {
+      await supabase.auth.admin.deleteUser(u.id);
+      deleted++;
+      process.stdout.write('.');
+    }
+    if (data.users.length < 1000) break;
+    page++;
   }
-  log(removed ? `Removed ${removed} existing test user(s).` : 'Nothing to clean up.');
+  if (deleted) console.log(`\n  ✓ Removed ${deleted} auth user(s)`);
+  else log('No auth users found.');
 }
 
 // ── Create users ──────────────────────────────────────────────────────────────
@@ -320,9 +336,9 @@ async function createUploads(users, pexelsImages, pexelsVideos) {
       const { rad, bad, total, wilson } = archetypeVotes(arch);
       const isVideo = Math.random() < VIDEO_RATE;
 
-      // Pick secondary category 30% of the time
+      // Pick secondary category 30% of the time — never exceed 2 (matches upload constraint)
       const others = ALL_CATEGORIES.filter((c) => c !== cat);
-      const categories = Math.random() < 0.3 ? [cat, rand(others)] : [cat];
+      const categories = (Math.random() < 0.3 ? [cat, rand(others)] : [cat]).slice(0, 2);
 
       let media_type, image_url, thumbnail_url, width, height, caption;
 

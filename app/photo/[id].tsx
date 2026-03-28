@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Pressable, StyleSheet, ActivityIndicator, Share, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, StyleSheet, ActivityIndicator, Share, Dimensions, Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { File, Paths } from 'expo-file-system/next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -33,7 +33,8 @@ import { getRating } from '@/lib/getRating';
 import { formatCount } from '@/lib/formatCount';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { GradientUsername } from '@/components/GradientUsername';
-import { colors, gradients } from '@/constants/theme';
+import { colors } from '@/constants/theme';
+import { VoteButton } from '@/components/VoteButton';
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
 import { animateScoreIn } from '@/lib/scoreAnimation';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
@@ -186,7 +187,12 @@ export default function PhotoDetailScreen() {
     if (hasVoted) return;
     Haptics.impactAsync(vote === 'rad' ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light);
     setLocalVote(vote);
-    castVote({ uploadId: p.id, vote });
+    castVote({ uploadId: p.id, vote }, {
+      onError: (err) => {
+        setLocalVote(null);
+        Alert.alert('Vote failed', err.message);
+      },
+    });
   }
 
   function handleDelete() {
@@ -268,20 +274,8 @@ export default function PhotoDetailScreen() {
       {/* Vote buttons — absolute so gradient height never clips them */}
       {!isOwnPost && !voteLoading && !hasVoted && (
         <View style={styles.voteButtonsCompact}>
-          <View style={styles.radGlowSm}>
-            <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('rad')}>
-              <LinearGradient colors={gradients.rad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-              <Ionicons name="thumbs-up" size={22} color="#FFFFFF" />
-              <Text style={styles.voteButtonTextSm}>RAD</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.badGlowSm}>
-            <TouchableOpacity style={styles.voteButtonSm} activeOpacity={0.8} onPress={() => handleVote('bad')}>
-              <LinearGradient colors={gradients.bad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
-              <Ionicons name="thumbs-down" size={22} color="#FFFFFF" />
-              <Text style={styles.voteButtonTextSm}>BAD</Text>
-            </TouchableOpacity>
-          </View>
+          <VoteButton vote="rad" onPress={() => handleVote('rad')} disabled={false} size={68} />
+          <VoteButton vote="bad" onPress={() => handleVote('bad')} disabled={false} size={68} />
         </View>
       )}
 
@@ -583,36 +577,5 @@ const styles = StyleSheet.create({
   infoBlockWithButtons: {
     // Reserve space for the 68px buttons + 16px edge margin + 4px breathing room
     paddingRight: 88,
-  },
-  badGlowSm: {
-    borderRadius: 34,
-    shadowColor: '#6699EE',
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 8,
-  },
-  radGlowSm: {
-    borderRadius: 34,
-    shadowColor: '#DDAA66',
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 8,
-  },
-  voteButtonSm: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 2,
-  },
-  voteButtonTextSm: {
-    color: colors.textPrimary,
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 0.8,
   },
 });

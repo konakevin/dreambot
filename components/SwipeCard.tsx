@@ -41,6 +41,7 @@ interface SwipeCardProps {
   isOwnPost: boolean;
   isAlreadyVoted?: boolean;
   onDismiss: () => void;
+  onDismissStart?: () => void;
   onFavorite: () => void;
   onFollow: () => void;
   onUserPress: () => void;
@@ -67,7 +68,7 @@ function CategoryPill({ category }: { category: string }) {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -177,6 +178,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
     .onEnd((e) => {
       const swipedUp = e.translationY < -DISMISS_THRESHOLD && canSwipeUp.value;
       if (swipedUp) {
+        if (onDismissStart) runOnJS(onDismissStart)();
         // Only carry leftward lean on exit, never rightward
         const exitX = Math.min(e.translationX, 0) * 3;
         translateX.value = withTiming(exitX, { duration: 300 });
@@ -348,8 +350,10 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
 
         {/* One-time swipe-up hint for new users */}
         <Animated.View style={[styles.hintContainer, hintStyle]} pointerEvents="none">
-          <Ionicons name="chevron-up" size={28} color="rgba(255,255,255,0.85)" />
-          <Text style={styles.hintText}>Swipe up to skip</Text>
+          <View style={styles.hintPill}>
+            <Ionicons name="chevron-up" size={28} color="#FFFFFF" />
+            <Text style={styles.hintText}>Swipe up to skip</Text>
+          </View>
         </Animated.View>
 
       </Animated.View>
@@ -549,10 +553,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
+  },
+  hintPill: {
+    alignItems: 'center',
     gap: 4,
+    backgroundColor: 'rgba(0,0,0,0.52)',
+    borderRadius: 22,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
   },
   hintText: {
-    color: 'rgba(255,255,255,0.7)',
+    color: 'rgba(255,255,255,0.9)',
     fontSize: 13,
     fontWeight: '600',
     letterSpacing: 0.3,
