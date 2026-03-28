@@ -89,7 +89,7 @@ export default function FeedScreen() {
   const headerTreadmillStyle = useAnimatedStyle(() => ({ transform: [{ translateX: headerTreadmillX.value }] }));
   useEffect(() => {
     headerTreadmillX.value = withRepeat(
-      withTiming(0, { duration: 16000, easing: Easing.linear }),
+      withTiming(0, { duration: 45000, easing: Easing.linear }),
       -1, true,
     );
   }, []);
