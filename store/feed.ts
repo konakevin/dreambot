@@ -1,5 +1,13 @@
 import { create } from 'zustand';
 
+export interface LocalStreak {
+  count: number;
+  streakType: 'rad' | 'bad' | null;
+  username: string;
+  avatarUrl: string | null;
+  userRank: string | null;
+}
+
 // Mirrors FeedItem shape — defined here to avoid circular imports
 export interface PendingPost {
   id: string;
@@ -29,9 +37,9 @@ interface FeedStore {
   // Votes cast outside the feed screen (e.g. photo detail view)
   externalVotes: Map<string, 'rad' | 'bad'>;
   addExternalVote: (uploadId: string, vote: 'rad' | 'bad') => void;
-  // Optimistic streak counts — overrides server values during active session
-  localStreaks: Map<string, number>;
-  updateStreak: (friendUsername: string, matched: boolean, serverStreak: number) => void;
+  // Optimistic streak data — overrides server values during active session
+  localStreaks: Map<string, LocalStreak>;
+  updateStreak: (friend: { username: string; avatar_url: string | null; user_rank: string | null }, matched: boolean, serverStreak: number, voteType: 'rad' | 'bad') => void;
   clearLocalStreaks: () => void;
 }
 
@@ -48,11 +56,20 @@ export const useFeedStore = create<FeedStore>((set) => ({
   addExternalVote: (uploadId, vote) =>
     set((s) => ({ externalVotes: new Map(s.externalVotes).set(uploadId, vote) })),
   localStreaks: new Map(),
-  updateStreak: (friendUsername, matched, serverStreak) =>
+  updateStreak: (friend, matched, serverStreak, voteType) =>
     set((s) => {
-      const current = s.localStreaks.get(friendUsername) ?? serverStreak;
-      const next = matched ? current + 1 : 0;
-      return { localStreaks: new Map(s.localStreaks).set(friendUsername, next) };
+      const existing = s.localStreaks.get(friend.username);
+      const currentCount = existing?.count ?? serverStreak;
+      const next = matched ? currentCount + 1 : 0;
+      return {
+        localStreaks: new Map(s.localStreaks).set(friend.username, {
+          count: next,
+          streakType: matched ? voteType : null,
+          username: friend.username,
+          avatarUrl: friend.avatar_url,
+          userRank: friend.user_rank,
+        }),
+      };
     }),
   clearLocalStreaks: () => set({ localStreaks: new Map() }),
 }));

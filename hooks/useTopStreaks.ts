@@ -36,18 +36,40 @@ export function useTopStreaks(userId: string) {
   });
 
   // Merge local optimistic streaks with server data
+  const serverUsernames = new Set((query.data ?? []).map((s) => s.friendUsername));
+
   const merged = (query.data ?? []).map((s) => {
     const local = localStreaks.get(s.friendUsername);
-    if (local !== undefined) {
-      return { ...s, currentStreak: local, bestStreak: Math.max(s.bestStreak, local) };
+    if (local) {
+      return {
+        ...s,
+        currentStreak: local.count,
+        bestStreak: Math.max(s.bestStreak, local.count),
+        streakType: local.streakType,
+      };
     }
     return s;
   });
 
-  // Sort by current streak descending after merge
+  // Add local-only streaks (new this session, no server row yet)
+  for (const [username, local] of localStreaks) {
+    if (!serverUsernames.has(username) && local.count > 0) {
+      merged.push({
+        friendId: '',
+        friendUsername: local.username,
+        friendAvatar: local.avatarUrl,
+        friendRank: local.userRank,
+        currentStreak: local.count,
+        bestStreak: local.count,
+        streakType: local.streakType,
+      });
+    }
+  }
+
+  // Sort by current streak descending
   merged.sort((a, b) => b.currentStreak - a.currentStreak);
 
-  // Filter out zeroed-out streaks (locally broken)
+  // Filter out zeroed-out streaks
   const filtered = merged.filter((s) => s.currentStreak > 0);
 
   return { ...query, data: filtered };
