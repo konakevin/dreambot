@@ -190,6 +190,7 @@ export interface Database {
           bad_votes: number;
           username: string;
           user_rank: string | null;
+          avatar_url: string | null;
           feed_score: number;
         }>;
       };

@@ -88,11 +88,11 @@ export function useUpload() {
 
       const { data: userData } = await supabase
         .from('users')
-        .select('username')
+        .select('username, avatar_url')
         .eq('id', user!.id)
         .single();
 
-      return { ...inserted, username: userData?.username ?? '' } as PendingPost;
+      return { ...inserted, username: userData?.username ?? '', avatar_url: userData?.avatar_url ?? null } as PendingPost;
     },
     onSuccess: (newPost) => {
       setPendingPost(newPost);

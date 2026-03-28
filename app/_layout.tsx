@@ -80,6 +80,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)" />
+          <Stack.Screen name="settings" />
           <Stack.Screen name="photo/[id]" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
           <Stack.Screen name="user/[userId]" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
         </Stack>

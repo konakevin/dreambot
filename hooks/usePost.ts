@@ -14,13 +14,13 @@ export interface PostDetail {
   rad_votes: number;
   created_at: string;
   user_id: string;
-  users: { username: string; user_rank: string | null } | null;
+  users: { username: string; user_rank: string | null; avatar_url: string | null } | null;
 }
 
 export async function fetchPost(id: string): Promise<PostDetail> {
   const { data, error } = await supabase
     .from('uploads')
-    .select('id, image_url, media_type, thumbnail_url, width, height, caption, categories, total_votes, rad_votes, created_at, user_id, users(username, user_rank)')
+    .select('id, image_url, media_type, thumbnail_url, width, height, caption, categories, total_votes, rad_votes, created_at, user_id, users(username, user_rank, avatar_url)')
     .eq('id', id)
     .single();
   if (error) throw error;

@@ -360,7 +360,7 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
         {/* Left — username, caption, meta */}
         <View style={[styles.infoBlock, !isOwnPost && !hasVoted && styles.infoBlockWithButtons]}>
           <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
-            <GradientUsername username={p.users?.username ?? ''} rank={p.users?.user_rank} style={styles.username} photoOverlay />
+            <GradientUsername username={p.users?.username ?? ''} rank={p.users?.user_rank} style={styles.username} photoOverlay avatarUrl={p.users?.avatar_url} showAvatar avatarSize={22} />
           </TouchableOpacity>
 
           {p.caption ? (

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, withDelay, Easing } from 'react-native-reanimated';
 
 const TREADMILL_COLORS = [
   '#BB88EE', '#6699EE', '#44BBCC', '#77CC88',
@@ -34,6 +34,8 @@ import { useCategoryPosts } from '@/hooks/useCategoryPosts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
 import { VoteButton } from '@/components/VoteButton';
+import { MilestoneBurst } from '@/components/MilestoneBurst';
+import { checkMilestone, type MilestoneHit } from '@/lib/milestones';
 import { CATEGORIES } from '@/constants/categories';
 
 
@@ -57,6 +59,7 @@ export default function FeedScreen() {
   const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [jiggleTick, setJiggleTick] = useState(0);
   const [dismissing, setDismissing] = useState(false);
+  const [milestoneHit, setMilestoneHit] = useState<(MilestoneHit & { postId: string }) | null>(null);
   const [headerRowSize, setHeaderRowSize] = useState({ width: 0, height: 0 });
   const loadedFeedKey = useRef('');
   const sessionVotesRef = useRef(sessionVotes);
@@ -133,6 +136,13 @@ export default function FeedScreen() {
       );
       castVote({ uploadId: item.id, vote });
       setSessionVotes((prev) => new Map(prev).set(item.id, vote));
+
+      // TODO: TEMP — force milestone on every rad vote for testing
+      if (vote === 'rad') {
+        setMilestoneHit({ milestone: 10, tier: 1, message: "You're the 10th to vote this RAD!", postId: item.id });
+      }
+      // const hit = vote === 'rad' ? checkMilestone(item.rad_votes) : null;
+      // if (hit) setMilestoneHit({ ...hit, postId: item.id });
     },
     [castVote, sessionVotes]
   );
@@ -158,6 +168,7 @@ export default function FeedScreen() {
   // Swipe up to dismiss (skip or after voting)
   const handleDismiss = useCallback((item: FeedItem) => {
     setDeck((prev) => prev.filter((c) => c.id !== item.id));
+    setMilestoneHit(null);
     if (showSwipeHint) {
       setShowSwipeHint(false);
       AsyncStorage.setItem('swipe_hint_seen', '1');
@@ -238,8 +249,8 @@ export default function FeedScreen() {
       <View style={styles.cardArea} onLayout={(e) => setCardAreaHeight(e.nativeEvent.layout.height)}>
         {deck.length === 0 && !isLoading && !isRefetching && feed.length === 0 ? (
           <CaughtUpState />
-        ) : (
-          topCards
+        ) : (<>
+          {topCards
             .slice()
             .reverse()
             .map((item, reversedIndex) => {
@@ -254,7 +265,7 @@ export default function FeedScreen() {
                   isOwnPost={currentUser?.id === item.user_id}
                   isAlreadyVoted={index === 0 && topItemExternallyVoted}
                   onDismiss={() => handleDismiss(item)}
-                  onDismissStart={index === 0 ? () => setDismissing(true) : undefined}
+                  onDismissStart={index === 0 ? () => { setDismissing(true); setMilestoneHit(null); } : undefined}
                   onFavorite={() => handleFavorite(item)}
                   onFollow={() => handleFollow(item)}
                   onUserPress={() => handleUserPress(item)}
@@ -265,16 +276,21 @@ export default function FeedScreen() {
                   containerHeight={cardAreaHeight}
                   showSwipeHint={index === 0 && showSwipeHint}
                   swipeEnabled={true}
+                  hasMilestone={index === 0 && milestoneHit?.postId === item.id}
                 />
               );
             })
-        )}
+          }
+          <MilestoneBurst hit={milestoneHit?.postId === topItem?.id ? milestoneHit : null} />
+        </>)}
       </View>
 
-      {/* Action buttons / already-voted state */}
+      {/* Action buttons / already-voted / milestone state */}
       {topItem && (
-        topItemExternallyVoted && !dismissing ? (
-          <AlreadyVotedRow cardAreaHeight={cardAreaHeight} />
+        milestoneHit?.postId === topItem.id && !dismissing ? (
+          <GradientMessageRow message={milestoneHit.message} />
+        ) : topItemExternallyVoted && !dismissing ? (
+          <GradientMessageRow message="You already rated this one" />
         ) : (
           <View style={styles.actionRow}>
             <VoteButton vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} jiggleTick={jiggleTick} />
@@ -288,62 +304,120 @@ export default function FeedScreen() {
 }
 
 
-function AlreadyVotedRow({ cardAreaHeight }: { cardAreaHeight: number }) {
-  const chevronY = useSharedValue(0);
+function GradientMessageRow({ message }: { message: string }) {
   const treadmillX = useSharedValue(-(Math.random() * TREADMILL_SCROLL));
   const [labelWidth, setLabelWidth] = useState(0);
 
   useEffect(() => {
-    chevronY.value = withRepeat(
-      withSequence(
-        withTiming(-10, { duration: 500, easing: Easing.inOut(Easing.sin) }),
-        withTiming(0,   { duration: 500, easing: Easing.inOut(Easing.sin) }),
-      ),
-      -1, false,
-    );
     treadmillX.value = withRepeat(
       withTiming(0, { duration: 16000, easing: Easing.linear }),
       -1, true,
     );
   }, []);
 
-  const chevronStyle = useAnimatedStyle(() => ({ transform: [{ translateY: chevronY.value }] }));
   const treadmillStyle = useAnimatedStyle(() => ({ transform: [{ translateX: treadmillX.value }] }));
 
   return (
     <View style={styles.alreadyVotedRow}>
-      <Animated.View pointerEvents="none" style={[chevronStyle, {
-        position: 'absolute',
-        top: -(cardAreaHeight / 2 + 34),
-        alignSelf: 'center',
-      }]}>
-        <Ionicons name="chevron-up" size={68} color="rgba(255,255,255,0.85)" style={{ textShadowColor: 'rgba(0,0,0,0.6)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 10 }} />
-      </Animated.View>
       <View style={styles.alreadyVotedTextGroup}>
-        {/* Hidden sizer to measure label width before showing masked version */}
         <View pointerEvents="none" style={{ position: 'absolute', opacity: 0 }}>
-          <Text style={styles.alreadyVotedLabel} onLayout={(e) => setLabelWidth(e.nativeEvent.layout.width)}>
-            You already rated this one
+          <Text style={styles.milestoneMessage} onLayout={(e) => setLabelWidth(e.nativeEvent.layout.width)}>
+            {message}
           </Text>
         </View>
-        <MaskedView
-          style={labelWidth > 0 ? { width: labelWidth, height: 24 } : { opacity: 0 }}
-          maskElement={<Text style={styles.alreadyVotedLabel}>You already rated this one</Text>}
-        >
-          <Animated.View style={treadmillStyle}>
-            <LinearGradient
-              colors={TREADMILL_COLORS}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={{ width: TREADMILL_WIDTH, height: 24 }}
-            />
-          </Animated.View>
-        </MaskedView>
-        <Text style={styles.alreadyVotedSub}>Swipe up to continue</Text>
+        <View style={{ overflow: 'visible' }}>
+          <MaskedView
+            style={labelWidth > 0 ? { width: labelWidth, height: 22 } : { opacity: 0 }}
+            maskElement={<Text style={styles.milestoneMessage}>{message}</Text>}
+          >
+            <Animated.View style={treadmillStyle}>
+              <LinearGradient
+                colors={TREADMILL_COLORS}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ width: TREADMILL_WIDTH, height: 22 }}
+              />
+            </Animated.View>
+          </MaskedView>
+          {/* Star drip particles */}
+          {labelWidth > 0 && (
+            <View pointerEvents="none" style={{ position: 'absolute', top: 16, left: labelWidth / 2, overflow: 'visible' }}>
+              {DRIP_CONFIGS.map((cfg, i) => (
+                <StarDripParticle key={i} config={cfg} labelWidth={labelWidth} />
+              ))}
+            </View>
+          )}
+        </View>
+        <Text style={[styles.alreadyVotedSub, { marginTop: 10 }]}>Swipe up to continue</Text>
       </View>
     </View>
   );
 }
+
+const DRIP_COLORS = [
+  '#D4AAFF', '#99BBFF', '#77DDEE', '#99EEBB',
+  '#DDEE88', '#FFDD99', '#FFCC88', '#FFAA99',
+];
+const DRIP_COUNT = 18;
+
+function seededRand(seed: number): number {
+  const x = Math.sin(seed * 9301 + 49297) * 49297;
+  return x - Math.floor(x);
+}
+
+const STAR_DRIP_COLORS = [...DRIP_COLORS, '#FFFFFF', '#FFFFFF', '#FFFFFF'];
+
+const DRIP_CONFIGS = Array.from({ length: DRIP_COUNT }, (_, i) => ({
+  xFraction: i >= DRIP_COUNT - 4
+    ? (i % 2 === 0 ? 0.0 + seededRand(i * 7 + 1) * 0.04 : 1.0 - seededRand(i * 7 + 1) * 0.04)
+    : seededRand(i * 7 + 1),
+  size: 4 + seededRand(i * 7 + 2) * 6,
+  color: STAR_DRIP_COLORS[i % STAR_DRIP_COLORS.length],
+  fallDistance: 28 + seededRand(i * 7 + 3) * 35,
+  delay: Math.floor(seededRand(i * 7 + 4) * 600),
+  duration: 800 + Math.floor(seededRand(i * 7 + 5) * 600),
+}));
+
+function StarDripParticle({ config, labelWidth }: { config: typeof DRIP_CONFIGS[number]; labelWidth: number }) {
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    progress.value = withRepeat(
+      withSequence(
+        withTiming(0, { duration: 0 }),
+        withDelay(config.delay, withTiming(1, { duration: config.duration, easing: Easing.in(Easing.quad) })),
+      ),
+      -1, false,
+    );
+  }, []);
+
+  const x = (config.xFraction - 0.5) * labelWidth;
+  const s = config.size;
+  const isWhite = config.color === '#FFFFFF';
+  const glowColor = isWhite ? '#FFFFFF' : config.color;
+
+  const style = useAnimatedStyle(() => {
+    const p = progress.value;
+    return {
+      opacity: p < 0.15 ? p / 0.15 : Math.max(0, 1 - (p - 0.4) / 0.6),
+      transform: [
+        { translateX: x },
+        { translateY: p * config.fallDistance },
+        { scale: 1 - p * 0.4 },
+        { rotate: '45deg' },
+      ],
+    };
+  });
+
+  return (
+    <Animated.View style={[{ position: 'absolute', width: s, height: s, alignItems: 'center', justifyContent: 'center' }, style]}>
+      <View style={{ position: 'absolute', width: s * 1.6, height: s * 1.6, borderRadius: s * 0.8, backgroundColor: `${glowColor}20` }} />
+      <View style={{ position: 'absolute', width: s * 0.22, height: s, borderRadius: s * 0.11, backgroundColor: config.color, shadowColor: glowColor, shadowOpacity: 0.8, shadowRadius: 6, shadowOffset: { width: 0, height: 0 } }} />
+      <View style={{ position: 'absolute', width: s, height: s * 0.22, borderRadius: s * 0.11, backgroundColor: config.color, shadowColor: glowColor, shadowOpacity: 0.8, shadowRadius: 6, shadowOffset: { width: 0, height: 0 } }} />
+    </Animated.View>
+  );
+}
+
 
 function CaughtUpState() {
   return (
@@ -443,16 +517,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 3,
   },
-  alreadyVotedLabel: {
-    color: 'rgba(255,255,255,0.75)',
-    fontSize: 16,
-    fontWeight: '600',
-    letterSpacing: 0.2,
+  milestoneMessage: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '800',
+    textAlign: 'center',
+    letterSpacing: 0.3,
   },
   alreadyVotedSub: {
-    color: 'rgba(255,255,255,0.45)',
-    fontSize: 11,
-    fontWeight: '500',
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
+    fontWeight: '600',
   },
   caughtUpScroll: {
     alignSelf: 'stretch',

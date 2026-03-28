@@ -16,7 +16,7 @@ export interface ExplorePost {
   total_votes: number;
   rad_votes: number;
   wilson_score: number | null;
-  users: { username: string; user_rank: string | null } | null;
+  users: { username: string; user_rank: string | null; avatar_url: string | null } | null;
 }
 
 export interface CategoryPostsResult {
@@ -33,7 +33,7 @@ export function useCategoryPosts(category: Category, limit = 10, sort: CategoryS
     queryFn: async (): Promise<CategoryPostsResult> => {
       let query = supabase
         .from('uploads')
-        .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username, user_rank)')
+        .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username, user_rank, avatar_url)')
         .eq('is_active', true)
         .contains('categories', [category]);
 

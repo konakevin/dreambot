@@ -6,6 +6,7 @@ export interface PublicProfile {
   username: string;
   created_at: string;
   user_rank: string | null;
+  avatar_url: string | null;
   postCount: number;
   followerCount: number;
   followingCount: number;
@@ -32,6 +33,7 @@ export function usePublicProfile(userId: string) {
         // backwards compatibility — consumers do not currently read it.
         created_at: '',
         user_rank: (row.user_rank as string | null) ?? null,
+        avatar_url: (row.avatar_url as string | null) ?? null,
         postCount: Number(row.post_count),
         followerCount: Number(row.follower_count),
         followingCount: Number(row.following_count),

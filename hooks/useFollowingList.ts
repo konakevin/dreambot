@@ -8,7 +8,7 @@ export function useFollowingList(userId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('follows')
-        .select('users!following_id(id, username)')
+        .select('users!following_id(id, username, avatar_url)')
         .eq('follower_id', userId)
         .order('created_at', { ascending: false })
         .limit(500);

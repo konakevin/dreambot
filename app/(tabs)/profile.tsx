@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
@@ -20,7 +21,7 @@ import type { FollowUser } from '@/hooks/useFollowersList';
 type Tab = 'posts' | 'saved' | 'followers' | 'following';
 
 export default function ProfileScreen() {
-  const { user, signOut } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<Tab>('posts');
 
   const { data: profile } = usePublicProfile(user?.id ?? '');
@@ -28,20 +29,6 @@ export default function ProfileScreen() {
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(user?.id ?? '');
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-
-  function handleSignOut() {
-    Alert.alert('Sign out', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Sign out',
-        style: 'destructive',
-        onPress: () => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          signOut();
-        },
-      },
-    ]);
-  }
 
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -60,11 +47,18 @@ export default function ProfileScreen() {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View>
-            <GradientUsername username={user?.user_metadata?.username ?? 'you'} rank={profile?.user_rank} style={styles.username} />
+            <GradientUsername
+              username={user?.user_metadata?.username ?? 'you'}
+              rank={profile?.user_rank}
+              style={styles.username}
+              avatarUrl={profile?.avatar_url}
+              showAvatar
+              avatarSize={32}
+            />
             <Text style={styles.email}>{user?.email}</Text>
           </View>
-          <TouchableOpacity onPress={handleSignOut} hitSlop={12}>
-            <Ionicons name="log-out-outline" size={22} color="#F4212E" />
+          <TouchableOpacity onPress={() => router.push('/settings')} hitSlop={12}>
+            <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 

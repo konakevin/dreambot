@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import { colors } from '@/constants/theme';
@@ -16,9 +17,13 @@ export function FollowUserRow({ item, isFollowing, onFollow }: Props) {
       onPress={() => router.push(`/user/${item.id}`)}
       activeOpacity={0.7}
     >
-      <View style={styles.avatar}>
-        <Text style={styles.avatarText}>{item.username[0].toUpperCase()}</Text>
-      </View>
+      {item.avatar_url ? (
+        <Image source={{ uri: item.avatar_url }} style={styles.avatar} />
+      ) : (
+        <View style={styles.avatar}>
+          <Text style={styles.avatarText}>{item.username[0].toUpperCase()}</Text>
+        </View>
+      )}
       <Text style={styles.username}>@{item.username}</Text>
       <TouchableOpacity
         style={[styles.pill, isFollowing && styles.followingPill]}

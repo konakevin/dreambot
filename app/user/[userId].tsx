@@ -70,7 +70,7 @@ export default function PublicProfileScreen() {
   const header = (
     <View style={styles.header}>
         <View style={styles.headerTop}>
-          <GradientUsername username={profile.username} rank={profile.user_rank} style={styles.username} />
+          <GradientUsername username={profile.username} rank={profile.user_rank} style={styles.username} avatarUrl={profile.avatar_url} showAvatar avatarSize={32} />
           {!isOwnProfile && (
             <TouchableOpacity
               style={[styles.followButton, isFollowing && styles.followingButton]}

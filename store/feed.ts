@@ -16,6 +16,7 @@ export interface PendingPost {
   rad_votes: number;
   bad_votes: number;
   username: string;
+  avatar_url: string | null;
 }
 
 interface FeedStore {

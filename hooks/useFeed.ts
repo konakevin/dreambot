@@ -18,6 +18,7 @@ export interface FeedItem {
   bad_votes: number;
   username: string;
   user_rank: string | null;
+  avatar_url: string | null;
 }
 
 async function fetchFeed(userId: string): Promise<FeedItem[]> {

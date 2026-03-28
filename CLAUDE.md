@@ -1,5 +1,8 @@
 # Rad or Bad — Claude Code Guidelines
 
+## Session Startup
+Do NOT auto-start the dev environment. Instead, let Kevin know he can run `/rad` to spin up the dev tools (simulator check, Xcode, Metro). Jump straight into whatever he needs.
+
 ## What This App Is
 Binary swipe rating app — users upload photos of anything (cars, fits, setups, etc.), others swipe Rad 🔥 or Bad 👎. Must rate 10 others to unlock your own score. Dark, high-energy aesthetic.
 
@@ -111,11 +114,13 @@ Follow these in every screen and component:
 ## Working With Kevin — Session Workflow
 
 ### Screenshots
-When Kevin says "look at the latest screenshot" or "see the last screenshot", he means:
+When Kevin **explicitly asks you to view a screenshot** (e.g. "take a look", "last screenshot", "last shot", "check the screenshot", "see what I mean" when referencing a visual), grab the most recent PNG from his Desktop:
 ```
 ls -t ~/Desktop/*.png | head -1
 ```
-Then read that file. The most recently modified `.png` on the Desktop is always the one he's referring to. Don't ask which screenshot — just go get it.
+Then read that file. Don't ask which screenshot — just go get it.
+
+**Do NOT** trigger a screenshot lookup just because he uses words like "look", "see", or "check" in casual conversation (e.g. "it looks glitchy", "I didn't see the text"). Only fetch when he's clearly directing you to view an image.
 
 ### Running the Seed Script
 The seed script lives at `scripts/seed.js`. It requires a service role key.

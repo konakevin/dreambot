@@ -52,6 +52,7 @@ interface SwipeCardProps {
   containerHeight: number;
   showSwipeHint: boolean;
   swipeEnabled?: boolean;
+  hasMilestone?: boolean;
 }
 
 function CategoryPill({ category }: { category: string }) {
@@ -68,7 +69,7 @@ function CategoryPill({ category }: { category: string }) {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -122,11 +123,13 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
         scoreScale.value = 1;
       } else {
         animateScoreIn(scoreOpacity, scoreScale);
-        dismissTimer.current = setTimeout(() => {
-          translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
-            runOnJS(onDismiss)();
-          });
-        }, 430);
+        if (!hasMilestone) {
+          dismissTimer.current = setTimeout(() => {
+            translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
+              runOnJS(onDismiss)();
+            });
+          }, 430);
+        }
       }
     }
     return () => {
@@ -280,7 +283,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
             {/* Row 1: username | follow */}
             <View style={styles.userRow}>
               <Pressable onPress={onUserPress} hitSlop={8}>
-                <GradientUsername username={item.username} rank={item.user_rank} style={styles.username} photoOverlay hideRank={hideRank} />
+                <GradientUsername username={item.username} rank={item.user_rank} style={styles.username} photoOverlay hideRank={hideRank} avatarUrl={item.avatar_url} showAvatar avatarSize={24} />
               </Pressable>
               {!isOwnPost && (
                 <Pressable
@@ -348,6 +351,9 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
           </View>
         </LinearGradient>
 
+        {/* Swipe-up chevron pill for already-voted cards */}
+        {isAlreadyVoted && <SwipeUpChevron />}
+
         {/* One-time swipe-up hint for new users */}
         <Animated.View style={[styles.hintContainer, hintStyle]} pointerEvents="none">
           <View style={styles.hintPill}>
@@ -361,33 +367,29 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
   );
 }
 
-function AlreadyVotedOverlay() {
+function SwipeUpChevron() {
   const chevronY = useSharedValue(0);
-  const opacity = useSharedValue(0);
 
   useEffect(() => {
-    opacity.value = withTiming(1, { duration: 300 });
     chevronY.value = withRepeat(
       withSequence(
-        withTiming(-10, { duration: 420 }),
-        withTiming(0, { duration: 420 }),
+        withTiming(-8, { duration: 500 }),
+        withTiming(0, { duration: 500 }),
       ),
-      -1, // infinite
+      -1,
       false,
     );
   }, []);
 
-  const chevronStyle = useAnimatedStyle(() => ({
+  const animStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: chevronY.value }],
-    opacity: opacity.value,
   }));
 
   return (
-    <Animated.View style={[styles.alreadyVotedOverlay, { opacity }]} pointerEvents="none">
-      <Animated.View style={chevronStyle}>
-        <Ionicons name="chevron-up" size={32} color="rgba(255,255,255,0.9)" />
-      </Animated.View>
-      <Text style={styles.alreadyVotedSub}>Swipe up to continue</Text>
+    <Animated.View style={[styles.chevronContainer, animStyle]} pointerEvents="none">
+      <View style={styles.chevronPill}>
+        <Ionicons name="chevron-up" size={32} color="#FFFFFF" />
+      </View>
     </Animated.View>
   );
 }
@@ -568,17 +570,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.3,
   },
-  alreadyVotedOverlay: {
+  chevronContainer: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 24,
+    alignSelf: 'center',
     left: 0,
     right: 0,
     alignItems: 'center',
-    gap: 2,
   },
-  alreadyVotedSub: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 12,
-    fontWeight: '500',
+  chevronPill: {
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderRadius: 24,
+    paddingHorizontal: 14,
+    paddingTop: 6,
+    paddingBottom: 2,
   },
 });

@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 export interface FollowUser {
   id: string;
   username: string;
+  avatar_url: string | null;
 }
 
 export function useFollowersList(userId: string) {
@@ -12,7 +13,7 @@ export function useFollowersList(userId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('follows')
-        .select('users!follower_id(id, username)')
+        .select('users!follower_id(id, username, avatar_url)')
         .eq('following_id', userId)
         .order('created_at', { ascending: false })
         .limit(500);
