@@ -147,8 +147,8 @@ class NoopProvider implements ModerationProvider {
 // Change this one line to swap providers.
 
 const activeProvider: ModerationProvider = new SightengineProvider(
-  '1485112881',
-  '3gz5esapSR4Dk3t84wa5Y7woQgZdzuCS'
+  process.env.EXPO_PUBLIC_SIGHTENGINE_API_USER ?? '',
+  process.env.EXPO_PUBLIC_SIGHTENGINE_API_SECRET ?? ''
 );
 
 // To disable moderation for testing:
