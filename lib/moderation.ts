@@ -144,7 +144,15 @@ class NoopProvider implements ModerationProvider {
 }
 
 // ── Active provider ──────────────────────────────────────────────────────────
-// Change this one line to swap providers.
+// To swap moderation services:
+//   1. Create a new class implementing ModerationProvider (e.g. GoogleVisionProvider)
+//   2. Change the activeProvider assignment below to use the new class
+//   3. No other files need to change — useUpload.ts and any other callers
+//      only import moderateUpload() which delegates to whichever provider is active
+//
+// Example:
+//   class GoogleVisionProvider implements ModerationProvider { ... }
+//   const activeProvider = new GoogleVisionProvider('your-api-key');
 
 const activeProvider: ModerationProvider = new SightengineProvider(
   process.env.EXPO_PUBLIC_SIGHTENGINE_API_USER ?? '',
