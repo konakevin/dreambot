@@ -335,29 +335,26 @@ export default function FeedScreen() {
           <Text style={[styles.feedToggleText, feedMode === 'friendsPosts' && styles.feedToggleTextActive]}>Following</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.feedToggle, feedMode === 'friends' && styles.feedToggleActive, !streakUnlocked && styles.feedToggleLocked]}
+          style={[styles.feedToggle, feedMode === 'friends' && styles.feedToggleActive]}
           onPress={() => {
-            if (!streakUnlocked) return;
-            if (showStreakIntro) {
+            if (streakUnlocked && showStreakIntro) {
               setShowStreakIntro(false);
               AsyncStorage.setItem('streak_intro_seen', '1');
             }
             setFeedMode('friends');
           }}
-          activeOpacity={streakUnlocked ? 0.7 : 1}
+          activeOpacity={0.7}
         >
-          <Ionicons name="flash" size={14} color={!streakUnlocked ? 'rgba(255,255,255,0.2)' : feedMode === 'friends' ? '#FFD700' : colors.textSecondary} />
-          {streakUnlocked ? (
-            <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Streak</Text>
-          ) : (
-            <Text style={styles.feedToggleLockedText}>{10 - totalVoteCount} more</Text>
-          )}
+          <Ionicons name="flash" size={14} color={feedMode === 'friends' ? '#FFD700' : colors.textSecondary} />
+          <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Streak</Text>
         </TouchableOpacity>
       </View>
 
       {/* Card stack */}
       <View style={styles.cardArea} onLayout={(e) => setCardAreaHeight(e.nativeEvent.layout.height)}>
-        {deck.length === 0 && !isLoading && !isRefetching && feed.length === 0 ? (
+        {feedMode === 'friends' && !streakUnlocked ? (
+          <StreakLockedState votesNeeded={10 - totalVoteCount} onGoVote={() => setFeedMode('default')} />
+        ) : deck.length === 0 && !isLoading && !isRefetching && feed.length === 0 ? (
           <CaughtUpState />
         ) : (<>
           {topCards
@@ -554,6 +551,21 @@ function StarDripParticle({ config, labelWidth }: { config: typeof DRIP_CONFIGS[
 }
 
 
+function StreakLockedState({ votesNeeded, onGoVote }: { votesNeeded: number; onGoVote: () => void }) {
+  return (
+    <View style={styles.lockedContainer}>
+      <Ionicons name="flash-outline" size={48} color="rgba(255,215,0,0.4)" />
+      <Text style={styles.lockedTitle}>Streak Mode</Text>
+      <Text style={styles.lockedBody}>
+        Vote on {votesNeeded} more {votesNeeded === 1 ? 'post' : 'posts'} to unlock! See what your friends voted on and build streaks by voting the same way.
+      </Text>
+      <TouchableOpacity style={styles.lockedButton} onPress={onGoVote} activeOpacity={0.7}>
+        <Text style={styles.lockedButtonText}>Go vote</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 function CaughtUpState() {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.caughtUpScroll} contentContainerStyle={styles.caughtUpContent}>
@@ -630,13 +642,37 @@ const styles = StyleSheet.create({
   feedToggleTextActive: {
     color: colors.textPrimary,
   },
-  feedToggleLocked: {
-    opacity: 0.5,
+  lockedContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 40,
+    gap: 12,
   },
-  feedToggleLockedText: {
-    color: 'rgba(255,255,255,0.3)',
-    fontSize: 11,
-    fontWeight: '600',
+  lockedTitle: {
+    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  lockedBody: {
+    color: colors.textSecondary,
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  lockedButton: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginTop: 4,
+  },
+  lockedButtonText: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '700',
   },
   introOverlay: {
     ...StyleSheet.absoluteFillObject,
