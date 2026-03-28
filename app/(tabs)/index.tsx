@@ -78,6 +78,9 @@ export default function FeedScreen() {
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
+  const [streakUnlocked, setStreakUnlocked] = useState(false);
+  const [showStreakIntro, setShowStreakIntro] = useState(false);
+  const [totalVoteCount, setTotalVoteCount] = useState(0);
   const [jiggleTick, setJiggleTick] = useState(0);
   const [dismissing, setDismissing] = useState(false);
   const [milestoneHit, setMilestoneHit] = useState<(MilestoneHit & { postId: string }) | null>(null);
@@ -100,6 +103,20 @@ export default function FeedScreen() {
   useEffect(() => {
     AsyncStorage.getItem('swipe_hint_seen').then((val) => {
       if (!val) setShowSwipeHint(true);
+    });
+  }, []);
+
+  // Streak unlock gate
+  useEffect(() => {
+    Promise.all([
+      AsyncStorage.getItem('total_vote_count'),
+      AsyncStorage.getItem('streak_intro_seen'),
+    ]).then(([count, introSeen]) => {
+      const n = parseInt(count ?? '0', 10);
+      setTotalVoteCount(n);
+      setStreakUnlocked(n >= 10);
+      // If they just hit 10 and haven't seen the intro, we'll show it when they tap Streak
+      if (n >= 10 && !introSeen) setShowStreakIntro(true);
     });
   }, []);
 
@@ -172,6 +189,15 @@ export default function FeedScreen() {
       castVote({ uploadId: item.id, vote });
       setSessionVotes((prev) => new Map(prev).set(item.id, vote));
 
+      // Track total votes for streak unlock
+      const newCount = totalVoteCount + 1;
+      setTotalVoteCount(newCount);
+      AsyncStorage.setItem('total_vote_count', String(newCount));
+      if (newCount >= 10 && !streakUnlocked) {
+        setStreakUnlocked(true);
+        setShowStreakIntro(true);
+      }
+
       const hit = vote === 'rad' ? checkMilestone(item.rad_votes) : null;
       if (hit) setMilestoneHit({ ...hit, postId: item.id });
 
@@ -188,7 +214,7 @@ export default function FeedScreen() {
         setFriendRevealPostId(item.id);
       }
     },
-    [castVote, sessionVotes, feedMode]
+    [castVote, sessionVotes, feedMode, totalVoteCount, streakUnlocked]
   );
 
   const handleFavorite = useCallback((item: FeedItem) => {
@@ -309,12 +335,23 @@ export default function FeedScreen() {
           <Text style={[styles.feedToggleText, feedMode === 'friendsPosts' && styles.feedToggleTextActive]}>Following</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.feedToggle, feedMode === 'friends' && styles.feedToggleActive]}
-          onPress={() => setFeedMode('friends')}
-          activeOpacity={0.7}
+          style={[styles.feedToggle, feedMode === 'friends' && styles.feedToggleActive, !streakUnlocked && styles.feedToggleLocked]}
+          onPress={() => {
+            if (!streakUnlocked) return;
+            if (showStreakIntro) {
+              setShowStreakIntro(false);
+              AsyncStorage.setItem('streak_intro_seen', '1');
+            }
+            setFeedMode('friends');
+          }}
+          activeOpacity={streakUnlocked ? 0.7 : 1}
         >
-          <Ionicons name="flash" size={14} color={feedMode === 'friends' ? '#FFD700' : colors.textSecondary} />
-          <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Streak</Text>
+          <Ionicons name="flash" size={14} color={!streakUnlocked ? 'rgba(255,255,255,0.2)' : feedMode === 'friends' ? '#FFD700' : colors.textSecondary} />
+          {streakUnlocked ? (
+            <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Streak</Text>
+          ) : (
+            <Text style={styles.feedToggleLockedText}>{10 - totalVoteCount} more</Text>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -372,6 +409,29 @@ export default function FeedScreen() {
             <VoteButton vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} jiggleTick={jiggleTick} />
           </View>
         )
+      )}
+
+      {/* Streak unlock intro overlay */}
+      {showStreakIntro && feedMode === 'friends' && (
+        <View style={styles.introOverlay}>
+          <View style={styles.introCard}>
+            <Ionicons name="flash" size={40} color="#FFD700" />
+            <Text style={styles.introTitle}>Streak Mode Unlocked!</Text>
+            <Text style={styles.introBody}>
+              See posts your friends already voted on. Vote and find out if you agree — build streaks with friends who think like you!
+            </Text>
+            <TouchableOpacity
+              style={styles.introButton}
+              onPress={() => {
+                setShowStreakIntro(false);
+                AsyncStorage.setItem('streak_intro_seen', '1');
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.introButtonText}>Let's go!</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
 
     </SafeAreaView>
@@ -569,6 +629,54 @@ const styles = StyleSheet.create({
   },
   feedToggleTextActive: {
     color: colors.textPrimary,
+  },
+  feedToggleLocked: {
+    opacity: 0.5,
+  },
+  feedToggleLockedText: {
+    color: 'rgba(255,255,255,0.3)',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  introOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 200,
+  },
+  introCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 24,
+    padding: 28,
+    alignItems: 'center',
+    gap: 12,
+    marginHorizontal: 32,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  introTitle: {
+    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  introBody: {
+    color: colors.textSecondary,
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  introButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 16,
+    paddingHorizontal: 28,
+    paddingVertical: 12,
+    marginTop: 4,
+  },
+  introButtonText: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '800',
   },
   headerWordRow: {
     flexDirection: 'row',
