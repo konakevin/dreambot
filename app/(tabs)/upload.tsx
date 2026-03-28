@@ -50,6 +50,7 @@ export default function UploadScreen() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [caption, setCaption] = useState('');
   const { mutate: upload, isPending } = useUpload();
+  const [uploadPhase, setUploadPhase] = useState<string | null>(null);
   const compressMsg = useMemo(
     () => COMPRESS_MESSAGES[Math.floor(Math.random() * COMPRESS_MESSAGES.length)],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,8 +138,9 @@ export default function UploadScreen() {
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setUploadPhase(null);
     upload(
-      { uri: mediaUri!, categories, caption, mediaType, width: mediaDimensions?.width ?? null, height: mediaDimensions?.height ?? null },
+      { uri: mediaUri!, categories, caption, mediaType, width: mediaDimensions?.width ?? null, height: mediaDimensions?.height ?? null, onPhase: setUploadPhase },
       {
         onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -174,8 +176,8 @@ export default function UploadScreen() {
               : <Text style={styles.postButtonText}>Post</Text>}
           </TouchableOpacity>
         </View>
-        {isPending && mediaType === 'video' && (
-          <Text style={styles.uploadStatus}>{compressMsg}</Text>
+        {isPending && uploadPhase && (
+          <Text style={styles.uploadStatus}>{uploadPhase}</Text>
         )}
 
         <ScrollView

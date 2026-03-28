@@ -14,6 +14,7 @@ interface UploadArgs {
   mediaType: 'image' | 'video';
   width: number | null;
   height: number | null;
+  onPhase?: (phase: string) => void;
 }
 
 async function uploadFile(uri: string, userId: string, mediaType: 'image' | 'video'): Promise<string> {
@@ -51,11 +52,13 @@ export function useUpload() {
   const setPendingPost = useFeedStore((s) => s.setPendingPost);
 
   return useMutation({
-    mutationFn: async ({ uri, categories, caption, mediaType, width, height }: UploadArgs): Promise<PendingPost> => {
+    mutationFn: async ({ uri, categories, caption, mediaType, width, height, onPhase }: UploadArgs): Promise<PendingPost> => {
+      onPhase?.('Compressing...');
       const uploadUri = mediaType === 'video'
         ? await CompressorVideo.compress(uri, { compressionMethod: 'auto', maxSize: 1280 })
         : uri;
 
+      onPhase?.('Uploading...');
       const mediaUrl = await uploadFile(uploadUri, user!.id, mediaType);
 
       const thumbnailUrl = mediaType === 'video'
@@ -63,6 +66,7 @@ export function useUpload() {
         : null;
 
       // Content moderation — check media + caption before making visible
+      onPhase?.('Processing...');
       const modResult = await moderateUpload(mediaUrl, mediaType, caption.trim() || null);
       if (!modResult.passed) {
         // Clean up uploaded file
