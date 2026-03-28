@@ -137,12 +137,8 @@ export default function FeedScreen() {
       castVote({ uploadId: item.id, vote });
       setSessionVotes((prev) => new Map(prev).set(item.id, vote));
 
-      // TODO: TEMP — force milestone on every rad vote for testing
-      if (vote === 'rad') {
-        setMilestoneHit({ milestone: 10, tier: 1, message: "You're the 10th to vote this RAD!", postId: item.id });
-      }
-      // const hit = vote === 'rad' ? checkMilestone(item.rad_votes) : null;
-      // if (hit) setMilestoneHit({ ...hit, postId: item.id });
+      const hit = vote === 'rad' ? checkMilestone(item.rad_votes) : null;
+      if (hit) setMilestoneHit({ ...hit, postId: item.id });
     },
     [castVote, sessionVotes]
   );
