@@ -86,11 +86,11 @@ interface VoteButtonProps {
   size?: number;
   /** Increment to trigger the swipe-up hint pulse. Defaults to 0 (never). */
   jiggleTick?: number;
-  /** When true, button shrinks to 0 and fades after press instead of bouncing back. */
-  shrinkOnPress?: boolean;
+  /** When false, button shrinks to 0 and fades out. Defaults to true. */
+  visible?: boolean;
 }
 
-export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0, shrinkOnPress = false }: VoteButtonProps) {
+export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0, visible = true }: VoteButtonProps) {
   const p0  = useSharedValue(0); const p1  = useSharedValue(0); const p2  = useSharedValue(0);
   const p3  = useSharedValue(0); const p4  = useSharedValue(0); const p5  = useSharedValue(0);
   const p6  = useSharedValue(0); const p7  = useSharedValue(0); const p8  = useSharedValue(0);
@@ -107,7 +107,12 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
   const iconSize = Math.round(size * 0.35);
   const pulseColor = isRad ? '#FFCC44' : '#6699EE';
 
-  const buttonStyle = useAnimatedStyle(() => ({ transform: [{ scale: buttonScale.value }], opacity: buttonOpacity.value }));
+  const buttonStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: buttonScale.value }],
+  }));
+  const wrapperOpacity = useAnimatedStyle(() => ({
+    opacity: buttonOpacity.value,
+  }));
   const pulseStyle = useAnimatedStyle(() => {
     const p = pulseProgress.value;
     return {
@@ -116,6 +121,7 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
     };
   });
 
+  // Jiggle hint pulse
   useEffect(() => {
     if (jiggleTick === 0) return;
     pulseProgress.value = 0;
@@ -126,20 +132,17 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
     );
   }, [jiggleTick]);
 
-  // When shrinkOnPress + disabled: both buttons shrink and fade out
-  // When shrinkOnPress turns off or disabled turns off: reset to visible
+  // Visibility: when visible flips to false, shrink and fade
   useEffect(() => {
-    if (shrinkOnPress && disabled) {
+    if (visible === false) {
       buttonScale.value = withTiming(0, { duration: 400, easing: Easing.in(Easing.cubic) });
       buttonOpacity.value = withDelay(100, withTiming(0, { duration: 300 }));
-    } else {
-      buttonScale.value = 1;
-      buttonOpacity.value = 1;
     }
-  }, [shrinkOnPress, disabled]);
+    // No else — fresh component instances start at scale=1, opacity=1
+  }, [visible]);
 
   function handlePressIn() {
-    // Fire burst particles (same on all views)
+    // Fire burst particles
     progresses.forEach((p, i) => {
       p.value = 0;
       p.value = withDelay(
@@ -148,53 +151,49 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
       );
     });
 
-    // Normal: quick press then bounce back
+    // Quick press then bounce back
     buttonScale.value = withSequence(
       withTiming(0.84, { duration: 60 }),
       withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) }),
     );
   }
 
-  const wrapperStyle = useAnimatedStyle(() => ({
-    opacity: buttonOpacity.value,
-  }));
-
   return (
     <View style={styles.burstWrapper}>
       <BurstEffect progresses={progresses} vote={vote} />
-      <Animated.View style={wrapperStyle}>
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.pulseRing,
-          { width: size, height: size, borderRadius: radius, borderColor: pulseColor },
-          pulseStyle,
-        ]}
-      />
-      <Animated.View style={[
-        isRad ? styles.radGlow : styles.badGlow,
-        { borderRadius: radius },
-        buttonStyle,
-      ]}>
-        <TouchableOpacity
-          style={[styles.button, { width: size, height: size, borderRadius: radius }]}
-          activeOpacity={0.8}
-          onPressIn={handlePressIn}
-          onPress={onPress}
-          disabled={disabled}
-        >
-          <LinearGradient
-            colors={isRad ? gradients.rad : gradients.bad}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={StyleSheet.absoluteFill}
-          />
-          <Ionicons name={isRad ? 'thumbs-up' : 'thumbs-down'} size={iconSize} color="#FFFFFF" />
-          <Text style={[styles.label, { fontSize: Math.round(size * 0.135) }]}>
-            {isRad ? 'RAD' : 'BAD'}
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
+      <Animated.View style={wrapperOpacity}>
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.pulseRing,
+            { width: size, height: size, borderRadius: radius, borderColor: pulseColor },
+            pulseStyle,
+          ]}
+        />
+        <Animated.View style={[
+          isRad ? styles.radGlow : styles.badGlow,
+          { borderRadius: radius },
+          buttonStyle,
+        ]}>
+          <TouchableOpacity
+            style={[styles.button, { width: size, height: size, borderRadius: radius }]}
+            activeOpacity={0.8}
+            onPressIn={handlePressIn}
+            onPress={onPress}
+            disabled={disabled}
+          >
+            <LinearGradient
+              colors={isRad ? gradients.rad : gradients.bad}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={StyleSheet.absoluteFill}
+            />
+            <Ionicons name={isRad ? 'thumbs-up' : 'thumbs-down'} size={iconSize} color="#FFFFFF" />
+            <Text style={[styles.label, { fontSize: Math.round(size * 0.135) }]}>
+              {isRad ? 'RAD' : 'BAD'}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
       </Animated.View>
     </View>
   );

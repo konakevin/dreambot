@@ -49,12 +49,7 @@ async function fetchFriendsFeed(userId: string): Promise<FeedItem[]> {
     p_limit: 50,
   });
 
-  if (error) {
-    console.error('[fetchFriendsFeed] RPC error:', error.message);
-    throw error;
-  }
-
-  console.log(`[fetchFriendsFeed] returned ${data?.length ?? 0} rows`);
+  if (error) throw error;
 
   return (data ?? []).map((row: Record<string, unknown>) => ({
     ...row,

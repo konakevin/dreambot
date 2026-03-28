@@ -282,8 +282,8 @@ export default function PhotoDetailScreen() {
       {/* Vote buttons — absolute, shrink + fade after voting */}
       {!isOwnPost && !voteLoading && (!hasVoted || votePending) && (
         <View style={styles.voteButtonsCompact}>
-          <VoteButton vote="rad" onPress={() => handleVote('rad')} disabled={!!votePending} size={68} shrinkOnPress />
-          <VoteButton vote="bad" onPress={() => handleVote('bad')} disabled={!!votePending} size={68} shrinkOnPress />
+          <VoteButton vote="rad" onPress={() => handleVote('rad')} disabled={!!votePending} size={68} visible={!votePending} />
+          <VoteButton vote="bad" onPress={() => handleVote('bad')} disabled={!!votePending} size={68} visible={!votePending} />
         </View>
       )}
 

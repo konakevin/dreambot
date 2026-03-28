@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, withDelay, Easing } from 'react-native-reanimated';
 
 const TREADMILL_COLORS = [
@@ -16,11 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
-import { useLocalSearchParams } from 'expo-router';
-import { useFeed, useFriendsFeed, useFollowingFeed, type FeedItem } from '@/hooks/useFeed';
-import { useFeatureFlags } from '@/hooks/useFeatureFlags';
+import type { FeedItem } from '@/hooks/useFeed';
 import { useVote } from '@/hooks/useVote';
 import { useUserVote } from '@/hooks/useUserVote';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
@@ -36,61 +33,43 @@ import { useCategoryPosts } from '@/hooks/useCategoryPosts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
 import { VoteButton } from '@/components/VoteButton';
-import { MilestoneBurst } from '@/components/MilestoneBurst';
-import { checkMilestone, type MilestoneHit } from '@/lib/milestones';
-import { useFriendVotesOnPost } from '@/hooks/useFriendVotesOnPost';
 import { CATEGORIES } from '@/constants/categories';
+
+// Extracted hooks — each owns one concern
+import { useActiveFeed } from '@/hooks/useActiveFeed';
+import { useFeedDeck } from '@/hooks/useFeedDeck';
+import { useMilestoneDetection } from '@/hooks/useMilestoneDetection';
+import { useStreakVoting } from '@/hooks/useStreakVoting';
+import { useStreakUnlock } from '@/hooks/useStreakUnlock';
 
 
 export default function FeedScreen() {
   const currentUser = useAuthStore((s) => s.user);
-  const { mode } = useLocalSearchParams<{ mode?: string }>();
-  const [feedMode, setFeedMode] = useState<'default' | 'friends' | 'friendsPosts'>(mode === 'friends' ? 'friends' : 'default');
+  const externalVotes = useFeedStore((s) => s.externalVotes);
+  const refreshToken = useFeedStore((s) => s.refreshToken);
 
-  // Reset mode when route param changes
-  useEffect(() => {
-    if (mode === 'friends') setFeedMode('friends');
-  }, [mode]);
+  // ── Extracted hooks ──────────────────────────────────────────────────────
+  const activeFeed = useActiveFeed();
+  const deck = useFeedDeck(activeFeed.feed, currentUser?.id);
+  const milestone = useMilestoneDetection();
+  const streakVoting = useStreakVoting();
+  const streakUnlock = useStreakUnlock();
 
-  const { data: flags } = useFeatureFlags();
-  const defaultFeed = useFeed();
-  const friendsFeed = useFriendsFeed();
-  const followingFeed = useFollowingFeed();
-  const activeFeed = feedMode === 'friends' ? friendsFeed : feedMode === 'friendsPosts' ? followingFeed : defaultFeed;
-  const { data: feed = [], isLoading, refetch, isRefetching } = activeFeed;
+  // ── Remaining local state (UI-only, minimal) ────────────────────────────
+  const [cardAreaHeight, setCardAreaHeight] = useState(0);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
+  const [jiggleTick, setJiggleTick] = useState(0);
+  const [dismissing, setDismissing] = useState(false);
+  const [headerRowSize, setHeaderRowSize] = useState({ width: 0, height: 0 });
+
+  // ── Query hooks (not extracted — they're simple selectors) ───────────────
   const { mutate: castVote } = useVote();
-  // Post-vote friend reveal (Everyone/Following modes only)
-  const { data: friendVotesOnPost = [] } = useFriendVotesOnPost(
-    feedMode !== 'friends' ? friendRevealPostId : null
-  );
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
   const { mutate: toggleFavorite } = useToggleFavorite();
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-  const resetToken = useFeedStore((s) => s.resetToken);
-  const refreshToken = useFeedStore((s) => s.refreshToken);
-  const localStreaks = useFeedStore((s) => s.localStreaks);
-  const updateStreak = useFeedStore((s) => s.updateStreak);
-  const clearLocalStreaks = useFeedStore((s) => s.clearLocalStreaks);
-  const pendingPost = useFeedStore((s) => s.pendingPost);
-  const setPendingPost = useFeedStore((s) => s.setPendingPost);
-  const externalVotes = useFeedStore((s) => s.externalVotes);
-  const [deck, setDeck] = useState<FeedItem[]>([]);
-  const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
-  const [cardAreaHeight, setCardAreaHeight] = useState(0);
-  const [showSwipeHint, setShowSwipeHint] = useState(false);
-  const [streakUnlocked, setStreakUnlocked] = useState(false);
-  const [showStreakIntro, setShowStreakIntro] = useState(false);
-  const [totalVoteCount, setTotalVoteCount] = useState(0);
-  const [jiggleTick, setJiggleTick] = useState(0);
-  const [dismissing, setDismissing] = useState(false);
-  const [milestoneHit, setMilestoneHit] = useState<(MilestoneHit & { postId: string }) | null>(null);
-  const [milestonePending, setMilestonePending] = useState<string | null>(null); // postId of pending milestone
-  const [friendRevealPostId, setFriendRevealPostId] = useState<string | null>(null);
-  const [headerRowSize, setHeaderRowSize] = useState({ width: 0, height: 0 });
-  const loadedFeedKey = useRef('');
-  const milestoneTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const sessionVotesRef = useRef(sessionVotes);
+
+  // ── Header treadmill animation ───────────────────────────────────────────
   const headerTreadmillX = useSharedValue(-(Math.random() * TREADMILL_SCROLL));
   const headerTreadmillStyle = useAnimatedStyle(() => ({ transform: [{ translateX: headerTreadmillX.value }] }));
   useEffect(() => {
@@ -99,135 +78,63 @@ export default function FeedScreen() {
       -1, true,
     );
   }, []);
-  useEffect(() => { sessionVotesRef.current = sessionVotes; }, [sessionVotes]);
-  const spinnerColor = colors.textSecondary;
 
-  // Show swipe hint once ever
+  // ── One-time swipe hint ──────────────────────────────────────────────────
   useEffect(() => {
     AsyncStorage.getItem('swipe_hint_seen').then((val) => {
       if (!val) setShowSwipeHint(true);
     });
   }, []);
 
-  // Streak unlock gate
+  // ── Feed mode change → reset deck ────────────────────────────────────────
   useEffect(() => {
-    Promise.all([
-      AsyncStorage.getItem('total_vote_count'),
-      AsyncStorage.getItem('streak_intro_seen'),
-    ]).then(([count, introSeen]) => {
-      const n = parseInt(count ?? '0', 10);
-      setTotalVoteCount(n);
-      setStreakUnlocked(n >= 10);
-      // If they just hit 10 and haven't seen the intro, we'll show it when they tap Streak
-      if (n >= 10 && !introSeen) setShowStreakIntro(true);
-    });
-  }, []);
+    deck.resetDeck();
+    milestone.clear();
+    activeFeed.refetch();
+  }, [activeFeed.feedMode]);
 
-  // When feed mode changes, wipe the deck and refetch (keep sessionVotes to filter voted posts)
+  // ── Tab icon pressed → refetch ───────────────────────────────────────────
   useEffect(() => {
-    loadedFeedKey.current = '';
-    setDeck([]);
-    setMilestoneHit(null);
-    setMilestonePending(null);
-    setFriendRevealPostId(null);
-    // Don't clear localStreaks — they should persist for the profile streaks tab
-    // Force refetch to ensure fresh data
-    refetch();
-  }, [feedMode]);
+    if (refreshToken === 0) return;
+    deck.resetDeck();
+    activeFeed.refetch();
+  }, [refreshToken]);
 
-  // When a new upload happens, wipe the deck so the feed refetches from scratch
-  useEffect(() => {
-    if (resetToken === 0) return;
-    loadedFeedKey.current = '';
-    setDeck([]);
-    setSessionVotes(new Map());
-  }, [resetToken]);
+  // ── Reset dismissing flag when top item changes ──────────────────────────
+  useEffect(() => { setDismissing(false); }, [deck.topItem?.id]);
 
-  // Prepend the user's own new post to the top of the deck after upload.
-  // Seeded into sessionVotes as 'rad' so the 100% score badge shows immediately
-  // (the DB also auto-votes rad at creation time). SwipeCard suppresses the
-  // auto-dismiss timer for own posts so it stays until manually swiped away.
-  useEffect(() => {
-    if (!pendingPost) return;
-    setDeck((prev) => {
-      const alreadyIn = prev.some((d) => d.id === pendingPost.id);
-      if (alreadyIn) return prev;
-      return [pendingPost as FeedItem, ...prev];
-    });
-    setPendingPost(null);
-  }, [pendingPost]);
+  // ── External vote detection ──────────────────────────────────────────────
+  const { data: topItemDbVote } = useUserVote(deck.topItem?.id ?? '');
+  const topItemExternallyVoted = deck.topItem
+    ? (!!topItemDbVote || externalVotes.has(deck.topItem.id)) && !deck.sessionVotes.has(deck.topItem.id)
+    : false;
 
-  useEffect(() => {
-    console.log(`[FEED] mode=${feedMode} feed.length=${feed.length} isLoading=${isLoading} deck.length=${deck.length}`);
-    const newKey = feed.map((f) => f.id).join(',');
-    if (newKey && newKey !== loadedFeedKey.current) {
-      loadedFeedKey.current = newKey;
-      const feedIds = new Set(feed.map((f) => f.id));
-      setDeck((prev) => {
-        const existingIds = new Set(prev.map((d) => d.id));
-        const voted = sessionVotesRef.current;
-        // Only add items we haven't voted on this session
-        const freshItems = feed.filter((f) => !existingIds.has(f.id) && !voted.has(f.id));
-        // Remove items no longer in the feed that weren't voted this session —
-        // they were voted externally (e.g. detail screen). Keep own posts
-        // (feed RPC excludes them) and session-voted cards still animating out.
-        const retained = prev.filter((item) =>
-          feedIds.has(item.id) ||
-          voted.has(item.id) ||
-          item.user_id === currentUser?.id ||
-          useFeedStore.getState().externalVotes.has(item.id)
-        );
-        return [...retained, ...freshItems];
-      });
+  // ── Handlers (clean delegation to hooks) ─────────────────────────────────
+
+  const handleVote = useCallback((item: FeedItem, vote: 'rad' | 'bad') => {
+    if (deck.sessionVotes.has(item.id)) return;
+
+    Haptics.impactAsync(
+      vote === 'rad' ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light
+    );
+    castVote({ uploadId: item.id, vote });
+    deck.recordVote(item.id, vote);
+    streakUnlock.recordVote();
+    milestone.checkAndTrigger(vote, item.rad_votes, item.id);
+
+    if (activeFeed.feedMode === 'friends') {
+      streakVoting.processVote(item, vote);
     }
-  }, [feed]);
+  }, [deck.sessionVotes, activeFeed.feedMode]);
 
-  // Vote on the top card — card stays, score badge fades in with optimistic score
-  const handleVote = useCallback(
-    (item: FeedItem, vote: 'rad' | 'bad') => {
-      if (sessionVotes.has(item.id)) return;
-      Haptics.impactAsync(
-        vote === 'rad'
-          ? Haptics.ImpactFeedbackStyle.Medium
-          : Haptics.ImpactFeedbackStyle.Light
-      );
-      castVote({ uploadId: item.id, vote });
-      setSessionVotes((prev) => new Map(prev).set(item.id, vote));
-
-      // Track total votes for streak unlock
-      const newCount = totalVoteCount + 1;
-      setTotalVoteCount(newCount);
-      AsyncStorage.setItem('total_vote_count', String(newCount));
-      if (newCount >= 10 && !streakUnlocked) {
-        setStreakUnlocked(true);
-        setShowStreakIntro(true);
-      }
-
-      const hit = vote === 'rad' ? checkMilestone(item.rad_votes) : null;
-      if (hit) {
-        const postId = item.id;
-        setMilestonePending(postId);
-        milestoneTimerRef.current = setTimeout(() => {
-          setMilestoneHit({ ...hit, postId });
-          milestoneTimerRef.current = null;
-        }, 650);
-      }
-
-      // Streak feed: compare vote with friends' votes + update local streaks
-      // Streak feed: optimistically update local streak counts
-      if (feedMode === 'friends' && item.friend_votes?.length) {
-        for (const f of item.friend_votes) {
-          updateStreak(f, f.vote === vote, vote);
-        }
-      }
-
-      // Everyone/Following feed: trigger friend votes check
-      if (feedMode !== 'friends') {
-        setFriendRevealPostId(item.id);
-      }
-    },
-    [castVote, sessionVotes, feedMode, totalVoteCount, streakUnlocked]
-  );
+  const handleDismiss = useCallback((item: FeedItem) => {
+    deck.dismissCard(item.id);
+    milestone.clear();
+    if (showSwipeHint) {
+      setShowSwipeHint(false);
+      AsyncStorage.setItem('swipe_hint_seen', '1');
+    }
+  }, [showSwipeHint]);
 
   const handleFavorite = useCallback((item: FeedItem) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -247,50 +154,17 @@ export default function FeedScreen() {
     setJiggleTick((t) => t + 1);
   }, []);
 
-  // Swipe up to dismiss (skip or after voting)
-  const handleDismiss = useCallback((item: FeedItem) => {
-    setDeck((prev) => prev.filter((c) => c.id !== item.id));
-    if (milestoneTimerRef.current) {
-      clearTimeout(milestoneTimerRef.current);
-      milestoneTimerRef.current = null;
-    }
-    setMilestoneHit(null);
-    setMilestonePending(null);
-    setFriendRevealPostId(null);
-    if (showSwipeHint) {
-      setShowSwipeHint(false);
-      AsyncStorage.setItem('swipe_hint_seen', '1');
-    }
-  }, [showSwipeHint]);
+  // ── Derived values ───────────────────────────────────────────────────────
+  const { topItem, topCards } = deck;
+  const topItemVoted = deck.topItemVoted;
+  const { feedMode } = activeFeed;
+  const buttonsVisible = !milestone.isActive(topItem?.id ?? '');
 
-  // Tab icon pressed → refetch feed (keeps session votes intact)
-  useEffect(() => {
-    if (refreshToken === 0) return;
-    loadedFeedKey.current = '';
-    refetch();
-  }, [refreshToken]);
-
-  // Show top 3 from deck. The top card stays even after voting (for animations).
-  // Behind it, skip any voted cards so the next card is always fresh.
-  const topCard = deck[0];
-  const behindCards = deck.slice(1).filter((item) => !sessionVotes.has(item.id)).slice(0, 2);
-  const topCards = topCard ? [topCard, ...behindCards] : [];
-  const topItem = topCards[0];
-  const topItemVoted = topItem ? sessionVotes.has(topItem.id) : false;
-  // Reset dismissing flag when top item changes
-  useEffect(() => { setDismissing(false); }, [topItem?.id]);
-
-  // Check if the top card was voted on outside this session (e.g. from the detail view).
-  // useUserVote is invalidated by useVote.onSuccess so this stays in sync automatically.
-  const { data: topItemDbVote } = useUserVote(topItem?.id ?? '');
-  const topItemExternallyVoted = topItem
-    ? (!!topItemDbVote || externalVotes.has(topItem.id)) && !sessionVotes.has(topItem.id)
-    : false;
-
-  if (isLoading) {
+  // ── Loading state ────────────────────────────────────────────────────────
+  if (activeFeed.isLoading) {
     return (
       <SafeAreaView style={styles.center}>
-        <ActivityIndicator size="large" color={spinnerColor} />
+        <ActivityIndicator size="large" color={colors.textSecondary} />
       </SafeAreaView>
     );
   }
@@ -299,7 +173,6 @@ export default function FeedScreen() {
     <SafeAreaView style={styles.root}>
       {/* Header */}
       <View style={styles.header}>
-        {/* Hidden sizer — measures the row before the masked version renders */}
         <View
           pointerEvents="none"
           style={{ position: 'absolute', opacity: 0 }}
@@ -331,17 +204,16 @@ export default function FeedScreen() {
                 style={{ width: TREADMILL_WIDTH, height: headerRowSize.height }}
               />
             </Animated.View>
-
           </MaskedView>
         )}
-        {isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
+        {activeFeed.isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
       </View>
 
       {/* Feed mode toggle */}
       <View style={styles.feedToggleRow}>
         <TouchableOpacity
           style={[styles.feedToggle, feedMode === 'default' && styles.feedToggleActive]}
-          onPress={() => setFeedMode('default')}
+          onPress={() => activeFeed.setFeedMode('default')}
           activeOpacity={0.7}
         >
           <Ionicons name="globe" size={14} color={feedMode === 'default' ? colors.textPrimary : colors.textSecondary} />
@@ -349,7 +221,7 @@ export default function FeedScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.feedToggle, feedMode === 'friendsPosts' && styles.feedToggleActive]}
-          onPress={() => setFeedMode('friendsPosts')}
+          onPress={() => activeFeed.setFeedMode('friendsPosts')}
           activeOpacity={0.7}
         >
           <Ionicons name="people" size={14} color={feedMode === 'friendsPosts' ? colors.textPrimary : colors.textSecondary} />
@@ -358,11 +230,10 @@ export default function FeedScreen() {
         <TouchableOpacity
           style={[styles.feedToggle, feedMode === 'friends' && styles.feedToggleActive]}
           onPress={() => {
-            if (streakUnlocked && showStreakIntro) {
-              setShowStreakIntro(false);
-              AsyncStorage.setItem('streak_intro_seen', '1');
+            if (streakUnlock.streakUnlocked && streakUnlock.showStreakIntro) {
+              streakUnlock.dismissIntro();
             }
-            setFeedMode('friends');
+            activeFeed.setFeedMode('friends');
           }}
           activeOpacity={0.7}
         >
@@ -373,9 +244,9 @@ export default function FeedScreen() {
 
       {/* Card stack */}
       <View style={styles.cardArea} onLayout={(e) => setCardAreaHeight(e.nativeEvent.layout.height)}>
-        {feedMode === 'friends' && !streakUnlocked ? (
-          <StreakLockedState votesNeeded={10 - totalVoteCount} onGoVote={() => setFeedMode('default')} />
-        ) : deck.length === 0 && !isLoading && !isRefetching && feed.length === 0 ? (
+        {feedMode === 'friends' && !streakUnlock.streakUnlocked ? (
+          <StreakLockedState votesNeeded={10 - streakUnlock.totalVoteCount} onGoVote={() => activeFeed.setFeedMode('default')} />
+        ) : deck.deck.length === 0 && !activeFeed.isLoading && !activeFeed.isRefetching && activeFeed.feed.length === 0 ? (
           <CaughtUpState />
         ) : (<>
           {topCards
@@ -387,13 +258,13 @@ export default function FeedScreen() {
                 <SwipeCard
                   key={item.id}
                   item={item}
-                  userVote={sessionVotes.get(item.id) ?? (index === 0 && topItemExternallyVoted ? (topItemDbVote ?? externalVotes.get(item.id) ?? null) : null)}
+                  userVote={deck.sessionVotes.get(item.id) ?? (index === 0 && topItemExternallyVoted ? (topItemDbVote ?? externalVotes.get(item.id) ?? null) : null)}
                   isFavorited={favoriteIds.has(item.id)}
                   isFollowing={followingIds.has(item.user_id)}
                   isOwnPost={currentUser?.id === item.user_id}
                   isAlreadyVoted={index === 0 && topItemExternallyVoted}
                   onDismiss={() => handleDismiss(item)}
-                  onDismissStart={index === 0 ? () => { setDismissing(true); setMilestoneHit(null); } : undefined}
+                  onDismissStart={index === 0 ? () => { setDismissing(true); milestone.clear(); } : undefined}
                   onFavorite={() => handleFavorite(item)}
                   onFollow={() => handleFollow(item)}
                   onUserPress={() => handleUserPress(item)}
@@ -404,17 +275,10 @@ export default function FeedScreen() {
                   containerHeight={cardAreaHeight}
                   showSwipeHint={index === 0 && showSwipeHint}
                   swipeEnabled={true}
-                  hasMilestone={index === 0 && (milestoneHit?.postId === item.id || milestonePending === item.id)}
-                  friendVotes={index === 0 && feedMode === 'friends' ? item.friend_votes?.map((f) => {
-                    const local = localStreaks.get(f.username);
-                    return {
-                      ...f,
-                      rad_streak: local?.radStreak ?? f.rad_streak,
-                      bad_streak: local?.badStreak ?? f.bad_streak,
-                    };
-                  }) : undefined}
-                  autoDismissDelay={index === 0 && (milestoneHit?.postId === item.id || milestonePending === item.id) ? null : undefined}
-                  milestoneHit={index === 0 && milestoneHit?.postId === item.id ? milestoneHit : null}
+                  hasMilestone={index === 0 && milestone.isActive(item.id)}
+                  friendVotes={index === 0 && feedMode === 'friends' ? streakVoting.applyLocalStreaks(item.friend_votes) : undefined}
+                  autoDismissDelay={index === 0 && milestone.isActive(item.id) ? null : undefined}
+                  milestoneHit={index === 0 && milestone.milestoneHit?.postId === item.id ? milestone.milestoneHit : null}
                 />
               );
             })
@@ -422,7 +286,7 @@ export default function FeedScreen() {
         </>)}
       </View>
 
-      {/* Action buttons / already-voted / milestone state */}
+      {/* Action buttons / already-voted */}
       {topItem && (
         topItem.user_id === currentUser?.id && !dismissing ? (
           <GradientMessageRow message="Upload complete!" />
@@ -430,14 +294,14 @@ export default function FeedScreen() {
           <GradientMessageRow message="You already rated this one" />
         ) : (
           <View key={topItem.id} style={styles.actionRow}>
-            <VoteButton vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} jiggleTick={jiggleTick} shrinkOnPress={!!milestonePending} />
-            <VoteButton vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} jiggleTick={jiggleTick} shrinkOnPress={!!milestonePending} />
+            <VoteButton vote="bad" onPress={() => handleVote(topItem, 'bad')} disabled={topItemVoted} jiggleTick={jiggleTick} visible={buttonsVisible} />
+            <VoteButton vote="rad" onPress={() => handleVote(topItem, 'rad')} disabled={topItemVoted} jiggleTick={jiggleTick} visible={buttonsVisible} />
           </View>
         )
       )}
 
       {/* Streak unlock intro overlay */}
-      {showStreakIntro && feedMode === 'friends' && (
+      {streakUnlock.showStreakIntro && feedMode === 'friends' && (
         <View style={styles.introOverlay}>
           <View style={styles.introCard}>
             <Ionicons name="flash" size={40} color="#FFD700" />
@@ -447,10 +311,7 @@ export default function FeedScreen() {
             </Text>
             <TouchableOpacity
               style={styles.introButton}
-              onPress={() => {
-                setShowStreakIntro(false);
-                AsyncStorage.setItem('streak_intro_seen', '1');
-              }}
+              onPress={streakUnlock.dismissIntro}
               activeOpacity={0.7}
             >
               <Text style={styles.introButtonText}>Let's go!</Text>
@@ -463,6 +324,8 @@ export default function FeedScreen() {
   );
 }
 
+
+// ── Sub-components (unchanged) ─────────────────────────────────────────────
 
 function GradientMessageRow({ message }: { message: string }) {
   const treadmillX = useSharedValue(-(Math.random() * TREADMILL_SCROLL));
@@ -499,7 +362,6 @@ function GradientMessageRow({ message }: { message: string }) {
               />
             </Animated.View>
           </MaskedView>
-          {/* Star drip particles */}
           {labelWidth > 0 && (
             <View pointerEvents="none" style={{ position: 'absolute', top: 16, left: labelWidth / 2, overflow: 'visible' }}>
               {DRIP_CONFIGS.map((cfg, i) => (
@@ -577,7 +439,6 @@ function StarDripParticle({ config, labelWidth }: { config: typeof DRIP_CONFIGS[
     </Animated.View>
   );
 }
-
 
 function StreakLockedState({ votesNeeded, onGoVote }: { votesNeeded: number; onGoVote: () => void }) {
   return (
@@ -691,6 +552,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   lockedButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     backgroundColor: colors.surface,
     borderRadius: 16,
     paddingHorizontal: 24,
@@ -760,9 +624,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     letterSpacing: 2,
-  },
-  invisible: {
-    opacity: 0,
   },
   headerSpinner: {
     position: 'absolute',
