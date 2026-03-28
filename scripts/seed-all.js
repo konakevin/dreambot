@@ -135,6 +135,39 @@ async function fetchPexelsPhotos(query, count = 80) {
   return photos;
 }
 
+const MAX_VIDEO_DURATION = 10; // seconds
+const VIDEO_RATE = 0.25; // 25% of posts will be videos
+
+const videoPexelsCache = {};
+async function fetchPexelsVideos(query, count = 40) {
+  if (videoPexelsCache[query]) return videoPexelsCache[query];
+  const res = await fetch(
+    `https://api.pexels.com/videos/search?query=${encodeURIComponent(query)}&per_page=80&orientation=portrait&max_duration=${MAX_VIDEO_DURATION}`,
+    { headers: { Authorization: PEXELS_KEY } }
+  );
+  if (!res.ok) { console.error(`  Pexels video error for "${query}": ${res.status}`); return []; }
+  const data = await res.json();
+  const videos = (data.videos ?? [])
+    .filter((v) => v.duration <= MAX_VIDEO_DURATION)
+    .slice(0, count)
+    .map((v) => {
+      const files = v.video_files ?? [];
+      const file = files.find((f) => f.quality === 'hd' && f.height >= f.width)
+        ?? files.find((f) => f.quality === 'hd') ?? files[0];
+      if (!file?.link) return null;
+      return {
+        url: file.link,
+        width: file.width ?? 1080,
+        height: file.height ?? 1920,
+        thumbnail: v.image ?? null,
+        alt: '',
+        isVideo: true,
+      };
+    }).filter(Boolean);
+  videoPexelsCache[query] = videos;
+  return videos;
+}
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -261,32 +294,54 @@ async function main() {
   const allUsers = [...friends, ...strangers];
 
   // ── 5. Fetch photos ──────────────────────────────────────────────────────
-  console.log('\n📷 Fetching Pexels photos...');
+  console.log('\n📷 Fetching Pexels photos + videos...');
   const photoPool = {};
+  const videoPool = {};
   for (const cat of CATEGORIES) {
     const query = pick(cat.queries);
     photoPool[cat.key] = await fetchPexelsPhotos(query, 80);
-    log(`${cat.key}: ${photoPool[cat.key].length} photos`);
+    videoPool[cat.key] = await fetchPexelsVideos(query, 30);
+    log(`${cat.key}: ${photoPool[cat.key].length} photos, ${videoPool[cat.key].length} videos`);
   }
 
   // ── 6. Create friend posts (8 each) ──────────────────────────────────────
   console.log('\n📸 Creating friend posts...');
   const friendPosts = [];
   const catKeys = CATEGORIES.map(c => c.key);
+  let friendVideoIdx = {};
+  catKeys.forEach(k => friendVideoIdx[k] = 0);
+
   for (const friend of friends) {
     for (let j = 0; j < 15; j++) {
       const catKey = catKeys[j % catKeys.length];
-      const photos = photoPool[catKey];
-      if (!photos.length) continue;
-      const photo = photos[(friends.indexOf(friend) * 15 + j) % photos.length];
-      const caption = casualize(photo.alt) || pick(CAPTIONS[catKey]);
-      const { data, error } = await supabase.from('uploads').insert({
-        user_id: friend.id, categories: [catKey],
-        image_url: photo.url, media_type: 'image',
-        width: photo.width, height: photo.height,
-        caption, is_approved: true,
-      }).select('id, user_id').single();
-      if (!error) friendPosts.push(data);
+      const useVideo = Math.random() < VIDEO_RATE && videoPool[catKey].length > 0;
+
+      if (useVideo) {
+        const videos = videoPool[catKey];
+        const video = videos[friendVideoIdx[catKey] % videos.length];
+        friendVideoIdx[catKey]++;
+        const caption = pick(CAPTIONS[catKey]);
+        const { data, error } = await supabase.from('uploads').insert({
+          user_id: friend.id, categories: [catKey],
+          image_url: video.url, media_type: 'video',
+          thumbnail_url: video.thumbnail,
+          width: video.width, height: video.height,
+          caption, is_approved: true,
+        }).select('id, user_id').single();
+        if (!error) friendPosts.push(data);
+      } else {
+        const photos = photoPool[catKey];
+        if (!photos.length) continue;
+        const photo = photos[(friends.indexOf(friend) * 15 + j) % photos.length];
+        const caption = casualize(photo.alt) || pick(CAPTIONS[catKey]);
+        const { data, error } = await supabase.from('uploads').insert({
+          user_id: friend.id, categories: [catKey],
+          image_url: photo.url, media_type: 'image',
+          width: photo.width, height: photo.height,
+          caption, is_approved: true,
+        }).select('id, user_id').single();
+        if (!error) friendPosts.push(data);
+      }
     }
     process.stdout.write('.');
   }
@@ -295,9 +350,10 @@ async function main() {
   // ── 7. Create stranger posts ─────────────────────────────────────────────
   console.log('\n📸 Creating stranger posts...');
   const strangerPosts = [];
-  const usedUrls = new Set(friendPosts.map(p => p.image_url).filter(Boolean));
+  const usedUrls = new Set();
   let photoIdx = {};
-  catKeys.forEach(k => photoIdx[k] = 0);
+  let videoIdx = {};
+  catKeys.forEach(k => { photoIdx[k] = 0; videoIdx[k] = 0; });
 
   for (const stranger of strangers) {
     const numCats = 1 + Math.floor(Math.random() * 3);
@@ -305,23 +361,46 @@ async function main() {
 
     for (let p = 0; p < POSTS_PER_STRANGER; p++) {
       const catKey = userCats[p % userCats.length];
-      const photos = photoPool[catKey].filter(ph => !usedUrls.has(ph.url));
-      if (!photos.length) continue;
-      const photo = photos[photoIdx[catKey] % photos.length];
-      photoIdx[catKey]++;
-      usedUrls.add(photo.url);
+      const useVideo = Math.random() < VIDEO_RATE && videoPool[catKey].length > 0;
 
-      const caption = casualize(photo.alt) || pick(CAPTIONS[catKey]);
-      const categories = [catKey];
-      if (Math.random() > 0.7) categories.push(pick(catKeys.filter(k => k !== catKey)));
+      if (useVideo) {
+        const videos = videoPool[catKey].filter(v => !usedUrls.has(v.url));
+        if (!videos.length) continue;
+        const video = videos[videoIdx[catKey] % videos.length];
+        videoIdx[catKey]++;
+        usedUrls.add(video.url);
 
-      const { data, error } = await supabase.from('uploads').insert({
-        user_id: stranger.id, categories,
-        image_url: photo.url, media_type: 'image',
-        width: photo.width, height: photo.height,
-        caption, is_approved: true,
-      }).select('id, user_id').single();
-      if (!error) strangerPosts.push(data);
+        const caption = pick(CAPTIONS[catKey]);
+        const categories = [catKey];
+        if (Math.random() > 0.7) categories.push(pick(catKeys.filter(k => k !== catKey)));
+
+        const { data, error } = await supabase.from('uploads').insert({
+          user_id: stranger.id, categories,
+          image_url: video.url, media_type: 'video',
+          thumbnail_url: video.thumbnail,
+          width: video.width, height: video.height,
+          caption, is_approved: true,
+        }).select('id, user_id').single();
+        if (!error) strangerPosts.push(data);
+      } else {
+        const photos = photoPool[catKey].filter(ph => !usedUrls.has(ph.url));
+        if (!photos.length) continue;
+        const photo = photos[photoIdx[catKey] % photos.length];
+        photoIdx[catKey]++;
+        usedUrls.add(photo.url);
+
+        const caption = casualize(photo.alt) || pick(CAPTIONS[catKey]);
+        const categories = [catKey];
+        if (Math.random() > 0.7) categories.push(pick(catKeys.filter(k => k !== catKey)));
+
+        const { data, error } = await supabase.from('uploads').insert({
+          user_id: stranger.id, categories,
+          image_url: photo.url, media_type: 'image',
+          width: photo.width, height: photo.height,
+          caption, is_approved: true,
+        }).select('id, user_id').single();
+        if (!error) strangerPosts.push(data);
+      }
     }
     process.stdout.write('.');
   }
