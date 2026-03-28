@@ -22,7 +22,13 @@ export function useFriendsList(userId: string) {
         .select('id, username, avatar_url, user_rank')
         .in('id', ids);
       if (usersErr) throw usersErr;
-      return (users ?? []) as FriendUser[];
+      // Deduplicate by id
+      const seen = new Set<string>();
+      return ((users ?? []) as FriendUser[]).filter((u) => {
+        if (seen.has(u.id)) return false;
+        seen.add(u.id);
+        return true;
+      });
     },
     enabled: !!userId,
     staleTime: 60_000,

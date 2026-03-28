@@ -330,7 +330,7 @@ export default function FeedScreen() {
           activeOpacity={0.7}
         >
           <Ionicons name="globe" size={14} color={feedMode === 'default' ? colors.textPrimary : colors.textSecondary} />
-          <Text style={[styles.feedToggleText, feedMode === 'default' && styles.feedToggleTextActive]}>Everyone</Text>
+          <Text style={[styles.feedToggleText, feedMode === 'default' && styles.feedToggleTextActive]}>Explore</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.feedToggle, feedMode === 'friendsPosts' && styles.feedToggleActive]}
@@ -390,7 +390,7 @@ export default function FeedScreen() {
                   showSwipeHint={index === 0 && showSwipeHint}
                   swipeEnabled={true}
                   hasMilestone={index === 0 && milestoneHit?.postId === item.id}
-                  friendVotes={index === 0 ? (feedMode === 'friends' ? item.friend_votes?.map((f) => ({ ...f, streak: localStreaks.get(f.username)?.count ?? f.streak })) : friendRevealPostId === item.id ? friendVotesOnPost : undefined) : undefined}
+                  friendVotes={index === 0 && feedMode === 'friends' ? item.friend_votes?.map((f) => ({ ...f, streak: localStreaks.get(f.username)?.count ?? f.streak })) : undefined}
                   autoDismissDelay={index === 0 && milestoneHit?.postId === item.id ? null : index === 0 && feedMode === 'friends' ? 900 : undefined}
                 />
               );
