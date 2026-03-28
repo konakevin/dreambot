@@ -20,10 +20,17 @@ interface GradientUsernameProps {
   style: TextStyle | (TextStyle | false | null | undefined)[];
   /** Pass true on the swipe card (over photos) to swap the black shadow for a rank-tinted glow */
   photoOverlay?: boolean;
+  /** Pass true to suppress rank gradient (e.g. home feed — avoid voting bias) */
+  hideRank?: boolean;
 }
 
-export function GradientUsername({ username, rank, style, photoOverlay = false }: GradientUsernameProps) {
+export function GradientUsername({ username, rank, style, photoOverlay = false, hideRank = false }: GradientUsernameProps) {
   const text = `@${username}`;
+
+  if (hideRank) {
+    return <Text style={[style, { color: 'rgba(255,255,255,0.9)' }]}>{text}</Text>;
+  }
+
   const meta = rank ? RANK_META[rank as UserRank] : null;
 
   if (!meta) {

@@ -45,6 +45,7 @@ interface SwipeCardProps {
   onFollow: () => void;
   onUserPress: () => void;
   onSwipeUpBlocked?: () => void;
+  hideRank?: boolean;
   isTop: boolean;
   index: number;
   containerHeight: number;
@@ -66,7 +67,7 @@ function CategoryPill({ category }: { category: string }) {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -277,7 +278,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
             {/* Row 1: username | follow */}
             <View style={styles.userRow}>
               <Pressable onPress={onUserPress} hitSlop={8}>
-                <GradientUsername username={item.username} rank={item.user_rank} style={styles.username} photoOverlay />
+                <GradientUsername username={item.username} rank={item.user_rank} style={styles.username} photoOverlay hideRank={hideRank} />
               </Pressable>
               {!isOwnPost && (
                 <Pressable

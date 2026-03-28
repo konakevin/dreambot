@@ -281,6 +281,7 @@ export default function FeedScreen() {
                   onFollow={() => handleFollow(item)}
                   onUserPress={() => handleUserPress(item)}
                   onSwipeUpBlocked={index === 0 ? handleSwipeUpBlocked : undefined}
+                  hideRank={true}
                   isTop={index === 0}
                   index={index}
                   containerHeight={cardAreaHeight}
