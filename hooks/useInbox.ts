@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
@@ -27,43 +27,54 @@ export interface InboxItem {
   isSeen: boolean;
 }
 
+const PAGE_SIZE = 20;
+
+function mapRow(row: Record<string, unknown>): InboxItem {
+  return {
+    shareId: row.share_id as string,
+    senderId: row.sender_id as string,
+    senderUsername: row.sender_username as string,
+    senderAvatarUrl: (row.sender_avatar_url as string | null) ?? null,
+    uploadId: row.upload_id as string,
+    imageUrl: row.image_url as string,
+    mediaType: (row.media_type as 'image' | 'video') ?? 'image',
+    thumbnailUrl: (row.thumbnail_url as string | null) ?? null,
+    width: (row.width as number | null) ?? null,
+    height: (row.height as number | null) ?? null,
+    caption: (row.caption as string | null) ?? null,
+    categories: (row.categories as string[]) ?? [],
+    postUserId: row.post_user_id as string,
+    postUsername: row.post_username as string,
+    postAvatarUrl: (row.post_avatar_url as string | null) ?? null,
+    postUserRank: (row.post_user_rank as string | null) ?? null,
+    totalVotes: row.total_votes as number,
+    radVotes: row.rad_votes as number,
+    badVotes: row.bad_votes as number,
+    postCreatedAt: row.post_created_at as string,
+    sharedAt: row.shared_at as string,
+    isSeen: row.is_seen as boolean,
+  };
+}
+
 export function useInbox() {
   const user = useAuthStore((s) => s.user);
 
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ['inbox', user?.id],
-    queryFn: async (): Promise<InboxItem[]> => {
+    queryFn: async ({ pageParam = 0 }): Promise<InboxItem[]> => {
       const { data, error } = await supabase.rpc('get_inbox', {
         p_user_id: user!.id,
-        p_limit: 50,
+        p_limit: PAGE_SIZE,
+        p_offset: pageParam,
       });
 
       if (error) throw error;
-
-      return (data ?? []).map((row: Record<string, unknown>) => ({
-        shareId: row.share_id as string,
-        senderId: row.sender_id as string,
-        senderUsername: row.sender_username as string,
-        senderAvatarUrl: (row.sender_avatar_url as string | null) ?? null,
-        uploadId: row.upload_id as string,
-        imageUrl: row.image_url as string,
-        mediaType: (row.media_type as 'image' | 'video') ?? 'image',
-        thumbnailUrl: (row.thumbnail_url as string | null) ?? null,
-        width: (row.width as number | null) ?? null,
-        height: (row.height as number | null) ?? null,
-        caption: (row.caption as string | null) ?? null,
-        categories: (row.categories as string[]) ?? [],
-        postUserId: row.post_user_id as string,
-        postUsername: row.post_username as string,
-        postAvatarUrl: (row.post_avatar_url as string | null) ?? null,
-        postUserRank: (row.post_user_rank as string | null) ?? null,
-        totalVotes: row.total_votes as number,
-        radVotes: row.rad_votes as number,
-        badVotes: row.bad_votes as number,
-        postCreatedAt: row.post_created_at as string,
-        sharedAt: row.shared_at as string,
-        isSeen: row.is_seen as boolean,
-      }));
+      return (data ?? []).map(mapRow);
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < PAGE_SIZE) return undefined; // No more pages
+      return allPages.reduce((total, page) => total + page.length, 0);
     },
     enabled: !!user,
     staleTime: 30_000,

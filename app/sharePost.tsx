@@ -1,33 +1,46 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, FlatList, TextInput, ActivityIndicator, StyleSheet, Alert, Dimensions, Pressable } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
-import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
+import { useShareableVibers, type ShareableViber } from '@/hooks/useShareableVibers';
 import { useSendShare } from '@/hooks/useSendShare';
 import { colors } from '@/constants/theme';
 
-function ViberRow({ item, selected, onToggle }: { item: FriendUser; selected: boolean; onToggle: () => void }) {
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const SHEET_HEIGHT = SCREEN_HEIGHT * 0.65;
+const COLUMNS = 3;
+const AVATAR_SIZE = 64;
+const CELL_WIDTH = (SCREEN_WIDTH - 32) / COLUMNS;
+const DEFAULT_ROWS = 4;
+const DEFAULT_LIMIT = DEFAULT_ROWS * COLUMNS;
+
+function ViberBubble({ item, selected, onToggle }: { item: ShareableViber; selected: boolean; onToggle: () => void }) {
   return (
     <TouchableOpacity
-      style={styles.viberRow}
+      style={[styles.bubble, { width: CELL_WIDTH }]}
       onPress={onToggle}
       activeOpacity={0.7}
     >
-      {item.avatar_url ? (
-        <Image source={{ uri: item.avatar_url }} style={styles.avatar} />
-      ) : (
-        <View style={styles.avatarFallback}>
-          <Text style={styles.avatarText}>{item.username[0].toUpperCase()}</Text>
-        </View>
-      )}
-      <Text style={styles.viberName}>@{item.username}</Text>
-      <View style={[styles.checkbox, selected && styles.checkboxSelected]}>
-        {selected && <Ionicons name="checkmark" size={16} color="#000000" />}
+      <View style={styles.avatarWrap}>
+        {item.avatarUrl ? (
+          <Image source={{ uri: item.avatarUrl }} style={[styles.avatar, selected && styles.avatarSelected]} />
+        ) : (
+          <View style={[styles.avatarFallback, selected && styles.avatarSelected]}>
+            <Text style={styles.avatarInitial}>{item.username[0].toUpperCase()}</Text>
+          </View>
+        )}
+        {selected && (
+          <View style={styles.checkBadge}>
+            <Ionicons name="checkmark" size={12} color="#000000" />
+          </View>
+        )}
       </View>
+      <Text style={[styles.bubbleName, selected && styles.bubbleNameSelected]} numberOfLines={1}>
+        {item.username}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -35,9 +48,19 @@ function ViberRow({ item, selected, onToggle }: { item: FriendUser; selected: bo
 export default function SharePostScreen() {
   const { uploadId } = useLocalSearchParams<{ uploadId: string }>();
   const user = useAuthStore((s) => s.user);
-  const { data: friends = [], isLoading } = useFriendsList(user?.id ?? '');
+  const { data: vibers = [], isLoading } = useShareableVibers();
   const { mutate: sendShare, isPending } = useSendShare();
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [search, setSearch] = useState('');
+
+  const isSearching = search.trim().length > 0;
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    const matched = q ? vibers.filter((v) => v.username.toLowerCase().includes(q)) : vibers;
+    // Show all results when searching, limit to 4 rows by default
+    return isSearching ? matched : matched.slice(0, DEFAULT_LIMIT);
+  }, [vibers, search, isSearching]);
 
   function toggleViber(userId: string) {
     Haptics.selectionAsync();
@@ -53,7 +76,7 @@ export default function SharePostScreen() {
     if (selected.size === 0) return;
 
     sendShare(
-      { uploadId: uploadId!, receiverIds: Array.from(selected) },
+      { uploadId: uploadId!, receiverIds: Array.from(selected).filter((id) => vibers.some((v) => v.userId === id)) },
       {
         onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -67,84 +90,131 @@ export default function SharePostScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.root}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Share Post</Text>
-        <TouchableOpacity
-          style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
-          onPress={handleSend}
-          disabled={selected.size === 0 || isPending}
-          activeOpacity={0.7}
-        >
-          {isPending ? (
-            <ActivityIndicator size="small" color="#000000" />
-          ) : (
-            <Text style={[styles.sendButtonText, selected.size === 0 && styles.sendButtonTextDisabled]}>
-              Send{selected.size > 0 ? ` (${selected.size})` : ''}
-            </Text>
-          )}
-        </TouchableOpacity>
-      </View>
+    <View style={styles.root}>
+      {/* Tap backdrop to dismiss */}
+      <Pressable style={styles.backdrop} onPress={() => router.back()} />
 
-      {/* Viber list */}
-      <FlatList
-        data={friends}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ViberRow
-            item={item}
-            selected={selected.has(item.id)}
-            onToggle={() => toggleViber(item.id)}
-          />
-        )}
-        ListEmptyComponent={
-          <View style={styles.empty}>
-            {isLoading ? (
-              <ActivityIndicator color={colors.textSecondary} />
+      {/* Bottom sheet */}
+      <View style={styles.sheet}>
+        {/* Drag handle */}
+        <View style={styles.handleRow}>
+          <View style={styles.handle} />
+        </View>
+
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Share</Text>
+          <TouchableOpacity
+            style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
+            onPress={handleSend}
+            disabled={selected.size === 0 || isPending}
+            activeOpacity={0.7}
+          >
+            {isPending ? (
+              <ActivityIndicator size="small" color="#000000" />
             ) : (
-              <>
-                <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
-                <Text style={styles.emptyText}>No vibers to share with yet</Text>
-              </>
+              <Text style={[styles.sendButtonText, selected.size === 0 && styles.sendButtonTextDisabled]}>
+                Send{selected.size > 0 ? ` (${selected.size})` : ''}
+              </Text>
             )}
-          </View>
-        }
-      />
-    </SafeAreaView>
+          </TouchableOpacity>
+        </View>
+
+        {/* Search */}
+        <View style={styles.searchWrap}>
+          <Ionicons name="search" size={16} color={colors.textSecondary} style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search vibers"
+            placeholderTextColor={colors.textSecondary}
+            value={search}
+            onChangeText={setSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch('')} hitSlop={8}>
+              <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Grid */}
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.userId}
+          numColumns={COLUMNS}
+          contentContainerStyle={styles.grid}
+          renderItem={({ item }) => (
+            <ViberBubble
+              item={item}
+              selected={selected.has(item.userId)}
+              onToggle={() => toggleViber(item.userId)}
+            />
+          )}
+          ListEmptyComponent={
+            <View style={styles.empty}>
+              {isLoading ? (
+                <ActivityIndicator color={colors.textSecondary} />
+              ) : search.length > 0 ? (
+                <Text style={styles.emptyText}>No matches</Text>
+              ) : (
+                <>
+                  <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
+                  <Text style={styles.emptyText}>No vibers to share with yet</Text>
+                </>
+              )}
+            </View>
+          }
+          keyboardShouldPersistTaps="handled"
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
+  root: {
+    flex: 1,
+  },
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  sheet: {
+    height: SHEET_HEIGHT,
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  handleRow: {
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 4,
+  },
+  handle: {
+    width: 36,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.border,
-  },
-  closeButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 10,
   },
   headerTitle: {
     color: colors.textPrimary,
-    fontSize: 17,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '800',
   },
   sendButton: {
     backgroundColor: '#FFD700',
-    borderRadius: 16,
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    borderRadius: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 9,
     minWidth: 70,
     alignItems: 'center',
   },
@@ -159,52 +229,89 @@ const styles = StyleSheet.create({
   sendButtonTextDisabled: {
     color: colors.textSecondary,
   },
-  viberRow: {
+  searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.card,
-    gap: 12,
-  },
-  avatar: {
-    width: 40,
+    backgroundColor: colors.background,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    paddingHorizontal: 12,
     height: 40,
-    borderRadius: 20,
   },
-  avatarFallback: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+  searchIcon: {
+    marginRight: 8,
   },
-  avatarText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
-  viberName: {
+  searchInput: {
     flex: 1,
     color: colors.textPrimary,
     fontSize: 15,
-    fontWeight: '600',
+    height: 40,
   },
-  checkbox: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+  grid: {
+    paddingHorizontal: 16,
+    paddingBottom: 40,
+  },
+  bubble: {
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  avatarWrap: {
+    position: 'relative',
+    marginBottom: 6,
+  },
+  avatar: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
     borderWidth: 2,
-    borderColor: colors.border,
+    borderColor: 'transparent',
+  },
+  avatarFallback: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
+    backgroundColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
-  checkboxSelected: {
-    backgroundColor: '#FFD700',
+  avatarSelected: {
     borderColor: '#FFD700',
+  },
+  avatarInitial: {
+    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  checkBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#FFD700',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: colors.surface,
+  },
+  bubbleName: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+    maxWidth: CELL_WIDTH - 8,
+    textAlign: 'center',
+  },
+  bubbleNameSelected: {
+    color: colors.textPrimary,
   },
   empty: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 60,
+    paddingTop: 40,
     gap: 10,
   },
   emptyText: {

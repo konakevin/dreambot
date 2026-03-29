@@ -233,10 +233,11 @@ async function main() {
   }
   if (deleted) console.log(`\n  Removed ${deleted} test user(s)`);
 
+  await supabase.from('post_shares').delete().not('id', 'is', null);
   await supabase.from('vote_streaks').delete().not('user_a', 'is', null);
   await supabase.from('friendships').delete().not('user_a', 'is', null);
   await supabase.from('streak_cron_state').update({ last_processed_at: '2000-01-01T00:00:00Z' }).eq('id', 1);
-  log('Cleared streaks, friendships, watermark');
+  log('Cleared shares, streaks, friendships, watermark');
 
   // ── 2. Reset Kevin ───────────────────────────────────────────────────────
   const { data: kevin } = await supabase.from('users').select('id').eq('email', KEVIN_EMAIL).single();
@@ -491,12 +492,78 @@ async function main() {
     log(`@${user.username} sent a friend request`);
   }
 
-  // ── 12. Refresh streaks ──────────────────────────────────────────────────
+  // ── 12. Post shares (inbox messages) ──────────────────────────────────────
+  console.log('\n📩 Generating post shares...');
+  const shareRows = [];
+
+  // Friends share posts with Kevin (varying frequency — simulates frequent vs rare sharers)
+  const shareFrequency = { sarah: 8, bill: 5, maya: 3, jake: 6, luna: 2, alex: 4, nova: 7, finn: 1, zoe: 3, omar: 5 };
+  for (const friend of friends) {
+    const count = shareFrequency[friend.username] || 3;
+    // Pick random posts NOT by Kevin and NOT by this friend
+    const shareable = shuffle(allPosts.filter(p => p.user_id !== kevin.id && p.user_id !== friend.id));
+    for (let i = 0; i < Math.min(count, shareable.length); i++) {
+      // Stagger timestamps so they're not all at the same time
+      const hoursAgo = Math.floor(Math.random() * 72); // within last 3 days
+      const createdAt = new Date(Date.now() - hoursAgo * 3600 * 1000).toISOString();
+      shareRows.push({
+        sender_id: friend.id,
+        receiver_id: kevin.id,
+        upload_id: shareable[i].id,
+        created_at: createdAt,
+        seen_at: Math.random() < 0.4 ? createdAt : null, // 40% already seen
+      });
+    }
+  }
+
+  // Kevin shares some posts with friends
+  const kevinShareable = shuffle(allPosts.filter(p => p.user_id !== kevin.id));
+  for (let i = 0; i < Math.min(12, kevinShareable.length, friends.length * 2); i++) {
+    const recipient = friends[i % friends.length];
+    const hoursAgo = Math.floor(Math.random() * 48);
+    shareRows.push({
+      sender_id: kevin.id,
+      receiver_id: recipient.id,
+      upload_id: kevinShareable[i].id,
+      created_at: new Date(Date.now() - hoursAgo * 3600 * 1000).toISOString(),
+      seen_at: null,
+    });
+  }
+
+  // Friends share with each other (cross-chatter)
+  for (let i = 0; i < friends.length - 1; i++) {
+    const sender = friends[i];
+    const receiver = friends[i + 1];
+    const shareable = shuffle(allPosts.filter(p => p.user_id !== sender.id && p.user_id !== receiver.id));
+    const count = 2 + Math.floor(Math.random() * 4);
+    for (let j = 0; j < Math.min(count, shareable.length); j++) {
+      const hoursAgo = Math.floor(Math.random() * 96);
+      shareRows.push({
+        sender_id: sender.id,
+        receiver_id: receiver.id,
+        upload_id: shareable[j].id,
+        created_at: new Date(Date.now() - hoursAgo * 3600 * 1000).toISOString(),
+        seen_at: Math.random() < 0.6 ? new Date(Date.now() - (hoursAgo - 1) * 3600 * 1000).toISOString() : null,
+      });
+    }
+  }
+
+  // Regular batch insert (no upsert — each share is unique)
+  for (let i = 0; i < shareRows.length; i += BATCH_SIZE) {
+    const chunk = shareRows.slice(i, i + BATCH_SIZE);
+    const { error } = await supabase.from('post_shares').insert(chunk);
+    if (error) console.error('  Batch insert error (post_shares):', error.message);
+  }
+  const kevinInbox = shareRows.filter(r => r.receiver_id === kevin.id);
+  const kevinUnseen = kevinInbox.filter(r => !r.seen_at);
+  log(`${shareRows.length} shares total (${kevinInbox.length} to Kevin, ${kevinUnseen.length} unseen)`);
+
+  // ── 13. Refresh streaks ──────────────────────────────────────────────────
   console.log('\n⚡ Refreshing streaks...');
   await supabase.rpc('refresh_vote_streaks');
   log('Streaks computed');
 
-  // ── 13. Verify ───────────────────────────────────────────────────────────
+  // ── 14. Verify ───────────────────────────────────────────────────────────
   console.log('\n✅ Verifying...');
   const { data: d1 } = await supabase.rpc('get_feed', { p_user_id: kevin.id, p_limit: 50 });
   log(`Explore feed: ${d1?.length ?? 0} posts`);
@@ -508,12 +575,15 @@ async function main() {
   log(`Friends: ${fc}`);
   const { data: pr } = await supabase.rpc('get_pending_requests', { p_user_id: kevin.id });
   log(`Pending requests: ${pr?.length ?? 0}`);
+  const { data: uc } = await supabase.rpc('get_unread_share_count', { p_user_id: kevin.id });
+  log(`Inbox unread: ${uc ?? 0}`);
 
   console.log('\n╔══════════════════════════════════════╗');
   console.log('║              ALL DONE!               ║');
   console.log('╚══════════════════════════════════════╝');
   console.log(`  ${friends.length} friends + ${strangers.length} strangers`);
   console.log(`  ${allPosts.length} posts, ${voteRows.length} votes`);
+  console.log(`  ${shareRows.length} post shares (${kevinUnseen.length} unread for Kevin)`);
   console.log(`  ~5% milestone posts (every 20th)`);
   console.log(`  3 pending friend requests`);
 }

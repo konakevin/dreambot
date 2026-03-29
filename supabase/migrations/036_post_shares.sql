@@ -5,7 +5,7 @@
 
 -- ── 1. Table ────────────────────────────────────────────────────────────────
 
-CREATE TABLE public.post_shares (
+CREATE TABLE IF NOT EXISTS public.post_shares (
   id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   sender_id   uuid NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   receiver_id uuid NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
@@ -14,21 +14,24 @@ CREATE TABLE public.post_shares (
   seen_at     timestamptz
 );
 
-CREATE INDEX idx_post_shares_receiver ON post_shares(receiver_id, created_at DESC);
-CREATE INDEX idx_post_shares_unread ON post_shares(receiver_id) WHERE seen_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_post_shares_receiver ON post_shares(receiver_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_post_shares_unread ON post_shares(receiver_id) WHERE seen_at IS NULL;
 
 -- ── 2. RLS ──────────────────────────────────────────────────────────────────
 
 ALTER TABLE post_shares ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view shares sent to them" ON post_shares;
 CREATE POLICY "Users can view shares sent to them"
   ON post_shares FOR SELECT
   USING (receiver_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can send shares" ON post_shares;
 CREATE POLICY "Users can send shares"
   ON post_shares FOR INSERT
   WITH CHECK (sender_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can mark their shares as seen" ON post_shares;
 CREATE POLICY "Users can mark their shares as seen"
   ON post_shares FOR UPDATE
   USING (receiver_id = auth.uid())

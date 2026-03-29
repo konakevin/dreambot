@@ -82,11 +82,11 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)" />
-          <Stack.Screen name="settings" />
-          <Stack.Screen name="friendReveal/[uploadId]" options={{ presentation: 'fullScreenModal', gestureEnabled: true }} />
+          <Stack.Screen name="settings" options={{ presentation: 'card', gestureEnabled: true }} />
+          <Stack.Screen name="friendReveal/[uploadId]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="photo/[id]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="user/[userId]" options={{ presentation: 'card', gestureEnabled: true }} />
-          <Stack.Screen name="sharePost" options={{ presentation: 'modal', gestureEnabled: true }} />
+          <Stack.Screen name="sharePost" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
         </Stack>
         <StatusBar style="light" />
       </QueryClientProvider>

@@ -80,8 +80,8 @@ export default function PublicProfileScreen() {
 
   const backButton = (
     <View style={styles.backRow}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton} hitSlop={12}>
+        <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );

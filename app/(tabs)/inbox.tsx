@@ -1,12 +1,13 @@
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { useMemo } from 'react';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { useInbox, type InboxItem } from '@/hooks/useInbox';
 import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
-import { useFeedStore } from '@/store/feed';
-import type { PendingPost } from '@/store/feed';
+import { useDeleteShare } from '@/hooks/useDeleteShare';
 import { colors } from '@/constants/theme';
 
 function formatTimeAgo(dateStr: string): string {
@@ -21,12 +22,26 @@ function formatTimeAgo(dateStr: string): string {
   return `${Math.floor(days / 7)}w`;
 }
 
-function InboxRow({ item, onPress }: { item: InboxItem; onPress: () => void }) {
+function InboxRow({ item, onPress, onDelete }: { item: InboxItem; onPress: () => void; onDelete: () => void }) {
+  function handleLongPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(
+      'Delete',
+      `Remove this share from @${item.senderUsername}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
+      ],
+    );
+  }
+
   return (
     <TouchableOpacity
       style={[styles.row, !item.isSeen && styles.rowUnseen]}
       onPress={onPress}
+      onLongPress={handleLongPress}
       activeOpacity={0.7}
+      delayLongPress={400}
     >
       {/* Sender avatar */}
       {item.senderAvatarUrl ? (
@@ -67,39 +82,25 @@ function InboxRow({ item, onPress }: { item: InboxItem; onPress: () => void }) {
 }
 
 export default function InboxScreen() {
-  const { data: inbox = [], isLoading } = useInbox();
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInbox();
   const { mutate: markSeen } = useMarkShareSeen();
-  const setPendingPost = useFeedStore((s) => s.setPendingPost);
+  const { mutate: deleteShare } = useDeleteShare();
+
+  const inbox = useMemo(
+    () => data?.pages.flat() ?? [],
+    [data],
+  );
 
   function handleTapShare(item: InboxItem) {
-    // Mark as seen
     if (!item.isSeen) {
       markSeen(item.shareId);
     }
+    // Push to photo detail — back button returns to inbox
+    router.push(`/photo/${item.uploadId}`);
+  }
 
-    // Inject the shared post into the feed deck
-    const feedItem: PendingPost = {
-      id: item.uploadId,
-      user_id: item.postUserId,
-      categories: item.categories,
-      image_url: item.imageUrl,
-      media_type: item.mediaType,
-      thumbnail_url: item.thumbnailUrl,
-      width: item.width,
-      height: item.height,
-      caption: item.caption,
-      created_at: item.postCreatedAt,
-      total_votes: item.totalVotes,
-      rad_votes: item.radVotes,
-      bad_votes: item.badVotes,
-      username: item.postUsername,
-      avatar_url: item.postAvatarUrl,
-    };
-
-    setPendingPost(feedItem);
-
-    // Navigate to Home tab (Explore feed)
-    router.replace('/(tabs)');
+  function handleDelete(shareId: string) {
+    deleteShare(shareId);
   }
 
   return (
@@ -112,8 +113,23 @@ export default function InboxScreen() {
         data={inbox}
         keyExtractor={(item) => item.shareId}
         renderItem={({ item }) => (
-          <InboxRow item={item} onPress={() => handleTapShare(item)} />
+          <InboxRow
+            item={item}
+            onPress={() => handleTapShare(item)}
+            onDelete={() => handleDelete(item.shareId)}
+          />
         )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View style={styles.footer}>
+              <ActivityIndicator color={colors.textSecondary} />
+            </View>
+          ) : null
+        }
         ListEmptyComponent={
           <View style={styles.empty}>
             {isLoading ? (
@@ -211,6 +227,10 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: '#FFD700',
+  },
+  footer: {
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   empty: {
     alignItems: 'center',

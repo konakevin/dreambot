@@ -167,7 +167,7 @@ export default function PhotoDetailScreen() {
         <StatusBar hidden />
         <View style={styles.loadingRoot}>
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
-            <Ionicons name="chevron-back" size={26} color="#FFFFFF" />
+            <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
           </TouchableOpacity>
           <ActivityIndicator color="#71767B" />
         </View>

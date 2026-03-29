@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import type { ShareableViber } from '@/hooks/useShareableVibers';
 
 interface SendShareArgs {
   uploadId: string;
@@ -22,9 +23,27 @@ export function useSendShare() {
       const { error } = await supabase.from('post_shares').insert(rows);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: (_, { receiverIds }) => {
       queryClient.invalidateQueries({ queryKey: ['inbox'] });
       queryClient.invalidateQueries({ queryKey: ['unreadShareCount'] });
+
+      // Optimistically bump interaction counts so ordering updates without a refetch
+      queryClient.setQueryData<ShareableViber[]>(
+        ['shareableVibers', user?.id],
+        (old) => {
+          if (!old) return old;
+          const receiverSet = new Set(receiverIds);
+          const updated = old.map((v) =>
+            receiverSet.has(v.userId)
+              ? { ...v, interactionCount: v.interactionCount + 1 }
+              : v
+          );
+          // Re-sort: interaction count DESC, vibe score DESC
+          return updated.sort((a, b) =>
+            b.interactionCount - a.interactionCount || b.vibeScore - a.vibeScore
+          );
+        },
+      );
     },
   });
 }
