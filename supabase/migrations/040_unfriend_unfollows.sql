@@ -18,5 +18,9 @@ BEGIN
   DELETE FROM public.follows
   WHERE (follower_id = auth.uid() AND following_id = p_friend_id)
      OR (follower_id = p_friend_id AND following_id = auth.uid());
+
+  -- Reset vote streaks
+  DELETE FROM public.vote_streaks
+  WHERE user_a = v_user_a AND user_b = v_user_b;
 END;
 $$;

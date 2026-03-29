@@ -3,7 +3,7 @@
 -- Add new notification types
 ALTER TABLE public.notifications DROP CONSTRAINT IF EXISTS notifications_type_check;
 ALTER TABLE public.notifications ADD CONSTRAINT notifications_type_check
-  CHECK (type IN ('post_comment', 'comment_reply', 'comment_mention', 'post_share', 'friend_request', 'friend_accepted'));
+  CHECK (type IN ('post_comment', 'comment_reply', 'comment_mention', 'post_share', 'friend_request', 'friend_accepted', 'post_milestone'));
 
 -- Trigger: notify when a friend request is sent or accepted
 CREATE OR REPLACE FUNCTION create_friendship_notification()
