@@ -50,12 +50,15 @@ export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined)
       setDeck((prev) => {
         const existingIds = new Set(prev.map((d) => d.id));
         const voted = sessionVotesRef.current;
-        const freshItems = feed.filter((f) => !existingIds.has(f.id) && !voted.has(f.id));
+        const external = useFeedStore.getState().externalVotes;
+        // Filter out posts voted in this session OR externally (photo detail, other feeds)
+        const freshItems = feed.filter((f) =>
+          !existingIds.has(f.id) && !voted.has(f.id) && !external.has(f.id)
+        );
         const retained = prev.filter((item) =>
           feedIds.has(item.id) ||
           voted.has(item.id) ||
-          item.user_id === currentUserId ||
-          useFeedStore.getState().externalVotes.has(item.id)
+          item.user_id === currentUserId
         );
         return [...retained, ...freshItems];
       });
@@ -63,8 +66,14 @@ export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined)
   }, [feed, resetCounter]);
 
   // Computed: top card + 2 unvoted behind it
-  const topCard = deck[0];
-  const behindCards = deck.slice(1).filter((item) => !sessionVotes.has(item.id)).slice(0, 2);
+  // Externally-voted posts (photo detail, other feeds) are invisible — skip them.
+  // Session-voted posts stay briefly (score animation + auto-dismiss).
+  const externalVotes = useFeedStore((s) => s.externalVotes);
+  const playableDeck = deck.filter((item) =>
+    !externalVotes.has(item.id) || sessionVotes.has(item.id)
+  );
+  const topCard = playableDeck[0];
+  const behindCards = playableDeck.slice(1).filter((item) => !sessionVotes.has(item.id)).slice(0, 2);
   const topCards = topCard ? [topCard, ...behindCards] : [];
   const topItem = topCards[0];
   const topItemVoted = topItem ? sessionVotes.has(topItem.id) : false;

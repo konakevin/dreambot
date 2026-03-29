@@ -11,7 +11,7 @@ const TREADMILL_COLORS = [
 const TREADMILL_WIDTH = 1280;
 const TREADMILL_SCROLL = 640;
 
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -33,6 +33,7 @@ import { useCategoryPosts } from '@/hooks/useCategoryPosts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
 import { VoteButton } from '@/components/VoteButton';
+import { RefreshIndicator } from '@/components/RefreshIndicator';
 import { CATEGORIES } from '@/constants/categories';
 
 // Extracted hooks — each owns one concern
@@ -46,6 +47,7 @@ import { useStreakUnlock } from '@/hooks/useStreakUnlock';
 export default function FeedScreen() {
   const currentUser = useAuthStore((s) => s.user);
   const externalVotes = useFeedStore((s) => s.externalVotes);
+  const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const refreshToken = useFeedStore((s) => s.refreshToken);
   const resetToken = useFeedStore((s) => s.resetToken);
 
@@ -57,6 +59,8 @@ export default function FeedScreen() {
   const streakUnlock = useStreakUnlock();
 
   // ── Remaining local state (UI-only, minimal) ────────────────────────────
+  const pullY = useSharedValue(0);
+  const [refreshing, setRefreshing] = useState(false);
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
   const cardAreaMeasured = useRef(false);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
@@ -158,6 +162,14 @@ export default function FeedScreen() {
     router.push(`/user/${item.user_id}?viewedPost=${item.id}`);
   }, []);
 
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    regenerateSeed();
+    deck.resetDeck();
+    await activeFeed.refetch();
+    setRefreshing(false);
+  }, []);
+
   const handleSwipeUpBlocked = useCallback(() => {
     setJiggleTick((t) => t + 1);
   }, []);
@@ -177,7 +189,7 @@ export default function FeedScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={styles.root} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
         <View
@@ -257,6 +269,7 @@ export default function FeedScreen() {
           setCardAreaHeight(h);
         }
       }}>
+        <RefreshIndicator pullY={pullY} />
         {!cardAreaHeight ? null : feedMode === 'friends' && !streakUnlock.streakUnlocked ? (
           <StreakLockedState votesNeeded={10 - streakUnlock.totalVoteCount} onGoVote={() => activeFeed.setFeedMode('default')} />
         ) : deck.deck.length === 0 && !activeFeed.isLoading && !activeFeed.isRefetching && activeFeed.feed.length === 0 ? (
@@ -282,6 +295,7 @@ export default function FeedScreen() {
                   onFollow={() => handleFollow(item)}
                   onUserPress={() => handleUserPress(item)}
                   onSwipeUpBlocked={index === 0 ? handleSwipeUpBlocked : undefined}
+                  onRefresh={index === 0 ? handleRefresh : undefined}
                   hideRank={true}
                   isTop={index === 0}
                   index={index}
@@ -292,6 +306,7 @@ export default function FeedScreen() {
                   friendVotes={feedMode === 'friends' ? streakVoting.applyLocalStreaks(item.friend_votes) : undefined}
                   autoDismissDelay={index === 0 && milestone.isActive(item.id) ? null : undefined}
                   milestoneHit={index === 0 && milestone.milestoneHit?.postId === item.id ? milestone.milestoneHit : null}
+                  pullY={index === 0 ? pullY : undefined}
                 />
               );
             })
@@ -654,8 +669,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 32,
     paddingHorizontal: 40,
-    paddingBottom: 2,
-    paddingTop: 8,
+    paddingTop: 6,
+    paddingBottom: 14,
   },
   alreadyVotedRow: {
     alignItems: 'center',

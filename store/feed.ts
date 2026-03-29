@@ -37,6 +37,9 @@ interface FeedStore {
   // Votes cast outside the feed screen (e.g. photo detail view)
   externalVotes: Map<string, 'rad' | 'bad'>;
   addExternalVote: (uploadId: string, vote: 'rad' | 'bad') => void;
+  // Session seed for feed shuffle — changes on pull-to-refresh
+  feedSeed: number;
+  regenerateSeed: () => void;
   // Optimistic streak data — overrides server values during active session
   localStreaks: Map<string, LocalStreak>;
   updateStreak: (friend: { username: string; avatar_url: string | null; user_rank: string | null; rad_streak?: number; bad_streak?: number }, matched: boolean, voteType: 'rad' | 'bad') => void;
@@ -50,6 +53,8 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpReset: () => set((s) => ({ resetToken: s.resetToken + 1 })),
   refreshToken: 0,
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
+  feedSeed: Math.random(),
+  regenerateSeed: () => set({ feedSeed: Math.random() }),
   pendingPost: null,
   setPendingPost: (post) => set({ pendingPost: post }),
   externalVotes: new Map(),

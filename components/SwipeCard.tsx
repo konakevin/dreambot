@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { GestureDetector, Gesture, TouchableOpacity, Pressable } from 'react-native-gesture-handler';
 import Animated, {
+  type SharedValue,
   useSharedValue,
   useAnimatedStyle,
   withSpring,
@@ -35,8 +36,9 @@ function needsBlurBackground(mediaWidth: number | null, mediaHeight: number | nu
   if (!mediaWidth || !mediaHeight) return false;
   return (mediaWidth / mediaHeight) > (CARD_WIDTH / cardHeight);
 }
-const DISMISS_THRESHOLD = SCREEN_HEIGHT * 0.18;
-const SPRING_CONFIG = { damping: 20, stiffness: 200 };
+const DISMISS_THRESHOLD = SCREEN_HEIGHT * 0.06; // ~52px — TikTok-like quick swipe
+const VELOCITY_THRESHOLD = 500; // px/s — fast flick always dismisses
+const SPRING_CONFIG = { damping: 22, stiffness: 250 };
 
 interface SwipeCardProps {
   item: FeedItem;
@@ -51,6 +53,7 @@ interface SwipeCardProps {
   onFollow: () => void;
   onUserPress: () => void;
   onSwipeUpBlocked?: () => void;
+  onRefresh?: () => void;
   hideRank?: boolean;
   isTop: boolean;
   index: number;
@@ -61,6 +64,7 @@ interface SwipeCardProps {
   friendVotes?: FriendVote[];
   autoDismissDelay?: number | null;
   milestoneHit?: MilestoneHit | null;
+  pullY?: SharedValue<number>;
 }
 
 function CategoryPill({ category }: { category: string }) {
@@ -127,7 +131,7 @@ function FriendAvatarBubble({ friend, userVote, index }: {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, onRefresh, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit, pullY }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -185,7 +189,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
         const delay = autoDismissDelay !== undefined ? autoDismissDelay : (hasMilestone ? null : DISMISS_DELAY);
         if (delay !== null) {
           dismissTimer.current = setTimeout(() => {
-            translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 260 }, () => {
+            translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 200 }, () => {
               runOnJS(onDismiss)();
             });
           }, delay);
@@ -227,19 +231,20 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
       runOnJS(cancelDismissTimer)();
     })
     .onUpdate((e) => {
-      if (!canSwipeUp.value) return;
-      if (e.translationY < 0) {
-        // Upward — left lean is free, rightward drift is heavily resisted
-        translateX.value = e.translationX < 0 ? e.translationX : e.translationX * 0.08;
-        translateY.value = e.translationY;
-      } else {
-        // Downward pull — resist everything
+      // Downward pull — always allowed (for pull-to-refresh)
+      if (e.translationY > 0) {
         translateX.value = e.translationX * 0.08;
         translateY.value = e.translationY * 0.15;
+        if (pullY) pullY.value = e.translationY;
+        return;
       }
+      // Upward — requires vote
+      if (!canSwipeUp.value) return;
+      translateX.value = e.translationX < 0 ? e.translationX : e.translationX * 0.08;
+      translateY.value = e.translationY;
     })
     .onEnd((e) => {
-      const swipedUp = e.translationY < -DISMISS_THRESHOLD && canSwipeUp.value;
+      const swipedUp = (e.translationY < -DISMISS_THRESHOLD || e.velocityY < -VELOCITY_THRESHOLD) && canSwipeUp.value;
       if (swipedUp) {
         if (onDismissStart) runOnJS(onDismissStart)();
         // Only carry leftward lean on exit, never rightward
@@ -251,9 +256,14 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
       } else {
         translateX.value = withSpring(0, SPRING_CONFIG);
         translateY.value = withSpring(0, SPRING_CONFIG);
+        if (pullY) pullY.value = withTiming(0, { duration: 300 });
         // User tried to swipe up without voting — nudge the vote buttons
         if (e.translationY < -60 && !canSwipeUp.value && onSwipeUpBlocked) {
           runOnJS(onSwipeUpBlocked)();
+        }
+        // Pull down to refresh
+        if (e.translationY > 120 && onRefresh) {
+          runOnJS(onRefresh)();
         }
       }
     });

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useFeedStore } from '@/store/feed';
 
 export interface FriendVote {
   username: string;
@@ -32,10 +33,11 @@ export interface FeedItem {
   friend_votes?: FriendVote[];
 }
 
-async function fetchFeed(userId: string): Promise<FeedItem[]> {
+async function fetchFeed(userId: string, seed: number): Promise<FeedItem[]> {
   const { data, error } = await supabase.rpc('get_feed', {
     p_user_id: userId,
     p_limit: 50,
+    p_seed: seed,
   });
 
   if (error) throw error;
@@ -59,9 +61,10 @@ async function fetchFriendsFeed(userId: string): Promise<FeedItem[]> {
 
 export function useFeed() {
   const user = useAuthStore((s) => s.user);
+  const feedSeed = useFeedStore((s) => s.feedSeed);
   return useQuery({
-    queryKey: ['feed', user?.id],
-    queryFn: () => fetchFeed(user!.id),
+    queryKey: ['feed', user?.id, feedSeed],
+    queryFn: () => fetchFeed(user!.id, feedSeed),
     enabled: !!user,
     staleTime: 120_000,
   });
