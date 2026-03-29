@@ -237,7 +237,6 @@ export default function FeedScreen() {
             <Ionicons name="search" size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
-        {activeFeed.isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
       </View>
 
       {/* Feed mode toggle */}

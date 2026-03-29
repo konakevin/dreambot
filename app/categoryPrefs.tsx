@@ -14,21 +14,22 @@ const SHEET_HEIGHT = SCREEN_HEIGHT * 0.7;
 
 export default function CategoryPrefsScreen() {
   const { categories: saved, save, isSaving } = useCategoryPreferences();
-  const [selected, setSelected] = useState<Set<Category>>(new Set());
+  const [selected, setSelected] = useState<Set<Category>>(
+    new Set(CATEGORIES.map((c) => c.key)) // default all selected
+  );
   const [initialized, setInitialized] = useState(false);
   const { translateY, panHandlers } = useSheetDismiss();
 
-  // Initialize from saved prefs
+  // Sync from saved prefs once loaded
   useEffect(() => {
-    if (initialized) return;
+    if (initialized || saved === undefined) return;
     if (saved === null) {
-      // null = all selected
       setSelected(new Set(CATEGORIES.map((c) => c.key)));
-    } else if (saved) {
+    } else {
       setSelected(new Set(saved));
     }
     setInitialized(true);
-  }, [saved]);
+  }, [saved, initialized]);
 
   const allSelected = selected.size === CATEGORIES.length;
 
