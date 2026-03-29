@@ -20,6 +20,9 @@ export function useRespondFriendRequest() {
       queryClient.invalidateQueries({ queryKey: ['followersList'] });
       queryClient.invalidateQueries({ queryKey: ['followingList'] });
       queryClient.invalidateQueries({ queryKey: ['followingIds'] });
+      queryClient.invalidateQueries({ queryKey: ['friendshipStatus'] });
+      queryClient.invalidateQueries({ queryKey: ['inbox'] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
     },
   });
 }

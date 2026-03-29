@@ -33,6 +33,10 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
       return { action: 'replied to your comment', preview: item.body };
     case 'comment_mention':
       return { action: 'mentioned you', preview: item.body };
+    case 'friend_request':
+      return { action: 'wants to vibe with you', preview: null };
+    case 'friend_accepted':
+      return { action: 'accepted your vibe request', preview: null };
     default:
       return { action: '', preview: null };
   }
@@ -118,8 +122,10 @@ export default function InboxScreen() {
     if (!item.isSeen) {
       markSeen(item.id);
     }
-    // All notification types navigate to the post
-    if (item.uploadId) {
+    // Friend notifications → profile, everything else → post
+    if (item.type === 'friend_request' || item.type === 'friend_accepted') {
+      router.push(`/user/${item.actorId}`);
+    } else if (item.uploadId) {
       router.push(`/photo/${item.uploadId}`);
     }
   }
