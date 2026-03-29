@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -65,6 +66,11 @@ function AuthInitializer() {
   return null;
 }
 
+function PushRegistrar() {
+  usePushNotifications();
+  return null;
+}
+
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ ...Ionicons.font });
 
@@ -78,6 +84,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <AuthInitializer />
+        <PushRegistrar />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />

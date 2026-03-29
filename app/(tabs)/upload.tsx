@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.25)',
     borderRadius: 16,
-    paddingVertical: 9,
+    paddingVertical: 10,
     paddingHorizontal: 16,
   },
   categoryChipSelected: {

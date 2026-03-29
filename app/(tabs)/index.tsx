@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: 12,
     backgroundColor: colors.background,
   },
   feedToggleRow: {
@@ -541,7 +541,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingBottom: 4,
+    paddingBottom: 6,
+    paddingTop: 2,
   },
   feedToggle: {
     flexDirection: 'row',
