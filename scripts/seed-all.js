@@ -233,11 +233,14 @@ async function main() {
   }
   if (deleted) console.log(`\n  Removed ${deleted} test user(s)`);
 
+  await supabase.from('notifications').delete().not('id', 'is', null);
+  await supabase.from('comment_likes').delete().not('user_id', 'is', null);
+  await supabase.from('comments').delete().not('id', 'is', null);
   await supabase.from('post_shares').delete().not('id', 'is', null);
   await supabase.from('vote_streaks').delete().not('user_a', 'is', null);
   await supabase.from('friendships').delete().not('user_a', 'is', null);
   await supabase.from('streak_cron_state').update({ last_processed_at: '2000-01-01T00:00:00Z' }).eq('id', 1);
-  log('Cleared shares, streaks, friendships, watermark');
+  log('Cleared notifications, comments, shares, streaks, friendships, watermark');
 
   // ── 2. Reset Kevin ───────────────────────────────────────────────────────
   const { data: kevin } = await supabase.from('users').select('id').eq('email', KEVIN_EMAIL).single();
@@ -558,7 +561,106 @@ async function main() {
   const kevinUnseen = kevinInbox.filter(r => !r.seen_at);
   log(`${shareRows.length} shares total (${kevinInbox.length} to Kevin, ${kevinUnseen.length} unseen)`);
 
-  // ── 13. Refresh streaks ──────────────────────────────────────────────────
+  // ── 13. Comments (top-level + replies) ────────────────────────────────────
+  console.log('\n💬 Generating comments...');
+
+  const COMMENT_TEMPLATES = [
+    'this is absolutely fire 🔥', 'no way lol', 'hard pass on this one',
+    'underrated post', 'this goes crazy', 'not feeling it tbh',
+    'W post', 'clean 🤌', 'mid at best', 'someone explain the hype',
+    'need more of this energy', 'this aint it chief', 'bruh 💀',
+    'sending this to everyone', 'instant classic', 'the vibes are immaculate',
+    'how does this not have more votes', 'yo this slaps', 'respectfully... bad',
+    'ok ok I see you', 'top tier content', 'delete this nephew',
+  ];
+
+  const REPLY_TEMPLATES = [
+    'facts', 'couldn\'t agree more', 'nah you\'re wrong for this',
+    'exactly what I was thinking', 'L take', 'W take',
+    'bro what 💀', 'this is the way', 'say it louder',
+    'hard disagree', 'spitting rn', 'ratio',
+    'you get it', 'not even close', 'finally someone said it',
+  ];
+
+  const commentRows = [];
+  const replyRows = [];
+
+  // Pick ~60% of posts to have comments
+  const postsWithComments = shuffle(allPosts).slice(0, Math.floor(allPosts.length * 0.6));
+
+  for (const post of postsWithComments) {
+    // 2-8 top-level comments per post
+    const numComments = 2 + Math.floor(Math.random() * 7);
+    const commenters = shuffle(allUsers.filter(u => u.id !== post.user_id)).slice(0, numComments);
+
+    for (const commenter of commenters) {
+      const hoursAgo = Math.floor(Math.random() * 120); // within last 5 days
+      commentRows.push({
+        upload_id: post.id,
+        user_id: commenter.id,
+        body: pick(COMMENT_TEMPLATES),
+        created_at: new Date(Date.now() - hoursAgo * 3600 * 1000).toISOString(),
+      });
+    }
+  }
+
+  // Batch insert top-level comments
+  const insertedComments = [];
+  for (let i = 0; i < commentRows.length; i += BATCH_SIZE) {
+    const chunk = commentRows.slice(i, i + BATCH_SIZE);
+    const { data, error } = await supabase.from('comments').insert(chunk).select('id, upload_id, user_id');
+    if (error) console.error('  Comment insert error:', error.message);
+    else if (data) insertedComments.push(...data);
+    process.stdout.write('.');
+  }
+  console.log(`\n  ${insertedComments.length} top-level comments`);
+
+  // Add replies to ~40% of top-level comments
+  const commentsWithReplies = shuffle(insertedComments).slice(0, Math.floor(insertedComments.length * 0.4));
+
+  for (const parent of commentsWithReplies) {
+    const numReplies = 1 + Math.floor(Math.random() * 4);
+    const repliers = shuffle(allUsers.filter(u => u.id !== parent.user_id)).slice(0, numReplies);
+
+    for (const replier of repliers) {
+      // Find the parent commenter's username for @mention
+      const parentUser = allUsers.find(u => u.id === parent.user_id);
+      const mentionPrefix = parentUser && Math.random() > 0.4 ? `@${parentUser.username} ` : '';
+      const hoursAgo = Math.floor(Math.random() * 48);
+      replyRows.push({
+        upload_id: parent.upload_id,
+        user_id: replier.id,
+        parent_id: parent.id,
+        body: mentionPrefix + pick(REPLY_TEMPLATES),
+        created_at: new Date(Date.now() - hoursAgo * 3600 * 1000).toISOString(),
+      });
+    }
+  }
+
+  // Batch insert replies
+  let replyCount = 0;
+  for (let i = 0; i < replyRows.length; i += BATCH_SIZE) {
+    const chunk = replyRows.slice(i, i + BATCH_SIZE);
+    const { data, error } = await supabase.from('comments').insert(chunk).select('id');
+    if (error) console.error('  Reply insert error:', error.message);
+    else if (data) replyCount += data.length;
+    process.stdout.write('.');
+  }
+  console.log(`\n  ${replyCount} replies`);
+
+  // Like some comments (friends like ~30% of comments on posts they voted on)
+  const commentLikeRows = [];
+  for (const friend of friends) {
+    const friendComments = shuffle(insertedComments).slice(0, Math.floor(insertedComments.length * 0.3));
+    for (const comment of friendComments) {
+      if (comment.user_id === friend.id) continue;
+      commentLikeRows.push({ user_id: friend.id, comment_id: comment.id });
+    }
+  }
+  await batchUpsert('comment_likes', commentLikeRows, 'user_id,comment_id');
+  log(`${commentLikeRows.length} comment likes`);
+
+  // ── 14. Refresh streaks ──────────────────────────────────────────────────
   console.log('\n⚡ Refreshing streaks...');
   await supabase.rpc('refresh_vote_streaks');
   log('Streaks computed');
@@ -575,7 +677,7 @@ async function main() {
   log(`Friends: ${fc}`);
   const { data: pr } = await supabase.rpc('get_pending_requests', { p_user_id: kevin.id });
   log(`Pending requests: ${pr?.length ?? 0}`);
-  const { data: uc } = await supabase.rpc('get_unread_share_count', { p_user_id: kevin.id });
+  const { data: uc } = await supabase.rpc('get_unread_notification_count', { p_user_id: kevin.id });
   log(`Inbox unread: ${uc ?? 0}`);
 
   console.log('\n╔══════════════════════════════════════╗');
@@ -583,6 +685,7 @@ async function main() {
   console.log('╚══════════════════════════════════════╝');
   console.log(`  ${friends.length} friends + ${strangers.length} strangers`);
   console.log(`  ${allPosts.length} posts, ${voteRows.length} votes`);
+  console.log(`  ${insertedComments.length} comments + ${replyCount} replies + ${commentLikeRows.length} likes`);
   console.log(`  ${shareRows.length} post shares (${kevinUnseen.length} unread for Kevin)`);
   console.log(`  ~5% milestone posts (every 20th)`);
   console.log(`  3 pending friend requests`);

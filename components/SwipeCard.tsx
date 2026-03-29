@@ -234,9 +234,8 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
       runOnJS(cancelDismissTimer)();
     })
     .onUpdate((e) => {
-      // Downward pull — always allowed (for pull-to-refresh)
+      // Downward pull — always allowed (for pull-to-refresh), locked vertical
       if (e.translationY > 0) {
-        translateX.value = e.translationX * 0.08;
         translateY.value = e.translationY * 0.15;
         if (pullY) pullY.value = e.translationY;
         return;

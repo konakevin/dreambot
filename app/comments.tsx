@@ -25,6 +25,7 @@ export default function CommentsScreen() {
 
   const [text, setText] = useState('');
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
+  const [expandedCommentId, setExpandedCommentId] = useState<string | null>(null);
   const inputRef = useRef<TextInput>(null);
 
   const comments = useMemo(() => data?.pages.flat() ?? [], [data]);
@@ -50,6 +51,7 @@ export default function CommentsScreen() {
       },
       {
         onSuccess: () => {
+          if (replyTo?.id) setExpandedCommentId(replyTo.id);
           setText('');
           setReplyTo(null);
         },
@@ -100,6 +102,7 @@ export default function CommentsScreen() {
               comment={item}
               uploadId={uploadId!}
               onReply={handleReply}
+              expandedCommentId={expandedCommentId}
             />
           )}
           onEndReached={() => {

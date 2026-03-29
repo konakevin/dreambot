@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,12 +28,18 @@ interface CommentRowProps {
   uploadId: string;
   isReply?: boolean;
   onReply: (comment: Comment) => void;
+  expandedCommentId?: string | null;
 }
 
-export function CommentRow({ comment, uploadId, isReply = false, onReply }: CommentRowProps) {
+export function CommentRow({ comment, uploadId, isReply = false, onReply, expandedCommentId }: CommentRowProps) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwn = currentUser?.id === comment.userId;
-  const [showReplies, setShowReplies] = useState(false);
+  const [showReplies, setShowReplies] = useState(expandedCommentId === comment.id);
+
+  // Auto-expand when a reply is posted to this comment
+  useEffect(() => {
+    if (expandedCommentId === comment.id) setShowReplies(true);
+  }, [expandedCommentId, comment.id]);
   const { data: replies = [] } = useReplies(comment.id, showReplies && !isReply);
   const { mutate: toggleLike } = useToggleCommentLike();
   const { mutate: deleteComment } = useDeleteComment();
