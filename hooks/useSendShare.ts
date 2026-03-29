@@ -25,7 +25,7 @@ export function useSendShare() {
     },
     onSuccess: (_, { receiverIds }) => {
       queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadShareCount'] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
 
       // Optimistically bump interaction counts so ordering updates without a refetch
       queryClient.setQueryData<ShareableViber[]>(

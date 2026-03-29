@@ -30,6 +30,7 @@ export interface FeedItem {
   username: string;
   user_rank: string | null;
   avatar_url: string | null;
+  comment_count?: number;
   friend_votes?: FriendVote[];
 }
 

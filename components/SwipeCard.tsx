@@ -55,6 +55,8 @@ interface SwipeCardProps {
   onSwipeUpBlocked?: () => void;
   onRefresh?: () => void;
   onShare?: () => void;
+  onComment?: () => void;
+  commentCount?: number;
   hideRank?: boolean;
   isTop: boolean;
   index: number;
@@ -132,7 +134,7 @@ function FriendAvatarBubble({ friend, userVote, index }: {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, onRefresh, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit, pullY, onShare }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, onRefresh, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit, pullY, onShare, onComment, commentCount }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -411,13 +413,21 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
                         </>
                       )}
                     </View>
-                    {!isOwnPost && (
-                      <View style={styles.actionButtons}>
-                        {onShare && (
-                          <TouchableOpacity onPress={onShare} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
-                            <Ionicons name="paper-plane-outline" size={20} color="rgba(255,255,255,0.55)" />
-                          </TouchableOpacity>
-                        )}
+                    <View style={styles.actionButtons}>
+                      {onComment && (
+                        <TouchableOpacity onPress={onComment} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                          <Ionicons name="chatbubble-outline" size={19} color="rgba(255,255,255,0.55)" />
+                          {(commentCount ?? 0) > 0 && (
+                            <Text style={styles.commentCountText}>{commentCount}</Text>
+                          )}
+                        </TouchableOpacity>
+                      )}
+                      {!isOwnPost && onShare && (
+                        <TouchableOpacity onPress={onShare} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                          <Ionicons name="paper-plane-outline" size={20} color="rgba(255,255,255,0.55)" />
+                        </TouchableOpacity>
+                      )}
+                      {!isOwnPost && (
                         <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
                           <Ionicons
                             name={isFavorited ? 'bookmark' : 'bookmark-outline'}
@@ -425,8 +435,8 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
                             color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
                           />
                         </TouchableOpacity>
-                      </View>
-                    )}
+                      )}
+                    </View>
                   </View>
                   {catsExpanded && hidden.length > 0 && (
                     <View style={styles.expandedCats}>
@@ -503,6 +513,13 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     padding: 4,
+    alignItems: 'center',
+  },
+  commentCountText: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 1,
   },
   muteButton: {
     position: 'absolute',

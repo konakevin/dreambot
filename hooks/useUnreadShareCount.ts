@@ -6,9 +6,9 @@ export function useUnreadShareCount() {
   const user = useAuthStore((s) => s.user);
 
   return useQuery({
-    queryKey: ['unreadShareCount', user?.id],
+    queryKey: ['unreadNotificationCount', user?.id],
     queryFn: async (): Promise<number> => {
-      const { data, error } = await supabase.rpc('get_unread_share_count', {
+      const { data, error } = await supabase.rpc('get_unread_notification_count', {
         p_user_id: user!.id,
       });
 
@@ -16,7 +16,7 @@ export function useUnreadShareCount() {
       return (data as number) ?? 0;
     },
     enabled: !!user,
-    staleTime: 15_000, // Check frequently for badge freshness
-    refetchInterval: 30_000, // Poll every 30s for new shares
+    staleTime: 15_000,
+    refetchInterval: 30_000,
   });
 }

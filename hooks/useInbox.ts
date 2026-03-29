@@ -2,56 +2,36 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
-export interface InboxItem {
-  shareId: string;
-  senderId: string;
-  senderUsername: string;
-  senderAvatarUrl: string | null;
-  uploadId: string;
-  imageUrl: string;
-  mediaType: 'image' | 'video';
+export interface NotificationItem {
+  id: string;
+  actorId: string;
+  actorUsername: string;
+  actorAvatarUrl: string | null;
+  type: 'post_comment' | 'comment_reply' | 'comment_mention' | 'post_share';
+  uploadId: string | null;
+  commentId: string | null;
+  body: string | null;
+  imageUrl: string | null;
   thumbnailUrl: string | null;
-  width: number | null;
-  height: number | null;
-  caption: string | null;
-  categories: string[];
-  postUserId: string;
-  postUsername: string;
-  postAvatarUrl: string | null;
-  postUserRank: string | null;
-  totalVotes: number;
-  radVotes: number;
-  badVotes: number;
-  postCreatedAt: string;
-  sharedAt: string;
+  createdAt: string;
   isSeen: boolean;
 }
 
 const PAGE_SIZE = 20;
 
-function mapRow(row: Record<string, unknown>): InboxItem {
+function mapRow(row: Record<string, unknown>): NotificationItem {
   return {
-    shareId: row.share_id as string,
-    senderId: row.sender_id as string,
-    senderUsername: row.sender_username as string,
-    senderAvatarUrl: (row.sender_avatar_url as string | null) ?? null,
-    uploadId: row.upload_id as string,
-    imageUrl: row.image_url as string,
-    mediaType: (row.media_type as 'image' | 'video') ?? 'image',
+    id: row.id as string,
+    actorId: row.actor_id as string,
+    actorUsername: row.actor_username as string,
+    actorAvatarUrl: (row.actor_avatar_url as string | null) ?? null,
+    type: row.type as NotificationItem['type'],
+    uploadId: (row.upload_id as string | null) ?? null,
+    commentId: (row.comment_id as string | null) ?? null,
+    body: (row.body as string | null) ?? null,
+    imageUrl: (row.image_url as string | null) ?? null,
     thumbnailUrl: (row.thumbnail_url as string | null) ?? null,
-    width: (row.width as number | null) ?? null,
-    height: (row.height as number | null) ?? null,
-    caption: (row.caption as string | null) ?? null,
-    categories: (row.categories as string[]) ?? [],
-    postUserId: row.post_user_id as string,
-    postUsername: row.post_username as string,
-    postAvatarUrl: (row.post_avatar_url as string | null) ?? null,
-    postUserRank: (row.post_user_rank as string | null) ?? null,
-    totalVotes: row.total_votes as number,
-    radVotes: row.rad_votes as number,
-    badVotes: row.bad_votes as number,
-    postCreatedAt: row.post_created_at as string,
-    sharedAt: row.shared_at as string,
+    createdAt: row.created_at as string,
     isSeen: row.is_seen as boolean,
   };
 }
@@ -61,8 +41,8 @@ export function useInbox() {
 
   return useInfiniteQuery({
     queryKey: ['inbox', user?.id],
-    queryFn: async ({ pageParam = 0 }): Promise<InboxItem[]> => {
-      const { data, error } = await supabase.rpc('get_inbox', {
+    queryFn: async ({ pageParam = 0 }): Promise<NotificationItem[]> => {
+      const { data, error } = await supabase.rpc('get_notifications', {
         p_user_id: user!.id,
         p_limit: PAGE_SIZE,
         p_offset: pageParam,
@@ -73,7 +53,7 @@ export function useInbox() {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length < PAGE_SIZE) return undefined; // No more pages
+      if (lastPage.length < PAGE_SIZE) return undefined;
       return allPages.reduce((total, page) => total + page.length, 0);
     },
     enabled: !!user,

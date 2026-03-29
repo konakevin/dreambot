@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { useInbox, type InboxItem } from '@/hooks/useInbox';
+import { useInbox, type NotificationItem } from '@/hooks/useInbox';
 import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
 import { useDeleteShare } from '@/hooks/useDeleteShare';
 import { colors } from '@/constants/theme';
@@ -22,17 +22,40 @@ function formatTimeAgo(dateStr: string): string {
   return `${Math.floor(days / 7)}w`;
 }
 
-function InboxRow({ item, onPress, onDelete }: { item: InboxItem; onPress: () => void; onDelete: () => void }) {
+function getNotificationText(item: NotificationItem): { action: string; preview: string | null } {
+  switch (item.type) {
+    case 'post_share':
+      return { action: 'sent you a post', preview: null };
+    case 'post_comment':
+      return { action: 'commented on your post', preview: item.body };
+    case 'comment_reply':
+      return { action: 'replied to your comment', preview: item.body };
+    case 'comment_mention':
+      return { action: 'mentioned you', preview: item.body };
+    default:
+      return { action: '', preview: null };
+  }
+}
+
+function getNotificationIcon(type: NotificationItem['type']): string {
+  switch (type) {
+    case 'post_share': return 'paper-plane';
+    case 'post_comment': return 'chatbubble';
+    case 'comment_reply': return 'arrow-undo';
+    case 'comment_mention': return 'at';
+    default: return 'notifications';
+  }
+}
+
+function NotificationRow({ item, onPress, onDelete }: { item: NotificationItem; onPress: () => void; onDelete: () => void }) {
+  const { action, preview } = getNotificationText(item);
+
   function handleLongPress() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Alert.alert(
-      'Delete',
-      `Remove this share from @${item.senderUsername}?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: onDelete },
-      ],
-    );
+    Alert.alert('Delete', 'Remove this notification?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: onDelete },
+    ]);
   }
 
   return (
@@ -43,38 +66,38 @@ function InboxRow({ item, onPress, onDelete }: { item: InboxItem; onPress: () =>
       activeOpacity={0.7}
       delayLongPress={400}
     >
-      {/* Sender avatar */}
-      {item.senderAvatarUrl ? (
-        <Image source={{ uri: item.senderAvatarUrl }} style={styles.avatar} />
+      {/* Actor avatar */}
+      {item.actorAvatarUrl ? (
+        <Image source={{ uri: item.actorAvatarUrl }} style={styles.avatar} />
       ) : (
         <View style={styles.avatarFallback}>
-          <Text style={styles.avatarText}>{item.senderUsername[0].toUpperCase()}</Text>
+          <Text style={styles.avatarText}>{item.actorUsername[0].toUpperCase()}</Text>
         </View>
       )}
 
       {/* Text */}
       <View style={styles.textCol}>
-        <Text style={styles.senderLine} numberOfLines={1}>
-          <Text style={styles.senderName}>@{item.senderUsername}</Text>
-          <Text style={styles.sentLabel}> sent you a post</Text>
+        <Text style={styles.mainLine} numberOfLines={2}>
+          <Text style={styles.actorName}>@{item.actorUsername}</Text>
+          <Text style={styles.actionText}> {action}</Text>
         </Text>
-        {item.caption ? (
-          <Text style={styles.caption} numberOfLines={1}>{item.caption}</Text>
-        ) : (
-          <Text style={styles.caption} numberOfLines={1}>by @{item.postUsername}</Text>
+        {preview && (
+          <Text style={styles.preview} numberOfLines={1}>"{preview}"</Text>
         )}
       </View>
 
       {/* Post thumbnail */}
-      <Image
-        source={{ uri: item.thumbnailUrl ?? item.imageUrl }}
-        style={styles.thumbnail}
-        contentFit="cover"
-      />
+      {item.imageUrl && (
+        <Image
+          source={{ uri: item.thumbnailUrl ?? item.imageUrl }}
+          style={styles.thumbnail}
+          contentFit="cover"
+        />
+      )}
 
       {/* Time + unseen dot */}
       <View style={styles.timeCol}>
-        <Text style={styles.time}>{formatTimeAgo(item.sharedAt)}</Text>
+        <Text style={styles.time}>{formatTimeAgo(item.createdAt)}</Text>
         {!item.isSeen && <View style={styles.unseenDot} />}
       </View>
     </TouchableOpacity>
@@ -84,23 +107,18 @@ function InboxRow({ item, onPress, onDelete }: { item: InboxItem; onPress: () =>
 export default function InboxScreen() {
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInbox();
   const { mutate: markSeen } = useMarkShareSeen();
-  const { mutate: deleteShare } = useDeleteShare();
+  const { mutate: deleteNotification } = useDeleteShare();
 
-  const inbox = useMemo(
-    () => data?.pages.flat() ?? [],
-    [data],
-  );
+  const inbox = useMemo(() => data?.pages.flat() ?? [], [data]);
 
-  function handleTapShare(item: InboxItem) {
+  function handleTap(item: NotificationItem) {
     if (!item.isSeen) {
-      markSeen(item.shareId);
+      markSeen(item.id);
     }
-    // Push to photo detail — back button returns to inbox
-    router.push(`/photo/${item.uploadId}`);
-  }
-
-  function handleDelete(shareId: string) {
-    deleteShare(shareId);
+    // All notification types navigate to the post
+    if (item.uploadId) {
+      router.push(`/photo/${item.uploadId}`);
+    }
   }
 
   return (
@@ -111,12 +129,12 @@ export default function InboxScreen() {
 
       <FlatList
         data={inbox}
-        keyExtractor={(item) => item.shareId}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <InboxRow
+          <NotificationRow
             item={item}
-            onPress={() => handleTapShare(item)}
-            onDelete={() => handleDelete(item.shareId)}
+            onPress={() => handleTap(item)}
+            onDelete={() => deleteNotification(item.id)}
           />
         )}
         onEndReached={() => {
@@ -136,9 +154,9 @@ export default function InboxScreen() {
               <ActivityIndicator color={colors.textSecondary} />
             ) : (
               <>
-                <Ionicons name="paper-plane-outline" size={40} color="rgba(255,255,255,0.2)" />
-                <Text style={styles.emptyTitle}>No shared posts yet</Text>
-                <Text style={styles.emptySubtitle}>When vibers share posts with you, they'll show up here</Text>
+                <Ionicons name="notifications-outline" size={40} color="rgba(255,255,255,0.2)" />
+                <Text style={styles.emptyTitle}>All caught up</Text>
+                <Text style={styles.emptySubtitle}>Comments, replies, and shares will show up here</Text>
               </>
             )}
           </View>
@@ -191,20 +209,22 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 2,
   },
-  senderLine: {
+  mainLine: {
     fontSize: 14,
+    lineHeight: 19,
   },
-  senderName: {
+  actorName: {
     color: colors.textPrimary,
     fontWeight: '700',
   },
-  sentLabel: {
+  actionText: {
     color: colors.textSecondary,
     fontWeight: '500',
   },
-  caption: {
+  preview: {
     color: colors.textSecondary,
     fontSize: 13,
+    fontStyle: 'italic',
   },
   thumbnail: {
     width: 44,

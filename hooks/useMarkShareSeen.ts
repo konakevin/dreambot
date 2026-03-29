@@ -5,17 +5,17 @@ export function useMarkShareSeen() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (shareId: string) => {
+    mutationFn: async (notificationId: string) => {
       const { error } = await supabase
-        .from('post_shares')
+        .from('notifications')
         .update({ seen_at: new Date().toISOString() })
-        .eq('id', shareId);
+        .eq('id', notificationId);
 
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadShareCount'] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
     },
   });
 }

@@ -297,6 +297,8 @@ export default function FeedScreen() {
                   onSwipeUpBlocked={index === 0 ? handleSwipeUpBlocked : undefined}
                   onRefresh={index === 0 ? handleRefresh : undefined}
                   onShare={index === 0 ? () => router.push(`/sharePost?uploadId=${item.id}`) : undefined}
+                  onComment={() => router.push(`/comments?uploadId=${item.id}`)}
+                  commentCount={item.comment_count ?? 0}
                   hideRank={true}
                   isTop={index === 0}
                   index={index}
