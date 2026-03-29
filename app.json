@@ -60,7 +60,16 @@
       "expo-web-browser",
       "expo-video",
       "react-native-compressor",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "3266110716887470",
+          "clientToken": "479742805ecbd92874db6a2544e2d61c",
+          "displayName": "Rad or Bad",
+          "scheme": "fb3266110716887470"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

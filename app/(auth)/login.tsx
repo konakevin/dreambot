@@ -9,6 +9,8 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { signInWithGoogle } from '@/lib/googleAuth';
+import { signInWithApple } from '@/lib/appleAuth';
+import { signInWithFacebook } from '@/lib/facebookAuth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -100,6 +102,33 @@ export default function LoginScreen() {
               <View className="flex-1 h-px bg-border" />
             </View>
 
+            {/* Apple Sign-In (iOS only) */}
+            {Platform.OS === 'ios' && (
+              <TouchableOpacity
+                className="bg-white rounded-full py-4 flex-row items-center justify-center gap-3 mb-3"
+                onPress={async () => {
+                  try {
+                    setLoading(true);
+                    await signInWithApple();
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                    router.replace('/(tabs)');
+                  } catch (err: unknown) {
+                    const msg = (err as Error).message;
+                    if (!msg.includes('canceled') && !msg.includes('cancelled') && !msg.includes('ERR_CANCELED')) {
+                      Alert.alert('Apple Sign-In failed', msg);
+                    }
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="logo-apple" size={20} color="#000000" />
+                <Text className="text-black font-semibold text-base">Continue with Apple</Text>
+              </TouchableOpacity>
+            )}
+
             {/* Google Sign-In */}
             <TouchableOpacity
               className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
@@ -123,6 +152,31 @@ export default function LoginScreen() {
             >
               <Ionicons name="logo-google" size={20} color="#FFFFFF" />
               <Text className="text-white font-semibold text-base">Continue with Google</Text>
+            </TouchableOpacity>
+
+            {/* Facebook Sign-In */}
+            <TouchableOpacity
+              className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3 mt-3"
+              onPress={async () => {
+                try {
+                  setLoading(true);
+                  await signInWithFacebook();
+                  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                  router.replace('/(tabs)');
+                } catch (err: unknown) {
+                  const msg = (err as Error).message;
+                  if (!msg.includes('canceled') && !msg.includes('cancelled')) {
+                    Alert.alert('Facebook Sign-In failed', msg);
+                  }
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              disabled={loading}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+              <Text className="text-white font-semibold text-base">Continue with Facebook</Text>
             </TouchableOpacity>
 
             <View className="flex-row justify-center mt-6">
