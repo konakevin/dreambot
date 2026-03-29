@@ -32,7 +32,19 @@ export default function TopScreen() {
     if (params.category) setSelected(params.category as Category);
   }, [params.category]);
 
+  const chipScrollRef = useRef<ScrollView>(null);
   const scrollRef = useRef<ScrollView>(null);
+
+  // Scroll the selected category pill into view (left-aligned)
+  useEffect(() => {
+    const idx = CATEGORIES.findIndex((c) => c.key === selected);
+    if (idx >= 0 && chipScrollRef.current) {
+      // Estimate pill width (~90px per pill + 8px gap)
+      const offset = Math.max(0, idx * 98 - 8);
+      chipScrollRef.current.scrollTo({ x: offset, animated: true });
+    }
+  }, [selected]);
+
   const { data, isLoading, refetch } = useCategoryPosts(selected, 9, sort);
   const posts = data?.posts ?? [];
   const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
@@ -91,6 +103,7 @@ export default function TopScreen() {
       {/* Category chips — horizontal scroll with right fade */}
       <View style={styles.chipWrapper}>
         <ScrollView
+          ref={chipScrollRef}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.chipRow}
