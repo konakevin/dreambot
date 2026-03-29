@@ -86,6 +86,7 @@ export default function RootLayout() {
           <Stack.Screen name="friendReveal/[uploadId]" options={{ presentation: 'fullScreenModal', gestureEnabled: true }} />
           <Stack.Screen name="photo/[id]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="user/[userId]" options={{ presentation: 'card', gestureEnabled: true }} />
+          <Stack.Screen name="sharePost" options={{ presentation: 'modal', gestureEnabled: true }} />
         </Stack>
         <StatusBar style="light" />
       </QueryClientProvider>

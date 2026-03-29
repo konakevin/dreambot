@@ -18,6 +18,7 @@ import { FollowUserRow } from '@/components/FollowUserRow';
 import { StreakRow, StreakEmptyState, VoteWithFriendsButton } from '@/components/StreakRow';
 import { FriendButton } from '@/components/FriendButton';
 import { useTopStreaks } from '@/hooks/useTopStreaks';
+import { useVibeStats } from '@/hooks/useVibeStats';
 import { useFriendIds } from '@/hooks/useFriendIds';
 import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
 import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
@@ -48,6 +49,7 @@ export default function PublicProfileScreen() {
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
   const { data: friendshipStatus = 'none' } = useFriendshipStatus(userId);
+  const { data: vibeStats } = useVibeStats(userId);
 
   const isFollowing = followingIds.has(userId);
 
@@ -110,6 +112,10 @@ export default function PublicProfileScreen() {
             </View>
           )}
         </View>
+
+        {!isOwnProfile && vibeStats && (vibeStats.vibeScore !== null || vibeStats.bestStreak > 0) && (
+          <VibeStatsRow vibeScore={vibeStats.vibeScore} bestStreak={vibeStats.bestStreak} sharedCount={vibeStats.sharedCount} isVibing={vibeStats.isVibing} />
+        )}
 
         <ProfileStatsRow
           postCount={profile.postCount}
@@ -220,6 +226,45 @@ export default function PublicProfileScreen() {
   );
 }
 
+function getVibeColor(score: number): string {
+  if (score >= 80) return '#4CAA64';
+  if (score >= 60) return '#FFD700';
+  if (score >= 40) return '#FF8C00';
+  return '#CC6666';
+}
+
+function VibeStatsRow({ vibeScore, bestStreak, sharedCount, isVibing }: {
+  vibeScore: number | null;
+  bestStreak: number;
+  sharedCount: number;
+  isVibing: boolean;
+}) {
+  const hasScore = vibeScore !== null;
+  const scoreColor = hasScore ? getVibeColor(vibeScore) : colors.textSecondary;
+
+  return (
+    <View style={styles.vibeRow}>
+      {hasScore && (
+        <View style={styles.vibePill}>
+          <View style={[styles.vibeDot, { backgroundColor: scoreColor }]} />
+          <Text style={[styles.vibeScoreText, { color: scoreColor }]}>{vibeScore}% match</Text>
+        </View>
+      )}
+      {!hasScore && sharedCount > 0 && (
+        <View style={styles.vibePill}>
+          <Text style={styles.vibeHintText}>{5 - sharedCount} more votes to see match</Text>
+        </View>
+      )}
+      {bestStreak > 0 && isVibing && (
+        <View style={styles.vibePill}>
+          <Ionicons name="flame" size={14} color="#FF6B35" />
+          <Text style={styles.vibeStreakText}>Best: {bestStreak}</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
@@ -255,4 +300,40 @@ const styles = StyleSheet.create({
   followButtonText: { color: colors.flame, fontSize: 14, fontWeight: '700' },
   followingButtonText: { color: colors.textSecondary },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
+  vibeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 16,
+  },
+  vibePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  vibeDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  vibeScoreText: {
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  vibeHintText: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  vibeStreakText: {
+    color: colors.textPrimary,
+    fontSize: 13,
+    fontWeight: '700',
+  },
 });

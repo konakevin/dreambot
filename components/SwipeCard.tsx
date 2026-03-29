@@ -54,6 +54,7 @@ interface SwipeCardProps {
   onUserPress: () => void;
   onSwipeUpBlocked?: () => void;
   onRefresh?: () => void;
+  onShare?: () => void;
   hideRank?: boolean;
   isTop: boolean;
   index: number;
@@ -131,7 +132,7 @@ function FriendAvatarBubble({ friend, userVote, index }: {
   );
 }
 
-export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, onRefresh, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit, pullY }: SwipeCardProps) {
+export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, onRefresh, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit, pullY, onShare }: SwipeCardProps) {
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const [muted, setMuted] = useState(true);
@@ -411,13 +412,20 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
                       )}
                     </View>
                     {!isOwnPost && (
-                      <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
-                        <Ionicons
-                          name={isFavorited ? 'bookmark' : 'bookmark-outline'}
-                          size={22}
-                          color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
-                        />
-                      </TouchableOpacity>
+                      <View style={styles.actionButtons}>
+                        {onShare && (
+                          <TouchableOpacity onPress={onShare} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                            <Ionicons name="paper-plane-outline" size={20} color="rgba(255,255,255,0.55)" />
+                          </TouchableOpacity>
+                        )}
+                        <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                          <Ionicons
+                            name={isFavorited ? 'bookmark' : 'bookmark-outline'}
+                            size={22}
+                            color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     )}
                   </View>
                   {catsExpanded && hidden.length > 0 && (
@@ -487,6 +495,11 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   saveButton: {
     padding: 4,

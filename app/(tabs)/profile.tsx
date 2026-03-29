@@ -22,6 +22,9 @@ import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
 import { usePendingRequests } from '@/hooks/usePendingRequests';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { useRemoveFriend } from '@/hooks/useRemoveFriend';
+import { useVibeSuggestions, type VibeSuggestion } from '@/hooks/useVibeSuggestions';
+import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
+import { VibeSuggestionRow } from '@/components/VibeSuggestionRow';
 import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import type { VibeSyncStreak } from '@/hooks/useTopStreaks';
@@ -42,6 +45,8 @@ export default function ProfileScreen() {
   const { data: pendingRequests = [] } = usePendingRequests();
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
+  const { data: vibeSuggestions = [] } = useVibeSuggestions();
+  const { mutate: sendFriendRequest } = useSendFriendRequest();
 
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -127,10 +132,22 @@ export default function ProfileScreen() {
   }
 
   if (activeTab === 'friends') {
-    // Combine pending requests + accepted friends into one list
-    const sections = [
+    // Combine pending requests + accepted friends + discover section
+    type ListItem =
+      | { type: 'request'; data: (typeof pendingRequests)[number] }
+      | { type: 'friend'; data: FriendUser }
+      | { type: 'discover_header' }
+      | { type: 'suggestion'; data: VibeSuggestion };
+
+    const sections: ListItem[] = [
       ...pendingRequests.map((r) => ({ type: 'request' as const, data: r })),
       ...friends.map((f) => ({ type: 'friend' as const, data: f })),
+      ...(vibeSuggestions.length > 0
+        ? [
+            { type: 'discover_header' as const },
+            ...vibeSuggestions.map((s) => ({ type: 'suggestion' as const, data: s })),
+          ]
+        : []),
     ];
 
     return (
@@ -138,7 +155,12 @@ export default function ProfileScreen() {
         <FlatList
           key="friends"
           data={sections}
-          keyExtractor={(item) => item.type === 'request' ? `req-${item.data.requesterId}` : `fr-${item.data.id}`}
+          keyExtractor={(item) => {
+            if (item.type === 'request') return `req-${item.data.requesterId}`;
+            if (item.type === 'friend') return `fr-${item.data.id}`;
+            if (item.type === 'discover_header') return 'discover-header';
+            return `sug-${item.data.userId}`;
+          }}
           ListHeaderComponent={header}
           ListEmptyComponent={
             <View style={styles.center}>
@@ -158,11 +180,31 @@ export default function ProfileScreen() {
                 />
               );
             }
+            if (item.type === 'friend') {
+              return (
+                <FollowUserRow
+                  item={item.data}
+                  isFollowing={followingIds.has(item.data.id)}
+                  onFollow={handleFollowUser}
+                />
+              );
+            }
+            if (item.type === 'discover_header') {
+              return (
+                <View style={styles.discoverHeader}>
+                  <Ionicons name="sparkles" size={16} color="#FFD700" />
+                  <Text style={styles.discoverTitle}>Discover Vibers</Text>
+                  <Text style={styles.discoverSubtitle}>People who vote like you</Text>
+                </View>
+              );
+            }
             return (
-              <FollowUserRow
-                item={item.data}
-                isFollowing={followingIds.has(item.data.id)}
-                onFollow={handleFollowUser}
+              <VibeSuggestionRow
+                suggestion={item.data}
+                onStartVibing={(id) => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  sendFriendRequest(id);
+                }}
               />
             );
           }}
@@ -262,4 +304,24 @@ const styles = StyleSheet.create({
   tabTextActive: { color: colors.textPrimary },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
+  discoverHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 24,
+    paddingBottom: 8,
+    borderTopWidth: 0.5,
+    borderTopColor: colors.border,
+    marginTop: 8,
+    gap: 2,
+    flexDirection: 'column',
+  },
+  discoverTitle: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '800',
+    marginTop: 4,
+  },
+  discoverSubtitle: {
+    color: colors.textSecondary,
+    fontSize: 13,
+  },
 });

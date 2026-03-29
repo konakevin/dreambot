@@ -2,11 +2,13 @@ import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
+import { useUnreadShareCount } from '@/hooks/useUnreadShareCount';
 import { colors } from '@/constants/theme';
 
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
   const bumpRefresh = useFeedStore((s) => s.bumpRefresh);
+  const { data: unreadCount } = useUnreadShareCount();
 
   if (initialized && !session) {
     return <Redirect href="/(auth)" />;
@@ -55,7 +57,18 @@ export default function TabLayout() {
           ),
         }}
       />
-<Tabs.Screen
+      <Tabs.Screen
+        name="inbox"
+        options={{
+          title: 'Inbox',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'notifications' : 'notifications-outline'} size={size} color={color} />
+          ),
+          tabBarBadge: unreadCount && unreadCount > 0 ? unreadCount : undefined,
+          tabBarBadgeStyle: { backgroundColor: '#F4212E', fontSize: 10, minWidth: 16, height: 16, lineHeight: 15 },
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',

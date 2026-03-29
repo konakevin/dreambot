@@ -296,6 +296,7 @@ export default function FeedScreen() {
                   onUserPress={() => handleUserPress(item)}
                   onSwipeUpBlocked={index === 0 ? handleSwipeUpBlocked : undefined}
                   onRefresh={index === 0 ? handleRefresh : undefined}
+                  onShare={index === 0 ? () => router.push(`/sharePost?uploadId=${item.id}`) : undefined}
                   hideRank={true}
                   isTop={index === 0}
                   index={index}
