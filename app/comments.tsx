@@ -10,6 +10,7 @@ import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { useComments, type Comment } from '@/hooks/useComments';
 import { useAddComment } from '@/hooks/useAddComment';
+import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { CommentRow } from '@/components/CommentRow';
 import { useSheetDismiss } from '@/hooks/useSheetDismiss';
 import { colors } from '@/constants/theme';
@@ -19,7 +20,7 @@ const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 const MAX_COMMENT_LENGTH = 500;
 
 export default function CommentsScreen() {
-  const { uploadId } = useLocalSearchParams<{ uploadId: string }>();
+  const { uploadId, postOwnerId } = useLocalSearchParams<{ uploadId: string; postOwnerId?: string }>();
   const currentUser = useAuthStore((s) => s.user);
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useComments(uploadId ?? '');
   const { mutate: addComment, isPending } = useAddComment();
@@ -28,9 +29,41 @@ export default function CommentsScreen() {
   const [text, setText] = useState('');
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
   const [expandedCommentId, setExpandedCommentId] = useState<string | null>(null);
+  const [mentionQuery, setMentionQuery] = useState('');
+  const mentionStart = useRef(-1);
   const inputRef = useRef<TextInput>(null);
 
   const comments = useMemo(() => data?.pages.flat() ?? [], [data]);
+  const { data: mentionResults = [] } = useSearchUsers(mentionQuery);
+
+  function handleTextChange(newText: string) {
+    setText(newText.slice(0, MAX_COMMENT_LENGTH));
+
+    // Detect @mention in progress
+    const cursorPos = newText.length;
+    const lastAt = newText.lastIndexOf('@');
+    if (lastAt >= 0) {
+      const afterAt = newText.slice(lastAt + 1);
+      // Only trigger if @ is at start or preceded by a space, and no space after
+      const charBefore = lastAt > 0 ? newText[lastAt - 1] : ' ';
+      if ((charBefore === ' ' || charBefore === '\n' || lastAt === 0) && !afterAt.includes(' ') && afterAt.length >= 1) {
+        mentionStart.current = lastAt;
+        setMentionQuery(afterAt);
+        return;
+      }
+    }
+    mentionStart.current = -1;
+    setMentionQuery('');
+  }
+
+  function completeMention(user: SearchUser) {
+    if (mentionStart.current < 0) return;
+    const before = text.slice(0, mentionStart.current);
+    const after = text.slice(mentionStart.current + 1 + mentionQuery.length);
+    setText(`${before}@${user.username} ${after}`);
+    mentionStart.current = -1;
+    setMentionQuery('');
+  }
 
   function handleReply(comment: Comment) {
     // If it's a reply, reply to its parent instead (keep flat)
@@ -79,9 +112,10 @@ export default function CommentsScreen() {
       {/* Bottom sheet */}
       <Animated.View {...panHandlers} style={[styles.sheet, { transform: [{ translateY }] }]}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior="padding"
         style={{ flex: 1 }}
-        keyboardVerticalOffset={0}
+        keyboardVerticalOffset={SCREEN_HEIGHT - SHEET_HEIGHT}
+        enabled={Platform.OS === 'ios'}
       >
         {/* Handle */}
         <View style={styles.handleRow}>
@@ -104,6 +138,7 @@ export default function CommentsScreen() {
             <CommentRow
               comment={item}
               uploadId={uploadId!}
+              postOwnerId={postOwnerId}
               onReply={handleReply}
               expandedCommentId={expandedCommentId}
             />
@@ -148,6 +183,29 @@ export default function CommentsScreen() {
           </View>
         )}
 
+        {/* Mention autocomplete */}
+        {mentionQuery.length >= 1 && mentionResults.length > 0 && (
+          <View style={styles.mentionList}>
+            {mentionResults.slice(0, 5).map((user) => (
+              <TouchableOpacity
+                key={user.id}
+                style={styles.mentionRow}
+                onPress={() => completeMention(user)}
+                activeOpacity={0.7}
+              >
+                {user.avatarUrl ? (
+                  <Image source={{ uri: user.avatarUrl }} style={styles.mentionAvatar} />
+                ) : (
+                  <View style={styles.mentionAvatarFallback}>
+                    <Text style={styles.mentionAvatarText}>{user.username[0].toUpperCase()}</Text>
+                  </View>
+                )}
+                <Text style={styles.mentionUsername}>{user.username}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+
         {/* Input bar */}
         <View style={styles.inputBar}>
           {currentUser ? (
@@ -158,7 +216,7 @@ export default function CommentsScreen() {
                 placeholder="Add a comment..."
                 placeholderTextColor={colors.textSecondary}
                 value={text}
-                onChangeText={(t) => setText(t.slice(0, MAX_COMMENT_LENGTH))}
+                onChangeText={handleTextChange}
                 multiline
                 maxLength={MAX_COMMENT_LENGTH}
               />
@@ -171,7 +229,7 @@ export default function CommentsScreen() {
                 {isPending ? (
                   <ActivityIndicator color="#000" size="small" />
                 ) : (
-                  <Ionicons name="arrow-up" size={18} color={text.trim() ? '#000000' : colors.textSecondary} />
+                  <Ionicons name="arrow-up" size={18} color={text.trim() ? '#000000' : colors.textSecondary} style={{ marginTop: -1 }} />
                 )}
               </TouchableOpacity>
             </>
@@ -264,12 +322,50 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontWeight: '600',
   },
+  mentionList: {
+    borderTopWidth: 0.5,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+    maxHeight: 200,
+  },
+  mentionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    gap: 10,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.card,
+  },
+  mentionAvatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+  },
+  mentionAvatarFallback: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mentionAvatarText: {
+    color: colors.textPrimary,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  mentionUsername: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
   inputBar: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    paddingBottom: 34, // Safe area bottom
+    paddingBottom: 16,
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     backgroundColor: colors.surface,

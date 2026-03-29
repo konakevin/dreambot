@@ -44,9 +44,10 @@ export function useToggleFollow() {
     },
     onSuccess: (_data, { userId }) => {
       qc.invalidateQueries({ queryKey: ['publicProfile', userId] });
-      // Refresh follower/following list tabs
-      qc.invalidateQueries({ queryKey: ['followersList', userId] });
-      qc.invalidateQueries({ queryKey: ['followingList', user?.id] });
+      qc.invalidateQueries({ queryKey: ['publicProfile', user?.id] });
+      qc.invalidateQueries({ queryKey: ['followersList'] });
+      qc.invalidateQueries({ queryKey: ['followingList'] });
+      qc.invalidateQueries({ queryKey: ['followingIds'] });
     },
   });
 }

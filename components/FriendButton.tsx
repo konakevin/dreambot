@@ -49,7 +49,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
         }}
         activeOpacity={0.7}
       >
-        <Text style={styles.pendingText}>Requested</Text>
+        <Text style={styles.pendingText}>Request Sent</Text>
       </TouchableOpacity>
     );
   }
@@ -66,8 +66,8 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
         }}
         activeOpacity={0.7}
       >
-        <Ionicons name="people" size={14} color={colors.textSecondary} />
-        <Text style={styles.friendsText}>Friends</Text>
+        <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
+        <Text style={styles.friendsText}>Vibers</Text>
       </TouchableOpacity>
     );
   }
@@ -80,7 +80,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
       activeOpacity={0.7}
     >
       <Ionicons name="person-add" size={14} color="#FFD700" />
-      <Text style={styles.addText}>Add Friend</Text>
+      <Text style={styles.addText}>Vibe</Text>
     </TouchableOpacity>
   );
 }

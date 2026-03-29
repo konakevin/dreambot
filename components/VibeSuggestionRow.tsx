@@ -40,7 +40,7 @@ export function VibeSuggestionRow({ suggestion, onStartVibing }: Props) {
       <View style={styles.info}>
         <Text style={styles.username}>{suggestion.username}</Text>
         <Text style={[styles.score, { color: scoreColor }]}>
-          {suggestion.vibeScore}% match · {suggestion.sharedCount} shared
+          {suggestion.vibeScore}% vibes · {suggestion.sharedCount} shared
         </Text>
       </View>
 

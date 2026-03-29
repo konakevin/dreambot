@@ -22,6 +22,14 @@ export const colors = {
 /** Auto-dismiss delay (ms) after voting on a card */
 export const DISMISS_DELAY = 430;
 
+/** Unified swipe-to-dismiss thresholds — used across all swipeable views */
+export const SWIPE = {
+  /** Distance (px) to trigger dismiss */
+  DISMISS_THRESHOLD: 80,
+  /** Velocity (px/s) to trigger dismiss on fast flick */
+  VELOCITY_THRESHOLD: 500,
+} as const;
+
 /** Brand gradient arrays — pass directly to LinearGradient `colors` prop */
 export const gradients: { rad: string[]; bad: string[] } = {
   rad: ['#CCDD55', '#DDAA66', '#DD7766'],

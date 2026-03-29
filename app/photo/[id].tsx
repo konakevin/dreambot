@@ -19,7 +19,8 @@ import Animated, {
 } from 'react-native-reanimated';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SWIPE_THRESHOLD = SCREEN_HEIGHT * 0.22;
+import { SWIPE } from '@/constants/theme';
+const SWIPE_THRESHOLD = SWIPE.DISMISS_THRESHOLD;
 import * as Haptics from 'expo-haptics';
 import { usePost } from '@/hooks/usePost';
 import { useDeletePost } from '@/hooks/useDeletePost';
@@ -411,8 +412,14 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
                   <VoteCount count={p.total_votes} />
                 </>
               )}
+              <TouchableOpacity onPress={() => router.push(`/comments?uploadId=${p.id}&postOwnerId=${p.user_id}`)} hitSlop={12} style={styles.commentButton}>
+                <Ionicons name="chatbubble-outline" size={16} color="rgba(255,255,255,0.6)" />
+                {(p.comment_count ?? 0) > 0 && (
+                  <Text style={styles.commentCountText}>{p.comment_count}</Text>
+                )}
+              </TouchableOpacity>
               <TouchableOpacity onPress={onShare} hitSlop={12} style={styles.shareButton}>
-                <Ionicons name="share-outline" size={18} color="rgba(255,255,255,0.6)" />
+                <Ionicons name="paper-plane-outline" size={17} color="rgba(255,255,255,0.6)" />
               </TouchableOpacity>
               {!isOwnPost && (
                 <TouchableOpacity onPress={onFavorite} hitSlop={12} style={styles.shareButton}>
@@ -559,6 +566,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 6,
     marginTop: 6,
+  },
+  commentButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    padding: 4,
+  },
+  commentCountText: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: 12,
+    fontWeight: '600',
   },
   shareButton: {
     padding: 4,

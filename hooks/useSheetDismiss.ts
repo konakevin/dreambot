@@ -1,8 +1,7 @@
 import { useRef } from 'react';
 import { Animated, PanResponder, Keyboard } from 'react-native';
 import { router } from 'expo-router';
-
-const DISMISS_THRESHOLD = 100;
+import { SWIPE } from '@/constants/theme';
 
 /**
  * Swipe-down-to-dismiss for bottom sheet modals.
@@ -25,7 +24,7 @@ export function useSheetDismiss() {
         }
       },
       onPanResponderRelease: (_, gestureState) => {
-        if (gestureState.dy > DISMISS_THRESHOLD || gestureState.vy > 0.5) {
+        if (gestureState.dy > SWIPE.DISMISS_THRESHOLD || gestureState.vy > (SWIPE.VELOCITY_THRESHOLD / 1000)) {
           Animated.timing(translateY, {
             toValue: 800,
             duration: 200,

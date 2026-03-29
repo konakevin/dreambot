@@ -12,10 +12,9 @@ export function useDeleteComment() {
 
   return useMutation({
     mutationFn: async ({ commentId }: DeleteCommentArgs) => {
-      // Soft delete — mark as deleted so reply structure stays intact
       const { error } = await supabase
         .from('comments')
-        .update({ is_deleted: true, body: '' })
+        .delete()
         .eq('id', commentId);
 
       if (error) throw error;

@@ -25,7 +25,7 @@ import { getRating } from '@/lib/getRating';
 import { VoteCount } from '@/components/VoteCount';
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
 import { animateScoreIn } from '@/lib/scoreAnimation';
-import { DISMISS_DELAY } from '@/constants/theme';
+import { DISMISS_DELAY, SWIPE } from '@/constants/theme';
 import { useFeedStore } from '@/store/feed';
 import { MilestoneBurst } from '@/components/MilestoneBurst';
 import type { MilestoneHit } from '@/lib/milestones';
@@ -37,8 +37,7 @@ function needsBlurBackground(mediaWidth: number | null, mediaHeight: number | nu
   if (!mediaWidth || !mediaHeight) return false;
   return (mediaWidth / mediaHeight) > (CARD_WIDTH / cardHeight);
 }
-const DISMISS_THRESHOLD = SCREEN_HEIGHT * 0.06; // ~52px — TikTok-like quick swipe
-const VELOCITY_THRESHOLD = 500; // px/s — fast flick always dismisses
+const { DISMISS_THRESHOLD, VELOCITY_THRESHOLD } = SWIPE;
 const SPRING_CONFIG = { damping: 22, stiffness: 250 };
 
 interface SwipeCardProps {
@@ -244,19 +243,19 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
       }
       // Upward — requires vote
       if (!canSwipeUp.value) return;
-      translateX.value = e.translationX < 0 ? e.translationX : e.translationX * 0.08;
+      // No horizontal movement — left swipe detected on release only
       translateY.value = e.translationY;
     })
     .onEnd((e) => {
       const swipedUp = (e.translationY < -DISMISS_THRESHOLD || e.velocityY < -VELOCITY_THRESHOLD) && canSwipeUp.value;
       if (swipedUp) {
         if (onDismissStart) runOnJS(onDismissStart)();
-        // Only carry leftward lean on exit, never rightward
-        const exitX = Math.min(e.translationX, 0) * 3;
-        translateX.value = withTiming(exitX, { duration: 300 });
         translateY.value = withTiming(-SCREEN_HEIGHT * 1.3, { duration: 300 }, () => {
           runOnJS(onDismiss)();
         });
+      } else if (e.velocityX < -300 && Math.abs(e.velocityY) < Math.abs(e.velocityX)) {
+        // Fast left flick → navigate to profile (no card animation, router handles transition)
+        runOnJS(onUserPress)();
       } else {
         translateX.value = withSpring(0, SPRING_CONFIG);
         translateY.value = withSpring(0, SPRING_CONFIG);

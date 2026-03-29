@@ -223,6 +223,9 @@ export default function FeedScreen() {
             </Animated.View>
           </MaskedView>
         )}
+        <TouchableOpacity style={styles.searchButton} onPress={() => router.push('/search')} hitSlop={12} activeOpacity={0.7}>
+          <Ionicons name="search" size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
         {activeFeed.isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
       </View>
 
@@ -295,7 +298,7 @@ export default function FeedScreen() {
                   onSwipeUpBlocked={index === 0 ? handleSwipeUpBlocked : undefined}
                   onRefresh={index === 0 ? handleRefresh : undefined}
                   onShare={() => router.push(`/sharePost?uploadId=${item.id}`)}
-                  onComment={() => router.push(`/comments?uploadId=${item.id}`)}
+                  onComment={() => router.push(`/comments?uploadId=${item.id}&postOwnerId=${item.user_id}`)}
                   commentCount={(item.comment_count ?? 0) + (commentBumps.get(item.id) ?? 0)}
                   hideRank={true}
                   isTop={index === 0}
@@ -654,9 +657,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 2,
   },
-  headerSpinner: {
+  searchButton: {
     position: 'absolute',
     right: 16,
+    padding: 4,
+  },
+  headerSpinner: {
+    position: 'absolute',
+    right: 44,
   },
   cardArea: {
     flex: 1,

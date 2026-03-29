@@ -88,6 +88,7 @@ export default function RootLayout() {
           <Stack.Screen name="user/[userId]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="sharePost" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
           <Stack.Screen name="comments" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
+          <Stack.Screen name="search" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
         </Stack>
         <StatusBar style="light" />
       </QueryClientProvider>

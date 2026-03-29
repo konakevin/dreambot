@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -34,6 +35,11 @@ type Tab = 'posts' | 'saved' | 'friends' | 'followers' | 'following' | 'streaks'
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<Tab>('posts');
+
+  // Reset to posts tab every time the profile screen comes into focus
+  useFocusEffect(useCallback(() => {
+    setActiveTab('posts');
+  }, []));
 
   const { data: profile } = usePublicProfile(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(user?.id ?? '');

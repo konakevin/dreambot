@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
+import { useSwipeBack } from '@/hooks/useSwipeBack';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
@@ -34,6 +35,7 @@ export default function PublicProfileScreen() {
   const { userId, viewedPost } = useLocalSearchParams<{ userId: string; viewedPost?: string }>();
   const currentUser = useAuthStore((s) => s.user);
   const isOwnProfile = currentUser?.id === userId;
+  const { translateX, panHandlers } = useSwipeBack();
 
   const [activeTab, setActiveTab] = useState<Tab>('posts');
 
@@ -65,7 +67,7 @@ export default function PublicProfileScreen() {
 
   if (profileLoading || !profile) {
     return (
-      <SafeAreaView style={styles.root}>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
         <View style={styles.backRow}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
             <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
@@ -74,7 +76,7 @@ export default function PublicProfileScreen() {
         <View style={styles.center}>
           <ActivityIndicator color={colors.textSecondary} />
         </View>
-      </SafeAreaView>
+      </SafeAreaView></Animated.View>
     );
   }
 
@@ -133,7 +135,7 @@ export default function PublicProfileScreen() {
 
   if (activeTab === 'posts') {
     return (
-      <SafeAreaView style={styles.root}>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
         {backButton}
         <PostGrid
           source={{ type: 'user', userId }}
@@ -141,13 +143,13 @@ export default function PublicProfileScreen() {
           ListHeaderComponent={header}
           highlightPostId={viewedPost}
         />
-      </SafeAreaView>
+      </SafeAreaView></Animated.View>
     );
   }
 
   if (activeTab === 'friends') {
     return (
-      <SafeAreaView style={styles.root}>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
         {backButton}
         <FlatList<FriendUser>
           key="friends"
@@ -170,13 +172,13 @@ export default function PublicProfileScreen() {
             />
           )}
         />
-      </SafeAreaView>
+      </SafeAreaView></Animated.View>
     );
   }
 
   if (activeTab === 'streaks') {
     return (
-      <SafeAreaView style={styles.root}>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
         {backButton}
         <FlatList<VibeSyncStreak>
           key="streaks"
@@ -193,7 +195,7 @@ export default function PublicProfileScreen() {
           }
           renderItem={({ item }) => <StreakRow streak={item} />}
         />
-      </SafeAreaView>
+      </SafeAreaView></Animated.View>
     );
   }
 
@@ -202,7 +204,7 @@ export default function PublicProfileScreen() {
   const emptyLabel = activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet';
 
   return (
-    <SafeAreaView style={styles.root}>
+    <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
       {backButton}
       <FlatList<FollowUser>
         key="users"
@@ -225,7 +227,7 @@ export default function PublicProfileScreen() {
           />
         )}
       />
-    </SafeAreaView>
+    </SafeAreaView></Animated.View>
   );
 }
 
@@ -250,7 +252,7 @@ function VibeStatsRow({ vibeScore, bestStreak, sharedCount, isVibing }: {
       {hasScore && (
         <View style={styles.vibePill}>
           <View style={[styles.vibeDot, { backgroundColor: scoreColor }]} />
-          <Text style={[styles.vibeScoreText, { color: scoreColor }]}>{vibeScore}% match</Text>
+          <Text style={[styles.vibeScoreText, { color: scoreColor }]}>{vibeScore}% vibes</Text>
         </View>
       )}
       {!hasScore && sharedCount > 0 && (

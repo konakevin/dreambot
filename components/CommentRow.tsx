@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useReplies } from '@/hooks/useReplies';
 import { useToggleCommentLike } from '@/hooks/useToggleCommentLike';
@@ -26,14 +27,17 @@ function formatTimeAgo(dateStr: string): string {
 interface CommentRowProps {
   comment: Comment;
   uploadId: string;
+  postOwnerId?: string;
   isReply?: boolean;
   onReply: (comment: Comment) => void;
   expandedCommentId?: string | null;
 }
 
-export function CommentRow({ comment, uploadId, isReply = false, onReply, expandedCommentId }: CommentRowProps) {
+export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, onReply, expandedCommentId }: CommentRowProps) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwn = currentUser?.id === comment.userId;
+  const isPostOwner = currentUser?.id === postOwnerId;
+  const canDelete = isOwn || isPostOwner;
   const [showReplies, setShowReplies] = useState(expandedCommentId === comment.id);
 
   // Auto-expand when a reply is posted to this comment
@@ -55,7 +59,7 @@ export function CommentRow({ comment, uploadId, isReply = false, onReply, expand
   }
 
   function handleLongPress() {
-    if (!isOwn) return;
+    if (!canDelete) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert('Delete comment', 'Are you sure?', [
       { text: 'Cancel', style: 'cancel' },
@@ -92,7 +96,30 @@ export function CommentRow({ comment, uploadId, isReply = false, onReply, expand
             <Text style={styles.username}>{comment.username}</Text>
             <Text style={styles.time}>  {formatTimeAgo(comment.createdAt)}</Text>
           </Text>
-          <Text style={styles.commentText}>{comment.body}</Text>
+          <Text style={styles.commentText}>
+            {comment.body.split(/(@[a-zA-Z0-9_.]+)/g).map((part, i) =>
+              part.startsWith('@') ? (
+                <Text
+                  key={i}
+                  style={styles.mention}
+                  onPress={() => {
+                    const username = part.slice(1);
+                    // Look up user by username and navigate
+                    supabase
+                      .from('users')
+                      .select('id')
+                      .eq('username', username)
+                      .maybeSingle()
+                      .then(({ data }) => {
+                        if (data) router.push(`/user/${data.id}`);
+                      });
+                  }}
+                >
+                  {part}
+                </Text>
+              ) : part
+            )}
+          </Text>
 
           {/* Actions */}
           <View style={styles.actions}>
@@ -200,6 +227,10 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 14,
     lineHeight: 20,
+  },
+  mention: {
+    color: '#6699EE',
+    fontWeight: '600',
   },
   actions: {
     flexDirection: 'row',
