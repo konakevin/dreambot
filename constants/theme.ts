@@ -13,7 +13,7 @@ export const colors = {
   ember: '#FF6B00',
   spark: '#FFB800',
   textPrimary: '#FFFFFF',
-  textSecondary: '#71767B',
+  textSecondary: '#969696',
   textTertiary: '#3E4144',
   error: '#F4212E',
   success: '#00BA7C',

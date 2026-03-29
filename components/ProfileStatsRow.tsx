@@ -35,7 +35,7 @@ export function ProfileStatsRow({ postCount, friendCount, followerCount, followi
                 </View>
               )}
             </View>
-            <Text style={[styles.statLabel, activeTab === 'friends' && styles.statLabelActive]}>Friends</Text>
+            <Text style={[styles.statLabel, activeTab === 'friends' && styles.statLabelActive]}>Vibers</Text>
           </TouchableOpacity>
         </>
       )}

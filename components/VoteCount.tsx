@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCount } from '@/lib/formatCount';
+import { colors } from '@/constants/theme';
 
 interface VoteCountProps {
   count: number;
@@ -15,7 +16,7 @@ export function VoteCount({ count, size = 'md' }: VoteCountProps) {
 
   return (
     <View style={styles.row}>
-      <Ionicons name="people-outline" size={iconSize} color="rgba(255,255,255,0.65)" />
+      <Ionicons name="people-outline" size={iconSize} color={colors.textSecondary} style={styles.icon} />
       <Text style={[styles.text, { fontSize }]}>{formatCount(count)}</Text>
     </View>
   );
@@ -26,9 +27,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+  },
+  icon: {
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   text: {
-    color: 'rgba(255,255,255,0.65)',
+    color: colors.textSecondary,
     textShadowColor: 'rgba(0,0,0,0.6)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,

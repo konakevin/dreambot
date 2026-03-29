@@ -235,9 +235,12 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   cellVotesText: {
-    color: 'rgba(255,255,255,0.6)',
+    color: colors.textSecondary,
     fontSize: 10,
     fontWeight: '600',
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   cellScore: {
     fontSize: 17,
@@ -263,7 +266,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   votesText: {
-    color: 'rgba(255,255,255,0.6)',
+    color: colors.textSecondary,
     fontSize: 11,
     fontWeight: '600',
   },

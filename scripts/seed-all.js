@@ -105,6 +105,11 @@ const CATEGORIES = [
   { key: 'music',   queries: ['concert crowd lights', 'vinyl records aesthetic', 'guitar close up'] },
   { key: 'sports',  queries: ['surfing wave', 'skateboard trick', 'basketball slam dunk'] },
   { key: 'art',     queries: ['street mural colorful', 'abstract painting', 'neon lights art'] },
+  { key: 'memes',   queries: ['funny meme', 'internet humor', 'reaction face'] },
+  { key: 'beauty',  queries: ['makeup look', 'skincare routine', 'beauty aesthetic'] },
+  { key: 'quotes',  queries: ['motivational quote', 'typography poster', 'inspirational text'] },
+  { key: 'cute',    queries: ['baby animals cute', 'adorable kitten', 'cute puppy sleeping'] },
+  { key: 'science', queries: ['space nebula', 'microscope close up', 'chemistry lab aesthetic'] },
 ];
 
 const CAPTIONS = {
@@ -168,6 +173,36 @@ const CAPTIONS = {
     'the colors are even crazier in person', 'support your local artists seriously',
     'i dont know art but i know what i like', 'the texture on this', 'someone put their whole soul into this',
     'gallery hopping is my new personality', 'stared at this for way too long',
+  ],
+  memes: [
+    'this is too real', 'im in this photo and i dont like it', 'sent this to my group chat immediately',
+    'why is this so accurate', 'the internet remains undefeated', 'tell me im wrong',
+    'this lives rent free in my head', 'me every single morning', 'the accuracy is concerning',
+    'i feel personally attacked', 'this is peak content', 'whoever made this gets it',
+  ],
+  beauty: [
+    'the blend tho', 'glass skin era', 'this look took me 2 hours and worth every minute',
+    'new routine and my skin is thriving', 'the glow up is real', 'soft glam always wins',
+    'finally nailed this look', 'skincare is self care', 'obsessed with this shade',
+    'tutorial coming soon maybe', 'the lashes are doing the heavy lifting', 'clean girl aesthetic',
+  ],
+  quotes: [
+    'needed to hear this today', 'screenshot worthy', 'this hit different at 2am',
+    'putting this on my wall', 'say it louder for the people in the back',
+    'felt that', 'no lies detected', 'this is the one', 'read that again',
+    'saving this forever', 'the truth hurts sometimes', 'manifesting this energy',
+  ],
+  cute: [
+    'i literally cannot', 'my heart just exploded', 'this is illegal levels of cute',
+    'how are you even real', 'the tiniest beans', 'im not crying youre crying',
+    'protect at all costs', 'this made my whole week', 'the little face omg',
+    'i need twelve of these immediately', 'cuteness overload', 'this healed me',
+  ],
+  science: [
+    'the universe is insane', 'this blew my mind', 'how is this even real',
+    'science is beautiful and terrifying', 'zoom in more', 'the detail at this scale is wild',
+    'we are so small', 'this is what peak nerd looks like', 'my new wallpaper tbh',
+    'the colors under a microscope tho', 'space never gets old', 'chemistry is art',
   ],
 };
 

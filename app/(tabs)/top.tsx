@@ -1,6 +1,6 @@
 import {
   View, Text, ScrollView, ActivityIndicator,
-  TouchableOpacity, StyleSheet,
+  TouchableOpacity, StyleSheet, type NativeSyntheticEvent, type NativeScrollEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
@@ -19,6 +19,13 @@ export default function TopScreen() {
     (params.category as Category | undefined) ?? CATEGORIES[0].key
   );
   const [sort, setSort] = useState<CategorySort>('top');
+  const [showChipFade, setShowChipFade] = useState(true);
+
+  function handleChipScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent;
+    const atEnd = contentOffset.x + layoutMeasurement.width >= contentSize.width - 10;
+    setShowChipFade(!atEnd);
+  }
 
   useEffect(() => {
     if (params.category) setSelected(params.category as Category);
@@ -48,7 +55,7 @@ export default function TopScreen() {
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={[styles.categoryHero, { color: activeCategory?.color ?? '#FFFFFF' }]}>
+            <Text style={styles.categoryHero}>
               {activeCategory?.label ?? selected}
             </Text>
             <Text style={[styles.metaLabel, !stableWindowLabel.current && styles.invisible]}>
@@ -86,6 +93,8 @@ export default function TopScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.chipRow}
+          onScroll={handleChipScroll}
+          scrollEventThrottle={16}
         >
           {CATEGORIES.map((cat) => {
             const isActive = selected === cat.key;
@@ -97,25 +106,27 @@ export default function TopScreen() {
                 style={[
                   styles.chip,
                   isActive
-                    ? { backgroundColor: `${cat.color}22`, borderColor: `${cat.color}99` }
+                    ? styles.chipActive
                     : styles.chipInactive,
                 ]}
               >
-                <Text style={[styles.chipText, isActive && { color: cat.color }]}>
+                <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
                   {cat.label}
                 </Text>
               </TouchableOpacity>
             );
           })}
         </ScrollView>
-        {/* Fade to signal more chips off-screen */}
-        <LinearGradient
-          colors={['transparent', '#000000']}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-          style={styles.chipFade}
-          pointerEvents="none"
-        />
+        {/* Fade to signal more chips off-screen — hides when scrolled to end */}
+        {showChipFade && (
+          <LinearGradient
+            colors={['transparent', '#000000']}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={styles.chipFade}
+            pointerEvents="none"
+          />
+        )}
       </View>
 
       {/* Rank list */}
@@ -199,6 +210,7 @@ const styles = StyleSheet.create({
   },
   invisible: { opacity: 0 },
   categoryHero: {
+    color: '#FFFFFF',
     fontSize: 40,
     fontWeight: '900',
     letterSpacing: -1,
@@ -226,13 +238,15 @@ const styles = StyleSheet.create({
   chip: {
     borderWidth: 1,
     borderRadius: 16,
-    paddingVertical: 6,
+    paddingVertical: 9,
     paddingHorizontal: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  chipInactive: { borderColor: colors.border },
+  chipActive: { backgroundColor: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.4)' },
+  chipInactive: { borderColor: 'rgba(255,255,255,0.25)' },
   chipText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
+  chipTextActive: { color: '#FFFFFF' },
   chipFade: {
     position: 'absolute',
     right: 0,

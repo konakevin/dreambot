@@ -23,7 +23,7 @@ import type { FeedItem, FriendVote } from '@/hooks/useFeed';
 import { GradientUsername } from '@/components/GradientUsername';
 import { getRating } from '@/lib/getRating';
 import { VoteCount } from '@/components/VoteCount';
-import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
+import { CATEGORY_LABELS } from '@/constants/categories';
 import { animateScoreIn } from '@/lib/scoreAnimation';
 import { DISMISS_DELAY, SWIPE } from '@/constants/theme';
 import { useFeedStore } from '@/store/feed';
@@ -72,14 +72,13 @@ interface SwipeCardProps {
 
 function CategoryPill({ category }: { category: string }) {
   const label = CATEGORY_LABELS[category] ?? category;
-  const color = CATEGORY_COLORS[category] ?? '#FFFFFF';
   return (
     <Pressable
       onPress={() => router.push(`/(tabs)/top?category=${category}`)}
       hitSlop={8}
-      style={[styles.categoryPill, { backgroundColor: `${color}26`, borderColor: `${color}66` }]}
+      style={[styles.categoryPill, { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }]}
     >
-      <Text style={[styles.categoryPillText, { color }]}>{label}</Text>
+      <Text style={[styles.categoryPillText, { color: '#FFFFFF' }]}>{label}</Text>
     </Pressable>
   );
 }

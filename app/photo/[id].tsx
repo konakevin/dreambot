@@ -36,7 +36,7 @@ import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
 import { VoteButton } from '@/components/VoteButton';
-import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/constants/categories';
+import { CATEGORY_LABELS } from '@/constants/categories';
 import { animateScoreIn } from '@/lib/scoreAnimation';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
@@ -393,10 +393,10 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
           <View>
             <View style={styles.metaRow}>
               {visibleCats.map((cat) => {
-                const color = CATEGORY_COLORS[cat] ?? '#FFFFFF';
+                const color = '#FFFFFF';
                 return (
                   <Pressable key={cat} onPress={() => router.push(`/(tabs)/top?category=${cat}`)} hitSlop={8}
-                    style={[styles.categoryPill, { backgroundColor: `${color}26`, borderColor: `${color}66` }]}>
+                    style={[styles.categoryPill, { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }]}>
                     <Text style={[styles.categoryPillText, { color }]}>{CATEGORY_LABELS[cat] ?? cat}</Text>
                   </Pressable>
                 );
@@ -434,10 +434,10 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
             {catsExpanded && hiddenCats.length > 0 && (
               <View style={styles.expandedCats}>
                 {hiddenCats.map((cat) => {
-                  const color = CATEGORY_COLORS[cat] ?? '#FFFFFF';
+                  const color = '#FFFFFF';
                   return (
                     <Pressable key={cat} onPress={() => router.push(`/(tabs)/top?category=${cat}`)} hitSlop={8}
-                      style={[styles.categoryPill, { backgroundColor: `${color}26`, borderColor: `${color}66` }]}>
+                      style={[styles.categoryPill, { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }]}>
                       <Text style={[styles.categoryPillText, { color }]}>{CATEGORY_LABELS[cat] ?? cat}</Text>
                     </Pressable>
                   );

@@ -230,24 +230,24 @@ export default function UploadScreen() {
           {/* Category */}
           <View style={styles.categoryHeader}>
             <Text style={styles.sectionLabel}>CATEGORY</Text>
-            <Text style={styles.categoryLimit}>{categories.length}/2</Text>
+            <Text style={styles.categoryLimit}>{categories.length}/3</Text>
           </View>
-          <View style={styles.categoryRow}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryRow}>
             {CATEGORIES.map((cat) => {
               const selected = categories.includes(cat.key);
-              const atMax = categories.length >= 2 && !selected;
+              const atMax = categories.length >= 3 && !selected;
               return (
                 <TouchableOpacity
                   key={cat.key}
                   style={[
                     styles.categoryChip,
-                    selected && { borderColor: cat.color, backgroundColor: `${cat.color}1A` },
+                    selected && styles.categoryChipSelected,
                     atMax && styles.categoryChipDisabled,
                   ]}
                   onPress={() => {
                     if (atMax) {
                       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-                      Alert.alert('Max 2 categories', 'Remove one before adding another.');
+                      Alert.alert('Max 3 categories', 'Remove one before adding another.');
                       return;
                     }
                     Haptics.selectionAsync();
@@ -259,13 +259,13 @@ export default function UploadScreen() {
                   }}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.categoryChipText, selected && { color: cat.color, fontWeight: '700' }, atMax && styles.categoryChipTextDisabled]} numberOfLines={1}>
+                  <Text style={[styles.categoryChipText, selected && styles.categoryChipTextSelected, atMax && styles.categoryChipTextDisabled]} numberOfLines={1}>
                     {cat.label}
                   </Text>
                 </TouchableOpacity>
               );
             })}
-          </View>
+          </ScrollView>
 
           {/* Caption */}
           <Text style={styles.sectionLabel}>CAPTION <Text style={styles.optional}>(optional)</Text></Text>
@@ -397,18 +397,23 @@ const styles = StyleSheet.create({
   optional: { color: colors.textTertiary, fontWeight: '400', letterSpacing: 0 },
   categoryHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, marginTop: 4 },
   categoryLimit: { color: colors.textTertiary, fontSize: 12, fontWeight: '600' },
-  categoryRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 28 },
+  categoryRow: { flexDirection: 'row', gap: 8, marginBottom: 28, paddingRight: 16 },
   categoryChipDisabled: { opacity: 0.35 },
   categoryChipTextDisabled: { color: colors.textTertiary },
   categoryChip: {
-    width: '23%',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: 'rgba(255,255,255,0.25)',
     borderRadius: 16,
-    paddingVertical: 7,
+    paddingVertical: 9,
+    paddingHorizontal: 16,
   },
+  categoryChipSelected: {
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(255,255,255,0.4)',
+  },
+  categoryChipTextSelected: { color: '#FFFFFF', fontWeight: '700' },
   categoryChipText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
   captionContainer: {
     borderBottomWidth: 1,

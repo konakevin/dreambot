@@ -509,7 +509,7 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
 
   return (
     <View style={styles.categorySection}>
-      <Text style={[styles.categoryLabel, { color: category.color }]}>{category.label}</Text>
+      <Text style={[styles.categoryLabel, { color: '#FFFFFF' }]}>{category.label}</Text>
       {posts.map((post, i) => (
         <RankCard key={post.id} post={post} rank={i + 1} albumIds={albumIds} height={130} />
       ))}
