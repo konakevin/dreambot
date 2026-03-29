@@ -396,7 +396,7 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
               {visibleCats.map((cat) => {
                 const color = '#FFFFFF';
                 return (
-                  <Pressable key={cat} onPress={() => router.push(`/(tabs)/top?category=${cat}`)} hitSlop={8}
+                  <Pressable key={cat} onPress={() => router.push(`/categoryBrowse?category=${cat}`)} hitSlop={8}
                     style={[styles.categoryPill, { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }]}>
                     <Text style={[styles.categoryPillText, { color }]}>{CATEGORY_LABELS[cat] ?? cat}</Text>
                   </Pressable>
@@ -437,7 +437,7 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
                 {hiddenCats.map((cat) => {
                   const color = '#FFFFFF';
                   return (
-                    <Pressable key={cat} onPress={() => router.push(`/(tabs)/top?category=${cat}`)} hitSlop={8}
+                    <Pressable key={cat} onPress={() => router.push(`/categoryBrowse?category=${cat}`)} hitSlop={8}
                       style={[styles.categoryPill, { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }]}>
                       <Text style={[styles.categoryPillText, { color }]}>{CATEGORY_LABELS[cat] ?? cat}</Text>
                     </Pressable>

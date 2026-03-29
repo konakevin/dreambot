@@ -99,6 +99,7 @@ export default function RootLayout() {
           <Stack.Screen name="comments" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
           <Stack.Screen name="search" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
           <Stack.Screen name="categoryPrefs" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
+          <Stack.Screen name="categoryBrowse" options={{ presentation: 'card', gestureEnabled: true }} />
         </Stack>
         <StatusBar style="light" />
         </AlertProvider>

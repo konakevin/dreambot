@@ -74,7 +74,7 @@ function CategoryPill({ category }: { category: string }) {
   const label = CATEGORY_LABELS[category] ?? category;
   return (
     <Pressable
-      onPress={() => router.push(`/(tabs)/top?category=${category}`)}
+      onPress={() => router.push(`/categoryBrowse?category=${category}`)}
       hitSlop={8}
       style={[styles.categoryPill, { backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)' }]}
     >
@@ -193,7 +193,7 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
         const delay = autoDismissDelay !== undefined ? autoDismissDelay : (hasMilestone ? null : DISMISS_DELAY);
         if (delay !== null) {
           dismissTimer.current = setTimeout(() => {
-            cardOpacity.value = withTiming(0, { duration: 250 }, () => {
+            cardOpacity.value = withTiming(0, { duration: 150 }, () => {
               runOnJS(onDismiss)();
             });
           }, delay);

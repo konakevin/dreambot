@@ -10,7 +10,7 @@ import { colors } from '@/constants/theme';
 import type { Category } from '@/types/database';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SHEET_HEIGHT = SCREEN_HEIGHT * 0.7;
+const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 
 export default function CategoryPrefsScreen() {
   const { categories: saved, save, isSaving } = useCategoryPreferences();
@@ -76,9 +76,14 @@ export default function CategoryPrefsScreen() {
 
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Feed Categories</Text>
-          <TouchableOpacity onPress={handleSave} activeOpacity={0.7}>
-            <Text style={styles.saveText}>{isSaving ? 'Saving...' : 'Save'}</Text>
-          </TouchableOpacity>
+          <View style={styles.headerRight}>
+            <TouchableOpacity onPress={handleSave} activeOpacity={0.7}>
+              <Text style={styles.saveText}>{isSaving ? 'Saving...' : 'Save'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+              <Ionicons name="close" size={22} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableOpacity style={styles.allRow} onPress={toggleAll} activeOpacity={0.7}>
@@ -132,6 +137,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   headerTitle: { color: colors.textPrimary, fontSize: 17, fontWeight: '800' },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   saveText: { color: '#FFD700', fontSize: 15, fontWeight: '700' },
   allRow: {
     flexDirection: 'row',
