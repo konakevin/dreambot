@@ -26,6 +26,9 @@ import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
 import { useFriendshipStatus } from '@/hooks/useFriendshipStatus';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { useRemoveFriend } from '@/hooks/useRemoveFriend';
+import { useReport } from '@/hooks/useReport';
+import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
+import { showAlert } from '@/components/CustomAlert';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import type { VibeSyncStreak } from '@/hooks/useTopStreaks';
 
@@ -51,6 +54,38 @@ export default function PublicProfileScreen() {
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
   const { data: friendshipStatus = 'none' } = useFriendshipStatus(userId);
+  const { mutate: report } = useReport();
+  const { data: blockedIds = new Set<string>() } = useBlockedIds();
+  const { mutate: toggleBlock } = useToggleBlock();
+  const isBlocked = blockedIds.has(userId);
+
+  function handleMoreMenu() {
+    showAlert('', '', [
+      {
+        text: isBlocked ? 'Unblock User' : 'Block User',
+        style: isBlocked ? 'default' : 'destructive',
+        onPress: () => {
+          toggleBlock({ userId, currentlyBlocked: isBlocked });
+          if (!isBlocked) {
+            router.back();
+          }
+        },
+      },
+      {
+        text: 'Report User',
+        style: 'destructive',
+        onPress: () => {
+          showAlert('Report User', 'Why are you reporting this user?', [
+            { text: 'Spam', onPress: () => { report({ reason: 'spam', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.'); } },
+            { text: 'Harassment', onPress: () => { report({ reason: 'harassment', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.'); } },
+            { text: 'Inappropriate', onPress: () => { report({ reason: 'inappropriate', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.'); } },
+            { text: 'Cancel', style: 'cancel' },
+          ]);
+        },
+      },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }
   const { data: vibeStats } = useVibeStats(userId);
 
   const isFollowing = followingIds.has(userId);
@@ -85,6 +120,11 @@ export default function PublicProfileScreen() {
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton} hitSlop={12}>
         <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
       </TouchableOpacity>
+      {!isOwnProfile && (
+        <TouchableOpacity onPress={handleMoreMenu} style={styles.backButton} hitSlop={12}>
+          <Ionicons name="ellipsis-horizontal" size={22} color={colors.textSecondary} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -273,7 +313,7 @@ function VibeStatsRow({ vibeScore, bestStreak, sharedCount, isVibing }: {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  backRow: { paddingHorizontal: 8, paddingVertical: 4 },
+  backRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, paddingVertical: 4 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: {
     paddingHorizontal: 16,

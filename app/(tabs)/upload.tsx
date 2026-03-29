@@ -86,20 +86,12 @@ export default function UploadScreen() {
         setMediaType('video');
         setMediaDimensions({ width: media.width, height: media.height });
       } else {
-        // Use original image with freeform crop option
-        const cropped = await ImageCropPicker.openCropper({
-          path: media.path,
-          forceJpg: true,
-          compressImageQuality: 0.95,
-          freeStyleCropEnabled: true,
-          cropperCancelText: 'Cancel',
-          cropperChooseText: 'Choose',
-        });
+        // Use original image as-is (no forced crop)
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        const uri = cropped.path.startsWith('file://') ? cropped.path : `file://${cropped.path}`;
+        const uri = media.path.startsWith('file://') ? media.path : `file://${media.path}`;
         setMediaUri(uri);
         setMediaType('image');
-        setMediaDimensions({ width: cropped.width, height: cropped.height });
+        setMediaDimensions({ width: media.width, height: media.height });
       }
     } catch (e: unknown) {
       if ((e as { code?: string }).code !== 'E_PICKER_CANCELLED') {
@@ -112,12 +104,9 @@ export default function UploadScreen() {
     try {
       const media = await ImageCropPicker.openCamera({
         mediaType: 'any',
-        cropping: true,
-        freeStyleCropEnabled: true,
+        cropping: false,
         forceJpg: true,
         compressImageQuality: 0.95,
-        cropperCancelText: 'Cancel',
-        cropperChooseText: 'Choose',
         videoMaxDuration: MAX_VIDEO_DURATION,
       });
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

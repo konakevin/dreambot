@@ -127,6 +127,7 @@ export default function ProfileScreen() {
             >
               <Ionicons name="flash" size={16} color="#FFD700" />
               <Text style={styles.goVibeText}>Go Vibe</Text>
+              <Ionicons name="chevron-forward" size={16} color="#FFD700" />
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.streakCardScroll} contentContainerStyle={styles.streakCardAvatars}>

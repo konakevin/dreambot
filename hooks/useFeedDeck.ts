@@ -9,7 +9,7 @@ import { useFeedStore } from '@/store/feed';
  * Owns: deck, sessionVotes, loadedFeedKey, pending post injection.
  * Does NOT own: milestones, streaks, feed selection.
  */
-export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined) {
+export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined, blockedIds?: Set<string>) {
   const [deck, setDeck] = useState<FeedItem[]>([]);
   const [sessionVotes, setSessionVotes] = useState<Map<string, 'rad' | 'bad'>>(new Map());
   const [resetCounter, setResetCounter] = useState(0);
@@ -70,7 +70,8 @@ export function useFeedDeck(feed: FeedItem[], currentUserId: string | undefined)
   // Session-voted posts stay briefly (score animation + auto-dismiss).
   const externalVotes = useFeedStore((s) => s.externalVotes);
   const playableDeck = deck.filter((item) =>
-    !externalVotes.has(item.id) || sessionVotes.has(item.id)
+    (!externalVotes.has(item.id) || sessionVotes.has(item.id))
+    && (!blockedIds || !blockedIds.has(item.user_id))
   );
   const topCard = playableDeck[0];
   const behindCards = playableDeck.slice(1).filter((item) => !sessionVotes.has(item.id)).slice(0, 2);

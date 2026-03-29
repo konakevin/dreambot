@@ -27,6 +27,7 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useFeedStore } from '@/store/feed';
 import { useAuthStore } from '@/store/auth';
 import { Image as ExpoImage } from 'expo-image';
+import { useBlockedIds } from '@/hooks/useBlockUser';
 import { SwipeCard } from '@/components/SwipeCard';
 import { RankCard } from '@/components/RankCard';
 import { router } from 'expo-router';
@@ -53,7 +54,8 @@ export default function FeedScreen() {
 
   // ── Extracted hooks ──────────────────────────────────────────────────────
   const activeFeed = useActiveFeed();
-  const deck = useFeedDeck(activeFeed.feed, currentUser?.id);
+  const { data: blockedIds } = useBlockedIds();
+  const deck = useFeedDeck(activeFeed.feed, currentUser?.id, blockedIds);
   const milestone = useMilestoneDetection();
   const streakVoting = useStreakVoting();
   const streakUnlock = useStreakUnlock();
