@@ -229,9 +229,14 @@ export default function FeedScreen() {
             </Animated.View>
           </MaskedView>
         )}
-        <TouchableOpacity style={styles.searchButton} onPress={() => router.push('/search')} hitSlop={12} activeOpacity={0.7}>
-          <Ionicons name="search" size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          <TouchableOpacity onPress={() => router.push('/categoryPrefs')} hitSlop={12} activeOpacity={0.7}>
+            <Ionicons name="options-outline" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/search')} hitSlop={12} activeOpacity={0.7}>
+            <Ionicons name="search" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
         {activeFeed.isRefetching && <ActivityIndicator size="small" color={colors.textSecondary} style={styles.headerSpinner} />}
       </View>
 
@@ -661,14 +666,16 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 2,
   },
-  searchButton: {
+  headerRight: {
     position: 'absolute',
     right: 16,
-    padding: 4,
+    flexDirection: 'row',
+    gap: 16,
+    alignItems: 'center',
   },
   headerSpinner: {
     position: 'absolute',
-    right: 44,
+    right: 72,
   },
   cardArea: {
     flex: 1,
