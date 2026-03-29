@@ -34,6 +34,7 @@ export function useRemoveFriend() {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['friendIds'] });
       queryClient.invalidateQueries({ queryKey: ['friendsList'] });
+      queryClient.invalidateQueries({ queryKey: ['followingIds'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
       queryClient.invalidateQueries({ queryKey: ['friendshipStatus'] });
     },
