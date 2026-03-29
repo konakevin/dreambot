@@ -92,15 +92,17 @@ export default function PublicProfileScreen() {
           <GradientUsername username={profile.username} rank={profile.user_rank} style={styles.username} avatarUrl={profile.avatar_url} showAvatar avatarSize={32} />
           {!isOwnProfile && (
             <View style={styles.headerButtons}>
-              <TouchableOpacity
-                style={[styles.followButton, isFollowing && styles.followingButton]}
-                onPress={handleFollow}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.followButtonText, isFollowing && styles.followingButtonText]}>
-                  {isFollowing ? 'Following' : 'Follow'}
-                </Text>
-              </TouchableOpacity>
+              {friendshipStatus !== 'friends' && (
+                <TouchableOpacity
+                  style={[styles.followButton, isFollowing && styles.followingButton]}
+                  onPress={handleFollow}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.followButtonText, isFollowing && styles.followingButtonText]}>
+                    {isFollowing ? 'Following' : 'Follow'}
+                  </Text>
+                </TouchableOpacity>
+              )}
               <FriendButton
                 status={friendshipStatus}
                 onSendRequest={() => sendFriendRequest(userId)}
