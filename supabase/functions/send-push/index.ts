@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
     // Send to all device tokens
     const messages = tokens.map((t) => ({
       to: t.token,
-      sound: 'default',
+      sound: 'notification.wav',
       title: content.title,
       body: content.body,
       data,

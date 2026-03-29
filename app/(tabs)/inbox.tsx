@@ -10,6 +10,7 @@ import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
 import { useDeleteShare } from '@/hooks/useDeleteShare';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
+import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { colors } from '@/constants/theme';
 
 function formatTimeAgo(dateStr: string): string {
@@ -53,9 +54,10 @@ function getNotificationIcon(type: NotificationItem['type']): string {
   }
 }
 
-function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onToggleSelect }: {
+function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onToggleSelect, onAcceptVibe, onDeclineVibe }: {
   item: NotificationItem; onPress: () => void; onDelete: () => void;
   selectMode: boolean; isSelected: boolean; onToggleSelect: () => void;
+  onAcceptVibe?: () => void; onDeclineVibe?: () => void;
 }) {
   const { action, preview } = getNotificationText(item);
 
@@ -92,6 +94,18 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
         )}
       </View>
 
+      {/* Accept/Decline for friend requests */}
+      {item.type === 'friend_request' && onAcceptVibe && !selectMode && (
+        <View style={styles.vibeActions}>
+          <TouchableOpacity style={styles.acceptVibeButton} onPress={onAcceptVibe} activeOpacity={0.7} hitSlop={4}>
+            <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.declineVibeButton} onPress={onDeclineVibe} activeOpacity={0.7} hitSlop={4}>
+            <Ionicons name="close" size={14} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+      )}
+
       {/* Post thumbnail */}
       {item.imageUrl && (
         <Image
@@ -122,6 +136,7 @@ export default function InboxScreen() {
   const { mutate: deleteNotification } = useDeleteShare();
   const { mutate: markAllSeen } = useMarkAllSeen();
   const { mutate: deleteAll } = useDeleteAllNotifications();
+  const { mutate: respondRequest } = useRespondFriendRequest();
 
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -232,6 +247,15 @@ export default function InboxScreen() {
             selectMode={selectMode}
             isSelected={selected.has(item.id)}
             onToggleSelect={() => toggleSelect(item.id)}
+            onAcceptVibe={item.type === 'friend_request' ? () => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              respondRequest({ requesterId: item.actorId, accept: true });
+              deleteNotification(item.id);
+            } : undefined}
+            onDeclineVibe={item.type === 'friend_request' ? () => {
+              respondRequest({ requesterId: item.actorId, accept: false });
+              deleteNotification(item.id);
+            } : undefined}
           />
         )}
         onEndReached={() => {
@@ -385,6 +409,27 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 14,
     fontWeight: '600',
+  },
+  vibeActions: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  acceptVibeButton: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 14,
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  declineVibeButton: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 14,
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   trashButton: {
     padding: 4,

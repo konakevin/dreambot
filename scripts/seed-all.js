@@ -59,6 +59,7 @@ const POSTS_PER_STRANGER = getArg('posts', 10);
 
 const PASSWORD = 'Testpass123!';
 const KEVIN_EMAIL = 'konakevin@gmail.com';
+const PROTECTED_EMAILS = ['konakevin@gmail.com', 'sunnysteph@gmail.com'];
 
 // ── Named friends (Kevin's inner circle) ─────────────────────────────────────
 const FRIENDS = [
@@ -343,7 +344,7 @@ async function main() {
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
     if (error || !data?.users?.length) break;
     for (const u of data.users) {
-      if (u.email === KEVIN_EMAIL) continue;
+      if (PROTECTED_EMAILS.includes(u.email)) continue;
       if (u.email && u.email.endsWith('@radorbad.dev')) {
         await supabase.auth.admin.deleteUser(u.id);
         deleted++;
@@ -364,7 +365,7 @@ async function main() {
   await supabase.from('streak_cron_state').update({ last_processed_at: '2000-01-01T00:00:00Z' }).eq('id', 1);
   log('Cleared notifications, comments, shares, streaks, friendships, watermark');
 
-  // ── 2. Reset Kevin ───────────────────────────────────────────────────────
+  // ── 2. Reset Kevin (sunnysteph is never touched) ─────────────────────────
   const { data: kevin } = await supabase.from('users').select('id').eq('email', KEVIN_EMAIL).single();
   if (!kevin) { console.error('Kevin not found!'); process.exit(1); }
   console.log(`\n👤 Kevin ID: ${kevin.id}`);
@@ -375,7 +376,7 @@ async function main() {
     total_ratings_given: 0, critic_level: 1,
     rad_score: null, user_rank: null, needs_rank_recalc: false,
   }).eq('id', kevin.id);
-  log('Kevin reset to clean state');
+  log('Kevin reset to clean state (sunnysteph preserved)');
 
   // ── 3. Create friends ────────────────────────────────────────────────────
   console.log(`\n👥 Creating ${FRIENDS.length} friends...`);
@@ -823,7 +824,12 @@ async function main() {
   await supabase.rpc('refresh_vote_streaks');
   log('Streaks computed');
 
-  // ── 14. Verify ───────────────────────────────────────────────────────────
+  // ── 14b. Clear auto-generated notifications (triggers fired during seeding)
+  console.log('\n🧹 Clearing seed-generated notifications...');
+  await supabase.from('notifications').delete().not('id', 'is', null);
+  log('Cleared all notifications');
+
+  // ── 15. Verify ───────────────────────────────────────────────────────────
   console.log('\n✅ Verifying...');
   const { data: d1 } = await supabase.rpc('get_feed', { p_user_id: kevin.id, p_limit: 50 });
   log(`Explore feed: ${d1?.length ?? 0} posts`);
