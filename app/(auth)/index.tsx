@@ -53,14 +53,14 @@ const authStyles = StyleSheet.create({
     letterSpacing: 6,
   },
   logoOr: {
-    color: 'rgba(255,255,255,0.65)',
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 6,
     marginVertical: 2,
   },
   tagline: {
-    color: 'rgba(255,255,255,0.65)',
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 16,
     fontWeight: '600',
     letterSpacing: 3,

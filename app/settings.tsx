@@ -11,6 +11,7 @@ import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useAvatarUpload } from '@/hooks/useAvatarUpload';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
+import { useFeedStore } from '@/store/feed';
 import { colors } from '@/constants/theme';
 
 function SettingsRow({ icon, label, onPress, destructive, trailing }: {
@@ -35,6 +36,8 @@ export default function SettingsScreen() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
   const queryClient = useQueryClient();
+  const bumpReset = useFeedStore((s) => s.bumpReset);
+  const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const { data: profile } = usePublicProfile(user?.id ?? '');
   const { mutate: uploadAvatar, isPending: uploading } = useAvatarUpload();
   const [changingUsername, setChangingUsername] = useState(false);
@@ -153,6 +156,22 @@ export default function SettingsScreen() {
     );
   }
 
+  function handleRefreshAll() {
+    Alert.alert('Refresh App', 'This will reload all your data. Continue?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Refresh',
+        onPress: () => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          queryClient.clear();
+          regenerateSeed();
+          bumpReset();
+          router.replace('/(tabs)');
+        },
+      },
+    ]);
+  }
+
   function handleSignOut() {
     Alert.alert('Sign out', 'Are you sure?', [
       { text: 'Cancel', style: 'cancel' },
@@ -253,6 +272,12 @@ export default function SettingsScreen() {
             onPress={() => {}}
             trailing={<Text style={styles.rowValue}>{user?.email}</Text>}
           />
+        </View>
+
+        {/* App section */}
+        <Text style={styles.sectionHeader}>APP</Text>
+        <View style={styles.section}>
+          <SettingsRow icon="refresh-outline" label="Refresh App" onPress={handleRefreshAll} trailing={null} />
         </View>
 
         {/* Account section */}
