@@ -63,7 +63,7 @@ export function VoteWithFriendsButton() {
       activeOpacity={0.7}
     >
       <Ionicons name="flash" size={16} color="#FFD700" />
-      <Text style={styles.ctaText}>Vote with friends</Text>
+      <Text style={styles.ctaText}>Go vibe with friends</Text>
       <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
     </TouchableOpacity>
   );
@@ -75,7 +75,7 @@ export function StreakEmptyState() {
       <Ionicons name="flash-outline" size={40} color={colors.textSecondary} />
       <Text style={styles.emptyTitle}>No streaks yet</Text>
       <Text style={styles.emptySub}>
-        Vote on posts your friends have voted on to build streaks!
+        Vote on posts your vibers have voted on to build streaks!
       </Text>
       <TouchableOpacity
         style={styles.goVoteButton}
@@ -83,7 +83,7 @@ export function StreakEmptyState() {
         activeOpacity={0.7}
       >
         <Ionicons name="flash" size={16} color="#FFD700" />
-        <Text style={styles.goVoteText}>Go vote</Text>
+        <Text style={styles.goVoteText}>Go vibe</Text>
         <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
       </TouchableOpacity>
     </View>

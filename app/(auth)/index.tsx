@@ -1,12 +1,72 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from 'expo-linear-gradient';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
+
+const HOT_GRADIENT: [string, string, ...string[]] = ['#FFD700', '#FF8C00', '#FF4500'];
+const COLD_GRADIENT: [string, string, ...string[]] = ['#44DDCC', '#6699EE', '#BB88EE'];
+
+function Tagline() {
+  return (
+    <View style={{ alignItems: 'center' }}>
+      <Text style={authStyles.tagline}>It's all vibes</Text>
+    </View>
+  );
+}
+
+function GradientWord({ text, colors }: { text: string; colors: [string, string, ...string[]] }) {
+  return (
+    <MaskedView maskElement={<Text style={authStyles.logoWord}>{text}</Text>}>
+      <LinearGradient colors={colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+        <Text style={[authStyles.logoWord, { opacity: 0 }]}>{text}</Text>
+      </LinearGradient>
+    </MaskedView>
+  );
+}
+
+function Logo() {
+  return (
+    <View style={authStyles.logoContainer}>
+      <GradientWord text="RAD" colors={HOT_GRADIENT} />
+      <Text style={authStyles.logoOr}>OR</Text>
+      <GradientWord text="BAD" colors={COLD_GRADIENT} />
+    </View>
+  );
+}
+
+const authStyles = StyleSheet.create({
+  logoContainer: {
+    alignItems: 'center',
+    gap: -4,
+    marginBottom: 12,
+  },
+  logoWord: {
+    fontSize: 44,
+    fontWeight: '900',
+    letterSpacing: 6,
+  },
+  logoOr: {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: 14,
+    fontWeight: '800',
+    letterSpacing: 6,
+    marginVertical: 2,
+  },
+  tagline: {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 3,
+    marginTop: 10,
+  },
+});
 
 export default function WelcomeScreen() {
   const [loading, setLoading] = useState<string | null>(null);
@@ -37,11 +97,10 @@ export default function WelcomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 items-center justify-center px-8">
-        <Text className="text-7xl mb-4">🔥</Text>
-        <Text className="text-white text-4xl font-bold tracking-tight">Rad or Bad</Text>
-        <Text className="text-text-secondary text-lg mt-3 text-center">
-          Rate anything. Get rated.{'\n'}No filter.
-        </Text>
+        <Logo />
+        <View style={{ overflow: 'visible', alignItems: 'center' }}>
+          <Tagline />
+        </View>
       </View>
 
       <View className="px-6 pb-8 gap-3">

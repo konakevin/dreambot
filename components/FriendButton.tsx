@@ -28,7 +28,13 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.declineButton}
-          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onDecline(); }}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            Alert.alert('Decline request?', 'They won\'t be notified.', [
+              { text: 'Keep', style: 'cancel' },
+              { text: 'Decline', style: 'destructive', onPress: onDecline },
+            ]);
+          }}
           activeOpacity={0.7}
         >
           <Ionicons name="close" size={16} color={colors.textSecondary} />

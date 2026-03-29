@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import { useInbox, type NotificationItem } from '@/hooks/useInbox';
 import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
 import { useDeleteShare } from '@/hooks/useDeleteShare';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
+import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import { colors } from '@/constants/theme';
 
 function formatTimeAgo(dateStr: string): string {
@@ -52,25 +53,25 @@ function getNotificationIcon(type: NotificationItem['type']): string {
   }
 }
 
-function NotificationRow({ item, onPress, onDelete }: { item: NotificationItem; onPress: () => void; onDelete: () => void }) {
+function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onToggleSelect }: {
+  item: NotificationItem; onPress: () => void; onDelete: () => void;
+  selectMode: boolean; isSelected: boolean; onToggleSelect: () => void;
+}) {
   const { action, preview } = getNotificationText(item);
-
-  function handleLongPress() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Alert.alert('Delete', 'Remove this notification?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: onDelete },
-    ]);
-  }
 
   return (
     <TouchableOpacity
       style={[styles.row, !item.isSeen && styles.rowUnseen]}
-      onPress={onPress}
-      onLongPress={handleLongPress}
+      onPress={selectMode ? onToggleSelect : onPress}
       activeOpacity={0.7}
-      delayLongPress={400}
     >
+      {/* Checkbox in select mode */}
+      {selectMode && (
+        <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+          {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
+        </View>
+      )}
+
       {/* Actor avatar */}
       {item.actorAvatarUrl ? (
         <Image source={{ uri: item.actorAvatarUrl }} style={styles.avatar} />
@@ -100,11 +101,17 @@ function NotificationRow({ item, onPress, onDelete }: { item: NotificationItem; 
         />
       )}
 
-      {/* Time + unseen dot */}
+      {/* Time + delete */}
       <View style={styles.timeCol}>
         <Text style={styles.time}>{formatTimeAgo(item.createdAt)}</Text>
         {!item.isSeen && <View style={styles.unseenDot} />}
       </View>
+
+      {!selectMode && (
+        <TouchableOpacity onPress={onDelete} hitSlop={8} style={styles.trashButton}>
+          <Ionicons name="trash-outline" size={16} color="rgba(255,255,255,0.25)" />
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 }
@@ -114,9 +121,45 @@ export default function InboxScreen() {
   const { mutate: markSeen } = useMarkShareSeen();
   const { mutate: deleteNotification } = useDeleteShare();
   const { mutate: markAllSeen } = useMarkAllSeen();
+  const { mutate: deleteAll } = useDeleteAllNotifications();
+
+  const [selectMode, setSelectMode] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const inbox = useMemo(() => data?.pages.flat() ?? [], [data]);
   const hasUnread = inbox.some((item) => !item.isSeen);
+  const hasAny = inbox.length > 0;
+  const allSelected = hasAny && selected.size === inbox.length;
+
+  function toggleSelect(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (allSelected) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(inbox.map((item) => item.id)));
+    }
+  }
+
+  function deleteSelected() {
+    for (const id of selected) {
+      deleteNotification(id);
+    }
+    setSelected(new Set());
+    setSelectMode(false);
+  }
+
+  function exitSelectMode() {
+    setSelectMode(false);
+    setSelected(new Set());
+  }
 
   function handleTap(item: NotificationItem) {
     if (!item.isSeen) {
@@ -133,11 +176,48 @@ export default function InboxScreen() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Inbox</Text>
-        {hasUnread && (
-          <TouchableOpacity onPress={() => markAllSeen()} activeOpacity={0.7} hitSlop={8}>
-            <Text style={styles.markAllRead}>Mark all read</Text>
-          </TouchableOpacity>
+        {selectMode ? (
+          <>
+            <TouchableOpacity onPress={exitSelectMode} activeOpacity={0.7}>
+              <Text style={styles.headerCancel}>Cancel</Text>
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>{selected.size} selected</Text>
+            <View style={styles.headerActions}>
+              <TouchableOpacity onPress={toggleSelectAll} activeOpacity={0.7} hitSlop={8}>
+                <Text style={styles.selectAllText}>{allSelected ? 'Deselect all' : 'Select all'}</Text>
+              </TouchableOpacity>
+              {selected.size > 0 && (
+                <TouchableOpacity
+                  onPress={() => {
+                    Alert.alert(`Delete ${selected.size} notifications?`, 'This cannot be undone.', [
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Delete', style: 'destructive', onPress: deleteSelected },
+                    ]);
+                  }}
+                  activeOpacity={0.7}
+                  hitSlop={8}
+                >
+                  <Ionicons name="trash" size={20} color="#F4212E" />
+                </TouchableOpacity>
+              )}
+            </View>
+          </>
+        ) : (
+          <>
+            <Text style={styles.headerTitle}>Inbox</Text>
+            <View style={styles.headerActions}>
+              {hasUnread && (
+                <TouchableOpacity onPress={() => markAllSeen()} activeOpacity={0.7} hitSlop={8}>
+                  <Text style={styles.markAllRead}>Mark all read</Text>
+                </TouchableOpacity>
+              )}
+              {hasAny && (
+                <TouchableOpacity onPress={() => setSelectMode(true)} activeOpacity={0.7} hitSlop={8}>
+                  <Text style={styles.editText}>Edit</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </>
         )}
       </View>
 
@@ -149,6 +229,9 @@ export default function InboxScreen() {
             item={item}
             onPress={() => handleTap(item)}
             onDelete={() => deleteNotification(item.id)}
+            selectMode={selectMode}
+            isSelected={selected.has(item.id)}
+            onToggleSelect={() => toggleSelect(item.id)}
           />
         )}
         onEndReached={() => {
@@ -195,6 +278,11 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 20,
     fontWeight: '800',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
   },
   markAllRead: {
     color: '#FFD700',
@@ -269,6 +357,37 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: '#FFD700',
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxSelected: {
+    backgroundColor: '#FFD700',
+    borderColor: '#FFD700',
+  },
+  headerCancel: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  selectAllText: {
+    color: '#FFD700',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  editText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  trashButton: {
+    padding: 4,
   },
   footer: {
     paddingVertical: 20,

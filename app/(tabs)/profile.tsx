@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
@@ -94,8 +95,50 @@ export default function ProfileScreen() {
           activeTab={statsActiveTab}
           onTabChange={handleStatsTabChange}
           pendingCount={pendingRequests.length}
+          hiddenTabs={['streaks']}
         />
       </View>
+
+      {/* Streak preview card */}
+      {streaks.length > 0 && (activeTab === 'posts' || activeTab === 'saved') && (
+        <View style={styles.streakCard}>
+          <View style={styles.streakCardHeader}>
+            <View style={styles.streakCardTitleRow}>
+              <Ionicons name="flame" size={18} color="#FFD700" />
+              <Text style={styles.streakCardTitle}>Vibe Streaks</Text>
+            </View>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.streakCardScroll} contentContainerStyle={styles.streakCardAvatars}>
+            {[...streaks].sort((a, b) => (b.radStreak + b.badStreak) - (a.radStreak + a.badStreak)).map((s) => (
+                <TouchableOpacity
+                  key={s.friendId || s.friendUsername}
+                  style={styles.streakCardItem}
+                  onPress={() => s.friendId ? router.push(`/user/${s.friendId}`) : null}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.streakAvatarWrap}>
+                    <View style={styles.streakCardRing}>
+                      {s.friendAvatar ? (
+                        <Image source={{ uri: s.friendAvatar }} style={styles.streakCardAvatar} />
+                      ) : (
+                        <View style={styles.streakCardAvatarFallback}>
+                          <Text style={styles.streakCardAvatarText}>{s.friendUsername[0].toUpperCase()}</Text>
+                        </View>
+                      )}
+                    </View>
+                    <View style={[styles.streakBadge, styles.streakBadgeRad]}>
+                      <Text style={styles.streakBadgeText}>{s.radStreak}</Text>
+                    </View>
+                    <View style={[styles.streakBadge, styles.streakBadgeBad]}>
+                      <Text style={styles.streakBadgeText}>{s.badStreak}</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.streakCardName} numberOfLines={1}>{s.friendUsername}</Text>
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </View>
+      )}
 
       {(activeTab === 'posts' || activeTab === 'saved') && (
         <View style={styles.tabRow}>
@@ -310,6 +353,110 @@ const styles = StyleSheet.create({
   tabTextActive: { color: colors.textPrimary },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
+  streakCard: {
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 4,
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#2A2A3A',
+    padding: 14,
+  },
+  streakCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  streakCardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  streakCardTitle: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  streakCardScroll: {
+    marginHorizontal: -4,
+  },
+  streakCardAvatars: {
+    flexDirection: 'row',
+    gap: 14,
+    paddingHorizontal: 4,
+  },
+  streakCardItem: {
+    alignItems: 'center',
+    gap: 4,
+    width: 54,
+  },
+  streakAvatarWrap: {
+    position: 'relative',
+    width: 50,
+    height: 50,
+  },
+  streakBadge: {
+    position: 'absolute',
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+    borderWidth: 2,
+    borderColor: colors.card,
+  },
+  streakBadgeRad: {
+    top: -4,
+    left: -4,
+    backgroundColor: '#FF4500',
+  },
+  streakBadgeBad: {
+    top: -4,
+    right: -4,
+    backgroundColor: '#6366F1',
+  },
+  streakBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '900',
+  },
+  streakCardRing: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    borderWidth: 2,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  streakCardAvatar: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+  },
+  streakCardAvatarFallback: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  streakCardAvatarText: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  streakCardName: {
+    color: colors.textSecondary,
+    fontSize: 10,
+    fontWeight: '600',
+    maxWidth: 52,
+    textAlign: 'center',
+  },
   discoverHeader: {
     paddingHorizontal: 16,
     paddingTop: 24,

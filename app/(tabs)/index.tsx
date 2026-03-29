@@ -258,7 +258,7 @@ export default function FeedScreen() {
           activeOpacity={0.7}
         >
           <Ionicons name="flash" size={14} color={feedMode === 'friends' ? '#FFD700' : colors.textSecondary} />
-          <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Streak</Text>
+          <Text style={[styles.feedToggleText, feedMode === 'friends' && styles.feedToggleTextActive]}>Vibes</Text>
         </TouchableOpacity>
       </View>
 
