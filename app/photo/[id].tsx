@@ -432,10 +432,8 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
                   />
                 </TouchableOpacity>
               )}
-              {!isOwnPost && currentUser && (
-                <TouchableOpacity onPress={() => reportPost(p.id, currentUser.id, () => router.back())} hitSlop={12} style={styles.shareButton}>
-                  <Ionicons name="flag-outline" size={16} color="rgba(255,255,255,0.35)" />
-                </TouchableOpacity>
+              {!isOwnPost && (
+                <ReportButton uploadId={p.id} />
               )}
             </View>
             {catsExpanded && hiddenCats.length > 0 && (
@@ -457,6 +455,16 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
       </View>
 
     </LinearGradient>
+  );
+}
+
+function ReportButton({ uploadId }: { uploadId: string }) {
+  const user = useAuthStore((s) => s.user);
+  if (!user) return null;
+  return (
+    <TouchableOpacity onPress={() => reportPost(uploadId, user.id, () => router.back())} hitSlop={12} style={{ padding: 4 }}>
+      <Ionicons name="flag-outline" size={16} color="rgba(255,255,255,0.35)" />
+    </TouchableOpacity>
   );
 }
 
