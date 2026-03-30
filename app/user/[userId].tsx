@@ -67,7 +67,7 @@ export default function PublicProfileScreen() {
         onPress: () => {
           toggleBlock({ userId, currentlyBlocked: isBlocked });
           if (!isBlocked) {
-            router.back();
+            router.replace('/(tabs)');
           }
         },
       },
