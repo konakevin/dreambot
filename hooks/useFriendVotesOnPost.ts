@@ -20,6 +20,7 @@ export function useFriendVotesOnPost(uploadId: string | null) {
       if (error) throw error;
 
       return (data ?? []).map((row: Record<string, unknown>) => ({
+        user_id: (row.friend_user_id as string) ?? '',
         username: row.friend_username as string,
         avatar_url: (row.friend_avatar as string | null) ?? null,
         user_rank: (row.friend_rank as string | null) ?? null,

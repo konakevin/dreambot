@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export interface LocalStreak {
   radStreak: number;
   badStreak: number;
+  userId: string;
   username: string;
   avatarUrl: string | null;
   userRank: string | null;
@@ -48,7 +49,7 @@ interface FeedStore {
   regenerateSeed: () => void;
   // Optimistic streak data — overrides server values during active session
   localStreaks: Map<string, LocalStreak>;
-  updateStreak: (friend: { username: string; avatar_url: string | null; user_rank: string | null; rad_streak?: number; bad_streak?: number }, matched: boolean, voteType: 'rad' | 'bad') => void;
+  updateStreak: (friend: { user_id: string; username: string; avatar_url: string | null; user_rank: string | null; rad_streak?: number; bad_streak?: number }, matched: boolean, voteType: 'rad' | 'bad') => void;
   clearLocalStreaks: () => void;
 }
 
@@ -97,6 +98,7 @@ export const useFeedStore = create<FeedStore>((set) => ({
         localStreaks: new Map(s.localStreaks).set(friend.username, {
           radStreak: newRad,
           badStreak: newBad,
+          userId: friend.user_id,
           username: friend.username,
           avatarUrl: friend.avatar_url,
           userRank: friend.user_rank,

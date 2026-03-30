@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useFriendshipStatus } from '@/hooks/useFriendshipStatus';
 import { colors } from '@/constants/theme';
 import type { VibeSuggestion } from '@/hooks/useVibeSuggestions';
 
@@ -14,10 +16,15 @@ function getVibeColor(score: number): string {
 interface Props {
   suggestion: VibeSuggestion;
   onStartVibing: (userId: string) => void;
+  localSent?: boolean;
 }
 
-export function VibeSuggestionRow({ suggestion, onStartVibing }: Props) {
+export function VibeSuggestionRow({ suggestion, onStartVibing, localSent }: Props) {
   const scoreColor = getVibeColor(suggestion.vibeScore);
+  const { data: status = 'none' } = useFriendshipStatus(suggestion.userId);
+
+  const isPending = localSent || status === 'pending_sent' || status === 'pending_received';
+  const isFriends = status === 'friends';
 
   return (
     <TouchableOpacity
@@ -44,14 +51,26 @@ export function VibeSuggestionRow({ suggestion, onStartVibing }: Props) {
         </Text>
       </View>
 
-      <TouchableOpacity
-        style={styles.vibeButton}
-        onPress={() => onStartVibing(suggestion.userId)}
-        activeOpacity={0.7}
-        hitSlop={8}
-      >
-        <Text style={styles.vibeButtonText}>Vibe</Text>
-      </TouchableOpacity>
+      {isFriends ? (
+        <View style={styles.friendsButton}>
+          <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
+          <Text style={styles.friendsButtonText}>Vibers</Text>
+        </View>
+      ) : isPending ? (
+        <View style={styles.requestedButton}>
+          <Text style={styles.requestedButtonText}>Requested</Text>
+        </View>
+      ) : (
+        <TouchableOpacity
+          onPress={() => onStartVibing(suggestion.userId)}
+          activeOpacity={0.7}
+          hitSlop={8}
+        >
+          <View style={styles.vibeButton}>
+            <Text style={styles.vibeButtonText}>Vibe</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 }
@@ -106,14 +125,42 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   vibeButton: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#FF4500',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 7,
   },
   vibeButtonText: {
-    color: '#000000',
+    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '800',
+  },
+  requestedButton: {
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 7,
+  },
+  requestedButtonText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  friendsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+  },
+  friendsButtonText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

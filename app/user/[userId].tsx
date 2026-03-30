@@ -313,7 +313,7 @@ function VibeStatsRow({ vibeScore, bestStreak, sharedCount, isVibing }: {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  backRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, paddingVertical: 4 },
+  backRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, paddingTop: 4, paddingBottom: 12 },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: {
     paddingHorizontal: 16,

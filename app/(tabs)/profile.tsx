@@ -26,9 +26,7 @@ import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
 import { usePendingRequests } from '@/hooks/usePendingRequests';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { useRemoveFriend } from '@/hooks/useRemoveFriend';
-import { useVibeSuggestions, type VibeSuggestion } from '@/hooks/useVibeSuggestions';
-import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
-import { VibeSuggestionRow } from '@/components/VibeSuggestionRow';
+
 import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import type { VibeSyncStreak } from '@/hooks/useTopStreaks';
@@ -65,8 +63,8 @@ export default function ProfileScreen() {
   const { data: pendingRequests = [] } = usePendingRequests();
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
-  const { data: vibeSuggestions = [] } = useVibeSuggestions();
-  const { mutate: sendFriendRequest } = useSendFriendRequest();
+
+
 
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -93,7 +91,7 @@ export default function ProfileScreen() {
               showAvatar
               avatarSize={32}
             />
-            <Text style={styles.email}>{user?.email}</Text>
+
           </View>
           <TouchableOpacity onPress={() => router.push('/settings')} hitSlop={12}>
             <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
@@ -130,7 +128,7 @@ export default function ProfileScreen() {
               <Ionicons name="chevron-forward" size={16} color="#FFD700" />
             </TouchableOpacity>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.streakCardScroll} contentContainerStyle={styles.streakCardAvatars}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled style={styles.streakCardScroll} contentContainerStyle={styles.streakCardAvatars}>
             {[...streaks].sort((a, b) => (b.radStreak + b.badStreak) - (a.radStreak + a.badStreak)).map((s) => (
                 <TouchableOpacity
                   key={s.friendId || s.friendUsername}
@@ -167,6 +165,18 @@ export default function ProfileScreen() {
               ))}
           </ScrollView>
         </View>
+      )}
+
+      {(activeTab === 'posts' || activeTab === 'saved') && (
+        <TouchableOpacity
+          style={styles.discoverButton}
+          onPress={() => router.push('/discoverVibers')}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="sparkles" size={14} color="#FFD700" />
+          <Text style={styles.discoverButtonText}>See who you vibe with</Text>
+          <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
+        </TouchableOpacity>
       )}
 
       {(activeTab === 'posts' || activeTab === 'saved') && (
@@ -210,22 +220,14 @@ export default function ProfileScreen() {
   }
 
   if (activeTab === 'friends') {
-    // Combine pending requests + accepted friends + discover section
+    // Combine pending requests + accepted friends
     type ListItem =
       | { type: 'request'; data: (typeof pendingRequests)[number] }
-      | { type: 'friend'; data: FriendUser }
-      | { type: 'discover_header' }
-      | { type: 'suggestion'; data: VibeSuggestion };
+      | { type: 'friend'; data: FriendUser };
 
     const sections: ListItem[] = [
       ...pendingRequests.map((r) => ({ type: 'request' as const, data: r })),
       ...friends.map((f) => ({ type: 'friend' as const, data: f })),
-      ...(vibeSuggestions.length > 0
-        ? [
-            { type: 'discover_header' as const },
-            ...vibeSuggestions.map((s) => ({ type: 'suggestion' as const, data: s })),
-          ]
-        : []),
     ];
 
     return (
@@ -236,10 +238,19 @@ export default function ProfileScreen() {
           keyExtractor={(item) => {
             if (item.type === 'request') return `req-${item.data.requesterId}`;
             if (item.type === 'friend') return `fr-${item.data.id}`;
-            if (item.type === 'discover_header') return 'discover-header';
-            return `sug-${item.data.userId}`;
+            return `fr-unknown`;
           }}
-          ListHeaderComponent={header}
+          ListHeaderComponent={<>{header}
+            <TouchableOpacity
+              style={styles.discoverButton}
+              onPress={() => router.push('/discoverVibers')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="sparkles" size={14} color="#FFD700" />
+              <Text style={styles.discoverButtonText}>See who you vibe with</Text>
+              <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
+            </TouchableOpacity>
+          </>}
           ListEmptyComponent={
             <View style={styles.center}>
               {loadingFriends
@@ -258,31 +269,11 @@ export default function ProfileScreen() {
                 />
               );
             }
-            if (item.type === 'friend') {
-              return (
-                <FollowUserRow
-                  item={item.data}
-                  isFollowing={followingIds.has(item.data.id)}
-                  onFollow={handleFollowUser}
-                />
-              );
-            }
-            if (item.type === 'discover_header') {
-              return (
-                <View style={styles.discoverHeader}>
-                  <Ionicons name="sparkles" size={16} color="#FFD700" />
-                  <Text style={styles.discoverTitle}>Discover Vibers</Text>
-                  <Text style={styles.discoverSubtitle}>People who vote like you</Text>
-                </View>
-              );
-            }
             return (
-              <VibeSuggestionRow
-                suggestion={item.data}
-                onStartVibing={(id) => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  sendFriendRequest(id);
-                }}
+              <FollowUserRow
+                item={item.data}
+                isFollowing={followingIds.has(item.data.id)}
+                onFollow={handleFollowUser}
               />
             );
           }}
@@ -483,24 +474,22 @@ const styles = StyleSheet.create({
     maxWidth: 52,
     textAlign: 'center',
   },
-  discoverHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 8,
-    borderTopWidth: 0.5,
-    borderTopColor: colors.border,
-    marginTop: 8,
-    gap: 2,
-    flexDirection: 'column',
+  discoverButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    backgroundColor: '#FF4500',
+    borderRadius: 12,
   },
-  discoverTitle: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '800',
-    marginTop: 4,
-  },
-  discoverSubtitle: {
-    color: colors.textSecondary,
-    fontSize: 13,
+  discoverButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });

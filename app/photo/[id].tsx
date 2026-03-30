@@ -169,10 +169,12 @@ export default function PhotoDetailScreen() {
       <>
         <StatusBar hidden />
         <View style={styles.loadingRoot}>
-          <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
-            <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
-          </TouchableOpacity>
-          <ActivityIndicator color="#71767B" />
+          <SafeAreaView style={styles.loadingBackWrap}>
+            <TouchableOpacity style={styles.backButton} onPress={() => router.back()} hitSlop={12}>
+              <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
+            </TouchableOpacity>
+          </SafeAreaView>
+          <ActivityIndicator color="#71767B" style={styles.loadingSpinner} />
         </View>
       </>
     );
@@ -476,7 +478,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loadingRoot: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
+  loadingRoot: { flex: 1, backgroundColor: colors.background },
+  loadingBackWrap: { position: 'absolute', top: 0, left: 0, zIndex: 1, paddingHorizontal: 8, paddingVertical: 4 },
+  loadingSpinner: { position: 'absolute', top: '50%', alignSelf: 'center' },
   backButton: {
     width: 44,
     height: 44,

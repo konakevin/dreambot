@@ -69,7 +69,7 @@ export function useTopStreaks(userId: string) {
   for (const [, local] of localStreaks) {
     if (!serverUsernames.has(local.username) && (local.radStreak > 0 || local.badStreak > 0)) {
       merged.push({
-        friendId: '',
+        friendId: local.userId,
         friendUsername: local.username,
         friendAvatar: local.avatarUrl,
         friendRank: local.userRank,

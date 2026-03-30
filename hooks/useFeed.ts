@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 
 export interface FriendVote {
+  user_id: string;
   username: string;
   avatar_url: string | null;
   user_rank: string | null;

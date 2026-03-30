@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue, useAnimatedStyle,
@@ -64,7 +64,7 @@ function Particle({ angle, color, progress, config }: {
   );
 }
 
-function BurstEffect({ progresses, vote }: {
+const BurstEffect = memo(function BurstEffect({ progresses, vote }: {
   progresses: Animated.SharedValue<number>[];
   vote: 'rad' | 'bad';
 }) {
@@ -76,7 +76,7 @@ function BurstEffect({ progresses, vote }: {
       ))}
     </View>
   );
-}
+});
 
 interface VoteButtonProps {
   vote: 'rad' | 'bad';
@@ -97,7 +97,7 @@ export function VoteButton({ vote, onPress, disabled, size = 74, jiggleTick = 0,
   const p9  = useSharedValue(0); const p10 = useSharedValue(0); const p11 = useSharedValue(0);
   const p12 = useSharedValue(0); const p13 = useSharedValue(0); const p14 = useSharedValue(0);
   const p15 = useSharedValue(0); const p16 = useSharedValue(0); const p17 = useSharedValue(0);
-  const progresses = [p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17];
+  const progresses = useMemo(() => [p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17], []);
 
   const buttonScale = useSharedValue(1);
   const buttonOpacity = useSharedValue(1);

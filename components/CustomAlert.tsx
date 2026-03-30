@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   button: {
+    flex: 1,
     paddingVertical: 13,
     borderRadius: 14,
     alignItems: 'center',

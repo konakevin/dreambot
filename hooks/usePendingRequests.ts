@@ -26,6 +26,7 @@ export function usePendingRequests() {
       }));
     },
     enabled: !!user,
-    staleTime: 30_000,
+    staleTime: 15_000,
+    refetchOnMount: 'always',
   });
 }

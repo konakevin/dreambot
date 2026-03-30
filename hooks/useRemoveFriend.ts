@@ -37,6 +37,9 @@ export function useRemoveFriend() {
       queryClient.invalidateQueries({ queryKey: ['followingIds'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
       queryClient.invalidateQueries({ queryKey: ['friendshipStatus'] });
+      queryClient.invalidateQueries({ queryKey: ['pendingRequests'] });
+      queryClient.invalidateQueries({ queryKey: ['inbox'] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
     },
   });
 }
