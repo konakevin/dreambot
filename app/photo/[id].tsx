@@ -33,6 +33,7 @@ import { useAlbumStore } from '@/store/album';
 import { fetchPost } from '@/hooks/usePost';
 import { getRating } from '@/lib/getRating';
 import { VoteCount } from '@/components/VoteCount';
+import { reportPost } from '@/lib/reportPost';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
@@ -429,6 +430,11 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
                     size={18}
                     color={isFavorited ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)'}
                   />
+                </TouchableOpacity>
+              )}
+              {!isOwnPost && user && (
+                <TouchableOpacity onPress={() => reportPost(p.id, user.id)} hitSlop={12} style={styles.shareButton}>
+                  <Ionicons name="flag-outline" size={16} color="rgba(255,255,255,0.35)" />
                 </TouchableOpacity>
               )}
             </View>

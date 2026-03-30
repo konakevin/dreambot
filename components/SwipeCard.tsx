@@ -27,6 +27,8 @@ import { CATEGORY_LABELS } from '@/constants/categories';
 import { animateScoreIn } from '@/lib/scoreAnimation';
 import { DISMISS_DELAY, SWIPE } from '@/constants/theme';
 import { useFeedStore } from '@/store/feed';
+import { useAuthStore } from '@/store/auth';
+import { reportPost } from '@/lib/reportPost';
 import { MilestoneBurst } from '@/components/MilestoneBurst';
 import type { MilestoneHit } from '@/lib/milestones';
 
@@ -134,6 +136,7 @@ function FriendAvatarBubble({ friend, userVote, index }: {
 }
 
 export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost, isAlreadyVoted = false, onDismiss, onDismissStart, onFavorite, onFollow, onUserPress, onSwipeUpBlocked, onRefresh, hideRank = false, isTop, index, containerHeight, showSwipeHint, swipeEnabled = true, hasMilestone = false, friendVotes, autoDismissDelay, milestoneHit, pullY, onShare, onComment, commentCount }: SwipeCardProps) {
+  const currentUserId = useAuthStore((s) => s.user?.id);
   const cardHeight = containerHeight > 0 ? containerHeight : SCREEN_HEIGHT * 0.65;
   const isVideo = item.media_type === 'video';
   const muted = useFeedStore((s) => s.videoMuted);
@@ -425,6 +428,11 @@ export function SwipeCard({ item, userVote, isFavorited, isFollowing, isOwnPost,
                             size={22}
                             color={isFavorited ? '#FFFFFF' : 'rgba(255,255,255,0.55)'}
                           />
+                        </TouchableOpacity>
+                      )}
+                      {!isOwnPost && currentUserId && (
+                        <TouchableOpacity onPress={() => reportPost(item.id, currentUserId)} hitSlop={12} style={styles.saveButton} activeOpacity={0.6}>
+                          <Ionicons name="flag-outline" size={18} color="rgba(255,255,255,0.35)" />
                         </TouchableOpacity>
                       )}
                     </View>
