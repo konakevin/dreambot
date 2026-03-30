@@ -1,5 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
+import * as Haptics from 'expo-haptics';
 
 export function reportPost(
   uploadId: string,
@@ -20,6 +21,6 @@ async function submit(uploadId: string, reporterId: string, reason: string, onCo
     upload_id: uploadId,
     reason,
   });
-  showAlert('Reported', 'Thanks for letting us know. We\'ll review this post.');
+  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   onComplete?.();
 }

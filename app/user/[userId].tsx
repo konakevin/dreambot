@@ -76,9 +76,9 @@ export default function PublicProfileScreen() {
         style: 'destructive',
         onPress: () => {
           showAlert('Report User', 'Why are you reporting this user?', [
-            { text: 'Spam', onPress: () => { report({ reason: 'spam', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.'); } },
-            { text: 'Harassment', onPress: () => { report({ reason: 'harassment', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.'); } },
-            { text: 'Inappropriate', onPress: () => { report({ reason: 'inappropriate', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.'); } },
+            { text: 'Spam', style: 'destructive', onPress: () => { report({ reason: 'spam', reportedUserId: userId }); Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); } },
+            { text: 'Harassment', style: 'destructive', onPress: () => { report({ reason: 'harassment', reportedUserId: userId }); Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); } },
+            { text: 'Inappropriate', style: 'destructive', onPress: () => { report({ reason: 'inappropriate', reportedUserId: userId }); Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); } },
             { text: 'Cancel', style: 'cancel' },
           ]);
         },

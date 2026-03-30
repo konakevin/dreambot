@@ -52,7 +52,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => button.onPress?.(), 150);
   }
 
-  const isStacked = alert.buttons.length > 2;
+  const isStacked = alert.buttons.length !== 2;
   // For stacked: cancel at bottom. For row: cancel on left.
   const sortedButtons = [...alert.buttons].sort((a, b) => {
     if (isStacked) {
