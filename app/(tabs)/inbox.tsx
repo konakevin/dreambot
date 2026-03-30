@@ -57,10 +57,11 @@ function getNotificationIcon(type: NotificationItem['type']): string {
   }
 }
 
-function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onToggleSelect, onAcceptVibe, onDeclineVibe }: {
+function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onToggleSelect, onAcceptVibe, onDeclineVibe, vibeAccepted }: {
   item: NotificationItem; onPress: () => void; onDelete: () => void;
   selectMode: boolean; isSelected: boolean; onToggleSelect: () => void;
   onAcceptVibe?: () => void; onDeclineVibe?: () => void;
+  vibeAccepted?: boolean;
 }) {
   const { action, preview } = getNotificationText(item);
 
@@ -106,15 +107,22 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
       </View>
 
       {/* Accept/Decline for friend requests */}
-      {item.type === 'friend_request' && onAcceptVibe && !selectMode && (
-        <View style={styles.vibeActions}>
-          <TouchableOpacity style={styles.acceptVibeButton} onPress={onAcceptVibe} activeOpacity={0.7} hitSlop={4}>
-            <Ionicons name="checkmark" size={16} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.declineVibeButton} onPress={onDeclineVibe} activeOpacity={0.7} hitSlop={4}>
-            <Ionicons name="close" size={14} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
+      {item.type === 'friend_request' && !selectMode && (
+        vibeAccepted ? (
+          <View style={styles.vibersBadge}>
+            <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
+            <Text style={styles.vibersBadgeText}>Vibers</Text>
+          </View>
+        ) : onAcceptVibe ? (
+          <View style={styles.vibeActions}>
+            <TouchableOpacity style={styles.acceptVibeButton} onPress={onAcceptVibe} activeOpacity={0.7} hitSlop={4}>
+              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.declineVibeButton} onPress={onDeclineVibe} activeOpacity={0.7} hitSlop={4}>
+              <Ionicons name="close" size={14} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
+        ) : null
       )}
 
       {/* Post thumbnail */}
@@ -147,6 +155,7 @@ export default function InboxScreen() {
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [allSelectedGlobal, setAllSelectedGlobal] = useState(false);
+  const [acceptedVibeIds, setAcceptedVibeIds] = useState<Set<string>>(new Set());
 
   const inbox = useMemo(() => data?.pages.flat() ?? [], [data]);
   const hasUnread = inbox.some((item) => !item.isSeen);
@@ -282,10 +291,11 @@ export default function InboxScreen() {
             selectMode={selectMode}
             isSelected={selected.has(item.id)}
             onToggleSelect={() => toggleSelect(item.id)}
+            vibeAccepted={acceptedVibeIds.has(item.id)}
             onAcceptVibe={item.type === 'friend_request' ? () => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               respondRequest({ requesterId: item.actorId, accept: true });
-              deleteNotification(item.id);
+              setAcceptedVibeIds((prev) => new Set(prev).add(item.id));
             } : undefined}
             onDeclineVibe={item.type === 'friend_request' ? () => {
               respondRequest({ requesterId: item.actorId, accept: false });
@@ -465,6 +475,22 @@ const styles = StyleSheet.create({
     height: 28,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  vibersBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  vibersBadgeText: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
   },
   trashButton: {
     padding: 4,
