@@ -8,6 +8,7 @@ import { colors } from '@/constants/theme';
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
   const bumpRefresh = useFeedStore((s) => s.bumpRefresh);
+  const bumpProfileReset = useFeedStore((s) => s.bumpProfileReset);
   const { data: unreadCount } = useUnreadShareCount();
 
   if (initialized && !session) {
@@ -75,6 +76,9 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
           ),
+        }}
+        listeners={{
+          tabPress: () => bumpProfileReset(),
         }}
       />
     </Tabs>

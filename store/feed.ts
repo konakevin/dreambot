@@ -51,6 +51,9 @@ interface FeedStore {
   localStreaks: Map<string, LocalStreak>;
   updateStreak: (friend: { user_id: string; username: string; avatar_url: string | null; user_rank: string | null; rad_streak?: number; bad_streak?: number }, matched: boolean, voteType: 'rad' | 'bad') => void;
   clearLocalStreaks: () => void;
+  // Profile tab reset — bumped when profile tab icon is re-tapped
+  profileResetToken: number;
+  bumpProfileReset: () => void;
 }
 
 // resetToken — wipes deck + refetches (used after a new upload)
@@ -106,4 +109,6 @@ export const useFeedStore = create<FeedStore>((set) => ({
       };
     }),
   clearLocalStreaks: () => set({ localStreaks: new Map() }),
+  profileResetToken: 0,
+  bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
 }));

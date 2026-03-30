@@ -120,6 +120,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
           <Stack.Screen name="settings" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="friendReveal/[uploadId]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="photo/[id]" options={{ presentation: 'card', gestureEnabled: true }} />

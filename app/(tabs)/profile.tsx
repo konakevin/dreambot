@@ -1,5 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { useFeedStore } from '@/store/feed';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -47,11 +49,21 @@ function GradientFlame({ colors, size }: { colors: [string, string, ...string[]]
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<Tab>('posts');
+  const profileResetToken = useFeedStore((s) => s.profileResetToken);
+  const queryClient = useQueryClient();
 
-  // Reset to posts tab every time the profile screen comes into focus
+  // Reset to posts tab on focus or when profile tab icon is re-tapped
   useFocusEffect(useCallback(() => {
     setActiveTab('posts');
   }, []));
+
+  useEffect(() => {
+    if (profileResetToken > 0) {
+      setActiveTab('posts');
+      queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+    }
+  }, [profileResetToken]);
 
   const { data: profile } = usePublicProfile(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(user?.id ?? '');
@@ -110,7 +122,7 @@ export default function ProfileScreen() {
         />
       </View>
 
-      {/* Streak preview card */}
+      {/* Streak preview card — hidden during dev, uncomment to re-enable
       {streaks.length > 0 && (activeTab === 'posts' || activeTab === 'saved') && (
         <View style={styles.streakCard}>
           <View style={styles.streakCardHeader}>
@@ -166,6 +178,7 @@ export default function ProfileScreen() {
           </ScrollView>
         </View>
       )}
+      */}
 
       {(activeTab === 'posts' || activeTab === 'saved') && (
         <TouchableOpacity
