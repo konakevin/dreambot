@@ -25,21 +25,16 @@ const SWIPE_THRESHOLD = SWIPE.DISMISS_THRESHOLD;
 import * as Haptics from 'expo-haptics';
 import { usePost } from '@/hooks/usePost';
 import { useDeletePost } from '@/hooks/useDeletePost';
-import { useUserVote } from '@/hooks/useUserVote';
-import { useVote } from '@/hooks/useVote';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { fetchPost } from '@/hooks/usePost';
-import { getRating } from '@/lib/getRating';
 import { VoteCount } from '@/components/VoteCount';
 import { reportPost } from '@/lib/reportPost';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
-import { VoteButton } from '@/components/VoteButton';
 import { CATEGORY_LABELS } from '@/constants/categories';
-import { animateScoreIn } from '@/lib/scoreAnimation';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 
@@ -58,26 +53,18 @@ export default function PhotoDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [localVote, setLocalVote] = useState<'rad' | 'bad' | null>(null);
-  const [justVoted, setJustVoted] = useState(false); // true only when voted THIS view
   const [currentId, setCurrentId] = useState(id);
   const [captionExpanded, setCaptionExpanded] = useState(false);
   const [muted, setMuted] = useState(true);
-  const [votePending, setVotePending] = useState<'rad' | 'bad' | null>(null);
 
   const queryClient = useQueryClient();
   const currentUser = useAuthStore((s) => s.user);
   const { data: post, isLoading } = usePost(currentId);
   const { mutate: deletePost } = useDeletePost();
-  const { data: existingVote, isLoading: voteLoading } = useUserVote(currentId);
-  const { mutate: castVote } = useVote();
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
   const { mutate: toggleFavorite } = useToggleFavorite();
   const isFavorited = favoriteIds.has(currentId);
 
-  // Simple rule: voted = either from DB or just now
-  const userVote = localVote ?? existingVote ?? null;
-  const hasVoted = userVote !== null;
 
   // Album navigation — swaps photo in-place, no navigation
   const albumIds = useAlbumStore((s) => s.ids);
@@ -97,9 +84,6 @@ export default function PhotoDetailScreen() {
   // Called on JS thread after the slide-out animation completes
   function swapToId(targetId: string, enterFrom: number) {
     setCurrentId(targetId);
-    setLocalVote(null);
-    setJustVoted(false);
-    setVotePending(null);
     setCaptionExpanded(false);
     // Jump to off-screen on the opposite side, then spring in
     slideY.value = enterFrom;
@@ -138,25 +122,6 @@ export default function PhotoDetailScreen() {
       }
     });
 
-  // Score animation only used for the "just voted" punch effect
-  const scoreOpacity = useSharedValue(0);
-  const scoreScale = useSharedValue(0.4);
-
-  useEffect(() => {
-    if (justVoted) {
-      animateScoreIn(scoreOpacity, scoreScale, { fadeDuration: 80, punchDuration: 160, settleDuration: 130 });
-    }
-  }, [justVoted]);
-
-  const scoreAnimStyle = useAnimatedStyle(() => ({
-    opacity: scoreOpacity.value,
-    transform: [{ scale: scoreScale.value }],
-  }));
-
-  // Determine if score should show: voted (from DB or local) and not loading
-  const showScore = hasVoted && !voteLoading && rating !== null;
-  // Previously voted = show instantly (no animation). Just voted = use animated style.
-  const showScoreInstant = showScore && !justVoted;
 
   const slideStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: slideY.value }],
@@ -184,30 +149,6 @@ export default function PhotoDetailScreen() {
   const isOwnPost = currentUser?.id === p.user_id;
   const blurBg = p.width && p.height ? (p.width / p.height) > (SCREEN_WIDTH / SCREEN_HEIGHT) : false;
 
-  // Optimistic score: only add +1 if DB hasn't caught up yet (existingVote still null)
-  const activeVote = localVote ?? votePending;
-  const needsOptimistic = activeVote !== null && existingVote === null;
-  const rad = p.rad_votes + (needsOptimistic && activeVote === 'rad' ? 1 : 0);
-  const total = p.total_votes + (needsOptimistic ? 1 : 0);
-  const rating = (hasVoted || votePending) ? getRating(rad, total) : null;
-
-  function handleVote(vote: 'rad' | 'bad') {
-    if (hasVoted || votePending) return;
-    Haptics.impactAsync(vote === 'rad' ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light);
-    setVotePending(vote);
-    castVote({ uploadId: p.id, vote }, {
-      onError: (err) => {
-        setVotePending(null);
-        showAlert('Vote failed', err.message);
-      },
-    });
-    // Let button shrink + burst play, then reveal score
-    setTimeout(() => {
-      setLocalVote(vote);
-      setJustVoted(true);
-      setVotePending(null);
-    }, 400);
-  }
 
   function handleDelete() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -277,7 +218,6 @@ export default function PhotoDetailScreen() {
       <DetailFooter
         post={p}
         isOwnPost={isOwnPost}
-        hasVoted={hasVoted}
         captionExpanded={captionExpanded}
         setCaptionExpanded={setCaptionExpanded}
         isFavorited={isFavorited}
@@ -285,33 +225,6 @@ export default function PhotoDetailScreen() {
         onShare={handleShare}
       />
 
-      {/* Vote buttons — absolute, shrink + fade after voting */}
-      {!isOwnPost && !voteLoading && (!hasVoted || votePending) && (
-        <View style={styles.voteButtonsCompact}>
-          <VoteButton vote="rad" onPress={() => handleVote('rad')} disabled={!!votePending} size={68} visible={!votePending} />
-          <VoteButton vote="bad" onPress={() => handleVote('bad')} disabled={!!votePending} size={68} visible={!votePending} />
-        </View>
-      )}
-
-      {/* Score badge — instant for previously voted, animated for just voted */}
-      {!isOwnPost && showScoreInstant && rating !== null && (
-        <View style={styles.scoreBadge} pointerEvents="none">
-          <MaskedView maskElement={<Text style={styles.scoreBadgeText}>{rating.percent}%</Text>}>
-            <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Text style={[styles.scoreBadgeText, styles.invisible]}>{rating.percent}%</Text>
-            </LinearGradient>
-          </MaskedView>
-        </View>
-      )}
-      {!isOwnPost && justVoted && rating !== null && (
-        <Animated.View style={[styles.scoreBadge, scoreAnimStyle]} pointerEvents="none">
-          <MaskedView maskElement={<Text style={styles.scoreBadgeText}>{rating.percent}%</Text>}>
-            <LinearGradient colors={rating.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Text style={[styles.scoreBadgeText, styles.invisible]}>{rating.percent}%</Text>
-            </LinearGradient>
-          </MaskedView>
-        </Animated.View>
-      )}
 
       <ConfirmDialog
         visible={showDeleteDialog}
@@ -358,7 +271,6 @@ export default function PhotoDetailScreen() {
 interface DetailFooterProps {
   post: PostDetail;
   isOwnPost: boolean;
-  hasVoted: boolean;
   captionExpanded: boolean;
   setCaptionExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   isFavorited: boolean;
@@ -366,7 +278,7 @@ interface DetailFooterProps {
   onShare: () => void;
 }
 
-function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptionExpanded, isFavorited, onFavorite, onShare }: DetailFooterProps) {
+function DetailFooter({ post: p, isOwnPost, captionExpanded, setCaptionExpanded, isFavorited, onFavorite, onShare }: DetailFooterProps) {
   const [catsExpanded, setCatsExpanded] = useState(false);
   const cats = p.categories ?? [];
   const visibleCats = cats.slice(0, 2);
@@ -381,7 +293,7 @@ function DetailFooter({ post: p, isOwnPost, hasVoted, captionExpanded, setCaptio
     >
       <View style={styles.contentRow}>
         {/* Left — username, caption, meta */}
-        <View style={[styles.infoBlock, !isOwnPost && !hasVoted && styles.infoBlockWithButtons]}>
+        <View style={styles.infoBlock}>
           <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
             <GradientUsername username={p.users?.username ?? ''} rank={p.users?.user_rank} style={styles.username} photoOverlay avatarUrl={p.users?.avatar_url} showAvatar avatarSize={22} />
           </TouchableOpacity>

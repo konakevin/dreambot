@@ -35,10 +35,8 @@ function GradientWord({ text, colors }: { text: string; colors: [string, string,
 function Logo() {
   return (
     <View style={authStyles.logoContainer}>
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        <GradientWord text="DREAM" colors={HOT_GRADIENT} />
-        <GradientWord text="BOT" colors={COLD_GRADIENT} />
-      </View>
+      <GradientWord text="DREAM" colors={HOT_GRADIENT} />
+      <GradientWord text="BOT" colors={COLD_GRADIENT} />
     </View>
   );
 }

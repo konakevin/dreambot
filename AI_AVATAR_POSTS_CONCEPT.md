@@ -542,6 +542,12 @@ Curated playlists of images, but for visuals. Users or the system can create col
 
 Users can subscribe to collections and get them mixed into their feed.
 
+## TODOs
+
+- **Rebrand bundle ID**: Change from `com.konakevin.radorbad` to `com.konakevin.dreambot`. Requires new App Store registration — do this before public launch.
+- **App icon**: Create 1024x1024 PNG with DREAM (hot gradient) / BOT (cold gradient) on dark background
+- **Update App Store Connect**: New name, description, screenshots, keywords for Dream Bot
+
 ## Open Questions
 
 - Should AI posts be visually distinguished from uploaded photos? (Subtle badge? Or intentionally blended?)
