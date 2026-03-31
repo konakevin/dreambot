@@ -126,7 +126,7 @@ export default function RootLayout() {
           <Stack.Screen name="photo/[id]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="user/[userId]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="sharePost" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
-          <Stack.Screen name="comments" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
+          <Stack.Screen name="comments" options={{ presentation: 'formSheet', gestureEnabled: true, contentStyle: { backgroundColor: '#0F0F1A' } }} />
           <Stack.Screen name="search" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
           <Stack.Screen name="discoverVibers" options={{ presentation: 'card', gestureEnabled: true }} />
         </Stack>

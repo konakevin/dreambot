@@ -11,14 +11,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue, useAnimatedStyle,
-  withTiming, withSequence, withSpring, runOnJS,
+  withTiming, withSequence, runOnJS,
 } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import {
-  SWIPE_THRESHOLD, ACTIVE_OFFSET, FAIL_OFFSET,
-  SWIPE_RESISTANCE, COUNTER_RESISTANCE, SNAP_SPRING, SLIDE_OFF_DURATION,
-} from '@/constants/gestures';
+import { SWIPE_THRESHOLD, ACTIVE_OFFSET } from '@/constants/gestures';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -54,22 +51,22 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
     opacity: heartOpacity.value,
   }));
 
-  // Horizontal swipe
-  const translateX = useSharedValue(0);
-  const cardStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
+  const swiped = useRef(false);
 
   function goToProfile() {
+    if (swiped.current) return;
+    swiped.current = true;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push(`/user/${item.user_id}`);
+    setTimeout(() => { swiped.current = false; }, 500);
   }
 
   function handleDoubleTap() {
     const now = Date.now();
     if (now - lastTap.current < 300) {
-      if (!isLiked) onLike();
+      onToggleLike();
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      if (isLiked) { lastTap.current = 0; return; } // unliking — no heart burst
       heartScale.value = 0;
       heartOpacity.value = 1;
       heartScale.value = withSequence(
@@ -87,37 +84,21 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
     lastTap.current = now;
   }
 
-  // Horizontal pan — swipe left to visit profile
+  // Horizontal pan — left swipe navigates to profile (no card animation)
   const panGesture = Gesture.Pan()
     .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
-    .failOffsetY([-FAIL_OFFSET, FAIL_OFFSET])
-    .onUpdate((e) => {
-      translateX.value = e.translationX < 0
-        ? e.translationX * SWIPE_RESISTANCE
-        : e.translationX * COUNTER_RESISTANCE;
-    })
+    .failOffsetY([-5, 5])
     .onEnd((e) => {
-      if (e.translationX < -SWIPE_THRESHOLD) {
-        translateX.value = withTiming(-SCREEN_WIDTH, { duration: SLIDE_OFF_DURATION }, () => {
-          runOnJS(goToProfile)();
-          translateX.value = 0;
-        });
-      } else {
-        translateX.value = withSpring(0, SNAP_SPRING);
+      if (e.translationX < -SWIPE_THRESHOLD && e.velocityX < -200) {
+        runOnJS(goToProfile)();
       }
     });
 
   return (
     <GestureDetector gesture={panGesture}>
-      <Animated.View style={[s.card, cardStyle]}>
+      <Animated.View style={s.card}>
       <Pressable style={StyleSheet.absoluteFill} onPress={handleDoubleTap}>
         <Image source={{ uri: item.image_url }} style={s.fullImage} contentFit="cover" transition={200} />
-
-        {/* Profile hint on swipe — visible behind the card */}
-        <View style={s.profileHint} pointerEvents="none">
-          <Ionicons name="person" size={24} color="rgba(255,255,255,0.6)" />
-          <Text style={s.profileHintText}>@{item.username}</Text>
-        </View>
 
         {/* Double-tap heart animation */}
         <Animated.View style={[s.heartBurst, heartStyle]} pointerEvents="none">
@@ -172,13 +153,6 @@ const s = StyleSheet.create({
   heartBurst: {
     position: 'absolute', top: '50%', left: '50%',
     marginTop: -40, marginLeft: -40,
-  },
-  profileHint: {
-    position: 'absolute', right: -60, top: '45%',
-    alignItems: 'center', gap: 4,
-  },
-  profileHintText: {
-    color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: '600',
   },
   sideActions: {
     position: 'absolute', right: 12, alignItems: 'center', gap: 20,
