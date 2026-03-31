@@ -1,17 +1,23 @@
 /**
  * DreamCard — shared full-screen image card used across all feed screens.
- * Supports double-tap to like with animated heart burst.
+ * - Double-tap to like with animated heart burst
+ * - Swipe left to visit the poster's profile
  */
 
 import { useRef } from 'react';
-import { View, Text, TouchableOpacity, Pressable, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue, useAnimatedStyle,
+  withTiming, withSequence, withSpring, runOnJS,
+} from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const SWIPE_THRESHOLD = -80;
 
 export interface DreamPostItem {
   id: string;
@@ -33,19 +39,36 @@ interface Props {
 
 export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
   const lastTap = useRef(0);
+
+  // Heart burst animation
   const heartScale = useSharedValue(0);
   const heartOpacity = useSharedValue(0);
-
   const heartStyle = useAnimatedStyle(() => ({
     transform: [{ scale: heartScale.value }],
     opacity: heartOpacity.value,
   }));
 
-  function handlePress() {
-    const now = Date.now();
-    if (now - lastTap.current < 300) {
-      if (!isLiked) onLike();
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  // Horizontal swipe
+  const translateX = useSharedValue(0);
+  const cardStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  function doLike() {
+    if (!isLiked) onLike();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  }
+
+  function goToProfile() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push(`/user/${item.user_id}`);
+  }
+
+  // Tap gesture — double tap detection
+  const tapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(() => {
+      runOnJS(doLike)();
       heartScale.value = 0;
       heartOpacity.value = 1;
       heartScale.value = withSequence(
@@ -59,46 +82,87 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
         withTiming(1, { duration: 500 }),
         withTiming(0, { duration: 200 }),
       );
-    }
-    lastTap.current = now;
-  }
+    });
+
+  // Horizontal pan — swipe left to visit profile
+  const panGesture = Gesture.Pan()
+    .activeOffsetX([-15, 15])
+    .failOffsetY([-10, 10])
+    .onUpdate((e) => {
+      // Only allow swiping left
+      if (e.translationX < 0) {
+        translateX.value = e.translationX * 0.6;
+      } else {
+        translateX.value = e.translationX * 0.1;
+      }
+    })
+    .onEnd((e) => {
+      if (e.translationX < SWIPE_THRESHOLD) {
+        // Swipe left past threshold — go to profile
+        translateX.value = withTiming(-SCREEN_WIDTH, { duration: 200 }, () => {
+          runOnJS(goToProfile)();
+          translateX.value = 0;
+        });
+      } else {
+        translateX.value = withSpring(0, { damping: 20, stiffness: 200 });
+      }
+    });
+
+  const composed = Gesture.Simultaneous(tapGesture, panGesture);
 
   return (
-    <Pressable style={s.card} onPress={handlePress}>
-      <Image source={{ uri: item.image_url }} style={s.fullImage} contentFit="cover" transition={200} />
+    <GestureDetector gesture={composed}>
+      <Animated.View style={[s.card, cardStyle]}>
+        <Image source={{ uri: item.image_url }} style={s.fullImage} contentFit="cover" transition={200} />
 
-      <Animated.View style={[s.heartBurst, heartStyle]} pointerEvents="none">
-        <Ionicons name="heart" size={80} color="#FFFFFF" />
+        {/* Profile hint on swipe — visible behind the card */}
+        <View style={s.profileHint} pointerEvents="none">
+          <Ionicons name="person" size={24} color="rgba(255,255,255,0.6)" />
+          <Text style={s.profileHintText}>@{item.username}</Text>
+        </View>
+
+        {/* Double-tap heart animation */}
+        <Animated.View style={[s.heartBurst, heartStyle]} pointerEvents="none">
+          <Ionicons name="heart" size={80} color="#FFFFFF" />
+        </Animated.View>
+
+        {/* Post info overlay — bottom */}
+        <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+          <TouchableOpacity
+            style={s.usernameRow}
+            onPress={() => router.push(`/user/${item.user_id}`)}
+            activeOpacity={0.7}
+          >
+            {item.avatar_url ? (
+              <Image source={{ uri: item.avatar_url }} style={s.avatar} />
+            ) : (
+              <View style={s.avatarFallback}>
+                <Text style={s.avatarText}>{item.username[0].toUpperCase()}</Text>
+              </View>
+            )}
+            <Text style={s.username}>{item.username}</Text>
+            {item.is_ai_generated && <Ionicons name="sparkles" size={14} color="#FFD700" />}
+          </TouchableOpacity>
+          {item.caption && <Text style={s.caption} numberOfLines={2}>{item.caption}</Text>}
+        </View>
       </Animated.View>
-
-      <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
-        <TouchableOpacity
-          style={s.usernameRow}
-          onPress={() => router.push(`/user/${item.user_id}`)}
-          activeOpacity={0.7}
-        >
-          {item.avatar_url ? (
-            <Image source={{ uri: item.avatar_url }} style={s.avatar} />
-          ) : (
-            <View style={s.avatarFallback}>
-              <Text style={s.avatarText}>{item.username[0].toUpperCase()}</Text>
-            </View>
-          )}
-          <Text style={s.username}>{item.username}</Text>
-          {item.is_ai_generated && <Ionicons name="sparkles" size={14} color="#FFD700" />}
-        </TouchableOpacity>
-        {item.caption && <Text style={s.caption} numberOfLines={2}>{item.caption}</Text>}
-      </View>
-    </Pressable>
+    </GestureDetector>
   );
 }
 
 const s = StyleSheet.create({
-  card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT },
+  card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },
   fullImage: { ...StyleSheet.absoluteFillObject },
   heartBurst: {
     position: 'absolute', top: '50%', left: '50%',
     marginTop: -40, marginLeft: -40,
+  },
+  profileHint: {
+    position: 'absolute', right: -60, top: '45%',
+    alignItems: 'center', gap: 4,
+  },
+  profileHintText: {
+    color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: '600',
   },
   postInfo: {
     position: 'absolute', bottom: 0, left: 0, right: 70,

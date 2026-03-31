@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { View, Text, TouchableOpacity, Pressable, StyleSheet, Dimensions, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -280,69 +280,6 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 15,
     textAlign: 'center',
-  },
-  card: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-  },
-  fullImage: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  heartBurst: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -40,
-    marginLeft: -40,
-  },
-  postInfo: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 70,
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  usernameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
-  },
-  avatarFallback: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  username: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
-    textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowRadius: 4,
-    textShadowOffset: { width: 0, height: 1 },
-  },
-  caption: {
-    color: 'rgba(255,255,255,0.85)',
-    fontSize: 14,
-    lineHeight: 20,
-    textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowRadius: 4,
-    textShadowOffset: { width: 0, height: 1 },
   },
   topOverlay: {
     position: 'absolute',
