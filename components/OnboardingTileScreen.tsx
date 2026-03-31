@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
 import { TOTAL_STEPS } from '@/constants/onboarding';
 
@@ -31,14 +32,13 @@ interface Props {
   singleSelect?: boolean;
   /** Accent color for selected tiles */
   accentColor?: string;
-  /** Show X button to dismiss (only when editing, not first-time signup) */
-  canDismiss?: boolean;
 }
 
 export function OnboardingTileScreen({
   stepNumber, title, subtitle, tiles, selected, onToggle,
-  onNext, onBack, minRequired = 1, singleSelect, accentColor = colors.accent, canDismiss,
+  onNext, onBack, minRequired = 1, singleSelect, accentColor = colors.accent,
 }: Props) {
+  const isEditing = useOnboardingStore((s) => s.isEditing);
   const canProceed = selected.length >= minRequired;
 
   function handleToggle(key: string) {
@@ -57,11 +57,6 @@ export function OnboardingTileScreen({
       {onBack && (
         <TouchableOpacity onPress={onBack} hitSlop={12} style={styles.backButton}>
           <Ionicons name="chevron-back" size={24} color={colors.textSecondary} />
-        </TouchableOpacity>
-      )}
-      {canDismiss && (
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color={colors.textSecondary} />
         </TouchableOpacity>
       )}
       <View style={styles.header}>

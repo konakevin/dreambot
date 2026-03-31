@@ -12,7 +12,7 @@ export default function InterestsScreen() {
   return (
     <OnboardingTileScreen
       stepNumber={1}
-      canDismiss={isEditing}
+      onBack={isEditing ? () => router.back() : undefined}
       title="What do you love?"
       subtitle="Pick at least 3 things that interest you"
       tiles={INTEREST_TILES}
