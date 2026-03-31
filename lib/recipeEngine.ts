@@ -12,6 +12,7 @@
  */
 
 import type { Recipe } from '@/types/recipe';
+import { DEFAULT_RECIPE } from '@/types/recipe';
 
 // ── TECHNIQUE: Medium Pool ──────────────────────────────────────────────────
 // Tagged with axes so the engine filters by rolled values.
@@ -234,65 +235,73 @@ export interface PromptInput {
 }
 
 export function buildPromptInput(recipe: Recipe): PromptInput {
-  const chaos = recipe.axes.chaos;
+  // Defensive defaults for recipes saved before new fields were added
+  const interests = recipe.interests ?? [];
+  const colorPalettes = recipe.color_palettes ?? [];
+  const personalityTags = recipe.personality_tags ?? [];
+  const eras = recipe.eras ?? [];
+  const settings = recipe.settings ?? [];
+  const sceneAtmospheres = recipe.scene_atmospheres ?? [];
+  const spiritCompanion = recipe.spirit_companion ?? null;
+  const axes = { ...DEFAULT_RECIPE.axes, ...recipe.axes };
+  const chaos = axes.chaos;
 
   // Roll dice on each axis
   const rolled = {
-    realism: rollAxis(recipe.axes.realism),
-    complexity: rollAxis(recipe.axes.complexity),
-    energy: rollAxis(recipe.axes.energy),
-    color_warmth: rollAxis(recipe.axes.color_warmth),
-    brightness: rollAxis(recipe.axes.brightness),
+    realism: rollAxis(axes.realism),
+    complexity: rollAxis(axes.complexity),
+    energy: rollAxis(axes.energy),
+    color_warmth: rollAxis(axes.color_warmth),
+    brightness: rollAxis(axes.brightness),
   };
 
   // TECHNIQUE layer
   const medium = filterPool(MEDIUM_POOL, rolled);
-  const palette = recipe.color_palettes.length > 0 ? pick(recipe.color_palettes) : 'everything';
-  const colorKeywords = PALETTE_KEYWORDS[palette] || '';
-  const weirdnessModifier = getModifierByValue(WEIRDNESS_MODIFIERS, recipe.axes.weirdness);
-  const scaleModifier = getModifierByValue(SCALE_MODIFIERS, recipe.axes.scale);
+  const paletteKey = colorPalettes.length > 0 ? pick(colorPalettes) : 'everything';
+  const colorKeywordsStr = PALETTE_KEYWORDS[paletteKey] || '';
+  const weirdnessModifier = getModifierByValue(WEIRDNESS_MODIFIERS, axes.weirdness);
+  const scaleModifier = getModifierByValue(SCALE_MODIFIERS, axes.scale);
 
   // SUBJECT layer
-  const sampleCount = Math.min(2, recipe.interests.length);
-  const shuffled = [...recipe.interests].sort(() => Math.random() - 0.5);
-  const interests = shuffled.slice(0, Math.max(1, sampleCount));
+  const sampleCount = Math.min(2, interests.length);
+  const shuffledInterests = [...interests].sort(() => Math.random() - 0.5);
+  const sampledInterests = shuffledInterests.slice(0, Math.max(1, sampleCount));
   const action = pick(ACTIONS);
   const sceneType = pick(SCENE_TYPES);
-  const spiritCompanion = recipe.spirit_companion;
-  const spiritAppears = spiritCompanion !== null && Math.random() < 0.3; // 30% chance
+  const spiritAppears = spiritCompanion !== null && Math.random() < 0.3;
 
   // WORLD layer
   const allEras = Object.keys(ERA_KEYWORDS);
-  const eraKey = recipe.eras.length > 0
-    ? pickWithChaos(recipe.eras, allEras, chaos)
+  const eraKey = eras.length > 0
+    ? pickWithChaos(eras, allEras, chaos)
     : pick(allEras);
-  const eraKeywords = ERA_KEYWORDS[eraKey] || '';
+  const eraKeywordsStr = ERA_KEYWORDS[eraKey] || '';
 
   const allSettings = Object.keys(SETTING_KEYWORDS);
-  const settingKey = recipe.settings.length > 0
-    ? pickWithChaos(recipe.settings, allSettings, chaos)
+  const settingKey = settings.length > 0
+    ? pickWithChaos(settings, allSettings, chaos)
     : pick(allSettings);
-  const settingKeywords = SETTING_KEYWORDS[settingKey] || '';
+  const settingKeywordsStr = SETTING_KEYWORDS[settingKey] || '';
 
   // ATMOSPHERE layer
   const mood = filterPool(MOOD_POOL, rolled);
   const lighting = filterPool(LIGHTING_POOL, rolled);
 
-  const tagCount = Math.min(3, recipe.personality_tags.length);
-  const shuffledTags = [...recipe.personality_tags].sort(() => Math.random() - 0.5);
-  const personalityTags = shuffledTags.slice(0, Math.max(1, tagCount));
+  const tagCount = Math.min(3, personalityTags.length);
+  const shuffledTags = [...personalityTags].sort(() => Math.random() - 0.5);
+  const sampledTags = shuffledTags.slice(0, Math.max(1, tagCount));
 
   const allAtmospheres = Object.keys(SCENE_ATMOSPHERE_KEYWORDS);
-  const atmosphereKey = recipe.scene_atmospheres.length > 0
-    ? pickWithChaos(recipe.scene_atmospheres, allAtmospheres, chaos)
+  const atmosphereKey = sceneAtmospheres.length > 0
+    ? pickWithChaos(sceneAtmospheres, allAtmospheres, chaos)
     : pick(allAtmospheres);
   const sceneAtmosphere = SCENE_ATMOSPHERE_KEYWORDS[atmosphereKey] || '';
 
   return {
-    medium, colorKeywords, weirdnessModifier, scaleModifier,
-    interests, action, sceneType, spiritCompanion, spiritAppears,
-    eraKeywords, settingKeywords,
-    mood, lighting, personalityTags, sceneAtmosphere,
+    medium, colorKeywords: colorKeywordsStr, weirdnessModifier, scaleModifier,
+    interests: sampledInterests, action, sceneType, spiritCompanion, spiritAppears,
+    eraKeywords: eraKeywordsStr, settingKeywords: settingKeywordsStr,
+    mood, lighting, personalityTags: sampledTags, sceneAtmosphere,
   };
 }
 

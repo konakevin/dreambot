@@ -140,7 +140,64 @@ The recipe gets better without the user ever touching a setting:
 
 If they *want* to tweak — there's a subtle "Adjust your vibe" button buried in settings. Opens the sliders again. But most people never touch it because the passive evolution handles it.
 
-### 6. What Makes Each Account Unique
+### 6. "Tonight's Dream" — User-Prompted Dreams
+
+Users can set a custom prompt for tonight's dream. They type a simple idea — "a castle in the clouds" or "my dog as a knight" — and the engine enhances it through their full recipe (medium, mood, era, companion, palette, everything). The result feels like *them* but guided by their idea.
+
+**How it works:**
+- Text input on the Dream tab or a "Set tonight's dream" button on their profile
+- The description is used for ONE generation only — that night's dream
+- The engine runs the user's idea through Haiku enhancement with all their recipe constraints
+- The output gets a special **"Inspired" badge** (small star or lightbulb icon) in the feed, indicating the user guided this dream
+- After generation, the prompt is cleared. Tomorrow goes back to fully automatic
+- Other users can see the badge and tap it to see what the user typed (transparent, fun)
+
+**Why this matters:**
+- Gives users a reason to come back and engage actively, not just passively
+- The badge creates social signal — "this person cared enough to guide their dream tonight"
+- The enhancement engine ensures even a lazy prompt like "cats" produces something stunning through their recipe
+- Creates a daily micro-ritual: "what should I dream about tonight?"
+
+**Database:** Add `tonight_prompt text` nullable column to `user_recipes`. The daily generation script checks this field first — if set, uses it as the subject instead of random interest sampling, then nulls it out after generation. Posts with user prompts get `is_user_prompted boolean DEFAULT false` on the uploads table.
+
+### 6b. "Daydream" — On-Demand Generation (Monetization)
+
+Users can dream on demand during the day by spending **Sparks** — the app's creative currency. Nightly dreams are free. Daydreaming costs sparks.
+
+**How it works:**
+- "Daydream" button on the Dream tab — same tool as tonight's dream but instant
+- User types a prompt or just taps "Surprise me" for a random recipe roll
+- Costs 1 Spark per generation
+- Result appears immediately with a **"Daydream" badge** (sun icon) in the feed
+- Users can also daydream a reference photo (the Dream Upload flow) for 1 Spark
+
+**Spark economy:**
+- Free users: **3 Sparks/week** (refill every Monday)
+- Premium ($5/mo): **Unlimited Sparks** (the primary upsell)
+- Spark packs (cheap enough to not think about): 10 for $0.99, 30 for $1.99, 100 for $4.99
+- Watching a rewarded ad: **+1 Spark** (self-serve, no pressure)
+- Referral bonus: invite a friend who signs up → both get 5 Sparks
+
+**Why Sparks work:**
+- Free users can still daydream 3x/week — enough to feel the feature, not enough to not want more
+- Premium is positioned as "unlimited creativity" — feels generous, not restrictive
+- Spark packs capture impulse purchases ("I NEED to see what this prompt looks like right now")
+- Rewarded ads are opt-in and feel like earning, not being advertised to
+- The scarcity makes each daydream feel intentional and valuable
+
+**Revenue math at 10K users:**
+| Source | Assumption | Monthly |
+|--------|-----------|---------|
+| Premium subs | 10% @ $5/mo | $5,000 |
+| Spark packs | 10% buy $0.99/mo avg | $9,900 |
+| Rewarded ads | 30% watch 2/week | $2,400 |
+| **Total** | | **$17,300** |
+| Generation cost | ~$3,383 | |
+| **Profit** | | **~$13,900/mo** |
+
+**Database:** Add `sparks integer DEFAULT 3` to users table. Add `spark_transactions` table for audit trail. Deduct on daydream, refill via cron weekly, add on purchase/ad/referral.
+
+### 7. What Makes Each Account Unique
 
 No two users get the same images because no two users have the same recipe. Even users who make similar choices during onboarding diverge over time because their passive interactions (what they vote on, save, follow) pull their recipes in different directions.
 
@@ -186,24 +243,100 @@ The Dream tab lets users transform real photos through their dream machine. The 
 - Users can **adjust their character** anytime from settings (re-launches onboarding tool)
 - Users can browse their **recipe collection** (auto-generated from their character)
 
-### 6. Monetization Angles
+## Full Monetization Strategy
 
-- **Free tier**: 5 AI posts/day
-- **Premium**: 20 AI posts/day, higher quality model, more tag slots
-- **Tag packs**: Unlock premium aesthetic tags (e.g., "Studio Ghibli", "Baroque", "Solarpunk")
-- **Custom prompts**: Premium users can write their own prompt modifiers
+### Revenue Stream 1: Sparks (In-App Currency)
+Sparks power daydreams (on-demand generation). Nightly dreams are free. Daydreaming costs 1 spark.
+- New users start with **3 free sparks**
+- Spark packs (cheap enough to not think about):
+  - 10 Sparks — $0.99 ($0.10/spark)
+  - 30 Sparks — $1.99 ($0.07/spark)
+  - 100 Sparks — $4.99 ($0.05/spark)
+- Rewarded ad: watch a 30-second ad → +1 Spark
+- Referral: invite a friend who signs up → both get 5 Sparks
+- Gift sparks to friends
+- **Margin: ~89-95% per spark** (costs $0.011 to generate, sells for $0.05-0.10)
 
-### 7. Technical Cost Estimate
+### Revenue Stream 2: Premium Subscription ("Lucid" Tier) — $5/mo
+- Unlimited sparks (the primary upsell)
+- Flux Pro quality instead of Dev (noticeably better images)
+- Priority generation (dreams render first)
+- No interstitial ads
+- Daily nightly dreams guaranteed (if we ever throttle free tier to every-other-day)
 
-Per user per day (5 images):
-- Haiku prompt refinement: ~$0.005
-- Flux generation: ~$0.05-0.15
+### Revenue Stream 3: Interstitial Ads
+- 1 interstitial per session for free users (~$10 CPM)
+- Rewarded ads for sparks (~$25 CPM, opt-in)
+- Premium users see no ads
+
+### Revenue Stream 4: Print-on-Demand — "Make It Real"
+- Tap any dream → "Print this dream" → poster, phone case, canvas, sticker, t-shirt
+- Partner with Printful/Gooten — zero inventory, they handle fulfillment
+- 40-50% margin. A $25 poster costs ~$12 to fulfill
+- No upfront cost — pure margin when someone orders
+
+### Revenue Stream 5: Custom Spirit Companions — $0.99 each
+- 12 free companions in onboarding
+- Premium companions: Unicorn, Phoenix, Kraken, Mechanical Owl, Crystal Stag, Aurora Serpent
+- Purely cosmetic — changes what motif appears in dreams
+- Low-effort, high-margin. Just a new string in the prompt
+
+### Revenue Stream 6: Dream Packs — Themed Spark Bundles
+- Seasonal/limited-time bundles that add temporary recipe modifiers:
+  - "Halloween Dream Pack" — 20 sparks + spooky modifiers for a week ($1.99)
+  - "Valentine's Pack" — romantic/dreamy modifiers ($1.99)
+  - "Chaos Pack" — maxes out weirdness for 10 dreams ($0.99)
+- Creates urgency and collectibility
+
+### Revenue Stream 7: Gifting Sparks
+- Send sparks to a friend: "Here's 5 sparks, dream something cool tonight"
+- Birthday feature: "It's @sarah's birthday! Gift her sparks"
+- Social mechanic + revenue — you buy sparks to give away
+
+### Revenue Stream 8: Brand Dreams (B2B, Longer Term)
+- Brands pay to inject their aesthetics as optional recipe modifiers
+- Users opt-in: "Try the Nike Dream Pack" → dreams get Nike-inspired elements
+- Not traditional ads — collaborative creativity. Users might actually want it
+- Brands get organic content creation from users posting branded dreams
+- Pricing: $10-50K/mo per brand depending on user base
+
+### Build Priority
+1. **Sparks + Daydream** (core monetization, build first)
+2. **Premium sub** (predictable recurring revenue)
+3. **Rewarded ads** (free revenue, no development cost)
+4. **Interstitial ads** (once 500+ users)
+5. **Print-on-demand** (partner integration, medium effort)
+6. **Custom companions** (trivial to build)
+7. **Dream packs** (seasonal, once content pipeline is stable)
+8. **Gifting** (social feature, later)
+9. **Brand dreams** (B2B sales, much later)
+
+### Revenue Projection at 10K DAU
+| Source | Assumption | Monthly |
+|--------|-----------|---------|
+| Premium subs | 10% @ $5/mo | $5,000 |
+| Spark packs | 10% buy $0.99/mo avg | $9,900 |
+| Rewarded ads | 30% watch 2/week | $2,400 |
+| Interstitial ads | 1/session @ $10 CPM | $3,000 |
+| Print-on-demand | 1% buy $25 avg, 40% margin | $1,000 |
+| Custom companions | 5% buy 1 @ $0.99 | $495 |
+| **Total revenue** | | **$21,795** |
+| **Generation cost** | | **-$3,383** |
+| **Profit** | | **~$18,400/mo** |
+
+### Technical Cost Estimate
+Per user per day (1 nightly dream):
+- Flux Dev generation: $0.01
+- Haiku prompt enhancement: $0.001
 - Storage: negligible
+- **Total: ~$0.33/user/month**
 
-At 1,000 daily active users: ~$50-150/day
-At 10,000 DAU: ~$500-1,500/day
-
-Could offset with premium subscriptions + reduced free tier.
+| DAU | Monthly Cost | Break-even (ads only) |
+|-----|-------------|----------------------|
+| 100 | $66 | ~75 users |
+| 500 | $218 | ~500 users |
+| 1,000 | $391 | ~500 users |
+| 10,000 | $3,383 | ~7,500 users |
 
 ## Design Inspirations — Systems We're Stealing From
 
