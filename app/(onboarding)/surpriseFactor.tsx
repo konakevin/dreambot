@@ -54,8 +54,8 @@ export default function SurpriseFactorScreen() {
     <SafeAreaView style={styles.root}>
       <View style={styles.header}>
         <View style={styles.progressBar}>
-          {[1, 2, 3, 4, 5, 6, 7].map((dot) => (
-            <View key={dot} style={[styles.progressDot, dot <= 6 && styles.progressDotActive]} />
+          {Array.from({ length: 11 }, (_, i) => (
+            <View key={i} style={[styles.progressDot, i < 9 && styles.progressDotActive]} />
           ))}
         </View>
         <TouchableOpacity onPress={handleBack} hitSlop={12}>
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingHorizontal: 20, paddingTop: 8, paddingBottom: 16,
   },
-  progressBar: { flexDirection: 'row', gap: 6 },
-  progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.border },
-  progressDotActive: { backgroundColor: '#FF4500', width: 24, borderRadius: 4 },
+  progressBar: { flexDirection: 'row', gap: 4 },
+  progressDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.border },
+  progressDotActive: { backgroundColor: '#FF4500', width: 16, borderRadius: 3 },
   content: {
     flex: 1,
     paddingHorizontal: 20,

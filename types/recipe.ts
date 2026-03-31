@@ -12,6 +12,10 @@ export interface RecipeAxes {
   brightness: number;
   /** 0 = predictable/consistent, 1 = chaotic/surprising */
   chaos: number;
+  /** 0 = normal proportions, 1 = full surrealism */
+  weirdness: number;
+  /** 0 = intimate close-up, 1 = epic wide vista */
+  scale: number;
 }
 
 /** Color palette preference */
@@ -29,7 +33,7 @@ export type Interest =
   | 'architecture' | 'fashion' | 'food' | 'abstract'
   | 'dark' | 'cute' | 'ocean' | 'space' | 'whimsical';
 
-/** Personality trait tags */
+/** Personality trait tags — injected as adjectives into prompts */
 export type PersonalityTag =
   | 'dreamy' | 'adventurous' | 'cozy' | 'edgy'
   | 'romantic' | 'mysterious' | 'playful' | 'fierce'
@@ -37,12 +41,37 @@ export type PersonalityTag =
   | 'elegant' | 'raw' | 'whimsical' | 'bold'
   | 'gentle' | 'wild';
 
+/** Era / time period — controls the WORLD layer */
+export type Era =
+  | 'ancient' | 'medieval' | 'victorian'
+  | 'retro' | 'modern' | 'far_future';
+
+/** Setting — controls the WORLD layer */
+export type Setting =
+  | 'cozy_indoors' | 'wild_outdoors' | 'city_streets' | 'otherworldly';
+
+/** Scene atmosphere — weather/season/time combos */
+export type SceneAtmosphere =
+  | 'sunny_morning' | 'rainy_afternoon' | 'snowy_night'
+  | 'foggy_dawn' | 'stormy_twilight' | 'starry_midnight'
+  | 'golden_hour' | 'aurora_night';
+
+/** Spirit companion — recurring motif in ~30% of images */
+export type SpiritCompanion =
+  | 'fox' | 'cat' | 'owl' | 'dragon' | 'rabbit'
+  | 'wolf' | 'jellyfish' | 'deer' | 'butterfly'
+  | 'robot' | 'ghost' | 'mushroom_creature';
+
 /** The complete taste recipe stored in user_recipes.recipe JSONB */
 export interface Recipe {
   axes: RecipeAxes;
   interests: Interest[];
   color_palettes: ColorPalette[];
   personality_tags: PersonalityTag[];
+  eras: Era[];
+  settings: Setting[];
+  scene_atmospheres: SceneAtmosphere[];
+  spirit_companion: SpiritCompanion | null;
 }
 
 /** Default recipe — all axes at 0.5 (neutral), no selections */
@@ -54,8 +83,14 @@ export const DEFAULT_RECIPE: Recipe = {
     energy: 0.5,
     brightness: 0.5,
     chaos: 0.5,
+    weirdness: 0.3,
+    scale: 0.5,
   },
   interests: [],
   color_palettes: [],
   personality_tags: [],
+  eras: [],
+  settings: [],
+  scene_atmospheres: [],
+  spirit_companion: null,
 };

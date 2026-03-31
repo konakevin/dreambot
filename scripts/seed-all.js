@@ -379,6 +379,11 @@ async function main() {
   console.log(`\n👤 Kevin ID: ${kevin.id}`);
   log('Protected users preserved: ' + PROTECTED_EMAILS.join(', '));
 
+  // Clear Kevin's existing friendships so seed starts fresh
+  await supabase.from('friendships').delete().or(`user_a.eq.${kevin.id},user_b.eq.${kevin.id}`);
+  await supabase.from('vote_streaks').delete().or(`user_a.eq.${kevin.id},user_b.eq.${kevin.id}`);
+  log('Cleared Kevin\'s friendships + streaks');
+
   // ── 3. Create friends ────────────────────────────────────────────────────
   console.log(`\n👥 Creating ${FRIENDS.length} friends...`);
   const friends = [];
@@ -844,6 +849,14 @@ async function main() {
     await supabase.from('notifications').delete().not('id', 'is', null);
   }
   log('Cleared notifications (preserved protected users)');
+
+  // Clear Kevin's friendships — he starts with zero vibers each seed
+  await supabase.from('friendships').delete().or(`user_a.eq.${kevin.id},user_b.eq.${kevin.id}`);
+  await supabase.from('vote_streaks').delete().or(`user_a.eq.${kevin.id},user_b.eq.${kevin.id}`);
+  // Also remove the mutual follows that friendships created
+  await supabase.from('follows').delete().eq('follower_id', kevin.id);
+  await supabase.from('follows').delete().eq('following_id', kevin.id);
+  log('Cleared Kevin\'s friendships, streaks, and follows');
 
   // ── 15. Verify ───────────────────────────────────────────────────────────
   console.log('\n✅ Verifying...');

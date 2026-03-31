@@ -1,7 +1,8 @@
-import { Tabs, Redirect } from 'expo-router';
+import { Tabs, Redirect, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
+import { useOnboardingStore } from '@/store/onboarding';
 import { useUnreadShareCount } from '@/hooks/useUnreadShareCount';
 import { colors } from '@/constants/theme';
 
@@ -52,9 +53,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="upload"
         options={{
-          title: 'Upload',
+          title: 'Dream',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} size={size} color={color} />
+            <Ionicons name={focused ? 'moon' : 'moon-outline'} size={size} color={color} />
           ),
         }}
       />

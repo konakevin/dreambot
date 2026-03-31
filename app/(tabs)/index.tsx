@@ -11,7 +11,7 @@ const TREADMILL_COLORS = [
 const TREADMILL_WIDTH = 1280;
 const TREADMILL_SCROLL = 640;
 
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView, RefreshControl, AppState } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -59,6 +59,18 @@ export default function FeedScreen() {
   const milestone = useMilestoneDetection();
   const streakVoting = useStreakVoting();
   const streakUnlock = useStreakUnlock();
+
+  // ── Refresh feed when app returns from background ───────────────────────
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (next) => {
+      if (appState.current.match(/inactive|background/) && next === 'active') {
+        activeFeed.refetch();
+      }
+      appState.current = next;
+    });
+    return () => sub.remove();
+  }, []);
 
   // ── Remaining local state (UI-only, minimal) ────────────────────────────
   const [cardAreaHeight, setCardAreaHeight] = useState(0);
