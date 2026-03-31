@@ -13,11 +13,11 @@ import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-// Generate images matching the phone's aspect ratio so they fill the screen
-const GEN_WIDTH = 768;
+// Balanced resolution: sharper than 512, cheaper than 768
+const GEN_WIDTH = 640;
 const GEN_HEIGHT = Math.round((SCREEN_HEIGHT / SCREEN_WIDTH) * GEN_WIDTH / 8) * 8; // round to nearest 8
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
-const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (1344 / 768), 380);
+const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), 380);
 const MAX_DREAMS = 5;
 
 type Phase = 'idle' | 'generating' | 'reveal' | 'creating';
@@ -287,6 +287,8 @@ export function RevealStep({ onBack }: Props) {
                 showsHorizontalScrollIndicator={false}
                 onMomentumScrollEnd={handleScrollEnd}
                 scrollEventThrottle={16}
+                style={{ width: IMAGE_WIDTH }}
+                contentContainerStyle={{ alignItems: 'center' }}
               >
                 {dreams.map((dream, i) => (
                   <View key={i} style={s.imageSlide}>
