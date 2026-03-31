@@ -236,6 +236,29 @@ The Dream tab lets users transform real photos through their dream machine. The 
 - Dream your pet → your cat as a dreamy watercolor in a fantasy forest
 - Dream a landscape from a trip → the place you visited, transformed through your taste
 
+### 8b. "Dream Characters" — Upload Faces & Things
+
+Users can upload photos of people, pets, objects, or places they want to appear in their dreams. These become recurring "dream characters" — the AI weaves them into nightly generations.
+
+**Examples:**
+- Upload a selfie → you start appearing in your own dreams as a character
+- Upload your dog → your dog shows up alongside your spirit companion
+- Upload your friend → gift them a cameo in your dream gallery
+- Upload your car, your house, a favorite place → they become dream settings
+
+**How it could work:**
+- Profile section: "My Dream Characters" — upload up to 5 reference photos
+- Each photo gets a label ("Me", "Luna the cat", "My cabin")
+- The daily generation engine passes these as reference images with low strength (~0.3) so they're recognizable but dreamified
+- Characters appear in ~20-30% of dreams (not every one — keeps it surprising)
+- Could use Flux's IP-Adapter or face-swap models for better likeness preservation
+
+**Why this is powerful:**
+- Makes dreams deeply personal — it's not just "art in my style," it's "art starring ME and my life"
+- Creates emotional attachment to the gallery
+- Social hook: "Look, my dream machine put me and @sarah in a medieval castle last night"
+- Natural upsell: free users get 1 dream character, premium gets 5
+
 ### 9. User Control
 
 - Users can **delete** any AI post they don't like (keep the gallery curated)

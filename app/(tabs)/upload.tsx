@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { Image } from 'expo-image';
@@ -8,14 +8,17 @@ import * as Haptics from 'expo-haptics';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
+import { buildPromptInput } from '@/lib/recipeEngine';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 import type { Recipe } from '@/types/recipe';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const PREVIEW_WIDTH = SCREEN_WIDTH - 48;
-const FAL_KEY = '66ced4d1-b410-4381-8c0e-f59c8ce7193b:b5e709a879187f3dc73fddb842de8dcf';
+
+// TODO: move to edge function for production
+const REPLICATE_TOKEN = '***REMOVED***';
+const ANTHROPIC_KEY = '***REMOVED***';
 
 type Phase = 'pick' | 'preview' | 'dreaming' | 'reveal' | 'posting';
 
@@ -24,10 +27,13 @@ export default function DreamScreen() {
   const [phase, setPhase] = useState<Phase>('pick');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [dreamUrl, setDreamUrl] = useState<string | null>(null);
+  const [photoBase64, setPhotoBase64] = useState<string | null>(null);
   const [prompt, setPrompt] = useState('');
+  const [userHint, setUserHint] = useState('');
   const [strength, setStrength] = useState(0.65);
   const [error, setError] = useState<string | null>(null);
   const busy = useRef(false);
+  const [cachedRecipe, setCachedRecipe] = useState<Recipe | null>(null);
 
   const imgScale = useSharedValue(0.85);
   const imgOpacity = useSharedValue(0);
@@ -37,13 +43,16 @@ export default function DreamScreen() {
   }));
 
   async function loadRecipe(): Promise<Recipe> {
+    if (cachedRecipe) return cachedRecipe;
     if (!user) return DEFAULT_RECIPE;
     const { data } = await supabase
       .from('user_recipes')
       .select('recipe')
       .eq('user_id', user.id)
       .single();
-    return (data?.recipe as Recipe) ?? DEFAULT_RECIPE;
+    const r = (data?.recipe as Recipe) ?? DEFAULT_RECIPE;
+    setCachedRecipe(r);
+    return r;
   }
 
   async function pickPhoto() {
@@ -53,7 +62,9 @@ export default function DreamScreen() {
         cropping: false,
         forceJpg: true,
         compressImageQuality: 0.9,
+        includeBase64: true,
       });
+      setPhotoBase64(media.data ?? null);
       setPhotoUri(media.path);
       setPhase('preview');
       setDreamUrl(null);
@@ -63,95 +74,117 @@ export default function DreamScreen() {
   }
 
   async function dream() {
-    if (!photoUri || !user || busy.current) return;
+    if (!photoUri || !user) return;
+    if (busy.current) return;
     busy.current = true;
+    setDreamUrl(null);
+    setError(null);
+    imgOpacity.value = 0;
+    imgScale.value = 0.85;
     setPhase('dreaming');
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     try {
-      // 1. Upload reference photo to get a public URL
-      console.log('[Dream] Uploading reference...');
-      const fileName = `${user.id}/${Date.now()}_ref.jpg`;
-      const resp = await fetch(photoUri);
-      const buf = await resp.arrayBuffer();
+      if (!photoBase64) throw new Error('No photo data');
+      const refUrl = `data:image/jpeg;base64,${photoBase64}`;
 
-      const { error: upErr } = await supabase.storage
-        .from('uploads')
-        .upload(fileName, buf, { contentType: 'image/jpeg', upsert: false });
-      if (upErr) throw new Error(upErr.message);
-
-      const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
-      const refUrl = urlData.publicUrl;
-      console.log('[Dream] Reference uploaded:', refUrl.slice(0, 60));
-
-      // 2. Build prompt from recipe
+      // Build recipe attributes
       const recipe = await loadRecipe();
       const input = buildPromptInput(recipe);
-      const p = buildRawPrompt(input);
-      setPrompt(p);
-      console.log('[Dream] Prompt:', p.slice(0, 80));
+      const scene = [input.eraKeywords, input.settingKeywords, input.sceneAtmosphere].filter(Boolean).join(', ');
+      const style = [input.mood, input.lighting, input.colorKeywords, input.weirdnessModifier].filter(Boolean).join(', ');
+      const tags = input.personalityTags.join(', ');
+      const hint = userHint.trim();
 
-      // 3. Submit to Flux queue
-      console.log('[Dream] Submitting to Flux...');
-      const submitRes = await fetch('https://queue.fal.run/fal-ai/flux-pro/v1.1', {
+      // Haiku enhances the prompt using recipe + user hint
+      const haikuRequest = `Write a 30-word max image restyling prompt.
+
+RECIPE DEFAULTS (use these unless the user's hint overrides a specific part):
+- Medium/Style: ${input.medium}
+- Mood: ${input.mood}
+- Lighting: ${input.lighting}
+- Colors: ${input.colorKeywords || 'vivid'}
+- Scene/Setting: ${scene || 'creative setting'}
+- Personality: ${tags || 'expressive'}
+${input.spiritAppears && input.spiritCompanion ? `- Companion: small ${input.spiritCompanion.replace(/_/g, ' ')} somewhere` : ''}
+
+${hint ? `USER HINT: "${hint}"
+
+The user typed this hint. Figure out their INTENT — what are they trying to change? Replace ONLY the recipe attribute(s) that match their intent. Keep everything else exactly as the recipe says.
+
+For example if the recipe says "oil painting, cozy mood, warm colors, forest scene" and the user says "make it neon" — only the colors change. The oil painting, cozy mood, and forest stay.` : ''}
+
+FORMAT: "Restyle as [medium]. [scene]. [mood + lighting + colors]. Keep the subject recognizable."
+NO poetry. NO abstract words. Output ONLY the prompt.`;
+
+      let p: string;
+      try {
+        const haikuRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': ANTHROPIC_KEY,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 100,
+            messages: [{ role: 'user', content: haikuRequest }],
+          }),
+        });
+        if (!haikuRes.ok) throw new Error('Haiku error');
+        const haikuData = await haikuRes.json();
+        p = haikuData.content?.[0]?.text?.trim() ?? '';
+      } catch {
+        p = `Restyle this image as ${input.medium}, ${style}. ${hint ? `Theme: ${hint}.` : ''} Keep the subject recognizable.`;
+      }
+
+      setPrompt(p);
+
+      // Generate via Flux Kontext Pro on Replicate
+      const createRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Key ${FAL_KEY}` },
+        headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: p,
-          image_url: refUrl,
-          strength,
-          image_size: { width: 768, height: 1344 },
-          num_images: 1,
-          output_format: 'jpeg',
-          safety_tolerance: '2',
+          input: {
+            prompt: p,
+            input_image: refUrl,
+            aspect_ratio: 'match_input_image',
+            output_format: 'jpg',
+            output_quality: 90,
+          },
         }),
       });
 
-      if (!submitRes.ok) {
-        const errText = await submitRes.text();
-        console.warn('[Dream] Submit failed:', errText);
-        throw new Error('Generation failed to start');
-      }
+      const createData = await createRes.json();
+      if (!createData.id) throw new Error('Dream generation failed to start');
 
-      const { status_url, response_url } = await submitRes.json();
-      console.log('[Dream] Queued, polling...');
-
-      // 4. Poll for result
-      for (let i = 0; i < 60; i++) {
+      // Poll for result
+      let url: string | null = null;
+      for (let i = 0; i < 30; i++) {
         await new Promise((r) => setTimeout(r, 2000));
-        try {
-          const pollRes = await fetch(status_url, { headers: { 'Authorization': `Key ${FAL_KEY}` } });
-          const pollText = await pollRes.text();
-          let pollData;
-          try { pollData = JSON.parse(pollText); } catch { continue; }
+        const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${createData.id}`, {
+          headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}` },
+        });
+        const pollData = await pollRes.json();
 
-          console.log('[Dream] Poll', i + 1, pollData.status);
-
-          if (pollData.status === 'COMPLETED') {
-            const resultRes = await fetch(response_url, { headers: { 'Authorization': `Key ${FAL_KEY}` } });
-            const resultData = await resultRes.json();
-            const url = resultData.images?.[0]?.url;
-            if (!url) throw new Error('No image in result');
-
-            setDreamUrl(url);
-            setPhase('reveal');
-            imgOpacity.value = withTiming(1, { duration: 600 });
-            imgScale.value = withSequence(withTiming(1.05, { duration: 400 }), withTiming(1, { duration: 200 }));
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-            // Clean up temp file
-            supabase.storage.from('uploads').remove([fileName]).catch(() => {});
-            return;
-          }
-          if (pollData.status === 'FAILED') throw new Error('Generation failed');
-        } catch (e) {
-          if (i >= 59) throw e;
+        if (pollData.status === 'succeeded') {
+          url = typeof pollData.output === 'string' ? pollData.output : pollData.output?.[0];
+          break;
         }
+        if (pollData.status === 'failed') throw new Error('Dream generation failed');
       }
-      throw new Error('Timed out');
+
+      if (!url) throw new Error('Dream generation timed out');
+
+      setDreamUrl(url);
+      setPhase('reveal');
+      imgOpacity.value = withTiming(1, { duration: 600 });
+      imgScale.value = withSequence(withTiming(1.05, { duration: 400 }), withTiming(1, { duration: 200 }));
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
-      console.warn('[Dream] Failed:', msg);
       setError(msg);
       setPhase('preview');
     } finally {
@@ -192,8 +225,7 @@ export default function DreamScreen() {
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       reset();
-    } catch (err) {
-      console.warn('[Dream] Post failed:', err);
+    } catch {
       setPhase('reveal');
     }
   }
@@ -201,8 +233,11 @@ export default function DreamScreen() {
   function reset() {
     setPhase('pick');
     setPhotoUri(null);
+    setPhotoBase64(null);
     setDreamUrl(null);
+    setUserHint('');
     setPrompt('');
+    setError(null);
     imgOpacity.value = 0;
     imgScale.value = 0.85;
   }
@@ -239,21 +274,14 @@ export default function DreamScreen() {
         </View>
         <View style={s.previewWrap}>
           <Image source={{ uri: photoUri! }} style={s.previewImg} contentFit="cover" />
-          <Text style={s.strengthLabel}>How dreamy?</Text>
-          <View style={s.pills}>
-            {([
-              { v: 0.35, l: 'Subtle' }, { v: 0.55, l: 'Balanced' },
-              { v: 0.7, l: 'Dreamy' }, { v: 0.85, l: 'Full Dream' },
-            ] as const).map((o) => (
-              <TouchableOpacity
-                key={o.v} activeOpacity={0.7}
-                style={[s.pill, strength === o.v && s.pillOn]}
-                onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setStrength(o.v); }}
-              >
-                <Text style={[s.pillText, strength === o.v && s.pillTextOn]}>{o.l}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <TextInput
+            style={s.hintInput}
+            placeholder="Add a dream hint... (optional)"
+            placeholderTextColor={colors.textSecondary}
+            value={userHint}
+            onChangeText={setUserHint}
+            maxLength={80}
+          />
         </View>
         {error && <Text style={s.errorText}>{error}</Text>}
         <View style={s.footer}>
@@ -302,7 +330,7 @@ export default function DreamScreen() {
             <Text style={s.ctaText}>Post This Dream</Text>
           </TouchableOpacity>
           <View style={s.row}>
-            <TouchableOpacity style={s.sec} onPress={dream} activeOpacity={0.7}>
+            <TouchableOpacity style={s.sec} onPress={() => { setDreamUrl(null); setPhase('preview'); }} activeOpacity={0.7}>
               <Ionicons name="refresh" size={16} color={colors.textSecondary} />
               <Text style={s.secText}>Dream again</Text>
             </TouchableOpacity>
@@ -341,17 +369,16 @@ const s = StyleSheet.create({
   footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
   previewWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center', gap: 20 },
   previewImg: { width: PREVIEW_WIDTH, height: PREVIEW_WIDTH * 1.2, borderRadius: 16 },
-  strengthLabel: { color: colors.textPrimary, fontSize: 16, fontWeight: '700', alignSelf: 'flex-start' },
-  pills: { flexDirection: 'row', gap: 8, width: '100%' },
-  pill: { flex: 1, paddingVertical: 10, borderRadius: 12, backgroundColor: colors.surface, borderWidth: 1.5, borderColor: colors.border, alignItems: 'center' },
-  pillOn: { borderColor: '#FF4500', backgroundColor: 'rgba(255,69,0,0.12)' },
-  pillText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
-  pillTextOn: { color: '#FF4500' },
+  hintInput: {
+    width: '100%', backgroundColor: colors.surface, borderRadius: 12,
+    borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14,
+    paddingVertical: 12, color: colors.textPrimary, fontSize: 15,
+  },
+  errorText: { color: '#F4212E', fontSize: 13, textAlign: 'center', paddingHorizontal: 20 },
   revealWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center' },
   revealBorder: { borderRadius: 20, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
   revealImg: { width: PREVIEW_WIDTH, height: Math.min(PREVIEW_WIDTH * 1.75, 400), borderRadius: 20 },
   promptText: { color: colors.textSecondary, fontSize: 12, textAlign: 'center', marginTop: 12, lineHeight: 17 },
-  errorText: { color: '#F4212E', fontSize: 13, textAlign: 'center', paddingHorizontal: 20 },
   row: { flexDirection: 'row', justifyContent: 'center', gap: 24 },
   sec: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8 },
   secText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },

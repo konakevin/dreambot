@@ -12,7 +12,7 @@ export default function SpiritCompanionScreen() {
     <OnboardingTileScreen
       stepNumber={2}
       title="Pick your dream companion"
-      subtitle="This little friend will appear in your dreams"
+      subtitle="This little friend may appear in your dreams"
       tiles={SPIRIT_COMPANIONS}
       selected={companion ? [companion] : []}
       onToggle={(key) => {

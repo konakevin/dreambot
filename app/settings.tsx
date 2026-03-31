@@ -275,6 +275,16 @@ export default function SettingsScreen() {
           />
         </View>
 
+        {/* Dream Engine */}
+        <Text style={styles.sectionHeader}>DREAM ENGINE</Text>
+        <View style={styles.section}>
+          <SettingsRow icon="sparkles" label="Edit My Character" onPress={() => {
+            const { useOnboardingStore } = require('@/store/onboarding');
+            useOnboardingStore.getState().reset();
+            router.push('/(onboarding)/interests');
+          }} />
+        </View>
+
         {/* App section */}
         <Text style={styles.sectionHeader}>APP</Text>
         <View style={styles.section}>
