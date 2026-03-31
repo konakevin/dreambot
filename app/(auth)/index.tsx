@@ -11,7 +11,8 @@ import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
 
-const RAINBOW_GRADIENT: [string, string, ...string[]] = ['#FFD700', '#FF8C00', '#FF4500', '#BB88EE', '#6699EE', '#44DDCC'];
+const HOT_GRADIENT: [string, string, ...string[]] = ['#FFD700', '#FF8C00', '#FF4500'];
+const COLD_GRADIENT: [string, string, ...string[]] = ['#44DDCC', '#6699EE', '#BB88EE'];
 
 function Tagline() {
   return (
@@ -21,14 +22,23 @@ function Tagline() {
   );
 }
 
+function GradientWord({ text, colors }: { text: string; colors: [string, string, ...string[]] }) {
+  return (
+    <MaskedView maskElement={<Text style={authStyles.logoWord}>{text}</Text>}>
+      <LinearGradient colors={colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+        <Text style={[authStyles.logoWord, { opacity: 0 }]}>{text}</Text>
+      </LinearGradient>
+    </MaskedView>
+  );
+}
+
 function Logo() {
   return (
     <View style={authStyles.logoContainer}>
-      <MaskedView maskElement={<Text style={authStyles.logoWord}>dreamcraft</Text>}>
-        <LinearGradient colors={RAINBOW_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-          <Text style={[authStyles.logoWord, { opacity: 0 }]}>dreamcraft</Text>
-        </LinearGradient>
-      </MaskedView>
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        <GradientWord text="DREAM" colors={HOT_GRADIENT} />
+        <GradientWord text="BOT" colors={COLD_GRADIENT} />
+      </View>
     </View>
   );
 }
