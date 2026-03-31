@@ -1,48 +1,40 @@
--- Migration 051: Remove the rad/bad voting system
--- The app has pivoted to a dream-sharing platform. Voting is gone.
+-- Migration 051: Remove rad/bad voting system, keep like infrastructure
+-- The app pivoted to dreams. Rad/bad voting is gone, likes (favorites) stay.
 
--- Drop vote-related tables
+-- Drop streak tables (voting streaks are gone)
 DROP TABLE IF EXISTS public.vote_streaks CASCADE;
-DROP TABLE IF EXISTS public.votes CASCADE;
 DROP TABLE IF EXISTS public.streak_cron_state CASCADE;
 
--- Drop vote-related functions
+-- Drop streak functions
 DROP FUNCTION IF EXISTS public.refresh_vote_streaks() CASCADE;
 DROP FUNCTION IF EXISTS public.get_top_streaks(uuid) CASCADE;
 DROP FUNCTION IF EXISTS public.check_post_milestone() CASCADE;
 
--- Drop vote-related columns from uploads (keep the table)
-ALTER TABLE public.uploads DROP COLUMN IF EXISTS rad_votes;
-ALTER TABLE public.uploads DROP COLUMN IF EXISTS bad_votes;
-ALTER TABLE public.uploads DROP COLUMN IF EXISTS total_votes;
-ALTER TABLE public.uploads DROP COLUMN IF EXISTS wilson_score;
+-- Drop the streak cron job
+DO $$ BEGIN
+  PERFORM cron.unschedule('refresh-vote-streaks');
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;
 
--- Drop vote-related columns from users
-ALTER TABLE public.uploads DROP COLUMN IF EXISTS is_moderated;
-ALTER TABLE public.uploads DROP COLUMN IF EXISTS is_approved;
+-- Drop milestone trigger
+DROP TRIGGER IF EXISTS trg_check_post_milestone ON public.uploads;
 
--- Drop user ranking columns (based on vote scores)
+-- Drop old feed functions that reference rad/bad voting
+DROP FUNCTION IF EXISTS public.get_friends_feed(uuid, integer) CASCADE;
+DROP FUNCTION IF EXISTS public.get_following_feed(uuid, integer) CASCADE;
+DROP FUNCTION IF EXISTS public.get_friend_votes_on_post(uuid, uuid) CASCADE;
+
+-- Drop vote-based user columns (rank was based on voting)
 ALTER TABLE public.users DROP COLUMN IF EXISTS rad_score;
 ALTER TABLE public.users DROP COLUMN IF EXISTS user_rank;
 ALTER TABLE public.users DROP COLUMN IF EXISTS critic_level;
 ALTER TABLE public.users DROP COLUMN IF EXISTS total_ratings_given;
 ALTER TABLE public.users DROP COLUMN IF EXISTS skip_tokens;
 
--- Drop category affinity table (vote-based)
+-- Drop category affinity (was vote-based)
 DROP TABLE IF EXISTS public.user_category_affinity CASCADE;
 
--- Drop the streak cron job if it exists
-SELECT cron.unschedule('refresh-vote-streaks') WHERE EXISTS (
-  SELECT 1 FROM cron.job WHERE jobname = 'refresh-vote-streaks'
-);
-
--- Drop the milestone trigger
-DROP TRIGGER IF EXISTS trg_check_post_milestone ON public.uploads;
-
--- Drop unused feed functions that reference voting
-DROP FUNCTION IF EXISTS public.get_friends_feed(uuid, integer) CASCADE;
-DROP FUNCTION IF EXISTS public.get_following_feed(uuid, integer) CASCADE;
-DROP FUNCTION IF EXISTS public.get_friend_votes_on_post(uuid, uuid) CASCADE;
-
--- Keep get_feed but it will need updating later to remove vote references
--- For now it still works because the dropped columns just won't be selected
+-- KEEP: votes table — repurpose for likes or drop later
+-- KEEP: uploads.total_votes, rad_votes, bad_votes, wilson_score — used by get_feed RPC
+-- KEEP: favorites table — this IS the new like system
+-- KEEP: get_feed RPC — still works, will be rewritten to use likes instead of votes
