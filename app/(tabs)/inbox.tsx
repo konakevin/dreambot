@@ -242,7 +242,7 @@ export default function InboxScreen() {
                     activeOpacity={0.7}
                     hitSlop={8}
                   >
-                    <Ionicons name="checkmark-done" size={20} color="#FFD700" />
+                    <Ionicons name="checkmark-done" size={20} color={colors.accent} />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {

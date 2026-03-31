@@ -249,7 +249,7 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
       <SafeAreaView style={s.root}>
         <View style={s.center}>
           <View style={s.moonIcon}>
-            <Ionicons name="moon" size={48} color="#FFD700" />
+            <Ionicons name="moon" size={48} color={colors.accent} />
           </View>
           <Text style={s.title}>Dream a photo</Text>
           <Text style={s.sub}>Pick a photo and your dream machine will transform it</Text>
@@ -361,10 +361,10 @@ const s = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, gap: 16 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
-  moonIcon: { width: 88, height: 88, borderRadius: 44, backgroundColor: 'rgba(255,215,0,0.1)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,215,0,0.2)', marginBottom: 8 },
+  moonIcon: { width: 88, height: 88, borderRadius: 44, backgroundColor: 'rgba(139,123,238,0.1)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(139,123,238,0.2)', marginBottom: 8 },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
-  cta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#FF4500', borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
+  cta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
   footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
   previewWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center', gap: 20 },

@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   vibeButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: colors.accent,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 7,

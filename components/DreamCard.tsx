@@ -15,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { colors, ui } from '@/constants/theme';
 import { SWIPE_THRESHOLD, ACTIVE_OFFSET } from '@/constants/gestures';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -121,7 +122,7 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
               </View>
             )}
             <Text style={s.username}>{item.username}</Text>
-            {item.is_ai_generated && <Ionicons name="sparkles" size={14} color="#FFD700" />}
+            {item.is_ai_generated && <Ionicons name="sparkles" size={14} color={colors.accent} />}
           </TouchableOpacity>
           {item.caption && <Text style={s.caption} numberOfLines={2}>{item.caption}</Text>}
         </View>
@@ -129,7 +130,7 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
         {/* Side action buttons */}
         <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
           <TouchableOpacity style={s.sideButton} onPress={onToggleLike} activeOpacity={0.7}>
-            <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={28} color={isLiked ? '#F4212E' : '#FFFFFF'} />
+            <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={28} color={isLiked ? colors.like : '#FFFFFF'} />
           </TouchableOpacity>
           {onComment && (
             <TouchableOpacity style={s.sideButton} onPress={onComment} activeOpacity={0.7}>
@@ -159,16 +160,8 @@ const s = StyleSheet.create({
   sideActions: {
     position: 'absolute', right: 12, alignItems: 'center', gap: 20,
   },
-  sideButton: {
-    width: 44, height: 44, alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: 22,
-  },
-  sideCount: {
-    color: '#FFFFFF', fontSize: 11, fontWeight: '700',
-    position: 'absolute', bottom: -2,
-    textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 3,
-    textShadowOffset: { width: 0, height: 1 },
-  },
+  sideButton: ui.sideButton,
+  sideCount: ui.sideCount,
   postInfo: {
     position: 'absolute', bottom: 0, left: 0, right: 70,
     paddingHorizontal: 16, gap: 8,

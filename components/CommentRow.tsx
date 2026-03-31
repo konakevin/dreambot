@@ -135,7 +135,7 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
           <Ionicons
             name={comment.isLiked ? 'heart' : 'heart-outline'}
             size={16}
-            color={comment.isLiked ? '#FF4500' : 'rgba(255,255,255,0.4)'}
+            color={comment.isLiked ? colors.accent : 'rgba(255,255,255,0.4)'}
           />
           {comment.likeCount > 0 && (
             <Text style={[styles.likeCount, comment.isLiked && styles.likeCountActive]}>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   likeCountActive: {
-    color: '#FF4500',
+    color: colors.accent,
   },
   repliesContainer: {
     paddingLeft: 0,

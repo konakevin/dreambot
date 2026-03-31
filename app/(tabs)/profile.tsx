@@ -32,7 +32,7 @@ import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'saved' | 'friends' | 'followers' | 'following' | 'streaks';
 
-const HOT_FLAME: [string, string, ...string[]] = ['#FFD700', '#FF8C00', '#FF4500'];
+const HOT_FLAME: [string, string, ...string[]] = ['#FFD700', '#FF8C00', colors.accent];
 const COLD_FLAME: [string, string, ...string[]] = ['#44DDCC', '#6699EE', '#BB88EE'];
 
 function GradientFlame({ colors, size }: { colors: [string, string, ...string[]]; size: number }) {
@@ -123,7 +123,7 @@ export default function ProfileScreen() {
         <View style={styles.streakCard}>
           <View style={styles.streakCardHeader}>
             <View style={styles.streakCardTitleRow}>
-              <Ionicons name="flame" size={18} color="#FFD700" />
+              <Ionicons name="flame" size={18} color={colors.accent} />
               <Text style={styles.streakCardTitle}>Vibe streaks</Text>
             </View>
             <TouchableOpacity
@@ -131,9 +131,9 @@ export default function ProfileScreen() {
               onPress={() => router.push('/(tabs)?mode=friends' as Href)}
               activeOpacity={0.7}
             >
-              <Ionicons name="flash" size={16} color="#FFD700" />
+              <Ionicons name="flash" size={16} color={colors.accent} />
               <Text style={styles.goVibeText}>Go Vibe</Text>
-              <Ionicons name="chevron-forward" size={16} color="#FFD700" />
+              <Ionicons name="chevron-forward" size={16} color={colors.accent} />
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled style={styles.streakCardScroll} contentContainerStyle={styles.streakCardAvatars}>
@@ -182,7 +182,7 @@ export default function ProfileScreen() {
           onPress={() => router.push('/discoverVibers')}
           activeOpacity={0.7}
         >
-          <Ionicons name="moon" size={14} color="#FFD700" />
+          <Ionicons name="moon" size={14} color={colors.accent} />
           <Text style={styles.discoverButtonText}>Find similar dreamers</Text>
           <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
         </TouchableOpacity>
@@ -255,7 +255,7 @@ export default function ProfileScreen() {
               onPress={() => router.push('/discoverVibers')}
               activeOpacity={0.7}
             >
-              <Ionicons name="moon" size={14} color="#FFD700" />
+              <Ionicons name="moon" size={14} color={colors.accent} />
               <Text style={styles.discoverButtonText}>See who you vibe with</Text>
               <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
             </TouchableOpacity>

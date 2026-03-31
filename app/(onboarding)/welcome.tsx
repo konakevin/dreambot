@@ -26,7 +26,7 @@ export default function WelcomeScreen() {
       <View style={styles.content}>
         <View style={styles.iconStack}>
           <View style={styles.iconCircle}>
-            <Ionicons name="sparkles" size={44} color="#FFD700" />
+            <Ionicons name="sparkles" size={44} color={colors.accent} />
           </View>
         </View>
 
@@ -39,13 +39,13 @@ export default function WelcomeScreen() {
         <View style={styles.steps}>
           <StepRow
             icon="color-palette"
-            color="#FF4500"
+            color={colors.accent}
             title="Teach it your taste"
             subtitle="Pick your interests, style, and personality"
           />
           <StepRow
             icon="moon"
-            color="#FFD700"
+            color={colors.accent}
             title="It dreams for you"
             subtitle="A new creation appears on your profile every day"
           />
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FF4500',
+    backgroundColor: colors.accent,
     borderRadius: 14,
     paddingVertical: 16,
   },

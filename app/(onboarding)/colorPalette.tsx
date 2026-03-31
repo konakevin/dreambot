@@ -47,7 +47,7 @@ export default function ColorPaletteScreen() {
                   style={styles.gradient}
                 />
                 <Text style={[styles.cardLabel, isSelected && styles.cardLabelSelected]}>{palette.label}</Text>
-                {isSelected && <Ionicons name="checkmark-circle" size={20} color="#FFD700" />}
+                {isSelected && <Ionicons name="checkmark-circle" size={20} color={colors.accent} />}
               </TouchableOpacity>
             );
           })}
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   progressBar: { flexDirection: 'row', gap: 4 },
   progressDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.border },
-  progressDotActive: { backgroundColor: '#FF4500', width: 16, borderRadius: 3 },
+  progressDotActive: { backgroundColor: colors.accent, width: 16, borderRadius: 3 },
   content: { paddingHorizontal: 20, paddingBottom: 20 },
   title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
   subtitle: { color: colors.textSecondary, fontSize: 16, marginBottom: 24 },
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   footer: { paddingHorizontal: 20, paddingBottom: 16 },
   nextButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: '#FF4500', borderRadius: 14, paddingVertical: 16,
+    gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
   },
   nextButtonDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },

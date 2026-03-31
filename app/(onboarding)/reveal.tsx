@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   },
   progressBar: { flexDirection: 'row', gap: 6 },
   progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.border },
-  progressDotActive: { backgroundColor: '#FF4500', width: 24, borderRadius: 4 },
+  progressDotActive: { backgroundColor: colors.accent, width: 24, borderRadius: 4 },
   loadingContent: {
     flex: 1,
     alignItems: 'center',
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FF4500',
+    backgroundColor: colors.accent,
     borderRadius: 14,
     paddingVertical: 16,
   },

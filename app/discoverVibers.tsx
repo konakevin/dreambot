@@ -44,7 +44,7 @@ export default function DiscoverVibersScreen() {
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <View style={styles.headerTitleRow}>
-            <Ionicons name="sparkles" size={20} color="#FFD700" />
+            <Ionicons name="sparkles" size={20} color={colors.accent} />
             <View>
               <Text style={styles.headerTitle}>Similar Dreamers</Text>
               <Text style={styles.subtitle}>People who like the same dreams as you</Text>

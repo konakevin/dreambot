@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonDefault: {
-    backgroundColor: '#FF4500',
+    backgroundColor: colors.accent,
   },
   buttonDestructive: {
     backgroundColor: '#F4212E',

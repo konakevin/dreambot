@@ -58,7 +58,7 @@ export function OnboardingTileScreen({
               key={i}
               style={[
                 styles.progressDot,
-                i < stepNumber && [styles.progressDotActive, { backgroundColor: '#FF4500' }],
+                i < stepNumber && [styles.progressDotActive, { backgroundColor: colors.accent }],
               ]}
             />
           ))}
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   footer: { paddingHorizontal: 20, paddingBottom: 16 },
   nextButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: '#FF4500', borderRadius: 14, paddingVertical: 16,
+    gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
   },
   nextButtonDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },

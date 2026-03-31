@@ -86,7 +86,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
       onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onSendRequest(); }}
       activeOpacity={0.7}
     >
-      <Ionicons name="person-add" size={14} color="#FFD700" />
+      <Ionicons name="person-add" size={14} color={colors.accent} />
       <Text style={styles.addText}>Dream</Text>
     </TouchableOpacity>
   );
