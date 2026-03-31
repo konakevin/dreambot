@@ -85,7 +85,7 @@ export const DREAM_CATEGORIES: DreamCategory[] = [
     key: 'retro',
     label: 'Retro',
     icon: 'radio',
-    color: '#FF4500',
+    color: colors.accent,
     keywords: [
       'retro', 'vintage', 'neon', 'vaporwave', '80s', '70s', '50s', 'film grain',
       'nostalgic', 'polaroid', 'arcade', 'synthwave', 'chrome', 'airbrush',

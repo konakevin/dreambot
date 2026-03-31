@@ -10,8 +10,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
+import { colors } from '@/constants/theme';
 
-const HOT_GRADIENT: [string, string, ...string[]] = ['#FFD700', '#FF8C00', colors.accent];
+const HOT_GRADIENT: [string, string, ...string[]] = ['#FFD700', '#FF8C00', '#FF4500'];
 const COLD_GRADIENT: [string, string, ...string[]] = ['#44DDCC', '#6699EE', '#BB88EE'];
 
 function Tagline() {
@@ -150,7 +151,7 @@ export default function WelcomeScreen() {
 
         <Link href="/(auth)/signup" asChild>
           <TouchableOpacity
-            className="bg-flame rounded-full py-4 items-center"
+            className="bg-[#8B7BEE] rounded-full py-4 items-center"
             activeOpacity={0.8}
             onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
           >

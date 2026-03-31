@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   statLabelActive: { color: colors.textPrimary },
   statWithBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   pendingBadge: {
-    backgroundColor: '#F4212E',
+    backgroundColor: colors.error,
     borderRadius: 8,
     minWidth: 16,
     height: 16,

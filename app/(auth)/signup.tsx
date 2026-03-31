@@ -102,7 +102,7 @@ export default function SignupScreen() {
           <View className="flex-row justify-center mt-6">
             <Text className="text-text-secondary">Wrong email? </Text>
             <TouchableOpacity onPress={() => setAwaitingConfirmation(false)}>
-              <Text className="text-flame font-semibold">Go back</Text>
+              <Text className="text-[#8B7BEE] font-semibold">Go back</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -170,7 +170,7 @@ export default function SignupScreen() {
             </View>
 
             <TouchableOpacity
-              className={`bg-flame rounded-full py-4 items-center ${loading ? 'opacity-70' : ''}`}
+              className={`bg-[#8B7BEE] rounded-full py-4 items-center ${loading ? 'opacity-70' : ''}`}
               onPress={handleSignup}
               disabled={loading}
               activeOpacity={0.8}
@@ -183,7 +183,7 @@ export default function SignupScreen() {
             <View className="flex-row justify-center mt-6">
               <Text className="text-text-secondary">Already have an account? </Text>
               <Link href="/(auth)/login">
-                <Text className="text-flame font-semibold">Sign in</Text>
+                <Text className="text-[#8B7BEE] font-semibold">Sign in</Text>
               </Link>
             </View>
           </View>

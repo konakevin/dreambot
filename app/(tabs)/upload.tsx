@@ -374,7 +374,7 @@ const s = StyleSheet.create({
     borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14,
     paddingVertical: 12, color: colors.textPrimary, fontSize: 15,
   },
-  errorText: { color: '#F4212E', fontSize: 13, textAlign: 'center', paddingHorizontal: 20 },
+  errorText: { color: colors.error, fontSize: 13, textAlign: 'center', paddingHorizontal: 20 },
   revealWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center' },
   revealBorder: { borderRadius: 20, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
   revealImg: { width: PREVIEW_WIDTH, height: Math.min(PREVIEW_WIDTH * 1.75, 400), borderRadius: 20 },
