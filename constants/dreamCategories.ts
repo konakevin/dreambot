@@ -4,6 +4,8 @@
  * that match against the ai_prompt field on posts.
  */
 
+import { colors } from '@/constants/theme';
+
 export interface DreamCategory {
   key: string;
   label: string;
