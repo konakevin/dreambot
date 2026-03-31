@@ -49,20 +49,20 @@ export function VibeSuggestionRow({ suggestion, onStartVibing, onCancelRequest, 
       <View style={styles.info}>
         <Text style={styles.username}>{suggestion.username}</Text>
         <Text style={[styles.score, { color: scoreColor }]}>
-          {suggestion.vibeScore}% vibes · {suggestion.sharedCount} shared
+          {suggestion.vibeScore}% match · {suggestion.sharedCount} shared
         </Text>
       </View>
 
       {isFriends ? (
         <View style={styles.friendsButton}>
           <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
-          <Text style={styles.friendsButtonText}>Vibers</Text>
+          <Text style={styles.friendsButtonText}>Connected</Text>
         </View>
       ) : isPending ? (
         <TouchableOpacity
           style={styles.requestedButton}
           onPress={() => {
-            showAlert('Cancel request?', 'Withdraw your vibe request?', [
+            showAlert('Cancel request?', 'Withdraw your dream request?', [
               { text: 'No', style: 'cancel' },
               { text: 'Cancel request', style: 'destructive', onPress: () => onCancelRequest?.(suggestion.userId) },
             ]);
@@ -79,7 +79,7 @@ export function VibeSuggestionRow({ suggestion, onStartVibing, onCancelRequest, 
           hitSlop={8}
         >
           <View style={styles.vibeButton}>
-            <Text style={styles.vibeButtonText}>Vibe</Text>
+            <Text style={styles.vibeButtonText}>Connect</Text>
           </View>
         </TouchableOpacity>
       )}

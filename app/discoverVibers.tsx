@@ -20,8 +20,8 @@ export default function DiscoverVibersScreen() {
 
   function handleVibe(userId: string, username: string) {
     showAlert(
-      'Send Vibe Request?',
-      `Send a vibe request to ${username}?`,
+      'Connect with dreamer?',
+      `Send a dream request to ${username}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -46,8 +46,8 @@ export default function DiscoverVibersScreen() {
           <View style={styles.headerTitleRow}>
             <Ionicons name="sparkles" size={20} color="#FFD700" />
             <View>
-              <Text style={styles.headerTitle}>Discover Vibers</Text>
-              <Text style={styles.subtitle}>People who vote like you</Text>
+              <Text style={styles.headerTitle}>Similar Dreamers</Text>
+              <Text style={styles.subtitle}>People who like the same dreams as you</Text>
             </View>
           </View>
         </View>
@@ -77,7 +77,7 @@ export default function DiscoverVibersScreen() {
                 <Text style={styles.emptyEmoji}>🔍</Text>
                 <Text style={styles.emptyTitle}>No suggestions yet</Text>
                 <Text style={styles.emptySubtitle}>
-                  Keep voting to find people who share your vibes!
+                  Like more dreams to find people with similar taste!
                 </Text>
               </>
             )}

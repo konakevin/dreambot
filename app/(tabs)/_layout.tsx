@@ -1,11 +1,13 @@
 import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
   const bumpProfileReset = useFeedStore((s) => s.bumpProfileReset);
+  const queryClient = useQueryClient();
 
   if (initialized && !session) {
     return <Redirect href="/(auth)" />;
@@ -33,12 +35,15 @@ export default function TabLayout() {
             <Ionicons name="home" size={size} color={color} />
           ),
         }}
+        listeners={{
+          tabPress: () => queryClient.invalidateQueries({ queryKey: ['dreamFeed'] }),
+        }}
       />
       <Tabs.Screen
         name="top"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search" size={size} color={color} />
+            <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
       />

@@ -1,7 +1,7 @@
--- Migration 052: Add pagination to get_feed
--- The smart feed algorithm now supports OFFSET for infinite scroll.
--- Also removes the vote filter (v.upload_id IS NULL) since voting is gone.
+-- Migration 052: Paginated smart feed (replaces old get_feed)
+-- Removes user_rank reference (dropped in 051), adds p_offset, removes vote filter.
 
+DROP FUNCTION IF EXISTS public.get_feed(uuid, integer, integer, double precision);
 DROP FUNCTION IF EXISTS public.get_feed(uuid, integer, double precision);
 
 CREATE FUNCTION public.get_feed(
@@ -25,7 +25,6 @@ RETURNS TABLE(
   rad_votes     integer,
   bad_votes     integer,
   username      text,
-  user_rank     text,
   avatar_url    text,
   comment_count integer,
   feed_score    double precision
@@ -42,18 +41,13 @@ AS $$
     up.id, up.user_id, up.categories, up.image_url, up.media_type,
     up.thumbnail_url, up.width, up.height, up.caption, up.created_at,
     up.total_votes, up.rad_votes, up.bad_votes,
-    u.username, u.user_rank, u.avatar_url,
+    u.username, u.avatar_url,
     up.comment_count,
     (
-      -- Time decay: newer posts score higher (25%)
       (1.0 / POWER(GREATEST(EXTRACT(EPOCH FROM (now() - up.created_at)) / 3600.0, 0.0) + 2.0, 1.8) / 0.2871) * 0.35
-      -- Follow boost: posts from people you follow rank higher (25%)
       + CASE WHEN follows.following_id IS NOT NULL THEN 0.25 ELSE 0.0 END
-      -- Engagement: comment count as a signal (15%)
       + (LN(1.0 + up.comment_count) / LN(1.0 + 1000.0)) * 0.15
-      -- Popularity: total favorites/votes as signal (15%)
       + (LN(1.0 + up.total_votes) / LN(1.0 + 1000000.0)) * 0.15
-      -- Randomization: seeded hash for variety (10%)
       + ((ABS(HASHTEXT(p_user_id::text || up.id::text || p_seed::text)) % 1000)::float / 1000.0) * 0.10
     ) AS feed_score
   FROM public.uploads up

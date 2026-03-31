@@ -182,9 +182,9 @@ export default function ProfileScreen() {
           onPress={() => router.push('/discoverVibers')}
           activeOpacity={0.7}
         >
-          <Ionicons name="sparkles" size={14} color="#FFD700" />
-          <Text style={styles.discoverButtonText}>See who you vibe with</Text>
-          <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
+          <Ionicons name="moon" size={14} color="#FFD700" />
+          <Text style={styles.discoverButtonText}>Find similar dreamers</Text>
+          <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
         </TouchableOpacity>
       )}
 
@@ -255,7 +255,7 @@ export default function ProfileScreen() {
               onPress={() => router.push('/discoverVibers')}
               activeOpacity={0.7}
             >
-              <Ionicons name="sparkles" size={14} color="#FFD700" />
+              <Ionicons name="moon" size={14} color="#FFD700" />
               <Text style={styles.discoverButtonText}>See who you vibe with</Text>
               <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
             </TouchableOpacity>
@@ -493,11 +493,13 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    backgroundColor: '#FF4500',
+    backgroundColor: colors.surface,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   discoverButtonText: {
-    color: '#FFFFFF',
+    color: colors.textPrimary,
     fontSize: 15,
     fontWeight: '700',
   },
