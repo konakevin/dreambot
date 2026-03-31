@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { MASCOT_URLS } from '@/constants/mascots';
 
 interface Props { onNext: () => void; onBack: () => void; }
 
@@ -33,7 +34,7 @@ export function WelcomeStep({ onNext }: Props) {
       <View style={s.content}>
         <View style={s.iconStack}>
           <Image
-            source={{ uri: 'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/assets/dreambot-mascot-v2.jpg' }}
+            source={{ uri: MASCOT_URLS[0] }}
             style={s.mascot}
             contentFit="cover"
           />

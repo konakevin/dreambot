@@ -2,6 +2,8 @@ import { useState, useRef, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
@@ -10,6 +12,7 @@ import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
 import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
 import { colors } from '@/constants/theme';
+import { MASCOT_URLS } from '@/constants/mascots';
 import { Toast } from '@/components/Toast';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -36,6 +39,7 @@ export function RevealStep({ onBack }: Props) {
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
 
   const [phase, setPhase] = useState<Phase>('idle');
+  const [isZoomed, setIsZoomed] = useState(false);
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +49,46 @@ export function RevealStep({ onBack }: Props) {
   const activeDream = dreams[activeIndex] ?? null;
   const dreamsRemaining = MAX_DREAMS - dreams.length;
   const canDreamAgain = dreamsRemaining > 0;
+
+  // Pinch to zoom on preview
+  const zoomScale = useSharedValue(1);
+  const zoomTransX = useSharedValue(0);
+  const zoomTransY = useSharedValue(0);
+  const focalX = useSharedValue(0);
+  const focalY = useSharedValue(0);
+  const startFocalX = useSharedValue(0);
+  const startFocalY = useSharedValue(0);
+
+  const zoomStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: zoomTransX.value },
+      { translateY: zoomTransY.value },
+      { scale: zoomScale.value },
+    ],
+  }));
+
+  const pinchGesture = Gesture.Pinch()
+    .onStart((e) => {
+      runOnJS(setIsZoomed)(true);
+      focalX.value = e.focalX - IMAGE_WIDTH / 2;
+      focalY.value = e.focalY - IMAGE_HEIGHT / 2;
+      startFocalX.value = e.focalX;
+      startFocalY.value = e.focalY;
+    })
+    .onUpdate((e) => {
+      const sc = Math.max(1, Math.min(5, e.scale));
+      zoomScale.value = sc;
+      const panX = e.focalX - startFocalX.value;
+      const panY = e.focalY - startFocalY.value;
+      zoomTransX.value = focalX.value * (1 - sc) + panX;
+      zoomTransY.value = focalY.value * (1 - sc) + panY;
+    })
+    .onEnd(() => {
+      zoomScale.value = withTiming(1, { duration: 200 });
+      zoomTransX.value = withTiming(0, { duration: 200 });
+      zoomTransY.value = withTiming(0, { duration: 200 });
+      runOnJS(setIsZoomed)(false);
+    });
 
   async function generateImage() {
     if (generating.current) return;
@@ -80,72 +124,66 @@ export function RevealStep({ onBack }: Props) {
   }
 
   async function generateFluxImage(prompt: string): Promise<string> {
-    const falKey = '66ced4d1-b410-4381-8c0e-f59c8ce7193b:b5e709a879187f3dc73fddb842de8dcf';
+    const replicateToken = '***REMOVED***';
 
-    const submitResponse = await fetch('https://queue.fal.run/fal-ai/flux/dev', {
+    // Submit prediction
+    const submitResponse = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Key ${falKey}`,
+        'Authorization': `Bearer ${replicateToken}`,
       },
       body: JSON.stringify({
-        prompt,
-        image_size: { width: GEN_WIDTH, height: GEN_HEIGHT },
-        num_images: 1,
-        output_format: 'jpeg',
-        safety_tolerance: '2',
+        input: {
+          prompt,
+          aspect_ratio: '9:16',
+          num_outputs: 1,
+          output_format: 'jpg',
+        },
       }),
     });
 
+    if (submitResponse.status === 429) {
+      // Rate limited — wait and retry once
+      const errBody = await submitResponse.text();
+      const retryAfter = JSON.parse(errBody).retry_after ?? 6;
+      console.log('[Reveal] Rate limited, retrying in', retryAfter, 's');
+      await new Promise((r) => setTimeout(r, retryAfter * 1000));
+      return generateFluxImage(prompt);
+    }
+
     if (!submitResponse.ok) {
       const errBody = await submitResponse.text();
-      throw new Error(`Flux submit error: ${submitResponse.status}`);
+      console.warn('[Reveal] Replicate submit error:', submitResponse.status, errBody);
+      throw new Error(`Replicate submit error: ${submitResponse.status}`);
     }
 
-    const submitData = await submitResponse.json();
-    const responseUrl = submitData.response_url;
-    const statusUrl = submitData.status_url;
+    const prediction = await submitResponse.json();
+    console.log('[Reveal] Replicate prediction:', prediction.id);
 
+    // Poll for result
     let attempts = 0;
     while (attempts < 60) {
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 1500));
       attempts++;
 
-      try {
-        const statusResponse = await fetch(statusUrl, {
-          headers: { 'Authorization': `Key ${falKey}` },
-        });
-        const statusText = await statusResponse.text();
-        let statusData;
-        try { statusData = JSON.parse(statusText); } catch { continue; }
+      const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
+        headers: { 'Authorization': `Bearer ${replicateToken}` },
+      });
+      const pollData = await pollResponse.json();
 
-        if (statusData.status === 'COMPLETED') {
-          const resultResponse = await fetch(responseUrl, {
-            headers: { 'Authorization': `Key ${falKey}` },
-          });
-          const resultData = await resultResponse.json();
-          console.log('[Reveal] Result data:', JSON.stringify(resultData).slice(0, 300));
-          // Flux Dev may return images at top level or nested
-          const url = resultData.images?.[0]?.url
-            ?? resultData.output?.images?.[0]?.url
-            ?? resultData.image?.url;
-          if (!url) throw new Error('No image URL in result');
-          return url;
-        }
+      if (pollData.status === 'succeeded') {
+        const url = pollData.output?.[0];
+        if (!url) throw new Error('No image URL in result');
+        console.log('[Reveal] Got URL:', url.slice(0, 80));
+        return url;
+      }
 
-        if (statusData.status === 'FAILED') {
-          throw new Error('Flux generation failed on server');
-        }
-      } catch (pollErr) {
-        // Don't retry on definitive failures — only on network/parse errors
-        const msg = (pollErr as Error).message ?? '';
-        if (msg.includes('No image URL') || msg.includes('Flux generation failed')) {
-          throw pollErr;
-        }
-        console.log('[Reveal] Poll error, retrying...', pollErr);
+      if (pollData.status === 'failed' || pollData.status === 'canceled') {
+        throw new Error(`Replicate generation ${pollData.status}: ${pollData.error ?? 'unknown'}`);
       }
     }
-    throw new Error('Flux generation timed out');
+    throw new Error('Generation timed out');
   }
 
   function handleDreamAgain() {
@@ -221,7 +259,7 @@ export function RevealStep({ onBack }: Props) {
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image
-            source={{ uri: 'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/assets/dreambot-artist.jpg' }}
+            source={{ uri: MASCOT_URLS[1] }}
             style={s.idleMascot}
             contentFit="cover"
           />
@@ -246,7 +284,7 @@ export function RevealStep({ onBack }: Props) {
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image
-            source={{ uri: 'https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/assets/dreambot-dreaming.jpg' }}
+            source={{ uri: MASCOT_URLS[2] }}
             style={s.idleMascot}
             contentFit="cover"
           />
@@ -278,39 +316,42 @@ export function RevealStep({ onBack }: Props) {
                   : 'Swipe to browse your dreams and pick your favorite to post.'}
             </Text>
 
-            {/* Swipeable image preview */}
-            <View style={s.imageWrap}>
-              <ScrollView
-                ref={scrollRef}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                onMomentumScrollEnd={handleScrollEnd}
-                scrollEventThrottle={16}
-                style={{ width: IMAGE_WIDTH }}
-                contentContainerStyle={{ alignItems: 'center' }}
-              >
-                {dreams.map((dream, i) => (
-                  <View key={i} style={s.imageSlide}>
-                    <ActivityIndicator style={s.imageLoader} size="small" color={colors.accent} />
-                    <Image
-                      source={{ uri: dream.url }}
-                      style={s.image}
-                      contentFit="cover"
-                      transition={200}
-                    />
-                  </View>
-                ))}
-              </ScrollView>
+            {/* Swipeable image preview with pinch to zoom */}
+            <GestureDetector gesture={pinchGesture}>
+              <Animated.View style={[s.imageWrap, zoomStyle]}>
+                <ScrollView
+                  ref={scrollRef}
+                  horizontal
+                  pagingEnabled
+                  scrollEnabled={!isZoomed}
+                  showsHorizontalScrollIndicator={false}
+                  onMomentumScrollEnd={handleScrollEnd}
+                  scrollEventThrottle={16}
+                  style={{ width: IMAGE_WIDTH }}
+                  contentContainerStyle={{ alignItems: 'center' }}
+                >
+                  {dreams.map((dream, i) => (
+                    <View key={i} style={s.imageSlide}>
+                      <ActivityIndicator style={s.imageLoader} size="small" color={colors.accent} />
+                      <Image
+                        source={{ uri: dream.url }}
+                        style={s.image}
+                        contentFit="cover"
+                        transition={200}
+                      />
+                    </View>
+                  ))}
+                </ScrollView>
 
-              {/* Generating overlay */}
-              {phase === 'generating' && (
-                <View style={s.generatingOverlay}>
-                  <ActivityIndicator size="large" color={colors.accent} />
-                  <Text style={s.generatingText}>Dreaming...</Text>
-                </View>
-              )}
-            </View>
+                {/* Generating overlay */}
+                {phase === 'generating' && (
+                  <View style={s.generatingOverlay}>
+                    <ActivityIndicator size="large" color={colors.accent} />
+                    <Text style={s.generatingText}>Dreaming...</Text>
+                  </View>
+                )}
+              </Animated.View>
+            </GestureDetector>
 
             {/* Dot indicators */}
             {dreams.length > 1 && (

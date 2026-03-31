@@ -54,7 +54,7 @@ export function FullScreenFeed({
   const { mutate: toggleFavorite } = useToggleFavorite();
 
   const handleDelete = useCallback(async (uploadId: string) => {
-    const { error } = await supabase.from('uploads').update({ is_active: false }).eq('id', uploadId);
+    const { error } = await supabase.from('uploads').delete().eq('id', uploadId);
     if (error) {
       Toast.show('Failed to delete', 'close-circle');
       return;
@@ -63,6 +63,9 @@ export function FullScreenFeed({
     Toast.show('Dream deleted', 'checkmark-circle');
     queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
     queryClient.invalidateQueries({ queryKey: ['userUploads'] });
+    queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+    queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+    if (router.canGoBack()) router.back();
   }, [queryClient]);
 
   const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;

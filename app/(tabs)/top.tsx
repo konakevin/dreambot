@@ -11,6 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useFeedStore } from '@/store/feed';
 import { DREAM_CATEGORIES, type DreamCategory } from '@/constants/dreamCategories';
 import { colors } from '@/constants/theme';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
@@ -20,16 +21,16 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function useCategoryDreams(category: DreamCategory) {
   const user = useAuthStore((s) => s.user);
-  const [seed] = useState(() => Math.random());
+  const feedSeed = useFeedStore((s) => s.feedSeed);
 
   return useInfiniteQuery({
-    queryKey: ['categoryDreams', category.key, seed],
+    queryKey: ['categoryDreams', category.key, feedSeed],
     queryFn: async (): Promise<DreamPostItem[]> => {
       const { data, error } = await supabase.rpc('get_feed', {
         p_user_id: user!.id,
         p_limit: 100,
         p_offset: 0,
-        p_seed: seed,
+        p_seed: feedSeed,
       });
       if (error) throw error;
 

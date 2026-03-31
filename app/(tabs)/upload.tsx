@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImageCropPicker from 'react-native-image-crop-picker';
@@ -12,6 +12,7 @@ import { buildPromptInput } from '@/lib/recipeEngine';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 import type { Recipe } from '@/types/recipe';
 import { colors } from '@/constants/theme';
+import { randomMascot } from '@/constants/mascots';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const PREVIEW_WIDTH = SCREEN_WIDTH - 48;
@@ -24,7 +25,9 @@ type Phase = 'pick' | 'preview' | 'dreaming' | 'reveal' | 'posting';
 
 export default function DreamScreen() {
   const user = useAuthStore((s) => s.user);
+  const mascotUrl = useMemo(() => randomMascot(), []);
   const [phase, setPhase] = useState<Phase>('pick');
+  const loadingMascot = useMemo(() => randomMascot(), []);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [dreamUrl, setDreamUrl] = useState<string | null>(null);
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
@@ -248,9 +251,7 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
     return (
       <SafeAreaView style={s.root}>
         <View style={s.center}>
-          <View style={s.moonIcon}>
-            <Ionicons name="moon" size={48} color={colors.accent} />
-          </View>
+          <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
           <Text style={s.title}>Dream a photo</Text>
           <Text style={s.sub}>Pick a photo and your dream machine will transform it</Text>
           <TouchableOpacity style={s.cta} onPress={pickPhoto} activeOpacity={0.7}>
@@ -300,9 +301,10 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
     return (
       <SafeAreaView style={s.root}>
         <View style={s.center}>
-          <ActivityIndicator size="large" color="#FF4500" />
+          <Image source={{ uri: loadingMascot }} style={s.loadingMascot} contentFit="cover" />
           <Text style={s.title}>Dreaming...</Text>
-          <Text style={s.sub}>Your dream machine is working its magic</Text>
+          <Text style={s.sub}>Your Dream Bot is transforming your photo</Text>
+          <ActivityIndicator size="small" color={colors.accent} />
         </View>
       </SafeAreaView>
     );
@@ -349,8 +351,9 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
   return (
     <SafeAreaView style={s.root}>
       <View style={s.center}>
-        <ActivityIndicator size="large" color="#FF4500" />
+        <Image source={{ uri: loadingMascot }} style={s.loadingMascot} contentFit="cover" />
         <Text style={s.title}>Posting your dream...</Text>
+        <ActivityIndicator size="small" color={colors.accent} />
       </View>
     </SafeAreaView>
   );
@@ -361,12 +364,13 @@ const s = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, gap: 16 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
-  moonIcon: { width: 88, height: 88, borderRadius: 44, backgroundColor: 'rgba(139,123,238,0.1)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(139,123,238,0.2)', marginBottom: 8 },
+  mascot: { width: 120, height: 120, borderRadius: 24, marginBottom: 12 },
+  loadingMascot: { width: 140, height: 140, borderRadius: 28, marginBottom: 8 },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
   cta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
-  footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
+  footer: { paddingHorizontal: 20, paddingBottom: 80, gap: 12 },
   previewWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center', gap: 20 },
   previewImg: { width: PREVIEW_WIDTH, height: PREVIEW_WIDTH * 1.2, borderRadius: 16 },
   hintInput: {

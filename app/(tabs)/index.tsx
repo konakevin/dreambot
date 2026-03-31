@@ -18,17 +18,17 @@ const PAGE_SIZE = 20;
 
 function useDreamFeed(tab: FeedTab) {
   const user = useAuthStore((s) => s.user);
-  const [seed] = useState(() => Math.random());
+  const feedSeed = useFeedStore((s) => s.feedSeed);
 
   return useInfiniteQuery({
-    queryKey: ['dreamFeed', tab, user?.id, seed],
+    queryKey: ['dreamFeed', tab, user?.id, feedSeed],
     queryFn: async ({ pageParam = 0 }): Promise<DreamPostItem[]> => {
       if (tab === 'forYou') {
         const { data, error } = await supabase.rpc('get_feed', {
           p_user_id: user!.id,
           p_limit: PAGE_SIZE,
           p_offset: pageParam,
-          p_seed: seed,
+          p_seed: feedSeed,
         });
         if (error) throw error;
         return (data ?? []).map((row: Record<string, unknown>) => ({

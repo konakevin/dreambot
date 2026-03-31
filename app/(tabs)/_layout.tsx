@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
@@ -7,7 +8,9 @@ import { useFeedStore } from '@/store/feed';
 export default function TabLayout() {
   const { session, initialized } = useAuthStore();
   const bumpProfileReset = useFeedStore((s) => s.bumpProfileReset);
+  const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const queryClient = useQueryClient();
+  const activeTab = useRef('index');
 
   if (initialized && !session) {
     return <Redirect href="/(auth)" />;
@@ -36,7 +39,12 @@ export default function TabLayout() {
           ),
         }}
         listeners={{
-          tabPress: () => queryClient.invalidateQueries({ queryKey: ['dreamFeed'] }),
+          tabPress: () => {
+            if (activeTab.current === 'index') {
+              regenerateSeed();
+            }
+            activeTab.current = 'index';
+          },
         }}
       />
       <Tabs.Screen
@@ -46,6 +54,10 @@ export default function TabLayout() {
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
+        listeners={{ tabPress: () => {
+          if (activeTab.current === 'top') regenerateSeed();
+          activeTab.current = 'top';
+        } }}
       />
       <Tabs.Screen
         name="upload"
@@ -54,6 +66,7 @@ export default function TabLayout() {
             <Ionicons name="moon-outline" size={size} color={color} />
           ),
         }}
+        listeners={{ tabPress: () => { activeTab.current = 'upload'; } }}
       />
       <Tabs.Screen
         name="inbox"
@@ -62,6 +75,7 @@ export default function TabLayout() {
             <Ionicons name="chatbubble-outline" size={size} color={color} />
           ),
         }}
+        listeners={{ tabPress: () => { activeTab.current = 'inbox'; } }}
       />
       <Tabs.Screen
         name="profile"
@@ -71,7 +85,7 @@ export default function TabLayout() {
           ),
         }}
         listeners={{
-          tabPress: () => bumpProfileReset(),
+          tabPress: () => { activeTab.current = 'profile'; bumpProfileReset(); },
         }}
       />
     </Tabs>
