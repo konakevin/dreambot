@@ -24,7 +24,7 @@ function SettingsRow({ icon, label, onPress, destructive, trailing }: {
 }) {
   return (
     <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
-      <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.textSecondary} />
+      <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={20} color={destructive ? colors.accent : colors.textSecondary} />
       <Text style={[styles.rowLabel, destructive && styles.destructiveText]}>{label}</Text>
       {trailing ?? (
         <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
@@ -191,11 +191,11 @@ export default function SettingsScreen() {
   function handleDeleteAccount() {
     showAlert(
       'Delete account',
-      'This will permanently delete all your posts, votes, and data. This cannot be undone.',
+      'This will permanently delete your account and all your data. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Delete everything',
+          text: 'Delete',
           style: 'destructive',
           onPress: () => {
             showAlert('Are you absolutely sure?', 'There is no going back.', [
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  destructiveText: { color: colors.textSecondary },
+  destructiveText: { color: colors.textPrimary },
   rowTrailing: {
     flexDirection: 'row',
     alignItems: 'center',
