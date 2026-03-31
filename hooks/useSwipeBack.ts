@@ -15,12 +15,12 @@ export function useSwipeBack() {
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
       onMoveShouldSetPanResponder: (_, gs) =>
-        gs.dx > 10 && Math.abs(gs.dx) > Math.abs(gs.dy) * 1.5 && gs.vx > 0,
+        gs.dx > 8 && Math.abs(gs.dx) > Math.abs(gs.dy) * 1.2 && gs.vx > 0,
       onPanResponderMove: (_, gs) => {
         if (gs.dx > 0) translateX.setValue(gs.dx);
       },
       onPanResponderRelease: (_, gs) => {
-        if (gs.dx > SWIPE_THRESHOLD || gs.vx > 0.5) {
+        if (gs.dx > 40 || gs.vx > 0.3) {
           Animated.timing(translateX, {
             toValue: 400,
             duration: SLIDE_OFF_DURATION,

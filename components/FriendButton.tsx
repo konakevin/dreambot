@@ -49,7 +49,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
       <TouchableOpacity
         style={styles.pendingButton}
         onPress={() => {
-          showAlert('Cancel request?', 'Withdraw your vibe request?', [
+          showAlert('Cancel request?', 'Withdraw your dream request?', [
             { text: 'No', style: 'cancel' },
             { text: 'Cancel request', style: 'destructive', onPress: onCancelRequest },
           ]);
@@ -66,7 +66,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
       <TouchableOpacity
         style={styles.friendsButton}
         onPress={() => {
-          showAlert('Remove vibe?', 'You can always add them back later.', [
+          showAlert('Remove dreamer?', 'You can always add them back later.', [
             { text: 'Cancel', style: 'cancel' },
             { text: 'Remove', style: 'destructive', onPress: onRemove },
           ]);
@@ -74,7 +74,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
         activeOpacity={0.7}
       >
         <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
-        <Text style={styles.friendsText}>Vibers</Text>
+        <Text style={styles.friendsText}>Dreamers</Text>
       </TouchableOpacity>
     );
   }
@@ -87,7 +87,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
       activeOpacity={0.7}
     >
       <Ionicons name="person-add" size={14} color="#FFD700" />
-      <Text style={styles.addText}>Vibe</Text>
+      <Text style={styles.addText}>Dream</Text>
     </TouchableOpacity>
   );
 }

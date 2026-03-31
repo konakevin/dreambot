@@ -57,7 +57,6 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
   function goToProfile() {
     if (swiped.current) return;
     swiped.current = true;
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push(`/user/${item.user_id}`);
     setTimeout(() => { swiped.current = false; }, 500);
   }
@@ -87,10 +86,11 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
 
   // Horizontal pan — left swipe navigates to profile (no card animation)
   const panGesture = Gesture.Pan()
-    .activeOffsetX([-20, 20])
-    .failOffsetY([-15, 15])
+    .activeOffsetX([-12, 12])
+    .failOffsetY([-20, 20])
     .onEnd((e) => {
-      if (e.translationX < -60 || e.velocityX < -500) {
+      // Easy flick — low threshold OR fast velocity
+      if (e.translationX < -40 || e.velocityX < -300) {
         runOnJS(goToProfile)();
       }
     });
