@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
   },
   buttonDestructive: {
-    backgroundColor: colors.error,
+    backgroundColor: colors.accent,
   },
   buttonCancel: {
     backgroundColor: colors.card,
