@@ -11,17 +11,8 @@ export default function WelcomeScreen() {
     router.push('/(onboarding)/interests');
   }
 
-  function handleSkip() {
-    router.replace('/(tabs)');
-  }
-
   return (
     <SafeAreaView style={styles.root}>
-      <View style={styles.skipRow}>
-        <TouchableOpacity onPress={handleSkip} hitSlop={12}>
-          <Text style={styles.skipText}>Skip</Text>
-        </TouchableOpacity>
-      </View>
 
       <View style={styles.content}>
         <View style={styles.iconStack}>
@@ -90,16 +81,6 @@ function StepRow({ icon, color, title, subtitle }: {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  skipRow: {
-    alignItems: 'flex-end',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-  },
-  skipText: {
-    color: colors.textSecondary,
-    fontSize: 15,
-    fontWeight: '600',
-  },
   content: {
     flex: 1,
     paddingHorizontal: 28,

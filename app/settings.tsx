@@ -282,7 +282,7 @@ export default function SettingsScreen() {
             const { useOnboardingStore } = require('@/store/onboarding');
             useOnboardingStore.getState().reset();
             useOnboardingStore.getState().setIsEditing(true);
-            router.push('/(onboarding)/interests');
+            router.push('/(onboarding)');
           }} />
         </View>
 
