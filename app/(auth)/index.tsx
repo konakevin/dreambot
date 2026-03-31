@@ -15,11 +15,7 @@ const HOT_GRADIENT: [string, string, ...string[]] = ['#FFD700', '#FF8C00', '#FF4
 const COLD_GRADIENT: [string, string, ...string[]] = ['#44DDCC', '#6699EE', '#BB88EE'];
 
 function Tagline() {
-  return (
-    <View style={{ alignItems: 'center' }}>
-      <Text style={authStyles.tagline}>Share your dreams with the world</Text>
-    </View>
-  );
+  return null;
 }
 
 function GradientWord({ text, colors }: { text: string; colors: [string, string, ...string[]] }) {
