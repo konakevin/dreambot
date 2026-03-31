@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, Activit
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
@@ -221,10 +222,14 @@ export default function HomeScreen() {
         />
       )}
 
-      {/* Top overlay — transparent */}
-      <View style={[s.topOverlay, { paddingTop: insets.top }]} pointerEvents="box-none">
+      {/* Top overlay with gradient backdrop for readability */}
+      <LinearGradient
+        colors={['rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
+        style={[s.topOverlay, { paddingTop: insets.top }]}
+        pointerEvents="box-none"
+      >
         <FeedTabs active={activeTab} onChange={handleTabChange} />
-      </View>
+      </LinearGradient>
 
       {/* Right side action buttons */}
       {currentPost && (
@@ -333,7 +338,7 @@ const s = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
-    paddingBottom: 8,
+    paddingBottom: 20,
   },
   feedTabs: {
     flexDirection: 'row',
