@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 import { Animated, PanResponder } from 'react-native';
 import { router } from 'expo-router';
-import { SWIPE } from '@/constants/theme';
+import { SWIPE_THRESHOLD, SNAP_SPRING, SLIDE_OFF_DURATION } from '@/constants/gestures';
 
 /**
  * Full-screen swipe-right-to-go-back gesture.
- * More forgiving than the native iOS edge swipe (~20px).
- * Spread panHandlers on the outermost View of the screen.
+ * Uses global swipe constants for consistent feel across the app.
+ * Spread panHandlers on the outermost Animated.View of the screen.
  */
 export function useSwipeBack() {
   const translateX = useRef(new Animated.Value(0)).current;
@@ -20,18 +20,18 @@ export function useSwipeBack() {
         if (gs.dx > 0) translateX.setValue(gs.dx);
       },
       onPanResponderRelease: (_, gs) => {
-        if (gs.dx > SWIPE.DISMISS_THRESHOLD || gs.vx > (SWIPE.VELOCITY_THRESHOLD / 1000)) {
+        if (gs.dx > SWIPE_THRESHOLD || gs.vx > 0.5) {
           Animated.timing(translateX, {
             toValue: 400,
-            duration: 150,
+            duration: SLIDE_OFF_DURATION,
             useNativeDriver: true,
           }).start(() => router.back());
         } else {
           Animated.spring(translateX, {
             toValue: 0,
             useNativeDriver: true,
-            tension: 200,
-            friction: 20,
+            tension: SNAP_SPRING.stiffness,
+            friction: SNAP_SPRING.damping,
           }).start();
         }
       },

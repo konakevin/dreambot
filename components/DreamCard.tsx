@@ -15,9 +15,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import {
+  SWIPE_THRESHOLD, ACTIVE_OFFSET, FAIL_OFFSET,
+  SWIPE_RESISTANCE, COUNTER_RESISTANCE, SNAP_SPRING, SLIDE_OFF_DURATION,
+} from '@/constants/gestures';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SWIPE_THRESHOLD = -80;
 
 export interface DreamPostItem {
   id: string;
@@ -86,25 +89,21 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
 
   // Horizontal pan — swipe left to visit profile
   const panGesture = Gesture.Pan()
-    .activeOffsetX([-15, 15])
-    .failOffsetY([-10, 10])
+    .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
+    .failOffsetY([-FAIL_OFFSET, FAIL_OFFSET])
     .onUpdate((e) => {
-      // Only allow swiping left
-      if (e.translationX < 0) {
-        translateX.value = e.translationX * 0.6;
-      } else {
-        translateX.value = e.translationX * 0.1;
-      }
+      translateX.value = e.translationX < 0
+        ? e.translationX * SWIPE_RESISTANCE
+        : e.translationX * COUNTER_RESISTANCE;
     })
     .onEnd((e) => {
-      if (e.translationX < SWIPE_THRESHOLD) {
-        // Swipe left past threshold — go to profile
-        translateX.value = withTiming(-SCREEN_WIDTH, { duration: 200 }, () => {
+      if (e.translationX < -SWIPE_THRESHOLD) {
+        translateX.value = withTiming(-SCREEN_WIDTH, { duration: SLIDE_OFF_DURATION }, () => {
           runOnJS(goToProfile)();
           translateX.value = 0;
         });
       } else {
-        translateX.value = withSpring(0, { damping: 20, stiffness: 200 });
+        translateX.value = withSpring(0, SNAP_SPRING);
       }
     });
 
