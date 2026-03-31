@@ -6,7 +6,6 @@ export interface ShareableViber {
   userId: string;
   username: string;
   avatarUrl: string | null;
-  userRank: string | null;
   interactionCount: number;
   vibeScore: number;
 }
@@ -27,7 +26,6 @@ export function useShareableVibers() {
         userId: row.user_id as string,
         username: row.username as string,
         avatarUrl: (row.avatar_url as string | null) ?? null,
-        userRank: (row.user_rank as string | null) ?? null,
         interactionCount: Number(row.interaction_count),
         vibeScore: Number(row.vibe_score),
       }));

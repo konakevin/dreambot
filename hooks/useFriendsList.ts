@@ -5,7 +5,6 @@ export interface FriendUser {
   id: string;
   username: string;
   avatar_url: string | null;
-  user_rank: string | null;
 }
 
 export function useFriendsList(userId: string) {
@@ -19,7 +18,7 @@ export function useFriendsList(userId: string) {
 
       const { data: users, error: usersErr } = await supabase
         .from('users')
-        .select('id, username, avatar_url, user_rank')
+        .select('id, username, avatar_url')
         .in('id', ids);
       if (usersErr) throw usersErr;
       // Deduplicate by id

@@ -6,7 +6,6 @@ export interface PendingRequest {
   requesterId: string;
   username: string;
   avatarUrl: string | null;
-  userRank: string | null;
   requestedAt: string;
 }
 
@@ -21,7 +20,6 @@ export function usePendingRequests() {
         requesterId: r.requester_id as string,
         username: r.username as string,
         avatarUrl: (r.avatar_url as string | null) ?? null,
-        userRank: (r.user_rank as string | null) ?? null,
         requestedAt: r.requested_at as string,
       }));
     },

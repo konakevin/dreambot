@@ -6,7 +6,6 @@ export interface Comment {
   userId: string;
   username: string;
   avatarUrl: string | null;
-  userRank: string | null;
   body: string;
   likeCount: number;
   replyCount: number;
@@ -23,7 +22,6 @@ function mapRow(row: Record<string, unknown>): Comment {
     userId: row.user_id as string,
     username: row.username as string,
     avatarUrl: (row.avatar_url as string | null) ?? null,
-    userRank: (row.user_rank as string | null) ?? null,
     body: row.body as string,
     likeCount: row.like_count as number,
     replyCount: row.reply_count as number,

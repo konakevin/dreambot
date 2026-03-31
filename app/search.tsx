@@ -44,7 +44,7 @@ function SearchRow({ user }: { user: SearchUser }) {
 
       <View style={styles.userInfo}>
         <Text style={styles.username}>{user.username}</Text>
-        {user.userRank && <Text style={styles.rank}>{user.userRank}</Text>}
+        
       </View>
 
       <View style={styles.actions}>

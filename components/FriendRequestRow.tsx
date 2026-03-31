@@ -32,7 +32,7 @@ export function FriendRequestRow({ request, onAccept, onDecline }: Props) {
         )}
         <GradientUsername
           username={request.username}
-          rank={request.userRank}
+          rank={null}
           style={styles.username}
         />
       </TouchableOpacity>

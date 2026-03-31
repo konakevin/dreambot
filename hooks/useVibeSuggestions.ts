@@ -6,7 +6,6 @@ export interface VibeSuggestion {
   userId: string;
   username: string;
   avatarUrl: string | null;
-  userRank: string | null;
   vibeScore: number;
   sharedCount: number;
 }
@@ -28,7 +27,6 @@ export function useVibeSuggestions() {
         userId: row.user_id as string,
         username: row.username as string,
         avatarUrl: (row.avatar_url as string | null) ?? null,
-        userRank: (row.user_rank as string | null) ?? null,
         vibeScore: row.vibe_score as number,
         sharedCount: row.shared_count as number,
       }));

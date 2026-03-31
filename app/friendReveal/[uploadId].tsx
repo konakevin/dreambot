@@ -67,7 +67,7 @@ function FriendRevealRow({ friend, userVote, index }: {
         )}
         <GradientUsername
           username={friend.username}
-          rank={friend.user_rank}
+          rank={null}
           style={styles.friendUsername}
         />
       </View>

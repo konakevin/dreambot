@@ -295,7 +295,7 @@ function DetailFooter({ post: p, isOwnPost, captionExpanded, setCaptionExpanded,
         {/* Left — username, caption, meta */}
         <View style={styles.infoBlock}>
           <TouchableOpacity onPress={() => router.push(`/user/${p.user_id}`)} hitSlop={8}>
-            <GradientUsername username={p.users?.username ?? ''} rank={p.users?.user_rank} style={styles.username} photoOverlay avatarUrl={p.users?.avatar_url} showAvatar avatarSize={22} />
+            <GradientUsername username={p.users?.username ?? ''} rank={null} style={styles.username} photoOverlay avatarUrl={p.users?.avatar_url} showAvatar avatarSize={22} />
           </TouchableOpacity>
 
           {p.caption ? (

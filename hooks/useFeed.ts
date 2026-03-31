@@ -7,7 +7,6 @@ export interface FriendVote {
   user_id: string;
   username: string;
   avatar_url: string | null;
-  user_rank: string | null;
   vote: 'rad' | 'bad';
   streak?: number;
   rad_streak?: number;
@@ -29,7 +28,6 @@ export interface FeedItem {
   rad_votes: number;
   bad_votes: number;
   username: string;
-  user_rank: string | null;
   avatar_url: string | null;
   comment_count?: number;
   friend_votes?: FriendVote[];
