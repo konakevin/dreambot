@@ -5,7 +5,7 @@
  */
 
 import { useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, StyleSheet, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
@@ -38,9 +38,12 @@ interface Props {
   bottomPadding: number;
   isLiked: boolean;
   onLike: () => void;
+  onToggleLike: () => void;
+  onComment?: () => void;
+  onShare?: () => void;
 }
 
-export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
+export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, onComment, onShare }: Props) {
   const lastTap = useRef(0);
 
   // Heart burst animation
@@ -57,21 +60,16 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
     transform: [{ translateX: translateX.value }],
   }));
 
-  function doLike() {
-    if (!isLiked) onLike();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-  }
-
   function goToProfile() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push(`/user/${item.user_id}`);
   }
 
-  // Tap gesture — double tap detection
-  const tapGesture = Gesture.Tap()
-    .numberOfTaps(2)
-    .onEnd(() => {
-      runOnJS(doLike)();
+  function handleDoubleTap() {
+    const now = Date.now();
+    if (now - lastTap.current < 300) {
+      if (!isLiked) onLike();
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       heartScale.value = 0;
       heartOpacity.value = 1;
       heartScale.value = withSequence(
@@ -85,7 +83,9 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
         withTiming(1, { duration: 500 }),
         withTiming(0, { duration: 200 }),
       );
-    });
+    }
+    lastTap.current = now;
+  }
 
   // Horizontal pan — swipe left to visit profile
   const panGesture = Gesture.Pan()
@@ -107,11 +107,10 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
       }
     });
 
-  const composed = Gesture.Simultaneous(tapGesture, panGesture);
-
   return (
-    <GestureDetector gesture={composed}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View style={[s.card, cardStyle]}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={handleDoubleTap}>
         <Image source={{ uri: item.image_url }} style={s.fullImage} contentFit="cover" transition={200} />
 
         {/* Profile hint on swipe — visible behind the card */}
@@ -144,6 +143,24 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike }: Props) {
           </TouchableOpacity>
           {item.caption && <Text style={s.caption} numberOfLines={2}>{item.caption}</Text>}
         </View>
+
+        {/* Side action buttons */}
+        <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
+          <TouchableOpacity style={s.sideButton} onPress={onToggleLike} activeOpacity={0.7}>
+            <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={28} color={isLiked ? '#F4212E' : '#FFFFFF'} />
+          </TouchableOpacity>
+          {onComment && (
+            <TouchableOpacity style={s.sideButton} onPress={onComment} activeOpacity={0.7}>
+              <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
+            </TouchableOpacity>
+          )}
+          {onShare && (
+            <TouchableOpacity style={s.sideButton} onPress={onShare} activeOpacity={0.7}>
+              <Ionicons name="share-outline" size={26} color="#FFFFFF" />
+            </TouchableOpacity>
+          )}
+        </View>
+      </Pressable>
       </Animated.View>
     </GestureDetector>
   );
@@ -162,6 +179,13 @@ const s = StyleSheet.create({
   },
   profileHintText: {
     color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: '600',
+  },
+  sideActions: {
+    position: 'absolute', right: 12, alignItems: 'center', gap: 20,
+  },
+  sideButton: {
+    width: 44, height: 44, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: 22,
   },
   postInfo: {
     position: 'absolute', bottom: 0, left: 0, right: 70,

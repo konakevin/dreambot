@@ -16,10 +16,7 @@ import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
 import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
-import { StreakRow, StreakEmptyState, VoteWithFriendsButton } from '@/components/StreakRow';
 import { FriendButton } from '@/components/FriendButton';
-import { useTopStreaks } from '@/hooks/useTopStreaks';
-import { useVibeStats } from '@/hooks/useVibeStats';
 import { useFriendIds } from '@/hooks/useFriendIds';
 import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
 import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
@@ -30,9 +27,8 @@ import { useReport } from '@/hooks/useReport';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
 import { showAlert } from '@/components/CustomAlert';
 import type { FollowUser } from '@/hooks/useFollowersList';
-import type { VibeSyncStreak } from '@/hooks/useTopStreaks';
 
-type Tab = 'posts' | 'friends' | 'followers' | 'following' | 'streaks';
+type Tab = 'posts' | 'friends' | 'followers' | 'following';
 
 export default function PublicProfileScreen() {
   const { userId, viewedPost } = useLocalSearchParams<{ userId: string; viewedPost?: string }>();
@@ -47,7 +43,6 @@ export default function PublicProfileScreen() {
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(userId);
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-  const { data: streaks = [], isLoading: loadingStreaks } = useTopStreaks(userId);
   const { data: friendIds = new Set<string>() } = useFriendIds();
   const { data: friendsList = [], isLoading: loadingFriends } = useFriendsList(userId);
   const { mutate: sendFriendRequest } = useSendFriendRequest();
@@ -93,7 +88,6 @@ export default function PublicProfileScreen() {
       { text: 'Cancel', style: 'cancel' },
     ]);
   }
-  const { data: vibeStats } = useVibeStats(userId);
 
   const isFollowing = followingIds.has(userId);
 
@@ -164,10 +158,6 @@ export default function PublicProfileScreen() {
           )}
         </View>
 
-        {!isOwnProfile && vibeStats && (vibeStats.vibeScore !== null || vibeStats.bestStreak > 0) && (
-          <VibeStatsRow vibeScore={vibeStats.vibeScore} bestStreak={vibeStats.bestStreak} sharedCount={vibeStats.sharedCount} isVibing={vibeStats.isVibing} />
-        )}
-
         <ProfileStatsRow
           postCount={profile.postCount}
           friendCount={profile.friendCount}
@@ -175,7 +165,7 @@ export default function PublicProfileScreen() {
           followingCount={profile.followingCount}
           activeTab={activeTab}
           onTabChange={setActiveTab}
-          hiddenTabs={isOwnProfile ? [] : ['friends', 'streaks']}
+          hiddenTabs={isOwnProfile ? [] : ['friends']}
         />
       </View>
   );
@@ -218,29 +208,6 @@ export default function PublicProfileScreen() {
               onFollow={handleFollowUser}
             />
           )}
-        />
-      </SafeAreaView></Animated.View>
-    );
-  }
-
-  if (activeTab === 'streaks') {
-    return (
-      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
-        {backButton}
-        <FlatList<VibeSyncStreak>
-          key="streaks"
-          data={streaks}
-          keyExtractor={(item) => item.friendId || item.friendUsername}
-          ListHeaderComponent={<>{header}<VoteWithFriendsButton /></>}
-          ListEmptyComponent={
-            <View style={styles.center}>
-              {loadingStreaks
-                ? <ActivityIndicator color={colors.textSecondary} />
-                : <StreakEmptyState />
-              }
-            </View>
-          }
-          renderItem={({ item }) => <StreakRow streak={item} />}
         />
       </SafeAreaView></Animated.View>
     );

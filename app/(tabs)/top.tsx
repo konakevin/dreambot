@@ -135,6 +135,8 @@ export default function ExploreScreen() {
               bottomPadding={90 + insets.bottom}
               isLiked={favoriteIds.has(item.id)}
               onLike={() => toggleFavorite({ uploadId: item.id, currentlyFavorited: false })}
+              onToggleLike={() => toggleFavorite({ uploadId: item.id, currentlyFavorited: favoriteIds.has(item.id) })}
+              onComment={() => router.push(`/comments?uploadId=${item.id}`)}
             />
           )}
         />
@@ -175,20 +177,6 @@ export default function ExploreScreen() {
         </View>
       </LinearGradient>
 
-      {/* Right side actions */}
-      {currentPost && (
-        <View style={[s.sideActions, { bottom: 100 + insets.bottom }]}>
-          <TouchableOpacity style={s.sideButton} onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)} activeOpacity={0.7}>
-            <Ionicons name="heart-outline" size={28} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity style={s.sideButton} onPress={() => router.push(`/comments?uploadId=${currentPost.id}`)} activeOpacity={0.7}>
-            <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity style={s.sideButton} onPress={() => {}} activeOpacity={0.7}>
-            <Ionicons name="share-outline" size={26} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 }
@@ -230,6 +218,4 @@ const s = StyleSheet.create({
     fontWeight: '800',
   },
 
-  sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 20 },
-  sideButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: 22 },
 });
