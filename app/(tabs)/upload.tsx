@@ -228,16 +228,21 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
   async function post() {
     if (!dreamUrl || !user) return;
     setPhase('posting');
+    console.log('[Post] Starting post with URL:', dreamUrl.slice(0, 60));
 
     try {
       const resp = await fetch(dreamUrl);
+      if (!resp.ok) throw new Error(`Failed to download image: ${resp.status}`);
       const buf = await resp.arrayBuffer();
+      console.log('[Post] Downloaded image:', buf.byteLength, 'bytes');
       const fileName = `ai/${Date.now()}.jpg`;
 
+      console.log('[Post] Uploading to storage...');
       const { error } = await supabase.storage
         .from('uploads')
         .upload(fileName, buf, { contentType: 'image/jpeg' });
       if (error) throw error;
+      console.log('[Post] Storage upload done');
 
       const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
 
@@ -274,7 +279,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       reset();
       // Jump to home tab — use replace to avoid stacking
       router.replace('/(tabs)');
-    } catch {
+    } catch (err) {
+      console.warn('[Post] Error:', err);
+      Toast.show('Failed to post dream', 'close-circle');
       setPhase('reveal');
     }
   }
