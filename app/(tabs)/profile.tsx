@@ -142,6 +142,7 @@ export default function ProfileScreen() {
           isOwn={activeTab === 'posts'}
           emptyText={activeTab === 'posts' ? 'No posts yet' : 'Nothing saved yet'}
           ListHeaderComponent={header}
+          scrollToTopToken={profileResetToken}
         />
       </SafeAreaView>
     );

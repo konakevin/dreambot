@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useRef, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
@@ -20,9 +20,17 @@ interface PostGridProps {
   emptyText?: string;
   ListHeaderComponent?: React.ReactElement;
   highlightPostId?: string;
+  scrollToTopToken?: number;
 }
 
-export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', ListHeaderComponent, highlightPostId }: PostGridProps) {
+export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', ListHeaderComponent, highlightPostId, scrollToTopToken }: PostGridProps) {
+  const listRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    if (scrollToTopToken && scrollToTopToken > 0) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [scrollToTopToken]);
   // All three hooks are always called — rules of hooks. Only the active one is enabled.
   const isOwn_ = source.type === 'own';
   const isSaved = source.type === 'saved';
@@ -51,10 +59,12 @@ export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', Li
 
   return (
     <FlatList<PostItem>
+      ref={listRef}
       data={posts}
       keyExtractor={(item) => item.id}
       numColumns={2}
       columnWrapperStyle={styles.row}
+      contentContainerStyle={{ paddingBottom: 90 }}
       ListHeaderComponent={ListHeaderComponent}
       // Begin fetching the next page when the user is halfway through remaining content
       onEndReachedThreshold={0.5}
