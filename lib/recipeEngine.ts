@@ -32,7 +32,7 @@ const MEDIUM_POOL: TaggedOption[] = [
   { text: 'vintage Disney animation cel, 1950s hand-drawn style', axes: { realism: 'low', color_warmth: 'high' } },
   { text: 'ukiyo-e Japanese woodblock print, flat color, bold outlines', axes: { realism: 'low', complexity: 'low' } },
   { text: 'chalk pastel on black paper, soft edges, dramatic contrast', axes: { brightness: 'low', energy: 'high' } },
-  { text: 'claymation stop-motion, visible fingerprint textures in clay', axes: { realism: 'low', complexity: 'low', energy: 'low', brightness: 'high' } },
+  { text: 'claymation stop-motion, visible fingerprint textures in clay', axes: { realism: 'low', complexity: 'low', energy: 'low', brightness: 'high', color_warmth: 'high' } },
   { text: 'retro 1980s airbrush illustration, chrome and gradients', axes: { energy: 'high', color_warmth: 'high' } },
   { text: 'botanical scientific illustration, ink linework with watercolor', axes: { complexity: 'high', energy: 'low' } },
   { text: 'stained glass window, bold black leading, jewel-tone translucent color', axes: { brightness: 'high', complexity: 'high' } },
@@ -44,7 +44,7 @@ const MEDIUM_POOL: TaggedOption[] = [
   { text: 'cross-stitch embroidery on fabric, pixel grid texture', axes: { realism: 'low', complexity: 'low' } },
   { text: 'isometric pixel art, retro game aesthetic, crisp edges', axes: { realism: 'low', complexity: 'low' } },
   // ── Additional styles for variety ──
-  { text: 'LEGO brick diorama, plastic minifigures, snap-together studs visible', axes: { realism: 'low', complexity: 'low', brightness: 'high' } },
+  { text: 'LEGO brick diorama, plastic minifigures, snap-together studs visible', axes: { realism: 'low', complexity: 'low', brightness: 'high', energy: 'low', color_warmth: 'high' } },
   { text: '8-bit pixel art, NES color palette, chunky pixels, retro gaming', axes: { realism: 'low', complexity: 'low', energy: 'high' } },
   { text: 'classic Disney 2D animation, clean ink outlines, cel-shaded, 1990s era', axes: { realism: 'low', color_warmth: 'high', brightness: 'high' } },
   { text: 'Tim Burton gothic illustration, spindly limbs, spiral shapes, dark whimsy', axes: { realism: 'low', brightness: 'low', energy: 'high' } },
@@ -711,9 +711,10 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   const scaleModifier = getModifierByValue(SCALE_MODIFIERS, axes.scale);
 
   // SUBJECT layer
-  const sampleCount = Math.min(2, interests.length);
+  // Usually 1 interest for focused dreams, sometimes 2 for chaos/variety
+  const sampleCount = Math.random() < 0.3 + chaos * 0.3 ? 2 : 1;
   const shuffledInterests = [...interests].sort(() => Math.random() - 0.5);
-  const sampledInterests = shuffledInterests.slice(0, Math.max(1, sampleCount));
+  const sampledInterests = shuffledInterests.slice(0, Math.min(sampleCount, interests.length));
   // Only include character actions when energy is high — low energy = scenic/atmospheric
   const includeAction = Math.random() < axes.energy;
   const action = includeAction ? pick(ACTIONS) : '';
@@ -734,7 +735,7 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
 
   // WORLD layer — sometimes swap in a wild bonus location/era for variety
   let eraKeywordsStr: string;
-  if (Math.random() < 0.08 + chaos * 0.25) {
+  if (Math.random() < chaos * 0.3) {
     // Bonus era — chaos-gated so adventurous users get more surprises
     eraKeywordsStr = pick(BONUS_ERAS);
   } else {
@@ -746,7 +747,7 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   }
 
   let settingKeywordsStr: string;
-  if (Math.random() < 0.1 + chaos * 0.25) {
+  if (Math.random() < chaos * 0.3) {
     // Bonus setting — pop culture / iconic locations
     settingKeywordsStr = pick(BONUS_SETTINGS);
   } else {
@@ -796,7 +797,8 @@ export function buildRawPrompt(input: PromptInput): string {
     parts.push(`Theme: ${interestStr}.`);
     if (input.action) parts.push(`Maybe ${input.action}.`);
   } else {
-    parts.push(`A ${interestStr} dreamscape.`);
+    const sceneWords = ['dreamscape', 'world', 'scene', 'realm', 'vision', 'landscape', 'environment'];
+    parts.push(`A ${interestStr} ${pick(sceneWords)}.`);
   }
 
   // World — where and when
