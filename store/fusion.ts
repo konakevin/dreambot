@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 
-interface FusionTarget {
+export interface FusionTarget {
   postId: string;
   prompt: string;
   imageUrl: string;
   username: string;
+  userId: string;
+  recipeId: string | null; // ID in recipe_registry table
 }
 
 interface FusionStore {

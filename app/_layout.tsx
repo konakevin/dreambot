@@ -145,6 +145,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
           <Stack.Screen name="settings" options={{ presentation: 'card', gestureEnabled: true }} />
+          <Stack.Screen name="fusion" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="friendReveal/[uploadId]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="photo/[id]" options={{ presentation: 'card', gestureEnabled: true }} />
           <Stack.Screen name="user/[userId]" options={{ presentation: 'card', gestureEnabled: true }} />

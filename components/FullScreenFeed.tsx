@@ -145,8 +145,10 @@ export function FullScreenFeed({
               prompt: item.ai_prompt ?? item.caption ?? '',
               imageUrl: item.image_url,
               username: item.username,
+              userId: item.user_id,
+              recipeId: item.recipe_id ?? null,
             });
-            router.navigate('/(tabs)/upload');
+            router.push('/fusion');
           } : undefined}
         />
       )}

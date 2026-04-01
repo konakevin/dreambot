@@ -47,7 +47,7 @@ function useDreamFeed(tab: FeedTab) {
 
       let query = supabase
         .from('uploads')
-        .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, users!inner(username, avatar_url)')
+        .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, users!inner(username, avatar_url)')
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(pageParam, pageParam + PAGE_SIZE - 1);
@@ -81,6 +81,8 @@ function useDreamFeed(tab: FeedTab) {
           comment_count: (row.comment_count as number) ?? 0,
           like_count: (row.like_count as number) ?? 0,
           from_wish: (row.from_wish as string | null) ?? null,
+          recipe_id: (row.recipe_id as string | null) ?? null,
+          ai_prompt: (row.ai_prompt as string | null) ?? null,
         };
       });
     },

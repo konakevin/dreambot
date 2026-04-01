@@ -20,6 +20,7 @@ import { useDreamFusion } from '@/hooks/useDreamFusion';
 import { useSparkleBalance, useSpendSparkles } from '@/hooks/useSparkles';
 import { useDreamWish, useSetDreamWish } from '@/hooks/useDreamWish';
 import { showAlert } from '@/components/CustomAlert';
+import { registerRecipe } from '@/lib/recipeRegistry';
 import { MASCOT_URLS } from '@/constants/mascots';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -271,21 +272,37 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     console.log('[Post] Starting post with URL:', postUrl.slice(0, 60));
 
     try {
-      const resp = await fetch(postUrl);
-      if (!resp.ok) throw new Error(`Failed to download image: ${resp.status}`);
-      const buf = await resp.arrayBuffer();
-      console.log('[Post] Downloaded image:', buf.byteLength, 'bytes');
+      let buf: ArrayBuffer;
+      try {
+        const resp = await fetch(postUrl);
+        if (!resp.ok) throw new Error(`Failed to download image: ${resp.status}`);
+        buf = await resp.arrayBuffer();
+      } catch (dlErr) {
+        Toast.show('Download failed — try again', 'close-circle');
+        throw dlErr;
+      }
+
       const fileName = `${user.id}/${Date.now()}.jpg`;
 
-      console.log('[Post] Uploading to storage...');
-      const { error } = await supabase.storage
-        .from('uploads')
-        .upload(fileName, buf, { contentType: 'image/jpeg' });
-      if (error) throw error;
-      console.log('[Post] Storage upload done');
+      try {
+        const { error } = await supabase.storage
+          .from('uploads')
+          .upload(fileName, buf, { contentType: 'image/jpeg' });
+        if (error) throw error;
+      } catch (upErr) {
+        Toast.show('Upload failed — try again', 'close-circle');
+        throw upErr;
+      }
 
       const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
       const captionText = postPrompt.length > 200 ? postPrompt.slice(0, 197) + '...' : postPrompt;
+
+      // Register the recipe that generated this dream
+      let recipeId: string | null = null;
+      try {
+        const recipe = cachedRecipe ?? (await loadRecipe());
+        recipeId = await registerRecipe(user.id, recipe);
+      } catch { /* non-critical */ }
 
       const { data: insertedRow } = await supabase.from('uploads').insert({
         user_id: user.id,
@@ -301,6 +318,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         total_votes: 0, rad_votes: 0, bad_votes: 0,
         width: 768, height: 1664,
         from_wish: postWish,
+        recipe_id: recipeId,
       }).select('id').single();
 
       // Pin to feed so it shows as top card

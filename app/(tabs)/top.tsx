@@ -53,6 +53,8 @@ function useCategoryDreams(category: DreamCategory) {
           comment_count: (row.comment_count as number) ?? 0,
           like_count: (row.like_count as number) ?? 0,
           from_wish: (row.from_wish as string | null) ?? null,
+          recipe_id: (row.recipe_id as string | null) ?? null,
+          ai_prompt: (row.ai_prompt as string | null) ?? null,
         }));
     },
     initialPageParam: 0,

@@ -37,6 +37,7 @@ export interface DreamPostItem {
   comment_count?: number;
   like_count?: number;
   from_wish?: string | null;
+  recipe_id?: string | null;
 }
 
 interface Props {
