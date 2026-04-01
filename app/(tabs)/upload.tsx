@@ -376,6 +376,8 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
     setUserHint('');
     setPrompt('');
     setError(null);
+    setLetBotDream(true);
+    clearFusion();
     imgOpacity.value = 0;
     imgScale.value = 0.85;
   }
