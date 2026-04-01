@@ -572,6 +572,30 @@ const INTEREST_FLAVORS: Record<string, string[]> = {
   ],
 };
 
+// ── SUBJECT: Dream creatures/subjects (replaces default humanoid) ────────────
+
+const DREAM_SUBJECTS = [
+  // Mythical creatures
+  'a massive dragon', 'a gentle giant sea serpent', 'a phoenix rising from embers',
+  'a tiny fairy with glowing wings', 'a crystal golem', 'a floating jellyfish made of light',
+  'a ancient tree spirit', 'a cloud whale swimming through the sky',
+  'a mechanical clockwork bird', 'a galaxy-patterned wolf',
+  // Fantasy creatures
+  'a baby kraken', 'an enormous friendly mushroom creature', 'a bioluminescent deep sea fish',
+  'a stone guardian covered in moss', 'a glass butterfly', 'a constellation bear',
+  'a tiny dragon sleeping on a leaf', 'a flying manta ray made of aurora light',
+  'a fox made of autumn leaves', 'a cat made of starlight',
+  // Objects as subjects
+  'a glowing lantern floating alone', 'an ancient telescope pointed at the stars',
+  'a massive ancient tree', 'a mysterious floating crystal',
+  'a forgotten lighthouse', 'a tiny house inside a seashell',
+  'an overgrown abandoned train', 'a door standing alone in a field',
+  'a giant flower blooming in an impossible place', 'a music box playing to no one',
+  // Scale subjects
+  'a miniature world inside a dewdrop', 'an enormous clock tower',
+  'a tiny boat on a vast ocean', 'a single candle in infinite darkness',
+];
+
 // Interests that are too vague on their own — always expand to a specific flavor
 const ALWAYS_EXPAND = new Set(['gaming', 'movies', 'music', 'geek', 'sports', 'travel', 'pride', 'fashion']);
 
@@ -639,6 +663,7 @@ export interface PromptInput {
   sceneType: string;
   spiritCompanion: string | null;
   spiritAppears: boolean;
+  dreamSubject: string;
   // WORLD layer
   eraKeywords: string;
   settingKeywords: string;
@@ -687,6 +712,18 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   const sceneType = pick(SCENE_TYPES);
   const spiritAppears = spiritCompanion !== null && Math.random() < 0.3;
 
+  // Pick a dream subject — creature, object, or nothing (pure landscape)
+  const subjectRoll = Math.random();
+  let dreamSubject = '';
+  if (subjectRoll < 0.4) {
+    // 40% — a fantastical creature
+    dreamSubject = pick(DREAM_SUBJECTS);
+  } else if (subjectRoll < 0.6) {
+    // 20% — spirit companion as main subject
+    dreamSubject = spiritCompanion ? `a magical ${spiritCompanion.replace(/_/g, ' ')}` : pick(DREAM_SUBJECTS);
+  }
+  // 40% — no subject, pure landscape/scene
+
   // WORLD layer — sometimes swap in a wild bonus location/era for variety
   let eraKeywordsStr: string;
   if (Math.random() < 0.08 + chaos * 0.25) {
@@ -728,7 +765,7 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
 
   return {
     medium, colorKeywords: colorKeywordsStr, weirdnessModifier, scaleModifier,
-    interests: sampledInterests, action, sceneType, spiritCompanion, spiritAppears,
+    interests: sampledInterests, action, sceneType, spiritCompanion, spiritAppears, dreamSubject,
     eraKeywords: eraKeywordsStr, settingKeywords: settingKeywordsStr,
     mood, lighting, personalityTags: sampledTags, sceneAtmosphere,
   };
@@ -744,8 +781,13 @@ export function buildRawPrompt(input: PromptInput): string {
   parts.push(`${input.medium}:`);
 
   // SUBJECT
-  parts.push(`${input.interests.map(expandInterest).join(' and ')} scene`);
-  if (input.action) parts.push(input.action);
+  if (input.dreamSubject) {
+    parts.push(`${input.dreamSubject} in a ${input.interests.map(expandInterest).join(' and ')} setting`);
+    if (input.action) parts.push(input.action);
+  } else {
+    // Pure landscape — no character
+    parts.push(`${input.interests.map(expandInterest).join(' and ')} landscape, no characters`);
+  }
 
   // WORLD
   if (input.eraKeywords) parts.push(input.eraKeywords);
@@ -768,8 +810,8 @@ export function buildRawPrompt(input: PromptInput): string {
     parts.push(`a small ${companion} visible somewhere in the scene`);
   }
 
-  // Always steer away from realistic human figures — this is a dream art app
-  parts.push('no realistic human figures or faces, stylized creatures or abstract forms only');
+  // No humans — this is a dream art app
+  parts.push('no humans, no people, no faces');
   parts.push('portrait orientation 9:16 ratio');
 
   return parts.join(', ');
