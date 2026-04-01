@@ -183,7 +183,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
           input: {
             prompt: p,
             input_image: refUrl,
-            aspect_ratio: 'match_input_image',
+            aspect_ratio: '9:16',
             output_format: 'jpg',
             output_quality: 90,
           },
