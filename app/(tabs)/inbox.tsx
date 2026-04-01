@@ -15,7 +15,6 @@ import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import { useAlbumStore } from '@/store/album';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { colors } from '@/constants/theme';
-import { MASCOT_URLS } from '@/constants/mascots';
 
 function formatTimeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -46,7 +45,7 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
     case 'post_milestone':
       return { action: 'Your post hit ' + (item.body ?? 'a milestone!'), preview: null };
     case 'dream_generated':
-      return { action: 'A new dream has been conjured ✨', preview: item.body };
+      return { action: 'A new dream has been conjured', preview: item.body };
     default:
       return { action: '', preview: null };
   }
@@ -99,7 +98,9 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
         disabled={item.type === 'dream_generated'}
       >
         {item.type === 'dream_generated' ? (
-          <Image source={{ uri: MASCOT_URLS[2] }} style={styles.avatar} />
+          <View style={[styles.avatarFallback, { backgroundColor: colors.accentBg }]}>
+            <Ionicons name="moon" size={20} color={colors.accent} />
+          </View>
         ) : item.actorAvatarUrl ? (
           <Image source={{ uri: item.actorAvatarUrl }} style={styles.avatar} />
         ) : (

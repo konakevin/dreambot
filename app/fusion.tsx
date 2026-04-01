@@ -75,7 +75,7 @@ export default function FusionScreen() {
     if (!myRecipe || !theirRecipe || !user || !fusionTarget || busy.current) return;
 
     if (sparkleBalance < FUSE_COST) {
-      showAlert('Not enough sparkles', `You need ${FUSE_COST}✨ but have ${sparkleBalance}✨`, [
+      showAlert('Not enough sparkles', `You need ${FUSE_COST} sparkles but have ${sparkleBalance}`, [
         { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
         { text: 'Cancel', style: 'cancel' },
       ]);
@@ -116,7 +116,7 @@ export default function FusionScreen() {
     } catch (err) {
       const msg = (err as Error).message;
       if (msg === 'Not enough sparkles') {
-        showAlert('Not enough sparkles', `You need ${FUSE_COST}✨ but have ${sparkleBalance}✨`);
+        showAlert('Not enough sparkles', `You need ${FUSE_COST} sparkles but have ${sparkleBalance}`);
       } else {
         Toast.show('Fusion failed — try again', 'close-circle');
       }
@@ -301,7 +301,7 @@ export default function FusionScreen() {
             : <Ionicons name="git-merge" size={18} color={colors.accent} />
           }
           <Text style={s.fuseButtonText}>
-            {album.length > 0 ? 'Fuse Again' : `Fuse (${FUSE_COST}✨)`}
+            {album.length > 0 ? 'Fuse Again' : `Fuse (${FUSE_COST} sparkles)`}
           </Text>
         </TouchableOpacity>
       </View>

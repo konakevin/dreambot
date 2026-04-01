@@ -9,10 +9,10 @@ import { Toast } from '@/components/Toast';
 import { useSparkleBalance, useSparklePackages, usePurchaseSparkles, useRestorePurchases } from '@/hooks/useSparkles';
 
 // Fallback display info keyed by product ID
-const PACK_INFO: Record<string, { sparkles: number; emoji: string; label: string }> = {
-  'com.konakevin.radorbad.sparkles.5':  { sparkles: 5,  emoji: '✨', label: 'Starter' },
-  'com.konakevin.radorbad.sparkles.35': { sparkles: 35, emoji: '🌟', label: 'Popular' },
-  'com.konakevin.radorbad.sparkles.85': { sparkles: 85, emoji: '💎', label: 'Best Value' },
+const PACK_INFO: Record<string, { sparkles: number; icon: string; label: string }> = {
+  'com.konakevin.radorbad.sparkles.5':  { sparkles: 5,  icon: 'sparkles-outline', label: 'Starter' },
+  'com.konakevin.radorbad.sparkles.35': { sparkles: 35, icon: 'star', label: 'Popular' },
+  'com.konakevin.radorbad.sparkles.85': { sparkles: 85, icon: 'diamond', label: 'Best Value' },
 };
 
 function PackCard({ pkg, onPurchase, purchasing }: {
@@ -21,7 +21,7 @@ function PackCard({ pkg, onPurchase, purchasing }: {
   purchasing: boolean;
 }) {
   const product = pkg.product;
-  const info = PACK_INFO[product.identifier] ?? { sparkles: 0, emoji: '✨', label: '' };
+  const info = PACK_INFO[product.identifier] ?? { sparkles: 0, icon: 'sparkles-outline', label: '' };
   const isBestValue = info.label === 'Best Value';
 
   return (
@@ -42,7 +42,7 @@ function PackCard({ pkg, onPurchase, purchasing }: {
         </View>
       )}
 
-      <Text style={s.packEmoji}>{info.emoji}</Text>
+      <Ionicons name={info.icon as keyof typeof Ionicons.glyphMap} size={28} color={colors.accent} />
       <Text style={s.packSparkles}>{info.sparkles}</Text>
       <Text style={s.packLabel}>sparkles</Text>
 
