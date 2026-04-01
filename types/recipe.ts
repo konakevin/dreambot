@@ -49,11 +49,13 @@ export type PersonalityTag =
 /** Era / time period — controls the WORLD layer */
 export type Era =
   | 'ancient' | 'medieval' | 'victorian'
-  | 'retro' | 'modern' | 'far_future';
+  | 'retro' | 'modern' | 'far_future'
+  | 'prehistoric' | 'steampunk' | 'art_deco' | 'synthwave';
 
 /** Setting — controls the WORLD layer */
 export type Setting =
-  | 'cozy_indoors' | 'wild_outdoors' | 'city_streets' | 'otherworldly';
+  | 'cozy_indoors' | 'wild_outdoors' | 'city_streets' | 'otherworldly'
+  | 'beach_tropical' | 'mountains' | 'underground' | 'space' | 'village' | 'underwater';
 
 /** Scene atmosphere — weather/season/time combos */
 export type SceneAtmosphere =

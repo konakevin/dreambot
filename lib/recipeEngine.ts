@@ -139,10 +139,14 @@ const LIGHTING_POOL: TaggedOption[] = [
 // ── WORLD: Era keywords ─────────────────────────────────────────────────────
 
 const ERA_KEYWORDS: Record<string, string> = {
+  prehistoric: 'prehistoric world, cave paintings, volcanoes, giant creatures, primal',
   ancient: 'ancient civilization, stone and bronze, weathered ruins',
   medieval: 'medieval fantasy, stone castles, candlelit, hand-forged',
   victorian: 'Victorian era, ornate brass and dark wood, gas lamps, lace',
+  steampunk: 'steampunk Victorian, brass gears, airships, clockwork mechanisms, steam',
+  art_deco: '1920s art deco, jazz age, gold and black geometry, Great Gatsby glamour',
   retro: 'retro 1950s-70s, mid-century modern, vintage colors, analog',
+  synthwave: '1980s synthwave, neon grid, palm trees, sunset gradient, VHS aesthetic',
   modern: 'contemporary modern, clean lines, current day',
   far_future: 'far future sci-fi, holographic, chrome and glass, alien tech',
 };
@@ -164,6 +168,12 @@ const SETTING_KEYWORDS: Record<string, string> = {
   cozy_indoors: 'cozy interior, warm room, furniture, shelves, windows',
   wild_outdoors: 'outdoor wilderness, forests, mountains, open sky, natural landscape',
   city_streets: 'urban cityscape, streets, buildings, signs, architecture',
+  beach_tropical: 'tropical beach, palm trees, turquoise water, golden sand, warm breeze',
+  mountains: 'mountain peaks, alpine meadows, rocky trails, snow caps, vast sky',
+  underwater: 'deep underwater, coral reefs, fish, light rays from surface, bubbles',
+  underground: 'underground cavern, crystals, glowing mushrooms, stalactites, hidden world',
+  village: 'charming village, cobblestone streets, market square, lanterns, quaint shops',
+  space: 'outer space, stars, nebula, zero gravity, Earth in the distance',
   otherworldly: 'otherworldly realm, floating islands, impossible geometry, alien landscape',
 };
 
@@ -622,7 +632,8 @@ function filterPool(pool: TaggedOption[], rolledAxes: Record<string, 'high' | 'l
     return { text: opt.text, score };
   });
   scored.sort((a, b) => b.score - a.score);
-  const top = scored.slice(0, 5);
+  // Pick from top 8 to keep variety high — not just the top 3-4 matches
+  const top = scored.slice(0, 8);
   return pick(top).text;
 }
 
@@ -688,7 +699,7 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
 
   // WORLD layer — sometimes swap in a wild bonus location/era for variety
   let eraKeywordsStr: string;
-  if (Math.random() < chaos * 0.4) {
+  if (Math.random() < 0.08 + chaos * 0.25) {
     // Bonus era — chaos-gated so adventurous users get more surprises
     eraKeywordsStr = pick(BONUS_ERAS);
   } else {
@@ -700,7 +711,7 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   }
 
   let settingKeywordsStr: string;
-  if (Math.random() < chaos * 0.3) {
+  if (Math.random() < 0.1 + chaos * 0.25) {
     // Bonus setting — pop culture / iconic locations
     settingKeywordsStr = pick(BONUS_SETTINGS);
   } else {

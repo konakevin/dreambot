@@ -42,36 +42,46 @@ export const SPIRIT_COMPANIONS: { key: SpiritCompanion; label: string; icon: str
 
 /** Step 4: Era tiles */
 export const ERA_TILES: { key: Era; label: string; icon: string }[] = [
-  { key: 'ancient',     label: 'Ancient',    icon: 'trophy' },
-  { key: 'medieval',    label: 'Medieval',   icon: 'shield' },
-  { key: 'victorian',   label: 'Victorian',  icon: 'key' },
-  { key: 'retro',       label: 'Retro',      icon: 'radio' },
-  { key: 'modern',      label: 'Modern',     icon: 'phone-portrait' },
-  { key: 'far_future',  label: 'Far Future', icon: 'rocket' },
+  { key: 'prehistoric', label: 'Prehistoric', icon: 'bonfire' },
+  { key: 'ancient',     label: 'Ancient',     icon: 'trophy' },
+  { key: 'medieval',    label: 'Medieval',    icon: 'shield' },
+  { key: 'victorian',   label: 'Victorian',   icon: 'key' },
+  { key: 'steampunk',   label: 'Steampunk',   icon: 'cog' },
+  { key: 'art_deco',    label: 'Art Deco',    icon: 'diamond' },
+  { key: 'retro',       label: 'Retro',       icon: 'radio' },
+  { key: 'synthwave',   label: 'Synthwave',   icon: 'musical-notes' },
+  { key: 'modern',      label: 'Modern',      icon: 'phone-portrait' },
+  { key: 'far_future',  label: 'Far Future',  icon: 'rocket' },
 ];
 
 /** Step 4: Setting tiles */
 export const SETTING_TILES: { key: Setting; label: string; icon: string }[] = [
-  { key: 'cozy_indoors',  label: 'Cozy Indoors',  icon: 'home' },
-  { key: 'wild_outdoors', label: 'Wild Outdoors',  icon: 'trail-sign' },
-  { key: 'city_streets',  label: 'City Streets',   icon: 'business' },
-  { key: 'otherworldly',  label: 'Otherworldly',   icon: 'planet' },
+  { key: 'cozy_indoors',  label: 'Cozy Indoors',   icon: 'home' },
+  { key: 'wild_outdoors', label: 'Wild Outdoors',   icon: 'trail-sign' },
+  { key: 'city_streets',  label: 'City Streets',    icon: 'business' },
+  { key: 'beach_tropical',label: 'Beach & Tropical', icon: 'sunny' },
+  { key: 'mountains',     label: 'Mountains',       icon: 'triangle' },
+  { key: 'underwater',    label: 'Underwater',      icon: 'water' },
+  { key: 'underground',   label: 'Underground',     icon: 'flashlight' },
+  { key: 'village',       label: 'Village & Town',  icon: 'storefront' },
+  { key: 'space',         label: 'Outer Space',     icon: 'rocket' },
+  { key: 'otherworldly',  label: 'Otherworldly',    icon: 'planet' },
 ];
 
-/** Step 5: Mood tiles */
-export const MOOD_TILES: { key: string; label: string; icon: string; energy: number; brightness: number }[] = [
-  { key: 'cozy',       label: 'Cozy',       icon: 'cafe',           energy: 0.2, brightness: 0.6 },
-  { key: 'epic',       label: 'Epic',       icon: 'flash',          energy: 0.9, brightness: 0.6 },
-  { key: 'dreamy',     label: 'Dreamy',     icon: 'cloud',          energy: 0.2, brightness: 0.8 },
-  { key: 'moody',      label: 'Moody',      icon: 'rainy',          energy: 0.3, brightness: 0.2 },
-  { key: 'playful',    label: 'Playful',    icon: 'balloon',        energy: 0.6, brightness: 0.8 },
-  { key: 'serene',     label: 'Serene',     icon: 'water',          energy: 0.1, brightness: 0.7 },
-  { key: 'intense',    label: 'Intense',    icon: 'thunderstorm',   energy: 0.9, brightness: 0.3 },
-  { key: 'nostalgic',  label: 'Nostalgic',  icon: 'time',           energy: 0.3, brightness: 0.5 },
-  { key: 'mysterious', label: 'Mysterious', icon: 'eye',            energy: 0.5, brightness: 0.2 },
-  { key: 'whimsical',  label: 'Whimsical',  icon: 'sparkles',       energy: 0.5, brightness: 0.7 },
-  { key: 'dramatic',   label: 'Dramatic',   icon: 'flame',          energy: 0.8, brightness: 0.3 },
-  { key: 'peaceful',   label: 'Peaceful',   icon: 'leaf',           energy: 0.1, brightness: 0.6 },
+/** Step 5: Mood tiles — energy, brightness, and color_warmth feed into axes */
+export const MOOD_TILES: { key: string; label: string; icon: string; energy: number; brightness: number; warmth: number }[] = [
+  { key: 'cozy',       label: 'Cozy',       icon: 'cafe',           energy: 0.2, brightness: 0.6, warmth: 0.8 },
+  { key: 'epic',       label: 'Epic',       icon: 'flash',          energy: 0.9, brightness: 0.6, warmth: 0.5 },
+  { key: 'dreamy',     label: 'Dreamy',     icon: 'cloud',          energy: 0.2, brightness: 0.8, warmth: 0.6 },
+  { key: 'moody',      label: 'Moody',      icon: 'rainy',          energy: 0.3, brightness: 0.2, warmth: 0.3 },
+  { key: 'playful',    label: 'Playful',    icon: 'balloon',        energy: 0.6, brightness: 0.8, warmth: 0.7 },
+  { key: 'serene',     label: 'Serene',     icon: 'water',          energy: 0.1, brightness: 0.7, warmth: 0.4 },
+  { key: 'intense',    label: 'Intense',    icon: 'thunderstorm',   energy: 0.9, brightness: 0.3, warmth: 0.3 },
+  { key: 'nostalgic',  label: 'Nostalgic',  icon: 'time',           energy: 0.3, brightness: 0.5, warmth: 0.7 },
+  { key: 'mysterious', label: 'Mysterious', icon: 'eye',            energy: 0.5, brightness: 0.2, warmth: 0.2 },
+  { key: 'whimsical',  label: 'Whimsical',  icon: 'sparkles',       energy: 0.5, brightness: 0.7, warmth: 0.6 },
+  { key: 'dramatic',   label: 'Dramatic',   icon: 'flame',          energy: 0.8, brightness: 0.3, warmth: 0.4 },
+  { key: 'peaceful',   label: 'Peaceful',   icon: 'leaf',           energy: 0.1, brightness: 0.6, warmth: 0.5 },
 ];
 
 /** Step 6: Scene atmosphere tiles */

@@ -52,16 +52,17 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       const next = current.includes(key)
         ? current.filter((k) => k !== key)
         : [...current, key];
-      // Compute average energy/brightness from selected moods
+      // Compute average energy/brightness/warmth from selected moods
       const selectedData = MOOD_TILES.filter((m) => next.includes(m.key));
       if (selectedData.length > 0) {
         const avgEnergy = selectedData.reduce((sum, m) => sum + m.energy, 0) / selectedData.length;
         const avgBrightness = selectedData.reduce((sum, m) => sum + m.brightness, 0) / selectedData.length;
+        const avgWarmth = selectedData.reduce((sum, m) => sum + m.warmth, 0) / selectedData.length;
         return {
           selectedMoods: next,
           recipe: {
             ...s.recipe,
-            axes: { ...s.recipe.axes, energy: clamp(avgEnergy), brightness: clamp(avgBrightness) },
+            axes: { ...s.recipe.axes, energy: clamp(avgEnergy), brightness: clamp(avgBrightness), color_warmth: clamp(avgWarmth) },
           },
         };
       }
