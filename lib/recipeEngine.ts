@@ -342,9 +342,9 @@ const ACTIONS = [
   'sliding down', 'bouncing off', 'carrying something absurdly oversized',
   'peeking around a corner at', 'caught mid-sneeze near',
   'building a fort out of', 'surfing on top of',
-  'having a tug-of-war over', 'catching something falling from above',
-  'being startled by a butterfly', 'whispering a secret about',
-  'painting a tiny masterpiece of', 'reading a tiny book together',
+  'catching something falling from above',
+  'being startled by a butterfly',
+  'painting a tiny masterpiece',
   'conducting a tiny orchestra', 'trying to open a jar',
   'posing dramatically for no reason', 'napping peacefully on',
   'exploring a hidden passage in',
@@ -356,23 +356,19 @@ const ACTIONS = [
   'assembling a tiny robot from spare parts',
   'riding a paper airplane through a canyon',
   'playing a guitar made of clouds',
-  'teaching a group of ducklings to march',
+  'teaching ducklings to march',
   'launching off a catapult into the sky',
   'melting into a puddle of colors',
   'inflating a balloon that lifts them off the ground',
   'running from an adorable tiny avalanche',
-  'befriending a creature twice their size',
   'hatching from a giant egg',
-  'sword-fighting with breadsticks',
   'planting a flag on a mountain of pillows',
   'parachuting with an umbrella',
   'racing snails and losing',
   'doing a dramatic slow-motion walk',
-  'stacking themselves into a totem pole',
   'fishing in a puddle and catching something huge',
   'walking a cloud like a dog on a leash',
   'accidentally summoning something magical',
-  'arm-wrestling a much bigger opponent',
 ];
 
 // ── SUBJECT: Scene types ────────────────────────────────────────────────────
@@ -772,8 +768,8 @@ export function buildRawPrompt(input: PromptInput): string {
     parts.push(`a small ${companion} visible somewhere in the scene`);
   }
 
-  // Steer away from human portraits for scenic dreams
-  if (!input.action) parts.push('no people, focus on the scene and atmosphere');
+  // Always steer away from realistic human figures — this is a dream art app
+  parts.push('no realistic human figures or faces, stylized creatures or abstract forms only');
   parts.push('portrait orientation 9:16 ratio');
 
   return parts.join(', ');
