@@ -235,7 +235,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       if (!resp.ok) throw new Error(`Failed to download image: ${resp.status}`);
       const buf = await resp.arrayBuffer();
       console.log('[Post] Downloaded image:', buf.byteLength, 'bytes');
-      const fileName = `ai/${Date.now()}.jpg`;
+      const fileName = `${user.id}/${Date.now()}.jpg`;
 
       console.log('[Post] Uploading to storage...');
       const { error } = await supabase.storage
