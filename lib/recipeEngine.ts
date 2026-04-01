@@ -685,7 +685,9 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   const sampleCount = Math.min(2, interests.length);
   const shuffledInterests = [...interests].sort(() => Math.random() - 0.5);
   const sampledInterests = shuffledInterests.slice(0, Math.max(1, sampleCount));
-  const action = pick(ACTIONS);
+  // Only include character actions when energy is high — low energy = scenic/atmospheric
+  const includeAction = Math.random() < axes.energy;
+  const action = includeAction ? pick(ACTIONS) : '';
   const sceneType = pick(SCENE_TYPES);
   const spiritAppears = spiritCompanion !== null && Math.random() < 0.3;
 
@@ -747,7 +749,7 @@ export function buildRawPrompt(input: PromptInput): string {
 
   // SUBJECT
   parts.push(`${input.interests.map(expandInterest).join(' and ')} scene`);
-  parts.push(input.action);
+  if (input.action) parts.push(input.action);
 
   // WORLD
   if (input.eraKeywords) parts.push(input.eraKeywords);
@@ -770,8 +772,8 @@ export function buildRawPrompt(input: PromptInput): string {
     parts.push(`a small ${companion} visible somewhere in the scene`);
   }
 
-  // Focus on scenes/environments, not human portraits
-  parts.push('focus on the scene and environment, not human faces or figures');
+  // Steer away from human portraits for scenic dreams
+  if (!input.action) parts.push('no people, focus on the scene and atmosphere');
   parts.push('portrait orientation 9:16 ratio');
 
   return parts.join(', ');
