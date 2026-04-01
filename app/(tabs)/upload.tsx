@@ -269,7 +269,8 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Dream posted!', 'checkmark-circle');
       reset();
-      router.navigate('/(tabs)');
+      // Jump to home tab — use replace to avoid stacking
+      router.replace('/(tabs)');
     } catch {
       setPhase('reveal');
     }
