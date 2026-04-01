@@ -859,6 +859,23 @@ export function buildRawPrompt(input: PromptInput): string {
     'Russian nesting dolls, scene within scene within scene.',
     'Tilt-shift effect making real things look like tiny models.',
 
+    // Micro compositions — tiny intimate spaces
+    'Tiny scene happening on a windowsill.',
+    'Miniature world inside a glass jar.',
+    'Scene unfolding on a cluttered desk among pencils and coffee cups.',
+    'Happening inside a dresser drawer among forgotten things.',
+    'Tiny creatures living in the cracks of a sidewalk.',
+    'A whole world inside a bedroom snow globe.',
+    'Scene tucked into a bookshelf between old books.',
+    'Macro view of something magical happening on a leaf.',
+    'An entire adventure on a kitchen table.',
+    'Hidden world underneath a bed, dust bunnies and lost toys.',
+    'Scene inside a coat pocket, lint and coins.',
+    'Mushroom village at the base of a tree trunk.',
+    'Life inside a raindrop on a window.',
+    'Tiny civilization in a potted plant on a nightstand.',
+    'A secret garden inside a cracked teapot.',
+
     // No directive — pure AI freedom
     '', '', '', '',
   ];
