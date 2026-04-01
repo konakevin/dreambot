@@ -818,22 +818,49 @@ export function buildRawPrompt(input: PromptInput): string {
 
   // Random composition — break the corridor perspective
   const compositions = [
-    'Compose as if cropping into a detail of a much larger painting.',
+    // Angles
     'Bird\'s eye view looking straight down.',
-    'Extreme close-up on one interesting detail.',
-    'Viewed from below looking up.',
-    'Off-center composition, main subject to one side.',
-    'Seen through a window, doorway, or frame within the scene.',
-    'Fisheye lens distortion, everything curves.',
-    'Split composition, two contrasting halves.',
-    'Scattered elements floating in space, no horizon line.',
-    'Flat pattern filling the entire frame, no depth.',
-    'Isometric angle, like a video game map.',
-    'Extreme wide shot, everything is tiny.',
-    'Reflected in water, mirror image.',
-    '', // no directive — let AI choose freely
-    '', // no directive
-    '', // no directive
+    'Viewed from below looking up at the sky.',
+    'Worm\'s eye view, everything towers above.',
+    'Dutch angle, slightly tilted and off-kilter.',
+    'Over the shoulder, peeking into the scene.',
+    'Overhead satellite view, like a map.',
+    'Shot from inside something looking out.',
+
+    // Cropping & framing
+    'Compose as if cropping into a detail of a much larger painting.',
+    'Extreme close-up on one tiny fascinating detail.',
+    'Zoomed way out, subject is a tiny speck in a vast world.',
+    'Off-center composition, lots of empty space on one side.',
+    'Subject cut in half by the frame edge, only partially visible.',
+    'Tightly framed, everything pressed to the edges.',
+
+    // Perspectives
+    'Fisheye lens distortion, everything curves outward.',
+    'Isometric angle, like a cozy video game.',
+    'Cross-section cutaway, like a dollhouse showing inside and outside.',
+    'Reflected in still water, upside-down mirror world.',
+    'Seen through frosted glass, blurry and dreamlike.',
+    'Peering through a keyhole or small opening.',
+    'Multiple overlapping transparent layers.',
+
+    // Layouts
+    'Flat pattern filling the entire frame, like wallpaper, no depth.',
+    'Scattered elements floating in space, no gravity, no horizon.',
+    'Spiral composition, everything swirls toward the center.',
+    'Symmetrical mandala-like arrangement.',
+    'Split screen, two different worlds side by side.',
+    'Collage of different scenes merged into one image.',
+    'Tiled repeating pattern with subtle variations.',
+
+    // Scale play
+    'Miniature world inside something ordinary, like a teacup or book.',
+    'Giant object in a tiny world, scale is wrong.',
+    'Russian nesting dolls, scene within scene within scene.',
+    'Tilt-shift effect making real things look like tiny models.',
+
+    // No directive — pure AI freedom
+    '', '', '', '',
   ];
   const comp = pick(compositions);
   if (comp) parts.push(comp);
