@@ -1,13 +1,12 @@
 import { useState, useRef } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet,
+  View, Text, ScrollView, StyleSheet,
   Dimensions, FlatList,
   type NativeSyntheticEvent, type NativeScrollEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Haptics from 'expo-haptics';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
@@ -15,6 +14,7 @@ import { useFeedStore } from '@/store/feed';
 import { DREAM_CATEGORIES, type DreamCategory } from '@/constants/dreamCategories';
 import { colors } from '@/constants/theme';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
+import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -37,6 +37,7 @@ function useCategoryDreams(category: DreamCategory) {
       const keywords = category.keywords;
       return (data ?? [])
         .filter((row: Record<string, unknown>) => {
+          if (keywords.length === 0) return true; // "All" category
           const text = `${row.caption ?? ''}`.toString().toLowerCase();
           return keywords.some((kw) => text.includes(kw));
         })
@@ -50,6 +51,8 @@ function useCategoryDreams(category: DreamCategory) {
           is_ai_generated: true,
           created_at: row.created_at as string,
           comment_count: (row.comment_count as number) ?? 0,
+          like_count: (row.like_count as number) ?? 0,
+          from_wish: (row.from_wish as string | null) ?? null,
         }));
     },
     initialPageParam: 0,
@@ -75,7 +78,6 @@ export default function ExploreScreen() {
   }
 
   function selectCategory(cat: DreamCategory) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelected(cat);
     listRef.current?.scrollToOffset({ offset: 0, animated: false });
   }
@@ -108,21 +110,14 @@ export default function ExploreScreen() {
             onScroll={handleChipScroll}
             scrollEventThrottle={16}
           >
-            {DREAM_CATEGORIES.map((cat) => {
-              const active = selected.key === cat.key;
-              return (
-                <TouchableOpacity
-                  key={cat.key}
-                  onPress={() => selectCategory(cat)}
-                  activeOpacity={0.7}
-                  style={[s.chip, active && s.chipActive]}
-                >
-                  <Text style={[s.chipText, active && s.chipTextActive]}>
-                    {cat.label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            {DREAM_CATEGORIES.map((cat) => (
+              <OverlayPill
+                key={cat.key}
+                label={cat.label}
+                active={selected.key === cat.key}
+                onPress={() => selectCategory(cat)}
+              />
+            ))}
           </ScrollView>
         </View>
       </LinearGradient>
@@ -136,12 +131,5 @@ const s = StyleSheet.create({
   emptyTitle: { color: colors.textSecondary, fontSize: 17 },
   topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, paddingBottom: 20 },
   chipWrapper: {},
-  chipRow: { gap: 12, paddingHorizontal: 16 },
-  chip: {
-    paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
-    backgroundColor: colors.overlayWhite,
-  },
-  chipActive: { backgroundColor: colors.overlayWhiteActive },
-  chipText: { color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: '600' },
-  chipTextActive: { color: '#FFFFFF', fontWeight: '800' },
+  chipRow: { gap: 8, paddingHorizontal: 16 },
 });

@@ -107,7 +107,7 @@ export default function CommentsScreen() {
   return (
     <View style={styles.root}>
       {/* Tap backdrop to dismiss */}
-      <Pressable style={styles.backdrop} onPress={() => router.back()} />
+      <Pressable style={styles.backdrop} onPress={() => router.dismiss()} />
 
       {/* Bottom sheet */}
       <Animated.View {...panHandlers} style={[styles.sheet, { transform: [{ translateY }] }]}>
@@ -125,7 +125,7 @@ export default function CommentsScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Comments</Text>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+          <TouchableOpacity onPress={() => router.dismiss()} hitSlop={12}>
             <Ionicons name="close" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>

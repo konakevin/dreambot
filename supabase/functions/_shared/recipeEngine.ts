@@ -1,5 +1,9 @@
 /**
- * Recipe Engine — translates a user's recipe into layered prompt constraints.
+ * Recipe Engine — DEPLOY COPY for Supabase Edge Functions (Deno runtime).
+ * SOURCE OF TRUTH: lib/recipeEngine.ts
+ * Keep in sync: after modifying lib/recipeEngine.ts, copy it here and fix the imports.
+ *
+ * Translates a user's recipe into layered prompt constraints.
  *
  * Every attribute the user picks MUST change the output. If it doesn't reach
  * the prompt, it shouldn't be in the onboarding.
@@ -11,8 +15,8 @@
  *   4. ATMOSPHERE  — mood, personality tags, scene atmosphere (controls HOW IT FEELS)
  */
 
-import type { Recipe } from '@/types/recipe';
-import { DEFAULT_RECIPE } from '@/types/recipe';
+import type { Recipe } from './recipe.ts';
+import { DEFAULT_RECIPE } from './recipe.ts';
 
 // ── TECHNIQUE: Medium Pool ──────────────────────────────────────────────────
 // Tagged with axes so the engine filters by rolled values.
@@ -41,29 +45,21 @@ const MEDIUM_POOL: TaggedOption[] = [
   { text: 'pencil sketch with watercolor splashes, loose linework', axes: { realism: 'low', complexity: 'low' } },
   { text: 'fantasy book cover illustration, lush detail, dramatic lighting', axes: { complexity: 'high', energy: 'high' } },
   { text: 'vaporwave digital collage, glitch art, pink and cyan', axes: { realism: 'low', energy: 'high' } },
-  { text: 'cross-stitch embroidery on fabric, every element stitched in thread, visible grid texture, framed in a hoop', axes: { realism: 'low', complexity: 'low' } },
-  { text: 'everything is shiny molded plastic, like toys in a playset — glossy surfaces, seam lines, injection mold marks', axes: { realism: 'low', complexity: 'low', brightness: 'high', color_warmth: 'high' } },
+  { text: 'cross-stitch embroidery on fabric, pixel grid texture', axes: { realism: 'low', complexity: 'low' } },
   { text: 'isometric pixel art, retro game aesthetic, crisp edges', axes: { realism: 'low', complexity: 'low' } },
   // ── Additional styles for variety ──
-  { text: 'entire world built from LEGO bricks, everything is LEGO — ground, sky, characters, trees, water — plastic studs visible everywhere', axes: { realism: 'low', complexity: 'low', brightness: 'high', energy: 'low', color_warmth: 'high' } },
-  { text: 'LEGO minifigure in a realistic world, tiny plastic character in a real environment', axes: { realism: 'high', complexity: 'low', brightness: 'high', energy: 'low' } },
+  { text: 'LEGO brick diorama, plastic minifigures, snap-together studs visible', axes: { realism: 'low', complexity: 'low', brightness: 'high', energy: 'low', color_warmth: 'high' } },
   { text: '8-bit pixel art, NES color palette, chunky pixels, retro gaming', axes: { realism: 'low', complexity: 'low', energy: 'high' } },
   { text: 'classic Disney 2D animation, clean ink outlines, cel-shaded, 1990s era', axes: { realism: 'low', color_warmth: 'high', brightness: 'high' } },
   { text: 'Tim Burton gothic illustration, spindly limbs, spiral shapes, dark whimsy', axes: { realism: 'low', brightness: 'low', energy: 'high' } },
   { text: 'Wes Anderson symmetrical composition, pastel color palette, dollhouse miniature', axes: { realism: 'high', brightness: 'high', complexity: 'high' } },
   { text: 'vintage travel poster, bold flat shapes, limited color palette, art deco lettering', axes: { realism: 'low', complexity: 'low', color_warmth: 'high' } },
-  { text: '1960s Pan Am airline advertisement illustration, glamorous jet-age optimism, bold colors', axes: { realism: 'low', brightness: 'high', color_warmth: 'high', energy: 'low' } },
   { text: 'dreamy soft-focus film photography, 35mm grain, light leaks, golden tones', axes: { realism: 'high', brightness: 'high', color_warmth: 'high' } },
   { text: 'comic book panel, bold ink outlines, halftone dots, speech bubble style', axes: { realism: 'low', energy: 'high', complexity: 'low' } },
   { text: 'felt and fabric diorama, stitched textures, button eyes, handmade craft', axes: { realism: 'low', brightness: 'high', energy: 'low' } },
-  { text: 'Muppet-style felt puppet world, fuzzy textures, googly eyes, Jim Henson whimsy', axes: { realism: 'low', brightness: 'high', energy: 'high', color_warmth: 'high' } },
-  { text: 'LittleBigPlanet craft world, knitted Sackboy characters, cardboard and sticker scenery, buttons and zippers', axes: { realism: 'low', brightness: 'high', energy: 'low', complexity: 'low' } },
-  { text: 'Funko Pop vinyl figure style, oversized head, tiny body, glossy plastic', axes: { realism: 'low', complexity: 'low', brightness: 'high', energy: 'low' } },
   { text: 'mosaic tile artwork, small colorful square tiles, ancient Roman style', axes: { realism: 'low', complexity: 'high', color_warmth: 'high' } },
   { text: 'pop art screen print, bold primary colors, Andy Warhol style', axes: { realism: 'low', energy: 'high', brightness: 'high' } },
   { text: 'cyberpunk neon cityscape style, rain-slicked surfaces, holographic ads', axes: { realism: 'high', brightness: 'low', energy: 'high' } },
-  { text: 'Spider-Verse animation style, mixed media, comic dots, paint splatters, dynamic angles', axes: { realism: 'low', energy: 'high', brightness: 'high', complexity: 'high' } },
-  { text: 'Tron digital world, glowing neon lines on black, light trails, geometric', axes: { realism: 'low', brightness: 'low', energy: 'high', complexity: 'low' } },
   { text: 'gouache painting, thick opaque paint, matte finish, children\'s book illustration', axes: { realism: 'low', brightness: 'high', energy: 'low' } },
   { text: 'origami paper sculpture, crisp folds, white paper with colored accents', axes: { realism: 'low', complexity: 'low', brightness: 'high' } },
   { text: 'art nouveau style, flowing organic lines, Alphonse Mucha inspired', axes: { realism: 'low', complexity: 'high', color_warmth: 'high' } },
@@ -96,21 +92,6 @@ const MEDIUM_POOL: TaggedOption[] = [
   { text: 'Dalí melting clocks surrealism, desert dreamscape, impossible objects', axes: { realism: 'low', complexity: 'high', energy: 'low' } },
   { text: 'Warhol repeated screen print, bold flat pop art colors, celebrity style', axes: { realism: 'low', energy: 'high', brightness: 'high' } },
   { text: 'Bob Ross happy little trees, soft landscape, calm mountains, cabin', axes: { realism: 'low', energy: 'low', color_warmth: 'high' } },
-  // Craft & puppet styles
-  { text: 'Rankin/Bass stop-motion, classic Christmas special, felt snow and glitter', axes: { realism: 'low', brightness: 'high', color_warmth: 'high', energy: 'low' } },
-  { text: 'Aardman claymation, Wallace & Gromit smooth clay, expressive faces', axes: { realism: 'low', brightness: 'high', energy: 'low', color_warmth: 'high' } },
-  { text: 'Laika stop-motion, Coraline/Kubo style, dark handcrafted beauty', axes: { realism: 'low', brightness: 'low', complexity: 'high', energy: 'high' } },
-  // Traditional & fine art
-  { text: 'golden age storybook illustration, Beatrix Potter watercolor, gentle linework', axes: { realism: 'low', brightness: 'high', energy: 'low', color_warmth: 'high' } },
-  { text: 'marble sculpture, Michelangelo carved stone, dramatic form', axes: { realism: 'high', complexity: 'high', energy: 'high', brightness: 'high' } },
-  { text: 'charcoal drawing on textured paper, smudged dramatic shadows', axes: { realism: 'high', brightness: 'low', complexity: 'low', energy: 'high' } },
-  { text: 'tarot card illustration, ornate gold borders, mystical symbolism', axes: { realism: 'low', complexity: 'high', brightness: 'low', energy: 'low' } },
-  // Retro & pop
-  { text: 'blacklight poster, psychedelic velvet colors glowing in the dark', axes: { realism: 'low', brightness: 'low', energy: 'high', color_warmth: 'high' } },
-  { text: 'vintage newspaper comic strip, Ben-Day dots, speech bubbles, Calvin & Hobbes warmth', axes: { realism: 'low', complexity: 'low', energy: 'low', color_warmth: 'high' } },
-  { text: 'children\'s chalk drawing on sidewalk, colorful and wobbly, puddle reflections', axes: { realism: 'low', complexity: 'low', brightness: 'high', energy: 'low' } },
-  { text: 'Looney Tunes cartoon, exaggerated squash and stretch, painted backgrounds, slapstick energy', axes: { realism: 'low', energy: 'high', brightness: 'high', color_warmth: 'high' } },
-  { text: '1920s Steamboat Willie style, black and white rubber hose animation, simple shapes', axes: { realism: 'low', complexity: 'low', brightness: 'low', energy: 'high' } },
 ];
 
 // ── ATMOSPHERE: Mood Pool ───────────────────────────────────────────────────
@@ -118,7 +99,6 @@ const MEDIUM_POOL: TaggedOption[] = [
 const MOOD_POOL: TaggedOption[] = [
   // ── Calm + Warm ──
   { text: 'cozy and intimate', axes: { energy: 'low', color_warmth: 'high', brightness: 'low' } },
-  { text: 'hygge — warm and safe indoors while a storm rages outside, rain on glass, soft light', axes: { energy: 'low', color_warmth: 'high', brightness: 'low', complexity: 'low' } },
   { text: 'nostalgic and warm', axes: { color_warmth: 'high', energy: 'low', brightness: 'low' } },
   { text: 'tender and gentle', axes: { energy: 'low', color_warmth: 'high', brightness: 'high' } },
   { text: 'homesick in the sweetest way', axes: { energy: 'low', color_warmth: 'high', complexity: 'low' } },
@@ -252,9 +232,6 @@ const BONUS_ERAS = [
   '1980s synthwave, VHS tracking lines, palm trees, sunset gradient',
   'wild west frontier, dusty saloons, tumbleweeds, golden desert light',
   'roaring 1960s space age, atomic design, googie architecture',
-  'Pan Am jet age poster, glamorous air travel, exotic destinations, retro illustration',
-  '1950s Americana, chrome bumpers, sock hops, soda fountain',
-  '1960s mod London, Twiggy, op art, Carnaby Street, mini Cooper',
   'Y2K aesthetic, frosted glass, metallic textures, butterfly clips',
   'prehistoric, cave paintings, volcanoes, giant creatures',
   'steampunk Victorian, brass gears, airships, clockwork',
@@ -376,14 +353,6 @@ const BONUS_SETTINGS = [
   'Willy Wonka chocolate room, chocolate waterfall, edible everything',
   'NeverEnding Story Falkor flying through clouds, Ivory Tower in distance',
   'Dark Crystal world, Aughra observatory, crystal shard glowing',
-  'Muppet Theater backstage, Kermit at the curtain, felt chaos everywhere',
-  'LittleBigPlanet level, cardboard platforms, sticker decorations, yarn and buttons',
-  'Land Before Time Great Valley, lush ferns, gentle dinosaurs, golden sunset',
-  'a library where the books whisper and pages flutter on their own',
-  'a night market floating on lantern-lit boats',
-  'inside a giant clockwork mechanism, gears turning slowly',
-  'a greenhouse on the moon, plants growing in low gravity',
-  'an abandoned amusement park being reclaimed by nature',
   'Princess Bride cliffs of insanity, fire swamp, miracle Max cottage',
   'Tron digital grid, glowing blue lines, light cycles',
   'Pandora bioluminescent forest, floating mountains, six-legged creatures',
@@ -559,7 +528,6 @@ const INTEREST_FLAVORS: Record<string, string[]> = {
     'Pokémon-style', 'Minecraft blocky', 'retro arcade', 'Nintendo',
     'Zelda-inspired', 'Mario world', 'Final Fantasy', 'Sonic the Hedgehog',
     'Animal Crossing', 'Pac-Man ghost', 'Tetris block', 'Kirby',
-    'LittleBigPlanet Sackboy craft world, knitted and stitched',
   ],
   movies: [
     'Star Wars', 'Lord of the Rings', 'Jurassic Park', 'The Matrix',
@@ -572,30 +540,8 @@ const INTEREST_FLAVORS: Record<string, string[]> = {
     'Shrek fairy tale', 'Wall-E post-apocalyptic', 'Ratatouille kitchen',
     'Toy Story', 'Finding Nemo underwater', 'Up floating house with balloons',
     'Howl\'s Moving Castle', 'Akira neon Tokyo', 'Ghost in the Shell',
-    'Muppet Show stage, felt characters, backstage chaos', 'The Dark Crystal puppetry, mystical Gelflings',
-    'Labyrinth goblin city, Jim Henson puppets', 'Fraggle Rock underground, Doozers building',
-    'Land Before Time, Littlefoot and friends, Great Valley, lush prehistoric', 'Secret of NIMH, magical rose, brave mice',
-    'Coraline other world, button eyes, too-perfect reality', 'Kubo and the Two Strings, origami magic',
-    'Wallace & Gromit, cozy English village, mad inventions', 'Fantasia, Disney musical dreamscape',
-    'Who Framed Roger Rabbit, cartoon meets real world', 'Pan\'s Labyrinth, dark fairy tale',
-    'Edward Scissorhands, pastel suburbia meets gothic', 'The Iron Giant, gentle metal giant',
-    'Interstellar, wormhole, tesseract, cosmic awe',
-    'ParaNorman, spooky small town, ghosts and misfits',
-    // Retro & classic pop culture
-    'Twilight Zone, black and white surreal, uncanny ordinary',
-    'I Love Lucy, 1950s sitcom, slapstick warmth',
-    'Alfred Hitchcock suspense, dramatic shadows, Vertigo spiral',
-    'James Bond 60s spy style, tuxedo, gadgets, martini',
-    'Breakfast at Tiffany\'s, little black dress, rain-soaked New York',
-    '2001: A Space Odyssey, monolith, stark white space station',
-    'Planet of the Apes, Statue of Liberty reveal',
-    'Yellow Submarine, Beatles psychedelic cartoon',
-    'Mary Poppins, chalk drawing world, chimney sweep rooftops',
-    'Wizard of Oz, yellow brick road, emerald city, ruby slippers',
-    'Singin\' in the Rain, lamppost, puddle splashing, pure joy',
     // Marvel & Comics
     'Marvel superhero landing pose', 'Spider-Man swinging between buildings',
-    'Spider-Verse multiverse, mixed animation styles colliding, glitch effects',
     'Avengers assembled, dramatic skyline', 'Wakanda forever, vibranium tech',
     'Gotham rooftop, bat signal', 'X-Men danger room training',
     'comic book POW ZAP action panel', 'graphic novel noir detective',
@@ -783,18 +729,6 @@ const DREAM_SUBJECTS = [
   // Scale subjects
   'a miniature world inside a dewdrop', 'an enormous clock tower',
   'a tiny boat on a vast ocean', 'a single candle in infinite darkness',
-  // Puppet & craft characters
-  'a fuzzy felt Muppet-style creature with googly eyes and a wide grin',
-  'a knitted Sackboy-style character exploring a cardboard world',
-  'a gentle long-necked dinosaur in a lush prehistoric valley',
-  'a Funko Pop figure with oversized glossy head and tiny body',
-  'Falkor the luck dragon soaring through clouds, NeverEnding Story',
-  'a Wallace & Gromit-style inventor tinkering with mad contraptions',
-  'a Totoro-sized gentle forest spirit',
-  'a brass automaton winding down in a garden',
-  'a lighthouse keeper\'s ghost still tending the light',
-  'a whale swimming through the clouds',
-  'a train that runs on starlight between floating islands',
   // Stylized characters (illustrated, not photorealistic faces)
   'a tiny cloaked wanderer seen from far away', 'a silhouette standing at the edge of something vast',
   'a small explorer with a glowing backpack', 'a masked spirit dancer',

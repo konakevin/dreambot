@@ -91,15 +91,21 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
       )}
 
       {/* Actor avatar — show bot mascot for dream notifications */}
-      {item.type === 'dream_generated' ? (
-        <Image source={{ uri: MASCOT_URLS[2] }} style={styles.avatar} />
-      ) : item.actorAvatarUrl ? (
-        <Image source={{ uri: item.actorAvatarUrl }} style={styles.avatar} />
-      ) : (
-        <View style={styles.avatarFallback}>
-          <Text style={styles.avatarText}>{item.actorUsername[0].toUpperCase()}</Text>
-        </View>
-      )}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => { if (item.type !== 'dream_generated') router.push(`/user/${item.actorId}`); }}
+        disabled={item.type === 'dream_generated'}
+      >
+        {item.type === 'dream_generated' ? (
+          <Image source={{ uri: MASCOT_URLS[2] }} style={styles.avatar} />
+        ) : item.actorAvatarUrl ? (
+          <Image source={{ uri: item.actorAvatarUrl }} style={styles.avatar} />
+        ) : (
+          <View style={styles.avatarFallback}>
+            <Text style={styles.avatarText}>{item.actorUsername[0].toUpperCase()}</Text>
+          </View>
+        )}
+      </TouchableOpacity>
 
       {/* Text */}
       <View style={styles.textCol}>
@@ -160,7 +166,7 @@ export default function InboxScreen() {
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInbox();
   const { mutate: markSeen } = useMarkShareSeen();
   const { mutate: deleteNotification } = useDeleteShare();
-  const { mutate: markAllSeen } = useMarkAllSeen();
+  const { mutate: markAllSeen, isPending: markingAll } = useMarkAllSeen();
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const { mutate: respondRequest } = useRespondFriendRequest();
 
@@ -280,8 +286,11 @@ export default function InboxScreen() {
             <Text style={styles.headerTitle}>Inbox</Text>
             <View style={styles.headerActions}>
               {hasUnread && (
-                <TouchableOpacity onPress={() => markAllSeen()} activeOpacity={0.7} hitSlop={8}>
-                  <Text style={styles.markAllRead}>Mark all read</Text>
+                <TouchableOpacity onPress={() => markAllSeen()} activeOpacity={0.7} hitSlop={8} disabled={markingAll}>
+                  <View style={styles.markAllRow}>
+                    {markingAll && <ActivityIndicator size="small" color={colors.accent} />}
+                    <Text style={styles.markAllRead}>{markingAll ? 'Marking...' : 'Mark all read'}</Text>
+                  </View>
                 </TouchableOpacity>
               )}
               {hasAny && (
@@ -367,6 +376,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
   },
+  markAllRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   markAllRead: {
     color: colors.accent,
     fontSize: 14,

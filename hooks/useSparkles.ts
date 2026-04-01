@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { type PurchasesPackage } from 'react-native-purchases';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { getSparklePackages, purchaseSparklePackage, restorePurchases } from '@/lib/revenuecat';
 
 export function useSparkleBalance() {
   const user = useAuthStore((s) => s.user);
@@ -17,6 +19,40 @@ export function useSparkleBalance() {
     },
     enabled: !!user,
     staleTime: 30_000,
+  });
+}
+
+export function useSparklePackages() {
+  return useQuery({
+    queryKey: ['sparklePackages'],
+    queryFn: getSparklePackages,
+    staleTime: 5 * 60_000,
+  });
+}
+
+export function usePurchaseSparkles() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (pkg: PurchasesPackage) => {
+      const success = await purchaseSparklePackage(pkg);
+      if (!success) throw new Error('cancelled');
+      return success;
+    },
+    onSuccess: () => {
+      // Webhook will grant sparkles; poll balance after short delay
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+      }, 2000);
+      // Also invalidate immediately for optimistic feel
+      queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+    },
+  });
+}
+
+export function useRestorePurchases() {
+  return useMutation({
+    mutationFn: restorePurchases,
   });
 }
 

@@ -24,9 +24,9 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'rgba(0,0,0,0.95)',
-          borderTopColor: 'rgba(255,255,255,0.1)',
-          borderTopWidth: 0.5,
+          backgroundColor: 'rgba(0,0,0,0.4)',
+          borderTopColor: 'rgba(255,255,255,0.08)',
+          borderTopWidth: StyleSheet.hairlineWidth,
           position: 'absolute',
         },
         tabBarActiveTintColor: '#FFFFFF',
@@ -74,6 +74,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="inbox"
         options={{
+          tabBarStyle: {
+            backgroundColor: '#000000',
+            borderTopColor: 'rgba(255,255,255,0.08)',
+            borderTopWidth: StyleSheet.hairlineWidth,
+            position: 'absolute',
+          },
           tabBarIcon: ({ color, size }) => (
             <View>
               <Ionicons name="chatbubble-outline" size={size} color={color} />
@@ -90,6 +96,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
+          tabBarStyle: {
+            backgroundColor: '#000000',
+            borderTopColor: 'rgba(255,255,255,0.08)',
+            borderTopWidth: StyleSheet.hairlineWidth,
+            position: 'absolute',
+          },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

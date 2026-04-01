@@ -275,6 +275,12 @@ export default function SettingsScreen() {
           />
         </View>
 
+        {/* Sparkles */}
+        <Text style={styles.sectionHeader}>SPARKLES</Text>
+        <View style={styles.section}>
+          <SettingsRow icon="sparkles" label="Get Sparkles" onPress={() => router.push('/sparkleStore')} />
+        </View>
+
         {/* Dream Engine */}
         <Text style={styles.sectionHeader}>DREAM ENGINE</Text>
         <View style={styles.section}>

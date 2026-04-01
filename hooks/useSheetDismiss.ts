@@ -29,7 +29,7 @@ export function useSheetDismiss() {
             toValue: 800,
             duration: 200,
             useNativeDriver: true,
-          }).start(() => router.back());
+          }).start(() => router.dismiss());
         } else {
           Animated.spring(translateY, {
             toValue: 0,

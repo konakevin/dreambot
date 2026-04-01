@@ -17,6 +17,8 @@ import { DreamCard } from '@/components/DreamCard';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
+import { useLikeIds } from '@/hooks/useLikeIds';
+import { useToggleLike } from '@/hooks/useToggleLike';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { Toast } from '@/components/Toast';
@@ -39,11 +41,13 @@ interface Props {
   ListEmptyComponent?: React.ReactElement;
   /** Disable swipe-left-to-profile on cards (for album/detail views) */
   disableSwipeToProfile?: boolean;
+  /** Hide tab bar padding (for detail views without a tab bar) */
+  hideTabBar?: boolean;
 }
 
 export function FullScreenFeed({
   posts, isLoading, onEndReached, initialIndex = 0,
-  onIndexChange, listRef, ListEmptyComponent, disableSwipeToProfile,
+  onIndexChange, listRef, ListEmptyComponent, disableSwipeToProfile, hideTabBar,
 }: Props) {
   const insets = useSafeAreaInsets();
   const internalRef = useRef<FlatList>(null);
@@ -53,6 +57,8 @@ export function FullScreenFeed({
   const queryClient = useQueryClient();
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
   const { mutate: toggleFavorite } = useToggleFavorite();
+  const { data: likeIds = new Set<string>() } = useLikeIds();
+  const { mutate: toggleLike } = useToggleLike();
   const setFusionTarget = useFusionStore((s) => s.setTarget);
 
   const handleDelete = useCallback(async (uploadId: string) => {
@@ -118,14 +124,19 @@ export function FullScreenFeed({
       renderItem={({ item }) => (
         <DreamCard
           item={item}
-          bottomPadding={90 + insets.bottom}
-          isLiked={favoriteIds.has(item.id)}
-          onLike={() => toggleFavorite({ uploadId: item.id, currentlyFavorited: false })}
+          bottomPadding={hideTabBar ? 16 + insets.bottom : 90 + insets.bottom}
+          isLiked={likeIds.has(item.id)}
+          onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
           onToggleLike={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            toggleLike({ uploadId: item.id, currentlyLiked: likeIds.has(item.id) });
+          }}
+          onComment={() => router.push(`/comments?uploadId=${item.id}`)}
+          isSaved={favoriteIds.has(item.id)}
+          onToggleSave={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             toggleFavorite({ uploadId: item.id, currentlyFavorited: favoriteIds.has(item.id) });
           }}
-          onComment={() => router.push(`/comments?uploadId=${item.id}`)}
           disableSwipeToProfile={disableSwipeToProfile}
           onDelete={item.user_id === user?.id ? () => handleDelete(item.id) : undefined}
           onFuse={item.user_id !== user?.id && item.is_ai_generated ? () => {

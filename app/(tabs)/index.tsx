@@ -1,16 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
-import { DreamWishBadge } from '@/components/DreamWishBadge';
 import { colors } from '@/constants/theme';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
+import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -42,12 +41,13 @@ function useDreamFeed(tab: FeedTab) {
           is_ai_generated: true,
           created_at: row.created_at as string,
           comment_count: (row.comment_count as number) ?? 0,
+          like_count: (row.like_count as number) ?? 0,
         }));
       }
 
       let query = supabase
         .from('uploads')
-        .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, users!inner(username, avatar_url)')
+        .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, users!inner(username, avatar_url)')
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(pageParam, pageParam + PAGE_SIZE - 1);
@@ -79,6 +79,8 @@ function useDreamFeed(tab: FeedTab) {
           is_ai_generated: (row.is_ai_generated as boolean) ?? false,
           created_at: row.created_at as string,
           comment_count: (row.comment_count as number) ?? 0,
+          like_count: (row.like_count as number) ?? 0,
+          from_wish: (row.from_wish as string | null) ?? null,
         };
       });
     },
@@ -101,17 +103,12 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
   return (
     <View style={s.feedTabs}>
       {tabs.map((tab) => (
-        <TouchableOpacity
+        <OverlayPill
           key={tab.key}
-          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(tab.key); }}
-          activeOpacity={0.7}
-          style={s.feedTab}
-        >
-          <Text style={[s.feedTabText, active === tab.key && s.feedTabTextActive]}>
-            {tab.label}
-          </Text>
-          {active === tab.key && <View style={s.feedTabLine} />}
-        </TouchableOpacity>
+          label={tab.label}
+          active={active === tab.key}
+          onPress={() => onChange(tab.key)}
+        />
       ))}
     </View>
   );
@@ -147,6 +144,13 @@ export default function HomeScreen() {
     ? [pinnedPost as unknown as DreamPostItem, ...feedPosts]
     : feedPosts;
 
+  // Scroll to top when a pinned post appears
+  useEffect(() => {
+    if (pinnedPost) {
+      setTimeout(() => listRef.current?.scrollToOffset({ offset: 0, animated: false }), 100);
+    }
+  }, [pinnedPost]);
+
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);
     listRef.current?.scrollToOffset({ offset: 0, animated: false });
@@ -170,7 +174,6 @@ export default function HomeScreen() {
         pointerEvents="box-none"
       >
         <FeedTabs active={activeTab} onChange={handleTabChange} />
-        <DreamWishBadge variant="pill" />
       </LinearGradient>
     </View>
   );
@@ -182,9 +185,5 @@ const s = StyleSheet.create({
   emptyTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
   topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, alignItems: 'center', paddingBottom: 20 },
-  feedTabs: { flexDirection: 'row', gap: 24 },
-  feedTab: { alignItems: 'center', paddingVertical: 8, paddingHorizontal: 4 },
-  feedTabText: { color: 'rgba(255,255,255,0.5)', fontSize: 16, fontWeight: '600', ...StyleSheet.flatten({ textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 4, textShadowOffset: { width: 0, height: 1 } }) },
-  feedTabTextActive: { color: '#FFFFFF', fontWeight: '800' },
-  feedTabLine: { width: 24, height: 3, borderRadius: 1.5, backgroundColor: '#FFFFFF', marginTop: 4 },
+  feedTabs: { flexDirection: 'row', gap: 8 },
 });

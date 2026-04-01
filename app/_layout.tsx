@@ -1,6 +1,6 @@
 import '../global.css';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { ToastHost } from '@/components/Toast';
 
@@ -73,8 +74,28 @@ function PushRegistrar() {
   return null;
 }
 
+function RevenueCatInitializer() {
+  const user = useAuthStore((s) => s.user);
+
+  useEffect(() => {
+    if (user?.id) {
+      configureRevenueCat(user.id);
+    }
+  }, [user?.id]);
+
+  return null;
+}
+
 function DataPrefetcher() {
   const user = useAuthStore((s) => s.user);
+  const activityLogged = useRef(false);
+
+  // Track last_active_at for nightly dream eligibility (once per session)
+  useEffect(() => {
+    if (!user || activityLogged.current) return;
+    activityLogged.current = true;
+    supabase.from('users').update({ last_active_at: new Date().toISOString() }).eq('id', user.id);
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user) return;
@@ -116,6 +137,7 @@ export default function RootLayout() {
         <AlertProvider>
         <AuthInitializer />
         <PushRegistrar />
+        <RevenueCatInitializer />
         <DataPrefetcher />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}>
           <Stack.Screen name="index" />
@@ -129,7 +151,7 @@ export default function RootLayout() {
           <Stack.Screen name="sharePost" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
           <Stack.Screen name="comments" options={{ presentation: 'formSheet', gestureEnabled: true, contentStyle: { backgroundColor: '#0F0F1A' } }} />
           <Stack.Screen name="search" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
-          <Stack.Screen name="discoverVibers" options={{ presentation: 'card', gestureEnabled: true }} />
+          <Stack.Screen name="sparkleStore" options={{ presentation: 'card', gestureEnabled: true }} />
         </Stack>
         <StatusBar style="light" />
         <ToastHost />

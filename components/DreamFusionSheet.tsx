@@ -42,7 +42,8 @@ export function DreamFusionSheet({ visible, onClose, sourcePostId, sourcePrompt,
 
     if (balance < cost) {
       showAlert('Not enough sparkles', `You need ${cost}✨ but have ${balance}✨`, [
-        { text: 'OK' },
+        { text: 'Get Sparkles', onPress: () => { onClose(); router.push('/sparkleStore'); } },
+        { text: 'Cancel', style: 'cancel' },
       ]);
       return;
     }
@@ -64,7 +65,10 @@ export function DreamFusionSheet({ visible, onClose, sourcePostId, sourcePrompt,
       setMode('pick');
       const msg = (err as Error).message;
       if (msg === 'Not enough sparkles') {
-        showAlert('Not enough sparkles', `You need ${cost}✨ but have ${balance}✨`);
+        showAlert('Not enough sparkles', `You need ${cost}✨ but have ${balance}✨`, [
+          { text: 'Get Sparkles', onPress: () => { onClose(); router.push('/sparkleStore'); } },
+          { text: 'Cancel', style: 'cancel' },
+        ]);
       } else {
         Toast.show('Dream fusion failed', 'close-circle');
       }

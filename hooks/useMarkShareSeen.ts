@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import type { NotificationItem } from './useInbox';
 
 export function useMarkShareSeen() {
   const queryClient = useQueryClient();
@@ -13,8 +14,19 @@ export function useMarkShareSeen() {
 
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['inbox'] });
+    onMutate: async (notificationId) => {
+      // Optimistic update — mark seen locally without refetching
+      queryClient.setQueryData<InfiniteData<NotificationItem[]>>(['inbox'], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page) =>
+            page.map((n) => n.id === notificationId ? { ...n, isSeen: true } : n)
+          ),
+        };
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
     },
   });

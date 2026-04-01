@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useFocusEffect } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { DreamWishBadge } from '@/components/DreamWishBadge';
@@ -7,10 +6,8 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import MaskedView from '@react-native-masked-view/masked-view';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
-import { router, type Href } from 'expo-router';
+import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
@@ -31,18 +28,7 @@ import { useRemoveFriend } from '@/hooks/useRemoveFriend';
 import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
-type Tab = 'posts' | 'saved' | 'friends' | 'followers' | 'following' | 'streaks';
-
-const HOT_FLAME: [string, string, ...string[]] = [colors.accent, '#FF8C00', colors.accent];
-const COLD_FLAME: [string, string, ...string[]] = ['#44DDCC', '#6699EE', '#BB88EE'];
-
-function GradientFlame({ colors, size }: { colors: [string, string, ...string[]]; size: number }) {
-  return (
-    <MaskedView maskElement={<Ionicons name="flame" size={size} color="#FFF" />}>
-      <LinearGradient colors={colors} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={{ width: size, height: size }} />
-    </MaskedView>
-  );
-}
+type Tab = 'posts' | 'saved' | 'friends' | 'followers' | 'following';
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -50,11 +36,7 @@ export default function ProfileScreen() {
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const queryClient = useQueryClient();
 
-  // Reset to posts tab on focus or when profile tab icon is re-tapped
-  useFocusEffect(useCallback(() => {
-    setActiveTab('posts');
-  }, []));
-
+  // Reset to posts tab only when profile tab icon is re-tapped
   useEffect(() => {
     if (profileResetToken > 0) {
       setActiveTab('posts');
@@ -119,79 +101,10 @@ export default function ProfileScreen() {
         />
       </View>
 
-      {/* Streak preview card — hidden during dev, uncomment to re-enable
-      {streaks.length > 0 && (activeTab === 'posts' || activeTab === 'saved') && (
-        <View style={styles.streakCard}>
-          <View style={styles.streakCardHeader}>
-            <View style={styles.streakCardTitleRow}>
-              <Ionicons name="flame" size={18} color={colors.accent} />
-              <Text style={styles.streakCardTitle}>Vibe streaks</Text>
-            </View>
-            <TouchableOpacity
-              style={styles.goVibeButton}
-              onPress={() => router.push('/(tabs)?mode=friends' as Href)}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="flash" size={16} color={colors.accent} />
-              <Text style={styles.goVibeText}>Go Vibe</Text>
-              <Ionicons name="chevron-forward" size={16} color={colors.accent} />
-            </TouchableOpacity>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled style={styles.streakCardScroll} contentContainerStyle={styles.streakCardAvatars}>
-            {[...streaks].sort((a, b) => (b.radStreak + b.badStreak) - (a.radStreak + a.badStreak)).map((s) => (
-                <TouchableOpacity
-                  key={s.friendId || s.friendUsername}
-                  style={styles.streakCardItem}
-                  onPress={() => s.friendId ? router.push(`/user/${s.friendId}`) : null}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.streakCardRing}>
-                    {s.friendAvatar ? (
-                      <Image source={{ uri: s.friendAvatar }} style={styles.streakCardAvatar} />
-                    ) : (
-                      <View style={styles.streakCardAvatarFallback}>
-                        <Text style={styles.streakCardAvatarText}>{s.friendUsername[0].toUpperCase()}</Text>
-                      </View>
-                    )}
-                  </View>
-                  <Text style={styles.streakCardName} numberOfLines={1}>{s.friendUsername}</Text>
-                  {(s.radStreak > 0 || s.badStreak > 0) && (
-                    <View style={styles.streakScoreRow}>
-                      {s.radStreak > 0 && (<>
-                        <GradientFlame colors={HOT_FLAME} size={15} />
-                        <Text style={styles.streakScoreNum}>{s.radStreak}</Text>
-                      </>)}
-                      {s.radStreak > 0 && s.badStreak > 0 && (
-                        <Text style={styles.streakScoreSep}>·</Text>
-                      )}
-                      {s.badStreak > 0 && (<>
-                        <GradientFlame colors={COLD_FLAME} size={15} />
-                        <Text style={styles.streakScoreNum}>{s.badStreak}</Text>
-                      </>)}
-                    </View>
-                  )}
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        </View>
-      )}
-      */}
-
       {(activeTab === 'posts' || activeTab === 'saved') && (
-        <>
-          <TouchableOpacity
-            style={styles.discoverButton}
-            onPress={() => router.push('/discoverVibers')}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="moon" size={14} color={colors.accent} />
-            <Text style={styles.discoverButtonText}>Find similar dreamers</Text>
-            <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
-          </TouchableOpacity>
-          <View style={styles.wishRow}>
-            <DreamWishBadge variant="card" />
-          </View>
-        </>
+        <View style={styles.wishRow}>
+          <DreamWishBadge variant="card" />
+        </View>
       )}
 
       {(activeTab === 'posts' || activeTab === 'saved') && (
@@ -255,17 +168,7 @@ export default function ProfileScreen() {
             if (item.type === 'friend') return `fr-${item.data.id}`;
             return `fr-unknown`;
           }}
-          ListHeaderComponent={<>{header}
-            <TouchableOpacity
-              style={styles.discoverButton}
-              onPress={() => router.push('/discoverVibers')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="moon" size={14} color={colors.accent} />
-              <Text style={styles.discoverButtonText}>See who you vibe with</Text>
-              <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
-            </TouchableOpacity>
-          </>}
+          ListHeaderComponent={header}
           ListEmptyComponent={
             <View style={styles.center}>
               {loadingFriends
@@ -292,28 +195,6 @@ export default function ProfileScreen() {
               />
             );
           }}
-        />
-      </SafeAreaView>
-    );
-  }
-
-  if (activeTab === 'streaks') {
-    return (
-      <SafeAreaView style={styles.root}>
-        <FlatList<VibeSyncStreak>
-          key="streaks"
-          data={streaks}
-          keyExtractor={(item) => item.friendId || item.friendUsername}
-          ListHeaderComponent={<>{header}<VoteWithFriendsButton /></>}
-          ListEmptyComponent={
-            <View style={styles.center}>
-              {loadingStreaks
-                ? <ActivityIndicator color={colors.textSecondary} />
-                : <StreakEmptyState />
-              }
-            </View>
-          }
-          renderItem={({ item }) => <StreakRow streak={item} />}
         />
       </SafeAreaView>
     );
@@ -383,131 +264,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
   },
-  tabActive: { borderBottomColor: colors.accent },
+  tabActive: {},
   tabText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
   tabTextActive: { color: colors.textPrimary },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
-  streakCard: {
-    marginHorizontal: 16,
-    marginTop: 14,
-    marginBottom: 6,
-    backgroundColor: colors.card,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: '#2A2A3A',
-    padding: 18,
-  },
-  streakCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 14,
-    marginBottom: 14,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.border,
-  },
-  streakCardTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  streakCardTitle: {
-    color: colors.textPrimary,
-    fontSize: 17,
-    fontWeight: '800',
-  },
-  goVibeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  goVibeText: {
-    color: colors.accent,
-    fontSize: 17,
-    fontWeight: '800',
-  },
-  streakCardScroll: {
-    marginHorizontal: -4,
-  },
-  streakCardAvatars: {
-    flexDirection: 'row',
-    gap: 14,
-    paddingHorizontal: 4,
-  },
-  streakCardItem: {
-    alignItems: 'center',
-    gap: 5,
-    width: 78,
-  },
-  streakScoreRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    marginTop: 4,
-  },
-  streakScoreNum: {
-    color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  streakScoreSep: {
-    color: colors.textSecondary,
-    fontSize: 12,
-  },
-  streakCardRing: {
-    width: 66,
-    height: 66,
-    borderRadius: 33,
-    borderWidth: 2,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  streakCardAvatar: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-  },
-  streakCardAvatarFallback: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    backgroundColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  streakCardAvatarText: {
-    color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  streakCardName: {
-    color: colors.textPrimary,
-    fontSize: 10,
-    fontWeight: '600',
-    maxWidth: 52,
-    textAlign: 'center',
-  },
   wishRow: { paddingHorizontal: 16, paddingBottom: 8 },
-  discoverButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    marginHorizontal: 16,
-    marginTop: 10,
-    marginBottom: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  discoverButtonText: {
-    color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '700',
-  },
 });

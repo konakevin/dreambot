@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Dream Bot",
-    "slug": "dream-bot",
+    "name": "DreamBot",
+    "slug": "dreambot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,13 +37,15 @@
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/sounds/notification.wav"]
+          "sounds": [
+            "./assets/sounds/notification.wav"
+          ]
         }
       ],
       [
         "expo-media-library",
         {
-          "photosPermission": "Allow Rad or Bad to save photos to your library."
+          "photosPermission": "Allow DreamBot to save photos to your library."
         }
       ],
       [
@@ -68,10 +70,11 @@
         {
           "appID": "3266110716887470",
           "clientToken": "479742805ecbd92874db6a2544e2d61c",
-          "displayName": "Rad or Bad",
+          "displayName": "DreamBot",
           "scheme": "fb3266110716887470"
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true,

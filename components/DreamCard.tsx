@@ -19,6 +19,8 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { colors, ui } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
+import { Toast } from '@/components/Toast';
+import { useAuthStore } from '@/store/auth';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -33,6 +35,8 @@ export interface DreamPostItem {
   ai_prompt?: string | null;
   created_at: string;
   comment_count?: number;
+  like_count?: number;
+  from_wish?: string | null;
 }
 
 interface Props {
@@ -43,12 +47,16 @@ interface Props {
   onToggleLike: () => void;
   onComment?: () => void;
   onShare?: () => void;
+  isSaved?: boolean;
+  onToggleSave?: () => void;
   disableSwipeToProfile?: boolean;
   onDelete?: () => void;
   onFuse?: () => void;
 }
 
-export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, onComment, onShare, disableSwipeToProfile, onDelete, onFuse }: Props) {
+export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, onComment, onShare, isSaved, onToggleSave, disableSwipeToProfile, onDelete, onFuse }: Props) {
+  const currentUser = useAuthStore((s) => s.user);
+  const isOwnPost = currentUser?.id === item.user_id;
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
@@ -75,7 +83,11 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
   function goToProfile() {
     if (swiped.current) return;
     swiped.current = true;
-    router.push(`/user/${item.user_id}`);
+    if (isOwnPost) {
+      router.navigate('/(tabs)/profile');
+    } else {
+      router.push(`/user/${item.user_id}?viewedPost=${item.id}`);
+    }
     setTimeout(() => { swiped.current = false; }, 500);
   }
 
@@ -167,7 +179,7 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
           <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
             <TouchableOpacity
               style={s.usernameRow}
-              onPress={() => router.push(`/user/${item.user_id}`)}
+              onPress={() => isOwnPost ? router.navigate('/(tabs)/profile') : router.push(`/user/${item.user_id}?viewedPost=${item.id}`)}
               activeOpacity={0.7}
             >
               {item.avatar_url ? (
@@ -178,15 +190,25 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
                 </View>
               )}
               <Text style={s.username}>{item.username}</Text>
-              {item.is_ai_generated && <Ionicons name="sparkles" size={14} color={colors.accent} />}
             </TouchableOpacity>
-            {item.caption && <Text style={s.caption} numberOfLines={2}>{item.caption}</Text>}
+            {item.from_wish && (
+              <TouchableOpacity
+                onPress={() => Toast.show(`Wished: "${item.from_wish}"`, 'color-wand-outline')}
+                activeOpacity={0.7}
+                hitSlop={8}
+              >
+                <Ionicons name="color-wand-outline" size={14} color="#FFFFFF" />
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Side actions */}
           <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
             <TouchableOpacity style={ui.sideButton} onPress={onToggleLike} activeOpacity={0.7}>
               <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={28} color={isLiked ? colors.like : '#FFFFFF'} />
+              {(item.like_count ?? 0) > 0 && (
+                <Text style={ui.sideCount}>{item.like_count}</Text>
+              )}
             </TouchableOpacity>
             {onComment && (
               <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
@@ -194,6 +216,11 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
                 {(item.comment_count ?? 0) > 0 && (
                   <Text style={ui.sideCount}>{item.comment_count}</Text>
                 )}
+              </TouchableOpacity>
+            )}
+            {onToggleSave && (
+              <TouchableOpacity style={ui.sideButton} onPress={onToggleSave} activeOpacity={0.7}>
+                <Ionicons name={isSaved ? 'bookmark' : 'bookmark-outline'} size={24} color="#FFFFFF" />
               </TouchableOpacity>
             )}
             <TouchableOpacity style={ui.sideButton} onPress={onShare ?? (() => router.push(`/sharePost?uploadId=${item.id}`))} activeOpacity={0.7}>
@@ -222,5 +249,4 @@ const s = StyleSheet.create({
   avatarFallback: { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
   avatarText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
   username: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 4, textShadowOffset: { width: 0, height: 1 } },
-  caption: { color: 'rgba(255,255,255,0.85)', fontSize: 14, lineHeight: 20, textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 4, textShadowOffset: { width: 0, height: 1 } },
 });

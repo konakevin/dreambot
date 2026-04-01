@@ -32,11 +32,13 @@ function getNotificationContent(type: string, actorName: string, body: string | 
     case 'post_share':
       return { title: `${actorName} sent you a post`, body: 'Tap to check it out' };
     case 'friend_request':
-      return { title: `${actorName} wants to vibe with you`, body: 'Tap to respond' };
+      return { title: `${actorName} wants to dream with you`, body: 'Tap to respond' };
     case 'friend_accepted':
-      return { title: `${actorName} accepted your vibe request`, body: "You're now vibers!" };
+      return { title: `${actorName} accepted your dream request`, body: "You're now dreamers!" };
     case 'post_milestone':
       return { title: `Your post just hit ${body ?? 'a milestone'}!`, body: '🔥' };
+    case 'dream_generated':
+      return { title: 'A new dream awaits', body: body ?? 'Your Dream Bot created something for you' };
     default:
       return { title: 'New notification', body: '' };
   }
