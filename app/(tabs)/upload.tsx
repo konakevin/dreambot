@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
-import { buildPromptInput } from '@/lib/recipeEngine';
+import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
 import { Toast } from '@/components/Toast';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 import type { Recipe } from '@/types/recipe';
@@ -305,6 +305,69 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
     }
   }
 
+  async function justDream() {
+    if (!user) return;
+    if (busy.current) return;
+    busy.current = true;
+    setDreamUrl(null);
+    setError(null);
+    imgOpacity.value = 0;
+    imgScale.value = 0.85;
+    setPhase('dreaming');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    try {
+      const recipe = await loadRecipe();
+      const input = buildPromptInput(recipe);
+      const p = buildRawPrompt(input);
+      setPrompt(p);
+
+      // Generate via Replicate
+      const createRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { prompt: p, aspect_ratio: '9:16', num_outputs: 1, output_format: 'jpg' },
+        }),
+      });
+
+      if (createRes.status === 429) {
+        const body = await createRes.json();
+        await new Promise((r) => setTimeout(r, (body.retry_after ?? 6) * 1000));
+        busy.current = false;
+        return justDream();
+      }
+
+      if (!createRes.ok) throw new Error('Generation failed to start');
+      const createData = await createRes.json();
+      if (!createData.id) throw new Error('No prediction ID');
+
+      let url: string | null = null;
+      for (let i = 0; i < 60; i++) {
+        await new Promise((r) => setTimeout(r, 1500));
+        const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${createData.id}`, {
+          headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}` },
+        });
+        const pollData = await pollRes.json();
+        if (pollData.status === 'succeeded') { url = pollData.output?.[0]; break; }
+        if (pollData.status === 'failed') throw new Error('Generation failed');
+      }
+
+      if (!url) throw new Error('Generation timed out');
+      setDreamUrl(url);
+      setPhase('reveal');
+      imgOpacity.value = withTiming(1, { duration: 600 });
+      imgScale.value = withSequence(withTiming(1.05, { duration: 400 }), withTiming(1, { duration: 200 }));
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      setError(msg);
+      setPhase('pick');
+    } finally {
+      busy.current = false;
+    }
+  }
+
   function reset() {
     setPhase('pick');
     setPhotoUri(null);
@@ -351,7 +414,7 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
 
             <TouchableOpacity style={s.fusionOption} onPress={() => handleFusion('style')} activeOpacity={0.7}>
               <View style={s.fusionOptionIcon}>
-                <Ionicons name="color-wand" size={22} color={colors.accent} />
+                <Ionicons name="brush" size={22} color={colors.accent} />
               </View>
               <View style={s.fusionOptionText}>
                 <Text style={s.fusionOptionTitle}>Dream in this style</Text>
@@ -380,11 +443,15 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
       <SafeAreaView style={s.root}>
         <View style={s.center}>
           <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
-          <Text style={s.title}>Dream a photo</Text>
-          <Text style={s.sub}>Pick a photo and let your Dream Bot dream it</Text>
-          <TouchableOpacity style={s.cta} onPress={pickPhoto} activeOpacity={0.7}>
-            <Ionicons name="images" size={20} color="#FFF" />
-            <Text style={s.ctaText}>Choose a Photo</Text>
+          <Text style={s.title}>Dream</Text>
+          <Text style={s.sub}>Let your Dream Bot create something new</Text>
+          <TouchableOpacity style={s.cta} onPress={justDream} activeOpacity={0.7}>
+            <Ionicons name="sparkles" size={20} color="#FFF" />
+            <Text style={s.ctaText}>Dream Now</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={s.ctaSecondary} onPress={pickPhoto} activeOpacity={0.7}>
+            <Ionicons name="images" size={20} color={colors.textPrimary} />
+            <Text style={s.ctaSecondaryText}>Dream a Photo</Text>
           </TouchableOpacity>
           <View style={s.wishSection}>
             <DreamWishBadge variant="card" />
@@ -492,13 +559,16 @@ NO poetry. NO abstract words. Output ONLY the prompt.`;
             <Text style={s.ctaText}>Post This Dream</Text>
           </TouchableOpacity>
           <View style={s.row}>
-            <TouchableOpacity style={s.sec} onPress={() => { setDreamUrl(null); setPhase('preview'); }} activeOpacity={0.7}>
+            <TouchableOpacity style={s.sec} onPress={() => {
+              setDreamUrl(null);
+              if (photoUri) { dream(); } else { justDream(); }
+            }} activeOpacity={0.7}>
               <Ionicons name="refresh" size={16} color={colors.textSecondary} />
               <Text style={s.secText}>Dream again</Text>
             </TouchableOpacity>
             <TouchableOpacity style={s.sec} onPress={reset} activeOpacity={0.7}>
               <Ionicons name="images" size={16} color={colors.textSecondary} />
-              <Text style={s.secText}>New photo</Text>
+              <Text style={s.secText}>Start over</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -558,6 +628,8 @@ const s = StyleSheet.create({
   costText: { color: colors.accent, fontSize: 14, fontWeight: '800' },
   cta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
+  ctaSecondary: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
+  ctaSecondaryText: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
   ctaDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   ctaTextDisabled: { color: colors.textSecondary },
   footer: { paddingHorizontal: 20, paddingBottom: 80, gap: 12 },

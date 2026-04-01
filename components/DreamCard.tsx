@@ -201,7 +201,7 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
             </TouchableOpacity>
             {onFuse && item.is_ai_generated && (
               <TouchableOpacity style={ui.sideButton} onPress={onFuse} activeOpacity={0.7}>
-                <Ionicons name="git-merge-outline" size={24} color="#FFFFFF" />
+                <Ionicons name="git-merge" size={24} color="#FFFFFF" />
               </TouchableOpacity>
             )}
           </View>

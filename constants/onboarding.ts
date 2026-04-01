@@ -21,7 +21,7 @@ export const INTEREST_TILES: { key: Interest; label: string; icon: string }[] = 
   { key: 'geek',         label: 'Geek',         icon: 'hardware-chip' },
   { key: 'sports',       label: 'Sports',       icon: 'football' },
   { key: 'travel',       label: 'Travel',       icon: 'airplane' },
-  { key: 'pride',        label: 'Pride',        icon: 'rainbow' },
+  { key: 'pride',        label: 'Pride',        icon: 'heart-circle' },
 ];
 
 /** Step 2: Spirit companion tiles */
