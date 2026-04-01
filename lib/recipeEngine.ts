@@ -784,13 +784,13 @@ export function buildRawPrompt(input: PromptInput): string {
   // TECHNIQUE first — medium MUST lead
   parts.push(`${input.medium}:`);
 
-  // SUBJECT
+  // SUBJECT — phrased as inspiration, not literal commands
+  const interestStr = input.interests.map(expandInterest).join(' and ');
   if (input.dreamSubject) {
-    parts.push(`${input.dreamSubject} in a ${input.interests.map(expandInterest).join(' and ')} setting`);
-    if (input.action) parts.push(input.action);
+    parts.push(`something like ${input.dreamSubject}, ${interestStr} themed`);
+    if (input.action) parts.push(`maybe ${input.action}`);
   } else {
-    // Pure landscape — no character
-    parts.push(`${input.interests.map(expandInterest).join(' and ')} landscape, no characters`);
+    parts.push(`a ${interestStr} scene, environment only, no characters`);
   }
 
   // WORLD
