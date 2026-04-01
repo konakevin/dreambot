@@ -776,78 +776,83 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
 }
 
 /**
- * Build a raw prompt string from all layers (used when Haiku is unavailable).
+ * Build a dream prompt from all layers.
+ * Phrased as creative inspiration — Flux interprets freely.
  */
 export function buildRawPrompt(input: PromptInput): string {
   const parts: string[] = [];
 
-  // TECHNIQUE first — medium MUST lead
-  parts.push(`${input.medium}:`);
+  // Lead with art style — this anchors the whole look
+  parts.push(`${input.medium}.`);
 
-  // SUBJECT — phrased as inspiration, not literal commands
+  // Subject — what's in the dream
   const interestStr = input.interests.map(expandInterest).join(' and ');
   if (input.dreamSubject) {
-    parts.push(`something like ${input.dreamSubject}, ${interestStr} themed`);
-    if (input.action) parts.push(`maybe ${input.action}`);
+    parts.push(`Inspired by: ${input.dreamSubject}.`);
+    parts.push(`Theme: ${interestStr}.`);
+    if (input.action) parts.push(`Maybe ${input.action}.`);
   } else {
-    parts.push(`a ${interestStr} scene, environment only, no characters`);
+    parts.push(`A ${interestStr} dreamscape.`);
   }
 
-  // WORLD
-  if (input.eraKeywords) parts.push(input.eraKeywords);
-  if (input.settingKeywords) parts.push(input.settingKeywords);
+  // World — where and when
+  const worldParts: string[] = [];
+  if (input.eraKeywords) worldParts.push(input.eraKeywords);
+  if (input.settingKeywords) worldParts.push(input.settingKeywords);
+  if (worldParts.length) parts.push(`Setting: ${worldParts.join('. ')}.`);
 
-  // ATMOSPHERE
-  parts.push(input.mood);
-  parts.push(input.lighting);
+  // Atmosphere — how it feels
+  parts.push(`Feeling: ${input.mood}, ${input.lighting}.`);
   if (input.sceneAtmosphere) parts.push(input.sceneAtmosphere);
-  if (input.personalityTags.length > 0) parts.push(input.personalityTags.join(', '));
+  if (input.personalityTags.length > 0) parts.push(`Personality: ${input.personalityTags.join(', ')}.`);
 
-  // TECHNIQUE modifiers
-  if (input.colorKeywords) parts.push(input.colorKeywords);
+  // Color and style modifiers
+  if (input.colorKeywords) parts.push(`Colors: ${input.colorKeywords}.`);
   if (input.weirdnessModifier) parts.push(input.weirdnessModifier);
-  parts.push(input.scaleModifier);
+  parts.push(`Framing: ${input.scaleModifier}.`);
 
-  // SIGNATURE — spirit companion cameo
+  // Easter egg
   if (input.spiritAppears && input.spiritCompanion) {
-    const companion = input.spiritCompanion.replace(/_/g, ' ');
-    parts.push(`a small ${companion} visible somewhere in the scene`);
+    parts.push(`Hidden somewhere: a small ${input.spiritCompanion.replace(/_/g, ' ')}.`);
   }
 
-  // Avoid photorealistic humans — stylized/fantastical characters are ok
-  parts.push('no photorealistic humans or faces');
-  parts.push('vertical composition');
+  // Keep it dreamy
+  parts.push('No photorealistic human portraits. Vertical composition.');
 
-  return parts.join(', ');
+  return parts.join(' ');
 }
 
 /**
- * Build the system prompt for Haiku to enhance into a Flux prompt.
+ * Build a creative brief for Haiku to imagine a dream.
+ * Everything is phrased as INSPIRATION, not literal instructions.
+ * Haiku has full creative freedom to interpret.
  */
 export function buildHaikuPrompt(input: PromptInput): string {
-  return `Write a Flux image generation prompt. Be BRIEF and DIRECT — Flux ignores flowery language.
+  return `You are a dream artist. A user's Dream Bot is creating an image for them. Use the attributes below as CREATIVE INSPIRATION — not literal instructions. Surprise them. Be imaginative. Think of what would make someone say "wow, I didn't expect that but I love it."
 
-TECHNIQUE: ${input.medium}
-${input.colorKeywords ? `Colors: ${input.colorKeywords}` : ''}
-${input.weirdnessModifier ? `Surrealism: ${input.weirdnessModifier}` : ''}
-Framing: ${input.scaleModifier}
+THE DREAMER'S TASTE (use as vibes, not rules):
+- They gravitate toward: ${input.interests.join(', ')}
+- Art styles they'd enjoy (pick one or blend): ${input.medium}
+- Color feeling: ${input.colorKeywords || 'vivid and expressive'}
+- Mood/energy: ${input.mood}, ${input.personalityTags.join(', ')}
+- Lighting inspiration: ${input.lighting}
+- World/era flavor: ${input.eraKeywords}
+- Setting inspiration: ${input.settingKeywords}
+- Weather/atmosphere: ${input.sceneAtmosphere}
+- Framing: ${input.scaleModifier}
+${input.weirdnessModifier ? `- Surrealism level: ${input.weirdnessModifier}` : ''}
+${input.dreamSubject ? `- A possible subject (or something like it): ${input.dreamSubject}` : '- Could be a landscape, a creature, a magical object, or something totally unexpected'}
+${input.action ? `- Something might be happening: ${input.action}` : ''}
+${input.spiritAppears && input.spiritCompanion ? `- Their spirit companion is a ${input.spiritCompanion.replace(/_/g, ' ')} — maybe it appears somewhere` : ''}
 
-SUBJECT: ${input.interests.join(' and ')} themed scene
-Action: the subject is ${input.action}
-Scene type: ${input.sceneType}
-${input.spiritAppears && input.spiritCompanion ? `Include a small ${input.spiritCompanion.replace(/_/g, ' ')} somewhere in the background as a recurring motif.` : ''}
-
-WORLD: ${input.eraKeywords}. ${input.settingKeywords}
-
-ATMOSPHERE: ${input.mood}. ${input.lighting}. ${input.sceneAtmosphere}
-Personality: ${input.personalityTags.join(', ')}
+YOUR JOB:
+Write a single image generation prompt (max 60 words) that a text-to-image AI will use. Start with the art medium/style. Describe a SPECIFIC scene — not vague, not generic. Make it feel like a dream someone would actually have. Be concrete about what's in the image.
 
 RULES:
-- Start with the medium name. The medium MUST dominate the visual style.
-- ONE sentence for the scene with a specific subject and action.
-- ONE sentence for environment, lighting, and technical details.
-- Max 80 words total. Portrait 9:16 orientation.
-- NO poetic language. Direct visual instructions only.
+- No photorealistic human portraits or faces
+- Don't just list the attributes back — CREATE something new from them
+- Be specific and visual, not poetic or abstract
+- The image should be beautiful, surprising, and feel personal
 
-Output ONLY the prompt.`;
+Output ONLY the prompt, nothing else.`;
 }
