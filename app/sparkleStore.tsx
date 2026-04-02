@@ -10,9 +10,9 @@ import { useSparkleBalance, useSparklePackages, usePurchaseSparkles, useRestoreP
 
 // Fallback display info keyed by product ID
 const PACK_INFO: Record<string, { sparkles: number; icon: string; label: string }> = {
-  'com.konakevin.radorbad.sparkles.5':  { sparkles: 5,  icon: 'sparkles-outline', label: 'Starter' },
-  'com.konakevin.radorbad.sparkles.35': { sparkles: 35, icon: 'star', label: 'Popular' },
-  'com.konakevin.radorbad.sparkles.85': { sparkles: 85, icon: 'diamond', label: 'Best Value' },
+  'com.konakevin.radorbad.sparkles.15':  { sparkles: 15,  icon: 'sparkles-outline', label: 'Starter' },
+  'com.konakevin.radorbad.sparkles.50':  { sparkles: 50,  icon: 'star', label: 'Popular' },
+  'com.konakevin.radorbad.sparkles.120': { sparkles: 120, icon: 'diamond', label: 'Best Value' },
 };
 
 function PackCard({ pkg, onPurchase, purchasing }: {

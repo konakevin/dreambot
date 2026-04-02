@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -43,18 +44,20 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
   const duration = 2000 + seededRandom(index + seed + 11) * 2000;
   const size = 2 + seededRandom(index + seed + 17) * 2.5;
 
-  opacity.value = withDelay(delay,
-    withRepeat(withSequence(
-      withTiming(1, { duration: duration * 0.3 }),
-      withTiming(0, { duration: duration * 0.7 }),
-    ), -1, true),
-  );
-  scale.value = withDelay(delay,
-    withRepeat(withSequence(
-      withTiming(1.4, { duration: duration * 0.3 }),
-      withTiming(0.3, { duration: duration * 0.7 }),
-    ), -1, true),
-  );
+  useEffect(() => {
+    opacity.value = withDelay(delay,
+      withRepeat(withSequence(
+        withTiming(1, { duration: duration * 0.3 }),
+        withTiming(0, { duration: duration * 0.7 }),
+      ), -1, true),
+    );
+    scale.value = withDelay(delay,
+      withRepeat(withSequence(
+        withTiming(1.4, { duration: duration * 0.3 }),
+        withTiming(0.3, { duration: duration * 0.7 }),
+      ), -1, true),
+    );
+  }, []);
 
   const style = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -87,14 +90,16 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
   const isWish = !!item.from_wish;
 
   const hazeOpacity = useSharedValue(0.3);
-  if (isWish) {
-    hazeOpacity.value = withRepeat(
-      withSequence(
-        withTiming(0.6, { duration: 1800 }),
-        withTiming(0.25, { duration: 1800 }),
-      ), -1, true,
-    );
-  }
+  useEffect(() => {
+    if (isWish) {
+      hazeOpacity.value = withRepeat(
+        withSequence(
+          withTiming(0.6, { duration: 1800 }),
+          withTiming(0.25, { duration: 1800 }),
+        ), -1, true,
+      );
+    }
+  }, [isWish]);
   const hazeStyle = useAnimatedStyle(() => ({ opacity: hazeOpacity.value }));
 
   function handlePress() {

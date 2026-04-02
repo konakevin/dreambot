@@ -1,15 +1,18 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, FlatList, TextInput, ActivityIndicator, StyleSheet, Alert, Dimensions, Pressable, Animated, Share } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, TextInput, ActivityIndicator, StyleSheet, Dimensions, Pressable, Animated } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/auth';
 import { useShareableVibers, type ShareableViber } from '@/hooks/useShareableVibers';
 import { useSendShare } from '@/hooks/useSendShare';
 import { useSheetDismiss } from '@/hooks/useSheetDismiss';
 import { colors } from '@/constants/theme';
+import { Toast } from '@/components/Toast';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.65;
@@ -31,7 +34,7 @@ function ViberBubble({ item, selected, onToggle }: { item: ShareableViber; selec
           <Image source={{ uri: item.avatarUrl }} style={[styles.avatar, selected && styles.avatarSelected]} />
         ) : (
           <View style={[styles.avatarFallback, selected && styles.avatarSelected]}>
-            <Text style={styles.avatarInitial}>{item.username[0].toUpperCase()}</Text>
+            <Text style={styles.avatarInitial}>{(item.username ?? '?')[0].toUpperCase()}</Text>
           </View>
         )}
         {selected && (
@@ -55,15 +58,13 @@ export default function SharePostScreen() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const { translateY, panHandlers } = useSheetDismiss();
-
-  const isSearching = search.trim().length > 0;
+  const insets = useSafeAreaInsets();
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    const matched = q ? vibers.filter((v) => v.username.toLowerCase().includes(q)) : vibers;
-    // Show all results when searching, limit to 4 rows by default
-    return isSearching ? matched : matched.slice(0, DEFAULT_LIMIT);
-  }, [vibers, search, isSearching]);
+    if (!q) return vibers.slice(0, DEFAULT_LIMIT);
+    return vibers.filter((v) => v.username.toLowerCase().includes(q));
+  }, [vibers, search]);
 
   function toggleViber(userId: string) {
     Haptics.selectionAsync();
@@ -79,7 +80,7 @@ export default function SharePostScreen() {
     if (selected.size === 0) return;
 
     sendShare(
-      { uploadId: uploadId!, receiverIds: Array.from(selected).filter((id) => vibers.some((v) => v.userId === id)) },
+      { uploadId: uploadId!, receiverIds: Array.from(selected) },
       {
         onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -90,6 +91,12 @@ export default function SharePostScreen() {
         },
       }
     );
+  }
+
+  function handleCopyLink() {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Clipboard.setStringAsync(`https://dreambot.app/post/${uploadId}`);
+    Toast.show('Link copied', 'checkmark-circle');
   }
 
   return (
@@ -107,19 +114,11 @@ export default function SharePostScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Share</Text>
-          <TouchableOpacity
-            style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
-            onPress={handleSend}
-            disabled={selected.size === 0 || isPending}
-            activeOpacity={0.7}
-          >
-            {isPending ? (
-              <ActivityIndicator size="small" color="#000000" />
-            ) : (
-              <Text style={[styles.sendButtonText, selected.size === 0 && styles.sendButtonTextDisabled]}>
-                Send{selected.size > 0 ? ` (${selected.size})` : ''}
-              </Text>
-            )}
+          <TouchableOpacity onPress={handleCopyLink} style={styles.linkButton} activeOpacity={0.7}>
+            <View style={styles.linkIcon}>
+              <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
+            </View>
+            <Text style={styles.linkLabel}>Copy</Text>
           </TouchableOpacity>
         </View>
 
@@ -128,7 +127,7 @@ export default function SharePostScreen() {
           <Ionicons name="search" size={16} color={colors.textSecondary} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search dreamers"
+            placeholder="Search fellow dreamers"
             placeholderTextColor={colors.textSecondary}
             value={search}
             onChangeText={setSearch}
@@ -164,7 +163,7 @@ export default function SharePostScreen() {
               ) : (
                 <>
                   <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
-                  <Text style={styles.emptyText}>No dreamers to share with yet</Text>
+                  <Text style={styles.emptyText}>No friends to share with yet</Text>
                 </>
               )}
             </View>
@@ -172,26 +171,23 @@ export default function SharePostScreen() {
           keyboardShouldPersistTaps="handled"
         />
 
-        {/* Share link — anchored at bottom */}
-        <TouchableOpacity
-          style={styles.shareLinkRow}
-          onPress={() => {
-            Share.share({
-              url: `https://dreambot.app/post/${uploadId}`,
-              message: `Check out this dream on Dream Bot`,
-            });
-          }}
-          activeOpacity={0.7}
-        >
-          <View style={styles.shareLinkIcon}>
-            <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
-          </View>
-          <View style={styles.shareLinkText}>
-            <Text style={styles.shareLinkTitle}>Share link</Text>
-            <Text style={styles.shareLinkUrl}>dreambot.app/post/{uploadId?.slice(0, 8)}...</Text>
-          </View>
-          <Ionicons name="open-outline" size={16} color={colors.textSecondary} />
-        </TouchableOpacity>
+        {/* Send button — bottom anchored */}
+        <View style={[styles.sendRow, { paddingBottom: insets.bottom + 16 }]}>
+          <TouchableOpacity
+            style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
+            onPress={handleSend}
+            disabled={selected.size === 0 || isPending}
+            activeOpacity={0.7}
+          >
+            {isPending ? (
+              <ActivityIndicator size="small" color="#000000" />
+            ) : (
+              <Text style={[styles.sendButtonText, selected.size === 0 && styles.sendButtonTextDisabled]}>
+                {selected.size > 0 ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}` : 'Select friends to send'}
+              </Text>
+            )}
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </View>
   );
@@ -234,58 +230,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '800',
   },
-  sendButton: {
-    backgroundColor: colors.accent,
-    borderRadius: 18,
-    paddingHorizontal: 20,
-    paddingVertical: 9,
-    minWidth: 70,
+  linkButton: {
     alignItems: 'center',
+    gap: 4,
   },
-  sendButtonDisabled: {
-    backgroundColor: colors.border,
-  },
-  sendButtonText: {
-    color: '#000000',
-    fontSize: 14,
-    fontWeight: '800',
-  },
-  sendButtonTextDisabled: {
-    color: colors.textSecondary,
-  },
-  shareLinkRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 16,
-    marginBottom: 32,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    gap: 10,
-  },
-  shareLinkIcon: {
+  linkIcon: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  shareLinkText: {
-    flex: 1,
-    gap: 1,
-  },
-  shareLinkTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  shareLinkUrl: {
+  linkLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: 11,
+    fontWeight: '600',
   },
   searchWrap: {
     flexDirection: 'row',
@@ -308,7 +270,7 @@ const styles = StyleSheet.create({
   },
   grid: {
     paddingHorizontal: 16,
-    paddingBottom: 40,
+    paddingBottom: 16,
   },
   bubble: {
     alignItems: 'center',
@@ -375,5 +337,32 @@ const styles = StyleSheet.create({
   emptyText: {
     color: colors.textSecondary,
     fontSize: 15,
+  },
+  sendRow: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  sendButton: {
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sendButtonDisabled: {
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  sendButtonText: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  sendButtonTextDisabled: {
+    color: colors.textSecondary,
   },
 });

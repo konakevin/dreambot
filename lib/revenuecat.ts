@@ -1,8 +1,7 @@
 import Purchases, { LOG_LEVEL, type PurchasesPackage } from 'react-native-purchases';
 import { Platform } from 'react-native';
 
-// TODO: Replace with your actual RevenueCat API keys
-const RC_IOS_KEY = 'YOUR_REVENUECAT_IOS_API_KEY';
+const RC_IOS_KEY = 'test_tEeLFdbkOGpyiarJlTELpIFpGAc';
 const RC_ANDROID_KEY = 'YOUR_REVENUECAT_ANDROID_API_KEY';
 
 let configured = false;
@@ -15,8 +14,8 @@ export async function configureRevenueCat(userId: string) {
   if (configured) return;
 
   const key = Platform.OS === 'ios' ? RC_IOS_KEY : RC_ANDROID_KEY;
-  if (key.startsWith('YOUR_')) {
-    console.log('[RevenueCat] Skipping — no API key configured yet');
+  if (key.startsWith('YOUR_') || key.startsWith('test_')) {
+    console.log('[RevenueCat] Skipping — using test key, products not ready yet');
     return;
   }
 
@@ -32,7 +31,7 @@ export async function configureRevenueCat(userId: string) {
 export async function getSparklePackages(): Promise<PurchasesPackage[]> {
   if (!configured) return [];
   const offerings = await Purchases.getOfferings();
-  const sparkles = offerings.current;
+  const sparkles = offerings.current ?? offerings.all['sparkle_packs'];
   if (!sparkles) return [];
   return sparkles.availablePackages;
 }

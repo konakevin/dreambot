@@ -1,6 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, Alert, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -74,19 +74,18 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
 
   return (
     <View>
-      <TouchableOpacity
+      <Pressable
         style={[styles.row, isReply && styles.replyRow]}
         onLongPress={handleLongPress}
         delayLongPress={400}
-        activeOpacity={0.8}
       >
         {/* Avatar */}
-        <TouchableOpacity onPress={() => router.push(`/user/${comment.userId}`)} activeOpacity={0.7}>
+        <TouchableOpacity onPress={() => router.replace(`/user/${comment.userId}`)} activeOpacity={0.7}>
           {comment.avatarUrl ? (
             <Image source={{ uri: comment.avatarUrl }} style={[styles.avatar, isReply && styles.replyAvatar]} />
           ) : (
             <View style={[styles.avatarFallback, isReply && styles.replyAvatar]}>
-              <Text style={styles.avatarText}>{comment.username[0].toUpperCase()}</Text>
+              <Text style={styles.avatarText}>{(comment.username ?? '?')[0].toUpperCase()}</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -112,7 +111,7 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
                       .eq('username', username)
                       .maybeSingle()
                       .then(({ data }) => {
-                        if (data) router.push(`/user/${data.id}`);
+                        if (data) router.replace(`/user/${data.id}`);
                       });
                   }}
                 >
@@ -143,7 +142,7 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
             </Text>
           )}
         </TouchableOpacity>
-      </TouchableOpacity>
+      </Pressable>
 
       {/* Replies toggle + list */}
       {!isReply && comment.replyCount > 0 && (

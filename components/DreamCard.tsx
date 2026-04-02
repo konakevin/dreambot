@@ -6,7 +6,7 @@
  * - Pinch to zoom
  */
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Pressable, StyleSheet, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -89,24 +89,26 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
   const duration = 2500 + seededRandom(index + seed + 11) * 2500;
   const size = 3 + seededRandom(index + 17) * 4;
 
-  opacity.value = withDelay(delay,
-    withRepeat(
-      withSequence(
-        withTiming(1, { duration: duration * 0.3 }),
-        withTiming(0, { duration: duration * 0.7 }),
+  useEffect(() => {
+    opacity.value = withDelay(delay,
+      withRepeat(
+        withSequence(
+          withTiming(1, { duration: duration * 0.3 }),
+          withTiming(0, { duration: duration * 0.7 }),
+        ),
+        -1, true,
       ),
-      -1, true,
-    ),
-  );
-  scale.value = withDelay(delay,
-    withRepeat(
-      withSequence(
-        withTiming(1.5, { duration: duration * 0.3 }),
-        withTiming(0.3, { duration: duration * 0.7 }),
+    );
+    scale.value = withDelay(delay,
+      withRepeat(
+        withSequence(
+          withTiming(1.5, { duration: duration * 0.3 }),
+          withTiming(0.3, { duration: duration * 0.7 }),
+        ),
+        -1, true,
       ),
-      -1, true,
-    ),
-  );
+    );
+  }, []);
 
   const style = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -137,15 +139,17 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
   // Wish fairy dust — shimmering hazy border with sparkle particles
   const isWish = !!item.from_wish;
   const hazeOpacity = useSharedValue(0.3);
-  if (isWish) {
-    hazeOpacity.value = withRepeat(
-      withSequence(
-        withTiming(0.7, { duration: 2000 }),
-        withTiming(0.3, { duration: 2000 }),
-      ),
-      -1, true,
-    );
-  }
+  useEffect(() => {
+    if (isWish) {
+      hazeOpacity.value = withRepeat(
+        withSequence(
+          withTiming(0.7, { duration: 2000 }),
+          withTiming(0.3, { duration: 2000 }),
+        ),
+        -1, true,
+      );
+    }
+  }, [isWish]);
   const hazeStyle = useAnimatedStyle(() => ({
     opacity: hazeOpacity.value,
   }));
@@ -309,7 +313,7 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
                 <Image source={{ uri: item.avatar_url }} style={s.avatar} />
               ) : (
                 <View style={s.avatarFallback}>
-                  <Text style={s.avatarText}>{item.username[0].toUpperCase()}</Text>
+                  <Text style={s.avatarText}>{(item.username ?? '?')[0].toUpperCase()}</Text>
                 </View>
               )}
               <Text style={s.username}>{item.username}</Text>

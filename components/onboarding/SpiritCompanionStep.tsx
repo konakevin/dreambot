@@ -14,7 +14,7 @@ export function SpiritCompanionStep({ onNext, onBack }: Props) {
       hideChrome
       stepNumber={2}
       title="Pick your dream companion"
-      subtitle="This little friend may appear in your dreams"
+      subtitle="This little friend may appear in your dreams — or skip if you'd rather not"
       tiles={SPIRIT_COMPANIONS}
       selected={companion ? [companion] : []}
       onToggle={(key) => {
@@ -22,7 +22,7 @@ export function SpiritCompanionStep({ onNext, onBack }: Props) {
         setCompanion(companion === k ? null : k);
       }}
       singleSelect
-      minRequired={1}
+      minRequired={0}
       onNext={onNext}
       onBack={onBack}
     />

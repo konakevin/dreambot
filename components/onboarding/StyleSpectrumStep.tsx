@@ -65,12 +65,12 @@ function Slider({ label, leftLabel, rightLabel, value, onChange }: {
   );
 }
 
-// Compress slider 0–1 to 0.25–0.75 so no axis is ever fully locked
+// Compress slider 0–1 to 0.10–0.90 so choices feel meaningful but never fully locked
 function toStored(slider: number): number {
-  return 0.25 + slider * 0.5;
+  return 0.10 + slider * 0.80;
 }
 function toSlider(stored: number): number {
-  return Math.max(0, Math.min(1, (stored - 0.25) / 0.5));
+  return Math.max(0, Math.min(1, (stored - 0.10) / 0.80));
 }
 
 export function StyleSpectrumStep({ onNext, onBack }: Props) {

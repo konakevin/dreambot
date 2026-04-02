@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
 import { Toast } from '@/components/Toast';
@@ -246,10 +247,12 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
   }
 
   async function justDream() {
-    if (!user) return;
-    if (busy.current) return;
+    console.log('[JustDream] START, user:', !!user, 'busy:', busy.current);
+    if (!user) { Toast.show('Not logged in', 'close-circle'); return; }
+    if (busy.current) { Toast.show('Already dreaming...', 'hourglass'); return; }
     busy.current = true;
     setError(null);
+    console.log('[JustDream] Setting phase to dreaming');
     if (dreamAlbum.length > 0) {
       setDreaming(true);
     } else {
@@ -260,11 +263,16 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     try {
+      console.log('[JustDream] Loading recipe...');
       const recipe = await loadRecipe();
+      console.log('[JustDream] Recipe loaded, building prompt...');
       const input = buildPromptInput(recipe);
       const p = buildRawPrompt(input);
+      console.log('[JustDream] Prompt:', p.slice(0, 80));
 
+      console.log('[JustDream] Generating image...');
       const url = await generateFluxDev(p);
+      console.log('[JustDream] Image generated:', url.slice(0, 60));
       setDreamAlbum(prev => {
         const newIndex = prev.length;
         setActiveIndex(newIndex);
@@ -278,10 +286,13 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
+      console.error('[JustDream] ERROR:', msg, err);
+      Toast.show(`Dream error: ${msg}`, 'close-circle');
       setError(msg);
       setDreaming(false);
       setPhase(dreamAlbum.length > 0 ? 'reveal' : 'pick');
     } finally {
+      console.log('[JustDream] DONE, resetting busy');
       busy.current = false;
     }
   }
@@ -560,7 +571,7 @@ const s = StyleSheet.create({
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
   mascot: { width: 120, height: 120, borderRadius: 24, marginBottom: 12 },
   loadingMascot: { width: 140, height: 140, borderRadius: 28, marginBottom: 8 },
-  title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800' },
+  title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', textAlign: 'center' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
   cta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },

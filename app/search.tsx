@@ -38,7 +38,7 @@ function SearchRow({ user }: { user: SearchUser }) {
         <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
       ) : (
         <View style={styles.avatarFallback}>
-          <Text style={styles.avatarText}>{user.username[0].toUpperCase()}</Text>
+          <Text style={styles.avatarText}>{(user.username ?? '?')[0].toUpperCase()}</Text>
         </View>
       )}
 

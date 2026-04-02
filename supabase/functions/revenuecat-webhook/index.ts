@@ -5,9 +5,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // Product ID → sparkle amount mapping
 const SPARKLE_PACKS: Record<string, number> = {
-  'com.konakevin.radorbad.sparkles.5': 5,
-  'com.konakevin.radorbad.sparkles.35': 35,
-  'com.konakevin.radorbad.sparkles.85': 85,
+  'com.konakevin.radorbad.sparkles.15': 15,
+  'com.konakevin.radorbad.sparkles.50': 50,
+  'com.konakevin.radorbad.sparkles.120': 120,
 };
 
 // Event types that represent a completed purchase
