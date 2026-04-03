@@ -249,7 +249,7 @@ const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'high', brightness: 'high', color_warmth: 'high' },
   },
   {
-    text: 'comic book panel, bold ink outlines, halftone dots, speech bubble style',
+    text: 'comic book art, bold ink outlines, halftone dots, vivid flat colors, dynamic angles',
     axes: { realism: 'low', energy: 'high', complexity: 'low' },
   },
   {
@@ -500,7 +500,7 @@ const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'low', brightness: 'low', energy: 'high', color_warmth: 'high' },
   },
   {
-    text: 'vintage newspaper comic strip, Ben-Day dots, speech bubbles, Calvin & Hobbes warmth',
+    text: 'vintage illustrated comic art, warm hand-drawn linework, soft colors, Calvin & Hobbes warmth',
     axes: { realism: 'low', complexity: 'low', energy: 'low', color_warmth: 'high' },
   },
   {
@@ -2062,6 +2062,7 @@ RULES:
 - The result should make someone say "that's MY dream bot — it gets me"
 - AVOID AI ART CLICHÉS: no "figure standing with back to camera gazing at vast landscape", no "lone silhouette on cliff edge", no "person looking up at giant glowing thing". These are overused. Be more creative with composition.
 - LEAN INTO THE ART STYLE: if the medium is cartoon, make it LOOK like a cartoon — exaggerated, flat colors, bold outlines. Don't let it default to photorealistic with a filter. The medium should fundamentally change HOW the image looks.
+- NEVER include text, words, letters, speech bubbles, signs with writing, or any readable text in the scene. Images only, no text.
 
 Output ONLY the prompt, nothing else.`;
 }

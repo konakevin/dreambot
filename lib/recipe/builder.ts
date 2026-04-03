@@ -326,6 +326,7 @@ RULES:
 - The result should make someone say "that's MY dream bot — it gets me"
 - AVOID AI ART CLICHÉS: no "figure standing with back to camera gazing at vast landscape", no "lone silhouette on cliff edge", no "person looking up at giant glowing thing". These are overused. Be more creative with composition.
 - LEAN INTO THE ART STYLE: if the medium is cartoon, make it LOOK like a cartoon — exaggerated, flat colors, bold outlines. Don't let it default to photorealistic with a filter. The medium should fundamentally change HOW the image looks.
+- NEVER include text, words, letters, speech bubbles, signs with writing, or any readable text in the scene. Images only, no text.
 
 Output ONLY the prompt, nothing else.`;
 }

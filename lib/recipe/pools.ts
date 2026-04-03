@@ -142,7 +142,7 @@ export const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'high', brightness: 'high', color_warmth: 'high' },
   },
   {
-    text: 'comic book panel, bold ink outlines, halftone dots, speech bubble style',
+    text: 'comic book art, bold ink outlines, halftone dots, vivid flat colors, dynamic angles',
     axes: { realism: 'low', energy: 'high', complexity: 'low' },
   },
   {
@@ -393,7 +393,7 @@ export const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'low', brightness: 'low', energy: 'high', color_warmth: 'high' },
   },
   {
-    text: 'vintage newspaper comic strip, Ben-Day dots, speech bubbles, Calvin & Hobbes warmth',
+    text: 'vintage illustrated comic art, warm hand-drawn linework, soft colors, Calvin & Hobbes warmth',
     axes: { realism: 'low', complexity: 'low', energy: 'low', color_warmth: 'high' },
   },
   {

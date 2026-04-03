@@ -197,6 +197,30 @@ Each dream randomly rolls which mode it uses:
 
 All three paths run through the same Chord engine for ingredient selection. The difference is what Haiku receives as its brief: The Chord gets the standard blend template. The Solo gets the archetype's rich narrative brief baked into the ingredient selection. The Song gets a pure visual beauty template.
 
+**HOW USER TRAITS FLOW THROUGH THE SYSTEM:**
+This is critical to understand. The user's onboarding choices affect dreams at EVERY level:
+
+1. **Interests + Moods → Archetype matching** (onboarding time): determines WHICH dream scenarios this user can have. A user with ocean+gaming+music and cozy+dreamy+playful moods gets a completely different archetype pool than someone with dark+fantasy and moody+intense.
+
+2. **Archetype → Focus** (dream time, Solo only): locks which interest and mood axes the engine uses for THIS dream. Narrows the identity.
+
+3. **ALL other traits → Chord engine ingredients** (every dream, all modes): Eras, settings, personality tags, color palettes, scene atmospheres, style sliders (realism, weirdness, scale, chaos), spirit companion — ALL still flow through the engine and affect medium selection, pool filtering, lighting, composition, everything. The archetype only narrows interest + mood. Everything else from the recipe still applies.
+
+4. **Engine ingredients + archetype brief → Haiku** (every dream): Haiku receives the full ingredient list from the Chord engine PLUS the archetype's narrative brief (if Solo mode). Haiku weaves them together.
+
+5. **Haiku prompt → Flux/SDXL** (every dream): The final ~50 word prompt is rendered.
+
+Result: Two users with the SAME archetype but different eras/settings/palettes/personality will get DIFFERENT looking dreams. The archetype provides the WHAT (scenario/identity). The rest of the recipe provides the HOW (visual style, mood, atmosphere). This is why every dream feels personal — it's not just the archetype, it's the archetype FILTERED through your entire recipe.
+
+**ARCHETYPE SYSTEM:**
+- 500+ archetypes in `dream_archetypes` table (growing)
+- Each has trigger_interests and trigger_moods for matching
+- Matched to users via `user_archetypes` junction at onboarding
+- At dream time: random pick from user's pool
+- Rich `prompt_context` (3-5 sentences, 5-8 scene examples) appended to Chord template
+- Seasonal support via `season_start`/`season_end` columns
+- Re-match users after adding new archetypes: `node scripts/generate-archetypes-v3.js` (generates + seeds + re-matches)
+
 ### Recipe Structure (types/recipe.ts)
 
 Every user has a `Recipe` with:
