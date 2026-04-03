@@ -43,7 +43,7 @@ export function WelcomeStep({ onNext }: Props) {
         <Text style={s.title}>Meet your Dream Bot</Text>
 
         <Text style={s.body}>
-          You're about to create your own little Dream Bot — a personal AI that learns your taste and creates stunning art just for you, every single day.
+          You{"'"}re about to create your own little Dream Bot — a personal AI that learns your taste and creates stunning art just for you, every single day.
         </Text>
 
         <View style={s.steps}>

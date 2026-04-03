@@ -100,7 +100,7 @@ export default function SignupScreen() {
           </Text>
           <Text className="text-text-secondary text-center text-sm leading-6 mb-10">
             Tap the link in the email to verify your account and get started. Check your spam folder
-            if you don't see it.
+            if you don{"'"}t see it.
           </Text>
 
           <TouchableOpacity

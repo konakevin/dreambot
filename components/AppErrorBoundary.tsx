@@ -39,7 +39,7 @@ export class AppErrorBoundary extends Component<Props, State> {
             <Ionicons name="cloud-offline" size={56} color={colors.textSecondary} />
             <Text style={s.title}>Something went wrong</Text>
             <Text style={s.message}>
-              The app ran into an unexpected error. This has been logged and we'll look into it.
+              The app ran into an unexpected error. This has been logged and we{"'"}ll look into it.
             </Text>
             <TouchableOpacity style={s.button} onPress={this.handleRetry} activeOpacity={0.7}>
               <Ionicons name="refresh" size={20} color="#FFFFFF" />

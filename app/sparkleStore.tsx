@@ -133,7 +133,7 @@ export default function SparkleStoreScreen() {
 
         <Text style={s.sectionTitle}>Sparkle Packs</Text>
         <Text style={s.sectionSub}>
-          Use sparkles to fuse dreams, dream in others' styles, and more
+          Use sparkles to fuse dreams, dream in others{"'"} styles, and more
         </Text>
 
         {isLoading ? (
