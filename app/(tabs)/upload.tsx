@@ -64,7 +64,7 @@ export default function DreamScreen() {
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
   const [dreamAlbum, setDreamAlbum] = useState<
-    { url: string; prompt: string; fromWish: string | null }[]
+    { url: string; prompt: string; fromWish: string | null; dreamMode?: string; archetype?: string }[]
   >([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const albumRef = useRef<FlatList>(null);
@@ -262,7 +262,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null }];
+        return [...prev, { url, prompt: p, fromWish: null, dreamMode: result.dream_mode, archetype: result.archetype }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -402,7 +402,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null }];
+        return [...prev, { url, prompt: p, fromWish: null, dreamMode: result.dream_mode, archetype: result.archetype }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -468,7 +468,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null }];
+        return [...prev, { url, prompt: p, fromWish: null, dreamMode: result.dream_mode, archetype: result.archetype }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -684,6 +684,14 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
                     contentFit="cover"
                     transition={300}
                   />
+                  {/* Debug: dream mode label */}
+                  {__DEV__ && item.dreamMode && (
+                    <View style={s.dreamModeLabel}>
+                      <Text style={s.dreamModeLabelText}>
+                        {item.dreamMode === 'archetype' ? `♫ Solo: ${(item.archetype ?? '').replace(/_/g, ' ').slice(0, 25)}` : item.dreamMode === 'beauty' ? '🎵 Song' : '🎶 Chord'}
+                      </Text>
+                    </View>
+                  )}
                   {dreaming && index === activeIndex && (
                     <View style={s.dreamingOverlay}>
                       <ActivityIndicator size="large" color={colors.accent} />
@@ -968,6 +976,16 @@ const s = StyleSheet.create({
     borderRadius: 20,
   },
   dreamingText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
+  dreamModeLabel: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  dreamModeLabelText: { color: '#FFFFFF', fontSize: 10, fontWeight: '600' },
   promptText: {
     color: colors.textSecondary,
     fontSize: 12,

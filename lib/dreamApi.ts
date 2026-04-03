@@ -32,6 +32,9 @@ interface GenerateDreamOpts {
 interface GenerateDreamResult {
   image_url: string;
   prompt_used: string;
+  dream_mode?: string;
+  archetype?: string;
+  model?: string;
 }
 
 /**
@@ -84,6 +87,9 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
   return {
     image_url: data.image_url,
     prompt_used: data.prompt_used,
+    dream_mode: data.dream_mode,
+    archetype: data.archetype,
+    model: data.model,
   };
 }
 

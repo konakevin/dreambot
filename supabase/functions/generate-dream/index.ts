@@ -329,6 +329,9 @@ Write an image prompt (max 50 words). Start with the art medium. Focus on visual
       JSON.stringify({
         image_url: imageUrl,
         prompt_used: finalPrompt,
+        dream_mode: logAxes.dreamMode ?? mode,
+        archetype: logAxes.archetype ?? null,
+        model: logAxes.model ?? null,
       }),
       {
         status: 200,
