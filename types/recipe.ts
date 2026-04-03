@@ -20,16 +20,15 @@ export interface RecipeAxes {
 
 /** Color palette preference */
 export type ColorPalette =
-  | 'warm_sunset' // 🟡🟠🔴
-  | 'cool_twilight' // 🔵🟣💜
-  | 'earthy_natural' // 🌿🍃💚
-  | 'soft_pastel' // 🌸💗🤍
-  | 'dark_bold' // ⚫🔴🟡
-  | 'monochrome' // ⬛⬜
-  | 'sepia' // 📜
-  | 'neon' // 💡
-  | 'candy' // 🍬
-  | 'everything'; // 🌈 random
+  | 'warm_sunset'
+  | 'cool_twilight'
+  | 'earthy_natural'
+  | 'soft_pastel'
+  | 'dark_bold'
+  | 'monochrome'
+  | 'neon'
+  | 'ocean_blues'
+  | 'jewel_tones';
 
 /** Interest categories the user selected */
 export type Interest =

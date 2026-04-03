@@ -906,16 +906,15 @@ export const SCENE_ATMOSPHERE_KEYWORDS: Record<string, string> = {
 // ── TECHNIQUE: Color palette keywords ───────────────────────────────────────
 
 export const PALETTE_KEYWORDS: Record<string, string> = {
-  warm_sunset: 'warm golden amber and crimson color palette',
-  cool_twilight: 'cool blue purple and lavender color palette',
-  earthy_natural: 'earthy green brown and forest tones',
-  soft_pastel: 'soft pastel pink lavender and cream tones',
+  warm_sunset: 'warm golden amber and crimson color palette, sunset tones, vintage warmth',
+  cool_twilight: 'cool blue purple and lavender color palette, dreamy twilight tones',
+  earthy_natural: 'earthy green brown and forest tones, natural organic colors',
+  soft_pastel: 'soft pastel pink, bubblegum, lavender, cream, candy tones',
   dark_bold: 'dark dramatic palette with deep blacks and vivid accent colors',
   monochrome: 'black and white, high contrast, dramatic shadows, no color',
-  sepia: 'warm sepia tone, vintage photograph, faded amber and brown',
   neon: 'electric neon colors, hot pink cyan and lime green, glowing edges',
-  candy: 'candy pop colors, bubblegum pink, bright magenta, sparkly gold',
-  everything: '',
+  ocean_blues: 'turquoise, teal, deep navy, aquamarine, the full spectrum of ocean blue',
+  jewel_tones: 'rich emerald green, ruby red, sapphire blue, amethyst purple, opulent and saturated',
 };
 
 // ── TECHNIQUE: Weirdness modifiers ──────────────────────────────────────────

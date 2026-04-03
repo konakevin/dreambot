@@ -103,7 +103,7 @@ const profiles: UserProfile[] = [
     chaosSlider: 0.4,
     recipe: {
       interests: ['abstract', 'whimsical', 'fashion'],
-      color_palettes: ['soft_pastel', 'candy'],
+      color_palettes: ['soft_pastel', 'soft_pastel'],
       personality_tags: ['dreamy', 'whimsical', 'elegant'],
       eras: ['art_deco', 'victorian'],
       settings: ['otherworldly', 'village'],
@@ -157,7 +157,7 @@ const profiles: UserProfile[] = [
     chaosSlider: 0.5,
     recipe: {
       interests: ['geek', 'cute', 'fantasy'],
-      color_palettes: ['candy', 'neon'],
+      color_palettes: ['soft_pastel', 'neon'],
       personality_tags: ['playful', 'whimsical', 'adventurous'],
       eras: ['modern', 'far_future'],
       settings: ['city_streets', 'otherworldly'],
@@ -175,7 +175,7 @@ const profiles: UserProfile[] = [
     chaosSlider: 1.0,
     recipe: {
       interests: ['abstract', 'whimsical', 'space'],
-      color_palettes: ['everything'],
+      color_palettes: ['warm_sunset'],
       personality_tags: ['chaotic', 'wild', 'bold'],
       eras: ['steampunk', 'synthwave', 'prehistoric'],
       settings: ['otherworldly', 'space', 'underground'],
@@ -193,7 +193,7 @@ const profiles: UserProfile[] = [
     chaosSlider: 0.1,
     recipe: {
       interests: ['nature', 'food', 'fashion'],
-      color_palettes: ['warm_sunset', 'sepia', 'earthy_natural'],
+      color_palettes: ['warm_sunset', 'warm_sunset', 'earthy_natural'],
       personality_tags: ['cozy', 'romantic', 'nostalgic', 'elegant'],
       eras: ['victorian', 'retro'],
       settings: ['cozy_indoors', 'village', 'wild_outdoors'],
@@ -211,7 +211,7 @@ const profiles: UserProfile[] = [
     chaosSlider: 0.7,
     recipe: {
       interests: ['gaming', 'animals', 'cute', 'movies'],
-      color_palettes: ['candy', 'neon'],
+      color_palettes: ['soft_pastel', 'neon'],
       personality_tags: ['playful', 'wild', 'adventurous'],
       eras: ['modern', 'far_future', 'prehistoric'],
       settings: ['wild_outdoors', 'otherworldly', 'beach_tropical'],
