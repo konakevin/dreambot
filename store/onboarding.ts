@@ -94,7 +94,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
         dark: ['dark'],
         glamour: ['fashion'],
         gamer: ['gaming', 'geek'],
-        anime_fantasy: ['fantasy', 'gaming'],
+        anime_fantasy: ['fantasy', 'gaming', 'anime'],
         beach_ocean: ['ocean', 'nature'],
         space_scifi: ['space', 'sci_fi', 'abstract'],
         epic_adventure: ['sports', 'travel', 'nature'],

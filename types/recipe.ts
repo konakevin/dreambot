@@ -48,6 +48,7 @@ export type Interest =
   | 'whimsical'
   | 'gaming'
   | 'movies'
+  | 'anime'
   | 'geek'
   | 'sports'
   | 'travel'

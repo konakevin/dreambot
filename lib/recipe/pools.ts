@@ -1053,6 +1053,48 @@ export const INTEREST_FLAVORS: Record<string, string[]> = {
     'Bridgerton Regency ballroom',
     'Black Mirror dystopia',
   ],
+  anime: [
+    // Studio Ghibli worlds
+    'a Spirited Away bathhouse at dusk, lanterns glowing, spirits arriving by ferry',
+    'a Totoro-sized forest spirit waiting at a rainy bus stop, holding a leaf umbrella',
+    'a Howl\'s Moving Castle clanking across a flower meadow, smoke trailing, doors to other worlds',
+    'a Kiki\'s Delivery Service bakery by the sea, a black cat on the windowsill, ocean breeze',
+    'a Nausicaä glider soaring over a toxic jungle, giant insects, spore-filled air, golden light',
+    'a Mononoke forest with glowing kodama spirits in ancient trees, a giant wolf silhouette',
+    // Shonen / action
+    'a shonen hero powering up, energy crackling, ground cracking, hair floating upward',
+    'two rivals facing each other across a destroyed battlefield, wind between them, silence before the clash',
+    'a Demon Slayer water breathing technique, crescent moon arcs of blue water slicing through darkness',
+    'a Jujutsu Kaisen cursed energy explosion, purple and black, distorted space around the fighter',
+    'a My Hero Academia hero pose on a rooftop, cape billowing, city lights below',
+    'a Dragon Ball energy blast illuminating an entire canyon, two silhouettes mid-clash',
+    // Aesthetic / slice of life
+    'an anime girl studying at a window desk at golden hour, headphones on, city below, cherry blossoms',
+    'a school rooftop at sunset, wind in hair, that over-the-shoulder look, the whole sky on fire',
+    'a rain-soaked anime street at night, neon reflecting in puddles, umbrella silhouettes',
+    'a train crossing at sunset, bicycle waiting, the signal blinking, warm nostalgic light',
+    'a convenience store at 3am, fluorescent glow on wet pavement, one figure inside',
+    'a rooftop summer festival, yukata, sparklers, lanterns, fireworks painting the sky',
+    // Romance / emotional
+    'two hands almost touching across a train window as it pulls away, cherry blossoms falling',
+    'a Weathering With You sky ocean, clouds you can walk on, sunlight breaking through rain',
+    'a Your Name comet streaking across a twilight sky, two timelines overlapping',
+    'a Violet Evergarden letter being written by candlelight, tears on the paper, flowers everywhere',
+    // Dark / mecha
+    'an Evangelion Unit standing in an orange ocean, head bowed, the pilot questioning everything',
+    'a Ghost in the Shell cityscape, rain, neon kanji, a figure diving off a skyscraper into data',
+    'an Akira motorcycle slide on a neon-soaked highway, light trails, Neo-Tokyo skyline',
+    'a Cowboy Bebop jazz bar in space, whiskey on the counter, a bounty hunter watching stars',
+    'an Attack on Titan wall with a massive eye peering over it, birds scattering, soldiers on cables',
+    // Magical girl / cute
+    'a magical girl mid-transformation, ribbons of light wrapping around her, sparkles and stars everywhere',
+    'a Sailor Moon crescent moon framing a princess on a balcony, silver light, roses',
+    'a Cardcaptor waving a staff as cards swirl around her in a cherry blossom tornado',
+    // Food / cozy anime
+    'a Ponyo ramen bowl so perfect it glows, steam curling, a tiny fish girl watching from the counter',
+    'an anime kitchen at dawn, someone making bento boxes with impossible precision and love',
+    'a cozy anime apartment filled with plants, fairy lights, a cat on every surface, rain outside',
+  ],
   geek: [
     'comic book superhero',
     'robot workshop',
@@ -1435,6 +1477,7 @@ export const DREAM_SUBJECTS = [
 export const ALWAYS_EXPAND = new Set([
   'gaming',
   'movies',
+  'anime',
   'geek',
   'sports',
   'travel',

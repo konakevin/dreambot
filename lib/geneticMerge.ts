@@ -37,6 +37,7 @@ const ALL_INTERESTS: Interest[] = [
   'whimsical',
   'gaming',
   'movies',
+  'anime',
   'geek',
   'sports',
   'travel',

@@ -21,6 +21,7 @@ export const INTEREST_TILES: { key: Interest; label: string; icon: string }[] = 
   { key: 'space', label: 'Space', icon: 'rocket' },
   { key: 'gaming', label: 'Gaming', icon: 'game-controller' },
   { key: 'movies', label: 'Movies', icon: 'film' },
+  { key: 'anime', label: 'Anime', icon: 'star' },
   { key: 'geek', label: 'Geek', icon: 'hardware-chip' },
   { key: 'sports', label: 'Sports', icon: 'football' },
   { key: 'pride', label: 'Pride', icon: 'heart-circle' },
