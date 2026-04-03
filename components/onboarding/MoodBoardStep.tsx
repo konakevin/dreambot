@@ -16,7 +16,7 @@ export function MoodBoardStep({ onNext, onBack }: Props) {
       hideChrome
       stepNumber={5}
       title="How do you want to feel?"
-      subtitle="Pick the vibes your dreams should have"
+      subtitle="Pick the moods your dreams should have"
       tiles={MOOD_TILES}
       selected={selectedMoods}
       onToggle={toggleMood}

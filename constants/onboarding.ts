@@ -13,31 +13,30 @@ export const INTEREST_TILES: { key: Interest; label: string; icon: string }[] = 
   { key: 'animals', label: 'Animals', icon: 'paw' },
   { key: 'nature', label: 'Nature', icon: 'leaf' },
   { key: 'fantasy', label: 'Fantasy', icon: 'sparkles' },
-  { key: 'sci_fi', label: 'Sci-Fi', icon: 'planet' },
+  { key: 'sci_fi', label: 'Sci-Fi & Space', icon: 'planet' },
   { key: 'architecture', label: 'Architecture', icon: 'business' },
   { key: 'fashion', label: 'Fashion', icon: 'shirt' },
-  { key: 'food', label: 'Food', icon: 'restaurant' },
+  { key: 'horror', label: 'Horror', icon: 'skull' },
   { key: 'ocean', label: 'Ocean', icon: 'water' },
-  { key: 'space', label: 'Space', icon: 'rocket' },
   { key: 'gaming', label: 'Gaming', icon: 'game-controller' },
   { key: 'movies', label: 'Movies', icon: 'film' },
   { key: 'anime', label: 'Anime', icon: 'star' },
   { key: 'geek', label: 'Geek', icon: 'hardware-chip' },
-  { key: 'sports', label: 'Sports', icon: 'football' },
-  { key: 'pride', label: 'Pride', icon: 'heart-circle' },
+  { key: 'tattoo_art', label: 'Tattoo Art', icon: 'brush' },
+  { key: 'mythology', label: 'Mythology', icon: 'thunderstorm' },
 ];
 
 /** Step 2: "I'm into..." vibe tiles — each maps to a curated archetype bundle */
 export const VIBE_TILES: { key: string; label: string; icon: string }[] = [
-  { key: 'cozy', label: 'Cozy & Cottagecore', icon: 'cafe' },
-  { key: 'dark', label: 'Dark & Mysterious', icon: 'moon' },
-  { key: 'glamour', label: 'Glamour', icon: 'flame' },
-  { key: 'gamer', label: 'Gamer', icon: 'game-controller' },
-  { key: 'anime_fantasy', label: 'Anime & Fantasy', icon: 'sparkles' },
-  { key: 'beach_ocean', label: 'Beach & Ocean', icon: 'sunny' },
-  { key: 'space_scifi', label: 'Space & Sci-Fi', icon: 'rocket' },
-  { key: 'epic_adventure', label: 'Epic & Adventure', icon: 'earth' },
-  { key: 'whimsical', label: 'Whimsical & Surreal', icon: 'color-palette' },
+  { key: 'cozy', label: 'Cozy Cabin Vibes', icon: 'cafe' },
+  { key: 'dark', label: 'Dark & Moody', icon: 'moon' },
+  { key: 'glamour', label: 'Glamour & Beauty', icon: 'flame' },
+  { key: 'gamer', label: 'Gamer World', icon: 'game-controller' },
+  { key: 'anime_fantasy', label: 'Anime & Magic', icon: 'sparkles' },
+  { key: 'beach_ocean', label: 'Beach & Tropical', icon: 'sunny' },
+  { key: 'space_scifi', label: 'Space Explorer', icon: 'rocket' },
+  { key: 'epic_adventure', label: 'Epic Adventures', icon: 'earth' },
+  { key: 'whimsical', label: 'Cute & Whimsical', icon: 'color-palette' },
 ];
 
 /** Vibe → archetype key prefixes/exact keys mapping.
@@ -119,36 +118,22 @@ export const VIBE_ARCHETYPE_MAP: Record<string, string[]> = {
 
 /** Step 3: Spirit companion tiles */
 export const SPIRIT_COMPANIONS: { key: SpiritCompanion; label: string; icon: string }[] = [
-  { key: 'fox', label: 'Fox', icon: 'paw' },
+  // Staples
   { key: 'cat', label: 'Cat', icon: 'paw' },
-  { key: 'owl', label: 'Owl', icon: 'eye' },
-  { key: 'dragon', label: 'Dragon', icon: 'flame' },
-  { key: 'rabbit', label: 'Rabbit', icon: 'heart' },
-  { key: 'wolf', label: 'Wolf', icon: 'moon' },
-  { key: 'jellyfish', label: 'Jellyfish', icon: 'water' },
-  { key: 'deer', label: 'Deer', icon: 'leaf' },
-  { key: 'butterfly', label: 'Butterfly', icon: 'flower' },
-  { key: 'robot', label: 'Robot', icon: 'hardware-chip' },
-  { key: 'ghost', label: 'Ghost', icon: 'cloudy-night' },
-  { key: 'mushroom_creature', label: 'Mushroom', icon: 'nuclear' },
   { key: 'dog', label: 'Dog', icon: 'paw' },
-  { key: 'bird', label: 'Bird', icon: 'leaf' },
-  { key: 'octopus', label: 'Octopus', icon: 'water' },
+  { key: 'rabbit', label: 'Bunny', icon: 'heart' },
+  { key: 'fox', label: 'Fox', icon: 'paw' },
+  { key: 'owl', label: 'Owl', icon: 'eye' },
+  { key: 'wolf', label: 'Wolf', icon: 'moon' },
+  { key: 'butterfly', label: 'Butterfly', icon: 'flower' },
+  // Magical
+  { key: 'dragon', label: 'Dragon', icon: 'flame' },
   { key: 'phoenix', label: 'Phoenix', icon: 'flame' },
-  { key: 'snake', label: 'Snake', icon: 'git-branch' },
-  { key: 'bear', label: 'Bear', icon: 'paw' },
-  { key: 'whale', label: 'Whale', icon: 'water' },
-  { key: 'crow', label: 'Crow', icon: 'moon' },
-  { key: 'turtle', label: 'Turtle', icon: 'earth' },
-  { key: 'horse', label: 'Horse', icon: 'speedometer' },
-  { key: 'koi', label: 'Koi Fish', icon: 'water' },
-  { key: 'lion', label: 'Lion', icon: 'shield' },
-  { key: 'penguin', label: 'Penguin', icon: 'snow' },
-  { key: 'bee', label: 'Bee', icon: 'flower' },
-  { key: 'tiger', label: 'Tiger', icon: 'flash' },
-  { key: 'fairy', label: 'Fairy', icon: 'sparkles' },
   { key: 'unicorn', label: 'Unicorn', icon: 'star' },
+  { key: 'fairy', label: 'Fairy', icon: 'sparkles' },
   { key: 'mermaid', label: 'Mermaid', icon: 'water' },
+  { key: 'narwhal', label: 'Narwhal', icon: 'water' },
+  { key: 'robot', label: 'Robot', icon: 'hardware-chip' },
 ];
 
 /** Step 4: Era tiles */
@@ -158,7 +143,7 @@ export const ERA_TILES: { key: Era; label: string; icon: string }[] = [
   { key: 'medieval', label: 'Castles & Knights', icon: 'shield' },
   { key: 'victorian', label: 'Victorian Gothic', icon: 'key' },
   { key: 'steampunk', label: 'Steampunk', icon: 'cog' },
-  { key: 'art_deco', label: 'Roaring 20s', icon: 'diamond' },
+  { key: 'art_deco', label: 'Art Deco', icon: 'diamond' },
   { key: 'retro', label: 'Retro / Vintage', icon: 'radio' },
   { key: 'synthwave', label: 'Neon 80s', icon: 'flash' },
   { key: 'modern', label: 'Modern Day', icon: 'phone-portrait' },
@@ -166,6 +151,17 @@ export const ERA_TILES: { key: Era; label: string; icon: string }[] = [
   { key: 'y2k', label: 'Y2K / 2000s', icon: 'logo-chrome' },
   { key: 'wild_west', label: 'Wild West', icon: 'compass' },
   { key: 'mythological', label: 'Gods & Myths', icon: 'thunderstorm' },
+  { key: 'fairy_tale', label: 'Fairy Tale', icon: 'sparkles' },
+  { key: 'post_apocalyptic', label: 'Post-Apocalyptic', icon: 'nuclear' },
+  { key: 'tropical', label: 'Tropical Paradise', icon: 'sunny' },
+  { key: 'cyberpunk', label: 'Cyberpunk', icon: 'flash' },
+  { key: 'pirate', label: 'Pirate Age', icon: 'boat' },
+  { key: 'ancient_egypt', label: 'Ancient Egypt', icon: 'triangle' },
+  { key: 'samurai', label: 'Samurai Japan', icon: 'shield' },
+  { key: 'underwater_kingdom', label: 'Underwater Kingdom', icon: 'water' },
+  { key: 'haunted', label: 'Haunted', icon: 'skull' },
+  { key: 'celestial', label: 'Celestial', icon: 'star' },
+  { key: 'arctic', label: 'Arctic / Ice World', icon: 'snow' },
 ];
 
 /** Step 4: Setting tiles */
@@ -267,4 +263,4 @@ export const LIMITS = {
 } as const;
 
 /** Total steps in the onboarding flow */
-export const TOTAL_STEPS = 11;
+export const TOTAL_STEPS = 12;

@@ -96,7 +96,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
         gamer: ['gaming', 'geek'],
         anime_fantasy: ['fantasy', 'gaming', 'anime'],
         beach_ocean: ['ocean', 'nature'],
-        space_scifi: ['space', 'sci_fi', 'abstract'],
+        space_scifi: ['space', 'sci_fi'],
         epic_adventure: ['sports', 'travel', 'nature'],
         whimsical: ['whimsical', 'cute'],
       };
@@ -120,9 +120,16 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   toggleInterest: (interest) =>
     set((s) => {
       const current = s.recipe.interests;
-      const next = current.includes(interest)
+      let next = current.includes(interest)
         ? current.filter((i) => i !== interest)
         : [...current, interest];
+      // Sci-Fi & Space are merged on UI — picking sci_fi also adds space
+      if (interest === 'sci_fi' && next.includes('sci_fi') && !next.includes('space' as typeof interest)) {
+        next = [...next, 'space' as typeof interest];
+      }
+      if (interest === 'sci_fi' && !next.includes('sci_fi')) {
+        next = next.filter((i) => i !== ('space' as typeof interest));
+      }
       return { recipe: { ...s.recipe, interests: next } };
     }),
 

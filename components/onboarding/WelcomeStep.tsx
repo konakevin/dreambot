@@ -59,7 +59,7 @@ export function WelcomeStep({ onNext }: Props) {
             icon="color-palette"
             color={colors.accent}
             title="Teach it your style"
-            subtitle="Pick your interests, mood, and personality"
+            subtitle="Tell us what you love and we'll dream it for you"
           />
           <StepRow
             icon="moon"

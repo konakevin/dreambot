@@ -12,6 +12,7 @@ import { VibesStep } from '@/components/onboarding/VibesStep';
 import { SpiritCompanionStep } from '@/components/onboarding/SpiritCompanionStep';
 import { StyleSpectrumStep } from '@/components/onboarding/StyleSpectrumStep';
 import { WorldBuilderStep } from '@/components/onboarding/WorldBuilderStep';
+import { SettingsStep } from '@/components/onboarding/SettingsStep';
 import { MoodBoardStep } from '@/components/onboarding/MoodBoardStep';
 import { SceneAtmosphereStep } from '@/components/onboarding/SceneAtmosphereStep';
 import { ColorPaletteStep } from '@/components/onboarding/ColorPaletteStep';
@@ -36,6 +37,7 @@ const STEPS: StepConfig[] = [
   { key: 'spirit', component: SpiritCompanionStep },
   { key: 'style', component: StyleSpectrumStep },
   { key: 'world', component: WorldBuilderStep },
+  { key: 'settings', component: SettingsStep },
   { key: 'mood', component: MoodBoardStep },
   { key: 'atmosphere', component: SceneAtmosphereStep },
   { key: 'palette', component: ColorPaletteStep },

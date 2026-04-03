@@ -50,6 +50,9 @@ export type Interest =
   | 'movies'
   | 'anime'
   | 'geek'
+  | 'horror'
+  | 'tattoo_art'
+  | 'mythology'
   | 'sports'
   | 'travel'
   | 'pride';
@@ -89,7 +92,18 @@ export type Era =
   | 'synthwave'
   | 'y2k'
   | 'wild_west'
-  | 'mythological';
+  | 'mythological'
+  | 'fairy_tale'
+  | 'post_apocalyptic'
+  | 'tropical'
+  | 'cyberpunk'
+  | 'pirate'
+  | 'ancient_egypt'
+  | 'samurai'
+  | 'underwater_kingdom'
+  | 'haunted'
+  | 'celestial'
+  | 'arctic';
 
 /** Setting — controls the WORLD layer */
 export type Setting =
@@ -146,7 +160,8 @@ export type SpiritCompanion =
   | 'tiger'
   | 'fairy'
   | 'unicorn'
-  | 'mermaid';
+  | 'mermaid'
+  | 'narwhal';
 
 /** The complete taste recipe stored in user_recipes.recipe JSONB */
 export interface Recipe {
