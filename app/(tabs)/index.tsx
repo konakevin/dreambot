@@ -212,7 +212,7 @@ export default function HomeScreen() {
             activeOpacity={0.7}
             hitSlop={12}
           >
-            <Ionicons name="search" size={20} color="rgba(255,255,255,0.8)" />
+            <Ionicons name="search" size={26} color="rgba(255,255,255,0.8)" />
           </TouchableOpacity>
         </View>
       </LinearGradient>
@@ -239,5 +239,5 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
   },
   feedTabs: { flexDirection: 'row', gap: 8 },
-  searchButton: { position: 'absolute', right: 16 },
+  searchButton: { position: 'absolute', right: 16, padding: 8 },
 });

@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useAuthStore } from '@/store/auth';
 import type { NotificationItem } from './useInbox';
 
 export function useMarkShareSeen() {
+  const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -16,15 +18,18 @@ export function useMarkShareSeen() {
     },
     onMutate: async (notificationId) => {
       // Optimistic update — mark seen locally without refetching
-      queryClient.setQueryData<InfiniteData<NotificationItem[]>>(['inbox'], (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          pages: old.pages.map((page) =>
-            page.map((n) => (n.id === notificationId ? { ...n, isSeen: true } : n))
-          ),
-        };
-      });
+      queryClient.setQueriesData<InfiniteData<NotificationItem[]>>(
+        { queryKey: ['inbox'] },
+        (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            pages: old.pages.map((page) =>
+              page.map((n) => (n.id === notificationId ? { ...n, isSeen: true } : n))
+            ),
+          };
+        }
+      );
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });

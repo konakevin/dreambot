@@ -31,27 +31,32 @@ import Animated, {
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useComments, type Comment } from '@/hooks/useComments';
 import { useAddComment } from '@/hooks/useAddComment';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { CommentRow } from '@/components/CommentRow';
+import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const THUMB_SIZE = 72;
-const THUMB_MARGIN_TOP = 12;
+const THUMB_HEIGHT = Math.round(SCREEN_HEIGHT * 0.28);
+const THUMB_WIDTH = Math.round(THUMB_HEIGHT * 9 / 16); // maintain 9:16 aspect
+const THUMB_MARGIN_TOP = 8;
 const MAX_COMMENT_LENGTH = 500;
-const ANIM_DURATION = 350;
-const EASING = Easing.bezier(0.32, 0.72, 0, 1);
+const ANIM_DURATION = 250;
+const EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
 
 interface Props {
   post: DreamPostItem;
   onClose: () => void;
+  hideTabBar?: boolean;
 }
 
-export function CommentOverlay({ post, onClose }: Props) {
+export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
   const insets = useSafeAreaInsets();
   const currentUser = useAuthStore((s) => s.user);
 
@@ -68,7 +73,7 @@ export function CommentOverlay({ post, onClose }: Props) {
   const dismiss = useCallback(() => {
     if (closing.current) return;
     closing.current = true;
-    progress.value = withTiming(0, { duration: 280, easing: EASING }, () => {
+    progress.value = withTiming(0, { duration: 250, easing: EASING }, () => {
       runOnJS(onClose)();
     });
   }, [onClose]);
@@ -90,18 +95,19 @@ export function CommentOverlay({ post, onClose }: Props) {
       }
     });
 
-  // Top section: image thumbnail row
-  const HEADER_HEIGHT = insets.top + THUMB_SIZE + THUMB_MARGIN_TOP * 2 + 16;
+  // Top section: thumbnail + username + close button
+  const HEADER_HEIGHT = insets.top + THUMB_HEIGHT + THUMB_MARGIN_TOP + 52;
 
-  // Image goes from full-screen to a small thumbnail in the top-left
+  // Image goes from full-screen to a centered thumbnail at the top
+  const thumbLeft = (SCREEN_WIDTH - THUMB_WIDTH) / 2;
   const imageStyle = useAnimatedStyle(() => {
     const p = progress.value;
     const dy = dragY.value;
 
-    const width = interpolate(p, [0, 1], [SCREEN_WIDTH, THUMB_SIZE * 0.8]);
-    const height = interpolate(p, [0, 1], [SCREEN_HEIGHT, THUMB_SIZE]);
-    const borderRadius = interpolate(p, [0, 1], [0, 10]);
-    const translateX = interpolate(p, [0, 1], [0, 16]);
+    const width = interpolate(p, [0, 1], [SCREEN_WIDTH, THUMB_WIDTH]);
+    const height = interpolate(p, [0, 1], [SCREEN_HEIGHT, THUMB_HEIGHT]);
+    const borderRadius = interpolate(p, [0, 1], [0, 12]);
+    const translateX = interpolate(p, [0, 1], [0, thumbLeft]);
     const translateY = interpolate(p, [0, 1], [0, insets.top + THUMB_MARGIN_TOP]) + dy * 0.3;
 
     return {
@@ -132,9 +138,39 @@ export function CommentOverlay({ post, onClose }: Props) {
   });
 
   // ── Comments ─────────────────────────────────────────────────────────────
+  const queryClient = useQueryClient();
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useComments(post.id);
   const { mutate: addComment, isPending } = useAddComment();
-  const comments = useMemo(() => data?.pages.flat() ?? [], [data]);
+
+  // Read avatar/username from public.users (not auth session) so optimistic comments match server
+  const [myProfile, setMyProfile] = useState<{ username: string; avatarUrl: string | null }>({
+    username: currentUser?.user_metadata?.username ?? 'you',
+    avatarUrl: currentUser?.user_metadata?.avatar_url ?? null,
+  });
+  useEffect(() => {
+    if (!currentUser) return;
+    supabase
+      .from('users')
+      .select('username, avatar_url')
+      .eq('id', currentUser.id)
+      .single()
+      .then(({ data: row }: { data: { username: string; avatar_url: string | null } | null }) => {
+        if (row) setMyProfile({ username: row.username, avatarUrl: row.avatar_url });
+      });
+  }, [currentUser?.id]);
+  const [optimisticComments, setOptimisticComments] = useState<Comment[]>([]);
+  const serverComments = useMemo(() => data?.pages.flat() ?? [], [data]);
+  // Clear optimistic comments once server data refreshes with new entries
+  const serverCount = serverComments.length;
+  useEffect(() => {
+    if (optimisticComments.length > 0 && serverCount > 0) {
+      setOptimisticComments([]);
+    }
+  }, [serverCount]);
+  const comments = useMemo(
+    () => [...optimisticComments, ...serverComments],
+    [optimisticComments, serverComments]
+  );
 
   const [text, setText] = useState('');
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
@@ -184,17 +220,38 @@ export function CommentOverlay({ post, onClose }: Props) {
     const body = text.trim();
     if (!body) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    // Show immediately
+    const tempId = `temp-${Date.now()}`;
+    const optimistic: Comment = {
+      id: tempId,
+      userId: currentUser!.id,
+      username: myProfile.username,
+      avatarUrl: myProfile.avatarUrl,
+      body,
+      likeCount: 0,
+      replyCount: 0,
+      createdAt: new Date().toISOString(),
+      isLiked: false,
+      parentId: replyTo?.id,
+    };
+    setOptimisticComments(prev => [optimistic, ...prev]);
+    setText('');
+    const savedReply = replyTo;
+    setReplyTo(null);
+
     addComment(
-      { uploadId: post.id, body, parentId: replyTo?.id },
+      { uploadId: post.id, body, parentId: savedReply?.id },
       {
         onSuccess: () => {
-          if (replyTo?.id) setExpandedCommentId(replyTo.id);
-          setText('');
-          setReplyTo(null);
+          if (savedReply?.id) setExpandedCommentId(savedReply.id);
+          queryClient.invalidateQueries({ queryKey: ['comments', post.id] });
         },
-        onError: () => {
+        onError: (err: Error) => {
+          // Remove the optimistic comment on failure
+          setOptimisticComments(prev => prev.filter(c => c.id !== tempId));
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-          setText('');
+          Toast.show(err.message ?? 'Failed to post comment', 'close-circle');
         },
       }
     );
@@ -211,21 +268,23 @@ export function CommentOverlay({ post, onClose }: Props) {
           activeOpacity={1}
         />
 
-        {/* Floating thumbnail image */}
+        {/* Floating thumbnail image — tap to dismiss */}
         <Animated.View style={imageStyle}>
-          <Image
-            source={{ uri: post.image_url }}
-            style={{ width: '100%', height: '100%', borderRadius: 10 }}
-            contentFit="cover"
-            cachePolicy="memory-disk"
-          />
+          <TouchableOpacity onPress={dismiss} activeOpacity={0.9} style={{ flex: 1 }}>
+            <Image
+              source={{ uri: post.image_url }}
+              style={{ width: '100%', height: '100%', borderRadius: 12 }}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+            />
+          </TouchableOpacity>
         </Animated.View>
 
-        {/* Username + close next to thumbnail (fades in) */}
+        {/* Username + comment count + close below thumbnail (fades in) */}
         <Animated.View
           style={[
             styles.thumbMeta,
-            { top: insets.top + THUMB_MARGIN_TOP },
+            { top: insets.top + THUMB_MARGIN_TOP + THUMB_HEIGHT + 8 },
             useAnimatedStyle(() => ({
               opacity: interpolate(progress.value, [0.6, 1], [0, 1]),
             })),
@@ -241,14 +300,12 @@ export function CommentOverlay({ post, onClose }: Props) {
                 </Text>
               </View>
             )}
-            <View style={{ flex: 1 }}>
-              <Text style={styles.thumbUsername} numberOfLines={1}>
-                {post.username}
-              </Text>
-              <Text style={styles.thumbCount}>
-                {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
-              </Text>
-            </View>
+            <Text style={styles.thumbUsername} numberOfLines={1}>
+              {post.username}
+            </Text>
+            <Text style={styles.thumbCount}>
+              {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+            </Text>
           </View>
           <TouchableOpacity onPress={dismiss} hitSlop={12} style={styles.closeButton}>
             <Ionicons name="chevron-down" size={24} color={colors.textSecondary} />
@@ -358,7 +415,7 @@ export function CommentOverlay({ post, onClose }: Props) {
               )}
 
               {/* Input bar */}
-              <View style={[styles.inputBar, { paddingBottom: insets.bottom || 16 }]}>
+              <View style={[styles.inputBar, { paddingBottom: insets.bottom + (hideTabBar ? 16 : 75) }]}>
                 {currentUser ? (
                   <>
                     <TextInput
@@ -408,18 +465,19 @@ const styles = StyleSheet.create({
   // ── Thumbnail meta ─────────────────────────────────────────────────────────
   thumbMeta: {
     position: 'absolute',
-    left: 16 + THUMB_SIZE * 0.8 + 12,
+    left: 16,
     right: 16,
-    height: THUMB_SIZE,
+    height: 36,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     zIndex: 11,
   },
   thumbUserRow: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   thumbAvatar: {
     width: 28,

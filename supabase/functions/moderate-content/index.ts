@@ -39,11 +39,13 @@ const IMAGE_THRESHOLDS: Record<string, number> = {
   // weapons are allowed — fantasy swords, sci-fi guns are common in dreams
 };
 
-// Block threats and hate speech. Sexual text allowed (sexy dreams are fine).
+// Block threats, hate speech, and explicit sexual content.
+// Suggestive/romantic text is fine, but explicit descriptions get blocked
+// because image models reject them anyway.
 const TEXT_THRESHOLDS: Record<string, number> = {
   discriminatory: 0.5, // hate speech — block
   violent: 0.5, // threats/violence — block
-  // sexual intentionally excluded — sexy/sensual descriptions are allowed
+  sexual: 0.7, // explicit sexual — block (suggestive under 0.7 is fine)
 };
 
 Deno.serve(async (req) => {

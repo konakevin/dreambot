@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
@@ -61,54 +61,59 @@ export default function SettingsScreen() {
       {
         text: 'Choose from library',
         onPress: async () => {
-          try {
-            const image = await ImageCropPicker.openPicker({
-              mediaType: 'photo',
-              cropping: true,
-              cropperCircleOverlay: true,
-              width: 400,
-              height: 400,
-              forceJpg: true,
-            });
-            const uri = image.path.startsWith('file://') ? image.path : `file://${image.path}`;
-            uploadAvatar(uri);
-          } catch (e: unknown) {
-            if ((e as { code?: string }).code !== 'E_PICKER_CANCELLED') {
-              showAlert('Error', 'Could not open photo library.');
-            }
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            showAlert('Permission needed', 'Allow photo library access in Settings.');
+            return;
+          }
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+          });
+          if (!result.canceled && result.assets[0]) {
+            uploadAvatar(result.assets[0].uri);
           }
         },
       },
       {
         text: 'Take photo',
         onPress: async () => {
-          try {
-            const image = await ImageCropPicker.openCamera({
-              mediaType: 'photo',
-              cropping: true,
-              cropperCircleOverlay: true,
-              width: 400,
-              height: 400,
-              forceJpg: true,
-            });
-            const uri = image.path.startsWith('file://') ? image.path : `file://${image.path}`;
-            uploadAvatar(uri);
-          } catch (e: unknown) {
-            if ((e as { code?: string }).code !== 'E_PICKER_CANCELLED') {
-              showAlert('Error', 'Could not open camera.');
-            }
+          const { status } = await ImagePicker.requestCameraPermissionsAsync();
+          if (status !== 'granted') {
+            showAlert('Permission needed', 'Allow camera access in Settings.');
+            return;
+          }
+          const result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+          });
+          if (!result.canceled && result.assets[0]) {
+            uploadAvatar(result.assets[0].uri);
           }
         },
       },
       ...(profile?.avatar_url
         ? [
             {
-              text: 'Remove photo',
+              text: 'Delete Photo',
               style: 'destructive' as const,
-              onPress: async () => {
-                await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
-                queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-                queryClient.invalidateQueries({ queryKey: ['feed'] });
+              onPress: () => {
+                showAlert('Delete Photo', 'Are you sure you want to remove your profile picture?', [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: async () => {
+                      await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
+                      await supabase.auth.updateUser({ data: { avatar_url: null } });
+                      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+                      queryClient.invalidateQueries({ queryKey: ['feed'] });
+                    },
+                  },
+                ]);
               },
             },
           ]

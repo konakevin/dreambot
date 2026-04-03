@@ -28,6 +28,7 @@ export default function TabLayout() {
           borderTopColor: 'rgba(255,255,255,0.08)',
           borderTopWidth: StyleSheet.hairlineWidth,
           position: 'absolute',
+          paddingTop: 8,
         },
         tabBarActiveTintColor: '#FFFFFF',
         tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
@@ -83,6 +84,7 @@ export default function TabLayout() {
             borderTopColor: 'rgba(255,255,255,0.08)',
             borderTopWidth: StyleSheet.hairlineWidth,
             position: 'absolute',
+            paddingTop: 8,
           },
           tabBarIcon: ({ color, size }) => (
             <View>
@@ -109,6 +111,7 @@ export default function TabLayout() {
             borderTopColor: 'rgba(255,255,255,0.08)',
             borderTopWidth: StyleSheet.hairlineWidth,
             position: 'absolute',
+            paddingTop: 8,
           },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />

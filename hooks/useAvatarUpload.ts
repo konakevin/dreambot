@@ -31,6 +31,9 @@ export function useAvatarUpload() {
 
       if (updateError) throw updateError;
 
+      // Keep auth session in sync so optimistic UI uses the correct avatar
+      await supabase.auth.updateUser({ data: { avatar_url: avatarUrl } });
+
       return avatarUrl;
     },
     onSuccess: () => {

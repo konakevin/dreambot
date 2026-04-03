@@ -194,7 +194,22 @@ async function generateDreamForUser(
       imageUrl = pollData.output?.[0];
       break;
     }
-    if (pollData.status === 'failed') throw new Error('Generation failed');
+    if (pollData.status === 'failed') {
+      const errMsg = pollData.error ?? 'Generation failed';
+      if (typeof errMsg === 'string' && (errMsg.toLowerCase().includes('nsfw') || errMsg.toLowerCase().includes('safety'))) {
+        // Notify user and clear the wish
+        if (wish) {
+          await supabase.from('notifications').insert({
+            recipient_id: user.user_id,
+            actor_id: user.user_id,
+            type: 'dream_generated',
+            body: `Your wish couldn't be dreamed — it was a bit too spicy. Try a different wish!`,
+          });
+          await supabase.from('user_recipes').update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null }).eq('user_id', user.user_id);
+        }
+      }
+      throw new Error(errMsg);
+    }
   }
 
   if (!imageUrl) throw new Error('Generation timed out');

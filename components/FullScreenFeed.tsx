@@ -199,7 +199,7 @@ export function FullScreenFeed({
         )}
       />
       {commentPost && (
-        <CommentOverlay post={commentPost} onClose={() => setCommentPost(null)} />
+        <CommentOverlay post={commentPost} onClose={() => setCommentPost(null)} hideTabBar={hideTabBar} />
       )}
       {familyPost && (
         <DreamFamilySheet
@@ -208,9 +208,11 @@ export function FullScreenFeed({
             setFamilyPostId(null);
             setFamilyPost(null);
           }}
+          post={familyPost}
           uploadId={familyPost.id}
           isAiGenerated={familyPost.is_ai_generated}
           aiPrompt={familyPost.ai_prompt ?? null}
+          hideTabBar={hideTabBar}
           onTwin={() => {
             setTwin({
               postId: familyPost.id,

@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions, ScrollView, Modal, StatusBar } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
@@ -49,6 +49,7 @@ export function RevealStep({ onBack }: Props) {
   const activeDream = dreams[activeIndex] ?? null;
   const dreamsRemaining = MAX_DREAMS - dreams.length;
   const canDreamAgain = dreamsRemaining > 0;
+  const [fullscreenUrl, setFullscreenUrl] = useState<string | null>(null);
 
   // Pinch to zoom on preview
   const zoomScale = useSharedValue(1);
@@ -66,6 +67,42 @@ export function RevealStep({ onBack }: Props) {
       { scale: zoomScale.value },
     ],
   }));
+
+  // Fullscreen pinch zoom
+  const fsScale = useSharedValue(1);
+  const fsTransX = useSharedValue(0);
+  const fsTransY = useSharedValue(0);
+  const fsFocalX = useSharedValue(0);
+  const fsFocalY = useSharedValue(0);
+  const fsStartFocalX = useSharedValue(0);
+  const fsStartFocalY = useSharedValue(0);
+
+  const fsZoomStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: fsTransX.value },
+      { translateY: fsTransY.value },
+      { scale: fsScale.value },
+    ],
+  }));
+
+  const fsPinch = Gesture.Pinch()
+    .onStart((e) => {
+      fsFocalX.value = e.focalX - SCREEN_WIDTH / 2;
+      fsFocalY.value = e.focalY - SCREEN_HEIGHT / 2;
+      fsStartFocalX.value = e.focalX;
+      fsStartFocalY.value = e.focalY;
+    })
+    .onUpdate((e) => {
+      const sc = Math.max(1, Math.min(5, e.scale));
+      fsScale.value = sc;
+      fsTransX.value = fsFocalX.value * (1 - sc) + (e.focalX - fsStartFocalX.value);
+      fsTransY.value = fsFocalY.value * (1 - sc) + (e.focalY - fsStartFocalY.value);
+    })
+    .onEnd(() => {
+      fsScale.value = withTiming(1, { duration: 200 });
+      fsTransX.value = withTiming(0, { duration: 200 });
+      fsTransY.value = withTiming(0, { duration: 200 });
+    });
 
   const pinchGesture = Gesture.Pinch()
     .onStart((e) => {
@@ -301,7 +338,12 @@ export function RevealStep({ onBack }: Props) {
                   contentContainerStyle={{ alignItems: 'center' }}
                 >
                   {dreams.map((dream, i) => (
-                    <View key={i} style={s.imageSlide}>
+                    <TouchableOpacity
+                      key={i}
+                      style={s.imageSlide}
+                      onPress={() => setFullscreenUrl(dream.url)}
+                      activeOpacity={0.9}
+                    >
                       <ActivityIndicator style={s.imageLoader} size="small" color={colors.accent} />
                       <Image
                         source={{ uri: dream.url }}
@@ -309,7 +351,7 @@ export function RevealStep({ onBack }: Props) {
                         contentFit="cover"
                         transition={200}
                       />
-                    </View>
+                    </TouchableOpacity>
                   ))}
                 </ScrollView>
 
@@ -337,6 +379,18 @@ export function RevealStep({ onBack }: Props) {
 
       {dreams.length > 0 && (
         <View style={s.footer}>
+          {canDreamAgain && (
+            <TouchableOpacity
+              style={s.dreamAgainButton}
+              onPress={handleDreamAgain}
+              disabled={phase === 'creating' || phase === 'generating'}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="refresh" size={18} color={colors.textPrimary} />
+              <Text style={s.dreamAgainText}>Dream Again ({dreamsRemaining})</Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity
             style={s.createButton}
             onPress={handleCreateBot}
@@ -348,41 +402,42 @@ export function RevealStep({ onBack }: Props) {
             ) : (
               <>
                 <Ionicons name="sparkles" size={20} color="#FFFFFF" />
-                <Text style={s.createButtonText}>Create My Dream Bot</Text>
+                <Text style={s.createButtonText}>Post Your Dream!</Text>
               </>
             )}
           </TouchableOpacity>
-
-          <View style={s.secondaryRow}>
-            {canDreamAgain ? (
-              <TouchableOpacity
-                style={s.secondaryButton}
-                onPress={handleDreamAgain}
-                disabled={phase === 'creating' || phase === 'generating'}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="refresh" size={16} color={colors.accent} />
-                <Text style={s.secondaryButtonText}>Dream Again ({dreamsRemaining})</Text>
-              </TouchableOpacity>
-            ) : dreams.length > 1 ? (
-              <View style={s.secondaryButton}>
-                <Ionicons name="swap-horizontal" size={16} color={colors.textSecondary} />
-                <Text style={[s.secondaryButtonText, { color: colors.textSecondary }]}>Swipe to browse</Text>
-              </View>
-            ) : null}
-
-            <TouchableOpacity
-              style={s.secondaryButton}
-              onPress={onBack}
-              disabled={phase === 'creating'}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="arrow-back" size={16} color={colors.textSecondary} />
-              <Text style={[s.secondaryButtonText, { color: colors.textSecondary }]}>Go Back</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       )}
+
+      {/* Fullscreen image modal */}
+      <Modal visible={!!fullscreenUrl} transparent animationType="fade" statusBarTranslucent>
+        <StatusBar hidden />
+        <TouchableOpacity
+          style={s.fullscreenBackdrop}
+          onPress={() => setFullscreenUrl(null)}
+          activeOpacity={1}
+        >
+          <GestureDetector gesture={fsPinch}>
+            <Animated.View style={[s.fullscreenImageWrap, fsZoomStyle]}>
+              {fullscreenUrl && (
+                <Image
+                  source={{ uri: fullscreenUrl }}
+                  style={s.fullscreenImage}
+                  contentFit="contain"
+                  transition={200}
+                />
+              )}
+            </Animated.View>
+          </GestureDetector>
+          <TouchableOpacity
+            style={s.fullscreenClose}
+            onPress={() => setFullscreenUrl(null)}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="close" size={28} color="#FFFFFF" />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }
@@ -445,12 +500,43 @@ const s = StyleSheet.create({
   footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
   createButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 18,
-    shadowColor: colors.accent, shadowOpacity: 0.4, shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 }, elevation: 8,
+    gap: 10, backgroundColor: colors.border, borderRadius: 14, paddingVertical: 18,
   },
-  createButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
-  secondaryRow: { flexDirection: 'row', justifyContent: 'center', gap: 28 },
-  secondaryButton: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8 },
-  secondaryButtonText: { color: colors.accent, fontSize: 14, fontWeight: '600' },
+  createButtonText: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
+  dreamAgainButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 18,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
+  },
+  dreamAgainText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '800',
+  },
+
+  fullscreenBackdrop: {
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.95)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  fullscreenImageWrap: {
+    width: SCREEN_WIDTH, height: SCREEN_HEIGHT,
+  },
+  fullscreenImage: {
+    width: SCREEN_WIDTH, height: SCREEN_HEIGHT,
+  },
+  fullscreenClose: {
+    position: 'absolute', top: 60, right: 20,
+    width: 44, height: 44, borderRadius: 22,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center', justifyContent: 'center',
+  },
 });

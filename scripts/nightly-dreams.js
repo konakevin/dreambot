@@ -294,8 +294,29 @@ async function main() {
         return;
       }
 
-      const tempUrl = await generateImage(prompt);
-      if (!tempUrl) throw new Error('No URL returned');
+      let tempUrl;
+      try {
+        tempUrl = await generateImage(prompt);
+        if (!tempUrl) throw new Error('No URL returned');
+      } catch (genErr) {
+        const msg = genErr?.message ?? '';
+        if (msg.toLowerCase().includes('nsfw') || msg.toLowerCase().includes('safety')) {
+          // Notify user their wish was blocked
+          if (wish) {
+            try {
+              await sb.from('notifications').insert({
+                recipient_id: user.user_id,
+                actor_id: user.user_id,
+                type: 'dream_generated',
+                body: `Your wish couldn't be dreamed — it was a bit too spicy. Try a different wish!`,
+              });
+              // Clear the wish so it doesn't keep failing every night
+              await sb.from('user_recipes').update({ dream_wish: null, wish_modifiers: null }).eq('user_id', user.user_id);
+            } catch {}
+          }
+        }
+        throw genErr;
+      }
 
       // Persist to Supabase Storage (Replicate URLs expire after ~1 hour)
       const imgResp = await fetch(tempUrl);

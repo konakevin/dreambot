@@ -272,10 +272,10 @@ export default function RootLayout() {
               <Stack.Screen
                 name="search"
                 options={{
-                  presentation: 'transparentModal',
+                  presentation: 'fullScreenModal',
                   gestureEnabled: true,
-                  animation: 'fade',
-                  contentStyle: { backgroundColor: 'transparent' },
+                  animation: 'slide_from_bottom',
+                  contentStyle: { backgroundColor: '#0F0F1A' },
                 }}
               />
               <Stack.Screen
