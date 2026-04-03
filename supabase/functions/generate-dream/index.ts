@@ -49,7 +49,7 @@ const CURATED_FLUX_STYLES = [
   'LEGO minifigure in a realistic world, tiny plastic character',
   'Muppet-style felt puppet world, fuzzy textures, googly eyes, Jim Henson whimsy',
   'LittleBigPlanet craft world, knitted characters, cardboard and sticker scenery',
-  'Oil painting style, visible brushstrokes, rich colors',
+  'Baroque oil painting, Caravaggio dramatic chiaroscuro, deep shadows, golden light',
   'Digital painting, cinematic lighting, vivid colors',
   'Digital illustration, clean lines, vibrant composition',
   'Fantasy illustration, lush detail, dramatic lighting',
@@ -121,6 +121,21 @@ const CURATED_FLUX_STYLES = [
   'Retro sci-fi pulp magazine cover, 1950s ray guns and rockets, bold lettering',
   'Pop surrealism, Mark Ryden style, big-eyed figures, unsettling cute, candy colors',
   'Colorful steampunk illustration, brass gears, copper pipes, Victorian machinery',
+  'Retro futurism, sleek chrome, atomic age optimism, space-age design',
+  'Surrealism, impossible dreamscape, floating objects, melting reality',
+  '3D blind box collectible figure, chibi proportions, glossy vinyl, display packaging',
+  'Collage art, cut paper, mixed textures, layered fragments, editorial style',
+  'Risograph print, limited color overlap, grainy texture, indie zine aesthetic',
+  'Minimalist 80s retro, neon grid, sunset gradient, clean geometric shapes',
+  'Glitch art, corrupted pixels, data moshing, digital distortion, vivid color bands',
+  'Polygon art, geometric faceted surfaces, crystalline low-poly world',
+  'Coloring book style, clean black outlines, white fill, intricate patterns',
+  'Fantasy art style, epic and painterly, rich saturated colors, magical atmosphere',
+  'Western cartoon style, bold outlines, exaggerated expressions, flat vivid colors',
+  'Retro game style, 16-bit sprite art, vibrant pixel palette, nostalgic',
+  'Light and airy, soft glowing whites, ethereal luminosity, delicate',
+  'Candy aesthetic, glossy sugar-coated surfaces, pastel swirls, sweet and shiny',
+  'Bubble aesthetic, iridescent floating spheres, translucent rainbow reflections, dreamy',
 ];
 
 const CURATED_SDXL_STYLES = [
@@ -142,6 +157,10 @@ const CURATED_SDXL_STYLES = [
   'lo-fi hip hop album cover, cozy room, warm lighting, anime-inspired chill',
   'Cel-shaded video game cutscene, Zelda Breath of the Wild style',
   'Webtoon digital comic style, clean lines, soft gradients, vertical panel',
+  'Anime art, vibrant colors, expressive characters, dynamic action',
+  'Japanese illustration, delicate linework, soft washes, elegant composition',
+  'Impressionism, loose visible brushstrokes, dappled light, plein air',
+  'Marker illustration, bold Copic marker strokes, vibrant ink on paper',
 ];
 
 interface RequestBody {
@@ -308,7 +327,8 @@ Deno.serve(async (req) => {
     // THREE-PART SONG: roll which dream type this is
     // 50% archetype (focused narrative), 30% chord (pure blend), 20% beauty (pure visual)
     const dreamRoll = Math.random();
-    const dreamMode = dreamRoll < 0.5 ? 'archetype' : dreamRoll < 0.8 ? 'chord' : 'beauty';
+    // TESTING: 100% beauty mode
+    const dreamMode = 'beauty';
 
     let archetype: { key: string; name: string; prompt_context: string; flavor_keywords: string[]; trigger_interests?: string[]; trigger_moods?: string[] } | undefined;
     if (dreamMode === 'archetype') {
@@ -365,17 +385,18 @@ Deno.serve(async (req) => {
       let haikuBrief: string;
 
       if (dreamMode === 'beauty') {
-        // BEAUTY MODE: pure visual focus, no narrative, just breathtaking imagery
-        haikuBrief = `Create the most visually breathtaking image possible. Rich, saturated, beautiful colors. This should stop someone mid-scroll.
+        // BEAUTY MODE: pure visual poetry — environment, light, texture, no characters
+        haikuBrief = `You are painting a place, not telling a story. No characters, no figures, no creatures. Just a breathtaking environment that makes someone stop scrolling and stare.
+
+Think: the light after a storm. A canyon at golden hour. An alien ocean at dawn. A forest floor after rain. Textures you can feel. Light that has weight. Depth that pulls you in.
 
 Medium: ${input.medium}
-Subject: ${input.dreamSubject || input.interests.map((i: string) => i).join(' and ')}
 Setting: ${input.settingKeywords}, ${input.eraKeywords}
 Mood: ${input.mood}, ${input.lighting}
 Palette: ${input.colorKeywords || 'vivid and expressive'}
 Weather: ${input.sceneAtmosphere}
 
-Write an image prompt (max 50 words). Start with the art medium. Focus on visual impact — color, light, composition, texture, scale. No photorealistic humans. No text in the image. Output ONLY the prompt.`;
+Write an image prompt (max 50 words). Start with the art medium. You can go macro (a single dewdrop, a crack in ancient stone) or epic (an infinite horizon, a cathedral of clouds). Just make it GORGEOUS. No people. No text. Output ONLY the prompt.`;
       } else {
         // CHORD or ARCHETYPE mode — use the standard Chord template
         haikuBrief = buildHaikuPrompt(input);
@@ -526,7 +547,10 @@ function pickModel(mode: string, prompt: string): { model: string; inputOverride
       p.includes('van gogh') || p.includes('swirling brushstroke') ||
       p.includes('cottagecore illustration') ||
       p.includes('cel-shaded') || p.includes('cel shaded') ||
-      p.includes('webtoon')) {
+      p.includes('webtoon') ||
+      p.includes('japanese illustration') || p.includes('impressionism') ||
+      p.includes('plein air') || p.includes('marker illustration') ||
+      p.includes('copic marker')) {
     return {
       model: 'sdxl',
       inputOverrides: { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 },

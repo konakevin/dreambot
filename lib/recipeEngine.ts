@@ -837,6 +837,17 @@ const DREAM_SUBJECTS = [
   'a pirate captain at the helm, tattoos showing', 'a celestial being descending from the clouds in golden armor',
   'a mysterious alchemist stirring a glowing cauldron', 'a surfer riding a massive wave, sun-bronzed',
   'a mysterious figure in a wet trench coat under city rain', 'a winged warrior on a flying horse, battle-ready',
+  // Alluring/glamorous — all verified safe with Flux NSFW filter
+  'a confident woman in an elegant red evening gown on a balcony overlooking a sunset city',
+  'a mysterious woman in a form-fitting black dress lounging on a velvet couch, candlelit',
+  'a glamorous figure wrapped in silk sheets, bare shoulders, moonlight through sheer curtains',
+  'a seductive sorceress in ornate revealing armor, thigh-high boots, dark castle throne room',
+  'a figure emerging from a hot spring, steam swirling, cherry blossoms falling, moonlit',
+  'a fierce empress in golden armor and flowing cape, dramatic wind',
+  'a stylish figure in a sleek cocktail dress at a rooftop bar, city lights below',
+  'a powerful enchantress draped in sheer flowing fabric, glowing with arcane energy',
+  'a dancer in a slit dress performing under dramatic stage lighting, fabric flowing',
+  'a regal figure reclining on a throne, ornate jewelry, smoldering gaze',
 ];
 
 // Interests that are too vague on their own — always expand to a specific flavor
@@ -1192,7 +1203,7 @@ export function buildHaikuPrompt(input: PromptInput): string {
   // Pick a random composition for Haiku to consider
   const comp = pick(COMPOSITIONS);
 
-  return `You are a dream artist creating a single stunning image for someone. Below are ingredients rolled from their taste profile. Your job is NOT to use all of them — pick the 4-5 that work best together and IGNORE the rest. Competing elements make bad images.
+  return `Think big. Think jaw-dropping, awe-inspiring, stop-you-mid-scroll stunning. You are a dream artist creating a single breathtaking image for someone. Below are ingredients rolled from their taste profile. Your job is NOT to use all of them — pick the 4-5 that work best together and IGNORE the rest. Competing elements make bad images.
 
 PRIORITY ORDER (most → least important):
 1. ART MEDIUM (always use this): ${input.medium}

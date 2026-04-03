@@ -44,7 +44,7 @@ export function usePurchaseSparkles() {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
       }, 2000);
-      // Also invalidate immediately for optimistic feel
+      // Also invalidate immediately for optimistic feel — partial key matches all users
       queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
     },
   });

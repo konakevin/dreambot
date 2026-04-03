@@ -99,9 +99,9 @@ export function RevealStep({ onBack }: Props) {
     try {
       const input = buildPromptInput(recipe);
       const prompt = buildRawPrompt(input);
-      console.log('[Reveal] Prompt:', prompt);
+      if (__DEV__) console.log('[Reveal] Prompt:', prompt);
       const url = await generateFluxImage(prompt);
-      console.log('[Reveal] Got URL:', url?.slice(0, 80));
+      if (__DEV__) console.log('[Reveal] Got URL:', url?.slice(0, 80));
 
       setDreams((prev) => {
         const next = [...prev, { url, prompt }];
@@ -115,7 +115,7 @@ export function RevealStep({ onBack }: Props) {
       setPhase('reveal');
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err) {
-      console.warn('[Reveal] Generation failed:', err);
+      if (__DEV__) console.warn('[Reveal] Generation failed:', err);
       setError('Image generation failed. Tap to try again.');
       setPhase('reveal');
     } finally {
@@ -124,66 +124,36 @@ export function RevealStep({ onBack }: Props) {
   }
 
   async function generateFluxImage(prompt: string): Promise<string> {
-    const replicateToken = '***REMOVED***';
+    // Route through the generate-dream edge function (no client-side API keys)
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) throw new Error('Not authenticated');
 
-    // Submit prediction
-    const submitResponse = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${replicateToken}`,
-      },
-      body: JSON.stringify({
-        input: {
-          prompt,
-          aspect_ratio: '9:16',
-          num_outputs: 1,
-          output_format: 'jpg',
+    const res = await fetch(
+      `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-dream`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
         },
-      }),
-    });
-
-    if (submitResponse.status === 429) {
-      // Rate limited — wait and retry once
-      const errBody = await submitResponse.text();
-      const retryAfter = JSON.parse(errBody).retry_after ?? 6;
-      console.log('[Reveal] Rate limited, retrying in', retryAfter, 's');
-      await new Promise((r) => setTimeout(r, retryAfter * 1000));
-      return generateFluxImage(prompt);
-    }
-
-    if (!submitResponse.ok) {
-      const errBody = await submitResponse.text();
-      console.warn('[Reveal] Replicate submit error:', submitResponse.status, errBody);
-      throw new Error(`Replicate submit error: ${submitResponse.status}`);
-    }
-
-    const prediction = await submitResponse.json();
-    console.log('[Reveal] Replicate prediction:', prediction.id);
-
-    // Poll for result
-    let attempts = 0;
-    while (attempts < 60) {
-      await new Promise((r) => setTimeout(r, 1500));
-      attempts++;
-
-      const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-        headers: { 'Authorization': `Bearer ${replicateToken}` },
-      });
-      const pollData = await pollResponse.json();
-
-      if (pollData.status === 'succeeded') {
-        const url = pollData.output?.[0];
-        if (!url) throw new Error('No image URL in result');
-        console.log('[Reveal] Got URL:', url.slice(0, 80));
-        return url;
+        body: JSON.stringify({
+          mode: 'flux-dev',
+          prompt,
+          persist: false,
+        }),
       }
+    );
 
-      if (pollData.status === 'failed' || pollData.status === 'canceled') {
-        throw new Error(`Replicate generation ${pollData.status}: ${pollData.error ?? 'unknown'}`);
-      }
+    if (!res.ok) {
+      const errBody = await res.text();
+      if (__DEV__) console.warn('[Reveal] Edge function error:', res.status, errBody);
+      throw new Error(`Generation failed: ${res.status}`);
     }
-    throw new Error('Generation timed out');
+
+    const data = await res.json();
+    if (!data.image_url) throw new Error('No image URL in response');
+    if (__DEV__) console.log('[Reveal] Got URL:', data.image_url.slice(0, 80));
+    return data.image_url;
   }
 
   function handleDreamAgain() {
@@ -227,7 +197,7 @@ export function RevealStep({ onBack }: Props) {
       }).select('id').single();
 
       if (uploadError) {
-        console.warn('[Reveal] Upload error:', uploadError);
+        if (__DEV__) console.warn('[Reveal] Upload error:', uploadError);
       }
 
       // Pin this dream so the home feed shows it as the first card
@@ -247,7 +217,7 @@ export function RevealStep({ onBack }: Props) {
       Toast.show('Your Dream Bot is alive!', 'sparkles');
       router.replace('/(tabs)');
     } catch (err) {
-      console.warn('[Reveal] Create error:', err);
+      if (__DEV__) console.warn('[Reveal] Create error:', err);
       setPhase('reveal');
       Toast.show('Something went wrong', 'close-circle');
     }
