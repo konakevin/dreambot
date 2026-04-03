@@ -200,9 +200,9 @@ Our engine provides ingredients and inspiration. Haiku and Flux express them cre
 
 **THE THREE-PART SONG (live in generate-dream edge function):**
 Each dream randomly rolls which mode it uses:
-1. **The Chord** (30%) — pure unguided engine. Blends 4-5 ingredients from the recipe pools. No archetype. Produces surprising mashups and unexpected combinations. The base melody.
-2. **The Solo** (50%) — guided by a dream archetype (285 scenarios in DB). Archetype locks the interest + mood, Chord engine builds the ingredients, Haiku weaves them into a focused narrative scene. Story-driven, identity-committed.
-3. **The Song** (20%) — pure visual beauty mode. No story, no characters, no narrative. Just: medium + mood + lighting + setting → "make the prettiest thing anyone has ever seen." Epic vistas, breathtaking landscapes, abstract beauty. Ingredients still come from the user's recipe so it reflects their taste.
+1. **🎶 The Chord (30%)** — The engine blends 4-5 random ingredients from the user's recipe. No archetype. Haiku gets a medium, subject, setting, mood, lighting and weaves them into something unexpected. This produces the wildest mashups — Picasso cubist Hoth, ghost lighthouse on alien moon, vintage travel poster asteroid colony. The surprise factory.
+2. **♫ The Solo (50%)** — A random archetype is picked from the user's matched pool (e.g., "The Zelda Wanderer" or "The Viking Saga"). It locks which interest and mood drive the dream, then the Chord engine picks the medium/lighting/setting. Haiku gets all those ingredients PLUS the archetype's rich creative brief. This produces focused, identity-driven dreams that feel deeply personal.
+3. **🎵 The Song (20%)** — Pure visual beauty. Gets the medium, mood, lighting, setting, colors, weather — but the instruction is just "make something breathtaking." No narrative, no character focus, just the prettiest image possible from the user's ingredients. The Monet water lilies, the cherry blossom tunnel, the epic vistas.
 
 All three paths run through the same Chord engine for ingredient selection. The difference is what Haiku receives as its brief: The Chord gets the standard blend template. The Solo gets the archetype's rich narrative brief baked into the ingredient selection. The Song gets a pure visual beauty template.
 
