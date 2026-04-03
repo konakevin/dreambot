@@ -233,67 +233,70 @@ async function generateDreamForUser(
 
   // Send notification to dreamer
   if (upload?.id) {
-    await supabase
-      .from('notifications')
-      .insert({
-        recipient_id: user.user_id,
-        actor_id: user.user_id,
-        type: 'dream_generated',
-        upload_id: upload.id,
-        body: wish ? `Wish: "${wish.slice(0, 60)}"` : null,
-      })
-      .catch(() => {});
+    const { error: notifErr } = await supabase.from('notifications').insert({
+      recipient_id: user.user_id,
+      actor_id: user.user_id,
+      type: 'dream_generated',
+      upload_id: upload.id,
+      body: wish ? `Wish: "${wish.slice(0, 60)}"` : null,
+    });
+    if (notifErr)
+      console.warn(`[Nightly] Notification failed for ${user.user_id}:`, notifErr.message);
 
-    // Send notification to wish recipients (friends)
+    // Send notification to wish recipients (friends) — deduplicated
     if (user.wish_recipient_ids && user.wish_recipient_ids.length > 0) {
-      const friendNotifs = user.wish_recipient_ids.map((rid) => ({
-        recipient_id: rid,
-        actor_id: user.user_id,
-        type: 'dream_generated',
-        upload_id: upload.id,
-        body: wish ? `Wished you a dream: "${wish.slice(0, 50)}"` : 'Wished you a dream',
-      }));
-      await supabase
-        .from('notifications')
-        .insert(friendNotifs)
-        .catch(() => {});
+      const uniqueRecipients = [...new Set(user.wish_recipient_ids)].filter(
+        (rid) => rid !== user.user_id
+      );
+      if (uniqueRecipients.length > 0) {
+        const friendNotifs = uniqueRecipients.map((rid) => ({
+          recipient_id: rid,
+          actor_id: user.user_id,
+          type: 'dream_generated',
+          upload_id: upload.id,
+          body: wish ? `Wished you a dream: "${wish.slice(0, 50)}"` : 'Wished you a dream',
+        }));
+        const { error: friendErr } = await supabase.from('notifications').insert(friendNotifs);
+        if (friendErr)
+          console.warn(
+            `[Nightly] Friend notifications failed for ${user.user_id}:`,
+            friendErr.message
+          );
+      }
     }
   }
 
   // Log generation
-  await supabase
-    .from('ai_generation_log')
-    .insert({
-      user_id: user.user_id,
-      recipe_snapshot: recipe,
-      enhanced_prompt: prompt,
-      model_used: 'flux-dev',
-      cost_cents: COST_PER_IMAGE_CENTS,
-      status: 'completed',
-    })
-    .catch(() => {});
+  const { error: logErr } = await supabase.from('ai_generation_log').insert({
+    user_id: user.user_id,
+    recipe_snapshot: recipe,
+    enhanced_prompt: prompt,
+    model_used: 'flux-dev',
+    cost_cents: COST_PER_IMAGE_CENTS,
+    status: 'completed',
+  });
+  if (logErr) console.warn(`[Nightly] Log insert failed for ${user.user_id}:`, logErr.message);
 
   // Update budget
-  await supabase
-    .from('ai_generation_budget')
-    .upsert(
-      {
-        user_id: user.user_id,
-        date: today,
-        images_generated: 1,
-        total_cost_cents: COST_PER_IMAGE_CENTS,
-      },
-      { onConflict: 'user_id,date' }
-    )
-    .catch(() => {});
+  const { error: budgetErr } = await supabase.from('ai_generation_budget').upsert(
+    {
+      user_id: user.user_id,
+      date: today,
+      images_generated: 1,
+      total_cost_cents: COST_PER_IMAGE_CENTS,
+    },
+    { onConflict: 'user_id,date' }
+  );
+  if (budgetErr)
+    console.warn(`[Nightly] Budget update failed for ${user.user_id}:`, budgetErr.message);
 
   // Clear wish + recipient if used
   if (wish) {
-    await supabase
+    const { error: wishErr } = await supabase
       .from('user_recipes')
       .update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null })
-      .eq('user_id', user.user_id)
-      .catch(() => {});
+      .eq('user_id', user.user_id);
+    if (wishErr) console.warn(`[Nightly] Wish clear failed for ${user.user_id}:`, wishErr.message);
   }
 
   console.log(`[Nightly] Dream generated for ${user.user_id} (wish: ${wish ? 'yes' : 'no'})`);
