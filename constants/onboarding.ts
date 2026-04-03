@@ -17,18 +17,12 @@ export const INTEREST_TILES: { key: Interest; label: string; icon: string }[] = 
   { key: 'architecture', label: 'Architecture', icon: 'business' },
   { key: 'fashion', label: 'Fashion', icon: 'shirt' },
   { key: 'food', label: 'Food', icon: 'restaurant' },
-  { key: 'abstract', label: 'Abstract', icon: 'color-palette' },
-  { key: 'dark', label: 'Dark', icon: 'moon' },
-  { key: 'cute', label: 'Cute', icon: 'heart' },
   { key: 'ocean', label: 'Ocean', icon: 'water' },
   { key: 'space', label: 'Space', icon: 'rocket' },
-  { key: 'whimsical', label: 'Whimsical', icon: 'balloon' },
   { key: 'gaming', label: 'Gaming', icon: 'game-controller' },
   { key: 'movies', label: 'Movies', icon: 'film' },
-  { key: 'music', label: 'Music', icon: 'musical-notes' },
   { key: 'geek', label: 'Geek', icon: 'hardware-chip' },
   { key: 'sports', label: 'Sports', icon: 'football' },
-  { key: 'travel', label: 'Travel', icon: 'airplane' },
   { key: 'pride', label: 'Pride', icon: 'heart-circle' },
 ];
 
@@ -42,7 +36,6 @@ export const VIBE_TILES: { key: string; label: string; icon: string }[] = [
   { key: 'beach_ocean', label: 'Beach & Ocean', icon: 'sunny' },
   { key: 'space_scifi', label: 'Space & Sci-Fi', icon: 'rocket' },
   { key: 'epic_adventure', label: 'Epic & Adventure', icon: 'earth' },
-  { key: 'music_retro', label: 'Music & Retro', icon: 'musical-notes' },
   { key: 'whimsical', label: 'Whimsical & Surreal', icon: 'color-palette' },
 ];
 
@@ -115,13 +108,6 @@ export const VIBE_ARCHETYPE_MAP: Record<string, string[]> = {
     'nature_mountain_king',
     'baddie_jungle_goddess', 'epic_sports_athletic_goddess', 'baddie_racing_queen',
   ],
-  music_retro: [
-    'music_', 'nostalgic_', 'retro_',
-    'music_jazz_midnight', 'music_metal_cathedral', 'music_lofi_rain',
-    'music_festival_euphoria', 'music_kpop_dreamer',
-    'gaming_retro_arcade', 'movies_wes_anderson',
-    'nostalgic_music_jazz_flame', 'baddie_k_pop_idol', 'baddie_festival_goddess', 'baddie_midnight_dancer',
-  ],
   whimsical: [
     'whimsical_', 'playful_', 'cute_',
     'cute_pastel_kingdom', 'cute_sanrio_world',
@@ -144,20 +130,41 @@ export const SPIRIT_COMPANIONS: { key: SpiritCompanion; label: string; icon: str
   { key: 'robot', label: 'Robot', icon: 'hardware-chip' },
   { key: 'ghost', label: 'Ghost', icon: 'cloudy-night' },
   { key: 'mushroom_creature', label: 'Mushroom', icon: 'nuclear' },
+  { key: 'dog', label: 'Dog', icon: 'paw' },
+  { key: 'bird', label: 'Bird', icon: 'leaf' },
+  { key: 'octopus', label: 'Octopus', icon: 'water' },
+  { key: 'phoenix', label: 'Phoenix', icon: 'flame' },
+  { key: 'snake', label: 'Snake', icon: 'git-branch' },
+  { key: 'bear', label: 'Bear', icon: 'paw' },
+  { key: 'whale', label: 'Whale', icon: 'water' },
+  { key: 'crow', label: 'Crow', icon: 'moon' },
+  { key: 'turtle', label: 'Turtle', icon: 'earth' },
+  { key: 'horse', label: 'Horse', icon: 'speedometer' },
+  { key: 'koi', label: 'Koi Fish', icon: 'water' },
+  { key: 'lion', label: 'Lion', icon: 'shield' },
+  { key: 'penguin', label: 'Penguin', icon: 'snow' },
+  { key: 'bee', label: 'Bee', icon: 'flower' },
+  { key: 'tiger', label: 'Tiger', icon: 'flash' },
+  { key: 'fairy', label: 'Fairy', icon: 'sparkles' },
+  { key: 'unicorn', label: 'Unicorn', icon: 'star' },
+  { key: 'mermaid', label: 'Mermaid', icon: 'water' },
 ];
 
 /** Step 4: Era tiles */
 export const ERA_TILES: { key: Era; label: string; icon: string }[] = [
-  { key: 'prehistoric', label: 'Prehistoric', icon: 'bonfire' },
-  { key: 'ancient', label: 'Ancient', icon: 'trophy' },
-  { key: 'medieval', label: 'Medieval', icon: 'shield' },
-  { key: 'victorian', label: 'Victorian', icon: 'key' },
+  { key: 'prehistoric', label: 'Dinosaurs & Volcanoes', icon: 'bonfire' },
+  { key: 'ancient', label: 'Ancient Ruins', icon: 'trophy' },
+  { key: 'medieval', label: 'Castles & Knights', icon: 'shield' },
+  { key: 'victorian', label: 'Victorian Gothic', icon: 'key' },
   { key: 'steampunk', label: 'Steampunk', icon: 'cog' },
-  { key: 'art_deco', label: 'Art Deco', icon: 'diamond' },
-  { key: 'retro', label: 'Retro', icon: 'radio' },
-  { key: 'synthwave', label: 'Synthwave', icon: 'musical-notes' },
-  { key: 'modern', label: 'Modern', icon: 'phone-portrait' },
-  { key: 'far_future', label: 'Far Future', icon: 'rocket' },
+  { key: 'art_deco', label: 'Roaring 20s', icon: 'diamond' },
+  { key: 'retro', label: 'Retro / Vintage', icon: 'radio' },
+  { key: 'synthwave', label: 'Neon 80s', icon: 'flash' },
+  { key: 'modern', label: 'Modern Day', icon: 'phone-portrait' },
+  { key: 'far_future', label: 'Sci-Fi Future', icon: 'rocket' },
+  { key: 'y2k', label: 'Y2K / 2000s', icon: 'logo-chrome' },
+  { key: 'wild_west', label: 'Wild West', icon: 'compass' },
+  { key: 'mythological', label: 'Gods & Myths', icon: 'thunderstorm' },
 ];
 
 /** Step 4: Setting tiles */
@@ -183,39 +190,18 @@ export const MOOD_TILES: {
   brightness: number;
   warmth: number;
 }[] = [
-  { key: 'cozy', label: 'Cozy', icon: 'cafe', energy: 0.2, brightness: 0.6, warmth: 0.8 },
-  { key: 'epic', label: 'Epic', icon: 'flash', energy: 0.9, brightness: 0.6, warmth: 0.5 },
-  { key: 'dreamy', label: 'Dreamy', icon: 'cloud', energy: 0.2, brightness: 0.8, warmth: 0.6 },
-  { key: 'moody', label: 'Moody', icon: 'rainy', energy: 0.3, brightness: 0.2, warmth: 0.3 },
-  { key: 'playful', label: 'Playful', icon: 'balloon', energy: 0.6, brightness: 0.8, warmth: 0.7 },
-  { key: 'serene', label: 'Serene', icon: 'water', energy: 0.1, brightness: 0.7, warmth: 0.4 },
-  {
-    key: 'intense',
-    label: 'Intense',
-    icon: 'thunderstorm',
-    energy: 0.9,
-    brightness: 0.3,
-    warmth: 0.3,
-  },
-  { key: 'nostalgic', label: 'Nostalgic', icon: 'time', energy: 0.3, brightness: 0.5, warmth: 0.7 },
-  {
-    key: 'mysterious',
-    label: 'Mysterious',
-    icon: 'eye',
-    energy: 0.5,
-    brightness: 0.2,
-    warmth: 0.2,
-  },
-  {
-    key: 'whimsical',
-    label: 'Whimsical',
-    icon: 'sparkles',
-    energy: 0.5,
-    brightness: 0.7,
-    warmth: 0.6,
-  },
-  { key: 'dramatic', label: 'Dramatic', icon: 'flame', energy: 0.8, brightness: 0.3, warmth: 0.4 },
-  { key: 'peaceful', label: 'Peaceful', icon: 'leaf', energy: 0.1, brightness: 0.6, warmth: 0.5 },
+  { key: 'cozy', label: 'Warm & Cozy', icon: 'cafe', energy: 0.2, brightness: 0.6, warmth: 0.8 },
+  { key: 'epic', label: 'Epic & Grand', icon: 'flash', energy: 0.9, brightness: 0.6, warmth: 0.5 },
+  { key: 'dreamy', label: 'Soft & Dreamy', icon: 'cloud', energy: 0.2, brightness: 0.8, warmth: 0.6 },
+  { key: 'moody', label: 'Dark & Moody', icon: 'rainy', energy: 0.3, brightness: 0.2, warmth: 0.3 },
+  { key: 'playful', label: 'Fun & Playful', icon: 'balloon', energy: 0.6, brightness: 0.8, warmth: 0.7 },
+  { key: 'serene', label: 'Calm & Still', icon: 'water', energy: 0.1, brightness: 0.7, warmth: 0.4 },
+  { key: 'intense', label: 'Intense & Raw', icon: 'thunderstorm', energy: 0.9, brightness: 0.3, warmth: 0.3 },
+  { key: 'nostalgic', label: 'Nostalgic & Warm', icon: 'time', energy: 0.3, brightness: 0.5, warmth: 0.7 },
+  { key: 'mysterious', label: 'Mysterious & Dark', icon: 'eye', energy: 0.5, brightness: 0.2, warmth: 0.2 },
+  { key: 'whimsical', label: 'Whimsical & Cute', icon: 'sparkles', energy: 0.5, brightness: 0.7, warmth: 0.6 },
+  { key: 'dramatic', label: 'Dramatic & Bold', icon: 'flame', energy: 0.8, brightness: 0.3, warmth: 0.4 },
+  { key: 'peaceful', label: 'Peaceful & Gentle', icon: 'leaf', energy: 0.1, brightness: 0.6, warmth: 0.5 },
 ];
 
 /** Step 6: Scene atmosphere tiles */
@@ -272,7 +258,7 @@ export const PERSONALITY_TAGS: { key: PersonalityTag; label: string }[] = [
 
 /** Minimum selections per step — no maximums, pick as many as you want */
 export const LIMITS = {
-  interests: { min: 3 },
+  interests: { min: 1 },
   colorPalettes: { min: 1 },
   personalityTags: { min: 1 },
   moods: { min: 1 },
@@ -280,4 +266,4 @@ export const LIMITS = {
 } as const;
 
 /** Total steps in the onboarding flow */
-export const TOTAL_STEPS = 12;
+export const TOTAL_STEPS = 11;

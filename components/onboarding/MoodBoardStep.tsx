@@ -15,8 +15,8 @@ export function MoodBoardStep({ onNext, onBack }: Props) {
     <OnboardingTileScreen
       hideChrome
       stepNumber={5}
-      title="Set the mood"
-      subtitle="Pick the moods you're drawn to"
+      title="How do you want to feel?"
+      subtitle="Pick the vibes your dreams should have"
       tiles={MOOD_TILES}
       selected={selectedMoods}
       onToggle={toggleMood}

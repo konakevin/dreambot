@@ -22,10 +22,10 @@ export function WorldBuilderStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
       <ScrollView style={s.scroll} contentContainerStyle={s.scrollContent}>
-        <Text style={s.title}>Where do your dreams live?</Text>
-        <Text style={s.subtitle}>Pick the eras and places you're drawn to</Text>
+        <Text style={s.title}>What worlds inspire you?</Text>
+        <Text style={s.subtitle}>Pick the vibes and places you're drawn to</Text>
 
-        <Text style={s.sectionLabel}>Time Period</Text>
+        <Text style={s.sectionLabel}>Worlds</Text>
         <View style={s.grid}>
           {ERA_TILES.map((tile) => {
             const selected = eras.includes(tile.key);

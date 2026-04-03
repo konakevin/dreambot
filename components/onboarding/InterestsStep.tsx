@@ -17,7 +17,7 @@ export function InterestsStep({ onNext, onBack }: Props) {
       hideChrome
       stepNumber={1}
       title="What do you love?"
-      subtitle="Pick at least 3 things that interest you"
+      subtitle="These shape what shows up in your dreams"
       tiles={INTEREST_TILES}
       selected={interests}
       onToggle={(key) => toggleInterest(key as Interest)}

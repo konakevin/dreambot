@@ -48,7 +48,6 @@ export type Interest =
   | 'whimsical'
   | 'gaming'
   | 'movies'
-  | 'music'
   | 'geek'
   | 'sports'
   | 'travel'
@@ -86,7 +85,10 @@ export type Era =
   | 'prehistoric'
   | 'steampunk'
   | 'art_deco'
-  | 'synthwave';
+  | 'synthwave'
+  | 'y2k'
+  | 'wild_west'
+  | 'mythological';
 
 /** Setting — controls the WORLD layer */
 export type Setting =
@@ -125,7 +127,25 @@ export type SpiritCompanion =
   | 'butterfly'
   | 'robot'
   | 'ghost'
-  | 'mushroom_creature';
+  | 'mushroom_creature'
+  | 'dog'
+  | 'bird'
+  | 'octopus'
+  | 'phoenix'
+  | 'snake'
+  | 'bear'
+  | 'whale'
+  | 'crow'
+  | 'turtle'
+  | 'horse'
+  | 'koi'
+  | 'lion'
+  | 'penguin'
+  | 'bee'
+  | 'tiger'
+  | 'fairy'
+  | 'unicorn'
+  | 'mermaid';
 
 /** The complete taste recipe stored in user_recipes.recipe JSONB */
 export interface Recipe {

@@ -15,8 +15,8 @@ export function VibesStep({ onNext, onBack }: Props) {
     <OnboardingTileScreen
       hideChrome
       stepNumber={2}
-      title="I'm into..."
-      subtitle="Pick the vibes that speak to you"
+      title="What's your aesthetic?"
+      subtitle="These unlock dream collections tailored to you"
       tiles={VIBE_TILES}
       selected={selectedVibes}
       onToggle={toggleVibe}

@@ -18,11 +18,15 @@ export function SpiritCompanionStep({ onNext, onBack }: Props) {
       stepNumber={2}
       title="Pick your dream companion"
       subtitle="This little friend may appear in your dreams — or skip if you'd rather not"
-      tiles={SPIRIT_COMPANIONS}
-      selected={companion ? [companion] : []}
+      tiles={[{ key: 'none', label: 'No Companion', icon: 'close-circle' }, ...SPIRIT_COMPANIONS]}
+      selected={companion ? [companion] : ['none']}
       onToggle={(key) => {
-        const k = key as SpiritCompanion;
-        setCompanion(companion === k ? null : k);
+        if (key === 'none') {
+          setCompanion(null);
+        } else {
+          const k = key as SpiritCompanion;
+          setCompanion(companion === k ? null : k);
+        }
       }}
       singleSelect
       minRequired={0}

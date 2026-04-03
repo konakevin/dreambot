@@ -88,9 +88,32 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
     set((s) => {
       const current = s.selectedVibes;
       const next = current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
+      // Vibes also inject associated interests for the Chord engine
+      const VIBE_INTERESTS: Record<string, string[]> = {
+        cozy: ['nature', 'food', 'animals'],
+        dark: ['dark'],
+        glamour: ['fashion'],
+        gamer: ['gaming', 'geek'],
+        anime_fantasy: ['fantasy', 'gaming'],
+        beach_ocean: ['ocean', 'nature'],
+        space_scifi: ['space', 'sci_fi', 'abstract'],
+        epic_adventure: ['sports', 'travel', 'nature'],
+        whimsical: ['whimsical', 'cute'],
+      };
+      // Merge vibe-implied interests with manually picked interests
+      const vibeInterests = new Set<string>(s.recipe.interests);
+      for (const v of next) {
+        for (const i of (VIBE_INTERESTS[v] ?? [])) {
+          vibeInterests.add(i);
+        }
+      }
       return {
         selectedVibes: next,
-        recipe: { ...s.recipe, selected_vibes: next },
+        recipe: {
+          ...s.recipe,
+          selected_vibes: next,
+          interests: [...vibeInterests] as typeof s.recipe.interests,
+        },
       };
     }),
 

@@ -15,7 +15,7 @@ import { WorldBuilderStep } from '@/components/onboarding/WorldBuilderStep';
 import { MoodBoardStep } from '@/components/onboarding/MoodBoardStep';
 import { SceneAtmosphereStep } from '@/components/onboarding/SceneAtmosphereStep';
 import { ColorPaletteStep } from '@/components/onboarding/ColorPaletteStep';
-import { PersonalityStep } from '@/components/onboarding/PersonalityStep';
+// PersonalityStep removed — overlaps with moods + vibes
 import { SurpriseFactorStep } from '@/components/onboarding/SurpriseFactorStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 
@@ -39,7 +39,6 @@ const STEPS: StepConfig[] = [
   { key: 'mood', component: MoodBoardStep },
   { key: 'atmosphere', component: SceneAtmosphereStep },
   { key: 'palette', component: ColorPaletteStep },
-  { key: 'personality', component: PersonalityStep },
   { key: 'surprise', component: SurpriseFactorStep },
   { key: 'reveal', component: RevealStep },
 ];

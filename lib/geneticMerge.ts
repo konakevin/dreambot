@@ -37,7 +37,6 @@ const ALL_INTERESTS: Interest[] = [
   'whimsical',
   'gaming',
   'movies',
-  'music',
   'geek',
   'sports',
   'travel',
@@ -54,6 +53,9 @@ const ALL_ERAS: Era[] = [
   'steampunk',
   'art_deco',
   'synthwave',
+  'y2k',
+  'wild_west',
+  'mythological',
 ];
 const ALL_SETTINGS: Setting[] = [
   'cozy_indoors',
