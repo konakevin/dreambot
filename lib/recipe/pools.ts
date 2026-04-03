@@ -927,7 +927,7 @@ export const PALETTE_KEYWORDS: Record<string, string> = {
   earthy_natural: 'earthy green brown and forest tones, natural organic colors',
   soft_pastel: 'soft pastel pink, bubblegum, lavender, cream, candy tones',
   dark_bold: 'dark dramatic palette with deep blacks and vivid accent colors',
-  monochrome: 'black and white, high contrast, dramatic shadows, no color',
+  monochrome: '', // removed — rarely interesting, Haiku can still go B&W if it wants
   neon: 'electric neon colors, hot pink cyan and lime green, glowing edges',
   ocean_blues: 'turquoise, teal, deep navy, aquamarine, the full spectrum of ocean blue',
   jewel_tones: 'rich emerald green, ruby red, sapphire blue, amethyst purple, opulent and saturated',
