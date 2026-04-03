@@ -136,6 +136,7 @@ const CURATED_FLUX_STYLES = [
   'Light and airy, soft glowing whites, ethereal luminosity, delicate',
   'Candy aesthetic, glossy sugar-coated surfaces, pastel swirls, sweet and shiny',
   'Bubble aesthetic, iridescent floating spheres, translucent rainbow reflections, dreamy',
+  '3D printed, visible layer lines, matte plastic filament, single-color sculptural',
 ];
 
 const CURATED_SDXL_STYLES = [

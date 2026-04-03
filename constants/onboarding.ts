@@ -40,106 +40,70 @@ export const SPIRIT_COMPANIONS: { key: SpiritCompanion; label: string; icon: str
   { key: 'mushroom_creature', label: 'Mushroom',   icon: 'nuclear' },
 ];
 
-/** Step 4: Era tiles */
-export const ERA_TILES: { key: Era; label: string; icon: string }[] = [
-  { key: 'prehistoric', label: 'Prehistoric', icon: 'bonfire' },
-  { key: 'ancient',     label: 'Ancient',     icon: 'trophy' },
-  { key: 'medieval',    label: 'Medieval',    icon: 'shield' },
-  { key: 'victorian',   label: 'Victorian',   icon: 'key' },
-  { key: 'steampunk',   label: 'Steampunk',   icon: 'cog' },
-  { key: 'art_deco',    label: 'Art Deco',    icon: 'diamond' },
-  { key: 'retro',       label: 'Retro',       icon: 'radio' },
-  { key: 'synthwave',   label: 'Synthwave',   icon: 'musical-notes' },
-  { key: 'modern',      label: 'Modern',      icon: 'phone-portrait' },
-  { key: 'far_future',  label: 'Far Future',  icon: 'rocket' },
+/** Step 3: Vibe tiles — each derives personality_tags, scene_atmospheres, color_palettes, and axes */
+export interface VibeTile {
+  key: string;
+  label: string;
+  icon: string;
+  personality_tags: PersonalityTag[];
+  scene_atmospheres: SceneAtmosphere[];
+  color_palettes: ColorPalette[];
+  energy: number;
+  brightness: number;
+  warmth: number;
+}
+
+export const VIBE_TILES: VibeTile[] = [
+  { key: 'cozy',       label: 'Cozy',          icon: 'cafe',           personality_tags: ['cozy', 'gentle', 'peaceful'],       scene_atmospheres: ['golden_hour', 'foggy_dawn'],          color_palettes: ['warm_sunset', 'earthy_natural'],  energy: 0.2, brightness: 0.6, warmth: 0.8 },
+  { key: 'epic',       label: 'Epic',          icon: 'flash',          personality_tags: ['adventurous', 'bold', 'fierce'],     scene_atmospheres: ['stormy_twilight', 'aurora_night'],     color_palettes: ['dark_bold', 'neon'],              energy: 0.9, brightness: 0.6, warmth: 0.5 },
+  { key: 'dreamy',     label: 'Dreamy',        icon: 'cloud',          personality_tags: ['dreamy', 'gentle', 'whimsical'],     scene_atmospheres: ['foggy_dawn', 'golden_hour'],          color_palettes: ['soft_pastel', 'cool_twilight'],   energy: 0.2, brightness: 0.8, warmth: 0.6 },
+  { key: 'dark',       label: 'Dark & Moody',  icon: 'moon',           personality_tags: ['mysterious', 'edgy', 'raw'],         scene_atmospheres: ['starry_midnight', 'stormy_twilight'],  color_palettes: ['dark_bold', 'cool_twilight'],     energy: 0.3, brightness: 0.2, warmth: 0.3 },
+  { key: 'playful',    label: 'Playful',       icon: 'balloon',        personality_tags: ['playful', 'wild', 'chaotic'],        scene_atmospheres: ['sunny_morning', 'golden_hour'],       color_palettes: ['neon', 'soft_pastel'],            energy: 0.6, brightness: 0.8, warmth: 0.7 },
+  { key: 'serene',     label: 'Serene',        icon: 'water',          personality_tags: ['peaceful', 'gentle', 'dreamy'],      scene_atmospheres: ['foggy_dawn', 'sunny_morning'],        color_palettes: ['cool_twilight', 'earthy_natural'], energy: 0.1, brightness: 0.7, warmth: 0.4 },
+  { key: 'intense',    label: 'Intense',       icon: 'thunderstorm',   personality_tags: ['fierce', 'bold', 'edgy'],            scene_atmospheres: ['stormy_twilight', 'snowy_night'],     color_palettes: ['dark_bold', 'neon'],              energy: 0.9, brightness: 0.3, warmth: 0.3 },
+  { key: 'nostalgic',  label: 'Nostalgic',     icon: 'time',           personality_tags: ['nostalgic', 'cozy', 'romantic'],      scene_atmospheres: ['golden_hour', 'rainy_afternoon'],     color_palettes: ['warm_sunset', 'earthy_natural'],  energy: 0.3, brightness: 0.5, warmth: 0.7 },
+  { key: 'mysterious', label: 'Mysterious',    icon: 'eye',            personality_tags: ['mysterious', 'elegant', 'raw'],       scene_atmospheres: ['starry_midnight', 'foggy_dawn'],      color_palettes: ['cool_twilight', 'dark_bold'],     energy: 0.5, brightness: 0.2, warmth: 0.2 },
+  { key: 'whimsical',  label: 'Whimsical',     icon: 'sparkles',       personality_tags: ['whimsical', 'playful', 'dreamy'],     scene_atmospheres: ['sunny_morning', 'aurora_night'],      color_palettes: ['soft_pastel', 'neon'],            energy: 0.5, brightness: 0.7, warmth: 0.6 },
+  { key: 'romantic',   label: 'Romantic',      icon: 'heart',          personality_tags: ['romantic', 'elegant', 'gentle'],      scene_atmospheres: ['golden_hour', 'rainy_afternoon'],     color_palettes: ['warm_sunset', 'soft_pastel'],     energy: 0.3, brightness: 0.7, warmth: 0.8 },
+  { key: 'spooky',     label: 'Spooky',        icon: 'skull',          personality_tags: ['edgy', 'mysterious', 'chaotic'],      scene_atmospheres: ['snowy_night', 'stormy_twilight'],     color_palettes: ['dark_bold', 'cool_twilight'],     energy: 0.5, brightness: 0.2, warmth: 0.2 },
+  { key: 'euphoric',   label: 'Euphoric',      icon: 'sunny',          personality_tags: ['bold', 'wild', 'adventurous'],        scene_atmospheres: ['sunny_morning', 'aurora_night'],      color_palettes: ['neon', 'warm_sunset'],            energy: 0.9, brightness: 0.9, warmth: 0.6 },
+  { key: 'elegant',    label: 'Elegant',       icon: 'diamond',        personality_tags: ['elegant', 'romantic', 'nostalgic'],    scene_atmospheres: ['golden_hour', 'starry_midnight'],     color_palettes: ['warm_sunset', 'cool_twilight'],   energy: 0.3, brightness: 0.6, warmth: 0.5 },
+  { key: 'fierce',     label: 'Fierce',        icon: 'flame',          personality_tags: ['fierce', 'bold', 'raw'],              scene_atmospheres: ['stormy_twilight', 'snowy_night'],     color_palettes: ['dark_bold', 'neon'],              energy: 0.8, brightness: 0.3, warmth: 0.4 },
 ];
 
-/** Step 4: Setting tiles */
-export const SETTING_TILES: { key: Setting; label: string; icon: string }[] = [
-  { key: 'cozy_indoors',  label: 'Cozy Indoors',   icon: 'home' },
-  { key: 'wild_outdoors', label: 'Wild Outdoors',   icon: 'trail-sign' },
-  { key: 'city_streets',  label: 'City Streets',    icon: 'business' },
-  { key: 'beach_tropical',label: 'Beach & Tropical', icon: 'sunny' },
-  { key: 'mountains',     label: 'Mountains',       icon: 'triangle' },
-  { key: 'underwater',    label: 'Underwater',      icon: 'water' },
-  { key: 'underground',   label: 'Underground',     icon: 'flashlight' },
-  { key: 'village',       label: 'Village & Town',  icon: 'storefront' },
-  { key: 'space',         label: 'Outer Space',     icon: 'rocket' },
-  { key: 'otherworldly',  label: 'Otherworldly',    icon: 'planet' },
+/** Step 4: World tiles — each maps to eras + settings */
+export interface WorldTile {
+  key: string;
+  label: string;
+  icon: string;
+  eras: Era[];
+  settings: Setting[];
+}
+
+export const WORLD_TILES: WorldTile[] = [
+  { key: 'cozy_village',       label: 'Cozy Village',        icon: 'home',           eras: ['medieval', 'retro'],          settings: ['cozy_indoors', 'village'] },
+  { key: 'enchanted_forest',   label: 'Enchanted Forest',    icon: 'leaf',           eras: ['medieval', 'prehistoric'],    settings: ['wild_outdoors'] },
+  { key: 'neon_city',          label: 'Neon City',           icon: 'flash',          eras: ['synthwave', 'modern'],        settings: ['city_streets'] },
+  { key: 'ancient_ruins',      label: 'Ancient Ruins',       icon: 'trophy',         eras: ['ancient', 'prehistoric'],     settings: ['wild_outdoors', 'underground'] },
+  { key: 'deep_space',         label: 'Deep Space',          icon: 'rocket',         eras: ['far_future'],                 settings: ['space'] },
+  { key: 'underwater',         label: 'Underwater World',    icon: 'water',          eras: ['prehistoric'],                settings: ['underwater'] },
+  { key: 'steampunk_workshop', label: 'Steampunk Workshop',  icon: 'cog',            eras: ['steampunk', 'victorian'],     settings: ['cozy_indoors', 'underground'] },
+  { key: 'tropical_paradise',  label: 'Tropical Paradise',   icon: 'sunny',          eras: ['modern', 'retro'],            settings: ['beach_tropical'] },
+  { key: 'mountain_peaks',     label: 'Mountain Peaks',      icon: 'triangle',       eras: ['prehistoric', 'modern'],      settings: ['mountains'] },
+  { key: 'haunted_gothic',     label: 'Haunted & Gothic',    icon: 'cloudy-night',   eras: ['victorian', 'medieval'],      settings: ['cozy_indoors', 'underground'] },
+  { key: 'desert_canyons',     label: 'Desert & Canyons',    icon: 'bonfire',        eras: ['ancient', 'prehistoric'],     settings: ['wild_outdoors'] },
+  { key: 'fairy_tale',         label: 'Fairy Tale Kingdom',  icon: 'sparkles',       eras: ['medieval'],                   settings: ['village', 'wild_outdoors'] },
+  { key: 'cyberpunk_future',   label: 'Cyberpunk Future',    icon: 'hardware-chip',  eras: ['far_future', 'synthwave'],    settings: ['city_streets'] },
+  { key: 'art_deco',           label: 'Art Deco Glamour',    icon: 'diamond',        eras: ['art_deco', 'retro'],          settings: ['city_streets', 'cozy_indoors'] },
+  { key: 'alien_world',        label: 'Alien & Otherworldly', icon: 'planet',        eras: ['far_future'],                 settings: ['otherworldly', 'space'] },
 ];
 
-/** Step 5: Mood tiles — energy, brightness, and color_warmth feed into axes */
-export const MOOD_TILES: { key: string; label: string; icon: string; energy: number; brightness: number; warmth: number }[] = [
-  { key: 'cozy',       label: 'Cozy',       icon: 'cafe',           energy: 0.2, brightness: 0.6, warmth: 0.8 },
-  { key: 'epic',       label: 'Epic',       icon: 'flash',          energy: 0.9, brightness: 0.6, warmth: 0.5 },
-  { key: 'dreamy',     label: 'Dreamy',     icon: 'cloud',          energy: 0.2, brightness: 0.8, warmth: 0.6 },
-  { key: 'moody',      label: 'Moody',      icon: 'rainy',          energy: 0.3, brightness: 0.2, warmth: 0.3 },
-  { key: 'playful',    label: 'Playful',    icon: 'balloon',        energy: 0.6, brightness: 0.8, warmth: 0.7 },
-  { key: 'serene',     label: 'Serene',     icon: 'water',          energy: 0.1, brightness: 0.7, warmth: 0.4 },
-  { key: 'intense',    label: 'Intense',    icon: 'thunderstorm',   energy: 0.9, brightness: 0.3, warmth: 0.3 },
-  { key: 'nostalgic',  label: 'Nostalgic',  icon: 'time',           energy: 0.3, brightness: 0.5, warmth: 0.7 },
-  { key: 'mysterious', label: 'Mysterious', icon: 'eye',            energy: 0.5, brightness: 0.2, warmth: 0.2 },
-  { key: 'whimsical',  label: 'Whimsical',  icon: 'sparkles',       energy: 0.5, brightness: 0.7, warmth: 0.6 },
-  { key: 'dramatic',   label: 'Dramatic',   icon: 'flame',          energy: 0.8, brightness: 0.3, warmth: 0.4 },
-  { key: 'peaceful',   label: 'Peaceful',   icon: 'leaf',           energy: 0.1, brightness: 0.6, warmth: 0.5 },
-];
-
-/** Step 6: Scene atmosphere tiles */
-export const SCENE_ATMOSPHERE_TILES: { key: SceneAtmosphere; label: string; icon: string }[] = [
-  { key: 'sunny_morning',    label: 'Sunny Morning',    icon: 'sunny' },
-  { key: 'rainy_afternoon',  label: 'Rainy Afternoon',  icon: 'rainy' },
-  { key: 'snowy_night',      label: 'Snowy Night',      icon: 'snow' },
-  { key: 'foggy_dawn',       label: 'Foggy Dawn',       icon: 'cloudy' },
-  { key: 'stormy_twilight',  label: 'Stormy Twilight',  icon: 'thunderstorm' },
-  { key: 'starry_midnight',  label: 'Starry Midnight',  icon: 'moon' },
-  { key: 'golden_hour',      label: 'Golden Hour',      icon: 'sunny' },
-  { key: 'aurora_night',     label: 'Aurora Night',     icon: 'sparkles' },
-];
-
-/** Step 7: Color palette options */
-export const COLOR_PALETTES: { key: ColorPalette; label: string; colors: string[] }[] = [
-  { key: 'warm_sunset',    label: 'Warm Sunset',    colors: ['#FFD700', '#FF8C00', '#FF4500'] },
-  { key: 'cool_twilight',  label: 'Cool Twilight',  colors: ['#6699EE', '#8855CC', '#BB88EE'] },
-  { key: 'earthy_natural', label: 'Earthy Natural', colors: ['#4CAA64', '#8B7355', '#556B2F'] },
-  { key: 'soft_pastel',    label: 'Soft Pastel',    colors: ['#FFB6C1', '#DDA0DD', '#F0F8FF'] },
-  { key: 'dark_bold',      label: 'Dark & Bold',    colors: ['#1A1A2E', '#E63946', '#FFD700'] },
-  { key: 'monochrome',     label: 'Black & White',  colors: ['#FFFFFF', '#888888', '#000000'] },
-  { key: 'sepia',          label: 'Sepia Vintage',  colors: ['#D4A76A', '#C19A6B', '#8B6914'] },
-  { key: 'neon',           label: 'Neon Electric',  colors: ['#FF00FF', '#00FFFF', '#39FF14'] },
-  { key: 'candy',          label: 'Candy Pop',      colors: ['#FF69B4', '#FF6EC7', '#FFD700'] },
-  { key: 'everything',     label: 'Surprise Me',    colors: ['#FF4500', '#FFD700', '#4CAA64', '#6699EE', '#BB88EE'] },
-];
-
-/** Step 8: Personality tags */
-export const PERSONALITY_TAGS: { key: PersonalityTag; label: string }[] = [
-  { key: 'dreamy',      label: 'Dreamy' },
-  { key: 'adventurous', label: 'Adventurous' },
-  { key: 'cozy',        label: 'Cozy' },
-  { key: 'edgy',        label: 'Edgy' },
-  { key: 'romantic',    label: 'Romantic' },
-  { key: 'mysterious',  label: 'Mysterious' },
-  { key: 'playful',     label: 'Playful' },
-  { key: 'fierce',      label: 'Fierce' },
-  { key: 'peaceful',    label: 'Peaceful' },
-  { key: 'chaotic',     label: 'Chaotic' },
-  { key: 'nostalgic',   label: 'Nostalgic' },
-  { key: 'futuristic',  label: 'Futuristic' },
-  { key: 'elegant',     label: 'Elegant' },
-  { key: 'raw',         label: 'Raw' },
-  { key: 'whimsical',   label: 'Whimsical' },
-  { key: 'bold',        label: 'Bold' },
-  { key: 'gentle',      label: 'Gentle' },
-  { key: 'wild',        label: 'Wild' },
-];
-
-/** Minimum selections per step — no maximums, pick as many as you want */
+/** Minimum selections per step */
 export const LIMITS = {
   interests: { min: 3 },
-  colorPalettes: { min: 1 },
-  personalityTags: { min: 1 },
-  moods: { min: 1 },
-  sceneAtmospheres: { min: 1 },
+  vibes: { min: 2 },
+  worlds: { min: 2 },
 } as const;
 
 /** Total steps in the onboarding flow */
-export const TOTAL_STEPS = 11;
+export const TOTAL_STEPS = 7;

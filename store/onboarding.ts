@@ -1,36 +1,28 @@
 import { create } from 'zustand';
 import type {
-  Recipe, RecipeAxes, Interest, ColorPalette, PersonalityTag,
-  Era, Setting, SceneAtmosphere, SpiritCompanion,
+  Recipe, RecipeAxes, Interest, SpiritCompanion,
 } from '@/types/recipe';
 import { DEFAULT_RECIPE } from '@/types/recipe';
-import { MOOD_TILES } from '@/constants/onboarding';
+import { VIBE_TILES, WORLD_TILES } from '@/constants/onboarding';
+import type { VibeTile, WorldTile } from '@/constants/onboarding';
 
 interface OnboardingStore {
   step: number;
   setStep: (step: number) => void;
-  /** True when editing from settings (shows X to dismiss) */
   isEditing: boolean;
   setIsEditing: (v: boolean) => void;
 
   recipe: Recipe;
 
-  /** Mood keys selected during onboarding (maps to energy/brightness axes) */
-  selectedMoods: string[];
-  toggleMood: (key: string) => void;
+  selectedVibes: string[];
+  toggleVibe: (key: string) => void;
+
+  selectedWorlds: string[];
+  toggleWorld: (key: string) => void;
 
   toggleInterest: (interest: Interest) => void;
-  setRealism: (value: number) => void;
-  setMoodPosition: (energy: number, brightness: number) => void;
-  toggleColorPalette: (palette: ColorPalette) => void;
-  togglePersonalityTag: (tag: PersonalityTag) => void;
-  setChaos: (value: number) => void;
-  setWeirdness: (value: number) => void;
-  setScale: (value: number) => void;
-  toggleEra: (era: Era) => void;
-  toggleSetting: (setting: Setting) => void;
-  toggleSceneAtmosphere: (atmosphere: SceneAtmosphere) => void;
   setSpiritCompanion: (companion: SpiritCompanion | null) => void;
+  setWildness: (value: number) => void;
   adjustAxis: (axis: keyof RecipeAxes, delta: number) => void;
   reset: () => void;
 }
@@ -39,34 +31,80 @@ function clamp(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
+function dedupe<T>(arr: T[]): T[] {
+  return [...new Set(arr)];
+}
+
 export const useOnboardingStore = create<OnboardingStore>((set) => ({
   step: 1,
   setStep: (step) => set({ step }),
 
   recipe: { ...DEFAULT_RECIPE },
 
-  selectedMoods: [],
-  toggleMood: (key) =>
+  selectedVibes: [],
+  toggleVibe: (key) =>
     set((s) => {
-      const current = s.selectedMoods;
+      const current = s.selectedVibes;
       const next = current.includes(key)
         ? current.filter((k) => k !== key)
         : [...current, key];
-      // Compute average energy/brightness/warmth from selected moods
-      const selectedData = MOOD_TILES.filter((m) => next.includes(m.key));
-      if (selectedData.length > 0) {
-        const avgEnergy = selectedData.reduce((sum, m) => sum + m.energy, 0) / selectedData.length;
-        const avgBrightness = selectedData.reduce((sum, m) => sum + m.brightness, 0) / selectedData.length;
-        const avgWarmth = selectedData.reduce((sum, m) => sum + m.warmth, 0) / selectedData.length;
+
+      const selectedData = VIBE_TILES.filter((v: VibeTile) => next.includes(v.key));
+
+      if (selectedData.length === 0) {
         return {
-          selectedMoods: next,
+          selectedVibes: next,
           recipe: {
             ...s.recipe,
-            axes: { ...s.recipe.axes, energy: clamp(avgEnergy), brightness: clamp(avgBrightness), color_warmth: clamp(avgWarmth) },
+            personality_tags: [],
+            scene_atmospheres: [],
+            color_palettes: [],
           },
         };
       }
-      return { selectedMoods: next };
+
+      const personality_tags = dedupe(selectedData.flatMap((v: VibeTile) => v.personality_tags));
+      const scene_atmospheres = dedupe(selectedData.flatMap((v: VibeTile) => v.scene_atmospheres));
+      const color_palettes = dedupe(selectedData.flatMap((v: VibeTile) => v.color_palettes));
+
+      const avgEnergy = selectedData.reduce((sum: number, v: VibeTile) => sum + v.energy, 0) / selectedData.length;
+      const avgBrightness = selectedData.reduce((sum: number, v: VibeTile) => sum + v.brightness, 0) / selectedData.length;
+      const avgWarmth = selectedData.reduce((sum: number, v: VibeTile) => sum + v.warmth, 0) / selectedData.length;
+
+      return {
+        selectedVibes: next,
+        recipe: {
+          ...s.recipe,
+          personality_tags,
+          scene_atmospheres,
+          color_palettes,
+          axes: {
+            ...s.recipe.axes,
+            energy: clamp(avgEnergy),
+            brightness: clamp(avgBrightness),
+            color_warmth: clamp(avgWarmth),
+          },
+        },
+      };
+    }),
+
+  selectedWorlds: [],
+  toggleWorld: (key) =>
+    set((s) => {
+      const current = s.selectedWorlds;
+      const next = current.includes(key)
+        ? current.filter((k) => k !== key)
+        : [...current, key];
+
+      const selectedData = WORLD_TILES.filter((w: WorldTile) => next.includes(w.key));
+
+      const eras = dedupe(selectedData.flatMap((w: WorldTile) => w.eras));
+      const settings = dedupe(selectedData.flatMap((w: WorldTile) => w.settings));
+
+      return {
+        selectedWorlds: next,
+        recipe: { ...s.recipe, eras, settings },
+      };
     }),
 
   toggleInterest: (interest) =>
@@ -78,81 +116,21 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       return { recipe: { ...s.recipe, interests: next } };
     }),
 
-  setRealism: (value) =>
-    set((s) => ({
-      recipe: { ...s.recipe, axes: { ...s.recipe.axes, realism: clamp(value) } },
-    })),
+  setSpiritCompanion: (companion) =>
+    set((s) => ({ recipe: { ...s.recipe, spirit_companion: companion } })),
 
-  setMoodPosition: (energy, brightness) =>
+  setWildness: (value) =>
     set((s) => ({
       recipe: {
         ...s.recipe,
-        axes: { ...s.recipe.axes, energy: clamp(energy), brightness: clamp(brightness) },
+        axes: {
+          ...s.recipe.axes,
+          chaos: clamp(value),
+          weirdness: clamp(0.1 + value * 0.6),
+          scale: clamp(0.3 + value * 0.5),
+        },
       },
     })),
-
-  toggleColorPalette: (palette) =>
-    set((s) => {
-      const current = s.recipe.color_palettes;
-      const next = current.includes(palette)
-        ? current.filter((p) => p !== palette)
-        : [...current, palette];
-      return { recipe: { ...s.recipe, color_palettes: next } };
-    }),
-
-  togglePersonalityTag: (tag) =>
-    set((s) => {
-      const current = s.recipe.personality_tags;
-      const next = current.includes(tag)
-        ? current.filter((t) => t !== tag)
-        : [...current, tag];
-      return { recipe: { ...s.recipe, personality_tags: next } };
-    }),
-
-  setChaos: (value) =>
-    set((s) => ({
-      recipe: { ...s.recipe, axes: { ...s.recipe.axes, chaos: clamp(value) } },
-    })),
-
-  setWeirdness: (value) =>
-    set((s) => ({
-      recipe: { ...s.recipe, axes: { ...s.recipe.axes, weirdness: clamp(value) } },
-    })),
-
-  setScale: (value) =>
-    set((s) => ({
-      recipe: { ...s.recipe, axes: { ...s.recipe.axes, scale: clamp(value) } },
-    })),
-
-  toggleEra: (era) =>
-    set((s) => {
-      const current = s.recipe.eras;
-      const next = current.includes(era)
-        ? current.filter((e) => e !== era)
-        : [...current, era];
-      return { recipe: { ...s.recipe, eras: next } };
-    }),
-
-  toggleSetting: (setting) =>
-    set((s) => {
-      const current = s.recipe.settings;
-      const next = current.includes(setting)
-        ? current.filter((st) => st !== setting)
-        : [...current, setting];
-      return { recipe: { ...s.recipe, settings: next } };
-    }),
-
-  toggleSceneAtmosphere: (atmosphere) =>
-    set((s) => {
-      const current = s.recipe.scene_atmospheres;
-      const next = current.includes(atmosphere)
-        ? current.filter((a) => a !== atmosphere)
-        : [...current, atmosphere];
-      return { recipe: { ...s.recipe, scene_atmospheres: next } };
-    }),
-
-  setSpiritCompanion: (companion) =>
-    set((s) => ({ recipe: { ...s.recipe, spirit_companion: companion } })),
 
   adjustAxis: (axis, delta) =>
     set((s) => ({
@@ -164,5 +142,5 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
 
   isEditing: false,
   setIsEditing: (v) => set({ isEditing: v }),
-  reset: () => set({ step: 1, isEditing: false, selectedMoods: [], recipe: { ...DEFAULT_RECIPE } }),
+  reset: () => set({ step: 1, isEditing: false, selectedVibes: [], selectedWorlds: [], recipe: { ...DEFAULT_RECIPE } }),
 }));

@@ -7,15 +7,15 @@
 
 import { buildPromptInput, buildRawPrompt } from '../lib/recipeEngine';
 import type { Recipe } from '../types/recipe';
-import { MOOD_TILES } from '../constants/onboarding';
+import { VIBE_TILES } from '../constants/onboarding';
 
-// ── Helper: compute mood axes from selected mood keys ──────────────────────
+// ── Helper: compute vibe axes from selected vibe keys ──────────────────────
 function moodAxes(keys: string[]): { energy: number; brightness: number; color_warmth: number } {
-  const tiles = MOOD_TILES.filter((m) => keys.includes(m.key));
+  const tiles = VIBE_TILES.filter((v) => keys.includes(v.key));
   if (tiles.length === 0) return { energy: 0.5, brightness: 0.5, color_warmth: 0.5 };
-  const energy = tiles.reduce((s, m) => s + m.energy, 0) / tiles.length;
-  const brightness = tiles.reduce((s, m) => s + m.brightness, 0) / tiles.length;
-  const color_warmth = tiles.reduce((s, m) => s + m.warmth, 0) / tiles.length;
+  const energy = tiles.reduce((s, v) => s + v.energy, 0) / tiles.length;
+  const brightness = tiles.reduce((s, v) => s + v.brightness, 0) / tiles.length;
+  const color_warmth = tiles.reduce((s, v) => s + v.warmth, 0) / tiles.length;
   return { energy, brightness, color_warmth };
 }
 

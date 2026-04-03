@@ -393,18 +393,6 @@ export function DreamCard({
             )}
           </View>
 
-          {/* AI Prompt — tap to see full prompt */}
-          {item.ai_prompt && (
-            <TouchableOpacity
-              style={s.promptBox}
-              onPress={() => Toast.show(item.ai_prompt!, 'sparkles')}
-              activeOpacity={0.7}
-            >
-              <Text style={s.promptBoxText} numberOfLines={3}>
-                {item.ai_prompt}
-              </Text>
-            </TouchableOpacity>
-          )}
 
           {/* Side actions */}
           <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
@@ -530,23 +518,6 @@ const s = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowRadius: 4,
     textShadowOffset: { width: 0, height: 1 },
-  },
-  promptBox: {
-    position: 'absolute',
-    top: '40%',
-    left: 20,
-    right: 20,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  promptBoxText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    lineHeight: 18,
-    fontStyle: 'italic',
-    textAlign: 'center',
   },
   botMessage: {
     color: 'rgba(255,255,255,0.75)',

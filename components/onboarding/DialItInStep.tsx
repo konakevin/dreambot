@@ -10,9 +10,9 @@ const THUMB_SIZE = 28;
 
 interface Props { onNext: () => void; onBack: () => void; }
 
-export function SurpriseFactorStep({ onNext, onBack }: Props) {
+export function DialItInStep({ onNext, onBack }: Props) {
   const chaos = useOnboardingStore((s) => s.recipe.axes.chaos);
-  const setChaos = useOnboardingStore((s) => s.setChaos);
+  const setWildness = useOnboardingStore((s) => s.setWildness);
   const [sliderValue, setSliderValue] = useState(chaos);
   const trackRef = useRef<View>(null);
   const trackLeft = useRef(0);
@@ -21,7 +21,7 @@ export function SurpriseFactorStep({ onNext, onBack }: Props) {
     const relative = pageX - trackLeft.current;
     const clamped = Math.max(0, Math.min(1, relative / SLIDER_WIDTH));
     setSliderValue(clamped);
-    setChaos(clamped);
+    setWildness(clamped);
   }
 
   function handleGrant(pageX: number) {
@@ -32,7 +32,7 @@ export function SurpriseFactorStep({ onNext, onBack }: Props) {
         const relative = pageX - x;
         const clamped = Math.max(0, Math.min(1, relative / SLIDER_WIDTH));
         setSliderValue(clamped);
-        setChaos(clamped);
+        setWildness(clamped);
       });
     }
   }
@@ -41,23 +41,23 @@ export function SurpriseFactorStep({ onNext, onBack }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }
 
-  const label = sliderValue < 0.25 ? 'Very predictable — stay close to my picks'
-    : sliderValue < 0.5 ? 'Mostly on-brand with a few surprises'
-    : sliderValue < 0.75 ? 'Adventurous — surprise me often'
-    : 'Full chaos — go wild, I love surprises';
+  const label = sliderValue < 0.25 ? 'Keep it chill — beautiful and grounded'
+    : sliderValue < 0.5 ? 'A little adventurous — surprise me sometimes'
+    : sliderValue < 0.75 ? 'Pretty wild — I like the unexpected'
+    : 'Maximum chaos — blow my mind';
 
   const emoji = sliderValue < 0.25 ? '🎯' : sliderValue < 0.5 ? '🌤' : sliderValue < 0.75 ? '🎲' : '🌪';
 
   return (
     <View style={s.root}>
       <View style={s.content}>
-        <Text style={s.title}>How adventurous?</Text>
-        <Text style={s.subtitle}>How much should your AI surprise you?</Text>
+        <Text style={s.title}>How wild should your dreams get?</Text>
+        <Text style={s.subtitle}>Slide to control how much your bot surprises you</Text>
 
         <View style={s.sliderContainer}>
           <View style={s.labelRow}>
-            <Text style={s.endLabel}>Predictable</Text>
-            <Text style={s.endLabel}>Surprise Me</Text>
+            <Text style={s.endLabel}>Chill</Text>
+            <Text style={s.endLabel}>Chaos</Text>
           </View>
 
           <View

@@ -9,13 +9,9 @@ import { colors } from '@/constants/theme';
 import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
 import { InterestsStep } from '@/components/onboarding/InterestsStep';
 import { SpiritCompanionStep } from '@/components/onboarding/SpiritCompanionStep';
-import { StyleSpectrumStep } from '@/components/onboarding/StyleSpectrumStep';
-import { WorldBuilderStep } from '@/components/onboarding/WorldBuilderStep';
-import { MoodBoardStep } from '@/components/onboarding/MoodBoardStep';
-import { SceneAtmosphereStep } from '@/components/onboarding/SceneAtmosphereStep';
-import { ColorPaletteStep } from '@/components/onboarding/ColorPaletteStep';
-import { PersonalityStep } from '@/components/onboarding/PersonalityStep';
-import { SurpriseFactorStep } from '@/components/onboarding/SurpriseFactorStep';
+import { VibesStep } from '@/components/onboarding/VibesStep';
+import { WorldsStep } from '@/components/onboarding/WorldsStep';
+import { DialItInStep } from '@/components/onboarding/DialItInStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -32,13 +28,9 @@ const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep, skipInEdit: true },
   { key: 'interests', component: InterestsStep },
   { key: 'spirit', component: SpiritCompanionStep },
-  { key: 'style', component: StyleSpectrumStep },
-  { key: 'world', component: WorldBuilderStep },
-  { key: 'mood', component: MoodBoardStep },
-  { key: 'atmosphere', component: SceneAtmosphereStep },
-  { key: 'palette', component: ColorPaletteStep },
-  { key: 'personality', component: PersonalityStep },
-  { key: 'surprise', component: SurpriseFactorStep },
+  { key: 'vibes', component: VibesStep },
+  { key: 'worlds', component: WorldsStep },
+  { key: 'dialItIn', component: DialItInStep },
   { key: 'reveal', component: RevealStep },
 ];
 
