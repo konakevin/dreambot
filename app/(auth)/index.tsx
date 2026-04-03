@@ -1,6 +1,14 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator, Platform, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -47,11 +55,9 @@ const authStyles = StyleSheet.create({
   logoWord: {
     fontSize: 38,
     fontWeight: '900',
-    letterSpacing: -1,
     letterSpacing: 6,
   },
-  _logoOrRemoved: {
-  },
+  _logoOrRemoved: {},
   tagline: {
     color: 'rgba(255,255,255,0.8)',
     fontSize: 16,
@@ -79,7 +85,11 @@ export default function WelcomeScreen() {
       router.replace(dest);
     } catch (err: unknown) {
       const msg = (err as Error).message;
-      if (!msg.includes('canceled') && !msg.includes('cancelled') && !msg.includes('ERR_CANCELED')) {
+      if (
+        !msg.includes('canceled') &&
+        !msg.includes('cancelled') &&
+        !msg.includes('ERR_CANCELED')
+      ) {
         const label = provider === 'google' ? 'Google' : 'Apple';
         showAlert(`${label} Sign-In failed`, msg);
       }

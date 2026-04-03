@@ -23,9 +23,7 @@ export function useMarkAllSeen() {
         if (!old) return old;
         return {
           ...old,
-          pages: old.pages.map((page) =>
-            page.map((n) => ({ ...n, isSeen: true }))
-          ),
+          pages: old.pages.map((page) => page.map((n) => ({ ...n, isSeen: true }))),
         };
       });
     },

@@ -4,7 +4,17 @@
  */
 
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Modal, Pressable, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -39,7 +49,12 @@ function FamilyTile({ item }: { item: FamilyMember }) {
       }}
       activeOpacity={0.9}
     >
-      <Image source={{ uri: item.image_url }} style={s.tileImage} contentFit="cover" transition={150} />
+      <Image
+        source={{ uri: item.image_url }}
+        style={s.tileImage}
+        contentFit="cover"
+        transition={150}
+      />
       <View style={s.tileInfo}>
         {item.avatar_url ? (
           <Image source={{ uri: item.avatar_url }} style={s.tileAvatar} />
@@ -48,13 +63,23 @@ function FamilyTile({ item }: { item: FamilyMember }) {
             <Text style={s.tileAvatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
           </View>
         )}
-        <Text style={s.tileUsername} numberOfLines={1}>{item.username}</Text>
+        <Text style={s.tileUsername} numberOfLines={1}>
+          {item.username}
+        </Text>
       </View>
     </TouchableOpacity>
   );
 }
 
-export function DreamFamilySheet({ visible, onClose, uploadId, isAiGenerated, aiPrompt, onTwin, onFuse }: Props) {
+export function DreamFamilySheet({
+  visible,
+  onClose,
+  uploadId,
+  isAiGenerated,
+  aiPrompt,
+  onTwin,
+  onFuse,
+}: Props) {
   const [tab, setTab] = useState<Tab>('twins');
   const { data, isLoading } = useDreamFamily(uploadId, visible);
   const twins = data?.twins ?? [];
@@ -81,7 +106,11 @@ export function DreamFamilySheet({ visible, onClose, uploadId, isAiGenerated, ai
               onPress={() => setTab('twins')}
               activeOpacity={0.7}
             >
-              <Ionicons name="dice-outline" size={16} color={tab === 'twins' ? colors.textPrimary : colors.textSecondary} />
+              <Ionicons
+                name="dice-outline"
+                size={16}
+                color={tab === 'twins' ? colors.textPrimary : colors.textSecondary}
+              />
               <Text style={[s.tabText, tab === 'twins' && s.tabTextActive]}>
                 Twins{twins.length > 0 ? ` (${twins.length})` : ''}
               </Text>
@@ -91,7 +120,11 @@ export function DreamFamilySheet({ visible, onClose, uploadId, isAiGenerated, ai
               onPress={() => setTab('fuses')}
               activeOpacity={0.7}
             >
-              <Ionicons name="git-merge-outline" size={16} color={tab === 'fuses' ? colors.textPrimary : colors.textSecondary} />
+              <Ionicons
+                name="git-merge-outline"
+                size={16}
+                color={tab === 'fuses' ? colors.textPrimary : colors.textSecondary}
+              />
               <Text style={[s.tabText, tab === 'fuses' && s.tabTextActive]}>
                 Fuses{fuses.length > 0 ? ` (${fuses.length})` : ''}
               </Text>
@@ -182,10 +215,13 @@ const s = StyleSheet.create({
     paddingBottom: 34,
   },
   handle: {
-    width: 40, height: 4, borderRadius: 2,
+    width: 40,
+    height: 4,
+    borderRadius: 2,
     backgroundColor: colors.border,
     alignSelf: 'center',
-    marginTop: 10, marginBottom: 8,
+    marginTop: 10,
+    marginBottom: 8,
   },
   header: {
     flexDirection: 'row',
@@ -195,7 +231,9 @@ const s = StyleSheet.create({
     paddingVertical: 8,
   },
   title: {
-    color: colors.textPrimary, fontSize: 18, fontWeight: '800',
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '800',
   },
   tabs: {
     flexDirection: 'row',
@@ -218,7 +256,9 @@ const s = StyleSheet.create({
     backgroundColor: colors.card,
   },
   tabText: {
-    color: colors.textSecondary, fontSize: 14, fontWeight: '600',
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
   },
   tabTextActive: {
     color: colors.textPrimary,
@@ -248,17 +288,27 @@ const s = StyleSheet.create({
     padding: 8,
   },
   tileAvatar: {
-    width: 20, height: 20, borderRadius: 10,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
   tileAvatarFallback: {
-    width: 20, height: 20, borderRadius: 10,
-    backgroundColor: colors.border, alignItems: 'center', justifyContent: 'center',
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tileAvatarText: {
-    color: colors.textPrimary, fontSize: 10, fontWeight: '700',
+    color: colors.textPrimary,
+    fontSize: 10,
+    fontWeight: '700',
   },
   tileUsername: {
-    color: colors.textSecondary, fontSize: 12, fontWeight: '600',
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
     flex: 1,
   },
   empty: {
@@ -268,10 +318,14 @@ const s = StyleSheet.create({
     gap: 8,
   },
   emptyText: {
-    color: colors.textPrimary, fontSize: 16, fontWeight: '700',
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
   },
   emptySubtext: {
-    color: colors.textSecondary, fontSize: 14, textAlign: 'center',
+    color: colors.textSecondary,
+    fontSize: 14,
+    textAlign: 'center',
     paddingHorizontal: 20,
   },
   actions: {
@@ -293,7 +347,9 @@ const s = StyleSheet.create({
     borderColor: colors.accent,
   },
   actionText: {
-    color: '#FFFFFF', fontSize: 16, fontWeight: '700',
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
   },
   actionTextSecondary: {
     color: colors.accent,

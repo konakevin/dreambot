@@ -16,7 +16,8 @@ interface AlertState {
 }
 
 // Global ref so showAlert can be called from anywhere (no hook required)
-let globalShowAlert: ((title: string, message: string, buttons?: AlertButton[]) => void) | null = null;
+let globalShowAlert: ((title: string, message: string, buttons?: AlertButton[]) => void) | null =
+  null;
 
 /**
  * Drop-in replacement for showAlert() — uses our dark theme styling.
@@ -29,7 +30,12 @@ export function showAlert(title: string, message: string, buttons?: AlertButton[
 }
 
 export function AlertProvider({ children }: { children: React.ReactNode }) {
-  const [alert, setAlert] = useState<AlertState>({ visible: false, title: '', message: '', buttons: [] });
+  const [alert, setAlert] = useState<AlertState>({
+    visible: false,
+    title: '',
+    message: '',
+    buttons: [],
+  });
 
   const show = useCallback((title: string, message: string, buttons?: AlertButton[]) => {
     setAlert({
@@ -87,11 +93,13 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                   onPress={() => handlePress(btn)}
                   activeOpacity={0.7}
                 >
-                  <Text style={[
-                    styles.buttonText,
-                    btn.style === 'destructive' && styles.buttonTextDestructive,
-                    btn.style === 'cancel' && styles.buttonTextCancel,
-                  ]}>
+                  <Text
+                    style={[
+                      styles.buttonText,
+                      btn.style === 'destructive' && styles.buttonTextDestructive,
+                      btn.style === 'cancel' && styles.buttonTextCancel,
+                    ]}
+                  >
                     {btn.text}
                   </Text>
                 </TouchableOpacity>

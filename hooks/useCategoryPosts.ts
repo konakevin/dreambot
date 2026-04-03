@@ -8,7 +8,7 @@ export interface ExplorePost {
   id: string;
   categories: string[];
   image_url: string;
-  media_type: 'image' | 'video';
+  media_type: string;
   thumbnail_url: string | null;
   width: number | null;
   height: number | null;
@@ -32,7 +32,9 @@ export function useCategoryPosts(category: Category, limit = 10, sort: CategoryS
     queryFn: async (): Promise<CategoryPostsResult> => {
       let query = supabase
         .from('uploads')
-        .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username, avatar_url)')
+        .select(
+          'id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, wilson_score, users(username, avatar_url)'
+        )
         .eq('is_active', true)
         .contains('categories', [category]);
 
@@ -44,9 +46,7 @@ export function useCategoryPosts(category: Category, limit = 10, sort: CategoryS
           .order('bad_votes', { ascending: false, nullsFirst: false })
           .limit(limit);
       } else {
-        query = query
-          .order('wilson_score', { ascending: false, nullsFirst: false })
-          .limit(limit);
+        query = query.order('wilson_score', { ascending: false, nullsFirst: false }).limit(limit);
       }
 
       const { data, error } = await query;

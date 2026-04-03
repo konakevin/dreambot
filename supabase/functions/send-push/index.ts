@@ -38,7 +38,10 @@ function getNotificationContent(type: string, actorName: string, body: string | 
     case 'post_milestone':
       return { title: `Your post just hit ${body ?? 'a milestone'}!`, body: 'Keep it going!' };
     case 'dream_generated':
-      return { title: 'A new dream awaits', body: body ?? 'Your Dream Bot created something for you' };
+      return {
+        title: 'A new dream awaits',
+        body: body ?? 'Your Dream Bot created something for you',
+      };
     default:
       return { title: 'New notification', body: '' };
   }
@@ -52,7 +55,7 @@ Deno.serve(async (req) => {
     // Create admin client
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
     // Get recipient's push tokens

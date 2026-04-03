@@ -14,20 +14,17 @@ async function fetchCharacterStats(userId: string): Promise<CharacterSheet> {
       .select('total_votes, rad_votes, wilson_score, categories')
       .eq('user_id', userId)
       .eq('is_active', true),
-    supabase
-      .from('user_category_affinity')
-      .select('rad_count, bad_count')
-      .eq('user_id', userId),
+    supabase.from('votes').select('vote').eq('voter_id', userId),
   ]);
 
-  if (postsRes.error)    throw postsRes.error;
+  if (postsRes.error) throw postsRes.error;
   if (affinityRes.error) throw affinityRes.error;
 
-  const posts    = postsRes.data    ?? [];
-  const affinity = affinityRes.data ?? [];
+  const posts = postsRes.data ?? [];
+  const votes = affinityRes.data ?? [];
 
-  const radVotesCast = affinity.reduce((s, a) => s + (a.rad_count ?? 0), 0);
-  const badVotesCast = affinity.reduce((s, a) => s + (a.bad_count ?? 0), 0);
+  const radVotesCast = votes.filter((v) => v.vote === 'rad').length;
+  const badVotesCast = votes.filter((v) => v.vote === 'bad').length;
 
   return computeCharacterSheet({
     postCount: posts.length,

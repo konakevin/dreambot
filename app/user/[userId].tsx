@@ -1,4 +1,12 @@
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Animated } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  Animated,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -63,12 +71,16 @@ export default function PublicProfileScreen() {
           if (isBlocked) {
             toggleBlock({ userId, currentlyBlocked: true });
           } else {
-            showAlert('Block User?', 'They won\'t be able to see your posts or contact you.', [
+            showAlert('Block User?', "They won't be able to see your posts or contact you.", [
               { text: 'Cancel', style: 'cancel' },
-              { text: 'Block', style: 'destructive', onPress: () => {
-                toggleBlock({ userId, currentlyBlocked: false });
-                router.replace('/(tabs)');
-              }},
+              {
+                text: 'Block',
+                style: 'destructive',
+                onPress: () => {
+                  toggleBlock({ userId, currentlyBlocked: false });
+                  router.replace('/(tabs)');
+                },
+              },
             ]);
           }
         },
@@ -78,9 +90,36 @@ export default function PublicProfileScreen() {
         style: 'destructive',
         onPress: () => {
           showAlert('Report User', 'Why are you reporting this user?', [
-            { text: 'Spam', style: 'destructive', onPress: () => { report({ reason: 'spam', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.', [{ text: 'OK', onPress: () => router.replace('/(tabs)') }]); } },
-            { text: 'Harassment', style: 'destructive', onPress: () => { report({ reason: 'harassment', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.', [{ text: 'OK', onPress: () => router.replace('/(tabs)') }]); } },
-            { text: 'Inappropriate', style: 'destructive', onPress: () => { report({ reason: 'inappropriate', reportedUserId: userId }); showAlert('Reported', 'Thanks for letting us know.', [{ text: 'OK', onPress: () => router.replace('/(tabs)') }]); } },
+            {
+              text: 'Spam',
+              style: 'destructive',
+              onPress: () => {
+                report({ reason: 'spam', reportedUserId: userId });
+                showAlert('Reported', 'Thanks for letting us know.', [
+                  { text: 'OK', onPress: () => router.replace('/(tabs)') },
+                ]);
+              },
+            },
+            {
+              text: 'Harassment',
+              style: 'destructive',
+              onPress: () => {
+                report({ reason: 'harassment', reportedUserId: userId });
+                showAlert('Reported', 'Thanks for letting us know.', [
+                  { text: 'OK', onPress: () => router.replace('/(tabs)') },
+                ]);
+              },
+            },
+            {
+              text: 'Inappropriate',
+              style: 'destructive',
+              onPress: () => {
+                report({ reason: 'inappropriate', reportedUserId: userId });
+                showAlert('Reported', 'Thanks for letting us know.', [
+                  { text: 'OK', onPress: () => router.replace('/(tabs)') },
+                ]);
+              },
+            },
             { text: 'Cancel', style: 'cancel' },
           ]);
         },
@@ -103,16 +142,18 @@ export default function PublicProfileScreen() {
 
   if (profileLoading || !profile) {
     return (
-      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
-        <View style={styles.backRow}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.textSecondary} />
-        </View>
-      </SafeAreaView></Animated.View>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}>
+        <SafeAreaView style={styles.root}>
+          <View style={styles.backRow}>
+            <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.center}>
+            <ActivityIndicator color={colors.textSecondary} />
+          </View>
+        </SafeAreaView>
+      </Animated.View>
     );
   }
 
@@ -131,74 +172,121 @@ export default function PublicProfileScreen() {
 
   const header = (
     <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <GradientUsername username={profile.username} rank={null} hideRank style={styles.username} avatarUrl={profile.avatar_url} showAvatar avatarSize={32} />
-          {!isOwnProfile && (
-            <View style={styles.headerButtons}>
-              {friendshipStatus !== 'friends' && (
-                <TouchableOpacity
-                  style={[styles.followButton, isFollowing && styles.followingButton]}
-                  onPress={handleFollow}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.followButtonText, isFollowing && styles.followingButtonText]}>
-                    {isFollowing ? 'Following' : 'Follow'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              <FriendButton
-                status={friendshipStatus}
-                onSendRequest={() => sendFriendRequest(userId)}
-                onCancelRequest={() => removeFriend(userId)}
-                onAccept={() => respondRequest({ requesterId: userId, accept: true })}
-                onDecline={() => respondRequest({ requesterId: userId, accept: false })}
-                onRemove={() => removeFriend(userId)}
-              />
-            </View>
-          )}
-        </View>
-
-        <ProfileStatsRow
-          postCount={profile.postCount}
-          friendCount={profile.friendCount}
-          followerCount={profile.followerCount}
-          followingCount={profile.followingCount}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          hiddenTabs={isOwnProfile ? [] : ['friends']}
+      <View style={styles.headerTop}>
+        <GradientUsername
+          username={profile.username}
+          rank={null}
+          hideRank
+          style={styles.username}
+          avatarUrl={profile.avatar_url}
+          showAvatar
+          avatarSize={32}
         />
+        {!isOwnProfile && (
+          <View style={styles.headerButtons}>
+            {friendshipStatus !== 'friends' && (
+              <TouchableOpacity
+                style={[styles.followButton, isFollowing && styles.followingButton]}
+                onPress={handleFollow}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.followButtonText, isFollowing && styles.followingButtonText]}>
+                  {isFollowing ? 'Following' : 'Follow'}
+                </Text>
+              </TouchableOpacity>
+            )}
+            <FriendButton
+              status={friendshipStatus}
+              onSendRequest={() => sendFriendRequest(userId)}
+              onCancelRequest={() => removeFriend(userId)}
+              onAccept={() => respondRequest({ requesterId: userId, accept: true })}
+              onDecline={() => respondRequest({ requesterId: userId, accept: false })}
+              onRemove={() => removeFriend(userId)}
+            />
+          </View>
+        )}
       </View>
+
+      <ProfileStatsRow
+        postCount={profile.postCount}
+        friendCount={profile.friendCount}
+        followerCount={profile.followerCount}
+        followingCount={profile.followingCount}
+        activeTab={activeTab}
+        onTabChange={(tab) => setActiveTab(tab as Tab)}
+        hiddenTabs={isOwnProfile ? [] : ['friends']}
+      />
+    </View>
   );
 
   if (activeTab === 'posts') {
     return (
-      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
-        {backButton}
-        <PostGrid
-          source={{ type: 'user', userId }}
-          emptyText="No posts yet"
-          ListHeaderComponent={header}
-          highlightPostId={viewedPost}
-        />
-      </SafeAreaView></Animated.View>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}>
+        <SafeAreaView style={styles.root}>
+          {backButton}
+          <PostGrid
+            source={{ type: 'user', userId }}
+            emptyText="No posts yet"
+            ListHeaderComponent={header}
+            highlightPostId={viewedPost}
+          />
+        </SafeAreaView>
+      </Animated.View>
     );
   }
 
   if (activeTab === 'friends') {
     return (
-      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
+      <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}>
+        <SafeAreaView style={styles.root}>
+          {backButton}
+          <FlatList<FriendUser>
+            key="friends"
+            data={friendsList}
+            keyExtractor={(item) => item.id}
+            ListHeaderComponent={header}
+            ListEmptyComponent={
+              <View style={styles.center}>
+                {loadingFriends ? (
+                  <ActivityIndicator color={colors.textSecondary} />
+                ) : (
+                  <Text style={styles.emptyText}>No friends yet</Text>
+                )}
+              </View>
+            }
+            renderItem={({ item }) => (
+              <FollowUserRow
+                item={item}
+                isFollowing={followingIds.has(item.id)}
+                onFollow={handleFollowUser}
+              />
+            )}
+          />
+        </SafeAreaView>
+      </Animated.View>
+    );
+  }
+
+  const listData = activeTab === 'followers' ? followers : following;
+  const isLoadingList = activeTab === 'followers' ? loadingFollowers : loadingFollowing;
+  const emptyLabel = activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet';
+
+  return (
+    <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}>
+      <SafeAreaView style={styles.root}>
         {backButton}
-        <FlatList<FriendUser>
-          key="friends"
-          data={friendsList}
+        <FlatList<FollowUser>
+          key="users"
+          data={listData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={header}
           ListEmptyComponent={
             <View style={styles.center}>
-              {loadingFriends
-                ? <ActivityIndicator color={colors.textSecondary} />
-                : <Text style={styles.emptyText}>No friends yet</Text>
-              }
+              {isLoadingList ? (
+                <ActivityIndicator color={colors.textSecondary} />
+              ) : (
+                <Text style={styles.emptyText}>{emptyLabel}</Text>
+              )}
             </View>
           }
           renderItem={({ item }) => (
@@ -209,47 +297,21 @@ export default function PublicProfileScreen() {
             />
           )}
         />
-      </SafeAreaView></Animated.View>
-    );
-  }
-
-  const listData = activeTab === 'followers' ? followers : following;
-  const isLoadingList = activeTab === 'followers' ? loadingFollowers : loadingFollowing;
-  const emptyLabel = activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet';
-
-  return (
-    <Animated.View {...panHandlers} style={[styles.root, { transform: [{ translateX }] }]}><SafeAreaView style={styles.root}>
-      {backButton}
-      <FlatList<FollowUser>
-        key="users"
-        data={listData}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={header}
-        ListEmptyComponent={
-          <View style={styles.center}>
-            {isLoadingList
-              ? <ActivityIndicator color={colors.textSecondary} />
-              : <Text style={styles.emptyText}>{emptyLabel}</Text>
-            }
-          </View>
-        }
-        renderItem={({ item }) => (
-          <FollowUserRow
-            item={item}
-            isFollowing={followingIds.has(item.id)}
-            onFollow={handleFollowUser}
-          />
-        )}
-      />
-    </SafeAreaView></Animated.View>
+      </SafeAreaView>
+    </Animated.View>
   );
 }
-
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  backRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, paddingTop: 4, paddingBottom: 12 },
+  backRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
+    paddingTop: 4,
+    paddingBottom: 12,
+  },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: {
     paddingHorizontal: 16,
@@ -273,13 +335,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   username: { color: colors.textPrimary, fontSize: 22, fontWeight: '800' },
-  headerButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 8,
-    justifyContent: 'flex-end',
-  },
   followButton: {
     borderWidth: 1.5,
     borderColor: 'rgba(255,255,255,0.3)',

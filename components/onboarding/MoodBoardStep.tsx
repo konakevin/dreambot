@@ -2,7 +2,10 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { MOOD_TILES, LIMITS } from '@/constants/onboarding';
 import { OnboardingTileScreen } from '@/components/OnboardingTileScreen';
 
-interface Props { onNext: () => void; onBack: () => void; }
+interface Props {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export function MoodBoardStep({ onNext, onBack }: Props) {
   const selectedMoods = useOnboardingStore((s) => s.selectedMoods);

@@ -20,36 +20,42 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
         // Single post — no album
         const { data, error } = await supabase
           .from('uploads')
-          .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)')
+          .select(
+            'id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
+          )
           .eq('id', currentId)
           .single();
         if (error) throw error;
         const u = data.users as Record<string, unknown>;
-        return [{
-          id: data.id,
-          user_id: data.user_id,
-          image_url: data.image_url,
-          caption: data.caption,
-          username: u.username as string,
-          avatar_url: u.avatar_url as string | null,
-          is_ai_generated: data.is_ai_generated ?? false,
-          created_at: data.created_at,
-          comment_count: data.comment_count ?? 0,
-          like_count: data.like_count ?? 0,
-          from_wish: data.from_wish ?? null,
-          recipe_id: data.recipe_id ?? null,
-          ai_prompt: data.ai_prompt ?? null,
-          twin_count: data.twin_count ?? 0,
-          fuse_count: data.fuse_count ?? 0,
-          twin_of: data.twin_of ?? null,
-          fuse_of: data.fuse_of ?? null,
-        }];
+        return [
+          {
+            id: data.id,
+            user_id: data.user_id,
+            image_url: data.image_url,
+            caption: data.caption,
+            username: u.username as string,
+            avatar_url: u.avatar_url as string | null,
+            is_ai_generated: data.is_ai_generated ?? false,
+            created_at: data.created_at,
+            comment_count: data.comment_count ?? 0,
+            like_count: data.like_count ?? 0,
+            from_wish: data.from_wish ?? null,
+            recipe_id: data.recipe_id ?? null,
+            ai_prompt: data.ai_prompt ?? null,
+            twin_count: data.twin_count ?? 0,
+            fuse_count: data.fuse_count ?? 0,
+            twin_of: data.twin_of ?? null,
+            fuse_of: data.fuse_of ?? null,
+          },
+        ];
       }
 
       // Album — fetch all posts in order
       const { data, error } = await supabase
         .from('uploads')
-        .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)')
+        .select(
+          'id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
+        )
         .in('id', albumIds)
         .eq('is_active', true);
       if (error) throw error;
@@ -122,7 +128,11 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#000' },
   backButton: { position: 'absolute', top: 54, left: 16, zIndex: 10 },
   backCircle: {
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

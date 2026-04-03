@@ -9,10 +9,7 @@ import type { PostItem } from '@/hooks/useUserPosts';
 
 const TILE_GAP = 2;
 
-export type PostGridSource =
-  | { type: 'own' }
-  | { type: 'saved' }
-  | { type: 'user'; userId: string };
+export type PostGridSource = { type: 'own' } | { type: 'saved' } | { type: 'user'; userId: string };
 
 interface PostGridProps {
   source: PostGridSource;
@@ -23,7 +20,14 @@ interface PostGridProps {
   scrollToTopToken?: number;
 }
 
-export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', ListHeaderComponent, highlightPostId, scrollToTopToken }: PostGridProps) {
+export function PostGrid({
+  source,
+  isOwn = false,
+  emptyText = 'No posts yet',
+  ListHeaderComponent,
+  highlightPostId,
+  scrollToTopToken,
+}: PostGridProps) {
   const listRef = useRef<FlatList>(null);
 
   useEffect(() => {
@@ -37,16 +41,13 @@ export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', Li
   const isUser = source.type === 'user';
   const userId = isUser ? source.userId : '';
 
-  const ownQuery    = useUserPosts(isOwn_);
-  const savedQuery  = useFavoritePosts(isSaved);
-  const userQuery   = usePublicProfilePosts(userId, isUser);
+  const ownQuery = useUserPosts(isOwn_);
+  const savedQuery = useFavoritePosts(isSaved);
+  const userQuery = usePublicProfilePosts(userId, isUser);
 
   const query = isOwn_ ? ownQuery : isSaved ? savedQuery : userQuery;
 
-  const posts = useMemo(
-    () => query.data?.pages.flatMap((p) => p.rows) ?? [],
-    [query.data],
-  );
+  const posts = useMemo(() => query.data?.pages.flatMap((p) => p.rows) ?? [], [query.data]);
 
   // Album IDs for detail-view swipe navigation — grows as more pages load
   const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
@@ -88,7 +89,12 @@ export function PostGrid({ source, isOwn = false, emptyText = 'No posts yet', Li
         ) : null
       }
       renderItem={({ item }) => (
-        <PostTile item={item} isOwn={isOwn} albumIds={albumIds} isHighlighted={item.id === highlightPostId} />
+        <PostTile
+          item={item}
+          isOwn={isOwn}
+          albumIds={albumIds}
+          isHighlighted={item.id === highlightPostId}
+        />
       )}
     />
   );

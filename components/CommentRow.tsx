@@ -34,7 +34,14 @@ interface CommentRowProps {
   expandedCommentId?: string | null;
 }
 
-export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, onReply, expandedCommentId }: CommentRowProps) {
+export function CommentRow({
+  comment,
+  uploadId,
+  postOwnerId,
+  isReply = false,
+  onReply,
+  expandedCommentId,
+}: CommentRowProps) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwn = currentUser?.id === comment.userId;
   const isPostOwner = currentUser?.id === postOwnerId;
@@ -67,7 +74,8 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
       {
         text: 'Delete',
         style: 'destructive',
-        onPress: () => deleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
+        onPress: () =>
+          deleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
       },
     ]);
   }
@@ -80,9 +88,15 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
         delayLongPress={400}
       >
         {/* Avatar */}
-        <TouchableOpacity onPress={() => router.replace(`/user/${comment.userId}`)} activeOpacity={0.7}>
+        <TouchableOpacity
+          onPress={() => router.replace(`/user/${comment.userId}`)}
+          activeOpacity={0.7}
+        >
           {comment.avatarUrl ? (
-            <Image source={{ uri: comment.avatarUrl }} style={[styles.avatar, isReply && styles.replyAvatar]} />
+            <Image
+              source={{ uri: comment.avatarUrl }}
+              style={[styles.avatar, isReply && styles.replyAvatar]}
+            />
           ) : (
             <View style={[styles.avatarFallback, isReply && styles.replyAvatar]}>
               <Text style={styles.avatarText}>{(comment.username || '?')[0].toUpperCase()}</Text>
@@ -94,7 +108,7 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
         <View style={styles.body}>
           <Text style={styles.headerLine}>
             <Text style={styles.username}>{comment.username ?? 'dreamer'}</Text>
-            <Text style={styles.time}>  {formatTimeAgo(comment.createdAt)}</Text>
+            <Text style={styles.time}> {formatTimeAgo(comment.createdAt)}</Text>
           </Text>
           <Text style={styles.commentText}>
             {comment.body.split(/(@[a-zA-Z0-9_.]+)/g).map((part, i) =>
@@ -117,7 +131,9 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
                 >
                   {part}
                 </Text>
-              ) : part
+              ) : (
+                part
+              )
             )}
           </Text>
 
@@ -154,19 +170,22 @@ export function CommentRow({ comment, uploadId, postOwnerId, isReply = false, on
           >
             <View style={styles.repliesLine} />
             <Text style={styles.repliesToggleText}>
-              {showReplies ? 'Hide replies' : `View ${comment.replyCount} ${comment.replyCount === 1 ? 'reply' : 'replies'}`}
+              {showReplies
+                ? 'Hide replies'
+                : `View ${comment.replyCount} ${comment.replyCount === 1 ? 'reply' : 'replies'}`}
             </Text>
           </TouchableOpacity>
 
-          {showReplies && replies.map((reply) => (
-            <CommentRow
-              key={reply.id}
-              comment={reply}
-              uploadId={uploadId}
-              isReply
-              onReply={onReply}
-            />
-          ))}
+          {showReplies &&
+            replies.map((reply) => (
+              <CommentRow
+                key={reply.id}
+                comment={reply}
+                uploadId={uploadId}
+                isReply
+                onReply={onReply}
+              />
+            ))}
         </View>
       )}
     </View>

@@ -8,13 +8,12 @@ import { supabase } from '@/lib/supabase';
  */
 export async function signInWithApple() {
   // Generate a nonce for security
-  const rawNonce = Crypto.getRandomBytes(16)
-    .reduce((acc, byte) => acc + byte.toString(16).padStart(2, '0'), '');
-
-  const hashedNonce = await Crypto.digestStringAsync(
-    Crypto.CryptoDigestAlgorithm.SHA256,
-    rawNonce,
+  const rawNonce = Crypto.getRandomBytes(16).reduce(
+    (acc, byte) => acc + byte.toString(16).padStart(2, '0'),
+    ''
   );
+
+  const hashedNonce = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, rawNonce);
 
   // Trigger the native Apple Sign-In UI
   const credential = await AppleAuthentication.signInAsync({
@@ -50,10 +49,7 @@ export async function signInWithApple() {
       data: { username, full_name: fullName },
     });
     // Also update the users table directly since the trigger already ran
-    await supabase
-      .from('users')
-      .update({ username })
-      .eq('id', data.user.id);
+    await supabase.from('users').update({ username }).eq('id', data.user.id);
   }
 
   return data;

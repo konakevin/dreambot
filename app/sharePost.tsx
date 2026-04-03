@@ -1,6 +1,18 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, FlatList, TextInput, ActivityIndicator, StyleSheet, Dimensions, Pressable, Animated, Share } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Animated,
+  Share,
+} from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -21,7 +33,15 @@ const CELL_WIDTH = (SCREEN_WIDTH - 32) / COLUMNS;
 const DEFAULT_ROWS = 4;
 const DEFAULT_LIMIT = DEFAULT_ROWS * COLUMNS;
 
-function ViberBubble({ item, selected, onToggle }: { item: ShareableViber; selected: boolean; onToggle: () => void }) {
+function ViberBubble({
+  item,
+  selected,
+  onToggle,
+}: {
+  item: ShareableViber;
+  selected: boolean;
+  onToggle: () => void;
+}) {
   return (
     <TouchableOpacity
       style={[styles.bubble, { width: CELL_WIDTH }]}
@@ -30,7 +50,10 @@ function ViberBubble({ item, selected, onToggle }: { item: ShareableViber; selec
     >
       <View style={styles.avatarWrap}>
         {item.avatarUrl ? (
-          <Image source={{ uri: item.avatarUrl }} style={[styles.avatar, selected && styles.avatarSelected]} />
+          <Image
+            source={{ uri: item.avatarUrl }}
+            style={[styles.avatar, selected && styles.avatarSelected]}
+          />
         ) : (
           <View style={[styles.avatarFallback, selected && styles.avatarSelected]}>
             <Text style={styles.avatarInitial}>{(item.username || '?')[0].toUpperCase()}</Text>
@@ -94,7 +117,10 @@ export default function SharePostScreen() {
 
   function handleCopyLink() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Share.share({ url: `https://dreambot.app/post/${uploadId}`, message: 'Check out this dream on DreamBot' });
+    Share.share({
+      url: `https://dreambot.app/post/${uploadId}`,
+      message: 'Check out this dream on DreamBot',
+    });
   }
 
   return (
@@ -122,7 +148,12 @@ export default function SharePostScreen() {
 
         {/* Search */}
         <View style={styles.searchWrap}>
-          <Ionicons name="search" size={16} color={colors.textSecondary} style={styles.searchIcon} />
+          <Ionicons
+            name="search"
+            size={16}
+            color={colors.textSecondary}
+            style={styles.searchIcon}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search fellow dreamers"
@@ -180,8 +211,15 @@ export default function SharePostScreen() {
             {isPending ? (
               <ActivityIndicator size="small" color="#000000" />
             ) : (
-              <Text style={[styles.sendButtonText, selected.size === 0 && styles.sendButtonTextDisabled]}>
-                {selected.size > 0 ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}` : 'Select friends to send'}
+              <Text
+                style={[
+                  styles.sendButtonText,
+                  selected.size === 0 && styles.sendButtonTextDisabled,
+                ]}
+              >
+                {selected.size > 0
+                  ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
+                  : 'Select friends to send'}
               </Text>
             )}
           </TouchableOpacity>

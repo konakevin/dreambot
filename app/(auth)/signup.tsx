@@ -1,8 +1,15 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
@@ -10,6 +17,7 @@ import * as Haptics from 'expo-haptics';
 import { getPostAuthRoute } from '@/lib/postAuthRoute';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
+import { moderateText } from '@/lib/moderation';
 
 export default function SignupScreen() {
   const [username, setUsername] = useState('');
@@ -31,6 +39,12 @@ export default function SignupScreen() {
     }
     setLoading(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const modResult = await moderateText(username.trim());
+    if (!modResult.passed) {
+      setLoading(false);
+      showAlert('Invalid username', modResult.reason ?? 'Username contains inappropriate content');
+      return;
+    }
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
@@ -77,9 +91,7 @@ export default function SignupScreen() {
 
         <View className="flex-1 px-6 justify-center">
           <Text className="text-5xl mb-6 text-center">📬</Text>
-          <Text className="text-white text-2xl font-bold mb-3 text-center">
-            Check your email
-          </Text>
+          <Text className="text-white text-2xl font-bold mb-3 text-center">Check your email</Text>
           <Text className="text-text-secondary text-center text-base leading-6 mb-2">
             We sent a confirmation link to
           </Text>
@@ -87,7 +99,8 @@ export default function SignupScreen() {
             {email.trim()}
           </Text>
           <Text className="text-text-secondary text-center text-sm leading-6 mb-10">
-            Tap the link in the email to verify your account and get started. Check your spam folder if you don't see it.
+            Tap the link in the email to verify your account and get started. Check your spam folder
+            if you don't see it.
           </Text>
 
           <TouchableOpacity
@@ -114,10 +127,16 @@ export default function SignupScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
           <View className="px-4 pt-4 pb-8">
-            <TouchableOpacity onPress={() => router.back()} className="w-11 h-11 items-center justify-center">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="w-11 h-11 items-center justify-center"
+            >
               <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
@@ -166,7 +185,10 @@ export default function SignupScreen() {
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
               />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} className="ml-2 w-8 h-8 items-center justify-center">
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                className="ml-2 w-8 h-8 items-center justify-center"
+              >
                 <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color="#71767B" />
               </TouchableOpacity>
             </View>
@@ -177,9 +199,11 @@ export default function SignupScreen() {
               disabled={loading}
               activeOpacity={0.8}
             >
-              {loading
-                ? <ActivityIndicator color="#fff" />
-                : <Text className="text-white font-bold text-base">Create account</Text>}
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text className="text-white font-bold text-base">Create account</Text>
+              )}
             </TouchableOpacity>
 
             <View className="flex-row justify-center mt-6">

@@ -20,7 +20,7 @@ export function useRemoveFriend() {
 
       queryClient.setQueryData<FriendUser[]>(
         ['friendsList', user?.id],
-        (old) => old?.filter((f) => f.id !== friendId) ?? [],
+        (old) => old?.filter((f) => f.id !== friendId) ?? []
       );
 
       return { previousList };

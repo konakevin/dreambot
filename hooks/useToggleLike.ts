@@ -8,11 +8,15 @@ interface ToggleArgs {
   currentlyLiked: boolean;
 }
 
-function bumpLikeCount(pages: DreamPostItem[][], uploadId: string, delta: number): DreamPostItem[][] {
+function bumpLikeCount(
+  pages: DreamPostItem[][],
+  uploadId: string,
+  delta: number
+): DreamPostItem[][] {
   return pages.map((page) =>
     page.map((p) =>
-      p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p,
-    ),
+      p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p
+    )
   );
 }
 
@@ -63,7 +67,7 @@ export function useToggleLike() {
         qc.setQueryData<DreamPostItem[]>(query.queryKey, (prev) => {
           if (!prev) return prev;
           return prev.map((p) =>
-            p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p,
+            p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p
           );
         });
       }

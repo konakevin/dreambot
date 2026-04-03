@@ -11,7 +11,9 @@ export function usePublicProfilePosts(userId: string, enabled = true) {
       const offset = pageParam as number;
       const { data, error } = await supabase
         .from('uploads')
-        .select('id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at')
+        .select(
+          'id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at'
+        )
         .eq('user_id', userId)
         .eq('is_active', true)
         .order('created_at', { ascending: false })

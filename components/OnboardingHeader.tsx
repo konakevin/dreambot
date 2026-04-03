@@ -30,10 +30,7 @@ export function OnboardingHeader({ stepNumber, onBack }: Props) {
       <View style={s.center}>
         <View style={s.bar}>
           {Array.from({ length: VISIBLE_STEPS }, (_, i) => (
-            <View
-              key={i}
-              style={[s.dot, i < stepNumber && s.dotActive]}
-            />
+            <View key={i} style={[s.dot, i < stepNumber && s.dotActive]} />
           ))}
         </View>
       </View>

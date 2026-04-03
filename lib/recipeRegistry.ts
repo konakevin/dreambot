@@ -22,8 +22,12 @@ export async function registerRecipe(userId: string, recipe: Recipe): Promise<st
   const { data, error } = await supabase
     .from('recipe_registry')
     .upsert(
-      { user_id: userId, recipe, fingerprint: fp },
-      { onConflict: 'user_id,fingerprint' },
+      {
+        user_id: userId,
+        recipe: recipe as unknown as import('@/types/database').Json,
+        fingerprint: fp,
+      },
+      { onConflict: 'user_id,fingerprint' }
     )
     .select('id')
     .single();
@@ -42,5 +46,5 @@ export async function fetchRecipeById(recipeId: string): Promise<Recipe | null> 
     .eq('id', recipeId)
     .single();
 
-  return (data?.recipe as Recipe) ?? null;
+  return (data?.recipe as unknown as Recipe) ?? null;
 }

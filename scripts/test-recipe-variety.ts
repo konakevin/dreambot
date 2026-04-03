@@ -21,7 +21,7 @@ function moodAxes(keys: string[]): { energy: number; brightness: number; color_w
 
 // Style sliders use toStored: slider 0-1 → stored 0.10-0.90
 function toStored(slider: number): number {
-  return 0.10 + slider * 0.80;
+  return 0.1 + slider * 0.8;
 }
 
 // ── 10 User Profiles (UI-achievable only) ──────────────────────────────────
@@ -43,7 +43,10 @@ const profiles: UserProfile[] = [
     name: 'Grandma Betty',
     description: 'Retired dog lover. Cozy, warm, gentle. Loves animals and nature.',
     moods: ['cozy', 'peaceful', 'nostalgic'],
-    realismSlider: 0.3, weirdnessSlider: 0.1, scaleSlider: 0.3, chaosSlider: 0.1,
+    realismSlider: 0.3,
+    weirdnessSlider: 0.1,
+    scaleSlider: 0.3,
+    chaosSlider: 0.1,
     recipe: {
       interests: ['animals', 'nature', 'food'],
       color_palettes: ['warm_sunset', 'soft_pastel'],
@@ -58,7 +61,10 @@ const profiles: UserProfile[] = [
     name: 'Jake the Gamer',
     description: 'College kid. Lives for gaming, anime, and epic moments.',
     moods: ['epic', 'intense', 'playful'],
-    realismSlider: 0.2, weirdnessSlider: 0.5, scaleSlider: 0.7, chaosSlider: 0.6,
+    realismSlider: 0.2,
+    weirdnessSlider: 0.5,
+    scaleSlider: 0.7,
+    chaosSlider: 0.6,
     recipe: {
       interests: ['gaming', 'geek', 'movies'],
       color_palettes: ['neon', 'dark_bold'],
@@ -73,7 +79,10 @@ const profiles: UserProfile[] = [
     name: 'Dr. Priya (Sci-Fi Techie)',
     description: 'Software engineer who reads hard sci-fi. Futuristic, dark, cerebral.',
     moods: ['mysterious', 'epic', 'intense'],
-    realismSlider: 0.8, weirdnessSlider: 0.6, scaleSlider: 0.8, chaosSlider: 0.3,
+    realismSlider: 0.8,
+    weirdnessSlider: 0.6,
+    scaleSlider: 0.8,
+    chaosSlider: 0.3,
     recipe: {
       interests: ['sci_fi', 'space', 'abstract'],
       color_palettes: ['cool_twilight', 'monochrome'],
@@ -88,7 +97,10 @@ const profiles: UserProfile[] = [
     name: 'Luna the Dreamer',
     description: 'Art school student. Soft, ethereal, pastel everything.',
     moods: ['dreamy', 'serene', 'whimsical'],
-    realismSlider: 0.0, weirdnessSlider: 0.4, scaleSlider: 0.4, chaosSlider: 0.4,
+    realismSlider: 0.0,
+    weirdnessSlider: 0.4,
+    scaleSlider: 0.4,
+    chaosSlider: 0.4,
     recipe: {
       interests: ['abstract', 'whimsical', 'fashion'],
       color_palettes: ['soft_pastel', 'candy'],
@@ -103,7 +115,10 @@ const profiles: UserProfile[] = [
     name: 'Raven (Gothic)',
     description: 'Goth aesthetic. Dark, moody, dramatic. Loves horror and dark beauty.',
     moods: ['moody', 'mysterious', 'dramatic'],
-    realismSlider: 0.6, weirdnessSlider: 0.7, scaleSlider: 0.5, chaosSlider: 0.3,
+    realismSlider: 0.6,
+    weirdnessSlider: 0.7,
+    scaleSlider: 0.5,
+    chaosSlider: 0.3,
     recipe: {
       interests: ['dark', 'fantasy', 'architecture'],
       color_palettes: ['dark_bold', 'monochrome'],
@@ -118,7 +133,10 @@ const profiles: UserProfile[] = [
     name: 'River (Nature Hippie)',
     description: 'Park ranger. Zen, serene, loves oceans and forests.',
     moods: ['serene', 'peaceful', 'dreamy'],
-    realismSlider: 0.7, weirdnessSlider: 0.1, scaleSlider: 0.9, chaosSlider: 0.15,
+    realismSlider: 0.7,
+    weirdnessSlider: 0.1,
+    scaleSlider: 0.9,
+    chaosSlider: 0.15,
     recipe: {
       interests: ['nature', 'ocean', 'animals'],
       color_palettes: ['earthy_natural', 'cool_twilight'],
@@ -133,7 +151,10 @@ const profiles: UserProfile[] = [
     name: 'Hiro (Anime Fan)',
     description: 'Anime obsessed. Colorful, playful, Studio Ghibli vibes.',
     moods: ['playful', 'whimsical', 'epic'],
-    realismSlider: 0.0, weirdnessSlider: 0.3, scaleSlider: 0.5, chaosSlider: 0.5,
+    realismSlider: 0.0,
+    weirdnessSlider: 0.3,
+    scaleSlider: 0.5,
+    chaosSlider: 0.5,
     recipe: {
       interests: ['geek', 'cute', 'fantasy'],
       color_palettes: ['candy', 'neon'],
@@ -148,7 +169,10 @@ const profiles: UserProfile[] = [
     name: 'Zara (Chaos Agent)',
     description: 'Wants maximum surprise. Surreal, high-energy, full chaos.',
     moods: ['intense', 'dramatic', 'epic'],
-    realismSlider: 0.5, weirdnessSlider: 1.0, scaleSlider: 0.5, chaosSlider: 1.0,
+    realismSlider: 0.5,
+    weirdnessSlider: 1.0,
+    scaleSlider: 0.5,
+    chaosSlider: 1.0,
     recipe: {
       interests: ['abstract', 'whimsical', 'space'],
       color_palettes: ['everything'],
@@ -163,7 +187,10 @@ const profiles: UserProfile[] = [
     name: 'Eloise (Cottagecore)',
     description: 'Vintage romantic. Gardens, tea, Victorian charm.',
     moods: ['cozy', 'nostalgic', 'peaceful'],
-    realismSlider: 0.4, weirdnessSlider: 0.0, scaleSlider: 0.3, chaosSlider: 0.1,
+    realismSlider: 0.4,
+    weirdnessSlider: 0.0,
+    scaleSlider: 0.3,
+    chaosSlider: 0.1,
     recipe: {
       interests: ['nature', 'food', 'fashion'],
       color_palettes: ['warm_sunset', 'sepia', 'earthy_natural'],
@@ -178,7 +205,10 @@ const profiles: UserProfile[] = [
     name: 'Max (10yo Kid)',
     description: 'Loves Pokémon, dinosaurs, and silly stuff. Bright and playful.',
     moods: ['playful', 'whimsical', 'dreamy'],
-    realismSlider: 0.0, weirdnessSlider: 0.5, scaleSlider: 0.4, chaosSlider: 0.7,
+    realismSlider: 0.0,
+    weirdnessSlider: 0.5,
+    scaleSlider: 0.4,
+    chaosSlider: 0.7,
     recipe: {
       interests: ['gaming', 'animals', 'cute', 'movies'],
       color_palettes: ['candy', 'neon'],
@@ -232,14 +262,28 @@ interface RollStats {
   interestExpansions: string[];
 }
 
-const allUserResults: { name: string; description: string; axes: Record<string, number>; stats: RollStats; prompts: string[] }[] = [];
+const allUserResults: {
+  name: string;
+  description: string;
+  axes: import('../types/recipe').RecipeAxes;
+  stats: RollStats;
+  prompts: string[];
+}[] = [];
 
 for (const profile of profiles) {
   const recipe = buildRecipe(profile);
   const stats: RollStats = {
-    mediums: new Map(), moods: new Map(), lightings: new Map(),
-    settings: new Map(), eras: new Map(), actions: new Map(), subjects: new Map(),
-    hadSubject: 0, hadAction: 0, hadSpirit: 0, interestExpansions: [],
+    mediums: new Map(),
+    moods: new Map(),
+    lightings: new Map(),
+    settings: new Map(),
+    eras: new Map(),
+    actions: new Map(),
+    subjects: new Map(),
+    hadSubject: 0,
+    hadAction: 0,
+    hadSpirit: 0,
+    interestExpansions: [],
   };
   const prompts: string[] = [];
 
@@ -281,7 +325,9 @@ for (const user of allUserResults) {
   console.log('───────────────────────────────────────────────────────────────');
   console.log(`  ${user.name} — "${user.description}"`);
   console.log('───────────────────────────────────────────────────────────────');
-  console.log(`  Axes: energy=${user.axes.energy.toFixed(2)} bright=${user.axes.brightness.toFixed(2)} warm=${user.axes.color_warmth.toFixed(2)} real=${user.axes.realism.toFixed(2)} weird=${user.axes.weirdness.toFixed(2)} scale=${user.axes.scale.toFixed(2)} chaos=${user.axes.chaos.toFixed(2)}`);
+  console.log(
+    `  Axes: energy=${user.axes.energy.toFixed(2)} bright=${user.axes.brightness.toFixed(2)} warm=${user.axes.color_warmth.toFixed(2)} real=${user.axes.realism.toFixed(2)} weird=${user.axes.weirdness.toFixed(2)} scale=${user.axes.scale.toFixed(2)} chaos=${user.axes.chaos.toFixed(2)}`
+  );
   console.log();
 
   // Show unique counts
@@ -321,7 +367,9 @@ for (const user of allUserResults) {
   // Show interest expansions (were vague interests expanded?)
   const expansions = user.stats.interestExpansions;
   const uniqueExpansions = [...new Set(expansions)];
-  console.log(`  Interest samples (${uniqueExpansions.length} unique across ${expansions.length} total):`);
+  console.log(
+    `  Interest samples (${uniqueExpansions.length} unique across ${expansions.length} total):`
+  );
   uniqueExpansions.slice(0, 8).forEach((e) => console.log(`    - ${e}`));
   if (uniqueExpansions.length > 8) console.log(`    ... and ${uniqueExpansions.length - 8} more`);
   console.log();
@@ -353,7 +401,9 @@ for (let i = 0; i < userMediumSets.length; i++) {
     const overlap = [...a.mediums].filter((m) => b.mediums.has(m));
     const overlapPct = overlap.length / Math.max(a.mediums.size, b.mediums.size);
     if (overlapPct > 0.5) {
-      console.log(`  ⚠️  ${a.name} ↔ ${b.name}: ${(overlapPct * 100).toFixed(0)}% medium overlap (${overlap.length} shared)`);
+      console.log(
+        `  ⚠️  ${a.name} ↔ ${b.name}: ${(overlapPct * 100).toFixed(0)}% medium overlap (${overlap.length} shared)`
+      );
     }
   }
 }
@@ -371,7 +421,9 @@ for (let i = 0; i < userMoodSets.length; i++) {
     const overlap = [...a.moods].filter((m) => b.moods.has(m));
     const overlapPct = overlap.length / Math.max(a.moods.size, b.moods.size);
     if (overlapPct > 0.6) {
-      console.log(`  ⚠️  ${a.name} ↔ ${b.name}: ${(overlapPct * 100).toFixed(0)}% mood overlap (${overlap.length} shared)`);
+      console.log(
+        `  ⚠️  ${a.name} ↔ ${b.name}: ${(overlapPct * 100).toFixed(0)}% mood overlap (${overlap.length} shared)`
+      );
     }
   }
 }

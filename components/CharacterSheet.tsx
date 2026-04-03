@@ -22,11 +22,26 @@ import { colors } from '@/constants/theme';
 // Yellow → orange → deep red across 20 segments
 // 0–7: #CCDD55 → #FFAA00, 7–13: #FFAA00 → #FF5500, 13–19: #FF5500 → #CC0000
 const RAD_BAR = [
-  '#CCDD55','#D3D649','#DACF3D','#E2C731',
-  '#E9C024','#F0B918','#F7B10C','#FFAA00',
-  '#FF9C00','#FF8E00','#FF7F00','#FF7100',
-  '#FF6300','#FF5500','#F64700','#EE3900',
-  '#E52B00','#DD1C00','#D40E00','#CC0000',
+  '#CCDD55',
+  '#D3D649',
+  '#DACF3D',
+  '#E2C731',
+  '#E9C024',
+  '#F0B918',
+  '#F7B10C',
+  '#FFAA00',
+  '#FF9C00',
+  '#FF8E00',
+  '#FF7F00',
+  '#FF7100',
+  '#FF6300',
+  '#FF5500',
+  '#F64700',
+  '#EE3900',
+  '#E52B00',
+  '#DD1C00',
+  '#D40E00',
+  '#CC0000',
 ];
 
 // ── Stat bar ──────────────────────────────────────────────────────────────────
@@ -40,7 +55,13 @@ function StatBar({ score }: { score: number }) {
           style={[
             styles.barSegment,
             i < score
-              ? { backgroundColor: segColor, shadowColor: segColor, shadowOpacity: 0.6, shadowRadius: 3, shadowOffset: { width: 0, height: 0 } }
+              ? {
+                  backgroundColor: segColor,
+                  shadowColor: segColor,
+                  shadowOpacity: 0.6,
+                  shadowRadius: 3,
+                  shadowOffset: { width: 0, height: 0 },
+                }
               : { backgroundColor: `${segColor}28` },
           ]}
         />
@@ -53,7 +74,7 @@ function StatBar({ score }: { score: number }) {
 
 function StatRow({ statKey, score }: { statKey: keyof CharacterStats; score: number }) {
   const { label, subtitle } = STAT_DISPLAY[statKey];
-  const desc  = statDescription(statKey, score);
+  const desc = statDescription(statKey, score);
 
   return (
     <View style={styles.statRow}>
@@ -110,16 +131,22 @@ export function CharacterSheet({ userId }: CharacterSheetProps) {
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-
       {/* Class + alignment */}
       <Text style={styles.sectionTitle}>CHARACTER CLASS</Text>
-      <View style={[
-        styles.classCard,
-        { shadowColor: alignmentColor, shadowOpacity: 0.6, shadowRadius: 18, shadowOffset: { width: 0, height: 0 } },
-      ]}>
+      <View
+        style={[
+          styles.classCard,
+          {
+            shadowColor: alignmentColor,
+            shadowOpacity: 0.6,
+            shadowRadius: 18,
+            shadowOffset: { width: 0, height: 0 },
+          },
+        ]}
+      >
         <Text style={styles.className}>{className}</Text>
         <View style={styles.alignmentRow}>
-          <Text style={styles.alignmentPrefix}>Alignment  </Text>
+          <Text style={styles.alignmentPrefix}>Alignment </Text>
           <Text style={[styles.alignmentValue, { color: alignmentColor }]}>{alignment}</Text>
         </View>
         <Text style={styles.flavor}>"{flavor}"</Text>
@@ -143,7 +170,6 @@ export function CharacterSheet({ userId }: CharacterSheetProps) {
           <StatRow key={key} statKey={key} score={stats[key]} />
         ))}
       </View>
-
     </ScrollView>
   );
 }

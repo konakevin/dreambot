@@ -15,18 +15,37 @@ interface Props {
   hiddenTabs?: StatsTab[];
 }
 
-export function ProfileStatsRow({ postCount, friendCount, followerCount, followingCount, activeTab, onTabChange, pendingCount = 0, hiddenTabs = [] }: Props) {
+export function ProfileStatsRow({
+  postCount,
+  friendCount,
+  followerCount,
+  followingCount,
+  activeTab,
+  onTabChange,
+  pendingCount = 0,
+  hiddenTabs = [],
+}: Props) {
   const hidden = new Set(hiddenTabs);
   return (
     <View style={styles.statsRow}>
-      <TouchableOpacity style={styles.stat} onPress={() => onTabChange('posts')} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.stat}
+        onPress={() => onTabChange('posts')}
+        activeOpacity={0.7}
+      >
         <Text style={styles.statNumber}>{postCount}</Text>
-        <Text style={[styles.statLabel, activeTab === 'posts' && styles.statLabelActive]}>Posts</Text>
+        <Text style={[styles.statLabel, activeTab === 'posts' && styles.statLabelActive]}>
+          Posts
+        </Text>
       </TouchableOpacity>
       {!hidden.has('friends') && (
         <>
           <View style={styles.statDivider} />
-          <TouchableOpacity style={styles.stat} onPress={() => onTabChange('friends')} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={styles.stat}
+            onPress={() => onTabChange('friends')}
+            activeOpacity={0.7}
+          >
             <View style={styles.statWithBadge}>
               <Text style={styles.statNumber}>{friendCount}</Text>
               {pendingCount > 0 && (
@@ -35,26 +54,50 @@ export function ProfileStatsRow({ postCount, friendCount, followerCount, followi
                 </View>
               )}
             </View>
-            <Text style={[styles.statLabel, activeTab === 'friends' && styles.statLabelActive]}>Dreamers</Text>
+            <Text style={[styles.statLabel, activeTab === 'friends' && styles.statLabelActive]}>
+              Dreamers
+            </Text>
           </TouchableOpacity>
         </>
       )}
       <View style={styles.statDivider} />
-      <TouchableOpacity style={styles.stat} onPress={() => onTabChange('followers')} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.stat}
+        onPress={() => onTabChange('followers')}
+        activeOpacity={0.7}
+      >
         <Text style={styles.statNumber}>{followerCount}</Text>
-        <Text style={[styles.statLabel, activeTab === 'followers' && styles.statLabelActive]}>Followers</Text>
+        <Text style={[styles.statLabel, activeTab === 'followers' && styles.statLabelActive]}>
+          Followers
+        </Text>
       </TouchableOpacity>
       <View style={styles.statDivider} />
-      <TouchableOpacity style={styles.stat} onPress={() => onTabChange('following')} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.stat}
+        onPress={() => onTabChange('following')}
+        activeOpacity={0.7}
+      >
         <Text style={styles.statNumber}>{followingCount}</Text>
-        <Text style={[styles.statLabel, activeTab === 'following' && styles.statLabelActive]}>Following</Text>
+        <Text style={[styles.statLabel, activeTab === 'following' && styles.statLabelActive]}>
+          Following
+        </Text>
       </TouchableOpacity>
       {!hidden.has('streaks') && (
         <>
           <View style={styles.statDivider} />
-          <TouchableOpacity style={styles.stat} onPress={() => onTabChange('streaks')} activeOpacity={0.7}>
-            <Ionicons name="flash" size={18} color={activeTab === 'streaks' ? colors.textPrimary : colors.textSecondary} />
-            <Text style={[styles.statLabel, activeTab === 'streaks' && styles.statLabelActive]}>Streaks</Text>
+          <TouchableOpacity
+            style={styles.stat}
+            onPress={() => onTabChange('streaks')}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name="flash"
+              size={18}
+              color={activeTab === 'streaks' ? colors.textPrimary : colors.textSecondary}
+            />
+            <Text style={[styles.statLabel, activeTab === 'streaks' && styles.statLabelActive]}>
+              Streaks
+            </Text>
           </TouchableOpacity>
         </>
       )}

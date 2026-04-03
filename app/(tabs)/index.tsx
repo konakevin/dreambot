@@ -50,13 +50,18 @@ function useDreamFeed(tab: FeedTab) {
 
       let query = supabase
         .from('uploads')
-        .select('id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)')
+        .select(
+          'id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
+        )
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(pageParam, pageParam + PAGE_SIZE - 1);
 
       if (tab === 'following') {
-        const { data: followData } = await supabase.from('follows').select('following_id').eq('follower_id', user!.id);
+        const { data: followData } = await supabase
+          .from('follows')
+          .select('following_id')
+          .eq('follower_id', user!.id);
         const ids = (followData ?? []).map((f: Record<string, string>) => f.following_id);
         if (ids.length === 0) return [];
         query = query.in('user_id', ids);
@@ -126,13 +131,25 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
 function EmptyFeed({ tab }: { tab: FeedTab }) {
   const msgs: Record<FeedTab, { icon: string; title: string; sub: string }> = {
     forYou: { icon: 'moon-outline', title: 'No dreams yet', sub: 'Dreams will appear here' },
-    following: { icon: 'people-outline', title: 'No dreams from people you follow', sub: 'Follow dreamers to see their creations' },
-    dreamers: { icon: 'heart-outline', title: 'No dreams from your dreamers', sub: 'Connect with dreamers to see their art' },
+    following: {
+      icon: 'people-outline',
+      title: 'No dreams from people you follow',
+      sub: 'Follow dreamers to see their creations',
+    },
+    dreamers: {
+      icon: 'heart-outline',
+      title: 'No dreams from your dreamers',
+      sub: 'Connect with dreamers to see their art',
+    },
   };
   const m = msgs[tab];
   return (
     <View style={s.emptyWrap}>
-      <Ionicons name={m.icon as keyof typeof Ionicons.glyphMap} size={48} color={colors.textSecondary} />
+      <Ionicons
+        name={m.icon as keyof typeof Ionicons.glyphMap}
+        size={48}
+        color={colors.textSecondary}
+      />
       <Text style={s.emptyTitle}>{m.title}</Text>
       <Text style={s.emptySub}>{m.sub}</Text>
     </View>
@@ -142,16 +159,18 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useDreamFeed(activeTab);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useDreamFeed(activeTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const feedPosts = data?.pages.flat() ?? [];
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
 
   // Prepend pinned post (e.g. first dream from onboarding) then clear it
-  const posts = pinnedPost && activeTab === 'forYou'
-    ? [pinnedPost as unknown as DreamPostItem, ...feedPosts]
-    : feedPosts;
+  const posts =
+    pinnedPost && activeTab === 'forYou'
+      ? [pinnedPost as unknown as DreamPostItem, ...feedPosts]
+      : feedPosts;
 
   // Scroll to top when a pinned post appears
   useEffect(() => {
@@ -173,7 +192,9 @@ export default function HomeScreen() {
         posts={posts}
         isLoading={isLoading}
         listRef={listRef}
-        onEndReached={() => { if (hasNextPage && !isFetchingNextPage) fetchNextPage(); }}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+        }}
         ListEmptyComponent={<EmptyFeed tab={activeTab} />}
       />
 
@@ -200,11 +221,22 @@ export default function HomeScreen() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#000' },
-  emptyWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingHorizontal: 40 },
+  emptyWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    paddingHorizontal: 40,
+  },
   emptyTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
   topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, paddingBottom: 20 },
-  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
   feedTabs: { flexDirection: 'row', gap: 8 },
   searchButton: { position: 'absolute', right: 16 },
 });

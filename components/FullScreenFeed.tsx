@@ -47,8 +47,15 @@ interface Props {
 }
 
 export function FullScreenFeed({
-  posts, isLoading, onEndReached, initialIndex = 0,
-  onIndexChange, listRef, ListEmptyComponent, disableSwipeToProfile, hideTabBar,
+  posts,
+  isLoading,
+  onEndReached,
+  initialIndex = 0,
+  onIndexChange,
+  listRef,
+  ListEmptyComponent,
+  disableSwipeToProfile,
+  hideTabBar,
 }: Props) {
   const insets = useSafeAreaInsets();
   const internalRef = useRef<FlatList>(null);
@@ -65,34 +72,40 @@ export function FullScreenFeed({
   const [familyPostId, setFamilyPostId] = useState<string | null>(null);
   const [familyPost, setFamilyPost] = useState<DreamPostItem | null>(null);
 
-  const handleDelete = useCallback(async (uploadId: string) => {
-    const { error } = await supabase.from('uploads').delete().eq('id', uploadId);
-    if (error) {
-      Toast.show('Failed to delete', 'close-circle');
-      return;
-    }
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Toast.show('Dream deleted', 'checkmark-circle');
-    queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-    queryClient.invalidateQueries({ queryKey: ['userUploads'] });
-    queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-    queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-    if (router.canGoBack()) router.back();
-  }, [queryClient]);
+  const handleDelete = useCallback(
+    async (uploadId: string) => {
+      const { error } = await supabase.from('uploads').delete().eq('id', uploadId);
+      if (error) {
+        Toast.show('Failed to delete', 'close-circle');
+        return;
+      }
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Toast.show('Dream deleted', 'checkmark-circle');
+      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+      queryClient.invalidateQueries({ queryKey: ['userUploads'] });
+      queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+      if (router.canGoBack()) router.back();
+    },
+    [queryClient]
+  );
 
   const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-  const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
-    if (viewableItems.length > 0 && viewableItems[0].index !== null) {
-      const idx = viewableItems[0].index;
-      onIndexChange?.(idx);
-      // Prefetch next 3 images
-      const upcoming = posts.slice(idx + 1, idx + 4);
-      if (upcoming.length > 0) {
-        ExpoImage.prefetch(upcoming.map((p) => p.image_url));
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
+      if (viewableItems.length > 0 && viewableItems[0].index !== null) {
+        const idx = viewableItems[0].index;
+        onIndexChange?.(idx);
+        // Prefetch next 3 images
+        const upcoming = posts.slice(idx + 1, idx + 4);
+        if (upcoming.length > 0) {
+          ExpoImage.prefetch(upcoming.map((p) => p.image_url));
+        }
       }
-    }
-  }, [posts, onIndexChange]);
+    },
+    [posts, onIndexChange]
+  );
 
   if (isLoading) {
     return (
@@ -108,79 +121,90 @@ export function FullScreenFeed({
 
   return (
     <>
-    <FlatList
-      ref={ref}
-      data={posts}
-      keyExtractor={(item) => item.id}
-      pagingEnabled
-      showsVerticalScrollIndicator={false}
-      decelerationRate="fast"
-      windowSize={7}
-      maxToRenderPerBatch={5}
-      initialNumToRender={3}
-      removeClippedSubviews={false}
-      initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
-      getItemLayout={(_, index) => ({ length: SCREEN_HEIGHT, offset: SCREEN_HEIGHT * index, index })}
-      onViewableItemsChanged={onViewableItemsChanged}
-      viewabilityConfig={viewabilityConfig}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={2}
-      renderItem={({ item }) => (
-        <DreamCard
-          item={item}
-          bottomPadding={hideTabBar ? 16 + insets.bottom : 90 + insets.bottom}
-          isLiked={likeIds.has(item.id)}
-          onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
-          onToggleLike={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            toggleLike({ uploadId: item.id, currentlyLiked: likeIds.has(item.id) });
+      <FlatList
+        ref={ref}
+        data={posts}
+        keyExtractor={(item) => item.id}
+        pagingEnabled
+        showsVerticalScrollIndicator={false}
+        decelerationRate="fast"
+        windowSize={7}
+        maxToRenderPerBatch={5}
+        initialNumToRender={3}
+        removeClippedSubviews={true}
+        initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
+        getItemLayout={(_, index) => ({
+          length: SCREEN_HEIGHT,
+          offset: SCREEN_HEIGHT * index,
+          index,
+        })}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={2}
+        renderItem={({ item }) => (
+          <DreamCard
+            item={item}
+            bottomPadding={hideTabBar ? 16 + insets.bottom : 90 + insets.bottom}
+            isLiked={likeIds.has(item.id)}
+            onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
+            onToggleLike={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              toggleLike({ uploadId: item.id, currentlyLiked: likeIds.has(item.id) });
+            }}
+            onComment={() => router.push(`/comments?uploadId=${item.id}`)}
+            isSaved={favoriteIds.has(item.id)}
+            onToggleSave={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              toggleFavorite({ uploadId: item.id, currentlyFavorited: favoriteIds.has(item.id) });
+            }}
+            disableSwipeToProfile={disableSwipeToProfile}
+            onDelete={item.user_id === user?.id ? () => handleDelete(item.id) : undefined}
+            onFamily={
+              item.is_ai_generated
+                ? () => {
+                    setFamilyPostId(item.id);
+                    setFamilyPost(item);
+                  }
+                : undefined
+            }
+          />
+        )}
+      />
+      {familyPost && (
+        <DreamFamilySheet
+          visible={!!familyPostId}
+          onClose={() => {
+            setFamilyPostId(null);
+            setFamilyPost(null);
           }}
-          onComment={() => router.push(`/comments?uploadId=${item.id}`)}
-          isSaved={favoriteIds.has(item.id)}
-          onToggleSave={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            toggleFavorite({ uploadId: item.id, currentlyFavorited: favoriteIds.has(item.id) });
+          uploadId={familyPost.id}
+          isAiGenerated={familyPost.is_ai_generated}
+          aiPrompt={familyPost.ai_prompt ?? null}
+          onTwin={() => {
+            setTwin({
+              postId: familyPost.id,
+              prompt: familyPost.ai_prompt ?? familyPost.caption ?? '',
+              imageUrl: familyPost.image_url,
+              username: familyPost.username,
+              userId: familyPost.user_id,
+              recipeId: familyPost.recipe_id ?? null,
+            });
+            router.navigate('/(tabs)/upload');
           }}
-          disableSwipeToProfile={disableSwipeToProfile}
-          onDelete={item.user_id === user?.id ? () => handleDelete(item.id) : undefined}
-          onFamily={item.is_ai_generated ? () => {
-            setFamilyPostId(item.id);
-            setFamilyPost(item);
-          } : undefined}
+          onFuse={() => {
+            setFuse({
+              postId: familyPost.id,
+              prompt: familyPost.ai_prompt ?? familyPost.caption ?? '',
+              imageUrl: familyPost.image_url,
+              username: familyPost.username,
+              userId: familyPost.user_id,
+              recipeId: familyPost.recipe_id ?? null,
+            });
+            router.push('/fusion');
+          }}
         />
       )}
-    />
-    {familyPost && (
-      <DreamFamilySheet
-        visible={!!familyPostId}
-        onClose={() => { setFamilyPostId(null); setFamilyPost(null); }}
-        uploadId={familyPost.id}
-        isAiGenerated={familyPost.is_ai_generated}
-        aiPrompt={familyPost.ai_prompt ?? null}
-        onTwin={() => {
-          setTwin({
-            postId: familyPost.id,
-            prompt: familyPost.ai_prompt ?? familyPost.caption ?? '',
-            imageUrl: familyPost.image_url,
-            username: familyPost.username,
-            userId: familyPost.user_id,
-            recipeId: familyPost.recipe_id ?? null,
-          });
-          router.navigate('/(tabs)/upload');
-        }}
-        onFuse={() => {
-          setFuse({
-            postId: familyPost.id,
-            prompt: familyPost.ai_prompt ?? familyPost.caption ?? '',
-            imageUrl: familyPost.image_url,
-            username: familyPost.username,
-            userId: familyPost.user_id,
-            recipeId: familyPost.recipe_id ?? null,
-          });
-          router.push('/fusion');
-        }}
-      />
-    )}
     </>
   );
 }

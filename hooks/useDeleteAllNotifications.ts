@@ -8,10 +8,7 @@ export function useDeleteAllNotifications() {
 
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase
-        .from('notifications')
-        .delete()
-        .eq('recipient_id', user!.id);
+      const { error } = await supabase.from('notifications').delete().eq('recipient_id', user!.id);
 
       if (error) throw error;
     },

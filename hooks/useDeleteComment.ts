@@ -12,10 +12,7 @@ export function useDeleteComment() {
 
   return useMutation({
     mutationFn: async ({ commentId }: DeleteCommentArgs) => {
-      const { error } = await supabase
-        .from('comments')
-        .delete()
-        .eq('id', commentId);
+      const { error } = await supabase.from('comments').delete().eq('id', commentId);
 
       if (error) throw error;
     },

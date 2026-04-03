@@ -13,9 +13,7 @@ export function useFeatureFlags() {
   return useQuery({
     queryKey: ['featureFlags'],
     queryFn: async (): Promise<FeatureFlags> => {
-      const { data, error } = await supabase
-        .from('feature_flags')
-        .select('key, value');
+      const { data, error } = await supabase.from('feature_flags').select('key, value');
       if (error) throw error;
       const flags = { ...DEFAULTS };
       for (const row of data ?? []) {

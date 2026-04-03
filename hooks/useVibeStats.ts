@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
 export interface VibeStats {
-  vibeScore: number | null;   // 0-100 %, null if < 5 shared votes
+  vibeScore: number | null; // 0-100 %, null if < 5 shared votes
   bestStreak: number;
   sharedCount: number;
   isVibing: boolean;

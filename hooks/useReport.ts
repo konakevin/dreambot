@@ -14,14 +14,11 @@ export function useReport() {
   const user = useAuthStore((s) => s.user);
 
   return useMutation({
-    mutationFn: async ({ reason, details, uploadId, reportedUserId, commentId }: ReportArgs) => {
+    mutationFn: async ({ reason, uploadId }: ReportArgs) => {
       const { error } = await supabase.from('reports').insert({
         reporter_id: user!.id,
         reason,
-        details: details ?? null,
-        upload_id: uploadId ?? null,
-        reported_user_id: reportedUserId ?? null,
-        comment_id: commentId ?? null,
+        upload_id: uploadId ?? '',
       });
       if (error) throw error;
     },

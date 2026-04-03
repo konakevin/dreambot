@@ -1,16 +1,29 @@
 import { useState, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
-import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
+import { generateFromRecipe } from '@/lib/dreamApi';
 import { colors } from '@/constants/theme';
 import { MASCOT_URLS } from '@/constants/mascots';
 import { Toast } from '@/components/Toast';
@@ -18,7 +31,7 @@ import { Toast } from '@/components/Toast';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 // Balanced resolution: sharper than 512, cheaper than 768
 const GEN_WIDTH = 640;
-const GEN_HEIGHT = Math.round((SCREEN_HEIGHT / SCREEN_WIDTH) * GEN_WIDTH / 8) * 8; // round to nearest 8
+const GEN_HEIGHT = Math.round(((SCREEN_HEIGHT / SCREEN_WIDTH) * GEN_WIDTH) / 8) * 8; // round to nearest 8
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), 380);
 const MAX_DREAMS = 5;
@@ -30,7 +43,10 @@ interface Dream {
   prompt: string;
 }
 
-interface Props { onNext: () => void; onBack: () => void; }
+interface Props {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export function RevealStep({ onBack }: Props) {
   const recipe = useOnboardingStore((s) => s.recipe);
@@ -97,10 +113,10 @@ export function RevealStep({ onBack }: Props) {
     setError(null);
 
     try {
-      const input = buildPromptInput(recipe);
-      const prompt = buildRawPrompt(input);
-      console.log('[Reveal] Prompt:', prompt);
-      const url = await generateFluxImage(prompt);
+      // Server builds prompt from recipe, generates via Flux (skip Haiku for speed)
+      const result = await generateFromRecipe(recipe, { skipEnhance: true });
+      const url = result.image_url;
+      const prompt = result.prompt_used;
       console.log('[Reveal] Got URL:', url?.slice(0, 80));
 
       setDreams((prev) => {
@@ -123,81 +139,21 @@ export function RevealStep({ onBack }: Props) {
     }
   }
 
-  async function generateFluxImage(prompt: string): Promise<string> {
-    const replicateToken = process.env.EXPO_PUBLIC_REPLICATE_API_TOKEN ?? '';
-
-    // Submit prediction
-    const submitResponse = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${replicateToken}`,
-      },
-      body: JSON.stringify({
-        input: {
-          prompt,
-          aspect_ratio: '9:16',
-          num_outputs: 1,
-          output_format: 'jpg',
-        },
-      }),
-    });
-
-    if (submitResponse.status === 429) {
-      // Rate limited — wait and retry once
-      const errBody = await submitResponse.text();
-      const retryAfter = JSON.parse(errBody).retry_after ?? 6;
-      console.log('[Reveal] Rate limited, retrying in', retryAfter, 's');
-      await new Promise((r) => setTimeout(r, retryAfter * 1000));
-      return generateFluxImage(prompt);
-    }
-
-    if (!submitResponse.ok) {
-      const errBody = await submitResponse.text();
-      console.warn('[Reveal] Replicate submit error:', submitResponse.status, errBody);
-      throw new Error(`Replicate submit error: ${submitResponse.status}`);
-    }
-
-    const prediction = await submitResponse.json();
-    console.log('[Reveal] Replicate prediction:', prediction.id);
-
-    // Poll for result
-    let attempts = 0;
-    while (attempts < 60) {
-      await new Promise((r) => setTimeout(r, 1500));
-      attempts++;
-
-      const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-        headers: { 'Authorization': `Bearer ${replicateToken}` },
-      });
-      const pollData = await pollResponse.json();
-
-      if (pollData.status === 'succeeded') {
-        const url = pollData.output?.[0];
-        if (!url) throw new Error('No image URL in result');
-        console.log('[Reveal] Got URL:', url.slice(0, 80));
-        return url;
-      }
-
-      if (pollData.status === 'failed' || pollData.status === 'canceled') {
-        throw new Error(`Replicate generation ${pollData.status}: ${pollData.error ?? 'unknown'}`);
-      }
-    }
-    throw new Error('Generation timed out');
-  }
-
   function handleDreamAgain() {
     if (!canDreamAgain) return;
     generateImage();
   }
 
-  const handleScrollEnd = useCallback((e: { nativeEvent: { contentOffset: { x: number } } }) => {
-    const idx = Math.round(e.nativeEvent.contentOffset.x / IMAGE_WIDTH);
-    if (idx >= 0 && idx < dreams.length && idx !== activeIndex) {
-      setActiveIndex(idx);
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
-  }, [dreams.length, activeIndex]);
+  const handleScrollEnd = useCallback(
+    (e: { nativeEvent: { contentOffset: { x: number } } }) => {
+      const idx = Math.round(e.nativeEvent.contentOffset.x / IMAGE_WIDTH);
+      if (idx >= 0 && idx < dreams.length && idx !== activeIndex) {
+        setActiveIndex(idx);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+    },
+    [dreams.length, activeIndex]
+  );
 
   async function handleCreateBot() {
     if (!user || !activeDream) return;
@@ -205,26 +161,33 @@ export function RevealStep({ onBack }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     try {
-      await supabase.from('user_recipes').upsert({
-        user_id: user.id,
-        recipe,
-        onboarding_completed: true,
-        ai_enabled: true,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'user_id' });
+      await supabase.from('user_recipes').upsert(
+        {
+          user_id: user.id,
+          recipe: recipe as unknown as import('@/types/database').Json,
+          onboarding_completed: true,
+          ai_enabled: true,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      );
 
       await supabase.from('users').update({ has_ai_recipe: true }).eq('id', user.id);
 
-      const { data: insertedRow, error: uploadError } = await supabase.from('uploads').insert({
-        user_id: user.id,
-        categories: ['fantasy'],
-        image_url: activeDream.url,
-        media_type: 'image',
-        caption: null,
-        is_ai_generated: true,
-        ai_prompt: activeDream.prompt || null,
-        is_approved: true,
-      }).select('id').single();
+      const { data: insertedRow, error: uploadError } = await supabase
+        .from('uploads')
+        .insert({
+          user_id: user.id,
+          categories: ['fantasy'],
+          image_url: activeDream.url,
+          media_type: 'image',
+          caption: null,
+          is_ai_generated: true,
+          ai_prompt: activeDream.prompt || null,
+          is_approved: true,
+        })
+        .select('id')
+        .single();
 
       if (uploadError) {
         console.warn('[Reveal] Upload error:', uploadError);
@@ -258,11 +221,7 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Image
-            source={{ uri: MASCOT_URLS[1] }}
-            style={s.idleMascot}
-            contentFit="cover"
-          />
+          <Image source={{ uri: MASCOT_URLS[1] }} style={s.idleMascot} contentFit="cover" />
           <Text style={s.bigTitle}>Your Dream Bot is ready</Text>
           <Text style={s.centeredSub}>Tap below to see what it dreams up for you</Text>
           <TouchableOpacity
@@ -283,11 +242,7 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Image
-            source={{ uri: MASCOT_URLS[2] }}
-            style={s.idleMascot}
-            contentFit="cover"
-          />
+          <Image source={{ uri: MASCOT_URLS[2] }} style={s.idleMascot} contentFit="cover" />
           <Text style={s.bigTitle}>Dreaming...</Text>
           <Text style={s.centeredSub}>Your Dream Bot is creating a dream for you</Text>
           <ActivityIndicator size="small" color={colors.accent} />
@@ -397,7 +352,9 @@ export function RevealStep({ onBack }: Props) {
             ) : dreams.length > 1 ? (
               <View style={s.secondaryButton}>
                 <Ionicons name="swap-horizontal" size={16} color={colors.textSecondary} />
-                <Text style={[s.secondaryButtonText, { color: colors.textSecondary }]}>Swipe to browse</Text>
+                <Text style={[s.secondaryButtonText, { color: colors.textSecondary }]}>
+                  Swipe to browse
+                </Text>
               </View>
             ) : null}
 
@@ -420,53 +377,90 @@ export function RevealStep({ onBack }: Props) {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
 
-  centeredContent: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, paddingHorizontal: 32 },
+  centeredContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+    paddingHorizontal: 32,
+  },
   idleMascot: {
-    width: 140, height: 140, borderRadius: 28, marginBottom: 8,
+    width: 140,
+    height: 140,
+    borderRadius: 28,
+    marginBottom: 8,
   },
   bigTitle: { color: colors.textPrimary, fontSize: 22, fontWeight: '800', textAlign: 'center' },
   centeredSub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
 
   content: { flex: 1, paddingTop: 4, alignItems: 'center' },
   heading: {
-    color: colors.textPrimary, fontSize: 20, fontWeight: '800',
-    textAlign: 'center', marginBottom: 6, paddingHorizontal: 20,
+    color: colors.textPrimary,
+    fontSize: 20,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 6,
+    paddingHorizontal: 20,
   },
   subheading: {
-    color: colors.textSecondary, fontSize: 13, textAlign: 'center',
-    marginBottom: 16, paddingHorizontal: 24, lineHeight: 19,
+    color: colors.textSecondary,
+    fontSize: 13,
+    textAlign: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 24,
+    lineHeight: 19,
   },
 
   imageWrap: {
-    width: IMAGE_WIDTH, height: IMAGE_HEIGHT,
-    borderRadius: 20, overflow: 'hidden',
-    borderWidth: 1, borderColor: colors.border,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   imageSlide: {
-    width: IMAGE_WIDTH, height: IMAGE_HEIGHT,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
   },
   imageLoader: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     zIndex: 0,
   },
   image: {
-    width: IMAGE_WIDTH, height: IMAGE_HEIGHT, zIndex: 1,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
+    zIndex: 1,
   },
   generatingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.7)',
-    alignItems: 'center', justifyContent: 'center', gap: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
   },
   generatingText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
 
   dots: {
-    flexDirection: 'row', justifyContent: 'center', gap: 8, marginTop: 14,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 14,
   },
   dot: {
-    width: 8, height: 8, borderRadius: 4, backgroundColor: colors.border,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.border,
   },
   dotActive: {
-    width: 20, borderRadius: 4, backgroundColor: colors.accent,
+    width: 20,
+    borderRadius: 4,
+    backgroundColor: colors.accent,
   },
 
   errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
@@ -474,10 +468,18 @@ const s = StyleSheet.create({
 
   footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
   createButton: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 18,
-    shadowColor: colors.accent, shadowOpacity: 0.4, shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 }, elevation: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 18,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
   },
   createButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
   secondaryRow: { flexDirection: 'row', justifyContent: 'center', gap: 28 },

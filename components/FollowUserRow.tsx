@@ -18,7 +18,7 @@ export function FollowUserRow({ item, isFollowing, onFollow }: Props) {
   return (
     <TouchableOpacity
       style={styles.row}
-      onPress={() => isSelf ? null : router.push(`/user/${item.id}`)}
+      onPress={() => (isSelf ? null : router.push(`/user/${item.id}`))}
       activeOpacity={0.7}
     >
       {item.avatar_url ? (

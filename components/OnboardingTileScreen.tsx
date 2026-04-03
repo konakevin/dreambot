@@ -40,8 +40,17 @@ interface Props {
 }
 
 export function OnboardingTileScreen({
-  stepNumber, title, subtitle, tiles, selected, onToggle,
-  onNext, onBack, minRequired = 1, singleSelect, accentColor = colors.accent,
+  stepNumber,
+  title,
+  subtitle,
+  tiles,
+  selected,
+  onToggle,
+  onNext,
+  onBack,
+  minRequired = 1,
+  singleSelect,
+  accentColor = colors.accent,
   hideChrome,
 }: Props) {
   const isEditing = useOnboardingStore((s) => s.isEditing);
@@ -63,7 +72,10 @@ export function OnboardingTileScreen({
   return (
     <Wrapper style={styles.root}>
       {!hideChrome && (
-        <OnboardingHeader stepNumber={stepNumber} onBack={onBack ?? (isEditing ? () => router.replace('/(tabs)') : undefined)} />
+        <OnboardingHeader
+          stepNumber={stepNumber}
+          onBack={onBack ?? (isEditing ? () => router.replace('/(tabs)') : undefined)}
+        />
       )}
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
@@ -77,10 +89,11 @@ export function OnboardingTileScreen({
               <TouchableOpacity
                 key={tile.key}
                 style={[
-                  tile.icon
-                    ? styles.tile
-                    : styles.pill,
-                  isSelected && [tile.icon ? styles.tileSelected : styles.pillSelected, { borderColor: accentColor, backgroundColor: `${accentColor}12` }],
+                  tile.icon ? styles.tile : styles.pill,
+                  isSelected && [
+                    tile.icon ? styles.tileSelected : styles.pillSelected,
+                    { borderColor: accentColor, backgroundColor: `${accentColor}12` },
+                  ],
                 ]}
                 onPress={() => handleToggle(tile.key)}
                 activeOpacity={0.7}
@@ -92,7 +105,12 @@ export function OnboardingTileScreen({
                     color={isSelected ? accentColor : colors.textSecondary}
                   />
                 ) : null}
-                <Text style={[tile.icon ? styles.tileLabel : styles.pillLabel, isSelected && { color: accentColor }]}>
+                <Text
+                  style={[
+                    tile.icon ? styles.tileLabel : styles.pillLabel,
+                    isSelected && { color: accentColor },
+                  ]}
+                >
                   {tile.label}
                 </Text>
               </TouchableOpacity>
@@ -110,13 +128,23 @@ export function OnboardingTileScreen({
             </TouchableOpacity>
           )}
           <TouchableOpacity
-            style={[styles.nextButton, !onBack && { flex: 1 }, !canProceed && styles.nextButtonDisabled]}
+            style={[
+              styles.nextButton,
+              !onBack && { flex: 1 },
+              !canProceed && styles.nextButtonDisabled,
+            ]}
             onPress={handleNext}
             disabled={!canProceed}
             activeOpacity={0.7}
           >
-            <Text style={[styles.nextButtonText, !canProceed && styles.nextButtonTextDisabled]}>Next</Text>
-            <Ionicons name="arrow-forward" size={18} color={canProceed ? '#FFFFFF' : colors.textSecondary} />
+            <Text style={[styles.nextButtonText, !canProceed && styles.nextButtonTextDisabled]}>
+              Next
+            </Text>
+            <Ionicons
+              name="arrow-forward"
+              size={18}
+              color={canProceed ? '#FFFFFF' : colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -127,16 +155,29 @@ export function OnboardingTileScreen({
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   backButton: {
-    position: 'absolute', top: 16, left: 16, zIndex: 1,
-    width: 36, height: 36, alignItems: 'center', justifyContent: 'center',
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    zIndex: 1,
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeButton: {
-    position: 'absolute', top: 16, right: 16, zIndex: 1,
-    width: 36, height: 36, alignItems: 'center', justifyContent: 'center',
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    zIndex: 1,
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     alignItems: 'center',
-    paddingTop: 16, paddingBottom: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
   },
   progressBar: { flexDirection: 'row', gap: 5 },
   progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.border },
@@ -187,17 +228,32 @@ const styles = StyleSheet.create({
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   backBtn: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-    paddingVertical: 16, borderRadius: 14,
-    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.accentBorder,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 16,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
   },
   backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
   nextButton: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
   },
-  nextButtonDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  nextButtonDisabled: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
   nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
   nextButtonTextDisabled: { color: colors.textSecondary },
 });

@@ -26,7 +26,13 @@ export function useToggleBlock() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ userId, currentlyBlocked }: { userId: string; currentlyBlocked: boolean }) => {
+    mutationFn: async ({
+      userId,
+      currentlyBlocked,
+    }: {
+      userId: string;
+      currentlyBlocked: boolean;
+    }) => {
       if (currentlyBlocked) {
         const { error } = await supabase
           .from('blocked_users')

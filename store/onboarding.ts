@@ -1,7 +1,14 @@
 import { create } from 'zustand';
 import type {
-  Recipe, RecipeAxes, Interest, ColorPalette, PersonalityTag,
-  Era, Setting, SceneAtmosphere, SpiritCompanion,
+  Recipe,
+  RecipeAxes,
+  Interest,
+  ColorPalette,
+  PersonalityTag,
+  Era,
+  Setting,
+  SceneAtmosphere,
+  SpiritCompanion,
 } from '@/types/recipe';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 import { MOOD_TILES } from '@/constants/onboarding';
@@ -49,20 +56,24 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   toggleMood: (key) =>
     set((s) => {
       const current = s.selectedMoods;
-      const next = current.includes(key)
-        ? current.filter((k) => k !== key)
-        : [...current, key];
+      const next = current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
       // Compute average energy/brightness/warmth from selected moods
       const selectedData = MOOD_TILES.filter((m) => next.includes(m.key));
       if (selectedData.length > 0) {
         const avgEnergy = selectedData.reduce((sum, m) => sum + m.energy, 0) / selectedData.length;
-        const avgBrightness = selectedData.reduce((sum, m) => sum + m.brightness, 0) / selectedData.length;
+        const avgBrightness =
+          selectedData.reduce((sum, m) => sum + m.brightness, 0) / selectedData.length;
         const avgWarmth = selectedData.reduce((sum, m) => sum + m.warmth, 0) / selectedData.length;
         return {
           selectedMoods: next,
           recipe: {
             ...s.recipe,
-            axes: { ...s.recipe.axes, energy: clamp(avgEnergy), brightness: clamp(avgBrightness), color_warmth: clamp(avgWarmth) },
+            axes: {
+              ...s.recipe.axes,
+              energy: clamp(avgEnergy),
+              brightness: clamp(avgBrightness),
+              color_warmth: clamp(avgWarmth),
+            },
           },
         };
       }
@@ -103,9 +114,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   togglePersonalityTag: (tag) =>
     set((s) => {
       const current = s.recipe.personality_tags;
-      const next = current.includes(tag)
-        ? current.filter((t) => t !== tag)
-        : [...current, tag];
+      const next = current.includes(tag) ? current.filter((t) => t !== tag) : [...current, tag];
       return { recipe: { ...s.recipe, personality_tags: next } };
     }),
 
@@ -127,9 +136,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   toggleEra: (era) =>
     set((s) => {
       const current = s.recipe.eras;
-      const next = current.includes(era)
-        ? current.filter((e) => e !== era)
-        : [...current, era];
+      const next = current.includes(era) ? current.filter((e) => e !== era) : [...current, era];
       return { recipe: { ...s.recipe, eras: next } };
     }),
 

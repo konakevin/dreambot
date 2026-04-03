@@ -28,22 +28,17 @@ export function useSendShare() {
       queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
 
       // Optimistically bump interaction counts so ordering updates without a refetch
-      queryClient.setQueryData<ShareableViber[]>(
-        ['shareableVibers', user?.id],
-        (old) => {
-          if (!old) return old;
-          const receiverSet = new Set(receiverIds);
-          const updated = old.map((v) =>
-            receiverSet.has(v.userId)
-              ? { ...v, interactionCount: v.interactionCount + 1 }
-              : v
-          );
-          // Re-sort: interaction count DESC, vibe score DESC
-          return updated.sort((a, b) =>
-            b.interactionCount - a.interactionCount || b.vibeScore - a.vibeScore
-          );
-        },
-      );
+      queryClient.setQueryData<ShareableViber[]>(['shareableVibers', user?.id], (old) => {
+        if (!old) return old;
+        const receiverSet = new Set(receiverIds);
+        const updated = old.map((v) =>
+          receiverSet.has(v.userId) ? { ...v, interactionCount: v.interactionCount + 1 } : v
+        );
+        // Re-sort: interaction count DESC, vibe score DESC
+        return updated.sort(
+          (a, b) => b.interactionCount - a.interactionCount || b.vibeScore - a.vibeScore
+        );
+      });
     },
   });
 }

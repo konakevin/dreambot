@@ -2,7 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { DreamWishBadge } from '@/components/DreamWishBadge';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -55,19 +62,16 @@ export default function ProfileScreen() {
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
 
-
-
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     toggleFollow({ userId: targetId, currentlyFollowing: followingIds.has(targetId) });
   }
 
   function handleStatsTabChange(tab: StatsTab) {
-    setActiveTab(tab);
+    setActiveTab(tab as Tab);
   }
 
-  const statsActiveTab: StatsTab =
-    activeTab === 'saved' ? 'posts' : (activeTab as StatsTab);
+  const statsActiveTab: StatsTab = activeTab === 'saved' ? 'posts' : (activeTab as StatsTab);
 
   const header = (
     <>
@@ -82,7 +86,6 @@ export default function ProfileScreen() {
               showAvatar
               avatarSize={32}
             />
-
           </View>
           <TouchableOpacity onPress={() => router.push('/settings')} hitSlop={12}>
             <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
@@ -114,8 +117,14 @@ export default function ProfileScreen() {
             onPress={() => setActiveTab('posts')}
             activeOpacity={0.7}
           >
-            <Ionicons name="grid-outline" size={16} color={activeTab === 'posts' ? colors.textPrimary : colors.textSecondary} />
-            <Text style={[styles.tabText, activeTab === 'posts' && styles.tabTextActive]}>My Posts</Text>
+            <Ionicons
+              name="grid-outline"
+              size={16}
+              color={activeTab === 'posts' ? colors.textPrimary : colors.textSecondary}
+            />
+            <Text style={[styles.tabText, activeTab === 'posts' && styles.tabTextActive]}>
+              My Posts
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'saved' && styles.tabActive]}
@@ -127,7 +136,9 @@ export default function ProfileScreen() {
               size={16}
               color={activeTab === 'saved' ? colors.textPrimary : colors.textSecondary}
             />
-            <Text style={[styles.tabText, activeTab === 'saved' && styles.tabTextActive]}>Saved</Text>
+            <Text style={[styles.tabText, activeTab === 'saved' && styles.tabTextActive]}>
+              Saved
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -172,10 +183,11 @@ export default function ProfileScreen() {
           ListHeaderComponent={header}
           ListEmptyComponent={
             <View style={styles.center}>
-              {loadingFriends
-                ? <ActivityIndicator color={colors.textSecondary} />
-                : <Text style={styles.emptyText}>No friends yet</Text>
-              }
+              {loadingFriends ? (
+                <ActivityIndicator color={colors.textSecondary} />
+              ) : (
+                <Text style={styles.emptyText}>No friends yet</Text>
+              )}
             </View>
           }
           renderItem={({ item }) => {
@@ -214,10 +226,11 @@ export default function ProfileScreen() {
         ListHeaderComponent={header}
         ListEmptyComponent={
           <View style={styles.center}>
-            {isLoadingList
-              ? <ActivityIndicator color={colors.textSecondary} />
-              : <Text style={styles.emptyText}>{emptyLabel}</Text>
-            }
+            {isLoadingList ? (
+              <ActivityIndicator color={colors.textSecondary} />
+            ) : (
+              <Text style={styles.emptyText}>{emptyLabel}</Text>
+            )}
           </View>
         }
         renderItem={({ item }) => (

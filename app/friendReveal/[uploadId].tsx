@@ -5,8 +5,12 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import Animated, {
-  useSharedValue, useAnimatedStyle,
-  withTiming, withDelay, withSequence, Easing,
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  withSequence,
+  Easing,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { usePost } from '@/hooks/usePost';
@@ -17,7 +21,11 @@ import type { FriendVote } from '@/hooks/useFeed';
 
 // ── Friend row with animated reveal ─────────────────────────────────────────
 
-function FriendRevealRow({ friend, userVote, index }: {
+function FriendRevealRow({
+  friend,
+  userVote,
+  index,
+}: {
   friend: FriendVote;
   userVote: 'rad' | 'bad';
   index: number;
@@ -31,14 +39,17 @@ function FriendRevealRow({ friend, userVote, index }: {
   useEffect(() => {
     const delay = 150 + index * 80;
     opacity.value = withDelay(delay, withTiming(1, { duration: 200 }));
-    scale.value = withDelay(delay, withSequence(
-      withTiming(1.08, { duration: 150, easing: Easing.out(Easing.quad) }),
-      withTiming(1, { duration: 100 }),
-    ));
-    bgOpacity.value = withDelay(delay, withSequence(
-      withTiming(0.3, { duration: 100 }),
-      withTiming(0.08, { duration: 400 }),
-    ));
+    scale.value = withDelay(
+      delay,
+      withSequence(
+        withTiming(1.08, { duration: 150, easing: Easing.out(Easing.quad) }),
+        withTiming(1, { duration: 100 })
+      )
+    );
+    bgOpacity.value = withDelay(
+      delay,
+      withSequence(withTiming(0.3, { duration: 100 }), withTiming(0.08, { duration: 400 }))
+    );
   }, []);
 
   const revealStyle = useAnimatedStyle(() => ({
@@ -65,28 +76,25 @@ function FriendRevealRow({ friend, userVote, index }: {
             <Text style={styles.friendAvatarInitial}>{initial}</Text>
           </View>
         )}
-        <GradientUsername
-          username={friend.username}
-          rank={null}
-          style={styles.friendUsername}
-        />
+        <GradientUsername username={friend.username} rank={null} style={styles.friendUsername} />
       </View>
 
       {/* Vote badge — staggered reveal */}
-      <Animated.View style={[
-        styles.revealedBadge,
-        isMatch ? styles.matchBadge : styles.mismatchBadge,
-        revealStyle,
-      ]}>
+      <Animated.View
+        style={[
+          styles.revealedBadge,
+          isMatch ? styles.matchBadge : styles.mismatchBadge,
+          revealStyle,
+        ]}
+      >
         <Ionicons
           name={friend.vote === 'rad' ? 'thumbs-up' : 'thumbs-down'}
           size={14}
           color={friend.vote === 'rad' ? '#FFD700' : '#6699EE'}
         />
-        <Text style={[
-          styles.revealedText,
-          { color: friend.vote === 'rad' ? '#FFD700' : '#6699EE' },
-        ]}>
+        <Text
+          style={[styles.revealedText, { color: friend.vote === 'rad' ? '#FFD700' : '#6699EE' }]}
+        >
           {friend.vote === 'rad' ? 'RAD' : 'BAD'}
         </Text>
         {isMatch ? (
@@ -103,12 +111,12 @@ function FriendRevealRow({ friend, userVote, index }: {
 
 export default function FriendRevealScreen() {
   const { uploadId, vote } = useLocalSearchParams<{ uploadId: string; vote: string }>();
-  const userVote = (vote === 'rad' || vote === 'bad') ? vote : 'rad';
+  const userVote = vote === 'rad' || vote === 'bad' ? vote : 'rad';
   const { data: post } = usePost(uploadId);
   const { data: friendVotes = [] } = useFriendVotesOnPost(uploadId);
 
   const matchCount = friendVotes.filter((f) => f.vote === userVote).length;
-  const thumbnailUrl = post?.thumbnail_url ?? post?.image_url;
+  const thumbnailUrl = post?.image_url;
 
   // Haptic on mount based on match results
   useEffect(() => {
@@ -142,12 +150,16 @@ export default function FriendRevealScreen() {
             size={12}
             color={userVote === 'rad' ? '#FFD700' : '#6699EE'}
           />
-          <Text style={[styles.yourVoteText, { color: userVote === 'rad' ? '#FFD700' : '#6699EE' }]}>
+          <Text
+            style={[styles.yourVoteText, { color: userVote === 'rad' ? '#FFD700' : '#6699EE' }]}
+          >
             You voted {userVote.toUpperCase()}
           </Text>
         </View>
         {post?.caption && (
-          <Text style={styles.thumbnailCaption} numberOfLines={1}>{post.caption}</Text>
+          <Text style={styles.thumbnailCaption} numberOfLines={1}>
+            {post.caption}
+          </Text>
         )}
       </View>
 
@@ -156,8 +168,7 @@ export default function FriendRevealScreen() {
         <Text style={styles.resultText}>
           {matchCount > 0
             ? `${matchCount} ${matchCount === 1 ? 'match' : 'matches'} out of ${friendVotes.length}`
-            : 'No matches this time!'
-          }
+            : 'No matches this time!'}
         </Text>
       </View>
 
@@ -167,11 +178,7 @@ export default function FriendRevealScreen() {
         keyExtractor={(item) => item.username}
         contentContainerStyle={styles.listContent}
         renderItem={({ item, index }) => (
-          <FriendRevealRow
-            friend={item}
-            userVote={userVote}
-            index={index}
-          />
+          <FriendRevealRow friend={item} userVote={userVote} index={index} />
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>

@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
   );
 
   const today = new Date().toISOString().slice(0, 10);
@@ -48,7 +48,9 @@ Deno.serve(async (req) => {
 
   if (!eligible || eligible.length === 0) {
     console.log('[Nightly] No eligible users');
-    return new Response(JSON.stringify({ message: 'No eligible users', generated: 0 }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'No eligible users', generated: 0 }), {
+      status: 200,
+    });
   }
 
   // 2. Filter out users who already got a dream today
@@ -67,7 +69,9 @@ Deno.serve(async (req) => {
       wish_recipient_ids: (u.wish_recipient_ids as string[] | null) ?? null,
     }));
 
-  console.log(`[Nightly] ${users.length} users to dream for (${eligible.length} eligible, ${doneSet.size} already done)`);
+  console.log(
+    `[Nightly] ${users.length} users to dream for (${eligible.length} eligible, ${doneSet.size} already done)`
+  );
 
   // 3. Process in batches
   let generated = 0;
@@ -82,7 +86,9 @@ Deno.serve(async (req) => {
 
     const batch = users.slice(i, i + BATCH_SIZE);
     const results = await Promise.allSettled(
-      batch.map((user) => generateDreamForUser(user, supabase, REPLICATE_TOKEN, ANTHROPIC_KEY, today)),
+      batch.map((user) =>
+        generateDreamForUser(user, supabase, REPLICATE_TOKEN, ANTHROPIC_KEY, today)
+      )
     );
 
     for (const result of results) {
@@ -111,7 +117,7 @@ async function generateDreamForUser(
   supabase: ReturnType<typeof createClient>,
   replicateToken: string,
   anthropicKey: string | undefined,
-  today: string,
+  today: string
 ) {
   const { recipe, dream_wish: wish } = user;
   const input = buildPromptInput(recipe);
@@ -119,7 +125,8 @@ async function generateDreamForUser(
   // Build prompt — use Haiku if available, fallback to raw
   let prompt: string;
   const haikuBrief = wish
-    ? buildHaikuPrompt(input) + `\n\nIMPORTANT: The user wished for "${wish}". Make this the heart of the dream — use their taste profile to style it, but the wish is the subject.`
+    ? buildHaikuPrompt(input) +
+      `\n\nIMPORTANT: The user wished for "${wish}". Make this the heart of the dream — use their taste profile to style it, but the wish is the subject.`
     : buildHaikuPrompt(input);
 
   if (anthropicKey) {
@@ -154,13 +161,16 @@ async function generateDreamForUser(
   }
 
   // Generate image via Replicate Flux Dev
-  const createRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${replicateToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      input: { prompt, aspect_ratio: '9:16', num_outputs: 1, output_format: 'jpg' },
-    }),
-  });
+  const createRes = await fetch(
+    'https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions',
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${replicateToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: { prompt, aspect_ratio: '9:16', num_outputs: 1, output_format: 'jpg' },
+      }),
+    }
+  );
 
   if (createRes.status === 429) {
     const body = await createRes.json();
@@ -177,10 +187,13 @@ async function generateDreamForUser(
   for (let i = 0; i < 60; i++) {
     await new Promise((r) => setTimeout(r, 2000));
     const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${createData.id}`, {
-      headers: { 'Authorization': `Bearer ${replicateToken}` },
+      headers: { Authorization: `Bearer ${replicateToken}` },
     });
     const pollData = await pollRes.json();
-    if (pollData.status === 'succeeded') { imageUrl = pollData.output?.[0]; break; }
+    if (pollData.status === 'succeeded') {
+      imageUrl = pollData.output?.[0];
+      break;
+    }
     if (pollData.status === 'failed') throw new Error('Generation failed');
   }
 
@@ -201,28 +214,35 @@ async function generateDreamForUser(
   const permanentUrl = urlData.publicUrl;
 
   // Store the dream
-  const { data: upload } = await supabase.from('uploads').insert({
-    user_id: user.user_id,
-    categories: ['art'],
-    image_url: permanentUrl,
-    media_type: 'image',
-    caption: null,
-    is_ai_generated: true,
-    ai_prompt: prompt,
-    from_wish: wish,
-    is_approved: true,
-    is_active: true,
-  }).select('id').single();
+  const { data: upload } = await supabase
+    .from('uploads')
+    .insert({
+      user_id: user.user_id,
+      categories: ['art'],
+      image_url: permanentUrl,
+      media_type: 'image',
+      caption: null,
+      is_ai_generated: true,
+      ai_prompt: prompt,
+      from_wish: wish,
+      is_approved: true,
+      is_active: true,
+    })
+    .select('id')
+    .single();
 
   // Send notification to dreamer
   if (upload?.id) {
-    await supabase.from('notifications').insert({
-      recipient_id: user.user_id,
-      actor_id: user.user_id,
-      type: 'dream_generated',
-      upload_id: upload.id,
-      body: wish ? `Wish: "${wish.slice(0, 60)}"` : null,
-    }).catch(() => {});
+    await supabase
+      .from('notifications')
+      .insert({
+        recipient_id: user.user_id,
+        actor_id: user.user_id,
+        type: 'dream_generated',
+        upload_id: upload.id,
+        body: wish ? `Wish: "${wish.slice(0, 60)}"` : null,
+      })
+      .catch(() => {});
 
     // Send notification to wish recipients (friends)
     if (user.wish_recipient_ids && user.wish_recipient_ids.length > 0) {
@@ -233,31 +253,44 @@ async function generateDreamForUser(
         upload_id: upload.id,
         body: wish ? `Wished you a dream: "${wish.slice(0, 50)}"` : 'Wished you a dream',
       }));
-      await supabase.from('notifications').insert(friendNotifs).catch(() => {});
+      await supabase
+        .from('notifications')
+        .insert(friendNotifs)
+        .catch(() => {});
     }
   }
 
   // Log generation
-  await supabase.from('ai_generation_log').insert({
-    user_id: user.user_id,
-    recipe_snapshot: recipe,
-    enhanced_prompt: prompt,
-    model_used: 'flux-dev',
-    cost_cents: COST_PER_IMAGE_CENTS,
-    status: 'completed',
-  }).catch(() => {});
+  await supabase
+    .from('ai_generation_log')
+    .insert({
+      user_id: user.user_id,
+      recipe_snapshot: recipe,
+      enhanced_prompt: prompt,
+      model_used: 'flux-dev',
+      cost_cents: COST_PER_IMAGE_CENTS,
+      status: 'completed',
+    })
+    .catch(() => {});
 
   // Update budget
-  await supabase.from('ai_generation_budget').upsert({
-    user_id: user.user_id,
-    date: today,
-    images_generated: 1,
-    total_cost_cents: COST_PER_IMAGE_CENTS,
-  }, { onConflict: 'user_id,date' }).catch(() => {});
+  await supabase
+    .from('ai_generation_budget')
+    .upsert(
+      {
+        user_id: user.user_id,
+        date: today,
+        images_generated: 1,
+        total_cost_cents: COST_PER_IMAGE_CENTS,
+      },
+      { onConflict: 'user_id,date' }
+    )
+    .catch(() => {});
 
   // Clear wish + recipient if used
   if (wish) {
-    await supabase.from('user_recipes')
+    await supabase
+      .from('user_recipes')
       .update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null })
       .eq('user_id', user.user_id)
       .catch(() => {});

@@ -15,13 +15,23 @@ interface Props {
   onRemove: () => void;
 }
 
-export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept, onDecline, onRemove }: Props) {
+export function FriendButton({
+  status,
+  onSendRequest,
+  onCancelRequest,
+  onAccept,
+  onDecline,
+  onRemove,
+}: Props) {
   if (status === 'pending_received') {
     return (
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.acceptButton}
-          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onAccept(); }}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            onAccept();
+          }}
           activeOpacity={0.7}
         >
           <Ionicons name="checkmark" size={16} color="#FFFFFF" />
@@ -31,7 +41,7 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
           style={styles.declineButton}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            showAlert('Decline request?', 'They won\'t be notified.', [
+            showAlert('Decline request?', "They won't be notified.", [
               { text: 'Keep', style: 'cancel' },
               { text: 'Decline', style: 'destructive', onPress: onDecline },
             ]);
@@ -83,7 +93,10 @@ export function FriendButton({ status, onSendRequest, onCancelRequest, onAccept,
   return (
     <TouchableOpacity
       style={styles.addButton}
-      onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onSendRequest(); }}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onSendRequest();
+      }}
       activeOpacity={0.7}
     >
       <Ionicons name="person-add" size={14} color={colors.accent} />

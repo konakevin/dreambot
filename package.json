@@ -8,7 +8,11 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test": "jest",
+    "format": "prettier --write \"**/*.{ts,tsx}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx}\" --ignore-path .gitignore",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -67,6 +71,8 @@
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
     "@typescript-eslint/eslint-plugin": "^8.57.2",
     "@typescript-eslint/parser": "^8.57.2",
@@ -76,7 +82,10 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-native": "^5.0.0",
     "eslint-plugin-security": "^4.0.0",
+    "jest": "^30.3.0",
+    "jest-expo": "^55.0.13",
     "prettier": "^3.8.1",
+    "react-test-renderer": "^19.1.0",
     "typescript": "~5.9.2"
   },
   "private": true

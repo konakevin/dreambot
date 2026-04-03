@@ -31,15 +31,10 @@ export function DreamWishBadge({ variant = 'pill' }: Props) {
           size={variant === 'card' ? 16 : 14}
           color={colors.textSecondary}
         />
-        <Text
-          style={variant === 'card' ? s.cardText : s.pillText}
-          numberOfLines={1}
-        >
+        <Text style={variant === 'card' ? s.cardText : s.pillText} numberOfLines={1}>
           {wish ? 'A wish is on its way' : 'Make a wish'}
         </Text>
-        {wish && (
-          <Ionicons name="checkmark-circle" size={16} color={colors.success} />
-        )}
+        {wish && <Ionicons name="checkmark-circle" size={16} color={colors.success} />}
       </TouchableOpacity>
 
       <DreamWishSheet
@@ -55,23 +50,37 @@ export function DreamWishBadge({ variant = 'pill' }: Props) {
 
 const s = StyleSheet.create({
   pill: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: colors.overlayWhite, borderRadius: 20,
-    paddingHorizontal: 12, paddingVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: colors.overlayWhite,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   pillIcon: { width: 16, height: 16, borderRadius: 8 },
   pillText: {
-    color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '600',
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 13,
+    fontWeight: '600',
     maxWidth: 140,
   },
   card: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: colors.card, borderRadius: 14,
-    borderWidth: 1, borderColor: colors.border,
-    paddingHorizontal: 16, paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.card,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   cardIcon: { width: 20, height: 20, borderRadius: 10 },
   cardText: {
-    color: colors.textSecondary, fontSize: 14, fontWeight: '600',
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

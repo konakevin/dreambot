@@ -1,16 +1,33 @@
 import { useState, useRef, useMemo } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Dimensions, Modal, Pressable, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+  Modal,
+  Pressable,
+  FlatList,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withSpring } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSequence,
+  withSpring,
+} from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
+import { buildPromptInput } from '@/lib/recipeEngine';
 import { Toast } from '@/components/Toast';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 import type { Recipe } from '@/types/recipe';
@@ -20,15 +37,21 @@ import { showAlert } from '@/components/CustomAlert';
 import { registerRecipe } from '@/lib/recipeRegistry';
 import { MASCOT_URLS } from '@/constants/mascots';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const PREVIEW_WIDTH = SCREEN_WIDTH - 48;
 
-import { enhanceWithHaiku, generateFluxDev, generateFluxKontext, persistImage, ANTHROPIC_KEY } from '@/lib/dreamApi';
+import {
+  generateFromPhoto,
+  generateFromRecipe,
+  generateTwin,
+  generateDream,
+  persistImage,
+} from '@/lib/dreamApi';
+import { moderateText } from '@/lib/moderation';
 import { postDream, pinToFeed } from '@/lib/dreamPost';
 import { useFusionStore } from '@/store/fusion';
 
 type Phase = 'pick' | 'preview' | 'dreaming' | 'reveal' | 'posting';
-
 
 export default function DreamScreen() {
   const user = useAuthStore((s) => s.user);
@@ -40,7 +63,9 @@ export default function DreamScreen() {
   const { mutateAsync: spendSparkles } = useSpendSparkles();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
-  const [dreamAlbum, setDreamAlbum] = useState<{ url: string; prompt: string; fromWish: string | null }[]>([]);
+  const [dreamAlbum, setDreamAlbum] = useState<
+    { url: string; prompt: string; fromWish: string | null }[]
+  >([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const albumRef = useRef<FlatList>(null);
   const [userHint, setUserHint] = useState('');
@@ -121,7 +146,7 @@ export default function DreamScreen() {
       .select('recipe')
       .eq('user_id', user.id)
       .single();
-    const r = (data?.recipe as Recipe) ?? DEFAULT_RECIPE;
+    const r = (data?.recipe as unknown as Recipe) ?? DEFAULT_RECIPE;
     setCachedRecipe(r);
     return r;
   }
@@ -144,7 +169,9 @@ export default function DreamScreen() {
       setUserHint('');
       imgOpacity.value = 0;
       imgScale.value = 0.85;
-    } catch { /* cancelled */ }
+    } catch {
+      /* cancelled */
+    }
   }
 
   async function dream() {
@@ -165,17 +192,30 @@ export default function DreamScreen() {
       if (!photoBase64) throw new Error('No photo data');
       const refUrl = `data:image/jpeg;base64,${photoBase64}`;
 
-      let p: string;
+      let result: { image_url: string; prompt_used: string };
 
       if (!letBotDream && userHint.trim()) {
-        // User wrote their own prompt — use it directly
-        p = userHint.trim();
+        // Moderate user-typed prompt — displayed as caption
+        const modResult = await moderateText(userHint.trim());
+        if (!modResult.passed) {
+          throw new Error(modResult.reason ?? 'Prompt contains inappropriate content');
+        }
+        // User wrote their own prompt — send it directly with the photo
+        result = await generateDream({
+          mode: 'flux-kontext',
+          prompt: userHint.trim(),
+          input_image: refUrl,
+        });
       } else {
-        // Let Dream Bot handle it via recipe + Haiku enhancement
+        // Let Dream Bot handle it via recipe + Haiku enhancement (all server-side)
         const recipe = await loadRecipe();
         const input = buildPromptInput(recipe);
-        const scene = [input.eraKeywords, input.settingKeywords, input.sceneAtmosphere].filter(Boolean).join(', ');
-        const style = [input.mood, input.lighting, input.colorKeywords, input.weirdnessModifier].filter(Boolean).join(', ');
+        const scene = [input.eraKeywords, input.settingKeywords, input.sceneAtmosphere]
+          .filter(Boolean)
+          .join(', ');
+        const style = [input.mood, input.lighting, input.colorKeywords, input.weirdnessModifier]
+          .filter(Boolean)
+          .join(', ');
         const tags = input.personalityTags.join(', ');
         const hint = userHint.trim();
 
@@ -190,9 +230,13 @@ DREAM BOT PERSONALITY:
 - Personality: ${tags || 'expressive'}
 ${input.spiritAppears && input.spiritCompanion ? `- Companion: small ${input.spiritCompanion.replace(/_/g, ' ')} somewhere` : ''}
 
-${hint ? `USER HINT: "${hint}"
+${
+  hint
+    ? `USER HINT: "${hint}"
 
-The user typed this hint. Figure out their INTENT and weave it into the dream.` : ''}
+The user typed this hint. Figure out their INTENT and weave it into the dream.`
+    : ''
+}
 
 IMPORTANT RULES:
 - If the photo has a person/face, DO NOT just apply a filter to their face. Instead, reimagine them as a character in a completely new scene using the medium above.
@@ -203,12 +247,18 @@ FORMAT: "[medium]. [reimagined scene with fantastical elements]. [mood + lightin
 NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`;
 
         const fallback = `Reimagine this image as ${input.medium}. Transform into a fantastical dream scene, ${style}. ${hint ? `Theme: ${hint}.` : ''} No filters, full creative reimagining.`;
-        p = await enhanceWithHaiku(haikuRequest, fallback, 100);
+        result = await generateDream({
+          mode: 'flux-kontext',
+          haiku_brief: haikuRequest,
+          haiku_fallback: fallback,
+          input_image: refUrl,
+        });
       }
 
-      const url = await generateFluxKontext(p, refUrl);
+      const url = result.image_url;
+      const p = result.prompt_used;
 
-      setDreamAlbum(prev => {
+      setDreamAlbum((prev) => {
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
@@ -217,7 +267,10 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       setDreaming(false);
       setPhase('reveal');
       imgOpacity.value = withTiming(1, { duration: 600 });
-      imgScale.value = withSequence(withTiming(1.05, { duration: 400 }), withTiming(1, { duration: 200 }));
+      imgScale.value = withSequence(
+        withTiming(1.05, { duration: 400 }),
+        withTiming(1, { duration: 200 })
+      );
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -234,8 +287,22 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
 
   async function post() {
     const currentDream = dreamAlbum[activeIndex];
-    console.log('[Post] START — dream:', !!currentDream, 'user:', !!user, 'posting:', posting, 'activeIndex:', activeIndex, 'albumLen:', dreamAlbum.length);
-    if (!currentDream || !user || posting) { console.log('[Post] SKIPPED — missing dream/user or already posting'); return; }
+    console.log(
+      '[Post] START — dream:',
+      !!currentDream,
+      'user:',
+      !!user,
+      'posting:',
+      posting,
+      'activeIndex:',
+      activeIndex,
+      'albumLen:',
+      dreamAlbum.length
+    );
+    if (!currentDream || !user || posting) {
+      console.log('[Post] SKIPPED — missing dream/user or already posting');
+      return;
+    }
     const multiImage = dreamAlbum.length > 1;
     if (!multiImage) setPhase('posting');
     else setPosting(true);
@@ -248,6 +315,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     console.log('[Post] Username:', user.user_metadata?.username ?? '(none)');
 
     try {
+      // Persist temp Replicate URL to Supabase Storage now that user wants to keep it
       console.log('[Post] Persisting image...');
       const imageUrl = await persistImage(postUrl, user.id);
       console.log('[Post] Image persisted:', imageUrl.slice(0, 60));
@@ -257,7 +325,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const recipe = cachedRecipe ?? (await loadRecipe());
         recipeId = await registerRecipe(user.id, recipe);
         console.log('[Post] Recipe registered:', recipeId);
-      } catch (recipeErr) { console.warn('[Post] Recipe registration failed (non-critical):', recipeErr); }
+      } catch (recipeErr) {
+        console.warn('[Post] Recipe registration failed (non-critical):', recipeErr);
+      }
 
       console.log('[Post] Inserting upload row...');
       const uploadId = await postDream({
@@ -289,7 +359,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       } else {
         // More images remain — remove posted one, stay on screen
         const postedIdx = activeIndex;
-        setDreamAlbum(prev => prev.filter((_, i) => i !== postedIdx));
+        setDreamAlbum((prev) => prev.filter((_, i) => i !== postedIdx));
         setActiveIndex(Math.min(postedIdx, dreamAlbum.length - 2));
         setPosting(false);
       }
@@ -304,7 +374,10 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
   // Twin dream — re-roll the exact same prompt from the source post
   async function twinDream() {
     if (!user || !fusionTarget) return;
-    if (busy.current) { Toast.show('Already dreaming...', 'hourglass'); return; }
+    if (busy.current) {
+      Toast.show('Already dreaming...', 'hourglass');
+      return;
+    }
     busy.current = true;
     setError(null);
     if (dreamAlbum.length > 0) {
@@ -319,8 +392,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     try {
       const p = fusionTarget.prompt;
       console.log('[Twin] Generating from prompt:', p.slice(0, 80));
-      const url = await generateFluxDev(p);
-      setDreamAlbum(prev => {
+      const result = await generateTwin(p);
+      const url = result.image_url;
+      setDreamAlbum((prev) => {
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
@@ -329,7 +403,10 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       setDreaming(false);
       setPhase('reveal');
       imgOpacity.value = withTiming(1, { duration: 600 });
-      imgScale.value = withSequence(withTiming(1.05, { duration: 400 }), withTiming(1, { duration: 200 }));
+      imgScale.value = withSequence(
+        withTiming(1.05, { duration: 400 }),
+        withTiming(1, { duration: 200 })
+      );
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -354,8 +431,14 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
 
   async function justDream() {
     console.log('[JustDream] START, user:', !!user, 'busy:', busy.current);
-    if (!user) { Toast.show('Not logged in', 'close-circle'); return; }
-    if (busy.current) { Toast.show('Already dreaming...', 'hourglass'); return; }
+    if (!user) {
+      Toast.show('Not logged in', 'close-circle');
+      return;
+    }
+    if (busy.current) {
+      Toast.show('Already dreaming...', 'hourglass');
+      return;
+    }
     busy.current = true;
     setError(null);
     console.log('[JustDream] Setting phase to dreaming');
@@ -371,15 +454,13 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     try {
       console.log('[JustDream] Loading recipe...');
       const recipe = await loadRecipe();
-      console.log('[JustDream] Recipe loaded, building prompt...');
-      const input = buildPromptInput(recipe);
-      const p = buildRawPrompt(input);
-      console.log('[JustDream] Prompt:', p.slice(0, 80));
+      console.log('[JustDream] Recipe loaded, generating via Edge Function...');
 
-      console.log('[JustDream] Generating image...');
-      const url = await generateFluxDev(p);
+      const result = await generateFromRecipe(recipe);
+      const url = result.image_url;
+      const p = result.prompt_used;
       console.log('[JustDream] Image generated:', url.slice(0, 60));
-      setDreamAlbum(prev => {
+      setDreamAlbum((prev) => {
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
@@ -388,7 +469,10 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       setDreaming(false);
       setPhase('reveal');
       imgOpacity.value = withTiming(1, { duration: 600 });
-      imgScale.value = withSequence(withTiming(1.05, { duration: 400 }), withTiming(1, { duration: 200 }));
+      imgScale.value = withSequence(
+        withTiming(1.05, { duration: 400 }),
+        withTiming(1, { duration: 200 })
+      );
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -446,7 +530,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     return (
       <SafeAreaView style={s.root}>
         <View style={s.header}>
-          <TouchableOpacity onPress={reset} hitSlop={12}><Ionicons name="close" size={28} color={colors.textSecondary} /></TouchableOpacity>
+          <TouchableOpacity onPress={reset} hitSlop={12}>
+            <Ionicons name="close" size={28} color={colors.textSecondary} />
+          </TouchableOpacity>
           <Text style={s.headerTitle}>Dream this</Text>
           <View style={{ width: 28 }} />
         </View>
@@ -456,7 +542,10 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
           {/* Toggle: let bot dream vs write your own */}
           <TouchableOpacity
             style={s.toggleRow}
-            onPress={() => { setLetBotDream(!letBotDream); if (!letBotDream) setUserHint(''); }}
+            onPress={() => {
+              setLetBotDream(!letBotDream);
+              if (!letBotDream) setUserHint('');
+            }}
             activeOpacity={0.7}
           >
             <View style={[s.checkbox, letBotDream && s.checkboxActive]}>
@@ -467,7 +556,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
 
           {!letBotDream && (
             <View style={s.promptWrap}>
-              <Text style={s.promptHint}>Describe your own dream — your words become the vision</Text>
+              <Text style={s.promptHint}>
+                Describe your own dream — your words become the vision
+              </Text>
               <TextInput
                 style={s.promptInput}
                 placeholder="A cozy cabin in the woods during a snowstorm, painted in watercolors..."
@@ -489,12 +580,21 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         <View style={s.footer}>
           <TouchableOpacity
             style={[s.cta, !letBotDream && !userHint.trim() && s.ctaDisabled]}
-            onPress={() => { setError(null); dream(); }}
+            onPress={() => {
+              setError(null);
+              dream();
+            }}
             disabled={!letBotDream && !userHint.trim()}
             activeOpacity={0.7}
           >
-            <Ionicons name="sparkles" size={20} color={!letBotDream && !userHint.trim() ? colors.textSecondary : '#FFF'} />
-            <Text style={[s.ctaText, !letBotDream && !userHint.trim() && s.ctaTextDisabled]}>Dream It</Text>
+            <Ionicons
+              name="sparkles"
+              size={20}
+              color={!letBotDream && !userHint.trim() ? colors.textSecondary : '#FFF'}
+            />
+            <Text style={[s.ctaText, !letBotDream && !userHint.trim() && s.ctaTextDisabled]}>
+              Dream It
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -526,7 +626,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     return (
       <SafeAreaView style={s.root}>
         <View style={s.header}>
-          <TouchableOpacity onPress={reset} hitSlop={12}><Ionicons name="close" size={28} color={colors.textSecondary} /></TouchableOpacity>
+          <TouchableOpacity onPress={reset} hitSlop={12}>
+            <Ionicons name="close" size={28} color={colors.textSecondary} />
+          </TouchableOpacity>
           <Text style={s.headerTitle}>Your dream</Text>
           <View style={{ width: 28 }} />
         </View>
@@ -542,7 +644,11 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
             decelerationRate="fast"
             style={{ flexGrow: 0 }}
             contentContainerStyle={{ paddingHorizontal: 24 }}
-            getItemLayout={(_, index) => ({ length: SNAP_WIDTH, offset: SNAP_WIDTH * index, index })}
+            getItemLayout={(_, index) => ({
+              length: SNAP_WIDTH,
+              offset: SNAP_WIDTH * index,
+              index,
+            })}
             onScroll={(e) => {
               const idx = Math.round(e.nativeEvent.contentOffset.x / SNAP_WIDTH);
               const clamped = Math.max(0, Math.min(idx, dreamAlbum.length - 1));
@@ -562,8 +668,18 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
                 }}
                 style={{ width: ITEM_WIDTH, marginRight: ITEM_SPACING }}
               >
-                <Animated.View style={[s.revealBorder, index === dreamAlbum.length - 1 ? revealStyle : undefined]}>
-                  <Image source={{ uri: item.url }} style={s.revealImg} contentFit="cover" transition={300} />
+                <Animated.View
+                  style={[
+                    s.revealBorder,
+                    index === dreamAlbum.length - 1 ? revealStyle : undefined,
+                  ]}
+                >
+                  <Image
+                    source={{ uri: item.url }}
+                    style={s.revealImg}
+                    contentFit="cover"
+                    transition={300}
+                  />
                   {dreaming && index === activeIndex && (
                     <View style={s.dreamingOverlay}>
                       <ActivityIndicator size="large" color={colors.accent} />
@@ -574,7 +690,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
                     <TouchableOpacity
                       style={s.dismissBadge}
                       onPress={() => {
-                        setDreamAlbum(prev => prev.filter((_, i) => i !== index));
+                        setDreamAlbum((prev) => prev.filter((_, i) => i !== index));
                         setActiveIndex(Math.min(activeIndex, dreamAlbum.length - 2));
                       }}
                       hitSlop={8}
@@ -598,16 +714,23 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
 
         {/* Fullscreen dream preview */}
         <Modal visible={fullscreen} transparent animationType="none" statusBarTranslucent>
-          <Pressable style={StyleSheet.absoluteFill} onPress={() => {
-            fsScale.value = withTiming(0, { duration: 250 });
-            fsOpacity.value = withTiming(0, { duration: 250 });
-            setTimeout(() => setFullscreen(false), 260);
-          }}>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => {
+              fsScale.value = withTiming(0, { duration: 250 });
+              fsOpacity.value = withTiming(0, { duration: 250 });
+              setTimeout(() => setFullscreen(false), 260);
+            }}
+          >
             <Animated.View style={[s.fsOverlay, fsOverlayStyle]}>
               <GestureDetector gesture={pinchGesture}>
                 <Animated.View style={[s.fsImageWrap, fsStyle]}>
                   <Animated.View style={pinchStyle}>
-                    <Image source={{ uri: dreamAlbum[activeIndex]?.url ?? ''}} style={s.fsImage} contentFit="contain" />
+                    <Image
+                      source={{ uri: dreamAlbum[activeIndex]?.url ?? '' }}
+                      style={s.fsImage}
+                      contentFit="contain"
+                    />
                   </Animated.View>
                 </Animated.View>
               </GestureDetector>
@@ -629,33 +752,60 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         </Modal>
 
         <View style={s.footer}>
-          <TouchableOpacity style={s.cta} onPress={post} activeOpacity={0.7} disabled={posting || dreaming}>
-            {posting
-              ? <ActivityIndicator size="small" color="#FFF" />
-              : <Ionicons name="cloud-upload" size={20} color="#FFF" />
-            }
+          <TouchableOpacity
+            style={s.cta}
+            onPress={post}
+            activeOpacity={0.7}
+            disabled={posting || dreaming}
+          >
+            {posting ? (
+              <ActivityIndicator size="small" color="#FFF" />
+            ) : (
+              <Ionicons name="cloud-upload" size={20} color="#FFF" />
+            )}
             <Text style={s.ctaText}>{posting ? 'Posting...' : 'Post This Dream'}</Text>
           </TouchableOpacity>
           {photoUri && (
-            <TouchableOpacity style={s.reuseRow} onPress={() => setReusePhoto(!reusePhoto)} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={s.reuseRow}
+              onPress={() => setReusePhoto(!reusePhoto)}
+              activeOpacity={0.7}
+            >
               <Ionicons
                 name={reusePhoto ? 'checkbox' : 'square-outline'}
                 size={18}
                 color={reusePhoto ? colors.accent : colors.textSecondary}
               />
-              <Text style={[s.reuseText, reusePhoto && s.reuseTextActive]}>Reuse original photo</Text>
+              <Text style={[s.reuseText, reusePhoto && s.reuseTextActive]}>
+                Reuse original photo
+              </Text>
             </TouchableOpacity>
           )}
           <View style={s.row}>
-            <TouchableOpacity style={s.sec} onPress={() => {
-              if (isTwinMode) twinDream();
-              else if (reusePhoto && photoUri) dream();
-              else justDream();
-            }} activeOpacity={0.7}>
-              <Ionicons name={isTwinMode ? 'dice-outline' : 'refresh'} size={16} color={colors.textSecondary} />
+            <TouchableOpacity
+              style={s.sec}
+              onPress={() => {
+                if (isTwinMode) twinDream();
+                else if (reusePhoto && photoUri) dream();
+                else justDream();
+              }}
+              activeOpacity={0.7}
+            >
+              <Ionicons
+                name={isTwinMode ? 'dice-outline' : 'refresh'}
+                size={16}
+                color={colors.textSecondary}
+              />
               <Text style={s.secText}>{isTwinMode ? 'Twin again' : 'Dream again'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={s.sec} onPress={() => { clearDreamMode(); reset(); }} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={s.sec}
+              onPress={() => {
+                clearDreamMode();
+                reset();
+              }}
+              activeOpacity={0.7}
+            >
               <Ionicons name="images" size={16} color={colors.textSecondary} />
               <Text style={s.secText}>Start over</Text>
             </TouchableOpacity>
@@ -680,16 +830,50 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, gap: 16 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 40,
+    gap: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
   mascot: { width: 120, height: 120, borderRadius: 24, marginBottom: 12 },
   loadingMascot: { width: 140, height: 140, borderRadius: 28, marginBottom: 8 },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', textAlign: 'center' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
-  cta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
+  cta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    width: '100%',
+  },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
-  ctaSecondary: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 24, width: '100%' },
+  ctaSecondary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    width: '100%',
+  },
   ctaSecondaryText: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
   ctaDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   ctaTextDisabled: { color: colors.textSecondary },
@@ -697,69 +881,142 @@ const s = StyleSheet.create({
   previewWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center', gap: 20 },
   previewImg: { width: PREVIEW_WIDTH, height: PREVIEW_WIDTH * 1.2, borderRadius: 16 },
   toggleRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 10, alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    alignSelf: 'flex-start',
   },
   checkbox: {
-    width: 24, height: 24, borderRadius: 6, borderWidth: 1.5,
-    borderColor: colors.border, alignItems: 'center', justifyContent: 'center',
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkboxActive: {
-    backgroundColor: colors.accent, borderColor: colors.accent,
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   toggleLabel: {
-    color: colors.textPrimary, fontSize: 15, fontWeight: '600',
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '600',
   },
   botNote: {
-    color: colors.textSecondary, fontSize: 13, textAlign: 'center', lineHeight: 18,
+    color: colors.textSecondary,
+    fontSize: 13,
+    textAlign: 'center',
+    lineHeight: 18,
     paddingHorizontal: 8,
   },
   promptWrap: {
-    width: '100%', gap: 8,
+    width: '100%',
+    gap: 8,
   },
   promptHint: {
-    color: colors.textSecondary, fontSize: 13, lineHeight: 18,
+    color: colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 18,
   },
   promptInput: {
-    width: '100%', minHeight: 100, backgroundColor: colors.surface, borderRadius: 14,
-    borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16,
-    paddingTop: 14, paddingBottom: 14, color: colors.textPrimary, fontSize: 15,
+    width: '100%',
+    minHeight: 100,
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 14,
+    color: colors.textPrimary,
+    fontSize: 15,
     lineHeight: 21,
   },
   errorText: { color: colors.error, fontSize: 13, textAlign: 'center', paddingHorizontal: 20 },
   revealWrap: { flex: 1, justifyContent: 'center' },
-  dotRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 14 },
+  dotRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 14,
+  },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)' },
   dotActive: { backgroundColor: '#FFFFFF' },
-  revealBorder: { borderRadius: 20, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
-  revealImg: { width: PREVIEW_WIDTH, height: Math.min(PREVIEW_WIDTH * 1.75, 400), borderRadius: 20 },
-  dismissBadge: { position: 'absolute', top: 8, right: 8, width: 24, height: 24, borderRadius: 12, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center' },
+  revealBorder: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  revealImg: {
+    width: PREVIEW_WIDTH,
+    height: Math.min(PREVIEW_WIDTH * 1.75, 400),
+    borderRadius: 20,
+  },
+  dismissBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   dreamingOverlay: {
-    ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 20,
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    borderRadius: 20,
   },
   dreamingText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
-  promptText: { color: colors.textSecondary, fontSize: 12, textAlign: 'center', marginTop: 12, lineHeight: 17 },
+  promptText: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 12,
+    lineHeight: 17,
+  },
   row: { flexDirection: 'row', justifyContent: 'center', gap: 24 },
   sec: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8 },
   secText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
-  reuseRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 6 },
+  reuseRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 6,
+  },
   reuseText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
   reuseTextActive: { color: colors.accent },
   // Fullscreen preview
   fsOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.92)',
-    alignItems: 'center', justifyContent: 'center',
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.92)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   fsImageWrap: {
-    width: '100%', height: '100%',
-    alignItems: 'center', justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 8,
   },
   fsImage: { width: '100%', height: '80%', borderRadius: 4 },
   fsClose: { position: 'absolute', top: 60, right: 20 },
   fsCloseCircle: {
-    width: 36, height: 36, borderRadius: 18,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.15)',
-    alignItems: 'center', justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

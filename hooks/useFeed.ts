@@ -18,7 +18,7 @@ export interface FeedItem {
   user_id: string;
   categories: string[];
   image_url: string;
-  media_type: 'image' | 'video';
+  media_type: string;
   thumbnail_url: string | null;
   width: number | null;
   height: number | null;
@@ -80,7 +80,7 @@ export function useFollowingFeed() {
         p_limit: 50,
       });
       if (error) throw error;
-      return (data ?? []) as FeedItem[];
+      return (data ?? []) as unknown as FeedItem[];
     },
     enabled: !!user,
     staleTime: 120_000,

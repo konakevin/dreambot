@@ -21,7 +21,7 @@ export function useMarkShareSeen() {
         return {
           ...old,
           pages: old.pages.map((page) =>
-            page.map((n) => n.id === notificationId ? { ...n, isSeen: true } : n)
+            page.map((n) => (n.id === notificationId ? { ...n, isSeen: true } : n))
           ),
         };
       });

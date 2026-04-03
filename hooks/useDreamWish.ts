@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { moderateText } from '@/lib/moderation';
 import type { WishModifiers } from '@/constants/wishModifiers';
 
 interface WishData {
@@ -50,6 +51,13 @@ export function useSetDreamWish() {
 
   return useMutation({
     mutationFn: async (args: SetWishArgs) => {
+      // Moderate wish text — wishes are displayed on dream cards
+      if (args.wish && args.wish.trim()) {
+        const modResult = await moderateText(args.wish.trim());
+        if (!modResult.passed) {
+          throw new Error(modResult.reason ?? 'Wish contains inappropriate language');
+        }
+      }
       const update: Record<string, unknown> = { dream_wish: args.wish };
       if (args.modifiers !== undefined) {
         update.wish_modifiers = args.modifiers;
@@ -57,10 +65,7 @@ export function useSetDreamWish() {
       if (args.recipientIds !== undefined) {
         update.wish_recipient_ids = args.recipientIds;
       }
-      const { error } = await supabase
-        .from('user_recipes')
-        .update(update)
-        .eq('user_id', user!.id);
+      const { error } = await supabase.from('user_recipes').update(update).eq('user_id', user!.id);
       if (error) throw error;
     },
     onSuccess: () => {

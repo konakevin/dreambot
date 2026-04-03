@@ -5,7 +5,12 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Text, StyleSheet, Dimensions } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -34,7 +39,7 @@ export function ToastHost() {
   const [data, setData] = useState<ToastData | null>(null);
   const translateY = useSharedValue(80);
   const opacity = useSharedValue(0);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const insets = useSafeAreaInsets();
 
   const dismiss = useCallback(() => {
@@ -54,7 +59,9 @@ export function ToastHost() {
         setTimeout(() => runOnJS(dismiss)(), 300);
       }, incoming.duration ?? 2000);
     };
-    return () => { listener = null; };
+    return () => {
+      listener = null;
+    };
   }, [dismiss, translateY, opacity]);
 
   const animStyle = useAnimatedStyle(() => ({

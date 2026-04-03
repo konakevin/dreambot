@@ -27,7 +27,7 @@ export function RefreshIndicator({ pullY }: RefreshIndicatorProps) {
           runOnJS(Haptics.selectionAsync)();
         }
       }
-    },
+    }
   );
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -42,9 +42,7 @@ export function RefreshIndicator({ pullY }: RefreshIndicatorProps) {
   return (
     <Animated.View style={[styles.container, animatedStyle]} pointerEvents="none">
       <View style={styles.pill}>
-        <Text style={styles.text}>
-          {pastThreshold ? 'Release to refresh' : 'Pull to refresh'}
-        </Text>
+        <Text style={styles.text}>{pastThreshold ? 'Release to refresh' : 'Pull to refresh'}</Text>
       </View>
     </Animated.View>
   );

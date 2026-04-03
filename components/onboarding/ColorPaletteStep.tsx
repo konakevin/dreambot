@@ -7,7 +7,10 @@ import { COLOR_PALETTES, LIMITS } from '@/constants/onboarding';
 import { colors } from '@/constants/theme';
 import type { ColorPalette } from '@/types/recipe';
 
-interface Props { onNext: () => void; onBack: () => void; }
+interface Props {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export function ColorPaletteStep({ onNext, onBack }: Props) {
   const selected = useOnboardingStore((s) => s.recipe.color_palettes);
@@ -27,15 +30,21 @@ export function ColorPaletteStep({ onNext, onBack }: Props) {
               <TouchableOpacity
                 key={palette.key}
                 style={[s.card, isSelected && s.cardSelected]}
-                onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); toggleColorPalette(palette.key as ColorPalette); }}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  toggleColorPalette(palette.key as ColorPalette);
+                }}
                 activeOpacity={0.7}
               >
                 <LinearGradient
                   colors={palette.colors as [string, string, ...string[]]}
-                  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
                   style={s.gradient}
                 />
-                <Text style={[s.cardLabel, isSelected && s.cardLabelSelected]}>{palette.label}</Text>
+                <Text style={[s.cardLabel, isSelected && s.cardLabelSelected]}>
+                  {palette.label}
+                </Text>
                 {isSelected && <Ionicons name="checkmark-circle" size={20} color={colors.accent} />}
               </TouchableOpacity>
             );
@@ -51,12 +60,19 @@ export function ColorPaletteStep({ onNext, onBack }: Props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[s.nextButton, !canProceed && s.nextButtonDisabled]}
-            onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); onNext(); }}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onNext();
+            }}
             disabled={!canProceed}
             activeOpacity={0.7}
           >
             <Text style={[s.nextButtonText, !canProceed && s.nextButtonTextDisabled]}>Next</Text>
-            <Ionicons name="arrow-forward" size={18} color={canProceed ? '#FFFFFF' : colors.textSecondary} />
+            <Ionicons
+              name="arrow-forward"
+              size={18}
+              color={canProceed ? '#FFFFFF' : colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -71,8 +87,14 @@ const s = StyleSheet.create({
   subtitle: { color: colors.textSecondary, fontSize: 16, marginBottom: 24 },
   grid: { gap: 12 },
   card: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: colors.surface,
-    borderRadius: 16, borderWidth: 1.5, borderColor: colors.border, padding: 14, gap: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    padding: 14,
+    gap: 14,
   },
   cardSelected: { borderColor: colors.accent, backgroundColor: colors.accentBg },
   gradient: { width: 48, height: 48, borderRadius: 12 },
@@ -82,17 +104,32 @@ const s = StyleSheet.create({
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   backBtn: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-    paddingVertical: 16, borderRadius: 14,
-    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.accentBorder,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 16,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
   },
   backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
   nextButton: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
   },
-  nextButtonDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  nextButtonDisabled: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
   nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
   nextButtonTextDisabled: { color: colors.textSecondary },
 });

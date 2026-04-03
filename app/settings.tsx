@@ -1,6 +1,14 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -14,8 +22,15 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { colors } from '@/constants/theme';
+import { moderateText } from '@/lib/moderation';
 
-function SettingsRow({ icon, label, onPress, destructive, trailing }: {
+function SettingsRow({
+  icon,
+  label,
+  onPress,
+  destructive,
+  trailing,
+}: {
   icon: string;
   label: string;
   onPress: () => void;
@@ -26,9 +41,7 @@ function SettingsRow({ icon, label, onPress, destructive, trailing }: {
     <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
       <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.accent} />
       <Text style={[styles.rowLabel, destructive && styles.destructiveText]}>{label}</Text>
-      {trailing ?? (
-        <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
-      )}
+      {trailing ?? <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />}
     </TouchableOpacity>
   );
 }
@@ -87,15 +100,19 @@ export default function SettingsScreen() {
           }
         },
       },
-      ...(profile?.avatar_url ? [{
-        text: 'Remove photo',
-        style: 'destructive' as const,
-        onPress: async () => {
-          await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
-          queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-          queryClient.invalidateQueries({ queryKey: ['feed'] });
-        },
-      }] : []),
+      ...(profile?.avatar_url
+        ? [
+            {
+              text: 'Remove photo',
+              style: 'destructive' as const,
+              onPress: async () => {
+                await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
+                queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+                queryClient.invalidateQueries({ queryKey: ['feed'] });
+              },
+            },
+          ]
+        : []),
       { text: 'Cancel', style: 'cancel' as const },
     ]);
   }
@@ -112,6 +129,14 @@ export default function SettingsScreen() {
         }
         setChangingUsername(true);
         try {
+          const modResult = await moderateText(trimmed);
+          if (!modResult.passed) {
+            showAlert(
+              'Invalid username',
+              modResult.reason ?? 'Username contains inappropriate content'
+            );
+            return;
+          }
           const { error } = await supabase
             .from('users')
             .update({ username: trimmed })
@@ -135,26 +160,22 @@ export default function SettingsScreen() {
         }
       },
       'plain-text',
-      profile?.username ?? '',
+      profile?.username ?? ''
     );
   }
 
   function handleChangePassword() {
-    showAlert(
-      'Reset password',
-      `We'll send a reset link to ${user?.email}`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Send link',
-          onPress: async () => {
-            await supabase.auth.resetPasswordForEmail(user!.email!);
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            showAlert('Sent', 'Check your email for the reset link.');
-          },
+    showAlert('Reset password', `We'll send a reset link to ${user?.email}`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Send link',
+        onPress: async () => {
+          await supabase.auth.resetPasswordForEmail(user!.email!);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          showAlert('Sent', 'Check your email for the reset link.');
         },
-      ],
-    );
+      },
+    ]);
   }
 
   function handleRefreshAll() {
@@ -217,7 +238,7 @@ export default function SettingsScreen() {
             ]);
           },
         },
-      ],
+      ]
     );
   }
 
@@ -259,12 +280,14 @@ export default function SettingsScreen() {
             label="Username"
             onPress={handleChangeUsername}
             trailing={
-              changingUsername
-                ? <ActivityIndicator size="small" color={colors.textSecondary} />
-                : <View style={styles.rowTrailing}>
-                    <Text style={styles.rowValue}>{profile?.username ?? ''}</Text>
-                    <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
-                  </View>
+              changingUsername ? (
+                <ActivityIndicator size="small" color={colors.textSecondary} />
+              ) : (
+                <View style={styles.rowTrailing}>
+                  <Text style={styles.rowValue}>{profile?.username ?? ''}</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
+                </View>
+              )
             }
           />
           <SettingsRow
@@ -278,39 +301,74 @@ export default function SettingsScreen() {
         {/* Sparkles */}
         <Text style={styles.sectionHeader}>SPARKLES</Text>
         <View style={styles.section}>
-          <SettingsRow icon="sparkles" label="Get Sparkles" onPress={() => router.push('/sparkleStore')} />
+          <SettingsRow
+            icon="sparkles"
+            label="Get Sparkles"
+            onPress={() => router.push('/sparkleStore')}
+          />
         </View>
 
         {/* Dream Engine */}
         <Text style={styles.sectionHeader}>DREAM ENGINE</Text>
         <View style={styles.section}>
-          <SettingsRow icon="sparkles" label="Edit My Dream Bot" onPress={() => {
-            const { useOnboardingStore } = require('@/store/onboarding');
-            useOnboardingStore.getState().reset();
-            useOnboardingStore.getState().setIsEditing(true);
-            router.push('/(onboarding)');
-          }} />
-          <SettingsRow icon="trash-outline" label="Reset My Dream Bot" onPress={async () => {
-            await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
-            await supabase.from('user_recipes').delete().eq('user_id', user!.id);
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            const { Toast } = require('@/components/Toast');
-            Toast.show('Dream Bot reset — reload to set up again', 'checkmark-circle');
-          }} destructive trailing={null} />
+          <SettingsRow
+            icon="sparkles"
+            label="Edit My Dream Bot"
+            onPress={() => {
+              const { useOnboardingStore } = require('@/store/onboarding');
+              useOnboardingStore.getState().reset();
+              useOnboardingStore.getState().setIsEditing(true);
+              router.push('/(onboarding)');
+            }}
+          />
+          <SettingsRow
+            icon="trash-outline"
+            label="Reset My Dream Bot"
+            onPress={async () => {
+              await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
+              await supabase.from('user_recipes').delete().eq('user_id', user!.id);
+              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+              const { Toast } = require('@/components/Toast');
+              Toast.show('Dream Bot reset — reload to set up again', 'checkmark-circle');
+            }}
+            destructive
+            trailing={null}
+          />
         </View>
 
         {/* App section */}
         <Text style={styles.sectionHeader}>APP</Text>
         <View style={styles.section}>
-          <SettingsRow icon="refresh-outline" label="Refresh App" onPress={handleRefreshAll} trailing={null} />
+          <SettingsRow
+            icon="refresh-outline"
+            label="Refresh App"
+            onPress={handleRefreshAll}
+            trailing={null}
+          />
         </View>
 
         {/* Account section */}
         <Text style={styles.sectionHeader}>ACCOUNT</Text>
         <View style={styles.section}>
-          <SettingsRow icon="lock-closed-outline" label="Change password" onPress={handleChangePassword} />
-          <SettingsRow icon="log-out-outline" label="Sign out" onPress={handleSignOut} destructive trailing={null} />
-          <SettingsRow icon="trash-outline" label="Delete account" onPress={handleDeleteAccount} destructive trailing={null} />
+          <SettingsRow
+            icon="lock-closed-outline"
+            label="Change password"
+            onPress={handleChangePassword}
+          />
+          <SettingsRow
+            icon="log-out-outline"
+            label="Sign out"
+            onPress={handleSignOut}
+            destructive
+            trailing={null}
+          />
+          <SettingsRow
+            icon="trash-outline"
+            label="Delete account"
+            onPress={handleDeleteAccount}
+            destructive
+            trailing={null}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

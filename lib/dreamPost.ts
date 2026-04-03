@@ -22,27 +22,31 @@ interface PostDreamOpts {
 export async function postDream(opts: PostDreamOpts): Promise<string> {
   const caption = opts.prompt.length > 200 ? opts.prompt.slice(0, 197) + '...' : opts.prompt;
 
-  const { data, error } = await supabase.from('uploads').insert({
-    user_id: opts.userId,
-    image_url: opts.imageUrl,
-    media_type: 'image',
-    categories: ['art'],
-    caption,
-    is_active: true,
-    is_approved: true,
-    is_moderated: true,
-    is_ai_generated: true,
-    ai_prompt: opts.prompt,
-    total_votes: 0,
-    rad_votes: 0,
-    bad_votes: 0,
-    width: 768,
-    height: 1664,
-    from_wish: opts.fromWish ?? null,
-    recipe_id: opts.recipeId ?? null,
-    twin_of: opts.twinOf ?? null,
-    fuse_of: opts.fuseOf ?? null,
-  }).select('id').single();
+  const { data, error } = await supabase
+    .from('uploads')
+    .insert({
+      user_id: opts.userId,
+      image_url: opts.imageUrl,
+      media_type: 'image',
+      categories: ['art'],
+      caption,
+      is_active: true,
+      is_approved: true,
+      is_moderated: true,
+      is_ai_generated: true,
+      ai_prompt: opts.prompt,
+      total_votes: 0,
+      rad_votes: 0,
+      bad_votes: 0,
+      width: 768,
+      height: 1664,
+      from_wish: opts.fromWish ?? null,
+      recipe_id: opts.recipeId ?? null,
+      twin_of: opts.twinOf ?? null,
+      fuse_of: opts.fuseOf ?? null,
+    })
+    .select('id')
+    .single();
 
   if (error) throw error;
   return data.id;

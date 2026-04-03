@@ -15,7 +15,10 @@ interface Props {
 export function OverlayPill({ label, active, onPress }: Props) {
   return (
     <TouchableOpacity
-      onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onPress(); }}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onPress();
+      }}
       activeOpacity={0.7}
       style={[s.pill, active && s.pillActive]}
     >
@@ -26,13 +29,22 @@ export function OverlayPill({ label, active, onPress }: Props) {
 
 const s = StyleSheet.create({
   pill: {
-    paddingVertical: 6, paddingHorizontal: 14, borderRadius: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 16,
     backgroundColor: 'rgba(0,0,0,0.35)',
-    alignItems: 'center', justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   pillActive: {
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
-  text: { color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '600', lineHeight: 16, includeFontPadding: false },
+  text: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 16,
+    includeFontPadding: false,
+  },
   textActive: { color: '#FFFFFF', fontWeight: '700' },
 });

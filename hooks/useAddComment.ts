@@ -67,9 +67,7 @@ export function useAddComment() {
           return {
             ...prev,
             pages: prev.pages.map((page) =>
-              page.map((c) =>
-                c.id === parentId ? { ...c, replyCount: c.replyCount + 1 } : c,
-              ),
+              page.map((c) => (c.id === parentId ? { ...c, replyCount: c.replyCount + 1 } : c))
             ),
           };
         });
@@ -80,9 +78,7 @@ export function useAddComment() {
           if (!prev) return prev;
           return {
             ...prev,
-            pages: prev.pages.map((page, i) =>
-              i === 0 ? [newComment, ...page] : page,
-            ),
+            pages: prev.pages.map((page, i) => (i === 0 ? [newComment, ...page] : page)),
           };
         });
       }
@@ -95,7 +91,9 @@ export function useAddComment() {
           return {
             ...prev,
             pages: prev.pages.map((page) =>
-              page.map((p) => p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p),
+              page.map((p) =>
+                p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p
+              )
             ),
           };
         });
@@ -105,7 +103,9 @@ export function useAddComment() {
       for (const query of albumKeys) {
         queryClient.setQueryData<DreamPostItem[]>(query.queryKey, (prev) => {
           if (!prev) return prev;
-          return prev.map((p) => p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p);
+          return prev.map((p) =>
+            p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p
+          );
         });
       }
     },

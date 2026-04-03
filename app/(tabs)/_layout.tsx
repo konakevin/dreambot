@@ -37,9 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="home" size={size} color={color} />,
         }}
         listeners={{
           tabPress: () => {
@@ -57,10 +55,12 @@ export default function TabLayout() {
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
-        listeners={{ tabPress: () => {
-          if (activeTab.current === 'top') regenerateSeed();
-          activeTab.current = 'top';
-        } }}
+        listeners={{
+          tabPress: () => {
+            if (activeTab.current === 'top') regenerateSeed();
+            activeTab.current = 'top';
+          },
+        }}
       />
       <Tabs.Screen
         name="upload"
@@ -69,7 +69,11 @@ export default function TabLayout() {
             <Ionicons name="moon-outline" size={size} color={color} />
           ),
         }}
-        listeners={{ tabPress: () => { activeTab.current = 'upload'; } }}
+        listeners={{
+          tabPress: () => {
+            activeTab.current = 'upload';
+          },
+        }}
       />
       <Tabs.Screen
         name="inbox"
@@ -91,7 +95,11 @@ export default function TabLayout() {
             </View>
           ),
         }}
-        listeners={{ tabPress: () => { activeTab.current = 'inbox'; } }}
+        listeners={{
+          tabPress: () => {
+            activeTab.current = 'inbox';
+          },
+        }}
       />
       <Tabs.Screen
         name="profile"
@@ -107,7 +115,10 @@ export default function TabLayout() {
           ),
         }}
         listeners={{
-          tabPress: () => { activeTab.current = 'profile'; bumpProfileReset(); },
+          tabPress: () => {
+            activeTab.current = 'profile';
+            bumpProfileReset();
+          },
         }}
       />
     </Tabs>

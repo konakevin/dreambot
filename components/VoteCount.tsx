@@ -16,7 +16,12 @@ export function VoteCount({ count, size = 'md' }: VoteCountProps) {
 
   return (
     <View style={styles.row}>
-      <Ionicons name="people-outline" size={iconSize} color="rgba(255,255,255,0.85)" style={styles.icon} />
+      <Ionicons
+        name="people-outline"
+        size={iconSize}
+        color="rgba(255,255,255,0.85)"
+        style={styles.icon}
+      />
       <Text style={[styles.text, { fontSize }]}>{formatCount(count)}</Text>
     </View>
   );

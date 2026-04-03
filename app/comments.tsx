@@ -1,7 +1,17 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, FlatList, TextInput, ActivityIndicator,
-  StyleSheet, Dimensions, Pressable, KeyboardAvoidingView, Platform, Animated,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  Animated,
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,9 +30,14 @@ const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 const MAX_COMMENT_LENGTH = 500;
 
 export default function CommentsScreen() {
-  const { uploadId, postOwnerId } = useLocalSearchParams<{ uploadId: string; postOwnerId?: string }>();
+  const { uploadId, postOwnerId } = useLocalSearchParams<{
+    uploadId: string;
+    postOwnerId?: string;
+  }>();
   const currentUser = useAuthStore((s) => s.user);
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useComments(uploadId ?? '');
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useComments(
+    uploadId ?? ''
+  );
   const { mutate: addComment, isPending } = useAddComment();
   const { translateY, panHandlers } = useSheetDismiss();
 
@@ -46,7 +61,11 @@ export default function CommentsScreen() {
       const afterAt = newText.slice(lastAt + 1);
       // Only trigger if @ is at start or preceded by a space, and no space after
       const charBefore = lastAt > 0 ? newText[lastAt - 1] : ' ';
-      if ((charBefore === ' ' || charBefore === '\n' || lastAt === 0) && !afterAt.includes(' ') && afterAt.length >= 1) {
+      if (
+        (charBefore === ' ' || charBefore === '\n' || lastAt === 0) &&
+        !afterAt.includes(' ') &&
+        afterAt.length >= 1
+      ) {
         mentionStart.current = lastAt;
         setMentionQuery(afterAt);
         return;
@@ -95,7 +114,7 @@ export default function CommentsScreen() {
           // Show the moderation message inline instead of alert
           setText('');
         },
-      },
+      }
     );
   }
 
@@ -111,133 +130,141 @@ export default function CommentsScreen() {
 
       {/* Bottom sheet */}
       <Animated.View {...panHandlers} style={[styles.sheet, { transform: [{ translateY }] }]}>
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={SCREEN_HEIGHT - SHEET_HEIGHT}
-        enabled={Platform.OS === 'ios'}
-      >
-        {/* Handle */}
-        <View style={styles.handleRow}>
-          <View style={styles.handle} />
-        </View>
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={SCREEN_HEIGHT - SHEET_HEIGHT}
+          enabled={Platform.OS === 'ios'}
+        >
+          {/* Handle */}
+          <View style={styles.handleRow}>
+            <View style={styles.handle} />
+          </View>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Comments</Text>
-          <TouchableOpacity onPress={() => router.dismiss()} hitSlop={12}>
-            <Ionicons name="close" size={22} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Comments list */}
-        <FlatList
-          data={comments}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <CommentRow
-              comment={item}
-              uploadId={uploadId!}
-              postOwnerId={postOwnerId}
-              onReply={handleReply}
-              expandedCommentId={expandedCommentId}
-            />
-          )}
-          onEndReached={() => {
-            if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-          }}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isFetchingNextPage ? (
-              <View style={styles.footerLoader}>
-                <ActivityIndicator color={colors.textSecondary} />
-              </View>
-            ) : null
-          }
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              {isLoading ? (
-                <ActivityIndicator color={colors.textSecondary} />
-              ) : (
-                <>
-                  <Ionicons name="chatbubble-outline" size={36} color="rgba(255,255,255,0.15)" />
-                  <Text style={styles.emptyTitle}>No comments yet</Text>
-                  <Text style={styles.emptySubtitle}>Be the first to say something</Text>
-                </>
-              )}
-            </View>
-          }
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.listContent}
-        />
-
-        {/* Reply indicator */}
-        {replyTo && (
-          <View style={styles.replyBar}>
-            <Text style={styles.replyBarText}>
-              Replying to <Text style={styles.replyBarUsername}>{replyTo.username ?? 'comment'}</Text>
-            </Text>
-            <TouchableOpacity onPress={cancelReply} hitSlop={8}>
-              <Ionicons name="close" size={16} color={colors.textSecondary} />
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Comments</Text>
+            <TouchableOpacity onPress={() => router.dismiss()} hitSlop={12}>
+              <Ionicons name="close" size={22} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
-        )}
 
-        {/* Mention autocomplete */}
-        {mentionQuery.length >= 1 && mentionResults.length > 0 && (
-          <View style={styles.mentionList}>
-            {mentionResults.slice(0, 5).map((user) => (
-              <TouchableOpacity
-                key={user.id}
-                style={styles.mentionRow}
-                onPress={() => completeMention(user)}
-                activeOpacity={0.7}
-              >
-                {user.avatarUrl ? (
-                  <Image source={{ uri: user.avatarUrl }} style={styles.mentionAvatar} />
-                ) : (
-                  <View style={styles.mentionAvatarFallback}>
-                    <Text style={styles.mentionAvatarText}>{(user.username || '?')[0].toUpperCase()}</Text>
-                  </View>
-                )}
-                <Text style={styles.mentionUsername}>{user.username}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-
-        {/* Input bar */}
-        <View style={styles.inputBar}>
-          {currentUser ? (
-            <>
-              <TextInput
-                ref={inputRef}
-                style={styles.input}
-                placeholder="Add a comment..."
-                placeholderTextColor={colors.textSecondary}
-                value={text}
-                onChangeText={handleTextChange}
-                multiline
-                maxLength={MAX_COMMENT_LENGTH}
+          {/* Comments list */}
+          <FlatList
+            data={comments}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <CommentRow
+                comment={item}
+                uploadId={uploadId!}
+                postOwnerId={postOwnerId}
+                onReply={handleReply}
+                expandedCommentId={expandedCommentId}
               />
-              <TouchableOpacity
-                style={[styles.sendButton, !text.trim() && styles.sendButtonDisabled]}
-                onPress={handleSend}
-                disabled={!text.trim() || isPending}
-                activeOpacity={0.7}
-              >
-                {isPending ? (
-                  <ActivityIndicator color="#000" size="small" />
+            )}
+            onEndReached={() => {
+              if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+            }}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              isFetchingNextPage ? (
+                <View style={styles.footerLoader}>
+                  <ActivityIndicator color={colors.textSecondary} />
+                </View>
+              ) : null
+            }
+            ListEmptyComponent={
+              <View style={styles.empty}>
+                {isLoading ? (
+                  <ActivityIndicator color={colors.textSecondary} />
                 ) : (
-                  <Ionicons name="arrow-up" size={18} color={text.trim() ? '#000000' : colors.textSecondary} style={{ marginTop: -1 }} />
+                  <>
+                    <Ionicons name="chatbubble-outline" size={36} color="rgba(255,255,255,0.15)" />
+                    <Text style={styles.emptyTitle}>No comments yet</Text>
+                    <Text style={styles.emptySubtitle}>Be the first to say something</Text>
+                  </>
                 )}
+              </View>
+            }
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={styles.listContent}
+          />
+
+          {/* Reply indicator */}
+          {replyTo && (
+            <View style={styles.replyBar}>
+              <Text style={styles.replyBarText}>
+                Replying to{' '}
+                <Text style={styles.replyBarUsername}>{replyTo.username ?? 'comment'}</Text>
+              </Text>
+              <TouchableOpacity onPress={cancelReply} hitSlop={8}>
+                <Ionicons name="close" size={16} color={colors.textSecondary} />
               </TouchableOpacity>
-            </>
-          ) : (
-            <Text style={styles.signInPrompt}>Sign in to comment</Text>
+            </View>
           )}
-        </View>
-      </KeyboardAvoidingView>
+
+          {/* Mention autocomplete */}
+          {mentionQuery.length >= 1 && mentionResults.length > 0 && (
+            <View style={styles.mentionList}>
+              {mentionResults.slice(0, 5).map((user) => (
+                <TouchableOpacity
+                  key={user.id}
+                  style={styles.mentionRow}
+                  onPress={() => completeMention(user)}
+                  activeOpacity={0.7}
+                >
+                  {user.avatarUrl ? (
+                    <Image source={{ uri: user.avatarUrl }} style={styles.mentionAvatar} />
+                  ) : (
+                    <View style={styles.mentionAvatarFallback}>
+                      <Text style={styles.mentionAvatarText}>
+                        {(user.username || '?')[0].toUpperCase()}
+                      </Text>
+                    </View>
+                  )}
+                  <Text style={styles.mentionUsername}>{user.username}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+
+          {/* Input bar */}
+          <View style={styles.inputBar}>
+            {currentUser ? (
+              <>
+                <TextInput
+                  ref={inputRef}
+                  style={styles.input}
+                  placeholder="Add a comment..."
+                  placeholderTextColor={colors.textSecondary}
+                  value={text}
+                  onChangeText={handleTextChange}
+                  multiline
+                  maxLength={MAX_COMMENT_LENGTH}
+                />
+                <TouchableOpacity
+                  style={[styles.sendButton, !text.trim() && styles.sendButtonDisabled]}
+                  onPress={handleSend}
+                  disabled={!text.trim() || isPending}
+                  activeOpacity={0.7}
+                >
+                  {isPending ? (
+                    <ActivityIndicator color="#000" size="small" />
+                  ) : (
+                    <Ionicons
+                      name="arrow-up"
+                      size={18}
+                      color={text.trim() ? '#000000' : colors.textSecondary}
+                      style={{ marginTop: -1 }}
+                    />
+                  )}
+                </TouchableOpacity>
+              </>
+            ) : (
+              <Text style={styles.signInPrompt}>Sign in to comment</Text>
+            )}
+          </View>
+        </KeyboardAvoidingView>
       </Animated.View>
     </View>
   );

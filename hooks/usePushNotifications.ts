@@ -54,8 +54,8 @@ async function savePushToken(userId: string, token: string) {
 
 export function usePushNotifications() {
   const user = useAuthStore((s) => s.user);
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+  const notificationListener = useRef<Notifications.Subscription>(undefined);
+  const responseListener = useRef<Notifications.Subscription>(undefined);
 
   useEffect(() => {
     if (!user) return;

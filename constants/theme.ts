@@ -191,6 +191,18 @@ export const ui = StyleSheet.create({
 
 // Legacy compat — remove these references over time
 export const Colors = {
-  light: { text: '#000000', background: '#FFFFFF', icon: '#687076', tabIconDefault: '#687076', tabIconSelected: colors.accent },
-  dark: { text: '#FFFFFF', background: '#000000', icon: '#9BA1A6', tabIconDefault: '#9BA1A6', tabIconSelected: colors.accent },
+  light: {
+    text: '#000000',
+    background: '#FFFFFF',
+    icon: '#687076',
+    tabIconDefault: '#687076',
+    tabIconSelected: colors.accent,
+  },
+  dark: {
+    text: '#FFFFFF',
+    background: '#000000',
+    icon: '#9BA1A6',
+    tabIconDefault: '#9BA1A6',
+    tabIconSelected: colors.accent,
+  },
 };

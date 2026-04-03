@@ -1,7 +1,15 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -45,7 +53,10 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
     case 'post_milestone':
       return { action: 'Your post hit ' + (item.body ?? 'a milestone!'), preview: null };
     case 'dream_generated':
-      return { action: item.body?.startsWith('Your wish') ? item.body : 'A new dream has been conjured', preview: null };
+      return {
+        action: item.body?.startsWith('Your wish') ? item.body : 'A new dream has been conjured',
+        preview: null,
+      };
     case 'post_like':
       return { action: 'liked your dream', preview: null };
     case 'post_twin':
@@ -59,22 +70,46 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
 
 function getNotificationIcon(type: NotificationItem['type']): string {
   switch (type) {
-    case 'post_share': return 'paper-plane';
-    case 'post_comment': return 'chatbubble';
-    case 'comment_reply': return 'arrow-undo';
-    case 'comment_mention': return 'at';
-    case 'dream_generated': return 'sparkles';
-    case 'post_like': return 'heart';
-    case 'post_twin': return 'dice-outline';
-    case 'post_fuse': return 'git-merge-outline';
-    default: return 'notifications';
+    case 'post_share':
+      return 'paper-plane';
+    case 'post_comment':
+      return 'chatbubble';
+    case 'comment_reply':
+      return 'arrow-undo';
+    case 'comment_mention':
+      return 'at';
+    case 'dream_generated':
+      return 'sparkles';
+    case 'post_like':
+      return 'heart';
+    case 'post_twin':
+      return 'dice-outline';
+    case 'post_fuse':
+      return 'git-merge-outline';
+    default:
+      return 'notifications';
   }
 }
 
-function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onToggleSelect, onAcceptDream, onDeclineDream, dreamAccepted }: {
-  item: NotificationItem; onPress: () => void; onDelete: () => void;
-  selectMode: boolean; isSelected: boolean; onToggleSelect: () => void;
-  onAcceptDream?: () => void; onDeclineDream?: () => void;
+function NotificationRow({
+  item,
+  onPress,
+  onDelete,
+  selectMode,
+  isSelected,
+  onToggleSelect,
+  onAcceptDream,
+  onDeclineDream,
+  dreamAccepted,
+}: {
+  item: NotificationItem;
+  onPress: () => void;
+  onDelete: () => void;
+  selectMode: boolean;
+  isSelected: boolean;
+  onToggleSelect: () => void;
+  onAcceptDream?: () => void;
+  onDeclineDream?: () => void;
   dreamAccepted?: boolean;
 }) {
   const { action, preview } = getNotificationText(item);
@@ -83,13 +118,17 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
     <TouchableOpacity
       style={[styles.row, !item.isSeen && styles.rowUnseen]}
       onPress={selectMode ? onToggleSelect : onPress}
-      onLongPress={selectMode ? undefined : () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-        showAlert('Delete', 'Remove this item?', [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Delete', style: 'destructive', onPress: onDelete },
-        ]);
-      }}
+      onLongPress={
+        selectMode
+          ? undefined
+          : () => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              showAlert('Delete', 'Remove this item?', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Delete', style: 'destructive', onPress: onDelete },
+              ]);
+            }
+      }
       delayLongPress={400}
       activeOpacity={0.7}
     >
@@ -103,7 +142,9 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
       {/* Actor avatar — show bot mascot for dream notifications */}
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => { if (item.type !== 'dream_generated') router.push(`/user/${item.actorId}`); }}
+        onPress={() => {
+          if (item.type !== 'dream_generated') router.push(`/user/${item.actorId}`);
+        }}
         disabled={item.type === 'dream_generated'}
       >
         {item.type === 'dream_generated' ? (
@@ -132,36 +173,44 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
           )}
         </Text>
         {preview && (
-          <Text style={styles.preview} numberOfLines={1}>"{preview}"</Text>
+          <Text style={styles.preview} numberOfLines={1}>
+            "{preview}"
+          </Text>
         )}
       </View>
 
       {/* Accept/Decline for friend requests */}
-      {item.type === 'friend_request' && !selectMode && (
-        dreamAccepted ? (
+      {item.type === 'friend_request' &&
+        !selectMode &&
+        (dreamAccepted ? (
           <View style={styles.dreamersBadge}>
             <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
             <Text style={styles.dreamersBadgeText}>Dreamers</Text>
           </View>
         ) : onAcceptDream ? (
           <View style={styles.dreamActions}>
-            <TouchableOpacity style={styles.acceptDreamButton} onPress={onAcceptDream} activeOpacity={0.7} hitSlop={4}>
+            <TouchableOpacity
+              style={styles.acceptDreamButton}
+              onPress={onAcceptDream}
+              activeOpacity={0.7}
+              hitSlop={4}
+            >
               <Ionicons name="checkmark" size={16} color="#FFFFFF" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.declineDreamButton} onPress={onDeclineDream} activeOpacity={0.7} hitSlop={4}>
+            <TouchableOpacity
+              style={styles.declineDreamButton}
+              onPress={onDeclineDream}
+              activeOpacity={0.7}
+              hitSlop={4}
+            >
               <Ionicons name="close" size={14} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
-        ) : null
-      )}
+        ) : null)}
 
       {/* Post thumbnail */}
       {item.imageUrl && (
-        <Image
-          source={{ uri: item.thumbnailUrl ?? item.imageUrl }}
-          style={styles.thumbnail}
-          contentFit="cover"
-        />
+        <Image source={{ uri: item.imageUrl }} style={styles.thumbnail} contentFit="cover" />
       )}
 
       {/* Time + delete */}
@@ -169,7 +218,6 @@ function NotificationRow({ item, onPress, onDelete, selectMode, isSelected, onTo
         <Text style={styles.time}>{formatTimeAgo(item.createdAt)}</Text>
         {!item.isSeen && <View style={styles.unseenDot} />}
       </View>
-
     </TouchableOpacity>
   );
 }
@@ -257,10 +305,14 @@ export default function InboxScreen() {
             <TouchableOpacity onPress={exitSelectMode} activeOpacity={0.7}>
               <Text style={styles.headerCancel}>Cancel</Text>
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>{allSelectedGlobal ? 'All' : selected.size} selected</Text>
+            <Text style={styles.headerTitle}>
+              {allSelectedGlobal ? 'All' : selected.size} selected
+            </Text>
             <View style={styles.headerActions}>
               <TouchableOpacity onPress={toggleSelectAll} activeOpacity={0.7} hitSlop={8}>
-                <Text style={styles.selectAllText}>{allSelectedGlobal ? 'Deselect all' : 'Select all'}</Text>
+                <Text style={styles.selectAllText}>
+                  {allSelectedGlobal ? 'Deselect all' : 'Select all'}
+                </Text>
               </TouchableOpacity>
               {(selected.size > 0 || allSelectedGlobal) && (
                 <>
@@ -302,15 +354,26 @@ export default function InboxScreen() {
             <Text style={styles.headerTitle}>Inbox</Text>
             <View style={styles.headerActions}>
               {hasUnread && (
-                <TouchableOpacity onPress={() => markAllSeen()} activeOpacity={0.7} hitSlop={8} disabled={markingAll}>
+                <TouchableOpacity
+                  onPress={() => markAllSeen()}
+                  activeOpacity={0.7}
+                  hitSlop={8}
+                  disabled={markingAll}
+                >
                   <View style={styles.markAllRow}>
                     {markingAll && <ActivityIndicator size="small" color={colors.accent} />}
-                    <Text style={styles.markAllRead}>{markingAll ? 'Marking...' : 'Mark all read'}</Text>
+                    <Text style={styles.markAllRead}>
+                      {markingAll ? 'Marking...' : 'Mark all read'}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               )}
               {hasAny && (
-                <TouchableOpacity onPress={() => setSelectMode(true)} activeOpacity={0.7} hitSlop={8}>
+                <TouchableOpacity
+                  onPress={() => setSelectMode(true)}
+                  activeOpacity={0.7}
+                  hitSlop={8}
+                >
                   <Text style={styles.editText}>Edit</Text>
                 </TouchableOpacity>
               )}
@@ -331,15 +394,23 @@ export default function InboxScreen() {
             isSelected={selected.has(item.id)}
             onToggleSelect={() => toggleSelect(item.id)}
             dreamAccepted={acceptedDreamIds.has(item.id)}
-            onAcceptDream={item.type === 'friend_request' ? () => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              respondRequest({ requesterId: item.actorId, accept: true });
-              setAcceptedDreamIds((prev) => new Set(prev).add(item.id));
-            } : undefined}
-            onDeclineDream={item.type === 'friend_request' ? () => {
-              respondRequest({ requesterId: item.actorId, accept: false });
-              deleteNotification(item.id);
-            } : undefined}
+            onAcceptDream={
+              item.type === 'friend_request'
+                ? () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    respondRequest({ requesterId: item.actorId, accept: true });
+                    setAcceptedDreamIds((prev) => new Set(prev).add(item.id));
+                  }
+                : undefined
+            }
+            onDeclineDream={
+              item.type === 'friend_request'
+                ? () => {
+                    respondRequest({ requesterId: item.actorId, accept: false });
+                    deleteNotification(item.id);
+                  }
+                : undefined
+            }
           />
         )}
         onEndReached={() => {
@@ -361,7 +432,9 @@ export default function InboxScreen() {
               <>
                 <Ionicons name="notifications-outline" size={40} color="rgba(255,255,255,0.2)" />
                 <Text style={styles.emptyTitle}>All caught up</Text>
-                <Text style={styles.emptySubtitle}>Comments, replies, and shares will show up here</Text>
+                <Text style={styles.emptySubtitle}>
+                  Comments, replies, and shares will show up here
+                </Text>
               </>
             )}
           </View>

@@ -1,8 +1,15 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
@@ -40,10 +47,16 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
           <View className="px-4 pt-4 pb-8">
-            <TouchableOpacity onPress={() => router.back()} className="w-11 h-11 items-center justify-center">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="w-11 h-11 items-center justify-center"
+            >
               <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
@@ -78,7 +91,10 @@ export default function LoginScreen() {
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
               />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} className="ml-2 w-8 h-8 items-center justify-center">
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                className="ml-2 w-8 h-8 items-center justify-center"
+              >
                 <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color="#71767B" />
               </TouchableOpacity>
             </View>
@@ -93,9 +109,11 @@ export default function LoginScreen() {
               disabled={loading}
               activeOpacity={0.8}
             >
-              {loading
-                ? <ActivityIndicator color="#fff" />
-                : <Text className="text-white font-bold text-base">Sign in</Text>}
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text className="text-white font-bold text-base">Sign in</Text>
+              )}
             </TouchableOpacity>
 
             {/* Divider */}
@@ -117,7 +135,11 @@ export default function LoginScreen() {
                     router.replace('/');
                   } catch (err: unknown) {
                     const msg = (err as Error).message;
-                    if (!msg.includes('canceled') && !msg.includes('cancelled') && !msg.includes('ERR_CANCELED')) {
+                    if (
+                      !msg.includes('canceled') &&
+                      !msg.includes('cancelled') &&
+                      !msg.includes('ERR_CANCELED')
+                    ) {
                       showAlert('Apple Sign-In failed', msg);
                     }
                   } finally {

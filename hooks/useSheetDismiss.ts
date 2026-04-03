@@ -24,7 +24,10 @@ export function useSheetDismiss() {
         }
       },
       onPanResponderRelease: (_, gestureState) => {
-        if (gestureState.dy > SWIPE.DISMISS_THRESHOLD || gestureState.vy > (SWIPE.VELOCITY_THRESHOLD / 1000)) {
+        if (
+          gestureState.dy > SWIPE.DISMISS_THRESHOLD ||
+          gestureState.vy > SWIPE.VELOCITY_THRESHOLD / 1000
+        ) {
           Animated.timing(translateY, {
             toValue: 800,
             duration: 200,

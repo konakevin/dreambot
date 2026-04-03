@@ -8,7 +8,10 @@ import { colors } from '@/constants/theme';
 const SLIDER_WIDTH = 280;
 const THUMB_SIZE = 28;
 
-interface Props { onNext: () => void; onBack: () => void; }
+interface Props {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export function SurpriseFactorStep({ onNext, onBack }: Props) {
   const chaos = useOnboardingStore((s) => s.recipe.axes.chaos);
@@ -41,12 +44,17 @@ export function SurpriseFactorStep({ onNext, onBack }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }
 
-  const label = sliderValue < 0.25 ? 'Very predictable — stay close to my picks'
-    : sliderValue < 0.5 ? 'Mostly on-brand with a few surprises'
-    : sliderValue < 0.75 ? 'Adventurous — surprise me often'
-    : 'Full chaos — go wild, I love surprises';
+  const label =
+    sliderValue < 0.25
+      ? 'Very predictable — stay close to my picks'
+      : sliderValue < 0.5
+        ? 'Mostly on-brand with a few surprises'
+        : sliderValue < 0.75
+          ? 'Adventurous — surprise me often'
+          : 'Full chaos — go wild, I love surprises';
 
-  const emoji = sliderValue < 0.25 ? '🎯' : sliderValue < 0.5 ? '🌤' : sliderValue < 0.75 ? '🎲' : '🌪';
+  const emoji =
+    sliderValue < 0.25 ? '🎯' : sliderValue < 0.5 ? '🌤' : sliderValue < 0.75 ? '🎲' : '🌪';
 
   return (
     <View style={s.root}>
@@ -70,7 +78,12 @@ export function SurpriseFactorStep({ onNext, onBack }: Props) {
           >
             <View ref={trackRef} style={s.sliderTrack}>
               <View style={[s.sliderFill, { width: sliderValue * SLIDER_WIDTH }]} />
-              <View style={[s.sliderThumb, { transform: [{ translateX: sliderValue * (SLIDER_WIDTH - THUMB_SIZE) }] }]} />
+              <View
+                style={[
+                  s.sliderThumb,
+                  { transform: [{ translateX: sliderValue * (SLIDER_WIDTH - THUMB_SIZE) }] },
+                ]}
+              />
             </View>
           </View>
 
@@ -87,10 +100,14 @@ export function SurpriseFactorStep({ onNext, onBack }: Props) {
             <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
             <Text style={s.backBtnText}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={s.nextButton} onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            onNext();
-          }} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={s.nextButton}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onNext();
+            }}
+            activeOpacity={0.7}
+          >
             <Text style={s.nextButtonText}>Next</Text>
             <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
           </TouchableOpacity>
@@ -110,16 +127,30 @@ const s = StyleSheet.create({
   endLabel: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
   hitArea: { paddingVertical: 16 },
   sliderTrack: {
-    width: SLIDER_WIDTH, height: 8, borderRadius: 4,
-    backgroundColor: colors.surface, justifyContent: 'center',
+    width: SLIDER_WIDTH,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
   },
   sliderFill: {
-    position: 'absolute', left: 0, height: 8, borderRadius: 4, backgroundColor: colors.accent,
+    position: 'absolute',
+    left: 0,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.accent,
   },
   sliderThumb: {
-    position: 'absolute', width: THUMB_SIZE, height: THUMB_SIZE, borderRadius: THUMB_SIZE / 2,
+    position: 'absolute',
+    width: THUMB_SIZE,
+    height: THUMB_SIZE,
+    borderRadius: THUMB_SIZE / 2,
     backgroundColor: '#FFFFFF',
-    shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 4, shadowOffset: { width: 0, height: 2 }, elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 4,
   },
   resultRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
   emoji: { fontSize: 24 },
@@ -128,15 +159,26 @@ const s = StyleSheet.create({
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   backBtn: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-    paddingVertical: 16, borderRadius: 14,
-    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.accentBorder,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 16,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
   },
   backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
   nextButton: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
   },
   nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
 });

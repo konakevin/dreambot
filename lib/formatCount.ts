@@ -16,12 +16,14 @@ export function formatCount(n: number): string {
   if (n < 1_000_000) {
     const k = n / 1_000;
     // 1k–9.9k: 1 decimal; 10k+: whole number
-    const formatted = k >= 10 ? String(Math.round(k)) : (Math.round(n / 100) / 10).toFixed(1).replace(/\.0$/, '');
+    const formatted =
+      k >= 10 ? String(Math.round(k)) : (Math.round(n / 100) / 10).toFixed(1).replace(/\.0$/, '');
     return `${formatted}k`;
   }
 
   const m = n / 1_000_000;
   // 1m–9.9m: 1 decimal; 10m+: whole number
-  const formatted = m >= 10 ? String(Math.round(m)) : (Math.round(n / 100_000) / 10).toFixed(1).replace(/\.0$/, '');
+  const formatted =
+    m >= 10 ? String(Math.round(m)) : (Math.round(n / 100_000) / 10).toFixed(1).replace(/\.0$/, '');
   return `${formatted}m`;
 }

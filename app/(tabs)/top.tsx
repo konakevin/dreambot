@@ -1,8 +1,13 @@
 import { useState, useRef } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet,
-  Dimensions, FlatList,
-  type NativeSyntheticEvent, type NativeScrollEvent,
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  type NativeSyntheticEvent,
+  type NativeScrollEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -71,7 +76,7 @@ export default function ExploreScreen() {
   const [selected, setSelected] = useState<DreamCategory>(DREAM_CATEGORIES[0]);
   const [showChipFade, setShowChipFade] = useState(true);
   const chipScrollRef = useRef<ScrollView>(null);
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
 
   const { data, isLoading } = useCategoryDreams(selected);
   const posts = data?.pages.flat() ?? [];

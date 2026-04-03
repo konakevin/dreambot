@@ -6,7 +6,10 @@ import { ERA_TILES, SETTING_TILES } from '@/constants/onboarding';
 import { colors } from '@/constants/theme';
 import type { Era, Setting } from '@/types/recipe';
 
-interface Props { onNext: () => void; onBack: () => void; }
+interface Props {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export function WorldBuilderStep({ onNext, onBack }: Props) {
   const eras = useOnboardingStore((s) => s.recipe.eras);
@@ -30,11 +33,20 @@ export function WorldBuilderStep({ onNext, onBack }: Props) {
               <TouchableOpacity
                 key={tile.key}
                 style={[s.tile, selected && s.tileSelected]}
-                onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); toggleEra(tile.key as Era); }}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  toggleEra(tile.key as Era);
+                }}
                 activeOpacity={0.7}
               >
-                <Ionicons name={tile.icon as keyof typeof Ionicons.glyphMap} size={22} color={selected ? colors.accent : colors.textSecondary} />
-                <Text style={[s.tileLabel, selected && { color: colors.accent }]}>{tile.label}</Text>
+                <Ionicons
+                  name={tile.icon as keyof typeof Ionicons.glyphMap}
+                  size={22}
+                  color={selected ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.tileLabel, selected && { color: colors.accent }]}>
+                  {tile.label}
+                </Text>
               </TouchableOpacity>
             );
           })}
@@ -48,11 +60,20 @@ export function WorldBuilderStep({ onNext, onBack }: Props) {
               <TouchableOpacity
                 key={tile.key}
                 style={[s.tileLarge, selected && s.tileLargeSelected]}
-                onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); toggleSetting(tile.key as Setting); }}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  toggleSetting(tile.key as Setting);
+                }}
                 activeOpacity={0.7}
               >
-                <Ionicons name={tile.icon as keyof typeof Ionicons.glyphMap} size={22} color={selected ? colors.accent : colors.textSecondary} />
-                <Text style={[s.tileLabel, selected && { color: colors.accent }]}>{tile.label}</Text>
+                <Ionicons
+                  name={tile.icon as keyof typeof Ionicons.glyphMap}
+                  size={22}
+                  color={selected ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.tileLabel, selected && { color: colors.accent }]}>
+                  {tile.label}
+                </Text>
               </TouchableOpacity>
             );
           })}
@@ -67,12 +88,19 @@ export function WorldBuilderStep({ onNext, onBack }: Props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[s.nextButton, !canProceed && s.nextButtonDisabled]}
-            onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); onNext(); }}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onNext();
+            }}
             disabled={!canProceed}
             activeOpacity={0.7}
           >
             <Text style={[s.nextButtonText, !canProceed && s.nextButtonTextDisabled]}>Next</Text>
-            <Ionicons name="arrow-forward" size={18} color={canProceed ? '#FFFFFF' : colors.textSecondary} />
+            <Ionicons
+              name="arrow-forward"
+              size={18}
+              color={canProceed ? '#FFFFFF' : colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -89,14 +117,28 @@ const s = StyleSheet.create({
   sectionLabel: { color: colors.textPrimary, fontSize: 16, fontWeight: '700', marginBottom: 12 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   tile: {
-    width: '30%', aspectRatio: 1, backgroundColor: colors.surface, borderRadius: 16,
-    borderWidth: 1.5, borderColor: colors.border, alignItems: 'center', justifyContent: 'center',
-    paddingVertical: 12, gap: 8,
+    width: '30%',
+    aspectRatio: 1,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    gap: 8,
   },
   tileSelected: { borderColor: colors.accent, backgroundColor: colors.accentBg },
   tileLarge: {
-    width: '47%', paddingVertical: 18, backgroundColor: colors.surface, borderRadius: 16,
-    borderWidth: 1.5, borderColor: colors.border, alignItems: 'center', justifyContent: 'center', gap: 6,
+    width: '47%',
+    paddingVertical: 18,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
   },
   tileLargeSelected: { borderColor: colors.accent, backgroundColor: colors.accentBg },
   tileLabel: { color: colors.textSecondary, fontSize: 12, fontWeight: '600', textAlign: 'center' },
@@ -104,17 +146,32 @@ const s = StyleSheet.create({
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   backBtn: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-    paddingVertical: 16, borderRadius: 14,
-    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.accentBorder,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 16,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
   },
   backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
   nextButton: {
     flex: 1,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
   },
-  nextButtonDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  nextButtonDisabled: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
   nextButtonText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
   nextButtonTextDisabled: { color: colors.textSecondary },
 });

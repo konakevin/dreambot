@@ -61,12 +61,20 @@ export function useSpendSparkles() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ amount, reason, referenceId }: { amount: number; reason: string; referenceId?: string }) => {
+    mutationFn: async ({
+      amount,
+      reason,
+      referenceId,
+    }: {
+      amount: number;
+      reason: string;
+      referenceId?: string;
+    }) => {
       const { data, error } = await supabase.rpc('spend_sparkles', {
         p_user_id: user!.id,
         p_amount: amount,
         p_reason: reason,
-        p_reference_id: referenceId ?? null,
+        p_reference_id: referenceId ?? undefined,
       });
       if (error) throw error;
       if (!data) throw new Error('Not enough sparkles');

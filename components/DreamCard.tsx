@@ -12,8 +12,14 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
-  useSharedValue, useAnimatedStyle,
-  withTiming, withSequence, withSpring, withRepeat, withDelay, runOnJS,
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSequence,
+  withSpring,
+  withRepeat,
+  withDelay,
+  runOnJS,
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -95,23 +101,27 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
   const size = 3 + seededRandom(index + 17) * 4;
 
   useEffect(() => {
-    opacity.value = withDelay(delay,
+    opacity.value = withDelay(
+      delay,
       withRepeat(
         withSequence(
           withTiming(1, { duration: duration * 0.3 }),
-          withTiming(0, { duration: duration * 0.7 }),
+          withTiming(0, { duration: duration * 0.7 })
         ),
-        -1, true,
-      ),
+        -1,
+        true
+      )
     );
-    scale.value = withDelay(delay,
+    scale.value = withDelay(
+      delay,
       withRepeat(
         withSequence(
           withTiming(1.5, { duration: duration * 0.3 }),
-          withTiming(0.3, { duration: duration * 0.7 }),
+          withTiming(0.3, { duration: duration * 0.7 })
         ),
-        -1, true,
-      ),
+        -1,
+        true
+      )
     );
   }, []);
 
@@ -120,22 +130,50 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
     transform: [{ scale: scale.value }],
   }));
 
-  const color = index % 3 === 0 ? 'rgba(255,223,150,0.95)'
-    : index % 3 === 1 ? 'rgba(196,181,253,0.95)'
-    : 'rgba(255,255,255,0.9)';
+  const color =
+    index % 3 === 0
+      ? 'rgba(255,223,150,0.95)'
+      : index % 3 === 1
+        ? 'rgba(196,181,253,0.95)'
+        : 'rgba(255,255,255,0.9)';
 
   return (
-    <Animated.View style={[{
-      position: 'absolute', left, top,
-      width: size, height: size, borderRadius: size / 2,
-      backgroundColor: color,
-      shadowColor: color, shadowRadius: 6, shadowOpacity: 1,
-      shadowOffset: { width: 0, height: 0 },
-    }, style]} />
+    <Animated.View
+      style={[
+        {
+          position: 'absolute',
+          left,
+          top,
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor: color,
+          shadowColor: color,
+          shadowRadius: 6,
+          shadowOpacity: 1,
+          shadowOffset: { width: 0, height: 0 },
+        },
+        style,
+      ]}
+    />
   );
 }
 
-export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, onComment, onShare, isSaved, onToggleSave, disableSwipeToProfile, onDelete, onFuse, onFamily }: Props) {
+export function DreamCard({
+  item,
+  bottomPadding,
+  isLiked,
+  onLike,
+  onToggleLike,
+  onComment,
+  onShare,
+  isSaved,
+  onToggleSave,
+  disableSwipeToProfile,
+  onDelete,
+  onFuse,
+  onFamily,
+}: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
   const lastTap = useRef(0);
@@ -147,11 +185,9 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
   useEffect(() => {
     if (isWish) {
       hazeOpacity.value = withRepeat(
-        withSequence(
-          withTiming(0.7, { duration: 2000 }),
-          withTiming(0.3, { duration: 2000 }),
-        ),
-        -1, true,
+        withSequence(withTiming(0.7, { duration: 2000 }), withTiming(0.3, { duration: 2000 })),
+        -1,
+        true
       );
     }
   }, [isWish]);
@@ -187,7 +223,9 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
     } else {
       router.push(`/user/${item.user_id}?viewedPost=${item.id}`);
     }
-    setTimeout(() => { swiped.current = false; }, 500);
+    setTimeout(() => {
+      swiped.current = false;
+    }, 500);
   }
 
   function handleDoubleTap() {
@@ -195,19 +233,22 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
     if (now - lastTap.current < 300) {
       onToggleLike();
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      if (isLiked) { lastTap.current = 0; return; }
+      if (isLiked) {
+        lastTap.current = 0;
+        return;
+      }
       heartScale.value = 0;
       heartOpacity.value = 1;
       heartScale.value = withSequence(
         withTiming(1.3, { duration: 200 }),
         withTiming(1, { duration: 100 }),
         withTiming(1, { duration: 400 }),
-        withTiming(0, { duration: 200 }),
+        withTiming(0, { duration: 200 })
       );
       heartOpacity.value = withSequence(
         withTiming(1, { duration: 200 }),
         withTiming(1, { duration: 500 }),
-        withTiming(0, { duration: 200 }),
+        withTiming(0, { duration: 200 })
       );
     }
     lastTap.current = now;
@@ -266,7 +307,12 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
           delayLongPress={500}
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageStyle]}>
-            <Image source={{ uri: item.image_url }} style={s.fullImage} contentFit="cover" cachePolicy="memory-disk" />
+            <Image
+              source={{ uri: item.image_url }}
+              style={s.fullImage}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+            />
           </Animated.View>
 
           {/* Wish shimmer border */}
@@ -297,7 +343,12 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
               </Animated.View>
               {/* Sparkle particles evenly around the border */}
               {Array.from({ length: 36 }).map((_, i) => (
-                <WishSparkle key={i} index={i} total={36} seed={item.id.charCodeAt(0) + item.id.charCodeAt(1) * 7} />
+                <WishSparkle
+                  key={i}
+                  index={i}
+                  total={36}
+                  seed={item.id.charCodeAt(0) + item.id.charCodeAt(1) * 7}
+                />
               ))}
             </View>
           )}
@@ -311,7 +362,11 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
           <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
             <TouchableOpacity
               style={s.usernameRow}
-              onPress={() => isOwnPost ? router.navigate('/(tabs)/profile') : router.push(`/user/${item.user_id}?viewedPost=${item.id}`)}
+              onPress={() =>
+                isOwnPost
+                  ? router.navigate('/(tabs)/profile')
+                  : router.push(`/user/${item.user_id}?viewedPost=${item.id}`)
+              }
               activeOpacity={0.7}
             >
               {item.avatar_url ? (
@@ -337,10 +392,12 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
           {/* Side actions */}
           <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
             <TouchableOpacity style={ui.sideButton} onPress={onToggleLike} activeOpacity={0.7}>
-              <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={28} color={isLiked ? colors.like : '#FFFFFF'} />
-              {(item.like_count ?? 0) > 0 && (
-                <Text style={ui.sideCount}>{item.like_count}</Text>
-              )}
+              <Ionicons
+                name={isLiked ? 'heart' : 'heart-outline'}
+                size={28}
+                color={isLiked ? colors.like : '#FFFFFF'}
+              />
+              {(item.like_count ?? 0) > 0 && <Text style={ui.sideCount}>{item.like_count}</Text>}
             </TouchableOpacity>
             {onComment && (
               <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
@@ -352,17 +409,27 @@ export function DreamCard({ item, bottomPadding, isLiked, onLike, onToggleLike, 
             )}
             {onToggleSave && (
               <TouchableOpacity style={ui.sideButton} onPress={onToggleSave} activeOpacity={0.7}>
-                <Ionicons name={isSaved ? 'bookmark' : 'bookmark-outline'} size={24} color="#FFFFFF" />
+                <Ionicons
+                  name={isSaved ? 'bookmark' : 'bookmark-outline'}
+                  size={24}
+                  color="#FFFFFF"
+                />
               </TouchableOpacity>
             )}
-            <TouchableOpacity style={ui.sideButton} onPress={onShare ?? (() => router.push(`/sharePost?uploadId=${item.id}`))} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={ui.sideButton}
+              onPress={onShare ?? (() => router.push(`/sharePost?uploadId=${item.id}`))}
+              activeOpacity={0.7}
+            >
               <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             {item.is_ai_generated && onFamily && (
               <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
                 <Ionicons name="albums-outline" size={24} color="#FFFFFF" />
-                {((item.twin_count ?? 0) + (item.fuse_count ?? 0)) > 0 && (
-                  <Text style={ui.sideCount}>{(item.twin_count ?? 0) + (item.fuse_count ?? 0)}</Text>
+                {(item.twin_count ?? 0) + (item.fuse_count ?? 0) > 0 && (
+                  <Text style={ui.sideCount}>
+                    {(item.twin_count ?? 0) + (item.fuse_count ?? 0)}
+                  </Text>
                 )}
               </TouchableOpacity>
             )}
@@ -377,18 +444,74 @@ const s = StyleSheet.create({
   card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },
   fullImage: { ...StyleSheet.absoluteFillObject },
   wishGlow: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
-  wishEdgeTop: { position: 'absolute', top: 0, left: 0, right: 0, height: 40, borderTopLeftRadius: 20, borderTopRightRadius: 20 },
-  wishEdgeBottom: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 40, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
-  wishEdgeLeft: { position: 'absolute', top: 0, bottom: 0, left: 0, width: 30, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
-  wishEdgeRight: { position: 'absolute', top: 0, bottom: 0, right: 0, width: 30, borderTopRightRadius: 20, borderBottomRightRadius: 20 },
+  wishEdgeTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  wishEdgeBottom: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 40,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  wishEdgeLeft: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 30,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+  },
+  wishEdgeRight: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: 30,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+  },
   heartBurst: { position: 'absolute', top: '50%', left: '50%', marginTop: -40, marginLeft: -40 },
   sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 20 },
   postInfo: { position: 'absolute', bottom: 0, left: 0, right: 70, paddingHorizontal: 16, gap: 8 },
   usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  avatar: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
-  avatarFallback: { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
+  avatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  avatarFallback: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   avatarText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
-  username: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 4, textShadowOffset: { width: 0, height: 1 } },
+  username: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowRadius: 4,
+    textShadowOffset: { width: 0, height: 1 },
+  },
 });

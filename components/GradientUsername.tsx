@@ -7,12 +7,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 export type UserRank = 'LEGENDARY' | 'RAD' | 'SOLID' | 'MID' | 'BAD' | 'CURSED';
 
 const RANK_META: Record<UserRank, { colors: string[]; glow: string }> = {
-  LEGENDARY: { colors: ['#FFFFFF', '#FFE566', '#FFAA00'], glow: 'rgba(255,220,80,0.75)'  },
-  RAD:       { colors: ['#AAFF55', '#44EE88'],            glow: 'rgba(100,255,100,0.65)' },
-  SOLID:     { colors: ['#44CCFF', '#2277EE'],            glow: 'rgba(68,204,255,0.55)'  },
-  MID:       { colors: ['#BBBBBB', '#888888'],            glow: 'rgba(170,170,170,0.4)'  },
-  BAD:       { colors: ['#CC77FF', '#8833CC'],            glow: 'rgba(180,100,255,0.6)'  },
-  CURSED:    { colors: ['#FF4444', '#BB0000'],            glow: 'rgba(255,60,60,0.65)'   },
+  LEGENDARY: { colors: ['#FFFFFF', '#FFE566', '#FFAA00'], glow: 'rgba(255,220,80,0.75)' },
+  RAD: { colors: ['#AAFF55', '#44EE88'], glow: 'rgba(100,255,100,0.65)' },
+  SOLID: { colors: ['#44CCFF', '#2277EE'], glow: 'rgba(68,204,255,0.55)' },
+  MID: { colors: ['#BBBBBB', '#888888'], glow: 'rgba(170,170,170,0.4)' },
+  BAD: { colors: ['#CC77FF', '#8833CC'], glow: 'rgba(180,100,255,0.6)' },
+  CURSED: { colors: ['#FF4444', '#BB0000'], glow: 'rgba(255,60,60,0.65)' },
 };
 
 interface GradientUsernameProps {
@@ -31,21 +31,42 @@ interface GradientUsernameProps {
   avatarSize?: number;
 }
 
-function AvatarCircle({ url, size, username }: { url?: string | null; size: number; username: string }) {
+function AvatarCircle({
+  url,
+  size,
+  username,
+}: {
+  url?: string | null;
+  size: number;
+  username: string;
+}) {
   if (url) {
-    return <Image source={{ uri: url }} style={[styles.avatar, { width: size, height: size, borderRadius: size / 2 }]} />;
+    return (
+      <Image
+        source={{ uri: url }}
+        style={[styles.avatar, { width: size, height: size, borderRadius: size / 2 }]}
+      />
+    );
   }
   // Fallback: initial letter on a dark circle
   return (
     <View style={[styles.avatarFallback, { width: size, height: size, borderRadius: size / 2 }]}>
-      <Text style={[styles.avatarInitial, { fontSize: size * 0.45 }]}>{(username || '?')[0].toUpperCase()}</Text>
+      <Text style={[styles.avatarInitial, { fontSize: size * 0.45 }]}>
+        {(username || '?')[0].toUpperCase()}
+      </Text>
     </View>
   );
 }
 
 export function GradientUsername({
-  username, rank, style, photoOverlay = false, hideRank = false,
-  avatarUrl, showAvatar = false, avatarSize = 20,
+  username,
+  rank,
+  style,
+  photoOverlay = false,
+  hideRank = false,
+  avatarUrl,
+  showAvatar = false,
+  avatarSize = 20,
 }: GradientUsernameProps) {
   const text = username;
 
@@ -60,9 +81,7 @@ export function GradientUsername({
   }
 
   if (hideRank) {
-    return wrapWithAvatar(
-      <Text style={[style, { color: 'rgba(255,255,255,0.9)' }]}>{text}</Text>
-    );
+    return wrapWithAvatar(<Text style={[style, { color: 'rgba(255,255,255,0.9)' }]}>{text}</Text>);
   }
 
   const meta = rank ? RANK_META[rank as UserRank] : null;
@@ -70,11 +89,7 @@ export function GradientUsername({
   if (!meta) {
     return wrapWithAvatar(
       <MaskedView maskElement={<Text style={style}>{text}</Text>}>
-        <LinearGradient
-          colors={['#999999', '#666666']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
+        <LinearGradient colors={['#999999', '#666666']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
           <Text style={[style, { opacity: 0 }]}>{text}</Text>
         </LinearGradient>
       </MaskedView>
@@ -82,7 +97,14 @@ export function GradientUsername({
   }
 
   const maskStyle = photoOverlay
-    ? [style, { textShadowColor: meta.glow, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 16 }]
+    ? [
+        style,
+        {
+          textShadowColor: meta.glow,
+          textShadowOffset: { width: 0, height: 0 },
+          textShadowRadius: 16,
+        },
+      ]
     : style;
 
   return wrapWithAvatar(

@@ -4,7 +4,15 @@
  */
 
 import { useState, useRef, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,8 +28,7 @@ import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { fuseRecipes } from '@/lib/geneticMerge';
 import { registerRecipe, fetchRecipeById } from '@/lib/recipeRegistry';
-import { buildPromptInput, buildRawPrompt, buildHaikuPrompt } from '@/lib/recipeEngine';
-import { enhanceWithHaiku, generateFluxDev, persistImage } from '@/lib/dreamApi';
+import { generateFusion } from '@/lib/dreamApi';
 import { postDream, pinToFeed } from '@/lib/dreamPost';
 import type { Recipe } from '@/types/recipe';
 import { DEFAULT_RECIPE } from '@/types/recipe';
@@ -56,16 +63,23 @@ export default function FusionScreen() {
     setLoaded(true);
 
     // Load my recipe
-    supabase.from('user_recipes').select('recipe').eq('user_id', user.id).single()
-      .then(({ data }) => setMyRecipe((data?.recipe as Recipe) ?? DEFAULT_RECIPE));
+    supabase
+      .from('user_recipes')
+      .select('recipe')
+      .eq('user_id', user.id)
+      .single()
+      .then(({ data }) => setMyRecipe((data?.recipe as unknown as Recipe) ?? DEFAULT_RECIPE));
 
     // Load their recipe from registry, or fall back to their user_recipes
     if (fusionTarget.recipeId) {
-      fetchRecipeById(fusionTarget.recipeId)
-        .then((r) => setTheirRecipe(r ?? DEFAULT_RECIPE));
+      fetchRecipeById(fusionTarget.recipeId).then((r) => setTheirRecipe(r ?? DEFAULT_RECIPE));
     } else {
-      supabase.from('user_recipes').select('recipe').eq('user_id', fusionTarget.userId).single()
-        .then(({ data }) => setTheirRecipe((data?.recipe as Recipe) ?? DEFAULT_RECIPE));
+      supabase
+        .from('user_recipes')
+        .select('recipe')
+        .eq('user_id', fusionTarget.userId)
+        .single()
+        .then(({ data }) => setTheirRecipe((data?.recipe as unknown as Recipe) ?? DEFAULT_RECIPE));
     }
   }, [user, fusionTarget]);
 
@@ -75,10 +89,14 @@ export default function FusionScreen() {
     if (!myRecipe || !theirRecipe || !user || !fusionTarget || busy.current) return;
 
     if (sparkleBalance < FUSE_COST) {
-      showAlert('Not enough sparkles', `You need ${FUSE_COST} sparkles but have ${sparkleBalance}`, [
-        { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
-        { text: 'Cancel', style: 'cancel' },
-      ]);
+      showAlert(
+        'Not enough sparkles',
+        `You need ${FUSE_COST} sparkles but have ${sparkleBalance}`,
+        [
+          { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
+          { text: 'Cancel', style: 'cancel' },
+        ]
+      );
       return;
     }
 
@@ -87,23 +105,26 @@ export default function FusionScreen() {
 
     try {
       // Spend sparkles first
-      await spendSparkles({ amount: FUSE_COST, reason: 'dream_fusion', referenceId: fusionTarget.postId });
+      await spendSparkles({
+        amount: FUSE_COST,
+        reason: 'dream_fusion',
+        referenceId: fusionTarget.postId,
+      });
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
       // Genetic merge
       const merged = fuseRecipes(theirRecipe, myRecipe, blend);
-      const input = buildPromptInput(merged);
 
-      // Build prompt via Haiku with epigenetic context
-      const haikuBrief = buildHaikuPrompt(input) +
-        `\n\nEPIGENETIC CONTEXT: This dream is a genetic fusion of two Dream Bots. ` +
+      // Generate via Edge Function — prompt building + Haiku + Replicate all server-side
+      const epigeneticContext =
+        `EPIGENETIC CONTEXT: This dream is a genetic fusion of two Dream Bots. ` +
         `The source dream that inspired this fusion was: "${fusionTarget.prompt}". ` +
         `Use this as creative context — the fusion should feel like it could be the child ` +
         `of that dream and the other parent's style. Don't copy it, evolve it.`;
 
-      const prompt = await enhanceWithHaiku(haikuBrief, buildRawPrompt(input));
-      const tempUrl = await generateFluxDev(prompt);
-      const imageUrl = await persistImage(tempUrl, user.id);
+      const result = await generateFusion(merged, epigeneticContext);
+      const imageUrl = result.image_url;
+      const prompt = result.prompt_used;
 
       setAlbum((prev) => {
         const newIndex = prev.length;
@@ -116,7 +137,10 @@ export default function FusionScreen() {
     } catch (err) {
       const msg = (err as Error).message;
       if (msg === 'Not enough sparkles') {
-        showAlert('Not enough sparkles', `You need ${FUSE_COST} sparkles but have ${sparkleBalance}`);
+        showAlert(
+          'Not enough sparkles',
+          `You need ${FUSE_COST} sparkles but have ${sparkleBalance}`
+        );
       } else {
         Toast.show('Fusion failed — try again', 'close-circle');
       }
@@ -132,18 +156,20 @@ export default function FusionScreen() {
     setPosting(true);
 
     try {
+      // Image already persisted during generation (fusion costs sparkles)
+      const imageUrl = current.url;
       const recipeId = await registerRecipe(user.id, current.mergedRecipe);
       const uploadId = await postDream({
         userId: user.id,
-        imageUrl: current.url,
+        imageUrl,
         prompt: current.prompt,
         recipeId,
-        fuseOf: target?.postId ?? null,
+        fuseOf: fusionTarget?.postId ?? null,
       });
       pinToFeed({
         id: uploadId,
         userId: user.id,
-        imageUrl: current.url,
+        imageUrl,
         username: user.user_metadata?.username ?? '',
         avatarUrl: user.user_metadata?.avatar_url ?? null,
       });
@@ -199,7 +225,9 @@ export default function FusionScreen() {
       <View style={s.tugWrap}>
         <View style={s.tugParent}>
           <Image source={{ uri: fusionTarget.imageUrl }} style={s.tugThumb} contentFit="cover" />
-          <Text style={s.tugLabel} numberOfLines={1}>@{fusionTarget.username}</Text>
+          <Text style={s.tugLabel} numberOfLines={1}>
+            @{fusionTarget.username}
+          </Text>
         </View>
         <View style={s.tugSliderWrap}>
           <Slider
@@ -213,7 +241,9 @@ export default function FusionScreen() {
             maximumTrackTintColor={colors.accent}
             thumbTintColor="#FFFFFF"
           />
-          <Text style={s.tugPercent}>{100 - blend} / {blend}</Text>
+          <Text style={s.tugPercent}>
+            {100 - blend} / {blend}
+          </Text>
         </View>
         <View style={s.tugParent}>
           <View style={s.tugYou}>
@@ -238,7 +268,11 @@ export default function FusionScreen() {
               decelerationRate="fast"
               style={{ flexGrow: 0 }}
               contentContainerStyle={{ paddingHorizontal: 24 }}
-              getItemLayout={(_, index) => ({ length: SNAP_WIDTH, offset: SNAP_WIDTH * index, index })}
+              getItemLayout={(_, index) => ({
+                length: SNAP_WIDTH,
+                offset: SNAP_WIDTH * index,
+                index,
+              })}
               onScroll={(e) => {
                 const idx = Math.round(e.nativeEvent.contentOffset.x / SNAP_WIDTH);
                 const clamped = Math.max(0, Math.min(idx, album.length - 1));
@@ -283,11 +317,17 @@ export default function FusionScreen() {
       {/* Footer */}
       <View style={s.footer}>
         {album.length > 0 && (
-          <TouchableOpacity style={s.cta} onPress={handlePost} activeOpacity={0.7} disabled={posting || generating}>
-            {posting
-              ? <ActivityIndicator size="small" color="#FFF" />
-              : <Ionicons name="cloud-upload" size={20} color="#FFF" />
-            }
+          <TouchableOpacity
+            style={s.cta}
+            onPress={handlePost}
+            activeOpacity={0.7}
+            disabled={posting || generating}
+          >
+            {posting ? (
+              <ActivityIndicator size="small" color="#FFF" />
+            ) : (
+              <Ionicons name="cloud-upload" size={20} color="#FFF" />
+            )}
             <Text style={s.ctaText}>{posting ? 'Posting...' : 'Post This Fusion'}</Text>
           </TouchableOpacity>
         )}
@@ -297,10 +337,11 @@ export default function FusionScreen() {
           activeOpacity={0.7}
           disabled={generating || !myRecipe || !theirRecipe}
         >
-          {generating
-            ? <ActivityIndicator size="small" color={colors.accent} />
-            : <Ionicons name="git-merge" size={18} color={colors.accent} />
-          }
+          {generating ? (
+            <ActivityIndicator size="small" color={colors.accent} />
+          ) : (
+            <Ionicons name="git-merge" size={18} color={colors.accent} />
+          )}
           <Text style={s.fuseButtonText}>
             {album.length > 0 ? 'Fuse Again' : `Fuse (${FUSE_COST} sparkles)`}
           </Text>
@@ -312,28 +353,49 @@ export default function FusionScreen() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10, paddingHorizontal: 40 },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingHorizontal: 40,
+  },
   header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingHorizontal: 16, paddingVertical: 12,
-    borderBottomWidth: 0.5, borderBottomColor: colors.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.border,
   },
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
 
   // Tug-of-war slider
   tugWrap: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 16, paddingVertical: 20, gap: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    gap: 12,
   },
   tugParent: { alignItems: 'center', gap: 6, width: 56 },
   tugThumb: {
-    width: 48, height: 48, borderRadius: 24,
-    borderWidth: 2, borderColor: colors.border,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 2,
+    borderColor: colors.border,
   },
   tugYou: {
-    width: 48, height: 48, borderRadius: 24,
-    backgroundColor: colors.accentBg, borderWidth: 2, borderColor: colors.accent,
-    alignItems: 'center', justifyContent: 'center',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.accentBg,
+    borderWidth: 2,
+    borderColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tugLabel: { color: colors.textSecondary, fontSize: 11, fontWeight: '600', textAlign: 'center' },
   tugSliderWrap: { flex: 1, alignItems: 'center' },
@@ -343,33 +405,59 @@ const s = StyleSheet.create({
   // Results
   resultArea: { flex: 1, justifyContent: 'center' },
   resultImg: {
-    width: PREVIEW_WIDTH, height: Math.min(PREVIEW_WIDTH * 1.5, 380), borderRadius: 20,
-    borderWidth: 1, borderColor: colors.border,
+    width: PREVIEW_WIDTH,
+    height: Math.min(PREVIEW_WIDTH * 1.5, 380),
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   generatingOverlay: {
-    ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 20,
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    borderRadius: 20,
   },
   loadingTitle: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
   loadingSub: { color: 'rgba(255,255,255,0.7)', fontSize: 14 },
   emptyTitle: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: 14, textAlign: 'center' },
-  dotRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 14 },
+  dotRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 14,
+  },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)' },
   dotActive: { backgroundColor: '#FFFFFF' },
 
   // Footer
   footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 10 },
   cta: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: colors.accent, borderRadius: 14, paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
   },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
   fuseButton: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border,
-    borderRadius: 14, paddingVertical: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 14,
+    paddingVertical: 14,
   },
   fuseButtonDisabled: { opacity: 0.5 },
   fuseButtonText: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
+  emptyText: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' as const },
+  generatingText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' as const },
 });

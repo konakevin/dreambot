@@ -10,17 +10,11 @@ interface ToggleLikeArgs {
   currentlyLiked: boolean;
 }
 
-function updateCommentInPages(
-  pages: Comment[][],
-  commentId: string,
-  liked: boolean,
-): Comment[][] {
+function updateCommentInPages(pages: Comment[][], commentId: string, liked: boolean): Comment[][] {
   return pages.map((page) =>
     page.map((c) =>
-      c.id === commentId
-        ? { ...c, isLiked: liked, likeCount: c.likeCount + (liked ? 1 : -1) }
-        : c,
-    ),
+      c.id === commentId ? { ...c, isLiked: liked, likeCount: c.likeCount + (liked ? 1 : -1) } : c
+    )
   );
 }
 
@@ -65,12 +59,13 @@ export function useToggleCommentLike() {
         await queryClient.cancelQueries({ queryKey: repliesKey });
         prevReplies = queryClient.getQueryData<Comment[]>(repliesKey);
         if (prevReplies) {
-          queryClient.setQueryData<Comment[]>(repliesKey,
+          queryClient.setQueryData<Comment[]>(
+            repliesKey,
             prevReplies.map((c) =>
               c.id === commentId
                 ? { ...c, isLiked: liked, likeCount: c.likeCount + (liked ? 1 : -1) }
-                : c,
-            ),
+                : c
+            )
           );
         }
       }

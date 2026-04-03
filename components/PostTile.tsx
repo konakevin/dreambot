@@ -3,7 +3,14 @@ import { TouchableOpacity, Text, StyleSheet, Dimensions, View } from 'react-nati
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, withDelay } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSequence,
+  withRepeat,
+  withDelay,
+} from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { useDeletePost } from '@/hooks/useDeletePost';
 import { handleImageLongPress } from '@/lib/imageLongPress';
@@ -31,13 +38,17 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
 
   let left: number, top: number;
   if (pos < TILE_SIZE) {
-    left = pos; top = jitter;
+    left = pos;
+    top = jitter;
   } else if (pos < 2 * TILE_SIZE) {
-    left = TILE_SIZE - jitter; top = pos - TILE_SIZE;
+    left = TILE_SIZE - jitter;
+    top = pos - TILE_SIZE;
   } else if (pos < 3 * TILE_SIZE) {
-    left = 3 * TILE_SIZE - pos; top = TILE_SIZE - jitter;
+    left = 3 * TILE_SIZE - pos;
+    top = TILE_SIZE - jitter;
   } else {
-    left = jitter; top = 4 * TILE_SIZE - pos;
+    left = jitter;
+    top = 4 * TILE_SIZE - pos;
   }
 
   const delay = seededRandom(index + seed + 3) * 4000;
@@ -45,17 +56,27 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
   const size = 2 + seededRandom(index + seed + 17) * 2.5;
 
   useEffect(() => {
-    opacity.value = withDelay(delay,
-      withRepeat(withSequence(
-        withTiming(1, { duration: duration * 0.3 }),
-        withTiming(0, { duration: duration * 0.7 }),
-      ), -1, true),
+    opacity.value = withDelay(
+      delay,
+      withRepeat(
+        withSequence(
+          withTiming(1, { duration: duration * 0.3 }),
+          withTiming(0, { duration: duration * 0.7 })
+        ),
+        -1,
+        true
+      )
     );
-    scale.value = withDelay(delay,
-      withRepeat(withSequence(
-        withTiming(1.4, { duration: duration * 0.3 }),
-        withTiming(0.3, { duration: duration * 0.7 }),
-      ), -1, true),
+    scale.value = withDelay(
+      delay,
+      withRepeat(
+        withSequence(
+          withTiming(1.4, { duration: duration * 0.3 }),
+          withTiming(0.3, { duration: duration * 0.7 })
+        ),
+        -1,
+        true
+      )
     );
   }, []);
 
@@ -64,17 +85,32 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
     transform: [{ scale: scale.value }],
   }));
 
-  const color = index % 3 === 0 ? 'rgba(255,223,150,0.95)'
-    : index % 3 === 1 ? 'rgba(196,181,253,0.95)' : 'rgba(255,255,255,0.9)';
+  const color =
+    index % 3 === 0
+      ? 'rgba(255,223,150,0.95)'
+      : index % 3 === 1
+        ? 'rgba(196,181,253,0.95)'
+        : 'rgba(255,255,255,0.9)';
 
   return (
-    <Animated.View style={[{
-      position: 'absolute', left, top,
-      width: size, height: size, borderRadius: size / 2,
-      backgroundColor: color,
-      shadowColor: color, shadowRadius: 3, shadowOpacity: 1,
-      shadowOffset: { width: 0, height: 0 },
-    }, style]} />
+    <Animated.View
+      style={[
+        {
+          position: 'absolute',
+          left,
+          top,
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor: color,
+          shadowColor: color,
+          shadowRadius: 3,
+          shadowOpacity: 1,
+          shadowOffset: { width: 0, height: 0 },
+        },
+        style,
+      ]}
+    />
   );
 }
 
@@ -93,10 +129,9 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
   useEffect(() => {
     if (isWish) {
       hazeOpacity.value = withRepeat(
-        withSequence(
-          withTiming(0.6, { duration: 1800 }),
-          withTiming(0.25, { duration: 1800 }),
-        ), -1, true,
+        withSequence(withTiming(0.6, { duration: 1800 }), withTiming(0.25, { duration: 1800 })),
+        -1,
+        true
       );
     }
   }, [isWish]);
@@ -128,16 +163,11 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
       activeOpacity={0.9}
     >
       <Image
-        source={{ uri: item.thumbnail_url ?? item.image_url }}
+        source={{ uri: item.image_url }}
         style={styles.image}
         contentFit="cover"
         transition={150}
       />
-      {item.media_type === 'video' && (
-        <View style={styles.playBadge}>
-          <Ionicons name="play" size={12} color="#FFFFFF" />
-        </View>
-      )}
       {isHighlighted && (
         <View style={styles.highlightOverlay}>
           <View style={styles.highlightPill}>
@@ -149,13 +179,34 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
       {isWish && (
         <View style={styles.wishGlow} pointerEvents="none">
           <Animated.View style={[StyleSheet.absoluteFill, hazeStyle]}>
-            <LinearGradient colors={['rgba(196,181,253,0.4)', 'rgba(255,223,150,0.15)', 'transparent']} style={styles.edgeTop} />
-            <LinearGradient colors={['transparent', 'rgba(255,223,150,0.15)', 'rgba(196,181,253,0.4)']} style={styles.edgeBottom} />
-            <LinearGradient colors={['rgba(196,181,253,0.35)', 'rgba(255,223,150,0.1)', 'transparent']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.edgeLeft} />
-            <LinearGradient colors={['transparent', 'rgba(255,223,150,0.1)', 'rgba(196,181,253,0.35)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.edgeRight} />
+            <LinearGradient
+              colors={['rgba(196,181,253,0.4)', 'rgba(255,223,150,0.15)', 'transparent']}
+              style={styles.edgeTop}
+            />
+            <LinearGradient
+              colors={['transparent', 'rgba(255,223,150,0.15)', 'rgba(196,181,253,0.4)']}
+              style={styles.edgeBottom}
+            />
+            <LinearGradient
+              colors={['rgba(196,181,253,0.35)', 'rgba(255,223,150,0.1)', 'transparent']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.edgeLeft}
+            />
+            <LinearGradient
+              colors={['transparent', 'rgba(255,223,150,0.1)', 'rgba(196,181,253,0.35)']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.edgeRight}
+            />
           </Animated.View>
           {Array.from({ length: 16 }).map((_, i) => (
-            <TileSparkle key={i} index={i} total={16} seed={item.id.charCodeAt(0) + item.id.charCodeAt(1) * 7} />
+            <TileSparkle
+              key={i}
+              index={i}
+              total={16}
+              seed={item.id.charCodeAt(0) + item.id.charCodeAt(1) * 7}
+            />
           ))}
         </View>
       )}
@@ -172,14 +223,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-  },
-  playBadge: {
-    position: 'absolute',
-    top: 6,
-    left: 6,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 4,
-    padding: 3,
   },
   highlightOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -202,7 +245,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   wishGlow: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   edgeTop: { position: 'absolute', top: 0, left: 0, right: 0, height: 16 },
   edgeBottom: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 16 },

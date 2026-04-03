@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import 'react-native-reanimated';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
@@ -18,11 +18,10 @@ import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { ToastHost } from '@/components/Toast';
 
+import { queryClient } from '@/lib/queryClient';
+import { AppErrorBoundary } from '@/components/AppErrorBoundary';
+
 SplashScreen.preventAutoHideAsync();
-
-const queryClient = new QueryClient();
-
-export { queryClient };
 
 function AuthInitializer() {
   const initialize = useAuthStore((s) => s.initialize);
@@ -97,20 +96,30 @@ function RealtimeSubscriber() {
       .channel(`user-${user.id}`)
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'notifications', filter: `recipient_id=eq.${user.id}` },
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `recipient_id=eq.${user.id}`,
+        },
         () => {
           // New notification — refresh inbox and unread count
           queryClient.invalidateQueries({ queryKey: ['inbox', user.id] });
           queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user.id] });
-        },
+        }
       )
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'user_recipes', filter: `user_id=eq.${user.id}` },
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'user_recipes',
+          filter: `user_id=eq.${user.id}`,
+        },
         () => {
           // Recipe/wish updated (e.g. wish cleared after granting)
           queryClient.invalidateQueries({ queryKey: ['dreamWish', user.id] });
-        },
+        }
       )
       .on(
         'postgres_changes',
@@ -119,7 +128,7 @@ function RealtimeSubscriber() {
           // New dream generated for this user — refresh feed
           queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
           queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-        },
+        }
       )
       .subscribe();
 
@@ -139,7 +148,7 @@ function DataPrefetcher() {
   useEffect(() => {
     if (!user || activityLogged.current) return;
     activityLogged.current = true;
-    supabase.from('users').update({ last_active_at: new Date().toISOString() }).eq('id', user.id);
+    supabase.auth.updateUser({ data: { last_active_at: new Date().toISOString() } });
   }, [user?.id]);
 
   // Refresh all data when app returns from background after 5+ minutes
@@ -161,23 +170,27 @@ function DataPrefetcher() {
   useEffect(() => {
     if (!user) return;
     // Prefetch profile data so the profile tab renders instantly
-    queryClient.prefetchQuery({ queryKey: ['topStreaks', user.id], queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_top_streaks', { p_user_id: user.id });
-      if (error) throw error;
-      return (data ?? []).map((row: Record<string, unknown>) => ({
-        friendId: row.friend_id as string,
-        friendUsername: row.friend_username as string,
-        friendAvatar: (row.friend_avatar as string | null) ?? null,
-        friendRank: (row.friend_rank as string | null) ?? null,
-        currentStreak: row.current_streak as number,
-        bestStreak: row.best_streak as number,
-        streakType: (row.streak_type as 'rad' | 'bad' | null) ?? null,
-        radStreak: (row.rad_streak as number) ?? 0,
-        badStreak: (row.bad_streak as number) ?? 0,
-        bestRadStreak: (row.best_rad_streak as number) ?? 0,
-        bestBadStreak: (row.best_bad_streak as number) ?? 0,
-      }));
-    }, staleTime: 5 * 60 * 1000 });
+    queryClient.prefetchQuery({
+      queryKey: ['topStreaks', user.id],
+      queryFn: async () => {
+        const { data, error } = await supabase.rpc('get_top_streaks', { p_user_id: user.id });
+        if (error) throw error;
+        return (data ?? []).map((row: Record<string, unknown>) => ({
+          friendId: row.friend_id as string,
+          friendUsername: row.friend_username as string,
+          friendAvatar: (row.friend_avatar as string | null) ?? null,
+          friendRank: (row.friend_rank as string | null) ?? null,
+          currentStreak: row.current_streak as number,
+          bestStreak: row.best_streak as number,
+          streakType: (row.streak_type as 'rad' | 'bad' | null) ?? null,
+          radStreak: (row.rad_streak as number) ?? 0,
+          badStreak: (row.bad_streak as number) ?? 0,
+          bestRadStreak: (row.best_rad_streak as number) ?? 0,
+          bestBadStreak: (row.best_bad_streak as number) ?? 0,
+        }));
+      },
+      staleTime: 5 * 60 * 1000,
+    });
   }, [user?.id]);
 
   return null;
@@ -195,30 +208,75 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
-        <AlertProvider>
-        <AuthInitializer />
-        <PushRegistrar />
-        <RevenueCatInitializer />
-        <RealtimeSubscriber />
-        <DataPrefetcher />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
-          <Stack.Screen name="settings" options={{ presentation: 'card', gestureEnabled: true }} />
-          <Stack.Screen name="fusion" options={{ presentation: 'card', gestureEnabled: true }} />
-          <Stack.Screen name="friendReveal/[uploadId]" options={{ presentation: 'card', gestureEnabled: true }} />
-          <Stack.Screen name="photo/[id]" options={{ presentation: 'card', gestureEnabled: true }} />
-          <Stack.Screen name="user/[userId]" options={{ presentation: 'card', gestureEnabled: true }} />
-          <Stack.Screen name="sharePost" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
-          <Stack.Screen name="comments" options={{ presentation: 'formSheet', gestureEnabled: true, contentStyle: { backgroundColor: '#0F0F1A' } }} />
-          <Stack.Screen name="search" options={{ presentation: 'transparentModal', gestureEnabled: true, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
-          <Stack.Screen name="sparkleStore" options={{ presentation: 'card', gestureEnabled: true }} />
-        </Stack>
-        <StatusBar style="light" />
-        <ToastHost />
-        </AlertProvider>
+        <AppErrorBoundary>
+          <AlertProvider>
+            <AuthInitializer />
+            <PushRegistrar />
+            <RevenueCatInitializer />
+            <RealtimeSubscriber />
+            <DataPrefetcher />
+            <Stack
+              screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
+              <Stack.Screen
+                name="settings"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="fusion"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="friendReveal/[uploadId]"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="photo/[id]"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="user/[userId]"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="sharePost"
+                options={{
+                  presentation: 'transparentModal',
+                  gestureEnabled: true,
+                  animation: 'fade',
+                  contentStyle: { backgroundColor: 'transparent' },
+                }}
+              />
+              <Stack.Screen
+                name="comments"
+                options={{
+                  presentation: 'formSheet',
+                  gestureEnabled: true,
+                  contentStyle: { backgroundColor: '#0F0F1A' },
+                }}
+              />
+              <Stack.Screen
+                name="search"
+                options={{
+                  presentation: 'transparentModal',
+                  gestureEnabled: true,
+                  animation: 'fade',
+                  contentStyle: { backgroundColor: 'transparent' },
+                }}
+              />
+              <Stack.Screen
+                name="sparkleStore"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+            </Stack>
+            <StatusBar style="light" />
+            <ToastHost />
+          </AlertProvider>
+        </AppErrorBoundary>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );

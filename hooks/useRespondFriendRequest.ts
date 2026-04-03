@@ -27,7 +27,8 @@ export function useRespondFriendRequest() {
       const previousPending = queryClient.getQueryData(['pendingRequests', user?.id]);
       queryClient.setQueryData(
         ['pendingRequests', user?.id],
-        (old: unknown[] | undefined) => old?.filter((r: Record<string, unknown>) => r.requesterId !== requesterId) ?? [],
+        (old: Record<string, unknown>[] | undefined) =>
+          old?.filter((r) => r.requesterId !== requesterId) ?? []
       );
 
       return { previous, key, previousPending };

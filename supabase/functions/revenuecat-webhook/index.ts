@@ -13,7 +13,7 @@ const SPARKLE_PACKS: Record<string, number> = {
 // Event types that represent a completed purchase
 const PURCHASE_EVENTS = new Set([
   'NON_RENEWING_PURCHASE', // one-time consumable (our sparkle packs)
-  'INITIAL_PURCHASE',      // subscription start (future-proofing)
+  'INITIAL_PURCHASE', // subscription start (future-proofing)
 ]);
 
 Deno.serve(async (req) => {
@@ -45,18 +45,24 @@ Deno.serve(async (req) => {
     const transactionId: string = event.transaction_id ?? event.id;
     const environment: string = event.environment ?? 'PRODUCTION';
 
-    console.log(`[RevenueCat] ${eventType} | user=${appUserId} | product=${productId} | env=${environment}`);
+    console.log(
+      `[RevenueCat] ${eventType} | user=${appUserId} | product=${productId} | env=${environment}`
+    );
 
     // Only process purchase events
     if (!PURCHASE_EVENTS.has(eventType)) {
-      return new Response(JSON.stringify({ message: `Ignored event: ${eventType}` }), { status: 200 });
+      return new Response(JSON.stringify({ message: `Ignored event: ${eventType}` }), {
+        status: 200,
+      });
     }
 
     // Look up sparkle amount
     const sparkleAmount = SPARKLE_PACKS[productId];
     if (!sparkleAmount) {
       console.error(`[RevenueCat] Unknown product: ${productId}`);
-      return new Response(JSON.stringify({ error: `Unknown product: ${productId}` }), { status: 400 });
+      return new Response(JSON.stringify({ error: `Unknown product: ${productId}` }), {
+        status: 400,
+      });
     }
 
     // Skip anonymous RevenueCat IDs — we need a real Supabase user ID
@@ -67,7 +73,7 @@ Deno.serve(async (req) => {
 
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
     // Idempotency: check if this transaction was already processed

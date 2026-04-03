@@ -3,7 +3,10 @@ import { SCENE_ATMOSPHERE_TILES, LIMITS } from '@/constants/onboarding';
 import { OnboardingTileScreen } from '@/components/OnboardingTileScreen';
 import type { SceneAtmosphere } from '@/types/recipe';
 
-interface Props { onNext: () => void; onBack: () => void; }
+interface Props {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export function SceneAtmosphereStep({ onNext, onBack }: Props) {
   const atmospheres = useOnboardingStore((s) => s.recipe.scene_atmospheres);

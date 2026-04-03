@@ -12,7 +12,7 @@ export interface PinnedPost {
   comment_count: number;
 }
 
-interface FeedStore {
+export interface FeedStore {
   // Pinned post — shows as first card on home feed (e.g. first dream after onboarding)
   pinnedPost: PinnedPost | null;
   setPinnedPost: (post: PinnedPost | null) => void;
@@ -24,12 +24,6 @@ interface FeedStore {
   // Session seed for feed shuffle
   feedSeed: number;
   regenerateSeed: () => void;
-  // Global video mute
-  videoMuted: boolean;
-  toggleVideoMute: () => void;
-  // Comment count bumps — tracks increments from this session
-  commentBumps: Map<string, number>;
-  bumpCommentCount: (uploadId: string) => void;
   // Profile tab reset
   profileResetToken: number;
   bumpProfileReset: () => void;
@@ -44,13 +38,6 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
   feedSeed: Math.random(),
   regenerateSeed: () => set({ feedSeed: Math.random() }),
-  videoMuted: true,
-  toggleVideoMute: () => set((s) => ({ videoMuted: !s.videoMuted })),
-  commentBumps: new Map(),
-  bumpCommentCount: (uploadId) =>
-    set((s) => ({
-      commentBumps: new Map(s.commentBumps).set(uploadId, (s.commentBumps.get(uploadId) ?? 0) + 1),
-    })),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
 }));

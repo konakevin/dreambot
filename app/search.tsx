@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import {
-  View, Text, TouchableOpacity, FlatList, TextInput, ActivityIndicator,
-  StyleSheet, Dimensions, Pressable, Animated,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Animated,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -44,7 +52,6 @@ function SearchRow({ user }: { user: SearchUser }) {
 
       <View style={styles.userInfo}>
         <Text style={styles.username}>{user.username}</Text>
-        
       </View>
 
       <View style={styles.actions}>
@@ -122,7 +129,12 @@ export default function SearchScreen() {
 
         {/* Search input */}
         <View style={styles.searchWrap}>
-          <Ionicons name="search" size={16} color={colors.textSecondary} style={styles.searchIcon} />
+          <Ionicons
+            name="search"
+            size={16}
+            color={colors.textSecondary}
+            style={styles.searchIcon}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search by username"
@@ -205,8 +217,12 @@ const styles = StyleSheet.create({
   },
   avatar: { width: 40, height: 40, borderRadius: 20 },
   avatarFallback: {
-    width: 40, height: 40, borderRadius: 20,
-    backgroundColor: colors.border, alignItems: 'center', justifyContent: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatarText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
   userInfo: { flex: 1, gap: 2 },

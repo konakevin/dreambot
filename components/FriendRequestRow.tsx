@@ -30,11 +30,7 @@ export function FriendRequestRow({ request, onAccept, onDecline }: Props) {
             <Text style={styles.avatarInitial}>{initial}</Text>
           </View>
         )}
-        <GradientUsername
-          username={request.username}
-          rank={null}
-          style={styles.username}
-        />
+        <GradientUsername username={request.username} rank={null} style={styles.username} />
       </TouchableOpacity>
 
       <View style={styles.actions}>
