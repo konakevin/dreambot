@@ -319,7 +319,7 @@ ${input.spiritAppears && input.spiritCompanion ? `- Spirit companion: a ${input.
 ${comp ? `- Composition idea: ${comp}` : ''}
 ${input.sceneType ? `- Scene type: ${input.sceneType}` : ''}
 
-WRITE a single image prompt (max 60 words). Start with the art style. Describe ONE specific, coherent scene — not a list of ingredients.
+WRITE a single image prompt (max 60 words) with rich, saturated, beautiful colors. Start with the art style. Describe ONE specific, coherent scene — not a list of ingredients.
 
 RULES:
 - If elements conflict, DROP the lower-priority one. A coherent scene beats a complete checklist.
