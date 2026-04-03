@@ -162,14 +162,6 @@ export const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'low', complexity: 'low', brightness: 'high', energy: 'low' },
   },
   {
-    text: 'mosaic tile artwork, small colorful square tiles, ancient Roman style',
-    axes: { realism: 'low', complexity: 'high', color_warmth: 'high' },
-  },
-  {
-    text: 'pop art screen print, bold primary colors, Andy Warhol style',
-    axes: { realism: 'low', energy: 'high', brightness: 'high' },
-  },
-  {
     text: 'cyberpunk neon cityscape style, rain-slicked surfaces, holographic ads',
     axes: { realism: 'high', brightness: 'low', energy: 'high' },
   },
@@ -198,20 +190,12 @@ export const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'high', complexity: 'low', brightness: 'high' },
   },
   {
-    text: 'woodcut print, bold carved lines, high contrast black and white with one accent color',
-    axes: { complexity: 'low', brightness: 'low', energy: 'high' },
-  },
-  {
     text: 'Dreamworks animation style, expressive characters, cinematic lighting',
     axes: { realism: 'low', energy: 'high', complexity: 'high' },
   },
   {
     text: 'faded vintage photograph, slightly overexposed, warm nostalgic tones',
     axes: { realism: 'high', brightness: 'high', energy: 'low' },
-  },
-  {
-    text: 'shadow puppet theater, silhouettes against warm backlit screen',
-    axes: { realism: 'low', brightness: 'low', complexity: 'low' },
   },
   // Anime & Japan inspired
   {
@@ -231,10 +215,6 @@ export const MEDIUM_POOL: TaggedOption[] = [
     axes: { realism: 'high', brightness: 'high', color_warmth: 'low' },
   },
   {
-    text: 'Japanese ink sumi-e, minimal brushstrokes, zen simplicity, negative space',
-    axes: { realism: 'low', complexity: 'low', energy: 'low' },
-  },
-  {
     text: 'voxel 3D art, chunky isometric blocks, Minecraft meets cute',
     axes: { realism: 'low', complexity: 'low', brightness: 'high' },
   },
@@ -251,16 +231,6 @@ export const MEDIUM_POOL: TaggedOption[] = [
       energy: 'high',
       color_warmth: 'high',
       brightness: 'low',
-    },
-  },
-  {
-    text: 'Picasso cubist style, fragmented geometric faces, multiple perspectives',
-    axes: {
-      realism: 'low',
-      complexity: 'high',
-      energy: 'high',
-      brightness: 'low',
-      color_warmth: 'low',
     },
   },
   {
@@ -284,16 +254,6 @@ export const MEDIUM_POOL: TaggedOption[] = [
     },
   },
   {
-    text: 'Banksy street art, stencil graffiti, political irony, concrete wall',
-    axes: {
-      realism: 'high',
-      energy: 'high',
-      brightness: 'low',
-      complexity: 'low',
-      color_warmth: 'low',
-    },
-  },
-  {
     text: 'Gustav Klimt gold leaf style, ornate patterns, Byzantine mosaic influence',
     axes: {
       complexity: 'high',
@@ -304,54 +264,8 @@ export const MEDIUM_POOL: TaggedOption[] = [
     },
   },
   {
-    text: 'Edward Hopper lonely realism, empty diners, long shadows, isolation',
-    axes: {
-      realism: 'high',
-      energy: 'low',
-      brightness: 'low',
-      color_warmth: 'high',
-      complexity: 'low',
-    },
-  },
-  {
-    text: 'Keith Haring bold outlines, dancing figures, primary colors, street art',
-    axes: {
-      realism: 'low',
-      energy: 'high',
-      brightness: 'high',
-      complexity: 'low',
-      color_warmth: 'high',
-    },
-  },
-  {
-    text: 'MC Escher impossible architecture, tessellations, mind-bending perspective',
-    axes: {
-      realism: 'low',
-      complexity: 'high',
-      energy: 'low',
-      brightness: 'low',
-      color_warmth: 'low',
-    },
-  },
-  {
-    text: 'Basquiat neo-expressionist, raw, crown motif, scrawled text, street',
-    axes: { realism: 'low', energy: 'high', brightness: 'low' },
-  },
-  {
     text: 'Hokusai Great Wave style, Japanese woodblock, dramatic ocean, Mount Fuji',
     axes: { realism: 'low', energy: 'high', color_warmth: 'low' },
-  },
-  {
-    text: 'Rothko color field, massive blocks of bleeding color, meditative',
-    axes: { realism: 'low', complexity: 'low', energy: 'low' },
-  },
-  {
-    text: 'Dalí melting clocks surrealism, desert dreamscape, impossible objects',
-    axes: { realism: 'low', complexity: 'high', energy: 'low' },
-  },
-  {
-    text: 'Warhol repeated screen print, bold flat pop art colors, celebrity style',
-    axes: { realism: 'low', energy: 'high', brightness: 'high' },
   },
   {
     text: 'Bob Ross happy little trees, soft landscape, calm mountains, cabin',
@@ -408,28 +322,7 @@ export const MEDIUM_POOL: TaggedOption[] = [
     text: '1920s Steamboat Willie style, black and white rubber hose animation, simple shapes',
     axes: { realism: 'low', complexity: 'low', brightness: 'low', energy: 'high' },
   },
-  // Art movements
-  {
-    text: 'pointillism, entire image made of tiny colored dots, Seurat style',
-    axes: { realism: 'low', complexity: 'high', energy: 'low', brightness: 'high' },
-  },
-  {
-    text: 'Mondrian De Stijl, bold black grid lines, primary color blocks, geometric abstraction',
-    axes: { realism: 'low', complexity: 'low', energy: 'low', brightness: 'high' },
-  },
-  {
-    text: 'Bauhaus design, clean geometric shapes, primary colors, functional minimalism',
-    axes: { realism: 'low', complexity: 'low', energy: 'low', brightness: 'high' },
-  },
-  {
-    text: 'Soviet Constructivist propaganda poster, bold red and black, angular typography, dramatic composition',
-    axes: { realism: 'low', energy: 'high', brightness: 'low', complexity: 'low' },
-  },
-  {
-    text: 'Art Brut outsider art, raw untrained style, intense emotion, unconventional materials',
-    axes: { realism: 'low', energy: 'high', complexity: 'low', brightness: 'high' },
-  },
-  // Modern aesthetics
+  // Art movements// Modern aesthetics
   {
     text: 'cottagecore aesthetic, wildflowers, linen, honey jars, soft pastoral warmth',
     axes: { realism: 'high', energy: 'low', brightness: 'high', color_warmth: 'high' },
@@ -464,34 +357,37 @@ export const MEDIUM_POOL: TaggedOption[] = [
     text: 'hyperrealistic CGI render, impossibly sharp detail, every pore and fiber visible, uncanny perfection',
     axes: { realism: 'high', complexity: 'high', brightness: 'high', energy: 'low' },
   },
-  {
-    text: 'kaleidoscope vision, infinite symmetrical reflections, fractal patterns, shifting geometry',
-    axes: { realism: 'low', complexity: 'high', energy: 'high', brightness: 'high' },
-  },
-  {
-    text: 'DMT visionary art, machine elf entities, sacred geometry, infinite recursive patterns, overwhelming color',
-    axes: {
-      realism: 'low',
-      complexity: 'high',
-      energy: 'high',
-      brightness: 'high',
-      color_warmth: 'high',
-    },
-  },
-  {
-    text: 'acid trip visuals, melting surfaces, breathing walls, trails and halos, colors bleeding into each other',
-    axes: { realism: 'low', complexity: 'high', energy: 'high', brightness: 'high' },
-  },
-  {
-    text: 'Alex Grey visionary art, translucent bodies, energy meridians, cosmic consciousness',
-    axes: {
-      realism: 'low',
-      complexity: 'high',
-      energy: 'high',
-      brightness: 'high',
-      color_warmth: 'high',
-    },
-  },
+  // ── New accessible mediums ──
+  { text: 'Unreal Engine 5 cinematic render, volumetric lighting, photogrammetry detail', axes: {} },
+  { text: 'drone aerial photograph from above, birds eye view, stunning landscape', axes: {} },
+  { text: 'macro photography, extreme close-up, shallow depth of field, every tiny detail', axes: {} },
+  { text: 'infrared photography, white trees, dark skies, otherworldly color palette', axes: {} },
+  { text: 'double exposure photograph, two images merged into one, ghostly overlay', axes: {} },
+  { text: 'long exposure photography, light trails, silky water, star trails, time compressed', axes: {} },
+  { text: 'underwater photograph, crystal clear water, light rays from surface, bubbles', axes: {} },
+  { text: 'cinematic movie still, anamorphic lens flare, film grain, 35mm widescreen', axes: {} },
+  { text: 'glowing neon wireframe on black, Tron-style digital world, geometric light', axes: {} },
+  { text: 'candy-colored 3D render, glossy plastic, bubblegum pink, soft rounded everything', axes: {} },
+  { text: 'cute 3D character render, big eyes, tiny body, Funko Pop meets Pixar', axes: {} },
+  { text: 'snow globe diorama, tiny world under glass, fake snow, miniature perfection', axes: {} },
+  { text: 'terrarium world, tiny ecosystem inside glass, moss and mushrooms and mist', axes: {} },
+  { text: 'needle felt sculpture, soft fuzzy wool texture, handmade, adorable and tactile', axes: {} },
+  { text: 'pressed flower art, dried botanicals arranged on cream paper, delicate and preserved', axes: {} },
+  { text: 'sand art in a bottle, layered colored sand forming a landscape, glass container visible', axes: {} },
+  { text: 'holographic iridescent style, rainbow reflections on everything, chrome and shimmer', axes: {} },
+  { text: 'neon sign style but the neon shapes form an entire scene, glowing tubes on dark wall', axes: {} },
+  { text: 'Indian miniature painting, rich detail, gold accents, flat perspective, jewel tones', axes: {} },
+  { text: 'Mexican Day of the Dead folk art, sugar skulls, marigolds, vivid celebration colors', axes: {} },
+  { text: 'Persian illuminated manuscript, intricate borders, lapis and gold, calligraphic beauty', axes: {} },
+  { text: 'Aboriginal dot painting, earthy colors, ancient patterns, landscape from above', axes: {} },
+  { text: 'synthwave outrun aesthetic, chrome grid, sunset gradient, palm trees, retro future', axes: {} },
+  { text: 'dark fantasy concept art, dramatic lighting, epic scale, cinematic composition', axes: {} },
+  { text: 'cozy illustration, warm colors, soft edges, the kind of art on a favorite book cover', axes: {} },
+  { text: 'retro futurism 1960s, space age optimism, bubble helmets, chrome everything', axes: {} },
+  { text: 'haunted daguerreotype, old photograph, ghostly figures, Victorian era, eerie', axes: {} },
+  { text: 'embossed leather book cover style, ornate tooling, gold stamping, medieval craftsmanship', axes: {} },
+  { text: 'Japanese cherry blossom screen painting, gold leaf background, delicate branches', axes: {} },
+  { text: 'diorama inside a jar, entire tiny world contained in glass, cork lid, shelf display', axes: {} },
 ];
 
 // ── ATMOSPHERE: Mood Pool ───────────────────────────────────────────────────

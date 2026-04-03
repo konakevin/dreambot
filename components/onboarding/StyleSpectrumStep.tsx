@@ -107,13 +107,6 @@ export function StyleSpectrumStep({ onNext, onBack }: Props) {
 
         <View style={s.sliders}>
           <Slider
-            label="Visual Style"
-            leftLabel="Artistic"
-            rightLabel="Photorealistic"
-            value={toSlider(recipe.axes.realism)}
-            onChange={(v) => setRealism(toStored(v))}
-          />
-          <Slider
             label="Weirdness"
             leftLabel="Normal"
             rightLabel="Surreal"

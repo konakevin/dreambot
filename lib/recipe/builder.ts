@@ -148,8 +148,9 @@ export function buildPromptInput(recipe: Recipe, archetype?: DreamArchetype): Pr
     brightness: rollAxis(axes.brightness),
   };
 
-  // TECHNIQUE layer
-  const medium = filterPool(MEDIUM_POOL, rolled, chaos);
+  // TECHNIQUE layer — medium is pure random for maximum visual variety
+  // (axes still filter moods and lighting, but medium should always surprise)
+  const medium = pick(MEDIUM_POOL).text;
   const paletteKey = colorPalettes.length > 0 ? pick(colorPalettes) : 'everything';
   const colorKeywordsStr = PALETTE_KEYWORDS[paletteKey] || '';
   const weirdnessModifier = getModifierByValue(WEIRDNESS_MODIFIERS, axes.weirdness);

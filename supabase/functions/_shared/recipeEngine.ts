@@ -1884,8 +1884,8 @@ export function buildPromptInput(recipe: Recipe, archetype?: Record<string, unkn
     brightness: rollAxis(axes.brightness),
   };
 
-  // TECHNIQUE layer
-  const medium = filterPool(MEDIUM_POOL, rolled, chaos);
+  // TECHNIQUE layer — medium is pure random for maximum visual variety
+  const medium = pick(MEDIUM_POOL).text;
   const paletteKey = colorPalettes.length > 0 ? pick(colorPalettes) : 'everything';
   const colorKeywordsStr = PALETTE_KEYWORDS[paletteKey] || '';
   const weirdnessModifier = getModifierByValue(WEIRDNESS_MODIFIERS, axes.weirdness);
@@ -2070,4 +2070,3 @@ Output ONLY the prompt, nothing else.`;
 // Note: Solo template (buildHaikuPromptDeep/buildHaikuPromptDual) was removed.
 // The three-part song now uses: Chord template (buildHaikuPrompt) for both
 // Chord and Solo modes, with archetype brief appended in the edge function.
-// Beauty mode has its own inline template in the edge function.

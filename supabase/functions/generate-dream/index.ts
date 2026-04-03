@@ -400,7 +400,7 @@ function pickModel(mode: string, prompt: string): { model: string; inputOverride
       p.includes('stained glass')) {
     return {
       model: 'sdxl',
-      inputOverrides: { width: 832, height: 1216, num_inference_steps: 30, guidance_scale: 7.5 },
+      inputOverrides: { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 },
     };
   }
 
@@ -425,8 +425,8 @@ async function generateImage(
       num_outputs: 1,
       output_format: 'jpg',
     } : {
-      width: 832,
-      height: 1216,
+      width: 768,
+      height: 1344,
       num_outputs: 1,
     }),
     ...inputOverrides,
