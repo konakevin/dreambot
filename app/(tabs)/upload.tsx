@@ -262,7 +262,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null, dreamMode: result.dream_mode, archetype: result.archetype }];
+        return [...prev, { url, prompt: p, fromWish: null, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -402,7 +402,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null, dreamMode: result.dream_mode, archetype: result.archetype }];
+        return [...prev, { url, prompt: p, fromWish: null, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -468,7 +468,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null, dreamMode: result.dream_mode, archetype: result.archetype }];
+        return [...prev, { url, prompt: p, fromWish: null, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined }];
       });
       setDreaming(false);
       setPhase('reveal');

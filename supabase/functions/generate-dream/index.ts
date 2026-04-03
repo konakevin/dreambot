@@ -384,24 +384,9 @@ function pickModel(mode: string, prompt: string): { model: string; inputOverride
 
   const p = prompt.toLowerCase();
 
-  // SDXL only for styles where it's clearly better than Flux:
-  // Traditional painting, hand-drawn illustration, anime, comic book art
-  if (p.includes('watercolor') || p.includes('oil painting') || p.includes('gouache') ||
-      p.includes('ink linework') || p.includes('pencil sketch') || p.includes('charcoal') ||
-      p.includes('impasto') || p.includes('brushstroke') ||
-      // Specific artists known for painterly styles
-      p.includes('van gogh') || p.includes('monet') || p.includes('seurat') ||
-      p.includes('pointillis') || p.includes('impressionis') ||
-      p.includes('frida kahlo') || p.includes('klimt') || p.includes('gold leaf') ||
-      p.includes('hokusai') || p.includes('bob ross') || p.includes('mucha') ||
-      // Hand-drawn / cartoon / anime
-      p.includes('anime') || p.includes('manga') || p.includes('cel animation') ||
-      p.includes('comic book') || p.includes('halftone') || p.includes('ben-day') ||
-      p.includes('spider-verse') ||
-      // Traditional print / craft
-      p.includes('woodblock') || p.includes('ukiyo-e') || p.includes('woodcut') ||
-      p.includes('cross-stitch') || p.includes('embroidery') || p.includes('tarot') ||
-      p.includes('stained glass')) {
+  // SDXL for anime/manga only — these render better on SDXL
+  if (p.includes('anime') || p.includes('manga') || p.includes('cel animation') ||
+      p.includes('shonen') || p.includes('shoujo') || p.includes('shinkai')) {
     return {
       model: 'sdxl',
       inputOverrides: { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 },

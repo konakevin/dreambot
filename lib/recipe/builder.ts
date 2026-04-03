@@ -194,7 +194,7 @@ export function buildPromptInput(recipe: Recipe, archetype?: DreamArchetype): Pr
 
   // WORLD layer — sometimes swap in a wild bonus location/era for variety
   let eraKeywordsStr: string;
-  if (Math.random() < 0.15 + chaos * 0.3) {
+  if (Math.random() < 0.25 + chaos * 0.5) {
     // Bonus era — base 15% + chaos bonus, with 308 options there's tons of variety
     eraKeywordsStr = pick(BONUS_ERAS);
   } else {
@@ -205,7 +205,7 @@ export function buildPromptInput(recipe: Recipe, archetype?: DreamArchetype): Pr
   }
 
   let settingKeywordsStr: string;
-  if (Math.random() < 0.15 + chaos * 0.3) {
+  if (Math.random() < 0.25 + chaos * 0.5) {
     // Bonus setting — base 15% + chaos bonus, with 308 options there's tons of variety
     settingKeywordsStr = pick(BONUS_SETTINGS);
   } else {
