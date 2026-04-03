@@ -42,7 +42,6 @@ const ALL_INTERESTS: Interest[] = [
   'horror',
   'tattoo_art',
   'mythology',
-  'sports',
   'travel',
   'pride',
 ];

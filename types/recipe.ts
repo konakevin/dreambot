@@ -52,7 +52,6 @@ export type Interest =
   | 'horror'
   | 'tattoo_art'
   | 'mythology'
-  | 'sports'
   | 'travel'
   | 'pride';
 
