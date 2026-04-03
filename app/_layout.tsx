@@ -127,6 +127,7 @@ function RealtimeSubscriber() {
         () => {
           // New dream generated for this user — refresh all feeds
           queryClient.invalidateQueries({ queryKey: ['feed'] });
+          queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
           queryClient.invalidateQueries({ queryKey: ['friendsFeed'] });
           queryClient.invalidateQueries({ queryKey: ['followingFeed'] });
           queryClient.invalidateQueries({ queryKey: ['userPosts'] });
@@ -151,7 +152,13 @@ function DataPrefetcher() {
   useEffect(() => {
     if (!user || activityLogged.current) return;
     activityLogged.current = true;
-    supabase.from('users').update({ last_active_at: new Date().toISOString() }).eq('id', user.id);
+    supabase
+      .from('users')
+      .update({ last_active_at: new Date().toISOString() })
+      .eq('id', user.id)
+      .then(({ error }) => {
+        if (error && __DEV__) console.warn('[DataPrefetcher] last_active_at update failed:', error.message);
+      });
   }, [user?.id]);
 
   // Refresh all data when app returns from background after 5+ minutes

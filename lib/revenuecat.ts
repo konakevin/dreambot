@@ -15,7 +15,7 @@ export async function configureRevenueCat(userId: string) {
 
   const key = Platform.OS === 'ios' ? RC_IOS_KEY : RC_ANDROID_KEY;
   if (key.startsWith('YOUR_') || key.startsWith('test_')) {
-    console.log('[RevenueCat] Skipping — using test key, products not ready yet');
+    if (__DEV__) console.log('[RevenueCat] Skipping — using test key, products not ready yet');
     return;
   }
 

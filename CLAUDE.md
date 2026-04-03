@@ -427,6 +427,22 @@ SignUp/LogIn → Supabase Auth (email or OAuth) → Session in SecureStore
 
 ---
 
+## GitHub & CI/CD
+
+**Repo:** `konakevin/dreambot` on GitHub (origin). Single `main` branch, push directly — no PR workflow.
+
+**CI pipeline** (`.github/workflows/ci.yml`) runs on every push to `main`:
+- Type check: `npx tsc --noEmit`
+- Lint: `npx expo lint`
+- Format: `npx prettier --check`
+- Tests: `npx jest --ci`
+
+**Nightly dreams** (`.github/workflows/nightly-dreams.yml`) runs via GitHub Actions cron at 1am MST + random 0-3hr delay. Uses `scripts/nightly-dreams.js` with secrets `SUPABASE_SERVICE_ROLE_KEY` and `REPLICATE_API_TOKEN`. Can also be triggered manually from GitHub UI.
+
+**Do NOT suggest adding CI or changing the Git workflow** — it already exists and works.
+
+---
+
 ## Key Rules
 
 1. Never use `StyleSheet.create` — always use NativeWind `className`
@@ -471,6 +487,12 @@ SignUp/LogIn → Supabase Auth (email or OAuth) → Session in SecureStore
 - Swipe interactions should have rubber-band physics (Reanimated handles this)
 - Large title style for main screens, small title for drill-downs
 - Use SF Symbols (via `@expo/vector-icons/Ionicons`) for icons — they feel native
+
+---
+
+## Team
+
+Kevin is the sole human developer. Claude is the other dev. There is no team, no code reviewers, no PR process. We push directly to `main`. Calibrate all recommendations accordingly — don't suggest enterprise process, team workflows, or "have someone review this." If something needs reviewing, that's Claude's job.
 
 ---
 

@@ -480,7 +480,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
-      console.error('[JustDream] ERROR:', msg, err);
+      if (__DEV__) console.error('[JustDream] ERROR:', msg, err);
       Toast.show(`Dream error: ${msg}`, 'close-circle');
       setError(msg);
       setDreaming(false);

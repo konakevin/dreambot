@@ -15,7 +15,7 @@ async function callModeration(body: Record<string, unknown>): Promise<Moderation
   const { data, error } = await supabase.functions.invoke('moderate-content', { body });
 
   if (error) {
-    console.warn('[Moderation] Edge Function error:', error);
+    if (__DEV__) console.warn('[Moderation] Edge Function error:', error);
     return { passed: false, reason: 'Unable to verify content. Please try again.' };
   }
 

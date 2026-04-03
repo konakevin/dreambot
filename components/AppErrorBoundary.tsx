@@ -21,8 +21,10 @@ export class AppErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('[AppErrorBoundary] Uncaught error:', error.message);
-    console.error('[AppErrorBoundary] Component stack:', info.componentStack);
+    if (__DEV__) {
+      console.error('[AppErrorBoundary] Uncaught error:', error.message);
+      console.error('[AppErrorBoundary] Component stack:', info.componentStack);
+    }
   }
 
   handleRetry = () => {
