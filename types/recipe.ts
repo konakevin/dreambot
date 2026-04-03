@@ -139,6 +139,8 @@ export interface Recipe {
   spirit_companion: SpiritCompanion | null;
   /** Mood keys selected during onboarding — sampled per-dream for axis variety */
   selected_moods?: string[];
+  /** Vibe keys selected during onboarding — maps to curated archetype bundles */
+  selected_vibes?: string[];
 }
 
 /** Default recipe — all axes at 0.5 (neutral), no selections */

@@ -174,24 +174,50 @@ export function RevealStep({ onBack }: Props) {
 
       await supabase.from('users').update({ has_ai_recipe: true }).eq('id', user.id);
 
-      // Match dream archetypes based on the user's interests × moods
+      // Match dream archetypes: interest×mood matching + vibe bundle injection
       try {
-        const userInterests = new Set(recipe.interests ?? []);
-        const userMoods = new Set(recipe.selected_moods ?? []);
-        const { data: archs } = await supabase
-          .from('dream_archetypes')
-          .select('id, trigger_interests, trigger_moods')
+        const userInterests = new Set<string>(recipe.interests ?? []);
+        const userMoods = new Set<string>(recipe.selected_moods ?? []);
+        const userVibes: string[] = (recipe as unknown as Record<string, unknown>).selected_vibes as string[] ?? [];
+
+        // Fetch all active archetypes (table not in generated types, cast needed)
+        const { data: archs } = await (supabase as unknown as { from: (t: string) => { select: (s: string) => { eq: (k: string, v: unknown) => Promise<{ data: { id: string; key: string; trigger_interests: string[]; trigger_moods: string[] }[] | null }> } } }).from('dream_archetypes')
+          .select('id, key, trigger_interests, trigger_moods')
           .eq('is_active', true);
+
         if (archs) {
-          const matches = archs.filter(
-            (a) =>
-              a.trigger_interests.some((i: string) => userInterests.has(i)) &&
-              a.trigger_moods.some((m: string) => userMoods.has(m))
-          );
-          if (matches.length > 0) {
-            await supabase.from('user_archetypes').delete().eq('user_id', user.id);
-            await supabase.from('user_archetypes').insert(
-              matches.map((m) => ({ user_id: user.id, archetype_id: m.id }))
+          const matchedIds = new Set<string>();
+
+          // 1. Interest × mood matching (original algorithm)
+          for (const a of archs) {
+            if (
+              a.trigger_interests.some((i) => userInterests.has(i as string)) &&
+              a.trigger_moods.some((m) => userMoods.has(m as string))
+            ) {
+              matchedIds.add(a.id);
+            }
+          }
+
+          // 2. Vibe bundle injection
+          const { VIBE_ARCHETYPE_MAP } = await import('@/constants/onboarding');
+          for (const vibe of userVibes) {
+            const patterns = VIBE_ARCHETYPE_MAP[vibe] ?? [];
+            for (const a of archs) {
+              for (const pattern of patterns) {
+                if (pattern.endsWith('_') ? a.key.startsWith(pattern) : a.key === pattern) {
+                  matchedIds.add(a.id);
+                  break;
+                }
+              }
+            }
+          }
+
+          if (matchedIds.size > 0) {
+            // user_archetypes not in generated types either
+            const ua = supabase as unknown as { from: (t: string) => { delete: () => { eq: (k: string, v: string) => Promise<unknown> }; insert: (rows: unknown[]) => Promise<unknown> } };
+            await ua.from('user_archetypes').delete().eq('user_id', user.id);
+            await ua.from('user_archetypes').insert(
+              [...matchedIds].map((id) => ({ user_id: user.id, archetype_id: id }))
             );
           }
         }

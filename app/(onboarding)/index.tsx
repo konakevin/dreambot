@@ -8,6 +8,7 @@ import { colors } from '@/constants/theme';
 
 import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
 import { InterestsStep } from '@/components/onboarding/InterestsStep';
+import { VibesStep } from '@/components/onboarding/VibesStep';
 import { SpiritCompanionStep } from '@/components/onboarding/SpiritCompanionStep';
 import { StyleSpectrumStep } from '@/components/onboarding/StyleSpectrumStep';
 import { WorldBuilderStep } from '@/components/onboarding/WorldBuilderStep';
@@ -31,6 +32,7 @@ interface StepConfig {
 const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep, skipInEdit: true },
   { key: 'interests', component: InterestsStep },
+  { key: 'vibes', component: VibesStep },
   { key: 'spirit', component: SpiritCompanionStep },
   { key: 'style', component: StyleSpectrumStep },
   { key: 'world', component: WorldBuilderStep },

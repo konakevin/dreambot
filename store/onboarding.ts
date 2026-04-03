@@ -26,6 +26,8 @@ interface OnboardingStore {
   selectedMoods: string[];
   toggleMood: (key: string) => void;
 
+  selectedVibes: string[];
+  toggleVibe: (key: string) => void;
   toggleInterest: (interest: Interest) => void;
   setRealism: (value: number) => void;
   setMoodPosition: (energy: number, brightness: number) => void;
@@ -79,6 +81,17 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
         };
       }
       return { selectedMoods: next };
+    }),
+
+  selectedVibes: [],
+  toggleVibe: (key) =>
+    set((s) => {
+      const current = s.selectedVibes;
+      const next = current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
+      return {
+        selectedVibes: next,
+        recipe: { ...s.recipe, selected_vibes: next },
+      };
     }),
 
   toggleInterest: (interest) =>
@@ -172,5 +185,5 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
 
   isEditing: false,
   setIsEditing: (v) => set({ isEditing: v }),
-  reset: () => set({ step: 1, isEditing: false, selectedMoods: [], recipe: { ...DEFAULT_RECIPE } }),
+  reset: () => set({ step: 1, isEditing: false, selectedMoods: [], selectedVibes: [], recipe: { ...DEFAULT_RECIPE } }),
 }));

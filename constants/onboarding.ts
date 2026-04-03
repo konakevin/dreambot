@@ -32,7 +32,98 @@ export const INTEREST_TILES: { key: Interest; label: string; icon: string }[] = 
   { key: 'pride', label: 'Pride', icon: 'heart-circle' },
 ];
 
-/** Step 2: Spirit companion tiles */
+/** Step 2: "I'm into..." vibe tiles — each maps to a curated archetype bundle */
+export const VIBE_TILES: { key: string; label: string; icon: string }[] = [
+  { key: 'cozy', label: 'Cozy & Cottagecore', icon: 'cafe' },
+  { key: 'dark', label: 'Dark & Mysterious', icon: 'moon' },
+  { key: 'baddie', label: 'Baddie', icon: 'flame' },
+  { key: 'gamer', label: 'Gamer', icon: 'game-controller' },
+  { key: 'anime_fantasy', label: 'Anime & Fantasy', icon: 'sparkles' },
+  { key: 'beach_ocean', label: 'Beach & Ocean', icon: 'sunny' },
+  { key: 'space_scifi', label: 'Space & Sci-Fi', icon: 'rocket' },
+  { key: 'epic_adventure', label: 'Epic & Adventure', icon: 'earth' },
+  { key: 'music_retro', label: 'Music & Retro', icon: 'musical-notes' },
+  { key: 'whimsical', label: 'Whimsical & Surreal', icon: 'color-palette' },
+];
+
+/** Vibe → archetype key prefixes/exact keys mapping.
+ *  At onboarding, selected vibes inject these archetypes into the user's pool. */
+export const VIBE_ARCHETYPE_MAP: Record<string, string[]> = {
+  cozy: [
+    'cozy_', 'peaceful_', 'nostalgic_', 'dreamy_',
+    'cozy_cottagecore_queen', 'whimsical_bookish_romantic', 'music_lofi_rain',
+    'travel_train_journey', 'anime_lofi_study', 'cute_animal_kingdom',
+    'fashion_ballet_dreamer', 'fashion_vintage_glamour',
+    'food_', 'cozy_food',
+  ],
+  dark: [
+    'dark_', 'moody_', 'mysterious_',
+    'dark_haunted_beauty', 'music_jazz_midnight', 'dark_cosmic_horror',
+    'cute_crystal_witch', 'nature_botanical_witch', 'fantasy_potion_shop',
+    'fantasy_undead_kingdom', 'movies_horror_beautiful',
+  ],
+  baddie: [
+    'intense_fashion_siren', 'intense_sci_fi_huntress', 'moody_dark_gothic_muse',
+    'playful_fashion_pinup', 'dramatic_movies_silver_screen',
+    'dreamy_ocean_goddess', 'ocean_mermaid_siren',
+    'dramatic_fantasy_enchantress', 'epic_sports_athletic_goddess',
+    'whimsical_cute_anime_dream', 'nostalgic_music_jazz_flame',
+    'mermaid_lagoon_siren_song', 'music_ocean_siren_seduction',
+    'baddie_', // all baddie_* archetypes
+  ],
+  gamer: [
+    'gaming_', 'geek_', 'steampunk_',
+    'gaming_zelda_wanderer', 'gaming_dark_souls', 'gaming_minecraft_builder',
+    'gaming_pokemon_trainer', 'gaming_retro_arcade', 'gaming_animal_crossing',
+    'gaming_cyberpunk_edgerunner', 'gaming_ghibli_adventure',
+    'gaming_boss_fight', 'gaming_loot_drop',
+    'geek_hacker_den', 'steampunk_airship', 'steampunk_clockwork',
+    'movies_blade_runner', 'movies_marvel_hero',
+  ],
+  anime_fantasy: [
+    'anime_', 'fantasy_', 'ghibli_',
+    'movies_ghibli_world', 'movies_lotr_fellowship', 'movies_harry_potter',
+    'movies_star_wars', 'anime_shonen_battle', 'anime_lofi_study',
+    'anime_mecha_sunset', 'anime_slice_of_life',
+    'fantasy_dragon_rider', 'fantasy_wizard_tower', 'fantasy_elven_kingdom',
+    'fantasy_tavern_night', 'fantasy_potion_shop', 'fantasy_floating_islands',
+    'fantasy_enchanted_forest', 'fantasy_undead_kingdom', 'fantasy_dragon_hoard',
+  ],
+  beach_ocean: [
+    'ocean_', 'dreamy_ocean', 'playful_ocean', 'serene_ocean',
+    'dreamy_ocean_goddess', 'ocean_mermaid_siren', 'ocean_mermaid_cute',
+    'ocean_pirate_captain', 'ocean_coral_palace', 'ocean_deep_abyss',
+  ],
+  space_scifi: [
+    'space_', 'sci_fi_', 'cosmic_',
+    'space_astronaut_alone', 'sci_fi_space_battle', 'sci_fi_mech_pilot',
+    'dark_cosmic_horror',
+    'abstract_', 'universal_surreal_mindbend', 'universal_impossible_landscape',
+    'abstract_synesthesia', 'abstract_infinity_room',
+  ],
+  epic_adventure: [
+    'universal_', 'vista_', 'alien_', 'earth_',
+    'sports_', 'travel_',
+    'sports_legendary_moment', 'sports_muscle_car', 'sports_underdog_glory',
+    'dark_samurai_ronin', 'dark_viking_saga',
+    'travel_lost_city', 'travel_train_journey',
+    'nature_mountain_king',
+  ],
+  music_retro: [
+    'music_', 'nostalgic_', 'retro_',
+    'music_jazz_midnight', 'music_metal_cathedral', 'music_lofi_rain',
+    'music_festival_euphoria', 'music_kpop_dreamer',
+    'gaming_retro_arcade', 'movies_wes_anderson',
+  ],
+  whimsical: [
+    'whimsical_', 'playful_', 'cute_',
+    'cute_pastel_kingdom', 'cute_sanrio_world',
+    'universal_tiny_worlds', 'universal_seasons_collide',
+    'food_feast_of_kings', 'food_midnight_feast',
+  ],
+};
+
+/** Step 3: Spirit companion tiles */
 export const SPIRIT_COMPANIONS: { key: SpiritCompanion; label: string; icon: string }[] = [
   { key: 'fox', label: 'Fox', icon: 'paw' },
   { key: 'cat', label: 'Cat', icon: 'paw' },
@@ -182,4 +273,4 @@ export const LIMITS = {
 } as const;
 
 /** Total steps in the onboarding flow */
-export const TOTAL_STEPS = 11;
+export const TOTAL_STEPS = 12;
