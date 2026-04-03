@@ -233,16 +233,16 @@ Deno.serve(async (req) => {
 
       if (dreamMode === 'beauty') {
         // BEAUTY MODE: pure visual focus, no narrative, just breathtaking imagery
-        haikuBrief = `Dream up something breathtaking using these ingredients.
+        haikuBrief = `Dream up something breathtaking with rich, saturated, beautiful colors.
 
 Style: ${input.medium}
-Mood: ${input.mood}
-Light: ${input.lighting}
-Place: ${input.settingKeywords}
+Subject: ${input.interests.map((i: string) => i).join(' and ')}
+Place: ${input.settingKeywords}, ${input.eraKeywords}
+Mood: ${input.mood}, ${input.lighting}
 ${input.colorKeywords ? `Colors: ${input.colorKeywords}` : ''}
 ${input.sceneAtmosphere ? `Weather: ${input.sceneAtmosphere}` : ''}
 
-Write a vivid image prompt (max 50 words). Start with the art style. Make it beautiful. No text in the image. Output ONLY the prompt.`;
+Write a vivid image prompt (max 50 words). Start with the art style. Make it beautiful. No photorealistic humans. No text in the image. Output ONLY the prompt.`;
       } else {
         // CHORD or ARCHETYPE mode — use the standard Chord template
         haikuBrief = buildHaikuPrompt(input);

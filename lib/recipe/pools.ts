@@ -7,12 +7,7 @@ import type { TaggedOption } from './types';
 // ── TECHNIQUE: Medium Pool ──────────────────────────────────────────────────
 // Tagged with axes so the engine filters by rolled values.
 
-export const MEDIUM_POOL: TaggedOption[] = [
-  {
-    text: 'ultra-realistic photograph, DSLR, 8K detail',
-    axes: { realism: 'high', complexity: 'high', energy: 'high', brightness: 'high' },
-  },
-  {
+export const MEDIUM_POOL: TaggedOption[] = [{
     text: 'Pixar-style 3D render, soft rounded shapes, vibrant colors',
     axes: { realism: 'low', energy: 'low' },
   },
@@ -348,19 +343,11 @@ export const MEDIUM_POOL: TaggedOption[] = [
     text: 'Blue Note jazz album cover, bold graphic shapes, smoky atmosphere, cool tones',
     axes: { realism: 'low', energy: 'low', brightness: 'low', color_warmth: 'low' },
   },
-  // Hyperreal & psychedelic
-  {
-    text: 'hyperrealistic CGI render, impossibly sharp detail, every pore and fiber visible, uncanny perfection',
-    axes: { realism: 'high', complexity: 'high', brightness: 'high', energy: 'low' },
-  },
-  // ── New accessible mediums ──
+  // Hyperreal & psychedelic// ── New accessible mediums ──
   { text: 'Unreal Engine 5 cinematic render, volumetric lighting, photogrammetry detail', axes: {} },
-  { text: 'drone aerial photograph from above, birds eye view, stunning landscape', axes: {} },
-  { text: 'macro photography, extreme close-up, shallow depth of field, every tiny detail', axes: {} },
   { text: 'infrared photography, white trees, dark skies, otherworldly color palette', axes: {} },
   { text: 'double exposure photograph, two images merged into one, ghostly overlay', axes: {} },
   { text: 'long exposure photography, light trails, silky water, star trails, time compressed', axes: {} },
-  { text: 'underwater photograph, crystal clear water, light rays from surface, bubbles', axes: {} },
   { text: 'cinematic movie still, anamorphic lens flare, film grain, 35mm widescreen', axes: {} },
   { text: 'glowing neon wireframe on black, Tron-style digital world, geometric light', axes: {} },
   { text: 'candy-colored 3D render, glossy plastic, bubblegum pink, soft rounded everything', axes: {} },
@@ -1575,6 +1562,17 @@ export const DREAM_SUBJECTS = [
   'a figure standing at the edge of a vast landscape, about to take the first step',
   'a crowd of lanterns rising into the night, each one carrying a wish',
   'a kid asleep in a blanket fort, the shadows on the wall showing their dream',
+  // Pop culture characters in action
+  'a Totoro-sized forest spirit sheltering tiny creatures from the rain under its belly',
+  'a Sackboy stitched from felt, exploring a cardboard world, button eyes wide with wonder',
+  'Falkor the luck dragon soaring through a canyon of clouds, a kid on his back laughing',
+  'a Wallace & Gromit-style inventor whose latest contraption has gone hilariously wrong',
+  'a Miyazaki-style cat bus bounding through a rainy countryside, passengers peeking out',
+  'a Pixar-style robot discovering a single flower growing in wreckage',
+  'a Studio Ghibli witch on a broomstick delivering packages over a seaside town at sunset',
+  'a Minecraft creeper sneaking up behind a player who is building something beautiful',
+  'a Pokemon battle mid-attack, energy beams colliding, the arena shaking',
+  'a Zelda-style hero pulling a glowing sword from a mossy stone pedestal in a sunbeam',
 ];
 
 // Interests that are too vague on their own — always expand to a specific flavor

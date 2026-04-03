@@ -6,7 +6,7 @@
  *                  lib/recipe/utils.ts, lib/recipe/builder.ts
  *
  * DO NOT EDIT DIRECTLY. Run: node scripts/sync-deno-engine.js
- * Generated: 2026-04-03T15:06:31.451Z
+ * Generated: 2026-04-03T15:21:01.023Z
  */
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -273,12 +273,7 @@ export interface PromptInput {
 // ── TECHNIQUE: Medium Pool ──────────────────────────────────────────────────
 // Tagged with axes so the engine filters by rolled values.
 
-export const MEDIUM_POOL: TaggedOption[] = [
-  {
-    text: 'ultra-realistic photograph, DSLR, 8K detail',
-    axes: { realism: 'high', complexity: 'high', energy: 'high', brightness: 'high' },
-  },
-  {
+export const MEDIUM_POOL: TaggedOption[] = [{
     text: 'Pixar-style 3D render, soft rounded shapes, vibrant colors',
     axes: { realism: 'low', energy: 'low' },
   },
@@ -614,19 +609,11 @@ export const MEDIUM_POOL: TaggedOption[] = [
     text: 'Blue Note jazz album cover, bold graphic shapes, smoky atmosphere, cool tones',
     axes: { realism: 'low', energy: 'low', brightness: 'low', color_warmth: 'low' },
   },
-  // Hyperreal & psychedelic
-  {
-    text: 'hyperrealistic CGI render, impossibly sharp detail, every pore and fiber visible, uncanny perfection',
-    axes: { realism: 'high', complexity: 'high', brightness: 'high', energy: 'low' },
-  },
-  // ── New accessible mediums ──
+  // Hyperreal & psychedelic// ── New accessible mediums ──
   { text: 'Unreal Engine 5 cinematic render, volumetric lighting, photogrammetry detail', axes: {} },
-  { text: 'drone aerial photograph from above, birds eye view, stunning landscape', axes: {} },
-  { text: 'macro photography, extreme close-up, shallow depth of field, every tiny detail', axes: {} },
   { text: 'infrared photography, white trees, dark skies, otherworldly color palette', axes: {} },
   { text: 'double exposure photograph, two images merged into one, ghostly overlay', axes: {} },
   { text: 'long exposure photography, light trails, silky water, star trails, time compressed', axes: {} },
-  { text: 'underwater photograph, crystal clear water, light rays from surface, bubbles', axes: {} },
   { text: 'cinematic movie still, anamorphic lens flare, film grain, 35mm widescreen', axes: {} },
   { text: 'glowing neon wireframe on black, Tron-style digital world, geometric light', axes: {} },
   { text: 'candy-colored 3D render, glossy plastic, bubblegum pink, soft rounded everything', axes: {} },
@@ -1841,6 +1828,17 @@ export const DREAM_SUBJECTS = [
   'a figure standing at the edge of a vast landscape, about to take the first step',
   'a crowd of lanterns rising into the night, each one carrying a wish',
   'a kid asleep in a blanket fort, the shadows on the wall showing their dream',
+  // Pop culture characters in action
+  'a Totoro-sized forest spirit sheltering tiny creatures from the rain under its belly',
+  'a Sackboy stitched from felt, exploring a cardboard world, button eyes wide with wonder',
+  'Falkor the luck dragon soaring through a canyon of clouds, a kid on his back laughing',
+  'a Wallace & Gromit-style inventor whose latest contraption has gone hilariously wrong',
+  'a Miyazaki-style cat bus bounding through a rainy countryside, passengers peeking out',
+  'a Pixar-style robot discovering a single flower growing in wreckage',
+  'a Studio Ghibli witch on a broomstick delivering packages over a seaside town at sunset',
+  'a Minecraft creeper sneaking up behind a player who is building something beautiful',
+  'a Pokemon battle mid-attack, energy beams colliding, the arena shaking',
+  'a Zelda-style hero pulling a glowing sword from a mossy stone pedestal in a sunbeam',
 ];
 
 // Interests that are too vague on their own — always expand to a specific flavor
@@ -2181,7 +2179,7 @@ export function buildPromptInput(recipe: Recipe, archetype?: DreamArchetype): Pr
 
   // SUBJECT layer
   // Usually 1 interest for focused dreams, sometimes 2 for chaos/variety
-  const sampleCount = Math.random() < 0.3 + chaos * 0.3 ? 2 : 1;
+  const sampleCount = interests.length >= 2 ? 2 : 1;
   const shuffledInterests = [...interests].sort(() => Math.random() - 0.5);
   const sampledInterests = shuffledInterests.slice(0, Math.min(sampleCount, interests.length));
   // Only include character actions when energy is high — low energy = scenic/atmospheric
@@ -2320,7 +2318,7 @@ export function buildHaikuPrompt(input: PromptInput): string {
   // Pick a random composition for Haiku to consider
   const comp = pick(COMPOSITIONS);
 
-  return `Dream up a stunning image. Use these ingredients however you want — combine them, twist them, surprise us. Drop anything that doesn't fit.
+  return `Dream up a stunning image with rich, saturated, beautiful colors. Use these ingredients however you want — combine them, twist them, surprise us. Drop anything that doesn't fit.
 
 Style: ${input.medium}
 Subject: ${input.dreamSubject || input.interests.map(expandInterest).join(' and ')}
@@ -2328,9 +2326,12 @@ Place: ${input.settingKeywords}, ${input.eraKeywords}
 Mood: ${input.mood}, ${input.lighting}
 ${input.colorKeywords ? `Colors: ${input.colorKeywords}` : ''}
 ${input.sceneAtmosphere ? `Weather: ${input.sceneAtmosphere}` : ''}
+${input.weirdnessModifier ? `Weirdness: ${input.weirdnessModifier}` : ''}
+${input.scaleModifier ? `Scale: ${input.scaleModifier}` : ''}
 ${input.action ? `Action: ${input.action}` : ''}
 ${input.sceneType ? `Moment: ${input.sceneType}` : ''}
 ${comp ? `Frame: ${comp}` : ''}
+${input.personalityTags.length > 0 ? `Vibe: ${input.personalityTags.join(', ')}` : ''}
 ${input.spiritAppears && input.spiritCompanion ? `Hidden easter egg: a tiny ${input.spiritCompanion.replace(/_/g, ' ')}` : ''}
 
 Write a vivid image prompt (max 50 words). Start with the art style. Be creative — the best dreams are ones nobody has seen before. No photorealistic humans. No portraits of real people. No text or words in the image.

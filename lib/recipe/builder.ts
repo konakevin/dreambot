@@ -160,7 +160,7 @@ export function buildPromptInput(recipe: Recipe, archetype?: DreamArchetype): Pr
 
   // SUBJECT layer
   // Usually 1 interest for focused dreams, sometimes 2 for chaos/variety
-  const sampleCount = Math.random() < 0.3 + chaos * 0.3 ? 2 : 1;
+  const sampleCount = interests.length >= 2 ? 2 : 1;
   const shuffledInterests = [...interests].sort(() => Math.random() - 0.5);
   const sampledInterests = shuffledInterests.slice(0, Math.min(sampleCount, interests.length));
   // Only include character actions when energy is high — low energy = scenic/atmospheric
@@ -299,7 +299,7 @@ export function buildHaikuPrompt(input: PromptInput): string {
   // Pick a random composition for Haiku to consider
   const comp = pick(COMPOSITIONS);
 
-  return `Dream up a stunning image. Use these ingredients however you want — combine them, twist them, surprise us. Drop anything that doesn't fit.
+  return `Dream up a stunning image with rich, saturated, beautiful colors. Use these ingredients however you want — combine them, twist them, surprise us. Drop anything that doesn't fit.
 
 Style: ${input.medium}
 Subject: ${input.dreamSubject || input.interests.map(expandInterest).join(' and ')}
@@ -307,9 +307,12 @@ Place: ${input.settingKeywords}, ${input.eraKeywords}
 Mood: ${input.mood}, ${input.lighting}
 ${input.colorKeywords ? `Colors: ${input.colorKeywords}` : ''}
 ${input.sceneAtmosphere ? `Weather: ${input.sceneAtmosphere}` : ''}
+${input.weirdnessModifier ? `Weirdness: ${input.weirdnessModifier}` : ''}
+${input.scaleModifier ? `Scale: ${input.scaleModifier}` : ''}
 ${input.action ? `Action: ${input.action}` : ''}
 ${input.sceneType ? `Moment: ${input.sceneType}` : ''}
 ${comp ? `Frame: ${comp}` : ''}
+${input.personalityTags.length > 0 ? `Vibe: ${input.personalityTags.join(', ')}` : ''}
 ${input.spiritAppears && input.spiritCompanion ? `Hidden easter egg: a tiny ${input.spiritCompanion.replace(/_/g, ' ')}` : ''}
 
 Write a vivid image prompt (max 50 words). Start with the art style. Be creative — the best dreams are ones nobody has seen before. No photorealistic humans. No portraits of real people. No text or words in the image.
