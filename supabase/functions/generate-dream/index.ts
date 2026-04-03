@@ -167,6 +167,8 @@ Deno.serve(async (req) => {
   // ── Build prompt ──────────────────────────────────────────────────────────
   let finalPrompt: string;
 
+  let logAxes: Record<string, unknown> = {};
+
   if (rawPrompt) {
     finalPrompt = rawPrompt;
     lap('prompt-raw');
@@ -174,14 +176,83 @@ Deno.serve(async (req) => {
     finalPrompt = await enhanceViaHaiku(haiku_brief, haiku_fallback ?? haiku_brief, ANTHROPIC_KEY);
     lap('prompt-haiku-brief');
   } else if (recipe) {
-    const input = buildPromptInput(recipe);
+    // THREE-PART SONG: roll which dream type this is
+    // 50% archetype (focused narrative), 30% chord (pure blend), 20% beauty (pure visual)
+    const dreamRoll = Math.random();
+    const dreamMode = dreamRoll < 0.5 ? 'archetype' : dreamRoll < 0.8 ? 'chord' : 'beauty';
+
+    let archetype: { key: string; name: string; prompt_context: string; flavor_keywords: string[]; trigger_interests?: string[]; trigger_moods?: string[] } | undefined;
+    if (dreamMode === 'archetype') {
+      try {
+        const { data: userArchs } = await supabase
+          .from('user_archetypes')
+          .select('archetype_id')
+          .eq('user_id', userId);
+        if (userArchs && userArchs.length > 0) {
+          const randomArch = userArchs[Math.floor(Math.random() * userArchs.length)];
+          const { data: arch } = await supabase
+            .from('dream_archetypes')
+            .select('key, name, prompt_context, flavor_keywords, trigger_interests, trigger_moods')
+            .eq('id', randomArch.archetype_id)
+            .single();
+          if (arch) archetype = arch;
+        }
+      } catch { /* non-critical — falls back to chord path */ }
+    }
+
+    // Build ingredients — archetype focuses the interest + mood, Chord does the rest
+    const input = buildPromptInput(recipe, archetype);
+    logAxes = {
+      medium: input.medium,
+      mood: input.mood,
+      lighting: input.lighting,
+      interests: input.interests,
+      dreamSubject: input.dreamSubject,
+      sceneType: input.sceneType,
+      action: input.action,
+      settingKeywords: input.settingKeywords,
+      eraKeywords: input.eraKeywords,
+      sceneAtmosphere: input.sceneAtmosphere,
+      colorKeywords: input.colorKeywords,
+      weirdnessModifier: input.weirdnessModifier,
+      scaleModifier: input.scaleModifier,
+      personalityTags: input.personalityTags,
+      spiritAppears: input.spiritAppears,
+      spiritCompanion: input.spiritCompanion,
+      archetype: archetype?.key ?? 'none',
+      dreamMode,
+    };
     const fallback = buildRawPrompt(input);
 
     if (skip_enhance) {
       finalPrompt = fallback;
       lap('prompt-raw-skip');
     } else {
-      let haikuBrief = buildHaikuPrompt(input);
+      let haikuBrief: string;
+
+      if (dreamMode === 'beauty') {
+        // BEAUTY MODE: pure visual focus, no narrative, just breathtaking imagery
+        haikuBrief = `Create the most visually breathtaking image possible using these ingredients. No story, no characters needed — just pure visual beauty that stops someone mid-scroll.
+
+Medium: ${input.medium}
+Mood: ${input.mood}
+Lighting: ${input.lighting}
+Setting: ${input.settingKeywords}
+Palette: ${input.colorKeywords || 'vivid and expressive'}
+Atmosphere: ${input.sceneAtmosphere}
+
+Write an image prompt (max 50 words). Start with the art medium. Focus entirely on visual impact — color, light, composition, texture, scale. Make it the prettiest thing anyone has ever seen. Output ONLY the prompt.`;
+      } else {
+        // CHORD or ARCHETYPE mode — use the standard Chord template
+        haikuBrief = buildHaikuPrompt(input);
+
+        // If archetype is active, inject its creative brief so Haiku knows the identity
+        if (archetype) {
+          haikuBrief += `\n\nTONIGHT'S DREAM IDENTITY: ${archetype.name}\n${archetype.prompt_context}\n\nUse the ingredients above but channel them through this identity. The dream should feel like it came from "${archetype.name}."`;
+        }
+      }
+
+      logAxes.promptPath = dreamMode + (archetype ? '+' + archetype.key : '');
 
       if (hint) {
         haikuBrief += `\n\nIMPORTANT: The user requested "${hint}". Make this the heart of the dream — use their taste profile to style it, but this wish is the subject.`;
@@ -191,15 +262,21 @@ Deno.serve(async (req) => {
         haikuBrief += `\n\n${epigenetic_context}`;
       }
 
+      // Store what we sent to Haiku so we can compare input vs output
+      logAxes.haikuBrief = haikuBrief.slice(0, 2000);
+
       finalPrompt = await enhanceViaHaiku(haikuBrief, fallback, ANTHROPIC_KEY);
+      logAxes.usedFallback = finalPrompt === fallback;
       lap('prompt-haiku-recipe');
     }
   } else {
     return new Response(JSON.stringify({ error: 'No prompt source provided' }), { status: 400 });
   }
 
+  const { model: pickedModel } = pickModel(mode, finalPrompt);
+  logAxes.model = pickedModel;
   console.log(
-    `[generate-dream] User ${userId}, mode=${mode}, skip_enhance=${skip_enhance}, persist=${persist}, prompt=${finalPrompt.slice(0, 80)}...`
+    `[generate-dream] User ${userId}, mode=${mode}, model=${pickedModel}, prompt=${finalPrompt.slice(0, 80)}...`
   );
 
   // ── Generate image via Replicate ──────────────────────────────────────────
@@ -209,22 +286,25 @@ Deno.serve(async (req) => {
 
     let imageUrl = tempUrl;
 
-    // Only persist to Storage and log when explicitly requested (i.e., user taps Post)
+    // Always log the prompt for debugging/analysis
+    try {
+      await supabase.from('ai_generation_log').insert({
+        user_id: userId,
+        recipe_snapshot: recipe ?? {},
+        rolled_axes: logAxes,
+        enhanced_prompt: finalPrompt,
+        model_used: mode === 'flux-kontext' ? 'flux-kontext-pro' : 'flux-dev',
+        cost_cents: 3,
+        status: 'completed',
+      });
+    } catch {
+      /* non-critical */
+    }
+
+    // Only persist to Storage and budget when explicitly requested (i.e., user taps Post)
     if (persist) {
       imageUrl = await persistToStorage(tempUrl, userId, supabase);
       lap('persist-done');
-
-      try {
-        await supabase.from('ai_generation_log').insert({
-          user_id: userId,
-          enhanced_prompt: finalPrompt,
-          model_used: mode === 'flux-kontext' ? 'flux-kontext-pro' : 'flux-dev',
-          cost_cents: 3,
-          status: 'completed',
-        });
-      } catch {
-        /* non-critical */
-      }
 
       try {
         await supabase.from('ai_generation_budget').upsert(
@@ -292,20 +372,64 @@ async function enhanceViaHaiku(
   }
 }
 
+// Route to the best model based on the medium/prompt content
+function pickModel(mode: string, prompt: string): { model: string; inputOverrides: Record<string, unknown> } {
+  if (mode === 'flux-kontext') {
+    return { model: 'black-forest-labs/flux-kontext-pro', inputOverrides: {} };
+  }
+
+  const p = prompt.toLowerCase();
+
+  // SDXL only for styles where it's clearly better than Flux:
+  // Traditional painting, hand-drawn illustration, anime, comic book art
+  if (p.includes('watercolor') || p.includes('oil painting') || p.includes('gouache') ||
+      p.includes('ink linework') || p.includes('pencil sketch') || p.includes('charcoal') ||
+      p.includes('impasto') || p.includes('brushstroke') ||
+      // Specific artists known for painterly styles
+      p.includes('van gogh') || p.includes('monet') || p.includes('seurat') ||
+      p.includes('pointillis') || p.includes('impressionis') ||
+      p.includes('frida kahlo') || p.includes('klimt') || p.includes('gold leaf') ||
+      p.includes('hokusai') || p.includes('bob ross') || p.includes('mucha') ||
+      // Hand-drawn / cartoon / anime
+      p.includes('anime') || p.includes('manga') || p.includes('cel animation') ||
+      p.includes('comic book') || p.includes('halftone') || p.includes('ben-day') ||
+      p.includes('spider-verse') ||
+      // Traditional print / craft
+      p.includes('woodblock') || p.includes('ukiyo-e') || p.includes('woodcut') ||
+      p.includes('cross-stitch') || p.includes('embroidery') || p.includes('tarot') ||
+      p.includes('stained glass')) {
+    return {
+      model: 'sdxl',
+      inputOverrides: { width: 832, height: 1216, num_inference_steps: 30, guidance_scale: 7.5 },
+    };
+  }
+
+  // Default: Flux Dev
+  return { model: 'black-forest-labs/flux-dev', inputOverrides: {} };
+}
+
 async function generateImage(
   mode: string,
   prompt: string,
   inputImage: string | undefined,
   replicateToken: string
 ): Promise<string> {
-  const model =
-    mode === 'flux-kontext' ? 'black-forest-labs/flux-kontext-pro' : 'black-forest-labs/flux-dev';
+  const { model, inputOverrides } = pickModel(mode, prompt);
+  const isSDXL = model === 'sdxl';
+  const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
 
   const input: Record<string, unknown> = {
     prompt,
-    aspect_ratio: '9:16',
-    num_outputs: 1,
-    output_format: 'jpg',
+    ...(!isSDXL ? {
+      aspect_ratio: '9:16',
+      num_outputs: 1,
+      output_format: 'jpg',
+    } : {
+      width: 832,
+      height: 1216,
+      num_outputs: 1,
+    }),
+    ...inputOverrides,
   };
 
   if (mode === 'flux-kontext' && inputImage) {
@@ -313,13 +437,21 @@ async function generateImage(
     input.output_quality = 90;
   }
 
-  const res = await fetch(`https://api.replicate.com/v1/models/${model}/predictions`, {
+  // SDXL uses version-based API, Flux uses model-based API
+  const url = isSDXL
+    ? 'https://api.replicate.com/v1/predictions'
+    : `https://api.replicate.com/v1/models/${model}/predictions`;
+  const body = isSDXL
+    ? { version: SDXL_VERSION, input }
+    : { input };
+
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${replicateToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ input }),
+    body: JSON.stringify(body),
   });
 
   if (res.status === 429) {

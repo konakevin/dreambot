@@ -25,14 +25,18 @@ import { CommentRow } from '@/components/CommentRow';
 import { useSheetDismiss } from '@/hooks/useSheetDismiss';
 import { colors } from '@/constants/theme';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
+const THUMB_HEIGHT = 100;
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 const MAX_COMMENT_LENGTH = 500;
 
 export default function CommentsScreen() {
-  const { uploadId, postOwnerId } = useLocalSearchParams<{
+  const { uploadId, postOwnerId, imageUrl, username, avatarUrl } = useLocalSearchParams<{
     uploadId: string;
     postOwnerId?: string;
+    imageUrl?: string;
+    username?: string;
+    avatarUrl?: string;
   }>();
   const currentUser = useAuthStore((s) => s.user);
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useComments(
@@ -123,6 +127,10 @@ export default function CommentsScreen() {
     setText('');
   }
 
+  const decodedImageUrl = imageUrl ? decodeURIComponent(imageUrl) : null;
+  const decodedUsername = username ? decodeURIComponent(username) : null;
+  const decodedAvatarUrl = avatarUrl ? decodeURIComponent(avatarUrl) : null;
+
   return (
     <View style={styles.root}>
       {/* Tap backdrop to dismiss */}
@@ -141,13 +149,46 @@ export default function CommentsScreen() {
             <View style={styles.handle} />
           </View>
 
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Comments</Text>
-            <TouchableOpacity onPress={() => router.dismiss()} hitSlop={12}>
-              <Ionicons name="close" size={22} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
+          {/* Post thumbnail */}
+          {decodedImageUrl && (
+            <View style={styles.thumbRow}>
+              <Image
+                source={{ uri: decodedImageUrl }}
+                style={styles.thumbImage}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+              />
+              <View style={styles.thumbInfo}>
+                <View style={styles.thumbUserRow}>
+                  {decodedAvatarUrl ? (
+                    <Image source={{ uri: decodedAvatarUrl }} style={styles.thumbAvatar} />
+                  ) : (
+                    <View style={styles.thumbAvatarFallback}>
+                      <Text style={styles.thumbAvatarText}>
+                        {(decodedUsername || '?')[0].toUpperCase()}
+                      </Text>
+                    </View>
+                  )}
+                  <Text style={styles.thumbUsername} numberOfLines={1}>
+                    {decodedUsername ?? 'dreamer'}
+                  </Text>
+                </View>
+                <Text style={styles.thumbCommentCount}>
+                  {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {/* Header (only show if no thumbnail) */}
+          {!decodedImageUrl && (
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Comments</Text>
+              <TouchableOpacity onPress={() => router.dismiss()} hitSlop={12}>
+                <Ionicons name="close" size={22} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* Comments list */}
           <FlatList
@@ -295,6 +336,61 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
+  // ── Thumbnail row ──────────────────────────────────────────────────────────
+  thumbRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.border,
+    gap: 12,
+  },
+  thumbImage: {
+    width: 64,
+    height: 80,
+    borderRadius: 8,
+  },
+  thumbInfo: {
+    flex: 1,
+    gap: 6,
+  },
+  thumbUserRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  thumbAvatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  thumbAvatarFallback: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  thumbAvatarText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  thumbUsername: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '700',
+    flexShrink: 1,
+  },
+  thumbCommentCount: {
+    color: colors.textSecondary,
+    fontSize: 13,
+  },
+  // ── Header (fallback when no image) ────────────────────────────────────────
   header: {
     flexDirection: 'row',
     alignItems: 'center',

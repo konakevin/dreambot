@@ -4,7 +4,7 @@
 
 **Before doing anything else, read this entire file.** This is your operating manual for the DreamBot codebase. You are acting as a senior principal engineer on this project. You already know the architecture, the patterns, the 3rd-party services, and the dream engine internals — they are all documented below. Do NOT re-explore the codebase to learn things already written here. Jump straight into whatever Kevin needs.
 
-Do NOT auto-start the dev environment. Let Kevin know he can run `/rad` to spin up the dev tools (simulator check, Xcode, Metro).
+Do NOT auto-start the dev environment. Let Kevin know he can run `/dream` to spin up the dev tools (simulator check, Xcode, Metro).
 
 ---
 
@@ -152,7 +152,50 @@ scripts/
 
 ## The Dream Engine (lib/recipeEngine.ts) — How Prompts Are Built
 
+> **THIS IS THE HEART OF DREAMBOT.** The dream engine is the single most important system in this app. Its purpose: to build the world's best, most creative, most surprising AI image prompts — finely tuned to each user's personality — that generate diverse, awe-inspiring, jaw-dropping pictures. Pictures that blow your mind, make you smile, make you feel something. The experience should be one of true discovery and artistic expression — fun, clever, surprising, unexpected. Every decision we make in this engine should serve that goal. If a prompt isn't capable of producing something that stops you mid-scroll, it's not good enough. This is what sets DreamBot apart from every other AI image app.
+
 This is the core creative engine. It transforms a user's taste recipe into a layered prompt that produces truly random, beautiful, and personalized AI images. Understanding this is critical.
+
+### How to Prompt Haiku and Flux — Hard-Won Lessons
+
+These are lessons from extensive testing on 2026-04-03. Read before touching the dream engine.
+
+**HAIKU (prompt writer):**
+- Haiku writes BETTER prompts when given LESS structure. A rich archetype brief + art medium + "surprise me" produces better output than a template with 15 rules and priority lists.
+- Haiku plays it safe when over-instructed. The more rules, bans, examples, and structure you add, the more generic the output. Give it creative freedom within constraints, not a checklist.
+- Haiku writes vivid prompts when the INPUT is vivid. "Tonight you dream of the old north. A longship cutting through fog, dragon prow emerging from mist" → Haiku matches that energy. "Generate a moody nature scene" → Haiku writes something generic.
+- When Haiku refused a creative override and improvised freely, it wrote the BEST prompt of the session (a hedgehog catching fireflies). The lesson: trust Haiku's creativity, guide it with identity not instructions.
+- Haiku will NOT write explicit/sexual content when framed as an override ("make it sexy"). But it WILL write attractive/alluring characters when framed as a creative brief ("a femme fatale in a smoky jazz club"). Framing matters.
+- Max 50 words for the final prompt to Flux. Longer prompts → Flux cherry-picks random parts and ignores the rest. Short, committed prompts → Flux follows faithfully.
+
+**FLUX DEV (image generator):**
+- Flux follows SHORT, CLEAR prompts well. 40-60 words ideal. Over 80 words and it starts ignoring things.
+- Flux renders photorealistic by default. To get a different art style, the style MUST be the first words of the prompt AND be described physically ("smooth rounded plastic shapes, bright saturated colors" not just "Pixar style").
+- Flux handles these styles well: vaporwave, voxel/pixel art, Bauhaus, neon/cyberpunk, watercolor (sometimes), stop-motion/craft. Flux struggles with: Escher impossible geometry, charcoal sketches, pure anime, abstract art movements.
+- "NOT a photograph" at the end of a prompt helps push away from photorealism but isn't magic.
+- Flux has biases: defaults to ferris wheels/carnivals when confused, defaults to photorealistic woman when "attractive" is mentioned, defaults to corridor/hallway compositions for moody lighting.
+- When a medium and scene CONFLICT (e.g., "charcoal sketch" + "neon cyberpunk city"), Flux ignores the medium and renders the scene in its default style. Medium and scene must harmonize.
+- Flux renders ONE clear subject better than multiple competing elements. "A dragon on a mountain" → great. "A dragon, a castle, a knight, a forest, a river, a sunset" → mush.
+
+**SDXL (illustration model):**
+- Routes via version-based API: POST /v1/predictions with version hash, NOT /v1/models/ path.
+- Better than Flux at: watercolor, oil painting, cartoon, anime, comic book, storybook illustration, craft styles. The Beatrix Potter watercolor test was dramatically better on SDXL than Flux.
+- Uses width/height (832x1216 for 9:16) instead of aspect_ratio.
+- ~$0.003/image vs Flux Dev's ~$0.03. 10x cheaper.
+
+**THE "LEAF" PRINCIPLE (creative depth):**
+- The best dreams come from specificity, not breadth. A dream about "a specific chess piece on a specific table in a specific room" beats "chess + ocean + neon."
+- The archetype system provides the identity/focus. The Chord engine provides the random ingredients. Haiku weaves them together. Each layer adds specificity without removing randomness.
+- The archetype is the TRUNK (who am I tonight). The engine ingredients are the BRANCHES (what medium, mood, lighting). Haiku finds the LEAF (the specific scene). The leaf is where the magic is — it's the most specific, vivid, surprising conclusion of all those inputs converging.
+- Don't try to control the leaf. Control the trunk and branches, let Haiku find the leaf. The best images came when Haiku had clear identity + clear style + creative freedom.
+
+**THE THREE-PART SONG (live in generate-dream edge function):**
+Each dream randomly rolls which mode it uses:
+1. **The Chord** (30%) — pure unguided engine. Blends 4-5 ingredients from the recipe pools. No archetype. Produces surprising mashups and unexpected combinations. The base melody.
+2. **The Solo** (50%) — guided by a dream archetype (285 scenarios in DB). Archetype locks the interest + mood, Chord engine builds the ingredients, Haiku weaves them into a focused narrative scene. Story-driven, identity-committed.
+3. **The Song** (20%) — pure visual beauty mode. No story, no characters, no narrative. Just: medium + mood + lighting + setting → "make the prettiest thing anyone has ever seen." Epic vistas, breathtaking landscapes, abstract beauty. Ingredients still come from the user's recipe so it reflects their taste.
+
+All three paths run through the same Chord engine for ingredient selection. The difference is what Haiku receives as its brief: The Chord gets the standard blend template. The Solo gets the archetype's rich narrative brief baked into the ingredient selection. The Song gets a pure visual beauty template.
 
 ### Recipe Structure (types/recipe.ts)
 
@@ -203,7 +246,7 @@ The engine builds prompts in 4 layers, each controlling a different aspect:
 - **Axes are probability biases, not fixed values.** A realism of 0.7 means 70% chance of "high" — not guaranteed. This creates natural variety.
 - **Complexity is derived, not set by user.** It's calculated from the user's interest/personality/era choices (fantasy, sci_fi, architecture → high; cute, cozy → low).
 - **Chaos controls randomness.** Low chaos = stick to preferences. High chaos = wildcards, bonus locations, mixed interests.
-- **Spirit companion appears only ~15% of the time** — keeps it special.
+- **Spirit companion appears only ~8% of the time** — keeps it rare and special. When it does appear, it's a hidden easter egg, not the focus.
 - **Compositions are random framing directives** — 40+ options including "bird's eye view", "cross-section cutaway", "miniature world inside a teacup", or nothing (pure AI freedom).
 
 ### Two Prompt Paths
@@ -507,6 +550,34 @@ Then read that file. Don't ask which screenshot — just go get it.
 
 **Do NOT** trigger a screenshot lookup just because he uses words like "look", "see", or "check" in casual conversation (e.g. "it looks glitchy", "I didn't see the text"). Only fetch when he's clearly directing you to view an image.
 
+### Dream Engine Testing Mode
+When Kevin says "k" during dream testing, run this sequence automatically:
+1. Get the latest screenshot: `ls -t ~/Desktop/*.png | head -1`
+2. Read the screenshot image
+3. Pull the latest generation log (archetype, mode, medium, mood, interests, prompt)
+4. Compare: Does the image match the prompt? Does it reflect the archetype? Is the art medium visible? Is it visually stunning or boring?
+5. Report: mode, archetype, what worked, what didn't, and any engine tweaks worth making
+
+Use the skill `/dream-test` to enter this mode. Kevin generates dreams, says "k", and Claude analyzes each one.
+
+### Persona Testing (Dream Engine)
+Swap Kevin's recipe to test personas for dream engine testing. Kevin taps Dream in the app to see results — no rebuild needed since the recipe is read server-side.
+
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node scripts/persona.js <number|kevin|list>
+```
+
+Personas: 1=Gamer Nerd, 2=Cottagecore Girl, 3=Edgy Artist, 4=Adventure Bro, 5=Fantasy Romantic, kevin=restore real recipe. Run `list` to see details.
+
+**After Kevin generates a dream**, pull the log to compare prompt vs image:
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && SUPABASE_SERVICE_ROLE_KEY=$(grep SUPABASE_SERVICE_ROLE_KEY .env.local | cut -d= -f2) node -e "const{createClient}=require('@supabase/supabase-js');const s=createClient('https://jimftynwrinwenonjrlj.supabase.co',process.env.SUPABASE_SERVICE_ROLE_KEY);(async()=>{const{data}=await s.from('ai_generation_log').select('enhanced_prompt,rolled_axes').eq('user_id','eab700d8-f11a-4f47-a3a1-addda6fb67ec').order('created_at',{ascending:false}).limit(1);if(!data||!data.length)return;const a=data[0].rolled_axes;console.log(a.promptPath+'|'+a.medium);console.log(a.mood+'|'+a.lighting);console.log(JSON.stringify(a.interests)+'|'+(a.dreamSubject||'none'));console.log(a.settingKeywords);console.log(a.eraKeywords);console.log(a.sceneType);console.log('---');console.log(data[0].enhanced_prompt)})()"
+```
+
+Kevin's convention: he says "k" after generating a dream — grab the latest Desktop screenshot + the latest log entry to compare.
+
+**Always restore Kevin's real recipe when done testing:** `node scripts/persona.js kevin`
+
 ### Running the Seed Script
 The seed script lives at `scripts/seed.js`. It requires a service role key.
 
@@ -552,6 +623,30 @@ The booted simulator is usually iPhone 17 Pro. Get its UDID with:
 ```bash
 xcrun simctl list devices available | grep Booted
 ```
+
+### Deploying Edge Functions
+Supabase Edge Functions live in `supabase/functions/`. The Supabase CLI is installed and linked to the project. To deploy after making changes:
+
+```bash
+supabase functions deploy <function-name> --no-verify-jwt
+```
+
+**IMPORTANT:** Always use `--no-verify-jwt` when deploying. The functions handle auth internally via `supabase.auth.getUser()`. Without this flag, the CLI defaults to enabling gateway-level JWT verification which blocks all requests with "Invalid JWT" before they even reach the function code.
+
+Active functions: `generate-dream`, `nightly-dreams`, `send-push`, `revenuecat-webhook`, `moderate-content`.
+
+**When to deploy:** Any time you change files in `supabase/functions/` (including `_shared/`), deploy the affected functions immediately — don't wait for Kevin to ask. The client app calls these remotely, so local file changes have NO effect until deployed. No Xcode rebuild needed after deploying edge functions.
+
+**The `_shared/recipeEngine.ts` copy:** This is a full inline copy of `lib/recipe/` for the Deno runtime. When you change the recipe engine source files (`lib/recipe/builder.ts`, `pools.ts`, `utils.ts`), you MUST also sync those changes into `supabase/functions/_shared/recipeEngine.ts` and then deploy both `generate-dream` and `nightly-dreams`.
+
+**Viewing edge function logs:** The Supabase CLI (v2.75.0) does NOT support `supabase functions logs`. To view logs, use the Supabase dashboard: **Dashboard → Functions → [function-name] → Logs**. Or query the `ai_generation_log` table for generation results.
+
+### Running Metro for Dev
+Start Metro so Kevin can press "r" in the simulator to reload:
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && npx expo start --dev-client
+```
+Run this in the background (`run_in_background: true`). This is the standard dev workflow — Kevin will ask for this frequently. No Xcode rebuild needed for JS/TS changes; just "r" to reload in the sim.
 
 ### Database Migrations
 - Files live in `supabase/migrations/` numbered sequentially (001, 002, etc.)

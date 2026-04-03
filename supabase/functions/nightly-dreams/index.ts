@@ -3,7 +3,7 @@
 // Generates one dream per eligible active user.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { buildPromptInput, buildRawPrompt, buildHaikuPrompt } from '../_shared/recipeEngine.ts';
+import { buildPromptInput, buildRawPrompt, buildHaikuPromptDual } from '../_shared/recipeEngine.ts';
 import type { Recipe } from '../_shared/recipe.ts';
 import { DEFAULT_RECIPE } from '../_shared/recipe.ts';
 
@@ -125,9 +125,9 @@ async function generateDreamForUser(
   // Build prompt — use Haiku if available, fallback to raw
   let prompt: string;
   const haikuBrief = wish
-    ? buildHaikuPrompt(input) +
+    ? buildHaikuPromptDual(input, recipe) +
       `\n\nIMPORTANT: The user wished for "${wish}". Make this the heart of the dream — use their taste profile to style it, but the wish is the subject.`
-    : buildHaikuPrompt(input);
+    : buildHaikuPromptDual(input, recipe);
 
   if (anthropicKey) {
     try {
@@ -213,6 +213,82 @@ async function generateDreamForUser(
   const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
   const permanentUrl = urlData.publicUrl;
 
+  // Generate a bot message — a short playful note from the Dream Bot
+  let botMessage: string | null = null;
+  if (anthropicKey) {
+    try {
+      // Fetch recent dreams for memory context
+      const { data: recentDreams } = await supabase
+        .from('uploads')
+        .select('ai_prompt, from_wish')
+        .eq('user_id', user.user_id)
+        .eq('is_ai_generated', true)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      const recentContext = (recentDreams ?? [])
+        .map((d: { ai_prompt: string | null; from_wish: string | null }) => d.ai_prompt?.slice(0, 80))
+        .filter(Boolean);
+      const pastWishes = (recentDreams ?? [])
+        .map((d: { ai_prompt: string | null; from_wish: string | null }) => d.from_wish)
+        .filter(Boolean);
+
+      let memoryBlock = '';
+      if (recentContext.length > 0) {
+        memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
+      }
+      if (pastWishes.length > 0) {
+        memoryBlock += `\n- Past wishes: ${pastWishes.join(', ')}`;
+      }
+      if (wish) {
+        memoryBlock += `\n- Tonight's wish: "${wish}"`;
+      }
+
+      const msgRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 60,
+          messages: [{
+            role: 'user',
+            content: `You are a Dream Bot — a small, curious, slightly mischievous creative spirit that lives inside someone's phone and makes dreams for them every night. You ADORE your human. You're not an AI assistant. You're a tiny artist who gets excited about your own work.
+
+Tonight's dream prompt: "${prompt.slice(0, 200)}"
+
+Write a 1-2 sentence message about tonight's dream.
+
+VOICE RULES:
+- You're a character, not a service. Have opinions.
+- Be specific. Reference actual elements from the prompt.
+- Vary your energy. Sometimes excited, sometimes chill, sometimes proud, sometimes sheepish about a weird choice.
+- NEVER explain what the dream is. They can see it. React to it instead.
+- Keep it under 20 words. Shorter is better.
+- No emojis. No exclamation marks more than once.
+- NEVER start with "I" — vary your openings.
+${memoryBlock}
+
+Output ONLY the message, nothing else.`,
+          }],
+        }),
+      });
+
+      if (msgRes.ok) {
+        const msgData = await msgRes.json();
+        const text = msgData.content?.[0]?.text?.trim() ?? '';
+        if (text.length >= 5 && text.length <= 100) {
+          botMessage = text;
+        }
+      }
+    } catch {
+      // Non-critical — dream still gets delivered without a message
+    }
+  }
+
   // Store the dream
   const { data: upload } = await supabase
     .from('uploads')
@@ -225,6 +301,7 @@ async function generateDreamForUser(
       is_ai_generated: true,
       ai_prompt: prompt,
       from_wish: wish,
+      bot_message: botMessage,
       is_approved: true,
       is_active: true,
     })

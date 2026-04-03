@@ -729,10 +729,10 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
             <Animated.View style={[s.fsOverlay, fsOverlayStyle]}>
               <GestureDetector gesture={pinchGesture}>
                 <Animated.View style={[s.fsImageWrap, fsStyle]}>
-                  <Animated.View style={pinchStyle}>
+                  <Animated.View style={[{ width: '100%', height: '80%' }, pinchStyle]}>
                     <Image
                       source={{ uri: dreamAlbum[activeIndex]?.url ?? '' }}
-                      style={s.fsImage}
+                      style={{ width: '100%', height: '100%', borderRadius: 4 }}
                       contentFit="contain"
                     />
                   </Animated.View>
@@ -758,16 +758,20 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         <View style={s.footer}>
           <TouchableOpacity
             style={s.cta}
-            onPress={post}
+            onPress={() => {
+              if (isTwinMode) twinDream();
+              else if (reusePhoto && photoUri) dream();
+              else justDream();
+            }}
             activeOpacity={0.7}
             disabled={posting || dreaming}
           >
-            {posting ? (
-              <ActivityIndicator size="small" color="#FFF" />
-            ) : (
-              <Ionicons name="cloud-upload" size={20} color="#FFF" />
-            )}
-            <Text style={s.ctaText}>{posting ? 'Posting...' : 'Post This Dream'}</Text>
+            <Ionicons
+              name={isTwinMode ? 'dice-outline' : 'refresh'}
+              size={20}
+              color="#FFF"
+            />
+            <Text style={s.ctaText}>{isTwinMode ? 'Twin Again' : 'Dream Again'}</Text>
           </TouchableOpacity>
           {photoUri && (
             <TouchableOpacity
@@ -785,35 +789,19 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
               </Text>
             </TouchableOpacity>
           )}
-          <View style={s.row}>
-            <TouchableOpacity
-              style={s.sec}
-              onPress={() => {
-                if (isTwinMode) twinDream();
-                else if (reusePhoto && photoUri) dream();
-                else justDream();
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons
-                name={isTwinMode ? 'dice-outline' : 'refresh'}
-                size={16}
-                color={colors.textSecondary}
-              />
-              <Text style={s.secText}>{isTwinMode ? 'Twin again' : 'Dream again'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.sec}
-              onPress={() => {
-                clearDreamMode();
-                reset();
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="images" size={16} color={colors.textSecondary} />
-              <Text style={s.secText}>Start over</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={s.ctaSecondary}
+            onPress={post}
+            activeOpacity={0.7}
+            disabled={posting || dreaming}
+          >
+            {posting ? (
+              <ActivityIndicator size="small" color={colors.textPrimary} />
+            ) : (
+              <Ionicons name="cloud-upload" size={20} color={colors.textPrimary} />
+            )}
+            <Text style={s.ctaSecondaryText}>{posting ? 'Posting...' : 'Post This Dream'}</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );

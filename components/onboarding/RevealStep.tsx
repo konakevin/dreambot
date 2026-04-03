@@ -174,6 +174,31 @@ export function RevealStep({ onBack }: Props) {
 
       await supabase.from('users').update({ has_ai_recipe: true }).eq('id', user.id);
 
+      // Match dream archetypes based on the user's interests × moods
+      try {
+        const userInterests = new Set(recipe.interests ?? []);
+        const userMoods = new Set(recipe.selected_moods ?? []);
+        const { data: archs } = await supabase
+          .from('dream_archetypes')
+          .select('id, trigger_interests, trigger_moods')
+          .eq('is_active', true);
+        if (archs) {
+          const matches = archs.filter(
+            (a) =>
+              a.trigger_interests.some((i: string) => userInterests.has(i)) &&
+              a.trigger_moods.some((m: string) => userMoods.has(m))
+          );
+          if (matches.length > 0) {
+            await supabase.from('user_archetypes').delete().eq('user_id', user.id);
+            await supabase.from('user_archetypes').insert(
+              matches.map((m) => ({ user_id: user.id, archetype_id: m.id }))
+            );
+          }
+        }
+      } catch {
+        // Non-critical — dreams still work without archetypes
+      }
+
       const { data: insertedRow, error: uploadError } = await supabase
         .from('uploads')
         .insert({

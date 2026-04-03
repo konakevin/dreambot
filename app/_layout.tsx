@@ -169,7 +169,7 @@ function DataPrefetcher() {
         backgroundedAt.current = Date.now();
       } else if (state === 'active' && backgroundedAt.current > 0) {
         const elapsed = Date.now() - backgroundedAt.current;
-        if (elapsed > 5 * 60 * 1000) {
+        if (elapsed > 60 * 1000) {
           queryClient.invalidateQueries();
         }
       }

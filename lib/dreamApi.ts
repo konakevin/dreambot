@@ -42,8 +42,12 @@ interface GenerateDreamResult {
 export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDreamResult> {
   const t0 = Date.now();
   if (__DEV__) {
+    const { data: { session } } = await supabase.auth.getSession();
     console.log(
-      `[dreamApi] Invoking generate-dream (mode=${opts.mode}, persist=${opts.persist ?? false}, skip_enhance=${opts.skip_enhance ?? false})...`
+      `[dreamApi] Invoking generate-dream (mode=${opts.mode}, persist=${opts.persist ?? false}, skip_enhance=${opts.skip_enhance ?? false})`,
+      `session=${session ? 'yes' : 'NO SESSION'}`,
+      `token=${session?.access_token ? session.access_token.slice(0, 20) + '...' : 'NONE'}`,
+      `expires=${session?.expires_at ? new Date(session.expires_at * 1000).toISOString() : 'N/A'}`
     );
   }
   const { data, error } = await supabase.functions.invoke('generate-dream', {

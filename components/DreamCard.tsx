@@ -49,6 +49,7 @@ export interface DreamPostItem {
   fuse_count?: number;
   twin_of?: string | null;
   fuse_of?: string | null;
+  bot_message?: string | null;
 }
 
 interface Props {
@@ -360,6 +361,9 @@ export function DreamCard({
 
           {/* Post info */}
           <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+            {item.bot_message && (
+              <Text style={s.botMessage}>{item.bot_message}</Text>
+            )}
             <TouchableOpacity
               style={s.usernameRow}
               onPress={() =>
@@ -511,6 +515,15 @@ const s = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowRadius: 4,
+    textShadowOffset: { width: 0, height: 1 },
+  },
+  botMessage: {
+    color: 'rgba(255,255,255,0.75)',
+    fontSize: 13,
+    fontStyle: 'italic',
+    lineHeight: 18,
+    textShadowColor: 'rgba(0,0,0,0.6)',
     textShadowRadius: 4,
     textShadowOffset: { width: 0, height: 1 },
   },

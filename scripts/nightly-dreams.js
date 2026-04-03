@@ -294,8 +294,86 @@ async function main() {
         return;
       }
 
-      const imageUrl = await generateImage(prompt);
-      if (!imageUrl) throw new Error('No URL returned');
+      const tempUrl = await generateImage(prompt);
+      if (!tempUrl) throw new Error('No URL returned');
+
+      // Persist to Supabase Storage (Replicate URLs expire after ~1 hour)
+      const imgResp = await fetch(tempUrl);
+      if (!imgResp.ok) throw new Error('Failed to download generated image');
+      const imgBuf = Buffer.from(await imgResp.arrayBuffer());
+      const fileName = `${user.user_id}/${Date.now()}.jpg`;
+
+      const { error: storageErr } = await sb.storage
+        .from('uploads')
+        .upload(fileName, imgBuf, { contentType: 'image/jpeg' });
+      if (storageErr) throw new Error(`Storage upload failed: ${storageErr.message}`);
+
+      const { data: urlData } = sb.storage.from('uploads').getPublicUrl(fileName);
+      const imageUrl = urlData.publicUrl;
+
+      // Generate a bot message — a short playful note from the Dream Bot
+      let botMessage = null;
+      const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
+      if (ANTHROPIC_KEY) {
+        try {
+          const { data: recentDreams } = await sb
+            .from('uploads')
+            .select('ai_prompt, from_wish')
+            .eq('user_id', user.user_id)
+            .eq('is_ai_generated', true)
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+          const recentContext = (recentDreams ?? []).map(d => d.ai_prompt?.slice(0, 80)).filter(Boolean);
+          const pastWishes = (recentDreams ?? []).map(d => d.from_wish).filter(Boolean);
+
+          let memoryBlock = '';
+          if (recentContext.length > 0) memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
+          if (pastWishes.length > 0) memoryBlock += `\n- Past wishes: ${pastWishes.join(', ')}`;
+          if (wish) memoryBlock += `\n- Tonight's wish: "${wish}"`;
+
+          const msgRes = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': ANTHROPIC_KEY,
+              'anthropic-version': '2023-06-01',
+            },
+            body: JSON.stringify({
+              model: 'claude-haiku-4-5-20251001',
+              max_tokens: 60,
+              messages: [{
+                role: 'user',
+                content: `You are a Dream Bot — a small, curious, slightly mischievous creative spirit that lives inside someone's phone and makes dreams for them every night. You ADORE your human. You're not an AI assistant. You're a tiny artist who gets excited about your own work.
+
+Tonight's dream prompt: "${prompt.slice(0, 200)}"
+
+Write a 1-2 sentence message about tonight's dream.
+
+VOICE RULES:
+- You're a character, not a service. Have opinions.
+- Be specific. Reference actual elements from the prompt.
+- Vary your energy. Sometimes excited, sometimes chill, sometimes proud, sometimes sheepish about a weird choice.
+- NEVER explain what the dream is. They can see it. React to it instead.
+- Keep it under 20 words. Shorter is better.
+- No emojis. No exclamation marks more than once.
+- NEVER start with "I" — vary your openings.
+${memoryBlock}
+
+Output ONLY the message, nothing else.`,
+              }],
+            }),
+          });
+
+          if (msgRes.ok) {
+            const msgData = await msgRes.json();
+            const text = msgData.content?.[0]?.text?.trim() ?? '';
+            if (text.length >= 5 && text.length <= 100) botMessage = text;
+          }
+        } catch {
+          // Non-critical
+        }
+      }
 
       // Insert upload
       const { data: uploadRow } = await sb.from('uploads').insert({
@@ -309,6 +387,7 @@ async function main() {
         is_approved: true,
         is_active: true,
         from_wish: wish || null,
+        bot_message: botMessage,
       }).select('id').single();
 
       const uploadId = uploadRow?.id;

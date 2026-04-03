@@ -65,9 +65,25 @@ function deriveComplexity(recipe: Recipe): number {
   return Math.max(0.2, Math.min(0.8, 0.5 + delta));
 }
 
-export function buildPromptInput(recipe: Recipe): PromptInput {
+// Mood axis profiles — must match constants/onboarding.ts MOOD_TILES
+const MOOD_AXIS_PROFILES: Record<string, { energy: number; brightness: number; warmth: number }> = {
+  cozy: { energy: 0.2, brightness: 0.6, warmth: 0.8 },
+  epic: { energy: 0.9, brightness: 0.6, warmth: 0.5 },
+  dreamy: { energy: 0.2, brightness: 0.8, warmth: 0.6 },
+  moody: { energy: 0.3, brightness: 0.2, warmth: 0.3 },
+  playful: { energy: 0.6, brightness: 0.8, warmth: 0.7 },
+  serene: { energy: 0.1, brightness: 0.7, warmth: 0.4 },
+  intense: { energy: 0.9, brightness: 0.3, warmth: 0.3 },
+  nostalgic: { energy: 0.3, brightness: 0.5, warmth: 0.7 },
+  mysterious: { energy: 0.5, brightness: 0.2, warmth: 0.2 },
+  whimsical: { energy: 0.5, brightness: 0.7, warmth: 0.6 },
+  dramatic: { energy: 0.8, brightness: 0.3, warmth: 0.4 },
+  peaceful: { energy: 0.1, brightness: 0.6, warmth: 0.5 },
+};
+
+export function buildPromptInput(recipe: Recipe, archetype?: DreamArchetype): PromptInput {
   // Defensive defaults for recipes saved before new fields were added
-  const interests = recipe.interests ?? [];
+  let interests = recipe.interests ?? [];
   const colorPalettes = recipe.color_palettes ?? [];
   const personalityTags = recipe.personality_tags ?? [];
   const eras = recipe.eras ?? [];
@@ -78,6 +94,50 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   // Derive complexity from user's choices instead of dead 0.5
   axes.complexity = deriveComplexity(recipe);
   const chaos = axes.chaos;
+
+  // ARCHETYPE MODE: If an archetype is provided, lock the lead interest
+  // to the archetype's trigger interest. This focuses the dream on one
+  // identity while letting all the Chord machinery do the creative work.
+  if (archetype) {
+    // Find which of the user's interests matches the archetype trigger
+    const archetypeInterest = interests.find(i =>
+      archetype.flavor_keywords.length > 0 ? true : true // always use first trigger
+    );
+    // Lock interests to just the archetype's trigger interest(s)
+    // but only if the user actually has that interest
+    const matchingInterests = interests.filter(i =>
+      (archetype as unknown as { trigger_interests?: string[] }).trigger_interests?.includes(i)
+    );
+    if (matchingInterests.length > 0) {
+      interests = matchingInterests;
+    }
+  }
+
+  // If the user selected moods during onboarding, randomly sample ONE mood's
+  // axes for this dream instead of using the baked-in average.
+  const selectedMoods = recipe.selected_moods ?? [];
+
+  // ARCHETYPE MODE: If archetype has a trigger mood, use that instead of random
+  if (archetype) {
+    const archMoods = (archetype as unknown as { trigger_moods?: string[] }).trigger_moods ?? [];
+    const matchingMood = archMoods.find(m => selectedMoods.includes(m)) ?? archMoods[0];
+    if (matchingMood) {
+      const profile = MOOD_AXIS_PROFILES[matchingMood];
+      if (profile) {
+        axes.energy = profile.energy;
+        axes.brightness = profile.brightness;
+        axes.color_warmth = profile.warmth;
+      }
+    }
+  } else if (selectedMoods.length > 0) {
+    const moodKey = pick(selectedMoods);
+    const profile = MOOD_AXIS_PROFILES[moodKey];
+    if (profile) {
+      axes.energy = profile.energy;
+      axes.brightness = profile.brightness;
+      axes.color_warmth = profile.warmth;
+    }
+  }
 
   // Roll dice on each axis
   const rolled = {
@@ -104,21 +164,24 @@ export function buildPromptInput(recipe: Recipe): PromptInput {
   const includeAction = Math.random() < axes.energy;
   const action = includeAction ? pick(ACTIONS) : '';
   const sceneType = pick(SCENE_TYPES);
-  const spiritAppears = spiritCompanion !== null && Math.random() < 0.15;
+  const spiritAppears = spiritCompanion !== null && Math.random() < 0.08;
 
-  // Pick a dream subject — creature, object, or nothing (pure landscape)
+  // Pick a dream subject — creature/character, or nothing (let scene/setting drive)
+  // When archetype is active, skip the random subject so the focused interest drives the scene
   const subjectRoll = Math.random();
   let dreamSubject = '';
-  if (subjectRoll < 0.5) {
-    // 50% — a fantastical creature
-    dreamSubject = pick(DREAM_SUBJECTS);
-  } else if (subjectRoll < 0.6) {
-    // 10% — spirit companion as main subject
-    dreamSubject = spiritCompanion
-      ? `a magical ${spiritCompanion.replace(/_/g, ' ')}`
-      : pick(DREAM_SUBJECTS);
+  if (!archetype) {
+    if (subjectRoll < 0.3) {
+      // 30% — a fantastical creature or character
+      dreamSubject = pick(DREAM_SUBJECTS);
+    } else if (subjectRoll < 0.35) {
+      // 5% — spirit companion as main subject
+      dreamSubject = spiritCompanion
+        ? `a magical ${spiritCompanion.replace(/_/g, ' ')}`
+        : pick(DREAM_SUBJECTS);
+    }
+    // 65% — no subject, let setting/interests/mood drive the scene
   }
-  // 40% — no subject, pure landscape/scene
 
   // WORLD layer — sometimes swap in a wild bonus location/era for variety
   let eraKeywordsStr: string;
@@ -251,17 +314,85 @@ ${input.weirdnessModifier ? `- Surrealism: ${input.weirdnessModifier}` : ''}
 ${input.action ? `- Action: ${input.action}` : ''}
 ${input.spiritAppears && input.spiritCompanion ? `- Spirit companion: a ${input.spiritCompanion.replace(/_/g, ' ')} hidden in the scene` : ''}
 ${comp ? `- Composition idea: ${comp}` : ''}
+${input.sceneType ? `- Scene type: ${input.sceneType}` : ''}
 
 WRITE a single image prompt (max 60 words). Start with the art style. Describe ONE specific, coherent scene — not a list of ingredients.
 
 RULES:
 - If elements conflict, DROP the lower-priority one. A coherent scene beats a complete checklist.
-- Stylized or illustrated characters welcome — no photorealistic human faces
-- Attractive, sexy, or glamorous characters welcome — no nudity or explicit content
+- Characters should be stylized, illustrated, or silhouetted — NEVER photorealistic human faces or bodies. If a person appears, they should feel like part of the art style (cartoon, painted, sketched), not a photo of a real person.
+- No nudity or explicit content
 - Be concrete and visual, not poetic or abstract
 - The result should make someone say "that's MY dream bot — it gets me"
 - AVOID AI ART CLICHÉS: no "figure standing with back to camera gazing at vast landscape", no "lone silhouette on cliff edge", no "person looking up at giant glowing thing". These are overused. Be more creative with composition.
 - LEAN INTO THE ART STYLE: if the medium is cartoon, make it LOOK like a cartoon — exaggerated, flat colors, bold outlines. Don't let it default to photorealistic with a filter. The medium should fundamentally change HOW the image looks.
 
 Output ONLY the prompt, nothing else.`;
+}
+
+/**
+ * Build a "Solo" creative brief — picks ONE ingredient and follows it DEEP.
+ * Where buildHaikuPrompt blends 4-5 elements, this narrows to one thread
+ * and chases it to its most specific, vivid, surprising conclusion.
+ */
+export interface DreamArchetype {
+  key: string;
+  name: string;
+  prompt_context: string;
+  flavor_keywords: string[];
+}
+
+export function buildHaikuPromptDeep(input: PromptInput, recipe?: Recipe, archetype?: DreamArchetype): string {
+  const comp = pick(COMPOSITIONS);
+
+  // If we have a pre-built archetype, use its focused identity
+  if (archetype) {
+    return `${archetype.prompt_context}
+
+Art style: ${input.medium}
+
+Write an image prompt (max 50 words). Start with the art style. Don't describe a static object — describe a SCENE with something happening, a story being told, or a moment that makes you feel something. Surprise me. End the prompt with "Style: ${input.medium}. NOT a photograph." Output ONLY the prompt.`;
+  }
+
+  // Fallback: no archetype available — use the full recipe approach
+  const allInterests = recipe?.interests ?? input.interests;
+  const allMoods = recipe?.selected_moods ?? [];
+  const allPersonality = recipe?.personality_tags ?? input.personalityTags;
+
+  return `This person loves: ${allInterests.join(', ')}. Their personality: ${allPersonality.join(', ')}. Moods: ${allMoods.length > 0 ? allMoods.join(', ') : input.mood}.
+
+Pick ONE interest and dream fully as that version of them. Not a blend — commit.
+
+STYLE:
+- Medium: ${input.medium}
+- Palette: ${input.colorKeywords || 'vivid and expressive'}
+- Light: ${input.lighting}
+${comp ? `- Frame: ${comp}` : ''}
+${input.dreamSubject ? `- Include: ${input.dreamSubject}` : ''}
+${input.action ? `- Action: ${input.action}` : ''}
+${input.spiritAppears && input.spiritCompanion ? `- Spirit animal (tiny hidden easter egg): ${input.spiritCompanion.replace(/_/g, ' ')}` : ''}
+
+Write a prompt (max 80 words). Start with the art medium.
+
+RULES:
+- NO photorealistic humans. Characters must be stylized, illustrated, or non-human.
+- NO nudity. NO single objects on dark backgrounds. NO figure-with-back-to-camera.
+- The art medium MUST visually dominate.
+
+Output ONLY the prompt.`;
+}
+
+/**
+ * Dual-path prompt builder — randomly selects Chord (blend) or Solo (deep).
+ *
+ * Chord (50%): picks 4-5 best elements, weaves into one coherent scene.
+ * Solo  (50%): picks ONE thread, follows it deep to a hyper-specific moment.
+ *
+ * Tune the ratio here — this is the single knob for chord/solo balance.
+ */
+export function buildHaikuPromptDual(input: PromptInput, recipe?: Recipe, archetype?: DreamArchetype): string {
+  // TODO: restore to 0.5 after testing Solo path
+  return Math.random() < 0
+    ? buildHaikuPrompt(input)
+    : buildHaikuPromptDeep(input, recipe, archetype);
 }

@@ -68,6 +68,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
           selectedMoods: next,
           recipe: {
             ...s.recipe,
+            selected_moods: next,
             axes: {
               ...s.recipe.axes,
               energy: clamp(avgEnergy),

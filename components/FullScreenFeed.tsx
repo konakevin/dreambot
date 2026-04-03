@@ -15,6 +15,7 @@ import * as Haptics from 'expo-haptics';
 import { useQueryClient } from '@tanstack/react-query';
 import { DreamCard } from '@/components/DreamCard';
 import type { DreamPostItem } from '@/components/DreamCard';
+import { CommentOverlay } from '@/components/CommentOverlay';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
@@ -71,17 +72,44 @@ export function FullScreenFeed({
   const setFuse = useFusionStore((s) => s.setFuse);
   const [familyPostId, setFamilyPostId] = useState<string | null>(null);
   const [familyPost, setFamilyPost] = useState<DreamPostItem | null>(null);
+  const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
   const handleDelete = useCallback(
     async (uploadId: string) => {
+      // Fetch image URL so we can clean up storage
+      const { data: row } = await supabase
+        .from('uploads')
+        .select('image_url')
+        .eq('id', uploadId)
+        .single();
+
       const { error } = await supabase.from('uploads').delete().eq('id', uploadId);
       if (error) {
         Toast.show('Failed to delete', 'close-circle');
         return;
       }
+
+      // Clean up the image from Supabase Storage
+      if (row?.image_url) {
+        const match = row.image_url.match(/\/uploads\/(.+)$/);
+        if (match?.[1]) {
+          supabase.storage.from('uploads').remove([decodeURIComponent(match[1])]);
+        }
+      }
+
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Dream deleted', 'checkmark-circle');
+
+      // Optimistically remove from all feed caches so the card disappears immediately
+      const feedKeys = ['feed', 'dreamFeed', 'userPosts', 'publicProfile', 'top'];
+      for (const key of feedKeys) {
+        queryClient.setQueriesData({ queryKey: [key] }, (old: unknown) => {
+          if (Array.isArray(old)) return old.filter((p: { id: string }) => p.id !== uploadId);
+          return old;
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ['feed'] });
+      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
       if (router.canGoBack()) router.back();
@@ -151,7 +179,7 @@ export function FullScreenFeed({
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               toggleLike({ uploadId: item.id, currentlyLiked: likeIds.has(item.id) });
             }}
-            onComment={() => router.push(`/comments?uploadId=${item.id}`)}
+            onComment={() => setCommentPost(item)}
             isSaved={favoriteIds.has(item.id)}
             onToggleSave={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -170,6 +198,9 @@ export function FullScreenFeed({
           />
         )}
       />
+      {commentPost && (
+        <CommentOverlay post={commentPost} onClose={() => setCommentPost(null)} />
+      )}
       {familyPost && (
         <DreamFamilySheet
           visible={!!familyPostId}

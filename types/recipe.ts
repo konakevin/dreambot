@@ -137,6 +137,8 @@ export interface Recipe {
   settings: Setting[];
   scene_atmospheres: SceneAtmosphere[];
   spirit_companion: SpiritCompanion | null;
+  /** Mood keys selected during onboarding — sampled per-dream for axis variety */
+  selected_moods?: string[];
 }
 
 /** Default recipe — all axes at 0.5 (neutral), no selections */
