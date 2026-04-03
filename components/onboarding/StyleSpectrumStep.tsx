@@ -100,23 +100,23 @@ export function StyleSpectrumStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
       <View style={s.content}>
-        <Text style={s.title}>Tune your style</Text>
+        <Text style={s.title}>Fine tune</Text>
         <Text style={s.subtitle}>
-          Your dreams will tend this direction, but your bot will still surprise you
+          These set the range — your bot will mix it up within your preferences
         </Text>
 
         <View style={s.sliders}>
           <Slider
-            label="Weirdness"
-            leftLabel="Normal"
-            rightLabel="Surreal"
+            label="How weird do you dream?"
+            leftLabel="A little"
+            rightLabel="A lot"
             value={toSlider(recipe.axes.weirdness)}
             onChange={(v) => setWeirdness(toStored(v))}
           />
           <Slider
-            label="Scale"
-            leftLabel="Intimate Close-up"
-            rightLabel="Epic Vista"
+            label="How big do you dream?"
+            leftLabel="Close up"
+            rightLabel="Epic vista"
             value={toSlider(recipe.axes.scale)}
             onChange={(v) => setScale(toStored(v))}
           />
