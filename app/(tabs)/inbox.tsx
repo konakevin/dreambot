@@ -54,9 +54,10 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
       return { action: 'Your post hit ' + (item.body ?? 'a milestone!'), preview: null };
     case 'dream_generated': {
       const isWish = item.body?.startsWith('wish:');
-      const botMsg = item.body?.replace(/^(wish|dream):/, '') || null;
+      const isWelcome = item.body?.startsWith('welcome:');
+      const botMsg = item.body?.replace(/^(wish|dream|welcome):/, '') || null;
       return {
-        action: isWish ? 'Your wish has arrived!' : 'Your dream has arrived!',
+        action: isWelcome ? 'Welcome to DreamBot :)' : isWish ? 'Your wish has arrived!' : 'Your dream has arrived!',
         preview: botMsg || null,
       };
     }
