@@ -4,7 +4,8 @@ import {
   buildFallbackConcept,
   buildFallbackFluxPrompt,
   parseConceptJson,
-} from '@/lib/vibeEngine';
+// @ts-expect-error — .ts extension required for Jest to resolve _shared Deno file
+} from '../../supabase/functions/_shared/vibeEngine.ts';
 import type { VibeProfile } from '@/types/vibeProfile';
 import { DEFAULT_VIBE_PROFILE } from '@/types/vibeProfile';
 

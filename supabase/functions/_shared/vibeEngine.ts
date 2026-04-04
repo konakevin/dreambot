@@ -1,6 +1,7 @@
 /**
- * Vibe Engine — DEPLOY COPY for Supabase Edge Functions (Deno runtime).
- * SOURCE OF TRUTH: lib/vibeEngine.ts
+ * Vibe Engine — the two-pass prompt builder for AI dream generation.
+ * Lives in _shared/ because it runs server-side only (Edge Functions).
+ * Tests import this file directly via Jest moduleNameMapper.
  */
 
 import type { VibeProfile, MoodAxes, ConceptRecipe, PromptMode } from './vibeProfile.ts';

@@ -17,11 +17,10 @@ jobs:
           cache: npm
       - run: npm ci --legacy-peer-deps
 
-      - name: Sync engine deploy copies
+      - name: Sync recipe engine deploy copy
         run: |
           node scripts/sync-deno-engine.js
-          node scripts/sync-vibe-engine.js
-          git diff --exit-code supabase/functions/_shared/ || (echo "❌ Engine deploy copies are out of sync. Run the sync scripts and commit." && exit 1)
+          git diff --exit-code supabase/functions/_shared/recipeEngine.ts || (echo "❌ recipeEngine deploy copy is out of sync. Run: node scripts/sync-deno-engine.js" && exit 1)
 
       - name: Type check
         run: npx tsc --noEmit
