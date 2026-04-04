@@ -1,12 +1,12 @@
 import { useOnboardingStore } from '@/store/onboarding';
 import { SPIRIT_COMPANIONS } from '@/constants/onboarding';
 import { OnboardingTileScreen } from '@/components/OnboardingTileScreen';
-import type { SpiritCompanion } from '@/types/recipe';
+import type { SpiritCompanion } from '@/types/vibeProfile';
 
 interface Props { onNext: () => void; onBack: () => void; }
 
 export function SpiritCompanionStep({ onNext, onBack }: Props) {
-  const companion = useOnboardingStore((s) => s.recipe.spirit_companion);
+  const companion = useOnboardingStore((s) => s.profile.spirit_companion);
   const setCompanion = useOnboardingStore((s) => s.setSpiritCompanion);
 
   return (

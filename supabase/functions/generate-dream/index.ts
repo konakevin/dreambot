@@ -13,6 +13,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { buildPromptInput, buildRawPrompt, buildHaikuPrompt } from '../_shared/recipeEngine.ts';
 import type { Recipe } from '../_shared/recipe.ts';
+import type { VibeProfile, PromptMode, ConceptRecipe } from '../_shared/vibeProfile.ts';
+import { buildConceptPrompt, buildPolisherPrompt, buildFallbackConcept, buildFallbackFluxPrompt, parseConceptJson } from '../_shared/vibeEngine.ts';
 
 const MAX_DAILY_GENERATIONS = 50;
 
@@ -185,6 +187,10 @@ interface RequestBody {
   persist?: boolean;
   /** Skip Haiku enhancement — use raw prompt from recipe engine (faster) */
   skip_enhance?: boolean;
+  /** Vibe Profile v2 — two-pass prompt generation */
+  vibe_profile?: import('../_shared/vibeProfile.ts').VibeProfile;
+  /** Prompt mode for vibe profile generation */
+  prompt_mode?: import('../_shared/vibeProfile.ts').PromptMode;
 }
 
 Deno.serve(async (req) => {
@@ -255,6 +261,8 @@ Deno.serve(async (req) => {
   const {
     mode,
     recipe,
+    vibe_profile,
+    prompt_mode,
     prompt: rawPrompt,
     hint,
     input_image,
@@ -278,8 +286,8 @@ Deno.serve(async (req) => {
     });
   }
 
-  if (!recipe && !rawPrompt && !haiku_brief) {
-    return new Response(JSON.stringify({ error: 'Must provide recipe, prompt, or haiku_brief' }), {
+  if (!recipe && !rawPrompt && !haiku_brief && !vibe_profile) {
+    return new Response(JSON.stringify({ error: 'Must provide recipe, vibe_profile, prompt, or haiku_brief' }), {
       status: 400,
     });
   }
@@ -324,8 +332,37 @@ Deno.serve(async (req) => {
   } else if (haiku_brief) {
     finalPrompt = await enhanceViaHaiku(haiku_brief, haiku_fallback ?? haiku_brief, ANTHROPIC_KEY);
     lap('prompt-haiku-brief');
+  } else if (vibe_profile) {
+    // TWO-PASS VIBE ENGINE
+    const vibeProfile = vibe_profile as VibeProfile;
+    const promptMode = (prompt_mode as PromptMode) ?? 'dream_me';
+
+    // Pass 1: Concept Generator
+    let concept: ConceptRecipe;
+    const conceptBrief = buildConceptPrompt(vibeProfile, promptMode, Math.random());
+    try {
+      const conceptRaw = await enhanceViaHaiku(conceptBrief, '', ANTHROPIC_KEY, 300);
+      concept = parseConceptJson(conceptRaw);
+    } catch {
+      concept = buildFallbackConcept(vibeProfile);
+    }
+
+    // Pass 2: Prompt Polisher
+    const polisherBrief = buildPolisherPrompt(concept);
+    try {
+      const polished = await enhanceViaHaiku(polisherBrief, '', ANTHROPIC_KEY, 150);
+      finalPrompt = polished.length >= 10 ? polished : buildFallbackFluxPrompt(concept);
+    } catch {
+      finalPrompt = buildFallbackFluxPrompt(concept);
+    }
+
+    if (hint) {
+      finalPrompt = `${finalPrompt}, ${hint}`;
+    }
+
+    lap('two-pass-done');
   } else if (recipe) {
-    // THREE-PART SONG: roll which dream type this is
+    // THREE-PART SONG (legacy): roll which dream type this is
     // 50% archetype (focused narrative), 30% chord (pure blend), 20% beauty (pure visual)
     const dreamRoll = Math.random();
     const dreamMode = dreamRoll < 0.5 ? 'archetype' : dreamRoll < 0.8 ? 'chord' : 'beauty';
@@ -503,7 +540,8 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
 async function enhanceViaHaiku(
   brief: string,
   fallback: string,
-  anthropicKey: string | undefined
+  anthropicKey: string | undefined,
+  maxTokens: number = 150
 ): Promise<string> {
   if (!anthropicKey) return fallback;
   try {
@@ -516,7 +554,7 @@ async function enhanceViaHaiku(
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 150,
+        max_tokens: maxTokens,
         messages: [{ role: 'user', content: brief }],
       }),
     });

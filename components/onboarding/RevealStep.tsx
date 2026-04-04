@@ -10,7 +10,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
-import { buildPromptInput, buildRawPrompt } from '@/lib/recipeEngine';
+// Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
 import { MASCOT_URLS } from '@/constants/mascots';
 import { Toast } from '@/components/Toast';
@@ -33,7 +33,7 @@ interface Dream {
 interface Props { onNext: () => void; onBack: () => void; }
 
 export function RevealStep({ onBack }: Props) {
-  const recipe = useOnboardingStore((s) => s.recipe);
+  const profile = useOnboardingStore((s) => s.profile);
   const reset = useOnboardingStore((s) => s.reset);
   const user = useAuthStore((s) => s.user);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
@@ -134,8 +134,11 @@ export function RevealStep({ onBack }: Props) {
     setError(null);
 
     try {
-      const input = buildPromptInput(recipe);
-      const prompt = buildRawPrompt(input);
+      // Build a quick preview prompt from the vibe profile
+      const style = profile.art_styles.length > 0 ? profile.art_styles[Math.floor(Math.random() * profile.art_styles.length)].replace(/_/g, ' ') : 'digital painting';
+      const interest = profile.interests.length > 0 ? profile.interests[Math.floor(Math.random() * profile.interests.length)].replace(/_/g, ' ') : 'dreamy landscape';
+      const aesthetic = profile.aesthetics.length > 0 ? profile.aesthetics[Math.floor(Math.random() * profile.aesthetics.length)].replace(/_/g, ' ') : 'dreamy';
+      const prompt = `${style}, a stunning ${interest} scene, ${aesthetic} aesthetic, gorgeous lighting, hyper detailed, cinematic composition`;
       if (__DEV__) console.log('[Reveal] Prompt:', prompt);
       const url = await generateFluxImage(prompt);
       if (__DEV__) console.log('[Reveal] Got URL:', url?.slice(0, 80));
@@ -214,7 +217,7 @@ export function RevealStep({ onBack }: Props) {
     try {
       await supabase.from('user_recipes').upsert({
         user_id: user.id,
-        recipe: JSON.parse(JSON.stringify(recipe)),
+        recipe: JSON.parse(JSON.stringify(profile)),
         onboarding_completed: true,
         ai_enabled: true,
         updated_at: new Date().toISOString(),
