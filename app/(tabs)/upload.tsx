@@ -69,9 +69,41 @@ export default function DreamScreen() {
   const { mutateAsync: spendSparkles } = useSpendSparkles();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
-  const [dreamAlbum, setDreamAlbum] = useState<
-    { url: string; prompt: string; fromWish: string | null; dreamMode?: string; archetype?: string }[]
-  >([]);
+  interface DreamAlbumItem {
+    url: string;
+    prompt: string;
+    fromWish: string | null;
+    dreamMode?: string;
+    archetype?: string;
+    fromUpload?: boolean; // true if this dream originated from a user-uploaded photo
+    // Per-dream control state (persisted across swipes)
+    controlState: {
+      selectedMode: PromptMode;
+      customPrompt: string;
+      reDreamCurrent: boolean;
+      reusePhoto: boolean;
+    };
+  }
+  const [dreamAlbum, setDreamAlbum] = useState<DreamAlbumItem[]>([]);
+
+  function makeControlState(): DreamAlbumItem['controlState'] {
+    return { selectedMode, customPrompt, reDreamCurrent, reusePhoto };
+  }
+
+  // Save current controls to the active dream before switching
+  function saveControlsToActiveDream() {
+    setDreamAlbum((prev) =>
+      prev.map((d, i) => i === activeIndex ? { ...d, controlState: makeControlState() } : d)
+    );
+  }
+
+  // Restore controls from a dream when swiping to it
+  function restoreControlsFromDream(dream: DreamAlbumItem) {
+    setSelectedMode(dream.controlState.selectedMode);
+    setCustomPrompt(dream.controlState.customPrompt);
+    setReDreamCurrent(dream.controlState.reDreamCurrent);
+    setReusePhoto(dream.controlState.reusePhoto);
+  }
   const [activeIndex, setActiveIndex] = useState(0);
   const albumRef = useRef<FlatList>(null);
   const [userHint, setUserHint] = useState('');
@@ -279,7 +311,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined }];
+        return [...prev, { url, prompt: p, fromWish: null, fromUpload: photoFromUpload.current, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined, controlState: makeControlState() }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -419,7 +451,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined }];
+        return [...prev, { url, prompt: p, fromWish: null, fromUpload: photoFromUpload.current, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined, controlState: makeControlState() }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -495,7 +527,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
         const newIndex = prev.length;
         setActiveIndex(newIndex);
         setTimeout(() => albumRef.current?.scrollToIndex({ index: newIndex, animated: true }), 100);
-        return [...prev, { url, prompt: p, fromWish: null, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined }];
+        return [...prev, { url, prompt: p, fromWish: null, fromUpload: photoFromUpload.current, dreamMode: (result as unknown as Record<string, unknown>).dream_mode as string | undefined, archetype: (result as unknown as Record<string, unknown>).archetype as string | undefined, controlState: makeControlState() }];
       });
       setDreaming(false);
       setPhase('reveal');
@@ -739,7 +771,11 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
             onScroll={(e) => {
               const idx = Math.round(e.nativeEvent.contentOffset.x / SNAP_WIDTH);
               const clamped = Math.max(0, Math.min(idx, dreamAlbum.length - 1));
-              if (clamped !== activeIndex) setActiveIndex(clamped);
+              if (clamped !== activeIndex) {
+                saveControlsToActiveDream();
+                setActiveIndex(clamped);
+                if (dreamAlbum[clamped]) restoreControlsFromDream(dreamAlbum[clamped]);
+              }
             }}
             scrollEventThrottle={16}
             renderItem={({ item, index }) => (
@@ -937,7 +973,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
               Re-dream this image
             </Text>
           </TouchableOpacity>
-          {photoFromUpload.current && (
+          {dreamAlbum[activeIndex]?.fromUpload && (
             <TouchableOpacity
               style={s.reuseRow}
               onPress={() => { setReusePhoto(!reusePhoto); if (!reusePhoto) setReDreamCurrent(false); }}
