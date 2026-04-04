@@ -79,6 +79,7 @@ export default function DreamLikeThisScreen() {
   const [resultPrompt, setResultPrompt] = useState('');
   const [resultConcept, setResultConcept] = useState<Record<string, unknown> | null>(null);
   const [posting, setPosting] = useState(false);
+  const [reDreamResult, setReDreamResult] = useState(false);
 
   const busy = useRef(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -238,10 +239,28 @@ export default function DreamLikeThisScreen() {
         ai_concept?: Record<string, unknown> | null;
       };
 
-      if (photoUri && photoBase64) {
-        // Photo + style ref: extract ONLY the art medium (first comma segment)
-        // and tell Kontext to apply it. Sending the full prompt causes Kontext
-        // to replace the photo's subject with the reference scene.
+      if (reDreamResult && resultUrl) {
+        // Re-dream: feed the AI result back through Kontext for iterative refinement
+        if (__DEV__) console.log('[DreamLikeThis] Re-dreaming previous result');
+        const resp = await fetch(resultUrl);
+        const blob = await resp.blob();
+        const b64 = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve((reader.result as string).split(',')[1] ?? '');
+          reader.readAsDataURL(blob);
+        });
+        const refUrl = `data:image/jpeg;base64,${b64}`;
+        const artStyle = refPost.prompt.split(',')[0].trim();
+        const stylePrompt = customPrompt.trim()
+          ? `Render this image as ${artStyle}. ${customPrompt.trim()}.`
+          : `Render this image as ${artStyle}.`;
+        result = await generateDream({
+          mode: 'flux-kontext',
+          prompt: stylePrompt,
+          input_image: refUrl,
+        });
+      } else if (photoUri && photoBase64) {
+        // Photo + style ref: apply reference art style to user's photo
         const refUrl = `data:image/jpeg;base64,${photoBase64}`;
         const artStyle = refPost.prompt.split(',')[0].trim();
         if (__DEV__) console.log('[DreamLikeThis] Photo + style ref, art style:', artStyle);
@@ -434,7 +453,7 @@ export default function DreamLikeThisScreen() {
       <SafeAreaView style={s.root}>
         <View style={s.center}>
           <Text style={s.title}>Dreaming...</Text>
-          <Text style={s.sub}>Applying {refPost.username}'s style</Text>
+          <Text style={s.sub}>Applying {refPost.username}&apos;s style</Text>
           <ActivityIndicator size="small" color={colors.accent} />
         </View>
       </SafeAreaView>
@@ -499,6 +518,38 @@ export default function DreamLikeThisScreen() {
             <Ionicons name="sparkles" size={20} color="#FFF" />
             <Text style={s.ctaText}>Dream Again</Text>
           </TouchableOpacity>
+          {photoUri && (
+            <View style={s.radioGroup}>
+              <TouchableOpacity
+                style={s.reuseRow}
+                onPress={() => setReDreamResult(false)}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={!reDreamResult ? 'radio-button-on' : 'radio-button-off'}
+                  size={18}
+                  color={!reDreamResult ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.reuseText, !reDreamResult && s.reuseTextActive]}>
+                  Use original photo
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={s.reuseRow}
+                onPress={() => setReDreamResult(true)}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={reDreamResult ? 'radio-button-on' : 'radio-button-off'}
+                  size={18}
+                  color={reDreamResult ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.reuseText, reDreamResult && s.reuseTextActive]}>
+                  Re-dream this result
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={s.buttonRow}>
             <TouchableOpacity
               style={s.ctaHalf}
@@ -650,6 +701,16 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
+  radioGroup: { gap: 4 },
+  reuseRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 6,
+  },
+  reuseText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
+  reuseTextActive: { color: colors.accent },
   fsClose: { position: 'absolute', top: 60, right: 20 },
   fsCloseCircle: {
     width: 36,

@@ -266,8 +266,6 @@ export function DreamFamilySheet({
                     if (__DEV__) console.log('[FamilySheet] Dream Like This button pressed');
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                     onDreamLikeThis();
-                    // Close after navigation to avoid unmounting before push completes
-                    setTimeout(() => onClose(), 100);
                   }}
                   activeOpacity={0.7}
                 >
