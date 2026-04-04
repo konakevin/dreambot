@@ -281,7 +281,7 @@ export function RevealStep({ onBack }: Props) {
         actor_id: user.id,
         type: 'dream_generated',
         upload_id: insertedRow?.id ?? null,
-        body: 'welcome:Hey there! 🤖✨ I\'m DreamBot, your new AI buddy. Here\'s 25 Sparkles to help you get dreaming. Sweet Dreams! 🌙💤',
+        body: 'welcome:Hello 🤖✨ I\'m DreamBot, your new AI buddy. Here\'s 25 Sparkles to help you get dreaming. Sweet Dreams! 🌙',
       });
 
       reset();

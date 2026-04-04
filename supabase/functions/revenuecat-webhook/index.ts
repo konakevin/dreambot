@@ -8,7 +8,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SPARKLE_PACKS: Record<string, number> = {
   'com.konakevin.radorbad.sparkles.25': 25,
   'com.konakevin.radorbad.sparkles.50': 50,
-  'com.konakevin.radorbad.sparkles.100_': 100,
+  'com.konakevin.radorbad.sparkles.100__': 100,
   'com.konakevin.radorbad.sparkles.500': 500,
 };
 
@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
   const authHeader = req.headers.get('authorization');
   const webhookSecret = Deno.env.get('REVENUECAT_WEBHOOK_SECRET');
 
-  if (!webhookSecret || authHeader !== `Bearer ${webhookSecret}`) {
+  if (!webhookSecret || (authHeader !== `Bearer ${webhookSecret}` && authHeader !== webhookSecret)) {
     console.error('[RevenueCat] Unauthorized request');
     return new Response('Unauthorized', { status: 401 });
   }
