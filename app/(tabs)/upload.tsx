@@ -36,6 +36,7 @@ import { colors } from '@/constants/theme';
 import { MASCOT_URLS } from '@/constants/mascots';
 import { PROMPT_MODE_TILES } from '@/constants/promptModes';
 import { Toast } from '@/components/Toast';
+import { formatCompact } from '@/lib/formatNumber';
 import { usePhotoInput } from '@/hooks/usePhotoInput';
 import { useDreamAlbum } from '@/hooks/useDreamAlbum';
 import { useDreamGeneration } from '@/hooks/useDreamGeneration';
@@ -193,7 +194,7 @@ export default function DreamScreen() {
         activeOpacity={0.7}
       >
         <Ionicons name="sparkles" size={14} color={colors.accent} />
-        <Text style={s.sparklePillText}>{sparkleBalance}</Text>
+        <Text style={s.sparklePillText}>{formatCompact(sparkleBalance)}</Text>
       </TouchableOpacity>
     );
   }

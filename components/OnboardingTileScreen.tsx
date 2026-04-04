@@ -101,7 +101,7 @@ export function OnboardingTileScreen({
                 {tile.icon ? (
                   <Ionicons
                     name={tile.icon as keyof typeof Ionicons.glyphMap}
-                    size={24}
+                    size={20}
                     color={isSelected ? accentColor : colors.textSecondary}
                   />
                 ) : null}
@@ -189,19 +189,20 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    gap: 8,
   },
   tile: {
-    width: '30%',
-    aspectRatio: 1,
+    width: '48%',
+    flexDirection: 'row',
     backgroundColor: colors.surface,
-    paddingVertical: 12,
-    borderRadius: 16,
+    paddingVertical: 11,
+    paddingHorizontal: 10,
+    borderRadius: 14,
     borderWidth: 1.5,
     borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: 6,
   },
   tileSelected: {},
   tileLabel: {

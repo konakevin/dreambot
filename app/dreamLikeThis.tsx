@@ -37,6 +37,7 @@ import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { generateDream, persistImage } from '@/lib/dreamApi';
+import { formatCompact } from '@/lib/formatNumber';
 import { postDream, pinToFeed } from '@/lib/dreamPost';
 import type { VibeProfile } from '@/types/vibeProfile';
 import type { Recipe } from '@/types/recipe';
@@ -186,7 +187,11 @@ export default function DreamLikeThisScreen() {
           body: { prompt },
         });
         if (!error && data?.style) {
-          if (__DEV__) console.log('[DreamLikeThis] Extracted style:', data.style);
+          if (__DEV__) {
+            console.log('**********');
+            console.log('[DreamLikeThis] Extracted style:', data.style);
+            console.log('**********');
+          }
           setExtractedStyle(data.style);
         }
       } catch {
@@ -424,7 +429,7 @@ export default function DreamLikeThisScreen() {
             activeOpacity={0.7}
           >
             <Ionicons name="sparkles" size={14} color={colors.accent} />
-            <Text style={s.sparklePillText}>{sparkleBalance}</Text>
+            <Text style={s.sparklePillText}>{formatCompact(sparkleBalance)}</Text>
           </TouchableOpacity>
         </View>
         <View style={s.center}>
@@ -520,7 +525,7 @@ export default function DreamLikeThisScreen() {
             activeOpacity={0.7}
           >
             <Ionicons name="sparkles" size={14} color={colors.accent} />
-            <Text style={s.sparklePillText}>{sparkleBalance}</Text>
+            <Text style={s.sparklePillText}>{formatCompact(sparkleBalance)}</Text>
           </TouchableOpacity>
         </View>
         <View style={s.revealCenter}>

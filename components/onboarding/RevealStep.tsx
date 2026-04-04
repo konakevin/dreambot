@@ -52,6 +52,7 @@ interface Props {
 
 export function RevealStep({ onBack }: Props) {
   const profile = useOnboardingStore((s) => s.profile);
+  const isEditing = useOnboardingStore((s) => s.isEditing);
   const reset = useOnboardingStore((s) => s.reset);
   const user = useAuthStore((s) => s.user);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
@@ -404,21 +405,68 @@ export function RevealStep({ onBack }: Props) {
     );
   }
 
-  // ── Idle state ──
+  // ── Edit mode: just save and go home ──
+  if (phase === 'idle' && isEditing) {
+    return (
+      <View style={s.root}>
+        <View style={s.centeredContent}>
+          <Image source={{ uri: MASCOT_URLS[1] }} style={s.idleMascot} contentFit="cover" />
+          <Text style={s.bigTitle}>Save your changes</Text>
+          <Text style={s.centeredSub}>Your updated taste profile will shape all future dreams</Text>
+          <TouchableOpacity
+            style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
+            onPress={async () => {
+              if (!user) return;
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              try {
+                await supabase.from('user_recipes').upsert(
+                  {
+                    user_id: user.id,
+                    recipe: JSON.parse(JSON.stringify(profile)),
+                    onboarding_completed: true,
+                    ai_enabled: true,
+                    updated_at: new Date().toISOString(),
+                  },
+                  { onConflict: 'user_id' }
+                );
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                Toast.show('Profile saved!', 'checkmark-circle');
+                reset();
+                router.replace('/(tabs)');
+              } catch {
+                Toast.show('Failed to save', 'close-circle');
+              }
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+            <Text style={s.createButtonText}>Save Changes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
+            <Text style={{ color: colors.textSecondary, fontSize: 15, fontWeight: '600' }}>
+              Go Back
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  // ── First-time idle state ──
   if (phase === 'idle') {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image source={{ uri: MASCOT_URLS[1] }} style={s.idleMascot} contentFit="cover" />
           <Text style={s.bigTitle}>DreamBot is ready</Text>
-          <Text style={s.centeredSub}>Tap below to see what it dreams up for you</Text>
+          <Text style={s.centeredSub}>Tap below to save your settings and start dreaming</Text>
           <TouchableOpacity
             style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
             onPress={() => generateImage()}
             activeOpacity={0.7}
           >
             <Ionicons name="sparkles" size={20} color="#FFFFFF" />
-            <Text style={s.createButtonText}>Generate My First Dream</Text>
+            <Text style={s.createButtonText}>Save &amp; Create Dream</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -676,11 +724,11 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor: colors.border,
+    backgroundColor: colors.accent,
     borderRadius: 14,
     paddingVertical: 18,
   },
-  createButtonText: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
+  createButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
   dreamAgainButton: {
     flexDirection: 'row',
     alignItems: 'center',

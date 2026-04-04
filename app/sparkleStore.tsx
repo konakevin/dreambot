@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -19,9 +20,10 @@ import {
   usePurchaseSparkles,
   useRestorePurchases,
 } from '@/hooks/useSparkles';
-
-// Fallback display info keyed by product ID
 import { PACK_INFO } from '@/constants/sparklePacks';
+
+const CARD_BORDER = colors.border;
+const CARD_BG = colors.card;
 
 function PackCard({
   pkg,
@@ -39,30 +41,31 @@ function PackCard({
     label: '',
   };
   const isBestValue = info.label === 'Best Value';
+  const isPopular = info.label === 'Popular';
 
   return (
     <TouchableOpacity
-      style={[s.packCard, isBestValue && s.packCardFeatured]}
+      style={s.packCard}
       onPress={() => onPurchase(pkg)}
       activeOpacity={0.7}
       disabled={purchasing}
     >
-      {isBestValue && (
-        <View style={s.featuredBadge}>
-          <Text style={s.featuredBadgeText}>BEST VALUE</Text>
-        </View>
-      )}
-      {info.label === 'Popular' && (
-        <View style={s.popularBadge}>
-          <Text style={s.popularBadgeText}>POPULAR</Text>
+      {(isBestValue || isPopular) && (
+        <View style={[s.badge, { backgroundColor: isBestValue ? colors.accent : colors.warning }]}>
+          <Text style={[s.badgeText, !isBestValue && { color: '#000' }]}>
+            {isBestValue ? 'BEST VALUE' : 'POPULAR'}
+          </Text>
         </View>
       )}
 
-      <Ionicons
-        name={info.icon as keyof typeof Ionicons.glyphMap}
-        size={28}
-        color={colors.accent}
-      />
+      <View style={s.iconCircle}>
+        <Ionicons
+          name={info.icon as keyof typeof Ionicons.glyphMap}
+          size={26}
+          color={colors.accent}
+        />
+      </View>
+
       <Text style={s.packSparkles}>{info.sparkles}</Text>
       <Text style={s.packLabel}>sparkles</Text>
 
@@ -83,7 +86,6 @@ export default function SparkleStoreScreen() {
   const { mutate: purchase, isPending: purchasing } = usePurchaseSparkles();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
 
-  // Sort packages by sparkle count (ascending)
   const sorted = [...packages].sort((a, b) => {
     const aInfo = PACK_INFO[a.product.identifier];
     const bInfo = PACK_INFO[b.product.identifier];
@@ -115,18 +117,21 @@ export default function SparkleStoreScreen() {
         <View style={{ width: 28 }} />
       </View>
 
-      <ScrollView contentContainerStyle={s.scroll}>
-        {/* Balance display */}
-        <View style={s.balanceCard}>
-          <Ionicons name="sparkles" size={32} color={colors.accent} />
+      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        {/* Balance hero */}
+        <LinearGradient
+          colors={['rgba(139,123,238,0.15)', 'rgba(139,123,238,0.03)', 'transparent']}
+          style={s.balanceHero}
+        >
+          <View style={s.balanceGlow}>
+            <Ionicons name="sparkles" size={40} color={colors.accent} />
+          </View>
           <Text style={s.balanceAmount}>{balance}</Text>
-          <Text style={s.balanceLabel}>sparkles</Text>
-        </View>
+          <Text style={s.balanceLabel}>sparkles available</Text>
+        </LinearGradient>
 
-        <Text style={s.sectionTitle}>Sparkle Packs</Text>
-        <Text style={s.sectionSub}>
-          Use sparkles to fuse dreams, dream in others{"'"} styles, and more
-        </Text>
+        {/* Section header */}
+        <Text style={s.sectionTitle}>Choose a Pack</Text>
 
         {isLoading ? (
           <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 40 }} />
@@ -137,7 +142,7 @@ export default function SparkleStoreScreen() {
             <Text style={s.emptySub}>Packs will appear here once the store is configured</Text>
           </View>
         ) : (
-          <View style={s.packRow}>
+          <View style={s.packGrid}>
             {sorted.map((pkg) => (
               <PackCard
                 key={pkg.identifier}
@@ -149,7 +154,7 @@ export default function SparkleStoreScreen() {
           </View>
         )}
 
-        {/* Restore purchases */}
+        {/* Restore */}
         <TouchableOpacity
           style={s.restoreButton}
           onPress={() =>
@@ -176,117 +181,117 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.border,
   },
   title: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
   scroll: { paddingHorizontal: 16, paddingBottom: 60 },
 
-  // Balance
-  balanceCard: {
+  // Balance hero
+  balanceHero: {
     alignItems: 'center',
-    gap: 4,
-    paddingVertical: 32,
+    paddingVertical: 20,
+    marginHorizontal: -16,
+    marginBottom: 4,
+  },
+  balanceGlow: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(139,123,238,0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
   },
   balanceAmount: {
     color: colors.textPrimary,
-    fontSize: 48,
-    fontWeight: '800',
+    fontSize: 44,
+    fontWeight: '900',
+    letterSpacing: -2,
   },
   balanceLabel: {
     color: colors.textSecondary,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
+    marginTop: 2,
   },
 
   // Section
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
     textAlign: 'center',
-  },
-  sectionSub: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    textAlign: 'center',
-    marginTop: 6,
-    marginBottom: 24,
-    lineHeight: 20,
+    marginTop: 4,
+    marginBottom: 16,
   },
 
-  // Pack cards
-  packRow: {
+  // Pack grid
+  packGrid: {
     flexDirection: 'row',
-    gap: 12,
+    flexWrap: 'wrap',
+    columnGap: 12,
+    rowGap: 20,
     justifyContent: 'center',
   },
   packCard: {
-    flex: 1,
+    width: '46%',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: colors.card,
-    borderRadius: 20,
+    gap: 4,
+    backgroundColor: colors.surface,
+    borderRadius: 18,
     borderWidth: 1.5,
     borderColor: colors.border,
-    paddingVertical: 24,
-    paddingHorizontal: 8,
+    paddingTop: 24,
+    paddingBottom: 16,
+    paddingHorizontal: 12,
   },
-  packCardFeatured: {
-    borderColor: colors.accent,
-    backgroundColor: colors.accentBg,
-  },
-  featuredBadge: {
+  badge: {
     position: 'absolute',
-    top: -10,
-    backgroundColor: colors.accent,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
+    top: -11,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
-  featuredBadgeText: {
+  badgeText: {
     color: '#FFFFFF',
     fontSize: 10,
     fontWeight: '800',
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
-  popularBadge: {
-    position: 'absolute',
-    top: -10,
-    backgroundColor: colors.warning,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
+  iconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(139,123,238,0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  popularBadgeText: {
-    color: '#000000',
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+  packSparkles: {
+    color: colors.textPrimary,
+    fontSize: 28,
+    fontWeight: '900',
+    letterSpacing: -1,
   },
-  packEmoji: { fontSize: 32, marginTop: 4 },
-  packSparkles: { color: colors.textPrimary, fontSize: 28, fontWeight: '800' },
   packLabel: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
   priceButton: {
     backgroundColor: colors.accent,
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginTop: 8,
-    minWidth: 80,
+    marginTop: 4,
+    minWidth: 90,
     alignItems: 'center',
   },
   priceButtonFeatured: {
     backgroundColor: colors.accentDark,
   },
-  priceText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+  priceText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
 
-  // Empty state
+  // Empty
   emptyWrap: { alignItems: 'center', gap: 8, paddingVertical: 40 },
   emptyText: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: 14, textAlign: 'center' },
 
   // Restore
-  restoreButton: { alignItems: 'center', paddingVertical: 24 },
+  restoreButton: { alignItems: 'center', paddingVertical: 28 },
   restoreText: { color: colors.textSecondary, fontSize: 14, fontWeight: '600' },
 });
