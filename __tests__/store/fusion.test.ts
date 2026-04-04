@@ -3,6 +3,7 @@ import { useFusionStore } from '@/store/fusion';
 const TEST_TARGET = {
   postId: 'post-123',
   prompt: 'pixel art, retro game aesthetic, a fox in a forest',
+  styleField: 'pixel art, retro game aesthetic',
   imageUrl: 'https://example.com/image.jpg',
   username: 'testuser',
   userId: 'user-456',

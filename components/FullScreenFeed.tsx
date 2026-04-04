@@ -216,19 +216,32 @@ export function FullScreenFeed({
           isAiGenerated={familyPost.is_ai_generated}
           hideTabBar={hideTabBar}
           onDreamLikeThis={async () => {
-            // Always fetch ai_prompt from DB — feed data may not include it
+            // Fetch ai_prompt + ai_concept from DB — feed data may not include them
             let prompt = familyPost.ai_prompt ?? '';
-            if (!prompt) {
-              const { data } = await supabase
+            let styleField: string | null = null;
+
+            // Try concept from feed data first
+            const feedConcept = familyPost.ai_concept;
+            if (feedConcept && typeof feedConcept.style === 'string') {
+              styleField = feedConcept.style;
+            }
+
+            if (!prompt || !styleField) {
+              const { data: raw } = await supabase
                 .from('uploads')
-                .select('ai_prompt')
+                .select('ai_prompt, caption')
                 .eq('id', familyPost.id)
                 .single();
-              prompt = (data?.ai_prompt as string) ?? '';
+              const row = raw as Record<string, unknown> | null;
+              if (!prompt) {
+                prompt = (row?.ai_prompt as string) || (row?.caption as string) || '';
+              }
             }
+
             setStyleRef({
               postId: familyPost.id,
               prompt,
+              styleField,
               imageUrl: familyPost.image_url,
               username: familyPost.username,
               userId: familyPost.user_id,

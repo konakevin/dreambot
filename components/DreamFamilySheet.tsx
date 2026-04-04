@@ -264,8 +264,8 @@ export function DreamFamilySheet({
                   style={s.actionButton}
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                    dismiss();
-                    setTimeout(onDreamLikeThis, 300);
+                    onClose();
+                    onDreamLikeThis();
                   }}
                   activeOpacity={0.7}
                 >

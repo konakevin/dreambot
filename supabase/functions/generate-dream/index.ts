@@ -334,6 +334,7 @@ Deno.serve(async (req) => {
   let finalPrompt: string;
 
   let logAxes: Record<string, unknown> = {};
+  let conceptJson: Record<string, unknown> | null = null;
 
   if (rawPrompt) {
     finalPrompt = rawPrompt;
@@ -354,10 +355,10 @@ Deno.serve(async (req) => {
     console.log('[generate-dream] input_image:', input_image ? 'YES' : 'NO');
     console.log('[generate-dream] prompt_mode:', promptMode);
 
-    // Inject style reference BEFORE concept generation so Haiku uses it
+    // Inject style reference BEFORE concept generation — hard override
     if (hint) {
-      conceptBrief += `\n\n${hint}`;
-      console.log('[generate-dream] Style hint injected into concept brief');
+      conceptBrief = `${hint}\n\n---\n\n${conceptBrief}`;
+      console.log('[generate-dream] Style hint injected at TOP of concept brief');
     }
 
     // If photo is attached, tell the concept generator to reimagine it
@@ -372,6 +373,7 @@ Deno.serve(async (req) => {
       const conceptRaw = await haikuJson(conceptBrief, ANTHROPIC_KEY, 600);
       console.log('[generate-dream] Haiku concept JSON:', conceptRaw.slice(0, 200));
       concept = JSON.parse(conceptRaw) as ConceptRecipe;
+      conceptJson = concept as unknown as Record<string, unknown>;
       console.log('[generate-dream] Concept style:', concept.style);
       console.log('[generate-dream] Concept palette:', concept.palette);
     } catch (err) {
@@ -564,6 +566,7 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
       JSON.stringify({
         image_url: imageUrl,
         prompt_used: finalPrompt,
+        ai_concept: conceptJson,
         dream_mode: logAxes.dreamMode ?? mode,
         archetype: logAxes.archetype ?? null,
         model: logAxes.model ?? null,

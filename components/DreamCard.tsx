@@ -40,6 +40,7 @@ export interface DreamPostItem {
   avatar_url: string | null;
   is_ai_generated: boolean;
   ai_prompt?: string | null;
+  ai_concept?: Record<string, unknown> | null;
   created_at: string;
   comment_count?: number;
   like_count?: number;

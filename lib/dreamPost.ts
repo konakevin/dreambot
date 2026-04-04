@@ -13,6 +13,7 @@ interface PostDreamOpts {
   fromWish?: string | null;
   twinOf?: string | null;
   fuseOf?: string | null;
+  aiConcept?: Record<string, unknown> | null;
 }
 
 /**
@@ -44,6 +45,7 @@ export async function postDream(opts: PostDreamOpts): Promise<string> {
       recipe_id: opts.recipeId ?? null,
       twin_of: opts.twinOf ?? null,
       fuse_of: opts.fuseOf ?? null,
+      ai_concept: opts.aiConcept ?? null,
     })
     .select('id')
     .single();

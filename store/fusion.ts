@@ -5,6 +5,8 @@ export type DreamMode = 'normal' | 'twin' | 'fuse' | 'style_ref';
 export interface FusionTarget {
   postId: string;
   prompt: string;
+  /** The style field from the concept JSON — most reliable for Dream Like This */
+  styleField: string | null;
   imageUrl: string;
   username: string;
   userId: string;
