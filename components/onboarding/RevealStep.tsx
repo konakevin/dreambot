@@ -23,7 +23,7 @@ const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), 380);
 const MAX_DREAMS = 5;
 
-type Phase = 'idle' | 'generating' | 'reveal' | 'creating';
+type Phase = 'idle' | 'generating' | 'reveal' | 'creating' | 'sparkles';
 
 interface Dream {
   url: string;
@@ -265,14 +265,74 @@ export function RevealStep({ onBack }: Props) {
         comment_count: 0,
       });
 
+      // Grant 25 welcome sparkles
+      await supabase.rpc('grant_sparkles', { p_user_id: user.id, p_amount: 25, p_reason: 'welcome_bonus' });
+
       reset();
-      Toast.show('DreamBot is ready!', 'sparkles');
-      router.replace('/(tabs)');
+      setPhase('sparkles');
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Create error:', err);
       setPhase('reveal');
       Toast.show('Something went wrong', 'close-circle');
     }
+  }
+
+  // ── Sparkles welcome ──
+  if (phase === 'sparkles') {
+    return (
+      <View style={s.root}>
+        <View style={s.centeredContent}>
+          <Text style={{ fontSize: 64, marginBottom: 8 }}>✨</Text>
+          <Text style={s.bigTitle}>25 Sparkles!</Text>
+          <Text style={[s.centeredSub, { marginBottom: 24, lineHeight: 22 }]}>
+            Welcome to DreamBot! We gave you 25 sparkles to get started.
+            Each sparkle lets you create one dream — try different modes,
+            re-dream your photos, go wild with Chaos mode.
+          </Text>
+
+          <View style={{
+            backgroundColor: colors.surface,
+            borderRadius: 16,
+            padding: 20,
+            width: '100%',
+            gap: 14,
+            borderWidth: 1,
+            borderColor: colors.border,
+          }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Ionicons name="sparkles" size={20} color={colors.accent} />
+              <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                1 Sparkle = 1 Dream
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Ionicons name="moon" size={20} color={colors.accent} />
+              <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                Free dream every week from DreamBot
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Ionicons name="bag-handle" size={20} color={colors.accent} />
+              <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                Get more sparkles anytime in the shop
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={[s.createButton, { alignSelf: 'stretch', marginTop: 24 }]}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+              router.replace('/(tabs)');
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="sparkles" size={20} color="#FFFFFF" />
+            <Text style={s.createButtonText}>Start Dreaming</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   }
 
   // ── Idle state ──
