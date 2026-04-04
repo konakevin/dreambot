@@ -757,8 +757,9 @@ export default function DreamScreen() {
               lineHeight: 17,
             }}
           >
-            Each dream is unique — DreamBot will capture the vibe and art style but put its own
-            creative spin on it. No two dreams are ever the same!
+            Every dream is one of a kind. Even the same style can produce wildly different results
+            each time — that's the magic of AI. DreamBot captures the vibe, but the final creation
+            is always a surprise.
           </Text>
 
           {/* Custom prompt input */}
