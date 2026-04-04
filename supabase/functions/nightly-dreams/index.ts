@@ -6,6 +6,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { buildPromptInput, buildRawPrompt, buildHaikuPrompt } from '../_shared/recipeEngine.ts';
 import type { Recipe } from '../_shared/recipe.ts';
 import { DEFAULT_RECIPE } from '../_shared/recipe.ts';
+import type { VibeProfile, ConceptRecipe } from '../_shared/vibeProfile.ts';
+import { buildConceptPrompt, buildPolisherPrompt, buildFallbackConcept, buildFallbackFluxPrompt, parseConceptJson } from '../_shared/vibeEngine.ts';
 
 const COST_PER_IMAGE_CENTS = 3;
 const MAX_BUDGET_CENTS = 500; // $5 default
@@ -128,51 +130,86 @@ async function generateDreamForUser(
   anthropicKey: string | undefined,
   today: string
 ) {
-  const { recipe, dream_wish: wish, wish_modifiers: mods } = user;
-  const input = buildPromptInput(recipe);
+  const { dream_wish: wish, wish_modifiers: mods } = user;
+  const profileData = user.recipe;
+  const isV2 = typeof profileData === 'object' && profileData !== null && (profileData as Record<string, unknown>).version === 2;
 
-  // Build vibe hints from wish modifiers
-  const vibeHints = mods
-    ? [mods.mood, mods.weather, mods.energy, mods.vibe].filter(Boolean)
-    : [];
-  const vibeStr = vibeHints.length > 0 ? ` The vibe should feel ${vibeHints.join(', ')}.` : '';
-
-  // Build prompt — use Haiku if available, fallback to raw
   let prompt: string;
-  const haikuBrief = wish
-    ? buildHaikuPrompt(input) +
-      `\n\nIMPORTANT: Your human wished for "${wish}". You're a tiny, loving Dream Bot who adores them — pour that affection into this dream. Their wish is the heart of the scene. Style it with their taste profile, but make it feel like a gift from someone who really knows them.${vibeStr}`
-    : buildHaikuPrompt(input);
 
-  if (anthropicKey) {
+  if (isV2 && anthropicKey) {
+    // ── VIBE PROFILE v2: Two-pass engine ──
+    const vibeProfile = profileData as unknown as VibeProfile;
+    const mode = wish ? 'nostalgia_trip' : 'dream_me';
+
+    // Pass 1: Concept Generator
+    let conceptBrief = buildConceptPrompt(vibeProfile, mode, Math.random());
+    if (wish) {
+      conceptBrief += `\n\nIMPORTANT: Your human wished for "${wish}". Make this the heart of the dream.`;
+    }
+
+    let concept: ConceptRecipe;
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 150,
-          messages: [{ role: 'user', content: haikuBrief }],
-        }),
+        headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 300, messages: [{ role: 'user', content: conceptBrief }] }),
       });
-      if (!res.ok) throw new Error('Haiku error');
+      if (!res.ok) throw new Error('Haiku concept error');
+      const data = await res.json();
+      concept = parseConceptJson(data.content?.[0]?.text ?? '');
+    } catch {
+      concept = buildFallbackConcept(vibeProfile);
+    }
+
+    // Pass 2: Prompt Polisher
+    const polisherBrief = buildPolisherPrompt(concept);
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 150, messages: [{ role: 'user', content: polisherBrief }] }),
+      });
+      if (!res.ok) throw new Error('Haiku polish error');
       const data = await res.json();
       const text = data.content?.[0]?.text?.trim() ?? '';
-      prompt = text.length >= 10 ? text : buildRawPrompt(input);
+      prompt = text.length >= 10 ? text : buildFallbackFluxPrompt(concept);
     } catch {
-      prompt = buildRawPrompt(input);
+      prompt = buildFallbackFluxPrompt(concept);
     }
   } else {
-    prompt = buildRawPrompt(input);
-  }
+    // ── LEGACY RECIPE: Single-pass engine ──
+    const recipe = (isV2 ? DEFAULT_RECIPE : profileData) as Recipe;
+    const input = buildPromptInput(recipe);
 
-  // Append wish to raw prompt if Haiku wasn't used and wish exists
-  if (!anthropicKey && wish) {
-    prompt += ` DREAM WISH: "${wish}" — this is the heart of the dream.`;
+    const vibeHints = mods ? [mods.mood, mods.weather, mods.energy, mods.vibe].filter(Boolean) : [];
+    const vibeStr = vibeHints.length > 0 ? ` The vibe should feel ${vibeHints.join(', ')}.` : '';
+
+    const haikuBrief = wish
+      ? buildHaikuPrompt(input) +
+        `\n\nIMPORTANT: Your human wished for "${wish}". You're a tiny, loving Dream Bot who adores them — pour that affection into this dream. Their wish is the heart of the scene. Style it with their taste profile, but make it feel like a gift from someone who really knows them.${vibeStr}`
+      : buildHaikuPrompt(input);
+
+    if (anthropicKey) {
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 150, messages: [{ role: 'user', content: haikuBrief }] }),
+        });
+        if (!res.ok) throw new Error('Haiku error');
+        const data = await res.json();
+        const text = data.content?.[0]?.text?.trim() ?? '';
+        prompt = text.length >= 10 ? text : buildRawPrompt(input);
+      } catch {
+        prompt = buildRawPrompt(input);
+      }
+    } else {
+      prompt = buildRawPrompt(input);
+    }
+
+    if (!anthropicKey && wish) {
+      prompt += ` DREAM WISH: "${wish}" — this is the heart of the dream.`;
+    }
   }
 
   // Generate image via Replicate Flux Dev

@@ -319,9 +319,21 @@ export default function SettingsScreen() {
           <SettingsRow
             icon="sparkles"
             label="Edit My Dream Bot"
-            onPress={() => {
+            onPress={async () => {
               const { useOnboardingStore } = require('@/store/onboarding');
+              const { isVibeProfile } = require('@/lib/migrateRecipe');
               useOnboardingStore.getState().reset();
+
+              // Load existing profile into the onboarding store
+              const { data } = await supabase
+                .from('user_recipes')
+                .select('recipe')
+                .eq('user_id', user!.id)
+                .single();
+              if (data?.recipe && isVibeProfile(data.recipe)) {
+                useOnboardingStore.getState().loadProfile(data.recipe);
+              }
+
               useOnboardingStore.getState().setIsEditing(true);
               router.push('/(onboarding)');
             }}

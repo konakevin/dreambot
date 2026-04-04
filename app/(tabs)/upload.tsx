@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  ScrollView,
   TextInput,
   StyleSheet,
   ActivityIndicator,
@@ -53,6 +54,8 @@ import {
 import { moderateText } from '@/lib/moderation';
 import { postDream, pinToFeed } from '@/lib/dreamPost';
 import { useFusionStore } from '@/store/fusion';
+import type { PromptMode } from '@/types/vibeProfile';
+import { PROMPT_MODE_TILES } from '@/constants/promptModes';
 
 type Phase = 'pick' | 'preview' | 'dreaming' | 'reveal' | 'posting';
 
@@ -75,6 +78,7 @@ export default function DreamScreen() {
   const [letBotDream, setLetBotDream] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reusePhoto, setReusePhoto] = useState(false);
+  const [selectedMode, setSelectedMode] = useState<PromptMode>('dream_me');
   const [fullscreen, setFullscreen] = useState(false);
   const dreamMode = useFusionStore((s) => s.mode);
   const fusionTarget = useFusionStore((s) => s.target);
@@ -472,7 +476,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
       if (__DEV__) console.log('[JustDream] Profile loaded, generating via Edge Function...');
 
       const result = vibeProfile
-        ? await generateFromVibeProfile(vibeProfile)
+        ? await generateFromVibeProfile(vibeProfile, { promptMode: selectedMode })
         : await generateFromRecipe(recipe!);
       const url = result.image_url;
       const p = result.prompt_used;
@@ -528,6 +532,25 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
           <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
           <Text style={s.title}>Dream</Text>
           <Text style={s.sub}>Let your Dream Bot create something new</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.modeRow}>
+            {PROMPT_MODE_TILES.map((m) => (
+              <TouchableOpacity
+                key={m.key}
+                style={[s.modePill, selectedMode === m.key && s.modePillActive]}
+                onPress={() => setSelectedMode(m.key)}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={m.icon as keyof typeof Ionicons.glyphMap}
+                  size={14}
+                  color={selectedMode === m.key ? '#FFFFFF' : colors.textSecondary}
+                />
+                <Text style={[s.modePillText, selectedMode === m.key && s.modePillTextActive]}>
+                  {m.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
           <TouchableOpacity style={s.cta} onPress={justDream} activeOpacity={0.7}>
             <Ionicons name="sparkles" size={20} color="#FFF" />
             <Text style={s.ctaText}>Dream Now</Text>
@@ -862,6 +885,15 @@ const s = StyleSheet.create({
   loadingMascot: { width: 140, height: 140, borderRadius: 28, marginBottom: 8 },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', textAlign: 'center' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
+  modeRow: { gap: 8, paddingHorizontal: 4, marginBottom: 16, justifyContent: 'center' },
+  modePill: {
+    flexDirection: 'row', alignItems: 'center', gap: 5,
+    paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20,
+    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border,
+  },
+  modePillActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  modePillText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
+  modePillTextActive: { color: '#FFFFFF' },
   cta: {
     flexDirection: 'row',
     alignItems: 'center',
