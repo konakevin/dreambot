@@ -215,10 +215,20 @@ export function FullScreenFeed({
           uploadId={familyPost.id}
           isAiGenerated={familyPost.is_ai_generated}
           hideTabBar={hideTabBar}
-          onDreamLikeThis={() => {
+          onDreamLikeThis={async () => {
+            // Fetch ai_prompt on-demand if not available from feed
+            let prompt = familyPost.ai_prompt ?? familyPost.caption ?? '';
+            if (!prompt) {
+              const { data } = await supabase
+                .from('uploads')
+                .select('ai_prompt')
+                .eq('id', familyPost.id)
+                .single();
+              prompt = (data?.ai_prompt as string) ?? '';
+            }
             setStyleRef({
               postId: familyPost.id,
-              prompt: familyPost.ai_prompt ?? familyPost.caption ?? '',
+              prompt,
               imageUrl: familyPost.image_url,
               username: familyPost.username,
               userId: familyPost.user_id,

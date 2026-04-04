@@ -279,14 +279,28 @@ export default function DreamScreen() {
           throw new Error(modResult.reason ?? 'Prompt contains inappropriate content');
         }
         // User wrote their own prompt — send it directly with the photo
+        const photoStyleHint =
+          isStyleRef && fusionTarget?.prompt
+            ? `. STYLE TO COPY: ${fusionTarget.prompt.slice(0, 150)}. Use this exact art medium and visual style.`
+            : '';
         result = await generateDream({
           mode: 'flux-kontext',
-          prompt: userHint.trim(),
+          prompt: userHint.trim() + photoStyleHint,
           input_image: refUrl,
         });
       } else {
         // Let DreamBot handle it — use vibe profile two-pass engine if available
         const { recipe: loadedRecipe, vibeProfile } = await loadProfile();
+        const photoRefHint =
+          isStyleRef && fusionTarget?.prompt
+            ? `STYLE TO COPY: "${fusionTarget.prompt.slice(0, 200)}". COPY the art medium, art style, color palette, lighting EXACTLY. Apply it to this photo.`
+            : undefined;
+        if (__DEV__) {
+          console.log('[PhotoDream] isStyleRef:', isStyleRef);
+          console.log('[PhotoDream] Reference prompt:', fusionTarget?.prompt?.slice(0, 100));
+          console.log('[PhotoDream] Photo style hint:', photoRefHint?.slice(0, 100));
+          console.log('[PhotoDream] Custom prompt hint:', userHint.trim() ? 'yes' : 'no');
+        }
 
         if (vibeProfile) {
           // Two-pass: generate concept from vibe profile + selected mode, send to Kontext
@@ -295,6 +309,7 @@ export default function DreamScreen() {
             vibe_profile: vibeProfile,
             prompt_mode: selectedMode,
             input_image: refUrl,
+            hint: photoRefHint,
           });
         } else {
           // Legacy recipe path
@@ -576,6 +591,12 @@ export default function DreamScreen() {
           isStyleRef && fusionTarget?.prompt
             ? `STYLE TO COPY: "${fusionTarget.prompt.slice(0, 200)}". COPY the art medium, art style, color palette, lighting, and visual treatment from this reference EXACTLY. But create a NEW scene using the user's interests, personal anchors, and mood from their profile above. Same look, different content.`
             : undefined;
+        if (__DEV__) {
+          console.log('[JustDream] isStyleRef:', isStyleRef);
+          console.log('[JustDream] Reference prompt:', fusionTarget?.prompt?.slice(0, 100));
+          console.log('[JustDream] Style hint:', styleHint?.slice(0, 100));
+          console.log('[JustDream] Using vibeProfile:', !!vibeProfile);
+        }
         result = vibeProfile
           ? await generateFromVibeProfile(vibeProfile, {
               promptMode: selectedMode,
@@ -636,9 +657,16 @@ export default function DreamScreen() {
     setDreamAlbum([]);
     setActiveIndex(0);
     setUserHint('');
+    setCustomPrompt('');
+    setSelectedMode('dream_me');
+    setReDreamCurrent(false);
+    setReusePhoto(false);
     setError(null);
     setPosting(false);
     setDreaming(false);
+    setCachedRecipe(null);
+    setCachedVibeProfile(null);
+    clearDreamMode();
     imgOpacity.value = 0;
     imgScale.value = 0.85;
   }
