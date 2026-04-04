@@ -265,8 +265,24 @@ export function RevealStep({ onBack }: Props) {
         comment_count: 0,
       });
 
-      // Grant 25 welcome sparkles
-      await supabase.rpc('grant_sparkles', { p_user_id: user.id, p_amount: 25, p_reason: 'welcome_bonus' });
+      // Grant 25 welcome sparkles (check balance first to avoid double-grant on retry)
+      const { data: balanceCheck } = await supabase
+        .from('users')
+        .select('sparkle_balance')
+        .eq('id', user.id)
+        .single();
+      if ((balanceCheck?.sparkle_balance ?? 0) < 25) {
+        await supabase.rpc('grant_sparkles', { p_user_id: user.id, p_amount: 25, p_reason: 'welcome_bonus' });
+      }
+
+      // Send welcome notification from DreamBot
+      await supabase.from('notifications').insert({
+        recipient_id: user.id,
+        actor_id: user.id,
+        type: 'dream_generated',
+        upload_id: insertedRow?.id ?? null,
+        body: 'dream:Hey, it\'s me, DreamBot. Just wanted to say — I\'m really glad you\'re here. I gave you 25 sparkles to play with. Go make something beautiful. Sweet dreams tonight.',
+      });
 
       reset();
       setPhase('sparkles');
