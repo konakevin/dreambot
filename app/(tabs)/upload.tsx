@@ -1085,8 +1085,8 @@ const s = StyleSheet.create({
   ctaDisabled: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   ctaTextDisabled: { color: colors.textSecondary },
   footer: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 80, gap: 12 },
-  previewWrap: { flex: 1, paddingHorizontal: 24, alignItems: 'center', gap: 20 },
-  previewImg: { width: PREVIEW_WIDTH, height: PREVIEW_WIDTH * 1.2, borderRadius: 16 },
+  previewWrap: { paddingHorizontal: 24, alignItems: 'center', gap: 12 },
+  previewImg: { width: PREVIEW_WIDTH * 0.7, height: PREVIEW_WIDTH * 0.85, borderRadius: 16 },
   toggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
