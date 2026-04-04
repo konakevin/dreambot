@@ -255,53 +255,30 @@ export default function DreamScreen() {
           input_image: refUrl,
         });
       } else {
-        // Let DreamBot handle it via recipe/profile + Haiku enhancement (all server-side)
-        const { recipe: loadedRecipe } = await loadProfile();
-        const recipe = loadedRecipe ?? DEFAULT_RECIPE;
-        const input = buildPromptInput(recipe);
-        const scene = [input.eraKeywords, input.settingKeywords, input.sceneAtmosphere]
-          .filter(Boolean)
-          .join(', ');
-        const style = [input.mood, input.lighting, input.colorKeywords, input.weirdnessModifier]
-          .filter(Boolean)
-          .join(', ');
-        const tags = input.personalityTags.join(', ');
-        const hint = userHint.trim();
+        // Let DreamBot handle it — use vibe profile two-pass engine if available
+        const { recipe: loadedRecipe, vibeProfile } = await loadProfile();
 
-        const haikuRequest = `Write a 40-word max dream reimagining prompt. This is NOT a filter or style transfer — it's a full creative reimagining. The photo is just inspiration, not something to preserve.
-
-DREAM BOT PERSONALITY:
-- Medium/Style: ${input.medium}
-- Mood: ${input.mood}
-- Lighting: ${input.lighting}
-- Colors: ${input.colorKeywords || 'vivid'}
-- Scene/Setting: ${scene || 'creative setting'}
-- Personality: ${tags || 'expressive'}
-${input.spiritAppears && input.spiritCompanion ? `- Companion: small ${input.spiritCompanion.replace(/_/g, ' ')} somewhere` : ''}
-
-${
-  hint
-    ? `USER HINT: "${hint}"
-
-The user typed this hint. Figure out their INTENT and weave it into the dream.`
-    : ''
-}
-
-IMPORTANT RULES:
-- If the photo has a person/face, DO NOT just apply a filter to their face. Instead, reimagine them as a character in a completely new scene using the medium above.
-- Transform the photo into something the original photographer could never have taken. Make it a DREAM, not an edit.
-- Change the environment, add fantastical elements, alter reality.
-
-FORMAT: "[medium]. [reimagined scene with fantastical elements]. [mood + lighting + colors]."
-NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`;
-
-        const fallback = `Reimagine this image as ${input.medium}. Transform into a fantastical dream scene, ${style}. ${hint ? `Theme: ${hint}.` : ''} No filters, full creative reimagining.`;
-        result = await generateDream({
-          mode: 'flux-kontext',
-          haiku_brief: haikuRequest,
-          haiku_fallback: fallback,
-          input_image: refUrl,
-        });
+        if (vibeProfile) {
+          // Two-pass: generate concept from vibe profile + selected mode, send to Kontext
+          result = await generateDream({
+            mode: 'flux-kontext',
+            vibe_profile: vibeProfile,
+            prompt_mode: selectedMode,
+            input_image: refUrl,
+          });
+        } else {
+          // Legacy recipe path
+          const recipe = loadedRecipe ?? DEFAULT_RECIPE;
+          const input = buildPromptInput(recipe);
+          const style = [input.mood, input.lighting, input.colorKeywords].filter(Boolean).join(', ');
+          const fallback = `Reimagine this image as ${input.medium}. Transform into a fantastical dream scene, ${style}. No filters, full creative reimagining.`;
+          result = await generateDream({
+            mode: 'flux-kontext',
+            haiku_brief: `Reimagine this photo as ${input.medium}. Create a full creative reimagining — not a filter. ${style}. Output ONLY the prompt, max 40 words.`,
+            haiku_fallback: fallback,
+            input_image: refUrl,
+          });
+        }
       }
 
       const url = result.image_url;
@@ -626,9 +603,9 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
               <Ionicons name="images" size={18} color={colors.textPrimary} />
               <Text style={s.ctaSecondaryText}>Dream a Photo</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[s.cta, { flex: 1 }]} onPress={justDream} activeOpacity={0.7}>
+            <TouchableOpacity style={[s.ctaHalf, { backgroundColor: colors.accent }]} onPress={justDream} activeOpacity={0.7}>
               <Ionicons name="sparkles" size={18} color="#FFF" />
-              <Text style={s.ctaText}>{customPrompt.trim() ? 'Dream This' : 'Dream'}</Text>
+              <Text style={[s.ctaSecondaryText, { color: '#FFFFFF' }]}>{customPrompt.trim() ? 'Dream This' : 'Dream'}</Text>
             </TouchableOpacity>
           </View>
         </View>

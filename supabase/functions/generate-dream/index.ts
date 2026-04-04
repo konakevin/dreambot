@@ -339,7 +339,12 @@ Deno.serve(async (req) => {
 
     // Pass 1: Concept Generator
     let concept: ConceptRecipe;
-    const conceptBrief = buildConceptPrompt(vibeProfile, promptMode, Math.random());
+    let conceptBrief = buildConceptPrompt(vibeProfile, promptMode, Math.random());
+
+    // If photo is attached, tell the concept generator to reimagine it
+    if (input_image) {
+      conceptBrief += `\n\nIMPORTANT: This is a PHOTO REIMAGINING. The user uploaded a photo. Your concept should reimagine the photo as a full creative dream — not apply a filter. Transform the scene, change the environment, add fantastical elements. The photo is inspiration, not something to preserve.`;
+    }
     try {
       const conceptRaw = await enhanceViaHaiku(conceptBrief, '', ANTHROPIC_KEY, 300);
       concept = parseConceptJson(conceptRaw);
