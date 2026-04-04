@@ -78,6 +78,7 @@ export default function DreamScreen() {
   const [error, setError] = useState<string | null>(null);
   const [reusePhoto, setReusePhoto] = useState(false);
   const [reDreamCurrent, setReDreamCurrent] = useState(false);
+  const photoFromUpload = useRef(false);
   const [selectedMode, setSelectedMode] = useState<PromptMode>('dream_me');
   const [customPrompt, setCustomPrompt] = useState('');
   const [fullscreen, setFullscreen] = useState(false);
@@ -177,6 +178,7 @@ export default function DreamScreen() {
       });
       setPhotoBase64(media.data ?? null);
       setPhotoUri(media.path);
+      photoFromUpload.current = true;
       setPhase('preview');
       setDreamAlbum([]);
       setActiveIndex(0);
@@ -520,6 +522,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
     setPhase('pick');
     setPhotoUri(null);
     setPhotoBase64(null);
+    photoFromUpload.current = false;
     setDreamAlbum([]);
     setActiveIndex(0);
     setUserHint('');
@@ -934,7 +937,7 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
               Re-dream this image
             </Text>
           </TouchableOpacity>
-          {photoUri && (
+          {photoFromUpload.current && (
             <TouchableOpacity
               style={s.reuseRow}
               onPress={() => { setReusePhoto(!reusePhoto); if (!reusePhoto) setReDreamCurrent(false); }}
