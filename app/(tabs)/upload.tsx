@@ -764,14 +764,6 @@ NO filters. NO subtle edits. Full creative reimagining. Output ONLY the prompt.`
                     contentFit="cover"
                     transition={300}
                   />
-                  {/* Dream mode label */}
-                  {item.dreamMode && (
-                    <View style={s.dreamModeLabel}>
-                      <Text style={s.dreamModeLabelText}>
-                        {item.dreamMode === 'archetype' ? `♫ Solo: ${(item.archetype ?? '').replace(/_/g, ' ').slice(0, 25)}` : item.dreamMode === 'beauty' ? '🎵 Song' : '🎶 Chord'}
-                      </Text>
-                    </View>
-                  )}
                   {dreaming && index === activeIndex && (
                     <View style={s.dreamingOverlay}>
                       <ActivityIndicator size="large" color={colors.accent} />
@@ -1183,7 +1175,7 @@ const s = StyleSheet.create({
     borderRadius: 20,
   },
   dreamingText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
-  dreamModeLabel: {
+  _unused_dreamModeLabel: {
     position: 'absolute',
     bottom: 8,
     left: 8,
