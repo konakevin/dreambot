@@ -273,44 +273,41 @@ export default function DreamScreen() {
 
       let result: { image_url: string; prompt_used: string };
 
-      if (userHint.trim()) {
-        // Moderate user-typed prompt — displayed as caption
+      if (isStyleRef && fusionTarget?.prompt) {
+        // Dream Like This + Photo: send reference prompt directly to Kontext — skip vibe profile
+        if (__DEV__) {
+          console.log('[PhotoDream] STYLE REF — sending reference prompt directly to Kontext');
+          console.log('[PhotoDream] Reference prompt:', fusionTarget.prompt.slice(0, 100));
+        }
+        const prompt = userHint.trim()
+          ? `${userHint.trim()}. Style: ${fusionTarget.prompt.slice(0, 150)}`
+          : fusionTarget.prompt;
+        result = await generateDream({
+          mode: 'flux-kontext',
+          prompt,
+          input_image: refUrl,
+        });
+      } else if (userHint.trim()) {
+        // User wrote their own prompt — send it directly with the photo
         const modResult = await moderateText(userHint.trim());
         if (!modResult.passed) {
           throw new Error(modResult.reason ?? 'Prompt contains inappropriate content');
         }
-        // User wrote their own prompt — send it directly with the photo
-        const photoStyleHint =
-          isStyleRef && fusionTarget?.prompt
-            ? `. STYLE TO COPY: ${fusionTarget.prompt.slice(0, 150)}. Use this exact art medium and visual style.`
-            : '';
         result = await generateDream({
           mode: 'flux-kontext',
-          prompt: userHint.trim() + photoStyleHint,
+          prompt: userHint.trim(),
           input_image: refUrl,
         });
       } else {
         // Let DreamBot handle it — use vibe profile two-pass engine if available
         const { recipe: loadedRecipe, vibeProfile } = await loadProfile();
-        const photoRefHint =
-          isStyleRef && fusionTarget?.prompt
-            ? `CRITICAL OVERRIDE — IGNORE the user's art_styles listed above. Instead, the "style" field in your JSON MUST be extracted from this reference prompt: "${fusionTarget.prompt.slice(0, 200)}". Whatever art medium appears in this reference (e.g. pencil sketch, pixel art, LEGO, watercolor) — use that EXACT medium as your "style" value. Do NOT substitute with the user's preferred styles. Apply this style to the uploaded photo.`
-            : undefined;
-        if (__DEV__) {
-          console.log('[PhotoDream] isStyleRef:', isStyleRef);
-          console.log('[PhotoDream] Reference prompt:', fusionTarget?.prompt?.slice(0, 100));
-          console.log('[PhotoDream] Photo style hint:', photoRefHint?.slice(0, 100));
-          console.log('[PhotoDream] Custom prompt hint:', userHint.trim() ? 'yes' : 'no');
-        }
 
         if (vibeProfile) {
-          // Two-pass: generate concept from vibe profile + selected mode, send to Kontext
           result = await generateDream({
             mode: 'flux-kontext',
             vibe_profile: vibeProfile,
             prompt_mode: selectedMode,
             input_image: refUrl,
-            hint: photoRefHint,
           });
         } else {
           // Legacy recipe path
@@ -583,27 +580,20 @@ export default function DreamScreen() {
         if (!modResult.passed)
           throw new Error(modResult.reason ?? 'Prompt contains inappropriate content');
         result = await generateDream({ mode: 'flux-dev', prompt: customPrompt.trim() });
+      } else if (isStyleRef && fusionTarget?.prompt) {
+        // Dream Like This: use the reference prompt directly — skip vibe profile entirely
+        if (__DEV__) {
+          console.log('[JustDream] STYLE REF — sending reference prompt directly to Flux');
+          console.log('[JustDream] Reference prompt:', fusionTarget.prompt.slice(0, 100));
+        }
+        result = await generateDream({ mode: 'flux-dev', prompt: fusionTarget.prompt });
       } else {
         if (__DEV__) console.log('[JustDream] Loading profile...');
         const { recipe, vibeProfile } = await loadProfile();
         if (__DEV__) console.log('[JustDream] Profile loaded, generating via Edge Function...');
-        // If style_ref mode, pass the reference prompt as a style hint
-        const styleHint =
-          isStyleRef && fusionTarget?.prompt
-            ? `CRITICAL OVERRIDE — IGNORE the user's art_styles listed above. Instead, the "style" field in your JSON MUST be extracted from this reference prompt: "${fusionTarget.prompt.slice(0, 200)}". Whatever art medium appears in this reference (e.g. pencil sketch, pixel art, watercolor, oil painting) — use that EXACT medium as your "style" value. Do NOT substitute with the user's preferred styles. The user's profile drives the subject, environment, and mood. The reference drives the art style ONLY.`
-            : undefined;
-        if (__DEV__) {
-          console.log('[JustDream] isStyleRef:', isStyleRef);
-          console.log('[JustDream] Reference prompt:', fusionTarget?.prompt?.slice(0, 100));
-          console.log('[JustDream] Style hint:', styleHint?.slice(0, 100));
-          console.log('[JustDream] Using vibeProfile:', !!vibeProfile);
-        }
         result = vibeProfile
-          ? await generateFromVibeProfile(vibeProfile, {
-              promptMode: selectedMode,
-              hint: styleHint,
-            })
-          : await generateFromRecipe(recipe!, { hint: styleHint });
+          ? await generateFromVibeProfile(vibeProfile, { promptMode: selectedMode })
+          : await generateFromRecipe(recipe!);
       }
       const url = result.image_url;
       const p = result.prompt_used;
