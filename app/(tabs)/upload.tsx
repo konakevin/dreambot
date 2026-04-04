@@ -715,15 +715,37 @@ export default function DreamScreen() {
           </TouchableOpacity>
         </View>
         <View style={s.center}>
-          {/* Reference image thumbnail */}
-          <Image
-            source={{ uri: fusionTarget.imageUrl }}
-            style={{ width: 120, height: 160, borderRadius: 12, marginBottom: 12 }}
-            contentFit="cover"
-          />
+          {/* Image thumbnails — reference on left, user photo on right */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+            <View style={{ alignItems: 'center' }}>
+              <Image
+                source={{ uri: fusionTarget.imageUrl }}
+                style={{ width: 100, height: 130, borderRadius: 10 }}
+                contentFit="cover"
+              />
+              <Text style={{ color: colors.textSecondary, fontSize: 11, marginTop: 4 }}>Style</Text>
+            </View>
+            {photoUri && (
+              <>
+                <Ionicons name="arrow-forward" size={20} color={colors.accent} />
+                <View style={{ alignItems: 'center' }}>
+                  <Image
+                    source={{ uri: photoUri }}
+                    style={{ width: 100, height: 130, borderRadius: 10 }}
+                    contentFit="cover"
+                  />
+                  <Text style={{ color: colors.textSecondary, fontSize: 11, marginTop: 4 }}>
+                    Your photo
+                  </Text>
+                </View>
+              </>
+            )}
+          </View>
+
           <Text style={s.sub}>
-            Dreaming in {fusionTarget.username}
-            {"'"}s style
+            {photoUri
+              ? `Applying ${fusionTarget.username}'s style to your photo`
+              : `Dreaming in ${fusionTarget.username}'s style`}
           </Text>
           <Text
             style={{
@@ -763,13 +785,36 @@ export default function DreamScreen() {
 
           {/* Action buttons */}
           <View style={[s.pickButtonRow, { marginTop: 16, alignSelf: 'stretch' }]}>
-            <TouchableOpacity style={s.ctaHalf} onPress={pickPhoto} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={s.ctaHalf}
+              onPress={async () => {
+                try {
+                  const media = await ImageCropPicker.openPicker({
+                    mediaType: 'photo',
+                    cropping: false,
+                    forceJpg: true,
+                    compressImageQuality: 0.9,
+                    includeBase64: true,
+                  });
+                  setPhotoBase64(media.data ?? null);
+                  setPhotoUri(media.path);
+                  photoFromUpload.current = true;
+                } catch {}
+              }}
+              activeOpacity={0.7}
+            >
               <Ionicons name="images" size={18} color={colors.textPrimary} />
-              <Text style={s.ctaSecondaryText}>Use a Photo</Text>
+              <Text style={s.ctaSecondaryText}>{photoUri ? 'Change Photo' : 'Use a Photo'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[s.ctaHalf, { backgroundColor: colors.accent }]}
-              onPress={justDream}
+              onPress={() => {
+                if (photoUri && photoBase64) {
+                  dream();
+                } else {
+                  justDream();
+                }
+              }}
               activeOpacity={0.7}
             >
               <Ionicons name="sparkles" size={18} color="#FFF" />
