@@ -6,7 +6,7 @@
  * fullscreen preview with pinch-to-zoom, dreaming overlay.
  */
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -27,7 +27,10 @@ import Animated, {
   withTiming,
   withSequence,
 } from 'react-native-reanimated';
+import { Share } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { Toast } from '@/components/Toast';
 import type { DreamAlbumItem } from '@/hooks/useDreamAlbum';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -118,6 +121,15 @@ export function DreamReveal({
     ],
   }));
 
+  const shareImage = useCallback(async (url: string) => {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      await Share.share({ url, message: 'Check out my dream!' });
+    } catch {
+      Toast.show('Could not share', 'close-circle');
+    }
+  }, []);
+
   function openFullscreen(index: number) {
     onIndexChange(index);
     setFullscreen(true);
@@ -162,6 +174,8 @@ export function DreamReveal({
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => openFullscreen(index)}
+              onLongPress={() => shareImage(item.url)}
+              delayLongPress={500}
               style={{ width: PREVIEW_WIDTH, marginRight: ITEM_SPACING }}
             >
               <Animated.View

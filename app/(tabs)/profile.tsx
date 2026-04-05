@@ -9,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -52,7 +53,7 @@ export default function ProfileScreen() {
     }
   }, [profileResetToken]);
 
-  const { data: profile } = usePublicProfile(user?.id ?? '');
+  const { data: profile, refetch: refetchProfile, isRefetching } = usePublicProfile(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(user?.id ?? '');
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(user?.id ?? '');
   const { data: followingIds = new Set<string>() } = useFollowingIds();
@@ -61,6 +62,12 @@ export default function ProfileScreen() {
   const { data: pendingRequests = [] } = usePendingRequests();
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
+
+  const handleRefresh = useCallback(() => {
+    refetchProfile();
+    queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+    queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+  }, [refetchProfile, queryClient]);
 
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -175,6 +182,13 @@ export default function ProfileScreen() {
         <FlatList
           key="friends"
           data={sections}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={handleRefresh}
+              tintColor={colors.accent}
+            />
+          }
           keyExtractor={(item) => {
             if (item.type === 'request') return `req-${item.data.requesterId}`;
             if (item.type === 'friend') return `fr-${item.data.id}`;
@@ -222,6 +236,13 @@ export default function ProfileScreen() {
       <FlatList<FollowUser>
         key="users"
         data={listData}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={handleRefresh}
+            tintColor={colors.accent}
+          />
+        }
         keyExtractor={(item) => item.id}
         ListHeaderComponent={header}
         ListEmptyComponent={

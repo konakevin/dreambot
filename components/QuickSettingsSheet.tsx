@@ -120,6 +120,10 @@ function PillRow<T extends string>({
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={s.pillScroll}
+      nestedScrollEnabled
+      directionalLockEnabled
+      scrollsToTop={false}
+      bounces={false}
     >
       {tiles.map((tile) => {
         const active = selected.includes(tile.key);
@@ -154,14 +158,15 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((s) => s.user);
   const [profile, setProfile] = useState<VibeProfile | null>(null);
-  const [loaded, setLoaded] = useState(false);
   const progress = useSharedValue(0);
   const dragY = useSharedValue(0);
   const closing = useRef(false);
 
-  // Load profile when sheet opens
+  // Load profile and animate when sheet opens
   useEffect(() => {
-    if (!visible || !user || loaded) return;
+    if (!visible || !user) return;
+    closing.current = false;
+    progress.value = withTiming(1, { duration: 300 });
     (async () => {
       const { data } = await supabase
         .from('user_recipes')
@@ -172,40 +177,24 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
       if (isVibeProfile(raw)) {
         setProfile(raw);
       }
-      setLoaded(true);
     })();
-  }, [visible, user, loaded]);
-
-  // Animate in
-  useEffect(() => {
-    if (visible) {
-      closing.current = false;
-      setLoaded(false);
-      progress.value = withTiming(1, { duration: 300 });
-    }
   }, [visible]);
 
-  const dismiss = useCallback(() => {
+  const dismiss = useCallback(async () => {
     if (closing.current) return;
     closing.current = true;
 
-    // Auto-save on dismiss
+    // Save before closing so next dream picks up changes immediately
     if (profile && user) {
-      supabase
-        .from('user_recipes')
-        .upsert(
-          {
-            user_id: user.id,
-            recipe: JSON.parse(JSON.stringify(profile)),
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'user_id' }
-        )
-        .then(({ error }) => {
-          if (!error) {
-            Toast.show('Settings saved', 'checkmark-circle');
-          }
-        });
+      const { error } = await supabase.from('user_recipes').upsert(
+        {
+          user_id: user.id,
+          recipe: JSON.parse(JSON.stringify(profile)),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      );
+      if (!error) Toast.show('Settings saved', 'checkmark-circle');
     }
 
     progress.value = withTiming(0, { duration: 250 }, () => {
@@ -276,64 +265,67 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
         <TouchableOpacity style={StyleSheet.absoluteFill} onPress={dismiss} activeOpacity={1} />
       </Animated.View>
 
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[s.sheet, { height: SHEET_HEIGHT }, sheetStyle]}>
+      <Animated.View style={[s.sheet, { height: SHEET_HEIGHT }, sheetStyle]}>
+        <GestureDetector gesture={panGesture}>
           <View style={s.handleRow}>
             <View style={s.handle} />
           </View>
+        </GestureDetector>
 
-          <View style={s.sheetHeader}>
-            <Text style={s.sheetTitle}>Your DreamBot</Text>
-            <TouchableOpacity onPress={dismiss} hitSlop={12}>
-              <Ionicons name="checkmark" size={24} color={colors.accent} />
-            </TouchableOpacity>
-          </View>
-          <Text style={s.sheetHint}>Tweak these settings to change how your dreams look</Text>
+        <View style={s.sheetHeader}>
+          <Text style={s.sheetTitle}>Your DreamBot</Text>
+          <TouchableOpacity onPress={dismiss} hitSlop={12}>
+            <Ionicons name="checkmark" size={24} color={colors.accent} />
+          </TouchableOpacity>
+        </View>
+        <Text style={s.sheetHint}>Tweak these settings to change how your dreams look</Text>
 
-          <ScrollView
-            style={s.scrollArea}
-            contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
-            showsVerticalScrollIndicator={false}
-          >
-            {profile ? (
-              <>
-                {/* Mood sliders */}
-                <Text style={s.sectionTitle}>Mood</Text>
-                <View style={s.slidersWrap}>
-                  {SLIDERS.map((sl) => (
-                    <MiniSlider
-                      key={sl.axis}
-                      label={sl.label}
-                      left={sl.left}
-                      right={sl.right}
-                      value={profile.moods[sl.axis]}
-                      onChange={(v) => setMood(sl.axis, v)}
-                    />
-                  ))}
-                </View>
+        <ScrollView
+          style={s.scrollArea}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled
+          canCancelContentTouches={false}
+          directionalLockEnabled
+        >
+          {profile ? (
+            <>
+              {/* Mood sliders */}
+              <Text style={s.sectionTitle}>Mood</Text>
+              <View style={s.slidersWrap}>
+                {SLIDERS.map((sl) => (
+                  <MiniSlider
+                    key={sl.axis}
+                    label={sl.label}
+                    left={sl.left}
+                    right={sl.right}
+                    value={profile.moods[sl.axis]}
+                    onChange={(v) => setMood(sl.axis, v)}
+                  />
+                ))}
+              </View>
 
-                {/* Aesthetics */}
-                <Text style={s.sectionTitle}>Aesthetics</Text>
-                <PillRow
-                  tiles={AESTHETIC_TILES}
-                  selected={profile.aesthetics}
-                  onToggle={toggleAesthetic}
-                />
+              {/* Aesthetics */}
+              <Text style={s.sectionTitle}>Aesthetics</Text>
+              <PillRow
+                tiles={AESTHETIC_TILES}
+                selected={profile.aesthetics}
+                onToggle={toggleAesthetic}
+              />
 
-                {/* Art styles */}
-                <Text style={s.sectionTitle}>Art Styles</Text>
-                <PillRow
-                  tiles={ART_STYLE_TILES}
-                  selected={profile.art_styles}
-                  onToggle={toggleArtStyle}
-                />
-              </>
-            ) : (
-              <Text style={s.loadingText}>Loading your settings...</Text>
-            )}
-          </ScrollView>
-        </Animated.View>
-      </GestureDetector>
+              {/* Art styles */}
+              <Text style={s.sectionTitle}>Art Styles</Text>
+              <PillRow
+                tiles={ART_STYLE_TILES}
+                selected={profile.art_styles}
+                onToggle={toggleArtStyle}
+              />
+            </>
+          ) : (
+            <Text style={s.loadingText}>Loading your settings...</Text>
+          )}
+        </ScrollView>
+      </Animated.View>
     </View>
   );
 }

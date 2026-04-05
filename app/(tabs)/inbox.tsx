@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -255,7 +256,8 @@ function NotificationRow({
 }
 
 export default function InboxScreen() {
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInbox();
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, refetch, isRefetching } =
+    useInbox();
   const { mutate: markSeen } = useMarkShareSeen();
   const { mutate: deleteNotification } = useDeleteShare();
   const { mutate: markAllSeen, isPending: markingAll } = useMarkAllSeen();
@@ -417,6 +419,13 @@ export default function InboxScreen() {
       <FlatList
         data={inbox}
         keyExtractor={(item) => item.id}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => refetch()}
+            tintColor={colors.accent}
+          />
+        }
         renderItem={({ item }) => (
           <NotificationRow
             item={item}

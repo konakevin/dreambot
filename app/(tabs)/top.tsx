@@ -79,7 +79,7 @@ export default function ExploreScreen() {
   const chipScrollRef = useRef<ScrollView>(null);
   const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
 
-  const { data, isLoading } = useCategoryDreams(selected);
+  const { data, isLoading, refetch, isRefetching } = useCategoryDreams(selected);
   const posts = data?.pages.flat() ?? [];
 
   function handleChipScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
@@ -97,6 +97,8 @@ export default function ExploreScreen() {
       <FullScreenFeed
         posts={posts}
         isLoading={isLoading}
+        isRefreshing={isRefetching}
+        onRefresh={() => refetch()}
         listRef={listRef}
         ListEmptyComponent={
           <View style={s.empty}>

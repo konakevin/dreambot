@@ -162,7 +162,7 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isRefetching } =
     useDreamFeed(activeTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
@@ -194,6 +194,8 @@ export default function HomeScreen() {
       <FullScreenFeed
         posts={posts}
         isLoading={isLoading}
+        isRefreshing={isRefetching}
+        onRefresh={() => refetch()}
         listRef={listRef}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) fetchNextPage();

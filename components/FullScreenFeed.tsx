@@ -7,7 +7,14 @@
  */
 
 import { useCallback, useRef, useState } from 'react';
-import { View, FlatList, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
@@ -32,6 +39,8 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 interface Props {
   posts: DreamPostItem[];
   isLoading?: boolean;
+  isRefreshing?: boolean;
+  onRefresh?: () => void;
   onEndReached?: () => void;
   /** Index to scroll to on mount (for album deep links) */
   initialIndex?: number;
@@ -50,6 +59,8 @@ interface Props {
 export function FullScreenFeed({
   posts,
   isLoading,
+  isRefreshing,
+  onRefresh,
   onEndReached,
   initialIndex = 0,
   onIndexChange,
@@ -167,6 +178,15 @@ export function FullScreenFeed({
         viewabilityConfig={viewabilityConfig}
         onEndReached={onEndReached}
         onEndReachedThreshold={2}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl
+              refreshing={!!isRefreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.accent}
+            />
+          ) : undefined
+        }
         renderItem={({ item }) => (
           <DreamCard
             item={item}

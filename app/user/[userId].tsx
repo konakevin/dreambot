@@ -6,6 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
   Animated,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -46,7 +47,12 @@ export default function PublicProfileScreen() {
 
   const [activeTab, setActiveTab] = useState<Tab>('posts');
 
-  const { data: profile, isLoading: profileLoading } = usePublicProfile(userId);
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    refetch: refetchProfile,
+    isRefetching,
+  } = usePublicProfile(userId);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(userId);
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(userId);
   const { data: followingIds = new Set<string>() } = useFollowingIds();
@@ -244,6 +250,13 @@ export default function PublicProfileScreen() {
             key="friends"
             data={friendsList}
             keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetching}
+                onRefresh={() => refetchProfile()}
+                tintColor={colors.accent}
+              />
+            }
             ListHeaderComponent={header}
             ListEmptyComponent={
               <View style={styles.center}>
@@ -279,6 +292,13 @@ export default function PublicProfileScreen() {
           key="users"
           data={listData}
           keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={() => refetchProfile()}
+              tintColor={colors.accent}
+            />
+          }
           ListHeaderComponent={header}
           ListEmptyComponent={
             <View style={styles.center}>
