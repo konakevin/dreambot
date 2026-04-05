@@ -16,11 +16,22 @@ import type { Recipe } from '../_shared/recipe.ts';
 import type { VibeProfile, PromptMode, ConceptRecipe } from '../_shared/vibeProfile.ts';
 import {
   buildConceptPrompt,
+  buildConceptPromptV2,
   buildPolisherPrompt,
+  buildPolisherPromptV2,
   buildFallbackConcept,
   buildFallbackFluxPrompt,
   parseConceptJson,
 } from '../_shared/vibeEngine.ts';
+import {
+  DREAM_MEDIUMS,
+  DREAM_VIBES,
+  CURATED_MEDIUMS,
+  CURATED_VIBES,
+  randomMedium,
+  randomVibe,
+  buildSubjectInventionPrompt,
+} from '../_shared/dreamEngine.ts';
 
 const MAX_DAILY_GENERATIONS = 50;
 
@@ -195,8 +206,12 @@ interface RequestBody {
   skip_enhance?: boolean;
   /** Vibe Profile v2 — two-pass prompt generation */
   vibe_profile?: import('../_shared/vibeProfile.ts').VibeProfile;
-  /** Prompt mode for vibe profile generation */
+  /** Prompt mode for vibe profile generation (legacy) */
   prompt_mode?: import('../_shared/vibeProfile.ts').PromptMode;
+  /** V2 engine — curated medium key (e.g., 'watercolor', 'pixel_art', 'surprise_me') */
+  medium_key?: string;
+  /** V2 engine — curated vibe key (e.g., 'cinematic', 'epic', 'surprise_me') */
+  vibe_key?: string;
 }
 
 Deno.serve(async (req) => {
@@ -269,6 +284,8 @@ Deno.serve(async (req) => {
     recipe,
     vibe_profile,
     prompt_mode,
+    medium_key,
+    vibe_key,
     prompt: rawPrompt,
     hint,
     input_image,
@@ -342,8 +359,112 @@ Deno.serve(async (req) => {
   } else if (haiku_brief) {
     finalPrompt = await enhanceViaHaiku(haiku_brief, haiku_fallback ?? haiku_brief, ANTHROPIC_KEY);
     lap('prompt-haiku-brief');
+  } else if (medium_key || vibe_key) {
+    // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
+    const vibeProfile = vibe_profile as VibeProfile | undefined;
+
+    // Resolve medium
+    let medium = DREAM_MEDIUMS.find((m) => m.key === medium_key);
+    if (!medium || medium.key === 'surprise_me') medium = randomMedium();
+    if (medium.key === 'my_mediums' && vibeProfile && vibeProfile.art_styles.length > 0) {
+      // Pick a random style from user's saved art styles and find a matching curated medium
+      const userStyle =
+        vibeProfile.art_styles[Math.floor(Math.random() * vibeProfile.art_styles.length)];
+      const matched = CURATED_MEDIUMS.find((m) => m.key === userStyle);
+      if (matched) medium = matched;
+      // If no match, keep the random one
+    }
+
+    // Resolve vibe
+    let vibe = DREAM_VIBES.find((v) => v.key === vibe_key);
+    if (!vibe || vibe.key === 'surprise_me') vibe = randomVibe();
+    if (vibe.key === 'my_vibes' && vibeProfile) {
+      // Build a personalized vibe directive from mood sliders
+      const moods = vibeProfile.moods;
+      const parts: string[] = [];
+      if (moods.peaceful_chaotic < 0.3) parts.push('Deeply peaceful and serene atmosphere.');
+      else if (moods.peaceful_chaotic > 0.7)
+        parts.push('Intense, chaotic energy vibrating through the scene.');
+      if (moods.cute_terrifying < 0.3) parts.push('Warm, cute, and inviting tone.');
+      else if (moods.cute_terrifying > 0.7) parts.push('Dark, unsettling, and haunting mood.');
+      if (moods.minimal_maximal < 0.3)
+        parts.push('Clean minimal composition with vast negative space.');
+      else if (moods.minimal_maximal > 0.7)
+        parts.push('Lush maximalist detail in every corner of the frame.');
+      if (moods.realistic_surreal < 0.3) parts.push('Grounded in photographic reality.');
+      else if (moods.realistic_surreal > 0.7)
+        parts.push('Deeply surreal — impossible geometry, dreamlike distortions.');
+      if (vibeProfile.personal_anchors.dream_vibe) {
+        parts.push(`The overall feeling should be: "${vibeProfile.personal_anchors.dream_vibe}"`);
+      }
+      vibe = { key: 'my_vibes', label: 'My Vibes', directive: parts.join(' ') };
+    }
+
+    console.log('[generate-dream] V2 engine — medium:', medium.key, 'vibe:', vibe.key);
+
+    // Pass 0: Subject invention (only when no user prompt)
+    let userSubject = rawPrompt ?? hint ?? '';
+    if (!userSubject && vibeProfile) {
+      try {
+        const subjectPrompt = buildSubjectInventionPrompt(
+          vibeProfile.interests,
+          vibeProfile.aesthetics,
+          vibeProfile.spirit_companion
+        );
+        userSubject = await enhanceViaHaiku(subjectPrompt, '', ANTHROPIC_KEY, 60);
+        console.log('[generate-dream] Invented subject:', userSubject);
+      } catch {
+        userSubject = 'a mysterious dreamscape with unexpected elements';
+      }
+      lap('subject-invention');
+    }
+
+    // Pass 1: Concept Generator
+    let concept: ConceptRecipe;
+    const conceptBrief = buildConceptPromptV2({
+      mediumDirective: medium.directive!,
+      vibeDirective: vibe.directive!,
+      fluxFragment: medium.fluxFragment!,
+      userPrompt: userSubject || undefined,
+      profile: vibeProfile,
+    });
+
+    try {
+      const conceptRaw = await haikuJson(conceptBrief, ANTHROPIC_KEY, 600);
+      console.log('[generate-dream] V2 concept JSON:', conceptRaw.slice(0, 200));
+      concept = JSON.parse(conceptRaw) as ConceptRecipe;
+      conceptJson = concept as unknown as Record<string, unknown>;
+    } catch (err) {
+      console.warn('[generate-dream] V2 concept parse failed:', (err as Error).message);
+      concept = vibeProfile
+        ? buildFallbackConcept(vibeProfile)
+        : {
+            subject: userSubject || 'a mysterious dreamscape',
+            environment: 'an atmospheric setting',
+            lighting: 'dramatic golden hour light',
+            camera: '35mm wide angle',
+            style: medium.fluxFragment?.split(',')[0] ?? 'digital art',
+            palette: 'vivid and expressive',
+            twist: 'unexpected reflections',
+            composition: 'center subject',
+            mood: 'dreamlike wonder',
+          };
+    }
+
+    // Pass 2: Prompt Polisher
+    const polisherBrief = buildPolisherPromptV2(concept, medium.fluxFragment!);
+    try {
+      const polished = await enhanceViaHaiku(polisherBrief, '', ANTHROPIC_KEY, 150);
+      finalPrompt = polished.length >= 10 ? polished : buildFallbackFluxPrompt(concept);
+    } catch {
+      finalPrompt = buildFallbackFluxPrompt(concept);
+    }
+
+    console.log('[generate-dream] V2 final prompt:', finalPrompt.slice(0, 150));
+    logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2' };
+    lap('v2-engine-done');
   } else if (vibe_profile) {
-    // TWO-PASS VIBE ENGINE
+    // LEGACY TWO-PASS VIBE ENGINE
     const vibeProfile = vibe_profile as VibeProfile;
     const promptMode = (prompt_mode as PromptMode) ?? 'dream_me';
 

@@ -30,8 +30,12 @@ interface GenerateDreamOpts {
   skip_enhance?: boolean;
   /** Vibe Profile v2 — two-pass prompt generation */
   vibe_profile?: VibeProfile;
-  /** Prompt mode for vibe profile generation */
+  /** Prompt mode for vibe profile generation (legacy) */
   prompt_mode?: PromptMode;
+  /** V2 engine — curated medium key */
+  medium_key?: string;
+  /** V2 engine — curated vibe key */
+  vibe_key?: string;
 }
 
 interface GenerateDreamResult {
@@ -119,13 +123,15 @@ export async function generateFromRecipe(
  */
 export async function generateFromVibeProfile(
   profile: VibeProfile,
-  opts?: { hint?: string; promptMode?: PromptMode }
+  opts?: { hint?: string; promptMode?: PromptMode; mediumKey?: string; vibeKey?: string }
 ): Promise<GenerateDreamResult> {
   return generateDream({
     mode: 'flux-dev',
     vibe_profile: profile,
     prompt_mode: opts?.promptMode,
     hint: opts?.hint,
+    medium_key: opts?.mediumKey,
+    vibe_key: opts?.vibeKey,
   });
 }
 

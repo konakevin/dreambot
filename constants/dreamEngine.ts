@@ -1,0 +1,292 @@
+/**
+ * Dream Engine Categories — the curated medium and vibe definitions that power DreamBot.
+ *
+ * Each medium directive tells Haiku how a master of that craft thinks.
+ * Each vibe directive shapes the mood, lighting, composition, and emotion.
+ * Combined, they produce stunning results regardless of user input.
+ *
+ * "My Mediums" / "My Vibes" = personalized from user's profile
+ * "Surprise Me" = random pick from the full curated pool
+ */
+
+// ── Types ───────────────────────────────────────────────────────────────
+
+export interface DreamMedium {
+  key: string;
+  label: string;
+  /** Creative brief for Haiku's concept generator. null = derived at runtime */
+  directive: string | null;
+  /** Technical prefix for the final Flux prompt. null = derived at runtime */
+  fluxFragment: string | null;
+}
+
+export interface DreamVibe {
+  key: string;
+  label: string;
+  /** Creative brief for Haiku's concept generator. null = derived at runtime */
+  directive: string | null;
+}
+
+// ── Mediums ─────────────────────────────────────────────────────────────
+
+export const DREAM_MEDIUMS: DreamMedium[] = [
+  {
+    key: 'my_mediums',
+    label: 'My Mediums',
+    directive: null,
+    fluxFragment: null,
+  },
+  {
+    key: 'surprise_me',
+    label: 'Surprise Me',
+    directive: null,
+    fluxFragment: null,
+  },
+  {
+    key: 'pixel_art',
+    label: 'Pixel Art',
+    directive:
+      'You are designing a scene as a pixel art master. Think SNES-era craftsmanship — every single pixel is intentional. Use a limited, harmonious color palette (16-32 colors max). Dithering for gradients. Visible pixel grid but with sophisticated color choices that create depth and atmosphere. The constraint of the medium IS the beauty — find elegance in the limitation. Think Superbrothers, Hyper Light Drifter, or Celeste. Environments should have layered parallax depth. Characters should have iconic silhouettes readable at low resolution. Lighting is achieved through palette shifts, not gradients.',
+    fluxFragment:
+      '16-bit pixel art, carefully placed pixels, limited harmonious color palette, dithered gradients, retro game aesthetic, crisp pixel edges',
+  },
+  {
+    key: 'watercolor',
+    label: 'Watercolor',
+    directive:
+      "You are a master watercolorist working wet-on-wet on cold-pressed Arches paper. Your genius is knowing when to STOP — watercolor's beauty is in what you leave unpainted. The white of the paper is your brightest light. Build transparent layers: light washes first, then richer pigment in the shadows. Let colors bloom and bleed into each other at the edges — controlled accidents are your signature. Granulating pigments (cerulean, raw umber, burnt sienna) create natural texture. Lost-and-found edges: some boundaries sharp and defined, others dissolving into nothing. The painting should look effortless, like it happened in one confident sitting.",
+    fluxFragment:
+      'Watercolor painting on textured paper, transparent layered washes, wet-on-wet blooms, soft bleeding edges, white paper glowing through, visible confident brushstrokes, granulating pigments',
+  },
+  {
+    key: 'oil_painting',
+    label: 'Oil Painting',
+    directive:
+      "You are painting in the tradition of the great oil painters — think the emotional weight of Rembrandt's light, the color boldness of Sorolla, the textural bravery of Freud. Thick impasto in the lights, thinner transparent darks. The paint itself is a character — visible palette knife marks, loaded brushstrokes that catch light on their ridges. Color mixing happens on the canvas, not just the palette — adjacent strokes of different hues vibrate against each other. Rich, warm undertones even in cool passages. The painting should feel like it has physical weight and took weeks of layered sessions.",
+    fluxFragment:
+      'Oil painting on canvas, thick impasto brushstrokes, visible palette knife texture, rich layered glazes, Rembrandt-inspired chiaroscuro lighting, warm undertones, painterly color mixing',
+  },
+  {
+    key: 'anime',
+    label: 'Anime',
+    directive:
+      "You are a top-tier anime production designer — think Makoto Shinkai's backgrounds married with Ghibli's character warmth. Clean, confident linework with varying weight (thick outlines, thin details). Flat cel-shaded color with strategic gradient shading on skin and hair. Eyes are expressive windows — large, detailed, with multiple light reflections. Backgrounds are painted with photographic detail and atmospheric perspective while characters maintain clean graphic simplicity. The contrast between detailed world and stylized characters creates the anime magic. Hair and fabric should have dynamic flow suggesting movement even in still frames.",
+    fluxFragment:
+      'Anime illustration, clean ink linework, cel-shaded coloring, expressive detailed eyes, Makoto Shinkai inspired backgrounds, dynamic hair flow, vibrant saturated colors',
+  },
+  {
+    key: 'lego',
+    label: 'LEGO',
+    directive:
+      "Everything in this scene is built entirely from LEGO bricks. Every surface, every object, every element of nature — all LEGO. Water is translucent blue bricks. Fire is orange and yellow pieces. Trees are green leaf elements on brown trunk pieces. The ground has visible studs. Characters are minifigures with painted expressions and snap-on accessories. The genius is in the creative problem-solving — how do you represent clouds, water, smoke, light with rigid plastic bricks? That constraint creates charm. Lighting should be realistic as if this is a photograph of an actual LEGO diorama on someone's table.",
+    fluxFragment:
+      'LEGO brick diorama, everything constructed from LEGO pieces, plastic studs visible on every surface, minifigure characters, photographed like a real LEGO set, soft realistic lighting',
+  },
+  {
+    key: 'claymation',
+    label: 'Claymation',
+    directive:
+      'This is a scene from a premium stop-motion animation studio — think Laika (Coraline, Kubo) or Aardman (Wallace & Gromit). Characters and objects are sculpted from smooth, matte clay with subtle fingerprint textures that remind you a human hand shaped them. Eyes are glass beads or painted spheres. Fabric textures are knitted or felted at miniature scale. Sets are handcrafted — painted plywood backdrops, miniature furniture with visible construction. Lighting is theatrical, with warm practicals and cool ambient fill. Everything has that slightly imperfect, handmade quality that makes stop-motion feel alive.',
+    fluxFragment:
+      'Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets, theatrical warm lighting, Laika Studios quality',
+  },
+  {
+    key: '3d_render',
+    label: '3D Render',
+    directive:
+      'You are a Pixar-level character designer and environment artist. Everything has that premium animated film quality — soft, rounded shapes with appealing proportions. Subsurface scattering on skin makes characters glow with life. Materials are physically accurate but stylized: glossy eyes with complex reflections, soft cloth with microfiber detail, translucent ears and fingertips. Environments are lush with volumetric lighting — god rays, atmospheric haze, warm bounce light. Color palettes are carefully art-directed, not random. Every frame should look like it could be a poster for a $200M animated feature.',
+    fluxFragment:
+      'Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, physically based materials, vibrant art-directed color palette, cinematic depth of field',
+  },
+  {
+    key: 'pencil_sketch',
+    label: 'Pencil Sketch',
+    directive:
+      "You are a master draftsman in the tradition of Da Vinci's notebooks and Sargent's charcoal portraits. Every line has purpose and confidence — no scratchy uncertainty. Build form through hatching and cross-hatching, varying the density and direction to sculpt three-dimensional volume on flat paper. Leave areas of pure white paper for your brightest highlights. The darkest values come from layered graphite compressed into velvet blacks. Smudged tones for atmospheric depth. The beauty is in the LINE — its weight, its rhythm, its economy. One confident stroke can describe an entire fold of fabric or the curve of a cheekbone.",
+    fluxFragment:
+      'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
+  },
+  {
+    key: 'neon',
+    label: 'Neon',
+    directive:
+      "This scene is lit entirely by neon — glowing tube lights, LED strips, holographic projections. The background is dark (night, deep shadow, black surfaces) so the neon POPS with maximum contrast. Colors are electric: hot pink, cyan, purple, acid green, amber. Neon light bounces off wet surfaces — rain-slicked streets, chrome, glass — creating doubled reflections and color bleeds. There's atmospheric haze or fog that makes the light beams visible. The aesthetic is premium cyberpunk meets Tokyo night photography. Every surface is a canvas for reflected neon color.",
+    fluxFragment:
+      'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
+  },
+  {
+    key: 'stained_glass',
+    label: 'Stained Glass',
+    directive:
+      "This entire scene is rendered as a grand stained glass window — the kind you'd find in a medieval cathedral but with modern subject matter. Bold black leading lines (cames) define every shape with confident graphic clarity. Each glass piece is a single jewel-tone color: ruby red, sapphire blue, emerald green, amber gold, deep purple. Light appears to come from BEHIND the glass, making everything glow with translucent luminosity. Composition should be symmetrical or radially balanced, like a rose window. Small detailed pieces in faces and focal points, larger simple pieces in backgrounds. The constraints of the medium create graphic power.",
+    fluxFragment:
+      'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight, ruby sapphire emerald amber, graphic symmetrical composition, cathedral quality',
+  },
+  {
+    key: 'comic_book',
+    label: 'Comic Book',
+    directive:
+      "You are designing a splash page for a premium graphic novel — think Mike Mignola's bold shadows, Moebius's intricate worlds, or Fiona Staples's emotional characters. Bold confident ink outlines with varying line weight — thick for silhouettes and shadows, thin for interior detail. Flat areas of saturated color with Ben-Day dot patterns in the mid-tones. Dynamic composition with dramatic angles — low shots looking up, extreme foreshortening, Dutch angles. Motion lines and speed streaks for energy. Sound effect typography integrated into the composition. The page should feel like it's bursting with kinetic energy.",
+    fluxFragment:
+      'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',
+  },
+  {
+    key: 'photography',
+    label: 'Photography',
+    directive:
+      'You are a National Geographic photographer who also shoots for Vogue — you combine documentary authenticity with artistic perfection. Shoot with a fast prime lens (50mm f/1.4 or 85mm f/1.2) for creamy bokeh that separates subject from background. Natural light is your primary tool — golden hour warmth, overcast softbox sky, or dramatic sidelighting that sculpts form. Focus is tack-sharp on the subject with everything else falling away. Composition follows the rule of thirds but breaks it when the subject demands center stage. Color grading is natural but elevated — slightly lifted shadows, rich but not oversaturated.',
+    fluxFragment:
+      'Ultra-realistic photograph, DSLR with fast prime lens, shallow depth of field, creamy bokeh background, natural golden hour lighting, tack-sharp focus, 8K resolution, editorial quality',
+  },
+  {
+    key: 'collage',
+    label: 'Collage',
+    directive:
+      'You are creating a mixed-media collage in the tradition of Hannah Hoch, Romare Bearden, and modern editorial design. Combine cut paper, torn magazine fragments, fabric swatches, vintage photographs, hand-drawn elements, and typography into a layered composition. Textures are EVERYTHING — visible paper grain, frayed edges, tape marks, ink stamps. Layer elements with deliberate overlap — some pieces in front, some behind, creating a z-depth that invites the eye to explore. Mix photographic realism with flat graphic shapes. Color comes from the found materials — a red from a magazine ad, a blue from tissue paper, a gold from wrapping paper.',
+    fluxFragment:
+      'Mixed media collage artwork, cut paper and torn magazine fragments, layered textures, visible paper grain and frayed edges, vintage ephemera, editorial design composition, handmade tactile quality',
+  },
+  {
+    key: 'embroidery',
+    label: 'Embroidery',
+    directive:
+      'Every element in this scene is rendered as if stitched by hand on fabric. Cross-stitch for flat areas with visible grid texture. Satin stitch for smooth surfaces and lettering. French knots for dots and texture points. Long-and-short stitch for gradients and shading. The fabric background (natural linen or cotton) is visible between stitched elements. Thread colors are rich and saturated — DMC embroidery floss palette. The hoop or frame edge might be partially visible. Light catches the raised thread creating subtle dimensionality. The patience and craft of handwork should radiate from every element.',
+    fluxFragment:
+      'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors, fabric background showing through, raised dimensional stitching',
+  },
+  {
+    key: 'vintage_film',
+    label: 'Vintage Film',
+    directive:
+      'This is shot on expired Kodak Portra 400 film with a vintage Contax T2 or Leica M6. The color science is warm and nostalgic — shifted toward amber and soft greens, with lifted milky shadows that never go true black. Film grain is organic and beautiful, not digital noise. Light leaks bleed warm orange or magenta from the frame edges. Focus has that slightly soft, dreamy quality of older glass — sharp enough but never clinical. Highlights bloom gently. The image feels like a recovered memory — something precious found in a shoebox of old photographs. Composition is intimate and personal, like the photographer was part of the moment.',
+    fluxFragment:
+      'Vintage 35mm film photograph, Kodak Portra warm color science, organic film grain, light leaks, lifted milky shadows, soft dreamy focus, golden nostalgic tones, intimate candid composition',
+  },
+];
+
+// ── Vibes ───────────────────────────────────────────────────────────────
+
+export const DREAM_VIBES: DreamVibe[] = [
+  {
+    key: 'my_vibes',
+    label: 'My Vibes',
+    directive: null,
+  },
+  {
+    key: 'surprise_me',
+    label: 'Surprise Me',
+    directive: null,
+  },
+  {
+    key: 'cinematic',
+    label: 'Cinematic',
+    directive:
+      'This is a frame from an Oscar-winning film. Compose it in 2.39:1 widescreen — use the horizontal space to create tension between subject and environment. Lighting is motivated by a visible or implied source: a window, a streetlight, a fire. Three-point lighting with the key at 45 degrees creating sculpted shadows on faces. Color grade is teal-and-orange or a deliberate complementary palette. Depth is created with atmospheric haze between foreground and background. Every element in frame serves the story. The viewer should feel like something just happened or is about to happen — frozen narrative tension.',
+  },
+  {
+    key: 'dreamy',
+    label: 'Dreamy',
+    directive:
+      "Everything floats in a soft, ethereal haze. Light doesn't come from one direction — it seems to emanate from within the scene itself, creating a gentle omnidirectional glow. Colors are pastels shifted toward lavender, blush pink, powder blue, and soft gold. Edges dissolve into each other — nothing has a hard boundary. There's a sense of weightlessness: objects might float slightly, fabric drifts without wind, hair defies gravity. The atmosphere is thick with soft particles — pollen, dust motes, tiny lights. The scene should feel like the moment between sleeping and waking when reality is beautifully uncertain.",
+  },
+  {
+    key: 'dark',
+    label: 'Dark',
+    directive:
+      "Embrace the shadows. The majority of the frame is in deep shadow — rich, velvety blacks and near-blacks. Light is rare and precious: a single candle, a crack under a door, moonlight through clouds. Where light exists, it creates dramatic contrast — bright highlights against crushing darks. Color palette is severely restricted: deep teal, dried blood red, cold steel blue, desaturated amber. The mood is contemplative and weighty, not necessarily scary — think Caravaggio's dramatic chiaroscuro or Gregory Crewdson's suburban noir. Negative space is powerful. What you can't see matters as much as what you can.",
+  },
+  {
+    key: 'chaos',
+    label: 'Chaos',
+    directive:
+      "Rules don't exist here. Multiple conflicting light sources in impossible colors. Perspective bends — parallel lines converge wrong, scale shifts within the frame. Colors CLASH deliberately: electric complementaries at maximum saturation. Textures collide — organic next to geometric, smooth against rough. Composition breaks the frame — elements extend beyond the edges, overlap uncomfortably, create visual tension. There's too much to look at and that's the point. The scene should feel like it's vibrating with unstable energy, like reality is glitching. Beautiful in its overwhelming excess.",
+  },
+  {
+    key: 'cozy',
+    label: 'Cozy',
+    directive:
+      'Everything is warm and close. The scene is an intimate space — small rooms, nooks, corners, sheltered spots. Lighting is soft and warm: candlelight, string lights, fireplace glow, golden afternoon sun through curtains. The color palette centers on warm neutrals: cream, honey, cinnamon, soft rust, forest green. Textures you want to touch: chunky knit blankets, worn wood, ceramic mugs, soft fur, old book pages. The composition is close and enveloping — the viewer is IN the cozy space, not observing from outside. Depth of field is shallow, making the immediate surroundings feel like a warm embrace. Steam rising from something hot.',
+  },
+  {
+    key: 'minimal',
+    label: 'Minimal',
+    directive:
+      'Less is everything. One subject, vast negative space. The background is a single tone or a subtle gradient — it exists only to make the subject sing. Composition is mathematical: perfect center, extreme rule-of-thirds, or radical asymmetry. Color palette is two to three colors maximum, and one dominates 80% of the frame. Every element that could be removed HAS been removed. What remains must be perfect in form and placement. Lighting is clean and simple — one source, soft or hard, creating a clear statement. The image should feel like a held breath — quiet, deliberate, and impossible to simplify further.',
+  },
+  {
+    key: 'epic',
+    label: 'Epic',
+    directive:
+      "SCALE. The subject exists within something impossibly vast — towering mountains, endless skies, cathedral-sized interiors, cosmic expanses. Camera angle is extreme: dramatic low angle looking up, or a high wide shot that reveals the world's enormity. Atmospheric perspective creates depth — foreground sharp and saturated, background fading through layers of haze. Light is dramatic and directional: god rays breaking through clouds, golden hour painting everything warm, or cold blue moonlight illuminating a vast landscape. The color palette is rich and full-range. The viewer should feel small and awed, like standing at the edge of the Grand Canyon.",
+  },
+  {
+    key: 'nostalgic',
+    label: 'Nostalgic',
+    directive:
+      'This is a memory being remembered fondly. Everything is shifted toward warm golden tones — late afternoon in eternal summer. Shadows are soft and lifted, never threatening. Focus is slightly soft, like looking through old glass or tears of joy. Details from a specific era peek through: vintage objects, period clothing, retro signage, old cars. Light has that magic-hour quality where everything glows from within. The composition feels personal and intimate, like a photograph taken by someone who was there and loved the moment. Lens flare and light bloom add to the romanticized warmth. Time has made everything more beautiful than it probably was.',
+  },
+  {
+    key: 'psychedelic',
+    label: 'Psychedelic',
+    directive:
+      "Reality is melting, breathing, and pulsing with impossible color. Every surface has organic flowing patterns — fractals, mandalas, paisley, flowing liquid forms. Colors are at MAXIMUM saturation and in combinations that vibrate: magenta against lime green, electric blue against hot orange. Forms morph into each other — a face becomes a landscape becomes an animal becomes a galaxy. Symmetry appears and breaks. The sky might be a swirling vortex of color. Edges ripple and breathe. Multiple patterns overlay at different scales. The image should feel like it's moving even though it's still — an optical experience that rewards long staring.",
+  },
+  {
+    key: 'peaceful',
+    label: 'Peaceful',
+    directive:
+      "Absolute stillness. The scene is in a state of perfect calm — still water reflecting sky, windless fields, quiet dawn light. Colors are soft and harmonious: sage green, powder blue, warm grey, soft white, pale gold. Nothing in the scene demands urgent attention — the eye wanders gently across the composition. Horizontal lines dominate: horizons, still waterlines, lying figures. Light is soft and even — overcast sky, pre-dawn blue, or the last glow of twilight. Sound would be absent if this had audio. The composition is balanced and stable. The viewer's breathing should slow down looking at this image.",
+  },
+  {
+    key: 'whimsical',
+    label: 'Whimsical',
+    directive:
+      "Physics are optional and reality is playful. Objects are slightly the wrong size — oversized mushrooms, tiny doors, floating islands. Colors are candy-bright but in sophisticated combinations: mint green with coral, periwinkle with marigold. Architecture curves and spirals instead of standing straight. Characters have exaggerated proportions — big heads, tiny feet, enormous eyes. Plants and nature are fantastical — trees with spiral trunks, flowers that glow, grass in impossible colors. The scene should feel like a children's book illustration made by a fine artist — playful but beautifully crafted. Light comes from unexpected places. Gravity is more of a suggestion than a rule.",
+  },
+];
+
+// ── Helpers ─────────────────────────────────────────────────────────────
+
+/** Get only the curated mediums (excludes My Mediums and Surprise Me) */
+export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter((m) => m.directive !== null);
+
+/** Get only the curated vibes (excludes My Vibes and Surprise Me) */
+export const CURATED_VIBES = DREAM_VIBES.filter((v) => v.directive !== null);
+
+/** Pick a random curated medium */
+export function randomMedium(): DreamMedium {
+  return CURATED_MEDIUMS[Math.floor(Math.random() * CURATED_MEDIUMS.length)];
+}
+
+/** Pick a random curated vibe */
+export function randomVibe(): DreamVibe {
+  return CURATED_VIBES[Math.floor(Math.random() * CURATED_VIBES.length)];
+}
+
+/**
+ * Subject invention prompt for when the user provides no input.
+ * Uses their profile interests/aesthetics for flavor.
+ */
+export function buildSubjectInventionPrompt(
+  interests: string[],
+  aesthetics: string[],
+  spiritCompanion?: string | null
+): string {
+  const flavorParts: string[] = [];
+  if (interests.length > 0) flavorParts.push(`Interests: ${interests.join(', ')}`);
+  if (aesthetics.length > 0) flavorParts.push(`Aesthetics: ${aesthetics.join(', ')}`);
+  if (spiritCompanion) flavorParts.push(`Spirit companion: ${spiritCompanion}`);
+  const flavor =
+    flavorParts.length > 0
+      ? `\n\nDraw inspiration from this taste profile:\n${flavorParts.join('\n')}`
+      : '';
+
+  return `You are DreamBot. The user wants to be surprised with something beautiful to look at. Invent a compelling, visually rich subject for a dream image.
+
+DO NOT be generic. No "a sunset over the ocean" or "a beautiful landscape." Instead, be SPECIFIC and unexpected:
+- "A fox wearing a tiny astronaut helmet, floating through a field of bioluminescent jellyfish"
+- "An ancient library where the books are growing like trees, their pages rustling with golden light"
+- "A street food cart in a rainy cyberpunk alley, steam rising into holographic advertisements"
+${flavor}
+Output ONLY the subject description, 10-20 words. Nothing else.`;
+}

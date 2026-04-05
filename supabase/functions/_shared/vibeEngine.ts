@@ -216,3 +216,109 @@ export function parseConceptJson(raw: string): ConceptRecipe {
   cleaned = cleaned.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
   return JSON.parse(cleaned) as ConceptRecipe;
 }
+
+// ═══════════════════════════════════════════════════════════════════════
+// V2 ENGINE — Medium + Vibe directive-based prompt generation
+// ═══════════════════════════════════════════════════════════════════════
+
+interface DirectiveInput {
+  /** The curated medium directive (e.g., watercolor masterclass brief) */
+  mediumDirective: string;
+  /** The curated vibe directive (e.g., cinematic mood/lighting brief) */
+  vibeDirective: string;
+  /** The medium's flux-optimized fragment for the polisher */
+  fluxFragment: string;
+  /** Optional user prompt — the subject to transform */
+  userPrompt?: string;
+  /** User's vibe profile for personal flavor (anchors, companion, avoid) */
+  profile?: VibeProfile;
+}
+
+export function buildConceptPromptV2(input: DirectiveInput): string {
+  const { mediumDirective, vibeDirective, userPrompt, profile } = input;
+
+  let personalBlock = '';
+  if (profile) {
+    const anchorLines: string[] = [];
+    if (profile.personal_anchors.place && Math.random() < 0.4)
+      anchorLines.push(`- Places they love: "${profile.personal_anchors.place}"`);
+    if (profile.personal_anchors.object && Math.random() < 0.4)
+      anchorLines.push(`- Objects they love: "${profile.personal_anchors.object}"`);
+    if (profile.personal_anchors.era && Math.random() < 0.4)
+      anchorLines.push(`- Eras they vibe with: "${profile.personal_anchors.era}"`);
+    if (profile.personal_anchors.dream_vibe)
+      anchorLines.push(`- Their dream vibe: "${profile.personal_anchors.dream_vibe}"`);
+
+    const spiritHint =
+      profile.spirit_companion && Math.random() < 0.2
+        ? `\nTheir spirit companion is a ${profile.spirit_companion.replace(/_/g, ' ')} — consider weaving it in.`
+        : '';
+
+    const avoidBlock =
+      profile.avoid.length > 0 ? `\nNEVER INCLUDE: ${profile.avoid.join(', ')}` : '';
+
+    if (anchorLines.length > 0 || spiritHint || avoidBlock) {
+      personalBlock = `\nPERSONAL TOUCH (weave in naturally when they fit):${anchorLines.length > 0 ? '\n' + anchorLines.join('\n') : ''}${spiritHint}${avoidBlock}`;
+    }
+  }
+
+  const subjectBlock = userPrompt
+    ? `\nSUBJECT TO TRANSFORM: "${userPrompt}"\nYour job: Take this subject and make it EXTRAORDINARY through the lens of the medium and vibe above. Don't just illustrate it — REIMAGINE it. Find the most visually stunning interpretation. What would make someone stop scrolling?`
+    : `\nSUBJECT: Invent a compelling, visually rich subject. Be SPECIFIC and unexpected — no generic sunsets or landscapes. Create something that would make someone stop scrolling and say "how did they even think of that?"`;
+
+  return `You are a world-class concept artist designing a single breathtaking image.
+
+MEDIUM — This defines how the image is rendered:
+${mediumDirective}
+
+VIBE — This defines how the image feels:
+${vibeDirective}
+${personalBlock}
+${subjectBlock}
+
+SCENE ANGLE: Before designing, invent a unique creative angle. Don't default to the obvious. Consider: an unusual time of day, an unexpected perspective, a fantasy element, an impossible scale, a hidden detail, a surreal twist. Pick ONE angle that makes this image unforgettable.
+
+OUTPUT exactly this JSON (no markdown, no commentary):
+{
+  "subject": "the main subject — specific, visual, evocative",
+  "environment": "where the scene takes place — concrete sensory details",
+  "lighting": "specific lighting that serves both the medium and the vibe",
+  "camera": "camera angle, lens feel, perspective",
+  "style": "the medium technique in 3-5 words",
+  "palette": "3-4 specific color names that anchor the image",
+  "twist": "one unexpected visual detail that elevates the scene",
+  "signature_detail": "one small, poetic detail that makes this feel hand-crafted, not generated",
+  "composition": "framing and spatial arrangement",
+  "mood": "2-3 word emotional tone"
+}
+
+RULES:
+- The "twist" and "signature_detail" MUST be different things
+- "subject" must NOT be generic — be inventive and specific
+- Name textures, materials, specific objects — not just adjectives
+- The medium directive should visibly influence your style and technique choices
+- The vibe directive should visibly influence your lighting, mood, and composition choices
+- Stylized characters welcome, no photorealistic human faces, no nudity`;
+}
+
+export function buildPolisherPromptV2(
+  concept: ConceptRecipe & { signature_detail?: string },
+  fluxFragment: string
+): string {
+  return `Convert this concept into a Flux image generation prompt. 50-70 words, comma-separated phrases.
+
+CONCEPT:
+${JSON.stringify(concept, null, 2)}
+
+CRITICAL — The prompt MUST start with this medium fragment (copy it exactly):
+"${fluxFragment}"
+
+Then describe the subject, environment, lighting, and mood concretely.
+Weave in the twist and signature_detail naturally — don't label them.
+Include camera/composition as technical terms.
+End with quality terms (hyper detailed, gorgeous lighting, masterful, etc.)
+
+No negative prompts, no meta-commentary, no quotation marks around the output.
+
+Output ONLY the prompt text.`;
+}

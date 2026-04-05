@@ -52,6 +52,8 @@ interface GenerationDeps {
   /** Album state */
   albumLength: number;
   selectedMode: PromptMode;
+  selectedMedium: string;
+  selectedVibe: string;
   customPrompt: string;
   makeControlState: () => ControlState;
   addDream: (item: DreamAlbumItem) => void;
@@ -240,10 +242,13 @@ export function useDreamGeneration(deps: GenerationDeps) {
       } else {
         const { recipe: loadedRecipe, vibeProfile } = await loadProfile();
         if (vibeProfile) {
+          const { selectedMedium: med, selectedVibe: vib } = depsRef.current;
           result = await generateDream({
             mode: 'flux-kontext',
             vibe_profile: vibeProfile,
             prompt_mode: selectedMode,
+            medium_key: med,
+            vibe_key: vib,
             input_image: refUrl,
           });
         } else {
@@ -311,9 +316,15 @@ export function useDreamGeneration(deps: GenerationDeps) {
       } else {
         if (__DEV__) console.log('[JustDream] Loading profile...');
         const { recipe, vibeProfile } = await loadProfile();
-        if (__DEV__) console.log('[JustDream] Profile loaded');
+        const { selectedMedium, selectedVibe } = depsRef.current;
+        if (__DEV__)
+          console.log('[JustDream] Profile loaded, medium:', selectedMedium, 'vibe:', selectedVibe);
         result = vibeProfile
-          ? await generateFromVibeProfile(vibeProfile, { promptMode: selectedMode })
+          ? await generateFromVibeProfile(vibeProfile, {
+              promptMode: selectedMode,
+              mediumKey: selectedMedium,
+              vibeKey: selectedVibe,
+            })
           : await generateFromRecipe(recipe!);
       }
 

@@ -37,6 +37,7 @@ import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { colors } from '@/constants/theme';
 import { MASCOT_URLS } from '@/constants/mascots';
+import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
 import { PROMPT_MODE_TILES } from '@/constants/promptModes';
 import { Toast } from '@/components/Toast';
 import { showAlert } from '@/components/CustomAlert';
@@ -60,6 +61,8 @@ export default function DreamScreen() {
   const [posting, setPosting] = useState(false);
   const [pickTab, setPickTab] = useState<'dream' | 'photo'>('dream');
   const [showSettings, setShowSettings] = useState(false);
+  const [selectedMedium, setSelectedMedium] = useState('surprise_me');
+  const [selectedVibe, setSelectedVibe] = useState('surprise_me');
   const [kbOpen, setKbOpen] = useState(false);
   const textFade = useRef(new RNAnimated.Value(1)).current;
 
@@ -106,6 +109,8 @@ export default function DreamScreen() {
     userHint: photo.userHint,
     albumLength: album.album.length,
     selectedMode: album.selectedMode,
+    selectedMedium,
+    selectedVibe,
     customPrompt: album.customPrompt,
     makeControlState: album.makeControlState,
     addDream: album.addDream,
@@ -201,46 +206,52 @@ export default function DreamScreen() {
     </TouchableOpacity>
   );
 
-  const modeScrollRef = useRef<ScrollView>(null);
   const promptScrollRef = useRef<ScrollView>(null);
-  const selectedModeIndex = PROMPT_MODE_TILES.findIndex((m) => m.key === album.selectedMode);
 
-  const modePills = (
+  const categorySelectors = (
     <>
-      <ScrollView
-        ref={modeScrollRef}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={s.modeRow}
-        style={s.modeScroll}
-        onLayout={() => {
-          if (selectedModeIndex > 0) {
-            // ~90px per pill, scroll so selected is visible
-            modeScrollRef.current?.scrollTo({
-              x: Math.max(0, selectedModeIndex * 90 - 40),
-              animated: false,
-            });
-          }
-        }}
-      >
-        {PROMPT_MODE_TILES.map((m) => (
-          <TouchableOpacity
-            key={m.key}
-            style={[s.modePill, album.selectedMode === m.key && s.modePillActive]}
-            onPress={() => album.setSelectedMode(m.key)}
-            activeOpacity={0.7}
-          >
-            <Text style={[s.modePillText, album.selectedMode === m.key && s.modePillTextActive]}>
-              {m.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      {!kbOpen && (
-        <Text style={s.modeHint}>
-          {PROMPT_MODE_TILES.find((m) => m.key === album.selectedMode)?.hint ?? ''}
-        </Text>
-      )}
+      <View style={s.selectorRow}>
+        <Text style={s.selectorLabel}>Medium</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={s.modeRow}
+        >
+          {DREAM_MEDIUMS.map((m) => (
+            <TouchableOpacity
+              key={m.key}
+              style={[s.modePill, selectedMedium === m.key && s.modePillActive]}
+              onPress={() => setSelectedMedium(m.key)}
+              activeOpacity={0.7}
+            >
+              <Text style={[s.modePillText, selectedMedium === m.key && s.modePillTextActive]}>
+                {m.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+      <View style={s.selectorRow}>
+        <Text style={s.selectorLabel}>Vibe</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={s.modeRow}
+        >
+          {DREAM_VIBES.map((v) => (
+            <TouchableOpacity
+              key={v.key}
+              style={[s.modePill, selectedVibe === v.key && s.modePillActive]}
+              onPress={() => setSelectedVibe(v.key)}
+              activeOpacity={0.7}
+            >
+              <Text style={[s.modePillText, selectedVibe === v.key && s.modePillTextActive]}>
+                {v.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     </>
   );
 
@@ -308,7 +319,7 @@ export default function DreamScreen() {
             </View>
           </TouchableOpacity>
           <View style={[s.composerFooter, { paddingBottom: kbOpen ? 0 : insets.bottom + 60 }]}>
-            {modePills}
+            {categorySelectors}
             {renderPromptInput(
               photo.userHint,
               photo.setUserHint,
@@ -401,7 +412,7 @@ export default function DreamScreen() {
 
           {/* Controls */}
           <View style={[s.composerFooter, { paddingBottom: kbOpen ? 0 : insets.bottom + 60 }]}>
-            {modePills}
+            {categorySelectors}
             {renderPromptInput(
               hasPhoto ? photo.userHint : album.customPrompt,
               hasPhoto ? photo.setUserHint : album.setCustomPrompt,
@@ -507,7 +518,7 @@ export default function DreamScreen() {
             imgScale={gen.imgScale}
           />
           <View style={[s.composerFooter, { paddingBottom: kbOpen ? 0 : insets.bottom + 60 }]}>
-            {modePills}
+            {categorySelectors}
             {renderPromptInput(
               album.customPrompt,
               album.setCustomPrompt,
@@ -704,6 +715,15 @@ const s = StyleSheet.create({
   loadingMascot: { width: 140, height: 140, borderRadius: 28, marginBottom: 8 },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', textAlign: 'center' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
+  selectorRow: { gap: 6 },
+  selectorLabel: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    paddingLeft: 4,
+  },
   modeScroll: { flexGrow: 0, marginBottom: 16 },
   modeRow: { gap: 8, paddingHorizontal: 4 },
   modePill: {
