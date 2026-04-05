@@ -323,11 +323,7 @@ export default function FusionScreen() {
             activeOpacity={0.7}
             disabled={posting || generating}
           >
-            {posting ? (
-              <ActivityIndicator size="small" color="#FFF" />
-            ) : (
-              <Ionicons name="cloud-upload" size={20} color="#FFF" />
-            )}
+            {posting && <ActivityIndicator size="small" color="#FFF" />}
             <Text style={s.ctaText}>{posting ? 'Posting...' : 'Post This Fusion'}</Text>
           </TouchableOpacity>
         )}
@@ -337,11 +333,7 @@ export default function FusionScreen() {
           activeOpacity={0.7}
           disabled={generating || !myRecipe || !theirRecipe}
         >
-          {generating ? (
-            <ActivityIndicator size="small" color={colors.accent} />
-          ) : (
-            <Ionicons name="git-merge" size={18} color={colors.accent} />
-          )}
+          {generating && <ActivityIndicator size="small" color={colors.accent} />}
           <Text style={s.fuseButtonText}>
             {album.length > 0 ? 'Fuse Again' : `Fuse (${FUSE_COST} sparkles)`}
           </Text>

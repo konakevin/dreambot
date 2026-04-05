@@ -53,7 +53,7 @@ export const PROMPT_MODE_CONFIGS: Record<PromptMode, PromptModeConfig> = {
 export const PROMPT_MODE_TILES: { key: PromptMode; label: string; icon: string; hint: string }[] = [
   {
     key: 'dream_me',
-    label: 'Dream Me',
+    label: 'For You',
     icon: 'sparkles',
     hint: 'Personalized to your taste with a splash of surprise',
   },

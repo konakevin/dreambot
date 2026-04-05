@@ -333,7 +333,7 @@ export function RevealStep({ onBack }: Props) {
         actor_id: user.id,
         type: 'dream_generated',
         upload_id: insertedRow?.id ?? null,
-        body: "welcome:Hello 🤖✨ I'm DreamBot, your new AI buddy. Here's 25 Sparkles to help you get dreaming. Sweet Dreams! 🌙",
+        body: "welcome:Hello, I'm DreamBot, your new AI buddy. Here's 25 Sparkles to help you get dreaming. Sweet Dreams!",
       });
 
       reset();
@@ -350,7 +350,6 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Text style={{ fontSize: 64, marginBottom: 8 }}>✨</Text>
           <Text style={s.bigTitle}>25 Sparkles!</Text>
           <Text style={[s.centeredSub, { marginBottom: 24, lineHeight: 22 }]}>
             Welcome to DreamBot! We gave you 25 sparkles to get started. Each sparkle lets you
@@ -396,7 +395,6 @@ export function RevealStep({ onBack }: Props) {
             }}
             activeOpacity={0.7}
           >
-            <Ionicons name="sparkles" size={20} color="#FFFFFF" />
             <Text style={s.createButtonText}>Start Dreaming</Text>
           </TouchableOpacity>
         </View>
@@ -438,7 +436,6 @@ export function RevealStep({ onBack }: Props) {
             }}
             activeOpacity={0.7}
           >
-            <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
             <Text style={s.createButtonText}>Save Changes</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
@@ -464,7 +461,6 @@ export function RevealStep({ onBack }: Props) {
             onPress={() => generateImage()}
             activeOpacity={0.7}
           >
-            <Ionicons name="sparkles" size={20} color="#FFFFFF" />
             <Text style={s.createButtonText}>Save &amp; Create Dream</Text>
           </TouchableOpacity>
         </View>
@@ -569,7 +565,6 @@ export function RevealStep({ onBack }: Props) {
               disabled={phase === 'creating' || phase === 'generating'}
               activeOpacity={0.7}
             >
-              <Ionicons name="refresh" size={18} color={colors.textPrimary} />
               <Text style={s.dreamAgainText}>Dream Again ({dreamsRemaining})</Text>
             </TouchableOpacity>
           )}
@@ -583,10 +578,7 @@ export function RevealStep({ onBack }: Props) {
             {phase === 'creating' ? (
               <ActivityIndicator color="#FFFFFF" />
             ) : (
-              <>
-                <Ionicons name="sparkles" size={20} color="#FFFFFF" />
-                <Text style={s.createButtonText}>Post Your Dream!</Text>
-              </>
+              <Text style={s.createButtonText}>Post Your Dream!</Text>
             )}
           </TouchableOpacity>
         </View>

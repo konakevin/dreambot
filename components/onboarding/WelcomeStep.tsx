@@ -81,7 +81,6 @@ export function WelcomeStep({ onNext }: Props) {
       <View style={s.footer}>
         <TouchableOpacity style={s.startButton} onPress={handleStart} activeOpacity={0.7}>
           <Text style={s.startButtonText}>Get Started</Text>
-          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
     </View>

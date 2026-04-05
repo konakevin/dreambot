@@ -42,7 +42,6 @@ export class AppErrorBoundary extends Component<Props, State> {
               The app ran into an unexpected error. This has been logged and we{"'"}ll look into it.
             </Text>
             <TouchableOpacity style={s.button} onPress={this.handleRetry} activeOpacity={0.7}>
-              <Ionicons name="refresh" size={20} color="#FFFFFF" />
               <Text style={s.buttonText}>Try Again</Text>
             </TouchableOpacity>
           </View>

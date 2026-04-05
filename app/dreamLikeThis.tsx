@@ -101,6 +101,7 @@ export default function DreamLikeThisScreen() {
   const [posting, setPosting] = useState(false);
   const [reDreamResult, setReDreamResult] = useState(false);
   const [extractedStyle, setExtractedStyle] = useState<string | null>(null);
+  const extractedStyleRef = useRef<string | null>(null);
 
   const busy = useRef(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -188,6 +189,7 @@ export default function DreamLikeThisScreen() {
             console.log('**********');
           }
           setExtractedStyle(data.style);
+          extractedStyleRef.current = data.style;
         }
       } catch {
         // Non-critical — falls back to first comma segment
@@ -261,6 +263,7 @@ export default function DreamLikeThisScreen() {
       });
       setPhotoBase64(media.data ?? null);
       setPhotoUri(media.path);
+      setCustomPrompt('');
     } catch {
       /* cancelled */
     }
@@ -318,9 +321,19 @@ export default function DreamLikeThisScreen() {
           input_image: refUrl,
         });
       } else if (customPrompt.trim()) {
-        // Custom prompt override — user wants their own twist
-        if (__DEV__) console.log('[DreamLikeThis] Custom prompt override');
-        result = await generateDream({ mode: 'flux-dev', prompt: customPrompt.trim() });
+        // Custom prompt + reference style — style FIRST so Flux prioritizes it
+        const style = extractedStyleRef.current ?? refPost.prompt;
+        const combined = `${style.slice(0, 250)}. Subject: ${customPrompt.trim()}`;
+        if (__DEV__) {
+          console.log('**********');
+          console.log(
+            '[DreamLikeThis] Style from ref:',
+            extractedStyleRef.current ? 'Haiku' : 'raw prompt'
+          );
+          console.log('[DreamLikeThis] Combined prompt:', combined.slice(0, 200));
+          console.log('**********');
+        }
+        result = await generateDream({ mode: 'flux-dev', prompt: combined });
       } else {
         // No photo, no custom prompt — replay the reference prompt directly
         if (__DEV__) console.log('[DreamLikeThis] Replaying reference prompt');
@@ -448,61 +461,94 @@ export default function DreamLikeThisScreen() {
         <View style={s.center}>
           <View style={s.thumbRow}>
             <View style={s.thumbCol}>
-              <Image source={{ uri: refPost.imageUrl }} style={s.thumb} contentFit="cover" />
-              <Text style={s.thumbLabel}>Style</Text>
+              <Image
+                source={{ uri: refPost.imageUrl }}
+                style={photoUri ? s.thumb : s.thumbLarge}
+                contentFit="cover"
+              />
+              {!photoUri && <Text style={s.thumbLabel}>Style</Text>}
             </View>
             {photoUri && (
               <>
                 <Ionicons name="arrow-forward" size={20} color={colors.accent} />
                 <View style={s.thumbCol}>
-                  <Image source={{ uri: photoUri }} style={s.thumb} contentFit="cover" />
+                  <View>
+                    <Image source={{ uri: photoUri }} style={s.thumb} contentFit="cover" />
+                    <TouchableOpacity
+                      style={s.thumbDismiss}
+                      onPress={() => {
+                        setPhotoUri(null);
+                        setPhotoBase64(null);
+                      }}
+                      hitSlop={8}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons name="close" size={12} color="#FFFFFF" />
+                    </TouchableOpacity>
+                  </View>
                   <Text style={s.thumbLabel}>Your photo</Text>
                 </View>
               </>
             )}
           </View>
 
-          <Text style={s.sub}>
-            {photoUri
-              ? `Applying ${refPost.username}'s style to your photo`
-              : `Dreaming in ${refPost.username}'s style`}
+          <Text style={s.pickHeading}>
+            {photoUri ? 'Dream your photo in this style' : 'Dream in this style'}
           </Text>
+          {!photoUri && (
+            <Text style={s.pickHint}>
+              Upload a photo to transform, or type a prompt to dream something new
+            </Text>
+          )}
 
-          <View style={[s.promptWrap, { marginTop: 16, alignSelf: 'stretch' }]}>
-            <TextInput
-              style={s.promptInput}
-              placeholder="Add your own twist, or leave blank..."
-              placeholderTextColor={colors.textMuted}
-              value={customPrompt}
-              onChangeText={setCustomPrompt}
-              maxLength={300}
-              multiline
-            />
-            {customPrompt.length > 0 && (
-              <TouchableOpacity
-                onPress={() => setCustomPrompt('')}
-                hitSlop={8}
-                style={s.promptClear}
-              >
-                <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-              </TouchableOpacity>
-            )}
-          </View>
+          {!photoUri && (
+            <View style={[s.promptWrap, { marginTop: 12, alignSelf: 'stretch' }]}>
+              <TextInput
+                style={s.promptInput}
+                placeholder="Describe what to dream..."
+                placeholderTextColor={colors.textMuted}
+                value={customPrompt}
+                onChangeText={setCustomPrompt}
+                maxLength={300}
+                multiline
+              />
+              {customPrompt.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => setCustomPrompt('')}
+                  hitSlop={8}
+                  style={s.promptClear}
+                >
+                  <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
 
           {error && <Text style={s.errorText}>{error}</Text>}
 
           <View style={[s.buttonRow, { marginTop: 16, alignSelf: 'stretch' }]}>
             <TouchableOpacity style={s.ctaHalf} onPress={pickPhoto} activeOpacity={0.7}>
-              <Ionicons name="images" size={18} color={colors.textPrimary} />
               <Text style={s.ctaHalfText}>{photoUri ? 'Change Photo' : 'Use a Photo'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[s.ctaHalf, { backgroundColor: colors.accent }]}
+              style={[
+                s.ctaHalf,
+                {
+                  backgroundColor: photoUri || customPrompt.trim() ? colors.accent : colors.border,
+                },
+              ]}
               onPress={handleDream}
               activeOpacity={0.7}
+              disabled={!photoUri && !customPrompt.trim()}
             >
-              <Ionicons name="sparkles" size={18} color="#FFF" />
-              <Text style={[s.ctaHalfText, { color: '#FFFFFF' }]}>Dream It</Text>
+              <Text
+                style={[
+                  s.ctaHalfText,
+                  { color: photoUri || customPrompt.trim() ? '#FFFFFF' : colors.textSecondary },
+                ]}
+              >
+                Dream It
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -516,7 +562,7 @@ export default function DreamLikeThisScreen() {
       <SafeAreaView style={s.root}>
         <View style={s.center}>
           <Text style={s.title}>Dreaming...</Text>
-          <Text style={s.sub}>Applying {refPost.username}&apos;s style</Text>
+          <Text style={s.sub}>Dreaming your photo...</Text>
           <ActivityIndicator size="small" color={colors.accent} />
         </View>
       </SafeAreaView>
@@ -591,10 +637,49 @@ export default function DreamLikeThisScreen() {
           </Pressable>
         </Modal>
         <View style={s.footer}>
-          <TouchableOpacity style={s.cta} onPress={handleDream} activeOpacity={0.7}>
-            <Ionicons name="sparkles" size={20} color="#FFF" />
-            <Text style={s.ctaText}>Dream Again</Text>
-          </TouchableOpacity>
+          {/* Context bar — what style + what prompt */}
+          <View style={s.contextBar}>
+            <Image source={{ uri: refPost.imageUrl }} style={s.contextThumb} contentFit="cover" />
+            <View style={s.contextInfo}>
+              <Text style={s.contextLabel} numberOfLines={1}>
+                This style
+              </Text>
+              {customPrompt.trim() ? (
+                <Text style={s.contextPrompt} numberOfLines={1}>
+                  &quot;{customPrompt.trim()}&quot;
+                </Text>
+              ) : photoUri ? (
+                <Text style={s.contextPrompt}>Your photo</Text>
+              ) : (
+                <Text style={s.contextPrompt}>Random dream</Text>
+              )}
+            </View>
+          </View>
+
+          {/* Editable prompt for iteration — hidden when photo is active */}
+          {!photoUri && (
+            <View style={s.promptWrap}>
+              <TextInput
+                style={s.promptInput}
+                placeholder="Change your prompt..."
+                placeholderTextColor={colors.textMuted}
+                value={customPrompt}
+                onChangeText={setCustomPrompt}
+                maxLength={300}
+                multiline
+              />
+              {customPrompt.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => setCustomPrompt('')}
+                  hitSlop={8}
+                  style={s.promptClear}
+                >
+                  <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+
           {photoUri && (
             <View style={s.radioGroup}>
               <TouchableOpacity
@@ -627,16 +712,12 @@ export default function DreamLikeThisScreen() {
               </TouchableOpacity>
             </View>
           )}
+
+          <TouchableOpacity style={s.cta} onPress={handleDream} activeOpacity={0.7}>
+            <Text style={s.ctaText}>Dream Again</Text>
+          </TouchableOpacity>
           <View style={s.buttonRow}>
-            <TouchableOpacity
-              style={s.ctaHalf}
-              onPress={() => {
-                setPhase('pick');
-                setResultUrl(null);
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="close" size={18} color={colors.textPrimary} />
+            <TouchableOpacity style={s.ctaHalf} onPress={confirmBack} activeOpacity={0.7}>
               <Text style={s.ctaHalfText}>Discard</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -645,11 +726,7 @@ export default function DreamLikeThisScreen() {
               activeOpacity={0.7}
               disabled={posting}
             >
-              {posting ? (
-                <ActivityIndicator size="small" color={colors.textPrimary} />
-              ) : (
-                <Ionicons name="cloud-upload" size={18} color={colors.textPrimary} />
-              )}
+              {posting && <ActivityIndicator size="small" color={colors.textPrimary} />}
               <Text style={s.ctaHalfText}>{posting ? 'Posting...' : 'Post Dream'}</Text>
             </TouchableOpacity>
           </View>
@@ -694,6 +771,21 @@ const s = StyleSheet.create({
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', textAlign: 'center' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
+  pickHeading: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  pickHint: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: 6,
+    lineHeight: 18,
+    paddingHorizontal: 20,
+  },
   sparklePill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -708,8 +800,20 @@ const s = StyleSheet.create({
   sparklePillText: { color: colors.accent, fontSize: 15, fontWeight: '700' },
   thumbRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
   thumbCol: { alignItems: 'center' },
-  thumb: { width: 100, height: 130, borderRadius: 10 },
+  thumb: { width: 140, height: 180, borderRadius: 12 },
+  thumbLarge: { width: SCREEN_WIDTH - 80, height: (SCREEN_WIDTH - 80) * 1.2, borderRadius: 16 },
   thumbLabel: { color: colors.textSecondary, fontSize: 11, marginTop: 4 },
+  thumbDismiss: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   promptWrap: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -778,6 +882,20 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
+  contextBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  contextThumb: { width: 36, height: 36, borderRadius: 8 },
+  contextInfo: { flex: 1 },
+  contextLabel: { color: colors.textPrimary, fontSize: 13, fontWeight: '700' },
+  contextPrompt: { color: colors.textSecondary, fontSize: 12, marginTop: 1 },
   radioGroup: { gap: 4 },
   reuseRow: {
     flexDirection: 'row',

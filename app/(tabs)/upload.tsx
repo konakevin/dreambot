@@ -38,6 +38,7 @@ import { PROMPT_MODE_TILES } from '@/constants/promptModes';
 import { Toast } from '@/components/Toast';
 import { showAlert } from '@/components/CustomAlert';
 import { formatCompact } from '@/lib/formatNumber';
+import { QuickSettingsSheet } from '@/components/QuickSettingsSheet';
 import { usePhotoInput } from '@/hooks/usePhotoInput';
 import { useDreamAlbum } from '@/hooks/useDreamAlbum';
 import { useDreamGeneration } from '@/hooks/useDreamGeneration';
@@ -54,6 +55,8 @@ export default function DreamScreen() {
   const [dreaming, setDreaming] = useState(false);
   const [posting, setPosting] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [pickTab, setPickTab] = useState<'dream' | 'photo'>('dream');
+  const [showSettings, setShowSettings] = useState(false);
 
   // ── Hooks ───────────────────────────────────────────────────────────
 
@@ -237,7 +240,6 @@ export default function DreamScreen() {
   // ── Mode pills (shared) ───────────────────────────────────────────────
 
   function ModePills() {
-    if (album.customPrompt.trim()) return null;
     return (
       <>
         <ScrollView
@@ -253,11 +255,6 @@ export default function DreamScreen() {
               onPress={() => album.setSelectedMode(m.key)}
               activeOpacity={0.7}
             >
-              <Ionicons
-                name={m.icon as keyof typeof Ionicons.glyphMap}
-                size={14}
-                color={album.selectedMode === m.key ? '#FFFFFF' : colors.textSecondary}
-              />
               <Text style={[s.modePillText, album.selectedMode === m.key && s.modePillTextActive]}>
                 {m.label}
               </Text>
@@ -306,78 +303,146 @@ export default function DreamScreen() {
   // RENDER — each phase is a separate block
   // ═══════════════════════════════════════════════════════════════════════
 
-  // ── PICK ──────────────────────────────────────────────────────────────
+  // ── PICK / PREVIEW (unified with tabs) ─────────────────────────────
 
-  if (phase === 'pick') {
-    return (
-      <SafeAreaView style={s.root}>
-        <View style={s.center}>
-          <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
-          <SparklePill />
-          <Text style={s.title}>Dream</Text>
-          <Text style={s.sub}>Let DreamBot create something new</Text>
-          <ModePills />
-          <CustomPromptInput
-            value={album.customPrompt}
-            onChange={album.setCustomPrompt}
-            placeholder="Or type your own prompt..."
-          />
-          <View style={s.pickButtonRow}>
-            <TouchableOpacity style={s.ctaHalf} onPress={photo.pickPhoto} activeOpacity={0.7}>
-              <Ionicons name="images" size={18} color={colors.textPrimary} />
-              <Text style={s.ctaSecondaryText}>Dream a Photo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[s.ctaHalf, { backgroundColor: colors.accent }]}
-              onPress={gen.justDream}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="sparkles" size={18} color="#FFF" />
-              <Text style={[s.ctaSecondaryText, { color: '#FFFFFF' }]}>
-                {album.customPrompt.trim() ? 'Dream This' : 'Dream'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </SafeAreaView>
-    );
+  const hasPhoto = !!photo.photoUri;
+
+  // Auto-switch to photo tab when photo is picked
+  if (hasPhoto && pickTab === 'dream' && phase === 'pick') {
+    setPickTab('photo');
   }
 
-  // ── PREVIEW ───────────────────────────────────────────────────────────
-
-  if (phase === 'preview') {
+  if (phase === 'pick' || phase === 'preview') {
     return (
       <SafeAreaView style={s.root}>
         <View style={s.header}>
-          <TouchableOpacity onPress={reset} hitSlop={12}>
-            <Ionicons name="close" size={28} color={colors.textSecondary} />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Dream this</Text>
+          <View style={{ width: 28 }} />
+          <View style={s.tabRow}>
+            <TouchableOpacity
+              style={[s.tab, pickTab === 'dream' && s.tabActive]}
+              onPress={() => {
+                setPickTab('dream');
+                photo.clearPhoto();
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={[s.tabText, pickTab === 'dream' && s.tabTextActive]}>Prompt</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[s.tab, pickTab === 'photo' && s.tabActive]}
+              onPress={() => {
+                setPickTab('photo');
+                if (!hasPhoto) photo.pickPhoto();
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={[s.tabText, pickTab === 'photo' && s.tabTextActive]}>Photo</Text>
+            </TouchableOpacity>
+          </View>
           <SparklePill />
         </View>
-        <View style={s.previewWrap}>
-          <Image source={{ uri: photo.photoUri! }} style={s.previewImg} contentFit="cover" />
-          <CustomPromptInput
-            value={photo.userHint}
-            onChange={photo.setUserHint}
-            placeholder="Describe your dream, or leave blank for DreamBot to decide..."
-          />
+
+        <View style={s.center}>
+          {pickTab === 'dream' ? (
+            <>
+              <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
+              <Text style={s.pickHeading}>Dream</Text>
+              <Text style={s.pickHint}>
+                Pick a vibe, type a wild idea, or switch to Photo and let DreamBot reimagine your
+                pics
+              </Text>
+              <TouchableOpacity onPress={() => setShowSettings(true)} activeOpacity={0.7}>
+                <Text style={s.settingsLink}>Customize your DreamBot</Text>
+              </TouchableOpacity>
+              <ModePills />
+              <CustomPromptInput
+                value={album.customPrompt}
+                onChange={album.setCustomPrompt}
+                placeholder="Type your own prompt (optional)..."
+              />
+              {error && <Text style={s.errorText}>{error}</Text>}
+              <TouchableOpacity
+                style={s.dreamCta}
+                onPress={() => {
+                  setError(null);
+                  gen.justDream();
+                }}
+                activeOpacity={0.7}
+              >
+                <Text style={s.dreamCtaText}>
+                  {album.customPrompt.trim() ? 'Dream This' : 'Dream'}
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              {hasPhoto ? (
+                <View>
+                  <Image
+                    source={{ uri: photo.photoUri! }}
+                    style={s.pickHeroPhoto}
+                    contentFit="cover"
+                  />
+                  <TouchableOpacity
+                    style={s.heroDismiss}
+                    onPress={() => {
+                      photo.clearPhoto();
+                      setPickTab('dream');
+                    }}
+                    hitSlop={8}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="close" size={14} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={s.photoPlaceholder}
+                  onPress={photo.pickPhoto}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="image-outline" size={48} color={colors.textSecondary} />
+                  <Text style={s.photoPlaceholderText}>Tap to pick a photo</Text>
+                </TouchableOpacity>
+              )}
+              <Text style={s.pickHeading}>{hasPhoto ? 'Dream this photo' : 'Photo'}</Text>
+              <Text style={s.pickHint}>
+                {hasPhoto
+                  ? 'Add a prompt to guide the transformation or let DreamBot decide'
+                  : 'Upload a photo and DreamBot will reimagine it in a new style'}
+              </Text>
+              {hasPhoto && !photo.userHint.trim() && <ModePills />}
+              {hasPhoto && (
+                <CustomPromptInput
+                  value={photo.userHint}
+                  onChange={photo.setUserHint}
+                  placeholder="Describe how to transform it..."
+                />
+              )}
+              {error && <Text style={s.errorText}>{error}</Text>}
+              {hasPhoto && (
+                <View style={s.pickButtonRow}>
+                  <TouchableOpacity style={s.ctaHalf} onPress={photo.pickPhoto} activeOpacity={0.7}>
+                    <Text style={s.ctaSecondaryText}>Change Photo</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[s.ctaHalf, { backgroundColor: colors.accent }]}
+                    onPress={() => {
+                      setError(null);
+                      gen.dream();
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[s.ctaSecondaryText, { color: '#FFFFFF' }]}>
+                      {photo.userHint.trim() ? 'Dream This' : 'Dream'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </>
+          )}
         </View>
-        {error && <Text style={s.errorText}>{error}</Text>}
-        <View style={s.footer}>
-          {!photo.userHint.trim() && <ModePills />}
-          <TouchableOpacity
-            style={s.cta}
-            onPress={() => {
-              setError(null);
-              gen.dream();
-            }}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="sparkles" size={20} color="#FFF" />
-            <Text style={s.ctaText}>{photo.userHint.trim() ? 'Dream This' : 'Dream'}</Text>
-          </TouchableOpacity>
-        </View>
+        <QuickSettingsSheet visible={showSettings} onClose={() => setShowSettings(false)} />
       </SafeAreaView>
     );
   }
@@ -523,7 +588,7 @@ export default function DreamScreen() {
           <CustomPromptInput
             value={album.customPrompt}
             onChange={album.setCustomPrompt}
-            placeholder="Or type your own prompt..."
+            placeholder="Type your own prompt (optional)..."
           />
           <TouchableOpacity
             style={s.cta}
@@ -549,7 +614,6 @@ export default function DreamScreen() {
             activeOpacity={0.7}
             disabled={posting || dreaming}
           >
-            <Ionicons name="sparkles" size={20} color="#FFF" />
             <Text style={s.ctaText}>{album.customPrompt.trim() ? 'Dream This' : 'Dream'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -590,7 +654,6 @@ export default function DreamScreen() {
           )}
           <View style={s.row}>
             <TouchableOpacity style={s.ctaHalf} onPress={photo.pickPhoto} activeOpacity={0.7}>
-              <Ionicons name="images" size={18} color={colors.textPrimary} />
               <Text style={s.ctaSecondaryText}>Dream a Photo</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -599,11 +662,7 @@ export default function DreamScreen() {
               activeOpacity={0.7}
               disabled={posting || dreaming}
             >
-              {posting ? (
-                <ActivityIndicator size="small" color={colors.textPrimary} />
-              ) : (
-                <Ionicons name="cloud-upload" size={18} color={colors.textPrimary} />
-              )}
+              {posting && <ActivityIndicator size="small" color={colors.textPrimary} />}
               <Text style={s.ctaSecondaryText}>{posting ? 'Posting...' : 'Post Dream'}</Text>
             </TouchableOpacity>
           </View>
@@ -642,7 +701,98 @@ const s = StyleSheet.create({
     paddingVertical: 12,
   },
   headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
+  tabRow: {
+    flexDirection: 'row',
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 3,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  tab: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 10,
+  },
+  tabActive: {
+    backgroundColor: colors.accent,
+  },
+  tabText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  tabTextActive: {
+    color: '#FFFFFF',
+  },
+  dreamCta: {
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+  },
+  dreamCtaText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
+  photoPlaceholder: {
+    width: SCREEN_WIDTH - 80,
+    height: 200,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  photoPlaceholderText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 8,
+  },
+  pickHint: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: 4,
+    marginBottom: 4,
+    lineHeight: 18,
+    paddingHorizontal: 20,
+  },
+  settingsLink: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 2,
+    marginBottom: 8,
+  },
   mascot: { width: 120, height: 120, borderRadius: 24, marginBottom: 12 },
+  pickHeroPhoto: {
+    width: SCREEN_WIDTH - 80,
+    height: (SCREEN_WIDTH - 80) * 1.1,
+    borderRadius: 16,
+  },
+  pickHeading: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  heroDismiss: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   loadingMascot: { width: 140, height: 140, borderRadius: 28, marginBottom: 8 },
   title: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', textAlign: 'center' },
   sub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 },
@@ -659,9 +809,9 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  modePillActive: { backgroundColor: colors.accent, borderColor: colors.accent },
+  modePillActive: { backgroundColor: 'transparent', borderColor: colors.accent },
   modePillText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
-  modePillTextActive: { color: '#FFFFFF' },
+  modePillTextActive: { color: colors.accent },
   sparklePill: {
     flexDirection: 'row',
     alignItems: 'center',
