@@ -14,20 +14,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
-  Modal,
-  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSequence,
-} from 'react-native-reanimated';
+import { useSharedValue, withTiming, withSequence } from 'react-native-reanimated';
 import { useLocalSearchParams, router } from 'expo-router';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { supabase } from '@/lib/supabase';
@@ -39,9 +31,10 @@ import { colors } from '@/constants/theme';
 import { generateDream, persistImage } from '@/lib/dreamApi';
 import { formatCompact } from '@/lib/formatNumber';
 import { postDream, pinToFeed } from '@/lib/dreamPost';
+import { useDreamAlbum } from '@/hooks/useDreamAlbum';
+import { DreamReveal } from '@/components/DreamReveal';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const PREVIEW_WIDTH = SCREEN_WIDTH - 48;
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 type Phase = 'loading' | 'pick' | 'dreaming' | 'reveal' | 'posting';
 
@@ -94,84 +87,16 @@ export default function DreamLikeThisScreen() {
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
   const [customPrompt, setCustomPrompt] = useState('');
 
-  // ── Result state ──────────────────────────────────────────────────
-  const [resultUrl, setResultUrl] = useState<string | null>(null);
-  const [resultPrompt, setResultPrompt] = useState('');
-  const [resultConcept, setResultConcept] = useState<Record<string, unknown> | null>(null);
+  // ── Album state (shared carousel) ─────────────────────────────────
+  const dreamAlbum = useDreamAlbum();
   const [posting, setPosting] = useState(false);
   const [reDreamResult, setReDreamResult] = useState(false);
   const [extractedStyle, setExtractedStyle] = useState<string | null>(null);
   const extractedStyleRef = useRef<string | null>(null);
 
   const busy = useRef(false);
-  const [fullscreen, setFullscreen] = useState(false);
   const imgScale = useSharedValue(0.85);
   const imgOpacity = useSharedValue(0);
-  const revealStyle = useAnimatedStyle(() => ({
-    opacity: imgOpacity.value,
-    transform: [{ scale: imgScale.value }],
-  }));
-
-  // Fullscreen preview
-  const fsScale = useSharedValue(0);
-  const fsOpacity = useSharedValue(0);
-  const fsStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: 0.5 + fsScale.value * 0.5 }],
-    opacity: fsOpacity.value,
-  }));
-  const fsOverlayStyle = useAnimatedStyle(() => ({
-    opacity: fsOpacity.value,
-  }));
-
-  // Pinch to zoom
-  const pinchScale = useSharedValue(1);
-  const pinchTransX = useSharedValue(0);
-  const pinchTransY = useSharedValue(0);
-  const pinchFocalX = useSharedValue(0);
-  const pinchFocalY = useSharedValue(0);
-  const pinchStartX = useSharedValue(0);
-  const pinchStartY = useSharedValue(0);
-
-  const pinchGesture = Gesture.Pinch()
-    .onStart((e) => {
-      pinchFocalX.value = e.focalX - SCREEN_WIDTH / 2;
-      pinchFocalY.value = e.focalY - SCREEN_HEIGHT / 2;
-      pinchStartX.value = e.focalX;
-      pinchStartY.value = e.focalY;
-    })
-    .onUpdate((e) => {
-      const sc = Math.max(1, Math.min(5, e.scale));
-      pinchScale.value = sc;
-      pinchTransX.value = pinchFocalX.value * (1 - sc) + (e.focalX - pinchStartX.value);
-      pinchTransY.value = pinchFocalY.value * (1 - sc) + (e.focalY - pinchStartY.value);
-    })
-    .onEnd(() => {
-      pinchScale.value = withTiming(1, { duration: 200 });
-      pinchTransX.value = withTiming(0, { duration: 200 });
-      pinchTransY.value = withTiming(0, { duration: 200 });
-    });
-
-  const pinchStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: pinchTransX.value },
-      { translateY: pinchTransY.value },
-      { scale: pinchScale.value },
-    ],
-  }));
-
-  function openFullscreen() {
-    setFullscreen(true);
-    fsScale.value = 0;
-    fsOpacity.value = 0;
-    fsScale.value = withTiming(1, { duration: 300 });
-    fsOpacity.value = withTiming(1, { duration: 250 });
-  }
-
-  function closeFullscreen() {
-    fsScale.value = withTiming(0, { duration: 250 });
-    fsOpacity.value = withTiming(0, { duration: 250 });
-    setTimeout(() => setFullscreen(false), 260);
-  }
 
   // ── Extract visual style via Haiku (background, non-blocking) ──────
   useEffect(() => {
@@ -287,10 +212,11 @@ export default function DreamLikeThisScreen() {
         ai_concept?: Record<string, unknown> | null;
       };
 
-      if (reDreamResult && resultUrl) {
+      const activeDreamUrl = dreamAlbum.activeDream?.url;
+      if (reDreamResult && activeDreamUrl) {
         // Re-dream: feed the AI result back through Kontext for iterative refinement
         if (__DEV__) console.log('[DreamLikeThis] Re-dreaming previous result');
-        const resp = await fetch(resultUrl);
+        const resp = await fetch(activeDreamUrl);
         const blob = await resp.blob();
         const b64 = await new Promise<string>((resolve) => {
           const reader = new FileReader();
@@ -340,9 +266,13 @@ export default function DreamLikeThisScreen() {
         result = await generateDream({ mode: 'flux-dev', prompt: refPost.prompt });
       }
 
-      setResultUrl(result.image_url);
-      setResultPrompt(result.prompt_used);
-      setResultConcept(result.ai_concept ?? null);
+      dreamAlbum.addDream({
+        url: result.image_url,
+        prompt: result.prompt_used,
+        fromWish: null,
+        aiConcept: result.ai_concept ?? null,
+        controlState: dreamAlbum.makeControlState(),
+      });
       setPhase('reveal');
       imgOpacity.value = withTiming(1, { duration: 600 });
       imgScale.value = withSequence(
@@ -381,18 +311,20 @@ export default function DreamLikeThisScreen() {
 
   // ── Post dream ────────────────────────────────────────────────────
   async function handlePost() {
-    if (!resultUrl || !user || !refPost || posting) return;
-    setPosting(true);
-    setPhase('posting');
+    const currentDream = dreamAlbum.activeDream;
+    if (!currentDream || !user || !refPost || posting) return;
+    const isLast = dreamAlbum.album.length <= 1;
+    if (isLast) setPhase('posting');
+    else setPosting(true);
 
     try {
-      const imageUrl = await persistImage(resultUrl, user.id);
+      const imageUrl = await persistImage(currentDream.url, user.id);
       const uploadId = await postDream({
         userId: user.id,
         imageUrl,
-        prompt: resultPrompt,
+        prompt: currentDream.prompt,
         fuseOf: refPost.id,
-        aiConcept: resultConcept,
+        aiConcept: currentDream.aiConcept ?? null,
       });
 
       // Notify original post owner
@@ -415,8 +347,15 @@ export default function DreamLikeThisScreen() {
       });
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      Toast.show('Dream posted!', 'sparkles');
-      router.back();
+
+      if (isLast) {
+        Toast.show('Dream posted!', 'sparkles');
+        router.back();
+      } else {
+        Toast.show('Posted!', 'checkmark-circle');
+        dreamAlbum.removeDream(dreamAlbum.activeIndex);
+        setPosting(false);
+      }
     } catch (err) {
       if (__DEV__) console.warn('[DreamLikeThis] Post error:', err);
       Toast.show('Failed to post dream', 'close-circle');
@@ -570,25 +509,30 @@ export default function DreamLikeThisScreen() {
   }
 
   // ── REVEAL ────────────────────────────────────────────────────────
-  if (phase === 'reveal' && resultUrl) {
-    function confirmBack() {
-      showAlert('Unsaved dream', 'Your dream result will be lost.', [
-        {
-          text: 'Discard',
-          style: 'destructive',
-          onPress: () => {
-            setPhase('pick');
-            setResultUrl(null);
+  if (phase === 'reveal' && dreamAlbum.album.length > 0) {
+    function confirmDiscard() {
+      const count = dreamAlbum.album.length;
+      showAlert(
+        'Unsaved dreams',
+        `You have ${count} unsaved ${count === 1 ? 'dream' : 'dreams'} that will be lost.`,
+        [
+          {
+            text: 'Discard',
+            style: 'destructive',
+            onPress: () => {
+              dreamAlbum.clearAlbum();
+              setPhase('pick');
+            },
           },
-        },
-        { text: 'Go Back', style: 'cancel' },
-      ]);
+          { text: 'Go Back', style: 'cancel' },
+        ]
+      );
     }
 
     return (
       <SafeAreaView style={s.root}>
         <View style={s.header}>
-          <TouchableOpacity onPress={confirmBack} hitSlop={12}>
+          <TouchableOpacity onPress={confirmDiscard} hitSlop={12}>
             <Ionicons name="arrow-back" size={28} color={colors.textSecondary} />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Your dream</Text>
@@ -601,86 +545,60 @@ export default function DreamLikeThisScreen() {
             <Text style={s.sparklePillText}>{formatCompact(sparkleBalance)}</Text>
           </TouchableOpacity>
         </View>
-        <View style={s.revealCenter}>
-          <TouchableOpacity activeOpacity={0.9} onPress={openFullscreen}>
-            <Animated.View style={[s.revealBorder, revealStyle]}>
-              <Image
-                source={{ uri: resultUrl }}
-                style={s.revealImg}
-                contentFit="cover"
-                transition={300}
-              />
-            </Animated.View>
-          </TouchableOpacity>
-        </View>
-
-        <Modal visible={fullscreen} transparent animationType="none" statusBarTranslucent>
-          <Pressable style={StyleSheet.absoluteFill} onPress={closeFullscreen}>
-            <Animated.View style={[s.fsOverlay, fsOverlayStyle]}>
-              <GestureDetector gesture={pinchGesture}>
-                <Animated.View style={[s.fsImageWrap, fsStyle]}>
-                  <Animated.View style={[{ width: '100%', height: '80%' }, pinchStyle]}>
-                    <Image
-                      source={{ uri: resultUrl }}
-                      style={{ width: '100%', height: '100%', borderRadius: 4 }}
-                      contentFit="contain"
-                    />
-                  </Animated.View>
-                </Animated.View>
-              </GestureDetector>
-              <TouchableOpacity style={s.fsClose} onPress={closeFullscreen} activeOpacity={0.7}>
-                <View style={s.fsCloseCircle}>
-                  <Ionicons name="close" size={20} color="#FFFFFF" />
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
-          </Pressable>
-        </Modal>
-        <View style={s.footer}>
-          {/* Context bar — what style + what prompt */}
-          <View style={s.contextBar}>
-            <Image source={{ uri: refPost.imageUrl }} style={s.contextThumb} contentFit="cover" />
-            <View style={s.contextInfo}>
-              <Text style={s.contextLabel} numberOfLines={1}>
-                This style
-              </Text>
-              {customPrompt.trim() ? (
-                <Text style={s.contextPrompt} numberOfLines={1}>
-                  &quot;{customPrompt.trim()}&quot;
+        <DreamReveal
+          album={dreamAlbum.album}
+          activeIndex={dreamAlbum.activeIndex}
+          albumRef={dreamAlbum.albumRef}
+          dreaming={false}
+          onIndexChange={dreamAlbum.setActiveIndex}
+          onRemove={dreamAlbum.removeDream}
+          imgOpacity={imgOpacity}
+          imgScale={imgScale}
+        >
+          <View style={s.footer}>
+            {/* Context bar */}
+            <View style={s.contextBar}>
+              <Image source={{ uri: refPost.imageUrl }} style={s.contextThumb} contentFit="cover" />
+              <View style={s.contextInfo}>
+                <Text style={s.contextLabel} numberOfLines={1}>
+                  This style
                 </Text>
-              ) : photoUri ? (
-                <Text style={s.contextPrompt}>Your photo</Text>
-              ) : (
-                <Text style={s.contextPrompt}>Random dream</Text>
-              )}
+                {customPrompt.trim() ? (
+                  <Text style={s.contextPrompt} numberOfLines={1}>
+                    &quot;{customPrompt.trim()}&quot;
+                  </Text>
+                ) : photoUri ? (
+                  <Text style={s.contextPrompt}>Your photo</Text>
+                ) : (
+                  <Text style={s.contextPrompt}>Random dream</Text>
+                )}
+              </View>
             </View>
-          </View>
 
-          {/* Editable prompt for iteration — hidden when photo is active */}
-          {!photoUri && (
-            <View style={s.promptWrap}>
-              <TextInput
-                style={s.promptInput}
-                placeholder="Change your prompt..."
-                placeholderTextColor={colors.textMuted}
-                value={customPrompt}
-                onChangeText={setCustomPrompt}
-                maxLength={300}
-                multiline
-              />
-              {customPrompt.length > 0 && (
-                <TouchableOpacity
-                  onPress={() => setCustomPrompt('')}
-                  hitSlop={8}
-                  style={s.promptClear}
-                >
-                  <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
+            {/* Editable prompt — hidden when photo active */}
+            {!photoUri && (
+              <View style={s.promptWrap}>
+                <TextInput
+                  style={s.promptInput}
+                  placeholder="Change your prompt..."
+                  placeholderTextColor={colors.textMuted}
+                  value={customPrompt}
+                  onChangeText={setCustomPrompt}
+                  maxLength={300}
+                  multiline
+                />
+                {customPrompt.length > 0 && (
+                  <TouchableOpacity
+                    onPress={() => setCustomPrompt('')}
+                    hitSlop={8}
+                    style={s.promptClear}
+                  >
+                    <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
 
-          {photoUri && (
             <View style={s.radioGroup}>
               <TouchableOpacity
                 style={s.reuseRow}
@@ -693,7 +611,7 @@ export default function DreamLikeThisScreen() {
                   color={!reDreamResult ? colors.accent : colors.textSecondary}
                 />
                 <Text style={[s.reuseText, !reDreamResult && s.reuseTextActive]}>
-                  Use original photo
+                  {photoUri ? 'Use original photo' : 'Fresh dream'}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -711,26 +629,26 @@ export default function DreamLikeThisScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-          )}
 
-          <TouchableOpacity style={s.cta} onPress={handleDream} activeOpacity={0.7}>
-            <Text style={s.ctaText}>Dream Again</Text>
-          </TouchableOpacity>
-          <View style={s.buttonRow}>
-            <TouchableOpacity style={s.ctaHalf} onPress={confirmBack} activeOpacity={0.7}>
-              <Text style={s.ctaHalfText}>Discard</Text>
+            <TouchableOpacity style={s.cta} onPress={handleDream} activeOpacity={0.7}>
+              <Text style={s.ctaText}>Dream Again</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={s.ctaHalf}
-              onPress={handlePost}
-              activeOpacity={0.7}
-              disabled={posting}
-            >
-              {posting && <ActivityIndicator size="small" color={colors.textPrimary} />}
-              <Text style={s.ctaHalfText}>{posting ? 'Posting...' : 'Post Dream'}</Text>
-            </TouchableOpacity>
+            <View style={s.buttonRow}>
+              <TouchableOpacity style={s.ctaHalf} onPress={confirmDiscard} activeOpacity={0.7}>
+                <Text style={s.ctaHalfText}>Discard</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={s.ctaHalf}
+                onPress={handlePost}
+                activeOpacity={0.7}
+                disabled={posting}
+              >
+                {posting && <ActivityIndicator size="small" color={colors.textPrimary} />}
+                <Text style={s.ctaHalfText}>{posting ? 'Posting...' : 'Post Dream'}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </DreamReveal>
       </SafeAreaView>
     );
   }
@@ -754,12 +672,6 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
     gap: 16,
-  },
-  revealCenter: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
   },
   header: {
     flexDirection: 'row',
@@ -858,30 +770,6 @@ const s = StyleSheet.create({
   },
   ctaText: { color: '#FFF', fontSize: 17, fontWeight: '700' },
   footer: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 80, gap: 12 },
-  revealBorder: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  revealImg: {
-    width: PREVIEW_WIDTH,
-    height: Math.min(PREVIEW_WIDTH * 1.75, 400),
-    borderRadius: 20,
-  },
-  fsOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.92)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fsImageWrap: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 8,
-  },
   contextBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -906,13 +794,4 @@ const s = StyleSheet.create({
   },
   reuseText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
   reuseTextActive: { color: colors.accent },
-  fsClose: { position: 'absolute', top: 60, right: 20 },
-  fsCloseCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });

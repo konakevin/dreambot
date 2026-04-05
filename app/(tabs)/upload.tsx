@@ -39,6 +39,7 @@ import { Toast } from '@/components/Toast';
 import { showAlert } from '@/components/CustomAlert';
 import { formatCompact } from '@/lib/formatNumber';
 import { QuickSettingsSheet } from '@/components/QuickSettingsSheet';
+import { DreamReveal } from '@/components/DreamReveal';
 import { usePhotoInput } from '@/hooks/usePhotoInput';
 import { useDreamAlbum } from '@/hooks/useDreamAlbum';
 import { useDreamGeneration } from '@/hooks/useDreamGeneration';
@@ -465,10 +466,6 @@ export default function DreamScreen() {
   // ── REVEAL ────────────────────────────────────────────────────────────
 
   if (phase === 'reveal' && album.album.length > 0) {
-    const ITEM_WIDTH = PREVIEW_WIDTH;
-    const ITEM_SPACING = 16;
-    const SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
-
     return (
       <SafeAreaView style={s.root}>
         <View style={s.header}>
@@ -478,195 +475,105 @@ export default function DreamScreen() {
           <Text style={s.headerTitle}>Your dream</Text>
           <SparklePill />
         </View>
-        <View style={{ flex: 1, justifyContent: 'center', maxHeight: SCREEN_HEIGHT * 0.45 }}>
-          <FlatList
-            ref={album.albumRef}
-            data={album.album}
-            keyExtractor={(item, i) => `${i}-${item.url.slice(-20)}`}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={SNAP_WIDTH}
-            snapToAlignment="start"
-            decelerationRate="fast"
-            style={{ flexGrow: 0 }}
-            contentContainerStyle={{ paddingHorizontal: 24 }}
-            getItemLayout={(_, index) => ({
-              length: SNAP_WIDTH,
-              offset: SNAP_WIDTH * index,
-              index,
-            })}
-            onScroll={(e) => {
-              const idx = Math.round(e.nativeEvent.contentOffset.x / SNAP_WIDTH);
-              const clamped = Math.max(0, Math.min(idx, album.album.length - 1));
-              if (clamped !== album.activeIndex) {
-                album.saveControlsToActiveDream();
-                album.setActiveIndex(clamped);
-                if (album.album[clamped]) album.restoreControlsFromDream(album.album[clamped]);
-              }
-            }}
-            scrollEventThrottle={16}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => {
-                  album.setActiveIndex(index);
-                  setFullscreen(true);
-                  fsScale.value = 0;
-                  fsOpacity.value = 0;
-                  fsScale.value = withTiming(1, { duration: 300 });
-                  fsOpacity.value = withTiming(1, { duration: 250 });
-                }}
-                style={{ width: ITEM_WIDTH, marginRight: ITEM_SPACING }}
-              >
-                <Animated.View
-                  style={[
-                    s.revealBorder,
-                    index === album.album.length - 1 ? revealStyle : undefined,
-                  ]}
-                >
-                  <Image
-                    source={{ uri: item.url }}
-                    style={s.revealImg}
-                    contentFit="cover"
-                    transition={300}
-                  />
-                  {dreaming && index === album.activeIndex && (
-                    <View style={s.dreamingOverlay}>
-                      <ActivityIndicator size="large" color={colors.accent} />
-                      <Text style={s.dreamingText}>Dreaming...</Text>
-                    </View>
-                  )}
-                  {album.album.length > 1 && !dreaming && (
-                    <TouchableOpacity
-                      style={s.dismissBadge}
-                      onPress={() => album.removeDream(index)}
-                      hitSlop={8}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="close" size={14} color="#FFFFFF" />
-                    </TouchableOpacity>
-                  )}
-                </Animated.View>
-              </TouchableOpacity>
-            )}
-          />
-          {album.album.length > 1 && (
-            <View style={s.dotRow}>
-              {album.album.map((_, i) => (
-                <View key={i} style={[s.dot, i === album.activeIndex && s.dotActive]} />
-              ))}
-            </View>
-          )}
-        </View>
-
-        {/* Fullscreen preview modal */}
-        <Modal visible={fullscreen} transparent animationType="none" statusBarTranslucent>
-          <Pressable style={StyleSheet.absoluteFill} onPress={closeFullscreen}>
-            <Animated.View style={[s.fsOverlay, fsOverlayStyle]}>
-              <GestureDetector gesture={pinchGesture}>
-                <Animated.View style={[s.fsImageWrap, fsStyle]}>
-                  <Animated.View style={[{ width: '100%', height: '80%' }, pinchStyle]}>
-                    <Image
-                      source={{ uri: album.album[album.activeIndex]?.url ?? '' }}
-                      style={{ width: '100%', height: '100%', borderRadius: 4 }}
-                      contentFit="contain"
-                    />
-                  </Animated.View>
-                </Animated.View>
-              </GestureDetector>
-              <TouchableOpacity style={s.fsClose} onPress={closeFullscreen} activeOpacity={0.7}>
-                <View style={s.fsCloseCircle}>
-                  <Ionicons name="close" size={20} color="#FFFFFF" />
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
-          </Pressable>
-        </Modal>
-
-        <View style={s.footer}>
-          <ModePills />
-          <CustomPromptInput
-            value={album.customPrompt}
-            onChange={album.setCustomPrompt}
-            placeholder="Type your own prompt (optional)..."
-          />
-          <TouchableOpacity
-            style={s.cta}
-            onPress={async () => {
-              if (album.reDreamCurrent && album.activeDream?.url) {
-                try {
-                  const resp = await fetch(album.activeDream.url);
-                  const blob = await resp.blob();
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    const b64 = reader.result as string;
-                    photo.setPhotoBase64(b64.split(',')[1] ?? null);
-                    photo.setPhotoUri(album.activeDream!.url);
-                    gen.dream();
-                  };
-                  reader.readAsDataURL(blob);
-                } catch {
-                  Toast.show('Could not load image', 'close-circle');
-                }
-              } else if (album.reusePhoto && photo.photoUri) gen.dream();
-              else gen.justDream();
-            }}
-            activeOpacity={0.7}
-            disabled={posting || dreaming}
-          >
-            <Text style={s.ctaText}>{album.customPrompt.trim() ? 'Dream This' : 'Dream'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={s.reuseRow}
-            onPress={() => {
-              album.setReDreamCurrent(!album.reDreamCurrent);
-              if (!album.reDreamCurrent) album.setReusePhoto(false);
-            }}
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name={album.reDreamCurrent ? 'checkbox' : 'square-outline'}
-              size={18}
-              color={album.reDreamCurrent ? colors.accent : colors.textSecondary}
+        <DreamReveal
+          album={album.album}
+          activeIndex={album.activeIndex}
+          albumRef={album.albumRef}
+          dreaming={dreaming}
+          onIndexChange={(idx) => {
+            album.saveControlsToActiveDream();
+            album.setActiveIndex(idx);
+            if (album.album[idx]) album.restoreControlsFromDream(album.album[idx]);
+          }}
+          onRemove={album.removeDream}
+          imgOpacity={gen.imgOpacity}
+          imgScale={gen.imgScale}
+        >
+          <View style={s.footer}>
+            <ModePills />
+            <CustomPromptInput
+              value={album.customPrompt}
+              onChange={album.setCustomPrompt}
+              placeholder="Type your own prompt (optional)..."
             />
-            <Text style={[s.reuseText, album.reDreamCurrent && s.reuseTextActive]}>
-              Re-dream this image
-            </Text>
-          </TouchableOpacity>
-          {album.album[album.activeIndex]?.fromUpload && (
+            <TouchableOpacity
+              style={s.cta}
+              onPress={async () => {
+                if (album.reDreamCurrent && album.activeDream?.url) {
+                  try {
+                    const resp = await fetch(album.activeDream.url);
+                    const blob = await resp.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      const b64 = reader.result as string;
+                      photo.setPhotoBase64(b64.split(',')[1] ?? null);
+                      photo.setPhotoUri(album.activeDream!.url);
+                      gen.dream();
+                    };
+                    reader.readAsDataURL(blob);
+                  } catch {
+                    Toast.show('Could not load image', 'close-circle');
+                  }
+                } else if (album.reusePhoto && photo.photoUri) gen.dream();
+                else gen.justDream();
+              }}
+              activeOpacity={0.7}
+              disabled={posting || dreaming}
+            >
+              <Text style={s.ctaText}>{album.customPrompt.trim() ? 'Dream This' : 'Dream'}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={s.reuseRow}
               onPress={() => {
-                album.setReusePhoto(!album.reusePhoto);
-                if (!album.reusePhoto) album.setReDreamCurrent(false);
+                album.setReDreamCurrent(!album.reDreamCurrent);
+                if (!album.reDreamCurrent) album.setReusePhoto(false);
               }}
               activeOpacity={0.7}
             >
               <Ionicons
-                name={album.reusePhoto ? 'checkbox' : 'square-outline'}
+                name={album.reDreamCurrent ? 'checkbox' : 'square-outline'}
                 size={18}
-                color={album.reusePhoto ? colors.accent : colors.textSecondary}
+                color={album.reDreamCurrent ? colors.accent : colors.textSecondary}
               />
-              <Text style={[s.reuseText, album.reusePhoto && s.reuseTextActive]}>
-                Reuse original photo
+              <Text style={[s.reuseText, album.reDreamCurrent && s.reuseTextActive]}>
+                Re-dream this image
               </Text>
             </TouchableOpacity>
-          )}
-          <View style={s.row}>
-            <TouchableOpacity style={s.ctaHalf} onPress={photo.pickPhoto} activeOpacity={0.7}>
-              <Text style={s.ctaSecondaryText}>Dream a Photo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.ctaHalf}
-              onPress={handlePost}
-              activeOpacity={0.7}
-              disabled={posting || dreaming}
-            >
-              {posting && <ActivityIndicator size="small" color={colors.textPrimary} />}
-              <Text style={s.ctaSecondaryText}>{posting ? 'Posting...' : 'Post Dream'}</Text>
-            </TouchableOpacity>
+            {album.album[album.activeIndex]?.fromUpload && (
+              <TouchableOpacity
+                style={s.reuseRow}
+                onPress={() => {
+                  album.setReusePhoto(!album.reusePhoto);
+                  if (!album.reusePhoto) album.setReDreamCurrent(false);
+                }}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={album.reusePhoto ? 'checkbox' : 'square-outline'}
+                  size={18}
+                  color={album.reusePhoto ? colors.accent : colors.textSecondary}
+                />
+                <Text style={[s.reuseText, album.reusePhoto && s.reuseTextActive]}>
+                  Reuse original photo
+                </Text>
+              </TouchableOpacity>
+            )}
+            <View style={s.row}>
+              <TouchableOpacity style={s.ctaHalf} onPress={photo.pickPhoto} activeOpacity={0.7}>
+                <Text style={s.ctaSecondaryText}>Dream a Photo</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={s.ctaHalf}
+                onPress={handlePost}
+                activeOpacity={0.7}
+                disabled={posting || dreaming}
+              >
+                {posting && <ActivityIndicator size="small" color={colors.textPrimary} />}
+                <Text style={s.ctaSecondaryText}>{posting ? 'Posting...' : 'Post Dream'}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </DreamReveal>
       </SafeAreaView>
     );
   }
