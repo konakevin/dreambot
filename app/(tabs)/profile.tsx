@@ -187,13 +187,13 @@ export default function ProfileScreen() {
   }
 
   if (activeTab === 'dreams') {
-    const tileSize = (Dimensions.get('window').width - 4) / 3;
+    const tileSize = (Dimensions.get('window').width - 2) / 2;
     return (
       <SafeAreaView style={styles.root}>
         <FlatList
           data={myDreams}
           keyExtractor={(item) => item.id}
-          numColumns={3}
+          numColumns={2}
           columnWrapperStyle={{ gap: 2 }}
           contentContainerStyle={{ gap: 2 }}
           ListHeaderComponent={header}
@@ -208,7 +208,7 @@ export default function ProfileScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
-                useAlbumStore.getState().clearAlbum();
+                useAlbumStore.getState().setAlbum(myDreams.map((d) => d.id));
                 router.push(`/photo/${item.id}`);
               }}
               style={{ width: tileSize, height: tileSize }}

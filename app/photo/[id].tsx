@@ -148,7 +148,10 @@ export default function PhotoDetailScreen() {
       setPostedMap((prev) => ({ ...prev, [currentPost.id]: !newPosted }));
       Toast.show('Failed to update', 'close-circle');
     } else {
-      Toast.show(newPosted ? 'Posted to profile' : 'Moved to private', newPosted ? 'checkmark-circle' : 'lock-closed');
+      Toast.show(
+        newPosted ? 'Posted to profile' : 'Moved to private',
+        newPosted ? 'checkmark-circle' : 'lock-closed'
+      );
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       queryClient.invalidateQueries({ queryKey: ['feed'] });

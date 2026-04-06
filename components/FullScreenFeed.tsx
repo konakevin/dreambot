@@ -116,7 +116,7 @@ export function FullScreenFeed({
       Toast.show('Dream deleted', 'checkmark-circle');
 
       // Optimistically remove from all feed caches so the card disappears immediately
-      const feedKeys = ['feed', 'dreamFeed', 'userPosts', 'publicProfile', 'top'];
+      const feedKeys = ['feed', 'dreamFeed', 'userPosts', 'publicProfile', 'top', 'my-dreams'];
       for (const key of feedKeys) {
         queryClient.setQueriesData({ queryKey: [key] }, (old: unknown) => {
           if (Array.isArray(old)) return old.filter((p: { id: string }) => p.id !== uploadId);
