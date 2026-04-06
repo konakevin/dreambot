@@ -97,10 +97,11 @@ export default function CreateScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Mascot + title */}
+      {/* Mascot — commented out until we have a proper bot image
       <View style={s.hero}>
         <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
       </View>
+      */}
 
       {/* Option cards */}
       <View style={s.cards}>
