@@ -1,15 +1,17 @@
-import { useState, useRef, useMemo } from 'react';
-import { View, FlatList, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import { useState, useMemo, useCallback } from 'react';
+import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useAlbumStore } from '@/store/album';
 import { useSwipeBack } from '@/hooks/useSwipeBack';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useAuthStore } from '@/store/auth';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import type { DreamPostItem } from '@/components/DreamCard';
-import { colors } from '@/constants/theme';
+import { Toast } from '@/components/Toast';
+import * as Haptics from 'expo-haptics';
 
 /** Fetch a single post + user info */
 function useAlbumPosts(albumIds: string[], currentId: string) {
@@ -91,17 +93,69 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
 
 export default function PhotoDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const user = useAuthStore((s) => s.user);
   const albumIds = useAlbumStore((s) => s.ids);
   const { translateX, panHandlers } = useSwipeBack();
+  const queryClient = useQueryClient();
 
-  const { data: posts = [], isLoading, error } = useAlbumPosts(albumIds, id);
+  const { data: posts = [], isLoading } = useAlbumPosts(albumIds, id);
 
-  if (__DEV__) {
-    console.log('[photo/id] id:', id, '| albumIds:', albumIds.length, '| posts:', posts.length, '| loading:', isLoading, '| error:', error?.message ?? 'none');
-    if (posts.length > 0) console.log('[photo/id] first post image_url:', posts[0].image_url?.slice(0, 80));
-  }
+  // Track posted state for the current post
+  const [postedMap, setPostedMap] = useState<Record<string, boolean>>({});
+  const [visibleIndex, setVisibleIndex] = useState(0);
 
-  // Find initial index for the tapped post
+  // Check initial posted state for visible post
+  const currentPost = posts[visibleIndex];
+  const isOwn = currentPost?.user_id === user?.id;
+
+  // Fetch is_posted for the current post (only for own posts)
+  const { data: postStatus } = useQuery({
+    queryKey: ['postStatus', currentPost?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('uploads')
+        .select('is_posted, is_active')
+        .eq('id', currentPost!.id)
+        .single();
+      return data as { is_posted: boolean; is_active: boolean } | null;
+    },
+    enabled: !!currentPost && isOwn,
+    staleTime: 0,
+  });
+
+  const isPosted = postedMap[currentPost?.id] ?? postStatus?.is_posted ?? false;
+
+  const togglePosted = useCallback(async () => {
+    if (!currentPost || !user) return;
+    const newPosted = !isPosted;
+
+    // Optimistic update
+    setPostedMap((prev) => ({ ...prev, [currentPost.id]: newPosted }));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    const { error } = await supabase
+      .from('uploads')
+      .update({
+        is_posted: newPosted,
+        is_active: newPosted,
+        visibility: newPosted ? 'public' : 'private',
+      })
+      .eq('id', currentPost.id)
+      .eq('user_id', user.id);
+
+    if (error) {
+      // Revert
+      setPostedMap((prev) => ({ ...prev, [currentPost.id]: !newPosted }));
+      Toast.show('Failed to update', 'close-circle');
+    } else {
+      Toast.show(newPosted ? 'Posted to profile' : 'Moved to private', newPosted ? 'checkmark-circle' : 'lock-closed');
+      queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+      queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
+      queryClient.invalidateQueries({ queryKey: ['feed'] });
+      queryClient.invalidateQueries({ queryKey: ['postStatus', currentPost.id] });
+    }
+  }, [currentPost, user, isPosted, queryClient]);
+
   const initialIndex = useMemo(() => {
     const idx = posts.findIndex((p) => p.id === id);
     return idx >= 0 ? idx : 0;
@@ -115,10 +169,25 @@ export default function PhotoDetailScreen() {
           <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
         </View>
       </TouchableOpacity>
+
+      {/* Post/Unpost toggle — only for own posts */}
+      {isOwn && currentPost && (
+        <TouchableOpacity style={s.postToggle} onPress={togglePosted} activeOpacity={0.7}>
+          <View style={[s.postToggleCircle, isPosted && s.postToggleActive]}>
+            <Ionicons
+              name={isPosted ? 'eye' : 'eye-off'}
+              size={20}
+              color={isPosted ? '#FFFFFF' : 'rgba(255,255,255,0.7)'}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
+
       <FullScreenFeed
         posts={posts}
         isLoading={isLoading}
         initialIndex={initialIndex}
+        onIndexChange={setVisibleIndex}
         disableSwipeToProfile
         hideTabBar
       />
@@ -136,5 +205,17 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  postToggle: { position: 'absolute', top: 54, right: 16, zIndex: 10 },
+  postToggleCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  postToggleActive: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
   },
 });

@@ -47,6 +47,7 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     image_url: imageUrl,
     caption,
     is_active: isPublic,
+    is_posted: isPublic,
     ai_prompt: opts.prompt,
     width: 768,
     height: 1664,

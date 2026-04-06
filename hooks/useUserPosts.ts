@@ -25,6 +25,7 @@ export function useUserPosts(enabled = true) {
         .from('uploads')
         .select('id, image_url, width, height, caption, created_at, from_wish')
         .eq('user_id', user!.id)
+        .eq('is_posted', true)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;

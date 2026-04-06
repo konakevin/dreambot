@@ -34,6 +34,7 @@ import { usePendingRequests } from '@/hooks/usePendingRequests';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { useRemoveFriend } from '@/hooks/useRemoveFriend';
 import { useMyDreams } from '@/hooks/useMyDreams';
+import { useAlbumStore } from '@/store/album';
 
 import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
@@ -206,7 +207,10 @@ export default function ProfileScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => router.push(`/photo/${item.id}`)}
+              onPress={() => {
+                useAlbumStore.getState().clearAlbum();
+                router.push(`/photo/${item.id}`);
+              }}
               style={{ width: tileSize, height: tileSize }}
             >
               <Image
