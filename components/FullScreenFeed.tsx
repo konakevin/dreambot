@@ -32,6 +32,7 @@ import { supabase } from '@/lib/supabase';
 import { Toast } from '@/components/Toast';
 // fusionStore no longer used for Dream Like This — uses stack screen with route params
 import { DreamFamilySheet } from '@/components/DreamFamilySheet';
+import { LikesSheet } from '@/components/LikesSheet';
 import { colors } from '@/constants/theme';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -87,6 +88,7 @@ export function FullScreenFeed({
   const { mutate: toggleLike } = useToggleLike();
   const [familyPostId, setFamilyPostId] = useState<string | null>(null);
   const [familyPost, setFamilyPost] = useState<DreamPostItem | null>(null);
+  const [likesPostId, setLikesPostId] = useState<string | null>(null);
   const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
   const handleDelete = useCallback(
@@ -211,30 +213,26 @@ export function FullScreenFeed({
             }}
             disableSwipeToProfile={disableSwipeToProfile}
             onDelete={item.user_id === user?.id ? () => handleDelete(item.id) : undefined}
-            onFamily={
-              item.is_ai_generated
-                ? () => {
-                    const fuseCount = (item.twin_count ?? 0) + (item.fuse_count ?? 0);
-                    if (fuseCount === 0) {
-                      // No fusions — go straight to Dream Like This
-                      if (__DEV__)
-                        console.log('[Feed] No fusions, skipping sheet → Dream Like This');
-                      const params = new URLSearchParams({
-                        postId: item.id,
-                        imageUrl: item.image_url,
-                        username: item.username,
-                        userId: item.user_id,
-                        ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
-                      });
-                      router.push(`/dreamLikeThis?${params.toString()}`);
-                    } else {
-                      if (__DEV__) console.log('[Feed] onFamily tapped, postId:', item.id);
-                      setFamilyPostId(item.id);
-                      setFamilyPost(item);
-                    }
-                  }
-                : undefined
-            }
+            onFamily={() => {
+              const fuseCount = (item.twin_count ?? 0) + (item.fuse_count ?? 0);
+              if (fuseCount === 0) {
+                const params = new URLSearchParams({
+                  postId: item.id,
+                  imageUrl: item.image_url,
+                  username: item.username,
+                  userId: item.user_id,
+                  ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
+                });
+                router.push(`/dreamLikeThis?${params.toString()}`);
+              } else {
+                setFamilyPostId(item.id);
+                setFamilyPost(item);
+              }
+            }}
+            onLikesPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setLikesPostId(item.id);
+            }}
           />
         )}
       />
@@ -271,6 +269,11 @@ export function FullScreenFeed({
           }}
         />
       )}
+      <LikesSheet
+        uploadId={likesPostId}
+        visible={!!likesPostId}
+        onClose={() => setLikesPostId(null)}
+      />
     </>
   );
 }

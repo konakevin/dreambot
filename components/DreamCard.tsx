@@ -67,6 +67,7 @@ interface Props {
   onDelete?: () => void;
   onFuse?: () => void;
   onFamily?: () => void;
+  onLikesPress?: () => void;
 }
 
 /** A single sparkle particle that floats along the border edge */
@@ -175,6 +176,7 @@ export function DreamCard({
   onDelete,
   onFuse,
   onFamily,
+  onLikesPress,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
@@ -397,7 +399,13 @@ export function DreamCard({
 
           {/* Side actions */}
           <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
-            <TouchableOpacity style={ui.sideButton} onPress={onToggleLike} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={ui.sideButton}
+              onPress={onToggleLike}
+              onLongPress={onLikesPress}
+              delayLongPress={400}
+              activeOpacity={0.7}
+            >
               <Ionicons
                 name={isLiked ? 'heart' : 'heart-outline'}
                 size={28}

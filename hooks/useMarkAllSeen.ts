@@ -19,7 +19,7 @@ export function useMarkAllSeen() {
     },
     onMutate: async () => {
       // Optimistic update — mark all seen locally without refetching
-      queryClient.setQueryData<InfiniteData<NotificationItem[]>>(['inbox'], (old) => {
+      queryClient.setQueryData<InfiniteData<NotificationItem[]>>(['inbox', user!.id], (old) => {
         if (!old) return old;
         return {
           ...old,
@@ -28,6 +28,7 @@ export function useMarkAllSeen() {
       });
     },
     onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['inbox', user!.id] });
       queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
     },
   });
