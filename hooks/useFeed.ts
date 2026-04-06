@@ -20,8 +20,9 @@ export interface FeedItem {
   ai_prompt?: string | null;
   ai_concept?: Record<string, unknown> | null;
   bot_message?: string | null;
+  dream_medium?: string | null;
+  dream_vibe?: string | null;
   feed_score?: number;
-  is_ai_generated?: boolean;
 }
 
 async function fetchFeed(userId: string, seed: number): Promise<FeedItem[]> {

@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
-import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
+import { MediumVibeBadge } from '@/components/MediumVibeBadge';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { saveDream, pinToFeed } from '@/lib/dreamSave';
@@ -40,8 +40,6 @@ export default function DreamRevealScreen() {
 
   const mediumKey = result?.resolvedMedium ?? config.selectedMedium;
   const vibeKey = result?.resolvedVibe ?? config.selectedVibe;
-  const mediumLabel = DREAM_MEDIUMS.find((m) => m.key === mediumKey)?.label ?? mediumKey;
-  const vibeLabel = DREAM_VIBES.find((v) => v.key === vibeKey)?.label ?? vibeKey;
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
@@ -171,8 +169,7 @@ export default function DreamRevealScreen() {
 
       {/* Medium + Vibe labels */}
       <View style={[s.labels, { paddingBottom: insets.bottom + 16 }]}>
-        <Text style={s.labelMedium}>{mediumLabel}</Text>
-        <Text style={s.labelVibe}>{vibeLabel}</Text>
+        <MediumVibeBadge mediumKey={mediumKey} vibeKey={vibeKey} />
       </View>
 
       {/* Bottom actions */}
@@ -245,25 +242,6 @@ const s = StyleSheet.create({
     left: 20,
     gap: 2,
     marginBottom: 160,
-  },
-  labelMedium: {
-    color: '#fff',
-    fontSize: 13,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    textShadowColor: 'rgba(0,0,0,0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
-  },
-  labelVibe: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 1,
-    textShadowColor: 'rgba(0,0,0,0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
   },
   actions: {
     position: 'absolute',

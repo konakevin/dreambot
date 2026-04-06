@@ -69,6 +69,8 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
           fuse_count: (row.fuse_count as number) ?? 0,
           twin_of: (row.twin_of as string | null) ?? null,
           fuse_of: (row.fuse_of as string | null) ?? null,
+          dream_medium: (row.dream_medium as string | null) ?? null,
+          dream_vibe: (row.dream_vibe as string | null) ?? null,
         };
       });
     },

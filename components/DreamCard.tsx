@@ -28,6 +28,7 @@ import * as Haptics from 'expo-haptics';
 import { colors, ui } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
+import { MediumVibeBadge } from '@/components/MediumVibeBadge';
 import { useAuthStore } from '@/store/auth';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -51,6 +52,8 @@ export interface DreamPostItem {
   twin_of?: string | null;
   fuse_of?: string | null;
   bot_message?: string | null;
+  dream_medium?: string | null;
+  dream_vibe?: string | null;
 }
 
 interface Props {
@@ -364,6 +367,7 @@ export function DreamCard({
 
           {/* Post info */}
           <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+            <MediumVibeBadge mediumKey={item.dream_medium} vibeKey={item.dream_vibe} />
             {item.bot_message && <Text style={s.botMessage}>{item.bot_message}</Text>}
             <TouchableOpacity
               style={s.usernameRow}
