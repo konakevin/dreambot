@@ -55,8 +55,7 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
         .select(
           'id, user_id, image_url, caption, created_at, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
         )
-        .in('id', albumIds)
-        .eq('is_active', true);
+        .in('id', albumIds);
       if (error) throw error;
 
       // Sort by album order
@@ -95,7 +94,12 @@ export default function PhotoDetailScreen() {
   const albumIds = useAlbumStore((s) => s.ids);
   const { translateX, panHandlers } = useSwipeBack();
 
-  const { data: posts = [], isLoading } = useAlbumPosts(albumIds, id);
+  const { data: posts = [], isLoading, error } = useAlbumPosts(albumIds, id);
+
+  if (__DEV__) {
+    console.log('[photo/id] id:', id, '| albumIds:', albumIds.length, '| posts:', posts.length, '| loading:', isLoading, '| error:', error?.message ?? 'none');
+    if (posts.length > 0) console.log('[photo/id] first post image_url:', posts[0].image_url?.slice(0, 80));
+  }
 
   // Find initial index for the tapped post
   const initialIndex = useMemo(() => {

@@ -1105,10 +1105,16 @@ async function persistToStorage(
   if (!resp.ok) throw new Error(`Failed to download image: ${resp.status}`);
   const buf = await resp.arrayBuffer();
 
-  const fileName = `${userId}/${Date.now()}.jpg`;
+  // Detect actual image format from magic bytes
+  const bytes = new Uint8Array(buf.slice(0, 4));
+  const isPng = bytes[0] === 0x89 && bytes[1] === 0x50;
+  const ext = isPng ? 'png' : 'jpg';
+  const contentType = isPng ? 'image/png' : 'image/jpeg';
+
+  const fileName = `${userId}/${Date.now()}.${ext}`;
   const { error } = await supabase.storage
     .from('uploads')
-    .upload(fileName, buf, { contentType: 'image/jpeg' });
+    .upload(fileName, buf, { contentType });
   if (error) throw new Error(`Storage upload failed: ${error.message}`);
 
   const { data } = supabase.storage.from('uploads').getPublicUrl(fileName);
