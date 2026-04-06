@@ -39,7 +39,6 @@ export interface DreamPostItem {
   caption: string | null;
   username: string;
   avatar_url: string | null;
-  is_ai_generated: boolean;
   ai_prompt?: string | null;
   ai_concept?: Record<string, unknown> | null;
   created_at: string;
@@ -430,7 +429,7 @@ export function DreamCard({
             >
               <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
             </TouchableOpacity>
-            {item.is_ai_generated && onFamily && (
+            {onFamily && (
               <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
                 <Ionicons name="git-network-outline" size={24} color="#FFFFFF" />
                 {(item.twin_count ?? 0) + (item.fuse_count ?? 0) > 0 && (

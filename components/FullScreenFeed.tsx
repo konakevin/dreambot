@@ -255,7 +255,7 @@ export function FullScreenFeed({
           }}
           post={familyPost}
           uploadId={familyPost.id}
-          isAiGenerated={familyPost.is_ai_generated}
+          isAiGenerated={true}
           hideTabBar={hideTabBar}
           onDreamLikeThis={() => {
             if (__DEV__)

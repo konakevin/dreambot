@@ -21,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSharedValue, withTiming, withSequence } from 'react-native-reanimated';
 import { useLocalSearchParams, router } from 'expo-router';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useSparkleBalance, useSpendSparkles } from '@/hooks/useSparkles';
@@ -179,15 +179,15 @@ export default function DreamLikeThisScreen() {
   // ── Pick photo ────────────────────────────────────────────────────
   async function pickPhoto() {
     try {
-      const media = await ImageCropPicker.openPicker({
-        mediaType: 'photo',
-        cropping: false,
-        forceJpg: true,
-        compressImageQuality: 0.9,
-        includeBase64: true,
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        quality: 0.8,
+        base64: true,
       });
-      setPhotoBase64(media.data ?? null);
-      setPhotoUri(media.path);
+      if (result.canceled || !result.assets?.[0]) return;
+      const asset = result.assets[0];
+      setPhotoBase64(asset.base64 ?? null);
+      setPhotoUri(asset.uri);
       setCustomPrompt('');
     } catch {
       /* cancelled */

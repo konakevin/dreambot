@@ -54,7 +54,6 @@ function useCategoryDreams(category: DreamCategory) {
           caption: row.caption as string | null,
           username: row.username as string,
           avatar_url: row.avatar_url as string | null,
-          is_ai_generated: true,
           created_at: row.created_at as string,
           comment_count: (row.comment_count as number) ?? 0,
           like_count: (row.like_count as number) ?? 0,

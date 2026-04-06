@@ -41,7 +41,6 @@ export async function moderateUpload(
   return callModeration({
     type: 'upload',
     media_url: mediaUrl,
-    media_type: 'image',
     caption,
   });
 }

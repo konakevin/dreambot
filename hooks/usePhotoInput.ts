@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export interface PhotoInput {
   photoUri: string | null;
@@ -21,15 +21,15 @@ export function usePhotoInput(onPhotoPicked?: () => void): PhotoInput {
 
   const pickPhoto = useCallback(async () => {
     try {
-      const media = await ImageCropPicker.openPicker({
-        mediaType: 'photo',
-        cropping: false,
-        forceJpg: true,
-        compressImageQuality: 0.9,
-        includeBase64: true,
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        quality: 0.8,
+        base64: true,
       });
-      setPhotoBase64(media.data ?? null);
-      setPhotoUri(media.path);
+      if (result.canceled || !result.assets?.[0]) return;
+      const asset = result.assets[0];
+      setPhotoBase64(asset.base64 ?? null);
+      setPhotoUri(asset.uri);
       photoFromUpload.current = true;
       onPhotoPicked?.();
     } catch {

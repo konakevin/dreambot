@@ -7,7 +7,6 @@ export interface PinnedPost {
   caption: string | null;
   username: string;
   avatar_url: string | null;
-  is_ai_generated: boolean;
   created_at: string;
   comment_count: number;
 }

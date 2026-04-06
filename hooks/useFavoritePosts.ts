@@ -13,9 +13,7 @@ export function useFavoritePosts(enabled = true) {
       const offset = pageParam as number;
       const { data, error } = await supabase
         .from('favorites')
-        .select(
-          'uploads(id, categories, image_url, media_type, thumbnail_url, width, height, caption, total_votes, rad_votes, created_at)'
-        )
+        .select('uploads(id, image_url, width, height, caption, created_at)')
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);

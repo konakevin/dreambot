@@ -22,8 +22,6 @@ interface GenerateDreamOpts {
   haiku_brief?: string;
   /** Fallback prompt if Haiku fails */
   haiku_fallback?: string;
-  /** Epigenetic context for fusion */
-  epigenetic_context?: string;
   /** Whether to persist to Storage (default: false — persist on post, not generate) */
   persist?: boolean;
   /** Skip Haiku enhancement — use raw prompt (faster) */
@@ -36,6 +34,8 @@ interface GenerateDreamOpts {
   medium_key?: string;
   /** V2 engine — curated vibe key */
   vibe_key?: string;
+  /** Photo style: 'restyle' keeps scene, 'reimagine' dreams up new scenario */
+  photo_style?: 'restyle' | 'reimagine';
 }
 
 interface GenerateDreamResult {
@@ -171,34 +171,4 @@ export async function persistImage(tempUrl: string, userId: string): Promise<str
 
   const { data } = supabase.storage.from('uploads').getPublicUrl(fileName);
   return data.publicUrl;
-}
-
-/**
- * Convenience: re-roll a twin dream from an existing prompt.
- */
-/**
- * Convenience: re-roll a twin dream from an existing prompt.
- * Twins cost sparkles — persist immediately.
- */
-export async function generateTwin(prompt: string): Promise<GenerateDreamResult> {
-  return generateDream({ mode: 'flux-dev', prompt, persist: true });
-}
-
-/**
- * Convenience: generate a fusion dream from a merged recipe.
- */
-/**
- * Convenience: generate a fusion dream from a merged recipe.
- * Fusions cost sparkles — persist immediately.
- */
-export async function generateFusion(
-  mergedRecipe: Recipe,
-  epigeneticContext: string
-): Promise<GenerateDreamResult> {
-  return generateDream({
-    mode: 'flux-dev',
-    recipe: mergedRecipe,
-    epigenetic_context: epigeneticContext,
-    persist: true,
-  });
 }

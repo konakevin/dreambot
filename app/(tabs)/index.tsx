@@ -39,7 +39,6 @@ function useDreamFeed(tab: FeedTab) {
           caption: row.caption as string | null,
           username: row.username as string,
           avatar_url: row.avatar_url as string | null,
-          is_ai_generated: true,
           created_at: row.created_at as string,
           comment_count: (row.comment_count as number) ?? 0,
           like_count: (row.like_count as number) ?? 0,
@@ -54,7 +53,7 @@ function useDreamFeed(tab: FeedTab) {
       let query = supabase
         .from('uploads')
         .select(
-          'id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, bot_message, users!inner(username, avatar_url)'
+          'id, user_id, image_url, caption, created_at, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, bot_message, users!inner(username, avatar_url)'
         )
         .eq('is_active', true)
         .order('created_at', { ascending: false })
@@ -87,7 +86,6 @@ function useDreamFeed(tab: FeedTab) {
           caption: row.caption as string | null,
           username: u.username as string,
           avatar_url: u.avatar_url as string | null,
-          is_ai_generated: (row.is_ai_generated as boolean) ?? false,
           created_at: row.created_at as string,
           comment_count: (row.comment_count as number) ?? 0,
           like_count: (row.like_count as number) ?? 0,

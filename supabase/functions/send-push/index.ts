@@ -35,8 +35,6 @@ function getNotificationContent(type: string, actorName: string, body: string | 
       return { title: `${actorName} wants to dream with you`, body: 'Tap to respond' };
     case 'friend_accepted':
       return { title: `${actorName} accepted your dream request`, body: "You're now dreamers!" };
-    case 'post_milestone':
-      return { title: `Your post just hit ${body ?? 'a milestone'}!`, body: 'Keep it going!' };
     case 'dream_generated':
       return {
         title: 'A new dream awaits',

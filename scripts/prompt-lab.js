@@ -266,10 +266,10 @@ async function uploadToSupabase(imageBuffer, filename) {
 
 async function createPost(userId, imageUrl, prompt, category) {
   const { data, error } = await supabase.from('uploads').insert({
-    user_id: userId, image_url: imageUrl, media_type: 'image',
+    user_id: userId, image_url: imageUrl,
     categories: [category], caption: makeCaption(prompt),
     is_active: true, is_approved: true, is_moderated: true,
-    total_votes: 0, rad_votes: 0, bad_votes: 0, width: 768, height: 1664,
+    width: 768, height: 1664,
   }).select('id').single();
   if (error) throw new Error(`Post failed: ${error.message}`);
   return data.id;

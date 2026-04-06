@@ -3,34 +3,25 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 
-export interface FriendVote {
-  user_id: string;
-  username: string;
-  avatar_url: string | null;
-  vote: 'rad' | 'bad';
-  streak?: number;
-  rad_streak?: number;
-  bad_streak?: number;
-}
-
 export interface FeedItem {
   id: string;
   user_id: string;
-  categories: string[];
   image_url: string;
-  media_type: string;
-  thumbnail_url: string | null;
   width: number | null;
   height: number | null;
   caption: string | null;
   created_at: string;
-  total_votes: number;
-  rad_votes: number;
-  bad_votes: number;
   username: string;
   avatar_url: string | null;
   comment_count?: number;
-  friend_votes?: FriendVote[];
+  like_count?: number;
+  twin_count?: number;
+  fuse_count?: number;
+  ai_prompt?: string | null;
+  ai_concept?: Record<string, unknown> | null;
+  bot_message?: string | null;
+  feed_score?: number;
+  is_ai_generated?: boolean;
 }
 
 async function fetchFeed(userId: string, seed: number): Promise<FeedItem[]> {
@@ -43,20 +34,6 @@ async function fetchFeed(userId: string, seed: number): Promise<FeedItem[]> {
   if (error) throw error;
 
   return (data ?? []) as FeedItem[];
-}
-
-async function fetchFriendsFeed(userId: string): Promise<FeedItem[]> {
-  const { data, error } = await supabase.rpc('get_friends_feed', {
-    p_user_id: userId,
-    p_limit: 50,
-  });
-
-  if (error) throw error;
-
-  return (data ?? []).map((row: Record<string, unknown>) => ({
-    ...row,
-    friend_votes: (row.friend_votes as FriendVote[] | null) ?? [],
-  })) as FeedItem[];
 }
 
 export function useFeed() {
@@ -82,16 +59,6 @@ export function useFollowingFeed() {
       if (error) throw error;
       return (data ?? []) as unknown as FeedItem[];
     },
-    enabled: !!user,
-    staleTime: 120_000,
-  });
-}
-
-export function useFriendsFeed() {
-  const user = useAuthStore((s) => s.user);
-  return useQuery({
-    queryKey: ['friendsFeed', user?.id],
-    queryFn: () => fetchFriendsFeed(user!.id),
     enabled: !!user,
     staleTime: 120_000,
   });

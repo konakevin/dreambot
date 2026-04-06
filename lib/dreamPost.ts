@@ -28,15 +28,9 @@ export async function postDream(opts: PostDreamOpts): Promise<string> {
     .insert({
       user_id: opts.userId,
       image_url: opts.imageUrl,
-      media_type: 'image',
-      categories: ['art'],
       caption,
       is_active: true,
-      is_ai_generated: true,
       ai_prompt: opts.prompt,
-      total_votes: 0,
-      rad_votes: 0,
-      bad_votes: 0,
       width: 768,
       height: 1664,
       from_wish: opts.fromWish ?? null,
@@ -72,7 +66,6 @@ export function pinToFeed(opts: PinToFeedOpts) {
     caption: opts.caption ?? null,
     username: opts.username,
     avatar_url: opts.avatarUrl,
-    is_ai_generated: true,
     created_at: new Date().toISOString(),
     comment_count: 0,
   });

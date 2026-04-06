@@ -51,7 +51,6 @@ export function useToggleBlock() {
       queryClient.invalidateQueries({ queryKey: ['blockedIds'] });
       queryClient.invalidateQueries({ queryKey: ['feed'] });
       queryClient.invalidateQueries({ queryKey: ['followingFeed'] });
-      queryClient.invalidateQueries({ queryKey: ['friendsFeed'] });
     },
   });
 }

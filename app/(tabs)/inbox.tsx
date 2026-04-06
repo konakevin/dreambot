@@ -51,8 +51,6 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
       return { action: 'wants to dream with you', preview: null };
     case 'friend_accepted':
       return { action: 'accepted your dream request', preview: null };
-    case 'post_milestone':
-      return { action: 'Your post hit ' + (item.body ?? 'a milestone!'), preview: null };
     case 'dream_generated': {
       const isWish = item.body?.startsWith('wish:');
       const isWelcome = item.body?.startsWith('welcome:');

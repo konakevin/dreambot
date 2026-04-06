@@ -1,8 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
-export type StatsTab = 'posts' | 'friends' | 'followers' | 'following' | 'streaks';
+export type StatsTab = 'posts' | 'friends' | 'followers' | 'following';
 
 interface Props {
   postCount: number;
@@ -82,25 +81,6 @@ export function ProfileStatsRow({
           Following
         </Text>
       </TouchableOpacity>
-      {!hidden.has('streaks') && (
-        <>
-          <View style={styles.statDivider} />
-          <TouchableOpacity
-            style={styles.stat}
-            onPress={() => onTabChange('streaks')}
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name="flash"
-              size={18}
-              color={activeTab === 'streaks' ? colors.textPrimary : colors.textSecondary}
-            />
-            <Text style={[styles.statLabel, activeTab === 'streaks' && styles.statLabelActive]}>
-              Streaks
-            </Text>
-          </TouchableOpacity>
-        </>
-      )}
     </View>
   );
 }

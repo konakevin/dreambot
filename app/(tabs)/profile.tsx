@@ -10,6 +10,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -32,11 +33,12 @@ import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
 import { usePendingRequests } from '@/hooks/usePendingRequests';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { useRemoveFriend } from '@/hooks/useRemoveFriend';
+import { useMyDreams } from '@/hooks/useMyDreams';
 
 import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
-type Tab = 'posts' | 'saved' | 'friends' | 'followers' | 'following';
+type Tab = 'posts' | 'saved' | 'dreams' | 'friends' | 'followers' | 'following';
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -62,11 +64,13 @@ export default function ProfileScreen() {
   const { data: pendingRequests = [] } = usePendingRequests();
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
+  const { data: myDreams = [], isLoading: loadingDreams } = useMyDreams();
 
   const handleRefresh = useCallback(() => {
     refetchProfile();
     queryClient.invalidateQueries({ queryKey: ['userPosts'] });
     queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+    queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
   }, [refetchProfile, queryClient]);
 
   function handleFollowUser(targetId: string) {
@@ -78,7 +82,8 @@ export default function ProfileScreen() {
     setActiveTab(tab as Tab);
   }
 
-  const statsActiveTab: StatsTab = activeTab === 'saved' ? 'posts' : (activeTab as StatsTab);
+  const statsActiveTab: StatsTab =
+    activeTab === 'saved' || activeTab === 'dreams' ? 'posts' : (activeTab as StatsTab);
 
   const header = (
     <>
@@ -107,17 +112,17 @@ export default function ProfileScreen() {
           activeTab={statsActiveTab}
           onTabChange={handleStatsTabChange}
           pendingCount={pendingRequests.length}
-          hiddenTabs={['streaks']}
+          hiddenTabs={[]}
         />
       </View>
 
-      {(activeTab === 'posts' || activeTab === 'saved') && (
+      {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
         <View style={styles.wishRow}>
           <DreamWishBadge variant="card" />
         </View>
       )}
 
-      {(activeTab === 'posts' || activeTab === 'saved') && (
+      {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
         <View style={styles.tabRow}>
           <TouchableOpacity
             style={[styles.tab, activeTab === 'posts' && styles.tabActive]}
@@ -131,6 +136,20 @@ export default function ProfileScreen() {
             />
             <Text style={[styles.tabText, activeTab === 'posts' && styles.tabTextActive]}>
               My Posts
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'dreams' && styles.tabActive]}
+            onPress={() => setActiveTab('dreams')}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={activeTab === 'dreams' ? 'moon' : 'moon-outline'}
+              size={16}
+              color={activeTab === 'dreams' ? colors.textPrimary : colors.textSecondary}
+            />
+            <Text style={[styles.tabText, activeTab === 'dreams' && styles.tabTextActive]}>
+              My Dreams
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -161,6 +180,54 @@ export default function ProfileScreen() {
           emptyText={activeTab === 'posts' ? 'No posts yet' : 'Nothing saved yet'}
           ListHeaderComponent={header}
           scrollToTopToken={profileResetToken}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  if (activeTab === 'dreams') {
+    const tileSize = (Dimensions.get('window').width - 4) / 3;
+    return (
+      <SafeAreaView style={styles.root}>
+        <FlatList
+          data={myDreams}
+          keyExtractor={(item) => item.id}
+          numColumns={3}
+          columnWrapperStyle={{ gap: 2 }}
+          contentContainerStyle={{ gap: 2 }}
+          ListHeaderComponent={header}
+          ListEmptyComponent={
+            loadingDreams ? (
+              <ActivityIndicator size="small" color={colors.accent} style={{ marginTop: 40 }} />
+            ) : (
+              <Text style={styles.emptyText}>No dreams yet. Create your first dream!</Text>
+            )
+          }
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => router.push(`/photo/${item.id}`)}
+              style={{ width: tileSize, height: tileSize }}
+            >
+              <Image
+                source={{ uri: item.image_url }}
+                style={{ width: '100%', height: '100%' }}
+                contentFit="cover"
+              />
+              {!item.is_active && (
+                <View style={styles.privateBadge}>
+                  <Ionicons name="lock-closed" size={10} color="#fff" />
+                </View>
+              )}
+            </TouchableOpacity>
+          )}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={handleRefresh}
+              tintColor={colors.textSecondary}
+            />
+          }
         />
       </SafeAreaView>
     );
@@ -305,4 +372,15 @@ const styles = StyleSheet.create({
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
   wishRow: { paddingHorizontal: 16, paddingBottom: 8 },
+  privateBadge: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

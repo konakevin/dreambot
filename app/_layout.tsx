@@ -128,7 +128,6 @@ function RealtimeSubscriber() {
           // New dream generated for this user — refresh all feeds
           queryClient.invalidateQueries({ queryKey: ['feed'] });
           queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-          queryClient.invalidateQueries({ queryKey: ['friendsFeed'] });
           queryClient.invalidateQueries({ queryKey: ['followingFeed'] });
           queryClient.invalidateQueries({ queryKey: ['userPosts'] });
         }
@@ -178,32 +177,6 @@ function DataPrefetcher() {
     return () => sub.remove();
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-    // Prefetch profile data so the profile tab renders instantly
-    queryClient.prefetchQuery({
-      queryKey: ['topStreaks', user.id],
-      queryFn: async () => {
-        const { data, error } = await supabase.rpc('get_top_streaks', { p_user_id: user.id });
-        if (error) throw error;
-        return (data ?? []).map((row: Record<string, unknown>) => ({
-          friendId: row.friend_id as string,
-          friendUsername: row.friend_username as string,
-          friendAvatar: (row.friend_avatar as string | null) ?? null,
-          friendRank: (row.friend_rank as string | null) ?? null,
-          currentStreak: row.current_streak as number,
-          bestStreak: row.best_streak as number,
-          streakType: (row.streak_type as 'rad' | 'bad' | null) ?? null,
-          radStreak: (row.rad_streak as number) ?? 0,
-          badStreak: (row.bad_streak as number) ?? 0,
-          bestRadStreak: (row.best_rad_streak as number) ?? 0,
-          bestBadStreak: (row.best_bad_streak as number) ?? 0,
-        }));
-      },
-      staleTime: 5 * 60 * 1000,
-    });
-  }, [user?.id]);
-
   return null;
 }
 
@@ -237,15 +210,7 @@ export default function RootLayout() {
                 name="settings"
                 options={{ presentation: 'card', gestureEnabled: true }}
               />
-              <Stack.Screen
-                name="fusion"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
-                name="friendReveal/[uploadId]"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
+<Stack.Screen
                 name="photo/[id]"
                 options={{ presentation: 'card', gestureEnabled: true }}
               />
@@ -282,6 +247,18 @@ export default function RootLayout() {
               <Stack.Screen
                 name="sparkleStore"
                 options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="dream/configure"
+                options={{ presentation: 'card', gestureEnabled: true }}
+              />
+              <Stack.Screen
+                name="dream/loading"
+                options={{ presentation: 'card', gestureEnabled: false }}
+              />
+              <Stack.Screen
+                name="dream/reveal"
+                options={{ presentation: 'card', gestureEnabled: false }}
               />
             </Stack>
             <StatusBar style="light" />

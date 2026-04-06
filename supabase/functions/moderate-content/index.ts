@@ -11,13 +11,11 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 interface RequestBody {
-  type: 'image' | 'video' | 'text' | 'upload';
+  type: 'image' | 'text' | 'upload';
   image_url?: string;
-  video_url?: string;
   text?: string;
   /** For "upload" type — combined media + text check */
   media_url?: string;
-  media_type?: 'image' | 'video';
   caption?: string;
 }
 
@@ -103,27 +101,18 @@ Deno.serve(async (req) => {
         result = await checkImage(body.image_url, API_USER, API_SECRET);
         break;
 
-      case 'video':
-        if (!body.video_url) return jsonResponse({ error: 'video_url required' }, 400);
-        result = await checkVideo(body.video_url, API_USER, API_SECRET);
-        break;
-
       case 'text':
         if (!body.text) return jsonResponse({ error: 'text required' }, 400);
         result = await checkText(body.text, API_USER, API_SECRET);
         break;
 
       case 'upload': {
-        if (!body.media_url || !body.media_type) {
-          return jsonResponse({ error: 'media_url and media_type required for upload type' }, 400);
+        if (!body.media_url) {
+          return jsonResponse({ error: 'media_url required for upload type' }, 400);
         }
-        const mediaCheck =
-          body.media_type === 'video'
-            ? checkVideo(body.media_url, API_USER, API_SECRET)
-            : checkImage(body.media_url, API_USER, API_SECRET);
 
         const [mediaResult, textResult] = await Promise.all([
-          mediaCheck,
+          checkImage(body.media_url, API_USER, API_SECRET),
           body.caption
             ? checkText(body.caption, API_USER, API_SECRET)
             : Promise.resolve({ passed: true, reason: null }),
@@ -142,7 +131,7 @@ Deno.serve(async (req) => {
       }
 
       default:
-        return jsonResponse({ error: 'Invalid type. Must be image, video, text, or upload' }, 400);
+        return jsonResponse({ error: 'Invalid type. Must be image, text, or upload' }, 400);
     }
 
     return jsonResponse(result, 200);
@@ -195,42 +184,6 @@ async function checkImage(
     if (score > threshold) {
       const category = path.split('.')[0];
       return { passed: false, reason: `Content flagged: ${category}` };
-    }
-  }
-
-  return { passed: true, reason: null };
-}
-
-async function checkVideo(
-  videoUrl: string,
-  apiUser: string,
-  apiSecret: string
-): Promise<ModerationResult> {
-  const params = new URLSearchParams({
-    stream_url: videoUrl,
-    models: 'nudity-2.1,gore-2.0,weapon,self-harm',
-    api_user: apiUser,
-    api_secret: apiSecret,
-  });
-
-  const res = await fetch(`https://api.sightengine.com/1.0/video/check-sync.json?${params}`);
-  if (!res.ok) {
-    return { passed: false, reason: 'Unable to verify content. Please try again.' };
-  }
-
-  const data = await res.json();
-  if (data.status !== 'success') {
-    return { passed: false, reason: 'Unable to verify content. Please try again.' };
-  }
-
-  const frames = data.data?.frames ?? [];
-  for (const frame of frames) {
-    for (const [path, threshold] of Object.entries(IMAGE_THRESHOLDS)) {
-      const score = getNestedValue(frame as Record<string, unknown>, path);
-      if (score > threshold) {
-        const category = path.split('.')[0];
-        return { passed: false, reason: `Video flagged: ${category}` };
-      }
     }
   }
 

@@ -64,7 +64,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="upload"
+        name="create"
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="moon-outline" size={size} color={color} />
@@ -72,7 +72,7 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            activeTab.current = 'upload';
+            activeTab.current = 'create';
           },
         }}
       />

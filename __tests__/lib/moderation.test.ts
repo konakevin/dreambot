@@ -99,7 +99,6 @@ describe('moderateUpload', () => {
       body: {
         type: 'upload',
         media_url: 'https://example.com/photo.jpg',
-        media_type: 'image',
         caption: 'nice photo',
       },
     });

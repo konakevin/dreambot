@@ -14,7 +14,6 @@ export interface NotificationItem {
     | 'post_share'
     | 'friend_request'
     | 'friend_accepted'
-    | 'post_milestone'
     | 'dream_generated'
     | 'post_like'
     | 'post_twin'
@@ -41,7 +40,7 @@ function mapRow(row: Record<string, unknown>): NotificationItem {
     commentId: (row.comment_id as string | null) ?? null,
     body: (row.body as string | null) ?? null,
     imageUrl: (row.image_url as string | null) ?? null,
-    thumbnailUrl: (row.thumbnail_url as string | null) ?? null,
+    thumbnailUrl: null,
     createdAt: row.created_at as string,
     isSeen: row.is_seen as boolean,
   };

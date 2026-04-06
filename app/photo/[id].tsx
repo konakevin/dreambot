@@ -21,7 +21,7 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
         const { data, error } = await supabase
           .from('uploads')
           .select(
-            'id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
+            'id, user_id, image_url, caption, created_at, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
           )
           .eq('id', currentId)
           .single();
@@ -35,7 +35,6 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
             caption: data.caption,
             username: u.username as string,
             avatar_url: u.avatar_url as string | null,
-            is_ai_generated: data.is_ai_generated ?? false,
             created_at: data.created_at,
             comment_count: data.comment_count ?? 0,
             like_count: data.like_count ?? 0,
@@ -54,7 +53,7 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
       const { data, error } = await supabase
         .from('uploads')
         .select(
-          'id, user_id, image_url, caption, created_at, is_ai_generated, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
+          'id, user_id, image_url, caption, created_at, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
         )
         .in('id', albumIds)
         .eq('is_active', true);
@@ -72,7 +71,6 @@ function useAlbumPosts(albumIds: string[], currentId: string) {
             caption: row.caption as string | null,
             username: u.username as string,
             avatar_url: u.avatar_url as string | null,
-            is_ai_generated: (row.is_ai_generated as boolean) ?? false,
             created_at: row.created_at as string,
             comment_count: (row.comment_count as number) ?? 0,
             like_count: (row.like_count as number) ?? 0,

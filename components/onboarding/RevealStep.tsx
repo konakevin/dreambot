@@ -286,11 +286,8 @@ export function RevealStep({ onBack }: Props) {
         .from('uploads')
         .insert({
           user_id: user.id,
-          categories: ['fantasy'],
           image_url: activeDream.url,
-          media_type: 'image',
           caption: null,
-          is_ai_generated: true,
           ai_prompt: activeDream.prompt || null,
         })
         .select('id')
@@ -308,7 +305,6 @@ export function RevealStep({ onBack }: Props) {
         caption: null,
         username: user.user_metadata?.username ?? '',
         avatar_url: user.user_metadata?.avatar_url ?? null,
-        is_ai_generated: true,
         created_at: new Date().toISOString(),
         comment_count: 0,
       });

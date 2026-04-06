@@ -28,13 +28,7 @@ jest.mock('@/lib/supabase', () => ({
   },
 }));
 
-import {
-  generateDream,
-  generateFromRecipe,
-  generateTwin,
-  generateFusion,
-  persistImage,
-} from '@/lib/dreamApi';
+import { generateDream, generateFromRecipe, persistImage } from '@/lib/dreamApi';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 
 beforeEach(() => {
@@ -112,45 +106,6 @@ describe('generateFromRecipe', () => {
 
     expect(mockInvoke).toHaveBeenCalledWith('generate-dream', {
       body: expect.objectContaining({ hint: 'a dragon' }),
-    });
-  });
-});
-
-describe('generateTwin', () => {
-  it('sends prompt with persist=true (twins cost sparkles)', async () => {
-    mockInvoke.mockResolvedValue({
-      data: { image_url: 'url', prompt_used: 'p' },
-      error: null,
-    });
-
-    await generateTwin('the original prompt');
-
-    expect(mockInvoke).toHaveBeenCalledWith('generate-dream', {
-      body: expect.objectContaining({
-        mode: 'flux-dev',
-        prompt: 'the original prompt',
-        persist: true,
-      }),
-    });
-  });
-});
-
-describe('generateFusion', () => {
-  it('sends merged recipe with epigenetic context and persist=true', async () => {
-    mockInvoke.mockResolvedValue({
-      data: { image_url: 'url', prompt_used: 'p' },
-      error: null,
-    });
-
-    await generateFusion(DEFAULT_RECIPE, 'EPIGENETIC CONTEXT: test');
-
-    expect(mockInvoke).toHaveBeenCalledWith('generate-dream', {
-      body: expect.objectContaining({
-        mode: 'flux-dev',
-        recipe: DEFAULT_RECIPE,
-        epigenetic_context: 'EPIGENETIC CONTEXT: test',
-        persist: true,
-      }),
     });
   });
 });
@@ -258,15 +213,6 @@ describe('path isolation — no hint leakage between dream types', () => {
     const body = mockInvoke.mock.calls[0][1].body;
     expect(body.hint).toBe(hint);
     expect(body.input_image).toBeUndefined();
-  });
-
-  it('Twin dream: uses rawPrompt path with persist=true, no hint', async () => {
-    await generateTwin('the original prompt text');
-    const body = mockInvoke.mock.calls[0][1].body;
-    expect(body.prompt).toBe('the original prompt text');
-    expect(body.persist).toBe(true);
-    expect(body.hint).toBeUndefined();
-    expect(body.vibe_profile).toBeUndefined();
   });
 
   it('hint does NOT leak between sequential calls', async () => {
