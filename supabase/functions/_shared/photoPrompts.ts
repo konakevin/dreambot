@@ -172,14 +172,119 @@ Express the mood through NEON COLOR CHOICES and ATMOSPHERE DENSITY — hot pink/
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  collage: {
+  disney: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a mixed-media collage artwork.
+    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into classic Disney 2D animation style — Renaissance era (Lion King, Little Mermaid, Aladdin).
 
-The image should look made from CUT PAPER, torn magazine fragments, and fabric swatches. The person is composed of layered paper pieces — visible paper grain, frayed torn edges, tape marks. Elements overlap with deliberate z-depth. Mix photographic fragments with flat graphic shapes. Typography fragments and vintage ephemera scattered throughout. Keep the person's likeness recognizable through the collage — but constructed from pieces. Portrait 9:16.
+The person becomes a Disney character — expressive face with large emotive eyes, clean flowing ink outlines, smooth cel-painted color with luminous highlights. Hair flows with graceful exaggerated movement. Skin has warm Disney color with soft shadow shapes. Background becomes a lush painted Disney environment. Keep the same person's features, hair color, clothing colors — but as a hand-drawn Disney character. Portrait 9:16.
 
-Express the mood through PAPER COLOR CHOICES and LAYERING DENSITY — bold bright scraps for energy, muted vintage paper for calm, dense chaotic layering for intensity, sparse clean arrangement for serenity:
+Express the mood through BACKGROUND PAINTING and COLOR VIBRANCY — Disney backgrounds carry enormous emotional weight:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  sack_boy: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into LittleBigPlanet Sack Boy craft world style.
+
+The person becomes a KNITTED FABRIC DOLL — visible stitching on skin, button eyes, zipper mouth, yarn hair matching their real hair color. Body is a soft stuffed form. Clothing becomes felt and fabric patches in matching colors. ALL background elements become craft materials — cardboard walls, corrugated paper, cork, sponge, stickers, tape rolls. Everything looks handmade on a craft table. Warm desk lamp lighting. Portrait 9:16.
+
+Express the mood through CRAFT MATERIAL CHOICES and LIGHTING WARMTH — colorful felt for joy, muted burlap for calm, glitter for magic:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  funko_pop: {
+    model: 'flux-dev',
+    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate a photograph of a Funko Pop vinyl figure.
+
+PERSON TO RECREATE AS FUNKO POP:
+${photo}
+
+Write a prompt (50-70 words, comma-separated) for a PRODUCT PHOTOGRAPH of a FUNKO POP FIGURE:
+- Start with: "Product photograph of a Funko Pop vinyl collectible figure on a display shelf, soft studio lighting"
+- The person becomes a FUNKO POP: massively oversized head (3x body), tiny body, dot eyes, no mouth, glossy vinyl plastic surface, painted-on clothing details matching their real colors
+- Hair is a solid sculpted plastic piece matching their hair color
+- Standing on a small circular black base
+- Apply the vibe through background color and lighting mood: ${vibe}
+- Portrait 9:16
+${hint ? `USER REQUEST: "${hint}"` : ''}
+Output ONLY the prompt.`,
+  },
+
+  ghibli: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into Studio Ghibli animation style — Spirited Away, Totoro, Howl's Moving Castle.
+
+The person becomes a Ghibli character — natural rounded proportions (NOT exaggerated anime), realistically-sized expressive eyes, warm watercolor-like skin shading. Hair is soft and natural with gentle movement. Clothing has simple, clean painted shapes. Background becomes a breathtakingly detailed Ghibli painted landscape — atmospheric clouds, living nature, incredible depth. The palette is rich but gentle — earthy greens, sky blues, warm golds. Keep the same person's features and colors. Portrait 9:16.
+
+Express the mood through LANDSCAPE ATMOSPHERE and NATURAL LIGHT — Ghibli's emotional power lives in the sky, wind, and light:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  tim_burton: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into Tim Burton's gothic whimsy style — Nightmare Before Christmas, Corpse Bride.
+
+The person becomes a Burton character — elongated thin limbs, slightly oversized head, sunken eyes with dark circles, pale skin. Hair becomes wild and angular. Spiral motifs appear in hair and surroundings. Color palette shifts to predominantly black, white, grey with pops of deep purple or blood red. Background becomes crooked angular architecture — leaning buildings, twisted trees, curling fences. Black and white stripes on clothing. Dark whimsy, not horror. Keep their core features recognizable. Portrait 9:16.
+
+Express the mood through SHADOW DEPTH and ACCENT COLOR CHOICE — deeper shadows for darker mood, more color pops for whimsy:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  pop_art: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into bold Pop Art style — Andy Warhol meets Roy Lichtenstein.
+
+Flat areas of MAXIMUM SATURATION primary colors — no photographic gradients anywhere. Thick black outlines define every shape. Ben-Day halftone dots fill all shadows and mid-tones. Skin becomes flat bold color. Hair becomes a solid graphic shape. Background is a flat contrasting color. Everything is graphic, commercial, unapologetically bold. NO subtlety, NO smooth blending — flat color blocks and dot patterns only. Keep the same person's features but rendered in pure Pop Art graphic style. Portrait 9:16.
+
+Express the mood through COLOR INTENSITY and DOT DENSITY — hot colors for energy, cool for calm, dense dots for drama:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  minecraft: {
+    model: 'flux-dev',
+    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate a Minecraft-style scene.
+
+SCENE TO RECREATE AS MINECRAFT:
+${photo}
+
+Write a prompt (50-70 words, comma-separated) for a MINECRAFT GAME SCREENSHOT:
+- Start with: "Minecraft voxel world screenshot, everything built from cubic blocks, pixelated block textures"
+- The person becomes a MINECRAFT CHARACTER: square head, rectangular body, pixelated skin texture on flat cube faces. Match their clothing colors.
+- Every surface is textured blocks — dirt, stone, wood planks, grass
+- Trees are wood block columns with leaf blocks on top
+- Apply the vibe through block palette and sky color: ${vibe}
+- Portrait 9:16
+- If person is very small, make a smaller character model
+${hint ? `USER REQUEST: "${hint}"` : ''}
+Output ONLY the prompt.`,
+  },
+
+  felt: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a needle-felted stop-motion puppet scene — Coraline / Kubo and the Two Strings style.
+
+The person becomes a NEEDLE-FELTED WOOL PUPPET — visible fiber texture on skin, hand-painted precise eyes, individual wool strand hair matching their real color. Clothing becomes real miniature fabric with tiny visible stitches, actual buttons, thread seams in matching colors. ALL surroundings become a handcrafted miniature set — real wood, fabric, paper, wire at tiny scale. Dramatic cinematic lighting casting long shadows. Slightly uncanny but beautiful. Portrait 9:16.
+
+Express the mood through LIGHTING DRAMA and MATERIAL WARMTH — warm wool tones for comfort, cold stark lighting for unease, rich saturated felt for vibrancy:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  '8bit': {
+    model: 'flux-dev',
+    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate NES-era 8-bit pixel art.
+
+SCENE TO RECREATE AS 8-BIT:
+${photo}
+
+Write a prompt (40-60 words, comma-separated) for an 8-BIT NES GAME SCREEN:
+- Start with: "NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution"
+- The person becomes a SIMPLE 8-BIT SPRITE: 2-pixel dot eyes, no facial detail, iconic silhouette only, matching clothing colors
+- Background is simple repeating tile patterns — flat color blocks, NO gradients, NO dithering
+- Think original Mario, Mega Man, Zelda NES quality
+- Apply the vibe through the limited palette choice: ${vibe}
+- Portrait 9:16
+${hint ? `USER REQUEST: "${hint}"` : ''}
+Output ONLY the prompt.`,
   },
 };
 
@@ -217,6 +322,30 @@ Output ONLY the prompt.`,
 - Subject from photo: ${photo} — entirely stitched (cross-stitch face, satin-stitch hair, matching thread colors)
 - NEW SCENARIO: ${scenario} — all elements embroidered, visible linen weave between stitches
 - Express mood through thread color choices: ${vibe}
+- Portrait 9:16
+Output ONLY the prompt.`,
+
+  funko_pop: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a Funko Pop figure:
+- Start with: "Product photograph of a Funko Pop vinyl collectible figure"
+- Subject from photo: ${photo} — becomes a FUNKO POP (oversized head, tiny body, dot eyes, glossy vinyl, matching clothing colors)
+- NEW SCENARIO: ${scenario} — setting built as a Funko Pop display diorama
+- Express mood through lighting: ${vibe}
+- Portrait 9:16
+Output ONLY the prompt.`,
+
+  minecraft: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a Minecraft scene:
+- Start with: "Minecraft voxel world, everything built from cubic blocks, pixelated textures"
+- Subject from photo: ${photo} — becomes a MINECRAFT CHARACTER (square head, rectangular body, pixelated skin)
+- NEW SCENARIO: ${scenario} — entire scene built from Minecraft blocks
+- Express mood through block palette and sky: ${vibe}
+- Portrait 9:16
+Output ONLY the prompt.`,
+
+  '8bit': (photo, scenario, vibe) => `Write a Flux AI prompt (40-60 words) for NES 8-bit art:
+- Start with: "NES 8-bit pixel art, extremely limited color palette, large chunky pixels"
+- Subject from photo: ${photo} — becomes a SIMPLE 8-BIT SPRITE (2-pixel eyes, iconic silhouette, matching colors)
+- NEW SCENARIO: ${scenario} — rendered in flat 8-bit tile patterns
+- Express mood through limited palette: ${vibe}
 - Portrait 9:16
 Output ONLY the prompt.`,
 };

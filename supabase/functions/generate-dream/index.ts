@@ -321,9 +321,15 @@ Deno.serve(async (req) => {
 
   // ── Timing ─────────────────────────────────────────────────────────────────
   const t0 = Date.now();
+  const timings: Record<string, number> = {};
+  let lastLap = t0;
   const lap = (label: string) => {
-    const elapsed = Date.now() - t0;
-    console.log(`[generate-dream] ⏱ ${label}: ${elapsed}ms`);
+    const now = Date.now();
+    const stepMs = now - lastLap;
+    const totalMs = now - t0;
+    timings[label] = stepMs;
+    console.log(`[generate-dream] ⏱ ${label}: ${stepMs}ms (total: ${totalMs}ms)`);
+    lastLap = now;
   };
 
   // ── Rate limit check ──────────────────────────────────────────────────────
@@ -438,7 +444,11 @@ Output ONLY the prompt.`;
 
         photoOverrideMode = 'flux-dev';
         // Only face-swap for realistic mediums — swapping a real face onto LEGO/pixel art looks wrong
-        const NON_SWAP_MEDIUMS = new Set(['lego', 'pixel_art', 'stained_glass', 'embroidery']);
+        const NON_SWAP_MEDIUMS = new Set([
+          'lego', 'pixel_art', 'stained_glass', 'embroidery',
+          'funko_pop', 'minecraft', '8bit',
+          'sack_boy', 'ghibli', 'tim_burton', 'pop_art', 'felt',
+        ]);
         if (!NON_SWAP_MEDIUMS.has(medium.key)) {
           faceSwapSource = input_image;
         }
@@ -761,10 +771,11 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
 
     // Always log the prompt for debugging/analysis
     try {
+      timings.total = Date.now() - t0;
       await supabase.from('ai_generation_log').insert({
         user_id: userId,
         recipe_snapshot: recipe ?? {},
-        rolled_axes: logAxes,
+        rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
         cost_cents: 3,

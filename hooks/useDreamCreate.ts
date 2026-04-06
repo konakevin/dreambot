@@ -113,7 +113,7 @@ export function useDreamCreate() {
           medium_key: config.selectedMedium,
           vibe_key: config.selectedVibe,
           input_image: refUrl,
-          hint: config.userPrompt.trim() || undefined,
+          hint: config.photoStyle === 'reimagine' ? (config.userPrompt.trim() || undefined) : undefined,
           photo_style: config.photoStyle,
         });
       } else {
