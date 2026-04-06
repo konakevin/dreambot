@@ -172,6 +172,26 @@ Express the mood through NEON COLOR CHOICES and ATMOSPHERE DENSITY — hot pink/
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
+  photography: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `Subtly enhance this photo to look like it was shot by a professional photographer. Do NOT change the person's face, features, or identity — they must look exactly the same.
+
+Only change: shallow depth of field with creamy bokeh behind the subject, professional color grading, tack-sharp focus on the subject. The person, their pose, expression, and clothing must remain identical. Portrait 9:16.
+
+Express the mood entirely through LIGHTING DIRECTION and COLOR GRADING — this is where the vibe lives:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  vintage_film: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) => `Transform this into a vintage film photograph. Same person exactly — just the film treatment changes.
+
+Organic film grain throughout — beautiful texture, not digital noise. Light leaks bleeding from frame edges. Shadows lifted and milky — never true black. Highlights bloom gently with dreamy halo. Focus slightly soft — the quality of vintage glass. Portrait 9:16.
+
+Express the mood through FILM STOCK COLOR SCIENCE and LIGHT LEAK COLORS — warm amber for nostalgia, cool greens for melancholy, magenta leaks for dreaminess, muted tones for contemplation:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
   collage: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a mixed-media collage artwork.

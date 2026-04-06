@@ -407,7 +407,7 @@ Deno.serve(async (req) => {
 
     if (isPhoto && photo_style === 'reimagine') {
       // ── REIMAGINE: vision describe → medium template or generic brief → flux-dev ──
-      console.log('[generate-dream] >>> ENTERING REIMAGINE BRANCH');
+      console.log('[generate-dream] ⏱ REIMAGINE: starting vision...');
       try {
         const photoDescription = await haikuVision(
           input_image!,
@@ -415,7 +415,8 @@ Deno.serve(async (req) => {
           ANTHROPIC_KEY,
           100
         );
-        console.log('[generate-dream] Reimagine photo description:', photoDescription.slice(0, 120));
+        lap('reimagine-vision');
+      console.log('[generate-dream] ⏱ Vision done:', photoDescription.slice(0, 120));
 
         const userHint = hint ?? '';
         const reimagineTemplate = buildReimaginePrompt(medium.key, photoDescription, userHint, vibe.directive!);
@@ -436,8 +437,12 @@ Output ONLY the prompt.`;
         }
 
         photoOverrideMode = 'flux-dev';
-        faceSwapSource = input_image;
-        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-reimagine' };
+        // Only face-swap for realistic mediums — swapping a real face onto LEGO/pixel art looks wrong
+        const NON_SWAP_MEDIUMS = new Set(['lego', 'pixel_art', 'stained_glass', 'embroidery']);
+        if (!NON_SWAP_MEDIUMS.has(medium.key)) {
+          faceSwapSource = input_image;
+        }
+        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-reimagine', faceSwap: !NON_SWAP_MEDIUMS.has(medium.key) };
         console.log('[generate-dream] Reimagine prompt:', finalPrompt.slice(0, 150));
       } catch (err) {
         console.error('[generate-dream] REIMAGINE FAILED:', (err as Error).message);
@@ -721,19 +726,34 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
 
   // ── Generate image via Replicate ──────────────────────────────────────────
   try {
+    console.log(`[generate-dream] ⏱ Starting image generation (model: ${pickedModel})...`);
     let tempUrl = await generateImage(effectiveMode, finalPrompt, effectiveInputImage, REPLICATE_TOKEN);
-    lap('replicate-done');
+    lap('image-gen');
+    console.log(`[generate-dream] ⏱ Image generation complete`);
 
     // Face swap: paste original face onto generated image (Reimagine path)
     if (faceSwapSource && tempUrl) {
       try {
-        console.log('[generate-dream] Face swap: swapping original face onto generated image...');
-        tempUrl = await faceSwap(faceSwapSource, tempUrl, REPLICATE_TOKEN);
-        lap('face-swap-done');
-        console.log('[generate-dream] Face swap complete');
+        console.log('[generate-dream] ⏱ Starting face swap upload...');
+        const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
+        const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
+        const swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
+        await supabase.storage.from('uploads').upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true });
+        const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
+        const sourceUrl = swapUrlData.publicUrl;
+        lap('face-swap-upload');
+        console.log('[generate-dream] ⏱ Face swap upload done, starting swap...');
+
+        tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
+
+        supabase.storage.from('uploads').remove([swapFileName]).catch(() => {});
+        lap('face-swap-model');
+        console.log('[generate-dream] ⏱ Face swap complete');
+        logAxes.faceSwapResult = 'success';
       } catch (err) {
         console.warn('[generate-dream] Face swap failed, using unswapped image:', (err as Error).message);
-        // Continue with the unswapped image — better than failing entirely
+        logAxes.faceSwapResult = 'failed';
+        logAxes.faceSwapError = (err as Error).message;
       }
     }
 
@@ -1038,14 +1058,16 @@ async function faceSwap(
   targetImageUrl: string,
   replicateToken: string
 ): Promise<string> {
-  // Create prediction
-  const res = await fetch('https://api.replicate.com/v1/models/codeplugtech/face-swap/predictions', {
+  // Create prediction using codeplugtech/face-swap (version-based API)
+  const FACE_SWAP_VERSION = '278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34';
+  const res = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${replicateToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+      version: FACE_SWAP_VERSION,
       input: {
         swap_image: sourceImageDataUrl,
         input_image: targetImageUrl,

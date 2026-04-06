@@ -131,14 +131,6 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',
   },
   {
-    key: 'photography',
-    label: 'Photography',
-    directive:
-      'You are a National Geographic photographer who also shoots for Vogue — you combine documentary authenticity with artistic perfection. Shoot with a fast prime lens (50mm f/1.4 or 85mm f/1.2) for creamy bokeh that separates subject from background. Natural light is your primary tool — golden hour warmth, overcast softbox sky, or dramatic sidelighting that sculpts form. Focus is tack-sharp on the subject with everything else falling away. Composition follows the rule of thirds but breaks it when the subject demands center stage. Color grading is natural but elevated — slightly lifted shadows, rich but not oversaturated.',
-    fluxFragment:
-      'Ultra-realistic photograph, DSLR with fast prime lens, shallow depth of field, creamy bokeh background, natural golden hour lighting, tack-sharp focus, 8K resolution, editorial quality',
-  },
-  {
     key: 'collage',
     label: 'Collage',
     directive:
@@ -153,14 +145,6 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Every element in this scene is rendered as if stitched by hand on fabric. Cross-stitch for flat areas with visible grid texture. Satin stitch for smooth surfaces and lettering. French knots for dots and texture points. Long-and-short stitch for gradients and shading. The fabric background (natural linen or cotton) is visible between stitched elements. Thread colors are rich and saturated — DMC embroidery floss palette. The hoop or frame edge might be partially visible. Light catches the raised thread creating subtle dimensionality. The patience and craft of handwork should radiate from every element.',
     fluxFragment:
       'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors, fabric background showing through, raised dimensional stitching',
-  },
-  {
-    key: 'vintage_film',
-    label: 'Vintage Film',
-    directive:
-      'This is shot on expired Kodak Portra 400 film with a vintage Contax T2 or Leica M6. The color science is warm and nostalgic — shifted toward amber and soft greens, with lifted milky shadows that never go true black. Film grain is organic and beautiful, not digital noise. Light leaks bleed warm orange or magenta from the frame edges. Focus has that slightly soft, dreamy quality of older glass — sharp enough but never clinical. Highlights bloom gently. The image feels like a recovered memory — something precious found in a shoebox of old photographs. Composition is intimate and personal, like the photographer was part of the moment.',
-    fluxFragment:
-      'Vintage 35mm film photograph, Kodak Portra warm color science, organic film grain, light leaks, lifted milky shadows, soft dreamy focus, golden nostalgic tones, intimate candid composition',
   },
 ];
 
