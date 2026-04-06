@@ -31,6 +31,8 @@ interface DreamResult {
   aiConcept: Record<string, unknown> | null;
   dreamMode: string | null;
   archetype: string | null;
+  resolvedMedium: string | null;
+  resolvedVibe: string | null;
 }
 
 interface DreamStore {

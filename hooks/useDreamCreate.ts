@@ -95,6 +95,8 @@ export function useDreamCreate() {
         dream_mode?: string;
         archetype?: string;
         ai_concept?: Record<string, unknown> | null;
+        resolved_medium?: string;
+        resolved_vibe?: string;
       };
 
       if (config.photoBase64) {
@@ -113,7 +115,8 @@ export function useDreamCreate() {
           medium_key: config.selectedMedium,
           vibe_key: config.selectedVibe,
           input_image: refUrl,
-          hint: config.photoStyle === 'reimagine' ? (config.userPrompt.trim() || undefined) : undefined,
+          hint:
+            config.photoStyle === 'reimagine' ? config.userPrompt.trim() || undefined : undefined,
           photo_style: config.photoStyle,
         });
       } else {
@@ -140,6 +143,8 @@ export function useDreamCreate() {
         aiConcept: result.ai_concept ?? null,
         dreamMode: result.dream_mode ?? null,
         archetype: result.archetype ?? null,
+        resolvedMedium: result.resolved_medium ?? null,
+        resolvedVibe: result.resolved_vibe ?? null,
       });
 
       return 'done';

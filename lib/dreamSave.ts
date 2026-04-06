@@ -20,6 +20,8 @@ interface SaveDreamOpts {
   prompt: string;
   aiConcept?: Record<string, unknown> | null;
   visibility: DreamVisibility;
+  dreamMedium?: string | null;
+  dreamVibe?: string | null;
 }
 
 interface SaveDreamResult {
@@ -50,6 +52,8 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     height: 1664,
     ai_concept: opts.aiConcept ?? null,
     visibility: opts.visibility,
+    dream_medium: opts.dreamMedium ?? null,
+    dream_vibe: opts.dreamVibe ?? null,
   };
 
   const { data, error } = await supabase

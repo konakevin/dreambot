@@ -210,7 +210,7 @@ export default function RootLayout() {
                 name="settings"
                 options={{ presentation: 'card', gestureEnabled: true }}
               />
-<Stack.Screen
+              <Stack.Screen
                 name="photo/[id]"
                 options={{ presentation: 'card', gestureEnabled: true }}
               />

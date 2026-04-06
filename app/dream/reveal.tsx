@@ -23,6 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
+import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { saveDream, pinToFeed } from '@/lib/dreamSave';
@@ -33,8 +34,14 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export default function DreamRevealScreen() {
   const user = useAuthStore((s) => s.user);
   const result = useDreamStore((s) => s.result);
+  const config = useDreamStore((s) => s.config);
   const clearResult = useDreamStore((s) => s.clearResult);
   const reset = useDreamStore((s) => s.reset);
+
+  const mediumKey = result?.resolvedMedium ?? config.selectedMedium;
+  const vibeKey = result?.resolvedVibe ?? config.selectedVibe;
+  const mediumLabel = DREAM_MEDIUMS.find((m) => m.key === mediumKey)?.label ?? mediumKey;
+  const vibeLabel = DREAM_VIBES.find((v) => v.key === vibeKey)?.label ?? vibeKey;
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
@@ -68,6 +75,8 @@ export default function DreamRevealScreen() {
         prompt: result!.prompt,
         aiConcept: result!.aiConcept,
         visibility: 'public',
+        dreamMedium: result!.resolvedMedium,
+        dreamVibe: result!.resolvedVibe,
       });
 
       pinToFeed({
@@ -102,6 +111,8 @@ export default function DreamRevealScreen() {
         prompt: result!.prompt,
         aiConcept: result!.aiConcept,
         visibility: 'private',
+        dreamMedium: result!.resolvedMedium,
+        dreamVibe: result!.resolvedVibe,
       });
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
@@ -157,6 +168,12 @@ export default function DreamRevealScreen() {
       >
         <Ionicons name="share-outline" size={22} color="#fff" />
       </TouchableOpacity>
+
+      {/* Medium + Vibe labels */}
+      <View style={[s.labels, { paddingBottom: insets.bottom + 16 }]}>
+        <Text style={s.labelMedium}>{mediumLabel}</Text>
+        <Text style={s.labelVibe}>{vibeLabel}</Text>
+      </View>
 
       {/* Bottom actions */}
       <View style={[s.actions, { paddingBottom: insets.bottom + 16 }]}>
@@ -221,6 +238,32 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  labels: {
+    position: 'absolute',
+    bottom: 0,
+    left: 20,
+    gap: 2,
+    marginBottom: 160,
+  },
+  labelMedium: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
+  },
+  labelVibe: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   actions: {
     position: 'absolute',

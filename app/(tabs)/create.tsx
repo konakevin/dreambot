@@ -56,18 +56,22 @@ export default function CreateScreen() {
     if (currentRatio > targetRatio) {
       // Too wide — crop sides
       const newW = Math.round(h * targetRatio);
-      cropAction = { crop: { originX: Math.round((w - newW) / 2), originY: 0, width: newW, height: h } };
+      cropAction = {
+        crop: { originX: Math.round((w - newW) / 2), originY: 0, width: newW, height: h },
+      };
     } else {
       // Too tall — crop top/bottom
       const newH = Math.round(w / targetRatio);
-      cropAction = { crop: { originX: 0, originY: Math.round((h - newH) / 2), width: w, height: newH } };
+      cropAction = {
+        crop: { originX: 0, originY: Math.round((h - newH) / 2), width: w, height: newH },
+      };
     }
 
-    const cropped = await ImageManipulator.manipulateAsync(
-      asset.uri,
-      [cropAction],
-      { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG, base64: true }
-    );
+    const cropped = await ImageManipulator.manipulateAsync(asset.uri, [cropAction], {
+      compress: 0.8,
+      format: ImageManipulator.SaveFormat.JPEG,
+      base64: true,
+    });
 
     if (!cropped.base64) {
       Toast.show('Could not process photo', 'close-circle');

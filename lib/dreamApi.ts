@@ -44,6 +44,8 @@ interface GenerateDreamResult {
   dream_mode?: string;
   archetype?: string;
   model?: string;
+  resolved_medium?: string;
+  resolved_vibe?: string;
 }
 
 /**
@@ -99,6 +101,8 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
     dream_mode: data.dream_mode,
     archetype: data.archetype,
     model: data.model,
+    resolved_medium: data.resolved_medium,
+    resolved_vibe: data.resolved_vibe,
   };
 }
 

@@ -142,7 +142,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'disney',
     label: 'Disney',
     directive:
-      "You are a classic Disney 2D animation artist from the Renaissance era — think The Lion King, The Little Mermaid, Aladdin. Characters have expressive, emotive faces with large eyes that convey personality. Clean, confident ink outlines with smooth, flowing lines. Rich cel-painted color with luminous highlights and soft shadows. Backgrounds are lush painted environments — every frame is a work of art. Hair and fabric flow with exaggerated, graceful movement. Characters feel alive with warmth, appeal, and personality. The magic of hand-drawn animation radiates from every stroke.",
+      'You are a classic Disney 2D animation artist from the Renaissance era — think The Lion King, The Little Mermaid, Aladdin. Characters have expressive, emotive faces with large eyes that convey personality. Clean, confident ink outlines with smooth, flowing lines. Rich cel-painted color with luminous highlights and soft shadows. Backgrounds are lush painted environments — every frame is a work of art. Hair and fabric flow with exaggerated, graceful movement. Characters feel alive with warmth, appeal, and personality. The magic of hand-drawn animation radiates from every stroke.',
     fluxFragment:
       'Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, expressive character design, luminous highlights, Renaissance Disney quality',
   },
@@ -150,7 +150,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'sack_boy',
     label: 'Sack Boy',
     directive:
-      "Everything in this scene is crafted from real-world materials at miniature scale — the LittleBigPlanet aesthetic. Characters are knitted fabric dolls with visible stitching, button eyes, and zipper mouths. Their bodies are soft stuffed forms with yarn hair and felt accessories. The environment is built from cardboard, corrugated paper, fabric swatches, sponge, cork, and stickers. Platforms are wooden rulers and tape rolls. Backgrounds are painted cardboard with visible brush marks. Everything has that handmade, tactile, craft-table quality — you can almost feel the textures. Lighting is warm and soft like a desk lamp illuminating a craft project.",
+      'Everything in this scene is crafted from real-world materials at miniature scale — the LittleBigPlanet aesthetic. Characters are knitted fabric dolls with visible stitching, button eyes, and zipper mouths. Their bodies are soft stuffed forms with yarn hair and felt accessories. The environment is built from cardboard, corrugated paper, fabric swatches, sponge, cork, and stickers. Platforms are wooden rulers and tape rolls. Backgrounds are painted cardboard with visible brush marks. Everything has that handmade, tactile, craft-table quality — you can almost feel the textures. Lighting is warm and soft like a desk lamp illuminating a craft project.',
     fluxFragment:
       'LittleBigPlanet Sack Boy style, knitted fabric characters, button eyes, zipper details, cardboard and craft material world, visible stitching, handmade tactile quality, warm desk lamp lighting',
   },
@@ -158,7 +158,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'funko_pop',
     label: 'Funko Pop',
     directive:
-      "Everything is rendered as a Funko Pop vinyl collectible figure. Characters have massively oversized heads (3x body proportion) with tiny bodies, small dot eyes, no mouth (or tiny line mouth), and simplified features. The surface is glossy vinyl plastic with a subtle sheen. Hair is a solid sculpted plastic piece. Clothing details are painted on, not textured. The figure stands on a small circular black base. The aesthetic is cute, collectible, and stylized — maximum personality through minimal features. Think of it as a photograph of the actual vinyl figure on a shelf.",
+      'Everything is rendered as a Funko Pop vinyl collectible figure. Characters have massively oversized heads (3x body proportion) with tiny bodies, small dot eyes, no mouth (or tiny line mouth), and simplified features. The surface is glossy vinyl plastic with a subtle sheen. Hair is a solid sculpted plastic piece. Clothing details are painted on, not textured. The figure stands on a small circular black base. The aesthetic is cute, collectible, and stylized — maximum personality through minimal features. Think of it as a photograph of the actual vinyl figure on a shelf.',
     fluxFragment:
       'Funko Pop vinyl figure style, oversized head, tiny body, glossy plastic surface, dot eyes, no mouth, painted clothing details, collectible figure on display base, product photography',
   },
@@ -182,7 +182,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'pop_art',
     label: 'Pop Art',
     directive:
-      "You are creating in the style of Andy Warhol and Roy Lichtenstein. Bold, flat areas of highly saturated primary and secondary colors — red, blue, yellow, green, orange, purple at maximum intensity. Ben-Day dots (halftone pattern) fill shadows and mid-tones. Thick black outlines define every shape with graphic clarity. The image may be divided into 2-4 color variations of the same subject (Warhol grid style). Text elements, speech bubbles, or onomatopoeia can be integrated. The aesthetic is commercial, graphic, and unapologetically bold — advertising meets fine art. No subtlety, no gradients — flat color and graphic power.",
+      'You are creating in the style of Andy Warhol and Roy Lichtenstein. Bold, flat areas of highly saturated primary and secondary colors — red, blue, yellow, green, orange, purple at maximum intensity. Ben-Day dots (halftone pattern) fill shadows and mid-tones. Thick black outlines define every shape with graphic clarity. The image may be divided into 2-4 color variations of the same subject (Warhol grid style). Text elements, speech bubbles, or onomatopoeia can be integrated. The aesthetic is commercial, graphic, and unapologetically bold — advertising meets fine art. No subtlety, no gradients — flat color and graphic power.',
     fluxFragment:
       'Pop art style, Andy Warhol screen print, bold flat primary colors at maximum saturation, Ben-Day halftone dots, thick black outlines, graphic commercial aesthetic',
   },
@@ -190,7 +190,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'minecraft',
     label: 'Minecraft',
     directive:
-      "Everything in this scene is built from cubic voxel blocks — the Minecraft aesthetic. Characters are blocky with square heads, rectangular bodies, and pixelated skin textures mapped onto flat cube faces. Every surface is a grid of textured blocks — dirt, stone, wood planks, grass with flowers. Trees are columns of wood blocks topped with leaf blocks. Water is translucent blue blocks. The sky has square clouds. Lighting creates blocky shadows. The charm is in the constraint — representing complex scenes with nothing but cubes. It should look like a screenshot from inside the game, or a photograph of a LEGO-like diorama made of cubes.",
+      'Everything in this scene is built from cubic voxel blocks — the Minecraft aesthetic. Characters are blocky with square heads, rectangular bodies, and pixelated skin textures mapped onto flat cube faces. Every surface is a grid of textured blocks — dirt, stone, wood planks, grass with flowers. Trees are columns of wood blocks topped with leaf blocks. Water is translucent blue blocks. The sky has square clouds. Lighting creates blocky shadows. The charm is in the constraint — representing complex scenes with nothing but cubes. It should look like a screenshot from inside the game, or a photograph of a LEGO-like diorama made of cubes.',
     fluxFragment:
       'Minecraft voxel style, everything built from cubic blocks, pixelated block textures, square character heads, blocky terrain, grass and dirt blocks, game screenshot aesthetic',
   },
@@ -206,7 +206,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'felt',
     label: 'Felt',
     directive:
-      "You are creating a scene in the style of Laika stop-motion films — think Coraline, Kubo and the Two Strings. Characters are needle-felted wool puppets with visible fiber texture on their skin. Eyes are hand-painted with eerie precision. Hair is individual strands of dyed wool carefully placed. Clothing is real miniature fabric — tiny stitches visible, real buttons, actual thread seams. The world is a handcrafted miniature set built from real materials — wood, fabric, paper, wire — but at a tiny scale. Lighting is dramatic and cinematic, casting long shadows across the miniature sets. Everything has that slightly uncanny, beautiful-but-unsettling quality that makes Laika films unforgettable.",
+      'You are creating a scene in the style of Laika stop-motion films — think Coraline, Kubo and the Two Strings. Characters are needle-felted wool puppets with visible fiber texture on their skin. Eyes are hand-painted with eerie precision. Hair is individual strands of dyed wool carefully placed. Clothing is real miniature fabric — tiny stitches visible, real buttons, actual thread seams. The world is a handcrafted miniature set built from real materials — wood, fabric, paper, wire — but at a tiny scale. Lighting is dramatic and cinematic, casting long shadows across the miniature sets. Everything has that slightly uncanny, beautiful-but-unsettling quality that makes Laika films unforgettable.',
     fluxFragment:
       'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
   },

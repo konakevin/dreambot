@@ -26,14 +26,17 @@ export function getPhotoRestyleConfig(mediumKey: string): PhotoRestyleConfig | n
 }
 
 const MEDIUM_CONFIGS: Record<string, PhotoRestyleConfig> = {
-
   // ═══════════════════════════════════════════════════════════════════════
   // FLUX-DEV — LEGO (minifigures are non-human, needs full rebuild)
   // ═══════════════════════════════════════════════════════════════════════
 
   lego: {
     model: 'flux-dev',
-    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate a photograph of a real LEGO diorama.
+    buildPrompt: (
+      photo,
+      vibe,
+      hint
+    ) => `You are writing a prompt for Flux AI to generate a photograph of a real LEGO diorama.
 
 PHOTO TO RECREATE AS LEGO:
 ${photo}
@@ -58,7 +61,11 @@ Output ONLY the prompt.`,
 
   pixel_art: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this entire photo into 16-bit SNES-era pixel art. Every single pixel must become part of a visible pixel grid.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this entire photo into 16-bit SNES-era pixel art. Every single pixel must become part of a visible pixel grid.
 
 The person becomes a pixel art sprite — blocky features, simple dot eyes, hair and clothing rendered in carefully placed pixels matching their real colors. NO smooth skin, NO photorealistic features — everything is chunky pixels.
 
@@ -70,7 +77,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   stained_glass: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this entire photo into a stained glass window panel.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this entire photo into a stained glass window panel.
 
 Every element must become colored glass pieces separated by bold black lead lines (cames). The person's face becomes simplified glass pieces — 4-6 panels with thick lead outlines defining features. Hair becomes flowing glass panels. Clothing becomes larger flat glass sections in matching colors.
 
@@ -82,7 +93,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   embroidery: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this entire photo into hand embroidery on linen fabric. Every single element must become visible thread stitches — no photographic elements remaining.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this entire photo into hand embroidery on linen fabric. Every single element must become visible thread stitches — no photographic elements remaining.
 
 The person's face becomes cross-stitch X patterns. Hair becomes satin stitch in matching color. Clothing becomes long-and-short stitch with matching thread colors. Skin is stitched in flesh-tone thread. Background walls, furniture, objects — ALL become embroidered.
 
@@ -94,7 +109,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   anime: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into anime illustration style.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into anime illustration style.
 
 Clean confident ink outlines with varying weight — thick for silhouettes, thin for details. Flat cel-shaded coloring with strategic gradient shading on skin and hair. Eyes larger and more expressive — with multiple light reflections. Hair simplified into flowing dynamic shapes with sheen highlights. Smooth cel-shaded skin. Clean flat color areas with simple shadow shapes for clothing. Keep the same person's features — but stylized as anime. Same hair color, clothing colors. Portrait 9:16.
 
@@ -104,7 +123,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   watercolor: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a watercolor painting on cold-pressed paper.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into a watercolor painting on cold-pressed paper.
 
 Every surface must look painted with transparent watercolor washes. Skin becomes soft washes with paper texture showing through. Hair is flowing wet-on-wet brushstrokes with bleeding edges. Clothing uses layered transparent washes, darker pigment in folds. Background dissolves into loose, bleeding washes — lost-and-found edges. Leave areas of pure white paper for highlights. Granulating pigment texture throughout. Keep the same person, face, pose, expression — but PAINTED. Portrait 9:16.
 
@@ -114,7 +137,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   oil_painting: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a classical oil painting on canvas.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into a classical oil painting on canvas.
 
 Thick impasto brushstrokes in highlights — visible paint ridges catching light. Thinner transparent glazes in shadows. Skin has visible color mixing — adjacent strokes of different hues. Hair is painted with loaded, confident palette knife strokes. Background has bold, expressive paint application. Canvas texture visible throughout. Keep the same person, face, pose, expression — but as an oil painting with physical weight and texture. Portrait 9:16.
 
@@ -124,7 +151,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   pencil_sketch: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a detailed pencil drawing on textured paper.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into a detailed pencil drawing on textured paper.
 
 Every surface rendered in graphite. Skin has smooth, carefully blended graphite with subtle hatching for form. Hair drawn with confident flowing pencil strokes. Clothing shows cross-hatching following the form and folds. Background uses looser, atmospheric graphite — smudged tones for depth. Pure white paper for brightest highlights. Darkest shadows are velvet-black compressed graphite. Keep the same person, face, pose. The line quality should be confident and masterful. Portrait 9:16.
 
@@ -134,7 +165,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   claymation: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into claymation stop-motion animation.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into claymation stop-motion animation.
 
 The person becomes a smooth sculpted CLAY FIGURE — matte clay with subtle fingerprint textures. Eyes are painted glass beads, slightly oversized. Hair is a sculpted clay piece. Clothing appears knitted or felted at miniature scale. ALL furniture and objects are handcrafted miniatures — painted wood, craft materials. Background is a handcrafted set with painted backdrop. Keep the same pose, expression, clothing colors — but EVERYTHING is clay. Portrait 9:16.
 
@@ -144,7 +179,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   '3d_render': {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a Pixar-quality 3D animated render.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into a Pixar-quality 3D animated render.
 
 The person becomes a stylized 3D character — soft rounded shapes, appealing proportions. Skin has subsurface scattering glow. Eyes are large, glossy with complex reflections. Hair is soft flowing 3D strands. Clothing has soft cloth simulation. Keep the same person's features, hair color, clothing colors — but as a Pixar character. Portrait 9:16.
 
@@ -154,7 +193,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   comic_book: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a comic book graphic novel illustration.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into a comic book graphic novel illustration.
 
 Bold confident INK OUTLINES around everything — thick for silhouettes, thin for details. Flat saturated color areas — no photographic gradients. Ben-Day dot halftone patterns in mid-tones and shadows. Skin is flat-colored with bold ink shadow shapes. Hair simplified into graphic shapes with thick ink strokes. Keep the same person, features, clothing colors — but with ink outlines and flat comic coloring. Everything has that hand-inked, printed quality. Portrait 9:16.
 
@@ -174,7 +217,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   disney: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into classic Disney 2D animation style — Renaissance era (Lion King, Little Mermaid, Aladdin).
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into classic Disney 2D animation style — Renaissance era (Lion King, Little Mermaid, Aladdin).
 
 The person becomes a Disney character — expressive face with large emotive eyes, clean flowing ink outlines, smooth cel-painted color with luminous highlights. Hair flows with graceful exaggerated movement. Skin has warm Disney color with soft shadow shapes. Background becomes a lush painted Disney environment. Keep the same person's features, hair color, clothing colors — but as a hand-drawn Disney character. Portrait 9:16.
 
@@ -184,7 +231,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   sack_boy: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into LittleBigPlanet Sack Boy craft world style.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into LittleBigPlanet Sack Boy craft world style.
 
 The person becomes a KNITTED FABRIC DOLL — visible stitching on skin, button eyes, zipper mouth, yarn hair matching their real hair color. Body is a soft stuffed form. Clothing becomes felt and fabric patches in matching colors. ALL background elements become craft materials — cardboard walls, corrugated paper, cork, sponge, stickers, tape rolls. Everything looks handmade on a craft table. Warm desk lamp lighting. Portrait 9:16.
 
@@ -194,7 +245,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   funko_pop: {
     model: 'flux-dev',
-    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate a photograph of a Funko Pop vinyl figure.
+    buildPrompt: (
+      photo,
+      vibe,
+      hint
+    ) => `You are writing a prompt for Flux AI to generate a photograph of a Funko Pop vinyl figure.
 
 PERSON TO RECREATE AS FUNKO POP:
 ${photo}
@@ -212,7 +267,11 @@ Output ONLY the prompt.`,
 
   ghibli: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into Studio Ghibli animation style — Spirited Away, Totoro, Howl's Moving Castle.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into Studio Ghibli animation style — Spirited Away, Totoro, Howl's Moving Castle.
 
 The person becomes a Ghibli character — natural rounded proportions (NOT exaggerated anime), realistically-sized expressive eyes, warm watercolor-like skin shading. Hair is soft and natural with gentle movement. Clothing has simple, clean painted shapes. Background becomes a breathtakingly detailed Ghibli painted landscape — atmospheric clouds, living nature, incredible depth. The palette is rich but gentle — earthy greens, sky blues, warm golds. Keep the same person's features and colors. Portrait 9:16.
 
@@ -222,7 +281,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   tim_burton: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into Tim Burton's gothic whimsy style — Nightmare Before Christmas, Corpse Bride.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into Tim Burton's gothic whimsy style — Nightmare Before Christmas, Corpse Bride.
 
 The person becomes a Burton character — elongated thin limbs, slightly oversized head, sunken eyes with dark circles, pale skin. Hair becomes wild and angular. Spiral motifs appear in hair and surroundings. Color palette shifts to predominantly black, white, grey with pops of deep purple or blood red. Background becomes crooked angular architecture — leaning buildings, twisted trees, curling fences. Black and white stripes on clothing. Dark whimsy, not horror. Keep their core features recognizable. Portrait 9:16.
 
@@ -232,7 +295,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   pop_art: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into bold Pop Art style — Andy Warhol meets Roy Lichtenstein.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into bold Pop Art style — Andy Warhol meets Roy Lichtenstein.
 
 Flat areas of MAXIMUM SATURATION primary colors — no photographic gradients anywhere. Thick black outlines define every shape. Ben-Day halftone dots fill all shadows and mid-tones. Skin becomes flat bold color. Hair becomes a solid graphic shape. Background is a flat contrasting color. Everything is graphic, commercial, unapologetically bold. NO subtlety, NO smooth blending — flat color blocks and dot patterns only. Keep the same person's features but rendered in pure Pop Art graphic style. Portrait 9:16.
 
@@ -242,7 +309,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   minecraft: {
     model: 'flux-dev',
-    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate a Minecraft-style scene.
+    buildPrompt: (
+      photo,
+      vibe,
+      hint
+    ) => `You are writing a prompt for Flux AI to generate a Minecraft-style scene.
 
 SCENE TO RECREATE AS MINECRAFT:
 ${photo}
@@ -261,7 +332,11 @@ Output ONLY the prompt.`,
 
   felt: {
     model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) => `COMPLETELY transform this photo into a needle-felted stop-motion puppet scene — Coraline / Kubo and the Two Strings style.
+    buildPrompt: (
+      _photo,
+      vibe,
+      hint
+    ) => `COMPLETELY transform this photo into a needle-felted stop-motion puppet scene — Coraline / Kubo and the Two Strings style.
 
 The person becomes a NEEDLE-FELTED WOOL PUPPET — visible fiber texture on skin, hand-painted precise eyes, individual wool strand hair matching their real color. Clothing becomes real miniature fabric with tiny visible stitches, actual buttons, thread seams in matching colors. ALL surroundings become a handcrafted miniature set — real wood, fabric, paper, wire at tiny scale. Dramatic cinematic lighting casting long shadows. Slightly uncanny but beautiful. Portrait 9:16.
 
@@ -271,7 +346,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
   '8bit': {
     model: 'flux-dev',
-    buildPrompt: (photo, vibe, hint) => `You are writing a prompt for Flux AI to generate NES-era 8-bit pixel art.
+    buildPrompt: (
+      photo,
+      vibe,
+      hint
+    ) => `You are writing a prompt for Flux AI to generate NES-era 8-bit pixel art.
 
 SCENE TO RECREATE AS 8-BIT:
 ${photo}
@@ -292,8 +371,15 @@ Output ONLY the prompt.`,
 // Reimagine always uses flux-dev (new scene from scratch).
 // Medium-specific templates for mediums that need special handling.
 
-const REIMAGINE_TEMPLATES: Record<string, (photo: string, scenario: string, vibe: string) => string> = {
-  lego: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a PHOTOGRAPH of a LEGO diorama:
+const REIMAGINE_TEMPLATES: Record<
+  string,
+  (photo: string, scenario: string, vibe: string) => string
+> = {
+  lego: (
+    photo,
+    scenario,
+    vibe
+  ) => `Write a Flux AI prompt (50-70 words) for a PHOTOGRAPH of a LEGO diorama:
 - Start with: "Photograph of a real LEGO brick diorama"
 - Subject from photo: ${photo} — becomes a LEGO MINIFIGURE (painted eyes, C-shaped hands, snap-on hair, matching clothing colors)
 - NEW SCENARIO: ${scenario} — build this entire scene from LEGO bricks, studs visible everywhere
@@ -309,7 +395,11 @@ Output ONLY the prompt.`,
 - Portrait 9:16
 Output ONLY the prompt.`,
 
-  stained_glass: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a stained glass window:
+  stained_glass: (
+    photo,
+    scenario,
+    vibe
+  ) => `Write a Flux AI prompt (50-70 words) for a stained glass window:
 - Start with: "Stained glass window panel, bold black lead cames, jewel-tone translucent glass, warm backlight"
 - Subject from photo: ${photo} — becomes a stained glass figure (lead outlines, colored glass panels)
 - NEW SCENARIO: ${scenario} — all elements are stained glass with lead dividers
@@ -317,7 +407,11 @@ Output ONLY the prompt.`,
 - Portrait 9:16
 Output ONLY the prompt.`,
 
-  embroidery: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for embroidery artwork:
+  embroidery: (
+    photo,
+    scenario,
+    vibe
+  ) => `Write a Flux AI prompt (50-70 words) for embroidery artwork:
 - Start with: "Flat embroidery artwork on natural linen fabric, cross-stitch and satin stitch, visible thread texture"
 - Subject from photo: ${photo} — entirely stitched (cross-stitch face, satin-stitch hair, matching thread colors)
 - NEW SCENARIO: ${scenario} — all elements embroidered, visible linen weave between stitches
@@ -325,7 +419,11 @@ Output ONLY the prompt.`,
 - Portrait 9:16
 Output ONLY the prompt.`,
 
-  funko_pop: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a Funko Pop figure:
+  funko_pop: (
+    photo,
+    scenario,
+    vibe
+  ) => `Write a Flux AI prompt (50-70 words) for a Funko Pop figure:
 - Start with: "Product photograph of a Funko Pop vinyl collectible figure"
 - Subject from photo: ${photo} — becomes a FUNKO POP (oversized head, tiny body, dot eyes, glossy vinyl, matching clothing colors)
 - NEW SCENARIO: ${scenario} — setting built as a Funko Pop display diorama

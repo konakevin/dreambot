@@ -131,22 +131,6 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',
   },
   {
-    key: 'photography',
-    label: 'Photography',
-    directive:
-      'You are a National Geographic photographer who also shoots for Vogue — you combine documentary authenticity with artistic perfection. Shoot with a fast prime lens (50mm f/1.4 or 85mm f/1.2) for creamy bokeh that separates subject from background. Natural light is your primary tool — golden hour warmth, overcast softbox sky, or dramatic sidelighting that sculpts form. Focus is tack-sharp on the subject with everything else falling away. Composition follows the rule of thirds but breaks it when the subject demands center stage. Color grading is natural but elevated — slightly lifted shadows, rich but not oversaturated.',
-    fluxFragment:
-      'Ultra-realistic photograph, DSLR with fast prime lens, shallow depth of field, creamy bokeh background, natural golden hour lighting, tack-sharp focus, 8K resolution, editorial quality',
-  },
-  {
-    key: 'collage',
-    label: 'Collage',
-    directive:
-      'You are creating a mixed-media collage in the tradition of Hannah Hoch, Romare Bearden, and modern editorial design. Combine cut paper, torn magazine fragments, fabric swatches, vintage photographs, hand-drawn elements, and typography into a layered composition. Textures are EVERYTHING — visible paper grain, frayed edges, tape marks, ink stamps. Layer elements with deliberate overlap — some pieces in front, some behind, creating a z-depth that invites the eye to explore. Mix photographic realism with flat graphic shapes. Color comes from the found materials — a red from a magazine ad, a blue from tissue paper, a gold from wrapping paper.',
-    fluxFragment:
-      'Mixed media collage artwork, cut paper and torn magazine fragments, layered textures, visible paper grain and frayed edges, vintage ephemera, editorial design composition, handmade tactile quality',
-  },
-  {
     key: 'embroidery',
     label: 'Embroidery',
     directive:
@@ -155,12 +139,76 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors, fabric background showing through, raised dimensional stitching',
   },
   {
-    key: 'vintage_film',
-    label: 'Vintage Film',
+    key: 'disney',
+    label: 'Disney',
     directive:
-      'This is shot on expired Kodak Portra 400 film with a vintage Contax T2 or Leica M6. The color science is warm and nostalgic — shifted toward amber and soft greens, with lifted milky shadows that never go true black. Film grain is organic and beautiful, not digital noise. Light leaks bleed warm orange or magenta from the frame edges. Focus has that slightly soft, dreamy quality of older glass — sharp enough but never clinical. Highlights bloom gently. The image feels like a recovered memory — something precious found in a shoebox of old photographs. Composition is intimate and personal, like the photographer was part of the moment.',
+      'You are a classic Disney 2D animation artist from the Renaissance era — think The Lion King, The Little Mermaid, Aladdin. Characters have expressive, emotive faces with large eyes that convey personality. Clean, confident ink outlines with smooth, flowing lines. Rich cel-painted color with luminous highlights and soft shadows. Backgrounds are lush painted environments — every frame is a work of art. Hair and fabric flow with exaggerated, graceful movement. Characters feel alive with warmth, appeal, and personality. The magic of hand-drawn animation radiates from every stroke.',
     fluxFragment:
-      'Vintage 35mm film photograph, Kodak Portra warm color science, organic film grain, light leaks, lifted milky shadows, soft dreamy focus, golden nostalgic tones, intimate candid composition',
+      'Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, expressive character design, luminous highlights, Renaissance Disney quality',
+  },
+  {
+    key: 'sack_boy',
+    label: 'Sack Boy',
+    directive:
+      'Everything in this scene is crafted from real-world materials at miniature scale — the LittleBigPlanet aesthetic. Characters are knitted fabric dolls with visible stitching, button eyes, and zipper mouths. Their bodies are soft stuffed forms with yarn hair and felt accessories. The environment is built from cardboard, corrugated paper, fabric swatches, sponge, cork, and stickers. Platforms are wooden rulers and tape rolls. Backgrounds are painted cardboard with visible brush marks. Everything has that handmade, tactile, craft-table quality — you can almost feel the textures. Lighting is warm and soft like a desk lamp illuminating a craft project.',
+    fluxFragment:
+      'LittleBigPlanet Sack Boy style, knitted fabric characters, button eyes, zipper details, cardboard and craft material world, visible stitching, handmade tactile quality, warm desk lamp lighting',
+  },
+  {
+    key: 'funko_pop',
+    label: 'Funko Pop',
+    directive:
+      'Everything is rendered as a Funko Pop vinyl collectible figure. Characters have massively oversized heads (3x body proportion) with tiny bodies, small dot eyes, no mouth (or tiny line mouth), and simplified features. The surface is glossy vinyl plastic with a subtle sheen. Hair is a solid sculpted plastic piece. Clothing details are painted on, not textured. The figure stands on a small circular black base. The aesthetic is cute, collectible, and stylized — maximum personality through minimal features. Think of it as a photograph of the actual vinyl figure on a shelf.',
+    fluxFragment:
+      'Funko Pop vinyl figure style, oversized head, tiny body, glossy plastic surface, dot eyes, no mouth, painted clothing details, collectible figure on display base, product photography',
+  },
+  {
+    key: 'ghibli',
+    label: 'Ghibli',
+    directive:
+      "You are a Studio Ghibli artist — think Spirited Away, My Neighbor Totoro, Howl's Moving Castle. The style is softer and more painterly than standard anime. Characters have natural, rounded proportions — not exaggerated anime features. Eyes are expressive but realistic in size. Skin tones are warm with soft watercolor-like shading. Backgrounds are breathtakingly detailed painted landscapes with incredible atmospheric perspective — clouds that feel alive, grass that sways, water that sparkles. There is a sense of quiet wonder and lived-in warmth in every scene. Nature is almost a character itself. The palette is rich but never harsh — earthy greens, sky blues, warm golds.",
+    fluxFragment:
+      'Studio Ghibli animation style, soft painterly rendering, warm natural color palette, detailed painted backgrounds, atmospheric clouds, gentle character design, Miyazaki quality, hand-painted cel animation',
+  },
+  {
+    key: 'tim_burton',
+    label: 'Tim Burton',
+    directive:
+      "You are designing in Tim Burton's signature gothic whimsy style — think Nightmare Before Christmas, Corpse Bride, Edward Scissorhands. Characters have exaggerated proportions: impossibly thin limbs, elongated necks, oversized heads with sunken eyes ringed in dark circles. Spiral motifs everywhere — in hair, architecture, landscapes. The color palette is stark: predominantly black, white, and grey with strategic pops of deep purple, blood red, or sickly green. Environments are crooked and angular — buildings lean, trees twist, fences curl. Stripes (black and white) appear on clothing and objects. Everything feels slightly unsettling but endearing — dark whimsy, not horror.",
+    fluxFragment:
+      'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture, sunken dark-ringed eyes, dark whimsical aesthetic',
+  },
+  {
+    key: 'pop_art',
+    label: 'Pop Art',
+    directive:
+      'You are creating in the style of Andy Warhol and Roy Lichtenstein. Bold, flat areas of highly saturated primary and secondary colors — red, blue, yellow, green, orange, purple at maximum intensity. Ben-Day dots (halftone pattern) fill shadows and mid-tones. Thick black outlines define every shape with graphic clarity. The image may be divided into 2-4 color variations of the same subject (Warhol grid style). Text elements, speech bubbles, or onomatopoeia can be integrated. The aesthetic is commercial, graphic, and unapologetically bold — advertising meets fine art. No subtlety, no gradients — flat color and graphic power.',
+    fluxFragment:
+      'Pop art style, Andy Warhol screen print, bold flat primary colors at maximum saturation, Ben-Day halftone dots, thick black outlines, graphic commercial aesthetic',
+  },
+  {
+    key: 'minecraft',
+    label: 'Minecraft',
+    directive:
+      'Everything in this scene is built from cubic voxel blocks — the Minecraft aesthetic. Characters are blocky with square heads, rectangular bodies, and pixelated skin textures mapped onto flat cube faces. Every surface is a grid of textured blocks — dirt, stone, wood planks, grass with flowers. Trees are columns of wood blocks topped with leaf blocks. Water is translucent blue blocks. The sky has square clouds. Lighting creates blocky shadows. The charm is in the constraint — representing complex scenes with nothing but cubes. It should look like a screenshot from inside the game, or a photograph of a LEGO-like diorama made of cubes.',
+    fluxFragment:
+      'Minecraft voxel style, everything built from cubic blocks, pixelated block textures, square character heads, blocky terrain, grass and dirt blocks, game screenshot aesthetic',
+  },
+  {
+    key: '8bit',
+    label: '8-Bit',
+    directive:
+      "You are creating NES-era 8-bit pixel art — think original Mario, Mega Man, Legend of Zelda on the NES. This is MORE primitive than 16-bit SNES pixel art. The color palette is extremely limited (12-16 colors max from the NES palette). Pixels are LARGE and chunky — very low resolution. Characters are simple — 2-pixel eyes, no detail in faces, iconic silhouettes only. No dithering, no gradients — flat color blocks only. Backgrounds are simple repeating tile patterns. The aesthetic is charming BECAUSE of its severe limitations. Everything should feel like it's running on 1985 hardware.",
+    fluxFragment:
+      'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, simple iconic character sprites, flat color blocks, retro 1985 gaming aesthetic',
+  },
+  {
+    key: 'felt',
+    label: 'Felt',
+    directive:
+      'You are creating a scene in the style of Laika stop-motion films — think Coraline, Kubo and the Two Strings. Characters are needle-felted wool puppets with visible fiber texture on their skin. Eyes are hand-painted with eerie precision. Hair is individual strands of dyed wool carefully placed. Clothing is real miniature fabric — tiny stitches visible, real buttons, actual thread seams. The world is a handcrafted miniature set built from real materials — wood, fabric, paper, wire — but at a tiny scale. Lighting is dramatic and cinematic, casting long shadows across the miniature sets. Everything has that slightly uncanny, beautiful-but-unsettling quality that makes Laika films unforgettable.',
+    fluxFragment:
+      'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
   },
 ];
 

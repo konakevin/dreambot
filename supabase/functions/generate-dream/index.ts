@@ -312,7 +312,9 @@ Deno.serve(async (req) => {
 
   if (!recipe && !rawPrompt && !haiku_brief && !vibe_profile && !medium_key && !vibe_key) {
     return new Response(
-      JSON.stringify({ error: 'Must provide recipe, vibe_profile, medium_key, prompt, or haiku_brief' }),
+      JSON.stringify({
+        error: 'Must provide recipe, vibe_profile, medium_key, prompt, or haiku_brief',
+      }),
       {
         status: 400,
       }
@@ -361,9 +363,20 @@ Deno.serve(async (req) => {
   let conceptJson: Record<string, unknown> | null = null;
   let photoOverrideMode: string | null = null;
   let resolvedMediumKey: string | undefined;
+  let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined; // original photo for face swap after generation
 
-  console.log('[generate-dream] RAW BODY:', JSON.stringify({ medium_key, vibe_key, photo_style, has_input_image: !!input_image, hint: hint?.slice(0, 50), mode }));
+  console.log(
+    '[generate-dream] RAW BODY:',
+    JSON.stringify({
+      medium_key,
+      vibe_key,
+      photo_style,
+      has_input_image: !!input_image,
+      hint: hint?.slice(0, 50),
+      mode,
+    })
+  );
 
   if (medium_key || vibe_key) {
     // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
@@ -407,9 +420,21 @@ Deno.serve(async (req) => {
     }
 
     resolvedMediumKey = medium.key;
+    resolvedVibeKey = vibe.key;
 
     const isPhoto = !!input_image;
-    console.log('[generate-dream] V2 ENGINE | medium:', medium.key, '| vibe:', vibe.key, '| isPhoto:', isPhoto, '| photo_style:', photo_style, '| has_input_image:', !!input_image);
+    console.log(
+      '[generate-dream] V2 ENGINE | medium:',
+      medium.key,
+      '| vibe:',
+      vibe.key,
+      '| isPhoto:',
+      isPhoto,
+      '| photo_style:',
+      photo_style,
+      '| has_input_image:',
+      !!input_image
+    );
 
     if (isPhoto && photo_style === 'reimagine') {
       // ── REIMAGINE: vision describe → medium template or generic brief → flux-dev ──
@@ -422,13 +447,23 @@ Deno.serve(async (req) => {
           100
         );
         lap('reimagine-vision');
-      console.log('[generate-dream] ⏱ Vision done:', photoDescription.slice(0, 120));
+        console.log('[generate-dream] ⏱ Vision done:', photoDescription.slice(0, 120));
 
         const userHint = hint ?? '';
-        const reimagineTemplate = buildReimaginePrompt(medium.key, photoDescription, userHint, vibe.directive!);
+        const reimagineTemplate = buildReimaginePrompt(
+          medium.key,
+          photoDescription,
+          userHint,
+          vibe.directive!
+        );
 
         if (reimagineTemplate) {
-          finalPrompt = await enhanceViaHaiku(reimagineTemplate, reimagineTemplate, ANTHROPIC_KEY, 150);
+          finalPrompt = await enhanceViaHaiku(
+            reimagineTemplate,
+            reimagineTemplate,
+            ANTHROPIC_KEY,
+            150
+          );
         } else {
           const genericBrief = `Write a Flux AI prompt (50-70 words, comma-separated phrases) for an image:
 - Start with: "${medium.fluxFragment}"
@@ -445,21 +480,40 @@ Output ONLY the prompt.`;
         photoOverrideMode = 'flux-dev';
         // Only face-swap for realistic mediums — swapping a real face onto LEGO/pixel art looks wrong
         const NON_SWAP_MEDIUMS = new Set([
-          'lego', 'pixel_art', 'stained_glass', 'embroidery',
-          'funko_pop', 'minecraft', '8bit',
-          'sack_boy', 'ghibli', 'tim_burton', 'pop_art', 'felt',
+          'lego',
+          'pixel_art',
+          'stained_glass',
+          'embroidery',
+          'funko_pop',
+          'minecraft',
+          '8bit',
+          'sack_boy',
+          'ghibli',
+          'tim_burton',
+          'pop_art',
+          'felt',
         ]);
         if (!NON_SWAP_MEDIUMS.has(medium.key)) {
           faceSwapSource = input_image;
         }
-        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-reimagine', faceSwap: !NON_SWAP_MEDIUMS.has(medium.key) };
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'v2-reimagine',
+          faceSwap: !NON_SWAP_MEDIUMS.has(medium.key),
+        };
         console.log('[generate-dream] Reimagine prompt:', finalPrompt.slice(0, 150));
       } catch (err) {
         console.error('[generate-dream] REIMAGINE FAILED:', (err as Error).message);
         // Fallback: use the hint as a raw prompt with medium styling
         finalPrompt = `${medium.fluxFragment}, ${hint ?? 'a creative scene'}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
         photoOverrideMode = 'flux-dev';
-        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-reimagine-fallback', error: (err as Error).message };
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'v2-reimagine-fallback',
+          error: (err as Error).message,
+        };
       }
       lap('reimagine-done');
     } else if (isPhoto) {
@@ -474,8 +528,15 @@ Output ONLY the prompt.`;
           ANTHROPIC_KEY,
           100
         );
-        console.log('[generate-dream] Restyle (flux-dev) photo description:', photoDescription.slice(0, 120));
-        const restyleBrief = config.buildPrompt(photoDescription, vibe.directive!.slice(0, 200), hint ?? '');
+        console.log(
+          '[generate-dream] Restyle (flux-dev) photo description:',
+          photoDescription.slice(0, 120)
+        );
+        const restyleBrief = config.buildPrompt(
+          photoDescription,
+          vibe.directive!.slice(0, 200),
+          hint ?? ''
+        );
         finalPrompt = await enhanceViaHaiku(restyleBrief, restyleBrief, ANTHROPIC_KEY, 150);
         photoOverrideMode = 'flux-dev';
       } else if (config) {
@@ -486,7 +547,11 @@ Output ONLY the prompt.`;
         finalPrompt = `Transform this photo into ${medium.fluxFragment ?? medium.key} style. Keep the same person, same pose, same expression. ${vibe.directive!.slice(0, 200)} Portrait 9:16.${hint ? ` ${hint}` : ''}`;
       }
 
-      logAxes = { medium: medium.key, vibe: vibe.key, engine: config?.model === 'flux-dev' ? 'v2-restyle-fluxdev' : 'v2-restyle-kontext' };
+      logAxes = {
+        medium: medium.key,
+        vibe: vibe.key,
+        engine: config?.model === 'flux-dev' ? 'v2-restyle-fluxdev' : 'v2-restyle-kontext',
+      };
       console.log('[generate-dream] Restyle prompt:', finalPrompt.slice(0, 150));
       lap('restyle-done');
     } else {
@@ -737,7 +802,12 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
   // ── Generate image via Replicate ──────────────────────────────────────────
   try {
     console.log(`[generate-dream] ⏱ Starting image generation (model: ${pickedModel})...`);
-    let tempUrl = await generateImage(effectiveMode, finalPrompt, effectiveInputImage, REPLICATE_TOKEN);
+    let tempUrl = await generateImage(
+      effectiveMode,
+      finalPrompt,
+      effectiveInputImage,
+      REPLICATE_TOKEN
+    );
     lap('image-gen');
     console.log(`[generate-dream] ⏱ Image generation complete`);
 
@@ -748,7 +818,9 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
         const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
         const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
         const swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
-        await supabase.storage.from('uploads').upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true });
+        await supabase.storage
+          .from('uploads')
+          .upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true });
         const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
         const sourceUrl = swapUrlData.publicUrl;
         lap('face-swap-upload');
@@ -756,12 +828,18 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
 
         tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
 
-        supabase.storage.from('uploads').remove([swapFileName]).catch(() => {});
+        supabase.storage
+          .from('uploads')
+          .remove([swapFileName])
+          .catch(() => {});
         lap('face-swap-model');
         console.log('[generate-dream] ⏱ Face swap complete');
         logAxes.faceSwapResult = 'success';
       } catch (err) {
-        console.warn('[generate-dream] Face swap failed, using unswapped image:', (err as Error).message);
+        console.warn(
+          '[generate-dream] Face swap failed, using unswapped image:',
+          (err as Error).message
+        );
         logAxes.faceSwapResult = 'failed';
         logAxes.faceSwapError = (err as Error).message;
       }
@@ -816,6 +894,8 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
         dream_mode: logAxes.dreamMode ?? mode,
         archetype: logAxes.archetype ?? null,
         model: logAxes.model ?? null,
+        resolved_medium: resolvedMediumKey ?? null,
+        resolved_vibe: resolvedVibeKey ?? null,
       }),
       {
         status: 200,
@@ -900,7 +980,7 @@ function pickModel(
   const sdxlOverrides = { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 };
 
   if (mode === 'flux-kontext') {
-    return { model: 'black-forest-labs/flux-kontext-max', inputOverrides: {} };
+    return { model: 'black-forest-labs/flux-kontext-pro', inputOverrides: {} };
   }
 
   // SDXL routing by medium key (preferred — exact match)
@@ -1128,13 +1208,15 @@ async function haikuVision(
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: maxTokens,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data } },
-          { type: 'text', text: prompt },
-        ],
-      }],
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data } },
+            { type: 'text', text: prompt },
+          ],
+        },
+      ],
     }),
   });
   if (!res.ok) throw new Error('Haiku vision ' + res.status);
