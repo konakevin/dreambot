@@ -181,15 +181,15 @@ export default function DreamRevealScreen() {
           <ActivityIndicator size="large" color="#fff" />
         ) : (
           <>
-            <TouchableOpacity style={s.postBtn} onPress={handlePost} activeOpacity={0.85}>
-              <Ionicons name="globe-outline" size={18} color="#fff" />
-              <Text style={s.postBtnText}>Post to Profile</Text>
-            </TouchableOpacity>
+            <View style={s.buttonRow}>
+              <TouchableOpacity style={s.glassPill} onPress={handlePost} activeOpacity={0.85}>
+                <Ionicons name="globe-outline" size={16} color="#fff" />
+                <Text style={s.glassPillText}>Post</Text>
+              </TouchableOpacity>
 
-            <View style={s.secondaryRow}>
               <TouchableOpacity style={s.glassPill} onPress={handleSave} activeOpacity={0.85}>
                 <Ionicons name="bookmark-outline" size={16} color="#fff" />
-                <Text style={s.glassPillText}>Save to Dreams</Text>
+                <Text style={s.glassPillText}>Save</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={s.glassPill} onPress={handleDiscard} activeOpacity={0.85}>
@@ -274,22 +274,7 @@ const s = StyleSheet.create({
     gap: 12,
     alignItems: 'center',
   },
-  postBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    width: '100%',
-    paddingVertical: 15,
-    borderRadius: 28,
-    backgroundColor: colors.accent,
-  },
-  postBtnText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  secondaryRow: {
+  buttonRow: {
     flexDirection: 'row',
     gap: 10,
   },

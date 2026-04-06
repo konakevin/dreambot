@@ -33,6 +33,7 @@ import {
   buildSubjectInventionPrompt,
 } from '../_shared/dreamEngine.ts';
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
+import { buildTextDreamPrompt } from '../_shared/textPrompts.ts';
 
 const MAX_DAILY_GENERATIONS = 50;
 
@@ -555,7 +556,7 @@ Output ONLY the prompt.`;
       console.log('[generate-dream] Restyle prompt:', finalPrompt.slice(0, 150));
       lap('restyle-done');
     } else {
-      // ── TEXT PATH: subject invention → concept generator → polisher ──
+      // ── TEXT PATH: medium-specific prompt or concept generator fallback ──
       let userSubject = rawPrompt ?? hint ?? '';
       if (!userSubject && vibeProfile) {
         try {
@@ -572,49 +573,68 @@ Output ONLY the prompt.`;
         lap('subject-invention');
       }
 
-      // Pass 1: Concept Generator
-      let concept: ConceptRecipe;
-      const conceptBrief = buildConceptPromptV2({
-        mediumDirective: medium.directive!,
-        vibeDirective: vibe.directive!,
-        fluxFragment: medium.fluxFragment!,
-        userPrompt: userSubject || undefined,
-        // profile stripped — vibe profile not injected into concept prompt
-      });
+      // Try medium-specific template first (best results)
+      const textBrief = buildTextDreamPrompt(
+        medium.key,
+        userSubject,
+        vibe.directive!,
+        medium.fluxFragment!
+      );
 
-      try {
-        const conceptRaw = await haikuJson(conceptBrief, ANTHROPIC_KEY, 600);
-        console.log('[generate-dream] V2 concept JSON:', conceptRaw.slice(0, 200));
-        concept = JSON.parse(conceptRaw) as ConceptRecipe;
-        conceptJson = concept as unknown as Record<string, unknown>;
-      } catch (err) {
-        console.warn('[generate-dream] V2 concept parse failed:', (err as Error).message);
-        concept = vibeProfile
-          ? buildFallbackConcept(vibeProfile)
-          : {
-              subject: userSubject || 'a mysterious dreamscape',
-              environment: 'an atmospheric setting',
-              lighting: 'dramatic golden hour light',
-              camera: '35mm wide angle',
-              style: medium.fluxFragment?.split(',')[0] ?? 'digital art',
-              palette: 'vivid and expressive',
-              twist: 'unexpected reflections',
-              composition: 'center subject',
-              mood: 'dreamlike wonder',
-            };
+      if (textBrief) {
+        // Medium-specific path — single Haiku call writes the optimized Flux prompt
+        console.log('[generate-dream] Text dream using medium template:', medium.key);
+        try {
+          finalPrompt = await enhanceViaHaiku(textBrief, '', ANTHROPIC_KEY, 150);
+          if (finalPrompt.length < 10) throw new Error('too short');
+        } catch {
+          finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
+        }
+      } else {
+        // Fallback: concept generator → polisher (for unknown mediums)
+        let concept: ConceptRecipe;
+        const conceptBrief = buildConceptPromptV2({
+          mediumDirective: medium.directive!,
+          vibeDirective: vibe.directive!,
+          fluxFragment: medium.fluxFragment!,
+          userPrompt: userSubject || undefined,
+        });
+
+        try {
+          const conceptRaw = await haikuJson(conceptBrief, ANTHROPIC_KEY, 600);
+          concept = JSON.parse(conceptRaw) as ConceptRecipe;
+          conceptJson = concept as unknown as Record<string, unknown>;
+        } catch {
+          concept = vibeProfile
+            ? buildFallbackConcept(vibeProfile)
+            : {
+                subject: userSubject || 'a mysterious dreamscape',
+                environment: 'an atmospheric setting',
+                lighting: 'dramatic golden hour light',
+                camera: '35mm wide angle',
+                style: medium.fluxFragment?.split(',')[0] ?? 'digital art',
+                palette: 'vivid and expressive',
+                twist: 'unexpected reflections',
+                composition: 'center subject',
+                mood: 'dreamlike wonder',
+              };
+        }
+
+        const polisherBrief = buildPolisherPromptV2(concept, medium.fluxFragment!);
+        try {
+          const polished = await enhanceViaHaiku(polisherBrief, '', ANTHROPIC_KEY, 150);
+          finalPrompt = polished.length >= 10 ? polished : buildFallbackFluxPrompt(concept);
+        } catch {
+          finalPrompt = buildFallbackFluxPrompt(concept);
+        }
       }
 
-      // Pass 2: Prompt Polisher
-      const polisherBrief = buildPolisherPromptV2(concept, medium.fluxFragment!);
-      try {
-        const polished = await enhanceViaHaiku(polisherBrief, '', ANTHROPIC_KEY, 150);
-        finalPrompt = polished.length >= 10 ? polished : buildFallbackFluxPrompt(concept);
-      } catch {
-        finalPrompt = buildFallbackFluxPrompt(concept);
-      }
-
-      console.log('[generate-dream] V2 final prompt:', finalPrompt.slice(0, 150));
-      logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2' };
+      console.log('[generate-dream] Text dream prompt:', finalPrompt.slice(0, 150));
+      logAxes = {
+        medium: medium.key,
+        vibe: vibe.key,
+        engine: textBrief ? 'v2-text-medium' : 'v2-text-concept',
+      };
     }
     lap('v2-engine-done');
   } else if (rawPrompt) {
