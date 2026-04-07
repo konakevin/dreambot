@@ -18,6 +18,8 @@ export interface DreamMedium {
   directive: string | null;
   /** Technical prefix for the final Flux prompt. null = derived at runtime */
   fluxFragment: string | null;
+  /** If present, this medium is an aggregate — engine randomly picks one of these sub-medium keys */
+  includes_mediums?: string[];
 }
 
 export interface DreamVibe {
@@ -69,10 +71,9 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
   {
     key: 'anime',
     label: 'Anime',
-    directive:
-      "You are a top-tier anime production designer — think Makoto Shinkai's backgrounds married with Ghibli's character warmth. Clean, confident linework with varying weight (thick outlines, thin details). Flat cel-shaded color with strategic gradient shading on skin and hair. Eyes are expressive windows — large, detailed, with multiple light reflections. Backgrounds are painted with photographic detail and atmospheric perspective while characters maintain clean graphic simplicity. The contrast between detailed world and stylized characters creates the anime magic. Hair and fabric should have dynamic flow suggesting movement even in still frames.",
-    fluxFragment:
-      'Anime illustration, clean ink linework, cel-shaded coloring, expressive detailed eyes, Makoto Shinkai inspired backgrounds, dynamic hair flow, vibrant saturated colors',
+    directive: null,
+    fluxFragment: null,
+    includes_mediums: ['cute_anime', 'dark_anime'],
   },
   {
     key: 'lego',
@@ -274,6 +275,14 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     fluxFragment:
       'Kawaii chibi anime style, oversized heads, enormous sparkly eyes, pastel pink lavender mint palette, soft rounded forms, floating hearts and stars, sparkle effects, maximum cuteness, Sanrio aesthetic',
   },
+  {
+    key: 'dark_anime',
+    label: 'Dark Anime',
+    directive:
+      'You are creating seinen/dark anime art — the visual world of Ghost in the Shell, Akira, Attack on Titan, Cowboy Bebop. Characters have realistic proportions, sharp angular features, intense narrow eyes with single hard light reflections. Detailed mechanical and architectural designs. Color palette is muted and moody — deep indigo, gunmetal grey, dried blood red, sickly amber. Heavy atmospheric effects — rain, smoke, dust, lens flare. Backgrounds are hyper-detailed cityscapes or desolate wastelands. Lighting is dramatic and cinematic — harsh rim lights, deep shadows. Nothing cute — everything is serious, intense, and beautiful.',
+    fluxFragment:
+      'Dark seinen anime, sharp angular character design, intense narrow eyes, muted moody palette, hyper-detailed backgrounds, dramatic cinematic lighting, Ghost in the Shell Akira aesthetic, atmospheric rain and smoke',
+  },
 ];
 
 // ── Vibes ───────────────────────────────────────────────────────────────
@@ -396,6 +405,7 @@ export const MEDIUM_KEYS = [
   'art_deco',
   'steampunk',
   'cute_anime',
+  'dark_anime',
 ] as const;
 
 export const VIBE_KEYS = [

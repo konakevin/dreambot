@@ -1474,12 +1474,21 @@ function resolveMedium(
   key: string | undefined,
   profile?: VibeProfile
 ): (typeof CURATED_MEDIUMS)[number] {
+  let medium: (typeof CURATED_MEDIUMS)[number];
   if (key === 'my_mediums' && profile?.art_styles.length) {
     const pick = profile.art_styles[Math.floor(Math.random() * profile.art_styles.length)];
-    return CURATED_MEDIUMS.find((m) => m.key === pick) ?? randomMedium();
+    medium = CURATED_MEDIUMS.find((m) => m.key === pick) ?? randomMedium();
+  } else {
+    medium = CURATED_MEDIUMS.find((m) => m.key === key) ?? randomMedium();
   }
-  const found = CURATED_MEDIUMS.find((m) => m.key === key);
-  return found ?? randomMedium();
+  // Aggregate mediums: randomly pick one of the sub-mediums
+  if (medium.includes_mediums?.length) {
+    const subKey =
+      medium.includes_mediums[Math.floor(Math.random() * medium.includes_mediums.length)];
+    const sub = CURATED_MEDIUMS.find((m) => m.key === subKey);
+    if (sub) return sub;
+  }
+  return medium;
 }
 
 /**

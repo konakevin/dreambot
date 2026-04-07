@@ -403,4 +403,17 @@ Output ONLY the prompt.`,
 
 Express the mood through sparkle density and pastel warmth: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
+
+  dark_anime: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for dark seinen anime:
+- Start with: "Dark seinen anime, sharp angular character design, intense narrow eyes, muted moody palette, hyper-detailed backgrounds, Ghost in the Shell Akira aesthetic"
+- Subject: ${subject} — with realistic proportions, sharp angular features, intense narrow eyes with single hard light reflection
+- Palette: deep indigo, gunmetal grey, dried blood red, sickly amber. Heavy atmosphere — rain, smoke, dust, lens flare.
+- Backgrounds are hyper-detailed cityscapes or desolate wastelands. Dramatic cinematic lighting — harsh rim lights, deep shadows.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through shadow depth and atmospheric density: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
 };

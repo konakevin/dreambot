@@ -75,8 +75,8 @@ const CURATED_MEDIUMS = [
   },
   {
     key: 'anime',
-    fluxFragment:
-      'Anime illustration, clean ink linework, cel-shaded coloring, expressive detailed eyes, Makoto Shinkai inspired backgrounds, dynamic hair flow, vibrant saturated colors',
+    fluxFragment: null,
+    includes_mediums: ['cute_anime', 'dark_anime'],
   },
   {
     key: 'lego',
@@ -199,6 +199,11 @@ const CURATED_MEDIUMS = [
     key: 'cute_anime',
     fluxFragment:
       'Kawaii chibi anime style, oversized heads, enormous sparkly eyes, pastel pink lavender mint palette, soft rounded forms, floating hearts and stars, sparkle effects, maximum cuteness, Sanrio aesthetic',
+  },
+  {
+    key: 'dark_anime',
+    fluxFragment:
+      'Dark seinen anime, sharp angular character design, intense narrow eyes, muted moody palette, hyper-detailed backgrounds, dramatic cinematic lighting, Ghost in the Shell Akira aesthetic, atmospheric rain and smoke',
   },
 ];
 
@@ -362,11 +367,20 @@ function pickWeightedCategory(moods) {
 }
 
 function resolveMedium(profile) {
+  let medium;
   if (profile.art_styles?.length) {
     const key = pick(profile.art_styles);
-    return CURATED_MEDIUMS.find((m) => m.key === key) ?? pick(CURATED_MEDIUMS);
+    medium = CURATED_MEDIUMS.find((m) => m.key === key) ?? pick(CURATED_MEDIUMS);
+  } else {
+    medium = pick(CURATED_MEDIUMS);
   }
-  return pick(CURATED_MEDIUMS);
+  // Aggregate mediums: randomly pick one of the sub-mediums
+  if (medium.includes_mediums?.length) {
+    const subKey = pick(medium.includes_mediums);
+    const sub = CURATED_MEDIUMS.find((m) => m.key === subKey);
+    if (sub) return sub;
+  }
+  return medium;
 }
 
 function resolveVibe(profile) {
