@@ -37,8 +37,7 @@ function pick(arr) {
 const MEDIUMS = {
   pixel_art:
     '16-bit pixel art, carefully placed pixels, limited harmonious color palette, dithered gradients, retro game aesthetic',
-  watercolor:
-    'Watercolor painting on textured paper, transparent layered washes, wet-on-wet blooms, soft bleeding edges',
+  // watercolor removed — Kontext restyle consistently fails to transform
   oil_painting:
     'Oil painting on canvas, thick impasto brushstrokes, visible palette knife texture, rich layered glazes',
   anime:
@@ -56,20 +55,46 @@ const MEDIUMS = {
     'Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors',
   tim_burton:
     'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents',
+  neon: 'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, cyberpunk noir',
+  stained_glass:
+    'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight',
+  embroidery:
+    'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors',
+  pencil_sketch:
+    'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range',
+  sack_boy:
+    'LittleBigPlanet Sack Boy style, knitted fabric characters, button eyes, zipper details, cardboard and craft material world',
+  funko_pop:
+    'Funko Pop vinyl figure style, oversized head, tiny body, glossy plastic surface, dot eyes, no mouth',
+  pop_art:
+    'Pop art style, Andy Warhol screen print, bold flat primary colors, Ben-Day halftone dots, thick black outlines',
+  minecraft:
+    'Minecraft voxel style, everything built from cubic blocks, pixelated block textures, square character heads',
+  '8bit':
+    'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, retro 1985 gaming',
+  felt: 'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, Laika Studios Coraline quality',
 };
 
 const VIBES = {
   cinematic:
-    'Frame from an Oscar-winning film, motivated lighting, teal-and-orange grade, frozen narrative tension.',
+    'This is a frame from an Oscar-winning film. Motivated lighting, teal-and-orange grade, frozen narrative tension.',
   dreamy:
-    'Soft ethereal haze, omnidirectional glow, pastels, weightlessness, moment between sleeping and waking.',
-  dark: 'Deep shadow, light is rare and precious, restricted palette of teal and blood red, Caravaggio chiaroscuro.',
-  epic: 'Impossibly vast scale, god rays, atmospheric perspective, the viewer feels small and awed.',
-  cozy: 'Warm and close, candlelight, string lights, chunky knit blankets, shallow depth of field, steam rising.',
+    'Everything floats in a soft, ethereal haze. Light emanates from within the scene itself, gentle omnidirectional glow.',
+  dark: 'Embrace the shadows. Deep shadow, rich velvety blacks. Light is rare and precious.',
+  chaos:
+    "Rules don't exist here. Multiple conflicting light sources in impossible colors. Perspective bends.",
+  cozy: 'Everything is warm and close. Intimate space, soft warm lighting, candlelight, string lights.',
+  minimal:
+    'Less is everything. One subject, vast negative space. Single tone or subtle gradient background.',
+  epic: 'SCALE. The subject exists within something impossibly vast — towering mountains, endless skies, cosmic expanses.',
+  nostalgic:
+    'This is a memory being remembered fondly. Warm golden tones, late afternoon in eternal summer.',
   psychedelic:
-    'Melting reality, fractals, maximum saturation, forms morphing, patterns at every scale.',
+    'Reality is melting, breathing, pulsing with impossible color. Fractals, mandalas, maximum saturation.',
+  peaceful:
+    'Absolute stillness. Perfect calm — still water reflecting sky, windless fields, quiet dawn light.',
   whimsical:
-    'Physics optional, wrong sizes, candy-bright colors, spiral architecture, playful gravity.',
+    'Physics are optional and reality is playful. Objects are the wrong size, candy-bright colors, floating islands.',
 };
 
 const CATEGORIES = [
@@ -93,6 +118,32 @@ const SHOT_DIRECTIONS = [
   'candid snapshot feeling, slightly off-center, caught mid-moment',
   'dutch angle, dramatic tension, off-kilter framing',
 ];
+
+async function generateFluxDev(prompt) {
+  const res = await fetch(
+    'https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions',
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${REPLICATE_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: { prompt, aspect_ratio: '9:16', num_outputs: 1, output_format: 'jpg' },
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`Flux Dev create failed: ${res.status}`);
+  const pred = await res.json();
+  if (!pred.id) throw new Error('No prediction ID');
+  for (let i = 0; i < 60; i++) {
+    await new Promise((r) => setTimeout(r, 2000));
+    const poll = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
+      headers: { Authorization: `Bearer ${REPLICATE_TOKEN}` },
+    });
+    const data = await poll.json();
+    if (data.status === 'succeeded') return data.output?.[0];
+    if (data.status === 'failed') throw new Error(`Failed: ${data.error}`);
+  }
+  throw new Error('Timed out');
+}
 
 async function generateKontext(prompt, inputImageUrl) {
   const res = await fetch(
@@ -211,9 +262,12 @@ async function main() {
 
   const results = [];
 
+  // Cycle through mediums instead of random to guarantee variety
+  const allMediumKeys = Object.keys(MEDIUMS).sort(() => Math.random() - 0.5);
+
   for (let i = 0; i < COUNT; i++) {
     const castMember = pick(cast);
-    const mediumKey = pick(Object.keys(MEDIUMS));
+    const mediumKey = allMediumKeys[i % allMediumKeys.length];
     const mediumFragment = MEDIUMS[mediumKey];
     const vibeKey = pick(Object.keys(VIBES));
     const vibeDirective = VIBES[vibeKey];
@@ -253,134 +307,50 @@ async function main() {
 
     const shotDirection = pick(SHOT_DIRECTIONS);
 
-    // Stylized mediums: transform the person INTO the medium (LEGO minifig, clay puppet, etc.)
-    // Realistic mediums: keep the person's face, transform the scene around them
-    // Stylized mediums: use Flux Dev with text description (better scenes, medium always correct)
-    // Realistic mediums: use Kontext with actual photo (face preserved)
-    const STYLIZED_MEDIUMS = new Set([
-      'pixel_art',
-      'lego',
-      'claymation',
-      'anime',
-      'comic_book',
-      'disney',
-      'sack_boy',
-      'funko_pop',
-      'ghibli',
-      'tim_burton',
-      'pop_art',
-      'minecraft',
-      '8bit',
-      'felt',
-    ]);
-    const isStylized = STYLIZED_MEDIUMS.has(mediumKey);
+    // ── THREE DREAM COMPOSITION PATHS ──
+    const shortCastDesc =
+      castMember.description?.split(',')[0] ??
+      (castMember.role === 'pet' ? 'a small creature' : 'a figure');
+    const mediumStyle = mediumKey.replace(/_/g, ' ');
+
+    // Cycle through all 3 paths evenly
+    const paths = ['character', 'pure_scene', 'epic_tiny'];
+    const dreamPath = paths[i % 3];
+
+    let promptBrief;
+
+    if (dreamPath === 'character') {
+      promptBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-90 words, comma-separated).\n\nMEDIUM: ${mediumFragment}\n\nCreate a scene where a ${mediumStyle}-style ${shortCastDesc} is the main character experiencing this dream:\n${filledTemplate}\n\nThe character is rendered fully in ${mediumStyle} style — NOT photorealistic. They are DOING something in the scene, not just standing and staring at the camera. Show them interacting with the surreal environment.\n\nCAMERA: ${shotDirection}\nMOOD: ${vibeDirective}\n\nStart with the art medium. End with: no text, no words, no letters, no watermarks, hyper detailed.\nOutput ONLY the prompt.`;
+    } else if (dreamPath === 'epic_tiny') {
+      promptBrief = `You are a cinematographer composing an EPIC, VAST scene. Write a Flux AI prompt (60-90 words, comma-separated).\n\nMEDIUM: ${mediumFragment}\n\nDREAM SCENE (this is the ENTIRE focus — describe in maximum vivid detail):\n${filledTemplate}\n\nSomewhere in this vast scene, barely visible, is a tiny ${mediumStyle}-style ${shortCastDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.\n\nCAMERA: ${shotDirection}\nMOOD: ${vibeDirective}\n\nWrite the prompt:\n1. Start with the art medium\n2. Spend 90% of words on the ENVIRONMENT\n3. Mention the tiny character in ONE short phrase at the very end\n4. End with: no text, no words, no letters, no watermarks, hyper detailed\nOutput ONLY the prompt.`;
+    } else {
+      promptBrief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).\n\nMEDIUM: ${mediumFragment}\n\nDREAM SCENE (this is sacred — do NOT water it down):\n${filledTemplate}\n\nCAMERA/COMPOSITION: ${shotDirection}\nMOOD: ${vibeDirective}\n\nWrite the prompt:\n1. Start with the art medium\n2. Describe the EXACT scene — every surreal detail preserved\n3. NO PEOPLE. NO CHARACTERS. NO FIGURES. Pure environment.\n4. Name specific materials, textures, light sources (NOUNS not adjectives)\n5. End with: no text, no words, no letters, no watermarks, hyper detailed, masterwork composition\nOutput ONLY the prompt.`;
+    }
 
     let promptUsed;
     let imageUrl;
-    const engine = isStylized ? 'flux-dev-cast' : 'kontext-cast';
+    const engine = `flux-dev-${dreamPath}`;
 
-    if (isStylized) {
-      // ── STYLIZED: Flux Dev with per-medium template (same as V2 text path) ──
-      const castDesc =
-        castMember.role === 'pet'
-          ? `A ${castMember.description}`
-          : `The protagonist is ${roleLabel}: ${castMember.description}. Stylized as a ${mediumKey.replace(/_/g, ' ')} character — same hair, build, clothing but fully in the art style.`;
+    try {
+      const msg = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 200,
+        messages: [{ role: 'user', content: promptBrief }],
+      });
+      promptUsed = msg.content?.[0]?.text?.trim() ?? '';
+      if (promptUsed.length < 20) throw new Error('too short');
+    } catch {
+      promptUsed = `${mediumFragment}, ${filledTemplate}, no text, hyper detailed`;
+    }
 
-      const subject = `${filledTemplate}. ${castDesc}`;
+    console.log(`  [${dreamPath}] ${promptUsed.slice(0, 100)}...`);
 
-      // Per-medium templates — proven to produce correct medium rendering
-      const MEDIUM_TEMPLATES = {
-        lego: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for a PHOTOGRAPH of a REAL LEGO SET:\n- Start with: "Photograph of a real LEGO brick diorama, soft studio lighting, shallow depth of field"\n- Subject: ${s} — built ENTIRELY from LEGO bricks. Characters are minifigures with painted expressions, snap-on hair, C-shaped hands\n- EVERY object, surface, and background element is LEGO — visible studs, snap-together construction\n- Portrait 9:16\nExpress the mood through brick color choices and lighting: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        pixel_art: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for pixel art:\n- Start with: "16-bit pixel art, SNES era, visible pixel grid, limited 24-color palette, crisp pixel edges"\n- Subject: ${s} — rendered as pixel art sprites and pixel environments\n- Characters have blocky features, dot eyes, iconic silhouettes\n- Dithered shading, NO anti-aliasing, NO smooth gradients\n- Portrait 9:16\nExpress the mood through palette selection: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        claymation: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for claymation:\n- Start with: "Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets"\n- Subject: ${s} — sculpted from smooth matte clay with subtle fingerprint textures\n- Characters have glass bead eyes, knitted/felted clothing. Sets are handcrafted miniatures.\n- Portrait 9:16\nExpress the mood through set lighting and clay color palette: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        anime: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for anime illustration:\n- Start with: "Anime illustration, clean ink linework, cel-shaded coloring, expressive detailed eyes, vibrant saturated colors"\n- Subject: ${s} — drawn in anime style with clean ink outlines, cel-shaded flat color\n- Characters have expressive eyes with light reflections, dynamic flowing hair\n- Backgrounds painted with atmospheric detail (Shinkai-style)\n- Portrait 9:16\nExpress the mood through background atmosphere and color saturation: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        comic_book: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for comic book art:\n- Start with: "Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, graphic novel splash page quality"\n- Subject: ${s} — drawn with bold confident ink outlines, flat saturated color\n- Ben-Day dot halftone patterns in mid-tones. Dynamic angles. Kinetic energy.\n- Portrait 9:16\nExpress the mood through ink weight and color intensity: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        disney: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for Disney animation:\n- Start with: "Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, Renaissance Disney quality"\n- Subject: ${s} — as a Disney animated character with expressive emotive face, large eyes\n- Clean ink outlines, luminous cel-painted color, lush painted backgrounds\n- Portrait 9:16\nExpress the mood through background painting and color vibrancy: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        ghibli: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for Studio Ghibli:\n- Start with: "Studio Ghibli animation, soft painterly rendering, warm natural palette, detailed painted backgrounds, Miyazaki quality"\n- Subject: ${s} — in Ghibli style with natural rounded proportions, warm watercolor-like shading\n- Breathtaking painted landscapes with atmospheric perspective. Nature as a character.\n- Portrait 9:16\nExpress the mood through landscape detail and palette warmth: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        tim_burton: (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for Tim Burton style:\n- Start with: "Tim Burton gothic illustration, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture"\n- Subject: ${s} — with impossibly thin limbs, elongated neck, sunken dark-ringed eyes\n- Spiral motifs in hair, architecture. Stark black/white/grey with pops of purple or blood red.\n- Portrait 9:16\nExpress the mood through angular environment and shadow intensity: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-        '3d_render': (s, v) =>
-          `Write a Flux AI prompt (50-70 words, comma-separated) for a 3D render:\n- Start with: "Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, cinematic depth of field"\n- Subject: ${s} — as a stylized 3D animated scene with Pixar-level quality\n- Soft rounded shapes, glossy eyes, subsurface scattering on skin\n- Portrait 9:16\nExpress the mood through volumetric lighting and color palette: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-      };
-
-      const templateFn = MEDIUM_TEMPLATES[mediumKey];
-      const fluxBrief = templateFn
-        ? templateFn(subject, vibeDirective)
-        : `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).\n\nMEDIUM: ${mediumFragment}\n\nSCENE: ${subject}\n\nCAMERA: ${shotDirection}\nMOOD: ${vibeDirective}\n\nStart with the art medium. Place the character naturally IN the scene with their traits in ${mediumKey.replace(/_/g, ' ')} style. End with: portrait 9:16, hyper detailed.\nOutput ONLY the prompt.`;
-
-      try {
-        const msg = await anthropic.messages.create({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 200,
-          messages: [{ role: 'user', content: fluxBrief }],
-        });
-        promptUsed = msg.content?.[0]?.text?.trim() ?? '';
-        if (promptUsed.length < 20) throw new Error('too short');
-      } catch {
-        promptUsed = `${mediumFragment}, ${filledTemplate}, ${castDesc.slice(0, 80)}, ${vibeDirective.split('.')[0]}, portrait 9:16, hyper detailed`;
-      }
-
-      console.log(`  [Flux Dev] ${promptUsed.slice(0, 100)}...`);
-
-      try {
-        const tempUrl = await generateFluxDev(promptUsed);
-        imageUrl = await persistImage(tempUrl);
-      } catch (err) {
-        console.log(`  ❌ Flux Dev failed: ${err.message}\n`);
-        continue;
-      }
-    } else {
-      // ── REALISTIC: Kontext with actual photo — scene-dominant ──
-      const kontextBrief = `You are writing an instruction for Flux Kontext Pro — an AI model that DRAMATICALLY transforms photos into surreal scenes.
-
-THE SCENE IS THE STAR. The person is a small figure WITHIN an overwhelming, impossible environment.
-
-PERSON/PET IN PHOTO: ${roleLabel} — ${castMember.description}
-
-SURREAL SCENE (describe this in vivid detail — it should fill 80% of the image):
-${filledTemplate}
-
-CAMERA: ${shotDirection}
-MOOD: ${vibeDirective}
-
-Write the Kontext instruction. 50-70 words. Rules:
-1. Start with "Transform this photo into a ${mediumFragment.split(',')[0]} scene:"
-2. Spend 80% of the words on the ENVIRONMENT — the surreal architecture, impossible physics, materials, lighting, weather
-3. The person is TINY within this vast scene — a small figure dwarfed by the impossible world
-4. Keep their face recognizable but they should occupy at most 20% of the frame
-5. Name specific materials, textures, light sources — NOT abstract adjectives
-6. The original photo background must be COMPLETELY REPLACED by the dream scene
-
-Output ONLY the instruction.`;
-
-      try {
-        const msg = await anthropic.messages.create({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 150,
-          messages: [{ role: 'user', content: kontextBrief }],
-        });
-        promptUsed = msg.content?.[0]?.text?.trim() ?? '';
-        if (promptUsed.length < 20) throw new Error('too short');
-      } catch {
-        promptUsed = `Transform this photo into a ${mediumFragment.split(',')[0]} scene: ${filledTemplate.slice(0, 100)}. The person is a tiny figure in this vast world. Keep their face. portrait 9:16.`;
-      }
-
-      console.log(`  [Kontext] ${promptUsed.slice(0, 100)}...`);
-
-      try {
-        const tempUrl = await generateKontext(promptUsed, castMember.thumb_url);
-        imageUrl = await persistImage(tempUrl);
-      } catch (err) {
-        console.log(`  ❌ Kontext failed: ${err.message}\n`);
-        continue;
-      }
+    try {
+      const tempUrl = await generateFluxDev(promptUsed);
+      imageUrl = await persistImage(tempUrl);
+    } catch (err) {
+      console.log(`  ❌ Flux Dev failed: ${err.message}\n`);
+      continue;
     }
 
     // Evaluate
@@ -398,6 +368,13 @@ Output ONLY the instruction.`;
         notes: 'eval failed',
       };
     }
+
+    // Ensure all scores are numbers (Sonnet sometimes omits fields)
+    scores.likeness = scores.likeness || 0;
+    scores.transformation = scores.transformation || 0;
+    scores.integration = scores.integration || 0;
+    scores.medium = scores.medium || 0;
+    scores.wow = scores.wow || 0;
 
     const avg = (
       (scores.likeness + scores.transformation + scores.integration + scores.medium + scores.wow) /

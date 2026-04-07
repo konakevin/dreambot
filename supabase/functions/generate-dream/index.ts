@@ -391,7 +391,14 @@ Deno.serve(async (req) => {
       // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
       // ══════════════════════════════════════════════════════════════════
       const nightlyProfile = vibe_profile as VibeProfile;
-      const nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+      // Watercolor removed from nightly — Kontext restyle consistently fails to transform
+      let nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+      if (nightlyMedium.key === 'watercolor') {
+        nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+        if (nightlyMedium.key === 'watercolor') {
+          nightlyMedium = CURATED_MEDIUMS.find((m) => m.key === 'oil_painting') ?? nightlyMedium;
+        }
+      }
       const nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
       resolvedMediumKey = nightlyMedium.key;
       resolvedVibeKey = nightlyVibe.key;
@@ -560,135 +567,86 @@ Deno.serve(async (req) => {
               .join(', ')}`
           : '';
 
-      if (castPick && ANTHROPIC_KEY) {
-        // ── CAST DREAM ──
-        const roleLabel =
-          castPick.role === 'self'
-            ? 'the dreamer themselves'
-            : castPick.role === 'pet'
-              ? 'their beloved pet'
-              : (castPick as Record<string, unknown>).relationship === 'significant_other'
-                ? 'their romantic partner'
-                : `their ${(castPick as Record<string, unknown>).relationship ?? 'companion'}`;
+      // ── THREE DREAM COMPOSITION PATHS ──
+      // Each has a custom Sonnet brief optimized for its composition type.
+      const shortCastDesc = castPick
+        ? (castPick.description?.split(',')[0] ??
+          (castPick.role === 'pet' ? 'a small creature' : 'a figure'))
+        : null;
+      const mediumStyle = nightlyMedium.key.replace(/_/g, ' ');
 
-        // Stylized mediums → Flux Dev with text description (better scenes + medium accuracy)
-        // Realistic mediums → Kontext with actual photo (face preserved)
-        const STYLIZED_MEDIUMS = new Set([
-          'pixel_art',
-          'lego',
-          'claymation',
-          'anime',
-          'comic_book',
-          'disney',
-          'sack_boy',
-          'funko_pop',
-          'ghibli',
-          'tim_burton',
-          'pop_art',
-          'minecraft',
-          '8bit',
-          'felt',
-        ]);
-        const isStylized = STYLIZED_MEDIUMS.has(nightlyMedium.key);
+      // Pick path: cast dreams get 3 options, non-cast always pure scene
+      // Some mediums ALWAYS use character path (the character IS the medium's art)
+      const CHARACTER_MEDIUMS = new Set(['claymation', 'lego', 'funko_pop', 'disney', 'sack_boy']);
+      // Some mediums ALWAYS use pure scene (characters look bad in them)
+      const SCENE_ONLY_MEDIUMS = new Set(['oil_painting']);
 
-        if (isStylized) {
-          // ── STYLIZED CAST: Flux Dev — use per-medium templates from V2 engine ──
-          const castDesc =
-            castPick.role === 'pet'
-              ? `A ${castPick.description}`
-              : `The protagonist is ${roleLabel}: ${castPick.description}. Stylized as a ${nightlyMedium.key.replace(/_/g, ' ')} character — same hair, build, clothing but fully in the art style.`;
+      type DreamPath = 'character' | 'pure_scene' | 'epic_tiny';
+      let dreamPath: DreamPath;
+      if (!castPick || SCENE_ONLY_MEDIUMS.has(nightlyMedium.key)) {
+        dreamPath = 'pure_scene';
+      } else if (CHARACTER_MEDIUMS.has(nightlyMedium.key)) {
+        dreamPath = 'character';
+      } else {
+        const roll = Math.random();
+        dreamPath = roll < 0.33 ? 'character' : roll < 0.66 ? 'pure_scene' : 'epic_tiny';
+      }
 
-          const subject = `${dreamSubject}. ${castDesc}`;
+      let nightlyBrief: string;
 
-          // Try the proven per-medium template from textPrompts.ts first
-          const mediumBrief = buildTextDreamPrompt(
-            nightlyMedium.key,
-            subject,
-            nightlyVibe.directive ?? '',
-            nightlyMedium.fluxFragment ?? ''
-          );
-
-          const briefToUse =
-            mediumBrief ??
-            `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
+      if (dreamPath === 'character') {
+        // ── PATH A: Character dream — character is the focus, scene wraps around them ──
+        nightlyBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
-SCENE: ${subject}
-
-CAMERA: ${shotDirection}
-MOOD: ${nightlyVibe.directive}
-${aestheticFlavor}${extraSeeds}${avoidList}
-
-Start with the art medium. Place the character naturally IN the scene. Include their traits rendered in ${nightlyMedium.key.replace(/_/g, ' ')} style. End with: portrait 9:16, hyper detailed.
-Output ONLY the prompt.`;
-
-          try {
-            finalPrompt = await nightlySonnet(briefToUse, ANTHROPIC_KEY, 200);
-            if (finalPrompt.length < 20) throw new Error('too short');
-          } catch {
-            finalPrompt = `${nightlyMedium.fluxFragment}, ${subject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
-          }
-
-          console.log(
-            '[generate-dream] Nightly STYLIZED CAST (Flux Dev):',
-            finalPrompt.slice(0, 200)
-          );
-          logAxes = {
-            medium: nightlyMedium.key,
-            vibe: nightlyVibe.key,
-            engine: 'nightly-fluxdev-cast',
-            castRole: castPick.role,
-          };
-        } else {
-          // ── REALISTIC CAST: Kontext — scene-dominant, person is small figure in vast world ──
-          const kontextBrief = `You are writing an instruction for Flux Kontext Pro — an AI model that DRAMATICALLY transforms photos into surreal scenes.
-
-THE SCENE IS THE STAR. The person is a small figure WITHIN an overwhelming, impossible environment.
-
-PERSON/PET IN PHOTO: ${roleLabel} — ${castPick.description}
-
-SURREAL SCENE (describe this in vivid detail — it should fill 80% of the image):
+Create a scene where a ${mediumStyle}-style ${shortCastDesc} is the main character experiencing this dream:
 ${dreamSubject}
 
+The character is rendered fully in ${mediumStyle} style — NOT photorealistic. They are DOING something in the scene, not just standing and staring at the camera. Show them interacting with the surreal environment.
+
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
 ${aestheticFlavor}${extraSeeds}${avoidList}
 
-Write the Kontext instruction. 50-70 words. Rules:
-1. Start with "Transform this photo into a ${nightlyMedium.fluxFragment?.split(',')[0] ?? 'dramatic art'} scene:"
-2. Spend 80% of the words on the ENVIRONMENT — the surreal architecture, impossible physics, materials, lighting, weather
-3. The person is TINY within this vast scene — a small figure dwarfed by the impossible world
-4. Keep their face recognizable but they should occupy at most 20% of the frame
-5. Name specific materials, textures, light sources — NOT abstract adjectives
-6. The original photo background must be COMPLETELY REPLACED by the dream scene
+Start with the art medium. End with: no text, no words, no letters, no watermarks, hyper detailed.
+Output ONLY the prompt.`;
+        logAxes = {
+          medium: nightlyMedium.key,
+          vibe: nightlyVibe.key,
+          engine: 'nightly-cast-character',
+          castRole: castPick!.role,
+        };
+      } else if (dreamPath === 'epic_tiny') {
+        // ── PATH C: Epic scene + tiny character — vast landscape, character is a tiny discoverable detail ──
+        nightlyBrief = `You are a cinematographer composing an EPIC, VAST scene. Write a Flux AI prompt (60-90 words, comma-separated).
 
-Output ONLY the instruction.`;
+MEDIUM: ${nightlyMedium.fluxFragment}
 
-          try {
-            finalPrompt = await nightlySonnet(kontextBrief, ANTHROPIC_KEY, 150);
-            if (finalPrompt.length < 20) throw new Error('too short');
-          } catch {
-            finalPrompt = `Transform this photo into a ${nightlyMedium.fluxFragment?.split(',')[0] ?? 'dramatic art'} scene: ${dreamSubject.slice(0, 100)}. The person is a tiny figure in this vast surreal world. portrait 9:16.`;
-          }
+DREAM SCENE (this is the ENTIRE focus — describe in maximum vivid detail):
+${dreamSubject}
 
-          mode = 'flux-kontext';
-          input_image = castPick.thumb_url;
+Somewhere in this vast scene, barely visible, is a tiny ${mediumStyle}-style ${shortCastDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
 
-          console.log(
-            '[generate-dream] Nightly REALISTIC CAST (Kontext):',
-            finalPrompt.slice(0, 200)
-          );
-          logAxes = {
-            medium: nightlyMedium.key,
-            vibe: nightlyVibe.key,
-            engine: 'nightly-kontext-cast',
-            castRole: castPick.role,
-          };
-        }
+CAMERA: ${shotDirection}
+MOOD: ${nightlyVibe.directive}
+${aestheticFlavor}${extraSeeds}${avoidList}
+
+Write the prompt:
+1. Start with the art medium
+2. Spend 90% of words on the ENVIRONMENT — architecture, physics, materials, light, weather
+3. Mention the tiny character in ONE short phrase at the very end
+4. End with: no text, no words, no letters, no watermarks, hyper detailed
+Output ONLY the prompt.`;
+        logAxes = {
+          medium: nightlyMedium.key,
+          vibe: nightlyVibe.key,
+          engine: 'nightly-cast-epic',
+          castRole: castPick!.role,
+        };
       } else {
-        // ── PURE SCENE: Flux Dev — no cast member ──
-        const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
+        // ── PATH B: Pure scene — no character, just breathtaking art ──
+        nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
@@ -696,33 +654,31 @@ DREAM SCENE (this is sacred — do NOT water it down):
 ${dreamSubject}
 
 CAMERA/COMPOSITION: ${shotDirection}
-
 MOOD: ${nightlyVibe.directive}
 ${aestheticFlavor}${extraSeeds}${avoidList}
 
 Write the prompt:
 1. Start with the art medium
 2. Describe the EXACT scene — every surreal detail preserved
-3. Apply the camera direction — this shapes HOW we see the scene
-4. Name specific materials, textures, light sources (not adjectives — NOUNS)
-5. End with: portrait 9:16, ${nightlyMedium.key === 'cgi' ? 'octane render, volumetric lighting, ray tracing, 8K' : nightlyMedium.key === 'anime' ? 'Studio Ghibli quality, cel animation, hand-painted backgrounds' : nightlyMedium.key === '35mm_photography' ? 'Kodak Portra 400, film grain, shallow depth of field' : 'hyper detailed, masterwork composition, stunning lighting'}
-
-No quotation marks. Output ONLY the prompt.`;
-
-        try {
-          finalPrompt = await nightlySonnet(nightlyBrief, ANTHROPIC_KEY, 200);
-          if (finalPrompt.length < 20) throw new Error('too short');
-        } catch {
-          finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed, gorgeous lighting`;
-        }
-
-        console.log('[generate-dream] Nightly SCENE prompt:', finalPrompt.slice(0, 200));
+3. NO PEOPLE. NO CHARACTERS. NO FIGURES. Pure environment.
+4. Name specific materials, textures, light sources (NOUNS not adjectives)
+5. End with: no text, no words, no letters, no watermarks, hyper detailed, masterwork composition
+Output ONLY the prompt.`;
         logAxes = {
           medium: nightlyMedium.key,
           vibe: nightlyVibe.key,
-          engine: 'nightly-dreambot',
+          engine: 'nightly-pure-scene',
         };
       }
+
+      try {
+        finalPrompt = await nightlySonnet(nightlyBrief, ANTHROPIC_KEY, 200);
+        if (finalPrompt.length < 20) throw new Error('too short');
+      } catch {
+        finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
+      }
+
+      console.log(`[generate-dream] Nightly ${dreamPath}:`, finalPrompt.slice(0, 200));
       lap('nightly-done');
     } catch (nightlyErr) {
       console.error(

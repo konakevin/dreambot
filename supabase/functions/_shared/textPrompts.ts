@@ -36,7 +36,7 @@ const TEXT_TEMPLATES: Record<
 - Subject: ${subject} — built ENTIRELY from LEGO bricks. Characters are minifigures with painted expressions, snap-on hair, C-shaped hands
 - EVERY object, surface, and background element is LEGO — visible studs, snap-together construction
 - Floor is a baseplate. Walls are stacked bricks.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through brick color choices and lighting: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -50,7 +50,7 @@ Output ONLY the prompt.`,
 - Characters have blocky features, dot eyes, iconic silhouettes
 - Dithered shading for depth, NO anti-aliasing, NO smooth gradients
 - Think Chrono Trigger, Celeste, Hyper Light Drifter quality
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through palette selection: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -64,7 +64,7 @@ Output ONLY the prompt.`,
 - Characters are simplified glass figures with lead outlines defining features
 - Colors: ruby, sapphire, emerald, amber, deep purple
 - Light from BEHIND makes everything glow with luminosity
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through glass color warmth and composition: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -77,7 +77,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — entirely stitched on fabric. Characters are cross-stitch figures, environments are stitched backgrounds
 - Visible linen weave between stitched areas. French knots for details.
 - Rich DMC floss colors. Thread catches light with raised dimensionality.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through thread color warmth and stitch density: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -90,7 +90,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — drawn in anime style with clean confident ink outlines, cel-shaded flat color
 - Characters have expressive eyes with light reflections, dynamic flowing hair
 - Backgrounds are painted with atmospheric detail (Shinkai-style)
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through background atmosphere and color saturation: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -103,7 +103,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — painted with transparent watercolor washes, granulating pigments
 - Lost-and-found edges: some sharp, some dissolving into nothing
 - Areas of pure white paper for highlights. Controlled accidents at edges.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through wash intensity and color temperature: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -116,7 +116,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — painted with thick impasto in lights, transparent glazes in darks
 - Visible brushstrokes, palette knife marks catching light, canvas texture throughout
 - Adjacent strokes of different hues vibrating against each other
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through brushstroke energy and light direction: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -129,7 +129,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — drawn in graphite with masterful draftsmanship
 - Hatching and cross-hatching for form and shadow. Pure white paper for highlights.
 - Velvet-black compressed graphite for deepest darks. Smudged tones for atmosphere.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through line weight and tonal contrast: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -142,7 +142,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — sculpted from smooth matte clay with subtle fingerprint textures
 - Characters have glass bead eyes, knitted/felted clothing. Sets are handcrafted miniatures.
 - Theatrical lighting with warm practicals and cool ambient fill
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through set lighting and clay color palette: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -155,7 +155,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — as a stylized 3D animated scene with Pixar-level quality
 - Soft rounded shapes, glossy eyes with reflections, subsurface scattering on skin
 - Lush environment with volumetric lighting, god rays, warm bounce light
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through volumetric lighting and color palette: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -168,7 +168,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — bathed in dramatic neon lighting against dark background
 - Electric colors: hot pink, cyan, purple, acid green. Atmospheric haze making light beams visible.
 - Wet reflective surfaces doubling the neon. Cyberpunk noir aesthetic.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through neon color choices and atmosphere density: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -181,7 +181,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — drawn with bold confident ink outlines, flat saturated color
 - Ben-Day dot halftone patterns in mid-tones. Varying line weight for depth.
 - Dynamic composition with dramatic angles. Kinetic energy.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through ink weight and color intensity: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -194,7 +194,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — as a Disney animated character with expressive emotive face, large eyes conveying personality
 - Clean confident ink outlines, luminous cel-painted color, lush painted backgrounds
 - Hair and fabric flow with graceful movement. Warmth and appeal radiate from every stroke.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through background painting and color vibrancy: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -207,7 +207,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — as knitted fabric dolls with button eyes, zipper mouths, yarn hair
 - Environment built from cardboard, corrugated paper, fabric, sponge, cork, stickers
 - Warm desk lamp lighting. Everything has handmade craft-table quality.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through craft material choices and lighting warmth: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -220,7 +220,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — as a Funko Pop with massively oversized head, tiny body, dot eyes, no mouth, glossy vinyl surface
 - Hair is solid sculpted plastic. Clothing details painted on.
 - Standing on small circular black base. Cute, collectible, maximum personality through minimal features.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through background color and lighting: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -233,7 +233,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — in Ghibli's soft painterly style with natural rounded proportions
 - Breathtakingly detailed painted landscapes, atmospheric clouds, living nature
 - Quiet wonder and lived-in warmth. Earthy greens, sky blues, warm golds.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through landscape atmosphere and natural light: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -246,7 +246,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — in Burton's gothic whimsy with exaggerated thin limbs, oversized heads, sunken dark-ringed eyes
 - Spiral motifs everywhere. Stark palette: black, white, grey with pops of deep purple or blood red.
 - Crooked angular architecture. Dark whimsy, not horror.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through shadow depth and accent color choice: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -256,7 +256,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — in bold flat areas of maximum saturation primary colors
 - Ben-Day dots in shadows and mid-tones. Thick black outlines defining every shape.
 - Graphic, commercial, unapologetically bold. No subtlety, no gradients.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through color intensity and dot density: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -269,7 +269,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — built from cubic voxel blocks. Characters have square heads, rectangular bodies.
 - Every surface is textured blocks — dirt, stone, wood planks, grass. Trees are wood block columns with leaf blocks.
 - Blocky shadows. The charm is in the cubic constraint.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through block palette and sky color: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -282,7 +282,7 @@ Output ONLY the prompt.`,
 - Subject: ${subject} — as simple 8-bit sprites. 2-pixel eyes, no facial detail, iconic silhouettes only.
 - NO dithering, NO gradients — flat color blocks only. Simple repeating tile backgrounds.
 - Charming BECAUSE of severe limitations. 1985 hardware feel.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through limited palette choice: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
@@ -296,7 +296,7 @@ Output ONLY the prompt.`,
 - Real miniature fabric clothing with tiny stitches, actual buttons, thread seams
 - World is handcrafted miniature — wood, fabric, paper, wire at tiny scale
 - Dramatic cinematic lighting. Slightly uncanny but beautiful.
-- Portrait 9:16
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
 Express the mood through lighting drama and material warmth: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
