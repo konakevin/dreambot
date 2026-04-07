@@ -395,8 +395,13 @@ Deno.serve(async (req) => {
       let nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
       if (nightlyMedium.key === 'watercolor') {
         nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
-        if (nightlyMedium.key === 'watercolor') {
-          nightlyMedium = CURATED_MEDIUMS.find((m) => m.key === 'oil_painting') ?? nightlyMedium;
+        // Skip mediums that don't work well in nightly — re-roll or fallback
+        const NIGHTLY_SKIP = new Set(['watercolor', 'neon', 'pencil_sketch']);
+        if (NIGHTLY_SKIP.has(nightlyMedium.key)) {
+          nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+          if (NIGHTLY_SKIP.has(nightlyMedium.key)) {
+            nightlyMedium = CURATED_MEDIUMS.find((m) => m.key === 'anime') ?? nightlyMedium;
+          }
         }
       }
       const nightlyVibe = resolveVibe('my_vibes', nightlyProfile);

@@ -160,17 +160,16 @@ Output ONLY the prompt.`,
 Express the mood through volumetric lighting and color palette: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
 
-  neon: (
+  cyberpunk: (
     subject,
     vibe
-  ) => `Write a Flux AI prompt (50-70 words, comma-separated) for a neon-lit scene:
-- Start with: "Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams"
-- Subject: ${subject} — bathed in dramatic neon lighting against dark background
-- Electric colors: hot pink, cyan, purple, acid green. Atmospheric haze making light beams visible.
-- Wet reflective surfaces doubling the neon. Cyberpunk noir aesthetic.
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for a cyberpunk scene:
+- Start with: "Cyberpunk dystopian megacity, towering megastructures, holographic advertisements, rain-soaked chrome, neon-drenched fog, Blade Runner aesthetic"
+- Subject: ${subject} — within a MASSIVE cyberpunk cityscape. Flying vehicles, chrome skyscrapers vanishing into smog, holographic signs the size of buildings
+- Scale is ENORMOUS — architecture dwarfs everything. Wet reflective surfaces, atmospheric haze, electric cyan and hot pink against steel grey
 - End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
-Express the mood through neon color choices and atmosphere density: ${vibe.slice(0, 200)}
+Express the mood through lighting color temperature and scale: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
 
   comic_book: (

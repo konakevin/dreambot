@@ -107,12 +107,12 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
   },
   {
-    key: 'neon',
-    label: 'Neon',
+    key: 'cyberpunk',
+    label: 'Cyberpunk',
     directive:
-      "This scene is lit entirely by neon — glowing tube lights, LED strips, holographic projections. The background is dark (night, deep shadow, black surfaces) so the neon POPS with maximum contrast. Colors are electric: hot pink, cyan, purple, acid green, amber. Neon light bounces off wet surfaces — rain-slicked streets, chrome, glass — creating doubled reflections and color bleeds. There's atmospheric haze or fog that makes the light beams visible. The aesthetic is premium cyberpunk meets Tokyo night photography. Every surface is a canvas for reflected neon color.",
+      'This is a dystopian megacity — towering megastructures disappearing into smog, holographic advertisements the size of buildings, chrome and steel everywhere. Rain-soaked streets reflect neon from a thousand signs. Flying vehicles weave between skyscrapers. The scale is MASSIVE — humans are tiny against the architecture. Colors are electric cyan, hot pink, amber against deep black and steel grey. Blade Runner meets Ghost in the Shell. Every surface is reflective, wet, or glowing.',
     fluxFragment:
-      'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
+      'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
   },
   {
     key: 'stained_glass',
@@ -311,7 +311,7 @@ export const MEDIUM_KEYS = [
   'claymation',
   '3d_render',
   'pencil_sketch',
-  'neon',
+  'cyberpunk',
   'stained_glass',
   'comic_book',
   'embroidery',

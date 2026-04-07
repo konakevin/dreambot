@@ -107,12 +107,12 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
   },
   {
-    key: 'neon',
-    label: 'Neon',
+    key: 'cyberpunk',
+    label: 'Cyberpunk',
     directive:
-      "This scene is lit entirely by neon — glowing tube lights, LED strips, holographic projections. The background is dark (night, deep shadow, black surfaces) so the neon POPS with maximum contrast. Colors are electric: hot pink, cyan, purple, acid green, amber. Neon light bounces off wet surfaces — rain-slicked streets, chrome, glass — creating doubled reflections and color bleeds. There's atmospheric haze or fog that makes the light beams visible. The aesthetic is premium cyberpunk meets Tokyo night photography. Every surface is a canvas for reflected neon color.",
+      'This is a dystopian megacity — towering megastructures disappearing into smog, holographic advertisements the size of buildings, chrome and steel everywhere. Rain-soaked streets reflect neon from a thousand signs. Flying vehicles weave between skyscrapers. The scale is MASSIVE — humans are tiny against the architecture. Colors are electric cyan, hot pink, amber against deep black and steel grey. Blade Runner meets Ghost in the Shell. Every surface is reflective, wet, or glowing.',
     fluxFragment:
-      'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
+      'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
   },
   {
     key: 'stained_glass',
@@ -301,6 +301,45 @@ export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter((m) => m.directive !== null)
 /** Get only the curated vibes (excludes My Vibes and Surprise Me) */
 export const CURATED_VIBES = DREAM_VIBES.filter((v) => v.directive !== null);
 
+/** Const key arrays — single source of truth for ArtStyle and Aesthetic union types */
+export const MEDIUM_KEYS = [
+  'pixel_art',
+  'watercolor',
+  'oil_painting',
+  'anime',
+  'lego',
+  'claymation',
+  '3d_render',
+  'pencil_sketch',
+  'cyberpunk',
+  'stained_glass',
+  'comic_book',
+  'embroidery',
+  'disney',
+  'sack_boy',
+  'funko_pop',
+  'ghibli',
+  'tim_burton',
+  'pop_art',
+  'minecraft',
+  '8bit',
+  'felt',
+] as const;
+
+export const VIBE_KEYS = [
+  'cinematic',
+  'dreamy',
+  'dark',
+  'chaos',
+  'cozy',
+  'minimal',
+  'epic',
+  'nostalgic',
+  'psychedelic',
+  'peaceful',
+  'whimsical',
+] as const;
+
 /** Pick a random curated medium */
 export function randomMedium(): DreamMedium {
   return CURATED_MEDIUMS[Math.floor(Math.random() * CURATED_MEDIUMS.length)];
@@ -315,56 +354,26 @@ export function randomVibe(): DreamVibe {
  * Subject invention prompt for when the user provides no input.
  * Uses their profile interests/aesthetics for flavor.
  */
-import { DREAM_SCENE_TEMPLATES } from './dreamTemplates.ts';
-
-/**
- * Build a dream scene by picking a random Sonnet-generated template
- * and filling its slots with the user's dream seeds.
- * No AI call needed — the templates ARE the creativity.
- */
-export function buildDreamScene(dreamSeeds: {
-  characters: string[];
-  places: string[];
-  things: string[];
-}): string {
-  const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
-
-  const template = pick(DREAM_SCENE_TEMPLATES);
-
-  // Fill template slots with random seeds, or generic fallbacks
-  const character =
-    dreamSeeds.characters.length > 0 ? pick(dreamSeeds.characters) : 'a wandering figure';
-  const place = dreamSeeds.places.length > 0 ? pick(dreamSeeds.places) : 'a forgotten city';
-  const thing = dreamSeeds.things.length > 0 ? pick(dreamSeeds.things) : 'glowing fragments';
-
-  return template
-    .replace(/\$\{character\}/g, character)
-    .replace(/\$\{place\}/g, place)
-    .replace(/\$\{thing\}/g, thing);
-}
-
-/**
- * Fallback: AI-powered subject invention for when templates aren't enough.
- * Uses Haiku to riff on seeds — called by the V2 text path.
- */
 export function buildSubjectInventionPrompt(
-  dreamSeeds: { characters: string[]; places: string[]; things: string[] },
-  aesthetics: string[]
+  interests: string[],
+  aesthetics: string[],
+  spiritCompanion?: string | null
 ): string {
-  const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+  const flavorParts: string[] = [];
+  if (interests.length > 0) flavorParts.push(`Interests: ${interests.join(', ')}`);
+  if (aesthetics.length > 0) flavorParts.push(`Aesthetics: ${aesthetics.join(', ')}`);
+  if (spiritCompanion) flavorParts.push(`Spirit companion: ${spiritCompanion}`);
+  const flavor =
+    flavorParts.length > 0
+      ? `\n\nDraw inspiration from this taste profile:\n${flavorParts.join('\n')}`
+      : '';
 
-  const allSeeds = [...dreamSeeds.characters, ...dreamSeeds.places, ...dreamSeeds.things];
-  const shuffled = [...allSeeds].sort(() => Math.random() - 0.5);
-  const picked = shuffled.slice(0, Math.min(allSeeds.length, 2));
+  return `You are DreamBot. The user wants to be surprised with something beautiful to look at. Invent a compelling, visually rich subject for a dream image.
 
-  const seedHint = picked.length > 0 ? `Raw ingredients (use loosely): ${picked.join(', ')}` : '';
-
-  const aestheticHint = aesthetics.length > 0 ? `Aesthetic: ${aesthetics.join(', ')}` : '';
-
-  return `Dream up a scene. Be surreal, impossible, beautiful, unsettling. Surprise me.
-
-${seedHint}
-${aestheticHint}
-
-15-30 words. What do we SEE? Output ONLY the scene description.`;
+DO NOT be generic. No "a sunset over the ocean" or "a beautiful landscape." Instead, be SPECIFIC and unexpected:
+- "A fox wearing a tiny astronaut helmet, floating through a field of bioluminescent jellyfish"
+- "An ancient library where the books are growing like trees, their pages rustling with golden light"
+- "A street food cart in a rainy cyberpunk alley, steam rising into holographic advertisements"
+${flavor}
+Output ONLY the subject description, 10-20 words. Nothing else.`;
 }

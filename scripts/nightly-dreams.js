@@ -93,15 +93,12 @@ const CURATED_MEDIUMS = [
     fluxFragment:
       'Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, physically based materials, vibrant art-directed color palette, cinematic depth of field',
   },
+  // pencil_sketch removed — inconsistent results in nightly
+  // neon removed — replaced with cyberpunk
   {
-    key: 'pencil_sketch',
+    key: 'cyberpunk',
     fluxFragment:
-      'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
-  },
-  {
-    key: 'neon',
-    fluxFragment:
-      'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
+      'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
   },
   {
     key: 'stained_glass',
