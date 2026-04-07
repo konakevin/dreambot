@@ -1,37 +1,103 @@
 // Supabase Edge Function: nightly-dreams
 // Triggered by pg_cron at 3am UTC daily.
-// Generates one dream per eligible active user.
+// Generates one dream per eligible active user using the Sonnet template pipeline.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { buildPromptInput, buildRawPrompt, buildHaikuPrompt } from '../_shared/recipeEngine.ts';
-import type { Recipe } from '../_shared/recipe.ts';
-import { DEFAULT_RECIPE } from '../_shared/recipe.ts';
-import type { VibeProfile, ConceptRecipe } from '../_shared/vibeProfile.ts';
+import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import {
-  buildConceptPrompt,
-  buildPolisherPrompt,
-  buildFallbackConcept,
-  buildFallbackFluxPrompt,
-  parseConceptJson,
-} from '../_shared/vibeEngine.ts';
+  CURATED_MEDIUMS,
+  CURATED_VIBES,
+  randomMedium,
+  randomVibe,
+} from '../_shared/dreamEngine.ts';
 
 const COST_PER_IMAGE_CENTS = 3;
 const MAX_BUDGET_CENTS = 500; // $5 default
 const BATCH_SIZE = 5;
 
-interface WishModifiers {
-  mood: string | null;
-  weather: string | null;
-  energy: string | null;
-  vibe: string | null;
+const TEMPLATE_CATEGORIES = [
+  'cosmic',
+  'microscopic',
+  'impossible_architecture',
+  'giant_objects',
+  'peaceful_absurdity',
+  'beautiful_melancholy',
+  'cosmic_horror',
+  'joyful_chaos',
+  'eerie_stillness',
+  'broken_gravity',
+  'wrong_materials',
+  'time_distortion',
+  'merged_worlds',
+  'living_objects',
+  'impossible_weather',
+  'overgrown',
+  'bioluminescence',
+  'dreams_within_dreams',
+  'memory_distortion',
+  'abandoned_running',
+  'transformation',
+  'reflections',
+  'machines',
+  'music_sound',
+  'underwater',
+  'doors_portals',
+  'collections',
+  'decay_beauty',
+  'childhood',
+  'transparency',
+  'cinematic',
+];
+
+const SHOT_DIRECTIONS = [
+  'extreme low angle looking up, dramatic forced perspective, subject towering overhead',
+  'tilt-shift miniature effect, shallow depth of field, toy-like scale',
+  'silhouette against blazing backlight, rim lighting, dramatic contrast',
+  'macro lens extreme close-up, impossibly detailed textures, creamy bokeh background',
+  'aerial view looking straight down, geometric patterns, vast scale',
+  'through rain-covered glass, soft distortion, reflections overlapping the scene',
+  'dutch angle, dramatic tension, off-kilter framing',
+  'wide establishing shot, tiny subject in vast environment, epic scale',
+  'over-the-shoulder perspective, voyeuristic, intimate framing',
+  'symmetrical dead-center composition, Wes Anderson framing, obsessive balance',
+  'fisheye lens distortion, warped edges, immersive and disorienting',
+  'long exposure motion blur, streaks of light, frozen and flowing simultaneously',
+  'reflection shot, scene mirrored in water or glass, doubled reality',
+  'extreme depth, foreground object sharp, background stretching to infinity',
+  'candid snapshot feeling, slightly off-center, caught mid-moment',
+];
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 interface EligibleUser {
   user_id: string;
-  recipe: Recipe;
+  recipe: VibeProfile | Record<string, unknown>;
   dream_wish: string | null;
   wish_recipient_ids: string[] | null;
-  wish_modifiers: WishModifiers | null;
+  wish_modifiers: {
+    mood: string | null;
+    weather: string | null;
+    energy: string | null;
+    vibe: string | null;
+  } | null;
+}
+
+function resolveMedium(profile: VibeProfile) {
+  if (profile.art_styles?.length) {
+    const key = pick(profile.art_styles);
+    return CURATED_MEDIUMS.find((m) => m.key === key) ?? randomMedium();
+  }
+  return randomMedium();
+}
+
+function resolveVibe(profile: VibeProfile) {
+  if (profile.aesthetics?.length) {
+    const key = pick(profile.aesthetics);
+    return CURATED_VIBES.find((v) => v.key === key) ?? randomVibe();
+  }
+  return randomVibe();
 }
 
 Deno.serve(async (req) => {
@@ -82,10 +148,10 @@ Deno.serve(async (req) => {
     .filter((u: Record<string, unknown>) => !doneSet.has(u.user_id as string))
     .map((u: Record<string, unknown>) => ({
       user_id: u.user_id as string,
-      recipe: (u.recipe as Recipe) ?? DEFAULT_RECIPE,
+      recipe: u.recipe as VibeProfile | Record<string, unknown>,
       dream_wish: (u.dream_wish as string | null) ?? null,
       wish_recipient_ids: (u.wish_recipient_ids as string[] | null) ?? null,
-      wish_modifiers: (u.wish_modifiers as WishModifiers | null) ?? null,
+      wish_modifiers: (u.wish_modifiers as EligibleUser['wish_modifiers']) ?? null,
     }));
 
   console.log(
@@ -138,7 +204,7 @@ async function generateDreamForUser(
   anthropicKey: string | undefined,
   today: string
 ) {
-  const { dream_wish: wish, wish_modifiers: mods } = user;
+  const { dream_wish: wish } = user;
   const profileData = user.recipe;
   const isV2 =
     typeof profileData === 'object' &&
@@ -148,17 +214,99 @@ async function generateDreamForUser(
   let prompt: string;
 
   if (isV2 && anthropicKey) {
-    // ── VIBE PROFILE v2: Two-pass engine ──
+    // ══════════════════════════════════════════════════════════════════
+    // ══ SONNET TEMPLATE PIPELINE — same as generate-dream nightly path
+    // ══════════════════════════════════════════════════════════════════
     const vibeProfile = profileData as unknown as VibeProfile;
-    const mode = wish ? 'nostalgia_trip' : 'dream_me';
+    const medium = resolveMedium(vibeProfile);
+    const vibe = resolveVibe(vibeProfile);
 
-    // Pass 1: Concept Generator
-    let conceptBrief = buildConceptPrompt(vibeProfile, mode, Math.random());
+    // Step 1: Pick a random scene template from the DB
+    const seeds = vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] };
+    let dreamSubject: string;
+
+    try {
+      const category = pick(TEMPLATE_CATEGORIES);
+      const { data: rows, error: tmplErr } = await supabase
+        .from('dream_templates')
+        .select('template')
+        .eq('category', category)
+        .eq('disabled', false)
+        .limit(200);
+
+      if (tmplErr || !rows?.length) throw new Error(tmplErr?.message ?? 'No templates');
+
+      const template = pick(rows).template;
+      const character = seeds.characters.length > 0 ? pick(seeds.characters) : 'a wandering figure';
+      const place = seeds.places.length > 0 ? pick(seeds.places) : 'a forgotten city';
+      const thing = seeds.things.length > 0 ? pick(seeds.things) : 'glowing fragments';
+
+      dreamSubject = template
+        .replace(/\$\{character\}/g, character)
+        .replace(/\$\{place\}/g, place)
+        .replace(/\$\{thing\}/g, thing);
+
+      console.log(
+        `[Nightly] ${user.user_id.slice(0, 8)} template | cat: ${category} | scene: ${dreamSubject.slice(0, 100)}`
+      );
+    } catch (dbErr) {
+      // Fallback: simple surreal scene
+      const fallbackSeeds = [
+        ...seeds.characters.slice(0, 1),
+        ...seeds.places.slice(0, 1),
+        ...seeds.things.slice(0, 1),
+      ].filter(Boolean);
+      dreamSubject =
+        fallbackSeeds.length > 0
+          ? `A surreal dream featuring ${fallbackSeeds.join(' and ')} in an impossible landscape`
+          : 'A surreal impossible dreamscape with unexpected elements and impossible geometry';
+      console.warn(`[Nightly] ${user.user_id.slice(0, 8)} DB fallback:`, (dbErr as Error).message);
+    }
+
+    // Step 2: Maybe inject a dream cast member (~30% chance)
+    const cast = (vibeProfile.dream_cast ?? []) as DreamCastMember[];
+    const describedCast = cast.filter((m) => m.description);
+    if (describedCast.length > 0 && Math.random() < 0.3) {
+      const castPick = pick(describedCast);
+      const roleLabel =
+        castPick.role === 'self'
+          ? 'the dreamer'
+          : castPick.role === 'pet'
+            ? 'their pet'
+            : (castPick as Record<string, unknown>).relationship === 'significant_other'
+              ? 'their romantic partner'
+              : `their ${(castPick as Record<string, unknown>).relationship ?? 'companion'}`;
+      dreamSubject += `. The main character is ${roleLabel}: ${castPick.description}`;
+    }
+
+    // Step 3: Inject wish if present
     if (wish) {
-      conceptBrief += `\n\nIMPORTANT: Your human wished for "${wish}". Make this the heart of the dream.`;
+      dreamSubject += `. DREAM WISH (make this the heart): "${wish}"`;
     }
 
-    let concept: ConceptRecipe;
+    // Step 4: Build Sonnet brief and generate prompt
+    const shotDirection = pick(SHOT_DIRECTIONS);
+
+    const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
+
+MEDIUM: ${medium.fluxFragment}
+
+DREAM SCENE (this is sacred — do NOT water it down):
+${dreamSubject}
+
+CAMERA/COMPOSITION: ${shotDirection}
+
+MOOD: ${vibe.directive}
+
+Write the prompt:
+1. Start with the art medium
+2. Describe the EXACT scene — every surreal detail preserved
+3. Apply the camera direction — this shapes HOW we see the scene
+4. Name specific materials, textures, light sources (not adjectives — NOUNS)
+5. End with: portrait 9:16, ${medium.key === 'cgi' ? 'octane render, volumetric lighting, ray tracing, 8K' : medium.key === 'anime' ? 'Studio Ghibli quality, cel animation, hand-painted backgrounds' : medium.key === '35mm_photography' ? 'Kodak Portra 400, film grain, shallow depth of field' : 'hyper detailed, masterwork composition, stunning lighting'}
+
+No quotation marks. Output ONLY the prompt.`;
+
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -168,82 +316,29 @@ async function generateDreamForUser(
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 300,
-          messages: [{ role: 'user', content: conceptBrief }],
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 200,
+          messages: [{ role: 'user', content: nightlyBrief }],
         }),
       });
-      if (!res.ok) throw new Error('Haiku concept error');
-      const data = await res.json();
-      concept = parseConceptJson(data.content?.[0]?.text ?? '');
-    } catch {
-      concept = buildFallbackConcept(vibeProfile);
-    }
-
-    // Pass 2: Prompt Polisher
-    const polisherBrief = buildPolisherPrompt(concept);
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 150,
-          messages: [{ role: 'user', content: polisherBrief }],
-        }),
-      });
-      if (!res.ok) throw new Error('Haiku polish error');
+      if (!res.ok) throw new Error(`Sonnet ${res.status}`);
       const data = await res.json();
       const text = data.content?.[0]?.text?.trim() ?? '';
-      prompt = text.length >= 10 ? text : buildFallbackFluxPrompt(concept);
+      if (text.length < 20) throw new Error('Sonnet response too short');
+      prompt = text;
     } catch {
-      prompt = buildFallbackFluxPrompt(concept);
+      // Fallback: concatenate directly
+      prompt = `${medium.fluxFragment}, ${dreamSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed, gorgeous lighting`;
     }
+
+    console.log(`[Nightly] ${user.user_id.slice(0, 8)} prompt: ${prompt.slice(0, 120)}`);
   } else {
-    // ── LEGACY RECIPE: Single-pass engine ──
-    const recipe = (isV2 ? DEFAULT_RECIPE : profileData) as Recipe;
-    const input = buildPromptInput(recipe);
-
-    const vibeHints = mods ? [mods.mood, mods.weather, mods.energy, mods.vibe].filter(Boolean) : [];
-    const vibeStr = vibeHints.length > 0 ? ` The vibe should feel ${vibeHints.join(', ')}.` : '';
-
-    const haikuBrief = wish
-      ? buildHaikuPrompt(input) +
-        `\n\nIMPORTANT: Your human wished for "${wish}". You're a tiny, loving DreamBot who adores them — pour that affection into this dream. Their wish is the heart of the scene. Style it with their taste profile, but make it feel like a gift from someone who really knows them.${vibeStr}`
-      : buildHaikuPrompt(input);
-
-    if (anthropicKey) {
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': anthropicKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 150,
-            messages: [{ role: 'user', content: haikuBrief }],
-          }),
-        });
-        if (!res.ok) throw new Error('Haiku error');
-        const data = await res.json();
-        const text = data.content?.[0]?.text?.trim() ?? '';
-        prompt = text.length >= 10 ? text : buildRawPrompt(input);
-      } catch {
-        prompt = buildRawPrompt(input);
-      }
-    } else {
-      prompt = buildRawPrompt(input);
-    }
-
-    if (!anthropicKey && wish) {
-      prompt += ` DREAM WISH: "${wish}" — this is the heart of the dream.`;
+    // ── NON-V2 USERS: simple fallback prompt ──
+    const fallbackMedium = randomMedium();
+    const fallbackVibe = randomVibe();
+    prompt = `${fallbackMedium.fluxFragment}, a surreal impossible dreamscape, ${fallbackVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
+    if (wish) {
+      prompt = `${fallbackMedium.fluxFragment}, "${wish}", ${fallbackVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
     }
   }
 
@@ -287,7 +382,6 @@ async function generateDreamForUser(
         typeof errMsg === 'string' &&
         (errMsg.toLowerCase().includes('nsfw') || errMsg.toLowerCase().includes('safety'))
       ) {
-        // Notify user and clear the wish
         if (wish) {
           await supabase.from('notifications').insert({
             recipient_id: user.user_id,
@@ -307,7 +401,7 @@ async function generateDreamForUser(
 
   if (!imageUrl) throw new Error('Generation timed out');
 
-  // Download from Replicate and upload to Supabase Storage (Replicate URLs are temporary)
+  // Download from Replicate and upload to Supabase Storage
   const imgResp = await fetch(imageUrl);
   if (!imgResp.ok) throw new Error('Failed to download generated image');
   const imgBuf = await imgResp.arrayBuffer();
@@ -321,11 +415,10 @@ async function generateDreamForUser(
   const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
   const permanentUrl = urlData.publicUrl;
 
-  // Generate a bot message — a short playful note from the DreamBot
+  // Generate a bot message via Haiku
   let botMessage: string | null = null;
   if (anthropicKey) {
     try {
-      // Fetch recent dreams for memory context
       const { data: recentDreams } = await supabase
         .from('uploads')
         .select('ai_prompt, from_wish')
@@ -335,12 +428,10 @@ async function generateDreamForUser(
         .limit(5);
 
       const recentContext = (recentDreams ?? [])
-        .map((d: { ai_prompt: string | null; from_wish: string | null }) =>
-          d.ai_prompt?.slice(0, 80)
-        )
+        .map((d: { ai_prompt: string | null }) => d.ai_prompt?.slice(0, 80))
         .filter(Boolean);
       const pastWishes = (recentDreams ?? [])
-        .map((d: { ai_prompt: string | null; from_wish: string | null }) => d.from_wish)
+        .map((d: { from_wish: string | null }) => d.from_wish)
         .filter(Boolean);
 
       let memoryBlock = '';
@@ -396,7 +487,7 @@ Output ONLY the message, nothing else.`,
         }
       }
     } catch {
-      // Non-critical — dream still gets delivered without a message
+      // Non-critical
     }
   }
 
@@ -429,7 +520,7 @@ Output ONLY the message, nothing else.`,
     if (notifErr)
       console.warn(`[Nightly] Notification failed for ${user.user_id}:`, notifErr.message);
 
-    // Send notification to wish recipients (friends) — deduplicated
+    // Send notification to wish recipients (friends)
     if (user.wish_recipient_ids && user.wish_recipient_ids.length > 0) {
       const uniqueRecipients = [...new Set(user.wish_recipient_ids)].filter(
         (rid) => rid !== user.user_id
@@ -455,7 +546,7 @@ Output ONLY the message, nothing else.`,
   // Log generation
   const { error: logErr } = await supabase.from('ai_generation_log').insert({
     user_id: user.user_id,
-    recipe_snapshot: recipe,
+    recipe_snapshot: user.recipe,
     enhanced_prompt: prompt,
     model_used: 'flux-dev',
     cost_cents: COST_PER_IMAGE_CENTS,

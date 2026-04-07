@@ -402,10 +402,89 @@ Deno.serve(async (req) => {
       nightlyVibe.key
     );
 
-    // Step 1: Pick a surreal scene from 200+ Sonnet-generated templates, fill with user's seeds
+    // Step 1: Pick a random scene template from 6,200+ Sonnet-generated DB templates
     const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [], things: [] };
-    let dreamSubject = buildDreamScene(seeds);
-    console.log('[generate-dream] Nightly scene:', dreamSubject);
+    let dreamSubject: string;
+
+    try {
+      // Pick a random category, then a random template within it — ensures category variety
+      const CATEGORIES = [
+        'cosmic',
+        'microscopic',
+        'impossible_architecture',
+        'giant_objects',
+        'peaceful_absurdity',
+        'beautiful_melancholy',
+        'cosmic_horror',
+        'joyful_chaos',
+        'eerie_stillness',
+        'broken_gravity',
+        'wrong_materials',
+        'time_distortion',
+        'merged_worlds',
+        'living_objects',
+        'impossible_weather',
+        'overgrown',
+        'bioluminescence',
+        'dreams_within_dreams',
+        'memory_distortion',
+        'abandoned_running',
+        'transformation',
+        'reflections',
+        'machines',
+        'music_sound',
+        'underwater',
+        'doors_portals',
+        'collections',
+        'decay_beauty',
+        'childhood',
+        'transparency',
+        'cinematic',
+      ];
+      const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+
+      const { data: rows, error: tmplErr } = await supabase
+        .from('dream_templates')
+        .select('template')
+        .eq('category', category)
+        .eq('disabled', false)
+        .limit(200);
+
+      if (tmplErr || !rows?.length) throw new Error(tmplErr?.message ?? 'No templates found');
+
+      const template = rows[Math.floor(Math.random() * rows.length)].template;
+      const character =
+        seeds.characters.length > 0
+          ? seeds.characters[Math.floor(Math.random() * seeds.characters.length)]
+          : 'a wandering figure';
+      const place =
+        seeds.places.length > 0
+          ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
+          : 'a forgotten city';
+      const thing =
+        seeds.things.length > 0
+          ? seeds.things[Math.floor(Math.random() * seeds.things.length)]
+          : 'glowing fragments';
+
+      dreamSubject = template
+        .replace(/\$\{character\}/g, character)
+        .replace(/\$\{place\}/g, place)
+        .replace(/\$\{thing\}/g, thing);
+
+      console.log(
+        '[generate-dream] Nightly DB template | category:',
+        category,
+        '| scene:',
+        dreamSubject.slice(0, 120)
+      );
+    } catch (dbErr) {
+      // Fallback to hardcoded templates if DB fails
+      console.warn(
+        '[generate-dream] DB template fetch failed, using hardcoded fallback:',
+        (dbErr as Error).message
+      );
+      dreamSubject = buildDreamScene(seeds);
+    }
     lap('nightly-subject');
 
     // Step 2: Maybe inject a dream cast member (~30% chance)
@@ -426,18 +505,45 @@ Deno.serve(async (req) => {
     }
 
     // Step 3: Build the full Flux prompt — medium style + invented subject + vibe mood
-    const nightlyBrief = `Convert this dream scene into a Flux AI image prompt. 50-80 words, comma-separated phrases.
+    // Random shot direction — forces varied compositions
+    const SHOT_DIRECTIONS = [
+      'extreme low angle looking up, dramatic forced perspective, subject towering overhead',
+      'tilt-shift miniature effect, shallow depth of field, toy-like scale',
+      'silhouette against blazing backlight, rim lighting, dramatic contrast',
+      'macro lens extreme close-up, impossibly detailed textures, creamy bokeh background',
+      'aerial view looking straight down, geometric patterns, vast scale',
+      'through rain-covered glass, soft distortion, reflections overlapping the scene',
+      'dutch angle, dramatic tension, off-kilter framing',
+      'wide establishing shot, tiny subject in vast environment, epic scale',
+      'over-the-shoulder perspective, voyeuristic, intimate framing',
+      'symmetrical dead-center composition, Wes Anderson framing, obsessive balance',
+      'fisheye lens distortion, warped edges, immersive and disorienting',
+      'long exposure motion blur, streaks of light, frozen and flowing simultaneously',
+      'reflection shot, scene mirrored in water or glass, doubled reality',
+      'extreme depth, foreground object sharp, background stretching to infinity',
+      'candid snapshot feeling, slightly off-center, caught mid-moment',
+    ];
+    const shotDirection = SHOT_DIRECTIONS[Math.floor(Math.random() * SHOT_DIRECTIONS.length)];
+
+    const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
-DREAM SCENE (KEEP THIS WEIRD — do NOT tone it down or make it normal):
+DREAM SCENE (this is sacred — do NOT water it down):
 ${dreamSubject}
 
-VIBE: ${nightlyVibe.directive}
+CAMERA/COMPOSITION: ${shotDirection}
 
-CRITICAL: The scene above is ALREADY the creative vision. Your ONLY job is to translate it into Flux-compatible phrasing. Do NOT simplify, sanitize, or replace it with something safer. Keep every surreal detail. Start with the medium, then describe EXACTLY this scene with concrete visual details, end with lighting and quality terms. Portrait 9:16. No quotation marks.
+MOOD: ${nightlyVibe.directive}
 
-Output ONLY the prompt.`;
+Write the prompt:
+1. Start with the art medium
+2. Describe the EXACT scene — every surreal detail preserved
+3. Apply the camera direction — this shapes HOW we see the scene
+4. Name specific materials, textures, light sources (not adjectives — NOUNS)
+5. End with: portrait 9:16, ${nightlyMedium.key === 'cgi' ? 'octane render, volumetric lighting, ray tracing, 8K' : nightlyMedium.key === 'anime' ? 'Studio Ghibli quality, cel animation, hand-painted backgrounds' : nightlyMedium.key === '35mm_photography' ? 'Kodak Portra 400, film grain, shallow depth of field' : 'hyper detailed, masterwork composition, stunning lighting'}
+
+No quotation marks. Output ONLY the prompt.`;
 
     try {
       finalPrompt = await nightlySonnet(nightlyBrief, ANTHROPIC_KEY, 200);

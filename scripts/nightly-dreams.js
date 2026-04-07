@@ -2,6 +2,7 @@
 
 /**
  * nightly-dreams.js — Generate one dream per eligible user.
+ * Uses the Sonnet template pipeline: DB template → slot fill → Sonnet prompt → Flux.
  *
  * Usage:
  *   SUPABASE_SERVICE_ROLE_KEY=xxx REPLICATE_API_TOKEN=xxx node scripts/nightly-dreams.js
@@ -13,10 +14,10 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
+const Anthropic = require('@anthropic-ai/sdk');
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
-// Read keys from env vars first, fall back to .env.local
 function readEnvFile() {
   try {
     const lines = require('fs').readFileSync('.env.local', 'utf8').split('\n');
@@ -26,18 +27,26 @@ function readEnvFile() {
       if (eq > 0) env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
     }
     return env;
-  } catch { return {}; }
+  } catch {
+    return {};
+  }
 }
 const envFile = readEnvFile();
-function getKey(name) { return process.env[name] || envFile[name]; }
+function getKey(name) {
+  return process.env[name] || envFile[name];
+}
 
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
 const REPLICATE_TOKEN = getKey('REPLICATE_API_TOKEN');
-const MAX_BUDGET_CENTS = parseInt(process.argv.find((_, i, a) => a[i - 1] === '--max-budget') ?? '500', 10);
+const ANTHROPIC_KEY = getKey('ANTHROPIC_API_KEY');
+const MAX_BUDGET_CENTS = parseInt(
+  process.argv.find((_, i, a) => a[i - 1] === '--max-budget') ?? '500',
+  10
+);
 const BATCH_SIZE = parseInt(process.argv.find((_, i, a) => a[i - 1] === '--batch-size') ?? '5', 10);
 const DRY_RUN = process.argv.includes('--dry-run');
-const COST_PER_IMAGE_CENTS = 3; // ~$0.03 for Flux Dev on Replicate
+const COST_PER_IMAGE_CENTS = 3;
 
 if (!SUPABASE_KEY || !REPLICATE_TOKEN) {
   console.error('Missing SUPABASE_SERVICE_ROLE_KEY or REPLICATE_API_TOKEN');
@@ -45,197 +54,264 @@ if (!SUPABASE_KEY || !REPLICATE_TOKEN) {
 }
 
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const anthropic = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
 
-// ── Inline recipe engine (simplified for Node) ─────────────────────────────
-// We can't import the TS module directly, so we duplicate the core logic here.
+// ── Curated mediums & vibes (mirrored from dreamEngine.ts) ────────────────
 
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function rollAxis(value) { return Math.random() < value ? 'high' : 'low'; }
+// We only need the keys + fluxFragments + directives for the nightly pipeline.
+// Instead of duplicating the full definitions, we load the user's art_styles/aesthetics
+// and map them to the curated pool. For fallback we use a compact subset.
+const CURATED_MEDIUMS = [
+  {
+    key: 'pixel_art',
+    fluxFragment:
+      '16-bit pixel art, carefully placed pixels, limited harmonious color palette, dithered gradients, retro game aesthetic, crisp pixel edges',
+  },
+  {
+    key: 'watercolor',
+    fluxFragment:
+      'Watercolor painting on textured paper, transparent layered washes, wet-on-wet blooms, soft bleeding edges, white paper glowing through, visible confident brushstrokes, granulating pigments',
+  },
+  {
+    key: 'oil_painting',
+    fluxFragment:
+      'Oil painting on canvas, thick impasto brushstrokes, visible palette knife texture, rich layered glazes, Rembrandt-inspired chiaroscuro lighting, warm undertones, painterly color mixing',
+  },
+  {
+    key: 'anime',
+    fluxFragment:
+      'Anime illustration, clean ink linework, cel-shaded coloring, expressive detailed eyes, Makoto Shinkai inspired backgrounds, dynamic hair flow, vibrant saturated colors',
+  },
+  {
+    key: 'lego',
+    fluxFragment:
+      'LEGO brick diorama, everything constructed from LEGO pieces, plastic studs visible on every surface, minifigure characters, photographed like a real LEGO set, soft realistic lighting',
+  },
+  {
+    key: 'claymation',
+    fluxFragment:
+      'Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets, theatrical warm lighting, Laika Studios quality',
+  },
+  {
+    key: '3d_render',
+    fluxFragment:
+      'Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, physically based materials, vibrant art-directed color palette, cinematic depth of field',
+  },
+  {
+    key: 'pencil_sketch',
+    fluxFragment:
+      'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
+  },
+  {
+    key: 'neon',
+    fluxFragment:
+      'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
+  },
+  {
+    key: 'stained_glass',
+    fluxFragment:
+      'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight, ruby sapphire emerald amber, graphic symmetrical composition, cathedral quality',
+  },
+  {
+    key: 'comic_book',
+    fluxFragment:
+      'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',
+  },
+  {
+    key: 'embroidery',
+    fluxFragment:
+      'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors, fabric background showing through, raised dimensional stitching',
+  },
+  {
+    key: 'disney',
+    fluxFragment:
+      'Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, expressive character design, luminous highlights, Renaissance Disney quality',
+  },
+  {
+    key: 'sack_boy',
+    fluxFragment:
+      'LittleBigPlanet Sack Boy style, knitted fabric characters, button eyes, zipper details, cardboard and craft material world, visible stitching, handmade tactile quality, warm desk lamp lighting',
+  },
+  {
+    key: 'funko_pop',
+    fluxFragment:
+      'Funko Pop vinyl figure style, oversized head, tiny body, glossy plastic surface, dot eyes, no mouth, painted clothing details, collectible figure on display base, product photography',
+  },
+  {
+    key: 'ghibli',
+    fluxFragment:
+      'Studio Ghibli animation style, soft painterly rendering, warm natural color palette, detailed painted backgrounds, atmospheric clouds, gentle character design, Miyazaki quality, hand-painted cel animation',
+  },
+  {
+    key: 'tim_burton',
+    fluxFragment:
+      'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture, sunken dark-ringed eyes, dark whimsical aesthetic',
+  },
+  {
+    key: 'pop_art',
+    fluxFragment:
+      'Pop art style, Andy Warhol screen print, bold flat primary colors at maximum saturation, Ben-Day halftone dots, thick black outlines, graphic commercial aesthetic',
+  },
+  {
+    key: 'minecraft',
+    fluxFragment:
+      'Minecraft voxel style, everything built from cubic blocks, pixelated block textures, square character heads, blocky terrain, grass and dirt blocks, game screenshot aesthetic',
+  },
+  {
+    key: '8bit',
+    fluxFragment:
+      'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, simple iconic character sprites, flat color blocks, retro 1985 gaming aesthetic',
+  },
+  {
+    key: 'felt',
+    fluxFragment:
+      'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
+  },
+];
 
-function filterPool(pool, rolled) {
-  const scored = pool.map((opt) => {
-    let score = 0;
-    if (opt.axes) {
-      for (const [axis, val] of Object.entries(opt.axes)) {
-        if (rolled[axis] === val) score += 1;
-        else score -= 0.5;
-      }
-    }
-    return { text: opt.text, score };
-  });
-  scored.sort((a, b) => b.score - a.score);
-  return pick(scored.slice(0, 8)).text;
+const CURATED_VIBES = [
+  {
+    key: 'cinematic',
+    directive:
+      'This is a frame from an Oscar-winning film. Compose it in 2.39:1 widescreen — use the horizontal space to create tension between subject and environment.',
+  },
+  {
+    key: 'dreamy',
+    directive:
+      "Everything floats in a soft, ethereal haze. Light doesn't come from one direction — it seems to emanate from within the scene itself, creating a gentle omnidirectional glow.",
+  },
+  {
+    key: 'dark',
+    directive:
+      'Embrace the shadows. The majority of the frame is in deep shadow — rich, velvety blacks and near-blacks. Light is rare and precious.',
+  },
+  {
+    key: 'chaos',
+    directive:
+      "Rules don't exist here. Multiple conflicting light sources in impossible colors. Perspective bends — parallel lines converge wrong, scale shifts within the frame.",
+  },
+  {
+    key: 'cozy',
+    directive:
+      'Everything is warm and close. The scene is an intimate space — small rooms, nooks, corners, sheltered spots. Lighting is soft and warm.',
+  },
+  {
+    key: 'minimal',
+    directive:
+      'Less is everything. One subject, vast negative space. The background is a single tone or a subtle gradient.',
+  },
+  {
+    key: 'epic',
+    directive:
+      'SCALE. The subject exists within something impossibly vast — towering mountains, endless skies, cathedral-sized interiors, cosmic expanses.',
+  },
+  {
+    key: 'nostalgic',
+    directive:
+      'This is a memory being remembered fondly. Everything is shifted toward warm golden tones — late afternoon in eternal summer.',
+  },
+  {
+    key: 'psychedelic',
+    directive:
+      'Reality is melting, breathing, and pulsing with impossible color. Every surface has organic flowing patterns — fractals, mandalas, paisley.',
+  },
+  {
+    key: 'peaceful',
+    directive:
+      'Absolute stillness. The scene is in a state of perfect calm — still water reflecting sky, windless fields, quiet dawn light.',
+  },
+  {
+    key: 'whimsical',
+    directive:
+      'Physics are optional and reality is playful. Objects are slightly the wrong size — oversized mushrooms, tiny doors, floating islands.',
+  },
+];
+
+const TEMPLATE_CATEGORIES = [
+  'cosmic',
+  'microscopic',
+  'impossible_architecture',
+  'giant_objects',
+  'peaceful_absurdity',
+  'beautiful_melancholy',
+  'cosmic_horror',
+  'joyful_chaos',
+  'eerie_stillness',
+  'broken_gravity',
+  'wrong_materials',
+  'time_distortion',
+  'merged_worlds',
+  'living_objects',
+  'impossible_weather',
+  'overgrown',
+  'bioluminescence',
+  'dreams_within_dreams',
+  'memory_distortion',
+  'abandoned_running',
+  'transformation',
+  'reflections',
+  'machines',
+  'music_sound',
+  'underwater',
+  'doors_portals',
+  'collections',
+  'decay_beauty',
+  'childhood',
+  'transparency',
+  'cinematic',
+];
+
+const SHOT_DIRECTIONS = [
+  'extreme low angle looking up, dramatic forced perspective, subject towering overhead',
+  'tilt-shift miniature effect, shallow depth of field, toy-like scale',
+  'silhouette against blazing backlight, rim lighting, dramatic contrast',
+  'macro lens extreme close-up, impossibly detailed textures, creamy bokeh background',
+  'aerial view looking straight down, geometric patterns, vast scale',
+  'through rain-covered glass, soft distortion, reflections overlapping the scene',
+  'dutch angle, dramatic tension, off-kilter framing',
+  'wide establishing shot, tiny subject in vast environment, epic scale',
+  'over-the-shoulder perspective, voyeuristic, intimate framing',
+  'symmetrical dead-center composition, Wes Anderson framing, obsessive balance',
+  'fisheye lens distortion, warped edges, immersive and disorienting',
+  'long exposure motion blur, streaks of light, frozen and flowing simultaneously',
+  'reflection shot, scene mirrored in water or glass, doubled reality',
+  'extreme depth, foreground object sharp, background stretching to infinity',
+  'candid snapshot feeling, slightly off-center, caught mid-moment',
+];
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// Minimal pools — enough for variety. Full pools are in lib/recipeEngine.ts.
-const MEDIUMS = [
-  { text: 'Pixar-style 3D render, soft rounded shapes, vibrant colors', axes: { realism: 'low', energy: 'low' } },
-  { text: 'Studio Ghibli anime watercolor, hand-painted cel animation', axes: { realism: 'low', color_warmth: 'high' } },
-  { text: 'adorable chibi kawaii illustration, big sparkly eyes, pastel colors', axes: { realism: 'low', brightness: 'high' } },
-  { text: 'oil painting on canvas, visible brushstrokes, impressionist', axes: { realism: 'low', complexity: 'high' } },
-  { text: 'ultra-realistic photograph, DSLR, 8K detail', axes: { realism: 'high', complexity: 'high' } },
-  { text: 'Van Gogh Starry Night style, swirling thick brushstrokes', axes: { realism: 'low', complexity: 'high', energy: 'high' } },
-  { text: 'comic book panel, bold ink outlines, halftone dots', axes: { realism: 'low', energy: 'high' } },
-  { text: 'dreamy soft-focus film photography, 35mm grain, light leaks', axes: { realism: 'high', brightness: 'high' } },
-  { text: 'LEGO brick diorama, plastic minifigures, studs visible', axes: { realism: 'low', complexity: 'low', brightness: 'high' } },
-  { text: 'retro anime VHS aesthetic, 1990s cel animation, warm grain', axes: { realism: 'low', color_warmth: 'high', energy: 'high' } },
-  { text: 'Makoto Shinkai style, photorealistic anime backgrounds, dramatic sky', axes: { realism: 'high', brightness: 'high', complexity: 'high' } },
-  { text: 'Bob Ross happy little trees, soft landscape, calm mountains', axes: { realism: 'low', energy: 'low', color_warmth: 'high' } },
-  { text: 'pop art screen print, bold primary colors, Andy Warhol style', axes: { realism: 'low', energy: 'high', brightness: 'high' } },
-  { text: 'felt and fabric diorama, stitched textures, button eyes', axes: { realism: 'low', brightness: 'high', energy: 'low' } },
-  { text: 'cyberpunk neon cityscape style, rain-slicked surfaces', axes: { realism: 'high', brightness: 'low', energy: 'high' } },
-];
-
-const MOODS = [
-  { text: 'cozy and intimate', axes: { energy: 'low', color_warmth: 'high' } },
-  { text: 'epic and grandiose', axes: { energy: 'high', complexity: 'high' } },
-  { text: 'ethereal and dreamlike', axes: { energy: 'low', brightness: 'high' } },
-  { text: 'playful and whimsical', axes: { energy: 'low', brightness: 'high' } },
-  { text: 'mysterious and suspenseful', axes: { energy: 'high', brightness: 'low' } },
-  { text: 'silly and absurd', axes: { energy: 'high', brightness: 'high' } },
-  { text: 'magical and enchanted', axes: { energy: 'low', brightness: 'high' } },
-  { text: 'triumphant and heroic', axes: { energy: 'high', brightness: 'high' } },
-];
-
-const LIGHTINGS = [
-  { text: 'golden hour sunlight', axes: { color_warmth: 'high', brightness: 'high' } },
-  { text: 'cool blue moonlight', axes: { color_warmth: 'low', brightness: 'low' } },
-  { text: 'neon city glow', axes: { color_warmth: 'low', brightness: 'low' } },
-  { text: 'warm candlelight', axes: { color_warmth: 'high', brightness: 'low' } },
-  { text: 'soft overcast diffused light', axes: { brightness: 'high', energy: 'low' } },
-  { text: 'aurora borealis light', axes: { color_warmth: 'low', energy: 'high' } },
-];
-
-const ACTIONS = [
-  'tumbling', 'sneaking', 'leaping', 'exploring a hidden passage in',
-  'riding a paper airplane through', 'having a tea party with unexpected guests',
-  'discovering a glowing portal', 'teaching ducklings to march',
-  'building a fort out of', 'napping peacefully on', 'surfing on top of',
-  'painting a tiny masterpiece of', 'conducting a tiny orchestra',
-  'accidentally summoning something magical', 'befriending a creature twice their size',
-  'fishing in a puddle and catching something huge', 'sword-fighting with breadsticks',
-];
-
-const INTEREST_FLAVORS = {
-  gaming: ['Pokémon-style', 'Minecraft blocky', 'Zelda-inspired', 'Animal Crossing', 'retro arcade'],
-  movies: ['Star Wars', 'Lord of the Rings', 'Harry Potter', 'Spirited Away', 'Jurassic Park', 'SpongeBob'],
-  music: ['rock concert', 'jazz club', 'EDM festival', 'vinyl record shop', 'acoustic campfire guitar'],
-  geek: ['Naruto ninja village', 'Dragon Ball energy blast', 'comic book superhero', 'mech suit cockpit'],
-  sports: ['surfing a massive wave', 'skateboard halfpipe', 'basketball slam dunk', 'snowboarding powder run'],
-  travel: ['Eiffel Tower at midnight', 'cherry blossom temple in Kyoto', 'Grand Canyon sunrise', 'Caribbean beach'],
-  pride: ['rainbow flag colors flowing', 'pride parade confetti', 'rainbow crosswalk'],
-};
-
-const ERA_KEYWORDS = {
-  prehistoric: 'prehistoric world, cave paintings, volcanoes',
-  ancient: 'ancient civilization, stone and bronze, weathered ruins',
-  medieval: 'medieval fantasy, stone castles, candlelit',
-  victorian: 'Victorian era, ornate brass and dark wood, gas lamps',
-  steampunk: 'steampunk Victorian, brass gears, airships, clockwork',
-  art_deco: '1920s art deco, jazz age, gold and black geometry',
-  retro: 'retro 1950s-70s, mid-century modern, vintage colors',
-  synthwave: '1980s synthwave, neon grid, palm trees, sunset gradient',
-  modern: 'contemporary modern, clean lines, current day',
-  far_future: 'far future sci-fi, holographic, chrome and glass',
-};
-
-const SETTING_KEYWORDS = {
-  cozy_indoors: 'cozy interior, warm room, furniture, shelves, windows',
-  wild_outdoors: 'outdoor wilderness, forests, mountains, open sky',
-  city_streets: 'urban cityscape, streets, buildings, signs',
-  beach_tropical: 'tropical beach, palm trees, turquoise water, golden sand',
-  mountains: 'mountain peaks, alpine meadows, rocky trails, snow caps',
-  underwater: 'deep underwater, coral reefs, fish, light rays from surface',
-  underground: 'underground cavern, crystals, glowing mushrooms, stalactites',
-  village: 'charming village, cobblestone streets, market square, lanterns',
-  space: 'outer space, stars, nebula, zero gravity, Earth in distance',
-  otherworldly: 'otherworldly realm, floating islands, impossible geometry',
-};
-
-const PALETTE_KEYWORDS = {
-  warm_sunset: 'warm golden amber and crimson',
-  cool_twilight: 'cool blue purple and lavender',
-  earthy_natural: 'earthy green brown and forest tones',
-  soft_pastel: 'soft pastel pink lavender and cream',
-  dark_bold: 'dark dramatic with deep blacks and vivid accents',
-  monochrome: 'black and white, high contrast',
-  sepia: 'warm sepia tone, vintage amber and brown',
-  neon: 'electric neon colors, hot pink cyan lime green',
-  candy: 'candy pop colors, bubblegum pink, sparkly gold',
-  everything: '',
-};
-
-const WEIRDNESS = ['', 'slightly unusual proportions', 'dreamlike distortions', 'surreal impossible geometry', 'full Dalí surrealism'];
-const SCALES = ['extreme macro close-up', 'intimate close-up', 'medium shot', 'wide shot', 'epic vast panoramic vista'];
-
-function expandInterest(interest) {
-  const flavors = INTEREST_FLAVORS[interest];
-  const always = ['gaming', 'movies', 'music', 'geek', 'sports', 'travel', 'pride'];
-  if (flavors && (always.includes(interest) || Math.random() < 0.4)) return pick(flavors);
-  return interest;
+function resolveMedium(profile) {
+  if (profile.art_styles?.length) {
+    const key = pick(profile.art_styles);
+    return CURATED_MEDIUMS.find((m) => m.key === key) ?? pick(CURATED_MEDIUMS);
+  }
+  return pick(CURATED_MEDIUMS);
 }
 
-function buildPrompt(recipe, wish) {
-  const axes = { color_warmth: 0.5, complexity: 0.5, realism: 0.5, energy: 0.5, brightness: 0.5, chaos: 0.5, weirdness: 0.5, scale: 0.5, ...recipe.axes };
-  const rolled = {
-    realism: rollAxis(axes.realism),
-    complexity: rollAxis(axes.complexity),
-    energy: rollAxis(axes.energy),
-    color_warmth: rollAxis(axes.color_warmth),
-    brightness: rollAxis(axes.brightness),
-  };
-
-  const medium = filterPool(MEDIUMS, rolled);
-  const mood = filterPool(MOODS, rolled);
-  const lighting = filterPool(LIGHTINGS, rolled);
-
-  const interests = recipe.interests ?? ['fantasy'];
-  const sampled = [...interests].sort(() => Math.random() - 0.5).slice(0, 2).map(expandInterest);
-
-  const eras = recipe.eras ?? ['modern'];
-  const era = ERA_KEYWORDS[pick(eras)] ?? ERA_KEYWORDS.modern;
-  const settings = recipe.settings ?? ['wild_outdoors'];
-  const setting = SETTING_KEYWORDS[pick(settings)] ?? SETTING_KEYWORDS.wild_outdoors;
-
-  const palettes = recipe.color_palettes ?? ['everything'];
-  const paletteKey = pick(palettes);
-  const colorKw = PALETTE_KEYWORDS[paletteKey] ?? '';
-
-  const tags = (recipe.personality_tags ?? ['dreamy']).sort(() => Math.random() - 0.5).slice(0, 2).join(', ');
-  const action = pick(ACTIONS);
-  const weirdIdx = Math.min(WEIRDNESS.length - 1, Math.floor(axes.weirdness * WEIRDNESS.length));
-  const scaleIdx = Math.min(SCALES.length - 1, Math.floor(axes.scale * SCALES.length));
-  const companion = recipe.spirit_companion && Math.random() < 0.3 ? `a small ${recipe.spirit_companion.replace(/_/g, ' ')} visible somewhere in the scene` : '';
-
-  const parts = [
-    `${medium}:`,
-    wish ? `"${wish}" —` : `${sampled.join(' and ')} scene`,
-    wish ? '' : action,
-    era,
-    setting,
-    mood,
-    lighting,
-    colorKw,
-    tags,
-    WEIRDNESS[weirdIdx],
-    SCALES[scaleIdx],
-    companion,
-    'portrait orientation 9:16 ratio',
-  ].filter(Boolean);
-
-  return parts.join(', ');
+function resolveVibe(profile) {
+  if (profile.aesthetics?.length) {
+    const key = pick(profile.aesthetics);
+    return CURATED_VIBES.find((v) => v.key === key) ?? pick(CURATED_VIBES);
+  }
+  return pick(CURATED_VIBES);
 }
 
 // ── Image generation ────────────────────────────────────────────────────────
 
 async function generateImage(prompt) {
-  const res = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      input: { prompt, aspect_ratio: '9:16', num_outputs: 1, output_format: 'jpg' },
-    }),
-  });
+  const res = await fetch(
+    'https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions',
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${REPLICATE_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: { prompt, aspect_ratio: '9:16', num_outputs: 1, output_format: 'jpg' },
+      }),
+    }
+  );
 
   if (!res.ok) {
     const body = await res.text();
@@ -245,11 +321,10 @@ async function generateImage(prompt) {
   const pred = await res.json();
   if (!pred.id) throw new Error('No prediction ID');
 
-  // Poll
   for (let i = 0; i < 60; i++) {
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 2000));
     const poll = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
-      headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}` },
+      headers: { Authorization: `Bearer ${REPLICATE_TOKEN}` },
     });
     const data = await poll.json();
     if (data.status === 'succeeded') return data.output?.[0];
@@ -261,35 +336,35 @@ async function generateImage(prompt) {
 // ── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\n🌙 Nightly Dream Generation`);
+  console.log(`\n🌙 Nightly Dream Generation (Sonnet Template Pipeline)`);
   console.log(`   Budget: ${MAX_BUDGET_CENTS}¢ | Batch: ${BATCH_SIZE} | Dry run: ${DRY_RUN}\n`);
 
-  // Find eligible users: has recipe, ai_enabled, hasn't dreamed today
   const today = new Date().toISOString().slice(0, 10);
   const { data: users, error } = await sb
     .from('user_recipes')
-    .select('user_id, recipe, dream_wish, wish_modifiers')
+    .select('user_id, recipe, dream_wish, wish_modifiers, wish_recipient_ids')
     .eq('onboarding_completed', true)
     .eq('ai_enabled', true);
 
-  if (error) { console.error('DB error:', error.message); process.exit(1); }
+  if (error) {
+    console.error('DB error:', error.message);
+    process.exit(1);
+  }
   console.log(`Found ${users.length} eligible users`);
 
-  // Check who already got a dream today
   const { data: todayBudgets } = await sb
     .from('ai_generation_budget')
     .select('user_id')
     .eq('date', today);
-  const alreadyDreamed = new Set((todayBudgets ?? []).map(b => b.user_id));
+  const alreadyDreamed = new Set((todayBudgets ?? []).map((b) => b.user_id));
 
-  const eligible = users.filter(u => !alreadyDreamed.has(u.user_id));
+  const eligible = users.filter((u) => !alreadyDreamed.has(u.user_id));
   console.log(`${eligible.length} haven't dreamed today\n`);
 
   let totalCost = 0;
   let generated = 0;
   let failed = 0;
 
-  // Process in batches
   for (let i = 0; i < eligible.length; i += BATCH_SIZE) {
     if (totalCost >= MAX_BUDGET_CENTS) {
       console.log(`\n⚠️  Budget limit reached (${totalCost}¢ / ${MAX_BUDGET_CENTS}¢). Stopping.`);
@@ -297,99 +372,194 @@ async function main() {
     }
 
     const batch = eligible.slice(i, i + BATCH_SIZE);
-    const results = await Promise.allSettled(batch.map(async (user) => {
-      const recipe = user.recipe;
-      const wish = user.dream_wish;
-      const mods = user.wish_modifiers;
-      let prompt = buildPrompt(recipe, wish);
+    const results = await Promise.allSettled(
+      batch.map(async (user) => {
+        const recipe = user.recipe;
+        const wish = user.dream_wish;
+        const isV2 = recipe?.version === 2;
 
-      // Append wish modifiers as vibe hints
-      if (wish && mods) {
-        const vibeHints = [mods.mood, mods.weather, mods.energy, mods.vibe].filter(Boolean);
-        if (vibeHints.length > 0) {
-          prompt += `, ${vibeHints.join(', ')} vibe`;
-        }
-      }
+        let prompt;
 
-      process.stdout.write(`  ${user.user_id.slice(0, 8)}... `);
+        if (isV2 && anthropic) {
+          // ── SONNET TEMPLATE PIPELINE ──
+          const medium = resolveMedium(recipe);
+          const vibe = resolveVibe(recipe);
+          const seeds = recipe.dream_seeds ?? { characters: [], places: [], things: [] };
 
-      if (DRY_RUN) {
-        console.log('PROMPT:', prompt.slice(0, 120));
-        return;
-      }
+          // Step 1: Pick template from DB
+          let dreamSubject;
+          try {
+            const category = pick(TEMPLATE_CATEGORIES);
+            const { data: rows, error: tmplErr } = await sb
+              .from('dream_templates')
+              .select('template')
+              .eq('category', category)
+              .eq('disabled', false)
+              .limit(200);
 
-      let tempUrl;
-      try {
-        tempUrl = await generateImage(prompt);
-        if (!tempUrl) throw new Error('No URL returned');
-      } catch (genErr) {
-        const msg = genErr?.message ?? '';
-        if (msg.toLowerCase().includes('nsfw') || msg.toLowerCase().includes('safety')) {
-          // Notify user their wish was blocked
-          if (wish) {
-            try {
-              await sb.from('notifications').insert({
-                recipient_id: user.user_id,
-                actor_id: user.user_id,
-                type: 'dream_generated',
-                body: `Your wish couldn't be dreamed — it was a bit too spicy. Try a different wish!`,
-              });
-              // Clear the wish so it doesn't keep failing every night
-              await sb.from('user_recipes').update({ dream_wish: null, wish_modifiers: null }).eq('user_id', user.user_id);
-            } catch {}
+            if (tmplErr || !rows?.length) throw new Error(tmplErr?.message ?? 'No templates');
+
+            const template = pick(rows).template;
+            const character =
+              seeds.characters.length > 0 ? pick(seeds.characters) : 'a wandering figure';
+            const place = seeds.places.length > 0 ? pick(seeds.places) : 'a forgotten city';
+            const thing = seeds.things.length > 0 ? pick(seeds.things) : 'glowing fragments';
+
+            dreamSubject = template
+              .replace(/\$\{character\}/g, character)
+              .replace(/\$\{place\}/g, place)
+              .replace(/\$\{thing\}/g, thing);
+          } catch {
+            const fallbackSeeds = [
+              ...seeds.characters.slice(0, 1),
+              ...seeds.places.slice(0, 1),
+              ...seeds.things.slice(0, 1),
+            ].filter(Boolean);
+            dreamSubject =
+              fallbackSeeds.length > 0
+                ? `A surreal dream featuring ${fallbackSeeds.join(' and ')} in an impossible landscape`
+                : 'A surreal impossible dreamscape with unexpected elements and impossible geometry';
           }
+
+          // Step 2: Maybe inject cast (~30%)
+          const cast = (recipe.dream_cast ?? []).filter((m) => m.description);
+          if (cast.length > 0 && Math.random() < 0.3) {
+            const castPick = pick(cast);
+            const roleLabel =
+              castPick.role === 'self'
+                ? 'the dreamer'
+                : castPick.role === 'pet'
+                  ? 'their pet'
+                  : castPick.relationship === 'significant_other'
+                    ? 'their romantic partner'
+                    : `their ${castPick.relationship ?? 'companion'}`;
+            dreamSubject += `. The main character is ${roleLabel}: ${castPick.description}`;
+          }
+
+          // Step 3: Inject wish
+          if (wish) {
+            dreamSubject += `. DREAM WISH (make this the heart): "${wish}"`;
+          }
+
+          // Step 4: Sonnet prompt writer
+          const shotDirection = pick(SHOT_DIRECTIONS);
+          const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
+
+MEDIUM: ${medium.fluxFragment}
+
+DREAM SCENE (this is sacred — do NOT water it down):
+${dreamSubject}
+
+CAMERA/COMPOSITION: ${shotDirection}
+
+MOOD: ${vibe.directive}
+
+Write the prompt:
+1. Start with the art medium
+2. Describe the EXACT scene — every surreal detail preserved
+3. Apply the camera direction — this shapes HOW we see the scene
+4. Name specific materials, textures, light sources (not adjectives — NOUNS)
+5. End with: portrait 9:16, hyper detailed, masterwork composition, stunning lighting
+
+No quotation marks. Output ONLY the prompt.`;
+
+          try {
+            const msg = await anthropic.messages.create({
+              model: 'claude-sonnet-4-20250514',
+              max_tokens: 200,
+              messages: [{ role: 'user', content: nightlyBrief }],
+            });
+            const text = msg.content?.[0]?.text?.trim() ?? '';
+            if (text.length < 20) throw new Error('too short');
+            prompt = text;
+          } catch {
+            prompt = `${medium.fluxFragment}, ${dreamSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed, gorgeous lighting`;
+          }
+        } else {
+          // Non-V2 fallback
+          const medium = pick(CURATED_MEDIUMS);
+          const vibe = pick(CURATED_VIBES);
+          prompt = wish
+            ? `${medium.fluxFragment}, "${wish}", ${vibe.directive.split('.')[0]}, portrait 9:16, hyper detailed`
+            : `${medium.fluxFragment}, a surreal impossible dreamscape, ${vibe.directive.split('.')[0]}, portrait 9:16, hyper detailed`;
         }
-        throw genErr;
-      }
 
-      // Persist to Supabase Storage (Replicate URLs expire after ~1 hour)
-      const imgResp = await fetch(tempUrl);
-      if (!imgResp.ok) throw new Error('Failed to download generated image');
-      const imgBuf = Buffer.from(await imgResp.arrayBuffer());
-      const fileName = `${user.user_id}/${Date.now()}.jpg`;
+        process.stdout.write(`  ${user.user_id.slice(0, 8)}... `);
 
-      const { error: storageErr } = await sb.storage
-        .from('uploads')
-        .upload(fileName, imgBuf, { contentType: 'image/jpeg' });
-      if (storageErr) throw new Error(`Storage upload failed: ${storageErr.message}`);
+        if (DRY_RUN) {
+          console.log('PROMPT:', prompt.slice(0, 150));
+          return;
+        }
 
-      const { data: urlData } = sb.storage.from('uploads').getPublicUrl(fileName);
-      const imageUrl = urlData.publicUrl;
-
-      // Generate a bot message — a short playful note from the Dream Bot
-      let botMessage = null;
-      const ANTHROPIC_KEY = getKey('ANTHROPIC_API_KEY');
-      if (ANTHROPIC_KEY) {
+        let tempUrl;
         try {
-          const { data: recentDreams } = await sb
-            .from('uploads')
-            .select('ai_prompt, from_wish')
-            .eq('user_id', user.user_id)
-            .eq('is_ai_generated', true)
-            .order('created_at', { ascending: false })
-            .limit(5);
+          tempUrl = await generateImage(prompt);
+          if (!tempUrl) throw new Error('No URL returned');
+        } catch (genErr) {
+          const msg = genErr?.message ?? '';
+          if (msg.toLowerCase().includes('nsfw') || msg.toLowerCase().includes('safety')) {
+            if (wish) {
+              try {
+                await sb.from('notifications').insert({
+                  recipient_id: user.user_id,
+                  actor_id: user.user_id,
+                  type: 'dream_generated',
+                  body: `Your wish couldn't be dreamed — it was a bit too spicy. Try a different wish!`,
+                });
+                await sb
+                  .from('user_recipes')
+                  .update({ dream_wish: null, wish_modifiers: null })
+                  .eq('user_id', user.user_id);
+              } catch {}
+            }
+          }
+          throw genErr;
+        }
 
-          const recentContext = (recentDreams ?? []).map(d => d.ai_prompt?.slice(0, 80)).filter(Boolean);
-          const pastWishes = (recentDreams ?? []).map(d => d.from_wish).filter(Boolean);
+        // Persist to Supabase Storage
+        const imgResp = await fetch(tempUrl);
+        if (!imgResp.ok) throw new Error('Failed to download generated image');
+        const imgBuf = Buffer.from(await imgResp.arrayBuffer());
+        const fileName = `${user.user_id}/${Date.now()}.jpg`;
 
-          let memoryBlock = '';
-          if (recentContext.length > 0) memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
-          if (pastWishes.length > 0) memoryBlock += `\n- Past wishes: ${pastWishes.join(', ')}`;
-          if (wish) memoryBlock += `\n- Tonight's wish: "${wish}"`;
+        const { error: storageErr } = await sb.storage
+          .from('uploads')
+          .upload(fileName, imgBuf, { contentType: 'image/jpeg' });
+        if (storageErr) throw new Error(`Storage upload failed: ${storageErr.message}`);
 
-          const msgRes = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': ANTHROPIC_KEY,
-              'anthropic-version': '2023-06-01',
-            },
-            body: JSON.stringify({
+        const { data: urlData } = sb.storage.from('uploads').getPublicUrl(fileName);
+        const imageUrl = urlData.publicUrl;
+
+        // Bot message via Haiku
+        let botMessage = null;
+        if (ANTHROPIC_KEY) {
+          try {
+            const { data: recentDreams } = await sb
+              .from('uploads')
+              .select('ai_prompt, from_wish')
+              .eq('user_id', user.user_id)
+              .eq('is_ai_generated', true)
+              .order('created_at', { ascending: false })
+              .limit(5);
+
+            const recentContext = (recentDreams ?? [])
+              .map((d) => d.ai_prompt?.slice(0, 80))
+              .filter(Boolean);
+            const pastWishes = (recentDreams ?? []).map((d) => d.from_wish).filter(Boolean);
+
+            let memoryBlock = '';
+            if (recentContext.length > 0)
+              memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
+            if (pastWishes.length > 0) memoryBlock += `\n- Past wishes: ${pastWishes.join(', ')}`;
+            if (wish) memoryBlock += `\n- Tonight's wish: "${wish}"`;
+
+            const msgRes = await anthropic.messages.create({
               model: 'claude-haiku-4-5-20251001',
               max_tokens: 60,
-              messages: [{
-                role: 'user',
-                content: `You are a Dream Bot — a tiny creative spirit living in someone's phone, making dreams nightly. Playful, warm, a little weird. You love your human.
+              messages: [
+                {
+                  role: 'user',
+                  content: `You are a Dream Bot — a tiny creative spirit living in someone's phone, making dreams nightly. Playful, warm, a little weird. You love your human.
 
 Tonight's dream prompt: "${prompt.slice(0, 200)}"
 
@@ -405,78 +575,104 @@ CRITICAL RULES:
 ${memoryBlock}
 
 Output ONLY the message, nothing else.`,
-              }],
-            }),
-          });
+                },
+              ],
+            });
 
-          if (msgRes.ok) {
-            const msgData = await msgRes.json();
-            const text = msgData.content?.[0]?.text?.trim() ?? '';
+            const text = msgRes.content?.[0]?.text?.trim() ?? '';
             if (text.length >= 5 && text.length <= 200) botMessage = text;
+          } catch {
+            // Non-critical
           }
-        } catch {
-          // Non-critical
         }
-      }
 
-      // Insert upload
-      const { data: uploadRow } = await sb.from('uploads').insert({
-        user_id: user.user_id,
-        categories: ['fantasy'],
-        image_url: imageUrl,
-        caption: null,
-        ai_prompt: prompt,
-        is_approved: true,
-        is_active: true,
-        from_wish: wish || null,
-        bot_message: botMessage,
-      }).select('id').single();
+        // Insert upload
+        const { data: uploadRow } = await sb
+          .from('uploads')
+          .insert({
+            user_id: user.user_id,
+            categories: ['art'],
+            image_url: imageUrl,
+            caption: null,
+            ai_prompt: prompt,
+            is_approved: true,
+            is_active: true,
+            from_wish: wish || null,
+            bot_message: botMessage,
+          })
+          .select('id')
+          .single();
 
-      const uploadId = uploadRow?.id;
+        const uploadId = uploadRow?.id;
 
-      // Send notification — use bot message if available, fallback to generic
-      const BOT_ACCOUNT = user.user_id;
-      const notifBody = (wish ? 'wish:' : 'dream:') + (botMessage || '');
-      try {
-        await sb.from('notifications').insert({
-          recipient_id: user.user_id,
-          actor_id: BOT_ACCOUNT,
-          type: 'dream_generated',
-          upload_id: uploadId,
-          body: notifBody,
-        });
-      } catch {}
+        // Send notification
+        const notifBody = (wish ? 'wish:' : 'dream:') + (botMessage || '');
+        try {
+          await sb.from('notifications').insert({
+            recipient_id: user.user_id,
+            actor_id: user.user_id,
+            type: 'dream_generated',
+            upload_id: uploadId,
+            body: notifBody,
+          });
+        } catch {}
 
-      // Log generation (non-critical)
-      try {
-        await sb.from('ai_generation_log').insert({
-          user_id: user.user_id,
-          recipe_snapshot: recipe,
-          raw_prompt_input: { wish },
-          enhanced_prompt: prompt,
-          model_used: 'flux-dev',
-          cost_cents: COST_PER_IMAGE_CENTS,
-          status: 'completed',
-        });
-      } catch {}
+        // Send to wish recipients
+        if (user.wish_recipient_ids?.length > 0) {
+          const uniqueRecipients = [...new Set(user.wish_recipient_ids)].filter(
+            (rid) => rid !== user.user_id
+          );
+          if (uniqueRecipients.length > 0) {
+            try {
+              await sb.from('notifications').insert(
+                uniqueRecipients.map((rid) => ({
+                  recipient_id: rid,
+                  actor_id: user.user_id,
+                  type: 'dream_generated',
+                  upload_id: uploadId,
+                  body: wish ? `Wished you a dream: "${wish.slice(0, 50)}"` : 'Wished you a dream',
+                }))
+              );
+            } catch {}
+          }
+        }
 
-      // Update budget (non-critical)
-      try {
-        await sb.from('ai_generation_budget').upsert({
-          user_id: user.user_id,
-          date: today,
-          images_generated: 1,
-          total_cost_cents: COST_PER_IMAGE_CENTS,
-        }, { onConflict: 'user_id,date' });
-      } catch {}
+        // Log generation
+        try {
+          await sb.from('ai_generation_log').insert({
+            user_id: user.user_id,
+            recipe_snapshot: recipe,
+            enhanced_prompt: prompt,
+            model_used: 'flux-dev',
+            cost_cents: COST_PER_IMAGE_CENTS,
+            status: 'completed',
+          });
+        } catch {}
 
-      // Clear wish + modifiers after use
-      if (wish) {
-        await sb.from('user_recipes').update({ dream_wish: null, wish_modifiers: null }).eq('user_id', user.user_id);
-      }
+        // Update budget
+        try {
+          await sb.from('ai_generation_budget').upsert(
+            {
+              user_id: user.user_id,
+              date: today,
+              images_generated: 1,
+              total_cost_cents: COST_PER_IMAGE_CENTS,
+            },
+            { onConflict: 'user_id,date' }
+          );
+        } catch {}
 
-      console.log('✅', wish ? `(wish: "${wish.slice(0, 30)}")` : '');
-    }));
+        // Clear wish after use
+        if (wish) {
+          await sb
+            .from('user_recipes')
+            .update({ dream_wish: null, wish_recipient_ids: null, wish_modifiers: null })
+            .eq('user_id', user.user_id);
+        }
+
+        console.log('✅', wish ? `(wish: "${wish.slice(0, 30)}")` : '');
+      })
+    );
 
     for (const r of results) {
       if (r.status === 'fulfilled') {
@@ -488,13 +684,15 @@ Output ONLY the message, nothing else.`,
       }
     }
 
-    // Small delay between batches to avoid rate limits
     if (i + BATCH_SIZE < eligible.length) {
-      await new Promise(r => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 2000));
     }
   }
 
   console.log(`\n✨ Done! Generated: ${generated} | Failed: ${failed} | Cost: ${totalCost}¢`);
 }
 
-main().catch(err => { console.error('Fatal:', err); process.exit(1); });
+main().catch((err) => {
+  console.error('Fatal:', err);
+  process.exit(1);
+});
