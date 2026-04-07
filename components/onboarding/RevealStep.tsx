@@ -25,6 +25,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
+import { saveDream } from '@/lib/dreamSave';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
 import { MASCOT_URLS } from '@/constants/mascots';
@@ -81,6 +82,7 @@ export function RevealStep({ onBack }: Props) {
   const dreamsRemaining = MAX_DREAMS - dreams.length;
   const canDreamAgain = dreamsRemaining > 0;
   const [fullscreenUrl, setFullscreenUrl] = useState<string | null>(null);
+  const describedProfile = useRef(profile);
 
   // Pinch to zoom on preview
   const zoomScale = useSharedValue(1);
@@ -222,6 +224,7 @@ export function RevealStep({ onBack }: Props) {
         ...profile,
         dream_cast: describedCast,
       };
+      describedProfile.current = profileWithDescriptions;
 
       // Save the profile with descriptions so they persist in the database
       if (user) {
@@ -296,7 +299,7 @@ export function RevealStep({ onBack }: Props) {
         mode: 'flux-dev',
         medium_key: mediumKey,
         vibe_key: vibeKey,
-        vibe_profile: profile,
+        vibe_profile: describedProfile.current,
         persist: false,
       }),
     });
@@ -638,16 +641,44 @@ export function RevealStep({ onBack }: Props) {
 
       {dreams.length > 0 && (
         <View style={s.footer}>
-          {canDreamAgain && (
+          <View style={s.footerRow}>
+            {canDreamAgain && (
+              <TouchableOpacity
+                style={s.dreamAgainButton}
+                onPress={handleDreamAgain}
+                disabled={phase === 'creating' || phase === 'generating'}
+                activeOpacity={0.7}
+              >
+                <Text style={s.dreamAgainText}>Dream Again</Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity
-              style={s.dreamAgainButton}
-              onPress={handleDreamAgain}
+              style={s.saveButton}
+              onPress={async () => {
+                if (!user || !activeDream) return;
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                try {
+                  await saveDream({
+                    userId: user.id,
+                    tempImageUrl: activeDream.url,
+                    prompt: activeDream.prompt || '',
+                    visibility: 'private',
+                    dreamMedium: activeDream.medium,
+                    dreamVibe: activeDream.vibe,
+                  });
+                  Toast.show('Dream saved!', 'checkmark-circle');
+                } catch (err) {
+                  if (__DEV__) console.warn('[Reveal] Save error:', err);
+                  Toast.show('Failed to save dream', 'close-circle');
+                }
+              }}
               disabled={phase === 'creating' || phase === 'generating'}
               activeOpacity={0.7}
             >
-              <Text style={s.dreamAgainText}>Dream Again</Text>
+              <Text style={s.saveButtonText}>Save</Text>
             </TouchableOpacity>
-          )}
+          </View>
 
           <TouchableOpacity
             style={s.createButton}
@@ -658,7 +689,7 @@ export function RevealStep({ onBack }: Props) {
             {phase === 'creating' ? (
               <ActivityIndicator color="#FFFFFF" />
             ) : (
-              <Text style={s.createButtonText}>Post Your Dream!</Text>
+              <Text style={s.createButtonText}>Finish Setup</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -789,7 +820,8 @@ const s = StyleSheet.create({
   errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   errorText: { color: colors.textSecondary, fontSize: 15 },
 
-  footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
+  footer: { paddingHorizontal: 20, paddingBottom: 16, gap: 10 },
+  footerRow: { flexDirection: 'row', gap: 10 },
   createButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -801,23 +833,35 @@ const s = StyleSheet.create({
   },
   createButtonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
   dreamAgainButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     backgroundColor: colors.accent,
     borderRadius: 14,
-    paddingVertical: 18,
-    shadowColor: colors.accent,
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
+    paddingVertical: 14,
   },
   dreamAgainText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  saveButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
+  },
+  saveButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
   },
 
   fullscreenBackdrop: {

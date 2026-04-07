@@ -165,10 +165,25 @@ function SeedInput({
   );
 }
 
+const AVOID_SUGGESTIONS = [
+  'spiders',
+  'clowns',
+  'gore',
+  'snakes',
+  'dolls',
+  'heights',
+  'deep water',
+  'crowds',
+];
+
 export function YourWorldStep({ onNext, onBack }: Props) {
   const dreamSeeds = useOnboardingStore((s) => s.profile.dream_seeds);
   const addSeed = useOnboardingStore((s) => s.addSeed);
   const removeSeed = useOnboardingStore((s) => s.removeSeed);
+  const avoid = useOnboardingStore((s) => s.profile.avoid);
+  const addAvoid = useOnboardingStore((s) => s.addAvoid);
+  const removeAvoid = useOnboardingStore((s) => s.removeAvoid);
+  const [avoidInput, setAvoidInput] = useState('');
 
   const totalSeeds =
     dreamSeeds.characters.length + dreamSeeds.places.length + dreamSeeds.things.length;
@@ -199,6 +214,96 @@ export function YourWorldStep({ onNext, onBack }: Props) {
             onRemove={(v) => removeSeed(cat.key, v)}
           />
         ))}
+
+        {/* Avoid list */}
+        <View style={s.categoryCard}>
+          <View style={s.categoryHeader}>
+            <Ionicons name="ban" size={18} color={colors.like} />
+            <Text style={s.categoryTitle}>Things to avoid</Text>
+          </View>
+
+          <View style={s.inputRow}>
+            <TextInput
+              style={s.input}
+              placeholder="Anything you don't want to see"
+              placeholderTextColor={colors.textMuted}
+              value={avoidInput}
+              onChangeText={setAvoidInput}
+              onSubmitEditing={() => {
+                if (avoidInput.trim()) {
+                  addAvoid(avoidInput);
+                  setAvoidInput('');
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }
+              }}
+              returnKeyType="done"
+              maxLength={40}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            <TouchableOpacity
+              style={[
+                s.addButton,
+                { backgroundColor: colors.like },
+                !avoidInput.trim() && s.addButtonDisabled,
+              ]}
+              onPress={() => {
+                if (avoidInput.trim()) {
+                  addAvoid(avoidInput);
+                  setAvoidInput('');
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }
+              }}
+              activeOpacity={0.7}
+              disabled={!avoidInput.trim()}
+            >
+              <Ionicons
+                name="add"
+                size={20}
+                color={avoidInput.trim() ? '#FFFFFF' : colors.textSecondary}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {avoid.length > 0 && (
+            <View style={s.tagRow}>
+              {avoid.map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  style={[s.tag, { backgroundColor: colors.like }]}
+                  onPress={() => {
+                    removeAvoid(item);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.tagText}>{item}</Text>
+                  <Ionicons name="close-circle" size={14} color="rgba(255,255,255,0.6)" />
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+
+          <View style={s.tagRow}>
+            {AVOID_SUGGESTIONS.filter((sug) => !avoid.includes(sug)).map((suggestion) => (
+              <TouchableOpacity
+                key={suggestion}
+                style={s.suggestionTag}
+                onPress={() => {
+                  if (avoid.includes(suggestion)) {
+                    removeAvoid(suggestion);
+                  } else {
+                    addAvoid(suggestion);
+                  }
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+                activeOpacity={0.7}
+              >
+                <Text style={s.suggestionText}>{suggestion}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
       </ScrollView>
 
       <View style={s.footer}>

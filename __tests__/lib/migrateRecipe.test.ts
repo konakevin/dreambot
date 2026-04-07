@@ -32,14 +32,13 @@ describe('migrateRecipeToVibeProfile', () => {
   it('maps personality tags to aesthetics', () => {
     const profile = migrateRecipeToVibeProfile(FULL_RECIPE);
     expect(profile.aesthetics).toContain('dreamy');
-    expect(profile.aesthetics).toContain('liminal'); // mysterious → liminal
-    expect(profile.aesthetics).toContain('gothic'); // edgy → gothic
+    expect(profile.aesthetics).toContain('dark'); // mysterious → dark
   });
 
   it('maps eras to aesthetics', () => {
     const profile = migrateRecipeToVibeProfile(FULL_RECIPE);
-    expect(profile.aesthetics).toContain('vaporwave'); // synthwave → vaporwave
-    expect(profile.aesthetics).toContain('dark_academia'); // medieval → dark_academia
+    expect(profile.aesthetics).toContain('psychedelic'); // synthwave → psychedelic
+    expect(profile.aesthetics).toContain('dark'); // medieval → dark
   });
 
   it('has at least 3 aesthetics', () => {

@@ -18,8 +18,8 @@ import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useEffect } from 'react';
-import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as nav from '@/lib/navigate';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { usePostLikes } from '@/hooks/usePostLikes';
@@ -52,7 +52,7 @@ export function LikesSheet({ uploadId, visible, onClose }: Props) {
   }));
 
   function handleUserPress(userId: string) {
-    router.push(`/user/${userId}`);
+    nav.push(`/user/${userId}`);
   }
 
   return (

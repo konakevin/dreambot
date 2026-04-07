@@ -38,7 +38,11 @@ function SearchRow({ user }: { user: SearchUser }) {
       activeOpacity={0.7}
     >
       {user.avatarUrl ? (
-        <Image source={{ uri: resizeAvatar(user.avatarUrl) }} style={s.avatar} cachePolicy="memory-disk" />
+        <Image
+          source={{ uri: resizeAvatar(user.avatarUrl) }}
+          style={s.avatar}
+          cachePolicy="memory-disk"
+        />
       ) : (
         <View style={s.avatarFallback}>
           <Text style={s.avatarText}>{(user.username || '?')[0].toUpperCase()}</Text>

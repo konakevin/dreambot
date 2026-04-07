@@ -12,7 +12,7 @@ import { DEFAULT_VIBE_PROFILE } from '@/types/vibeProfile';
 
 const TEST_PROFILE: VibeProfile = {
   version: 2,
-  aesthetics: ['cyberpunk', 'dreamy', 'liminal'],
+  aesthetics: ['dark', 'dreamy', 'epic'],
   art_styles: ['anime', 'watercolor'],
   moods: {
     peaceful_chaotic: 0.3,
@@ -32,9 +32,9 @@ const TEST_PROFILE: VibeProfile = {
 describe('buildConceptPrompt', () => {
   it('includes user aesthetics', () => {
     const prompt = buildConceptPrompt(TEST_PROFILE);
-    expect(prompt).toContain('cyberpunk');
+    expect(prompt).toContain('dark');
     expect(prompt).toContain('dreamy');
-    expect(prompt).toContain('liminal');
+    expect(prompt).toContain('epic');
   });
 
   it('includes art styles', () => {

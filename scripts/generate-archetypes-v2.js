@@ -27,7 +27,10 @@ if (fs.existsSync(envFile)) {
 }
 
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-if (!ANTHROPIC_KEY) { console.error('Missing ANTHROPIC_API_KEY'); process.exit(1); }
+if (!ANTHROPIC_KEY) {
+  console.error('Missing ANTHROPIC_API_KEY');
+  process.exit(1);
+}
 
 const supabase = createClient(
   process.env.EXPO_PUBLIC_SUPABASE_URL,
@@ -38,17 +41,46 @@ const supabase = createClient(
 const DRY_RUN = process.argv.includes('--dry-run');
 
 const VALID_MOODS = new Set([
-  'cozy', 'epic', 'dreamy', 'moody', 'playful', 'serene',
-  'intense', 'nostalgic', 'mysterious', 'whimsical', 'dramatic', 'peaceful',
+  'cozy',
+  'epic',
+  'dreamy',
+  'moody',
+  'playful',
+  'serene',
+  'intense',
+  'nostalgic',
+  'mysterious',
+  'whimsical',
+  'dramatic',
+  'peaceful',
 ]);
 
 const INTERESTS = [
-  'animals', 'nature', 'fantasy', 'sci_fi', 'architecture', 'fashion',
-  'food', 'abstract', 'dark', 'cute', 'ocean', 'space', 'whimsical',
-  'gaming', 'movies', 'music', 'geek', 'sports', 'travel', 'pride',
+  'animals',
+  'nature',
+  'fantasy',
+  'sci_fi',
+  'architecture',
+  'fashion',
+  'food',
+  'abstract',
+  'dark',
+  'cute',
+  'ocean',
+  'space',
+  'whimsical',
+  'gaming',
+  'movies',
+  'music',
+  'geek',
+  'sports',
+  'travel',
+  'pride',
 ];
 
-const PROMPT_TEMPLATE = (interest) => `You are designing dream scenarios for an AI dream image generator app. The audience is 18-40 year olds — they love pop culture, aesthetics, nostalgia, adventure, beauty, humor, and things that make them feel something.
+const PROMPT_TEMPLATE = (
+  interest
+) => `You are designing dream scenarios for an AI dream image generator app. The audience is 18-40 year olds — they love pop culture, aesthetics, nostalgia, adventure, beauty, humor, and things that make them feel something.
 
 Each dream scenario is a specific TYPE of dream someone might have. Not a mood or a genre — a vivid, specific scenario that instantly conjures an image.
 
@@ -120,12 +152,12 @@ async function callHaiku(prompt) {
 }
 
 function cleanMoods(moods) {
-  return (moods || []).filter(m => VALID_MOODS.has(m)).slice(0, 4);
+  return (moods || []).filter((m) => VALID_MOODS.has(m)).slice(0, 4);
 }
 
 function cleanInterests(interests, primary) {
   const validInterests = new Set(INTERESTS);
-  const cleaned = (interests || []).filter(i => validInterests.has(i));
+  const cleaned = (interests || []).filter((i) => validInterests.has(i));
   if (!cleaned.includes(primary)) cleaned.unshift(primary);
   return cleaned.slice(0, 3);
 }
@@ -138,11 +170,14 @@ async function main() {
     console.log(`\n[${i + 1}/${INTERESTS.length}] Generating 10 scenarios for "${interest}"...`);
 
     // Rate limit
-    if (i > 0) await new Promise(r => setTimeout(r, 2000));
+    if (i > 0) await new Promise((r) => setTimeout(r, 2000));
 
     try {
       const raw = await callHaiku(PROMPT_TEMPLATE(interest));
-      let cleaned = raw.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+      let cleaned = raw
+        .replace(/^```json\s*/i, '')
+        .replace(/```\s*$/, '')
+        .trim();
       cleaned = cleaned.replace(/,\s*([\]}])/g, '$1');
       const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
       if (!jsonMatch) throw new Error('No JSON array found');
@@ -184,7 +219,10 @@ async function main() {
 
   // Clear old archetypes (keep hand-crafted ones? No — replace everything)
   console.log('\nClearing old archetypes...');
-  await supabase.from('user_archetypes').delete().neq('user_id', '00000000-0000-0000-0000-000000000000');
+  await supabase
+    .from('user_archetypes')
+    .delete()
+    .neq('user_id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('dream_archetypes').delete().neq('key', '__never__');
 
   // Also add back the hand-crafted specialty ones
@@ -199,7 +237,7 @@ async function main() {
 
   console.log(`Seeding ${allToSeed.length} archetypes...`);
   for (let i = 0; i < allToSeed.length; i += 50) {
-    const chunk = allToSeed.slice(i, i + 50).map(a => ({
+    const chunk = allToSeed.slice(i, i + 50).map((a) => ({
       key: a.key,
       name: a.name,
       description: (a.trigger_interests || []).join('+') + ' dream scenario',
@@ -236,17 +274,17 @@ async function main() {
     const userInterests = new Set(recipe.interests ?? []);
     const userMoods = new Set(recipe.selected_moods ?? []);
 
-    const matches = dbArchs.filter(a => {
-      const hasInterest = a.trigger_interests.some(i => userInterests.has(i));
-      const hasMood = a.trigger_moods.some(m => userMoods.has(m));
+    const matches = dbArchs.filter((a) => {
+      const hasInterest = a.trigger_interests.some((i) => userInterests.has(i));
+      const hasMood = a.trigger_moods.some((m) => userMoods.has(m));
       return hasInterest && hasMood;
     });
 
     await supabase.from('user_archetypes').delete().eq('user_id', user.user_id);
     if (matches.length > 0) {
-      await supabase.from('user_archetypes').insert(
-        matches.map(m => ({ user_id: user.user_id, archetype_id: m.id }))
-      );
+      await supabase
+        .from('user_archetypes')
+        .insert(matches.map((m) => ({ user_id: user.user_id, archetype_id: m.id })));
       console.log(`  ${user.user_id}: ${matches.length} archetypes`);
     }
   }

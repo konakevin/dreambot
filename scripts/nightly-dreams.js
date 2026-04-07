@@ -283,6 +283,51 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function pickWeightedCategory(moods) {
+  const w = {
+    cosmic: 1 + moods.realistic_surreal * 0.5,
+    microscopic: 1 + (1 - moods.minimal_maximal) * 0.5,
+    impossible_architecture: 1 + moods.realistic_surreal * 0.5 + moods.minimal_maximal * 0.3,
+    giant_objects: 1 + moods.minimal_maximal * 0.5,
+    peaceful_absurdity: 1 + (1 - moods.peaceful_chaotic) * 0.8 + (1 - moods.cute_terrifying) * 0.3,
+    beautiful_melancholy:
+      1 + (1 - moods.peaceful_chaotic) * 0.5 + (1 - moods.minimal_maximal) * 0.3,
+    cosmic_horror: 1 + moods.cute_terrifying * 0.8 + moods.realistic_surreal * 0.3,
+    joyful_chaos: 1 + moods.peaceful_chaotic * 0.8 + (1 - moods.cute_terrifying) * 0.3,
+    eerie_stillness: 1 + (1 - moods.peaceful_chaotic) * 0.5 + moods.cute_terrifying * 0.5,
+    broken_gravity: 1 + moods.peaceful_chaotic * 0.3 + moods.realistic_surreal * 0.5,
+    wrong_materials: 1 + moods.realistic_surreal * 0.8,
+    time_distortion: 1 + moods.realistic_surreal * 0.8,
+    merged_worlds: 1 + moods.realistic_surreal * 0.5 + moods.minimal_maximal * 0.3,
+    living_objects: 1 + (1 - moods.cute_terrifying) * 0.3 + moods.realistic_surreal * 0.3,
+    impossible_weather: 1 + moods.peaceful_chaotic * 0.3 + moods.realistic_surreal * 0.3,
+    overgrown: 1 + (1 - moods.peaceful_chaotic) * 0.3,
+    bioluminescence: 1 + (1 - moods.cute_terrifying) * 0.5 + (1 - moods.peaceful_chaotic) * 0.3,
+    dreams_within_dreams: 1 + moods.realistic_surreal * 0.8 + moods.minimal_maximal * 0.3,
+    memory_distortion: 1 + (1 - moods.peaceful_chaotic) * 0.3 + moods.realistic_surreal * 0.5,
+    abandoned_running: 1 + moods.cute_terrifying * 0.3 + (1 - moods.peaceful_chaotic) * 0.3,
+    transformation: 1 + moods.realistic_surreal * 0.5 + moods.peaceful_chaotic * 0.3,
+    reflections: 1 + (1 - moods.minimal_maximal) * 0.3 + moods.realistic_surreal * 0.3,
+    machines: 1 + moods.minimal_maximal * 0.5 + moods.peaceful_chaotic * 0.3,
+    music_sound: 1 + moods.peaceful_chaotic * 0.3,
+    underwater: 1 + (1 - moods.peaceful_chaotic) * 0.3,
+    doors_portals: 1 + moods.realistic_surreal * 0.5,
+    collections: 1 + moods.minimal_maximal * 0.8,
+    decay_beauty: 1 + moods.cute_terrifying * 0.5 + (1 - moods.peaceful_chaotic) * 0.3,
+    childhood: 1 + (1 - moods.cute_terrifying) * 0.5,
+    transparency: 1 + moods.realistic_surreal * 0.5 + (1 - moods.minimal_maximal) * 0.3,
+    cinematic: 1 + moods.minimal_maximal * 0.3,
+  };
+  const entries = Object.entries(w);
+  const totalWeight = entries.reduce((a, [, v]) => a + v, 0);
+  let roll = Math.random() * totalWeight;
+  for (const [cat, weight] of entries) {
+    roll -= weight;
+    if (roll <= 0) return cat;
+  }
+  return entries[0][0];
+}
+
 function resolveMedium(profile) {
   if (profile.art_styles?.length) {
     const key = pick(profile.art_styles);
@@ -386,10 +431,16 @@ async function main() {
           const vibe = resolveVibe(recipe);
           const seeds = recipe.dream_seeds ?? { characters: [], places: [], things: [] };
 
-          // Step 1: Pick template from DB
+          // Step 1: Pick mood-weighted template from DB
+          const moods = recipe.moods ?? {
+            peaceful_chaotic: 0.5,
+            cute_terrifying: 0.3,
+            minimal_maximal: 0.5,
+            realistic_surreal: 0.5,
+          };
           let dreamSubject;
           try {
-            const category = pick(TEMPLATE_CATEGORIES);
+            const category = pickWeightedCategory(moods);
             const { data: rows, error: tmplErr } = await sb
               .from('dream_templates')
               .select('template')
@@ -441,8 +492,23 @@ async function main() {
             dreamSubject += `. DREAM WISH (make this the heart): "${wish}"`;
           }
 
-          // Step 4: Sonnet prompt writer
+          // Step 4: Sonnet prompt writer with personalization context
           const shotDirection = pick(SHOT_DIRECTIONS);
+          const aestheticFlavor = recipe.aesthetics?.length
+            ? `\nFLAVOR (the dreamer vibes with): ${recipe.aesthetics.slice(0, 4).join(', ')}`
+            : '';
+          const avoidList = recipe.avoid?.length
+            ? `\nNEVER INCLUDE: ${recipe.avoid.join(', ')}`
+            : '';
+          const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
+          const extraSeeds =
+            allSeeds.length > 0
+              ? `\nDREAMER'S INGREDIENTS (weave 1-2 in naturally if they fit the scene): ${allSeeds
+                  .sort(() => Math.random() - 0.5)
+                  .slice(0, 4)
+                  .join(', ')}`
+              : '';
+
           const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
 
 MEDIUM: ${medium.fluxFragment}
@@ -453,6 +519,7 @@ ${dreamSubject}
 CAMERA/COMPOSITION: ${shotDirection}
 
 MOOD: ${vibe.directive}
+${aestheticFlavor}${extraSeeds}${avoidList}
 
 Write the prompt:
 1. Start with the art medium

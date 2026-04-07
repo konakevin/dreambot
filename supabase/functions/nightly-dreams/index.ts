@@ -71,6 +71,59 @@ function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+interface MoodAxes {
+  peaceful_chaotic: number;
+  cute_terrifying: number;
+  minimal_maximal: number;
+  realistic_surreal: number;
+}
+
+function pickWeightedCategory(moods: MoodAxes): string {
+  const CATEGORY_WEIGHTS: Record<string, (m: MoodAxes) => number> = {
+    cosmic: (m) => 1 + m.realistic_surreal * 0.5,
+    microscopic: (m) => 1 + (1 - m.minimal_maximal) * 0.5,
+    impossible_architecture: (m) => 1 + m.realistic_surreal * 0.5 + m.minimal_maximal * 0.3,
+    giant_objects: (m) => 1 + m.minimal_maximal * 0.5,
+    peaceful_absurdity: (m) => 1 + (1 - m.peaceful_chaotic) * 0.8 + (1 - m.cute_terrifying) * 0.3,
+    beautiful_melancholy: (m) => 1 + (1 - m.peaceful_chaotic) * 0.5 + (1 - m.minimal_maximal) * 0.3,
+    cosmic_horror: (m) => 1 + m.cute_terrifying * 0.8 + m.realistic_surreal * 0.3,
+    joyful_chaos: (m) => 1 + m.peaceful_chaotic * 0.8 + (1 - m.cute_terrifying) * 0.3,
+    eerie_stillness: (m) => 1 + (1 - m.peaceful_chaotic) * 0.5 + m.cute_terrifying * 0.5,
+    broken_gravity: (m) => 1 + m.peaceful_chaotic * 0.3 + m.realistic_surreal * 0.5,
+    wrong_materials: (m) => 1 + m.realistic_surreal * 0.8,
+    time_distortion: (m) => 1 + m.realistic_surreal * 0.8,
+    merged_worlds: (m) => 1 + m.realistic_surreal * 0.5 + m.minimal_maximal * 0.3,
+    living_objects: (m) => 1 + (1 - m.cute_terrifying) * 0.3 + m.realistic_surreal * 0.3,
+    impossible_weather: (m) => 1 + m.peaceful_chaotic * 0.3 + m.realistic_surreal * 0.3,
+    overgrown: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3,
+    bioluminescence: (m) => 1 + (1 - m.cute_terrifying) * 0.5 + (1 - m.peaceful_chaotic) * 0.3,
+    dreams_within_dreams: (m) => 1 + m.realistic_surreal * 0.8 + m.minimal_maximal * 0.3,
+    memory_distortion: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3 + m.realistic_surreal * 0.5,
+    abandoned_running: (m) => 1 + m.cute_terrifying * 0.3 + (1 - m.peaceful_chaotic) * 0.3,
+    transformation: (m) => 1 + m.realistic_surreal * 0.5 + m.peaceful_chaotic * 0.3,
+    reflections: (m) => 1 + (1 - m.minimal_maximal) * 0.3 + m.realistic_surreal * 0.3,
+    machines: (m) => 1 + m.minimal_maximal * 0.5 + m.peaceful_chaotic * 0.3,
+    music_sound: (m) => 1 + m.peaceful_chaotic * 0.3,
+    underwater: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3,
+    doors_portals: (m) => 1 + m.realistic_surreal * 0.5,
+    collections: (m) => 1 + m.minimal_maximal * 0.8,
+    decay_beauty: (m) => 1 + m.cute_terrifying * 0.5 + (1 - m.peaceful_chaotic) * 0.3,
+    childhood: (m) => 1 + (1 - m.cute_terrifying) * 0.5,
+    transparency: (m) => 1 + m.realistic_surreal * 0.5 + (1 - m.minimal_maximal) * 0.3,
+    cinematic: (m) => 1 + m.minimal_maximal * 0.3,
+  };
+
+  const entries = Object.entries(CATEGORY_WEIGHTS);
+  const weights = entries.map(([, fn]) => fn(moods));
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+  let roll = Math.random() * totalWeight;
+  for (let i = 0; i < entries.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return entries[i][0];
+  }
+  return entries[0][0];
+}
+
 interface EligibleUser {
   user_id: string;
   recipe: VibeProfile | Record<string, unknown>;
@@ -221,12 +274,18 @@ async function generateDreamForUser(
     const medium = resolveMedium(vibeProfile);
     const vibe = resolveVibe(vibeProfile);
 
-    // Step 1: Pick a random scene template from the DB
+    // Step 1: Pick a mood-weighted scene template from the DB
     const seeds = vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] };
+    const moods = vibeProfile.moods ?? {
+      peaceful_chaotic: 0.5,
+      cute_terrifying: 0.3,
+      minimal_maximal: 0.5,
+      realistic_surreal: 0.5,
+    };
     let dreamSubject: string;
 
     try {
-      const category = pick(TEMPLATE_CATEGORIES);
+      const category = pickWeightedCategory(moods);
       const { data: rows, error: tmplErr } = await supabase
         .from('dream_templates')
         .select('template')
@@ -287,6 +346,22 @@ async function generateDreamForUser(
     // Step 4: Build Sonnet brief and generate prompt
     const shotDirection = pick(SHOT_DIRECTIONS);
 
+    // Build personalization context from profile
+    const aestheticFlavor = vibeProfile.aesthetics?.length
+      ? `\nFLAVOR (the dreamer vibes with): ${vibeProfile.aesthetics.slice(0, 4).join(', ')}`
+      : '';
+    const avoidList = vibeProfile.avoid?.length
+      ? `\nNEVER INCLUDE: ${vibeProfile.avoid.join(', ')}`
+      : '';
+    const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
+    const extraSeeds =
+      allSeeds.length > 0
+        ? `\nDREAMER'S INGREDIENTS (weave 1-2 in naturally if they fit the scene): ${allSeeds
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 4)
+            .join(', ')}`
+        : '';
+
     const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
 
 MEDIUM: ${medium.fluxFragment}
@@ -297,6 +372,7 @@ ${dreamSubject}
 CAMERA/COMPOSITION: ${shotDirection}
 
 MOOD: ${vibe.directive}
+${aestheticFlavor}${extraSeeds}${avoidList}
 
 Write the prompt:
 1. Start with the art medium

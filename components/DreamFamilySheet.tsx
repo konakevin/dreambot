@@ -24,8 +24,8 @@ import Animated, {
   interpolate,
   Easing,
 } from 'react-native-reanimated';
-import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import * as nav from '@/lib/navigate';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
 import { useDreamFamily, type FamilyMember } from '@/hooks/useDreamFamily';
@@ -57,7 +57,7 @@ function FamilyTile({ item }: { item: FamilyMember }) {
       style={s.tile}
       onPress={() => {
         useAlbumStore.getState().clearAlbum();
-        router.push(`/photo/${item.id}`);
+        nav.push(`/photo/${item.id}`);
       }}
       activeOpacity={0.9}
     >

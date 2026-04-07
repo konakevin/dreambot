@@ -185,46 +185,47 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     if (!user) return;
 
     const asset = result.assets[0];
-
-    // Show the local image immediately so user gets instant feedback
-    setCastMember({
-      role,
-      thumb_url: asset.uri,
-      description: '',
-    });
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-    // Upload to Supabase storage in the background
     setUploading(role);
+
     try {
-      const ext = asset.uri.split('.').pop() ?? 'jpg';
-      const path = `dream-cast/${user.id}/${role}.${ext}`;
+      // Upload to Supabase Storage first — we need a public URL for Kontext
+      // Path must start with user ID — avatars bucket RLS requires foldername[1] = auth.uid()
+      const path = `${user.id}/cast-${role}-${Date.now()}.jpg`;
 
       const response = await fetch(asset.uri);
-      const blob = await response.blob();
-      const arrayBuffer = await new Response(blob).arrayBuffer();
+      const arrayBuffer = await response.arrayBuffer();
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(path, arrayBuffer, {
-          contentType: `image/${ext}`,
+          contentType: 'image/jpeg',
           upsert: true,
         });
 
       if (uploadError) throw uploadError;
 
-      // Update with the permanent public URL
       const {
         data: { publicUrl },
       } = supabase.storage.from('avatars').getPublicUrl(path);
 
+      // Store the public URL — never store file:// URIs
       const existing = getMember(role);
-      if (existing) {
-        setCastMember({ ...existing, thumb_url: publicUrl });
-      }
+      setCastMember({
+        role,
+        thumb_url: publicUrl,
+        description: existing?.description ?? '',
+        ...(existing?.relationship ? { relationship: existing.relationship } : {}),
+      });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err) {
-      if (__DEV__) console.warn('[DreamCast] Upload failed:', err);
-      // Local URI still works as fallback — they can see their photo
+      const msg = err instanceof Error ? err.message : String(err);
+      if (__DEV__) console.error('[DreamCast] UPLOAD FAILED for', role, ':', msg);
+      // Fall back to local URI so user at least sees their photo
+      setCastMember({
+        role,
+        thumb_url: asset.uri,
+        description: '',
+      });
     } finally {
       setUploading(null);
     }

@@ -132,7 +132,7 @@ const CATEGORIES = [
     key: 'memory_distortion',
     name: 'Memory Distortion',
     description:
-      "Familiar places remembered wrong, childhood rooms at adult scale, your school but the halls go on forever, home but the colors are wrong, nostalgia warped",
+      'Familiar places remembered wrong, childhood rooms at adult scale, your school but the halls go on forever, home but the colors are wrong, nostalgia warped',
   },
   {
     key: 'abandoned_running',

@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import * as nav from '@/lib/navigate';
 import { GradientUsername } from '@/components/GradientUsername';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
@@ -21,11 +21,15 @@ export function FriendRequestRow({ request, onAccept, onDecline }: Props) {
     <View style={styles.row}>
       <TouchableOpacity
         style={styles.info}
-        onPress={() => router.push(`/user/${request.requesterId}`)}
+        onPress={() => nav.push(`/user/${request.requesterId}`)}
         activeOpacity={0.7}
       >
         {request.avatarUrl ? (
-          <Image source={{ uri: resizeAvatar(request.avatarUrl) }} style={styles.avatar} cachePolicy="memory-disk" />
+          <Image
+            source={{ uri: resizeAvatar(request.avatarUrl) }}
+            style={styles.avatar}
+            cachePolicy="memory-disk"
+          />
         ) : (
           <View style={styles.avatarFallback}>
             <Text style={styles.avatarInitial}>{initial}</Text>

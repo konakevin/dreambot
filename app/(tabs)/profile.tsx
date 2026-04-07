@@ -14,8 +14,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
+import * as nav from '@/lib/navigate';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
@@ -102,7 +102,7 @@ export default function ProfileScreen() {
               avatarSize={32}
             />
           </View>
-          <TouchableOpacity onPress={() => router.push('/settings')} hitSlop={12}>
+          <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
             <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>

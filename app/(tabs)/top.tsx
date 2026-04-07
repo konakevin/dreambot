@@ -185,68 +185,68 @@ export default function ExploreScreen() {
           style={[s.topOverlay, { paddingTop: insets.top + 4 }]}
           pointerEvents="box-none"
         >
-        {/* Medium row */}
-        <View style={s.filterRow}>
-          <View style={s.filterIcon}>
-            <Ionicons name="brush-outline" size={14} color="rgba(255,255,255,0.45)" />
+          {/* Medium row */}
+          <View style={s.filterRow}>
+            <View style={s.filterIcon}>
+              <Ionicons name="brush-outline" size={14} color="rgba(255,255,255,0.45)" />
+            </View>
+            <ScrollView
+              ref={mediumScrollRef}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={s.pillRow}
+            >
+              {MEDIUM_PILLS.map((m) => (
+                <View
+                  key={m.key}
+                  onLayout={(e) => {
+                    mediumLayoutsRef.current[m.key] = {
+                      x: e.nativeEvent.layout.x,
+                      width: e.nativeEvent.layout.width,
+                    };
+                  }}
+                >
+                  <OverlayPill
+                    label={m.label}
+                    active={selectedMedium === m.key}
+                    onPress={() => selectMedium(m.key)}
+                  />
+                </View>
+              ))}
+            </ScrollView>
           </View>
-          <ScrollView
-            ref={mediumScrollRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={s.pillRow}
-          >
-            {MEDIUM_PILLS.map((m) => (
-              <View
-                key={m.key}
-                onLayout={(e) => {
-                  mediumLayoutsRef.current[m.key] = {
-                    x: e.nativeEvent.layout.x,
-                    width: e.nativeEvent.layout.width,
-                  };
-                }}
-              >
-                <OverlayPill
-                  label={m.label}
-                  active={selectedMedium === m.key}
-                  onPress={() => selectMedium(m.key)}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        </View>
 
-        {/* Vibe row */}
-        <View style={s.filterRow}>
-          <View style={s.filterIcon}>
-            <Ionicons name="sparkles-outline" size={14} color="rgba(255,255,255,0.45)" />
+          {/* Vibe row */}
+          <View style={s.filterRow}>
+            <View style={s.filterIcon}>
+              <Ionicons name="sparkles-outline" size={14} color="rgba(255,255,255,0.45)" />
+            </View>
+            <ScrollView
+              ref={vibeScrollRef}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={s.pillRow}
+            >
+              {VIBE_PILLS.map((v) => (
+                <View
+                  key={v.key}
+                  onLayout={(e) => {
+                    vibeLayoutsRef.current[v.key] = {
+                      x: e.nativeEvent.layout.x,
+                      width: e.nativeEvent.layout.width,
+                    };
+                  }}
+                >
+                  <OverlayPill
+                    label={v.label}
+                    active={selectedVibe === v.key}
+                    onPress={() => selectVibe(v.key)}
+                  />
+                </View>
+              ))}
+            </ScrollView>
           </View>
-          <ScrollView
-            ref={vibeScrollRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={s.pillRow}
-          >
-            {VIBE_PILLS.map((v) => (
-              <View
-                key={v.key}
-                onLayout={(e) => {
-                  vibeLayoutsRef.current[v.key] = {
-                    x: e.nativeEvent.layout.x,
-                    width: e.nativeEvent.layout.width,
-                  };
-                }}
-              >
-                <OverlayPill
-                  label={v.label}
-                  active={selectedVibe === v.key}
-                  onPress={() => selectVibe(v.key)}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
       </Animated.View>
     </View>
   );

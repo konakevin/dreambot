@@ -287,7 +287,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
-  const {
+  let {
     mode,
     recipe,
     vibe_profile,
@@ -386,146 +386,309 @@ Deno.serve(async (req) => {
   );
 
   if (medium_key === 'my_mediums' && vibe_key === 'my_vibes' && vibe_profile) {
-    // ══════════════════════════════════════════════════════════════════
-    // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
-    // ══════════════════════════════════════════════════════════════════
-    const nightlyProfile = vibe_profile as VibeProfile;
-    const nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
-    const nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
-    resolvedMediumKey = nightlyMedium.key;
-    resolvedVibeKey = nightlyVibe.key;
-
-    console.log(
-      '[generate-dream] NIGHTLY DREAMBOT | medium:',
-      nightlyMedium.key,
-      '| vibe:',
-      nightlyVibe.key
-    );
-
-    // Step 1: Pick a random scene template from 6,200+ Sonnet-generated DB templates
-    const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [], things: [] };
-    let dreamSubject: string;
-
     try {
-      // Pick a random category, then a random template within it — ensures category variety
-      const CATEGORIES = [
-        'cosmic',
-        'microscopic',
-        'impossible_architecture',
-        'giant_objects',
-        'peaceful_absurdity',
-        'beautiful_melancholy',
-        'cosmic_horror',
-        'joyful_chaos',
-        'eerie_stillness',
-        'broken_gravity',
-        'wrong_materials',
-        'time_distortion',
-        'merged_worlds',
-        'living_objects',
-        'impossible_weather',
-        'overgrown',
-        'bioluminescence',
-        'dreams_within_dreams',
-        'memory_distortion',
-        'abandoned_running',
-        'transformation',
-        'reflections',
-        'machines',
-        'music_sound',
-        'underwater',
-        'doors_portals',
-        'collections',
-        'decay_beauty',
-        'childhood',
-        'transparency',
-        'cinematic',
-      ];
-      const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
-
-      const { data: rows, error: tmplErr } = await supabase
-        .from('dream_templates')
-        .select('template')
-        .eq('category', category)
-        .eq('disabled', false)
-        .limit(200);
-
-      if (tmplErr || !rows?.length) throw new Error(tmplErr?.message ?? 'No templates found');
-
-      const template = rows[Math.floor(Math.random() * rows.length)].template;
-      const character =
-        seeds.characters.length > 0
-          ? seeds.characters[Math.floor(Math.random() * seeds.characters.length)]
-          : 'a wandering figure';
-      const place =
-        seeds.places.length > 0
-          ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
-          : 'a forgotten city';
-      const thing =
-        seeds.things.length > 0
-          ? seeds.things[Math.floor(Math.random() * seeds.things.length)]
-          : 'glowing fragments';
-
-      dreamSubject = template
-        .replace(/\$\{character\}/g, character)
-        .replace(/\$\{place\}/g, place)
-        .replace(/\$\{thing\}/g, thing);
+      // ══════════════════════════════════════════════════════════════════
+      // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
+      // ══════════════════════════════════════════════════════════════════
+      const nightlyProfile = vibe_profile as VibeProfile;
+      const nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+      const nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
+      resolvedMediumKey = nightlyMedium.key;
+      resolvedVibeKey = nightlyVibe.key;
 
       console.log(
-        '[generate-dream] Nightly DB template | category:',
-        category,
-        '| scene:',
-        dreamSubject.slice(0, 120)
+        '[generate-dream] NIGHTLY DREAMBOT | medium:',
+        nightlyMedium.key,
+        '| vibe:',
+        nightlyVibe.key
       );
-    } catch (dbErr) {
-      // Fallback to hardcoded templates if DB fails
-      console.warn(
-        '[generate-dream] DB template fetch failed, using hardcoded fallback:',
-        (dbErr as Error).message
+
+      // Step 1: Pick a mood-weighted scene template from 6,200+ Sonnet-generated DB templates
+      const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [], things: [] };
+      const moods = nightlyProfile.moods ?? {
+        peaceful_chaotic: 0.5,
+        cute_terrifying: 0.3,
+        minimal_maximal: 0.5,
+        realistic_surreal: 0.5,
+      };
+      let dreamSubject: string;
+
+      // Check if we'll inject a cast member — decided before template selection
+      // so we can use a neutral character placeholder in the template
+      const describedCastMembers = (nightlyProfile.dream_cast ?? []).filter(
+        (m: DreamCastMember) => m.description && m.thumb_url?.startsWith('http')
       );
-      dreamSubject = buildDreamScene(seeds);
-    }
-    lap('nightly-subject');
+      const castPick =
+        describedCastMembers.length > 0 && Math.random() < 0.4
+          ? describedCastMembers[Math.floor(Math.random() * describedCastMembers.length)]
+          : null;
 
-    // Step 2: Maybe inject a dream cast member (~30% chance)
-    const cast = nightlyProfile.dream_cast ?? [];
-    const describedCast = cast.filter((m: DreamCastMember) => m.description);
-    if (describedCast.length > 0 && Math.random() < 0.3) {
-      const castPick = describedCast[Math.floor(Math.random() * describedCast.length)];
-      const roleLabel =
-        castPick.role === 'self'
-          ? 'the dreamer'
-          : castPick.role === 'pet'
-            ? 'their pet'
-            : (castPick as Record<string, unknown>).relationship === 'significant_other'
-              ? 'their romantic partner'
-              : `their ${(castPick as Record<string, unknown>).relationship ?? 'companion'}`;
-      dreamSubject += `. The main character is ${roleLabel}: ${castPick.description}`;
-      console.log('[generate-dream] Nightly cast injected:', castPick.role);
-    }
+      try {
+        // Category weights based on user's mood sliders — higher weight = more likely to be picked
+        const CATEGORY_WEIGHTS: Record<string, (m: typeof moods) => number> = {
+          cosmic: (m) => 1 + m.realistic_surreal * 0.5,
+          microscopic: (m) => 1 + (1 - m.minimal_maximal) * 0.5,
+          impossible_architecture: (m) => 1 + m.realistic_surreal * 0.5 + m.minimal_maximal * 0.3,
+          giant_objects: (m) => 1 + m.minimal_maximal * 0.5,
+          peaceful_absurdity: (m) =>
+            1 + (1 - m.peaceful_chaotic) * 0.8 + (1 - m.cute_terrifying) * 0.3,
+          beautiful_melancholy: (m) =>
+            1 + (1 - m.peaceful_chaotic) * 0.5 + (1 - m.minimal_maximal) * 0.3,
+          cosmic_horror: (m) => 1 + m.cute_terrifying * 0.8 + m.realistic_surreal * 0.3,
+          joyful_chaos: (m) => 1 + m.peaceful_chaotic * 0.8 + (1 - m.cute_terrifying) * 0.3,
+          eerie_stillness: (m) => 1 + (1 - m.peaceful_chaotic) * 0.5 + m.cute_terrifying * 0.5,
+          broken_gravity: (m) => 1 + m.peaceful_chaotic * 0.3 + m.realistic_surreal * 0.5,
+          wrong_materials: (m) => 1 + m.realistic_surreal * 0.8,
+          time_distortion: (m) => 1 + m.realistic_surreal * 0.8,
+          merged_worlds: (m) => 1 + m.realistic_surreal * 0.5 + m.minimal_maximal * 0.3,
+          living_objects: (m) => 1 + (1 - m.cute_terrifying) * 0.3 + m.realistic_surreal * 0.3,
+          impossible_weather: (m) => 1 + m.peaceful_chaotic * 0.3 + m.realistic_surreal * 0.3,
+          overgrown: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3,
+          bioluminescence: (m) =>
+            1 + (1 - m.cute_terrifying) * 0.5 + (1 - m.peaceful_chaotic) * 0.3,
+          dreams_within_dreams: (m) => 1 + m.realistic_surreal * 0.8 + m.minimal_maximal * 0.3,
+          memory_distortion: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3 + m.realistic_surreal * 0.5,
+          abandoned_running: (m) => 1 + m.cute_terrifying * 0.3 + (1 - m.peaceful_chaotic) * 0.3,
+          transformation: (m) => 1 + m.realistic_surreal * 0.5 + m.peaceful_chaotic * 0.3,
+          reflections: (m) => 1 + (1 - m.minimal_maximal) * 0.3 + m.realistic_surreal * 0.3,
+          machines: (m) => 1 + m.minimal_maximal * 0.5 + m.peaceful_chaotic * 0.3,
+          music_sound: (m) => 1 + m.peaceful_chaotic * 0.3,
+          underwater: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3,
+          doors_portals: (m) => 1 + m.realistic_surreal * 0.5,
+          collections: (m) => 1 + m.minimal_maximal * 0.8,
+          decay_beauty: (m) => 1 + m.cute_terrifying * 0.5 + (1 - m.peaceful_chaotic) * 0.3,
+          childhood: (m) => 1 + (1 - m.cute_terrifying) * 0.5,
+          transparency: (m) => 1 + m.realistic_surreal * 0.5 + (1 - m.minimal_maximal) * 0.3,
+          cinematic: (m) => 1 + m.minimal_maximal * 0.3,
+        };
 
-    // Step 3: Build the full Flux prompt — medium style + invented subject + vibe mood
-    // Random shot direction — forces varied compositions
-    const SHOT_DIRECTIONS = [
-      'extreme low angle looking up, dramatic forced perspective, subject towering overhead',
-      'tilt-shift miniature effect, shallow depth of field, toy-like scale',
-      'silhouette against blazing backlight, rim lighting, dramatic contrast',
-      'macro lens extreme close-up, impossibly detailed textures, creamy bokeh background',
-      'aerial view looking straight down, geometric patterns, vast scale',
-      'through rain-covered glass, soft distortion, reflections overlapping the scene',
-      'dutch angle, dramatic tension, off-kilter framing',
-      'wide establishing shot, tiny subject in vast environment, epic scale',
-      'over-the-shoulder perspective, voyeuristic, intimate framing',
-      'symmetrical dead-center composition, Wes Anderson framing, obsessive balance',
-      'fisheye lens distortion, warped edges, immersive and disorienting',
-      'long exposure motion blur, streaks of light, frozen and flowing simultaneously',
-      'reflection shot, scene mirrored in water or glass, doubled reality',
-      'extreme depth, foreground object sharp, background stretching to infinity',
-      'candid snapshot feeling, slightly off-center, caught mid-moment',
-    ];
-    const shotDirection = SHOT_DIRECTIONS[Math.floor(Math.random() * SHOT_DIRECTIONS.length)];
+        // Weighted random pick
+        const entries = Object.entries(CATEGORY_WEIGHTS);
+        const weights = entries.map(([, fn]) => fn(moods));
+        const totalWeight = weights.reduce((a, b) => a + b, 0);
+        let roll = Math.random() * totalWeight;
+        let category = entries[0][0];
+        for (let ci = 0; ci < entries.length; ci++) {
+          roll -= weights[ci];
+          if (roll <= 0) {
+            category = entries[ci][0];
+            break;
+          }
+        }
 
-    const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
+        const { data: rows, error: tmplErr } = await supabase
+          .from('dream_templates')
+          .select('template')
+          .eq('category', category)
+          .eq('disabled', false)
+          .limit(200);
+
+        if (tmplErr || !rows?.length) throw new Error(tmplErr?.message ?? 'No templates found');
+
+        const template = rows[Math.floor(Math.random() * rows.length)].template;
+
+        // For cast dreams, use a neutral character so template doesn't conflict with the real person
+        const character = castPick
+          ? castPick.role === 'pet'
+            ? 'a small creature'
+            : 'a lone figure'
+          : seeds.characters.length > 0
+            ? seeds.characters[Math.floor(Math.random() * seeds.characters.length)]
+            : 'a wandering figure';
+        const place =
+          seeds.places.length > 0
+            ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
+            : 'a forgotten city';
+        const thing =
+          seeds.things.length > 0
+            ? seeds.things[Math.floor(Math.random() * seeds.things.length)]
+            : 'glowing fragments';
+
+        dreamSubject = template
+          .replace(/\$\{character\}/g, character)
+          .replace(/\$\{place\}/g, place)
+          .replace(/\$\{thing\}/g, thing);
+
+        console.log(
+          '[generate-dream] Nightly DB template | category:',
+          category,
+          '| scene:',
+          dreamSubject.slice(0, 120)
+        );
+      } catch (dbErr) {
+        // Fallback to hardcoded templates if DB fails
+        console.warn(
+          '[generate-dream] DB template fetch failed, using hardcoded fallback:',
+          (dbErr as Error).message
+        );
+        dreamSubject = buildDreamScene(seeds);
+      }
+      lap('nightly-subject');
+
+      // Step 2: Shared context for both cast and non-cast paths
+      const SHOT_DIRECTIONS = [
+        'extreme low angle looking up, dramatic forced perspective, subject towering overhead',
+        'tilt-shift miniature effect, shallow depth of field, toy-like scale',
+        'silhouette against blazing backlight, rim lighting, dramatic contrast',
+        'macro lens extreme close-up, impossibly detailed textures, creamy bokeh background',
+        'aerial view looking straight down, geometric patterns, vast scale',
+        'through rain-covered glass, soft distortion, reflections overlapping the scene',
+        'dutch angle, dramatic tension, off-kilter framing',
+        'wide establishing shot, tiny subject in vast environment, epic scale',
+        'over-the-shoulder perspective, voyeuristic, intimate framing',
+        'symmetrical dead-center composition, Wes Anderson framing, obsessive balance',
+        'fisheye lens distortion, warped edges, immersive and disorienting',
+        'long exposure motion blur, streaks of light, frozen and flowing simultaneously',
+        'reflection shot, scene mirrored in water or glass, doubled reality',
+        'extreme depth, foreground object sharp, background stretching to infinity',
+        'candid snapshot feeling, slightly off-center, caught mid-moment',
+      ];
+      const shotDirection = SHOT_DIRECTIONS[Math.floor(Math.random() * SHOT_DIRECTIONS.length)];
+
+      const aestheticFlavor = nightlyProfile.aesthetics?.length
+        ? `\nFLAVOR (the dreamer vibes with): ${nightlyProfile.aesthetics.slice(0, 4).join(', ')}`
+        : '';
+      const avoidList = nightlyProfile.avoid?.length
+        ? `\nNEVER INCLUDE: ${nightlyProfile.avoid.join(', ')}`
+        : '';
+      const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
+      const extraSeeds =
+        allSeeds.length > 0
+          ? `\nDREAMER'S INGREDIENTS (weave 1-2 in naturally if they fit the scene): ${allSeeds
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 4)
+              .join(', ')}`
+          : '';
+
+      if (castPick && ANTHROPIC_KEY) {
+        // ── CAST DREAM ──
+        const roleLabel =
+          castPick.role === 'self'
+            ? 'the dreamer themselves'
+            : castPick.role === 'pet'
+              ? 'their beloved pet'
+              : (castPick as Record<string, unknown>).relationship === 'significant_other'
+                ? 'their romantic partner'
+                : `their ${(castPick as Record<string, unknown>).relationship ?? 'companion'}`;
+
+        // Stylized mediums → Flux Dev with text description (better scenes + medium accuracy)
+        // Realistic mediums → Kontext with actual photo (face preserved)
+        const STYLIZED_MEDIUMS = new Set([
+          'pixel_art',
+          'lego',
+          'claymation',
+          'anime',
+          'comic_book',
+          'disney',
+          'sack_boy',
+          'funko_pop',
+          'ghibli',
+          'tim_burton',
+          'pop_art',
+          'minecraft',
+          '8bit',
+          'felt',
+        ]);
+        const isStylized = STYLIZED_MEDIUMS.has(nightlyMedium.key);
+
+        if (isStylized) {
+          // ── STYLIZED CAST: Flux Dev — use per-medium templates from V2 engine ──
+          const castDesc =
+            castPick.role === 'pet'
+              ? `A ${castPick.description}`
+              : `The protagonist is ${roleLabel}: ${castPick.description}. Stylized as a ${nightlyMedium.key.replace(/_/g, ' ')} character — same hair, build, clothing but fully in the art style.`;
+
+          const subject = `${dreamSubject}. ${castDesc}`;
+
+          // Try the proven per-medium template from textPrompts.ts first
+          const mediumBrief = buildTextDreamPrompt(
+            nightlyMedium.key,
+            subject,
+            nightlyVibe.directive ?? '',
+            nightlyMedium.fluxFragment ?? ''
+          );
+
+          const briefToUse =
+            mediumBrief ??
+            `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
+
+MEDIUM: ${nightlyMedium.fluxFragment}
+
+SCENE: ${subject}
+
+CAMERA: ${shotDirection}
+MOOD: ${nightlyVibe.directive}
+${aestheticFlavor}${extraSeeds}${avoidList}
+
+Start with the art medium. Place the character naturally IN the scene. Include their traits rendered in ${nightlyMedium.key.replace(/_/g, ' ')} style. End with: portrait 9:16, hyper detailed.
+Output ONLY the prompt.`;
+
+          try {
+            finalPrompt = await nightlySonnet(briefToUse, ANTHROPIC_KEY, 200);
+            if (finalPrompt.length < 20) throw new Error('too short');
+          } catch {
+            finalPrompt = `${nightlyMedium.fluxFragment}, ${subject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
+          }
+
+          console.log(
+            '[generate-dream] Nightly STYLIZED CAST (Flux Dev):',
+            finalPrompt.slice(0, 200)
+          );
+          logAxes = {
+            medium: nightlyMedium.key,
+            vibe: nightlyVibe.key,
+            engine: 'nightly-fluxdev-cast',
+            castRole: castPick.role,
+          };
+        } else {
+          // ── REALISTIC CAST: Kontext — scene-dominant, person is small figure in vast world ──
+          const kontextBrief = `You are writing an instruction for Flux Kontext Pro — an AI model that DRAMATICALLY transforms photos into surreal scenes.
+
+THE SCENE IS THE STAR. The person is a small figure WITHIN an overwhelming, impossible environment.
+
+PERSON/PET IN PHOTO: ${roleLabel} — ${castPick.description}
+
+SURREAL SCENE (describe this in vivid detail — it should fill 80% of the image):
+${dreamSubject}
+
+CAMERA: ${shotDirection}
+MOOD: ${nightlyVibe.directive}
+${aestheticFlavor}${extraSeeds}${avoidList}
+
+Write the Kontext instruction. 50-70 words. Rules:
+1. Start with "Transform this photo into a ${nightlyMedium.fluxFragment?.split(',')[0] ?? 'dramatic art'} scene:"
+2. Spend 80% of the words on the ENVIRONMENT — the surreal architecture, impossible physics, materials, lighting, weather
+3. The person is TINY within this vast scene — a small figure dwarfed by the impossible world
+4. Keep their face recognizable but they should occupy at most 20% of the frame
+5. Name specific materials, textures, light sources — NOT abstract adjectives
+6. The original photo background must be COMPLETELY REPLACED by the dream scene
+
+Output ONLY the instruction.`;
+
+          try {
+            finalPrompt = await nightlySonnet(kontextBrief, ANTHROPIC_KEY, 150);
+            if (finalPrompt.length < 20) throw new Error('too short');
+          } catch {
+            finalPrompt = `Transform this photo into a ${nightlyMedium.fluxFragment?.split(',')[0] ?? 'dramatic art'} scene: ${dreamSubject.slice(0, 100)}. The person is a tiny figure in this vast surreal world. portrait 9:16.`;
+          }
+
+          mode = 'flux-kontext';
+          input_image = castPick.thumb_url;
+
+          console.log(
+            '[generate-dream] Nightly REALISTIC CAST (Kontext):',
+            finalPrompt.slice(0, 200)
+          );
+          logAxes = {
+            medium: nightlyMedium.key,
+            vibe: nightlyVibe.key,
+            engine: 'nightly-kontext-cast',
+            castRole: castPick.role,
+          };
+        }
+      } else {
+        // ── PURE SCENE: Flux Dev — no cast member ──
+        const nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Convert this dream into a Flux AI prompt. 60-90 words, comma-separated phrases.
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
@@ -535,6 +698,7 @@ ${dreamSubject}
 CAMERA/COMPOSITION: ${shotDirection}
 
 MOOD: ${nightlyVibe.directive}
+${aestheticFlavor}${extraSeeds}${avoidList}
 
 Write the prompt:
 1. Start with the art medium
@@ -545,21 +709,32 @@ Write the prompt:
 
 No quotation marks. Output ONLY the prompt.`;
 
-    try {
-      finalPrompt = await nightlySonnet(nightlyBrief, ANTHROPIC_KEY, 200);
-      if (finalPrompt.length < 20) throw new Error('too short');
-    } catch {
-      // Fallback: concatenate directly
-      finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed, gorgeous lighting`;
-    }
+        try {
+          finalPrompt = await nightlySonnet(nightlyBrief, ANTHROPIC_KEY, 200);
+          if (finalPrompt.length < 20) throw new Error('too short');
+        } catch {
+          finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed, gorgeous lighting`;
+        }
 
-    console.log('[generate-dream] Nightly prompt:', finalPrompt.slice(0, 200));
-    logAxes = {
-      medium: nightlyMedium.key,
-      vibe: nightlyVibe.key,
-      engine: 'nightly-dreambot',
-    };
-    lap('nightly-done');
+        console.log('[generate-dream] Nightly SCENE prompt:', finalPrompt.slice(0, 200));
+        logAxes = {
+          medium: nightlyMedium.key,
+          vibe: nightlyVibe.key,
+          engine: 'nightly-dreambot',
+        };
+      }
+      lap('nightly-done');
+    } catch (nightlyErr) {
+      console.error(
+        '[generate-dream] NIGHTLY PATH CRASHED:',
+        (nightlyErr as Error).message,
+        (nightlyErr as Error).stack
+      );
+      return new Response(
+        JSON.stringify({ error: `Nightly path error: ${(nightlyErr as Error).message}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } else if (medium_key || vibe_key) {
     // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
     const vibeProfile = vibe_profile as VibeProfile | undefined;

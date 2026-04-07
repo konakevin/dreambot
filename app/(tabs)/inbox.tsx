@@ -14,8 +14,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
+import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useInbox, type NotificationItem } from '@/hooks/useInbox';
 import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
@@ -164,7 +164,7 @@ function NotificationRow({
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          if (item.type !== 'dream_generated') router.push(`/user/${item.actorId}`);
+          if (item.type !== 'dream_generated') nav.push(`/user/${item.actorId}`);
         }}
         disabled={item.type === 'dream_generated'}
       >
@@ -173,7 +173,11 @@ function NotificationRow({
             <Ionicons name="moon" size={20} color={colors.accent} />
           </View>
         ) : item.actorAvatarUrl ? (
-          <Image source={{ uri: resizeAvatar(item.actorAvatarUrl) }} style={styles.avatar} cachePolicy="memory-disk" />
+          <Image
+            source={{ uri: resizeAvatar(item.actorAvatarUrl) }}
+            style={styles.avatar}
+            cachePolicy="memory-disk"
+          />
         ) : (
           <View style={styles.avatarFallback}>
             <Text style={styles.avatarText}>{(item.actorUsername || '?')[0].toUpperCase()}</Text>
@@ -316,14 +320,14 @@ export default function InboxScreen() {
     }
     // Friend notifications → profile, dream → full detail, everything else → post
     if (item.type === 'friend_request' || item.type === 'friend_accepted') {
-      router.push(`/user/${item.actorId}`);
+      nav.push(`/user/${item.actorId}`);
     } else if (item.type === 'dream_generated' && item.uploadId) {
       useAlbumStore.getState().clearAlbum();
       queryClient.invalidateQueries({ queryKey: ['dreamWish'] });
-      router.push(`/photo/${item.uploadId}`);
+      nav.push(`/photo/${item.uploadId}`);
     } else if (item.uploadId) {
       useAlbumStore.getState().clearAlbum();
-      router.push(`/photo/${item.uploadId}`);
+      nav.push(`/photo/${item.uploadId}`);
     }
   }
 
@@ -373,7 +377,7 @@ export default function InboxScreen() {
                     activeOpacity={0.7}
                     hitSlop={8}
                   >
-                    <Ionicons name="trash" size={20} color="#F4212E" />
+                    <Ionicons name="trash-outline" size={20} color={colors.textSecondary} />
                   </TouchableOpacity>
                 </>
               )}

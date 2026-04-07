@@ -50,15 +50,106 @@ const VIBE_INTERESTS = {
 
 // Vibe → archetype patterns
 const VIBE_MAP = {
-  cozy: ['cozy_','peaceful_','nostalgic_','dreamy_','food_','anime_lofi_study','fashion_ballet_dreamer','fashion_vintage_glamour','music_lofi_rain','travel_train_journey','cute_animal_kingdom','whimsical_bookish_romantic'],
-  dark: ['dark_','moody_','mysterious_','baddie_vampire_countess','moody_dark_gothic_muse','baddie_noir_detective'],
-  glamour: ['intense_fashion_siren','intense_sci_fi_huntress','moody_dark_gothic_muse','playful_fashion_pinup','dramatic_movies_silver_screen','dreamy_ocean_goddess','ocean_mermaid_siren','dramatic_fantasy_enchantress','epic_sports_athletic_goddess','whimsical_cute_anime_dream','nostalgic_music_jazz_flame','mermaid_lagoon_siren_song','music_ocean_siren_seduction','baddie_'],
-  gamer: ['gaming_','geek_','steampunk_','whimsical_cute_anime_dream','baddie_samurai_empress'],
-  anime_fantasy: ['anime_','fantasy_','ghibli_','movies_ghibli_world','movies_lotr_fellowship','movies_harry_potter','movies_star_wars','dramatic_fantasy_enchantress','baddie_witch_queen'],
-  beach_ocean: ['ocean_','dreamy_ocean','playful_ocean','serene_ocean','dreamy_ocean_goddess','ocean_mermaid_siren','ocean_mermaid_cute','ocean_pirate_captain','ocean_coral_palace','ocean_deep_abyss','baddie_jungle_goddess','baddie_mermaid_dark','baddie_festival_goddess'],
-  space_scifi: ['space_','sci_fi_','cosmic_','abstract_','universal_surreal_mindbend','universal_impossible_landscape','intense_sci_fi_huntress','baddie_space_empress'],
-  epic_adventure: ['universal_','vista_','alien_','earth_','sports_','travel_','dark_samurai_ronin','dark_viking_saga','nature_mountain_king','baddie_jungle_goddess','epic_sports_athletic_goddess','baddie_racing_queen'],
-  whimsical: ['whimsical_','playful_','cute_','cute_pastel_kingdom','cute_sanrio_world','universal_tiny_worlds','universal_seasons_collide','food_feast_of_kings','food_midnight_feast'],
+  cozy: [
+    'cozy_',
+    'peaceful_',
+    'nostalgic_',
+    'dreamy_',
+    'food_',
+    'anime_lofi_study',
+    'fashion_ballet_dreamer',
+    'fashion_vintage_glamour',
+    'music_lofi_rain',
+    'travel_train_journey',
+    'cute_animal_kingdom',
+    'whimsical_bookish_romantic',
+  ],
+  dark: [
+    'dark_',
+    'moody_',
+    'mysterious_',
+    'baddie_vampire_countess',
+    'moody_dark_gothic_muse',
+    'baddie_noir_detective',
+  ],
+  glamour: [
+    'intense_fashion_siren',
+    'intense_sci_fi_huntress',
+    'moody_dark_gothic_muse',
+    'playful_fashion_pinup',
+    'dramatic_movies_silver_screen',
+    'dreamy_ocean_goddess',
+    'ocean_mermaid_siren',
+    'dramatic_fantasy_enchantress',
+    'epic_sports_athletic_goddess',
+    'whimsical_cute_anime_dream',
+    'nostalgic_music_jazz_flame',
+    'mermaid_lagoon_siren_song',
+    'music_ocean_siren_seduction',
+    'baddie_',
+  ],
+  gamer: ['gaming_', 'geek_', 'steampunk_', 'whimsical_cute_anime_dream', 'baddie_samurai_empress'],
+  anime_fantasy: [
+    'anime_',
+    'fantasy_',
+    'ghibli_',
+    'movies_ghibli_world',
+    'movies_lotr_fellowship',
+    'movies_harry_potter',
+    'movies_star_wars',
+    'dramatic_fantasy_enchantress',
+    'baddie_witch_queen',
+  ],
+  beach_ocean: [
+    'ocean_',
+    'dreamy_ocean',
+    'playful_ocean',
+    'serene_ocean',
+    'dreamy_ocean_goddess',
+    'ocean_mermaid_siren',
+    'ocean_mermaid_cute',
+    'ocean_pirate_captain',
+    'ocean_coral_palace',
+    'ocean_deep_abyss',
+    'baddie_jungle_goddess',
+    'baddie_mermaid_dark',
+    'baddie_festival_goddess',
+  ],
+  space_scifi: [
+    'space_',
+    'sci_fi_',
+    'cosmic_',
+    'abstract_',
+    'universal_surreal_mindbend',
+    'universal_impossible_landscape',
+    'intense_sci_fi_huntress',
+    'baddie_space_empress',
+  ],
+  epic_adventure: [
+    'universal_',
+    'vista_',
+    'alien_',
+    'earth_',
+    'sports_',
+    'travel_',
+    'dark_samurai_ronin',
+    'dark_viking_saga',
+    'nature_mountain_king',
+    'baddie_jungle_goddess',
+    'epic_sports_athletic_goddess',
+    'baddie_racing_queen',
+  ],
+  whimsical: [
+    'whimsical_',
+    'playful_',
+    'cute_',
+    'cute_pastel_kingdom',
+    'cute_sanrio_world',
+    'universal_tiny_worlds',
+    'universal_seasons_collide',
+    'food_feast_of_kings',
+    'food_midnight_feast',
+  ],
 };
 
 const PROFILES = [
@@ -72,7 +163,16 @@ const PROFILES = [
     palettes: ['neon', 'soft_pastel', 'cool_twilight'],
     atmospheres: ['starry_midnight', 'aurora_night', 'cherry_blossom'],
     companion: 'cat',
-    axes: { chaos: 0.6, scale: 0.5, energy: 0.5, realism: 0.5, weirdness: 0.4, brightness: 0.6, complexity: 0.5, color_warmth: 0.5 },
+    axes: {
+      chaos: 0.6,
+      scale: 0.5,
+      energy: 0.5,
+      realism: 0.5,
+      weirdness: 0.4,
+      brightness: 0.6,
+      complexity: 0.5,
+      color_warmth: 0.5,
+    },
   },
   {
     label: 'Gothic Horror Queen',
@@ -84,7 +184,16 @@ const PROFILES = [
     palettes: ['dark_bold', 'monochrome'],
     atmospheres: ['foggy_dawn', 'stormy_twilight', 'moonlit'],
     companion: 'ghost',
-    axes: { chaos: 0.5, scale: 0.6, energy: 0.6, realism: 0.5, weirdness: 0.6, brightness: 0.5, complexity: 0.5, color_warmth: 0.5 },
+    axes: {
+      chaos: 0.5,
+      scale: 0.6,
+      energy: 0.6,
+      realism: 0.5,
+      weirdness: 0.6,
+      brightness: 0.5,
+      complexity: 0.5,
+      color_warmth: 0.5,
+    },
   },
   {
     label: 'Beach Babe',
@@ -96,7 +205,16 @@ const PROFILES = [
     palettes: ['ocean_blues', 'warm_sunset', 'soft_pastel'],
     atmospheres: ['golden_hour', 'sunny_morning', 'tropical_rain'],
     companion: 'mermaid',
-    axes: { chaos: 0.3, scale: 0.6, energy: 0.3, realism: 0.5, weirdness: 0.2, brightness: 0.7, complexity: 0.5, color_warmth: 0.7 },
+    axes: {
+      chaos: 0.3,
+      scale: 0.6,
+      energy: 0.3,
+      realism: 0.5,
+      weirdness: 0.2,
+      brightness: 0.7,
+      complexity: 0.5,
+      color_warmth: 0.7,
+    },
   },
   {
     label: 'Sci-Fi Nerd',
@@ -108,7 +226,16 @@ const PROFILES = [
     palettes: ['neon', 'dark_bold', 'cool_twilight'],
     atmospheres: ['starry_midnight', 'stormy_twilight', 'overcast'],
     companion: 'robot',
-    axes: { chaos: 0.7, scale: 0.7, energy: 0.8, realism: 0.5, weirdness: 0.5, brightness: 0.4, complexity: 0.5, color_warmth: 0.3 },
+    axes: {
+      chaos: 0.7,
+      scale: 0.7,
+      energy: 0.8,
+      realism: 0.5,
+      weirdness: 0.5,
+      brightness: 0.4,
+      complexity: 0.5,
+      color_warmth: 0.3,
+    },
   },
   {
     label: 'Cottagecore Dreamer',
@@ -120,7 +247,16 @@ const PROFILES = [
     palettes: ['earthy_natural', 'warm_sunset', 'soft_pastel'],
     atmospheres: ['golden_hour', 'misty_forest', 'autumn_leaves', 'overcast'],
     companion: 'deer',
-    axes: { chaos: 0.3, scale: 0.3, energy: 0.2, realism: 0.5, weirdness: 0.2, brightness: 0.7, complexity: 0.5, color_warmth: 0.8 },
+    axes: {
+      chaos: 0.3,
+      scale: 0.3,
+      energy: 0.2,
+      realism: 0.5,
+      weirdness: 0.2,
+      brightness: 0.7,
+      complexity: 0.5,
+      color_warmth: 0.8,
+    },
   },
   {
     label: 'Anime Superfan',
@@ -132,7 +268,16 @@ const PROFILES = [
     palettes: ['neon', 'soft_pastel', 'jewel_tones'],
     atmospheres: ['cherry_blossom', 'starry_midnight', 'sunset_fire'],
     companion: 'fox',
-    axes: { chaos: 0.5, scale: 0.5, energy: 0.6, realism: 0.5, weirdness: 0.4, brightness: 0.6, complexity: 0.5, color_warmth: 0.5 },
+    axes: {
+      chaos: 0.5,
+      scale: 0.5,
+      energy: 0.6,
+      realism: 0.5,
+      weirdness: 0.4,
+      brightness: 0.6,
+      complexity: 0.5,
+      color_warmth: 0.5,
+    },
   },
   {
     label: 'Mythology Buff',
@@ -144,7 +289,16 @@ const PROFILES = [
     palettes: ['jewel_tones', 'warm_sunset', 'dark_bold'],
     atmospheres: ['stormy_twilight', 'golden_hour', 'moonlit'],
     companion: 'dragon',
-    axes: { chaos: 0.5, scale: 0.8, energy: 0.7, realism: 0.5, weirdness: 0.3, brightness: 0.5, complexity: 0.5, color_warmth: 0.5 },
+    axes: {
+      chaos: 0.5,
+      scale: 0.8,
+      energy: 0.7,
+      realism: 0.5,
+      weirdness: 0.3,
+      brightness: 0.5,
+      complexity: 0.5,
+      color_warmth: 0.5,
+    },
   },
   {
     label: 'Glamour Queen',
@@ -156,7 +310,16 @@ const PROFILES = [
     palettes: ['jewel_tones', 'dark_bold', 'neon'],
     atmospheres: ['moonlit', 'golden_hour', 'sunset_fire'],
     companion: 'butterfly',
-    axes: { chaos: 0.4, scale: 0.5, energy: 0.5, realism: 0.5, weirdness: 0.2, brightness: 0.5, complexity: 0.5, color_warmth: 0.5 },
+    axes: {
+      chaos: 0.4,
+      scale: 0.5,
+      energy: 0.5,
+      realism: 0.5,
+      weirdness: 0.2,
+      brightness: 0.5,
+      complexity: 0.5,
+      color_warmth: 0.5,
+    },
   },
   {
     label: 'Tattoo Artist',
@@ -168,7 +331,16 @@ const PROFILES = [
     palettes: ['dark_bold', 'monochrome', 'jewel_tones'],
     atmospheres: ['moonlit', 'stormy_twilight', 'foggy_dawn'],
     companion: 'wolf',
-    axes: { chaos: 0.6, scale: 0.5, energy: 0.7, realism: 0.5, weirdness: 0.5, brightness: 0.3, complexity: 0.5, color_warmth: 0.3 },
+    axes: {
+      chaos: 0.6,
+      scale: 0.5,
+      energy: 0.7,
+      realism: 0.5,
+      weirdness: 0.5,
+      brightness: 0.3,
+      complexity: 0.5,
+      color_warmth: 0.3,
+    },
   },
   {
     label: 'Whimsical Kid at Heart',
@@ -180,7 +352,16 @@ const PROFILES = [
     palettes: ['soft_pastel', 'neon', 'ocean_blues'],
     atmospheres: ['cherry_blossom', 'sunny_morning', 'aurora_night'],
     companion: 'unicorn',
-    axes: { chaos: 0.5, scale: 0.4, energy: 0.5, realism: 0.5, weirdness: 0.4, brightness: 0.8, complexity: 0.5, color_warmth: 0.7 },
+    axes: {
+      chaos: 0.5,
+      scale: 0.4,
+      energy: 0.5,
+      realism: 0.5,
+      weirdness: 0.4,
+      brightness: 0.8,
+      complexity: 0.5,
+      color_warmth: 0.7,
+    },
   },
 ];
 
@@ -196,13 +377,16 @@ async function matchArchetypes(recipe) {
 
   // Interest × mood matching
   for (const a of archs) {
-    if (a.trigger_interests.some(i => userInterests.has(i)) && a.trigger_moods.some(m => userMoods.has(m))) {
+    if (
+      a.trigger_interests.some((i) => userInterests.has(i)) &&
+      a.trigger_moods.some((m) => userMoods.has(m))
+    ) {
       matchedIds.add(a.id);
     }
   }
 
   // Vibe bundle injection
-  for (const vibe of (recipe.selected_vibes || [])) {
+  for (const vibe of recipe.selected_vibes || []) {
     const patterns = VIBE_MAP[vibe] || [];
     for (const a of archs) {
       for (const p of patterns) {
@@ -220,9 +404,13 @@ async function matchArchetypes(recipe) {
 async function main() {
   // Auth as Kevin
   const { data: auth } = await userClient.auth.signInWithPassword({
-    email: KEVIN_EMAIL, password: KEVIN_PASS,
+    email: KEVIN_EMAIL,
+    password: KEVIN_PASS,
   });
-  if (!auth?.session) { console.error('Auth failed'); process.exit(1); }
+  if (!auth?.session) {
+    console.error('Auth failed');
+    process.exit(1);
+  }
 
   const results = [];
   const outputDir = path.join(__dirname, 'profile-test-output');
@@ -230,12 +418,12 @@ async function main() {
 
   for (let i = 0; i < PROFILES.length; i++) {
     const p = PROFILES[i];
-    console.log(`\n═══ [${i+1}/10] ${p.label} ═══`);
+    console.log(`\n═══ [${i + 1}/10] ${p.label} ═══`);
 
     // Build recipe with vibe interest injection
     const allInterests = new Set(p.interests);
     for (const v of p.vibes) {
-      for (const interest of (VIBE_INTERESTS[v] || [])) allInterests.add(interest);
+      for (const interest of VIBE_INTERESTS[v] || []) allInterests.add(interest);
     }
 
     const recipe = {
@@ -258,9 +446,9 @@ async function main() {
     const matchedIds = await matchArchetypes(recipe);
     await supabase.from('user_archetypes').delete().eq('user_id', KEVIN_ID);
     if (matchedIds.size > 0) {
-      await supabase.from('user_archetypes').insert(
-        [...matchedIds].map(id => ({ user_id: KEVIN_ID, archetype_id: id }))
-      );
+      await supabase
+        .from('user_archetypes')
+        .insert([...matchedIds].map((id) => ({ user_id: KEVIN_ID, archetype_id: id })));
     }
 
     console.log(`  Interests: ${recipe.interests.join(', ')}`);
@@ -274,8 +462,8 @@ async function main() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${auth.session.access_token}`,
-            'apikey': ANON_KEY,
+            Authorization: `Bearer ${auth.session.access_token}`,
+            apikey: ANON_KEY,
           },
           body: JSON.stringify({ mode: 'flux-dev', recipe, persist: true }),
         });
@@ -292,11 +480,13 @@ async function main() {
           const log = logs?.[0];
           const axes = log?.rolled_axes || {};
 
-          console.log(`  Dream ${d+1}: ${axes.dreamMode}/${axes.archetype || 'none'} | ${(axes.model || '').split('/').pop()}`);
+          console.log(
+            `  Dream ${d + 1}: ${axes.dreamMode}/${axes.archetype || 'none'} | ${(axes.model || '').split('/').pop()}`
+          );
           console.log(`    ${data.prompt_used?.slice(0, 100)}...`);
 
           // Download image
-          const filename = `${String(i+1).padStart(2,'0')}_${p.label.replace(/\s+/g,'_')}_dream${d+1}.jpg`;
+          const filename = `${String(i + 1).padStart(2, '0')}_${p.label.replace(/\s+/g, '_')}_dream${d + 1}.jpg`;
           const filepath = path.join(outputDir, filename);
           try {
             const imgRes = await fetch(data.image_url);
@@ -316,15 +506,18 @@ async function main() {
           });
         }
       } catch (e) {
-        console.log(`  Dream ${d+1}: ❌ ${e.message}`);
+        console.log(`  Dream ${d + 1}: ❌ ${e.message}`);
       }
 
-      if (d < 2) await new Promise(r => setTimeout(r, 1000));
+      if (d < 2) await new Promise((r) => setTimeout(r, 1000));
     }
   }
 
   // Save results
-  fs.writeFileSync(path.join(__dirname, 'profile-test-results.json'), JSON.stringify(results, null, 2));
+  fs.writeFileSync(
+    path.join(__dirname, 'profile-test-results.json'),
+    JSON.stringify(results, null, 2)
+  );
   console.log(`\n✅ Done! ${results.length} dreams across 10 profiles`);
   console.log(`Images: ${outputDir}/`);
 }

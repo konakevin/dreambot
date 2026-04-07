@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import * as nav from '@/lib/navigate';
 import { useQueryClient } from '@tanstack/react-query';
 import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
@@ -222,7 +223,7 @@ export function FullScreenFeed({
         renderItem={({ item }) => (
           <DreamCard
             item={item}
-            bottomPadding={hideTabBar ? 16 + insets.bottom : 90 + insets.bottom}
+            bottomPadding={hideTabBar ? 16 + insets.bottom : 60 + insets.bottom}
             isLiked={likeIds.has(item.id)}
             onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
             onToggleLike={() => {
@@ -246,7 +247,7 @@ export function FullScreenFeed({
                   userId: item.user_id,
                   ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
                 });
-                router.push(`/dreamLikeThis?${params.toString()}`);
+                nav.push(`/dreamLikeThis?${params.toString()}`);
               } else {
                 setFamilyPostId(item.id);
                 setFamilyPost(item);
@@ -291,7 +292,7 @@ export function FullScreenFeed({
               userId: familyPost.user_id,
               ...(familyPost.ai_prompt ? { prompt: familyPost.ai_prompt } : {}),
             });
-            router.push(`/dreamLikeThis?${params.toString()}`);
+            nav.push(`/dreamLikeThis?${params.toString()}`);
           }}
         />
       )}

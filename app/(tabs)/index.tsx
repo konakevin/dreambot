@@ -4,8 +4,8 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
+import * as nav from '@/lib/navigate';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -209,7 +209,7 @@ export default function HomeScreen() {
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <TouchableOpacity
                 style={s.searchButton}
-                onPress={() => router.push('/search')}
+                onPress={() => nav.push('/search')}
                 activeOpacity={0.7}
                 hitSlop={12}
               >

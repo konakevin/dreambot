@@ -301,6 +301,45 @@ export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter((m) => m.directive !== null)
 /** Get only the curated vibes (excludes My Vibes and Surprise Me) */
 export const CURATED_VIBES = DREAM_VIBES.filter((v) => v.directive !== null);
 
+/** Const key arrays — single source of truth for ArtStyle and Aesthetic union types */
+export const MEDIUM_KEYS = [
+  'pixel_art',
+  'watercolor',
+  'oil_painting',
+  'anime',
+  'lego',
+  'claymation',
+  '3d_render',
+  'pencil_sketch',
+  'neon',
+  'stained_glass',
+  'comic_book',
+  'embroidery',
+  'disney',
+  'sack_boy',
+  'funko_pop',
+  'ghibli',
+  'tim_burton',
+  'pop_art',
+  'minecraft',
+  '8bit',
+  'felt',
+] as const;
+
+export const VIBE_KEYS = [
+  'cinematic',
+  'dreamy',
+  'dark',
+  'chaos',
+  'cozy',
+  'minimal',
+  'epic',
+  'nostalgic',
+  'psychedelic',
+  'peaceful',
+  'whimsical',
+] as const;
+
 /** Pick a random curated medium */
 export function randomMedium(): DreamMedium {
   return CURATED_MEDIUMS[Math.floor(Math.random() * CURATED_MEDIUMS.length)];

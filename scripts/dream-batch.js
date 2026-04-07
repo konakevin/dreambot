@@ -42,20 +42,28 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 const userClient = createClient(SUPABASE_URL, ANON_KEY);
 
 const args = process.argv.slice(2);
-const count = parseInt(args.find(a => !a.startsWith('--')) || '5', 10);
+const count = parseInt(args.find((a) => !a.startsWith('--')) || '5', 10);
 const shouldDownload = args.includes('--download');
 
 function downloadFile(url, dest) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
     const client = url.startsWith('https') ? https : http;
-    client.get(url, (res) => {
-      if (res.statusCode === 301 || res.statusCode === 302) {
-        return downloadFile(res.headers.location, dest).then(resolve).catch(reject);
-      }
-      res.pipe(file);
-      file.on('finish', () => { file.close(); resolve(); });
-    }).on('error', (e) => { fs.unlink(dest, () => {}); reject(e); });
+    client
+      .get(url, (res) => {
+        if (res.statusCode === 301 || res.statusCode === 302) {
+          return downloadFile(res.headers.location, dest).then(resolve).catch(reject);
+        }
+        res.pipe(file);
+        file.on('finish', () => {
+          file.close();
+          resolve();
+        });
+      })
+      .on('error', (e) => {
+        fs.unlink(dest, () => {});
+        reject(e);
+      });
   });
 }
 
@@ -67,7 +75,10 @@ async function main() {
     email: KEVIN_EMAIL,
     password: KEVIN_PASS,
   });
-  if (authErr) { console.error('Auth failed:', authErr.message); process.exit(1); }
+  if (authErr) {
+    console.error('Auth failed:', authErr.message);
+    process.exit(1);
+  }
 
   // Get Kevin's recipe
   const { data: recipeRow } = await supabase
@@ -91,8 +102,8 @@ async function main() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth.session.access_token}`,
-          'apikey': ANON_KEY,
+          Authorization: `Bearer ${auth.session.access_token}`,
+          apikey: ANON_KEY,
         },
         body: JSON.stringify({
           mode: 'flux-dev',
@@ -158,14 +169,15 @@ async function main() {
         }
       }
 
-      console.log(` ✅ ${axes.dreamMode}/${axes.archetype || 'none'} | ${axes.model?.split('/').pop()} | ${elapsed}ms`);
-
+      console.log(
+        ` ✅ ${axes.dreamMode}/${axes.archetype || 'none'} | ${axes.model?.split('/').pop()} | ${elapsed}ms`
+      );
     } catch (e) {
       console.log(` ❌ ${e.message}`);
     }
 
     // Small delay between generations
-    if (i < count - 1) await new Promise(r => setTimeout(r, 1000));
+    if (i < count - 1) await new Promise((r) => setTimeout(r, 1000));
   }
 
   // Save results
@@ -186,8 +198,18 @@ async function main() {
   console.log(`\n--- SUMMARY (${results.length} dreams) ---`);
   console.log('Modes:', JSON.stringify(modes));
   console.log('Models:', JSON.stringify(models));
-  console.log('Top archetypes:', Object.entries(archetypes).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, v]) => `${k}(${v})`).join(', '));
-  console.log('Avg time:', Math.round(results.reduce((s, r) => s + r.elapsed_ms, 0) / results.length) + 'ms');
+  console.log(
+    'Top archetypes:',
+    Object.entries(archetypes)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([k, v]) => `${k}(${v})`)
+      .join(', ')
+  );
+  console.log(
+    'Avg time:',
+    Math.round(results.reduce((s, r) => s + r.elapsed_ms, 0) / results.length) + 'ms'
+  );
 
   if (shouldDownload) {
     console.log(`\nImages saved to ${outputDir}/`);

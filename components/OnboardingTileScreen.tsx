@@ -18,7 +18,7 @@ import { TOTAL_STEPS } from '@/constants/onboarding';
 interface Tile {
   key: string;
   label: string;
-  icon: string;
+  icon?: string;
 }
 
 interface Props {

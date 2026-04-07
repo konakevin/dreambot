@@ -131,7 +131,6 @@ export default function DreamRevealScreen() {
     router.back();
   }
 
-
   return (
     <View style={s.container}>
       {/* Full-bleed image */}

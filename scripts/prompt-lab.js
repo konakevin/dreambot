@@ -38,9 +38,18 @@ const FAL_API_KEY = process.env.FAL_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const KEVIN_EMAIL = 'konakevin@gmail.com';
 
-if (!SUPABASE_URL || !SERVICE_KEY) { console.error('Missing SUPABASE env vars.'); process.exit(1); }
-if (!FAL_API_KEY) { console.error('Missing FAL_API_KEY in .env.local'); process.exit(1); }
-if (!ANTHROPIC_API_KEY) { console.error('Missing ANTHROPIC_API_KEY in .env.local'); process.exit(1); }
+if (!SUPABASE_URL || !SERVICE_KEY) {
+  console.error('Missing SUPABASE env vars.');
+  process.exit(1);
+}
+if (!FAL_API_KEY) {
+  console.error('Missing FAL_API_KEY in .env.local');
+  process.exit(1);
+}
+if (!ANTHROPIC_API_KEY) {
+  console.error('Missing ANTHROPIC_API_KEY in .env.local');
+  process.exit(1);
+}
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
   auth: { autoRefreshToken: false, persistSession: false },
@@ -49,7 +58,7 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
 // ── CLI ─────────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
-const ideaPrompt = args.filter(a => !a.startsWith('--')).join(' ');
+const ideaPrompt = args.filter((a) => !a.startsWith('--')).join(' ');
 
 if (!ideaPrompt) {
   console.error('Usage: node scripts/prompt-lab.js "your idea here"');
@@ -84,36 +93,67 @@ const MEDIUM = [
 ];
 
 const LIGHTING = [
-  'warm candlelight', 'golden hour sunlight', 'soft overcast diffused light',
-  'neon city glow', 'cool blue moonlight', 'dramatic backlight silhouette',
-  'studio Rembrandt lighting', 'dappled light through leaves',
-  'firelight with dancing shadows', 'bioluminescent ambient glow',
-  'aurora borealis light', 'foggy diffused streetlight',
+  'warm candlelight',
+  'golden hour sunlight',
+  'soft overcast diffused light',
+  'neon city glow',
+  'cool blue moonlight',
+  'dramatic backlight silhouette',
+  'studio Rembrandt lighting',
+  'dappled light through leaves',
+  'firelight with dancing shadows',
+  'bioluminescent ambient glow',
+  'aurora borealis light',
+  'foggy diffused streetlight',
 ];
 
 const MOOD = [
-  'cozy and intimate', 'epic and grandiose', 'ethereal and dreamlike',
-  'playful and whimsical', 'moody and atmospheric', 'serene and peaceful',
-  'chaotic and energetic', 'haunting and melancholic', 'luxurious and opulent',
-  'nostalgic and warm', 'surreal and otherworldly', 'tender and gentle',
+  'cozy and intimate',
+  'epic and grandiose',
+  'ethereal and dreamlike',
+  'playful and whimsical',
+  'moody and atmospheric',
+  'serene and peaceful',
+  'chaotic and energetic',
+  'haunting and melancholic',
+  'luxurious and opulent',
+  'nostalgic and warm',
+  'surreal and otherworldly',
+  'tender and gentle',
 ];
 
 const SETTING = [
-  'spring morning with dew drops', 'summer golden hour in a meadow',
-  'autumn twilight with falling leaves', 'winter scene with fresh snow',
-  'rainy day with reflections in puddles', 'foggy dawn just before sunrise',
-  'in a cozy cafe by a window', 'on a mossy log in an enchanted forest',
-  'in a sun-dappled garden', 'on a rooftop overlooking a city at night',
-  'beside a babbling brook', 'in a field of wildflowers',
-  'inside a greenhouse full of tropical plants', 'on a windowsill during a thunderstorm',
+  'spring morning with dew drops',
+  'summer golden hour in a meadow',
+  'autumn twilight with falling leaves',
+  'winter scene with fresh snow',
+  'rainy day with reflections in puddles',
+  'foggy dawn just before sunrise',
+  'in a cozy cafe by a window',
+  'on a mossy log in an enchanted forest',
+  'in a sun-dappled garden',
+  'on a rooftop overlooking a city at night',
+  'beside a babbling brook',
+  'in a field of wildflowers',
+  'inside a greenhouse full of tropical plants',
+  'on a windowsill during a thunderstorm',
 ];
 
 const DETAIL = [
-  'intricate feather detail', 'glistening dewdrops', 'soft bokeh background',
-  'volumetric light rays', 'tiny sparkles and glitter particles',
-  'shallow depth of field', 'rich saturated colors', 'delicate texture detail',
-  'warm color palette', 'cool blue-purple color harmony', 'iridescent shimmer',
-  'dramatic shadows', 'soft diffused glow', 'ultra-sharp crisp detail',
+  'intricate feather detail',
+  'glistening dewdrops',
+  'soft bokeh background',
+  'volumetric light rays',
+  'tiny sparkles and glitter particles',
+  'shallow depth of field',
+  'rich saturated colors',
+  'delicate texture detail',
+  'warm color palette',
+  'cool blue-purple color harmony',
+  'iridescent shimmer',
+  'dramatic shadows',
+  'soft diffused glow',
+  'ultra-sharp crisp detail',
 ];
 
 function pick(arr) {
@@ -132,27 +172,53 @@ async function generateThreeEnhancedPrompts(anthropic, idea) {
   const lightings = pickUniqueSet(LIGHTING, 3);
 
   const SCENE_TYPES = [
-    'unexpected discovery', 'playful chaos', 'cozy comfort',
-    'tiny adventure', 'dramatic moment', 'silly mishap',
-    'tender moment', 'creative activity', 'celebration',
-    'sneaky heist', 'friendly competition', 'rescue mission',
+    'unexpected discovery',
+    'playful chaos',
+    'cozy comfort',
+    'tiny adventure',
+    'dramatic moment',
+    'silly mishap',
+    'tender moment',
+    'creative activity',
+    'celebration',
+    'sneaky heist',
+    'friendly competition',
+    'rescue mission',
   ];
   const sceneTypes = pickUniqueSet(SCENE_TYPES, 3);
 
   const ACTIONS = [
-    'tumbling', 'sneaking', 'leaping', 'balancing precariously',
-    'wrestling over', 'tiptoeing', 'diving headfirst into',
-    'stacking things into a wobbly tower', 'chasing each other around',
-    'hiding behind', 'dangling upside down from', 'squeezing through a tiny gap',
-    'launching off like a catapult', 'sliding down', 'bouncing off',
-    'carrying something absurdly oversized', 'doing a dramatic slow-motion dodge',
-    'peeking around a corner at', 'caught mid-sneeze near',
-    'high-fiving with tiny hands/wings/paws', 'photobombing',
-    'building a fort out of', 'surfing on top of',
-    'conducting an orchestra of', 'painting a tiny masterpiece of',
-    'having a tug-of-war over', 'catching something falling from above',
-    'being startled by a butterfly', 'whispering a secret about',
-    'doing synchronized swimming in', 'riding on the back of something bigger',
+    'tumbling',
+    'sneaking',
+    'leaping',
+    'balancing precariously',
+    'wrestling over',
+    'tiptoeing',
+    'diving headfirst into',
+    'stacking things into a wobbly tower',
+    'chasing each other around',
+    'hiding behind',
+    'dangling upside down from',
+    'squeezing through a tiny gap',
+    'launching off like a catapult',
+    'sliding down',
+    'bouncing off',
+    'carrying something absurdly oversized',
+    'doing a dramatic slow-motion dodge',
+    'peeking around a corner at',
+    'caught mid-sneeze near',
+    'high-fiving with tiny hands/wings/paws',
+    'photobombing',
+    'building a fort out of',
+    'surfing on top of',
+    'conducting an orchestra of',
+    'painting a tiny masterpiece of',
+    'having a tug-of-war over',
+    'catching something falling from above',
+    'being startled by a butterfly',
+    'whispering a secret about',
+    'doing synchronized swimming in',
+    'riding on the back of something bigger',
   ];
   const actions = pickUniqueSet(ACTIONS, 3);
 
@@ -163,9 +229,10 @@ async function generateThreeEnhancedPrompts(anthropic, idea) {
     const response = await anthropic.messages.create({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 150,
-      messages: [{
-        role: 'user',
-        content: `Write a Flux image generation prompt. Be BRIEF and DIRECT — Flux ignores flowery language.
+      messages: [
+        {
+          role: 'user',
+          content: `Write a Flux image generation prompt. Be BRIEF and DIRECT — Flux ignores flowery language.
 
 Subject: ${idea}
 Medium: ${mediums[i]}
@@ -184,7 +251,8 @@ RULES:
 - Portrait 9:16 orientation.
 
 Output ONLY the prompt.`,
-      }],
+        },
+      ],
     });
 
     const enhanced = response.content[0].text.trim();
@@ -197,7 +265,8 @@ Output ONLY the prompt.`,
 // ── Caption ─────────────────────────────────────────────────────────────────
 
 function makeCaption(prompt) {
-  const techTerms = /,\s*(shot on|cinematic|depth of field|8K|hyperrealistic|anamorphic|Kodak|Fujifilm|Cinestill|Ilford|Hasselblad|macro \d+mm|fisheye|tilt-shift|wide angle|medium format|drone|pinhole|infrared|long exposure|double exposure|split diopter|Lomography|Technicolor|Ektar|expired film|digital clean)/i;
+  const techTerms =
+    /,\s*(shot on|cinematic|depth of field|8K|hyperrealistic|anamorphic|Kodak|Fujifilm|Cinestill|Ilford|Hasselblad|macro \d+mm|fisheye|tilt-shift|wide angle|medium format|drone|pinhole|infrared|long exposure|double exposure|split diopter|Lomography|Technicolor|Ektar|expired film|digital clean)/i;
   const match = prompt.match(techTerms);
   const cleaned = match ? prompt.slice(0, match.index) : prompt;
   const trimmed = cleaned.trim().replace(/,\s*$/, '');
@@ -207,10 +276,98 @@ function makeCaption(prompt) {
 // ── Category ────────────────────────────────────────────────────────────────
 
 const CATEGORY_KEYWORDS = {
-  animals: ['cat', 'dog', 'fox', 'whale', 'bird', 'fish', 'deer', 'owl', 'bear', 'wolf', 'kitten', 'puppy', 'bunny', 'panda', 'otter', 'elephant', 'parrot', 'jellyfish', 'octopus', 'butterfly', 'spider', 'moth', 'beetle', 'elk', 'tortoise', 'serpent', 'duckling', 'hedgehog', 'raccoon', 'fawn'],
-  nature: ['forest', 'mountain', 'ocean', 'lake', 'waterfall', 'aurora', 'volcano', 'desert', 'garden', 'cave', 'moon', 'stars', 'sunset', 'sunrise', 'storm', 'snow', 'rain', 'flower', 'tree', 'river', 'island', 'cliff', 'canyon', 'nebula', 'bioluminescent', 'coral'],
-  art: ['neon', 'graffiti', 'sculpture', 'painting', 'tattoo', 'mural', 'ceramic', 'stained glass', 'origami', 'calligraphy', 'mosaic', 'fresco', 'art deco', 'art nouveau', 'baroque', 'renaissance'],
-  cute: ['tiny', 'baby', 'miniature', 'cozy', 'soft', 'fluffy', 'adorable', 'sweet', 'little', 'snuggle', 'kawaii', 'precious'],
+  animals: [
+    'cat',
+    'dog',
+    'fox',
+    'whale',
+    'bird',
+    'fish',
+    'deer',
+    'owl',
+    'bear',
+    'wolf',
+    'kitten',
+    'puppy',
+    'bunny',
+    'panda',
+    'otter',
+    'elephant',
+    'parrot',
+    'jellyfish',
+    'octopus',
+    'butterfly',
+    'spider',
+    'moth',
+    'beetle',
+    'elk',
+    'tortoise',
+    'serpent',
+    'duckling',
+    'hedgehog',
+    'raccoon',
+    'fawn',
+  ],
+  nature: [
+    'forest',
+    'mountain',
+    'ocean',
+    'lake',
+    'waterfall',
+    'aurora',
+    'volcano',
+    'desert',
+    'garden',
+    'cave',
+    'moon',
+    'stars',
+    'sunset',
+    'sunrise',
+    'storm',
+    'snow',
+    'rain',
+    'flower',
+    'tree',
+    'river',
+    'island',
+    'cliff',
+    'canyon',
+    'nebula',
+    'bioluminescent',
+    'coral',
+  ],
+  art: [
+    'neon',
+    'graffiti',
+    'sculpture',
+    'painting',
+    'tattoo',
+    'mural',
+    'ceramic',
+    'stained glass',
+    'origami',
+    'calligraphy',
+    'mosaic',
+    'fresco',
+    'art deco',
+    'art nouveau',
+    'baroque',
+    'renaissance',
+  ],
+  cute: [
+    'tiny',
+    'baby',
+    'miniature',
+    'cozy',
+    'soft',
+    'fluffy',
+    'adorable',
+    'sweet',
+    'little',
+    'snuggle',
+    'kawaii',
+    'precious',
+  ],
   funny: ['silly', 'confused', 'surprised', 'costume', 'weird', 'absurd', 'ridiculous', 'goofy'],
 };
 
@@ -226,7 +383,10 @@ function pickCategory(prompt) {
   let best = 'art';
   let bestScore = 0;
   for (const [category, score] of Object.entries(scores)) {
-    if (score > bestScore) { bestScore = score; best = category; }
+    if (score > bestScore) {
+      bestScore = score;
+      best = category;
+    }
   }
   return best;
 }
@@ -257,7 +417,8 @@ async function downloadImage(url) {
 async function uploadToSupabase(imageBuffer, filename) {
   const storagePath = `ai/${filename}`;
   const { error } = await supabase.storage.from('uploads').upload(storagePath, imageBuffer, {
-    contentType: 'image/jpeg', upsert: false,
+    contentType: 'image/jpeg',
+    upsert: false,
   });
   if (error) throw new Error(`Upload failed: ${error.message}`);
   const { data } = supabase.storage.from('uploads').getPublicUrl(storagePath);
@@ -265,12 +426,21 @@ async function uploadToSupabase(imageBuffer, filename) {
 }
 
 async function createPost(userId, imageUrl, prompt, category) {
-  const { data, error } = await supabase.from('uploads').insert({
-    user_id: userId, image_url: imageUrl,
-    categories: [category], caption: makeCaption(prompt),
-    is_active: true, is_approved: true, is_moderated: true,
-    width: 768, height: 1664,
-  }).select('id').single();
+  const { data, error } = await supabase
+    .from('uploads')
+    .insert({
+      user_id: userId,
+      image_url: imageUrl,
+      categories: [category],
+      caption: makeCaption(prompt),
+      is_active: true,
+      is_approved: true,
+      is_moderated: true,
+      width: 768,
+      height: 1664,
+    })
+    .select('id')
+    .single();
   if (error) throw new Error(`Post failed: ${error.message}`);
   return data.id;
 }
@@ -304,8 +474,15 @@ async function main() {
   fal.config({ credentials: FAL_API_KEY });
 
   // Find Kevin
-  const { data: kevin } = await supabase.from('users').select('id').eq('email', KEVIN_EMAIL).single();
-  if (!kevin) { console.error('Kevin not found!'); process.exit(1); }
+  const { data: kevin } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', KEVIN_EMAIL)
+    .single();
+  if (!kevin) {
+    console.error('Kevin not found!');
+    process.exit(1);
+  }
   console.log(`  Posting to: ${KEVIN_EMAIL} (${kevin.id})\n`);
 
   for (let i = 0; i < 3; i++) {

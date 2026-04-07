@@ -1,47 +1,18 @@
-/** Vibe Profile v2 — replaces Recipe as the user's creative identity */
+/**
+ * Vibe Profile v2 — replaces Recipe as the user's creative identity.
+ *
+ * ArtStyle and Aesthetic are derived from MEDIUM_KEYS and VIBE_KEYS in
+ * constants/dreamEngine.ts so onboarding, Create screen, and the dream
+ * engine always stay in sync.
+ */
 
-export type Aesthetic =
-  | 'cyberpunk'
-  | 'cozy'
-  | 'liminal'
-  | 'brutalist'
-  | 'retrofuturism'
-  | 'dreamy'
-  | 'analog_film'
-  | 'surreal'
-  | 'cottagecore'
-  | 'dark_academia'
-  | 'solarpunk'
-  | 'vaporwave'
-  | 'gothic'
-  | 'art_nouveau'
-  | 'maximalist'
-  | 'minimalist'
-  | 'psychedelic'
-  | 'steampunk'
-  | 'biopunk'
-  | 'afrofuturism';
+import { MEDIUM_KEYS, VIBE_KEYS } from '@/constants/dreamEngine';
 
-export type ArtStyle =
-  | 'oil_painting'
-  | 'anime'
-  | '35mm_photography'
-  | 'watercolor'
-  | 'cgi'
-  | 'pixel_art'
-  | 'claymation'
-  | 'pencil_sketch'
-  | 'comic_book'
-  | 'stained_glass'
-  | 'ukiyo_e'
-  | 'gouache'
-  | 'vector_art'
-  | 'collage'
-  | 'neon_sign'
-  | 'papercraft'
-  | 'embroidery'
-  | 'lego'
-  | 'felt_puppet';
+/** Union of all curated medium keys — derived from the engine */
+export type ArtStyle = (typeof MEDIUM_KEYS)[number];
+
+/** Union of all curated vibe keys — derived from the engine */
+export type Aesthetic = (typeof VIBE_KEYS)[number];
 
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {

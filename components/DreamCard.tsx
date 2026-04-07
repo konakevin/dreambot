@@ -23,8 +23,8 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
@@ -255,9 +255,9 @@ export function DreamCard({
     if (swiped.current) return;
     swiped.current = true;
     if (isOwnPost) {
-      router.navigate('/(tabs)/profile');
+      nav.navigate('/(tabs)/profile');
     } else {
-      router.push(`/user/${item.user_id}?viewedPost=${item.id}`);
+      nav.push(`/user/${item.user_id}?viewedPost=${item.id}`);
     }
     setTimeout(() => {
       swiped.current = false;
@@ -443,119 +443,125 @@ export function DreamCard({
 
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
-          <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
-            {item.bot_message && <Text style={s.botMessage}>{item.bot_message}</Text>}
-            <MediumVibeBadge
-              mediumKey={item.dream_medium}
-              vibeKey={item.dream_vibe}
-              onPress={() => {
-                useExploreStore
-                  .getState()
-                  .setFilters(item.dream_medium ?? null, item.dream_vibe ?? null);
-                useFeedStore.getState().setActiveTab('top');
-                router.navigate('/(tabs)/top');
-              }}
-            />
-            <TouchableOpacity
-              style={s.usernameRow}
-              onPress={() =>
-                isOwnPost
-                  ? router.navigate('/(tabs)/profile')
-                  : router.push(`/user/${item.user_id}?viewedPost=${item.id}`)
-              }
-              activeOpacity={0.7}
-            >
-              {item.avatar_url ? (
-                <Image
-                  source={{ uri: avatarUrl(item.avatar_url!) }}
-                  style={s.avatar}
-                  cachePolicy="memory-disk"
-                />
-              ) : (
-                <View style={s.avatarFallback}>
-                  <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
-                </View>
-              )}
-              <View>
-                <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
-                <Text style={s.timestamp}>{timeAgo(item.created_at)}</Text>
-              </View>
-            </TouchableOpacity>
-            {item.from_wish && (
-              <TouchableOpacity
-                onPress={() => Toast.show(`Wished: "${item.from_wish}"`, 'color-wand-outline')}
-                activeOpacity={0.7}
-                hitSlop={8}
-              >
-                <Ionicons name="color-wand-outline" size={14} color="#FFFFFF" />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* Side actions */}
-          <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
-            {showVisibilityToggle && onTogglePosted && (
-              <TouchableOpacity style={ui.sideButton} onPress={onTogglePosted} activeOpacity={0.7}>
-                <View style={[s.visibilityCircle, item.is_posted && s.visibilityCircleActive]}>
-                  <Ionicons
-                    name={item.is_posted ? 'eye' : 'eye-off'}
-                    size={20}
-                    color={item.is_posted ? '#FFFFFF' : 'rgba(255,255,255,0.7)'}
-                  />
-                </View>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              style={ui.sideButton}
-              onPress={onToggleLike}
-              onLongPress={onLikesPress}
-              delayLongPress={400}
-              activeOpacity={0.7}
-            >
-              <Ionicons
-                name={isLiked ? 'heart' : 'heart-outline'}
-                size={28}
-                color={isLiked ? colors.like : '#FFFFFF'}
+            <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+              {item.bot_message && <Text style={s.botMessage}>{item.bot_message}</Text>}
+              <MediumVibeBadge
+                mediumKey={item.dream_medium}
+                vibeKey={item.dream_vibe}
+                onPress={() => {
+                  useExploreStore
+                    .getState()
+                    .setFilters(item.dream_medium ?? null, item.dream_vibe ?? null);
+                  useFeedStore.getState().setActiveTab('top');
+                  nav.navigate('/(tabs)/top');
+                }}
               />
-              {(item.like_count ?? 0) > 0 && <Text style={ui.sideCount}>{item.like_count}</Text>}
-            </TouchableOpacity>
-            {onComment && (
-              <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
-                <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
-                {(item.comment_count ?? 0) > 0 && (
-                  <Text style={ui.sideCount}>{item.comment_count}</Text>
+              <TouchableOpacity
+                style={s.usernameRow}
+                onPress={() =>
+                  isOwnPost
+                    ? nav.navigate('/(tabs)/profile')
+                    : nav.push(`/user/${item.user_id}?viewedPost=${item.id}`)
+                }
+                activeOpacity={0.7}
+              >
+                {item.avatar_url ? (
+                  <Image
+                    source={{ uri: avatarUrl(item.avatar_url!) }}
+                    style={s.avatar}
+                    cachePolicy="memory-disk"
+                  />
+                ) : (
+                  <View style={s.avatarFallback}>
+                    <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
+                  </View>
                 )}
+                <View>
+                  <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
+                  <Text style={s.timestamp}>{timeAgo(item.created_at)}</Text>
+                </View>
               </TouchableOpacity>
-            )}
-            {onToggleSave && (
-              <TouchableOpacity style={ui.sideButton} onPress={onToggleSave} activeOpacity={0.7}>
+              {item.from_wish && (
+                <TouchableOpacity
+                  onPress={() => Toast.show(`Wished: "${item.from_wish}"`, 'color-wand-outline')}
+                  activeOpacity={0.7}
+                  hitSlop={8}
+                >
+                  <Ionicons name="color-wand-outline" size={14} color="#FFFFFF" />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Side actions */}
+            <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
+              {showVisibilityToggle && onTogglePosted && (
+                <TouchableOpacity
+                  style={ui.sideButton}
+                  onPress={onTogglePosted}
+                  activeOpacity={0.7}
+                >
+                  <View style={[s.visibilityCircle, item.is_posted && s.visibilityCircleActive]}>
+                    <Ionicons
+                      name={item.is_posted ? 'eye' : 'eye-off'}
+                      size={20}
+                      color={item.is_posted ? '#FFFFFF' : 'rgba(255,255,255,0.7)'}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={ui.sideButton}
+                onPress={onToggleLike}
+                onLongPress={onLikesPress}
+                delayLongPress={400}
+                activeOpacity={0.7}
+              >
                 <Ionicons
-                  name={isSaved ? 'bookmark' : 'bookmark-outline'}
-                  size={24}
-                  color="#FFFFFF"
+                  name={isLiked ? 'heart' : 'heart-outline'}
+                  size={28}
+                  color={isLiked ? colors.like : '#FFFFFF'}
                 />
+                {(item.like_count ?? 0) > 0 && <Text style={ui.sideCount}>{item.like_count}</Text>}
               </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              style={ui.sideButton}
-              onPress={
-                onShare ??
-                (() =>
-                  router.push(
-                    `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}`
-                  ))
-              }
-              activeOpacity={0.7}
-            >
-              <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
-            </TouchableOpacity>
-            {onFamily && (
-              <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
-                <Ionicons name="color-wand-outline" size={24} color="#FFFFFF" />
-                {(item.fuse_count ?? 0) > 0 && <Text style={ui.sideCount}>{item.fuse_count}</Text>}
+              {onComment && (
+                <TouchableOpacity style={ui.sideButton} onPress={onComment} activeOpacity={0.7}>
+                  <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
+                  {(item.comment_count ?? 0) > 0 && (
+                    <Text style={ui.sideCount}>{item.comment_count}</Text>
+                  )}
+                </TouchableOpacity>
+              )}
+              {onToggleSave && (
+                <TouchableOpacity style={ui.sideButton} onPress={onToggleSave} activeOpacity={0.7}>
+                  <Ionicons
+                    name={isSaved ? 'bookmark' : 'bookmark-outline'}
+                    size={24}
+                    color="#FFFFFF"
+                  />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={ui.sideButton}
+                onPress={
+                  onShare ??
+                  (() =>
+                    nav.push(
+                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}`
+                    ))
+                }
+                activeOpacity={0.7}
+              >
+                <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
               </TouchableOpacity>
-            )}
-          </View>
+              {onFamily && (
+                <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
+                  <Ionicons name="color-wand-outline" size={24} color="#FFFFFF" />
+                  {(item.fuse_count ?? 0) > 0 && (
+                    <Text style={ui.sideCount}>{item.fuse_count}</Text>
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
           </Animated.View>
         </Pressable>
       </Animated.View>

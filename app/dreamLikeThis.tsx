@@ -29,6 +29,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { useLocalSearchParams, router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
+import * as nav from '@/lib/navigate';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
@@ -117,38 +118,21 @@ export default function DreamLikeThisScreen() {
     });
     if (result.canceled || !result.assets?.[0]) return;
 
+    // Keep original aspect ratio for preview. 9:16 crop happens before API call.
     const asset = result.assets[0];
-    const w = asset.width;
-    const h = asset.height;
-    const targetRatio = 9 / 16;
-    const currentRatio = w / h;
-    let cropAction: ImageManipulator.Action;
-
-    if (currentRatio > targetRatio) {
-      const newW = Math.round(h * targetRatio);
-      cropAction = {
-        crop: { originX: Math.round((w - newW) / 2), originY: 0, width: newW, height: h },
-      };
-    } else {
-      const newH = Math.round(w / targetRatio);
-      cropAction = {
-        crop: { originX: 0, originY: Math.round((h - newH) / 2), width: w, height: newH },
-      };
-    }
-
-    const cropped = await ImageManipulator.manipulateAsync(asset.uri, [cropAction], {
+    const compressed = await ImageManipulator.manipulateAsync(asset.uri, [], {
       compress: 0.8,
       format: ImageManipulator.SaveFormat.JPEG,
       base64: true,
     });
 
-    if (!cropped.base64) {
+    if (!compressed.base64) {
       Toast.show('Could not process photo', 'close-circle');
       return;
     }
 
-    setPhotoUri(cropped.uri);
-    setPhotoBase64(cropped.base64);
+    setPhotoUri(compressed.uri);
+    setPhotoBase64(compressed.base64);
   }
 
   function clearPhoto() {
@@ -176,7 +160,7 @@ export default function DreamLikeThisScreen() {
     setPrompt(userPrompt.trim());
 
     // Navigate to Loading → Reveal (same as Create flow)
-    router.push('/dream/loading');
+    nav.push('/dream/loading');
   }
 
   if (loading) {
@@ -201,7 +185,7 @@ export default function DreamLikeThisScreen() {
           </TouchableOpacity>
           <Text style={s.headerTitle}>Dream Like This</Text>
           <TouchableOpacity
-            onPress={() => router.push('/sparkleStore')}
+            onPress={() => nav.push('/sparkleStore')}
             style={[s.sparklePill, { zIndex: 1 }]}
           >
             <Ionicons name="sparkles" size={14} color={colors.accent} />

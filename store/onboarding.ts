@@ -38,6 +38,10 @@ interface OnboardingStore {
   setCastMember: (member: DreamCastMember) => void;
   removeCastMember: (role: DreamCastMember['role']) => void;
 
+  // Avoid list
+  addAvoid: (value: string) => void;
+  removeAvoid: (value: string) => void;
+
   // Load existing profile for editing
   loadProfile: (profile: VibeProfile) => void;
 
@@ -106,6 +110,18 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   removeCastMember: (role) =>
     set((s) => ({
       profile: { ...s.profile, dream_cast: s.profile.dream_cast.filter((m) => m.role !== role) },
+    })),
+
+  addAvoid: (value) =>
+    set((s) => {
+      const trimmed = value.trim().toLowerCase();
+      if (!trimmed || s.profile.avoid.includes(trimmed)) return s;
+      return { profile: { ...s.profile, avoid: [...s.profile.avoid, trimmed] } };
+    }),
+
+  removeAvoid: (value) =>
+    set((s) => ({
+      profile: { ...s.profile, avoid: s.profile.avoid.filter((v) => v !== value) },
     })),
 
   loadProfile: (profile) => set({ profile }),

@@ -11,8 +11,8 @@ import Animated, {
   withRepeat,
   withDelay,
 } from 'react-native-reanimated';
-import { router } from 'expo-router';
 import { useDeletePost } from '@/hooks/useDeletePost';
+import * as nav from '@/lib/navigate';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { useAlbumStore } from '@/store/album';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -151,7 +151,7 @@ export function PostTile({
     } else {
       useAlbumStore.getState().clearAlbum();
     }
-    router.push(`/photo/${item.id}`);
+    nav.push(`/photo/${item.id}`);
   }
 
   function handleLongPress() {

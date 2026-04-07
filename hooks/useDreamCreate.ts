@@ -14,6 +14,7 @@
 
 import { useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import { cropToPortrait } from '@/lib/cropPhoto';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance, useSpendSparkles } from '@/hooks/useSparkles';
@@ -99,9 +100,10 @@ export function useDreamCreate() {
         resolved_vibe?: string;
       };
 
-      if (config.photoBase64) {
-        // Photo dream — flux-kontext
-        const refUrl = `data:image/jpeg;base64,${config.photoBase64}`;
+      if (config.photoBase64 && config.photoUri) {
+        // Photo dream — crop to 9:16 portrait for the API
+        const croppedBase64 = await cropToPortrait(config.photoUri);
+        const refUrl = `data:image/jpeg;base64,${croppedBase64}`;
 
         if (config.userPrompt.trim()) {
           const modResult = await moderateText(config.userPrompt.trim());

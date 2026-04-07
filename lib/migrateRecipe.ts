@@ -9,29 +9,29 @@ import type { VibeProfile, Aesthetic, ArtStyle, MoodAxes } from '@/types/vibePro
 const TAG_TO_AESTHETIC: Record<string, Aesthetic> = {
   dreamy: 'dreamy',
   cozy: 'cozy',
-  edgy: 'gothic',
-  mysterious: 'liminal',
-  futuristic: 'retrofuturism',
-  nostalgic: 'analog_film',
-  raw: 'brutalist',
-  whimsical: 'cottagecore',
-  bold: 'maximalist',
-  gentle: 'minimalist',
-  peaceful: 'solarpunk',
+  edgy: 'dark',
+  mysterious: 'dark',
+  futuristic: 'epic',
+  nostalgic: 'nostalgic',
+  raw: 'chaos',
+  whimsical: 'whimsical',
+  bold: 'epic',
+  gentle: 'minimal',
+  peaceful: 'peaceful',
   chaotic: 'psychedelic',
-  elegant: 'art_nouveau',
-  playful: 'vaporwave',
+  elegant: 'cinematic',
+  playful: 'whimsical',
 };
 
 const ERA_TO_AESTHETIC: Record<string, Aesthetic> = {
-  synthwave: 'vaporwave',
-  steampunk: 'steampunk',
-  victorian: 'gothic',
-  art_deco: 'art_nouveau',
-  far_future: 'cyberpunk',
-  medieval: 'dark_academia',
-  retro: 'analog_film',
-  ancient: 'brutalist',
+  synthwave: 'psychedelic',
+  steampunk: 'epic',
+  victorian: 'dark',
+  art_deco: 'cinematic',
+  far_future: 'epic',
+  medieval: 'dark',
+  retro: 'nostalgic',
+  ancient: 'epic',
 };
 
 export function migrateRecipeToVibeProfile(recipe: Recipe): VibeProfile {
@@ -46,7 +46,7 @@ export function migrateRecipeToVibeProfile(recipe: Recipe): VibeProfile {
     if (mapped) aesthetics.add(mapped);
   }
   // Pad to minimum 3
-  const defaults: Aesthetic[] = ['dreamy', 'cozy', 'surreal'];
+  const defaults: Aesthetic[] = ['dreamy', 'cozy', 'whimsical'];
   for (const d of defaults) {
     if (aesthetics.size >= 3) break;
     aesthetics.add(d);
@@ -55,7 +55,7 @@ export function migrateRecipeToVibeProfile(recipe: Recipe): VibeProfile {
   // Infer art styles from realism axis
   const artStyles: ArtStyle[] = [];
   if (recipe.axes.realism > 0.6) {
-    artStyles.push('35mm_photography', 'cgi');
+    artStyles.push('pencil_sketch', '3d_render');
   } else if (recipe.axes.realism < 0.4) {
     artStyles.push('watercolor', 'anime');
   } else {

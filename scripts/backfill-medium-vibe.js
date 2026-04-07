@@ -17,15 +17,41 @@ const sb = createClient(
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 
 const MEDIUMS = [
-  'pixel_art', 'watercolor', 'oil_painting', 'anime', 'lego', 'claymation',
-  '3d_render', 'pencil_sketch', 'neon', 'stained_glass', 'comic_book',
-  'embroidery', 'disney', 'sack_boy', 'funko_pop', 'ghibli', 'tim_burton',
-  'pop_art', 'minecraft', '8bit', 'felt',
+  'pixel_art',
+  'watercolor',
+  'oil_painting',
+  'anime',
+  'lego',
+  'claymation',
+  '3d_render',
+  'pencil_sketch',
+  'neon',
+  'stained_glass',
+  'comic_book',
+  'embroidery',
+  'disney',
+  'sack_boy',
+  'funko_pop',
+  'ghibli',
+  'tim_burton',
+  'pop_art',
+  'minecraft',
+  '8bit',
+  'felt',
 ];
 
 const VIBES = [
-  'cinematic', 'dreamy', 'dark', 'chaos', 'cozy', 'minimal', 'epic',
-  'nostalgic', 'psychedelic', 'peaceful', 'whimsical',
+  'cinematic',
+  'dreamy',
+  'dark',
+  'chaos',
+  'cozy',
+  'minimal',
+  'epic',
+  'nostalgic',
+  'psychedelic',
+  'peaceful',
+  'whimsical',
 ];
 
 async function classify(prompt) {

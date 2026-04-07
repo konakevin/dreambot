@@ -42,7 +42,16 @@ const KEVIN_ID = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 
 // Kevin's real recipe — saved so we can restore it
 const KEVIN_RECIPE = {
-  axes: { chaos: 0.5, scale: 0.5, energy: 0.6, realism: 0.5, weirdness: 0.3, brightness: 0.25, complexity: 0.5, color_warmth: 0.3 },
+  axes: {
+    chaos: 0.5,
+    scale: 0.5,
+    energy: 0.6,
+    realism: 0.5,
+    weirdness: 0.3,
+    brightness: 0.25,
+    complexity: 0.5,
+    color_warmth: 0.3,
+  },
   eras: ['prehistoric', 'victorian', 'steampunk', 'retro', 'far_future'],
   settings: ['city_streets', 'village'],
   interests: ['food', 'ocean', 'music'],
@@ -57,7 +66,16 @@ const PERSONAS = {
   1: {
     name: 'Gamer Nerd',
     recipe: {
-      axes: { chaos: 0.6, scale: 0.7, energy: 0.8, realism: 0.4, weirdness: 0.5, brightness: 0.4, complexity: 0.7, color_warmth: 0.4 },
+      axes: {
+        chaos: 0.6,
+        scale: 0.7,
+        energy: 0.8,
+        realism: 0.4,
+        weirdness: 0.5,
+        brightness: 0.4,
+        complexity: 0.7,
+        color_warmth: 0.4,
+      },
       eras: ['synthwave', 'far_future'],
       settings: ['city_streets', 'space'],
       interests: ['gaming', 'geek', 'sci_fi'],
@@ -71,7 +89,16 @@ const PERSONAS = {
   2: {
     name: 'Cottagecore Girl',
     recipe: {
-      axes: { chaos: 0.3, scale: 0.3, energy: 0.2, realism: 0.6, weirdness: 0.1, brightness: 0.7, complexity: 0.3, color_warmth: 0.8 },
+      axes: {
+        chaos: 0.3,
+        scale: 0.3,
+        energy: 0.2,
+        realism: 0.6,
+        weirdness: 0.1,
+        brightness: 0.7,
+        complexity: 0.3,
+        color_warmth: 0.8,
+      },
       eras: ['victorian', 'retro'],
       settings: ['cozy_indoors', 'village'],
       interests: ['nature', 'animals', 'food'],
@@ -85,7 +112,16 @@ const PERSONAS = {
   3: {
     name: 'Edgy Artist',
     recipe: {
-      axes: { chaos: 0.7, scale: 0.5, energy: 0.6, realism: 0.3, weirdness: 0.7, brightness: 0.2, complexity: 0.8, color_warmth: 0.2 },
+      axes: {
+        chaos: 0.7,
+        scale: 0.5,
+        energy: 0.6,
+        realism: 0.3,
+        weirdness: 0.7,
+        brightness: 0.2,
+        complexity: 0.8,
+        color_warmth: 0.2,
+      },
       eras: ['modern', 'art_deco'],
       settings: ['city_streets', 'underground'],
       interests: ['abstract', 'dark', 'music'],
@@ -99,7 +135,16 @@ const PERSONAS = {
   4: {
     name: 'Adventure Bro',
     recipe: {
-      axes: { chaos: 0.6, scale: 0.8, energy: 0.9, realism: 0.7, weirdness: 0.2, brightness: 0.6, complexity: 0.5, color_warmth: 0.6 },
+      axes: {
+        chaos: 0.6,
+        scale: 0.8,
+        energy: 0.9,
+        realism: 0.7,
+        weirdness: 0.2,
+        brightness: 0.6,
+        complexity: 0.5,
+        color_warmth: 0.6,
+      },
       eras: ['modern', 'prehistoric'],
       settings: ['wild_outdoors', 'mountains', 'beach_tropical'],
       interests: ['sports', 'travel', 'ocean'],
@@ -113,7 +158,16 @@ const PERSONAS = {
   5: {
     name: 'Fantasy Romantic',
     recipe: {
-      axes: { chaos: 0.4, scale: 0.5, energy: 0.3, realism: 0.2, weirdness: 0.4, brightness: 0.7, complexity: 0.6, color_warmth: 0.7 },
+      axes: {
+        chaos: 0.4,
+        scale: 0.5,
+        energy: 0.3,
+        realism: 0.2,
+        weirdness: 0.4,
+        brightness: 0.7,
+        complexity: 0.6,
+        color_warmth: 0.7,
+      },
       eras: ['medieval', 'victorian', 'art_deco'],
       settings: ['otherworldly', 'village'],
       interests: ['fantasy', 'cute', 'whimsical'],
@@ -154,10 +208,7 @@ async function main() {
     name = persona.name;
   }
 
-  const { error } = await supabase
-    .from('user_recipes')
-    .update({ recipe })
-    .eq('user_id', KEVIN_ID);
+  const { error } = await supabase.from('user_recipes').update({ recipe }).eq('user_id', KEVIN_ID);
 
   if (error) {
     console.error('Failed:', error.message);

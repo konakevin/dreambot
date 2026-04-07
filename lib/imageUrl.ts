@@ -10,7 +10,12 @@
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 
 /** Convert a public storage URL to a resized transform URL */
-function transform(url: string, width: number, height?: number, mode: 'contain' | 'cover' = 'contain'): string {
+function transform(
+  url: string,
+  width: number,
+  height?: number,
+  mode: 'contain' | 'cover' = 'contain'
+): string {
   // Only transform Supabase Storage URLs
   if (!url.includes(SUPABASE_URL)) return url;
 

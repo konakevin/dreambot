@@ -338,6 +338,11 @@ export default function SettingsScreen() {
             }}
           />
           <SettingsRow
+            icon="flask"
+            label="Run Dream Generator"
+            onPress={() => nav.push('/dreamTest')}
+          />
+          <SettingsRow
             icon="trash-outline"
             label="Reset DreamBot Profile"
             onPress={async () => {

@@ -27,7 +27,10 @@ if (fs.existsSync(envFile)) {
 }
 
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-if (!ANTHROPIC_KEY) { console.error('Missing ANTHROPIC_API_KEY'); process.exit(1); }
+if (!ANTHROPIC_KEY) {
+  console.error('Missing ANTHROPIC_API_KEY');
+  process.exit(1);
+}
 
 const supabase = createClient(
   process.env.EXPO_PUBLIC_SUPABASE_URL,
@@ -38,14 +41,41 @@ const supabase = createClient(
 const DRY_RUN = process.argv.includes('--dry-run');
 
 const INTERESTS = [
-  'animals', 'nature', 'fantasy', 'sci_fi', 'architecture', 'fashion',
-  'food', 'abstract', 'dark', 'cute', 'ocean', 'space', 'whimsical',
-  'gaming', 'movies', 'music', 'geek', 'sports', 'travel', 'pride',
+  'animals',
+  'nature',
+  'fantasy',
+  'sci_fi',
+  'architecture',
+  'fashion',
+  'food',
+  'abstract',
+  'dark',
+  'cute',
+  'ocean',
+  'space',
+  'whimsical',
+  'gaming',
+  'movies',
+  'music',
+  'geek',
+  'sports',
+  'travel',
+  'pride',
 ];
 
 const MOODS = [
-  'cozy', 'epic', 'dreamy', 'moody', 'playful', 'serene',
-  'intense', 'nostalgic', 'mysterious', 'whimsical', 'dramatic', 'peaceful',
+  'cozy',
+  'epic',
+  'dreamy',
+  'moody',
+  'playful',
+  'serene',
+  'intense',
+  'nostalgic',
+  'mysterious',
+  'whimsical',
+  'dramatic',
+  'peaceful',
 ];
 
 // Generate archetypes in batches to avoid rate limits
@@ -92,7 +122,10 @@ Output ONLY valid JSON, nothing else. No markdown, no backticks.`;
 
   try {
     // Strip markdown code fences, trailing commas, and other common Haiku JSON issues
-    let cleaned = raw.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+    let cleaned = raw
+      .replace(/^```json\s*/i, '')
+      .replace(/```\s*$/, '')
+      .trim();
     cleaned = cleaned.replace(/,\s*([\]}])/g, '$1'); // trailing commas
     const parsed = JSON.parse(cleaned);
     return {
@@ -123,7 +156,9 @@ async function main() {
     }
   }
 
-  console.log(`\n🎭 Generating ${combos.length} archetypes (${INTERESTS.length} interests × ${MOODS.length} moods)...\n`);
+  console.log(
+    `\n🎭 Generating ${combos.length} archetypes (${INTERESTS.length} interests × ${MOODS.length} moods)...\n`
+  );
 
   const allArchetypes = [];
 
@@ -131,7 +166,9 @@ async function main() {
     const batch = combos.slice(i, i + BATCH_SIZE);
     const batchNum = Math.floor(i / BATCH_SIZE) + 1;
     const totalBatches = Math.ceil(combos.length / BATCH_SIZE);
-    console.log(`  Batch ${batchNum}/${totalBatches}: ${batch.map(c => `${c.mood}_${c.interest}`).join(', ')}`);
+    console.log(
+      `  Batch ${batchNum}/${totalBatches}: ${batch.map((c) => `${c.mood}_${c.interest}`).join(', ')}`
+    );
 
     const results = await Promise.all(
       batch.map(({ interest, mood }) => generateArchetype(interest, mood))
@@ -148,7 +185,7 @@ async function main() {
 
     // Small delay between batches to avoid rate limits
     if (i + BATCH_SIZE < combos.length) {
-      await new Promise(r => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, 1000));
     }
   }
 
@@ -164,13 +201,16 @@ async function main() {
 
   // Clear old archetypes and seed new ones
   console.log('\n  Clearing old archetypes...');
-  await supabase.from('user_archetypes').delete().neq('user_id', '00000000-0000-0000-0000-000000000000');
+  await supabase
+    .from('user_archetypes')
+    .delete()
+    .neq('user_id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('dream_archetypes').delete().neq('key', '__never__');
 
   console.log('  Seeding new archetypes...');
   // Insert in chunks of 50
   for (let i = 0; i < allArchetypes.length; i += 50) {
-    const chunk = allArchetypes.slice(i, i + 50).map(a => ({
+    const chunk = allArchetypes.slice(i, i + 50).map((a) => ({
       key: a.key,
       name: a.name,
       description: a.description,
@@ -210,14 +250,14 @@ async function main() {
     const userMoods = new Set(recipe.selected_moods ?? []);
 
     // An archetype matches if the user has BOTH the interest AND the mood
-    const matches = dbArchetypes.filter(a => {
-      const hasInterest = a.trigger_interests.some(i => userInterests.has(i));
-      const hasMood = a.trigger_moods.some(m => userMoods.has(m));
+    const matches = dbArchetypes.filter((a) => {
+      const hasInterest = a.trigger_interests.some((i) => userInterests.has(i));
+      const hasMood = a.trigger_moods.some((m) => userMoods.has(m));
       return hasInterest && hasMood;
     });
 
     if (matches.length > 0) {
-      const rows = matches.map(m => ({ user_id: user.user_id, archetype_id: m.id }));
+      const rows = matches.map((m) => ({ user_id: user.user_id, archetype_id: m.id }));
       const { error } = await supabase.from('user_archetypes').insert(rows);
       if (error) {
         console.error(`  ❌ ${user.user_id}: ${error.message}`);
