@@ -383,42 +383,9 @@ Deno.serve(async (req) => {
     // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
     const vibeProfile = vibe_profile as VibeProfile | undefined;
 
-    // Resolve medium
-    let medium = DREAM_MEDIUMS.find((m) => m.key === medium_key);
-    if (!medium || medium.key === 'surprise_me') medium = randomMedium();
-    if (medium.key === 'my_mediums' && vibeProfile && vibeProfile.art_styles.length > 0) {
-      // Pick a random style from user's saved art styles and find a matching curated medium
-      const userStyle =
-        vibeProfile.art_styles[Math.floor(Math.random() * vibeProfile.art_styles.length)];
-      const matched = CURATED_MEDIUMS.find((m) => m.key === userStyle);
-      if (matched) medium = matched;
-      // If no match, keep the random one
-    }
-
-    // Resolve vibe
-    let vibe = DREAM_VIBES.find((v) => v.key === vibe_key);
-    if (!vibe || vibe.key === 'surprise_me') vibe = randomVibe();
-    if (vibe.key === 'my_vibes' && vibeProfile) {
-      // Build a personalized vibe directive from mood sliders
-      const moods = vibeProfile.moods;
-      const parts: string[] = [];
-      if (moods.peaceful_chaotic < 0.3) parts.push('Deeply peaceful and serene atmosphere.');
-      else if (moods.peaceful_chaotic > 0.7)
-        parts.push('Intense, chaotic energy vibrating through the scene.');
-      if (moods.cute_terrifying < 0.3) parts.push('Warm, cute, and inviting tone.');
-      else if (moods.cute_terrifying > 0.7) parts.push('Dark, unsettling, and haunting mood.');
-      if (moods.minimal_maximal < 0.3)
-        parts.push('Clean minimal composition with vast negative space.');
-      else if (moods.minimal_maximal > 0.7)
-        parts.push('Lush maximalist detail in every corner of the frame.');
-      if (moods.realistic_surreal < 0.3) parts.push('Grounded in photographic reality.');
-      else if (moods.realistic_surreal > 0.7)
-        parts.push('Deeply surreal — impossible geometry, dreamlike distortions.');
-      if (vibeProfile.personal_anchors.dream_vibe) {
-        parts.push(`The overall feeling should be: "${vibeProfile.personal_anchors.dream_vibe}"`);
-      }
-      vibe = { key: 'my_vibes', label: 'My Vibes', directive: parts.join(' ') };
-    }
+    // Resolve medium and vibe to real curated entries — never store placeholders
+    const medium = resolveMedium(medium_key, vibeProfile);
+    const vibe = resolveVibe(vibe_key, vibeProfile);
 
     resolvedMediumKey = medium.key;
     resolvedVibeKey = vibe.key;
@@ -1145,6 +1112,40 @@ function secondsUntilMidnightUTC(): number {
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
   );
   return Math.ceil((midnight.getTime() - now.getTime()) / 1000);
+}
+
+/**
+ * Resolve a medium key to a real curated medium. Handles:
+ *   - 'surprise_me' → random curated medium
+ *   - 'my_mediums' → random from user's art_styles, or random curated
+ *   - unknown key → random curated medium
+ *   - valid key → that medium
+ */
+function resolveMedium(
+  key: string | undefined,
+  profile?: VibeProfile
+): (typeof CURATED_MEDIUMS)[number] {
+  if (key === 'my_mediums' && profile?.art_styles.length) {
+    const pick = profile.art_styles[Math.floor(Math.random() * profile.art_styles.length)];
+    return CURATED_MEDIUMS.find((m) => m.key === pick) ?? randomMedium();
+  }
+  const found = CURATED_MEDIUMS.find((m) => m.key === key);
+  return found ?? randomMedium();
+}
+
+/**
+ * Resolve a vibe key to a real curated vibe. Handles:
+ *   - 'surprise_me' → random curated vibe
+ *   - 'my_vibes' → random curated vibe (placeholder, no special logic)
+ *   - unknown key → random curated vibe
+ *   - valid key → that vibe
+ */
+function resolveVibe(
+  key: string | undefined,
+  _profile?: VibeProfile
+): (typeof CURATED_VIBES)[number] {
+  const found = CURATED_VIBES.find((v) => v.key === key);
+  return found ?? randomVibe();
 }
 
 function sanitizePrompt(prompt: string): string {

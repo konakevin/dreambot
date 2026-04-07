@@ -29,6 +29,8 @@ import { colors, ui } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { MediumVibeBadge } from '@/components/MediumVibeBadge';
+import { useExploreStore } from '@/store/explore';
+import { useFeedStore } from '@/store/feed';
 import { useAuthStore } from '@/store/auth';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -210,10 +212,13 @@ export function DreamCard({
     opacity: heartOpacity.value,
   }));
 
-  // Pinch to zoom — simple focal point approach
+  // Pinch to zoom — Instagram-style: stays zoomed, pan to explore, double-tap resets
   const zoomScale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
   const zoomTransX = useSharedValue(0);
   const zoomTransY = useSharedValue(0);
+  const savedTransX = useSharedValue(0);
+  const savedTransY = useSharedValue(0);
   const imageStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: zoomTransX.value },
@@ -238,6 +243,17 @@ export function DreamCard({
   function handleDoubleTap() {
     const now = Date.now();
     if (now - lastTap.current < 300) {
+      // If zoomed, reset zoom instead of toggling like
+      if (savedScale.value > 1) {
+        zoomScale.value = withSpring(1, { damping: 15 });
+        zoomTransX.value = withSpring(0, { damping: 15 });
+        zoomTransY.value = withSpring(0, { damping: 15 });
+        savedScale.value = 1;
+        savedTransX.value = 0;
+        savedTransY.value = 0;
+        lastTap.current = 0;
+        return;
+      }
       onToggleLike();
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       if (isLiked) {
@@ -266,43 +282,66 @@ export function DreamCard({
   }
 
   // Gestures
-  const panGesture = Gesture.Pan()
+  const swipeGesture = Gesture.Pan()
     .activeOffsetX([-8, 8])
     .failOffsetY([-15, 15])
-    .enabled(!disableSwipeToProfile)
+    .enabled(!disableSwipeToProfile && savedScale.value <= 1)
     .onEnd((e) => {
       if (e.translationX < -25 || e.velocityX < -200) {
         runOnJS(goToProfile)();
       }
     });
 
+  // Pan when zoomed — slide around the image (only active when zoomed in)
+  const zoomPanGesture = Gesture.Pan()
+    .minPointers(2)
+    .onStart(() => {
+      savedTransX.value = zoomTransX.value;
+      savedTransY.value = zoomTransY.value;
+    })
+    .onUpdate((e) => {
+      if (savedScale.value <= 1) return;
+      // Clamp pan to image boundaries
+      const maxX = ((savedScale.value - 1) * SCREEN_WIDTH) / 2;
+      const maxY = ((savedScale.value - 1) * SCREEN_HEIGHT) / 2;
+      zoomTransX.value = Math.max(-maxX, Math.min(maxX, savedTransX.value + e.translationX));
+      zoomTransY.value = Math.max(-maxY, Math.min(maxY, savedTransY.value + e.translationY));
+    });
+
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
-  const startFocalX = useSharedValue(0);
-  const startFocalY = useSharedValue(0);
 
   const pinchGesture = Gesture.Pinch()
     .onStart((e) => {
       focalX.value = e.focalX - SCREEN_WIDTH / 2;
       focalY.value = e.focalY - SCREEN_HEIGHT / 2;
-      startFocalX.value = e.focalX;
-      startFocalY.value = e.focalY;
     })
     .onUpdate((e) => {
-      const s = Math.max(1, Math.min(5, e.scale));
-      zoomScale.value = s;
-      const panX = e.focalX - startFocalX.value;
-      const panY = e.focalY - startFocalY.value;
-      zoomTransX.value = focalX.value * (1 - s) + panX;
-      zoomTransY.value = focalY.value * (1 - s) + panY;
+      const newScale = Math.max(1, Math.min(5, savedScale.value * e.scale));
+      zoomScale.value = newScale;
+      // Pan toward focal point as you zoom
+      zoomTransX.value = savedTransX.value + focalX.value * (1 - e.scale);
+      zoomTransY.value = savedTransY.value + focalY.value * (1 - e.scale);
     })
     .onEnd(() => {
-      zoomScale.value = withTiming(1, { duration: 200 });
-      zoomTransX.value = withTiming(0, { duration: 200 });
-      zoomTransY.value = withTiming(0, { duration: 200 });
+      savedScale.value = zoomScale.value;
+      savedTransX.value = zoomTransX.value;
+      savedTransY.value = zoomTransY.value;
+      // If zoomed out past 1x, snap back
+      if (zoomScale.value <= 1.05) {
+        zoomScale.value = withSpring(1, { damping: 15 });
+        zoomTransX.value = withSpring(0, { damping: 15 });
+        zoomTransY.value = withSpring(0, { damping: 15 });
+        savedScale.value = 1;
+        savedTransX.value = 0;
+        savedTransY.value = 0;
+      }
     });
 
-  const composed = Gesture.Simultaneous(panGesture, pinchGesture);
+  const composed = Gesture.Simultaneous(
+    swipeGesture,
+    Gesture.Simultaneous(pinchGesture, zoomPanGesture)
+  );
 
   return (
     <GestureDetector gesture={composed}>
@@ -367,8 +406,18 @@ export function DreamCard({
 
           {/* Post info */}
           <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
-            <MediumVibeBadge mediumKey={item.dream_medium} vibeKey={item.dream_vibe} />
             {item.bot_message && <Text style={s.botMessage}>{item.bot_message}</Text>}
+            <MediumVibeBadge
+              mediumKey={item.dream_medium}
+              vibeKey={item.dream_vibe}
+              onPress={() => {
+                useExploreStore
+                  .getState()
+                  .setFilters(item.dream_medium ?? null, item.dream_vibe ?? null);
+                useFeedStore.getState().setActiveTab('top');
+                router.navigate('/(tabs)/top');
+              }}
+            />
             <TouchableOpacity
               style={s.usernameRow}
               onPress={() =>
@@ -443,7 +492,7 @@ export function DreamCard({
             </TouchableOpacity>
             {onFamily && (
               <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
-                <Ionicons name="git-network-outline" size={24} color="#FFFFFF" />
+                <Ionicons name="color-wand-outline" size={24} color="#FFFFFF" />
                 {(item.twin_count ?? 0) + (item.fuse_count ?? 0) > 0 && (
                   <Text style={ui.sideCount}>
                     {(item.twin_count ?? 0) + (item.fuse_count ?? 0)}
@@ -505,9 +554,17 @@ const s = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   heartBurst: { position: 'absolute', top: '50%', left: '50%', marginTop: -40, marginLeft: -40 },
-  sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 20 },
-  postInfo: { position: 'absolute', bottom: 0, left: 0, right: 70, paddingHorizontal: 16, gap: 8 },
-  usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 16 },
+  postInfo: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 60,
+    paddingHorizontal: 16,
+    gap: 6,
+    paddingBottom: 4,
+  },
+  usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
   avatar: {
     width: 32,
     height: 32,
@@ -528,26 +585,26 @@ const s = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '700',
-    textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowRadius: 4,
-    textShadowOffset: { width: 0, height: 1 },
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowRadius: 16,
+    textShadowOffset: { width: 0, height: 0 },
   },
   timestamp: {
     color: 'rgba(255,255,255,0.7)',
-    fontSize: 13,
-    fontWeight: '600',
-    textShadowColor: 'rgba(0,0,0,0.8)',
-    textShadowRadius: 6,
-    textShadowOffset: { width: 0, height: 1 },
+    fontSize: 12,
+    fontWeight: '500',
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowRadius: 16,
+    textShadowOffset: { width: 0, height: 0 },
     marginTop: 1,
   },
   botMessage: {
-    color: 'rgba(255,255,255,0.75)',
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 13,
     fontStyle: 'italic',
     lineHeight: 18,
-    textShadowColor: 'rgba(0,0,0,0.6)',
-    textShadowRadius: 4,
-    textShadowOffset: { width: 0, height: 1 },
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowRadius: 16,
+    textShadowOffset: { width: 0, height: 0 },
   },
 });

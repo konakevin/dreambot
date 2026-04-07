@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,8 +10,9 @@ export default function TabLayout() {
   const { session, initialized } = useAuthStore();
   const bumpProfileReset = useFeedStore((s) => s.bumpProfileReset);
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
+  const activeTab = useFeedStore((s) => s.activeTab);
+  const setActiveTab = useFeedStore((s) => s.setActiveTab);
   const queryClient = useQueryClient();
-  const activeTab = useRef('index');
   const { data: unreadCount = 0 } = useUnreadCount();
 
   if (initialized && !session) {
@@ -42,10 +42,10 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            if (activeTab.current === 'index') {
+            if (activeTab === 'index') {
               regenerateSeed();
             }
-            activeTab.current = 'index';
+            setActiveTab('index');
           },
         }}
       />
@@ -58,8 +58,8 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            if (activeTab.current === 'top') regenerateSeed();
-            activeTab.current = 'top';
+            if (activeTab === 'top') regenerateSeed();
+            setActiveTab('top');
           },
         }}
       />
@@ -72,7 +72,7 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            activeTab.current = 'create';
+            setActiveTab('create');
           },
         }}
       />
@@ -99,7 +99,7 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            activeTab.current = 'inbox';
+            setActiveTab('inbox');
           },
         }}
       />
@@ -119,7 +119,7 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            activeTab.current = 'profile';
+            setActiveTab('profile');
             bumpProfileReset();
           },
         }}

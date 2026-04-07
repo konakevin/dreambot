@@ -1,17 +1,19 @@
 /**
  * MediumVibeBadge — displays the medium and vibe labels on dream cards.
  * Shared across feed cards, reveal screen, and detail views.
+ * Tappable — navigates to Explore with that medium+vibe filtered.
  */
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
 
 interface Props {
   mediumKey?: string | null;
   vibeKey?: string | null;
+  onPress?: () => void;
 }
 
-export function MediumVibeBadge({ mediumKey, vibeKey }: Props) {
+export function MediumVibeBadge({ mediumKey, vibeKey, onPress }: Props) {
   if (!mediumKey && !vibeKey) return null;
 
   const mediumLabel = mediumKey
@@ -19,35 +21,44 @@ export function MediumVibeBadge({ mediumKey, vibeKey }: Props) {
     : null;
   const vibeLabel = vibeKey ? (DREAM_VIBES.find((v) => v.key === vibeKey)?.label ?? vibeKey) : null;
 
-  return (
+  const content = (
     <View style={s.container}>
       {mediumLabel && <Text style={s.medium}>{mediumLabel}</Text>}
       {vibeLabel && <Text style={s.vibe}>{vibeLabel}</Text>}
     </View>
   );
+
+  if (onPress) {
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+        {content}
+      </TouchableOpacity>
+    );
+  }
+
+  return content;
 }
 
 const s = StyleSheet.create({
   container: {
-    gap: 2,
+    gap: 1,
   },
   medium: {
-    color: '#fff',
+    color: 'rgba(255,255,255,0.9)',
     fontSize: 13,
     fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    textShadowColor: 'rgba(0,0,0,0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
+    letterSpacing: 0.5,
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
   },
   vibe: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,
     fontWeight: '600',
-    letterSpacing: 1,
-    textShadowColor: 'rgba(0,0,0,0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
+    letterSpacing: 0.3,
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
   },
 });

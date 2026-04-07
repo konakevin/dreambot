@@ -141,6 +141,10 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 28,
     fontWeight: '800',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
   },
   sparklePill: {
     flexDirection: 'row',

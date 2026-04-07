@@ -115,9 +115,8 @@ export function useDreamCreate() {
           medium_key: config.selectedMedium,
           vibe_key: config.selectedVibe,
           input_image: refUrl,
-          hint:
-            config.photoStyle === 'reimagine' ? config.userPrompt.trim() || undefined : undefined,
-          photo_style: config.photoStyle,
+          hint: config.userPrompt.trim() || undefined,
+          photo_style: config.userPrompt.trim() ? 'reimagine' : 'restyle',
         });
       } else {
         // Text dream (prompt or surprise)

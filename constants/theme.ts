@@ -164,8 +164,8 @@ export const ui = StyleSheet.create({
     width: 44,
     paddingVertical: 8,
     shadowColor: '#000000',
-    shadowOpacity: 0.6,
-    shadowRadius: 4,
+    shadowOpacity: 0.9,
+    shadowRadius: 8,
     shadowOffset: { width: 0, height: 1 },
   },
   sideCount: {
@@ -173,8 +173,8 @@ export const ui = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700' as const,
     marginTop: 1,
-    textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowRadius: 3,
+    textShadowColor: 'rgba(0,0,0,0.8)',
+    textShadowRadius: 6,
     textShadowOffset: { width: 0, height: 1 },
   },
 

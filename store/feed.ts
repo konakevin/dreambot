@@ -26,6 +26,9 @@ export interface FeedStore {
   // Profile tab reset
   profileResetToken: number;
   bumpProfileReset: () => void;
+  // Active tab tracking (for programmatic navigation)
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
 }
 
 export const useFeedStore = create<FeedStore>((set) => ({
@@ -39,4 +42,6 @@ export const useFeedStore = create<FeedStore>((set) => ({
   regenerateSeed: () => set({ feedSeed: Math.random() }),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
+  activeTab: 'index',
+  setActiveTab: (tab) => set({ activeTab: tab }),
 }));

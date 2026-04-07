@@ -30,11 +30,11 @@ export function OverlayPill({ label, active, onPress }: Props) {
 const s = StyleSheet.create({
   pill: {
     paddingVertical: 6,
-    paddingHorizontal: 14,
     borderRadius: 16,
     backgroundColor: 'rgba(0,0,0,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
+    width: 105,
   },
   pillActive: {
     backgroundColor: 'rgba(0,0,0,0.6)',

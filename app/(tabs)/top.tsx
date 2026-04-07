@@ -6,8 +6,9 @@
  * Filters by dream_medium and dream_vibe columns on uploads.
  */
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -33,9 +34,7 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
       const offset = pageParam as number;
       let query = supabase
         .from('uploads')
-        .select(
-          'id, user_id, image_url, caption, created_at, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, users!inner(username, avatar_url)'
-        )
+        .select('*, users!inner(username, avatar_url)')
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
@@ -83,21 +82,51 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
 }
 
 // Only show curated mediums (exclude my_mediums, surprise_me)
-const MEDIUM_PILLS = DREAM_MEDIUMS.filter((m) => m.directive !== null);
-const VIBE_PILLS = DREAM_VIBES.filter((v) => v.directive !== null);
-
-type ExploreTab = 'medium' | 'vibe';
+const MEDIUM_PILLS = DREAM_MEDIUMS.filter((m) => m.directive !== null).sort((a, b) =>
+  a.label.localeCompare(b.label)
+);
+const VIBE_PILLS = DREAM_VIBES.filter((v) => v.directive !== null).sort((a, b) =>
+  a.label.localeCompare(b.label)
+);
 
 export default function ExploreScreen() {
   const insets = useSafeAreaInsets();
-  const [tab, setTab] = useState<ExploreTab>('medium');
-  const [selectedMediums, setSelectedMediums] = useState<Set<string>>(new Set());
-  const [selectedVibes, setSelectedVibes] = useState<Set<string>>(new Set());
+  const [selectedMedium, setSelectedMedium] = useState<string | null>(null);
+  const [selectedVibe, setSelectedVibe] = useState<string | null>(null);
+  const feedSeed = useFeedStore((s) => s.feedSeed);
+  const pendingMedium = useExploreStore((s) => s.pendingMedium);
+  const pendingVibe = useExploreStore((s) => s.pendingVibe);
+  const clearPending = useExploreStore((s) => s.clearPending);
   const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
+  const mediumScrollRef = useRef<ScrollView>(null);
+  const vibeScrollRef = useRef<ScrollView>(null);
+  const mediumLayoutsRef = useRef<Record<string, { x: number; width: number }>>({});
+  const vibeLayoutsRef = useRef<Record<string, { x: number; width: number }>>({});
 
-  // Only filter by the active tab's selections
-  const activeMediums = tab === 'medium' ? [...selectedMediums] : [];
-  const activeVibes = tab === 'vibe' ? [...selectedVibes] : [];
+  // Apply filters from store (e.g. tapping medium+vibe badge on a card)
+  useEffect(() => {
+    if (pendingMedium !== null || pendingVibe !== null) {
+      setSelectedMedium(pendingMedium);
+      if (pendingVibe) setSelectedVibe(pendingVibe);
+      clearPending();
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
+      setTimeout(() => {
+        scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, pendingMedium);
+        scrollPillIntoView(vibeScrollRef, vibeLayoutsRef.current, pendingVibe);
+      }, 100);
+    }
+  }, [pendingMedium, pendingVibe, clearPending]);
+
+  // Re-tap Explore tab: scroll feed to top and pills back to selected
+  useEffect(() => {
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    setTimeout(() => {
+      scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, selectedMedium);
+    }, 100);
+  }, [feedSeed]);
+
+  const activeMediums = selectedMedium ? [selectedMedium] : [];
+  const activeVibes = selectedVibe ? [selectedVibe] : [];
 
   const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage } = useExploreDreams(
     activeMediums,
@@ -105,40 +134,37 @@ export default function ExploreScreen() {
   );
   const posts = data?.pages.flat() ?? [];
 
-  function toggleMedium(key: string) {
-    setSelectedMediums((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-    listRef.current?.scrollToOffset({ offset: 0, animated: false });
+  function scrollPillIntoView(
+    scrollRef: React.RefObject<ScrollView | null>,
+    layouts: Record<string, { x: number; width: number }>,
+    key: string | null
+  ) {
+    if (!key || !layouts[key] || !scrollRef.current) return;
+    const { x } = layouts[key];
+    scrollRef.current.scrollTo({ x: Math.max(0, x - 8), animated: true });
   }
 
-  function toggleVibe(key: string) {
-    setSelectedVibes((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
+  function selectMedium(key: string) {
+    const next = selectedMedium === key ? null : key;
+    setSelectedMedium(next);
     listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    if (next) scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, next);
   }
 
-  function switchTab(newTab: ExploreTab) {
-    setTab(newTab);
+  function selectVibe(key: string) {
+    const next = selectedVibe === key ? null : key;
+    setSelectedVibe(next);
     listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    if (next) scrollPillIntoView(vibeScrollRef, vibeLayoutsRef.current, next);
   }
 
-  const activeSelections = tab === 'medium' ? selectedMediums : selectedVibes;
-  const pills = tab === 'medium' ? MEDIUM_PILLS : VIBE_PILLS;
   const filterLabel =
-    activeSelections.size === 0
-      ? 'all'
-      : [...activeSelections]
-          .map((k) => pills.find((p) => p.key === k)?.label)
-          .filter(Boolean)
-          .join(' + ');
+    [
+      selectedMedium ? MEDIUM_PILLS.find((p) => p.key === selectedMedium)?.label : null,
+      selectedVibe ? VIBE_PILLS.find((p) => p.key === selectedVibe)?.label : null,
+    ]
+      .filter(Boolean)
+      .join(' + ') || 'all';
 
   return (
     <View style={s.root}>
@@ -159,52 +185,67 @@ export default function ExploreScreen() {
       />
 
       <LinearGradient
-        colors={['rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
+        colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.4)', 'transparent']}
         style={[s.topOverlay, { paddingTop: insets.top + 4 }]}
         pointerEvents="box-none"
       >
-        {/* Tab toggles */}
-        <View style={s.tabRow}>
-          <TouchableOpacity
-            style={[s.tab, tab === 'medium' && s.tabActive]}
-            onPress={() => switchTab('medium')}
-            activeOpacity={0.7}
+        {/* Medium row */}
+        <View style={s.filterRow}>
+          <Text style={s.filterLabel}>Medium</Text>
+          <ScrollView
+            ref={mediumScrollRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={s.pillRow}
           >
-            <Text style={[s.tabText, tab === 'medium' && s.tabTextActive]}>Medium</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[s.tab, tab === 'vibe' && s.tabActive]}
-            onPress={() => switchTab('vibe')}
-            activeOpacity={0.7}
-          >
-            <Text style={[s.tabText, tab === 'vibe' && s.tabTextActive]}>Vibe</Text>
-          </TouchableOpacity>
+            {MEDIUM_PILLS.map((m) => (
+              <View
+                key={m.key}
+                onLayout={(e) => {
+                  mediumLayoutsRef.current[m.key] = {
+                    x: e.nativeEvent.layout.x,
+                    width: e.nativeEvent.layout.width,
+                  };
+                }}
+              >
+                <OverlayPill
+                  label={m.label}
+                  active={selectedMedium === m.key}
+                  onPress={() => selectMedium(m.key)}
+                />
+              </View>
+            ))}
+          </ScrollView>
         </View>
 
-        {/* Filter pills for active tab */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={s.pillRow}
-        >
-          {tab === 'medium'
-            ? MEDIUM_PILLS.map((m) => (
+        {/* Vibe row */}
+        <View style={s.filterRow}>
+          <Text style={s.filterLabel}>Vibe</Text>
+          <ScrollView
+            ref={vibeScrollRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={s.pillRow}
+          >
+            {VIBE_PILLS.map((v) => (
+              <View
+                key={v.key}
+                onLayout={(e) => {
+                  vibeLayoutsRef.current[v.key] = {
+                    x: e.nativeEvent.layout.x,
+                    width: e.nativeEvent.layout.width,
+                  };
+                }}
+              >
                 <OverlayPill
-                  key={m.key}
-                  label={m.label}
-                  active={selectedMediums.has(m.key)}
-                  onPress={() => toggleMedium(m.key)}
-                />
-              ))
-            : VIBE_PILLS.map((v) => (
-                <OverlayPill
-                  key={v.key}
                   label={v.label}
-                  active={selectedVibes.has(v.key)}
-                  onPress={() => toggleVibe(v.key)}
+                  active={selectedVibe === v.key}
+                  onPress={() => selectVibe(v.key)}
                 />
-              ))}
-        </ScrollView>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
       </LinearGradient>
     </View>
   );
@@ -215,28 +256,19 @@ const s = StyleSheet.create({
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   emptyTitle: { color: colors.textSecondary, fontSize: 17, fontWeight: '600' },
   emptySubtitle: { color: colors.textMuted, fontSize: 14 },
-  topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, paddingBottom: 16, gap: 8 },
-  tabRow: {
+  topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, paddingBottom: 16, gap: 6 },
+  filterRow: {
     flexDirection: 'row',
-    gap: 0,
-    paddingHorizontal: 16,
-    marginBottom: 4,
+    alignItems: 'center',
   },
-  tab: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  tabActive: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
-  },
-  tabText: {
+  filterLabel: {
     color: 'rgba(255,255,255,0.5)',
-    fontSize: 15,
+    fontSize: 11,
     fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    width: 56,
+    paddingLeft: 16,
   },
-  tabTextActive: {
-    color: '#FFFFFF',
-  },
-  pillRow: { gap: 8, paddingHorizontal: 16 },
+  pillRow: { gap: 6, paddingRight: 16 },
 });

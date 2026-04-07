@@ -31,7 +31,6 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
-import type { PhotoStyle } from '@/store/dream';
 import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -64,7 +63,6 @@ export default function DreamLikeThisScreen() {
   // User's choices
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
-  const [photoStyle, setLocalPhotoStyle] = useState<PhotoStyle>('restyle');
   const [userPrompt, setUserPrompt] = useState('');
   const [kbOpen, setKbOpen] = useState(false);
   const promptRef = useRef<TextInput>(null);
@@ -111,7 +109,6 @@ export default function DreamLikeThisScreen() {
     DREAM_MEDIUMS.find((m) => m.key === refMedium)?.label ?? refMedium ?? 'Unknown';
   const vibeLabel = DREAM_VIBES.find((v) => v.key === refVibe)?.label ?? refVibe ?? 'Unknown';
   const hasPhoto = !!photoUri;
-  const needsPrompt = hasPhoto && photoStyle === 'reimagine' && !userPrompt.trim();
 
   async function handlePickPhoto() {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -160,20 +157,23 @@ export default function DreamLikeThisScreen() {
   }
 
   function handleDream() {
-    if (needsPrompt || !refMedium) return;
+    if (!refMedium) return;
     Keyboard.dismiss();
+
+    // Auto-detect: prompt entered = reimagine, no prompt = restyle
+    const effectivePhotoStyle = userPrompt.trim() ? 'reimagine' : 'restyle';
 
     // Set up the dream store with inherited medium/vibe
     reset();
     if (photoBase64 && photoUri) {
       setPhoto(photoBase64, photoUri);
-      setPhotoStyle(photoStyle);
+      setPhotoStyle(effectivePhotoStyle);
     } else {
       setMode('prompt');
     }
     setMedium(refMedium);
     setVibe(refVibe ?? 'surprise_me');
-    setPrompt(hasPhoto && photoStyle === 'restyle' ? '' : userPrompt.trim());
+    setPrompt(userPrompt.trim());
 
     // Navigate to Loading → Reveal (same as Create flow)
     router.push('/dream/loading');
@@ -196,11 +196,14 @@ export default function DreamLikeThisScreen() {
       >
         {/* Header */}
         <View style={s.header}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={{ zIndex: 1 }}>
             <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Dream Like This</Text>
-          <TouchableOpacity onPress={() => router.push('/sparkleStore')} style={s.sparklePill}>
+          <TouchableOpacity
+            onPress={() => router.push('/sparkleStore')}
+            style={[s.sparklePill, { zIndex: 1 }]}
+          >
             <Ionicons name="sparkles" size={14} color={colors.accent} />
             <Text style={s.sparkleText}>{formatCompact(sparkleBalance)}</Text>
           </TouchableOpacity>
@@ -212,109 +215,91 @@ export default function DreamLikeThisScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Reference post + arrow + user photo */}
-          <View style={s.previewRow}>
-            <View style={s.previewCard}>
-              <Image source={{ uri: params.imageUrl }} style={s.previewImage} contentFit="cover" />
-              <Text style={s.previewLabel}>Original</Text>
+          {/* Preview area */}
+          {hasPhoto ? (
+            <View style={s.previewRow}>
+              <View style={s.previewCard}>
+                <Image
+                  source={{ uri: params.imageUrl }}
+                  style={s.previewImage}
+                  contentFit="cover"
+                />
+                <Text style={s.previewLabel}>Original</Text>
+              </View>
+              <Ionicons name="arrow-forward" size={24} color={colors.textMuted} />
+              <View style={s.previewCard}>
+                <Image source={{ uri: photoUri! }} style={s.previewImage} contentFit="cover" />
+                <TouchableOpacity style={s.clearPhoto} onPress={clearPhoto}>
+                  <Ionicons name="close-circle" size={20} color="#fff" />
+                </TouchableOpacity>
+                <Text style={s.previewLabel}>Your Photo</Text>
+              </View>
             </View>
-            <Ionicons name="arrow-forward" size={24} color={colors.textMuted} />
-            <TouchableOpacity style={s.previewCard} onPress={handlePickPhoto} activeOpacity={0.7}>
-              {hasPhoto ? (
-                <>
-                  <Image source={{ uri: photoUri! }} style={s.previewImage} contentFit="cover" />
-                  <TouchableOpacity style={s.clearPhoto} onPress={clearPhoto}>
-                    <Ionicons name="close-circle" size={20} color="#fff" />
-                  </TouchableOpacity>
-                  <Text style={s.previewLabel}>Your Photo</Text>
-                </>
-              ) : (
-                <View style={s.addPhoto}>
-                  <Ionicons name="camera-outline" size={28} color={colors.textSecondary} />
-                  <Text style={s.addPhotoText}>Add Photo</Text>
-                  <Text style={s.addPhotoSub}>or enter a prompt below</Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          </View>
-
-          {/* Locked medium + vibe display */}
-          <View style={s.lockedRow}>
-            <View style={s.lockedPill}>
-              <Ionicons name="color-palette-outline" size={14} color={colors.accent} />
-              <Text style={s.lockedText}>{mediumLabel}</Text>
-            </View>
-            <View style={s.lockedPill}>
-              <Ionicons name="sparkles-outline" size={14} color={colors.accent} />
-              <Text style={s.lockedText}>{vibeLabel}</Text>
-            </View>
-          </View>
-
-          {/* Photo style toggle */}
-          {hasPhoto && (
-            <View style={s.styleToggle}>
-              <TouchableOpacity
-                style={[s.styleOption, photoStyle === 'restyle' && s.styleOptionActive]}
-                onPress={() => setLocalPhotoStyle('restyle')}
-                activeOpacity={0.7}
-              >
-                <Text style={[s.styleLabel, photoStyle === 'restyle' && s.styleLabelActive]}>
-                  Restyle
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[s.styleOption, photoStyle === 'reimagine' && s.styleOptionActive]}
-                onPress={() => setLocalPhotoStyle('reimagine')}
-                activeOpacity={0.7}
-              >
-                <Text style={[s.styleLabel, photoStyle === 'reimagine' && s.styleLabelActive]}>
-                  Reimagine
-                </Text>
-              </TouchableOpacity>
+          ) : (
+            <View style={s.previewRow}>
+              <View style={s.previewCard}>
+                <Image
+                  source={{ uri: params.imageUrl }}
+                  style={s.previewImage}
+                  contentFit="cover"
+                />
+                <TouchableOpacity
+                  style={s.cameraBadge}
+                  onPress={handlePickPhoto}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="camera-outline" size={18} color="#fff" />
+                  <View style={s.cameraPlusDot}>
+                    <Ionicons name="add" size={10} color={colors.accent} />
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
 
-          {/* Prompt input — show for text dreams or reimagine */}
-          {(!hasPhoto || photoStyle === 'reimagine') && (
-            <View style={s.promptWrap}>
-              <TextInput
-                ref={promptRef}
-                style={s.promptInput}
-                placeholder={hasPhoto ? 'Describe the new scenario...' : 'Describe your dream...'}
-                placeholderTextColor={colors.textMuted}
-                value={userPrompt}
-                onChangeText={setUserPrompt}
-                maxLength={300}
-                multiline
-              />
-              {userPrompt.length > 0 && (
-                <TouchableOpacity
-                  onPress={() => setUserPrompt('')}
-                  hitSlop={8}
-                  style={s.promptClear}
-                >
-                  <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-                </TouchableOpacity>
-              )}
-            </View>
+          {/* Style info */}
+          <View style={s.styleInfo}>
+            <Text style={s.styleInfoTitle}>Dream in this style</Text>
+            <Text style={s.styleInfoLine}>Medium: {mediumLabel}</Text>
+            <Text style={s.styleInfoLine}>Vibe: {vibeLabel}</Text>
+          </View>
+
+          {/* Prompt input — always visible */}
+          <View style={s.promptWrap}>
+            <TextInput
+              ref={promptRef}
+              style={s.promptInput}
+              placeholder={
+                hasPhoto
+                  ? 'Add a scenario to reimagine, or leave empty to restyle...'
+                  : 'Describe your dream, or tap the camera to upload a photo...'
+              }
+              placeholderTextColor={colors.textMuted}
+              value={userPrompt}
+              onChangeText={setUserPrompt}
+              maxLength={300}
+              multiline
+            />
+            {userPrompt.length > 0 && (
+              <TouchableOpacity onPress={() => setUserPrompt('')} hitSlop={8} style={s.promptClear}>
+                <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
+          </View>
+          {hasPhoto && (
+            <Text style={s.promptHint}>
+              {userPrompt.trim()
+                ? 'Your photo will be reimagined in a new scenario'
+                : 'Your photo will be restyled — same scene, new art style'}
+            </Text>
           )}
         </ScrollView>
 
         {/* Footer */}
         <View style={s.footer}>
-          <TouchableOpacity
-            style={[s.dreamBtn, needsPrompt && s.dreamBtnDisabled]}
-            onPress={handleDream}
-            activeOpacity={needsPrompt ? 1 : 0.8}
-          >
-            <Ionicons
-              name="sparkles"
-              size={18}
-              color={needsPrompt ? 'rgba(255,255,255,0.4)' : '#fff'}
-            />
-            <Text style={[s.dreamBtnText, needsPrompt && s.dreamBtnTextDisabled]}>
-              {needsPrompt ? 'Enter a scenario' : 'Dream'}
-            </Text>
+          <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
+            <Ionicons name="sparkles" size={18} color="#fff" />
+            <Text style={s.dreamBtnText}>Dream</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -332,7 +317,15 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  headerTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
+  headerTitle: {
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '700',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+  },
   sparklePill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -374,44 +367,63 @@ const s = StyleSheet.create({
     textShadowRadius: 3,
   },
   clearPhoto: { position: 'absolute', top: 6, right: 6 },
-  addPhoto: {
-    flex: 1,
+  cameraBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
   },
-  addPhotoText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
-  addPhotoSub: { color: colors.textMuted, fontSize: 10 },
-
-  // Locked medium/vibe
-  lockedRow: { flexDirection: 'row', gap: 8 },
-  lockedPill: {
-    flexDirection: 'row',
+  cameraPlusDot: {
+    position: 'absolute',
+    top: 3,
+    right: 3,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: '#fff',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.accent,
+    justifyContent: 'center',
   },
-  lockedText: { color: colors.accent, fontSize: 13, fontWeight: '600' },
 
-  // Photo style toggle
-  styleToggle: { flexDirection: 'row', gap: 10 },
-  styleOption: {
-    flex: 1,
+  // Source center (text mode — no photo uploaded)
+  sourceCenter: {
     alignItems: 'center',
-    paddingVertical: 10,
+  },
+  sourceThumbnail: {
+    aspectRatio: 9 / 16,
+    maxHeight: 200,
     borderRadius: 12,
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    width: '42%',
   },
-  styleOptionActive: { borderColor: colors.accent },
-  styleLabel: { color: colors.textSecondary, fontSize: 14, fontWeight: '700' },
-  styleLabelActive: { color: colors.accent },
+
+  // Style info
+  styleInfo: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  styleInfoTitle: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  styleInfoLine: {
+    color: colors.textSecondary,
+    fontSize: 14,
+  },
+
+  promptHint: {
+    color: colors.textMuted,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: -8,
+  },
 
   // Prompt
   promptWrap: {
@@ -446,6 +458,4 @@ const s = StyleSheet.create({
     backgroundColor: colors.accent,
   },
   dreamBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
-  dreamBtnDisabled: { backgroundColor: colors.surface },
-  dreamBtnTextDisabled: { color: 'rgba(255,255,255,0.4)' },
 });

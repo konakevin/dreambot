@@ -25,7 +25,6 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useDreamStore } from '@/store/dream';
-import type { PhotoStyle } from '@/store/dream';
 import { MediumVibeSelector } from '@/components/MediumVibeSelector';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
@@ -35,7 +34,6 @@ export default function DreamConfigureScreen() {
   const setMedium = useDreamStore((s) => s.setMedium);
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
-  const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
 
   const [kbOpen, setKbOpen] = useState(false);
@@ -70,10 +68,8 @@ export default function DreamConfigureScreen() {
   }, [config.mode]);
 
   const hasPhoto = !!config.photoUri;
-  const needsPrompt = hasPhoto && config.photoStyle === 'reimagine' && !config.userPrompt.trim();
 
   function handleDream() {
-    if (needsPrompt) return;
     Keyboard.dismiss();
     router.push('/dream/loading');
   }
@@ -110,50 +106,6 @@ export default function DreamConfigureScreen() {
             </View>
           )}
 
-          {/* Photo style toggle */}
-          {hasPhoto && (
-            <View style={s.styleToggle}>
-              <TouchableOpacity
-                style={[s.styleOption, config.photoStyle === 'restyle' && s.styleOptionActive]}
-                onPress={() => setPhotoStyle('restyle')}
-                activeOpacity={0.7}
-              >
-                <Ionicons
-                  name="color-palette-outline"
-                  size={18}
-                  color={config.photoStyle === 'restyle' ? colors.accent : colors.textSecondary}
-                />
-                <View style={s.styleOptionText}>
-                  <Text
-                    style={[s.styleLabel, config.photoStyle === 'restyle' && s.styleLabelActive]}
-                  >
-                    Restyle
-                  </Text>
-                  <Text style={s.styleDesc}>Same scene, new art style</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[s.styleOption, config.photoStyle === 'reimagine' && s.styleOptionActive]}
-                onPress={() => setPhotoStyle('reimagine')}
-                activeOpacity={0.7}
-              >
-                <Ionicons
-                  name="planet-outline"
-                  size={18}
-                  color={config.photoStyle === 'reimagine' ? colors.accent : colors.textSecondary}
-                />
-                <View style={s.styleOptionText}>
-                  <Text
-                    style={[s.styleLabel, config.photoStyle === 'reimagine' && s.styleLabelActive]}
-                  >
-                    Reimagine
-                  </Text>
-                  <Text style={s.styleDesc}>New scenario, keep subject</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-
           {/* Medium + Vibe selectors */}
           <View style={s.selectors}>
             <MediumVibeSelector
@@ -164,45 +116,42 @@ export default function DreamConfigureScreen() {
             />
           </View>
 
-          {/* Prompt input */}
-          {(hasPhoto && config.photoStyle === 'reimagine') || !hasPhoto ? (
-            <View style={s.promptWrap}>
-              <TextInput
-                ref={promptRef}
-                style={s.promptInput}
-                placeholder={
-                  hasPhoto ? 'Describe the new scenario...' : 'Describe your dream (optional)...'
-                }
-                placeholderTextColor={colors.textMuted}
-                value={config.userPrompt}
-                onChangeText={setPrompt}
-                maxLength={300}
-                multiline
-              />
-              {config.userPrompt.length > 0 && (
-                <TouchableOpacity onPress={() => setPrompt('')} hitSlop={8} style={s.promptClear}>
-                  <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-                </TouchableOpacity>
-              )}
-            </View>
-          ) : null}
+          {/* Prompt input — always visible */}
+          <View style={s.promptWrap}>
+            <TextInput
+              ref={promptRef}
+              style={s.promptInput}
+              placeholder={
+                hasPhoto
+                  ? 'Add a scenario to reimagine, or leave empty to restyle...'
+                  : 'Describe your dream (optional)...'
+              }
+              placeholderTextColor={colors.textMuted}
+              value={config.userPrompt}
+              onChangeText={setPrompt}
+              maxLength={300}
+              multiline
+            />
+            {config.userPrompt.length > 0 && (
+              <TouchableOpacity onPress={() => setPrompt('')} hitSlop={8} style={s.promptClear}>
+                <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
+          </View>
+          {hasPhoto && (
+            <Text style={s.promptHint}>
+              {config.userPrompt.trim()
+                ? 'Your photo will be reimagined in a new scenario'
+                : 'Your photo will be restyled — same scene, new art style'}
+            </Text>
+          )}
         </ScrollView>
 
         {/* Fixed footer */}
         <View style={s.footer}>
-          <TouchableOpacity
-            style={[s.dreamBtn, needsPrompt && s.dreamBtnDisabled]}
-            onPress={handleDream}
-            activeOpacity={needsPrompt ? 1 : 0.8}
-          >
-            <Ionicons
-              name="sparkles"
-              size={18}
-              color={needsPrompt ? 'rgba(255,255,255,0.4)' : '#fff'}
-            />
-            <Text style={[s.dreamBtnText, needsPrompt && s.dreamBtnTextDisabled]}>
-              {needsPrompt ? 'Enter a scenario to dream' : 'Dream'}
-            </Text>
+          <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
+            <Ionicons name="sparkles" size={18} color="#fff" />
+            <Text style={s.dreamBtnText}>Dream</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -227,6 +176,10 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
   },
   sparklePill: {
     flexDirection: 'row',
@@ -302,45 +255,10 @@ const s = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
   },
-  dreamBtnDisabled: {
-    backgroundColor: colors.surface,
-  },
-  dreamBtnTextDisabled: {
-    color: 'rgba(255,255,255,0.4)',
-  },
-  styleToggle: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  styleOption: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    borderRadius: 14,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  styleOptionActive: {
-    borderColor: colors.accent,
-  },
-  styleOptionText: {
-    flex: 1,
-    gap: 2,
-  },
-  styleLabel: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  styleLabelActive: {
-    color: colors.accent,
-  },
-  styleDesc: {
+  promptHint: {
     color: colors.textMuted,
-    fontSize: 11,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: -8,
   },
 });
