@@ -36,6 +36,7 @@ import {
   randomMedium,
   randomVibe,
   buildSubjectInventionPrompt,
+  buildDreamScene,
 } from '../_shared/dreamEngine.ts';
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { buildTextDreamPrompt } from '../_shared/textPrompts.ts';
@@ -401,16 +402,10 @@ Deno.serve(async (req) => {
       nightlyVibe.key
     );
 
-    // Step 1: Invent a subject from dream seeds
+    // Step 1: Pick a surreal scene from 200+ Sonnet-generated templates, fill with user's seeds
     const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [], things: [] };
-    let dreamSubject: string;
-    try {
-      const subjectPrompt = buildSubjectInventionPrompt(seeds, nightlyProfile.aesthetics);
-      dreamSubject = await enhanceViaHaiku(subjectPrompt, '', ANTHROPIC_KEY, 80);
-      console.log('[generate-dream] Nightly subject:', dreamSubject);
-    } catch {
-      dreamSubject = 'a mysterious dreamscape with unexpected elements';
-    }
+    let dreamSubject = buildDreamScene(seeds);
+    console.log('[generate-dream] Nightly scene:', dreamSubject);
     lap('nightly-subject');
 
     // Step 2: Maybe inject a dream cast member (~30% chance)
@@ -431,30 +426,21 @@ Deno.serve(async (req) => {
     }
 
     // Step 3: Build the full Flux prompt — medium style + invented subject + vibe mood
-    const nightlyBrief = `You are writing a prompt for Flux AI to generate a dream image. Output 50-80 words, comma-separated phrases.
+    const nightlyBrief = `Convert this dream scene into a Flux AI image prompt. 50-80 words, comma-separated phrases.
 
-ART STYLE: ${nightlyMedium.directive}
+MEDIUM: ${nightlyMedium.fluxFragment}
 
-SCENE TO RENDER:
+DREAM SCENE (KEEP THIS WEIRD — do NOT tone it down or make it normal):
 ${dreamSubject}
 
-MOOD & ATMOSPHERE:
-${nightlyVibe.directive}
+VIBE: ${nightlyVibe.directive}
 
-RULES:
-- Start with the art style/medium description
-- Describe the SPECIFIC scene — what we see, where it is, what's happening
-- Include lighting, color palette, and one impossible/surreal detail
-- End with composition notes and quality terms
-- Portrait 9:16 vertical orientation
-- Be CONCRETE — name textures, materials, specific objects
-- NO meta-commentary, NO quotation marks
-- SAFETY: no nudity, no photorealistic human faces
+CRITICAL: The scene above is ALREADY the creative vision. Your ONLY job is to translate it into Flux-compatible phrasing. Do NOT simplify, sanitize, or replace it with something safer. Keep every surreal detail. Start with the medium, then describe EXACTLY this scene with concrete visual details, end with lighting and quality terms. Portrait 9:16. No quotation marks.
 
 Output ONLY the prompt.`;
 
     try {
-      finalPrompt = await enhanceViaHaiku(nightlyBrief, '', ANTHROPIC_KEY, 200);
+      finalPrompt = await nightlySonnet(nightlyBrief, ANTHROPIC_KEY, 200);
       if (finalPrompt.length < 20) throw new Error('too short');
     } catch {
       // Fallback: concatenate directly
@@ -1049,6 +1035,34 @@ async function enhanceViaHaiku(
     console.warn('[generate-dream] Haiku fallback:', (err as Error).message);
     return fallback;
   }
+}
+
+/** Sonnet call — used ONLY by the nightly DreamBot path for higher creativity */
+async function nightlySonnet(
+  brief: string,
+  anthropicKey: string | undefined,
+  maxTokens: number = 200
+): Promise<string> {
+  if (!anthropicKey) throw new Error('No API key');
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': anthropicKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: brief }],
+    }),
+  });
+  if (!res.ok) throw new Error(`Sonnet ${res.status}`);
+  const data = await res.json();
+  const text = data.content?.[0]?.text?.trim() ?? '';
+  if (text.length < 10) throw new Error('Sonnet response too short');
+  console.log('[generate-dream] Sonnet nightly prompt:', text.slice(0, 150));
+  return text;
 }
 
 // Route to the best model based on the medium/prompt content

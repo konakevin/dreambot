@@ -315,89 +315,56 @@ export function randomVibe(): DreamVibe {
  * Subject invention prompt for when the user provides no input.
  * Uses their profile interests/aesthetics for flavor.
  */
+import { DREAM_SCENE_TEMPLATES } from './dreamTemplates.ts';
+
+/**
+ * Build a dream scene by picking a random Sonnet-generated template
+ * and filling its slots with the user's dream seeds.
+ * No AI call needed — the templates ARE the creativity.
+ */
+export function buildDreamScene(dreamSeeds: {
+  characters: string[];
+  places: string[];
+  things: string[];
+}): string {
+  const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+  const template = pick(DREAM_SCENE_TEMPLATES);
+
+  // Fill template slots with random seeds, or generic fallbacks
+  const character =
+    dreamSeeds.characters.length > 0 ? pick(dreamSeeds.characters) : 'a wandering figure';
+  const place = dreamSeeds.places.length > 0 ? pick(dreamSeeds.places) : 'a forgotten city';
+  const thing = dreamSeeds.things.length > 0 ? pick(dreamSeeds.things) : 'glowing fragments';
+
+  return template
+    .replace(/\$\{character\}/g, character)
+    .replace(/\$\{place\}/g, place)
+    .replace(/\$\{thing\}/g, thing);
+}
+
+/**
+ * Fallback: AI-powered subject invention for when templates aren't enough.
+ * Uses Haiku to riff on seeds — called by the V2 text path.
+ */
 export function buildSubjectInventionPrompt(
   dreamSeeds: { characters: string[]; places: string[]; things: string[] },
   aesthetics: string[]
 ): string {
   const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-  // Don't always pick from every category — vary the combo
-  // Sometimes it's character+place, sometimes just a thing, sometimes place+thing with NO character
-  const roll = Math.random();
-  let pickedChar: string | null = null;
-  let pickedPlace: string | null = null;
-  let pickedThing: string | null = null;
+  const allSeeds = [...dreamSeeds.characters, ...dreamSeeds.places, ...dreamSeeds.things];
+  const shuffled = [...allSeeds].sort(() => Math.random() - 0.5);
+  const picked = shuffled.slice(0, Math.min(allSeeds.length, 2));
 
-  if (roll < 0.25) {
-    // Character + place (no thing)
-    pickedChar = dreamSeeds.characters.length > 0 ? pick(dreamSeeds.characters) : null;
-    pickedPlace = dreamSeeds.places.length > 0 ? pick(dreamSeeds.places) : null;
-  } else if (roll < 0.5) {
-    // Place + thing (no character — landscape/environment dream)
-    pickedPlace = dreamSeeds.places.length > 0 ? pick(dreamSeeds.places) : null;
-    pickedThing = dreamSeeds.things.length > 0 ? pick(dreamSeeds.things) : null;
-  } else if (roll < 0.7) {
-    // Just one seed — deep dive into a single concept
-    const allSeeds = [...dreamSeeds.characters, ...dreamSeeds.places, ...dreamSeeds.things];
-    if (allSeeds.length > 0) {
-      const solo = pick(allSeeds);
-      if (dreamSeeds.characters.includes(solo)) pickedChar = solo;
-      else if (dreamSeeds.places.includes(solo)) pickedPlace = solo;
-      else pickedThing = solo;
-    }
-  } else {
-    // All three — full fusion
-    pickedChar = dreamSeeds.characters.length > 0 ? pick(dreamSeeds.characters) : null;
-    pickedPlace = dreamSeeds.places.length > 0 ? pick(dreamSeeds.places) : null;
-    pickedThing = dreamSeeds.things.length > 0 ? pick(dreamSeeds.things) : null;
-  }
+  const seedHint = picked.length > 0 ? `Raw ingredients (use loosely): ${picked.join(', ')}` : '';
 
-  const picked = [pickedChar, pickedPlace, pickedThing].filter(Boolean) as string[];
+  const aestheticHint = aesthetics.length > 0 ? `Aesthetic: ${aesthetics.join(', ')}` : '';
 
-  // Randomly pick a scene scale to force variety
-  const scales = [
-    'EPIC WIDE SHOT — a massive sprawling environment, tiny figures dwarfed by the scale',
-    'INTIMATE CLOSE-UP — a single object or detail, filling the frame with texture',
-    'CHARACTER PORTRAIT — one figure or creature, dramatic pose, personality radiating',
-    'BIRDS EYE VIEW — looking down on an impossible world from above',
-    'VAST LANDSCAPE — environment IS the subject, stretching to the horizon',
-  ];
-  const scaleHint = scales[Math.floor(Math.random() * scales.length)];
+  return `Dream up a scene. Be surreal, impossible, beautiful, unsettling. Surprise me.
 
-  let seedInstruction: string;
-  if (picked.length >= 2) {
-    seedInstruction = `MANDATORY INGREDIENTS — you MUST fuse ALL of these into ONE scene:
-${picked.map((s) => `- "${s}"`).join('\n')}
-
-FUSE them into something impossible. Vary the SCALE and SCOPE:
-- EPIC: "robots" + "guitars" + "Tokyo" = a colossal robot fortress built from giant guitar necks, towering over neon Tokyo, strings humming between skyscrapers
-- INTIMATE: "crystals" + "the moon" = a single crystal growing on the moon's surface, refracting earthlight into a tiny rainbow
-- LANDSCAPE: "dragons" + "donuts" = rolling hills made of glazed donuts, dragon-shaped clouds drifting overhead, frosting rivers winding through valleys
-- CHARACTER: "astronauts" + "cozy cabin" = an astronaut sitting on a porch in space, cabin floating among asteroids, reading by starlight`;
-  } else if (picked.length === 1) {
-    seedInstruction = `MANDATORY INGREDIENT — the scene MUST feature "${picked[0]}" but reimagined at unexpected scale:
-- EPIC: "guitar" = a guitar the size of a mountain range, its strings forming bridges between peaks, tiny villages in the sound holes
-- INTIMATE: "robots" = a tiny clockwork robot the size of a thimble, sleeping inside a flower petal
-- LANDSCAPE: "donuts" = an entire world made of donuts — donut mountains, frosting waterfalls, sprinkle forests`;
-  } else {
-    seedInstruction = `No seeds — invent something visually stunning. Think fever dream, not stock photo.`;
-  }
-
-  const aestheticHint = aesthetics.length > 0 ? `\nAesthetic taste: ${aesthetics.join(', ')}` : '';
-
-  return `You are DreamBot. Invent a subject for a dream image.
-
-SCENE SCALE FOR THIS DREAM: ${scaleHint}
-
-${seedInstruction}
+${seedHint}
 ${aestheticHint}
 
-RULES:
-- Output ONLY the subject description, 15-30 words
-- Match the SCENE SCALE above — not every dream is a character portrait
-- Be CONCRETE and VISUAL — describe what we SEE, not what we feel
-- Must be physically IMPOSSIBLE in real life
-- NO generic scenes. NO "a beautiful landscape." NO "cozy room."
-
-Output ONLY the subject. Nothing else.`;
+15-30 words. What do we SEE? Output ONLY the scene description.`;
 }
