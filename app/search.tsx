@@ -19,6 +19,7 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useFriendIds } from '@/hooks/useFriendIds';
 import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
 import { useFriendshipStatus } from '@/hooks/useFriendshipStatus';
+import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 
 function SearchRow({ user }: { user: SearchUser }) {
@@ -37,7 +38,7 @@ function SearchRow({ user }: { user: SearchUser }) {
       activeOpacity={0.7}
     >
       {user.avatarUrl ? (
-        <Image source={{ uri: user.avatarUrl }} style={s.avatar} />
+        <Image source={{ uri: resizeAvatar(user.avatarUrl) }} style={s.avatar} cachePolicy="memory-disk" />
       ) : (
         <View style={s.avatarFallback}>
           <Text style={s.avatarText}>{(user.username || '?')[0].toUpperCase()}</Text>

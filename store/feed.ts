@@ -1,20 +1,10 @@
 import { create } from 'zustand';
-
-export interface PinnedPost {
-  id: string;
-  user_id: string;
-  image_url: string;
-  caption: string | null;
-  username: string;
-  avatar_url: string | null;
-  created_at: string;
-  comment_count: number;
-}
+import type { DreamPostItem } from '@/components/DreamCard';
 
 export interface FeedStore {
-  // Pinned post — shows as first card on home feed (e.g. first dream after onboarding)
-  pinnedPost: PinnedPost | null;
-  setPinnedPost: (post: PinnedPost | null) => void;
+  // Pinned post — shows as first card on home feed (e.g. deep link, first dream after onboarding)
+  pinnedPost: DreamPostItem | null;
+  setPinnedPost: (post: DreamPostItem | null) => void;
   // Feed refresh tokens
   resetToken: number;
   bumpReset: () => void;
@@ -29,6 +19,12 @@ export interface FeedStore {
   // Active tab tracking (for programmatic navigation)
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  // Deep link — post ID to pin when the home screen is ready
+  pendingPostId: string | null;
+  setPendingPostId: (id: string | null) => void;
+  // HUD visibility — toggled by single tap on feed cards
+  hudVisible: boolean;
+  setHudVisible: (visible: boolean) => void;
 }
 
 export const useFeedStore = create<FeedStore>((set) => ({
@@ -44,4 +40,8 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
   activeTab: 'index',
   setActiveTab: (tab) => set({ activeTab: tab }),
+  pendingPostId: null,
+  setPendingPostId: (id) => set({ pendingPostId: id }),
+  hudVisible: true,
+  setHudVisible: (visible) => set({ hudVisible: visible }),
 }));

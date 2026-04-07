@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { PostItem } from '@/hooks/useUserPosts';
+import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
 
 const PAGE_SIZE = 18;
 
@@ -11,13 +11,14 @@ export function usePublicProfilePosts(userId: string, enabled = true) {
       const offset = pageParam as number;
       const { data, error } = await supabase
         .from('uploads')
-        .select('id, image_url, width, height, caption, created_at')
+        .select(POST_SELECT)
         .eq('user_id', userId)
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
-      return { rows: (data ?? []) as PostItem[], offset };
+      const rows = castRows(data).map(mapToDreamPost);
+      return { rows, offset };
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>

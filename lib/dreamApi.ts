@@ -12,7 +12,7 @@ interface GenerateDreamOpts {
   mode: 'flux-dev' | 'flux-kontext';
   /** User's taste recipe — server builds prompt from this */
   recipe?: Recipe;
-  /** Pre-built prompt (for twin re-rolls) */
+  /** Pre-built prompt */
   prompt?: string;
   /** Optional user hint to weave into the dream */
   hint?: string;

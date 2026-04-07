@@ -15,13 +15,14 @@ import { router } from 'expo-router';
 import { useDeletePost } from '@/hooks/useDeletePost';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { useAlbumStore } from '@/store/album';
-import type { PostItem } from '@/hooks/useUserPosts';
+import type { DreamPostItem } from '@/components/DreamCard';
+import { thumbnailUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 
 const TILE_GAP = 2;
-const TILE_SIZE = (Dimensions.get('window').width - TILE_GAP) / 2;
+const TILE_WIDTH = (Dimensions.get('window').width - TILE_GAP) / 2;
+const TILE_HEIGHT = TILE_WIDTH;
 
-// Stable random for sparkle positions
 function seededRandom(seed: number) {
   const x = Math.sin(seed * 9301 + 49297) * 49297;
   return x - Math.floor(x);
@@ -31,24 +32,24 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
   const opacity = useSharedValue(0);
   const scale = useSharedValue(0);
 
-  const perimeter = 4 * TILE_SIZE;
+  const perimeter = 2 * (TILE_WIDTH + TILE_HEIGHT);
   const step = perimeter / total;
   const pos = (step * index + seededRandom(index + seed + 7) * step * 0.6) % perimeter;
   const jitter = seededRandom(index + seed + 13) * 6;
 
   let left: number, top: number;
-  if (pos < TILE_SIZE) {
+  if (pos < TILE_WIDTH) {
     left = pos;
     top = jitter;
-  } else if (pos < 2 * TILE_SIZE) {
-    left = TILE_SIZE - jitter;
-    top = pos - TILE_SIZE;
-  } else if (pos < 3 * TILE_SIZE) {
-    left = 3 * TILE_SIZE - pos;
-    top = TILE_SIZE - jitter;
+  } else if (pos < TILE_WIDTH + TILE_HEIGHT) {
+    left = TILE_WIDTH - jitter;
+    top = pos - TILE_WIDTH;
+  } else if (pos < 2 * TILE_WIDTH + TILE_HEIGHT) {
+    left = 2 * TILE_WIDTH + TILE_HEIGHT - pos;
+    top = TILE_HEIGHT - jitter;
   } else {
     left = jitter;
-    top = 4 * TILE_SIZE - pos;
+    top = perimeter - pos;
   }
 
   const delay = seededRandom(index + seed + 3) * 4000;
@@ -115,13 +116,20 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
 }
 
 interface PostTileProps {
-  item: PostItem;
+  item: DreamPostItem;
   isOwn?: boolean;
   albumIds?: string[];
   isHighlighted?: boolean;
+  showPrivateBadge?: boolean;
 }
 
-export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false }: PostTileProps) {
+export function PostTile({
+  item,
+  isOwn = false,
+  albumIds,
+  isHighlighted = false,
+  showPrivateBadge = false,
+}: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const isWish = !!item.from_wish;
 
@@ -167,6 +175,7 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
         style={styles.image}
         contentFit="cover"
         transition={150}
+        cachePolicy="memory-disk"
       />
       {isHighlighted && (
         <View style={styles.highlightOverlay}>
@@ -174,6 +183,11 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
             <Ionicons name="eye-outline" size={13} color="#FFFFFF" />
             <Text style={styles.highlightText}>Just viewed</Text>
           </View>
+        </View>
+      )}
+      {showPrivateBadge && item.is_active === false && (
+        <View style={styles.privateBadge}>
+          <Ionicons name="lock-closed" size={10} color="#fff" />
         </View>
       )}
       {isWish && (
@@ -216,8 +230,8 @@ export function PostTile({ item, isOwn = false, albumIds, isHighlighted = false 
 
 const styles = StyleSheet.create({
   tile: {
-    width: TILE_SIZE,
-    height: TILE_SIZE,
+    width: TILE_WIDTH,
+    height: TILE_HEIGHT,
     backgroundColor: colors.card,
   },
   image: {
@@ -243,6 +257,17 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
+  },
+  privateBadge: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   wishGlow: {
     position: 'absolute',

@@ -10,8 +10,9 @@ export function useDeletePost() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-      queryClient.invalidateQueries({ queryKey: ['feed'] });
-      queryClient.invalidateQueries({ queryKey: ['top'] }); // matches ['top', category, limit]
+      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+      queryClient.invalidateQueries({ queryKey: ['explore'] });
+      queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
     },
   });

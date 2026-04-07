@@ -15,11 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as Haptics from 'expo-haptics';
 import { useInbox, type NotificationItem } from '@/hooks/useInbox';
 import { useMarkShareSeen } from '@/hooks/useMarkShareSeen';
 import { useDeleteShare } from '@/hooks/useDeleteShare';
 import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
+import { InboxSkeleton } from '@/components/Skeleton';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import { useAlbumStore } from '@/store/album';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
@@ -66,8 +68,6 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
     }
     case 'post_like':
       return { action: 'liked your dream', preview: null };
-    case 'post_twin':
-      return { action: 'twinned your dream', preview: null };
     case 'post_fuse':
       return { action: 'fused with your dream', preview: null };
     default:
@@ -89,8 +89,6 @@ function getNotificationIcon(type: NotificationItem['type']): string {
       return 'sparkles';
     case 'post_like':
       return 'heart';
-    case 'post_twin':
-      return 'dice-outline';
     case 'post_fuse':
       return 'git-merge-outline';
     default:
@@ -175,7 +173,7 @@ function NotificationRow({
             <Ionicons name="moon" size={20} color={colors.accent} />
           </View>
         ) : item.actorAvatarUrl ? (
-          <Image source={{ uri: item.actorAvatarUrl }} style={styles.avatar} />
+          <Image source={{ uri: resizeAvatar(item.actorAvatarUrl) }} style={styles.avatar} cachePolicy="memory-disk" />
         ) : (
           <View style={styles.avatarFallback}>
             <Text style={styles.avatarText}>{(item.actorUsername || '?')[0].toUpperCase()}</Text>
@@ -467,7 +465,7 @@ export default function InboxScreen() {
         ListEmptyComponent={
           <View style={styles.empty}>
             {isLoading ? (
-              <ActivityIndicator color={colors.textSecondary} />
+              <InboxSkeleton />
             ) : (
               <>
                 <Ionicons name="notifications-outline" size={40} color="rgba(255,255,255,0.2)" />

@@ -6,15 +6,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   StyleSheet,
   ActivityIndicator,
+  FlatList,
   RefreshControl,
-  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
@@ -33,10 +31,6 @@ import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
 import { usePendingRequests } from '@/hooks/usePendingRequests';
 import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
 import { useRemoveFriend } from '@/hooks/useRemoveFriend';
-import { useMyDreams } from '@/hooks/useMyDreams';
-import { useAlbumStore } from '@/store/album';
-
-import { FlatList } from 'react-native';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'saved' | 'dreams' | 'friends' | 'followers' | 'following';
@@ -56,16 +50,24 @@ export default function ProfileScreen() {
     }
   }, [profileResetToken]);
 
+  // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
+  const isSocialTab =
+    activeTab === 'friends' || activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile, isRefetching } = usePublicProfile(user?.id ?? '');
-  const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(user?.id ?? '');
-  const { data: following = [], isLoading: loadingFollowing } = useFollowingList(user?.id ?? '');
+  const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
+    isSocialTab ? (user?.id ?? '') : ''
+  );
+  const { data: following = [], isLoading: loadingFollowing } = useFollowingList(
+    isSocialTab ? (user?.id ?? '') : ''
+  );
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-  const { data: friends = [], isLoading: loadingFriends } = useFriendsList(user?.id ?? '');
+  const { data: friends = [], isLoading: loadingFriends } = useFriendsList(
+    isSocialTab ? (user?.id ?? '') : ''
+  );
   const { data: pendingRequests = [] } = usePendingRequests();
   const { mutate: respondRequest } = useRespondFriendRequest();
   const { mutate: removeFriend } = useRemoveFriend();
-  const { data: myDreams = [], isLoading: loadingDreams } = useMyDreams();
 
   const handleRefresh = useCallback(() => {
     refetchProfile();
@@ -172,66 +174,26 @@ export default function ProfileScreen() {
     </>
   );
 
-  if (activeTab === 'posts' || activeTab === 'saved') {
+  if (activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') {
+    const sourceMap = {
+      posts: { type: 'own' as const },
+      saved: { type: 'saved' as const },
+      dreams: { type: 'dreams' as const },
+    };
+    const emptyMap = {
+      posts: 'No posts yet',
+      saved: 'Nothing saved yet',
+      dreams: 'No dreams yet. Create your first dream!',
+    };
     return (
       <SafeAreaView style={styles.root}>
         <PostGrid
-          source={activeTab === 'posts' ? { type: 'own' } : { type: 'saved' }}
-          isOwn={activeTab === 'posts'}
-          emptyText={activeTab === 'posts' ? 'No posts yet' : 'Nothing saved yet'}
+          source={sourceMap[activeTab]}
+          isOwn={activeTab === 'posts' || activeTab === 'dreams'}
+          emptyText={emptyMap[activeTab]}
           ListHeaderComponent={header}
           scrollToTopToken={profileResetToken}
-        />
-      </SafeAreaView>
-    );
-  }
-
-  if (activeTab === 'dreams') {
-    const tileSize = (Dimensions.get('window').width - 2) / 2;
-    return (
-      <SafeAreaView style={styles.root}>
-        <FlatList
-          data={myDreams}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={{ gap: 2 }}
-          contentContainerStyle={{ gap: 2 }}
-          ListHeaderComponent={header}
-          ListEmptyComponent={
-            loadingDreams ? (
-              <ActivityIndicator size="small" color={colors.accent} style={{ marginTop: 40 }} />
-            ) : (
-              <Text style={styles.emptyText}>No dreams yet. Create your first dream!</Text>
-            )
-          }
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => {
-                useAlbumStore.getState().setAlbum(myDreams.map((d) => d.id));
-                router.push(`/photo/${item.id}`);
-              }}
-              style={{ width: tileSize, height: tileSize }}
-            >
-              <Image
-                source={{ uri: item.image_url }}
-                style={{ width: '100%', height: '100%' }}
-                contentFit="cover"
-              />
-              {!item.is_active && (
-                <View style={styles.privateBadge}>
-                  <Ionicons name="lock-closed" size={10} color="#fff" />
-                </View>
-              )}
-            </TouchableOpacity>
-          )}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefetching}
-              onRefresh={handleRefresh}
-              tintColor={colors.textSecondary}
-            />
-          }
+          showPrivateBadge={activeTab === 'dreams'}
         />
       </SafeAreaView>
     );
@@ -376,15 +338,4 @@ const styles = StyleSheet.create({
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
   wishRow: { paddingHorizontal: 16, paddingBottom: 8 },
-  privateBadge: {
-    position: 'absolute',
-    bottom: 4,
-    right: 4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });

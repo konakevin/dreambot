@@ -27,7 +27,6 @@ export function useFriendshipStatus(targetId: string) {
       return 'pending_received';
     },
     enabled: !!user && !!targetId && user.id !== targetId,
-    staleTime: 15_000,
-    refetchOnMount: 'always',
+    staleTime: 60_000,
   });
 }

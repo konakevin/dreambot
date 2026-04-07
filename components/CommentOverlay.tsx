@@ -40,6 +40,7 @@ import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { CommentRow } from '@/components/CommentRow';
 import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
+import { avatarUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -291,7 +292,11 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         >
           <View style={styles.thumbUserRow}>
             {post.avatar_url ? (
-              <Image source={{ uri: post.avatar_url }} style={styles.thumbAvatar} />
+              <Image
+                source={{ uri: avatarUrl(post.avatar_url!) }}
+                style={styles.thumbAvatar}
+                cachePolicy="memory-disk"
+              />
             ) : (
               <View style={styles.thumbAvatarFallback}>
                 <Text style={styles.thumbAvatarText}>

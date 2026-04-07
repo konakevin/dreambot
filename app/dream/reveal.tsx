@@ -12,7 +12,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Share,
   Dimensions,
 } from 'react-native';
 import { Image } from 'expo-image';
@@ -86,7 +85,7 @@ export default function DreamRevealScreen() {
       });
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-      queryClient.invalidateQueries({ queryKey: ['feed'] });
+      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Posted to your profile', 'checkmark-circle');
 
@@ -132,13 +131,6 @@ export default function DreamRevealScreen() {
     router.back();
   }
 
-  async function handleShare() {
-    try {
-      await Share.share({ url: result!.imageUrl });
-    } catch {
-      // user cancelled
-    }
-  }
 
   return (
     <View style={s.container}>
@@ -158,15 +150,6 @@ export default function DreamRevealScreen() {
         pointerEvents="none"
       />
 
-      {/* Top-right share button */}
-      <TouchableOpacity
-        style={[s.shareBtn, { top: insets.top + 12 }]}
-        onPress={handleShare}
-        activeOpacity={0.7}
-      >
-        <Ionicons name="share-outline" size={22} color="#fff" />
-      </TouchableOpacity>
-
       {/* Medium + Vibe labels */}
       <View style={[s.labels, { paddingBottom: insets.bottom + 16 }]}>
         <MediumVibeBadge mediumKey={mediumKey} vibeKey={vibeKey} />
@@ -185,8 +168,8 @@ export default function DreamRevealScreen() {
               </TouchableOpacity>
 
               <TouchableOpacity style={s.glassPill} onPress={handleSave} activeOpacity={0.85}>
-                <Ionicons name="bookmark-outline" size={16} color="#fff" />
-                <Text style={s.glassPillText}>Save</Text>
+                <Ionicons name="moon-outline" size={16} color="#fff" />
+                <Text style={s.glassPillText}>Save to Dreams</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={s.glassPill} onPress={handleDiscard} activeOpacity={0.85}>
@@ -225,16 +208,6 @@ const s = StyleSheet.create({
     left: 0,
     right: 0,
     height: SCREEN_HEIGHT * 0.4,
-  },
-  shareBtn: {
-    position: 'absolute',
-    right: 16,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   labels: {
     position: 'absolute',

@@ -20,6 +20,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-na
 import { useEffect } from 'react';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { usePostLikes } from '@/hooks/usePostLikes';
 
@@ -81,9 +82,10 @@ export function LikesSheet({ uploadId, visible, onClose }: Props) {
                 activeOpacity={0.7}
               >
                 <Image
-                  source={{ uri: item.avatar_url ?? undefined }}
+                  source={{ uri: item.avatar_url ? resizeAvatar(item.avatar_url) : undefined }}
                   style={s.avatar}
                   contentFit="cover"
+                  cachePolicy="memory-disk"
                 />
                 <Text style={s.username} numberOfLines={1}>
                   {item.username}

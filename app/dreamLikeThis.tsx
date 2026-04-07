@@ -218,7 +218,7 @@ export default function DreamLikeThisScreen() {
           {/* Preview area */}
           {hasPhoto ? (
             <View style={s.previewRow}>
-              <View style={s.previewCard}>
+              <View style={[s.previewCard, kbOpen && s.previewCardSmall]}>
                 <Image
                   source={{ uri: params.imageUrl }}
                   style={s.previewImage}
@@ -227,17 +227,19 @@ export default function DreamLikeThisScreen() {
                 <Text style={s.previewLabel}>Original</Text>
               </View>
               <Ionicons name="arrow-forward" size={24} color={colors.textMuted} />
-              <View style={s.previewCard}>
+              <View style={[s.previewCard, kbOpen && s.previewCardSmall]}>
                 <Image source={{ uri: photoUri! }} style={s.previewImage} contentFit="cover" />
-                <TouchableOpacity style={s.clearPhoto} onPress={clearPhoto}>
-                  <Ionicons name="close-circle" size={20} color="#fff" />
+                <TouchableOpacity style={s.clearPhoto} onPress={clearPhoto} hitSlop={8}>
+                  <View style={s.clearPhotoCircle}>
+                    <Ionicons name="close" size={14} color="#fff" />
+                  </View>
                 </TouchableOpacity>
                 <Text style={s.previewLabel}>Your Photo</Text>
               </View>
             </View>
           ) : (
             <View style={s.previewRow}>
-              <View style={s.previewCard}>
+              <View style={[s.previewCard, kbOpen && s.previewCardSmall]}>
                 <Image
                   source={{ uri: params.imageUrl }}
                   style={s.previewImage}
@@ -249,9 +251,6 @@ export default function DreamLikeThisScreen() {
                   activeOpacity={0.7}
                 >
                   <Ionicons name="camera-outline" size={18} color="#fff" />
-                  <View style={s.cameraPlusDot}>
-                    <Ionicons name="add" size={10} color={colors.accent} />
-                  </View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -315,7 +314,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 8,
   },
   headerTitle: {
     color: colors.textPrimary,
@@ -338,7 +337,7 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   sparkleText: { color: colors.accent, fontSize: 13, fontWeight: '700' },
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 16, gap: 16 },
+  scrollContent: { paddingHorizontal: 16, paddingBottom: 16, gap: 12 },
 
   // Preview row
   previewRow: {
@@ -352,7 +351,10 @@ const s = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: colors.surface,
-    maxHeight: 200,
+    maxHeight: 280,
+  },
+  previewCardSmall: {
+    maxHeight: 140,
   },
   previewImage: { width: '100%', height: '100%' },
   previewLabel: {
@@ -366,7 +368,15 @@ const s = StyleSheet.create({
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
   },
-  clearPhoto: { position: 'absolute', top: 6, right: 6 },
+  clearPhoto: { position: 'absolute', top: 6, right: 6, zIndex: 2 },
+  clearPhotoCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   cameraBadge: {
     position: 'absolute',
     bottom: 8,
@@ -375,17 +385,6 @@ const s = StyleSheet.create({
     height: 36,
     borderRadius: 18,
     backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cameraPlusDot: {
-    position: 'absolute',
-    top: 3,
-    right: 3,
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -405,13 +404,13 @@ const s = StyleSheet.create({
   // Style info
   styleInfo: {
     alignItems: 'center',
-    gap: 4,
+    gap: 2,
   },
   styleInfoTitle: {
     color: colors.textPrimary,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   styleInfoLine: {
     color: colors.textSecondary,
@@ -428,7 +427,7 @@ const s = StyleSheet.create({
   // Prompt
   promptWrap: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderRadius: 14,
     borderWidth: 1,
@@ -447,7 +446,7 @@ const s = StyleSheet.create({
   promptClear: { paddingTop: 2, paddingLeft: 8 },
 
   // Footer
-  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: 24 },
+  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: 36 },
   dreamBtn: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   Pressable,
   Animated,
   Share,
+  InteractionManager,
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,6 +23,7 @@ import { useAuthStore } from '@/store/auth';
 import { useShareableVibers, type ShareableViber } from '@/hooks/useShareableVibers';
 import { useSendShare } from '@/hooks/useSendShare';
 import { useSheetDismiss } from '@/hooks/useSheetDismiss';
+import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 
@@ -51,8 +53,9 @@ function ViberBubble({
       <View style={styles.avatarWrap}>
         {item.avatarUrl ? (
           <Image
-            source={{ uri: item.avatarUrl }}
+            source={{ uri: resizeAvatar(item.avatarUrl) }}
             style={[styles.avatar, selected && styles.avatarSelected]}
+            cachePolicy="memory-disk"
           />
         ) : (
           <View style={[styles.avatarFallback, selected && styles.avatarSelected]}>
@@ -73,7 +76,7 @@ function ViberBubble({
 }
 
 export default function SharePostScreen() {
-  const { uploadId } = useLocalSearchParams<{ uploadId: string }>();
+  const { uploadId, username } = useLocalSearchParams<{ uploadId: string; username?: string }>();
   const user = useAuthStore((s) => s.user);
   const { data: vibers = [], isLoading } = useShareableVibers();
   const { mutate: sendShare, isPending } = useSendShare();
@@ -117,9 +120,9 @@ export default function SharePostScreen() {
 
   function handleCopyLink() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const label = username ? `View ${username}'s dream` : 'View this dream';
     Share.share({
-      url: `https://dreambot.app/post/${uploadId}`,
-      message: 'Check out this dream on DreamBot',
+      message: `${label}\nhttps://dreambotapp.com/post/${uploadId}`,
     });
   }
 

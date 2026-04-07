@@ -17,7 +17,7 @@ export function useUnreadCount() {
       return count ?? 0;
     },
     enabled: !!user,
-    staleTime: 30_000,
-    refetchInterval: 60_000, // Poll every minute
+    staleTime: 60_000,
+    refetchInterval: 120_000,
   });
 }

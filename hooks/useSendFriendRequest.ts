@@ -26,12 +26,8 @@ export function useSendFriendRequest() {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['friendIds'] });
-      queryClient.invalidateQueries({ queryKey: ['friendsList'] });
-      queryClient.invalidateQueries({ queryKey: ['pendingRequests'] });
       queryClient.invalidateQueries({ queryKey: ['friendshipStatus'] });
-      queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
+      queryClient.invalidateQueries({ queryKey: ['pendingRequests'] });
     },
   });
 }

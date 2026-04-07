@@ -1,14 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
-import { colors } from '@/constants/theme';
+import { colors, ANIM } from '@/constants/theme';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -32,31 +34,12 @@ function useDreamFeed(tab: FeedTab) {
           p_seed: feedSeed,
         });
         if (error) throw error;
-        return (data ?? []).map((row: Record<string, unknown>) => ({
-          id: row.id as string,
-          user_id: row.user_id as string,
-          image_url: row.image_url as string,
-          caption: row.caption as string | null,
-          username: row.username as string,
-          avatar_url: row.avatar_url as string | null,
-          created_at: row.created_at as string,
-          comment_count: (row.comment_count as number) ?? 0,
-          like_count: (row.like_count as number) ?? 0,
-          twin_count: (row.twin_count as number) ?? 0,
-          fuse_count: (row.fuse_count as number) ?? 0,
-          bot_message: (row.bot_message as string | null) ?? null,
-          ai_prompt: (row.ai_prompt as string | null) ?? null,
-          ai_concept: (row.ai_concept as Record<string, unknown> | null) ?? null,
-          dream_medium: (row.dream_medium as string | null) ?? null,
-          dream_vibe: (row.dream_vibe as string | null) ?? null,
-        }));
+        return castRows(data).map(mapRpcToDreamPost);
       }
 
       let query = supabase
         .from('uploads')
-        .select(
-          'id, user_id, image_url, caption, created_at, comment_count, like_count, from_wish, recipe_id, ai_prompt, twin_count, fuse_count, twin_of, fuse_of, bot_message, users!inner(username, avatar_url)'
-        )
+        .select(POST_SELECT)
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(pageParam, pageParam + PAGE_SIZE - 1);
@@ -79,29 +62,7 @@ function useDreamFeed(tab: FeedTab) {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data ?? []).map((row: Record<string, unknown>) => {
-        const u = row.users as Record<string, unknown>;
-        return {
-          id: row.id as string,
-          user_id: row.user_id as string,
-          image_url: row.image_url as string,
-          caption: row.caption as string | null,
-          username: u.username as string,
-          avatar_url: u.avatar_url as string | null,
-          created_at: row.created_at as string,
-          comment_count: (row.comment_count as number) ?? 0,
-          like_count: (row.like_count as number) ?? 0,
-          from_wish: (row.from_wish as string | null) ?? null,
-          recipe_id: (row.recipe_id as string | null) ?? null,
-          ai_prompt: (row.ai_prompt as string | null) ?? null,
-          twin_count: (row.twin_count as number) ?? 0,
-          fuse_count: (row.fuse_count as number) ?? 0,
-          twin_of: (row.twin_of as string | null) ?? null,
-          fuse_of: (row.fuse_of as string | null) ?? null,
-          dream_medium: (row.dream_medium as string | null) ?? null,
-          dream_vibe: (row.dream_vibe as string | null) ?? null,
-        };
-      });
+      return castRows(data).map(mapToDreamPost);
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
@@ -168,14 +129,44 @@ export default function HomeScreen() {
     useDreamFeed(activeTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
+  const pendingPostId = useFeedStore((s) => s.pendingPostId);
+  const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
   const feedPosts = data?.pages.flat() ?? [];
   const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
+  const overlayOpacity = useSharedValue(1);
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: overlayOpacity.value,
+    pointerEvents: overlayOpacity.value < 0.5 ? 'none' : 'auto',
+  }));
+  const setHudVisible = useFeedStore((s) => s.setHudVisible);
+  const handleHudToggle = useCallback(
+    (visible: boolean) => {
+      overlayOpacity.value = withTiming(visible ? 1 : 0, { duration: ANIM.HUD_FADE_MS });
+      setHudVisible(visible);
+    },
+    [overlayOpacity, setHudVisible]
+  );
 
-  // Prepend pinned post (e.g. first dream from onboarding) then clear it
-  const posts =
-    pinnedPost && activeTab === 'forYou'
-      ? [pinnedPost as unknown as DreamPostItem, ...feedPosts]
-      : feedPosts;
+  // Deep link: when a pending post ID arrives, fetch it and pin to feed
+  useEffect(() => {
+    if (!pendingPostId) return;
+    const id = pendingPostId;
+    setPendingPostId(null);
+    (async () => {
+      const { data: row } = await supabase
+        .from('uploads')
+        .select(POST_SELECT)
+        .eq('id', id)
+        .single();
+      if (row) {
+        const post = mapToDreamPost(row as unknown as Record<string, unknown>);
+        setPinnedPost(post);
+      }
+    })();
+  }, [pendingPostId]);
+
+  // Prepend pinned post (e.g. deep link, first dream after onboarding)
+  const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...feedPosts] : feedPosts;
 
   // Scroll to top when a pinned post appears
   useEffect(() => {
@@ -203,28 +194,31 @@ export default function HomeScreen() {
           if (hasNextPage && !isFetchingNextPage) fetchNextPage();
         }}
         ListEmptyComponent={<EmptyFeed tab={activeTab} />}
+        onHudToggle={handleHudToggle}
       />
 
-      <LinearGradient
-        colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-        style={[s.topOverlay, { paddingTop: insets.top }]}
-        pointerEvents="box-none"
-      >
-        <View style={s.topRow}>
-          <View style={{ flex: 1 }} />
-          <FeedTabs active={activeTab} onChange={handleTabChange} />
-          <View style={{ flex: 1, alignItems: 'flex-end' }}>
-            <TouchableOpacity
-              style={s.searchButton}
-              onPress={() => router.push('/search')}
-              activeOpacity={0.7}
-              hitSlop={12}
-            >
-              <Ionicons name="search" size={26} color="rgba(255,255,255,0.8)" />
-            </TouchableOpacity>
+      <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
+          style={[s.topOverlay, { paddingTop: insets.top }]}
+          pointerEvents="box-none"
+        >
+          <View style={s.topRow}>
+            <View style={{ flex: 1 }} />
+            <FeedTabs active={activeTab} onChange={handleTabChange} />
+            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+              <TouchableOpacity
+                style={s.searchButton}
+                onPress={() => router.push('/search')}
+                activeOpacity={0.7}
+                hitSlop={12}
+              >
+                <Ionicons name="search" size={26} color="rgba(255,255,255,0.8)" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
+      </Animated.View>
     </View>
   );
 }
@@ -240,7 +234,8 @@ const s = StyleSheet.create({
   },
   emptyTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
-  topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, paddingBottom: 20 },
+  topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
+  topOverlay: { paddingBottom: 20 },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -44,6 +44,12 @@ export const gradients = {
   accent: ['#8B7BEE', '#6B5DC4'] as [string, string],
 };
 
+// ── Animation ───────────────────────────────────────────────────────────────
+
+export const ANIM = {
+  HUD_FADE_MS: 120,
+} as const;
+
 // ── Swipe / Gesture ──────────────────────────────────────────────────────────
 
 export const SWIPE = {

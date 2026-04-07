@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { supabase } from '@/lib/supabase';
+import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { useAuthStore } from '@/store/auth';
 import { useReplies } from '@/hooks/useReplies';
 import { useToggleCommentLike } from '@/hooks/useToggleCommentLike';
@@ -94,8 +95,9 @@ export function CommentRow({
         >
           {comment.avatarUrl ? (
             <Image
-              source={{ uri: comment.avatarUrl }}
+              source={{ uri: resizeAvatar(comment.avatarUrl) }}
               style={[styles.avatar, isReply && styles.replyAvatar]}
+              cachePolicy="memory-disk"
             />
           ) : (
             <View style={[styles.avatarFallback, isReply && styles.replyAvatar]}>

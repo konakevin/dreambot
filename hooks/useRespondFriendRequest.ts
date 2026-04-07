@@ -43,13 +43,8 @@ export function useRespondFriendRequest() {
       queryClient.invalidateQueries({ queryKey: ['friendIds'] });
       queryClient.invalidateQueries({ queryKey: ['friendsList'] });
       queryClient.invalidateQueries({ queryKey: ['pendingRequests'] });
-      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-      queryClient.invalidateQueries({ queryKey: ['followersList'] });
-      queryClient.invalidateQueries({ queryKey: ['followingList'] });
-      queryClient.invalidateQueries({ queryKey: ['followingIds'] });
       queryClient.invalidateQueries({ queryKey: ['friendshipStatus'] });
-      queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
     },
   });
 }

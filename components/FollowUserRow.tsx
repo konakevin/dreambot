@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { useAuthStore } from '@/store/auth';
 import type { FollowUser } from '@/hooks/useFollowersList';
 import { colors } from '@/constants/theme';
@@ -22,7 +23,7 @@ export function FollowUserRow({ item, isFollowing, onFollow }: Props) {
       activeOpacity={0.7}
     >
       {item.avatar_url ? (
-        <Image source={{ uri: item.avatar_url }} style={styles.avatar} />
+        <Image source={{ uri: resizeAvatar(item.avatar_url!) }} style={styles.avatar} cachePolicy="memory-disk" />
       ) : (
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>

@@ -38,7 +38,6 @@ export function useAvatarUpload() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-      queryClient.invalidateQueries({ queryKey: ['feed'] });
     },
   });
 }

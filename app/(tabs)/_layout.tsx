@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
+import { ANIM } from '@/constants/theme';
 import { useUnreadCount } from '@/hooks/useUnreadCount';
 
 export default function TabLayout() {
@@ -12,6 +14,15 @@ export default function TabLayout() {
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const activeTab = useFeedStore((s) => s.activeTab);
   const setActiveTab = useFeedStore((s) => s.setActiveTab);
+  const hudVisible = useFeedStore((s) => s.hudVisible);
+  const tabBarOpacity = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.timing(tabBarOpacity, {
+      toValue: hudVisible ? 1 : 0,
+      duration: ANIM.HUD_FADE_MS,
+      useNativeDriver: true,
+    }).start();
+  }, [hudVisible]);
   const queryClient = useQueryClient();
   const { data: unreadCount = 0 } = useUnreadCount();
 
@@ -21,6 +32,18 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      tabBar={(props) => (
+        <Animated.View
+          style={{ opacity: tabBarOpacity, pointerEvents: hudVisible ? 'auto' : 'none' }}
+        >
+          {/* Default bottom tab bar from Expo Router */}
+          {/* eslint-disable-next-line @typescript-eslint/no-require-imports */}
+          {(() => {
+            const { BottomTabBar } = require('@react-navigation/bottom-tabs');
+            return <BottomTabBar {...props} />;
+          })()}
+        </Animated.View>
+      )}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {

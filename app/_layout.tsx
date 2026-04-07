@@ -1,7 +1,7 @@
 import '../global.css';
 
 import { useEffect, useRef } from 'react';
-import { AppState } from 'react-native';
+import { AppState, InteractionManager } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -31,7 +31,7 @@ function AuthInitializer() {
     return unsubscribe;
   }, [initialize]);
 
-  // Handle deep links from confirmation emails
+  // Handle deep links — auth callbacks + post/user navigation
   useEffect(() => {
     async function handleUrl(url: string) {
       const parsed = Linking.parse(url);
@@ -45,14 +45,33 @@ function AuthInitializer() {
 
       // Implicit flow fallback: tokens in URL fragment #access_token=xxx
       const fragment = url.split('#')[1];
-      if (!fragment) return;
-      const params = new URLSearchParams(fragment);
-      const accessToken = params.get('access_token');
-      const refreshToken = params.get('refresh_token');
-      if (accessToken && refreshToken) {
-        await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+      if (fragment) {
+        const params = new URLSearchParams(fragment);
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+        if (accessToken && refreshToken) {
+          await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          return;
+        }
       }
-      // onAuthStateChange in the auth store fires automatically after either path
+
+      // Deep link routing: dreambot://photo/{id} or https://dreambotapp.com/post/{id}
+      // Just store the post ID — the home screen picks it up when ready
+      const path = parsed.path ?? '';
+      const postMatch = path.match(/^(?:post|photo)\/([a-f0-9-]+)$/i);
+      if (postMatch) {
+        const { useFeedStore } = await import('@/store/feed');
+        useFeedStore.getState().setPendingPostId(postMatch[1]);
+        return;
+      }
+      const userMatch = path.match(/^user\/([a-f0-9-]+)$/i);
+      if (userMatch) {
+        const { router } = await import('expo-router');
+        router.push(`/user/${userMatch[1]}`);
+      }
     }
 
     // App already open when link is tapped
@@ -125,11 +144,10 @@ function RealtimeSubscriber() {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
         () => {
-          // New dream generated for this user — refresh all feeds
-          queryClient.invalidateQueries({ queryKey: ['feed'] });
+          // New dream generated for this user — refresh feeds
           queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-          queryClient.invalidateQueries({ queryKey: ['followingFeed'] });
           queryClient.invalidateQueries({ queryKey: ['userPosts'] });
+          queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
         }
       )
       .subscribe();
@@ -159,6 +177,70 @@ function DataPrefetcher() {
         if (error && __DEV__)
           console.warn('[DataPrefetcher] last_active_at update failed:', error.message);
       });
+  }, [user?.id]);
+
+  // Prefetch shareable friends after the app is fully interactive
+  // so it doesn't compete with navigation, feed loading, etc.
+  useEffect(() => {
+    if (!user) return;
+    const handle = InteractionManager.runAfterInteractions(() => {
+      queryClient.prefetchQuery({
+        queryKey: ['shareableVibers', user.id],
+        queryFn: async () => {
+          const { data, error } = await supabase.rpc('get_shareable_vibers', {
+            p_user_id: user.id,
+          });
+          if (error) throw error;
+          return (data ?? []).map((row: Record<string, unknown>) => ({
+            userId: row.user_id as string,
+            username: row.username as string,
+            avatarUrl: (row.avatar_url as string | null) ?? null,
+            interactionCount: Number(row.interaction_count),
+            vibeScore: Number(row.vibe_score),
+          }));
+        },
+        staleTime: 5 * 60_000,
+      });
+    });
+    return () => handle.cancel();
+  }, [user?.id]);
+
+  // Prefetch adjacent tab data so they load instantly when tapped
+  useEffect(() => {
+    if (!user) return;
+    const handle = InteractionManager.runAfterInteractions(() => {
+      // Profile stats
+      queryClient.prefetchQuery({
+        queryKey: ['publicProfile', user.id],
+        queryFn: async () => {
+          const { data, error } = await supabase.rpc('get_public_profile', {
+            p_user_id: user.id,
+          });
+          if (error) throw error;
+          const row = (data as unknown as Record<string, unknown>[])?.[0];
+          return row ?? null;
+        },
+        staleTime: 5 * 60_000,
+      });
+      // Explore feed (first page, no filters)
+      queryClient.prefetchInfiniteQuery({
+        queryKey: ['explore', '', '', 0],
+        queryFn: async () => {
+          const { data, error } = await supabase
+            .from('uploads')
+            .select('*, users!inner(username, avatar_url)')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false })
+            .range(0, 19);
+          if (error) throw error;
+          const { castRows, mapToDreamPost } = await import('@/lib/mapPost');
+          return castRows(data).map(mapToDreamPost);
+        },
+        initialPageParam: 0,
+        staleTime: 5 * 60_000,
+      });
+    });
+    return () => handle.cancel();
   }, [user?.id]);
 
   // Refresh all data when app returns from background after 5+ minutes
@@ -246,10 +328,6 @@ export default function RootLayout() {
               />
               <Stack.Screen
                 name="sparkleStore"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
-                name="dream/configure"
                 options={{ presentation: 'card', gestureEnabled: true }}
               />
               <Stack.Screen

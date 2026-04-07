@@ -190,7 +190,7 @@ interface RequestBody {
   mode: 'flux-dev' | 'flux-kontext';
   /** User's taste recipe — server builds the prompt from this */
   recipe?: Recipe;
-  /** Pre-built prompt — used for twins (re-rolling existing prompt) */
+  /** Pre-built prompt */
   prompt?: string;
   /** Optional user hint to weave into the dream */
   hint?: string;

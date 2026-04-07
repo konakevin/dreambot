@@ -25,10 +25,11 @@ import Animated, {
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { colors, ui } from '@/constants/theme';
+import { colors, ui, ANIM } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { MediumVibeBadge } from '@/components/MediumVibeBadge';
+import { feedImageUrl, avatarUrl } from '@/lib/imageUrl';
 import { useExploreStore } from '@/store/explore';
 import { useFeedStore } from '@/store/feed';
 import { useAuthStore } from '@/store/auth';
@@ -49,13 +50,13 @@ export interface DreamPostItem {
   like_count?: number;
   from_wish?: string | null;
   recipe_id?: string | null;
-  twin_count?: number;
   fuse_count?: number;
-  twin_of?: string | null;
   fuse_of?: string | null;
   bot_message?: string | null;
   dream_medium?: string | null;
   dream_vibe?: string | null;
+  is_active?: boolean;
+  is_posted?: boolean;
 }
 
 interface Props {
@@ -73,6 +74,11 @@ interface Props {
   onFuse?: () => void;
   onFamily?: () => void;
   onLikesPress?: () => void;
+  /** Show the eye/visibility toggle (only for own posts in album views) */
+  showVisibilityToggle?: boolean;
+  onTogglePosted?: () => void;
+  /** Called when the HUD is toggled (single tap) */
+  onHudToggle?: (visible: boolean) => void;
 }
 
 /** A single sparkle particle that floats along the border edge */
@@ -182,6 +188,9 @@ export function DreamCard({
   onFuse,
   onFamily,
   onLikesPress,
+  showVisibilityToggle,
+  onTogglePosted,
+  onHudToggle,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
@@ -202,6 +211,21 @@ export function DreamCard({
   }, [isWish]);
   const hazeStyle = useAnimatedStyle(() => ({
     opacity: hazeOpacity.value,
+  }));
+
+  // HUD visibility — single tap toggles, fades in/out
+  const hudOpacity = useSharedValue(1);
+  const hudHidden = useRef(false);
+
+  // Reset HUD when scrolling to a different card
+  useEffect(() => {
+    hudHidden.current = false;
+    hudOpacity.value = 1;
+  }, [item.id]);
+
+  const hudStyle = useAnimatedStyle(() => ({
+    opacity: hudOpacity.value,
+    pointerEvents: hudOpacity.value < 0.5 ? 'none' : 'auto',
   }));
 
   // Heart burst
@@ -240,41 +264,59 @@ export function DreamCard({
     }, 500);
   }
 
-  function handleDoubleTap() {
+  const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function handleTap() {
     const now = Date.now();
     if (now - lastTap.current < 300) {
+      // Double tap — cancel the pending single tap
+      if (singleTapTimer.current) {
+        clearTimeout(singleTapTimer.current);
+        singleTapTimer.current = null;
+      }
+
       // If zoomed, reset zoom instead of toggling like
       if (savedScale.value > 1) {
-        zoomScale.value = withSpring(1, { damping: 15 });
-        zoomTransX.value = withSpring(0, { damping: 15 });
-        zoomTransY.value = withSpring(0, { damping: 15 });
+        zoomScale.value = withTiming(1, { duration: 200 });
+        zoomTransX.value = withTiming(0, { duration: 200 });
+        zoomTransY.value = withTiming(0, { duration: 200 });
         savedScale.value = 1;
         savedTransX.value = 0;
         savedTransY.value = 0;
         lastTap.current = 0;
         return;
       }
+
       onToggleLike();
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      if (isLiked) {
-        lastTap.current = 0;
-        return;
+      if (!isLiked) {
+        heartScale.value = 0;
+        heartOpacity.value = 1;
+        heartScale.value = withSequence(
+          withTiming(1.3, { duration: 200 }),
+          withTiming(1, { duration: 100 }),
+          withTiming(1, { duration: 400 }),
+          withTiming(0, { duration: 200 })
+        );
+        heartOpacity.value = withSequence(
+          withTiming(1, { duration: 200 }),
+          withTiming(1, { duration: 500 }),
+          withTiming(0, { duration: 200 })
+        );
       }
-      heartScale.value = 0;
-      heartOpacity.value = 1;
-      heartScale.value = withSequence(
-        withTiming(1.3, { duration: 200 }),
-        withTiming(1, { duration: 100 }),
-        withTiming(1, { duration: 400 }),
-        withTiming(0, { duration: 200 })
-      );
-      heartOpacity.value = withSequence(
-        withTiming(1, { duration: 200 }),
-        withTiming(1, { duration: 500 }),
-        withTiming(0, { duration: 200 })
-      );
+      lastTap.current = 0;
+      return;
     }
+
     lastTap.current = now;
+
+    // Wait to see if a second tap comes — if not, it's a single tap (toggle HUD)
+    singleTapTimer.current = setTimeout(() => {
+      singleTapTimer.current = null;
+      hudHidden.current = !hudHidden.current;
+      hudOpacity.value = withTiming(hudHidden.current ? 0 : 1, { duration: ANIM.HUD_FADE_MS });
+      onHudToggle?.(!hudHidden.current);
+    }, 300);
   }
 
   function handleLongPress() {
@@ -324,18 +366,13 @@ export function DreamCard({
       zoomTransY.value = savedTransY.value + focalY.value * (1 - e.scale);
     })
     .onEnd(() => {
-      savedScale.value = zoomScale.value;
-      savedTransX.value = zoomTransX.value;
-      savedTransY.value = zoomTransY.value;
-      // If zoomed out past 1x, snap back
-      if (zoomScale.value <= 1.05) {
-        zoomScale.value = withSpring(1, { damping: 15 });
-        zoomTransX.value = withSpring(0, { damping: 15 });
-        zoomTransY.value = withSpring(0, { damping: 15 });
-        savedScale.value = 1;
-        savedTransX.value = 0;
-        savedTransY.value = 0;
-      }
+      // Always animate back to full size on release — no bounce
+      zoomScale.value = withTiming(1, { duration: 200 });
+      zoomTransX.value = withTiming(0, { duration: 200 });
+      zoomTransY.value = withTiming(0, { duration: 200 });
+      savedScale.value = 1;
+      savedTransX.value = 0;
+      savedTransY.value = 0;
     });
 
   const composed = Gesture.Simultaneous(
@@ -348,13 +385,13 @@ export function DreamCard({
       <Animated.View style={s.card}>
         <Pressable
           style={StyleSheet.absoluteFill}
-          onPress={handleDoubleTap}
+          onPress={handleTap}
           onLongPress={handleLongPress}
           delayLongPress={500}
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageStyle]}>
             <Image
-              source={{ uri: item.image_url }}
+              source={{ uri: feedImageUrl(item.image_url) }}
               style={s.fullImage}
               contentFit="cover"
               cachePolicy="memory-disk"
@@ -404,7 +441,8 @@ export function DreamCard({
             <Ionicons name="heart" size={80} color="#FFFFFF" />
           </Animated.View>
 
-          {/* Post info */}
+          {/* HUD — post info + side actions, toggled by single tap */}
+          <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
           <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
             {item.bot_message && <Text style={s.botMessage}>{item.bot_message}</Text>}
             <MediumVibeBadge
@@ -428,7 +466,11 @@ export function DreamCard({
               activeOpacity={0.7}
             >
               {item.avatar_url ? (
-                <Image source={{ uri: item.avatar_url }} style={s.avatar} />
+                <Image
+                  source={{ uri: avatarUrl(item.avatar_url!) }}
+                  style={s.avatar}
+                  cachePolicy="memory-disk"
+                />
               ) : (
                 <View style={s.avatarFallback}>
                   <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
@@ -452,6 +494,17 @@ export function DreamCard({
 
           {/* Side actions */}
           <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
+            {showVisibilityToggle && onTogglePosted && (
+              <TouchableOpacity style={ui.sideButton} onPress={onTogglePosted} activeOpacity={0.7}>
+                <View style={[s.visibilityCircle, item.is_posted && s.visibilityCircleActive]}>
+                  <Ionicons
+                    name={item.is_posted ? 'eye' : 'eye-off'}
+                    size={20}
+                    color={item.is_posted ? '#FFFFFF' : 'rgba(255,255,255,0.7)'}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               style={ui.sideButton}
               onPress={onToggleLike}
@@ -485,7 +538,13 @@ export function DreamCard({
             )}
             <TouchableOpacity
               style={ui.sideButton}
-              onPress={onShare ?? (() => router.push(`/sharePost?uploadId=${item.id}`))}
+              onPress={
+                onShare ??
+                (() =>
+                  router.push(
+                    `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}`
+                  ))
+              }
               activeOpacity={0.7}
             >
               <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
@@ -493,14 +552,11 @@ export function DreamCard({
             {onFamily && (
               <TouchableOpacity style={ui.sideButton} onPress={onFamily} activeOpacity={0.7}>
                 <Ionicons name="color-wand-outline" size={24} color="#FFFFFF" />
-                {(item.twin_count ?? 0) + (item.fuse_count ?? 0) > 0 && (
-                  <Text style={ui.sideCount}>
-                    {(item.twin_count ?? 0) + (item.fuse_count ?? 0)}
-                  </Text>
-                )}
+                {(item.fuse_count ?? 0) > 0 && <Text style={ui.sideCount}>{item.fuse_count}</Text>}
               </TouchableOpacity>
             )}
           </View>
+          </Animated.View>
         </Pressable>
       </Animated.View>
     </GestureDetector>
@@ -555,6 +611,17 @@ const s = StyleSheet.create({
   },
   heartBurst: { position: 'absolute', top: '50%', left: '50%', marginTop: -40, marginLeft: -40 },
   sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 16 },
+  visibilityCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  visibilityCircleActive: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
+  },
   postInfo: {
     position: 'absolute',
     bottom: 0,

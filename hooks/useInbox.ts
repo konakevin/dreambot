@@ -16,7 +16,6 @@ export interface NotificationItem {
     | 'friend_accepted'
     | 'dream_generated'
     | 'post_like'
-    | 'post_twin'
     | 'post_fuse';
   uploadId: string | null;
   commentId: string | null;

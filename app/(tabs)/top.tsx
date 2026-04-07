@@ -6,18 +6,20 @@
  * Filters by dream_medium and dream_vibe columns on uploads.
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
-import { colors } from '@/constants/theme';
+import { colors, ANIM } from '@/constants/theme';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -34,7 +36,7 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
       const offset = pageParam as number;
       let query = supabase
         .from('uploads')
-        .select('*, users!inner(username, avatar_url)')
+        .select(POST_SELECT)
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
@@ -49,29 +51,7 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data ?? []).map((row: Record<string, unknown>) => {
-        const u = row.users as Record<string, unknown>;
-        return {
-          id: row.id as string,
-          user_id: row.user_id as string,
-          image_url: row.image_url as string,
-          caption: row.caption as string | null,
-          username: u.username as string,
-          avatar_url: u.avatar_url as string | null,
-          created_at: row.created_at as string,
-          comment_count: (row.comment_count as number) ?? 0,
-          like_count: (row.like_count as number) ?? 0,
-          from_wish: (row.from_wish as string | null) ?? null,
-          recipe_id: (row.recipe_id as string | null) ?? null,
-          ai_prompt: (row.ai_prompt as string | null) ?? null,
-          twin_count: (row.twin_count as number) ?? 0,
-          fuse_count: (row.fuse_count as number) ?? 0,
-          twin_of: (row.twin_of as string | null) ?? null,
-          fuse_of: (row.fuse_of as string | null) ?? null,
-          dream_medium: (row.dream_medium as string | null) ?? null,
-          dream_vibe: (row.dream_vibe as string | null) ?? null,
-        };
-      });
+      return castRows(data).map(mapToDreamPost);
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, _allPages, lastParam) =>
@@ -124,6 +104,20 @@ export default function ExploreScreen() {
       scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, selectedMedium);
     }, 100);
   }, [feedSeed]);
+
+  const overlayOpacity = useSharedValue(1);
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: overlayOpacity.value,
+    pointerEvents: overlayOpacity.value < 0.5 ? 'none' : 'auto',
+  }));
+  const setHudVisible = useFeedStore((s) => s.setHudVisible);
+  const handleHudToggle = useCallback(
+    (visible: boolean) => {
+      overlayOpacity.value = withTiming(visible ? 1 : 0, { duration: ANIM.HUD_FADE_MS });
+      setHudVisible(visible);
+    },
+    [overlayOpacity, setHudVisible]
+  );
 
   const activeMediums = selectedMedium ? [selectedMedium] : [];
   const activeVibes = selectedVibe ? [selectedVibe] : [];
@@ -182,16 +176,20 @@ export default function ExploreScreen() {
             <Text style={s.emptySubtitle}>Be the first to create one</Text>
           </View>
         }
+        onHudToggle={handleHudToggle}
       />
 
-      <LinearGradient
-        colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.4)', 'transparent']}
-        style={[s.topOverlay, { paddingTop: insets.top + 4 }]}
-        pointerEvents="box-none"
-      >
+      <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.4)', 'transparent']}
+          style={[s.topOverlay, { paddingTop: insets.top + 4 }]}
+          pointerEvents="box-none"
+        >
         {/* Medium row */}
         <View style={s.filterRow}>
-          <Text style={s.filterLabel}>Medium</Text>
+          <View style={s.filterIcon}>
+            <Ionicons name="brush-outline" size={14} color="rgba(255,255,255,0.45)" />
+          </View>
           <ScrollView
             ref={mediumScrollRef}
             horizontal
@@ -220,7 +218,9 @@ export default function ExploreScreen() {
 
         {/* Vibe row */}
         <View style={s.filterRow}>
-          <Text style={s.filterLabel}>Vibe</Text>
+          <View style={s.filterIcon}>
+            <Ionicons name="sparkles-outline" size={14} color="rgba(255,255,255,0.45)" />
+          </View>
           <ScrollView
             ref={vibeScrollRef}
             horizontal
@@ -247,6 +247,7 @@ export default function ExploreScreen() {
           </ScrollView>
         </View>
       </LinearGradient>
+      </Animated.View>
     </View>
   );
 }
@@ -256,19 +257,17 @@ const s = StyleSheet.create({
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   emptyTitle: { color: colors.textSecondary, fontSize: 17, fontWeight: '600' },
   emptySubtitle: { color: colors.textMuted, fontSize: 14 },
-  topOverlay: { position: 'absolute', top: 0, left: 0, right: 0, paddingBottom: 16, gap: 6 },
+  topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
+  topOverlay: { paddingBottom: 16, gap: 6 },
   filterRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  filterLabel: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 11,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    width: 56,
-    paddingLeft: 16,
+  filterIcon: {
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10,
   },
   pillRow: { gap: 6, paddingRight: 16 },
 });

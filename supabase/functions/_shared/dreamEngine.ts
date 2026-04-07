@@ -140,7 +140,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
   },
   {
     key: 'disney',
-    label: 'Disney',
+    label: 'Storybook',
     directive:
       'You are a classic Disney 2D animation artist from the Renaissance era — think The Lion King, The Little Mermaid, Aladdin. Characters have expressive, emotive faces with large eyes that convey personality. Clean, confident ink outlines with smooth, flowing lines. Rich cel-painted color with luminous highlights and soft shadows. Backgrounds are lush painted environments — every frame is a work of art. Hair and fabric flow with exaggerated, graceful movement. Characters feel alive with warmth, appeal, and personality. The magic of hand-drawn animation radiates from every stroke.',
     fluxFragment:
@@ -172,7 +172,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
   },
   {
     key: 'tim_burton',
-    label: 'Tim Burton',
+    label: 'Gothic',
     directive:
       "You are designing in Tim Burton's signature gothic whimsy style — think Nightmare Before Christmas, Corpse Bride, Edward Scissorhands. Characters have exaggerated proportions: impossibly thin limbs, elongated necks, oversized heads with sunken eyes ringed in dark circles. Spiral motifs everywhere — in hair, architecture, landscapes. The color palette is stark: predominantly black, white, and grey with strategic pops of deep purple, blood red, or sickly green. Environments are crooked and angular — buildings lean, trees twist, fences curl. Stripes (black and white) appear on clothing and objects. Everything feels slightly unsettling but endearing — dark whimsy, not horror.",
     fluxFragment:

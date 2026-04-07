@@ -3,13 +3,19 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-nativ
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
+import { useMyDreams } from '@/hooks/useMyDreams';
 import { PostTile } from '@/components/PostTile';
+import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
-import type { PostItem } from '@/hooks/useUserPosts';
+import type { DreamPostItem } from '@/components/DreamCard';
 
 const TILE_GAP = 2;
 
-export type PostGridSource = { type: 'own' } | { type: 'saved' } | { type: 'user'; userId: string };
+export type PostGridSource =
+  | { type: 'own' }
+  | { type: 'saved' }
+  | { type: 'dreams' }
+  | { type: 'user'; userId: string };
 
 interface PostGridProps {
   source: PostGridSource;
@@ -18,6 +24,7 @@ interface PostGridProps {
   ListHeaderComponent?: React.ReactElement;
   highlightPostId?: string;
   scrollToTopToken?: number;
+  showPrivateBadge?: boolean;
 }
 
 export function PostGrid({
@@ -27,6 +34,7 @@ export function PostGrid({
   ListHeaderComponent,
   highlightPostId,
   scrollToTopToken,
+  showPrivateBadge = false,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
 
@@ -35,46 +43,56 @@ export function PostGrid({
       listRef.current?.scrollToOffset({ offset: 0, animated: true });
     }
   }, [scrollToTopToken]);
-  // All three hooks are always called — rules of hooks. Only the active one is enabled.
+
   const isOwn_ = source.type === 'own';
   const isSaved = source.type === 'saved';
+  const isDreams = source.type === 'dreams';
   const isUser = source.type === 'user';
   const userId = isUser ? source.userId : '';
 
   const ownQuery = useUserPosts(isOwn_);
   const savedQuery = useFavoritePosts(isSaved);
   const userQuery = usePublicProfilePosts(userId, isUser);
+  const dreamsQuery = useMyDreams();
 
-  const query = isOwn_ ? ownQuery : isSaved ? savedQuery : userQuery;
+  // Paginated hooks return { pages: { rows }[] }, useMyDreams returns flat array
+  const paginatedQuery = isOwn_ ? ownQuery : isSaved ? savedQuery : userQuery;
 
-  const posts = useMemo(() => query.data?.pages.flatMap((p) => p.rows) ?? [], [query.data]);
+  const posts: DreamPostItem[] = useMemo(() => {
+    if (isDreams) return dreamsQuery.data ?? [];
+    return paginatedQuery.data?.pages.flatMap((p) => p.rows) ?? [];
+  }, [isDreams, dreamsQuery.data, paginatedQuery.data]);
 
-  // Album IDs for detail-view swipe navigation — grows as more pages load
+  const isLoading = isDreams ? dreamsQuery.isLoading : paginatedQuery.isLoading;
+  const hasNextPage = isDreams ? false : paginatedQuery.hasNextPage;
+  const isFetchingNextPage = isDreams ? false : paginatedQuery.isFetchingNextPage;
+
   const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
 
   const handleEndReached = useCallback(() => {
-    if (query.hasNextPage && !query.isFetchingNextPage) {
-      query.fetchNextPage();
+    if (!isDreams && hasNextPage && !isFetchingNextPage) {
+      paginatedQuery.fetchNextPage();
     }
-  }, [query.hasNextPage, query.isFetchingNextPage, query.fetchNextPage]);
+  }, [isDreams, hasNextPage, isFetchingNextPage, paginatedQuery.fetchNextPage]);
 
   return (
-    <FlatList<PostItem>
+    <FlatList<DreamPostItem>
       ref={listRef}
       data={posts}
       keyExtractor={(item) => item.id}
       numColumns={2}
       columnWrapperStyle={styles.row}
       contentContainerStyle={{ paddingBottom: 90 }}
+      windowSize={10}
+      maxToRenderPerBatch={8}
+      initialNumToRender={6}
+      removeClippedSubviews
       ListHeaderComponent={ListHeaderComponent}
-      // Begin fetching the next page when the user is halfway through remaining content
       onEndReachedThreshold={0.5}
       onEndReached={handleEndReached}
       ListEmptyComponent={
-        query.isLoading ? (
-          <View style={styles.center}>
-            <ActivityIndicator color={colors.textSecondary} />
-          </View>
+        isLoading ? (
+          <GridSkeleton />
         ) : (
           <View style={styles.center}>
             <Text style={styles.emptyText}>{emptyText}</Text>
@@ -82,7 +100,7 @@ export function PostGrid({
         )
       }
       ListFooterComponent={
-        query.isFetchingNextPage ? (
+        isFetchingNextPage ? (
           <View style={styles.footer}>
             <ActivityIndicator color={colors.textSecondary} />
           </View>
@@ -94,6 +112,7 @@ export function PostGrid({
           isOwn={isOwn}
           albumIds={albumIds}
           isHighlighted={item.id === highlightPostId}
+          showPrivateBadge={showPrivateBadge}
         />
       )}
     />

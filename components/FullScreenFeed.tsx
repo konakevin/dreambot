@@ -6,7 +6,8 @@
  * end-reached loading. Cards are rendered via DreamCard.
  */
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import {
   View,
   FlatList,
@@ -21,6 +22,8 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useQueryClient } from '@tanstack/react-query';
 import { DreamCard } from '@/components/DreamCard';
+import { FeedCardSkeleton } from '@/components/Skeleton';
+import { feedImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { CommentOverlay } from '@/components/CommentOverlay';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
@@ -55,6 +58,12 @@ interface Props {
   disableSwipeToProfile?: boolean;
   /** Hide tab bar padding (for detail views without a tab bar) */
   hideTabBar?: boolean;
+  /** Show the eye/visibility toggle on own posts */
+  showVisibilityToggle?: boolean;
+  /** Callback when the visibility toggle is pressed */
+  onTogglePosted?: (postId: string) => void;
+  /** Called when the card HUD is toggled (single tap) */
+  onHudToggle?: (visible: boolean) => void;
 }
 
 export function FullScreenFeed({
@@ -69,10 +78,25 @@ export function FullScreenFeed({
   ListEmptyComponent,
   disableSwipeToProfile,
   hideTabBar,
+  showVisibilityToggle,
+  onTogglePosted,
+  onHudToggle,
 }: Props) {
   const insets = useSafeAreaInsets();
   const internalRef = useRef<FlatList>(null);
   const ref = listRef ?? internalRef;
+  const currentIndex = useRef(0);
+  const isFocused = useIsFocused();
+
+  // Re-snap scroll position when the screen regains focus (prevents half-scroll offset)
+  useEffect(() => {
+    if (isFocused && posts.length > 0) {
+      ref.current?.scrollToOffset({
+        offset: currentIndex.current * SCREEN_HEIGHT,
+        animated: false,
+      });
+    }
+  }, [isFocused]);
 
   const handleRefresh = useCallback(() => {
     onRefreshProp?.();
@@ -118,17 +142,17 @@ export function FullScreenFeed({
       Toast.show('Dream deleted', 'checkmark-circle');
 
       // Optimistically remove from all feed caches so the card disappears immediately
-      const feedKeys = ['feed', 'dreamFeed', 'userPosts', 'publicProfile', 'top', 'my-dreams'];
+      const feedKeys = ['dreamFeed', 'explore', 'userPosts', 'my-dreams', 'albumPosts'];
       for (const key of feedKeys) {
         queryClient.setQueriesData({ queryKey: [key] }, (old: unknown) => {
           if (Array.isArray(old)) return old.filter((p: { id: string }) => p.id !== uploadId);
           return old;
         });
       }
-      queryClient.invalidateQueries({ queryKey: ['feed'] });
       queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
+      queryClient.invalidateQueries({ queryKey: ['explore'] });
       if (router.canGoBack()) router.back();
     },
     [queryClient]
@@ -140,11 +164,14 @@ export function FullScreenFeed({
     ({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
       if (viewableItems.length > 0 && viewableItems[0].index !== null) {
         const idx = viewableItems[0].index;
+        currentIndex.current = idx;
         onIndexChange?.(idx);
+        // Reset HUD to visible when scrolling to a new card
+        onHudToggle?.(true);
         // Prefetch next 3 images
         const upcoming = posts.slice(idx + 1, idx + 4);
         if (upcoming.length > 0) {
-          ExpoImage.prefetch(upcoming.map((p) => p.image_url));
+          ExpoImage.prefetch(upcoming.map((p) => feedImageUrl(p.image_url)));
         }
       }
     },
@@ -152,11 +179,7 @@ export function FullScreenFeed({
   );
 
   if (isLoading) {
-    return (
-      <View style={s.loading}>
-        <ActivityIndicator size="large" color={colors.accent} />
-      </View>
-    );
+    return <FeedCardSkeleton />;
   }
 
   if (posts.length === 0 && ListEmptyComponent) {
@@ -170,6 +193,7 @@ export function FullScreenFeed({
         data={posts}
         keyExtractor={(item) => item.id}
         pagingEnabled
+        disableIntervalMomentum
         showsVerticalScrollIndicator={false}
         decelerationRate="fast"
         windowSize={7}
@@ -214,8 +238,7 @@ export function FullScreenFeed({
             disableSwipeToProfile={disableSwipeToProfile}
             onDelete={item.user_id === user?.id ? () => handleDelete(item.id) : undefined}
             onFamily={() => {
-              const fuseCount = (item.twin_count ?? 0) + (item.fuse_count ?? 0);
-              if (fuseCount === 0) {
+              if ((item.fuse_count ?? 0) === 0) {
                 const params = new URLSearchParams({
                   postId: item.id,
                   imageUrl: item.image_url,
@@ -233,6 +256,9 @@ export function FullScreenFeed({
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               setLikesPostId(item.id);
             }}
+            showVisibilityToggle={showVisibilityToggle && item.user_id === user?.id}
+            onTogglePosted={onTogglePosted ? () => onTogglePosted(item.id) : undefined}
+            onHudToggle={onHudToggle}
           />
         )}
       />

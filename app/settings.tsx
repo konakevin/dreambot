@@ -110,7 +110,6 @@ export default function SettingsScreen() {
                       await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
                       await supabase.auth.updateUser({ data: { avatar_url: null } });
                       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-                      queryClient.invalidateQueries({ queryKey: ['feed'] });
                     },
                   },
                 ]);
@@ -156,7 +155,6 @@ export default function SettingsScreen() {
           }
           await supabase.auth.updateUser({ data: { username: trimmed } });
           queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-          queryClient.invalidateQueries({ queryKey: ['feed'] });
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         } catch (err: unknown) {
           showAlert('Error', (err as Error).message);

@@ -18,7 +18,7 @@ interface SaveDreamOpts {
   /** Temp Replicate URL — will be persisted to Storage */
   tempImageUrl: string;
   prompt: string;
-  aiConcept?: Record<string, unknown> | null;
+  aiConcept?: unknown | null;
   visibility: DreamVisibility;
   dreamMedium?: string | null;
   dreamVibe?: string | null;
@@ -51,7 +51,7 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     ai_prompt: opts.prompt,
     width: 768,
     height: 1664,
-    ai_concept: opts.aiConcept ?? null,
+    ai_concept: (opts.aiConcept as Record<string, never>) ?? null,
     visibility: opts.visibility,
     dream_medium: opts.dreamMedium ?? null,
     dream_vibe: opts.dreamVibe ?? null,

@@ -6,33 +6,27 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-
-export interface MyDream {
-  id: string;
-  image_url: string;
-  ai_prompt: string | null;
-  visibility: string;
-  is_active: boolean;
-  created_at: string;
-  like_count: number;
-  comment_count: number;
-}
+import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
+import type { DreamPostItem } from '@/components/DreamCard';
 
 export function useMyDreams() {
   const userId = useAuthStore((s) => s.user?.id);
 
   return useQuery({
     queryKey: ['my-dreams', userId],
-    queryFn: async (): Promise<MyDream[]> => {
+    queryFn: async (): Promise<DreamPostItem[]> => {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('uploads')
-        .select('id, image_url, ai_prompt, is_active, created_at, like_count, comment_count')
+        .select(POST_SELECT)
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      // visibility column added by migration 075 — cast until types regenerated
-      return (data as unknown as MyDream[]) ?? [];
+      return castRows(data).map((row) => ({
+        ...mapToDreamPost(row),
+        is_active: (row.is_active as boolean) ?? false,
+        is_posted: (row.is_posted as boolean) ?? false,
+      }));
     },
     enabled: !!userId,
   });
