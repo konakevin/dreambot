@@ -7,11 +7,11 @@ import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { colors } from '@/constants/theme';
 
 import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
-import { VisualTasteStep } from '@/components/onboarding/VisualTasteStep';
-import { InterestsStep } from '@/components/onboarding/InterestsStep';
+import { MediumsStep } from '@/components/onboarding/MediumsStep';
+import { VibesStep } from '@/components/onboarding/VibesStep';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
-import { PersonalAnchorsStep } from '@/components/onboarding/PersonalAnchorsStep';
-import { SpiritCompanionStep } from '@/components/onboarding/SpiritCompanionStep';
+import { YourWorldStep } from '@/components/onboarding/YourWorldStep';
+import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -26,11 +26,11 @@ interface StepConfig {
 
 const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep, skipInEdit: true },
-  { key: 'visual', component: VisualTasteStep },
-  { key: 'interests', component: InterestsStep },
-  { key: 'moods', component: MoodSlidersStep },
-  { key: 'anchors', component: PersonalAnchorsStep },
-  { key: 'spirit', component: SpiritCompanionStep },
+  { key: 'mediums', component: MediumsStep },
+  { key: 'vibes', component: VibesStep },
+  { key: 'personality', component: MoodSlidersStep },
+  { key: 'world', component: YourWorldStep },
+  { key: 'cast', component: DreamCastStep },
   { key: 'reveal', component: RevealStep },
 ];
 

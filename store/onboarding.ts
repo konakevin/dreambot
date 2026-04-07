@@ -3,12 +3,15 @@ import type {
   VibeProfile,
   Aesthetic,
   ArtStyle,
-  SubjectInterest,
-  SpiritCompanion,
   MoodAxes,
-  PersonalAnchors,
+  DreamSeeds,
+  DreamCastMember,
 } from '@/types/vibeProfile';
 import { DEFAULT_VIBE_PROFILE } from '@/types/vibeProfile';
+
+const MAX_SEEDS_PER_CATEGORY = 10;
+
+type SeedCategory = keyof DreamSeeds;
 
 interface OnboardingStore {
   step: number;
@@ -18,21 +21,22 @@ interface OnboardingStore {
 
   profile: VibeProfile;
 
-  // Step 2: Visual Taste
-  toggleAesthetic: (key: Aesthetic) => void;
+  // Mediums
   toggleArtStyle: (key: ArtStyle) => void;
 
-  // Step 3: Interests
-  toggleInterest: (key: SubjectInterest) => void;
+  // Vibes
+  toggleAesthetic: (key: Aesthetic) => void;
 
-  // Step 4: Mood Sliders
+  // Personality
   setMoodAxis: (axis: keyof MoodAxes, value: number) => void;
 
-  // Step 5: Personal Anchors
-  setAnchor: (key: keyof PersonalAnchors, value: string) => void;
+  // Dream seeds (characters, places, things)
+  addSeed: (category: SeedCategory, value: string) => void;
+  removeSeed: (category: SeedCategory, value: string) => void;
 
-  // Step 6: Spirit Companion
-  setSpiritCompanion: (companion: SpiritCompanion | null) => void;
+  // Dream cast (photo descriptions)
+  setCastMember: (member: DreamCastMember) => void;
+  removeCastMember: (role: DreamCastMember['role']) => void;
 
   // Load existing profile for editing
   loadProfile: (profile: VibeProfile) => void;
@@ -57,27 +61,52 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
 
   profile: { ...DEFAULT_VIBE_PROFILE },
 
-  toggleAesthetic: (key) =>
-    set((s) => ({ profile: { ...s.profile, aesthetics: toggle(s.profile.aesthetics, key) } })),
-
   toggleArtStyle: (key) =>
     set((s) => ({ profile: { ...s.profile, art_styles: toggle(s.profile.art_styles, key) } })),
 
-  toggleInterest: (key) =>
-    set((s) => ({ profile: { ...s.profile, interests: toggle(s.profile.interests, key) } })),
+  toggleAesthetic: (key) =>
+    set((s) => ({ profile: { ...s.profile, aesthetics: toggle(s.profile.aesthetics, key) } })),
 
   setMoodAxis: (axis, value) =>
     set((s) => ({
       profile: { ...s.profile, moods: { ...s.profile.moods, [axis]: clamp(value) } },
     })),
 
-  setAnchor: (key, value) =>
+  addSeed: (category, value) =>
+    set((s) => {
+      const trimmed = value.trim();
+      const current = s.profile.dream_seeds[category];
+      if (!trimmed || current.length >= MAX_SEEDS_PER_CATEGORY) return s;
+      if (current.includes(trimmed)) return s;
+      return {
+        profile: {
+          ...s.profile,
+          dream_seeds: { ...s.profile.dream_seeds, [category]: [...current, trimmed] },
+        },
+      };
+    }),
+
+  removeSeed: (category, value) =>
     set((s) => ({
-      profile: { ...s.profile, personal_anchors: { ...s.profile.personal_anchors, [key]: value } },
+      profile: {
+        ...s.profile,
+        dream_seeds: {
+          ...s.profile.dream_seeds,
+          [category]: s.profile.dream_seeds[category].filter((t) => t !== value),
+        },
+      },
     })),
 
-  setSpiritCompanion: (companion) =>
-    set((s) => ({ profile: { ...s.profile, spirit_companion: companion } })),
+  setCastMember: (member) =>
+    set((s) => {
+      const filtered = s.profile.dream_cast.filter((m) => m.role !== member.role);
+      return { profile: { ...s.profile, dream_cast: [...filtered, member] } };
+    }),
+
+  removeCastMember: (role) =>
+    set((s) => ({
+      profile: { ...s.profile, dream_cast: s.profile.dream_cast.filter((m) => m.role !== role) },
+    })),
 
   loadProfile: (profile) => set({ profile }),
 

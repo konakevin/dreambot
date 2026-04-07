@@ -80,65 +80,72 @@ export function buildConceptPrompt(
 ): string {
   const config = PROMPT_MODE_CONFIGS[mode];
 
-  const spiritHint =
-    profile.spirit_companion && seed < 0.2
-      ? `\nTheir spirit companion is a ${profile.spirit_companion.replace(/_/g, ' ')} — consider weaving it into the scene.`
-      : '';
+  // Pick dream seeds — one from each category that has entries
+  const seeds = profile.dream_seeds ?? { characters: [], places: [], things: [] };
+  const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+  const pickedCharacter = seeds.characters.length > 0 ? pick(seeds.characters) : null;
+  const pickedPlace = seeds.places.length > 0 ? pick(seeds.places) : null;
+  const pickedThing = seeds.things.length > 0 ? pick(seeds.things) : null;
+  const pickedSeeds = [pickedCharacter, pickedPlace, pickedThing].filter(Boolean) as string[];
 
-  const anchorLines: string[] = [];
-  if (profile.personal_anchors.place && Math.random() < 0.4)
-    anchorLines.push(`- Places they love: "${profile.personal_anchors.place}"`);
-  if (profile.personal_anchors.object && Math.random() < 0.4)
-    anchorLines.push(`- Objects they love: "${profile.personal_anchors.object}"`);
-  if (profile.personal_anchors.era && Math.random() < 0.4)
-    anchorLines.push(`- Eras they vibe with: "${profile.personal_anchors.era}"`);
-  if (profile.personal_anchors.dream_vibe)
-    anchorLines.push(`- Their dream vibe: "${profile.personal_anchors.dream_vibe}"`);
-  const anchorsBlock =
-    anchorLines.length > 0
-      ? `\nPERSONAL ANCHORS (weave in naturally when they fit — don't force them):\n${anchorLines.join('\n')}`
-      : '';
+  // Build the seed fusion instruction — this is the CORE of the dream
+  let seedInstruction: string;
+  if (pickedSeeds.length >= 2) {
+    seedInstruction = `DREAM INGREDIENTS (MANDATORY — the dream MUST be built from these):
+${pickedCharacter ? `- Character: "${pickedCharacter}"` : ''}
+${pickedPlace ? `- Place: "${pickedPlace}"` : ''}
+${pickedThing ? `- Thing: "${pickedThing}"` : ''}
+
+Your job is to FUSE these ingredients into one surprising scene. Don't just place them side by side — MASH THEM UP. Examples of good fusion:
+- "cat" + "donuts" = a cat made entirely of glazed donuts, sitting on a giant sprinkle
+- "astronaut" + "Tokyo" = a tiny astronaut exploring a ramen bowl like it's an alien planet
+- "guitar" + "ocean" = a guitar growing from a coral reef, fish swimming through its strings
+
+Be WILD. Be UNEXPECTED. The weirder the fusion, the better the dream.`;
+  } else if (pickedSeeds.length === 1) {
+    seedInstruction = `DREAM INGREDIENT (MANDATORY — the dream MUST feature this):
+- "${pickedSeeds[0]}"
+
+Don't use it literally. Reimagine it. Put it somewhere impossible. Change its scale. Make it out of the wrong material. Give it a life it never asked for. A guitar could be growing from a mountain. A cat could be piloting a spaceship. Push it somewhere unexpected.`;
+  } else {
+    seedInstruction = `No specific dream seeds provided. Invent something visually stunning and unexpected based on their aesthetic taste. Be bold — this should feel like a fever dream, not a stock photo.`;
+  }
 
   const avoidBlock = profile.avoid.length > 0 ? `\nNEVER INCLUDE: ${profile.avoid.join(', ')}` : '';
 
-  return `You are a concept artist designing a single dream image for someone. Output a structured JSON concept recipe.
+  return `You are designing a single dream image. This must feel like a REAL DREAM — unexpected, vivid, personal, slightly impossible. Output structured JSON.
 
-WHO THIS PERSON IS:
-- Aesthetics they love: ${profile.aesthetics.join(', ')}
-- Art styles they respond to: ${profile.art_styles.join(', ')}
-- Subjects that excite them: ${profile.interests.join(', ')}
-- Their mood spectrum: ${describeMoods(profile.moods)}
-${anchorsBlock}${spiritHint}${avoidBlock}
+TASTE PROFILE:
+- Aesthetics: ${profile.aesthetics.join(', ') || 'eclectic'}
+- Art styles: ${profile.art_styles.join(', ') || 'mixed media'}
+- Mood: ${describeMoods(profile.moods)}
+
+${seedInstruction}
+${avoidBlock}
 
 CREATIVE DIRECTION:
 ${config.directive}
 
-SCENE ANGLE: Before designing, invent a unique creative angle for this dream. Don't default to the obvious postcard version of a location. Consider: an unusual time of day, an unexpected activity, a fantasy mashup, a hidden perspective, an impossible scale, the aftermath of something, a tiny overlooked detail, a different era. Pick ONE angle you've never used before and let it shape the entire concept.
-
-WEIGHTING: ${Math.round(config.userWeight * 100)}% of your choices should draw from their profile. ${Math.round(config.spiceWeight * 100)}% should be a creative surprise — something adjacent to their taste but unexpected. The surprise is what makes each dream feel fresh.
-
 OUTPUT exactly this JSON (no markdown, no commentary):
 {
-  "subject": "the main subject — be specific and visual, not generic",
-  "environment": "where the scene takes place — concrete sensory details",
-  "lighting": "specific lighting that sets the mood",
-  "camera": "camera angle, lens type, perspective",
-  "style": "ONE art style from their preferences (or a creative mashup of two)",
-  "palette": "2-3 specific colors that anchor the image",
-  "twist": "one unexpected visual element that makes this image impossible to forget",
-  "composition": "framing and layout",
+  "subject": "the SPECIFIC main subject — built from the dream ingredients above. NOT generic.",
+  "environment": "where this happens — concrete sensory details, not 'a beautiful place'",
+  "lighting": "specific dramatic lighting that sets the emotional tone",
+  "camera": "camera angle and perspective — try unusual ones (worm's eye, bird's eye, through a keyhole, reflected in water)",
+  "style": "ONE art style from their preferences",
+  "palette": "2-3 specific colors (e.g. 'burnt sienna, midnight blue, electric pink')",
+  "twist": "one visual element that makes this image IMPOSSIBLE in real life",
+  "composition": "portrait 9:16 vertical — describe the layout",
   "mood": "2-3 word emotional tone"
 }
 
-MANDATORY RULES:
-- COMPOSITION MUST be portrait orientation (9:16 vertical) — tall, not wide
-- The "twist" must be something surprising — it prevents repetition
-- "subject" must NOT be "lone figure gazing at landscape" — be more creative
-- Pick ONE art style, don't blend three
-- Be concrete: name textures, materials, specific objects. Not adjectives.
-- Must include an unusual light source OR a reflective surface OR a surreal object
-- Stylized characters welcome, no photorealistic human faces, no nudity
-- SAFETY (Flux filter avoidance): Attractive and stylized characters are welcome. Suggestive is fine. But avoid: explicit nudity, fully bare torsos, underwear-only outfits, sexual acts. Characters should wear at least light clothing.`;
+RULES:
+- The subject MUST come from the dream ingredients. Do NOT ignore them.
+- Be CONCRETE: name textures, materials, specific objects. Not adjectives.
+- NO generic scenes. NO "cozy room." NO "lone figure gazing at landscape."
+- The twist should be physically impossible — wrong scale, wrong material, defying gravity, merged objects.
+- Portrait 9:16 vertical composition only.
+- Stylized characters welcome. No photorealistic human faces, no nudity.`;
 }
 
 export function buildPolisherPrompt(concept: ConceptRecipe): string {
@@ -165,10 +172,9 @@ export function buildFallbackConcept(profile: VibeProfile): ConceptRecipe {
     profile.art_styles.length > 0
       ? pick(profile.art_styles).replace(/_/g, ' ')
       : 'digital painting';
-  const interest =
-    profile.interests.length > 0
-      ? pick(profile.interests).replace(/_/g, ' ')
-      : 'mysterious landscape';
+  const seeds = profile.dream_seeds ?? { characters: [], places: [], things: [] };
+  const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
+  const interest = allSeeds.length > 0 ? pick(allSeeds) : 'mysterious landscape';
   const aesthetic =
     profile.aesthetics.length > 0 ? pick(profile.aesthetics).replace(/_/g, ' ') : 'dreamy';
   const isSurreal = profile.moods.realistic_surreal > 0.5;
@@ -176,7 +182,7 @@ export function buildFallbackConcept(profile: VibeProfile): ConceptRecipe {
 
   return {
     subject: `a scene about ${interest}`,
-    environment: profile.personal_anchors.place || `an atmospheric ${aesthetic} setting`,
+    environment: `an atmospheric ${aesthetic} setting`,
     lighting: isDark ? 'moody low-key light with deep shadows' : 'soft golden hour light',
     camera: '35mm wide angle, eye level',
     style,

@@ -43,42 +43,6 @@ export type ArtStyle =
   | 'lego'
   | 'felt_puppet';
 
-export type SubjectInterest =
-  | 'nature'
-  | 'architecture'
-  | 'sci_fi'
-  | 'fantasy'
-  | 'animals'
-  | 'cities'
-  | 'space'
-  | 'oceans'
-  | 'mountains'
-  | 'food'
-  | 'fashion'
-  | 'music'
-  | 'gaming'
-  | 'sports'
-  | 'travel'
-  | 'abstract'
-  | 'dark'
-  | 'cute'
-  | 'whimsical'
-  | 'pride';
-
-export type SpiritCompanion =
-  | 'fox'
-  | 'cat'
-  | 'owl'
-  | 'dragon'
-  | 'rabbit'
-  | 'wolf'
-  | 'jellyfish'
-  | 'deer'
-  | 'butterfly'
-  | 'robot'
-  | 'ghost'
-  | 'mushroom_creature';
-
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {
   /** 0 = peaceful, 1 = chaotic */
@@ -91,16 +55,35 @@ export interface MoodAxes {
   realistic_surreal: number;
 }
 
-/** Free-text personal anchors that make dreams feel uniquely theirs */
-export interface PersonalAnchors {
-  /** "a place you love" */
-  place: string;
-  /** "an object you love" */
-  object: string;
-  /** "an era you vibe with" */
-  era: string;
-  /** "your dream vibe (one-liner)" */
-  dream_vibe: string;
+/** Dream seeds — three categories of ingredients the engine mashes up */
+export interface DreamSeeds {
+  /** Who shows up — my cat, astronauts, tiny monsters, grandma */
+  characters: string[];
+  /** Where dreams happen — Disneyland, abandoned malls, Tokyo at night */
+  places: string[];
+  /** Objects that appear, transform, or become something else — donuts, guitars, neon signs */
+  things: string[];
+}
+
+/** Relationship type for the +1 cast member — affects how they appear in dreams */
+export type CastRelationship =
+  | 'significant_other'
+  | 'friend'
+  | 'sibling'
+  | 'parent'
+  | 'child'
+  | 'grandchild';
+
+/** A person or pet the user uploads — photo gets described once, description used in dreams */
+export interface DreamCastMember {
+  /** 'self' | 'plus_one' | 'pet' */
+  role: 'self' | 'plus_one' | 'pet';
+  /** Thumbnail URL stored in Supabase storage */
+  thumb_url: string;
+  /** AI-generated text description of appearance (set once at save time) */
+  description: string;
+  /** Relationship to the user — only for plus_one role. Affects dream context (romantic vs platonic). */
+  relationship?: CastRelationship;
 }
 
 /** The complete vibe profile stored in user_recipes.recipe JSONB */
@@ -108,27 +91,33 @@ export interface VibeProfile {
   version: 2;
   aesthetics: Aesthetic[];
   art_styles: ArtStyle[];
-  interests: SubjectInterest[];
   moods: MoodAxes;
-  personal_anchors: PersonalAnchors;
+  /** Three categories of dream ingredients the engine remixes */
+  dream_seeds: DreamSeeds;
+  /** Photos described as text — randomly appear in dreams as stylized characters */
+  dream_cast: DreamCastMember[];
   avoid: string[];
-  spirit_companion: SpiritCompanion | null;
 }
+
+export const DEFAULT_DREAM_SEEDS: DreamSeeds = {
+  characters: [],
+  places: [],
+  things: [],
+};
 
 export const DEFAULT_VIBE_PROFILE: VibeProfile = {
   version: 2,
   aesthetics: [],
   art_styles: [],
-  interests: [],
   moods: {
     peaceful_chaotic: 0.5,
     cute_terrifying: 0.3,
     minimal_maximal: 0.5,
     realistic_surreal: 0.5,
   },
-  personal_anchors: { place: '', object: '', era: '', dream_vibe: '' },
+  dream_seeds: { ...DEFAULT_DREAM_SEEDS },
+  dream_cast: [],
   avoid: ['text', 'watermarks'],
-  spirit_companion: null,
 };
 
 /** Prompt mode — adjusts weighting and creative direction */

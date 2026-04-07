@@ -4,13 +4,7 @@
  */
 
 import type { Recipe } from '@/types/recipe';
-import type {
-  VibeProfile,
-  Aesthetic,
-  ArtStyle,
-  SubjectInterest,
-  MoodAxes,
-} from '@/types/vibeProfile';
+import type { VibeProfile, Aesthetic, ArtStyle, MoodAxes } from '@/types/vibeProfile';
 
 const TAG_TO_AESTHETIC: Record<string, Aesthetic> = {
   dreamy: 'dreamy',
@@ -76,18 +70,17 @@ export function migrateRecipeToVibeProfile(recipe: Recipe): VibeProfile {
     realistic_surreal: recipe.axes.weirdness,
   };
 
-  // Interests carry over (types overlap)
-  const interests = (recipe.interests ?? []) as SubjectInterest[];
+  // Map legacy interests to world_tags
+  const worldTags = (recipe.interests ?? []).map((i: string) => i.replace(/_/g, ' '));
 
   return {
     version: 2,
     aesthetics: [...aesthetics].slice(0, 6),
     art_styles: artStyles,
-    interests,
     moods,
-    personal_anchors: { place: '', object: '', era: '', dream_vibe: '' },
+    dream_seeds: { characters: [], places: [], things: worldTags },
+    dream_cast: [],
     avoid: ['text', 'watermarks'],
-    spirit_companion: recipe.spirit_companion ?? null,
   };
 }
 

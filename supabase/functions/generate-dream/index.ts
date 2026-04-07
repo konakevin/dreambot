@@ -13,7 +13,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { buildPromptInput, buildRawPrompt, buildHaikuPrompt } from '../_shared/recipeEngine.ts';
 import type { Recipe } from '../_shared/recipe.ts';
-import type { VibeProfile, PromptMode, ConceptRecipe } from '../_shared/vibeProfile.ts';
+import type {
+  VibeProfile,
+  PromptMode,
+  ConceptRecipe,
+  DreamCastMember,
+} from '../_shared/vibeProfile.ts';
 import {
   buildConceptPrompt,
   buildConceptPromptV2,
@@ -379,7 +384,91 @@ Deno.serve(async (req) => {
     })
   );
 
-  if (medium_key || vibe_key) {
+  if (medium_key === 'my_mediums' && vibe_key === 'my_vibes' && vibe_profile) {
+    // ══════════════════════════════════════════════════════════════════
+    // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
+    // ══════════════════════════════════════════════════════════════════
+    const nightlyProfile = vibe_profile as VibeProfile;
+    const nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+    const nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
+    resolvedMediumKey = nightlyMedium.key;
+    resolvedVibeKey = nightlyVibe.key;
+
+    console.log(
+      '[generate-dream] NIGHTLY DREAMBOT | medium:',
+      nightlyMedium.key,
+      '| vibe:',
+      nightlyVibe.key
+    );
+
+    // Step 1: Invent a subject from dream seeds
+    const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [], things: [] };
+    let dreamSubject: string;
+    try {
+      const subjectPrompt = buildSubjectInventionPrompt(seeds, nightlyProfile.aesthetics);
+      dreamSubject = await enhanceViaHaiku(subjectPrompt, '', ANTHROPIC_KEY, 80);
+      console.log('[generate-dream] Nightly subject:', dreamSubject);
+    } catch {
+      dreamSubject = 'a mysterious dreamscape with unexpected elements';
+    }
+    lap('nightly-subject');
+
+    // Step 2: Maybe inject a dream cast member (~30% chance)
+    const cast = nightlyProfile.dream_cast ?? [];
+    const describedCast = cast.filter((m: DreamCastMember) => m.description);
+    if (describedCast.length > 0 && Math.random() < 0.3) {
+      const castPick = describedCast[Math.floor(Math.random() * describedCast.length)];
+      const roleLabel =
+        castPick.role === 'self'
+          ? 'the dreamer'
+          : castPick.role === 'pet'
+            ? 'their pet'
+            : (castPick as Record<string, unknown>).relationship === 'significant_other'
+              ? 'their romantic partner'
+              : `their ${(castPick as Record<string, unknown>).relationship ?? 'companion'}`;
+      dreamSubject += `. The main character is ${roleLabel}: ${castPick.description}`;
+      console.log('[generate-dream] Nightly cast injected:', castPick.role);
+    }
+
+    // Step 3: Build the full Flux prompt — medium style + invented subject + vibe mood
+    const nightlyBrief = `You are writing a prompt for Flux AI to generate a dream image. Output 50-80 words, comma-separated phrases.
+
+ART STYLE: ${nightlyMedium.directive}
+
+SCENE TO RENDER:
+${dreamSubject}
+
+MOOD & ATMOSPHERE:
+${nightlyVibe.directive}
+
+RULES:
+- Start with the art style/medium description
+- Describe the SPECIFIC scene — what we see, where it is, what's happening
+- Include lighting, color palette, and one impossible/surreal detail
+- End with composition notes and quality terms
+- Portrait 9:16 vertical orientation
+- Be CONCRETE — name textures, materials, specific objects
+- NO meta-commentary, NO quotation marks
+- SAFETY: no nudity, no photorealistic human faces
+
+Output ONLY the prompt.`;
+
+    try {
+      finalPrompt = await enhanceViaHaiku(nightlyBrief, '', ANTHROPIC_KEY, 200);
+      if (finalPrompt.length < 20) throw new Error('too short');
+    } catch {
+      // Fallback: concatenate directly
+      finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed, gorgeous lighting`;
+    }
+
+    console.log('[generate-dream] Nightly prompt:', finalPrompt.slice(0, 200));
+    logAxes = {
+      medium: nightlyMedium.key,
+      vibe: nightlyVibe.key,
+      engine: 'nightly-dreambot',
+    };
+    lap('nightly-done');
+  } else if (medium_key || vibe_key) {
     // ── V2 ENGINE: Medium + Vibe directive-based generation ──────────
     const vibeProfile = vibe_profile as VibeProfile | undefined;
 
@@ -527,12 +616,16 @@ Output ONLY the prompt.`;
       let userSubject = rawPrompt ?? hint ?? '';
       if (!userSubject && vibeProfile) {
         try {
+          const seeds = vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] };
+          const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
           const subjectPrompt = buildSubjectInventionPrompt(
-            vibeProfile.interests,
-            vibeProfile.aesthetics,
-            vibeProfile.spirit_companion
+            vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] },
+            vibeProfile.aesthetics
           );
-          userSubject = await enhanceViaHaiku(subjectPrompt, '', ANTHROPIC_KEY, 60);
+          userSubject =
+            allSeeds.length > 0
+              ? await enhanceViaHaiku(subjectPrompt, '', ANTHROPIC_KEY, 60)
+              : 'a mysterious dreamscape with unexpected elements';
           console.log('[generate-dream] Invented subject:', userSubject);
         } catch {
           userSubject = 'a mysterious dreamscape with unexpected elements';
@@ -1136,14 +1229,18 @@ function resolveMedium(
 /**
  * Resolve a vibe key to a real curated vibe. Handles:
  *   - 'surprise_me' → random curated vibe
- *   - 'my_vibes' → random curated vibe (placeholder, no special logic)
+ *   - 'my_vibes' → random from user's aesthetics, or random curated
  *   - unknown key → random curated vibe
  *   - valid key → that vibe
  */
 function resolveVibe(
   key: string | undefined,
-  _profile?: VibeProfile
+  profile?: VibeProfile
 ): (typeof CURATED_VIBES)[number] {
+  if (key === 'my_vibes' && profile?.aesthetics.length) {
+    const pick = profile.aesthetics[Math.floor(Math.random() * profile.aesthetics.length)];
+    return CURATED_VIBES.find((v) => v.key === pick) ?? randomVibe();
+  }
   const found = CURATED_VIBES.find((v) => v.key === key);
   return found ?? randomVibe();
 }

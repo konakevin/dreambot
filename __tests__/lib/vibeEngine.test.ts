@@ -14,21 +14,19 @@ const TEST_PROFILE: VibeProfile = {
   version: 2,
   aesthetics: ['cyberpunk', 'dreamy', 'liminal'],
   art_styles: ['anime', 'watercolor'],
-  interests: ['space', 'oceans', 'fantasy'],
   moods: {
     peaceful_chaotic: 0.3,
     cute_terrifying: 0.2,
     minimal_maximal: 0.7,
     realistic_surreal: 0.8,
   },
-  personal_anchors: {
-    place: 'a rooftop at sunset',
-    object: 'a vintage camera',
-    era: '80s synthwave',
-    dream_vibe: "like waking up in someone else's memory",
+  dream_seeds: {
+    characters: ['a fox', 'astronauts'],
+    places: ['a rooftop at sunset', 'underwater cities'],
+    things: ['vintage cameras', 'crystals'],
   },
+  dream_cast: [],
   avoid: ['text', 'gore'],
-  spirit_companion: 'fox',
 };
 
 describe('buildConceptPrompt', () => {
@@ -37,12 +35,6 @@ describe('buildConceptPrompt', () => {
     expect(prompt).toContain('cyberpunk');
     expect(prompt).toContain('dreamy');
     expect(prompt).toContain('liminal');
-  });
-
-  it('includes user interests', () => {
-    const prompt = buildConceptPrompt(TEST_PROFILE);
-    expect(prompt).toContain('space');
-    expect(prompt).toContain('oceans');
   });
 
   it('includes art styles', () => {
@@ -59,11 +51,6 @@ describe('buildConceptPrompt', () => {
     expect(prompt).toMatch(/surreal/i);
   });
 
-  it('includes dream vibe anchor always', () => {
-    const prompt = buildConceptPrompt(TEST_PROFILE);
-    expect(prompt).toContain("like waking up in someone else's memory");
-  });
-
   it('includes avoid list', () => {
     const prompt = buildConceptPrompt(TEST_PROFILE);
     expect(prompt).toContain('text, gore');
@@ -76,21 +63,16 @@ describe('buildConceptPrompt', () => {
     expect(prompt).toContain('"twist"');
   });
 
-  it('respects mode weighting for chaos', () => {
-    const prompt = buildConceptPrompt(TEST_PROFILE, 'chaos');
-    expect(prompt).toContain('30%');
-    expect(prompt).toContain('70%');
-  });
-
-  it('respects mode weighting for dream_me', () => {
-    const prompt = buildConceptPrompt(TEST_PROFILE, 'dream_me');
-    expect(prompt).toContain('70%');
-    expect(prompt).toContain('30%');
+  it('includes different creative direction per mode', () => {
+    const chaos = buildConceptPrompt(TEST_PROFILE, 'chaos');
+    const dreamMe = buildConceptPrompt(TEST_PROFILE, 'dream_me');
+    // Different modes should produce different creative direction blocks
+    expect(chaos).not.toBe(dreamMe);
   });
 
   it('works with empty profile', () => {
     const prompt = buildConceptPrompt(DEFAULT_VIBE_PROFILE);
-    expect(prompt).toContain('concept artist');
+    expect(prompt).toContain('dream');
     expect(prompt.length).toBeGreaterThan(100);
   });
 });

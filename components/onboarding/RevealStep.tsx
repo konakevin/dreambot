@@ -36,13 +36,24 @@ const GEN_WIDTH = 640;
 const GEN_HEIGHT = Math.round(((SCREEN_HEIGHT / SCREEN_WIDTH) * GEN_WIDTH) / 8) * 8; // round to nearest 8
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), 380);
-const MAX_DREAMS = 5;
+const MAX_DREAMS = Infinity;
 
-type Phase = 'idle' | 'generating' | 'reveal' | 'creating' | 'sparkles';
+type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';
+
+const BOOT_MESSAGES = [
+  'Initializing your DreamBot...',
+  'Sharpening pencils...',
+  'Adjusting the mood lighting...',
+  'Giving it an attitude...',
+  'Filling its head with your weird stuff...',
+  'Here goes nothing...',
+];
 
 interface Dream {
   url: string;
   prompt: string;
+  medium?: string;
+  vibe?: string;
 }
 
 interface Props {
@@ -62,6 +73,7 @@ export function RevealStep({ onBack }: Props) {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [bootMessage, setBootMessage] = useState(BOOT_MESSAGES[0]);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -146,19 +158,77 @@ export function RevealStep({ onBack }: Props) {
       runOnJS(setIsZoomed)(false);
     });
 
+  async function runBootSequence() {
+    for (let i = 0; i < BOOT_MESSAGES.length; i++) {
+      setBootMessage(BOOT_MESSAGES[i]);
+      await new Promise((r) => setTimeout(r, 600));
+    }
+  }
+
+  async function describeCastPhotos(): Promise<typeof profile.dream_cast> {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.access_token) return profile.dream_cast;
+
+    const described = await Promise.all(
+      profile.dream_cast.map(async (member) => {
+        // Skip if already described or no URL
+        if (member.description || !member.thumb_url) return member;
+        // Skip local file:// URIs — need a public URL
+        if (member.thumb_url.startsWith('file://')) return member;
+        try {
+          const res = await fetch(
+            `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.access_token}`,
+              },
+              body: JSON.stringify({
+                image_url: member.thumb_url,
+                role: member.role,
+              }),
+            }
+          );
+          if (!res.ok) throw new Error(`${res.status}`);
+          const data = await res.json();
+          if (__DEV__)
+            console.log(`[Reveal] Described ${member.role}:`, data.description?.slice(0, 80));
+          return { ...member, description: data.description ?? '' };
+        } catch (err) {
+          if (__DEV__) console.warn(`[Reveal] Failed to describe ${member.role}:`, err);
+          return member;
+        }
+      })
+    );
+    return described;
+  }
+
   async function generateImage() {
     if (generating.current) return;
     generating.current = true;
-    setPhase('generating');
+    setPhase('booting');
     setError(null);
 
+    // Run boot-up sequence in parallel with saving profile + describing cast photos
+    const bootPromise = runBootSequence();
+
     try {
-      // Save the profile immediately so it's persisted even if they don't post
+      // Describe cast photos (one-time AI vision call per photo)
+      const describedCast = await describeCastPhotos();
+      const profileWithDescriptions = {
+        ...profile,
+        dream_cast: describedCast,
+      };
+
+      // Save the profile with descriptions so they persist in the database
       if (user) {
         await supabase.from('user_recipes').upsert(
           {
             user_id: user.id,
-            recipe: JSON.parse(JSON.stringify(profile)),
+            recipe: JSON.parse(JSON.stringify(profileWithDescriptions)),
             onboarding_completed: true,
             ai_enabled: true,
             updated_at: new Date().toISOString(),
@@ -168,35 +238,27 @@ export function RevealStep({ onBack }: Props) {
         await supabase.from('users').update({ has_ai_recipe: true }).eq('id', user.id);
       }
 
-      // Build a quick preview prompt from the vibe profile
-      const style =
-        profile.art_styles.length > 0
-          ? profile.art_styles[Math.floor(Math.random() * profile.art_styles.length)].replace(
-              /_/g,
-              ' '
-            )
-          : 'digital painting';
-      const interest =
-        profile.interests.length > 0
-          ? profile.interests[Math.floor(Math.random() * profile.interests.length)].replace(
-              /_/g,
-              ' '
-            )
-          : 'dreamy landscape';
-      const aesthetic =
-        profile.aesthetics.length > 0
-          ? profile.aesthetics[Math.floor(Math.random() * profile.aesthetics.length)].replace(
-              /_/g,
-              ' '
-            )
-          : 'dreamy';
-      const prompt = `${style}, a stunning ${interest} scene, ${aesthetic} aesthetic, gorgeous lighting, hyper detailed, cinematic composition`;
-      if (__DEV__) console.log('[Reveal] Prompt:', prompt);
-      const url = await generateFluxImage(prompt);
-      if (__DEV__) console.log('[Reveal] Got URL:', url?.slice(0, 80));
+      await bootPromise;
+      setPhase('generating');
+
+      // Let the engine pick everything — just send the profile
+      const mediumKey = 'my_mediums';
+      const vibeKey = 'my_vibes';
+
+      if (__DEV__) console.log('[Reveal] medium:', mediumKey, 'vibe:', vibeKey);
+      const result = await generateVibeProfileDream(mediumKey, vibeKey);
+      if (__DEV__) console.log('[Reveal] Got URL:', result.url?.slice(0, 80));
 
       setDreams((prev) => {
-        const next = [...prev, { url, prompt }];
+        const next = [
+          ...prev,
+          {
+            url: result.url,
+            prompt: result.prompt,
+            medium: result.medium,
+            vibe: result.vibe,
+          },
+        ];
         const newIdx = next.length - 1;
         setActiveIndex(newIdx);
         setTimeout(() => {
@@ -215,8 +277,10 @@ export function RevealStep({ onBack }: Props) {
     }
   }
 
-  async function generateFluxImage(prompt: string): Promise<string> {
-    // Route through the generate-dream edge function (no client-side API keys)
+  async function generateVibeProfileDream(
+    mediumKey?: string,
+    vibeKey?: string
+  ): Promise<{ url: string; prompt: string; medium?: string; vibe?: string }> {
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -230,7 +294,9 @@ export function RevealStep({ onBack }: Props) {
       },
       body: JSON.stringify({
         mode: 'flux-dev',
-        prompt,
+        medium_key: mediumKey,
+        vibe_key: vibeKey,
+        vibe_profile: profile,
         persist: false,
       }),
     });
@@ -243,8 +309,12 @@ export function RevealStep({ onBack }: Props) {
 
     const data = await res.json();
     if (!data.image_url) throw new Error('No image URL in response');
-    if (__DEV__) console.log('[Reveal] Got URL:', data.image_url.slice(0, 80));
-    return data.image_url;
+    return {
+      url: data.image_url,
+      prompt: data.prompt_used ?? '',
+      medium: data.resolved_medium ?? undefined,
+      vibe: data.resolved_vibe ?? undefined,
+    };
   }
 
   function handleDreamAgain() {
@@ -289,6 +359,8 @@ export function RevealStep({ onBack }: Props) {
           image_url: activeDream.url,
           caption: null,
           ai_prompt: activeDream.prompt || null,
+          medium: activeDream.medium || null,
+          vibe: activeDream.vibe || null,
         })
         .select('id')
         .single();
@@ -348,8 +420,7 @@ export function RevealStep({ onBack }: Props) {
         <View style={s.centeredContent}>
           <Text style={s.bigTitle}>25 Sparkles!</Text>
           <Text style={[s.centeredSub, { marginBottom: 24, lineHeight: 22 }]}>
-            Welcome to DreamBot! We gave you 25 sparkles to get started. Each sparkle lets you
-            create one dream — try different modes, re-dream your photos, go wild with Chaos mode.
+            {`Your DreamBot is alive! It'll dream for you every night — for free. Use sparkles to dream on demand with the Dream tool — any style, no limits.`}
           </Text>
 
           <View
@@ -366,13 +437,13 @@ export function RevealStep({ onBack }: Props) {
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <Ionicons name="sparkles" size={20} color={colors.accent} />
               <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                1 Sparkle = 1 Dream
+                1 Sparkle = 1 on-demand dream
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <Ionicons name="moon" size={20} color={colors.accent} />
               <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                Free dream every week from DreamBot
+                Your DreamBot dreams every night for free
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -450,28 +521,41 @@ export function RevealStep({ onBack }: Props) {
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image source={{ uri: MASCOT_URLS[1] }} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>DreamBot is ready</Text>
-          <Text style={s.centeredSub}>Tap below to save your settings and start dreaming</Text>
+          <Text style={s.bigTitle}>Your DreamBot is built</Text>
+          <Text style={s.centeredSub}>{`Stand back. It's about to wake up.`}</Text>
           <TouchableOpacity
             style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
             onPress={() => generateImage()}
             activeOpacity={0.7}
           >
-            <Text style={s.createButtonText}>Save &amp; Create Dream</Text>
+            <Text style={s.createButtonText}>Activate DreamBot</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 
-  // ── First generation loading ──
+  // ── Boot-up sequence ──
+  if (phase === 'booting') {
+    return (
+      <View style={s.root}>
+        <View style={s.centeredContent}>
+          <Image source={{ uri: MASCOT_URLS[2] }} style={s.idleMascot} contentFit="cover" />
+          <Text style={s.bigTitle}>{bootMessage}</Text>
+          <ActivityIndicator size="small" color={colors.accent} />
+        </View>
+      </View>
+    );
+  }
+
+  // ── Generating (after boot-up) ──
   if (phase === 'generating' && dreams.length === 0) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image source={{ uri: MASCOT_URLS[2] }} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>Dreaming...</Text>
-          <Text style={s.centeredSub}>DreamBot is creating a dream for you</Text>
+          <Text style={s.bigTitle}>Generating first dream...</Text>
+          <Text style={s.centeredSub}>Your DreamBot is online</Text>
           <ActivityIndicator size="small" color={colors.accent} />
         </View>
       </View>
@@ -561,7 +645,7 @@ export function RevealStep({ onBack }: Props) {
               disabled={phase === 'creating' || phase === 'generating'}
               activeOpacity={0.7}
             >
-              <Text style={s.dreamAgainText}>Dream Again ({dreamsRemaining})</Text>
+              <Text style={s.dreamAgainText}>Dream Again</Text>
             </TouchableOpacity>
           )}
 

@@ -59,21 +59,10 @@ describe('migrateRecipeToVibeProfile', () => {
     expect(profile.art_styles).toContain('watercolor');
   });
 
-  it('preserves interests', () => {
+  it('maps interests to dream_seeds things', () => {
     const profile = migrateRecipeToVibeProfile(FULL_RECIPE);
-    expect(profile.interests).toContain('fantasy');
-    expect(profile.interests).toContain('ocean');
-  });
-
-  it('preserves spirit companion', () => {
-    const profile = migrateRecipeToVibeProfile(FULL_RECIPE);
-    expect(profile.spirit_companion).toBe('dragon');
-  });
-
-  it('sets empty personal anchors', () => {
-    const profile = migrateRecipeToVibeProfile(FULL_RECIPE);
-    expect(profile.personal_anchors.place).toBe('');
-    expect(profile.personal_anchors.dream_vibe).toBe('');
+    expect(profile.dream_seeds.things).toContain('fantasy');
+    expect(profile.dream_seeds.things).toContain('ocean');
   });
 
   it('includes default avoid list', () => {

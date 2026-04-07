@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
@@ -307,7 +308,7 @@ export default function SettingsScreen() {
           <SettingsRow
             icon="sparkles"
             label="Get Sparkles"
-            onPress={() => router.push('/sparkleStore')}
+            onPress={() => nav.push('/sparkleStore')}
           />
         </View>
 
@@ -333,7 +334,7 @@ export default function SettingsScreen() {
               }
 
               useOnboardingStore.getState().setIsEditing(true);
-              router.push('/(onboarding)');
+              nav.push('/(onboarding)');
             }}
           />
           <SettingsRow
@@ -342,9 +343,10 @@ export default function SettingsScreen() {
             onPress={async () => {
               await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
               await supabase.from('user_recipes').delete().eq('user_id', user!.id);
+              const { useOnboardingStore } = require('@/store/onboarding');
+              useOnboardingStore.getState().reset();
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-              const { Toast } = require('@/components/Toast');
-              Toast.show('Profile reset — reload to set up again', 'checkmark-circle');
+              router.replace('/(onboarding)');
             }}
             destructive
             trailing={null}

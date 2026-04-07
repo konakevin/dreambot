@@ -47,35 +47,32 @@ export function WelcomeStep({ onNext }: Props) {
           <Image source={{ uri: MASCOT_URLS[0] }} style={s.mascot} contentFit="cover" />
         </View>
 
-        <Text style={s.title}>Welcome to DreamBot</Text>
+        <Text style={s.title}>Create Your DreamBot</Text>
 
-        <Text style={s.body}>
-          DreamBot is an AI that learns your taste and creates stunning art just for you, every
-          single day.
-        </Text>
+        <Text style={s.body}>{`Every DreamBot is one of a kind. Let's build yours.`}</Text>
 
         <View style={s.steps}>
           <StepRow
-            icon="color-palette"
+            icon="construct"
             color={colors.accent}
-            title="Teach it your style"
-            subtitle="Pick your interests, mood, and personality"
+            title="Build its personality"
+            subtitle="Your choices shape how it sees the world"
           />
           <StepRow
             icon="moon"
             color={colors.accent}
             title="It dreams while you sleep"
-            subtitle="Wake up to a new creation on your profile every day"
+            subtitle="Wake up to a new creation every morning"
           />
           <StepRow
-            icon="globe-outline"
+            icon="sparkles"
             color={colors.accent}
-            title="Share your dreams"
-            subtitle="See what others are dreaming and find kindred spirits"
+            title="Create anything, anytime"
+            subtitle="Go beyond your DreamBot and experiment freely"
           />
         </View>
 
-        <Text style={s.footnote}>Takes about 30 seconds. You can always change it later.</Text>
+        <Text style={s.footnote}>Takes about 30 seconds. You can rebuild it anytime.</Text>
       </View>
 
       <View style={s.footer}>

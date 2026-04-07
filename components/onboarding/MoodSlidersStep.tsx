@@ -1,28 +1,50 @@
 /**
- * MoodSlidersStep — 4 bipolar mood sliders.
- * peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal
+ * MoodSlidersStep — "Tune its personality"
+ * Each slider gets its own card with a description of what it controls.
  */
 
-import { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, findNodeHandle, UIManager } from 'react-native';
+import { useRef } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  findNodeHandle,
+  UIManager,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import type { MoodAxes } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 
-const SLIDER_WIDTH = 280;
+const SLIDER_WIDTH = 260;
 const THUMB_SIZE = 28;
 
-interface SliderProps {
-  label: string;
+interface SliderCardProps {
+  title: string;
+  description: string;
   leftLabel: string;
   rightLabel: string;
+  leftHint: string;
+  rightHint: string;
   value: number;
   onChange: (v: number) => void;
 }
 
-function BipolarSlider({ label, leftLabel, rightLabel, value, onChange }: SliderProps) {
+function SliderCard({
+  title,
+  description,
+  leftLabel,
+  rightLabel,
+  leftHint,
+  rightHint,
+  value,
+  onChange,
+}: SliderCardProps) {
   const trackRef = useRef<View>(null);
   const trackLeft = useRef(0);
 
@@ -43,25 +65,42 @@ function BipolarSlider({ label, leftLabel, rightLabel, value, onChange }: Slider
   }
 
   return (
-    <View style={s.sliderBlock}>
-      <Text style={s.sliderTitle}>{label}</Text>
-      <View style={s.poleRow}>
-        <Text style={s.poleLabel}>{leftLabel}</Text>
-        <Text style={s.poleLabel}>{rightLabel}</Text>
-      </View>
-      <View
-        style={s.hitArea}
-        onStartShouldSetResponder={() => true}
-        onMoveShouldSetResponder={() => true}
-        onResponderGrant={(e) => handleGrant(e.nativeEvent.pageX)}
-        onResponderMove={(e) => handleMove(e.nativeEvent.pageX)}
-        onResponderRelease={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-      >
-        <View ref={trackRef} style={s.track}>
-          <View style={[s.fill, { width: value * SLIDER_WIDTH }]} />
-          <View
-            style={[s.thumb, { transform: [{ translateX: value * (SLIDER_WIDTH - THUMB_SIZE) }] }]}
-          />
+    <View style={s.card}>
+      <Text style={s.cardTitle}>{title}</Text>
+      <Text style={s.cardDesc}>{description}</Text>
+
+      <View style={s.sliderWrap}>
+        <View style={s.poleRow}>
+          <View style={s.poleCol}>
+            <Text style={[s.poleLabel, value < 0.4 && s.poleLabelActive]}>{leftLabel}</Text>
+            <Text style={s.poleHint}>{leftHint}</Text>
+          </View>
+          <View style={[s.poleCol, { alignItems: 'flex-end' }]}>
+            <Text style={[s.poleLabel, value > 0.6 && s.poleLabelActive]}>{rightLabel}</Text>
+            <Text style={[s.poleHint, { textAlign: 'right' }]}>{rightHint}</Text>
+          </View>
+        </View>
+        <View
+          style={s.hitArea}
+          onStartShouldSetResponder={() => true}
+          onMoveShouldSetResponder={() => true}
+          onResponderTerminationRequest={() => false}
+          onResponderGrant={(e) => {
+            e.currentTarget.setNativeProps?.({});
+            handleGrant(e.nativeEvent.pageX);
+          }}
+          onResponderMove={(e) => handleMove(e.nativeEvent.pageX)}
+          onResponderRelease={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+        >
+          <View ref={trackRef} style={s.track}>
+            <View style={[s.fill, { width: value * SLIDER_WIDTH }]} />
+            <View
+              style={[
+                s.thumb,
+                { transform: [{ translateX: value * (SLIDER_WIDTH - THUMB_SIZE) }] },
+              ]}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -73,11 +112,51 @@ interface Props {
   onBack: () => void;
 }
 
-const SLIDERS: { axis: keyof MoodAxes; label: string; left: string; right: string }[] = [
-  { axis: 'peaceful_chaotic', label: 'Energy', left: 'Peaceful', right: 'Chaotic' },
-  { axis: 'cute_terrifying', label: 'Tone', left: 'Cute', right: 'Terrifying' },
-  { axis: 'minimal_maximal', label: 'Detail', left: 'Minimal', right: 'Maximal' },
-  { axis: 'realistic_surreal', label: 'Reality', left: 'Realistic', right: 'Surreal' },
+const SLIDERS: {
+  axis: keyof MoodAxes;
+  title: string;
+  description: string;
+  left: string;
+  right: string;
+  leftHint: string;
+  rightHint: string;
+}[] = [
+  {
+    axis: 'peaceful_chaotic',
+    title: 'Energy',
+    description: 'Controls the intensity of your dreams. Quiet sunsets or raging storms?',
+    left: 'Calm',
+    right: 'Intense',
+    leftHint: 'Still water, soft light',
+    rightHint: 'Thunder, motion, fire',
+  },
+  {
+    axis: 'cute_terrifying',
+    title: 'Tone',
+    description: 'Sets the emotional temperature. Cozy vibes or creepy shadows?',
+    left: 'Warm',
+    right: 'Dark',
+    leftHint: 'Bright, friendly, safe',
+    rightHint: 'Moody, eerie, haunting',
+  },
+  {
+    axis: 'minimal_maximal',
+    title: 'Detail',
+    description: 'How much visual information gets packed into each dream.',
+    left: 'Simple',
+    right: 'Complex',
+    leftHint: 'One subject, one mood',
+    rightHint: 'Every inch packed',
+  },
+  {
+    axis: 'realistic_surreal',
+    title: 'Reality',
+    description: 'How grounded in the real world — or how far from it.',
+    left: 'Grounded',
+    right: 'Surreal',
+    leftHint: 'Could be a photo',
+    rightHint: 'Impossible physics',
+  },
 ];
 
 export function MoodSlidersStep({ onNext, onBack }: Props) {
@@ -85,24 +164,35 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
   const setMoodAxis = useOnboardingStore((s) => s.setMoodAxis);
 
   return (
-    <View style={s.root}>
-      <View style={s.content}>
-        <Text style={s.title}>Dial in your mood</Text>
-        <Text style={s.subtitle}>Slide each one to match your vibe</Text>
+    <KeyboardAvoidingView
+      style={s.root}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView
+        contentContainerStyle={s.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator
+      >
+        <Text style={s.title}>Tune its personality</Text>
+        <Text style={s.subtitle}>
+          {`These dials shape how your DreamBot dreams. Scroll down to set them all.`}
+        </Text>
 
-        <View style={s.sliders}>
-          {SLIDERS.map((slider) => (
-            <BipolarSlider
-              key={slider.axis}
-              label={slider.label}
-              leftLabel={slider.left}
-              rightLabel={slider.right}
-              value={moods[slider.axis]}
-              onChange={(v) => setMoodAxis(slider.axis, v)}
-            />
-          ))}
-        </View>
-      </View>
+        {SLIDERS.map((slider) => (
+          <SliderCard
+            key={slider.axis}
+            title={slider.title}
+            description={slider.description}
+            leftLabel={slider.left}
+            rightLabel={slider.right}
+            leftHint={slider.leftHint}
+            rightHint={slider.rightHint}
+            value={moods[slider.axis]}
+            onChange={(v) => setMoodAxis(slider.axis, v)}
+          />
+        ))}
+      </ScrollView>
 
       <View style={s.footer}>
         <View style={s.footerRow}>
@@ -123,26 +213,54 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { flex: 1, paddingHorizontal: 20, paddingTop: 4 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 20 },
   title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: colors.textSecondary, fontSize: 16, marginBottom: 32 },
-  sliders: { gap: 28, alignItems: 'center' },
-  sliderBlock: { width: SLIDER_WIDTH, gap: 8 },
-  sliderTitle: { color: colors.textPrimary, fontSize: 16, fontWeight: '700', textAlign: 'center' },
-  poleRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  poleLabel: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
+  subtitle: { color: colors.textSecondary, fontSize: 15, marginBottom: 20, lineHeight: 22 },
+
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  cardTitle: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '800',
+    marginBottom: 4,
+  },
+  cardDesc: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 18,
+    marginBottom: 14,
+  },
+
+  sliderWrap: { alignItems: 'center' },
+  poleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: SLIDER_WIDTH,
+    marginBottom: 2,
+  },
+  poleCol: { gap: 1 },
+  poleLabel: { color: colors.textMuted, fontSize: 13, fontWeight: '700' },
+  poleLabelActive: { color: colors.accent },
+  poleHint: { color: colors.textMuted, fontSize: 11 },
   hitArea: { paddingVertical: 12 },
   track: {
     width: SLIDER_WIDTH,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.border,
     justifyContent: 'center',
   },
   fill: {
@@ -164,6 +282,16 @@ const s = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 4,
   },
+
+  vibeHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
+  vibeInput: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    lineHeight: 20,
+    padding: 0,
+    marginTop: 4,
+  },
+
   footer: { paddingHorizontal: 20, paddingBottom: 16 },
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   backBtn: {
