@@ -160,6 +160,46 @@ const CURATED_MEDIUMS = [
     fluxFragment:
       'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
   },
+  {
+    key: 'retro_poster',
+    fluxFragment:
+      'Vintage retro travel poster, bold flat color blocks, screen-printed aesthetic, Art Deco influence, simplified geometric forms, limited palette, 1940s illustration style, dramatic diagonal composition',
+  },
+  {
+    key: 'childrens_book',
+    fluxFragment:
+      "Children's picture book illustration, soft watercolor washes on textured paper, rounded friendly character designs, warm inviting palette, gentle hand-drawn linework, cozy magical atmosphere, storybook quality",
+  },
+  {
+    key: 'vaporwave',
+    fluxFragment:
+      'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation',
+  },
+  {
+    key: 'dark_fantasy',
+    fluxFragment:
+      'Dark fantasy concept art, gothic crumbling architecture, dramatic god rays, storm clouds, ornate battered armor, Dark Souls Elden Ring aesthetic, massive scale, muted ashen palette with blood red accents',
+  },
+  {
+    key: 'ukiyo_e',
+    fluxFragment:
+      'Japanese ukiyo-e woodblock print, bold black outlines, flat color fills, Hokusai wave style, indigo and vermillion palette, stylized clouds, traditional Edo period aesthetic, decorative composition',
+  },
+  {
+    key: 'art_deco',
+    fluxFragment:
+      'Art Deco style, geometric patterns, sunburst motifs, gold and black and emerald palette, polished brass and marble, 1920s glamour, Chrysler Building aesthetic, luxurious symmetrical composition',
+  },
+  {
+    key: 'steampunk',
+    fluxFragment:
+      'Steampunk aesthetic, brass gears and copper pipes, Victorian machinery, ornate mechanical complexity, airships, goggles and leather, warm metallic palette, steam venting, clockwork mechanisms',
+  },
+  {
+    key: 'cute_anime',
+    fluxFragment:
+      'Kawaii chibi anime style, oversized heads, enormous sparkly eyes, pastel pink lavender mint palette, soft rounded forms, floating hearts and stars, sparkle effects, maximum cuteness, Sanrio aesthetic',
+  },
 ];
 
 const CURATED_VIBES = [

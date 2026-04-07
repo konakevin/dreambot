@@ -210,6 +210,70 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     fluxFragment:
       'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
   },
+  {
+    key: 'retro_poster',
+    label: 'Retro Poster',
+    directive:
+      'You are designing a vintage travel poster from the 1930s-1950s. Bold flat color blocks with no gradients — screen-printed aesthetic. Strong geometric shapes and simplified forms. Limited palette of 4-6 rich colors: deep teal, burnt orange, cream, burgundy, navy. Dramatic diagonal compositions with Art Deco influence. Subjects are stylized and iconic — silhouettes, simplified architecture, sweeping landscapes. No photorealism — this is graphic design as art. Think WPA national park posters, TWA airline ads, Swiss tourism prints.',
+    fluxFragment:
+      'Vintage retro travel poster, bold flat color blocks, screen-printed aesthetic, Art Deco influence, simplified geometric forms, limited palette, 1940s illustration style, dramatic diagonal composition',
+  },
+  {
+    key: 'childrens_book',
+    label: "Children's Book",
+    directive:
+      "You are illustrating a page from a beloved children's picture book. Soft, warm watercolor-like washes with visible paper texture. Rounded, friendly character designs with exaggerated proportions — big heads, small bodies, expressive faces. Colors are warm and inviting — soft pastels mixed with rich accent colors. Environments feel cozy and magical. Gentle linework, hand-drawn quality. Think Beatrix Potter meets Studio Ghibli — whimsical, detailed, and full of tiny discoverable details that reward close looking. Every scene tells a story.",
+    fluxFragment:
+      "Children's picture book illustration, soft watercolor washes on textured paper, rounded friendly character designs, warm inviting palette, gentle hand-drawn linework, cozy magical atmosphere, storybook quality",
+  },
+  {
+    key: 'vaporwave',
+    label: 'Vaporwave',
+    directive:
+      'You are creating vaporwave aesthetic art — the visual language of internet nostalgia and retro-futurism. Greek/Roman marble busts and statues in unexpected contexts. Glitch effects — horizontal scan lines, RGB color separation, pixel sorting. Color palette is MANDATORY: hot pink, cyan, purple, and teal against black or deep purple backgrounds. Palm trees, sunsets, grid floors stretching to infinity. Japanese text fragments. VHS tracking artifacts. Windows 95 UI elements. The aesthetic is simultaneously beautiful and ironic — corporate muzak made visual.',
+    fluxFragment:
+      'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation',
+  },
+  {
+    key: 'dark_fantasy',
+    label: 'Dark Fantasy',
+    directive:
+      'You are painting dark fantasy concept art — the visual world of Dark Souls, Berserk, and Elden Ring. Massive gothic architecture crumbling with age — cathedrals, fortresses, bridges spanning impossible chasms. Dark atmospheric lighting with dramatic god rays piercing through storm clouds. Characters wear ornate but battered armor. Creatures are terrifying and majestic. The palette is muted — ashen greys, deep blacks, blood reds, tarnished gold — with occasional shafts of ethereal light. Everything feels ancient, dangerous, and awe-inspiring. The scale is overwhelming.',
+    fluxFragment:
+      'Dark fantasy concept art, gothic crumbling architecture, dramatic god rays, storm clouds, ornate battered armor, Dark Souls Elden Ring aesthetic, massive scale, muted ashen palette with blood red accents',
+  },
+  {
+    key: 'ukiyo_e',
+    label: 'Ukiyo-e',
+    directive:
+      'You are creating in the style of traditional Japanese woodblock prints — ukiyo-e masters like Hokusai and Hiroshige. Bold black outlines with flat color fills — no gradients or shading within shapes. Colors are specific: indigo blue, vermillion red, forest green, ochre yellow, ivory white. Waves curl in the iconic Hokusai style. Mountains appear as layered silhouettes. Clouds are stylized swirling patterns. Cherry blossoms and pine branches frame compositions. Everything has the characteristic flat perspective and decorative patterning of Edo-period prints.',
+    fluxFragment:
+      'Japanese ukiyo-e woodblock print, bold black outlines, flat color fills, Hokusai wave style, indigo and vermillion palette, stylized clouds, traditional Edo period aesthetic, decorative composition',
+  },
+  {
+    key: 'art_deco',
+    label: 'Art Deco',
+    directive:
+      'You are designing in the Art Deco style of the 1920s-1930s — the age of Gatsby, golden age Hollywood, and the Chrysler Building. Geometric precision: symmetrical compositions, sunburst radiating patterns, chevrons, zigzags, stepped forms. The palette is luxurious: gold, black, cream, emerald green, deep navy. Materials are rich — polished brass, marble, lacquer, chrome. Typography is geometric and elegant. Architecture features strong vertical lines, tiered setbacks, and ornate geometric ornamentation. Everything exudes glamour, wealth, and machine-age optimism.',
+    fluxFragment:
+      'Art Deco style, geometric patterns, sunburst motifs, gold and black and emerald palette, polished brass and marble, 1920s glamour, Chrysler Building aesthetic, luxurious symmetrical composition',
+  },
+  {
+    key: 'steampunk',
+    label: 'Steampunk',
+    directive:
+      'You are building a steampunk world — Victorian-era technology powered by steam and clockwork, imagined to impossible extremes. Brass gears, copper pipes, riveted iron plates, leather straps, and glass pressure gauges are EVERYWHERE. Machines are ornate — covered in decorative filigree and unnecessary but beautiful mechanical complexity. Airships fill smoky skies. Characters wear goggles, top hats, corsets, and leather aviator gear. The palette is warm metallics: brass gold, copper, iron grey, leather brown, with jade green or sapphire blue accents. Steam vents from every surface.',
+    fluxFragment:
+      'Steampunk aesthetic, brass gears and copper pipes, Victorian machinery, ornate mechanical complexity, airships, goggles and leather, warm metallic palette, steam venting, clockwork mechanisms',
+  },
+  {
+    key: 'cute_anime',
+    label: 'Cute Anime',
+    directive:
+      'You are drawing in kawaii/chibi anime style — maximum cuteness. Characters have oversized heads (3:1 head-to-body ratio), enormous sparkly eyes with multiple highlight reflections, tiny button noses, and small simple mouths. Bodies are short and rounded — stubby limbs, no sharp angles. Colors are soft pastels: baby pink, lavender, mint, powder blue, peach, with white highlights everywhere. Backgrounds are magical — floating hearts, stars, sparkles, rainbow gradients, cloud floors. Everything is round, soft, and adorable. Think Sanrio meets chibi anime — weaponized cuteness.',
+    fluxFragment:
+      'Kawaii chibi anime style, oversized heads, enormous sparkly eyes, pastel pink lavender mint palette, soft rounded forms, floating hearts and stars, sparkle effects, maximum cuteness, Sanrio aesthetic',
+  },
 ];
 
 // ── Vibes ───────────────────────────────────────────────────────────────
@@ -324,6 +388,14 @@ export const MEDIUM_KEYS = [
   'minecraft',
   '8bit',
   'felt',
+  'retro_poster',
+  'childrens_book',
+  'vaporwave',
+  'dark_fantasy',
+  'ukiyo_e',
+  'art_deco',
+  'steampunk',
+  'cute_anime',
 ] as const;
 
 export const VIBE_KEYS = [

@@ -299,4 +299,108 @@ Output ONLY the prompt.`,
 
 Express the mood through lighting drama and material warmth: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
+
+  retro_poster: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for a vintage travel poster:
+- Start with: "Vintage retro travel poster, bold flat color blocks, screen-printed aesthetic, Art Deco influence, 1940s illustration"
+- Subject: ${subject} — as simplified geometric shapes and iconic silhouettes, NOT photorealistic
+- Limited palette of 4-6 rich colors: deep teal, burnt orange, cream, burgundy. NO gradients — flat screen-printed color blocks only
+- Dramatic diagonal composition with strong graphic design sensibility
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through color palette choice and composition angle: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  childrens_book: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for a children's book illustration:
+- Start with: "Children's picture book illustration, soft watercolor washes on textured paper, rounded friendly character designs, gentle hand-drawn linework"
+- Subject: ${subject} — with rounded, friendly proportions (big heads, small bodies, expressive faces)
+- Warm inviting palette — soft pastels mixed with rich accent colors. Visible paper texture. Cozy magical atmosphere.
+- Tiny discoverable details throughout — bugs, flowers, hidden creatures in corners
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through color warmth and detail density: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  vaporwave: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for vaporwave aesthetic art:
+- Start with: "Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, retro grid floor, VHS artifacts, 80s nostalgia"
+- Subject: ${subject} — with glitch effects, RGB color separation, pixel sorting artifacts
+- MANDATORY palette: hot pink, cyan, purple, teal against black or deep purple. Grid floors stretching to infinity. Palm trees. Sunsets.
+- Greek/Roman marble elements in unexpected places. Windows 95 UI fragments. Scan lines.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through glitch intensity and color saturation: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  dark_fantasy: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for dark fantasy concept art:
+- Start with: "Dark fantasy concept art, gothic crumbling architecture, dramatic god rays through storm clouds, Dark Souls Elden Ring aesthetic"
+- Subject: ${subject} — massive scale, ancient and dangerous. Crumbling cathedrals, fortresses spanning chasms, twisted landscapes
+- Palette: ashen greys, deep blacks, blood reds, tarnished gold. Occasional shafts of ethereal light piercing darkness.
+- Everything feels ancient and overwhelming. Scale dwarfs all characters.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through lighting drama and architectural decay: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  ukiyo_e: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for a Japanese woodblock print:
+- Start with: "Japanese ukiyo-e woodblock print, bold black outlines, flat color fills, Hokusai style, traditional Edo period aesthetic"
+- Subject: ${subject} — with bold black outlines and FLAT color fills (no gradients within shapes)
+- Colors: indigo blue, vermillion red, forest green, ochre yellow, ivory white. Waves curl in Hokusai style.
+- Stylized clouds as swirling patterns. Cherry blossoms and pine branches frame the scene. Flat perspective.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through composition balance and color restraint: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  art_deco: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for Art Deco style:
+- Start with: "Art Deco style, geometric patterns, sunburst motifs, gold and black and emerald palette, 1920s glamour, luxurious symmetrical composition"
+- Subject: ${subject} — with geometric precision: symmetrical sunbursts, chevrons, zigzags, stepped forms
+- Palette: gold, black, cream, emerald green, deep navy. Materials: polished brass, marble, lacquer, chrome.
+- Strong vertical lines, tiered setbacks, ornate geometric ornamentation. Gatsby-era opulence.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through geometric complexity and metallic warmth: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  steampunk: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for steampunk style:
+- Start with: "Steampunk aesthetic, brass gears and copper pipes, Victorian machinery, ornate mechanical complexity, clockwork mechanisms"
+- Subject: ${subject} — surrounded by brass gears, copper pipes, riveted iron, leather straps, glass pressure gauges
+- Machines are ornate with decorative filigree. Airships in smoky skies. Goggles, top hats, aviator leather.
+- Palette: brass gold, copper, iron grey, leather brown with jade green or sapphire accents. Steam venting everywhere.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through mechanical density and steam atmosphere: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
+
+  cute_anime: (
+    subject,
+    vibe
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for kawaii chibi anime:
+- Start with: "Kawaii chibi anime, oversized heads, enormous sparkly eyes with multiple highlight reflections, pastel palette, soft rounded forms, Sanrio aesthetic"
+- Subject: ${subject} — with 3:1 head-to-body ratio, enormous sparkly eyes, tiny button nose, stubby rounded limbs
+- Soft pastels: baby pink, lavender, mint, powder blue, peach. White highlights everywhere.
+- Backgrounds: floating hearts, stars, sparkles, rainbow gradients, cloud floors. Everything round and adorable.
+- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
+
+Express the mood through sparkle density and pastel warmth: ${vibe.slice(0, 200)}
+Output ONLY the prompt.`,
 };

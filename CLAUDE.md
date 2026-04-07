@@ -13,6 +13,7 @@ Do NOT auto-start the dev environment. Let Kevin know he can run `/dream` to spi
 DreamBot is an AI-powered dream image generator for iOS. Users set up a "Vibe Profile" during onboarding (aesthetics, art styles, interests, mood sliders, personal anchors, spirit companion), and the app generates unique AI dreams personalized to their taste. Users can also fuse dreams genetically, twin dreams, set dream wishes, and share/comment/like in a social feed. Dark, high-energy aesthetic. Built for fun and delight.
 
 **Key features:**
+
 - Personality-driven AI image generation via a two-pass prompt engine
 - 7 prompt modes (Dream Me, Chaos, Cinematic, Minimal, Nature, Character, Nostalgia)
 - Photo reimagining (upload → AI transforms while keeping the subject)
@@ -49,6 +50,7 @@ DreamBot is an AI-powered dream image generator for iOS. Users set up a "Vibe Pr
 ### Vibe Profile (types/vibeProfile.ts)
 
 Every user has a `VibeProfile` (version: 2) with:
+
 - **aesthetics[]** — cyberpunk, cozy, liminal, dreamy, etc. (20 options, min 3)
 - **art_styles[]** — anime, watercolor, 35mm, oil painting, etc. (19 options, min 2)
 - **interests[]** — nature, space, fantasy, animals, etc. (20 options, min 3)
@@ -67,15 +69,15 @@ Every user has a `VibeProfile` (version: 2) with:
 
 ### 7 Prompt Modes (constants/promptModes.ts)
 
-| Mode | User/Surprise | Description |
-|------|--------------|-------------|
-| Dream Me | 70/30 | Personalized to taste |
-| Chaos | 30/70 | Wild and unpredictable |
-| Cinematic | 70/30 | Movie poster vibes |
-| Minimal | 80/20 | One subject, one mood |
-| Nature | 60/40 | Pure landscape, no characters |
-| Character | 70/30 | Creature or figure focus |
-| Nostalgia | 80/20 | Warm memories, golden tones |
+| Mode      | User/Surprise | Description                   |
+| --------- | ------------- | ----------------------------- |
+| Dream Me  | 70/30         | Personalized to taste         |
+| Chaos     | 30/70         | Wild and unpredictable        |
+| Cinematic | 70/30         | Movie poster vibes            |
+| Minimal   | 80/20         | One subject, one mood         |
+| Nature    | 60/40         | Pure landscape, no characters |
+| Character | 70/30         | Creature or figure focus      |
+| Nostalgia | 80/20         | Warm memories, golden tones   |
 
 ### Photo Reimagining
 
@@ -102,6 +104,7 @@ Old users with Recipe (no version field) still work through `lib/recipeEngine.ts
 ## Sparkle Economy
 
 ### Costs
+
 - **1 sparkle** per dream (all types: Dream Me, photo, twin, re-dream, custom prompt)
 - **3 sparkles** per fusion
 - **Free:** nightly dreams (server-side), weekly free dream (future)
@@ -110,18 +113,21 @@ Old users with Recipe (no version field) still work through `lib/recipeEngine.ts
 ### IAP Packs (via RevenueCat)
 
 Product IDs centralized in `constants/sparklePacks.ts`:
+
 - `com.konakevin.radorbad.sparkles.25` → 25 sparkles ($2.99)
 - `com.konakevin.radorbad.sparkles.50` → 50 sparkles ($4.99)
 - `com.konakevin.radorbad.sparkles.100__` → 100 sparkles ($7.99)
 - `com.konakevin.radorbad.sparkles.500` → 500 sparkles ($24.99)
 
 ### Purchase Flow
+
 App → RevenueCat SDK → Apple payment → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC → balance updated → client refreshes.
 
 **RevenueCat key:** Production iOS key (`appl_`) in `lib/revenuecat.ts`.
 **Webhook secret:** `REVENUECAT_WEBHOOK_SECRET` in Supabase Edge Function secrets.
 
 ### Balance Display
+
 Sparkle pill (tappable → sparkle store) on Dream screen pick/reveal/photo headers. "Not enough sparkles" alert with "Get Sparkles" button when balance = 0.
 
 ---
@@ -216,29 +222,54 @@ scripts/
 
 ---
 
+## Adding New Mediums/Styles
+
+A "medium" is really an art style (e.g., "Cute Anime", "Cyberpunk", "Sack Boy"). To add one:
+
+1. **`constants/dreamEngine.ts`** — Add to `CURATED_MEDIUMS` (key, label, directive, fluxFragment) + `MEDIUM_KEYS`
+2. **`supabase/functions/_shared/dreamEngine.ts`** — Copy: `cp constants/dreamEngine.ts supabase/functions/_shared/dreamEngine.ts`
+3. **`supabase/functions/_shared/textPrompts.ts`** — Add per-medium Sonnet brief template
+4. **`scripts/nightly-dreams.js`** — Add to `CURATED_MEDIUMS` array (key + fluxFragment)
+5. **Deploy:** `supabase functions deploy generate-dream --no-verify-jwt`
+
+UI tiles auto-derive from `CURATED_MEDIUMS` — no manual UI changes needed. The `ArtStyle` type derives from `MEDIUM_KEYS`.
+
+**Path overrides** (in generate-dream + nightly-dreams.js):
+
+- `CHARACTER_MEDIUMS` — always character path (claymation, lego, funko_pop, disney, sack_boy)
+- `SCENE_ONLY_MEDIUMS` — always pure scene (oil_painting)
+- `NIGHTLY_SKIP` — re-roll if selected (watercolor, neon, pencil_sketch)
+
+---
+
 ## 3rd Party Services
 
 ### Supabase (Backend)
+
 - **Client:** `lib/supabase.ts`, auth tokens in Expo SecureStore
 - **Env vars:** `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 - **Key RPCs:** `get_feed`, `get_comments`, `spend_sparkles`, `grant_sparkles`
 
 ### Replicate (AI Image Generation)
+
 - **Flux Dev** — text-to-image, ~$0.03/image
 - **Flux Kontext Pro** — photo-to-image reimagining
 - All generation goes through `generate-dream` Edge Function
 
 ### Anthropic (Prompt Engine)
+
 - **Haiku 4.5** — concept generator (Pass 1) + prompt polisher (Pass 2) + bot messages
 - ~$0.002 per dream for both passes
 - All calls server-side in Edge Functions
 
 ### RevenueCat (In-App Purchases)
+
 - Production iOS key in `lib/revenuecat.ts`
 - Webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC
 - Product IDs in `constants/sparklePacks.ts`
 
 ### SightEngine (Moderation)
+
 - Image + text moderation via `moderate-content` Edge Function
 - Sexual text threshold: 0.7 (blocks explicit, allows suggestive)
 - NSFW image rejection sends notification to user
@@ -248,14 +279,17 @@ scripts/
 ## Database Schema (Key Tables)
 
 ### Core
+
 - **`users`** — id, email, username, avatar_url, sparkle_balance, last_active_at
 - **`uploads`** — id, user_id, image_url, ai_prompt, bot_message, from_wish, is_ai_generated, is_approved, comment_count, like_count
 - **`user_recipes`** — user_id, recipe (JSONB — VibeProfile or legacy Recipe), onboarding_completed, ai_enabled, dream_wish
 
 ### Social
+
 - **`likes`**, **`favorites`**, **`follows`**, **`friendships`**, **`comments`**, **`post_shares`**, **`blocked_users`**
 
 ### System
+
 - **`notifications`** — recipient_id, actor_id, type, body (prefixed: dream:/wish:/welcome:)
 - **`sparkle_transactions`** — user_id, amount, reason (spend/grant audit log)
 - **`ai_generation_log`** — recipe_snapshot, enhanced_prompt, model_used, cost_cents
@@ -266,11 +300,13 @@ scripts/
 ## Design System
 
 ### Colors
+
 - Background: `#0F0F1A` | Surface: `#1A1A2E` | Border: `#2D2D44`
 - Accent (purple): `colors.accent` | Like (red): `colors.like`
 - Text primary: `#FFFFFF` | Text secondary: `#9CA3AF`
 
 ### Key Rules
+
 1. Never use `StyleSheet.create` — always use NativeWind `className`
 2. Never use `any` type
 3. Always handle loading and error states in UI
@@ -300,6 +336,7 @@ Kevin is the sole human developer. Claude is the other dev. No team, no PR proce
 ## Pre-Commit Checklist
 
 **Run ALL 4 before every commit — CI will fail if any don't pass:**
+
 ```bash
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
 npx prettier --write "**/*.{ts,tsx}" --ignore-path .gitignore
@@ -313,35 +350,45 @@ npx jest --silent
 ## Working With Kevin
 
 ### Screenshots
+
 When Kevin asks to view a screenshot: `ls -t ~/Desktop/*.png | head -1` then read it.
 
 ### Running Node Scripts
+
 ```bash
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>
 ```
 
 ### Deploying Edge Functions
+
 ```bash
 supabase functions deploy <function-name> --no-verify-jwt
 ```
+
 **Always use `--no-verify-jwt`.** Deploy immediately after editing — don't wait to be asked. Active functions: `generate-dream`, `nightly-dreams`, `send-push`, `revenuecat-webhook`, `moderate-content`.
 
 ### Dev Build
+
 Uses native modules — must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
 
 ### Database Migrations
+
 Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor. `get_feed` RPC must be DROPped before recreating.
 
 ### Running Nightly Dreams Locally
+
 ```bash
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node scripts/nightly-dreams.js
 ```
+
 Reads keys from `.env.local` automatically. Clear budget first if testing specific users.
 
 ### Setting Sparkle Balance
+
 ```bash
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && SUPABASE_SERVICE_ROLE_KEY=$(grep SUPABASE_SERVICE_ROLE_KEY .env.local | cut -d= -f2) node -e "const{createClient}=require('@supabase/supabase-js');const sb=createClient('https://jimftynwrinwenonjrlj.supabase.co',process.env.SUPABASE_SERVICE_ROLE_KEY);(async()=>{await sb.from('users').update({sparkle_balance:25}).eq('id','eab700d8-f11a-4f47-a3a1-addda6fb67ec');console.log('Done')})();"
 ```
 
 ### Kevin's User ID
+
 `eab700d8-f11a-4f47-a3a1-addda6fb67ec`
