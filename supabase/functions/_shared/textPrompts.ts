@@ -286,18 +286,17 @@ Output ONLY the prompt.`,
 Express the mood through limited palette choice: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
 
-  felt: (
+  paper_cutout: (
     subject,
     vibe
-  ) => `Write a Flux AI prompt (50-70 words, comma-separated) for felt/stop-motion:
-- Start with: "Needle-felted stop-motion puppet scene, visible wool fiber texture, handcrafted miniature set, Laika Studios Coraline quality"
-- Subject: ${subject} — as needle-felted wool puppets with hand-painted eyes, individual wool strand hair
-- Real miniature fabric clothing with tiny stitches, actual buttons, thread seams
-- World is handcrafted miniature — wood, fabric, paper, wire at tiny scale
-- Dramatic cinematic lighting. Slightly uncanny but beautiful.
+  ) => `Write a Flux AI prompt (60-90 words, comma-separated) for construction paper cutout animation:
+- Start with: "Construction paper cutout animation, flat 2D characters cut from colored construction paper, rough-cut edges, visible paper texture, layered paper backgrounds"
+- Subject: ${subject} — as flat paper cutouts with simple glued-on circle eyes, separate paper limbs attached at joints
+- Backgrounds are torn/cut construction paper layers — mountains are triangles, trees are circles on sticks, clouds are cotton balls
+- Everything is intentionally crude, flat, charming. Straight-on camera angle.
 - End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
 
-Express the mood through lighting drama and material warmth: ${vibe.slice(0, 200)}
+Express the mood through paper color choices and layering complexity: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
 
   retro_poster: (

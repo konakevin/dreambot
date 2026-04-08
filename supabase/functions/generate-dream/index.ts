@@ -302,6 +302,9 @@ Deno.serve(async (req) => {
     photo_style = 'restyle',
     persist = false,
     skip_enhance = false,
+    force_cast_role,
+    force_medium,
+    force_vibe,
   } = body;
 
   if (!mode || !['flux-dev', 'flux-kontext'].includes(mode)) {
@@ -409,7 +412,16 @@ Deno.serve(async (req) => {
           }
         }
       }
-      const nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
+      // Test mode overrides: force specific medium/vibe
+      if (force_medium) {
+        const forced = CURATED_MEDIUMS.find((m) => m.key === force_medium);
+        if (forced) nightlyMedium = forced;
+      }
+      let nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
+      if (force_vibe) {
+        const forced = CURATED_VIBES.find((v) => v.key === force_vibe);
+        if (forced) nightlyVibe = forced;
+      }
       resolvedMediumKey = nightlyMedium.key;
       resolvedVibeKey = nightlyVibe.key;
 
@@ -435,10 +447,27 @@ Deno.serve(async (req) => {
       const describedCastMembers = (nightlyProfile.dream_cast ?? []).filter(
         (m: DreamCastMember) => m.description && m.thumb_url?.startsWith('http')
       );
-      const castPick =
-        describedCastMembers.length > 0 && Math.random() < 0.4
-          ? describedCastMembers[Math.floor(Math.random() * describedCastMembers.length)]
-          : null;
+      let castPick: DreamCastMember | null = null;
+      let multiCast: DreamCastMember[] = [];
+      if (force_cast_role && typeof force_cast_role === 'string' && force_cast_role.includes('+')) {
+        // Duo/group mode: combine multiple cast members
+        const roles = force_cast_role.split('+');
+        multiCast = roles
+          .map((r: string) => describedCastMembers.find((m: DreamCastMember) => m.role === r))
+          .filter(Boolean) as DreamCastMember[];
+        if (multiCast.length > 0) castPick = multiCast[0]; // use first as primary for path logic
+      } else if (force_cast_role) {
+        // Test mode: force a specific cast role
+        castPick =
+          describedCastMembers.find((m: DreamCastMember) => m.role === force_cast_role) ?? null;
+      } else if (
+        force_cast_role === undefined &&
+        describedCastMembers.length > 0 &&
+        Math.random() < 0.4
+      ) {
+        // Only random cast if force_cast_role was NOT sent at all (null = explicitly no cast)
+        castPick = describedCastMembers[Math.floor(Math.random() * describedCastMembers.length)];
+      }
 
       try {
         // Category weights based on user's mood sliders — higher weight = more likely to be picked
@@ -589,12 +618,13 @@ Deno.serve(async (req) => {
       // Some mediums ALWAYS use character path (the character IS the medium's art)
       const CHARACTER_MEDIUMS = new Set(['claymation', 'lego', 'funko_pop', 'disney', 'sack_boy']);
       // Some mediums ALWAYS use pure scene (characters look bad in them)
-      const SCENE_ONLY_MEDIUMS = new Set(['oil_painting']);
+      const SCENE_ONLY_MEDIUMS = new Set(['oil_painting', 'embroidery']);
 
       let dreamPath: string;
       if (!castPick || SCENE_ONLY_MEDIUMS.has(nightlyMedium.key)) {
         dreamPath = 'pure_scene';
-      } else if (CHARACTER_MEDIUMS.has(nightlyMedium.key)) {
+      } else if (force_cast_role || CHARACTER_MEDIUMS.has(nightlyMedium.key)) {
+        // Forced cast or character-only medium: always character path
         dreamPath = 'character';
       } else {
         const roll = Math.random();
@@ -605,14 +635,27 @@ Deno.serve(async (req) => {
 
       if (dreamPath === 'character') {
         // ── PATH A: Character dream — character is the focus, scene wraps around them ──
+        const castDescForBrief =
+          multiCast.length > 1
+            ? multiCast
+                .map((m) => m.description)
+                .filter(Boolean)
+                .join('\nAND ALSO: ')
+            : (castPick?.description ?? shortCastDesc ?? 'a figure');
+        const characterCount =
+          multiCast.length > 1 ? `${multiCast.length} CHARACTERS` : 'THE MAIN CHARACTER';
         nightlyBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
-Create a scene where a ${mediumStyle}-style ${shortCastDesc} is the main character experiencing this dream:
+${characterCount} (include these traits but STYLIZED — NOT photorealistic):
+${castDescForBrief}
+Render them as ${mediumStyle} CHARACTERS — stylized, illustrated, artistic. NOT real photographs. They should look like they BELONG in this art style.${multiCast.length > 1 ? ' Show them TOGETHER interacting in the scene.' : ''}
+
+DREAM SCENE (the character is experiencing this):
 ${dreamSubject}
 
-The character is rendered fully in ${mediumStyle} style — NOT photorealistic. They are DOING something in the scene, not just standing and staring at the camera. Show them interacting with the surreal environment.
+IMPORTANT: Replace any generic "figure" or "person" in the scene with the specific character. They are DOING something, not standing and staring at the camera.
 
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}

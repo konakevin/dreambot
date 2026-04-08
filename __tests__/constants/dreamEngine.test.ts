@@ -89,6 +89,6 @@ describe('dreamEngine constants', () => {
     expect(keys).toContain('pop_art');
     expect(keys).toContain('minecraft');
     expect(keys).toContain('8bit');
-    expect(keys).toContain('felt');
+    expect(keys).toContain('paper_cutout');
   });
 });

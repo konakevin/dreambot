@@ -156,9 +156,9 @@ const CURATED_MEDIUMS = [
       'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, simple iconic character sprites, flat color blocks, retro 1985 gaming aesthetic',
   },
   {
-    key: 'felt',
+    key: 'paper_cutout',
     fluxFragment:
-      'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
+      'Construction paper cutout animation, flat 2D paper characters with rough-cut edges, visible paper texture, simple glued-on circle eyes, layered paper backgrounds, crude charming aesthetic, straight-on camera angle',
   },
   {
     key: 'retro_poster',
@@ -434,7 +434,7 @@ const STYLIZED_MEDIUMS = new Set([
   'pop_art',
   'minecraft',
   '8bit',
-  'felt',
+  'paper_cutout',
 ]);
 
 const COST_KONTEXT_CENTS = 4;
@@ -597,7 +597,7 @@ async function main() {
 
           // Step 2: Maybe inject cast (~30%)
           // Some mediums look best as pure scene — skip cast for those
-          const SCENE_ONLY_MEDIUMS = new Set(['oil_painting']);
+          const SCENE_ONLY_MEDIUMS = new Set(['oil_painting', 'embroidery']);
           const cast = (recipe.dream_cast ?? []).filter((m) => m.description);
           if (cast.length > 0 && Math.random() < 0.3 && !SCENE_ONLY_MEDIUMS.has(medium.key)) {
             castPick = pick(cast);
@@ -641,7 +641,7 @@ async function main() {
             'disney',
             'sack_boy',
           ]);
-          const SCENE_ONLY = new Set(['oil_painting']);
+          const SCENE_ONLY = new Set(['oil_painting', 'embroidery']);
 
           let dreamPath;
           if (!castPick || SCENE_ONLY.has(medium.key)) {

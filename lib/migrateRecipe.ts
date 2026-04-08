@@ -55,7 +55,7 @@ export function migrateRecipeToVibeProfile(recipe: Recipe): VibeProfile {
   // Infer art styles from realism axis
   const artStyles: ArtStyle[] = [];
   if (recipe.axes.realism > 0.6) {
-    artStyles.push('pencil_sketch', '3d_render');
+    artStyles.push('3d_render', 'dark_fantasy');
   } else if (recipe.axes.realism < 0.4) {
     artStyles.push('watercolor', 'anime');
   } else {

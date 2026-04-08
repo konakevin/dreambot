@@ -33,6 +33,7 @@ import { saveDream } from '@/lib/dreamSave';
 import { colors } from '@/constants/theme';
 import type { VibeProfile } from '@/types/vibeProfile';
 import { Toast } from '@/components/Toast';
+import { MediumVibeSelector } from '@/components/MediumVibeSelector';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
@@ -45,12 +46,25 @@ interface Dream {
   vibe?: string;
 }
 
+const CAST_OPTIONS: { key: string | null; label: string }[] = [
+  { key: null, label: 'None' },
+  { key: 'self', label: 'Me' },
+  { key: 'plus_one', label: '+1' },
+  { key: 'pet', label: 'Pet' },
+  { key: 'self+plus_one', label: 'Me + Partner' },
+  { key: 'self+pet', label: 'Me + Pet' },
+  { key: 'self+plus_one+pet', label: 'All' },
+];
+
 export default function DreamTestScreen() {
   const user = useAuthStore((s) => s.user);
   const [generating, setGenerating] = useState(false);
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMedium, setSelectedMedium] = useState('surprise_me');
+  const [selectedVibe, setSelectedVibe] = useState('surprise_me');
+  const [forceCastRole, setForceCastRole] = useState<string | null>(null);
   const [fullscreenUrl, setFullscreenUrl] = useState<string | null>(null);
   const scrollRef = useRef<ScrollView>(null);
   const profileRef = useRef<VibeProfile | null>(null);
@@ -176,6 +190,9 @@ export default function DreamTestScreen() {
             vibe_key: 'surprise_me',
             vibe_profile: profile,
             persist: false,
+            force_cast_role: forceCastRole,
+            force_medium: selectedMedium !== 'surprise_me' ? selectedMedium : undefined,
+            force_vibe: selectedVibe !== 'surprise_me' ? selectedVibe : undefined,
           }),
         }
       );
@@ -253,21 +270,64 @@ export default function DreamTestScreen() {
       {/* Content */}
       <View className="flex-1 items-center pt-2">
         {dreams.length === 0 && !generating && !error && (
-          <View className="flex-1 items-center justify-center px-8">
+          <ScrollView
+            className="flex-1"
+            contentContainerStyle={{ paddingHorizontal: 8, paddingTop: 32 }}
+          >
             <Text className="text-white text-xl font-extrabold text-center mb-2">
               Test the nightly dream pipeline
             </Text>
             <Text className="text-gray-400 text-sm text-center mb-6">
-              Uses your saved profile — same path as onboarding reveal and nightly cron.
+              Uses your saved profile — same path as nightly cron.
             </Text>
-            <TouchableOpacity
-              className="bg-purple-600 rounded-2xl px-8 py-4"
-              onPress={generateDream}
-              activeOpacity={0.7}
-            >
-              <Text className="text-white text-lg font-bold">Generate Dream</Text>
-            </TouchableOpacity>
-          </View>
+            <MediumVibeSelector
+              selectedMedium={selectedMedium}
+              selectedVibe={selectedVibe}
+              onMediumChange={setSelectedMedium}
+              onVibeChange={setSelectedVibe}
+            />
+            <View className="mt-4 mb-2 gap-1">
+              <Text style={s.castLabel}>Cast</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 6, paddingHorizontal: 4 }}
+                keyboardShouldPersistTaps="always"
+              >
+                {CAST_OPTIONS.map((opt) => (
+                  <TouchableOpacity
+                    key={opt.label}
+                    style={[s.castPill, forceCastRole === opt.key && s.castPillActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setForceCastRole(opt.key);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      style={{
+                        color: forceCastRole === opt.key ? colors.accent : colors.textSecondary,
+                        fontSize: 13,
+                        fontWeight: '600',
+                      }}
+                      numberOfLines={1}
+                    >
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+            <View className="items-center mt-4">
+              <TouchableOpacity
+                className="bg-purple-600 rounded-2xl px-8 py-4"
+                onPress={generateDream}
+                activeOpacity={0.7}
+              >
+                <Text className="text-white text-lg font-bold">Generate Dream</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         )}
 
         {generating && dreams.length === 0 && (
@@ -321,24 +381,40 @@ export default function DreamTestScreen() {
                   style={{ width: IMAGE_WIDTH }}
                 >
                   {dreams.map((dream, i) => (
-                    <TouchableOpacity
-                      key={i}
-                      style={{ width: IMAGE_WIDTH, height: IMAGE_HEIGHT }}
-                      onPress={() => setFullscreenUrl(dream.url)}
-                      activeOpacity={0.9}
-                    >
-                      <ActivityIndicator
-                        style={StyleSheet.absoluteFill}
-                        size="small"
-                        color={colors.accent}
-                      />
-                      <Image
-                        source={{ uri: dream.url }}
+                    <View key={i} style={{ width: IMAGE_WIDTH, height: IMAGE_HEIGHT }}>
+                      <TouchableOpacity
                         style={{ width: IMAGE_WIDTH, height: IMAGE_HEIGHT }}
-                        contentFit="cover"
-                        transition={200}
-                      />
-                    </TouchableOpacity>
+                        onPress={() => setFullscreenUrl(dream.url)}
+                        activeOpacity={0.9}
+                      >
+                        <ActivityIndicator
+                          style={StyleSheet.absoluteFill}
+                          size="small"
+                          color={colors.accent}
+                        />
+                        <Image
+                          source={{ uri: dream.url }}
+                          style={{ width: IMAGE_WIDTH, height: IMAGE_HEIGHT }}
+                          contentFit="cover"
+                          transition={200}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={s.deleteBtn}
+                        onPress={() => {
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          setDreams((prev) => {
+                            const next = prev.filter((_, idx) => idx !== i);
+                            if (activeIndex >= next.length)
+                              setActiveIndex(Math.max(0, next.length - 1));
+                            return next;
+                          });
+                        }}
+                        hitSlop={8}
+                      >
+                        <Ionicons name="close-circle" size={24} color="rgba(255,255,255,0.7)" />
+                      </TouchableOpacity>
+                    </View>
                   ))}
                 </ScrollView>
 
@@ -371,10 +447,12 @@ export default function DreamTestScreen() {
             )}
 
             {/* Prompt preview */}
-            <ScrollView className="max-h-16 mx-6 mt-3" showsVerticalScrollIndicator={false}>
-              <Text className="text-gray-500 text-xs leading-4">
-                {activeDream.prompt.slice(0, 300)}
-              </Text>
+            <ScrollView
+              className="mx-4 mt-3 max-h-24 p-3 rounded-xl"
+              style={{ backgroundColor: colors.surface }}
+              showsVerticalScrollIndicator
+            >
+              <Text className="text-gray-300 text-xs leading-4">{activeDream.prompt}</Text>
             </ScrollView>
           </>
         )}
@@ -382,8 +460,44 @@ export default function DreamTestScreen() {
 
       {/* Footer */}
       {dreams.length > 0 && (
-        <View className="px-5 pb-10 gap-2">
-          <View className="flex-row gap-3">
+        <View className="px-1 pb-10 gap-1">
+          <MediumVibeSelector
+            selectedMedium={selectedMedium}
+            selectedVibe={selectedVibe}
+            onMediumChange={setSelectedMedium}
+            onVibeChange={setSelectedVibe}
+            compact
+          />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 6, paddingHorizontal: 4 }}
+            keyboardShouldPersistTaps="always"
+          >
+            {CAST_OPTIONS.map((opt) => (
+              <TouchableOpacity
+                key={opt.label}
+                style={[s.castPill, forceCastRole === opt.key && s.castPillActive]}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setForceCastRole(opt.key);
+                }}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={{
+                    color: forceCastRole === opt.key ? colors.accent : colors.textSecondary,
+                    fontSize: 12,
+                    fontWeight: '600',
+                  }}
+                  numberOfLines={1}
+                >
+                  {opt.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          <View className="flex-row gap-3 px-4 mt-1">
             <TouchableOpacity
               className="flex-1 items-center justify-center rounded-2xl py-4"
               style={{ backgroundColor: colors.accent }}
@@ -484,6 +598,37 @@ const s = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  castLabel: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    paddingLeft: 4,
+  },
+  castPill: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  castPillActive: {
+    backgroundColor: 'transparent',
+    borderColor: colors.accent,
+  },
+  deleteBtn: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',

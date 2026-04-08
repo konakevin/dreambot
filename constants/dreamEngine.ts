@@ -93,14 +93,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     fluxFragment:
       'Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, physically based materials, vibrant art-directed color palette, cinematic depth of field',
   },
-  {
-    key: 'pencil_sketch',
-    label: 'Pencil Sketch',
-    directive:
-      "You are a master draftsman in the tradition of Da Vinci's notebooks and Sargent's charcoal portraits. Every line has purpose and confidence — no scratchy uncertainty. Build form through hatching and cross-hatching, varying the density and direction to sculpt three-dimensional volume on flat paper. Leave areas of pure white paper for your brightest highlights. The darkest values come from layered graphite compressed into velvet blacks. Smudged tones for atmospheric depth. The beauty is in the LINE — its weight, its rhythm, its economy. One confident stroke can describe an entire fold of fabric or the curve of a cheekbone.",
-    fluxFragment:
-      'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
-  },
+  // pencil_sketch removed — Flux can't render authentic pencil sketch style
   {
     key: 'cyberpunk',
     label: 'Cyberpunk',
@@ -109,14 +102,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     fluxFragment:
       'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
   },
-  {
-    key: 'stained_glass',
-    label: 'Stained Glass',
-    directive:
-      "This entire scene is rendered as a grand stained glass window — the kind you'd find in a medieval cathedral but with modern subject matter. Bold black leading lines (cames) define every shape with confident graphic clarity. Each glass piece is a single jewel-tone color: ruby red, sapphire blue, emerald green, amber gold, deep purple. Light appears to come from BEHIND the glass, making everything glow with translucent luminosity. Composition should be symmetrical or radially balanced, like a rose window. Small detailed pieces in faces and focal points, larger simple pieces in backgrounds. The constraints of the medium create graphic power.",
-    fluxFragment:
-      'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight, ruby sapphire emerald amber, graphic symmetrical composition, cathedral quality',
-  },
+  // stained_glass removed — inconsistent results
   {
     key: 'comic_book',
     label: 'Comic Book',
@@ -198,12 +184,12 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, simple iconic character sprites, flat color blocks, retro 1985 gaming aesthetic',
   },
   {
-    key: 'felt',
-    label: 'Felt',
+    key: 'paper_cutout',
+    label: 'Paper Cutout',
     directive:
-      'You are creating a scene in the style of Laika stop-motion films — think Coraline, Kubo and the Two Strings. Characters are needle-felted wool puppets with visible fiber texture on their skin. Eyes are hand-painted with eerie precision. Hair is individual strands of dyed wool carefully placed. Clothing is real miniature fabric — tiny stitches visible, real buttons, actual thread seams. The world is a handcrafted miniature set built from real materials — wood, fabric, paper, wire — but at a tiny scale. Lighting is dramatic and cinematic, casting long shadows across the miniature sets. Everything has that slightly uncanny, beautiful-but-unsettling quality that makes Laika films unforgettable.',
+      "You are creating construction paper cutout animation — think South Park, Monty Python, or early Blue's Clues. Characters are flat 2D shapes cut from colored construction paper with visible rough-cut edges and slight paper texture. Arms and legs are separate paper pieces attached at joints. Eyes are simple cut-out circles glued on. Backgrounds are layered construction paper — mountains are torn paper triangles, clouds are cotton balls or white paper ovals, trees are green paper circles on brown paper sticks. Everything is intentionally crude, flat, and charming. The camera looks straight-on at a flat paper world. Shadows are cut from darker paper placed behind characters.",
     fluxFragment:
-      'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
+      'Construction paper cutout animation, flat 2D paper characters with rough-cut edges, visible paper texture, simple glued-on circle eyes, layered paper backgrounds, crude charming aesthetic, straight-on camera angle',
   },
   {
     key: 'retro_poster',
@@ -359,7 +345,7 @@ export const DREAM_VIBES: DreamVibe[] = [
 
 /** Get only the curated mediums (excludes My Mediums and Surprise Me) */
 export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter(
-  (m) => m.directive !== null || m.includes_mediums?.length
+  (m) => m.directive !== null || (m.includes_mediums && m.includes_mediums.length > 0)
 );
 
 /** Get only the curated vibes (excludes My Vibes and Surprise Me) */
@@ -374,9 +360,7 @@ export const MEDIUM_KEYS = [
   'lego',
   'claymation',
   '3d_render',
-  'pencil_sketch',
   'cyberpunk',
-  'stained_glass',
   'comic_book',
   'embroidery',
   'disney',
@@ -387,7 +371,7 @@ export const MEDIUM_KEYS = [
   'pop_art',
   'minecraft',
   '8bit',
-  'felt',
+  'paper_cutout',
   'retro_poster',
   'childrens_book',
   'vaporwave',

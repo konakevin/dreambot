@@ -50,6 +50,8 @@ function SettingsRow({
 export default function SettingsScreen() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
+  const ADMIN_IDS = new Set(['eab700d8-f11a-4f47-a3a1-addda6fb67ec']);
+  const isAdmin = user?.id ? ADMIN_IDS.has(user.id) : false;
   const queryClient = useQueryClient();
   const bumpReset = useFeedStore((s) => s.bumpReset);
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
@@ -337,11 +339,13 @@ export default function SettingsScreen() {
               nav.push('/(onboarding)');
             }}
           />
-          <SettingsRow
-            icon="flask"
-            label="Run Dream Generator"
-            onPress={() => nav.push('/dreamTest')}
-          />
+          {isAdmin && (
+            <SettingsRow
+              icon="flask"
+              label="Run Dream Generator"
+              onPress={() => nav.push('/dreamTest')}
+            />
+          )}
           <SettingsRow
             icon="trash-outline"
             label="Reset DreamBot Profile"

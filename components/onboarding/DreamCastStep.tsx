@@ -217,6 +217,41 @@ export function DreamCastStep({ onNext, onBack }: Props) {
         ...(existing?.relationship ? { relationship: existing.relationship } : {}),
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+      // Describe the photo immediately so cast descriptions are always present
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (session?.access_token) {
+          const descRes = await fetch(
+            `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.access_token}`,
+              },
+              body: JSON.stringify({ image_url: publicUrl, role }),
+            }
+          );
+          if (descRes.ok) {
+            const descData = await descRes.json();
+            if (descData.description) {
+              setCastMember({
+                role,
+                thumb_url: publicUrl,
+                description: descData.description,
+                ...(existing?.relationship ? { relationship: existing.relationship } : {}),
+              });
+              if (__DEV__)
+                console.log(`[DreamCast] Described ${role}:`, descData.description.slice(0, 60));
+            }
+          }
+        }
+      } catch {
+        // Non-critical — RevealStep will retry
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (__DEV__) console.error('[DreamCast] UPLOAD FAILED for', role, ':', msg);

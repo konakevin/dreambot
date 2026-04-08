@@ -227,7 +227,7 @@ scripts/
 A "medium" is really an art style (e.g., "Cute Anime", "Cyberpunk", "Sack Boy"). To add one:
 
 1. **`constants/dreamEngine.ts`** — Add to `CURATED_MEDIUMS` (key, label, directive, fluxFragment) + `MEDIUM_KEYS`
-2. **`supabase/functions/_shared/dreamEngine.ts`** — Copy: `cp constants/dreamEngine.ts supabase/functions/_shared/dreamEngine.ts`
+2. **`supabase/functions/_shared/dreamEngine.ts`** — **DO NOT `cp` from constants!** Edit this file independently — it has Edge-specific helper functions (`buildDreamScene`, `inventSubject`) that get destroyed by copying. Only sync the MEDIUM/VIBE DATA.
 3. **`supabase/functions/_shared/textPrompts.ts`** — Add per-medium Sonnet brief template
 4. **`scripts/nightly-dreams.js`** — Add to `CURATED_MEDIUMS` array (key + fluxFragment)
 5. **Deploy:** `supabase functions deploy generate-dream --no-verify-jwt`
@@ -239,6 +239,18 @@ UI tiles auto-derive from `CURATED_MEDIUMS` — no manual UI changes needed. The
 - `CHARACTER_MEDIUMS` — always character path (claymation, lego, funko_pop, disney, sack_boy)
 - `SCENE_ONLY_MEDIUMS` — always pure scene (oil_painting)
 - `NIGHTLY_SKIP` — re-roll if selected (watercolor, neon, pencil_sketch)
+
+### Edge Function Gotcha: No Optional Chaining in Top-Level Code
+
+**NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts`. Deno Edge runtime crashes (BOOT_ERROR). Use explicit null checks instead:
+```typescript
+// BAD — causes BOOT_ERROR:
+export const X = arr.filter(m => m.foo?.length);
+
+// GOOD:
+export const X = arr.filter(m => m.foo && m.foo.length > 0);
+```
+When syncing `constants/dreamEngine.ts` → `_shared/dreamEngine.ts`, always check the `CURATED_MEDIUMS` filter line.
 
 ---
 
