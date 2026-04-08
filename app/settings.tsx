@@ -59,7 +59,7 @@ export default function SettingsScreen() {
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
-        if ((data as Record<string, unknown>)?.is_admin) setIsAdmin(true);
+        if ((data as unknown as { is_admin?: boolean })?.is_admin) setIsAdmin(true);
       });
   }, [user]);
   const queryClient = useQueryClient();
