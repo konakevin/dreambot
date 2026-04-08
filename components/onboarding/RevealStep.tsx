@@ -412,7 +412,8 @@ export function RevealStep({ onBack }: Props) {
       });
 
       reset();
-      setPhase('sparkles');
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      router.replace('/(tabs)');
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Create error:', err);
       setPhase('reveal');
@@ -420,60 +421,9 @@ export function RevealStep({ onBack }: Props) {
     }
   }
 
-  // ── Sparkles welcome ──
+  // ── Sparkles welcome (legacy — now skipped, goes straight to home) ──
   if (phase === 'sparkles') {
-    return (
-      <View style={s.root}>
-        <View style={s.centeredContent}>
-          <Text style={s.bigTitle}>25 Sparkles!</Text>
-          <Text style={[s.centeredSub, { marginBottom: 24, lineHeight: 22 }]}>
-            {`Your DreamBot is alive! It'll dream for you every night — for free. Use sparkles to dream on demand with the Dream tool — any style, no limits.`}
-          </Text>
-
-          <View
-            style={{
-              backgroundColor: colors.surface,
-              borderRadius: 16,
-              padding: 20,
-              width: '100%',
-              gap: 14,
-              borderWidth: 1,
-              borderColor: colors.border,
-            }}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Ionicons name="sparkles" size={20} color={colors.accent} />
-              <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                1 Sparkle = 1 on-demand dream
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Ionicons name="moon" size={20} color={colors.accent} />
-              <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                Your DreamBot dreams every night for free
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Ionicons name="bag-handle" size={20} color={colors.accent} />
-              <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                Get more sparkles anytime in the shop
-              </Text>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            style={[s.createButton, { alignSelf: 'stretch', marginTop: 24 }]}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-              router.replace('/(tabs)');
-            }}
-            activeOpacity={0.7}
-          >
-            <Text style={s.createButtonText}>Start Dreaming</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
+    return <View style={s.root} />;
   }
 
   // ── Edit mode: just save and go home ──
@@ -570,165 +520,80 @@ export function RevealStep({ onBack }: Props) {
     );
   }
 
-  // ── Reveal state ──
+  // ── Reveal state — fullscreen image with "Post my Dream" ──
   return (
     <View style={s.root}>
-      <View style={s.content}>
-        {error && dreams.length === 0 ? (
-          <TouchableOpacity style={s.errorContainer} onPress={() => generateImage()}>
-            <Ionicons name="refresh" size={32} color={colors.textSecondary} />
-            <Text style={s.errorText}>{error}</Text>
-          </TouchableOpacity>
-        ) : activeDream ? (
-          <>
-            <Text style={s.heading}>Pick your first dream</Text>
-            <Text style={s.subheading}>
-              {dreams.length === 1 && canDreamAgain
-                ? 'This is one of many possible dreams your bot can create. Tap "Dream Again" to see more, or post this one now.'
-                : canDreamAgain
-                  ? `Swipe to browse your dreams. When you find one you love, post it. ${dreamsRemaining} dream${dreamsRemaining === 1 ? '' : 's'} left to try.`
-                  : 'Swipe to browse your dreams and pick your favorite to post.'}
-            </Text>
+      {error && dreams.length === 0 ? (
+        <TouchableOpacity style={s.centeredContent} onPress={() => generateImage()}>
+          <Ionicons name="refresh" size={32} color={colors.textSecondary} />
+          <Text style={s.errorText}>{error}</Text>
+        </TouchableOpacity>
+      ) : activeDream ? (
+        <View style={{ flex: 1 }}>
+          {/* Fullscreen dream image */}
+          <Image
+            source={{ uri: activeDream.url }}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={300}
+          />
 
-            {/* Swipeable image preview with pinch to zoom */}
-            <GestureDetector gesture={pinchGesture}>
-              <Animated.View style={[s.imageWrap, zoomStyle]}>
-                <ScrollView
-                  ref={scrollRef}
-                  horizontal
-                  pagingEnabled
-                  scrollEnabled={!isZoomed}
-                  showsHorizontalScrollIndicator={false}
-                  onMomentumScrollEnd={handleScrollEnd}
-                  scrollEventThrottle={16}
-                  style={{ width: IMAGE_WIDTH }}
-                  contentContainerStyle={{ alignItems: 'center' }}
-                >
-                  {dreams.map((dream, i) => (
-                    <TouchableOpacity
-                      key={i}
-                      style={s.imageSlide}
-                      onPress={() => setFullscreenUrl(dream.url)}
-                      activeOpacity={0.9}
-                    >
-                      <ActivityIndicator style={s.imageLoader} size="small" color={colors.accent} />
-                      <Image
-                        source={{ uri: dream.url }}
-                        style={s.image}
-                        contentFit="cover"
-                        transition={200}
-                      />
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-
-                {/* Generating overlay */}
-                {phase === 'generating' && (
-                  <View style={s.generatingOverlay}>
-                    <ActivityIndicator size="large" color={colors.accent} />
-                    <Text style={s.generatingText}>Dreaming...</Text>
-                  </View>
-                )}
-              </Animated.View>
-            </GestureDetector>
-
-            {/* Dot indicators */}
-            {dreams.length > 1 && (
-              <View style={s.dots}>
-                {dreams.map((_, i) => (
-                  <View key={i} style={[s.dot, i === activeIndex && s.dotActive]} />
-                ))}
-              </View>
-            )}
-          </>
-        ) : null}
-      </View>
-
-      {dreams.length > 0 && (
-        <View style={s.footer}>
-          <View style={s.footerRow}>
-            {canDreamAgain && (
-              <TouchableOpacity
-                style={s.dreamAgainButton}
-                onPress={handleDreamAgain}
-                disabled={phase === 'creating' || phase === 'generating'}
-                activeOpacity={0.7}
-              >
-                <Text style={s.dreamAgainText}>Dream Again</Text>
-              </TouchableOpacity>
-            )}
-
-            <TouchableOpacity
-              style={s.saveButton}
-              onPress={async () => {
-                if (!user || !activeDream) return;
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                try {
-                  await saveDream({
-                    userId: user.id,
-                    tempImageUrl: activeDream.url,
-                    prompt: activeDream.prompt || '',
-                    visibility: 'private',
-                    dreamMedium: activeDream.medium,
-                    dreamVibe: activeDream.vibe,
-                  });
-                  Toast.show('Dream saved!', 'checkmark-circle');
-                } catch (err) {
-                  if (__DEV__) console.warn('[Reveal] Save error:', err);
-                  Toast.show('Failed to save dream', 'close-circle');
-                }
+          {/* Gradient overlay at bottom for button */}
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              paddingBottom: 50,
+              paddingHorizontal: 24,
+              paddingTop: 80,
+              backgroundColor: 'transparent',
+            }}
+          >
+            {/* Dark gradient behind button */}
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                backgroundColor: 'rgba(0,0,0,0.6)',
               }}
-              disabled={phase === 'creating' || phase === 'generating'}
+            />
+            <Text
+              style={{
+                color: '#FFFFFF',
+                fontSize: 22,
+                fontWeight: '800',
+                textAlign: 'center',
+                marginBottom: 8,
+              }}
+            >
+              Your first dream
+            </Text>
+            <Text
+              style={{
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: 14,
+                textAlign: 'center',
+                marginBottom: 20,
+              }}
+            >
+              {activeDream.medium?.replace(/_/g, ' ')} / {activeDream.vibe}
+            </Text>
+            <TouchableOpacity
+              style={s.createButton}
+              onPress={handleCreateBot}
+              disabled={phase === 'creating'}
               activeOpacity={0.7}
             >
-              <Text style={s.saveButtonText}>Save</Text>
+              {phase === 'creating' ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={s.createButtonText}>Post my Dream</Text>
+              )}
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={s.createButton}
-            onPress={handleCreateBot}
-            disabled={phase === 'creating' || phase === 'generating'}
-            activeOpacity={0.7}
-          >
-            {phase === 'creating' ? (
-              <ActivityIndicator color="#FFFFFF" />
-            ) : (
-              <Text style={s.createButtonText}>Finish Setup</Text>
-            )}
-          </TouchableOpacity>
         </View>
-      )}
-
-      {/* Fullscreen image modal */}
-      <Modal visible={!!fullscreenUrl} transparent animationType="fade" statusBarTranslucent>
-        <StatusBar hidden />
-        <TouchableOpacity
-          style={s.fullscreenBackdrop}
-          onPress={() => setFullscreenUrl(null)}
-          activeOpacity={1}
-        >
-          <GestureDetector gesture={fsPinch}>
-            <Animated.View style={[s.fullscreenImageWrap, fsZoomStyle]}>
-              {fullscreenUrl && (
-                <Image
-                  source={{ uri: fullscreenUrl }}
-                  style={s.fullscreenImage}
-                  contentFit="contain"
-                  transition={200}
-                />
-              )}
-            </Animated.View>
-          </GestureDetector>
-          <TouchableOpacity
-            style={s.fullscreenClose}
-            onPress={() => setFullscreenUrl(null)}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="close" size={28} color="#FFFFFF" />
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
+      ) : null}
     </View>
   );
 }
