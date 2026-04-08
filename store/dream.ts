@@ -49,6 +49,7 @@ interface DreamStore {
   setPrompt: (text: string) => void;
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
+  clearPhoto: () => void;
   reset: () => void;
 }
 
@@ -75,5 +76,9 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setPrompt: (text) => set((s) => ({ config: { ...s.config, userPrompt: text } })),
   setResult: (result) => set({ result }),
   clearResult: () => set({ result: null }),
+  clearPhoto: () =>
+    set((s) => ({
+      config: { ...s.config, photoBase64: null, photoUri: null, photoStyle: 'restyle' },
+    })),
   reset: () => set({ config: { ...INITIAL_CONFIG }, result: null }),
 }));

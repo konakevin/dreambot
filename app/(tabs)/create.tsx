@@ -1,196 +1,420 @@
 /**
- * Create Tab — the entry point for dream creation.
+ * Create Tab — unified dream creation screen.
  *
- * Three big options:
- *   Surprise Me → straight to Loading (random medium + vibe)
- *   Upload Photo → photo picker → Configure
- *   Enter Prompt → Configure (with prompt focused)
+ * 4 implicit modes based on what the user provides:
+ *   No prompt + no photo → surprise dream
+ *   Prompt only → generate from prompt
+ *   Photo only → stylize/remix photo
+ *   Photo + prompt → reimagine photo with prompt
+ *
+ * One screen, one button: "Dream ✨"
  */
 
-import { useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  Modal,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import * as nav from '@/lib/navigate';
-import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
-import { randomMascot } from '@/constants/mascots';
+import { CURATED_MEDIUMS, CURATED_VIBES } from '@/constants/dreamEngine';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
+import { useAuthStore } from '@/store/auth';
+import { supabase } from '@/lib/supabase';
+import { isVibeProfile } from '@/lib/migrateRecipe';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
+import { StylePickerSheet } from '@/components/StylePickerSheet';
+import type { VibeProfile } from '@/types/vibeProfile';
 
 export default function CreateScreen() {
-  const mascotUrl = useRef(randomMascot()).current;
-  const reset = useDreamStore((s) => s.reset);
-  const setMode = useDreamStore((s) => s.setMode);
+  const config = useDreamStore((s) => s.config);
   const setPhoto = useDreamStore((s) => s.setPhoto);
+  const clearPhoto = useDreamStore((s) => s.clearPhoto);
+  const setMedium = useDreamStore((s) => s.setMedium);
+  const setVibe = useDreamStore((s) => s.setVibe);
+  const setPrompt = useDreamStore((s) => s.setPrompt);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
+  const user = useAuthStore((s) => s.user);
 
-  async function handlePhoto() {
+  const [kbOpen, setKbOpen] = useState(false);
+  const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
+  const [previewPhoto, setPreviewPhoto] = useState(false);
+  const promptRef = useRef<TextInput>(null);
+
+  // Load user's art_styles/aesthetics for filtering
+  const [userArtStyles, setUserArtStyles] = useState<string[] | undefined>();
+  const [userAesthetics, setUserAesthetics] = useState<string[] | undefined>();
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('user_recipes')
+      .select('recipe')
+      .eq('user_id', user.id)
+      .single()
+      .then(({ data }) => {
+        const raw = data?.recipe as unknown;
+        if (raw && isVibeProfile(raw)) {
+          const vp = raw as VibeProfile;
+          if (vp.art_styles?.length) setUserArtStyles(vp.art_styles);
+          if (vp.aesthetics?.length) setUserAesthetics(vp.aesthetics);
+        }
+      });
+  }, [user]);
+
+  // Keyboard tracking
+  useEffect(() => {
+    const s1 = Keyboard.addListener('keyboardWillShow', () => setKbOpen(true));
+    const s2 = Keyboard.addListener('keyboardWillHide', () => setKbOpen(false));
+    return () => {
+      s1.remove();
+      s2.remove();
+    };
+  }, []);
+
+  // Derived state
+  const hasPhoto = !!config.photoUri;
+  const hasPrompt = config.userPrompt.trim().length > 0;
+
+  // Find labels for selected medium/vibe
+  const mediumLabel =
+    CURATED_MEDIUMS.find((m) => m.key === config.selectedMedium)?.label ??
+    (config.selectedMedium === 'surprise_me' ? 'Surprise Me' : config.selectedMedium);
+  const vibeLabel =
+    CURATED_VIBES.find((v) => v.key === config.selectedVibe)?.label ??
+    (config.selectedVibe === 'surprise_me' ? 'Surprise Me' : config.selectedVibe);
+
+  // Contextual hint above Dream button
+  const contextHint = hasPhoto
+    ? hasPrompt
+      ? 'Reimagine your photo'
+      : 'Stylize your photo'
+    : hasPrompt
+      ? 'Generate from your prompt'
+      : 'Leave blank for a surprise';
+
+  // Placeholder text
+  const placeholder = hasPhoto
+    ? 'Describe how to reimagine it... or leave blank to stylize it.'
+    : 'Describe your dream... or leave blank for a surprise.';
+
+  // Photo picker
+  async function handlePickPhoto() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    reset();
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       quality: 0.8,
     });
-
     if (result.canceled || !result.assets?.[0]) return;
 
-    // Compress for base64 but keep original aspect ratio for preview.
-    // The 9:16 crop happens in the loading screen before sending to the API.
     const asset = result.assets[0];
-    const compressed = await ImageManipulator.manipulateAsync(asset.uri, [], {
-      compress: 0.8,
-      format: ImageManipulator.SaveFormat.JPEG,
-      base64: true,
-    });
-
-    if (!compressed.base64) {
+    try {
+      const compressed = await ImageManipulator.manipulateAsync(
+        asset.uri,
+        [{ resize: { width: 1024 } }],
+        { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+      );
+      if (!compressed.base64) {
+        Toast.show('Could not process photo', 'close-circle');
+        return;
+      }
+      setPhoto(compressed.base64, compressed.uri);
+    } catch {
       Toast.show('Could not process photo', 'close-circle');
-      return;
     }
-
-    setPhoto(compressed.base64, compressed.uri);
-    nav.push('/dream/configure');
   }
 
-  function handlePrompt() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    reset();
-    setMode('prompt');
-    nav.push('/dream/configure');
+  function handleDream() {
+    Keyboard.dismiss();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    nav.push('/dream/loading');
   }
 
   return (
-    <SafeAreaView style={s.container}>
-      {/* Header */}
-      <View style={s.header}>
-        <Text style={s.headerTitle}>Create</Text>
-        <TouchableOpacity onPress={() => nav.push('/sparkleStore')} style={s.sparklePill}>
-          <Ionicons name="sparkles" size={14} color={colors.accent} />
-          <Text style={s.sparkleText}>{formatCompact(sparkleBalance)}</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }} edges={['top']}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={0}
+      >
+        {/* Header */}
+        <View className="flex-row items-center justify-between px-5 py-3">
+          <Text className="text-2xl font-extrabold" style={{ color: colors.textPrimary }}>
+            Create
+          </Text>
+          <TouchableOpacity
+            onPress={() => nav.push('/sparkleStore')}
+            className="flex-row items-center gap-1 px-2.5 py-1.5 rounded-2xl"
+            style={{ backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
+          >
+            <Ionicons name="sparkles" size={14} color={colors.accent} />
+            <Text className="text-xs font-bold" style={{ color: colors.accent }}>
+              {formatCompact(sparkleBalance)}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Mascot — commented out until we have a proper bot image
-      <View style={s.hero}>
-        <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
-      </View>
-      */}
+        {/* Scrollable content */}
+        <ScrollView
+          className="flex-1 px-5"
+          keyboardShouldPersistTaps="always"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
+          {/* Photo attachment card */}
+          {hasPhoto && !kbOpen && (
+            <View
+              className="flex-row items-center gap-3 p-3 mb-4 rounded-xl"
+              style={{
+                backgroundColor: colors.surface,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <TouchableOpacity onPress={() => setPreviewPhoto(true)}>
+                <Image
+                  source={{ uri: config.photoUri! }}
+                  className="rounded-lg"
+                  style={{ width: 48, height: 48 }}
+                  contentFit="cover"
+                />
+              </TouchableOpacity>
+              <View className="flex-1">
+                <Text className="text-sm font-semibold" style={{ color: colors.textPrimary }}>
+                  Reference Photo
+                </Text>
+                <Text className="text-xs" style={{ color: colors.textSecondary }}>
+                  Tap to preview
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  clearPhoto();
+                }}
+                hitSlop={8}
+              >
+                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+          )}
 
-      {/* Option cards */}
-      <View style={s.cards}>
-        <TouchableOpacity style={s.card} onPress={handlePhoto} activeOpacity={0.8}>
-          <View style={[s.cardIcon, { backgroundColor: 'rgba(59,130,246,0.15)' }]}>
-            <Ionicons name="camera-outline" size={32} color="#3B82F6" />
+          {/* Compact photo card (keyboard open) */}
+          {hasPhoto && kbOpen && (
+            <View
+              className="flex-row items-center gap-2 px-3 py-2 mb-3 rounded-lg"
+              style={{
+                backgroundColor: colors.surface,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <Image
+                source={{ uri: config.photoUri! }}
+                className="rounded"
+                style={{ width: 32, height: 32 }}
+                contentFit="cover"
+              />
+              <Text className="flex-1 text-xs font-medium" style={{ color: colors.textSecondary }}>
+                Reference Photo
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  clearPhoto();
+                }}
+                hitSlop={8}
+              >
+                <Ionicons name="close" size={16} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Prompt input */}
+          <View
+            className="rounded-xl mb-4"
+            style={{ backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
+          >
+            <TextInput
+              ref={promptRef}
+              className="px-4 pt-4 pb-10 text-base"
+              style={{
+                color: colors.textPrimary,
+                minHeight: kbOpen ? 80 : 120,
+                textAlignVertical: 'top',
+              }}
+              placeholder={placeholder}
+              placeholderTextColor={colors.textMuted ?? '#6B7280'}
+              value={config.userPrompt}
+              onChangeText={setPrompt}
+              maxLength={300}
+              multiline
+              returnKeyType="default"
+            />
+            {/* Photo icon inside prompt field */}
+            <TouchableOpacity
+              className="absolute top-3 right-3"
+              onPress={handlePickPhoto}
+              hitSlop={8}
+            >
+              <Ionicons
+                name={hasPhoto ? 'image' : 'camera-outline'}
+                size={22}
+                color={hasPhoto ? colors.accent : colors.textSecondary}
+              />
+            </TouchableOpacity>
           </View>
-          <Text style={s.cardTitle}>Upload Photo</Text>
-          <Text style={s.cardDesc}>Transform a photo</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity style={s.card} onPress={handlePrompt} activeOpacity={0.8}>
-          <View style={[s.cardIcon, { backgroundColor: 'rgba(34,197,94,0.15)' }]}>
-            <Ionicons name="create-outline" size={32} color="#22C55E" />
-          </View>
-          <Text style={s.cardTitle}>Enter Prompt</Text>
-          <Text style={s.cardDesc}>Describe your dream</Text>
+          {/* Style pills (keyboard closed) */}
+          {!kbOpen && (
+            <View className="flex-row gap-3 mb-4">
+              <TouchableOpacity
+                className="flex-1 flex-row items-center justify-between px-4 py-3 rounded-xl"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setPickerType('medium');
+                }}
+                activeOpacity={0.7}
+              >
+                <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+                  Medium
+                </Text>
+                <View className="flex-row items-center gap-1">
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: colors.textPrimary }}
+                    numberOfLines={1}
+                  >
+                    {mediumLabel}
+                  </Text>
+                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="flex-1 flex-row items-center justify-between px-4 py-3 rounded-xl"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setPickerType('vibe');
+                }}
+                activeOpacity={0.7}
+              >
+                <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+                  Vibe
+                </Text>
+                <View className="flex-row items-center gap-1">
+                  <Text
+                    className="text-sm font-semibold"
+                    style={{ color: colors.textPrimary }}
+                    numberOfLines={1}
+                  >
+                    {vibeLabel}
+                  </Text>
+                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ScrollView>
+
+        {/* Fixed footer — always visible above keyboard */}
+        <View className="px-5 pb-4">
+          {/* Compressed style text (keyboard open) */}
+          {kbOpen && (
+            <TouchableOpacity
+              className="flex-row items-center justify-center gap-1 mb-2"
+              onPress={() => {
+                Keyboard.dismiss();
+                setTimeout(() => setPickerType('medium'), 100);
+              }}
+            >
+              <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+                {mediumLabel} · {vibeLabel}
+              </Text>
+              <Ionicons name="chevron-down" size={12} color={colors.textSecondary} />
+            </TouchableOpacity>
+          )}
+
+          {/* Contextual hint */}
+          <Text className="text-center text-xs mb-2" style={{ color: colors.textSecondary }}>
+            {contextHint}
+          </Text>
+
+          {/* Dream button */}
+          <TouchableOpacity
+            className="items-center justify-center py-4 rounded-2xl"
+            style={{ backgroundColor: colors.accent }}
+            onPress={handleDream}
+            activeOpacity={0.7}
+          >
+            <Text className="text-white text-base font-bold">Dream ✨</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+
+      {/* Style picker bottom sheet */}
+      <StylePickerSheet
+        visible={pickerType !== null}
+        type={pickerType ?? 'medium'}
+        selected={pickerType === 'vibe' ? config.selectedVibe : config.selectedMedium}
+        onSelect={(key) => {
+          if (pickerType === 'vibe') setVibe(key);
+          else setMedium(key);
+        }}
+        onClose={() => setPickerType(null)}
+        userFilter={pickerType === 'vibe' ? userAesthetics : userArtStyles}
+      />
+
+      {/* Photo fullscreen preview */}
+      <Modal visible={previewPhoto} transparent animationType="fade">
+        <TouchableOpacity
+          className="flex-1 items-center justify-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.9)' }}
+          onPress={() => setPreviewPhoto(false)}
+          activeOpacity={1}
+        >
+          {config.photoUri && (
+            <Image
+              source={{ uri: config.photoUri }}
+              style={{ width: '90%', height: '70%' }}
+              contentFit="contain"
+            />
+          )}
+          <TouchableOpacity
+            className="absolute top-16 right-5 w-11 h-11 rounded-full items-center justify-center"
+            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            onPress={() => setPreviewPhoto(false)}
+          >
+            <Ionicons name="close" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
         </TouchableOpacity>
-      </View>
+      </Modal>
     </SafeAreaView>
   );
 }
-
-const s = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  headerTitle: {
-    color: colors.textPrimary,
-    fontSize: 28,
-    fontWeight: '800',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-  },
-  sparklePill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  sparkleText: {
-    color: colors.accent,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  hero: {
-    alignItems: 'center',
-    paddingTop: 24,
-    paddingBottom: 32,
-    gap: 16,
-  },
-  mascot: {
-    width: 120,
-    height: 120,
-    borderRadius: 28,
-  },
-  heroTitle: {
-    color: colors.textPrimary,
-    fontSize: 28,
-    fontWeight: '800',
-  },
-  cards: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    gap: 12,
-  },
-  card: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 12,
-    paddingVertical: 28,
-    paddingHorizontal: 16,
-    borderRadius: 16,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  cardIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardTitle: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  cardDesc: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    textAlign: 'center',
-  },
-});
