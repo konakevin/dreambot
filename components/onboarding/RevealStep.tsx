@@ -342,10 +342,14 @@ export function RevealStep({ onBack }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     try {
+      // Use describedProfile if available (has AI-generated cast descriptions),
+      // otherwise fall back to raw profile. NEVER save profile with empty cast descriptions
+      // over one that already has them.
+      const profileToSave = describedProfile.current ?? profile;
       await supabase.from('user_recipes').upsert(
         {
           user_id: user.id,
-          recipe: JSON.parse(JSON.stringify(profile)),
+          recipe: JSON.parse(JSON.stringify(profileToSave)),
           onboarding_completed: true,
           ai_enabled: true,
           updated_at: new Date().toISOString(),
@@ -486,10 +490,11 @@ export function RevealStep({ onBack }: Props) {
               if (!user) return;
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               try {
+                const profileToSave = describedProfile.current ?? profile;
                 await supabase.from('user_recipes').upsert(
                   {
                     user_id: user.id,
-                    recipe: JSON.parse(JSON.stringify(profile)),
+                    recipe: JSON.parse(JSON.stringify(profileToSave)),
                     onboarding_completed: true,
                     ai_enabled: true,
                     updated_at: new Date().toISOString(),
