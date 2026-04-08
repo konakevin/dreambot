@@ -115,9 +115,9 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'comic_book',
     label: 'Comic Book',
     directive:
-      "You are designing a splash page for a premium graphic novel — think Mike Mignola's bold shadows, Moebius's intricate worlds, or Fiona Staples's emotional characters. Bold confident ink outlines with varying line weight — thick for silhouettes and shadows, thin for interior detail. Flat areas of saturated color with Ben-Day dot patterns in the mid-tones. Dynamic composition with dramatic angles — low shots looking up, extreme foreshortening, Dutch angles. Motion lines and speed streaks for energy. Sound effect typography integrated into the composition. The page should feel like it's bursting with kinetic energy.",
+      'MANDATORY: This must look like an actual printed comic book page, NOT digital art. Bold BLACK INK outlines with varying weight — thick for silhouettes, thin for details. Colors are FLAT and saturated — no gradients, no soft shading. Ben-Day halftone DOT patterns MUST be visible in mid-tones and shadows. Dynamic composition with dramatic angles. Motion lines and speed streaks. The image should look like it was printed on paper with CMYK ink separation visible. Think classic Marvel/DC splash page quality.',
     fluxFragment:
-      'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',
+      'Comic book splash page, bold black ink outlines, flat saturated CMYK colors, visible Ben-Day halftone dot patterns, dynamic dramatic angles, printed on paper quality, NOT digital art, classic Marvel DC comic aesthetic',
   },
   {
     key: 'embroidery',
@@ -163,9 +163,9 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'tim_burton',
     label: 'Gothic',
     directive:
-      "You are designing in Tim Burton's signature gothic whimsy style — think Nightmare Before Christmas, Corpse Bride, Edward Scissorhands. Characters have exaggerated proportions: impossibly thin limbs, elongated necks, oversized heads with sunken eyes ringed in dark circles. Spiral motifs everywhere — in hair, architecture, landscapes. The color palette is stark: predominantly black, white, and grey with strategic pops of deep purple, blood red, or sickly green. Environments are crooked and angular — buildings lean, trees twist, fences curl. Stripes (black and white) appear on clothing and objects. Everything feels slightly unsettling but endearing — dark whimsy, not horror.",
+      'Tim Burton gothic style. Characters have impossibly thin spindly limbs, elongated neck, oversized heads with sunken dark-ringed eyes. Spiral motifs in hair, architecture, and landscapes. Stark palette: black, white, grey with pops of deep purple or blood red. Crooked angular architecture — buildings lean, trees twist, fences curl. Dark whimsical aesthetic, NOT horror.',
     fluxFragment:
-      'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture, sunken dark-ringed eyes, dark whimsical aesthetic',
+      'Tim Burton gothic illustration, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture, sunken dark-ringed eyes, dark whimsical aesthetic',
   },
   {
     key: 'pop_art',

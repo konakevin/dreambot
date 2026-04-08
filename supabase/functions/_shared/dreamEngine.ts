@@ -162,7 +162,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'tim_burton',
     label: 'Gothic',
     directive:
-      "You are designing in Tim Burton's signature gothic whimsy style — think Nightmare Before Christmas, Corpse Bride, Edward Scissorhands. Characters have exaggerated proportions: impossibly thin limbs, elongated necks, oversized heads with sunken eyes ringed in dark circles. Spiral motifs everywhere — in hair, architecture, landscapes. The color palette is stark: predominantly black, white, and grey with strategic pops of deep purple, blood red, or sickly green. Environments are crooked and angular — buildings lean, trees twist, fences curl. Stripes (black and white) appear on clothing and objects. Everything feels slightly unsettling but endearing — dark whimsy, not horror.",
+      'Tim Burton gothic style. Characters have impossibly thin spindly limbs, elongated neck, oversized heads with sunken dark-ringed eyes. Spiral motifs in hair, architecture, and landscapes. Stark palette: black, white, grey with pops of deep purple or blood red. Crooked angular architecture — buildings lean, trees twist, fences curl. Dark whimsical aesthetic, NOT horror.',
     fluxFragment:
       'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture, sunken dark-ringed eyes, dark whimsical aesthetic',
   },

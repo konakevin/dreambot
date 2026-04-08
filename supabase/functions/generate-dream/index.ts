@@ -954,51 +954,35 @@ Output ONLY the prompt.`;
       const userSubject = rawPrompt ?? hint ?? '';
 
       if (userSubject) {
-        // User provided a prompt — try textPrompts.ts template first, fall back to directive
-        const textBrief = buildTextDreamPrompt(
-          medium.key,
-          userSubject,
-          vibe.directive!,
-          medium.fluxFragment!
-        );
+        // User provided a prompt — directive approach for all mediums
+        const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
 
-        if (textBrief) {
-          console.log('[generate-dream] V2 text using textPrompts template:', medium.key);
-          try {
-            finalPrompt = await enhanceViaHaiku(textBrief, '', ANTHROPIC_KEY, 150);
-            if (finalPrompt.length < 10) throw new Error('too short');
-          } catch {
-            finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
-          }
-        } else {
-          // No textPrompts template — use directive approach
-          const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
-
-MEDIUM: ${medium.fluxFragment}
+MEDIUM (start the prompt with this EXACTLY): ${medium.fluxFragment}
 
 STYLE GUIDE:
 ${medium.directive}
 
-SUBJECT: ${userSubject}
+SUBJECT (the user wants this — honor their vision):
+${userSubject}
 
 MOOD: ${vibe.directive}
 
-Start with the art medium. End with: no text, no words, no letters, no watermarks, hyper detailed.
+Write the prompt:
+1. Start with the art medium fragment EXACTLY as given above
+2. Render the user's subject in this medium's style — preserve their idea but make it visually stunning
+3. Name specific materials, textures, light sources (NOUNS not adjectives)
+4. End with: no text, no words, no letters, no watermarks, hyper detailed
 Output ONLY the prompt.`;
-          try {
-            finalPrompt = await nightlySonnet(userBrief, ANTHROPIC_KEY, 200);
-            if (finalPrompt.length < 10) throw new Error('too short');
-          } catch {
-            finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
-          }
+
+        try {
+          finalPrompt = await nightlySonnet(userBrief, ANTHROPIC_KEY, 200);
+          if (finalPrompt.length < 10) throw new Error('too short');
+        } catch {
+          finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
         }
 
-        logAxes = {
-          medium: medium.key,
-          vibe: vibe.key,
-          engine: textBrief ? 'v2-text-template' : 'v2-text-directive',
-        };
-        console.log('[generate-dream] V2 text prompt:', finalPrompt.slice(0, 150));
+        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-text-directive' };
+        console.log('[generate-dream] V2 text (directive):', finalPrompt.slice(0, 150));
         lap('text-prompt-done');
       } else {
         // No user prompt — "Surprise Me" — use nightly-quality cinematographer brief
