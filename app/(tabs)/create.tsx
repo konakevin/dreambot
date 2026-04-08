@@ -171,12 +171,14 @@ export default function CreateScreen() {
         {/* Scrollable content */}
         <ScrollView
           className="flex-1 px-5"
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="handled"
+          onScrollBeginDrag={() => Keyboard.dismiss()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
         >
           {/* Photo attachment card */}
-          {hasPhoto && !kbOpen && (
+          {/* Photo attachment card */}
+          {hasPhoto && (
             <View
               className="flex-row items-center gap-3 p-3 mb-4 rounded-xl"
               style={{
@@ -213,37 +215,6 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Compact photo card (keyboard open) */}
-          {hasPhoto && kbOpen && (
-            <View
-              className="flex-row items-center gap-2 px-3 py-2 mb-3 rounded-lg"
-              style={{
-                backgroundColor: colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              <Image
-                source={{ uri: config.photoUri! }}
-                className="rounded"
-                style={{ width: 32, height: 32 }}
-                contentFit="cover"
-              />
-              <Text className="flex-1 text-xs font-medium" style={{ color: colors.textSecondary }}>
-                Reference Photo
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  clearPhoto();
-                }}
-                hitSlop={8}
-              >
-                <Ionicons name="close" size={16} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-          )}
-
           {/* Prompt input */}
           <View
             className="rounded-xl mb-4"
@@ -254,7 +225,7 @@ export default function CreateScreen() {
               className="px-4 pt-4 pb-10 text-base"
               style={{
                 color: colors.textPrimary,
-                minHeight: kbOpen ? 80 : 120,
+                minHeight: 120,
                 textAlignVertical: 'top',
               }}
               placeholder={placeholder}
@@ -267,7 +238,7 @@ export default function CreateScreen() {
             />
             {/* Photo icon inside prompt field */}
             <TouchableOpacity
-              className="absolute top-3 right-3"
+              className="absolute bottom-2 right-3"
               onPress={handlePickPhoto}
               hitSlop={8}
             >
@@ -279,8 +250,8 @@ export default function CreateScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Style pills (keyboard closed) */}
-          {!kbOpen && (
+          {/* Style pills */}
+          {
             <View className="flex-row gap-3 mb-4">
               <TouchableOpacity
                 className="flex-1 flex-row items-center justify-between px-4 py-3 rounded-xl"
@@ -340,27 +311,11 @@ export default function CreateScreen() {
                 </View>
               </TouchableOpacity>
             </View>
-          )}
+          }
         </ScrollView>
 
         {/* Fixed footer — always visible above keyboard */}
-        <View className="px-5 pb-4">
-          {/* Compressed style text (keyboard open) */}
-          {kbOpen && (
-            <TouchableOpacity
-              className="flex-row items-center justify-center gap-1 mb-2"
-              onPress={() => {
-                Keyboard.dismiss();
-                setTimeout(() => setPickerType('medium'), 100);
-              }}
-            >
-              <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
-                {mediumLabel} · {vibeLabel}
-              </Text>
-              <Ionicons name="chevron-down" size={12} color={colors.textSecondary} />
-            </TouchableOpacity>
-          )}
-
+        <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : 96 }}>
           {/* Contextual hint */}
           <Text className="text-center text-xs mb-2" style={{ color: colors.textSecondary }}>
             {contextHint}
@@ -373,7 +328,10 @@ export default function CreateScreen() {
             onPress={handleDream}
             activeOpacity={0.7}
           >
-            <Text className="text-white text-base font-bold">Dream ✨</Text>
+            <View className="flex-row items-center gap-2">
+              <Text className="text-white text-base font-bold">Dream</Text>
+              <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+            </View>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
