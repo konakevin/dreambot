@@ -20,8 +20,8 @@ describe('dreamEngine constants', () => {
     for (const m of DREAM_MEDIUMS) {
       expect(m.key).toBeTruthy();
       expect(m.label).toBeTruthy();
-      // my_mediums, surprise_me, and aggregate mediums have null directives
-      if (m.key !== 'my_mediums' && m.key !== 'surprise_me' && !m.includes_mediums?.length) {
+      // surprise_me and aggregate mediums have null directives
+      if (m.key !== 'surprise_me' && !m.includes_mediums?.length) {
         expect(m.directive).toBeTruthy();
         expect(m.fluxFragment).toBeTruthy();
       }
@@ -32,7 +32,7 @@ describe('dreamEngine constants', () => {
     for (const v of DREAM_VIBES) {
       expect(v.key).toBeTruthy();
       expect(v.label).toBeTruthy();
-      if (v.key !== 'my_vibes' && v.key !== 'surprise_me') {
+      if (v.key !== 'surprise_me') {
         expect(v.directive).toBeTruthy();
       }
     }
@@ -48,18 +48,16 @@ describe('dreamEngine constants', () => {
     expect(new Set(keys).size).toBe(keys.length);
   });
 
-  it('CURATED_MEDIUMS excludes my_mediums and surprise_me', () => {
+  it('CURATED_MEDIUMS excludes surprise_me', () => {
     // Aggregate mediums (with includes_mediums) can have null directives
     expect(CURATED_MEDIUMS.every((m) => m.directive !== null || m.includes_mediums?.length)).toBe(
       true
     );
-    expect(CURATED_MEDIUMS.find((m) => m.key === 'my_mediums')).toBeUndefined();
     expect(CURATED_MEDIUMS.find((m) => m.key === 'surprise_me')).toBeUndefined();
   });
 
-  it('CURATED_VIBES excludes my_vibes and surprise_me', () => {
+  it('CURATED_VIBES excludes surprise_me', () => {
     expect(CURATED_VIBES.every((v) => v.directive !== null)).toBe(true);
-    expect(CURATED_VIBES.find((v) => v.key === 'my_vibes')).toBeUndefined();
     expect(CURATED_VIBES.find((v) => v.key === 'surprise_me')).toBeUndefined();
   });
 

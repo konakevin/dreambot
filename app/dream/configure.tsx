@@ -28,6 +28,10 @@ import { useDreamStore } from '@/store/dream';
 import { MediumVibeSelector } from '@/components/MediumVibeSelector';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
+import { useAuthStore } from '@/store/auth';
+import { supabase } from '@/lib/supabase';
+import { isVibeProfile } from '@/lib/migrateRecipe';
+import type { VibeProfile } from '@/types/vibeProfile';
 
 export default function DreamConfigureScreen() {
   const config = useDreamStore((s) => s.config);
@@ -35,6 +39,27 @@ export default function DreamConfigureScreen() {
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
+  const user = useAuthStore((s) => s.user);
+
+  // Load user's selected art_styles + aesthetics to filter the picker
+  const [userArtStyles, setUserArtStyles] = useState<string[] | undefined>();
+  const [userAesthetics, setUserAesthetics] = useState<string[] | undefined>();
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('user_recipes')
+      .select('recipe')
+      .eq('user_id', user.id)
+      .single()
+      .then(({ data }) => {
+        const raw = data?.recipe as unknown;
+        if (raw && isVibeProfile(raw)) {
+          const vp = raw as VibeProfile;
+          if (vp.art_styles?.length) setUserArtStyles(vp.art_styles);
+          if (vp.aesthetics?.length) setUserAesthetics(vp.aesthetics);
+        }
+      });
+  }, [user]);
 
   const [kbOpen, setKbOpen] = useState(false);
   const promptRef = useRef<TextInput>(null);
@@ -109,6 +134,8 @@ export default function DreamConfigureScreen() {
               onMediumChange={setMedium}
               onVibeChange={setVibe}
               compact={kbOpen && hasPhoto}
+              userArtStyles={userArtStyles}
+              userAesthetics={userAesthetics}
             />
           </View>
 

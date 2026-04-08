@@ -33,12 +33,6 @@ export interface DreamVibe {
 
 export const DREAM_MEDIUMS: DreamMedium[] = [
   {
-    key: 'my_mediums',
-    label: 'My Mediums',
-    directive: null,
-    fluxFragment: null,
-  },
-  {
     key: 'surprise_me',
     label: 'Surprise Me',
     directive: null,
@@ -288,11 +282,6 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
 // ── Vibes ───────────────────────────────────────────────────────────────
 
 export const DREAM_VIBES: DreamVibe[] = [
-  {
-    key: 'my_vibes',
-    label: 'My Vibes',
-    directive: null,
-  },
   {
     key: 'surprise_me',
     label: 'Surprise Me',

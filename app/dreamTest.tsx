@@ -172,8 +172,8 @@ export default function DreamTestScreen() {
           },
           body: JSON.stringify({
             mode: 'flux-dev',
-            medium_key: 'my_mediums',
-            vibe_key: 'my_vibes',
+            medium_key: 'surprise_me',
+            vibe_key: 'surprise_me',
             vibe_profile: profile,
             persist: false,
           }),

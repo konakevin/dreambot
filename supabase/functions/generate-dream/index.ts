@@ -385,7 +385,12 @@ Deno.serve(async (req) => {
     })
   );
 
-  if (medium_key === 'my_mediums' && vibe_key === 'my_vibes' && vibe_profile) {
+  // Nightly path: triggered by my_mediums/my_vibes (legacy) or surprise_me with a full profile
+  const isNightly =
+    vibe_profile &&
+    ((medium_key === 'my_mediums' && vibe_key === 'my_vibes') ||
+      (medium_key === 'surprise_me' && vibe_key === 'surprise_me' && !rawPrompt && !input_image));
+  if (isNightly) {
     try {
       // ══════════════════════════════════════════════════════════════════
       // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
@@ -1475,7 +1480,8 @@ function resolveMedium(
   profile?: VibeProfile
 ): (typeof CURATED_MEDIUMS)[number] {
   let medium: (typeof CURATED_MEDIUMS)[number];
-  if (key === 'my_mediums' && profile?.art_styles.length) {
+  // surprise_me or my_mediums: pick from user's art_styles if available, else random curated
+  if ((key === 'surprise_me' || key === 'my_mediums') && profile?.art_styles.length) {
     const pick = profile.art_styles[Math.floor(Math.random() * profile.art_styles.length)];
     medium = CURATED_MEDIUMS.find((m) => m.key === pick) ?? randomMedium();
   } else {
@@ -1502,7 +1508,8 @@ function resolveVibe(
   key: string | undefined,
   profile?: VibeProfile
 ): (typeof CURATED_VIBES)[number] {
-  if (key === 'my_vibes' && profile?.aesthetics.length) {
+  // surprise_me or my_vibes: pick from user's aesthetics if available, else random curated
+  if ((key === 'surprise_me' || key === 'my_vibes') && profile?.aesthetics.length) {
     const pick = profile.aesthetics[Math.floor(Math.random() * profile.aesthetics.length)];
     return CURATED_VIBES.find((v) => v.key === pick) ?? randomVibe();
   }

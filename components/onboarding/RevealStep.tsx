@@ -244,9 +244,9 @@ export function RevealStep({ onBack }: Props) {
       await bootPromise;
       setPhase('generating');
 
-      // Let the engine pick everything — just send the profile
-      const mediumKey = 'my_mediums';
-      const vibeKey = 'my_vibes';
+      // Let the engine pick from user's selections
+      const mediumKey = 'surprise_me';
+      const vibeKey = 'surprise_me';
 
       if (__DEV__) console.log('[Reveal] medium:', mediumKey, 'vibe:', vibeKey);
       const result = await generateVibeProfileDream(mediumKey, vibeKey);

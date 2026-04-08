@@ -12,8 +12,8 @@ import { colors } from '@/constants/theme';
 
 const PILL_WIDTH = 105;
 
-const SORTED_MEDIUMS = [...DREAM_MEDIUMS].sort((a, b) => a.label.localeCompare(b.label));
-const SORTED_VIBES = [...DREAM_VIBES].sort((a, b) => a.label.localeCompare(b.label));
+// Special keys that always show regardless of user selection
+const ALWAYS_SHOW = new Set(['surprise_me']);
 
 interface Props {
   selectedMedium: string;
@@ -21,6 +21,10 @@ interface Props {
   onMediumChange: (key: string) => void;
   onVibeChange: (key: string) => void;
   compact?: boolean;
+  /** If provided, only show mediums the user selected + my_mediums/surprise_me */
+  userArtStyles?: string[];
+  /** If provided, only show vibes the user selected + my_vibes/surprise_me */
+  userAesthetics?: string[];
 }
 
 export function MediumVibeSelector({
@@ -29,7 +33,28 @@ export function MediumVibeSelector({
   onMediumChange,
   onVibeChange,
   compact,
+  userArtStyles,
+  userAesthetics,
 }: Props) {
+  // Filter to user's selections if provided, otherwise show all
+  const filteredMediums = userArtStyles?.length
+    ? DREAM_MEDIUMS.filter((m) => ALWAYS_SHOW.has(m.key) || userArtStyles.includes(m.key))
+    : DREAM_MEDIUMS;
+  const filteredVibes = userAesthetics?.length
+    ? DREAM_VIBES.filter((v) => ALWAYS_SHOW.has(v.key) || userAesthetics.includes(v.key))
+    : DREAM_VIBES;
+
+  const SORTED_MEDIUMS = [...filteredMediums].sort((a, b) => {
+    // Keep my_mediums and surprise_me at the front
+    if (ALWAYS_SHOW.has(a.key) && !ALWAYS_SHOW.has(b.key)) return -1;
+    if (!ALWAYS_SHOW.has(a.key) && ALWAYS_SHOW.has(b.key)) return 1;
+    return a.label.localeCompare(b.label);
+  });
+  const SORTED_VIBES = [...filteredVibes].sort((a, b) => {
+    if (ALWAYS_SHOW.has(a.key) && !ALWAYS_SHOW.has(b.key)) return -1;
+    if (!ALWAYS_SHOW.has(a.key) && ALWAYS_SHOW.has(b.key)) return 1;
+    return a.label.localeCompare(b.label);
+  });
   const mediumScrollRef = useRef<ScrollView>(null);
   const vibeScrollRef = useRef<ScrollView>(null);
   const mediumLayouts = useRef<Record<string, number>>({});
