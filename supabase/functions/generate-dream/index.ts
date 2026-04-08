@@ -591,8 +591,7 @@ Deno.serve(async (req) => {
       // Some mediums ALWAYS use pure scene (characters look bad in them)
       const SCENE_ONLY_MEDIUMS = new Set(['oil_painting']);
 
-      type DreamPath = 'character' | 'pure_scene' | 'epic_tiny';
-      let dreamPath: DreamPath;
+      let dreamPath: string;
       if (!castPick || SCENE_ONLY_MEDIUMS.has(nightlyMedium.key)) {
         dreamPath = 'pure_scene';
       } else if (CHARACTER_MEDIUMS.has(nightlyMedium.key)) {

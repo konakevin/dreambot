@@ -357,8 +357,10 @@ export const DREAM_VIBES: DreamVibe[] = [
 
 // ── Helpers ─────────────────────────────────────────────────────────────
 
-/** Get only the curated mediums (excludes My Mediums and Surprise Me) */
-export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter((m) => m.directive !== null);
+/** Get only the curated mediums (excludes Surprise Me — includes aggregates) */
+export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter(
+  (m) => m.directive !== null || m.includes_mediums?.length
+);
 
 /** Get only the curated vibes (excludes My Vibes and Surprise Me) */
 export const CURATED_VIBES = DREAM_VIBES.filter((v) => v.directive !== null);
