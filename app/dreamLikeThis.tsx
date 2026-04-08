@@ -66,6 +66,7 @@ export default function DreamLikeThisScreen() {
   const [photoBase64, setPhotoBase64] = useState<string | null>(null);
   const [userPrompt, setUserPrompt] = useState('');
   const [kbOpen, setKbOpen] = useState(false);
+  const pickerOpenRef = useRef(false);
   const promptRef = useRef<TextInput>(null);
 
   // Fetch the reference post's medium and vibe
@@ -86,18 +87,25 @@ export default function DreamLikeThisScreen() {
   }, [params.postId]);
 
   useEffect(() => {
+    const anim = {
+      duration: 400,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: { type: LayoutAnimation.Types.easeInEaseOut },
+      delete: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+    };
     const s1 = Keyboard.addListener('keyboardWillShow', () => {
-      LayoutAnimation.configureNext({
-        duration: 250,
-        update: { type: LayoutAnimation.Types.easeInEaseOut },
-      });
+      LayoutAnimation.configureNext(anim);
       setKbOpen(true);
     });
     const s2 = Keyboard.addListener('keyboardWillHide', () => {
-      LayoutAnimation.configureNext({
-        duration: 250,
-        update: { type: LayoutAnimation.Types.easeInEaseOut },
-      });
+      if (pickerOpenRef.current) return;
+      LayoutAnimation.configureNext(anim);
       setKbOpen(false);
     });
     return () => {
@@ -112,11 +120,15 @@ export default function DreamLikeThisScreen() {
   const hasPhoto = !!photoUri;
 
   async function handlePickPhoto() {
+    pickerOpenRef.current = true;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       quality: 0.8,
     });
-    if (result.canceled || !result.assets?.[0]) return;
+    if (result.canceled || !result.assets?.[0]) {
+      pickerOpenRef.current = false;
+      return;
+    }
 
     // Keep original aspect ratio for preview. 9:16 crop happens before API call.
     const asset = result.assets[0];
@@ -131,6 +143,7 @@ export default function DreamLikeThisScreen() {
       return;
     }
 
+    pickerOpenRef.current = false;
     setPhotoUri(compressed.uri);
     setPhotoBase64(compressed.base64);
   }
@@ -195,14 +208,18 @@ export default function DreamLikeThisScreen() {
 
         <ScrollView
           style={s.flex}
-          contentContainerStyle={s.scrollContent}
+          contentContainerStyle={[
+            s.scrollContent,
+            !hasPhoto && kbOpen && { gap: 4, paddingBottom: 2, flexGrow: 1 },
+          ]}
           keyboardShouldPersistTaps="handled"
+          onScrollBeginDrag={() => Keyboard.dismiss()}
           showsVerticalScrollIndicator={false}
         >
           {/* Preview area */}
           {hasPhoto ? (
             <View style={s.previewRow}>
-              <View style={[s.previewCard, kbOpen && s.previewCardSmall]}>
+              <View style={[s.previewCard, s.previewCardDuo]}>
                 <Image
                   source={{ uri: params.imageUrl }}
                   style={s.previewImage}
@@ -211,7 +228,7 @@ export default function DreamLikeThisScreen() {
                 <Text style={s.previewLabel}>Original</Text>
               </View>
               <Ionicons name="arrow-forward" size={24} color={colors.textMuted} />
-              <View style={[s.previewCard, kbOpen && s.previewCardSmall]}>
+              <View style={[s.previewCard, s.previewCardDuo]}>
                 <Image source={{ uri: photoUri! }} style={s.previewImage} contentFit="cover" />
                 <TouchableOpacity style={s.clearPhoto} onPress={clearPhoto} hitSlop={8}>
                   <View style={s.clearPhotoCircle}>
@@ -222,7 +239,7 @@ export default function DreamLikeThisScreen() {
               </View>
             </View>
           ) : (
-            <View style={s.previewRow}>
+            <View style={[s.previewRow, kbOpen && { justifyContent: 'center' }]}>
               <View style={[s.previewCard, kbOpen && s.previewCardSmall]}>
                 <Image
                   source={{ uri: params.imageUrl }}
@@ -239,6 +256,9 @@ export default function DreamLikeThisScreen() {
               </View>
             </View>
           )}
+
+          {/* Spacer — pushes text/prompt to bottom when keyboard open (single image only) */}
+          {!hasPhoto && kbOpen && <View style={{ flex: 1 }} />}
 
           {/* Style info */}
           <View style={s.styleInfo}>
@@ -279,7 +299,7 @@ export default function DreamLikeThisScreen() {
         </ScrollView>
 
         {/* Footer */}
-        <View style={s.footer}>
+        <View style={[s.footer, !hasPhoto && kbOpen && { paddingBottom: 6, paddingVertical: 4 }]}>
           <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
             <Ionicons name="sparkles" size={18} color="#fff" />
             <Text style={s.dreamBtnText}>Dream</Text>
@@ -327,6 +347,7 @@ const s = StyleSheet.create({
   previewRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 12,
   },
   previewCard: {
@@ -337,8 +358,17 @@ const s = StyleSheet.create({
     backgroundColor: colors.surface,
     maxHeight: 280,
   },
+  previewCardDuo: {
+    maxHeight: 200,
+    maxWidth: '40%',
+  },
   previewCardSmall: {
-    maxHeight: 140,
+    flex: 0,
+    aspectRatio: 1,
+    width: 200,
+    height: 200,
+    maxHeight: undefined,
+    alignSelf: 'center',
   },
   previewImage: { width: '100%', height: '100%' },
   previewLabel: {
