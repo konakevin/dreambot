@@ -176,9 +176,9 @@ const CURATED_MEDIUMS = [
       'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation',
   },
   {
-    key: 'dark_fantasy',
+    key: 'fantasy',
     fluxFragment:
-      'Dark fantasy concept art, gothic crumbling architecture, dramatic god rays, storm clouds, ornate battered armor, Dark Souls Elden Ring aesthetic, massive scale, muted ashen palette with blood red accents',
+      'Epic fantasy digital concept art, hyper-detailed, vivid saturated colors, dramatic volumetric lighting, vast magical scale, crisp polished rendering, AAA game art quality',
   },
   {
     key: 'ukiyo_e',
@@ -319,6 +319,68 @@ const SHOT_DIRECTIONS = [
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ── Dream Algorithm (mirrored from lib/dreamAlgorithm.ts) ──
+const CAST_PROBABILITY = 0.75;
+const SCENE_ONLY_SET = new Set([
+  'oil_painting',
+  'embroidery',
+  'watercolor',
+  'vaporwave',
+  'retro_poster',
+  'pop_art',
+  '8bit',
+  'pixel_art',
+  'fantasy',
+]);
+const CHARACTER_SET = new Set(['claymation', 'lego', 'funko_pop', 'disney', 'sack_boy']);
+const WHO_THRESHOLDS = [
+  { max: 15, roles: ['self'] },
+  { max: 25, roles: ['plus_one'] },
+  { max: 35, roles: ['pet'] },
+  { max: 75, roles: ['self', 'plus_one'] },
+  { max: 90, roles: ['self', 'pet'] },
+  { max: 100, roles: ['self', 'plus_one', 'pet'] },
+];
+
+function rollDream(describedCast, mediumKey) {
+  const findRole = (r) => describedCast.find((m) => m.role === r);
+  let castPick = null;
+  let multiCast = [];
+
+  if (
+    describedCast.length > 0 &&
+    !SCENE_ONLY_SET.has(mediumKey) &&
+    Math.random() < CAST_PROBABILITY
+  ) {
+    const whoRoll = Math.random() * 100;
+    const match = WHO_THRESHOLDS.find((t) => whoRoll < t.max);
+    if (match) {
+      const members = match.roles.map((r) => findRole(r)).filter(Boolean);
+      if (members.length > 1) {
+        multiCast = members;
+        castPick = members[0];
+      } else if (members.length === 1) {
+        castPick = members[0];
+      } else {
+        castPick = describedCast[0];
+      }
+    }
+  }
+
+  let dreamPath;
+  if (!castPick || SCENE_ONLY_SET.has(mediumKey)) {
+    dreamPath = 'pure_scene';
+  } else if (CHARACTER_SET.has(mediumKey)) {
+    dreamPath = 'character';
+  } else if (multiCast.length > 1) {
+    dreamPath = 'character';
+  } else {
+    dreamPath = Math.random() < 0.6 ? 'character' : 'epic_tiny';
+  }
+
+  return { dreamPath, castPick, multiCast };
 }
 
 function pickWeightedCategory(moods) {
@@ -595,13 +657,11 @@ async function main() {
                 : 'A surreal impossible dreamscape with unexpected elements and impossible geometry';
           }
 
-          // Step 2: Maybe inject cast (~30%)
-          // Some mediums look best as pure scene — skip cast for those
-          const SCENE_ONLY_MEDIUMS = new Set(['oil_painting', 'embroidery']);
+          // Step 2: Roll dream algorithm (cast selection + composition)
           const cast = (recipe.dream_cast ?? []).filter((m) => m.description);
-          if (cast.length > 0 && Math.random() < 0.3 && !SCENE_ONLY_MEDIUMS.has(medium.key)) {
-            castPick = pick(cast);
-          }
+          const dreamRoll = rollDream(cast, medium.key);
+          castPick = dreamRoll.castPick;
+          const multiCast = dreamRoll.multiCast;
 
           // Step 3: Inject wish
           if (wish) {
@@ -632,26 +692,8 @@ async function main() {
             : null;
           const mediumStyle = medium.key.replace(/_/g, ' ');
 
-          // Pick path: cast dreams get 3 options, non-cast always pure scene
-          // Some mediums ALWAYS use character path (the character IS the medium's art)
-          const CHARACTER_MEDIUMS = new Set([
-            'claymation',
-            'lego',
-            'funko_pop',
-            'disney',
-            'sack_boy',
-          ]);
-          const SCENE_ONLY = new Set(['oil_painting', 'embroidery']);
-
-          let dreamPath;
-          if (!castPick || SCENE_ONLY.has(medium.key)) {
-            dreamPath = 'pure_scene';
-          } else if (CHARACTER_MEDIUMS.has(medium.key)) {
-            dreamPath = 'character';
-          } else {
-            const roll = Math.random();
-            dreamPath = roll < 0.33 ? 'character' : roll < 0.66 ? 'pure_scene' : 'epic_tiny';
-          }
+          // Path already decided by rollDream() above
+          const { dreamPath } = dreamRoll;
 
           let nightlyBrief;
 

@@ -1,60 +1,67 @@
 /**
- * describe-photo — Takes a photo URL, sends it to Haiku vision,
+ * describe-photo — Takes a photo URL, sends it to Llama 3.2 Vision (via Replicate),
  * returns a detailed text description of the person/pet's appearance.
- * One-time cost at profile save time (~$0.002 per photo).
+ * Uses Llama instead of Anthropic because it never refuses to describe people.
+ * One-time cost at profile save time.
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY')!;
+const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
 
 async function describePhoto(imageUrl: string, role: string): Promise<string> {
-  const systemPrompt =
+  const prompt =
     role === 'pet'
-      ? 'You describe animals for an AI art generator. Be specific about species, breed (if identifiable), coloring, markings, size, fur/feather texture, eye color, and any distinctive features. Output ONLY the description, 2-3 sentences max.'
-      : 'You describe people for an AI art generator that creates stylized dream art (NOT photorealistic). Describe: approximate age range, hair color/style/length, skin tone, build, any distinctive features (glasses, facial hair, freckles, etc), and what they are wearing. Do NOT name them. Output ONLY the description, 2-3 sentences max.';
+      ? 'Describe this animal for an AI artist. Include: species, breed, coat color/pattern, fur texture (curly/straight/wiry/fluffy), eye color, ear shape, size, build, age (puppy/young/adult/senior), distinguishing features. 2-3 sentences. Output ONLY the description.'
+      : 'Describe this person for an AI artist creating a stylized character. Include: exact age estimate, face shape, eye color, hair (exact color like sandy brown or chestnut, length, texture, style), facial hair if any, skin tone, build, clothing colors/style, any distinguishing features (glasses, freckles, jewelry, tattoos). 3 sentences max. Be EXTREMELY specific — the more detail, the better the resemblance. Output ONLY the description.';
 
-  // Fetch image as base64
-  const imgResponse = await fetch(imageUrl);
-  const imgBuffer = await imgResponse.arrayBuffer();
-  const base64 = btoa(String.fromCharCode(...new Uint8Array(imgBuffer)));
-  const mediaType = imgResponse.headers.get('content-type') ?? 'image/jpeg';
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 150,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: { type: 'base64', media_type: mediaType, data: base64 },
-            },
-            { type: 'text', text: systemPrompt },
-          ],
+  // Call Llama 3.2 Vision via Replicate
+  const createRes = await fetch(
+    'https://api.replicate.com/v1/models/meta/llama-3.2-90b-vision/predictions',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${REPLICATE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        input: {
+          image: imageUrl,
+          prompt,
+          max_tokens: 300,
         },
-      ],
-    }),
-  });
+      }),
+    }
+  );
 
-  if (!res.ok) {
-    const err = await res.text();
-    console.error('[describe-photo] Anthropic error:', res.status, err);
-    throw new Error(`Vision API failed: ${res.status}`);
+  if (!createRes.ok) {
+    const err = await createRes.text();
+    console.error('[describe-photo] Replicate create error:', createRes.status, err);
+    throw new Error(`Vision API failed: ${createRes.status}`);
   }
 
-  const data = await res.json();
-  const text = data.content?.[0]?.text ?? '';
-  console.log(`[describe-photo] ${role}:`, text.slice(0, 120));
-  return text.trim();
+  const pred = await createRes.json();
+  if (!pred.id) throw new Error('No prediction ID');
+
+  // Poll for result
+  for (let i = 0; i < 30; i++) {
+    await new Promise((r) => setTimeout(r, 2000));
+    const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
+      headers: { Authorization: `Bearer ${REPLICATE_TOKEN}` },
+    });
+    const data = await pollRes.json();
+    if (data.status === 'succeeded') {
+      // Llama returns an array of strings or a single string
+      const output = Array.isArray(data.output) ? data.output.join('') : data.output ?? '';
+      console.log(`[describe-photo] ${role}:`, output.slice(0, 120));
+      return output.trim();
+    }
+    if (data.status === 'failed') {
+      console.error('[describe-photo] Replicate failed:', data.error);
+      throw new Error(`Vision failed: ${data.error}`);
+    }
+  }
+  throw new Error('Vision API timed out');
 }
 
 Deno.serve(async (req: Request) => {

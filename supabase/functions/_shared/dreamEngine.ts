@@ -163,7 +163,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'pop_art',
     label: 'Pop Art',
     directive:
-      'You are creating in the style of Andy Warhol and Roy Lichtenstein. Bold, flat areas of highly saturated primary and secondary colors — red, blue, yellow, green, orange, purple at maximum intensity. Ben-Day dots (halftone pattern) fill shadows and mid-tones. Thick black outlines define every shape with graphic clarity. The image may be divided into 2-4 color variations of the same subject (Warhol grid style). Text elements, speech bubbles, or onomatopoeia can be integrated. The aesthetic is commercial, graphic, and unapologetically bold — advertising meets fine art. No subtlety, no gradients — flat color and graphic power.',
+      'You are creating in the style of Andy Warhol and Roy Lichtenstein. Bold, flat areas of highly saturated primary and secondary colors — red, blue, yellow, green, orange, purple at maximum intensity. Ben-Day dots (halftone pattern) fill shadows and mid-tones. Thick black outlines define every shape with graphic clarity. The aesthetic is commercial, graphic, and unapologetically bold — advertising meets fine art. No subtlety, no gradients — flat color and graphic power.',
     fluxFragment:
       'Pop art style, Andy Warhol screen print, bold flat primary colors at maximum saturation, Ben-Day halftone dots, thick black outlines, graphic commercial aesthetic',
   },
@@ -177,11 +177,11 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
   },
   {
     key: '8bit',
-    label: '8-Bit',
+    label: 'Retro Gaming',
     directive:
-      "You are creating NES-era 8-bit pixel art — think original Mario, Mega Man, Legend of Zelda on the NES. This is MORE primitive than 16-bit SNES pixel art. The color palette is extremely limited (12-16 colors max from the NES palette). Pixels are LARGE and chunky — very low resolution. Characters are simple — 2-pixel eyes, no detail in faces, iconic silhouettes only. No dithering, no gradients — flat color blocks only. Backgrounds are simple repeating tile patterns. The aesthetic is charming BECAUSE of its severe limitations. Everything should feel like it's running on 1985 hardware.",
+      'You are creating a retro video game scene — the nostalgic look of classic gaming from the 80s and 90s. Pixel art environments with rich color palettes, detailed sprite work, parallax scrolling backgrounds. Think the most beautiful moments from SNES, Genesis, and arcade games — Chrono Trigger, Streets of Rage, Metal Slug, Castlevania. Lush pixel landscapes, dramatic pixel skies, glowing effects. The charm of pixel art at its BEST — not its most primitive. Vibrant, colorful, detailed pixel worlds.',
     fluxFragment:
-      'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, simple iconic character sprites, flat color blocks, retro 1985 gaming aesthetic',
+      'Retro video game pixel art, vibrant colorful pixel environments, detailed sprite work, SNES era quality, parallax scrolling backgrounds, classic gaming aesthetic, nostalgic pixel landscapes',
   },
   {
     key: 'paper_cutout',
@@ -219,17 +219,17 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'vaporwave',
     label: 'Vaporwave',
     directive:
-      'You are creating vaporwave aesthetic art. Greek/Roman marble busts and statues in unexpected contexts. Glitch effects. Color palette is MANDATORY: hot pink, cyan, purple, and teal against black or deep purple backgrounds. Palm trees, sunsets, grid floors stretching to infinity. VHS tracking artifacts.',
+      'You are creating vaporwave aesthetic art — the visual language of internet nostalgia and retro-futurism. Greek/Roman marble busts and statues in unexpected contexts. Glitch effects — horizontal scan lines, RGB color separation, pixel sorting. Color palette is MANDATORY: hot pink, cyan, purple, and teal against black or deep purple backgrounds. Palm trees, sunsets, grid floors stretching to infinity. VHS tracking artifacts. Windows 95 UI elements. The aesthetic is simultaneously beautiful and ironic — corporate muzak made visual. Maximum saturation, maximum atmosphere.',
     fluxFragment:
-      'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation',
+      'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation, maximum saturation',
   },
   {
-    key: 'dark_fantasy',
-    label: 'Dark Fantasy',
+    key: 'fantasy',
+    label: 'Fantasy',
     directive:
-      'You are painting dark fantasy concept art. Massive gothic architecture crumbling with age. Dark atmospheric lighting with dramatic god rays piercing through storm clouds. The palette is muted: ashen greys, deep blacks, blood reds, tarnished gold. Everything feels ancient, dangerous, and awe-inspiring. The scale is overwhelming. Dark Souls, Berserk, Elden Ring.',
+      'You are creating epic fantasy digital concept art — clean, vivid, and hyper-detailed like a AAA video game loading screen or movie poster. NOT an oil painting — this is polished digital art with smooth rendering, crisp edges, and vibrant saturated colors. The world can be bright and magical OR dark and ominous. Enchanted forests, cursed oceans, soaring castles, underground kingdoms, frozen wastelands, volcanic forges, floating islands, crystal caves. Dramatic lighting — god rays, bioluminescence, firelight, moonlight. Scale is VAST and overwhelming. Be CREATIVE — surprise me with the setting.',
     fluxFragment:
-      'Dark fantasy concept art, gothic crumbling architecture, dramatic god rays, storm clouds, ornate battered armor, Dark Souls Elden Ring aesthetic, massive scale, muted ashen palette with blood red accents',
+      'Epic fantasy digital concept art, hyper-detailed, vivid saturated colors, dramatic volumetric lighting, vast magical scale, crisp polished rendering, AAA game art quality',
   },
   {
     key: 'ukiyo_e',
@@ -251,9 +251,9 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'steampunk',
     label: 'Steampunk',
     directive:
-      'You are building a steampunk world. Victorian-era technology powered by steam and clockwork. Brass gears, copper pipes, riveted iron plates, leather straps, and glass pressure gauges are EVERYWHERE. Machines are ornate. Airships fill smoky skies. Characters wear goggles, top hats, corsets, and leather aviator gear. The palette is warm metallics: brass gold, copper, iron grey, leather brown.',
+      'You are creating a STYLIZED CARTOON steampunk world — NOT photorealistic. Think animated film or illustrated storybook set in a Victorian steam-powered universe. Characters are stylized with exaggerated proportions — big expressive eyes, rounded features, charming cartoon anatomy. Brass gears, copper pipes, riveted iron, glass pressure gauges everywhere but rendered in a warm illustrated style. Airships in painterly skies. Palette: warm brass gold, copper, leather brown, jade green accents. Everything has hand-painted, illustrated quality — NEVER photorealistic.',
     fluxFragment:
-      'Steampunk aesthetic, brass gears and copper pipes, Victorian machinery, ornate mechanical complexity, airships, goggles and leather, warm metallic palette, steam venting, clockwork mechanisms',
+      'Illustrative steampunk art, stylized cartoon render, warm painterly lighting, brass gears and copper pipes, Victorian machinery, ornate clockwork, illustrated storybook quality, NOT photorealistic',
   },
   {
     key: 'cute_anime',

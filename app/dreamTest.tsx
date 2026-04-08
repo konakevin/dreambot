@@ -176,6 +176,18 @@ export default function DreamTestScreen() {
       } = await supabase.auth.getSession();
       if (!session?.access_token) throw new Error('Not authenticated');
 
+      const requestBody = {
+        mode: 'flux-dev',
+        medium_key: 'surprise_me',
+        vibe_key: 'surprise_me',
+        vibe_profile: profile,
+        persist: false,
+        force_cast_role: forceCastRole,
+        force_medium: selectedMedium !== 'surprise_me' ? selectedMedium : undefined,
+        force_vibe: selectedVibe !== 'surprise_me' ? selectedVibe : undefined,
+      };
+      if (__DEV__) console.log('[DreamTest] SENDING:', JSON.stringify({ force_cast_role: requestBody.force_cast_role, force_medium: requestBody.force_medium, force_vibe: requestBody.force_vibe }));
+
       const res = await fetch(
         `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-dream`,
         {
@@ -184,16 +196,7 @@ export default function DreamTestScreen() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${session.access_token}`,
           },
-          body: JSON.stringify({
-            mode: 'flux-dev',
-            medium_key: 'surprise_me',
-            vibe_key: 'surprise_me',
-            vibe_profile: profile,
-            persist: false,
-            force_cast_role: forceCastRole,
-            force_medium: selectedMedium !== 'surprise_me' ? selectedMedium : undefined,
-            force_vibe: selectedVibe !== 'surprise_me' ? selectedVibe : undefined,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
 

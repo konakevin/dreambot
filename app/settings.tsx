@@ -1,5 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -50,8 +50,18 @@ function SettingsRow({
 export default function SettingsScreen() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
-  const ADMIN_IDS = new Set(['eab700d8-f11a-4f47-a3a1-addda6fb67ec']);
-  const isAdmin = user?.id ? ADMIN_IDS.has(user.id) : false;
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('users')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.is_admin) setIsAdmin(true);
+      });
+  }, [user]);
   const queryClient = useQueryClient();
   const bumpReset = useFeedStore((s) => s.bumpReset);
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);

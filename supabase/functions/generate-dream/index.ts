@@ -40,6 +40,7 @@ import {
 } from '../_shared/dreamEngine.ts';
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { buildTextDreamPrompt } from '../_shared/textPrompts.ts';
+import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 
 const MAX_DAILY_GENERATIONS = 50;
 
@@ -220,6 +221,12 @@ interface RequestBody {
   medium_key?: string;
   /** V2 engine — curated vibe key (e.g., 'cinematic', 'epic', 'surprise_me') */
   vibe_key?: string;
+  /** Test mode: force a specific cast role ('self', 'plus_one', 'pet', 'self+plus_one', etc.) */
+  force_cast_role?: string | null;
+  /** Test mode: override medium selection */
+  force_medium?: string;
+  /** Test mode: override vibe selection */
+  force_vibe?: string;
 }
 
 Deno.serve(async (req) => {
@@ -283,6 +290,12 @@ Deno.serve(async (req) => {
   let body: RequestBody;
   try {
     body = await req.json();
+    console.log(
+      '[generate-dream] BODY KEYS:',
+      Object.keys(body),
+      'force_cast_role:',
+      (body as any).force_cast_role
+    );
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
@@ -302,10 +315,20 @@ Deno.serve(async (req) => {
     photo_style = 'restyle',
     persist = false,
     skip_enhance = false,
-    force_cast_role,
-    force_medium,
-    force_vibe,
   } = body;
+
+  // Read test-mode params directly from body (bypass TS destructuring issues)
+  const force_cast_role = (body as Record<string, unknown>).force_cast_role as
+    | string
+    | null
+    | undefined;
+  const force_medium = (body as Record<string, unknown>).force_medium as string | undefined;
+  const force_vibe = (body as Record<string, unknown>).force_vibe as string | undefined;
+
+  console.log(
+    '[generate-dream] RAW TEST PARAMS:',
+    JSON.stringify({ force_cast_role, force_medium, force_vibe, medium_key, vibe_key })
+  );
 
   if (!mode || !['flux-dev', 'flux-kontext'].includes(mode)) {
     return new Response(
@@ -403,11 +426,9 @@ Deno.serve(async (req) => {
       let nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
       if (nightlyMedium.key === 'watercolor') {
         nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
-        // Skip mediums that don't work well in nightly — re-roll or fallback
-        const NIGHTLY_SKIP = new Set(['watercolor', 'neon', 'pencil_sketch']);
-        if (NIGHTLY_SKIP.has(nightlyMedium.key)) {
+        if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
           nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
-          if (NIGHTLY_SKIP.has(nightlyMedium.key)) {
+          if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
             nightlyMedium = CURATED_MEDIUMS.find((m) => m.key === 'anime') ?? nightlyMedium;
           }
         }
@@ -429,7 +450,11 @@ Deno.serve(async (req) => {
         '[generate-dream] NIGHTLY DREAMBOT | medium:',
         nightlyMedium.key,
         '| vibe:',
-        nightlyVibe.key
+        nightlyVibe.key,
+        '| force_cast_role:',
+        force_cast_role,
+        '| typeof:',
+        typeof force_cast_role
       );
 
       // Step 1: Pick a mood-weighted scene template from 6,200+ Sonnet-generated DB templates
@@ -443,31 +468,79 @@ Deno.serve(async (req) => {
       let dreamSubject: string;
 
       // Check if we'll inject a cast member — decided before template selection
-      // so we can use a neutral character placeholder in the template
-      const describedCastMembers = (nightlyProfile.dream_cast ?? []).filter(
-        (m: DreamCastMember) => m.description && m.thumb_url?.startsWith('http')
-      );
-      let castPick: DreamCastMember | null = null;
-      let multiCast: DreamCastMember[] = [];
-      if (force_cast_role && typeof force_cast_role === 'string' && force_cast_role.includes('+')) {
-        // Duo/group mode: combine multiple cast members
-        const roles = force_cast_role.split('+');
-        multiCast = roles
-          .map((r: string) => describedCastMembers.find((m: DreamCastMember) => m.role === r))
-          .filter(Boolean) as DreamCastMember[];
-        if (multiCast.length > 0) castPick = multiCast[0]; // use first as primary for path logic
-      } else if (force_cast_role) {
-        // Test mode: force a specific cast role
-        castPick =
-          describedCastMembers.find((m: DreamCastMember) => m.role === force_cast_role) ?? null;
-      } else if (
-        force_cast_role === undefined &&
-        describedCastMembers.length > 0 &&
-        Math.random() < 0.4
-      ) {
-        // Only random cast if force_cast_role was NOT sent at all (null = explicitly no cast)
-        castPick = describedCastMembers[Math.floor(Math.random() * describedCastMembers.length)];
+      // Describe any undescribed cast members server-side via Anthropic vision
+      // Describe any undescribed cast members server-side via Llama Vision (Replicate)
+      const castMembers = nightlyProfile.dream_cast ?? [];
+      const REPLICATE_KEY = Deno.env.get('REPLICATE_API_TOKEN');
+      for (const member of castMembers) {
+        if (
+          !member.description &&
+          member.thumb_url &&
+          member.thumb_url.startsWith('http') &&
+          REPLICATE_KEY
+        ) {
+          try {
+            const descPrompt =
+              member.role === 'pet'
+                ? 'Describe this animal: species, breed, coat color/pattern, fur texture, eye color, ear shape, size, build, age, distinguishing features. 2-3 sentences.'
+                : 'Describe this person for an AI artist creating a stylized character. Include: exact age estimate, face shape, eye color, hair (exact color, length, texture, style), facial hair if any, skin tone, build, clothing colors/style, distinguishing features (glasses, freckles, jewelry, tattoos). 3 sentences max. Be EXTREMELY specific.';
+            const createRes = await fetch(
+              'https://api.replicate.com/v1/models/meta/llama-3.2-90b-vision/predictions',
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${REPLICATE_KEY}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  input: { image: member.thumb_url, prompt: descPrompt, max_tokens: 300 },
+                }),
+              }
+            );
+            if (!createRes.ok) throw new Error(`Replicate ${createRes.status}`);
+            const pred = await createRes.json();
+            for (let i = 0; i < 30; i++) {
+              await new Promise((r) => setTimeout(r, 2000));
+              const poll = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
+                headers: { Authorization: `Bearer ${REPLICATE_KEY}` },
+              });
+              const pData = await poll.json();
+              if (pData.status === 'succeeded') {
+                member.description = (
+                  Array.isArray(pData.output) ? pData.output.join('') : (pData.output ?? '')
+                ).trim();
+                console.log(
+                  `[generate-dream] Described cast ${member.role}:`,
+                  member.description.slice(0, 60)
+                );
+                break;
+              }
+              if (pData.status === 'failed') throw new Error(pData.error);
+            }
+          } catch (descErr) {
+            console.warn(
+              `[generate-dream] Failed to describe cast ${member.role}:`,
+              (descErr as Error).message
+            );
+          }
+        }
       }
+      const describedCastMembers = castMembers.filter(
+        (m: DreamCastMember) => m.description && m.thumb_url && m.thumb_url.startsWith('http')
+      );
+
+      // Roll the dream algorithm (cast selection + composition path)
+      const dreamRoll = rollDream(describedCastMembers, nightlyMedium.key, force_cast_role);
+      let castPick = dreamRoll.castPick as DreamCastMember | null;
+      const multiCast = dreamRoll.multiCast as DreamCastMember[];
+      console.log(
+        '[generate-dream] Dream roll:',
+        dreamRoll.dreamPath,
+        '| cast:',
+        castPick?.role ?? 'none',
+        '| multi:',
+        multiCast.map((m) => m.role)
+      );
 
       try {
         // Category weights based on user's mood sliders — higher weight = more likely to be picked
@@ -607,29 +680,13 @@ Deno.serve(async (req) => {
           : '';
 
       // ── THREE DREAM COMPOSITION PATHS ──
-      // Each has a custom Sonnet brief optimized for its composition type.
+      // Path already decided by rollDream() above
+      const { dreamPath } = dreamRoll;
       const shortCastDesc = castPick
         ? (castPick.description?.split(',')[0] ??
           (castPick.role === 'pet' ? 'a small creature' : 'a figure'))
         : null;
       const mediumStyle = nightlyMedium.key.replace(/_/g, ' ');
-
-      // Pick path: cast dreams get 3 options, non-cast always pure scene
-      // Some mediums ALWAYS use character path (the character IS the medium's art)
-      const CHARACTER_MEDIUMS = new Set(['claymation', 'lego', 'funko_pop', 'disney', 'sack_boy']);
-      // Some mediums ALWAYS use pure scene (characters look bad in them)
-      const SCENE_ONLY_MEDIUMS = new Set(['oil_painting', 'embroidery']);
-
-      let dreamPath: string;
-      if (!castPick || SCENE_ONLY_MEDIUMS.has(nightlyMedium.key)) {
-        dreamPath = 'pure_scene';
-      } else if (force_cast_role || CHARACTER_MEDIUMS.has(nightlyMedium.key)) {
-        // Forced cast or character-only medium: always character path
-        dreamPath = 'character';
-      } else {
-        const roll = Math.random();
-        dreamPath = roll < 0.33 ? 'character' : roll < 0.66 ? 'pure_scene' : 'epic_tiny';
-      }
 
       let nightlyBrief: string;
 
@@ -647,6 +704,9 @@ Deno.serve(async (req) => {
         nightlyBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
+
+STYLE GUIDE (follow this closely):
+${nightlyMedium.directive}
 
 ${characterCount} (include these traits but STYLIZED — NOT photorealistic):
 ${castDescForBrief}
@@ -675,10 +735,13 @@ Output ONLY the prompt.`;
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
+STYLE GUIDE (follow this closely):
+${nightlyMedium.directive}
+
 DREAM SCENE (this is the ENTIRE focus — describe in maximum vivid detail):
 ${dreamSubject}
 
-Somewhere in this vast scene, barely visible, is a tiny ${mediumStyle}-style ${shortCastDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
+Somewhere in this vast scene, barely visible: ${multiCast.length > 1 ? `TWO tiny figures together — ${multiCast.map((m) => m.description?.split(',')[0] ?? 'a figure').join(' AND ')}. Both must appear as TWO DISTINCT people next to each other.` : `a tiny ${mediumStyle}-style ${shortCastDesc}`}. They occupy less than 5% of the image. The scene is EVERYTHING.
 
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
@@ -687,7 +750,7 @@ ${aestheticFlavor}${extraSeeds}${avoidList}
 Write the prompt:
 1. Start with the art medium
 2. Spend 90% of words on the ENVIRONMENT — architecture, physics, materials, light, weather
-3. Mention the tiny character in ONE short phrase at the very end
+3. ${multiCast.length > 1 ? 'Mention TWO tiny figures together at the end — describe both distinctly' : 'Mention the tiny character in ONE short phrase at the very end'}
 4. End with: no text, no words, no letters, no watermarks, hyper detailed
 Output ONLY the prompt.`;
         logAxes = {
@@ -1659,3 +1722,4 @@ async function haikuVision(
   const data = await res.json();
   return data.content?.[0]?.text?.trim() ?? '';
 }
+// force redeploy Tue Apr  7 23:17:08 MDT 2026
