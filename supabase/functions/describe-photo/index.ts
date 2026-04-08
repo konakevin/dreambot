@@ -52,7 +52,7 @@ async function describePhoto(imageUrl: string, role: string): Promise<string> {
     const data = await pollRes.json();
     if (data.status === 'succeeded') {
       // Llama returns an array of strings or a single string
-      const output = Array.isArray(data.output) ? data.output.join('') : data.output ?? '';
+      const output = Array.isArray(data.output) ? data.output.join('') : (data.output ?? '');
       console.log(`[describe-photo] ${role}:`, output.slice(0, 120));
       return output.trim();
     }

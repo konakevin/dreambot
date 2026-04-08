@@ -55,8 +55,6 @@ const ALL_MEDIUMS = {
   pencil_sketch:
     'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching',
   neon: 'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces',
-  stained_glass:
-    'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight',
   comic_book:
     'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors',
   embroidery:

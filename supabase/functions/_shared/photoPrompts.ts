@@ -75,22 +75,6 @@ Express the mood through PALETTE SELECTION — the color palette sets the entire
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  stained_glass: {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `COMPLETELY transform this entire photo into a stained glass window panel.
-
-Every element must become colored glass pieces separated by bold black lead lines (cames). The person's face becomes simplified glass pieces — 4-6 panels with thick lead outlines defining features. Hair becomes flowing glass panels. Clothing becomes larger flat glass sections in matching colors.
-
-Background, furniture, objects — ALL become stained glass pieces with lead dividers. Light glows from BEHIND the glass making everything luminous and translucent. Bold graphic clarity. Portrait 9:16.
-
-Express the mood through GLASS COLOR CHOICES and BACKLIGHT WARMTH — jewel tones set the emotion:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
   embroidery: {
     model: 'kontext-max',
     buildPrompt: (
@@ -392,18 +376,6 @@ Output ONLY the prompt.`,
 - Subject from photo: ${photo} — becomes a pixel art sprite (blocky features, dot eyes, matching clothing colors)
 - NEW SCENARIO: ${scenario} — render entirely in pixel art
 - Express mood through palette warmth/coolness: ${vibe}
-- Portrait 9:16
-Output ONLY the prompt.`,
-
-  stained_glass: (
-    photo,
-    scenario,
-    vibe
-  ) => `Write a Flux AI prompt (50-70 words) for a stained glass window:
-- Start with: "Stained glass window panel, bold black lead cames, jewel-tone translucent glass, warm backlight"
-- Subject from photo: ${photo} — becomes a stained glass figure (lead outlines, colored glass panels)
-- NEW SCENARIO: ${scenario} — all elements are stained glass with lead dividers
-- Express mood through glass color warmth: ${vibe}
 - Portrait 9:16
 Output ONLY the prompt.`,
 

@@ -26,7 +26,6 @@ const MEDIUMS = [
   '3d_render',
   'pencil_sketch',
   'neon',
-  'stained_glass',
   'comic_book',
   'embroidery',
   'disney',

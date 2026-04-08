@@ -102,7 +102,6 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     fluxFragment:
       'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
   },
-  // stained_glass removed — inconsistent results
   {
     key: 'comic_book',
     label: 'Comic Book',

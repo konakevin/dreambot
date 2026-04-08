@@ -101,11 +101,6 @@ const CURATED_MEDIUMS = [
       'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
   },
   {
-    key: 'stained_glass',
-    fluxFragment:
-      'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight, ruby sapphire emerald amber, graphic symmetrical composition, cathedral quality',
-  },
-  {
     key: 'comic_book',
     fluxFragment:
       'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',

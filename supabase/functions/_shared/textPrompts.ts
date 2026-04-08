@@ -55,20 +55,6 @@ Output ONLY the prompt.`,
 Express the mood through palette selection: ${vibe.slice(0, 200)}
 Output ONLY the prompt.`,
 
-  stained_glass: (
-    subject,
-    vibe
-  ) => `Write a Flux AI prompt (50-70 words, comma-separated) for a stained glass window:
-- Start with: "Stained glass window panel, bold black lead cames, jewel-tone translucent glass glowing with warm backlight"
-- Subject: ${subject} — rendered as colored glass pieces separated by bold black lead lines
-- Characters are simplified glass figures with lead outlines defining features
-- Colors: ruby, sapphire, emerald, amber, deep purple
-- Light from BEHIND makes everything glow with luminosity
-- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.
-
-Express the mood through glass color warmth and composition: ${vibe.slice(0, 200)}
-Output ONLY the prompt.`,
-
   embroidery: (
     subject,
     vibe

@@ -186,7 +186,15 @@ export default function DreamTestScreen() {
         force_medium: selectedMedium !== 'surprise_me' ? selectedMedium : undefined,
         force_vibe: selectedVibe !== 'surprise_me' ? selectedVibe : undefined,
       };
-      if (__DEV__) console.log('[DreamTest] SENDING:', JSON.stringify({ force_cast_role: requestBody.force_cast_role, force_medium: requestBody.force_medium, force_vibe: requestBody.force_vibe }));
+      if (__DEV__)
+        console.log(
+          '[DreamTest] SENDING:',
+          JSON.stringify({
+            force_cast_role: requestBody.force_cast_role,
+            force_medium: requestBody.force_medium,
+            force_vibe: requestBody.force_vibe,
+          })
+        );
 
       const res = await fetch(
         `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-dream`,

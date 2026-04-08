@@ -56,8 +56,6 @@ const MEDIUMS = {
   tim_burton:
     'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents',
   neon: 'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, cyberpunk noir',
-  stained_glass:
-    'Stained glass window artwork, bold black leading lines, jewel-tone translucent colors glowing with backlight',
   embroidery:
     'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors',
   pencil_sketch:
