@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import { colors, ANIM } from '@/constants/theme';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
+// POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -19,55 +20,73 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 type FeedTab = 'forYou' | 'following' | 'dreamers';
 const PAGE_SIZE = 20;
 
+/**
+ * Content diversity post-processing.
+ * Reorders scored feed to prevent monotonous sequences:
+ * - No more than 2 consecutive posts from the same user
+ * - No more than 3 consecutive posts of the same medium
+ */
+function applyDiversity(posts: DreamPostItem[]): DreamPostItem[] {
+  if (posts.length <= 2) return posts;
+  const result: DreamPostItem[] = [];
+  const deferred: DreamPostItem[] = [];
+
+  for (const post of posts) {
+    const len = result.length;
+    // Check same-user streak (max 2)
+    const sameUser =
+      len >= 2 &&
+      result[len - 1].user_id === post.user_id &&
+      result[len - 2].user_id === post.user_id;
+    // Check same-medium streak (max 3)
+    const sameMedium =
+      len >= 3 &&
+      post.dream_medium != null &&
+      result[len - 1].dream_medium === post.dream_medium &&
+      result[len - 2].dream_medium === post.dream_medium &&
+      result[len - 3].dream_medium === post.dream_medium;
+
+    if (sameUser || sameMedium) {
+      deferred.push(post);
+    } else {
+      result.push(post);
+    }
+  }
+  // Append deferred posts at the end (still visible, just not in a streak)
+  return result.concat(deferred);
+}
+
+interface FeedCursor {
+  score: number;
+  id: string;
+}
+
 function useDreamFeed(tab: FeedTab) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
 
   return useInfiniteQuery({
     queryKey: ['dreamFeed', tab, user?.id, feedSeed],
-    queryFn: async ({ pageParam = 0 }): Promise<DreamPostItem[]> => {
-      if (tab === 'forYou') {
-        const { data, error } = await supabase.rpc('get_feed', {
-          p_user_id: user!.id,
-          p_limit: PAGE_SIZE,
-          p_offset: pageParam,
-          p_seed: feedSeed,
-        });
-        if (error) throw error;
-        return castRows(data).map(mapRpcToDreamPost);
-      }
-
-      let query = supabase
-        .from('uploads')
-        .select(POST_SELECT)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .range(pageParam, pageParam + PAGE_SIZE - 1);
-
-      if (tab === 'following') {
-        const { data: followData } = await supabase
-          .from('follows')
-          .select('following_id')
-          .eq('follower_id', user!.id);
-        const ids = (followData ?? []).map((f: Record<string, string>) => f.following_id);
-        if (ids.length === 0) return [];
-        query = query.in('user_id', ids);
-      } else if (tab === 'dreamers') {
-        const { data: friendData } = await supabase.rpc('get_friend_ids', { p_user_id: user!.id });
-        const ids = (friendData ?? []).map((f: Record<string, string>) => f.friend_id);
-        if (ids.length === 0) return [];
-        query = query.in('user_id', ids);
-      }
-
-      const { data, error } = await query;
+    queryFn: async ({ pageParam }): Promise<(DreamPostItem & { feed_score?: number })[]> => {
+      const { data, error } = await supabase.rpc('get_feed', {
+        p_user_id: user!.id,
+        p_limit: PAGE_SIZE,
+        p_seed: feedSeed,
+        p_tab: tab,
+        ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
+      });
       if (error) throw error;
-
-      return castRows(data).map(mapToDreamPost);
+      return castRows(data).map((row) => ({
+        ...mapRpcToDreamPost(row),
+        feed_score: row.feed_score as number,
+      }));
     },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
+    initialPageParam: null as FeedCursor | null,
+    getNextPageParam: (lastPage) => {
       if (lastPage.length < PAGE_SIZE) return undefined;
-      return allPages.reduce((total, page) => total + page.length, 0);
+      const last = lastPage[lastPage.length - 1];
+      if (last.feed_score == null) return undefined;
+      return { score: last.feed_score, id: last.id } as FeedCursor;
     },
     enabled: !!useAuthStore.getState().user,
   });
@@ -165,8 +184,11 @@ export default function HomeScreen() {
     })();
   }, [pendingPostId]);
 
+  // Content diversity: reorder to prevent monotonous sequences
+  const diverseFeed = useMemo(() => applyDiversity(feedPosts), [feedPosts]);
+
   // Prepend pinned post (e.g. deep link, first dream after onboarding)
-  const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...feedPosts] : feedPosts;
+  const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...diverseFeed] : diverseFeed;
 
   // Scroll to top when a pinned post appears
   useEffect(() => {

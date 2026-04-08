@@ -8,35 +8,6 @@ export type Database = {
   };
   public: {
     Tables: {
-      achievements: {
-        Row: {
-          achievement_type: string;
-          id: string;
-          unlocked_at: string;
-          user_id: string;
-        };
-        Insert: {
-          achievement_type: string;
-          id?: string;
-          unlocked_at?: string;
-          user_id: string;
-        };
-        Update: {
-          achievement_type?: string;
-          id?: string;
-          unlocked_at?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'achievements_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       ai_generation_budget: {
         Row: {
           date: string;
@@ -340,24 +311,6 @@ export type Database = {
           },
         ];
       };
-      feature_flags: {
-        Row: {
-          description: string | null;
-          key: string;
-          value: boolean;
-        };
-        Insert: {
-          description?: string | null;
-          key: string;
-          value?: boolean;
-        };
-        Update: {
-          description?: string | null;
-          key?: string;
-          value?: boolean;
-        };
-        Relationships: [];
-      };
       follows: {
         Row: {
           created_at: string;
@@ -625,38 +578,6 @@ export type Database = {
           },
         ];
       };
-      recipe_registry: {
-        Row: {
-          created_at: string;
-          fingerprint: string;
-          id: string;
-          recipe: Json;
-          user_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          fingerprint: string;
-          id?: string;
-          recipe: Json;
-          user_id: string;
-        };
-        Update: {
-          created_at?: string;
-          fingerprint?: string;
-          id?: string;
-          recipe?: Json;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'recipe_registry_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       reports: {
         Row: {
           created_at: string;
@@ -831,13 +752,6 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'uploads_recipe_id_fkey';
-            columns: ['recipe_id'];
-            isOneToOne: false;
-            referencedRelation: 'recipe_registry';
-            referencedColumns: ['id'];
-          },
-          {
             foreignKeyName: 'uploads_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
@@ -931,14 +845,8 @@ export type Database = {
           has_ai_recipe: boolean;
           id: string;
           last_active_at: string | null;
-          needs_rank_recalc: boolean;
-          preferred_categories: string[] | null;
-          pro_subscription: boolean;
           sparkle_balance: number;
-          subscription_expires: string | null;
-          upload_count_week: number;
           username: string;
-          week_reset_date: string;
         };
         Insert: {
           avatar_url?: string | null;
@@ -947,14 +855,8 @@ export type Database = {
           has_ai_recipe?: boolean;
           id: string;
           last_active_at?: string | null;
-          needs_rank_recalc?: boolean;
-          preferred_categories?: string[] | null;
-          pro_subscription?: boolean;
           sparkle_balance?: number;
-          subscription_expires?: string | null;
-          upload_count_week?: number;
           username: string;
-          week_reset_date?: string;
         };
         Update: {
           avatar_url?: string | null;
@@ -963,14 +865,8 @@ export type Database = {
           has_ai_recipe?: boolean;
           id?: string;
           last_active_at?: string | null;
-          needs_rank_recalc?: boolean;
-          preferred_categories?: string[] | null;
-          pro_subscription?: boolean;
           sparkle_balance?: number;
-          subscription_expires?: string | null;
-          upload_count_week?: number;
           username?: string;
-          week_reset_date?: string;
         };
         Relationships: [];
       };
@@ -1007,9 +903,12 @@ export type Database = {
       };
       get_feed: {
         Args: {
+          p_cursor_id?: string;
+          p_cursor_score?: number;
           p_limit?: number;
           p_offset?: number;
           p_seed?: number;
+          p_tab?: string;
           p_user_id: string;
         };
         Returns: {
@@ -1037,33 +936,6 @@ export type Database = {
         Args: { p_user_id: string };
         Returns: {
           friend_id: string;
-        }[];
-      };
-      get_inbox: {
-        Args: { p_limit?: number; p_offset?: number; p_user_id: string };
-        Returns: {
-          bad_votes: number;
-          caption: string;
-          categories: string[];
-          height: number;
-          image_url: string;
-          is_seen: boolean;
-          media_type: string;
-          post_avatar_url: string;
-          post_created_at: string;
-          post_user_id: string;
-          post_user_rank: string;
-          post_username: string;
-          rad_votes: number;
-          sender_avatar_url: string;
-          sender_id: string;
-          sender_username: string;
-          share_id: string;
-          shared_at: string;
-          thumbnail_url: string;
-          total_votes: number;
-          upload_id: string;
-          width: number;
         }[];
       };
       get_notifications: {
@@ -1133,18 +1005,12 @@ export type Database = {
         Args: { p_user_id: string };
         Returns: number;
       };
-      get_unread_share_count: { Args: { p_user_id: string }; Returns: number };
-      get_vibe_stats: {
-        Args: { p_other_id: string; p_user_id: string };
-        Returns: {
-          best_streak: number;
-          is_vibing: boolean;
-          shared_count: number;
-          vibe_score: number;
-        }[];
-      };
       grant_sparkles: {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
+        Returns: undefined;
+      };
+      record_impression: {
+        Args: { p_upload_id: string; p_user_id: string };
         Returns: undefined;
       };
       remove_friend: { Args: { p_friend_id: string }; Returns: undefined };
@@ -1164,13 +1030,9 @@ export type Database = {
         };
         Returns: boolean;
       };
-      wilson_lower_bound: {
-        Args: { gas: number; total: number };
-        Returns: number;
-      };
     };
     Enums: {
-      vote_type: 'rad' | 'bad' | 'skip';
+      [_ in never]: never;
     };
     CompositeTypes: {
       [_ in never]: never;

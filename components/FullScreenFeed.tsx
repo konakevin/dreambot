@@ -87,6 +87,8 @@ export function FullScreenFeed({
   const internalRef = useRef<FlatList>(null);
   const ref = listRef ?? internalRef;
   const currentIndex = useRef(0);
+  const impressionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
 
   // Re-snap scroll position when the screen regains focus (prevents half-scroll offset)
@@ -98,6 +100,13 @@ export function FullScreenFeed({
       });
     }
   }, [isFocused]);
+
+  // Clean up impression timer on unmount
+  useEffect(() => {
+    return () => {
+      if (impressionTimer.current) clearTimeout(impressionTimer.current);
+    };
+  }, []);
 
   const handleRefresh = useCallback(() => {
     onRefreshProp?.();
@@ -174,9 +183,21 @@ export function FullScreenFeed({
         if (upcoming.length > 0) {
           ExpoImage.prefetch(upcoming.map((p) => feedImageUrl(p.image_url)));
         }
+        // Record impression after 1 second of visibility
+        if (impressionTimer.current) clearTimeout(impressionTimer.current);
+        const post = posts[idx];
+        if (post && user && !recordedImpressions.current.has(post.id)) {
+          impressionTimer.current = setTimeout(() => {
+            recordedImpressions.current.add(post.id);
+            supabase.rpc('record_impression', {
+              p_user_id: user.id,
+              p_upload_id: post.id,
+            });
+          }, 1000);
+        }
       }
     },
-    [posts, onIndexChange]
+    [posts, onIndexChange, user]
   );
 
   if (isLoading) {

@@ -190,7 +190,7 @@ export function StylePickerSheet({
                 </TouchableOpacity>
               );
             })}
-            <View style={{ height: 20 }} />
+            <View style={{ height: insets.bottom + 40 }} />
           </ScrollView>
         </Animated.View>
       </GestureDetector>

@@ -331,10 +331,6 @@ export default function RootLayout() {
                 options={{ presentation: 'card', gestureEnabled: true }}
               />
               <Stack.Screen
-                name="dream/configure"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
                 name="dream/loading"
                 options={{ presentation: 'card', gestureEnabled: false }}
               />

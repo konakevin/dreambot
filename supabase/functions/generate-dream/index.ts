@@ -39,7 +39,6 @@ import {
   buildDreamScene,
 } from '../_shared/dreamEngine.ts';
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
-import { buildTextDreamPrompt } from '../_shared/textPrompts.ts';
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 
 const MAX_DAILY_GENERATIONS = 50;

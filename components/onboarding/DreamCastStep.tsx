@@ -158,6 +158,7 @@ function CastSlot({
 }
 
 export function DreamCastStep({ onNext, onBack }: Props) {
+  const isEditing = useOnboardingStore((s) => s.isEditing);
   const dreamCast = useOnboardingStore((s) => s.profile.dream_cast);
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
   const removeCastMember = useOnboardingStore((s) => s.removeCastMember);
@@ -238,11 +239,15 @@ export function DreamCastStep({ onNext, onBack }: Props) {
           if (descRes.ok) {
             const descData = await descRes.json();
             if (descData.description) {
+              // Re-read current member from store (user may have set relationship while describe was running)
+              const current = useOnboardingStore
+                .getState()
+                .profile.dream_cast.find((m) => m.role === role);
               setCastMember({
                 role,
                 thumb_url: publicUrl,
                 description: descData.description,
-                ...(existing?.relationship ? { relationship: existing.relationship } : {}),
+                ...(current?.relationship ? { relationship: current.relationship } : {}),
               });
               if (__DEV__)
                 console.log(`[DreamCast] Described ${role}:`, descData.description.slice(0, 60));
@@ -305,17 +310,19 @@ export function DreamCastStep({ onNext, onBack }: Props) {
             <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
             <Text style={s.backBtnText}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={s.nextBtn}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              onNext();
-            }}
-            activeOpacity={0.7}
-          >
-            <Text style={s.nextBtnText}>{dreamCast.length === 0 ? 'Skip' : 'Next'}</Text>
-            <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-          </TouchableOpacity>
+          {!isEditing && (
+            <TouchableOpacity
+              style={s.nextBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                onNext();
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={s.nextBtnText}>{dreamCast.length === 0 ? 'Skip' : 'Next'}</Text>
+              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

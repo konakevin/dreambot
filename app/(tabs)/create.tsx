@@ -21,6 +21,7 @@ import {
   Keyboard,
   Platform,
   Modal,
+  ActionSheetIOS,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
@@ -28,6 +29,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { Linking } from 'react-native';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
 import { CURATED_MEDIUMS, CURATED_VIBES } from '@/constants/dreamEngine';
@@ -112,16 +114,8 @@ export default function CreateScreen() {
     ? 'Describe how to reimagine it... or leave blank to stylize it.'
     : 'Describe your dream... or leave blank for a surprise.';
 
-  // Photo picker
-  async function handlePickPhoto() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      quality: 0.8,
-    });
-    if (result.canceled || !result.assets?.[0]) return;
-
-    const asset = result.assets[0];
+  // Process a picked/captured image asset
+  async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
     try {
       const compressed = await ImageManipulator.manipulateAsync(
         asset.uri,
@@ -136,6 +130,52 @@ export default function CreateScreen() {
     } catch {
       Toast.show('Could not process photo', 'close-circle');
     }
+  }
+
+  async function launchLibrary() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets?.[0]) {
+      await processPhotoAsset(result.assets[0]);
+    }
+  }
+
+  async function launchCamera() {
+    const existing = await ImagePicker.getCameraPermissionsAsync();
+    if (existing.status === 'denied' && !existing.canAskAgain) {
+      Toast.show('Enable camera in Settings', 'close-circle');
+      Linking.openSettings();
+      return;
+    }
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Toast.show('Camera permission required', 'close-circle');
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ['images'],
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets?.[0]) {
+      await processPhotoAsset(result.assets[0]);
+    }
+  }
+
+  // Photo picker — action sheet to choose camera or library
+  function handlePickPhoto() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Take Photo', 'Choose from Library', 'Cancel'],
+        cancelButtonIndex: 2,
+      },
+      (index) => {
+        if (index === 0) launchCamera();
+        else if (index === 1) launchLibrary();
+      }
+    );
   }
 
   function handleDream() {
@@ -317,7 +357,10 @@ export default function CreateScreen() {
         {/* Fixed footer — always visible above keyboard */}
         <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : 96 }}>
           {/* Contextual hint */}
-          <Text className="text-center text-xs mb-2" style={{ color: colors.textSecondary }}>
+          <Text
+            className="text-center text-sm font-medium mb-2"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+          >
             {contextHint}
           </Text>
 

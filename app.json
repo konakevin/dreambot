@@ -13,6 +13,7 @@
       "bundleIdentifier": "com.konakevin.radorbad",
       "associatedDomains": ["applinks:dreambotapp.com"],
       "infoPlist": {
+        "NSCameraUsageDescription": "DreamBot uses your camera to capture photos for AI dream generation.",
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [

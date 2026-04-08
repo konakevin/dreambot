@@ -444,7 +444,6 @@ export function DreamCard({
           {/* HUD — post info + side actions, toggled by single tap */}
           <Animated.View style={[StyleSheet.absoluteFill, hudStyle]} pointerEvents="box-none">
             <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
-              {item.bot_message && <Text style={s.botMessage}>{item.bot_message}</Text>}
               <MediumVibeBadge
                 mediumKey={item.dream_medium}
                 vibeKey={item.dream_vibe}
@@ -670,14 +669,5 @@ const s = StyleSheet.create({
     textShadowRadius: 16,
     textShadowOffset: { width: 0, height: 0 },
     marginTop: 1,
-  },
-  botMessage: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 13,
-    fontStyle: 'italic',
-    lineHeight: 18,
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowRadius: 16,
-    textShadowOffset: { width: 0, height: 0 },
   },
 });
