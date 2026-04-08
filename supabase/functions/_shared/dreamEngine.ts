@@ -102,12 +102,12 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Detailed pencil sketch on textured paper, confident graphite linework, hatching and cross-hatching, dramatic tonal range from white paper to velvet blacks, masterful draftsmanship',
   },
   {
-    key: 'cyberpunk',
-    label: 'Cyberpunk',
+    key: 'neon',
+    label: 'Neon',
     directive:
-      'This is a dystopian megacity — towering megastructures disappearing into smog, holographic advertisements the size of buildings, chrome and steel everywhere. Rain-soaked streets reflect neon from a thousand signs. Flying vehicles weave between skyscrapers. The scale is MASSIVE — humans are tiny against the architecture. Colors are electric cyan, hot pink, amber against deep black and steel grey. Blade Runner meets Ghost in the Shell. Every surface is reflective, wet, or glowing.',
+      "This scene is lit entirely by neon — glowing tube lights, LED strips, holographic projections. The background is dark (night, deep shadow, black surfaces) so the neon POPS with maximum contrast. Colors are electric: hot pink, cyan, purple, acid green, amber. Neon light bounces off wet surfaces — rain-slicked streets, chrome, glass — creating doubled reflections and color bleeds. There's atmospheric haze or fog that makes the light beams visible. The aesthetic is premium cyberpunk meets Tokyo night photography. Every surface is a canvas for reflected neon color.",
     fluxFragment:
-      'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
+      'Neon-lit night scene, glowing tube lights, electric cyan and hot pink, rain-slicked reflective surfaces, atmospheric fog catching light beams, dark moody background, cyberpunk noir',
   },
   {
     key: 'stained_glass',
@@ -206,26 +206,34 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Needle-felted stop-motion puppet, visible wool fiber texture, hand-crafted miniature set, real fabric clothing with tiny stitches, Laika Studios Coraline quality, dramatic cinematic lighting, handmade miniature world',
   },
   {
+    key: 'cyberpunk',
+    label: 'Cyberpunk',
+    directive:
+      'This is a dystopian megacity — towering megastructures disappearing into smog, holographic advertisements the size of buildings, chrome and steel everywhere. Rain-soaked streets reflect neon from a thousand signs. Flying vehicles weave between skyscrapers. The scale is MASSIVE — humans are tiny against the architecture. Colors are electric cyan, hot pink, amber against deep black and steel grey. Blade Runner meets Ghost in the Shell. Every surface is reflective, wet, or glowing.',
+    fluxFragment:
+      'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
+  },
+  {
     key: 'retro_poster',
     label: 'Retro Poster',
     directive:
-      'You are designing a vintage travel poster from the 1930s-1950s. Bold flat color blocks with no gradients — screen-printed aesthetic. Strong geometric shapes and simplified forms. Limited palette of 4-6 rich colors: deep teal, burnt orange, cream, burgundy, navy. Dramatic diagonal compositions with Art Deco influence. Subjects are stylized and iconic — silhouettes, simplified architecture, sweeping landscapes. No photorealism — this is graphic design as art. Think WPA national park posters, TWA airline ads, Swiss tourism prints.',
+      'You are designing a vintage travel poster from the 1930s-1950s. Bold flat color blocks with no gradients. Strong geometric shapes and simplified forms. Limited palette of 4-6 rich colors: deep teal, burnt orange, cream, burgundy, navy. Dramatic diagonal compositions with Art Deco influence. Subjects are stylized and iconic. No photorealism. Think WPA national park posters, TWA airline ads, Swiss tourism prints.',
     fluxFragment:
       'Vintage retro travel poster, bold flat color blocks, screen-printed aesthetic, Art Deco influence, simplified geometric forms, limited palette, 1940s illustration style, dramatic diagonal composition',
   },
   {
     key: 'childrens_book',
-    label: "Children's Book",
+    label: 'Storybook',
     directive:
-      "You are illustrating a page from a beloved children's picture book. Soft, warm watercolor-like washes with visible paper texture. Rounded, friendly character designs with exaggerated proportions — big heads, small bodies, expressive faces. Colors are warm and inviting — soft pastels mixed with rich accent colors. Environments feel cozy and magical. Gentle linework, hand-drawn quality. Think Beatrix Potter meets Studio Ghibli — whimsical, detailed, and full of tiny discoverable details that reward close looking. Every scene tells a story.",
+      'You are illustrating a page from a beloved children picture book. Soft, warm watercolor-like washes with visible paper texture. Rounded, friendly character designs with exaggerated proportions. Colors are warm and inviting. Environments feel cozy and magical. Gentle linework, hand-drawn quality. Think Beatrix Potter meets Studio Ghibli.',
     fluxFragment:
-      "Children's picture book illustration, soft watercolor washes on textured paper, rounded friendly character designs, warm inviting palette, gentle hand-drawn linework, cozy magical atmosphere, storybook quality",
+      'Children picture book illustration, soft watercolor washes on textured paper, rounded friendly character designs, warm inviting palette, gentle hand-drawn linework, cozy magical atmosphere, storybook quality',
   },
   {
     key: 'vaporwave',
     label: 'Vaporwave',
     directive:
-      'You are creating vaporwave aesthetic art — the visual language of internet nostalgia and retro-futurism. Greek/Roman marble busts and statues in unexpected contexts. Glitch effects — horizontal scan lines, RGB color separation, pixel sorting. Color palette is MANDATORY: hot pink, cyan, purple, and teal against black or deep purple backgrounds. Palm trees, sunsets, grid floors stretching to infinity. Japanese text fragments. VHS tracking artifacts. Windows 95 UI elements. The aesthetic is simultaneously beautiful and ironic — corporate muzak made visual.',
+      'You are creating vaporwave aesthetic art. Greek/Roman marble busts and statues in unexpected contexts. Glitch effects. Color palette is MANDATORY: hot pink, cyan, purple, and teal against black or deep purple backgrounds. Palm trees, sunsets, grid floors stretching to infinity. VHS tracking artifacts.',
     fluxFragment:
       'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation',
   },
@@ -233,7 +241,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'dark_fantasy',
     label: 'Dark Fantasy',
     directive:
-      'You are painting dark fantasy concept art — the visual world of Dark Souls, Berserk, and Elden Ring. Massive gothic architecture crumbling with age — cathedrals, fortresses, bridges spanning impossible chasms. Dark atmospheric lighting with dramatic god rays piercing through storm clouds. Characters wear ornate but battered armor. Creatures are terrifying and majestic. The palette is muted — ashen greys, deep blacks, blood reds, tarnished gold — with occasional shafts of ethereal light. Everything feels ancient, dangerous, and awe-inspiring. The scale is overwhelming.',
+      'You are painting dark fantasy concept art. Massive gothic architecture crumbling with age. Dark atmospheric lighting with dramatic god rays piercing through storm clouds. The palette is muted: ashen greys, deep blacks, blood reds, tarnished gold. Everything feels ancient, dangerous, and awe-inspiring. The scale is overwhelming. Dark Souls, Berserk, Elden Ring.',
     fluxFragment:
       'Dark fantasy concept art, gothic crumbling architecture, dramatic god rays, storm clouds, ornate battered armor, Dark Souls Elden Ring aesthetic, massive scale, muted ashen palette with blood red accents',
   },
@@ -241,7 +249,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'ukiyo_e',
     label: 'Ukiyo-e',
     directive:
-      'You are creating in the style of traditional Japanese woodblock prints — ukiyo-e masters like Hokusai and Hiroshige. Bold black outlines with flat color fills — no gradients or shading within shapes. Colors are specific: indigo blue, vermillion red, forest green, ochre yellow, ivory white. Waves curl in the iconic Hokusai style. Mountains appear as layered silhouettes. Clouds are stylized swirling patterns. Cherry blossoms and pine branches frame compositions. Everything has the characteristic flat perspective and decorative patterning of Edo-period prints.',
+      'You are creating in the style of traditional Japanese woodblock prints. Bold black outlines with flat color fills. Colors are specific: indigo blue, vermillion red, forest green, ochre yellow, ivory white. Waves curl in the iconic Hokusai style. Mountains appear as layered silhouettes. Clouds are stylized swirling patterns.',
     fluxFragment:
       'Japanese ukiyo-e woodblock print, bold black outlines, flat color fills, Hokusai wave style, indigo and vermillion palette, stylized clouds, traditional Edo period aesthetic, decorative composition',
   },
@@ -249,7 +257,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'art_deco',
     label: 'Art Deco',
     directive:
-      'You are designing in the Art Deco style of the 1920s-1930s — the age of Gatsby, golden age Hollywood, and the Chrysler Building. Geometric precision: symmetrical compositions, sunburst radiating patterns, chevrons, zigzags, stepped forms. The palette is luxurious: gold, black, cream, emerald green, deep navy. Materials are rich — polished brass, marble, lacquer, chrome. Typography is geometric and elegant. Architecture features strong vertical lines, tiered setbacks, and ornate geometric ornamentation. Everything exudes glamour, wealth, and machine-age optimism.',
+      'You are designing in the Art Deco style of the 1920s-1930s. Geometric precision: symmetrical compositions, sunburst radiating patterns, chevrons, zigzags, stepped forms. The palette is luxurious: gold, black, cream, emerald green, deep navy. Materials are rich: polished brass, marble, lacquer, chrome.',
     fluxFragment:
       'Art Deco style, geometric patterns, sunburst motifs, gold and black and emerald palette, polished brass and marble, 1920s glamour, Chrysler Building aesthetic, luxurious symmetrical composition',
   },
@@ -257,7 +265,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'steampunk',
     label: 'Steampunk',
     directive:
-      'You are building a steampunk world — Victorian-era technology powered by steam and clockwork, imagined to impossible extremes. Brass gears, copper pipes, riveted iron plates, leather straps, and glass pressure gauges are EVERYWHERE. Machines are ornate — covered in decorative filigree and unnecessary but beautiful mechanical complexity. Airships fill smoky skies. Characters wear goggles, top hats, corsets, and leather aviator gear. The palette is warm metallics: brass gold, copper, iron grey, leather brown, with jade green or sapphire blue accents. Steam vents from every surface.',
+      'You are building a steampunk world. Victorian-era technology powered by steam and clockwork. Brass gears, copper pipes, riveted iron plates, leather straps, and glass pressure gauges are EVERYWHERE. Machines are ornate. Airships fill smoky skies. Characters wear goggles, top hats, corsets, and leather aviator gear. The palette is warm metallics: brass gold, copper, iron grey, leather brown.',
     fluxFragment:
       'Steampunk aesthetic, brass gears and copper pipes, Victorian machinery, ornate mechanical complexity, airships, goggles and leather, warm metallic palette, steam venting, clockwork mechanisms',
   },
@@ -265,7 +273,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'cute_anime',
     label: 'Cute Anime',
     directive:
-      'You are drawing in kawaii/chibi anime style — maximum cuteness. Characters have oversized heads (3:1 head-to-body ratio), enormous sparkly eyes with multiple highlight reflections, tiny button noses, and small simple mouths. Bodies are short and rounded — stubby limbs, no sharp angles. Colors are soft pastels: baby pink, lavender, mint, powder blue, peach, with white highlights everywhere. Backgrounds are magical — floating hearts, stars, sparkles, rainbow gradients, cloud floors. Everything is round, soft, and adorable. Think Sanrio meets chibi anime — weaponized cuteness.',
+      'You are drawing in kawaii/chibi anime style. Characters have oversized heads (3:1 head-to-body ratio), enormous sparkly eyes with multiple highlight reflections, tiny button noses, and small simple mouths. Bodies are short and rounded. Colors are soft pastels: baby pink, lavender, mint, powder blue, peach, with white highlights everywhere. Backgrounds are magical. Everything is round, soft, and adorable. Think Sanrio meets chibi anime.',
     fluxFragment:
       'Kawaii chibi anime style, oversized heads, enormous sparkly eyes, pastel pink lavender mint palette, soft rounded forms, floating hearts and stars, sparkle effects, maximum cuteness, Sanrio aesthetic',
   },
@@ -273,7 +281,7 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
     key: 'dark_anime',
     label: 'Dark Anime',
     directive:
-      'You are creating seinen/dark anime art — the visual world of Ghost in the Shell, Akira, Attack on Titan, Cowboy Bebop. Characters have realistic proportions, sharp angular features, intense narrow eyes with single hard light reflections. Detailed mechanical and architectural designs. Color palette is muted and moody — deep indigo, gunmetal grey, dried blood red, sickly amber. Heavy atmospheric effects — rain, smoke, dust, lens flare. Backgrounds are hyper-detailed cityscapes or desolate wastelands. Lighting is dramatic and cinematic — harsh rim lights, deep shadows. Nothing cute — everything is serious, intense, and beautiful.',
+      'You are creating seinen/dark anime art. Characters have realistic proportions, sharp angular features, intense narrow eyes with single hard light reflections. Detailed mechanical and architectural designs. Color palette is muted and moody: deep indigo, gunmetal grey, dried blood red, sickly amber. Heavy atmospheric effects. Backgrounds are hyper-detailed cityscapes or desolate wastelands. Ghost in the Shell, Akira, Attack on Titan, Cowboy Bebop.',
     fluxFragment:
       'Dark seinen anime, sharp angular character design, intense narrow eyes, muted moody palette, hyper-detailed backgrounds, dramatic cinematic lighting, Ghost in the Shell Akira aesthetic, atmospheric rain and smoke',
   },
@@ -357,61 +365,13 @@ export const DREAM_VIBES: DreamVibe[] = [
 
 // ── Helpers ─────────────────────────────────────────────────────────────
 
-/** Get only the curated mediums (excludes Surprise Me — includes aggregates) */
+/** Get only the curated mediums (excludes My Mediums and Surprise Me) */
 export const CURATED_MEDIUMS = DREAM_MEDIUMS.filter(
-  (m) => m.directive !== null || m.includes_mediums?.length
+  (m) => m.directive !== null || (m.includes_mediums && m.includes_mediums.length > 0)
 );
 
 /** Get only the curated vibes (excludes My Vibes and Surprise Me) */
 export const CURATED_VIBES = DREAM_VIBES.filter((v) => v.directive !== null);
-
-/** Const key arrays — single source of truth for ArtStyle and Aesthetic union types */
-export const MEDIUM_KEYS = [
-  'pixel_art',
-  'watercolor',
-  'oil_painting',
-  'anime',
-  'lego',
-  'claymation',
-  '3d_render',
-  'pencil_sketch',
-  'cyberpunk',
-  'stained_glass',
-  'comic_book',
-  'embroidery',
-  'disney',
-  'sack_boy',
-  'funko_pop',
-  'ghibli',
-  'tim_burton',
-  'pop_art',
-  'minecraft',
-  '8bit',
-  'felt',
-  'retro_poster',
-  'childrens_book',
-  'vaporwave',
-  'dark_fantasy',
-  'ukiyo_e',
-  'art_deco',
-  'steampunk',
-  'cute_anime',
-  'dark_anime',
-] as const;
-
-export const VIBE_KEYS = [
-  'cinematic',
-  'dreamy',
-  'dark',
-  'chaos',
-  'cozy',
-  'minimal',
-  'epic',
-  'nostalgic',
-  'psychedelic',
-  'peaceful',
-  'whimsical',
-] as const;
 
 /** Pick a random curated medium */
 export function randomMedium(): DreamMedium {
@@ -427,26 +387,56 @@ export function randomVibe(): DreamVibe {
  * Subject invention prompt for when the user provides no input.
  * Uses their profile interests/aesthetics for flavor.
  */
+import { DREAM_SCENE_TEMPLATES } from './dreamTemplates.ts';
+
+/**
+ * Build a dream scene by picking a random Sonnet-generated template
+ * and filling its slots with the user's dream seeds.
+ * No AI call needed — the templates ARE the creativity.
+ */
+export function buildDreamScene(dreamSeeds: {
+  characters: string[];
+  places: string[];
+  things: string[];
+}): string {
+  const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+  const template = pick(DREAM_SCENE_TEMPLATES);
+
+  // Fill template slots with random seeds, or generic fallbacks
+  const character =
+    dreamSeeds.characters.length > 0 ? pick(dreamSeeds.characters) : 'a wandering figure';
+  const place = dreamSeeds.places.length > 0 ? pick(dreamSeeds.places) : 'a forgotten city';
+  const thing = dreamSeeds.things.length > 0 ? pick(dreamSeeds.things) : 'glowing fragments';
+
+  return template
+    .replace(/\$\{character\}/g, character)
+    .replace(/\$\{place\}/g, place)
+    .replace(/\$\{thing\}/g, thing);
+}
+
+/**
+ * Fallback: AI-powered subject invention for when templates aren't enough.
+ * Uses Haiku to riff on seeds — called by the V2 text path.
+ */
 export function buildSubjectInventionPrompt(
-  interests: string[],
-  aesthetics: string[],
-  spiritCompanion?: string | null
+  dreamSeeds: { characters: string[]; places: string[]; things: string[] },
+  aesthetics: string[]
 ): string {
-  const flavorParts: string[] = [];
-  if (interests.length > 0) flavorParts.push(`Interests: ${interests.join(', ')}`);
-  if (aesthetics.length > 0) flavorParts.push(`Aesthetics: ${aesthetics.join(', ')}`);
-  if (spiritCompanion) flavorParts.push(`Spirit companion: ${spiritCompanion}`);
-  const flavor =
-    flavorParts.length > 0
-      ? `\n\nDraw inspiration from this taste profile:\n${flavorParts.join('\n')}`
-      : '';
+  const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-  return `You are DreamBot. The user wants to be surprised with something beautiful to look at. Invent a compelling, visually rich subject for a dream image.
+  const allSeeds = [...dreamSeeds.characters, ...dreamSeeds.places, ...dreamSeeds.things];
+  const shuffled = [...allSeeds].sort(() => Math.random() - 0.5);
+  const picked = shuffled.slice(0, Math.min(allSeeds.length, 2));
 
-DO NOT be generic. No "a sunset over the ocean" or "a beautiful landscape." Instead, be SPECIFIC and unexpected:
-- "A fox wearing a tiny astronaut helmet, floating through a field of bioluminescent jellyfish"
-- "An ancient library where the books are growing like trees, their pages rustling with golden light"
-- "A street food cart in a rainy cyberpunk alley, steam rising into holographic advertisements"
-${flavor}
-Output ONLY the subject description, 10-20 words. Nothing else.`;
+  const seedHint = picked.length > 0 ? `Raw ingredients (use loosely): ${picked.join(', ')}` : '';
+
+  const aestheticHint = aesthetics.length > 0 ? `Aesthetic: ${aesthetics.join(', ')}` : '';
+
+  return `Dream up a scene. Be surreal, impossible, beautiful, unsettling. Surprise me.
+
+${seedHint}
+${aestheticHint}
+
+15-30 words. What do we SEE? Output ONLY the scene description.`;
 }
