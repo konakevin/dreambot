@@ -950,89 +950,133 @@ Output ONLY the prompt.`;
       console.log('[generate-dream] Restyle prompt:', finalPrompt.slice(0, 150));
       lap('restyle-done');
     } else {
-      // ── TEXT PATH: medium-specific prompt or concept generator fallback ──
-      let userSubject = rawPrompt ?? hint ?? '';
-      if (!userSubject && vibeProfile) {
-        try {
-          const seeds = vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] };
-          const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
-          const subjectPrompt = buildSubjectInventionPrompt(
-            vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] },
-            vibeProfile.aesthetics
-          );
-          userSubject =
-            allSeeds.length > 0
-              ? await enhanceViaHaiku(subjectPrompt, '', ANTHROPIC_KEY, 60)
-              : 'a mysterious dreamscape with unexpected elements';
-          console.log('[generate-dream] Invented subject:', userSubject);
-        } catch {
-          userSubject = 'a mysterious dreamscape with unexpected elements';
+      // ── TEXT PATH ──
+      const userSubject = rawPrompt ?? hint ?? '';
+
+      if (userSubject) {
+        // User provided a prompt — try textPrompts.ts template first, fall back to directive
+        const textBrief = buildTextDreamPrompt(
+          medium.key,
+          userSubject,
+          vibe.directive!,
+          medium.fluxFragment!
+        );
+
+        if (textBrief) {
+          console.log('[generate-dream] V2 text using textPrompts template:', medium.key);
+          try {
+            finalPrompt = await enhanceViaHaiku(textBrief, '', ANTHROPIC_KEY, 150);
+            if (finalPrompt.length < 10) throw new Error('too short');
+          } catch {
+            finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
+          }
+        } else {
+          // No textPrompts template — use directive approach
+          const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
+
+MEDIUM: ${medium.fluxFragment}
+
+STYLE GUIDE:
+${medium.directive}
+
+SUBJECT: ${userSubject}
+
+MOOD: ${vibe.directive}
+
+Start with the art medium. End with: no text, no words, no letters, no watermarks, hyper detailed.
+Output ONLY the prompt.`;
+          try {
+            finalPrompt = await nightlySonnet(userBrief, ANTHROPIC_KEY, 200);
+            if (finalPrompt.length < 10) throw new Error('too short');
+          } catch {
+            finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
+          }
         }
-        lap('subject-invention');
-      }
 
-      // Try medium-specific template first (best results)
-      const textBrief = buildTextDreamPrompt(
-        medium.key,
-        userSubject,
-        vibe.directive!,
-        medium.fluxFragment!
-      );
-
-      if (textBrief) {
-        // Medium-specific path — single Haiku call writes the optimized Flux prompt
-        console.log('[generate-dream] Text dream using medium template:', medium.key);
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: textBrief ? 'v2-text-template' : 'v2-text-directive',
+        };
+        console.log('[generate-dream] V2 text prompt:', finalPrompt.slice(0, 150));
+        lap('text-prompt-done');
+      } else {
+        // No user prompt — "Surprise Me" — use nightly-quality cinematographer brief
+        // Pick a random dream template from DB (same as nightly, but NO cast/seeds/personal data)
+        let dreamScene = 'a surreal impossible dreamscape with unexpected elements';
         try {
-          finalPrompt = await enhanceViaHaiku(textBrief, '', ANTHROPIC_KEY, 150);
+          const categories = [
+            'cosmic',
+            'impossible_architecture',
+            'peaceful_absurdity',
+            'bioluminescence',
+            'joyful_chaos',
+            'overgrown',
+            'broken_gravity',
+            'merged_worlds',
+            'underwater',
+            'cinematic',
+          ];
+          const category = categories[Math.floor(Math.random() * categories.length)];
+          const { data: rows } = await supabase
+            .from('dream_templates')
+            .select('template')
+            .eq('category', category)
+            .eq('disabled', false)
+            .limit(200);
+          if (rows && rows.length > 0) {
+            const template = rows[Math.floor(Math.random() * rows.length)].template;
+            dreamScene = template
+              .replace(/\$\{character\}/g, 'a wandering figure')
+              .replace(/\$\{place\}/g, 'a forgotten city')
+              .replace(/\$\{thing\}/g, 'glowing fragments');
+          }
+        } catch {
+          // Use fallback
+        }
+
+        const SHOTS = [
+          'wide establishing shot, vast environment, epic scale',
+          'extreme low angle looking up, towering architecture',
+          'aerial view looking down, geometric patterns',
+          'symmetrical composition, detailed architecture flanking both sides',
+          'tilt-shift miniature effect, diorama quality',
+          'dramatic portrait integrated into environment, surreal world fills frame',
+        ];
+        const shotDirection = SHOTS[Math.floor(Math.random() * SHOTS.length)];
+
+        const v2Brief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
+
+MEDIUM: ${medium.fluxFragment}
+
+STYLE GUIDE:
+${medium.directive}
+
+DREAM SCENE (this is sacred — do NOT water it down):
+${dreamScene}
+
+CAMERA: ${shotDirection}
+MOOD: ${vibe.directive}
+
+Write the prompt:
+1. Start with the art medium
+2. Describe the EXACT scene — every surreal detail preserved
+3. NO PEOPLE. NO CHARACTERS. NO FIGURES. Pure environment.
+4. Name specific materials, textures, light sources (NOUNS not adjectives)
+5. End with: no text, no words, no letters, no watermarks, hyper detailed
+Output ONLY the prompt.`;
+
+        try {
+          finalPrompt = await nightlySonnet(v2Brief, ANTHROPIC_KEY, 200);
           if (finalPrompt.length < 10) throw new Error('too short');
         } catch {
-          finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
-        }
-      } else {
-        // Fallback: concept generator → polisher (for unknown mediums)
-        let concept: ConceptRecipe;
-        const conceptBrief = buildConceptPromptV2({
-          mediumDirective: medium.directive!,
-          vibeDirective: vibe.directive!,
-          fluxFragment: medium.fluxFragment!,
-          userPrompt: userSubject || undefined,
-        });
-
-        try {
-          const conceptRaw = await haikuJson(conceptBrief, ANTHROPIC_KEY, 600);
-          concept = JSON.parse(conceptRaw) as ConceptRecipe;
-          conceptJson = concept as unknown as Record<string, unknown>;
-        } catch {
-          concept = vibeProfile
-            ? buildFallbackConcept(vibeProfile)
-            : {
-                subject: userSubject || 'a mysterious dreamscape',
-                environment: 'an atmospheric setting',
-                lighting: 'dramatic golden hour light',
-                camera: '35mm wide angle',
-                style: medium.fluxFragment?.split(',')[0] ?? 'digital art',
-                palette: 'vivid and expressive',
-                twist: 'unexpected reflections',
-                composition: 'center subject',
-                mood: 'dreamlike wonder',
-              };
+          finalPrompt = `${medium.fluxFragment}, ${dreamScene}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
         }
 
-        const polisherBrief = buildPolisherPromptV2(concept, medium.fluxFragment!);
-        try {
-          const polished = await enhanceViaHaiku(polisherBrief, '', ANTHROPIC_KEY, 150);
-          finalPrompt = polished.length >= 10 ? polished : buildFallbackFluxPrompt(concept);
-        } catch {
-          finalPrompt = buildFallbackFluxPrompt(concept);
-        }
+        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-surprise' };
+        console.log('[generate-dream] V2 surprise (nightly-quality):', finalPrompt.slice(0, 150));
+        lap('surprise-done');
       }
-
-      console.log('[generate-dream] Text dream prompt:', finalPrompt.slice(0, 150));
-      logAxes = {
-        medium: medium.key,
-        vibe: vibe.key,
-        engine: textBrief ? 'v2-text-medium' : 'v2-text-concept',
-      };
     }
     lap('v2-engine-done');
   } else if (rawPrompt) {

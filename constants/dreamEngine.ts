@@ -86,12 +86,20 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets, theatrical warm lighting, Laika Studios quality',
   },
   {
+    key: '3d_cartoon',
+    label: '3D Cartoon',
+    directive:
+      'You are a Pixar/DreamWorks-level character designer and environment artist. Everything has that premium animated film quality — soft, rounded shapes with appealing exaggerated proportions. Characters have oversized expressive eyes with complex reflections, subsurface scattering on skin making them glow with life. Environments are lush, colorful, and art-directed with volumetric lighting, god rays, and warm bounce light. Every frame should look like a poster for a $200M animated feature. NOT photorealistic — this is stylized cartoon 3D.',
+    fluxFragment:
+      'Pixar-quality 3D animated cartoon render, soft rounded appealing shapes, oversized expressive eyes, subsurface scattering, volumetric lighting, vibrant art-directed color palette, cinematic depth of field, animated film quality',
+  },
+  {
     key: '3d_render',
     label: '3D Render',
     directive:
-      'You are a Pixar-level character designer and environment artist. Everything has that premium animated film quality — soft, rounded shapes with appealing proportions. Subsurface scattering on skin makes characters glow with life. Materials are physically accurate but stylized: glossy eyes with complex reflections, soft cloth with microfiber detail, translucent ears and fingertips. Environments are lush with volumetric lighting — god rays, atmospheric haze, warm bounce light. Color palettes are carefully art-directed, not random. Every frame should look like it could be a poster for a $200M animated feature.',
+      'You are a AAA game cinematic artist working in Unreal Engine 5. Photorealistic 3D rendering with physically based materials — real metal reflections, accurate glass refraction, skin pores and peach fuzz visible. Environments have ray-traced global illumination, volumetric fog, and cinematic depth of field. Textures are hyper-detailed — weathered concrete, wet asphalt, brushed steel, worn leather. Lighting is motivated and cinematic — dramatic rim lights, atmospheric haze, practical light sources. Everything looks like a movie-quality CGI render, NOT cartoon.',
     fluxFragment:
-      'Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, physically based materials, vibrant art-directed color palette, cinematic depth of field',
+      'Photorealistic 3D render, Unreal Engine 5 quality, ray-traced global illumination, physically based materials, hyper-detailed textures, cinematic lighting, volumetric fog, movie-quality CGI',
   },
   // pencil_sketch removed — Flux can't render authentic pencil sketch style
   {
@@ -359,6 +367,7 @@ export const MEDIUM_KEYS = [
   'anime',
   'lego',
   'claymation',
+  '3d_cartoon',
   '3d_render',
   'cyberpunk',
   'comic_book',

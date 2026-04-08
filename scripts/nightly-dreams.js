@@ -89,9 +89,14 @@ const CURATED_MEDIUMS = [
       'Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets, theatrical warm lighting, Laika Studios quality',
   },
   {
+    key: '3d_cartoon',
+    fluxFragment:
+      'Pixar-quality 3D animated cartoon render, soft rounded appealing shapes, oversized expressive eyes, subsurface scattering, volumetric lighting, vibrant art-directed color palette, cinematic depth of field, animated film quality',
+  },
+  {
     key: '3d_render',
     fluxFragment:
-      'Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, physically based materials, vibrant art-directed color palette, cinematic depth of field',
+      'Photorealistic 3D render, Unreal Engine 5 quality, ray-traced global illumination, physically based materials, hyper-detailed textures, cinematic lighting, volumetric fog, movie-quality CGI',
   },
   // pencil_sketch removed — inconsistent results in nightly
   // neon removed — replaced with cyberpunk
