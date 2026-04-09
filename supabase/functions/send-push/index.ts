@@ -34,7 +34,11 @@ function getNotificationContent(type: string, actorName: string, body: string | 
     case 'friend_request':
       return { title: `${actorName} wants to dream with you`, body: 'Tap to respond' };
     case 'friend_accepted':
-      return { title: `${actorName} accepted your dream request`, body: "You're now dreamers!" };
+      return { title: `${actorName} accepted your friend request`, body: "You're now friends!" };
+    case 'follow_request':
+      return { title: `${actorName} requested to follow you`, body: 'Tap to approve or deny' };
+    case 'follow_accepted':
+      return { title: `${actorName} accepted your follow request`, body: '' };
     case 'dream_generated':
       return {
         title: 'A new dream awaits',

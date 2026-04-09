@@ -7,6 +7,7 @@ import { queryClient } from '@/lib/queryClient';
 interface AuthState {
   session: Session | null;
   user: User | null;
+  isAdmin: boolean;
   initialized: boolean;
   setSession: (session: Session | null) => void;
   signOut: () => Promise<void>;
@@ -16,9 +17,26 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
   user: null,
+  isAdmin: false,
   initialized: false,
 
-  setSession: (session) => set({ session, user: session?.user ?? null }),
+  setSession: (session) => {
+    set({ session, user: session?.user ?? null });
+    // Check admin status
+    if (session?.user) {
+      supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', session.user.id)
+        .single()
+        .then(({ data }) => {
+          const row = data as unknown as { is_admin?: boolean } | null;
+          set({ isAdmin: !!row?.is_admin });
+        });
+    } else {
+      set({ isAdmin: false });
+    }
+  },
 
   signOut: async () => {
     await supabase.auth.signOut();

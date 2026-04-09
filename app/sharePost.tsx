@@ -159,7 +159,7 @@ export default function SharePostScreen() {
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search fellow dreamers"
+            placeholder="Search friends"
             placeholderTextColor={colors.textSecondary}
             value={search}
             onChangeText={setSearch}

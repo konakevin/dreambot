@@ -5,6 +5,7 @@ export interface PublicProfile {
   id: string;
   username: string;
   avatar_url: string | null;
+  is_public: boolean;
   postCount: number;
   followerCount: number;
   followingCount: number;
@@ -28,6 +29,7 @@ export function usePublicProfile(userId: string) {
         id: row.id as string,
         username: row.username as string,
         avatar_url: (row.avatar_url as string | null) ?? null,
+        is_public: (row.is_public as boolean) ?? false,
         postCount: Number(row.post_count),
         followerCount: Number(row.follower_count),
         followingCount: Number(row.following_count),

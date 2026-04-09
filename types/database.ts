@@ -844,6 +844,7 @@ export type Database = {
           email: string;
           has_ai_recipe: boolean;
           id: string;
+          is_public: boolean;
           last_active_at: string | null;
           sparkle_balance: number;
           username: string;
@@ -854,6 +855,7 @@ export type Database = {
           email: string;
           has_ai_recipe?: boolean;
           id: string;
+          is_public?: boolean;
           last_active_at?: string | null;
           sparkle_balance?: number;
           username: string;
@@ -864,6 +866,7 @@ export type Database = {
           email?: string;
           has_ai_recipe?: boolean;
           id?: string;
+          is_public?: boolean;
           last_active_at?: string | null;
           sparkle_balance?: number;
           username?: string;
@@ -906,10 +909,12 @@ export type Database = {
           p_cursor_id?: string;
           p_cursor_score?: number;
           p_limit?: number;
+          p_medium?: string;
           p_offset?: number;
           p_seed?: number;
           p_tab?: string;
           p_user_id: string;
+          p_vibe?: string;
         };
         Returns: {
           ai_concept: Json;
@@ -972,9 +977,14 @@ export type Database = {
           following_count: number;
           friend_count: number;
           id: string;
+          is_public: boolean;
           post_count: number;
           username: string;
         }[];
+      };
+      block_user: {
+        Args: { p_blocked_id: string };
+        Returns: undefined;
       };
       get_replies: {
         Args: { p_comment_id: string; p_limit?: number };

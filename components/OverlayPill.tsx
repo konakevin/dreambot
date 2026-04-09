@@ -34,7 +34,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 105,
+    paddingHorizontal: 14,
   },
   pillActive: {
     backgroundColor: 'rgba(0,0,0,0.6)',

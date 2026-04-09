@@ -4,7 +4,6 @@ import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
-import { useUserDreams } from '@/hooks/useUserDreams';
 import { PostTile } from '@/components/PostTile';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
@@ -17,8 +16,7 @@ export type PostGridSource =
   | { type: 'own' }
   | { type: 'saved' }
   | { type: 'dreams' }
-  | { type: 'user'; userId: string }
-  | { type: 'userDreams'; userId: string };
+  | { type: 'user'; userId: string };
 
 interface PostGridProps {
   source: PostGridSource;
@@ -51,25 +49,14 @@ export function PostGrid({
   const isSaved = source.type === 'saved';
   const isDreams = source.type === 'dreams';
   const isUser = source.type === 'user';
-  const isUserDreams = source.type === 'userDreams';
-  const userId =
-    source.type === 'user' ? source.userId : source.type === 'userDreams' ? source.userId : '';
+  const userId = isUser ? source.userId : '';
 
   const ownQuery = useUserPosts(isOwn_);
   const savedQuery = useFavoritePosts(isSaved);
   const userQuery = usePublicProfilePosts(userId, isUser);
   const dreamsQuery = useMyDreams();
-  const userDreamsQuery = useUserDreams(userId, isUserDreams);
 
-  const activeQuery = isOwn_
-    ? ownQuery
-    : isSaved
-      ? savedQuery
-      : isDreams
-        ? dreamsQuery
-        : isUserDreams
-          ? userDreamsQuery
-          : userQuery;
+  const activeQuery = isOwn_ ? ownQuery : isSaved ? savedQuery : isDreams ? dreamsQuery : userQuery;
 
   const posts: DreamPostItem[] = useMemo(
     () => activeQuery.data?.pages.flatMap((p) => p.rows) ?? [],

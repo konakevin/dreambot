@@ -1,4 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
+import { Toast } from '@/components/Toast';
 import { useState, useEffect } from 'react';
 import {
   View,
@@ -8,6 +9,7 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  Switch,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -51,15 +53,18 @@ export default function SettingsScreen() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isPublic, setIsPublic] = useState(false);
   useEffect(() => {
     if (!user) return;
     supabase
       .from('users')
-      .select('is_admin')
+      .select('is_admin, is_public')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
-        if ((data as unknown as { is_admin?: boolean })?.is_admin) setIsAdmin(true);
+        const row = data as unknown as { is_admin?: boolean; is_public?: boolean };
+        if (row?.is_admin) setIsAdmin(true);
+        if (row?.is_public) setIsPublic(true);
       });
   }, [user]);
   const queryClient = useQueryClient();
@@ -312,6 +317,33 @@ export default function SettingsScreen() {
             onPress={() => {}}
             trailing={<Text style={styles.rowValue}>{user?.email}</Text>}
           />
+        </View>
+
+        {/* Privacy */}
+        <Text style={styles.sectionHeader}>PRIVACY</Text>
+        <View style={styles.section}>
+          <View style={styles.row}>
+            <Ionicons name="lock-closed-outline" size={20} color={colors.accent} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rowLabel}>Public Profile</Text>
+              <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+                {isPublic ? 'Everyone can see your posts' : 'Only friends can see your posts'}
+              </Text>
+            </View>
+            <Switch
+              value={isPublic}
+              onValueChange={async (val) => {
+                setIsPublic(val);
+                await supabase.from('users').update({ is_public: val }).eq('id', user!.id);
+                queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+                if (val) {
+                  Toast.show('All pending follow requests approved', 'checkmark-circle');
+                }
+              }}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
         </View>
 
         {/* Sparkles */}

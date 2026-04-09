@@ -17,7 +17,7 @@ import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-type FeedTab = 'forYou' | 'following' | 'dreamers';
+type FeedTab = 'forYou' | 'following';
 const PAGE_SIZE = 20;
 
 /**
@@ -96,7 +96,6 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
   const tabs: { key: FeedTab; label: string }[] = [
     { key: 'following', label: 'Following' },
     { key: 'forYou', label: 'Explore' },
-    { key: 'dreamers', label: 'Dreamers' },
   ];
 
   return (
@@ -119,12 +118,7 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
     following: {
       icon: 'people-outline',
       title: 'No dreams from people you follow',
-      sub: 'Follow dreamers to see their creations',
-    },
-    dreamers: {
-      icon: 'heart-outline',
-      title: 'No dreams from your dreamers',
-      sub: 'Connect with dreamers to see their art',
+      sub: 'Follow people to see their creations',
     },
   };
   const m = msgs[tab];
@@ -226,16 +220,16 @@ export default function HomeScreen() {
           pointerEvents="box-none"
         >
           <View style={s.topRow}>
-            <View style={{ flex: 1 }} />
+            <View style={{ flex: 1, minWidth: 42 }} />
             <FeedTabs active={activeTab} onChange={handleTabChange} />
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+            <View style={{ flex: 1, alignItems: 'flex-end', minWidth: 42 }}>
               <TouchableOpacity
                 style={s.searchButton}
                 onPress={() => nav.push('/search')}
                 activeOpacity={0.7}
                 hitSlop={12}
               >
-                <Ionicons name="search" size={26} color="rgba(255,255,255,0.8)" />
+                <Ionicons name="search" size={22} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           </View>
@@ -265,5 +259,5 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
   },
   feedTabs: { flexDirection: 'row', gap: 8 },
-  searchButton: { padding: 8 },
+  searchButton: { padding: 8, marginRight: 4 },
 });

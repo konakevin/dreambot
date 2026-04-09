@@ -657,7 +657,7 @@ Output ONLY the message, nothing else.`,
             dream_medium: dreamMediumKey,
             dream_vibe: dreamVibeKey,
             is_approved: true,
-            is_active: true,
+            is_active: false,
             from_wish: wish || null,
             bot_message: botMessage,
           })

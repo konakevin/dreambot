@@ -1437,7 +1437,6 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
           ai_concept: conceptJson,
           dream_medium: resolvedMediumKey ?? null,
           dream_vibe: resolvedVibeKey ?? null,
-          visibility: 'private',
           is_active: false,
           is_posted: false,
           width: 768,
@@ -1659,22 +1658,28 @@ function pickModel(
     return { model: 'black-forest-labs/flux-kontext-pro', inputOverrides: {} };
   }
 
-  // SDXL routing by medium key (preferred — exact match)
-  const SDXL_PREFERRED_MEDIUMS = new Set(['anime', 'pixel_art']);
-  if (mediumKey && SDXL_PREFERRED_MEDIUMS.has(mediumKey)) {
+  // SDXL routing by medium key
+  const SDXL_ALWAYS = new Set(['anime', 'pixel_art']);
+  const SDXL_HALF = new Set(['ghibli']); // 50/50 SDXL vs Flux
+  if (mediumKey && SDXL_ALWAYS.has(mediumKey)) {
+    return { model: 'sdxl', inputOverrides: sdxlOverrides };
+  }
+  if (mediumKey && SDXL_HALF.has(mediumKey) && Math.random() < 0.5) {
     return { model: 'sdxl', inputOverrides: sdxlOverrides };
   }
 
-  // SDXL fallback by keyword (for legacy/recipe paths)
-  const p = prompt.toLowerCase();
-  if (
-    p.includes('anime') ||
-    p.includes('manga') ||
-    p.includes('pixel art') ||
-    p.includes('8-bit') ||
-    p.includes('16-bit')
-  ) {
-    return { model: 'sdxl', inputOverrides: sdxlOverrides };
+  // SDXL fallback by keyword (for legacy/recipe paths — only when no medium key provided)
+  if (!mediumKey) {
+    const p = prompt.toLowerCase();
+    if (
+      p.includes('anime') ||
+      p.includes('manga') ||
+      p.includes('pixel art') ||
+      p.includes('8-bit') ||
+      p.includes('16-bit')
+    ) {
+      return { model: 'sdxl', inputOverrides: sdxlOverrides };
+    }
   }
 
   // Default: Flux Dev

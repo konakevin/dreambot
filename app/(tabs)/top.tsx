@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
+import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
@@ -29,29 +29,23 @@ const PAGE_SIZE = 20;
 function useExploreDreams(mediums: string[], vibes: string[]) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const medium = mediums[0] ?? null;
+  const vibe = vibes[0] ?? null;
 
   return useInfiniteQuery({
-    queryKey: ['explore', mediums.sort().join(','), vibes.sort().join(','), feedSeed],
+    queryKey: ['explore', medium ?? '', vibe ?? '', feedSeed],
     queryFn: async ({ pageParam }): Promise<DreamPostItem[]> => {
-      const offset = pageParam as number;
-      let query = supabase
-        .from('uploads')
-        .select(POST_SELECT)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .range(offset, offset + PAGE_SIZE - 1);
-
-      if (mediums.length > 0) {
-        query = query.in('dream_medium', mediums);
-      }
-      if (vibes.length > 0) {
-        query = query.in('dream_vibe', vibes);
-      }
-
-      const { data, error } = await query;
+      const { data, error } = await supabase.rpc('get_feed', {
+        p_user_id: user!.id,
+        p_limit: PAGE_SIZE,
+        p_offset: pageParam as number,
+        p_seed: feedSeed,
+        p_tab: 'forYou',
+        ...(medium ? { p_medium: medium } : {}),
+        ...(vibe ? { p_vibe: vibe } : {}),
+      });
       if (error) throw error;
-
-      return castRows(data).map(mapToDreamPost);
+      return castRows(data).map(mapRpcToDreamPost);
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, _allPages, lastParam) =>

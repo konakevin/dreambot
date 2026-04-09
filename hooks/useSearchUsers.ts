@@ -6,6 +6,7 @@ export interface SearchUser {
   id: string;
   username: string;
   avatarUrl: string | null;
+  isPublic: boolean;
 }
 
 export function useSearchUsers(query: string) {
@@ -16,7 +17,7 @@ export function useSearchUsers(query: string) {
     queryFn: async (): Promise<SearchUser[]> => {
       const { data, error } = await supabase
         .from('users')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, is_public')
         .ilike('username', `%${query}%`)
         .neq('id', user!.id)
         .limit(20);
@@ -26,6 +27,7 @@ export function useSearchUsers(query: string) {
         id: u.id,
         username: u.username,
         avatarUrl: u.avatar_url,
+        isPublic: ((u as Record<string, unknown>).is_public as boolean) ?? true,
       }));
     },
     enabled: !!user && query.trim().length >= 2,

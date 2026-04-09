@@ -579,7 +579,7 @@ Output ONLY the message, nothing else.`,
       from_wish: wish,
       bot_message: botMessage,
       is_approved: true,
-      is_active: true,
+      is_active: false,
     })
     .select('id')
     .single();

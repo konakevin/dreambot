@@ -1,30 +1,23 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
 
-export type StatsTab = 'posts' | 'friends' | 'followers' | 'following';
+export type StatsTab = 'posts' | 'followers' | 'following';
 
 interface Props {
   postCount: number;
-  friendCount: number;
   followerCount: number;
   followingCount: number;
   activeTab: StatsTab;
   onTabChange: (tab: StatsTab) => void;
-  pendingCount?: number;
-  hiddenTabs?: StatsTab[];
 }
 
 export function ProfileStatsRow({
   postCount,
-  friendCount,
   followerCount,
   followingCount,
   activeTab,
   onTabChange,
-  pendingCount = 0,
-  hiddenTabs = [],
 }: Props) {
-  const hidden = new Set(hiddenTabs);
   return (
     <View style={styles.statsRow}>
       <TouchableOpacity
@@ -37,28 +30,6 @@ export function ProfileStatsRow({
           Posts
         </Text>
       </TouchableOpacity>
-      {!hidden.has('friends') && (
-        <>
-          <View style={styles.statDivider} />
-          <TouchableOpacity
-            style={styles.stat}
-            onPress={() => onTabChange('friends')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.statWithBadge}>
-              <Text style={styles.statNumber}>{friendCount}</Text>
-              {pendingCount > 0 && (
-                <View style={styles.pendingBadge}>
-                  <Text style={styles.pendingBadgeText}>{pendingCount}</Text>
-                </View>
-              )}
-            </View>
-            <Text style={[styles.statLabel, activeTab === 'friends' && styles.statLabelActive]}>
-              Dreamers
-            </Text>
-          </TouchableOpacity>
-        </>
-      )}
       <View style={styles.statDivider} />
       <TouchableOpacity
         style={styles.stat}
@@ -91,16 +62,5 @@ const styles = StyleSheet.create({
   statNumber: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
   statLabel: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
   statLabelActive: { color: colors.textPrimary },
-  statWithBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  pendingBadge: {
-    backgroundColor: colors.error,
-    borderRadius: 8,
-    minWidth: 16,
-    height: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 4,
-  },
-  pendingBadgeText: { color: '#FFFFFF', fontSize: 10, fontWeight: '800' },
   statDivider: { width: 0.5, height: 28, backgroundColor: colors.border },
 });

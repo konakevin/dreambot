@@ -12,6 +12,7 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import { useDeletePost } from '@/hooks/useDeletePost';
+import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { useAlbumStore } from '@/store/album';
@@ -131,6 +132,7 @@ export function PostTile({
   showPrivateBadge = false,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
+  const isAdminUser = useAuthStore((s) => s.isAdmin);
   const isWish = !!item.from_wish;
 
   const hazeOpacity = useSharedValue(0.3);
@@ -158,7 +160,7 @@ export function PostTile({
     handleImageLongPress({
       id: item.id,
       imageUrl: item.image_url,
-      onDelete: isOwn ? () => deletePost(item.id) : undefined,
+      onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
     });
   }
 

@@ -2,23 +2,15 @@ name: Bot Dream Generation
 
 on:
   schedule:
-    # Run 10 times throughout the day (every ~2.5 hours)
-    # Each run picks ONE random bot and generates 1 dream
-    # With random delays, this spreads 10 posts across the full day
-    - cron: '0 0 * * *'
-    - cron: '30 2 * * *'
-    - cron: '0 5 * * *'
-    - cron: '30 7 * * *'
-    - cron: '0 10 * * *'
-    - cron: '30 12 * * *'
-    - cron: '0 15 * * *'
-    - cron: '30 17 * * *'
-    - cron: '0 20 * * *'
-    - cron: '30 22 * * *'
+    # Each seeded bot posts once per day at a random time
+    # Solaris posts between 6am-10am UTC
+    - cron: '0 6 * * *'
+    # Yūki posts between 2pm-6pm UTC
+    - cron: '0 14 * * *'
   workflow_dispatch:
     inputs:
       bot:
-        description: 'Specific bot username (leave empty for random)'
+        description: 'Specific bot username (leave empty for all seeded)'
         required: false
       count:
         description: 'Number of dreams per bot'
@@ -40,10 +32,10 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Random delay (0-60 minutes)
-        run: sleep $((RANDOM % 3600))
+      - name: Random delay (0-4 hours)
+        run: sleep $((RANDOM % 14400))
 
-      - name: Generate bot dream
+      - name: Generate bot dreams
         env:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
@@ -52,9 +44,11 @@ jobs:
           if [ -n "${{ inputs.bot }}" ]; then
             node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
           else
-            # Pick a random bot
-            BOTS=("solaris" "void.architect" "aurelia" "terra" "yuuki" "prism" "cinder" "mochi" "pixelrex" "frida.neon")
-            BOT=${BOTS[$((RANDOM % ${#BOTS[@]}))]}
-            echo "🎲 Random bot: $BOT"
-            node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
+            # Post once for each seeded bot
+            BOTS=("solaris" "yuuki")
+            for BOT in "${BOTS[@]}"; do
+              echo "🎨 Generating for $BOT..."
+              node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
+              sleep 10
+            done
           fi

@@ -16,20 +16,16 @@ import * as Haptics from 'expo-haptics';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
-import { useFriendIds } from '@/hooks/useFriendIds';
-import { useSendFriendRequest } from '@/hooks/useSendFriendRequest';
-import { useFriendshipStatus } from '@/hooks/useFriendshipStatus';
+import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 
 function SearchRow({ user }: { user: SearchUser }) {
   const { data: followingIds = new Set<string>() } = useFollowingIds();
-  const { data: friendIds = new Set<string>() } = useFriendIds();
+  const { data: requestIds = new Set<string>() } = useOutgoingFollowRequestIds();
   const { mutate: toggleFollow } = useToggleFollow();
-  const { mutate: sendRequest } = useSendFriendRequest();
-  const { data: friendshipStatus = 'none' } = useFriendshipStatus(user.id);
   const isFollowing = followingIds.has(user.id);
-  const isFriend = friendIds.has(user.id);
+  const hasRequest = requestIds.has(user.id);
 
   return (
     <TouchableOpacity
@@ -54,35 +50,36 @@ function SearchRow({ user }: { user: SearchUser }) {
       </View>
 
       <View style={s.actions}>
-        {!isFriend && friendshipStatus === 'none' && (
+        {isFollowing ? (
           <TouchableOpacity
-            style={s.dreamButton}
+            style={s.followingPill}
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              sendRequest(user.id);
+              toggleFollow({ userId: user.id, currentlyFollowing: true });
             }}
             activeOpacity={0.7}
             hitSlop={8}
           >
-            <Text style={s.dreamButtonText}>Dream</Text>
+            <Text style={s.followingPillText}>Following</Text>
           </TouchableOpacity>
-        )}
-        {friendshipStatus === 'pending_sent' && (
-          <View style={s.sentPill}>
-            <Text style={s.sentText}>Sent</Text>
-          </View>
-        )}
-        {isFriend && (
-          <View style={s.friendPill}>
-            <Ionicons name="checkmark-circle" size={12} color="#4CAA64" />
-          </View>
-        )}
-        {!isFriend && !isFollowing && friendshipStatus !== 'pending_sent' && (
+        ) : hasRequest ? (
+          <TouchableOpacity
+            style={s.followingPill}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              toggleFollow({ userId: user.id, currentlyFollowing: false, hasRequest: true });
+            }}
+            activeOpacity={0.7}
+            hitSlop={8}
+          >
+            <Text style={s.followingPillText}>Requested</Text>
+          </TouchableOpacity>
+        ) : (
           <TouchableOpacity
             style={s.followButton}
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              toggleFollow({ userId: user.id, currentlyFollowing: false });
+              toggleFollow({ userId: user.id, currentlyFollowing: false, isPublic: user.isPublic });
             }}
             activeOpacity={0.7}
             hitSlop={8}
@@ -98,14 +95,6 @@ function SearchRow({ user }: { user: SearchUser }) {
 export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const { data: results = [], isLoading } = useSearchUsers(query);
-  const { data: friendIds = new Set<string>() } = useFriendIds();
-
-  // Sort friends first
-  const sortedResults = [...results].sort((a, b) => {
-    const aFriend = friendIds.has(a.id) ? 0 : 1;
-    const bFriend = friendIds.has(b.id) ? 0 : 1;
-    return aFriend - bFriend;
-  });
 
   return (
     <SafeAreaView style={s.root}>
@@ -139,7 +128,7 @@ export default function SearchScreen() {
 
       {/* Results */}
       <FlatList
-        data={sortedResults}
+        data={results}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <SearchRow user={item} />}
         keyboardShouldPersistTaps="handled"
@@ -168,12 +157,13 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 12,
   },
   headerTitle: {
     color: colors.textPrimary,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '800',
   },
   closeButton: {
@@ -213,13 +203,6 @@ const s = StyleSheet.create({
   userInfo: { flex: 1, gap: 2 },
   username: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
   actions: { flexDirection: 'row', gap: 8, alignItems: 'center' },
-  dreamButton: {
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-  },
-  dreamButtonText: { color: '#000000', fontSize: 12, fontWeight: '800' },
   followButton: {
     borderWidth: 1,
     borderColor: colors.accent,
@@ -228,15 +211,14 @@ const s = StyleSheet.create({
     paddingVertical: 5,
   },
   followButtonText: { color: colors.accent, fontSize: 12, fontWeight: '600' },
-  sentPill: {
+  followingPill: {
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 14,
     paddingHorizontal: 12,
     paddingVertical: 5,
   },
-  sentText: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
-  friendPill: { padding: 4 },
+  followingPillText: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 14 },
 });

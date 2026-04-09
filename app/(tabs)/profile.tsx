@@ -26,14 +26,9 @@ import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
 import { ProfileStatsRow, type StatsTab } from '@/components/ProfileStatsRow';
 import { FollowUserRow } from '@/components/FollowUserRow';
-import { FriendRequestRow } from '@/components/FriendRequestRow';
-import { useFriendsList, type FriendUser } from '@/hooks/useFriendsList';
-import { usePendingRequests } from '@/hooks/usePendingRequests';
-import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
-import { useRemoveFriend } from '@/hooks/useRemoveFriend';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
-type Tab = 'posts' | 'saved' | 'dreams' | 'friends' | 'followers' | 'following';
+type Tab = 'posts' | 'saved' | 'dreams' | 'followers' | 'following';
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -51,8 +46,7 @@ export default function ProfileScreen() {
   }, [profileResetToken]);
 
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
-  const isSocialTab =
-    activeTab === 'friends' || activeTab === 'followers' || activeTab === 'following';
+  const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile, isRefetching } = usePublicProfile(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
@@ -62,13 +56,6 @@ export default function ProfileScreen() {
   );
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-  const { data: friends = [], isLoading: loadingFriends } = useFriendsList(
-    isSocialTab ? (user?.id ?? '') : ''
-  );
-  const { data: pendingRequests = [] } = usePendingRequests();
-  const { mutate: respondRequest } = useRespondFriendRequest();
-  const { mutate: removeFriend } = useRemoveFriend();
-
   const handleRefresh = useCallback(() => {
     refetchProfile();
     queryClient.invalidateQueries({ queryKey: ['userPosts'] });
@@ -109,13 +96,10 @@ export default function ProfileScreen() {
 
         <ProfileStatsRow
           postCount={profile?.postCount ?? 0}
-          friendCount={profile?.friendCount ?? 0}
           followerCount={profile?.followerCount ?? 0}
           followingCount={profile?.followingCount ?? 0}
           activeTab={statsActiveTab}
           onTabChange={handleStatsTabChange}
-          pendingCount={pendingRequests.length}
-          hiddenTabs={[]}
         />
       </View>
 
@@ -196,67 +180,6 @@ export default function ProfileScreen() {
           ListHeaderComponent={header}
           scrollToTopToken={profileResetToken}
           showPrivateBadge={activeTab === 'dreams'}
-        />
-      </SafeAreaView>
-    );
-  }
-
-  if (activeTab === 'friends') {
-    // Combine pending requests + accepted friends
-    type ListItem =
-      | { type: 'request'; data: (typeof pendingRequests)[number] }
-      | { type: 'friend'; data: FriendUser };
-
-    const sections: ListItem[] = [
-      ...pendingRequests.map((r) => ({ type: 'request' as const, data: r })),
-      ...friends.map((f) => ({ type: 'friend' as const, data: f })),
-    ];
-
-    return (
-      <SafeAreaView style={styles.root}>
-        <FlatList
-          key="friends"
-          data={sections}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefetching}
-              onRefresh={handleRefresh}
-              tintColor={colors.accent}
-            />
-          }
-          keyExtractor={(item) => {
-            if (item.type === 'request') return `req-${item.data.requesterId}`;
-            if (item.type === 'friend') return `fr-${item.data.id}`;
-            return `fr-unknown`;
-          }}
-          ListHeaderComponent={header}
-          ListEmptyComponent={
-            <View style={styles.center}>
-              {loadingFriends ? (
-                <ActivityIndicator color={colors.textSecondary} />
-              ) : (
-                <Text style={styles.emptyText}>No friends yet</Text>
-              )}
-            </View>
-          }
-          renderItem={({ item }) => {
-            if (item.type === 'request') {
-              return (
-                <FriendRequestRow
-                  request={item.data}
-                  onAccept={(id) => respondRequest({ requesterId: id, accept: true })}
-                  onDecline={(id) => respondRequest({ requesterId: id, accept: false })}
-                />
-              );
-            }
-            return (
-              <FollowUserRow
-                item={item.data}
-                isFollowing={followingIds.has(item.data.id)}
-                onFollow={handleFollowUser}
-              />
-            );
-          }}
         />
       </SafeAreaView>
     );

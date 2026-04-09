@@ -24,7 +24,7 @@ import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { InboxSkeleton } from '@/components/Skeleton';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import { useAlbumStore } from '@/store/album';
-import { useRespondFriendRequest } from '@/hooks/useRespondFriendRequest';
+import { useApproveFollowRequest, useDenyFollowRequest } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
 
 function formatTimeAgo(dateStr: string): string {
@@ -53,6 +53,10 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
       return { action: 'wants to dream with you', preview: null };
     case 'friend_accepted':
       return { action: 'accepted your dream request', preview: null };
+    case 'follow_request':
+      return { action: 'requested to follow you', preview: null };
+    case 'follow_accepted':
+      return { action: 'accepted your follow request', preview: null };
     case 'dream_generated': {
       const isWish = item.body?.startsWith('wish:');
       const isWelcome = item.body?.startsWith('welcome:');
@@ -91,9 +95,40 @@ function getNotificationIcon(type: NotificationItem['type']): string {
       return 'heart';
     case 'post_fuse':
       return 'git-merge-outline';
+    case 'follow_request':
+      return 'person-add';
+    case 'follow_accepted':
+      return 'person-add';
     default:
       return 'notifications';
   }
+}
+
+function FollowRequestActions({ actorId, notifId }: { actorId: string; notifId: string }) {
+  const { mutate: approve, isPending: approving } = useApproveFollowRequest();
+  const { mutate: deny, isPending: denying } = useDenyFollowRequest();
+  const busy = approving || denying;
+
+  return (
+    <View style={styles.followRequestActions}>
+      <TouchableOpacity
+        style={styles.approveButton}
+        onPress={() => approve(actorId)}
+        disabled={busy}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.approveText}>Approve</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.denyButton}
+        onPress={() => deny(actorId)}
+        disabled={busy}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.denyText}>Deny</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 function NotificationRow({
@@ -104,9 +139,6 @@ function NotificationRow({
   selectMode,
   isSelected,
   onToggleSelect,
-  onAcceptDream,
-  onDeclineDream,
-  dreamAccepted,
 }: {
   item: NotificationItem;
   onPress: () => void;
@@ -115,9 +147,6 @@ function NotificationRow({
   selectMode: boolean;
   isSelected: boolean;
   onToggleSelect: () => void;
-  onAcceptDream?: () => void;
-  onDeclineDream?: () => void;
-  dreamAccepted?: boolean;
 }) {
   const { action, preview } = getNotificationText(item);
   const [expanded, setExpanded] = useState(false);
@@ -204,34 +233,10 @@ function NotificationRow({
         )}
       </View>
 
-      {/* Accept/Decline for friend requests */}
-      {item.type === 'friend_request' &&
-        !selectMode &&
-        (dreamAccepted ? (
-          <View style={styles.dreamersBadge}>
-            <Ionicons name="checkmark-circle" size={14} color="#4CAA64" />
-            <Text style={styles.dreamersBadgeText}>Dreamers</Text>
-          </View>
-        ) : onAcceptDream ? (
-          <View style={styles.dreamActions}>
-            <TouchableOpacity
-              style={styles.acceptDreamButton}
-              onPress={onAcceptDream}
-              activeOpacity={0.7}
-              hitSlop={4}
-            >
-              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.declineDreamButton}
-              onPress={onDeclineDream}
-              activeOpacity={0.7}
-              hitSlop={4}
-            >
-              <Ionicons name="close" size={14} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
-        ) : null)}
+      {/* Follow request approve/deny buttons */}
+      {item.type === 'follow_request' && !item.isSeen && (
+        <FollowRequestActions actorId={item.actorId} notifId={item.id} />
+      )}
 
       {/* Post thumbnail — tap to navigate */}
       {item.imageUrl && (
@@ -262,13 +267,11 @@ export default function InboxScreen() {
   const { mutate: deleteNotification } = useDeleteShare();
   const { mutate: markAllSeen, isPending: markingAll } = useMarkAllSeen();
   const { mutate: deleteAll } = useDeleteAllNotifications();
-  const { mutate: respondRequest } = useRespondFriendRequest();
   const queryClient = useQueryClient();
 
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [allSelectedGlobal, setAllSelectedGlobal] = useState(false);
-  const [acceptedDreamIds, setAcceptedDreamIds] = useState<Set<string>>(new Set());
 
   const inbox = useMemo(() => data?.pages.flat() ?? [], [data]);
   const hasUnread = inbox.some((item) => !item.isSeen);
@@ -435,24 +438,6 @@ export default function InboxScreen() {
             selectMode={selectMode}
             isSelected={selected.has(item.id)}
             onToggleSelect={() => toggleSelect(item.id)}
-            dreamAccepted={acceptedDreamIds.has(item.id)}
-            onAcceptDream={
-              item.type === 'friend_request'
-                ? () => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    respondRequest({ requesterId: item.actorId, accept: true });
-                    setAcceptedDreamIds((prev) => new Set(prev).add(item.id));
-                  }
-                : undefined
-            }
-            onDeclineDream={
-              item.type === 'friend_request'
-                ? () => {
-                    respondRequest({ requesterId: item.actorId, accept: false });
-                    deleteNotification(item.id);
-                  }
-                : undefined
-            }
           />
         )}
         onEndReached={() => {
@@ -584,6 +569,33 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: colors.accent,
   },
+  followRequestActions: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  approveButton: {
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  approveText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  denyButton: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  denyText: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+  },
   checkbox: {
     width: 22,
     height: 22,
@@ -610,43 +622,6 @@ const styles = StyleSheet.create({
   editText: {
     color: colors.textSecondary,
     fontSize: 14,
-    fontWeight: '600',
-  },
-  dreamActions: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  acceptDreamButton: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 14,
-    width: 28,
-    height: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  declineDreamButton: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 14,
-    width: 28,
-    height: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dreamersBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  dreamersBadgeText: {
-    color: colors.textSecondary,
-    fontSize: 12,
     fontWeight: '600',
   },
   trashButton: {

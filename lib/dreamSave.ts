@@ -1,9 +1,9 @@
 /**
- * Dream Save — handles saving dreams with visibility control.
+ * Dream Save — handles saving dreams.
  *
  * Three outcomes from the Reveal screen:
- *   Post to Profile → public, is_active=true
- *   Save to Dreams  → private, is_active=false
+ *   Post to Profile → is_active=true, is_posted=true
+ *   Save to Dreams  → is_active=false, is_posted=false
  *   Discard         → no insert (caller handles)
  */
 
@@ -34,8 +34,8 @@ interface SaveDreamResult {
 /**
  * Persist image to Storage and insert into uploads table.
  *
- * - `public` → is_active=true, visibility='public' (appears in feed)
- * - `private` → is_active=false, visibility='private' (My Dreams only)
+ * - `public` → is_active=true, is_posted=true (appears in feed)
+ * - `private` → is_active=false, is_posted=false (My Dreams only)
  */
 export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
   // Skip re-upload if the image is already in Supabase Storage
@@ -52,7 +52,6 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     const { error } = await supabase
       .from('uploads')
       .update({
-        visibility: opts.visibility,
         is_active: isPublic,
         is_posted: isPublic,
       } as Record<string, unknown>)
@@ -61,7 +60,6 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     return { uploadId: opts.existingUploadId, imageUrl };
   }
 
-  // visibility column added by migration 075 — remove cast after regenerating types
   const row = {
     user_id: opts.userId,
     image_url: imageUrl,
@@ -72,7 +70,6 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     width: 768,
     height: 1664,
     ai_concept: (opts.aiConcept as Record<string, never>) ?? null,
-    visibility: opts.visibility,
     dream_medium: opts.dreamMedium ?? null,
     dream_vibe: opts.dreamVibe ?? null,
   };
