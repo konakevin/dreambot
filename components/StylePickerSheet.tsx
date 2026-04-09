@@ -17,11 +17,15 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
 import { colors } from '@/constants/theme';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.5;
+
+interface StyleOption {
+  key: string;
+  label: string;
+}
 
 interface Props {
   visible: boolean;
@@ -29,6 +33,8 @@ interface Props {
   selected: string;
   onSelect: (key: string) => void;
   onClose: () => void;
+  /** Full list of available options (from DB) */
+  options: StyleOption[];
   /** If provided, only show options the user selected + Surprise Me */
   userFilter?: string[];
 }
@@ -39,6 +45,7 @@ export function StylePickerSheet({
   selected,
   onSelect,
   onClose,
+  options: allAvailable,
   userFilter,
 }: Props) {
   const insets = useSafeAreaInsets();
@@ -46,15 +53,10 @@ export function StylePickerSheet({
   const dragY = useSharedValue(0);
   const closing = useRef(false);
 
-  // Build options list
-  const allOptions =
-    type === 'medium'
-      ? DREAM_MEDIUMS.filter(
-          (m) => m.key === 'surprise_me' || !userFilter?.length || userFilter.includes(m.key)
-        )
-      : DREAM_VIBES.filter(
-          (v) => v.key === 'surprise_me' || !userFilter?.length || userFilter.includes(v.key)
-        );
+  // Build options list — filter to user's selections if provided
+  const allOptions = allAvailable.filter(
+    (o) => o.key === 'surprise_me' || !userFilter?.length || userFilter.includes(o.key)
+  );
 
   // Sort: Surprise Me first, then alphabetical
   const options = [...allOptions].sort((a, b) => {

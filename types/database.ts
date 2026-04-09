@@ -1001,6 +1001,23 @@ export type Database = {
           vibe_score: number;
         }[];
       };
+      get_dream_mediums: {
+        Args: Record<string, never>;
+        Returns: {
+          key: string;
+          label: string;
+          directive: string;
+          flux_fragment: string;
+        }[];
+      };
+      get_dream_vibes: {
+        Args: Record<string, never>;
+        Returns: {
+          key: string;
+          label: string;
+          directive: string;
+        }[];
+      };
       get_unread_notification_count: {
         Args: { p_user_id: string };
         Returns: number;

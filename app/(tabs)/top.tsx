@@ -6,7 +6,7 @@
  * Filters by dream_medium and dream_vibe columns on uploads.
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { View, Text, ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useExploreStore } from '@/store/explore';
@@ -18,7 +18,7 @@ import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
-import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors, ANIM } from '@/constants/theme';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OverlayPill } from '@/components/OverlayPill';
@@ -61,16 +61,18 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
   });
 }
 
-// Only show curated mediums (exclude my_mediums, surprise_me)
-const MEDIUM_PILLS = DREAM_MEDIUMS.filter((m) => m.directive !== null).sort((a, b) =>
-  a.label.localeCompare(b.label)
-);
-const VIBE_PILLS = DREAM_VIBES.filter((v) => v.directive !== null).sort((a, b) =>
-  a.label.localeCompare(b.label)
-);
-
 export default function ExploreScreen() {
   const insets = useSafeAreaInsets();
+  const { data: dbMediums = [] } = useDreamMediums();
+  const { data: dbVibes = [] } = useDreamVibes();
+  const MEDIUM_PILLS = useMemo(
+    () => [...dbMediums].sort((a, b) => a.label.localeCompare(b.label)),
+    [dbMediums]
+  );
+  const VIBE_PILLS = useMemo(
+    () => [...dbVibes].sort((a, b) => a.label.localeCompare(b.label)),
+    [dbVibes]
+  );
   const [selectedMedium, setSelectedMedium] = useState<string | null>(null);
   const [selectedVibe, setSelectedVibe] = useState<string | null>(null);
   const feedSeed = useFeedStore((s) => s.feedSeed);

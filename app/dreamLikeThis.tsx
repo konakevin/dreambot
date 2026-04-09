@@ -28,11 +28,12 @@ import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { useLocalSearchParams, router } from 'expo-router';
+import { vs } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
-import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -48,6 +49,8 @@ export default function DreamLikeThisScreen() {
 
   const user = useAuthStore((s) => s.user);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
+  const { data: dbMediums = [] } = useDreamMediums();
+  const { data: dbVibes = [] } = useDreamVibes();
   const reset = useDreamStore((s) => s.reset);
   const setMode = useDreamStore((s) => s.setMode);
   const setPhoto = useDreamStore((s) => s.setPhoto);
@@ -114,9 +117,8 @@ export default function DreamLikeThisScreen() {
     };
   }, []);
 
-  const mediumLabel =
-    DREAM_MEDIUMS.find((m) => m.key === refMedium)?.label ?? refMedium ?? 'Unknown';
-  const vibeLabel = DREAM_VIBES.find((v) => v.key === refVibe)?.label ?? refVibe ?? 'Unknown';
+  const mediumLabel = dbMediums.find((m) => m.key === refMedium)?.label ?? refMedium ?? 'Unknown';
+  const vibeLabel = dbVibes.find((v) => v.key === refVibe)?.label ?? refVibe ?? 'Unknown';
   const hasPhoto = !!photoUri;
 
   async function handlePickPhoto() {
@@ -356,17 +358,17 @@ const s = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: colors.surface,
-    maxHeight: 280,
+    maxHeight: vs(280),
   },
   previewCardDuo: {
-    maxHeight: 200,
+    maxHeight: vs(200),
     maxWidth: '40%',
   },
   previewCardSmall: {
     flex: 0,
     aspectRatio: 1,
-    width: 200,
-    height: 200,
+    width: vs(200),
+    height: vs(200),
     maxHeight: undefined,
     alignSelf: 'center',
   },
@@ -460,7 +462,7 @@ const s = StyleSheet.create({
   promptClear: { paddingTop: 2, paddingLeft: 8 },
 
   // Footer
-  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: 36 },
+  footer: { paddingHorizontal: 24, paddingVertical: 12, paddingBottom: vs(36) },
   dreamBtn: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -420,7 +420,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
               {/* Input bar */}
               <View
-                style={[styles.inputBar, { paddingBottom: insets.bottom + (hideTabBar ? 16 : 75) }]}
+                style={[styles.inputBar, { paddingBottom: insets.bottom + (hideTabBar ? 16 : 60) }]}
               >
                 {currentUser ? (
                   <>

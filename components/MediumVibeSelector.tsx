@@ -7,7 +7,7 @@
 import { useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
 
 const PILL_WIDTH = 105;
@@ -36,13 +36,18 @@ export function MediumVibeSelector({
   userArtStyles,
   userAesthetics,
 }: Props) {
+  const { data: dbMediums = [] } = useDreamMediums();
+  const { data: dbVibes = [] } = useDreamVibes();
+  const allMediums = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbMediums];
+  const allVibes = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbVibes];
+
   // Filter to user's selections if provided, otherwise show all
   const filteredMediums = userArtStyles?.length
-    ? DREAM_MEDIUMS.filter((m) => ALWAYS_SHOW.has(m.key) || userArtStyles.includes(m.key))
-    : DREAM_MEDIUMS;
+    ? allMediums.filter((m) => ALWAYS_SHOW.has(m.key) || userArtStyles.includes(m.key))
+    : allMediums;
   const filteredVibes = userAesthetics?.length
-    ? DREAM_VIBES.filter((v) => ALWAYS_SHOW.has(v.key) || userAesthetics.includes(v.key))
-    : DREAM_VIBES;
+    ? allVibes.filter((v) => ALWAYS_SHOW.has(v.key) || userAesthetics.includes(v.key))
+    : allVibes;
 
   const SORTED_MEDIUMS = [...filteredMediums].sort((a, b) => {
     // Keep my_mediums and surprise_me at the front

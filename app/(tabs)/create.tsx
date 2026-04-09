@@ -32,7 +32,8 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import { Linking } from 'react-native';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
-import { CURATED_MEDIUMS, CURATED_VIBES } from '@/constants/dreamEngine';
+import { vs } from '@/lib/responsive';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useAuthStore } from '@/store/auth';
@@ -52,6 +53,8 @@ export default function CreateScreen() {
   const setPrompt = useDreamStore((s) => s.setPrompt);
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const user = useAuthStore((s) => s.user);
+  const { data: dbMediums = [] } = useDreamMediums();
+  const { data: dbVibes = [] } = useDreamVibes();
 
   const [kbOpen, setKbOpen] = useState(false);
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
@@ -93,12 +96,14 @@ export default function CreateScreen() {
   const hasPrompt = config.userPrompt.trim().length > 0;
 
   // Find labels for selected medium/vibe
+  // Build options lists with Surprise Me prepended
+  const mediumOptions = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbMediums];
+  const vibeOptions = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbVibes];
+
   const mediumLabel =
-    CURATED_MEDIUMS.find((m) => m.key === config.selectedMedium)?.label ??
-    (config.selectedMedium === 'surprise_me' ? 'Surprise Me' : config.selectedMedium);
+    mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium;
   const vibeLabel =
-    CURATED_VIBES.find((v) => v.key === config.selectedVibe)?.label ??
-    (config.selectedVibe === 'surprise_me' ? 'Surprise Me' : config.selectedVibe);
+    vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
 
   // Contextual hint above Dream button
   const contextHint = hasPhoto
@@ -355,7 +360,7 @@ export default function CreateScreen() {
         </ScrollView>
 
         {/* Fixed footer — always visible above keyboard */}
-        <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : 96 }}>
+        <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : vs(96) }}>
           {/* Contextual hint */}
           <Text
             className="text-center text-sm font-medium mb-2"
@@ -389,6 +394,7 @@ export default function CreateScreen() {
           else setMedium(key);
         }}
         onClose={() => setPickerType(null)}
+        options={pickerType === 'vibe' ? vibeOptions : mediumOptions}
         userFilter={pickerType === 'vibe' ? userAesthetics : userArtStyles}
       />
 

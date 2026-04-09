@@ -7,6 +7,7 @@ import { useMyDreams } from '@/hooks/useMyDreams';
 import { PostTile } from '@/components/PostTile';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
+import { vs } from '@/lib/responsive';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const TILE_GAP = 2;
@@ -82,7 +83,7 @@ export function PostGrid({
       keyExtractor={(item) => item.id}
       numColumns={2}
       columnWrapperStyle={styles.row}
-      contentContainerStyle={{ paddingBottom: 90 }}
+      contentContainerStyle={{ paddingBottom: vs(90) }}
       windowSize={10}
       maxToRenderPerBatch={8}
       initialNumToRender={6}

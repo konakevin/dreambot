@@ -99,9 +99,9 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
       hint
     ) => `COMPLETELY transform this photo into anime illustration style.
 
-Clean confident ink outlines with varying weight — thick for silhouettes, thin for details. Flat cel-shaded coloring with strategic gradient shading on skin and hair. Eyes larger and more expressive — with multiple light reflections. Hair simplified into flowing dynamic shapes with sheen highlights. Smooth cel-shaded skin. Clean flat color areas with simple shadow shapes for clothing. Keep the same person's features — but stylized as anime. Same hair color, clothing colors. Portrait 9:16.
+Clean confident ink outlines with varying weight — thick for silhouettes, thin for details. Cel-shaded coloring with strategic gradient shading on skin and hair. Eyes larger and more expressive with light reflections. Hair simplified into flowing dynamic shapes with sheen highlights. Smooth cel-shaded skin. The anime style can range freely — cute and soft, dark and intense, epic and dramatic, or gentle and warm. Let the mood guide the tone. Keep the same person's features — but stylized as anime. Same hair color, clothing colors. Portrait 9:16.
 
-Express the mood through BACKGROUND PAINTING STYLE and COLOR SATURATION — the background carries the emotional atmosphere (Shinkai-style backgrounds respond beautifully to mood):
+Express the mood through BACKGROUND PAINTING STYLE and ANIME TONE — the mood determines whether this feels like a gentle slice-of-life or an intense action scene:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
@@ -348,6 +348,120 @@ Write a prompt (40-60 words, comma-separated) for an 8-BIT NES GAME SCREEN:
 - Portrait 9:16
 ${hint ? `USER REQUEST: "${hint}"` : ''}
 Output ONLY the prompt.`,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // ADDITIONAL KONTEXT-MAX MEDIUMS
+  // ═══════════════════════════════════════════════════════════════════════
+
+  '3d_cartoon': {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a 3D cartoon render — Pixar/DreamWorks quality but more stylized and exaggerated than realistic 3D.
+
+The person becomes a cartoon character — rounder face, bigger eyes, simplified features with maximum appeal. Exaggerated proportions — slightly larger head, expressive hands. Smooth plastic-like skin with warm subsurface glow. Hair is thick stylized strands with bounce. Clothing becomes simplified with bold saturated colors. Background becomes a colorful 3D cartoon environment. Keep the same person's features, hair color, clothing colors. Portrait 9:16.
+
+Express the mood through LIGHTING COLOR and ENVIRONMENT STYLE — bright bouncy light for fun, moody dramatic light for intensity:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  cyberpunk: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a cyberpunk scene.
+
+Add cybernetic augmentations — glowing circuit lines on skin, one eye replaced with a glowing prosthetic lens, metallic implants at temples. Clothing becomes techwear — tactical harnesses, LED-trimmed jacket in their original colors. Background transforms into a rain-soaked neon cityscape — holographic advertisements, steam rising from grates, towering megastructures. Skin has a cool blue-tinted sheen from neon reflections. Keep the same person, face, pose. Portrait 9:16.
+
+Express the mood through NEON HUE DOMINANCE and RAIN INTENSITY — hot magenta for danger, cool cyan for isolation, heavy rain for melancholy:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  paper_cutout: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a layered paper cutout illustration — like a handcrafted paper diorama.
+
+The person becomes a flat paper cutout figure — visible paper edges, slight shadow between layers showing depth. Face is simplified paper shapes — cut paper eyes, painted details. Hair is layered paper strips in matching color. Clothing is colored construction paper with visible cut edges. Background becomes multiple layers of cut paper at different depths — trees, buildings, clouds all paper with visible shadows between layers. Warm craft-table lighting. Portrait 9:16.
+
+Express the mood through PAPER COLOR CHOICES and LAYER DEPTH — bright primaries for joy, muted kraft paper for calm, deep layering for drama:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  retro_poster: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a vintage travel/movie poster illustration — 1950s-60s mid-century graphic design.
+
+The person becomes a stylized illustrated figure — simplified features, bold confident linework, flat color areas with limited palette (4-5 colors max). Skin is a single warm flat tone. Hair is a bold graphic shape. Clothing becomes flat geometric color blocks. Background becomes a dramatic poster composition — bold typography space, geometric shapes, radiating lines, simplified landscape elements. Visible print texture — slight halftone grain, paper stock warmth. Keep same person's silhouette and colors. Portrait 9:16.
+
+Express the mood through POSTER COLOR PALETTE and COMPOSITION DRAMA — warm oranges/teals for adventure, cool blues for mystery, bold reds for energy:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  childrens_book: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a children's book illustration — warm, gentle, hand-painted quality.
+
+The person becomes a sweet illustrated character — soft rounded features, rosy cheeks, gentle smile, slightly larger eyes with warmth. Hair is soft painted strokes in matching color. Clothing becomes simple charming shapes with gentle patterns. Skin has visible warm brushstrokes. Background becomes a cozy storybook scene — soft watercolor washes, gentle details, friendly environment. Everything feels safe, warm, inviting. The style should feel hand-painted with love, like a Caldecott Medal winner. Keep same person's features and colors. Portrait 9:16.
+
+Express the mood through WARMTH OF PALETTE and BACKGROUND DETAIL — golden tones for comfort, cool pastels for wonder, lush detail for enchantment:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  vaporwave: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into vaporwave aesthetic.
+
+Shift the entire color palette to pink, cyan, and purple. Add glitch effects — horizontal scan lines, RGB channel separation, pixel distortion artifacts. Skin takes on a pink/purple tint. Background transforms into a surreal vaporwave landscape — checkered floors extending to infinity, Greek marble busts, palm trees, sunset gradients, floating geometric shapes, Japanese text overlays. CRT monitor glow effect on edges. Everything has that nostalgic 90s digital aesthetic. Keep the same person, face, pose. Portrait 9:16.
+
+Express the mood through COLOR SATURATION and GLITCH INTENSITY — heavy glitch for chaos, smooth gradients for calm, deep purples for melancholy:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  fantasy: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a high fantasy illustration — epic fantasy book cover quality.
+
+The person becomes a fantasy character — add subtle pointed ear tips, ethereal glow to eyes, flowing magical elements around them. Clothing transforms into fantasy attire — leather armor, flowing cloaks, ornate clasps in matching colors. Hair gains an otherworldly sheen. Background becomes an epic fantasy landscape — ancient ruins, mystical forests, distant mountains with aurora-lit skies, floating magical particles. Dramatic painterly rendering with rich detail. Keep same person's face and features. Portrait 9:16.
+
+Express the mood through MAGICAL ATMOSPHERE and LIGHT SOURCE — warm golden magic for hope, cool blue arcane glow for mystery, fiery red for danger:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  ukiyo_e: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into traditional Japanese ukiyo-e woodblock print style.
+
+The person becomes a figure in a woodblock print — face simplified with clean black ink outlines, minimal features (thin line eyes, small mouth), flat skin tone with no shading. Hair becomes solid black ink with visible wood-grain texture in the strokes. Clothing becomes flat colored areas with pattern details (waves, flowers, geometric). Background becomes a classic ukiyo-e scene — stylized waves, Mt. Fuji, cherry blossoms, flat color sky with no gradients. Visible woodblock print texture throughout — grain lines, registration marks. Portrait 9:16.
+
+Express the mood through SEASONAL ELEMENTS and INK DENSITY — cherry blossoms for spring/joy, bare branches for melancholy, stormy waves for drama:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  art_deco: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into Art Deco illustration style — 1920s-30s glamour and geometric elegance.
+
+The person becomes an Art Deco figure — elongated elegant proportions, stylized angular features, dramatic pose. Skin is smooth flat gold or bronze tones. Hair is sculpted into sleek geometric waves. Clothing becomes geometric patterns — chevrons, sunbursts, fan shapes in metallic golds, deep blacks, and jewel tones. Background becomes bold geometric patterns — radiating sunburst lines, stepped pyramids, symmetric arches. Strong black outlines, metallic accents, limited rich palette. Everything exudes luxury and symmetry. Portrait 9:16.
+
+Express the mood through METALLIC WARMTH and GEOMETRIC COMPLEXITY — gold for opulence, silver for cool elegance, dense geometry for grandeur:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  steampunk: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into steampunk style — Victorian-era meets brass machinery.
+
+The person gains steampunk accessories — brass goggles on forehead, gear-adorned leather vest, pocket watch chains, copper rivets on clothing. Skin has a warm sepia-toned quality. Hair styled in Victorian fashion with small mechanical ornaments. One eye possibly has a brass monocle with extending lenses. Background transforms into a steampunk workshop or airship deck — brass pipes, pressure gauges, spinning gears, steam vents, leather-bound books, Tesla coils sparking. Warm amber gaslight illumination. Keep same person's face and features. Portrait 9:16.
+
+Express the mood through BRASS PATINA WARMTH and STEAM DENSITY — polished brass for optimism, oxidized green copper for mystery, thick steam for drama:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 };
 

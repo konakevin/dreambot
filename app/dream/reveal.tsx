@@ -28,6 +28,7 @@ import { useDreamStore } from '@/store/dream';
 import { saveDream, pinToFeed } from '@/lib/dreamSave';
 import { Toast } from '@/components/Toast';
 
+import { vs } from '@/lib/responsive';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default function DreamRevealScreen() {
@@ -89,8 +90,9 @@ export default function DreamRevealScreen() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Posted to your profile', 'checkmark-circle');
 
-      clearResult();
-      router.back();
+      reset();
+      // Navigate to Explore feed with the dream pinned as first card
+      router.replace('/(tabs)');
     } catch (err) {
       if (__DEV__) console.error('[Reveal] Post error:', err);
       Toast.show('Failed to post dream', 'close-circle');
@@ -213,7 +215,7 @@ const s = StyleSheet.create({
     bottom: 0,
     left: 20,
     gap: 2,
-    marginBottom: 160,
+    marginBottom: vs(160),
   },
   actions: {
     position: 'absolute',

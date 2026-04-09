@@ -314,7 +314,7 @@ export function DreamWishSheet({
       {/* Modifier picker sheet */}
       <Modal visible={!!picker} transparent animationType="slide">
         <Pressable style={s.pickerBackdrop} onPress={() => setPicker(null)}>
-          <View style={s.pickerBottomSheet}>
+          <View style={[s.pickerBottomSheet, { paddingBottom: insets.bottom + 16 }]}>
             <View style={s.pickerSheetHandle} />
             <Text style={s.pickerSheetTitle}>{picker?.label ?? ''}</Text>
             <TouchableOpacity

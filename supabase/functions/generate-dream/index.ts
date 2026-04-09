@@ -28,18 +28,11 @@ import {
   buildFallbackFluxPrompt,
   parseConceptJson,
 } from '../_shared/vibeEngine.ts';
-import {
-  DREAM_MEDIUMS,
-  DREAM_VIBES,
-  CURATED_MEDIUMS,
-  CURATED_VIBES,
-  randomMedium,
-  randomVibe,
-  buildSubjectInventionPrompt,
-  buildDreamScene,
-} from '../_shared/dreamEngine.ts';
+import { buildSubjectInventionPrompt, buildDreamScene } from '../_shared/dreamEngine.ts';
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
+import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
+import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 
 const MAX_DAILY_GENERATIONS = 50;
 
@@ -422,25 +415,23 @@ Deno.serve(async (req) => {
       // ══════════════════════════════════════════════════════════════════
       const nightlyProfile = vibe_profile as VibeProfile;
       // Watercolor removed from nightly — Kontext restyle consistently fails to transform
-      let nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+      let nightlyMedium = await resolveMediumFromDb('my_mediums', nightlyProfile.art_styles);
       if (nightlyMedium.key === 'watercolor') {
-        nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+        nightlyMedium = await resolveMediumFromDb('my_mediums', nightlyProfile.art_styles);
         if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
-          nightlyMedium = resolveMedium('my_mediums', nightlyProfile);
+          nightlyMedium = await resolveMediumFromDb('my_mediums', nightlyProfile.art_styles);
           if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
-            nightlyMedium = CURATED_MEDIUMS.find((m) => m.key === 'anime') ?? nightlyMedium;
+            nightlyMedium = await resolveMediumFromDb('anime');
           }
         }
       }
       // Test mode overrides: force specific medium/vibe
       if (force_medium) {
-        const forced = CURATED_MEDIUMS.find((m) => m.key === force_medium);
-        if (forced) nightlyMedium = forced;
+        nightlyMedium = await resolveMediumFromDb(force_medium);
       }
-      let nightlyVibe = resolveVibe('my_vibes', nightlyProfile);
+      let nightlyVibe = await resolveVibeFromDb('my_vibes', nightlyProfile.aesthetics);
       if (force_vibe) {
-        const forced = CURATED_VIBES.find((v) => v.key === force_vibe);
-        if (forced) nightlyVibe = forced;
+        nightlyVibe = await resolveVibeFromDb(force_vibe);
       }
       resolvedMediumKey = nightlyMedium.key;
       resolvedVibeKey = nightlyVibe.key;
@@ -810,8 +801,8 @@ Output ONLY the prompt.`;
     const vibeProfile = vibe_profile as VibeProfile | undefined;
 
     // Resolve medium and vibe to real curated entries — never store placeholders
-    const medium = resolveMedium(medium_key, vibeProfile);
-    const vibe = resolveVibe(vibe_key, vibeProfile);
+    const medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
+    const vibe = await resolveVibeFromDb(vibe_key, vibeProfile?.aesthetics);
 
     resolvedMediumKey = medium.key;
     resolvedVibeKey = vibe.key;
@@ -834,10 +825,10 @@ Output ONLY the prompt.`;
       // ── REIMAGINE: vision describe → medium template or generic brief → flux-dev ──
       console.log('[generate-dream] ⏱ REIMAGINE: starting vision...');
       try {
-        const photoDescription = await haikuVision(
+        const photoDescription = await describeWithVision(
           input_image!,
-          'Describe the main subject of this photo in one sentence. Include skin tone, hair color/style, clothing, and any distinguishing features. Be factual and concise.',
-          ANTHROPIC_KEY,
+          VISION_PROMPTS.photoSubject,
+          REPLICATE_TOKEN,
           100
         );
         lap('reimagine-vision');
@@ -916,10 +907,10 @@ Output ONLY the prompt.`;
 
       if (config && config.model === 'flux-dev') {
         // Vision describe → Haiku rewrite → flux-dev
-        const photoDescription = await haikuVision(
+        const photoDescription = await describeWithVision(
           input_image!,
-          'Describe the main subject of this photo in one sentence. Include skin tone, hair color/style, clothing, and any distinguishing features. Be factual and concise.',
-          ANTHROPIC_KEY,
+          VISION_PROMPTS.photoSubject,
+          REPLICATE_TOKEN,
           100
         );
         console.log(
@@ -1600,55 +1591,6 @@ function secondsUntilMidnightUTC(): number {
   return Math.ceil((midnight.getTime() - now.getTime()) / 1000);
 }
 
-/**
- * Resolve a medium key to a real curated medium. Handles:
- *   - 'surprise_me' → random curated medium
- *   - 'my_mediums' → random from user's art_styles, or random curated
- *   - unknown key → random curated medium
- *   - valid key → that medium
- */
-function resolveMedium(
-  key: string | undefined,
-  profile?: VibeProfile
-): (typeof CURATED_MEDIUMS)[number] {
-  let medium: (typeof CURATED_MEDIUMS)[number];
-  // surprise_me or my_mediums: pick from user's art_styles if available, else random curated
-  if ((key === 'surprise_me' || key === 'my_mediums') && profile?.art_styles.length) {
-    const pick = profile.art_styles[Math.floor(Math.random() * profile.art_styles.length)];
-    medium = CURATED_MEDIUMS.find((m) => m.key === pick) ?? randomMedium();
-  } else {
-    medium = CURATED_MEDIUMS.find((m) => m.key === key) ?? randomMedium();
-  }
-  // Aggregate mediums: randomly pick one of the sub-mediums
-  if (medium.includes_mediums?.length) {
-    const subKey =
-      medium.includes_mediums[Math.floor(Math.random() * medium.includes_mediums.length)];
-    const sub = CURATED_MEDIUMS.find((m) => m.key === subKey);
-    if (sub) return sub;
-  }
-  return medium;
-}
-
-/**
- * Resolve a vibe key to a real curated vibe. Handles:
- *   - 'surprise_me' → random curated vibe
- *   - 'my_vibes' → random from user's aesthetics, or random curated
- *   - unknown key → random curated vibe
- *   - valid key → that vibe
- */
-function resolveVibe(
-  key: string | undefined,
-  profile?: VibeProfile
-): (typeof CURATED_VIBES)[number] {
-  // surprise_me or my_vibes: pick from user's aesthetics if available, else random curated
-  if ((key === 'surprise_me' || key === 'my_vibes') && profile?.aesthetics.length) {
-    const pick = profile.aesthetics[Math.floor(Math.random() * profile.aesthetics.length)];
-    return CURATED_VIBES.find((v) => v.key === pick) ?? randomVibe();
-  }
-  const found = CURATED_VIBES.find((v) => v.key === key);
-  return found ?? randomVibe();
-}
-
 function sanitizePrompt(prompt: string): string {
   return prompt
     .replace(/\bbaby\b/gi, 'small cute character')
@@ -1714,39 +1656,4 @@ async function faceSwap(
   throw new Error('Face swap timed out');
 }
 
-async function haikuVision(
-  imageDataUrl: string,
-  prompt: string,
-  anthropicKey: string | undefined,
-  maxTokens: number = 100
-): Promise<string> {
-  if (!anthropicKey) throw new Error('No API key');
-  const mediaTypeMatch = imageDataUrl.match(/^data:(image\/\w+);base64,/);
-  const mediaType = mediaTypeMatch?.[1] ?? 'image/jpeg';
-  const base64Data = imageDataUrl.replace(/^data:image\/\w+;base64,/, '');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': anthropicKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: maxTokens,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data } },
-            { type: 'text', text: prompt },
-          ],
-        },
-      ],
-    }),
-  });
-  if (!res.ok) throw new Error('Haiku vision ' + res.status);
-  const data = await res.json();
-  return data.content?.[0]?.text?.trim() ?? '';
-}
 // force redeploy Tue Apr  7 23:17:08 MDT 2026

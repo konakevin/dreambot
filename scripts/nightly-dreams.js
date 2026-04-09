@@ -56,214 +56,29 @@ if (!SUPABASE_KEY || !REPLICATE_TOKEN) {
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 const anthropic = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
 
-// ── Curated mediums & vibes (mirrored from dreamEngine.ts) ────────────────
+// ── Curated mediums & vibes (fetched from DB at startup) ────────────────
 
-// We only need the keys + fluxFragments + directives for the nightly pipeline.
-// Instead of duplicating the full definitions, we load the user's art_styles/aesthetics
-// and map them to the curated pool. For fallback we use a compact subset.
-const CURATED_MEDIUMS = [
-  {
-    key: 'pixel_art',
-    fluxFragment:
-      '16-bit pixel art, carefully placed pixels, limited harmonious color palette, dithered gradients, retro game aesthetic, crisp pixel edges',
-  },
-  // watercolor removed — Kontext restyle consistently fails to transform
-  {
-    key: 'oil_painting',
-    fluxFragment:
-      'Oil painting on canvas, thick impasto brushstrokes, visible palette knife texture, rich layered glazes, Rembrandt-inspired chiaroscuro lighting, warm undertones, painterly color mixing',
-  },
-  {
-    key: 'anime',
-    fluxFragment: null,
-    includes_mediums: ['cute_anime', 'dark_anime'],
-  },
-  {
-    key: 'lego',
-    fluxFragment:
-      'LEGO brick diorama, everything constructed from LEGO pieces, plastic studs visible on every surface, minifigure characters, photographed like a real LEGO set, soft realistic lighting',
-  },
-  {
-    key: 'claymation',
-    fluxFragment:
-      'Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets, theatrical warm lighting, Laika Studios quality',
-  },
-  {
-    key: '3d_cartoon',
-    fluxFragment:
-      'Pixar-quality 3D animated cartoon render, soft rounded appealing shapes, oversized expressive eyes, subsurface scattering, volumetric lighting, vibrant art-directed color palette, cinematic depth of field, animated film quality',
-  },
-  {
-    key: '3d_render',
-    fluxFragment:
-      'Photorealistic 3D render, Unreal Engine 5 quality, ray-traced global illumination, physically based materials, hyper-detailed textures, cinematic lighting, volumetric fog, movie-quality CGI',
-  },
-  // pencil_sketch removed — inconsistent results in nightly
-  // neon removed — replaced with cyberpunk
-  {
-    key: 'cyberpunk',
-    fluxFragment:
-      'Cyberpunk cityscape, towering megastructures, holographic advertisements, rain-soaked chrome surfaces, neon-drenched fog, flying vehicles, massive scale dystopian architecture, Blade Runner aesthetic',
-  },
-  {
-    key: 'comic_book',
-    fluxFragment:
-      'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, dramatic foreshortening, kinetic energy, graphic novel splash page quality',
-  },
-  {
-    key: 'embroidery',
-    fluxFragment:
-      'Hand embroidery on linen fabric, cross-stitch and satin stitch techniques, visible thread texture, rich DMC floss colors, fabric background showing through, raised dimensional stitching',
-  },
-  {
-    key: 'disney',
-    fluxFragment:
-      'Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, expressive character design, luminous highlights, Renaissance Disney quality',
-  },
-  {
-    key: 'sack_boy',
-    fluxFragment:
-      'LittleBigPlanet Sack Boy style, knitted fabric characters, button eyes, zipper details, cardboard and craft material world, visible stitching, handmade tactile quality, warm desk lamp lighting',
-  },
-  {
-    key: 'funko_pop',
-    fluxFragment:
-      'Funko Pop vinyl figure style, oversized head, tiny body, glossy plastic surface, dot eyes, no mouth, painted clothing details, collectible figure on display base, product photography',
-  },
-  {
-    key: 'ghibli',
-    fluxFragment:
-      'Studio Ghibli animation style, soft painterly rendering, warm natural color palette, detailed painted backgrounds, atmospheric clouds, gentle character design, Miyazaki quality, hand-painted cel animation',
-  },
-  {
-    key: 'tim_burton',
-    fluxFragment:
-      'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture, sunken dark-ringed eyes, dark whimsical aesthetic',
-  },
-  {
-    key: 'pop_art',
-    fluxFragment:
-      'Pop art style, Andy Warhol screen print, bold flat primary colors at maximum saturation, Ben-Day halftone dots, thick black outlines, graphic commercial aesthetic',
-  },
-  {
-    key: 'minecraft',
-    fluxFragment:
-      'Minecraft voxel style, everything built from cubic blocks, pixelated block textures, square character heads, blocky terrain, grass and dirt blocks, game screenshot aesthetic',
-  },
-  {
-    key: '8bit',
-    fluxFragment:
-      'NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution, simple iconic character sprites, flat color blocks, retro 1985 gaming aesthetic',
-  },
-  {
-    key: 'paper_cutout',
-    fluxFragment:
-      'Construction paper cutout animation, flat 2D paper characters with rough-cut edges, visible paper texture, simple glued-on circle eyes, layered paper backgrounds, crude charming aesthetic, straight-on camera angle',
-  },
-  {
-    key: 'retro_poster',
-    fluxFragment:
-      'Vintage retro travel poster, bold flat color blocks, screen-printed aesthetic, Art Deco influence, simplified geometric forms, limited palette, 1940s illustration style, dramatic diagonal composition',
-  },
-  {
-    key: 'childrens_book',
-    fluxFragment:
-      "Children's picture book illustration, soft watercolor washes on textured paper, rounded friendly character designs, warm inviting palette, gentle hand-drawn linework, cozy magical atmosphere, storybook quality",
-  },
-  {
-    key: 'vaporwave',
-    fluxFragment:
-      'Vaporwave aesthetic, hot pink and cyan and purple palette, glitch effects, marble busts, palm trees, retro grid floor, VHS artifacts, 80s nostalgia, digital sunset, RGB color separation',
-  },
-  {
-    key: 'fantasy',
-    fluxFragment:
-      'Epic fantasy digital concept art, hyper-detailed, vivid saturated colors, dramatic volumetric lighting, vast magical scale, crisp polished rendering, AAA game art quality',
-  },
-  {
-    key: 'ukiyo_e',
-    fluxFragment:
-      'Japanese ukiyo-e woodblock print, bold black outlines, flat color fills, Hokusai wave style, indigo and vermillion palette, stylized clouds, traditional Edo period aesthetic, decorative composition',
-  },
-  {
-    key: 'art_deco',
-    fluxFragment:
-      'Art Deco style, geometric patterns, sunburst motifs, gold and black and emerald palette, polished brass and marble, 1920s glamour, Chrysler Building aesthetic, luxurious symmetrical composition',
-  },
-  {
-    key: 'steampunk',
-    fluxFragment:
-      'Steampunk aesthetic, brass gears and copper pipes, Victorian machinery, ornate mechanical complexity, airships, goggles and leather, warm metallic palette, steam venting, clockwork mechanisms',
-  },
-  {
-    key: 'cute_anime',
-    fluxFragment:
-      'Kawaii chibi anime style, oversized heads, enormous sparkly eyes, pastel pink lavender mint palette, soft rounded forms, floating hearts and stars, sparkle effects, maximum cuteness, Sanrio aesthetic',
-  },
-  {
-    key: 'dark_anime',
-    fluxFragment:
-      'Dark seinen anime, sharp angular character design, intense narrow eyes, muted moody palette, hyper-detailed backgrounds, dramatic cinematic lighting, Ghost in the Shell Akira aesthetic, atmospheric rain and smoke',
-  },
-];
+// Single source of truth — dream_mediums and dream_vibes tables.
+// Fetched once at startup, used throughout the script.
+let CURATED_MEDIUMS = [];
+let CURATED_VIBES = [];
 
-const CURATED_VIBES = [
-  {
-    key: 'cinematic',
-    directive:
-      'This is a frame from an Oscar-winning film. Compose it in 2.39:1 widescreen — use the horizontal space to create tension between subject and environment.',
-  },
-  {
-    key: 'dreamy',
-    directive:
-      "Everything floats in a soft, ethereal haze. Light doesn't come from one direction — it seems to emanate from within the scene itself, creating a gentle omnidirectional glow.",
-  },
-  {
-    key: 'dark',
-    directive:
-      'Embrace the shadows. The majority of the frame is in deep shadow — rich, velvety blacks and near-blacks. Light is rare and precious.',
-  },
-  {
-    key: 'chaos',
-    directive:
-      "Rules don't exist here. Multiple conflicting light sources in impossible colors. Perspective bends — parallel lines converge wrong, scale shifts within the frame.",
-  },
-  {
-    key: 'cozy',
-    directive:
-      'Everything is warm and close. The scene is an intimate space — small rooms, nooks, corners, sheltered spots. Lighting is soft and warm.',
-  },
-  {
-    key: 'minimal',
-    directive:
-      'Less is everything. One subject, vast negative space. The background is a single tone or a subtle gradient.',
-  },
-  {
-    key: 'epic',
-    directive:
-      'SCALE. The subject exists within something impossibly vast — towering mountains, endless skies, cathedral-sized interiors, cosmic expanses.',
-  },
-  {
-    key: 'nostalgic',
-    directive:
-      'This is a memory being remembered fondly. Everything is shifted toward warm golden tones — late afternoon in eternal summer.',
-  },
-  {
-    key: 'psychedelic',
-    directive:
-      'Reality is melting, breathing, and pulsing with impossible color. Every surface has organic flowing patterns — fractals, mandalas, paisley.',
-  },
-  {
-    key: 'peaceful',
-    directive:
-      'Absolute stillness. The scene is in a state of perfect calm — still water reflecting sky, windless fields, quiet dawn light.',
-  },
-  {
-    key: 'whimsical',
-    directive:
-      'Physics are optional and reality is playful. Objects are slightly the wrong size — oversized mushrooms, tiny doors, floating islands.',
-  },
-];
+async function loadStylesFromDb() {
+  const { data: mediums, error: mErr } = await sb.rpc('get_dream_mediums');
+  if (mErr) { console.error('Failed to load mediums:', mErr.message); process.exit(1); }
+  CURATED_MEDIUMS = (mediums || []).map(m => ({
+    key: m.key, label: m.label, directive: m.directive, fluxFragment: m.flux_fragment,
+  }));
+  console.log(`Loaded ${CURATED_MEDIUMS.length} mediums from DB`);
+
+  const { data: vibes, error: vErr } = await sb.rpc('get_dream_vibes');
+  if (vErr) { console.error('Failed to load vibes:', vErr.message); process.exit(1); }
+  CURATED_VIBES = (vibes || []).map(v => ({
+    key: v.key, label: v.label, directive: v.directive,
+  }));
+  console.log(`Loaded ${CURATED_VIBES.length} vibes from DB`);
+}
+
 
 const TEMPLATE_CATEGORIES = [
   'cosmic',
@@ -436,12 +251,6 @@ function resolveMedium(profile) {
   } else {
     medium = pick(CURATED_MEDIUMS);
   }
-  // Aggregate mediums: randomly pick one of the sub-mediums
-  if (medium.includes_mediums?.length) {
-    const subKey = pick(medium.includes_mediums);
-    const sub = CURATED_MEDIUMS.find((m) => m.key === subKey);
-    if (sub) return sub;
-  }
   return medium;
 }
 
@@ -563,6 +372,9 @@ async function generateImage(prompt) {
 async function main() {
   console.log(`\n🌙 Nightly Dream Generation (Sonnet Template Pipeline)`);
   console.log(`   Budget: ${MAX_BUDGET_CENTS}¢ | Batch: ${BATCH_SIZE} | Dry run: ${DRY_RUN}\n`);
+
+  // Load mediums and vibes from DB (single source of truth)
+  await loadStylesFromDb();
 
   const today = new Date().toISOString().slice(0, 10);
   const { data: users, error } = await sb

@@ -36,7 +36,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const GEN_WIDTH = 640;
 const GEN_HEIGHT = Math.round(((SCREEN_HEIGHT / SCREEN_WIDTH) * GEN_WIDTH) / 8) * 8; // round to nearest 8
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
-const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), 380);
+const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
 const MAX_DREAMS = Infinity;
 
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';

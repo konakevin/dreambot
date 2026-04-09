@@ -5,7 +5,7 @@
  */
 
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { DREAM_MEDIUMS, DREAM_VIBES } from '@/constants/dreamEngine';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 
 interface Props {
   mediumKey?: string | null;
@@ -14,12 +14,15 @@ interface Props {
 }
 
 export function MediumVibeBadge({ mediumKey, vibeKey, onPress }: Props) {
+  const { data: mediums = [] } = useDreamMediums();
+  const { data: vibes = [] } = useDreamVibes();
+
   if (!mediumKey && !vibeKey) return null;
 
   const mediumLabel = mediumKey
-    ? (DREAM_MEDIUMS.find((m) => m.key === mediumKey)?.label ?? mediumKey)
+    ? (mediums.find((m) => m.key === mediumKey)?.label ?? mediumKey)
     : null;
-  const vibeLabel = vibeKey ? (DREAM_VIBES.find((v) => v.key === vibeKey)?.label ?? vibeKey) : null;
+  const vibeLabel = vibeKey ? (vibes.find((v) => v.key === vibeKey)?.label ?? vibeKey) : null;
 
   const content = (
     <View style={s.container}>
