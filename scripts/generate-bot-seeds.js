@@ -74,6 +74,62 @@ const BOT_SEEDS = {
       },
     ],
   },
+  'void.architect': {
+    strategies: [
+      { category: 'voidarchitect_genre', prompt: 'a mind-bending surreal sci-fi scene that is visually stunning and awe-inspiring from worlds like blade runner, dune, interstellar, alien, 2001 a space odyssey, arrival, annihilation' },
+      { category: 'voidarchitect_genre_dedup', prompt: 'a mind-bending surreal sci-fi scene that is visually stunning and awe-inspiring from worlds like blade runner, dune, interstellar, alien, 2001 a space odyssey, arrival, annihilation', continueDedup: true },
+      { category: 'voidarchitect_landscape', prompt: 'an impossibly beautiful alien landscape or cosmic vista that defies physics and takes your breath away', separateDedup: true },
+    ],
+  },
+  aurelia: {
+    strategies: [
+      { category: 'aurelia_genre', prompt: 'an ethereally beautiful scene that takes your breath away — soft divine light, magical atmosphere, transcendent beauty from worlds like lord of the rings, studio ghibli, narnia' },
+      { category: 'aurelia_genre_dedup', prompt: 'an ethereally beautiful scene that takes your breath away — soft divine light, magical atmosphere, transcendent beauty from worlds like lord of the rings, studio ghibli, narnia', continueDedup: true },
+      { category: 'aurelia_landscape', prompt: 'a breathtakingly beautiful landscape that feels like a painting you would hang in your home — serene, luminous, peaceful', separateDedup: true },
+    ],
+  },
+  terra: {
+    strategies: [
+      { category: 'terra_genre', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland' },
+      { category: 'terra_genre_dedup', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland', continueDedup: true },
+      { category: 'terra_landscape', prompt: 'an impossibly beautiful natural landscape — dramatic lighting, perfect conditions, the most stunning version of earth or an alien world', separateDedup: true },
+    ],
+  },
+  prism: {
+    strategies: [
+      { category: 'prism_genre', prompt: 'a visually stunning and interesting scene rendered in a creative stylized medium — the contrast between the epic content and playful art style is the magic' },
+      { category: 'prism_genre_dedup', prompt: 'a visually stunning and interesting scene rendered in a creative stylized medium — the contrast between the epic content and playful art style is the magic', continueDedup: true },
+      { category: 'prism_landscape', prompt: 'an epic and beautiful landscape or cityscape that would look amazing rendered in a creative stylized art medium', separateDedup: true },
+    ],
+  },
+  cinder: {
+    strategies: [
+      { category: 'cinder_genre', prompt: 'a hauntingly beautiful dark fantasy scene from worlds like dark souls, elden ring, bloodborne, tim burton films, gothic fairy tales — beautiful but unsettling, elegant darkness' },
+      { category: 'cinder_genre_dedup', prompt: 'a hauntingly beautiful dark fantasy scene from worlds like dark souls, elden ring, bloodborne, tim burton films, gothic fairy tales — beautiful but unsettling, elegant darkness', continueDedup: true },
+      { category: 'cinder_landscape', prompt: 'a dark and beautiful gothic landscape — haunted, atmospheric, mysterious, but stunningly gorgeous', separateDedup: true },
+    ],
+  },
+  mochi: {
+    strategies: [
+      { category: 'mochi_genre', prompt: 'an adorable and heartwarming scene that makes people smile — cute creatures, cozy spaces, warm light, inspired by pixar, sanrio, studio ghibli cozy moments' },
+      { category: 'mochi_genre_dedup', prompt: 'an adorable and heartwarming scene that makes people smile — cute creatures, cozy spaces, warm light, inspired by pixar, sanrio, studio ghibli cozy moments', continueDedup: true },
+      { category: 'mochi_landscape', prompt: 'a cute and cozy miniature world that feels warm and inviting — tiny details, soft lighting, the kind of place you want to shrink down and live in', separateDedup: true },
+    ],
+  },
+  pixelrex: {
+    strategies: [
+      { category: 'pixelrex_genre', prompt: 'a stunning retro gaming scene that triggers pure nostalgia — inspired by classic games like zelda, final fantasy, chrono trigger, pokemon, mega man, metroid, castlevania' },
+      { category: 'pixelrex_genre_dedup', prompt: 'a stunning retro gaming scene that triggers pure nostalgia — inspired by classic games like zelda, final fantasy, chrono trigger, pokemon, mega man, metroid, castlevania', continueDedup: true },
+      { category: 'pixelrex_landscape', prompt: 'a beautiful retro pixel art landscape — the kind of gorgeous background from a classic 16-bit RPG that makes you stop and admire', separateDedup: true },
+    ],
+  },
+  'frida.neon': {
+    strategies: [
+      { category: 'fridaneon_genre', prompt: 'a bold and visually explosive art piece — vibrant maximalist energy from worlds like jazz age glamour, vintage movie posters, comic book splash pages, pop art, art deco architecture' },
+      { category: 'fridaneon_genre_dedup', prompt: 'a bold and visually explosive art piece — vibrant maximalist energy from worlds like jazz age glamour, vintage movie posters, comic book splash pages, pop art, art deco architecture', continueDedup: true },
+      { category: 'fridaneon_landscape', prompt: 'a stunning architectural or cityscape scene with bold geometric patterns, dramatic colors, and maximalist energy', separateDedup: true },
+    ],
+  },
 };
 
 async function generateScene(basePrompt, banList) {
