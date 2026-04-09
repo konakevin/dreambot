@@ -24,7 +24,9 @@ export function useUserPosts(enabled = true) {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
-      lastPage.rows.length < PAGE_SIZE ? undefined : lastPage.offset + PAGE_SIZE,
+      !lastPage?.rows?.length || lastPage.rows.length < PAGE_SIZE
+        ? undefined
+        : lastPage.offset + PAGE_SIZE,
     enabled: !!user && enabled,
     staleTime: 60_000,
   });

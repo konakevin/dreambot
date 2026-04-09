@@ -81,11 +81,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
       _photo,
       vibe,
       hint
-    ) => `COMPLETELY transform this entire photo into hand embroidery on linen fabric. Every single element must become visible thread stitches — no photographic elements remaining.
+    ) => `Transform this photo into a hand embroidery portrait on linen fabric. The style should look like skilled needlework while PRESERVING the person's face, features, and likeness.
 
-The person's face becomes cross-stitch X patterns. Hair becomes satin stitch in matching color. Clothing becomes long-and-short stitch with matching thread colors. Skin is stitched in flesh-tone thread. Background walls, furniture, objects — ALL become embroidered.
+Keep the same person — same face shape, same eyes, same expression, same hair color. Render their features using fine satin stitch for skin (flesh-tone thread), satin stitch for hair in matching color, and detailed stitching for clothing in matching colors. The face should be recognizable as the same person, just rendered in thread.
 
-Visible natural linen weave texture between all stitched areas. French knots for small details like eyes. Raised thread catching light. The entire image should look like flat needlework viewed straight-on. Portrait 9:16.
+Background becomes embroidered — visible linen weave texture, cross-stitch patterns, French knots for small details. Raised thread catching light. Portrait 9:16.
 
 Express the mood through THREAD COLOR WARMTH and STITCH DENSITY — dense rich stitching for intensity, sparse delicate stitching for calm:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
@@ -205,9 +205,9 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
       _photo,
       vibe,
       hint
-    ) => `COMPLETELY transform this photo into classic Disney 2D animation style — Renaissance era (Lion King, Little Mermaid, Aladdin).
+    ) => `COMPLETELY transform this photo into classic Disney 2D animation style — Renaissance era (Lion King, Little Mermaid, Aladdin). The FACE must be fully cartoon — NO photorealistic skin, NO real human features remaining.
 
-The person becomes a Disney character — expressive face with large emotive eyes, clean flowing ink outlines, smooth cel-painted color with luminous highlights. Hair flows with graceful exaggerated movement. Skin has warm Disney color with soft shadow shapes. Background becomes a lush painted Disney environment. Keep the same person's features, hair color, clothing colors — but as a hand-drawn Disney character. Portrait 9:16.
+The person becomes a FULLY DRAWN Disney character — the face is completely cartoon with large emotive Disney eyes, smooth cel-painted skin (NOT photorealistic), clean flowing ink outlines, simplified nose and mouth. Hair becomes flowing painted strokes with graceful exaggerated movement. Every part of the person — including their face and skin — must look hand-drawn and cel-painted, NOT a real photo. Match their hair color and clothing colors. Background becomes a lush painted Disney environment. Portrait 9:16.
 
 Express the mood through BACKGROUND PAINTING and COLOR VIBRANCY — Disney backgrounds carry enormous emotional weight:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
@@ -461,6 +461,28 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 The person gains steampunk accessories — brass goggles on forehead, gear-adorned leather vest, pocket watch chains, copper rivets on clothing. Skin has a warm sepia-toned quality. Hair styled in Victorian fashion with small mechanical ornaments. One eye possibly has a brass monocle with extending lenses. Background transforms into a steampunk workshop or airship deck — brass pipes, pressure gauges, spinning gears, steam vents, leather-bound books, Tesla coils sparking. Warm amber gaslight illumination. Keep same person's face and features. Portrait 9:16.
 
 Express the mood through BRASS PATINA WARMTH and STEAM DENSITY — polished brass for optimism, oxidized green copper for mystery, thick steam for drama:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  surreal: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `Keep this photo looking photographically REAL — real skin, real textures, real materials — but push everything into surreal impossibility.
+
+Apply extreme color grading: hyper-saturated, shifted hues — skin glows with unnatural warmth, shadows are deep electric blue or magenta. Add double-exposure blending with cosmic elements — galaxies, nebulae, or organic textures bleeding through the person's silhouette. Warp the environment subtly: reflections that don't match, impossible geometry in the background, light sources that shouldn't exist. Hair or clothing might defy gravity. The sky could be an ocean, flowers might be crystalline. Lens effects pushed to extremes — heavy chromatic aberration, prismatic light splits, lens flare from invisible sources. Everything is sharp and detailed like a real photo, but the scene is impossible and dreamlike. Portrait 9:16.
+
+Express the mood through COLOR SATURATION DIRECTION and REALITY DISTORTION LEVEL — warm saturated for euphoric, cool desaturated for eerie, maximum distortion for chaos:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  photorealistic: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `Make this photo look like a great natural photograph — NOT a studio shoot, NOT heavily edited.
+
+Keep the person EXACTLY as they are — same face, same features. Place them in a believable real environment with natural ambient lighting. No dramatic studio setups, no artificial rim lighting, no heavy color grading. The lighting should come from whatever is naturally in the scene — sunlight, street lights, window light. Skin looks like real skin, not airbrushed. Colors are true to life, not pushed or saturated. The image should feel like a great candid photo someone took, not a retouched magazine image. No filters, no HDR look, no artificial glow.
+
+Express the mood through the ENVIRONMENT and TIME OF DAY — not through post-processing effects:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 };

@@ -369,6 +369,8 @@ export const MEDIUM_KEYS = [
   'ukiyo_e',
   'art_deco',
   'steampunk',
+  'photorealistic',
+  'surreal',
 ] as const;
 
 export const VIBE_KEYS = [

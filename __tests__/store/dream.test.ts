@@ -59,6 +59,7 @@ describe('useDreamStore', () => {
       archetype: null,
       resolvedMedium: 'watercolor',
       resolvedVibe: 'dreamy',
+      uploadId: null,
     };
     useDreamStore.getState().setResult(result);
     expect(useDreamStore.getState().result).toEqual(result);
@@ -75,6 +76,7 @@ describe('useDreamStore', () => {
       archetype: null,
       resolvedMedium: 'anime',
       resolvedVibe: 'epic',
+      uploadId: null,
     });
 
     useDreamStore.getState().clearResult();
@@ -95,6 +97,7 @@ describe('useDreamStore', () => {
       archetype: null,
       resolvedMedium: 'lego',
       resolvedVibe: 'epic',
+      uploadId: null,
     });
 
     useDreamStore.getState().reset();

@@ -36,6 +36,8 @@ interface GenerateDreamOpts {
   vibe_key?: string;
   /** Photo style: 'restyle' keeps scene, 'reimagine' dreams up new scenario */
   photo_style?: 'restyle' | 'reimagine';
+  /** Client-generated job ID for queue tracking */
+  job_id?: string;
 }
 
 interface GenerateDreamResult {
@@ -46,6 +48,8 @@ interface GenerateDreamResult {
   model?: string;
   resolved_medium?: string;
   resolved_vibe?: string;
+  job_id?: string;
+  upload_id?: string;
 }
 
 /**
@@ -103,6 +107,8 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
     model: data.model,
     resolved_medium: data.resolved_medium,
     resolved_vibe: data.resolved_vibe,
+    job_id: data.job_id,
+    upload_id: data.upload_id,
   };
 }
 
@@ -112,13 +118,14 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
  */
 export async function generateFromRecipe(
   recipe: Recipe,
-  opts?: { hint?: string; skipEnhance?: boolean }
+  opts?: { hint?: string; skipEnhance?: boolean; jobId?: string }
 ): Promise<GenerateDreamResult> {
   return generateDream({
     mode: 'flux-dev',
     recipe,
     hint: opts?.hint,
     skip_enhance: opts?.skipEnhance,
+    job_id: opts?.jobId,
   });
 }
 
@@ -127,7 +134,13 @@ export async function generateFromRecipe(
  */
 export async function generateFromVibeProfile(
   profile: VibeProfile,
-  opts?: { hint?: string; promptMode?: PromptMode; mediumKey?: string; vibeKey?: string }
+  opts?: {
+    hint?: string;
+    promptMode?: PromptMode;
+    mediumKey?: string;
+    vibeKey?: string;
+    jobId?: string;
+  }
 ): Promise<GenerateDreamResult> {
   return generateDream({
     mode: 'flux-dev',
@@ -136,6 +149,7 @@ export async function generateFromVibeProfile(
     hint: opts?.hint,
     medium_key: opts?.mediumKey,
     vibe_key: opts?.vibeKey,
+    job_id: opts?.jobId,
   });
 }
 

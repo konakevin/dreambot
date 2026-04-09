@@ -1,0 +1,60 @@
+name: Bot Dream Generation
+
+on:
+  schedule:
+    # Run 10 times throughout the day (every ~2.5 hours)
+    # Each run picks ONE random bot and generates 1 dream
+    # With random delays, this spreads 10 posts across the full day
+    - cron: '0 0 * * *'
+    - cron: '30 2 * * *'
+    - cron: '0 5 * * *'
+    - cron: '30 7 * * *'
+    - cron: '0 10 * * *'
+    - cron: '30 12 * * *'
+    - cron: '0 15 * * *'
+    - cron: '30 17 * * *'
+    - cron: '0 20 * * *'
+    - cron: '30 22 * * *'
+  workflow_dispatch:
+    inputs:
+      bot:
+        description: 'Specific bot username (leave empty for random)'
+        required: false
+      count:
+        description: 'Number of dreams per bot'
+        required: false
+        default: '1'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Random delay (0-60 minutes)
+        run: sleep $((RANDOM % 3600))
+
+      - name: Generate bot dream
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "${{ inputs.bot }}" ]; then
+            node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
+          else
+            # Pick a random bot
+            BOTS=("solaris" "void.architect" "aurelia" "terra" "yuuki" "prism" "cinder" "mochi" "pixelrex" "frida.neon")
+            BOT=${BOTS[$((RANDOM % ${#BOTS[@]}))]}
+            echo "🎲 Random bot: $BOT"
+            node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
+          fi

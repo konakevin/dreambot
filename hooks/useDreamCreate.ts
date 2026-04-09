@@ -85,6 +85,13 @@ export function useDreamCreate() {
     if (!(await trySpendSparkle())) return 'error';
     busy.current = true;
 
+    // Generate a job ID for queue tracking (Hermes doesn't have crypto.randomUUID)
+    const jobId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
+    useDreamStore.getState().setActiveJobId(jobId);
+
     const { config } = useDreamStore.getState();
 
     try {
@@ -98,6 +105,7 @@ export function useDreamCreate() {
         ai_concept?: Record<string, unknown> | null;
         resolved_medium?: string;
         resolved_vibe?: string;
+        upload_id?: string;
       };
 
       if (config.photoBase64 && config.photoUri) {
@@ -119,6 +127,7 @@ export function useDreamCreate() {
           input_image: refUrl,
           hint: config.userPrompt.trim() || undefined,
           photo_style: config.userPrompt.trim() ? 'reimagine' : 'restyle',
+          job_id: jobId,
         });
       } else {
         // Text dream (prompt or surprise)
@@ -132,10 +141,18 @@ export function useDreamCreate() {
             mediumKey: config.selectedMedium,
             vibeKey: config.selectedVibe,
             hint: config.userPrompt.trim() || undefined,
+            jobId,
           });
         } else {
-          result = await generateFromRecipe(recipe ?? DEFAULT_RECIPE);
+          result = await generateFromRecipe(recipe ?? DEFAULT_RECIPE, { jobId });
         }
+      }
+
+      // Guard: if the user queued this dream and started a new one, don't clobber
+      const currentJobId = useDreamStore.getState().activeJobId;
+      if (currentJobId !== jobId) {
+        if (__DEV__) console.log('[useDreamCreate] Stale job result, discarding');
+        return 'done';
       }
 
       setResult({
@@ -146,6 +163,7 @@ export function useDreamCreate() {
         archetype: result.archetype ?? null,
         resolvedMedium: result.resolved_medium ?? null,
         resolvedVibe: result.resolved_vibe ?? null,
+        uploadId: result.upload_id ?? null,
       });
 
       return 'done';

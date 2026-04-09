@@ -4,14 +4,17 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { randomMascot } from '@/constants/mascots';
 import { useDreamCreate } from '@/hooks/useDreamCreate';
+import { useDreamStore } from '@/store/dream';
+import { Toast } from '@/components/Toast';
 
 const TIPS = [
   'Dreaming up something special...',
@@ -26,6 +29,8 @@ export default function DreamLoadingScreen() {
   const tipIndex = useRef(0);
   const { generate } = useDreamCreate();
   const started = useRef(false);
+  const queued = useRef(false);
+  const [showQueue, setShowQueue] = useState(false);
 
   useEffect(() => {
     if (started.current) return;
@@ -34,6 +39,9 @@ export default function DreamLoadingScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     generate().then((status) => {
+      // If user already queued, don't navigate — Edge Function handled persistence
+      if (queued.current) return;
+
       if (status === 'done') {
         router.replace('/dream/reveal');
       } else {
@@ -42,6 +50,11 @@ export default function DreamLoadingScreen() {
       }
     });
   }, [generate]);
+
+  // Show "Queue This" button immediately
+  useEffect(() => {
+    setShowQueue(true);
+  }, []);
 
   // Cycle tips every 4 seconds
   const [tip, setTip] = useState(TIPS[0]);
@@ -53,12 +66,27 @@ export default function DreamLoadingScreen() {
     return () => clearInterval(interval);
   }, []);
 
+  function handleQueue() {
+    queued.current = true;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Clear the active job so the stale guard in useDreamCreate discards the result
+    useDreamStore.getState().setActiveJobId(null);
+    Toast.show("We'll notify you when it's ready", 'checkmark-circle');
+    router.replace('/(tabs)/create');
+  }
+
   return (
     <SafeAreaView style={s.container}>
       <View style={s.content}>
         <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
         <ActivityIndicator size="large" color={colors.accent} style={s.spinner} />
         <Text style={s.tip}>{tip}</Text>
+        {showQueue && (
+          <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
+            <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
+            <Text style={s.queueText}>Queue This</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -88,6 +116,22 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 16,
     textAlign: 'center',
+    fontWeight: '600',
+  },
+  queueBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  queueText: {
+    color: colors.textSecondary,
+    fontSize: 14,
     fontWeight: '600',
   },
 });

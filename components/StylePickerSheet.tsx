@@ -4,7 +4,7 @@
  * Dismisses on selection or drag-down.
  */
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -52,14 +52,10 @@ export function StylePickerSheet({
   const progress = useSharedValue(0);
   const dragY = useSharedValue(0);
   const closing = useRef(false);
+  const scrollRef = useRef<ScrollView>(null);
 
-  // Build options list — filter to user's selections if provided
-  const allOptions = allAvailable.filter(
-    (o) => o.key === 'surprise_me' || !userFilter?.length || userFilter.includes(o.key)
-  );
-
-  // Sort: Surprise Me first, then alphabetical
-  const options = [...allOptions].sort((a, b) => {
+  // Sort: Surprise Me first, then alphabetical — show all available mediums/vibes
+  const options = [...allAvailable].sort((a, b) => {
     if (a.key === 'surprise_me') return -1;
     if (b.key === 'surprise_me') return 1;
     return a.label.localeCompare(b.label);
@@ -70,6 +66,19 @@ export function StylePickerSheet({
     closing.current = false;
     progress.value = withTiming(1, { duration: 300 });
   }
+
+  // Scroll to selected item when sheet opens
+  useEffect(() => {
+    if (visible && options.length > 0) {
+      const idx = options.findIndex((o) => o.key === selected);
+      if (idx > 2) {
+        const ROW_HEIGHT = 52;
+        setTimeout(() => {
+          scrollRef.current?.scrollTo({ y: (idx - 1) * ROW_HEIGHT, animated: false });
+        }, 50);
+      }
+    }
+  }, [visible]);
 
   const dismiss = useCallback(() => {
     if (closing.current) return;
@@ -159,6 +168,7 @@ export function StylePickerSheet({
 
           {/* Options list */}
           <ScrollView
+            ref={scrollRef}
             className="flex-1 px-4"
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="always"

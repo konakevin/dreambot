@@ -132,6 +132,19 @@ function RealtimeSubscriber() {
         {
           event: 'UPDATE',
           schema: 'public',
+          table: 'users',
+          filter: `id=eq.${user.id}`,
+        },
+        () => {
+          // Balance or profile changed — refresh sparkles immediately
+          queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
           table: 'user_recipes',
           filter: `user_id=eq.${user.id}`,
         },
@@ -148,6 +161,24 @@ function RealtimeSubscriber() {
           queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
           queryClient.invalidateQueries({ queryKey: ['userPosts'] });
           queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'dream_jobs',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const status = (payload.new as { status?: string }).status;
+          if (status === 'done') {
+            // Queued dream finished — refresh inbox and dreams
+            queryClient.invalidateQueries({ queryKey: ['inbox', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
+          }
         }
       )
       .subscribe();
@@ -222,6 +253,25 @@ function DataPrefetcher() {
         },
         staleTime: 5 * 60_000,
       });
+      // Dream styles (mediums + vibes from DB)
+      queryClient.prefetchQuery({
+        queryKey: ['dreamMediums'],
+        queryFn: async () => {
+          const { data, error } = await supabase.rpc('get_dream_mediums');
+          if (error) throw error;
+          return data ?? [];
+        },
+        staleTime: 5 * 60_000,
+      });
+      queryClient.prefetchQuery({
+        queryKey: ['dreamVibes'],
+        queryFn: async () => {
+          const { data, error } = await supabase.rpc('get_dream_vibes');
+          if (error) throw error;
+          return data ?? [];
+        },
+        staleTime: 5 * 60_000,
+      });
       // Explore feed (first page, no filters)
       queryClient.prefetchInfiniteQuery({
         queryKey: ['explore', '', '', 0],
@@ -244,6 +294,7 @@ function DataPrefetcher() {
   }, [user?.id]);
 
   // Refresh all data when app returns from background after 5+ minutes
+  // Also clean up stale dream jobs that never completed
   const backgroundedAt = useRef<number>(0);
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
@@ -254,10 +305,27 @@ function DataPrefetcher() {
         if (elapsed > 60 * 1000) {
           queryClient.invalidateQueries();
         }
+
+        // Mark stale processing jobs as failed (>3 min old)
+        if (user) {
+          const cutoff = new Date(Date.now() - 3 * 60_000).toISOString();
+          (supabase.from as Function)('dream_jobs')
+            .update({
+              status: 'failed',
+              error: 'timed_out',
+              completed_at: new Date().toISOString(),
+            })
+            .eq('user_id', user.id)
+            .eq('status', 'processing')
+            .lt('created_at', cutoff)
+            .then(() => {
+              /* fire and forget */
+            });
+        }
       }
     });
     return () => sub.remove();
-  }, []);
+  }, [user?.id]);
 
   return null;
 }

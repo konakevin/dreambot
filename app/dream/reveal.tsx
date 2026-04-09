@@ -75,6 +75,7 @@ export default function DreamRevealScreen() {
         visibility: 'public',
         dreamMedium: result!.resolvedMedium,
         dreamVibe: result!.resolvedVibe,
+        existingUploadId: result!.uploadId ?? undefined,
       });
 
       pinToFeed({
@@ -104,15 +105,18 @@ export default function DreamRevealScreen() {
     if (!user || saving) return;
     setSaving(true);
     try {
-      await saveDream({
-        userId: user.id,
-        tempImageUrl: result!.imageUrl,
-        prompt: result!.prompt,
-        aiConcept: result!.aiConcept,
-        visibility: 'private',
-        dreamMedium: result!.resolvedMedium,
-        dreamVibe: result!.resolvedVibe,
-      });
+      // Edge Function already created a private draft — only insert if no existing upload
+      if (!result!.uploadId) {
+        await saveDream({
+          userId: user.id,
+          tempImageUrl: result!.imageUrl,
+          prompt: result!.prompt,
+          aiConcept: result!.aiConcept,
+          visibility: 'private',
+          dreamMedium: result!.resolvedMedium,
+          dreamVibe: result!.resolvedVibe,
+        });
+      }
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

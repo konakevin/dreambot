@@ -1,7 +1,7 @@
 /**
  * useDreamStyles — fetches mediums and vibes from the DB.
  * Single source of truth — no more hardcoded arrays.
- * Cached for 24 hours via TanStack Query (data rarely changes).
+ * Always fresh — no stale time, refetches every mount.
  */
 
 import { useQuery } from '@tanstack/react-query';
@@ -20,8 +20,6 @@ export interface DreamVibe {
   directive: string;
 }
 
-const STALE_TIME = 24 * 60 * 60 * 1000; // 24 hours
-
 export function useDreamMediums() {
   return useQuery({
     queryKey: ['dreamMediums'],
@@ -30,7 +28,7 @@ export function useDreamMediums() {
       if (error) throw error;
       return (data ?? []) as DreamMedium[];
     },
-    staleTime: STALE_TIME,
+    staleTime: 5 * 60_000,
   });
 }
 
@@ -42,6 +40,6 @@ export function useDreamVibes() {
       if (error) throw error;
       return (data ?? []) as DreamVibe[];
     },
-    staleTime: STALE_TIME,
+    staleTime: 5 * 60_000,
   });
 }

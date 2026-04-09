@@ -127,6 +127,9 @@ export function FullScreenFeed({
 
   const handleDelete = useCallback(
     async (uploadId: string) => {
+      const idx = currentIndex.current;
+      const totalBefore = posts.length;
+
       // Fetch image URL so we can clean up storage
       const { data: row } = await supabase
         .from('uploads')
@@ -151,6 +154,19 @@ export function FullScreenFeed({
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Dream deleted', 'checkmark-circle');
 
+      // If this was the only post, go back (empty state will show in grid)
+      if (totalBefore <= 1) {
+        if (router.canGoBack()) router.back();
+      } else {
+        // At end → scroll up to previous; otherwise stay put (next card fills in)
+        const targetIdx = idx >= totalBefore - 1 ? idx - 1 : idx;
+        currentIndex.current = targetIdx;
+        ref.current?.scrollToOffset({
+          offset: targetIdx * SCREEN_HEIGHT,
+          animated: false,
+        });
+      }
+
       // Optimistically remove from all feed caches so the card disappears immediately
       const feedKeys = ['dreamFeed', 'explore', 'userPosts', 'my-dreams', 'albumPosts'];
       for (const key of feedKeys) {
@@ -163,9 +179,8 @@ export function FullScreenFeed({
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       queryClient.invalidateQueries({ queryKey: ['explore'] });
-      if (router.canGoBack()) router.back();
     },
-    [queryClient]
+    [queryClient, posts, ref]
   );
 
   const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;

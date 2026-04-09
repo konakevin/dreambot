@@ -15,13 +15,15 @@ export type DreamVisibility = 'public' | 'private';
 
 interface SaveDreamOpts {
   userId: string;
-  /** Temp Replicate URL — will be persisted to Storage */
+  /** Temp Replicate URL or permanent Storage URL */
   tempImageUrl: string;
   prompt: string;
   aiConcept?: unknown | null;
   visibility: DreamVisibility;
   dreamMedium?: string | null;
   dreamVibe?: string | null;
+  /** If set, UPDATE this existing draft upload instead of INSERT */
+  existingUploadId?: string;
 }
 
 interface SaveDreamResult {
@@ -36,10 +38,28 @@ interface SaveDreamResult {
  * - `private` → is_active=false, visibility='private' (My Dreams only)
  */
 export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
-  const imageUrl = await persistImage(opts.tempImageUrl, opts.userId);
+  // Skip re-upload if the image is already in Supabase Storage
+  const isStorageUrl = opts.tempImageUrl.includes('supabase.co/storage');
+  const imageUrl = isStorageUrl
+    ? opts.tempImageUrl
+    : await persistImage(opts.tempImageUrl, opts.userId);
 
   const isPublic = opts.visibility === 'public';
   const caption = opts.prompt.length > 200 ? opts.prompt.slice(0, 197) + '...' : opts.prompt;
+
+  // If we have an existing draft upload (from queue), update it instead of inserting
+  if (opts.existingUploadId) {
+    const { error } = await supabase
+      .from('uploads')
+      .update({
+        visibility: opts.visibility,
+        is_active: isPublic,
+        is_posted: isPublic,
+      } as Record<string, unknown>)
+      .eq('id', opts.existingUploadId);
+    if (error) throw error;
+    return { uploadId: opts.existingUploadId, imageUrl };
+  }
 
   // visibility column added by migration 075 — remove cast after regenerating types
   const row = {

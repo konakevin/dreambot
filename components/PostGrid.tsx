@@ -1,9 +1,10 @@
 import { useMemo, useCallback, useRef, useEffect } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, RefreshControl } from 'react-native';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
+import { useUserDreams } from '@/hooks/useUserDreams';
 import { PostTile } from '@/components/PostTile';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
@@ -16,7 +17,8 @@ export type PostGridSource =
   | { type: 'own' }
   | { type: 'saved' }
   | { type: 'dreams' }
-  | { type: 'user'; userId: string };
+  | { type: 'user'; userId: string }
+  | { type: 'userDreams'; userId: string };
 
 interface PostGridProps {
   source: PostGridSource;
@@ -49,32 +51,42 @@ export function PostGrid({
   const isSaved = source.type === 'saved';
   const isDreams = source.type === 'dreams';
   const isUser = source.type === 'user';
-  const userId = isUser ? source.userId : '';
+  const isUserDreams = source.type === 'userDreams';
+  const userId =
+    source.type === 'user' ? source.userId : source.type === 'userDreams' ? source.userId : '';
 
   const ownQuery = useUserPosts(isOwn_);
   const savedQuery = useFavoritePosts(isSaved);
   const userQuery = usePublicProfilePosts(userId, isUser);
   const dreamsQuery = useMyDreams();
+  const userDreamsQuery = useUserDreams(userId, isUserDreams);
 
-  // Paginated hooks return { pages: { rows }[] }, useMyDreams returns flat array
-  const paginatedQuery = isOwn_ ? ownQuery : isSaved ? savedQuery : userQuery;
+  const activeQuery = isOwn_
+    ? ownQuery
+    : isSaved
+      ? savedQuery
+      : isDreams
+        ? dreamsQuery
+        : isUserDreams
+          ? userDreamsQuery
+          : userQuery;
 
-  const posts: DreamPostItem[] = useMemo(() => {
-    if (isDreams) return dreamsQuery.data ?? [];
-    return paginatedQuery.data?.pages.flatMap((p) => p.rows) ?? [];
-  }, [isDreams, dreamsQuery.data, paginatedQuery.data]);
+  const posts: DreamPostItem[] = useMemo(
+    () => activeQuery.data?.pages.flatMap((p) => p.rows) ?? [],
+    [activeQuery.data]
+  );
 
-  const isLoading = isDreams ? dreamsQuery.isLoading : paginatedQuery.isLoading;
-  const hasNextPage = isDreams ? false : paginatedQuery.hasNextPage;
-  const isFetchingNextPage = isDreams ? false : paginatedQuery.isFetchingNextPage;
+  const isLoading = activeQuery.isLoading;
+  const hasNextPage = activeQuery.hasNextPage;
+  const isFetchingNextPage = activeQuery.isFetchingNextPage;
 
   const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
 
   const handleEndReached = useCallback(() => {
-    if (!isDreams && hasNextPage && !isFetchingNextPage) {
-      paginatedQuery.fetchNextPage();
+    if (hasNextPage && !isFetchingNextPage) {
+      activeQuery.fetchNextPage();
     }
-  }, [isDreams, hasNextPage, isFetchingNextPage, paginatedQuery.fetchNextPage]);
+  }, [hasNextPage, isFetchingNextPage, activeQuery.fetchNextPage]);
 
   return (
     <FlatList<DreamPostItem>
@@ -84,10 +96,17 @@ export function PostGrid({
       numColumns={2}
       columnWrapperStyle={styles.row}
       contentContainerStyle={{ paddingBottom: vs(90) }}
-      windowSize={10}
-      maxToRenderPerBatch={8}
-      initialNumToRender={6}
+      windowSize={5}
+      maxToRenderPerBatch={6}
+      initialNumToRender={8}
       removeClippedSubviews
+      refreshControl={
+        <RefreshControl
+          refreshing={activeQuery.isRefetching && !isFetchingNextPage}
+          onRefresh={() => activeQuery.refetch()}
+          tintColor="#fff"
+        />
+      }
       ListHeaderComponent={ListHeaderComponent}
       onEndReachedThreshold={0.5}
       onEndReached={handleEndReached}

@@ -33,6 +33,7 @@ interface DreamResult {
   archetype: string | null;
   resolvedMedium: string | null;
   resolvedVibe: string | null;
+  uploadId: string | null;
 }
 
 interface DreamStore {
@@ -40,6 +41,8 @@ interface DreamStore {
   config: DreamConfig;
   // Result (set by Loading screen)
   result: DreamResult | null;
+  // Queue tracking
+  activeJobId: string | null;
   // Actions
   setMode: (mode: DreamFlowMode) => void;
   setPhoto: (base64: string, uri: string) => void;
@@ -50,6 +53,7 @@ interface DreamStore {
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
   clearPhoto: () => void;
+  setActiveJobId: (id: string | null) => void;
   reset: () => void;
 }
 
@@ -66,6 +70,7 @@ const INITIAL_CONFIG: DreamConfig = {
 export const useDreamStore = create<DreamStore>((set) => ({
   config: { ...INITIAL_CONFIG },
   result: null,
+  activeJobId: null,
 
   setMode: (mode) => set((s) => ({ config: { ...s.config, mode } })),
   setPhoto: (base64, uri) =>
@@ -80,5 +85,6 @@ export const useDreamStore = create<DreamStore>((set) => ({
     set((s) => ({
       config: { ...s.config, photoBase64: null, photoUri: null, photoStyle: 'restyle' },
     })),
-  reset: () => set({ config: { ...INITIAL_CONFIG }, result: null }),
+  setActiveJobId: (id) => set({ activeJobId: id }),
+  reset: () => set({ config: { ...INITIAL_CONFIG }, result: null, activeJobId: null }),
 }));

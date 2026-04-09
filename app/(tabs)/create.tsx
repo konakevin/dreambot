@@ -283,15 +283,12 @@ export default function CreateScreen() {
             />
             {/* Photo icon inside prompt field */}
             <TouchableOpacity
-              className="absolute bottom-2 right-3"
+              className="absolute bottom-2 right-3 w-9 h-9 rounded-full items-center justify-center"
+              style={{ backgroundColor: colors.accent }}
               onPress={handlePickPhoto}
               hitSlop={8}
             >
-              <Ionicons
-                name={hasPhoto ? 'image' : 'camera-outline'}
-                size={22}
-                color={hasPhoto ? colors.accent : colors.textSecondary}
-              />
+              <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={18} color="#fff" />
             </TouchableOpacity>
           </View>
 

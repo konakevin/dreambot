@@ -119,11 +119,13 @@ export default function ProfileScreen() {
         />
       </View>
 
+      {/* TODO: revisit wish feature once we figure out how it will work
       {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
         <View style={styles.wishRow}>
           <DreamWishBadge variant="card" />
         </View>
       )}
+      */}
 
       {(activeTab === 'posts' || activeTab === 'saved' || activeTab === 'dreams') && (
         <View style={styles.tabRow}>

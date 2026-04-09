@@ -50,12 +50,7 @@ export function handleImageLongPress(opts: {
       {
         text: 'Delete',
         style: 'destructive' as const,
-        onPress: () => {
-          showAlert('Delete Dream', 'Are you sure? This cannot be undone.', [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Delete', style: 'destructive' as const, onPress: opts.onDelete! },
-          ]);
-        },
+        onPress: opts.onDelete!,
       },
     ]);
   } else {

@@ -219,6 +219,8 @@ interface RequestBody {
   force_medium?: string;
   /** Test mode: override vibe selection */
   force_vibe?: string;
+  /** Client-generated job ID for queue tracking */
+  job_id?: string;
 }
 
 Deno.serve(async (req) => {
@@ -316,6 +318,7 @@ Deno.serve(async (req) => {
     | undefined;
   const force_medium = (body as Record<string, unknown>).force_medium as string | undefined;
   const force_vibe = (body as Record<string, unknown>).force_vibe as string | undefined;
+  const jobId = (body as Record<string, unknown>).job_id as string | undefined;
 
   console.log(
     '[generate-dream] RAW TEST PARAMS:',
@@ -380,6 +383,19 @@ Deno.serve(async (req) => {
   //     { status: 429 }
   //   );
   // }
+
+  // ── Create dream job (queue tracking) ──────────────────────────────────
+  if (jobId) {
+    try {
+      await supabase.from('dream_jobs').insert({
+        id: jobId,
+        user_id: userId,
+        status: 'processing',
+      });
+    } catch {
+      /* non-critical — job tracking is best-effort */
+    }
+  }
 
   // ── Build prompt ──────────────────────────────────────────────────────────
   let finalPrompt: string;
@@ -822,7 +838,7 @@ Output ONLY the prompt.`;
     );
 
     if (isPhoto && photo_style === 'reimagine') {
-      // ── REIMAGINE: vision describe → medium template or generic brief → flux-dev ──
+      // ── REIMAGINE (solo): vision describe → medium template or generic brief → flux-dev ──
       console.log('[generate-dream] ⏱ REIMAGINE: starting vision...');
       try {
         const photoDescription = await describeWithVision(
@@ -856,8 +872,8 @@ Output ONLY the prompt.`;
 - The user wants: ${userHint || 'a creative reimagining'}
 - Render in ${medium.key} style
 - Mood: ${vibe.directive!.slice(0, 200)}
-- Portrait 9:16
-- DO NOT invent your own scenario — use the user's request
+- Framing: waist-up to three-quarter body. The person's face must be clearly visible and well-lit. Show the person IN the scene, interacting with elements around them. The environment should be visible — don't crop it out.
+- DO NOT invent your own scenario — use the user's request EXACTLY
 Output ONLY the prompt.`;
           finalPrompt = await enhanceViaHaiku(genericBrief, genericBrief, ANTHROPIC_KEY, 150);
         }
@@ -868,14 +884,11 @@ Output ONLY the prompt.`;
           'lego',
           'pixel_art',
           'stained_glass',
-          'embroidery',
           'funko_pop',
           'minecraft',
-          '8bit',
           'sack_boy',
           'ghibli',
           'tim_burton',
-          'pop_art',
           'felt',
         ]);
         if (!NON_SWAP_MEDIUMS.has(medium.key)) {
@@ -927,9 +940,11 @@ Output ONLY the prompt.`;
       } else if (config) {
         // Kontext-max: send instruction directly (NO Haiku rewrite)
         finalPrompt = config.buildPrompt('', vibe.directive!.slice(0, 200), hint ?? '');
+        finalPrompt +=
+          '\nIMPORTANT: The person must be RECOGNIZABLE — keep their face, features, and likeness. Render them in the art style but they must still look like the same person.';
       } else {
         // No medium-specific config — use generic Kontext restyle
-        finalPrompt = `Transform this photo into ${medium.fluxFragment ?? medium.key} style. Keep the same person, same pose, same expression. ${vibe.directive!.slice(0, 200)} Portrait 9:16.${hint ? ` ${hint}` : ''}`;
+        finalPrompt = `Transform this photo into ${medium.fluxFragment ?? medium.key} style. Keep the same person, same pose, same expression, facing the camera. ${vibe.directive!.slice(0, 200)} Portrait 9:16.${hint ? ` ${hint}` : ''}`;
       }
 
       logAxes = {
@@ -943,7 +958,100 @@ Output ONLY the prompt.`;
       // ── TEXT PATH ──
       const userSubject = rawPrompt ?? hint ?? '';
 
-      if (userSubject) {
+      // Detect self-references ("put me", "I am", "myself") → inject cast description + face swap
+      // Only use cast photo when there's NO attached photo — if a photo is attached, the reimagine path handles it
+      const selfCast = !isPhoto
+        ? vibeProfile?.dream_cast?.find(
+            (m: DreamCastMember) => m.role === 'self' && m.thumb_url && m.description
+          )
+        : undefined;
+      const mentionsSelf =
+        userSubject &&
+        selfCast &&
+        /\b(put me|place me|make me|show me|me as|me in|me on|me at|i am|i'm|myself|my face)\b/i.test(
+          userSubject
+        );
+
+      if (mentionsSelf && userSubject) {
+        // ── SELF-INSERT TEXT PATH: user's description + face swap from cast photo ──
+        const selfDesc = selfCast.description
+          .replace(/^#.*\n/gm, '')
+          .replace(/\*\*/g, '')
+          .slice(0, 250);
+        console.log('[generate-dream] 🎭 SELF-INSERT TEXT: injecting cast description + face swap');
+
+        try {
+          const selfBrief = `You are a cinematographer. Write a Flux AI prompt (60-80 words, comma-separated).
+
+MEDIUM (start with this EXACTLY): ${medium.fluxFragment}
+
+STYLE GUIDE:
+${medium.directive}
+
+SCENE — the user asked for: ${userSubject}
+
+THE MAIN CHARACTER (this is the user — you MUST match their description EXACTLY):
+${selfDesc}
+CRITICAL: Preserve the character's EXACT sex, age, build, and features as described above. Do NOT change their gender.
+
+MOOD: ${vibe.directive}
+
+COMPOSITION — THIS IS CRITICAL:
+${(() => {
+  const shots = [
+    '1. HEAD AND SHOULDERS framing — face fills ~30% of the frame. Person interacting with one key prop or element.',
+    '1. CHEST-UP framing — face fills ~25% of the frame. Show the person holding, touching, or using something from the scene.',
+    '1. WAIST-UP framing — face fills ~20% of the frame. Person actively engaged in the scene — gesturing, reaching, leaning.',
+    '1. THREE-QUARTER BODY framing — show from knees up. Face fills ~15% of the frame. Person surrounded by scene elements, interacting with the environment.',
+  ];
+  return shots[Math.floor(Math.random() * shots.length)];
+})()}
+2. Face must be CLEARLY VISIBLE and well-lit — no tiny faces, no silhouettes, no faces in shadow
+3. NEVER use full body shots, extreme wide shots, aerial views, or show the person tiny in a vast landscape
+4. Show the character DOING something — interacting with objects, environment, or props from the scene
+5. Name specific materials, textures, light sources
+6. End with: no text, no words, no letters, no watermarks, hyper detailed
+Output ONLY the prompt.`;
+
+          finalPrompt = await nightlySonnet(selfBrief, ANTHROPIC_KEY, 200);
+          if (finalPrompt.length < 10) throw new Error('too short');
+
+          // Set up face swap from cast photo
+          const NON_SWAP_MEDIUMS = new Set([
+            'lego',
+            'pixel_art',
+            'stained_glass',
+            'embroidery',
+            'funko_pop',
+            'minecraft',
+            'sack_boy',
+            'ghibli',
+            'tim_burton',
+          ]);
+          if (!NON_SWAP_MEDIUMS.has(medium.key)) {
+            faceSwapSource = selfCast.thumb_url;
+          }
+
+          logAxes = {
+            medium: medium.key,
+            vibe: vibe.key,
+            engine: 'v2-self-insert-text',
+            faceSwap: !NON_SWAP_MEDIUMS.has(medium.key),
+          };
+          console.log('[generate-dream] Self-insert prompt:', finalPrompt.slice(0, 150));
+          lap('self-insert-done');
+        } catch (err) {
+          console.error('[generate-dream] SELF-INSERT FAILED:', (err as Error).message);
+          finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
+          logAxes = {
+            medium: medium.key,
+            vibe: vibe.key,
+            engine: 'v2-self-insert-fallback',
+            error: (err as Error).message,
+          };
+          lap('self-insert-done');
+        }
+      } else if (userSubject) {
         // User provided a prompt — directive approach for all mediums
         const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
 
@@ -1247,27 +1355,38 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
     lap('image-gen');
     console.log(`[generate-dream] ⏱ Image generation complete`);
 
-    // Face swap: paste original face onto generated image (Reimagine path)
+    // Face swap: paste original face onto generated image
     if (faceSwapSource && tempUrl) {
       try {
-        console.log('[generate-dream] ⏱ Starting face swap upload...');
-        const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
-        const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
-        const swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
-        await supabase.storage
-          .from('uploads')
-          .upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true });
-        const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
-        const sourceUrl = swapUrlData.publicUrl;
-        lap('face-swap-upload');
+        let sourceUrl: string;
+        let swapFileName: string | null = null;
+        if (faceSwapSource.startsWith('http')) {
+          // Already a public URL (e.g., cast thumb_url)
+          sourceUrl = faceSwapSource;
+          lap('face-swap-upload');
+        } else {
+          // Base64 data URL — upload to temp storage first
+          console.log('[generate-dream] ⏱ Starting face swap upload...');
+          const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
+          const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
+          swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
+          await supabase.storage
+            .from('uploads')
+            .upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true });
+          const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
+          sourceUrl = swapUrlData.publicUrl;
+          lap('face-swap-upload');
+        }
         console.log('[generate-dream] ⏱ Face swap upload done, starting swap...');
 
         tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
 
-        supabase.storage
-          .from('uploads')
-          .remove([swapFileName])
-          .catch(() => {});
+        if (swapFileName) {
+          supabase.storage
+            .from('uploads')
+            .remove([swapFileName])
+            .catch(() => {});
+        }
         lap('face-swap-model');
         console.log('[generate-dream] ⏱ Face swap complete');
         logAxes.faceSwapResult = 'success';
@@ -1283,29 +1402,52 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
 
     let imageUrl = tempUrl;
 
-    // Always log the prompt for debugging/analysis
-    try {
-      timings.total = Date.now() - t0;
-      await supabase.from('ai_generation_log').insert({
-        user_id: userId,
-        recipe_snapshot: recipe ?? {},
-        rolled_axes: { ...logAxes, timings },
-        enhanced_prompt: finalPrompt,
-        model_used: pickedModel,
-        cost_cents: 3,
-        status: 'completed',
-      });
-    } catch {
-      /* non-critical */
-    }
+    // Persist to Storage + log in parallel (log doesn't need the permanent URL)
+    timings.total = Date.now() - t0;
+    const [persistedUrl] = await Promise.all([
+      persistToStorage(tempUrl, userId, supabase),
+      supabase
+        .from('ai_generation_log')
+        .insert({
+          user_id: userId,
+          recipe_snapshot: recipe ?? {},
+          rolled_axes: { ...logAxes, timings },
+          enhanced_prompt: finalPrompt,
+          model_used: pickedModel,
+          cost_cents: 3,
+          status: 'completed',
+        })
+        .then(() => {})
+        .catch(() => {}),
+    ]);
+    imageUrl = persistedUrl;
+    lap('persist-done');
 
-    // Only persist to Storage and budget when explicitly requested (i.e., user taps Post)
-    if (persist) {
-      imageUrl = await persistToStorage(tempUrl, userId, supabase);
-      lap('persist-done');
-
-      try {
-        await supabase.from('ai_generation_budget').upsert(
+    // Draft upload + budget upsert in parallel (both need imageUrl but not each other)
+    let uploadId: string | undefined;
+    const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
+    const [uploadResult] = await Promise.all([
+      supabase
+        .from('uploads')
+        .insert({
+          user_id: userId,
+          image_url: imageUrl,
+          caption,
+          ai_prompt: finalPrompt,
+          ai_concept: conceptJson,
+          dream_medium: resolvedMediumKey ?? null,
+          dream_vibe: resolvedVibeKey ?? null,
+          visibility: 'private',
+          is_active: false,
+          is_posted: false,
+          width: 768,
+          height: 1664,
+        })
+        .select('id')
+        .single(),
+      supabase
+        .from('ai_generation_budget')
+        .upsert(
           {
             user_id: userId,
             date: today,
@@ -1313,11 +1455,51 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
             total_cost_cents: (todayCount + 1) * 3,
           },
           { onConflict: 'user_id,date' }
-        );
-      } catch {
-        /* non-critical */
-      }
+        )
+        .then(() => {})
+        .catch(() => {}),
+    ]);
+    uploadId = uploadResult.data?.id;
+    if (uploadResult.error) {
+      console.error('[generate-dream] Failed to create draft upload:', uploadResult.error.message);
     }
+
+    // Job update + notification in parallel (both need uploadId but not each other)
+    const notifBody = hint
+      ? `dream:Your dream is ready: ${hint.slice(0, 150)}`
+      : `dream:Your dream is ready: ${resolvedMediumKey ?? 'surprise'}/${resolvedVibeKey ?? 'surprise'}`;
+
+    await Promise.all([
+      jobId
+        ? supabase
+            .from('dream_jobs')
+            .update({
+              status: 'done',
+              result_image_url: imageUrl,
+              result_prompt: finalPrompt,
+              result_medium: resolvedMediumKey ?? null,
+              result_vibe: resolvedVibeKey ?? null,
+              upload_id: uploadId ?? null,
+              completed_at: new Date().toISOString(),
+            })
+            .eq('id', jobId)
+            .then(() => {})
+            .catch(() => {})
+        : Promise.resolve(),
+      uploadId
+        ? supabase
+            .from('notifications')
+            .insert({
+              recipient_id: userId,
+              actor_id: userId,
+              type: 'dream_generated',
+              upload_id: uploadId,
+              body: notifBody,
+            })
+            .then(() => {})
+            .catch(() => {})
+        : Promise.resolve(),
+    ]);
 
     lap('total');
     console.log(`[generate-dream] ✅ Done in ${Date.now() - t0}ms for user ${userId}`);
@@ -1332,6 +1514,8 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
         model: logAxes.model ?? null,
         resolved_medium: resolvedMediumKey ?? null,
         resolved_vibe: resolvedVibeKey ?? null,
+        job_id: jobId ?? null,
+        upload_id: uploadId ?? null,
       }),
       {
         status: 200,
@@ -1339,8 +1523,36 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
       }
     );
   } catch (err) {
-    console.error(`[generate-dream] Error for user ${userId}:`, (err as Error).message);
-    return new Response(JSON.stringify({ error: (err as Error).message }), { status: 500 });
+    const errMsg = (err as Error).message;
+    console.error(`[generate-dream] Error for user ${userId}:`, errMsg);
+
+    // Update dream job on failure
+    if (jobId) {
+      const isNsfw = errMsg.includes('NSFW') || errMsg.includes('safety');
+      try {
+        await supabase
+          .from('dream_jobs')
+          .update({
+            status: isNsfw ? 'nsfw' : 'failed',
+            error: errMsg,
+            completed_at: new Date().toISOString(),
+          })
+          .eq('id', jobId);
+
+        // Refund sparkle server-side for NSFW (client may not receive the error)
+        if (isNsfw) {
+          await supabase.rpc('grant_sparkles', {
+            p_user_id: userId,
+            p_amount: 1,
+            p_reason: 'nsfw_refund',
+          });
+        }
+      } catch {
+        /* non-critical */
+      }
+    }
+
+    return new Response(JSON.stringify({ error: errMsg }), { status: 500 });
   }
 });
 
@@ -1638,8 +1850,8 @@ async function faceSwap(
   const data = await res.json();
   if (!data.id) throw new Error('No prediction ID from face swap');
 
-  // Poll for result
-  for (let i = 0; i < 30; i++) {
+  // Poll for result (45 attempts × 2s = 90s max — model can cold-start slowly)
+  for (let i = 0; i < 45; i++) {
     await new Promise((r) => setTimeout(r, 2000));
     const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${data.id}`, {
       headers: { Authorization: `Bearer ${replicateToken}` },
@@ -1656,4 +1868,52 @@ async function faceSwap(
   throw new Error('Face swap timed out');
 }
 
-// force redeploy Tue Apr  7 23:17:08 MDT 2026
+interface CompanionMatch {
+  roles: string[];
+  members: DreamCastMember[];
+  _faceSwapSources?: string[];
+}
+
+/**
+ * Detect companion references in the user's prompt and match to cast members.
+ * Returns null if no companions detected or no matching cast data.
+ */
+function detectCompanionRequest(hint: string, cast: DreamCastMember[]): CompanionMatch | null {
+  const lower = hint.toLowerCase();
+  const roles: string[] = [];
+  const members: DreamCastMember[] = [];
+
+  // Plus one patterns
+  const plusOnePatterns = [
+    /\b(?:my|the)\s+(?:wife|husband|partner|girlfriend|boyfriend|fiancee?|spouse|significant other|babe|boo)\b/i,
+    /\b(?:me\s+and|with)\s+(?:my|the)\s+(?:wife|husband|partner|girlfriend|boyfriend|fiancee?|spouse|significant other|babe|boo)\b/i,
+    /\b(?:\+1|plus\s*one|plus\s*1)\b/i,
+    /\b(?:me\s+and|with)\s+(?:my|the)\s+(?:\+1|plus\s*one|plus\s*1)\b/i,
+    /\bus\b.*\btogether\b/i,
+    /\bcouple\b/i,
+  ];
+
+  // Pet patterns
+  const petPatterns = [
+    /\b(?:my|the|our)\s+(?:dog|cat|pet|puppy|kitten|bird|parrot|bunny|rabbit|hamster|guinea pig)\b/i,
+    /\b(?:me\s+and|with)\s+(?:my|the|our)\s+(?:dog|cat|pet|puppy|kitten|bird|parrot|bunny|rabbit|hamster|guinea pig)\b/i,
+  ];
+
+  const plusOne = cast.find((m) => m.role === 'plus_one' && m.description && m.thumb_url);
+  const pet = cast.find((m) => m.role === 'pet' && m.description && m.thumb_url);
+
+  if (plusOne && plusOnePatterns.some((p) => p.test(lower))) {
+    roles.push('plus_one');
+    members.push(plusOne);
+  }
+
+  if (pet && petPatterns.some((p) => p.test(lower))) {
+    roles.push('pet');
+    members.push(pet);
+  }
+
+  if (members.length === 0) return null;
+
+  console.log('[detectCompanionRequest] Matched roles:', roles, 'from hint:', hint.slice(0, 80));
+  return { roles, members };
+}
