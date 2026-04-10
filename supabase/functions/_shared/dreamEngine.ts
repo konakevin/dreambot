@@ -142,6 +142,14 @@ export const DREAM_MEDIUMS: DreamMedium[] = [
       'knitted fabric texture, handmade craft materials, cardboard architecture, felt landscape, button details, zipper trim, miniature diorama photography, soft warm lighting, shallow depth of field, visible stitching, wool yarn texture',
   },
   {
+    key: 'plushie',
+    label: 'Plushie',
+    directive:
+      "Create images in a plush stuffed animal aesthetic where everything looks like it was sewn from soft fabric. Characters and creatures are round, huggable plush toys with visible seam lines, embroidered features, and button or bead eyes. Surfaces show realistic fabric textures—velvet, fleece, corduroy, minky, cotton—with visible stitching holding pieces together. Stuffing gives forms a soft, slightly lumpy, squeezable quality. Colors are warm and inviting, like a well-loved toy collection. Lighting is soft and cozy, as if photographed in a child's bedroom or toy shop. Environmental elements are also plush—felt flowers, fabric trees, quilted skies, pillow mountains. Details include ribbon bows, sewn-on patches, embroidered smiles, and yarn hair. Everything maintains the handmade, imperfect charm of a lovingly crafted stuffed animal. Proportions are rounded and simplified, emphasizing cuteness and huggability over realism.",
+    fluxFragment:
+      'plush stuffed animal, soft fabric texture, visible stitching, button eyes, embroidered features, fleece and velvet materials, round huggable forms, cozy warm lighting, handmade toy aesthetic, sewn seam lines, stuffed and soft, felt details',
+  },
+  {
     key: 'funko_pop',
     label: 'Funko Pop',
     directive:

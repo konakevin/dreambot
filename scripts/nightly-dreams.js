@@ -65,20 +65,30 @@ let CURATED_VIBES = [];
 
 async function loadStylesFromDb() {
   const { data: mediums, error: mErr } = await sb.rpc('get_dream_mediums');
-  if (mErr) { console.error('Failed to load mediums:', mErr.message); process.exit(1); }
-  CURATED_MEDIUMS = (mediums || []).map(m => ({
-    key: m.key, label: m.label, directive: m.directive, fluxFragment: m.flux_fragment,
+  if (mErr) {
+    console.error('Failed to load mediums:', mErr.message);
+    process.exit(1);
+  }
+  CURATED_MEDIUMS = (mediums || []).map((m) => ({
+    key: m.key,
+    label: m.label,
+    directive: m.directive,
+    fluxFragment: m.flux_fragment,
   }));
   console.log(`Loaded ${CURATED_MEDIUMS.length} mediums from DB`);
 
   const { data: vibes, error: vErr } = await sb.rpc('get_dream_vibes');
-  if (vErr) { console.error('Failed to load vibes:', vErr.message); process.exit(1); }
-  CURATED_VIBES = (vibes || []).map(v => ({
-    key: v.key, label: v.label, directive: v.directive,
+  if (vErr) {
+    console.error('Failed to load vibes:', vErr.message);
+    process.exit(1);
+  }
+  CURATED_VIBES = (vibes || []).map((v) => ({
+    key: v.key,
+    label: v.label,
+    directive: v.directive,
   }));
   console.log(`Loaded ${CURATED_VIBES.length} vibes from DB`);
 }
-
 
 const TEMPLATE_CATEGORIES = [
   'cosmic',
@@ -299,6 +309,7 @@ const STYLIZED_MEDIUMS = new Set([
   'comic_book',
   'disney',
   'sack_boy',
+  'plushie',
   'funko_pop',
   'ghibli',
   'tim_burton',
