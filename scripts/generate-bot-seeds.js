@@ -79,6 +79,12 @@ const BOT_SEEDS = {
       { category: 'voidarchitect_genre', prompt: 'a mind-bending surreal sci-fi scene that is visually stunning and awe-inspiring from worlds like blade runner, dune, interstellar, alien, 2001 a space odyssey, arrival, annihilation' },
       { category: 'voidarchitect_genre_dedup', prompt: 'a mind-bending surreal sci-fi scene that is visually stunning and awe-inspiring from worlds like blade runner, dune, interstellar, alien, 2001 a space odyssey, arrival, annihilation', continueDedup: true },
       { category: 'voidarchitect_landscape', prompt: 'an impossibly beautiful alien landscape or cosmic vista that defies physics and takes your breath away', separateDedup: true },
+      { category: 'voidarchitect_spacebattle', prompt: 'an epic expansive gorgeous looking space opera battle scene set in the interstellar reaches of outerspace', noDedup: true },
+      { category: 'voidarchitect_interior', prompt: 'Epic and beautiful interior shot of a building, space ship, or natural structure in the sci-fi genre', separateDedup: true },
+      { category: 'voidarchitect_cozyinterior', prompt: 'cozy and beautiful interior shot of a building, space ship, or natural structure in the sci-fi genre', separateDedup: true },
+      { category: 'voidarchitect_robot', prompt: 'a beautiful sci-fi scene with a robot having a human moment in a tranquil setting — the robot can be any form: humanoid, industrial, tiny companion bot, massive mech, ancient rusted machine, sleek drone, bio-mechanical hybrid', separateDedup: true },
+      { category: 'voidarchitect_city', prompt: 'an expansive, vast sci-fi city viewed from above on an alien world out in the far off reaches of space', noDedup: true },
+      { category: 'voidarchitect_androidwoman', prompt: 'an intimate close-up shot of an exquisitely attractive sci-fi android woman — she must be visibly MECHANICAL: exposed circuitry, chrome plating, glowing seams between skin and metal, visible joints, translucent panels showing inner workings, cybernetic implants. Alien aesthetic — alluring and provocative, scantily clad is fine and encouraged. Vary everything: skin tone, hair, eyes, body type (curvy, skinny, athletic, voluptuous, petite), the ratio of skin to machine. She can be seductive but never nude.', separateDedup: true },
     ],
   },
   aurelia: {
@@ -121,6 +127,13 @@ const BOT_SEEDS = {
       { category: 'pixelrex_genre', prompt: 'a stunning retro gaming scene that triggers pure nostalgia — inspired by classic games like zelda, final fantasy, chrono trigger, pokemon, mega man, metroid, castlevania' },
       { category: 'pixelrex_genre_dedup', prompt: 'a stunning retro gaming scene that triggers pure nostalgia — inspired by classic games like zelda, final fantasy, chrono trigger, pokemon, mega man, metroid, castlevania', continueDedup: true },
       { category: 'pixelrex_landscape', prompt: 'a beautiful retro pixel art landscape — the kind of gorgeous background from a classic 16-bit RPG that makes you stop and admire', separateDedup: true },
+    ],
+  },
+  astra: {
+    strategies: [
+      { category: 'astra_androidwoman', prompt: 'an intimate close-up shot of an exquisitely attractive sci-fi android woman — she must be visibly MECHANICAL: exposed circuitry, chrome plating, glowing seams between skin and metal, visible joints, translucent panels showing inner workings, cybernetic implants. Alien aesthetic — alluring and provocative, scantily clad is fine and encouraged. Vary everything: skin tone, hair, eyes, body type (curvy, skinny, athletic, voluptuous, petite), the ratio of skin to machine. She can be seductive but never nude.', separateDedup: true },
+      { category: 'astra_cyborgface', prompt: 'a close-up shot of the face and head of a sci-fi cyborg woman — part of her face is exposed chrome and circuitry, mechanical components, visible gears and wiring. She is still exquisitely beautiful despite being heavily mechanical. Sultry gaze, seductive expression. Vary everything: ratio of machine to skin, metal types, skin tone.', separateDedup: true },
+      { category: 'astra_alienface', prompt: 'a close-up shot of the face and head of an exquisitely beautiful woman who is half human half alien from somewhere far far away in outerspace — she leans towards the alien side in appearance. Exotic otherworldly features blended with human beauty. Sultry gaze, seductive expression. Vary everything: skin tone, alien features, eye color, facial structure.', separateDedup: true },
     ],
   },
   'frida.neon': {
@@ -181,10 +194,13 @@ async function extractSubject(scene) {
     console.log(`--- ${PER_STRATEGY} ${strategy.category} ---`);
 
     for (let i = 0; i < PER_STRATEGY; i++) {
-      const scene = await generateScene(strategy.prompt, banList);
-      const subject = await extractSubject(scene);
-      banList.push(subject);
-      if (!strategy.separateDedup) sharedBanList = banList;
+      const scene = await generateScene(strategy.prompt, strategy.noDedup ? [] : banList);
+      let subject = '-';
+      if (!strategy.noDedup) {
+        subject = await extractSubject(scene);
+        banList.push(subject);
+        if (!strategy.separateDedup) sharedBanList = banList;
+      }
 
       rows.push({ category: strategy.category, template: scene, disabled: false });
       console.log(rows.length + '. [' + subject + '] ' + scene);

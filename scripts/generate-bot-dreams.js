@@ -47,7 +47,7 @@ const BOTS = {
     mediums: ['oil_painting', 'fantasy', 'watercolor'],
     excludeVibes: ['minimal', 'dark'],
   },
-  'void.architect': { mediums: ['surreal', '3d_render', 'cyberpunk'] },
+  'void.architect': { mediums: ['surreal'], templatePrefix: 'voidarchitect_', excludeVibes: ['minimal', 'whimsical'] },
   aurelia: { mediums: ['watercolor', 'oil_painting', 'ghibli'] },
   terra: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   yuuki: { mediums: ['anime', 'ghibli', 'anime_illustration'], templatePrefix: 'yuuki_', excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'], pinVibes: { ghibli: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'enchanted', 'whimsical', 'whimsical', 'majestic', 'majestic', 'epic', 'epic', 'mystical', 'mystical'], anime_illustration: ['dreamy', 'dreamy', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'whimsical', 'enchanted', 'enchanted', 'majestic', 'epic', 'cinematic'], anime: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'dark', 'cozy', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'] } },
@@ -62,6 +62,7 @@ const BOTS = {
   mochi: { mediums: ['3d_cartoon', 'claymation', 'disney', 'childrens_book'] },
   pixelrex: { mediums: ['pixel_art', '8bit', 'vaporwave'] },
   'frida.neon': { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
+  astra: { mediums: ['surreal'], templatePrefix: 'astra_', excludeVibes: ['minimal', 'whimsical'] },
 };
 
 (async () => {
