@@ -2,7 +2,8 @@
 /**
  * Generate dreams for bot accounts.
  * Each bot has seed prompts stored in dream_templates (category: {username}_*).
- * Picks a random seed, sends it as hint through V2 text path.
+ * Picks unused seeds first (no repeats until all are used), then auto-regenerates
+ * a fresh batch when the pool is exhausted.
  *
  * Usage:
  *   node scripts/generate-bot-dreams.js                  # 1 dream per bot
@@ -11,6 +12,7 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
+const { BOT_SEEDS, generateSeedsForBot } = require('./lib/seed-generator');
 
 function readEnvFile() {
   try {
@@ -58,13 +60,88 @@ const BOTS = {
       'minecraft', 'sack_boy', 'funko_pop', 'disney', 'comic_book', '3d_render', 'childrens_book',
     ],
   },
-  cinder: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], templatePrefix: 'cinder_', excludeVibes: ['minimal'], excludeVibes: ['minimal'] },
+  cinder: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], templatePrefix: 'cinder_', excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   mochi: { mediums: ['3d_cartoon', 'claymation', 'disney', 'childrens_book'] },
   pixelrex: { mediums: ['pixel_art', '8bit', 'vaporwave'] },
   ember: { mediums: ['oil_painting', 'fantasy', 'watercolor'], templatePrefix: 'ember_', excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   'frida.neon': { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
   astra: { mediums: ['surreal'], templatePrefix: 'astra_', excludeVibes: ['minimal', 'whimsical'] },
 };
+
+/**
+ * Load unused seeds for a bot. Returns array of { id, template }.
+ */
+async function loadUnusedSeeds(prefix) {
+  const { data } = await sb
+    .from('dream_templates')
+    .select('id, template')
+    .like('category', `${prefix}%`)
+    .eq('disabled', false)
+    .is('used_at', null)
+    .limit(500);
+  return data ?? [];
+}
+
+/**
+ * Regenerate seeds for a bot when pool is exhausted.
+ * Disables old seeds, generates fresh batch, returns new unused pool.
+ */
+async function regenSeeds(username, prefix) {
+  const anthropicApiKey = getKey('ANTHROPIC_API_KEY');
+  if (!anthropicApiKey) {
+    console.log(`   ⚠️ No ANTHROPIC_API_KEY, can't regenerate seeds for ${username}`);
+    return null;
+  }
+
+  const config = BOT_SEEDS[username];
+  if (!config) {
+    // No seed config — recycle existing seeds by clearing used_at
+    console.log(`   ♻️ No seed config for ${username}, recycling existing seeds`);
+    await sb
+      .from('dream_templates')
+      .update({ used_at: null })
+      .like('category', `${prefix}%`)
+      .eq('disabled', false);
+    return await loadUnusedSeeds(prefix);
+  }
+
+  // Get next generation number
+  const { data: maxGenRows } = await sb
+    .from('dream_templates')
+    .select('generation')
+    .like('category', prefix + '%')
+    .order('generation', { ascending: false })
+    .limit(1);
+  const nextGen = ((maxGenRows && maxGenRows[0] && maxGenRows[0].generation) || 0) + 1;
+
+  console.log(`   🔄 Generating new seeds for ${username} (gen ${nextGen})...`);
+
+  // Disable old seeds
+  await sb
+    .from('dream_templates')
+    .update({ disabled: true })
+    .like('category', prefix + '%')
+    .eq('disabled', false);
+
+  try {
+    const { rows } = await generateSeedsForBot(username, { anthropicApiKey });
+    const tagged = rows.map(r => ({ ...r, disabled: false, generation: nextGen }));
+    const { error } = await sb.from('dream_templates').insert(tagged);
+    if (error) throw new Error(error.message);
+    console.log(`   ✅ ${tagged.length} new seeds generated (gen ${nextGen})`);
+    return await loadUnusedSeeds(prefix);
+  } catch (err) {
+    // Regen failed — re-enable old seeds and recycle
+    console.error(`   ❌ Seed regen failed: ${err.message}`);
+    console.log(`   ♻️ Re-enabling old seeds to continue`);
+    await sb
+      .from('dream_templates')
+      .update({ disabled: false, used_at: null })
+      .like('category', prefix + '%')
+      .eq('disabled', true);
+    return await loadUnusedSeeds(prefix);
+  }
+}
 
 (async () => {
   // Fetch all active vibes
@@ -113,28 +190,37 @@ const BOTS = {
     if (bot.extraVibes) botVibeKeys.push(...bot.extraVibes);
     console.log(`🔑 ${username} (${botVibeKeys.length} vibes)`);
 
-    // Load seed prompts from DB
-    const { data: seeds } = await sb
-      .from('dream_templates')
-      .select('template')
-      .like('category', `${username.replace('.', '')}_%`)
-      .eq('disabled', false)
-      .limit(500);
-    const seedPool = (seeds ?? []).map((s) => s.template);
-    console.log(`   📦 ${seedPool.length} seed prompts loaded`);
+    // Load unused seed prompts
+    const prefix = `${username.replace('.', '')}_`;
+    let seedPool = await loadUnusedSeeds(prefix);
+    console.log(`   📦 ${seedPool.length} unused seeds`);
+
+    // If pool is empty, regenerate
+    if (seedPool.length === 0) {
+      const refreshed = await regenSeeds(username, prefix);
+      if (refreshed) seedPool = refreshed;
+      console.log(`   📦 ${seedPool.length} seeds after regen`);
+    }
 
     for (let i = 0; i < COUNT; i++) {
       try {
         const mediumKey = pick(bot.mediums);
-        const pinned = bot.pinVibes?.[mediumKey];
+        const pinned = bot.pinVibes && bot.pinVibes[mediumKey];
         const vibeKey = pinned
           ? (Array.isArray(pinned) ? pick(pinned) : pinned)
           : pick(botVibeKeys);
 
-        // Pick a random seed prompt as the hint
-        const hint = seedPool.length > 0
-          ? pick(seedPool)
-          : 'an epic breathtaking scene';
+        // Pick a random unused seed
+        let seed;
+        if (seedPool.length > 0) {
+          const idx = Math.floor(Math.random() * seedPool.length);
+          seed = seedPool[idx];
+          seedPool.splice(idx, 1); // remove from local pool so we don't pick it again this run
+        }
+        let hint = seed ? seed.template : 'an epic breathtaking scene';
+        if (bot.banPhrases && bot.banPhrases.length > 0) {
+          hint += '. Never include: ' + bot.banPhrases.join(', ');
+        }
 
         console.log(`\n🎨 ${username} [${i + 1}/${COUNT}] | ${mediumKey} + ${vibeKey}`);
         console.log(`   📝 ${hint.slice(0, 80)}`);
@@ -160,11 +246,18 @@ const BOTS = {
 
         const result = await res.json();
         if (result.upload_id) {
+          // Mark seed as used
+          if (seed) {
+            await sb
+              .from('dream_templates')
+              .update({ used_at: new Date().toISOString() })
+              .eq('id', seed.id);
+          }
           await sb
             .from('uploads')
             .update({ is_active: true, is_posted: true })
             .eq('id', result.upload_id);
-          console.log(`   ✅ Posted! (${++totalGenerated} total)`);
+          console.log(`   ✅ Posted! (${++totalGenerated} total) [${seedPool.length} seeds remaining]`);
         }
 
         await new Promise((r) => setTimeout(r, 2000));

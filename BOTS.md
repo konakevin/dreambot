@@ -266,12 +266,12 @@ As Kevin reviews posts, update weights in real-time:
 **Seeds:** 7 strategies — `femalebody`, `femaleaction`, `femaleface`, `malebody`, `maleface`, `maleaction`, `seductive`
 **Notes:** Most character-path-heavy bot. Race variety is critical (elf, drow, tiefling, orc, etc.). "Sexy but never nude, never topless" language works. Fantasy art style keeps renders tasteful.
 
-### Cinder — Gothic Dark Fantasy 🔄 IN PROGRESS
+### Cinder — Gothic Dark Fantasy ✅ COMPLETE
 
 **Username:** `cinder`
 **Mediums:** `tim_burton`, `fantasy`, `anime`, `oil_painting`
 **Excluded vibes:** `minimal`
-**Seeds:** 5 strategies defined, testing in progress
+**Seeds:** 5 strategies in DB (`cinder_genre`, `cinder_genre_dedup`, `cinder_landscape`, `cinder_horror`, `cinder_gothwoman`)
 
 **Strategies:**
 1. **cinder_genre** — hauntingly beautiful dark fantasy scenes (dark souls, elden ring, bloodborne, tim burton, gothic fairy tales)
@@ -279,8 +279,6 @@ As Kevin reviews posts, update weights in real-time:
 3. **cinder_landscape** — dark gothic landscapes, haunted and atmospheric
 4. **cinder_horror** — classic horror creatures (werewolf, vampire, demon, succubus, etc.) reimagined as never-before-seen variants. No blood/gore/clowns. Dedup on creature type + pose + action.
 5. **cinder_gothwoman** — exquisitely beautiful goth women from hell. Evil incarnate but lures you in. Dark lipstick, eyeliner, pale skin, glowing eyes, fangs, claws, tattoos, piercings. Succubus energy. Dedup on race + pose + setting (3-dimension dedup).
-
-**Still needed:** drow female path, drow male path, full seed generation, avatar, add to cron
 
 **Key learnings from Cinder:**
 - Anime needs no special vibe pinning — the dark aesthetic comes from the seeds naturally
@@ -323,7 +321,7 @@ GitHub Actions workflow: `.github/workflows/bot-dreams.yml`
 - Each run generates 1 post for EACH seeded bot
 - Manual trigger available with `--bot` and `--count` params
 - Only seeded bots are included — update the `BOTS` array when new bots are ready
-- Currently active: solaris, yuuki, void.architect, astra, ember
+- Currently active: solaris, yuuki, void.architect, astra, ember, cinder
 
 ## How to Deploy a New Bot
 
@@ -347,10 +345,22 @@ Once a bot's seeds are generated and tested:
 
 6. **Verify in app** — search for the bot, check their profile shows posts
 
+## Testing a Bot
+
+**Always reset the seed pool before a testing session.** This clears `used_at` on all seeds so the full pool is available:
+
+```bash
+# Reset a bot's seed pool (replace cinder_ with the bot's prefix)
+node -e "require('dotenv').config({path:'.env.local'});const sb=require('@supabase/supabase-js').createClient('https://jimftynwrinwenonjrlj.supabase.co',process.env.SUPABASE_SERVICE_ROLE_KEY);sb.from('dream_templates').update({used_at:null}).like('category','cinder_%').eq('disabled',false).then(r=>console.log('Reset done'))"
+```
+
+When starting work on any bot, Claude should proactively reset the pool and remind Kevin.
+
 ## Scripts
 
-- `scripts/generate-bot-dreams.js` — reads seed prompts from DB, signs in as bot, calls Edge Function V2 path, flips draft to public
-- `scripts/generate-bot-seeds.js` — generates deduped seeds using Sonnet, stores in dream_templates table
+- `scripts/generate-bot-dreams.js` — reads seed prompts from DB, picks unused seeds (tracks `used_at`), auto-regenerates when exhausted, signs in as bot, calls Edge Function V2 path, flips draft to public
+- `scripts/generate-bot-seeds.js` — generates deduped seeds using Sonnet, stores in dream_templates table with generation tracking
+- `scripts/lib/seed-generator.js` — shared module: BOT_SEEDS config, generateScene, extractSubject, generateSeedsForBot
 - `scripts/create-bot-accounts.js` — creates auth users + public.users + vibe profiles for all 10 bots
 
 ## New Vibes Added (available to all users)
