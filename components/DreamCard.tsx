@@ -62,6 +62,8 @@ export interface DreamPostItem {
 interface Props {
   item: DreamPostItem;
   bottomPadding: number;
+  /** Measured container height — card renders at this height for perfect paging */
+  cardHeight?: number;
   isLiked: boolean;
   onLike: () => void;
   onToggleLike: () => void;
@@ -176,6 +178,7 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
 export function DreamCard({
   item,
   bottomPadding,
+  cardHeight,
   isLiked,
   onLike,
   onToggleLike,
@@ -382,7 +385,7 @@ export function DreamCard({
 
   return (
     <GestureDetector gesture={composed}>
-      <Animated.View style={s.card}>
+      <Animated.View style={[s.card, cardHeight ? { height: cardHeight } : undefined]}>
         <Pressable
           style={StyleSheet.absoluteFill}
           onPress={handleTap}

@@ -110,9 +110,12 @@ const BOT_SEEDS = {
   },
   cinder: {
     strategies: [
-      { category: 'cinder_genre', prompt: 'a hauntingly beautiful dark fantasy scene from worlds like dark souls, elden ring, bloodborne, tim burton films, gothic fairy tales — beautiful but unsettling, elegant darkness' },
-      { category: 'cinder_genre_dedup', prompt: 'a hauntingly beautiful dark fantasy scene from worlds like dark souls, elden ring, bloodborne, tim burton films, gothic fairy tales — beautiful but unsettling, elegant darkness', continueDedup: true },
-      { category: 'cinder_landscape', prompt: 'a dark and beautiful gothic landscape — haunted, atmospheric, mysterious, but stunningly gorgeous', separateDedup: true },
+      // mediums: tim_burton, fantasy, anime (steampunk removed)
+      { category: 'cinder_genre', count: 8, prompt: 'a hauntingly beautiful dark fantasy scene from worlds like dark souls, elden ring, bloodborne, tim burton films, gothic fairy tales — beautiful but unsettling, elegant darkness' },
+      { category: 'cinder_genre_dedup', count: 8, prompt: 'a hauntingly beautiful dark fantasy scene from worlds like dark souls, elden ring, bloodborne, tim burton films, gothic fairy tales — beautiful but unsettling, elegant darkness', continueDedup: true },
+      { category: 'cinder_landscape', count: 8, prompt: 'a dark and beautiful gothic landscape — haunted, atmospheric, mysterious, but stunningly gorgeous', separateDedup: true },
+      { category: 'cinder_horror', count: 8, prompt: 'Pick ONE: werewolf, vampire, demon, succubus, goblin, banshee, wraith, ghoul, lich, hellhound, wendigo, gargoyle, revenant, specter. Then describe a dark, evil, menacing reimagining of that creature — powerful, terrifying, radiating malice. No blood, no gore, no clowns. Pure darkness and dread. Vary the action: stalking, lunging, perched, crawling, hovering, emerging from shadows, mid-howl, watching from above.', separateDedup: true },
+      { category: 'cinder_gothwoman', count: 30, prompt: 'an exquisitely exotic and beautiful goth woman from the bowels of hell. Evil incarnate but so pretty she lures you in with her evil smile. Glowing colored eyes, fangs, sharp claws, dark lipstick, tattoos, piercings, showing lots of skin. Include a unique dark accessory or feature (horns, crown, chains, wings, veil, thorns, serpents, third eye, antlers, halo). No nipples, never nude, no skeletons. Dynamic pose.', separateDedup: true },
     ],
   },
   mochi: {
@@ -134,6 +137,17 @@ const BOT_SEEDS = {
       { category: 'astra_androidwoman', prompt: 'an intimate close-up shot of an exquisitely attractive sci-fi android woman — she must be visibly MECHANICAL: exposed circuitry, chrome plating, glowing seams between skin and metal, visible joints, translucent panels showing inner workings, cybernetic implants. Alien aesthetic — alluring and provocative, scantily clad is fine and encouraged. Vary everything: skin tone, hair, eyes, body type (curvy, skinny, athletic, voluptuous, petite), the ratio of skin to machine. She can be seductive but never nude.', separateDedup: true },
       { category: 'astra_cyborgface', prompt: 'a close-up shot of the face and head of a sci-fi cyborg woman — part of her face is exposed chrome and circuitry, mechanical components, visible gears and wiring. She is still exquisitely beautiful despite being heavily mechanical. Sultry gaze, seductive expression. Vary everything: ratio of machine to skin, metal types, skin tone.', separateDedup: true },
       { category: 'astra_alienface', prompt: 'a close-up shot of the face and head of an exquisitely beautiful woman who is half human half alien from somewhere far far away in outerspace — she leans towards the alien side in appearance. Exotic otherworldly features blended with human beauty. Sultry gaze, seductive expression. Vary everything: skin tone, alien features, eye color, facial structure.', separateDedup: true },
+    ],
+  },
+  ember: {
+    strategies: [
+      { category: 'ember_femalebody', prompt: 'a shot of an exquisitely beautiful and dangerous high fantasy woman — scantily clad is fine and encouraged. Fierce and seductive, dont-fuck-with-me energy. ALWAYS covered enough to avoid nudity but showing skin is great. Vary the race wildly: elf, half-dragon, gnome, dwarf, orc, tiefling, drow, fairy, nymph, centaur, harpy, lamia, succubus, half-giant, goblin princess, merfolk. Ornate flashy details: enchanted armor, magical tattoos, glowing runes, jeweled accessories. Sexy but never nude, never topless.', separateDedup: true },
+      { category: 'ember_femaleaction', prompt: 'a shot of an exquisitely beautiful and dangerous high fantasy woman in the heat of action — casting a devastating spell, swinging an enchanted blade, commanding an army, riding a dragon, leaping through battle. Never floating in place, never hovering — always in dynamic motion. Fierce and seductive, scantily clad is fine and encouraged. Ornate flashy details. Vary the race wildly. Sexy but never nude, never topless.', separateDedup: true },
+      { category: 'ember_femaleface', prompt: 'a close-up shot of the face and head of an exquisitely beautiful high fantasy woman — exotic magical features, glowing eyes, enchanted markings, pointed ears, horns, scales, or ethereal glow. Fierce and seductive expression. Vary everything: race, features, skin tone, magical details.', separateDedup: true },
+      { category: 'ember_malebody', prompt: 'a shot of a powerful and menacing high fantasy warrior — fierce, dangerous, alpha male energy. Battle-scarred, muscular, intimidating. Warlords, dark knights, barbarian kings, demon hunters, dragon slayers, shadow assassins. Ornate flashy details: enchanted weapons, runic war paint, battle armor, glowing eyes. Vary the race wildly: orc, half-dragon, dwarf, tiefling, elf, human, goliath, minotaur, undead knight.', separateDedup: true },
+      { category: 'ember_maleface', prompt: 'a close-up shot of the face and head of a powerful and menacing high fantasy male warrior — battle-scarred, fierce eyes, war paint, enchanted markings, horns, tusks, or glowing runes. Dangerous and intimidating. Vary everything: race, features, skin tone, scars, war paint, facial accessories.', separateDedup: true },
+      { category: 'ember_maleaction', prompt: 'a shot of a powerful and menacing high fantasy male warrior in the heat of action — always in dynamic motion, never floating. Battle-scarred, muscular, intimidating. Ornate flashy details. Vary the race wildly.', separateDedup: true },
+      { category: 'ember_seductive', prompt: 'an exquisitely beautiful sexy FEMALE high fantasy woman in a sizzling, provocative pose in an exotic fantasy setting. She is feminine, gorgeous, seductive, mysterious and dangerous. Showing skin, scantily clad. No nipples showing. Fantasy art style makes it feel like mythic fine art. Vary race wildly. No nudity.', separateDedup: true },
     ],
   },
   'frida.neon': {
@@ -191,9 +205,10 @@ async function extractSubject(scene) {
 
   for (const strategy of config.strategies) {
     const banList = strategy.separateDedup ? [] : sharedBanList;
-    console.log(`--- ${PER_STRATEGY} ${strategy.category} ---`);
+    const stratCount = strategy.count || PER_STRATEGY;
+    console.log(`--- ${stratCount} ${strategy.category} ---`);
 
-    for (let i = 0; i < PER_STRATEGY; i++) {
+    for (let i = 0; i < stratCount; i++) {
       const scene = await generateScene(strategy.prompt, strategy.noDedup ? [] : banList);
       let subject = '-';
       if (!strategy.noDedup) {

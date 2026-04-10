@@ -58,9 +58,10 @@ const BOTS = {
       'minecraft', 'sack_boy', 'funko_pop', 'disney', 'comic_book', '3d_render', 'childrens_book',
     ],
   },
-  cinder: { mediums: ['tim_burton', 'fantasy', 'steampunk', 'anime'] },
+  cinder: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], templatePrefix: 'cinder_', excludeVibes: ['minimal'], excludeVibes: ['minimal'] },
   mochi: { mediums: ['3d_cartoon', 'claymation', 'disney', 'childrens_book'] },
   pixelrex: { mediums: ['pixel_art', '8bit', 'vaporwave'] },
+  ember: { mediums: ['oil_painting', 'fantasy', 'watercolor'], templatePrefix: 'ember_', excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   'frida.neon': { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
   astra: { mediums: ['surreal'], templatePrefix: 'astra_', excludeVibes: ['minimal', 'whimsical'] },
 };

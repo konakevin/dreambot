@@ -37,7 +37,7 @@ import { Toast } from '@/components/Toast';
 import { LikesSheet } from '@/components/LikesSheet';
 import { colors } from '@/constants/theme';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const FALLBACK_HEIGHT = Dimensions.get('window').height;
 
 interface Props {
   posts: DreamPostItem[];
@@ -89,11 +89,25 @@ export function FullScreenFeed({
   const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
 
+  // Measure the actual container height — this is the true page size
+  const [containerHeight, setContainerHeight] = useState(FALLBACK_HEIGHT);
+  const pageHeight = containerHeight > 0 ? containerHeight : FALLBACK_HEIGHT;
+
+  const handleLayout = useCallback(
+    (e: { nativeEvent: { layout: { height: number } } }) => {
+      const h = e.nativeEvent.layout.height;
+      if (h > 0 && Math.abs(h - containerHeight) > 1) {
+        setContainerHeight(h);
+      }
+    },
+    [containerHeight]
+  );
+
   // Re-snap scroll position when the screen regains focus (prevents half-scroll offset)
   useEffect(() => {
     if (isFocused && posts.length > 0) {
       ref.current?.scrollToOffset({
-        offset: currentIndex.current * SCREEN_HEIGHT,
+        offset: currentIndex.current * pageHeight,
         animated: false,
       });
     }
@@ -134,7 +148,9 @@ export function FullScreenFeed({
         .eq('id', uploadId)
         .single();
 
-      const { error } = await supabase.from('uploads').delete().eq('id', uploadId);
+      const { error } = isAdmin
+        ? await supabase.rpc('admin_delete_upload' as never, { p_upload_id: uploadId } as never)
+        : await supabase.from('uploads').delete().eq('id', uploadId);
       if (error) {
         Toast.show('Failed to delete', 'close-circle');
         return;
@@ -151,31 +167,19 @@ export function FullScreenFeed({
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Dream deleted', 'checkmark-circle');
 
-      // If this was the only post, go back (empty state will show in grid)
-      if (totalBefore <= 1) {
-        if (router.canGoBack()) router.back();
-      } else {
-        // At end → scroll up to previous; otherwise stay put (next card fills in)
-        const targetIdx = idx >= totalBefore - 1 ? idx - 1 : idx;
-        currentIndex.current = targetIdx;
-        ref.current?.scrollToOffset({
-          offset: targetIdx * SCREEN_HEIGHT,
-          animated: false,
-        });
-      }
-
-      // Optimistically remove from all feed caches so the card disappears immediately
-      const feedKeys = ['dreamFeed', 'explore', 'userPosts', 'my-dreams', 'albumPosts'];
-      for (const key of feedKeys) {
-        queryClient.setQueriesData({ queryKey: [key] }, (old: unknown) => {
-          if (Array.isArray(old)) return old.filter((p: { id: string }) => p.id !== uploadId);
-          return old;
-        });
-      }
+      // Invalidate all caches so grids and feeds refresh
       queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       queryClient.invalidateQueries({ queryKey: ['explore'] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfilePosts'] });
+      queryClient.invalidateQueries({ queryKey: ['favoritePosts'] });
+      queryClient.invalidateQueries({ queryKey: ['albumPosts'] });
+
+      // If this was the only post, go back
+      if (totalBefore <= 1) {
+        if (router.canGoBack()) router.back();
+      }
     },
     [queryClient, posts, ref]
   );
@@ -226,6 +230,7 @@ export function FullScreenFeed({
         ref={ref}
         data={posts}
         keyExtractor={(item) => item.id}
+        onLayout={handleLayout}
         pagingEnabled
         disableIntervalMomentum
         showsVerticalScrollIndicator={false}
@@ -236,8 +241,8 @@ export function FullScreenFeed({
         removeClippedSubviews={true}
         initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
         getItemLayout={(_, index) => ({
-          length: SCREEN_HEIGHT,
-          offset: SCREEN_HEIGHT * index,
+          length: pageHeight,
+          offset: pageHeight * index,
           index,
         })}
         onViewableItemsChanged={onViewableItemsChanged}
@@ -257,6 +262,7 @@ export function FullScreenFeed({
           <DreamCard
             item={item}
             bottomPadding={hideTabBar ? 16 + insets.bottom : 60 + insets.bottom}
+            cardHeight={pageHeight}
             isLiked={likeIds.has(item.id)}
             onLike={() => toggleLike({ uploadId: item.id, currentlyLiked: false })}
             onToggleLike={() => {

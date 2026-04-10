@@ -48,14 +48,29 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   initialize: () => {
+    const checkAdmin = (userId: string) => {
+      supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', userId)
+        .single()
+        .then(({ data }) => {
+          const row = data as unknown as { is_admin?: boolean } | null;
+          set({ isAdmin: !!row?.is_admin });
+        });
+    };
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       set({ session, user: session?.user ?? null, initialized: true });
+      if (session?.user) checkAdmin(session.user.id);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       set({ session, user: session?.user ?? null, initialized: true });
+      if (session?.user) checkAdmin(session.user.id);
+      else set({ isAdmin: false });
     });
 
     return () => subscription.unsubscribe();

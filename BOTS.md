@@ -32,7 +32,43 @@ A prompt like *"an epic fantasy scene that is mind blowingly exotic and beautifu
 
 ## The Bot Training Process — How to Dial In a New Bot
 
-This is the repeatable process we developed through Solaris and Yūki. Follow it for every bot.
+This is the repeatable process we developed through Solaris, Yūki, Void Architect, Ember, Astra, and Cinder. Follow it for every bot.
+
+### The Iterative Refinement Pattern (KEY TECHNIQUE)
+
+The most effective approach for building bot seed strategies:
+
+1. **Start with a solid base prompt** targeting the bot's core persona ("an epic fantasy scene...", "a hauntingly beautiful gothic woman...")
+2. **Run 10 seeds / 5 posts** to test the base prompt
+3. **Review renders and iterate** — adjust language, add/remove descriptors, fix problems (wrong gender, wrong pose, wrong mood)
+4. **Once the base is solid, split into 2-3 variant paths** that branch from the same energy but target different subjects (e.g., base gothic → horror creatures + goth women + dark landscapes)
+5. **Each variant gets its own dedup strategy** — dedup on the dimension that matters most for that path (creature type, race, pose+setting, etc.)
+
+This "refine then fork" pattern consistently produces better results than trying to design all paths upfront. The base prompt teaches you what works for the bot's aesthetic before you branch.
+
+### Multi-Dimensional Dedup
+
+Different paths need different dedup strategies:
+
+- **Genre/scene paths:** dedup on main subject (1 word: "dragon", "castle", "forest")
+- **Character paths:** dedup on race/type (1 word: "vampire", "drow", "succubus")
+- **Paths with pose/composition problems:** dedup on 3 dimensions — creature type, pose, AND setting. Extract all 3 from each seed and ban all 3. This prevents the "everyone standing in ruins" problem.
+
+The 3-dimension dedup extraction prompt:
+```
+"From this scene, give me THREE words: the creature type, the pose, and the setting. Comma separated. Example: vampire, lounging, cathedral"
+```
+
+### Prompt Language Lessons
+
+- **"MUST be visibly female/male"** — Flux will render the wrong gender if the seed doesn't explicitly specify. Always force gender in character prompts.
+- **Don't suggest too many example verbs/actions** — Sonnet latches onto the first few and ignores the rest. Keep action lists short.
+- **"Never-before-seen variant/reimagining"** — forces original designs instead of standard depictions of creatures
+- **"No blood, no gore, no clowns"** — explicit exclusions work better than vague "not too dark"
+- **Describe the ENERGY not the pose** — "succubus energy, dark temptress vibes" works better than "standing seductively"
+- **Physical descriptors that render well** — "dark lipstick, heavy eyeliner, pale skin, glowing eyes, fangs, sharp claws, tattoos, piercings" — these give Flux concrete visual anchors
+- **"Vary the pose wildly: lounging, crouching, mid-spell, perched on a throne..."** — explicit pose suggestions + dedup prevents static standing compositions
+- **Emotional language from Kevin works** — "she lures you in with her evil smile only to destroy you" produces better results than clinical descriptions. Keep the human voice in prompts.
 
 ### Step 0: Get a Rough Baseline
 
@@ -73,7 +109,23 @@ A second prompt for pure environment scenes. Keep it even more open:
 
 **Don't list specific things** (cottages, villages) — Sonnet will latch onto whatever you list and repeat it. Keep it abstract and let Sonnet decide.
 
-### Step 3: Test Mediums
+### Step 3: Find Variant Paths (Character, Creature, etc.)
+
+After the base genre + landscape are solid, add specialized paths for the bot's unique content:
+
+**Character-focused bots (Ember, Cinder, Astra):**
+- Split by gender: female body, female face, male body, male face
+- Split by energy: seductive, action, horror, intimate
+- Each path gets its own dedup target (race, pose+setting, creature type)
+
+**Examples of successful variant paths:**
+- Ember: `femalebody`, `femaleface`, `femaleaction`, `malebody`, `maleface`, `maleaction`, `seductive` (7 paths!)
+- Cinder: `genre`, `genre_dedup`, `landscape`, `horror` (classic creatures), `gothwoman` (sexy goth women)
+- Astra: `androidwoman`, `cyborgface`, `alienface` (3 face/body variants)
+
+**Key: each variant should feel like it belongs on the same account but shows a different facet.**
+
+### Step 4: Test Mediums
 
 Run 1-2 renders per medium with the genre prompt. Identify:
 - Which mediums produce stunning results for this bot's aesthetic
@@ -87,7 +139,7 @@ Run 1-2 renders per medium with the genre prompt. Identify:
 - Everything else → Flux Dev
 - The keyword fallback (`prompt.includes('anime')`) only fires when no `medium_key` is provided
 
-### Step 4: Test Vibes (the most important step)
+### Step 5: Test Vibes (the most important step)
 
 Run the genre prompt with EVERY vibe and evaluate each one. For each result, rate it:
 
@@ -110,17 +162,18 @@ pinVibes: {
 - When Kevin says "that's good" → bump. "That's excellent/killer/10 out of 10" → double or triple bump
 - The vibe weighting is what makes or breaks a bot's content quality
 
-### Step 5: Generate 60 Deduped Seeds
+### Step 6: Generate 60+ Deduped Seeds
 
-Use the iterative passback technique to generate 20 seeds per strategy:
+Use the iterative passback technique to generate 15-20 seeds per strategy:
 
-1. **GENRE (20):** Ask Sonnet for a scene from the genre prompt. Extract 1-word subject. Ban it. Repeat.
-2. **GENRE+DEDUP (20):** Continue the ban list from strategy 1 (now 20 banned subjects). Generates deeper variety.
-3. **LANDSCAPE (20):** Separate ban list. Same technique with the landscape prompt.
+1. **GENRE (15):** Ask Sonnet for a scene from the genre prompt. Extract 1-word subject. Ban it. Repeat.
+2. **GENRE+DEDUP (15):** Continue the ban list from strategy 1 (now 15 banned subjects). Generates deeper variety.
+3. **LANDSCAPE (15):** Separate ban list. Same technique with the landscape prompt.
+4. **VARIANT PATHS (15 each):** Separate ban lists. Dedup on whatever dimension matters for that path.
 
-Store in `dream_templates` with categories: `{username}_genre`, `{username}_genre_dedup`, `{username}_landscape`.
+Store in `dream_templates` with categories: `{username}_genre`, `{username}_genre_dedup`, `{username}_landscape`, etc.
 
-### Step 6: Test the Full Pipeline
+### Step 7: Test the Full Pipeline
 
 Run 10 posts through the bot script using the stored seeds. Verify:
 - Seeds are being pulled from DB correctly
@@ -128,7 +181,7 @@ Run 10 posts through the bot script using the stored seeds. Verify:
 - Quality is consistent
 - Variety is good across the 10
 
-### Step 7: Iterate on Feedback
+### Step 8: Iterate on Feedback
 
 As Kevin reviews posts, update weights in real-time:
 - "That's good" → bump that vibe for that medium
@@ -149,6 +202,12 @@ As Kevin reviews posts, update weights in real-time:
 - **"Massive/colossal/gargantuan" scale words** → biases Flux toward centered giant objects
 - **Seeds injected into templates** → seeds + templates fight each other
 - **Listing specific subjects in landscape prompts** ("cottages, villages") → Sonnet latches onto whatever you list
+- **Abstract horror prompts** ("the wrongness of a shape that shouldn't exist") → Flux renders generic dark figures, not scary
+- **Body horror / Silent Hill style** → too grotesque, not beautiful
+- **Too many example verbs/actions** → Sonnet picks from the first 2-3 and ignores the rest
+- **"Push the edge" / "dominatrix"** → Sonnet refuses or Flux gets blocked by moderation. Use "dark temptress", "succubus energy" instead
+- **Cemetery wraith prompts without creature variety** → every render is the same hooded figure
+- **Not specifying gender** → Flux renders male when you want female. Always say "woman" or "female" explicitly
 
 ---
 
@@ -178,37 +237,67 @@ As Kevin reviews posts, update weights in real-time:
 3. **LANDSCAPE** — beautiful Japanese anime worlds to explore
 4. **CUTE** — adorable heartwarming scenes (Totoro, Ponyo, Kiki style) with big eyes and warm feelings
 
-**Genre prompt:** "an extremely interesting and visually appealing scene from the universes of: studio ghibli, makoto shinkai, demon slayer, spirited away, your name, akira, evangelion, princess mononoke, howls moving castle, jujutsu kaisen — include characters, creatures, or architecture as the scene calls for"
-**Landscape prompt:** "a beautiful Japanese anime world that is visually stunning, warm and inviting, interesting to explore"
-**Cute prompt:** "an adorable and heartwarming anime scene from the universes of: my neighbor totoro, ponyo, kiki delivery service, sailor moon, cardcaptor sakura, fruits basket — cute characters, big expressive eyes, warm and cozy"
-
 **Vibe weighting (GOD TIER → regular, from testing):**
 - **anime:** enchanted ████, cinematic ████, majestic ███, dreamy ███, whimsical ███, mystical ██, dark ██, cozy ██, epic ██
 - **ghibli:** enchanted █████ (GOD TIER), whimsical ██, majestic ██, epic ██, mystical ██
 - **anime_illustration:** dreamy █████ (GOD TIER), whimsical ████, enchanted ██, majestic █, epic █, cinematic █
-- **cute strategy vibes:** cozy ███, dreamy ███, whimsical ██, enchanted █, peaceful █
 
-**Key findings from Yūki testing:**
-- **SDXL renders anime/ghibli WAY better than Flux Dev** — true cel-shaded look vs semi-realistic
-- **Ghibli + enchanted is the #1 combo** — Spirited Away quality every time
-- **Anime illustration + dreamy is GOD TIER** — produces the Princess Mononoke lush adventure look
-- **Cyberpunk medium killed** — consistently ugly for anime aesthetic, don't bring back
-- **anime_illustration medium created** for dense Ghibli-adventure-film look (50/50 SDXL/Flux, both good)
-- **"Include characters, creatures, or architecture as the scene calls for"** in genre prompt prevents all-landscape monotony
-- **Don't list specific things in landscape prompt** ("cottages, villages") — Sonnet latches onto whatever you list
-- **Cute strategy needs its own vibe pool** — cozy/whimsical/dreamy, NOT the action vibes
-- **Per-medium vibe pinning is critical** — same vibe produces wildly different quality across mediums
-- **4 strategies instead of 3** — some bots need a character-driven path alongside genre/dedup/landscape
+### Void Architect — Surreal Sci-Fi ✅ SEEDED
+
+**Username:** `void.architect`
+**Mediums:** `surreal`
+**Excluded vibes:** `minimal`, `whimsical`
+**Seeds:** In DB — 8 strategies: `genre`, `genre_dedup`, `landscape`, `spacebattle`, `interior`, `cozyinterior`, `robot`, `city`, `androidwoman`
+**Notes:** Most strategy-heavy bot. Space battles and cities use `noDedup` (infinite variety naturally). Android woman path shared with Astra.
+
+### Astra — Sci-Fi Women ✅ SEEDED
+
+**Username:** `astra`
+**Mediums:** `surreal`
+**Excluded vibes:** `minimal`, `whimsical`
+**Seeds:** 3 paths — `androidwoman` (mechanical beauty), `cyborgface` (half-machine faces), `alienface` (half-alien faces)
+**Notes:** All face/body focused. Dedup on body type, skin tone, alien features.
+
+### Ember — High Fantasy Characters ✅ SEEDED
+
+**Username:** `ember`
+**Mediums:** `oil_painting`, `fantasy`, `watercolor`
+**Excluded vibes:** `minimal`, `whimsical`, `cozy`
+**Seeds:** 7 strategies — `femalebody`, `femaleaction`, `femaleface`, `malebody`, `maleface`, `maleaction`, `seductive`
+**Notes:** Most character-path-heavy bot. Race variety is critical (elf, drow, tiefling, orc, etc.). "Sexy but never nude, never topless" language works. Fantasy art style keeps renders tasteful.
+
+### Cinder — Gothic Dark Fantasy 🔄 IN PROGRESS
+
+**Username:** `cinder`
+**Mediums:** `tim_burton`, `fantasy`, `anime`, `oil_painting`
+**Excluded vibes:** `minimal`
+**Seeds:** 5 strategies defined, testing in progress
+
+**Strategies:**
+1. **cinder_genre** — hauntingly beautiful dark fantasy scenes (dark souls, elden ring, bloodborne, tim burton, gothic fairy tales)
+2. **cinder_genre_dedup** — same with continued ban list
+3. **cinder_landscape** — dark gothic landscapes, haunted and atmospheric
+4. **cinder_horror** — classic horror creatures (werewolf, vampire, demon, succubus, etc.) reimagined as never-before-seen variants. No blood/gore/clowns. Dedup on creature type + pose + action.
+5. **cinder_gothwoman** — exquisitely beautiful goth women from hell. Evil incarnate but lures you in. Dark lipstick, eyeliner, pale skin, glowing eyes, fangs, claws, tattoos, piercings. Succubus energy. Dedup on race + pose + setting (3-dimension dedup).
+
+**Still needed:** drow female path, drow male path, full seed generation, avatar, add to cron
+
+**Key learnings from Cinder:**
+- Anime needs no special vibe pinning — the dark aesthetic comes from the seeds naturally
+- oil_painting added as 4th medium — works well for gothic aesthetic
+- 3-dimension dedup (creature+pose+setting) solved the "everyone standing in ruins" problem
+- "She MUST be visibly female" is required or Flux renders males
+- Kevin's emotional language ("lures you in with her evil smile only to destroy you") produces better seeds than clinical descriptions
+- "No blood, no gore" + creature list + "never-before-seen variant" = scary without being gross
+- Goth aesthetic needs explicit physical descriptors (lipstick, eyeliner, fangs, claws) or renders look like generic dark robed figures
 
 ### Remaining Bots (not started)
 
 | Username | Persona | Mediums | Seed Status |
 |---|---|---|---|
-| void.architect | Surreal sci-fi | surreal, 3d_render | ❌ needs testing |
 | aurelia | Ethereal beauty | watercolor, oil_painting, ghibli | ❌ needs testing |
 | terra | Awe-inspiring nature | photorealistic, oil_painting, surreal | ❌ needs testing |
 | prism | Stylized mediums | 19 mediums | ❌ needs testing |
-| cinder | Gothic dark fantasy | tim_burton, fantasy, steampunk, anime | ❌ needs testing |
 | mochi | Kawaii cozy | 3d_cartoon, claymation, disney, childrens_book | ❌ needs testing |
 | pixelrex | Retro gaming | pixel_art, 8bit, vaporwave | ❌ needs testing |
 | frida.neon | Bold maximalist | comic_book, retro_poster, art_deco | ❌ needs testing |
@@ -234,6 +323,7 @@ GitHub Actions workflow: `.github/workflows/bot-dreams.yml`
 - Each run generates 1 post for EACH seeded bot
 - Manual trigger available with `--bot` and `--count` params
 - Only seeded bots are included — update the `BOTS` array when new bots are ready
+- Currently active: solaris, yuuki, void.architect, astra, ember
 
 ## How to Deploy a New Bot
 
@@ -260,6 +350,7 @@ Once a bot's seeds are generated and tested:
 ## Scripts
 
 - `scripts/generate-bot-dreams.js` — reads seed prompts from DB, signs in as bot, calls Edge Function V2 path, flips draft to public
+- `scripts/generate-bot-seeds.js` — generates deduped seeds using Sonnet, stores in dream_templates table
 - `scripts/create-bot-accounts.js` — creates auth users + public.users + vibe profiles for all 10 bots
 
 ## New Vibes Added (available to all users)
