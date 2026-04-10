@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TextInput,
   ActivityIndicator,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -14,11 +15,27 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
+import { useSearchPosts } from '@/hooks/useSearchPosts';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
+import { PostTile } from '@/components/PostTile';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
+import type { DreamPostItem } from '@/components/DreamCard';
+
+const TILE_GAP = 2;
+const TILE_WIDTH = (Dimensions.get('window').width - TILE_GAP) / 2;
+
+// ── Mixed result types for the unified FlatList ──
+
+type SearchItem =
+  | { type: 'userHeader' }
+  | { type: 'user'; user: SearchUser }
+  | { type: 'seeAllUsers' }
+  | { type: 'postHeader' }
+  | { type: 'postPair'; left: DreamPostItem; right?: DreamPostItem };
 
 function SearchRow({ user }: { user: SearchUser }) {
   const { data: followingIds = new Set<string>() } = useFollowingIds();
@@ -92,9 +109,125 @@ function SearchRow({ user }: { user: SearchUser }) {
   );
 }
 
+function PostPairRow({ left, right }: { left: DreamPostItem; right?: DreamPostItem }) {
+  return (
+    <View style={s.postPairRow}>
+      <View style={{ width: TILE_WIDTH }}>
+        <PostTile item={left} />
+      </View>
+      {right ? (
+        <View style={{ width: TILE_WIDTH }}>
+          <PostTile item={right} />
+        </View>
+      ) : (
+        <View style={{ width: TILE_WIDTH }} />
+      )}
+    </View>
+  );
+}
+
+function SectionHeader({ title }: { title: string }) {
+  return (
+    <View style={s.sectionHeader}>
+      <Text style={s.sectionHeaderText}>{title}</Text>
+    </View>
+  );
+}
+
 export default function SearchScreen() {
   const [query, setQuery] = useState('');
-  const { data: results = [], isLoading } = useSearchUsers(query);
+  const debouncedQuery = useDebouncedValue(query, 300);
+
+  const { data: userResults = [], isLoading: usersLoading } = useSearchUsers(debouncedQuery);
+  const {
+    data: postPages,
+    isLoading: postsLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSearchPosts(debouncedQuery);
+
+  const posts = useMemo(
+    () => postPages?.pages.flatMap((p) => p.rows) ?? [],
+    [postPages],
+  );
+
+  const isLoading = usersLoading || postsLoading;
+  const hasQuery = debouncedQuery.trim().length >= 2;
+  const hasResults = userResults.length > 0 || posts.length > 0;
+
+  // Build unified data for FlatList
+  const listData = useMemo(() => {
+    if (!hasQuery) return [];
+    const items: SearchItem[] = [];
+
+    // People section
+    if (userResults.length > 0) {
+      items.push({ type: 'userHeader' });
+      const showUsers = userResults.slice(0, 3);
+      for (const user of showUsers) {
+        items.push({ type: 'user', user });
+      }
+      if (userResults.length > 3) {
+        items.push({ type: 'seeAllUsers' });
+      }
+    }
+
+    // Dreams section
+    if (posts.length > 0) {
+      items.push({ type: 'postHeader' });
+      for (let i = 0; i < posts.length; i += 2) {
+        items.push({ type: 'postPair', left: posts[i], right: posts[i + 1] });
+      }
+    }
+
+    return items;
+  }, [hasQuery, userResults, posts]);
+
+  const renderItem = ({ item }: { item: SearchItem }) => {
+    switch (item.type) {
+      case 'userHeader':
+        return <SectionHeader title="People" />;
+      case 'user':
+        return <SearchRow user={item.user} />;
+      case 'seeAllUsers':
+        return (
+          <TouchableOpacity
+            style={s.seeAll}
+            onPress={() => {
+              // Could navigate to a full user search, for now just show all inline
+            }}
+            activeOpacity={0.7}
+          >
+            <Text style={s.seeAllText}>See all users</Text>
+            <Ionicons name="chevron-forward" size={14} color={colors.accent} />
+          </TouchableOpacity>
+        );
+      case 'postHeader':
+        return <SectionHeader title="Dreams" />;
+      case 'postPair':
+        return <PostPairRow left={item.left} right={item.right} />;
+      default:
+        return null;
+    }
+  };
+
+  const keyExtractor = (item: SearchItem, index: number) => {
+    switch (item.type) {
+      case 'userHeader':
+        return 'uh';
+      case 'user':
+        return `u-${item.user.id}`;
+      case 'seeAllUsers':
+        return 'sa';
+      case 'postHeader':
+        return 'ph';
+      case 'postPair':
+        return `pp-${item.left.id}`;
+      default:
+        return `i-${index}`;
+    }
+  };
 
   return (
     <SafeAreaView style={s.root}>
@@ -111,7 +244,7 @@ export default function SearchScreen() {
         <Ionicons name="search" size={16} color={colors.textSecondary} style={s.searchIcon} />
         <TextInput
           style={s.searchInput}
-          placeholder="Search by username"
+          placeholder="Search dreamers and dreams"
           placeholderTextColor={colors.textSecondary}
           value={query}
           onChangeText={setQuery}
@@ -128,18 +261,37 @@ export default function SearchScreen() {
 
       {/* Results */}
       <FlatList
-        data={results}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <SearchRow user={item} />}
+        data={listData}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
         keyboardShouldPersistTaps="handled"
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View style={s.footer}>
+              <ActivityIndicator color={colors.textSecondary} />
+            </View>
+          ) : null
+        }
         ListEmptyComponent={
           <View style={s.empty}>
-            {isLoading ? (
+            {isLoading && hasQuery ? (
               <ActivityIndicator color={colors.textSecondary} />
-            ) : query.length >= 2 ? (
-              <Text style={s.emptyText}>No users found</Text>
+            ) : hasQuery && !hasResults ? (
+              <Text style={s.emptyText}>No results found</Text>
             ) : (
-              <Text style={s.emptyText}>Type a username to search</Text>
+              <>
+                <Ionicons
+                  name="search"
+                  size={40}
+                  color={colors.border}
+                  style={{ marginBottom: 12 }}
+                />
+                <Text style={s.emptyText}>Search for dreamers and dreams</Text>
+              </>
             )}
           </View>
         }
@@ -181,6 +333,18 @@ const s = StyleSheet.create({
   },
   searchIcon: { marginRight: 8 },
   searchInput: { flex: 1, color: colors.textPrimary, fontSize: 15, height: 44 },
+  sectionHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  sectionHeaderText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -219,6 +383,19 @@ const s = StyleSheet.create({
     paddingVertical: 5,
   },
   followingPillText: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
+  seeAll: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  seeAllText: { color: colors.accent, fontSize: 13, fontWeight: '600' },
+  postPairRow: {
+    flexDirection: 'row',
+    gap: TILE_GAP,
+  },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyText: { color: colors.textSecondary, fontSize: 14 },
+  footer: { paddingVertical: 20 },
 });
