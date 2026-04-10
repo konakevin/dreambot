@@ -10,12 +10,12 @@ import { useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
   View,
-  FlatList,
   StyleSheet,
   Dimensions,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
@@ -179,6 +179,16 @@ export function FullScreenFeed({
       // If this was the only post, go back
       if (totalBefore <= 1) {
         if (router.canGoBack()) router.back();
+      } else {
+        // Snap to the correct page boundary after the deleted item is removed
+        const newIdx = idx >= totalBefore - 1 ? Math.max(0, idx - 1) : idx;
+        currentIndex.current = newIdx;
+        setTimeout(() => {
+          ref.current?.scrollToOffset({
+            offset: newIdx * pageHeight,
+            animated: false,
+          });
+        }, 300);
       }
     },
     [queryClient, posts, ref]
