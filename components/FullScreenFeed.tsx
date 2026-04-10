@@ -8,13 +8,7 @@
 
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-  RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, Dimensions, ActivityIndicator, RefreshControl } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -103,7 +97,7 @@ export function FullScreenFeed({
     [containerHeight]
   );
 
-  // Re-snap scroll position when the screen regains focus (prevents half-scroll offset)
+  // Re-snap scroll position when posts change (delete, refetch) or screen regains focus
   useEffect(() => {
     if (isFocused && posts.length > 0) {
       ref.current?.scrollToOffset({
@@ -111,7 +105,7 @@ export function FullScreenFeed({
         animated: false,
       });
     }
-  }, [isFocused]);
+  }, [isFocused, posts.length, pageHeight]);
 
   // Clean up impression timer on unmount
   useEffect(() => {
@@ -180,15 +174,9 @@ export function FullScreenFeed({
       if (totalBefore <= 1) {
         if (router.canGoBack()) router.back();
       } else {
-        // Snap to the correct page boundary after the deleted item is removed
+        // Adjust index so the re-snap effect (below) lands on the right page
         const newIdx = idx >= totalBefore - 1 ? Math.max(0, idx - 1) : idx;
         currentIndex.current = newIdx;
-        setTimeout(() => {
-          ref.current?.scrollToOffset({
-            offset: newIdx * pageHeight,
-            animated: false,
-          });
-        }, 300);
       }
     },
     [queryClient, posts, ref]
