@@ -240,17 +240,18 @@ export default function SearchScreen() {
   };
 
   return (
-    <SafeAreaView style={s.root}>
+    <SafeAreaView style={s.root} edges={['top', 'left', 'right']}>
       {/* Header with close button */}
       <View style={s.header}>
         <Text style={s.headerTitle}>Search</Text>
         <TouchableOpacity
           onPress={() => {
             Keyboard.dismiss();
-            router.back();
+            setTimeout(() => router.back(), 50);
           }}
-          hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
           style={s.closeButton}
+          activeOpacity={0.5}
         >
           <Ionicons name="close" size={28} color={colors.textPrimary} />
         </TouchableOpacity>
@@ -326,7 +327,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingTop: 12,
     paddingBottom: 16,
   },
   headerTitle: {
