@@ -45,27 +45,30 @@ const ONLY_BOT = botIdx >= 0 ? args[botIdx + 1] : null;
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
-  solaris: {
-    mediums: ['oil_painting', 'fantasy', 'watercolor'],
-    excludeVibes: ['minimal', 'dark'],
-  },
-  'void.architect': { mediums: ['surreal'], templatePrefix: 'voidarchitect_', excludeVibes: ['minimal', 'whimsical'] },
-  aurelia: { mediums: ['watercolor', 'oil_painting', 'ghibli'] },
-  terra: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
-  yuuki: { mediums: ['anime', 'ghibli', 'anime_illustration'], templatePrefix: 'yuuki_', excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'], pinVibes: { ghibli: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'enchanted', 'whimsical', 'whimsical', 'majestic', 'majestic', 'epic', 'epic', 'mystical', 'mystical'], anime_illustration: ['dreamy', 'dreamy', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'whimsical', 'enchanted', 'enchanted', 'majestic', 'epic', 'cinematic'], anime: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'dark', 'cozy', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'] } },
-  prism: {
-    mediums: [
-      'lego', 'pixel_art', 'claymation', '3d_cartoon', 'tim_burton', 'paper_cutout',
-      'embroidery', 'retro_poster', 'art_deco', 'steampunk', 'vaporwave', '8bit',
-      'minecraft', 'sack_boy', 'funko_pop', 'disney', 'comic_book', '3d_render', 'childrens_book',
-    ],
-  },
-  cinder: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], templatePrefix: 'cinder_', excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
-  mochi: { mediums: ['3d_cartoon', 'claymation', 'disney', 'childrens_book'] },
-  pixelrex: { mediums: ['pixel_art', '8bit', 'vaporwave'] },
-  ember: { mediums: ['oil_painting', 'fantasy', 'watercolor'], templatePrefix: 'ember_', excludeVibes: ['minimal', 'whimsical', 'cozy'] },
-  'frida.neon': { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
-  astra: { mediums: ['surreal'], templatePrefix: 'astra_', excludeVibes: ['minimal', 'whimsical'] },
+  // ── Seeded & active on cron ──
+  dragonbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
+  mangabot: { mediums: ['anime', 'ghibli', 'anime_illustration'], excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'], pinVibes: { ghibli: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'enchanted', 'whimsical', 'whimsical', 'majestic', 'majestic', 'epic', 'epic', 'mystical', 'mystical'], anime_illustration: ['dreamy', 'dreamy', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'whimsical', 'enchanted', 'enchanted', 'majestic', 'epic', 'cinematic'], anime: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'dark', 'cozy', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'] } },
+  starbot: { mediums: ['surreal'], excludeVibes: ['minimal', 'whimsical'] },
+  venusbot: { mediums: ['surreal'], excludeVibes: ['minimal', 'whimsical'] },
+  sirenbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
+  gothbot: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
+  // ── Existing accounts, not yet seeded ──
+  glowbot: { mediums: ['watercolor', 'oil_painting', 'ghibli'] },
+  earthbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
+  arcadebot: { mediums: ['lego', 'pixel_art', 'claymation', '3d_cartoon', 'paper_cutout', '8bit', 'minecraft', 'sack_boy', 'funko_pop', 'vaporwave'] },
+  cuddlebot: { mediums: ['3d_cartoon', 'claymation', 'disney', 'childrens_book'] },
+  popbot: { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
+  // ── New bots ──
+  coquettebot: { mediums: ['watercolor', 'oil_painting', 'ghibli', 'disney'] },
+  safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
+  glambot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
+  steambot: { mediums: ['steampunk', 'oil_painting', 'fantasy'] },
+  tinybot: { mediums: ['photorealistic', '3d_cartoon', 'claymation'] },
+  hauntbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
+  bloombot: { mediums: ['watercolor', 'oil_painting', 'photorealistic'] },
+  inkbot: { mediums: ['comic_book', 'oil_painting', 'photorealistic'] },
+  tripbot: { mediums: ['surreal', 'oil_painting', 'comic_book'] },
+  titanbot: { mediums: ['oil_painting', 'fantasy', 'photorealistic'] },
 };
 
 /**

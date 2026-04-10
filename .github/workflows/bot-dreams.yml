@@ -45,7 +45,7 @@ jobs:
             node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
           else
             # Post once for each seeded bot
-            BOTS=("solaris" "yuuki" "void.architect" "astra" "ember" "cinder")
+            BOTS=("dragonbot" "mangabot" "starbot" "venusbot" "sirenbot" "gothbot")
             for BOT in "${BOTS[@]}"; do
               echo "🎨 Generating for $BOT..."
               node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
