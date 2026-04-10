@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+// nav used for debounced navigation, router for back()
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
@@ -20,7 +21,9 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
+import { useAlbumStore } from '@/store/album';
 import { PostTile } from '@/components/PostTile';
+import * as nav from '@/lib/navigate';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -47,7 +50,7 @@ function SearchRow({ user }: { user: SearchUser }) {
   return (
     <TouchableOpacity
       style={s.row}
-      onPress={() => router.replace(`/user/${user.id}`)}
+      onPress={() => nav.push(`/user/${user.id}`)}
       activeOpacity={0.7}
     >
       {user.avatarUrl ? (
@@ -109,15 +112,23 @@ function SearchRow({ user }: { user: SearchUser }) {
   );
 }
 
-function PostPairRow({ left, right }: { left: DreamPostItem; right?: DreamPostItem }) {
+function PostPairRow({
+  left,
+  right,
+  albumIds,
+}: {
+  left: DreamPostItem;
+  right?: DreamPostItem;
+  albumIds: string[];
+}) {
   return (
     <View style={s.postPairRow}>
       <View style={{ width: TILE_WIDTH }}>
-        <PostTile item={left} />
+        <PostTile item={left} albumIds={albumIds} />
       </View>
       {right ? (
         <View style={{ width: TILE_WIDTH }}>
-          <PostTile item={right} />
+          <PostTile item={right} albumIds={albumIds} />
         </View>
       ) : (
         <View style={{ width: TILE_WIDTH }} />
@@ -148,6 +159,7 @@ export default function SearchScreen() {
   } = useSearchPosts(debouncedQuery);
 
   const posts = useMemo(() => postPages?.pages.flatMap((p) => p.rows) ?? [], [postPages]);
+  const postAlbumIds = useMemo(() => posts.map((p) => p.id), [posts]);
 
   const isLoading = usersLoading || postsLoading;
   const hasQuery = debouncedQuery.trim().length >= 2;
@@ -203,7 +215,7 @@ export default function SearchScreen() {
       case 'postHeader':
         return <SectionHeader title="Dreams" />;
       case 'postPair':
-        return <PostPairRow left={item.left} right={item.right} />;
+        return <PostPairRow left={item.left} right={item.right} albumIds={postAlbumIds} />;
       default:
         return null;
     }
