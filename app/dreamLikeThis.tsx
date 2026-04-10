@@ -18,7 +18,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  LayoutAnimation,
+  InteractionManager,
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -93,27 +93,14 @@ export default function DreamLikeThisScreen() {
     })();
   }, [params.postId]);
 
+  // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
-    const anim = {
-      duration: 400,
-      create: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-      update: { type: LayoutAnimation.Types.easeInEaseOut },
-      delete: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-    };
-    const s1 = Keyboard.addListener('keyboardWillShow', () => {
-      LayoutAnimation.configureNext(anim);
-      setKbOpen(true);
+    const s1 = Keyboard.addListener('keyboardDidShow', () => {
+      InteractionManager.runAfterInteractions(() => setKbOpen(true));
     });
-    const s2 = Keyboard.addListener('keyboardWillHide', () => {
+    const s2 = Keyboard.addListener('keyboardDidHide', () => {
       if (pickerOpenRef.current) return;
-      LayoutAnimation.configureNext(anim);
-      setKbOpen(false);
+      InteractionManager.runAfterInteractions(() => setKbOpen(false));
     });
     return () => {
       s1.remove();

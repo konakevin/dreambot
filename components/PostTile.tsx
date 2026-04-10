@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -124,7 +124,7 @@ interface PostTileProps {
   showPrivateBadge?: boolean;
 }
 
-export function PostTile({
+export const PostTile = memo(function PostTile({
   item,
   isOwn = false,
   albumIds,
@@ -228,7 +228,7 @@ export function PostTile({
       )}
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   tile: {

@@ -10,7 +10,7 @@
  * One screen, one button: "Dream ✨"
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Keyboard,
+  InteractionManager,
   Platform,
   Modal,
   ActionSheetIOS,
@@ -90,10 +91,14 @@ export default function CreateScreen() {
       });
   }, [user]);
 
-  // Keyboard tracking
+  // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
-    const s1 = Keyboard.addListener('keyboardWillShow', () => setKbOpen(true));
-    const s2 = Keyboard.addListener('keyboardWillHide', () => setKbOpen(false));
+    const s1 = Keyboard.addListener('keyboardDidShow', () => {
+      InteractionManager.runAfterInteractions(() => setKbOpen(true));
+    });
+    const s2 = Keyboard.addListener('keyboardDidHide', () => {
+      InteractionManager.runAfterInteractions(() => setKbOpen(false));
+    });
     return () => {
       s1.remove();
       s2.remove();

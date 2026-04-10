@@ -6,7 +6,7 @@
  * - Pinch to zoom
  */
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, memo } from 'react';
 import { View, Text, TouchableOpacity, Pressable, StyleSheet, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -175,7 +175,7 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
   );
 }
 
-export function DreamCard({
+export const DreamCard = memo(function DreamCard({
   item,
   bottomPadding,
   cardHeight,
@@ -569,7 +569,7 @@ export function DreamCard({
       </Animated.View>
     </GestureDetector>
   );
-}
+});
 
 const s = StyleSheet.create({
   card: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: '#000' },
