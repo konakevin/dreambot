@@ -32,7 +32,7 @@ export function useMarkShareSeen() {
       );
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user?.id] });
     },
   });
 }

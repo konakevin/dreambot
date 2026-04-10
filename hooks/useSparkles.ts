@@ -40,12 +40,13 @@ export function usePurchaseSparkles() {
       return success;
     },
     onSuccess: () => {
+      const userId = useAuthStore.getState().user?.id;
       // Webhook will grant sparkles; poll balance after short delay
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+        queryClient.invalidateQueries({ queryKey: ['sparkleBalance', userId] });
       }, 2000);
-      // Also invalidate immediately for optimistic feel — partial key matches all users
-      queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+      // Also invalidate immediately for optimistic feel
+      queryClient.invalidateQueries({ queryKey: ['sparkleBalance', userId] });
     },
   });
 }
@@ -81,7 +82,7 @@ export function useSpendSparkles() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+      queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user?.id] });
     },
   });
 }

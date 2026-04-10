@@ -377,7 +377,7 @@ export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>
 supabase functions deploy <function-name> --no-verify-jwt
 ```
 
-**Always use `--no-verify-jwt`.** Deploy immediately after editing — don't wait to be asked. Active functions: `generate-dream`, `nightly-dreams`, `send-push`, `revenuecat-webhook`, `moderate-content`.
+**Always use `--no-verify-jwt`.** Deploy immediately after editing — don't wait to be asked. Active functions: `generate-dream`, `nightly-dreams`, `send-push`, `revenuecat-webhook`, `moderate-content`, `describe-photo`, `extract-style`.
 
 ### Dev Build
 

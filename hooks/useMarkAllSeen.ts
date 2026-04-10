@@ -29,7 +29,7 @@ export function useMarkAllSeen() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['inbox', user!.id] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user!.id] });
     },
   });
 }

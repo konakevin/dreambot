@@ -37,7 +37,7 @@ export function useAvatarUpload() {
       return avatarUrl;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile', user?.id] });
     },
   });
 }

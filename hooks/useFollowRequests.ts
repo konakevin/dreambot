@@ -39,12 +39,14 @@ export function useApproveFollowRequest() {
       });
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: (_data, requesterId) => {
+      const userId = useAuthStore.getState().user?.id;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
-      queryClient.invalidateQueries({ queryKey: ['followersList'] });
-      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['inbox', userId] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', userId] });
+      queryClient.invalidateQueries({ queryKey: ['followersList', userId] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile', userId] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile', requesterId] });
     },
     onError: () => {
       Toast.show('Failed to approve', 'close-circle');
@@ -64,9 +66,10 @@ export function useDenyFollowRequest() {
       if (error) throw error;
     },
     onSuccess: () => {
+      const userId = useAuthStore.getState().user?.id;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
+      queryClient.invalidateQueries({ queryKey: ['inbox', userId] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', userId] });
     },
   });
 }
@@ -86,7 +89,7 @@ export function useCancelFollowRequest() {
     },
     onSuccess: () => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      queryClient.invalidateQueries({ queryKey: ['outgoingFollowRequests'] });
+      queryClient.invalidateQueries({ queryKey: ['outgoingFollowRequests', userId] });
     },
   });
 }

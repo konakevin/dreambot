@@ -94,10 +94,11 @@ export function useToggleFollow() {
     onSuccess: (_data, { userId }) => {
       qc.invalidateQueries({ queryKey: ['publicProfile', userId] });
       qc.invalidateQueries({ queryKey: ['publicProfile', user?.id] });
-      qc.invalidateQueries({ queryKey: ['followersList'] });
-      qc.invalidateQueries({ queryKey: ['followingList'] });
-      qc.invalidateQueries({ queryKey: ['followingIds'] });
-      qc.invalidateQueries({ queryKey: ['outgoingFollowRequests'] });
+      qc.invalidateQueries({ queryKey: ['followersList', userId] });
+      qc.invalidateQueries({ queryKey: ['followersList', user?.id] });
+      qc.invalidateQueries({ queryKey: ['followingList', user?.id] });
+      qc.invalidateQueries({ queryKey: ['followingIds', user?.id] });
+      qc.invalidateQueries({ queryKey: ['outgoingFollowRequests', user?.id] });
     },
   });
 }

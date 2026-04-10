@@ -48,7 +48,7 @@ export function useToggleBlock() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blockedIds'] });
+      queryClient.invalidateQueries({ queryKey: ['blockedIds', user?.id] });
       queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
     },
   });

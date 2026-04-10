@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useAuthStore } from '@/store/auth';
 
 export function useDeleteShare() {
+  const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -11,8 +13,8 @@ export function useDeleteShare() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['inbox'] });
-      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount'] });
+      queryClient.invalidateQueries({ queryKey: ['inbox', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user?.id] });
     },
   });
 }
