@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Dimensions,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -241,78 +243,84 @@ export default function SearchScreen() {
 
   return (
     <SafeAreaView style={s.root} edges={['top', 'left', 'right']}>
-      {/* Header with close button */}
-      <View style={s.header}>
-        <Text style={s.headerTitle}>Search</Text>
-        <TouchableOpacity
-          onPress={() => {
-            Keyboard.dismiss();
-            setTimeout(() => router.back(), 50);
-          }}
-          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-          style={s.closeButton}
-          activeOpacity={0.5}
-        >
-          <Ionicons name="close" size={28} color={colors.textPrimary} />
-        </TouchableOpacity>
-      </View>
-
-      {/* Search input */}
-      <View style={s.searchWrap}>
-        <Ionicons name="search" size={16} color={colors.textSecondary} style={s.searchIcon} />
-        <TextInput
-          style={s.searchInput}
-          placeholder="Search dreamers and dreams"
-          placeholderTextColor={colors.textSecondary}
-          value={query}
-          onChangeText={setQuery}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        {query.length > 0 && (
-          <TouchableOpacity onPress={() => setQuery('')} hitSlop={8}>
-            <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={0}
+      >
+        {/* Header with close button */}
+        <View style={s.header}>
+          <Text style={s.headerTitle}>Search</Text>
+          <TouchableOpacity
+            onPress={() => {
+              Keyboard.dismiss();
+              setTimeout(() => router.back(), 50);
+            }}
+            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            style={s.closeButton}
+            activeOpacity={0.5}
+          >
+            <Ionicons name="close" size={28} color={colors.textPrimary} />
           </TouchableOpacity>
-        )}
-      </View>
+        </View>
 
-      {/* Results */}
-      <FlatList
-        data={listData}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        keyboardShouldPersistTaps="handled"
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <View style={s.footer}>
-              <ActivityIndicator color={colors.textSecondary} />
+        {/* Search input */}
+        <View style={s.searchWrap}>
+          <Ionicons name="search" size={16} color={colors.textSecondary} style={s.searchIcon} />
+          <TextInput
+            style={s.searchInput}
+            placeholder="Search dreamers and dreams"
+            placeholderTextColor={colors.textSecondary}
+            value={query}
+            onChangeText={setQuery}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          {query.length > 0 && (
+            <TouchableOpacity onPress={() => setQuery('')} hitSlop={8}>
+              <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Results */}
+        <FlatList
+          data={listData}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          keyboardShouldPersistTaps="handled"
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+          }}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <View style={s.footer}>
+                <ActivityIndicator color={colors.textSecondary} />
+              </View>
+            ) : null
+          }
+          ListEmptyComponent={
+            <View style={s.empty}>
+              {isLoading && hasQuery ? (
+                <ActivityIndicator color={colors.textSecondary} />
+              ) : hasQuery && !hasResults ? (
+                <Text style={s.emptyText}>No results found</Text>
+              ) : (
+                <>
+                  <Ionicons
+                    name="search"
+                    size={40}
+                    color={colors.border}
+                    style={{ marginBottom: 12 }}
+                  />
+                  <Text style={s.emptyText}>Search for dreamers and dreams</Text>
+                </>
+              )}
             </View>
-          ) : null
-        }
-        ListEmptyComponent={
-          <View style={s.empty}>
-            {isLoading && hasQuery ? (
-              <ActivityIndicator color={colors.textSecondary} />
-            ) : hasQuery && !hasResults ? (
-              <Text style={s.emptyText}>No results found</Text>
-            ) : (
-              <>
-                <Ionicons
-                  name="search"
-                  size={40}
-                  color={colors.border}
-                  style={{ marginBottom: 12 }}
-                />
-                <Text style={s.emptyText}>Search for dreamers and dreams</Text>
-              </>
-            )}
-          </View>
-        }
-      />
+          }
+        />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
