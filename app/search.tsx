@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
+  Keyboard,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -243,8 +244,15 @@ export default function SearchScreen() {
       {/* Header with close button */}
       <View style={s.header}>
         <Text style={s.headerTitle}>Search</Text>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={s.closeButton}>
-          <Ionicons name="close" size={26} color={colors.textSecondary} />
+        <TouchableOpacity
+          onPress={() => {
+            Keyboard.dismiss();
+            router.back();
+          }}
+          hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+          style={s.closeButton}
+        >
+          <Ionicons name="close" size={28} color={colors.textPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -259,7 +267,6 @@ export default function SearchScreen() {
           onChangeText={setQuery}
           autoCapitalize="none"
           autoCorrect={false}
-          autoFocus
         />
         {query.length > 0 && (
           <TouchableOpacity onPress={() => setQuery('')} hitSlop={8}>
@@ -318,9 +325,9 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 12,
+    paddingBottom: 16,
   },
   headerTitle: {
     color: colors.textPrimary,
