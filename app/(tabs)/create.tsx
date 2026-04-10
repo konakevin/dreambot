@@ -57,6 +57,7 @@ export default function CreateScreen() {
   const { data: dbVibes = [] } = useDreamVibes();
 
   const [kbOpen, setKbOpen] = useState(false);
+  const [hasCastSelf, setHasCastSelf] = useState(false);
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const promptRef = useRef<TextInput>(null);
@@ -77,6 +78,14 @@ export default function CreateScreen() {
           const vp = raw as VibeProfile;
           if (vp.art_styles?.length) setUserArtStyles(vp.art_styles);
           if (vp.aesthetics?.length) setUserAesthetics(vp.aesthetics);
+          const cast = vp.dream_cast;
+          if (cast && Array.isArray(cast)) {
+            setHasCastSelf(
+              cast.some(
+                (m: { role: string; thumb_url?: string }) => m.role === 'self' && !!m.thumb_url
+              )
+            );
+          }
         }
       });
   }, [user]);
@@ -105,18 +114,30 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
 
+  // Self-reference detection
+  const SELF_REF_REGEX =
+    /\b(put me|place me|make me|show me|me as|me in|me on|me at|i am|i'm|myself|my face)\b/i;
+  const mentionsSelf = hasPrompt && SELF_REF_REGEX.test(config.userPrompt);
+
+  // Medium transform quality
+  const selectedMediumData = dbMediums.find((m) => m.key === config.selectedMedium);
+  const isGoodTransform =
+    config.selectedMedium === 'surprise_me' || selectedMediumData?.transform_quality === 'good';
+
   // Contextual hint above Dream button
   const contextHint = hasPhoto
     ? hasPrompt
-      ? 'Reimagine your photo'
-      : 'Stylize your photo'
+      ? isGoodTransform
+        ? 'Inspired by your likeness'
+        : 'Artistic interpretation'
+      : 'Restyle your photo'
     : hasPrompt
       ? 'Generate from your prompt'
       : 'Leave blank for a surprise';
 
   // Placeholder text
   const placeholder = hasPhoto
-    ? 'Describe how to reimagine it... or leave blank to stylize it.'
+    ? 'Describe a scene...'
     : 'Describe your dream... or leave blank for a surprise.';
 
   // Process a picked/captured image asset
@@ -260,6 +281,32 @@ export default function CreateScreen() {
             </View>
           )}
 
+          {/* Contextual info hint — photo or self-insert states */}
+          {hasPhoto && (
+            <View className="flex-row items-center gap-1.5 mb-2 px-1">
+              <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
+              <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
+                {!hasPrompt
+                  ? 'Leave blank to restyle your photo, or type a scene for a likeness-based dream'
+                  : isGoodTransform
+                    ? 'Your photo will help capture your likeness in this style'
+                    : 'This style creates an artistic interpretation — not your exact likeness'}
+              </Text>
+            </View>
+          )}
+          {!hasPhoto && mentionsSelf && (
+            <View className="flex-row items-center gap-1.5 mb-2 px-1">
+              <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
+              <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
+                {isGoodTransform
+                  ? hasCastSelf
+                    ? 'Your Dream Cast photo will inspire your character'
+                    : 'Add yourself to Dream Cast in settings to see yourself in dreams'
+                  : 'Self-insert works best with stylized mediums — try anime or 3d cartoon'}
+              </Text>
+            </View>
+          )}
+
           {/* Prompt input */}
           <View
             className="rounded-xl mb-4"
@@ -359,12 +406,17 @@ export default function CreateScreen() {
         {/* Fixed footer — always visible above keyboard */}
         <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : vs(96) }}>
           {/* Contextual hint */}
-          <Text
-            className="text-center text-sm font-medium mb-2"
-            style={{ color: 'rgba(255,255,255,0.5)' }}
-          >
-            {contextHint}
-          </Text>
+          <View className="flex-row items-center justify-center gap-1.5 mb-2">
+            {((hasPhoto && hasPrompt) || mentionsSelf) && (
+              <Ionicons name="information-circle" size={14} color={colors.accent} />
+            )}
+            <Text
+              className="text-center text-sm font-medium"
+              style={{ color: 'rgba(255,255,255,0.5)' }}
+            >
+              {contextHint}
+            </Text>
+          </View>
 
           {/* Dream button */}
           <TouchableOpacity

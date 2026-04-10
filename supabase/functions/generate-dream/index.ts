@@ -221,6 +221,8 @@ interface RequestBody {
   force_vibe?: string;
   /** Client-generated job ID for queue tracking */
   job_id?: string;
+  /** Style transfer: original post's ai_prompt used as style template for DLT */
+  style_prompt?: string;
 }
 
 Deno.serve(async (req) => {
@@ -319,6 +321,7 @@ Deno.serve(async (req) => {
   const force_medium = (body as Record<string, unknown>).force_medium as string | undefined;
   const force_vibe = (body as Record<string, unknown>).force_vibe as string | undefined;
   const jobId = (body as Record<string, unknown>).job_id as string | undefined;
+  const style_prompt = (body as Record<string, unknown>).style_prompt as string | undefined;
 
   console.log(
     '[generate-dream] RAW TEST PARAMS:',
@@ -866,12 +869,15 @@ Output ONLY the prompt.`;
             150
           );
         } else {
+          const styleRef = style_prompt
+            ? `\n- Reference style (match this aesthetic): ${style_prompt.slice(0, 300)}`
+            : '';
           const genericBrief = `Write a Flux AI prompt (50-70 words, comma-separated phrases) for an image:
 - Start with: "${medium.fluxFragment}"
 - Subject from photo: ${photoDescription}
 - The user wants: ${userHint || 'a creative reimagining'}
 - Render in ${medium.key} style
-- Mood: ${vibe.directive!.slice(0, 200)}
+- Mood: ${vibe.directive!.slice(0, 200)}${styleRef}
 - Framing: waist-up to three-quarter body. The person's face must be clearly visible and well-lit. Show the person IN the scene, interacting with elements around them. The environment should be visible — don't crop it out.
 - DO NOT invent your own scenario — use the user's request EXACTLY
 Output ONLY the prompt.`;
@@ -879,26 +885,11 @@ Output ONLY the prompt.`;
         }
 
         photoOverrideMode = 'flux-dev';
-        // Only face-swap for realistic mediums — swapping a real face onto LEGO/pixel art looks wrong
-        const NON_SWAP_MEDIUMS = new Set([
-          'lego',
-          'pixel_art',
-          'stained_glass',
-          'funko_pop',
-          'minecraft',
-          'sack_boy',
-          'ghibli',
-          'tim_burton',
-          'felt',
-        ]);
-        if (!NON_SWAP_MEDIUMS.has(medium.key)) {
-          faceSwapSource = input_image;
-        }
+        // No face swap — reimagine produces a likeness-based caricature, not an exact photo
         logAxes = {
           medium: medium.key,
           vibe: vibe.key,
           engine: 'v2-reimagine',
-          faceSwap: !NON_SWAP_MEDIUMS.has(medium.key),
         };
         console.log('[generate-dream] Reimagine prompt:', finalPrompt.slice(0, 150));
       } catch (err) {
@@ -968,6 +959,7 @@ Output ONLY the prompt.`;
       const mentionsSelf =
         userSubject &&
         selfCast &&
+        medium.transformQuality === 'good' &&
         /\b(put me|place me|make me|show me|me as|me in|me on|me at|i am|i'm|myself|my face)\b/i.test(
           userSubject
         );
@@ -1016,27 +1008,11 @@ Output ONLY the prompt.`;
           finalPrompt = await nightlySonnet(selfBrief, ANTHROPIC_KEY, 200);
           if (finalPrompt.length < 10) throw new Error('too short');
 
-          // Set up face swap from cast photo
-          const NON_SWAP_MEDIUMS = new Set([
-            'lego',
-            'pixel_art',
-            'stained_glass',
-            'embroidery',
-            'funko_pop',
-            'minecraft',
-            'sack_boy',
-            'ghibli',
-            'tim_burton',
-          ]);
-          if (!NON_SWAP_MEDIUMS.has(medium.key)) {
-            faceSwapSource = selfCast.thumb_url;
-          }
-
+          // No face swap — self-insert uses cast description only (stylized mediums abstract the face)
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
             engine: 'v2-self-insert-text',
-            faceSwap: !NON_SWAP_MEDIUMS.has(medium.key),
           };
           console.log('[generate-dream] Self-insert prompt:', finalPrompt.slice(0, 150));
           lap('self-insert-done');
@@ -1051,6 +1027,35 @@ Output ONLY the prompt.`;
           };
           lap('self-insert-done');
         }
+      } else if (style_prompt) {
+        // Style transfer: merge the original post's style with the user's subject
+        const stSubject = userSubject || 'a surprising new scene that fits this style';
+        const styleTransferBrief = `You are a cinematographer. You have a reference Flux AI prompt that produced a stunning image.
+Your job: write a NEW Flux AI prompt (60-90 words, comma-separated) that keeps the EXACT same visual style, mood, lighting, color palette, and medium technique — but with a DIFFERENT subject.
+
+REFERENCE PROMPT (copy the style, NOT the subject):
+"${style_prompt.slice(0, 500)}"
+
+NEW SUBJECT (the user wants this):
+"${stSubject}"
+
+Rules:
+1. Start with the same art medium/style fragment as the reference
+2. Preserve the lighting, palette, mood, and compositional approach
+3. Replace the subject entirely with the user's request
+4. End with: no text, no words, no letters, no watermarks, hyper detailed
+Output ONLY the prompt.`;
+
+        try {
+          finalPrompt = await nightlySonnet(styleTransferBrief, ANTHROPIC_KEY, 200);
+          if (finalPrompt.length < 10) throw new Error('too short');
+        } catch {
+          finalPrompt = `${medium.fluxFragment}, ${stSubject}, ${vibe.directive && vibe.directive.split('.')[0] ? vibe.directive.split('.')[0] : 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
+        }
+
+        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-style-transfer' };
+        console.log('[generate-dream] V2 style transfer:', finalPrompt.slice(0, 150));
+        lap('style-transfer-done');
       } else if (userSubject) {
         // User provided a prompt — directive approach for all mediums
         const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).

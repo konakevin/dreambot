@@ -38,6 +38,8 @@ interface GenerateDreamOpts {
   photo_style?: 'restyle' | 'reimagine';
   /** Client-generated job ID for queue tracking */
   job_id?: string;
+  /** Style transfer: original post's ai_prompt used as style template for DLT */
+  style_prompt?: string;
 }
 
 interface GenerateDreamResult {
@@ -140,6 +142,7 @@ export async function generateFromVibeProfile(
     mediumKey?: string;
     vibeKey?: string;
     jobId?: string;
+    stylePrompt?: string;
   }
 ): Promise<GenerateDreamResult> {
   return generateDream({
@@ -150,6 +153,7 @@ export async function generateFromVibeProfile(
     medium_key: opts?.mediumKey,
     vibe_key: opts?.vibeKey,
     job_id: opts?.jobId,
+    style_prompt: opts?.stylePrompt,
   });
 }
 

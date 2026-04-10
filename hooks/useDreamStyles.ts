@@ -12,6 +12,7 @@ export interface DreamMedium {
   label: string;
   directive: string;
   flux_fragment: string;
+  transform_quality: 'good' | 'poor';
 }
 
 export interface DreamVibe {

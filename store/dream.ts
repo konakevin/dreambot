@@ -23,6 +23,7 @@ interface DreamConfig {
   selectedMedium: string;
   selectedVibe: string;
   userPrompt: string;
+  stylePrompt: string | null;
 }
 
 interface DreamResult {
@@ -50,6 +51,7 @@ interface DreamStore {
   setMedium: (key: string) => void;
   setVibe: (key: string) => void;
   setPrompt: (text: string) => void;
+  setStylePrompt: (prompt: string | null) => void;
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
   clearPhoto: () => void;
@@ -65,6 +67,7 @@ const INITIAL_CONFIG: DreamConfig = {
   selectedMedium: 'surprise_me',
   selectedVibe: 'surprise_me',
   userPrompt: '',
+  stylePrompt: null,
 };
 
 export const useDreamStore = create<DreamStore>((set) => ({
@@ -79,6 +82,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setMedium: (key) => set((s) => ({ config: { ...s.config, selectedMedium: key } })),
   setVibe: (key) => set((s) => ({ config: { ...s.config, selectedVibe: key } })),
   setPrompt: (text) => set((s) => ({ config: { ...s.config, userPrompt: text } })),
+  setStylePrompt: (prompt) => set((s) => ({ config: { ...s.config, stylePrompt: prompt } })),
   setResult: (result) => set({ result }),
   clearResult: () => set({ result: null }),
   clearPhoto: () =>

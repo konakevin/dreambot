@@ -45,6 +45,7 @@ export default function DreamLikeThisScreen() {
     imageUrl?: string;
     username?: string;
     userId?: string;
+    prompt?: string;
   }>();
 
   const user = useAuthStore((s) => s.user);
@@ -58,10 +59,12 @@ export default function DreamLikeThisScreen() {
   const setMedium = useDreamStore((s) => s.setMedium);
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
+  const setStylePrompt = useDreamStore((s) => s.setStylePrompt);
 
   // Reference post data
   const [refMedium, setRefMedium] = useState<string | null>(null);
   const [refVibe, setRefVibe] = useState<string | null>(null);
+  const [refPrompt, setRefPrompt] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // User's choices
@@ -77,13 +80,14 @@ export default function DreamLikeThisScreen() {
     (async () => {
       const { data } = await supabase
         .from('uploads')
-        .select('dream_medium, dream_vibe')
+        .select('dream_medium, dream_vibe, ai_prompt')
         .eq('id', params.postId)
         .single();
       const row = data as unknown as Record<string, unknown> | null;
       if (row) {
         setRefMedium((row.dream_medium as string) ?? null);
         setRefVibe((row.dream_vibe as string) ?? null);
+        setRefPrompt(params.prompt ?? (row.ai_prompt as string) ?? null);
       }
       setLoading(false);
     })();
@@ -159,8 +163,13 @@ export default function DreamLikeThisScreen() {
     if (!refMedium) return;
     Keyboard.dismiss();
 
-    // Auto-detect: prompt entered = reimagine, no prompt = restyle
-    const effectivePhotoStyle = userPrompt.trim() ? 'reimagine' : 'restyle';
+    // DLT with style reference = always reimagine (flux-dev + face swap) so style actually transfers
+    // Without style ref: prompt entered = reimagine, no prompt = restyle
+    const effectivePhotoStyle = refPrompt
+      ? 'reimagine'
+      : userPrompt.trim()
+        ? 'reimagine'
+        : 'restyle';
 
     // Set up the dream store with inherited medium/vibe
     reset();
@@ -173,6 +182,7 @@ export default function DreamLikeThisScreen() {
     setMedium(refMedium);
     setVibe(refVibe ?? 'surprise_me');
     setPrompt(userPrompt.trim());
+    setStylePrompt(refPrompt);
 
     // Navigate to Loading → Reveal (same as Create flow)
     nav.push('/dream/loading');
@@ -276,7 +286,7 @@ export default function DreamLikeThisScreen() {
               style={s.promptInput}
               placeholder={
                 hasPhoto
-                  ? 'Add a scenario to reimagine, or leave empty to restyle...'
+                  ? 'Describe a scene — your likeness will be woven in...'
                   : 'Describe your dream, or tap the camera to upload a photo...'
               }
               placeholderTextColor={colors.textMuted}
@@ -292,11 +302,18 @@ export default function DreamLikeThisScreen() {
             )}
           </View>
           {hasPhoto && (
-            <Text style={s.promptHint}>
-              {userPrompt.trim()
-                ? 'Your photo will be reimagined in a new scenario'
-                : 'Your photo will be restyled — same scene, new art style'}
-            </Text>
+            <View style={s.likenessHint}>
+              <Ionicons name="information-circle" size={14} color={colors.accent} />
+              <Text style={s.likenessHintText}>
+                {(() => {
+                  const md = dbMediums.find((m) => m.key === refMedium);
+                  const good = !md || md.transform_quality === 'good';
+                  return good
+                    ? 'Your photo will be styled to match — preserving your likeness'
+                    : 'Based on your likeness — an artistic interpretation, not an exact photo';
+                })()}
+              </Text>
+            </View>
           )}
         </ScrollView>
 
@@ -438,6 +455,17 @@ const s = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     marginTop: -8,
+  },
+  likenessHint: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    gap: 6,
+    marginTop: -8,
+  },
+  likenessHintText: {
+    color: colors.textSecondary,
+    fontSize: 12,
   },
 
   // Prompt

@@ -126,8 +126,9 @@ export function useDreamCreate() {
           vibe_key: config.selectedVibe,
           input_image: refUrl,
           hint: config.userPrompt.trim() || undefined,
-          photo_style: config.userPrompt.trim() ? 'reimagine' : 'restyle',
+          photo_style: config.stylePrompt || config.userPrompt.trim() ? 'reimagine' : 'restyle',
           job_id: jobId,
+          style_prompt: config.stylePrompt || undefined,
         });
       } else {
         // Text dream (prompt or surprise)
@@ -142,6 +143,7 @@ export function useDreamCreate() {
             vibeKey: config.selectedVibe,
             hint: config.userPrompt.trim() || undefined,
             jobId,
+            stylePrompt: config.stylePrompt || undefined,
           });
         } else {
           result = await generateFromRecipe(recipe ?? DEFAULT_RECIPE, { jobId });

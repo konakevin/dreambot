@@ -11,6 +11,7 @@ interface DbMediumRow {
   label: string;
   directive: string;
   flux_fragment: string;
+  transform_quality: string;
 }
 
 /** App format — matches existing code expectations */
@@ -19,6 +20,7 @@ export interface ResolvedMedium {
   label: string;
   directive: string;
   fluxFragment: string;
+  transformQuality: string;
 }
 
 export interface ResolvedVibe {
@@ -33,6 +35,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     label: row.label,
     directive: row.directive,
     fluxFragment: row.flux_fragment,
+    transformQuality: row.transform_quality || 'good',
   };
 }
 
