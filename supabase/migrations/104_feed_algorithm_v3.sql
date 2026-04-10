@@ -212,17 +212,8 @@ AS $$
     FROM scored
   ),
 
-  -- Count distinct creators for dynamic throttle
-  creator_pool AS (
-    SELECT COUNT(DISTINCT fs.user_id) AS cnt
-    FROM final_scored fs
-    WHERE
-      (p_cursor_score IS NULL OR p_cursor_id IS NULL)
-      OR (fs.computed_score < p_cursor_score)
-      OR (fs.computed_score = p_cursor_score AND fs.id < p_cursor_id)
-  ),
-
-  -- Dynamic creator throttle: max posts per creator adapts to pool size
+  -- Soft creator throttle: penalize a creator's 2nd, 3rd, etc. post per page
+  -- instead of hard-cutting them. This ensures pagination always fills pages.
   throttled AS (
     SELECT
       fs.*,
@@ -244,9 +235,15 @@ AS $$
     throttled.comment_count, throttled.like_count, throttled.fuse_count,
     throttled.ai_prompt, throttled.ai_concept, throttled.bot_message,
     throttled.dream_medium, throttled.dream_vibe,
-    throttled.computed_score AS feed_score
+    -- Soft throttle: 1st post full score, 2nd at 40%, 3rd at 15%, 4th+ at 5%
+    -- This naturally pushes diverse creators to the top while still filling the page
+    throttled.computed_score * CASE
+      WHEN throttled.creator_rank = 1 THEN 1.0
+      WHEN throttled.creator_rank = 2 THEN 0.4
+      WHEN throttled.creator_rank = 3 THEN 0.15
+      ELSE 0.05
+    END AS feed_score
   FROM throttled
-  WHERE throttled.creator_rank <= GREATEST(1, p_limit / GREATEST((SELECT cnt FROM creator_pool), 1))
-  ORDER BY throttled.computed_score DESC, throttled.id DESC
+  ORDER BY feed_score DESC, throttled.id DESC
   LIMIT p_limit;
 $$;
