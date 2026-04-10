@@ -15,9 +15,7 @@ export function useSearchPosts(query: string) {
       // Build tsquery: "dragon mountain" → "dragon & mountain"
       // Append :* to last token for prefix matching ("drag" → "drag:*" matches "dragon")
       const tokens = query.trim().split(/\s+/).filter(Boolean);
-      const tsQuery = tokens
-        .map((t, i) => (i === tokens.length - 1 ? `${t}:*` : t))
-        .join(' & ');
+      const tsQuery = tokens.map((t, i) => (i === tokens.length - 1 ? `${t}:*` : t)).join(' & ');
 
       const { data, error } = await supabase
         .from('uploads')

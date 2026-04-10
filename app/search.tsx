@@ -147,10 +147,7 @@ export default function SearchScreen() {
     isFetchingNextPage,
   } = useSearchPosts(debouncedQuery);
 
-  const posts = useMemo(
-    () => postPages?.pages.flatMap((p) => p.rows) ?? [],
-    [postPages],
-  );
+  const posts = useMemo(() => postPages?.pages.flatMap((p) => p.rows) ?? [], [postPages]);
 
   const isLoading = usersLoading || postsLoading;
   const hasQuery = debouncedQuery.trim().length >= 2;
