@@ -63,10 +63,10 @@ const BOTS = {
   glowbot: { mediums: ['watercolor', 'oil_painting', 'ghibli'] },
   earthbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   arcadebot: { mediums: ['lego', 'pixel_art', 'claymation', '3d_cartoon', 'paper_cutout', '8bit', 'minecraft', 'sack_boy', 'funko_pop', 'vaporwave'] },
-  cuddlebot: { mediums: ['3d_cartoon', 'claymation', 'disney', 'childrens_book'] },
+  cuddlebot: { mediums: ['3d_cartoon', 'claymation', 'childrens_book'] },
   popbot: { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
   // ── New bots ──
-  coquettebot: { mediums: ['watercolor', 'oil_painting', 'ghibli', 'disney'] },
+  coquettebot: { mediums: ['watercolor', 'oil_painting', 'ghibli', '3d_cartoon'] },
   safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
   glambot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   steambot: { mediums: ['steampunk', 'oil_painting', 'fantasy'] },
