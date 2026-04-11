@@ -65,7 +65,7 @@ const BOTS = {
   cuddlebot: { mediums: ['3d_cartoon', 'sack_boy', 'childrens_book'] },
   popbot: { mediums: ['comic_book', 'retro_poster'] },
   // ── New bots ──
-  coquettebot: { mediums: ['watercolor', 'oil_painting', '3d_cartoon'] },
+  coquettebot: { mediums: ['surreal', 'fairytale', 'watercolor'] },
   safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
   glambot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   steambot: { mediums: ['steampunk', 'oil_painting', 'fantasy'] },
