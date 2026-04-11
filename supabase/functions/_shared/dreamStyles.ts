@@ -11,7 +11,10 @@ interface DbMediumRow {
   label: string;
   directive: string;
   flux_fragment: string;
-  transform_quality: string;
+  is_scene_only: boolean;
+  is_character_only: boolean;
+  nightly_skip: boolean;
+  face_swaps: boolean;
 }
 
 /** App format — matches existing code expectations */
@@ -20,7 +23,10 @@ export interface ResolvedMedium {
   label: string;
   directive: string;
   fluxFragment: string;
-  transformQuality: string;
+  isSceneOnly: boolean;
+  isCharacterOnly: boolean;
+  nightlySkip: boolean;
+  faceSwaps: boolean;
 }
 
 export interface ResolvedVibe {
@@ -35,7 +41,10 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     label: row.label,
     directive: row.directive,
     fluxFragment: row.flux_fragment,
-    transformQuality: row.transform_quality || 'good',
+    isSceneOnly: row.is_scene_only,
+    isCharacterOnly: row.is_character_only,
+    nightlySkip: row.nightly_skip,
+    faceSwaps: row.face_swaps,
   };
 }
 

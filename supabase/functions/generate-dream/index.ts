@@ -959,8 +959,7 @@ Output ONLY the prompt.`;
       const mentionsSelf =
         userSubject &&
         selfCast &&
-        medium.transformQuality === 'good' &&
-        /\b(put me|place me|make me|show me|me as|me in|me on|me at|i am|i'm|myself|my face)\b/i.test(
+        /\b(put me|place me|make me|show me|me as|me in|me on|me at|me \w+ing|i am|i'm|myself|my face)\b/i.test(
           userSubject
         );
 
@@ -1008,20 +1007,15 @@ Output ONLY the prompt.`;
           finalPrompt = await nightlySonnet(selfBrief, ANTHROPIC_KEY, 200);
           if (finalPrompt.length < 10) throw new Error('too short');
 
-          // Face swap for mediums not in the NON_SWAP list
-          const NON_SWAP_MEDIUMS = new Set([
-            'lego', 'pixel_art', 'stained_glass', 'embroidery', 'funko_pop',
-            'minecraft', 'sack_boy', 'ghibli', 'tim_burton', 'plushie',
-            'disney', '3d_cartoon', '3d_render', 'claymation', 'felt', 'childrens_book',
-          ]);
-          if (!NON_SWAP_MEDIUMS.has(medium.key)) {
+          // Face swap only if the medium supports it (from DB)
+          if (medium.faceSwaps) {
             faceSwapSource = selfCast.thumb_url;
           }
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
             engine: 'v2-self-insert-text',
-            faceSwap: !NON_SWAP_MEDIUMS.has(medium.key),
+            faceSwap: medium.faceSwaps,
           };
           console.log('[generate-dream] Self-insert prompt:', finalPrompt.slice(0, 150));
           lap('self-insert-done');

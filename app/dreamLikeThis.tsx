@@ -108,9 +108,14 @@ export default function DreamLikeThisScreen() {
     };
   }, []);
 
-  const mediumLabel = dbMediums.find((m) => m.key === refMedium)?.label ?? refMedium ?? 'Unknown';
+  const refMediumRow = dbMediums.find((m) => m.key === refMedium);
+  const mediumLabel = refMediumRow?.label ?? refMedium ?? 'Unknown';
   const vibeLabel = dbVibes.find((v) => v.key === refVibe)?.label ?? refVibe ?? 'Unknown';
   const hasPhoto = !!photoUri;
+  const hasPrompt = userPrompt.trim().length > 0;
+  const mediumFaceSwaps = refMediumRow?.face_swaps ?? true;
+  // Face is involved if photo + prompt (reimagine path)
+  const faceInvolved = hasPhoto && hasPrompt;
 
   async function handlePickPhoto() {
     pickerOpenRef.current = true;
@@ -288,17 +293,13 @@ export default function DreamLikeThisScreen() {
               </TouchableOpacity>
             )}
           </View>
-          {hasPhoto && (
+          {faceInvolved && (
             <View style={s.likenessHint}>
               <Ionicons name="information-circle" size={14} color={colors.accent} />
               <Text style={s.likenessHintText}>
-                {(() => {
-                  const md = dbMediums.find((m) => m.key === refMedium);
-                  const good = !md || md.transform_quality === 'good';
-                  return good
-                    ? 'Your photo will be styled to match — preserving your likeness'
-                    : 'Based on your likeness — an artistic interpretation, not an exact photo';
-                })()}
+                {mediumFaceSwaps
+                  ? 'Your face will be added into the dream.'
+                  : "This medium can't use your face — you'll be drawn from your Cast description."}
               </Text>
             </View>
           )}

@@ -124,26 +124,19 @@ export default function CreateScreen() {
     /\b(put me|place me|make me|show me|me as|me in|me on|me at|me \w+ing|i am|i'm|myself|my face)\b/i;
   const mentionsSelf = hasPrompt && SELF_REF_REGEX.test(config.userPrompt);
 
-  // Medium transform quality
-  const selectedMediumData = dbMediums.find((m) => m.key === config.selectedMedium);
-  const isGoodTransform =
-    config.selectedMedium === 'surprise_me' || selectedMediumData?.transform_quality === 'good';
+  // Whether the selected medium face-swaps (composites real face into scene)
+  // Pulled from DB single source of truth — no hardcoded lists
+  const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
+  const mediumFaceSwaps =
+    config.selectedMedium === 'surprise_me' ? true : (selectedMediumRow?.face_swaps ?? true);
 
-  // Whether this medium uses face swap (composites real face) vs description only
-  const NON_SWAP_MEDIUMS = new Set([
-    'lego', 'pixel_art', 'stained_glass', 'embroidery', 'funko_pop',
-    'minecraft', 'sack_boy', 'ghibli', 'tim_burton', 'plushie',
-    'disney', '3d_cartoon', '3d_render', 'claymation', 'felt', 'childrens_book',
-  ]);
-  const doesFaceSwap =
-    config.selectedMedium !== 'surprise_me' && !NON_SWAP_MEDIUMS.has(config.selectedMedium);
+  // Face is involved if: photo uploaded + prompt, OR self-reference + cast self photo exists
+  const faceInvolved = (hasPhoto && hasPrompt) || (mentionsSelf && hasCastSelf);
 
-  // Contextual hint above Dream button
+  // Contextual hint above Dream button (4 states, always visible)
   const contextHint = hasPhoto
     ? hasPrompt
-      ? isGoodTransform
-        ? 'Inspired by your likeness'
-        : 'Artistic interpretation'
+      ? 'Reimagine your photo'
       : 'Restyle your photo'
     : hasPrompt
       ? 'Generate from your prompt'
@@ -295,34 +288,14 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Contextual info hint — photo or self-insert states */}
-          {hasPhoto && (
+          {/* Face tooltip — only when a face is actually involved */}
+          {faceInvolved && (
             <View className="flex-row items-center gap-1.5 mb-2 px-1">
               <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
               <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
-                {!hasPrompt
-                  ? 'Leave blank to restyle your photo, or type a scene for a likeness-based dream'
-                  : isGoodTransform
-                    ? 'Your photo will help capture your likeness in this style'
-                    : 'This style creates an artistic interpretation — not your exact likeness'}
-              </Text>
-            </View>
-          )}
-          {!hasPhoto && mentionsSelf && hasCastSelf && (
-            <View className="flex-row items-center gap-1.5 mb-2 px-1">
-              <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
-              <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
-                {doesFaceSwap
-                  ? 'Your character will be crafted from your Dream Cast — results vary by style'
-                  : 'Your character will be based on your look — stylized for this medium'}
-              </Text>
-            </View>
-          )}
-          {!hasPhoto && mentionsSelf && !hasCastSelf && (
-            <View className="flex-row items-center gap-1.5 mb-2 px-1">
-              <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
-              <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
-                Add yourself to Dream Cast in settings to see yourself in dreams
+                {mediumFaceSwaps
+                  ? 'Your face will be added into the dream.'
+                  : "This medium can't use your face — you'll be drawn from your Cast description."}
               </Text>
             </View>
           )}

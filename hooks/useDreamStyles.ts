@@ -12,7 +12,10 @@ export interface DreamMedium {
   label: string;
   directive: string;
   flux_fragment: string;
-  transform_quality: 'good' | 'poor';
+  is_scene_only: boolean;
+  is_character_only: boolean;
+  nightly_skip: boolean;
+  face_swaps: boolean;
 }
 
 export interface DreamVibe {
