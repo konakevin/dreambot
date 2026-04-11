@@ -6,7 +6,7 @@
  * Changes save to user_recipes on close.
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -33,7 +33,7 @@ import { useAuthStore } from '@/store/auth';
 import { isVibeProfile } from '@/lib/migrateRecipe';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
-import { AESTHETIC_TILES, ART_STYLE_TILES } from '@/constants/onboarding';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import type { VibeProfile, MoodAxes, Aesthetic, ArtStyle } from '@/types/vibeProfile';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -161,6 +161,16 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
   const progress = useSharedValue(0);
   const dragY = useSharedValue(0);
   const closing = useRef(false);
+  const { data: dbMediums = [] } = useDreamMediums();
+  const { data: dbVibes = [] } = useDreamVibes();
+  const artStyleTiles = useMemo(
+    () => dbMediums.map((m) => ({ key: m.key as ArtStyle, label: m.label })),
+    [dbMediums]
+  );
+  const aestheticTiles = useMemo(
+    () => dbVibes.map((v) => ({ key: v.key as Aesthetic, label: v.label })),
+    [dbVibes]
+  );
 
   // Load profile and animate when sheet opens
   useEffect(() => {
@@ -308,7 +318,7 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
               {/* Aesthetics */}
               <Text style={s.sectionTitle}>Aesthetics</Text>
               <PillRow
-                tiles={AESTHETIC_TILES}
+                tiles={aestheticTiles}
                 selected={profile.aesthetics}
                 onToggle={toggleAesthetic}
               />
@@ -316,7 +326,7 @@ export function QuickSettingsSheet({ visible, onClose }: Props) {
               {/* Art styles */}
               <Text style={s.sectionTitle}>Art Styles</Text>
               <PillRow
-                tiles={ART_STYLE_TILES}
+                tiles={artStyleTiles}
                 selected={profile.art_styles}
                 onToggle={toggleArtStyle}
               />

@@ -5,11 +5,11 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import {
-  CURATED_MEDIUMS,
-  CURATED_VIBES,
-  randomMedium,
-  randomVibe,
-} from '../_shared/dreamEngine.ts';
+  resolveMediumFromDb,
+  resolveVibeFromDb,
+  randomDbMedium,
+  randomDbVibe,
+} from '../_shared/dreamStyles.ts';
 
 const COST_PER_IMAGE_CENTS = 3;
 const MAX_BUDGET_CENTS = 500; // $5 default
@@ -137,20 +137,20 @@ interface EligibleUser {
   } | null;
 }
 
-function resolveMedium(profile: VibeProfile) {
+async function resolveMedium(profile: VibeProfile) {
   if (profile.art_styles?.length) {
     const key = pick(profile.art_styles);
-    return CURATED_MEDIUMS.find((m) => m.key === key) ?? randomMedium();
+    return await resolveMediumFromDb(key, profile.art_styles);
   }
-  return randomMedium();
+  return await randomDbMedium();
 }
 
-function resolveVibe(profile: VibeProfile) {
+async function resolveVibe(profile: VibeProfile) {
   if (profile.aesthetics?.length) {
     const key = pick(profile.aesthetics);
-    return CURATED_VIBES.find((v) => v.key === key) ?? randomVibe();
+    return await resolveVibeFromDb(key, profile.aesthetics);
   }
-  return randomVibe();
+  return await randomDbVibe();
 }
 
 Deno.serve(async (req) => {
@@ -271,8 +271,8 @@ async function generateDreamForUser(
     // ══ SONNET TEMPLATE PIPELINE — same as generate-dream nightly path
     // ══════════════════════════════════════════════════════════════════
     const vibeProfile = profileData as unknown as VibeProfile;
-    const medium = resolveMedium(vibeProfile);
-    const vibe = resolveVibe(vibeProfile);
+    const medium = await resolveMedium(vibeProfile);
+    const vibe = await resolveVibe(vibeProfile);
 
     // Step 1: Pick a mood-weighted scene template from the DB
     const seeds = vibeProfile.dream_seeds ?? { characters: [], places: [], things: [] };
@@ -410,8 +410,8 @@ No quotation marks. Output ONLY the prompt.`;
     console.log(`[Nightly] ${user.user_id.slice(0, 8)} prompt: ${prompt.slice(0, 120)}`);
   } else {
     // ── NON-V2 USERS: simple fallback prompt ──
-    const fallbackMedium = randomMedium();
-    const fallbackVibe = randomVibe();
+    const fallbackMedium = await randomDbMedium();
+    const fallbackVibe = await randomDbVibe();
     prompt = `${fallbackMedium.fluxFragment}, a surreal impossible dreamscape, ${fallbackVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
     if (wish) {
       prompt = `${fallbackMedium.fluxFragment}, "${wish}", ${fallbackVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;

@@ -1,18 +1,15 @@
 /**
  * Vibe Profile v2 — replaces Recipe as the user's creative identity.
  *
- * ArtStyle and Aesthetic are derived from MEDIUM_KEYS and VIBE_KEYS in
- * constants/dreamEngine.ts so onboarding, Create screen, and the dream
- * engine always stay in sync.
+ * ArtStyle and Aesthetic are medium/vibe keys from the dream_mediums
+ * and dream_vibes DB tables. Validated at runtime via DB fetch.
  */
 
-import { MEDIUM_KEYS, VIBE_KEYS } from '@/constants/dreamEngine';
+/** Medium key from dream_mediums table. Validated at runtime via DB fetch. */
+export type ArtStyle = string;
 
-/** Union of all curated medium keys — derived from the engine */
-export type ArtStyle = (typeof MEDIUM_KEYS)[number];
-
-/** Union of all curated vibe keys — derived from the engine */
-export type Aesthetic = (typeof VIBE_KEYS)[number];
+/** Vibe key from dream_vibes table. Validated at runtime via DB fetch. */
+export type Aesthetic = string;
 
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {

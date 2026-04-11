@@ -1,42 +1,10 @@
 /** Vibe Profile v2 — replaces Recipe as the user's creative identity */
 
-/** Matches CURATED_VIBES keys in constants/dreamEngine.ts */
-export type Aesthetic =
-  | 'cinematic'
-  | 'dreamy'
-  | 'dark'
-  | 'chaos'
-  | 'cozy'
-  | 'minimal'
-  | 'epic'
-  | 'nostalgic'
-  | 'psychedelic'
-  | 'peaceful'
-  | 'whimsical';
+/** Vibe key from dream_vibes table. Validated at runtime via DB fetch. */
+export type Aesthetic = string;
 
-/** Matches CURATED_MEDIUMS keys in constants/dreamEngine.ts */
-export type ArtStyle =
-  | 'pixel_art'
-  | 'watercolor'
-  | 'oil_painting'
-  | 'anime'
-  | 'lego'
-  | 'claymation'
-  | '3d_render'
-  | 'pencil_sketch'
-  | 'neon'
-  | 'stained_glass'
-  | 'comic_book'
-  | 'embroidery'
-  | 'disney'
-  | 'sack_boy'
-  | 'funko_pop'
-  | 'ghibli'
-  | 'tim_burton'
-  | 'pop_art'
-  | 'minecraft'
-  | '8bit'
-  | 'felt';
+/** Medium key from dream_mediums table. Validated at runtime via DB fetch. */
+export type ArtStyle = string;
 
 /** 4 bipolar mood sliders, each 0.0–1.0 */
 export interface MoodAxes {
