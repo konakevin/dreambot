@@ -11,7 +11,10 @@
     "test": "jest",
     "format": "prettier --write \"**/*.{ts,tsx}\" --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{ts,tsx}\" --ignore-path .gitignore",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test -- --silent",
+    "fix": "npm run format && npm run lint -- --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -81,10 +84,12 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-native": "^5.0.0",
     "eslint-plugin-security": "^4.0.0",
+    "husky": "^9.1.7",
     "jest": "^30.3.0",
     "jest-expo": "^55.0.13",
     "prettier": "^3.8.1",
     "react-test-renderer": "^19.1.0",
+    "sharp": "^0.34.5",
     "typescript": "~5.9.2"
   },
   "private": true

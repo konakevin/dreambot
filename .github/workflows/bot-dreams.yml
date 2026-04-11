@@ -42,13 +42,20 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ -n "${{ inputs.bot }}" ]; then
-            node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
+            if [ "${{ inputs.bot }}" = "humanbot" ]; then
+              node scripts/generate-humanbot.js --count ${{ inputs.count || '1' }}
+            else
+              node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
+            fi
           else
-            # Post once for each seeded bot
+            # Post once for each seeded image bot
             BOTS=("dragonbot" "mangabot" "starbot" "venusbot" "sirenbot" "gothbot")
             for BOT in "${BOTS[@]}"; do
               echo "🎨 Generating for $BOT..."
               node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
               sleep 10
             done
+            # HumanBot — content bot with Sharp overlay, runs via its own script
+            echo "🤖 Generating for humanbot..."
+            node scripts/generate-humanbot.js --count 1
           fi
