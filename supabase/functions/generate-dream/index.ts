@@ -422,11 +422,16 @@ Deno.serve(async (req) => {
     })
   );
 
-  // Nightly path: triggered by my_mediums/my_vibes (legacy) or surprise_me with a full profile
+  // Nightly path: triggered by my_mediums/my_vibes (legacy) or surprise_me with no user input
+  // If user provides a hint or prompt, surprise_me should still honor their input — not random scene
   const isNightly =
     vibe_profile &&
     ((medium_key === 'my_mediums' && vibe_key === 'my_vibes') ||
-      (medium_key === 'surprise_me' && vibe_key === 'surprise_me' && !rawPrompt && !input_image));
+      (medium_key === 'surprise_me' &&
+        vibe_key === 'surprise_me' &&
+        !rawPrompt &&
+        !hint &&
+        !input_image));
   if (isNightly) {
     try {
       // ══════════════════════════════════════════════════════════════════
