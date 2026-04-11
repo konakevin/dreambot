@@ -24,7 +24,7 @@ DreamBot is an AI-powered dream image generator for iOS. Users set up a "Vibe Pr
 - Nightly automatic dream generation with bot messages
 - Social feed with likes, comments, shares, friend system
 - Sparkle currency (in-app purchases via RevenueCat)
-- Content moderation (SightEngine)
+- Lightweight wordlist-based text moderation (no external API)
 
 ---
 
@@ -36,7 +36,7 @@ DreamBot is an AI-powered dream image generator for iOS. Users set up a "Vibe Pr
 - **Backend:** Supabase (Postgres, auth, storage, realtime, Edge Functions)
 - **AI Image Gen:** Replicate API (Flux Dev for text-to-image, Flux Kontext Pro for photo-to-image)
 - **AI Prompt Engine:** Anthropic API (Claude Haiku 4.5) — two-pass concept generator + prompt polisher
-- **Moderation:** SightEngine API (NSFW, violence, text profanity)
+- **Moderation:** Local wordlist filter for text only (no external API). Generated images rely on Flux's built-in safety.
 - **Payments:** RevenueCat (sparkle currency IAP)
 - **Auth:** Supabase Auth (email/password, Google, Apple, Facebook OAuth)
 - **Animations:** Reanimated 3 + Gesture Handler
@@ -185,7 +185,7 @@ lib/
   dreamApi.ts                     # Edge Function client (generateDream, generateFromVibeProfile, etc.)
   migrateRecipe.ts                # Recipe → VibeProfile converter
   recipeEngine.ts                 # LEGACY — old single-pass recipe engine
-  moderation.ts                   # SightEngine content moderation
+  moderation.ts                   # Local wordlist text moderation
   revenuecat.ts                   # RevenueCat IAP setup
   dreamPost.ts                    # Insert dream into uploads, pin to feed
   geneticMerge.ts                 # Genetic recipe fusion
@@ -280,11 +280,12 @@ When syncing `constants/dreamEngine.ts` → `_shared/dreamEngine.ts`, always che
 - Webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC
 - Product IDs in `constants/sparklePacks.ts`
 
-### SightEngine (Moderation)
+### Moderation (Local Wordlist)
 
-- Image + text moderation via `moderate-content` Edge Function
-- Sexual text threshold: 0.7 (blocks explicit, allows suggestive)
-- NSFW image rejection sends notification to user
+- Text-only moderation via `lib/moderation.ts` — small wordlist of slurs
+- No external API, no per-call cost
+- Generated images rely on Flux Dev's built-in NSFW filters
+- Used by: useAddComment, useDreamWish, settings (username), signup
 
 ---
 
