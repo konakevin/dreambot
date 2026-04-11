@@ -121,13 +121,22 @@ export default function CreateScreen() {
 
   // Self-reference detection
   const SELF_REF_REGEX =
-    /\b(put me|place me|make me|show me|me as|me in|me on|me at|i am|i'm|myself|my face)\b/i;
+    /\b(put me|place me|make me|show me|me as|me in|me on|me at|me \w+ing|i am|i'm|myself|my face)\b/i;
   const mentionsSelf = hasPrompt && SELF_REF_REGEX.test(config.userPrompt);
 
   // Medium transform quality
   const selectedMediumData = dbMediums.find((m) => m.key === config.selectedMedium);
   const isGoodTransform =
     config.selectedMedium === 'surprise_me' || selectedMediumData?.transform_quality === 'good';
+
+  // Whether this medium uses face swap (composites real face) vs description only
+  const NON_SWAP_MEDIUMS = new Set([
+    'lego', 'pixel_art', 'stained_glass', 'embroidery', 'funko_pop',
+    'minecraft', 'sack_boy', 'ghibli', 'tim_burton', 'plushie',
+    'disney', '3d_cartoon',
+  ]);
+  const doesFaceSwap =
+    config.selectedMedium !== 'surprise_me' && !NON_SWAP_MEDIUMS.has(config.selectedMedium);
 
   // Contextual hint above Dream button
   const contextHint = hasPhoto
@@ -299,15 +308,21 @@ export default function CreateScreen() {
               </Text>
             </View>
           )}
-          {!hasPhoto && mentionsSelf && (
+          {!hasPhoto && mentionsSelf && hasCastSelf && (
             <View className="flex-row items-center gap-1.5 mb-2 px-1">
               <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
               <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
-                {isGoodTransform
-                  ? hasCastSelf
-                    ? 'Your Dream Cast photo will inspire your character'
-                    : 'Add yourself to Dream Cast in settings to see yourself in dreams'
-                  : 'Self-insert works best with stylized mediums — try anime or 3d cartoon'}
+                {doesFaceSwap
+                  ? 'Your character will be crafted from your Dream Cast — results vary by style'
+                  : 'Your character will be based on your look — stylized for this medium'}
+              </Text>
+            </View>
+          )}
+          {!hasPhoto && mentionsSelf && !hasCastSelf && (
+            <View className="flex-row items-center gap-1.5 mb-2 px-1">
+              <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
+              <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
+                Add yourself to Dream Cast in settings to see yourself in dreams
               </Text>
             </View>
           )}

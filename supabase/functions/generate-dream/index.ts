@@ -1012,6 +1012,7 @@ Output ONLY the prompt.`;
           const NON_SWAP_MEDIUMS = new Set([
             'lego', 'pixel_art', 'stained_glass', 'embroidery', 'funko_pop',
             'minecraft', 'sack_boy', 'ghibli', 'tim_burton', 'plushie',
+            'disney', '3d_cartoon',
           ]);
           if (!NON_SWAP_MEDIUMS.has(medium.key)) {
             faceSwapSource = selfCast.thumb_url;
