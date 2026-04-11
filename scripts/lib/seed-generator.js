@@ -70,6 +70,11 @@ const BOT_SEEDS = {
         prompt: 'an exquisitely exotic and beautiful goth woman from the bowels of hell. Evil incarnate but so pretty she lures you in with her evil smile only to destroy you. Glowing colored eyes, fangs, sharp claws, dark lipstick, tattoos, piercings, showing lots of skin. Include a unique dark accessory or feature (horns, crown, chains, wings, veil, thorns, serpents, third eye, antlers, halo). She MUST be visibly female. No nipples, never nude, no skeletons. Dynamic pose.',
         extractPrompt: 'From this scene give THREE words: the pose, the eye color, and the unique accessory. Comma separated. Example: lounging, crimson, horns',
       },
+      {
+        category: 'gothbot_castlevania', separateDedup: true,
+        prompt: 'a richly painterly dark fantasy scene in the style of Castlevania game art, Bloodborne concept art, Berserk manga, and classic gothic horror illustrations. Think: vampire hunters, Belmont clan energy, cursed cathedrals, gargoyle statues, wrought iron gates, stained glass windows bleeding crimson light, moonlit castle courtyards, cobblestone streets shrouded in fog, werewolves lurking in shadows, gothic nobility in ornate period dress, candlelit crypts, blood moon skies. Characters include: pale vampire lords in Victorian fashion, wandering hunters with silver weapons, cursed priests, noble ghosts, elegant monsters. Render as a detailed painterly illustration with dramatic chiaroscuro lighting, deep purples and crimsons against midnight blacks, rich atmospheric depth, ornate gothic detail. Hauntingly beautiful, darkly romantic, classical gothic horror made gorgeous.',
+        extractPrompt: 'From this scene give THREE words: the character or creature, the gothic setting, and the key prop. Comma separated. Example: vampire, cathedral, silver crossbow',
+      },
     ],
   },
   glowbot: {
