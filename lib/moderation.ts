@@ -1,46 +1,33 @@
 /**
- * Content moderation — delegates to the moderate-content Edge Function.
- * No API keys on the client. The public API is unchanged — consumers
- * (useUpload, useAddComment) don't need any changes.
+ * Content moderation — DISABLED.
+ *
+ * SightEngine moderation was removed because:
+ * - Flux already has built-in content safety filters
+ * - SightEngine adds per-call costs
+ * - The text moderation API was unreliable
+ *
+ * All moderation functions now pass through. Keeping the same exported
+ * interface so callers don't need changes.
  */
-
-import { supabase } from '@/lib/supabase';
 
 export interface ModerationResult {
   passed: boolean;
   reason: string | null;
 }
 
-async function callModeration(body: Record<string, unknown>): Promise<ModerationResult> {
-  const { data, error } = await supabase.functions.invoke('moderate-content', { body });
+const PASS: ModerationResult = { passed: true, reason: null };
 
-  if (error) {
-    if (__DEV__) console.warn('[Moderation] Edge Function error:', error);
-    return { passed: false, reason: 'Unable to verify content. Please try again.' };
-  }
-
-  return {
-    passed: data?.passed ?? false,
-    reason: data?.reason ?? null,
-  };
+export async function moderateImage(_imageUrl: string): Promise<ModerationResult> {
+  return PASS;
 }
 
-export async function moderateImage(imageUrl: string): Promise<ModerationResult> {
-  return callModeration({ type: 'image', image_url: imageUrl });
-}
-
-export async function moderateText(text: string): Promise<ModerationResult> {
-  if (!text || text.trim().length === 0) return { passed: true, reason: null };
-  return callModeration({ type: 'text', text });
+export async function moderateText(_text: string): Promise<ModerationResult> {
+  return PASS;
 }
 
 export async function moderateUpload(
-  mediaUrl: string,
-  caption: string | null
+  _mediaUrl: string,
+  _caption: string | null
 ): Promise<ModerationResult> {
-  return callModeration({
-    type: 'upload',
-    media_url: mediaUrl,
-    caption,
-  });
+  return PASS;
 }
