@@ -48,10 +48,9 @@ const BOTS = {
   // ── Seeded & active on cron ──
   dragonbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
   mangabot: {
-    mediums: ['anime', 'ghibli'],
+    mediums: ['anime'],
     excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'],
     pinVibes: {
-      ghibli: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'enchanted', 'whimsical', 'whimsical', 'majestic', 'majestic', 'epic', 'epic', 'mystical', 'mystical'],
       anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'],
     },
   },
@@ -60,17 +59,17 @@ const BOTS = {
   sirenbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   gothbot: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
-  glowbot: { mediums: ['watercolor', 'oil_painting', 'ghibli'] },
+  glowbot: { mediums: ['watercolor', 'oil_painting'] },
   earthbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
-  arcadebot: { mediums: ['lego', 'pixel_art', 'claymation', '3d_cartoon', 'paper_cutout', '8bit', 'minecraft', 'sack_boy', 'funko_pop', 'vaporwave'] },
-  cuddlebot: { mediums: ['3d_cartoon', 'claymation', 'childrens_book'] },
+  arcadebot: { mediums: ['lego', 'pixel_art', '3d_cartoon', 'sack_boy', 'funko_pop'] },
+  cuddlebot: { mediums: ['3d_cartoon', 'sack_boy', 'childrens_book'] },
   popbot: { mediums: ['comic_book', 'retro_poster'] },
   // ── New bots ──
-  coquettebot: { mediums: ['watercolor', 'oil_painting', 'ghibli', '3d_cartoon'] },
+  coquettebot: { mediums: ['watercolor', 'oil_painting', '3d_cartoon'] },
   safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
   glambot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   steambot: { mediums: ['steampunk', 'oil_painting', 'fantasy'] },
-  tinybot: { mediums: ['photorealistic', '3d_cartoon', 'claymation'] },
+  tinybot: { mediums: ['photorealistic', '3d_cartoon', 'sack_boy'] },
   hauntbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   bloombot: { mediums: ['watercolor', 'oil_painting', 'photorealistic'] },
   inkbot: { mediums: ['comic_book', 'oil_painting', 'photorealistic'] },
