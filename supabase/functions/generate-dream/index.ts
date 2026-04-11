@@ -1065,24 +1065,29 @@ Output ONLY the prompt.`;
         console.log('[generate-dream] V2 style transfer:', finalPrompt.slice(0, 150));
         lap('style-transfer-done');
       } else if (userSubject) {
-        // User provided a prompt — directive approach for all mediums
+        // User provided a prompt — subject-first brief so the medium styles the subject rather than replacing it
         const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
 
-MEDIUM (start the prompt with this EXACTLY): ${medium.fluxFragment}
-
-STYLE GUIDE:
-${medium.directive}
-
-SUBJECT (the user wants this — honor their vision):
+=== SUBJECT (THIS IS WHAT YOU ARE DRAWING — it MUST be the focus of the image) ===
 ${userSubject}
 
-MOOD: ${vibe.directive}
+The subject above is non-negotiable. Whatever the user described MUST appear prominently in the frame. Do NOT substitute with atmospheric scenery or generic props. If they said "a girl", draw the girl. If they said "a fox", draw the fox. If they said "a castle", draw the castle. The style below is ONLY a rendering treatment — it does not replace the subject.
 
-Write the prompt:
-1. Start with the art medium fragment EXACTLY as given above
-2. Render the user's subject in this medium's style — preserve their idea but make it visually stunning
-3. Name specific materials, textures, light sources (NOUNS not adjectives)
-4. End with: no text, no words, no letters, no watermarks, hyper detailed
+=== STYLE (apply this aesthetic treatment to the subject above) ===
+${medium.directive}
+
+=== MOOD ===
+${vibe.directive}
+
+Write the Flux prompt:
+1. START the prompt by describing the SUBJECT in rich detail — who they are, what they look like, their pose, their expression, what they are doing. Expand any vague user description with specifics that fit the style.
+2. THEN describe the environment AROUND the subject (still keeping the subject as the focus)
+3. THEN add the style descriptors: "${medium.fluxFragment}"
+4. Name specific materials, textures, light sources (NOUNS not adjectives)
+5. End with: no text, no words, no letters, no watermarks, hyper detailed
+
+The final Flux prompt should feel like "[detailed subject description], [environment that surrounds them], [medium style], [mood]" — never like "[medium style] scene with [subject mentioned]".
+
 Output ONLY the prompt.`;
 
         try {
