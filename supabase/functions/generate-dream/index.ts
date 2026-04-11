@@ -1008,11 +1008,19 @@ Output ONLY the prompt.`;
           finalPrompt = await nightlySonnet(selfBrief, ANTHROPIC_KEY, 200);
           if (finalPrompt.length < 10) throw new Error('too short');
 
-          // No face swap — self-insert uses cast description only (stylized mediums abstract the face)
+          // Face swap for mediums not in the NON_SWAP list
+          const NON_SWAP_MEDIUMS = new Set([
+            'lego', 'pixel_art', 'stained_glass', 'embroidery', 'funko_pop',
+            'minecraft', 'sack_boy', 'ghibli', 'tim_burton', 'plushie',
+          ]);
+          if (!NON_SWAP_MEDIUMS.has(medium.key)) {
+            faceSwapSource = selfCast.thumb_url;
+          }
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
             engine: 'v2-self-insert-text',
+            faceSwap: !NON_SWAP_MEDIUMS.has(medium.key),
           };
           console.log('[generate-dream] Self-insert prompt:', finalPrompt.slice(0, 150));
           lap('self-insert-done');
