@@ -64,7 +64,7 @@ const BOTS = {
   earthbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   arcadebot: { mediums: ['lego', 'pixel_art', 'claymation', '3d_cartoon', 'paper_cutout', '8bit', 'minecraft', 'sack_boy', 'funko_pop', 'vaporwave'] },
   cuddlebot: { mediums: ['3d_cartoon', 'claymation', 'childrens_book'] },
-  popbot: { mediums: ['comic_book', 'retro_poster', 'art_deco'] },
+  popbot: { mediums: ['comic_book', 'retro_poster'] },
   // ── New bots ──
   coquettebot: { mediums: ['watercolor', 'oil_painting', 'ghibli', '3d_cartoon'] },
   safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
