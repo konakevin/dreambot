@@ -27,6 +27,11 @@ import type { DreamPostItem } from '@/components/DreamCard';
 
 const PAGE_SIZE = 20;
 
+interface ExploreCursor {
+  score: number;
+  id: string;
+}
+
 function useExploreDreams(mediums: string[], vibes: string[]) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
@@ -35,22 +40,29 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
 
   return useInfiniteQuery({
     queryKey: ['explore', medium ?? '', vibe ?? '', feedSeed],
-    queryFn: async ({ pageParam }): Promise<DreamPostItem[]> => {
+    queryFn: async ({ pageParam }): Promise<(DreamPostItem & { feed_score?: number })[]> => {
       const { data, error } = await supabase.rpc('get_feed', {
         p_user_id: user!.id,
         p_limit: PAGE_SIZE,
-        p_offset: pageParam as number,
         p_seed: feedSeed,
         p_tab: 'forYou',
+        ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
         ...(medium ? { p_medium: medium } : {}),
         ...(vibe ? { p_vibe: vibe } : {}),
       });
       if (error) throw error;
-      return castRows(data).map(mapRpcToDreamPost);
+      return castRows(data).map((row) => ({
+        ...mapRpcToDreamPost(row),
+        feed_score: row.feed_score as number,
+      }));
     },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, _allPages, lastParam) =>
-      lastPage.length < PAGE_SIZE ? undefined : (lastParam as number) + PAGE_SIZE,
+    initialPageParam: null as ExploreCursor | null,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.length < PAGE_SIZE) return undefined;
+      const last = lastPage[lastPage.length - 1];
+      if (last.feed_score == null) return undefined;
+      return { score: last.feed_score, id: last.id } as ExploreCursor;
+    },
     enabled: !!user,
     staleTime: 60_000,
   });

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,34 +7,21 @@ import {
   ActivityIndicator,
   Dimensions,
   ScrollView,
-  Modal,
-  StatusBar,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  runOnJS,
-} from 'react-native-reanimated';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
-import { saveDream } from '@/lib/dreamSave';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
 import { MASCOT_URLS } from '@/constants/mascots';
 import { Toast } from '@/components/Toast';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-// Balanced resolution: sharper than 512, cheaper than 768
-const GEN_WIDTH = 640;
-const GEN_HEIGHT = Math.round(((SCREEN_HEIGHT / SCREEN_WIDTH) * GEN_WIDTH) / 8) * 8; // round to nearest 8
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
 const MAX_DREAMS = Infinity;
@@ -70,7 +57,6 @@ export function RevealStep({ onBack }: Props) {
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
 
   const [phase, setPhase] = useState<Phase>('idle');
-  const [isZoomed, setIsZoomed] = useState(false);
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -80,85 +66,7 @@ export function RevealStep({ onBack }: Props) {
 
   const activeDream = dreams[activeIndex] ?? null;
   const dreamsRemaining = MAX_DREAMS - dreams.length;
-  const canDreamAgain = dreamsRemaining > 0;
-  const [fullscreenUrl, setFullscreenUrl] = useState<string | null>(null);
   const describedProfile = useRef(profile);
-
-  // Pinch to zoom on preview
-  const zoomScale = useSharedValue(1);
-  const zoomTransX = useSharedValue(0);
-  const zoomTransY = useSharedValue(0);
-  const focalX = useSharedValue(0);
-  const focalY = useSharedValue(0);
-  const startFocalX = useSharedValue(0);
-  const startFocalY = useSharedValue(0);
-
-  const zoomStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: zoomTransX.value },
-      { translateY: zoomTransY.value },
-      { scale: zoomScale.value },
-    ],
-  }));
-
-  // Fullscreen pinch zoom
-  const fsScale = useSharedValue(1);
-  const fsTransX = useSharedValue(0);
-  const fsTransY = useSharedValue(0);
-  const fsFocalX = useSharedValue(0);
-  const fsFocalY = useSharedValue(0);
-  const fsStartFocalX = useSharedValue(0);
-  const fsStartFocalY = useSharedValue(0);
-
-  const fsZoomStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: fsTransX.value },
-      { translateY: fsTransY.value },
-      { scale: fsScale.value },
-    ],
-  }));
-
-  const fsPinch = Gesture.Pinch()
-    .onStart((e) => {
-      fsFocalX.value = e.focalX - SCREEN_WIDTH / 2;
-      fsFocalY.value = e.focalY - SCREEN_HEIGHT / 2;
-      fsStartFocalX.value = e.focalX;
-      fsStartFocalY.value = e.focalY;
-    })
-    .onUpdate((e) => {
-      const sc = Math.max(1, Math.min(5, e.scale));
-      fsScale.value = sc;
-      fsTransX.value = fsFocalX.value * (1 - sc) + (e.focalX - fsStartFocalX.value);
-      fsTransY.value = fsFocalY.value * (1 - sc) + (e.focalY - fsStartFocalY.value);
-    })
-    .onEnd(() => {
-      fsScale.value = withTiming(1, { duration: 200 });
-      fsTransX.value = withTiming(0, { duration: 200 });
-      fsTransY.value = withTiming(0, { duration: 200 });
-    });
-
-  const pinchGesture = Gesture.Pinch()
-    .onStart((e) => {
-      runOnJS(setIsZoomed)(true);
-      focalX.value = e.focalX - IMAGE_WIDTH / 2;
-      focalY.value = e.focalY - IMAGE_HEIGHT / 2;
-      startFocalX.value = e.focalX;
-      startFocalY.value = e.focalY;
-    })
-    .onUpdate((e) => {
-      const sc = Math.max(1, Math.min(5, e.scale));
-      zoomScale.value = sc;
-      const panX = e.focalX - startFocalX.value;
-      const panY = e.focalY - startFocalY.value;
-      zoomTransX.value = focalX.value * (1 - sc) + panX;
-      zoomTransY.value = focalY.value * (1 - sc) + panY;
-    })
-    .onEnd(() => {
-      zoomScale.value = withTiming(1, { duration: 200 });
-      zoomTransX.value = withTiming(0, { duration: 200 });
-      zoomTransY.value = withTiming(0, { duration: 200 });
-      runOnJS(setIsZoomed)(false);
-    });
 
   async function runBootSequence() {
     for (let i = 0; i < BOOT_MESSAGES.length; i++) {
@@ -319,22 +227,6 @@ export function RevealStep({ onBack }: Props) {
       vibe: data.resolved_vibe ?? undefined,
     };
   }
-
-  function handleDreamAgain() {
-    if (!canDreamAgain) return;
-    generateImage();
-  }
-
-  const handleScrollEnd = useCallback(
-    (e: { nativeEvent: { contentOffset: { x: number } } }) => {
-      const idx = Math.round(e.nativeEvent.contentOffset.x / IMAGE_WIDTH);
-      if (idx >= 0 && idx < dreams.length && idx !== activeIndex) {
-        setActiveIndex(idx);
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      }
-    },
-    [dreams.length, activeIndex]
-  );
 
   async function handleCreateBot() {
     if (!user || !activeDream) return;

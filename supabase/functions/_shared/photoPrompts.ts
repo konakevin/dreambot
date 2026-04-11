@@ -75,22 +75,6 @@ Express the mood through PALETTE SELECTION — the color palette sets the entire
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  embroidery: {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `Transform this photo into a hand embroidery portrait on linen fabric. The style should look like skilled needlework while PRESERVING the person's face, features, and likeness.
-
-Keep the same person — same face shape, same eyes, same expression, same hair color. Render their features using fine satin stitch for skin (flesh-tone thread), satin stitch for hair in matching color, and detailed stitching for clothing in matching colors. The face should be recognizable as the same person, just rendered in thread.
-
-Background becomes embroidered — visible linen weave texture, cross-stitch patterns, French knots for small details. Raised thread catching light. Portrait 9:16.
-
-Express the mood through THREAD COLOR WARMTH and STITCH DENSITY — dense rich stitching for intensity, sparse delicate stitching for calm:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
   anime: {
     model: 'kontext-max',
     buildPrompt: (
@@ -133,17 +117,19 @@ Express the mood through BRUSHSTROKE ENERGY and LIGHT DIRECTION — aggressive i
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  pencil_sketch: {
+  pencil: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
       vibe,
       hint
-    ) => `COMPLETELY transform this photo into a detailed pencil drawing on textured paper.
+    ) => `COMPLETELY transform this photo into a detailed COLORED pencil drawing on textured paper — Prismacolor master quality, NOT graphite.
 
-Every surface rendered in graphite. Skin has smooth, carefully blended graphite with subtle hatching for form. Hair drawn with confident flowing pencil strokes. Clothing shows cross-hatching following the form and folds. Background uses looser, atmospheric graphite — smudged tones for depth. Pure white paper for brightest highlights. Darkest shadows are velvet-black compressed graphite. Keep the same person, face, pose. The line quality should be confident and masterful. Portrait 9:16.
+CRITICAL — preserve identity: keep the person's exact face, gender, skin tone, age, and core features. Male subjects stay male, female subjects stay female. Render their clothing in colored pencil but keep its style and gender presentation.
 
-Express the mood through LINE WEIGHT and TONAL CONTRAST — heavy dark hatching for drama, light delicate lines for gentleness, high contrast for intensity, soft mid-tones for calm:
+Every surface rendered with visible individual colored pencil strokes built up in layers. Directional hatching to suggest form. Skin has rich layered color with warm and cool tones blended. Hair is confident layered strokes matching their hair color. Clothing shows directional pencil work. Background has looser strokes with paper tooth showing through. Eraser marks visible at highlights. Confident hand-drawn line quality — never photographic, never digital-smooth. Portrait 9:16.
+
+Express the mood through COLOR PALETTE and STROKE INTENSITY — vibrant warm hues for joy, muted cool tones for melancholy, bold strokes for drama, soft delicate layers for gentleness:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
@@ -158,20 +144,6 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 The person becomes a smooth sculpted CLAY FIGURE — matte clay with subtle fingerprint textures. Eyes are painted glass beads, slightly oversized. Hair is a sculpted clay piece. Clothing appears knitted or felted at miniature scale. ALL furniture and objects are handcrafted miniatures — painted wood, craft materials. Background is a handcrafted set with painted backdrop. Keep the same pose, expression, clothing colors — but EVERYTHING is clay. Portrait 9:16.
 
 Express the mood through SET LIGHTING and CLAY COLOR PALETTE — theatrical spotlights for drama, warm practicals for cozy, cool ambient for mystery, bright even light for whimsy:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  '3d_render': {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `COMPLETELY transform this photo into a Pixar-quality 3D animated render.
-
-The person becomes a stylized 3D character — soft rounded shapes, appealing proportions. Skin has subsurface scattering glow. Eyes are large, glossy with complex reflections. Hair is soft flowing 3D strands. Clothing has soft cloth simulation. Keep the same person's features, hair color, clothing colors — but as a Pixar character. Portrait 9:16.
-
-Express the mood through VOLUMETRIC LIGHTING and COLOR PALETTE — god rays for epic, soft bounce light for warmth, dramatic rim lighting for intensity, pastel palette for gentleness:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
@@ -199,21 +171,7 @@ Express the mood through NEON COLOR CHOICES and ATMOSPHERE DENSITY — hot pink/
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  disney: {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `COMPLETELY transform this photo into classic Disney 2D animation style — Renaissance era (Lion King, Little Mermaid, Aladdin). The FACE must be fully cartoon — NO photorealistic skin, NO real human features remaining.
-
-The person becomes a FULLY DRAWN Disney character — the face is completely cartoon with large emotive Disney eyes, smooth cel-painted skin (NOT photorealistic), clean flowing ink outlines, simplified nose and mouth. Hair becomes flowing painted strokes with graceful exaggerated movement. Every part of the person — including their face and skin — must look hand-drawn and cel-painted, NOT a real photo. Match their hair color and clothing colors. Background becomes a lush painted Disney environment. Portrait 9:16.
-
-Express the mood through BACKGROUND PAINTING and COLOR VIBRANCY — Disney backgrounds carry enormous emotional weight:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  claymation: {
+  handcrafted: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
@@ -249,20 +207,6 @@ ${hint ? `USER REQUEST: "${hint}"` : ''}
 Output ONLY the prompt.`,
   },
 
-  ghibli: {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `COMPLETELY transform this photo into Studio Ghibli animation style — Spirited Away, Totoro, Howl's Moving Castle.
-
-The person becomes a Ghibli character — natural rounded proportions (NOT exaggerated anime), realistically-sized expressive eyes, warm watercolor-like skin shading. Hair is soft and natural with gentle movement. Clothing has simple, clean painted shapes. Background becomes a breathtakingly detailed Ghibli painted landscape — atmospheric clouds, living nature, incredible depth. The palette is rich but gentle — earthy greens, sky blues, warm golds. Keep the same person's features and colors. Portrait 9:16.
-
-Express the mood through LANDSCAPE ATMOSPHERE and NATURAL LIGHT — Ghibli's emotional power lives in the sky, wind, and light:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
   gothic: {
     model: 'kontext-max',
     buildPrompt: (
@@ -277,83 +221,6 @@ Express the mood through SHADOW DEPTH and ACCENT COLOR CHOICE — deeper shadows
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  pop_art: {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `COMPLETELY transform this photo into bold Pop Art style — Andy Warhol meets Roy Lichtenstein.
-
-Flat areas of MAXIMUM SATURATION primary colors — no photographic gradients anywhere. Thick black outlines define every shape. Ben-Day halftone dots fill all shadows and mid-tones. Skin becomes flat bold color. Hair becomes a solid graphic shape. Background is a flat contrasting color. Everything is graphic, commercial, unapologetically bold. NO subtlety, NO smooth blending — flat color blocks and dot patterns only. Keep the same person's features but rendered in pure Pop Art graphic style. Portrait 9:16.
-
-Express the mood through COLOR INTENSITY and DOT DENSITY — hot colors for energy, cool for calm, dense dots for drama:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  minecraft: {
-    model: 'flux-dev',
-    buildPrompt: (
-      photo,
-      vibe,
-      hint
-    ) => `You are writing a prompt for Flux AI to generate a Minecraft-style scene.
-
-SCENE TO RECREATE AS MINECRAFT:
-${photo}
-
-Write a prompt (50-70 words, comma-separated) for a MINECRAFT GAME SCREENSHOT:
-- Start with: "Minecraft voxel world screenshot, everything built from cubic blocks, pixelated block textures"
-- The person becomes a MINECRAFT CHARACTER: square head, rectangular body, pixelated skin texture on flat cube faces. Match their clothing colors.
-- Every surface is textured blocks — dirt, stone, wood planks, grass
-- Trees are wood block columns with leaf blocks on top
-- Apply the vibe through block palette and sky color: ${vibe}
-- Portrait 9:16
-- If person is very small, make a smaller character model
-${hint ? `USER REQUEST: "${hint}"` : ''}
-Output ONLY the prompt.`,
-  },
-
-  felt: {
-    model: 'kontext-max',
-    buildPrompt: (
-      _photo,
-      vibe,
-      hint
-    ) => `COMPLETELY transform this photo into a needle-felted stop-motion puppet scene — Coraline / Kubo and the Two Strings style.
-
-The person becomes a NEEDLE-FELTED WOOL PUPPET — visible fiber texture on skin, hand-painted precise eyes, individual wool strand hair matching their real color. Clothing becomes real miniature fabric with tiny visible stitches, actual buttons, thread seams in matching colors. ALL surroundings become a handcrafted miniature set — real wood, fabric, paper, wire at tiny scale. Dramatic cinematic lighting casting long shadows. Slightly uncanny but beautiful. Portrait 9:16.
-
-Express the mood through LIGHTING DRAMA and MATERIAL WARMTH — warm wool tones for comfort, cold stark lighting for unease, rich saturated felt for vibrancy:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  '8bit': {
-    model: 'flux-dev',
-    buildPrompt: (
-      photo,
-      vibe,
-      hint
-    ) => `You are writing a prompt for Flux AI to generate NES-era 8-bit pixel art.
-
-SCENE TO RECREATE AS 8-BIT:
-${photo}
-
-Write a prompt (40-60 words, comma-separated) for an 8-BIT NES GAME SCREEN:
-- Start with: "NES 8-bit pixel art, extremely limited color palette, large chunky pixels, very low resolution"
-- The person becomes a SIMPLE 8-BIT SPRITE: 2-pixel dot eyes, no facial detail, iconic silhouette only, matching clothing colors
-- Background is simple repeating tile patterns — flat color blocks, NO gradients, NO dithering
-- Think original Mario, Mega Man, Zelda NES quality
-- Apply the vibe through the limited palette choice: ${vibe}
-- Portrait 9:16
-${hint ? `USER REQUEST: "${hint}"` : ''}
-Output ONLY the prompt.`,
-  },
-
-  // ═══════════════════════════════════════════════════════════════════════
-  // ADDITIONAL KONTEXT-MAX MEDIUMS
-  // ═══════════════════════════════════════════════════════════════════════
-
   animation: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
@@ -362,39 +229,6 @@ Output ONLY the prompt.`,
 The person becomes a cartoon character — rounder face, bigger eyes, simplified features with maximum appeal. Exaggerated proportions — slightly larger head, expressive hands. Smooth plastic-like skin with warm subsurface glow. Hair is thick stylized strands with bounce. Clothing becomes simplified with bold saturated colors. Background becomes a colorful 3D cartoon environment. Keep the same person's features, hair color, clothing colors. Portrait 9:16.
 
 Express the mood through LIGHTING COLOR and ENVIRONMENT STYLE — bright bouncy light for fun, moody dramatic light for intensity:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  neon: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into a cyberpunk scene.
-
-Add cybernetic augmentations — glowing circuit lines on skin, one eye replaced with a glowing prosthetic lens, metallic implants at temples. Clothing becomes techwear — tactical harnesses, LED-trimmed jacket in their original colors. Background transforms into a rain-soaked neon cityscape — holographic advertisements, steam rising from grates, towering megastructures. Skin has a cool blue-tinted sheen from neon reflections. Keep the same person, face, pose. Portrait 9:16.
-
-Express the mood through NEON HUE DOMINANCE and RAIN INTENSITY — hot magenta for danger, cool cyan for isolation, heavy rain for melancholy:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  paper_cutout: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into a layered paper cutout illustration — like a handcrafted paper diorama.
-
-The person becomes a flat paper cutout figure — visible paper edges, slight shadow between layers showing depth. Face is simplified paper shapes — cut paper eyes, painted details. Hair is layered paper strips in matching color. Clothing is colored construction paper with visible cut edges. Background becomes multiple layers of cut paper at different depths — trees, buildings, clouds all paper with visible shadows between layers. Warm craft-table lighting. Portrait 9:16.
-
-Express the mood through PAPER COLOR CHOICES and LAYER DEPTH — bright primaries for joy, muted kraft paper for calm, deep layering for drama:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  retro_poster: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into a vintage travel/movie poster illustration — 1950s-60s mid-century graphic design.
-
-The person becomes a stylized illustrated figure — simplified features, bold confident linework, flat color areas with limited palette (4-5 colors max). Skin is a single warm flat tone. Hair is a bold graphic shape. Clothing becomes flat geometric color blocks. Background becomes a dramatic poster composition — bold typography space, geometric shapes, radiating lines, simplified landscape elements. Visible print texture — slight halftone grain, paper stock warmth. Keep same person's silhouette and colors. Portrait 9:16.
-
-Express the mood through POSTER COLOR PALETTE and COMPOSITION DRAMA — warm oranges/teals for adventure, cool blues for mystery, bold reds for energy:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
@@ -420,50 +254,6 @@ Express the mood through COLOR SATURATION and GLITCH INTENSITY — heavy glitch 
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  fantasy: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into a high fantasy illustration — epic fantasy book cover quality.
-
-The person becomes a fantasy character — add subtle pointed ear tips, ethereal glow to eyes, flowing magical elements around them. Clothing transforms into fantasy attire — leather armor, flowing cloaks, ornate clasps in matching colors. Hair gains an otherworldly sheen. Background becomes an epic fantasy landscape — ancient ruins, mystical forests, distant mountains with aurora-lit skies, floating magical particles. Dramatic painterly rendering with rich detail. Keep same person's face and features. Portrait 9:16.
-
-Express the mood through MAGICAL ATMOSPHERE and LIGHT SOURCE — warm golden magic for hope, cool blue arcane glow for mystery, fiery red for danger:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  ukiyo_e: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into traditional Japanese ukiyo-e woodblock print style.
-
-The person becomes a figure in a woodblock print — face simplified with clean black ink outlines, minimal features (thin line eyes, small mouth), flat skin tone with no shading. Hair becomes solid black ink with visible wood-grain texture in the strokes. Clothing becomes flat colored areas with pattern details (waves, flowers, geometric). Background becomes a classic ukiyo-e scene — stylized waves, Mt. Fuji, cherry blossoms, flat color sky with no gradients. Visible woodblock print texture throughout — grain lines, registration marks. Portrait 9:16.
-
-Express the mood through SEASONAL ELEMENTS and INK DENSITY — cherry blossoms for spring/joy, bare branches for melancholy, stormy waves for drama:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  art_deco: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into Art Deco illustration style — 1920s-30s glamour and geometric elegance.
-
-The person becomes an Art Deco figure — elongated elegant proportions, stylized angular features, dramatic pose. Skin is smooth flat gold or bronze tones. Hair is sculpted into sleek geometric waves. Clothing becomes geometric patterns — chevrons, sunbursts, fan shapes in metallic golds, deep blacks, and jewel tones. Background becomes bold geometric patterns — radiating sunburst lines, stepped pyramids, symmetric arches. Strong black outlines, metallic accents, limited rich palette. Everything exudes luxury and symmetry. Portrait 9:16.
-
-Express the mood through METALLIC WARMTH and GEOMETRIC COMPLEXITY — gold for opulence, silver for cool elegance, dense geometry for grandeur:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
-  steampunk: {
-    model: 'kontext-max',
-    buildPrompt: (_photo, vibe, hint) =>
-      `COMPLETELY transform this photo into steampunk style — Victorian-era meets brass machinery.
-
-The person gains steampunk accessories — brass goggles on forehead, gear-adorned leather vest, pocket watch chains, copper rivets on clothing. Skin has a warm sepia-toned quality. Hair styled in Victorian fashion with small mechanical ornaments. One eye possibly has a brass monocle with extending lenses. Background transforms into a steampunk workshop or airship deck — brass pipes, pressure gauges, spinning gears, steam vents, leather-bound books, Tesla coils sparking. Warm amber gaslight illumination. Keep same person's face and features. Portrait 9:16.
-
-Express the mood through BRASS PATINA WARMTH and STEAM DENSITY — polished brass for optimism, oxidized green copper for mystery, thick steam for drama:
-${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
-  },
-
   coquette: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
@@ -483,6 +273,45 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 Keep the person EXACTLY as they are — same face, same features. Place them in a believable real environment with natural ambient lighting. No dramatic studio setups, no artificial rim lighting, no heavy color grading. The lighting should come from whatever is naturally in the scene — sunlight, street lights, window light. Skin looks like real skin, not airbrushed. Colors are true to life, not pushed or saturated. The image should feel like a great candid photo someone took, not a retouched magazine image. No filters, no HDR look, no artificial glow.
 
 Express the mood through the ENVIRONMENT and TIME OF DAY — not through post-processing effects:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  twilight: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into a richly painterly dark fantasy illustration in the style of Castlevania game art, Bloodborne concept art, and Berserk manga.
+
+CRITICAL — preserve the person's identity: keep their exact face, gender, skin tone, age, and core features. If they are male, they MUST remain male — masculine jawline, masculine hair, masculine fashion (tailored coats, high collars, cloaks, leather harnesses, NOT dresses or gowns). If they are female, they remain female. NEVER change their gender. NEVER put male subjects in dresses, gowns, skirts, corsets, or feminine bodices.
+
+Render them as a dark fantasy version of themselves: pale painterly skin with rich shading, eyes with a faint supernatural glow, ornate gothic period clothing matching their gender, dramatic painterly brushwork. Background becomes a moonlit gothic environment — cathedral ruins, twisted forest, candlelit crypt, foggy graveyard. Color palette: deep purples, teals, midnight blues, crimson, bone whites, with magical glowing accents.
+
+Express the mood through atmospheric color and dramatic chiaroscuro lighting:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  fairytale: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `COMPLETELY transform this photo into classic 2D hand-drawn princess animation — Disney Renaissance style (Beauty and the Beast, Aladdin, Mulan, Pocahontas), Don Bluth, classic 2D fairytale animation. Strictly 2D traditional cel animation, NEVER 3D CGI.
+
+CRITICAL — preserve identity: keep the person's exact face, gender, skin tone, age, and core features. Male subjects stay male with masculine animated features (defined jaw, broader shoulders, masculine hair, masculine clothing). Female subjects stay female. NEVER change their gender.
+
+Render them as a fully hand-drawn 2D animated character — clean flowing ink outlines, smooth cel-painted skin (NOT photorealistic), large expressive eyes, simplified animated features. Hair becomes flowing painted strokes matching their color. Clothing becomes simplified cel-painted shapes in their actual colors. Background becomes a lush painted watercolor environment with golden hour lighting. Portrait 9:16.
+
+Express the mood through BACKGROUND PAINTING and COLOR WARMTH — rich golden tones for romance, cool blues for melancholy, vibrant primaries for joy:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
+  shimmer: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `Apply maximum glamour editorial production value to this photo — Vogue cover quality.
+
+CRITICAL — preserve identity completely: keep the person EXACTLY as they are. Same face, same features, same gender, same body, same hair. This medium ENHANCES the existing photo with cinematic lighting and effects, it does NOT redraw or restyle the person. Do NOT change their gender, do NOT swap their clothing for opposite-gender garments.
+
+Push every visual effect to its peak: dramatic rim lighting outlining the subject in gold, magic hour golden light streaming through the scene, sparkles and glitter particles floating in the air, lens flare, shimmering iridescent highlights, vibrant saturated colors, flawless film-like skin tones, shallow cinematic depth of field. The image stays photorealistic but becomes the most stunning version of itself. Portrait 9:16.
+
+Express the mood through LIGHTING COLOR and SPARKLE DENSITY — warm gold for romance, cool silver/blue for ethereal, dense glitter for magic, soft bokeh for dreaminess:
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 };
@@ -515,39 +344,11 @@ Output ONLY the prompt.`,
 - Portrait 9:16
 Output ONLY the prompt.`,
 
-  embroidery: (
-    photo,
-    scenario,
-    vibe
-  ) => `Write a Flux AI prompt (50-70 words) for embroidery artwork:
-- Start with: "Flat embroidery artwork on natural linen fabric, cross-stitch and satin stitch, visible thread texture"
-- Subject from photo: ${photo} — entirely stitched (cross-stitch face, satin-stitch hair, matching thread colors)
-- NEW SCENARIO: ${scenario} — all elements embroidered, visible linen weave between stitches
-- Express mood through thread color choices: ${vibe}
-- Portrait 9:16
-Output ONLY the prompt.`,
-
   vinyl: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a Funko Pop figure:
 - Start with: "Product photograph of a Funko Pop vinyl collectible figure"
 - Subject from photo: ${photo} — becomes a FUNKO POP (oversized head, tiny body, dot eyes, glossy vinyl, matching clothing colors)
 - NEW SCENARIO: ${scenario} — setting built as a Funko Pop display diorama
 - Express mood through lighting: ${vibe}
-- Portrait 9:16
-Output ONLY the prompt.`,
-
-  minecraft: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a Minecraft scene:
-- Start with: "Minecraft voxel world, everything built from cubic blocks, pixelated textures"
-- Subject from photo: ${photo} — becomes a MINECRAFT CHARACTER (square head, rectangular body, pixelated skin)
-- NEW SCENARIO: ${scenario} — entire scene built from Minecraft blocks
-- Express mood through block palette and sky: ${vibe}
-- Portrait 9:16
-Output ONLY the prompt.`,
-
-  '8bit': (photo, scenario, vibe) => `Write a Flux AI prompt (40-60 words) for NES 8-bit art:
-- Start with: "NES 8-bit pixel art, extremely limited color palette, large chunky pixels"
-- Subject from photo: ${photo} — becomes a SIMPLE 8-BIT SPRITE (2-pixel eyes, iconic silhouette, matching colors)
-- NEW SCENARIO: ${scenario} — rendered in flat 8-bit tile patterns
-- Express mood through limited palette: ${vibe}
 - Portrait 9:16
 Output ONLY the prompt.`,
 };

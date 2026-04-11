@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+# Pre-commit hook — runs the full CI pipeline locally before allowing a commit.
+# Prevents "random failing build on GitHub" by catching formatting/type/lint/test
+# failures at commit time instead of after push.
+#
+# To bypass in an emergency: `git commit --no-verify`. Don't abuse this.
+
+set -e
+
+# NVM isn't auto-loaded in non-interactive shells. Source it so we get the
+# right Node version the project expects.
+export NVM_DIR="$HOME/.nvm"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  . "$NVM_DIR/nvm.sh"
+fi
+
+echo "→ Running pre-commit checks (prettier, lint, tsc, jest)..."
+npm run check

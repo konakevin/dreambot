@@ -6,6 +6,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       ai_generation_budget: {
@@ -275,6 +300,171 @@ export type Database = {
         };
         Relationships: [];
       };
+      dream_jobs: {
+        Row: {
+          completed_at: string | null;
+          created_at: string;
+          error: string | null;
+          id: string;
+          result_image_url: string | null;
+          result_medium: string | null;
+          result_prompt: string | null;
+          result_vibe: string | null;
+          status: string;
+          upload_id: string | null;
+          user_id: string;
+        };
+        Insert: {
+          completed_at?: string | null;
+          created_at?: string;
+          error?: string | null;
+          id: string;
+          result_image_url?: string | null;
+          result_medium?: string | null;
+          result_prompt?: string | null;
+          result_vibe?: string | null;
+          status?: string;
+          upload_id?: string | null;
+          user_id: string;
+        };
+        Update: {
+          completed_at?: string | null;
+          created_at?: string;
+          error?: string | null;
+          id?: string;
+          result_image_url?: string | null;
+          result_medium?: string | null;
+          result_prompt?: string | null;
+          result_vibe?: string | null;
+          status?: string;
+          upload_id?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_jobs_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_jobs_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      dream_mediums: {
+        Row: {
+          created_at: string;
+          directive: string;
+          face_swaps: boolean;
+          flux_fragment: string;
+          is_active: boolean;
+          is_character_only: boolean;
+          is_scene_only: boolean;
+          key: string;
+          label: string;
+          nightly_skip: boolean;
+          sort_order: number;
+        };
+        Insert: {
+          created_at?: string;
+          directive: string;
+          face_swaps?: boolean;
+          flux_fragment: string;
+          is_active?: boolean;
+          is_character_only?: boolean;
+          is_scene_only?: boolean;
+          key: string;
+          label: string;
+          nightly_skip?: boolean;
+          sort_order?: number;
+        };
+        Update: {
+          created_at?: string;
+          directive?: string;
+          face_swaps?: boolean;
+          flux_fragment?: string;
+          is_active?: boolean;
+          is_character_only?: boolean;
+          is_scene_only?: boolean;
+          key?: string;
+          label?: string;
+          nightly_skip?: boolean;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      dream_templates: {
+        Row: {
+          active_from: string | null;
+          active_until: string | null;
+          category: string;
+          created_at: string;
+          disabled: boolean;
+          generation: number;
+          id: string;
+          seasonal: boolean;
+          template: string;
+          used_at: string | null;
+        };
+        Insert: {
+          active_from?: string | null;
+          active_until?: string | null;
+          category: string;
+          created_at?: string;
+          disabled?: boolean;
+          generation?: number;
+          id?: string;
+          seasonal?: boolean;
+          template: string;
+          used_at?: string | null;
+        };
+        Update: {
+          active_from?: string | null;
+          active_until?: string | null;
+          category?: string;
+          created_at?: string;
+          disabled?: boolean;
+          generation?: number;
+          id?: string;
+          seasonal?: boolean;
+          template?: string;
+          used_at?: string | null;
+        };
+        Relationships: [];
+      };
+      dream_vibes: {
+        Row: {
+          created_at: string;
+          directive: string;
+          is_active: boolean;
+          key: string;
+          label: string;
+          sort_order: number;
+        };
+        Insert: {
+          created_at?: string;
+          directive: string;
+          is_active?: boolean;
+          key: string;
+          label: string;
+          sort_order?: number;
+        };
+        Update: {
+          created_at?: string;
+          directive?: string;
+          is_active?: boolean;
+          key?: string;
+          label?: string;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
       favorites: {
         Row: {
           created_at: string;
@@ -305,6 +495,42 @@ export type Database = {
           {
             foreignKeyName: 'favorites_user_id_fkey';
             columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      follow_requests: {
+        Row: {
+          created_at: string;
+          id: string;
+          requester_id: string;
+          target_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          requester_id: string;
+          target_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          requester_id?: string;
+          target_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'follow_requests_requester_id_fkey';
+            columns: ['requester_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'follow_requests_target_id_fkey';
+            columns: ['target_id'];
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
@@ -490,6 +716,48 @@ export type Database = {
             columns: ['upload_id'];
             isOneToOne: false;
             referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      post_impressions: {
+        Row: {
+          first_seen: string;
+          id: string;
+          last_seen: string;
+          upload_id: string;
+          user_id: string;
+          view_count: number;
+        };
+        Insert: {
+          first_seen?: string;
+          id?: string;
+          last_seen?: string;
+          upload_id: string;
+          user_id: string;
+          view_count?: number;
+        };
+        Update: {
+          first_seen?: string;
+          id?: string;
+          last_seen?: string;
+          upload_id?: string;
+          user_id?: string;
+          view_count?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'post_impressions_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'post_impressions_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
             referencedColumns: ['id'];
           },
         ];
@@ -680,9 +948,12 @@ export type Database = {
           like_count: number;
           media_type: string;
           recipe_id: string | null;
+          save_count: number;
+          search_tsv: unknown;
+          share_count: number;
           thumbnail_url: string | null;
           user_id: string;
-          visibility: string;
+          view_count: number;
           width: number | null;
         };
         Insert: {
@@ -709,9 +980,12 @@ export type Database = {
           like_count?: number;
           media_type?: string;
           recipe_id?: string | null;
+          save_count?: number;
+          search_tsv?: unknown;
+          share_count?: number;
           thumbnail_url?: string | null;
           user_id: string;
-          visibility?: string;
+          view_count?: number;
           width?: number | null;
         };
         Update: {
@@ -738,9 +1012,12 @@ export type Database = {
           like_count?: number;
           media_type?: string;
           recipe_id?: string | null;
+          save_count?: number;
+          search_tsv?: unknown;
+          share_count?: number;
           thumbnail_url?: string | null;
           user_id?: string;
-          visibility?: string;
+          view_count?: number;
           width?: number | null;
         };
         Relationships: [
@@ -844,6 +1121,7 @@ export type Database = {
           email: string;
           has_ai_recipe: boolean;
           id: string;
+          is_admin: boolean | null;
           is_public: boolean;
           last_active_at: string | null;
           sparkle_balance: number;
@@ -855,6 +1133,7 @@ export type Database = {
           email: string;
           has_ai_recipe?: boolean;
           id: string;
+          is_admin?: boolean | null;
           is_public?: boolean;
           last_active_at?: string | null;
           sparkle_balance?: number;
@@ -866,6 +1145,7 @@ export type Database = {
           email?: string;
           has_ai_recipe?: boolean;
           id?: string;
+          is_admin?: boolean | null;
           is_public?: boolean;
           last_active_at?: string | null;
           sparkle_balance?: number;
@@ -885,11 +1165,21 @@ export type Database = {
       };
     };
     Functions: {
+      admin_delete_upload: { Args: { p_upload_id: string }; Returns: undefined };
+      approve_follow_request: {
+        Args: { p_requester_id: string };
+        Returns: undefined;
+      };
+      block_user: { Args: { p_blocked_id: string }; Returns: undefined };
       check_friend_request_rate_limit: {
         Args: { p_user_id: string };
         Returns: boolean;
       };
       delete_own_account: { Args: never; Returns: undefined };
+      deny_follow_request: {
+        Args: { p_requester_id: string };
+        Returns: undefined;
+      };
       get_comments: {
         Args: { p_limit?: number; p_offset?: number; p_upload_id: string };
         Returns: {
@@ -902,6 +1192,28 @@ export type Database = {
           reply_count: number;
           user_id: string;
           username: string;
+        }[];
+      };
+      get_dream_mediums: {
+        Args: never;
+        Returns: {
+          directive: string;
+          face_swaps: boolean;
+          flux_fragment: string;
+          is_character_only: boolean;
+          is_scene_only: boolean;
+          key: string;
+          label: string;
+          nightly_skip: boolean;
+          sort_order: number;
+        }[];
+      };
+      get_dream_vibes: {
+        Args: never;
+        Returns: {
+          directive: string;
+          key: string;
+          label: string;
         }[];
       };
       get_feed: {
@@ -982,10 +1294,6 @@ export type Database = {
           username: string;
         }[];
       };
-      block_user: {
-        Args: { p_blocked_id: string };
-        Returns: undefined;
-      };
       get_replies: {
         Args: { p_comment_id: string; p_limit?: number };
         Returns: {
@@ -1011,23 +1319,6 @@ export type Database = {
           vibe_score: number;
         }[];
       };
-      get_dream_mediums: {
-        Args: Record<string, never>;
-        Returns: {
-          key: string;
-          label: string;
-          directive: string;
-          flux_fragment: string;
-        }[];
-      };
-      get_dream_vibes: {
-        Args: Record<string, never>;
-        Returns: {
-          key: string;
-          label: string;
-          directive: string;
-        }[];
-      };
       get_unread_notification_count: {
         Args: { p_user_id: string };
         Returns: number;
@@ -1046,8 +1337,6 @@ export type Database = {
         Returns: undefined;
       };
       send_friend_request: { Args: { p_target_id: string }; Returns: undefined };
-      show_limit: { Args: never; Returns: number };
-      show_trgm: { Args: { '': string }; Returns: string[] };
       spend_sparkles: {
         Args: {
           p_amount: number;
@@ -1059,7 +1348,7 @@ export type Database = {
       };
     };
     Enums: {
-      [_ in never]: never;
+      vote_type: 'rad' | 'bad' | 'skip';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -1183,6 +1472,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],

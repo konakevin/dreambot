@@ -290,7 +290,7 @@ Deno.serve(async (req) => {
       '[generate-dream] BODY KEYS:',
       Object.keys(body),
       'force_cast_role:',
-      (body as any).force_cast_role
+      body.force_cast_role
     );
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
@@ -376,16 +376,21 @@ Deno.serve(async (req) => {
   lap('rate-limit-check');
 
   const todayCount = budgetRow?.images_generated ?? 0;
-  // Rate limit disabled for now
-  // if (todayCount >= MAX_DAILY_GENERATIONS) {
-  //   return new Response(
-  //     JSON.stringify({
-  //       error: 'Daily generation limit reached. Try again tomorrow!',
-  //       retry_after: secondsUntilMidnightUTC(),
-  //     }),
-  //     { status: 429 }
-  //   );
-  // }
+  if (todayCount >= MAX_DAILY_GENERATIONS) {
+    return new Response(
+      JSON.stringify({
+        error: 'Daily generation limit reached. Try again tomorrow!',
+        retry_after: secondsUntilMidnightUTC(),
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
+  }
 
   // ── Create dream job (queue tracking) ──────────────────────────────────
   if (jobId) {
@@ -979,18 +984,19 @@ Output ONLY the prompt.`;
         try {
           const selfBrief = `You are a cinematographer. Write a Flux AI prompt (60-80 words, comma-separated).
 
-MEDIUM (start with this EXACTLY): ${medium.fluxFragment}
+=== THE MAIN CHARACTER (THIS IS THE USER — render them EXACTLY as described, especially their gender) ===
+${selfDesc}
 
-STYLE GUIDE:
+GENDER LOCK — non-negotiable: the character's gender, sex, age, build, ethnicity, and core features above are SACRED. If they are male, render them MALE with masculine features and masculine clothing. If they are female, render them FEMALE. NEVER swap genders. NEVER put a male character in a dress, gown, skirt, corset, or feminine bodice. NEVER feminize a masculine subject's hair or features. NEVER masculinize a feminine subject. The style below is ONLY a rendering treatment — it does not change who the character is.
+
+=== SCENE — the user asked for ===
+${userSubject}
+
+=== STYLE (apply this aesthetic to the character above, respecting their gender) ===
 ${medium.directive}
 
-SCENE — the user asked for: ${userSubject}
-
-THE MAIN CHARACTER (this is the user — you MUST match their description EXACTLY):
-${selfDesc}
-CRITICAL: Preserve the character's EXACT sex, age, build, and features as described above. Do NOT change their gender.
-
-MOOD: ${vibe.directive}
+=== MOOD ===
+${vibe.directive}
 
 COMPOSITION — THIS IS CRITICAL:
 ${(() => {

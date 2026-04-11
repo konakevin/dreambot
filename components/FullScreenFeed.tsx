@@ -203,10 +203,16 @@ export function FullScreenFeed({
         if (post && user && !recordedImpressions.current.has(post.id)) {
           impressionTimer.current = setTimeout(() => {
             recordedImpressions.current.add(post.id);
-            supabase.rpc('record_impression', {
-              p_user_id: user.id,
-              p_upload_id: post.id,
-            });
+            supabase
+              .rpc('record_impression', {
+                p_user_id: user.id,
+                p_upload_id: post.id,
+              })
+              .then(({ error }) => {
+                if (error && __DEV__) {
+                  console.error('[FullScreenFeed] record_impression failed:', error.message);
+                }
+              });
           }, 1000);
         }
       }

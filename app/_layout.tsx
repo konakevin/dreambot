@@ -309,7 +309,8 @@ function DataPrefetcher() {
         // Mark stale processing jobs as failed (>3 min old)
         if (user) {
           const cutoff = new Date(Date.now() - 3 * 60_000).toISOString();
-          (supabase.from as Function)('dream_jobs')
+          supabase
+            .from('dream_jobs')
             .update({
               status: 'failed',
               error: 'timed_out',

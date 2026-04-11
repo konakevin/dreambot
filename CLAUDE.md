@@ -224,21 +224,117 @@ scripts/
 
 ## Adding New Mediums/Styles
 
-A "medium" is really an art style (e.g., "Cute Anime", "Cyberpunk", "Sack Boy"). To add one:
+A "medium" is an art style (e.g., "Anime", "Gothic", "Twilight"). The `dream_mediums` DB table is the single source of truth for medium identity, but **5 places outside the DB MUST also be updated** or the photo restyle path silently breaks.
 
-1. **`constants/dreamEngine.ts`** — Add to `CURATED_MEDIUMS` (key, label, directive, fluxFragment) + `MEDIUM_KEYS`
-2. **`supabase/functions/_shared/dreamEngine.ts`** — **DO NOT `cp` from constants!** Edit this file independently — it has Edge-specific helper functions (`buildDreamScene`, `inventSubject`) that get destroyed by copying. Only sync the MEDIUM/VIBE DATA.
-3. **`supabase/functions/_shared/textPrompts.ts`** — Add per-medium Sonnet brief template
-4. **`scripts/nightly-dreams.js`** — Add to `CURATED_MEDIUMS` array (key + fluxFragment)
-5. **Deploy:** `supabase functions deploy generate-dream --no-verify-jwt`
+**Critical rule: `key` MUST equal `label.toLowerCase().replace(/ /g, '_')`.** Legacy mismatches caused the big rename of April 2026 — never create new ones.
 
-UI tiles auto-derive from `CURATED_MEDIUMS` — no manual UI changes needed. The `ArtStyle` type derives from `MEDIUM_KEYS`.
+### Step 1 — Insert DB row in `dream_mediums`
 
-**Path overrides** (in generate-dream + nightly-dreams.js):
+```sql
+INSERT INTO public.dream_mediums (
+  key, label, directive, flux_fragment,
+  is_active, is_scene_only, is_character_only, face_swaps, nightly_skip,
+  sort_order
+) VALUES (
+  'newmedium', 'NewMedium',                       -- key MUST match snake_case label
+  '...tight ~120-150 word directive...',
+  '...compact comma-separated flux phrase...',
+  true, false, false, false, false, 99
+);
+```
 
-- `CHARACTER_MEDIUMS` — always character path (claymation, lego, vinyl)
-- `SCENE_ONLY_MEDIUMS` — always pure scene (canvas, watercolor, vaporwave, pixels)
-- `NIGHTLY_SKIP` — re-roll if selected (watercolor)
+**Directive rules** (all learned from real bugs):
+- **Cap at ~120-150 words** — long directives dilute the user's subject and hamper Sonnet creativity.
+- **Front-load identity rules** (gender preservation, no horns, no Jack Skellington bans).
+- **Avoid horns/demons** as defaults — AI gravitates there. Push for varied accessories (hair, hats, masks, jewelry, tattoos, scars).
+- **Avoid female-coded language** if the medium should render any gender: ban "shojo", "gowns", "veils", "delicate jewelry" — they skew Flux/Kontext feminine. Use neutral terms or split by "if male: X / if female: Y".
+- **No camera/composition language** — conflicts with user photos.
+
+**Classification flag meanings:**
+
+| Flag | Effect |
+|---|---|
+| `is_scene_only` | Pure environment, no people. Cast excluded. |
+| `is_character_only` | Always uses character composition path (LEGO, Claymation, Vinyl). |
+| `face_swaps` | Photo path will face-swap from user's cast thumb. |
+| `nightly_skip` | Re-rolled if picked in nightly cron. |
+
+### Step 2 — `supabase/functions/_shared/photoPrompts.ts` MEDIUM_CONFIGS (CRITICAL — never skip)
+
+**This is the most-forgotten step and causes the worst bugs.** Without an entry, the photo restyle path falls through to a generic 1-liner (`generate-dream/index.ts:~943`) that ignores the directive entirely. Result: zero gender preservation, Kontext defaults to "young woman in dress" regardless of subject. (Twilight Apr 2026.)
+
+```typescript
+newmedium: {
+  model: 'kontext-max',  // 'flux-dev' only for full rebuild like LEGO
+  buildPrompt: (_photo, vibe, hint) =>
+    `COMPLETELY transform this photo into [style description].
+
+CRITICAL — preserve identity: keep the person's exact face, gender, skin tone, age, and core features. Male subjects stay male with masculine features and clothing. Female subjects stay female. NEVER change their gender. NEVER put a male subject in a dress, gown, skirt, corset, or feminine bodice.
+
+[Element-by-element transformation: skin, hair, clothing, background, lighting].
+
+Express the mood through [DIMENSION] and [DIMENSION]:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+},
+```
+
+**Required elements in every photo config:**
+1. `COMPLETELY transform this photo into [X]` opening
+2. CRITICAL identity preservation block with explicit gender lock
+3. Element-by-element transformation rules (skin, hair, clothing, background, lighting)
+4. Mood via "Express the mood through X and Y: [vibe]" — never just append vibe at the end
+5. `Portrait 9:16`
+6. Hint inclusion: `${hint ? '\n' + hint : ''}`
+
+**After adding, grep the file for the key to confirm there are no duplicates.** Duplicate keys silently let the LATER definition win — caused Claymation to render as Sack Boy and Neon to render as cyberpunk cybernetics in Apr 2026.
+
+### Step 3 — Path override sets (mirror in 3 files)
+
+If the new medium needs path overrides, update ALL THREE locations to keep them in sync:
+
+- `supabase/functions/_shared/dreamAlgorithm.ts` — `SCENE_ONLY_MEDIUMS`, `CHARACTER_MEDIUMS`, `NIGHTLY_SKIP_MEDIUMS`
+- `lib/dreamAlgorithm.ts` — same three sets (must match)
+- `scripts/nightly-dreams.js` — `SCENE_ONLY_SET`, `CHARACTER_SET`, `STYLIZED_MEDIUMS`
+
+These should mirror the DB columns. (Tech debt: should read from DB at startup.)
+
+### Step 4 — Bot config (`scripts/generate-bot-dreams.js`)
+
+If a bot should post in this style, add the new key to that bot's `mediums` array:
+```javascript
+gothbot: { mediums: ['gothic', 'twilight', 'anime', 'canvas'], ... },
+```
+
+### Step 5 — Deploy
+
+```bash
+supabase functions deploy generate-dream --no-verify-jwt
+```
+
+### Verification (run after every add)
+
+```sql
+-- Should return 0 rows
+SELECT key, label FROM dream_mediums
+WHERE is_active = true AND key != lower(replace(label, ' ', '_'));
+```
+
+**Smoke test all 5 user paths** before declaring done:
+1. Create + medium + no hint + no photo → renders a scene that showcases the medium
+2. Create + medium + text prompt → renders the user's subject in this medium's style
+3. Create + medium + self-reference text ("put me in...") → user appears as themselves with correct gender
+4. Create + medium + photo upload (restyle) → renders YOU in the medium without gender swap
+5. Create + medium + photo + prompt → reimagines using both inputs
+
+If any path renders generic / wrong gender → you missed step 2 (photoPrompts.ts).
+
+### What does NOT need updating (auto-derived)
+
+- **UI tiles** — `MediumVibeSelector` queries `dream_mediums` directly via the `get_dream_mediums` RPC. New active mediums appear automatically.
+- **`ArtStyle` type** — defined as `string`, no union to maintain.
+- **`constants/dreamEngine.ts`** — gutted; medium data lives only in the DB.
+- **`supabase/functions/_shared/dreamEngine.ts`** — gutted; only helper functions remain.
+- **Tests** — iterate exported sets, pick up changes automatically.
 
 ### Edge Function Gotcha: No Optional Chaining in Top-Level Code
 
@@ -250,7 +346,6 @@ export const X = arr.filter(m => m.foo?.length);
 // GOOD:
 export const X = arr.filter(m => m.foo && m.foo.length > 0);
 ```
-When syncing `constants/dreamEngine.ts` → `_shared/dreamEngine.ts`, always check the `CURATED_MEDIUMS` filter line.
 
 ---
 
@@ -320,7 +415,7 @@ When syncing `constants/dreamEngine.ts` → `_shared/dreamEngine.ts`, always che
 
 ### Key Rules
 
-1. Never use `StyleSheet.create` — always use NativeWind `className`
+1. **Styling:** NativeWind `className` is preferred for new components, but the existing codebase uses `StyleSheet.create` extensively (53+ files) — both are acceptable. Don't bulk-migrate one to the other; match the file's existing style.
 2. Never use `any` type
 3. Always handle loading and error states in UI
 4. Supabase queries go in TanStack Query hooks inside `hooks/`
@@ -348,15 +443,61 @@ Kevin is the sole human developer. Claude is the other dev. No team, no PR proce
 
 ## Pre-Commit Checklist
 
-**Run ALL 4 before every commit — CI will fail if any don't pass:**
+**A husky pre-commit hook auto-runs `npm run check` on every `git commit`.** It runs prettier → lint → tsc → jest in sequence and blocks the commit if any fails. This prevents the "green locally, red on GitHub" failure mode.
 
+**Manual invocation:**
 ```bash
-export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
-npx prettier --write "**/*.{ts,tsx}" --ignore-path .gitignore
-npx expo lint
-npx tsc --noEmit
-npx jest --silent
+npm run check   # same thing the hook runs — use before pushing
+npm run fix     # auto-fix prettier + lint issues
 ```
+
+**Individual steps (if you need to debug one in isolation):**
+```bash
+npm run format:check   # prettier --check
+npm run lint           # expo lint
+npm run typecheck      # tsc --noEmit
+npm run test           # jest
+```
+
+**To bypass the hook in an emergency:** `git commit --no-verify`. Don't abuse this — every bypassed commit has historically broken CI.
+
+---
+
+## After-Change Checklist (READ THIS — bug classes that have bitten us)
+
+The April 2026 audit found 14 issues, several silently broken for months. The pattern: a step that needed to happen elsewhere when X was added got forgotten, and nothing in CI caught it. This checklist exists so it stops happening. See `memory/feedback_audit_lessons.md` for the full root-cause writeup.
+
+### After adding/changing a Supabase table, column, or RPC
+
+1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`. Forgetting this leads to `(supabase.from as Function)('table_name')` workarounds that bypass the type system entirely.
+2. **For UPDATE policies on user-writable tables:** verify a `WITH CHECK` clause OR an UPDATE trigger freezes sensitive columns (`is_approved`, `user_id`, etc.). Postgres does NOT require WITH CHECK on UPDATE policies — you have to remember. Reference pattern: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.
+3. **Smoke-test new RPCs** — especially fire-and-forget ones. `record_impression` was broken for the entire app's lifetime (boolean = integer crash) and silently returned errors that nobody saw because clients didn't `.catch`.
+
+### After adding a migration file
+
+1. `ls supabase/migrations/ | grep ^NNN` to check for prefix collisions before saving.
+2. `npx jest __tests__/lib/migrations.test.ts` to verify hygiene (this test enforces unique numeric prefixes).
+3. If you must add a follow-up to an existing number, use `NNNa_`, `NNNb_` suffixes — alphabetical order will resolve them deterministically.
+4. Run the migration in the Supabase SQL editor (DDL can't go through the JS client).
+
+### After adding a medium to `dream_mediums`
+
+1. Update `__tests__/lib/photoPrompts.test.ts` `ACTIVE_MEDIUMS` list.
+2. Add the matching `MEDIUM_CONFIGS` entry in `supabase/functions/_shared/photoPrompts.ts`. The test will fail if you forget.
+3. See the full medium-add checklist in the "Adding New Mediums/Styles" section above.
+
+### After ripping out a feature
+
+1. Audit DB columns it owned — write a cleanup migration for vestigial columns. (SightEngine removal left `is_moderated`/`is_approved` as confusing dead state for months.)
+2. Search for hanging RLS references, triggers, RPCs that read those columns.
+3. Search for type definitions that mention the feature.
+
+### Hard rules (no exceptions)
+
+- **NEVER comment out a rate limit, security check, or RLS policy "for now".** If you need to disable, delete it AND create a follow-up task. Comments rot.
+- **NEVER use `as Function`, `as any`, or `as unknown as <type>` to bypass types.** If a table isn't in the generated types, regenerate the types instead.
+- **NEVER fire-and-forget critical RPCs without a `.catch` that logs in dev mode.** Silent failures lived for months.
+- **NEVER write a SQL migration without checking `ls supabase/migrations/` for the next free number.**
 
 ---
 

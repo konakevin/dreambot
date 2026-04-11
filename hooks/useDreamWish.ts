@@ -69,7 +69,7 @@ export function useSetDreamWish() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dreamWish'] });
+      queryClient.invalidateQueries({ queryKey: ['dreamWish', user?.id] });
     },
   });
 }

@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
+const MAX_AVATAR_BYTES = 8 * 1024 * 1024; // 8MB
+
 export function useAvatarUpload() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
@@ -13,6 +15,12 @@ export function useAvatarUpload() {
 
       const response = await fetch(uri);
       const arrayBuffer = await response.arrayBuffer();
+
+      if (arrayBuffer.byteLength > MAX_AVATAR_BYTES) {
+        throw new Error(
+          `Image too large (${(arrayBuffer.byteLength / 1024 / 1024).toFixed(1)}MB). Max 8MB.`
+        );
+      }
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')

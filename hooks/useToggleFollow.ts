@@ -3,8 +3,6 @@ import * as Haptics from 'expo-haptics';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
-const fromRequests = () => (supabase.from as Function)('follow_requests');
-
 interface ToggleArgs {
   userId: string;
   currentlyFollowing: boolean;
@@ -32,14 +30,15 @@ export function useToggleFollow() {
         if (error) throw error;
       } else if (hasRequest) {
         // Cancel pending request
-        const { error } = await fromRequests()
+        const { error } = await supabase
+          .from('follow_requests')
           .delete()
           .eq('requester_id', user!.id)
           .eq('target_id', userId);
         if (error) throw error;
       } else if (!isPublic) {
         // Private account — send follow request
-        const { error } = await fromRequests().insert({
+        const { error } = await supabase.from('follow_requests').insert({
           requester_id: user!.id,
           target_id: userId,
         });

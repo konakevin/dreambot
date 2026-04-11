@@ -63,7 +63,7 @@ const BOTS = {
   earthbot: { mediums: ['photography', 'canvas', 'watercolor'] },
   arcadebot: { mediums: ['lego', 'pixels', 'animation', 'claymation', 'vinyl'] },
   cuddlebot: { mediums: ['animation', 'claymation', 'storybook'] },
-  popbot: { mediums: ['comics', 'retro_poster'] },
+  popbot: { mediums: ['comics', 'vaporwave'] },
   // ── New bots ──
   coquettebot: { mediums: ['coquette', 'fairytale', 'watercolor'] },
   safaribot: { mediums: ['photography', 'canvas', 'watercolor'] },
