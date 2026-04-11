@@ -46,7 +46,7 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
   // ── Seeded & active on cron ──
-  dragonbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
+  dragonbot: { mediums: ['oil_painting', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
   mangabot: {
     mediums: ['anime'],
     excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'],
@@ -56,8 +56,8 @@ const BOTS = {
   },
   starbot: { mediums: ['surreal'], excludeVibes: ['minimal', 'whimsical'] },
   venusbot: { mediums: ['surreal'], excludeVibes: ['minimal', 'whimsical'] },
-  sirenbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
-  gothbot: { mediums: ['tim_burton', 'fantasy', 'anime', 'oil_painting'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
+  sirenbot: { mediums: ['oil_painting', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
+  gothbot: { mediums: ['tim_burton', 'anime', 'oil_painting'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
   glowbot: { mediums: ['watercolor', 'oil_painting'] },
   earthbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
@@ -68,13 +68,13 @@ const BOTS = {
   coquettebot: { mediums: ['surreal', 'fairytale', 'watercolor'] },
   safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
   glambot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
-  steambot: { mediums: ['steampunk', 'oil_painting', 'fantasy'] },
+  steambot: { mediums: ['steampunk', 'oil_painting'] },
   tinybot: { mediums: ['photorealistic', '3d_cartoon', 'sack_boy'] },
   hauntbot: { mediums: ['photorealistic', 'oil_painting', 'surreal'] },
   bloombot: { mediums: ['watercolor', 'oil_painting', 'photorealistic'] },
   inkbot: { mediums: ['comic_book', 'oil_painting', 'photorealistic'] },
   tripbot: { mediums: ['surreal', 'oil_painting', 'comic_book'] },
-  titanbot: { mediums: ['oil_painting', 'fantasy', 'photorealistic'] },
+  titanbot: { mediums: ['oil_painting', 'photorealistic'] },
 };
 
 /**

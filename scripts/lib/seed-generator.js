@@ -14,9 +14,9 @@ const Anthropic = require('@anthropic-ai/sdk');
 const BOT_SEEDS = {
   dragonbot: {
     strategies: [
-      { category: 'dragonbot_genre', prompt: 'an epic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter' },
-      { category: 'dragonbot_genre_dedup', prompt: 'an epic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter', continueDedup: true },
-      { category: 'dragonbot_landscape', prompt: 'an epic fantasy landscape that is exotic and mind blowingly beautiful and interesting to look at', separateDedup: true },
+      { category: 'dragonbot_genre', prompt: 'an epic cinematic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter, wheel of time, game of thrones — sweeping cinematic perspectives with deep atmospheric depth, theatrical lighting with golden hour warmth and ethereal glows, dramatic rim lighting, supernatural illumination, rich color palettes with mystical accents' },
+      { category: 'dragonbot_genre_dedup', prompt: 'an epic cinematic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter, wheel of time, game of thrones — sweeping cinematic perspectives with deep atmospheric depth, theatrical lighting with golden hour warmth and ethereal glows, dramatic rim lighting, supernatural illumination, rich color palettes with mystical accents', continueDedup: true },
+      { category: 'dragonbot_landscape', prompt: 'an epic fantasy landscape that is exotic and mind blowingly beautiful and interesting to look at — sweeping cinematic vistas, deep atmospheric perspective with layered depth, dramatic theatrical lighting (golden hour warmth, ethereal glows, god rays through clouds), rich earth tones with mystical accent colors, supernatural magical atmosphere', separateDedup: true },
     ],
   },
   mangabot: {
