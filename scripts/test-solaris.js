@@ -90,7 +90,7 @@ async function persistToStorage(tempUrl, userId) {
   // Fetch mediums from DB
   const { data: allMediums } = await sb.rpc('get_dream_mediums');
   const { data: allVibes } = await sb.rpc('get_dream_vibes');
-  const mediumKeys = ['oil_painting', 'fantasy', 'watercolor'];
+  const mediumKeys = ['canvas', 'fantasy', 'watercolor'];
   const vibeKeys = allVibes.map((v) => v.key);
 
   const { data: user } = await sb.from('users').select('id').eq('username', 'solaris').single();

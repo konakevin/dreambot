@@ -148,18 +148,8 @@ function pick(arr) {
 
 // ── Dream Algorithm (mirrored from lib/dreamAlgorithm.ts) ──
 const CAST_PROBABILITY = 0.75;
-const SCENE_ONLY_SET = new Set([
-  'oil_painting',
-  'embroidery',
-  'watercolor',
-  'vaporwave',
-  'retro_poster',
-  'pop_art',
-  '8bit',
-  'pixel_art',
-  'fantasy',
-]);
-const CHARACTER_SET = new Set(['claymation', 'lego', 'funko_pop', 'disney', 'sack_boy']);
+const SCENE_ONLY_SET = new Set(['canvas', 'watercolor', 'vaporwave', 'pixels']);
+const CHARACTER_SET = new Set(['claymation', 'lego', 'vinyl']);
 const WHO_THRESHOLDS = [
   { max: 15, roles: ['self'] },
   { max: 25, roles: ['plus_one'] },
@@ -302,21 +292,21 @@ async function generateKontextImage(prompt, inputImageUrl) {
 }
 
 const STYLIZED_MEDIUMS = new Set([
-  'pixel_art',
+  'pixels',
   'lego',
   'claymation',
   'anime',
-  'comic_book',
-  'disney',
-  'sack_boy',
-  'plushie',
-  'funko_pop',
-  'ghibli',
-  'tim_burton',
-  'pop_art',
-  'minecraft',
-  '8bit',
-  'paper_cutout',
+  'comics',
+  'handcrafted',
+  'vinyl',
+  'gothic',
+  'twilight',
+  'animation',
+  'storybook',
+  'fairytale',
+  'coquette',
+  'shimmer',
+  'pencil',
 ]);
 
 const COST_KONTEXT_CENTS = 4;
@@ -326,19 +316,19 @@ const COST_KONTEXT_CENTS = 4;
 const MEDIUM_TEMPLATES = {
   lego: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for a PHOTOGRAPH of a REAL LEGO SET:\n- Start with: "Photograph of a real LEGO brick diorama, soft studio lighting, shallow depth of field"\n- Subject: ${s} — built ENTIRELY from LEGO bricks. Characters are minifigures with painted expressions, snap-on hair, C-shaped hands\n- EVERY object, surface, and background element is LEGO — visible studs, snap-together construction\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through brick color choices and lighting: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-  pixel_art: (s, v) =>
+  pixels: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for pixel art:\n- Start with: "16-bit pixel art, SNES era, visible pixel grid, limited 24-color palette, crisp pixel edges"\n- Subject: ${s} — rendered as pixel art sprites and pixel environments\n- Characters have blocky features, dot eyes, iconic silhouettes\n- Dithered shading, NO anti-aliasing, NO smooth gradients\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through palette selection: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
   claymation: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for claymation:\n- Start with: "Claymation stop-motion animation, smooth sculpted clay characters, visible fingerprint textures, glass bead eyes, handcrafted miniature sets"\n- Subject: ${s} — sculpted from smooth matte clay with subtle fingerprint textures\n- Characters have glass bead eyes, knitted/felted clothing. Sets are handcrafted miniatures.\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through set lighting and clay color palette: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
   anime: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for anime illustration:\n- Start with: "Anime illustration, clean ink linework, cel-shaded coloring, expressive detailed eyes, vibrant saturated colors"\n- Subject: ${s} — drawn in anime style with clean ink outlines, cel-shaded flat color\n- Characters have expressive eyes with light reflections, dynamic flowing hair\n- Backgrounds painted with atmospheric detail (Shinkai-style)\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through background atmosphere and color saturation: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-  comic_book: (s, v) =>
+  comics: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for comic book art:\n- Start with: "Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, graphic novel splash page quality"\n- Subject: ${s} — drawn with bold confident ink outlines, flat saturated color\n- Ben-Day dot halftone patterns in mid-tones. Dynamic angles. Kinetic energy.\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through ink weight and color intensity: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
   disney: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for Disney animation:\n- Start with: "Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, Renaissance Disney quality"\n- Subject: ${s} — as a Disney animated character with expressive emotive face, large eyes\n- Clean ink outlines, luminous cel-painted color, lush painted backgrounds\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through background painting and color vibrancy: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
   ghibli: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for Studio Ghibli:\n- Start with: "Studio Ghibli animation style, soft painterly rendering, warm natural palette, detailed painted backgrounds, Miyazaki quality"\n- Subject: ${s} — in Ghibli style with natural rounded proportions, warm watercolor-like shading\n- Breathtaking painted landscapes with atmospheric perspective. Nature as a character.\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through landscape detail and palette warmth: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
-  tim_burton: (s, v) =>
+  gothic: (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for Tim Burton style:\n- Start with: "Tim Burton gothic illustration, spindly elongated limbs, spiral motifs, black and white with purple accents, crooked angular architecture"\n- Subject: ${s} — with impossibly thin limbs, elongated neck, sunken dark-ringed eyes\n- Spiral motifs in hair, architecture. Stark black/white/grey with pops of purple or blood red.\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through angular environment and shadow intensity: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,
   '3d_render': (s, v) =>
     `Write a Flux AI prompt (50-70 words, comma-separated) for a 3D render:\n- Start with: "Pixar-quality 3D render, soft rounded appealing shapes, subsurface scattering, volumetric lighting, cinematic depth of field"\n- Subject: ${s} — as a stylized 3D animated scene with Pixar-level quality\n- Soft rounded shapes, glossy eyes, subsurface scattering on skin\n- End with: no text, no words, no letters, no watermarks, hyper detailed. NEVER place the character standing centered on a path, road, sidewalk, or trail.\nExpress the mood through volumetric lighting and color palette: ${v.slice(0, 200)}\nOutput ONLY the prompt.`,

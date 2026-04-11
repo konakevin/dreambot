@@ -16,7 +16,7 @@ function pick(arr) {
 
 const MEDIUMS = [
   {
-    key: 'oil_painting',
+    key: 'canvas',
     flux: 'Oil painting on canvas, thick impasto brushstrokes, visible palette knife texture, rich layered glazes, Rembrandt-inspired chiaroscuro',
   },
   {
@@ -40,11 +40,11 @@ const MEDIUMS = [
     flux: 'Classic Disney 2D animation, hand-drawn cel animation, clean flowing ink outlines, rich painted colors, Renaissance Disney quality',
   },
   {
-    key: 'tim_burton',
+    key: 'gothic',
     flux: 'Tim Burton gothic style, spindly elongated limbs, spiral motifs, black and white with purple accents, dark whimsical aesthetic',
   },
   {
-    key: 'comic_book',
+    key: 'comics',
     flux: 'Comic book art, bold ink outlines, dynamic composition, halftone Ben-Day dots, saturated flat colors, graphic novel splash page quality',
   },
 ];

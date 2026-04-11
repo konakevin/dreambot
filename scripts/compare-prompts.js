@@ -23,10 +23,10 @@ const COUNT = 2; // 2 per approach per medium
 // Load mediums from dreamEngine.ts (parse the CURATED_MEDIUMS)
 // We'll just hardcode the active ones with their data to keep it simple
 const ACTIVE_MEDIUMS = [
-  'pixel_art', 'oil_painting', 'anime', 'lego', 'claymation', '3d_cartoon',
-  '3d_render', 'cyberpunk', 'comic_book', 'embroidery', 'disney', 'sack_boy',
-  'funko_pop', 'ghibli', 'tim_burton', 'pop_art', 'minecraft', '8bit',
-  'paper_cutout', 'retro_poster', 'childrens_book', 'vaporwave', 'fantasy',
+  'pixels', 'canvas', 'anime', 'lego', 'claymation', 'animation',
+  '3d_render', 'neon', 'comics', 'embroidery', 'disney', 'claymation',
+  'vinyl', 'ghibli', 'gothic', 'pop_art', 'minecraft', '8bit',
+  'paper_cutout', 'retro_poster', 'storybook', 'vaporwave', 'fantasy',
   'ukiyo_e', 'art_deco', 'steampunk', 'cute_anime', 'dark_anime',
 ];
 

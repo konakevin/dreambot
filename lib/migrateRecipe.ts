@@ -55,11 +55,11 @@ export function migrateRecipeToVibeProfile(recipe: Recipe): VibeProfile {
   // Infer art styles from realism axis
   const artStyles: ArtStyle[] = [];
   if (recipe.axes.realism > 0.6) {
-    artStyles.push('3d_render', 'fantasy');
+    artStyles.push('photography', 'animation');
   } else if (recipe.axes.realism < 0.4) {
     artStyles.push('watercolor', 'anime');
   } else {
-    artStyles.push('oil_painting', 'watercolor');
+    artStyles.push('canvas', 'watercolor');
   }
 
   // Map axes → mood axes

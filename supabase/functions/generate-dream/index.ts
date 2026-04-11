@@ -209,7 +209,7 @@ interface RequestBody {
   vibe_profile?: import('../_shared/vibeProfile.ts').VibeProfile;
   /** Prompt mode for vibe profile generation (legacy) */
   prompt_mode?: import('../_shared/vibeProfile.ts').PromptMode;
-  /** V2 engine — curated medium key (e.g., 'watercolor', 'pixel_art', 'surprise_me') */
+  /** V2 engine — curated medium key (e.g., 'watercolor', 'pixels', 'surprise_me') */
   medium_key?: string;
   /** V2 engine — curated vibe key (e.g., 'cinematic', 'epic', 'surprise_me') */
   vibe_key?: string;
@@ -1088,6 +1088,10 @@ Write the Flux prompt:
 
 The final Flux prompt should feel like "[detailed subject description], [environment that surrounds them], [medium style], [mood]" — never like "[medium style] scene with [subject mentioned]".
 
+CREATIVITY RULES:
+- Do NOT default to horns, demon features, or Maleficent-style tropes on characters. Reach for more interesting accessories and features: unusual hair colors and styles, hats, masks, jewelry, tattoos, unusual eye colors, freckles, face paint, scars, antlers (only if animal-appropriate), unusual clothing textures, unusual pets, etc.
+- Invent details that feel surprising but fitting for the medium and subject.
+
 Output ONLY the prompt.`;
 
         try {
@@ -1101,69 +1105,26 @@ Output ONLY the prompt.`;
         console.log('[generate-dream] V2 text (directive):', finalPrompt.slice(0, 150));
         lap('text-prompt-done');
       } else {
-        // No user prompt — "Surprise Me" — use nightly-quality cinematographer brief
-        // Pick a random dream template from DB (same as nightly, but NO cast/seeds/personal data)
-        let dreamScene = 'a surreal impossible dreamscape with unexpected elements';
-        try {
-          const categories = [
-            'cosmic',
-            'impossible_architecture',
-            'peaceful_absurdity',
-            'bioluminescence',
-            'joyful_chaos',
-            'overgrown',
-            'broken_gravity',
-            'merged_worlds',
-            'underwater',
-            'cinematic',
-          ];
-          const category = categories[Math.floor(Math.random() * categories.length)];
-          const { data: rows } = await supabase
-            .from('dream_templates')
-            .select('template')
-            .eq('category', category)
-            .eq('disabled', false)
-            .limit(200);
-          if (rows && rows.length > 0) {
-            const template = rows[Math.floor(Math.random() * rows.length)].template;
-            dreamScene = template
-              .replace(/\$\{character\}/g, 'a wandering figure')
-              .replace(/\$\{place\}/g, 'a forgotten city')
-              .replace(/\$\{thing\}/g, 'glowing fragments');
-          }
-        } catch {
-          // Use fallback
-        }
+        // No user prompt — user picked a specific medium — invent a scene that showcases IT
+        const v2Brief = `You are an art director. Write a Flux AI prompt (60-90 words, comma-separated) that perfectly showcases this art medium at its best.
 
-        const SHOTS = [
-          'wide establishing shot, vast environment, epic scale',
-          'extreme low angle looking up, towering architecture',
-          'aerial view looking down, geometric patterns',
-          'symmetrical composition, detailed architecture flanking both sides',
-          'tilt-shift miniature effect, diorama quality',
-          'dramatic portrait integrated into environment, surreal world fills frame',
-        ];
-        const shotDirection = SHOTS[Math.floor(Math.random() * SHOTS.length)];
-
-        const v2Brief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
-
-MEDIUM: ${medium.fluxFragment}
-
-STYLE GUIDE:
+=== MEDIUM (this is what you are showcasing) ===
 ${medium.directive}
 
-DREAM SCENE (this is sacred — do NOT water it down):
-${dreamScene}
+Flux fragment: ${medium.fluxFragment}
 
-CAMERA: ${shotDirection}
-MOOD: ${vibe.directive}
+=== MOOD ===
+${vibe.directive}
 
-Write the prompt:
-1. Start with the art medium
-2. Describe the EXACT scene — every surreal detail preserved
-3. NO PEOPLE. NO CHARACTERS. NO FIGURES. Pure environment.
-4. Name specific materials, textures, light sources (NOUNS not adjectives)
+Invent a SUBJECT AND SCENE that this medium renders beautifully — whatever would look most iconic in this style. Pick something concrete: a character, creature, or signature scene element the medium is known for. Build the environment around that subject. Apply the medium's style language to everything.
+
+Rules:
+1. Start with a concrete subject, not an abstract environment
+2. The subject should feel inevitable for this medium — the thing it was made to render
+3. Name specific materials, textures, light sources (NOUNS not adjectives)
+4. Do NOT default to horns, demon features, or Maleficent-style tropes on characters — reach for more interesting details: unusual hair, hats, masks, jewelry, tattoos, unusual eye colors, freckles, face paint, scars, unusual clothing, unusual pets
 5. End with: no text, no words, no letters, no watermarks, hyper detailed
+
 Output ONLY the prompt.`;
 
         try {
@@ -1677,8 +1638,8 @@ function pickModel(
   }
 
   // SDXL routing by medium key
-  const SDXL_ALWAYS = new Set(['anime', 'pixel_art']);
-  const SDXL_HALF = new Set(['ghibli']); // 50/50 SDXL vs Flux
+  const SDXL_ALWAYS = new Set(['anime', 'pixels']);
+  const SDXL_HALF = new Set<string>(); // 50/50 SDXL vs Flux
   if (mediumKey && SDXL_ALWAYS.has(mediumKey)) {
     return { model: 'sdxl', inputOverrides: sdxlOverrides };
   }

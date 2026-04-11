@@ -46,7 +46,7 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
   // ── Seeded & active on cron ──
-  dragonbot: { mediums: ['oil_painting', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
+  dragonbot: { mediums: ['canvas', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
   mangabot: {
     mediums: ['anime'],
     excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'],
@@ -54,27 +54,27 @@ const BOTS = {
       anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'],
     },
   },
-  starbot: { mediums: ['photorealistic', 'cyberpunk', 'oil_painting'], excludeVibes: ['minimal', 'whimsical'] },
-  venusbot: { mediums: ['photorealistic', 'cyberpunk', 'shimmer'], excludeVibes: ['minimal', 'whimsical'] },
-  sirenbot: { mediums: ['oil_painting', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
-  gothbot: { mediums: ['tim_burton', 'anime', 'oil_painting'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
+  starbot: { mediums: ['photography', 'neon', 'canvas'], excludeVibes: ['minimal', 'whimsical'] },
+  venusbot: { mediums: ['photography', 'neon', 'shimmer'], excludeVibes: ['minimal', 'whimsical'] },
+  sirenbot: { mediums: ['canvas', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
+  gothbot: { mediums: ['gothic', 'anime', 'canvas'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
-  glowbot: { mediums: ['watercolor', 'oil_painting'] },
-  earthbot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
-  arcadebot: { mediums: ['lego', 'pixel_art', '3d_cartoon', 'sack_boy', 'funko_pop'] },
-  cuddlebot: { mediums: ['3d_cartoon', 'sack_boy', 'childrens_book'] },
-  popbot: { mediums: ['comic_book', 'retro_poster'] },
+  glowbot: { mediums: ['watercolor', 'canvas'] },
+  earthbot: { mediums: ['photography', 'canvas', 'watercolor'] },
+  arcadebot: { mediums: ['lego', 'pixels', 'animation', 'claymation', 'vinyl'] },
+  cuddlebot: { mediums: ['animation', 'claymation', 'storybook'] },
+  popbot: { mediums: ['comics', 'retro_poster'] },
   // ── New bots ──
-  coquettebot: { mediums: ['surreal', 'fairytale', 'watercolor'] },
-  safaribot: { mediums: ['photorealistic', 'oil_painting', 'watercolor'] },
-  glambot: { mediums: ['photorealistic', 'shimmer', 'oil_painting'] },
-  steambot: { mediums: ['oil_painting', 'photorealistic'] },
-  tinybot: { mediums: ['photorealistic', '3d_cartoon', 'sack_boy'] },
-  hauntbot: { mediums: ['photorealistic', 'oil_painting', 'tim_burton'] },
-  bloombot: { mediums: ['watercolor', 'oil_painting', 'photorealistic'] },
-  inkbot: { mediums: ['comic_book', 'oil_painting', 'photorealistic'] },
-  tripbot: { mediums: ['oil_painting', 'comic_book', 'vaporwave'] },
-  titanbot: { mediums: ['oil_painting', 'photorealistic'] },
+  coquettebot: { mediums: ['coquette', 'fairytale', 'watercolor'] },
+  safaribot: { mediums: ['photography', 'canvas', 'watercolor'] },
+  glambot: { mediums: ['photography', 'shimmer', 'canvas'] },
+  steambot: { mediums: ['canvas', 'photography'] },
+  tinybot: { mediums: ['photography', 'animation', 'claymation'] },
+  hauntbot: { mediums: ['photography', 'canvas', 'gothic'] },
+  bloombot: { mediums: ['watercolor', 'canvas', 'photography'] },
+  inkbot: { mediums: ['comics', 'canvas', 'photography'] },
+  tripbot: { mediums: ['canvas', 'comics', 'vaporwave'] },
+  titanbot: { mediums: ['canvas', 'photography'] },
 };
 
 /**

@@ -15,24 +15,14 @@
 /** Probability of a cast dream (vs pure scene) */
 export const CAST_PROBABILITY = 0.75;
 
-/** Mediums that ALWAYS render as pure scene (no cast) */
-export const SCENE_ONLY_MEDIUMS = new Set([
-  'oil_painting',
-  'embroidery',
-  'watercolor',
-  'vaporwave',
-  'retro_poster',
-  'pop_art',
-  '8bit',
-  'pixel_art',
-  'fantasy',
-]);
+/** Mediums that ALWAYS render as pure scene (no cast). Mirrors dream_mediums.is_scene_only. */
+export const SCENE_ONLY_MEDIUMS = new Set(['canvas', 'watercolor', 'vaporwave', 'pixels']);
 
-/** Mediums that ALWAYS use the character composition path */
-export const CHARACTER_MEDIUMS = new Set(['claymation', 'lego', 'funko_pop', 'disney', 'sack_boy']);
+/** Mediums that ALWAYS use the character composition path. Mirrors dream_mediums.is_character_only. */
+export const CHARACTER_MEDIUMS = new Set(['claymation', 'lego', 'vinyl']);
 
-/** Mediums that should be skipped (re-rolled) in nightly dreams */
-export const NIGHTLY_SKIP_MEDIUMS = new Set(['watercolor', 'neon', 'pencil_sketch']);
+/** Mediums that should be skipped (re-rolled) in nightly dreams. Mirrors dream_mediums.nightly_skip. */
+export const NIGHTLY_SKIP_MEDIUMS = new Set(['watercolor']);
 
 /**
  * WHO weights within cast dreams (must sum to 100)

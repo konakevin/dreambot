@@ -236,9 +236,9 @@ UI tiles auto-derive from `CURATED_MEDIUMS` — no manual UI changes needed. The
 
 **Path overrides** (in generate-dream + nightly-dreams.js):
 
-- `CHARACTER_MEDIUMS` — always character path (claymation, lego, funko_pop, disney, sack_boy)
-- `SCENE_ONLY_MEDIUMS` — always pure scene (oil_painting)
-- `NIGHTLY_SKIP` — re-roll if selected (watercolor, neon, pencil_sketch)
+- `CHARACTER_MEDIUMS` — always character path (claymation, lego, vinyl)
+- `SCENE_ONLY_MEDIUMS` — always pure scene (canvas, watercolor, vaporwave, pixels)
+- `NIGHTLY_SKIP` — re-roll if selected (watercolor)
 
 ### Edge Function Gotcha: No Optional Chaining in Top-Level Code
 

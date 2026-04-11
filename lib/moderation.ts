@@ -23,19 +23,37 @@ export interface ModerationResult {
 const PASS: ModerationResult = { passed: true, reason: null };
 const FAIL: ModerationResult = {
   passed: false,
-  reason: 'This contains language we don\'t allow.',
+  reason: "This contains language we don't allow.",
 };
 
 // Wordlist of slurs to block. Match on word boundaries only.
 // Encoded loosely to dodge naive grep but readable.
 const BLOCKED_WORDS = [
   // Racial slurs
-  'n1gger', 'n1gga', 'chink', 'gook', 'spic', 'wetback', 'kike', 'beaner',
-  'coon', 'jigaboo', 'pickaninny', 'sandnigger', 'towelhead', 'raghead',
+  'n1gger',
+  'n1gga',
+  'chink',
+  'gook',
+  'spic',
+  'wetback',
+  'kike',
+  'beaner',
+  'coon',
+  'jigaboo',
+  'pickaninny',
+  'sandnigger',
+  'towelhead',
+  'raghead',
   // Homophobic / transphobic
-  'faggot', 'fagg', 'tranny', 'shemale', 'dyke',
+  'faggot',
+  'fagg',
+  'tranny',
+  'shemale',
+  'dyke',
   // Hate speech / threats
-  'kill yourself', 'kys', 'go die',
+  'kill yourself',
+  'kys',
+  'go die',
 ].map((w) => w.replace('1', 'i'));
 
 function containsBlockedWord(text: string): boolean {

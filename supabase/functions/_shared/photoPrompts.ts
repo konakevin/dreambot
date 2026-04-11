@@ -59,7 +59,7 @@ Output ONLY the prompt.`,
   // KONTEXT MAX — preserves face/likeness, medium-specific instructions
   // ═══════════════════════════════════════════════════════════════════════
 
-  pixel_art: {
+  pixels: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
@@ -119,7 +119,7 @@ Express the mood through WASH INTENSITY and COLOR TEMPERATURE — heavy saturate
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  oil_painting: {
+  canvas: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
@@ -175,7 +175,7 @@ Express the mood through VOLUMETRIC LIGHTING and COLOR PALETTE — god rays for 
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  comic_book: {
+  comics: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
@@ -213,7 +213,7 @@ Express the mood through BACKGROUND PAINTING and COLOR VIBRANCY — Disney backg
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  sack_boy: {
+  claymation: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
@@ -227,7 +227,7 @@ Express the mood through CRAFT MATERIAL CHOICES and LIGHTING WARMTH — colorful
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  funko_pop: {
+  vinyl: {
     model: 'flux-dev',
     buildPrompt: (
       photo,
@@ -263,7 +263,7 @@ Express the mood through LANDSCAPE ATMOSPHERE and NATURAL LIGHT — Ghibli's emo
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  tim_burton: {
+  gothic: {
     model: 'kontext-max',
     buildPrompt: (
       _photo,
@@ -354,7 +354,7 @@ Output ONLY the prompt.`,
   // ADDITIONAL KONTEXT-MAX MEDIUMS
   // ═══════════════════════════════════════════════════════════════════════
 
-  '3d_cartoon': {
+  animation: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
       `COMPLETELY transform this photo into a 3D cartoon render — Pixar/DreamWorks quality but more stylized and exaggerated than realistic 3D.
@@ -365,7 +365,7 @@ Express the mood through LIGHTING COLOR and ENVIRONMENT STYLE — bright bouncy 
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  cyberpunk: {
+  neon: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
       `COMPLETELY transform this photo into a cyberpunk scene.
@@ -398,7 +398,7 @@ Express the mood through POSTER COLOR PALETTE and COMPOSITION DRAMA — warm ora
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  childrens_book: {
+  storybook: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
       `COMPLETELY transform this photo into a children's book illustration — warm, gentle, hand-painted quality.
@@ -464,7 +464,7 @@ Express the mood through BRASS PATINA WARMTH and STEAM DENSITY — polished bras
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  surreal: {
+  coquette: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
       `Keep this photo looking photographically REAL — real skin, real textures, real materials — but push everything into surreal impossibility.
@@ -475,7 +475,7 @@ Express the mood through COLOR SATURATION DIRECTION and REALITY DISTORTION LEVEL
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
-  photorealistic: {
+  photography: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
       `Make this photo look like a great natural photograph — NOT a studio shoot, NOT heavily edited.
@@ -507,7 +507,7 @@ const REIMAGINE_TEMPLATES: Record<
 - Portrait 9:16
 Output ONLY the prompt.`,
 
-  pixel_art: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a pixel art scene:
+  pixels: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a pixel art scene:
 - Start with: "16-bit pixel art, SNES era, visible pixel grid, limited 24-color palette"
 - Subject from photo: ${photo} — becomes a pixel art sprite (blocky features, dot eyes, matching clothing colors)
 - NEW SCENARIO: ${scenario} — render entirely in pixel art
@@ -527,11 +527,7 @@ Output ONLY the prompt.`,
 - Portrait 9:16
 Output ONLY the prompt.`,
 
-  funko_pop: (
-    photo,
-    scenario,
-    vibe
-  ) => `Write a Flux AI prompt (50-70 words) for a Funko Pop figure:
+  vinyl: (photo, scenario, vibe) => `Write a Flux AI prompt (50-70 words) for a Funko Pop figure:
 - Start with: "Product photograph of a Funko Pop vinyl collectible figure"
 - Subject from photo: ${photo} — becomes a FUNKO POP (oversized head, tiny body, dot eyes, glossy vinyl, matching clothing colors)
 - NEW SCENARIO: ${scenario} — setting built as a Funko Pop display diorama
