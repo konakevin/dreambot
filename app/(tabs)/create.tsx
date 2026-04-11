@@ -133,7 +133,7 @@ export default function CreateScreen() {
   const NON_SWAP_MEDIUMS = new Set([
     'lego', 'pixel_art', 'stained_glass', 'embroidery', 'funko_pop',
     'minecraft', 'sack_boy', 'ghibli', 'tim_burton', 'plushie',
-    'disney', '3d_cartoon',
+    'disney', '3d_cartoon', '3d_render', 'claymation', 'felt', 'childrens_book',
   ]);
   const doesFaceSwap =
     config.selectedMedium !== 'surprise_me' && !NON_SWAP_MEDIUMS.has(config.selectedMedium);
