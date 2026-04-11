@@ -81,9 +81,9 @@ const BOT_SEEDS = {
   },
   earthbot: {
     strategies: [
-      { category: 'earthbot_genre', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland' },
-      { category: 'earthbot_genre_dedup', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland', continueDedup: true },
-      { category: 'earthbot_landscape', prompt: 'an impossibly beautiful natural landscape — dramatic lighting, perfect conditions, the most stunning version of earth or an alien world', separateDedup: true },
+      { category: 'earthbot_genre', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland. Sweeping panoramic vista, deep atmospheric depth, golden hour lighting, dramatic cloud formations, god rays, rich saturated colors' },
+      { category: 'earthbot_genre_dedup', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland. Sweeping panoramic vista, deep atmospheric depth, golden hour lighting, dramatic cloud formations, god rays, rich saturated colors', continueDedup: true },
+      { category: 'earthbot_landscape', prompt: 'an impossibly beautiful natural landscape — dramatic cinematic lighting, perfect conditions, the most stunning version of earth or an alien world. Sweeping wide vista framing, deep atmospheric perspective, golden hour or magic hour lighting, dramatic skies, god rays streaming through clouds, rich saturated nature colors', separateDedup: true },
     ],
   },
   arcadebot: {
