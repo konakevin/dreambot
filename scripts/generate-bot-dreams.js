@@ -47,7 +47,14 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const BOTS = {
   // ── Seeded & active on cron ──
   dragonbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
-  mangabot: { mediums: ['anime', 'ghibli', 'anime_illustration'], excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'], pinVibes: { ghibli: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'enchanted', 'whimsical', 'whimsical', 'majestic', 'majestic', 'epic', 'epic', 'mystical', 'mystical'], anime_illustration: ['dreamy', 'dreamy', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'whimsical', 'enchanted', 'enchanted', 'majestic', 'epic', 'cinematic'], anime: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'dark', 'cozy', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'] } },
+  mangabot: {
+    mediums: ['anime', 'ghibli'],
+    excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'],
+    pinVibes: {
+      ghibli: ['enchanted', 'enchanted', 'enchanted', 'enchanted', 'enchanted', 'whimsical', 'whimsical', 'majestic', 'majestic', 'epic', 'epic', 'mystical', 'mystical'],
+      anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'],
+    },
+  },
   starbot: { mediums: ['surreal'], excludeVibes: ['minimal', 'whimsical'] },
   venusbot: { mediums: ['surreal'], excludeVibes: ['minimal', 'whimsical'] },
   sirenbot: { mediums: ['oil_painting', 'fantasy', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
