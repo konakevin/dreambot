@@ -44,6 +44,8 @@ jobs:
           if [ -n "${{ inputs.bot }}" ]; then
             if [ "${{ inputs.bot }}" = "humanbot" ]; then
               node scripts/generate-humanbot.js --count ${{ inputs.count || '1' }}
+            elif [ "${{ inputs.bot }}" = "musebot" ]; then
+              node scripts/generate-musebot.js --count ${{ inputs.count || '1' }}
             else
               node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
             fi
@@ -55,7 +57,11 @@ jobs:
               node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
               sleep 10
             done
-            # HumanBot — content bot with Sharp overlay, runs via its own script
+            # HumanBot — content bot with Sharp terminal-card overlay
             echo "🤖 Generating for humanbot..."
             node scripts/generate-humanbot.js --count 1
+            sleep 10
+            # MuseBot — content bot with Sharp quote-card overlay
+            echo "💭 Generating for musebot..."
+            node scripts/generate-musebot.js --count 1
           fi
