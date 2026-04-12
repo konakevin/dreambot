@@ -116,72 +116,295 @@ const BOT_SEEDS = {
   // ── New bots — base prompts for iteration ──
   coquettebot: {
     strategies: [
-      { category: 'coquettebot_genre', prompt: 'an impossibly pretty and feminine scene dripping with coquette aesthetic — pink, soft, delicate, romantic. Think ballet slippers on marble floors, silk ribbons in the breeze, rose petals on a vanity mirror, pearls catching golden light. Princesses, fairy wings, lace, bows, soft glam. Everything is beautiful and dainty and makes you feel like royalty.' },
-      { category: 'coquettebot_genre_dedup', prompt: 'an impossibly pretty and feminine scene dripping with coquette aesthetic — pink, soft, delicate, romantic. Think ballet slippers on marble floors, silk ribbons in the breeze, rose petals on a vanity mirror, pearls catching golden light. Princesses, fairy wings, lace, bows, soft glam. Everything is beautiful and dainty and makes you feel like royalty.', continueDedup: true },
-      { category: 'coquettebot_landscape', prompt: 'a breathtakingly beautiful soft feminine landscape — cottagecore gardens, cherry blossom paths, pink sunsets, crystal clear lakes reflecting pastel skies. Pure environment, no characters, no people.', separateDedup: true },
+      {
+        category: 'coquettebot_creatures', count: 20,
+        prompt: 'the MOST ADORABLE thing you have ever seen — a tiny cute creature in a soft pastel setting that makes girls absolutely LOSE THEIR MINDS with cuteness. Baby bunnies in teacups with flower crowns, kittens sleeping in rose petals, tiny fantasy dragons with HUGE sparkly eyes curled in silk ribbons, crystal foxes on pink clouds, fairy kittens with butterfly wings, hedgehogs in tiny knit sweaters, baby deer with butterflies on their nose, cloud puppies, iridescent baby birds, tiny unicorn foals. Make up ADORABLE creatures that dont exist — fantasy pets with big dewy eyes. Every creature must have BIG EYES. Every setting must be SOFT PASTEL PINK. The image should make someone literally say "OH MY GOD" out loud.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the creature and the setting. Comma separated. Example: bunny, teacup',
+      },
+      {
+        category: 'coquettebot_scenes',
+        prompt: 'the prettiest most adorable cottagecore/fairy/princess scene that girls want to LIVE IN — a fairy door in a mossy tree with tiny lanterns and pink mushrooms, a picnic blanket with strawberries and pink macarons and wildflowers, a pink velvet bedroom with canopy bed and fairy lights and stuffed animals, a ballet studio with pink tulle and mirrors, a tiny Parisian café with pink awning and pastries, a bookshop with climbing roses and window seat and blankets. Everything PASTEL, everything SOFT, everything makes you want to climb inside the screen.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the main element and the setting. Comma separated. Example: macarons, picnic',
+      },
+      {
+        category: 'coquettebot_nature',
+        prompt: 'the GIRLIEST nature scene possible — nature but make it PINK. Cherry blossom paths with petals falling like pink snow, fields of pink peonies stretching forever, pastel sunsets over still water with a single white bunny, a garden path lined with roses and butterflies everywhere, lavender fields at golden hour with dragonflies, a meadow of wildflowers in pastels with dewdrops catching rainbow light. Soft, dreamy, impossibly pretty.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the flower and the setting. Comma separated. Example: cherry-blossom, path',
+      },
+      {
+        category: 'coquettebot_sweet',
+        prompt: 'food and treats SO PRETTY you could never eat them — a tower of pink macarons with edible flowers on a marble stand, strawberry shortcake with fresh berries and gold leaf, aesthetic latte art with a tiny heart in a pink cup, a candy shop window in all pastels, a tea party setup with fine china and petit fours and roses, flower-decorated cake that looks like a garden. Everything pink, pastel, pristine, precious.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the food and the setting. Comma separated. Example: macarons, marble',
+      },
+      {
+        category: 'coquettebot_fashion',
+        prompt: 'coquette fashion moment that makes girls think "I WANT TO BE HER" — ribbon-laced corsets with pearl details, ballet slippers on marble floors, silk bows in perfectly curled hair, lace gloves holding a single rose, pink velvet everything, a vanity table dripping with perfume bottles and pearls and soft golden light, a girl twirling in a tulle skirt in a flower field. Soft, feminine, aspirational, princess energy. Characters described by outfit and pose only, never named.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the fashion item and the setting. Comma separated. Example: corset, garden',
+      },
     ],
   },
   safaribot: {
     strategies: [
-      { category: 'safaribot_genre', prompt: 'a breathtakingly beautiful animal in a stunning natural setting — the kind of photo that makes you stop scrolling. Majestic, powerful, intimate. Think National Geographic but impossibly perfect. Lions at golden hour, wolves in misty forests, eagles over mountain peaks, whales breaching at sunset, foxes in snow, elephants at watering holes.' },
-      { category: 'safaribot_genre_dedup', prompt: 'a breathtakingly beautiful animal in a stunning natural setting — the kind of photo that makes you stop scrolling. Majestic, powerful, intimate. Think National Geographic but impossibly perfect. Lions at golden hour, wolves in misty forests, eagles over mountain peaks, whales breaching at sunset, foxes in snow, elephants at watering holes.', continueDedup: true },
-      { category: 'safaribot_landscape', prompt: 'a group of animals in a gorgeous natural scene — herds, flocks, packs in their element. The beauty of wildlife at scale. Pure nature, no humans.', separateDedup: true },
+      {
+        category: 'safaribot_portrait', count: 20,
+        prompt: 'an EXTREME closeup of an animal so beautiful it takes your breath away — the detail in a lion eyes at golden hour, the texture of an elephant trunk, the iridescence of a hummingbird feather, the wet nose of a wolf in snow, the pattern of a leopard coat. Every hair, every scale, every feather razor-sharp. National Geographic best-of-the-year × 10. Dramatic lighting. The animal should feel like it is looking directly into your soul. Vary the animal wildly — big cats, birds of prey, wolves, bears, elephants, primates, reptiles, marine life.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the animal and the key detail. Comma separated. Example: lion, golden-eyes',
+      },
+      {
+        category: 'safaribot_landscape',
+        prompt: 'a single majestic animal in a VAST stunning landscape — the animal and the setting are equally breathtaking. A lone wolf on a snowy ridge under aurora, an elephant silhouetted against a blood-orange African sunset, a polar bear on a turquoise iceberg, a deer in a misty bamboo forest at dawn, an eagle soaring over a canyon at golden hour. The landscape should be jaw-dropping on its own — the animal makes it transcendent.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the animal and the landscape. Comma separated. Example: wolf, snowy-ridge',
+      },
+      {
+        category: 'safaribot_action',
+        prompt: 'an animal in DYNAMIC motion — a frozen moment of raw power and beauty. Eagle diving with talons extended, whale breaching against sunset, cheetah mid-sprint with dust flying, dolphins arcing through a wave, a bear catching salmon mid-leap, wolves running through snow. The moment should feel impossible to capture — only AI could freeze this instant with this lighting and this clarity.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the animal and the action. Comma separated. Example: eagle, diving',
+      },
+      {
+        category: 'safaribot_tender',
+        prompt: 'an intimate, emotional animal moment — a mother and cub nuzzling, two birds touching beaks, a fox curled sleeping in autumn leaves, a gorilla cradling its baby, an otter floating on its back holding hands with its partner, a deer and fawn in morning mist. The image should make you FEEL something — tenderness, warmth, the beauty of connection in the animal world.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the animal and the emotional moment. Comma separated. Example: otters, holding-hands',
+      },
+      {
+        category: 'safaribot_underwater',
+        prompt: 'the alien beauty of underwater life — coral reefs exploding with color, a whale shark gliding through sunbeams, sea turtles in crystal clear water, jellyfish glowing in the deep, manta rays in formation, an octopus on a vibrant reef. The ocean rendered with impossible clarity and beauty — every scale, every tentacle, every coral polyp. Light shafts piercing blue water.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the creature and the ocean setting. Comma separated. Example: jellyfish, deep-blue',
+      },
     ],
   },
   glambot: {
     strategies: [
-      { category: 'glambot_genre', prompt: 'a stunning high fashion editorial shot — the kind of image you see in Vogue or on a runway. Exotic beauty, bold makeup, dramatic lighting, attitude. Tattoos, piercings, wild hair, statement accessories. The model is fierce, confident, untouchable. Fashion meets fine art. Vary everything: ethnicity, body type, style, setting.' },
-      { category: 'glambot_genre_dedup', prompt: 'a stunning high fashion editorial shot — the kind of image you see in Vogue or on a runway. Exotic beauty, bold makeup, dramatic lighting, attitude. Tattoos, piercings, wild hair, statement accessories. The model is fierce, confident, untouchable. Fashion meets fine art. Vary everything: ethnicity, body type, style, setting.', continueDedup: true, extractPrompt: 'From this scene give THREE words: the style/outfit, the pose, and the setting. Comma separated. Example: avant-garde gown, strutting, rooftop' },
-      { category: 'glambot_beauty', prompt: 'a close-up beauty shot of an extraordinarily striking face — bold artistic makeup, dramatic eyes, perfect skin, statement jewelry or face art. Editorial beauty photography that belongs on a magazine cover. Vary everything: ethnicity, skin tone, makeup style, hair.', separateDedup: true, extractPrompt: 'From this scene give THREE words: the ethnicity, the makeup style, and the unique feature. Comma separated. Example: korean, graphic eyeliner, gold leaf' },
+      {
+        category: 'glambot_makeup', count: 20,
+        prompt: 'an INSANE creative makeup look that makes girls screenshot and try to recreate — graphic liner art in impossible colors, jewel-toned smoky eyes with crystal accents, bold lip art, holographic highlights that catch light, body glitter, editorial color-blocking, face gems arranged like constellations, metallic eye looks, ombre lips. Close-up face shot where the MAKEUP is the art. This should look like the viral makeup looks that get 10M views. Vary ethnicity wildly. Characters described by features only, never named.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give THREE words: the skin tone, the makeup technique, and the accent detail. Comma separated. Example: deep-brown, graphic-liner, crystal-tears',
+      },
+      {
+        category: 'glambot_fashion', count: 20,
+        prompt: 'a SLEEK, BEAUTIFUL, FUN, EXPRESSIVE fashion moment — the kind of outfit that makes girls think "I NEED THAT." Statement pieces, unexpected styling, bold colors and texture mixing, street-meets-editorial energy. Not runway-stiff — alive, moving, someone you want to BE. Confident poses, killer attitude, clothes that are a MOOD. Vary everything: body type, ethnicity, style (streetwear, couture, Y2K, minimalist, maximalist, avant-garde). Characters described by outfit and vibe only, never named.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give THREE words: the style, the key garment, and the setting. Comma separated. Example: streetwear, oversized-blazer, neon-alley',
+      },
+      {
+        category: 'glambot_beauty',
+        prompt: 'a JAW-DROPPING beauty portrait — the face IS the art. Perfect glowing skin you can almost feel, dramatic eyes that pierce through the screen, bold features, hair that has its own gravity. Magazine cover energy but with PERSONALITY and edge. Diverse — every skin tone, every style, every vibe. The kind of image where you zoom in on the SKIN and think "how is that possible." Vary everything wildly. Characters described by features only, never named.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give THREE words: the skin tone, the eye look, and the hair style. Comma separated. Example: dark-mahogany, amber-smoky, braided-crown',
+      },
+      {
+        category: 'glambot_wild',
+        prompt: 'Met Gala meets AI — the absolutely CRAZY fashion/beauty that could only exist through artificial intelligence. Sculptural garments that defy physics, impossible accessories made of light or water or flowers, makeup that becomes architecture on the face, hair that becomes living art, outfits made of butterflies or crystals or smoke. Fashion-as-spectacle. The "HOW is she wearing that" moments. Still gorgeous — never ugly-weird, always beautiful-impossible. Characters described by outfit only, never named.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give THREE words: the impossible material, the garment type, and the setting. Comma separated. Example: living-butterflies, gown, crystal-ballroom',
+      },
     ],
   },
   steambot: {
     strategies: [
-      { category: 'steambot_genre', prompt: 'a breathtakingly detailed steampunk scene — brass and copper machinery, impossible clockwork contraptions, Victorian elegance meets industrial revolution. Airships over fog-shrouded cities, inventors in workshops full of gears, steam-powered automatons, ornate mechanical devices. From worlds like BioShock Infinite, Mortal Engines, Hugo, Wild Wild West.' },
-      { category: 'steambot_genre_dedup', prompt: 'a breathtakingly detailed steampunk scene — brass and copper machinery, impossible clockwork contraptions, Victorian elegance meets industrial revolution. Airships over fog-shrouded cities, inventors in workshops full of gears, steam-powered automatons, ornate mechanical devices. From worlds like BioShock Infinite, Mortal Engines, Hugo, Wild Wild West.', continueDedup: true },
-      { category: 'steambot_landscape', prompt: 'a stunning steampunk cityscape or landscape — brass spires, steam vents, clockwork bridges, airship docks, Victorian architecture with impossible mechanical additions. Pure environment, no characters.', separateDedup: true },
+      {
+        category: 'steambot_scene',
+        prompt: 'a breathtakingly detailed steampunk scene that makes you want to LIVE in this world — brass and copper machinery, impossible clockwork contraptions, Victorian elegance meets industrial revolution. Airships docking at fog-shrouded towers, inventors in workshops overflowing with gears, steam-powered automatons serving tea, ornate mechanical birds in brass cages. From worlds like BioShock Infinite, Mortal Engines, Hugo, Howls Moving Castle. Every rivet, every gear, every steam wisp rendered with obsessive detail.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the main machine/object and the setting. Comma separated. Example: airship, clocktower',
+      },
+      { category: 'steambot_scene_dedup', prompt: 'a breathtakingly detailed steampunk scene — brass machinery, clockwork contraptions, Victorian elegance meets industrial revolution. Airships, workshops, automatons, mechanical marvels. Every rivet and gear rendered with obsessive detail. BioShock Infinite, Mortal Engines, Howls Moving Castle energy.', continueDedup: true, extractPrompt: 'From this scene give TWO words: the main machine/object and the setting. Comma separated. Example: automaton, workshop' },
+      {
+        category: 'steambot_landscape',
+        prompt: 'a VAST steampunk cityscape or landscape that takes your breath away — brass spires piercing fog, steam vents creating clouds between clockwork bridges, airship docks bustling overhead, Victorian architecture with impossible mechanical additions — entire buildings that are machines, clock faces the size of cathedrals, copper domes with spinning gyroscopes. Pure environment at MASSIVE scale. Golden hour or foggy dawn.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the main structure and the atmosphere. Comma separated. Example: clocktower, fog',
+      },
+      {
+        category: 'steambot_machine',
+        prompt: 'a BEAUTIFUL steampunk machine rendered in loving closeup detail — an ornate clockwork heart with spinning gears, a brass telescope with impossible lenses, a steam-powered music box with dancing automatons, an orrery of spinning planets, a mechanical flower that opens and closes. The machine itself is the art — every gear, every spring, every polished surface. Dramatic warm lighting on copper and brass.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the machine type and the material. Comma separated. Example: orrery, brass',
+      },
     ],
   },
   tinybot: {
     strategies: [
-      { category: 'tinybot_genre', prompt: 'an impossibly detailed miniature diorama scene — everything is tiny, like a perfectly crafted model. Tilt-shift photography, shallow depth of field, macro lens feel. Tiny houses, miniature streets, little gardens, small figurines in big worlds. The kind of scene that makes you want to shrink down and explore every tiny detail.' },
-      { category: 'tinybot_genre_dedup', prompt: 'an impossibly detailed miniature diorama scene — everything is tiny, like a perfectly crafted model. Tilt-shift photography, shallow depth of field, macro lens feel. Tiny houses, miniature streets, little gardens, small figurines in big worlds. The kind of scene that makes you want to shrink down and explore every tiny detail.', continueDedup: true },
-      { category: 'tinybot_landscape', prompt: 'a stunning miniature landscape that looks like a handcrafted model — rolling hills, tiny trees, little rivers, perfect lighting. Tilt-shift effect, macro lens, impossibly detailed. Pure environment, no characters.', separateDedup: true },
+      {
+        category: 'tinybot_diorama', count: 20,
+        prompt: 'an impossibly detailed miniature diorama that makes you want to SHRINK DOWN and live inside it — tilt-shift photography, extreme shallow depth of field, macro lens feel. A tiny perfect village with smoke coming from chimneys, a miniature train station with working lights, a dollhouse-scale bakery with tiny pastries in the window, a small garden with individual flowers you can count. Every miniature detail is PERFECT. The kind of scene that makes you stare for five minutes finding new details.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the miniature subject and the setting type. Comma separated. Example: bakery, village',
+      },
+      {
+        category: 'tinybot_landscape',
+        prompt: 'a miniature landscape so perfect it looks handcrafted by a master model-maker — rolling hills with individual tiny trees, a little river with a stone bridge, perfectly manicured hedges, soft golden lighting that makes everything glow. Tilt-shift effect, macro lens, impossibly detailed at micro scale. Pure environment — the landscape itself is the marvel. Like looking at a snow globe from inside.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the terrain feature and the season. Comma separated. Example: river-bridge, autumn',
+      },
+      {
+        category: 'tinybot_nature_macro',
+        prompt: 'real nature rendered at MINIATURE SCALE so it looks like a tiny fantasy world — a mushroom that looks like a house with a door, a dewdrop that contains a reflected universe, an acorn cap that looks like a tiny swimming pool, moss that looks like a forest from above, a snail shell that looks like a cathedral. The magic of macro photography where real nature becomes a miniature kingdom.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the natural element and what it resembles. Comma separated. Example: mushroom, house',
+      },
+      {
+        category: 'tinybot_urban',
+        prompt: 'a tiny perfect miniature city or urban scene — a model train running through a miniature downtown, tiny shop fronts with working neon signs, a miniature street market with individual tiny produce, little café tables with microscopic coffee cups. Tilt-shift photography makes real-looking things feel dollhouse-scale. Warm evening lighting, every window glowing.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the urban element and the time of day. Comma separated. Example: café, evening',
+      },
     ],
   },
   hauntbot: {
     strategies: [
-      { category: 'hauntbot_genre', prompt: 'a hauntingly beautiful but deeply unsettling scene — something is wrong but you cant look away. Eerie, creepy, atmospheric horror that is gorgeous to look at. Think The Ring, Midsommar, It Follows, Hereditary, Silent Hill — beautiful cinematography of terrifying things. No gore, no blood, no jump scares. Pure dread and unease wrapped in beauty.' },
-      { category: 'hauntbot_genre_dedup', prompt: 'a hauntingly beautiful but deeply unsettling scene — something is wrong but you cant look away. Eerie, creepy, atmospheric horror that is gorgeous to look at. Think The Ring, Midsommar, It Follows, Hereditary, Silent Hill — beautiful cinematography of terrifying things. No gore, no blood, no jump scares. Pure dread and unease wrapped in beauty.', continueDedup: true },
-      { category: 'hauntbot_landscape', prompt: 'a stunningly beautiful but deeply unsettling landscape — places that feel wrong. Abandoned buildings reclaimed by nature, fog-choked forests, empty playgrounds at twilight, hallways that go on forever. Beautiful but you would never want to be there. No characters, no people, no figures.', separateDedup: true },
+      {
+        category: 'hauntbot_scene', count: 20,
+        prompt: 'a hauntingly beautiful but deeply UNSETTLING scene — something is WRONG but you CANNOT look away. Gorgeous cinematography of terrifying things. A dinner table set for twelve where every chair is empty and the food is untouched. A hallway where all the doors are slightly open. A playground at dusk where the swing is moving with no wind. Think: Midsommar, Hereditary, The Ring, It Follows, Silent Hill — beauty and dread married perfectly. NO gore, NO blood, NO jump scares. Pure atmospheric unease wrapped in stunning visuals.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the creepy element and the setting. Comma separated. Example: empty-swing, playground',
+      },
+      {
+        category: 'hauntbot_landscape',
+        prompt: 'a stunningly beautiful landscape that feels DEEPLY WRONG — a place you would NEVER want to be alone in. A fog-choked forest where trees bend toward you. An empty swimming pool filled with autumn leaves at twilight. A staircase that spirals down into darkness with no bottom. Abandoned buildings where one light is on. Hallways that go on forever with no doors. Roads that lead to nothing. Photographed beautifully — gorgeous lighting, rich colors — but every detail whispers "leave." No characters, no people, no figures.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the wrong element and the location. Comma separated. Example: spiral-stairs, darkness',
+      },
+      {
+        category: 'hauntbot_creature',
+        prompt: 'a REIMAGINED horror creature — a never-before-seen version of a classic monster that is terrifying AND beautiful at the same time. A porcelain-skinned vampire whose veins glow blue beneath translucent skin. A wendigo made of twisted birch branches and antlers with golden eyes. A siren whose beauty is inhuman and wrong. A creature emerging from fog that is almost human but NOT. Beautiful dread — gorgeous to look at, chilling to consider. NO gore, NO blood.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the creature type and the unique feature. Comma separated. Example: wendigo, birch-branches',
+      },
+      {
+        category: 'hauntbot_liminal',
+        prompt: 'a LIMINAL SPACE — a place that exists between places, feels familiar but WRONG. An empty shopping mall at 3am with all the lights on. A pool room with no exit and impossibly calm water. A hotel corridor that repeats forever. A school hallway at midnight. An airport terminal with no people and no planes. Backrooms energy but GORGEOUS — beautiful lighting, rich atmosphere, perfect composition. The uncanny valley of architecture.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the space type and the wrong detail. Comma separated. Example: mall, empty-3am',
+      },
     ],
   },
   bloombot: {
     strategies: [
-      { category: 'bloombot_genre', prompt: 'an overwhelmingly beautiful floral scene — flowers so gorgeous they dont look real. Lush gardens, wild meadows, flower markets, botanical arrangements, blooming cherry trees, fields of lavender, rose gardens after rain. The colors, the light, the detail — every petal is perfect. Think Monet meets National Geographic.' },
-      { category: 'bloombot_genre_dedup', prompt: 'an overwhelmingly beautiful floral scene — flowers so gorgeous they dont look real. Lush gardens, wild meadows, flower markets, botanical arrangements, blooming cherry trees, fields of lavender, rose gardens after rain. The colors, the light, the detail — every petal is perfect. Think Monet meets National Geographic.', continueDedup: true },
-      { category: 'bloombot_landscape', prompt: 'a breathtaking botanical landscape — endless flower fields, garden paths disappearing into bloom, greenhouses dripping with exotic plants, forest floors carpeted in wildflowers. Pure environment, no characters, no people.', separateDedup: true },
+      {
+        category: 'bloombot_landscape',
+        prompt: 'imagine the Garden of Eden times 100 — an absolutely INSANE explosion of flowers across a jaw-dropping landscape. Flowers EVERYWHERE covering every surface, impossibly dense and lush, more blooms than physics allows. Pick a specific flower type AND a specific breathtaking setting (volcanic coastline, glacial valley, ancient ruins, tropical jungle, Hawaiian garden, Mediterranean cliffside, Icelandic black sand, bamboo forest, desert canyon, floating islands). The flower DOMINATES the scene. The setting is stunning. The combination should overwhelm with impossible beauty. This could NEVER exist in reality — only AI could create this.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the flower type and the setting. Comma separated. Example: wisteria, cathedral',
+      },
+      {
+        category: 'bloombot_landscape_dedup',
+        prompt: 'imagine the Garden of Eden times 100 — an absolutely INSANE explosion of flowers across a jaw-dropping landscape. Flowers EVERYWHERE covering every surface, impossibly dense and lush, more blooms than physics allows. Pick a specific flower type AND a specific breathtaking setting (greenhouse, rooftop garden, moonlit grove, underwater cave, abandoned train station, spiral staircase tower, temple ruins, cloud forest, coral reef, glacier). The flower DOMINATES the scene. The setting is stunning. The combination should overwhelm with impossible beauty. This could NEVER exist in reality — only AI could create this.',
+        continueDedup: true,
+        extractPrompt: 'From this scene give TWO words: the flower type and the setting. Comma separated. Example: lotus, cenote',
+      },
+      {
+        category: 'bloombot_portrait',
+        prompt: 'an extreme closeup of a flower that is SO beautiful it doesnt look real — maybe a real flower rendered with impossible detail and physics-defying beauty, or a completely INVENTED botanical specimen from another world (crystal petals, bioluminescent veins, liquid mercury stems, frozen flame petals, nebula-colored stamen). Dramatic lighting — Rembrandt chiaroscuro, golden backlighting through translucent petals, dawn sidelight. Dark or bokeh background. Every vein and dewdrop visible. Fashion-editorial energy for a plant. The viewer should think "I have never seen anything this beautiful."',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the flower type and the lighting style. Comma separated. Example: protea, chiaroscuro',
+      },
+      {
+        category: 'bloombot_surreal',
+        prompt: 'a surreal impossible scene where flowers exist in a context that could ONLY happen through AI — flowers reclaiming an abandoned cathedral, a grand piano in a field completely consumed by roses, flowers growing underwater in a sunken ship, blooming from the surface of the moon, cascading from the strings of a harp, erupting from cracked mirrors, growing from ancient clockwork machinery. Or: a completely INVENTED impossible flower species — crystalline petals, aurora borealis blooms, flowers made of frozen light. The flowers are ALWAYS the hero and ALWAYS jaw-droppingly gorgeous. Beauty first, surrealism second.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the flower type and the surreal element. Comma separated. Example: roses, piano',
+      },
+      {
+        category: 'bloombot_cozy',
+        prompt: 'the PRETTIEST flower setting in an interior space a person could dream of — flowers inside homes, cottagecore scenes, gorgeous vases of flowers in beautiful rooms, the warmest coziest most inviting floral interiors imaginable. Think: a rain-streaked cottage window with a wildflower box bursting with blooms, a massive vase of peonies on a farmhouse table with morning light streaming through linen curtains, a greenhouse with warm golden light and rain on the glass, a cozy reading nook with hanging plants and flower garlands, a tiny Parisian flower shop with buckets spilling onto cobblestones, a claw-foot bathtub filled with floating petals and candles, a bedroom nightstand with roses and soft amber lamp glow, a Victorian conservatory with climbing wisteria and old iron chairs, a sun-drenched kitchen drowning in sunflowers and wildflowers in mason jars. Cottagecore meets botanical paradise. The flowers are EVERYWHERE — impossibly abundant, lush, overflowing. The space is warm, golden, inviting. The prettiest interior flower scene you can possibly imagine.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the flower type and the cozy setting. Comma separated. Example: peonies, kitchen',
+      },
     ],
   },
   inkbot: {
     strategies: [
-      { category: 'inkbot_genre', prompt: 'a stunning piece of tattoo art — bold lines, rich detail, the kind of design that makes you want to get it inked immediately. Flash sheet energy, ornamental patterns, neo-traditional creatures, geometric mandalas, Japanese irezumi dragons, blackwork skulls, fine-line botanicals, sacred geometry. Beautiful enough to hang on a wall.' },
-      { category: 'inkbot_genre_dedup', prompt: 'a stunning piece of tattoo art — bold lines, rich detail, the kind of design that makes you want to get it inked immediately. Flash sheet energy, ornamental patterns, neo-traditional creatures, geometric mandalas, Japanese irezumi dragons, blackwork skulls, fine-line botanicals, sacred geometry. Beautiful enough to hang on a wall.', continueDedup: true },
-      { category: 'inkbot_bodied', prompt: 'a close-up of incredible tattoo art ON skin — you can see the skin texture, the ink saturation, the placement on the body. Arm sleeves, back pieces, hand tattoos, chest pieces, leg sleeves. The artistry of tattoo as fine art on the human canvas.', separateDedup: true },
+      {
+        category: 'inkbot_flash', count: 20,
+        prompt: 'a STUNNING piece of standalone tattoo art on a clean background — the kind of design that makes someone immediately want it on their body. Bold confident lines, rich saturated ink, perfect symmetry where needed, organic flow where needed. Styles to rotate through: neo-traditional (bold outlines, limited palette, roses/eagles/daggers), Japanese irezumi (dragons, koi, waves, cherry blossoms), fine-line botanical (delicate flowers, leaves, vines), blackwork (heavy black, geometric, sacred geometry, mandala), ornamental (filigree, dotwork, lace patterns), American traditional (anchors, swallows, hearts), dark art (skulls, moths, snakes, occult symbols). Each piece should be gallery-quality — beautiful enough to hang on a wall as art.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the tattoo style and the main subject. Comma separated. Example: irezumi, dragon',
+      },
+      {
+        category: 'inkbot_bodied',
+        prompt: 'incredible tattoo art ON SKIN — you can see the skin texture, the ink saturation, the placement on the body. The human body as canvas. Arm sleeves with intricate interconnected designs, back pieces that tell a story, hand tattoos with fine detail, chest pieces that use the body contours, leg sleeves that flow with the muscle. Dramatic lighting that shows the ink AND the skin. The artistry of tattoo as fine art on the human body. Vary skin tones widely. Characters described by body part and tattoo only.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the body placement and the tattoo subject. Comma separated. Example: full-sleeve, mythology',
+      },
+      {
+        category: 'inkbot_botanical',
+        prompt: 'FINE-LINE botanical tattoo art — the most delicate, detailed, beautiful floral and nature tattoo designs. Single stems, wild bouquets, vines, ferns, mushrooms, insects on flowers. Hair-thin lines, subtle shading, negative space. The prettiest fine-line tattoo work you can imagine — the kind that makes people DM the artist asking "who did this?" Clean background or on skin.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the botanical subject and the style detail. Comma separated. Example: peony, fine-line',
+      },
+      {
+        category: 'inkbot_dark',
+        prompt: 'DARK BLACKWORK tattoo art — heavy black ink, dramatic contrast, gothic energy. Sacred geometry mandalas, occult symbols, moth/skull/serpent motifs, ornamental patterns that could be mistaken for ironwork, dotwork that creates photorealistic depth in pure black. Impressive technical execution — the kind of blackwork that makes other tattoo artists jealous. Clean background.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the dark motif and the technique. Comma separated. Example: skull-mandala, dotwork',
+      },
     ],
   },
   tripbot: {
     strategies: [
-      { category: 'tripbot_genre', prompt: 'a mind-melting psychedelic vision — impossible colors, fractal geometry, reality dissolving into patterns. DMT machine elves, ayahuasca visions, kaleidoscope worlds, melting landscapes, cosmic consciousness expanding into infinity. Think Alex Grey, Android Jones, visionary art. Beautiful, overwhelming, transcendent.' },
-      { category: 'tripbot_genre_dedup', prompt: 'a mind-melting psychedelic vision — impossible colors, fractal geometry, reality dissolving into patterns. DMT machine elves, ayahuasca visions, kaleidoscope worlds, melting landscapes, cosmic consciousness expanding into infinity. Think Alex Grey, Android Jones, visionary art. Beautiful, overwhelming, transcendent.', continueDedup: true },
-      { category: 'tripbot_landscape', prompt: 'a psychedelic landscape where reality has completely dissolved — fractal mountains, liquid skies, impossible geometry stretching to infinity, bioluminescent everything. Pure visual overload, no characters, no people.', separateDedup: true },
+      {
+        category: 'tripbot_vision', count: 20,
+        prompt: 'a MIND-MELTING psychedelic vision that overwhelms every sense — impossible colors that vibrate against each other, fractal geometry spiraling into infinity, reality dissolving into sacred patterns. DMT machine elves in crystalline palaces, ayahuasca serpent visions in cosmic jungles, kaleidoscope tunnels opening into new dimensions, melting landscapes where physics has given up. Think: Alex Grey, Android Jones, visionary art. Beautiful, overwhelming, transcendent — the most psychedelic image you can possibly generate.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the psychedelic element and the pattern type. Comma separated. Example: machine-elves, fractal',
+      },
+      {
+        category: 'tripbot_landscape',
+        prompt: 'a psychedelic landscape where REALITY HAS COMPLETELY DISSOLVED — fractal mountains that repeat infinitely, liquid mercury skies with aurora-colored clouds, bioluminescent forests where every leaf is a different impossible color, oceans of light, deserts made of crystal, skies full of geometric eyes. Pure visual overload — every inch of the frame is saturated with pattern and color and impossibility. No characters, no people — just a world that has gone fully psychedelic.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the terrain type and the psychedelic effect. Comma separated. Example: mountains, fractal-repeat',
+      },
+      {
+        category: 'tripbot_portal',
+        prompt: 'a psychedelic PORTAL, TUNNEL, or WORMHOLE — the experience of going THROUGH something into another dimension. Spiraling geometric tunnels of light and color, doorways opening into impossible spaces, cosmic wormholes lined with sacred geometry, stairways dissolving into fractal infinity. The journey itself — moving through layers of reality. The viewer should feel like they are being pulled INTO the image.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the portal shape and the destination. Comma separated. Example: spiral-tunnel, crystal-dimension',
+      },
+      {
+        category: 'tripbot_sacred',
+        prompt: 'SACRED GEOMETRY and VISIONARY ART — the mathematics of consciousness made visible. Perfect mandalas that contain galaxies, cosmic eyes surrounded by geometric patterns, the Flower of Life rendered in impossible neon colors, metatrons cube in a cosmic void, Sri Yantra radiating light, Fibonacci spirals in bioluminescent forms. The intersection of math and mysticism — precise, symmetrical, transcendent, and overwhelmingly beautiful.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the sacred pattern and the cosmic element. Comma separated. Example: flower-of-life, nebula',
+      },
     ],
   },
   titanbot: {
     strategies: [
-      { category: 'titanbot_genre', prompt: 'an awe-inspiring mythological scene — gods, titans, legendary creatures from the great mythologies of the world. Greek gods on Mount Olympus, Norse warriors in Valhalla, Egyptian deities in golden temples, Hindu gods in cosmic battles, Celtic druids in ancient forests, Japanese kami in sacred shrines. Epic scale, divine power, ancient majesty.' },
-      { category: 'titanbot_genre_dedup', prompt: 'an awe-inspiring mythological scene — gods, titans, legendary creatures from the great mythologies of the world. Greek gods on Mount Olympus, Norse warriors in Valhalla, Egyptian deities in golden temples, Hindu gods in cosmic battles, Celtic druids in ancient forests, Japanese kami in sacred shrines. Epic scale, divine power, ancient majesty.', continueDedup: true },
-      { category: 'titanbot_landscape', prompt: 'a legendary mythological landscape — Mount Olympus piercing the clouds, the rainbow bridge Bifrost, the Egyptian underworld, Avalon shrouded in mist, the gardens of Babylon. Sacred places where gods walked. Pure environment, no characters.', separateDedup: true },
+      {
+        category: 'titanbot_deity', count: 20,
+        prompt: 'a GOD or TITAN in the moment of their divine power — NOT a static portrait but a MOMENT. Zeus mid-thunderbolt with the sky splitting, Anubis weighing a soul with golden scales, Odin on Sleipnir crossing the Rainbow Bridge, Shiva mid-dance destroying a world, Athena emerging from Zeus head, Thor calling Mjolnir through a storm, Amaterasu stepping from a cave to light the world. Draw from ALL mythologies: Greek, Norse, Egyptian, Hindu, Celtic, Japanese, Mesopotamian, Aztec, Polynesian, African. Epic scale, divine power, the moment where myth becomes real. Characters described by role and action, never by specific appearance details.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the deity and the divine action. Comma separated. Example: zeus, thunderbolt',
+      },
+      {
+        category: 'titanbot_landscape',
+        prompt: 'a LEGENDARY mythological landscape — the sacred places where gods walked, rendered with jaw-dropping beauty. Mount Olympus piercing golden clouds, Valhalla great hall with infinite warriors feasting, the Egyptian underworld river of stars, Avalon shrouded in eternal mist, the Gardens of Babylon hanging impossibly over desert, Asgard rainbow bridge spanning the cosmos, the Japanese spirit realm where kami dwell. Pure environment — no characters, just the PLACE itself radiating divine energy.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the mythological place and the mythology. Comma separated. Example: valhalla, norse',
+      },
+      {
+        category: 'titanbot_battle',
+        prompt: 'a LEGENDARY mythological battle of cosmic scale — Ragnarok with gods and giants clashing as the world burns, the Titanomachy with Zeus overthrowing Kronos, Rama vs Ravana with divine weapons splitting the sky, Beowulf vs the Dragon, Perseus vs Medusa, the War of Troy at its most explosive. EPIC SCALE — armies of gods, cosmic destruction, divine weapons, the fate of worlds at stake. Beautiful and terrifying at once.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the battle and the mythology. Comma separated. Example: ragnarok, norse',
+      },
+      {
+        category: 'titanbot_creature',
+        prompt: 'a mythological CREATURE reimagined as something NEVER seen before — a Phoenix reborn in an explosion of impossible colors, a Hydra with heads of different elements (fire, ice, lightning, shadow), Fenrir the wolf so large it swallows the horizon, a Thunderbird creating a storm with each wingbeat, Quetzalcoatl as a feathered serpent made of living jade and turquoise, a Sphinx with galaxy eyes. Classic creatures but rendered in jaw-dropping new ways. The creature should feel ANCIENT and POWERFUL.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the creature and the reimagined feature. Comma separated. Example: phoenix, prismatic-flames',
+      },
     ],
   },
 };

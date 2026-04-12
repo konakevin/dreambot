@@ -71,7 +71,7 @@ const BOTS = {
   steambot: { mediums: ['canvas', 'photography'] },
   tinybot: { mediums: ['photography', 'animation', 'claymation'] },
   hauntbot: { mediums: ['photography', 'canvas', 'gothic'] },
-  bloombot: { mediums: ['watercolor', 'canvas', 'photography'] },
+  bloombot: { mediums: ['photography', 'photography', 'photography', 'canvas', 'watercolor', 'pencil'] },
   inkbot: { mediums: ['comics', 'canvas', 'photography'] },
   tripbot: { mediums: ['canvas', 'comics', 'vaporwave'] },
   titanbot: { mediums: ['canvas', 'photography'] },
