@@ -365,6 +365,7 @@ export type Database = {
           flux_fragment: string;
           is_active: boolean;
           is_character_only: boolean;
+          is_public: boolean;
           is_scene_only: boolean;
           key: string;
           label: string;
@@ -378,6 +379,7 @@ export type Database = {
           flux_fragment: string;
           is_active?: boolean;
           is_character_only?: boolean;
+          is_public?: boolean;
           is_scene_only?: boolean;
           key: string;
           label: string;
@@ -391,6 +393,7 @@ export type Database = {
           flux_fragment?: string;
           is_active?: boolean;
           is_character_only?: boolean;
+          is_public?: boolean;
           is_scene_only?: boolean;
           key?: string;
           label?: string;
