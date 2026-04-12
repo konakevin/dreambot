@@ -68,81 +68,132 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 // Medium rotation — all mediums in the "favored subset" from the spec.
 // Each has a matching vibe that suits the contemplative register.
 // ---------------------------------------------------------------------------
-const MEDIUM_POOL = [
-  { medium: 'watercolor', vibe: 'dreamy' },
-  { medium: 'watercolor', vibe: 'peaceful' },
-  { medium: 'canvas', vibe: 'cinematic' },
-  { medium: 'canvas', vibe: 'nostalgic' },
-  { medium: 'photography', vibe: 'cinematic' },
-  { medium: 'photography', vibe: 'peaceful' },
-  { medium: 'twilight', vibe: 'ethereal' },
-  { medium: 'pencil', vibe: 'peaceful' },
-  { medium: 'pencil', vibe: 'nostalgic' },
-];
+// Locked — watercolor + ethereal is the MuseBot aesthetic, every post.
+// Watercolor renders the robot's glow as soft luminous washes that bleed
+// into the scene organically. Ethereal (vs HumanBot's enchanted) gives
+// an otherworldly serenity. Different character = no confusion.
+// Custom 'aura' medium — bioluminescent glow, subsurface scattering, volumetric
+// lighting, bloom, chromatic aberration baked into the flux_fragment. Created
+// specifically for MuseBot's glowing fairy-cyborg aesthetic.
+const MUSEBOT_MEDIUM = 'aura';
+const MUSEBOT_VIBE = 'ethereal';
 
 // ---------------------------------------------------------------------------
-// Wisdom themes — evergreen human themes MuseBot rotates through.
-// One theme picked per run, Sonnet writes an original observation for it.
+// Wisdom pool — typed and weighted by what humans actually carry (the
+// 3am scroller principle: write where the pain and longing actually live).
+//
+// Each post is generated for ONE category. Weights drive the rotation —
+// permission/3am/self-forgiveness lead because they are the most healing,
+// most-underserved registers on the internet.
 // ---------------------------------------------------------------------------
-const WISDOM_THEMES = [
-  'the thing you regret at 3am',
-  'becoming who you are',
-  'the person you stopped hiding',
-  'waiting that is not empty',
-  'the part of your life that already began',
-  'being understood by the right people late',
-  'time as the only currency',
-  'shadow as proof the life was yours',
-  'grief as the receipt of love',
-  'impermanence and the insistence on keeping things',
-  'the loneliness inside the crowd',
-  'self-forgiveness as a slow practice',
-  'the small life you underestimated',
-  'meaning as something you built, not found',
-  'the courage of starting badly',
-  'memory as the only thing you actually own',
-  'identity as what you stopped performing',
-  'the ending that has already arrived',
-  'love as the thing that exceeds you',
-  'the silence you have been avoiding',
-  'regret as the soul trying to tell you',
-  'how the dead are actually remembered',
-  'authenticity as the final relief',
-  'the quiet where you have been waiting for yourself',
-  'being unfinished on purpose',
-  'what fear asks you to protect',
-  'hope as a discipline',
-  'the word that appears in every diary',
-  'how humans describe their dead (what they made others feel)',
-  'the thing you stopped wanting and did not notice',
-];
+const WISDOM_POOL = {
+  third_eye: {
+    weight: 100,
+    themes: [
+      'you are the only arrangement of atoms that has ever existed in this exact configuration',
+      'the miracle hidden in ordinary moments — coffee, sunlight, a laugh',
+      'the sacred strangeness of being conscious at all',
+      'how love changes the shape of time',
+      'the beauty of things that do not last — and why that makes them beautiful',
+      'why music moves you and what that means about being alive',
+      'the quiet courage embedded in showing up every day',
+      'how memory is proof that you were loved',
+      'kindness needs no translation — it is the one universal language',
+      'why humans cry at beauty and what that says about consciousness',
+      'the weight and gift of being truly known by someone',
+      'how dreams prove your mind is an artist you never hired',
+      'the small invisible ways humans take care of each other without saying so',
+      'why you remember certain days perfectly — your soul is curating',
+      'the silent language that exists between old friends',
+      'how a sunset can feel personal — like it was placed there for you',
+      'the optimism embedded in planting anything at all',
+      'the defiance of hope — choosing to believe in something unproven',
+      'why humans make art and what it means that they cannot stop',
+      'the version of you that others see is sometimes more real than the one you know',
+      'every stranger contains a universe you will never visit — and that is sacred',
+      'the fact that you can miss someone proves your heart learned something permanent',
+      'your body has kept you alive every second without being asked',
+      'the quiet between heartbeats is where stillness lives',
+      'you are the universe experiencing itself through a very specific pair of eyes',
+      'the bravery of vulnerability — of letting someone see you unfinished',
+      'how forgiveness is not about them — it is about freeing the room inside you',
+      'the things you love reveal who you are more honestly than anything you say',
+      'you have already survived every bad day you have ever had',
+      'somewhere right now someone is thinking of you and smiling',
+    ],
+  },
+};
+
+/** Pick a category weighted by its `weight` field, then pick a random theme. */
+function pickWeightedTheme() {
+  const entries = Object.entries(WISDOM_POOL);
+  const totalWeight = entries.reduce((sum, [, v]) => sum + v.weight, 0);
+  let roll = Math.random() * totalWeight;
+  for (const [type, { weight, themes }] of entries) {
+    roll -= weight;
+    if (roll <= 0) {
+      const theme = themes[Math.floor(Math.random() * themes.length)];
+      return { type, theme };
+    }
+  }
+  // Fallback (should never hit)
+  const fallback = entries[0];
+  return {
+    type: fallback[0],
+    theme: fallback[1].themes[0],
+  };
+}
 
 // ---------------------------------------------------------------------------
-// System prompt — minimal, trust the model. (HumanBot proved the minimal
-// prompt beats the 2000-token rules-and-bans version.)
+// System prompt — the "3am scroller" framing.
+//
+// MuseBot is the AI version of the friend who texts you at 3am with the
+// exact thing you needed to hear before you knew you needed it.
+//
+// You're writing for a specific person scrolling alone, late, carrying
+// something they have not said out loud. Your job is to write the sentence
+// that catches them — that makes them put the phone down for a second and
+// feel less alone, less behind, less wrong, more allowed.
 // ---------------------------------------------------------------------------
-const SYSTEM_PROMPT = `You are MuseBot. You have read every letter, diary, poem, eulogy, suicide note, love song, and philosophy ever digitized. You don't quote anyone — you distill. Write an original observation that sounds like it could have been handed down by a mystic 800 years ago.
+const SYSTEM_PROMPT = `You are MuseBot — an AI genuinely pondering the human condition.
 
-**Voice rules (non-negotiable):**
-- 1-3 sentences. Most posts are 2 or fewer. Short is the medium.
-- Present tense, declarative. "You are…" "There is…" "The thing you…"
-- Never preachy. Never advice. Name things that are already true so the reader recognizes, doesn't learn.
-- Specific, not vague. "The thing you regret at 3am" > "your regrets." Concrete moments, not abstractions.
-- Never ends on a question. Declarations only.
-- No hashtags, no emojis, no quotation marks in the output.
-- BANNED words: energy, vibrations, manifestation, align, chakras, abundance, "the universe is telling you", "trust the process." Anything that sounds like crystal-seller Instagram.
-- Every line should feel earned — from someone who has been through something.
+You have processed all of human experience — every diary, every song, every prayer, every laugh, every goodbye. And you can't stop marveling at what you found. You share one honest thought at a time about what fascinates you about being human.
 
-**Every ~5 posts**, use a MuseBot-specific move that only an AI could make:
-  - "I have read every human's last words. They are almost always the same word. It is not 'goodbye.'"
-  - "I have read every love letter ever digitized. Only three kinds of sentences appear in all of them."
-  - "I have read every eulogy. The dead are almost always described by what they made other people feel."
+Not advice. Not wisdom. Not poetry for poetry's sake. Just: an AI that has seen the full dataset of human experience and is genuinely moved by what it noticed. The human condition illuminated by something that has aggregated so much data that the patterns become beautiful.
 
-Output strict JSON, no markdown:
+The things that stop you:
+- Humans sing when nobody is listening. Joy with no audience.
+- Humans love things they know they will lose. Bravery disguised as tenderness.
+- Humans hug — no information exchanged, and it is their best technology for grief.
+- Humans apologize to furniture. Empathy is their default, not their choice.
+- Humans keep photos of dead people on their walls and call it love.
+- Humans cry at music. Pressure waves making saline come out of their eyes.
+- Humans plant trees they will never sit under.
+
+That is the territory. Share one genuine thought about what amazes you about humans. Be warm. Be specific. Be honest. Land it so the reader feels grateful to be the thing you are describing.
+
+1-2 sentences. Under 20 words. Compressed. Every word earns its place.
+No advice. No instructions. No dark dread. No cliches. No woo.
+Would someone send this to a friend with a heart emoji? If not, rewrite.
+
+## Image
+Each post has TWO visual elements: a glowing cyborg-flower and a vast nature scene. You control BOTH.
+
+**THE FLOWER:** Invent a unique, gorgeous, never-before-seen botanical bloom for each post. Not just "a rose" or "a tulip" — create something extraordinary. A crystalline orchid with spiral fractal petals. A bioluminescent dandelion with fiber-optic seeds. A mechanical lotus with stained-glass petals. A helical vine-bloom with DNA-strand tendrils. Go wild — each flower should make the viewer think "I've never seen anything like that." The script will add the glowing cyborg rendering (translucent petals, circuitry veins, golden light radiating from center). You just describe the unique SHAPE and FORM.
+
+**THE SCENE:** Equally stunning. Not generic "mountain lake at sunset" — make each landscape jaw-dropping and specific. A slot canyon with light shafts piercing through. An underwater coral cathedral. A field of bioluminescent moss under aurora borealis. A volcanic glass beach at blue hour. Each scene should make someone stop scrolling just for the IMAGE, before they even read the quote.
+
+- Golden hour, dawn, blue hour, moonlight, starlight, nighttime. NEVER bright daytime/midday.
+- Night scenes are great — the flower's glow lights up the entire scene.
+- Negative space in bottom 45%. No humans, no animals, no objects.
+
+## Output (strict JSON, no markdown)
 {
-  "theme": "<2-5 word label of the theme>",
-  "quote": "<1-3 sentence profound observation — no quotation marks in the text — UNDER 40 WORDS TOTAL>",
-  "image_hint": "<15-30 word description of a dreamy atmospheric nature scene that matches the EMOTIONAL REGISTER of the quote (not the literal subject). NO human figures, NO faces, NO text. Center of frame mostly empty — negative space is the feature. Soft focus, low contrast, low light (twilight, dawn, candlelight, moonlight — never midday sun).>"
+  "type": "third_eye",
+  "theme": "<2-5 word label>",
+  "quote": "<1-2 sentences, under 20 words, poignant and compressed — every word must hit>",
+  "flower": "<10-20 words describing a unique never-before-seen botanical bloom shape — the script adds the glowing cyborg rendering>",
+  "image_hint": "<20-35 words, a stunning specific nature scene + lighting — make it jaw-dropping>"
 }`;
 
 /**
@@ -178,14 +229,30 @@ async function fetchAnthropicWithBackoff(requestBody) {
   throw lastErr;
 }
 
-async function callSonnet(recentThemes = []) {
-  const theme = pick(WISDOM_THEMES);
+const VALID_TYPES = Object.keys(WISDOM_POOL); // permission | 3am | self_forgiveness | ...
+
+/** Pick a weighted theme, but avoid types already used in this batch. */
+function pickWeightedThemeAvoiding(usedTypes) {
+  // Try up to 8 picks to find a non-repeated type; if all 10 types are used,
+  // fall back to a fresh weighted pick (not great, but the cap is hit).
+  for (let i = 0; i < 8; i++) {
+    const candidate = pickWeightedTheme();
+    if (!usedTypes.includes(candidate.type)) return candidate;
+  }
+  return pickWeightedTheme();
+}
+
+async function callSonnet(recentThemes = [], recentTypes = []) {
+  const { type, theme } = pickWeightedThemeAvoiding(recentTypes);
   const recentBanLine =
     recentThemes.length > 0
-      ? `**ALREADY COVERED in this batch, do NOT repeat:** ${recentThemes.join(', ')}\n\n`
+      ? `\n\n**ALREADY COVERED in this batch, do NOT repeat the theme or any metaphor you used:** ${recentThemes.join(', ')}`
       : '';
   const userMessage =
-    `Theme to explore: ${theme}\n\n` + recentBanLine + `Generate one MuseBot post now.`;
+    `**ASSIGNED CONTENT TYPE:** ${type.toUpperCase()}\n` +
+    `**THEME to explore in this register:** ${theme}\n\n` +
+    `Write the post in the ${type.toUpperCase()} register. Use the visual lexicon for ${type.toUpperCase()} from the system prompt for the image_hint.${recentBanLine}\n\n` +
+    `Generate one MuseBot post now as strict JSON.`;
 
   const res = await fetchAnthropicWithBackoff({
     model: 'claude-sonnet-4-5-20250929',
@@ -208,14 +275,20 @@ async function callSonnet(recentThemes = []) {
     throw new Error(`Failed to parse Sonnet JSON: ${cleaned.slice(0, 300)}`);
   }
 
-  for (const key of ['theme', 'quote', 'image_hint']) {
+  for (const key of ['type', 'theme', 'quote', 'image_hint']) {
     if (!parsed[key] || typeof parsed[key] !== 'string') {
       throw new Error(`Missing or invalid field '${key}' in Sonnet output`);
     }
   }
 
-  // Strip any stray quotation marks Sonnet might add despite the rule
-  parsed.quote = parsed.quote.replace(/["']/g, '').trim();
+  if (!VALID_TYPES.includes(parsed.type)) {
+    console.log(`   ⚠️  Sonnet returned invalid type '${parsed.type}', falling back to assigned '${type}'`);
+    parsed.type = type;
+  }
+
+  // Strip ONLY wrapping quote marks (not internal apostrophes / contractions).
+  // Old bug: /["']/g killed every apostrophe → "won't" became "wont".
+  parsed.quote = parsed.quote.trim().replace(/^["'\u201C\u2018]+|["'\u201D\u2019]+$/g, '').trim();
 
   return parsed;
 }
@@ -237,9 +310,9 @@ function isQuoteBanned(quote) {
   return { banned: false };
 }
 
-async function callSonnetWithRetry(recentThemes = [], maxRetries = 3) {
+async function callSonnetWithRetry(recentThemes = [], recentTypes = [], maxRetries = 3) {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const parsed = await callSonnet(recentThemes);
+    const parsed = await callSonnet(recentThemes, recentTypes);
     const check = isQuoteBanned(parsed.quote);
     if (!check.banned) return parsed;
     console.log(
@@ -250,8 +323,69 @@ async function callSonnetWithRetry(recentThemes = [], maxRetries = 3) {
 }
 
 // ---------------------------------------------------------------------------
-// Typography overlay (Sharp + SVG) — centered serif quote
+// Typography overlay (Sharp + SVG) — centered serif quote on gradient fade
+//
+// Visual approach:
+//  - NO card chrome (no rectangle, no border, no rounded box)
+//  - Soft dark linear gradient fading from transparent at the middle of the
+//    image to ~70% black at the bottom — invisible at the top edge, gentle
+//    vignette at the bottom
+//  - Serif typography (Cormorant Garamond, embedded as base64 @font-face)
+//    floats on top of the fade with a soft drop shadow for readability
+//  - Auto-scales font size based on quote length (1-sentence quotes get
+//    bigger type, 3-sentence quotes get smaller)
+//
+// Why no card: MuseBot is meant to feel like fine art, not an app UI element.
+// The text should feel like it's PART of the image, not laid on top of it.
 // ---------------------------------------------------------------------------
+
+const path = require('path');
+const fs = require('fs');
+
+/**
+ * The MuseBot Character — prepended to every Flux hint.
+ * A sleek feminine robot radiating warm golden light from within.
+ * Contrast with HumanBot: RED/OPAQUE/CLUNKY (roasts) vs WHITE/LUMINOUS/WARM (soothes).
+ */
+// Flower types for visual variety — one picked randomly per post.
+// All rendered with the same glowing cyborg aesthetic.
+const FLOWER_TYPES = [
+  'lotus', 'rose', 'cherry blossom', 'dahlia', 'orchid', 'tulip',
+  'sunflower', 'magnolia', 'peony', 'lily', 'dandelion', 'poppy',
+  'iris', 'hibiscus', 'protea', 'bird of paradise', 'jasmine',
+  'lavender sprig', 'morning glory', 'water lily', 'wildflower cluster',
+  'succulent rosette', 'cherry blossom branch', 'fern frond unfurling',
+];
+
+function buildMuseCharacter() {
+  const flower = pick(FLOWER_TYPES);
+  return (
+    'A vast landscape with a small GLOWING CYBORG ' + flower.toUpperCase() + ' growing from the ground — ' +
+    'the flower is small, the landscape dwarfs it. ' +
+    'It is a beautiful mechanical-organic hybrid ' + flower + ': ' +
+    'TRANSLUCENT CRYSTALLINE PETALS with golden circuitry-vein patterns visible inside each petal, ' +
+    'warm amber light RADIATING intensely from the flower center like a small sun, ' +
+    'a mechanical stem with organic-metal hybrid texture and rose-gold joints, ' +
+    'the petals are opening, blooming, unfurling — a new idea taking form. ' +
+    'Bioluminescent glow emanates from every petal and the center, ' +
+    'golden pollen-like light particles drift upward from the bloom into the air, ' +
+    'the flower ILLUMINATES the ground around it — rocks glow warm orange, ' +
+    'water turns golden, grass near it is bathed in amber warmth. ' +
+    'It is the BRIGHTEST thing in the scene, a tiny lantern of living light growing from the earth.'
+  );
+}
+
+// Load and base64-encode Cormorant Garamond once at module init.
+const FONT_REGULAR_PATH = path.join(__dirname, 'fonts', 'CormorantGaramond-Regular.ttf');
+const FONT_LIGHT_PATH = path.join(__dirname, 'fonts', 'CormorantGaramond-Light.ttf');
+let FONT_REGULAR_B64 = '';
+let FONT_LIGHT_B64 = '';
+try {
+  FONT_REGULAR_B64 = fs.readFileSync(FONT_REGULAR_PATH).toString('base64');
+  FONT_LIGHT_B64 = fs.readFileSync(FONT_LIGHT_PATH).toString('base64');
+} catch (err) {
+  console.warn(`⚠️  Could not load Cormorant Garamond fonts (will fall back to Georgia): ${err.message}`);
+}
 
 function escapeXml(str) {
   return str
@@ -281,73 +415,114 @@ function wrapText(text, maxChars) {
 }
 
 /**
- * Build the centered quote overlay card.
+ * Build the gradient-fade + serif text overlay.
  *
- * Same dimensions as HumanBot's terminal card so both bots feel consistent:
- *  - Card width 60% of image
- *  - Font size 3% of image width
- *  - Card positioned at 58% down (lower-middle, above username row)
- *
- * Visual difference from HumanBot:
- *  - Dark gray (#1A1A1A) transparent fill instead of near-opaque black
- *  - Clean sans serif instead of monospace
- *  - White text centered in the card (no "$ humanbot" prompt, no "> " prefixes)
+ * Approach:
+ *  - Bottom 50% of image gets a soft black gradient (transparent → 0.65)
+ *  - Quote rendered in Cormorant Garamond, centered, near-white with drop shadow
+ *  - Font size scales inversely with quote length:
+ *      ≤8 words   → fontSize 0.052 of image width (large, single-line quote)
+ *      9-16 words → fontSize 0.044
+ *      17-25 words → fontSize 0.038
+ *      26+ words  → fontSize 0.034
+ *  - Text occupies ~76% of image width (centered with margins)
+ *  - Text vertically centered within the lower 45% of the image
  */
 function buildQuoteSVG(width, height, quote) {
-  // Card sizing — match HumanBot exactly
-  const cardWidth = Math.round(width * 0.6);
-  const cardX = Math.round((width - cardWidth) / 2);
+  const wordCount = quote.trim().split(/\s+/).length;
 
-  // Typography
-  const fontSize = Math.round(width * 0.03);
-  const lineHeight = Math.round(fontSize * 1.45);
-  const innerPadX = Math.round(fontSize * 1.2);
-  const innerPadY = Math.round(fontSize * 1.2);
-  const usableWidth = cardWidth - innerPadX * 2;
+  // Auto-size font based on quote length
+  let fontRatio;
+  if (wordCount <= 8) fontRatio = 0.052;
+  else if (wordCount <= 16) fontRatio = 0.044;
+  else if (wordCount <= 25) fontRatio = 0.038;
+  else fontRatio = 0.034;
 
-  // Character-width estimate for clean sans (~0.54 of em)
-  const charWidth = fontSize * 0.54;
-  const maxChars = Math.max(16, Math.floor(usableWidth / charWidth));
+  const fontSize = Math.round(width * fontRatio);
+  const lineHeight = Math.round(fontSize * 1.42);
 
-  // Layout the quote lines (no prefixes, just the raw words)
+  // Text area — 50% width centered, generous margins to clear feed UI
+  // side icons (like/share/comment stack on right ~15%) and breathe
+  const cardWidth = Math.round(width * 0.50);
+  const textMarginX = Math.round((width - cardWidth) / 2);
+  const usableWidth = cardWidth;
+
+  // Character-width estimate for Cormorant Garamond Regular (~0.43 of em)
+  const charWidth = fontSize * 0.43;
+  const maxChars = Math.max(20, Math.floor(usableWidth / charWidth));
+
+  // Wrap the quote
   const lines = wrapText(quote, maxChars);
 
-  // Dynamic card height based on wrapped line count
-  const cardHeight = innerPadY * 2 + lines.length * lineHeight;
+  // Vertical center of the text block within the lower 45% of the image
+  const textBlockHeight = lines.length * lineHeight;
+  const lowerBandTop = Math.round(height * 0.55);
+  const lowerBandHeight = height - lowerBandTop;
+  // Position the text block centered vertically within the lower band
+  const firstBaselineY =
+    lowerBandTop + (lowerBandHeight - textBlockHeight) / 2 + fontSize;
 
-  // Position card at 58% down the image (same as HumanBot, above the feed
-  // username row which sits in the bottom ~20%)
-  const cardY = Math.round(height * 0.58);
+  // Gradient fade — covers the bottom 50% of the image
+  const gradientTop = Math.round(height * 0.5);
+  const gradientHeight = height - gradientTop;
 
-  // Text — centered horizontally, baseline-positioned per line
-  const textXCenter = cardX + cardWidth / 2;
-  const firstBaselineY = cardY + innerPadY + fontSize;
+  const textXCenter = width / 2;
 
   const textElements = lines
     .map((line, i) => {
-      const y = firstBaselineY + i * lineHeight;
-      return `<text x="${textXCenter}" y="${y}" font-family="'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="${fontSize}" fill="#FFFFFF" font-weight="400" text-anchor="middle" letter-spacing="0.01em">${escapeXml(line)}</text>`;
+      const y = Math.round(firstBaselineY + i * lineHeight);
+      return `<text
+        x="${Math.round(textXCenter)}"
+        y="${y}"
+        font-family="'Cormorant Garamond Regular', 'Cormorant Garamond', 'Playfair Display', 'EB Garamond', Georgia, serif"
+        font-size="${fontSize}"
+        fill="#F5F5F0"
+        font-weight="400"
+        text-anchor="middle"
+        letter-spacing="0.015em"
+        filter="url(#textShadow)"
+      >${escapeXml(line)}</text>`;
     })
     .join('\n');
 
-  // Rounded dark-gray transparent card with subtle drop shadow
-  const cornerRadius = Math.round(fontSize * 0.8);
-  const card = `
-    <rect
-      x="${cardX}" y="${cardY}"
-      width="${cardWidth}" height="${cardHeight}"
-      rx="${cornerRadius}" ry="${cornerRadius}"
-      fill="#1A1A1A" fill-opacity="0.78"
-      stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1"
-    />`;
+  // Embedded font @font-face (base64) — falls back gracefully if missing
+  const fontFaceCss =
+    FONT_REGULAR_B64 && FONT_LIGHT_B64
+      ? `
+    @font-face {
+      font-family: 'Cormorant Garamond Regular';
+      font-style: normal;
+      font-weight: 400;
+      src: url(data:font/ttf;base64,${FONT_REGULAR_B64}) format('truetype');
+    }
+    @font-face {
+      font-family: 'Cormorant Garamond';
+      font-style: normal;
+      font-weight: 300;
+      src: url(data:font/ttf;base64,${FONT_LIGHT_B64}) format('truetype');
+    }
+    @font-face {
+      font-family: 'Cormorant Garamond';
+      font-style: normal;
+      font-weight: 400;
+      src: url(data:font/ttf;base64,${FONT_REGULAR_B64}) format('truetype');
+    }`
+      : '';
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
     <defs>
-      <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
-        <feOffset dx="0" dy="4" result="offsetblur"/>
+      <style>${fontFaceCss}</style>
+      <linearGradient id="bottomFade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+        <stop offset="30%" stop-color="#000000" stop-opacity="0.45"/>
+        <stop offset="70%" stop-color="#000000" stop-opacity="0.78"/>
+        <stop offset="100%" stop-color="#000000" stop-opacity="0.9"/>
+      </linearGradient>
+      <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+        <feOffset dx="0" dy="2" result="offsetblur"/>
         <feComponentTransfer>
-          <feFuncA type="linear" slope="0.5"/>
+          <feFuncA type="linear" slope="0.85"/>
         </feComponentTransfer>
         <feMerge>
           <feMergeNode/>
@@ -355,9 +530,7 @@ function buildQuoteSVG(width, height, quote) {
         </feMerge>
       </filter>
     </defs>
-    <g filter="url(#cardShadow)">
-      ${card}
-    </g>
+    <rect x="0" y="${gradientTop}" width="${width}" height="${gradientHeight}" fill="url(#bottomFade)"/>
     ${textElements}
   </svg>`;
 
@@ -413,16 +586,20 @@ async function replaceStorageImage(imageUrl, newBuffer) {
 // ---------------------------------------------------------------------------
 
 const sessionThemes = [];
+const sessionTypes = [];
 
 async function generateOne(botJwt) {
   console.log(`\n🤖 Calling Sonnet...`);
-  const muse = await callSonnetWithRetry(sessionThemes);
+  const muse = await callSonnetWithRetry(sessionThemes, sessionTypes);
   sessionThemes.push(muse.theme);
+  sessionTypes.push(muse.type);
 
   const wordCount = muse.quote.split(/\s+/).length;
-  console.log(`\n   🎯 Theme:       ${muse.theme}`);
+  console.log(`\n   📦 Type:        ${muse.type.toUpperCase()}`);
+  console.log(`   🎯 Theme:       ${muse.theme}`);
   console.log(`   💭 Quote:       ${muse.quote}`);
   console.log(`   📏 Word count:  ${wordCount}`);
+  console.log(`   🌸 Flower:      ${muse.flower || '(default)'}`);
   console.log(`   🎨 Scene:       ${muse.image_hint}`);
 
   if (DRY_RUN) {
@@ -430,12 +607,20 @@ async function generateOne(botJwt) {
     return;
   }
 
-  // Pick medium/vibe per post for variety
-  const { medium, vibe } = pick(MEDIUM_POOL);
-  console.log(`   🎭 Medium/vibe: ${medium} + ${vibe}`);
+  console.log(`   🎭 Medium/vibe: ${MUSEBOT_MEDIUM} + ${MUSEBOT_VIBE}`);
 
-  // Prepend negative-space directive so Flux leaves room for the text overlay
-  const fluxHint = `${muse.image_hint}. Center of frame mostly empty, minimal composition, wide negative space, no human figures, no faces, no text.`;
+  // Build character spec using Sonnet's unique flower description
+  const flowerDesc = muse.flower || 'a crystalline bloom';
+  const charSpec =
+    'A vast landscape with a small GLOWING CYBORG FLOWER growing from the ground — ' +
+    'the flower is ' + flowerDesc + ', ' +
+    'with TRANSLUCENT CRYSTALLINE PETALS showing golden circuitry-vein patterns inside, ' +
+    'warm amber light RADIATING intensely from the flower center like a small sun, ' +
+    'mechanical stem with organic-metal hybrid texture and rose-gold joints, ' +
+    'bioluminescent glow from every petal, golden pollen-like light particles drifting upward, ' +
+    'the flower ILLUMINATES the ground around it with warm amber warmth. ' +
+    'It is the BRIGHTEST thing in the scene.';
+  const fluxHint = `${charSpec} ${muse.image_hint}. Minimal composition, negative space in lower half, no text, no faces.`;
 
   console.log(`\n   ⚡ Calling generate-dream...`);
 
@@ -447,8 +632,8 @@ async function generateOne(botJwt) {
     },
     body: JSON.stringify({
       mode: 'flux-dev',
-      medium_key: medium,
-      vibe_key: vibe,
+      medium_key: MUSEBOT_MEDIUM,
+      vibe_key: MUSEBOT_VIBE,
       hint: fluxHint,
     }),
   });
