@@ -23,7 +23,6 @@ const RENAMES = [
   { old: 'terra', oldVariants: [], newName: 'earthbot', oldPrefix: 'terra_', newPrefix: 'earthbot_' },
   { old: 'prism', oldVariants: [], newName: 'arcadebot', oldPrefix: 'prism_', newPrefix: 'arcadebot_' },
   { old: 'mochi', oldVariants: [], newName: 'cuddlebot', oldPrefix: 'mochi_', newPrefix: 'cuddlebot_' },
-  { old: 'frida.neon', oldVariants: [], newName: 'popbot', oldPrefix: 'fridaneon_', newPrefix: 'popbot_' },
 ];
 
 // pixelrex merges into arcadebot — rename its templates too

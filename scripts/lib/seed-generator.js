@@ -166,13 +166,6 @@ const BOT_SEEDS = {
       },
     ],
   },
-  popbot: {
-    strategies: [
-      { category: 'popbot_genre', prompt: 'a bold and visually explosive art piece — vibrant maximalist energy from worlds like jazz age glamour, vintage movie posters, comic book splash pages, pop art, art deco architecture' },
-      { category: 'popbot_genre_dedup', prompt: 'a bold and visually explosive art piece — vibrant maximalist energy from worlds like jazz age glamour, vintage movie posters, comic book splash pages, pop art, art deco architecture', continueDedup: true },
-      { category: 'popbot_landscape', prompt: 'a stunning architectural or cityscape scene with bold geometric patterns, dramatic colors, and maximalist energy', separateDedup: true },
-    ],
-  },
   // ── New bots — base prompts for iteration ──
   coquettebot: {
     strategies: [

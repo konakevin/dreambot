@@ -64,7 +64,6 @@ const BOTS = {
   arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics'], excludeVibes: ['ominous', 'ancient', 'cozy', 'peaceful'] },
   toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic'] },
   cuddlebot: { mediums: ['animation', 'claymation', 'storybook'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic', 'ancient'] },
-  popbot: { mediums: ['comics', 'vaporwave'], excludeVibes: ['ominous', 'ancient'] },
   // ── New bots ──
   coquettebot: { mediums: ['coquette', 'fairytale', 'watercolor'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic', 'ancient', 'epic'] },
   animalbot: { mediums: ['photography', 'canvas', 'watercolor'], excludeVibes: ['minimal', 'psychedelic', 'chaos'] },
