@@ -8,7 +8,14 @@
 
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { View, StyleSheet, Dimensions, ActivityIndicator, RefreshControl } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+  RefreshControl,
+  InteractionManager,
+} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -97,13 +104,19 @@ export function FullScreenFeed({
     [containerHeight]
   );
 
-  // Re-snap scroll position when posts change (delete, refetch) or screen regains focus
+  // Re-snap scroll position when posts change (delete, refetch) or screen regains focus.
+  // Uses scrollToIndex (which calls getItemLayout for the exact offset) instead of manual
+  // offset math. Waits for InteractionManager so the navigation transition and onLayout
+  // have both completed — otherwise pageHeight may be stale and the card shows ~100px off.
   useEffect(() => {
     if (isFocused && posts.length > 0) {
-      ref.current?.scrollToOffset({
-        offset: currentIndex.current * pageHeight,
-        animated: false,
+      const handle = InteractionManager.runAfterInteractions(() => {
+        const idx = currentIndex.current;
+        if (idx >= 0 && idx < posts.length) {
+          ref.current?.scrollToIndex({ index: idx, animated: false });
+        }
       });
+      return () => handle.cancel();
     }
   }, [isFocused, posts.length, pageHeight]);
 
