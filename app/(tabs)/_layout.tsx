@@ -37,7 +37,7 @@ export default function TabLayout() {
           style={{ opacity: tabBarOpacity, pointerEvents: hudVisible ? 'auto' : 'none' }}
         >
           {/* Default bottom tab bar from Expo Router */}
-          {/* eslint-disable-next-line @typescript-eslint/no-require-imports */}
+          {}
           {(() => {
             const { BottomTabBar } = require('@react-navigation/bottom-tabs');
             return <BottomTabBar {...props} />;

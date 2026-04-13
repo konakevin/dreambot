@@ -23,6 +23,7 @@ import {
   Platform,
   Modal,
   ActionSheetIOS,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
@@ -30,7 +31,6 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { Linking } from 'react-native';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
 import { vs } from '@/lib/responsive';

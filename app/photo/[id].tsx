@@ -98,7 +98,7 @@ export default function PhotoDetailScreen() {
       <ReAnimated.View style={[s.backButton, overlayStyle]}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
           <View style={s.backCircle}>
-            <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
+            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </View>
         </TouchableOpacity>
       </ReAnimated.View>

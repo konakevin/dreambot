@@ -6,9 +6,8 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { ScreenLayout } from '@/components/ScreenLayout';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { type PurchasesPackage } from 'react-native-purchases';
@@ -108,15 +107,7 @@ export default function SparkleStoreScreen() {
   }
 
   return (
-    <SafeAreaView style={s.root}>
-      <View style={s.topBar}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text style={s.title}>Get Sparkles</Text>
-        <View style={{ width: 28 }} />
-      </View>
-
+    <ScreenLayout header="back" title="Get Sparkles">
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         {/* Balance hero */}
         <LinearGradient
@@ -169,7 +160,7 @@ export default function SparkleStoreScreen() {
           <Text style={s.restoreText}>{restoring ? 'Restoring...' : 'Restore Purchases'}</Text>
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }
 

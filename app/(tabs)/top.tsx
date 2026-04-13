@@ -21,6 +21,7 @@ import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors, ANIM } from '@/constants/theme';
+import * as nav from '@/lib/navigate';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OverlayPill } from '@/components/OverlayPill';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -194,6 +195,13 @@ export default function ExploreScreen() {
           style={[s.topOverlay, { paddingTop: insets.top + 4 }]}
           pointerEvents="box-none"
         >
+          {/* Search button — top right, matching Home tab */}
+          <View style={s.searchRow}>
+            <TouchableOpacity onPress={() => nav.push('/search')} hitSlop={12} activeOpacity={0.7}>
+              <Ionicons name="search" size={22} color="rgba(255,255,255,0.8)" />
+            </TouchableOpacity>
+          </View>
+
           {/* Medium row */}
           <View style={s.filterRow}>
             <View style={s.filterIcon}>
@@ -268,6 +276,12 @@ const s = StyleSheet.create({
   emptySubtitle: { color: colors.textMuted, fontSize: 14 },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
   topOverlay: { paddingBottom: 16, gap: 6 },
+  searchRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingBottom: 2,
+  },
   filterRow: {
     flexDirection: 'row',
     alignItems: 'center',

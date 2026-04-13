@@ -21,13 +21,13 @@ import {
   InteractionManager,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { useLocalSearchParams, router } from 'expo-router';
+import { ScreenLayout } from '@/components/ScreenLayout';
 import { vs } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import * as nav from '@/lib/navigate';
@@ -182,34 +182,29 @@ export default function DreamLikeThisScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={s.container}>
+      <ScreenLayout header="back" title="Dream Like This">
         <ActivityIndicator size="large" color={colors.accent} style={{ flex: 1 }} />
-      </SafeAreaView>
+      </ScreenLayout>
     );
   }
 
+  const sparklePill = (
+    <TouchableOpacity
+      onPress={() => nav.push('/sparkleStore')}
+      style={[s.sparklePill, { zIndex: 1 }]}
+    >
+      <Ionicons name="sparkles" size={14} color={colors.accent} />
+      <Text style={s.sparkleText}>{formatCompact(sparkleBalance)}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <SafeAreaView style={s.container} edges={['top']}>
+    <ScreenLayout header="back" title="Dream Like This" rightAction={sparklePill}>
       <KeyboardAvoidingView
         style={s.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={0}
       >
-        {/* Header */}
-        <View style={s.header}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={{ zIndex: 1 }}>
-            <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Dream Like This</Text>
-          <TouchableOpacity
-            onPress={() => nav.push('/sparkleStore')}
-            style={[s.sparklePill, { zIndex: 1 }]}
-          >
-            <Ionicons name="sparkles" size={14} color={colors.accent} />
-            <Text style={s.sparkleText}>{formatCompact(sparkleBalance)}</Text>
-          </TouchableOpacity>
-        </View>
-
         <ScrollView
           style={s.flex}
           contentContainerStyle={[
@@ -313,7 +308,7 @@ export default function DreamLikeThisScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }
 

@@ -57,7 +57,7 @@ export default function LoginScreen() {
               onPress={() => router.back()}
               className="w-11 h-11 items-center justify-center"
             >
-              <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
 

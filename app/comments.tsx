@@ -185,7 +185,7 @@ export default function CommentsScreen() {
             <View style={styles.header}>
               <Text style={styles.headerTitle}>Comments</Text>
               <TouchableOpacity onPress={() => router.dismiss()} hitSlop={12}>
-                <Ionicons name="close" size={22} color={colors.textSecondary} />
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
           )}

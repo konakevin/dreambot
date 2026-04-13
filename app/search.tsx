@@ -256,11 +256,11 @@ export default function SearchScreen() {
               Keyboard.dismiss();
               setTimeout(() => router.back(), 50);
             }}
-            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            hitSlop={12}
             style={s.closeButton}
             activeOpacity={0.5}
           >
-            <Ionicons name="close" size={28} color={colors.textPrimary} />
+            <Ionicons name="close" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
 

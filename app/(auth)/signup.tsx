@@ -85,7 +85,7 @@ export default function SignupScreen() {
             onPress={() => setAwaitingConfirmation(false)}
             className="w-11 h-11 items-center justify-center"
           >
-            <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
+            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
 
@@ -137,7 +137,7 @@ export default function SignupScreen() {
               onPress={() => router.back()}
               className="w-11 h-11 items-center justify-center"
             >
-              <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
 

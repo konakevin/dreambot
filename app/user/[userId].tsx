@@ -214,7 +214,7 @@ export default function PublicProfileScreen() {
   const backButton = (
     <View style={styles.backRow}>
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton} hitSlop={12}>
-        <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
+        <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       {!isOwnProfile && (
         <TouchableOpacity onPress={handleMoreMenu} style={styles.backButton} hitSlop={12}>

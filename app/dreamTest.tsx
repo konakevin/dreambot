@@ -270,7 +270,7 @@ export default function DreamTestScreen() {
       {/* Header */}
       <View className="flex-row items-center px-5 pt-16 pb-3">
         <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <Text className="flex-1 text-center text-lg font-extrabold text-white">
           Dream Generator Test

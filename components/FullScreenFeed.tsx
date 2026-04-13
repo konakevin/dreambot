@@ -198,7 +198,7 @@ export function FullScreenFeed({
   const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
+    ({ viewableItems }: { viewableItems: { index: number | null }[] }) => {
       if (viewableItems.length > 0 && viewableItems[0].index !== null) {
         const idx = viewableItems[0].index;
         currentIndex.current = idx;

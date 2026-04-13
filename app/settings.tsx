@@ -11,10 +11,10 @@ import {
   ActivityIndicator,
   Switch,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { ScreenLayout } from '@/components/ScreenLayout';
 import * as ImagePicker from 'expo-image-picker';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
@@ -266,15 +266,7 @@ export default function SettingsScreen() {
   const initial = (profile?.username || user?.user_metadata?.username || '?')[0].toUpperCase();
 
   return (
-    <SafeAreaView style={styles.root}>
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="chevron-back" size={28} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Settings</Text>
-        <View style={{ width: 28 }} />
-      </View>
-
+    <ScreenLayout header="back" title="Settings">
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Avatar hero */}
         <TouchableOpacity style={styles.avatarHero} onPress={handleChangePhoto} activeOpacity={0.8}>
@@ -439,7 +431,7 @@ export default function SettingsScreen() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }
 
