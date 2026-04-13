@@ -387,15 +387,6 @@ export default function RootLayout() {
                 }}
               />
               <Stack.Screen
-                name="search"
-                options={{
-                  presentation: 'fullScreenModal',
-                  gestureEnabled: true,
-                  animation: 'slide_from_bottom',
-                  contentStyle: { backgroundColor: '#0F0F1A' },
-                }}
-              />
-              <Stack.Screen
                 name="sparkleStore"
                 options={{ presentation: 'card', gestureEnabled: true }}
               />

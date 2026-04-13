@@ -223,16 +223,7 @@ export default function HomeScreen() {
           <View style={s.topRow}>
             <View style={{ flex: 1, minWidth: 42 }} />
             <FeedTabs active={activeTab} onChange={handleTabChange} />
-            <View style={{ flex: 1, alignItems: 'flex-end', minWidth: 42 }}>
-              <TouchableOpacity
-                style={s.searchButton}
-                onPress={() => nav.push('/search')}
-                activeOpacity={0.7}
-                hitSlop={12}
-              >
-                <Ionicons name="search" size={22} color="#FFFFFF" />
-              </TouchableOpacity>
-            </View>
+            <View style={{ flex: 1, minWidth: 42 }} />
           </View>
         </LinearGradient>
       </Animated.View>

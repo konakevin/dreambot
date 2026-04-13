@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
+import { useExploreStore } from '@/store/explore';
 import { ANIM } from '@/constants/theme';
 import { useUnreadCount } from '@/hooks/useUnreadCount';
 
@@ -75,13 +76,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="top"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid-outline" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
         }}
         listeners={{
           tabPress: () => {
-            if (activeTab === 'top') regenerateSeed();
+            const { searchActive, setSearchActive } = useExploreStore.getState();
+            if (searchActive) {
+              setSearchActive(false);
+            } else if (activeTab === 'top') {
+              regenerateSeed();
+            }
             setActiveTab('top');
           },
         }}

@@ -140,6 +140,9 @@ export default function SharePostScreen() {
 
         {/* Header */}
         <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+            <Ionicons name="close" size={24} color={colors.textSecondary} />
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>Share</Text>
           <TouchableOpacity onPress={handleCopyLink} style={styles.linkButton} activeOpacity={0.7}>
             <View style={styles.linkIcon}>
