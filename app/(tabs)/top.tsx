@@ -1,8 +1,8 @@
 /**
  * Search + Explore Screen — dual-mode tab.
  *
- * BROWSE MODE (default): search bar + fullscreen feed. Clean, no clutter.
- * SEARCH MODE (tap search bar): feed hidden, search results shown.
+ * BROWSE MODE (default): search bar + 2-column grid of thumbnails. Instagram Explore pattern.
+ * SEARCH MODE (tap search bar): grid hidden, search results shown.
  *
  * Filter chips appear below the search bar ONLY when a medium or vibe filter
  * is active (e.g., after tapping a MediumVibeBadge on a card). Each chip is
@@ -23,13 +23,11 @@ import {
   Platform,
   ActivityIndicator,
   FlatList as RNFlatList,
+  RefreshControl,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { mapRpcToDreamPost, castRows } from '@/lib/mapPost';
@@ -42,14 +40,15 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
-import { colors, ANIM } from '@/constants/theme';
+import { colors } from '@/constants/theme';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
-import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { FilterPickerSheet } from '@/components/FilterPickerSheet';
 import { PostTile } from '@/components/PostTile';
+import { GridSkeleton } from '@/components/Skeleton';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
+import { vs } from '@/lib/responsive';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 // ── Browse mode feed query ───────────────────────────────────────────────────
@@ -250,7 +249,7 @@ export default function SearchExploreScreen() {
       setSelectedMedium(pendingMedium);
       if (pendingVibe !== null) setSelectedVibe(pendingVibe);
       clearPending();
-      listRef.current?.scrollToOffset({ offset: 0, animated: false });
+      gridRef.current?.scrollToOffset({ offset: 0, animated: false });
     }
   }, [pendingMedium, pendingVibe, clearPending]);
 
@@ -342,57 +341,69 @@ export default function SearchExploreScreen() {
     }
   }, []);
 
-  // ── Browse feed ──
+  // ── Browse feed (grid mode) ──
   const feedSeed = useFeedStore((s) => s.feedSeed);
-  const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
+  const gridRef = useRef<RNFlatList>(null);
 
   useEffect(() => {
-    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    gridRef.current?.scrollToOffset({ offset: 0, animated: true });
   }, [feedSeed]);
-
-  const overlayOpacity = useSharedValue(1);
-  const overlayStyle = useAnimatedStyle(() => ({
-    opacity: overlayOpacity.value,
-    pointerEvents: overlayOpacity.value < 0.5 ? 'none' : 'auto',
-  }));
-  const setHudVisible = useFeedStore((s) => s.setHudVisible);
-  const handleHudToggle = useCallback(
-    (visible: boolean) => {
-      overlayOpacity.value = withTiming(visible ? 1 : 0, { duration: ANIM.HUD_FADE_MS });
-      setHudVisible(visible);
-    },
-    [overlayOpacity, setHudVisible]
-  );
 
   const activeMediums = selectedMedium ? [selectedMedium] : [];
   const activeVibes = selectedVibe ? [selectedVibe] : [];
-  const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage } = useExploreDreams(
-    activeMediums,
-    activeVibes
-  );
+  const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useExploreDreams(activeMediums, activeVibes);
   const posts = data?.pages.flat() ?? [];
+  const gridAlbumIds = useMemo(() => posts.map((p) => p.id), [posts]);
+
+  const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 
   // ── Render ──
 
   return (
     <View style={s.root}>
-      {/* Browse mode: fullscreen feed */}
+      {/* Browse mode: 2-column thumbnail grid */}
       {!searchActive && (
-        <FullScreenFeed
-          posts={posts}
-          isLoading={isLoading}
-          isRefreshing={isRefetching}
-          onRefresh={() => refetch()}
-          onEndReached={() => hasNextPage && fetchNextPage()}
-          listRef={listRef}
-          ListEmptyComponent={
-            <View style={s.empty}>
-              <Ionicons name="moon-outline" size={48} color={colors.textSecondary} />
-              <Text style={s.emptyTitle}>No dreams yet</Text>
-              <Text style={s.emptySubtitle}>Be the first to create one</Text>
-            </View>
+        <RNFlatList<DreamPostItem>
+          ref={gridRef}
+          data={posts}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          columnWrapperStyle={s.gridRow}
+          contentContainerStyle={{ paddingTop: overlayHeight, paddingBottom: vs(90) }}
+          windowSize={7}
+          maxToRenderPerBatch={8}
+          initialNumToRender={10}
+          removeClippedSubviews
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching && !isFetchingNextPage}
+              onRefresh={() => refetch()}
+              tintColor={colors.accent}
+              progressViewOffset={overlayHeight}
+            />
           }
-          onHudToggle={handleHudToggle}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => hasNextPage && fetchNextPage()}
+          ListEmptyComponent={
+            isLoading ? (
+              <GridSkeleton />
+            ) : (
+              <View style={s.empty}>
+                <Ionicons name="moon-outline" size={48} color={colors.textSecondary} />
+                <Text style={s.emptyTitle}>No dreams yet</Text>
+                <Text style={s.emptySubtitle}>Be the first to create one</Text>
+              </View>
+            )
+          }
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <View style={s.searchFooter}>
+                <ActivityIndicator color={colors.textSecondary} />
+              </View>
+            ) : null
+          }
+          renderItem={({ item }) => <PostTile item={item} albumIds={gridAlbumIds} />}
         />
       )}
 
@@ -403,7 +414,7 @@ export default function SearchExploreScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={0}
         >
-          <View style={[s.searchSafeTop, { paddingTop: insets.top + (hasFilters ? 100 : 60) }]}>
+          <View style={[s.searchSafeTop, { paddingTop: overlayHeight }]}>
             <RNFlatList
               data={searchListData}
               keyExtractor={searchKeyExtractor}
@@ -444,16 +455,10 @@ export default function SearchExploreScreen() {
         </KeyboardAvoidingView>
       )}
 
-      {/* Overlay: search bar + filter chips */}
-      <Animated.View style={[s.topOverlayWrap, searchActive ? undefined : overlayStyle]}>
-        <LinearGradient
-          colors={
-            searchActive
-              ? [colors.background, colors.background, colors.background]
-              : ['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.4)', 'transparent']
-          }
-          style={[s.topOverlay, { paddingTop: insets.top + 4 }]}
-          pointerEvents="box-none"
+      {/* Header overlay: search bar + filter chips */}
+      <View style={s.topOverlayWrap}>
+        <View
+          style={[s.topOverlay, { paddingTop: insets.top + 4, backgroundColor: colors.background }]}
         >
           {/* Search bar */}
           <View style={s.searchBarRow}>
@@ -526,8 +531,8 @@ export default function SearchExploreScreen() {
               )}
             </View>
           )}
-        </LinearGradient>
-      </Animated.View>
+        </View>
+      </View>
 
       {/* Picker sheets */}
       <FilterPickerSheet
@@ -536,7 +541,7 @@ export default function SearchExploreScreen() {
         onSelect={(key) => {
           setSelectedMedium(key);
           setMediumSheetOpen(false);
-          listRef.current?.scrollToOffset({ offset: 0, animated: false });
+          gridRef.current?.scrollToOffset({ offset: 0, animated: false });
         }}
         items={mediumItems}
         selectedKey={selectedMedium}
@@ -548,7 +553,7 @@ export default function SearchExploreScreen() {
         onSelect={(key) => {
           setSelectedVibe(key);
           setVibeSheetOpen(false);
-          listRef.current?.scrollToOffset({ offset: 0, animated: false });
+          gridRef.current?.scrollToOffset({ offset: 0, animated: false });
         }}
         items={vibeItems}
         selectedKey={selectedVibe}
@@ -561,10 +566,11 @@ export default function SearchExploreScreen() {
 // ── Styles ────────────────────────────────────────────────────────────────────
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000' },
+  root: { flex: 1, backgroundColor: colors.background },
 
-  // Browse mode
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  // Browse grid
+  gridRow: { gap: 2, marginBottom: 2 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingTop: 60 },
   emptyTitle: { color: colors.textSecondary, fontSize: 17, fontWeight: '600' },
   emptySubtitle: { color: colors.textMuted, fontSize: 14 },
 
