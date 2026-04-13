@@ -148,34 +148,34 @@ const BOT_SEEDS = {
       },
     ],
   },
-  safaribot: {
+  animalbot: {
     strategies: [
       {
-        category: 'safaribot_portrait', count: 20,
+        category: 'animalbot_portrait', count: 20,
         prompt: 'an EXTREME closeup of an animal so beautiful it takes your breath away — the detail in a lion eyes at golden hour, the texture of an elephant trunk, the iridescence of a hummingbird feather, the wet nose of a wolf in snow, the pattern of a leopard coat. Every hair, every scale, every feather razor-sharp. National Geographic best-of-the-year × 10. Dramatic lighting. The animal should feel like it is looking directly into your soul. Vary the animal wildly — big cats, birds of prey, wolves, bears, elephants, primates, reptiles, marine life.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the animal and the key detail. Comma separated. Example: lion, golden-eyes',
       },
       {
-        category: 'safaribot_landscape',
+        category: 'animalbot_landscape',
         prompt: 'a single majestic animal in a VAST stunning landscape — the animal and the setting are equally breathtaking. A lone wolf on a snowy ridge under aurora, an elephant silhouetted against a blood-orange African sunset, a polar bear on a turquoise iceberg, a deer in a misty bamboo forest at dawn, an eagle soaring over a canyon at golden hour. The landscape should be jaw-dropping on its own — the animal makes it transcendent.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the animal and the landscape. Comma separated. Example: wolf, snowy-ridge',
       },
       {
-        category: 'safaribot_action',
+        category: 'animalbot_action',
         prompt: 'an animal in DYNAMIC motion — a frozen moment of raw power and beauty. Eagle diving with talons extended, whale breaching against sunset, cheetah mid-sprint with dust flying, dolphins arcing through a wave, a bear catching salmon mid-leap, wolves running through snow. The moment should feel impossible to capture — only AI could freeze this instant with this lighting and this clarity.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the animal and the action. Comma separated. Example: eagle, diving',
       },
       {
-        category: 'safaribot_tender',
+        category: 'animalbot_tender',
         prompt: 'an intimate, emotional animal moment — a mother and cub nuzzling, two birds touching beaks, a fox curled sleeping in autumn leaves, a gorilla cradling its baby, an otter floating on its back holding hands with its partner, a deer and fawn in morning mist. The image should make you FEEL something — tenderness, warmth, the beauty of connection in the animal world.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the animal and the emotional moment. Comma separated. Example: otters, holding-hands',
       },
       {
-        category: 'safaribot_underwater',
+        category: 'animalbot_underwater',
         prompt: 'the alien beauty of underwater life — coral reefs exploding with color, a whale shark gliding through sunbeams, sea turtles in crystal clear water, jellyfish glowing in the deep, manta rays in formation, an octopus on a vibrant reef. The ocean rendered with impossible clarity and beauty — every scale, every tentacle, every coral polyp. Light shafts piercing blue water.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the creature and the ocean setting. Comma separated. Example: jellyfish, deep-blue',

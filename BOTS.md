@@ -377,3 +377,109 @@ Added during bot testing, now in `dream_vibes` DB table:
 ## New Mediums Added
 
 - **anime_illustration** — dense lush hand-painted Japanese animation style, adventure atmosphere, detailed backgrounds (added for Yūki's Mononoke/Nausicaa aesthetic)
+- **aura** — bioluminescent glow, subsurface scattering, volumetric golden light rays, bloom effect, chromatic aberration. Created for MuseBot. `is_public: false` (bot-only, hidden from user picker).
+
+---
+
+## Lessons Learned: The April 2026 Bot Expansion (11 new bots in one session)
+
+### What worked — the formula that produced 9/11 bots at 4+ quality on first generation
+
+1. **Multi-path seed strategies, not generic prompts.** Each bot got 3-5 specific PATHS (e.g., BloomBot: landscape, portrait, surreal, cozy) instead of one vague "make pretty flowers" prompt. Each path is a distinct visual approach with its own dedup key. This produces variety because different seeds come from different conceptual angles.
+
+2. **Sonnet generates the seeds, not us.** We define the creative DIRECTION per path (a 50-100 word prompt describing the energy, references, and quality bar), then Sonnet generates 15-20 specific seeds per path with built-in dedup. This gives us 60-80 seeds per bot that are all high-quality and non-repetitive. No hardcoded scene lists.
+
+3. **The prompt formula for seed generation.** The prompts that worked best:
+   - Start with what the scene IS (not what it looks like)
+   - Include reference worlds/artists/genres the bot should channel
+   - Include quality language that sets the bar ("jaw-dropping", "mind-blowing", "the most X thing you've ever seen")
+   - Include specific variety instructions ("vary the X wildly")
+   - Include what to AVOID ("never flat midday", "no gore")
+   - Let Sonnet fill in the specifics — vague-but-anchored beats over-specified
+
+4. **Dedup extraction per path.** Each path has an `extractPrompt` that pulls 2-3 dedup keys from each generated seed (e.g., "flower type + setting" for BloomBot landscape). This prevents repeating the same subject even across 60+ seeds.
+
+5. **Medium pools curated per bot.** Don't give bots access to all 20+ mediums. Each bot gets 2-4 mediums that specifically match its aesthetic. BloomBot gets `photography, canvas, watercolor, pencil`. ArcadeBot gets `lego, pixels, animation, claymation, vinyl`. Wrong mediums produce images that look nothing like the bot's identity.
+
+6. **The V2 text path as the universal rendering engine.** Every bot uses the same pipeline: seed → Sonnet expands to Flux prompt (incorporating the medium directive + vibe directive) → Flux Dev renders → draft upload → flip to public. The V2 engine handles the heavy lifting; the bot just provides the creative seed.
+
+### What failed — and why 2/11 bots scored below 4.5
+
+**HauntBot (3.5/5) — "Beautiful but not creepy"**
+
+Root cause: **wrong vibe killed the horror.** HauntBot rendered `photography + psychedelic` which produced saturated, dreamy energy — the opposite of dread. The seed said "unsettling playground where the swing moves with no wind" but the psychedelic vibe turned it into a pretty garden scene.
+
+Deeper issue: **competing instructions → Flux picks the safe option.** The seed said "beautiful BUT unsettling." When beauty and dread compete in a prompt, Flux resolves the conflict by defaulting to beautiful because that's what its training rewards. The subtle wrongness gets smoothed out.
+
+Fix: Added `excludeVibes` — HauntBot now ONLY gets dark/ominous/ancient/fierce/mystical/epic/cinematic/chaos vibes. Excluded: whimsical, cozy, enchanted, dreamy, peaceful, cute, psychedelic, minimal. The heaviest exclusion list of any bot.
+
+**TripBot (3.5/5) — "Fantasy art, not psychedelic"**
+
+Root cause: **wrong medium + wrong vibe completely overrode the seed's intent.** TripBot rendered `comics + majestic` which produced a D&D illustration of a robed king — zero fractals, zero impossible colors, zero reality-dissolving geometry. The medium (comics = graphic novel line art) and vibe (majestic = grand/epic) pulled the image into a completely different register.
+
+Deeper issue: **the medium/vibe combo is as powerful as the seed itself.** A psychedelic seed rendered in comics+majestic becomes fantasy art. The seed's intent gets overridden by the stylistic instructions from the medium/vibe.
+
+Fix: Changed mediums from `canvas, comics, vaporwave` to `canvas, shimmer, neon` (mediums that actually handle impossible colors and glow effects). Added `excludeVibes` — TripBot now only gets psychedelic/chaos/enchanted/mystical/fierce/dreamy/ethereal/whimsical/dark/epic/ominous/nostalgic/cute. Excluded: minimal, cozy, peaceful, ancient, majestic, cinematic.
+
+### The critical lesson: excludeVibes is NON-NEGOTIABLE
+
+Every bot that worked well (the original 6 + the 9 new ones that scored 4+) had either:
+- Curated medium pools that match their aesthetic, OR
+- Lucky random vibe draws that happened to work
+
+Every bot that failed had:
+- Wide-open vibe pools with no exclusions
+- A random draw that served the wrong vibe for the seed
+
+**Rule for all future bots:** ALWAYS add `excludeVibes` to the BOTS config. Think about which vibes would KILL this bot's aesthetic, and exclude them. Better to be too restrictive than too permissive — you can always add vibes back, but a bad vibe ruins an otherwise good seed.
+
+The existing seeded bots that have been running for weeks (DragonBot, MangaBot, GothBot) all proved this — they were tuned through iterative testing to have specific vibe exclusions and even `pinVibes` (forced good combos). The lesson just needed to be applied to the new bots too.
+
+### Content bot lessons (HumanBot + MuseBot)
+
+These follow a completely different architecture from the image bots:
+
+1. **Stateless, no seed pool.** Sonnet generates the content from scratch each run. The system prompt IS the seed. This works because text generation (observations, quotes) has natural variety — Sonnet won't write the same joke or quote twice.
+
+2. **Minimal prompts beat heavy prompts.** HumanBot proved this through 5 rounds of iteration: a 2000-token prompt with 30+ rules and 15 canonical examples produced hedged, formulaic output. A 40-word prompt ("Make a funny profound observation about humans, Seinfeld/LD/Wright voice, under 18 words") unleashed Sonnet's natural comedic instincts and scored 4.5/5.
+
+3. **The medium IS the brand.** HumanBot = watercolor + enchanted, always. MuseBot = aura + ethereal, always. Locking the medium gives visual consistency that makes the bot instantly recognizable in a feed.
+
+4. **Sharp post-processing for text-on-image.** Both content bots use Sharp to composite text overlays onto the Flux-generated image. HumanBot: green phosphor terminal card (the bot's "CLI output" voice). MuseBot: gradient-fade serif text (the bot's "gallery placard" voice). Different typography = different brand silhouette.
+
+5. **Character consistency requires a prepended spec.** HumanBot's red tin robot and MuseBot's cyborg flower are described in a JS constant that gets prepended to every Flux hint. This forces the same character into every scene without relying on Sonnet to remember across independent calls.
+
+### Quick reference: the full bot roster as of April 2026
+
+**Image bots (seed-pool pipeline via generate-bot-dreams.js):**
+
+| Bot | Content | Mediums | Seeds | Status |
+|---|---|---|---|---|
+| DragonBot | Epic fantasy | canvas, watercolor | 60 | ✅ Active |
+| MangaBot | Anime/Japanese | anime | 60 | ✅ Active |
+| StarBot | Sci-fi/space | photography, neon, canvas | 135 | ✅ Active |
+| VenusBot | Sci-fi women | photography, neon, shimmer | 60 | ✅ Active |
+| SirenBot | Fantasy characters | canvas, watercolor | 63 | ✅ Active |
+| GothBot | Gothic dark fantasy | gothic, anime, canvas | 90 | ✅ Active |
+| GlowBot | Ethereal beauty | watercolor, canvas | 20 | ✅ Active |
+| EarthBot | Nature/landscape | photography, canvas, watercolor | 20 | ✅ Active |
+| ArcadeBot | Toy/craft/retro | lego, pixels, animation, claymation, vinyl | 40 | ✅ Active |
+| CuddleBot | Kawaii cozy | animation, claymation, storybook | 20 | ✅ Active |
+| PopBot | Pop culture | comics, vaporwave | 20 | ✅ Active |
+| BloomBot | Flowers/botanical | photography×3, canvas, watercolor, pencil | 130 | ✅ Active |
+| AnimalBot | All animals | photography, canvas, watercolor | 75 | ✅ Active |
+| GlamBot | Fashion/beauty | photography, shimmer, canvas | 65 | ✅ Active |
+| SteamBot | Steampunk | canvas, photography | 55 | ✅ Active |
+| TinyBot | Miniatures/dioramas | photography, animation, claymation | 60 | ✅ Active |
+| HauntBot | Atmospheric horror | photography, canvas, gothic | 60 | ✅ Active |
+| InkBot | Tattoo art | comics, canvas, photography | 60 | ✅ Active |
+| TripBot | Psychedelic | canvas, shimmer, neon | 60 | ✅ Active |
+| TitanBot | Mythology/gods | canvas, photography | 60 | ✅ Active |
+| CoquetteBot | Cute feminine | coquette, fairytale, watercolor | 75 | ✅ Active |
+
+**Content bots (custom scripts with Sharp text overlay):**
+
+| Bot | Content | Medium | Script | Status |
+|---|---|---|---|---|
+| HumanBot | AI roasting human behavior | watercolor + enchanted | generate-humanbot.js | ✅ Active |
+| MuseBot | AI musing on human condition | aura + ethereal | generate-musebot.js | ✅ Active |
