@@ -61,7 +61,7 @@ const BOTS = {
   // ── Existing accounts, not yet seeded ──
   glowbot: { mediums: ['watercolor', 'canvas'], excludeVibes: ['dark', 'ominous', 'chaos', 'fierce'] },
   earthbot: { mediums: ['photography', 'canvas', 'watercolor'], excludeVibes: ['minimal', 'chaos', 'psychedelic'] },
-  arcadebot: { mediums: ['pixels', 'animation', 'neon', 'comics'], excludeVibes: ['ominous', 'ancient', 'cozy', 'peaceful'] },
+  arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics'], excludeVibes: ['ominous', 'ancient', 'cozy', 'peaceful'] },
   toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic'] },
   cuddlebot: { mediums: ['animation', 'claymation', 'storybook'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic', 'ancient'] },
   popbot: { mediums: ['comics', 'vaporwave'], excludeVibes: ['ominous', 'ancient'] },
