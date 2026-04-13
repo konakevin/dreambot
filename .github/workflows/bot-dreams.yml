@@ -51,7 +51,7 @@ jobs:
             fi
           else
             # Post once for each seeded image bot
-            BOTS=("dragonbot" "mangabot" "starbot" "venusbot" "sirenbot" "gothbot" "bloombot" "coquettebot" "animalbot" "glambot" "steambot" "tinybot" "hauntbot" "inkbot" "tripbot" "titanbot")
+            BOTS=("dragonbot" "mangabot" "starbot" "venusbot" "sirenbot" "gothbot" "bloombot" "coquettebot" "animalbot" "glambot" "steambot" "tinybot" "hauntbot" "inkbot" "tripbot" "titanbot" "arcadebot" "toybot")
             for BOT in "${BOTS[@]}"; do
               echo "🎨 Generating for $BOT..."
               node scripts/generate-bot-dreams.js --bot "$BOT" --count 1

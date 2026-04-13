@@ -93,10 +93,64 @@ const BOT_SEEDS = {
   },
   arcadebot: {
     strategies: [
-      { category: 'arcadebot_genre', prompt: 'a visually stunning and interesting scene rendered in a creative toy or game art style — the contrast between the epic content and playful art style is the magic' },
-      { category: 'arcadebot_genre_dedup', prompt: 'a visually stunning and interesting scene rendered in a creative toy or game art style — the contrast between the epic content and playful art style is the magic', continueDedup: true },
-      { category: 'arcadebot_landscape', prompt: 'an epic and beautiful landscape or cityscape that would look amazing rendered in a toy or game art style', separateDedup: true },
-      { category: 'arcadebot_retro', prompt: 'a stunning retro gaming scene that triggers pure nostalgia — inspired by classic games like zelda, final fantasy, chrono trigger, pokemon, mega man, metroid, castlevania', separateDedup: true },
+      {
+        category: 'arcadebot_retro', count: 20,
+        prompt: 'a stunning scene from the golden age of gaming — NES, SNES, arcade, Game Boy era. Think: a Zelda overworld at sunset, a Final Fantasy crystal cave, a Metroid alien corridor, a Castlevania gothic throne room, a Pokemon route through tall grass at dusk, a Mega Man boss arena, a Chrono Trigger time portal, a Street Fighter stage. The scene should trigger PURE NOSTALGIA for anyone who grew up with a controller in their hands. Pixel art, 16-bit color palettes, scanline energy. Beautiful enough to hang on a wall. VARY THE SUBJECT wildly — not always a warrior. Include: vehicles, creatures, landscapes, towns, dungeons, space stations, oceans, forests.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give ONE word: the main subject (warrior, dragon, spaceship, town, forest, dungeon, castle, ocean, etc). ONE word only.',
+      },
+      {
+        category: 'arcadebot_gameworld',
+        prompt: 'a breathtaking environment from a video game universe — the kind of vista that makes you put the controller down and just LOOK. A Zelda overworld stretching to distant mountains, an Elden Ring legacy dungeon entrance, a Hollow Knight crystal cavern, a Journey sand dune at sunset, a Shadow of the Colossus ruin, a Breath of the Wild shrine glowing at twilight, a Dark Souls bonfire in a crumbling cathedral. Game concept art energy — painterly, atmospheric, massive scale. The viewer should feel like they could walk into the screen. PURE ENVIRONMENT — no characters, no warriors, no figures. Just the PLACE.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give ONE word: the main environment type (cave, temple, forest, ocean, volcano, city, ruins, etc). ONE word only.',
+      },
+      {
+        category: 'arcadebot_bossfight',
+        prompt: 'an EPIC reimagined video game boss encounter — the moment the health bar appears and the music changes. A massive pixel-art dragon filling the screen, a neon-lit arcade final boss with bullet-hell patterns, a Dark Souls scale colossus emerging from fog, a side-scrolling Mega Man boss with a full arena, a JRPG summon being unleashed. The boss should feel MASSIVE and the scene should feel like the most dramatic moment in the game. Dynamic, explosive, the "oh shit" moment of gaming. VARY THE BOSS wildly — not always a humanoid. Include: dragons, mechs, sea monsters, giant insects, sentient trees, shadow beasts, crystal golems, multi-headed hydras.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give ONE word: the boss creature type (dragon, mech, kraken, golem, hydra, etc). ONE word only.',
+      },
+      {
+        category: 'arcadebot_vibes',
+        prompt: 'the CULTURE and AESTHETIC of gaming — not a game scene but the FEELING of being a gamer. A row of glowing arcade cabinets in a dark neon-lit room, a retro console setup with CRT TV glowing in a dark bedroom, a controller collection arranged like art, a game-over screen rendered as beautiful typography, a save point glowing in an empty room, an inventory screen with lovingly detailed pixel items, a character select screen with dramatic lighting on each fighter. The nostalgia and beauty of gaming ITSELF as an aesthetic.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give ONE word: the main gaming object (cabinet, controller, screen, cartridge, console, etc). ONE word only.',
+      },
+    ],
+  },
+  toybot: {
+    strategies: [
+      {
+        category: 'toybot_lego', count: 20,
+        prompt: 'an EPIC scene built entirely in LEGO — every surface is LEGO bricks, every character is a minifigure, every prop is a brick-built element. A LEGO castle under siege with catapults and knights, a LEGO space station with astronaut minifigs floating through brick corridors, a LEGO city street at night with glowing windows, a LEGO pirate ship battling a brick-built kraken, a LEGO medieval village with a dragon overhead. The detail should be OBSESSIVE — you can see individual studs, transparent pieces for windows and water, printed faces on minifigs. Dramatic lighting on plastic bricks.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the LEGO theme and the key element. Comma separated. Example: castle, siege',
+      },
+      {
+        category: 'toybot_claymation',
+        prompt: 'a scene that looks like it is from a stop-motion CLAYMATION or PLAY-DOH film — Wallace & Gromit, Shaun the Sheep, Coraline, Kubo, Laika studio energy, or bright colorful Play-Doh creations. Everything is made of CLAY or PLAY-DOH — you can see fingerprints in the material, the slightly lumpy handcrafted texture, the warm imperfect charm, the bright primary colors of Play-Doh or the muted earth tones of professional clay. Characters with clay bodies and painted eyes. Sets that look built on a tabletop with real tiny props. Warm lighting like a practical film set. Charming, handmade, alive.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the character type and the setting. Comma separated. Example: dog, kitchen',
+      },
+      {
+        category: 'toybot_vinyl',
+        prompt: 'a dramatic diorama scene starring VINYL COLLECTIBLE FIGURES — Funko Pop style, designer toy aesthetic, Kidrobot energy. Oversized heads, tiny bodies, glossy plastic sheen, painted-on details. A vinyl samurai figure standing on a tiny bonsai mountain, a vinyl astronaut on a miniature moon, vinyl medieval knights in a tabletop castle siege, a vinyl detective in a noir diorama. The figures should look like REAL PHYSICAL VINYL TOYS photographed with dramatic cinematic lighting in handcrafted miniature sets.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the vinyl character and the diorama. Comma separated. Example: astronaut, moon',
+      },
+      {
+        category: 'toybot_action_figure', count: 20,
+        prompt: 'an EPIC dramatic scene of ACTION FIGURES — real plastic toys with visible joint articulation, plastic sheen, molded hair, painted-on details, toy-scale weapons and accessories. Shot like high-end toy photography with dramatic lighting. Think: giant transforming robot figures battling on a shelf with explosion effects, muscular barbarian warrior figures storming a playset castle, space marine figures in a diorama moonbase, ninja figures mid-kick on a rooftop playset, kaiju monster figures destroying a miniature city. The figures should look like REAL PHYSICAL 80s/90s ACTION FIGURES — chunky sculpts, bold primary colors, over-the-top muscles and weapons. Dramatic cinematic lighting makes cheap plastic look epic. The gap between "its just a toy" and "that looks like a movie" IS the magic.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the figure type and the action. Comma separated. Example: robot, battling',
+      },
+      {
+        category: 'toybot_everyday',
+        prompt: 'mundane everyday human activities rendered with TOY FIGURES — the charming absurdity of toys living normal lives. LEGO minifigures having a dinner party with brick-built food, claymation characters waiting for a bus in the rain, vinyl figures doing laundry in a tiny laundromat, action figures grocery shopping with miniature carts, plush animals commuting on a toy train. The activity should be completely ORDINARY (cooking, cleaning, commuting, working, relaxing) but the toy rendering makes it unexpectedly delightful and funny.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the toy type and the mundane activity. Comma separated. Example: lego, dinner-party',
+      },
     ],
   },
   cuddlebot: {
@@ -104,6 +158,12 @@ const BOT_SEEDS = {
       { category: 'cuddlebot_genre', prompt: 'an adorable and heartwarming scene that makes people smile — cute creatures, cozy spaces, warm light, inspired by pixar, sanrio, studio ghibli cozy moments' },
       { category: 'cuddlebot_genre_dedup', prompt: 'an adorable and heartwarming scene that makes people smile — cute creatures, cozy spaces, warm light, inspired by pixar, sanrio, studio ghibli cozy moments', continueDedup: true },
       { category: 'cuddlebot_landscape', prompt: 'a cute and cozy miniature world that feels warm and inviting — tiny details, soft lighting, the kind of place you want to shrink down and live in', separateDedup: true },
+      {
+        category: 'cuddlebot_plushie', count: 20,
+        prompt: 'a scene of PLUSHIE STUFFED ANIMALS living their lives like Toy Story — the plushies are ALIVE, interacting with each other and their environment in adorable ways. They have visible stitching, button eyes, soft fuzzy fabric, and slightly floppy limbs. Think: a group of plushie bears having a tiny picnic on a blanket with miniature sandwiches, plushie bunnies watching a movie on a tiny TV with popcorn, a plushie cat reading a tiny book by lamplight, plushie puppies playing board games on the floor, plushies camping in a pillow fort with fairy lights, a plushie tea party with tiny cups and cookies, plushies cooking together in a dollhouse kitchen, plushies stargazing from a windowsill at night. The plushies are the CHARACTERS — they have personality, they are doing something SPECIFIC and heartwarming. The scene should make you want to hug your childhood stuffed animal. Soft warm lighting, cozy settings, impossibly cute.',
+        separateDedup: true,
+        extractPrompt: 'From this scene give TWO words: the plushie animal type and the activity. Comma separated. Example: bears, picnic',
+      },
     ],
   },
   popbot: {
@@ -136,9 +196,9 @@ const BOT_SEEDS = {
       },
       {
         category: 'coquettebot_sweet',
-        prompt: 'food and treats SO PRETTY you could never eat them — a tower of pink macarons with edible flowers on a marble stand, strawberry shortcake with fresh berries and gold leaf, aesthetic latte art with a tiny heart in a pink cup, a candy shop window in all pastels, a tea party setup with fine china and petit fours and roses, flower-decorated cake that looks like a garden. Everything pink, pastel, pristine, precious.',
+        prompt: 'food and treats SO PRETTY you could never eat them in a FANTASTICAL whimsical setting — a tower of pink macarons on a marble stand in a fairy kitchen, a strawberry cake being decorated by tiny mice in aprons, a princess arranging petit fours in a rose garden, a bunny barista making latte art in a pastel café, a magical bakery run by hedgehogs in tiny hats. If characters are present they must be WHIMSICAL — cute animals, fairy-tale princesses, tiny magical creatures. NEVER a realistic human chef or pastry worker. Everything pink, pastel, fantastical, precious. NEVER repeat the same food item — every seed must feature a DIFFERENT treat.',
         separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the food and the setting. Comma separated. Example: macarons, marble',
+        extractPrompt: 'From this scene give ONE word: the specific food item (macarons, cake, croissant, latte, cupcake, etc). ONE word only.',
       },
       {
         category: 'coquettebot_fashion',
@@ -409,10 +469,25 @@ const BOT_SEEDS = {
   },
 };
 
+async function withRetry(fn, maxRetries = 4) {
+  const delays = [2000, 5000, 12000, 30000];
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      const retryable = err.status === 429 || err.status === 529 || err.status >= 500;
+      if (!retryable || attempt === maxRetries) throw err;
+      const delay = delays[Math.min(attempt, delays.length - 1)];
+      console.log(`   ⏳ ${err.status} overloaded, retrying in ${delay / 1000}s (attempt ${attempt + 1}/${maxRetries})...`);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+}
+
 async function generateScene(anthropic, basePrompt, banList) {
   const ban = banList.length > 0 ? ' DO NOT include: ' + banList.join(', ') : '';
-  const msg = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+  const msg = await withRetry(() => anthropic.messages.create({
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: 60,
     messages: [
       {
@@ -424,24 +499,24 @@ async function generateScene(anthropic, basePrompt, banList) {
           '"\nWrite ONE specific scene in 15-25 words. Characters described by role only, never named. Output ONLY the scene.',
       },
     ],
-  });
+  }));
   return (msg.content[0].text || '').replace(/^["]+|["]+$/g, '').trim();
 }
 
 async function extractSubject(anthropic, scene, extractPrompt) {
   if (extractPrompt) {
-    const msg = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+    const msg = await withRetry(() => anthropic.messages.create({
+      model: 'claude-sonnet-4-5-20250929',
       max_tokens: 20,
       messages: [{ role: 'user', content: extractPrompt + '\n\n' + scene }],
-    });
+    }));
     return (msg.content[0].text || '').trim().toLowerCase().split(',').map(s => s.trim());
   }
-  const msg = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+  const msg = await withRetry(() => anthropic.messages.create({
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: 10,
     messages: [{ role: 'user', content: 'One word for main element? ' + scene + '\nONE word.' }],
-  });
+  }));
   return (msg.content[0].text || '').trim().toLowerCase();
 }
 

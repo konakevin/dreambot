@@ -61,7 +61,8 @@ const BOTS = {
   // ── Existing accounts, not yet seeded ──
   glowbot: { mediums: ['watercolor', 'canvas'], excludeVibes: ['dark', 'ominous', 'chaos', 'fierce'] },
   earthbot: { mediums: ['photography', 'canvas', 'watercolor'], excludeVibes: ['minimal', 'chaos', 'psychedelic'] },
-  arcadebot: { mediums: ['lego', 'pixels', 'animation', 'claymation', 'vinyl'], excludeVibes: ['ominous', 'dark', 'ancient'] },
+  arcadebot: { mediums: ['pixels', 'animation', 'neon', 'comics'], excludeVibes: ['ominous', 'ancient', 'cozy', 'peaceful'] },
+  toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic'] },
   cuddlebot: { mediums: ['animation', 'claymation', 'storybook'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic', 'ancient'] },
   popbot: { mediums: ['comics', 'vaporwave'], excludeVibes: ['ominous', 'ancient'] },
   // ── New bots ──
@@ -159,10 +160,12 @@ async function regenSeeds(username, prefix) {
   console.log(`🎭 ${vibeKeys.length} vibes loaded`);
 
   const botUsernames = Object.keys(BOTS).filter((b) => !ONLY_BOT || b === ONLY_BOT);
-  const { data: botUsers } = await sb
-    .from('users')
-    .select('id, username')
-    .in('username', botUsernames);
+  // Fetch ALL users and match case-insensitively — DB stores PascalCase
+  // display names but BOTS keys are lowercase
+  const { data: allUsers } = await sb.from('users').select('id, username');
+  const botUsers = (allUsers ?? []).filter((u) =>
+    botUsernames.some((b) => u.username && u.username.toLowerCase() === b.toLowerCase())
+  );
 
   if (!botUsers?.length) {
     console.error('❌ No bot users found.');
@@ -170,7 +173,7 @@ async function regenSeeds(username, prefix) {
   }
 
   const userMap = {};
-  botUsers.forEach((u) => (userMap[u.username] = u.id));
+  botUsers.forEach((u) => (userMap[u.username.toLowerCase()] = u.id));
 
   let totalGenerated = 0;
 
