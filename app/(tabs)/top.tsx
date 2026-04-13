@@ -1,18 +1,19 @@
 /**
  * Search + Explore Screen — dual-mode tab.
  *
- * BROWSE MODE (default): medium/vibe pills + fullscreen feed. Same as the old Explore tab.
- * SEARCH MODE (tap search bar): pills hidden, feed hidden, search results shown.
+ * BROWSE MODE (default): search bar + fullscreen feed. Clean, no clutter.
+ * SEARCH MODE (tap search bar): feed hidden, search results shown.
  *
- * The two modes are mutually exclusive — no dual-filter confusion.
- * Instagram Explore pattern: search bar at top, discovery grid below.
+ * Filter chips appear below the search bar ONLY when a medium or vibe filter
+ * is active (e.g., after tapping a MediumVibeBadge on a card). Each chip is
+ * tappable to open a picker sheet and change the filter value. Each has a ✕
+ * to dismiss that individual filter. Search results respect active filters.
  */
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -41,18 +42,17 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
-import { useAlbumStore } from '@/store/album';
 import { colors, ANIM } from '@/constants/theme';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
-import { OverlayPill } from '@/components/OverlayPill';
+import { FilterPickerSheet } from '@/components/FilterPickerSheet';
 import { PostTile } from '@/components/PostTile';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 
-// ── Browse mode ──────────────────────────────────────────────────────────────
+// ── Browse mode feed query ───────────────────────────────────────────────────
 
 const FEED_PAGE_SIZE = 20;
 
@@ -97,7 +97,7 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
   });
 }
 
-// ── Search mode components ───────────────────────────────────────────────────
+// ── Search result components ─────────────────────────────────────────────────
 
 const TILE_GAP = 2;
 const TILE_WIDTH = (Dimensions.get('window').width - TILE_GAP) / 2;
@@ -105,7 +105,6 @@ const TILE_WIDTH = (Dimensions.get('window').width - TILE_GAP) / 2;
 type SearchItem =
   | { type: 'userHeader' }
   | { type: 'user'; user: SearchUser }
-  | { type: 'seeAllUsers' }
   | { type: 'postHeader' }
   | { type: 'postPair'; left: DreamPostItem; right?: DreamPostItem };
 
@@ -218,6 +217,43 @@ export default function SearchExploreScreen() {
   const insets = useSafeAreaInsets();
   const searchInputRef = useRef<TextInput>(null);
 
+  // ── Medium/vibe data for filter pickers ──
+  const { data: dbMediums = [] } = useDreamMediums();
+  const { data: dbVibes = [] } = useDreamVibes();
+  const mediumItems = useMemo(
+    () => [...dbMediums].sort((a, b) => a.label.localeCompare(b.label)),
+    [dbMediums]
+  );
+  const vibeItems = useMemo(
+    () => [...dbVibes].sort((a, b) => a.label.localeCompare(b.label)),
+    [dbVibes]
+  );
+
+  // ── Filter state ──
+  const [selectedMedium, setSelectedMedium] = useState<string | null>(null);
+  const [selectedVibe, setSelectedVibe] = useState<string | null>(null);
+  const [mediumSheetOpen, setMediumSheetOpen] = useState(false);
+  const [vibeSheetOpen, setVibeSheetOpen] = useState(false);
+  const hasFilters = selectedMedium !== null || selectedVibe !== null;
+
+  const selectedMediumLabel = mediumItems.find((m) => m.key === selectedMedium)?.label ?? null;
+  const selectedVibeLabel = vibeItems.find((v) => v.key === selectedVibe)?.label ?? null;
+
+  // ── Pending filter handoff from badge taps ──
+  const pendingMedium = useExploreStore((s) => s.pendingMedium);
+  const pendingVibe = useExploreStore((s) => s.pendingVibe);
+  const clearPending = useExploreStore((s) => s.clearPending);
+
+  useEffect(() => {
+    if (pendingMedium !== null || pendingVibe !== null) {
+      if (searchActive) deactivateSearch();
+      setSelectedMedium(pendingMedium);
+      if (pendingVibe !== null) setSelectedVibe(pendingVibe);
+      clearPending();
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    }
+  }, [pendingMedium, pendingVibe, clearPending]);
+
   // ── Search state ──
   const [searchActive, setSearchActiveLocal] = useState(false);
   const [query, setQuery] = useState('');
@@ -237,7 +273,7 @@ export default function SearchExploreScreen() {
     setSearchActiveStore(false);
   }
 
-  // Search hooks (only fire when search is active + query is long enough)
+  // Search hooks — pass medium/vibe filters so search results are scoped
   const hasQuery = debouncedQuery.trim().length >= 2;
   const { data: userResults = [], isLoading: usersLoading } = useSearchUsers(
     searchActive ? debouncedQuery : ''
@@ -248,14 +284,13 @@ export default function SearchExploreScreen() {
     fetchNextPage: fetchMorePosts,
     hasNextPage: hasMorePosts,
     isFetchingNextPage: fetchingMorePosts,
-  } = useSearchPosts(searchActive ? debouncedQuery : '');
+  } = useSearchPosts(searchActive ? debouncedQuery : '', selectedMedium, selectedVibe);
 
   const searchPosts = useMemo(() => postPages?.pages.flatMap((p) => p.rows) ?? [], [postPages]);
   const searchAlbumIds = useMemo(() => searchPosts.map((p) => p.id), [searchPosts]);
   const searchLoading = usersLoading || postsLoading;
   const hasResults = userResults.length > 0 || searchPosts.length > 0;
 
-  // Unified FlatList data for search mode
   const searchListData = useMemo(() => {
     if (!hasQuery || !searchActive) return [];
     const items: SearchItem[] = [];
@@ -263,9 +298,6 @@ export default function SearchExploreScreen() {
       items.push({ type: 'userHeader' });
       for (const user of userResults.slice(0, 3)) {
         items.push({ type: 'user', user });
-      }
-      if (userResults.length > 3) {
-        items.push({ type: 'seeAllUsers' });
       }
     }
     if (searchPosts.length > 0) {
@@ -284,8 +316,6 @@ export default function SearchExploreScreen() {
           return <SectionHeader title="People" />;
         case 'user':
           return <SearchRow user={item.user} />;
-        case 'seeAllUsers':
-          return null;
         case 'postHeader':
           return <SectionHeader title="Dreams" />;
         case 'postPair':
@@ -303,8 +333,6 @@ export default function SearchExploreScreen() {
         return 'uh';
       case 'user':
         return `u-${item.user.id}`;
-      case 'seeAllUsers':
-        return 'sa';
       case 'postHeader':
         return 'ph';
       case 'postPair':
@@ -314,48 +342,12 @@ export default function SearchExploreScreen() {
     }
   }, []);
 
-  // ── Browse state (existing Explore logic) ──
-  const { data: dbMediums = [] } = useDreamMediums();
-  const { data: dbVibes = [] } = useDreamVibes();
-  const MEDIUM_PILLS = useMemo(
-    () => [...dbMediums].sort((a, b) => a.label.localeCompare(b.label)),
-    [dbMediums]
-  );
-  const VIBE_PILLS = useMemo(
-    () => [...dbVibes].sort((a, b) => a.label.localeCompare(b.label)),
-    [dbVibes]
-  );
-  const [selectedMedium, setSelectedMedium] = useState<string | null>(null);
-  const [selectedVibe, setSelectedVibe] = useState<string | null>(null);
+  // ── Browse feed ──
   const feedSeed = useFeedStore((s) => s.feedSeed);
-  const pendingMedium = useExploreStore((s) => s.pendingMedium);
-  const pendingVibe = useExploreStore((s) => s.pendingVibe);
-  const clearPending = useExploreStore((s) => s.clearPending);
   const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
-  const mediumScrollRef = useRef<ScrollView>(null);
-  const vibeScrollRef = useRef<ScrollView>(null);
-  const mediumLayoutsRef = useRef<Record<string, { x: number; width: number }>>({});
-  const vibeLayoutsRef = useRef<Record<string, { x: number; width: number }>>({});
-
-  useEffect(() => {
-    if (pendingMedium !== null || pendingVibe !== null) {
-      if (searchActive) deactivateSearch();
-      setSelectedMedium(pendingMedium);
-      if (pendingVibe) setSelectedVibe(pendingVibe);
-      clearPending();
-      listRef.current?.scrollToOffset({ offset: 0, animated: false });
-      setTimeout(() => {
-        scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, pendingMedium);
-        scrollPillIntoView(vibeScrollRef, vibeLayoutsRef.current, pendingVibe);
-      }, 100);
-    }
-  }, [pendingMedium, pendingVibe, clearPending]);
 
   useEffect(() => {
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
-    setTimeout(() => {
-      scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, selectedMedium);
-    }, 100);
   }, [feedSeed]);
 
   const overlayOpacity = useSharedValue(1);
@@ -374,50 +366,17 @@ export default function SearchExploreScreen() {
 
   const activeMediums = selectedMedium ? [selectedMedium] : [];
   const activeVibes = selectedVibe ? [selectedVibe] : [];
-
   const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage } = useExploreDreams(
     activeMediums,
     activeVibes
   );
   const posts = data?.pages.flat() ?? [];
 
-  function scrollPillIntoView(
-    scrollRef: React.RefObject<ScrollView | null>,
-    layouts: Record<string, { x: number; width: number }>,
-    key: string | null
-  ) {
-    if (!key || !layouts[key] || !scrollRef.current) return;
-    const { x } = layouts[key];
-    scrollRef.current.scrollTo({ x: Math.max(0, x - 8), animated: true });
-  }
-
-  function selectMedium(key: string) {
-    const next = selectedMedium === key ? null : key;
-    setSelectedMedium(next);
-    listRef.current?.scrollToOffset({ offset: 0, animated: false });
-    if (next) scrollPillIntoView(mediumScrollRef, mediumLayoutsRef.current, next);
-  }
-
-  function selectVibe(key: string) {
-    const next = selectedVibe === key ? null : key;
-    setSelectedVibe(next);
-    listRef.current?.scrollToOffset({ offset: 0, animated: false });
-    if (next) scrollPillIntoView(vibeScrollRef, vibeLayoutsRef.current, next);
-  }
-
-  const filterLabel =
-    [
-      selectedMedium ? MEDIUM_PILLS.find((p) => p.key === selectedMedium)?.label : null,
-      selectedVibe ? VIBE_PILLS.find((p) => p.key === selectedVibe)?.label : null,
-    ]
-      .filter(Boolean)
-      .join(' + ') || 'all';
-
   // ── Render ──
 
   return (
     <View style={s.root}>
-      {/* Browse mode: fullscreen feed (hidden when searching) */}
+      {/* Browse mode: fullscreen feed */}
       {!searchActive && (
         <FullScreenFeed
           posts={posts}
@@ -429,7 +388,7 @@ export default function SearchExploreScreen() {
           ListEmptyComponent={
             <View style={s.empty}>
               <Ionicons name="moon-outline" size={48} color={colors.textSecondary} />
-              <Text style={s.emptyTitle}>No {filterLabel?.toLowerCase()} dreams yet</Text>
+              <Text style={s.emptyTitle}>No dreams yet</Text>
               <Text style={s.emptySubtitle}>Be the first to create one</Text>
             </View>
           }
@@ -444,7 +403,7 @@ export default function SearchExploreScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={0}
         >
-          <View style={[s.searchSafeTop, { paddingTop: insets.top + 60 }]}>
+          <View style={[s.searchSafeTop, { paddingTop: insets.top + (hasFilters ? 100 : 60) }]}>
             <RNFlatList
               data={searchListData}
               keyExtractor={searchKeyExtractor}
@@ -485,7 +444,7 @@ export default function SearchExploreScreen() {
         </KeyboardAvoidingView>
       )}
 
-      {/* Overlay: search bar + pills (pills hidden when searching) */}
+      {/* Overlay: search bar + filter chips */}
       <Animated.View style={[s.topOverlayWrap, searchActive ? undefined : overlayStyle]}>
         <LinearGradient
           colors={
@@ -524,72 +483,77 @@ export default function SearchExploreScreen() {
             )}
           </View>
 
-          {/* Medium + Vibe pills (hidden when searching) */}
-          {!searchActive && (
-            <>
-              <View style={s.filterRow}>
-                <View style={s.filterIcon}>
-                  <Ionicons name="brush-outline" size={14} color="rgba(255,255,255,0.45)" />
+          {/* Filter chips — only visible when filters are active */}
+          {hasFilters && (
+            <View style={s.chipRow}>
+              {selectedMedium && (
+                <View style={s.chipGroup}>
+                  <TouchableOpacity
+                    style={s.chip}
+                    onPress={() => setMediumSheetOpen(true)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={s.chipLabel}>{selectedMediumLabel}</Text>
+                    <Ionicons name="chevron-down" size={14} color={colors.textPrimary} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setSelectedMedium(null)}
+                    hitSlop={8}
+                    style={s.chipDismiss}
+                  >
+                    <Ionicons name="close" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
                 </View>
-                <ScrollView
-                  ref={mediumScrollRef}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={s.pillRow}
-                >
-                  {MEDIUM_PILLS.map((m) => (
-                    <View
-                      key={m.key}
-                      onLayout={(e) => {
-                        mediumLayoutsRef.current[m.key] = {
-                          x: e.nativeEvent.layout.x,
-                          width: e.nativeEvent.layout.width,
-                        };
-                      }}
-                    >
-                      <OverlayPill
-                        label={m.label}
-                        active={selectedMedium === m.key}
-                        onPress={() => selectMedium(m.key)}
-                      />
-                    </View>
-                  ))}
-                </ScrollView>
-              </View>
-
-              <View style={s.filterRow}>
-                <View style={s.filterIcon}>
-                  <Ionicons name="sparkles-outline" size={14} color="rgba(255,255,255,0.45)" />
+              )}
+              {selectedVibe && (
+                <View style={s.chipGroup}>
+                  <TouchableOpacity
+                    style={s.chip}
+                    onPress={() => setVibeSheetOpen(true)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={s.chipLabel}>{selectedVibeLabel}</Text>
+                    <Ionicons name="chevron-down" size={14} color={colors.textPrimary} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setSelectedVibe(null)}
+                    hitSlop={8}
+                    style={s.chipDismiss}
+                  >
+                    <Ionicons name="close" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
                 </View>
-                <ScrollView
-                  ref={vibeScrollRef}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={s.pillRow}
-                >
-                  {VIBE_PILLS.map((v) => (
-                    <View
-                      key={v.key}
-                      onLayout={(e) => {
-                        vibeLayoutsRef.current[v.key] = {
-                          x: e.nativeEvent.layout.x,
-                          width: e.nativeEvent.layout.width,
-                        };
-                      }}
-                    >
-                      <OverlayPill
-                        label={v.label}
-                        active={selectedVibe === v.key}
-                        onPress={() => selectVibe(v.key)}
-                      />
-                    </View>
-                  ))}
-                </ScrollView>
-              </View>
-            </>
+              )}
+            </View>
           )}
         </LinearGradient>
       </Animated.View>
+
+      {/* Picker sheets */}
+      <FilterPickerSheet
+        visible={mediumSheetOpen}
+        onClose={() => setMediumSheetOpen(false)}
+        onSelect={(key) => {
+          setSelectedMedium(key);
+          setMediumSheetOpen(false);
+          listRef.current?.scrollToOffset({ offset: 0, animated: false });
+        }}
+        items={mediumItems}
+        selectedKey={selectedMedium}
+        title="Medium"
+      />
+      <FilterPickerSheet
+        visible={vibeSheetOpen}
+        onClose={() => setVibeSheetOpen(false)}
+        onSelect={(key) => {
+          setSelectedVibe(key);
+          setVibeSheetOpen(false);
+          listRef.current?.scrollToOffset({ offset: 0, animated: false });
+        }}
+        items={vibeItems}
+        selectedKey={selectedVibe}
+        title="Vibe"
+      />
     </View>
   );
 }
@@ -624,10 +588,37 @@ const s = StyleSheet.create({
   cancelButton: { paddingVertical: 8 },
   cancelText: { color: colors.accent, fontSize: 15, fontWeight: '600' },
 
-  // Pills
-  filterRow: { flexDirection: 'row', alignItems: 'center' },
-  filterIcon: { width: 30, alignItems: 'center', justifyContent: 'center', paddingLeft: 10 },
-  pillRow: { gap: 6, paddingRight: 16 },
+  // Filter chips
+  chipRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  chipGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+  chipLabel: {
+    color: colors.textPrimary,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  chipDismiss: {
+    padding: 2,
+  },
 
   // Search mode
   searchContainer: { flex: 1, backgroundColor: colors.background },
