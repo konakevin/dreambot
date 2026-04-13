@@ -70,10 +70,8 @@ const BOTS = {
   glambot: { mediums: ['photography', 'shimmer', 'canvas'], excludeVibes: ['ancient', 'ominous', 'cozy', 'minimal'] },
   steambot: { mediums: ['canvas', 'photography'], excludeVibes: ['minimal', 'psychedelic', 'cozy'] },
   tinybot: { mediums: ['photography', 'animation', 'claymation'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos'] },
-  hauntbot: { mediums: ['photography', 'canvas', 'gothic'], excludeVibes: ['whimsical', 'cozy', 'enchanted', 'dreamy', 'peaceful', 'cute', 'psychedelic', 'minimal'] },
   bloombot: { mediums: ['photography', 'photography', 'photography', 'canvas', 'watercolor', 'pencil'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'minimal'] },
   inkbot: { mediums: ['comics', 'canvas', 'photography'], excludeVibes: ['whimsical', 'cozy', 'peaceful', 'cute'] },
-  tripbot: { mediums: ['canvas', 'shimmer', 'neon'], excludeVibes: ['minimal', 'cozy', 'peaceful', 'ancient', 'majestic', 'cinematic'] },
   titanbot: { mediums: ['canvas', 'photography'], excludeVibes: ['minimal', 'cozy', 'whimsical', 'cute', 'peaceful'] },
 };
 

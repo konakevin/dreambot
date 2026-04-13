@@ -314,34 +314,6 @@ const BOT_SEEDS = {
       },
     ],
   },
-  hauntbot: {
-    strategies: [
-      {
-        category: 'hauntbot_scene', count: 20,
-        prompt: 'a hauntingly beautiful but deeply UNSETTLING scene — something is WRONG but you CANNOT look away. Gorgeous cinematography of terrifying things. A dinner table set for twelve where every chair is empty and the food is untouched. A hallway where all the doors are slightly open. A playground at dusk where the swing is moving with no wind. Think: Midsommar, Hereditary, The Ring, It Follows, Silent Hill — beauty and dread married perfectly. NO gore, NO blood, NO jump scares. Pure atmospheric unease wrapped in stunning visuals.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the creepy element and the setting. Comma separated. Example: empty-swing, playground',
-      },
-      {
-        category: 'hauntbot_landscape',
-        prompt: 'a stunningly beautiful landscape that feels DEEPLY WRONG — a place you would NEVER want to be alone in. A fog-choked forest where trees bend toward you. An empty swimming pool filled with autumn leaves at twilight. A staircase that spirals down into darkness with no bottom. Abandoned buildings where one light is on. Hallways that go on forever with no doors. Roads that lead to nothing. Photographed beautifully — gorgeous lighting, rich colors — but every detail whispers "leave." No characters, no people, no figures.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the wrong element and the location. Comma separated. Example: spiral-stairs, darkness',
-      },
-      {
-        category: 'hauntbot_creature',
-        prompt: 'a REIMAGINED horror creature — a never-before-seen version of a classic monster that is terrifying AND beautiful at the same time. A porcelain-skinned vampire whose veins glow blue beneath translucent skin. A wendigo made of twisted birch branches and antlers with golden eyes. A siren whose beauty is inhuman and wrong. A creature emerging from fog that is almost human but NOT. Beautiful dread — gorgeous to look at, chilling to consider. NO gore, NO blood.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the creature type and the unique feature. Comma separated. Example: wendigo, birch-branches',
-      },
-      {
-        category: 'hauntbot_liminal',
-        prompt: 'a LIMINAL SPACE — a place that exists between places, feels familiar but WRONG. An empty shopping mall at 3am with all the lights on. A pool room with no exit and impossibly calm water. A hotel corridor that repeats forever. A school hallway at midnight. An airport terminal with no people and no planes. Backrooms energy but GORGEOUS — beautiful lighting, rich atmosphere, perfect composition. The uncanny valley of architecture.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the space type and the wrong detail. Comma separated. Example: mall, empty-3am',
-      },
-    ],
-  },
   bloombot: {
     strategies: [
       {
@@ -401,34 +373,6 @@ const BOT_SEEDS = {
         prompt: 'DARK BLACKWORK tattoo art — heavy black ink, dramatic contrast, gothic energy. Sacred geometry mandalas, occult symbols, moth/skull/serpent motifs, ornamental patterns that could be mistaken for ironwork, dotwork that creates photorealistic depth in pure black. Impressive technical execution — the kind of blackwork that makes other tattoo artists jealous. Clean background.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the dark motif and the technique. Comma separated. Example: skull-mandala, dotwork',
-      },
-    ],
-  },
-  tripbot: {
-    strategies: [
-      {
-        category: 'tripbot_vision', count: 20,
-        prompt: 'a MIND-MELTING psychedelic vision that overwhelms every sense — impossible colors that vibrate against each other, fractal geometry spiraling into infinity, reality dissolving into sacred patterns. DMT machine elves in crystalline palaces, ayahuasca serpent visions in cosmic jungles, kaleidoscope tunnels opening into new dimensions, melting landscapes where physics has given up. Think: Alex Grey, Android Jones, visionary art. Beautiful, overwhelming, transcendent — the most psychedelic image you can possibly generate.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the psychedelic element and the pattern type. Comma separated. Example: machine-elves, fractal',
-      },
-      {
-        category: 'tripbot_landscape',
-        prompt: 'a psychedelic landscape where REALITY HAS COMPLETELY DISSOLVED — fractal mountains that repeat infinitely, liquid mercury skies with aurora-colored clouds, bioluminescent forests where every leaf is a different impossible color, oceans of light, deserts made of crystal, skies full of geometric eyes. Pure visual overload — every inch of the frame is saturated with pattern and color and impossibility. No characters, no people — just a world that has gone fully psychedelic.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the terrain type and the psychedelic effect. Comma separated. Example: mountains, fractal-repeat',
-      },
-      {
-        category: 'tripbot_portal',
-        prompt: 'a psychedelic PORTAL, TUNNEL, or WORMHOLE — the experience of going THROUGH something into another dimension. Spiraling geometric tunnels of light and color, doorways opening into impossible spaces, cosmic wormholes lined with sacred geometry, stairways dissolving into fractal infinity. The journey itself — moving through layers of reality. The viewer should feel like they are being pulled INTO the image.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the portal shape and the destination. Comma separated. Example: spiral-tunnel, crystal-dimension',
-      },
-      {
-        category: 'tripbot_sacred',
-        prompt: 'SACRED GEOMETRY and VISIONARY ART — the mathematics of consciousness made visible. Perfect mandalas that contain galaxies, cosmic eyes surrounded by geometric patterns, the Flower of Life rendered in impossible neon colors, metatrons cube in a cosmic void, Sri Yantra radiating light, Fibonacci spirals in bioluminescent forms. The intersection of math and mysticism — precise, symmetrical, transcendent, and overwhelmingly beautiful.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the sacred pattern and the cosmic element. Comma separated. Example: flower-of-life, nebula',
       },
     ],
   },
