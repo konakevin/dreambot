@@ -41,6 +41,7 @@ const ACTIVE_MEDIUMS = [
   'pixels',
   'shimmer',
   'storybook',
+  'surreal',
   'twilight',
   'vaporwave',
   'vinyl',

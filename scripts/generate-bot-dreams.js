@@ -55,7 +55,7 @@ const BOTS = {
     },
   },
   starbot: { mediums: ['photography', 'neon', 'canvas'], excludeVibes: ['minimal', 'whimsical'] },
-  venusbot: { mediums: ['photography', 'neon', 'shimmer'], excludeVibes: ['minimal', 'whimsical'] },
+  venusbot: { mediums: ['surreal', 'surreal', 'neon', 'shimmer'], excludeVibes: ['minimal', 'whimsical'] },
   sirenbot: { mediums: ['canvas', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   gothbot: { mediums: ['gothic', 'anime', 'canvas'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──

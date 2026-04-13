@@ -276,6 +276,19 @@ Express the mood through the ENVIRONMENT and TIME OF DAY — not through post-pr
 ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
   },
 
+  surreal: {
+    model: 'kontext-max',
+    buildPrompt: (_photo, vibe, hint) =>
+      `Keep this photo looking photographically REAL — real skin, real textures, real materials — but push everything into surreal impossibility.
+
+CRITICAL — preserve identity: keep the person's exact face, gender, skin tone, age, and core features. The surreal treatment applies to COLOR, LIGHTING, and ENVIRONMENT — not to the person's identity.
+
+Apply extreme color grading: hyper-saturated, shifted hues — skin glows with unnatural warmth, shadows are deep electric blue or magenta. Add double-exposure blending with cosmic elements — galaxies, nebulae, or organic textures bleeding through the subject's silhouette. Warp the environment subtly: reflections that don't match, impossible geometry, light sources that shouldn't exist. Lens effects pushed to extremes — chromatic aberration, prismatic light splits, lens flare. Sharp and detailed like a real photo, but the scene is impossible and dreamlike. Portrait 9:16.
+
+Express the mood through COLOR SATURATION and REALITY DISTORTION — warm saturated for euphoric, cool desaturated for eerie, maximum distortion for chaos:
+${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
+  },
+
   twilight: {
     model: 'kontext-max',
     buildPrompt: (_photo, vibe, hint) =>
