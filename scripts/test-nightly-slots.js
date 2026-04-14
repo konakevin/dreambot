@@ -33,9 +33,13 @@ const FORCE_OBJECT = objIdx >= 0 ? args[objIdx + 1] : null;
 const countArgIdx = args.indexOf('--count');
 const TEST_COUNT = countArgIdx >= 0 ? parseInt(args[countArgIdx + 1], 10) : 3;
 
+const pathIdx = args.indexOf('--path');
+const FORCE_PATH = pathIdx >= 0 ? args[pathIdx + 1] : null;
+const noForceRoll = args.includes('--natural');
+
 const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
   label: `dream ${i + 1}/${TEST_COUNT}`,
-  force_nightly_path: 'personal_cast',
+  force_nightly_path: noForceRoll ? undefined : (FORCE_PATH || 'personal_cast'),
 }));
 
 (async () => {
@@ -88,8 +92,8 @@ const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
               ...(FORCE_OBJECT ? { things: [FORCE_OBJECT], characters: [] } : {}),
             },
           },
-          force_cast_role: 'self',
-          force_nightly_path: test.force_nightly_path,
+          ...(noForceRoll ? {} : { force_cast_role: 'self' }),
+          ...(test.force_nightly_path ? { force_nightly_path: test.force_nightly_path } : {}),
           force_medium: ['pencil','anime','comics','shimmer','twilight','surreal','photography','neon'][Math.floor(Math.random() * 8)],
         }),
       });
