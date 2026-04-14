@@ -356,12 +356,40 @@ node -e "require('dotenv').config({path:'.env.local'});const sb=require('@supaba
 
 When starting work on any bot, Claude should proactively reset the pool and remind Kevin.
 
+## The `dream_templates` Table — SHARED, DO NOT BULK DELETE
+
+**This table stores TWO kinds of data.** Different prefixes, different consumers, different lifecycles:
+
+### 1. Nightly dream templates (~6,200 rows) — for USER dreams
+- **Categories:** `cosmic`, `bioluminescence`, `broken_gravity`, `childhood`, `cinematic`, etc. (31 total)
+- **Format:** Scene skeletons with `${character}/${place}/${thing}` placeholder slots
+- **Example:** `"An ocean of melted clocks where islands of ${thing} drift, each ticking at a different speed"`
+- **Consumed by:** `generate-dream` Edge Function nightly path — picks a mood-weighted category, pulls a random template, fills slots from user's vibe profile dream seeds, feeds to Sonnet
+- **Lifecycle:** Permanent pool. Write once via `scripts/generate-dream-templates.js`, never delete.
+- **If deleted:** Nightly user dreams break silently (the Edge Function throws and falls back to a generic prompt)
+
+### 2. Bot seeds — for BOT dreams
+- **Categories:** `dragonbot_genre`, `venusbot_androidwoman`, `bloombot_landscape`, etc.
+- **Format:** Complete scene descriptions, no placeholder slots
+- **Example:** `"The android tilts her chrome-plated head, glowing blue circuits pulsing beneath translucent cheek panels"`
+- **Consumed by:** `scripts/generate-bot-dreams.js` — picks an unused seed, sends as `hint` to the Edge Function V2 text path
+- **Lifecycle:** Tracked via `used_at` (each seed used once), auto-regenerated when pool exhausted via `regenSeeds()` → `generateSeedsForBot()`
+- **Safe to delete by prefix:** `.delete().like('category', 'botname_%')` — only affects one bot
+
+### Critical rule
+**NEVER run an unscoped delete on this table.** Always filter by category prefix. In April 2026, all 11,338 nightly templates were accidentally deleted while cleaning bot seed orphans — nightly user dreams broke silently.
+
+**Safe patterns:**
+- Bot seed cleanup: `.delete().like('category', 'botname_%')` or `.update({disabled: true})`
+- Nightly template refresh: run `node scripts/generate-dream-templates.js` (regenerates all 31 categories)
+
 ## Scripts
 
 - `scripts/generate-bot-dreams.js` — reads seed prompts from DB, picks unused seeds (tracks `used_at`), auto-regenerates when exhausted, signs in as bot, calls Edge Function V2 path, flips draft to public
 - `scripts/generate-bot-seeds.js` — generates deduped seeds using Sonnet, stores in dream_templates table with generation tracking
+- `scripts/generate-dream-templates.js` — generates ~6,200 nightly dream templates (31 categories × 200 each) via Sonnet. One-time run, creates the permanent pool for user nightly dreams.
 - `scripts/lib/seed-generator.js` — shared module: BOT_SEEDS config, generateScene, extractSubject, generateSeedsForBot
-- `scripts/create-bot-accounts.js` — creates auth users + public.users + vibe profiles for all 10 bots
+- `scripts/create-bot-accounts.js` — creates auth users + public.users + vibe profiles for all bots
 
 ## New Vibes Added (available to all users)
 

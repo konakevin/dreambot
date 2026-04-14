@@ -492,8 +492,24 @@ The April 2026 audit found 14 issues, several silently broken for months. The pa
 2. Search for hanging RLS references, triggers, RPCs that read those columns.
 3. Search for type definitions that mention the feature.
 
+### The `dream_templates` table — CRITICAL shared data (do NOT bulk delete)
+
+This table contains **TWO kinds of data** separated by category prefix:
+
+1. **Nightly dream templates** (~6,200 rows) — categories like `cosmic`, `bioluminescence`, `broken_gravity`, `childhood`, etc. Used by the nightly dream path in `generate-dream/index.ts` to generate personalized user dreams. These are permanent and should NEVER be deleted. If they need refreshing, run `node scripts/generate-dream-templates.js` which regenerates all 31 categories.
+
+2. **Bot seeds** — categories like `dragonbot_genre`, `venusbot_androidwoman`, etc. Used by `scripts/generate-bot-dreams.js`. These have lifecycle tracking (`used_at`, `generation`, `disabled`) and auto-regenerate when exhausted.
+
+**The April 2026 incident:** All 11,338 nightly templates were accidentally deleted while cleaning up bot seed orphans. The nightly dream path broke silently. **Before deleting from this table, always check which categories you're targeting and verify they're not nightly template categories.**
+
+**Safe patterns:**
+- Delete bot seeds by prefix: `.delete().like('category', 'botname_%')` — safe, scoped to one bot
+- Disable bot seeds: `.update({disabled: true}).like('category', 'botname_%')` — even safer, reversible
+- **NEVER** run an unscoped delete on this table
+
 ### Hard rules (no exceptions)
 
+- **NEVER bulk delete from `dream_templates` without verifying the category prefix.** The table contains both bot seeds AND nightly dream templates. Deleting nightly templates breaks user dreams silently.
 - **NEVER comment out a rate limit, security check, or RLS policy "for now".** If you need to disable, delete it AND create a follow-up task. Comments rot.
 - **NEVER use `as Function`, `as any`, or `as unknown as <type>` to bypass types.** If a table isn't in the generated types, regenerate the types instead.
 - **NEVER fire-and-forget critical RPCs without a `.catch` that logs in dev mode.** Silent failures lived for months.

@@ -548,17 +548,31 @@ Deno.serve(async (req) => {
         (m: DreamCastMember) => m.description && m.thumb_url && m.thumb_url.startsWith('http')
       );
 
-      // Roll the dream algorithm (cast selection + composition path)
-      const dreamRoll = rollDream(describedCastMembers, nightlyMedium.key, force_cast_role);
-      let castPick = dreamRoll.castPick as DreamCastMember | null;
-      const multiCast = dreamRoll.multiCast as DreamCastMember[];
+      // Roll the dream algorithm (path selection + cast + personal elements)
+      const dreamRoll = rollDream(
+        describedCastMembers,
+        nightlyMedium.key,
+        nightlyMedium.faceSwaps,
+        force_cast_role
+      );
+      const {
+        nightlyPath,
+        composition,
+        castMembers: selectedCast,
+        includeLocation,
+        includeObject,
+      } = dreamRoll;
+      const castPick = selectedCast.length > 0 ? (selectedCast[0] as DreamCastMember) : null;
       console.log(
         '[generate-dream] Dream roll:',
-        dreamRoll.dreamPath,
+        nightlyPath,
+        composition,
         '| cast:',
-        castPick?.role ?? 'none',
-        '| multi:',
-        multiCast.map((m) => m.role)
+        selectedCast.map((m) => m.role),
+        '| location:',
+        includeLocation,
+        '| object:',
+        includeObject
       );
 
       try {
@@ -625,20 +639,18 @@ Deno.serve(async (req) => {
 
         const template = rows[Math.floor(Math.random() * rows.length)].template;
 
-        // For cast dreams, use a neutral character so template doesn't conflict with the real person
+        // Fill template slots based on nightly path
         const character = castPick
           ? castPick.role === 'pet'
             ? 'a small creature'
             : 'a lone figure'
-          : seeds.characters.length > 0
-            ? seeds.characters[Math.floor(Math.random() * seeds.characters.length)]
-            : 'a wandering figure';
+          : 'a wandering figure';
         const place =
-          seeds.places.length > 0
+          includeLocation && seeds.places.length > 0
             ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
             : 'a forgotten city';
         const thing =
-          seeds.things.length > 0
+          includeObject && seeds.things.length > 0
             ? seeds.things[Math.floor(Math.random() * seeds.things.length)]
             : 'glowing fragments';
 
@@ -683,43 +695,77 @@ Deno.serve(async (req) => {
       ];
       const shotDirection = SHOT_DIRECTIONS[Math.floor(Math.random() * SHOT_DIRECTIONS.length)];
 
-      const aestheticFlavor = nightlyProfile.aesthetics?.length
-        ? `\nFLAVOR (the dreamer vibes with): ${nightlyProfile.aesthetics.slice(0, 4).join(', ')}`
-        : '';
+      const moodWords = (m: typeof moods) => {
+        const axis = (val: number, low: string, mid: string, high: string) =>
+          val < 0.3 ? low : val > 0.7 ? high : mid;
+        return [
+          axis(m.peaceful_chaotic, 'peaceful', 'balanced energy', 'chaotic'),
+          axis(m.cute_terrifying, 'cute and warm', 'balanced light and dark', 'dark and intense'),
+          axis(
+            m.minimal_maximal,
+            'minimal and clean',
+            'moderate detail',
+            'maximalist, more-is-more'
+          ),
+          axis(
+            m.realistic_surreal,
+            'grounded and realistic',
+            'somewhat dreamlike',
+            'fully surreal'
+          ),
+        ].join(', ');
+      };
+
+      // Build personal context based on nightly path decisions
+      const dreamerWorld: string[] = [];
+      if (includeLocation && seeds.places.length > 0) {
+        const loc = seeds.places[Math.floor(Math.random() * seeds.places.length)];
+        dreamerWorld.push(`Set the scene in or near: ${loc}`);
+      }
+      if (includeObject && seeds.things.length > 0) {
+        const obj = seeds.things[Math.floor(Math.random() * seeds.things.length)];
+        dreamerWorld.push(`Include this object naturally in the scene: ${obj}`);
+      }
+      const dreamerContext =
+        dreamerWorld.length > 0
+          ? `\nPERSONAL ELEMENTS — weave these into the scene:\n- ${dreamerWorld.join('\n- ')}`
+          : '';
       const avoidList = nightlyProfile.avoid?.length
         ? `\nNEVER INCLUDE: ${nightlyProfile.avoid.join(', ')}`
         : '';
-      const allSeeds = [...seeds.characters, ...seeds.places, ...seeds.things];
-      const extraSeeds =
-        allSeeds.length > 0
-          ? `\nDREAMER'S INGREDIENTS (weave 1-2 in naturally if they fit the scene): ${allSeeds
-              .sort(() => Math.random() - 0.5)
-              .slice(0, 4)
-              .join(', ')}`
-          : '';
 
-      // ── THREE DREAM COMPOSITION PATHS ──
-      // Path already decided by rollDream() above
-      const { dreamPath } = dreamRoll;
+      // ── DREAM COMPOSITION PATHS ──
+      const mediumStyle = nightlyMedium.key.replace(/_/g, ' ');
+
+      // Build cast description block for Sonnet
+      const castDescBlock =
+        selectedCast.length > 0
+          ? selectedCast
+              .map((m, i) => {
+                const desc =
+                  (m as DreamCastMember).description ??
+                  (m.role === 'pet' ? 'a small creature' : 'a figure');
+                return selectedCast.length === 1
+                  ? `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${desc}`
+                  : `CHARACTER ${i + 1} (${m.role}):\n${desc}`;
+              })
+              .join('\n\n')
+          : '';
+      const castInstruction =
+        selectedCast.length > 1
+          ? `Render ALL ${selectedCast.length} characters as ${mediumStyle} CHARACTERS — stylized, artistic. Show them TOGETHER interacting in the scene.`
+          : selectedCast.length === 1
+            ? `Render them as a ${mediumStyle} CHARACTER — stylized, illustrated, artistic. NOT a real photograph.`
+            : '';
+
       const shortCastDesc = castPick
         ? (castPick.description?.split(',')[0] ??
           (castPick.role === 'pet' ? 'a small creature' : 'a figure'))
         : null;
-      const mediumStyle = nightlyMedium.key.replace(/_/g, ' ');
 
       let nightlyBrief: string;
 
-      if (dreamPath === 'character') {
-        // ── PATH A: Character dream — character is the focus, scene wraps around them ──
-        const castDescForBrief =
-          multiCast.length > 1
-            ? multiCast
-                .map((m) => m.description)
-                .filter(Boolean)
-                .join('\nAND ALSO: ')
-            : (castPick?.description ?? shortCastDesc ?? 'a figure');
-        const characterCount =
-          multiCast.length > 1 ? `${multiCast.length} CHARACTERS` : 'THE MAIN CHARACTER';
+      if (composition === 'character') {
         nightlyBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
@@ -727,18 +773,17 @@ MEDIUM: ${nightlyMedium.fluxFragment}
 STYLE GUIDE (follow this closely):
 ${nightlyMedium.directive}
 
-${characterCount} (include these traits but STYLIZED — NOT photorealistic):
-${castDescForBrief}
-Render them as ${mediumStyle} CHARACTERS — stylized, illustrated, artistic. NOT real photographs. They should look like they BELONG in this art style.${multiCast.length > 1 ? ' Show them TOGETHER interacting in the scene.' : ''}
+${castDescBlock}
+${castInstruction}
 
-DREAM SCENE (the character is experiencing this):
+DREAM SCENE (the character${selectedCast.length > 1 ? 's are' : ' is'} experiencing this):
 ${dreamSubject}
 
-IMPORTANT: Replace any generic "figure" or "person" in the scene with the specific character. They are DOING something, not standing and staring at the camera.
+IMPORTANT: Replace any generic "figure" or "person" in the scene with the specific character${selectedCast.length > 1 ? 's' : ''}. They are DOING something, not standing and staring at the camera.
 
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${aestheticFlavor}${extraSeeds}${avoidList}
+${dreamerContext}${avoidList}
 
 Start with the art medium. End with: no text, no words, no letters, no watermarks, hyper detailed.
 Output ONLY the prompt.`;
@@ -746,10 +791,14 @@ Output ONLY the prompt.`;
           medium: nightlyMedium.key,
           vibe: nightlyVibe.key,
           engine: 'nightly-cast-character',
-          castRole: castPick!.role,
+          nightlyPath,
+          castRoles: selectedCast.map((m) => m.role),
         };
-      } else if (dreamPath === 'epic_tiny') {
-        // ── PATH C: Epic scene + tiny character — vast landscape, character is a tiny discoverable detail ──
+      } else if (composition === 'epic_tiny') {
+        const tinyDesc =
+          selectedCast.length > 1
+            ? `tiny ${mediumStyle}-style figures: ${selectedCast.map((m) => m.description?.split(',')[0] ?? m.role).join(' and ')}`
+            : `a tiny ${mediumStyle}-style ${shortCastDesc}`;
         nightlyBrief = `You are a cinematographer composing an EPIC, VAST scene. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
@@ -760,26 +809,27 @@ ${nightlyMedium.directive}
 DREAM SCENE (this is the ENTIRE focus — describe in maximum vivid detail):
 ${dreamSubject}
 
-Somewhere in this vast scene, barely visible: ${multiCast.length > 1 ? `TWO tiny figures together — ${multiCast.map((m) => m.description?.split(',')[0] ?? 'a figure').join(' AND ')}. Both must appear as TWO DISTINCT people next to each other.` : `a tiny ${mediumStyle}-style ${shortCastDesc}`}. They occupy less than 5% of the image. The scene is EVERYTHING.
+Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
 
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${aestheticFlavor}${extraSeeds}${avoidList}
+${dreamerContext}${avoidList}
 
 Write the prompt:
 1. Start with the art medium
 2. Spend 90% of words on the ENVIRONMENT — architecture, physics, materials, light, weather
-3. ${multiCast.length > 1 ? 'Mention TWO tiny figures together at the end — describe both distinctly' : 'Mention the tiny character in ONE short phrase at the very end'}
+3. Mention the tiny ${selectedCast.length > 1 ? 'figures' : 'character'} in ONE short phrase at the very end
 4. End with: no text, no words, no letters, no watermarks, hyper detailed
 Output ONLY the prompt.`;
         logAxes = {
           medium: nightlyMedium.key,
           vibe: nightlyVibe.key,
           engine: 'nightly-cast-epic',
-          castRole: castPick!.role,
+          nightlyPath,
+          castRoles: selectedCast.map((m) => m.role),
         };
       } else {
-        // ── PATH B: Pure scene — no character, just breathtaking art ──
+        // ── Pure scene — no character, just breathtaking art ──
         nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
 
 MEDIUM: ${nightlyMedium.fluxFragment}
@@ -789,7 +839,7 @@ ${dreamSubject}
 
 CAMERA/COMPOSITION: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${aestheticFlavor}${extraSeeds}${avoidList}
+${dreamerContext}${avoidList}
 
 Write the prompt:
 1. Start with the art medium
@@ -810,6 +860,24 @@ Output ONLY the prompt.`;
         if (finalPrompt.length < 20) throw new Error('too short');
       } catch {
         finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
+      }
+
+      // Face swap for nightly cast dreams — humans only, not pets.
+      // Only fires when: (a) single human cast member selected, (b) medium supports face swap,
+      // (c) composition includes a character (not pure_scene).
+      if (
+        castPick &&
+        castPick.role !== 'pet' &&
+        castPick.thumb_url &&
+        castPick.thumb_url.startsWith('http') &&
+        nightlyMedium.faceSwaps &&
+        composition !== 'pure_scene' &&
+        selectedCast.length === 1
+      ) {
+        faceSwapSource = castPick.thumb_url;
+        console.log(
+          `[generate-dream] 🎭 Nightly face swap: ${castPick.role} → ${nightlyMedium.key}`
+        );
       }
 
       console.log(`[generate-dream] Nightly ${dreamPath}:`, finalPrompt.slice(0, 200));

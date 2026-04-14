@@ -1,10 +1,4 @@
-import {
-  rollDream,
-  CAST_PROBABILITY,
-  SCENE_ONLY_MEDIUMS,
-  CHARACTER_MEDIUMS,
-  CastMember,
-} from '@/lib/dreamAlgorithm';
+import { rollDream, SCENE_ONLY_MEDIUMS, CHARACTER_MEDIUMS, CastMember } from '@/lib/dreamAlgorithm';
 
 const SELF: CastMember = {
   role: 'self',
@@ -24,153 +18,113 @@ const PET: CastMember = {
 const ALL_CAST = [SELF, PARTNER, PET];
 
 describe('rollDream', () => {
-  // ── Force cast role (test tool) ──
-
   it('force_cast_role "self" always picks self', () => {
     for (let i = 0; i < 20; i++) {
-      const result = rollDream(ALL_CAST, 'anime', 'self');
-      expect(result.castPick?.role).toBe('self');
-      expect(result.multiCast).toHaveLength(0);
-      expect(result.dreamPath).not.toBe('pure_scene');
+      const result = rollDream(ALL_CAST, 'anime', true, 'self');
+      expect(result.castMembers).toHaveLength(1);
+      expect(result.castMembers[0].role).toBe('self');
     }
-  });
-
-  it('force_cast_role "self+plus_one" picks both', () => {
-    for (let i = 0; i < 20; i++) {
-      const result = rollDream(ALL_CAST, 'anime', 'self+plus_one');
-      expect(result.multiCast).toHaveLength(2);
-      expect(result.multiCast.map((m) => m.role)).toEqual(['self', 'plus_one']);
-      expect(result.castPick?.role).toBe('self');
-    }
-  });
-
-  it('force_cast_role "self+plus_one+pet" picks all three', () => {
-    const result = rollDream(ALL_CAST, 'anime', 'self+plus_one+pet');
-    expect(result.multiCast).toHaveLength(3);
-    expect(result.castPick?.role).toBe('self');
   });
 
   it('force_cast_role null means no cast', () => {
     for (let i = 0; i < 20; i++) {
-      const result = rollDream(ALL_CAST, 'anime', null);
-      expect(result.castPick).toBeNull();
-      expect(result.dreamPath).toBe('pure_scene');
+      const result = rollDream(ALL_CAST, 'anime', true, null);
+      expect(result.castMembers).toHaveLength(0);
+      expect(result.composition).toBe('pure_scene');
     }
   });
 
-  // ── Scene-only mediums ──
-
-  it('scene-only mediums always return pure_scene', () => {
+  it('scene-only mediums always return pure_scene path', () => {
     for (const medium of SCENE_ONLY_MEDIUMS) {
       for (let i = 0; i < 10; i++) {
-        const result = rollDream(ALL_CAST, medium);
-        expect(result.dreamPath).toBe('pure_scene');
+        const result = rollDream(ALL_CAST, medium, false);
+        expect(result.nightlyPath).toBe('personal_scene');
+        expect(result.composition).toBe('pure_scene');
       }
     }
   });
 
-  // ── Character-only mediums ──
-
-  it('character mediums always return character path when cast is picked', () => {
+  it('character mediums always return character composition when cast is picked', () => {
     for (const medium of CHARACTER_MEDIUMS) {
-      let gotCast = false;
-      for (let i = 0; i < 50; i++) {
-        const result = rollDream(ALL_CAST, medium);
-        if (result.castPick) {
-          expect(result.dreamPath).toBe('character');
-          gotCast = true;
-        }
-      }
-      expect(gotCast).toBe(true);
-    }
-  });
-
-  // ── Duos/groups always character ──
-
-  it('multi-cast always uses character path', () => {
-    for (let i = 0; i < 20; i++) {
-      const result = rollDream(ALL_CAST, 'anime', 'self+plus_one');
-      expect(result.dreamPath).toBe('character');
-    }
-  });
-
-  // ── Empty cast ──
-
-  it('empty cast always returns pure_scene', () => {
-    for (let i = 0; i < 20; i++) {
-      const result = rollDream([], 'anime');
-      expect(result.castPick).toBeNull();
-      expect(result.dreamPath).toBe('pure_scene');
-    }
-  });
-
-  // ── Statistical distribution tests (run many times) ──
-
-  it('cast probability is approximately 75% for non-scene-only mediums', () => {
-    const N = 2000;
-    let castCount = 0;
-    for (let i = 0; i < N; i++) {
-      const result = rollDream(ALL_CAST, 'anime');
-      if (result.castPick) castCount++;
-    }
-    const ratio = castCount / N;
-    // Allow 5% tolerance
-    expect(ratio).toBeGreaterThan(CAST_PROBABILITY - 0.05);
-    expect(ratio).toBeLessThan(CAST_PROBABILITY + 0.05);
-  });
-
-  it('WHO distribution is approximately correct', () => {
-    const N = 5000;
-    const counts: Record<string, number> = {
-      self: 0,
-      plus_one: 0,
-      pet: 0,
-      'self+plus_one': 0,
-      'self+pet': 0,
-      'self+plus_one+pet': 0,
-      none: 0,
-    };
-
-    for (let i = 0; i < N; i++) {
-      const result = rollDream(ALL_CAST, 'anime');
-      if (!result.castPick) {
-        counts.none++;
-      } else if (result.multiCast.length > 1) {
-        const key = result.multiCast.map((m) => m.role).join('+');
-        counts[key] = (counts[key] ?? 0) + 1;
-      } else {
-        counts[result.castPick.role] = (counts[result.castPick.role] ?? 0) + 1;
+      for (let i = 0; i < 20; i++) {
+        const result = rollDream(ALL_CAST, medium, false, 'self');
+        expect(result.composition).toBe('character');
       }
     }
+  });
 
-    // Cast dreams should be ~75% of total
-    const castTotal = N - counts.none;
-    expect(castTotal / N).toBeGreaterThan(0.7);
-    expect(castTotal / N).toBeLessThan(0.8);
-
-    // Within cast: me+partner should be the most common (~40% of cast)
-    if (castTotal > 0) {
-      const mePartnerRatio = (counts['self+plus_one'] ?? 0) / castTotal;
-      expect(mePartnerRatio).toBeGreaterThan(0.3);
-      expect(mePartnerRatio).toBeLessThan(0.5);
+  it('empty cast always returns personal_scene', () => {
+    for (let i = 0; i < 20; i++) {
+      const result = rollDream([], 'anime', true);
+      expect(result.castMembers).toHaveLength(0);
+      expect(result.nightlyPath).toBe('personal_scene');
     }
   });
 
-  it('singles get both character and epic_tiny paths', () => {
-    const N = 1000;
-    let characterCount = 0;
-    let epicTinyCount = 0;
-
-    for (let i = 0; i < N; i++) {
-      const result = rollDream(ALL_CAST, 'anime', 'self');
-      if (result.dreamPath === 'character') characterCount++;
-      if (result.dreamPath === 'epic_tiny') epicTinyCount++;
+  it('face-swap medium always picks single cast member', () => {
+    for (let i = 0; i < 50; i++) {
+      const result = rollDream(ALL_CAST, 'anime', true);
+      if (result.castMembers.length > 0) {
+        expect(result.castMembers).toHaveLength(1);
+      }
     }
+  });
 
-    // 60/40 split with tolerance
-    const charRatio = characterCount / N;
-    expect(charRatio).toBeGreaterThan(0.5);
-    expect(charRatio).toBeLessThan(0.7);
-    expect(epicTinyCount).toBeGreaterThan(0);
+  it('non-face-swap medium can pick multiple cast members', () => {
+    let gotMultiple = false;
+    for (let i = 0; i < 100; i++) {
+      const result = rollDream(ALL_CAST, 'lego', false, undefined, 'personal_cast');
+      if (result.castMembers.length > 1) {
+        gotMultiple = true;
+        break;
+      }
+    }
+    expect(gotMultiple).toBe(true);
+  });
+
+  it('three nightly paths fire with roughly 40/30/30 distribution', () => {
+    const N = 3000;
+    const counts = { personal_cast: 0, personal_scene: 0, cast_random: 0 };
+    for (let i = 0; i < N; i++) {
+      const result = rollDream(ALL_CAST, 'anime', true);
+      counts[result.nightlyPath]++;
+    }
+    expect(counts.personal_cast / N).toBeGreaterThan(0.33);
+    expect(counts.personal_cast / N).toBeLessThan(0.47);
+    expect(counts.personal_scene / N).toBeGreaterThan(0.23);
+    expect(counts.personal_scene / N).toBeLessThan(0.37);
+    expect(counts.cast_random / N).toBeGreaterThan(0.23);
+    expect(counts.cast_random / N).toBeLessThan(0.37);
+  });
+
+  it('personal_cast and personal_scene always have at least one personal element', () => {
+    for (let i = 0; i < 100; i++) {
+      const result = rollDream(ALL_CAST, 'anime', true);
+      if (result.nightlyPath === 'personal_cast' || result.nightlyPath === 'personal_scene') {
+        expect(result.includeLocation || result.includeObject).toBe(true);
+      }
+    }
+  });
+
+  it('cast_random never has personal elements', () => {
+    for (let i = 0; i < 100; i++) {
+      const result = rollDream(ALL_CAST, 'anime', true, undefined, 'cast_random');
+      expect(result.includeLocation).toBe(false);
+      expect(result.includeObject).toBe(false);
+    }
+  });
+
+  it('character and epic_tiny split for cast dreams', () => {
+    let charCount = 0;
+    let epicCount = 0;
+    const N = 500;
+    for (let i = 0; i < N; i++) {
+      const result = rollDream(ALL_CAST, 'anime', true, 'self');
+      if (result.composition === 'character') charCount++;
+      if (result.composition === 'epic_tiny') epicCount++;
+    }
+    expect(charCount / N).toBeGreaterThan(0.5);
+    expect(charCount / N).toBeLessThan(0.7);
+    expect(epicCount).toBeGreaterThan(0);
   });
 });
