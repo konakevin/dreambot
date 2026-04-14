@@ -434,7 +434,7 @@ async function main() {
           try {
             const category = pickWeightedCategory(moods);
             const { data: rows, error: tmplErr } = await sb
-              .from('dream_templates')
+              .from('nightly_seeds')
               .select('template')
               .eq('category', category)
               .eq('disabled', false)

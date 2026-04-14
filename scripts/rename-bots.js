@@ -137,9 +137,9 @@ async function renameBot(oldUsername, oldVariants, newUsername, oldPrefix, newPr
     console.log(`   ⚠️ Auth update failed: ${e.message}`);
   }
 
-  // Rename dream_templates categories
+  // Rename bot_seeds categories
   const { data: templates } = await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .select('id, category')
     .like('category', oldPrefix + '%');
 
@@ -147,7 +147,7 @@ async function renameBot(oldUsername, oldVariants, newUsername, oldPrefix, newPr
     let renamed = 0;
     for (const t of templates) {
       const newCategory = t.category.replace(oldPrefix, newPrefix);
-      await sb.from('dream_templates').update({ category: newCategory }).eq('id', t.id);
+      await sb.from('bot_seeds').update({ category: newCategory }).eq('id', t.id);
       renamed++;
     }
     console.log(`   ✅ Templates: ${renamed} categories renamed (${oldPrefix}* → ${newPrefix}*)`);
@@ -236,13 +236,13 @@ async function createNewBot(bot) {
 
     // Rename templates
     const { data: templates } = await sb
-      .from('dream_templates')
+      .from('bot_seeds')
       .select('id, category')
       .like('category', ASTRA_RENAME.oldPrefix + '%');
     if (templates && templates.length > 0) {
       for (const t of templates) {
         const newCat = t.category.replace(ASTRA_RENAME.oldPrefix, ASTRA_RENAME.newPrefix);
-        await sb.from('dream_templates').update({ category: newCat }).eq('id', t.id);
+        await sb.from('bot_seeds').update({ category: newCat }).eq('id', t.id);
       }
       console.log(`   ✅ Templates: ${templates.length} renamed`);
     }
@@ -253,13 +253,13 @@ async function createNewBot(bot) {
   // Merge pixelrex into arcadebot
   console.log(`\n🔀 Merging pixelrex → arcadebot`);
   const { data: pxTemplates } = await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .select('id, category')
     .like('category', MERGE_PIXELREX.oldPrefix + '%');
   if (pxTemplates && pxTemplates.length > 0) {
     for (const t of pxTemplates) {
       const newCat = t.category.replace(MERGE_PIXELREX.oldPrefix, MERGE_PIXELREX.newPrefix);
-      await sb.from('dream_templates').update({ category: newCat }).eq('id', t.id);
+      await sb.from('bot_seeds').update({ category: newCat }).eq('id', t.id);
     }
     console.log(`   ✅ ${pxTemplates.length} templates renamed`);
   }

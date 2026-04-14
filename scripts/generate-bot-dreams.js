@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Generate dreams for bot accounts.
- * Each bot has seed prompts stored in dream_templates (category: {username}_*).
+ * Each bot has seed prompts stored in bot_seeds (category: {username}_*).
  * Picks unused seeds first (no repeats until all are used), then auto-regenerates
  * a fresh batch when the pool is exhausted.
  *
@@ -80,7 +80,7 @@ const BOTS = {
  */
 async function loadUnusedSeeds(prefix) {
   const { data } = await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .select('id, template')
     .like('category', `${prefix}%`)
     .eq('disabled', false)
@@ -105,7 +105,7 @@ async function regenSeeds(username, prefix) {
     // No seed config — recycle existing seeds by clearing used_at
     console.log(`   ♻️ No seed config for ${username}, recycling existing seeds`);
     await sb
-      .from('dream_templates')
+      .from('bot_seeds')
       .update({ used_at: null })
       .like('category', `${prefix}%`)
       .eq('disabled', false);
@@ -114,7 +114,7 @@ async function regenSeeds(username, prefix) {
 
   // Get next generation number
   const { data: maxGenRows } = await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .select('generation')
     .like('category', prefix + '%')
     .order('generation', { ascending: false })
@@ -125,7 +125,7 @@ async function regenSeeds(username, prefix) {
 
   // Disable old seeds
   await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .update({ disabled: true })
     .like('category', prefix + '%')
     .eq('disabled', false);
@@ -133,7 +133,7 @@ async function regenSeeds(username, prefix) {
   try {
     const { rows } = await generateSeedsForBot(username, { anthropicApiKey });
     const tagged = rows.map(r => ({ ...r, disabled: false, generation: nextGen }));
-    const { error } = await sb.from('dream_templates').insert(tagged);
+    const { error } = await sb.from('bot_seeds').insert(tagged);
     if (error) throw new Error(error.message);
     console.log(`   ✅ ${tagged.length} new seeds generated (gen ${nextGen})`);
     return await loadUnusedSeeds(prefix);
@@ -142,7 +142,7 @@ async function regenSeeds(username, prefix) {
     console.error(`   ❌ Seed regen failed: ${err.message}`);
     console.log(`   ♻️ Re-enabling old seeds to continue`);
     await sb
-      .from('dream_templates')
+      .from('bot_seeds')
       .update({ disabled: false, used_at: null })
       .like('category', prefix + '%')
       .eq('disabled', true);
@@ -258,7 +258,7 @@ async function regenSeeds(username, prefix) {
           // Mark seed as used
           if (seed) {
             await sb
-              .from('dream_templates')
+              .from('bot_seeds')
               .update({ used_at: new Date().toISOString() })
               .eq('id', seed.id);
           }

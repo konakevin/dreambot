@@ -320,6 +320,9 @@ Deno.serve(async (req) => {
     | undefined;
   const force_medium = (body as Record<string, unknown>).force_medium as string | undefined;
   const force_vibe = (body as Record<string, unknown>).force_vibe as string | undefined;
+  const force_nightly_path = (body as Record<string, unknown>).force_nightly_path as
+    | string
+    | undefined;
   const jobId = (body as Record<string, unknown>).job_id as string | undefined;
   const style_prompt = (body as Record<string, unknown>).style_prompt as string | undefined;
 
@@ -553,7 +556,8 @@ Deno.serve(async (req) => {
         describedCastMembers,
         nightlyMedium.key,
         nightlyMedium.faceSwaps,
-        force_cast_role
+        force_cast_role,
+        force_nightly_path
       );
       const {
         nightlyPath,
@@ -576,92 +580,59 @@ Deno.serve(async (req) => {
       );
 
       try {
-        // Category weights based on user's mood sliders — higher weight = more likely to be picked
-        const CATEGORY_WEIGHTS: Record<string, (m: typeof moods) => number> = {
-          cosmic: (m) => 1 + m.realistic_surreal * 0.5,
-          microscopic: (m) => 1 + (1 - m.minimal_maximal) * 0.5,
-          impossible_architecture: (m) => 1 + m.realistic_surreal * 0.5 + m.minimal_maximal * 0.3,
-          giant_objects: (m) => 1 + m.minimal_maximal * 0.5,
-          peaceful_absurdity: (m) =>
-            1 + (1 - m.peaceful_chaotic) * 0.8 + (1 - m.cute_terrifying) * 0.3,
-          beautiful_melancholy: (m) =>
-            1 + (1 - m.peaceful_chaotic) * 0.5 + (1 - m.minimal_maximal) * 0.3,
-          cosmic_horror: (m) => 1 + m.cute_terrifying * 0.8 + m.realistic_surreal * 0.3,
-          joyful_chaos: (m) => 1 + m.peaceful_chaotic * 0.8 + (1 - m.cute_terrifying) * 0.3,
-          eerie_stillness: (m) => 1 + (1 - m.peaceful_chaotic) * 0.5 + m.cute_terrifying * 0.5,
-          broken_gravity: (m) => 1 + m.peaceful_chaotic * 0.3 + m.realistic_surreal * 0.5,
-          wrong_materials: (m) => 1 + m.realistic_surreal * 0.8,
-          time_distortion: (m) => 1 + m.realistic_surreal * 0.8,
-          merged_worlds: (m) => 1 + m.realistic_surreal * 0.5 + m.minimal_maximal * 0.3,
-          living_objects: (m) => 1 + (1 - m.cute_terrifying) * 0.3 + m.realistic_surreal * 0.3,
-          impossible_weather: (m) => 1 + m.peaceful_chaotic * 0.3 + m.realistic_surreal * 0.3,
-          overgrown: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3,
-          bioluminescence: (m) =>
-            1 + (1 - m.cute_terrifying) * 0.5 + (1 - m.peaceful_chaotic) * 0.3,
-          dreams_within_dreams: (m) => 1 + m.realistic_surreal * 0.8 + m.minimal_maximal * 0.3,
-          memory_distortion: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3 + m.realistic_surreal * 0.5,
-          abandoned_running: (m) => 1 + m.cute_terrifying * 0.3 + (1 - m.peaceful_chaotic) * 0.3,
-          transformation: (m) => 1 + m.realistic_surreal * 0.5 + m.peaceful_chaotic * 0.3,
-          reflections: (m) => 1 + (1 - m.minimal_maximal) * 0.3 + m.realistic_surreal * 0.3,
-          machines: (m) => 1 + m.minimal_maximal * 0.5 + m.peaceful_chaotic * 0.3,
-          music_sound: (m) => 1 + m.peaceful_chaotic * 0.3,
-          underwater: (m) => 1 + (1 - m.peaceful_chaotic) * 0.3,
-          doors_portals: (m) => 1 + m.realistic_surreal * 0.5,
-          collections: (m) => 1 + m.minimal_maximal * 0.8,
-          decay_beauty: (m) => 1 + m.cute_terrifying * 0.5 + (1 - m.peaceful_chaotic) * 0.3,
-          childhood: (m) => 1 + (1 - m.cute_terrifying) * 0.5,
-          transparency: (m) => 1 + m.realistic_surreal * 0.5 + (1 - m.minimal_maximal) * 0.3,
-          cinematic: (m) => 1 + m.minimal_maximal * 0.3,
-        };
+        // Map the roll to a seed category based on what personal elements are available
+        const hasChar = selectedCast.length > 0;
+        const hasLoc = includeLocation && seeds.places.length > 0;
+        const hasObj = includeObject && (seeds.things.length > 0 || seeds.characters.length > 0);
 
-        // Weighted random pick
-        const entries = Object.entries(CATEGORY_WEIGHTS);
-        const weights = entries.map(([, fn]) => fn(moods));
-        const totalWeight = weights.reduce((a, b) => a + b, 0);
-        let roll = Math.random() * totalWeight;
-        let category = entries[0][0];
-        for (let ci = 0; ci < entries.length; ci++) {
-          roll -= weights[ci];
-          if (roll <= 0) {
-            category = entries[ci][0];
-            break;
-          }
+        let seedCategory: string;
+        if (hasChar && hasLoc && hasObj) seedCategory = 'nightly_char_loc_obj';
+        else if (hasChar && hasLoc) seedCategory = 'nightly_char_loc';
+        else if (hasChar && hasObj) seedCategory = 'nightly_char_obj';
+        else if (hasChar) seedCategory = 'nightly_char';
+        else if (hasLoc && hasObj) seedCategory = 'nightly_loc_obj';
+        else if (hasLoc) seedCategory = 'nightly_loc';
+        else if (hasObj) seedCategory = 'nightly_obj';
+        else seedCategory = 'nightly_pure';
+
+        console.log('[generate-dream] Seed category:', seedCategory);
+
+        // Pull an unused seed from the matching pool
+        const { data: rows, error: tmplErr } = await supabase
+          .from('nightly_seeds')
+          .select('template')
+          .eq('category', seedCategory)
+          .limit(100);
+
+        if (tmplErr || !rows?.length)
+          throw new Error(tmplErr?.message ?? `No seeds found for ${seedCategory}`);
+
+        let filledTemplate = rows[Math.floor(Math.random() * rows.length)].template;
+
+        // Fill slots with user's actual data
+        if (hasChar) {
+          const castDesc = castPick
+            ? castPick.role === 'pet'
+              ? (castPick.description ?? 'a small creature')
+              : (castPick.description ?? 'a figure')
+            : 'a wandering figure';
+          filledTemplate = filledTemplate.replace(/\$\{character\}/g, castDesc);
+        }
+        if (hasLoc) {
+          const place = seeds.places[Math.floor(Math.random() * seeds.places.length)];
+          filledTemplate = filledTemplate.replace(/\$\{place\}/g, place);
+        }
+        if (hasObj) {
+          const thingsPool = [...seeds.things, ...seeds.characters];
+          const thing = thingsPool[Math.floor(Math.random() * thingsPool.length)];
+          filledTemplate = filledTemplate.replace(/\$\{thing\}/g, thing);
         }
 
-        const { data: rows, error: tmplErr } = await supabase
-          .from('dream_templates')
-          .select('template')
-          .eq('category', category)
-          .eq('disabled', false)
-          .limit(200);
-
-        if (tmplErr || !rows?.length) throw new Error(tmplErr?.message ?? 'No templates found');
-
-        const template = rows[Math.floor(Math.random() * rows.length)].template;
-
-        // Fill template slots based on nightly path
-        const character = castPick
-          ? castPick.role === 'pet'
-            ? 'a small creature'
-            : 'a lone figure'
-          : 'a wandering figure';
-        const place =
-          includeLocation && seeds.places.length > 0
-            ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
-            : 'a forgotten city';
-        const thing =
-          includeObject && seeds.things.length > 0
-            ? seeds.things[Math.floor(Math.random() * seeds.things.length)]
-            : 'glowing fragments';
-
-        dreamSubject = template
-          .replace(/\$\{character\}/g, character)
-          .replace(/\$\{place\}/g, place)
-          .replace(/\$\{thing\}/g, thing);
+        dreamSubject = filledTemplate;
 
         console.log(
-          '[generate-dream] Nightly DB template | category:',
-          category,
+          '[generate-dream] Nightly seed | category:',
+          seedCategory,
           '| scene:',
           dreamSubject.slice(0, 120)
         );
@@ -880,7 +851,10 @@ Output ONLY the prompt.`;
         );
       }
 
-      console.log(`[generate-dream] Nightly ${dreamPath}:`, finalPrompt.slice(0, 200));
+      console.log(
+        `[generate-dream] Nightly ${nightlyPath}/${composition}:`,
+        finalPrompt.slice(0, 200)
+      );
       lap('nightly-done');
     } catch (nightlyErr) {
       console.error(

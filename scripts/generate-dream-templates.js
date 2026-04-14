@@ -1,5 +1,5 @@
 /**
- * Generate ~6200 dream scene templates using Sonnet and insert into dream_templates table.
+ * Generate ~6200 dream scene templates using Sonnet and insert into nightly_seeds table.
  * 31 categories × 200 templates each.
  * One-time cost — run once, never again.
  *
@@ -253,7 +253,7 @@ async function insertBatch(category, templates) {
   // Insert in chunks of 100
   for (let i = 0; i < rows.length; i += 100) {
     const chunk = rows.slice(i, i + 100);
-    const { error } = await supabase.from('dream_templates').insert(chunk);
+    const { error } = await supabase.from('nightly_seeds').insert(chunk);
     if (error) {
       console.error(`  DB insert error:`, error.message);
     }

@@ -38,7 +38,7 @@ if (!BOT_SEEDS[BOT]) {
 
   // Get current max generation for this bot
   const { data: maxGenRows } = await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .select('generation')
     .like('category', prefix + '%')
     .order('generation', { ascending: false })
@@ -48,7 +48,7 @@ if (!BOT_SEEDS[BOT]) {
 
   // Disable old seeds (don't delete)
   const { count: disabledCount } = await sb
-    .from('dream_templates')
+    .from('bot_seeds')
     .update({ disabled: true })
     .like('category', prefix + '%')
     .eq('disabled', false);
@@ -63,6 +63,6 @@ if (!BOT_SEEDS[BOT]) {
 
   // Insert with generation tag
   const tagged = rows.map(r => ({ ...r, disabled: false, generation: nextGen }));
-  const { error } = await sb.from('dream_templates').insert(tagged);
+  const { error } = await sb.from('bot_seeds').insert(tagged);
   console.log(error ? '❌ ' + error.message : `✅ ${tagged.length} seeds saved for ${BOT} (gen ${nextGen})`);
 })();
