@@ -25,9 +25,9 @@ const sb = createClient(SUPABASE_URL, getKey('SUPABASE_SERVICE_ROLE_KEY'));
 const KEVIN_ID = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 
 const TESTS = [
-  { label: 'face-swap 1/3', force_nightly_path: 'cast_random' },
-  { label: 'face-swap 2/3', force_nightly_path: 'cast_random' },
-  { label: 'face-swap 3/3', force_nightly_path: 'cast_random' },
+  { label: 'personal+face 1/3', force_nightly_path: 'personal_cast' },
+  { label: 'personal+face 2/3', force_nightly_path: 'personal_cast' },
+  { label: 'personal+face 3/3', force_nightly_path: 'personal_cast' },
 ];
 
 (async () => {

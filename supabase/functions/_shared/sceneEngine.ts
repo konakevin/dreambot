@@ -762,12 +762,21 @@ const STORY_HOOKS: Entry[] = [
   { text: 'the bridge will only hold for one more crossing', weight: 4 },
 ];
 
+const SUBJECT_SCALE_FACESWAP: Entry[] = [
+  { text: 'subject fills 25% of the frame height, face clearly visible', weight: 8 },
+  { text: 'three-quarter body shot, subject fills 30% of frame, face readable', weight: 7 },
+  { text: 'midground subject, visible eyes and mouth, environment still dominant', weight: 6 },
+  { text: 'subject framed waist-up with vast environment behind them', weight: 7 },
+  { text: 'subject framed three-quarter body, face readable, environment expansive', weight: 6 },
+  { text: 'subject in midground framed by foreground elements, face visible', weight: 5 },
+];
+
 const CAMERA_FACESWAP: Entry[] = [
-  { text: 'medium wide shot, environmental portrait, eye-level angle, 35mm lens', weight: 8 },
-  { text: 'medium shot, natural perspective, eye-level, 35mm lens', weight: 7 },
-  { text: 'three-quarter body shot, slight low angle, 35mm lens', weight: 6 },
-  { text: 'medium wide shot, slightly above eye level, 40mm lens', weight: 5 },
-  { text: 'environmental portrait, rule of thirds, 35mm lens', weight: 6 },
+  { text: 'medium shot, subject readable face, 50mm lens, cinematic framing', weight: 8 },
+  { text: 'three-quarter shot, face clearly visible, 45mm lens, background expansive', weight: 7 },
+  { text: 'environmental portrait, eye-level angle, 50mm lens', weight: 7 },
+  { text: 'medium shot, natural perspective, eye-level, 45mm lens', weight: 6 },
+  { text: 'environmental portrait, rule of thirds, 50mm lens', weight: 6 },
 ];
 
 const CAMERA_WIDE: Entry[] = [
@@ -838,6 +847,11 @@ export function assembleScene(opts: SceneOptions): string {
   const actionPool = opts.isFaceSwap ? ACTIONS_FACESWAP : ACTIONS_WIDE;
   const action = filterAndPick(actionPool, tags, rules, rand, allowChaotic);
 
+  // Subject scale — face-swap only
+  const subjectScale = opts.isFaceSwap
+    ? filterAndPick(SUBJECT_SCALE_FACESWAP, tags, rules, rand, allowChaotic)
+    : null;
+
   // Camera — different for face-swap vs wide
   const cameraPool = opts.isFaceSwap ? CAMERA_FACESWAP : CAMERA_WIDE;
   const camera = filterAndPick(cameraPool, tags, rules, rand, allowChaotic);
@@ -870,24 +884,31 @@ export function assembleScene(opts: SceneOptions): string {
     pieces.push(opts.userThing + ' prominent in the scene');
   }
 
-  pieces.push(QUALITY_TAGS);
-
-  // Subject + action (character gets placed by Sonnet — we just say "a figure")
-  pieces.push('a lone figure ' + action.text);
-
-  // Story hook
-  pieces.push(storyHook.text);
-
-  // Face-swap safe zone
   if (opts.isFaceSwap) {
-    pieces.push('clean face visibility, unobstructed facial area, balanced lighting on face');
+    // Face-swap: controlled DOF, subject scale, anti-wide negatives
+    pieces.push(
+      'foreground midground background, layered composition, controlled depth of field, sharp subject, detailed background, atmospheric haze, cinematic lighting'
+    );
+    if (subjectScale) pieces.push(subjectScale.text);
+    pieces.push('a lone figure ' + action.text);
+    pieces.push(storyHook.text);
+    pieces.push(
+      'face clearly visible and readable, eyes visible, head facing camera or slight three-quarter angle, balanced lighting across face, face occupies 8 to 15 percent of image height'
+    );
+    pieces.push(camera.text);
+    pieces.push(style.text);
+    pieces.push('not a distant silhouette, not tiny subject, not wide establishing shot');
+    pieces.push(QUALITY_TAGS_END);
+  } else {
+    // Non-face-swap: deep DOF, environment dominates
+    pieces.push(QUALITY_TAGS);
+    pieces.push('a lone figure ' + action.text);
+    pieces.push(storyHook.text);
+    pieces.push(camera.text);
+    pieces.push('character prominent but background highly detailed');
+    pieces.push(style.text);
+    pieces.push(QUALITY_TAGS_END);
   }
-
-  // Camera + style
-  pieces.push(camera.text);
-  pieces.push('character prominent but background highly detailed');
-  pieces.push(style.text);
-  pieces.push(QUALITY_TAGS_END);
 
   return pieces.join(', ');
 }
