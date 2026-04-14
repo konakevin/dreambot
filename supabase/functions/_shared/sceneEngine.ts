@@ -9,6 +9,15 @@
  * Output: a rich scene description that Sonnet turns into a Flux prompt.
  */
 
+// ── Sonnet-generated pools (creative content, high variety) ───────────
+// These replace the hand-written inline arrays with 480 Sonnet-generated entries.
+import { SETTINGS as GEN_SETTINGS } from './pools/settings.ts';
+import { SIGNATURE_DETAILS as GEN_SIGNATURE_DETAILS } from './pools/signature_details.ts';
+import { FOREGROUND as GEN_FOREGROUND } from './pools/foreground.ts';
+import { MIDGROUND as GEN_MIDGROUND } from './pools/midground.ts';
+import { BACKGROUND as GEN_BACKGROUND } from './pools/background.ts';
+import { STORY_HOOKS as GEN_STORY_HOOKS } from './pools/story_hooks.ts';
+
 // ── Types ─────────────────────────────────────────────────────────────
 
 type Rarity = 'safe' | 'bold' | 'chaotic';
@@ -817,29 +826,29 @@ export function assembleScene(opts: SceneOptions): string {
     : 0.25;
   const allowChaotic = rand() < boldChance * 0.3;
 
-  // Pick from each pool
-  const setting = filterAndPick(SETTINGS, tags, rules, rand, allowChaotic);
+  // Pick from Sonnet-generated pools (creative content)
+  const setting = filterAndPick(GEN_SETTINGS, tags, rules, rand, allowChaotic);
   const scale = filterAndPick(SCALE, tags, rules, rand, allowChaotic);
   const time = filterAndPick(TIME, tags, rules, rand, allowChaotic);
   const weather = filterAndPick(WEATHER, tags, rules, rand, allowChaotic);
   const lighting = filterAndPick(LIGHTING, tags, rules, rand, allowChaotic);
-  const foreground = filterAndPick(FOREGROUND, tags, rules, rand, allowChaotic);
-  const midground = filterAndPick(MIDGROUND, tags, rules, rand, allowChaotic);
-  const background = filterAndPick(BACKGROUND, tags, rules, rand, allowChaotic);
+  const foreground = filterAndPick(GEN_FOREGROUND, tags, rules, rand, allowChaotic);
+  const midground = filterAndPick(GEN_MIDGROUND, tags, rules, rand, allowChaotic);
+  const background = filterAndPick(GEN_BACKGROUND, tags, rules, rand, allowChaotic);
 
   // Story hook
-  const storyHook = filterAndPick(STORY_HOOKS, tags, rules, rand, allowChaotic);
+  const storyHook = filterAndPick(GEN_STORY_HOOKS, tags, rules, rand, allowChaotic);
 
   // Signature detail — rarity-gated
   let signatureText = '';
   const sigRoll = rand();
   if (sigRoll < 0.03 && allowChaotic) {
-    signatureText = filterAndPick(SIGNATURE_DETAILS, tags, rules, rand, true).text;
+    signatureText = filterAndPick(GEN_SIGNATURE_DETAILS, tags, rules, rand, true).text;
   } else if (sigRoll < 0.15) {
-    const boldSigs = SIGNATURE_DETAILS.filter((e) => e.rarity !== 'chaotic');
+    const boldSigs = GEN_SIGNATURE_DETAILS.filter((e) => e.rarity !== 'chaotic');
     if (boldSigs.length > 0) signatureText = pickWeighted(boldSigs, rand).text;
   } else if (sigRoll < 0.5) {
-    const safeSigs = SIGNATURE_DETAILS.filter((e) => !e.rarity || e.rarity === 'safe');
+    const safeSigs = GEN_SIGNATURE_DETAILS.filter((e) => !e.rarity || e.rarity === 'safe');
     if (safeSigs.length > 0) signatureText = pickWeighted(safeSigs, rand).text;
   }
 
