@@ -17,6 +17,7 @@ import { FOREGROUND as GEN_FOREGROUND } from './pools/foreground.ts';
 import { MIDGROUND as GEN_MIDGROUND } from './pools/midground.ts';
 import { BACKGROUND as GEN_BACKGROUND } from './pools/background.ts';
 import { STORY_HOOKS as GEN_STORY_HOOKS } from './pools/story_hooks.ts';
+import { ACTIONS_FACESWAP as GEN_ACTIONS_FACESWAP } from './pools/actions_faceswap.ts';
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -34,12 +35,35 @@ interface ConflictRule {
   notTags: string[];
 }
 
+export interface LocationCardData {
+  tags: string[];
+  visual_palette: string[];
+  atmosphere: string[];
+  cinematic_phrases: string[];
+  fusion_settings: Record<string, string>;
+}
+
+export interface ObjectCardData {
+  tags: string[];
+  visual_forms: string[];
+  signature_details: string[];
+  interaction_modes: string[];
+  environment_bindings: string[];
+  role_options: string[];
+  fusion_forms: Record<string, string[]>;
+  soft_presence_forms: string[];
+  faceswap_forbidden: string[];
+  faceswap_safe_positive: string[];
+}
+
 interface SceneOptions {
   isFaceSwap: boolean;
   includeLocation: boolean;
   includeObject: boolean;
   userPlace?: string;
   userThing?: string;
+  locationCard?: LocationCardData;
+  objectCard?: ObjectCardData;
   moodAxis?: {
     peaceful_chaotic: number;
     cute_terrifying: number;
@@ -69,6 +93,23 @@ function pickWeighted(entries: Entry[], rand: () => number): Entry {
     if (r <= 0) return e;
   }
   return entries[entries.length - 1];
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────
+
+function pickN(arr: string[], n: number, rand: () => number): string[] {
+  const shuffled = [...arr].sort(() => rand() - 0.5);
+  return shuffled.slice(0, n);
+}
+
+function pickOne(arr: string[], rand: () => number): string {
+  return arr[Math.floor(rand() * arr.length)];
+}
+
+function resolveGenre(tags: Set<string>): 'realistic' | 'fantasy' | 'scifi' {
+  if (tags.has('fantasy') || tags.has('gothic')) return 'fantasy';
+  if (tags.has('space') || tags.has('cyberpunk')) return 'scifi';
+  return 'realistic';
 }
 
 // ── Conflict Filtering ────────────────────────────────────────────────
@@ -699,25 +740,23 @@ const SIGNATURE_DETAILS: Entry[] = [
   { text: 'the shadow of the figure does not match their pose', weight: 1, rarity: 'chaotic' },
 ];
 
+// EVERY action MUST imply the character faces the camera. No looking away, no back-turned,
+// no gazing at the horizon. These are explicitly camera-facing poses.
 const ACTIONS_FACESWAP: Entry[] = [
-  { text: 'walking slowly while scanning the surroundings', weight: 7 },
-  { text: 'pausing to look at something in the distance', weight: 7 },
-  { text: 'holding a glowing object calmly', weight: 6 },
-  { text: 'leaning against a wall with arms crossed', weight: 5 },
-  { text: 'crouching to examine something on the ground', weight: 5 },
-  { text: 'standing at the edge looking out over the vista', weight: 6 },
-  { text: 'turning to look back over one shoulder', weight: 5 },
-  { text: 'stepping through a doorway into the light', weight: 5 },
-  { text: 'resting with eyes fixed on the horizon', weight: 5 },
-  { text: 'reaching toward something floating nearby', weight: 5 },
-  { text: 'sitting on a ledge with legs dangling over the drop', weight: 5 },
-  { text: 'shielding their eyes to look into the light', weight: 4 },
-  { text: 'reading from an old map or scroll', weight: 4 },
-  { text: 'adjusting a backpack strap while surveying the scene', weight: 4 },
-  { text: 'warming their hands over a small flame', weight: 4, tags: ['fire'] },
-  { text: 'drinking from a flask while taking in the view', weight: 4 },
-  { text: 'brushing rain or snow from their coat', weight: 4 },
-  { text: 'looking upward in quiet awe at something vast', weight: 6 },
+  { text: 'walking toward the camera with a confident stride', weight: 8 },
+  { text: 'standing facing the camera with arms crossed', weight: 7 },
+  { text: 'leaning against a wall facing the camera', weight: 7 },
+  { text: 'holding a glowing object at chest height and looking at the viewer', weight: 6 },
+  { text: 'standing with hands in pockets facing the camera', weight: 7 },
+  { text: 'looking directly at the camera with a slight smile', weight: 6 },
+  { text: 'reading something held at chest height with face tilted toward camera', weight: 5 },
+  { text: 'speaking to someone just off-camera to the left', weight: 5 },
+  { text: 'turning head toward the camera with a three-quarter front angle', weight: 7 },
+  { text: 'standing facing the viewer with wind blowing their hair', weight: 6 },
+  { text: 'holding a lantern near waist level and looking at the camera', weight: 5 },
+  { text: 'resting one arm on a railing and facing the viewer', weight: 5 },
+  { text: 'pausing mid-stride and turning to face the camera', weight: 6 },
+  { text: 'sitting and looking up toward the camera', weight: 5 },
 ];
 
 const ACTIONS_WIDE: Entry[] = [
@@ -853,7 +892,7 @@ export function assembleScene(opts: SceneOptions): string {
   }
 
   // Action — different pools for face-swap vs wide
-  const actionPool = opts.isFaceSwap ? ACTIONS_FACESWAP : ACTIONS_WIDE;
+  const actionPool = opts.isFaceSwap ? GEN_ACTIONS_FACESWAP : ACTIONS_WIDE;
   const action = filterAndPick(actionPool, tags, rules, rand, allowChaotic);
 
   // Subject scale — face-swap only
@@ -868,10 +907,75 @@ export function assembleScene(opts: SceneOptions): string {
   // Style pack
   const style = filterAndPick(STYLE_PACKS, tags, rules, rand, allowChaotic);
 
-  // Inject user's location/object into the setting if available
+  // ── Location injection via card or fallback ──
+  const genre = resolveGenre(tags);
   let settingText = setting.text;
+  let locationTextureBlock = '';
+
   if (opts.includeLocation && opts.userPlace) {
-    settingText = settingText + ', set in ' + opts.userPlace;
+    if (opts.locationCard) {
+      const lc = opts.locationCard;
+      if (rand() < 0.4 && lc.fusion_settings && lc.fusion_settings[genre]) {
+        // 40% fusion: replace setting with genre-appropriate fusion
+        settingText = lc.fusion_settings[genre];
+      } else {
+        // 60% seasoning: sprinkle 2-3 cinematic phrases as atmosphere
+        const allPhrases = [...lc.cinematic_phrases, ...lc.visual_palette, ...lc.atmosphere];
+        if (allPhrases.length > 0) {
+          locationTextureBlock =
+            'location textures: ' +
+            pickN(allPhrases, Math.min(3, allPhrases.length), rand).join(', ');
+        }
+      }
+    } else {
+      settingText = settingText + ', set in ' + opts.userPlace;
+    }
+  }
+
+  // ── Object injection via card or fallback ──
+  let objectBlock = '';
+
+  if (opts.includeObject && opts.userThing) {
+    if (opts.objectCard) {
+      const oc = opts.objectCard;
+      const softRoll = rand();
+
+      if (softRoll < 0.3 && oc.soft_presence_forms && oc.soft_presence_forms.length > 0) {
+        // 30% symbolic: indirect appearance
+        objectBlock = pickOne(oc.soft_presence_forms, rand);
+      } else {
+        // 70% literal: pick genre-appropriate form + role + binding
+        const genreForms =
+          oc.fusion_forms && oc.fusion_forms[genre] && oc.fusion_forms[genre].length > 0
+            ? oc.fusion_forms[genre]
+            : oc.visual_forms;
+        const form = genreForms.length > 0 ? pickOne(genreForms, rand) : opts.userThing;
+        const binding =
+          oc.environment_bindings.length > 0 ? pickOne(oc.environment_bindings, rand) : '';
+        const role = oc.role_options.length > 0 ? pickOne(oc.role_options, rand) : '';
+
+        // Placement roll: 50% foreground, 35% midground, 15% background
+        const placementRoll = rand();
+        const placement =
+          placementRoll < 0.5 ? 'foreground' : placementRoll < 0.85 ? 'midground' : 'background';
+
+        objectBlock = placement + ' object: ' + form;
+        if (binding) objectBlock += ', ' + binding;
+        if (role) objectBlock += ', ' + role;
+
+        // Face-swap safety
+        if (opts.isFaceSwap) {
+          if (oc.faceswap_safe_positive && oc.faceswap_safe_positive.length > 0) {
+            objectBlock += ', ' + pickOne(oc.faceswap_safe_positive, rand);
+          }
+          if (oc.faceswap_forbidden && oc.faceswap_forbidden.length > 0) {
+            objectBlock += ', ' + oc.faceswap_forbidden.join(', ');
+          }
+        }
+      }
+    } else {
+      objectBlock = opts.userThing + ' prominent in the scene';
+    }
   }
 
   // Build the scene description
@@ -886,12 +990,9 @@ export function assembleScene(opts: SceneOptions): string {
     background.text,
   ];
 
+  if (locationTextureBlock) pieces.push(locationTextureBlock);
   if (signatureText) pieces.push(signatureText);
-
-  // Add the object naturally if rolled
-  if (opts.includeObject && opts.userThing) {
-    pieces.push(opts.userThing + ' prominent in the scene');
-  }
+  if (objectBlock) pieces.push(objectBlock);
 
   if (opts.isFaceSwap) {
     // Face-swap: controlled DOF, subject scale, anti-wide negatives

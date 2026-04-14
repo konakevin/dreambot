@@ -32,6 +32,8 @@ import { buildSubjectInventionPrompt, buildDreamScene } from '../_shared/dreamEn
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
+import { getLocationCard, getObjectCard } from '../_shared/essenceCards.ts';
+import type { LocationCard, ObjectCard } from '../_shared/essenceCards.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 
@@ -591,6 +593,45 @@ Deno.serve(async (req) => {
           ? thingsPool[Math.floor(Math.random() * thingsPool.length)]
           : undefined;
 
+      // Fetch essence cards in parallel (lazy-generates on first encounter)
+      let locationCard: LocationCard | null = null;
+      let objectCard: ObjectCard | null = null;
+      const cardPromises: Promise<void>[] = [];
+      if (userPlace && ANTHROPIC_KEY) {
+        cardPromises.push(
+          getLocationCard(userPlace, ANTHROPIC_KEY)
+            .then((c) => {
+              locationCard = c;
+            })
+            .catch((err) => {
+              console.warn('[generate-dream] Location card failed:', (err as Error).message);
+            })
+        );
+      }
+      if (userThing && ANTHROPIC_KEY) {
+        cardPromises.push(
+          getObjectCard(userThing, ANTHROPIC_KEY)
+            .then((c) => {
+              objectCard = c;
+            })
+            .catch((err) => {
+              console.warn('[generate-dream] Object card failed:', (err as Error).message);
+            })
+        );
+      }
+      if (cardPromises.length > 0) await Promise.all(cardPromises);
+      console.log(
+        '[generate-dream] Essence cards | place:',
+        userPlace ?? 'none',
+        '| locationCard:',
+        locationCard ? locationCard.cinematic_phrases.length + ' phrases' : 'null',
+        '| thing:',
+        userThing ?? 'none',
+        '| objectCard:',
+        objectCard ? objectCard.visual_forms.length + ' forms' : 'null'
+      );
+      lap('essence-cards');
+
       dreamSubject = assembleScene({
         isFaceSwap:
           nightlyMedium.faceSwaps &&
@@ -601,6 +642,8 @@ Deno.serve(async (req) => {
         includeObject,
         userPlace,
         userThing,
+        locationCard: locationCard ?? undefined,
+        objectCard: objectCard ?? undefined,
         moodAxis: moods,
       });
 
@@ -648,15 +691,28 @@ Deno.serve(async (req) => {
         ].join(', ');
       };
 
-      // Build personal context based on nightly path decisions
+      // Build personal context — use card data when available (budget: 2 location phrases, 1 object phrase)
       const dreamerWorld: string[] = [];
-      if (includeLocation && seeds.places.length > 0) {
-        const loc = seeds.places[Math.floor(Math.random() * seeds.places.length)];
-        dreamerWorld.push(`Set the scene in or near: ${loc}`);
+      if (includeLocation && userPlace) {
+        if (
+          locationCard &&
+          locationCard.cinematic_phrases &&
+          locationCard.cinematic_phrases.length > 0
+        ) {
+          const pick2 = locationCard.cinematic_phrases.sort(() => Math.random() - 0.5).slice(0, 2);
+          dreamerWorld.push(`Location texture: ${pick2.join(', ')}`);
+        } else {
+          dreamerWorld.push(`Set the scene in or near: ${userPlace}`);
+        }
       }
-      if (includeObject && seeds.things.length > 0) {
-        const obj = seeds.things[Math.floor(Math.random() * seeds.things.length)];
-        dreamerWorld.push(`Include this object naturally in the scene: ${obj}`);
+      if (includeObject && userThing) {
+        if (objectCard && objectCard.visual_forms && objectCard.visual_forms.length > 0) {
+          const form =
+            objectCard.visual_forms[Math.floor(Math.random() * objectCard.visual_forms.length)];
+          dreamerWorld.push(`Scene object: ${form}`);
+        } else {
+          dreamerWorld.push(`Include this object naturally in the scene: ${userThing}`);
+        }
       }
       const dreamerContext =
         dreamerWorld.length > 0
@@ -699,7 +755,45 @@ Deno.serve(async (req) => {
 
       if (composition === 'character') {
         const isFaceSwapScene = nightlyMedium.faceSwaps && castPick && castPick.role !== 'pet';
-        nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
+
+        if (isFaceSwapScene) {
+          // Face-swap brief: scene first, then HARD face lock, then character
+          nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
+
+STRUCTURE:
+1. Start with: "${nightlyMedium.fluxFragment}"
+2. SCENE/ENVIRONMENT (50% of words)
+3. SUBJECT FRAMING (must be early in the prompt)
+4. CHARACTER (20% of words)
+5. CAMERA + MOOD (20% of words)
+6. End with: no text, no words, no letters, no watermarks, ultra detailed
+
+SCENE (make it EPIC):
+${dreamSubject}
+
+MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
+"front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no rear angle"
+
+COMPOSITION RULES (must obey):
+- Subject facing camera. No back view. No rear angle. No over-the-shoulder. No silhouette.
+- No crouching, no kneeling, no looking down, no looking away from camera.
+- The character is visible and facing the viewer in the scene.
+
+CHARACTER IN THE SCENE:
+${castDescBlock}
+Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.
+
+MOOD: ${nightlyVibe.directive}
+${dreamerContext}${avoidList}
+
+RULES:
+- SCENE FIRST, then the mandatory face phrase, then character details.
+- Include "foreground midground background, layered composition" in the prompt.
+- Every word must be something a camera can see. No feelings, no metaphors.
+Output ONLY the prompt.`;
+        } else {
+          // Non-face-swap brief: standard scene-first approach
+          nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
 CRITICAL STRUCTURE — follow this order EXACTLY:
 1. Start with: "${nightlyMedium.fluxFragment}"
@@ -713,11 +807,7 @@ ${dreamSubject}
 
 CHARACTER IN THE SCENE:
 ${castDescBlock}
-${
-  isFaceSwapScene
-    ? `This character must have a clearly visible, well-lit face — natural expression, eye-level or slightly above. Their face will be swapped with a real photo afterward. Do NOT over-describe the face — just "natural human face" is enough. Push detail into clothing, pose, and environment instead.`
-    : castInstruction
-}
+${castInstruction}
 
 MOOD: ${nightlyVibe.directive}
 ${dreamerContext}${avoidList}
@@ -728,6 +818,7 @@ RULES:
 - The character is IN the world, not posing for a portrait.
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
+        }
         logAxes = {
           medium: nightlyMedium.key,
           vibe: nightlyVibe.key,
@@ -801,6 +892,18 @@ Output ONLY the prompt.`;
         if (finalPrompt.length < 20) throw new Error('too short');
       } catch {
         finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
+      }
+
+      // Post-process: brute force face lock for face-swap dreams.
+      // Even if Sonnet dropped or weakened the face constraints, this appends them.
+      const isFaceSwapDream =
+        nightlyMedium.faceSwaps &&
+        composition === 'character' &&
+        castPick &&
+        castPick.role !== 'pet';
+      if (isFaceSwapDream) {
+        finalPrompt +=
+          ', front-facing subject facing the camera, three-quarter front angle, head turned toward camera, eyes visible, no back view, no rear angle, no silhouette';
       }
 
       // Face swap for nightly cast dreams — humans only, not pets.

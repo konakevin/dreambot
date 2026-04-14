@@ -311,6 +311,84 @@ Start with ~30-50 entries per module, expand after testing:
 - Style packs: 6
 - Quality tags: 3 (always all)
 
+## Next Feature: Location Cards + Object Cards
+
+### The Problem
+Currently user locations are injected as ", set in hawaii" — weak, generic, feels like metadata.
+User objects are injected as "guitars prominent in the scene" — checklist item, not a dream.
+
+### The Solution: Essence Cards
+Generate a rich cinematic description ONCE per location/object, store in shared DB tables, reuse for every user forever.
+
+### Shared DB Tables
+
+```sql
+location_cards (
+  id uuid, location_name text UNIQUE,
+  core_visuals text[],       -- "volcanic black sand beaches", "plumeria trade winds"
+  atmosphere text[],          -- "warm salt air", "afternoon rain through sunshine"
+  signature_details text[],   -- "sea turtles on warm rocks", "shave ice in rainbow colors"
+  color_palette text,
+  created_at timestamptz
+)
+
+object_cards (
+  id uuid, object_name text UNIQUE,
+  visual_forms text[],        -- "worn black guitar with chipped paint", "chrome hardware catching neon"
+  interaction_modes text[],   -- "leaning against wall", "half-buried in sand", "held at waist"
+  environmental_integration text[],  -- "wired into machinery", "turned into shrine relic"
+  lighting_affinity text[],   -- "warm spotlight", "neon rim light"
+  surreal_twists text[],      -- "strings form constellations", "emits glowing sound waves"
+  created_at timestamptz
+)
+```
+
+### Lazy Generation Flow
+1. Dream rolls "hawaii" + "guitar"
+2. Check `location_cards` for "hawaii" — exists? Use it. Missing? Sonnet generates + caches.
+3. Check `object_cards` for "guitar" — exists? Use it. Missing? Sonnet generates + caches.
+4. Tables fill up organically as users add new locations/objects.
+
+### Dream-Time Compilation
+
+**Hierarchy:** Location = world. Object = story. Face = actor.
+
+1. Scene engine picks base modules (setting, scale, time, weather, etc.)
+2. **Location fusion:** Rewrite the setting using the location card's core_visuals + atmosphere
+3. **Object integration:** Pick a role (60% artifact, 25% hero prop, 10% carried, 5% surreal) + visual form + interaction mode from the card
+4. **Subject framing:** Face-swap constraints locked in
+5. **Compile final prompt** in structured blocks:
+
+```
+[SETTING rewritten with LOCATION ESSENCE],
+[LOCATION atmosphere + signature details],
+
+foreground prop: [OBJECT visual form], [OBJECT placement], [OBJECT environment interaction],
+
+a lone figure [FACE-SWAP-SAFE ACTION],
+subject midground, face clearly visible, eyes visible,
+face 8-15% of frame height, balanced lighting on face,
+not a distant silhouette,
+
+camera: medium wide, eye-level, 50mm lens,
+controlled depth of field, layered composition,
+cinematic film still, no text, no watermark
+```
+
+### Face-Swap Object Safety Rules
+- Objects held at waist level or lower
+- Objects parked/placed nearby, not covering face
+- No helmets, masks, or face-obscuring items
+- No strong colored light from objects onto face
+- Motorcycle → "helmet hanging from handlebars" not "wearing helmet"
+
+### Sweet Spot Per Dream
+- 1 location
+- 1 object
+- 1 signature detail
+- 1 story hook
+- More than that = prompt soup
+
 ## Files
 
 - `supabase/functions/generate-dream/index.ts` — main Edge Function, nightly path starts at `isNightly` check (~line 435)
