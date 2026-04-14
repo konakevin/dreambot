@@ -91,6 +91,22 @@ Users can check "Re-dream this image" to feed a generated dream back into Flux K
 
 Places, objects, eras, and dream vibe are included in ~40% of dreams (randomly gated per anchor to prevent overuse). Dream vibe (the creative north star) is always included.
 
+### Nightly User Dreams
+
+Every night, each active user receives one personalized dream. The system uses **slotted seed templates** from the `nightly_seeds` DB table (8 pools × 100 seeds each). Three paths roll at 40/30/30:
+
+- **Path 1 (40%):** Cast photo (face swap) + personal location/object/both
+- **Path 2 (30%):** Personal location/object/both, no cast
+- **Path 3 (30%):** Cast photo (face swap) in a completely random scene
+
+The runtime maps the roll to a seed category (`nightly_char`, `nightly_char_loc`, `nightly_obj`, etc.), picks a random seed, fills `${character}/${place}/${thing}` slots with the user's actual data, then feeds to Sonnet + medium directive + vibe. Face swap pastes real photo onto the rendered character for face-swap mediums (self/+1 only, not pets).
+
+See `BOTS.md` for the full architecture, all 8 seed pools, face swap rules, and the database table structure.
+
+### Bot Dreams
+
+Bots post 2x daily via GitHub Actions cron. Each bot has curated seed prompts in the `bot_seeds` DB table with `used_at` tracking and auto-regeneration. See `BOTS.md` for the complete bot training process, all 19 active image bots + 2 content bots.
+
 ### Bot Messages
 
 Each nightly dream gets a short whimsical message from DreamBot via a dedicated Haiku call. The bot has a personality — playful, warm, a little weird. Messages reference the dream's content and occasionally recall past dreams/wishes.
@@ -492,24 +508,25 @@ The April 2026 audit found 14 issues, several silently broken for months. The pa
 2. Search for hanging RLS references, triggers, RPCs that read those columns.
 3. Search for type definitions that mention the feature.
 
-### The `dream_templates` table — CRITICAL shared data (do NOT bulk delete)
+### Seed tables — `bot_seeds` and `nightly_seeds` (SEPARATE tables, never cross-contaminate)
 
-This table contains **TWO kinds of data** separated by category prefix:
+Bot dreams and nightly user dreams use **separate DB tables** to prevent accidental cross-deletion:
 
-1. **Nightly dream templates** (~6,200 rows) — categories like `cosmic`, `bioluminescence`, `broken_gravity`, `childhood`, etc. Used by the nightly dream path in `generate-dream/index.ts` to generate personalized user dreams. These are permanent and should NEVER be deleted. If they need refreshing, run `node scripts/generate-dream-templates.js` which regenerates all 31 categories.
+- **`bot_seeds`** — bot-specific seeds with `used_at` lifecycle tracking. Used by `scripts/generate-bot-dreams.js`. Auto-regenerates when exhausted.
+- **`nightly_seeds`** — 8 pools of slotted templates for user dreams. Used by `generate-dream` Edge Function nightly path. Permanent pool, random pick, no usage tracking.
+- **`dream_templates`** — LEGACY table, still exists but no longer read by any code. Will be dropped.
 
-2. **Bot seeds** — categories like `dragonbot_genre`, `venusbot_androidwoman`, etc. Used by `scripts/generate-bot-dreams.js`. These have lifecycle tracking (`used_at`, `generation`, `disabled`) and auto-regenerate when exhausted.
+**The April 2026 incident:** An unscoped delete on the old shared `dream_templates` table wiped ALL bot seeds AND all nightly templates in one command. Both systems broke. Bot seeds were partially recovered from a Supabase backup, nightly templates had to be redesigned from scratch. This incident is why the tables were split.
 
-**The April 2026 incident:** All 11,338 nightly templates were accidentally deleted while cleaning up bot seed orphans. The nightly dream path broke silently. **Before deleting from this table, always check which categories you're targeting and verify they're not nightly template categories.**
-
-**Safe patterns:**
-- Delete bot seeds by prefix: `.delete().like('category', 'botname_%')` — safe, scoped to one bot
-- Disable bot seeds: `.update({disabled: true}).like('category', 'botname_%')` — even safer, reversible
-- **NEVER** run an unscoped delete on this table
+**Hard rules:**
+- NEVER run unscoped deletes on either seed table
+- Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped to one bot
+- Nightly seed refresh: run `node scripts/generate-nightly-seeds.js` — regenerates all 8 pools
+- Always query first: `SELECT category, count(*) GROUP BY category` before any delete operation
 
 ### Hard rules (no exceptions)
 
-- **NEVER bulk delete from `dream_templates` without verifying the category prefix.** The table contains both bot seeds AND nightly dream templates. Deleting nightly templates breaks user dreams silently.
+- **NEVER run unscoped deletes on `bot_seeds` or `nightly_seeds`.** Always scope by category prefix. The April 2026 incident destroyed all bot seeds + nightly templates in one unscoped delete. Query `SELECT category, count(*) GROUP BY category` BEFORE any delete.
 - **NEVER comment out a rate limit, security check, or RLS policy "for now".** If you need to disable, delete it AND create a follow-up task. Comments rot.
 - **NEVER use `as Function`, `as any`, or `as unknown as <type>` to bypass types.** If a table isn't in the generated types, regenerate the types instead.
 - **NEVER fire-and-forget critical RPCs without a `.catch` that logs in dev mode.** Silent failures lived for months.
