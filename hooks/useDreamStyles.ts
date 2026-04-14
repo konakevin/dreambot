@@ -16,6 +16,7 @@ export interface DreamMedium {
   is_character_only: boolean;
   nightly_skip: boolean;
   face_swaps: boolean;
+  character_render_mode?: string;
 }
 
 export interface DreamVibe {

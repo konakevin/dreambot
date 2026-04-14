@@ -15,6 +15,7 @@ interface DbMediumRow {
   is_character_only: boolean;
   nightly_skip: boolean;
   face_swaps: boolean;
+  character_render_mode: string;
 }
 
 /** App format — matches existing code expectations */
@@ -27,6 +28,7 @@ export interface ResolvedMedium {
   isCharacterOnly: boolean;
   nightlySkip: boolean;
   faceSwaps: boolean;
+  characterRenderMode: 'natural' | 'embodied';
 }
 
 export interface ResolvedVibe {
@@ -45,6 +47,9 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     isCharacterOnly: row.is_character_only,
     nightlySkip: row.nightly_skip,
     faceSwaps: row.face_swaps,
+    characterRenderMode: (row.character_render_mode === 'embodied' ? 'embodied' : 'natural') as
+      | 'natural'
+      | 'embodied',
   };
 }
 

@@ -32,6 +32,7 @@ import { buildSubjectInventionPrompt, buildDreamScene } from '../_shared/dreamEn
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
+import { buildRenderEntity } from '../_shared/renderEntity.ts';
 import { getLocationCard, getObjectCard } from '../_shared/essenceCards.ts';
 import type { LocationCard, ObjectCard } from '../_shared/essenceCards.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
@@ -643,12 +644,32 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Determine render mode and face swap eligibility
+      const isCharacterDream =
+        composition === 'character' && castPick != null && castPick.role !== 'pet';
+      const renderMode: 'natural' | 'embodied' | 'none' = !isCharacterDream
+        ? composition === 'pure_scene'
+          ? 'none'
+          : 'embodied'
+        : nightlyMedium.characterRenderMode;
+      const faceSwapEligible =
+        isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
+
+      // Pre-transform character identity for embodied mediums
+      let renderEntityDesc: string | undefined;
+      if (isCharacterDream && renderMode === 'embodied' && castPick) {
+        const entity = buildRenderEntity(
+          (castPick as DreamCastMember).description ?? '',
+          nightlyMedium.characterRenderMode,
+          nightlyMedium.key
+        );
+        renderEntityDesc = entity.description;
+        console.log('[generate-dream] Render entity (embodied):', renderEntityDesc.slice(0, 100));
+      }
+
       dreamSubject = assembleScene({
-        isFaceSwap:
-          nightlyMedium.faceSwaps &&
-          composition === 'character' &&
-          castPick != null &&
-          castPick.role !== 'pet',
+        renderMode,
+        faceSwapEligible,
         includeLocation,
         includeObject,
         userPlace,
@@ -737,16 +758,25 @@ Deno.serve(async (req) => {
       // ── DREAM COMPOSITION PATHS ──
       const mediumStyle = nightlyMedium.key.replace(/_/g, ' ');
 
-      // Build cast description block for Sonnet
+      // Build cast description block for Sonnet.
+      // For embodied mediums: use pre-transformed entity description (LEGO minifig, clay figure, etc.)
+      // For natural mediums: use full human description (face swap handles identity)
       const castDescBlock =
         selectedCast.length > 0
           ? selectedCast
               .map((m, i) => {
-                const desc =
-                  (m as DreamCastMember).description ??
-                  (m.role === 'pet' ? 'a small creature' : 'a figure');
+                let desc: string;
+                if (renderMode === 'embodied' && renderEntityDesc && selectedCast.length === 1) {
+                  desc = renderEntityDesc;
+                } else {
+                  desc =
+                    (m as DreamCastMember).description ??
+                    (m.role === 'pet' ? 'a small creature' : 'a figure');
+                }
                 return selectedCast.length === 1
-                  ? `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${desc}`
+                  ? renderMode === 'embodied'
+                    ? `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):\n${desc}`
+                    : `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${desc}`
                   : `CHARACTER ${i + 1} (${m.role}):\n${desc}`;
               })
               .join('\n\n')
@@ -766,9 +796,7 @@ Deno.serve(async (req) => {
       let nightlyBrief: string;
 
       if (composition === 'character') {
-        const isFaceSwapScene = nightlyMedium.faceSwaps && castPick && castPick.role !== 'pet';
-
-        if (isFaceSwapScene) {
+        if (faceSwapEligible) {
           // Face-swap brief: scene first, then HARD face lock, then character
           nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
@@ -906,28 +934,18 @@ Output ONLY the prompt.`;
         finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
       }
 
-      // Post-process: brute force face lock for face-swap dreams.
-      // Even if Sonnet dropped or weakened the face constraints, this appends them.
-      const isFaceSwapDream =
-        nightlyMedium.faceSwaps &&
-        composition === 'character' &&
-        castPick &&
-        castPick.role !== 'pet';
-      if (isFaceSwapDream) {
+      // Post-process: brute force face lock for face-swap-eligible dreams.
+      if (faceSwapEligible) {
         finalPrompt +=
           ', front-facing subject facing the camera, three-quarter front angle, head turned toward camera, eyes visible, no back view, no rear angle, no silhouette';
       }
 
-      // Face swap for nightly cast dreams — humans only, not pets.
-      // Only fires when: (a) single human cast member selected, (b) medium supports face swap,
-      // (c) composition includes a character (not pure_scene).
+      // Face swap — only fires for natural render mode with face-swap-eligible medium.
       if (
+        faceSwapEligible &&
         castPick &&
-        castPick.role !== 'pet' &&
         castPick.thumb_url &&
         castPick.thumb_url.startsWith('http') &&
-        nightlyMedium.faceSwaps &&
-        composition !== 'pure_scene' &&
         selectedCast.length === 1
       ) {
         faceSwapSource = castPick.thumb_url;

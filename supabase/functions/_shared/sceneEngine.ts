@@ -57,7 +57,8 @@ export interface ObjectCardData {
 }
 
 interface SceneOptions {
-  isFaceSwap: boolean;
+  renderMode: 'natural' | 'embodied' | 'none';
+  faceSwapEligible: boolean;
   includeLocation: boolean;
   includeObject: boolean;
   userPlace?: string;
@@ -893,16 +894,16 @@ export function assembleScene(opts: SceneOptions): string {
   }
 
   // Action — different pools for face-swap vs wide
-  const actionPool = opts.isFaceSwap ? GEN_ACTIONS_FACESWAP : ACTIONS_WIDE;
+  const actionPool = opts.faceSwapEligible ? GEN_ACTIONS_FACESWAP : ACTIONS_WIDE;
   const action = filterAndPick(actionPool, tags, rules, rand, allowChaotic);
 
   // Subject scale — face-swap only
-  const subjectScale = opts.isFaceSwap
+  const subjectScale = opts.faceSwapEligible
     ? filterAndPick(SUBJECT_SCALE_FACESWAP, tags, rules, rand, allowChaotic)
     : null;
 
   // Camera — different for face-swap vs wide
-  const cameraPool = opts.isFaceSwap ? CAMERA_FACESWAP : CAMERA_WIDE;
+  const cameraPool = opts.faceSwapEligible ? CAMERA_FACESWAP : CAMERA_WIDE;
   const camera = filterAndPick(cameraPool, tags, rules, rand, allowChaotic);
 
   // Style pack
@@ -966,7 +967,7 @@ export function assembleScene(opts: SceneOptions): string {
         if (role) objectBlock += ', ' + role;
 
         // Face-swap safety
-        if (opts.isFaceSwap) {
+        if (opts.faceSwapEligible) {
           if (oc.faceswap_safe_positive && oc.faceswap_safe_positive.length > 0) {
             objectBlock += ', ' + pickOne(oc.faceswap_safe_positive, rand);
           }
@@ -996,7 +997,7 @@ export function assembleScene(opts: SceneOptions): string {
   if (signatureText) pieces.push(signatureText);
   if (objectBlock) pieces.push(objectBlock);
 
-  if (opts.isFaceSwap) {
+  if (opts.faceSwapEligible) {
     // Face-swap: controlled DOF, subject scale, anti-wide negatives
     pieces.push(
       'foreground midground background, layered composition, controlled depth of field, sharp subject, detailed background, atmospheric haze, cinematic lighting'
