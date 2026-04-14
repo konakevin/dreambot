@@ -1,8 +1,21 @@
 # Fix The Nightly Dreams
 
-## Status (2026-04-14)
+## Status (2026-04-14, end of day)
 
-The nightly dream pipeline is mechanically working. Face swaps fire correctly, character composition is enforced, and the old mood-weighted template architecture is restored. **The problem now is template quality** — the 6,665 seed templates produce boring, everyday scenes (typewriters, fields, coral) instead of epic dreamscapes.
+### What's Working
+- **Scene DNA engine** — procedural art director assembling scenes from 480+ Sonnet-generated pool entries (settings, foreground, midground, background, signature details, story hooks)
+- **Face-lock system** — 3 layers: 88 camera-facing actions with explicit "face turned toward viewer" clauses + verbatim face lock phrase forced into Sonnet output + post-process append. Face visibility went from ~10% to ~66%+
+- **Gender reinforcement** — explicit male/female tokens + negative constraints prevent medium styles from overriding cast gender
+- **Essence cards** — location_cards + object_cards DB tables with rich cinematic descriptions. Shared across all users, lazy-generated on first encounter. Hawaii has 50 expanded fusion settings.
+- **Subject scale + anti-wide negatives** — 50mm lens, "not a distant silhouette" constraints pull the character closer in frame
+
+### What Needs Work Next
+1. **Expand object fusion forms** from 2 to 20 per genre (same two-step anchor approach as locations). Regeneration script exists, just needs to finish running for all objects.
+2. **Limit users to 3 locations + 3 objects** in settings — fewer items, deeper expansion, better variety per item
+3. **Essence cards not fetching in Edge Function** — cards are in the DB and the code is wired up, but the Deno fetch to Supabase may be failing silently. Cards generated via Node.js script work fine. Need to debug the Edge Function card fetch path.
+4. **Face visibility still ~66%, not 100%** — some dreams still drop the character entirely (pure landscapes) or render back-turned. The face-lock system helps but Flux still fights it on some compositions. Could improve with more face-safe action variety.
+5. **Per-user scene dedup** — prevent the same scene from appearing twice for a user within 60 days. Proposed nightly_dream_log table.
+6. **Object sometimes dropped by Flux** — guitar was in the prompt but Flux rendered a pure landscape. Object cards with more fusion forms should help, but may also need stronger object placement language.
 
 ## Architecture (What's Working)
 
