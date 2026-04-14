@@ -40,7 +40,7 @@ export interface LocationCardData {
   visual_palette: string[];
   atmosphere: string[];
   cinematic_phrases: string[];
-  fusion_settings: Record<string, string>;
+  fusion_settings: Record<string, string[]>;
 }
 
 export interface ObjectCardData {
@@ -64,6 +64,7 @@ interface SceneOptions {
   userThing?: string;
   locationCard?: LocationCardData;
   objectCard?: ObjectCardData;
+  castGender?: 'male' | 'female';
   moodAxis?: {
     peaceful_chaotic: number;
     cute_terrifying: number;
@@ -915,9 +916,10 @@ export function assembleScene(opts: SceneOptions): string {
   if (opts.includeLocation && opts.userPlace) {
     if (opts.locationCard) {
       const lc = opts.locationCard;
-      if (rand() < 0.4 && lc.fusion_settings && lc.fusion_settings[genre]) {
-        // 40% fusion: replace setting with genre-appropriate fusion
-        settingText = lc.fusion_settings[genre];
+      const genreFusions = lc.fusion_settings && lc.fusion_settings[genre];
+      if (rand() < 0.4 && genreFusions && genreFusions.length > 0) {
+        // 40% fusion: replace setting with random genre-appropriate fusion
+        settingText = pickOne(genreFusions, rand);
       } else {
         // 60% seasoning: sprinkle 2-3 cinematic phrases as atmosphere
         const allPhrases = [...lc.cinematic_phrases, ...lc.visual_palette, ...lc.atmosphere];
@@ -1000,6 +1002,12 @@ export function assembleScene(opts: SceneOptions): string {
       'foreground midground background, layered composition, controlled depth of field, sharp subject, detailed background, atmospheric haze, cinematic lighting'
     );
     if (subjectScale) pieces.push(subjectScale.text);
+    // Gender reinforcement — prevents medium style from overriding gender
+    const genderToken =
+      opts.castGender === 'female'
+        ? 'adult female, woman, feminine facial structure, not male, not masculine'
+        : 'adult male, man, masculine facial structure, not female, not feminine';
+    pieces.push(genderToken);
     pieces.push('a lone figure ' + action.text);
     pieces.push(storyHook.text);
     pieces.push(

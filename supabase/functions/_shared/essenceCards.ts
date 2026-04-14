@@ -19,7 +19,7 @@ export interface LocationCard {
   light_signature: string[];
   texture_details: string[];
   cinematic_phrases: string[];
-  fusion_settings: Record<string, string>;
+  fusion_settings: Record<string, string[]>;
 }
 
 export interface ObjectCard {
@@ -159,14 +159,16 @@ Return ONLY valid JSON with these exact keys:
   "texture_details": ["4 tactile close-up details — surfaces, natural elements, 6-10 words each"],
   "cinematic_phrases": ["6 short evocative phrases a cinematographer would use, 6-10 words each"],
   "fusion_settings": {
-    "realistic": "One sentence reimagining this place as a cinematic dream setting, max 25 words",
-    "fantasy": "One sentence reimagining this place with fantasy/magical elements, max 25 words",
-    "scifi": "One sentence reimagining this place as sci-fi/futuristic, max 25 words"
+    "realistic": ["5 unique cinematic scene settings in this place, each 15-25 words, each a DIFFERENT sub-location or landmark"],
+    "fantasy": ["5 unique fantasy/magical reimaginings of this place, each 15-25 words, each a DIFFERENT concept"],
+    "scifi": ["5 unique sci-fi/futuristic reimaginings of this place, each 15-25 words, each a DIFFERENT concept"]
   }
 }
 
 Be SPECIFIC to this exact place. Not generic. What makes THIS place visually unique?
 Every phrase must be something a camera can see or a microphone can hear.
+Each fusion setting MUST include a camera distance term (medium wide, medium, three-quarter, environmental portrait).
+NEVER include: looking out over, gazing at horizon, standing at the edge, silhouette against, from behind, walking away.
 Each phrase max 10 words. Fusion settings max 25 words.
 No metaphors, no emotions, no cliches.`;
 
@@ -184,7 +186,7 @@ No metaphors, no emotions, no cliches.`;
       light_signature: ensureArray(parsed.light_signature),
       texture_details: ensureArray(parsed.texture_details),
       cinematic_phrases: ensureArray(parsed.cinematic_phrases),
-      fusion_settings: ensureStringRecord(parsed.fusion_settings),
+      fusion_settings: ensureRecord(parsed.fusion_settings),
     };
   } catch (err) {
     console.error('[essenceCards] Location card generation failed:', (err as Error).message);

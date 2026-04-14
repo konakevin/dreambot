@@ -632,6 +632,17 @@ Deno.serve(async (req) => {
       );
       lap('essence-cards');
 
+      // Detect gender from cast description for gender reinforcement
+      let castGender: 'male' | 'female' | undefined;
+      if (castPick && castPick.role !== 'pet') {
+        const desc = ((castPick as DreamCastMember).description ?? '').toLowerCase();
+        if (desc.includes('woman') || desc.includes('female') || desc.includes('girl')) {
+          castGender = 'female';
+        } else {
+          castGender = 'male';
+        }
+      }
+
       dreamSubject = assembleScene({
         isFaceSwap:
           nightlyMedium.faceSwaps &&
@@ -644,6 +655,7 @@ Deno.serve(async (req) => {
         userThing,
         locationCard: locationCard ?? undefined,
         objectCard: objectCard ?? undefined,
+        castGender,
         moodAxis: moods,
       });
 

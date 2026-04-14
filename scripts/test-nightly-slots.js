@@ -20,15 +20,23 @@ function readEnvFile() {
 const envFile = readEnvFile();
 const getKey = (name) => process.env[name] || envFile[name];
 
+const args = process.argv.slice(2);
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, getKey('SUPABASE_SERVICE_ROLE_KEY'));
 const KEVIN_ID = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 
-const TESTS = [
-  { label: 'personal+face 1/3', force_nightly_path: 'personal_cast' },
-  { label: 'personal+face 2/3', force_nightly_path: 'personal_cast' },
-  { label: 'personal+face 3/3', force_nightly_path: 'personal_cast' },
-];
+// Parse --location and --object flags
+const locIdx = args.indexOf('--location');
+const objIdx = args.indexOf('--object');
+const FORCE_LOCATION = locIdx >= 0 ? args[locIdx + 1] : null;
+const FORCE_OBJECT = objIdx >= 0 ? args[objIdx + 1] : null;
+const countArgIdx = args.indexOf('--count');
+const TEST_COUNT = countArgIdx >= 0 ? parseInt(args[countArgIdx + 1], 10) : 3;
+
+const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
+  label: `dream ${i + 1}/${TEST_COUNT}`,
+  force_nightly_path: 'personal_cast',
+}));
 
 (async () => {
   // Get JWT for Kevin
@@ -50,6 +58,8 @@ const TESTS = [
   const vibeProfile = recipeData?.recipe;
   if (!vibeProfile) { console.error('❌ No vibe profile'); process.exit(1); }
   console.log(`👤 Cast: ${(vibeProfile.dream_cast || []).map(c => c.role).join(', ')}`);
+  if (FORCE_LOCATION) console.log(`📍 Forced location: ${FORCE_LOCATION}`);
+  if (FORCE_OBJECT) console.log(`🎸 Forced object: ${FORCE_OBJECT}`);
   console.log(`📍 Places: ${(vibeProfile.dream_seeds?.places || []).join(', ')}`);
   console.log(`🎸 Things: ${[...(vibeProfile.dream_seeds?.things || []), ...(vibeProfile.dream_seeds?.characters || [])].join(', ')}\n`);
 
@@ -70,7 +80,14 @@ const TESTS = [
           mode: 'flux-dev',
           medium_key: 'surprise_me',
           vibe_key: 'surprise_me',
-          vibe_profile: vibeProfile,
+          vibe_profile: {
+            ...vibeProfile,
+            dream_seeds: {
+              ...vibeProfile.dream_seeds,
+              ...(FORCE_LOCATION ? { places: [FORCE_LOCATION] } : {}),
+              ...(FORCE_OBJECT ? { things: [FORCE_OBJECT], characters: [] } : {}),
+            },
+          },
           force_cast_role: 'self',
           force_nightly_path: test.force_nightly_path,
           force_medium: ['pencil','anime','comics','shimmer','twilight','surreal','photography','neon'][Math.floor(Math.random() * 8)],
