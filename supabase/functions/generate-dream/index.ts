@@ -31,6 +31,7 @@ import {
 import { buildSubjectInventionPrompt, buildDreamScene } from '../_shared/dreamEngine.ts';
 import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
+import { assembleScene } from '../_shared/sceneEngine.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 
@@ -579,71 +580,31 @@ Deno.serve(async (req) => {
         includeObject
       );
 
-      try {
-        // Map the roll to a seed category based on what personal elements are available
-        const hasChar = selectedCast.length > 0;
-        const hasLoc = includeLocation && seeds.places.length > 0;
-        const hasObj = includeObject && (seeds.things.length > 0 || seeds.characters.length > 0);
+      // Assemble scene from modular pools (Scene DNA engine)
+      const userPlace =
+        includeLocation && seeds.places.length > 0
+          ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
+          : undefined;
+      const thingsPool = [...seeds.things, ...seeds.characters];
+      const userThing =
+        includeObject && thingsPool.length > 0
+          ? thingsPool[Math.floor(Math.random() * thingsPool.length)]
+          : undefined;
 
-        let seedCategory: string;
-        if (hasChar && hasLoc && hasObj) seedCategory = 'nightly_char_loc_obj';
-        else if (hasChar && hasLoc) seedCategory = 'nightly_char_loc';
-        else if (hasChar && hasObj) seedCategory = 'nightly_char_obj';
-        else if (hasChar) seedCategory = 'nightly_char';
-        else if (hasLoc && hasObj) seedCategory = 'nightly_loc_obj';
-        else if (hasLoc) seedCategory = 'nightly_loc';
-        else if (hasObj) seedCategory = 'nightly_obj';
-        else seedCategory = 'nightly_pure';
+      dreamSubject = assembleScene({
+        isFaceSwap:
+          nightlyMedium.faceSwaps &&
+          composition === 'character' &&
+          castPick != null &&
+          castPick.role !== 'pet',
+        includeLocation,
+        includeObject,
+        userPlace,
+        userThing,
+        moodAxis: moods,
+      });
 
-        console.log('[generate-dream] Seed category:', seedCategory);
-
-        // Pull an unused seed from the matching pool
-        const { data: rows, error: tmplErr } = await supabase
-          .from('nightly_seeds')
-          .select('template')
-          .eq('category', seedCategory)
-          .limit(100);
-
-        if (tmplErr || !rows?.length)
-          throw new Error(tmplErr?.message ?? `No seeds found for ${seedCategory}`);
-
-        let filledTemplate = rows[Math.floor(Math.random() * rows.length)].template;
-
-        // Fill slots with user's actual data
-        if (hasChar) {
-          const castDesc = castPick
-            ? castPick.role === 'pet'
-              ? (castPick.description ?? 'a small creature')
-              : (castPick.description ?? 'a figure')
-            : 'a wandering figure';
-          filledTemplate = filledTemplate.replace(/\$\{character\}/g, castDesc);
-        }
-        if (hasLoc) {
-          const place = seeds.places[Math.floor(Math.random() * seeds.places.length)];
-          filledTemplate = filledTemplate.replace(/\$\{place\}/g, place);
-        }
-        if (hasObj) {
-          const thingsPool = [...seeds.things, ...seeds.characters];
-          const thing = thingsPool[Math.floor(Math.random() * thingsPool.length)];
-          filledTemplate = filledTemplate.replace(/\$\{thing\}/g, thing);
-        }
-
-        dreamSubject = filledTemplate;
-
-        console.log(
-          '[generate-dream] Nightly seed | category:',
-          seedCategory,
-          '| scene:',
-          dreamSubject.slice(0, 120)
-        );
-      } catch (dbErr) {
-        // Fallback to hardcoded templates if DB fails
-        console.warn(
-          '[generate-dream] DB template fetch failed, using hardcoded fallback:',
-          (dbErr as Error).message
-        );
-        dreamSubject = buildDreamScene(seeds);
-      }
+      console.log('[generate-dream] Scene DNA:', dreamSubject.slice(0, 200));
       lap('nightly-subject');
 
       // Step 2: Shared context for both cast and non-cast paths
@@ -737,26 +698,35 @@ Deno.serve(async (req) => {
       let nightlyBrief: string;
 
       if (composition === 'character') {
-        nightlyBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-90 words, comma-separated).
+        const isFaceSwapScene = nightlyMedium.faceSwaps && castPick && castPick.role !== 'pet';
+        nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
-MEDIUM: ${nightlyMedium.fluxFragment}
+CRITICAL STRUCTURE — follow this order EXACTLY:
+1. Start with: "${nightlyMedium.fluxFragment}"
+2. SCENE/ENVIRONMENT (spend 60% of words here — this is the star)
+3. CHARACTER placed naturally in the scene (spend 20% of words)
+4. CAMERA + MOOD (spend 20% of words)
+5. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-STYLE GUIDE (follow this closely):
-${nightlyMedium.directive}
-
-${castDescBlock}
-${castInstruction}
-
-DREAM SCENE (the character${selectedCast.length > 1 ? 's are' : ' is'} experiencing this):
+SCENE (describe this world — make it EPIC):
 ${dreamSubject}
 
-IMPORTANT: Replace any generic "figure" or "person" in the scene with the specific character${selectedCast.length > 1 ? 's' : ''}. They are DOING something, not standing and staring at the camera.
+CHARACTER IN THE SCENE:
+${castDescBlock}
+${
+  isFaceSwapScene
+    ? `This character must have a clearly visible, well-lit face — natural expression, eye-level or slightly above. Their face will be swapped with a real photo afterward. Do NOT over-describe the face — just "natural human face" is enough. Push detail into clothing, pose, and environment instead.`
+    : castInstruction
+}
 
-CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
 ${dreamerContext}${avoidList}
 
-Start with the art medium. End with: no text, no words, no letters, no watermarks, hyper detailed.
+RULES:
+- SCENE FIRST in the prompt. The environment must be rich, detailed, layered.
+- Include "foreground midground background, layered composition" in the prompt.
+- The character is IN the world, not posing for a portrait.
+- Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
         logAxes = {
           medium: nightlyMedium.key,

@@ -168,7 +168,7 @@ export function rollDream(
     composition = 'pure_scene';
   } else if (SCENE_ONLY_MEDIUMS.has(mediumKey)) {
     composition = 'pure_scene';
-  } else if (CHARACTER_MEDIUMS.has(mediumKey)) {
+  } else if (CHARACTER_MEDIUMS.has(mediumKey) || isFaceSwapMedium) {
     composition = 'character';
   } else {
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';
