@@ -56,9 +56,78 @@ export interface ObjectCardData {
   faceswap_safe_positive: string[];
 }
 
+type CompositionMode =
+  | 'balanced'
+  | 'open_vista'
+  | 'layered_depth'
+  | 'negative_space'
+  | 'low_angle_hero'
+  | 'overhead'
+  | 'intimate_close';
+
+interface CompositionHint {
+  positive: string;
+  negative: string;
+  banKeywords: string[];
+}
+
+const COMPOSITION_HINTS: Record<CompositionMode, CompositionHint> = {
+  balanced: { positive: '', negative: '', banKeywords: [] },
+  open_vista: {
+    positive: 'wide open vista, big sky, expansive horizon, no corridor framing',
+    negative: 'no narrow alley, no tunnel corridor, no boxed-in framing',
+    banKeywords: [
+      'archway',
+      'tunnel',
+      'corridor',
+      'narrow',
+      'between two',
+      'flanked by',
+      'passageway',
+    ],
+  },
+  layered_depth: {
+    positive: 'strong foreground-midground-background depth layering, rich parallax',
+    negative: '',
+    banKeywords: [],
+  },
+  negative_space: {
+    positive: 'large negative space, minimal framing elements, clean composition',
+    negative: 'no cluttered framing, no dense foreground objects',
+    banKeywords: ['cluttered', 'crowded', 'dense foreground'],
+  },
+  low_angle_hero: {
+    positive: 'low angle hero shot, towering scale, sky dominant above subject',
+    negative: 'no overhead view, no top-down angle',
+    banKeywords: ['overhead', 'top-down', 'aerial'],
+  },
+  overhead: {
+    positive: 'top-down overhead composition, map-like clarity, geometric patterns',
+    negative: 'no ground-level perspective, no horizon line',
+    banKeywords: ['horizon', 'eye-level'],
+  },
+  intimate_close: {
+    positive: 'tight framing, shallow depth of field, intimate detail, close perspective',
+    negative: 'no wide establishing shot, no distant landscape',
+    banKeywords: ['establishing shot', 'vast', 'panoramic'],
+  },
+};
+
+const ALLEY_KEYWORDS = [
+  'alley',
+  'corridor',
+  'tunnel',
+  'narrow street',
+  'passageway',
+  'flanked by',
+  'between two walls',
+  'tree-lined path',
+];
+
 interface SceneOptions {
   renderMode: 'natural' | 'embodied' | 'none';
   faceSwapEligible: boolean;
+  compositionMode?: CompositionMode;
   includeLocation: boolean;
   includeObject: boolean;
   userPlace?: string;
@@ -873,7 +942,18 @@ export function assembleScene(opts: SceneOptions): string {
   const time = filterAndPick(TIME, tags, rules, rand, allowChaotic);
   const weather = filterAndPick(WEATHER, tags, rules, rand, allowChaotic);
   const lighting = filterAndPick(LIGHTING, tags, rules, rand, allowChaotic);
-  const foreground = filterAndPick(GEN_FOREGROUND, tags, rules, rand, allowChaotic);
+  // Foreground — soft-ban alley keywords based on composition mode
+  const compMode = opts.compositionMode || 'balanced';
+  const compHint = COMPOSITION_HINTS[compMode];
+  const fgPool =
+    compHint.banKeywords.length > 0
+      ? GEN_FOREGROUND.map((e) => {
+          const lower = e.text.toLowerCase();
+          const penalized = compHint.banKeywords.some((kw) => lower.includes(kw));
+          return penalized ? { ...e, weight: Math.max(1, Math.round(e.weight * 0.15)) } : e;
+        })
+      : GEN_FOREGROUND;
+  const foreground = filterAndPick(fgPool, tags, rules, rand, allowChaotic);
   const midground = filterAndPick(GEN_MIDGROUND, tags, rules, rand, allowChaotic);
   const background = filterAndPick(GEN_BACKGROUND, tags, rules, rand, allowChaotic);
 
@@ -1029,5 +1109,17 @@ export function assembleScene(opts: SceneOptions): string {
     pieces.push(QUALITY_TAGS_END);
   }
 
-  return pieces.join(', ');
+  // Inject composition hints (positive + negative)
+  if (compHint.positive) pieces.push(compHint.positive);
+  if (compHint.negative) pieces.push(compHint.negative);
+
+  // Post-assembly alley detector — if too many corridor keywords, inject override
+  const assembled = pieces.join(', ');
+  const lower = assembled.toLowerCase();
+  const alleyCount = ALLEY_KEYWORDS.filter((kw) => lower.includes(kw)).length;
+  if (alleyCount >= 2) {
+    return assembled + ', wide open composition with no enclosing side walls, expansive depth';
+  }
+
+  return assembled;
 }

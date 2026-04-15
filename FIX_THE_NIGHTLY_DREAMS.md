@@ -1,32 +1,36 @@
 # Fix The Nightly Dreams
 
-## Status (2026-04-14, end of day)
+## Status (2026-04-15)
 
 ### What's Working
-- **Scene DNA engine** — procedural art director assembling scenes from 480+ Sonnet-generated pool entries (settings, foreground, midground, background, signature details, story hooks)
-- **Face-lock system** — 3 layers: 88 camera-facing actions with explicit "face turned toward viewer" clauses + verbatim face lock phrase forced into Sonnet output + post-process append. Face visibility went from ~10% to ~66%+
-- **Gender reinforcement** — explicit male/female tokens + negative constraints prevent medium styles from overriding cast gender
-- **Essence cards** — location_cards + object_cards DB tables with rich cinematic descriptions. Shared across all users, lazy-generated on first encounter. Hawaii has 50 expanded fusion settings.
-- **Subject scale + anti-wide negatives** — 50mm lens, "not a distant silhouette" constraints pull the character closer in frame
+- **Scene DNA engine** — procedural art director assembling scenes from 480+ Sonnet-generated pool entries across 7 modules (settings, foreground, midground, background, signature details, story hooks, face-safe actions)
+- **Essence cards** — `location_cards` + `object_cards` DB tables with rich cinematic descriptions. Shared across all users. Location cards have 50 fusion settings (17 realistic + 17 fantasy + 16 scifi) generated via two-step anchor dedup.
+- **Face-lock system** — 3 layers: 88 camera-facing actions + verbatim Sonnet phrase + post-process append. ~66% face visibility on natural mediums.
+- **Gender reinforcement** — explicit male/female tokens prevent medium styles from overriding cast gender
+- **Medium render modes** — `natural` (real human, face swap) vs `embodied` (LEGO minifig, clay figure, etc.). `buildRenderEntity()` pre-transforms cast descriptions. Scene engine receives `renderMode` + `faceSwapEligible` as separate signals.
+- **Independent dream rolls** — character 50%, location ALWAYS, object 50%. All combos: char+loc, char+loc+obj, loc only, loc+obj, etc.
+- **Every dream uses a location** — forced for personalization. No more generic unrelated scenes.
 
 ### What Needs Work Next
-1. **Expand object fusion forms** from 2 to 20 per genre (same two-step anchor approach as locations). Regeneration script exists, just needs to finish running for all objects.
-2. **Limit users to 3 locations + 3 objects** in settings — fewer items, deeper expansion, better variety per item
-3. **Essence cards not fetching in Edge Function** — cards are in the DB and the code is wired up, but the Deno fetch to Supabase may be failing silently. Cards generated via Node.js script work fine. Need to debug the Edge Function card fetch path.
-4. **Face visibility still ~66%, not 100%** — some dreams still drop the character entirely (pure landscapes) or render back-turned. The face-lock system helps but Flux still fights it on some compositions. Could improve with more face-safe action variety.
-5. **Per-user scene dedup** — prevent the same scene from appearing twice for a user within 60 days. Proposed nightly_dream_log table.
-6. **Object sometimes dropped by Flux** — guitar was in the prompt but Flux rendered a pure landscape. Object cards with more fusion forms should help, but may also need stronger object placement language.
+1. **Predefined location + object picker** — curated list instead of free text. Pre-generate cards before users pick.
+2. **Face visibility improvement** — still ~66% on natural mediums. Flux fights face-forward instructions.
+3. **Per-user scene dedup** — prevent repeating the same scene within 60 days.
+4. **Defensive medium filter** — filter user's art_styles against active mediums before picking.
+5. **Essence card fetch in Edge Function** — may need debugging for the Deno Supabase fetch path.
 
-## Architecture (What's Working)
+## Architecture (Current)
 
 ### Pipeline Flow
-1. **Roll the dream algorithm** (`dreamAlgorithm.ts`) — picks path (40% personal_cast, 30% personal_scene, 30% cast_random), cast members, personal elements
-2. **Pick a mood-weighted template** from `nightly_seeds` table — 31 categories, ~215 templates each, weighted by user's mood sliders
-3. **Fill generic slots** — `${character}` → "a lone figure", `${place}` → user's location or "a forgotten city", `${thing}` → user's object or "glowing fragments"
-4. **Sonnet writes the Flux prompt** — receives: filled template as dream scene, full character description as separate block, medium directive, vibe directive, camera direction
-5. **Flux Dev renders** the image
-6. **Face swap API** (`codeplugtech/face-swap`) pastes user's real face onto the rendered figure
-7. **Upload and post**
+1. **Select medium** from user's `art_styles` via `resolveMediumFromDb('my_mediums')`. Determines `characterRenderMode` (natural/embodied) and `faceSwaps` flag.
+2. **Roll the dream algorithm** (`dreamAlgorithm.ts`) — independent rolls: character 50%, location ALWAYS, object 50%. Composition derived from character roll + medium type.
+3. **Fetch essence cards** — `getLocationCard()` and `getObjectCard()` from shared DB tables (lazy-generated on first encounter, cached forever).
+4. **Build render entity** — for embodied mediums, `buildRenderEntity()` pre-transforms cast description into medium-native form (LEGO minifig, clay figure, etc.) using deterministic regex trait extraction + per-medium CHARACTER_TEMPLATES.
+5. **Assemble scene** (`sceneEngine.ts`) — picks from weighted modular pools (settings, scale, time, weather, lighting, foreground, midground, background, signature details, story hooks). Injects location card data (40% fusion rewrite, 60% atmosphere sprinkle). Injects object card data with role assignment + environment binding. Face-swap path gets face-lock constraints, subject scale, gender tokens.
+6. **Sonnet writes the Flux prompt** — receives assembled scene as `dreamSubject` + pre-transformed character entity + medium directive/fluxFragment + vibe directive. For face-swap: verbatim face lock phrase forced in output.
+7. **Post-process** — for face-swap-eligible dreams, appends "front-facing subject, no back view" to Flux prompt.
+8. **Flux Dev renders** the image.
+9. **Face swap** (`codeplugtech/face-swap`) — only fires for natural render mode + face-swap medium + human cast. Pastes user's real face onto rendered figure.
+10. **Upload and post**
 
 ### Key Decisions That Made Face Swap Work
 - **Full character description goes to Sonnet as a separate block**, NOT baked into the template slot. The `${character}` slot stays generic ("a lone figure"). Sonnet merges both.
@@ -324,83 +328,110 @@ Start with ~30-50 entries per module, expand after testing:
 - Style packs: 6
 - Quality tags: 3 (always all)
 
-## Next Feature: Location Cards + Object Cards
+## Essence Cards (BUILT — location_cards + object_cards)
 
-### The Problem
-Currently user locations are injected as ", set in hawaii" — weak, generic, feels like metadata.
-User objects are injected as "guitars prominent in the scene" — checklist item, not a dream.
+### How They Work
 
-### The Solution: Essence Cards
-Generate a rich cinematic description ONCE per location/object, store in shared DB tables, reuse for every user forever.
+Shared DB tables with rich cinematic descriptions. One card per unique location/object. All users share the same cards. Generated once by Sonnet, cached forever.
 
-### Shared DB Tables
+### Location Cards (`location_cards` table)
 
-```sql
-location_cards (
-  id uuid, location_name text UNIQUE,
-  core_visuals text[],       -- "volcanic black sand beaches", "plumeria trade winds"
-  atmosphere text[],          -- "warm salt air", "afternoon rain through sunshine"
-  signature_details text[],   -- "sea turtles on warm rocks", "shave ice in rainbow colors"
-  color_palette text,
-  created_at timestamptz
-)
+| Column | Type | Purpose |
+|--------|------|---------|
+| `name` | text UNIQUE | normalized lowercase key ("hawaii") |
+| `tags` | text[] | for conflict filtering ("tropical", "coastal") |
+| `visual_palette` | text[] | 5+ visual elements specific to this place |
+| `atmosphere` | text[] | 4+ sensory atmosphere phrases |
+| `architecture` | text[] | 4+ built environment details |
+| `light_signature` | text[] | 3+ light behavior descriptions |
+| `texture_details` | text[] | 4+ tactile close-up details |
+| `cinematic_phrases` | text[] | 6-8 short cinematographer phrases |
+| `fusion_settings` | jsonb | `{ realistic: [17 settings], fantasy: [17], scifi: [16] }` = 50 unique scene rewrites |
+| `is_approved` | boolean | disable bad cards without deleting |
+| `prompt_version` | int | track which generation prompt created this |
 
-object_cards (
-  id uuid, object_name text UNIQUE,
-  visual_forms text[],        -- "worn black guitar with chipped paint", "chrome hardware catching neon"
-  interaction_modes text[],   -- "leaning against wall", "half-buried in sand", "held at waist"
-  environmental_integration text[],  -- "wired into machinery", "turned into shrine relic"
-  lighting_affinity text[],   -- "warm spotlight", "neon rim light"
-  surreal_twists text[],      -- "strings form constellations", "emits glowing sound waves"
-  created_at timestamptz
-)
+### Object Cards (`object_cards` table)
+
+| Column | Type | Purpose |
+|--------|------|---------|
+| `name` | text UNIQUE | normalized lowercase key ("guitars") |
+| `tags` | text[] | for conflict filtering ("instrument", "handheld") |
+| `visual_forms` | text[] | 4+ visually striking versions |
+| `material_textures` | text[] | 4+ close-up tactile details |
+| `signature_details` | text[] | 3+ cinematic micro-details |
+| `scale_contexts` | text[] | 4+ size/position relationships |
+| `interaction_modes` | text[] | 5+ natural interaction poses |
+| `environment_bindings` | text[] | 5+ physical grounding phrases |
+| `role_options` | text[] | artifact/hero prop/carried/surreal |
+| `fusion_forms` | jsonb | `{ realistic: [7], fantasy: [7], scifi: [6] }` = 20 genre-specific forms |
+| `soft_presence_forms` | text[] | 3+ indirect/symbolic appearances (30% chance) |
+| `faceswap_forbidden` | text[] | negative constraints for face-swap mode |
+| `faceswap_safe_positive` | text[] | positive reinforcements for face-swap |
+| `is_approved` | boolean | disable bad cards |
+
+### How Cards Are Generated
+
+**Two approaches:**
+
+**1. Full card generation (PREFERRED for predefined locations):**
+`scripts/generate-full-location-card.js` generates a complete card in one shot:
+- Base fields expanded to 30 entries each (visual_palette, atmosphere, cinematic_phrases)
+- 50 fusion settings (17 realistic + 17 fantasy + 16 scifi) via two-step anchor dedup
+- All fields mood-neutral — no emotional language, no darkness/eeriness
+- Post-validation rejects back-facing language AND mood words
+- Deletes old card and inserts fresh
+
+**Usage:**
+```bash
+node scripts/generate-full-location-card.js hawaii           # one location
+node scripts/generate-full-location-card.js --all            # all existing cards
 ```
 
-### Lazy Generation Flow
-1. Dream rolls "hawaii" + "guitar"
-2. Check `location_cards` for "hawaii" — exists? Use it. Missing? Sonnet generates + caches.
-3. Check `object_cards` for "guitar" — exists? Use it. Missing? Sonnet generates + caches.
-4. Tables fill up organically as users add new locations/objects.
+**2. Lazy generation (fallback for unknown locations):**
+If a location isn't in the DB when a dream fires, `essenceCards.ts` generates a small base card at runtime (5 phrases per genre). This is a fallback only — predefined locations should always use the full generator.
 
-### Dream-Time Compilation
+**3. Fusion-only expansion (legacy):**
+`scripts/regenerate-essence-cards.js` expands ONLY the fusion_settings field on existing cards. Doesn't touch base fields. Use the full generator instead for new cards.
 
-**Hierarchy:** Location = world. Object = story. Face = actor.
+### Mood-Neutrality Rule
 
-1. Scene engine picks base modules (setting, scale, time, weather, etc.)
-2. **Location fusion:** Rewrite the setting using the location card's core_visuals + atmosphere
-3. **Object integration:** Pick a role (60% artifact, 25% hero prop, 10% carried, 5% surreal) + visual form + interaction mode from the card
-4. **Subject framing:** Face-swap constraints locked in
-5. **Compile final prompt** in structured blocks:
+**ALL card fields must be mood-neutral.** Cards describe physical environment ONLY — what a camera sees. No emotional tone, no darkness, no eeriness, no menace. The vibe system (selected separately from user's aesthetics) handles all mood/tone. Even fantasy/scifi fusions should be beautiful and wonder-filled, not dark or threatening.
 
-```
-[SETTING rewritten with LOCATION ESSENCE],
-[LOCATION atmosphere + signature details],
+Banned words in card generation: dark, eerie, haunting, ghostly, ominous, sinister, foreboding, menace, dread, gloomy, creepy, terrifying, horror, nightmarish, demonic, cursed.
 
-foreground prop: [OBJECT visual form], [OBJECT placement], [OBJECT environment interaction],
+### Predefined Location Strategy (PLANNED)
 
-a lone figure [FACE-SWAP-SAFE ACTION],
-subject midground, face clearly visible, eyes visible,
-face 8-15% of frame height, balanced lighting on face,
-not a distant silhouette,
+Instead of free-text location input, users select from a curated list of ~63 locations. Every location has a pre-generated full card with 50 fusion settings + 30 atmosphere phrases + 30 cinematic phrases. This guarantees:
+- Every location renders beautifully (tested and tuned)
+- Zero first-dream latency (no runtime generation)
+- Consistent quality across all users
+- Every dream feels personal (location ALWAYS included in every dream)
 
-camera: medium wide, eye-level, 50mm lens,
-controlled depth of field, layered composition,
-cinematic film still, no text, no watermark
-```
+### How Cards Are Used at Dream Time
 
-### Face-Swap Object Safety Rules
-- Objects held at waist level or lower
-- Objects parked/placed nearby, not covering face
-- No helmets, masks, or face-obscuring items
-- No strong colored light from objects onto face
-- Motorcycle → "helmet hanging from handlebars" not "wearing helmet"
+**Location injection** (every dream):
+- 40% fusion: pick a random fusion_setting from the genre-appropriate array → REPLACES the base scene setting
+- 60% seasoning: pick 2-3 random cinematic_phrases → APPENDED as atmosphere texture
+- Genre resolved by scene tags: fantasy/gothic → fantasy fusions, space/cyberpunk → scifi, else → realistic
 
-### Sweet Spot Per Dream
-- 1 location
-- 1 object
-- 1 signature detail
-- 1 story hook
-- More than that = prompt soup
+**Object injection** (50% of dreams):
+- 70% literal: genre-appropriate fusion_form + role_option + interaction_mode + environment_binding
+- 30% symbolic: soft_presence_form (indirect appearance — mural, sign, motif)
+- Placement roll: 50% foreground, 35% midground, 15% background
+- Face-swap safety: append faceswap_safe_positive + faceswap_forbidden when applicable
+
+### Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/generate-full-location-card.js <name>` | **PREFERRED** — generates complete card (30 base entries + 50 fusions) from scratch |
+| `scripts/generate-full-location-card.js --all` | Regenerate ALL existing location cards |
+| `scripts/regenerate-essence-cards.js --type location --name hawaii` | Legacy — expand fusion settings ONLY on existing card |
+| `scripts/regenerate-essence-cards.js --type object` | Expand fusion forms for all objects |
+
+### Future: Predefined Location + Object Picker
+
+Instead of free-text input, offer a curated list of locations/objects. Pre-generate cards with 50+ fusions BEFORE users pick. Guarantees every location renders beautifully. Requires min 3 locations at onboarding.
 
 ## Files
 

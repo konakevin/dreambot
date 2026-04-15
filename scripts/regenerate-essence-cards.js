@@ -61,6 +61,7 @@ async function generateAnchors(name, type, genre, count) {
 Each anchor must be a DIFFERENT sub-${type === 'location' ? 'location, landmark, or environment type' : 'form, material, or visual treatment'}.
 Format: one concept per line, numbered. Each concept is 5-10 words describing a unique angle.
 No duplicates. No generic entries. Every concept must be specific to "${name}".
+MOOD-NEUTRAL: describe physical places and features ONLY. No emotional tone, no darkness, no eeriness, no menace, no haunting, no ghostly. The mood system handles tone separately — your job is just the PLACE.
 
 Example for "hawaii" (realistic):
 1. black sand beach with lava tubes and tide pools
@@ -99,6 +100,8 @@ ${anchorList}
 RULES:
 - Each expansion is 15-25 words, comma-separated cinematic phrases
 - ${type === 'location' ? 'Include a camera distance term: medium wide, medium, three-quarter, or environmental portrait' : 'Include how the object is physically placed in the scene'}
+- MOOD-NEUTRAL: describe physical environment and composition ONLY. No emotional language. No darkness, eeriness, menace, haunting, ghostly, ominous, foreboding, sinister. The vibe system handles mood separately — fusions are JUST the place and what the camera sees.
+- Even fantasy/scifi fusions should be BEAUTIFUL and WONDER-FILLED, not dark or threatening
 - NEVER include: looking out over, gazing at horizon, standing at the edge, silhouette, from behind, walking away, back turned
 - Every word must be something a camera can see
 - Output one expansion per line, numbered to match

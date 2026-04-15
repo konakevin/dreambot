@@ -33,11 +33,22 @@ export interface CastMember {
   relationship?: string;
 }
 
+export type CompositionMode =
+  | 'balanced'
+  | 'open_vista'
+  | 'layered_depth'
+  | 'negative_space'
+  | 'low_angle_hero'
+  | 'overhead'
+  | 'intimate_close';
+
 export interface DreamRoll {
   /** Descriptive path for logging/analytics */
   nightlyPath: string;
   /** Visual composition: character focus, tiny figure in vast scene, or pure environment */
   composition: 'character' | 'epic_tiny' | 'pure_scene';
+  /** Camera/framing composition style */
+  compositionMode: CompositionMode;
   /** Selected cast members (empty for non-character dreams) */
   castMembers: CastMember[];
   /** Whether to include a personal location in the scene */
@@ -99,8 +110,8 @@ export function rollDream(
     includeCharacter = Math.random() < 0.5;
   }
 
-  // ── Step 2: Location roll (60%) ──
-  let includeLocation = Math.random() < 0.6;
+  // ── Step 2: Location — ALWAYS included for personalization ──
+  const includeLocation = true;
 
   // ── Step 3: Object roll (50%) ──
   let includeObject = Math.random() < 0.5;
@@ -109,8 +120,7 @@ export function rollDream(
   if (!includeCharacter) {
     const pureSceneRoll = Math.random();
     if (pureSceneRoll < 0.15) {
-      // 15% deliberate pure scene — no location, no object
-      includeLocation = false;
+      // 15% deliberate pure scene — no object, but location still included
       includeObject = false;
     } else {
       // 85% roll loc/obj normally, guarantee at least one
@@ -184,6 +194,39 @@ export function rollDream(
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';
   }
 
+  // ── Step 7: Composition mode roll ──
+  const COMPOSITION_WEIGHTS: [CompositionMode, number][] = [
+    ['balanced', 25],
+    ['open_vista', 20],
+    ['layered_depth', 15],
+    ['negative_space', 15],
+    ['low_angle_hero', 10],
+    ['overhead', 7.5],
+    ['intimate_close', 7.5],
+  ];
+  // Clamp for face-swap: ban modes that shrink or obscure the face
+  const FACESWAP_ALLOWED: Set<CompositionMode> = new Set([
+    'balanced',
+    'open_vista',
+    'layered_depth',
+    'intimate_close',
+    'low_angle_hero',
+  ]);
+  const eligibleWeights =
+    isFaceSwapMedium && includeCharacter
+      ? COMPOSITION_WEIGHTS.filter(([mode]) => FACESWAP_ALLOWED.has(mode))
+      : COMPOSITION_WEIGHTS;
+  const totalCompWeight = eligibleWeights.reduce((s, [, w]) => s + w, 0);
+  let compRoll = Math.random() * totalCompWeight;
+  let compositionMode: CompositionMode = 'balanced';
+  for (const [mode, weight] of eligibleWeights) {
+    compRoll -= weight;
+    if (compRoll <= 0) {
+      compositionMode = mode;
+      break;
+    }
+  }
+
   // ── Build nightlyPath label for logging ──
   let nightlyPath: string;
   if (includeCharacter) {
@@ -201,7 +244,7 @@ export function rollDream(
     nightlyPath = parts.join('_');
   }
 
-  return { nightlyPath, composition, castMembers, includeLocation, includeObject };
+  return { nightlyPath, composition, compositionMode, castMembers, includeLocation, includeObject };
 }
 
 // ── Legacy path handler for backwards compat ──────────────────────────
@@ -221,7 +264,7 @@ function rollLegacyPath(
 
   if (path === 'personal_cast') {
     includeCharacter = true;
-    includeLocation = Math.random() < 0.6;
+    includeLocation = true;
     includeObject = Math.random() < 0.5;
     if (!includeLocation && !includeObject) {
       if (Math.random() < 0.5) includeLocation = true;
@@ -229,7 +272,7 @@ function rollLegacyPath(
     }
   } else if (path === 'personal_scene') {
     includeCharacter = false;
-    includeLocation = Math.random() < 0.6;
+    includeLocation = true;
     includeObject = Math.random() < 0.5;
     if (!includeLocation && !includeObject) {
       if (Math.random() < 0.5) includeLocation = true;
@@ -238,7 +281,7 @@ function rollLegacyPath(
   } else {
     // cast_random — loosened: char=yes, loc 30%, obj 30%
     includeCharacter = true;
-    includeLocation = Math.random() < 0.3;
+    includeLocation = true;
     includeObject = Math.random() < 0.3;
   }
 
@@ -277,6 +320,7 @@ function rollLegacyPath(
   return {
     nightlyPath: path,
     composition,
+    compositionMode: 'balanced' as CompositionMode,
     castMembers,
     includeLocation,
     includeObject,

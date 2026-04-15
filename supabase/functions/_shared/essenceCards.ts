@@ -167,10 +167,12 @@ Return ONLY valid JSON with these exact keys:
 
 Be SPECIFIC to this exact place. Not generic. What makes THIS place visually unique?
 Every phrase must be something a camera can see or a microphone can hear.
+MOOD-NEUTRAL: describe physical environment ONLY. No emotional tone, no darkness, no eeriness, no menace, no haunting. The mood system handles tone separately.
+Even fantasy/scifi entries should be BEAUTIFUL and WONDER-FILLED, not dark or threatening.
 Each fusion setting MUST include a camera distance term (medium wide, medium, three-quarter, environmental portrait).
 NEVER include: looking out over, gazing at horizon, standing at the edge, silhouette against, from behind, walking away.
 Each phrase max 10 words. Fusion settings max 25 words.
-No metaphors, no emotions, no cliches.`;
+No metaphors, no cliches.`;
 
   try {
     const raw = await callSonnet(prompt, anthropicKey, 800);

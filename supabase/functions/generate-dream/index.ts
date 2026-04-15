@@ -566,6 +566,7 @@ Deno.serve(async (req) => {
       const {
         nightlyPath,
         composition,
+        compositionMode,
         castMembers: selectedCast,
         includeLocation,
         includeObject,
@@ -575,6 +576,7 @@ Deno.serve(async (req) => {
         '[generate-dream] Dream roll:',
         nightlyPath,
         composition,
+        compositionMode,
         '| cast:',
         selectedCast.map((m) => m.role),
         '| location:',
@@ -670,6 +672,7 @@ Deno.serve(async (req) => {
       dreamSubject = assembleScene({
         renderMode,
         faceSwapEligible,
+        compositionMode,
         includeLocation,
         includeObject,
         userPlace,
@@ -826,6 +829,9 @@ Do NOT over-describe the face. Just "natural human face" is enough. Push detail 
 MOOD: ${nightlyVibe.directive}
 ${dreamerContext}${avoidList}
 
+COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
+${compositionMode !== 'balanced' ? '- Obey this composition style in camera framing and scene layout' : ''}
+
 RULES:
 - SCENE FIRST, then the mandatory face phrase, then character details.
 - Include "foreground midground background, layered composition" in the prompt.
@@ -851,6 +857,8 @@ ${castInstruction}
 
 MOOD: ${nightlyVibe.directive}
 ${dreamerContext}${avoidList}
+
+COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
 
 RULES:
 - SCENE FIRST in the prompt. The environment must be rich, detailed, layered.
