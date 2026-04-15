@@ -742,18 +742,7 @@ Deno.serve(async (req) => {
       };
 
       // Location is now the scene identity (baked into dreamSubject via assembleScene).
-      // Object as required prop — promoted from garnish to mandatory constraint
-      let requiredPropLine = '';
-      let requiredPropForm = '';
-      if (includeObject && userThing) {
-        if (objectCard && objectCard.visual_forms && objectCard.visual_forms.length > 0) {
-          requiredPropForm =
-            objectCard.visual_forms[Math.floor(Math.random() * objectCard.visual_forms.length)];
-        } else {
-          requiredPropForm = userThing;
-        }
-        requiredPropLine = `\nREQUIRED PROP — must be clearly visible in the final image:\n${requiredPropForm}\nThe character is interacting with it or it is prominently placed in the foreground/midground.`;
-      }
+      // Objects flow through assembleScene() naturally — no enforcement in the brief.
       const avoidList = nightlyProfile.avoid?.length
         ? `\nNEVER INCLUDE: ${nightlyProfile.avoid.join(', ')}`
         : '';
@@ -814,7 +803,7 @@ ${castDescBlock}
 Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.
 
 MOOD: ${nightlyVibe.directive}
-${requiredPropLine}${avoidList}
+${avoidList}
 
 COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
 ${compositionMode !== 'balanced' ? '- Obey this composition style in camera framing and scene layout' : ''}
@@ -843,14 +832,15 @@ ${castDescBlock}
 ${castInstruction}
 
 MOOD: ${nightlyVibe.directive}
-${requiredPropLine}${avoidList}
+${avoidList}
 
 COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
 
 RULES:
 - SCENE FIRST in the prompt. The environment must be rich, detailed, layered.
 - Include "foreground midground background stacked top to bottom, layered depth" in the prompt. Compose with depth — stack layers top to bottom, not left to right.
-- The character is IN the world, not posing for a portrait.
+- The character is actively DOING something interesting in the world — fighting, climbing, leaping, exploring, casting, riding. Dynamic action, not standing still.
+- Character visible from front or side angle — never a back-turned or rear-view shot.
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
         }
@@ -880,7 +870,7 @@ Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than
 
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${requiredPropLine}${avoidList}
+${avoidList}
 
 Write the prompt:
 1. Start with the art medium
@@ -906,7 +896,7 @@ ${dreamSubject}
 
 CAMERA/COMPOSITION: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${requiredPropLine}${avoidList}
+${avoidList}
 
 Write the prompt:
 1. Start with the art medium
@@ -936,21 +926,6 @@ Output ONLY the prompt.`;
         !finalPrompt.toLowerCase().includes(userPlace.toLowerCase())
       ) {
         finalPrompt = `set in ${userPlace}, ` + finalPrompt;
-      }
-
-      // Post-process: ensure object appears in final prompt when rolled
-      if (includeObject && userThing && requiredPropForm) {
-        const lower = finalPrompt.toLowerCase();
-        const objectName = userThing.toLowerCase();
-        const formWords = requiredPropForm
-          .toLowerCase()
-          .split(/\s+/)
-          .filter((w: string) => w.length > 4);
-        const hasObjectName = lower.includes(objectName);
-        const hasFormWord = formWords.some((w: string) => lower.includes(w));
-        if (!hasObjectName && !hasFormWord) {
-          finalPrompt += `, prominently featuring a ${requiredPropForm}`;
-        }
       }
 
       // Post-process: brute force face lock for face-swap-eligible dreams.

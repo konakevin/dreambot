@@ -15,7 +15,9 @@ function readEnvFile() {
       if (eq > 0) env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
     }
     return env;
-  } catch { return {}; }
+  } catch {
+    return {};
+  }
 }
 const envFile = readEnvFile();
 const getKey = (name) => process.env[name] || envFile[name];
@@ -39,7 +41,7 @@ const noForceRoll = args.includes('--natural');
 
 const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
   label: `dream ${i + 1}/${TEST_COUNT}`,
-  force_nightly_path: noForceRoll ? undefined : (FORCE_PATH || 'personal_cast'),
+  force_nightly_path: noForceRoll ? undefined : FORCE_PATH || 'personal_cast',
 }));
 
 (async () => {
@@ -48,24 +50,39 @@ const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
     type: 'magiclink',
     email: 'konakevin@gmail.com',
   });
-  if (linkErr) { console.error('❌ Link failed:', linkErr.message); process.exit(1); }
+  if (linkErr) {
+    console.error('❌ Link failed:', linkErr.message);
+    process.exit(1);
+  }
   const { data: otpData, error: otpErr } = await sb.auth.verifyOtp({
     token_hash: linkData.properties.hashed_token,
     type: 'magiclink',
   });
-  if (otpErr || !otpData.session) { console.error('❌ Auth failed:', otpErr?.message); process.exit(1); }
+  if (otpErr || !otpData.session) {
+    console.error('❌ Auth failed:', otpErr?.message);
+    process.exit(1);
+  }
   const jwt = otpData.session.access_token;
   console.log('🔑 Authenticated as Kevin');
 
   // Get Kevin's vibe profile
-  const { data: recipeData } = await sb.from('user_recipes').select('recipe').eq('user_id', KEVIN_ID).single();
+  const { data: recipeData } = await sb
+    .from('user_recipes')
+    .select('recipe')
+    .eq('user_id', KEVIN_ID)
+    .single();
   const vibeProfile = recipeData?.recipe;
-  if (!vibeProfile) { console.error('❌ No vibe profile'); process.exit(1); }
-  console.log(`👤 Cast: ${(vibeProfile.dream_cast || []).map(c => c.role).join(', ')}`);
+  if (!vibeProfile) {
+    console.error('❌ No vibe profile');
+    process.exit(1);
+  }
+  console.log(`👤 Cast: ${(vibeProfile.dream_cast || []).map((c) => c.role).join(', ')}`);
   if (FORCE_LOCATION) console.log(`📍 Forced location: ${FORCE_LOCATION}`);
   if (FORCE_OBJECT) console.log(`🎸 Forced object: ${FORCE_OBJECT}`);
   console.log(`📍 Places: ${(vibeProfile.dream_seeds?.places || []).join(', ')}`);
-  console.log(`🎸 Things: ${[...(vibeProfile.dream_seeds?.things || []), ...(vibeProfile.dream_seeds?.characters || [])].join(', ')}\n`);
+  console.log(
+    `🎸 Things: ${[...(vibeProfile.dream_seeds?.things || []), ...(vibeProfile.dream_seeds?.characters || [])].join(', ')}\n`
+  );
 
   let posted = 0;
 
@@ -94,7 +111,28 @@ const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
           },
           ...(noForceRoll ? {} : { force_cast_role: 'self' }),
           ...(test.force_nightly_path ? { force_nightly_path: test.force_nightly_path } : {}),
-          ...(noForceRoll ? {} : { force_medium: ['pencil','anime','comics','shimmer','twilight','surreal','photography','neon'][Math.floor(Math.random() * 8)] }),
+          ...(noForceRoll
+            ? {}
+            : {
+                force_medium: [
+                  'pencil',
+                  'anime',
+                  'comics',
+                  'shimmer',
+                  'twilight',
+                  'surreal',
+                  'photography',
+                  'neon',
+                  'lego',
+                  'claymation',
+                  'vinyl',
+                  'animation',
+                  'storybook',
+                  'pixels',
+                  'vaporwave',
+                  'handcrafted',
+                ][Math.floor(Math.random() * 16)],
+              }),
         }),
       });
 
@@ -105,7 +143,10 @@ const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
 
       const result = await res.json();
       if (result.upload_id) {
-        await sb.from('uploads').update({ is_active: true, is_posted: true }).eq('id', result.upload_id);
+        await sb
+          .from('uploads')
+          .update({ is_active: true, is_posted: true })
+          .eq('id', result.upload_id);
         console.log(`   ✅ Posted! (${++posted}/9)`);
       } else {
         console.log('   ⚠️ No upload_id:', JSON.stringify(result).slice(0, 200));
@@ -114,7 +155,7 @@ const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
       console.error(`   ❌ Failed:`, err.message);
     }
 
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 3000));
   }
 
   console.log(`\n🎉 Done. ${posted}/9 dreams posted.`);
