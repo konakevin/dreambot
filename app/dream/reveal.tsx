@@ -79,10 +79,9 @@ export default function DreamRevealScreen() {
       });
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-      reset();
-      router.replace(
-        `/dream/newPost?uploadId=${uploadId}&imageUrl=${encodeURIComponent(imageUrl)}`
-      );
+      // Push (not replace) so Cancel from New Post returns here
+      router.push(`/dream/newPost?uploadId=${uploadId}&imageUrl=${encodeURIComponent(imageUrl)}`);
+      setSaving(false);
     } catch (err) {
       if (__DEV__) console.error('[Reveal] Post error:', err);
       Toast.show('Failed to save dream', 'close-circle');

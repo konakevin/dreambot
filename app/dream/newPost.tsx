@@ -24,6 +24,7 @@ import * as Haptics from 'expo-haptics';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useDreamStore } from '@/store/dream';
 import { pinToFeed } from '@/lib/dreamSave';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -68,6 +69,9 @@ export default function NewPostScreen() {
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+      // Clear dream store in case we came from Reveal
+      useDreamStore.getState().reset();
+
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Posted', 'checkmark-circle');
 
