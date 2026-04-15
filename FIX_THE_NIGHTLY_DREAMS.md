@@ -11,12 +11,18 @@
 - **Independent dream rolls** — character 50%, location ALWAYS, object 50%. All combos: char+loc, char+loc+obj, loc only, loc+obj, etc.
 - **Every dream uses a location** — forced for personalization. No more generic unrelated scenes.
 
+- **Composition mode system** — 7 modes (balanced, open_vista, layered_depth, negative_space, low_angle_hero, overhead, intimate_close) with weighted rolls. Soft-ban alley keywords on foreground picks. Post-assembly alley detector. Face-swap clamps to face-safe modes.
+- **Mood-neutral cards** — all card fields generated without emotional language. Vibe system handles mood separately.
+- **Curated content library** — 63 predefined locations (50 fusions each) + 58 predefined objects (20 fusion forms each) with context bridges. Batch-generated via `generate-full-location-card.js` and `generate-full-object-card.js`.
+- **Onboarding refactor** (IN PROGRESS) — curated location + object pickers replacing free-text input. Starter packs, category filters, sticky chips. Pet cast slot removed.
+
 ### What Needs Work Next
-1. **Predefined location + object picker** — curated list instead of free text. Pre-generate cards before users pick.
+1. **Tag-based conflict filtering** — location tags should filter incompatible scene pool entries (e.g., "cherry blossoms" banned for tropical locations). Pattern exists in composition mode system, just needs extending.
 2. **Face visibility improvement** — still ~66% on natural mediums. Flux fights face-forward instructions.
 3. **Per-user scene dedup** — prevent repeating the same scene within 60 days.
 4. **Defensive medium filter** — filter user's art_styles against active mediums before picking.
-5. **Essence card fetch in Edge Function** — may need debugging for the Deno Supabase fetch path.
+5. **Mediums/Vibes step polish** — add Popular section, category filters, Quick Start packs to existing tile pickers.
+6. **Edge function pet cleanup** — remove pet-specific code paths.
 
 ## Architecture (Current)
 
@@ -399,13 +405,66 @@ If a location isn't in the DB when a dream fires, `essenceCards.ts` generates a 
 
 Banned words in card generation: dark, eerie, haunting, ghostly, ominous, sinister, foreboding, menace, dread, gloomy, creepy, terrifying, horror, nightmarish, demonic, cursed.
 
-### Predefined Location Strategy (PLANNED)
+### Predefined Content Library (BUILT)
 
-Instead of free-text location input, users select from a curated list of ~63 locations. Every location has a pre-generated full card with 50 fusion settings + 30 atmosphere phrases + 30 cinematic phrases. This guarantees:
-- Every location renders beautifully (tested and tuned)
-- Zero first-dream latency (no runtime generation)
-- Consistent quality across all users
-- Every dream feels personal (location ALWAYS included in every dream)
+**63 curated locations** organized by category:
+- Tropical (6): Hawaii, Bali, Maldives, Caribbean Island, Tahiti, Costa Rica
+- Cities (12): Tokyo, NYC, Paris, London, Venice, Dubai, Hong Kong, SF, LA, Miami, SLC, Moab
+- Nature (11): Swiss Alps, Patagonia, Yosemite, Iceland, NZ, Norwegian Fjords, Grand Canyon, Zions, Arches, Amazon, African Safari
+- Fantasy (9): Enchanted Forest, Floating Sky Islands, Crystal Caverns, Dragon's Keep, Fairy Tale Kingdom, Ancient Elven City, Hogwarts, Cloud Kingdom, Mermaid Lagoon
+- Cozy (7): Japanese Garden, Tuscan Villa, Mountain Cabin, Parisian Cafe, Cherry Blossom Temple, Rose Garden Palace, Fairy Cottage
+- Gothic (4): Haunted Castle, Victorian London, Transylvania, Gothic Cathedral
+- Sci-Fi (5): Cyberpunk Megacity, Mars Colony, Underwater City, Alien Planet, Space Station
+- Theme Parks (4): Disneyland, Sea World, Aquarium, Pirate Ship
+- Historical (5): Ancient Egypt, Roman Colosseum, Machu Picchu, Angkor Wat, Greek Isles
+- Feminine (5): Rose Garden Palace, Cherry Blossom Temple, Fairy Cottage, Cloud Kingdom, Mermaid Lagoon
+
+**58 curated objects** organized by category:
+- Adventure (7): Sword, Bow & Arrow, Lightsaber, Trident, Wand, Dagger, Katana
+- Vehicles (6): Motorcycle, Muscle Car, Sailboat, Helicopter, Spaceship, Hot Air Balloon
+- Music (4): Guitar, Piano, Violin, Drums
+- Companions (6): Dragon, Phoenix, Wolf, Horse, Owl, Cat
+- Tech (5): Robot, Drone, Telescope, Compass, Lantern
+- Sports (5): Surfboard, Skateboard, Campfire, Bicycle, Snowboard
+- Toys (5): Teddy Bear, Kite, Music Box, Snow Globe, Balloons
+- Magic (5): Crystal Orb, Ancient Book, Treasure Chest, Hourglass, Magic Mirror
+- Nature (5): Giant Flower, Butterfly Swarm, Bonsai Tree, Crystals, Seashell
+- Luxury (10): Jewelry Box, Chandelier, Hand Mirror, Rose Bouquet, Perfume Bottle, Hand Fan, Parasol, Vanity Table, Music Locket, Glass Terrarium
+
+Each location card has: 30 visual_palette + 30 atmosphere + 30 cinematic_phrases + 50 fusion settings (17r/17f/16s)
+Each object card has: 8 visual_forms + 12 context_bridges + 20 fusion_forms (7r/7f/6s) + 6 soft_presence_forms
+
+### Onboarding Refactor (IN PROGRESS)
+
+**New flow (8 steps):**
+1. Welcome
+2. Mediums (tile picker — unchanged, polish planned)
+3. Vibes (tile picker — unchanged, polish planned)
+4. Mood Sliders (unchanged)
+5. **Choose Locations** (NEW — curated picker with packs)
+6. **Choose Objects** (NEW — curated 2-column grid with packs)
+7. Dream Cast (self + plus_one only, pet removed)
+8. Reveal (unchanged)
+
+**Location picker UX:** sticky chips row + starter packs (tap = add 6 instantly) + category filters + 2-column tile grid. Min 3, max 10 onboarding / 25 settings.
+
+**Object picker UX:** same pattern with emoji tiles.
+
+**5 location packs:** Epic Nature, City Nights, Fantasy Realms, Tropical Paradise, Cozy Escapes
+**6 object packs:** Adventure Kit, Speed Pack, Mythical Relics, Music Studio, Crystal & Gold, Cute & Pretty
+
+**8 medium packs:** Classic Starter, Toy Box, Dark & Dramatic, Dreamy & Soft, Cute & Pretty, Epic Worlds, Cartoons & Animation, Full Studio
+**7 vibe packs:** Chill Vibes, Epic Adventure, Weird & Wild, Dark Side, Cute & Pretty, Epic Worlds, All Moods
+
+**Key architecture rule:** smart selection logic (Balanced Mix, packs) lives in UI only. The dream engine treats user selections as flat arrays and picks randomly. No bucket sampling or coherence scoring in the engine.
+
+**Components built:**
+- `ChipsRow.tsx` — reusable sticky selected chips with dismiss
+- `PackRow.tsx` — horizontal packs with state awareness (Added ✓ / + Add remaining)
+- `LocationPickerStep.tsx` — full location picker
+- `ObjectPickerStep.tsx` — full object picker
+
+**Store functions added:** `toggleLocation`, `toggleObject`, `addLocationPack`, `addObjectPack`
 
 ### How Cards Are Used at Dream Time
 
@@ -428,6 +487,11 @@ Instead of free-text location input, users select from a curated list of ~63 loc
 | `scripts/generate-full-location-card.js --all` | Regenerate ALL existing location cards |
 | `scripts/regenerate-essence-cards.js --type location --name hawaii` | Legacy — expand fusion settings ONLY on existing card |
 | `scripts/regenerate-essence-cards.js --type object` | Expand fusion forms for all objects |
+| `scripts/generate-full-object-card.js <name>` | Complete object card with context bridges + fusion forms |
+| `scripts/generate-full-object-card.js --all` | Generate all 58 curated objects |
+| `scripts/batch-generate-all-cards.js` | Orchestrates all 63 locations + 58 objects sequentially |
+| `scripts/batch-generate-all-cards.js --locations` | Locations only |
+| `scripts/batch-generate-all-cards.js --objects` | Objects only |
 
 ### Future: Predefined Location + Object Picker
 

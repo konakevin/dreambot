@@ -148,15 +148,18 @@ Sparkle pill (tappable → sparkle store) on Dream screen pick/reveal/photo head
 
 ---
 
-## Onboarding (7 steps)
+## Onboarding (8 steps)
 
 1. **Welcome** — intro screen, "Get Started" CTA
-2. **Visual Taste** — pick aesthetics (min 3) + art styles (min 2) from pill grids
-3. **Interests** — pick subjects (min 3)
-4. **Mood Sliders** — 4 bipolar sliders
-5. **Personal Anchors** — 4 free-text fields (places, objects, eras, dream vibe)
-6. **Spirit Companion** — pick one or skip
-7. **Reveal** — generate first dream, post it, 25 sparkle welcome, welcome notification
+2. **Mediums** — pick art styles (min 2) from pill grid, fetched from `dream_mediums` DB
+3. **Vibes** — pick aesthetics (min 3) from pill grid, fetched from `dream_vibes` DB
+4. **Mood Sliders** — 4 bipolar sliders (peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal)
+5. **Choose Locations** — curated picker from 63 pre-built location cards. Starter packs, category filters, sticky chips. Min 3, max 10. Stored as `dream_seeds.places[]`.
+6. **Choose Objects** — curated 2-column grid from 58 pre-built object cards. Starter packs, category filters. Min 3, max 10. Stored as `dream_seeds.things[]`.
+7. **Dream Cast** — photo upload for self + plus_one (pet removed). Llama Vision generates descriptions. Relationship picker for +1.
+8. **Reveal** — generate first dream, post it, 25 sparkle welcome, welcome notification
+
+**Key architecture rule:** locations and objects are selected from pre-curated lists with pre-generated essence cards. No free-text input. Every selection maps to a card in the DB with 50 fusion settings (locations) or 20 fusion forms (objects). The dream engine picks randomly from the user's selections — no smart selection logic in the engine.
 
 Profile saves on first dream generation (not just on post). Welcome notification sent from DreamBot with emojis.
 
