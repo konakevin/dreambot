@@ -148,6 +148,41 @@ const POOL_DEFS = {
     tagPrompt: 'Assign 1-2 tags from this list ONLY: skyline, mountains, coastal, space, nature, fire. Output only the tags, comma separated. If none fit, output "none".',
   },
 
+  actions_wide: {
+    count: 80,
+    wordRange: '8-12 words',
+    description: `A DYNAMIC ACTION for a character in a cinematic dream scene. The character is doing something interesting — fighting, exploring, climbing, casting magic, riding, performing, surviving. The character must be naturally visible from the FRONT or SIDE angle (never back-turned or silhouetted from behind). Do NOT include any "facing the camera" or "looking toward the viewer" language — that's for a different pool.`,
+    rules: [
+      'Character must be DOING something dynamic and visually interesting',
+      'Character naturally visible from front or side — no back-turned poses, no silhouettes from behind',
+      'NO "facing camera", "looking toward viewer", "eyes visible" — this is NOT a face-swap pool',
+      'Describe the ACTION and BODY POSITION, not the environment',
+      'Must work in ANY setting — no location-specific details',
+      'Include physical details: body position, limbs, movement, energy',
+      'Vary intensity: some calm/contemplative, some intense/violent, some surreal/impossible',
+      'Cover diverse categories: combat, magic, athletics, exploration, emotional, riding, creative, survival',
+    ],
+    examples: [
+      'mid-leap across a chasm, body in full extension',
+      'swinging a weapon in a dramatic arc, caught mid-strike',
+      'casting a spell with energy crackling from outstretched hands',
+      'climbing a massive structure, one arm reaching for the next hold',
+      'sitting on a ledge with legs dangling, surveying the world below',
+      'shielding someone smaller behind them, protective stance',
+      'riding a massive creature, gripping its mane',
+      'playing an instrument, lost in the music',
+      'bracing against a powerful wind or blast, one arm shielding their face',
+      'dueling another figure, blades locked',
+    ],
+    extractPrompt: 'From this action, give TWO words: the action type and the body position. Comma separated. Example: sword-swing, mid-strike',
+    needsTags: true,
+    tagPrompt: 'Assign 1-2 tags from this list ONLY: combat, magic, athletics, exploration, emotional, riding, creative, survival. Output only the tags, comma separated.',
+    needsRarity: true,
+    rarityPrompt: 'Rate this action\'s intensity. "safe" = grounded/calm/contemplative. "bold" = surreal/intense/fantastical. "chaotic" = physics-breaking/extreme/impossible. Output ONLY one word: safe, bold, or chaotic.',
+    // Pre-seed ban list with face-swap pool summaries to prevent overlap
+    preBanFile: 'supabase/functions/_shared/pools/actions_faceswap.ts',
+  },
+
   story_hooks: {
     count: 80,
     wordRange: '8-16 words',
@@ -228,11 +263,47 @@ async function assignTags(poolDef, entry) {
   return raw.split(',').map(t => t.trim()).filter(Boolean);
 }
 
+async function assignRarity(poolDef, entry) {
+  if (!poolDef.needsRarity) return undefined;
+  const msg = await client.messages.create({
+    model: 'claude-sonnet-4-5-20250929',
+    max_tokens: 10,
+    messages: [{
+      role: 'user',
+      content: `${poolDef.rarityPrompt}\n\nEntry: "${entry}"`,
+    }],
+  });
+  const raw = msg.content[0].text.trim().toLowerCase();
+  if (['safe', 'bold', 'chaotic'].includes(raw)) return raw;
+  return 'safe';
+}
+
+function loadPreBanKeys(filePath) {
+  if (!filePath) return [];
+  const fullPath = path.join(__dirname, '..', filePath);
+  if (!fs.existsSync(fullPath)) {
+    console.warn(`  ⚠️  Pre-ban file not found: ${filePath}`);
+    return [];
+  }
+  const content = fs.readFileSync(fullPath, 'utf8');
+  // Extract text values from the pool file
+  const texts = [];
+  const regex = /text:\s*'([^']+)'/g;
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    // Use first 6 words as a dedup key
+    texts.push(match[1].split(' ').slice(0, 6).join(' '));
+  }
+  console.log(`  📋 Pre-banned ${texts.length} entries from ${filePath}`);
+  return texts;
+}
+
 function writePoolFile(poolName, entries) {
   const lines = entries.map(e => {
     const tagStr = e.tags.length > 0 ? `, tags: [${e.tags.map(t => `'${t}'`).join(', ')}]` : '';
+    const rarityStr = e.rarity && e.rarity !== 'safe' ? `, rarity: '${e.rarity}'` : '';
     const escaped = e.text.replace(/'/g, "\\'");
-    return `  { text: '${escaped}', weight: 5${tagStr} },`;
+    return `  { text: '${escaped}', weight: 5${tagStr}${rarityStr} },`;
   });
 
   const content = `/**
@@ -268,7 +339,9 @@ ${lines.join('\n')}
     const count = COUNT_OVERRIDE || poolDef.count;
     console.log(`\n=== ${poolName} (generating ${count}) ===`);
 
-    const banList = [];
+    // Pre-seed ban list from another pool file to prevent overlap
+    const preBans = loadPreBanKeys(poolDef.preBanFile);
+    const banList = [...preBans];
     const entries = [];
 
     for (let i = 0; i < count; i++) {
@@ -276,9 +349,10 @@ ${lines.join('\n')}
         const text = await generateEntry(poolDef, banList);
         const key = await extractKey(poolDef, text);
         const tags = await assignTags(poolDef, text);
+        const rarity = await assignRarity(poolDef, text);
         banList.push(key);
-        entries.push({ text, tags });
-        console.log(`  [${i + 1}/${count}] ${key}`);
+        entries.push({ text, tags, rarity });
+        console.log(`  [${i + 1}/${count}] ${key} ${rarity ? `(${rarity})` : ''}`);
         console.log(`    ${text.slice(0, 100)}`);
       } catch (err) {
         console.error(`  ❌ Failed:`, err.message);

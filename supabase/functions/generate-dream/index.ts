@@ -227,6 +227,8 @@ interface RequestBody {
   job_id?: string;
   /** Style transfer: original post's ai_prompt used as style template for DLT */
   style_prompt?: string;
+  /** Nightly: dream wish to weave into the scene */
+  dream_wish?: string;
 }
 
 Deno.serve(async (req) => {
@@ -329,6 +331,7 @@ Deno.serve(async (req) => {
     | undefined;
   const jobId = (body as Record<string, unknown>).job_id as string | undefined;
   const style_prompt = (body as Record<string, unknown>).style_prompt as string | undefined;
+  const dream_wish = (body as Record<string, unknown>).dream_wish as string | undefined;
 
   console.log(
     '[generate-dream] RAW TEST PARAMS:',
@@ -696,6 +699,10 @@ Deno.serve(async (req) => {
         castGender,
         moodAxis: moods,
       });
+
+      if (dream_wish) {
+        dreamSubject += `. DREAM WISH (make this the heart): "${dream_wish}"`;
+      }
 
       console.log('[generate-dream] Scene DNA:', dreamSubject.slice(0, 200));
       lap('nightly-subject');
@@ -1563,6 +1570,7 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
           dream_vibe: resolvedVibeKey ?? null,
           is_active: false,
           is_posted: false,
+          is_approved: true,
           width: 768,
           height: 1664,
         })
