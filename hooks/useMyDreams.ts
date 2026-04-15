@@ -28,8 +28,9 @@ export function useMyDreams() {
       if (error) throw error;
       const rows = castRows(data).map((row) => ({
         ...mapToDreamPost(row),
-        is_active: (row.is_active as boolean) ?? false,
-        is_posted: (row.is_posted as boolean) ?? false,
+        is_public: (row.is_public as boolean) ?? false,
+        posted_at: (row.posted_at as string | null) ?? null,
+        description: (row.description as string | null) ?? null,
       }));
       return { rows, offset };
     },

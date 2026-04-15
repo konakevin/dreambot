@@ -72,6 +72,34 @@ export function useDenyFollowRequest() {
   });
 }
 
+/** Approve a follow request AND follow the requester back */
+export function useApproveFollowAndFollowBack() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (requesterId: string) => {
+      const { error } = await supabase.rpc('approve_follow_and_follow_back', {
+        p_requester_id: requesterId,
+      });
+      if (error) throw error;
+    },
+    onSuccess: (_data, requesterId) => {
+      const userId = useAuthStore.getState().user?.id;
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      queryClient.invalidateQueries({ queryKey: ['inbox', userId] });
+      queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', userId] });
+      queryClient.invalidateQueries({ queryKey: ['followersList', userId] });
+      queryClient.invalidateQueries({ queryKey: ['followingList', userId] });
+      queryClient.invalidateQueries({ queryKey: ['followingIds', userId] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile', userId] });
+      queryClient.invalidateQueries({ queryKey: ['publicProfile', requesterId] });
+    },
+    onError: () => {
+      Toast.show('Failed to approve', 'close-circle');
+    },
+  });
+}
+
 /** Cancel an outgoing follow request */
 export function useCancelFollowRequest() {
   const queryClient = useQueryClient();

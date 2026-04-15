@@ -24,7 +24,11 @@ import { useMarkAllSeen } from '@/hooks/useMarkAllSeen';
 import { InboxSkeleton } from '@/components/Skeleton';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import { useAlbumStore } from '@/store/album';
-import { useApproveFollowRequest, useDenyFollowRequest } from '@/hooks/useFollowRequests';
+import {
+  useApproveFollowRequest,
+  useApproveFollowAndFollowBack,
+  useDenyFollowRequest,
+} from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
 
 function formatTimeAgo(dateStr: string): string {
@@ -106,8 +110,9 @@ function getNotificationIcon(type: NotificationItem['type']): string {
 
 function FollowRequestActions({ actorId, notifId }: { actorId: string; notifId: string }) {
   const { mutate: approve, isPending: approving } = useApproveFollowRequest();
+  const { mutate: approveAndFollow, isPending: approving2 } = useApproveFollowAndFollowBack();
   const { mutate: deny, isPending: denying } = useDenyFollowRequest();
-  const busy = approving || denying;
+  const busy = approving || approving2 || denying;
 
   return (
     <View style={styles.followRequestActions}>
@@ -117,7 +122,15 @@ function FollowRequestActions({ actorId, notifId }: { actorId: string; notifId: 
         disabled={busy}
         activeOpacity={0.7}
       >
-        <Text style={styles.approveText}>Approve</Text>
+        <Text style={styles.approveText}>Accept</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.approveFollowBackButton}
+        onPress={() => approveAndFollow(actorId)}
+        disabled={busy}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.approveText}>Accept & Follow Back</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.denyButton}
@@ -572,11 +585,19 @@ const styles = StyleSheet.create({
   followRequestActions: {
     flexDirection: 'row',
     gap: 6,
+    flexWrap: 'wrap',
   },
   approveButton: {
     backgroundColor: colors.accent,
     borderRadius: 12,
     paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  approveFollowBackButton: {
+    borderWidth: 1,
+    borderColor: colors.accent,
+    borderRadius: 12,
+    paddingHorizontal: 10,
     paddingVertical: 5,
   },
   approveText: {

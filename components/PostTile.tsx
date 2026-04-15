@@ -187,9 +187,9 @@ export const PostTile = memo(function PostTile({
           </View>
         </View>
       )}
-      {showPrivateBadge && item.is_active === false && (
+      {showPrivateBadge && !item.is_public && (
         <View style={styles.privateBadge}>
-          <Ionicons name="lock-closed" size={10} color="#fff" />
+          <Ionicons name={item.posted_at ? 'eye-off' : 'add'} size={10} color="#fff" />
         </View>
       )}
       {isWish && (

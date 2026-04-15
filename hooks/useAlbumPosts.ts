@@ -30,8 +30,9 @@ export function useAlbumPosts(albumIds: string[], currentId: string) {
         return castRows(data)
           .map((row) => ({
             ...mapToDreamPost(row),
-            is_active: (row.is_active as boolean) ?? false,
-            is_posted: (row.is_posted as boolean) ?? false,
+            is_public: (row.is_public as boolean) ?? false,
+            posted_at: (row.posted_at as string | null) ?? null,
+            description: (row.description as string | null) ?? null,
           }))
           .sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0));
       }
@@ -47,8 +48,9 @@ export function useAlbumPosts(albumIds: string[], currentId: string) {
       const targetRow = castRow(single);
       const target: DreamPostItem = {
         ...mapToDreamPost(targetRow),
-        is_active: (targetRow.is_active as boolean) ?? false,
-        is_posted: (targetRow.is_posted as boolean) ?? false,
+        is_public: (targetRow.is_public as boolean) ?? false,
+        posted_at: (targetRow.posted_at as string | null) ?? null,
+        description: (targetRow.description as string | null) ?? null,
       };
 
       // Fetch the poster's other public posts as scrollable context
@@ -56,7 +58,7 @@ export function useAlbumPosts(albumIds: string[], currentId: string) {
         .from('uploads')
         .select(POST_SELECT)
         .eq('user_id', target.user_id)
-        .eq('is_active', true)
+        .eq('is_public', true)
         .neq('id', currentId)
         .order('created_at', { ascending: false })
         .limit(CONTEXT_LIMIT);

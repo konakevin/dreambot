@@ -1,17 +1,13 @@
 /**
- * Dream Save — handles saving dreams.
+ * Dream Save — handles saving dreams to the user's dream album.
  *
- * Three outcomes from the Reveal screen:
- *   Post to Profile → is_active=true, is_posted=true
- *   Save to Dreams  → is_active=false, is_posted=false
- *   Discard         → no insert (caller handles)
+ * All dreams save as PRIVATE (is_public=false, posted_at=null).
+ * Publishing happens separately via the New Post screen.
  */
 
 import { supabase } from '@/lib/supabase';
 import { useFeedStore } from '@/store/feed';
 import { persistImage } from '@/lib/dreamApi';
-
-export type DreamVisibility = 'public' | 'private';
 
 interface SaveDreamOpts {
   userId: string;
@@ -19,10 +15,9 @@ interface SaveDreamOpts {
   tempImageUrl: string;
   prompt: string;
   aiConcept?: unknown | null;
-  visibility: DreamVisibility;
   dreamMedium?: string | null;
   dreamVibe?: string | null;
-  /** If set, UPDATE this existing draft upload instead of INSERT */
+  /** If set, this existing draft upload already exists (from queue) — no insert needed */
   existingUploadId?: string;
 }
 
@@ -32,10 +27,8 @@ interface SaveDreamResult {
 }
 
 /**
- * Persist image to Storage and insert into uploads table.
- *
- * - `public` → is_active=true, is_posted=true (appears in feed)
- * - `private` → is_active=false, is_posted=false (My Dreams only)
+ * Persist image to Storage and insert into uploads table as a private dream.
+ * The New Post screen handles making it public (is_public=true, posted_at=now()).
  */
 export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
   // Skip re-upload if the image is already in Supabase Storage
@@ -44,19 +37,10 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     ? opts.tempImageUrl
     : await persistImage(opts.tempImageUrl, opts.userId);
 
-  const isPublic = opts.visibility === 'public';
   const caption = opts.prompt.length > 200 ? opts.prompt.slice(0, 197) + '...' : opts.prompt;
 
-  // If we have an existing draft upload (from queue), update it instead of inserting
+  // If we have an existing draft upload (from queue), it's already saved — just return
   if (opts.existingUploadId) {
-    const { error } = await supabase
-      .from('uploads')
-      .update({
-        is_active: isPublic,
-        is_posted: isPublic,
-      } as Record<string, unknown>)
-      .eq('id', opts.existingUploadId);
-    if (error) throw error;
     return { uploadId: opts.existingUploadId, imageUrl };
   }
 
@@ -64,8 +48,7 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
     user_id: opts.userId,
     image_url: imageUrl,
     caption,
-    is_active: isPublic,
-    is_posted: isPublic,
+    is_public: false,
     ai_prompt: opts.prompt,
     width: 768,
     height: 1664,

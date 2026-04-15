@@ -19,7 +19,7 @@ export function useSearchPosts(query: string, medium?: string | null, vibe?: str
         .from('uploads')
         .select(POST_SELECT)
         .textSearch('search_tsv', tsQuery)
-        .eq('is_active', true);
+        .eq('is_public', true);
 
       if (medium) q = q.eq('dream_medium', medium);
       if (vibe) q = q.eq('dream_vibe', vibe);

@@ -67,36 +67,25 @@ export default function DreamRevealScreen() {
     if (!user || saving) return;
     setSaving(true);
     try {
+      // Save as private first, then route to New Post screen for description + publish
       const { uploadId, imageUrl } = await saveDream({
         userId: user.id,
         tempImageUrl: result!.imageUrl,
         prompt: result!.prompt,
         aiConcept: result!.aiConcept,
-        visibility: 'public',
         dreamMedium: result!.resolvedMedium,
         dreamVibe: result!.resolvedVibe,
         existingUploadId: result!.uploadId ?? undefined,
       });
 
-      pinToFeed({
-        id: uploadId,
-        userId: user.id,
-        imageUrl,
-        username: user.user_metadata?.username ?? '',
-        avatarUrl: user.user_metadata?.avatar_url ?? null,
-      });
-
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      Toast.show('Posted to your profile', 'checkmark-circle');
-
       reset();
-      // Navigate to Explore feed with the dream pinned as first card
-      router.replace('/(tabs)');
+      router.replace(
+        `/dream/newPost?uploadId=${uploadId}&imageUrl=${encodeURIComponent(imageUrl)}`
+      );
     } catch (err) {
       if (__DEV__) console.error('[Reveal] Post error:', err);
-      Toast.show('Failed to post dream', 'close-circle');
+      Toast.show('Failed to save dream', 'close-circle');
       setSaving(false);
     }
   }
@@ -112,7 +101,6 @@ export default function DreamRevealScreen() {
           tempImageUrl: result!.imageUrl,
           prompt: result!.prompt,
           aiConcept: result!.aiConcept,
-          visibility: 'private',
           dreamMedium: result!.resolvedMedium,
           dreamVibe: result!.resolvedVibe,
         });

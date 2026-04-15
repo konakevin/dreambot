@@ -578,8 +578,7 @@ Output ONLY the message, nothing else.`,
       ai_prompt: prompt,
       from_wish: wish,
       bot_message: botMessage,
-      is_approved: true,
-      is_active: false,
+      is_public: false,
     })
     .select('id')
     .single();

@@ -6,8 +6,16 @@
  * - Pinch to zoom
  */
 
-import { useRef, useEffect, memo } from 'react';
-import { View, Text, TouchableOpacity, Pressable, StyleSheet, Dimensions } from 'react-native';
+import { useState, useRef, useEffect, memo } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  TextStyle,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { timeAgo } from '@/lib/timeAgo';
@@ -55,8 +63,9 @@ export interface DreamPostItem {
   bot_message?: string | null;
   dream_medium?: string | null;
   dream_vibe?: string | null;
-  is_active?: boolean;
-  is_posted?: boolean;
+  is_public?: boolean;
+  posted_at?: string | null;
+  description?: string | null;
 }
 
 interface Props {
@@ -172,6 +181,19 @@ function WishSparkle({ index, total, seed }: { index: number; total: number; see
         style,
       ]}
     />
+  );
+}
+
+function ExpandableDescription({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <Text
+      style={s.description}
+      numberOfLines={expanded ? undefined : 1}
+      onPress={() => setExpanded((v) => !v)}
+    >
+      {text}
+    </Text>
   );
 }
 
@@ -478,8 +500,9 @@ export const DreamCard = memo(function DreamCard({
                     <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
                   </View>
                 )}
-                <View>
+                <View style={{ flex: 1 }}>
                   <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
+                  {item.description ? <ExpandableDescription text={item.description} /> : null}
                   <Text style={s.timestamp}>{timeAgo(item.created_at)}</Text>
                 </View>
               </TouchableOpacity>
@@ -502,13 +525,19 @@ export const DreamCard = memo(function DreamCard({
                   onPress={onTogglePosted}
                   activeOpacity={0.7}
                 >
-                  <View style={[s.visibilityCircle, item.is_posted && s.visibilityCircleActive]}>
-                    <Ionicons
-                      name={item.is_posted ? 'eye' : 'eye-off'}
-                      size={20}
-                      color={item.is_posted ? '#FFFFFF' : 'rgba(255,255,255,0.7)'}
-                    />
-                  </View>
+                  {item.posted_at == null ? (
+                    <View style={s.visibilityCircle}>
+                      <Ionicons name="add" size={24} color="#FFFFFF" />
+                    </View>
+                  ) : (
+                    <View style={[s.visibilityCircle, item.is_public && s.visibilityCircleActive]}>
+                      <Ionicons
+                        name={item.is_public ? 'eye' : 'eye-off'}
+                        size={20}
+                        color={item.is_public ? '#FFFFFF' : 'rgba(255,255,255,0.7)'}
+                      />
+                    </View>
+                  )}
                 </TouchableOpacity>
               )}
               <TouchableOpacity
@@ -664,6 +693,15 @@ const s = StyleSheet.create({
     textShadowRadius: 16,
     textShadowOffset: { width: 0, height: 0 },
   },
+  description: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 13,
+    fontWeight: '400',
+    marginTop: 2,
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowRadius: 16,
+    textShadowOffset: { width: 0, height: 0 },
+  } as TextStyle,
   timestamp: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,

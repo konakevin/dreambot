@@ -9,7 +9,8 @@ export interface PublicProfile {
   postCount: number;
   followerCount: number;
   followingCount: number;
-  friendCount: number;
+  isFollowing: boolean;
+  hasRequest: boolean;
 }
 
 export function usePublicProfile(userId: string) {
@@ -33,7 +34,8 @@ export function usePublicProfile(userId: string) {
         postCount: Number(row.post_count),
         followerCount: Number(row.follower_count),
         followingCount: Number(row.following_count),
-        friendCount: Number(row.friend_count ?? 0),
+        isFollowing: (row.is_following as boolean) ?? false,
+        hasRequest: (row.has_request as boolean) ?? false,
       } as PublicProfile;
     },
     enabled: !!userId,

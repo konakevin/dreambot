@@ -533,7 +533,6 @@ export default function DreamTestScreen() {
                     userId: user.id,
                     tempImageUrl: activeDream.url,
                     prompt: activeDream.prompt,
-                    visibility: 'private',
                     dreamMedium: activeDream.medium,
                     dreamVibe: activeDream.vibe,
                   });

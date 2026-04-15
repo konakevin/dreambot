@@ -15,7 +15,7 @@ export function useUserPosts(enabled = true) {
         .from('uploads')
         .select(POST_SELECT)
         .eq('user_id', user!.id)
-        .eq('is_posted', true)
+        .eq('is_public', true)
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;

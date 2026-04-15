@@ -279,7 +279,7 @@ function DataPrefetcher() {
           const { data, error } = await supabase
             .from('uploads')
             .select('*, users!inner(username, avatar_url)')
-            .eq('is_active', true)
+            .eq('is_public', true)
             .order('created_at', { ascending: false })
             .range(0, 19);
           if (error) throw error;

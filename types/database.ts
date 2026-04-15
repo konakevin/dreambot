@@ -152,6 +152,36 @@ export type Database = {
           },
         ];
       };
+      bot_seeds: {
+        Row: {
+          category: string;
+          created_at: string;
+          disabled: boolean;
+          generation: number;
+          id: string;
+          template: string;
+          used_at: string | null;
+        };
+        Insert: {
+          category: string;
+          created_at?: string;
+          disabled?: boolean;
+          generation?: number;
+          id?: string;
+          template: string;
+          used_at?: string | null;
+        };
+        Update: {
+          category?: string;
+          created_at?: string;
+          disabled?: boolean;
+          generation?: number;
+          id?: string;
+          template?: string;
+          used_at?: string | null;
+        };
+        Relationships: [];
+      };
       comment_likes: {
         Row: {
           comment_id: string;
@@ -359,6 +389,7 @@ export type Database = {
       };
       dream_mediums: {
         Row: {
+          character_render_mode: string;
           created_at: string;
           directive: string;
           face_swaps: boolean;
@@ -373,6 +404,7 @@ export type Database = {
           sort_order: number;
         };
         Insert: {
+          character_render_mode?: string;
           created_at?: string;
           directive: string;
           face_swaps?: boolean;
@@ -387,6 +419,7 @@ export type Database = {
           sort_order?: number;
         };
         Update: {
+          character_render_mode?: string;
           created_at?: string;
           directive?: string;
           face_swaps?: boolean;
@@ -658,6 +691,90 @@ export type Database = {
           },
         ];
       };
+      location_cards: {
+        Row: {
+          architecture: string[];
+          atmosphere: string[];
+          cinematic_phrases: string[];
+          created_at: string;
+          fusion_settings: Json;
+          id: string;
+          is_approved: boolean;
+          light_signature: string[];
+          model_version: string;
+          name: string;
+          prompt_version: number;
+          tags: string[];
+          texture_details: string[];
+          updated_at: string;
+          visual_palette: string[];
+        };
+        Insert: {
+          architecture?: string[];
+          atmosphere?: string[];
+          cinematic_phrases?: string[];
+          created_at?: string;
+          fusion_settings?: Json;
+          id?: string;
+          is_approved?: boolean;
+          light_signature?: string[];
+          model_version?: string;
+          name: string;
+          prompt_version?: number;
+          tags?: string[];
+          texture_details?: string[];
+          updated_at?: string;
+          visual_palette?: string[];
+        };
+        Update: {
+          architecture?: string[];
+          atmosphere?: string[];
+          cinematic_phrases?: string[];
+          created_at?: string;
+          fusion_settings?: Json;
+          id?: string;
+          is_approved?: boolean;
+          light_signature?: string[];
+          model_version?: string;
+          name?: string;
+          prompt_version?: number;
+          tags?: string[];
+          texture_details?: string[];
+          updated_at?: string;
+          visual_palette?: string[];
+        };
+        Relationships: [];
+      };
+      nightly_seeds: {
+        Row: {
+          category: string;
+          created_at: string;
+          disabled: boolean;
+          generation: number;
+          id: string;
+          template: string;
+          used_at: string | null;
+        };
+        Insert: {
+          category: string;
+          created_at?: string;
+          disabled?: boolean;
+          generation?: number;
+          id?: string;
+          template: string;
+          used_at?: string | null;
+        };
+        Update: {
+          category?: string;
+          created_at?: string;
+          disabled?: boolean;
+          generation?: number;
+          id?: string;
+          template?: string;
+          used_at?: string | null;
+        };
+        Relationships: [];
+      };
       notifications: {
         Row: {
           actor_id: string;
@@ -722,6 +839,81 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      object_cards: {
+        Row: {
+          category: string;
+          context_bridges: string[];
+          created_at: string;
+          environment_bindings: string[];
+          faceswap_forbidden: string[];
+          faceswap_safe_positive: string[];
+          fusion_forms: Json;
+          id: string;
+          interaction_modes: string[];
+          is_approved: boolean;
+          material_textures: string[];
+          model_version: string;
+          name: string;
+          prompt_version: number;
+          role_options: string[];
+          scale: string;
+          scale_contexts: string[];
+          signature_details: string[];
+          soft_presence_forms: string[];
+          tags: string[];
+          updated_at: string;
+          visual_forms: string[];
+        };
+        Insert: {
+          category?: string;
+          context_bridges?: string[];
+          created_at?: string;
+          environment_bindings?: string[];
+          faceswap_forbidden?: string[];
+          faceswap_safe_positive?: string[];
+          fusion_forms?: Json;
+          id?: string;
+          interaction_modes?: string[];
+          is_approved?: boolean;
+          material_textures?: string[];
+          model_version?: string;
+          name: string;
+          prompt_version?: number;
+          role_options?: string[];
+          scale?: string;
+          scale_contexts?: string[];
+          signature_details?: string[];
+          soft_presence_forms?: string[];
+          tags?: string[];
+          updated_at?: string;
+          visual_forms?: string[];
+        };
+        Update: {
+          category?: string;
+          context_bridges?: string[];
+          created_at?: string;
+          environment_bindings?: string[];
+          faceswap_forbidden?: string[];
+          faceswap_safe_positive?: string[];
+          fusion_forms?: Json;
+          id?: string;
+          interaction_modes?: string[];
+          is_approved?: boolean;
+          material_textures?: string[];
+          model_version?: string;
+          name?: string;
+          prompt_version?: number;
+          role_options?: string[];
+          scale?: string;
+          scale_contexts?: string[];
+          signature_details?: string[];
+          soft_presence_forms?: string[];
+          tags?: string[];
+          updated_at?: string;
+          visual_forms?: string[];
+        };
+        Relationships: [];
       };
       post_impressions: {
         Row: {
@@ -935,6 +1127,7 @@ export type Database = {
           categories: string[];
           comment_count: number;
           created_at: string;
+          description: string | null;
           dream_medium: string | null;
           dream_vibe: string | null;
           from_wish: string | null;
@@ -948,8 +1141,10 @@ export type Database = {
           is_approved: boolean | null;
           is_moderated: boolean;
           is_posted: boolean;
+          is_public: boolean;
           like_count: number;
           media_type: string;
+          posted_at: string | null;
           recipe_id: string | null;
           save_count: number;
           search_tsv: unknown;
@@ -967,6 +1162,7 @@ export type Database = {
           categories?: string[];
           comment_count?: number;
           created_at?: string;
+          description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
           from_wish?: string | null;
@@ -980,8 +1176,10 @@ export type Database = {
           is_approved?: boolean | null;
           is_moderated?: boolean;
           is_posted?: boolean;
+          is_public?: boolean;
           like_count?: number;
           media_type?: string;
+          posted_at?: string | null;
           recipe_id?: string | null;
           save_count?: number;
           search_tsv?: unknown;
@@ -999,6 +1197,7 @@ export type Database = {
           categories?: string[];
           comment_count?: number;
           created_at?: string;
+          description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
           from_wish?: string | null;
@@ -1012,8 +1211,10 @@ export type Database = {
           is_approved?: boolean | null;
           is_moderated?: boolean;
           is_posted?: boolean;
+          is_public?: boolean;
           like_count?: number;
           media_type?: string;
+          posted_at?: string | null;
           recipe_id?: string | null;
           save_count?: number;
           search_tsv?: unknown;
@@ -1169,18 +1370,26 @@ export type Database = {
     };
     Functions: {
       admin_delete_upload: { Args: { p_upload_id: string }; Returns: undefined };
+      approve_follow_and_follow_back: {
+        Args: { p_requester_id: string };
+        Returns: undefined;
+      };
       approve_follow_request: {
         Args: { p_requester_id: string };
         Returns: undefined;
       };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
-      check_friend_request_rate_limit: {
-        Args: { p_user_id: string };
-        Returns: boolean;
-      };
       delete_own_account: { Args: never; Returns: undefined };
       deny_follow_request: {
         Args: { p_requester_id: string };
+        Returns: undefined;
+      };
+      finalize_nightly_upload: {
+        Args: {
+          p_bot_message?: string;
+          p_from_wish?: string;
+          p_upload_id: string;
+        };
         Returns: undefined;
       };
       get_comments: {
@@ -1200,6 +1409,7 @@ export type Database = {
       get_dream_mediums: {
         Args: never;
         Returns: {
+          character_render_mode: string;
           directive: string;
           face_swaps: boolean;
           flux_fragment: string;
@@ -1239,6 +1449,7 @@ export type Database = {
           caption: string;
           comment_count: number;
           created_at: string;
+          description: string;
           dream_medium: string;
           dream_vibe: string;
           feed_score: number;
@@ -1247,15 +1458,10 @@ export type Database = {
           id: string;
           image_url: string;
           like_count: number;
+          posted_at: string;
           user_id: string;
           username: string;
           width: number;
-        }[];
-      };
-      get_friend_ids: {
-        Args: { p_user_id: string };
-        Returns: {
-          friend_id: string;
         }[];
       };
       get_notifications: {
@@ -1275,23 +1481,15 @@ export type Database = {
           upload_id: string;
         }[];
       };
-      get_pending_requests: {
-        Args: { p_user_id: string };
-        Returns: {
-          avatar_url: string;
-          requested_at: string;
-          requester_id: string;
-          username: string;
-        }[];
-      };
       get_public_profile: {
         Args: { p_user_id: string };
         Returns: {
           avatar_url: string;
           follower_count: number;
           following_count: number;
-          friend_count: number;
+          has_request: boolean;
           id: string;
+          is_following: boolean;
           is_public: boolean;
           post_count: number;
           username: string;
@@ -1334,12 +1532,6 @@ export type Database = {
         Args: { p_upload_id: string; p_user_id: string };
         Returns: undefined;
       };
-      remove_friend: { Args: { p_friend_id: string }; Returns: undefined };
-      respond_friend_request: {
-        Args: { p_accept: boolean; p_requester_id: string };
-        Returns: undefined;
-      };
-      send_friend_request: { Args: { p_target_id: string }; Returns: undefined };
       spend_sparkles: {
         Args: {
           p_amount: number;

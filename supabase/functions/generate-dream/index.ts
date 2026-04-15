@@ -1568,9 +1568,7 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
           ai_concept: conceptJson,
           dream_medium: resolvedMediumKey ?? null,
           dream_vibe: resolvedVibeKey ?? null,
-          is_active: false,
-          is_posted: false,
-          is_approved: true,
+          is_public: false,
           width: 768,
           height: 1664,
         })

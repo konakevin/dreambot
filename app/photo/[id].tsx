@@ -47,49 +47,49 @@ export default function PhotoDetailScreen() {
       const post = posts.find((p) => p.id === postId);
       if (!post) return;
 
-      const newPosted = !post.is_posted;
+      // Never posted → route to New Post screen
+      if (!post.posted_at) {
+        router.push(
+          `/dream/newPost?uploadId=${postId}&imageUrl=${encodeURIComponent(post.image_url)}`
+        );
+        return;
+      }
+
+      // Previously posted → toggle public/private
+      const newPublic = !post.is_public;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-      // Optimistic update in query cache
+      // Optimistic update
       queryClient.setQueryData(
         ['albumPosts', albumIds.join(','), id],
         (old: DreamPostItem[] | undefined) =>
-          old?.map((p) =>
-            p.id === postId ? { ...p, is_posted: newPosted, is_active: newPosted } : p
-          )
+          old?.map((p) => (p.id === postId ? { ...p, is_public: newPublic } : p))
       );
 
       const { error } = await supabase
         .from('uploads')
-        .update({
-          is_posted: newPosted,
-          is_active: newPosted,
-          visibility: newPosted ? 'public' : 'private',
-        })
+        .update({ is_public: newPublic })
         .eq('id', postId)
         .eq('user_id', user.id);
 
       if (error) {
-        // Revert
         queryClient.setQueryData(
           ['albumPosts', albumIds.join(','), id],
           (old: DreamPostItem[] | undefined) =>
-            old?.map((p) =>
-              p.id === postId ? { ...p, is_posted: !newPosted, is_active: !newPosted } : p
-            )
+            old?.map((p) => (p.id === postId ? { ...p, is_public: !newPublic } : p))
         );
         Toast.show('Failed to update', 'close-circle');
       } else {
         Toast.show(
-          newPosted ? 'Posted to profile' : 'Moved to private',
-          newPosted ? 'checkmark-circle' : 'lock-closed'
+          newPublic ? 'Shared publicly' : 'Moved to private',
+          newPublic ? 'checkmark-circle' : 'lock-closed'
         );
         queryClient.invalidateQueries({ queryKey: ['userPosts'] });
         queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
         queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       }
     },
-    [user, posts, queryClient, albumIds, id]
+    [user, posts, queryClient, albumIds, id, router]
   );
 
   return (
