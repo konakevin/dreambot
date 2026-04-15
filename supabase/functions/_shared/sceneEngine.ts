@@ -72,9 +72,14 @@ interface CompositionHint {
 }
 
 const COMPOSITION_HINTS: Record<CompositionMode, CompositionHint> = {
-  balanced: { positive: '', negative: '', banKeywords: [] },
+  balanced: {
+    positive:
+      'stacked depth layers from foreground to sky, keep subject centered with generous headroom and footroom',
+    negative: '',
+    banKeywords: [],
+  },
   open_vista: {
-    positive: 'wide open vista, big sky, expansive horizon, no corridor framing',
+    positive: 'towering open sky, dramatic scale, stacked depth layers, no corridor framing',
     negative: 'no narrow alley, no tunnel corridor, no boxed-in framing',
     banKeywords: [
       'archway',
@@ -87,12 +92,13 @@ const COMPOSITION_HINTS: Record<CompositionMode, CompositionHint> = {
     ],
   },
   layered_depth: {
-    positive: 'strong foreground-midground-background depth layering, rich parallax',
+    positive:
+      'strong depth layering: foreground at bottom, midground center, background and sky stacked above, rich parallax',
     negative: '',
     banKeywords: [],
   },
   negative_space: {
-    positive: 'large negative space, minimal framing elements, clean composition',
+    positive: 'large negative space above subject, minimal framing elements, clean composition',
     negative: 'no cluttered framing, no dense foreground objects',
     banKeywords: ['cluttered', 'crowded', 'dense foreground'],
   },
@@ -102,14 +108,14 @@ const COMPOSITION_HINTS: Record<CompositionMode, CompositionHint> = {
     banKeywords: ['overhead', 'top-down', 'aerial'],
   },
   overhead: {
-    positive: 'top-down overhead composition, map-like clarity, geometric patterns',
+    positive: 'looking straight down, depth into scene below, stacked layers receding downward',
     negative: 'no ground-level perspective, no horizon line',
     banKeywords: ['horizon', 'eye-level'],
   },
   intimate_close: {
     positive: 'tight framing, shallow depth of field, intimate detail, close perspective',
-    negative: 'no wide establishing shot, no distant landscape',
-    banKeywords: ['establishing shot', 'vast', 'panoramic'],
+    negative: 'no distant landscape, no establishing shot',
+    banKeywords: ['establishing shot', 'panoramic'],
   },
 };
 
@@ -891,22 +897,51 @@ const SUBJECT_SCALE_FACESWAP: Entry[] = [
 ];
 
 const CAMERA_FACESWAP: Entry[] = [
-  { text: 'medium shot, subject readable face, 50mm lens, cinematic framing', weight: 8 },
-  { text: 'three-quarter shot, face clearly visible, 45mm lens, background expansive', weight: 7 },
-  { text: 'environmental portrait, eye-level angle, 50mm lens', weight: 7 },
-  { text: 'medium shot, natural perspective, eye-level, 45mm lens', weight: 6 },
-  { text: 'environmental portrait, rule of thirds, 50mm lens', weight: 6 },
+  {
+    text: 'medium shot, subject readable face, 50mm lens, subject centered with headroom',
+    weight: 8,
+  },
+  {
+    text: 'three-quarter shot, face clearly visible, 50mm lens, towering background above subject',
+    weight: 7,
+  },
+  {
+    text: 'environmental portrait, eye-level angle, 50mm lens, deep perspective behind subject',
+    weight: 7,
+  },
+  { text: 'medium shot, natural perspective, eye-level, 50mm lens, depth layers', weight: 6 },
+  {
+    text: 'environmental portrait, subject in lower third, 50mm lens, sky and environment stacked above',
+    weight: 6,
+  },
 ];
 
 const CAMERA_WIDE: Entry[] = [
   {
-    text: 'wide establishing shot, full body, character small in frame, environment dominates, 24mm lens',
+    text: 'tall environmental portrait, full body, character in lower third, towering environment above, 35mm lens, deep perspective',
     weight: 8,
   },
-  { text: 'ultra wide shot, tiny silhouette against massive environment, 24mm lens', weight: 6 },
-  { text: 'low angle wide shot emphasizing towering scale, 24mm lens', weight: 6 },
-  { text: 'high angle wide shot showing the entire layout, 28mm lens', weight: 5 },
-  { text: 'wide cinematic shot, character placed on rule of thirds, 28mm lens', weight: 7 },
+  {
+    text: 'looking upward through environment, subject small against towering scale, 35mm lens',
+    weight: 6,
+  },
+  {
+    text: 'low angle looking up, towering structures and sky dominating frame, subject at base, 35mm lens',
+    weight: 7,
+  },
+  {
+    text: 'deep perspective shot, foreground at bottom sharp, subject in middle, background and sky stacked above, 50mm lens',
+    weight: 7,
+  },
+  {
+    text: 'environmental portrait, subject centered, stacked depth layers from ground to sky, 35mm lens',
+    weight: 7,
+  },
+  { text: 'silhouette against towering backdrop, dramatic scale, 35mm lens', weight: 5 },
+  {
+    text: 'looking down from height into scene below, depth receding downward, 35mm lens',
+    weight: 4,
+  },
 ];
 
 const STYLE_PACKS: Entry[] = [
@@ -919,7 +954,7 @@ const STYLE_PACKS: Entry[] = [
 ];
 
 const QUALITY_TAGS =
-  'foreground midground background, layered composition, deep depth of field, highly detailed environment, atmospheric haze, cinematic lighting';
+  'foreground midground background stacked top to bottom, layered depth composition, deep perspective, highly detailed environment, atmospheric haze, cinematic lighting';
 const QUALITY_TAGS_END = 'no text, no words, no letters, no watermarks, ultra detailed';
 
 // ── Main Export ────────────────────────────────────────────────────────
@@ -936,26 +971,93 @@ export function assembleScene(opts: SceneOptions): string {
     : 0.25;
   const allowChaotic = rand() < boldChance * 0.3;
 
-  // Pick from Sonnet-generated pools (creative content)
-  const setting = filterAndPick(GEN_SETTINGS, tags, rules, rand, allowChaotic);
+  // When a location card exists, it IS the scene identity — skip GEN_SETTINGS entirely.
+  // Scene DNA pools provide texture within the location, not a competing setting.
+  const hasLocationAnchor = opts.includeLocation && opts.userPlace && opts.locationCard;
+  const setting = hasLocationAnchor
+    ? null
+    : filterAndPick(GEN_SETTINGS, tags, rules, rand, allowChaotic);
   const scale = filterAndPick(SCALE, tags, rules, rand, allowChaotic);
   const time = filterAndPick(TIME, tags, rules, rand, allowChaotic);
   const weather = filterAndPick(WEATHER, tags, rules, rand, allowChaotic);
   const lighting = filterAndPick(LIGHTING, tags, rules, rand, allowChaotic);
-  // Foreground — soft-ban alley keywords based on composition mode
+  // Foreground/midground/background — apply composition + location-compatibility filtering
   const compMode = opts.compositionMode || 'balanced';
   const compHint = COMPOSITION_HINTS[compMode];
-  const fgPool =
-    compHint.banKeywords.length > 0
-      ? GEN_FOREGROUND.map((e) => {
-          const lower = e.text.toLowerCase();
-          const penalized = compHint.banKeywords.some((kw) => lower.includes(kw));
-          return penalized ? { ...e, weight: Math.max(1, Math.round(e.weight * 0.15)) } : e;
-        })
-      : GEN_FOREGROUND;
+
+  // Location-based filtering: penalize scene DNA entries that clash with the location's identity
+  const locationTags =
+    hasLocationAnchor && opts.locationCard ? new Set(opts.locationCard.tags) : null;
+
+  // Identity killers — hard-ban keywords that override any location's sense of place
+  const IDENTITY_KILLERS = [
+    'factory',
+    'warehouse',
+    'bunker',
+    'subway',
+    'hospital',
+    'parking garage',
+    'server room',
+    'laboratory',
+    'office',
+    'prison',
+    'dungeon',
+    'sewer',
+    'operating room',
+    'sterile',
+    'industrial plant',
+    'slaughterhouse',
+  ];
+
+  function applyLocationFilter(pool: Entry[]): Entry[] {
+    if (!locationTags) return pool;
+    return pool
+      .map((e) => {
+        const lower = e.text.toLowerCase();
+        // Hard-ban identity killers when location exists
+        if (IDENTITY_KILLERS.some((kw) => lower.includes(kw))) {
+          return { ...e, weight: 0 };
+        }
+        // Soft-penalize tag mismatches (0.1x weight)
+        const eTags = e.tags ?? [];
+        const isIndoor = eTags.includes('interior') || eTags.includes('underground');
+        const locIsOutdoor =
+          locationTags.has('tropical') ||
+          locationTags.has('coastal') ||
+          locationTags.has('nature') ||
+          locationTags.has('mountain') ||
+          locationTags.has('desert');
+        if (isIndoor && locIsOutdoor) {
+          return { ...e, weight: Math.max(1, Math.round(e.weight * 0.1)) };
+        }
+        return e;
+      })
+      .filter((e) => e.weight > 0);
+  }
+
+  let fgPool = applyLocationFilter(GEN_FOREGROUND);
+  if (compHint.banKeywords.length > 0) {
+    fgPool = fgPool.map((e) => {
+      const lower = e.text.toLowerCase();
+      const penalized = compHint.banKeywords.some((kw) => lower.includes(kw));
+      return penalized ? { ...e, weight: Math.max(1, Math.round(e.weight * 0.15)) } : e;
+    });
+  }
   const foreground = filterAndPick(fgPool, tags, rules, rand, allowChaotic);
-  const midground = filterAndPick(GEN_MIDGROUND, tags, rules, rand, allowChaotic);
-  const background = filterAndPick(GEN_BACKGROUND, tags, rules, rand, allowChaotic);
+  const midground = filterAndPick(
+    applyLocationFilter(GEN_MIDGROUND),
+    tags,
+    rules,
+    rand,
+    allowChaotic
+  );
+  const background = filterAndPick(
+    applyLocationFilter(GEN_BACKGROUND),
+    tags,
+    rules,
+    rand,
+    allowChaotic
+  );
 
   // Story hook
   const storyHook = filterAndPick(GEN_STORY_HOOKS, tags, rules, rand, allowChaotic);
@@ -989,30 +1091,35 @@ export function assembleScene(opts: SceneOptions): string {
   // Style pack
   const style = filterAndPick(STYLE_PACKS, tags, rules, rand, allowChaotic);
 
-  // ── Location injection via card or fallback ──
+  // ── Location as scene identity (not garnish) ──
+  // When a location card exists: location name IS the setting, card phrases are primary texture.
+  // Scene DNA pools provide compositional variety within the location, not a competing scene.
   const genre = resolveGenre(tags);
-  let settingText = setting.text;
-  let locationTextureBlock = '';
+  let settingText: string;
 
   if (opts.includeLocation && opts.userPlace) {
     if (opts.locationCard) {
       const lc = opts.locationCard;
       const genreFusions = lc.fusion_settings && lc.fusion_settings[genre];
       if (rand() < 0.4 && genreFusions && genreFusions.length > 0) {
-        // 40% fusion: replace setting with random genre-appropriate fusion
-        settingText = pickOne(genreFusions, rand);
+        // 40% fusion: genre-appropriate interpretation, still anchored to location name
+        settingText = opts.userPlace + ' — ' + pickOne(genreFusions, rand);
       } else {
-        // 60% seasoning: sprinkle 2-3 cinematic phrases as atmosphere
+        // 60% card phrases: location name + 3-4 cinematic phrases as scene identity
         const allPhrases = [...lc.cinematic_phrases, ...lc.visual_palette, ...lc.atmosphere];
-        if (allPhrases.length > 0) {
-          locationTextureBlock =
-            'location textures: ' +
-            pickN(allPhrases, Math.min(3, allPhrases.length), rand).join(', ');
-        }
+        const phrases =
+          allPhrases.length > 0
+            ? pickN(allPhrases, Math.min(4, allPhrases.length), rand).join(', ')
+            : '';
+        settingText = phrases ? opts.userPlace + ' — ' + phrases : opts.userPlace;
       }
     } else {
-      settingText = settingText + ', set in ' + opts.userPlace;
+      // No card — use location name with the pool setting as texture
+      settingText = (setting ? setting.text : '') + ', set in ' + opts.userPlace;
     }
+  } else {
+    // No location — pure scene DNA
+    settingText = setting ? setting.text : 'vast cinematic landscape';
   }
 
   // ── Object injection via card or fallback ──
@@ -1073,14 +1180,13 @@ export function assembleScene(opts: SceneOptions): string {
     background.text,
   ];
 
-  if (locationTextureBlock) pieces.push(locationTextureBlock);
   if (signatureText) pieces.push(signatureText);
   if (objectBlock) pieces.push(objectBlock);
 
   if (opts.faceSwapEligible) {
     // Face-swap: controlled DOF, subject scale, anti-wide negatives
     pieces.push(
-      'foreground midground background, layered composition, controlled depth of field, sharp subject, detailed background, atmospheric haze, cinematic lighting'
+      'foreground midground background stacked top to bottom, layered depth composition, controlled depth of field, sharp subject, detailed background, atmospheric haze, cinematic lighting, keep subject centered with generous headroom and footroom'
     );
     if (subjectScale) pieces.push(subjectScale.text);
     // Gender reinforcement — prevents medium style from overriding gender
@@ -1096,7 +1202,7 @@ export function assembleScene(opts: SceneOptions): string {
     );
     pieces.push(camera.text);
     pieces.push(style.text);
-    pieces.push('not a distant silhouette, not tiny subject, not wide establishing shot');
+    pieces.push('not a distant silhouette, not tiny subject, subject clearly visible and centered');
     pieces.push(QUALITY_TAGS_END);
   } else {
     // Non-face-swap: deep DOF, environment dominates

@@ -649,24 +649,38 @@ Deno.serve(async (req) => {
       // Determine render mode and face swap eligibility
       const isCharacterDream =
         composition === 'character' && castPick != null && castPick.role !== 'pet';
-      const renderMode: 'natural' | 'embodied' | 'none' = !isCharacterDream
-        ? composition === 'pure_scene'
-          ? 'none'
-          : 'embodied'
-        : nightlyMedium.characterRenderMode;
+      const renderMode: 'natural' | 'embodied' | 'none' =
+        composition === 'pure_scene' ? 'none' : nightlyMedium.characterRenderMode;
       const faceSwapEligible =
         isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
 
-      // Pre-transform character identity for embodied mediums
-      let renderEntityDesc: string | undefined;
-      if (isCharacterDream && renderMode === 'embodied' && castPick) {
-        const entity = buildRenderEntity(
-          (castPick as DreamCastMember).description ?? '',
-          nightlyMedium.characterRenderMode,
-          nightlyMedium.key
+      // ── Resolve character descriptions: single source of truth per render mode ──
+      // Natural → raw cast description (face swap handles identity)
+      // Embodied → pre-transformed medium-native description (LEGO minifig, clay figure, etc.)
+      // ALL downstream prompt construction uses resolvedCast.promptDesc exclusively.
+      function resolveCharacterDesc(
+        member: DreamCastMember,
+        mode: 'natural' | 'embodied' | 'none'
+      ): string {
+        const raw = member.description ?? (member.role === 'pet' ? 'a small creature' : 'a figure');
+        if (mode === 'embodied') {
+          return buildRenderEntity(raw, nightlyMedium.characterRenderMode, nightlyMedium.key)
+            .description;
+        }
+        return raw;
+      }
+
+      const resolvedCast = selectedCast.map((m) => ({
+        role: m.role,
+        rawDescription: (m as DreamCastMember).description ?? '',
+        promptDesc: resolveCharacterDesc(m as DreamCastMember, renderMode),
+      }));
+
+      if (resolvedCast.length > 0) {
+        console.log(
+          '[generate-dream] Resolved cast (' + renderMode + '):',
+          resolvedCast.map((c) => c.role + ':' + c.promptDesc.slice(0, 60)).join(' | ')
         );
-        renderEntityDesc = entity.description;
-        console.log('[generate-dream] Render entity (embodied):', renderEntityDesc.slice(0, 100));
       }
 
       dreamSubject = assembleScene({
@@ -688,21 +702,21 @@ Deno.serve(async (req) => {
 
       // Step 2: Shared context for both cast and non-cast paths
       const SHOT_DIRECTIONS = [
-        'extreme low angle looking up, dramatic forced perspective, subject towering overhead',
-        'tilt-shift miniature effect, shallow depth of field, toy-like scale',
-        'silhouette against blazing backlight, rim lighting, dramatic contrast',
+        'extreme low angle looking up, dramatic forced perspective, towering scale',
+        'tilt-shift miniature effect, shallow depth of field, stacked depth layers',
+        'silhouette against towering backlit sky, rim lighting, dramatic contrast',
         'macro lens extreme close-up, impossibly detailed textures, creamy bokeh background',
-        'aerial view looking straight down, geometric patterns, vast scale',
+        'looking down from height into scene below, depth receding downward',
         'through rain-covered glass, soft distortion, reflections overlapping the scene',
         'dutch angle, dramatic tension, off-kilter framing',
-        'wide establishing shot, tiny subject in vast environment, epic scale',
-        'over-the-shoulder perspective, voyeuristic, intimate framing',
+        'tall environmental shot, subject small at base, towering environment stacked above',
+        'looking upward through canopy or architecture, light filtering down from above',
         'symmetrical dead-center composition, Wes Anderson framing, obsessive balance',
-        'fisheye lens distortion, warped edges, immersive and disorienting',
         'long exposure motion blur, streaks of light, frozen and flowing simultaneously',
-        'reflection shot, scene mirrored in water or glass, doubled reality',
-        'extreme depth, foreground object sharp, background stretching to infinity',
-        'candid snapshot feeling, slightly off-center, caught mid-moment',
+        'reflection in puddle or glass, scene doubled top and bottom',
+        'extreme depth, foreground sharp, background stretching to infinity',
+        'candid snapshot feeling, slightly off-center, caught mid-moment, deep perspective',
+        'cascading depth, layers receding top to bottom through the frame',
       ];
       const shotDirection = SHOT_DIRECTIONS[Math.floor(Math.random() * SHOT_DIRECTIONS.length)];
 
@@ -727,33 +741,19 @@ Deno.serve(async (req) => {
         ].join(', ');
       };
 
-      // Build personal context — use card data when available (budget: 2 location phrases, 1 object phrase)
-      const dreamerWorld: string[] = [];
-      if (includeLocation && userPlace) {
-        if (
-          locationCard &&
-          locationCard.cinematic_phrases &&
-          locationCard.cinematic_phrases.length > 0
-        ) {
-          const pick2 = locationCard.cinematic_phrases.sort(() => Math.random() - 0.5).slice(0, 2);
-          dreamerWorld.push(`Location texture: ${pick2.join(', ')}`);
-        } else {
-          dreamerWorld.push(`Set the scene in or near: ${userPlace}`);
-        }
-      }
+      // Location is now the scene identity (baked into dreamSubject via assembleScene).
+      // Object as required prop — promoted from garnish to mandatory constraint
+      let requiredPropLine = '';
+      let requiredPropForm = '';
       if (includeObject && userThing) {
         if (objectCard && objectCard.visual_forms && objectCard.visual_forms.length > 0) {
-          const form =
+          requiredPropForm =
             objectCard.visual_forms[Math.floor(Math.random() * objectCard.visual_forms.length)];
-          dreamerWorld.push(`Scene object: ${form}`);
         } else {
-          dreamerWorld.push(`Include this object naturally in the scene: ${userThing}`);
+          requiredPropForm = userThing;
         }
+        requiredPropLine = `\nREQUIRED PROP — must be clearly visible in the final image:\n${requiredPropForm}\nThe character is interacting with it or it is prominently placed in the foreground/midground.`;
       }
-      const dreamerContext =
-        dreamerWorld.length > 0
-          ? `\nPERSONAL ELEMENTS — weave these into the scene:\n- ${dreamerWorld.join('\n- ')}`
-          : '';
       const avoidList = nightlyProfile.avoid?.length
         ? `\nNEVER INCLUDE: ${nightlyProfile.avoid.join(', ')}`
         : '';
@@ -761,26 +761,15 @@ Deno.serve(async (req) => {
       // ── DREAM COMPOSITION PATHS ──
       const mediumStyle = nightlyMedium.key.replace(/_/g, ' ');
 
-      // Build cast description block for Sonnet.
-      // For embodied mediums: use pre-transformed entity description (LEGO minifig, clay figure, etc.)
-      // For natural mediums: use full human description (face swap handles identity)
       const castDescBlock =
-        selectedCast.length > 0
-          ? selectedCast
-              .map((m, i) => {
-                let desc: string;
-                if (renderMode === 'embodied' && renderEntityDesc && selectedCast.length === 1) {
-                  desc = renderEntityDesc;
-                } else {
-                  desc =
-                    (m as DreamCastMember).description ??
-                    (m.role === 'pet' ? 'a small creature' : 'a figure');
-                }
-                return selectedCast.length === 1
+        resolvedCast.length > 0
+          ? resolvedCast
+              .map((rc, i) => {
+                return resolvedCast.length === 1
                   ? renderMode === 'embodied'
-                    ? `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):\n${desc}`
-                    : `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${desc}`
-                  : `CHARACTER ${i + 1} (${m.role}):\n${desc}`;
+                    ? `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):\n${rc.promptDesc}`
+                    : `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${rc.promptDesc}`
+                  : `CHARACTER ${i + 1} (${rc.role}):\n${rc.promptDesc}`;
               })
               .join('\n\n')
           : '';
@@ -791,10 +780,8 @@ Deno.serve(async (req) => {
             ? `Render them as a ${mediumStyle} CHARACTER — stylized, illustrated, artistic. NOT a real photograph.`
             : '';
 
-      const shortCastDesc = castPick
-        ? (castPick.description?.split(',')[0] ??
-          (castPick.role === 'pet' ? 'a small creature' : 'a figure'))
-        : null;
+      const shortCastDesc =
+        resolvedCast.length > 0 ? resolvedCast[0].promptDesc.split(',')[0] : null;
 
       let nightlyBrief: string;
 
@@ -811,7 +798,7 @@ STRUCTURE:
 5. CAMERA + MOOD (20% of words)
 6. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-SCENE (make it EPIC):
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — make it EPIC:
 ${dreamSubject}
 
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
@@ -827,14 +814,14 @@ ${castDescBlock}
 Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.
 
 MOOD: ${nightlyVibe.directive}
-${dreamerContext}${avoidList}
+${requiredPropLine}${avoidList}
 
 COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
 ${compositionMode !== 'balanced' ? '- Obey this composition style in camera framing and scene layout' : ''}
 
 RULES:
 - SCENE FIRST, then the mandatory face phrase, then character details.
-- Include "foreground midground background, layered composition" in the prompt.
+- Include "foreground midground background stacked top to bottom, layered depth" in the prompt. Compose with depth — stack layers top to bottom, not left to right.
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
         } else {
@@ -848,7 +835,7 @@ CRITICAL STRUCTURE — follow this order EXACTLY:
 4. CAMERA + MOOD (spend 20% of words)
 5. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-SCENE (describe this world — make it EPIC):
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — make it EPIC:
 ${dreamSubject}
 
 CHARACTER IN THE SCENE:
@@ -856,13 +843,13 @@ ${castDescBlock}
 ${castInstruction}
 
 MOOD: ${nightlyVibe.directive}
-${dreamerContext}${avoidList}
+${requiredPropLine}${avoidList}
 
 COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
 
 RULES:
 - SCENE FIRST in the prompt. The environment must be rich, detailed, layered.
-- Include "foreground midground background, layered composition" in the prompt.
+- Include "foreground midground background stacked top to bottom, layered depth" in the prompt. Compose with depth — stack layers top to bottom, not left to right.
 - The character is IN the world, not posing for a portrait.
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
@@ -876,8 +863,8 @@ Output ONLY the prompt.`;
         };
       } else if (composition === 'epic_tiny') {
         const tinyDesc =
-          selectedCast.length > 1
-            ? `tiny ${mediumStyle}-style figures: ${selectedCast.map((m) => m.description?.split(',')[0] ?? m.role).join(' and ')}`
+          resolvedCast.length > 1
+            ? `tiny ${mediumStyle}-style figures: ${resolvedCast.map((rc) => rc.promptDesc.split(',')[0]).join(' and ')}`
             : `a tiny ${mediumStyle}-style ${shortCastDesc}`;
         nightlyBrief = `You are a cinematographer composing an EPIC, VAST scene. Write a Flux AI prompt (60-90 words, comma-separated).
 
@@ -886,14 +873,14 @@ MEDIUM: ${nightlyMedium.fluxFragment}
 STYLE GUIDE (follow this closely):
 ${nightlyMedium.directive}
 
-DREAM SCENE (this is the ENTIRE focus — describe in maximum vivid detail):
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — this is the ENTIRE focus, describe in maximum vivid detail:
 ${dreamSubject}
 
 Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
 
 CAMERA: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${dreamerContext}${avoidList}
+${requiredPropLine}${avoidList}
 
 Write the prompt:
 1. Start with the art medium
@@ -914,12 +901,12 @@ Output ONLY the prompt.`;
 
 MEDIUM: ${nightlyMedium.fluxFragment}
 
-DREAM SCENE (this is sacred — do NOT water it down):
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — this is sacred, do NOT water it down:
 ${dreamSubject}
 
 CAMERA/COMPOSITION: ${shotDirection}
 MOOD: ${nightlyVibe.directive}
-${dreamerContext}${avoidList}
+${requiredPropLine}${avoidList}
 
 Write the prompt:
 1. Start with the art medium
@@ -940,6 +927,30 @@ Output ONLY the prompt.`;
         if (finalPrompt.length < 20) throw new Error('too short');
       } catch {
         finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
+      }
+
+      // Post-process: ensure location name appears in final prompt (Sonnet sometimes drifts)
+      if (
+        includeLocation &&
+        userPlace &&
+        !finalPrompt.toLowerCase().includes(userPlace.toLowerCase())
+      ) {
+        finalPrompt = `set in ${userPlace}, ` + finalPrompt;
+      }
+
+      // Post-process: ensure object appears in final prompt when rolled
+      if (includeObject && userThing && requiredPropForm) {
+        const lower = finalPrompt.toLowerCase();
+        const objectName = userThing.toLowerCase();
+        const formWords = requiredPropForm
+          .toLowerCase()
+          .split(/\s+/)
+          .filter((w: string) => w.length > 4);
+        const hasObjectName = lower.includes(objectName);
+        const hasFormWord = formWords.some((w: string) => lower.includes(w));
+        if (!hasObjectName && !hasFormWord) {
+          finalPrompt += `, prominently featuring a ${requiredPropForm}`;
+        }
       }
 
       // Post-process: brute force face lock for face-swap-eligible dreams.
