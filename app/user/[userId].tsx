@@ -173,8 +173,8 @@ export default function PublicProfileScreen() {
     ]);
   }
 
-  const isFollowing = followingIds.has(userId);
-  const hasRequest = requestIds.has(userId);
+  const isFollowing = profile?.isFollowing ?? followingIds.has(userId);
+  const hasRequest = profile?.hasRequest ?? requestIds.has(userId);
   const isTargetPublic = profile?.is_public ?? true;
 
   function handleFollow() {
