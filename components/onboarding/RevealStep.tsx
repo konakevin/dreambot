@@ -380,6 +380,11 @@ export function RevealStep({ onBack }: Props) {
           >
             <Text style={s.createButtonText}>Activate DreamBot</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
+            <Text style={{ color: colors.textSecondary, fontSize: 15, fontWeight: '600' }}>
+              Go Back
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

@@ -12,7 +12,7 @@ import { useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
 import type { Aesthetic } from '@/types/vibeProfile';
 
-const MIN_REQUIRED = 3;
+const MIN_REQUIRED = 1;
 
 interface Props {
   onNext: () => void;
@@ -39,9 +39,7 @@ export function VibesStep({ onNext, onBack }: Props) {
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Text style={styles.title}>Pick your vibes</Text>
-          <Text style={styles.subtitle}>
-            Choose 3 or more. These shape the mood of your dreams.
-          </Text>
+          <Text style={styles.subtitle}>Pick at least 1. These shape the mood of your dreams.</Text>
           <Text style={[styles.counter, canProceed && styles.counterMet]}>
             {aesthetics.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}
           </Text>

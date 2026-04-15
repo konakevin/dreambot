@@ -10,7 +10,7 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
 
-const MIN_REQUIRED = 3;
+const MIN_REQUIRED = 1;
 const MAX_ONBOARDING = 10;
 
 interface Props {
@@ -117,9 +117,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>Pick your dream locations</Text>
-            <Text style={styles.subtitle}>
-              Choose 3 or more places you&apos;d love to dream in.
-            </Text>
+            <Text style={styles.subtitle}>Pick at least 1 place you&apos;d love to dream in.</Text>
             <Text style={[styles.counter, canProceed && styles.counterMet]}>
               {places.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}
             </Text>

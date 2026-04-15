@@ -12,7 +12,7 @@ import { useDreamMediums } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
 import type { ArtStyle } from '@/types/vibeProfile';
 
-const MIN_REQUIRED = 2;
+const MIN_REQUIRED = 1;
 
 interface Props {
   onNext: () => void;
@@ -39,7 +39,7 @@ export function MediumsStep({ onNext, onBack }: Props) {
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Text style={styles.title}>Pick your art styles</Text>
-          <Text style={styles.subtitle}>Choose 2 or more. These define how your dreams look.</Text>
+          <Text style={styles.subtitle}>Pick at least 1. These define how your dreams look.</Text>
           <Text style={[styles.counter, canProceed && styles.counterMet]}>
             {artStyles.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}
           </Text>
