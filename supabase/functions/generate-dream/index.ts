@@ -1615,7 +1615,8 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
             .then(() => {})
             .catch(() => {})
         : Promise.resolve(),
-      uploadId
+      // Only notify if queued (jobId present) — inline generation doesn't need a notification
+      uploadId && jobId
         ? supabase
             .from('notifications')
             .insert({

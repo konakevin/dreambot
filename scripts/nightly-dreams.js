@@ -218,15 +218,17 @@ async function processDream(user) {
     console.error(`  ⚠️  No upload_id returned from Edge Function`);
   }
 
-  // 6. Update notification body with bot message
+  // 6. Send nightly dream notification with bot message
   if (result.upload_id) {
     const notifBody = (wish ? 'wish:' : 'dream:') + (botMessage || '');
     try {
-      await sb
-        .from('notifications')
-        .update({ body: notifBody })
-        .eq('upload_id', result.upload_id)
-        .eq('recipient_id', userId);
+      await sb.from('notifications').insert({
+        recipient_id: userId,
+        actor_id: userId,
+        type: 'dream_generated',
+        upload_id: result.upload_id,
+        body: notifBody,
+      });
     } catch {}
   }
 
