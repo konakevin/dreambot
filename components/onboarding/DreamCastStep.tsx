@@ -50,12 +50,6 @@ const SLOTS: SlotConfig[] = [
     icon: 'heart',
     tip: 'Someone special to dream alongside',
   },
-  {
-    role: 'pet',
-    label: 'Your Pet',
-    icon: 'paw',
-    tip: 'Good lighting, face visible',
-  },
 ];
 
 const RELATIONSHIPS: { key: CastRelationship; label: string }[] = [

@@ -38,6 +38,12 @@ interface OnboardingStore {
   setCastMember: (member: DreamCastMember) => void;
   removeCastMember: (role: DreamCastMember['role']) => void;
 
+  // Location/object toggles (for curated pickers)
+  toggleLocation: (key: string) => void;
+  toggleObject: (key: string) => void;
+  addLocationPack: (keys: string[]) => void;
+  addObjectPack: (keys: string[]) => void;
+
   // Avoid list
   addAvoid: (value: string) => void;
   removeAvoid: (value: string) => void;
@@ -111,6 +117,54 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
     set((s) => ({
       profile: { ...s.profile, dream_cast: s.profile.dream_cast.filter((m) => m.role !== role) },
     })),
+
+  toggleLocation: (key) =>
+    set((s) => ({
+      profile: {
+        ...s.profile,
+        dream_seeds: {
+          ...s.profile.dream_seeds,
+          places: toggle(s.profile.dream_seeds.places, key),
+        },
+      },
+    })),
+
+  toggleObject: (key) =>
+    set((s) => ({
+      profile: {
+        ...s.profile,
+        dream_seeds: {
+          ...s.profile.dream_seeds,
+          things: toggle(s.profile.dream_seeds.things, key),
+        },
+      },
+    })),
+
+  addLocationPack: (keys) =>
+    set((s) => {
+      const current = s.profile.dream_seeds.places;
+      const newKeys = keys.filter((k) => !current.includes(k));
+      if (newKeys.length === 0) return s;
+      return {
+        profile: {
+          ...s.profile,
+          dream_seeds: { ...s.profile.dream_seeds, places: [...current, ...newKeys].slice(0, 25) },
+        },
+      };
+    }),
+
+  addObjectPack: (keys) =>
+    set((s) => {
+      const current = s.profile.dream_seeds.things;
+      const newKeys = keys.filter((k) => !current.includes(k));
+      if (newKeys.length === 0) return s;
+      return {
+        profile: {
+          ...s.profile,
+          dream_seeds: { ...s.profile.dream_seeds, things: [...current, ...newKeys].slice(0, 25) },
+        },
+      };
+    }),
 
   addAvoid: (value) =>
     set((s) => {

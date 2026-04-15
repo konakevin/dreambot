@@ -13,7 +13,8 @@ import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
 import { MediumsStep } from '@/components/onboarding/MediumsStep';
 import { VibesStep } from '@/components/onboarding/VibesStep';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
-import { YourWorldStep } from '@/components/onboarding/YourWorldStep';
+import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
+import { ObjectPickerStep } from '@/components/onboarding/ObjectPickerStep';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 
@@ -32,7 +33,8 @@ const STEPS: StepConfig[] = [
   { key: 'mediums', component: MediumsStep },
   { key: 'vibes', component: VibesStep },
   { key: 'personality', component: MoodSlidersStep },
-  { key: 'world', component: YourWorldStep },
+  { key: 'locations', component: LocationPickerStep },
+  { key: 'objects', component: ObjectPickerStep },
   { key: 'cast', component: DreamCastStep },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
