@@ -1,19 +1,14 @@
 /**
- * Vibes picker — 3-layer discovery: Quick Start → Packs → Browse.
- * "Pick 3-7 moods. We'll remix them."
+ * Vibes picker — simple grid of tappable pills.
+ * "Pick 3+ moods for your dreams."
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useDreamVibes } from '@/hooks/useDreamStyles';
-import { ChipsRow } from '@/components/onboarding/ChipsRow';
-import { PackRow, Pack } from '@/components/onboarding/PackRow';
-import { QuickStartRow } from '@/components/onboarding/QuickStartRow';
-import { CategoryFilterChips } from '@/components/onboarding/CategoryFilterChips';
-import { balancedVibes, surpriseVibes } from '@/lib/balancedMix';
 import { colors } from '@/constants/theme';
 import type { Aesthetic } from '@/types/vibeProfile';
 
@@ -24,82 +19,12 @@ interface Props {
   onBack: () => void;
 }
 
-const VIBE_CATEGORIES: Record<string, string[]> = {
-  popular: [
-    'dreamy',
-    'epic',
-    'cozy',
-    'cinematic',
-    'enchanted',
-    'whimsical',
-    'nostalgic',
-    'ethereal',
-  ],
-  calm: ['cozy', 'peaceful', 'dreamy', 'nostalgic', 'ethereal', 'minimal'],
-  intense: ['epic', 'cinematic', 'fierce', 'majestic', 'chaos'],
-  mystical: ['enchanted', 'mystical', 'whimsical', 'psychedelic', 'ancient'],
-  cute: ['dreamy', 'whimsical', 'cozy', 'enchanted', 'ethereal', 'peaceful'],
-  dark: ['dark', 'ominous', 'minimal'],
-};
-
-const CATEGORIES = [
-  { key: 'popular', label: 'Popular' },
-  { key: 'calm', label: 'Calm' },
-  { key: 'intense', label: 'Intense' },
-  { key: 'mystical', label: 'Mystical' },
-  { key: 'cute', label: 'Cute' },
-  { key: 'dark', label: 'Dark' },
-  { key: 'all', label: 'All' },
-];
-
-const VIBE_PACKS: Pack[] = [
-  { name: 'Chill Vibes', items: ['cozy', 'dreamy', 'peaceful', 'nostalgic', 'ethereal'] },
-  { name: 'Epic Adventure', items: ['epic', 'cinematic', 'majestic', 'fierce', 'ancient'] },
-  { name: 'Weird & Wild', items: ['chaos', 'psychedelic', 'mystical', 'whimsical', 'enchanted'] },
-  { name: 'Dark Side', items: ['dark', 'ominous', 'mystical', 'ancient', 'minimal'] },
-  { name: 'Cute & Pretty', items: ['dreamy', 'whimsical', 'cozy', 'enchanted', 'ethereal'] },
-  { name: 'Epic Worlds', items: ['epic', 'majestic', 'ancient', 'fierce', 'mystical', 'ominous'] },
-  {
-    name: 'All Moods',
-    items: [
-      'cinematic',
-      'dreamy',
-      'dark',
-      'chaos',
-      'cozy',
-      'minimal',
-      'epic',
-      'nostalgic',
-      'psychedelic',
-      'peaceful',
-      'whimsical',
-      'ethereal',
-      'mystical',
-      'majestic',
-      'ominous',
-      'ancient',
-      'enchanted',
-      'fierce',
-    ],
-  },
-];
-
 export function VibesStep({ onNext, onBack }: Props) {
   const aesthetics = useOnboardingStore((s) => s.profile.aesthetics);
   const toggleAesthetic = useOnboardingStore((s) => s.toggleAesthetic);
-  const loadProfile = useOnboardingStore((s) => s.loadProfile);
-  const profile = useOnboardingStore((s) => s.profile);
   const { data: dbVibes = [] } = useDreamVibes();
-  const [activeCategory, setActiveCategory] = useState('popular');
 
   const canProceed = aesthetics.length >= MIN_REQUIRED;
-
-  const filteredVibes = useMemo(() => {
-    if (activeCategory === 'all') return dbVibes;
-    const keys = VIBE_CATEGORIES[activeCategory];
-    if (!keys) return dbVibes;
-    return dbVibes.filter((v) => keys.includes(v.key));
-  }, [activeCategory, dbVibes]);
 
   const handleToggle = useCallback(
     (key: string) => {
@@ -109,69 +34,21 @@ export function VibesStep({ onNext, onBack }: Props) {
     [toggleAesthetic]
   );
 
-  const handleBalanced = useCallback(() => {
-    const picks = balancedVibes();
-    loadProfile({ ...profile, aesthetics: picks as Aesthetic[] });
-  }, [profile, loadProfile]);
-
-  const handleSurprise = useCallback(() => {
-    const picks = surpriseVibes();
-    loadProfile({ ...profile, aesthetics: picks as Aesthetic[] });
-  }, [profile, loadProfile]);
-
-  const handleAddPack = useCallback(
-    (items: string[]) => {
-      const current = aesthetics;
-      const newItems = items.filter((i) => !current.includes(i as Aesthetic));
-      if (newItems.length === 0) return;
-      loadProfile({ ...profile, aesthetics: [...current, ...(newItems as Aesthetic[])] });
-    },
-    [aesthetics, profile, loadProfile]
-  );
-
-  const formatLabel = useCallback(
-    (key: string) => {
-      const v = dbVibes.find((d) => d.key === key);
-      return v ? v.label : key;
-    },
-    [dbVibes]
-  );
-
   return (
     <View style={styles.root}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.title}>Pick 3–7 moods. We&apos;ll remix them.</Text>
-          <Text style={styles.subtitle}>Think emotions, not rules.</Text>
+          <Text style={styles.title}>Pick your vibes</Text>
+          <Text style={styles.subtitle}>
+            Choose 3 or more. These shape the mood of your dreams.
+          </Text>
           <Text style={[styles.counter, canProceed && styles.counterMet]}>
-            Selected: {aesthetics.length} / {MIN_REQUIRED} required
+            {aesthetics.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}
           </Text>
         </View>
 
-        <ChipsRow
-          items={aesthetics}
-          onRemove={(key) => handleToggle(key)}
-          formatLabel={formatLabel}
-          placeholder="+ Add a mood"
-        />
-
-        <QuickStartRow
-          onBalanced={handleBalanced}
-          onSurprise={handleSurprise}
-          balancedLabel="Balanced mood"
-          surpriseLabel="Surprise me"
-        />
-
-        <PackRow packs={VIBE_PACKS} selected={aesthetics} onAddPack={handleAddPack} />
-
-        <CategoryFilterChips
-          categories={CATEGORIES}
-          active={activeCategory}
-          onSelect={setActiveCategory}
-        />
-
         <View style={styles.grid}>
-          {filteredVibes.map((v) => {
+          {dbVibes.map((v) => {
             const isSelected = aesthetics.includes(v.key as Aesthetic);
             return (
               <TouchableOpacity

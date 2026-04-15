@@ -1,26 +1,15 @@
 /**
- * Location picker step — swipeable cards with packs, category filters, and sticky chips.
- * Users select 3-10 locations from the pre-curated location_cards library.
+ * Location picker step — simple 2-column grid of tappable location cards.
+ * Users select 3+ locations from the pre-curated library.
  */
 
-import { useState, useMemo, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  Animated,
-} from 'react-native';
+import { useCallback } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
-import { ChipsRow } from '@/components/onboarding/ChipsRow';
-import { PackRow, Pack } from '@/components/onboarding/PackRow';
 import { colors } from '@/constants/theme';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const MIN_REQUIRED = 3;
 const MAX_ONBOARDING = 10;
 
@@ -29,277 +18,85 @@ interface Props {
   onBack: () => void;
 }
 
-// Category definitions for locations
-const CATEGORIES = [
-  { key: 'popular', label: 'Popular' },
-  { key: 'tropical', label: 'Tropical' },
-  { key: 'cities', label: 'Cities' },
-  { key: 'nature', label: 'Nature' },
-  { key: 'fantasy', label: 'Fantasy' },
-  { key: 'cozy', label: 'Cozy' },
-  { key: 'more', label: 'More' },
-];
-
-// All curated locations with category + tags
-const CURATED_LOCATIONS: { key: string; label: string; category: string; tags: string[] }[] = [
+const CURATED_LOCATIONS: { key: string; label: string }[] = [
   // Tropical
-  { key: 'hawaii', label: 'Hawaii', category: 'tropical', tags: ['tropical', 'coastal', 'nature'] },
-  { key: 'bali', label: 'Bali', category: 'tropical', tags: ['tropical', 'nature'] },
-  { key: 'maldives', label: 'Maldives', category: 'tropical', tags: ['tropical', 'coastal'] },
-  {
-    key: 'caribbean island',
-    label: 'Caribbean Island',
-    category: 'tropical',
-    tags: ['tropical', 'coastal'],
-  },
-  { key: 'tahiti', label: 'Tahiti', category: 'tropical', tags: ['tropical', 'coastal'] },
-  { key: 'costa rica', label: 'Costa Rica', category: 'tropical', tags: ['tropical', 'nature'] },
+  { key: 'hawaii', label: 'Hawaii' },
+  { key: 'bali', label: 'Bali' },
+  { key: 'maldives', label: 'Maldives' },
+  { key: 'caribbean island', label: 'Caribbean Island' },
+  { key: 'tahiti', label: 'Tahiti' },
+  { key: 'costa rica', label: 'Costa Rica' },
   // Cities
-  { key: 'tokyo', label: 'Tokyo', category: 'cities', tags: ['urban', 'cyberpunk'] },
-  { key: 'new york city', label: 'New York City', category: 'cities', tags: ['urban'] },
-  { key: 'paris', label: 'Paris', category: 'cities', tags: ['urban', 'cozy'] },
-  { key: 'london', label: 'London', category: 'cities', tags: ['urban', 'gothic'] },
-  { key: 'venice', label: 'Venice', category: 'cities', tags: ['urban', 'coastal'] },
-  { key: 'dubai', label: 'Dubai', category: 'cities', tags: ['urban', 'epic'] },
-  { key: 'hong kong', label: 'Hong Kong', category: 'cities', tags: ['urban', 'cyberpunk'] },
-  { key: 'san francisco', label: 'San Francisco', category: 'cities', tags: ['urban', 'coastal'] },
-  { key: 'los angeles', label: 'Los Angeles', category: 'cities', tags: ['urban', 'coastal'] },
-  { key: 'miami', label: 'Miami', category: 'cities', tags: ['urban', 'tropical'] },
-  {
-    key: 'salt lake city',
-    label: 'Salt Lake City',
-    category: 'cities',
-    tags: ['urban', 'mountain'],
-  },
-  { key: 'moab utah', label: 'Moab Utah', category: 'cities', tags: ['desert', 'nature'] },
+  { key: 'tokyo', label: 'Tokyo' },
+  { key: 'new york city', label: 'New York City' },
+  { key: 'paris', label: 'Paris' },
+  { key: 'london', label: 'London' },
+  { key: 'venice', label: 'Venice' },
+  { key: 'dubai', label: 'Dubai' },
+  { key: 'hong kong', label: 'Hong Kong' },
+  { key: 'san francisco', label: 'San Francisco' },
+  { key: 'los angeles', label: 'Los Angeles' },
+  { key: 'miami', label: 'Miami' },
+  { key: 'salt lake city', label: 'Salt Lake City' },
+  { key: 'moab utah', label: 'Moab Utah' },
   // Nature
-  { key: 'swiss alps', label: 'Swiss Alps', category: 'nature', tags: ['mountain', 'snow'] },
-  { key: 'patagonia', label: 'Patagonia', category: 'nature', tags: ['mountain', 'nature'] },
-  { key: 'yosemite', label: 'Yosemite', category: 'nature', tags: ['nature', 'mountain'] },
-  { key: 'iceland', label: 'Iceland', category: 'nature', tags: ['snow', 'nature'] },
-  { key: 'new zealand', label: 'New Zealand', category: 'nature', tags: ['nature', 'mountain'] },
-  {
-    key: 'norwegian fjords',
-    label: 'Norwegian Fjords',
-    category: 'nature',
-    tags: ['coastal', 'mountain'],
-  },
-  { key: 'grand canyon', label: 'Grand Canyon', category: 'nature', tags: ['desert', 'epic'] },
-  {
-    key: 'zions national park',
-    label: 'Zions National Park',
-    category: 'nature',
-    tags: ['nature', 'mountain'],
-  },
-  {
-    key: 'arches national park',
-    label: 'Arches National Park',
-    category: 'nature',
-    tags: ['desert', 'nature'],
-  },
-  {
-    key: 'amazon rainforest',
-    label: 'Amazon Rainforest',
-    category: 'nature',
-    tags: ['jungle', 'nature'],
-  },
-  { key: 'african safari', label: 'African Safari', category: 'nature', tags: ['nature', 'epic'] },
+  { key: 'swiss alps', label: 'Swiss Alps' },
+  { key: 'patagonia', label: 'Patagonia' },
+  { key: 'yosemite', label: 'Yosemite' },
+  { key: 'iceland', label: 'Iceland' },
+  { key: 'new zealand', label: 'New Zealand' },
+  { key: 'norwegian fjords', label: 'Norwegian Fjords' },
+  { key: 'grand canyon', label: 'Grand Canyon' },
+  { key: 'zions national park', label: 'Zions National Park' },
+  { key: 'arches national park', label: 'Arches National Park' },
+  { key: 'amazon rainforest', label: 'Amazon Rainforest' },
+  { key: 'african safari', label: 'African Safari' },
   // Fantasy
-  {
-    key: 'enchanted forest',
-    label: 'Enchanted Forest',
-    category: 'fantasy',
-    tags: ['fantasy', 'nature'],
-  },
-  {
-    key: 'floating sky islands',
-    label: 'Floating Sky Islands',
-    category: 'fantasy',
-    tags: ['fantasy', 'sky'],
-  },
-  {
-    key: 'crystal caverns',
-    label: 'Crystal Caverns',
-    category: 'fantasy',
-    tags: ['fantasy', 'underground'],
-  },
-  { key: 'dragons keep', label: "Dragon's Keep", category: 'fantasy', tags: ['fantasy', 'epic'] },
-  {
-    key: 'fairy tale kingdom',
-    label: 'Fairy Tale Kingdom',
-    category: 'fantasy',
-    tags: ['fantasy'],
-  },
-  {
-    key: 'ancient elven city',
-    label: 'Ancient Elven City',
-    category: 'fantasy',
-    tags: ['fantasy'],
-  },
-  { key: 'hogwarts', label: 'Hogwarts', category: 'fantasy', tags: ['fantasy', 'gothic'] },
-  { key: 'cloud kingdom', label: 'Cloud Kingdom', category: 'fantasy', tags: ['fantasy', 'sky'] },
-  {
-    key: 'mermaid lagoon',
-    label: 'Mermaid Lagoon',
-    category: 'fantasy',
-    tags: ['fantasy', 'underwater'],
-  },
+  { key: 'enchanted forest', label: 'Enchanted Forest' },
+  { key: 'floating sky islands', label: 'Floating Sky Islands' },
+  { key: 'crystal caverns', label: 'Crystal Caverns' },
+  { key: 'dragons keep', label: "Dragon's Keep" },
+  { key: 'fairy tale kingdom', label: 'Fairy Tale Kingdom' },
+  { key: 'ancient elven city', label: 'Ancient Elven City' },
+  { key: 'hogwarts', label: 'Hogwarts' },
+  { key: 'cloud kingdom', label: 'Cloud Kingdom' },
+  { key: 'mermaid lagoon', label: 'Mermaid Lagoon' },
   // Cozy
-  { key: 'japanese garden', label: 'Japanese Garden', category: 'cozy', tags: ['cozy', 'nature'] },
-  { key: 'tuscan villa', label: 'Tuscan Villa', category: 'cozy', tags: ['cozy'] },
-  {
-    key: 'cozy mountain cabin',
-    label: 'Cozy Mountain Cabin',
-    category: 'cozy',
-    tags: ['cozy', 'mountain'],
-  },
-  { key: 'parisian cafe', label: 'Parisian Café', category: 'cozy', tags: ['cozy', 'urban'] },
-  {
-    key: 'cherry blossom temple',
-    label: 'Cherry Blossom Temple',
-    category: 'cozy',
-    tags: ['cozy', 'nature'],
-  },
-  {
-    key: 'rose garden palace',
-    label: 'Rose Garden Palace',
-    category: 'cozy',
-    tags: ['cozy', 'fantasy'],
-  },
-  { key: 'fairy cottage', label: 'Fairy Cottage', category: 'cozy', tags: ['cozy', 'fantasy'] },
-  // Gothic / Dark
-  { key: 'haunted castle', label: 'Haunted Castle', category: 'gothic', tags: ['gothic'] },
-  {
-    key: 'victorian london',
-    label: 'Victorian London',
-    category: 'gothic',
-    tags: ['gothic', 'urban'],
-  },
-  { key: 'transylvania', label: 'Transylvania', category: 'gothic', tags: ['gothic', 'mountain'] },
-  {
-    key: 'gothic cathedral',
-    label: 'Gothic Cathedral',
-    category: 'gothic',
-    tags: ['gothic', 'interior'],
-  },
+  { key: 'japanese garden', label: 'Japanese Garden' },
+  { key: 'tuscan villa', label: 'Tuscan Villa' },
+  { key: 'cozy mountain cabin', label: 'Cozy Mountain Cabin' },
+  { key: 'parisian cafe', label: 'Parisian Caf\u00e9' },
+  { key: 'cherry blossom temple', label: 'Cherry Blossom Temple' },
+  { key: 'rose garden palace', label: 'Rose Garden Palace' },
+  { key: 'fairy cottage', label: 'Fairy Cottage' },
+  // Gothic
+  { key: 'haunted castle', label: 'Haunted Castle' },
+  { key: 'victorian london', label: 'Victorian London' },
+  { key: 'transylvania', label: 'Transylvania' },
+  { key: 'gothic cathedral', label: 'Gothic Cathedral' },
   // Sci-Fi
-  {
-    key: 'cyberpunk megacity',
-    label: 'Cyberpunk Megacity',
-    category: 'scifi',
-    tags: ['space', 'cyberpunk'],
-  },
-  { key: 'mars colony', label: 'Mars Colony', category: 'scifi', tags: ['space', 'desert'] },
-  {
-    key: 'underwater city',
-    label: 'Underwater City',
-    category: 'scifi',
-    tags: ['underwater', 'space'],
-  },
-  { key: 'alien planet', label: 'Alien Planet', category: 'scifi', tags: ['space'] },
-  // Theme Parks
-  { key: 'disneyland', label: 'Disneyland', category: 'theme_park', tags: ['fantasy'] },
-  { key: 'space station', label: 'Space Station', category: 'scifi', tags: ['space', 'interior'] },
-  { key: 'pirate ship', label: 'Pirate Ship', category: 'theme_park', tags: ['coastal'] },
-  { key: 'sea world', label: 'Sea World', category: 'theme_park', tags: ['coastal', 'nature'] },
-  { key: 'aquarium', label: 'Aquarium', category: 'theme_park', tags: ['underwater', 'interior'] },
-  // Historical
-  {
-    key: 'ancient egypt',
-    label: 'Ancient Egypt',
-    category: 'historical',
-    tags: ['desert', 'ancient'],
-  },
-  { key: 'roman colosseum', label: 'Roman Colosseum', category: 'historical', tags: ['ancient'] },
-  {
-    key: 'machu picchu',
-    label: 'Machu Picchu',
-    category: 'historical',
-    tags: ['mountain', 'ancient'],
-  },
-  { key: 'angkor wat', label: 'Angkor Wat', category: 'historical', tags: ['jungle', 'ancient'] },
-  {
-    key: 'greek isles',
-    label: 'Greek Isles',
-    category: 'historical',
-    tags: ['coastal', 'ancient'],
-  },
+  { key: 'cyberpunk megacity', label: 'Cyberpunk Megacity' },
+  { key: 'mars colony', label: 'Mars Colony' },
+  { key: 'underwater city', label: 'Underwater City' },
+  { key: 'alien planet', label: 'Alien Planet' },
+  { key: 'space station', label: 'Space Station' },
+  // Theme Parks & Historical
+  { key: 'disneyland', label: 'Disneyland' },
+  { key: 'pirate ship', label: 'Pirate Ship' },
+  { key: 'ancient egypt', label: 'Ancient Egypt' },
+  { key: 'roman colosseum', label: 'Roman Colosseum' },
+  { key: 'machu picchu', label: 'Machu Picchu' },
+  { key: 'angkor wat', label: 'Angkor Wat' },
+  { key: 'greek isles', label: 'Greek Isles' },
 ];
-
-const POPULAR_KEYS = [
-  'hawaii',
-  'tokyo',
-  'paris',
-  'enchanted forest',
-  'swiss alps',
-  'disneyland',
-  'cozy mountain cabin',
-  'cyberpunk megacity',
-];
-
-const LOCATION_PACKS: Pack[] = [
-  {
-    name: 'Epic Nature',
-    items: ['swiss alps', 'iceland', 'patagonia', 'yosemite', 'grand canyon', 'norwegian fjords'],
-  },
-  {
-    name: 'City Nights',
-    items: ['tokyo', 'new york city', 'paris', 'hong kong', 'dubai', 'san francisco'],
-  },
-  {
-    name: 'Fantasy Realms',
-    items: [
-      'enchanted forest',
-      'floating sky islands',
-      'crystal caverns',
-      'dragons keep',
-      'fairy tale kingdom',
-      'ancient elven city',
-    ],
-  },
-  {
-    name: 'Tropical Paradise',
-    items: ['hawaii', 'bali', 'maldives', 'caribbean island', 'tahiti', 'costa rica'],
-  },
-  {
-    name: 'Cozy Escapes',
-    items: [
-      'japanese garden',
-      'tuscan villa',
-      'cozy mountain cabin',
-      'parisian cafe',
-      'cherry blossom temple',
-      'rose garden palace',
-    ],
-  },
-];
-
-function formatLabel(key: string): string {
-  const loc = CURATED_LOCATIONS.find((l) => l.key === key);
-  return loc ? loc.label : key;
-}
 
 export function LocationPickerStep({ onNext, onBack }: Props) {
   const places = useOnboardingStore((s) => s.profile.dream_seeds.places);
   const toggleLocation = useOnboardingStore((s) => s.toggleLocation);
-  const addLocationPack = useOnboardingStore((s) => s.addLocationPack);
   const isEditing = useOnboardingStore((s) => s.isEditing);
-  const [activeCategory, setActiveCategory] = useState('popular');
 
   const canProceed = places.length >= MIN_REQUIRED;
   const atMax = places.length >= (isEditing ? 25 : MAX_ONBOARDING);
-
-  const filteredLocations = useMemo(() => {
-    if (activeCategory === 'popular') {
-      return CURATED_LOCATIONS.filter((l) => POPULAR_KEYS.includes(l.key));
-    }
-    if (activeCategory === 'more') {
-      return CURATED_LOCATIONS.filter(
-        (l) => !['tropical', 'cities', 'nature', 'fantasy', 'cozy'].includes(l.category)
-      );
-    }
-    return CURATED_LOCATIONS.filter((l) => l.category === activeCategory);
-  }, [activeCategory]);
 
   const handleToggle = useCallback(
     (key: string) => {
@@ -310,66 +107,24 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
     [places, atMax, toggleLocation]
   );
 
-  const handleAddPack = useCallback(
-    (items: string[]) => {
-      addLocationPack(items);
-    },
-    [addLocationPack]
-  );
-
   return (
     <View style={styles.root}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Pick a few places you&apos;d love to dream in</Text>
-        <Text style={styles.subtitle}>
-          {isEditing
-            ? `Tap to remove. Add as many as you want.`
-            : `Pick 3–7 favorites. You can add more later.`}
-        </Text>
-        <Text style={[styles.counter, canProceed && styles.counterMet]}>
-          {places.length} / {MIN_REQUIRED} selected
-        </Text>
-      </View>
-
-      <ChipsRow
-        items={places}
-        onRemove={toggleLocation}
-        formatLabel={formatLabel}
-        placeholder="+ Add a location"
-      />
-
-      <PackRow packs={LOCATION_PACKS} selected={places} onAddPack={handleAddPack} />
-
-      {/* Category filters */}
       <FlatList
-        horizontal
-        data={CATEGORIES}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoryScroll}
-        keyExtractor={(c) => c.key}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.categoryPill, activeCategory === item.key && styles.categoryActive]}
-            onPress={() => setActiveCategory(item.key)}
-          >
-            <Text
-              style={[
-                styles.categoryText,
-                activeCategory === item.key && styles.categoryTextActive,
-              ]}
-            >
-              {item.label}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      {/* Location grid */}
-      <FlatList
-        data={filteredLocations}
+        data={CURATED_LOCATIONS}
         numColumns={2}
         keyExtractor={(l) => l.key}
         contentContainerStyle={styles.grid}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={styles.title}>Pick your dream locations</Text>
+            <Text style={styles.subtitle}>
+              Choose 3 or more places you&apos;d love to dream in.
+            </Text>
+            <Text style={[styles.counter, canProceed && styles.counterMet]}>
+              {places.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => {
           const isSelected = places.includes(item.key);
           return (
@@ -386,13 +141,11 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
               <Text style={[styles.tileLabel, isSelected && styles.tileLabelSelected]}>
                 {item.label}
               </Text>
-              <Text style={styles.tileTags}>{item.tags.slice(0, 2).join(' • ')}</Text>
             </TouchableOpacity>
           );
         }}
       />
 
-      {/* Bottom CTA */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
@@ -424,24 +177,11 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 4 },
+  header: { paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8 },
   title: { fontSize: 22, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 },
   subtitle: { fontSize: 14, color: colors.textSecondary, marginBottom: 4 },
   counter: { fontSize: 13, color: colors.textSecondary, fontWeight: '600' },
   counterMet: { color: '#4ADE80' },
-  categoryScroll: { paddingHorizontal: 16, paddingVertical: 8, gap: 8 },
-  categoryPill: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginRight: 8,
-  },
-  categoryActive: { backgroundColor: colors.accent, borderColor: colors.accent },
-  categoryText: { fontSize: 13, color: colors.textSecondary, fontWeight: '500' },
-  categoryTextActive: { color: '#FFFFFF' },
   grid: { paddingHorizontal: 12, paddingBottom: 100 },
   tile: {
     flex: 1,
@@ -451,13 +191,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    minHeight: 80,
+    minHeight: 60,
     justifyContent: 'center',
   },
-  tileSelected: {
-    borderColor: colors.accent,
-    backgroundColor: `${colors.accent}18`,
-  },
+  tileSelected: { borderColor: colors.accent, backgroundColor: `${colors.accent}18` },
   checkBadge: {
     position: 'absolute',
     top: 8,
@@ -469,9 +206,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tileLabel: { fontSize: 15, fontWeight: '600', color: '#FFFFFF', marginBottom: 2 },
+  tileLabel: { fontSize: 15, fontWeight: '600', color: '#FFFFFF' },
   tileLabelSelected: { color: colors.accent },
-  tileTags: { fontSize: 11, color: colors.textSecondary },
   footer: {
     position: 'absolute',
     bottom: 0,

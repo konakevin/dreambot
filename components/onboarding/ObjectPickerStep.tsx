@@ -1,18 +1,15 @@
 /**
- * Object picker step — 2-column tile grid with packs, category filters, and sticky chips.
- * Objects are optional — they add fun surprises to dreams but aren't required.
+ * Object picker step — simple 2-column grid of tappable object cards.
+ * Objects are optional — they add fun surprises to dreams.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
-import { ChipsRow } from '@/components/onboarding/ChipsRow';
-import { PackRow, Pack } from '@/components/onboarding/PackRow';
 import { colors } from '@/constants/theme';
 
-const MIN_REQUIRED = 0;
 const MAX_ONBOARDING = 10;
 
 interface Props {
@@ -20,165 +17,73 @@ interface Props {
   onBack: () => void;
 }
 
-const CATEGORIES = [
-  { key: 'popular', label: 'Popular' },
-  { key: 'adventure', label: 'Adventure' },
-  { key: 'vehicles', label: 'Vehicles' },
-  { key: 'music', label: 'Music' },
-  { key: 'companions', label: 'Companions' },
-  { key: 'magic', label: 'Magic' },
-  { key: 'more', label: 'More' },
-];
-
-const CURATED_OBJECTS: { key: string; label: string; category: string; emoji: string }[] = [
+const CURATED_OBJECTS: { key: string; label: string; emoji: string }[] = [
   // Adventure
-  { key: 'sword', label: 'Sword', category: 'adventure', emoji: '⚔️' },
-  { key: 'bow and arrow', label: 'Bow & Arrow', category: 'adventure', emoji: '🏹' },
-  { key: 'lightsaber', label: 'Lightsaber', category: 'adventure', emoji: '⚡' },
-  { key: 'trident', label: 'Trident', category: 'adventure', emoji: '🔱' },
-  { key: 'wand', label: 'Wand', category: 'magic', emoji: '🪄' },
-  { key: 'dagger', label: 'Dagger', category: 'adventure', emoji: '🗡️' },
-  { key: 'katana', label: 'Katana', category: 'adventure', emoji: '⚔️' },
+  { key: 'sword', label: 'Sword', emoji: '\u2694\uFE0F' },
+  { key: 'bow and arrow', label: 'Bow & Arrow', emoji: '\uD83C\uDFF9' },
+  { key: 'lightsaber', label: 'Lightsaber', emoji: '\u26A1' },
+  { key: 'trident', label: 'Trident', emoji: '\uD83D\uDD31' },
+  { key: 'dagger', label: 'Dagger', emoji: '\uD83D\uDDE1\uFE0F' },
+  { key: 'katana', label: 'Katana', emoji: '\u2694\uFE0F' },
+  { key: 'treasure chest', label: 'Treasure Chest', emoji: '\uD83D\uDDDD\uFE0F' },
   // Vehicles
-  { key: 'motorcycle', label: 'Motorcycle', category: 'vehicles', emoji: '🏍️' },
-  { key: 'classic muscle car', label: 'Muscle Car', category: 'vehicles', emoji: '🚗' },
-  { key: 'sailboat', label: 'Sailboat', category: 'vehicles', emoji: '⛵' },
-  { key: 'helicopter', label: 'Helicopter', category: 'vehicles', emoji: '🚁' },
-  { key: 'spaceship', label: 'Spaceship', category: 'vehicles', emoji: '🚀' },
-  { key: 'hot air balloon', label: 'Hot Air Balloon', category: 'vehicles', emoji: '🎈' },
+  { key: 'motorcycle', label: 'Motorcycle', emoji: '\uD83C\uDFCD\uFE0F' },
+  { key: 'classic muscle car', label: 'Muscle Car', emoji: '\uD83D\uDE97' },
+  { key: 'sailboat', label: 'Sailboat', emoji: '\u26F5' },
+  { key: 'helicopter', label: 'Helicopter', emoji: '\uD83D\uDE81' },
+  { key: 'spaceship', label: 'Spaceship', emoji: '\uD83D\uDE80' },
+  { key: 'hot air balloon', label: 'Hot Air Balloon', emoji: '\uD83C\uDF88' },
   // Music
-  { key: 'guitar', label: 'Guitar', category: 'music', emoji: '🎸' },
-  { key: 'piano', label: 'Piano', category: 'music', emoji: '🎹' },
-  { key: 'violin', label: 'Violin', category: 'music', emoji: '🎻' },
-  { key: 'drums', label: 'Drums', category: 'music', emoji: '🥁' },
+  { key: 'guitar', label: 'Guitar', emoji: '\uD83C\uDFB8' },
+  { key: 'piano', label: 'Piano', emoji: '\uD83C\uDFB9' },
+  { key: 'violin', label: 'Violin', emoji: '\uD83C\uDFBB' },
+  { key: 'drums', label: 'Drums', emoji: '\uD83E\uDD41' },
   // Companions
-  { key: 'dragon', label: 'Dragon', category: 'companions', emoji: '🐉' },
-  { key: 'phoenix', label: 'Phoenix', category: 'companions', emoji: '🔥' },
-  { key: 'wolf', label: 'Wolf', category: 'companions', emoji: '🐺' },
-  { key: 'horse', label: 'Horse', category: 'companions', emoji: '🐴' },
-  { key: 'owl', label: 'Owl', category: 'companions', emoji: '🦉' },
-  { key: 'cat', label: 'Cat', category: 'companions', emoji: '🐱' },
-  // Tech
-  { key: 'robot', label: 'Robot', category: 'tech', emoji: '🤖' },
-  { key: 'drone', label: 'Drone', category: 'tech', emoji: '📡' },
-  { key: 'telescope', label: 'Telescope', category: 'tech', emoji: '🔭' },
-  { key: 'compass', label: 'Compass', category: 'tech', emoji: '🧭' },
-  { key: 'lantern', label: 'Lantern', category: 'tech', emoji: '🏮' },
-  // Sports
-  { key: 'surfboard', label: 'Surfboard', category: 'sports', emoji: '🏄' },
-  { key: 'skateboard', label: 'Skateboard', category: 'sports', emoji: '🛹' },
-  { key: 'campfire', label: 'Campfire', category: 'sports', emoji: '🔥' },
-  { key: 'bicycle', label: 'Bicycle', category: 'sports', emoji: '🚲' },
-  { key: 'snowboard', label: 'Snowboard', category: 'sports', emoji: '🏂' },
-  // Toys
-  { key: 'teddy bear', label: 'Teddy Bear', category: 'toys', emoji: '🧸' },
-  { key: 'kite', label: 'Kite', category: 'toys', emoji: '🪁' },
-  { key: 'music box', label: 'Music Box', category: 'music', emoji: '🎵' },
-  { key: 'snow globe', label: 'Snow Globe', category: 'toys', emoji: '🔮' },
-  { key: 'balloons', label: 'Balloons', category: 'toys', emoji: '🎈' },
-  // Magic / Artifacts
-  { key: 'crystal orb', label: 'Crystal Orb', category: 'magic', emoji: '🔮' },
-  { key: 'ancient book', label: 'Ancient Book', category: 'magic', emoji: '📖' },
-  { key: 'treasure chest', label: 'Treasure Chest', category: 'adventure', emoji: '🗝️' },
-  { key: 'hourglass', label: 'Hourglass', category: 'magic', emoji: '⏳' },
-  { key: 'magic mirror', label: 'Magic Mirror', category: 'magic', emoji: '🪞' },
-  // Nature
-  { key: 'giant flower', label: 'Giant Flower', category: 'nature', emoji: '🌺' },
-  { key: 'butterfly swarm', label: 'Butterfly Swarm', category: 'nature', emoji: '🦋' },
-  { key: 'bonsai tree', label: 'Bonsai Tree', category: 'nature', emoji: '🌳' },
-  { key: 'crystals', label: 'Crystals', category: 'nature', emoji: '💎' },
-  { key: 'seashell', label: 'Seashell', category: 'nature', emoji: '🐚' },
-  // Luxury / Glam
-  { key: 'jewelry box', label: 'Jewelry Box', category: 'luxury', emoji: '💍' },
-  { key: 'crystal chandelier', label: 'Chandelier', category: 'luxury', emoji: '✨' },
-  { key: 'ornate hand mirror', label: 'Hand Mirror', category: 'luxury', emoji: '🪞' },
-  { key: 'rose bouquet', label: 'Rose Bouquet', category: 'luxury', emoji: '🌹' },
-  { key: 'perfume bottle', label: 'Perfume Bottle', category: 'luxury', emoji: '🧴' },
-  { key: 'jeweled hand fan', label: 'Hand Fan', category: 'luxury', emoji: '🪭' },
-  { key: 'parasol', label: 'Parasol', category: 'luxury', emoji: '☂️' },
-  { key: 'vanity table', label: 'Vanity Table', category: 'luxury', emoji: '💄' },
-  { key: 'music locket', label: 'Music Locket', category: 'luxury', emoji: '🎵' },
-  { key: 'glass terrarium', label: 'Terrarium', category: 'luxury', emoji: '🌿' },
+  { key: 'dragon', label: 'Dragon', emoji: '\uD83D\uDC09' },
+  { key: 'phoenix', label: 'Phoenix', emoji: '\uD83D\uDD25' },
+  { key: 'wolf', label: 'Wolf', emoji: '\uD83D\uDC3A' },
+  { key: 'horse', label: 'Horse', emoji: '\uD83D\uDC34' },
+  { key: 'owl', label: 'Owl', emoji: '\uD83E\uDD89' },
+  { key: 'cat', label: 'Cat', emoji: '\uD83D\uDC31' },
+  // Magic
+  { key: 'wand', label: 'Wand', emoji: '\uD83E\uDE84' },
+  { key: 'crystal orb', label: 'Crystal Orb', emoji: '\uD83D\uDD2E' },
+  { key: 'ancient book', label: 'Ancient Book', emoji: '\uD83D\uDCD6' },
+  { key: 'hourglass', label: 'Hourglass', emoji: '\u23F3' },
+  { key: 'magic mirror', label: 'Magic Mirror', emoji: '\uD83E\uDE9E' },
+  // Tech & Tools
+  { key: 'robot', label: 'Robot', emoji: '\uD83E\uDD16' },
+  { key: 'telescope', label: 'Telescope', emoji: '\uD83D\uDD2D' },
+  { key: 'compass', label: 'Compass', emoji: '\uD83E\uDDED' },
+  { key: 'lantern', label: 'Lantern', emoji: '\uD83C\uDFEE' },
+  // Sports & Outdoor
+  { key: 'surfboard', label: 'Surfboard', emoji: '\uD83C\uDFC4' },
+  { key: 'skateboard', label: 'Skateboard', emoji: '\uD83D\uDEF9' },
+  { key: 'bicycle', label: 'Bicycle', emoji: '\uD83D\uDEB2' },
+  { key: 'snowboard', label: 'Snowboard', emoji: '\uD83C\uDFC2' },
+  { key: 'campfire', label: 'Campfire', emoji: '\uD83D\uDD25' },
+  // Cute & Nature
+  { key: 'teddy bear', label: 'Teddy Bear', emoji: '\uD83E\uDDF8' },
+  { key: 'kite', label: 'Kite', emoji: '\uD83E\uDE81' },
+  { key: 'balloons', label: 'Balloons', emoji: '\uD83C\uDF88' },
+  { key: 'giant flower', label: 'Giant Flower', emoji: '\uD83C\uDF3A' },
+  { key: 'butterfly swarm', label: 'Butterfly Swarm', emoji: '\uD83E\uDD8B' },
+  { key: 'bonsai tree', label: 'Bonsai Tree', emoji: '\uD83C\uDF33' },
+  { key: 'crystals', label: 'Crystals', emoji: '\uD83D\uDC8E' },
+  { key: 'seashell', label: 'Seashell', emoji: '\uD83D\uDC1A' },
+  // Luxury
+  { key: 'jewelry box', label: 'Jewelry Box', emoji: '\uD83D\uDC8D' },
+  { key: 'rose bouquet', label: 'Rose Bouquet', emoji: '\uD83C\uDF39' },
+  { key: 'crystal chandelier', label: 'Chandelier', emoji: '\u2728' },
+  { key: 'snow globe', label: 'Snow Globe', emoji: '\uD83D\uDD2E' },
 ];
-
-const POPULAR_KEYS = [
-  'sword',
-  'guitar',
-  'dragon',
-  'motorcycle',
-  'crystal orb',
-  'surfboard',
-  'rose bouquet',
-  'teddy bear',
-];
-
-const OBJECT_PACKS: Pack[] = [
-  {
-    name: 'Adventure Kit',
-    items: ['sword', 'compass', 'lantern', 'treasure chest', 'ancient book', 'bow and arrow'],
-  },
-  {
-    name: 'Speed Pack',
-    items: [
-      'motorcycle',
-      'classic muscle car',
-      'helicopter',
-      'skateboard',
-      'surfboard',
-      'snowboard',
-    ],
-  },
-  {
-    name: 'Mythical Relics',
-    items: ['crystal orb', 'magic mirror', 'wand', 'hourglass', 'dragon', 'phoenix'],
-  },
-  {
-    name: 'Music Studio',
-    items: ['guitar', 'piano', 'violin', 'drums', 'music box', 'music locket'],
-  },
-  {
-    name: 'Crystal & Gold',
-    items: [
-      'jewelry box',
-      'ornate hand mirror',
-      'rose bouquet',
-      'perfume bottle',
-      'crystal chandelier',
-      'parasol',
-    ],
-  },
-  {
-    name: 'Cute & Pretty',
-    items: ['teddy bear', 'butterfly swarm', 'rose bouquet', 'balloons', 'glass terrarium', 'kite'],
-  },
-];
-
-function formatLabel(key: string): string {
-  const obj = CURATED_OBJECTS.find((o) => o.key === key);
-  return obj ? obj.label : key;
-}
 
 export function ObjectPickerStep({ onNext, onBack }: Props) {
   const things = useOnboardingStore((s) => s.profile.dream_seeds.things);
   const toggleObject = useOnboardingStore((s) => s.toggleObject);
-  const addObjectPack = useOnboardingStore((s) => s.addObjectPack);
   const isEditing = useOnboardingStore((s) => s.isEditing);
-  const [activeCategory, setActiveCategory] = useState('popular');
 
-  const canProceed = things.length >= MIN_REQUIRED;
   const atMax = things.length >= (isEditing ? 25 : MAX_ONBOARDING);
-
-  const filteredObjects = useMemo(() => {
-    if (activeCategory === 'popular') {
-      return CURATED_OBJECTS.filter((o) => POPULAR_KEYS.includes(o.key));
-    }
-    if (activeCategory === 'more') {
-      return CURATED_OBJECTS.filter(
-        (o) => !['adventure', 'vehicles', 'music', 'companions', 'magic'].includes(o.category)
-      );
-    }
-    return CURATED_OBJECTS.filter((o) => o.category === activeCategory);
-  }, [activeCategory]);
 
   const handleToggle = useCallback(
     (key: string) => {
@@ -191,62 +96,22 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
 
   return (
     <View style={styles.root}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Pick some of your favorite things</Text>
-        <Text style={styles.subtitle}>
-          {isEditing
-            ? `Tap to remove. Add as many as you want.`
-            : `These will show up as fun surprises in your dreams.`}
-        </Text>
-        <Text style={[styles.counter, things.length > 0 && styles.counterMet]}>
-          {things.length} selected
-        </Text>
-      </View>
-
-      <ChipsRow
-        items={things}
-        onRemove={toggleObject}
-        formatLabel={formatLabel}
-        placeholder="+ Add an object"
-      />
-
-      <PackRow
-        packs={OBJECT_PACKS}
-        selected={things}
-        onAddPack={addObjectPack}
-        title="Starter Packs"
-      />
-
-      {/* Category filters */}
       <FlatList
-        horizontal
-        data={CATEGORIES}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoryScroll}
-        keyExtractor={(c) => c.key}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.categoryPill, activeCategory === item.key && styles.categoryActive]}
-            onPress={() => setActiveCategory(item.key)}
-          >
-            <Text
-              style={[
-                styles.categoryText,
-                activeCategory === item.key && styles.categoryTextActive,
-              ]}
-            >
-              {item.label}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      {/* Object grid */}
-      <FlatList
-        data={filteredObjects}
+        data={CURATED_OBJECTS}
         numColumns={2}
         keyExtractor={(o) => o.key}
         contentContainerStyle={styles.grid}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={styles.title}>Pick some of your favorite things</Text>
+            <Text style={styles.subtitle}>
+              These show up as fun surprises in your dreams. Optional.
+            </Text>
+            <Text style={[styles.counter, things.length > 0 && styles.counterMet]}>
+              {things.length} selected
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => {
           const isSelected = things.includes(item.key);
           return (
@@ -264,67 +129,40 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
               <Text style={[styles.tileLabel, isSelected && styles.tileLabelSelected]}>
                 {item.label}
               </Text>
-              <Text style={styles.tileCategory}>{item.category}</Text>
             </TouchableOpacity>
           );
         }}
       />
 
-      {/* Bottom CTA */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
           <Text style={styles.backBtnText}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.continueBtn, !canProceed && styles.continueBtnDisabled]}
+          style={styles.continueBtn}
           onPress={() => {
-            if (!canProceed) return;
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             onNext();
           }}
-          disabled={!canProceed}
           activeOpacity={0.7}
         >
-          <Text style={[styles.continueBtnText, !canProceed && styles.continueBtnTextDisabled]}>
-            {things.length > 0 ? 'Continue' : 'Skip'}
-          </Text>
-          <Ionicons
-            name="arrow-forward"
-            size={18}
-            color={canProceed ? '#FFFFFF' : colors.textSecondary}
-          />
+          <Text style={styles.continueBtnText}>{things.length > 0 ? 'Continue' : 'Skip'}</Text>
+          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
-
-      <Text style={styles.hint}>
-        Your favorite things won&apos;t dominate every dream — they appear as fun surprises.
-      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 4 },
+  header: { paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8 },
   title: { fontSize: 22, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 },
   subtitle: { fontSize: 14, color: colors.textSecondary, marginBottom: 4 },
   counter: { fontSize: 13, color: colors.textSecondary, fontWeight: '600' },
   counterMet: { color: '#4ADE80' },
-  categoryScroll: { paddingHorizontal: 16, paddingVertical: 8, gap: 8 },
-  categoryPill: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginRight: 8,
-  },
-  categoryActive: { backgroundColor: colors.accent, borderColor: colors.accent },
-  categoryText: { fontSize: 13, color: colors.textSecondary, fontWeight: '500' },
-  categoryTextActive: { color: '#FFFFFF' },
-  grid: { paddingHorizontal: 12, paddingBottom: 140 },
+  grid: { paddingHorizontal: 12, paddingBottom: 100 },
   tile: {
     flex: 1,
     margin: 4,
@@ -334,13 +172,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
-    minHeight: 90,
+    minHeight: 80,
     justifyContent: 'center',
   },
-  tileSelected: {
-    borderColor: colors.accent,
-    backgroundColor: `${colors.accent}18`,
-  },
+  tileSelected: { borderColor: colors.accent, backgroundColor: `${colors.accent}18` },
   checkBadge: {
     position: 'absolute',
     top: 6,
@@ -355,10 +190,9 @@ const styles = StyleSheet.create({
   tileEmoji: { fontSize: 28, marginBottom: 4 },
   tileLabel: { fontSize: 13, fontWeight: '600', color: '#FFFFFF', textAlign: 'center' },
   tileLabelSelected: { color: colors.accent },
-  tileCategory: { fontSize: 10, color: colors.textSecondary, marginTop: 2 },
   footer: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 0,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -387,17 +221,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     gap: 6,
   },
-  continueBtnDisabled: { backgroundColor: colors.surface },
   continueBtnText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF' },
-  continueBtnTextDisabled: { color: colors.textSecondary },
-  hint: {
-    position: 'absolute',
-    bottom: 4,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-    fontSize: 12,
-    color: colors.textSecondary,
-    fontStyle: 'italic',
-  },
 });
