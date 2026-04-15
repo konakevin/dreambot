@@ -83,7 +83,7 @@ export function ScreenLayout({
           ) : (
             <View style={s.titleSpacer} />
           )}
-          <View style={s.headerSide}>
+          <View style={s.headerSideRight}>
             {rightAction ?? <View style={{ width: NAV_ICON_SIZE }} />}
           </View>
         </View>
@@ -113,6 +113,11 @@ const s = StyleSheet.create({
   headerSide: {
     width: 40,
     alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  headerSideRight: {
+    minWidth: 40,
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
   title: {
