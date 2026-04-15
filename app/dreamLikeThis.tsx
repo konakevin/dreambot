@@ -53,6 +53,15 @@ export default function DreamLikeThisScreen() {
   const { data: dbMediums = [] } = useDreamMediums();
   const { data: dbVibes = [] } = useDreamVibes();
   const reset = useDreamStore((s) => s.reset);
+
+  // Clean up dream store when leaving DLT so it doesn't leak into Create screen
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const setMode = useDreamStore((s) => s.setMode);
   const setPhoto = useDreamStore((s) => s.setPhoto);
   const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);

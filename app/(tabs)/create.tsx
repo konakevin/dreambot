@@ -11,7 +11,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useFocusEffect } from 'expo-router';
+
 import {
   View,
   Text,
@@ -53,14 +53,7 @@ export default function CreateScreen() {
   const setMedium = useDreamStore((s) => s.setMedium);
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
-  const resetDream = useDreamStore((s) => s.reset);
 
-  // Reset dream store when this tab is focused so DLT state doesn't leak in
-  useFocusEffect(
-    useCallback(() => {
-      resetDream();
-    }, [resetDream])
-  );
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const user = useAuthStore((s) => s.user);
   const { data: dbMediums = [] } = useDreamMediums();
