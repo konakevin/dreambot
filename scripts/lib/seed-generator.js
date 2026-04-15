@@ -457,13 +457,21 @@ async function extractSubject(anthropic, scene, extractPrompt) {
   return (msg.content[0].text || '').trim().toLowerCase();
 }
 
+/** Target total seeds per bot — every bot gets exactly this many regardless of strategy count */
+const TARGET_SEEDS_PER_BOT = 75;
+
 /**
  * Generate seeds for a bot. Returns rows without touching DB.
+ * Each bot gets exactly TARGET_SEEDS_PER_BOT seeds, distributed evenly
+ * across its strategies. A bot with 3 strategies gets 25 each. A bot
+ * with 5 strategies gets 15 each. This makes it easy to verify all bots
+ * generated correctly — anything less than 75 means something failed.
+ *
  * @param {string} botUsername
- * @param {object} opts - { anthropicApiKey, perStrategy? }
+ * @param {object} opts - { anthropicApiKey, totalTarget? }
  * @returns {{ rows: Array<{category: string, template: string}> }}
  */
-async function generateSeedsForBot(botUsername, { anthropicApiKey, perStrategy = 15 }) {
+async function generateSeedsForBot(botUsername, { anthropicApiKey, totalTarget = TARGET_SEEDS_PER_BOT }) {
   const config = BOT_SEEDS[botUsername];
   if (!config) {
     throw new Error('No seed config for bot: ' + botUsername);
@@ -473,9 +481,15 @@ async function generateSeedsForBot(botUsername, { anthropicApiKey, perStrategy =
   const rows = [];
   let sharedBanList = [];
 
-  for (const strategy of config.strategies) {
+  // Distribute target evenly across strategies, giving remainder to the first ones
+  const numStrategies = config.strategies.length;
+  const basePerStrategy = Math.floor(totalTarget / numStrategies);
+  const remainder = totalTarget % numStrategies;
+
+  for (let si = 0; si < config.strategies.length; si++) {
+    const strategy = config.strategies[si];
     const banList = strategy.separateDedup ? [] : sharedBanList;
-    const stratCount = strategy.count || perStrategy;
+    const stratCount = strategy.count || (basePerStrategy + (si < remainder ? 1 : 0));
     console.log(`--- ${stratCount} ${strategy.category} ---`);
 
     for (let i = 0; i < stratCount; i++) {

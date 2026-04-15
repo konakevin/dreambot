@@ -123,12 +123,8 @@ async function regenSeeds(username, prefix) {
 
   console.log(`   🔄 Generating new seeds for ${username} (gen ${nextGen})...`);
 
-  // Disable old seeds
-  await sb
-    .from('bot_seeds')
-    .update({ disabled: true })
-    .like('category', prefix + '%')
-    .eq('disabled', false);
+  // Old seeds stay in the table with used_at set — NOT disabled.
+  // To recycle old seeds manually: UPDATE bot_seeds SET used_at = NULL WHERE category LIKE 'botname_%'
 
   try {
     const { rows } = await generateSeedsForBot(username, { anthropicApiKey });
@@ -138,14 +134,13 @@ async function regenSeeds(username, prefix) {
     console.log(`   ✅ ${tagged.length} new seeds generated (gen ${nextGen})`);
     return await loadUnusedSeeds(prefix);
   } catch (err) {
-    // Regen failed — re-enable old seeds and recycle
+    // Regen failed — recycle old seeds by clearing used_at
     console.error(`   ❌ Seed regen failed: ${err.message}`);
-    console.log(`   ♻️ Re-enabling old seeds to continue`);
+    console.log(`   ♻️ Recycling old seeds (clearing used_at)`);
     await sb
       .from('bot_seeds')
-      .update({ disabled: false, used_at: null })
-      .like('category', prefix + '%')
-      .eq('disabled', true);
+      .update({ used_at: null })
+      .like('category', prefix + '%');
     return await loadUnusedSeeds(prefix);
   }
 }
