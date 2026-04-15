@@ -1,6 +1,6 @@
 /**
  * Object picker step — 2-column tile grid with packs, category filters, and sticky chips.
- * Users select 3-10 objects from the pre-curated object_cards library.
+ * Objects are optional — they add fun surprises to dreams but aren't required.
  */
 
 import { useState, useMemo, useCallback } from 'react';
@@ -12,7 +12,7 @@ import { ChipsRow } from '@/components/onboarding/ChipsRow';
 import { PackRow, Pack } from '@/components/onboarding/PackRow';
 import { colors } from '@/constants/theme';
 
-const MIN_REQUIRED = 3;
+const MIN_REQUIRED = 0;
 const MAX_ONBOARDING = 10;
 
 interface Props {
@@ -192,14 +192,14 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
   return (
     <View style={styles.root}>
       <View style={styles.header}>
-        <Text style={styles.title}>Pick objects you&apos;d love to see in your dreams</Text>
+        <Text style={styles.title}>Pick some of your favorite things</Text>
         <Text style={styles.subtitle}>
           {isEditing
             ? `Tap to remove. Add as many as you want.`
-            : `Pick 3–7 favorites. They'll show up as fun surprises.`}
+            : `These will show up as fun surprises in your dreams.`}
         </Text>
-        <Text style={[styles.counter, canProceed && styles.counterMet]}>
-          {things.length} / {MIN_REQUIRED} selected
+        <Text style={[styles.counter, things.length > 0 && styles.counterMet]}>
+          {things.length} selected
         </Text>
       </View>
 
@@ -287,7 +287,7 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
           activeOpacity={0.7}
         >
           <Text style={[styles.continueBtnText, !canProceed && styles.continueBtnTextDisabled]}>
-            {canProceed ? 'Continue' : `Continue (${things.length}/${MIN_REQUIRED})`}
+            {things.length > 0 ? 'Continue' : 'Skip'}
           </Text>
           <Ionicons
             name="arrow-forward"
@@ -298,7 +298,7 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
       </View>
 
       <Text style={styles.hint}>
-        Objects won&apos;t dominate every dream — they appear as fun surprises.
+        Your favorite things won&apos;t dominate every dream — they appear as fun surprises.
       </Text>
     </View>
   );
