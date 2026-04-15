@@ -94,7 +94,7 @@ const TESTS = Array.from({ length: TEST_COUNT }, (_, i) => ({
           },
           ...(noForceRoll ? {} : { force_cast_role: 'self' }),
           ...(test.force_nightly_path ? { force_nightly_path: test.force_nightly_path } : {}),
-          force_medium: ['pencil','anime','comics','shimmer','twilight','surreal','photography','neon'][Math.floor(Math.random() * 8)],
+          ...(noForceRoll ? {} : { force_medium: ['pencil','anime','comics','shimmer','twilight','surreal','photography','neon'][Math.floor(Math.random() * 8)] }),
         }),
       });
 
