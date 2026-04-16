@@ -1149,9 +1149,11 @@ ${entity.description}
 KEEP: gender, hair color, eye color, facial hair, build from the description above.`;
         } else if (medium.faceSwaps) {
           const gender = /\b(woman|female|girl)\b/i.test(selfDesc) ? 'female' : 'male';
-          characterBlock = `THE MAIN CHARACTER: a ${gender} figure in the scene.
+          characterBlock = `THE MAIN CHARACTER: an average-build ${gender} figure in the scene, fully clothed in attire appropriate to the scene.
 
-IMPORTANT — DO NOT describe the character's face, skin tone, pores, eye color, hair color, or facial features. Identity will be composited from a reference photo AFTER rendering. Describe only what the body is doing in the scene — pose, gesture, interaction with the environment. Render the figure entirely in the ${mediumStyle} medium's style — maintain the medium's texture and technique across the face and skin just as across the rest of the image. No photoreal skin pores, no photographic realism on the subject; the face is a ${mediumStyle} rendering like everything else.`;
+IMPORTANT — DO NOT describe the character's face, skin tone, pores, eye color, hair color, or facial features. Identity will be composited from a reference photo AFTER rendering. Describe only what the body is doing in the scene — pose, gesture, interaction with the environment. Render the figure entirely in the ${mediumStyle} medium's style — maintain the medium's texture and technique across the face and skin just as across the rest of the image. No photoreal skin pores, no photographic realism on the subject; the face is a ${mediumStyle} rendering like everything else.
+
+ANATOMY — non-negotiable: natural proportions, NOT a fitness model. No six-pack abs, no exaggerated musculature, no bulging biceps unless the user specifically asked. Two arms, two legs, one head, two hands each with five fingers correctly placed, normal-length limbs, symmetrical features. The figure is clothed (shirt/top, pants/skirt/dress appropriate to the scene) — never bare-chested or partially nude unless the user explicitly asked. Hands should be in natural positions — not distorted, not fused, not extra digits.`;
         } else {
           characterBlock = `THE MAIN CHARACTER (this is the user — match their description EXACTLY):
 ${selfDesc}
