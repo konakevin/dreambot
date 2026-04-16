@@ -1,0 +1,310 @@
+/**
+ * Prompt Compiler — unified brief builder for all V2 dream generation paths.
+ *
+ * All V2 paths (self-insert, text directive, photo reimagine, style transfer)
+ * feed structured input into this single compilePrompt() function. It outputs
+ * a Sonnet brief that gets compressed into a 70-90 word Flux prompt.
+ *
+ * The brief has priority-labeled sections so Sonnet knows what to protect
+ * under compression pressure: SCENE (sacred) → OBJECT → CHARACTER → CAMERA → STYLE → MOOD.
+ */
+
+import type { ResolvedCastMember } from './castResolver.ts';
+
+// ── Public Types ──
+
+export type CompositionMode =
+  | 'balanced'
+  | 'open_vista'
+  | 'layered_depth'
+  | 'negative_space'
+  | 'low_angle_hero'
+  | 'overhead'
+  | 'intimate_close';
+
+export interface CompilerInput {
+  inputType: 'self_insert' | 'text_directive' | 'photo_reimagine' | 'style_transfer';
+
+  medium: {
+    key: string;
+    directive: string;
+    fluxFragment: string;
+    characterRenderMode: 'natural' | 'embodied';
+    faceSwaps: boolean;
+  };
+
+  vibe: {
+    key: string;
+    directive: string;
+  };
+
+  scene: {
+    userPrompt?: string;
+    sceneExpansion?: string;
+    styleReference?: string;
+    photoDescription?: string;
+    objectDirective?: string;
+    dreamWish?: string;
+  };
+
+  cast: ResolvedCastMember[];
+
+  composition: {
+    type: 'character' | 'pure_scene';
+    faceSwapEligible: boolean;
+    shotDirection: string;
+    focalAnchor: string;
+  };
+
+  profile?: {
+    avoid?: string[];
+  };
+}
+
+export interface CompilerOutput {
+  sonnetBrief: string;
+  fallbackPrompt: string;
+  maxTokens: number;
+  postProcess: {
+    appendFaceLock: boolean;
+    appendPortraitTags: boolean;
+  };
+  faceSwapSource: string | null;
+}
+
+// ── Focal Anchor Derivation ──
+
+export function deriveFocalAnchor(
+  cast: ResolvedCastMember[],
+  scene: CompilerInput['scene']
+): string {
+  if (cast.length === 1) return 'the main character';
+  if (cast.length > 1) return 'the interaction between the characters';
+  if (scene.objectDirective) return 'the scene object';
+  return 'a single dominant visual subject that defines the scene';
+}
+
+// ── Medium Directive Summarizer ──
+// Full 150-word directives overwhelm the brief. Extract first 3 sentences.
+
+function summarizeMediumDirective(directive: string): string {
+  const sentences = directive
+    .split(/[.!]\s+/)
+    .filter(Boolean)
+    .slice(0, 3);
+  return sentences.join('. ') + '.';
+}
+
+// ── Word Budget ──
+
+function getWordBudget(
+  compositionType: string,
+  faceSwap: boolean
+): { character: number; environment: number; finishing: number } {
+  if (compositionType === 'character') {
+    return faceSwap
+      ? { character: 20, environment: 45, finishing: 15 }
+      : { character: 20, environment: 45, finishing: 15 };
+  }
+  return { character: 0, environment: 60, finishing: 15 };
+}
+
+// ── Section Builders ──
+
+function buildSceneBlock(scene: CompilerInput['scene']): string {
+  const parts: string[] = [];
+
+  if (scene.userPrompt) {
+    parts.push(scene.userPrompt);
+  }
+  if (scene.sceneExpansion) {
+    parts.push(scene.sceneExpansion);
+  }
+  if (scene.styleReference) {
+    parts.push(
+      `REFERENCE STYLE (match this aesthetic — palette, lighting, composition, texture — but apply to NEW subject):\n"${scene.styleReference.slice(0, 400)}"\nCopy VISUAL STYLE, not subject.`
+    );
+  }
+  if (scene.photoDescription) {
+    parts.push(`PHOTO SUBJECT: ${scene.photoDescription}`);
+  }
+  if (scene.dreamWish) {
+    parts.push(`DREAM WISH (make this the heart): "${scene.dreamWish}"`);
+  }
+  if (!scene.userPrompt && !scene.styleReference) {
+    parts.push(
+      'Invent a stunning subject and scene that showcases this medium beautifully. Pick something concrete — a character, creature, landscape, or architectural marvel.'
+    );
+  }
+
+  return parts.join('\n\n');
+}
+
+function buildCharacterBlock(
+  cast: ResolvedCastMember[],
+  medium: CompilerInput['medium'],
+  composition: CompilerInput['composition']
+): string {
+  const mediumStyle = medium.key.replace(/_/g, ' ');
+  const isEmbodied = medium.characterRenderMode === 'embodied';
+  const parts: string[] = [];
+
+  if (cast.length === 1) {
+    const c = cast[0];
+    if (isEmbodied) {
+      parts.push(
+        `THE CHARACTER (${mediumStyle} style — render as-is, do NOT make photorealistic):`
+      );
+      parts.push(c.promptDesc);
+    } else {
+      parts.push('THE MAIN CHARACTER:');
+      parts.push(c.promptDesc);
+      if (composition.faceSwapEligible) {
+        parts.push('Do NOT over-describe the face. Push detail into clothing, pose, environment.');
+      }
+    }
+  } else {
+    cast.forEach((c, i) => {
+      parts.push(`CHARACTER ${i + 1} (${c.role}): ${c.promptDesc}`);
+    });
+    parts.push(`Render ALL ${cast.length} characters as ${mediumStyle} style. Show them TOGETHER.`);
+  }
+
+  // Gender lock
+  const genderCast = cast.find((c) => c.genderLock);
+  if (genderCast && genderCast.genderLock) {
+    parts.push(`\nGENDER — NON-NEGOTIABLE: ${genderCast.genderLock}`);
+  }
+
+  return parts.join('\n');
+}
+
+function buildCameraBlock(composition: CompilerInput['composition']): string {
+  const parts: string[] = [];
+  parts.push(composition.shotDirection);
+
+  if (composition.faceSwapEligible) {
+    parts.push(
+      'Subject facing camera, eyes visible, face well-lit, face occupies 15-30% of image height. No back views, no silhouettes, no faces in shadow.'
+    );
+  }
+
+  parts.push('Portrait 9:16 vertical — depth stacked top to bottom.');
+  return parts.join('\n');
+}
+
+// ── Main Export ──
+
+export function compilePrompt(input: CompilerInput): CompilerOutput {
+  const { medium, vibe, scene, cast, composition, profile } = input;
+  const mediumStyle = medium.key.replace(/_/g, ' ');
+  const hasCast = cast.length > 0 && composition.type !== 'pure_scene';
+
+  const budget = getWordBudget(composition.type, composition.faceSwapEligible);
+  const sceneBlock = buildSceneBlock(scene);
+  const characterBlock = hasCast ? buildCharacterBlock(cast, medium, composition) : '';
+  const cameraBlock = buildCameraBlock(composition);
+  const mediumSummary = summarizeMediumDirective(medium.directive);
+
+  const brief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-90 words, comma-separated).
+
+WORD BUDGET:
+- Character/subject: ~${budget.character} words
+- Environment/scene: ~${budget.environment} words
+- Camera + mood + finishing: ~${budget.finishing} words
+
+OUTPUT STRUCTURE:
+1. Start with: "${medium.fluxFragment}"
+2. Environment/scene
+3. Subject/character
+4. Camera + mood
+5. Your invented details
+6. End with: no text, no words, no letters, no watermarks, ultra detailed
+
+═══ SCENE (SACRED — must appear) ═══
+${sceneBlock}
+
+═══ FOCAL ANCHOR (MANDATORY) ═══
+There must be exactly ONE dominant visual subject: ${composition.focalAnchor}
+- This is the first thing the eye sees.
+- Everything else supports or frames it.
+- Do NOT introduce competing subjects of equal importance.
+- If multiple interesting elements exist, subordinate all but one to background role.
+
+${scene.objectDirective ? `═══ SCENE OBJECT (MUST APPEAR) ═══\n${scene.objectDirective}\n\n` : ''}${characterBlock ? `═══ CHARACTER ═══\n${characterBlock}\n\n` : ''}═══ CAMERA ═══
+${cameraBlock}
+
+═══ STYLE ═══
+${mediumSummary}
+
+═══ MOOD ═══
+${vibe.directive}
+
+═══ YOUR CREATIVE ADDITIONS ═══
+Add vivid concrete details the user didn't mention. Things a camera can see — textures, light sources, atmospheric elements, foreground/background depth.
+
+${profile && profile.avoid && profile.avoid.length > 0 ? `═══ NEVER INCLUDE ═══\n${profile.avoid.join(', ')}\n\n` : ''}RULES:
+- Every word must be something a camera can see. No feelings, no metaphors.
+- Depth: foreground, midground, background stacked top to bottom.
+Output ONLY the prompt.`;
+
+  // Fallback
+  const fallbackParts = [medium.fluxFragment];
+  if (scene.userPrompt) fallbackParts.push(scene.userPrompt);
+  else fallbackParts.push('a surreal dreamscape');
+  if (vibe.directive) fallbackParts.push(vibe.directive.split('.')[0]);
+  fallbackParts.push('no text, no words, no letters, no watermarks, hyper detailed');
+  const fallback = fallbackParts.join(', ');
+
+  // Face swap source
+  let faceSwapSource: string | null = null;
+  if (
+    composition.faceSwapEligible &&
+    cast.length === 1 &&
+    cast[0].sourcePhotoUrl &&
+    cast[0].sourcePhotoUrl.startsWith('http')
+  ) {
+    faceSwapSource = cast[0].sourcePhotoUrl;
+  }
+
+  return {
+    sonnetBrief: brief,
+    fallbackPrompt: fallback,
+    maxTokens: 200,
+    postProcess: {
+      appendFaceLock: composition.faceSwapEligible,
+      appendPortraitTags: true,
+    },
+    faceSwapSource,
+  };
+}
+
+// ── Post-Processing (applied after Sonnet returns) ──
+
+export function postProcessPrompt(prompt: string, rules: CompilerOutput['postProcess']): string {
+  let result = prompt;
+
+  if (rules.appendFaceLock) {
+    result +=
+      ', front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no silhouette';
+  }
+
+  if (rules.appendPortraitTags) {
+    if (!result.includes('foreground midground background')) {
+      result += ', foreground midground background stacked top to bottom, layered depth';
+    }
+  }
+
+  return result;
+}
+
+// ── Prompt Sanitization ──
+
+export function sanitizeUserPrompt(raw: string): string {
+  return raw
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/[{}[\]<>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 240);
+}

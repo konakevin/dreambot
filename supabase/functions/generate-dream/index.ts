@@ -33,10 +33,20 @@ import { getPhotoRestyleConfig, buildReimaginePrompt } from '../_shared/photoPro
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 import { buildRenderEntity } from '../_shared/renderEntity.ts';
-import { getLocationCard, getObjectCard } from '../_shared/essenceCards.ts';
-import type { LocationCard, ObjectCard } from '../_shared/essenceCards.ts';
+import { getLocationCard } from '../_shared/essenceCards.ts';
+import type { LocationCard } from '../_shared/essenceCards.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
+import { resolveCastForPrompt } from '../_shared/castResolver.ts';
+import { expandScene } from '../_shared/sceneExpander.ts';
+import { rollChaos, applyChaos } from '../_shared/chaosLayer.ts';
+import {
+  compilePrompt,
+  postProcessPrompt,
+  sanitizeUserPrompt,
+  deriveFocalAnchor,
+} from '../_shared/promptCompiler.ts';
 
 const MAX_DAILY_GENERATIONS = 50;
 
@@ -599,42 +609,22 @@ Deno.serve(async (req) => {
           ? thingsPool[Math.floor(Math.random() * thingsPool.length)]
           : undefined;
 
-      // Fetch essence cards in parallel (lazy-generates on first encounter)
+      // Fetch location essence card (lazy-generates on first encounter)
       let locationCard: LocationCard | null = null;
-      let objectCard: ObjectCard | null = null;
-      const cardPromises: Promise<void>[] = [];
       if (userPlace && ANTHROPIC_KEY) {
-        cardPromises.push(
-          getLocationCard(userPlace, ANTHROPIC_KEY)
-            .then((c) => {
-              locationCard = c;
-            })
-            .catch((err) => {
-              console.warn('[generate-dream] Location card failed:', (err as Error).message);
-            })
-        );
+        try {
+          locationCard = await getLocationCard(userPlace, ANTHROPIC_KEY);
+        } catch (err) {
+          console.warn('[generate-dream] Location card failed:', (err as Error).message);
+        }
       }
-      if (userThing && ANTHROPIC_KEY) {
-        cardPromises.push(
-          getObjectCard(userThing, ANTHROPIC_KEY)
-            .then((c) => {
-              objectCard = c;
-            })
-            .catch((err) => {
-              console.warn('[generate-dream] Object card failed:', (err as Error).message);
-            })
-        );
-      }
-      if (cardPromises.length > 0) await Promise.all(cardPromises);
       console.log(
         '[generate-dream] Essence cards | place:',
         userPlace ?? 'none',
         '| locationCard:',
         locationCard ? locationCard.cinematic_phrases.length + ' phrases' : 'null',
         '| thing:',
-        userThing ?? 'none',
-        '| objectCard:',
-        objectCard ? objectCard.visual_forms.length + ' forms' : 'null'
+        userThing ?? 'none'
       );
       lap('essence-cards');
 
@@ -695,7 +685,6 @@ Deno.serve(async (req) => {
         userPlace,
         userThing,
         locationCard: locationCard ?? undefined,
-        objectCard: objectCard ?? undefined,
         castGender,
         moodAxis: moods,
       });
@@ -1105,231 +1094,200 @@ Output ONLY the prompt.`;
       // ── TEXT PATH ──
       const userSubject = rawPrompt ?? hint ?? '';
 
-      // Detect self-references ("put me", "I am", "myself") → inject cast description + face swap
-      // Only use cast photo when there's NO attached photo — if a photo is attached, the reimagine path handles it
+      // ── V2 SELF-INSERT DETECTION (using new detector) ──
       const selfCast = !isPhoto
         ? vibeProfile?.dream_cast?.find(
             (m: DreamCastMember) => m.role === 'self' && m.thumb_url && m.description
           )
         : undefined;
-      const mentionsSelf =
-        userSubject &&
-        selfCast &&
-        /\b(put me|place me|make me|show me|me as|me in|me on|me at|me \w+ing|i am|i'm|myself|my face)\b/i.test(
-          userSubject
-        );
+      const selfInsertResult = userSubject
+        ? detectSelfInsert(userSubject)
+        : { isSelfInsert: false, cleanedPrompt: '' };
+      const mentionsSelf = selfInsertResult.isSelfInsert && selfCast;
 
       if (mentionsSelf && userSubject) {
-        // ── SELF-INSERT TEXT PATH: user's description + face swap from cast photo ──
-        // Two versions of the cast description:
-        //   - fullSelfDesc: untruncated, used ONLY by buildRenderEntity's trait
-        //     regex for embodied mediums (hair/beard/build info often past 250).
-        //   - selfDesc: truncated to 250 chars, used where it lands in the brief
-        //     as prose (natural + no-face-swap path). Keeps brief compact so
-        //     scene/composition instructions don't get compressed out by Sonnet.
-        const fullSelfDesc = selfCast.description
-          .replace(/^#.*\n/gm, '')
-          .replace(/\*\*/g, '')
-          .trim();
-        const selfDesc = fullSelfDesc.slice(0, 250);
+        // ── SELF-INSERT: cast + scene expansion + chaos + compiler ──
+        const cleanedPrompt = sanitizeUserPrompt(selfInsertResult.cleanedPrompt);
+        const resolvedCast = resolveCastForPrompt([selfCast as DreamCastMember], {
+          characterRenderMode: medium.characterRenderMode,
+          key: medium.key,
+        });
+        const isFaceSwapEligible = medium.faceSwaps && medium.characterRenderMode === 'natural';
 
-        const isEmbodied = medium.characterRenderMode === 'embodied';
-        const mediumStyle = medium.key.replace(/_/g, ' ');
         console.log(
-          `[generate-dream] 🎭 SELF-INSERT TEXT: ${isEmbodied ? 'embodied' : 'natural'} / faceSwap=${medium.faceSwaps}`
+          `[generate-dream] 🎭 SELF-INSERT: ${medium.characterRenderMode} / faceSwap=${isFaceSwapEligible}`
         );
 
-        // Build character block — three branches:
-        //   1. Embodied (LEGO/clay/etc.) → medium-native entity from traits
-        //      (uses FULL description so trait regex captures hair/beard/build)
-        //   2. Natural + face-swap → MINIMAL block, no cast description
-        //      (face swap restores identity post-hoc; the photographic cast
-        //      prose was pulling Flux toward photorealism and collapsing the
-        //      medium style across the face and body)
-        //   3. Natural + no face-swap → full cast description (face swap
-        //      won't restore identity, so Flux needs the features)
-        let characterBlock: string;
-        if (isEmbodied) {
-          const entity = buildRenderEntity(fullSelfDesc, medium.characterRenderMode, medium.key);
-          characterBlock = `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):
-${entity.description}
+        // Scene expansion + chaos
+        const expanded = expandScene({
+          userPrompt: cleanedPrompt,
+          userId,
+          mediumKey: medium.key,
+          vibeKey: vibe.key,
+          hasCharacter: true,
+        });
+        const chaosProfile = rollChaos(
+          Array.from(userId + cleanedPrompt).reduce(
+            (h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0,
+            0
+          ),
+          {
+            userPrompt: cleanedPrompt,
+            mediumRenderMode: medium.characterRenderMode,
+            faceSwapEligible: isFaceSwapEligible,
+          }
+        );
+        const finalExpansion = applyChaos(expanded.expansion, chaosProfile);
+        const focalAnchor = deriveFocalAnchor(resolvedCast, { userPrompt: cleanedPrompt });
 
-KEEP: gender, hair color, eye color, facial hair, build from the description above.`;
-        } else if (medium.faceSwaps) {
-          const gender = /\b(woman|female|girl)\b/i.test(selfDesc) ? 'female' : 'male';
-          characterBlock = `THE MAIN CHARACTER: an average-build ${gender} figure in the scene, fully clothed in attire appropriate to the scene.
-
-IMPORTANT — DO NOT describe the character's face, skin tone, pores, eye color, hair color, or facial features. Identity will be composited from a reference photo AFTER rendering. Describe only what the body is doing in the scene — pose, gesture, interaction with the environment. Render the figure entirely in the ${mediumStyle} medium's style — maintain the medium's texture and technique across the face and skin just as across the rest of the image. No photoreal skin pores, no photographic realism on the subject; the face is a ${mediumStyle} rendering like everything else.
-
-ANATOMY — non-negotiable: natural proportions, NOT a fitness model. No six-pack abs, no exaggerated musculature, no bulging biceps unless the user specifically asked. Two arms, two legs, one head, two hands each with five fingers correctly placed, normal-length limbs, symmetrical features. The figure is clothed (shirt/top, pants/skirt/dress appropriate to the scene) — never bare-chested or partially nude unless the user explicitly asked.
-
-HANDS — prefer not to show hands at all if they aren't central to the scene (hands in pockets, behind back, at sides, out of frame, or obscured by clothing/environment). If hands MUST be shown, describe them in natural resting positions — palm down on a surface, fingers relaxed, never bent backwards, never gripping, never reaching toward the viewer, never interlaced. Avoid close-up hand detail. Flux renders hands poorly — the safest choice is to keep them minimal or hidden.`;
-        } else {
-          characterBlock = `THE MAIN CHARACTER (this is the user — match their description EXACTLY):
-${selfDesc}
-
-CRITICAL: Preserve the character's EXACT sex, age, build, and features as described above. Do NOT change their gender. Render them with masculine features if male, feminine features if female. The style above is a rendering treatment — it does not change who the character is.`;
-        }
+        const compiled = compilePrompt({
+          inputType: 'self_insert',
+          medium: {
+            key: medium.key,
+            directive: medium.directive ?? '',
+            fluxFragment: medium.fluxFragment ?? medium.key,
+            characterRenderMode: medium.characterRenderMode,
+            faceSwaps: medium.faceSwaps,
+          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
+          scene: {
+            userPrompt: cleanedPrompt || undefined,
+            sceneExpansion: finalExpansion || undefined,
+          },
+          cast: resolvedCast,
+          composition: {
+            type: 'character',
+            faceSwapEligible: isFaceSwapEligible,
+            shotDirection: expanded.suggestedCamera,
+            focalAnchor,
+          },
+          profile: { avoid: vibeProfile?.avoid },
+        });
 
         try {
-          const selfBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-80 words, comma-separated).
-
-MEDIUM (start with this EXACTLY): ${medium.fluxFragment}
-
-STYLE GUIDE:
-${medium.directive}
-
-SCENE — the user asked for: ${userSubject}
-
-${characterBlock}
-
-MOOD: ${vibe.directive}
-
-COMPOSITION — THIS IS CRITICAL:
-${(() => {
-  const shots = [
-    '1. HEAD AND SHOULDERS framing — face fills ~30% of the frame. Person interacting with one key prop or element.',
-    '1. CHEST-UP framing — face fills ~25% of the frame. Show the person holding, touching, or using something from the scene.',
-    '1. WAIST-UP framing — face fills ~20% of the frame. Person actively engaged in the scene — gesturing, reaching, leaning.',
-    '1. THREE-QUARTER BODY framing — show from knees up. Face fills ~15% of the frame. Person surrounded by scene elements, interacting with the environment.',
-  ];
-  return shots[Math.floor(Math.random() * shots.length)];
-})()}
-2. Face must be CLEARLY VISIBLE and well-lit — no tiny faces, no silhouettes, no faces in shadow
-3. NEVER use full body shots, extreme wide shots, aerial views, or show the person tiny in a vast landscape
-4. Show the character DOING something — interacting with objects, environment, or props from the scene
-5. Name specific materials, textures, light sources — but apply them through the MEDIUM's rendering (e.g. "thick oil paint strokes depicting rough bark" not "photograph of rough bark")
-6. End with: no text, no words, no letters, no watermarks, hyper detailed
-Output ONLY the prompt.`;
-
-          finalPrompt = await nightlySonnet(selfBrief, ANTHROPIC_KEY, 200);
+          finalPrompt = await nightlySonnet(
+            compiled.sonnetBrief,
+            ANTHROPIC_KEY,
+            compiled.maxTokens
+          );
           if (finalPrompt.length < 10) throw new Error('too short');
+          finalPrompt = postProcessPrompt(finalPrompt, compiled.postProcess);
 
-          // Face swap only if the medium supports it (from DB)
-          if (medium.faceSwaps) {
-            faceSwapSource = selfCast.thumb_url;
+          if (compiled.faceSwapSource) {
+            faceSwapSource = compiled.faceSwapSource;
           }
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
-            engine: isEmbodied ? 'v2-self-insert-embodied' : 'v2-self-insert-text',
-            faceSwap: medium.faceSwaps,
+            engine: 'v2-compiler-self-insert',
+            faceSwap: isFaceSwapEligible,
+            chaosIntensity: chaosProfile.intensity,
           };
-          console.log('[generate-dream] Self-insert prompt:', finalPrompt.slice(0, 150));
+          console.log('[generate-dream] V2 compiler (self-insert):', finalPrompt.slice(0, 150));
           lap('self-insert-done');
         } catch (err) {
           console.error('[generate-dream] SELF-INSERT FAILED:', (err as Error).message);
-          finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
+          finalPrompt = compiled.fallbackPrompt;
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
-            engine: 'v2-self-insert-fallback',
+            engine: 'v2-compiler-self-insert-fallback',
             error: (err as Error).message,
           };
           lap('self-insert-done');
         }
-      } else if (style_prompt) {
-        // Style transfer: merge the original post's style with the user's subject
-        const stSubject = userSubject || 'a surprising new scene that fits this style';
-        const styleTransferBrief = `You are a cinematographer. You have a reference Flux AI prompt that produced a stunning image.
-Your job: write a NEW Flux AI prompt (60-90 words, comma-separated) that keeps the EXACT same visual style, mood, lighting, color palette, and medium technique — but with a DIFFERENT subject.
-
-REFERENCE PROMPT (copy the style, NOT the subject):
-"${style_prompt.slice(0, 500)}"
-
-NEW SUBJECT (the user wants this):
-"${stSubject}"
-
-Rules:
-1. Start with the same art medium/style fragment as the reference
-2. Preserve the lighting, palette, mood, and compositional approach
-3. Replace the subject entirely with the user's request
-4. End with: no text, no words, no letters, no watermarks, hyper detailed
-Output ONLY the prompt.`;
-
-        try {
-          finalPrompt = await nightlySonnet(styleTransferBrief, ANTHROPIC_KEY, 200);
-          if (finalPrompt.length < 10) throw new Error('too short');
-        } catch {
-          finalPrompt = `${medium.fluxFragment}, ${stSubject}, ${vibe.directive && vibe.directive.split('.')[0] ? vibe.directive.split('.')[0] : 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
-        }
-
-        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-style-transfer' };
-        console.log('[generate-dream] V2 style transfer:', finalPrompt.slice(0, 150));
-        lap('style-transfer-done');
-      } else if (userSubject) {
-        // User provided a prompt — subject-first brief so the medium styles the subject rather than replacing it
-        const userBrief = `You are a cinematographer. Write a Flux AI prompt (60-90 words, comma-separated).
-
-=== SUBJECT (THIS IS WHAT YOU ARE DRAWING — it MUST be the focus of the image) ===
-${userSubject}
-
-The subject above is non-negotiable. Whatever the user described MUST appear prominently in the frame. Do NOT substitute with atmospheric scenery or generic props. If they said "a girl", draw the girl. If they said "a fox", draw the fox. If they said "a castle", draw the castle. The style below is ONLY a rendering treatment — it does not replace the subject.
-
-=== STYLE (apply this aesthetic treatment to the subject above) ===
-${medium.directive}
-
-=== MOOD ===
-${vibe.directive}
-
-Write the Flux prompt:
-1. START the prompt by describing the SUBJECT in rich detail — who they are, what they look like, their pose, their expression, what they are doing. Expand any vague user description with specifics that fit the style.
-2. THEN describe the environment AROUND the subject (still keeping the subject as the focus)
-3. THEN add the style descriptors: "${medium.fluxFragment}"
-4. Name specific materials, textures, light sources (NOUNS not adjectives)
-5. End with: no text, no words, no letters, no watermarks, hyper detailed
-
-The final Flux prompt should feel like "[detailed subject description], [environment that surrounds them], [medium style], [mood]" — never like "[medium style] scene with [subject mentioned]".
-
-CREATIVITY RULES:
-- Do NOT default to horns, demon features, or Maleficent-style tropes on characters. Reach for more interesting accessories and features: unusual hair colors and styles, hats, masks, jewelry, tattoos, unusual eye colors, freckles, face paint, scars, antlers (only if animal-appropriate), unusual clothing textures, unusual pets, etc.
-- Invent details that feel surprising but fitting for the medium and subject.
-
-Output ONLY the prompt.`;
-
-        try {
-          finalPrompt = await nightlySonnet(userBrief, ANTHROPIC_KEY, 200);
-          if (finalPrompt.length < 10) throw new Error('too short');
-        } catch {
-          finalPrompt = `${medium.fluxFragment}, ${userSubject}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
-        }
-
-        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-text-directive' };
-        console.log('[generate-dream] V2 text (directive):', finalPrompt.slice(0, 150));
-        lap('text-prompt-done');
       } else {
-        // No user prompt — user picked a specific medium — invent a scene that showcases IT
-        const v2Brief = `You are an art director. Write a Flux AI prompt (60-90 words, comma-separated) that perfectly showcases this art medium at its best.
+        // ── V2 COMPILER PATHS: style transfer, text directive, surprise ──
+        const sanitizedPrompt = userSubject ? sanitizeUserPrompt(userSubject) : '';
+        const inputType = style_prompt
+          ? 'style_transfer'
+          : sanitizedPrompt
+            ? 'text_directive'
+            : 'text_directive'; // surprise = text_directive with no prompt
 
-=== MEDIUM (this is what you are showcasing) ===
-${medium.directive}
+        // Scene expansion (fills gaps in thin user prompts with cinematic detail)
+        const expanded = sanitizedPrompt
+          ? expandScene({
+              userPrompt: sanitizedPrompt,
+              userId,
+              mediumKey: medium.key,
+              vibeKey: vibe.key,
+              hasCharacter: false, // no cast in these paths
+            })
+          : {
+              expansion: '',
+              suggestedCamera: 'environmental portrait, eye-level, 50mm lens, deep perspective',
+              usedPhrases: [],
+            };
 
-Flux fragment: ${medium.fluxFragment}
+        // Chaos layer (perception distortion)
+        const chaosProfile = rollChaos(
+          Array.from(userId + (sanitizedPrompt || medium.key)).reduce(
+            (h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0,
+            0
+          ),
+          {
+            userPrompt: sanitizedPrompt,
+            mediumRenderMode: medium.characterRenderMode,
+            faceSwapEligible: false,
+          }
+        );
+        const finalExpansion = applyChaos(expanded.expansion, chaosProfile);
 
-=== MOOD ===
-${vibe.directive}
+        // Focal anchor
+        const focalAnchor = deriveFocalAnchor([], {
+          userPrompt: sanitizedPrompt,
+          styleReference: style_prompt,
+          objectDirective: undefined,
+        });
 
-Invent a SUBJECT AND SCENE that this medium renders beautifully — whatever would look most iconic in this style. Pick something concrete: a character, creature, or signature scene element the medium is known for. Build the environment around that subject. Apply the medium's style language to everything.
-
-Rules:
-1. Start with a concrete subject, not an abstract environment
-2. The subject should feel inevitable for this medium — the thing it was made to render
-3. Name specific materials, textures, light sources (NOUNS not adjectives)
-4. Do NOT default to horns, demon features, or Maleficent-style tropes on characters — reach for more interesting details: unusual hair, hats, masks, jewelry, tattoos, unusual eye colors, freckles, face paint, scars, unusual clothing, unusual pets
-5. End with: no text, no words, no letters, no watermarks, hyper detailed
-
-Output ONLY the prompt.`;
+        // Compile prompt
+        const compiled = compilePrompt({
+          inputType: inputType as 'text_directive' | 'style_transfer',
+          medium: {
+            key: medium.key,
+            directive: medium.directive ?? '',
+            fluxFragment: medium.fluxFragment ?? medium.key,
+            characterRenderMode: medium.characterRenderMode,
+            faceSwaps: medium.faceSwaps,
+          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
+          scene: {
+            userPrompt: sanitizedPrompt || undefined,
+            sceneExpansion: finalExpansion || undefined,
+            styleReference: style_prompt || undefined,
+          },
+          cast: [],
+          composition: {
+            type: 'pure_scene',
+            faceSwapEligible: false,
+            shotDirection: expanded.suggestedCamera,
+            focalAnchor,
+          },
+          profile: { avoid: vibeProfile?.avoid },
+        });
 
         try {
-          finalPrompt = await nightlySonnet(v2Brief, ANTHROPIC_KEY, 200);
+          finalPrompt = await nightlySonnet(
+            compiled.sonnetBrief,
+            ANTHROPIC_KEY,
+            compiled.maxTokens
+          );
           if (finalPrompt.length < 10) throw new Error('too short');
+          finalPrompt = postProcessPrompt(finalPrompt, compiled.postProcess);
         } catch {
-          finalPrompt = `${medium.fluxFragment}, ${dreamScene}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, no words, no letters, no watermarks, hyper detailed`;
+          finalPrompt = compiled.fallbackPrompt;
         }
 
-        logAxes = { medium: medium.key, vibe: vibe.key, engine: 'v2-surprise' };
-        console.log('[generate-dream] V2 surprise (nightly-quality):', finalPrompt.slice(0, 150));
-        lap('surprise-done');
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: `v2-compiler-${inputType}`,
+          chaosIntensity: chaosProfile.intensity,
+          chaosInjections: chaosProfile.injections.length,
+        };
+        console.log(`[generate-dream] V2 compiler (${inputType}):`, finalPrompt.slice(0, 150));
+        lap('v2-compiler-done');
       }
     }
     lap('v2-engine-done');

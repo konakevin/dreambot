@@ -35,27 +35,32 @@ export function extractTraits(description: string): Traits {
   const ageMatch = description.match(/(\d{1,2}-?\d{0,2})\s*year/i);
   const age = ageMatch ? ageMatch[1] : 'adult';
 
-  const hairMatch = description.match(
-    /(?:hair|hair color)[:\s]*([^,.\n]+)|(\w+(?:\s+\w+)?(?:\s+to\s+\w+)?)\s+(?:color\s+)?hair/i
+  // Hair: look for "Hair:" label first, then "X hair" pattern
+  const hairLabelMatch = description.match(/hair[:\s]+([^.]+)/i);
+  const hairInlineMatch = description.match(
+    /([\w-]+(?:\s+[\w-]+)?(?:\s+to\s+[\w-]+)?)\s+(?:color\s+)?hair/i
   );
-  const hairColor = hairMatch
-    ? (hairMatch[1] || hairMatch[2] || 'dark').trim().toLowerCase()
-    : 'dark';
+  const rawHair = hairLabelMatch
+    ? hairLabelMatch[1]
+    : hairInlineMatch
+      ? hairInlineMatch[1] || ''
+      : '';
+  // Extract just the color words (first 3 words, skip lengthy descriptions)
+  const hairColor = rawHair.trim().toLowerCase().split(/\s+/).slice(0, 3).join(' ') || 'dark';
 
-  const eyeMatch = description.match(/(\w+(?:\s+\w+)?)\s+eyes/i);
+  // Eyes: capture hyphenated colors like "hazel-brown"
+  const eyeMatch = description.match(/([\w-]+(?:\s+[\w-]+)?)\s+eyes/i);
   const eyeColor = eyeMatch ? eyeMatch[1].toLowerCase() : 'brown';
 
   const facialHair = /beard|goatee|mustache|moustache/i.test(description) ? 'beard' : 'none';
 
-  const buildMatch = description.match(
-    /(?:build|frame|physique)[:\s]*(\w+)|(\w+)\s+(?:build|frame|physique)/i
-  );
-  const build = buildMatch
-    ? (buildMatch[1] || buildMatch[2] || 'average').toLowerCase()
-    : /athletic|fit/i.test(description)
-      ? 'athletic'
-      : /heavy|large|stocky/i.test(description)
-        ? 'stocky'
+  // Build: check for common build words directly, avoid matching "approximately"
+  const build = /athletic|fit/i.test(lower)
+    ? 'athletic'
+    : /heavy|large|stocky/i.test(lower)
+      ? 'stocky'
+      : /slim|thin|lean|slender/i.test(lower)
+        ? 'slim'
         : 'average';
 
   return { gender, age, hairColor, eyeColor, facialHair, build };
