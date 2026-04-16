@@ -1125,20 +1125,37 @@ Output ONLY the prompt.`;
           .replace(/^#.*\n/gm, '')
           .replace(/\*\*/g, '')
           .slice(0, 250);
-        console.log('[generate-dream] 🎭 SELF-INSERT TEXT: injecting cast description + face swap');
+
+        const isEmbodied = medium.characterRenderMode === 'embodied';
+        const mediumStyle = medium.key.replace(/_/g, ' ');
+        console.log(
+          `[generate-dream] 🎭 SELF-INSERT TEXT: ${isEmbodied ? 'embodied' : 'natural'} / faceSwap=${medium.faceSwaps}`
+        );
+
+        // Build character block — different for natural vs embodied
+        let characterBlock: string;
+        if (isEmbodied) {
+          const entity = buildRenderEntity(selfDesc, medium.characterRenderMode, medium.key);
+          characterBlock = `=== THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is) ===
+${entity.description}
+
+KEEP: gender, hair color, eye color, facial hair, build from the description above.`;
+        } else {
+          characterBlock = `=== THE MAIN CHARACTER (THIS IS THE USER — render them EXACTLY as described, especially their gender) ===
+${selfDesc}
+
+GENDER LOCK — non-negotiable: the character's gender, sex, age, build, ethnicity, and core features above are SACRED. If they are male, render them MALE with masculine features and masculine clothing. If they are female, render them FEMALE. NEVER swap genders. NEVER put a male character in a dress, gown, skirt, corset, or feminine bodice. NEVER feminize a masculine subject's hair or features. NEVER masculinize a feminine subject. The style below is ONLY a rendering treatment — it does not change who the character is.`;
+        }
 
         try {
           const selfBrief = `You are a cinematographer. Write a Flux AI prompt (60-80 words, comma-separated).
 
-=== THE MAIN CHARACTER (THIS IS THE USER — render them EXACTLY as described, especially their gender) ===
-${selfDesc}
-
-GENDER LOCK — non-negotiable: the character's gender, sex, age, build, ethnicity, and core features above are SACRED. If they are male, render them MALE with masculine features and masculine clothing. If they are female, render them FEMALE. NEVER swap genders. NEVER put a male character in a dress, gown, skirt, corset, or feminine bodice. NEVER feminize a masculine subject's hair or features. NEVER masculinize a feminine subject. The style below is ONLY a rendering treatment — it does not change who the character is.
+${characterBlock}
 
 === SCENE — the user asked for ===
 ${userSubject}
 
-=== STYLE (apply this aesthetic to the character above, respecting their gender) ===
+=== STYLE (apply this aesthetic to the character above${isEmbodied ? '' : ', respecting their gender'}) ===
 ${medium.directive}
 
 === MOOD ===
@@ -1171,7 +1188,7 @@ Output ONLY the prompt.`;
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
-            engine: 'v2-self-insert-text',
+            engine: isEmbodied ? 'v2-self-insert-embodied' : 'v2-self-insert-text',
             faceSwap: medium.faceSwaps,
           };
           console.log('[generate-dream] Self-insert prompt:', finalPrompt.slice(0, 150));
