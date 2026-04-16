@@ -19,11 +19,13 @@
  *   </ScreenLayout>
  */
 
-import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useSwipeBack } from '@/hooks/useSwipeBack';
+import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { colors } from '@/constants/theme';
 import { HEADER_H_PAD, HEADER_V_PAD, NAV_ICON_SIZE, NAV_HIT_SLOP } from '@/constants/layout';
 
@@ -56,7 +58,7 @@ export function ScreenLayout({
   children,
 }: ScreenLayoutProps) {
   const enableSwipe = swipeBack ?? header === 'back';
-  const { translateX, panHandlers } = useSwipeBack();
+  const { gesture, animatedStyle } = useStandardSwipeBack({ disabled: !enableSwipe });
 
   const content = (
     <SafeAreaView style={[s.root, { backgroundColor: bg }]} edges={edges}>
@@ -95,9 +97,9 @@ export function ScreenLayout({
   if (!enableSwipe) return content;
 
   return (
-    <Animated.View style={[s.swipeRoot, { transform: [{ translateX }] }]} {...panHandlers}>
-      {content}
-    </Animated.View>
+    <GestureDetector gesture={gesture}>
+      <Animated.View style={[s.swipeRoot, animatedStyle]}>{content}</Animated.View>
+    </GestureDetector>
   );
 }
 

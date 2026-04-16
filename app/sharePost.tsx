@@ -10,10 +10,11 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-  Animated,
   Share,
   InteractionManager,
 } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -22,7 +23,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/auth';
 import { useShareableVibers, type ShareableViber } from '@/hooks/useShareableVibers';
 import { useSendShare } from '@/hooks/useSendShare';
-import { useSheetDismiss } from '@/hooks/useSheetDismiss';
+import { useStandardSheetDismiss } from '@/hooks/gestures/useStandardSheetDismiss';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -82,7 +83,7 @@ export default function SharePostScreen() {
   const { mutate: sendShare, isPending } = useSendShare();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
-  const { translateY, panHandlers } = useSheetDismiss();
+  const { gesture, animatedStyle } = useStandardSheetDismiss();
   const insets = useSafeAreaInsets();
 
   const filtered = useMemo(() => {
@@ -132,105 +133,111 @@ export default function SharePostScreen() {
       <Pressable style={styles.backdrop} onPress={() => router.back()} />
 
       {/* Bottom sheet */}
-      <Animated.View {...panHandlers} style={[styles.sheet, { transform: [{ translateY }] }]}>
-        {/* Drag handle */}
-        <View style={styles.handleRow}>
-          <View style={styles.handle} />
-        </View>
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={[styles.sheet, animatedStyle]}>
+          {/* Drag handle */}
+          <View style={styles.handleRow}>
+            <View style={styles.handle} />
+          </View>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-            <Ionicons name="close" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Share</Text>
-          <TouchableOpacity onPress={handleCopyLink} style={styles.linkButton} activeOpacity={0.7}>
-            <View style={styles.linkIcon}>
-              <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
-            </View>
-            <Text style={styles.linkLabel}>Copy</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Search */}
-        <View style={styles.searchWrap}>
-          <Ionicons
-            name="search"
-            size={16}
-            color={colors.textSecondary}
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search friends"
-            placeholderTextColor={colors.textSecondary}
-            value={search}
-            onChangeText={setSearch}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          {search.length > 0 && (
-            <TouchableOpacity onPress={() => setSearch('')} hitSlop={8}>
-              <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+              <Ionicons name="close" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
-          )}
-        </View>
+            <Text style={styles.headerTitle}>Share</Text>
+            <TouchableOpacity
+              onPress={handleCopyLink}
+              style={styles.linkButton}
+              activeOpacity={0.7}
+            >
+              <View style={styles.linkIcon}>
+                <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
+              </View>
+              <Text style={styles.linkLabel}>Copy</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* Grid */}
-        <FlatList
-          data={filtered}
-          keyExtractor={(item) => item.userId}
-          numColumns={COLUMNS}
-          contentContainerStyle={styles.grid}
-          renderItem={({ item }) => (
-            <ViberBubble
-              item={item}
-              selected={selected.has(item.userId)}
-              onToggle={() => toggleViber(item.userId)}
+          {/* Search */}
+          <View style={styles.searchWrap}>
+            <Ionicons
+              name="search"
+              size={16}
+              color={colors.textSecondary}
+              style={styles.searchIcon}
             />
-          )}
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              {isLoading ? (
-                <ActivityIndicator color={colors.textSecondary} />
-              ) : search.length > 0 ? (
-                <Text style={styles.emptyText}>No matches</Text>
-              ) : (
-                <>
-                  <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
-                  <Text style={styles.emptyText}>No friends to share with yet</Text>
-                </>
-              )}
-            </View>
-          }
-          keyboardShouldPersistTaps="handled"
-        />
-
-        {/* Send button — bottom anchored */}
-        <View style={[styles.sendRow, { paddingBottom: insets.bottom + 16 }]}>
-          <TouchableOpacity
-            style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
-            onPress={handleSend}
-            disabled={selected.size === 0 || isPending}
-            activeOpacity={0.7}
-          >
-            {isPending ? (
-              <ActivityIndicator size="small" color="#000000" />
-            ) : (
-              <Text
-                style={[
-                  styles.sendButtonText,
-                  selected.size === 0 && styles.sendButtonTextDisabled,
-                ]}
-              >
-                {selected.size > 0
-                  ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
-                  : 'Select friends to send'}
-              </Text>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search friends"
+              placeholderTextColor={colors.textSecondary}
+              value={search}
+              onChangeText={setSearch}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            {search.length > 0 && (
+              <TouchableOpacity onPress={() => setSearch('')} hitSlop={8}>
+                <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
+          </View>
+
+          {/* Grid */}
+          <FlatList
+            data={filtered}
+            keyExtractor={(item) => item.userId}
+            numColumns={COLUMNS}
+            contentContainerStyle={styles.grid}
+            renderItem={({ item }) => (
+              <ViberBubble
+                item={item}
+                selected={selected.has(item.userId)}
+                onToggle={() => toggleViber(item.userId)}
+              />
+            )}
+            ListEmptyComponent={
+              <View style={styles.empty}>
+                {isLoading ? (
+                  <ActivityIndicator color={colors.textSecondary} />
+                ) : search.length > 0 ? (
+                  <Text style={styles.emptyText}>No matches</Text>
+                ) : (
+                  <>
+                    <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
+                    <Text style={styles.emptyText}>No friends to share with yet</Text>
+                  </>
+                )}
+              </View>
+            }
+            keyboardShouldPersistTaps="handled"
+          />
+
+          {/* Send button — bottom anchored */}
+          <View style={[styles.sendRow, { paddingBottom: insets.bottom + 16 }]}>
+            <TouchableOpacity
+              style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
+              onPress={handleSend}
+              disabled={selected.size === 0 || isPending}
+              activeOpacity={0.7}
+            >
+              {isPending ? (
+                <ActivityIndicator size="small" color="#000000" />
+              ) : (
+                <Text
+                  style={[
+                    styles.sendButtonText,
+                    selected.size === 0 && styles.sendButtonTextDisabled,
+                  ]}
+                >
+                  {selected.size > 0
+                    ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
+                    : 'Select friends to send'}
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 }

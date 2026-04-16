@@ -1,11 +1,12 @@
 import { useMemo, useCallback } from 'react';
-import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native';
-import ReAnimated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useAlbumStore } from '@/store/album';
-import { useSwipeBack } from '@/hooks/useSwipeBack';
+import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
@@ -19,7 +20,7 @@ export default function PhotoDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const user = useAuthStore((s) => s.user);
   const albumIds = useAlbumStore((s) => s.ids);
-  const { translateX, panHandlers } = useSwipeBack();
+  const { gesture: swipeBackGesture, animatedStyle: swipeBackStyle } = useStandardSwipeBack();
   const queryClient = useQueryClient();
 
   const { data: posts = [], isLoading } = useAlbumPosts(albumIds, id);
@@ -93,27 +94,29 @@ export default function PhotoDetailScreen() {
   );
 
   return (
-    <Animated.View {...panHandlers} style={[s.root, { transform: [{ translateX }] }]}>
-      <StatusBar hidden />
-      <ReAnimated.View style={[s.backButton, overlayStyle]}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <View style={s.backCircle}>
-            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-          </View>
-        </TouchableOpacity>
-      </ReAnimated.View>
+    <GestureDetector gesture={swipeBackGesture}>
+      <Animated.View style={[s.root, swipeBackStyle]}>
+        <StatusBar hidden />
+        <Animated.View style={[s.backButton, overlayStyle]}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+            <View style={s.backCircle}>
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
 
-      <FullScreenFeed
-        posts={posts}
-        isLoading={isLoading}
-        initialIndex={initialIndex}
-        disableSwipeToProfile
-        hideTabBar
-        showVisibilityToggle
-        onTogglePosted={handleTogglePosted}
-        onHudToggle={handleHudToggle}
-      />
-    </Animated.View>
+        <FullScreenFeed
+          posts={posts}
+          isLoading={isLoading}
+          initialIndex={initialIndex}
+          disableSwipeToProfile
+          hideTabBar
+          showVisibilityToggle
+          onTogglePosted={handleTogglePosted}
+          onHudToggle={handleHudToggle}
+        />
+      </Animated.View>
+    </GestureDetector>
   );
 }
 

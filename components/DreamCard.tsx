@@ -19,7 +19,7 @@ import {
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { timeAgo } from '@/lib/timeAgo';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -28,8 +28,8 @@ import Animated, {
   withSpring,
   withRepeat,
   withDelay,
-  runOnJS,
 } from 'react-native-reanimated';
+import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -261,21 +261,6 @@ export const DreamCard = memo(function DreamCard({
     opacity: heartOpacity.value,
   }));
 
-  // Pinch to zoom — Instagram-style: stays zoomed, pan to explore, double-tap resets
-  const zoomScale = useSharedValue(1);
-  const savedScale = useSharedValue(1);
-  const zoomTransX = useSharedValue(0);
-  const zoomTransY = useSharedValue(0);
-  const savedTransX = useSharedValue(0);
-  const savedTransY = useSharedValue(0);
-  const imageStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: zoomTransX.value },
-      { translateY: zoomTransY.value },
-      { scale: zoomScale.value },
-    ],
-  }));
-
   function goToProfile() {
     if (swiped.current) return;
     swiped.current = true;
@@ -289,6 +274,17 @@ export const DreamCard = memo(function DreamCard({
     }, 500);
   }
 
+  // Pinch-to-zoom + swipe-left-to-profile. Single composed gesture — all
+  // threshold/animation tuning lives in hooks/gestures/useCardGestures.ts.
+  const {
+    gesture: cardGesture,
+    imageTransformStyle,
+    scale: savedScale,
+  } = useCardGestures({
+    onSwipeLeft: goToProfile,
+    disableSwipeLeft: disableSwipeToProfile,
+  });
+
   const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function handleTap() {
@@ -300,14 +296,10 @@ export const DreamCard = memo(function DreamCard({
         singleTapTimer.current = null;
       }
 
-      // If zoomed, reset zoom instead of toggling like
-      if (savedScale.value > 1) {
-        zoomScale.value = withTiming(1, { duration: 200 });
-        zoomTransX.value = withTiming(0, { duration: 200 });
-        zoomTransY.value = withTiming(0, { duration: 200 });
-        savedScale.value = 1;
-        savedTransX.value = 0;
-        savedTransY.value = 0;
+      // If still zoomed (e.g. pinch animation hasn't settled), skip toggling like
+      // — user was trying to reset zoom, not double-tap. Pinch release auto-resets
+      // scale via useCardGestures.
+      if (savedScale.value > 1.05) {
         lastTap.current = 0;
         return;
       }
@@ -348,65 +340,10 @@ export const DreamCard = memo(function DreamCard({
     handleImageLongPress({ id: item.id, imageUrl: item.image_url, onDelete });
   }
 
-  // Gestures
-  const swipeGesture = Gesture.Pan()
-    .activeOffsetX([-8, 8])
-    .failOffsetY([-15, 15])
-    .enabled(!disableSwipeToProfile && savedScale.value <= 1)
-    .onEnd((e) => {
-      if (e.translationX < -25 || e.velocityX < -200) {
-        runOnJS(goToProfile)();
-      }
-    });
-
-  // Pan when zoomed — slide around the image (only active when zoomed in)
-  const zoomPanGesture = Gesture.Pan()
-    .minPointers(2)
-    .onStart(() => {
-      savedTransX.value = zoomTransX.value;
-      savedTransY.value = zoomTransY.value;
-    })
-    .onUpdate((e) => {
-      if (savedScale.value <= 1) return;
-      // Clamp pan to image boundaries
-      const maxX = ((savedScale.value - 1) * SCREEN_WIDTH) / 2;
-      const maxY = ((savedScale.value - 1) * SCREEN_HEIGHT) / 2;
-      zoomTransX.value = Math.max(-maxX, Math.min(maxX, savedTransX.value + e.translationX));
-      zoomTransY.value = Math.max(-maxY, Math.min(maxY, savedTransY.value + e.translationY));
-    });
-
-  const focalX = useSharedValue(0);
-  const focalY = useSharedValue(0);
-
-  const pinchGesture = Gesture.Pinch()
-    .onStart((e) => {
-      focalX.value = e.focalX - SCREEN_WIDTH / 2;
-      focalY.value = e.focalY - SCREEN_HEIGHT / 2;
-    })
-    .onUpdate((e) => {
-      const newScale = Math.max(1, Math.min(5, savedScale.value * e.scale));
-      zoomScale.value = newScale;
-      // Pan toward focal point as you zoom
-      zoomTransX.value = savedTransX.value + focalX.value * (1 - e.scale);
-      zoomTransY.value = savedTransY.value + focalY.value * (1 - e.scale);
-    })
-    .onEnd(() => {
-      // Always animate back to full size on release — no bounce
-      zoomScale.value = withTiming(1, { duration: 200 });
-      zoomTransX.value = withTiming(0, { duration: 200 });
-      zoomTransY.value = withTiming(0, { duration: 200 });
-      savedScale.value = 1;
-      savedTransX.value = 0;
-      savedTransY.value = 0;
-    });
-
-  const composed = Gesture.Simultaneous(
-    swipeGesture,
-    Gesture.Simultaneous(pinchGesture, zoomPanGesture)
-  );
+  // Gestures composed by useCardGestures above — swipe-left, pinch, two-finger pan.
 
   return (
-    <GestureDetector gesture={composed}>
+    <GestureDetector gesture={cardGesture}>
       <Animated.View style={[s.card, cardHeight ? { height: cardHeight } : undefined]}>
         <Pressable
           style={StyleSheet.absoluteFill}
@@ -414,7 +351,7 @@ export const DreamCard = memo(function DreamCard({
           onLongPress={handleLongPress}
           delayLongPress={500}
         >
-          <Animated.View style={[StyleSheet.absoluteFill, imageStyle]}>
+          <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
             <Image
               source={{ uri: feedImageUrl(item.image_url) }}
               style={s.fullImage}

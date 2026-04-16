@@ -20,6 +20,7 @@ import { ToastHost } from '@/components/Toast';
 
 import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
+import { SCREEN_PRESETS } from '@/constants/navigationPresets';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -356,48 +357,27 @@ export default function RootLayout() {
               <Stack.Screen name="index" />
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="(auth)" />
-              <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
-              <Stack.Screen
-                name="settings"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
-                name="photo/[id]"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
-                name="user/[userId]"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
+              <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
+              <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+              <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+              <Stack.Screen name="user/[userId]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
               <Stack.Screen
                 name="sharePost"
                 options={{
-                  presentation: 'transparentModal',
-                  gestureEnabled: true,
-                  animation: 'fade',
+                  ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
                   contentStyle: { backgroundColor: 'transparent' },
                 }}
               />
               <Stack.Screen
                 name="comments"
                 options={{
-                  presentation: 'formSheet',
-                  gestureEnabled: true,
+                  ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
                   contentStyle: { backgroundColor: '#0F0F1A' },
                 }}
               />
-              <Stack.Screen
-                name="sparkleStore"
-                options={{ presentation: 'card', gestureEnabled: true }}
-              />
-              <Stack.Screen
-                name="dream/loading"
-                options={{ presentation: 'card', gestureEnabled: false }}
-              />
-              <Stack.Screen
-                name="dream/reveal"
-                options={{ presentation: 'card', gestureEnabled: false }}
-              />
+              <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+              <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
+              <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
             </Stack>
             <StatusBar style="light" />
             <ToastHost />

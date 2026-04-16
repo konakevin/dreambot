@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
+import { ACTIVE_OFFSET, SWIPE_DISMISS_DISTANCE, VELOCITY_THRESHOLD } from '@/constants/gestures';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.55;
@@ -72,15 +73,22 @@ export function FilterPickerSheet({
     }).start(() => onClose());
   }, [onClose]);
 
+  // Local PanResponder (not useStandardSheetDismiss) because this sheet is
+  // visibility-controlled via a `visible` prop with a custom spring mount
+  // animation — not a router-dismissed screen. Thresholds match the shared
+  // constants in @/constants/gestures so swipe feel is consistent with
+  // router-based sheets.
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
-      onMoveShouldSetPanResponder: (_, gs) => gs.dy > 8 && Math.abs(gs.dy) > Math.abs(gs.dx) * 1.5,
+      onMoveShouldSetPanResponder: (_, gs) =>
+        gs.dy > ACTIVE_OFFSET && Math.abs(gs.dy) > Math.abs(gs.dx) * 1.5,
       onPanResponderMove: (_, gs) => {
         if (gs.dy > 0) translateY.setValue(gs.dy);
       },
       onPanResponderRelease: (_, gs) => {
-        if (gs.dy > 80 || gs.vy > 0.3) {
+        // VELOCITY_THRESHOLD is px/sec; PanResponder's vy is px/ms — convert.
+        if (gs.dy > SWIPE_DISMISS_DISTANCE || gs.vy * 1000 > VELOCITY_THRESHOLD) {
           dismiss();
         } else {
           Animated.spring(translateY, {

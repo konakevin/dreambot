@@ -336,6 +336,7 @@ Deno.serve(async (req) => {
     | undefined;
   const force_medium = (body as Record<string, unknown>).force_medium as string | undefined;
   const force_vibe = (body as Record<string, unknown>).force_vibe as string | undefined;
+  const force_model = (body as Record<string, unknown>).force_model as string | undefined;
   const force_nightly_path = (body as Record<string, unknown>).force_nightly_path as
     | string
     | undefined;
@@ -1467,10 +1468,11 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
 
   finalPrompt = sanitizePrompt(finalPrompt);
 
-  const { model: pickedModel } = pickModel(effectiveMode, finalPrompt, resolvedMediumKey);
+  const autoPicked = pickModel(effectiveMode, finalPrompt, resolvedMediumKey);
+  const pickedModel = force_model || autoPicked.model;
   logAxes.model = pickedModel;
   console.log(
-    `[generate-dream] User ${userId}, mode=${effectiveMode}, model=${pickedModel}, prompt=${finalPrompt.slice(0, 80)}...`
+    `[generate-dream] User ${userId}, mode=${effectiveMode}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
   );
 
   // ── Generate image via Replicate ──────────────────────────────────────────
@@ -1480,7 +1482,8 @@ Write an image prompt (max 50 words). Start with the art medium. You can go macr
       effectiveMode,
       finalPrompt,
       effectiveInputImage,
-      REPLICATE_TOKEN
+      REPLICATE_TOKEN,
+      pickedModel
     );
     lap('image-gen');
     console.log(`[generate-dream] ⏱ Image generation complete`);
@@ -1812,17 +1815,20 @@ function pickModel(
     }
   }
 
-  // Default: Flux Dev
-  return { model: 'black-forest-labs/flux-dev', inputOverrides: {} };
+  // Default: Flux 2 Dev (cheap, handles full-length prompts via T5 encoder)
+  return { model: 'black-forest-labs/flux-2-dev', inputOverrides: {} };
 }
 
 async function generateImage(
   mode: string,
   prompt: string,
   inputImage: string | undefined,
-  replicateToken: string
+  replicateToken: string,
+  modelOverride?: string
 ): Promise<string> {
-  const { model, inputOverrides } = pickModel(mode, prompt);
+  const picked = pickModel(mode, prompt);
+  const model = modelOverride || picked.model;
+  const inputOverrides = modelOverride ? {} : picked.inputOverrides;
   const isSDXL = model === 'sdxl';
   const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
 

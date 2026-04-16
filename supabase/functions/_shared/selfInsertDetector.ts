@@ -49,6 +49,11 @@ const TRIGGERS = [
   /\bshow me on\b/i,
   /\bportrait of me\b/i,
   /\bselfie\b/i,
+  // Bare "me [verb]ing" — matches "me sitting", "me walking", "me holding",
+  // "me standing", "me running", etc. Natural phrasing users actually type.
+  // False positives (give me, tell me, let me see, send me, teach me) are
+  // already caught above and return early.
+  /\bme \w+ing\b/i,
 ];
 
 export function detectSelfInsert(prompt: string): SelfInsertResult {
@@ -68,6 +73,9 @@ export function detectSelfInsert(prompt: string): SelfInsertResult {
         .replace(/\b(put|place|show)\s+me\b/gi, '')
         .replace(/\bi'?m\b/gi, 'a person is')
         .replace(/\bmyself\b/gi, 'a person')
+        // Bare "me [verb]ing" at prompt start or after a comma — replace with
+        // "a person [verb]ing" so Sonnet/Flux have a grammatical subject.
+        .replace(/(^|,\s*)me\s+(\w+ing)\b/gi, '$1a person $2')
         .replace(/\bmy face\b/gi, '')
         .replace(/\bselfie\b/gi, 'portrait')
         .replace(/\s+/g, ' ')
