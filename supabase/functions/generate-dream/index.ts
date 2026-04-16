@@ -1132,34 +1132,38 @@ Output ONLY the prompt.`;
           `[generate-dream] 🎭 SELF-INSERT TEXT: ${isEmbodied ? 'embodied' : 'natural'} / faceSwap=${medium.faceSwaps}`
         );
 
-        // Build character block — different for natural vs embodied
+        // Build character block — different for natural vs embodied.
+        // Character block is rendered LAST in the brief so Flux commits to the
+        // style first and treats the cast description as a modifier, not the
+        // primary subject. Putting the cast description first causes Flux to
+        // render a photograph regardless of the style tokens.
         let characterBlock: string;
         if (isEmbodied) {
           const entity = buildRenderEntity(selfDesc, medium.characterRenderMode, medium.key);
-          characterBlock = `=== THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is) ===
+          characterBlock = `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):
 ${entity.description}
 
 KEEP: gender, hair color, eye color, facial hair, build from the description above.`;
         } else {
-          characterBlock = `=== THE MAIN CHARACTER (THIS IS THE USER — render them EXACTLY as described, especially their gender) ===
+          characterBlock = `THE MAIN CHARACTER (this is the user — match their description EXACTLY):
 ${selfDesc}
 
-GENDER LOCK — non-negotiable: the character's gender, sex, age, build, ethnicity, and core features above are SACRED. If they are male, render them MALE with masculine features and masculine clothing. If they are female, render them FEMALE. NEVER swap genders. NEVER put a male character in a dress, gown, skirt, corset, or feminine bodice. NEVER feminize a masculine subject's hair or features. NEVER masculinize a feminine subject. The style below is ONLY a rendering treatment — it does not change who the character is.`;
+CRITICAL: Preserve the character's EXACT sex, age, build, and features as described above. Do NOT change their gender. Render them with masculine features if male, feminine features if female. The style above is a rendering treatment — it does not change who the character is.`;
         }
 
         try {
-          const selfBrief = `You are a cinematographer. Write a Flux AI prompt (60-80 words, comma-separated).
+          const selfBrief = `You are a ${mediumStyle} artist. Write a Flux AI prompt (60-80 words, comma-separated).
+
+MEDIUM (start with this EXACTLY): ${medium.fluxFragment}
+
+STYLE GUIDE:
+${medium.directive}
+
+SCENE — the user asked for: ${userSubject}
 
 ${characterBlock}
 
-=== SCENE — the user asked for ===
-${userSubject}
-
-=== STYLE (apply this aesthetic to the character above${isEmbodied ? '' : ', respecting their gender'}) ===
-${medium.directive}
-
-=== MOOD ===
-${vibe.directive}
+MOOD: ${vibe.directive}
 
 COMPOSITION — THIS IS CRITICAL:
 ${(() => {
@@ -1174,7 +1178,7 @@ ${(() => {
 2. Face must be CLEARLY VISIBLE and well-lit — no tiny faces, no silhouettes, no faces in shadow
 3. NEVER use full body shots, extreme wide shots, aerial views, or show the person tiny in a vast landscape
 4. Show the character DOING something — interacting with objects, environment, or props from the scene
-5. Name specific materials, textures, light sources
+5. Name specific materials, textures, light sources — but apply them through the MEDIUM's rendering (e.g. "thick oil paint strokes depicting rough bark" not "photograph of rough bark")
 6. End with: no text, no words, no letters, no watermarks, hyper detailed
 Output ONLY the prompt.`;
 
