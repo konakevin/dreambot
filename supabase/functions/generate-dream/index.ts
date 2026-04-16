@@ -1121,10 +1121,12 @@ Output ONLY the prompt.`;
 
       if (mentionsSelf && userSubject) {
         // ── SELF-INSERT TEXT PATH: user's description + face swap from cast photo ──
+        // Full description — no truncation. The 250-char cap was silently
+        // dropping hair/beard/build info for embodied trait extraction.
         const selfDesc = selfCast.description
           .replace(/^#.*\n/gm, '')
           .replace(/\*\*/g, '')
-          .slice(0, 250);
+          .trim();
 
         const isEmbodied = medium.characterRenderMode === 'embodied';
         const mediumStyle = medium.key.replace(/_/g, ' ');
@@ -1134,6 +1136,7 @@ Output ONLY the prompt.`;
 
         // Build character block — three branches:
         //   1. Embodied (LEGO/clay/etc.) → medium-native entity from traits
+        //      (uses FULL description so trait regex captures hair/beard/build)
         //   2. Natural + face-swap → MINIMAL block, no cast description
         //      (face swap restores identity post-hoc; the photographic cast
         //      prose was pulling Flux toward photorealism and collapsing the
@@ -1153,7 +1156,9 @@ KEEP: gender, hair color, eye color, facial hair, build from the description abo
 
 IMPORTANT — DO NOT describe the character's face, skin tone, pores, eye color, hair color, or facial features. Identity will be composited from a reference photo AFTER rendering. Describe only what the body is doing in the scene — pose, gesture, interaction with the environment. Render the figure entirely in the ${mediumStyle} medium's style — maintain the medium's texture and technique across the face and skin just as across the rest of the image. No photoreal skin pores, no photographic realism on the subject; the face is a ${mediumStyle} rendering like everything else.
 
-ANATOMY — non-negotiable: natural proportions, NOT a fitness model. No six-pack abs, no exaggerated musculature, no bulging biceps unless the user specifically asked. Two arms, two legs, one head, two hands each with five fingers correctly placed, normal-length limbs, symmetrical features. The figure is clothed (shirt/top, pants/skirt/dress appropriate to the scene) — never bare-chested or partially nude unless the user explicitly asked. Hands should be in natural positions — not distorted, not fused, not extra digits.`;
+ANATOMY — non-negotiable: natural proportions, NOT a fitness model. No six-pack abs, no exaggerated musculature, no bulging biceps unless the user specifically asked. Two arms, two legs, one head, two hands each with five fingers correctly placed, normal-length limbs, symmetrical features. The figure is clothed (shirt/top, pants/skirt/dress appropriate to the scene) — never bare-chested or partially nude unless the user explicitly asked.
+
+HANDS — prefer not to show hands at all if they aren't central to the scene (hands in pockets, behind back, at sides, out of frame, or obscured by clothing/environment). If hands MUST be shown, describe them in natural resting positions — palm down on a surface, fingers relaxed, never bent backwards, never gripping, never reaching toward the viewer, never interlaced. Avoid close-up hand detail. Flux renders hands poorly — the safest choice is to keep them minimal or hidden.`;
         } else {
           characterBlock = `THE MAIN CHARACTER (this is the user — match their description EXACTLY):
 ${selfDesc}
