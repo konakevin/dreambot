@@ -145,7 +145,19 @@ export default function HomeScreen() {
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
   const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
-  const feedPosts = data?.pages.flat() ?? [];
+  // Dedup by id in case the paginated RPC's cursor boundary lets the same post
+  // appear on two adjacent pages (can happen when many posts share the same
+  // feed_score and the tiebreaker overlaps). Kills both data-level duplicates
+  // and the "reappearing post every ~10 scrolls" visual bug they cause.
+  const feedPosts = useMemo(() => {
+    const rows = data?.pages.flat() ?? [];
+    const seen = new Set<string>();
+    return rows.filter((r) => {
+      if (seen.has(r.id)) return false;
+      seen.add(r.id);
+      return true;
+    });
+  }, [data]);
   const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({

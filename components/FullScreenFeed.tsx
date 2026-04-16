@@ -255,7 +255,11 @@ export function FullScreenFeed({
         windowSize={7}
         maxToRenderPerBatch={5}
         initialNumToRender={3}
-        removeClippedSubviews={true}
+        // removeClippedSubviews was set to true on 2026-04-08 but aggressive
+        // cell recycling caused the "duplicate post every ~10 scrolls" visual
+        // glitch. Flipping back to false. If the feed starts flickering again
+        // in-practice, re-enable and investigate the underlying issue instead.
+        removeClippedSubviews={false}
         initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
         getItemLayout={(_, index) => ({
           length: pageHeight,
