@@ -1121,12 +1121,10 @@ Output ONLY the prompt.`;
 
       if (mentionsSelf && userSubject) {
         // ── SELF-INSERT TEXT PATH: user's description + face swap from cast photo ──
-        // Full description (no truncation): embodied buildRenderEntity() trait regex
-        // needs hair/beard/build info that often appears past 250 chars.
         const selfDesc = selfCast.description
           .replace(/^#.*\n/gm, '')
           .replace(/\*\*/g, '')
-          .trim();
+          .slice(0, 250);
 
         const isEmbodied = medium.characterRenderMode === 'embodied';
         const mediumStyle = medium.key.replace(/_/g, ' ');
