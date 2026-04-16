@@ -1121,12 +1121,17 @@ Output ONLY the prompt.`;
 
       if (mentionsSelf && userSubject) {
         // ── SELF-INSERT TEXT PATH: user's description + face swap from cast photo ──
-        // Full description — no truncation. The 250-char cap was silently
-        // dropping hair/beard/build info for embodied trait extraction.
-        const selfDesc = selfCast.description
+        // Two versions of the cast description:
+        //   - fullSelfDesc: untruncated, used ONLY by buildRenderEntity's trait
+        //     regex for embodied mediums (hair/beard/build info often past 250).
+        //   - selfDesc: truncated to 250 chars, used where it lands in the brief
+        //     as prose (natural + no-face-swap path). Keeps brief compact so
+        //     scene/composition instructions don't get compressed out by Sonnet.
+        const fullSelfDesc = selfCast.description
           .replace(/^#.*\n/gm, '')
           .replace(/\*\*/g, '')
           .trim();
+        const selfDesc = fullSelfDesc.slice(0, 250);
 
         const isEmbodied = medium.characterRenderMode === 'embodied';
         const mediumStyle = medium.key.replace(/_/g, ' ');
@@ -1145,7 +1150,7 @@ Output ONLY the prompt.`;
         //      won't restore identity, so Flux needs the features)
         let characterBlock: string;
         if (isEmbodied) {
-          const entity = buildRenderEntity(selfDesc, medium.characterRenderMode, medium.key);
+          const entity = buildRenderEntity(fullSelfDesc, medium.characterRenderMode, medium.key);
           characterBlock = `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):
 ${entity.description}
 
