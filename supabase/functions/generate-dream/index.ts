@@ -1132,11 +1132,14 @@ Output ONLY the prompt.`;
           `[generate-dream] 🎭 SELF-INSERT TEXT: ${isEmbodied ? 'embodied' : 'natural'} / faceSwap=${medium.faceSwaps}`
         );
 
-        // Build character block — different for natural vs embodied.
-        // Character block is rendered LAST in the brief so Flux commits to the
-        // style first and treats the cast description as a modifier, not the
-        // primary subject. Putting the cast description first causes Flux to
-        // render a photograph regardless of the style tokens.
+        // Build character block — three branches:
+        //   1. Embodied (LEGO/clay/etc.) → medium-native entity from traits
+        //   2. Natural + face-swap → MINIMAL block, no cast description
+        //      (face swap restores identity post-hoc; the photographic cast
+        //      prose was pulling Flux toward photorealism and collapsing the
+        //      medium style across the face and body)
+        //   3. Natural + no face-swap → full cast description (face swap
+        //      won't restore identity, so Flux needs the features)
         let characterBlock: string;
         if (isEmbodied) {
           const entity = buildRenderEntity(selfDesc, medium.characterRenderMode, medium.key);
@@ -1144,6 +1147,11 @@ Output ONLY the prompt.`;
 ${entity.description}
 
 KEEP: gender, hair color, eye color, facial hair, build from the description above.`;
+        } else if (medium.faceSwaps) {
+          const gender = /\b(woman|female|girl)\b/i.test(selfDesc) ? 'female' : 'male';
+          characterBlock = `THE MAIN CHARACTER: a ${gender} figure in the scene.
+
+IMPORTANT — DO NOT describe the character's face, skin tone, pores, eye color, hair color, or facial features. Identity will be composited from a reference photo AFTER rendering. Describe only what the body is doing in the scene — pose, gesture, interaction with the environment. Render the figure entirely in the ${mediumStyle} medium's style — maintain the medium's texture and technique across the face and skin just as across the rest of the image. No photoreal skin pores, no photographic realism on the subject; the face is a ${mediumStyle} rendering like everything else.`;
         } else {
           characterBlock = `THE MAIN CHARACTER (this is the user — match their description EXACTLY):
 ${selfDesc}
