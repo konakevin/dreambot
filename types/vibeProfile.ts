@@ -50,6 +50,8 @@ export interface DreamCastMember {
   thumb_url: string;
   /** AI-generated text description of appearance (set once at save time) */
   description: string;
+  /** Explicit gender from vision describe — used by castResolver for gender lock. Pets have no gender. */
+  gender?: 'male' | 'female';
   /** Relationship to the user — only for plus_one role. Affects dream context (romantic vs platonic). */
   relationship?: CastRelationship;
 }

@@ -162,6 +162,7 @@ const SLIDERS: {
 export function MoodSlidersStep({ onNext, onBack }: Props) {
   const moods = useOnboardingStore((s) => s.profile.moods);
   const setMoodAxis = useOnboardingStore((s) => s.setMoodAxis);
+  const isEditing = useOnboardingStore((s) => s.isEditing);
 
   return (
     <KeyboardAvoidingView
@@ -194,25 +195,27 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
         ))}
       </ScrollView>
 
-      <View style={s.footer}>
-        <View style={s.footerRow}>
-          <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-            <Text style={s.backBtnText}>Back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={s.nextBtn}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              onNext();
-            }}
-            activeOpacity={0.7}
-          >
-            <Text style={s.nextBtnText}>Next</Text>
-            <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-          </TouchableOpacity>
+      {!isEditing && (
+        <View style={s.footer}>
+          <View style={s.footerRow}>
+            <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
+              <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+              <Text style={s.backBtnText}>Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={s.nextBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                onNext();
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={s.nextBtnText}>Next</Text>
+              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
     </KeyboardAvoidingView>
   );
 }

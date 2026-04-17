@@ -64,6 +64,7 @@ const RENDER_MODE_FILTER = args.includes('--embodied')
   : args.includes('--natural')
     ? 'natural'
     : null;
+const CAST_ROLE = getArg('cast', null); // e.g. 'plus_one', 'self', 'pet' — routes via nightly-dreams with force_cast_role
 
 const MODELS = MODELS_FLAG
   ? MODELS_FLAG.split(',').map((tag) => {
@@ -156,7 +157,7 @@ async function main() {
           persist: true,
         };
         if (model.slug) body.force_model = model.slug;
-
+        if (CAST_ROLE) body.force_cast_role = CAST_ROLE;
         const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-dream`, {
           method: 'POST',
           headers: {

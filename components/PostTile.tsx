@@ -16,7 +16,9 @@ import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { useAlbumStore } from '@/store/album';
+import { supabase } from '@/lib/supabase';
 import type { DreamPostItem } from '@/components/DreamCard';
+import type { PostGridSource } from '@/components/PostGrid';
 import { thumbnailUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 
@@ -119,7 +121,7 @@ function TileSparkle({ index, total, seed }: { index: number; total: number; see
 interface PostTileProps {
   item: DreamPostItem;
   isOwn?: boolean;
-  albumIds?: string[];
+  albumSource?: PostGridSource;
   isHighlighted?: boolean;
   showPrivateBadge?: boolean;
 }
@@ -127,7 +129,7 @@ interface PostTileProps {
 export const PostTile = memo(function PostTile({
   item,
   isOwn = false,
-  albumIds,
+  albumSource,
   isHighlighted = false,
   showPrivateBadge = false,
 }: PostTileProps) {
@@ -147,13 +149,35 @@ export const PostTile = memo(function PostTile({
   }, [isWish]);
   const hazeStyle = useAnimatedStyle(() => ({ opacity: hazeOpacity.value }));
 
-  function handlePress() {
-    if (albumIds?.length) {
-      useAlbumStore.getState().setAlbum(albumIds);
-    } else {
-      useAlbumStore.getState().clearAlbum();
-    }
+  async function handlePress() {
+    // Navigate immediately — album IDs load in parallel
     nav.push(`/photo/${item.id}`);
+
+    if (!albumSource) {
+      useAlbumStore.getState().clearAlbum();
+      return;
+    }
+
+    // Fetch ALL post IDs for this source (lightweight — IDs only, no joins)
+    try {
+      let query = supabase.from('uploads').select('id').order('created_at', { ascending: false });
+
+      if (albumSource.type === 'user') {
+        query = query.eq('user_id', albumSource.userId).eq('is_public', true);
+      } else if (albumSource.type === 'own') {
+        query = query.eq('user_id', item.user_id);
+      } else if (albumSource.type === 'dreams') {
+        query = query.eq('user_id', item.user_id).eq('is_ai_generated', true);
+      }
+      // 'saved' source uses a different table (favorites) — fall back to empty album
+
+      const { data } = await query.limit(500);
+      if (data && data.length > 0) {
+        useAlbumStore.getState().setAlbum(data.map((r: { id: string }) => r.id));
+      }
+    } catch {
+      // Non-critical — fullscreen view falls back to single-post + context mode
+    }
   }
 
   function handleLongPress() {

@@ -4,15 +4,15 @@
  * restyle-photo).
  *
  * Priority order (first match wins):
- *   1. Explicit force model (test-mode override from `force_model` request field)
+ *   1. force_model (test-mode override)
  *   2. Kontext mode → flux-kontext-pro
- *   3. Medium-keyed SDXL always list (anime, pixels — SDXL renders these better)
- *   4. DB-stored preferred_model per medium (migration 118)
- *   5. Prompt-keyword SDXL fallback (only when no medium provided)
- *   6. Default: flux-2-dev (T5 encoder handles full-length prompts)
+ *   3. SDXL always list (anime, pixels)
+ *   4. model_overrides table — medium+vibe combo (random from pool)
+ *   5. dream_mediums.allowed_models — medium default (random from pool)
+ *   6. Keyword SDXL fallback (no medium provided)
+ *   7. Default: flux-2-dev
  *
- * DB reads are cached in-memory with a 60-second TTL so we don't hit the
- * database on every generation.
+ * Both DB tables are cached in-memory with a 60-second TTL.
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -32,66 +32,101 @@ const SDXL_OVERRIDES = {
 const SDXL_ALWAYS = new Set(['anime', 'pixels']);
 const DEFAULT_MODEL = 'black-forest-labs/flux-2-dev';
 
-// ── In-memory cache for preferred_model lookups ──────────────────────────
+// ── In-memory cache ─────────────────────────────────────────────────────
 
-let preferredModelCache: Map<string, string | null> = new Map();
+// medium key → allowed models array
+let mediumModelsCache: Map<string, string[]> = new Map();
+// "medium|vibe" → allowed models array
+let overrideCache: Map<string, string[]> = new Map();
 let cacheTimestamp = 0;
-const CACHE_TTL_MS = 60_000; // 1 minute
+const CACHE_TTL_MS = 60_000;
 
-async function getPreferredModel(mediumKey: string): Promise<string | null> {
-  const now = Date.now();
-  if (now - cacheTimestamp > CACHE_TTL_MS) {
-    // Refresh entire cache in one query
-    try {
-      const supabaseUrl = Deno.env.get('SUPABASE_URL');
-      const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-      if (supabaseUrl && serviceKey) {
-        const sb = createClient(supabaseUrl, serviceKey);
-        const { data } = await sb
-          .from('dream_mediums')
-          .select('key, preferred_model')
-          .eq('is_active', true);
-        preferredModelCache = new Map();
-        if (data) {
-          for (const row of data) {
-            preferredModelCache.set(row.key as string, (row.preferred_model as string) || null);
-          }
-        }
-        cacheTimestamp = now;
-      }
-    } catch (err) {
-      console.warn('[modelPicker] Cache refresh failed:', (err as Error).message);
-      // Continue with stale cache
-    }
-  }
-  return preferredModelCache.get(mediumKey) ?? null;
+function pickRandom(models: string[]): string {
+  return models[Math.floor(Math.random() * models.length)];
 }
 
-// ── Main export ──────────────────────────────────────────────────────────
+async function refreshCache(): Promise<void> {
+  const now = Date.now();
+  if (now - cacheTimestamp <= CACHE_TTL_MS) return;
+
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseUrl || !serviceKey) return;
+
+    const sb = createClient(supabaseUrl, serviceKey);
+
+    // Fetch both tables in parallel
+    const [mediumsRes, overridesRes] = await Promise.all([
+      sb.from('dream_mediums').select('key, allowed_models').eq('is_active', true),
+      sb.from('model_overrides').select('medium_key, vibe_key, allowed_models'),
+    ]);
+
+    const newMediumCache: Map<string, string[]> = new Map();
+    if (mediumsRes.data) {
+      for (const row of mediumsRes.data) {
+        const models = row.allowed_models as string[] | null;
+        if (models && models.length > 0) {
+          newMediumCache.set(row.key as string, models);
+        }
+      }
+    }
+    mediumModelsCache = newMediumCache;
+
+    const newOverrideCache: Map<string, string[]> = new Map();
+    if (overridesRes.data) {
+      for (const row of overridesRes.data) {
+        const models = row.allowed_models as string[] | null;
+        if (models && models.length > 0) {
+          newOverrideCache.set(`${row.medium_key}|${row.vibe_key}`, models);
+        }
+      }
+    }
+    overrideCache = newOverrideCache;
+
+    cacheTimestamp = now;
+  } catch (err) {
+    console.warn('[modelPicker] Cache refresh failed:', (err as Error).message);
+  }
+}
+
+// ── Main export ─────────────────────────────────────────────────────────
 
 export async function pickModel(
   mode: string,
   prompt: string,
-  mediumKey?: string
+  mediumKey?: string,
+  vibeKey?: string
 ): Promise<PickedModel> {
   if (mode === 'flux-kontext') {
     return { model: 'black-forest-labs/flux-kontext-pro', inputOverrides: {} };
   }
 
-  // SDXL routing by medium key (code-owned, not DB — these models need special input overrides)
+  // SDXL routing by medium key (code-owned — needs special input overrides)
   if (mediumKey && SDXL_ALWAYS.has(mediumKey)) {
     return { model: 'sdxl', inputOverrides: { ...SDXL_OVERRIDES } };
   }
 
-  // DB-stored preferred model per medium (migration 118)
-  if (mediumKey) {
-    const preferred = await getPreferredModel(mediumKey);
-    if (preferred) {
-      return { model: preferred, inputOverrides: {} };
+  // DB-driven routing
+  await refreshCache();
+
+  // Check medium+vibe override first (e.g., photography+coquette → flux-1 only)
+  if (mediumKey && vibeKey) {
+    const overrideModels = overrideCache.get(`${mediumKey}|${vibeKey}`);
+    if (overrideModels && overrideModels.length > 0) {
+      return { model: pickRandom(overrideModels), inputOverrides: {} };
     }
   }
 
-  // SDXL fallback by keyword — only when no medium key provided (legacy paths)
+  // Fall back to medium's default pool
+  if (mediumKey) {
+    const mediumModels = mediumModelsCache.get(mediumKey);
+    if (mediumModels && mediumModels.length > 0) {
+      return { model: pickRandom(mediumModels), inputOverrides: {} };
+    }
+  }
+
+  // SDXL fallback by keyword — only when no medium key provided
   if (!mediumKey) {
     const p = prompt.toLowerCase();
     if (

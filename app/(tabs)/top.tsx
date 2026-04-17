@@ -177,23 +177,15 @@ function SearchRow({ user }: { user: SearchUser }) {
   );
 }
 
-function PostPairRow({
-  left,
-  right,
-  albumIds,
-}: {
-  left: DreamPostItem;
-  right?: DreamPostItem;
-  albumIds: string[];
-}) {
+function PostPairRow({ left, right }: { left: DreamPostItem; right?: DreamPostItem }) {
   return (
     <View style={s.postPairRow}>
       <View style={{ width: TILE_WIDTH }}>
-        <PostTile item={left} albumIds={albumIds} />
+        <PostTile item={left} />
       </View>
       {right ? (
         <View style={{ width: TILE_WIDTH }}>
-          <PostTile item={right} albumIds={albumIds} />
+          <PostTile item={right} />
         </View>
       ) : (
         <View style={{ width: TILE_WIDTH }} />
@@ -286,7 +278,6 @@ export default function SearchExploreScreen() {
   } = useSearchPosts(searchActive ? debouncedQuery : '', selectedMedium, selectedVibe);
 
   const searchPosts = useMemo(() => postPages?.pages.flatMap((p) => p.rows) ?? [], [postPages]);
-  const searchAlbumIds = useMemo(() => searchPosts.map((p) => p.id), [searchPosts]);
   const searchLoading = usersLoading || postsLoading;
   const hasResults = userResults.length > 0 || searchPosts.length > 0;
 
@@ -308,23 +299,20 @@ export default function SearchExploreScreen() {
     return items;
   }, [hasQuery, searchActive, userResults, searchPosts]);
 
-  const renderSearchItem = useCallback(
-    ({ item }: { item: SearchItem }) => {
-      switch (item.type) {
-        case 'userHeader':
-          return <SectionHeader title="People" />;
-        case 'user':
-          return <SearchRow user={item.user} />;
-        case 'postHeader':
-          return <SectionHeader title="Dreams" />;
-        case 'postPair':
-          return <PostPairRow left={item.left} right={item.right} albumIds={searchAlbumIds} />;
-        default:
-          return null;
-      }
-    },
-    [searchAlbumIds]
-  );
+  const renderSearchItem = useCallback(({ item }: { item: SearchItem }) => {
+    switch (item.type) {
+      case 'userHeader':
+        return <SectionHeader title="People" />;
+      case 'user':
+        return <SearchRow user={item.user} />;
+      case 'postHeader':
+        return <SectionHeader title="Dreams" />;
+      case 'postPair':
+        return <PostPairRow left={item.left} right={item.right} />;
+      default:
+        return null;
+    }
+  }, []);
 
   const searchKeyExtractor = useCallback((item: SearchItem, index: number) => {
     switch (item.type) {
@@ -354,7 +342,6 @@ export default function SearchExploreScreen() {
   const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useExploreDreams(activeMediums, activeVibes);
   const posts = data?.pages.flat() ?? [];
-  const gridAlbumIds = useMemo(() => posts.map((p) => p.id), [posts]);
 
   const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 
@@ -403,7 +390,7 @@ export default function SearchExploreScreen() {
               </View>
             ) : null
           }
-          renderItem={({ item }) => <PostTile item={item} albumIds={gridAlbumIds} />}
+          renderItem={({ item }) => <PostTile item={item} />}
         />
       )}
 

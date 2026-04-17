@@ -106,7 +106,11 @@ export function RevealStep({ onBack }: Props) {
           const data = await res.json();
           if (__DEV__)
             console.log(`[Reveal] Described ${member.role}:`, data.description?.slice(0, 80));
-          return { ...member, description: data.description ?? '' };
+          return {
+            ...member,
+            description: data.description ?? '',
+            ...(data.gender ? { gender: data.gender } : {}),
+          };
         } catch (err) {
           if (__DEV__) console.warn(`[Reveal] Failed to describe ${member.role}:`, err);
           return member;

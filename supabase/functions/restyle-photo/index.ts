@@ -23,6 +23,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 
 interface RestyleRequest {
@@ -202,7 +203,9 @@ Deno.serve(async (req) => {
   let logAxes: Record<string, unknown> = {};
 
   const config = getPhotoRestyleConfig(medium.key);
-  const vibeDirective = vibe.directive ? vibe.directive.slice(0, 200) : '';
+  // Apply gender modifier (coquette routing) — null gender = female default for restyle
+  const rawVibeDirective = vibe.directive ? vibe.directive.slice(0, 200) : '';
+  const vibeDirective = applyVibeGenderModifier(vibe.key, rawVibeDirective, null);
 
   if (config && config.model === 'flux-dev') {
     // ── PATH 1: Vision describe → Sonnet rewrite → Flux Dev ──
@@ -268,7 +271,12 @@ Deno.serve(async (req) => {
 
   finalPrompt = sanitizePrompt(finalPrompt);
 
-  const autoPicked = await pickModel(effectiveMode, finalPrompt, resolvedMediumKey);
+  const autoPicked = await pickModel(
+    effectiveMode,
+    finalPrompt,
+    resolvedMediumKey,
+    resolvedVibeKey
+  );
   const pickedModel = force_model || autoPicked.model;
   logAxes.model = pickedModel;
 

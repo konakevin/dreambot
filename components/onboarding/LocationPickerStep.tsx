@@ -113,7 +113,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         data={CURATED_LOCATIONS}
         numColumns={2}
         keyExtractor={(l) => l.key}
-        contentContainerStyle={styles.grid}
+        contentContainerStyle={[styles.grid, isEditing && { paddingBottom: 20 }]}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>Pick your dream locations</Text>
@@ -144,31 +144,33 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         }}
       />
 
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-          <Text style={styles.backBtnText}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.continueBtn, !canProceed && styles.continueBtnDisabled]}
-          onPress={() => {
-            if (!canProceed) return;
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            onNext();
-          }}
-          disabled={!canProceed}
-          activeOpacity={0.7}
-        >
-          <Text style={[styles.continueBtnText, !canProceed && styles.continueBtnTextDisabled]}>
-            {canProceed ? 'Continue' : `Continue (${places.length}/${MIN_REQUIRED})`}
-          </Text>
-          <Ionicons
-            name="arrow-forward"
-            size={18}
-            color={canProceed ? '#FFFFFF' : colors.textSecondary}
-          />
-        </TouchableOpacity>
-      </View>
+      {!isEditing && (
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
+            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+            <Text style={styles.backBtnText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.continueBtn, !canProceed && styles.continueBtnDisabled]}
+            onPress={() => {
+              if (!canProceed) return;
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onNext();
+            }}
+            disabled={!canProceed}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.continueBtnText, !canProceed && styles.continueBtnTextDisabled]}>
+              {canProceed ? 'Continue' : `Continue (${places.length}/${MIN_REQUIRED})`}
+            </Text>
+            <Ionicons
+              name="arrow-forward"
+              size={18}
+              color={canProceed ? '#FFFFFF' : colors.textSecondary}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }

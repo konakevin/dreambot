@@ -22,6 +22,7 @@ import { buildRenderEntity } from '../_shared/renderEntity.ts';
 import { getLocationCard } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -49,15 +50,19 @@ Deno.serve(async (req) => {
     });
   }
 
-  const supabase: SupabaseClient = createClient(
-    Deno.env.get('SUPABASE_URL')!,
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+  // User-scoped client for auth only
+  const supabaseUser: SupabaseClient = createClient(
+    supabaseUrl,
     Deno.env.get('SUPABASE_ANON_KEY')!,
     { global: { headers: { Authorization: authHeader } } }
   );
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabaseUser.auth.getUser();
   if (!user) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
@@ -65,6 +70,9 @@ Deno.serve(async (req) => {
     });
   }
   const userId = user.id;
+
+  // Service role client for DB operations (bypasses RLS)
+  const supabase: SupabaseClient = createClient(supabaseUrl, serviceRoleKey);
 
   // ── Parse request body ─────────────────────────────────────────────────
   let body: Record<string, unknown>;
@@ -451,7 +459,7 @@ CHARACTER IN THE SCENE:
 ${castDescBlock}
 Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.
 
-MOOD: ${nightlyVibe.directive}
+MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
 COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
@@ -480,7 +488,7 @@ CHARACTER IN THE SCENE:
 ${castDescBlock}
 ${castInstruction}
 
-MOOD: ${nightlyVibe.directive}
+MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
 COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : compositionMode.replace(/_/g, ' ')}
@@ -518,7 +526,7 @@ ${dreamSubject}
 Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
 
 CAMERA: ${shotDirection}
-MOOD: ${nightlyVibe.directive}
+MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
 Write the prompt:
@@ -544,7 +552,7 @@ DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is t
 ${dreamSubject}
 
 CAMERA/COMPOSITION: ${shotDirection}
-MOOD: ${nightlyVibe.directive}
+MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
 Write the prompt:
@@ -619,7 +627,7 @@ Output ONLY the prompt.`;
   // ── Post-pipeline: sanitize, generate, face swap, persist ──────────────
   finalPrompt = sanitizePrompt(finalPrompt);
 
-  const autoPicked = await pickModel('flux-dev', finalPrompt, resolvedMediumKey);
+  const autoPicked = await pickModel('flux-dev', finalPrompt, resolvedMediumKey, resolvedVibeKey);
   const pickedModel = force_model || autoPicked.model;
   logAxes.model = pickedModel;
   console.log(

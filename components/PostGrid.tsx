@@ -67,8 +67,6 @@ export function PostGrid({
   const hasNextPage = activeQuery.hasNextPage;
   const isFetchingNextPage = activeQuery.isFetchingNextPage;
 
-  const albumIds = useMemo(() => posts.map((p) => p.id), [posts]);
-
   const handleEndReached = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
       activeQuery.fetchNextPage();
@@ -117,7 +115,7 @@ export function PostGrid({
         <PostTile
           item={item}
           isOwn={isOwn}
-          albumIds={albumIds}
+          albumSource={source}
           isHighlighted={item.id === highlightPostId}
           showPrivateBadge={showPrivateBadge}
         />

@@ -44,24 +44,23 @@ export function MediumVibeBadge({ mediumKey, vibeKey, onPress }: Props) {
 
 const s = StyleSheet.create({
   container: {
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     gap: 1,
+    alignSelf: 'flex-start',
   },
   medium: {
-    color: 'rgba(255,255,255,0.9)',
+    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0.5,
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 16,
   },
   vibe: {
-    color: 'rgba(255,255,255,0.7)',
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 12,
     fontWeight: '600',
     letterSpacing: 0.3,
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 16,
   },
 });

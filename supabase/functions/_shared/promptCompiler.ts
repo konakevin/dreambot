@@ -193,12 +193,49 @@ function buildCameraBlock(composition: CompilerInput['composition']): string {
   return parts.join('\n');
 }
 
+// ── Gender-Aware Vibe Modifier ──
+
+/**
+ * Post-processes a vibe directive with gender-specific instructions.
+ * No-op for all vibes except coquette. Safe to call unconditionally.
+ */
+export function applyVibeGenderModifier(
+  vibeKey: string,
+  directive: string,
+  castGender: 'male' | 'female' | null
+): string {
+  if (vibeKey !== 'coquette') return directive;
+
+  if (castGender === 'male') {
+    return (
+      directive +
+      '\n\nGENDER NOTE: Subject is MALE — keep him masculine but make him BEAUTIFUL. Flawless skin with warm golden glow, perfectly tousled hair catching the light, sharp jawline softened by dreamy lighting. Styling feels expensive and effortless — soft luxurious fabrics, delicate accessories, pretty-boy energy. No dress, no makeup, no feminization. The scene around him is equally coquette: soft pink and champagne color grading, warm golden-hour light, rose-tinted atmosphere, dreamy bokeh, everything looks expensive and romantic.'
+    );
+  }
+
+  // Female or no cast — full coquette, no restraint
+  return (
+    directive +
+    "\n\nGENDER NOTE: Make HER the coquette centerpiece. Dewy glowing skin, flowing glossy hair with soft ribbons and bows, delicate feminine accessories catching the light, soft luxurious fabrics in blush and cream, lips soft and perfect, eyes sparkling. She looks like every girl's dream Pinterest board come to life. The scene matches her energy: drenched in soft pink and champagne tones, warm honey light, dreamy romantic glow, iridescent shimmer. Pretty dial to 11."
+  );
+}
+
 // ── Main Export ──
 
 export function compilePrompt(input: CompilerInput): CompilerOutput {
   const { medium, vibe, scene, cast, composition, profile } = input;
   const mediumStyle = medium.key.replace(/_/g, ' ');
   const hasCast = cast.length > 0 && composition.type !== 'pure_scene';
+
+  // Extract cast gender for vibe modifiers (coquette gender routing)
+  const castGender: 'male' | 'female' | null =
+    cast.length > 0 && cast[0].genderLock
+      ? cast[0].genderLock.toUpperCase().includes('MALE') &&
+        !cast[0].genderLock.toUpperCase().startsWith('FEMALE')
+        ? 'male'
+        : 'female'
+      : null;
+  const vibeDirective = applyVibeGenderModifier(vibe.key, vibe.directive, castGender);
 
   const budget = getWordBudget(composition.type, composition.faceSwapEligible);
   const sceneBlock = buildSceneBlock(scene);
@@ -238,7 +275,7 @@ ${cameraBlock}
 ${mediumSummary}
 
 ═══ MOOD ═══
-${vibe.directive}
+${vibeDirective}
 
 ═══ YOUR CREATIVE ADDITIONS ═══
 Add vivid concrete details the user didn't mention. Things a camera can see — textures, light sources, atmospheric elements, foreground/background depth.

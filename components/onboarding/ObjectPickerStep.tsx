@@ -100,7 +100,7 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
         data={CURATED_OBJECTS}
         numColumns={2}
         keyExtractor={(o) => o.key}
-        contentContainerStyle={styles.grid}
+        contentContainerStyle={[styles.grid, isEditing && { paddingBottom: 20 }]}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>Pick some of your favorite things</Text>
@@ -134,23 +134,25 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
         }}
       />
 
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-          <Text style={styles.backBtnText}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.continueBtn}
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            onNext();
-          }}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.continueBtnText}>{things.length > 0 ? 'Continue' : 'Skip'}</Text>
-          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
+      {!isEditing && (
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
+            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+            <Text style={styles.backBtnText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.continueBtn}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onNext();
+            }}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.continueBtnText}>{things.length > 0 ? 'Continue' : 'Skip'}</Text>
+            <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }

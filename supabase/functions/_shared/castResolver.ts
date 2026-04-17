@@ -13,6 +13,8 @@ export interface DreamCastMember {
   role: string;
   thumb_url: string;
   description: string;
+  /** Explicit gender set at describe-photo time — preferred over regex inference */
+  gender?: 'male' | 'female';
   structured_traits?: Record<string, unknown>;
   relationship?: string;
 }
@@ -47,11 +49,18 @@ export function resolveCastForPrompt(
         .replace(/\*\*/g, '')
         .trim();
 
-      // Determine gender: prefer structured_traits, fall back to regex
-      const traits = member.structured_traits as Record<string, string> | undefined;
-      const isFemale =
-        traits && traits.gender ? traits.gender === 'female' : /woman|female|girl/i.test(rawDesc);
-      const gender = isFemale ? 'female' : 'male';
+      // Determine gender: explicit field > structured_traits > regex fallback
+      let gender: 'male' | 'female';
+      if (member.gender) {
+        gender = member.gender;
+      } else {
+        const traits = member.structured_traits as Record<string, string> | undefined;
+        const isFemale =
+          traits && traits.gender
+            ? traits.gender === 'female'
+            : /woman|female|girl|she\b|her\b/i.test(rawDesc);
+        gender = isFemale ? 'female' : 'male';
+      }
 
       // Build medium-native description
       let promptDesc: string;

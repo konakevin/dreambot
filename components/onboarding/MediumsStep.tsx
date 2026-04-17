@@ -22,6 +22,7 @@ interface Props {
 export function MediumsStep({ onNext, onBack }: Props) {
   const artStyles = useOnboardingStore((s) => s.profile.art_styles);
   const toggleArtStyle = useOnboardingStore((s) => s.toggleArtStyle);
+  const isEditing = useOnboardingStore((s) => s.isEditing);
   const { data: dbMediums = [] } = useDreamMediums();
 
   const canProceed = artStyles.length >= MIN_REQUIRED;
@@ -36,7 +37,10 @@ export function MediumsStep({ onNext, onBack }: Props) {
 
   return (
     <View style={styles.root}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[styles.scrollContent, isEditing && { paddingBottom: 20 }]}
+      >
         <View style={styles.header}>
           <Text style={styles.title}>Pick your art styles</Text>
           <Text style={styles.subtitle}>Pick at least 1. These define how your dreams look.</Text>
@@ -72,31 +76,33 @@ export function MediumsStep({ onNext, onBack }: Props) {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-          <Text style={styles.backBtnText}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.continueBtn, !canProceed && styles.continueBtnDisabled]}
-          onPress={() => {
-            if (!canProceed) return;
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            onNext();
-          }}
-          disabled={!canProceed}
-          activeOpacity={0.7}
-        >
-          <Text style={[styles.continueBtnText, !canProceed && styles.continueBtnTextDisabled]}>
-            {canProceed ? 'Continue' : `Continue (${artStyles.length}/${MIN_REQUIRED})`}
-          </Text>
-          <Ionicons
-            name="arrow-forward"
-            size={18}
-            color={canProceed ? '#FFFFFF' : colors.textSecondary}
-          />
-        </TouchableOpacity>
-      </View>
+      {!isEditing && (
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
+            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+            <Text style={styles.backBtnText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.continueBtn, !canProceed && styles.continueBtnDisabled]}
+            onPress={() => {
+              if (!canProceed) return;
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onNext();
+            }}
+            disabled={!canProceed}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.continueBtnText, !canProceed && styles.continueBtnTextDisabled]}>
+              {canProceed ? 'Continue' : `Continue (${artStyles.length}/${MIN_REQUIRED})`}
+            </Text>
+            <Ionicons
+              name="arrow-forward"
+              size={18}
+              color={canProceed ? '#FFFFFF' : colors.textSecondary}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }

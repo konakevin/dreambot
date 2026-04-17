@@ -1,6 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import * as ImagePicker from 'expo-image-picker';
 import * as nav from '@/lib/navigate';
@@ -24,6 +25,8 @@ import { useAvatarUpload } from '@/hooks/useAvatarUpload';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
+import { useOnboardingStore } from '@/store/onboarding';
+import { isVibeProfile } from '@/lib/migrateRecipe';
 import { colors } from '@/constants/theme';
 import { moderateText } from '@/lib/moderation';
 
@@ -44,7 +47,12 @@ function SettingsRow({
     <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
       <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.accent} />
       <Text style={[styles.rowLabel, destructive && styles.destructiveText]}>{label}</Text>
-      {trailing ?? <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />}
+      {trailing === null ? null : (
+        <View style={styles.rowTrailing}>
+          {trailing}
+          <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -73,6 +81,49 @@ export default function SettingsScreen() {
   const { data: profile } = usePublicProfile(user?.id ?? '');
   const { mutate: uploadAvatar, isPending: uploading } = useAvatarUpload();
   const [changingUsername, setChangingUsername] = useState(false);
+
+  // Load vibe profile into onboarding store for settings sub-screens.
+  // Set isEditing once on mount, clear on unmount — NOT on focus/blur,
+  // because navigating to a sub-screen blurs the index and would toggle it off.
+  const vibeProfile = useOnboardingStore((s) => s.profile);
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from('user_recipes')
+        .select('recipe')
+        .eq('user_id', user.id)
+        .single();
+      if (data?.recipe && isVibeProfile(data.recipe)) {
+        useOnboardingStore.getState().loadProfile(data.recipe);
+      }
+      useOnboardingStore.getState().setIsEditing(true);
+    })();
+    return () => {
+      useOnboardingStore.getState().setIsEditing(false);
+    };
+  }, [user]);
+
+  // Summaries for dream engine rows
+  const artStylesSummary =
+    vibeProfile.art_styles.length > 0
+      ? vibeProfile.art_styles.length === 1
+        ? vibeProfile.art_styles[0]
+        : `${vibeProfile.art_styles.slice(0, 2).join(', ')} +${vibeProfile.art_styles.length - 2}`
+      : 'Not set';
+  const vibesSummary =
+    vibeProfile.aesthetics.length > 0
+      ? vibeProfile.aesthetics.length === 1
+        ? vibeProfile.aesthetics[0]
+        : `${vibeProfile.aesthetics.slice(0, 2).join(', ')} +${vibeProfile.aesthetics.length - 2}`
+      : 'Not set';
+  const locationCount = vibeProfile.dream_seeds?.places?.length ?? 0;
+  const objectCount = vibeProfile.dream_seeds?.things?.length ?? 0;
+  const castMembers = vibeProfile.dream_cast ?? [];
+  const castSummary =
+    castMembers.length === 0
+      ? 'Not set up'
+      : castMembers.map((m) => (m.role === 'self' ? 'You' : 'Your +1')).join(' + ');
 
   function handleChangePhoto() {
     showAlert('Profile picture', '', [
@@ -266,7 +317,7 @@ export default function SettingsScreen() {
   const initial = (profile?.username || user?.user_metadata?.username || '?')[0].toUpperCase();
 
   return (
-    <ScreenLayout header="back" title="Settings">
+    <ScreenLayout header="back" title="Settings" swipeBack={false}>
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Avatar hero */}
         <TouchableOpacity style={styles.avatarHero} onPress={handleChangePhoto} activeOpacity={0.8}>
@@ -352,27 +403,51 @@ export default function SettingsScreen() {
         <Text style={styles.sectionHeader}>DREAM ENGINE</Text>
         <View style={styles.section}>
           <SettingsRow
-            icon="sparkles"
-            label="Edit DreamBot Profile"
-            onPress={async () => {
-              const { useOnboardingStore } = require('@/store/onboarding');
-              const { isVibeProfile } = require('@/lib/migrateRecipe');
-              useOnboardingStore.getState().reset();
-
-              // Load existing profile into the onboarding store
-              const { data } = await supabase
-                .from('user_recipes')
-                .select('recipe')
-                .eq('user_id', user!.id)
-                .single();
-              if (data?.recipe && isVibeProfile(data.recipe)) {
-                useOnboardingStore.getState().loadProfile(data.recipe);
-              }
-
-              useOnboardingStore.getState().setIsEditing(true);
-              nav.push('/(onboarding)');
-            }}
+            icon="color-palette"
+            label="Art Styles"
+            trailing={<Text style={styles.trailingSummary}>{artStylesSummary}</Text>}
+            onPress={() => nav.push('/settings/art-styles')}
           />
+          <SettingsRow
+            icon="sparkles"
+            label="Vibes"
+            trailing={<Text style={styles.trailingSummary}>{vibesSummary}</Text>}
+            onPress={() => nav.push('/settings/vibes')}
+          />
+          <SettingsRow
+            icon="options"
+            label="Mood"
+            trailing={<Text style={styles.trailingSummary}>Customized</Text>}
+            onPress={() => nav.push('/settings/mood')}
+          />
+          <SettingsRow
+            icon="location"
+            label="Locations"
+            trailing={
+              <Text style={styles.trailingSummary}>
+                {locationCount > 0 ? `${locationCount} selected` : 'Not set'}
+              </Text>
+            }
+            onPress={() => nav.push('/settings/locations')}
+          />
+          <SettingsRow
+            icon="cube"
+            label="Objects"
+            trailing={
+              <Text style={styles.trailingSummary}>
+                {objectCount > 0 ? `${objectCount} selected` : 'Not set'}
+              </Text>
+            }
+            onPress={() => nav.push('/settings/objects')}
+          />
+          <SettingsRow
+            icon="people"
+            label="Dream Cast"
+            trailing={<Text style={styles.trailingSummary}>{castSummary}</Text>}
+            onPress={() => nav.push('/settings/dream-cast')}
+          />
+        </View>
+        <View style={styles.section}>
           {isAdmin && (
             <SettingsRow
               icon="flask"
@@ -386,7 +461,6 @@ export default function SettingsScreen() {
             onPress={async () => {
               await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
               await supabase.from('user_recipes').delete().eq('user_id', user!.id);
-              const { useOnboardingStore } = require('@/store/onboarding');
               useOnboardingStore.getState().reset();
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               router.replace('/(onboarding)');
@@ -496,6 +570,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   destructiveText: { color: colors.textPrimary },
+  trailingSummary: { color: colors.textSecondary, fontSize: 13, maxWidth: 160 },
   rowTrailing: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -45,11 +45,36 @@ Deno.serve(async (req: Request) => {
     }
 
     const prompt = role === 'pet' ? VISION_PROMPTS.castPet : VISION_PROMPTS.castPerson;
-    const description = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 300);
+    const rawDescription = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 300);
 
-    console.log(`[describe-photo] ${role}:`, description.slice(0, 120));
+    // Extract gender from the "Male:" / "Female:" prefix and strip it from the description
+    let gender: 'male' | 'female' | null = null;
+    let description = rawDescription;
+    if (role !== 'pet') {
+      const lower = rawDescription.toLowerCase();
+      if (
+        lower.startsWith('female:') ||
+        lower.startsWith('female,') ||
+        lower.startsWith('female ')
+      ) {
+        gender = 'female';
+        description = rawDescription.replace(/^(?:female)[:\s,]+/i, '').trim();
+      } else if (
+        lower.startsWith('male:') ||
+        lower.startsWith('male,') ||
+        lower.startsWith('male ')
+      ) {
+        gender = 'male';
+        description = rawDescription.replace(/^(?:male)[:\s,]+/i, '').trim();
+      } else {
+        // Fallback: regex on the full text
+        gender = /woman|female|girl|she|her\b/i.test(rawDescription) ? 'female' : 'male';
+      }
+    }
 
-    return new Response(JSON.stringify({ description }), {
+    console.log(`[describe-photo] ${role} (${gender ?? 'pet'}):`, description.slice(0, 120));
+
+    return new Response(JSON.stringify({ description, gender }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });

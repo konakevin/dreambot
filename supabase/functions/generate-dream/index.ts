@@ -58,6 +58,8 @@ interface RequestBody {
   vibe_key?: string;
   /** Test mode: override the picked Replicate model */
   force_model?: string;
+  /** Test mode: override which cast member to use for self-insert ('self', 'plus_one', 'pet') */
+  force_cast_role?: string;
   /** Client-generated job ID for queue tracking */
   job_id?: string;
   /** Style transfer: original post's ai_prompt used as style template for DLT */
@@ -140,6 +142,7 @@ Deno.serve(async (req) => {
     input_image,
     photo_style = 'restyle',
     force_model,
+    force_cast_role,
     job_id: jobId,
     style_prompt,
   } = body;
@@ -345,15 +348,18 @@ Output ONLY the prompt.`;
       const userSubject = rawPrompt ?? hint ?? '';
 
       // ── V2 SELF-INSERT DETECTION (using new detector) ──
+      // force_cast_role overrides which cast member is used (test mode)
+      const castRole = force_cast_role ?? 'self';
       const selfCast = !isPhoto
         ? vibeProfile?.dream_cast?.find(
-            (m: DreamCastMember) => m.role === 'self' && m.thumb_url && m.description
+            (m: DreamCastMember) => m.role === castRole && m.thumb_url && m.description
           )
         : undefined;
       const selfInsertResult = userSubject
         ? detectSelfInsert(userSubject)
         : { isSelfInsert: false, cleanedPrompt: '' };
-      const mentionsSelf = selfInsertResult.isSelfInsert && selfCast;
+      // force_cast_role also forces the self-insert path even if prompt doesn't say "me"
+      const mentionsSelf = (selfInsertResult.isSelfInsert || force_cast_role) && selfCast;
 
       if (mentionsSelf && userSubject) {
         // ── SELF-INSERT: cast + scene expansion + chaos + compiler ──
@@ -554,7 +560,12 @@ Output ONLY the prompt.`;
 
   finalPrompt = sanitizePrompt(finalPrompt);
 
-  const autoPicked = await pickModel(effectiveMode, finalPrompt, resolvedMediumKey);
+  const autoPicked = await pickModel(
+    effectiveMode,
+    finalPrompt,
+    resolvedMediumKey,
+    resolvedVibeKey
+  );
   const pickedModel = force_model || autoPicked.model;
   logAxes.model = pickedModel;
   console.log(

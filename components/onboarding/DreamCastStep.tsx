@@ -20,6 +20,7 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
 
@@ -94,13 +95,28 @@ function CastSlot({
       {member ? (
         <>
           <View style={s.uploadedRow}>
-            <Image source={{ uri: member.thumb_url }} style={s.thumb} contentFit="cover" />
-            <View style={s.uploadedInfo}>
-              <Text style={s.uploadedCheck}>Ready for dreams</Text>
+            <View>
+              <Image source={{ uri: member.thumb_url }} style={s.thumb} contentFit="cover" />
+              {isUploading && (
+                <View style={s.thumbSpinner}>
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                </View>
+              )}
             </View>
-            <TouchableOpacity onPress={() => onRemove(config.role)} hitSlop={8} activeOpacity={0.7}>
-              <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
-            </TouchableOpacity>
+            <View style={s.uploadedInfo}>
+              <Text style={s.uploadedCheck}>
+                {isUploading ? 'Analyzing...' : 'Ready for dreams'}
+              </Text>
+            </View>
+            {!isUploading && (
+              <TouchableOpacity
+                onPress={() => onRemove(config.role)}
+                hitSlop={8}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Relationship picker for +1 */}
@@ -183,10 +199,8 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     setUploading(role);
 
     try {
-      // Upload to Supabase Storage first — we need a public URL for Kontext
-      // Path must start with user ID — avatars bucket RLS requires foldername[1] = auth.uid()
+      // Upload to Supabase Storage — need a public URL for describe-photo + Kontext
       const path = `${user.id}/cast-${role}-${Date.now()}.jpg`;
-
       const response = await fetch(asset.uri);
       const arrayBuffer = await response.arrayBuffer();
 
@@ -196,65 +210,77 @@ export function DreamCastStep({ onNext, onBack }: Props) {
           contentType: 'image/jpeg',
           upsert: true,
         });
-
       if (uploadError) throw uploadError;
 
       const {
         data: { publicUrl },
       } = supabase.storage.from('avatars').getPublicUrl(path);
 
-      // Store the public URL — never store file:// URIs
+      // Show the photo immediately (spinner stays on until describe completes)
       const existing = getMember(role);
       setCastMember({
         role,
         thumb_url: publicUrl,
-        description: existing?.description ?? '',
+        description: '',
         ...(existing?.relationship ? { relationship: existing.relationship } : {}),
       });
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-      // Describe the photo immediately so cast descriptions are always present
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (session?.access_token) {
-          const descRes = await fetch(
-            `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.access_token}`,
-              },
-              body: JSON.stringify({ image_url: publicUrl, role }),
-            }
-          );
-          if (descRes.ok) {
-            const descData = await descRes.json();
-            if (descData.description) {
-              // Re-read current member from store (user may have set relationship while describe was running)
-              const current = useOnboardingStore
-                .getState()
-                .profile.dream_cast.find((m) => m.role === role);
-              setCastMember({
-                role,
-                thumb_url: publicUrl,
-                description: descData.description,
-                ...(current?.relationship ? { relationship: current.relationship } : {}),
-              });
-              if (__DEV__)
-                console.log(`[DreamCast] Described ${role}:`, descData.description.slice(0, 60));
-            }
-          }
+      // Describe the photo — spinner stays visible until this completes
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('No session');
+
+      const descRes = await fetch(
+        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ image_url: publicUrl, role }),
         }
-      } catch {
-        // Non-critical — RevealStep will retry
+      );
+
+      if (!descRes.ok) throw new Error(`describe-photo failed: ${descRes.status}`);
+      const descData = await descRes.json();
+
+      if (!descData.description || descData.description.length < 20) {
+        // Description too short — likely not a recognizable person
+        removeCastMember(role);
+        // Clean up the uploaded file
+        supabase.storage
+          .from('avatars')
+          .remove([path])
+          .catch(() => {});
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        showAlert(
+          'Photo not recognized',
+          "We couldn't detect a clear face in this photo. Please use a well-lit photo where your face is clearly visible.",
+          [{ text: 'OK' }]
+        );
+        return;
       }
+
+      // Re-read current member from store (user may have set relationship while describe was running)
+      const current = useOnboardingStore.getState().profile.dream_cast.find((m) => m.role === role);
+      setCastMember({
+        role,
+        thumb_url: publicUrl,
+        description: descData.description,
+        ...(descData.gender ? { gender: descData.gender } : {}),
+        ...(current?.relationship ? { relationship: current.relationship } : {}),
+      });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      if (__DEV__)
+        console.log(
+          `[DreamCast] Described ${role} (${descData.gender}):`,
+          descData.description.slice(0, 60)
+        );
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (__DEV__) console.error('[DreamCast] UPLOAD FAILED for', role, ':', msg);
-      // Fall back to local URI so user at least sees their photo
       setCastMember({
         role,
         thumb_url: asset.uri,
@@ -298,13 +324,13 @@ export function DreamCastStep({ onNext, onBack }: Props) {
         ))}
       </ScrollView>
 
-      <View style={s.footer}>
-        <View style={s.footerRow}>
-          <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-            <Text style={s.backBtnText}>Back</Text>
-          </TouchableOpacity>
-          {!isEditing && (
+      {!isEditing && (
+        <View style={s.footer}>
+          <View style={s.footerRow}>
+            <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
+              <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+              <Text style={s.backBtnText}>Back</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={s.nextBtn}
               onPress={() => {
@@ -316,9 +342,9 @@ export function DreamCastStep({ onNext, onBack }: Props) {
               <Text style={s.nextBtnText}>{dreamCast.length === 0 ? 'Skip' : 'Next'}</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
             </TouchableOpacity>
-          )}
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 }
@@ -399,6 +425,13 @@ const s = StyleSheet.create({
     borderRadius: 24,
     borderWidth: 2,
     borderColor: colors.accent,
+  },
+  thumbSpinner: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 24,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   uploadedInfo: { flex: 1 },
   uploadedCheck: {
