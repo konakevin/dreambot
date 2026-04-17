@@ -22,8 +22,6 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { GestureDetector } from 'react-native-gesture-handler';
-import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
@@ -47,8 +45,6 @@ export default function PublicProfileScreen() {
   const { userId, viewedPost } = useLocalSearchParams<{ userId: string; viewedPost?: string }>();
   const currentUser = useAuthStore((s) => s.user);
   const isOwnProfile = currentUser?.id === userId;
-  const { gesture: swipeBackGesture, animatedStyle: swipeBackStyle } = useStandardSwipeBack();
-
   const [activeTab, setActiveTab] = useState<Tab>('posts');
 
   const {
@@ -196,24 +192,18 @@ export default function PublicProfileScreen() {
 
   if (profileLoading || !profile) {
     return (
-      <GestureDetector gesture={swipeBackGesture}>
-        <Animated.View style={[styles.root, swipeBackStyle]}>
-          <SafeAreaView style={styles.root}>
-            <View style={styles.backRow}>
-              <TouchableOpacity
-                onPress={() => router.back()}
-                hitSlop={12}
-                style={styles.backButton}
-              >
-                <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.center}>
-              <ActivityIndicator color={colors.textSecondary} />
-            </View>
-          </SafeAreaView>
-        </Animated.View>
-      </GestureDetector>
+      <View style={styles.root}>
+        <SafeAreaView style={styles.root}>
+          <View style={styles.backRow}>
+            <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.center}>
+            <ActivityIndicator color={colors.textSecondary} />
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 
@@ -339,42 +329,38 @@ export default function PublicProfileScreen() {
 
   if (activeTab === 'posts') {
     return (
-      <GestureDetector gesture={swipeBackGesture}>
-        <Animated.View style={[styles.root, swipeBackStyle]}>
-          <SafeAreaView style={styles.root}>
-            {backButton}
-            {avatarModal}
-            {canSeePosts ? (
-              <PostGrid
-                source={{ type: 'user', userId }}
-                emptyText="No posts yet"
-                ListHeaderComponent={header}
-                highlightPostId={viewedPost}
-              />
-            ) : (
-              <ScrollView>
-                {header}
-                <View style={styles.lockedState}>
-                  <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
-                  <Text style={styles.lockedTitle}>This account is private</Text>
-                  <Text style={styles.lockedSub}>Follow them to see their dreams</Text>
-                  <TouchableOpacity
-                    style={[styles.followButton, hasRequest && styles.followingButton]}
-                    onPress={handleFollow}
-                    activeOpacity={0.8}
-                  >
-                    <Text
-                      style={[styles.followButtonText, hasRequest && styles.followingButtonText]}
-                    >
-                      {hasRequest ? 'Requested' : 'Follow'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            )}
-          </SafeAreaView>
-        </Animated.View>
-      </GestureDetector>
+      <View style={styles.root}>
+        <SafeAreaView style={styles.root}>
+          {backButton}
+          {avatarModal}
+          {canSeePosts ? (
+            <PostGrid
+              source={{ type: 'user', userId }}
+              emptyText="No posts yet"
+              ListHeaderComponent={header}
+              highlightPostId={viewedPost}
+            />
+          ) : (
+            <ScrollView>
+              {header}
+              <View style={styles.lockedState}>
+                <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
+                <Text style={styles.lockedTitle}>This account is private</Text>
+                <Text style={styles.lockedSub}>Follow them to see their dreams</Text>
+                <TouchableOpacity
+                  style={[styles.followButton, hasRequest && styles.followingButton]}
+                  onPress={handleFollow}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.followButtonText, hasRequest && styles.followingButtonText]}>
+                    {hasRequest ? 'Requested' : 'Follow'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          )}
+        </SafeAreaView>
+      </View>
     );
   }
 
@@ -382,44 +368,44 @@ export default function PublicProfileScreen() {
   const isLoadingList = activeTab === 'followers' ? loadingFollowers : loadingFollowing;
   const emptyLabel = activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet';
 
+  // Swipe-right-to-back handled by React Navigation's native gesture
+  // (fullScreenGestureEnabled: true in SCREEN_PRESETS.MODAL_SWIPEABLE).
   return (
-    <GestureDetector gesture={swipeBackGesture}>
-      <Animated.View style={[styles.root, swipeBackStyle]}>
-        <SafeAreaView style={styles.root}>
-          {backButton}
-          {avatarModal}
-          <FlatList<FollowUser>
-            key="users"
-            data={listData}
-            keyExtractor={(item) => item.id}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefetching}
-                onRefresh={() => refetchProfile()}
-                tintColor={colors.accent}
-              />
-            }
-            ListHeaderComponent={header}
-            ListEmptyComponent={
-              <View style={styles.center}>
-                {isLoadingList ? (
-                  <ActivityIndicator color={colors.textSecondary} />
-                ) : (
-                  <Text style={styles.emptyText}>{emptyLabel}</Text>
-                )}
-              </View>
-            }
-            renderItem={({ item }) => (
-              <FollowUserRow
-                item={item}
-                isFollowing={followingIds.has(item.id)}
-                onFollow={handleFollowUser}
-              />
-            )}
-          />
-        </SafeAreaView>
-      </Animated.View>
-    </GestureDetector>
+    <View style={styles.root}>
+      <SafeAreaView style={styles.root}>
+        {backButton}
+        {avatarModal}
+        <FlatList<FollowUser>
+          key="users"
+          data={listData}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetching}
+              onRefresh={() => refetchProfile()}
+              tintColor={colors.accent}
+            />
+          }
+          ListHeaderComponent={header}
+          ListEmptyComponent={
+            <View style={styles.center}>
+              {isLoadingList ? (
+                <ActivityIndicator color={colors.textSecondary} />
+              ) : (
+                <Text style={styles.emptyText}>{emptyLabel}</Text>
+              )}
+            </View>
+          }
+          renderItem={({ item }) => (
+            <FollowUserRow
+              item={item}
+              isFollowing={followingIds.has(item.id)}
+              onFollow={handleFollowUser}
+            />
+          )}
+        />
+      </SafeAreaView>
+    </View>
   );
 }
 

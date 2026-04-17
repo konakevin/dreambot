@@ -82,13 +82,11 @@ async function getJwtForUser(email) {
 async function callNightlyEdgeFunction(jwt, vibeProfile, dreamWish) {
   const body = {
     mode: 'flux-dev',
-    medium_key: 'my_mediums',
-    vibe_key: 'my_vibes',
     vibe_profile: vibeProfile,
   };
   if (dreamWish) body.dream_wish = dreamWish;
 
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-dream`, {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/nightly-dreams`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -63,6 +63,15 @@ export function extractTraits(description: string): Traits {
         ? 'slim'
         : 'average';
 
+  // Log which traits fell to defaults (helps diagnose thin cast descriptions)
+  const defaults: string[] = [];
+  if (!ageMatch) defaults.push('age');
+  if (!rawHair.trim()) defaults.push('hairColor');
+  if (!eyeMatch) defaults.push('eyeColor');
+  if (defaults.length > 0) {
+    console.log(`[renderEntity] trait defaults fired: ${defaults.join(', ')}`);
+  }
+
   return { gender, age, hairColor, eyeColor, facialHair, build };
 }
 
@@ -135,6 +144,9 @@ export function buildRenderEntity(
   const template = CHARACTER_TEMPLATES[mediumKey];
 
   if (!template) {
+    console.warn(
+      `[renderEntity] No CHARACTER_TEMPLATE for medium '${mediumKey}' — using generic fallback`
+    );
     return {
       mode: 'embodied',
       description: `stylized ${traits.gender} character with ${traits.hairColor} hair`,

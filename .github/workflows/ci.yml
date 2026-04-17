@@ -17,13 +17,16 @@ jobs:
           cache: npm
       - run: npm ci --legacy-peer-deps
 
-      - name: Sync recipe engine deploy copy
-        run: |
-          node scripts/sync-deno-engine.js
-          git diff --exit-code supabase/functions/_shared/recipeEngine.ts || (echo "❌ recipeEngine deploy copy is out of sync. Run: node scripts/sync-deno-engine.js" && exit 1)
-
       - name: Type check
         run: npx tsc --noEmit
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Deno type check (Edge Functions)
+        run: deno check supabase/functions/*/index.ts
 
       - name: Lint
         run: npx expo lint

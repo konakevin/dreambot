@@ -28,6 +28,15 @@ export function resolveCastForPrompt(
   members: DreamCastMember[],
   medium: { characterRenderMode: string; key: string }
 ): ResolvedCastMember[] {
+  // Log non-pet members dropped due to missing description (quality signal)
+  for (const m of members) {
+    if (!m.description && m.role !== 'pet') {
+      console.warn(
+        `[castResolver] Dropped ${m.role} — empty description (thumb_url: ${m.thumb_url ? 'yes' : 'no'})`
+      );
+    }
+  }
+
   return members
     .filter((m) => m.description && m.thumb_url)
     .map((member) => {

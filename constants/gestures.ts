@@ -31,7 +31,7 @@ export const ACTIVE_OFFSET = 12;
  * How far the gesture can travel on its opposing axis before it fails.
  * Keeps vertical-scroll and horizontal-swipe from getting confused.
  */
-export const FAIL_OFFSET = 20;
+export const FAIL_OFFSET = 10;
 
 /** @deprecated Use SWIPE_DISMISS_DISTANCE for clarity */
 export const SWIPE_THRESHOLD = SWIPE_DISMISS_DISTANCE;

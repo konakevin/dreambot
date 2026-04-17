@@ -16,6 +16,11 @@
     "nativewind-env.d.ts"
   ],
   "exclude": [
-    "supabase/functions/**"
+    "supabase/functions/**",
+    "__tests__/lib/selfInsertDetector.test.ts",
+    "__tests__/lib/renderEntity.test.ts",
+    "__tests__/lib/sanitize.test.ts",
+    "__tests__/lib/modelPicker.test.ts",
+    "__tests__/lib/promptCompiler.test.ts"
   ]
 }

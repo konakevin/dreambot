@@ -117,18 +117,15 @@ export function rollDream(
   let includeObject = Math.random() < 0.5;
 
   // ── Step 4: Non-character path logic ──
+  // Location is always true (Step 2), so the non-character path always includes
+  // location. The only remaining choice is whether to also include an object.
   if (!includeCharacter) {
     const pureSceneRoll = Math.random();
     if (pureSceneRoll < 0.15) {
       // 15% deliberate pure scene — no object, but location still included
       includeObject = false;
-    } else {
-      // 85% roll loc/obj normally, guarantee at least one
-      if (!includeLocation && !includeObject) {
-        if (Math.random() < 0.5) includeLocation = true;
-        else includeObject = true;
-      }
     }
+    // 85% keep whatever Step 3 rolled for includeObject
   }
 
   // ── Step 5: Cast selection ──

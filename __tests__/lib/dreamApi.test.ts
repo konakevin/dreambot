@@ -28,8 +28,7 @@ jest.mock('@/lib/supabase', () => ({
   },
 }));
 
-import { generateDream, generateFromRecipe, persistImage } from '@/lib/dreamApi';
-import { DEFAULT_RECIPE } from '@/types/recipe';
+import { generateDream, persistImage } from '@/lib/dreamApi';
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -46,10 +45,14 @@ describe('generateDream', () => {
       error: null,
     });
 
-    const result = await generateDream({ mode: 'flux-dev', recipe: DEFAULT_RECIPE });
+    const result = await generateDream({
+      mode: 'flux-dev',
+      medium_key: 'photography',
+      vibe_key: 'cinematic',
+    });
 
     expect(mockInvoke).toHaveBeenCalledWith('generate-dream', {
-      body: { mode: 'flux-dev', recipe: DEFAULT_RECIPE },
+      body: { mode: 'flux-dev', medium_key: 'photography', vibe_key: 'cinematic' },
     });
     expect(result.image_url).toBe('https://example.com/dream.jpg');
     expect(result.prompt_used).toBe('test prompt');
@@ -61,9 +64,9 @@ describe('generateDream', () => {
       error: { message: 'Server error' },
     });
 
-    await expect(generateDream({ mode: 'flux-dev', recipe: DEFAULT_RECIPE })).rejects.toThrow(
-      'Server error'
-    );
+    await expect(
+      generateDream({ mode: 'flux-dev', medium_key: 'photography', vibe_key: 'cinematic' })
+    ).rejects.toThrow('Server error');
   });
 
   it('throws when no image_url in response', async () => {
@@ -72,41 +75,9 @@ describe('generateDream', () => {
       error: null,
     });
 
-    await expect(generateDream({ mode: 'flux-dev', recipe: DEFAULT_RECIPE })).rejects.toThrow(
-      'Rate limited'
-    );
-  });
-});
-
-describe('generateFromRecipe', () => {
-  it('sends recipe with skip_enhance when requested', async () => {
-    mockInvoke.mockResolvedValue({
-      data: { image_url: 'url', prompt_used: 'p' },
-      error: null,
-    });
-
-    await generateFromRecipe(DEFAULT_RECIPE, { skipEnhance: true });
-
-    expect(mockInvoke).toHaveBeenCalledWith('generate-dream', {
-      body: expect.objectContaining({
-        mode: 'flux-dev',
-        recipe: DEFAULT_RECIPE,
-        skip_enhance: true,
-      }),
-    });
-  });
-
-  it('sends hint when provided', async () => {
-    mockInvoke.mockResolvedValue({
-      data: { image_url: 'url', prompt_used: 'p' },
-      error: null,
-    });
-
-    await generateFromRecipe(DEFAULT_RECIPE, { hint: 'a dragon' });
-
-    expect(mockInvoke).toHaveBeenCalledWith('generate-dream', {
-      body: expect.objectContaining({ hint: 'a dragon' }),
-    });
+    await expect(
+      generateDream({ mode: 'flux-dev', medium_key: 'photography', vibe_key: 'cinematic' })
+    ).rejects.toThrow('Rate limited');
   });
 });
 
@@ -232,18 +203,7 @@ describe('path isolation — no hint leakage between dream types', () => {
     expect(mockInvoke.mock.calls[2][1].body.vibe_profile).toBeUndefined();
   });
 
-  it('recipe path passes hint when provided', async () => {
-    await generateFromRecipe(DEFAULT_RECIPE, { hint: 'STYLE TO COPY: "oil painting"' });
-    const body = mockInvoke.mock.calls[0][1].body;
-    expect(body.recipe).toBeDefined();
-    expect(body.hint).toBe('STYLE TO COPY: "oil painting"');
-  });
-
-  it('recipe path has no hint by default', async () => {
-    await generateFromRecipe(DEFAULT_RECIPE);
-    const body = mockInvoke.mock.calls[0][1].body;
-    expect(body.hint).toBeUndefined();
-  });
+  // generateFromRecipe tests deleted — legacy recipe path removed in Phase 3.2.
 });
 
 describe('persistImage', () => {

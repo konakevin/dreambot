@@ -8,14 +8,7 @@
 
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-  RefreshControl,
-  InteractionManager,
-} from 'react-native';
+import { View, StyleSheet, Dimensions, RefreshControl, InteractionManager } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -129,7 +122,6 @@ export function FullScreenFeed({
 
   const handleRefresh = useCallback(() => {
     onRefreshProp?.();
-    // Scroll to top after refresh so user sees fresh content
     setTimeout(() => ref.current?.scrollToOffset({ offset: 0, animated: true }), 300);
   }, [onRefreshProp, ref]);
 
@@ -275,7 +267,7 @@ export function FullScreenFeed({
             <RefreshControl
               refreshing={!!isRefreshing}
               onRefresh={handleRefresh}
-              tintColor={colors.accent}
+              tintColor={colors.textPrimary}
             />
           ) : undefined
         }

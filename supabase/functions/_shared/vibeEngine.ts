@@ -248,15 +248,15 @@ export function buildConceptPromptV2(input: DirectiveInput): string {
 
   let personalBlock = '';
   if (profile) {
+    const anchors = profile.personal_anchors;
     const anchorLines: string[] = [];
-    if (profile.personal_anchors.place && Math.random() < 0.4)
-      anchorLines.push(`- Places they love: "${profile.personal_anchors.place}"`);
-    if (profile.personal_anchors.object && Math.random() < 0.4)
-      anchorLines.push(`- Objects they love: "${profile.personal_anchors.object}"`);
-    if (profile.personal_anchors.era && Math.random() < 0.4)
-      anchorLines.push(`- Eras they vibe with: "${profile.personal_anchors.era}"`);
-    if (profile.personal_anchors.dream_vibe)
-      anchorLines.push(`- Their dream vibe: "${profile.personal_anchors.dream_vibe}"`);
+    if (anchors?.place && Math.random() < 0.4)
+      anchorLines.push(`- Places they love: "${anchors.place}"`);
+    if (anchors?.object && Math.random() < 0.4)
+      anchorLines.push(`- Objects they love: "${anchors.object}"`);
+    if (anchors?.era && Math.random() < 0.4)
+      anchorLines.push(`- Eras they vibe with: "${anchors.era}"`);
+    if (anchors?.dream_vibe) anchorLines.push(`- Their dream vibe: "${anchors.dream_vibe}"`);
 
     const spiritHint =
       profile.spirit_companion && Math.random() < 0.2

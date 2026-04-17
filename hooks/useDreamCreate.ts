@@ -25,7 +25,7 @@ import { isVibeProfile } from '@/lib/migrateRecipe';
 import { DEFAULT_RECIPE } from '@/types/recipe';
 import type { Recipe } from '@/types/recipe';
 import type { VibeProfile } from '@/types/vibeProfile';
-import { generateDream, generateFromVibeProfile, generateFromRecipe } from '@/lib/dreamApi';
+import { generateDream, generateFromVibeProfile, restylePhoto } from '@/lib/dreamApi';
 import { router } from 'expo-router';
 
 type GenerateStatus = 'idle' | 'generating' | 'done' | 'error';
@@ -118,18 +118,31 @@ export function useDreamCreate() {
           if (!modResult.passed) throw new Error(modResult.reason ?? 'Prompt flagged');
         }
 
-        result = await generateDream({
-          mode: 'flux-kontext',
-          vibe_profile: vibeProfile ?? undefined,
-          recipe: !vibeProfile ? (recipe ?? DEFAULT_RECIPE) : undefined,
-          medium_key: config.selectedMedium,
-          vibe_key: config.selectedVibe,
-          input_image: refUrl,
-          hint: config.userPrompt.trim() || undefined,
-          photo_style: config.stylePrompt || config.userPrompt.trim() ? 'reimagine' : 'restyle',
-          job_id: jobId,
-          style_prompt: config.stylePrompt || undefined,
-        });
+        const isReimagine = !!(config.stylePrompt || config.userPrompt.trim());
+
+        if (isReimagine) {
+          // Photo reimagine — vision describe + Sonnet rewrite via generate-dream
+          result = await generateDream({
+            mode: 'flux-kontext',
+            vibe_profile: vibeProfile ?? undefined,
+            medium_key: config.selectedMedium,
+            vibe_key: config.selectedVibe,
+            input_image: refUrl,
+            hint: config.userPrompt.trim() || undefined,
+            photo_style: 'reimagine',
+            job_id: jobId,
+            style_prompt: config.stylePrompt || undefined,
+          });
+        } else {
+          // Photo restyle — Kontext transform via dedicated restyle-photo endpoint
+          result = await restylePhoto({
+            inputImageBase64: refUrl,
+            mediumKey: config.selectedMedium ?? 'photography',
+            vibeKey: config.selectedVibe ?? 'cinematic',
+            vibeProfile: vibeProfile ?? undefined,
+            jobId,
+          });
+        }
       } else {
         // Text dream (prompt or surprise)
         if (config.userPrompt.trim()) {
@@ -137,17 +150,13 @@ export function useDreamCreate() {
           if (!modResult.passed) throw new Error(modResult.reason ?? 'Prompt flagged');
         }
 
-        if (vibeProfile) {
-          result = await generateFromVibeProfile(vibeProfile, {
-            mediumKey: config.selectedMedium,
-            vibeKey: config.selectedVibe,
-            hint: config.userPrompt.trim() || undefined,
-            jobId,
-            stylePrompt: config.stylePrompt || undefined,
-          });
-        } else {
-          result = await generateFromRecipe(recipe ?? DEFAULT_RECIPE, { jobId });
-        }
+        result = await generateFromVibeProfile(vibeProfile ?? ({} as VibeProfile), {
+          mediumKey: config.selectedMedium,
+          vibeKey: config.selectedVibe,
+          hint: config.userPrompt.trim() || undefined,
+          jobId,
+          stylePrompt: config.stylePrompt || undefined,
+        });
       }
 
       // Guard: if the user queued this dream and started a new one, don't clobber

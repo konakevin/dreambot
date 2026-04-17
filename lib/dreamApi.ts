@@ -1,6 +1,11 @@
 /**
- * Dream API — thin client that delegates all AI generation to the
- * generate-dream Edge Function. No API keys on the client.
+ * Dream API — thin client that delegates all AI generation to Edge Functions.
+ * No API keys on the client.
+ *
+ * Three endpoints:
+ *   generate-dream  — V4 compiler (text directive, self-insert, DLT, photo reimagine)
+ *   nightly-dreams   — nightly cron pipeline (called by scripts/nightly-dreams.js)
+ *   restyle-photo    — photo restyle via Kontext/Flux (Phase 3.4)
  */
 
 import { supabase } from '@/lib/supabase';
@@ -10,36 +15,27 @@ import type { VibeProfile, PromptMode } from '@/types/vibeProfile';
 interface GenerateDreamOpts {
   /** Which Flux model to use */
   mode: 'flux-dev' | 'flux-kontext';
-  /** User's taste recipe — server builds prompt from this */
-  recipe?: Recipe;
   /** Pre-built prompt */
   prompt?: string;
   /** Optional user hint to weave into the dream */
   hint?: string;
-  /** Base64 data URL for flux-kontext (photo-to-image) */
+  /** Base64 data URL for flux-kontext (photo reimagine) */
   input_image?: string;
-  /** Custom Haiku brief (for photo reimagining) */
-  haiku_brief?: string;
-  /** Fallback prompt if Haiku fails */
-  haiku_fallback?: string;
-  /** Whether to persist to Storage (default: false — persist on post, not generate) */
-  persist?: boolean;
-  /** Skip Haiku enhancement — use raw prompt (faster) */
-  skip_enhance?: boolean;
-  /** Vibe Profile v2 — two-pass prompt generation */
+  /** Photo style: 'reimagine' for vision + Sonnet rewrite */
+  photo_style?: 'reimagine';
+  /** Vibe Profile v2 — provides dream_cast for self-insert detection */
   vibe_profile?: VibeProfile;
-  /** Prompt mode for vibe profile generation (legacy) */
-  prompt_mode?: PromptMode;
-  /** V2 engine — curated medium key */
+  /** V4 engine — curated medium key */
   medium_key?: string;
-  /** V2 engine — curated vibe key */
+  /** V4 engine — curated vibe key */
   vibe_key?: string;
-  /** Photo style: 'restyle' keeps scene, 'reimagine' dreams up new scenario */
-  photo_style?: 'restyle' | 'reimagine';
   /** Client-generated job ID for queue tracking */
   job_id?: string;
   /** Style transfer: original post's ai_prompt used as style template for DLT */
   style_prompt?: string;
+  // Legacy fields kept for backward compat during transition
+  recipe?: Recipe;
+  prompt_mode?: PromptMode;
 }
 
 interface GenerateDreamResult {
@@ -63,7 +59,7 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
   const t0 = Date.now();
   if (__DEV__) {
     console.log(
-      `[dreamApi] Invoking generate-dream (mode=${opts.mode}, persist=${opts.persist ?? false}, skip_enhance=${opts.skip_enhance ?? false})...`
+      `[dreamApi] Invoking generate-dream (mode=${opts.mode}, medium=${opts.medium_key ?? 'none'})...`
     );
   }
   const { data, error } = await supabase.functions.invoke('generate-dream', {
@@ -115,24 +111,7 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
 }
 
 /**
- * Convenience: generate a text-to-image dream from a recipe.
- * Used by justDream() and the onboarding RevealStep.
- */
-export async function generateFromRecipe(
-  recipe: Recipe,
-  opts?: { hint?: string; skipEnhance?: boolean; jobId?: string }
-): Promise<GenerateDreamResult> {
-  return generateDream({
-    mode: 'flux-dev',
-    recipe,
-    hint: opts?.hint,
-    skip_enhance: opts?.skipEnhance,
-    job_id: opts?.jobId,
-  });
-}
-
-/**
- * Convenience: generate a dream from a VibeProfile v2 using the two-pass engine.
+ * Convenience: generate a dream from a VibeProfile v2 using the V4 compiler.
  */
 export async function generateFromVibeProfile(
   profile: VibeProfile,
@@ -158,22 +137,75 @@ export async function generateFromVibeProfile(
 }
 
 /**
- * Convenience: generate a photo-to-image dream (Flux Kontext).
- * Used by the Dream screen when user picks a photo.
+ * Photo restyle — transforms a photo into a medium style via Kontext/Flux.
+ * Calls the dedicated restyle-photo Edge Function (Phase 3.4).
  */
-export async function generateFromPhoto(
-  recipe: Recipe,
-  inputImageBase64: string,
-  opts?: { hint?: string; haiku_brief?: string; haiku_fallback?: string }
-): Promise<GenerateDreamResult> {
-  return generateDream({
-    mode: 'flux-kontext',
-    recipe,
-    input_image: inputImageBase64,
-    hint: opts?.hint,
-    haiku_brief: opts?.haiku_brief,
-    haiku_fallback: opts?.haiku_fallback,
+export async function restylePhoto(opts: {
+  inputImageBase64: string;
+  mediumKey: string;
+  vibeKey: string;
+  hint?: string;
+  vibeProfile?: VibeProfile;
+  jobId?: string;
+}): Promise<GenerateDreamResult> {
+  const t0 = Date.now();
+  if (__DEV__) {
+    console.log(
+      `[dreamApi] Invoking restyle-photo (medium=${opts.mediumKey}, vibe=${opts.vibeKey})...`
+    );
+  }
+
+  const { data, error } = await supabase.functions.invoke('restyle-photo', {
+    body: {
+      mode: 'flux-kontext',
+      input_image: opts.inputImageBase64,
+      medium_key: opts.mediumKey,
+      vibe_key: opts.vibeKey,
+      hint: opts.hint,
+      vibe_profile: opts.vibeProfile,
+      job_id: opts.jobId,
+    },
   });
+
+  if (error) {
+    if (__DEV__) console.error('[dreamApi] restyle-photo error:', JSON.stringify(error));
+    let msg: string;
+    if (typeof error === 'object' && error !== null) {
+      const ctx = (error as Record<string, unknown>).context;
+      if (ctx && typeof ctx === 'object' && 'json' in (ctx as Record<string, unknown>)) {
+        try {
+          const body = await (ctx as Response).json();
+          msg = body?.error ?? body?.message ?? String(error);
+        } catch {
+          msg = (error as { message?: string }).message ?? String(error);
+        }
+      } else {
+        msg = (error as { message?: string }).message ?? String(error);
+      }
+    } else {
+      msg = String(error);
+    }
+    throw new Error(msg);
+  }
+
+  if (__DEV__) {
+    console.log(
+      `[dreamApi] restyle-photo response in ${Date.now() - t0}ms:`,
+      JSON.stringify(data).slice(0, 200)
+    );
+  }
+
+  if (!data || !data.image_url) {
+    throw new Error(data?.error ?? 'No image returned from restyle-photo');
+  }
+
+  return {
+    image_url: data.image_url,
+    prompt_used: data.enhanced_prompt ?? data.prompt_used ?? '',
+    resolved_medium: data.resolved_medium,
+    resolved_vibe: data.resolved_vibe,
+    upload_id: data.upload_id,
+  };
 }
 
 /**

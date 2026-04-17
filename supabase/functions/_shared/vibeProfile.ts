@@ -60,6 +60,19 @@ export interface VibeProfile {
   /** Photos described as text — randomly appear in dreams as stylized characters */
   dream_cast: DreamCastMember[];
   avoid: string[];
+  /**
+   * Legacy V1 fields — still present on some user_recipes.recipe JSON blobs.
+   * Read-only from the server side; the V1 two-pass engine in vibeEngine.ts
+   * still dereferences them until Phase 3 deletes that file.
+   */
+  personal_anchors?: {
+    place?: string;
+    object?: string;
+    era?: string;
+    dream_vibe?: string;
+  };
+  /** Legacy V1: one of 12 spirit creature keys (e.g. 'fox', 'owl'). */
+  spirit_companion?: string;
 }
 
 export const DEFAULT_DREAM_SEEDS: DreamSeeds = {

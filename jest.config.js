@@ -8,6 +8,13 @@ module.exports = {
     '^\\.\\./recipe\\.ts$': '<rootDir>/types/recipe',
     '^\\./vibeProfile\\.ts$': '<rootDir>/types/vibeProfile',
     '^\\./recipe\\.ts$': '<rootDir>/types/recipe',
+    '^\\./castResolver\\.ts$':
+      '<rootDir>/supabase/functions/_shared/castResolver',
+    '^\\./renderEntity\\.ts$':
+      '<rootDir>/supabase/functions/_shared/renderEntity',
+    // Map Deno URL imports to mocks
+    '^https://esm\\.sh/@supabase/supabase-js@2$':
+      '<rootDir>/__tests__/__mocks__/supabase-esm.js',
   },
   globals: {
     __DEV__: true,

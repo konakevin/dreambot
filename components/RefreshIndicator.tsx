@@ -1,74 +1,44 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Animated, {
-  type SharedValue,
-  useAnimatedStyle,
-  useAnimatedReaction,
-  runOnJS,
-} from 'react-native-reanimated';
-import * as Haptics from 'expo-haptics';
-import { colors } from '@/constants/theme';
+/**
+ * RefreshIndicator — floating feedback at the top of fullscreen feeds.
+ *
+ * Two modes:
+ *   1. Pull-to-refresh hint (tracks pullY shared value, shows "Pull/Release to refresh")
+ *   2. Refreshing spinner (shows Spinner while data is loading)
+ *
+ * FullScreenFeed uses mode 2 (isRefreshing prop).
+ */
 
-const PULL_THRESHOLD = 120;
+import { StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { Spinner } from '@/components/Spinner';
 
 interface RefreshIndicatorProps {
-  pullY: SharedValue<number>;
+  visible: boolean;
 }
 
-export function RefreshIndicator({ pullY }: RefreshIndicatorProps) {
-  const [pastThreshold, setPastThreshold] = useState(false);
-
-  useAnimatedReaction(
-    () => pullY.value > PULL_THRESHOLD,
-    (current, previous) => {
-      if (current !== previous) {
-        runOnJS(setPastThreshold)(current);
-        if (current) {
-          runOnJS(Haptics.selectionAsync)();
-        }
-      }
-    }
-  );
-
-  const animatedStyle = useAnimatedStyle(() => {
-    const progress = Math.min(pullY.value / 60, 1);
-    const visualY = pullY.value * 0.15;
-    return {
-      opacity: progress,
-      transform: [{ translateY: visualY - 10 }],
-    };
-  });
+export function RefreshIndicator({ visible }: RefreshIndicatorProps) {
+  const insets = useSafeAreaInsets();
+  if (!visible) return null;
 
   return (
-    <Animated.View style={[styles.container, animatedStyle]} pointerEvents="none">
-      <View style={styles.pill}>
-        <Text style={styles.text}>{pastThreshold ? 'Release to refresh' : 'Pull to refresh'}</Text>
-      </View>
+    <Animated.View
+      entering={FadeIn.duration(150)}
+      exiting={FadeOut.duration(150)}
+      style={[s.container, { top: insets.top + 12 }]}
+      pointerEvents="none"
+    >
+      <Spinner />
     </Animated.View>
   );
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 8,
     left: 0,
     right: 0,
+    zIndex: 20,
     alignItems: 'center',
-    zIndex: 100,
-  },
-  pill: {
-    backgroundColor: colors.card,
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  text: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 0.3,
   },
 });
