@@ -29,7 +29,7 @@ const SDXL_OVERRIDES = {
   guidance_scale: 7.5,
 } as const;
 
-const SDXL_ALWAYS = new Set(['pixels']);
+const SDXL_ALWAYS = new Set<string>();
 const DEFAULT_MODEL = 'black-forest-labs/flux-2-dev';
 
 // ── In-memory cache ─────────────────────────────────────────────────────
@@ -114,7 +114,8 @@ export async function pickModel(
   if (mediumKey && vibeKey) {
     const overrideModels = overrideCache.get(`${mediumKey}|${vibeKey}`);
     if (overrideModels && overrideModels.length > 0) {
-      return { model: pickRandom(overrideModels), inputOverrides: {} };
+      const picked = pickRandom(overrideModels);
+      return { model: picked, inputOverrides: picked === 'sdxl' ? { ...SDXL_OVERRIDES } : {} };
     }
   }
 
@@ -122,21 +123,8 @@ export async function pickModel(
   if (mediumKey) {
     const mediumModels = mediumModelsCache.get(mediumKey);
     if (mediumModels && mediumModels.length > 0) {
-      return { model: pickRandom(mediumModels), inputOverrides: {} };
-    }
-  }
-
-  // SDXL fallback by keyword — only when no medium key provided
-  if (!mediumKey) {
-    const p = prompt.toLowerCase();
-    if (
-      p.includes('anime') ||
-      p.includes('manga') ||
-      p.includes('pixel art') ||
-      p.includes('8-bit') ||
-      p.includes('16-bit')
-    ) {
-      return { model: 'sdxl', inputOverrides: { ...SDXL_OVERRIDES } };
+      const picked = pickRandom(mediumModels);
+      return { model: picked, inputOverrides: picked === 'sdxl' ? { ...SDXL_OVERRIDES } : {} };
     }
   }
 

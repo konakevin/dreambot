@@ -23,31 +23,21 @@ describe('pickModel', () => {
     expect(result.model).toBe('black-forest-labs/flux-2-dev');
   });
 
-  it('returns sdxl with overrides for pixels medium', async () => {
+  it('returns default model for pixels medium (DB-routed, not SDXL_ALWAYS)', async () => {
     const result = await pickModel('text-to-image', 'retro game scene', 'pixels');
-    expect(result.model).toBe('sdxl');
-    expect(result.inputOverrides).toEqual({
-      width: 768,
-      height: 1344,
-      num_inference_steps: 30,
-      guidance_scale: 7.5,
-    });
+    // Pixels uses DB allowed_models now (flux-dev, flux-2-dev, flux-2-pro, sdxl).
+    // In test Deno.env fails so it falls to default.
+    expect(result.model).toBe('black-forest-labs/flux-2-dev');
   });
 
-  it('returns sdxl when no medium and prompt contains "anime"', async () => {
-    const result = await pickModel('text-to-image', 'anime warrior in rain');
-    expect(result.model).toBe('sdxl');
-    expect(result.inputOverrides).toMatchObject({ width: 768, height: 1344 });
-  });
-
-  it('returns sdxl when no medium and prompt contains "pixel art"', async () => {
-    const result = await pickModel('text-to-image', 'pixel art castle at night');
-    expect(result.model).toBe('sdxl');
-  });
-
-  it('returns sdxl when no medium and prompt contains "8-bit"', async () => {
-    const result = await pickModel('text-to-image', 'an 8-bit dungeon crawler');
-    expect(result.model).toBe('sdxl');
+  it('returns default model for keyword prompts without medium (no keyword SDXL fallback)', async () => {
+    const anime = await pickModel('text-to-image', 'anime warrior in rain');
+    const pixel = await pickModel('text-to-image', 'pixel art castle at night');
+    const eightBit = await pickModel('text-to-image', 'an 8-bit dungeon crawler');
+    // No more keyword-based SDXL routing — all go to default when no medium selected
+    expect(anime.model).toBe('black-forest-labs/flux-2-dev');
+    expect(pixel.model).toBe('black-forest-labs/flux-2-dev');
+    expect(eightBit.model).toBe('black-forest-labs/flux-2-dev');
   });
 
   it('returns flux-2-dev default when no medium and normal prompt', async () => {

@@ -47,6 +47,7 @@ const MODEL_REGISTRY = {
   'flux2-dev': 'black-forest-labs/flux-2-dev',
   'flux2-pro': 'black-forest-labs/flux-2-pro',
   'flux2-max': 'black-forest-labs/flux-2-max',
+  'sdxl': 'sdxl',
 };
 
 const args = process.argv.slice(2);

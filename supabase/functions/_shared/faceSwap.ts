@@ -10,7 +10,7 @@
 
 const FACE_SWAP_VERSION = '278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34';
 
-export async function faceSwap(
+async function faceSwapOnce(
   sourceImageDataUrl: string,
   targetImageUrl: string,
   replicateToken: string
@@ -49,4 +49,28 @@ export async function faceSwap(
     }
   }
   throw new Error('Face swap timed out');
+}
+
+/**
+ * Ship C: wraps faceSwapOnce with a single retry on timeout. Cold-start
+ * timeouts on Replicate's side are common and usually transient — the
+ * first attempt warms the container, the second almost always succeeds.
+ * Only retries on timeout (not on `failed` or `canceled` which are
+ * deterministic errors that won't recover).
+ */
+export async function faceSwap(
+  sourceImageDataUrl: string,
+  targetImageUrl: string,
+  replicateToken: string
+): Promise<string> {
+  try {
+    return await faceSwapOnce(sourceImageDataUrl, targetImageUrl, replicateToken);
+  } catch (err) {
+    const msg = (err as Error).message || '';
+    if (msg.includes('timed out')) {
+      console.warn('[faceSwap] first attempt timed out — retrying once');
+      return await faceSwapOnce(sourceImageDataUrl, targetImageUrl, replicateToken);
+    }
+    throw err;
+  }
 }
