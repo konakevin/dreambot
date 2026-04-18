@@ -16,15 +16,11 @@ describe('pickModel', () => {
     expect(result.inputOverrides).toEqual({});
   });
 
-  it('returns sdxl with overrides for anime medium', async () => {
+  it('returns default model for anime medium (no longer SDXL-routed)', async () => {
     const result = await pickModel('text-to-image', 'a beautiful sunset', 'anime');
-    expect(result.model).toBe('sdxl');
-    expect(result.inputOverrides).toEqual({
-      width: 768,
-      height: 1344,
-      num_inference_steps: 30,
-      guidance_scale: 7.5,
-    });
+    // Anime uses Flux now (danbooru tags via compiler). DB allowed_models would
+    // pick the model in production; in test Deno.env fails so it falls to default.
+    expect(result.model).toBe('black-forest-labs/flux-2-dev');
   });
 
   it('returns sdxl with overrides for pixels medium', async () => {

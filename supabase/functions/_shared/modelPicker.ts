@@ -29,7 +29,7 @@ const SDXL_OVERRIDES = {
   guidance_scale: 7.5,
 } as const;
 
-const SDXL_ALWAYS = new Set(['anime', 'pixels']);
+const SDXL_ALWAYS = new Set(['pixels']);
 const DEFAULT_MODEL = 'black-forest-labs/flux-2-dev';
 
 // ── In-memory cache ─────────────────────────────────────────────────────

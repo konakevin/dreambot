@@ -106,6 +106,9 @@ const CHARACTER_TEMPLATES: Record<string, string> = {
 
   coquette:
     'dreamy surreal figure with {hairColor} flowing ethereal hair, {eyeColor} luminous eyes, soft impossible lighting, chromatic prismatic glow',
+
+  anime:
+    'anime character with {hairColor} stylized flowing hair, large expressive {eyeColor} eyes with light reflections, {facialHairDetail}, {build} anime proportions, clean cel-shaded skin, confident ink outlines',
 };
 
 // ── Template Filling ──────────────────────────────────────────────────

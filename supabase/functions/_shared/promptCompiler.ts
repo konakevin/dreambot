@@ -153,7 +153,7 @@ function buildCharacterBlock(
     const c = cast[0];
     if (isEmbodied) {
       parts.push(
-        `THE CHARACTER (${mediumStyle} style — render as-is, do NOT make photorealistic):`
+        `THE CHARACTER — transform this person into ${mediumStyle} style (use the medium's aesthetic, NOT photorealistic):`
       );
       parts.push(c.promptDesc);
     } else {
@@ -185,11 +185,16 @@ function buildCameraBlock(composition: CompilerInput['composition']): string {
 
   if (composition.faceSwapEligible) {
     parts.push(
-      'Subject facing camera, eyes visible, face well-lit, face occupies 15-30% of image height. No back views, no silhouettes, no faces in shadow.'
+      'Subject facing camera, eyes visible, face well-lit. No back views, no silhouettes, no faces in shadow.'
+    );
+    parts.push(
+      'Character face must have realistic human proportions — normal sized eyes, natural face shape. A real photo face will be composited on, so the rendered face must be proportionally compatible.'
     );
   }
 
-  parts.push('Portrait 9:16 vertical — depth stacked top to bottom.');
+  parts.push(
+    'Portrait 9:16 vertical — wide environmental framing, show the full scene. Subject in context, NOT a tight headshot. Depth stacked top to bottom.'
+  );
   return parts.join('\n');
 }
 
@@ -243,7 +248,18 @@ export function compilePrompt(input: CompilerInput): CompilerOutput {
   const cameraBlock = buildCameraBlock(composition);
   const mediumSummary = summarizeMediumDirective(medium.directive);
 
-  const brief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-90 words, comma-separated).
+  // Engine-specific output format instructions
+  // Anime uses danbooru tag format — Flux handles tags well via T5 encoder
+  const useTagFormat = medium.key === 'anime';
+  const formatHeader = useTagFormat
+    ? `You are an anime character designer. Write danbooru-style tags for an anime image.
+
+OUTPUT FORMAT: comma-separated danbooru tags, NOT natural language sentences.
+Include a framing tag (randomly pick ONE: full_body, upper_body, cowboy_shot, or wide_shot).
+Start with: ${medium.fluxFragment}
+End with: masterpiece, best quality, detailed background, no text, no watermark, single image, no collage, no split screen
+Do NOT write sentences or descriptions. ONLY tags.`
+    : `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-90 words, comma-separated).
 
 WORD BUDGET:
 - Character/subject: ~${budget.character} words
@@ -256,7 +272,9 @@ OUTPUT STRUCTURE:
 3. Subject/character
 4. Camera + mood
 5. Your invented details
-6. End with: no text, no words, no letters, no watermarks, ultra detailed
+6. End with: no text, no words, no letters, no watermarks, ultra detailed`;
+
+  const brief = `${formatHeader}
 
 ═══ SCENE (SACRED — must appear) ═══
 ${sceneBlock}

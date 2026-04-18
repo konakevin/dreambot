@@ -17,6 +17,8 @@ interface DbMediumRow {
   face_swaps: boolean;
   character_render_mode: string;
   kontext_directive: string | null;
+  render_base: string | null;
+  engine: string | null;
 }
 
 /** App format — matches existing code expectations */
@@ -31,6 +33,8 @@ export interface ResolvedMedium {
   faceSwaps: boolean;
   characterRenderMode: 'natural' | 'embodied';
   kontextDirective: string | null;
+  renderBase: string | null;
+  engine: string | null;
 }
 
 export interface ResolvedVibe {
@@ -53,6 +57,8 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
       | 'natural'
       | 'embodied',
     kontextDirective: row.kontext_directive,
+    renderBase: row.render_base,
+    engine: row.engine,
   };
 }
 

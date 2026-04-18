@@ -18,7 +18,7 @@ import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
-import { buildRenderEntity } from '../_shared/renderEntity.ts';
+// buildRenderEntity removed — full cast description now passes to Sonnet directly
 import { getLocationCard } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
@@ -161,6 +161,8 @@ Deno.serve(async (req) => {
     }
     resolvedMediumKey = nightlyMedium.key;
     resolvedVibeKey = nightlyVibe.key;
+
+    const baseMedium = nightlyMedium;
 
     console.log(
       '[nightly-dreams] NIGHTLY DREAMBOT | medium:',
@@ -333,22 +335,14 @@ Deno.serve(async (req) => {
     // Natural -> raw cast description (face swap handles identity)
     // Embodied -> pre-transformed medium-native description (LEGO minifig, clay figure, etc.)
     // ALL downstream prompt construction uses resolvedCast.promptDesc exclusively.
-    function resolveCharacterDesc(
-      member: DreamCastMember,
-      mode: 'natural' | 'embodied' | 'none'
-    ): string {
-      const raw = member.description ?? (member.role === 'pet' ? 'a small creature' : 'a figure');
-      if (mode === 'embodied') {
-        return buildRenderEntity(raw, nightlyMedium.characterRenderMode, nightlyMedium.key)
-          .description;
-      }
-      return raw;
+    function resolveCharacterDesc(member: DreamCastMember): string {
+      return member.description ?? (member.role === 'pet' ? 'a small creature' : 'a figure');
     }
 
     const resolvedCast = selectedCast.map((m) => ({
       role: m.role,
       rawDescription: (m as DreamCastMember).description ?? '',
-      promptDesc: resolveCharacterDesc(m as DreamCastMember, renderMode),
+      promptDesc: resolveCharacterDesc(m as DreamCastMember),
     }));
 
     if (resolvedCast.length > 0) {
@@ -437,7 +431,7 @@ Deno.serve(async (req) => {
         nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
 STRUCTURE:
-1. Start with: "${nightlyMedium.fluxFragment}"
+1. Start with: "${baseMedium.fluxFragment}"
 2. SCENE/ENVIRONMENT (50% of words)
 3. SUBJECT FRAMING (must be early in the prompt)
 4. CHARACTER (20% of words)
@@ -475,7 +469,7 @@ Output ONLY the prompt.`;
         nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
 CRITICAL STRUCTURE — follow this order EXACTLY:
-1. Start with: "${nightlyMedium.fluxFragment}"
+1. Start with: "${baseMedium.fluxFragment}"
 2. SCENE/ENVIRONMENT (spend 60% of words here — this is the star)
 3. CHARACTER placed naturally in the scene (spend 20% of words)
 4. CAMERA + MOOD (spend 20% of words)
@@ -515,7 +509,7 @@ Output ONLY the prompt.`;
           : `a tiny ${mediumStyle}-style ${shortCastDesc}`;
       nightlyBrief = `You are a cinematographer composing an EPIC, VAST scene. Write a Flux AI prompt (60-90 words, comma-separated).
 
-MEDIUM: ${nightlyMedium.fluxFragment}
+MEDIUM: ${baseMedium.fluxFragment}
 
 STYLE GUIDE (follow this closely):
 ${nightlyMedium.directive}
@@ -546,7 +540,7 @@ Output ONLY the prompt.`;
       // ── Pure scene — no character, just breathtaking art ──
       nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
 
-MEDIUM: ${nightlyMedium.fluxFragment}
+MEDIUM: ${baseMedium.fluxFragment}
 
 DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — this is sacred, do NOT water it down:
 ${dreamSubject}
@@ -577,7 +571,7 @@ Output ONLY the prompt.`;
       finalPrompt = sonnet.text;
     } catch (err) {
       fallbackReasons.push(`nightly_sonnet_failed:${(err as Error).message}`);
-      finalPrompt = `${nightlyMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive && nightlyVibe.directive.length > 0 ? nightlyVibe.directive.split('.')[0] : 'dramatic atmosphere'}, no text, hyper detailed`;
+      finalPrompt = `${baseMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive && nightlyVibe.directive.length > 0 ? nightlyVibe.directive.split('.')[0] : 'dramatic atmosphere'}, no text, hyper detailed`;
     }
 
     // Post-process: ensure location name appears in final prompt (Sonnet sometimes drifts)

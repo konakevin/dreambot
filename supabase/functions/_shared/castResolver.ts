@@ -7,8 +7,6 @@
  * Gender lock: NON-NEGOTIABLE phrase baked into every resolved cast member.
  */
 
-import { buildRenderEntity } from './renderEntity.ts';
-
 export interface DreamCastMember {
   role: string;
   thumb_url: string;
@@ -62,21 +60,11 @@ export function resolveCastForPrompt(
         gender = isFemale ? 'female' : 'male';
       }
 
-      // Build medium-native description
-      let promptDesc: string;
-      if (medium.characterRenderMode === 'embodied' && member.role !== 'pet') {
-        // Embodied: full description → trait extraction → template fill
-        // NEVER truncate — trait extraction needs hair, beard, build sections
-        const entity = buildRenderEntity(cleanDesc, medium.characterRenderMode, medium.key);
-        promptDesc = entity.description;
-      } else if (member.role === 'pet') {
-        // Pets pass through raw in all modes
-        promptDesc = cleanDesc;
-      } else {
-        // Natural: full prose, NEVER truncated
-        // Face swap handles facial identity, Sonnet needs body/hair/build cues
-        promptDesc = cleanDesc;
-      }
+      // Full description passes to Sonnet for ALL modes (natural + embodied).
+      // Sonnet + the medium's directive handle style transformation.
+      // No more trait extraction — Sonnet is better at translating
+      // "full beard, athletic build" into "sculpted clay beard, stocky clay proportions."
+      const promptDesc = cleanDesc;
 
       // Gender lock (not for pets)
       let genderLock: string | null = null;
