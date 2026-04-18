@@ -102,7 +102,7 @@ const CHARACTER_TEMPLATES: Record<string, string> = {
     'knitted Sackboy-style craft figure with {hairColor} yarn hair, {eyeColor} button eyes, {facialHairDetail}, stitched fabric skin, felt and burlap textures',
 
   gothic:
-    'dark gothic illustrated character in Tim Burton style, {hairColor} wild spindly hair, {eyeColor} wide haunted eyes, {facialHairDetail}, pale sharp angular features, dark whimsy',
+    'dark whimsical stop-motion puppet character with enormous soulful {eyeColor} eyes dominating the face, {hairColor} wild gravity-defying spindly hair, {facialHairDetail}, pale porcelain skin with visible handcrafted texture, impossibly slender elongated limbs, long delicate spindly fingers, {build} but exaggerated willowy proportions, goth-Victorian clothing with dark lace and tattered frills, darkly adorable and endearing',
 
   coquette:
     'dreamy surreal figure with {hairColor} flowing ethereal hair, {eyeColor} luminous eyes, soft impossible lighting, chromatic prismatic glow',

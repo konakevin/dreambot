@@ -271,7 +271,7 @@ There must be exactly ONE dominant visual subject: ${composition.focalAnchor}
 ${scene.objectDirective ? `═══ SCENE OBJECT (MUST APPEAR) ═══\n${scene.objectDirective}\n\n` : ''}${characterBlock ? `═══ CHARACTER ═══\n${characterBlock}\n\n` : ''}═══ CAMERA ═══
 ${cameraBlock}
 
-═══ STYLE ═══
+═══ STYLE${medium.characterRenderMode === 'embodied' ? ' (TRANSFORM EVERYTHING — the scene, environment, and characters ALL become this style. A forest becomes a stylized forest. A city becomes a stylized city. Nothing stays photorealistic.)' : ''} ═══
 ${mediumSummary}
 
 ═══ MOOD ═══

@@ -202,7 +202,7 @@ Deno.serve(async (req) => {
   let photoOverrideMode: string | null = null;
   let logAxes: Record<string, unknown> = {};
 
-  const config = getPhotoRestyleConfig(medium.key);
+  const config = getPhotoRestyleConfig(medium.key, medium);
   // Apply gender modifier (coquette routing) — null gender = female default for restyle
   const rawVibeDirective = vibe.directive ? vibe.directive.slice(0, 200) : '';
   const vibeDirective = applyVibeGenderModifier(vibe.key, rawVibeDirective, null);

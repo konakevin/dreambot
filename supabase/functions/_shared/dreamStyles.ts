@@ -16,6 +16,7 @@ interface DbMediumRow {
   nightly_skip: boolean;
   face_swaps: boolean;
   character_render_mode: string;
+  kontext_directive: string | null;
 }
 
 /** App format — matches existing code expectations */
@@ -29,6 +30,7 @@ export interface ResolvedMedium {
   nightlySkip: boolean;
   faceSwaps: boolean;
   characterRenderMode: 'natural' | 'embodied';
+  kontextDirective: string | null;
 }
 
 export interface ResolvedVibe {
@@ -50,6 +52,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     characterRenderMode: (row.character_render_mode === 'embodied' ? 'embodied' : 'natural') as
       | 'natural'
       | 'embodied',
+    kontextDirective: row.kontext_directive,
   };
 }
 

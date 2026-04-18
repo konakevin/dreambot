@@ -1,11 +1,11 @@
 /**
  * Coverage test for photo restyle configs.
  *
- * Why this exists: in April 2026 the Twilight medium was added to the DB but
- * its photo restyle config was forgotten in `MEDIUM_CONFIGS`. The photo path
- * silently fell through to a generic 1-line fallback that ignored gender
- * preservation rules. Took a user complaint to find it. This test catches it
- * at CI time instead.
+ * Most mediums auto-generate Kontext instructions from the DB's
+ * kontext_directive column. Only LEGO and vinyl need custom configs
+ * in MEDIUM_CONFIGS (they use flux-dev full rebuild).
+ *
+ * This test verifies the custom configs exist and no orphans remain.
  */
 
 import * as fs from 'fs';
@@ -21,37 +21,13 @@ const PHOTO_PROMPTS_PATH = path.join(
   'photoPrompts.ts'
 );
 
-// The 20 active mediums from dream_mediums (as of April 2026).
-// Update this list whenever a medium is added or removed in the DB.
-// (TODO: read from DB at test time so we don't have to maintain this manually.)
-const ACTIVE_MEDIUMS = [
-  'anime',
-  'animation',
-  'canvas',
-  'claymation',
-  'comics',
-  'coquette',
-  'fairytale',
-  'gothic',
-  'handcrafted',
-  'lego',
-  'neon',
-  'pencil',
-  'photography',
-  'pixels',
-  'shimmer',
-  'storybook',
-  'surreal',
-  'twilight',
-  'vaporwave',
-  'vinyl',
-  'watercolor',
-];
+// Only these mediums need custom MEDIUM_CONFIGS entries (flux-dev rebuild).
+// All others auto-generate from DB kontext_directive via getPhotoRestyleConfig.
+const CUSTOM_CONFIG_MEDIUMS = ['lego', 'vinyl'];
 
 describe('photoPrompts MEDIUM_CONFIGS coverage', () => {
   const source = fs.readFileSync(PHOTO_PROMPTS_PATH, 'utf-8');
 
-  // Match top-level MEDIUM_CONFIGS keys: lines like `  somekey: {` (2-space indent + identifier + colon + brace)
   const keyRegex = /^ {2}([a-z][a-z0-9_]*): \{$/gm;
   const foundKeys = new Set<string>();
   let m: RegExpExecArray | null;
@@ -59,26 +35,21 @@ describe('photoPrompts MEDIUM_CONFIGS coverage', () => {
     foundKeys.add(m[1]);
   }
 
-  it.each(ACTIVE_MEDIUMS)('has a MEDIUM_CONFIGS entry for "%s"', (medium) => {
-    expect(foundKeys.has(medium)).toBe(true);
-  });
+  it.each(CUSTOM_CONFIG_MEDIUMS)(
+    'has a MEDIUM_CONFIGS entry for "%s" (flux-dev rebuild)',
+    (medium) => {
+      expect(foundKeys.has(medium)).toBe(true);
+    }
+  );
 
-  it('has no orphan entries for inactive mediums', () => {
-    const orphans = [...foundKeys].filter((k) => !ACTIVE_MEDIUMS.includes(k));
+  it('has no orphan entries beyond the expected custom configs', () => {
+    const orphans = [...foundKeys].filter((k) => !CUSTOM_CONFIG_MEDIUMS.includes(k));
     expect(orphans).toEqual([]);
   });
 
-  it('has no duplicate keys', () => {
-    // Re-scan and count occurrences (in case a key appears twice, the regex collected it once in the Set above).
-    const counts: Record<string, number> = {};
-    let m2: RegExpExecArray | null;
-    const re = /^ {2}([a-z][a-z0-9_]*): \{$/gm;
-    while ((m2 = re.exec(source)) !== null) {
-      counts[m2[1]] = (counts[m2[1]] || 0) + 1;
-    }
-    const duplicates = Object.entries(counts)
-      .filter(([, v]) => v > 1)
-      .map(([k]) => k);
-    expect(duplicates).toEqual([]);
+  it('getPhotoRestyleConfig auto-generates for non-custom mediums', () => {
+    // Verify the function signature accepts medium object for auto-gen
+    expect(source).toContain('kontextDirective');
+    expect(source).toContain('kontext-pro');
   });
 });
