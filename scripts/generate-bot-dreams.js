@@ -259,7 +259,12 @@ async function regenSeeds(username, prefix) {
           }
           await sb
             .from('uploads')
-            .update({ is_active: true, is_posted: true })
+            .update({
+              is_active: true,
+              is_posted: true,
+              is_public: true,
+              posted_at: new Date().toISOString(),
+            })
             .eq('id', result.upload_id);
           console.log(`   ✅ Posted! (${++totalGenerated} total) [${seedPool.length} seeds remaining]`);
         }
