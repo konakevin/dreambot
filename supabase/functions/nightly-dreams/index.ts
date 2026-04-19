@@ -159,19 +159,31 @@ Deno.serve(async (req) => {
       .map((l) => (l.rolled_axes as Record<string, unknown>)?.vibe)
       .filter((v): v is string => typeof v === 'string' && v.length > 0);
     const profilePlaces = nightlyProfile.dream_seeds?.places ?? [];
+    const profileThings = [
+      ...(nightlyProfile.dream_seeds?.things ?? []),
+      ...(nightlyProfile.dream_seeds?.characters ?? []),
+    ];
     const recentPlaces = (recentLogs ?? [])
       .map((l) => {
         const prompt = (l.enhanced_prompt || '').toLowerCase();
         return profilePlaces.find((p) => prompt.includes(p.toLowerCase()));
       })
       .filter((p): p is string => !!p);
+    const recentThings = (recentLogs ?? [])
+      .map((l) => {
+        const prompt = (l.enhanced_prompt || '').toLowerCase();
+        return profileThings.find((t) => prompt.includes(t.toLowerCase()));
+      })
+      .filter((t): t is string => !!t);
     console.log(
       '[nightly-dreams] recent mediums:',
       recentMediums.slice(0, 5).join(', '),
       '| recent vibes:',
       recentVibes.slice(0, 5).join(', '),
       '| recent places:',
-      recentPlaces.slice(0, 5).join(', ')
+      recentPlaces.slice(0, 5).join(', '),
+      '| recent things:',
+      recentThings.slice(0, 5).join(', ')
     );
 
     // Watercolor removed from nightly — Kontext restyle consistently fails to transform
@@ -346,7 +358,14 @@ Deno.serve(async (req) => {
       includeLocation && placePool.length > 0
         ? placePool[Math.floor(Math.random() * placePool.length)]
         : undefined;
-    const thingsPool = [...seeds.things, ...seeds.characters];
+    // Same recency treatment on objects — rotates through user's things so
+    // all of them get a turn, not just the lucky first-pick ones.
+    let thingsPool = [...seeds.things, ...seeds.characters];
+    if (thingsPool.length > 0 && recentThings.length > 0) {
+      const excludeSet = new Set(recentThings);
+      const filtered = thingsPool.filter((t: string) => !excludeSet.has(t));
+      if (filtered.length >= 1) thingsPool = filtered;
+    }
     const userThing =
       includeObject && thingsPool.length > 0
         ? thingsPool[Math.floor(Math.random() * thingsPool.length)]
