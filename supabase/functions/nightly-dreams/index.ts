@@ -438,8 +438,13 @@ STRUCTURE:
 5. CAMERA + MOOD (20% of words)
 6. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — make it EPIC:
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
 ${dreamSubject}
+
+SELECT AND SUBORDINATE (critical):
+- The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
+- A strong single image with harmonious supporting details beats a busy one with everything crammed in.
+- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no rear angle"
@@ -475,8 +480,13 @@ CRITICAL STRUCTURE — follow this order EXACTLY:
 4. CAMERA + MOOD (spend 20% of words)
 5. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — make it EPIC:
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
 ${dreamSubject}
+
+SELECT AND SUBORDINATE (critical):
+- The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
+- A strong single image with harmonious supporting details beats a busy one with everything crammed in.
+- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 CHARACTER IN THE SCENE:
 ${castDescBlock}
@@ -514,8 +524,13 @@ MEDIUM: ${baseMedium.fluxFragment}
 STYLE GUIDE (follow this closely):
 ${nightlyMedium.directive}
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — this is the ENTIRE focus, describe in maximum vivid detail:
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
 ${dreamSubject}
+
+SELECT AND SUBORDINATE (critical):
+- The DREAM SCENE contains many raw elements. Pick ONE dominant environmental anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
+- A strong single landscape with harmonious supporting details beats a busy one with everything crammed in.
+- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
 
@@ -542,8 +557,13 @@ Output ONLY the prompt.`;
 
 MEDIUM: ${baseMedium.fluxFragment}
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — this is sacred, do NOT water it down:
+DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
 ${dreamSubject}
+
+SELECT AND SUBORDINATE (critical):
+- The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
+- A strong single image with harmonious supporting details beats a busy one with everything crammed in.
+- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 CAMERA/COMPOSITION: ${shotDirection}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
