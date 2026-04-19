@@ -73,11 +73,12 @@ interface RequestBody {
   subject_description?: string;
   /** Pre-classified photo subject type. Determines routing:
    *   - 'person'  → face-swap path (ephemeral cast from description, face from photo)
+   *   - 'group'   → description path: Flux renders the described people in scene, no face-swap
    *   - 'animal'  → description path: creature literally in the scene, no face-swap
    *   - 'object'  → description path: object literally in the scene, no face-swap
    *   - 'scenery' → description path: scene built inspired by the place, no face-swap
    */
-  subject_type?: 'person' | 'animal' | 'object' | 'scenery';
+  subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
 }
 
 Deno.serve(async (req) => {

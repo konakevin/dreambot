@@ -31,6 +31,10 @@ const TEST_PHOTOS = [
     label: 'MOUNTAIN LANDSCAPE (expect SCENERY)',
     url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
   },
+  {
+    label: 'FRIENDS GROUP (expect GROUP)',
+    url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80',
+  },
 ];
 
 async function getJwt() {

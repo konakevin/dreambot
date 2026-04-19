@@ -23,46 +23,78 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { describeWithVision } from '../_shared/vision.ts';
 
-const CLASSIFY_PROMPT = `Analyze this photo and describe its primary subject in one clear sentence (10-30 words), then append a type tag.
+const CLASSIFY_PROMPT = `Classify the primary subject of this photo and describe it.
 
-If you can CONFIDENTLY identify a single DOMINANT subject, describe it with visual specifics a painter would need (physical features, colors, distinguishing marks, pose, expression):
-- a specific person → describe them in flattering detail
-- a specific animal → describe the creature
-- a specific object → describe what it is and its key visual features
-- a specific place/scene → describe the setting and mood
+Return ONLY a JSON object matching this exact shape (no markdown, no code fences, no preamble):
+{"type":"<TYPE>","description":"<visual description, 15-50 words>"}
 
-If the photo has MULTIPLE competing subjects where none dominates (e.g. a group with no clear primary face), is too blurry/small/obscured to read, is a collage/meme/screenshot/abstract, or you cannot CONFIDENTLY name ONE dominant subject — respond with "UNCLEAR" as the description.
+TYPE values:
+- "person"  — one person is the clear dominant subject
+- "group"   — multiple people visible, none clearly dominant (describe each briefly, up to 4)
+- "animal"  — a single animal or pet
+- "object"  — a single object or thing (car, gadget, item)
+- "scenery" — landscape or place without people as the subject
+- "unclear" — too blurry/small/abstract/collage/meme to read confidently
 
-End with EXACTLY ONE of these type tags: [PERSON] | [ANIMAL] | [OBJECT] | [SCENERY] | [UNCLEAR]
+Description requirements — describe like a painter needs to render it (physical features, colors, pose, expression, distinguishing marks). Be specific and flattering.
 
 Examples:
-"A woman in her 30s with shoulder-length chestnut brown wavy hair, warm genuine smile, wearing a gray knit sweater [PERSON]"
-"A fluffy golden retriever with floppy ears and a bright happy expression, sitting on green grass [ANIMAL]"
-"A vintage cherry-red convertible sports car with chrome trim and leather seats, parked on cobblestones [OBJECT]"
-"A snowy alpine mountain peak at dusk with dramatic orange-pink clouds catching the light [SCENERY]"
-"UNCLEAR [UNCLEAR]"
-
-Output only the description + tag, no other text.`;
+{"type":"person","description":"A woman in her 30s with shoulder-length chestnut brown wavy hair, warm genuine smile, wearing a gray knit sweater"}
+{"type":"group","description":"Three people outdoors: a woman with curly brown hair in a red dress, a man with a beard in a blue button-down, and a teenage girl with long blonde hair in a denim jacket"}
+{"type":"animal","description":"A fluffy golden retriever with floppy ears and a bright happy expression, sitting on green grass"}
+{"type":"object","description":"A vintage cherry-red convertible sports car with chrome trim and leather seats, parked on cobblestones"}
+{"type":"scenery","description":"A snowy alpine mountain peak at dusk with dramatic orange-pink clouds catching the light"}
+{"type":"unclear","description":"unclear"}`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-type SubjectType = 'person' | 'animal' | 'object' | 'scenery' | 'unclear';
+type SubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';
+
+const VALID_TYPES = new Set<SubjectType>([
+  'person',
+  'group',
+  'animal',
+  'object',
+  'scenery',
+  'unclear',
+]);
 
 function parseResponse(raw: string): { description: string; type: SubjectType } {
-  // Expected format: "<description> [TYPE]"
-  const trimmed = raw.trim();
-  const match = trimmed.match(/^(.+?)\s*\[(PERSON|ANIMAL|OBJECT|SCENERY|UNCLEAR)\]\s*$/is);
-  if (match) {
-    const description = match[1].trim();
-    const type = match[2].toLowerCase() as SubjectType;
-    return { description, type };
+  // Strip markdown fences if Haiku added any (```json ... ```).
+  const stripped = raw
+    .trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  // Extract the JSON object — look for the first `{` and its matching `}`.
+  const firstBrace = stripped.indexOf('{');
+  if (firstBrace < 0) {
+    console.warn('[classify-photo] No JSON in response:', stripped.slice(0, 100));
+    return { description: stripped.slice(0, 200), type: 'unclear' };
   }
-  // Fallback: couldn't parse tag — treat as unclear
-  console.warn('[classify-photo] Could not parse type tag from:', trimmed.slice(0, 100));
-  return { description: trimmed.slice(0, 200), type: 'unclear' };
+  const jsonText = stripped.slice(firstBrace);
+  try {
+    // Attempt to parse. Haiku may output extra text after the JSON; use the
+    // last valid object we can parse by trimming back to the last `}`.
+    const lastBrace = jsonText.lastIndexOf('}');
+    const candidate = lastBrace > 0 ? jsonText.slice(0, lastBrace + 1) : jsonText;
+    const parsed = JSON.parse(candidate);
+    const type: SubjectType = VALID_TYPES.has(parsed.type) ? parsed.type : 'unclear';
+    const description = typeof parsed.description === 'string' ? parsed.description.trim() : '';
+    return { description, type };
+  } catch (err) {
+    console.warn(
+      '[classify-photo] JSON parse failed:',
+      (err as Error).message,
+      '| raw:',
+      stripped.slice(0, 150)
+    );
+    return { description: stripped.slice(0, 200), type: 'unclear' };
+  }
 }
 
 Deno.serve(async (req) => {
