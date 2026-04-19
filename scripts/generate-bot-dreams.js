@@ -46,33 +46,33 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
   // ── Seeded & active on cron ──
-  dragonbot: { mediums: ['canvas', 'watercolor'], excludeVibes: ['minimal', 'dark'] },
+  dragonbot: { mediums: ['canvas', 'watercolor', 'illustration', 'pencil'], excludeVibes: ['minimal', 'dark'] },
   mangabot: {
     mediums: ['anime'],
-    excludeVibes: ['ancient', 'ominous', 'fierce', 'psychedelic', 'chaos', 'minimal'],
+    excludeVibes: ['ancient', 'fierce', 'psychedelic', 'minimal'],
     pinVibes: {
-      anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'majestic', 'majestic', 'dreamy', 'dreamy', 'dreamy', 'whimsical', 'whimsical', 'mystical', 'mystical', 'dark', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'],
+      anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'epic', 'epic', 'ethereal', 'ethereal', 'ethereal', 'whimsical', 'whimsical', 'arcane', 'arcane', 'dark', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'],
     },
   },
-  starbot: { mediums: ['photography', 'neon', 'canvas'], excludeVibes: ['minimal', 'whimsical'] },
-  venusbot: { mediums: ['surreal', 'surreal', 'neon', 'shimmer'], excludeVibes: ['minimal', 'whimsical'] },
-  sirenbot: { mediums: ['canvas', 'watercolor'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
-  gothbot: { mediums: ['gothic', 'anime', 'canvas'], excludeVibes: ['minimal'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
+  starbot: { mediums: ['photography', 'vaporwave', 'canvas', 'render'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
+  venusbot: { mediums: ['canvas', 'render', 'photography', 'vaporwave'], excludeVibes: ['minimal', 'whimsical'] },
+  sirenbot: { mediums: ['canvas', 'watercolor', 'photography', 'illustration'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
+  gothbot: { mediums: ['canvas', 'anime', 'comics', 'illustration', 'pencil'], excludeVibes: ['minimal', 'cozy', 'peaceful'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
-  glowbot: { mediums: ['watercolor', 'canvas'], excludeVibes: ['dark', 'ominous', 'chaos', 'fierce'] },
-  earthbot: { mediums: ['photography', 'canvas', 'watercolor'], excludeVibes: ['minimal', 'chaos', 'psychedelic'] },
-  arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics'], excludeVibes: ['ominous', 'ancient', 'cozy', 'peaceful'] },
-  toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic'] },
-  cuddlebot: { mediums: ['animation', 'claymation', 'storybook'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic', 'ancient'] },
+  glowbot: { mediums: ['watercolor', 'canvas', 'illustration', 'pencil'], excludeVibes: ['dark', 'fierce', 'macabre'] },
+  earthbot: { mediums: ['photography', 'canvas', 'watercolor', 'pencil'], excludeVibes: ['minimal', 'psychedelic', 'macabre'] },
+  arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics', 'illustration'], excludeVibes: ['ancient', 'cozy', 'peaceful'] },
+  toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'macabre'] },
+  cuddlebot: { mediums: ['animation', 'claymation', 'storybook', 'watercolor', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'ancient', 'macabre'] },
   // ── New bots ──
-  coquettebot: { mediums: ['coquette', 'fairytale', 'watercolor'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'psychedelic', 'ancient', 'epic'] },
-  animalbot: { mediums: ['photography', 'canvas', 'watercolor'], excludeVibes: ['minimal', 'psychedelic', 'chaos'] },
-  glambot: { mediums: ['photography', 'shimmer', 'canvas'], excludeVibes: ['ancient', 'ominous', 'cozy', 'minimal'] },
-  steambot: { mediums: ['canvas', 'photography'], excludeVibes: ['minimal', 'psychedelic', 'cozy'] },
-  tinybot: { mediums: ['photography', 'animation', 'claymation'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos'] },
-  bloombot: { mediums: ['photography', 'photography', 'photography', 'canvas', 'watercolor', 'pencil'], excludeVibes: ['dark', 'ominous', 'fierce', 'chaos', 'minimal'] },
-  inkbot: { mediums: ['comics', 'canvas', 'photography'], excludeVibes: ['whimsical', 'cozy', 'peaceful', 'cute'] },
-  titanbot: { mediums: ['canvas', 'photography'], excludeVibes: ['minimal', 'cozy', 'whimsical', 'cute', 'peaceful'] },
+  coquettebot: { mediums: ['fairytale', 'watercolor', 'canvas', 'pencil', 'photography'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'ancient', 'epic', 'macabre'], pinVibes: { fairytale: ['coquette', 'coquette', 'coquette', 'enchanted', 'whimsical', 'shimmer'] } },
+  animalbot: { mediums: ['photography', 'canvas', 'watercolor', 'pencil'], excludeVibes: ['minimal', 'psychedelic', 'macabre'] },
+  glambot: { mediums: ['photography', 'photography', 'canvas', 'vaporwave', 'render'], excludeVibes: ['ancient', 'cozy', 'minimal'] },
+  steambot: { mediums: ['canvas', 'photography', 'illustration'], excludeVibes: ['minimal', 'psychedelic', 'cozy'] },
+  tinybot: { mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'macabre'] },
+  bloombot: { mediums: ['photography', 'photography', 'photography', 'canvas', 'watercolor', 'pencil'], excludeVibes: ['dark', 'fierce', 'minimal', 'macabre'] },
+  inkbot: { mediums: ['comics', 'canvas', 'photography', 'illustration', 'pencil'], excludeVibes: ['whimsical', 'cozy', 'peaceful'] },
+  titanbot: { mediums: ['canvas', 'photography', 'render'], excludeVibes: ['minimal', 'cozy', 'whimsical', 'peaceful'] },
 };
 
 /**
