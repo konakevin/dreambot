@@ -639,6 +639,12 @@ Output ONLY the prompt.`;
     );
     let tempUrl = genResult.url;
     replicatePredictionId = genResult.predictionId;
+    if (genResult.nsfwRetries && genResult.nsfwRetries > 0) {
+      logAxes.nsfwRetries = genResult.nsfwRetries;
+      console.log(
+        `[nightly-dreams] Generation passed after ${genResult.nsfwRetries} NSFW retry/retries`
+      );
+    }
     lap('image-gen');
     console.log(
       `[nightly-dreams] Image generation complete (prediction: ${genResult.predictionId})`

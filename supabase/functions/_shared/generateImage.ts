@@ -2,6 +2,12 @@
  * Replicate image generation — submit prediction + poll until result.
  * NSFW error surfaces with a distinct `NSFW_CONTENT:` prefix so callers can
  * branch on it. Used by all three pipelines (V4, nightly, restyle-photo).
+ *
+ * Ship 2.5: the top-level `generateImage` now retries up to 2x on NSFW flags
+ * with a fresh Replicate call (same prompt, new stochastic seed). Flux's
+ * safety filter is non-deterministic enough that a legitimate prompt flagged
+ * once usually passes on the second try. `nsfwRetries` is surfaced in the
+ * result for observability.
  */
 
 import { pickModel } from './modelPicker.ts';
@@ -9,11 +15,47 @@ import { pickModel } from './modelPicker.ts';
 export interface GenerateImageResult {
   url: string;
   predictionId: string;
+  /** Number of NSFW retries that occurred before success. 0 = passed on first try. */
+  nsfwRetries?: number;
 }
 
 const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
+const NSFW_MAX_RETRIES = 2;
 
 export async function generateImage(
+  mode: string,
+  prompt: string,
+  inputImage: string | undefined,
+  replicateToken: string,
+  modelOverride?: string
+): Promise<GenerateImageResult> {
+  let lastErr: Error | null = null;
+  for (let attempt = 0; attempt <= NSFW_MAX_RETRIES; attempt++) {
+    try {
+      const result = await generateImageOnce(
+        mode,
+        prompt,
+        inputImage,
+        replicateToken,
+        modelOverride
+      );
+      return { ...result, nsfwRetries: attempt };
+    } catch (err) {
+      const msg = (err as Error).message || '';
+      if (msg.startsWith('NSFW_CONTENT') && attempt < NSFW_MAX_RETRIES) {
+        console.warn(
+          `[generateImage] NSFW flag on attempt ${attempt + 1}/${NSFW_MAX_RETRIES + 1}, retrying...`
+        );
+        lastErr = err as Error;
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr ?? new Error('NSFW_CONTENT: exhausted retries');
+}
+
+async function generateImageOnce(
   mode: string,
   prompt: string,
   inputImage: string | undefined,
@@ -67,7 +109,7 @@ export async function generateImage(
     const json = await res.json();
     const retryAfter = json.retry_after ?? 6;
     await new Promise((r) => setTimeout(r, retryAfter * 1000));
-    return generateImage(mode, prompt, inputImage, replicateToken, modelOverride);
+    return generateImageOnce(mode, prompt, inputImage, replicateToken, modelOverride);
   }
 
   if (!res.ok) {

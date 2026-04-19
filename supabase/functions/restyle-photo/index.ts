@@ -295,6 +295,12 @@ Deno.serve(async (req) => {
       pickedModel
     );
     replicatePredictionId = genResult.predictionId;
+    if (genResult.nsfwRetries && genResult.nsfwRetries > 0) {
+      logAxes.nsfwRetries = genResult.nsfwRetries;
+      console.log(
+        `[restyle-photo] Generation passed after ${genResult.nsfwRetries} NSFW retry/retries`
+      );
+    }
     lap('image-gen');
     console.log(
       `[restyle-photo] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
@@ -446,9 +452,26 @@ Deno.serve(async (req) => {
       () => {}
     );
 
-    // Update dream job on failure
+    const isNsfw =
+      errMsg.startsWith('NSFW_CONTENT') || errMsg.includes('NSFW') || errMsg.includes('safety');
+
+    // Ship 2.5: NSFW sparkle refund — unconditional on NSFW (not gated by jobId).
+    // Server owns the refund; client should NOT double-refund.
+    if (isNsfw) {
+      try {
+        await supabase.rpc('grant_sparkles', {
+          p_user_id: userId,
+          p_amount: 1,
+          p_reason: 'nsfw_refund',
+        });
+        console.log('[restyle-photo] NSFW sparkle refunded');
+      } catch (refundErr) {
+        console.error('[restyle-photo] NSFW refund FAILED:', (refundErr as Error).message);
+      }
+    }
+
+    // Update dream job on failure (best-effort)
     if (jobId) {
-      const isNsfw = errMsg.includes('NSFW') || errMsg.includes('safety');
       try {
         await supabase
           .from('dream_jobs')
@@ -458,20 +481,18 @@ Deno.serve(async (req) => {
             completed_at: new Date().toISOString(),
           })
           .eq('id', jobId);
-
-        // Refund sparkle server-side for NSFW
-        if (isNsfw) {
-          await supabase.rpc('grant_sparkles', {
-            p_user_id: userId,
-            p_amount: 1,
-            p_reason: 'nsfw_refund',
-          });
-        }
       } catch {
         /* non-critical */
       }
     }
 
-    return new Response(JSON.stringify({ error: errMsg }), { status: 500 });
+    return new Response(
+      JSON.stringify({
+        error: errMsg,
+        nsfw: isNsfw,
+        sparkle_refunded: isNsfw,
+      }),
+      { status: 500 }
+    );
   }
 });

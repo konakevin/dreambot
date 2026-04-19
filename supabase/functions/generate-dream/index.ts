@@ -826,6 +826,12 @@ Output ONLY the prompt.`;
     );
     let tempUrl = genResult.url;
     replicatePredictionId = genResult.predictionId;
+    if (genResult.nsfwRetries && genResult.nsfwRetries > 0) {
+      logAxes.nsfwRetries = genResult.nsfwRetries;
+      console.log(
+        `[generate-dream] Generation passed after ${genResult.nsfwRetries} NSFW retry/retries`
+      );
+    }
     lap('image-gen');
     console.log(
       `[generate-dream] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
@@ -1007,11 +1013,27 @@ Output ONLY the prompt.`;
     );
   } catch (err) {
     const errMsg = (err as Error).message;
+    const isNsfw =
+      errMsg.startsWith('NSFW_CONTENT') || errMsg.includes('NSFW') || errMsg.includes('safety');
     console.error(`[generate-dream] Error for user ${userId}:`, errMsg);
 
-    // Update dream job on failure
+    // Ship 2.5: NSFW sparkle refund — unconditional on NSFW (not gated by jobId).
+    // Server owns the refund; client should NOT double-refund.
+    if (isNsfw) {
+      try {
+        await supabase.rpc('grant_sparkles', {
+          p_user_id: userId,
+          p_amount: 1,
+          p_reason: 'nsfw_refund',
+        });
+        console.log('[generate-dream] NSFW sparkle refunded');
+      } catch (refundErr) {
+        console.error('[generate-dream] NSFW refund FAILED:', (refundErr as Error).message);
+      }
+    }
+
+    // Update dream job on failure (best-effort)
     if (jobId) {
-      const isNsfw = errMsg.includes('NSFW') || errMsg.includes('safety');
       try {
         await supabase
           .from('dream_jobs')
@@ -1021,21 +1043,19 @@ Output ONLY the prompt.`;
             completed_at: new Date().toISOString(),
           })
           .eq('id', jobId);
-
-        // Refund sparkle server-side for NSFW (client may not receive the error)
-        if (isNsfw) {
-          await supabase.rpc('grant_sparkles', {
-            p_user_id: userId,
-            p_amount: 1,
-            p_reason: 'nsfw_refund',
-          });
-        }
       } catch {
         /* non-critical */
       }
     }
 
-    return new Response(JSON.stringify({ error: errMsg }), { status: 500 });
+    return new Response(
+      JSON.stringify({
+        error: errMsg,
+        nsfw: isNsfw, // explicit flag — clients should branch on this
+        sparkle_refunded: isNsfw, // tells client to refresh balance
+      }),
+      { status: 500 }
+    );
   }
 });
 

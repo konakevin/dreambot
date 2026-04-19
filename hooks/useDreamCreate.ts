@@ -13,6 +13,7 @@
  */
 
 import { useCallback, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { cropToPortrait } from '@/lib/cropPhoto';
 import { useAuthStore } from '@/store/auth';
@@ -32,6 +33,7 @@ type GenerateStatus = 'idle' | 'generating' | 'done' | 'error';
 
 export function useDreamCreate() {
   const user = useAuthStore((s) => s.user);
+  const queryClient = useQueryClient();
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const { mutateAsync: spendSparkles } = useSpendSparkles();
   const setResult = useDreamStore((s) => s.setResult);
@@ -183,15 +185,10 @@ export function useDreamCreate() {
       if (__DEV__) console.error('[useDreamCreate] ERROR:', msg);
 
       if (msg.includes('NSFW_CONTENT') && user) {
-        try {
-          await supabase.rpc('grant_sparkles', {
-            p_user_id: user.id,
-            p_amount: 1,
-            p_reason: 'nsfw_refund',
-          });
-        } catch {
-          if (__DEV__) console.warn('[useDreamCreate] Failed to refund sparkle');
-        }
+        // Server-side handles the refund (generate-dream + restyle-photo both
+        // call grant_sparkles on NSFW). Client's job: refresh balance so the
+        // UI shows the refund, and show a user-friendly toast.
+        queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
         Toast.show(
           'This dream was flagged by our safety filters. Your sparkle has been refunded.',
           'shield-checkmark'
