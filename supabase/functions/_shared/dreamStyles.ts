@@ -108,23 +108,56 @@ export async function randomDbVibe(): Promise<ResolvedVibe> {
 }
 
 /**
+ * Filter a candidate pool to exclude recently-used items. Falls back to the
+ * full pool if filtering would leave fewer than 2 options (prevents stuck
+ * states for users with small profiles). Used to spread draws across the
+ * user's full selection over time instead of clustering on a few choices.
+ */
+function filterRecent(pool: string[], excludeRecent?: string[]): string[] {
+  if (!excludeRecent || excludeRecent.length === 0) return pool;
+  const excludeSet = new Set(excludeRecent);
+  const filtered = pool.filter((item) => !excludeSet.has(item));
+  return filtered.length >= 2 ? filtered : pool;
+}
+
+/**
  * Resolve a medium key. Handles surprise_me, my_mediums, and direct keys.
  * Falls back to random if key not found.
+ *
+ * @param excludeRecent — keys to avoid (e.g., user's last 5-7 nightly mediums).
+ *   Filtering is applied only when the pool still has 2+ options after exclusion,
+ *   so small profiles never get starved.
+ *
+ * Stale-key safety: the user's selection is filtered to ONLY active mediums
+ * (not inactive rows or keys that have since moved to vibes) before picking.
+ * Without this, sampling a stale key like 'coquette' (now a vibe, previously
+ * a medium) returned undefined from mediums.find() and triggered rand() across
+ * the full active pool — effectively ignoring the user's actual selection.
  */
 export async function resolveMediumFromDb(
   key: string | undefined,
-  userArtStyles?: string[]
+  userArtStyles?: string[],
+  excludeRecent?: string[]
 ): Promise<ResolvedMedium> {
   const mediums = await fetchMediums();
   const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
   const rand = () => mediums[Math.floor(Math.random() * mediums.length)];
+  const activeKeys = new Set(mediums.map((m) => m.key));
 
   if (
     (key === 'surprise_me' || key === 'my_mediums') &&
     userArtStyles &&
     userArtStyles.length > 0
   ) {
-    const picked = pick(userArtStyles);
+    // Strip stale keys (inactive mediums + keys that moved to vibes) so we
+    // only pick from the user's CURRENT valid selections.
+    const validUserArtStyles = userArtStyles.filter((s) => activeKeys.has(s));
+    if (validUserArtStyles.length === 0) {
+      // Profile fully stale — fall back to random across full active pool.
+      return rand();
+    }
+    const pool = filterRecent(validUserArtStyles, excludeRecent);
+    const picked = pick(pool);
     return mediums.find((m) => m.key === picked) ?? rand();
   }
   return mediums.find((m) => m.key === key) ?? rand();
@@ -133,21 +166,35 @@ export async function resolveMediumFromDb(
 /**
  * Resolve a vibe key. Handles surprise_me, my_vibes, and direct keys.
  * Falls back to random if key not found.
+ *
+ * @param excludeRecent — keys to avoid (e.g., user's last 5-7 nightly vibes).
+ *
+ * Stale-key safety: see note on resolveMediumFromDb above. Same logic applies
+ * — Kevin's 2026-04-19 profile has inactive vibe keys (`chaos`, `dreamy`,
+ * `ominous`, `majestic`) that would previously silently trigger full-pool
+ * random fallback.
  */
 export async function resolveVibeFromDb(
   key: string | undefined,
-  userAesthetics?: string[]
+  userAesthetics?: string[],
+  excludeRecent?: string[]
 ): Promise<ResolvedVibe> {
   const vibes = await fetchVibes();
   const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
   const rand = () => vibes[Math.floor(Math.random() * vibes.length)];
+  const activeKeys = new Set(vibes.map((v) => v.key));
 
   if (
     (key === 'surprise_me' || key === 'my_vibes') &&
     userAesthetics &&
     userAesthetics.length > 0
   ) {
-    const picked = pick(userAesthetics);
+    const validUserAesthetics = userAesthetics.filter((s) => activeKeys.has(s));
+    if (validUserAesthetics.length === 0) {
+      return rand();
+    }
+    const pool = filterRecent(validUserAesthetics, excludeRecent);
+    const picked = pick(pool);
     return vibes.find((v) => v.key === picked) ?? rand();
   }
   return vibes.find((v) => v.key === key) ?? rand();

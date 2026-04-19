@@ -140,12 +140,58 @@ Deno.serve(async (req) => {
     // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
     // ══════════════════════════════════════════════════════════════════
     const nightlyProfile = vibe_profile as VibeProfile;
+
+    // Recency: exclude the last 7 nightly mediums + vibes + locations from
+    // the pool so the user doesn't see the same choices repeat in a row.
+    // Falls back to the full pool if filtering would starve it (small
+    // profiles). Locations are parsed from the enhanced_prompt since there's
+    // no dedicated rolled_axes.location field.
+    const { data: recentLogs } = await supabase
+      .from('ai_generation_log')
+      .select('rolled_axes, enhanced_prompt')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(7);
+    const recentMediums = (recentLogs ?? [])
+      .map((l) => (l.rolled_axes as Record<string, unknown>)?.medium)
+      .filter((m): m is string => typeof m === 'string' && m.length > 0);
+    const recentVibes = (recentLogs ?? [])
+      .map((l) => (l.rolled_axes as Record<string, unknown>)?.vibe)
+      .filter((v): v is string => typeof v === 'string' && v.length > 0);
+    const profilePlaces = nightlyProfile.dream_seeds?.places ?? [];
+    const recentPlaces = (recentLogs ?? [])
+      .map((l) => {
+        const prompt = (l.enhanced_prompt || '').toLowerCase();
+        return profilePlaces.find((p) => prompt.includes(p.toLowerCase()));
+      })
+      .filter((p): p is string => !!p);
+    console.log(
+      '[nightly-dreams] recent mediums:',
+      recentMediums.slice(0, 5).join(', '),
+      '| recent vibes:',
+      recentVibes.slice(0, 5).join(', '),
+      '| recent places:',
+      recentPlaces.slice(0, 5).join(', ')
+    );
+
     // Watercolor removed from nightly — Kontext restyle consistently fails to transform
-    let nightlyMedium = await resolveMediumFromDb('my_mediums', nightlyProfile.art_styles);
+    let nightlyMedium = await resolveMediumFromDb(
+      'my_mediums',
+      nightlyProfile.art_styles,
+      recentMediums
+    );
     if (nightlyMedium.key === 'watercolor') {
-      nightlyMedium = await resolveMediumFromDb('my_mediums', nightlyProfile.art_styles);
+      nightlyMedium = await resolveMediumFromDb(
+        'my_mediums',
+        nightlyProfile.art_styles,
+        recentMediums
+      );
       if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
-        nightlyMedium = await resolveMediumFromDb('my_mediums', nightlyProfile.art_styles);
+        nightlyMedium = await resolveMediumFromDb(
+          'my_mediums',
+          nightlyProfile.art_styles,
+          recentMediums
+        );
         if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
           nightlyMedium = await resolveMediumFromDb('anime');
         }
@@ -155,7 +201,11 @@ Deno.serve(async (req) => {
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }
-    let nightlyVibe = await resolveVibeFromDb('my_vibes', nightlyProfile.aesthetics);
+    let nightlyVibe = await resolveVibeFromDb(
+      'my_vibes',
+      nightlyProfile.aesthetics,
+      recentVibes
+    );
     if (force_vibe) {
       nightlyVibe = await resolveVibeFromDb(force_vibe);
     }
@@ -282,9 +332,19 @@ Deno.serve(async (req) => {
     );
 
     // Assemble scene from modular pools (Scene DNA engine)
+    // Apply recency filter to location picks — forces rotation through
+    // user's places instead of clustering on one. With 2 places + filter,
+    // locations alternate; with many places, they rotate naturally.
+    let placePool = seeds.places;
+    if (placePool.length > 0 && recentPlaces.length > 0) {
+      const excludeSet = new Set(recentPlaces);
+      const filtered = placePool.filter((p: string) => !excludeSet.has(p));
+      // Keep filtered pool only if it has something; otherwise full list
+      if (filtered.length >= 1) placePool = filtered;
+    }
     const userPlace =
-      includeLocation && seeds.places.length > 0
-        ? seeds.places[Math.floor(Math.random() * seeds.places.length)]
+      includeLocation && placePool.length > 0
+        ? placePool[Math.floor(Math.random() * placePool.length)]
         : undefined;
     const thingsPool = [...seeds.things, ...seeds.characters];
     const userThing =
