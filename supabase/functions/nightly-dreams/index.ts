@@ -412,6 +412,16 @@ Deno.serve(async (req) => {
       );
     }
 
+    // ── Relationship tone for multi-cast scenes ─────────────────────────
+    // When 2+ cast are in a scene, the TONE of their interaction should
+    // match their real-life relationship. self+plus_one(significant_other)
+    // = romantic; self+plus_one(friend/sibling) = playful; self+parent/
+    // child/grandchild = family; self+pet = human-animal bond.
+    const relationshipTone = buildRelationshipTone(selectedCast);
+    if (relationshipTone) {
+      console.log('[nightly-dreams] relationship tone:', relationshipTone.kind);
+    }
+
     dreamSubject = assembleScene({
       renderMode,
       faceSwapEligible,
@@ -551,7 +561,7 @@ SELECT AND SUBORDINATE (critical):
 CHARACTER IN THE SCENE:
 ${castDescBlock}
 ${castInstruction}
-
+${relationshipTone ? `\n${relationshipTone.block}\n` : ''}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
@@ -593,7 +603,7 @@ SELECT AND SUBORDINATE (critical):
 - If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
-
+${relationshipTone && selectedCast.length >= 2 ? `\n${relationshipTone.block}\n` : ''}
 CAMERA: ${shotDirection}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
@@ -841,3 +851,55 @@ Output ONLY the prompt.`;
     });
   }
 });
+
+// ─── Relationship tone ──────────────────────────────────────────────────
+// Determines the interaction tone between 2+ cast members in the same scene.
+// Solo scenes return null (no tone directive needed).
+type RelationshipTone = {
+  kind: 'romantic' | 'family' | 'petBond' | 'playful';
+  block: string;
+};
+
+function buildRelationshipTone(
+  selectedCast: { role: string; relationship?: string }[]
+): RelationshipTone | null {
+  if (selectedCast.length < 2) return null;
+  const roles = new Set(selectedCast.map((c) => c.role));
+  const plusOne = selectedCast.find((c) => c.role === 'plus_one');
+  const rel = plusOne?.relationship;
+
+  if (roles.has('self') && roles.has('plus_one') && rel === 'significant_other') {
+    return {
+      kind: 'romantic',
+      block: `RELATIONSHIP TONE — apply throughout the scene:
+The two characters are life partners — deeply close in every way. The scene can lean into ANY part of that relationship: the intimate side (holding hands, stealing glances, tender moments, slow dances, sunset walks, shared meals, warm looks, quiet conversations, reading side by side) OR the playful side (laughing together, adventuring, partners in crime, matching mischievous grins, goofy shared moments, road-trip energy, high-fives, doing something silly). Whatever the moment, the emotional truth is "we're each other's person." Absolutely never sexual — always sweet, warm, genuine. Only this bucket gets to use intimate language; every other relationship stays platonic.`,
+    };
+  }
+
+  if (
+    roles.has('self') &&
+    roles.has('plus_one') &&
+    (rel === 'parent' || rel === 'child' || rel === 'grandchild')
+  ) {
+    return {
+      kind: 'family',
+      block: `RELATIONSHIP TONE — apply throughout the scene:
+The two characters share a warm familial bond — intergenerational closeness, care and protection, shared moments of teaching or wonder. Walking side by side, a hand on a shoulder, shared laughter, quiet comfort. Not romantic. Just the genuine affection that comes from family.`,
+    };
+  }
+
+  if (roles.has('self') && roles.has('pet') && !roles.has('plus_one')) {
+    return {
+      kind: 'petBond',
+      block: `RELATIONSHIP TONE — apply throughout the scene:
+The person and their animal companion share a close bond — walking together, playing, reading with the animal nearby, sharing a quiet moment or a shared adventure. Warm human-animal connection. The animal behaves like a real animal, not anthropomorphic.`,
+    };
+  }
+
+  // Default: friends, siblings, unknown relationship, or 3+ mixed cast
+  return {
+    kind: 'playful',
+    block: `RELATIONSHIP TONE — apply throughout the scene:
+The characters are close companions sharing an experience — laughing, discovering, adventuring together, high-fiving, pointing out something cool, mid-motion through a shared moment. Camaraderie and genuine warmth. NOT romantic — no hand-holding, no intimate gestures, no lovey energy. Think "friends sharing a great moment."`,
+  };
+}
