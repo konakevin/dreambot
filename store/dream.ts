@@ -12,8 +12,12 @@ import { create } from 'zustand';
 
 export type DreamFlowMode = 'surprise' | 'photo' | 'prompt';
 
-/** For photos: restyle keeps the scene, reimagine dreams up a new scenario */
-export type PhotoStyle = 'restyle' | 'reimagine';
+/**
+ * Photo modes — set by user toggle on the Create screen when a photo is attached.
+ *   'restyle'   — Kontext path, preserves pose and composition (same scene, new style)
+ *   'new_scene' — Flux + face-swap path, invents a fresh scene with the person's face preserved
+ */
+export type PhotoStyle = 'restyle' | 'new_scene';
 
 interface DreamConfig {
   mode: DreamFlowMode;
@@ -63,7 +67,10 @@ const INITIAL_CONFIG: DreamConfig = {
   mode: 'surprise',
   photoBase64: null,
   photoUri: null,
-  photoStyle: 'restyle',
+  // Default to 'new_scene' — the higher-quality path with face-swap +
+  // Sonnet-invented scenes. Users who want to preserve their photo's pose
+  // can toggle to 'restyle'.
+  photoStyle: 'new_scene',
   selectedMedium: 'surprise_me',
   selectedVibe: 'surprise_me',
   userPrompt: '',
@@ -87,7 +94,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   clearResult: () => set({ result: null }),
   clearPhoto: () =>
     set((s) => ({
-      config: { ...s.config, photoBase64: null, photoUri: null, photoStyle: 'restyle' },
+      config: { ...s.config, photoBase64: null, photoUri: null, photoStyle: 'new_scene' },
     })),
   setActiveJobId: (id) => set({ activeJobId: id }),
   reset: () => set({ config: { ...INITIAL_CONFIG }, result: null, activeJobId: null }),

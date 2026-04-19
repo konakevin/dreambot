@@ -21,8 +21,8 @@ interface GenerateDreamOpts {
   hint?: string;
   /** Base64 data URL for flux-kontext (photo reimagine) */
   input_image?: string;
-  /** Photo style: 'reimagine' for vision + Sonnet rewrite */
-  photo_style?: 'reimagine';
+  /** Photo style: 'reimagine' keeps composition, 'new_scene' invents scene with face-swap */
+  photo_style?: 'reimagine' | 'new_scene';
   /** Vibe Profile v2 — provides dream_cast for self-insert detection */
   vibe_profile?: VibeProfile;
   /** V4 engine — curated medium key */
@@ -33,9 +33,20 @@ interface GenerateDreamOpts {
   job_id?: string;
   /** Style transfer: original post's ai_prompt used as style template for DLT */
   style_prompt?: string;
+  /** Pre-classified subject description (from classifyPhoto). Skips redundant vision on server. */
+  subject_description?: string;
+  /** Pre-classified subject type (from classifyPhoto). Determines server routing. */
+  subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
   // Legacy fields kept for backward compat during transition
   recipe?: Recipe;
   prompt_mode?: PromptMode;
+}
+
+export type PhotoSubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';
+
+export interface PhotoClassification {
+  subject_description: string;
+  type: PhotoSubjectType;
 }
 
 interface GenerateDreamResult {
@@ -205,6 +216,38 @@ export async function restylePhoto(opts: {
     resolved_medium: data.resolved_medium,
     resolved_vibe: data.resolved_vibe,
     upload_id: data.upload_id,
+  };
+}
+
+/**
+ * Classify a photo before generation. Returns the dominant subject's description
+ * plus a type tag ('person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear').
+ *
+ * Call this ONLY when the user has committed to generating (i.e., on Dream tap) —
+ * this is the first paid API we incur for the photo. Pass the result through to
+ * generateDream() as `subject_description` + `subject_type` so the server doesn't
+ * re-run vision.
+ *
+ * For 'unclear' or 'group' results, the caller should show a confirmation modal
+ * before proceeding so the user understands what will happen.
+ */
+export async function classifyPhoto(inputImageBase64: string): Promise<PhotoClassification> {
+  const t0 = Date.now();
+  if (__DEV__) console.log('[dreamApi] Invoking classify-photo...');
+  const { data, error } = await supabase.functions.invoke('classify-photo', {
+    body: { input_image: inputImageBase64 },
+  });
+  if (error) {
+    if (__DEV__) console.error('[dreamApi] classify-photo error:', JSON.stringify(error));
+    throw new Error((error as { message?: string })?.message ?? 'Classification failed');
+  }
+  if (__DEV__) console.log(`[dreamApi] classify-photo ${Date.now() - t0}ms:`, data?.type);
+  if (!data || !data.type) {
+    throw new Error(data?.error ?? 'Classification returned no result');
+  }
+  return {
+    subject_description: data.subject_description ?? '',
+    type: data.type as PhotoSubjectType,
   };
 }
 

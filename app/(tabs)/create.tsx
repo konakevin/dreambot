@@ -53,6 +53,7 @@ export default function CreateScreen() {
   const setMedium = useDreamStore((s) => s.setMedium);
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
+  const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const user = useAuthStore((s) => s.user);
@@ -135,11 +136,11 @@ export default function CreateScreen() {
   // Face is involved if: photo uploaded + prompt, OR self-reference + cast self photo exists
   const faceInvolved = (hasPhoto && hasPrompt) || (mentionsSelf && hasCastSelf);
 
-  // Contextual hint above Dream button (4 states, always visible)
+  // Contextual hint above Dream button
   const contextHint = hasPhoto
-    ? hasPrompt
-      ? 'Reimagine your photo'
-      : 'Restyle your photo'
+    ? config.photoStyle === 'new_scene'
+      ? 'Put your photo in a new scene'
+      : 'Restyle your photo in this medium'
     : hasPrompt
       ? 'Generate from your prompt'
       : 'Leave blank for a surprise';
@@ -287,6 +288,81 @@ export default function CreateScreen() {
               >
                 <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
               </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Photo mode toggle — only when a photo is attached */}
+          {hasPhoto && (
+            <View className="mb-3">
+              <View
+                className="flex-row rounded-xl p-1"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <TouchableOpacity
+                  className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                  style={{
+                    backgroundColor:
+                      config.photoStyle === 'new_scene' ? colors.accent : 'transparent',
+                  }}
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    setPhotoStyle('new_scene');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons
+                    name="sparkles-outline"
+                    size={14}
+                    color={config.photoStyle === 'new_scene' ? '#fff' : colors.textSecondary}
+                  />
+                  <Text
+                    className="text-xs font-semibold"
+                    style={{
+                      color: config.photoStyle === 'new_scene' ? '#fff' : colors.textSecondary,
+                    }}
+                  >
+                    New Scene
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                  style={{
+                    backgroundColor:
+                      config.photoStyle === 'restyle' ? colors.accent : 'transparent',
+                  }}
+                  onPress={() => {
+                    Haptics.selectionAsync();
+                    setPhotoStyle('restyle');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons
+                    name="color-palette-outline"
+                    size={14}
+                    color={config.photoStyle === 'restyle' ? '#fff' : colors.textSecondary}
+                  />
+                  <Text
+                    className="text-xs font-semibold"
+                    style={{
+                      color: config.photoStyle === 'restyle' ? '#fff' : colors.textSecondary,
+                    }}
+                  >
+                    Restyle
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Text
+                className="text-xs mt-1.5 px-1"
+                style={{ color: colors.textSecondary, opacity: 0.7 }}
+              >
+                {config.photoStyle === 'new_scene'
+                  ? 'We’ll invent a fresh scene around you — works best with a clear single-subject photo.'
+                  : 'We’ll keep your pose and restyle the scene in this medium.'}
+              </Text>
             </View>
           )}
 

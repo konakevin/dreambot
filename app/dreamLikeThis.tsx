@@ -167,9 +167,9 @@ export default function DreamLikeThisScreen() {
     // DLT with style reference = always reimagine (flux-dev + face swap) so style actually transfers
     // Without style ref: prompt entered = reimagine, no prompt = restyle
     const effectivePhotoStyle = refPrompt
-      ? 'reimagine'
+      ? 'new_scene'
       : userPrompt.trim()
-        ? 'reimagine'
+        ? 'new_scene'
         : 'restyle';
 
     // Set up the dream store with inherited medium/vibe
