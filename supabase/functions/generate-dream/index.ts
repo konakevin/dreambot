@@ -359,9 +359,10 @@ Output ONLY the prompt.`;
         ? detectSelfInsert(userSubject)
         : { isSelfInsert: false, cleanedPrompt: '' };
       // force_cast_role also forces the self-insert path even if prompt doesn't say "me"
+      // or prompt is empty entirely (surprise-me + cast = new scene with face-swap).
       const mentionsSelf = (selfInsertResult.isSelfInsert || force_cast_role) && selfCast;
 
-      if (mentionsSelf && userSubject) {
+      if (mentionsSelf) {
         // ── SELF-INSERT: cast + scene expansion + chaos + compiler ──
         const cleanedPrompt = sanitizeUserPrompt(selfInsertResult.cleanedPrompt);
         const resolvedCast = resolveCastForPrompt([selfCast as DreamCastMember], {
