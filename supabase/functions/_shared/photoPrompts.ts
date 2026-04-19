@@ -153,5 +153,9 @@ export function buildReimaginePrompt(
 ): string | null {
   const template = REIMAGINE_TEMPLATES[mediumKey];
   if (!template) return null;
-  return template(photoDescription, scenario, vibeDirective.slice(0, 200));
+  // Pass the FULL vibe directive — previous 200-char slice was cutting off the
+  // concrete visual vocabulary (palette, flora/props, lighting rules) that
+  // makes a vibe actually manifest in the render. Haiku downstream handles
+  // length budgeting; we don't need to pre-truncate here.
+  return template(photoDescription, scenario, vibeDirective);
 }

@@ -48,8 +48,12 @@ interface RequestBody {
   hint?: string;
   /** Base64 data URL for flux-kontext (photo-to-image) */
   input_image?: string;
-  /** Photo style: restyle (keep likeness) or reimagine (new scene) */
-  photo_style?: 'restyle' | 'reimagine';
+  /** Photo style:
+   *   - 'reimagine' — re-render the photo in the medium, preserving pose/composition. Face-swap applied.
+   *   - 'new_scene' — invent a fresh scene, put the person in it with real face preserved via swap.
+   *   - 'restyle' (default) — legacy value that falls through to an error (client should use restyle-photo endpoint for Kontext restyle).
+   */
+  photo_style?: 'reimagine' | 'new_scene' | 'restyle';
   /** Vibe Profile v2 — provides dream_cast for self-insert detection */
   vibe_profile?: VibeProfile;
   /** V4 engine — curated medium key (e.g., 'watercolor', 'pixels') */
@@ -64,6 +68,16 @@ interface RequestBody {
   job_id?: string;
   /** Style transfer: original post's ai_prompt used as style template for DLT */
   style_prompt?: string;
+  /** Pre-classified photo subject description (from classify-photo endpoint).
+   * When provided alongside subject_type, skips the internal vision call. */
+  subject_description?: string;
+  /** Pre-classified photo subject type. Determines routing:
+   *   - 'person'  → face-swap path (ephemeral cast from description, face from photo)
+   *   - 'animal'  → description path: creature literally in the scene, no face-swap
+   *   - 'object'  → description path: object literally in the scene, no face-swap
+   *   - 'scenery' → description path: scene built inspired by the place, no face-swap
+   */
+  subject_type?: 'person' | 'animal' | 'object' | 'scenery';
 }
 
 Deno.serve(async (req) => {
@@ -145,6 +159,8 @@ Deno.serve(async (req) => {
     force_cast_role,
     job_id: jobId,
     style_prompt,
+    subject_description,
+    subject_type,
   } = body;
 
   if (!mode || !['flux-dev', 'flux-kontext'].includes(mode)) {
@@ -266,7 +282,222 @@ Deno.serve(async (req) => {
       !!input_image
     );
 
-    if (isPhoto && photo_style === 'reimagine') {
+    if (isPhoto && photo_style === 'new_scene' && subject_type && subject_type !== 'person') {
+      // ── DESCRIPTION ROUTE: animal / object / scenery photo subjects.
+      // The uploaded subject is literally included in the invented scene.
+      // No face-swap, no character block — subject is the scene's focal element.
+      console.log(`[generate-dream] ⏱ NEW SCENE (${subject_type}): description route`);
+      try {
+        const subjectDesc = subject_description ?? hint ?? '';
+        visionDescription = subjectDesc;
+        // Compose subject into the user prompt so Sonnet treats it as a directive.
+        // Example: "A fluffy golden retriever with floppy ears sitting on grass"
+        const userSubject = subjectDesc;
+
+        const expanded = expandScene({
+          userPrompt: userSubject,
+          userId,
+          mediumKey: medium.key,
+          vibeKey: vibe.key,
+          hasCharacter: false,
+        });
+        const chaosProfile = rollChaos(
+          Array.from(userId + userSubject).reduce(
+            (h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0,
+            0
+          ),
+          {
+            userPrompt: userSubject,
+            mediumRenderMode: medium.characterRenderMode,
+            faceSwapEligible: false,
+          }
+        );
+        const finalExpansion = applyChaos(expanded.expansion, chaosProfile);
+
+        const compiled = compilePrompt({
+          inputType: 'text_directive',
+          medium: {
+            key: medium.key,
+            directive: medium.directive ?? '',
+            fluxFragment: medium.fluxFragment ?? medium.key,
+            characterRenderMode: medium.characterRenderMode,
+            faceSwaps: medium.faceSwaps,
+          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
+          scene: {
+            userPrompt: userSubject || undefined,
+            sceneExpansion: finalExpansion || undefined,
+            styleReference: style_prompt || undefined,
+          },
+          cast: [],
+          composition: {
+            type: 'pure_scene',
+            faceSwapEligible: false,
+            shotDirection: expanded.suggestedCamera,
+            focalAnchor: userSubject.slice(0, 80),
+          },
+          profile: { avoid: vibeProfile?.avoid },
+        });
+
+        try {
+          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens);
+          sonnetBrief = sonnet.brief;
+          sonnetRawResponse = sonnet.rawResponse;
+          if (sonnet.text.length < 10) throw new Error('too short');
+          finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+        } catch (err) {
+          console.error(
+            '[generate-dream] DESCRIPTION ROUTE Sonnet failed:',
+            (err as Error).message
+          );
+          fallbackReasons.push(`description_route_sonnet_failed:${(err as Error).message}`);
+          finalPrompt = compiled.fallbackPrompt;
+        }
+
+        photoOverrideMode = 'flux-dev';
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'v2-new-scene-description',
+          subjectType: subject_type,
+          faceSwap: false,
+        };
+        console.log('[generate-dream] Description route prompt:', finalPrompt.slice(0, 150));
+      } catch (err) {
+        console.error('[generate-dream] DESCRIPTION ROUTE FAILED:', (err as Error).message);
+        fallbackReasons.push(`description_route_failed:${(err as Error).message}`);
+        finalPrompt = `${medium.fluxFragment}, ${subject_description ?? 'a creative scene'}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
+        photoOverrideMode = 'flux-dev';
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'v2-new-scene-description-fallback',
+          error: (err as Error).message,
+        };
+      }
+      lap('description-route-done');
+    } else if (isPhoto && photo_style === 'new_scene') {
+      // ── NEW SCENE (person): vision describes person → ephemeral cast →
+      // compilePrompt self-insert path → Flux invents scene → face-swap pastes
+      // the real face on. Same high-quality pipeline as the self-insert branch
+      // for stored cast. Skips vision when classify-photo already provided the
+      // description.
+      console.log('[generate-dream] ⏱ NEW SCENE: starting...');
+      try {
+        const photoDescription =
+          subject_description ??
+          (await describeWithVision(
+            input_image!,
+            VISION_PROMPTS.photoSubject,
+            REPLICATE_TOKEN,
+            200
+          ));
+        visionDescription = photoDescription;
+        lap('new-scene-vision');
+        console.log(
+          `[generate-dream] ⏱ Vision ${subject_description ? 'provided' : 'done'}: ${photoDescription.slice(0, 120)}`
+        );
+
+        // Synthesize an ephemeral cast from the photo. thumb_url is the user's
+        // uploaded photo (face-swap block handles base64 → temp URL upload).
+        const ephemeralCast: DreamCastMember = {
+          role: 'self',
+          thumb_url: input_image!,
+          description: photoDescription,
+        };
+        const resolvedCast = resolveCastForPrompt([ephemeralCast], {
+          characterRenderMode: medium.characterRenderMode,
+          key: medium.key,
+        });
+        const isFaceSwapEligible = medium.faceSwaps && medium.characterRenderMode === 'natural';
+
+        // Scene expansion + chaos (same as self-insert)
+        const expanded = expandScene({
+          userPrompt: hint ?? '',
+          userId,
+          mediumKey: medium.key,
+          vibeKey: vibe.key,
+          hasCharacter: true,
+        });
+        const chaosProfile = rollChaos(
+          Array.from(userId + (hint ?? '')).reduce(
+            (h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0,
+            0
+          ),
+          {
+            userPrompt: hint ?? '',
+            mediumRenderMode: medium.characterRenderMode,
+            faceSwapEligible: isFaceSwapEligible,
+          }
+        );
+        const finalExpansion = applyChaos(expanded.expansion, chaosProfile);
+        const focalAnchor = deriveFocalAnchor(resolvedCast, { userPrompt: hint ?? '' });
+
+        const compiled = compilePrompt({
+          inputType: 'self_insert',
+          medium: {
+            key: medium.key,
+            directive: medium.directive ?? '',
+            fluxFragment: medium.fluxFragment ?? medium.key,
+            characterRenderMode: medium.characterRenderMode,
+            faceSwaps: medium.faceSwaps,
+          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
+          scene: {
+            userPrompt: hint || undefined,
+            sceneExpansion: finalExpansion || undefined,
+            styleReference: style_prompt || undefined,
+          },
+          cast: resolvedCast,
+          composition: {
+            type: 'character',
+            faceSwapEligible: isFaceSwapEligible,
+            shotDirection: expanded.suggestedCamera,
+            focalAnchor,
+          },
+          profile: { avoid: vibeProfile?.avoid },
+        });
+
+        try {
+          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens);
+          sonnetBrief = sonnet.brief;
+          sonnetRawResponse = sonnet.rawResponse;
+          if (sonnet.text.length < 10) throw new Error('too short');
+          finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+        } catch (err) {
+          console.error('[generate-dream] NEW SCENE Sonnet failed:', (err as Error).message);
+          fallbackReasons.push(`new_scene_sonnet_failed:${(err as Error).message}`);
+          finalPrompt = compiled.fallbackPrompt;
+        }
+
+        // Photo is the face-swap source (face-swap block handles upload).
+        if (isFaceSwapEligible) {
+          faceSwapSource = input_image!;
+        }
+
+        photoOverrideMode = 'flux-dev';
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'v2-new-scene-photo',
+          faceSwap: isFaceSwapEligible,
+          chaosIntensity: chaosProfile.intensity,
+        };
+        console.log('[generate-dream] New scene prompt:', finalPrompt.slice(0, 150));
+      } catch (err) {
+        console.error('[generate-dream] NEW SCENE FAILED:', (err as Error).message);
+        fallbackReasons.push(`new_scene_failed:${(err as Error).message}`);
+        finalPrompt = `${medium.fluxFragment}, ${hint ?? 'a creative scene'}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, portrait 9:16, hyper detailed`;
+        photoOverrideMode = 'flux-dev';
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'v2-new-scene-photo-fallback',
+          error: (err as Error).message,
+        };
+      }
+      lap('new-scene-done');
+    } else if (isPhoto && photo_style === 'reimagine') {
       // ── REIMAGINE (solo): vision describe → medium template or generic brief → flux-dev ──
       console.log('[generate-dream] ⏱ REIMAGINE: starting vision...');
       try {
@@ -304,7 +535,7 @@ Deno.serve(async (req) => {
 - Subject from photo: ${photoDescription}
 - The user wants: ${userHint || 'a creative reimagining'}
 - Render in ${medium.key} style
-- Mood: ${vibe.directive!.slice(0, 200)}${styleRef}
+- Mood: ${vibe.directive}${styleRef}
 - Framing: waist-up to three-quarter body. The person's face must be clearly visible and well-lit. Show the person IN the scene, interacting with elements around them. The environment should be visible — don't crop it out.
 - DO NOT invent your own scenario — use the user's request EXACTLY
 Output ONLY the prompt.`;
@@ -312,7 +543,6 @@ Output ONLY the prompt.`;
         }
 
         photoOverrideMode = 'flux-dev';
-        // No face swap — reimagine produces a likeness-based caricature, not an exact photo
         logAxes = {
           medium: medium.key,
           vibe: vibe.key,
@@ -332,6 +562,16 @@ Output ONLY the prompt.`;
           error: (err as Error).message,
         };
       }
+
+      // Ship 2: face-swap the original photo onto the generated scene when the
+      // medium supports it. Reimagine used to be caricature-only; now if the
+      // medium is face-swap eligible, we get real face preservation + new scene.
+      if (medium.faceSwaps && medium.characterRenderMode === 'natural') {
+        faceSwapSource = input_image!;
+        logAxes.faceSwap = true;
+        console.log('[generate-dream] Reimagine + face-swap enabled for this medium');
+      }
+
       lap('reimagine-done');
     } else if (isPhoto) {
       // Photo restyle moved to restyle-photo Edge Function (Phase 3.4).
