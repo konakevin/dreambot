@@ -9,6 +9,7 @@
  * Downstream: client passes the classification to generate-dream, which
  * skips redundant vision and routes based on type:
  *   - person  → face-swap path (the person gets swapped onto the rendered scene)
+ *   - group   → description path, client shows "face-swap only for single subjects" modal
  *   - animal  → description path (the creature literally appears in the scene)
  *   - object  → description path (the object literally appears in the scene)
  *   - scenery → description path (scene is built inspired by the place)
@@ -17,7 +18,7 @@
  * POST /functions/v1/classify-photo
  * Authorization: Bearer <user JWT>
  * Body: { input_image: string }  // base64 data URL or public URL
- * Response: { subject_description: string, type: 'person' | 'animal' | 'object' | 'scenery' | 'unclear' }
+ * Response: { subject_description: string, type: 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear' }
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
