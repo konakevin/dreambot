@@ -302,9 +302,17 @@ const GLOW_COLORS = [
   'mercury silver / chrome white',
 ];
 
-// Cross-render recency dedup. Pools we actively rotate (skin, glow) track
-// the last N picks and exclude them on the next render — prevents batches
-// from clustering on one tone.
+// CHARACTER_BASES — 20 distinct cyborg-flavor character identity paragraphs,
+// Sonnet-authored in scripts/seeds/venusbot_characters.json. Each is a
+// different flavor of the same species. Rolled per render so every post
+// has a different body architecture anchoring it.
+const CHARACTER_BASES = JSON.parse(
+  fs.readFileSync(path.resolve('scripts/seeds/venusbot_characters.json'), 'utf8')
+);
+
+// Cross-render recency dedup. Pools we actively rotate (skin, glow, character)
+// track the last N picks and exclude them on the next render — prevents
+// batches from clustering.
 const recentPicks = {};
 function pickWithRecency(pool, kind, window = 3) {
   const recent = recentPicks[kind] || [];
@@ -320,6 +328,7 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 function buildGoldenBrief({ vibeDirective, vibeKey }) {
   const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
   const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
+  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
   const hair = pick(HAIR_STYLES);
   const eyes = pick(EYE_STYLES);
   const cyborg = pick(CYBORG_FEATURES);
@@ -340,7 +349,15 @@ TASK: write ONE vivid scene description (60-80 words, comma-separated phrases) o
 
 ━━━ CHARACTER RULES (who SHE is) ━━━
 
-She is the visual fusion of a **Victoria's Secret model, a couture runway walker, and a lethal honeytrap cyborg assassin.** She is a KILLING MACHINE that uses seduction as a weapon. Her sultry pose, parted lips, and smoldering gaze are DELIBERATE LURES — bait to draw you closer. Beneath the performance, her eyes are reading you for weakness, calculating kill vectors. Think Black Widow assassin. Think femme fatale android. Think: "her smile does not reach her eyes." She IS seductive — openly, confidently, weaponized — but the sex appeal is a tactic, not emotion. Beauty as blade. The colder she is inside, the more smoothly the seduction performs on the outside. She invites you in because she plans to end you.
+${characterBase}
+
+━━━ REQUIRED VISUAL ELEMENTS (must appear in the render) ━━━
+
+- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises visible across the scene, not dim ambient.
+- A visible INTERNAL ENERGY CORE glows through a translucent panel on her torso (or temple) in the glow color — the "is she alive?" power source.
+- CIRCUIT LIGHT pulses along her exposed cyborg parts — tree-branch patterns of the glow color running under/through the chrome.
+- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, presence that unsettles.
+- STRICT: never bare chest / bare nipples / areolas. Chest is always covered — chrome armor, translucent mechanical panel (showing internals, NEVER organic), or fabric/mesh with only the cyborg-form visible. Nipple-shape through covering as a smooth polymer bump or small chrome port is fine; exposed flesh nipple is not.
 
 ━━━ CRITICAL SUBJECT RULES ━━━
 
@@ -412,6 +429,7 @@ Output ONLY the 60-80 word scene description. No preamble, no quotes, no meta-co
 function buildFullBodyBrief({ vibeDirective, vibeKey }) {
   const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
   const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
+  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
   const hair = pick(HAIR_STYLES);
   const eyes = pick(EYE_STYLES);
   const cyborg = pick(CYBORG_FEATURES);
@@ -430,7 +448,15 @@ TASK: write ONE vivid FULL-BODY scene description (60-90 words, comma-separated 
 
 ━━━ CHARACTER (same as always) ━━━
 
-She is a Victoria's-Secret-runway-couture supermodel fused with a cold honeytrap cyborg assassin. Mechanical first, feminine beauty second. She IS seductive and sexy — but underneath is a killing machine. Her seduction is bait; her coldness is the truth. Whatever she is doing in this scene, her hyper-perfect beauty is evident, but so is her half-cyborg nature.
+${characterBase}
+
+━━━ REQUIRED VISUAL ELEMENTS (must appear in the render) ━━━
+
+- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises visible across the scene, not dim ambient.
+- A visible INTERNAL ENERGY CORE glows through a translucent panel on her torso (or temple) in the glow color — the "is she alive?" power source.
+- CIRCUIT LIGHT pulses along her exposed cyborg parts — tree-branch patterns of the glow color running under/through the chrome.
+- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, presence that unsettles.
+- STRICT: never bare chest / bare nipples / areolas. Chest is always covered — chrome armor, translucent mechanical panel (showing internals, NEVER organic), or fabric/mesh with only the cyborg-form visible. Nipple-shape through covering as a smooth polymer bump or small chrome port is fine; exposed flesh nipple is not.
 
 ━━━ THE MOMENT (what she is doing — this is the scene's narrative) ━━━
 
@@ -484,6 +510,7 @@ Output ONLY the scene description, 60-90 words, no preamble, no quotes.`;
 function buildSeductionBrief({ vibeDirective, vibeKey }) {
   const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
   const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
+  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
   const hair = pick(HAIR_STYLES);
   const eyes = pick(EYE_STYLES);
   const cyborg = pick(CYBORG_FEATURES);
@@ -507,7 +534,15 @@ Her expression, pose, and the way she's addressing the camera/viewer should ALL 
 
 ━━━ CHARACTER (same as always) ━━━
 
-Victoria's-Secret-runway supermodel fused with a cold honeytrap cyborg assassin. Mechanical first, feminine beauty second. Her seduction is a weapon. Her chrome, circuits, and mechanical body are fully visible — that's HALF the draw. The other half is her sheer beauty. Together they are irresistible and lethal.
+${characterBase}
+
+━━━ REQUIRED VISUAL ELEMENTS (must appear in the render) ━━━
+
+- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises visible across the scene, not dim ambient.
+- A visible INTERNAL ENERGY CORE glows through a translucent panel on her torso (or temple) in the glow color — the "is she alive?" power source.
+- CIRCUIT LIGHT pulses along her exposed cyborg parts — tree-branch patterns of the glow color running under/through the chrome.
+- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, presence that unsettles.
+- STRICT: never bare chest / bare nipples / areolas. Chest is always covered — chrome armor, translucent mechanical panel (showing internals, NEVER organic), or fabric/mesh with only the cyborg-form visible. Nipple-shape through covering as a smooth polymer bump or small chrome port is fine; exposed flesh nipple is not. What is she? You can't quite tell. That's the point.
 
 ━━━ THE SCENE (her invitation to the viewer) ━━━
 
