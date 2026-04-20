@@ -55,8 +55,8 @@ const BOTS = {
     },
   },
   starbot: { mediums: ['photography', 'vaporwave', 'canvas', 'render'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
-  // venusbot migrated to new engine — see scripts/bots/venusbot/ + .github/workflows/venusbot.yml
-  sirenbot: { mediums: ['canvas', 'watercolor', 'photography', 'illustration'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
+  // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
+  //   venusbot, sirenbot
   gothbot: { mediums: ['canvas', 'anime', 'comics', 'illustration', 'pencil'], excludeVibes: ['minimal', 'cozy', 'peaceful'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
   glowbot: { mediums: ['watercolor', 'canvas', 'illustration', 'pencil'], excludeVibes: ['dark', 'fierce', 'macabre'] },

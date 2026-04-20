@@ -51,8 +51,9 @@ jobs:
             fi
           else
             # Post once for each seeded image bot
-            # venusbot migrated to new engine (see .github/workflows/venusbot.yml)
-            BOTS=("dragonbot" "mangabot" "starbot" "sirenbot" "gothbot" "glowbot" "earthbot" "cuddlebot" "bloombot" "coquettebot" "animalbot" "glambot" "steambot" "tinybot" "inkbot" "titanbot" "arcadebot" "toybot")
+            # Migrated to new engine (see .github/workflows/<botname>.yml):
+            #   venusbot, sirenbot
+            BOTS=("dragonbot" "mangabot" "starbot" "gothbot" "glowbot" "earthbot" "cuddlebot" "bloombot" "coquettebot" "animalbot" "glambot" "steambot" "tinybot" "inkbot" "titanbot" "arcadebot" "toybot")
             for BOT in "${BOTS[@]}"; do
               echo "🎨 Generating for $BOT..."
               node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
