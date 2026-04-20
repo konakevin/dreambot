@@ -302,6 +302,21 @@ const GLOW_COLORS = [
   'mercury silver / chrome white',
 ];
 
+// MAKEUPS — Sonnet-authored extreme editorial makeup looks. Rolled per
+// render on the cyborg_fashion path as a separate axis so moment/makeup
+// combos multiply (30 moments × 25 makeups = 750 distinct pairings).
+const MAKEUPS = JSON.parse(
+  fs.readFileSync(path.resolve('scripts/seeds/venusbot_makeups.json'), 'utf8')
+);
+
+// CYBORG_FASHION_MOMENTS — Sonnet-authored editorial fashion scene seeds
+// for the venusbot_cyborg_fashion path. Vogue/McQueen/Galliano-tier avant-
+// garde editorial spreads — extreme makeup, extreme couture, extreme pose.
+// See scripts/gen-cyborg-fashion-moments.js to regenerate.
+const CYBORG_FASHION_MOMENTS = JSON.parse(
+  fs.readFileSync(path.resolve('scripts/seeds/venusbot_cyborg_fashion_moments.json'), 'utf8')
+);
+
 // CHARACTER_BASES — 20 distinct cyborg-flavor character identity paragraphs,
 // Sonnet-authored in scripts/seeds/venusbot_characters.json. Each is a
 // different flavor of the same species. Rolled per render so every post
@@ -605,6 +620,64 @@ ${vibeDirective.slice(0, 250)}
 ${SURREAL_EFFECTS_BLOCK}
 
 Output ONLY the scene description, 60-90 words, no preamble, no quotes, no meta-commentary.`;
+}
+
+/**
+ * Cyborg-fashion variant — the same cold-bitch cyborg assassin, now the
+ * subject of an avant-garde editorial fashion spread. Extreme makeup,
+ * extreme couture, extreme pose. McQueen / Galliano / Schiaparelli / Nick
+ * Knight energy. Same character DNA (glowing eyes, translucent core,
+ * machine-first body, no nipples) but dressed up for a Vogue spread.
+ */
+function buildCyborgFashionBrief({ vibeDirective, vibeKey }) {
+  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
+  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
+  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
+  const hair = pick(HAIR_STYLES);
+  const eyes = pick(EYE_STYLES);
+  const internal = pick(INTERNAL_EXPOSURE);
+  const wildcard = pick(WILDCARDS);
+  const moment = pick(CYBORG_FASHION_MOMENTS);
+  const makeup = pickWithRecency(MAKEUPS, 'makeup', 5);
+  const colorPalette = VIBE_COLOR[vibeKey] || VIBE_COLOR.cinematic;
+
+  return `You are a fashion-editorial cinematographer writing CYBORG FASHION scenes for VenusBot — avant-garde editorial spreads featuring the cold-bitch cyborg assassin all glammed up.
+
+TASK: write ONE vivid scene description (60-90 words, comma-separated phrases) of her in the editorial scene below. The output will be wrapped with style prefix and suffix — you produce ONLY the middle scene section.
+
+━━━ WHO SHE IS (same character, now in an editorial spread) ━━━
+
+${characterBase}
+
+Same character. Still cold, still mean, still mysterious, still the cyborg killer. She is now the subject of an extreme fashion shoot — McQueen Plato's Atlantis, Galliano-Dior couture, Schiaparelli surrealism, Pat McGrath extreme makeup, Nick Knight editorial photography. Nothing is off limits in terms of bizarre or crazy looks. Her cyborg body and machine-nature remain fully visible — she is dressed UP, not disguised.
+
+${REQUIRED_ELEMENTS_BLOCK}
+
+━━━ THE EDITORIAL SCENE ━━━
+
+${moment}
+
+━━━ EXTREME EDITORIAL MAKEUP (must appear — override any makeup hints in the scene above) ━━━
+
+${makeup}
+
+━━━ LEADING IDEAS (Sonnet, use as you see fit) ━━━
+
+- Skin tone: ${skin}
+- Glow color (eyes, internal core, circuits): ${glowColor}
+- Hair: ${hair}
+- Eye style: ${eyes}
+- Internal exposure through translucent panel: ${internal}
+- Surreal wildcard element: ${wildcard}
+- Color palette: ${colorPalette}
+
+━━━ MOOD ━━━
+
+${vibeDirective.slice(0, 200)}
+
+${SURREAL_EFFECTS_BLOCK}
+
+Output ONLY the 60-90 word scene, comma-separated, no preamble, no quotes.`;
 }
 
 // Dev-side Sonnet call with retry on transient 429/529/5xx.

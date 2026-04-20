@@ -1,5 +1,76 @@
 # Bot & Nightly Dream Generation System
 
+> **📌 NEW ARCHITECTURE (2026-04-20):** A new **Bot Strategy Pattern** is in active development on VenusBot. Four paths working (`closeup` / `full-body` / `seduction` / `cyborg_fashion`), two paths tried-and-dropped (`group`, `human_moment`). Everything below documents the **LEGACY** pre-gen'd `bot_seeds` pipeline still serving every other bot — the new pattern replaces it strategy-by-strategy.
+>
+> - New reference implementation: `scripts/iter-venus-golden.js`
+> - Pattern memory: `memory/project_bot_strategy_pattern.md` (PINNED)
+> - Branch: `bot-dream-engine` (not yet merged)
+
+---
+
+## 🆕 NEW BOT DREAM ENGINE — Strategy Pattern (WIP)
+
+### The refined build-a-bot process (learned iteratively on VenusBot)
+
+The process has a specific shape — **shared cross-path foundation first**, then **per-path iteration with its own Sonnet-seeded axes**.
+
+**Phase A — do ONCE per bot species:**
+
+1. Pull the bot's golden-era `ai_prompt` rows from `uploads` and extract the common prefix + suffix verbatim. These wrap every render.
+2. Sonnet-generate **20 CHARACTER_BASES** — distinct identity flavor variants of the same species (different body architectures, same character DNA). Shared across all paths. See `scripts/gen-character-bases.js` as reference.
+3. Hand-curate the shared visual axis pools (small enough to not need Sonnet): `SKIN_TONES`, `GLOW_COLORS`, `HAIR_STYLES`, `EYE_STYLES`, `INTERNAL_EXPOSURE`, `WILDCARDS`.
+4. Write two shared aesthetic-forcing constants injected into every brief:
+   - `REQUIRED_ELEMENTS_BLOCK` — minimum machine threshold, required mechanical body parts, nudity rule, material openness, anti-surface-effect rule
+   - `SURREAL_EFFECTS_BLOCK` — the surreal wrapper list
+
+**Phase B — for each path, iterate in this order:**
+
+1. **Identify what makes THIS path unique** — the scene/moment dimension that differs from other paths.
+2. **Sonnet-seed 30 MOMENTS** for this path (e.g. `scripts/gen-<path>-moments.js`).
+3. **Write the `build<Path>Brief` function** — picks character_base + moment + shared axes, injects the shared aesthetic blocks, and wraps with golden prefix/suffix.
+4. **Run 5-9 test renders.**
+5. **Identify any NEW axis this path specifically needs.** Each path often needs its own dedicated axis:
+   - `seduction` → environment variety (public cyberpunk settings)
+   - `cyborg_fashion` → `MAKEUPS` axis (25 Sonnet-generated extreme editorial makeup looks)
+   - `group` (if/when we try again) → character-slot-rotation to pick 2-4 characters
+6. **Sonnet-seed that new axis** and wire it into the path's brief only (not other paths).
+7. **If a systemic failure affects all paths** — tighten the shared `REQUIRED_ELEMENTS_BLOCK` surgically (e.g. "nipples keep appearing" → absolute ban; "chrome everything" → add MATERIAL OPENNESS clause).
+
+**A path is "done"** when 5-9 random test renders land consistently well. Commit checkpoint, move to next path.
+
+### VenusBot strategies — current state
+
+| Path | Status | Notes |
+|---|---|---|
+| `closeup` | ✅ Working | Character bases + required elements + shared axes |
+| `full-body` | ✅ Working | Noir plotting/conspiring moments pool |
+| `seduction` | ✅ Working | Cyberpunk public settings + come-join-me lures, no bedrooms |
+| `cyborg_fashion` | 🛠 WIP | 30 editorial moments + 25 makeups (path-specific axis) |
+| `group` | ❌ Dropped | Tried — visual output didn't land |
+| `human_moment` | ❌ Dropped | Tried — soft-scene contrast rendered boring |
+
+### Lessons burned in during VenusBot iteration
+
+1. **Don't stack mandatory checklists.** 3+ REQUIRED blocks in one brief dilutes Sonnet. Max 1 shared required block per brief.
+2. **Don't name pop-culture references.** "Ex Machina's Ava" didn't land — describe aesthetics in plain visual terms.
+3. **Don't over-permit nudity rule.** "Nipple-shape as bump is fine" → Sonnet rendered mechanical nipples. Absolute ban is simpler.
+4. **INTERNAL CORE must be INSIDE the body.** "Glowing core through translucent panel" gets interpreted as surface fireworks unless explicitly "INSIDE her body, seen THROUGH transparent panel, a physical mechanical structure — NOT a light effect on her surface."
+5. **MATERIAL OPENNESS matters** — without it, every render drifts to chrome. Call out latex/ceramic/composites/holographic polymer/bioluminescent gel/liquid mercury/nanotube weave as an open palette.
+6. **Character DNA stays fixed.** Swinging character direction mid-session (cold predator → tactical bounty hunter → couture diva) costs hours. Commit a direction.
+
+### API hardening (shipped to production 2026-04-20)
+
+`supabase/functions/_shared/llm.ts` now retries Claude on 429/500/502/503/504/529 with exponential backoff (1s/3s/10s/30s), then falls back to Haiku with its own retry budget. If both exhaust, call sites fall through to their existing template-based `fallbackPrompt` so the user always gets a dream. Applies to `generate-dream`, `nightly-dreams`, `restyle-photo`. Dev-side `iter-venus-golden.js` mirrors the retry (no Haiku fallback — dev only).
+
+### Productionization path (not yet built)
+
+1. New DB table `bot_strategies` — columns: `bot_username`, `strategy_key`, `character_bases` JSONB, `moments` JSONB, `prefix` TEXT, `suffix` TEXT, `axes` JSONB, `required_block` TEXT, `surreal_block` TEXT, `model_key` TEXT.
+2. New Edge Function `generate-bot-dream` — takes `{bot_username, strategy_key, vibe_key}`, loads config from DB, dedup-picks axes, composes brief, calls Claude (via hardened helper), wraps prefix+suffix, renders via Flux, creates upload with `is_public=true`.
+3. Update `scripts/generate-bot-dreams.js` orchestrator to call the new endpoint with recency filtering across a bot's strategies.
+4. Migrate strategy-by-strategy: VenusBot closeup → full-body → seduction → cyborg_fashion, then GothBot strategies, then the rest.
+
+---
+
 ## Two Dream Generators
 
 DreamBot has TWO independent dream generation systems, each with its own DB table:
