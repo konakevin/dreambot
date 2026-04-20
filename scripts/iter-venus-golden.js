@@ -331,14 +331,43 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 // seduction. Only the moment/framing varies per path.
 // ─────────────────────────────────────────────────────────────
 
-const REQUIRED_ELEMENTS_BLOCK = `━━━ REQUIRED VISUAL ELEMENTS (must appear in every render) ━━━
+const REQUIRED_ELEMENTS_BLOCK = `━━━ MACHINE-FIRST — NON-NEGOTIABLE ━━━
 
-- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises clearly visible across the scene, not dim ambient.
-- A visible INTERNAL ENERGY CORE pulses through a translucent panel on her torso or temple in the glow color — the "is she alive?" power source.
-- CIRCUIT LIGHT branches along her exposed cyborg parts in tree-vein patterns of the glow color running under/through her body surface.
-- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, a presence that unsettles.
-- MATERIAL OPENNESS: her body surface materials are an OPEN palette — brushed titanium, polished brass, copper, rose-gold, matte carbon fiber, glossy black latex, oxblood/royal-blue/emerald latex, iridescent holographic polymer, pearlescent ceramic, obsidian glass, smart-glass panels, color-shifting chameleon pigment, frosted acrylic, translucent silicone, bioluminescent hydrogel, liquid mercury segments, nanotube weave, jade, graphite, plus chrome (just one option among many). Mix 2-3 materials across different body zones per render. Do NOT default every render to chrome.
-- STRICT coverage: chest is ALWAYS covered — body-surface material in any of the above, translucent mechanical panel (showing internals, NEVER organic flesh/ribs/nipples), or fabric/mesh showing only cyborg-form. Nipple-shape as a smooth polymer bump or small port is fine; exposed flesh nipple is NOT.`;
+She MUST read unmistakably as a CYBORG at first glance, not a human woman with accents. If a viewer could scroll past this image and think "pretty woman with a glow patch," the render has failed.
+
+MINIMUM THRESHOLD: at least HALF (50%+) of her visible body surface must be clearly, obviously mechanical — no negotiation, no compromise, no "subtle accents." The human parts are a MINORITY of what's visible.
+
+REQUIRED MECHANICAL BODY PARTS (these MUST be visible in the render — weave them in):
+- **Mechanical arms** — at least one forearm and hand must be clearly robotic: exposed segmented chrome / titanium / brass / carbon-fiber structure, articulated servo fingers with visible piston joints, NO organic flesh on the limb.
+- **Shoulder joints** — exposed ball-socket or hydraulic-hinge mechanisms where a human shoulder would be, hardware visibly rotating.
+- **Segmented neck / throat** — chrome or composite ring-segments with visible actuators between them where a human throat would be, not smooth skin.
+- **Torso panel** — a large translucent / transparent section on her torso revealing her INTERNAL MECHANISMS (gear clusters, spinning rotors, pulsing power core, fiber-optic nerve bundles) — the "see inside her" Ex-Machina-style reveal.
+- **Additional machine tells welcome** — chrome jawline plating, exposed spine segments visible through back/nape, mechanical ear-housings with visible gears, transparent skull section, robotic legs with hinge joints.
+
+Only her FACE stays organic (exotic human or alien skin, full lips, luminous eyes). Everything else should read as a constructed being.
+
+━━━ REQUIRED LIGHT ELEMENTS (in every render) ━━━
+
+- Her EYES burn brightly in the GLOW COLOR — plasma-lit irises visible across the scene.
+- A visible INTERNAL POWER CORE lives INSIDE HER BODY and is seen THROUGH a transparent-acrylic / smoked-glass / clear-polymer section of her torso or skull. It is a physical mechanical/reactor structure (not a light effect on her surface, NOT a firework, NOT a decorative glowing emblem, NOT a heart-shape). The viewer looks INTO her and sees her mechanical guts with the reactor pulsing among gears and fiber-optic cables.
+- CIRCUIT LIGHT glows from UNDER the skin — bioluminescent tree-veins visible through translucent body sections, subtle and integrated, not sparks on top.
+- Uncanny "is she alive or not" stillness — machine-still composure, gaze that doesn't quite blink right.
+
+**SURFACE EFFECTS BANNED:** No fireworks, no spark explosions bursting off her chest, no glowing hearts/logos/emblems pasted on her body, no decorative rays shooting out. Everything glowing lives INSIDE her body and is visible THROUGH translucent panels — never sits on top of her surface as an effect.
+
+━━━ MATERIAL PALETTE (OPEN — not chrome-locked) ━━━
+
+Her body surface materials can be ANY combination: brushed titanium, polished brass, copper, rose-gold, matte carbon fiber, glossy black latex, oxblood/royal-blue/emerald latex, iridescent holographic polymer, pearlescent ceramic, obsidian glass, smart-glass panels, color-shifting chameleon pigment, frosted acrylic, translucent silicone, bioluminescent hydrogel, liquid mercury segments, nanotube weave, jade, graphite, plus chrome (one option of many). MIX 2-3 materials across different body zones per render. Do NOT default every render to chrome-everything.
+
+━━━ STRICT COVERAGE — ABSOLUTELY NO NIPPLES ━━━
+
+**NO nipples. Ever.** Not human nipples, not polymer nipples, not chrome ports where nipples would be, not glowing LED nipple-dots, not "nipple-shape through fabric," not decorative nipple-suggestion-bumps. ZERO nipple-like features anywhere on her chest.
+
+Her chest is sexy in silhouette and line — curves, contours, sweeping shapes, elegant breast forms — but the surface over her breasts is SMOOTH and UNINTERRUPTED. Mechanical breast-forms are clean curves (think a polished sculptural breastplate or translucent panel) with no protrusions at the nipple position. Fabric or mesh covering her chest shows curve and cleavage but NOT nipple outline or bump.
+
+If your description mentions anything that could render as a nipple (ports, dots, bumps, pinpricks, accents, knobs, studs, gems, glowing circles positioned at the nipple) — delete that detail. Seductive lines, shapes, cleavage, and bare-chrome curves welcome. Nipples (any form, any material) banned.
+
+Coverage materials: mechanical surface in any palette material, translucent mechanical panel (showing INTERNALS like gears/circuitry, NEVER organic flesh/ribs and NEVER with nipple-position ports), or fabric/mesh over the cyborg form.`;
 
 const SURREAL_EFFECTS_BLOCK = `━━━ SURREAL EFFECT LAYER (weave 2-3 naturally, don't overdo) ━━━
 
