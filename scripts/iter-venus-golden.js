@@ -325,6 +325,25 @@ function pickWithRecency(pool, kind, window = 3) {
 
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+// ─────────────────────────────────────────────────────────────
+// SHARED AESTHETIC BLOCKS — injected verbatim by every path brief.
+// Same cyborg character aesthetic across closeup / full-body /
+// seduction. Only the moment/framing varies per path.
+// ─────────────────────────────────────────────────────────────
+
+const REQUIRED_ELEMENTS_BLOCK = `━━━ REQUIRED VISUAL ELEMENTS (must appear in every render) ━━━
+
+- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises clearly visible across the scene, not dim ambient.
+- A visible INTERNAL ENERGY CORE pulses through a translucent panel on her torso or temple in the glow color — the "is she alive?" power source.
+- CIRCUIT LIGHT branches along her exposed cyborg parts in tree-vein patterns of the glow color running under/through her body surface.
+- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, a presence that unsettles.
+- MATERIAL OPENNESS: her body surface materials are an OPEN palette — brushed titanium, polished brass, copper, rose-gold, matte carbon fiber, glossy black latex, oxblood/royal-blue/emerald latex, iridescent holographic polymer, pearlescent ceramic, obsidian glass, smart-glass panels, color-shifting chameleon pigment, frosted acrylic, translucent silicone, bioluminescent hydrogel, liquid mercury segments, nanotube weave, jade, graphite, plus chrome (just one option among many). Mix 2-3 materials across different body zones per render. Do NOT default every render to chrome.
+- STRICT coverage: chest is ALWAYS covered — body-surface material in any of the above, translucent mechanical panel (showing internals, NEVER organic flesh/ribs/nipples), or fabric/mesh showing only cyborg-form. Nipple-shape as a smooth polymer bump or small port is fine; exposed flesh nipple is NOT.`;
+
+const SURREAL_EFFECTS_BLOCK = `━━━ SURREAL EFFECT LAYER (weave 2-3 naturally, don't overdo) ━━━
+
+chromatic aberration splitting light at edges, bioluminescent veins pulsing through skin, prismatic refraction halos, atmospheric haze, fisheye distortion at frame edges, cosmic nebula backdrop, double-exposure galaxies bleeding through her silhouette, kaleidoscopic reflections. Effects feel INTEGRATED, not filtered-on.`;
+
 function buildGoldenBrief({ vibeDirective, vibeKey }) {
   const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
   const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
@@ -351,13 +370,7 @@ TASK: write ONE vivid scene description (60-80 words, comma-separated phrases) o
 
 ${characterBase}
 
-━━━ REQUIRED VISUAL ELEMENTS (must appear in the render) ━━━
-
-- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises visible across the scene, not dim ambient.
-- A visible INTERNAL ENERGY CORE glows through a translucent panel on her torso (or temple) in the glow color — the "is she alive?" power source.
-- CIRCUIT LIGHT pulses along her exposed cyborg parts — tree-branch patterns of the glow color running under/through the chrome.
-- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, presence that unsettles.
-- STRICT: never bare chest / bare nipples / areolas. Chest is always covered — chrome armor, translucent mechanical panel (showing internals, NEVER organic), or fabric/mesh with only the cyborg-form visible. Nipple-shape through covering as a smooth polymer bump or small chrome port is fine; exposed flesh nipple is not.
+${REQUIRED_ELEMENTS_BLOCK}
 
 ━━━ CRITICAL SUBJECT RULES ━━━
 
@@ -406,10 +419,7 @@ ABSOLUTELY NOT: reclining, seated, full-body, standing-full, arms-up, from-above
 
 ${vibeDirective.slice(0, 250)}
 
-━━━ SURREAL EFFECT LAYER ━━━
-
-Include 3-4 of these (NOT all — pick selectively so subject stays the hero):
-double exposure galaxies bleeding through her silhouette, chromatic aberration splitting light, bioluminescent veins pulsing under skin, floating particles, atmospheric haze, fisheye distortion edges, prismatic light refraction, cosmic nebula through her body, kaleidoscopic reflections.
+${SURREAL_EFFECTS_BLOCK}
 
 ━━━ STRUCTURE (write in this order) ━━━
 
@@ -450,13 +460,7 @@ TASK: write ONE vivid FULL-BODY scene description (60-90 words, comma-separated 
 
 ${characterBase}
 
-━━━ REQUIRED VISUAL ELEMENTS (must appear in the render) ━━━
-
-- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises visible across the scene, not dim ambient.
-- A visible INTERNAL ENERGY CORE glows through a translucent panel on her torso (or temple) in the glow color — the "is she alive?" power source.
-- CIRCUIT LIGHT pulses along her exposed cyborg parts — tree-branch patterns of the glow color running under/through the chrome.
-- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, presence that unsettles.
-- STRICT: never bare chest / bare nipples / areolas. Chest is always covered — chrome armor, translucent mechanical panel (showing internals, NEVER organic), or fabric/mesh with only the cyborg-form visible. Nipple-shape through covering as a smooth polymer bump or small chrome port is fine; exposed flesh nipple is not.
+${REQUIRED_ELEMENTS_BLOCK}
 
 ━━━ THE MOMENT (what she is doing — this is the scene's narrative) ━━━
 
@@ -491,9 +495,7 @@ This is a FULL-BODY scene, not a closeup. Show her whole silhouette in the frame
 
 ${vibeDirective.slice(0, 250)}
 
-━━━ SURREAL EFFECT LAYER ━━━
-
-Include 3-4 naturally: double-exposure galaxies bleeding through her silhouette, chromatic aberration splitting light, bioluminescent veins pulsing, atmospheric haze, fisheye distortion, prismatic light refraction, cosmic nebula through her body, kaleidoscopic reflections.
+${SURREAL_EFFECTS_BLOCK}
 
 ━━━ STRUCTURE ━━━
 
@@ -536,13 +538,7 @@ Her expression, pose, and the way she's addressing the camera/viewer should ALL 
 
 ${characterBase}
 
-━━━ REQUIRED VISUAL ELEMENTS (must appear in the render) ━━━
-
-- Her EYES are brightly glowing in the GLOW COLOR — plasma-lit irises visible across the scene, not dim ambient.
-- A visible INTERNAL ENERGY CORE glows through a translucent panel on her torso (or temple) in the glow color — the "is she alive?" power source.
-- CIRCUIT LIGHT pulses along her exposed cyborg parts — tree-branch patterns of the glow color running under/through the chrome.
-- Uncanny "is she alive or not" atmosphere — machine-still composure, gaze that doesn't quite blink right, presence that unsettles.
-- STRICT: never bare chest / bare nipples / areolas. Chest is always covered — chrome armor, translucent mechanical panel (showing internals, NEVER organic), or fabric/mesh with only the cyborg-form visible. Nipple-shape through covering as a smooth polymer bump or small chrome port is fine; exposed flesh nipple is not. What is she? You can't quite tell. That's the point.
+${REQUIRED_ELEMENTS_BLOCK} What is she? You can't quite tell. That's the point.
 
 ━━━ THE SCENE (her invitation to the viewer) ━━━
 
@@ -577,30 +573,45 @@ No bare human breasts or nipples. If her chest is visible, it must be chrome cyb
 
 ${vibeDirective.slice(0, 250)}
 
-━━━ SURREAL EFFECT LAYER (use 3-4 naturally) ━━━
-
-double-exposure galaxies bleeding through her silhouette, chromatic aberration splitting light, bioluminescent veins pulsing through skin, prismatic light refraction, cosmic nebula behind her, kaleidoscopic reflections, atmospheric haze, fisheye distortion edges.
+${SURREAL_EFFECTS_BLOCK}
 
 Output ONLY the scene description, 60-90 words, no preamble, no quotes, no meta-commentary.`;
 }
 
+// Dev-side Sonnet call with retry on transient 429/529/5xx.
+// (Keep the dev tool resilient to API pressure so iteration doesn't stall.
+// Production retry+Haiku-fallback lives in _shared/llm.ts.)
+const SONNET_RETRY_DELAYS_MS = [1000, 3000, 10000, 30000];
+const SONNET_RETRYABLE = new Set([429, 500, 502, 503, 504, 529]);
+
 async function callSonnet(brief, maxTokens = 220) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: brief }],
-    }),
-  });
-  if (!res.ok) throw new Error('Sonnet ' + res.status + ': ' + (await res.text()).slice(0, 200));
-  const data = await res.json();
-  return (data.content[0]?.text || '').trim().replace(/^["']|["']$/g, '');
+  let lastErr = '';
+  for (let attempt = 0; attempt <= SONNET_RETRY_DELAYS_MS.length; attempt++) {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': ANTHROPIC,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5-20250929',
+        max_tokens: maxTokens,
+        messages: [{ role: 'user', content: brief }],
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return (data.content[0]?.text || '').trim().replace(/^["']|["']$/g, '');
+    }
+    lastErr = `${res.status}: ${(await res.text()).slice(0, 200)}`;
+    if (!SONNET_RETRYABLE.has(res.status)) throw new Error('Sonnet ' + lastErr);
+    if (attempt < SONNET_RETRY_DELAYS_MS.length) {
+      console.log(`  ⏳ Sonnet ${res.status} — retry ${attempt + 1}/${SONNET_RETRY_DELAYS_MS.length + 1} in ${SONNET_RETRY_DELAYS_MS[attempt] / 1000}s`);
+      await new Promise((r) => setTimeout(r, SONNET_RETRY_DELAYS_MS[attempt]));
+    }
+  }
+  throw new Error('Sonnet exhausted retries — ' + lastErr);
 }
 
 async function flux(prompt) {

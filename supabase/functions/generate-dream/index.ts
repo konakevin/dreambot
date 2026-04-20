@@ -1063,6 +1063,12 @@ Output ONLY the prompt.`;
 
 // haikuJson deleted Phase 3.2 — was only used by legacy recipe path.
 
+// Retries Haiku on transient errors before falling back to the template prompt.
+// Mirrors the retry logic in _shared/llm.ts (without model fallback — Haiku
+// IS the fallback in this path).
+const HAIKU_RETRY_DELAYS_MS = [1000, 3000, 10000, 30000];
+const HAIKU_RETRYABLE = new Set([429, 500, 502, 503, 504, 529]);
+
 async function enhanceViaHaiku(
   brief: string,
   fallback: string,
@@ -1070,28 +1076,49 @@ async function enhanceViaHaiku(
   maxTokens: number = 150
 ): Promise<string> {
   if (!anthropicKey) return fallback;
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: maxTokens,
-        messages: [{ role: 'user', content: brief }],
-      }),
-    });
-    if (!res.ok) throw new Error(`Haiku ${res.status}`);
-    const data = await res.json();
-    const text = data.content?.[0]?.text?.trim() ?? '';
-    return text.length >= 10 ? text : fallback;
-  } catch (err) {
-    console.warn('[generate-dream] Haiku fallback:', (err as Error).message);
-    return fallback;
+  let lastErr = '';
+  for (let attempt = 0; attempt <= HAIKU_RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: maxTokens,
+          messages: [{ role: 'user', content: brief }],
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.content?.[0]?.text?.trim() ?? '';
+        return text.length >= 10 ? text : fallback;
+      }
+      lastErr = `Haiku ${res.status}`;
+      if (!HAIKU_RETRYABLE.has(res.status)) {
+        console.warn(`[generate-dream] ${lastErr} non-retryable — using template fallback`);
+        return fallback;
+      }
+      if (attempt < HAIKU_RETRY_DELAYS_MS.length) {
+        console.warn(
+          `[generate-dream] ${lastErr} on ${attempt + 1}/${HAIKU_RETRY_DELAYS_MS.length + 1}, retrying in ${
+            HAIKU_RETRY_DELAYS_MS[attempt] / 1000
+          }s`
+        );
+        await new Promise((r) => setTimeout(r, HAIKU_RETRY_DELAYS_MS[attempt]));
+      }
+    } catch (err) {
+      lastErr = (err as Error).message;
+      if (attempt < HAIKU_RETRY_DELAYS_MS.length) {
+        await new Promise((r) => setTimeout(r, HAIKU_RETRY_DELAYS_MS[attempt]));
+      }
+    }
   }
+  console.warn(`[generate-dream] Haiku exhausted retries (${lastErr}) — using template fallback`);
+  return fallback;
 }
 
 // Sonnet, pickModel, generateImage, persistToStorage, sanitizePrompt,
