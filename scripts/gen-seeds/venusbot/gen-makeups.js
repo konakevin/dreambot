@@ -5,7 +5,7 @@
  * different makeup with different moment/couture. Pat McGrath / Nick
  * Knight / McQueen editorial energy — never everyday glam.
  *
- * Output: scripts/seeds/venusbot_makeups.json
+ * Output: scripts/bots/venusbot/seeds/makeups.json
  */
 
 const fs = require('fs');
@@ -81,7 +81,7 @@ async function callWithRetry(body) {
     process.exit(1);
   }
   const seeds = JSON.parse(match[0]);
-  const outPath = 'scripts/seeds/venusbot_makeups.json';
+  const outPath = 'scripts/bots/venusbot/seeds/makeups.json';
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(seeds, null, 2));
   console.log(`✅ Saved ${seeds.length} makeups to ${outPath}\n`);

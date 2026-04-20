@@ -213,11 +213,7 @@ Deno.serve(async (req) => {
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }
-    let nightlyVibe = await resolveVibeFromDb(
-      'my_vibes',
-      nightlyProfile.aesthetics,
-      recentVibes
-    );
+    let nightlyVibe = await resolveVibeFromDb('my_vibes', nightlyProfile.aesthetics, recentVibes);
     if (force_vibe) {
       nightlyVibe = await resolveVibeFromDb(force_vibe);
     }

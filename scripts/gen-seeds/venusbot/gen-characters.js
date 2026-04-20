@@ -6,7 +6,7 @@
  * clearly-mechanical body parts so Flux can't default to "woman with
  * chrome accents." Shared pool — all VenusBot paths roll from this.
  *
- * Output: scripts/seeds/venusbot_characters.json (array of strings)
+ * Output: scripts/bots/venusbot/seeds/characters.json (array of strings)
  */
 
 const fs = require('fs');
@@ -74,7 +74,7 @@ Return ONLY a JSON array of 20 strings, each 100-150 words, each one a distinct 
   }
   const bases = JSON.parse(match[0]);
 
-  const outPath = 'scripts/seeds/venusbot_characters.json';
+  const outPath = 'scripts/bots/venusbot/seeds/characters.json';
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(bases, null, 2));
 

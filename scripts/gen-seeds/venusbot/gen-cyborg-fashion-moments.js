@@ -8,7 +8,7 @@
  * is the subject of a fashion editorial. Her cyborg body is integrated with
  * the couture in striking, avant-garde ways.
  *
- * Output: scripts/seeds/venusbot_cyborg_fashion_moments.json
+ * Output: scripts/bots/venusbot/seeds/cyborg_fashion_moments.json
  */
 
 const fs = require('fs');
@@ -99,7 +99,7 @@ async function callWithRetry(body) {
     process.exit(1);
   }
   const seeds = JSON.parse(match[0]);
-  const outPath = 'scripts/seeds/venusbot_cyborg_fashion_moments.json';
+  const outPath = 'scripts/bots/venusbot/seeds/cyborg_fashion_moments.json';
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(seeds, null, 2));
   console.log(`✅ Saved ${seeds.length} cyborg-fashion moments to ${outPath}\n`);

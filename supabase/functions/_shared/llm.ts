@@ -113,7 +113,9 @@ export async function callSonnet(
       fellBackToSecondary: false,
     };
   } catch (primaryErr) {
-    console.warn(`[llm] primary model failed after retries: ${(primaryErr as Error).message} — falling back to ${SECONDARY_MODEL}`);
+    console.warn(
+      `[llm] primary model failed after retries: ${(primaryErr as Error).message} — falling back to ${SECONDARY_MODEL}`
+    );
   }
 
   // Fallback: Haiku

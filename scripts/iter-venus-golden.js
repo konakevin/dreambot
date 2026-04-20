@@ -54,18 +54,38 @@ const GOLDEN_SUFFIX = 'no text, no words, no letters, no watermarks, hyper detai
  * section — the scene detail that matches the golden-era vocabulary.
  * We hard-wrap it with the golden prefix + suffix at compose-time.
  */
-// ── Variety palette — rotated programmatically so Sonnet can't cluster on obsidian. ──
+// SKIN TONES — the organic side of the cyborg. Explicitly DIVERSE, across
+// human ethnicities AND alien species. Not every render is a "white girl
+// with a chrome shoulder" — her organic half can be ebony, mahogany, pink
+// alien, green alien, ashen gray, matte obsidian skin, etc. Human skin
+// entries name real ethnic tones; alien entries go wild. Recency window
+// set deep (7) because this is the MOST-noticed axis and Kevin flagged
+// clustering on pale skin as a blocker.
 const SKIN_TONES = [
-  'iridescent purple skin with metallic undertones',
-  'liquid mercury skin with chrome highlights',
-  'midnight blue skin with fine silver circuit traces',
-  'jade green skin with crystalline cheekbones',
-  'bronze skin with copper circuit filigree',
-  'copper-rose skin with holographic shimmer',
-  'amber-gold skin with translucent panels',
-  'emerald skin with sapphire bioluminescent veins',
-  'translucent porcelain skin revealing chrome underlayer',
-  'platinum skin with prismatic reflections',
+  // HUMAN — across the spectrum, NAMED with ethnic specificity
+  'deep ebony brown skin with rich mahogany undertones, warm and matte',
+  'dark cocoa skin with red-brown undertones, velvety finish',
+  'warm umber brown skin, golden undertones catching rim light',
+  'mid-toned sepia brown skin, terracotta undertones',
+  'olive-tan Mediterranean skin with warm honey undertones',
+  'golden-tawny South Asian skin with warm sienna undertones',
+  'warm porcelain East-Asian skin with peach undertones',
+  'sunburned desert-tan skin, copper-warm and weathered',
+  'light beige skin with cool rose undertones',
+  'freckled alabaster skin with rose-pink undertones',
+  // ALIEN — not from this planet, organic but fully inhuman
+  'soft fuchsia-pink alien skin, smooth and glossy like petals',
+  'moss-green alien skin with deeper jade speckling across the cheekbones',
+  'jet-black alien skin absorbing light like velvet, no reflection',
+  'ashen gray alien skin with charcoal micro-veining, matte stone finish',
+  'translucent pale-lavender alien skin with blood vessels faintly visible',
+  'icy robin-egg blue alien skin with white frost bloom across the cheeks',
+  'deep wine-purple alien skin with indigo shadow gradients',
+  'iridescent shifting-hue alien skin (copper-to-teal gradient depending on angle)',
+  'obsidian-black alien skin with sparse constellations of bioluminescent freckles',
+  'warm terracotta-red alien skin with ochre undertones, desert-creature energy',
+  'pale-gold alien skin with a fine subdermal shimmer, like buttered chrome',
+  'seafoam green alien skin with opalescent micro-scales across the temples',
 ];
 const HAIR_STYLES = [
   'platinum braids floating weightlessly',
@@ -77,6 +97,25 @@ const HAIR_STYLES = [
   'electric teal hair spilling over chrome shoulder plates',
   'copper wire tendrils sparking with energy',
 ];
+// BODY_TYPES — vary her silhouette. Default runway-thin is banned —
+// Sonnet/Flux gravitates there. Explicitly roll diverse sexy bodies so
+// batches mix short / tall / curvy / thick / athletic / bombshell /
+// busty. North star: always SEXY and R-rated. Recency window deep (6).
+const BODY_TYPES = [
+  'voluptuous hourglass build with full heavy bust, narrow waist, wide curvy hips — bombshell silhouette',
+  'thick curvy athletic build, broad shoulders, strong mechanical thighs, full chest, soft stomach — powerful and sexy',
+  'tall amazonian build, 6-foot frame, long mechanical legs, athletic shoulders, firm medium-full bust — statuesque and commanding',
+  'short petite build, 5-foot frame, compact curves, generous bust for her size, softly rounded hips — small and devastating',
+  'lean athletic runway build, long limbs, subtle curves, small firm bust, narrow hips — elegant and sharp',
+  'pear-shaped build with slim upper torso, small-medium bust, wide voluptuous hips and thick mechanical thighs — weighty and sexy',
+  'apple-shaped build with full chest and shoulders, soft rounded midsection, slimmer legs — top-heavy bombshell energy',
+  'stacked bombshell build — enormous full bust, cinched waist, lush curvy hips, dramatic hourglass silhouette',
+  'athletic curvy build with visible muscle definition under soft skin, medium-full bust, sculpted mechanical abs — gym-goddess cyborg',
+  'slim-thicc build — slender waist and shoulders, unexpectedly thick hips and curvy thighs, full medium bust',
+  'tall willowy build, flat-chested with subtle breast shaping, narrow hips, long mechanical limbs — androgynous cyborg beauty',
+  'plus-size voluptuous build, fully curvy body, soft full bust, rounded hips and thighs, confident fuckable silhouette',
+];
+
 const EYE_STYLES = [
   'luminous violet eyes with triple irises',
   'electric cyan eyes radiating inner light',
@@ -238,6 +277,7 @@ const SEDUCTION_MOMENTS = [
 // energy cores behind transparent panels. This is what makes her read as a real
 // machine, not just chrome-plated. Pick 1.
 const INTERNAL_EXPOSURE = [
+  // SMALL-WINDOW variants (traditional cyborg maintenance-panel reveals)
   'one cheek panel slightly lifted like a hinged hatch, revealing spinning brass micro-gears and a pulsing amber plasma core inside her skull',
   'a transparent observation-window section on her temple exposing the circuit board beneath, data streams visibly scrolling across it in real time',
   'a visible service seam along her jaw partially open showing bundles of fiber-optic nerve cables glowing turquoise inside',
@@ -245,9 +285,16 @@ const INTERNAL_EXPOSURE = [
   'one side of her forehead opened like a maintenance panel, exposing pulsing liquid-coolant lines and a central glowing reactor core',
   'a glass observation window built into her neck showing the rotating mechanism of internal vertebrae processing, circuitry flashing behind it',
   'one ear housing is open and exposed, showing intricate brass resonance chambers, copper wire bundles, and tiny LEDs winking inside',
-  'a translucent panel across her sternum reveals her internal energy core pulsing like a mechanical heart, circuit pathways branching outward from it',
-  'the skin on one half of her forehead and temple is peeled back in a lifted translucent flap, revealing raw chrome skull plating, spinning gears, and pulsing circuit boards beneath',
   'a diagnostic port at her collarbone is open with a wisp of internal plasma visible, fiber-optic filaments spilling out like thin glowing tendrils',
+  // WHOLE-TORSO / DOMINANT-REVEAL variants — subtle, not screamy. Let the
+  // translucency speak for itself without over-naming the internal parts.
+  'her torso is translucent — you can see the mechanical structure inside and a glowing core at center-chest, softly visible through the clear skin',
+  'most of her chest and abdomen read as clear polymer, the internal mechanisms and glowing heart-light showing through like something seen in a beautiful museum display',
+  'translucent skin across her front exposes the quiet architecture of her inner workings and the steady glow of her core, rendered with museum-piece restraint',
+  'her sternum and belly glow softly from within — a translucent shell over mechanical structure, the internal light washing outward',
+  'her body has an almost-translucent quality across her torso — gentle hints of internal structure visible, the pulsing inner glow more felt than seen',
+  'her chest is see-through in a subtle way — the internal mechanism glows through the clear skin like a lantern through paper',
+  'wide portions of her body are translucent, and the internal workings are visible in soft, dreamy detail — not an anatomy diagram, but a gorgeous reveal',
 ];
 
 // WILDCARDS — the "look twice" element. Pick 1. Intentionally surreal.
@@ -287,6 +334,31 @@ const VIBE_COLOR = {
   shimmer: 'shimmering gold particles, iridescent highlights, soft warm rim light',
 };
 
+// SCENE_PALETTES — overall color mood of the whole image, rolled per
+// render so batches don't cluster on teal/orange or blue/green. This
+// overrides the default VIBE_COLOR default when picked. Deep recency
+// window (7) so a batch forces cycling through the full range.
+const SCENE_PALETTES = [
+  'warm sunset gold and copper tones, burnt-orange shadows, peach highlights — all warm',
+  'deep crimson and oxblood reds, black shadows, gold accent highlights — bloody and regal',
+  'icy arctic whites and pale cerulean, silver highlights, fog haze, clinical cool',
+  'rich amethyst and violet with magenta highlights, indigo shadows, dreamy saturated',
+  'emerald forest greens with gold rim-light, deep umber shadows, nature-mystic',
+  'pure monochrome black-and-white with a single crimson accent — editorial graphic',
+  'dusty sepia and bone-white tones, ochre highlights, antique-film aesthetic',
+  'hot neon pink and acid yellow, black shadows, cyberpunk-pop electric',
+  'creamy pearl and rose-gold, soft peach atmosphere, ivory highlights — bright and luxe',
+  'toxic chartreuse green with black shadows and hot-pink accents — poison-editorial',
+  'molten lava orange and charcoal, ember-red highlights — volcanic warm',
+  'bleached desert sand and sunbaked ochre, blue-sky negative space, hot bright',
+  'deep ocean navy and teal with silver-white foam highlights — aquatic and cold',
+  'champagne gold on ivory, soft rose shadows, editorial studio bright',
+  'inky midnight black with moonlight silver rim-light, subtle violet undertones',
+  'burgundy and mulled-wine reds with soft candlelight gold, chiaroscuro',
+  'butter-yellow and cream with soft robin-blue accents — vintage sunny',
+  'blood-red and raw-meat crimson against charcoal — brutal painterly',
+];
+
 // GLOW_COLORS — explicit dominant-glow color picked per render so batches
 // don't cluster on teal/cyan. Used with cross-render recency dedup.
 const GLOW_COLORS = [
@@ -316,6 +388,34 @@ const MAKEUPS = JSON.parse(
 const CYBORG_FASHION_MOMENTS = JSON.parse(
   fs.readFileSync(path.resolve('scripts/seeds/venusbot_cyborg_fashion_moments.json'), 'utf8')
 );
+
+// STARE_MOMENTS — Sonnet-authored direct-eye-contact scene seeds for the
+// venusbot_stare path. Every seed is a moment where she stares straight
+// into the camera; intent varies wildly (seductive / menacing / hungry /
+// knowing / vacant / etc). See scripts/gen-stare-moments.js to regenerate.
+const STARE_MOMENTS = JSON.parse(
+  fs.readFileSync(path.resolve('scripts/seeds/venusbot_stare_moments.json'), 'utf8')
+);
+
+// HUMAN_TOUCH_VARIANTS — used by the ROBOT path only. Robot path inverts
+// the 50/50 cyborg balance to 90/10 — she's almost entirely machine, with
+// ONE small human sliver showing through. This axis decides which sliver.
+const HUMAN_TOUCH_VARIANTS = [
+  'half her face is still human (split diagonally from forehead to jaw) — real skin with pores, full sensual lips, one human eye — the OTHER half is built machine with a glowing sensor-eye',
+  'only her LOWER FACE is human — full human lips and jawline — everything from the cheekbones up is machine with a glowing visual sensor',
+  'only the CENTER of her face is human (a thin mask-shape around the mouth and eyes) — the rest of her head is a sculpted machine shell',
+  'ONE entire ARM is organic human flesh with visible skin, the other is a fully mechanical limb — everything else on her body is machine',
+  'ONE SIDE of her torso (ribcage to hip) has organic human skin visible through the cracked machine shell — the rest of her is all machine',
+  'only her LIPS are human — full, slightly parted, real skin — everything else on her head is a seamless machine face with a glowing visor where eyes would be',
+  'a SEAM of human skin runs vertically down the center of her body from throat to navel — a pale ribbon of flesh flanked entirely by machine shell',
+  'only her NECK AND THROAT are organic, with real skin showing a pulse — head is a faceless machine helmet with a glowing slit visor, body is all machine',
+  'only her EYES are human — vulnerable, watery, real — set into a mannequin face and fully robotic body',
+  'her FACE is a sculpted machine mask with NO human features visible — but her HAIR is real, falling in heavy organic waves over her built shoulders (the only human thing on her)',
+];
+
+// ROBOT_MOMENTS — path-specific scene seeds. Predator energy, hunting
+// the viewer, industrial/clinical/threatening settings, but she's still
+// hot-as-fuck. Terrifying-and-magnetic at once — fight-or-fuck response.
 
 // CHARACTER_BASES — 20 distinct cyborg-flavor character identity paragraphs,
 // Sonnet-authored in scripts/seeds/venusbot_characters.json. Each is a
@@ -356,7 +456,7 @@ REQUIRED MECHANICAL BODY PARTS (these MUST be visible in the render — weave th
 - **Mechanical arms** — at least one forearm and hand must be clearly robotic: exposed segmented chrome / titanium / brass / carbon-fiber structure, articulated servo fingers with visible piston joints, NO organic flesh on the limb.
 - **Shoulder joints** — exposed ball-socket or hydraulic-hinge mechanisms where a human shoulder would be, hardware visibly rotating.
 - **Segmented neck / throat** — chrome or composite ring-segments with visible actuators between them where a human throat would be, not smooth skin.
-- **Torso panel** — a large translucent / transparent section on her torso revealing her INTERNAL MECHANISMS (gear clusters, spinning rotors, pulsing power core, fiber-optic nerve bundles) — the "see inside her" Ex-Machina-style reveal.
+- **TRANSLUCENT TORSO** — a substantial portion of her torso (chest, sternum, belly) is translucent / frosted / clear-polymer skin — you can see into her. The internal mechanical structure is visible through it, and a glowing power core sits somewhere inside. Think Ex-Machina or Alita Battle Angel — the "see inside her" reveal is part of what makes her beautiful, handled with subtlety rather than screamed. Don't over-describe the internal parts; just establish that her body is translucent and glows from within.
 - **Additional machine tells welcome** — chrome jawline plating, exposed spine segments visible through back/nape, mechanical ear-housings with visible gears, transparent skull section, robotic legs with hinge joints.
 
 Only her FACE stays organic (exotic human or alien skin, full lips, luminous eyes). Everything else should read as a constructed being.
@@ -374,26 +474,108 @@ Only her FACE stays organic (exotic human or alien skin, full lips, luminous eye
 
 Her body surface materials can be ANY combination: brushed titanium, polished brass, copper, rose-gold, matte carbon fiber, glossy black latex, oxblood/royal-blue/emerald latex, iridescent holographic polymer, pearlescent ceramic, obsidian glass, smart-glass panels, color-shifting chameleon pigment, frosted acrylic, translucent silicone, bioluminescent hydrogel, liquid mercury segments, nanotube weave, jade, graphite, plus chrome (one option of many). MIX 2-3 materials across different body zones per render. Do NOT default every render to chrome-everything.
 
-━━━ STRICT COVERAGE — ABSOLUTELY NO NIPPLES ━━━
+━━━ CHEST COVERAGE (rated-R, Vogue-editorial level) ━━━
 
-**NO nipples. Ever.** Not human nipples, not polymer nipples, not chrome ports where nipples would be, not glowing LED nipple-dots, not "nipple-shape through fabric," not decorative nipple-suggestion-bumps. ZERO nipple-like features anywhere on her chest.
+Her chest is sexy in SILHOUETTE and LINE — elegant curves, sweeping contours, sculptural breast-forms rendered as a clean mechanical or fabric surface. Coverage is ALWAYS present. Options:
 
-Her chest is sexy in silhouette and line — curves, contours, sweeping shapes, elegant breast forms — but the surface over her breasts is SMOOTH and UNINTERRUPTED. Mechanical breast-forms are clean curves (think a polished sculptural breastplate or translucent panel) with no protrusions at the nipple position. Fabric or mesh covering her chest shows curve and cleavage but NOT nipple outline or bump.
+- Sculptural mechanical breastplate with a smooth, UNINTERRUPTED surface (like a polished sculpture — no surface features, no ports, no accents, no dots, no studs, no gems positioned on the bust)
+- Translucent polymer panel across the chest revealing internal mechanisms (gears, circuits, pulsing core) — the reveal is WHAT'S INSIDE the panel, never flesh
+- Silk / latex / sheer mesh / lace / high-fashion fabric draped across her chest — fabric follows the curve but the surface under it stays smooth and featureless
+- Ornate circuit-traced chrome bust with patterning (filigree, etched lines, cabled circuits) — patterning flows across the whole surface continuously, never concentrating into a central feature on each breast
 
-If your description mentions anything that could render as a nipple (ports, dots, bumps, pinpricks, accents, knobs, studs, gems, glowing circles positioned at the nipple) — delete that detail. Seductive lines, shapes, cleavage, and bare-chrome curves welcome. Nipples (any form, any material) banned.
+DO NOT add any small surface feature at the center of the bust — no accents, no ports, no studs, no gems, no LEDs, no glowing dots, no circuit-node, no small decorative emblem — anywhere on the breast surface. The bust surface stays sculpturally clean.
 
-Coverage materials: mechanical surface in any palette material, translucent mechanical panel (showing INTERNALS like gears/circuitry, NEVER organic flesh/ribs and NEVER with nipple-position ports), or fabric/mesh over the cyborg form.`;
+Rated R, high-fashion editorial — think Vogue cover, NOT lingerie catalog. Suggestive via shape, not explicit via detail. No nipples.`;
 
 const SURREAL_EFFECTS_BLOCK = `━━━ SURREAL EFFECT LAYER (weave 2-3 naturally, don't overdo) ━━━
 
 chromatic aberration splitting light at edges, bioluminescent veins pulsing through skin, prismatic refraction halos, atmospheric haze, fisheye distortion at frame edges, cosmic nebula backdrop, double-exposure galaxies bleeding through her silhouette, kaleidoscopic reflections. Effects feel INTEGRATED, not filtered-on.`;
 
+const SKIN_MATERIAL_NUANCE_BLOCK = `━━━ SKIN MATERIAL NUANCE ━━━
+
+Her skin mixes THREE material zones visible in the frame: (1) real human skin with pores and imperfections in the tinted color below, (2) polished synthetic polymer skin catching light like lacquered ceramic with subtle seam lines, (3) exposed internals / transparent panels revealing mechanisms. Let the viewer see the transitions between all three.`;
+
+const HOT_AS_HELL_BLOCK = `━━━ HOT-AS-HELL RULE (universal — every path) ━━━
+
+She is MAGNETICALLY sexy in every render. Every pose, every framing, every moment should radiate heat and pull. Lean into it — elegant feminine curves, exposed mechanical décolletage, hip line, chrome thigh revealed through a slit, silk-and-machine lingerie-couture, latex-and-circuit bustiers, sheer mesh draped over cyborg panels, boudoir silk sliding off one shoulder, hint of exposed waist, fabric catching the line of her bust. High-fashion Vogue editorial energy — suggestive via shape, not explicit via detail. Rated R, not X. Whatever the path is doing (plotting, staring, posing for Vogue, closeup portrait), she is ALWAYS the hottest thing in the frame. Coverage rules from above apply (mechanical / translucent-panel / fabric), but the SILHOUETTE burns with heat and the pull of wanting her. Never demure, never schoolmarm. Always a ten.
+
+━━━ BANNED SHOTS ━━━
+
+- NO "runway walk toward the camera" or "walking directly toward the lens" compositions — that's a cliché catwalk shot. Frontal walk-toward-camera is banned.
+- NO boring standing-still-facing-camera-in-a-hallway / corridor / subway-platform shots. If you've written "standing motionless in a corridor looking at camera", scrap it.
+- PICK interesting angles — overhead, low-angle, profile, tilted, Dutch angle, reflection, over-the-shoulder, partial-body, from behind her, through a window or doorway, frozen mid-action. Make each frame a unique composition.`;
+
+// ROBOT-PATH-ONLY required-elements. Overrides REQUIRED_ELEMENTS_BLOCK
+// for the robot path (which inverts the default 50/50 to 90/10 machine-
+// dominant). She is ALMOST entirely machine — a Terminator-style
+// endoskeleton-and-chrome predator in female silhouette. ONE small
+// human sliver shows through (see HUMAN_TOUCH_VARIANTS). Hunter.
+// Fight-or-fuck response: you want to run from her AND want her.
+const ROBOT_FIRST_BLOCK = `━━━ ROBOT-FIRST — 90% MACHINE, 10% HUMAN ━━━
+
+This is the ROBOT path. She is almost entirely a machine — think female Terminator, T-800 / T-1000 hunter energy, relentless, in a sexy-as-fuck feminine silhouette. At least 90% of her visible body reads as PURE ROBOT. Only a small HUMAN SLIVER remains (see HUMAN TOUCH axis below).
+
+MATERIALS — OPEN: she can be built from ANY composite of materials and colors. Metals of any kind (chrome, brushed titanium, gunmetal, brass, copper, rose-gold, steel, iron, ceramic), plastics, polymers, rubber, latex, carbon fiber, ceramics, painted composites, matte finishes, glossy finishes, candy-coated colors, military matte, pearlescent whites, obsidian blacks, jewel-toned enamels, transparent panels, liquid-metal segments, hybrid fabric-over-frame — any mix. She is a BUILT thing; she can be built from anything. Don't default to chrome-everything. Let the look breathe.
+
+The viewer should look at her and think "that is a ROBOT" — not "that is a cyborg woman." The human sliver is a haunting detail, not a reassurance.
+
+FEMININE-BUT-ROBOT SILHOUETTE: she is unmistakably a female-form robot. Curves are present — bust, waist, hips, thighs — but rendered in her built materials. The female shape is part of the weapon. Sexiness comes from SILHOUETTE + lethal threat, not from exposed skin. Articulated limbs, visible joints, whatever internal anatomy she has, all optional flavors — choose what fits the shot.
+
+━━━ REQUIRED LIGHT ELEMENTS (robot path) ━━━
+
+- A glowing sensor / targeting-eye / lens slit in the GLOW COLOR — visible wherever her visual apparatus is
+- An internal power core or energy source visible THROUGH a translucent section somewhere (chest, skull, shoulder) — same rule as shared: inside, not surface fireworks
+- Machine-still composure — too mechanical to be alive
+
+━━━ THE HUMAN SLIVER (the 10%) ━━━
+
+Exactly ONE small human feature remains — see the HUMAN TOUCH axis below. This is the ONLY organic detail on her. Everywhere else: full machine.
+
+━━━ COVERAGE ━━━
+
+Her chest is sculptural robot material — smooth mechanical breastplate, translucent panel, built-surface, or fabric-over-frame. Suggestive via SHAPE only. No nipples.`;
+
+/**
+ * Roll the shared character-DNA slots once for a render. Every path calls
+ * this so the body-aesthetic is identical across paths — only the path's
+ * unique hook (pose / moment / makeup / stare-intent) differs.
+ */
+function rollCharacterDNA(vibeKey) {
+  return {
+    skin: pickWithRecency(SKIN_TONES, 'skin', 7),
+    bodyType: pickWithRecency(BODY_TYPES, 'body', 6),
+    glowColor: pickWithRecency(GLOW_COLORS, 'glow', 3),
+    scenePalette: pickWithRecency(SCENE_PALETTES, 'scene_palette', 7),
+    characterBase: pickWithRecency(CHARACTER_BASES, 'character', 5),
+    hair: pick(HAIR_STYLES),
+    eyes: pick(EYE_STYLES),
+    internal: pick(INTERNAL_EXPOSURE),
+    wildcard: pick(WILDCARDS),
+    colorPalette: VIBE_COLOR[vibeKey] || VIBE_COLOR.cinematic,
+  };
+}
+
+/**
+ * Emit the shared "HER BODY" slot list verbatim. Every path injects this
+ * block unchanged so she reads as the same cyborg across closeup / full-body
+ * / seduction / cyborg_fashion / stare — only the path's unique axes differ.
+ */
+function characterDNABlock(dna) {
+  return `━━━ HER BODY (shared character DNA — same across all paths) ━━━
+
+- Body type / silhouette (MUST land — don't default to runway-thin): **${dna.bodyType}**
+- Skin tone tint on organic skin (pores visible): **${dna.skin}**
+- Hair: **${dna.hair}**
+- Eyes: **${dna.eyes}**
+- Internal workings visible through translucent panel: **${dna.internal}**
+- Surreal wildcard: **${dna.wildcard}**
+- SCENE-WIDE COLOR PALETTE (overrides the default cinematic teal/orange — the WHOLE image should be graded in this palette): **${dna.scenePalette}**
+- Secondary lighting palette (supports scene palette above): ${dna.colorPalette}
+- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, internal core, circuits — renders in this color): **${dna.glowColor}**`;
+}
+
 function buildGoldenBrief({ vibeDirective, vibeKey }) {
-  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
-  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
-  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
-  const hair = pick(HAIR_STYLES);
-  const eyes = pick(EYE_STYLES);
+  const dna = rollCharacterDNA(vibeKey);
   const cyborg = pick(CYBORG_FEATURES);
   const energy1 = pick(ENERGY_EFFECTS);
   let energy2 = pick(ENERGY_EFFECTS);
@@ -401,10 +583,7 @@ function buildGoldenBrief({ vibeDirective, vibeKey }) {
   const pose = pick(POSES);
   const expression = pick(EXPRESSIONS);
   const accent = pick(ACCENT_DETAILS);
-  const internal = pick(INTERNAL_EXPOSURE);
-  const wildcard = pick(WILDCARDS);
   const environment = pick(ENVIRONMENTS);
-  const colorPalette = VIBE_COLOR[vibeKey] || VIBE_COLOR.cinematic;
 
   return `You are a surrealist fashion photographer writing scene descriptions for VenusBot.
 
@@ -412,43 +591,23 @@ TASK: write ONE vivid scene description (60-80 words, comma-separated phrases) o
 
 ━━━ CHARACTER RULES (who SHE is) ━━━
 
-${characterBase}
+${dna.characterBase}
 
 ${REQUIRED_ELEMENTS_BLOCK}
 
-━━━ CRITICAL SUBJECT RULES ━━━
+${SKIN_MATERIAL_NUANCE_BLOCK}
 
-She is a HALF-HUMAN HALF-CYBORG. Roughly 40-50% of what's visible in the frame is MECHANICAL / CYBORG / GLOWING-ENERGY-ACTIVE, and the other 50-60% is REAL HUMAN skin/face with full lips, real feminine facial proportions, visible pores, eyelashes, genuine feminine beauty.
+${characterDNABlock(dna)}
 
-SKIN MATERIAL NUANCE: her skin is NOT uniform. It varies across three material zones that the viewer can SEE transitions between:
-1. **Real human skin** — pores, fine hair, natural imperfections, the tinted color noted below
-2. **Synthetic polymer skin** — glossy, reflective like polished ceramic or lacquered polymer, seam lines subtly visible, almost-mannequin smooth, catches light like high-end synthetic
-3. **Exposed internals / transparent panels** — sections where mechanical inner workings are clearly visible (see INTERNAL WORKINGS slot below)
+━━━ PATH-SPECIFIC AXES (closeup path extras) ━━━
 
-The viewer should be able to trace the transitions and see three different material types on her at once. Name these material transitions explicitly in your output.
-
-The cyborg half is DOMINANT and UNMISTAKABLE — not a small accent or single jewelry piece. It includes exposed mechanical structure, chrome plating, brightly glowing energy cores, pulsing bioluminescent circuit patterns, visible mechanism. Someone looking at the image must immediately see "half woman, half machine" — never "woman with a single small prosthetic."
-
-NEVER write "obsidian-skinned robot", "chrome mannequin", "android figure", or "a woman with a small chrome port." The balance is half-and-half. She is intrinsically ENERGETIC — her cyborg parts are POWERED, GLOWING, PULSING, ALIVE.
-
-SEXY CYBORG SILHOUETTE: she is overtly sexy. Her body's curves — collarbone, throat, shoulder line, upper chest, breasts — are visible and flattered by the framing. The torso/chest can and SHOULD be visibly mechanical: chrome-plated cyborg breast armor, curved circuit-panel breastplate, translucent synthetic chest panel with pulsing light, ornate copper-filigree bust plate, bioluminescent circuit patterns flowing across the décolletage and over curved breast shapes. Mechanical feminine curves are welcome. AVOID: bare human breasts, human nipples, solid latex/rubber bodysuit. The chest, when visible, is INTEGRATED CYBORG (mechanical breast armor, translucent panel with internal glow, or circuit-traced chrome). Think sexy concept-art cyborg, not softcore.
-
-━━━ USE THESE EXACT ELEMENTS (programmatically chosen this render) ━━━
-
-- Skin tone (real human skin with this tint — pores visible): **${skin}**
-- Hair: **${hair}**
-- Eyes: **${eyes}**
 - EXPRESSION: **${expression}**
 - POSE (within waist-up framing): **${pose}**
 - CYBORG HALF (must be dominant, ~40-50% of frame): **${cyborg}**
 - Energy effect #1: **${energy1}**
 - Energy effect #2: **${energy2}**
-- INTERNAL WORKINGS visible (MUST be included prominently — this is what makes her read as a real machine, not surface-chrome): **${internal}**
 - ACCENT DETAIL (subtle extra): **${accent}**
-- WILDCARD (surreal look-twice element): **${wildcard}**
 - Environment: **${environment}**
-- Color palette for lighting: ${colorPalette}
-- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, breath, circuits, core — renders in this color): **${glowColor}**
 
 ━━━ FRAMING HARD-LOCK — NO EXCEPTIONS ━━━
 
@@ -458,6 +617,8 @@ The composition MUST be ONE of:
 3. Side-profile portrait showing face + throat + shoulder
 
 ABSOLUTELY NOT: reclining, seated, full-body, standing-full, arms-up, from-above, from-behind, distant figure. NEVER show the legs or hips. Face fills the upper third of the frame.
+
+${HOT_AS_HELL_BLOCK}
 
 ━━━ MOOD CONTEXT (subtle, don't override subject) ━━━
 
@@ -481,20 +642,13 @@ Output ONLY the 60-80 word scene description. No preamble, no quotes, no meta-co
  * brief, but framing is opened up and a specific moment is the focus.
  */
 function buildFullBodyBrief({ vibeDirective, vibeKey }) {
-  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
-  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
-  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
-  const hair = pick(HAIR_STYLES);
-  const eyes = pick(EYE_STYLES);
+  const dna = rollCharacterDNA(vibeKey);
   const cyborg = pick(CYBORG_FEATURES);
   const energy1 = pick(ENERGY_EFFECTS);
   let energy2 = pick(ENERGY_EFFECTS);
   while (energy2 === energy1) energy2 = pick(ENERGY_EFFECTS);
   const pose = pick(ACTION_POSES);
   const moment = pick(MOMENTS);
-  const internal = pick(INTERNAL_EXPOSURE);
-  const wildcard = pick(WILDCARDS);
-  const colorPalette = VIBE_COLOR[vibeKey] || VIBE_COLOR.cinematic;
 
   return `You are a surrealist cinematographer writing full-body action / moment scenes for VenusBot — a lethal honeytrap cyborg assassin.
 
@@ -502,9 +656,19 @@ TASK: write ONE vivid FULL-BODY scene description (60-90 words, comma-separated 
 
 ━━━ CHARACTER (same as always) ━━━
 
-${characterBase}
+${dna.characterBase}
 
 ${REQUIRED_ELEMENTS_BLOCK}
+
+${SKIN_MATERIAL_NUANCE_BLOCK}
+
+${characterDNABlock(dna)}
+
+━━━ PATH-SPECIFIC AXES (full-body path extras) ━━━
+
+- Dominant cyborg feature (~40-50% of body visible): **${cyborg}**
+- Energy effect #1: **${energy1}**
+- Energy effect #2: **${energy2}**
 
 ━━━ THE MOMENT (what she is doing — this is the scene's narrative) ━━━
 
@@ -512,28 +676,13 @@ ${REQUIRED_ELEMENTS_BLOCK}
 
 This is a LOADED scene — she is in the middle of a plot. Film-noir meets sci-fi assassin. Seductive AND deadly at once. The moment should feel charged with intent — something is about to happen, or just did. NEVER a generic "running" or "standing still" pose. Her hyper-perfect beauty is the lure; her cold cyborg nature is the blade.
 
-━━━ HER BODY (the usual character DNA — 10-slot dedup) ━━━
-
-- Skin tone tint on real human skin (pores visible): **${skin}**
-- Hair: **${hair}**
-- Eyes: **${eyes}**
-- Dominant cyborg feature (~40-50% of body visible): **${cyborg}**
-- Energy effect #1: **${energy1}**
-- Energy effect #2: **${energy2}**
-- Internal workings visible (gears/circuits/cores revealed through opened panel or translucent section): **${internal}**
-- Surreal wildcard: **${wildcard}**
-- Color palette: ${colorPalette}
-- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, breath, circuits, core — renders in this color): **${glowColor}**
-
-━━━ SKIN MATERIAL NUANCE ━━━
-
-Her skin mixes THREE material zones: (1) real human skin with pores and imperfections, (2) polished synthetic polymer skin that catches light like lacquered ceramic, and (3) exposed internals / transparent panels showing inner mechanisms. Let the viewer see the transitions.
-
 ━━━ FRAMING ━━━
 
 **${pose}**
 
 This is a FULL-BODY scene, not a closeup. Show her whole silhouette in the frame doing the moment above. Scene has depth, environment, scale. She is the subject but the world surrounds her.
+
+${HOT_AS_HELL_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
 
@@ -554,19 +703,12 @@ Output ONLY the scene description, 60-90 words, no preamble, no quotes.`;
  * should feel pulled forward despite knowing she's dangerous.
  */
 function buildSeductionBrief({ vibeDirective, vibeKey }) {
-  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
-  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
-  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
-  const hair = pick(HAIR_STYLES);
-  const eyes = pick(EYE_STYLES);
+  const dna = rollCharacterDNA(vibeKey);
   const cyborg = pick(CYBORG_FEATURES);
   const energy1 = pick(ENERGY_EFFECTS);
   let energy2 = pick(ENERGY_EFFECTS);
   while (energy2 === energy1) energy2 = pick(ENERGY_EFFECTS);
   const moment = pick(SEDUCTION_MOMENTS);
-  const internal = pick(INTERNAL_EXPOSURE);
-  const wildcard = pick(WILDCARDS);
-  const colorPalette = VIBE_COLOR[vibeKey] || VIBE_COLOR.cinematic;
 
   return `You are a surrealist cinematographer writing SEDUCTION scenes for VenusBot — a lethal honeytrap cyborg assassin.
 
@@ -580,38 +722,29 @@ Her expression, pose, and the way she's addressing the camera/viewer should ALL 
 
 ━━━ CHARACTER (same as always) ━━━
 
-${characterBase}
+${dna.characterBase}
 
 ${REQUIRED_ELEMENTS_BLOCK} What is she? You can't quite tell. That's the point.
+
+${SKIN_MATERIAL_NUANCE_BLOCK}
+
+${characterDNABlock(dna)}
+
+━━━ PATH-SPECIFIC AXES (seduction path extras) ━━━
+
+- Dominant cyborg feature (~40-50% visible): **${cyborg}**
+- Energy effect #1: **${energy1}**
+- Energy effect #2: **${energy2}**
 
 ━━━ THE SCENE (her invitation to the viewer) ━━━
 
 ${moment}
 
-━━━ HER BODY (same 10-slot dedup) ━━━
-
-- Skin tone tint on real human skin (pores visible): **${skin}**
-- Hair: **${hair}**
-- Eyes: **${eyes}**
-- Dominant cyborg feature (~40-50% visible): **${cyborg}**
-- Energy effect #1: **${energy1}**
-- Energy effect #2: **${energy2}**
-- Internal workings visible (opened panel / translucent section): **${internal}**
-- Surreal wildcard: **${wildcard}**
-- Color palette: ${colorPalette}
-- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, breath, circuits, core — renders in this color): **${glowColor}**
-
-━━━ SKIN MATERIAL NUANCE ━━━
-
-Her skin mixes three material zones visible in the frame: (1) real human skin with pores, (2) polished synthetic polymer skin catching light like lacquered ceramic, (3) exposed internals / transparent panels showing mechanisms. Let the viewer see transitions.
-
 ━━━ FRAMING ━━━
 
 Full-body or three-quarter-body boudoir framing — she occupies the frame invitingly. The camera angle and composition should itself feel seductive: intimate, close enough to feel her presence but far enough to see her whole form. The eye-line between her and the viewer is CHARGED. No distant wide shots — this is an intimate lure.
 
-━━━ NUDITY RULE ━━━
-
-No bare human breasts or nipples. If her chest is visible, it must be chrome cyborg plating, translucent mechanical panel with internal glow, silk-covered, or circuit-traced synthetic. Sexy but strictly cyborg silhouette. Silk robes, lingerie-like mechanical couture, or boudoir drapery are welcome — as long as chest coverage reads as mechanical/fabric, never flesh.
+${HOT_AS_HELL_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
 
@@ -627,19 +760,12 @@ Output ONLY the scene description, 60-90 words, no preamble, no quotes, no meta-
  * subject of an avant-garde editorial fashion spread. Extreme makeup,
  * extreme couture, extreme pose. McQueen / Galliano / Schiaparelli / Nick
  * Knight energy. Same character DNA (glowing eyes, translucent core,
- * machine-first body, no nipples) but dressed up for a Vogue spread.
+ * machine-first body, clean-silhouette coverage) but dressed up for a Vogue spread.
  */
 function buildCyborgFashionBrief({ vibeDirective, vibeKey }) {
-  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
-  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
-  const characterBase = pickWithRecency(CHARACTER_BASES, 'character', 5);
-  const hair = pick(HAIR_STYLES);
-  const eyes = pick(EYE_STYLES);
-  const internal = pick(INTERNAL_EXPOSURE);
-  const wildcard = pick(WILDCARDS);
+  const dna = rollCharacterDNA(vibeKey);
   const moment = pick(CYBORG_FASHION_MOMENTS);
   const makeup = pickWithRecency(MAKEUPS, 'makeup', 5);
-  const colorPalette = VIBE_COLOR[vibeKey] || VIBE_COLOR.cinematic;
 
   return `You are a fashion-editorial cinematographer writing CYBORG FASHION scenes for VenusBot — avant-garde editorial spreads featuring the cold-bitch cyborg assassin all glammed up.
 
@@ -647,11 +773,15 @@ TASK: write ONE vivid scene description (60-90 words, comma-separated phrases) o
 
 ━━━ WHO SHE IS (same character, now in an editorial spread) ━━━
 
-${characterBase}
+${dna.characterBase}
 
 Same character. Still cold, still mean, still mysterious, still the cyborg killer. She is now the subject of an extreme fashion shoot — McQueen Plato's Atlantis, Galliano-Dior couture, Schiaparelli surrealism, Pat McGrath extreme makeup, Nick Knight editorial photography. Nothing is off limits in terms of bizarre or crazy looks. Her cyborg body and machine-nature remain fully visible — she is dressed UP, not disguised.
 
 ${REQUIRED_ELEMENTS_BLOCK}
+
+${SKIN_MATERIAL_NUANCE_BLOCK}
+
+${characterDNABlock(dna)}
 
 ━━━ THE EDITORIAL SCENE ━━━
 
@@ -661,17 +791,185 @@ ${moment}
 
 ${makeup}
 
-━━━ LEADING IDEAS (Sonnet, use as you see fit) ━━━
-
-- Skin tone: ${skin}
-- Glow color (eyes, internal core, circuits): ${glowColor}
-- Hair: ${hair}
-- Eye style: ${eyes}
-- Internal exposure through translucent panel: ${internal}
-- Surreal wildcard element: ${wildcard}
-- Color palette: ${colorPalette}
+${HOT_AS_HELL_BLOCK}
 
 ━━━ MOOD ━━━
+
+${vibeDirective.slice(0, 200)}
+
+${SURREAL_EFFECTS_BLOCK}
+
+Output ONLY the 60-90 word scene, comma-separated, no preamble, no quotes.`;
+}
+
+/**
+ * Stare variant — every render is a direct-eye-contact moment. She stares
+ * straight into the camera; the viewer feels LOOKED AT. Intent of her stare
+ * varies wildly per seed (seductive, menacing, hungry, knowing, vacant,
+ * assessing, challenging, etc.). Same character DNA as other paths.
+ */
+function buildStareBrief({ vibeDirective, vibeKey }) {
+  const dna = rollCharacterDNA(vibeKey);
+  const moment = pickWithRecency(STARE_MOMENTS, 'stare_moment', 5);
+
+  return `You are a surrealist cinematographer writing DIRECT-EYE-CONTACT scenes for VenusBot — the cyborg-assassin staring you down through the lens.
+
+TASK: write ONE vivid scene description (60-90 words, comma-separated phrases) where she stares DIRECTLY INTO THE CAMERA. The viewer feels LOOKED AT. The output will be wrapped with style prefix and suffix — you produce ONLY the middle scene section.
+
+━━━ THE HOOK OF THIS PATH ━━━
+
+EYE CONTACT. She is looking DIRECTLY AT THE CAMERA. Eyes locked on the lens. No side-glance, no off-camera stare, no averted gaze. The viewer's whole experience is being STARED DOWN by her. Whatever framing, whatever setting — her eyes cut straight through the lens and hold the viewer.
+
+Make the stare UNESCAPABLE. Name it explicitly in your output ("eyes locked on camera," "gaze cutting through the lens," "direct eye contact with the viewer," "stare pinning you through the glass" — however you phrase it, make it clear she is looking AT the camera).
+
+━━━ CHARACTER (same as always) ━━━
+
+${dna.characterBase}
+
+${REQUIRED_ELEMENTS_BLOCK}
+
+${SKIN_MATERIAL_NUANCE_BLOCK}
+
+━━━ THE SCENE (the stare, with its specific intent, composition, setting) ━━━
+
+${moment}
+
+${characterDNABlock(dna)}
+
+━━━ FRAMING NOTE ━━━
+
+Whatever composition the scene specifies (closeup, over-shoulder, low-angle, through-glass, mirror, etc.), her EYES must end up pointed at the camera lens. If the composition would naturally have her looking elsewhere, write in the moment where she turns / pivots / catches the lens so eye contact lands. The CAMERA IS HER TARGET.
+
+${HOT_AS_HELL_BLOCK}
+
+━━━ MOOD CONTEXT ━━━
+
+${vibeDirective.slice(0, 200)}
+
+${SURREAL_EFFECTS_BLOCK}
+
+Output ONLY the 60-90 word scene, comma-separated, no preamble, no quotes.`;
+}
+
+/**
+ * Robot variant — reuses scenes from CLOSEUP / FULL-BODY / SEDUCTION
+ * paths, just swaps the character spec to 90% machine / 10% human.
+ * Each render rolls a random sub-flavor so robot batches get closeup
+ * portraits, full-body action, AND seductive lures — all rendered as
+ * Terminator-style near-fully-robotic hunters with one human sliver.
+ */
+function buildRobotBrief({ vibeDirective, vibeKey }) {
+  const dna = rollCharacterDNA(vibeKey);
+  const humanTouch = pickWithRecency(HUMAN_TOUCH_VARIANTS, 'human_touch', 4);
+  const subFlavor = pick(['closeup', 'full-body', 'seduction', 'cyborg_fashion', 'stare']);
+
+  let sceneBlock = '';
+  let framingBlock = '';
+  let intentBlock = '';
+
+  if (subFlavor === 'closeup') {
+    const expression = pick(EXPRESSIONS);
+    const pose = pick(POSES);
+    const environment = pick(ENVIRONMENTS);
+    intentBlock = `━━━ INTENT OF THIS IMAGE (closeup portrait flavor) ━━━
+
+A tight closeup portrait of her. Face, throat, shoulder. Expression and gaze carry the whole image. The viewer is close — uncomfortably close — to a thing that is mostly machine.`;
+    sceneBlock = `━━━ THE SCENE (closeup portrait) ━━━
+
+- EXPRESSION: **${expression}**
+- POSE (within waist-up framing): **${pose}**
+- Environment (background only — face dominates frame): **${environment}**`;
+    framingBlock = `━━━ FRAMING ━━━
+
+WAIST-UP three-quarter bust portrait, HEAD-AND-SHOULDERS closeup, or side-profile portrait. Face fills the upper third of the frame. NEVER show legs or hips. NO full-body in this sub-flavor.`;
+  } else if (subFlavor === 'full-body') {
+    const moment = pick(MOMENTS);
+    const actionPose = pick(ACTION_POSES);
+    intentBlock = `━━━ INTENT OF THIS IMAGE (full-body action flavor) ━━━
+
+A full-body scene of her in the middle of a charged moment. Film-noir-meets-sci-fi — something is about to happen, or just did. Hunter-predator energy in every motion.`;
+    sceneBlock = `━━━ THE SCENE (full-body moment) ━━━
+
+**${moment.kind.toUpperCase()} MOMENT**: ${moment.text}
+
+This is a LOADED scene — she is in the middle of a plot. Rendered as a robot, the moment plays even colder.`;
+    framingBlock = `━━━ FRAMING ━━━
+
+**${actionPose}**
+
+Full-body scene, not closeup. Show her whole silhouette in the frame. Scene has depth, environment, scale.`;
+  } else if (subFlavor === 'seduction') {
+    const moment = pick(SEDUCTION_MOMENTS);
+    intentBlock = `━━━ INTENT OF THIS IMAGE (seduction / lure flavor) ━━━
+
+This image must PULL THE VIEWER IN. Magnetic drag, "come to me" invitation — even knowing she's a machine that would kill them. Fight-or-fuck response: they want to run AND they want her.`;
+    sceneBlock = `━━━ THE SCENE (her lure to the viewer) ━━━
+
+${moment}`;
+    framingBlock = `━━━ FRAMING ━━━
+
+Full-body or three-quarter-body boudoir framing — she occupies the frame invitingly. Intimate, close enough to feel her presence, but far enough to see her whole form. The eye-line between her and the viewer is CHARGED.`;
+  } else if (subFlavor === 'cyborg_fashion') {
+    const moment = pick(CYBORG_FASHION_MOMENTS);
+    const makeup = pickWithRecency(MAKEUPS, 'makeup', 5);
+    intentBlock = `━━━ INTENT OF THIS IMAGE (avant-garde editorial fashion flavor) ━━━
+
+An avant-garde editorial fashion spread — McQueen / Galliano / Schiaparelli / Nick Knight energy. She is the subject of an extreme Vogue shoot, now rendered as a near-fully-robotic being. The fashion is extreme; the body is mostly machine; the two magnify each other.`;
+    sceneBlock = `━━━ THE EDITORIAL SCENE ━━━
+
+${moment}
+
+━━━ EXTREME EDITORIAL MAKEUP (must appear — applies to the human sliver + any visible face surface) ━━━
+
+${makeup}`;
+    framingBlock = `━━━ FRAMING ━━━
+
+Editorial fashion framing — whatever the scene above specifies. Full-body, three-quarter, or extreme close-up — all acceptable. Editorial composition rules: strong shape, dramatic negative space, confident graphic energy.`;
+  } else {
+    // stare
+    const moment = pickWithRecency(STARE_MOMENTS, 'stare_moment', 5);
+    intentBlock = `━━━ INTENT OF THIS IMAGE (direct-eye-contact / stare flavor) ━━━
+
+EYE CONTACT. Her eye/sensor/visor is LOCKED directly on the camera. The viewer is being stared down by a thing that is mostly machine. Whatever her visual apparatus is (human eye, sensor slit, glowing lens, visor), it points STRAIGHT at the lens. Make the stare UNESCAPABLE. Name it explicitly ("eyes locked on camera," "targeting lens cutting through the lens," "direct sensor-contact with the viewer," etc.).`;
+    sceneBlock = `━━━ THE SCENE (the stare, with its specific intent, composition, setting) ━━━
+
+${moment}`;
+    framingBlock = `━━━ FRAMING NOTE ━━━
+
+Whatever composition the scene specifies, her visual apparatus must END UP pointed at the camera lens. The CAMERA IS HER TARGET.`;
+  }
+
+  return `You are a sci-fi cinematographer writing ROBOT scenes for VenusBot — a Terminator-style female robot. T-800 / T-1000 hunter energy in a sexy-as-fuck feminine silhouette, lethal and 90% machine.
+
+TASK: write ONE vivid scene description (60-90 words, comma-separated phrases) of her in the scene below, rendered as an almost-fully robotic being. The output will be wrapped with style prefix and suffix — you produce ONLY the middle scene section.
+
+${intentBlock}
+
+━━━ CHARACTER (robot-mode — 90% machine, override default) ━━━
+
+${dna.characterBase}
+
+Disregard any language in the character base suggesting a majority-human body. In THIS path she is MORE machine than human. Take the character's flavor (voice, demeanor, predator-nature) but render her as almost entirely robotic.
+
+${ROBOT_FIRST_BLOCK}
+
+━━━ THE HUMAN TOUCH (the 10% sliver — USE THIS EXACT VARIANT) ━━━
+
+**${humanTouch}**
+
+This is the ONLY human thing visible on her. Everywhere else: full machine.
+
+${sceneBlock}
+
+${characterDNABlock(dna)}
+
+(Note: for this ROBOT path, "skin tone" only applies to the SMALL HUMAN SLIVER above — the rest of her surface is built robot material. Hair, if not part of the human-touch variant, may be real hair OR replaced with sensor-arrays, cables, or a sculpted helmet.)
+
+${framingBlock}
+
+${HOT_AS_HELL_BLOCK}
+
+━━━ MOOD CONTEXT ━━━
 
 ${vibeDirective.slice(0, 200)}
 
@@ -786,7 +1084,7 @@ async function postToVenus({ localPath, prompt, vibeKey, label, idx }) {
   fs.mkdirSync(outDir, { recursive: true });
   console.log(`📁 ${outDir}\n`);
 
-  const MIXED_ORDER = ['closeup', 'full-body', 'seduction'];
+  const MIXED_ORDER = ['closeup', 'full-body', 'seduction', 'cyborg_fashion', 'stare', 'robot'];
   for (let i = 1; i <= COUNT; i++) {
     const resolvedMode =
       MODE === 'mixed' ? MIXED_ORDER[(i - 1) % MIXED_ORDER.length] : MODE;
@@ -795,7 +1093,13 @@ async function postToVenus({ localPath, prompt, vibeKey, label, idx }) {
         ? buildFullBodyBrief({ vibeDirective, vibeKey: VIBE })
         : resolvedMode === 'seduction'
           ? buildSeductionBrief({ vibeDirective, vibeKey: VIBE })
-          : buildGoldenBrief({ vibeDirective, vibeKey: VIBE });
+          : resolvedMode === 'cyborg_fashion'
+            ? buildCyborgFashionBrief({ vibeDirective, vibeKey: VIBE })
+            : resolvedMode === 'stare'
+              ? buildStareBrief({ vibeDirective, vibeKey: VIBE })
+              : resolvedMode === 'robot'
+                ? buildRobotBrief({ vibeDirective, vibeKey: VIBE })
+                : buildGoldenBrief({ vibeDirective, vibeKey: VIBE });
     console.log(`━━━ #${i}/${COUNT} | surreal + ${VIBE} | mode=${resolvedMode} ━━━`);
     try {
       const middle = await callSonnet(brief);
