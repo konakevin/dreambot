@@ -202,22 +202,35 @@ const ACTION_POSES = [
 // SEDUCTION MOMENTS — she is actively drawing in an unwilling subject. The
 // scene is designed to make the viewer feel the pull toward her despite
 // knowing she's dangerous. Every pose is an invitation; every glance is bait.
+// SEDUCTION_MOMENTS — cyberpunk public-encounter scenes + "come join me"
+// lures (no bedrooms, no baths). She is somewhere fun/sexy in a futuristic
+// setting — a bar, nightclub, alley, rooftop, vending machine corner — and
+// the viewer encounters her. Smile + glare at once. Mix of "just present"
+// and "come here" beckoning.
 const SEDUCTION_MOMENTS = [
-  'lounging on crimson silk sheets in a dim hotel suite, one chrome arm propping her head, the other curled invitingly across her mechanical bust, eyes locked on the viewer with cold hunger — "come here, close the door"',
-  'sitting backward on a velvet chair, legs straddling it, chin resting on chrome hands atop the backrest, slow predator smile for the viewer',
-  'wrapped in a silk robe slipping off one shoulder revealing the exposed mechanical circuitry and chrome plating of her chest beneath, one chrome hand lightly holding the robe closed at her hip, lips barely parted',
-  'emerging dripping from a steaming copper bathtub, chrome body wet and gleaming, reaching one dripping chrome hand out toward the viewer in a slow invitation',
-  'leaning against a penthouse bar pouring two glasses of something amber from a cut-crystal decanter, her gaze finding the viewer through the dim light — "this one is yours"',
-  'sitting on the edge of a four-poster bed with knees drawn up, chrome arms wrapped around her legs, gazing up at the viewer through her lashes — deceptively small and inviting',
-  'standing in a hotel doorway backlit by warm lamp light, silk robe loose and slipping, one chrome hand holding the door open, a slow dangerous smile',
-  'dancing alone to unheard music in a dim suite, a silk slip dress clinging to her mechanical form, one chrome hand extended toward the viewer in a "come join me" gesture',
-  'perched on the edge of a grand piano in a dim parlour, chrome legs crossed, silk dress slit high on her thigh, chrome fingertip curling in a slow beckoning',
-  'lighting a cigarette in a mirrored art-deco room, exhaling smoke through parted lips, her eyes finding the viewer through the mirror reflection',
-  'at a vanity mirror adjusting an earring, reflection meeting the viewer — her chrome-traced fingers play idly at the circuit-lines on her throat as if daring them to get closer',
-  'curled into the corner of a velvet club booth, one chrome leg drawn up, chin resting on her chrome knee, a slow come-here curl of her fingertip for the viewer',
-  'reclining on a fur rug before a roaring fireplace, chrome silhouette bathed in warm light, one hand tracing the rim of a glass, eyes on the viewer — "sit with me"',
-  'leaning in the frame of a doorway with crimson neon behind her, silk camisole slipping off one chrome-circuited shoulder, head tilted — "inside, now"',
-  'kneeling on a bed among scattered roses, chrome chest gleaming, a single black rose petal caught on her lips — eyes inviting the viewer forward while already calculating',
+  'standing alone at a dim rooftop bar under pulsing magenta strobes, chrome-fingered hand wrapped around a glowing blue drink, gaze catching yours across the crowd — small knowing smile, eyes utterly cold',
+  'perched on a high-top stool at the edge of a cyberpunk nightclub dance floor, laser grids cutting across her chrome shoulders, one chrome heel hooked on the rung, watching without watching',
+  'alone in a VIP club booth with holographic ads reflected in the black glass tabletop, one chrome arm draped along the banquette, head tilted as you step closer',
+  'seated at a neon noodle-shop counter with steam curling off a bowl, red paper lanterns glowing, she notices you the moment you slide onto the stool beside her',
+  'leaning against a chrome-columned underground rave bar, strobes catching the pulsing circuits on her exposed torso, she turns her head toward you — deliberate, slow',
+  'at the back booth of a glitching 24-hour diner with neon katakana signs and rain streaking the window behind her, chrome fingers around a chipped coffee cup',
+  'in a crowded cyberpunk concert crowd, neon lasers and smoke, chrome shoulder visible through torn mesh top, her eyes find yours across bodies',
+  'smoking a slim glass cigarette at a chrome-topped dive bar in a rain-soaked undercity alley, exhaling through parted lips as she locks eyes with you',
+  'standing under a flickering neon sign on a wet cyberpunk sidewalk, silhouette backlit by passing hover-car headlights, turning as you approach',
+  'emerging from a steaming subway stairway into a rain-soaked neon street, chrome heels on wet pavement, holographic ads reflected in puddles around her boots, she sees you and pauses',
+  'leaning against graffiti-covered concrete under a neon pachinko sign, vapor curling off a black cigarette, cold eyes assessing you like a technical manual',
+  'standing on a cyberpunk rooftop balcony with the megacity skyline behind her, rain sheeting off the railing, chrome forearms on the wet metal, small curl of her lip as she feels you watching',
+  'standing in the open door of a rain-slicked hover-car pulled over under a flickering streetlamp, chrome heels on wet pavement, chrome hand on the doorframe, her eyes already on you',
+  'on a 3 am cyberpunk subway platform empty except for her, chrome legs crossed at the ankle, holographic train schedules glitching above, she lifts her head and meets your eye',
+  'standing at a cyberpunk vending machine at the end of a neon arcade, chrome fingers closing around a glowing bottle, she turns her head toward you — small knowing glance',
+  'stepping out of a mirrored black limo under the awning of an exclusive cyberpunk nightclub, chrome bustier glowing through sheer black coat, chauffeur holding the door — she pauses as you watch',
+  // "come join me" cyberpunk lures (non-bedroom)
+  'dancing alone in the center of a dim cyberpunk lounge dance floor, chrome body catching magenta strobes, one chrome hand extended toward you in a slow "come join me" gesture',
+  'curled into the corner of a velvet cyberpunk club booth, chrome leg drawn up, chin resting on chrome knee, slow come-here curl of her fingertip for you through the smoke',
+  'pouring two glowing neon-blue drinks from a chrome decanter behind an empty cyberpunk bar, sliding one across to the empty stool beside her — "this one is yours"',
+  'gesturing from the edge of an empty rooftop dance floor at 4am, lasers still pulsing, her chrome hand tilted in silent invitation as music thumps from below',
+  'patting the empty leather seat beside her in a dim hover-limo under neon rain, chrome lips parted in a slow "get in"',
+  'standing in the red-lit elevator of a cyberpunk tower, chrome hand holding the doors open with a single fingertip, eyes locked on you — "going up?"',
 ];
 
 // INTERNAL_EXPOSURE — the "inside her" element. Every render shows SOME internal
@@ -274,10 +287,39 @@ const VIBE_COLOR = {
   shimmer: 'shimmering gold particles, iridescent highlights, soft warm rim light',
 };
 
+// GLOW_COLORS — explicit dominant-glow color picked per render so batches
+// don't cluster on teal/cyan. Used with cross-render recency dedup.
+const GLOW_COLORS = [
+  'electric cyan',
+  'molten amber / orange',
+  'plasma magenta / hot pink',
+  'deep violet / ultraviolet',
+  'toxic acid green',
+  'molten gold',
+  'ice blue / arctic white',
+  'blood crimson',
+  'prismatic rainbow spectrum',
+  'mercury silver / chrome white',
+];
+
+// Cross-render recency dedup. Pools we actively rotate (skin, glow) track
+// the last N picks and exclude them on the next render — prevents batches
+// from clustering on one tone.
+const recentPicks = {};
+function pickWithRecency(pool, kind, window = 3) {
+  const recent = recentPicks[kind] || [];
+  const filtered = pool.filter((v) => !recent.includes(v));
+  const source = filtered.length > 0 ? filtered : pool;
+  const chosen = source[Math.floor(Math.random() * source.length)];
+  recentPicks[kind] = [chosen, ...recent].slice(0, window);
+  return chosen;
+}
+
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 function buildGoldenBrief({ vibeDirective, vibeKey }) {
-  const skin = pick(SKIN_TONES);
+  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
+  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
   const hair = pick(HAIR_STYLES);
   const eyes = pick(EYE_STYLES);
   const cyborg = pick(CYBORG_FEATURES);
@@ -332,6 +374,7 @@ SEXY CYBORG SILHOUETTE: she is overtly sexy. Her body's curves — collarbone, t
 - WILDCARD (surreal look-twice element): **${wildcard}**
 - Environment: **${environment}**
 - Color palette for lighting: ${colorPalette}
+- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, breath, circuits, core — renders in this color): **${glowColor}**
 
 ━━━ FRAMING HARD-LOCK — NO EXCEPTIONS ━━━
 
@@ -367,7 +410,8 @@ Output ONLY the 60-80 word scene description. No preamble, no quotes, no meta-co
  * brief, but framing is opened up and a specific moment is the focus.
  */
 function buildFullBodyBrief({ vibeDirective, vibeKey }) {
-  const skin = pick(SKIN_TONES);
+  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
+  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
   const hair = pick(HAIR_STYLES);
   const eyes = pick(EYE_STYLES);
   const cyborg = pick(CYBORG_FEATURES);
@@ -405,6 +449,7 @@ This is a LOADED scene — she is in the middle of a plot. Film-noir meets sci-f
 - Internal workings visible (gears/circuits/cores revealed through opened panel or translucent section): **${internal}**
 - Surreal wildcard: **${wildcard}**
 - Color palette: ${colorPalette}
+- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, breath, circuits, core — renders in this color): **${glowColor}**
 
 ━━━ SKIN MATERIAL NUANCE ━━━
 
@@ -437,7 +482,8 @@ Output ONLY the scene description, 60-90 words, no preamble, no quotes.`;
  * should feel pulled forward despite knowing she's dangerous.
  */
 function buildSeductionBrief({ vibeDirective, vibeKey }) {
-  const skin = pick(SKIN_TONES);
+  const skin = pickWithRecency(SKIN_TONES, 'skin', 3);
+  const glowColor = pickWithRecency(GLOW_COLORS, 'glow', 3);
   const hair = pick(HAIR_STYLES);
   const eyes = pick(EYE_STYLES);
   const cyborg = pick(CYBORG_FEATURES);
@@ -478,6 +524,7 @@ ${moment}
 - Internal workings visible (opened panel / translucent section): **${internal}**
 - Surreal wildcard: **${wildcard}**
 - Color palette: ${colorPalette}
+- DOMINANT GLOW COLOR (every glowing cyborg element — eyes, breath, circuits, core — renders in this color): **${glowColor}**
 
 ━━━ SKIN MATERIAL NUANCE ━━━
 
