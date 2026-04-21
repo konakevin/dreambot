@@ -1,0 +1,47 @@
+name: DragonBot Dream Generation
+
+on:
+  schedule:
+    # 19:00 UTC + 07:00 UTC — staggered from prior migrated bots.
+    - cron: '0 19 * * *'
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+    inputs:
+      path:
+        description: 'Specific path (default: random)'
+        required: false
+        default: 'random'
+      vibe:
+        description: 'Specific vibe (default: random)'
+        required: false
+        default: 'random'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Random delay (0-4 hours)
+        if: github.event_name == 'schedule'
+        run: sleep $((RANDOM % 14400))
+
+      - name: Generate DragonBot dream
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node scripts/run-bot.js \
+            --bot dragonbot \
+            --path "${{ inputs.path || 'random' }}" \
+            --vibe "${{ inputs.vibe || 'random' }}"
