@@ -56,13 +56,12 @@ const BOTS = {
   },
   starbot: { mediums: ['photography', 'vaporwave', 'canvas', 'render'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
-  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot
+  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot
   gothbot: { mediums: ['canvas', 'anime', 'comics', 'illustration', 'pencil'], excludeVibes: ['minimal', 'cozy', 'peaceful'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
   arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics', 'illustration'], excludeVibes: ['ancient', 'cozy', 'peaceful'] },
   toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'macabre'] },
   // ── New bots ──
-  coquettebot: { mediums: ['fairytale', 'watercolor', 'canvas', 'pencil', 'photography'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'ancient', 'epic', 'macabre'], pinVibes: { fairytale: ['coquette', 'coquette', 'coquette', 'enchanted', 'whimsical', 'shimmer'] } },
   glambot: { mediums: ['photography', 'photography', 'canvas', 'vaporwave', 'render'], excludeVibes: ['ancient', 'cozy', 'minimal'] },
   steambot: { mediums: ['canvas', 'photography', 'illustration'], excludeVibes: ['minimal', 'psychedelic', 'cozy'] },
   tinybot: { mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'macabre'] },
