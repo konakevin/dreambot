@@ -35,6 +35,7 @@ module.exports = {
   ETHEREAL_SCENES: load('ethereal_scenes'),
   DIVINE_MOMENTS: load('divine_moments'),
   DREAMSCAPE_CONTEXTS: load('dreamscape_contexts'),
+  INTIMATE_GLOW_SUBJECTS: load('intimate_glow_subjects'),
   LIGHT_TREATMENTS: load('light_treatments'),
   EMOTIONAL_TONES: load('emotional_tones'),
   ATMOSPHERES: load('atmospheres'),

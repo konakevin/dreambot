@@ -14,6 +14,7 @@ const pathBuilders = {
   'ethereal-scene': require('./paths/ethereal-scene'),
   'divine-moment': require('./paths/divine-moment'),
   dreamscape: require('./paths/dreamscape'),
+  'quiet-glow': require('./paths/quiet-glow'),
 };
 
 module.exports = {
@@ -46,14 +47,16 @@ module.exports = {
     'surreal',
   ],
 
-  paths: ['luminous-landscape', 'ethereal-scene', 'divine-moment', 'dreamscape'],
+  paths: ['luminous-landscape', 'ethereal-scene', 'divine-moment', 'dreamscape', 'quiet-glow'],
 
-  // Hero paths weighted slightly — luminous-landscape + dreamscape are the bread-and-butter
+  // Hero paths weighted slightly — luminous-landscape + dreamscape are the bread-and-butter.
+  // quiet-glow is the intimate small-scale counterweight.
   pathWeights: {
     'luminous-landscape': 2,
     'ethereal-scene': 1,
     'divine-moment': 1,
     dreamscape: 2,
+    'quiet-glow': 2,
   },
 
   // Scene-centric — sharedDNA is just palette + vibe color
