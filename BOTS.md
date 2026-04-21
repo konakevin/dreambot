@@ -1,73 +1,126 @@
 # Bot & Nightly Dream Generation System
 
-> **📌 NEW ARCHITECTURE (2026-04-20):** A new **Bot Strategy Pattern** is in active development on VenusBot. Four paths working (`closeup` / `full-body` / `seduction` / `cyborg_fashion`), two paths tried-and-dropped (`group`, `human_moment`). Everything below documents the **LEGACY** pre-gen'd `bot_seeds` pipeline still serving every other bot — the new pattern replaces it strategy-by-strategy.
+> **📌 NEW BOT ENGINE IS PRODUCTION (2026-04-20):** A standalone bot-render engine (`scripts/lib/botEngine.js`) replaces the old `generate-dream` coupling. Two bots migrated + live on per-bot crons: **VenusBot** (6 paths) + **SirenBot** (7 paths, gender-split). 17 image bots + 2 content bots remain on the old `bot-dreams.yml` herd cron.
 >
-> - New reference implementation: `scripts/iter-venus-golden.js`
-> - Pattern memory: `memory/project_bot_strategy_pattern.md` (PINNED)
-> - Branch: `bot-dream-engine` (not yet merged)
+> **Docs:**
+> - `docs/MIGRATE-BOT.md` — per-bot migration checklist
+> - `docs/AUTONOMOUS-MIGRATION.md` — rubric + iteration loop for autonomous migrations
+> - `scripts/bots/venusbot/` + `scripts/bots/sirenbot/` — reference implementations
+> - `scripts/lib/botEngine.js` — the shared engine
+> - `scripts/lib/seedGenHelper.js` — batched Sonnet seed generator
+>
+> The OLD SYSTEM (below this section) stays in place until all 21 bots migrate. Do not delete.
 
 ---
 
-## 🆕 NEW BOT DREAM ENGINE — Strategy Pattern (WIP)
+## 🆕 NEW BOT ENGINE — architecture
 
-### The refined build-a-bot process (learned iteratively on VenusBot)
+### 4-layer axis structure
 
-The process has a specific shape — **shared cross-path foundation first**, then **per-path iteration with its own Sonnet-seeded axes**.
+Every render is a combination of FOUR layers:
 
-**Phase A — do ONCE per bot species:**
-
-1. Pull the bot's golden-era `ai_prompt` rows from `uploads` and extract the common prefix + suffix verbatim. These wrap every render.
-2. Sonnet-generate **20 CHARACTER_BASES** — distinct identity flavor variants of the same species (different body architectures, same character DNA). Shared across all paths. See `scripts/gen-character-bases.js` as reference.
-3. Hand-curate the shared visual axis pools (small enough to not need Sonnet): `SKIN_TONES`, `GLOW_COLORS`, `HAIR_STYLES`, `EYE_STYLES`, `INTERNAL_EXPOSURE`, `WILDCARDS`.
-4. Write two shared aesthetic-forcing constants injected into every brief:
-   - `REQUIRED_ELEMENTS_BLOCK` — minimum machine threshold, required mechanical body parts, nudity rule, material openness, anti-surface-effect rule
-   - `SURREAL_EFFECTS_BLOCK` — the surreal wrapper list
-
-**Phase B — for each path, iterate in this order:**
-
-1. **Identify what makes THIS path unique** — the scene/moment dimension that differs from other paths.
-2. **Sonnet-seed 30 MOMENTS** for this path (e.g. `scripts/gen-<path>-moments.js`).
-3. **Write the `build<Path>Brief` function** — picks character_base + moment + shared axes, injects the shared aesthetic blocks, and wraps with golden prefix/suffix.
-4. **Run 5-9 test renders.**
-5. **Identify any NEW axis this path specifically needs.** Each path often needs its own dedicated axis:
-   - `seduction` → environment variety (public cyberpunk settings)
-   - `cyborg_fashion` → `MAKEUPS` axis (25 Sonnet-generated extreme editorial makeup looks)
-   - `group` (if/when we try again) → character-slot-rotation to pick 2-4 characters
-6. **Sonnet-seed that new axis** and wire it into the path's brief only (not other paths).
-7. **If a systemic failure affects all paths** — tighten the shared `REQUIRED_ELEMENTS_BLOCK` surgically (e.g. "nipples keep appearing" → absolute ban; "chrome everything" → add MATERIAL OPENNESS clause).
-
-**A path is "done"** when 5-9 random test renders land consistently well. Commit checkpoint, move to next path.
-
-### VenusBot strategies — current state
-
-| Path | Status | Notes |
+| Layer | What it is | Example |
 |---|---|---|
-| `closeup` | ✅ Working | Character bases + required elements + shared axes |
-| `full-body` | ✅ Working | Noir plotting/conspiring moments pool |
-| `seduction` | ✅ Working | Cyberpunk public settings + come-join-me lures, no bedrooms |
-| `cyborg_fashion` | 🛠 WIP | 30 editorial moments + 25 makeups (path-specific axis) |
-| `group` | ❌ Dropped | Tried — visual output didn't land |
-| `human_moment` | ❌ Dropped | Tried — soft-scene contrast rendered boring |
+| **1. Shared DNA** (`rollSharedDNA`) | Axes rolled ONCE per render, shared by all paths — "who she is / what this render feels like" | skin, body-type, glow-color, scene-palette, character identity |
+| **2. Path-specific axes** (inside `buildBrief`) | Axes rolled per-path — "what she's doing this render" | pose, expression, moment, makeup (path-dependent) |
+| **3. Universal prose blocks** (`shared-blocks.js`) | Text injected verbatim into every brief — non-negotiable rules | REQUIRED_ELEMENTS, SOLO_COMPOSITION, HOT_AS_HELL, NO_POSING |
+| **4. Flux wrapping** (`promptPrefix` + `promptSuffix`) | Style anchor applied to every final prompt | golden first-sentence + no-text suffix |
 
-### Lessons burned in during VenusBot iteration
+### Sizing rules (HARD FLOOR: 50 entries per Sonnet-seeded pool)
 
-1. **Don't stack mandatory checklists.** 3+ REQUIRED blocks in one brief dilutes Sonnet. Max 1 shared required block per brief.
-2. **Don't name pop-culture references.** "Ex Machina's Ava" didn't land — describe aesthetics in plain visual terms.
-3. **Don't over-permit nudity rule.** "Nipple-shape as bump is fine" → Sonnet rendered mechanical nipples. Absolute ban is simpler.
-4. **INTERNAL CORE must be INSIDE the body.** "Glowing core through translucent panel" gets interpreted as surface fireworks unless explicitly "INSIDE her body, seen THROUGH transparent panel, a physical mechanical structure — NOT a light effect on her surface."
-5. **MATERIAL OPENNESS matters** — without it, every render drifts to chrome. Call out latex/ceramic/composites/holographic polymer/bioluminescent gel/liquid mercury/nanotube weave as an open palette.
-6. **Character DNA stays fixed.** Swinging character direction mid-session (cold predator → tactical bounty hunter → couture diva) costs hours. Commit a direction.
+| Visibility | Size | Method | Dedup window |
+|---|---|---|---|
+| Rolled every render, MAIN diversity | **50** | Sonnet-seeded, intra-pool batched dedup via `seedGenHelper.js` | 5 days (`bot_dedup` table) |
+| Path-specific "moment" pool | **50** | Sonnet-seeded | 5 days |
+| Supporting detail rolled every render | 50 | Sonnet-seeded (audit first) | sometimes |
+| Narrow variant (gender sliver / race-limit) | 30 OK with explicit approval | Sonnet-seeded | 5 days |
 
-### API hardening (shipped to production 2026-04-20)
+**Rule:** 50 is the floor for ANY rolled pool. When a pool is below 50, batches exhaust the 5-day dedup window and the picker falls back to full pool (warning logged). Avoid by starting at 50.
 
-`supabase/functions/_shared/llm.ts` now retries Claude on 429/500/502/503/504/529 with exponential backoff (1s/3s/10s/30s), then falls back to Haiku with its own retry budget. If both exhaust, call sites fall through to their existing template-based `fallbackPrompt` so the user always gets a dream. Applies to `generate-dream`, `nightly-dreams`, `restyle-photo`. Dev-side `iter-venus-golden.js` mirrors the retry (no Haiku fallback — dev only).
+### The refined build-a-bot process (V3 — post-SirenBot autonomous run)
 
-### Productionization path (not yet built)
+**Phase A — Audit (thorough — do NOT skip)**
 
-1. New DB table `bot_strategies` — columns: `bot_username`, `strategy_key`, `character_bases` JSONB, `moments` JSONB, `prefix` TEXT, `suffix` TEXT, `axes` JSONB, `required_block` TEXT, `surreal_block` TEXT, `model_key` TEXT.
-2. New Edge Function `generate-bot-dream` — takes `{bot_username, strategy_key, vibe_key}`, loads config from DB, dedup-picks axes, composes brief, calls Claude (via hardened helper), wraps prefix+suffix, renders via Flux, creates upload with `is_public=true`.
-3. Update `scripts/generate-bot-dreams.js` orchestrator to call the new endpoint with recency filtering across a bot's strategies.
-4. Migrate strategy-by-strategy: VenusBot closeup → full-body → seduction → cyborg_fashion, then GothBot strategies, then the rest.
+1. Read `BOTS.<botname>` in old `scripts/generate-bot-dreams.js`
+2. Read `BOT_SEEDS.<botname>.strategies` in old `scripts/lib/seed-generator.js`
+3. Query DB: recent `uploads WHERE user_id = <bot>` — what has the bot actually been rendering?
+4. **Decide what axes matter for this bot.** Character-centric vs scene-centric. Male/female split? Race/gender variety? Unique dimensions (makeup, cosmic-event, tattoo-style)?
+5. Map old strategies → new paths (strategies with `continueDedup` collapse into base path).
+
+**Phase B — Scaffold + configure**
+
+1. Create `scripts/bots/<name>/` tree
+2. Fill `index.js` contract — username, mediums (or `mediumByPath`), vibes (or `vibesByMedium`), paths, pathWeights, `rollSharedDNA`, `buildBrief`
+3. Fill `shared-blocks.js` — 4-6 universal prose blocks for bot identity / coverage rules / anti-posing
+4. Fill `pools.js` — small hand-curated axes (VIBE_COLOR map etc.)
+
+**Phase C — Sonnet-seed all axis pools (≥50 each, parallel)**
+
+1. Write one generator per axis in `scripts/gen-seeds/<bot>/`
+2. Each generator uses `seedGenHelper.generatePool()` with batched intra-pool dedup
+3. Launch ALL generators in parallel — takes ~90 seconds total
+4. Verify every pool wrote 50 (or the approved narrower count)
+
+**Phase D — Per-path iteration**
+
+1. `iter-bot.js --bot <name> --count 5 --mode <path> --label r1-<path>`
+2. View renders, score against rubric in `AUTONOMOUS-MIGRATION.md`
+3. If avg < 4.5/5 → diagnose → fix → retry (hard cap: 3 rounds)
+4. Mark path PROBLEMATIC if still failing after round 3
+5. **If you discover a new axis mid-iteration:** immediately write a generator + produce 50 entries (the floor rule applies mid-migration too, not just at scaffolding time)
+
+**Phase E — Cross-path diversity + cutover**
+
+1. `iter-bot.js --bot <name> --count 10 --mode mixed --post` for a visible cross-path spot-check posted to bot's profile
+2. Atomic cutover commit: new `.github/workflows/<name>.yml` + remove from old `BOTS` map + remove from old bash array — ALL IN ONE COMMIT (prevents double-post window)
+3. Push to main
+
+### Lessons burned in across VenusBot + SirenBot migrations
+
+**Writing effective Sonnet briefs:**
+1. **Never plant example verbs/actions in briefs** — "lighting a cigarette, sipping a drink" made every 3rd render a cigarette scene. Describe CATEGORIES, not specifics.
+2. **Don't name pop-culture references** — "Ex Machina's Ava" didn't land. Use plain visual descriptors.
+3. **Don't stack mandatory checklists** — 3+ REQUIRED blocks dilutes Sonnet. Max 1 per brief.
+4. **Negative language backfires** — repeated "NO nipples / NO nipples / NO" planted the concept. Positive framing ("smooth sculptural surface") works.
+5. **Constrain Sonnet at scene level, not prompt level** — seed the scene, let Sonnet write the prompt.
+
+**Anti-drift rules:**
+6. **Internal elements must be INSIDE the body** — "core through translucent panel" → surface fireworks unless explicitly "INSIDE her body, seen THROUGH transparent panel, not a light effect."
+7. **Material openness matters** — call out full material palette (latex/ceramic/brass/carbon-fiber/etc.) or every render drifts to chrome.
+8. **Solo compositions for character-centric bots** — two-figure shots read as cheesy AI stock-art. "Pinning a man against a column" makes the render worse. Scrub references to second figures from all pools.
+9. **No-posing language for candid-aesthetic bots** — "fashion shoot / editorial / portrait session / pose / model" language turns renders into catwalk pictures. Use "caught mid-X / noticing / resting / listening" verbs.
+10. **Character DNA stays fixed per bot** — don't swing character direction mid-session; commit a frame.
+
+**Engine-level safeguards:**
+11. **50-entry pool floor** — any pool under 50 exhausts the 5-day dedup window after a few days of cron. Fix by Sonnet-generating 50.
+12. **Flux NSFW false-positives auto-retry** — Flux's safety model occasionally flags fine cyborg/fantasy renders. Engine retries same prompt up to 2 more times (stochastic diffusion usually produces a non-flagged variant).
+13. **Banned phrases retry Sonnet** — some bots have `bannedPhrases` (e.g., GothBot: "jack skellington"). Engine catches + retries up to 2x before failing loud.
+14. **Fail loud on prod cron.** If all retries + fallbacks exhaust, engine throws. `bot_run_log` captures error + stage. GitHub Actions fails, sends email. Do NOT auto-post a broken render.
+
+**Operational lessons:**
+15. **Audit-first, then Sonnet-seed 50**: don't create pools blindly. Audit the old bot's strategies + post history to identify what axes matter BEFORE stamping generators.
+16. **Mid-migration axis discovery**: if you realize you need a new axis during iteration, IMMEDIATELY write a generator that produces 50 entries. Never ship a <50 pool.
+17. **Atomic cutover or don't cutover.** New workflow + removal from old runner MUST be one commit or you get double-posts (same bot cron-fires from both workflows in the overlap window).
+18. **Default test batch size: 5.** 20 is overkill for gut-check. 5 gives signal without burning time/money. Only exceed when explicitly asked.
+19. **Dedup commits only on successful post.** Failed renders don't burn pool entries. Dev batches (`iter-bot.js` without `--post`) never commit.
+
+### API hardening (shipped 2026-04-20, in production)
+
+`scripts/lib/botEngine.js` `callClaude` retries Sonnet on 429/500/502/503/504/529 with exponential backoff (1s/3s/10s/30s), then falls back to Haiku with its own retry budget. If both exhaust, the render throws (fail loud, per bot policy — no fallback post, `bot_run_log` captures the failure, GitHub Actions exits non-zero).
+
+`flux()` auto-retries up to 2x on NSFW false-positives (same prompt, stochastic diffusion typically passes).
+
+`supabase/functions/_shared/llm.ts` has the same pattern for the Edge Functions (generate-dream, nightly-dreams, restyle-photo) but retains the template-based `fallbackPrompt` fallback because those serve users.
+
+### Migration status (live)
+
+| Bot | Old system | New system | Cron |
+|---|---|---|---|
+| VenusBot | — | ✅ `scripts/bots/venusbot/` | `venusbot.yml` 10:30 + 22:30 UTC |
+| SirenBot | — | ✅ `scripts/bots/sirenbot/` | `sirenbot.yml` 11:15 + 23:15 UTC |
+| 17 image bots + HumanBot + MuseBot | ✅ `bot-dreams.yml` | — | 6 + 14 UTC (herd) |
+
+**HumanBot + MuseBot** are text-overlay "thinking bots" — they generate text content first (observation / quote), render a base image via Flux, then composite text onto the image. Migrated via the same architecture but with the optional `generateTextContent` + `postProcess` hooks on the bot contract. Schedule LAST in the migration queue (they need the extra hooks to work properly).
 
 ---
 
