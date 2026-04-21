@@ -55,7 +55,6 @@ const BOTS = {
   steambot: { mediums: ['canvas', 'photography', 'illustration'], excludeVibes: ['minimal', 'psychedelic', 'cozy'] },
   tinybot: { mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'macabre'] },
   inkbot: { mediums: ['comics', 'canvas', 'photography', 'illustration', 'pencil'], excludeVibes: ['whimsical', 'cozy', 'peaceful'] },
-  titanbot: { mediums: ['canvas', 'photography', 'render'], excludeVibes: ['minimal', 'cozy', 'whimsical', 'peaceful'] },
 };
 
 /**
