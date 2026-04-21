@@ -2,45 +2,50 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/fantasy_landscapes.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} FANTASY LANDSCAPE descriptions for DragonBot — the FLAGSHIP path. Stunning fantasy-world vistas with or without architecture. LOTR/GoT/Elden-Ring/Warhammer scale. No characters.
+  total: 200,
+  batch: 12,
+  append: true,
+  metaPrompt: (n) => `You are writing ${n} FANTASY LANDSCAPE descriptions for DragonBot — the FLAGSHIP path. Each entry is a gorgeous high-fantasy scene worthy of a fantasy-art-show gallery wall. Entries 20-40 words each. Cinematic wide vistas only — no characters, no people, no figures of any kind.
 
-Each entry: 15-30 words. One specific dramatic fantasy landscape.
+━━━ AESTHETIC NORTH STAR ━━━
+Think Ted Nasmith / John Howe / Alan Lee / Frank Frazetta — the painters who made LOTR, Middle-earth art books, Howl's-Moving-Castle, Hyrule. Grounded painterly high-fantasy. Castles nestled in dramatic natural settings. Waterfalls cascading down cliffs. Vast mist-filled valleys at dawn. Multi-tiered spired citadels with towers piercing clouds. Stone bridges over gorges. Gothic keeps against sunset sky. Rivendell, Minas Tirith, Hogwarts-as-architecture, fantasy-Kyoto, Elvish forest-citadel, Dwarven mountain-city.
 
-━━━ CATEGORIES ━━━
-- Castle vistas (vast mountain fortress on cliff, white citadel in valley with banners, ruined castle reclaimed by forest)
-- Floating islands (aerial archipelago with cascading waterfalls, sky-city platforms connected by bridges)
-- Ancient ruins (overgrown city reclaimed by moss and vines, fallen obelisk in jungle, amphitheater in twilight)
-- Elven forests (cathedral trees with platforms in canopy, luminous root-glow forest, seasonal-moon elven realm)
-- Volcanic peaks (obsidian mountain with lava rivers, dragon-peak with smoke, shadow-forge volcano)
-- Frozen tundra (crystal-spired ice wasteland, frost giant's valley, aurora over ice-field)
-- Sunken kingdoms (underwater ruins, flooded cathedral, drowned archway — above-water scale)
-- Enchanted lakes (mirror-still lake with rising mist, lake bordered by ancient stones, lake with hovering lantern lights)
-- Dwarven halls (vast underground city with cavern-ceiling, lava-lit forges, stone-carved throne room)
-- Sky cities (clouds-wreathed city on mountaintop, aerial kingdom with towers piercing clouds)
-- Dark forests (black-trunked woods with glowing eyes, primeval cursed grove, barrow-wood)
-- Mage towers (solitary wizard tower on clifftop, leaning tower of scrolls, spiral-chamber library)
-- Drowned crypts (sunken tomb on dark lake, foggy graveyard with cathedral ruin)
-- Dragon lairs (mountain cave with hoard gleaming, volcanic lair with smoke, ice-dragon cavern)
-- Holy sites (pilgrim's temple on peak, sunlit monastery, star-aligned stone circle)
-- Battle scars (epic battlefield aftermath, broken siege weapons, ruined-gate courtyard)
-- Steppes (vast fantasy grasslands with horse-lords' standards, nomad-encampment)
-- Swamplands (misty bog with lit-windows hut, crocodile-king's drowned temple)
-- Seaside cliffs (fantasy lighthouse on jagged cliff, pirate-cove with galleon)
-- Market cities (bustling-vista fantasy city at sunset, spice-market canal)
-- Jungle temples (stepped pyramid reclaimed by jungle, vine-wrapped statuary)
-- Desert kingdoms (crescent-moon palace, sun-scorched obelisk ruins)
-- Watchtowers on cliff-edges with banners
-- Bridge-across-canyon archways with torches
-- Wizard-school castles on island
-- Orc-strongholds on rocky outcrops
+━━━ GROUNDED HIGH-FANTASY — BANNED TROPES ━━━
+NO surreal AI-looking weirdness:
+- NO floating islands with magical crystals suspended in void
+- NO bioluminescent-everything glowing
+- NO impossible-physics-defying architecture floating in sky
+- NO multiple-moons / multiple-suns / aurora-dominant skies
+- NO neon-magical-energy blasting around
+- NO crystalline-everything
+- NO hallucinatory liquid-starlight-waterfalls
+Keep it GROUNDED — real physics, real architecture rooted to earth, real light from real-ish sun/moon. The magic is in the BEAUTY, not in impossible elements.
+
+━━━ WHAT TO STACK (cinematic painter's recipe) ━━━
+Each entry should weave together:
+- ONE focal architectural element (castle, keep, spired-citadel, tower, monastery, temple, bridge, aqueduct, lighthouse, gate — OR zero architecture if pure-nature-vista)
+- ONE or two dramatic natural features (cliff, waterfall, valley, mountain, forest, lake, gorge, ridge, peak, fjord)
+- ONE specific lighting moment (dawn, golden hour, dusk, blue hour, stormy-break, misty-morning, moonrise, sunset-gold)
+- Atmospheric cue (mist, fog, storm-clouds, low-cloud, drifting-snow, falling-leaves, rain-break)
+- Painterly color-palette cue (amber-and-forest, misty-blue-gold, sunset-rose-bronze, storm-grey-with-gold-break, etc.)
+
+━━━ HARD DIVERSITY CAPS (200 pool) ━━━
+- Every entry visibly distinct in location / architecture-type / natural-setting combination
+- Max 30 entries centered on a single massive castle
+- Min 40 entries pure-nature-vista (no architecture at all — just jaw-dropping fantasy wilderness)
+- Min 20 entries with bridge/aqueduct/pass as focal element
+- Min 20 entries with monastery/temple/shrine as focal (small architecture in vast natural setting)
+- Min 20 entries featuring waterfalls prominently
+- Min 20 entries in snow/winter/arctic fantasy setting
+- Min 20 entries in forest-canyon or deep-woods setting
+- Min 15 entries at night / moonlit / blue-hour
+- Spread across all seasons, all times-of-day, all biomes
 
 ━━━ RULES ━━━
-- No characters (they go on other paths)
-- Epic scale + painterly rendering
-- Include specific architectural or geological detail
-- Fantasy / mythic — not real-world Earth (that's EarthBot)
+- NO characters, NO figures, NO silhouettes of people
+- Dragons allowed as distant peripheral silhouette in ≤15% of entries (optional, not required)
+- Painterly concept-art aesthetic — never photoreal, never 3D-render-cheap
+- GROUNDED high-fantasy — Tolkien-canonical not Reddit-AI-fantasy
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

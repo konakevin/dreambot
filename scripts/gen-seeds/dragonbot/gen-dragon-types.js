@@ -2,51 +2,53 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dragon_types.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} DRAGON TYPE descriptions for DragonBot's dragon-scene path — specific dragon variants as hero subject. GNARLY, DRAMATIC, CHARACTERFUL. Mythic creatures, not cute. Different dragons in different settings.
+  total: 200,
+  batch: 12,
+  append: true,
+  metaPrompt: (n) => `You are writing ${n} DRAGON SCENE descriptions for DragonBot. Each entry is a complete fantasy-gallery-wall dragon scene — a specific dragon in a specific pose in a specific setting. Entries 20-40 words. Painterly concept-art fantasy gallery quality.
 
-Each entry: 15-30 words. One specific dragon with distinguishing features + setting context.
+━━━ AESTHETIC NORTH STAR ━━━
+Think Ted Nasmith / John Howe / Alan Lee / Frank Frazetta / Iain McCaig. The painterly tradition of Smaug-in-Erebor, the Nazgûl-on-Fell-beast, the dragon-over-Minas-Tirith, the ice-dragon above Skyrim's tundra. Grounded high-fantasy. The dragon is a MYTHIC ANIMAL — ancient, powerful, gnarly, weighty — in a believable natural environment with real physics. Concept-art-book-page quality.
 
-━━━ CATEGORIES ━━━
-- Western wyrm (massive four-legged dragon, hoard visible, amber cave light)
-- Eastern serpentine dragon (long coiling body, whiskers, cloud-swimming)
-- Wyvern (two-legged bat-winged dragon mid-flight over crags)
-- Ancient rotting dragon (massive skeletal overgrown, moss-covered, ruin-dwelling)
-- Crystal dragon (translucent scales, refracting light, ice-cavern)
-- Shadow dragon (smoke-form wings, glowing eyes, void-like body)
-- Sunset dragon (amber-scales glowing, golden-hour flight, sun-burst backdrop)
-- Ice dragon (white-scaled frost-wyrm, breath-frost, glacier lair)
-- Volcano dragon (obsidian-scaled, lava-lit, cone-nesting)
-- Storm dragon (cloud-form, lightning-crackle, thunderhead-dwelling)
-- Ancient black dragon (massive scarred, ruined city, red-eye glow)
-- Sea dragon (kelp-wreathed serpent coiling in shallows, pearl-scales)
-- Hoard-keeper (dragon coiled atop gold mountain, treasure-gleaming)
-- In-flight hunter (mid-wing-spread over mountains, talons extended)
-- Sleeping-ancient (colossal ancient in volcanic cave, breath-smoke rising)
-- Standoff-with-rider (dragon facing dragon-rider with drawn blade)
-- Mid-breath-attack (mouth open mid-roar, breath-weapon forming)
-- Young whelp (smaller dragon emerging from egg-cluster)
-- Cliff-perch with wingspan silhouette against sky
-- Lair guardian with adventurer-silhouette in doorway (scale indicator)
-- Dragon-rider combat dive over battle
-- Dragon circling lone tower
-- Nightscale dragon under starfield
-- Iridescent dragon with color-shifting scales
-- Moon-aligned dragon at full moon flight
-- Multi-headed hydra-variant (three heads, serpentine body)
-- Dragon emerging from cavern mouth with smoke
-- Dragon-bone ghost (spectral ancient dragon)
-- Two-dragon territorial roar face-off
-- Dragon mid-stoop grabbing prey
-- Winged-serpent feathered-scales Mesoamerican-variant
-- Nine-tailed-dragon ancient spirit
+━━━ GROUNDED HIGH-FANTASY — BANNED TROPES ━━━
+NO surreal AI-looking weirdness:
+- NO floating-crystal halos orbiting the dragon
+- NO bioluminescent-glowing-everything
+- NO rainbow-energy-blasts / neon-lightning-from-everywhere
+- NO multiple-moons / aurora-explosion skies (unless specifically Arctic setting)
+- NO physics-defying architecture surrounding the dragon
+- NO crystalline-armor on dragons (scales only)
+- NO overly-symmetric decorative arrangements
+
+BANNED COMPOSITION CLICHÉ:
+- NO "dragon with tail coiled/wrapped around a tower or building" — do NOT describe this ever
+
+━━━ WHAT TO STACK (painter's recipe) ━━━
+Each entry weaves together:
+- Specific dragon species/variant (describe anatomy, scale-color, horn/wing/eye distinctive features)
+- One primary pose (flying / diving / perched / sleeping / drinking / roaring / mid-breath / emerging / basking / patrolling / coiled-on-hoard / standing-ground / wing-drying / swimming / hunting / preening — vary widely)
+- One natural setting (mountain / cave / cliff / forest / lake / tundra / volcanic-crater / coast / valley / canyon / fjord / waterfall — minimize architecture)
+- Lighting moment (dawn / dusk / golden hour / storm-break / moonlit / misty-morning / backlit / firelight-from-within-cave)
+- Atmospheric cue (mist, falling snow, drifting ash, breath-fog, storm-clouds, rain-break)
+- Scale cue (tiny distant forest / tiny distant tower / mountain-range for scale / visible wing-beat wake)
+
+━━━ HARD DIVERSITY CAPS (200 pool) ━━━
+- Every entry distinct in species + pose + setting combination — no duplicates
+- Max 20 dragons with castle/tower/architecture in scene (architecture is peripheral)
+- Min 40 dragons in pure-wilderness settings (no architecture anywhere)
+- Min 30 dragons in rest/sleep/quiet moments (not all action)
+- Min 30 dragons in mid-flight or airborne compositions
+- Min 20 dragons in subterranean/cave settings
+- Min 20 dragons near water (lake/river/sea/waterfall)
+- Spread species across the full mythology spectrum (western wyrm / eastern serpentine / wyvern / sea / ice / fire / shadow / ancient / young / skeletal / feathered / multi-headed / elemental / etc.)
+- Cover day + night / summer + winter / desert + arctic / sky + underground
 
 ━━━ RULES ━━━
-- Dragons are GNARLY / dramatic / characterful — not cute
-- Include dragon type + setting + pose
-- Real-dragon variants (western/eastern/wyvern etc.)
-- No named IP dragons (no Smaug, no Drogon, no Toothless)
+- NO humans, NO named IP dragons (no Smaug, Drogon, Toothless — archetypes only)
+- NO "tail-wrapped-around-tower" composition
+- Dragon is MYTHIC ANIMAL not magical-energy-beast
+- Painterly concept-art — never photoreal, never 3D-cheap
+- GROUNDED high-fantasy, Tolkien-canonical not Reddit-AI-fantasy
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
