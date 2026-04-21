@@ -1,0 +1,48 @@
+name: CuddleBot Dream Generation
+
+on:
+  schedule:
+    # 16:00 UTC + 04:00 UTC — staggered from AnimalBot (15/03), EarthBot (14/02),
+    # GlowBot (13/01), BloomBot (12/00), VenusBot (10:30/22:30), SirenBot (11:15/23:15).
+    - cron: '0 16 * * *'
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      path:
+        description: 'Specific path (default: random)'
+        required: false
+        default: 'random'
+      vibe:
+        description: 'Specific vibe (default: random)'
+        required: false
+        default: 'random'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Random delay (0-4 hours)
+        if: github.event_name == 'schedule'
+        run: sleep $((RANDOM % 14400))
+
+      - name: Generate CuddleBot dream
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node scripts/run-bot.js \
+            --bot cuddlebot \
+            --path "${{ inputs.path || 'random' }}" \
+            --vibe "${{ inputs.vibe || 'random' }}"
