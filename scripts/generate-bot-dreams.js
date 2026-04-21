@@ -47,16 +47,9 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const BOTS = {
   // ── Seeded & active on cron ──
   dragonbot: { mediums: ['canvas', 'watercolor', 'illustration', 'pencil'], excludeVibes: ['minimal', 'dark'] },
-  mangabot: {
-    mediums: ['anime'],
-    excludeVibes: ['ancient', 'fierce', 'psychedelic', 'minimal'],
-    pinVibes: {
-      anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'cinematic', 'epic', 'epic', 'ethereal', 'ethereal', 'ethereal', 'whimsical', 'whimsical', 'arcane', 'arcane', 'dark', 'cozy', 'epic', 'epic', 'nostalgic', 'peaceful', 'ethereal'],
-    },
-  },
   starbot: { mediums: ['photography', 'vaporwave', 'canvas', 'render'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
-  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot
+  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot, mangabot
   gothbot: { mediums: ['canvas', 'anime', 'comics', 'illustration', 'pencil'], excludeVibes: ['minimal', 'cozy', 'peaceful'], banPhrases: ['jack skellington', 'nightmare before christmas'] },
   // ── Existing accounts, not yet seeded ──
   arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics', 'illustration'], excludeVibes: ['ancient', 'cozy', 'peaceful'] },
