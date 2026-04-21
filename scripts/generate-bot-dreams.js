@@ -45,10 +45,8 @@ const ONLY_BOT = botIdx >= 0 ? args[botIdx + 1] : null;
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
-  // ── Seeded & active on cron ──
-  starbot: { mediums: ['photography', 'vaporwave', 'canvas', 'render'], excludeVibes: ['minimal', 'whimsical', 'cozy'] },
   // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
-  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot
+  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot, starbot
   // ── Existing accounts, not yet seeded ──
   arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics', 'illustration'], excludeVibes: ['ancient', 'cozy', 'peaceful'] },
   toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'macabre'] },
