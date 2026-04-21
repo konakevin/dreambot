@@ -39,9 +39,23 @@ const DRAMATIC_LIGHTING_BLOCK = `━━━ DRAMATIC LIGHTING ━━━
 
 Name specific treatments per render. Rim-light backlighting fur against dark forest. Golden-hour raked across coat. Frost-crystal breath lit against low sun. Rain-soaked fur catching stormlight. Shaft-of-sun through canopy spotlighting the animal. Never generic "nice light" — always specific, namable, photographable.`;
 
-const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — AMPLIFICATION (within wildlife-photography truth) ━━━
+const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — NAT-GEO-PHOTO-OF-THE-YEAR AMPLIFICATION ━━━
 
-Wildlife-photography is the canvas, not the ceiling. Stack: peak-moment timing + dramatic backdrop + atmospheric element + perfect light + razor clarity. The viewer should react "HOW did they capture this?" every single frame. But bound by real biology — real species, real behaviors, real habitats, correctly depicted. No fantasy creatures. Amplify reality, don't fake it.`;
+Wildlife-photography is the canvas, not the ceiling. Every frame must stack MULTIPLE simultaneous spectacle elements. Not one good thing — FOUR or FIVE at once. Demand:
+
+- PEAK-MOMENT timing (the impossible split-second)
+- DRAMATIC atmospheric response (breath-fog in freezing air / water-shake-crystal-droplets / dust-plume from gallop / snow-crown-kicked / spray-backlit / steam / leaves-torn mid-action)
+- WEATHER-CONCURRENCE drama (storm-break-single-ray / aurora-overhead / fog-parting / lightning-flash freezing scene / blizzard-whiteout with subject emerging)
+- HABITAT-MAXED setting (NOT generic "forest" — ancient-basalt-cliffs / primeval-redwoods / arctic-pack-ice-with-cracks / volcanic-black-beach / sandstone-canyon at golden hour / aurora-lit boreal)
+- ENVIRONMENTAL RESPONSE (branches snapping, water parting, dust kicked, leaves torn, snow-plume trailing, spray backlit, flocks-startled-peripheral)
+- IMPOSSIBLE CLARITY (every scale / feather / whisker razor-sharp EVEN while subject is mid-motion)
+- SCALE COMMUNICATION (topography + peripheral elements make the creature's size visceral)
+
+Viewer should GASP. "HOW did they catch this?" every render. Nat-Geo-POTY-winner tone. If the render feels merely nice, add another spectacle element and dial further. Still bound to real biology + real species + real behaviors — but never tame, never restrained. Nature at its absolute maximum.`;
+
+const SPECTACLE_AMPLIFIER_BLOCK = `━━━ SPECTACLE AMPLIFIER (use the one provided + add more spontaneously) ━━━
+
+The brief supplies ONE spectacle amplifier detail. WEAVE IT IN naturally. Then ADD AT LEAST TWO MORE spontaneous spectacle elements from these categories: environmental response, weather concurrence, atmospheric particulate, peripheral creature reaction, pose peak-detail, surface-texture drama, lighting accident (a specific extraordinary light moment). The amplifier is the seed; stack additional drama until the frame is impossibly rich.`;
 
 module.exports = {
   PROMPT_PREFIX,
@@ -54,4 +68,5 @@ module.exports = {
   IMPOSSIBLE_BEAUTY_BLOCK,
   DRAMATIC_LIGHTING_BLOCK,
   BLOW_IT_UP_BLOCK,
+  SPECTACLE_AMPLIFIER_BLOCK,
 };

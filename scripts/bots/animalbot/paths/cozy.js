@@ -9,6 +9,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const moment = picker.pickWithRecency(pools.COZY_ANIMAL_MOMENTS, 'cozy_moment');
+  const amplifier = picker.pickWithRecency(pools.SPECTACLE_AMPLIFIERS, 'spectacle_amplifier');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -28,6 +29,11 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE COZY ANIMAL MOMENT ━━━
 ${moment}
+
+━━━ SPECTACLE AMPLIFIER (weave in + stack more drama) ━━━
+${amplifier}
+
+${blocks.SPECTACLE_AMPLIFIER_BLOCK}
 
 ━━━ LIGHTING (warm / soft dominant) ━━━
 ${lighting}

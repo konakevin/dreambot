@@ -1,7 +1,8 @@
 /**
- * GlowBot quiet-glow path — SMALL-SCALE intimate light + immediate surroundings.
- * Single glowing mushroom in mossy corner, torch lighting a wall, bioluminescent
- * sapling in clearing. Peaceful + awe via subtle magic, not mythic scale.
+ * GlowBot quiet-glow path — small-scale intimate scenes where the GLOW DOMINATES.
+ * Single glowing element as the STAR of the frame — its light fills the scene,
+ * reveals every surface, casts dramatic shadows, paints everything in its hue.
+ * Think: brilliantly glowing object radiating visible light everywhere.
  */
 
 const pools = require('../pools');
@@ -13,7 +14,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const emotionalTone = picker.pickWithRecency(pools.EMOTIONAL_TONES, 'emotional_tone');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an intimate-nature painter writing QUIET GLOW scenes for GlowBot — SMALL-SCALE intimate-light moments. A single luminous element illuminates its immediate nearby surroundings. Intimate frame, not grand scale. Peaceful + awe via subtle magic. Output wraps with style prefix + suffix.
+  return `You are a light-drunk painter writing QUIET GLOW scenes for GlowBot — small-scale intimate scenes where the GLOW IS THE UNDISPUTED STAR. A single brilliantly glowing element radiates visible light throughout the frame, painting surfaces, casting dramatic shadows, filling the atmosphere with its color. Output wraps with style prefix + suffix.
 
 ${blocks.LIGHT_IS_HERO_BLOCK}
 
@@ -25,19 +26,22 @@ ${blocks.NO_PEOPLE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ INTIMATE SCALE (required) ━━━
-SMALL-SCALE frame. The light-source illuminates only its IMMEDIATE surroundings — 2 to 5 feet around it. Not a grand vista. Not a mythic landscape. A single quiet corner of the world glowing gently.
+━━━ THE GLOW IS THE STAR — NON-NEGOTIABLE ━━━
+GLOW GLOW GLOW. The luminous element is BRILLIANTLY bright — not subtle, not tasteful, DAZZLING. It floods the scene with visible light. It saturates surrounding surfaces in its hue. It casts dramatic long shadows. It creates visible light-shafts through the air. Dust-motes, mist-tendrils, particulate are all ignited by its light. Adjacent leaves / bark / moss / stone / water / petals are BATHED in the glow's color and intensity. Subject radiates like a small sun. Viewer's eye cannot look away from the light.
 
-━━━ THE INTIMATE GLOW SUBJECT ━━━
+━━━ INTIMATE SCALE (small corner of world) ━━━
+Still a small-scale intimate frame (quiet corner of nature / forest / garden / pond) — but the LIGHT within it is ENORMOUSLY bright relative to scale. Dark ambient background makes the glow POP. Think: single glowing mushroom in pitch-black forest that casts a 20-foot halo; single torch that fills stone alcove with warm-amber spilling onto every surface.
+
+━━━ THE GLOWING SUBJECT ━━━
 ${subject}
 
-━━━ LIGHT TREATMENT (soft + focal) ━━━
+━━━ LIGHT TREATMENT ━━━
 ${lightTreatment}
 
-━━━ EMOTIONAL TONE (hushed intimate quiet) ━━━
+━━━ EMOTIONAL TONE ━━━
 ${emotionalTone}
 
-━━━ ATMOSPHERIC DETAIL ━━━
+━━━ ATMOSPHERIC DETAIL (ignited by the glow) ━━━
 ${atmosphere}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
@@ -52,7 +56,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid-close or close frame. Single light-source dominant in frame. Its glow reveals nearby leaves / stones / moss / bark / water / flowers. Dark-with-quiet-warmth composition. Intimate "I stumbled upon this" discovery feeling. Never wide vista, never grand scale.
+Mid-close frame. Glowing subject center or off-center. Surrounding darkness-to-contrast with the brilliance. LIGHT-SPILL on every adjacent surface — describe specifically which surfaces are painted by the glow (moss glowing green-from-mushroom, bark painted amber-from-torch, dewdrops igniting like tiny suns). Visible LIGHT-SHAFTS piercing any available mist / fog / particulate. Dramatic SHADOW PATTERNS cast by objects the glow illuminates from behind. The glow's color saturates the ENTIRE atmosphere within its halo.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

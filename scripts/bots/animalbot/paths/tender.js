@@ -8,6 +8,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const pairing = picker.pickWithRecency(pools.TENDER_PAIRINGS, 'tender_pairing');
+  const amplifier = picker.pickWithRecency(pools.SPECTACLE_AMPLIFIERS, 'spectacle_amplifier');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -28,6 +29,11 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE TENDER PAIRING (includes species type) ━━━
 ${pairing}
+
+━━━ SPECTACLE AMPLIFIER (weave in + stack more drama) ━━━
+${amplifier}
+
+${blocks.SPECTACLE_AMPLIFIER_BLOCK}
 
 ━━━ LIGHTING (warm / soft preferred) ━━━
 ${lighting}

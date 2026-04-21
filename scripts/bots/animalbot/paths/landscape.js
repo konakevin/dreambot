@@ -9,6 +9,7 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const animal = picker.pickWithRecency(pools.LAND_ANIMALS, 'animal');
   const context = picker.pickWithRecency(pools.LANDSCAPE_CONTEXTS, 'landscape_context');
+  const amplifier = picker.pickWithRecency(pools.SPECTACLE_AMPLIFIERS, 'spectacle_amplifier');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -31,6 +32,11 @@ ${animal}
 
 ━━━ THE LANDSCAPE CONTEXT ━━━
 ${context}
+
+━━━ SPECTACLE AMPLIFIER (weave in + stack more drama) ━━━
+${amplifier}
+
+${blocks.SPECTACLE_AMPLIFIER_BLOCK}
 
 ━━━ LIGHTING ━━━
 ${lighting}

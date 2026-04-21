@@ -37,6 +37,7 @@ module.exports = {
   ACTION_MOMENTS: load('action_moments'),
   TENDER_PAIRINGS: load('tender_pairings'),
   COZY_ANIMAL_MOMENTS: load('cozy_animal_moments'),
+  SPECTACLE_AMPLIFIERS: load('spectacle_amplifiers'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
