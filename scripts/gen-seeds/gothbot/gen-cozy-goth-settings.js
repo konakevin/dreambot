@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/cozy_goth_settings.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 12,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} COZY GOTH SETTING descriptions for GothBot's cozy-goth path — cozy dark-fantasy pockets. Warm-dark coziness. Never dramatic action — places you want to spend a rainy afternoon.
 
 Each entry: 15-30 words. One specific cozy-goth setting.

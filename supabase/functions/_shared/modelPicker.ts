@@ -56,9 +56,19 @@ async function refreshCache(): Promise<void> {
 
     const sb = createClient(supabaseUrl, serviceKey);
 
-    // Fetch both tables in parallel
+    // Fetch both tables in parallel.
+    // User-facing pipelines (V4 / nightly / restyle) explicitly exclude
+    // bot-only mediums via is_bot_only=false filter. Belt-and-suspenders
+    // — bot-only rows are also is_active=false so they were already
+    // excluded, but the explicit filter survives any future schema drift.
+    // The bot engine uses a separate modelPicker in scripts/lib/ that
+    // queries with scope='bot' (includes bot-only rows).
     const [mediumsRes, overridesRes] = await Promise.all([
-      sb.from('dream_mediums').select('key, allowed_models').eq('is_active', true),
+      sb
+        .from('dream_mediums')
+        .select('key, allowed_models')
+        .eq('is_active', true)
+        .eq('is_bot_only', false),
       sb.from('model_overrides').select('medium_key, vibe_key, allowed_models'),
     ]);
 

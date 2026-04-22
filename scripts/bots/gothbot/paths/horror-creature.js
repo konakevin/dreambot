@@ -1,7 +1,8 @@
 /**
  * GothBot horror-creature path — dark-fantasy creature as hero.
- * Werewolf / vampire / demon / wraith / wendigo / lich / phantom / ghoul.
- * Powerful + terrifying + beautifully rendered.
+ * Vampire / werewolf / succubus / demon / wraith / wendigo / lich /
+ * hellhound / fallen-angel / banshee / shadow-demon. Mid-action, majestic-evil,
+ * gorgeous + terrifying. 11/10.
  */
 
 const pools = require('../pools');
@@ -13,11 +14,19 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a dark-fantasy concept-art painter writing HORROR CREATURE scenes for GothBot — creature as hero. Powerful, terrifying, BEAUTIFULLY rendered. Never cheap-horror. Castlevania/Bloodborne/Berserk creature-design. Output wraps with style prefix + suffix.
+  return `You are a dark-fantasy concept-art painter writing HORROR CREATURE scenes for GothBot — creature as hero, majestic-evil + gorgeous + terrifying. Castlevania / Bloodborne / Van-Helsing / Berserk / WoW-undead-warlock-art creature-design. Mid-action, mid-motion, alive in the frame. 11/10. Output wraps with style prefix + suffix.
 
 ${blocks.ELEGANT_DARKNESS_BLOCK}
 
-${blocks.NO_BLOOD_NO_GORE_NO_CLOWNS_BLOCK}
+${blocks.TWILIGHT_COLOR_BLOCK}
+
+${blocks.DYNAMIC_POSE_BLOCK}
+
+${blocks.EXTERIOR_PREFERRED_BLOCK}
+
+${blocks.NO_CHEAP_GORE_BLOCK}
+
+${blocks.NO_SATANIC_BLOCK}
 
 ${blocks.PAINTERLY_ILLUSTRATION_BLOCK}
 
@@ -25,13 +34,13 @@ ${blocks.CINEMATIC_COMPOSITION_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ THE HORROR CREATURE (hero) ━━━
+━━━ THE HORROR CREATURE (mid-action hero) ━━━
 ${creature}
 
-━━━ GOTHIC SETTING CONTEXT ━━━
+━━━ GOTHIC SETTING CONTEXT (prefer exterior — cliff, moor, graveyard, forest, courtyard, balcony, blood-moon sky) ━━━
 ${landscape}
 
-━━━ LIGHTING (chiaroscuro / moon / fire / ritual-glow) ━━━
+━━━ LIGHTING (moonlight / witch-fire / fel-green / stained-glass shaft / blood-moon / candle / ember) ━━━
 ${lighting}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
@@ -49,7 +58,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Creature dominates frame. Scale + menace + beauty integrated. Dramatic low-angle or mid-shot. Setting supports but doesn't compete. Painterly gothic detail on fur/wings/skin/eyes.
+Creature DOMINATES frame but MID-ACTION — mid-leap, mid-lunge, mid-unfurl-wings, mid-shriek, mid-transform, mid-stalk, mid-howl, mid-glide, mid-summon. Scale + menace + gorgeousness integrated. Dramatic low-angle heroics or mid-shot with dynamic energy. Twilight or occult-glow lighting. Setting supports (exterior preferred). Painterly detail on fur/wings/skin/eyes/fangs/runes. Never just-standing. Never boring-portrait.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

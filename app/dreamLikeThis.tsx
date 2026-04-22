@@ -74,6 +74,13 @@ export default function DreamLikeThisScreen() {
   const [refMedium, setRefMedium] = useState<string | null>(null);
   const [refVibe, setRefVibe] = useState<string | null>(null);
   const [refPrompt, setRefPrompt] = useState<string | null>(null);
+  // Direct-fetched medium row — covers bot-only mediums (gothic / gothic-realistic /
+  // gothic-painted / gothic-whimsy) that `useDreamMediums()` excludes. Without this,
+  // DLT on a bot post showed the raw key as label and defaulted face_swaps=true.
+  const [refMediumRowDirect, setRefMediumRowDirect] = useState<{
+    label: string;
+    face_swaps: boolean;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
   // User's choices
@@ -94,9 +101,33 @@ export default function DreamLikeThisScreen() {
         .single();
       const row = data as unknown as Record<string, unknown> | null;
       if (row) {
-        setRefMedium((row.dream_medium as string) ?? null);
+        const mk = (row.dream_medium as string) ?? null;
+        setRefMedium(mk);
         setRefVibe((row.dream_vibe as string) ?? null);
         setRefPrompt(params.prompt ?? (row.ai_prompt as string) ?? null);
+        // Direct-fetch the medium row — covers bot-only mediums that aren't
+        // returned by useDreamMediums() (gothic / gothic-realistic / etc).
+        if (mk) {
+          const { data: mRow } = await (
+            supabase as unknown as {
+              from: (t: string) => {
+                select: (c: string) => {
+                  eq: (
+                    col: string,
+                    v: string
+                  ) => {
+                    single: () => Promise<{ data: { label: string; face_swaps: boolean } | null }>;
+                  };
+                };
+              };
+            }
+          )
+            .from('dream_mediums')
+            .select('label, face_swaps')
+            .eq('key', mk)
+            .single();
+          if (mRow) setRefMediumRowDirect(mRow);
+        }
       }
       setLoading(false);
     })();
@@ -118,11 +149,13 @@ export default function DreamLikeThisScreen() {
   }, []);
 
   const refMediumRow = dbMediums.find((m) => m.key === refMedium);
-  const mediumLabel = refMediumRow?.label ?? refMedium ?? 'Unknown';
+  // For bot-only mediums the useDreamMediums list doesn't include them —
+  // fall back to the direct-fetched row so label + face_swaps are correct.
+  const mediumLabel = refMediumRow?.label ?? refMediumRowDirect?.label ?? refMedium ?? 'Unknown';
   const vibeLabel = dbVibes.find((v) => v.key === refVibe)?.label ?? refVibe ?? 'Unknown';
   const hasPhoto = !!photoUri;
   const hasPrompt = userPrompt.trim().length > 0;
-  const mediumFaceSwaps = refMediumRow?.face_swaps ?? true;
+  const mediumFaceSwaps = refMediumRow?.face_swaps ?? refMediumRowDirect?.face_swaps ?? true;
   // Face is involved if photo + prompt (reimagine path)
   const faceInvolved = hasPhoto && hasPrompt;
 

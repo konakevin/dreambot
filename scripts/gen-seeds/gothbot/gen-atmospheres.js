@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 12,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for GothBot — gothic atmospheric elements. Fog / rain / bats / ravens / falling-ash / blood-mist / moths / candles-flicker / cobweb-drift.
 
 Each entry: 6-14 words. One specific gothic atmospheric element.

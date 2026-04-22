@@ -2,49 +2,72 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/castlevania_contexts.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} CASTLEVANIA CONTEXT descriptions for GothBot's castlevania-scene path — Castlevania-game-art / Bloodborne / Berserk aesthetic settings. Vampire hunters, cursed cathedrals, gargoyles, wrought iron, crimson stained glass, moonlit courtyards.
+  total: 200,
+  batch: 12,
+  metaPrompt: (n) => `You are writing ${n} CASTLEVANIA-STYLE architecture + landscape settings for GothBot's castlevania-scene path. Each entry is a PURE ARCHITECTURE/ENVIRONMENT description — NO humans, NO figures, NO people. Entries 25-40 words. Castlevania / Van-Helsing / Bloodborne / Berserk gothic architecture + landscape DNA.
 
-Each entry: 15-30 words. One specific Castlevania-ish setting.
+━━━ THREE NON-NEGOTIABLE RULES ━━━
 
-━━━ CATEGORIES ━━━
-- Cursed cathedrals (cathedral interior with crimson stained-glass, broken pews)
-- Gargoyle-ridden courtyards (castle courtyard with gargoyles looking down, moonlit)
-- Wrought-iron gates (massive iron gate with bat-motifs, moonlit)
-- Crimson stained-glass (tall arched window with blood-red-pattern, candlelit interior)
-- Moonlit courtyards (empty courtyard with fountain and gargoyles, full moon)
-- Werewolf-shadow alleys (narrow Victorian alley with werewolf silhouette at end)
-- Gothic-nobility ballrooms (Victorian dress-ball backdrop empty or one figure)
-- Candlelit crypts (subterranean crypt with many candles, stone coffins)
-- Blood-moon castle skies (castle silhouette against massive red moon)
-- Vampire-hunter training ground (old chapel with weapons-rack and altar)
-- Cursed chapels (abandoned chapel with iron chains hanging)
-- Dark castle throne-rooms (black throne with red-velvet, candelabras)
-- Castle entrance halls (sweeping stair with tapestries and iron chandelier)
-- Witch's tower-top (circular chamber with cauldron and raven)
-- Cobblestone gothic streets (rain-slick cobblestones with gas-lamps and fog)
-- Gothic bridge across moat (stone bridge with guard-towers)
-- Cathedral bell-tower (massive bells with bats circling)
-- Crypt-mausoleum entry (iron-gate mausoleum with stone angels)
-- Gothic library (floor-to-ceiling dark wood shelves with globe and candles)
-- Vampire-lord study (study with velvet chair, chalice, skull, open grimoire)
-- Torture chamber (iron-maiden and chains — atmospheric, not gory)
-- Cursed-forest-gate (iron gate into dark forest with crimson mist)
-- Haunted dining halls (long wooden table with melted candles)
-- Organ chambers (massive pipe-organ with skeletal-key, gothic ceiling)
-- Statuary galleries (hall of weeping-angel statues in moonlight)
-- Sword-wielder's duel courtyard (candlelit dueling-ground with rose petals)
-- Tower-top fighting arena (exposed tower platform under storm-sky)
-- Cobwebbed clock-room with iron-works exposed
-- Werewolf-forest pack-gathering (shadowy pack under blood-moon)
-- Vampire-garden courtyard (black roses and marble fountain)
+**RULE 1 — PURE ARCHITECTURE / LANDSCAPE ONLY. ZERO CHARACTERS.**
+Every entry is pure structures + landscape + props. Absolutely NO characters, NO figures, NO silhouettes of people, NO hooded wanderers, NO hunters, NO witches, NO priests, NO warlocks, NO monks, NO pilgrims, NO plague-doctors, NO cardinals, NO paladins, NO vampire-lords, NO mages, NO figures of any kind. DO NOT describe implied presence (e.g. "witch-trial field" / "warlock sanctum" / "monk's cloister" all imply people — write "abandoned gallows field" / "obsidian obelisk grounds" / "cloister arcade" instead). The scene is UNPOPULATED. Distant atmospheric creature accents OK as tiny detail — bat swarm, raven on gargoyle, cat silhouette, wolf-shadow, single owl — but NEVER the subject.
+
+**RULE 2 — COMPOSITION: 3 SHOT-TYPES ONLY (rotate across the pool)**
+Every entry fits one of three composition types:
+A) **EPIC WIDE VISTA** (~50% of entries, min 100) — distant gothic castle/cathedral/citadel silhouetted against moonlit sky, viewed from a wide vantage point (ridge, valley-floor, cliff-edge). The full structure visible, dramatic silhouette against atmospheric sky. Trees / mist / terrain framing the shot.
+B) **INSIDE GOTHIC CITY, CLOSE TO THE BIG BUILDING** (~30% of entries, min 60) — street-level or plaza-level inside a gothic cityscape, with a looming cathedral/castle/clock-tower towering above. You feel WITHIN the place — rain-slick cobblestones, gas-lamps, crooked shopfronts, clothesline alleys, but the massive gothic structure dominates the horizon.
+C) **UP-CLOSE ON GOTHIC ARCHITECTURE FACADE/DETAIL** (~20% of entries, min 30) — mid-distance close-up on a single dramatic architectural element: rose-window, flying-buttress flank, gargoyle-crowded roofline, ornate carved doorway, wrought-iron gate, spire-base. The detail fills the frame.
+
+NOT shot-types: NO empty interior prop-rooms. NO tiny-prop close-ups. NO flat-aerial-from-above. NO single-detail-on-stairway-going-down.
+
+**RULE 3 — LIGHTING: WARM + COOL MIX ENCOURAGED, MONOCHROMATIC-COOL WITH WARM-ACCENT OK**
+Prefer entries that specify both a COOL ambient (moonlit-silver / twilight-violet / midnight-blue / aurora-cyan) AND a WARM accent (amber-candle / orange-torch / forge-ember / alchemist-gold / pink-moon-glow). Monochromatic-cool scenes are fine IF they include a single warm accent (pink moon, amber window, torch-row). Pure one-color-only entries are BANNED. Accent-hue specialty light (witch-fire-green, violet-stained-glass, fel-green, crimson-stained-glass) welcome as secondary accent.
+
+━━━ AESTHETIC NORTH STAR ━━━
+Castlevania-game-art stages, Van-Helsing-movie locations, Bloodborne exteriors, Berserk gothic-landscapes, Dark-Souls / Elden-Ring dead courtyards, Crimson-Peak mansion grounds. Dramatic ornate gothic architecture + atmospheric landscape. Fog / mist / dust / ember-sparks.
+
+━━━ SUBJECT VARIETY ACROSS 200 POOL ━━━
+
+Primary subjects to rotate through (mix across epic-vista / in-city / close-up compositions):
+- Gothic cathedrals (cliff-top, city-center, ruined, siege-scarred, multi-spired)
+- Gothic castles / citadels / fortresses / keeps (various geographies)
+- Clock-towers / bell-towers / watch-towers / observatories
+- Gothic cityscapes / quarters / plazas / gaslight lanes (big building looms)
+- Cathedral rose-windows (interior-facing close-up, stained-glass-lit)
+- Flying-buttress walls / gargoyle-roofline / carved-doorway close-ups
+- Cliff-top monasteries / mountain-pass abbeys / remote chapels
+- Stone bridges + aqueducts crossing chasms (architecture-as-hero)
+- Gothic flower gardens with castle/cathedral backdrop
+- Necropoli / mausoleum-rows with distant skyline
+- Coastal gothic lighthouses + fortified harbors
+- Ruin-fields with distant surviving tower / spire
+- Ice-castles / frozen-fortresses / glacial-cathedrals
+- Haunted village clustered around gothic manor (city-close-up)
+- Moat-bridges + gate-houses (wide-vista or close-up)
+- Crypt entrances / carved gates / iron-gate facades (close-up detail)
+- Volcanic / wasteland gothic ruin-fields
+- Desert-mesa gothic monastery silhouettes
+
+No interior empty-prop-rooms. No stairway close-ups. No character-implying settings.
+
+━━━ NIGHTSHADE PALETTE ANCHOR ━━━
+Deep purples, midnight blues, velvet blacks, charcoal, moonlit silver — PLUS warm amber-gold + cool violet-silver + green witch-fire accents MIXED. Red/crimson sparing only (single lantern, rose-petal). NO full-red monochrome.
+
+━━━ HARD BANS ━━━
+- NO humans / figures / people / silhouettes of characters
+- NO character-implying roles as subject (witch, hunter, paladin, pilgrim, warlock, priest, monk, nun, duelist, cardinal, plague-doctor, vampire-lord, etc.)
+- NO red-red-red monochrome
+- NO single-color-dominant scenes (MUST have 2-3 distinct hues specified)
+- NO stairways as the dominant subject
+- NO "looking through archway at building" cliché
+- NO pentagrams / satanic iconography
+- NO named IP references
 
 ━━━ RULES ━━━
-- Castlevania / Bloodborne / Berserk aesthetic
-- Ornate gothic detail
-- Often empty for character to be placed
-- Dramatic single-light-source compositions
+- Each entry 25-40 words
+- Pure architecture + landscape — NO characters
+- 2-3 distinct-temperature light sources specified per entry
+- Specific architectural + atmospheric detail
+- Every entry visibly distinct from others
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

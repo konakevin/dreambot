@@ -45,6 +45,8 @@ function arg(name, fallback) {
   const count = parseInt(arg('count', '5'), 10);
   const mode = arg('mode', 'random');
   const vibe = arg('vibe', 'random');
+  const medium = arg('medium', null); // force a specific medium string — overrides bot.mediums
+  const model = arg('model', null); // force a specific model (e.g. 'black-forest-labs/flux-dev')
   const label = arg('label', 'iter');
   const post = arg('post', false) === true;
   const dryRun = arg('dry-run', false) === true;
@@ -55,6 +57,23 @@ function arg(name, fallback) {
   } catch (err) {
     console.error(`Failed to load bot module scripts/bots/${botName}/: ${err.message}`);
     process.exit(2);
+  }
+
+  // Force medium override — temporarily replace the mediums list with just the specified one.
+  if (medium && typeof medium === 'string') {
+    bot.mediums = [medium];
+    delete bot.defaultMedium;
+    delete bot.mediumByPath;
+    console.log(`⚡ medium forced to: ${medium}`);
+  }
+
+  // Force model override — collapse modelByPath to force every render onto a single model.
+  // Cross-cuts bot.modelByPath + useModelPicker + allowedModels. Useful for A/B testing models.
+  if (model && typeof model === 'string') {
+    const forced = {};
+    for (const p of bot.paths) forced[p] = model;
+    bot.modelByPath = forced;
+    console.log(`⚡ model forced to: ${model}`);
   }
 
   const outDir = `/tmp/${botName}-${label}`;

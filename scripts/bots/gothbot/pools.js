@@ -10,33 +10,49 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+// All vibes push toward the Nightshade spine: deep purples, midnight blues, velvet blacks,
+// poison greens, witch-fire green, fel-violet, blacklight, moonlit silver, tarnished silver,
+// twilight lavender. Red is rare/accent-only — never window-glow, never blood-moon dominant.
 const VIBE_COLOR = {
-  cinematic: 'teal-and-crimson cinematic grade, deep shadows, dramatic highlights',
-  dark: 'oil-black dominant, charcoal shadow, single candle-amber key-light',
-  epic: 'dramatic god-rays through gothic arches, crimson accents, deep black',
-  nostalgic: 'faded sepia gothic, burnt umber and oxblood, weathered palette',
-  psychedelic: 'impossible violet + poisonous green, hallucinatory gothic hues',
-  whimsical: 'Tim-Burton muted palette, moss-grey + rust + faded purple',
-  ethereal: 'pearl-white ghost-mist, opalescent fog, ashen tones',
-  arcane: 'deep violet and emerald ritual-glow, mystical candle-amber',
-  ancient: 'weathered bronze + stone-grey, crypt-dust + faded crimson',
-  enchanted: 'soft ghostly glow, lavender-and-rose against midnight',
-  fierce: 'stark blood-red and obsidian, savage backlight, cold white',
-  coquette: 'dark-rose pastel + cream + black lace (gothic-lolita soft edge)',
-  voltage: 'electric-violet storm-arcs, neon gothic accents, contrast',
-  nightshade: 'deep-violet moonlight + plum-shadows + silver starlight',
-  macabre: 'inked blood-crimson on charcoal, dread-atmosphere palette',
-  shimmer: 'tarnished silver + gold glint amidst shadow, gothic gleam',
-  surreal: 'impossible color pairings with gothic palette, hallucinatory dread',
+  cinematic: 'teal-and-amber cinematic grade, deep indigo shadows, warm candle highlights',
+  dark: 'oil-black dominant with warm amber-and-orange candle glow cutting the shadow',
+  epic: 'dramatic moonbeams through gothic arches, silver + fel-violet + forge-ember accents',
+  nostalgic: 'faded sepia gothic, burnt umber + tarnished-gold + weathered plum',
+  psychedelic: 'impossible violet + poisonous witch-fire green + amber flashes, hallucinatory gothic',
+  whimsical: 'Tim-Burton muted palette — moss-grey + faded purple + warm ember accents',
+  ethereal: 'pearl-white ghost-mist, opalescent fog, lavender with pale-gold candle-gleam',
+  arcane: 'deep violet + emerald ritual-glow + mystical candle-amber + witch-fire green mix',
+  ancient: 'weathered bronze + stone-grey + warm alchemist-gold + crypt-dust + faded plum',
+  enchanted: 'soft ghostly glow, lavender-and-midnight + warm candle secondary against twilight-indigo',
+  fierce: 'stark violet + obsidian, forge-ember backlight, torch-orange rim-light',
+  coquette: 'dark-rose pastel + cream + black lace + warm candle-amber + midnight-indigo',
+  voltage: 'electric-violet storm-arcs + fel-green neon + amber-sparks, high contrast',
+  nightshade: 'deep-violet moonlight + plum-shadows + silver starlight + candle-amber pool',
+  macabre: 'inked plum-and-obsidian + fel-green dread + single warm-orange lantern accent',
+  shimmer: 'tarnished silver + alchemist-gold glint amidst shadow + moonlit violet ground',
+  surreal: 'impossible violet + witch-fire green + molten-amber pairings, hallucinatory gothic',
 };
+
+// GOTHIC_STRUCTURES may not exist yet during regen — load defensively
+function loadOptional(name) {
+  try { return load(name); } catch { return []; }
+}
 
 module.exports = {
   DARK_CHARACTERS: load('dark_characters'),
+  CHARACTER_ACTIONS: load('character_actions'),
   GOTHIC_LANDSCAPES: load('gothic_landscapes'),
+  GOTHIC_STRUCTURES: loadOptional('gothic_structures'),
+  GOTHIC_WHIMSY_SETTINGS: loadOptional('gothic_whimsy_settings'),
+  GOTHIC_WHIMSY_PALETTES: loadOptional('gothic_whimsy_palettes'),
   DARK_CREATURES: load('dark_creatures'),
   GOTH_WOMAN_ACCESSORIES: load('goth_woman_accessories'),
   CASTLEVANIA_CONTEXTS: load('castlevania_contexts'),
   COZY_GOTH_SETTINGS: load('cozy_goth_settings'),
+  VAMPIRE_LOOKS: loadOptional('vampire_looks'),
+  VAMPIRE_LIGHTING: loadOptional('vampire_lighting'),
+  VAMPIRE_EYE_COLORS: loadOptional('vampire_eye_colors'),
+  VAMPIRE_ETHNICITIES: loadOptional('vampire_ethnicities'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),

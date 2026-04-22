@@ -33,6 +33,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
+const { pickModel } = require('./modelPicker');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -162,17 +163,42 @@ async function callClaude({
 // Approximate cost per Flux-dev render in cents.
 const FLUX_COST_CENTS = 3; // $0.03 per render
 
-async function fluxOnce({ prompt, aspectRatio, model, replicateKey }) {
-  const res = await fetch(`https://api.replicate.com/v1/models/${model}/predictions`, {
+const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
+
+/**
+ * Submit one Replicate prediction + poll until result. Dispatches on model
+ * family: SDXL uses version-based `/v1/predictions` with different input
+ * shape; Flux family uses model-based `/v1/models/{model}/predictions`.
+ * Mirrors supabase/functions/_shared/generateImage.ts dispatch logic.
+ */
+async function fluxOnce({
+  prompt,
+  aspectRatio,
+  model,
+  replicateKey,
+  inputOverrides = {},
+}) {
+  const isSDXL = model === 'sdxl';
+  const input = {
+    prompt,
+    ...(isSDXL
+      ? { num_outputs: 1 }
+      : { aspect_ratio: aspectRatio, num_outputs: 1, output_format: 'jpg' }),
+    ...inputOverrides,
+  };
+  const url = isSDXL
+    ? 'https://api.replicate.com/v1/predictions'
+    : `https://api.replicate.com/v1/models/${model}/predictions`;
+  const body = isSDXL ? { version: SDXL_VERSION, input } : { input };
+
+  const res = await fetch(url, {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + replicateKey, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      input: { prompt, aspect_ratio: aspectRatio, num_outputs: 1, output_format: 'jpg' },
-    }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
-    const body = (await res.text()).slice(0, 400);
-    throw new Error(`Flux ${res.status}: ${body}`);
+    const text = (await res.text()).slice(0, 400);
+    throw new Error(`Replicate ${res.status}: ${text}`);
   }
   const data = await res.json();
   // Poll prediction — 60 * 1.5s = 90s max
@@ -186,22 +212,26 @@ async function fluxOnce({ prompt, aspectRatio, model, replicateKey }) {
       return typeof pd.output === 'string' ? pd.output : pd.output[0];
     }
     if (pd.status === 'failed' || pd.status === 'canceled') {
-      throw new Error(`Flux ${pd.status}: ${pd.error || 'no error message'}`);
+      throw new Error(`Replicate ${pd.status}: ${pd.error || 'no error message'}`);
     }
   }
-  throw new Error('Flux timed out after 90s');
+  throw new Error('Replicate timed out after 90s');
 }
 
 /**
- * Flux with NSFW false-positive auto-retry. Flux's safety model occasionally
- * flags perfectly-fine cyborg renders as NSFW — retrying the same prompt
- * usually succeeds because diffusion is stochastic. We retry up to 2 times
- * on NSFW errors; other errors fail-fast.
+ * Replicate render with NSFW false-positive auto-retry. Flux's safety
+ * model occasionally flags clean prompts as NSFW — retrying the same
+ * prompt usually succeeds due to stochastic diffusion. Up to 2 retries.
+ *
+ * Accepts `model` string directly. If bot opts into `useModelPicker`,
+ * runBot calls pickModel() first to choose the model + inputOverrides
+ * then passes them here.
  */
 async function flux({
   prompt,
   aspectRatio = '9:16',
   model = 'black-forest-labs/flux-dev',
+  inputOverrides = {},
   replicateKey,
   nsfwRetries = 2,
 }) {
@@ -210,11 +240,20 @@ async function flux({
 
   for (let attempt = 0; attempt <= nsfwRetries; attempt++) {
     try {
-      return await fluxOnce({ prompt, aspectRatio, model, replicateKey: key });
+      return await fluxOnce({
+        prompt,
+        aspectRatio,
+        model,
+        replicateKey: key,
+        inputOverrides,
+      });
     } catch (err) {
-      const isNsfw = err && err.message && /NSFW/i.test(err.message);
-      if (isNsfw && attempt < nsfwRetries) {
-        console.warn(`  ⚠️ Flux NSFW false-positive, retry ${attempt + 1}/${nsfwRetries}`);
+      // Match NSFW classic flag AND BFL's E005 "flagged as sensitive" — same
+      // stochastic false-positive pattern, retry up to nsfwRetries times.
+      const isSafetyFlag =
+        err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
+      if (isSafetyFlag && attempt < nsfwRetries) {
+        console.warn(`  ⚠️ Replicate safety-filter (possibly false-positive), retry ${attempt + 1}/${nsfwRetries}`);
         continue;
       }
       throw err;
@@ -528,6 +567,7 @@ async function runBot(opts) {
 
   let errorStage = null;
   let finalPrompt = null;
+  let renderModel = 'black-forest-labs/flux-dev';
   let sharedDNA = null;
   let picker = null;
   let claudeMeta = { retries: 0, fellBackToSecondary: false };
@@ -546,7 +586,7 @@ async function runBot(opts) {
     // 3. Roll shared DNA (optional)
     errorStage = 'roll-shared-dna';
     sharedDNA = bot.rollSharedDNA
-      ? bot.rollSharedDNA({ vibeKey, picker })
+      ? bot.rollSharedDNA({ vibeKey, medium, picker })
       : {};
 
     // 4. Optional text content (HumanBot/MuseBot thinking-bot pattern)
@@ -569,6 +609,7 @@ async function runBot(opts) {
       sharedDNA,
       vibeDirective,
       vibeKey,
+      medium,
       picker,
     });
     if (!brief || typeof brief !== 'string' || brief.length < 50) {
@@ -601,11 +642,26 @@ async function runBot(opts) {
       }
     }
 
-    // 8. Compose final prompt with bot's prefix/suffix
+    // 8. Compose final prompt with bot's prefix + per-medium-style + suffix
     errorStage = 'compose-prompt';
-    const prefix = bot.promptPrefix ? `${bot.promptPrefix}, ` : '';
-    const suffix = bot.promptSuffix ? `, ${bot.promptSuffix}` : '';
-    finalPrompt = `${prefix}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
+    // Per-medium prefix/suffix override — if bot.promptPrefixByMedium/promptSuffixByMedium[medium]
+    // is set, use it INSTEAD of bot.promptPrefix/bot.promptSuffix. Lets a specific medium use
+    // a totally different stylistic anchor (e.g. gothic-whimsy uses Tim-Burton-whimsical prefix
+    // instead of the bot's default Castlevania-manga prefix).
+    const rawPrefix =
+      (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
+      bot.promptPrefix || '';
+    const rawSuffix =
+      (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
+      bot.promptSuffix || '';
+    const prefix = rawPrefix ? `${rawPrefix}, ` : '';
+    const suffix = rawSuffix ? `, ${rawSuffix}` : '';
+    // Optional per-medium style injection — lets each medium tag produce visually distinct output.
+    // Usage: bot.mediumStyles = { gothic: 'Ayami-Kojima dark-manga...', watercolor: '...' }
+    const mediumStyle = bot.mediumStyles && bot.mediumStyles[medium]
+      ? `${bot.mediumStyles[medium]}, `
+      : '';
+    finalPrompt = `${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
 
     if (dryRun) {
       return {
@@ -619,9 +675,40 @@ async function runBot(opts) {
       };
     }
 
-    // 9. Flux render
+    // 9. Replicate render — opt-in per-medium routing via pickModel().
+    // Priority: bot.modelByPath > pickModel (medium+vibe → pool) > flux-dev default.
+    // If bot.useModelPicker is true, pickModel() reads dream_mediums.allowed_models
+    // (with bot-scope, includes bot-only mediums) and random-picks a Flux/SDXL model.
+    // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
+    // the medium pool — use this when a path's aesthetic needs a specific model.
     errorStage = 'flux';
-    const fluxUrl = await flux({ prompt: finalPrompt, aspectRatio: '9:16' });
+    let renderInputOverrides = {};
+    if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
+      const modelVal = bot.modelByPath[resolvedPath];
+      // Support weighted-array rotation (e.g. ['flux-dev', 'flux-1.1-pro'])
+      // mirroring mediumByPath's array behavior.
+      renderModel = Array.isArray(modelVal)
+        ? modelVal[Math.floor(Math.random() * modelVal.length)]
+        : modelVal;
+      // No input overrides for Flux; SDXL would need width/height/steps
+      if (renderModel === 'sdxl') renderInputOverrides = { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 };
+      console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
+    } else if (bot.useModelPicker) {
+      const picked = await pickModel({
+        mediumKey: medium,
+        vibeKey: vibeKey,
+        allowedModels: bot.allowedModels,
+      });
+      renderModel = picked.model;
+      renderInputOverrides = picked.inputOverrides;
+      console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
+    }
+    const fluxUrl = await flux({
+      prompt: finalPrompt,
+      aspectRatio: '9:16',
+      model: renderModel,
+      inputOverrides: renderInputOverrides,
+    });
 
     // 10. Download
     errorStage = 'download';
@@ -676,6 +763,7 @@ async function runBot(opts) {
         path: resolvedPath,
         vibe: vibeKey,
         medium,
+        model: renderModel,
         status: 'ok',
         image_url: imageUrl,
         duration_ms: durationMs,
@@ -713,6 +801,7 @@ async function runBot(opts) {
           path: resolvedPath,
           vibe: vibeKey,
           medium,
+          model: renderModel,
           status: 'failed',
           error: errStr.slice(0, 2000),
           error_stage: errorStage,

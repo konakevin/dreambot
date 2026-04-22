@@ -2,48 +2,54 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/scene_palettes.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for GothBot — gothic color moods. Deep purple / crimson / midnight black / bone white / oxblood / velvet green / sickly chartreuse.
+  total: 200,
+  batch: 12,
+  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for GothBot. Each entry is a specific Nightshade-aesthetic gothic palette: 3-5 specific color words that define the scene's overall color mood. Entries 12-22 words.
 
-Each entry: 10-20 words. One specific gothic palette with 3-5 color words.
+━━━ AESTHETIC NORTH STAR — NIGHTSHADE ━━━
+Dark fantasy at its most stylish — moonlit baroque, twilight-hour gothic, occult-lit ritual, candle-and-amber. Castlevania / Bloodborne / Van-Helsing / Hellboy / Bram-Stoker-Dracula. Dark-dominant palettes with VIBRANT ACCENT COLOR — accent is purple/violet/green/blue/silver/amber territory. Red is RARE — never the dominant hue, never coloring windows or moons or fog.
 
-━━━ CATEGORIES ━━━
-- Deep-purple-and-black (eggplant-purple + oil-black + faint-silver)
-- Crimson-and-shadow (blood-crimson + deep-shadow-black + bone-white accent)
-- Midnight-black (oil-black + charcoal + cold-silver-accent)
-- Bone-white-and-sepia (bone + faded-ivory + weathered-umber)
-- Oxblood-and-gold (dried-blood-red + tarnished-gold + dark-brown)
-- Velvet-green-dark (deep-forest + moss + black + candle-amber)
-- Sickly-chartreuse (poisonous-yellow-green + black + dark-violet)
-- Crimson-and-emerald (blood-red + deep-green + black)
-- Amethyst-dark (deep-violet + silver + midnight-black)
-- Gothic-autumn (rust-red + black + burnt-umber + faded-gold)
-- Blood-moon-red (crimson-dominant + black shadow + silver touches)
-- Ice-pallor (pale-blue + bone-white + deep-shadow-black)
-- Funeral-palette (oil-black + bone + dried-rose)
-- Cathedral-jewel (stained-glass blue + crimson + gold + black)
-- Tim-Burton-muted (moss-grey + rust + faded-purple + off-white)
-- Crimson-peak-romance (oxblood + cream + faded-rose + burnt-umber)
-- Bloodborne-moody (charcoal + rust-red + mist-grey + amber-hint)
-- Velvet-purple (royal-velvet-purple + black + gold-accent)
-- Dark-academia (forest-green + burnt-umber + cream + black)
-- Ghost-pale (pearl-white + mist-grey + faint-lavender)
-- Occult-black-and-silver (black + silver + purple + ritual-red)
-- Widow's-palette (black + dried-rose + cream + ivory)
-- Plague-palette (yellow-sickly + grey-ash + crimson-scar)
-- Autumn-goth (deep-burgundy + burnt-orange + charcoal + gold)
-- Castlevania-film (crimson-velvet + oil-black + stained-glass + amber)
-- Dark-mermaid (deep-teal + purple + silver-scale + shadow)
-- Werewolf-shadow (slate-grey + black + amber-eye-glow + blue-mist)
-- Nightshade (deep-violet + black-petal + poison-green + pale-silver)
-- Stained-glass-spectrum (deep-blue + ruby + emerald + gold-lead)
-- Moonstone-gothic (opal-pale + silver + black + faint-lavender)
+━━━ NIGHTSHADE COLOR — MANDATORY SPINE ━━━
+Every palette must have at least ONE vibrant accent from the Nightshade spine: deep violet / fel-violet / witch-fire green / poison green / sapphire nocturne / emerald ritual-glow / moonlit silver / tarnished silver / twilight lavender / blacklight aurora / ember-amber candle / rose-dusk / indigo-midnight. Gray-monochrome palettes are capped hard. Crimson/blood-red appears as accent ONLY (a single rose, a single lantern, a single drop) and NEVER dominates a palette — max 10 red-accent entries in the whole 200-pool.
+
+━━━ HARD DISTRIBUTION CAPS (200 pool — enforce) ━━━
+
+Max 30 entries that lean GRAY-CHARCOAL-MONOCHROME as the dominant (only a small silver/rose accent) — these are the exception, not the rule.
+
+Min 20 per each of these Nightshade accent palettes:
+- VIOLET-TWILIGHT: deep violet + midnight-indigo + silver-moonlight + amethyst glow
+- EMERALD-OCCULT: deep-forest-green + charcoal + witch-fire-green accent + pale-bone
+- SAPPHIRE-NOCTURNE: deep-sapphire + midnight-black + silver-moon + pearl-accent
+- ROSE-DUSK: dusty-rose + violet-horizon + faded-gold + charcoal
+- FEL-GREEN WARLOCK: fel-green-glow + charcoal + oil-black + ember-amber secondary
+- NECRO-PALE-BLUE: ghost-blue + bone-white + midnight + faint-lavender
+- NIGHTSHADE-INDIGO: deep-indigo + black-petal + poison-green + pale-silver
+- EMBER-AMBER-CANDLE: candle-amber + deep-charcoal + tarnished-silver + bronze
+- BLACKLIGHT-AURORA: fel-violet-aurora + black + pale-silver + witch-fire-green
+- TWILIGHT-LAVENDER: lavender-horizon + violet-shadow + silver-starlight + plum
+
+Min 10 per each additional accent palette:
+- STAINED-GLASS VIOLET-PRISMATIC: deep-violet + emerald + sapphire + gold-lead + shadow (NO ruby/crimson-dominant)
+- WITCH-FIRE GREEN: acidic-green + black + violet + bone
+- OCCULT-RITUAL VIOLET-BLACK-GOLD
+- VAMPIRE-COURTLY: pearl-white + plum + faded-violet + black
+- AUTUMN-GOTH: deep-plum + burnt-umber + charcoal + tarnished-gold
+- GOTHIC FLORAL: nightshade-violet + black-rose + pearl + emerald-leaf
+- PLAGUE-POISON: sickly-yellow-green + ash-grey + bone + charcoal
+- DARK-ACADEMIA: forest-green + burnt-umber + cream + black
+- MOONSTONE-OPAL: pearl-white + pale-lavender + silver + black
+- STORM-LIGHTNING: slate-blue + white-flash + purple-sky + black
+- WARLOCK-VOID: void-purple + fel-green accent + oil-black + silver
+
+━━━ PALETTE CONSTRUCTION RULES ━━━
+Each entry: 3-5 specific color words, dark-dominant, with ONE clear vibrant accent. Describe which color dominates, which is secondary, which is the ACCENT that carries the twilight/occult energy. Example format: "deep violet dominant + midnight-indigo shadow + silver-moon accent + faint amethyst glow + oil-black depth."
 
 ━━━ RULES ━━━
-- Gothic mood palettes
-- 3-5 specific color words per entry
-- Always dark-dominant with one accent color
+- Every entry visibly distinct from the others
+- No two entries share the same dominant + accent combination
+- Specific color-words (not "dark gothic colors") — name actual colors
+- Dark-dominant but with vibrant accent mandatory
+- No flat-gray-monochrome dominating the pool
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

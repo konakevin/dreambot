@@ -16,7 +16,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ELEGANT_DARKNESS_BLOCK}
 
-${blocks.NO_BLOOD_NO_GORE_NO_CLOWNS_BLOCK}
+${blocks.NO_CHEAP_GORE_BLOCK}
 
 ${blocks.PAINTERLY_ILLUSTRATION_BLOCK}
 

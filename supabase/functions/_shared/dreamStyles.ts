@@ -69,11 +69,23 @@ function getServiceClient() {
   return createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 }
 
-/** Fetch all active mediums from DB (cached per invocation) */
+/** Fetch active mediums INCLUDING bot-only rows (cached per invocation).
+ *
+ * Trusted edge-function side — bot-only mediums must be resolvable here so
+ * Dream Like This can replay a bot post's medium (gothic / gothic-realistic /
+ * gothic-painted / gothic-whimsy, etc.) without falling through to a random
+ * user-facing medium. The UI-facing `get_dream_mediums` RPC still filters
+ * is_bot_only=false — that filter only belongs in pickers, not in resolvers.
+ */
 export async function fetchMediums(): Promise<ResolvedMedium[]> {
   if (cachedMediums) return cachedMediums;
   const sb = getServiceClient();
-  const { data, error } = await sb.rpc('get_dream_mediums');
+  const { data, error } = await sb
+    .from('dream_mediums')
+    .select(
+      'key,label,directive,flux_fragment,is_scene_only,is_character_only,nightly_skip,face_swaps,character_render_mode,kontext_directive,render_base,engine'
+    )
+    .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {
     console.error('[dreamStyles] Failed to fetch mediums:', error.message);
     return [];
