@@ -2,9 +2,9 @@
  * StarBot — the bot-engine contract.
  *
  * Mind-bending sci-fi. Blade Runner / Dune / Interstellar / Alien / 2001 /
- * Arrival / Annihilation / Foundation. Cosmic vistas + alien landscapes +
- * epic space opera + sleek futurism. VenusBot owns cyborg-women — StarBot
- * does not.
+ * Arrival / Annihilation / Foundation / Moebius-Jodorowsky / Chesley-Bonestell.
+ * Cosmic vistas + alien landscapes + epic space opera + sleek futurism.
+ * VenusBot owns cyborg-women — StarBot does not.
  */
 
 const pools = require('./pools');
@@ -19,13 +19,64 @@ const pathBuilders = {
   'alien-city': require('./paths/alien-city'),
   'robot-moment': require('./paths/robot-moment'),
   'real-space': require('./paths/real-space'),
+  'cosmic-oracle': require('./paths/cosmic-oracle'),
 };
 
 module.exports = {
   username: 'starbot',
   displayName: 'StarBot',
 
-  mediums: ['photography', 'vaporwave', 'canvas', 'render'],
+  // 7 mediums — 4 original + 3 added (watercolor/pencil/illustration).
+  // Plus 1 bot-only custom medium (star-oil-cosmos) locked to cosmic-oracle.
+  mediums: ['photography', 'vaporwave', 'canvas', 'render', 'watercolor', 'pencil', 'illustration'],
+
+  // cosmic-oracle path locks to the custom bot-only star-oil-cosmos medium
+  mediumByPath: {
+    'cosmic-oracle': 'star-oil-cosmos',
+  },
+
+  // cosmic-oracle path locks to flux-dev (best painterly model)
+  modelByPath: {
+    'cosmic-oracle': 'black-forest-labs/flux-dev',
+  },
+
+  // Per-medium prompt prefix/suffix overrides. The star-oil-cosmos medium
+  // uses environment-dominant language so the scene wins over the figure
+  // (mirrors gothbot gothic-oil-garden pattern).
+  promptPrefixByMedium: {
+    'star-oil-cosmos':
+      'PAINTED SPACE-ART OIL MASTERWORK — golden-age-of-sci-fi-paperback oil-cover tradition, Chesley-Bonestell + Syd-Mead + John-Harris + Michael-Whelan + Bruce-Pennington + Donato-Giancola lineage, full-scene painterly cosmic composition — the cosmos dominates, the figure is a participant within it NOT the centered subject, visible impasto oil brushwork, atmospheric cosmic depth, painted-chiaroscuro with nebula-hued shadows, pulp-sci-fi paperback-cover gallery quality',
+  },
+  promptSuffixByMedium: {
+    'star-oil-cosmos':
+      'painted oil-on-canvas finish, heavy impasto brushwork, canvas-texture polish, full-scene cosmic environment-dominant composition, painted-paperback-cover masterwork, no text no words no watermarks — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm, NOT anime, NOT manga, NOT photoreal, NOT 3D-render, NOT sci-fi-magazine editorial',
+  },
+
+  // Per-medium prompt injection — StarBot's dialect for each medium.
+  // Gets injected between promptPrefix and the Sonnet-written scene,
+  // giving each medium StarBot's Blade-Runner / Dune / Alien / 2001 /
+  // Moebius-Jodorowsky DNA instead of the generic medium text.
+  mediumStyles: {
+    photography:
+      '35mm cinematic sci-fi film-still — Denis-Villeneuve Blade-Runner-2049 / Dune / Arrival visual family, Roger-Deakins cinematography, anamorphic widescreen with characteristic horizontal lens-flare, shallow-DOF practical-effects scale, physical-model + miniature-photography authenticity, subdued naturalistic color-grade with shadow-heavy low-key lighting, Kubrick-2001-style precision framing, atmospheric haze, photographic grain',
+    vaporwave:
+      'late-80s / early-90s retrofuturism — Syd-Mead + Moebius painted chrome-and-neon-pink-cyan palette, gridded-horizon vanishing-point perspective, synthwave-cosmos sunset, tropical-palm-silhouette against gradient-sky, VHS-glitch scanlines, Miami-Vice-in-space mood, Blade-Runner-original-era neon-signage, pastel-gradient nebula backdrop',
+    canvas:
+      'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Bruce-Pennington / Frank-Kelly-Freas Analog-SF-magazine tradition, heavy-impasto painted brushwork, painterly atmospheric cosmic depth, dramatic painted-chiaroscuro with nebula-hued ambient shadow, pulp-sci-fi paperback polish, museum-painted masterwork quality',
+    render:
+      'high-end cinematic 3D render — ILM / Weta / DNEG / MPC feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, Dune / Blade-Runner-2049 / Arrival / Interstellar CG precision, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, 4K film-finish polish, NOT cartoon NOT toy NOT videogame',
+    watercolor:
+      'NASA concept-art watercolor wash — Robert-McCall painted-space-tradition + Jean-Giraud-Moebius watercolor-sci-fi, soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel, NOT cute-watercolor NOT children-book NOT flowers',
+    pencil:
+      'Ralph-McQuarrie Star-Wars-concept-art graphite + Syd-Mead architectural-pencil-rendering + NASA engineering-blueprint-cross-hatch + Moebius pencil-and-ink sci-fi concept sketch — tight cross-hatched shadow, technical-drafting precision, silver-graphite-on-toned-paper tradition, dramatic value range, architectural-scale cosmic machinery, pre-production-concept-sketch authority',
+    illustration:
+      'Moebius / Jean-Giraud / Philippe-Druillet / Enki-Bilal / Jodorowsky Heavy-Metal-magazine ink-and-color sci-fi BD tradition, clean-ink linework + flat-color-wash with gradient-field cosmic backgrounds, European bande-dessinée science-fiction craftsmanship, Arzach / Incal / The-Airtight-Garage visual family, dream-logic cosmic surrealism, NOT superhero-comic NOT manga NOT cartoon',
+    // Bot-only custom medium for cosmic-oracle path — sci-fi adaptation of
+    // gothbot's gothic-oil-garden. Full-scene painted cosmic oil-canvas where
+    // a figure lives WITHIN the environment (NOT a centered portrait).
+    'star-oil-cosmos':
+      'PAINTED SPACE-ART OIL MASTERWORK — Chesley-Bonestell + Syd-Mead + John-Harris + Michael-Whelan + Bruce-Pennington + Donato-Giancola + Frank-Kelly-Freas golden-age-of-sci-fi-paperback oil-cover tradition, full-scene painterly cosmic composition showing a figure WITHIN a richly-detailed cosmic environment (NOT a centered hero portrait — the cosmos is the frame, she lives inside it), visible impasto oil brushwork, heavy canvas texture, painterly-realism with atmospheric cosmic depth, painted-chiaroscuro with nebula-hued ambient shadows, dramatic volumetric starlight, Analog-SF / Ace-Books / DAW-Books / Ballantine-SF paperback-cover tradition, gallery-oil-painting masterwork quality — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm-smooth-digital, NOT anime, NOT manga, NOT magazine-editorial, NOT photoreal',
+  },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -60,6 +111,7 @@ module.exports = {
     'alien-city',
     'robot-moment',
     'real-space',
+    'cosmic-oracle',
   ],
 
   pathWeights: {
@@ -71,6 +123,7 @@ module.exports = {
     'alien-city': 2,
     'robot-moment': 1,
     'real-space': 2,
+    'cosmic-oracle': 2,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
