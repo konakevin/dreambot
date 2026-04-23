@@ -45,11 +45,11 @@ module.exports = {
   // (mirrors gothbot gothic-oil-garden pattern).
   promptPrefixByMedium: {
     'star-oil-cosmos':
-      'PAINTED SPACE-ART OIL MASTERWORK — golden-age-of-sci-fi-paperback oil-cover tradition, Chesley-Bonestell + Syd-Mead + John-Harris + Michael-Whelan + Bruce-Pennington + Donato-Giancola lineage, full-scene painterly cosmic composition — the cosmos dominates, the figure is a participant within it NOT the centered subject, visible impasto oil brushwork, atmospheric cosmic depth, painted-chiaroscuro with nebula-hued shadows, pulp-sci-fi paperback-cover gallery quality',
+      'cinematic sci-fi oil painting, environment-dominant composition, heavy impasto brushwork, atmospheric depth',
   },
   promptSuffixByMedium: {
     'star-oil-cosmos':
-      'painted oil-on-canvas finish, heavy impasto brushwork, canvas-texture polish, full-scene cosmic environment-dominant composition, painted-paperback-cover masterwork, no text no words no watermarks — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm, NOT anime, NOT manga, NOT photoreal, NOT 3D-render, NOT sci-fi-magazine editorial',
+      'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
   },
 
   // Per-medium prompt injection — StarBot's dialect for each medium.
@@ -75,7 +75,7 @@ module.exports = {
     // gothbot's gothic-oil-garden. Full-scene painted cosmic oil-canvas where
     // a figure lives WITHIN the environment (NOT a centered portrait).
     'star-oil-cosmos':
-      'PAINTED SPACE-ART OIL MASTERWORK — Chesley-Bonestell + Syd-Mead + John-Harris + Michael-Whelan + Bruce-Pennington + Donato-Giancola + Frank-Kelly-Freas golden-age-of-sci-fi-paperback oil-cover tradition, full-scene painterly cosmic composition showing a figure WITHIN a richly-detailed cosmic environment (NOT a centered hero portrait — the cosmos is the frame, she lives inside it), visible impasto oil brushwork, heavy canvas texture, painterly-realism with atmospheric cosmic depth, painted-chiaroscuro with nebula-hued ambient shadows, dramatic volumetric starlight, Analog-SF / Ace-Books / DAW-Books / Ballantine-SF paperback-cover tradition, gallery-oil-painting masterwork quality — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm-smooth-digital, NOT anime, NOT manga, NOT magazine-editorial, NOT photoreal',
+      'cinematic sci-fi oil painting, environment-dominant composition with figure WITHIN scene, visible impasto brushwork, heavy canvas texture, dramatic volumetric lighting, gallery-quality masterwork',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,

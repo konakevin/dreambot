@@ -1,84 +1,56 @@
 #!/usr/bin/env node
+const fs = require('fs');
+try { fs.unlinkSync('scripts/bots/starbot/seeds/cosmic_oracle_characters.json'); } catch (_) {}
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_oracle_characters.json',
-  total: 25,
+  total: 50,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SCI-FI ORACLE / SPACE PRIESTESS / COSMIC WOMAN character descriptions for StarBot's cosmic-oracle path — an art-show-quality painted-space-art illustration path (Dune / Foundation / Arrival / Blade-Runner-2049 / Moebius-Jodorowsky / Chesley-Bonestell aesthetic). Each entry is one SOLO woman caught candidly in a richly-detailed cosmic scene.
+  metaPrompt: (n) => `You are writing ${n} COOL SCI-FI CHARACTER descriptions for StarBot's cosmic-oracle path — cinematic sci-fi oil paintings of badass, interesting characters in cosmic scenes.
 
-Each entry: 18-28 words. ONE specific character. Archetype + ethnicity + hair + eyes + sci-fi-ceremonial wardrobe. Aggressively deduped on ALL four dimensions.
+Think of the characters you'd see in the coolest scenes from: Star Wars cantina, Dune, Halo, Mass Effect, Guardians of the Galaxy, Alien/Prometheus, The Expanse, Cowboy Bebop, Firefly, Mandalorian, Blade Runner, Fifth Element, Farscape, Warhammer 40K, Stargate. The VIBE of those characters — NOT the specific named characters.
 
-━━━ ARCHETYPE MIX (rotate across these, don't cluster) ━━━
-- Starlight Priestess / Cosmic High-Priestess / Lumen-Acolyte (ceremonial-light-bearer)
-- Cosmic Seer / Star-Chart Diviner / Constellation-Reader (future-sight)
-- Nebula Witch / Plasma-Mage / Void-Singer (alien magic-user)
-- Void Oracle / Silence-Walker / Black-Star Oracle (emptiness-between-stars)
-- Navigator-Priestess / Astrogator / Helios-Reader (pilot-mystic)
-- Galactic Shaman / Star-Whisperer / Cosmic Herbalist
-- Ceremonial Astronaut / Ritual-Pilot (religious spacefarer, helmet visor up)
-- Temple-Guardian / Cosmic-Library Keeper
-- Dune-style Bene-Gesserit-analog Truth-sayer (archetype only, no IP)
-- Cyber-Mystic / Quantum-Nun / Digital-Oracle (subtle cybernetic accents)
+Each entry: 20-35 words. ONE specific solo character. Format: "[Role] — [visual description], wearing [gear]"
 
-━━━ ETHNICITY MIX (rotate evenly — Flux tends to default white-western, force variety) ━━━
-Pan-African / Afro-Caribbean / Igbo / Somali / Ethiopian / Yoruba / Maori / Samoan / Tongan / Hawaiian / Aboriginal-Australian / Sámi / Pan-South-Asian / Tamil / Bengali / Rajput / Tibetan / Nepali / Mongolian / Kazakh / Persian / Kurdish / Amazigh / Moroccan / Tuareg / Coptic / Pan-East-Asian / Japanese / Korean / Vietnamese / Filipino / Thai / Indonesian / Mayan / Quechua / Mapuche / Afro-Latina / Indigenous-Andean / Inuit / Norse / Celtic / Slavic / Balkan / Ashkenazi / Sephardic / Greek / Etruscan / mixed-heritage — vary strongly.
+━━━ CHARACTER MIX (across ${n} entries) ━━━
+- ~40% HUMAN (but interesting humans — grizzled, scarred, augmented, weathered, young-and-scrappy, old-and-wise, battle-hardened, roguish)
+- ~30% HUMANOID ALIEN (the cool kind — think Turian, Yautja, Twi'lek, Asari, Sangheili, Wraith, Cardassian-vibe — recognizably person-shaped but clearly alien)
+- ~20% ARMORED / HELMETED (Mandalorian-vibe bounty hunters, Spartan-vibe super-soldiers, space marines, knight-like warriors in powered armor)
+- ~10% ROBOT / ANDROID / CYBORG (not silly — think HK-47, Bishop from Aliens, Terminator endoskeleton, battle-droid commander)
 
-━━━ HAIR MIX ━━━
-- Braids (cornrows / Fulani / Himba-ochred-twists / silver-thread-braids / constellation-studded-micro-braids)
-- Locs (silver-shot / ash-white / plasma-violet-tinted / glowing-fiber-optic-threaded)
-- Updo (crown-braid / chignon / buns / top-knot / ceremonial-tiara-wound)
-- Shaved / undercut / half-shaved with glowing-sigil-scalp-tattoos
-- Long straight (metallic-silver / platinum-white / nebula-violet / star-dusted / holographic-shifting)
-- Wavy / curly (dark-ink / silver-shot / aurora-highlighted)
-- Short / pixie / chin-bob / asymmetric-cut
-- Astronaut-close-cropped practical
-- Head-wrapped ceremonial fabric or veil (deep-indigo / gold-embroidered / starfield-printed)
-- Hood-covered / cowl-covered / turbaned
-MAX ~3 entries per hair-family across the pool.
+━━━ ROLE MIX (rotate — don't cluster) ━━━
+Bounty hunter / Smuggler / Astronaut / Explorer / Pilot / Mercenary / Scientist / Soldier / Scavenger / Engineer / Medic / Captain / Navigator / Spy / Diplomat / Mystic / Warlord / Sniper / Mechanic / Archaeologist / Trader / Refugee / Drifter / Commander
 
-━━━ EYES MIX (most should have a SUBTLE supernatural glow — gold / violet / lime / cyan / star-white / amber) ━━━
-- Luminous gold / faintly-glowing gold
-- Deep violet / glowing violet iris on black-sclera
-- Lime-green / plasma-green glow
-- Star-white pinprick-centers in deep-black iris
-- Electric cyan / aurora cyan
-- Pale silver / moon-silver
-- Amber / fire-amber
-- Deep-ink-black with cold-white star pinprick-reflection
-- Heterochromatic (gold + violet / silver + cyan)
-MAX ~4 entries per eye-color across the pool.
+━━━ WHAT MAKES A CHARACTER COOL ━━━
+- Specific weathering: scars, cybernetic replacements, burn marks, tattoos, battle damage
+- Interesting gear: not generic — specific weapons, tools, gadgets, trophies
+- Attitude in the description: "grizzled", "sharp-eyed", "battle-scarred", "war-weary", "cocky"
+- Period/culture flavor: samurai-influenced, Wild-West-in-space, military-spec, nomadic-tribal, corporate-sleek
 
-━━━ WARDROBE MIX (sci-fi ceremonial / priestess / oracle / astronaut-mystic — NO Earth-modern clothes) ━━━
-- Flowing ceremonial robes (deep-indigo / cosmic-violet / aurora-teal / star-field-black with embroidered-gold-sigils)
-- Ritual cloaks with high-popped collars (black-silk / matte-void-black / starlight-silver)
-- Ceremonial armor with starmetal trim (bronze-and-crystal / silver-and-aurora / obsidian-and-gold)
-- Astronaut flight-suit (repurposed as ritual wear — visor up or transparent)
-- Veil / face-wrap covering lower-face but eyes visible (deep-indigo / starfield-printed / gold-sigil)
-- Long-sleeve floor-length robe with slit-panels showing iridescent-circuitry underlayer
-- Bronze-and-crystal navigation-sextant harness with arm-gauntlets
-- Cold-white vestment with gold chest-emblem
-- Ancient-Egyptian / Mesoamerican / Silk-Road inspired ceremonial robes with sci-fi material-swap (glowfiber / starmetal / holo-silk)
-- Subtle cybernetic-accent ceremonial wear (glowing-sigil-vein implants along collarbone, tiny antenna-circlet)
-
-━━━ FORMAT ━━━
-"[Archetype] — [ethnicity] woman with [skin tone detail], [hair], [eyes], wearing [wardrobe]"
-
-Example (do NOT copy): "Starlight Priestess — Pan-African woman with warm-umber skin, silver-braided locs threaded with glowing-fiber-optic, glowing amber eyes, wearing deep-indigo ceremonial flight-robes trimmed in gold-embroidered sigils"
-
-━━━ MUST-HAVE FOR EVERY ENTRY ━━━
-- 18-28 words, strict
-- Four-dimension dedup (archetype + ethnicity + hair + eyes)
-- Sci-fi-ceremonial wardrobe (NO Earth-modern clothing)
-- Subtle-supernatural detail (glowing iris / constellation tattoo / plasma-vein hint)
-- SOLO character — no companion-figures, no partners
+━━━ MUST-HAVE ━━━
+- 20-35 words strict
+- Role FIRST, visual description SECOND, gear/wardrobe THIRD
+- SOLO character, no companions
+- Gender-neutral or mix freely — don't default to male or female
+- Species-neutral language for aliens ("scaled warrior" not "male Turian")
 
 ━━━ BANNED ━━━
-- NO modern Earth clothes (jeans / t-shirt / sneakers / hoodie)
-- NO real IP names (Ellen Ripley / Sarah Connor / Chani / Rey / Leia / Furiosa / Bene Gesserit by name)
-- NO weapons brandished (blaster / pistol / laser-rifle)
-- NO cyborg / cybernetic-dominant bodies (that's VenusBot territory — subtle-cyber-accents OK, full-robotic NO)
-- NO child / teen subjects — adult woman only
-- NO sexualized description (body-type / breasts / cleavage / curves) — focus on face + wardrobe + accessories
+- NO real IP character names (Boba Fett, Master Chief, Shepard, Ripley, etc.)
+- NO specific IP species names (Turian, Sangheili, Twi'lek, etc.) — describe the look instead
+- NO modern Earth clothes
+- NO children
+- NO sexualized descriptions
+- NO lame/passive characters — everyone should look like they have a STORY
+- NO mushrooms, jellyfish, coral, fungi, plants as characters — keep it COOL
+- NO "beautiful woman" / "handsome man" — describe the CHARACTER not their attractiveness
+
+━━━ EXAMPLES (do NOT copy — show the ENERGY) ━━━
+- "Bounty hunter — tall scaled reptilian with scarred snout and cybernetic targeting-eye, wearing battered Beskar-style plate armor with trophy bones wired to shoulder-guards"
+- "Astronaut — weathered human woman with close-cropped grey hair and radiation burns on her neck, wearing patched EVA suit with mission patches faded to ghosts"
+- "Smuggler — wiry four-armed alien with blue-grey skin and sharp mandibles, wearing a leather flight-jacket over cargo vest, twin pistols in cross-draw holsters"
+- "Space marine — massive armored figure in scarred power-armor with glowing eye-slits, chainsword mag-locked to back, kill-tallies scratched into shoulder-plate"
+- "Mechanic — stocky cyborg with one mechanical arm ending in integrated tools, oil-stained coveralls, welding goggles pushed up on forehead, wrench in human hand"
+- "Explorer — lanky insectoid with compound eyes and chitinous exoskeleton, wearing expedition pack bristling with survey instruments, star-charts rolled in a tube on the back"
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
