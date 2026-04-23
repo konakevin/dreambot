@@ -10,22 +10,24 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+// Distinct palette per vibe — deliberately NOT warm-and-cool variants.
+// Every vibe should push Flux to a DIFFERENT corner of the color spectrum.
 const VIBE_COLOR = {
-  cinematic: 'teal-and-orange cinematic toy-photography grade, deep shadows',
-  cozy: 'warm amber toy-room light, practical lamp-glow, inviting palette',
-  epic: 'dramatic backlit toy-studio god-rays, heroic warm highlights',
-  nostalgic: 'faded 80s-toy-catalog palette, copper-and-cream',
-  peaceful: 'soft diffuse toy-photography daylight, gentle pastels',
-  whimsical: 'buoyant saturated toy-color palette, warm cream',
-  ethereal: 'pearl-white toy-fog, opalescent toy-set mist',
-  arcane: 'deep violet toy-lighting, emerald toy-set glow',
-  ancient: 'weathered bronze toy-patina, faded-paint palette',
-  enchanted: 'soft magical toy-glow, sparkle-dust on set',
-  coquette: 'rose-pink toy-set blush, cream highlights (soft toy)',
-  voltage: 'electric-blue toy-studio arcs, neon accents',
-  nightshade: 'deep violet moonlit toy-set, silver toy-shadows',
-  shimmer: 'shimmering toy-gold particulate, iridescent toy-glint',
-  surreal: 'impossible toy-color pairings, dreamy toy-hallucinatory',
+  cinematic: 'high-contrast noir palette, hard black shadows, single white key light, no color cast',
+  cozy: 'overall-warm monochrome scene, all cream-and-honey tones, NO cool fill, flat even glow',
+  epic: 'hard white high-noon daylight, short sharp shadows, washed-clean saturation',
+  nostalgic: 'faded-Polaroid color grade, yellowed-paper tint, green-shifted shadows, no blue',
+  peaceful: 'overcast-soft flat daylight, pale-grey sky, zero shadow contrast, muted desaturation',
+  whimsical: 'primary-color saturation pop (red / yellow / blue on white set), flat catalog lighting, NO chiaroscuro',
+  ethereal: 'all-white high-key floating light, milk-fog atmosphere, everything dissolves into pale',
+  arcane: 'monochrome deep-violet ONLY palette, NO warm tones anywhere, purple-on-purple, crystal-glow rim',
+  ancient: 'sepia-monochrome faded-desert palette, bronze-and-dust, no blue channel, sun-bleached',
+  enchanted: 'bioluminescent cyan-green glow on all surfaces, NO warm counter-light, aquarium-feel',
+  coquette: 'pastel-pink monochrome — rose / bubblegum / cream ONLY, NO orange NO blue, soft-box flat',
+  voltage: 'electric-magenta-and-cyan neon-only palette, pitch-black negative space, NO warm highlights',
+  nightshade: 'deep-indigo nocturnal monochrome, silver moon-rim, ultraviolet accents, NO warm glow',
+  shimmer: 'iridescent pearl-holographic palette, shifting rainbow-oil-slick sheen, hard white key',
+  surreal: 'clashing impossible color pairings (e.g. lime-green sky + hot-pink ground + purple shadows), saturated-flat',
 };
 
 module.exports = {

@@ -7,7 +7,7 @@
  */
 
 const PROMPT_PREFIX =
-  'cinematic toy photography, dramatic movie-still composition, action-packed toy-world storytelling, handcrafted practical-set lighting, toy-ness elevated to cinematic art';
+  'toy photography in a handcrafted practical set, action-packed toy-world storytelling, toy-ness elevated as the subject';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
@@ -19,9 +19,9 @@ const CINEMATIC_STORY_BLOCK = `━━━ CINEMATIC STORY — EVERY RENDER IS A M
 
 Something IS HAPPENING. Action mid-charge, explosion frozen, mid-leap, spell-casting, ambush peak-moment. NEVER "toy-on-shelf" static. Narrative + tension + dynamic composition. The viewer should feel they stumbled into minute 47 of a stop-motion film.`;
 
-const DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK = `━━━ DRAMATIC LIGHTING MAKES THE MEDIUM EPIC ━━━
+const DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK = `━━━ LIGHTING ELEVATES THE MEDIUM ━━━
 
-Lighting is the multiplier. Practical spotlights + backlit rim-light + atmospheric smoke-from-offstage + warm-key-cool-fill cinematography. Plastic/clay/fabric is elevated by lighting into something that belongs in a museum exhibition. Deep shadows, warm highlights, atmospheric depth.`;
+Lighting is the multiplier that makes plastic / clay / fabric feel like it belongs in a museum. The exact palette comes from the LIGHTING and VIBE-COLOR sections below — do NOT default to teal-and-orange, do NOT add warm-key-cool-fill unless the pool pick explicitly says so. Respect the specified palette (monochrome / high-key / low-key / noon-flat / noir-hard / golden-hour / blue-hour / neon / sodium / emergency-red / underwater / overcast / catalog-soft / whatever the pool specifies) and build the scene around IT. Atmospheric depth via smoke / haze / dust / steam / rain / snow / pollen / backlight-only is welcome, but the color temperature must follow the pool's call, not a generic cinematic default.`;
 
 const PATH_MEDIUM_LOCK_BLOCK = `━━━ PATH MEDIUM LOCK — NEVER MIX ━━━
 
