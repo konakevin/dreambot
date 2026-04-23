@@ -41,6 +41,8 @@ module.exports = {
   BARBIE_SCENES: load('barbie_scenes'),
   TABLETOP_SCENES: load('tabletop_scenes'),
   ARMY_MEN_SCENES: load('army_men_scenes'),
+  GI_JOE_SCENES: load('gi_joe_scenes'),
+  ACTION_HERO_SCENES: load('action_hero_scenes'),
   LIGHTING: load('lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),

@@ -23,6 +23,8 @@ const pathBuilders = {
   'barbie-scene': require('./paths/barbie-scene'),
   'tabletop-minis': require('./paths/tabletop-minis'),
   'army-men': require('./paths/army-men'),
+  'gi-joe': require('./paths/gi-joe'),
+  'action-hero': require('./paths/action-hero'),
 };
 
 module.exports = {
@@ -44,6 +46,8 @@ module.exports = {
     'barbie-scene': 'barbie-figures',
     'tabletop-minis': 'tabletop-minis',
     'army-men': 'army-men',
+    'gi-joe': 'gi-joe-figures',
+    'action-hero': 'action-hero-figures',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -90,6 +94,12 @@ module.exports = {
     // Bot-only medium.
     'army-men':
       'classic Bucket-O-Soldiers / Toy-Story 2nd-battalion / green-army-men aesthetic — monochromatic solid-color molded-plastic toy soldiers (army-green / olive-drab / tan-desert / grey-Wehrmacht / sand-Marine variants), ~2-inch scale, fixed cast-in-plastic single-pose (crouch-and-fire / bayonet-charge / binocular-spot / bazooka-shoulder / radio-operator / grenade-throw / flamethrower / flag-bearer / prone-rifleman), visible vertical mold-seam down each figure, plastic-shine where light catches, oval connector-base attached underfoot, helmet / rifle / backpack / canteen molded as one piece with body, handcrafted WWII-diorama or oversized-real-world backyard-epic practical set, cotton-ball smoke / flash-bulb explosion-burst / dramatic spotlight lighting, multiple soldiers in frame — NOT articulated NOT action-figure NOT real soldier NOT CGI NOT illustration',
+    // 1980s GI-Joe-era articulated-commando action-figures. Bot-only medium.
+    'gi-joe-figures':
+      '1980s GI-Joe-era articulated-commando action-figure aesthetic — 3.75-inch hand-painted multicolor military action-figures with swivel-waist / ball-joint arms / rubber-band-waist construction, colorful commando wardrobe (camo fatigues / berets / goggles / bandannas / chest-rig / dogtags), named-code-style commando archetypes (masked-operative / mohawk-soldier / ninja-operative / gruff-sergeant / demolitions-expert / pilot-ace / jungle-specialist / arctic-specialist) paired against masked terror-organization faceless-troopers in silver-visor helmets with armored jumpsuits and chrome-faceplate / hooded-cloak / snake-motif commanders, fully-dressed battle-playset with iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser), bright Saturday-morning-cartoon-serial energy, cotton-ball smoke / flash-bulb explosion-burst / dramatic practical lighting — NOT classic single-pose army-men NOT real soldier NOT CGI NOT illustration',
+    // Vintage 80s/90s "epic" action-figures — He-Man + Star-Wars + cape-and-cowl DNA rolled up. Bot-only medium.
+    'action-hero-figures':
+      'vintage 80s/90s "epic" action-figure aesthetic — rolled-up bucket covering (a) 5-to-7-inch hyper-muscled sword-and-sorcery Masters-of-Universe-style hand-painted figures (barbarian-hero / sorceress / skeletal-villain / muscle-champion / beast-warrior with loincloth-fur-boots-cross-straps, magic-sword or battle-axe, crystal-staff), (b) 3.75-inch space-adventurer-era figures (hooded laser-sword monk / dark-helmet full-face-mask villain / scruffy vested smuggler / astromech-or-protocol droid / flight-suited rebel-pilot / T-visor-helmeted bounty-hunter / fur-covered alien-sidekick), (c) cape-and-cowl generic superhero figures (caped champion with geometric chest-emblem / dark hooded vigilante with utility-belt and grappling-gun / winged hero / cosmic hero with glowing ring or staff / powered-armor hero with glowing chest-reactor / amazon warrior with tiara-and-bracers / horned cape-villain with scepter), hand-painted bright primary-color plastic, swivel-waist articulation, fully-dressed handcrafted playset diorama, dramatic toy-commercial lighting (backlit rim-light / fog-haze / laser-bolt-glow / magic-crystal glow), Saturday-morning-epic-serial energy — NOT IP-named NOT real-person NOT CGI NOT illustration',
   },
 
   // Inverts old excludeVibes (dark/fierce/psychedelic/macabre).
@@ -124,6 +134,8 @@ module.exports = {
     'barbie-scene',
     'tabletop-minis',
     'army-men',
+    'gi-joe',
+    'action-hero',
   ],
 
   pathWeights: {
@@ -139,6 +151,8 @@ module.exports = {
     'barbie-scene': 1,
     'tabletop-minis': 1,
     'army-men': 1,
+    'gi-joe': 1,
+    'action-hero': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
