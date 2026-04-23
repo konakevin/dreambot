@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/action_figure_battles.json',
-  total: 50,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} ACTION FIGURE BATTLE descriptions for ToyBot's action-figure path — 80s/90s action-figure cinematic dioramas with toy-scale drama. Joint-articulation visible + explosion effects.
 
 Each entry: 15-30 words. One specific action-figure battle scene.

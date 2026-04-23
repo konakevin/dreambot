@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/vinyl_dioramas.json',
-  total: 50,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} VINYL DIORAMA descriptions for ToyBot's vinyl path — Funko-Pop-style vinyl figure dioramas. Oversized-head vinyl figures in themed dioramas. Kidrobot / designer-toy energy.
 
 Each entry: 15-30 words. One specific vinyl figure diorama.

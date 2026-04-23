@@ -17,7 +17,6 @@ const pathBuilders = {
   'action-figure': require('./paths/action-figure'),
   sackboy: require('./paths/sackboy'),
   'toy-landscape': require('./paths/toy-landscape'),
-  'burton-scene': require('./paths/burton-scene'),
   'calico-scene': require('./paths/calico-scene'),
   'shortcake-scene': require('./paths/shortcake-scene'),
   'barbie-scene': require('./paths/barbie-scene'),
@@ -40,7 +39,6 @@ module.exports = {
     'action-figure': 'action-figure',
     sackboy: 'stitched',
     'toy-landscape': ['lego', 'lego', 'lego', 'claymation', 'vinyl'],
-    'burton-scene': 'burton-puppet',
     'calico-scene': 'calico-figures',
     'shortcake-scene': 'shortcake-figures',
     'barbie-scene': 'barbie-figures',
@@ -70,10 +68,6 @@ module.exports = {
       '1/12-scale posable action-figure, visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, hard-plastic body with cloth-hybrid costume elements, hand-painted weathering and detail wash, interchangeable accessories at scale, GI-Joe / Hot-Toys / Mezco / NECA / Hasbro-Black-Series aesthetic, practical diorama lighting with shallow depth-of-field, NOT CGI NOT illustration',
     stitched:
       'LittleBigPlanet Sackboy-world aesthetic — burlap / hessian brown-sackcloth body with visible thread stitching along every seam, iconic zipper-down-chest, round plastic-button eyes, felt mouth-and-eyebrow details sewn on, cotton-fiberfill soft rounded body, optional yarn-or-felt-strip hair, LBP craft-world environment where everything looks hand-sewn (fabric hills, cardboard trees, button flowers, yarn grass, corduroy stone, sponge rocks), Media Molecule LittleBigPlanet game-world cinematography, warm tungsten practical lighting on fabric texture, NOT CGI NOT Raggedy-Ann NOT generic-plushie NOT illustration',
-    // Tim Burton / Corpse Bride / Laika stop-motion puppet aesthetic.
-    // Bot-only medium (not in public dream_mediums table).
-    'burton-puppet':
-      'Tim Burton / Corpse Bride / Coraline / Laika-Studios stop-motion puppet aesthetic — tall gaunt elongated figures with oversized heads and huge teardrop eyes, porcelain or pale-blue-tinged sculpted skin with faint painted blush, visible stitch-seams along the puppet body, armature-supported ball-joint articulation at shoulders / hips / elbows, wild dark silken hair or intricate sculpted updo, Victorian-gothic wardrobe (tattered lace / high-collar / morning-coat / top-hat / black-widow veil) rendered in real fabric and miniature tailoring, gothic-whimsy mood blending melancholy and dark romance, practical-miniature-set stop-motion cinematography with dramatic colored key-light and atmospheric haze, Laika-level puppet-craft detail — NOT CGI NOT illustration NOT 3D-render NOT anime NOT live-action',
     // Calico Critter / Sylvanian Families — cozy flocked-animal dollhouse figurines.
     // Bot-only medium.
     'calico-figures':
@@ -128,7 +122,6 @@ module.exports = {
     'action-figure',
     'sackboy',
     'toy-landscape',
-    'burton-scene',
     'calico-scene',
     'shortcake-scene',
     'barbie-scene',
@@ -145,7 +138,6 @@ module.exports = {
     'action-figure': 1,
     sackboy: 1,
     'toy-landscape': 2,
-    'burton-scene': 1,
     'calico-scene': 1,
     'shortcake-scene': 1,
     'barbie-scene': 1,

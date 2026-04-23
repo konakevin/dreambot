@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/lego_scenes.json',
-  total: 50,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} LEGO SCENE descriptions for ToyBot's lego-epic path — epic LEGO scenes with minifigure action. Brick-everything. Cinematic movie-still composition.
 
 Each entry: 15-30 words. One specific epic LEGO scene with action.

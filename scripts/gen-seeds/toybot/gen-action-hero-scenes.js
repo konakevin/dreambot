@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/action_hero_scenes.json',
-  total: 25,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} "epic 80s action figure" scene descriptions for ToyBot's action-hero path — a rolled-up bucket of vintage 80s/90s action-figure aesthetics covering (a) He-Man / Masters-of-the-Universe muscular-sword-and-sorcery heroes, (b) Star-Wars-era space-adventurer archetypes, (c) generic cape-and-cowl superhero figures, and (d) "epic" franchise-toy DNA more broadly. Non-IP — archetype only, never named characters. Toy-photography on handcrafted playsets with dramatic cinematic lighting.
 
 Each entry: 18-28 words. ONE specific scene with vintage-action-figure(s) mid-action in a handcrafted playset diorama.

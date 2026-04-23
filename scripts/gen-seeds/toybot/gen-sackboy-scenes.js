@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/sackboy_scenes.json',
-  total: 50,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} SACKBOY SCENE descriptions for ToyBot's sackboy path — LBP-style fabric-world with stitched-Sackboy-style characters. EVERYTHING in the world is fabric / felt / yarn / paper / cardboard. LittleBigPlanet energy.
 
 Each entry: 15-30 words. One specific stitched-fabric-world scene with Sackboy-style character.
