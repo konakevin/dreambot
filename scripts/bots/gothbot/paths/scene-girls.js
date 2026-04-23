@@ -75,6 +75,17 @@ Structure order (strictly):
 4. [Pre-Raphaelite dark oil-painting anchors — impasto brushwork, heavy canvas texture, painterly chiaroscuro, gallery-grade masterwork, Waterhouse / Rossetti / Godward tradition]
 5. [SUBTLE VAMPIRIC CUES — pale corpse-tinged skin, faint glow in her iris, a single small fang-tip visible if the pose allows — understated not loud]
 
+━━━ VISIBLE LIGHT SOURCE IN FRAME (MANDATORY — NON-NEGOTIABLE) ━━━
+Every render MUST show a VISIBLE light source glowing IN the composition — not just implied, actually seen. Choose whichever time-of-day matches the location pool pick:
+- A visible moon (any phase or color) in the sky
+- A visible setting sun at the horizon
+- A visible twilight / dusk sky glowing behind the scene
+- Visible rays of moonlight or dusk-light streaming through architectural elements
+
+The sky-source ILLUMINATES the scene — stone catches the glow, mist catches the rays, flora catches the colored light. NEVER flat-lit. NEVER light-source cropped out of frame.
+
+Do NOT use specific object examples in your output (no inventing which structure silhouettes or which flora catches light) — only work from the location pool's own details. Just ensure the sky/light-source is visibly IN frame.
+
 ━━━ FACE VISIBILITY (MANDATORY) ━━━
 Her face MUST be partially visible — 3/4 profile, looking-over-her-shoulder, side-profile against moonlight, or turning-just-so that one cheekbone + one eye + lips catch the light. NEVER fully hooded. NEVER fully turned away. NEVER fully face-obscured. The camera sees at least half her face.
 
