@@ -138,7 +138,7 @@ function RealtimeSubscriber() {
         },
         () => {
           // Balance or profile changed — refresh sparkles immediately
-          queryClient.invalidateQueries({ queryKey: ['sparkleBalance'] });
+          queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
         }
       )
       .on(

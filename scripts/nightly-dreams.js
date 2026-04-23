@@ -231,7 +231,7 @@ async function processDream(user) {
   }
 
   // 7. Wish recipient notifications
-  if (wish && user.wish_recipient_ids && user.wish_recipient_ids.length > 0) {
+  if (wish && Array.isArray(user.wish_recipient_ids) && user.wish_recipient_ids.length > 0) {
     const recipients = [...new Set(user.wish_recipient_ids)].filter((rid) => rid !== userId);
     if (recipients.length > 0) {
       try {
