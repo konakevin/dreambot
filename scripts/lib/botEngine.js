@@ -421,14 +421,19 @@ function resolveMedium({ bot, path }) {
 }
 
 /**
- * Resolve vibe for a render. Respects vibesByMedium override, else falls
- * back to bot.vibes. Weighted-random via repetition (array style).
+ * Resolve vibe for a render. Priority: vibesByPath > vibesByMedium > bot.vibes.
+ * Weighted-random via repetition (array style).
  */
-function resolveVibe({ bot, medium }) {
-  const perMedium = bot.vibesByMedium?.[medium];
-  const pool = (Array.isArray(perMedium) && perMedium.length > 0 ? perMedium : bot.vibes) || [];
+function resolveVibe({ bot, medium, path }) {
+  const perPath = path && bot.vibesByPath && bot.vibesByPath[path];
+  const perMedium = bot.vibesByMedium && bot.vibesByMedium[medium];
+  const pool =
+    (Array.isArray(perPath) && perPath.length > 0 ? perPath : null) ||
+    (Array.isArray(perMedium) && perMedium.length > 0 ? perMedium : null) ||
+    bot.vibes ||
+    [];
   if (pool.length === 0) {
-    throw new Error(`Bot ${bot.username} has no vibes configured (medium=${medium})`);
+    throw new Error(`Bot ${bot.username} has no vibes configured (path=${path}, medium=${medium})`);
   }
   return pool[Math.floor(Math.random() * pool.length)];
 }
@@ -556,7 +561,7 @@ async function runBot(opts) {
           return pathArg;
         })();
   const medium = resolveMedium({ bot, path: resolvedPath });
-  const vibeKey = vibeArg === 'random' ? resolveVibe({ bot, medium }) : vibeArg;
+  const vibeKey = vibeArg === 'random' ? resolveVibe({ bot, medium, path: resolvedPath }) : vibeArg;
 
   const runMeta = {
     botName: bot.username,

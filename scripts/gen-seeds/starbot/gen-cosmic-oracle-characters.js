@@ -4,8 +4,8 @@ try { fs.unlinkSync('scripts/bots/starbot/seeds/cosmic_oracle_characters.json');
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_oracle_characters.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COOL SCI-FI CHARACTER descriptions for StarBot's cosmic-oracle path — cinematic sci-fi oil paintings of badass, interesting characters in cosmic scenes.
 
 Think of the characters you'd see in the coolest scenes from: Star Wars cantina, Dune, Halo, Mass Effect, Guardians of the Galaxy, Alien/Prometheus, The Expanse, Cowboy Bebop, Firefly, Mandalorian, Blade Runner, Fifth Element, Farscape, Warhammer 40K, Stargate. The VIBE of those characters — NOT the specific named characters.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/alien_cities.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ALIEN CITY descriptions for StarBot's alien-city path — vast alien cities from above. Coruscant-style megacity, floating-platform city, dome-city on ice moon, ring-habitat, crystal-crater city.
 
 Each entry: 15-30 words. One specific alien city.

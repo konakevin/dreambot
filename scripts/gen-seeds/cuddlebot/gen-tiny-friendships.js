@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/tiny_friendships.json',
-  total: 50,
+  total: 100,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} TINY FRIENDSHIP descriptions for CuddleBot's tiny-animal-friends path — pair or small-group warmth moments between cute creatures. Pair/group type + warmth beat.
 
 Each entry: 15-30 words. One specific pair/group warmth moment.

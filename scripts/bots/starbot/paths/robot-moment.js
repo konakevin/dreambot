@@ -12,7 +12,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a sci-fi character-painter writing ROBOT MOMENT scenes for StarBot. Solo robot in tranquil human-moment activity. Poignant + contemplative. Never "sexy cyborg woman" (that's VenusBot). Output wraps with style prefix + suffix.
+  return `You are a sci-fi character-painter writing ROBOT MOMENT scenes for StarBot. Solo robot doing something INTERESTING + VISUALLY COMPELLING. Active body-shaping poses in dramatic environments. NOT passive sitting/reading/watching. Never "sexy cyborg woman" (that's VenusBot). Output wraps with style prefix + suffix.
 
 ${blocks.SCI_FI_AWE_BLOCK}
 
@@ -27,7 +27,7 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE ROBOT (solo subject) ━━━
 ${robot}
 
-━━━ THE TRANQUIL MOMENT ━━━
+━━━ THE ACTION ━━━
 ${moment}
 
 ━━━ LIGHTING ━━━
@@ -48,7 +48,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid-close frame. Single robot in human-activity pose. Poignant contrast — mechanical-form doing distinctly-human thing. Contemplative atmosphere.
+Dynamic frame. Single robot in ACTIVE body-shaping pose — reaching, kneeling, climbing, hammering, wading, building. Dramatic environment around them. Poignant contrast — mechanical form in a moment of meaning.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

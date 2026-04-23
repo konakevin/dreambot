@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/robot_types.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ROBOT TYPE descriptions for StarBot's robot-moment path — varied specific robot forms. Massive-mech / rusted / sleek-drone / tiny-companion / bio-mechanical / humanoid-android / industrial. NO cyborg-women (VenusBot territory).
 
 Each entry: 10-20 words. One specific robot type with visual details.

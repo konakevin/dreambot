@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for StarBot — sci-fi + astronomy atmospheric elements. Space-dust, nebula-wisps, ion-storm, cosmic-rays, plasma-glow, crystal-refraction, rain-on-metal.
 
 Each entry: 6-14 words. One specific sci-fi atmospheric element.

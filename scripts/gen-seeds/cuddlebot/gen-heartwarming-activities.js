@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/heartwarming_activities.json',
-  total: 50,
+  total: 100,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} HEARTWARMING ACTIVITY descriptions for CuddleBot's heartwarming-scene path — specific heart-melting activities a cute creature could be doing. Described as activity + beat, species-agnostic.
 
 Each entry: 10-20 words. One specific heart-melting activity beat.

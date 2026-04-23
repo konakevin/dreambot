@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/alien_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ALIEN LANDSCAPE descriptions for StarBot's alien-landscape path — surfaces of alien planets. Bioluminescent, crystal-spire, floating-coral, methane-lakes. Fictional but plausible alien geography.
 
 Each entry: 15-30 words. One specific alien planet surface.

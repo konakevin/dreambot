@@ -58,14 +58,14 @@ module.exports = {
     'cozy-arcane',
   ],
 
-  // Landscape is flagship (3x weight). Cozy-arcane, fantasy-scene, dragon-scene at 2x.
+  // dragon-scene + landscape co-flagship at 20% each (4/20). Other 4 paths evenly split the remaining 60% at 15% each (3/20).
   pathWeights: {
-    landscape: 3,
-    'fantasy-scene': 2,
-    'epic-moment': 1,
-    'dragon-scene': 2,
-    'magic-moment': 1,
-    'cozy-arcane': 2,
+    landscape: 4,
+    'fantasy-scene': 3,
+    'epic-moment': 3,
+    'dragon-scene': 4,
+    'magic-moment': 3,
+    'cozy-arcane': 3,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

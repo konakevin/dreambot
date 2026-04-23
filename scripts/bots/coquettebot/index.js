@@ -23,7 +23,16 @@ module.exports = {
   username: 'coquettebot',
   displayName: 'CoquetteBot',
 
-  mediums: ['fairytale', 'watercolor', 'canvas', 'pencil', 'photography'],
+  mediums: [
+    'fairytale',
+    'watercolor',
+    'canvas',
+    'pencil',
+    'animation',
+    'anime',
+    'illustration',
+    'storybook',
+  ],
 
   // Fairytale medium heavily favored coquette/enchanted/whimsical/shimmer
   // (preserves old pinVibes pattern for fairytale)
@@ -34,10 +43,13 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // Inverts old excludeVibes (dark/fierce/psychedelic/ancient/epic/macabre).
-  // Nightshade kept but should render soft-only.
+  // 9 allowed vibes. coquette is stacked 4× to hit ~31% bot-wide (4/13).
+  // Weighted-random via array repetition (matches engine's resolveVibe).
   vibes: [
-    'cinematic',
+    'coquette',
+    'coquette',
+    'coquette',
+    'coquette',
     'cozy',
     'nostalgic',
     'peaceful',
@@ -45,11 +57,7 @@ module.exports = {
     'ethereal',
     'arcane',
     'enchanted',
-    'coquette',
-    'voltage',
-    'nightshade',
     'shimmer',
-    'surreal',
   ],
 
   paths: [

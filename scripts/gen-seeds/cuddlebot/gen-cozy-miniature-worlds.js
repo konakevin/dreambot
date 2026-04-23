@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/cozy_miniature_worlds.json',
-  total: 50,
+  total: 100,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} COZY MINIATURE WORLD descriptions for CuddleBot's cozy-landscape path — tiny magical cozy worlds. Miniature-scale + storybook-warm + wholesome. No creatures needed (setting is hero).
 
 Each entry: 15-30 words. One specific tiny cozy world.

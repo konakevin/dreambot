@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/real_space_subjects.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} REAL SPACE SUBJECT descriptions for StarBot's real-space path — photoreal astrophotography. NASA-Hubble / JWST-style REAL space. Real nebulae, galaxies, planets, star-clusters. Named real astronomical objects OK. Distinct from fictional cosmic-vista.
 
 Each entry: 15-30 words. One specific real astronomical subject with wavelength-color treatment.

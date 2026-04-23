@@ -28,16 +28,28 @@ module.exports = {
 
   // 7 mediums — 4 original + 3 added (watercolor/pencil/illustration).
   // Plus 1 bot-only custom medium (star-oil-cosmos) locked to cosmic-oracle.
-  mediums: ['photography', 'vaporwave', 'canvas', 'render', 'watercolor', 'pencil', 'illustration'],
+  mediums: ['photography', 'canvas', 'render', 'watercolor', 'pencil', 'illustration'],
 
   // cosmic-oracle path locks to the custom bot-only star-oil-cosmos medium
   mediumByPath: {
     'cosmic-oracle': 'star-oil-cosmos',
   },
 
-  // cosmic-oracle path locks to flux-dev (best painterly model)
+  // cozy-sci-fi-interior only gets warm/intimate vibes
+  vibesByPath: {
+    'cozy-sci-fi-interior': ['nostalgic', 'ethereal', 'enchanted', 'shimmer', 'dark', 'voltage', 'arcane', 'surreal', 'cinematic'],
+  },
+
+  // all paths use flux-dev / flux-1.1-pro 50/50 rotation
   modelByPath: {
-    'cosmic-oracle': 'black-forest-labs/flux-dev',
+    'cosmic-vista': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'space-opera': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'sci-fi-interior': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cozy-sci-fi-interior': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'alien-city': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'robot-moment': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'real-space': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cosmic-oracle': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
   },
 
   // Per-medium prompt prefix/suffix overrides. The star-oil-cosmos medium
@@ -88,23 +100,18 @@ module.exports = {
     'epic',
     'nostalgic',
     'psychedelic',
-    'peaceful',
     'ethereal',
     'arcane',
     'ancient',
     'enchanted',
-    'fierce',
-    'coquette',
     'voltage',
-    'nightshade',
-    'macabre',
     'shimmer',
     'surreal',
   ],
 
   paths: [
     'cosmic-vista',
-    'alien-landscape',
+    // 'alien-landscape', — deactivated: cosmic-oracle covers this territory better
     'space-opera',
     'sci-fi-interior',
     'cozy-sci-fi-interior',
@@ -116,7 +123,6 @@ module.exports = {
 
   pathWeights: {
     'cosmic-vista': 2,
-    'alien-landscape': 2,
     'space-opera': 1,
     'sci-fi-interior': 1,
     'cozy-sci-fi-interior': 1,

@@ -4,34 +4,24 @@ generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/scene_palettes.json',
   total: 50,
   batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for CuddleBot — warm cozy storybook palettes. Always wholesome + soft + cute. Sanrio-pastel + storybook-warm + cozy-autumn.
+  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for CuddleBot. Each palette is 10-20 words naming 3-5 color words + a one-beat atmospheric tone. Previous pool was 90% yellow-orange tinted (peach/amber/honey/cream) — invent fresh, diverse palettes across the full cozy-wholesome spectrum.
 
-Each entry: 10-20 words. One specific warm-cozy palette with 3-5 color words.
+━━━ HARD DIVERSITY CAPS (enforced) ━━━
+Across the full pool of 50:
+- Max 15 palettes lean warm (amber / honey / peach / cream / orange / rust / gold)
+- Min 8 palettes lean cool (blue / aqua / mint / periwinkle / silver / frost)
+- Min 5 palettes lean green (sage / moss / eucalyptus / forest / olive)
+- Min 5 palettes lean pink-beyond-peach (rose / blush / sakura / coral / berry)
+- Min 5 palettes lean purple/lavender (lilac / wisteria / heather / violet)
+- Min 5 palettes in unexpected-cozy territory (dusty teal, moody plum-pastel, sage-pewter, stormy-soft, neutral-dove)
 
-━━━ CATEGORIES ━━━
-- Warm pastels (peach + cream + soft pink + mint + buttercream)
-- Cozy autumn (rust + honey + pumpkin + cream + warm brown)
-- Dreamy pinks (blush + cotton-candy + rose + peach + cream)
-- Sanrio-pastels (mint + pastel-yellow + baby-pink + lavender + cream)
-- Storybook-warm (amber + honey + cream + warm-beige + soft-brown)
-- Marshmallow palette (cream + baby-pink + white + pale-cream)
-- Cloud-pastel (baby-blue + lavender + peach + pearl-white)
-- Honey-cozy (warm-honey + cream + amber + butter + caramel)
-- Tea-party pastel (mint + rose + lemon + cream)
-- Lavender-evening (lavender + dusty-rose + peach + cream-blue)
-- Strawberry-fields (strawberry-red + cream + pink + soft-green)
-- Mushroom-forest cute (mint-green + rust + honey + peach + cream)
-- Bakery-warm (cream + caramel + powder-sugar-white + honey + raspberry-pink)
-- Ice-cream-stand (mint + strawberry + vanilla + chocolate-cream + pastel-pink)
-- Nursery-gentle (cream + baby-blue + butter-yellow + gentle-pink)
-- Holiday-cozy (pine-green + cream + gold + soft-red-muted)
-- Spring-bloom-soft (pale-sakura + mint + honey + cream)
-- Tropical-gentle (coral + mint + cream + butter + soft-teal)
+━━━ EVERY ENTRY MUST BE UNIQUE ━━━
+No two palettes share the same dominant color family. Do not repeat adjective combinations. If a palette is in the "warm" bucket, its 3-5 colors must differ from every other warm palette's colors. Treat each as a genuinely new palette no one else has invented.
 
 ━━━ RULES ━━━
-- All palettes wholesome + soft + warm
+- Always wholesome + cozy-compatible (never sharp-contrast, never dark-dominant)
 - 3-5 specific color words per entry
-- Never sharp-contrast or dark-dominant
+- Treat the caps as non-negotiable distribution rules
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
