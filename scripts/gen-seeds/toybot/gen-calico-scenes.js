@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/calico_scenes.json',
-  total: 25,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} CALICO-CRITTER / SYLVANIAN-FAMILIES scene descriptions for ToyBot's calico-scene path — cozy daily-life miniature dioramas featuring flocked small-animal figurines (rabbits, bears, foxes, cats, squirrels, mice, raccoons, hedgehogs, sheep) in tiny hand-built dollhouse-scale sets. Every scene is cozy, wholesome, meticulously detailed.
 
 Each entry: 18-28 words. ONE specific cozy vignette with flocked-animal figurines mid-activity in a fully-appointed miniature set.

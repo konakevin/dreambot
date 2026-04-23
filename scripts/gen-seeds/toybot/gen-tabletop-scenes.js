@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/tabletop_scenes.json',
-  total: 25,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} TABLETOP-MINIATURE scene descriptions for ToyBot's tabletop-minis path — Warhammer / Dungeons-&-Dragons / Reaper / WizKids painted pewter-or-plastic miniatures arranged on handcrafted terrain dioramas. 28mm–32mm scale figures with visible brush-strokes, drybrushed highlights, base-flocking, mounted on round bases, photographed like a pro-painter's display cabinet lit for a Games-Workshop catalog.
 
 Each entry: 18-28 words. ONE specific cinematic tabletop-miniature battle or narrative scene with painted figures mid-action on a built-up terrain piece.

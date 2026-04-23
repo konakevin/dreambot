@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/burton_scenes.json',
-  total: 25,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} TIM BURTON / CORPSE BRIDE stop-motion scene descriptions for ToyBot's burton-scene path — cinematic scenes populated by tall gaunt elongated Laika-puppet characters (Corpse Bride / Coraline / Frankenweenie / Nightmare-Before-Christmas puppet DNA). Every scene is a handcrafted miniature stop-motion set photographed on a practical soundstage with dramatic lighting.
 
 Each entry: 18-28 words. ONE specific cinematic Burton-puppet scene with a character (or characters) mid-action in a gothic-whimsy miniature set.

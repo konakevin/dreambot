@@ -40,6 +40,7 @@ module.exports = {
   SHORTCAKE_SCENES: load('shortcake_scenes'),
   BARBIE_SCENES: load('barbie_scenes'),
   TABLETOP_SCENES: load('tabletop_scenes'),
+  ARMY_MEN_SCENES: load('army_men_scenes'),
   LIGHTING: load('lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),

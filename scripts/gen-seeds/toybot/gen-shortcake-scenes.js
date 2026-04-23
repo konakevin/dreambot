@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/shortcake_scenes.json',
-  total: 25,
+  total: 200,
   batch: 10,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} STRAWBERRY-SHORTCAKE-era-toy scene descriptions for ToyBot's shortcake-scene path — 1980s OG girl-targeted scented-doll figurines (Strawberry Shortcake / Rainbow Brite / My-Little-Pony / Popples / Rose-Petal-Place / Lady-Lovely-Locks DNA). Soft-plastic dolls with oversized heads, rosy-cheeks, pastel-yarn hair, dessert/flower-themed wardrobe, photographed in hand-built dessert-fantasy playsets.
 
 Each entry: 18-28 words. ONE specific 80s-toy-catalog scene with scented-doll figurines mid-activity in a pastel dessert-or-flower-themed miniature world.

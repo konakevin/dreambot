@@ -22,6 +22,7 @@ const pathBuilders = {
   'shortcake-scene': require('./paths/shortcake-scene'),
   'barbie-scene': require('./paths/barbie-scene'),
   'tabletop-minis': require('./paths/tabletop-minis'),
+  'army-men': require('./paths/army-men'),
 };
 
 module.exports = {
@@ -42,6 +43,7 @@ module.exports = {
     'shortcake-scene': 'shortcake-figures',
     'barbie-scene': 'barbie-figures',
     'tabletop-minis': 'tabletop-minis',
+    'army-men': 'army-men',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -84,6 +86,10 @@ module.exports = {
     // Bot-only medium.
     'tabletop-minis':
       'Warhammer / Dungeons-&-Dragons / Reaper / WizKids tabletop-miniature aesthetic — 28mm-to-32mm scale painted pewter-or-plastic fantasy figures with visible brush-strokes, wash-shaded recesses, drybrushed highlights on raised edges, metallic-armor paint, freehand shield-crest detail, mounted on round flocked bases with static-grass / cork-rock / sand / snow texture, handcrafted terrain dioramas with sculpted-foam rocks / lichen-trees / plaster ruins / resin-water, Games-Workshop / Reaper / WizKids collector-grade pro-painter display DNA, dramatic cabinet-LED spotlight with warm-key rim-light, shallow-depth display-cabinet photography — NOT CGI NOT illustration NOT real fantasy scene NOT anime',
+    // Classic green-army-men single-pose molded-plastic toy soldiers.
+    // Bot-only medium.
+    'army-men':
+      'classic Bucket-O-Soldiers / Toy-Story 2nd-battalion / green-army-men aesthetic — monochromatic solid-color molded-plastic toy soldiers (army-green / olive-drab / tan-desert / grey-Wehrmacht / sand-Marine variants), ~2-inch scale, fixed cast-in-plastic single-pose (crouch-and-fire / bayonet-charge / binocular-spot / bazooka-shoulder / radio-operator / grenade-throw / flamethrower / flag-bearer / prone-rifleman), visible vertical mold-seam down each figure, plastic-shine where light catches, oval connector-base attached underfoot, helmet / rifle / backpack / canteen molded as one piece with body, handcrafted WWII-diorama or oversized-real-world backyard-epic practical set, cotton-ball smoke / flash-bulb explosion-burst / dramatic spotlight lighting, multiple soldiers in frame — NOT articulated NOT action-figure NOT real soldier NOT CGI NOT illustration',
   },
 
   // Inverts old excludeVibes (dark/fierce/psychedelic/macabre).
@@ -117,6 +123,7 @@ module.exports = {
     'shortcake-scene',
     'barbie-scene',
     'tabletop-minis',
+    'army-men',
   ],
 
   pathWeights: {
@@ -131,6 +138,7 @@ module.exports = {
     'shortcake-scene': 1,
     'barbie-scene': 1,
     'tabletop-minis': 1,
+    'army-men': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
