@@ -102,11 +102,12 @@ module.exports = {
     'psychedelic',
     'ethereal',
     'arcane',
-    'ancient',
     'enchanted',
     'voltage',
     'shimmer',
     'surreal',
+    'peaceful',
+    'minimal',
   ],
 
   paths: [
