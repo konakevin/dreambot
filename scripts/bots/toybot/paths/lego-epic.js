@@ -2,7 +2,10 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.LEGO_SCENES, 'lego_scene');
+  const useLandscape = Math.random() < 0.3;
+  const scene = useLandscape
+    ? picker.pickWithRecency(pools.LEGO_LANDSCAPES, 'lego_landscape')
+    : picker.pickWithRecency(pools.LEGO_SCENES, 'lego_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
