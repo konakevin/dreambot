@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/sea_colors.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SEA COLOR descriptions for BeachBot — specific sea-color states.
 
 Each entry: 6-14 words. One specific sea-color state.

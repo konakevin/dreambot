@@ -7,7 +7,7 @@
  */
 
 const PROMPT_PREFIX =
-  'National Geographic Travel photograph dialed to 10×, stunning beach beauty, crystal-turquoise water, dramatic saturated sky, impossibly gorgeous coastal scene, wallpaper-worthy tropical paradise';
+  'stunning beach beauty, crystal-turquoise water, dramatic saturated sky, impossibly gorgeous coastal scene, wallpaper-worthy tropical paradise';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 

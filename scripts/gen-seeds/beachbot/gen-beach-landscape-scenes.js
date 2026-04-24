@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/beach_landscape_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BEACH LANDSCAPE SCENE descriptions for BeachBot's beach-landscape path — wide POSTCARD of any beach + its full context + any weather/time. Multiple-element composition.
 
 Each entry: 15-30 words. One specific wide beach-composition scene.

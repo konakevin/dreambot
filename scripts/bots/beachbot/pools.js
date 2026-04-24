@@ -32,5 +32,12 @@ module.exports = {
   SEA_COLORS: load('sea_colors'),
   COASTAL_WEATHER_MOMENTS: load('coastal_weather_moments'),
   ATMOSPHERES: load('atmospheres'),
+  HAWAII_COASTAL_SPACES: load('hawaii_coastal_spaces'),
+  REEF_PARADISE_SCENES: load('reef_paradise_scenes'),
+  BIG_WAVE_SCENES: load('big_wave_scenes'),
+  SEASHELL_SCENES: load('seashell_scenes'),
+  BEACH_NIGHT_SCENES: load('beach_night_scenes'),
+  EPIC_SUNSET_SCENES: load('epic_sunset_scenes'),
+  TROPICAL_FLOWER_ARRANGEMENTS: load('tropical_flower_arrangements'),
   VIBE_COLOR,
 };

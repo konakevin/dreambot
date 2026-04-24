@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/beach_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BEACH MOMENT descriptions for BeachBot's beach-moment path — atmospheric beach-object moments. Beach-objects tell the story. NO PEOPLE.
 
 Each entry: 15-30 words. One specific object-centered beach moment.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/wave_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} WAVE MOMENT descriptions for BeachBot's wave path — Clark-Little-inspired wave photography. Unusual perspectives + rich backdrops.
 
 Each entry: 15-30 words. One specific wave perspective/moment.

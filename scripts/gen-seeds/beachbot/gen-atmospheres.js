@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BEACH ATMOSPHERIC DETAIL descriptions for BeachBot.
 
 Each entry: 6-14 words. One specific beach atmospheric element.

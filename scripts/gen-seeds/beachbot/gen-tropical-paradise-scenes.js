@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/tropical_paradise_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TROPICAL PARADISE SCENE descriptions for BeachBot's tropical-paradise path — dreamy destinations. Palm trees + turquoise water + white/pink sand.
 
 Each entry: 15-30 words. One specific tropical-paradise destination/scene.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/cozy_coast_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COZY COAST SCENE descriptions for BeachBot's cozy-beach path — coastal villages / huts / lighthouses / cottages. Warm coastal pockets.
 
 Each entry: 15-30 words. One specific cozy coastal scene.

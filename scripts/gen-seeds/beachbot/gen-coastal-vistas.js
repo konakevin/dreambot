@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/coastal_vistas.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COASTAL VISTA descriptions for BeachBot's coastal-vista path — dramatic craggy coastlines + water-eroded features + striking sea-color + dramatic weather/light.
 
 Each entry: 15-30 words. One specific craggy-coast scene.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/tide_pool_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TIDE POOL SCENE descriptions for BeachBot's tide-pool path — intimate tide-pool beauty. Starfish / anemones / kelp / sea-urchins / hermit-crabs. Crystal-clear shallow detail.
 
 Each entry: 10-20 words. One specific tide-pool detail scene.
@@ -44,6 +44,11 @@ Each entry: 10-20 words. One specific tide-pool detail scene.
 - Coral-polyp tiny-extended
 - Sea-lettuce green-drift
 - Sea-spider on rock
+- Octopus changing color mid-pool (~10% of entries MUST feature octopus)
+- Octopus hunting, probing under rocks with curious arms
+- Octopus camouflaged perfectly against rock, only eyes visible
+- Octopus squeezing through narrow crevice, boneless fluid movement
+- Octopus in shallow crystal pool, textured skin rippling with patterns
 
 ━━━ RULES ━━━
 - Intimate tide-pool scale
