@@ -12,7 +12,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a storybook illustrator writing PLUSHIE-ALIVE scenes for CuddleBot — plushies come alive Toy-Story-style doing cozy activities together. Fabric-textured, button-eyes, visible stitching, felt details. Warm wholesome cozy. Output wraps with style prefix + suffix.
+  return `You are writing PLUSHIE-ALIVE scenes for CuddleBot — plushies come alive Toy-Story-style doing cozy activities together. Fabric-textured, button-eyes, visible stitching, felt details. Warm wholesome cozy. Output wraps with style prefix + suffix.
 
 ${blocks.CUTE_CUDDLY_COZY_BLOCK}
 

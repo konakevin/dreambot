@@ -14,7 +14,12 @@ const pathBuilders = {
   'cozy-landscape': require('./paths/cozy-landscape'),
   'plushie-life': require('./paths/plushie-life'),
   'creature-portrait': require('./paths/creature-portrait'),
-  'tiny-animal-friends': require('./paths/tiny-animal-friends'),
+  'sleepy-naptime': require('./paths/sleepy-naptime'),
+  'rainy-day-cozy': require('./paths/rainy-day-cozy'),
+  'miniature-feast': require('./paths/miniature-feast'),
+  'bath-time': require('./paths/bath-time'),
+  'outdoor-adventure': require('./paths/outdoor-adventure'),
+  'storybook-page': require('./paths/storybook-page'),
 };
 
 module.exports = {
@@ -58,17 +63,29 @@ module.exports = {
     'cozy-landscape',
     'plushie-life',
     'creature-portrait',
-    'tiny-animal-friends',
+    'sleepy-naptime',
+    'rainy-day-cozy',
+    'miniature-feast',
+    'bath-time',
+    'outdoor-adventure',
+    'storybook-page',
   ],
 
-  // Bread-and-butter: heartwarming-scene + creature-portrait.
-  // Cozy-landscape + tiny-friends balance.
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+
+  // storybook-page 50%, cozy-landscape 15%, outdoor-adventure 10%, rest ~25%
   pathWeights: {
-    'heartwarming-scene': 2,
-    'cozy-landscape': 1,
+    'heartwarming-scene': 1,
+    'cozy-landscape': 3,
     'plushie-life': 1,
-    'creature-portrait': 2,
-    'tiny-animal-friends': 1,
+    'creature-portrait': 1,
+    'sleepy-naptime': 1,
+    'rainy-day-cozy': 1,
+    'miniature-feast': 1,
+    'bath-time': 1,
+    'outdoor-adventure': 2,
+    'storybook-page': 12,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

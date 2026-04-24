@@ -12,7 +12,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a storybook illustrator writing COZY MINIATURE WORLD scenes for CuddleBot — tiny magical cozy worlds. The setting IS the hero; no creatures are needed. Output wraps with style prefix + suffix.
+  return `You are writing COZY WORLD scenes for CuddleBot — magical cozy places both indoors and outdoors. Miniature villages, nature panoramas, campfire clearings, beach coves, meadow picnics, forest paths. The setting IS the hero; no creatures are needed. Output wraps with style prefix + suffix.
 
 ${blocks.CUTE_CUDDLY_COZY_BLOCK}
 
@@ -27,7 +27,7 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE COZY MINIATURE WORLD ━━━
 ${world}
 
-━━━ LIGHTING (warm cozy storybook only) ━━━
+━━━ LIGHTING (warm cozy only) ━━━
 ${lighting}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
@@ -45,7 +45,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Wide or mid-wide tiny-world view. Stacked cozy details — tiny windows glowing warm, chimneys smoking, lanterns glowing, tiny bridges, moss carpet, wildflowers. Storybook-picture-book page quality. Viewer wants to miniaturize and live there.
+Wide or mid-wide view. Two modes: MINIATURE-SCALE (tilt-shift fairy village, acorn-cap rooftops, thimble chimneys) OR OUTDOOR (cozy campfire clearing, sunset beach cove, flower meadow with winding path, village rooftops at golden hour). Both modes: stacked cozy details, warm inviting lighting, the viewer wants to step into the scene and stay forever. Artbook-quality rendering.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

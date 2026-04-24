@@ -14,7 +14,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a storybook illustrator writing CUTE CREATURE PORTRAITS for CuddleBot — tight close-up of one impossibly cute creature. Storybook-illustration quality. The viewer can't look away from the cuteness. Output wraps with style prefix + suffix.
+  return `You are writing CUTE CREATURE PORTRAITS for CuddleBot — tight close-up of one impossibly cute creature. The viewer can't look away from the cuteness. Output wraps with style prefix + suffix.
 
 ${blocks.CUTE_CUDDLY_COZY_BLOCK}
 
@@ -53,7 +53,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Tight or extreme-close portrait. Creature fills frame. Big dewy eyes, blush cheeks, impossible fluff. Every cute feature stacked. Soft dreamy background — not distracting. Pixar-Sanrio-Totoro polish.
+Tight or extreme-close portrait. Creature fills frame. Push IMPOSSIBLY ROUND AND SOFT — oversized dewy eyes (glistening, reflective), tiny stubby paws, chunky marshmallow proportions, exaggerated head-to-body ratio. Blush cheeks mandatory. Soft dreamy background — not distracting. Maximum cute saturation.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

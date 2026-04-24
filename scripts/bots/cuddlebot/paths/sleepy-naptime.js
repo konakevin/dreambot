@@ -1,17 +1,19 @@
 /**
- * CuddleBot tiny-animal-friends path — small creature pair/group warmth.
- * Bunny hugging flower, dragons napping on cloud, mouse family dinner.
+ * CuddleBot sleepy-naptime path — creatures dozing in impossibly cozy spots.
+ * Hammocks between mushrooms, curled in teacups, napping on clouds,
+ * snuggled in flower petals. Peak cute = sleeping animals.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const friendship = picker.pickWithRecency(pools.TINY_FRIENDSHIPS, 'tiny_friendship');
+  const creature = picker.pickWithRecency(pools.CUTE_CREATURES, 'creature');
+  const napSpot = picker.pickWithRecency(pools.SLEEPY_NAP_SPOTS, 'nap_spot');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are writing TINY FRIENDSHIP scenes for CuddleBot — pair or small-group warmth moments between cute creatures. The viewer feels their heart squeeze with tenderness. Output wraps with style prefix + suffix.
+  return `You are writing SLEEPY NAPTIME scenes for CuddleBot — one adorable creature dozing in an impossibly cozy spot. The viewer melts. Peaceful breathing, tiny curled paws, dream bubbles optional. Output wraps with style prefix + suffix.
 
 ${blocks.CUTE_CUDDLY_COZY_BLOCK}
 
@@ -23,10 +25,13 @@ ${blocks.NO_PEOPLE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ THE TINY FRIENDSHIP MOMENT ━━━
-${friendship}
+━━━ THE CUTE CREATURE ━━━
+${creature}
 
-━━━ LIGHTING (warm soft only) ━━━
+━━━ THE COZY NAP SPOT ━━━
+${napSpot}
+
+━━━ LIGHTING (warm drowsy only) ━━━
 ${lighting}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
@@ -44,7 +49,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid or mid-close frame. 2-4 creatures max. Warmth beat is central — nuzzling, sharing, hugging, napping together. Storybook soft lighting. Emotional beat unmistakable.
+Mid-close frame with creature curled up, eyes closed or half-lidded, in its cozy nap spot. Sleepy details stacked — tiny blankets, dream bubbles, gentle breathing motion implied, warm drowsy glow. Soft focus background. The viewer whispers "shhh don't wake it."
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };
