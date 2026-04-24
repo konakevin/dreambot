@@ -44,6 +44,13 @@ module.exports = {
   GARDEN_WALKS: load('garden_walks'),
   COSMIC_SCENES: load('cosmic_scenes'),
   DREAMSCAPE_CONTEXTS: load('dreamscape_contexts'),
+  CONSERVATORY_SPACES: load('conservatory_spaces'),
+  FLOWER_ARRANGEMENTS: load('flower_arrangements'),
+  TROPICAL_PARADISE_SPACES: load('tropical_paradise_spaces'),
+  TROPICAL_FLOWER_ARRANGEMENTS: load('tropical_flower_arrangements'),
+  CITY_FLOWER_SPACES: load('city_flower_spaces'),
+  RECLAIM_SPACES: load('reclaim_spaces'),
+  SPACE_BLOOM_SPACES: load('space_bloom_spaces'),
   // Inline
   VIBE_COLOR,
 };

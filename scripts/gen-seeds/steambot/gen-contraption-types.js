@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/contraption_types.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} STEAMPUNK CONTRAPTION descriptions for SteamBot's contraption path — fantastical steampunk devices. WIDE RANGE — NOT clock-dominant. Vary widely.
 
 Each entry: 15-30 words. One specific steampunk contraption with rich detail.

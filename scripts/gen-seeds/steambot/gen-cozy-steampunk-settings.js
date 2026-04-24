@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/cozy_steampunk_settings.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COZY STEAMPUNK SETTING descriptions for SteamBot's cozy-steampunk path — warm cozy steampunk pockets.
 
 Each entry: 15-30 words. One specific cozy steampunk setting.

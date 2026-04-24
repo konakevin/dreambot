@@ -9,7 +9,7 @@
 // Flux prompt wrapping — applied verbatim every render. Tuned for
 // photorealistic-leaning floral beauty with painterly quality where applicable.
 const PROMPT_PREFIX =
-  'breathtaking floral beauty, impossibly lush, hyper-detailed botanical photography meets fine-art painting, dramatic atmospheric lighting, magazine-cover-worthy composition, every petal and dewdrop in focus, saturated with color and life';
+  'breathtaking floral beauty, impossibly lush, dramatic atmospheric lighting, magazine-cover-worthy composition, every petal and dewdrop in focus, saturated with color and life';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality, the kind of image you would hang on a wall';
 

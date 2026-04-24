@@ -17,6 +17,11 @@ const pathBuilders = {
   'garden-walk': require('./paths/garden-walk'),
   cosmic: require('./paths/cosmic'),
   dreamscape: require('./paths/dreamscape'),
+  conservatory: require('./paths/conservatory'),
+  'tropical-paradise': require('./paths/tropical-paradise'),
+  'city-flowers': require('./paths/city-flowers'),
+  reclaim: require('./paths/reclaim'),
+  'space-bloom': require('./paths/space-bloom'),
 };
 
 module.exports = {
@@ -24,7 +29,26 @@ module.exports = {
   displayName: 'BloomBot',
 
   // Multi-medium with photography weighted 3x (matches old config)
-  mediums: ['photography', 'photography', 'photography', 'canvas', 'watercolor', 'pencil'],
+  mediums: ['photography', 'canvas', 'watercolor', 'pencil', 'illustration', 'render', 'animation', 'anime', 'storybook', 'fairytale'],
+
+  // conservatory path locks to custom bot-only bloom-conservatory medium
+  mediumByPath: {
+    conservatory: 'bloom-conservatory',
+  },
+
+  promptPrefixByMedium: {
+    'bloom-conservatory':
+      'botanical conservatory interior, glass-and-iron greenhouse architecture, impossibly lush floral density',
+  },
+  promptSuffixByMedium: {
+    'bloom-conservatory':
+      'no text, no words, no watermarks, hyper detailed, masterpiece quality',
+  },
+
+  mediumStyles: {
+    'bloom-conservatory':
+      'botanical conservatory — glass panes, iron framework, arched architecture, flowers overflowing through structure',
+  },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -49,16 +73,35 @@ module.exports = {
     'surreal',
   ],
 
-  paths: ['landscape', 'closeup', 'cozy', 'garden-walk', 'cosmic', 'dreamscape'],
+  paths: ['landscape', 'closeup', 'cozy', 'garden-walk', 'cosmic', 'dreamscape', 'conservatory', 'tropical-paradise', 'city-flowers', 'reclaim', 'space-bloom'],
 
-  // Hero paths slightly weighted — landscape and closeup are the bread-and-butter
+  // 50/50 flux-dev / flux-1.1-pro rotation on all paths
+  modelByPath: {
+    landscape: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    closeup: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    cozy: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'garden-walk': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    cosmic: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    dreamscape: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    conservatory: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'tropical-paradise': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'city-flowers': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    reclaim: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'space-bloom': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  },
+
   pathWeights: {
     landscape: 2,
-    closeup: 2,
+    closeup: 1,
     cozy: 1,
-    'garden-walk': 2,
-    cosmic: 1,
+    'garden-walk': 1,
+    cosmic: 2,
     dreamscape: 1,
+    conservatory: 2,
+    'tropical-paradise': 2,
+    'city-flowers': 1,
+    reclaim: 1,
+    'space-bloom': 2,
   },
 
   // Scene-centric bot — sharedDNA is minimal (just palette + color)

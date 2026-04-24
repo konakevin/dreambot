@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_characters.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} STEAMPUNK CHARACTER descriptions for SteamBot's steampunk-scene path — steampunk archetype characters by role only. BioShock/Mortal-Engines/Howl/FFIX energy.
 
 Each entry: 10-20 words. One specific steampunk archetype with distinguishing visual details.

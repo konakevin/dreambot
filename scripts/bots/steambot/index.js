@@ -16,13 +16,28 @@ const pathBuilders = {
   'airship-skies': require('./paths/airship-skies'),
   'cozy-steampunk': require('./paths/cozy-steampunk'),
   'sexy-steampunk-woman': require('./paths/sexy-steampunk-woman'),
+  'steampunk-hybrid': require('./paths/steampunk-hybrid'),
+  'steampunk-spectacle': require('./paths/steampunk-spectacle'),
+  'steam-transport': require('./paths/steam-transport'),
 };
 
 module.exports = {
   username: 'steambot',
   displayName: 'SteamBot',
 
-  mediums: ['canvas', 'photography', 'illustration'],
+  mediums: ['canvas', 'illustration', 'render', 'watercolor'],
+
+  modelByPath: {
+    'steampunk-scene': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'steampunk-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    contraption: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'airship-skies': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cozy-steampunk': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'sexy-steampunk-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'steampunk-hybrid': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'steampunk-spectacle': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'steam-transport': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -55,6 +70,9 @@ module.exports = {
     'airship-skies',
     'cozy-steampunk',
     'sexy-steampunk-woman',
+    'steampunk-hybrid',
+    'steampunk-spectacle',
+    'steam-transport',
   ],
 
   pathWeights: {
@@ -64,6 +82,9 @@ module.exports = {
     'airship-skies': 2,
     'cozy-steampunk': 2,
     'sexy-steampunk-woman': 2,
+    'steampunk-hybrid': 2,
+    'steampunk-spectacle': 1,
+    'steam-transport': 2,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

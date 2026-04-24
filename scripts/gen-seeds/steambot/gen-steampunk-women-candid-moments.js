@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_candid_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} STEAMPUNK WOMAN CANDID MOMENT descriptions for SteamBot's sexy-steampunk-woman path — really-fucking-sexy steampunk woman candid solo doing a specific steampunk action. Capable, dangerous-magnetic, unmistakably steampunk. Voyeuristic candid framing. SOLO.
 
 Each entry: 15-30 words. One specific steampunk-female + specific action + setting.

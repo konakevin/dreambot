@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/airship_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} AIRSHIP SCENE descriptions for SteamBot's airship-skies path — airships in dramatic sky scenes.
 
 Each entry: 15-30 words. One specific airship scene.

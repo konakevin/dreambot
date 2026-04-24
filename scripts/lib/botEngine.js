@@ -464,6 +464,17 @@ async function fetchVibeDirective(sb, vibeKey) {
   return data.directive || '';
 }
 
+async function fetchMediumFluxFragment(sb, mediumKey) {
+  const { data, error } = await sb
+    .from('dream_mediums')
+    .select('key, flux_fragment')
+    .eq('key', mediumKey)
+    .maybeSingle();
+  if (error) throw new Error(`dream_mediums lookup failed: ${error.message}`);
+  if (!data) return '';
+  return data.flux_fragment || '';
+}
+
 async function lookupBotUserId(sb, username) {
   const { data, error } = await sb
     .from('users')
@@ -580,9 +591,10 @@ async function runBot(opts) {
   let imageUrl = null;
 
   try {
-    // 1. Fetch vibe directive
+    // 1. Fetch vibe directive + medium flux fragment
     errorStage = 'vibe-lookup';
     const vibeDirective = await fetchVibeDirective(sb, vibeKey);
+    const mediumFluxFragment = await fetchMediumFluxFragment(sb, medium);
 
     // 2. Create picker (pre-loads recency window)
     errorStage = 'picker-init';
@@ -661,11 +673,13 @@ async function runBot(opts) {
       bot.promptSuffix || '';
     const prefix = rawPrefix ? `${rawPrefix}, ` : '';
     const suffix = rawSuffix ? `, ${rawSuffix}` : '';
-    // Optional per-medium style injection — lets each medium tag produce visually distinct output.
-    // Usage: bot.mediumStyles = { gothic: 'Ayami-Kojima dark-manga...', watercolor: '...' }
+    // Per-medium style injection — bot.mediumStyles overrides DB flux_fragment if set.
+    // Otherwise falls back to the DB's flux_fragment for this medium.
     const mediumStyle = bot.mediumStyles && bot.mediumStyles[medium]
       ? `${bot.mediumStyles[medium]}, `
-      : '';
+      : mediumFluxFragment
+        ? `${mediumFluxFragment}, `
+        : '';
     finalPrompt = `${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
 
     if (dryRun) {

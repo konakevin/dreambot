@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} STEAMPUNK ATMOSPHERIC DETAIL descriptions for SteamBot — steampunk atmospheric elements.
 
 Each entry: 6-14 words. One specific steampunk atmospheric element.

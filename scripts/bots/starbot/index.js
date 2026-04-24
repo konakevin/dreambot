@@ -123,11 +123,11 @@ module.exports = {
   ],
 
   pathWeights: {
-    'cosmic-vista': 2,
+    'cosmic-vista': 3,
     'space-opera': 1,
-    'sci-fi-interior': 1,
+    'sci-fi-interior': 2,
     'cozy-sci-fi-interior': 1,
-    'alien-city': 2,
+    'alien-city': 3,
     'robot-moment': 1,
     'real-space': 2,
     'cosmic-oracle': 2,
