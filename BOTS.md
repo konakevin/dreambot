@@ -1,529 +1,764 @@
 # Bot & Nightly Dream Generation System
 
-> **📌 NEW BOT ENGINE IS PRODUCTION (2026-04-20):** A standalone bot-render engine (`scripts/lib/botEngine.js`) replaces the old `generate-dream` coupling. Two bots migrated + live on per-bot crons: **VenusBot** (6 paths) + **SirenBot** (7 paths, gender-split). 17 image bots + 2 content bots remain on the old `bot-dreams.yml` herd cron.
+> **V2 Bot Engine — Production (2026-04-25)**
 >
-> **Docs:**
-> - `docs/MIGRATE-BOT.md` — per-bot migration checklist
-> - `docs/AUTONOMOUS-MIGRATION.md` — rubric + iteration loop for autonomous migrations
-> - `scripts/bots/venusbot/` + `scripts/bots/sirenbot/` — reference implementations
-> - `scripts/lib/botEngine.js` — the shared engine
-> - `scripts/lib/seedGenHelper.js` — batched Sonnet seed generator
+> All 19 image bots run on the standalone V2 engine (`scripts/lib/botEngine.js`).
+> Each bot is a pure-data Node module in `scripts/bots/<name>/` with its own
+> per-bot GitHub Actions cron. Two content bots (HumanBot, MuseBot) use custom
+> scripts with Sharp text overlays.
 >
-> The OLD SYSTEM (below this section) stays in place until all 21 bots migrate. Do not delete.
+> **Key files:**
+> - `scripts/lib/botEngine.js` — shared render engine (Sonnet + Flux + Supabase)
+> - `scripts/lib/seedGenHelper.js` — batched Sonnet pool generator with intra-pool dedup
+> - `scripts/lib/modelPicker.js` — per-medium/vibe model routing (DB-backed)
+> - `scripts/iter-bot.js` — dev iteration CLI (batch renders to /tmp or --post)
+> - `scripts/run-bot.js` — production entry point (1 render, fail-loud, called by cron)
 
 ---
 
-## 🆕 NEW BOT ENGINE — architecture
+## Table of Contents
 
-### 4-layer axis structure
+1. [Architecture Overview](#architecture-overview)
+2. [Bot Module Structure](#bot-module-structure)
+3. [The Bot Engine Contract](#the-bot-engine-contract)
+4. [Seed Pool System](#seed-pool-system)
+5. [Testing & Iteration (iter-bot.js)](#testing--iteration-iter-botjs)
+6. [The "Bring It Alive" Process](#the-bring-it-alive-process)
+7. [Writing Effective Briefs](#writing-effective-briefs)
+8. [Writing Effective Pool Gen Scripts](#writing-effective-pool-gen-scripts)
+9. [Lessons Learned](#lessons-learned)
+10. [Production Cron](#production-cron)
+11. [Creating a New Bot From Scratch](#creating-a-new-bot-from-scratch)
+12. [Bot Roster](#bot-roster)
+13. [Nightly User Dreams](#nightly-user-dreams)
+14. [Database Tables](#database-tables)
+
+---
+
+## Architecture Overview
+
+### The Render Pipeline
+
+Every bot render follows this exact pipeline:
+
+```
+1. Resolve path (weighted random + 3-post dedup window)
+2. Resolve medium (per-path override > bot.mediums list > defaultMedium)
+3. Resolve vibe (vibesByPath > vibesByMedium > bot.vibes)
+4. Fetch vibe directive from DB (dream_vibes.directive)
+5. Create picker (pre-load 5-day recency window from bot_dedup)
+6. Roll shared DNA (bot.rollSharedDNA — axes common to all paths)
+7. Build brief (bot.buildBrief — path-specific Sonnet brief)
+8. Call Sonnet (retry + Haiku fallback) → get 60-90 word prompt
+9. Banned-phrase check → retry Sonnet up to 2x if triggered
+10. Compose final prompt: prefix + mediumStyle + Sonnet output + suffix
+11. Resolve model (bot.modelByPath > pickModel > flux-2-dev default)
+12. Flux render (NSFW false-positive auto-retry up to 2x)
+13. Download image to local disk
+14. Optional post-process (content bots: Sharp text overlay)
+15. Post to DB (uploads table + storage bucket)
+16. Commit dedup picks to bot_dedup (ONLY on successful post)
+17. Write bot_run_log (success or failure)
+```
+
+### 4-Layer Axis Structure
 
 Every render is a combination of FOUR layers:
 
 | Layer | What it is | Example |
 |---|---|---|
-| **1. Shared DNA** (`rollSharedDNA`) | Axes rolled ONCE per render, shared by all paths — "who she is / what this render feels like" | skin, body-type, glow-color, scene-palette, character identity |
-| **2. Path-specific axes** (inside `buildBrief`) | Axes rolled per-path — "what she's doing this render" | pose, expression, moment, makeup (path-dependent) |
-| **3. Universal prose blocks** (`shared-blocks.js`) | Text injected verbatim into every brief — non-negotiable rules | REQUIRED_ELEMENTS, SOLO_COMPOSITION, HOT_AS_HELL, NO_POSING |
-| **4. Flux wrapping** (`promptPrefix` + `promptSuffix`) | Style anchor applied to every final prompt | golden first-sentence + no-text suffix |
+| **1. Shared DNA** (`rollSharedDNA`) | Axes rolled ONCE per render, shared by all paths | skin, body-type, glow-color, scene-palette, character identity |
+| **2. Path-specific axes** (inside `buildBrief`) | Axes rolled per-path | landscape type, action, closeup framing, camera angle |
+| **3. Universal prose blocks** (`shared-blocks.js`) | Text injected verbatim into every brief | BLOW_IT_UP, NO_NAMED_CHARACTERS, SOLO_COMPOSITION |
+| **4. Flux wrapping** (`promptPrefix` + `promptSuffix` + `mediumStyles`) | Style anchor applied to every final prompt | golden first-sentence + per-medium style + no-text suffix |
 
-### Sizing rules (HARD FLOOR: 50 entries per Sonnet-seeded pool)
+### The Picker (DB-Backed Recency)
 
-| Visibility | Size | Method | Dedup window |
-|---|---|---|---|
-| Rolled every render, MAIN diversity | **50** | Sonnet-seeded, intra-pool batched dedup via `seedGenHelper.js` | 5 days (`bot_dedup` table) |
-| Path-specific "moment" pool | **50** | Sonnet-seeded | 5 days |
-| Supporting detail rolled every render | 50 | Sonnet-seeded (audit first) | sometimes |
-| Narrow variant (gender sliver / race-limit) | 30 OK with explicit approval | Sonnet-seeded | 5 days |
+`createPicker()` pre-loads the last 5 days of picks from `bot_dedup` for the bot. Within a render:
 
-**Rule:** 50 is the floor for ANY rolled pool. When a pool is below 50, batches exhaust the 5-day dedup window and the picker falls back to full pool (warning logged). Avoid by starting at 50.
+- `picker.pick(pool)` — pure random, no dedup
+- `picker.pickWithRecency(pool, axisName)` — filters out entries used in the last 5 days, warns if pool exhausted
 
-### The refined build-a-bot process (V3 — post-SirenBot autonomous run)
+Picks are queued in memory. `picker.commit()` writes them to DB **only** after a successful post. Dev batches without `--post` never commit — pool entries are never burned in dev mode.
 
-**Phase A — Audit (thorough — do NOT skip)**
-
-1. Read `BOTS.<botname>` in old `scripts/generate-bot-dreams.js`
-2. Read `BOT_SEEDS.<botname>.strategies` in old `scripts/lib/seed-generator.js`
-3. Query DB: recent `uploads WHERE user_id = <bot>` — what has the bot actually been rendering?
-4. **Decide what axes matter for this bot.** Character-centric vs scene-centric. Male/female split? Race/gender variety? Unique dimensions (makeup, cosmic-event, tattoo-style)?
-5. Map old strategies → new paths (strategies with `continueDedup` collapse into base path).
-
-**Phase B — Scaffold + configure**
-
-1. Create `scripts/bots/<name>/` tree
-2. Fill `index.js` contract — username, mediums (or `mediumByPath`), vibes (or `vibesByMedium`), paths, pathWeights, `rollSharedDNA`, `buildBrief`
-3. Fill `shared-blocks.js` — 4-6 universal prose blocks for bot identity / coverage rules / anti-posing
-4. Fill `pools.js` — small hand-curated axes (VIBE_COLOR map etc.)
-
-**Phase C — Sonnet-seed all axis pools (≥50 each, parallel)**
-
-1. Write one generator per axis in `scripts/gen-seeds/<bot>/`
-2. Each generator uses `seedGenHelper.generatePool()` with batched intra-pool dedup
-3. Launch ALL generators in parallel — takes ~90 seconds total
-4. Verify every pool wrote 50 (or the approved narrower count)
-
-**Phase D — Per-path iteration**
-
-1. `iter-bot.js --bot <name> --count 5 --mode <path> --label r1-<path>`
-2. View renders, score against rubric in `AUTONOMOUS-MIGRATION.md`
-3. If avg < 4.5/5 → diagnose → fix → retry (hard cap: 3 rounds)
-4. Mark path PROBLEMATIC if still failing after round 3
-5. **If you discover a new axis mid-iteration:** immediately write a generator + produce 50 entries (the floor rule applies mid-migration too, not just at scaffolding time)
-
-**Phase E — Cross-path diversity + cutover**
-
-1. `iter-bot.js --bot <name> --count 10 --mode mixed --post` for a visible cross-path spot-check posted to bot's profile
-2. Atomic cutover commit: new `.github/workflows/<name>.yml` + remove from old `BOTS` map + remove from old bash array — ALL IN ONE COMMIT (prevents double-post window)
-3. Push to main
-
-### Lessons burned in across VenusBot + SirenBot migrations
-
-**Writing effective Sonnet briefs:**
-1. **Never plant example verbs/actions in briefs** — "lighting a cigarette, sipping a drink" made every 3rd render a cigarette scene. Describe CATEGORIES, not specifics.
-2. **Don't name pop-culture references** — "Ex Machina's Ava" didn't land. Use plain visual descriptors.
-3. **Don't stack mandatory checklists** — 3+ REQUIRED blocks dilutes Sonnet. Max 1 per brief.
-4. **Negative language backfires** — repeated "NO nipples / NO nipples / NO" planted the concept. Positive framing ("smooth sculptural surface") works.
-5. **Constrain Sonnet at scene level, not prompt level** — seed the scene, let Sonnet write the prompt.
-
-**Anti-drift rules:**
-6. **Internal elements must be INSIDE the body** — "core through translucent panel" → surface fireworks unless explicitly "INSIDE her body, seen THROUGH transparent panel, not a light effect."
-7. **Material openness matters** — call out full material palette (latex/ceramic/brass/carbon-fiber/etc.) or every render drifts to chrome.
-8. **Solo compositions for character-centric bots** — two-figure shots read as cheesy AI stock-art. "Pinning a man against a column" makes the render worse. Scrub references to second figures from all pools.
-9. **No-posing language for candid-aesthetic bots** — "fashion shoot / editorial / portrait session / pose / model" language turns renders into catwalk pictures. Use "caught mid-X / noticing / resting / listening" verbs.
-10. **Character DNA stays fixed per bot** — don't swing character direction mid-session; commit a frame.
-
-**Engine-level safeguards:**
-11. **50-entry pool floor** — any pool under 50 exhausts the 5-day dedup window after a few days of cron. Fix by Sonnet-generating 50.
-12. **Flux NSFW false-positives auto-retry** — Flux's safety model occasionally flags fine cyborg/fantasy renders. Engine retries same prompt up to 2 more times (stochastic diffusion usually produces a non-flagged variant).
-13. **Banned phrases retry Sonnet** — some bots have `bannedPhrases` (e.g., GothBot: "jack skellington"). Engine catches + retries up to 2x before failing loud.
-14. **Fail loud on prod cron.** If all retries + fallbacks exhaust, engine throws. `bot_run_log` captures error + stage. GitHub Actions fails, sends email. Do NOT auto-post a broken render.
-
-**Operational lessons:**
-15. **Audit-first, then Sonnet-seed 50**: don't create pools blindly. Audit the old bot's strategies + post history to identify what axes matter BEFORE stamping generators.
-16. **Mid-migration axis discovery**: if you realize you need a new axis during iteration, IMMEDIATELY write a generator that produces 50 entries. Never ship a <50 pool.
-17. **Atomic cutover or don't cutover.** New workflow + removal from old runner MUST be one commit or you get double-posts (same bot cron-fires from both workflows in the overlap window).
-18. **Default test batch size: 5.** 20 is overkill for gut-check. 5 gives signal without burning time/money. Only exceed when explicitly asked.
-19. **Dedup commits only on successful post.** Failed renders don't burn pool entries. Dev batches (`iter-bot.js` without `--post`) never commit.
-
-### API hardening (shipped 2026-04-20, in production)
-
-`scripts/lib/botEngine.js` `callClaude` retries Sonnet on 429/500/502/503/504/529 with exponential backoff (1s/3s/10s/30s), then falls back to Haiku with its own retry budget. If both exhaust, the render throws (fail loud, per bot policy — no fallback post, `bot_run_log` captures the failure, GitHub Actions exits non-zero).
-
-`flux()` auto-retries up to 2x on NSFW false-positives (same prompt, stochastic diffusion typically passes).
-
-`supabase/functions/_shared/llm.ts` has the same pattern for the Edge Functions (generate-dream, nightly-dreams, restyle-photo) but retains the template-based `fallbackPrompt` fallback because those serve users.
-
-### Migration status (live)
-
-| Bot | Old system | New system | Cron |
-|---|---|---|---|
-| VenusBot | — | ✅ `scripts/bots/venusbot/` | `venusbot.yml` 10:30 + 22:30 UTC |
-| SirenBot | — | ✅ `scripts/bots/sirenbot/` | `sirenbot.yml` 11:15 + 23:15 UTC |
-| 17 image bots + HumanBot + MuseBot | ✅ `bot-dreams.yml` | — | 6 + 14 UTC (herd) |
-
-**HumanBot + MuseBot** are text-overlay "thinking bots" — they generate text content first (observation / quote), render a base image via Flux, then composite text onto the image. Migrated via the same architecture but with the optional `generateTextContent` + `postProcess` hooks on the bot contract. Schedule LAST in the migration queue (they need the extra hooks to work properly).
+**Pool exhaustion warning:** If a pool has fewer entries than 5 days of renders can consume, the picker falls back to full-pool random and logs a warning. The fix is always "expand the pool," never "shrink the dedup window."
 
 ---
 
-## Two Dream Generators
+## Bot Module Structure
 
-DreamBot has TWO independent dream generation systems, each with its own DB table:
+Every bot lives in `scripts/bots/<name>/` with this structure:
 
-1. **Bot dreams** → `bot_seeds` table → bots post 2x daily via GitHub Actions cron
-2. **Nightly user dreams** → `nightly_seeds` table → personalized dreams for each user nightly
-
-Both use the same downstream pipeline (Sonnet → Flux → image), but they source their creative seeds differently and serve different purposes.
-
----
-
-## BOT DREAMS — How They Work
-
-Each bot account has a pool of **seed prompts** stored in the `bot_seeds` table (category prefix: `{username}_`). The bot script (`scripts/generate-bot-dreams.js`) picks a random unused seed, pairs it with a random medium + vibe from the bot's config, and sends it as a `hint` through the **V2 text path** of the `generate-dream` Edge Function.
-
-The V2 text path: Sonnet receives the hint + medium directive + vibe directive → writes a 60-90 word Flux prompt → Flux Dev (or SDXL for anime/pixel_art) renders it → image persisted to Storage → draft upload created → script flips it to public.
-
-## Why This Works
-
-The key insight: **Sonnet + V2 + a good hint = stunning art every time.** We tested dozens of approaches — nightly templates, persona-driven Sonnet, self-contained templates, direct Sonnet freestyle. They all produced mediocre or repetitive results. The winning formula is giving Sonnet a **short, vague-but-anchored prompt** as the hint and letting the proven V2 engine handle the rest.
-
-The hint is the creative seed. The medium directive shapes the art style. The vibe directive sets the mood. Sonnet ties it all together into a Flux prompt.
-
-### Why "Epic Fantasy Scene..." Style Prompts Produce Great Results
-
-A prompt like *"an epic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter"* works because:
-
-1. **It gives Sonnet creative freedom.** When you over-specify ("a dragon on a cliff at sunset"), Sonnet just transcribes it — no creative value added. When you say "epic fantasy scene," Sonnet invents something original every time.
-
-2. **It lets Sonnet optimize for what Flux renders well.** Sonnet knows which compositions, lighting, and subjects produce stunning results. Vague prompts let Sonnet pick from its best material.
-
-3. **Genre anchors prevent chaos.** "Middle earth, lord of the rings, harry potter" doesn't constrain — it INSPIRES. Without genre anchors, Sonnet produces generic abstract scenes. With them, it produces Rivendell-quality beauty.
-
-4. **The V2 medium directive does the heavy lifting.** The hint is just 15-25 words. The medium directive adds 50+ words of specific art instruction. Together = clear signal to Flux.
-
-5. **Short hints > long hints.** Flux has a token limit. 20-word hint + 60-word directive = 80 words of clarity. 100-word hint + 60-word directive = 160 words of mush.
-
-**The formula: vague creative direction + specific art style = Sonnet fills the gap with brilliance.**
-
----
-
-## The Bot Training Process — How to Dial In a New Bot
-
-This is the repeatable process we developed through Solaris, Yūki, Void Architect, Ember, Astra, and Cinder. Follow it for every bot.
-
-### The Iterative Refinement Pattern (KEY TECHNIQUE)
-
-The most effective approach for building bot seed strategies:
-
-1. **Start with a solid base prompt** targeting the bot's core persona ("an epic fantasy scene...", "a hauntingly beautiful gothic woman...")
-2. **Run 10 seeds / 5 posts** to test the base prompt
-3. **Review renders and iterate** — adjust language, add/remove descriptors, fix problems (wrong gender, wrong pose, wrong mood)
-4. **Once the base is solid, split into 2-3 variant paths** that branch from the same energy but target different subjects (e.g., base gothic → horror creatures + goth women + dark landscapes)
-5. **Each variant gets its own dedup strategy** — dedup on the dimension that matters most for that path (creature type, race, pose+setting, etc.)
-
-This "refine then fork" pattern consistently produces better results than trying to design all paths upfront. The base prompt teaches you what works for the bot's aesthetic before you branch.
-
-### Multi-Dimensional Dedup
-
-Different paths need different dedup strategies:
-
-- **Genre/scene paths:** dedup on main subject (1 word: "dragon", "castle", "forest")
-- **Character paths:** dedup on race/type (1 word: "vampire", "drow", "succubus")
-- **Paths with pose/composition problems:** dedup on 3 dimensions — creature type, pose, AND setting. Extract all 3 from each seed and ban all 3. This prevents the "everyone standing in ruins" problem.
-
-The 3-dimension dedup extraction prompt:
 ```
-"From this scene, give me THREE words: the creature type, the pose, and the setting. Comma separated. Example: vampire, lounging, cathedral"
+scripts/bots/<name>/
+  index.js          # The bot contract (required)
+  pools.js          # Axis pools — inline arrays + load() from seeds/
+  shared-blocks.js  # Universal prose blocks for this bot's identity
+  paths/            # One .js file per path — each exports a brief-builder function
+    cosmic-vista.js
+    cyborg-woman.js
+    ...
+  seeds/            # Sonnet-generated JSON pools (200 entries each)
+    alien_landscapes.json
+    cyborg_actions.json
+    ...
 ```
 
-### Prompt Language Lessons
+Generator scripts live separately in `scripts/gen-seeds/<name>/`:
 
-- **"MUST be visibly female/male"** — Flux will render the wrong gender if the seed doesn't explicitly specify. Always force gender in character prompts.
-- **Don't suggest too many example verbs/actions** — Sonnet latches onto the first few and ignores the rest. Keep action lists short.
-- **"Never-before-seen variant/reimagining"** — forces original designs instead of standard depictions of creatures
-- **"No blood, no gore, no clowns"** — explicit exclusions work better than vague "not too dark"
-- **Describe the ENERGY not the pose** — "succubus energy, dark temptress vibes" works better than "standing seductively"
-- **Physical descriptors that render well** — "dark lipstick, heavy eyeliner, pale skin, glowing eyes, fangs, sharp claws, tattoos, piercings" — these give Flux concrete visual anchors
-- **"Vary the pose wildly: lounging, crouching, mid-spell, perched on a throne..."** — explicit pose suggestions + dedup prevents static standing compositions
-- **Emotional language from Kevin works** — "she lures you in with her evil smile only to destroy you" produces better results than clinical descriptions. Keep the human voice in prompts.
+```
+scripts/gen-seeds/<name>/
+  gen-alien-landscapes.js
+  gen-cyborg-actions.js
+  ...
+```
 
-### Step 0: Get a Rough Baseline
+---
 
-Before finding the perfect prompts, run quick tests through both the **nightly dream path** (template-driven) and the **V2 text path** (hint-driven) using the bot's mediums. This gives you a cross-section of what each pipeline produces for this bot's aesthetic.
+## The Bot Engine Contract
 
-- Run 5 nightly-style dreams (pass `vibe_profile` + `medium_key` + `vibe_key`, no hint)
-- Run 5 V2-style dreams (pass `medium_key` + `vibe_key` + a simple hint like "a stunning [genre] scene")
-- Compare: which pipeline produces better results for this bot's mediums?
-- V2 with hints consistently wins for bots — nightly templates produce generic/corridor compositions without rich user profile data
+`index.js` exports a plain object with these fields:
 
-This baseline tells you: which mediums render well, which model (SDXL vs Flux) works better, and what the genre prompt needs to anchor on. From there you refine.
+### Required Fields
 
-### Step 1: Find the Genre Prompt
-
-Start with a simple, open-ended prompt anchored to the bot's universe. Pattern:
-
-"an [adjective] [genre] scene that is [quality words] in the style/universe of: [3-8 reference works]"
-
-**Examples:**
-- Solaris: "an epic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter"
-- Yūki: "an extremely interesting and visually appealing scene from the universes of: studio ghibli, makoto shinkai, demon slayer, spirited away, your name, akira, evangelion, attack on titan, cowboy bebop, ghost in the shell, princess mononoke, howls moving castle, jujutsu kaisen"
-
-**Rules for the genre prompt:**
-- Keep it VAGUE on specifics but ANCHORED to references
-- Don't list specific subjects (castles, waterfalls) — Sonnet will default to those
-- The quality words matter ("mind blowingly exotic and beautiful" > "cool")
-- Test 5 renders. If they're beautiful but repetitive, the prompt is working — variety comes from dedup + strategy mix
-
-### Step 2: Find the Landscape/Environment Prompt
-
-A second prompt for pure environment scenes. Keep it even more open:
-
-"a beautiful [genre] [world/landscape] that is [quality words]"
-
-**Examples:**
-- Solaris: "an epic fantasy landscape that is exotic and mind blowingly beautiful and interesting to look at"
-- Yūki: "a beautiful Japanese anime world that is visually stunning, warm and inviting, interesting to explore"
-
-**Don't list specific things** (cottages, villages) — Sonnet will latch onto whatever you list and repeat it. Keep it abstract and let Sonnet decide.
-
-### Step 3: Find Variant Paths (Character, Creature, etc.)
-
-After the base genre + landscape are solid, add specialized paths for the bot's unique content:
-
-**Character-focused bots (Ember, Cinder, Astra):**
-- Split by gender: female body, female face, male body, male face
-- Split by energy: seductive, action, horror, intimate
-- Each path gets its own dedup target (race, pose+setting, creature type)
-
-**Examples of successful variant paths:**
-- Ember: `femalebody`, `femaleface`, `femaleaction`, `malebody`, `maleface`, `maleaction`, `seductive` (7 paths!)
-- Cinder: `genre`, `genre_dedup`, `landscape`, `horror` (classic creatures), `gothwoman` (sexy goth women)
-- Astra: `androidwoman`, `cyborgface`, `alienface` (3 face/body variants)
-
-**Key: each variant should feel like it belongs on the same account but shows a different facet.**
-
-### Step 4: Test Mediums
-
-Run 1-2 renders per medium with the genre prompt. Identify:
-- Which mediums produce stunning results for this bot's aesthetic
-- Which model (Flux Dev vs SDXL) renders each medium better
-- Kill any medium that consistently produces bad results
-
-**SDXL vs Flux routing:**
-- `anime`, `pixel_art` → always SDXL (it renders these much better)
-- `ghibli` → 50/50 SDXL/Flux (both look good, different flavor)
-- `anime_illustration` → 50/50 SDXL/Flux
-- Everything else → Flux Dev
-- The keyword fallback (`prompt.includes('anime')`) only fires when no `medium_key` is provided
-
-### Step 5: Test Vibes (the most important step)
-
-Run the genre prompt with EVERY vibe and evaluate each one. For each result, rate it:
-
-- **GOD TIER** — triple weight (3x entries in the pool)
-- **EXCELLENT** — double weight (2x entries)
-- **GOOD** — normal weight (1x entry)
-- **BAD** — exclude entirely
-
-Build a weighted vibe pool per medium using array repetition:
 ```javascript
-pinVibes: {
-  anime: ['enchanted', 'enchanted', 'enchanted', 'cinematic', 'cinematic', 'dreamy', 'dreamy', ...],
-  ghibli: ['enchanted', 'enchanted', 'enchanted', 'majestic', 'epic', 'mystical'],
-}
+module.exports = {
+  username: 'starbot',        // matches DB users.username
+  displayName: 'StarBot',     // for logs
+
+  // Which mediums this bot renders in (random pick per render)
+  mediums: ['render'],
+  // OR per-path medium locking:
+  mediumByPath: {
+    'real-space': 'real-astro',
+    'cosmic-vista': 'render',
+  },
+  // OR single fixed medium:
+  defaultMedium: 'watercolor',
+
+  // Which vibes this bot uses (random pick per render)
+  vibes: ['cinematic', 'dark', 'epic', 'ethereal', ...],
+  // Optional per-path override:
+  vibesByPath: {
+    'cozy-sci-fi-interior': ['nostalgic', 'ethereal', 'enchanted', ...],
+  },
+
+  // All paths this bot can render
+  paths: ['cosmic-vista', 'alien-landscape', 'cyborg-woman', ...],
+
+  // Optional weighted path selection (default weight = 1)
+  pathWeights: {
+    'alien-landscape': 2,  // ~10.5% instead of ~5.3%
+    'cyborg-woman': 2,
+  },
+
+  // Flux prompt wrapper — golden first-sentence + no-text suffix
+  promptPrefix: 'cinematic sci-fi concept art, epic scale, ...',
+  promptSuffix: 'no text, no words, no watermarks, ...',
+
+  // Roll shared DNA (axes that persist across all paths for one render)
+  rollSharedDNA({ vibeKey, path, picker }) {
+    return {
+      scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
+      colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
+    };
+  },
+
+  // Build the Sonnet brief for a specific path
+  buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
+    const builder = pathBuilders[path];
+    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+  },
+
+  // Optional caption for the uploaded post
+  caption({ path }) {
+    return `[${path}] StarBot`;
+  },
+};
 ```
 
-**Key learnings:**
-- Test EVERY medium + vibe combination — some combos are magic, others are terrible
-- Pin specific vibes to specific mediums when a combo is consistently great
-- When Kevin says "that's good" → bump. "That's excellent/killer/10 out of 10" → double or triple bump
-- The vibe weighting is what makes or breaks a bot's content quality
+### Optional Fields
 
-### Step 6: Generate 60+ Deduped Seeds
+```javascript
+// Per-medium style injection — overrides DB flux_fragment for this bot.
+// THIS IS HOW YOU MAKE EACH MEDIUM VISUALLY DISTINCT FOR YOUR BOT.
+mediumStyles: {
+  photography: '35mm cinematic sci-fi film-still — Denis-Villeneuve ...',
+  canvas: 'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell ...',
+  render: 'high-end cinematic 3D render — feature-film VFX quality ...',
+},
 
-Use the iterative passback technique to generate 15-20 seeds per strategy:
+// Per-medium prefix/suffix overrides (replaces bot.promptPrefix/Suffix for that medium)
+promptPrefixByMedium: {
+  'real-astro': 'NASA Hubble JWST astrophotography, ...',
+},
+promptSuffixByMedium: {
+  'real-astro': 'astrophotography finish, deep black space contrast, ...',
+},
 
-1. **GENRE (15):** Ask Sonnet for a scene from the genre prompt. Extract 1-word subject. Ban it. Repeat.
-2. **GENRE+DEDUP (15):** Continue the ban list from strategy 1 (now 15 banned subjects). Generates deeper variety.
-3. **LANDSCAPE (15):** Separate ban list. Same technique with the landscape prompt.
-4. **VARIANT PATHS (15 each):** Separate ban lists. Dedup on whatever dimension matters for that path.
+// Per-path model locking — overrides pickModel() for specific paths
+modelByPath: {
+  'cosmic-vista': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+},
 
-Store in `dream_templates` with categories: `{username}_genre`, `{username}_genre_dedup`, `{username}_landscape`, etc.
+// Phrases that trigger Sonnet re-roll (up to 2 retries)
+bannedPhrases: ['jack skellington', 'tim burton'],
 
-### Step 7: Test the Full Pipeline
+// Content bot hooks (HumanBot/MuseBot only)
+generateTextContent({ picker, sharedDNA, path, vibeKey }) { ... },
+postProcess({ localPath, textContent, sharedDNA, path }) { ... },
+```
 
-Run 10 posts through the bot script using the stored seeds. Verify:
-- Seeds are being pulled from DB correctly
-- Medium + vibe weighting is hitting the right combos
-- Quality is consistent
-- Variety is good across the 10
+### Path Builder Functions
 
-### Step 8: Iterate on Feedback
+Each `paths/<name>.js` exports a function that returns a Sonnet brief string:
 
-As Kevin reviews posts, update weights in real-time:
-- "That's good" → bump that vibe for that medium
-- "Kill that medium" → remove it
-- "That combo is 10/10" → heavy weight
-- "Repetitive" → needs more dedup or seed variety
+```javascript
+module.exports = ({ sharedDNA, vibeDirective, vibeKey, picker }) => {
+  // Roll path-specific axes
+  const landscape = picker.pickWithRecency(pools.ALIEN_LANDSCAPES, 'alien_landscape');
+  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 
----
+  // Return the Sonnet brief — a multi-section prompt that tells Sonnet
+  // exactly what to write, with pool entries filling the variable slots
+  return `You are an alien-world concept artist writing a scene for StarBot...
 
-## What Failed (NEVER repeat for any bot)
+━━━ THE ALIEN LANDSCAPE ━━━
+${landscape}
 
-- **Nightly template system** → templates dominate with corridor/architecture compositions
-- **Sonnet persona-driven prompts** → too abstract ("shadow-silk catching souls"), Flux can't render them
-- **Self-contained Sonnet templates** → too poetic, not paintable
-- **Generic prompt with no dedup** → repetitive (same scene every time)
-- **Full prompt passback dedup** → prompt too long, gets truncated, made output MORE repetitive
-- **Hardcoded specific hints** (kraken, sword, world-turtle) → inconsistent quality, not scalable
-- **"Massive/colossal/gargantuan" scale words** → biases Flux toward centered giant objects
-- **Seeds injected into templates** → seeds + templates fight each other
-- **Listing specific subjects in landscape prompts** ("cottages, villages") → Sonnet latches onto whatever you list
-- **Abstract horror prompts** ("the wrongness of a shape that shouldn't exist") → Flux renders generic dark figures, not scary
-- **Body horror / Silent Hill style** → too grotesque, not beautiful
-- **Too many example verbs/actions** → Sonnet picks from the first 2-3 and ignores the rest
-- **"Push the edge" / "dominatrix"** → Sonnet refuses or Flux gets blocked by moderation. Use "dark temptress", "succubus energy" instead
-- **Cemetery wraith prompts without creature variety** → every render is the same hooded figure
-- **Not specifying gender** → Flux renders male when you want female. Always say "woman" or "female" explicitly
+━━━ LIGHTING ━━━
+${lighting}
 
----
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
 
-## Bot Profiles
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
 
-### Solaris — Epic Fantasy Art ✅ COMPLETE
-
-**Username:** `solaris` | **ID:** `ff629c07-8441-4d80-98ff-9b7010d3338b`
-**Avatar:** Fantasy sorceress with silver-white hair, amber-gold eyes
-**Mediums:** `oil_painting`, `fantasy`, `watercolor`
-**Excluded vibes:** `minimal`
-**Seeds:** 60 in DB (`solaris_genre`, `solaris_genre_dedup`, `solaris_landscape`)
-
-**Genre prompt:** "an epic fantasy scene that is mind blowingly exotic and beautiful in one of these genres: middle earth, lord of the rings, harry potter"
-**Landscape prompt:** "an epic fantasy landscape that is exotic and mind blowingly beautiful and interesting to look at"
-
-### Yūki — Anime / Japanese Culture ✅ COMPLETE
-
-**Username:** `yuuki` | **ID:** `e1e808d1-4569-462c-a84a-09e3e1119513`
-**Mediums:** `anime`, `ghibli`, `anime_illustration`
-**Excluded vibes:** `ancient`, `ominous`, `fierce`, `psychedelic`, `chaos`, `minimal`
-**Seeds:** 60 in DB (`yuuki_genre`, `yuuki_genre_dedup`, `yuuki_landscape`, `yuuki_cute`)
-
-**4-Strategy Split (25/25/25/25):**
-1. **GENRE** — epic/action anime scenes with characters, creatures, architecture
-2. **GENRE+DEDUP** — same with forced variety
-3. **LANDSCAPE** — beautiful Japanese anime worlds to explore
-4. **CUTE** — adorable heartwarming scenes (Totoro, Ponyo, Kiki style) with big eyes and warm feelings
-
-**Vibe weighting (GOD TIER → regular, from testing):**
-- **anime:** enchanted ████, cinematic ████, majestic ███, dreamy ███, whimsical ███, mystical ██, dark ██, cozy ██, epic ██
-- **ghibli:** enchanted █████ (GOD TIER), whimsical ██, majestic ██, epic ██, mystical ██
-- **anime_illustration:** dreamy █████ (GOD TIER), whimsical ████, enchanted ██, majestic █, epic █, cinematic █
-
-### Void Architect — Surreal Sci-Fi ✅ SEEDED
-
-**Username:** `void.architect`
-**Mediums:** `surreal`
-**Excluded vibes:** `minimal`, `whimsical`
-**Seeds:** In DB — 8 strategies: `genre`, `genre_dedup`, `landscape`, `spacebattle`, `interior`, `cozyinterior`, `robot`, `city`, `androidwoman`
-**Notes:** Most strategy-heavy bot. Space battles and cities use `noDedup` (infinite variety naturally). Android woman path shared with Astra.
-
-### Astra — Sci-Fi Women ✅ SEEDED
-
-**Username:** `astra`
-**Mediums:** `surreal`
-**Excluded vibes:** `minimal`, `whimsical`
-**Seeds:** 3 paths — `androidwoman` (mechanical beauty), `cyborgface` (half-machine faces), `alienface` (half-alien faces)
-**Notes:** All face/body focused. Dedup on body type, skin tone, alien features.
-
-### Ember — High Fantasy Characters ✅ SEEDED
-
-**Username:** `ember`
-**Mediums:** `oil_painting`, `fantasy`, `watercolor`
-**Excluded vibes:** `minimal`, `whimsical`, `cozy`
-**Seeds:** 7 strategies — `femalebody`, `femaleaction`, `femaleface`, `malebody`, `maleface`, `maleaction`, `seductive`
-**Notes:** Most character-path-heavy bot. Race variety is critical (elf, drow, tiefling, orc, etc.). "Sexy but never nude, never topless" language works. Fantasy art style keeps renders tasteful.
-
-### Cinder — Gothic Dark Fantasy ✅ COMPLETE
-
-**Username:** `cinder`
-**Mediums:** `tim_burton`, `fantasy`, `anime`, `oil_painting`
-**Excluded vibes:** `minimal`
-**Seeds:** 5 strategies in DB (`cinder_genre`, `cinder_genre_dedup`, `cinder_landscape`, `cinder_horror`, `cinder_gothwoman`)
-
-**Strategies:**
-1. **cinder_genre** — hauntingly beautiful dark fantasy scenes (dark souls, elden ring, bloodborne, tim burton, gothic fairy tales)
-2. **cinder_genre_dedup** — same with continued ban list
-3. **cinder_landscape** — dark gothic landscapes, haunted and atmospheric
-4. **cinder_horror** — classic horror creatures (werewolf, vampire, demon, succubus, etc.) reimagined as never-before-seen variants. No blood/gore/clowns. Dedup on creature type + pose + action.
-5. **cinder_gothwoman** — exquisitely beautiful goth women from hell. Evil incarnate but lures you in. Dark lipstick, eyeliner, pale skin, glowing eyes, fangs, claws, tattoos, piercings. Succubus energy. Dedup on race + pose + setting (3-dimension dedup).
-
-**Key learnings from Cinder:**
-- Anime needs no special vibe pinning — the dark aesthetic comes from the seeds naturally
-- oil_painting added as 4th medium — works well for gothic aesthetic
-- 3-dimension dedup (creature+pose+setting) solved the "everyone standing in ruins" problem
-- "She MUST be visibly female" is required or Flux renders males
-- Kevin's emotional language ("lures you in with her evil smile only to destroy you") produces better seeds than clinical descriptions
-- "No blood, no gore" + creature list + "never-before-seen variant" = scary without being gross
-- Goth aesthetic needs explicit physical descriptors (lipstick, eyeliner, fangs, claws) or renders look like generic dark robed figures
-
-### Remaining Bots (not started)
-
-| Username | Persona | Mediums | Seed Status |
-|---|---|---|---|
-| aurelia | Ethereal beauty | watercolor, oil_painting, ghibli | ❌ needs testing |
-| terra | Awe-inspiring nature | photorealistic, oil_painting, surreal | ❌ needs testing |
-| prism | Stylized mediums | 19 mediums | ❌ needs testing |
-| mochi | Kawaii cozy | 3d_cartoon, claymation, disney, childrens_book | ❌ needs testing |
-| pixelrex | Retro gaming | pixel_art, 8bit, vaporwave | ❌ needs testing |
-| frida.neon | Bold maximalist | comic_book, retro_poster, art_deco | ❌ needs testing |
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. ...`;
+};
+```
 
 ---
 
-## Model Routing
+## Seed Pool System
 
-| Medium | Model | Notes |
+### Pool Sizing Standard
+
+**ALL pools: 200 entries, batch 50, Sonnet-generated.**
+
+| Parameter | Value | Why |
 |---|---|---|
-| anime | SDXL always | Much better cel-shading than Flux |
-| pixel_art | SDXL always | Better retro pixel rendering |
-| ghibli | 50/50 SDXL/Flux | Both produce good but different results |
-| anime_illustration | 50/50 SDXL/Flux | New medium, testing |
-| everything else | Flux Dev | Default |
+| `total` | 200 | 5-day dedup window × 2 posts/day = 10 picks/window. 200 entries means the pool never exhausts. |
+| `batch` | 50 | Sonnet generates 50 per call with intra-batch dedup. 4 batches × 50 = 200. Each batch sees all prior entries as "ALREADY GENERATED — DO NOT DUPLICATE." |
 
-Keyword fallback (`prompt.includes('anime')`) only fires when no `medium_key` is provided (legacy paths). When a medium_key exists, the SDXL/ALWAYS and SDXL_HALF sets are the sole routing authority.
+**Exception:** Hand-curated pools (skin tones, hair styles, body types, eye styles) stay inline in `pools.js` — these are sensitive axes where Sonnet-generated entries introduced unintended language (see Lessons Learned).
 
-## Cron Schedule
+### Generator Scripts
 
-GitHub Actions workflow: `.github/workflows/bot-dreams.yml`
-- Runs 2x/day (6am UTC + 2pm UTC) with 0-4 hour random delay
-- Each run generates 1 post for EACH seeded bot
-- Manual trigger available with `--bot` and `--count` params
-- Only seeded bots are included — update the `BOTS` array when new bots are ready
-- Currently active: solaris, yuuki, void.architect, astra, ember, cinder
+Each pool has a generator script in `scripts/gen-seeds/<bot>/`:
 
-## How to Deploy a New Bot
+```javascript
+#!/usr/bin/env node
+const { generatePool } = require('../../lib/seedGenHelper');
+generatePool({
+  outPath: 'scripts/bots/starbot/seeds/alien_landscapes.json',
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} ALIEN LANDSCAPE descriptions...
 
-Once a bot's seeds are generated and tested:
+━━━ WHAT MAKES A GOOD ENTRY ━━━
+...
 
-1. **Add templatePrefix** to bot config in `scripts/generate-bot-dreams.js`:
-   ```javascript
-   botname: { mediums: [...], templatePrefix: 'botname_', excludeVibes: [...], pinVibes: {...} }
-   ```
+━━━ CATEGORIES TO COVER (spread across all) ━━━
+...
 
-2. **Add to cron** in `.github/workflows/bot-dreams.yml`:
-   ```bash
-   BOTS=("solaris" "yuuki" "newbot")
-   ```
+━━━ DEDUP DIMENSIONS ━━━
+Deduplicate by: [what makes two entries "too similar"]
 
-3. **Generate avatar** — use Sonnet to describe the character, render with Flux, upload to `avatars/` storage, update `users.avatar_url`
+━━━ OUTPUT ━━━
+JSON array of ${n} strings. No preamble, no numbering.`,
+}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+```
 
-4. **Commit + push to main** — cron activates on next scheduled run
+### How seedGenHelper Works
 
-5. **Test** — `node scripts/generate-bot-dreams.js --bot newbot --count 1` to verify it posts correctly
+1. Calls Sonnet with the `metaPrompt(batchSize)` — batch 1 gets no prior entries
+2. Parses JSON array from response
+3. On batch 2+, appends ALL prior entries as a dedup reference:
+   `━━━ ALREADY GENERATED (DO NOT DUPLICATE, vary strongly from these) ━━━`
+4. Retries up to 3x on JSON parse failure (adds strictness note on retry)
+5. Writes final JSON array to `outPath`
 
-6. **Verify in app** — search for the bot, check their profile shows posts
-
-## Testing a Bot
-
-**Always reset the seed pool before a testing session.** This clears `used_at` on all seeds so the full pool is available:
+### Running Generators
 
 ```bash
-# Reset a bot's seed pool (replace cinder_ with the bot's prefix)
-node -e "require('dotenv').config({path:'.env.local'});const sb=require('@supabase/supabase-js').createClient('https://jimftynwrinwenonjrlj.supabase.co',process.env.SUPABASE_SERVICE_ROLE_KEY);sb.from('dream_templates').update({used_at:null}).like('category','cinder_%').eq('disabled',false).then(r=>console.log('Reset done'))"
+# Single pool
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+node scripts/gen-seeds/starbot/gen-alien-landscapes.js
+
+# All pools for a bot (parallel)
+for f in scripts/gen-seeds/starbot/gen-*.js; do node "$f" & done; wait
 ```
 
-When starting work on any bot, Claude should proactively reset the pool and remind Kevin.
+### Pool Loading
+
+`pools.js` uses a `load()` helper to read from `seeds/`:
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+function load(name) {
+  return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
+}
+
+// Sonnet-generated pools (200 entries each)
+const ALIEN_LANDSCAPES = load('alien_landscapes');
+
+// Hand-curated pools (inline, sensitive axes)
+const CYBORG_SKIN_TONES = [
+  'deep ebony brown skin with rich mahogany undertones, warm and matte',
+  ...
+];
+```
 
 ---
 
-## NIGHTLY USER DREAMS — How They Work
+## Testing & Iteration (iter-bot.js)
 
-Every night, each active user gets one personalized dream generated by the nightly cron. The system uses **slotted seed templates** stored in the `nightly_seeds` table.
+### CLI Flags
+
+```bash
+node scripts/iter-bot.js --bot <name> [flags]
+
+  --count N        # renders per batch (default 5 — ALWAYS USE 5 FOR GUT-CHECK)
+  --mode X         # 'random' (default), 'mixed' (round-robin all paths), or specific path name
+  --vibe X         # specific vibe key, or 'random' (default)
+  --medium X       # force a specific medium (overrides bot.mediums entirely)
+  --model X        # force a specific model (overrides bot.modelByPath + pickModel)
+  --label X        # string in saved filenames (default 'iter')
+  --post           # ALSO post each render to DB + commit dedup + write run log
+  --dry-run        # brief-only debug, no Flux render
+```
+
+### Common Testing Patterns
+
+```bash
+# Random 5-render gut-check (default batch size)
+node scripts/iter-bot.js --bot starbot --count 5 --post
+
+# Test a specific path
+node scripts/iter-bot.js --bot starbot --count 5 --mode cyborg-woman --post
+
+# Test a specific path + vibe combo
+node scripts/iter-bot.js --bot starbot --count 5 --mode cyborg-woman --vibe dark --post
+
+# Test a specific medium across random paths
+node scripts/iter-bot.js --bot starbot --count 5 --medium photography --post
+
+# Force a specific Flux model for A/B testing
+node scripts/iter-bot.js --bot starbot --count 5 --model black-forest-labs/flux-1.1-pro --post
+
+# Round-robin all paths (1 render per path)
+node scripts/iter-bot.js --bot starbot --count 13 --mode mixed --post
+
+# Dry-run to inspect briefs without spending Replicate credits
+node scripts/iter-bot.js --bot starbot --count 3 --dry-run
+
+# Random 10-batch posted to feed for phone QA
+node scripts/iter-bot.js --bot starbot --count 10 --post
+```
+
+### Temp Forcing Technique
+
+To force closeup or full-body for paths with a random split:
+
+```javascript
+// In paths/cyborg-woman.js — TEMPORARILY change for testing:
+const isCloseup = true;   // force all closeups
+const isCloseup = false;  // force all full-body
+
+// REVERT after testing:
+const isCloseup = Math.random() < 0.7;  // 70% closeup, 30% full-body
+```
+
+### Key Rules
+
+- **Default batch is 5.** 20 is overkill for gut-check. 5 gives signal without burning time/money.
+- **"Run a batch" = always `--post`.** /tmp-only renders are useless — Kevin QAs on his phone.
+- **After any code change, render 5 and verify.** Don't trust "deployed green" alone.
+- **Test pools at 25 before scaling to 200.** Generate 25, test quality, then scale after approval.
+
+---
+
+## The "Bring It Alive" Process
+
+This is the 5-step process developed through StarBot and DragonBot for taking a bot from functional to stunning. Apply this to every bot.
+
+### Step 1: Audit the Current State
+
+Before changing anything, understand what the bot is rendering:
+
+```bash
+# Run 5 random renders to see current quality
+node scripts/iter-bot.js --bot <name> --count 5 --post
+
+# Run 5 per specific path to identify weak spots
+node scripts/iter-bot.js --bot <name> --count 5 --mode <path> --post
+```
+
+Review on phone. Score each render 1-5. Identify:
+- Which paths produce stunning results?
+- Which paths produce repetitive/boring/broken results?
+- Are the briefs constraining Sonnet too much or too little?
+- Are pool entries specific enough to produce distinct renders?
+
+### Step 2: Fix the Brief
+
+The brief is the single most important file. Common fixes:
+
+- **Add identity-matching language** — "READ the [X] below and render THAT specific [thing]. Do NOT default to: [list the 4-5 most common AI defaults for this genre]"
+- **Add composition bans** — "NOT walking towards camera, NOT facing camera, NOT posing, NOT standing still" (put these in the brief, NOT in pool gen scripts)
+- **Add explicit banned imagery** — "NO skulls, NO skeletons, NO floating objects" (whatever the AI keeps defaulting to)
+- **Add the BLOW_IT_UP block** — tells Sonnet to max every element within the theme's constraints
+- **Enforce solo composition** — "She is the ONLY figure in the frame" for character bots
+- **Cap the output format** — "Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers..."
+
+**CRITICAL: Composition problems belong in the BRIEF, not in pool gen scripts.** The brief controls what Sonnet writes. The pool provides what the scene IS. "Walking towards camera" is a Sonnet composition problem — ban it in the brief, don't rewrite all your action entries.
+
+### Step 3: Tune the Pools
+
+After the brief is solid, iterate on pool quality:
+
+- **Expand thin pools** — anything under 200 entries gets expanded
+- **Check pool-to-brief alignment** — pool content is useless if the brief hardcodes composition that overrides it. Always update both together.
+- **Add dedup dimensions to gen scripts** — "Deduplicate by: base hue + warmth/coolness + intensity" for colors, "verb + body engagement" for actions, "setting type + time of day" for scenes
+- **For sensitive axes (skin/body/hair), hand-curate** — Sonnet-generated entries can introduce unintended texture language. Match the tone/voice of existing entries.
+
+### Step 4: Add mediumStyles
+
+Each `mediumStyles` entry gives the bot's visual DNA for that medium. Without it, the bot uses the generic DB `flux_fragment` which has no personality.
+
+```javascript
+mediumStyles: {
+  render: 'high-end cinematic 3D render — feature-film VFX quality, ...',
+  photography: '35mm cinematic sci-fi film-still — Denis-Villeneuve Blade-Runner-2049 ...',
+},
+```
+
+### Step 5: Weight Paths and Lock In
+
+After all paths render well individually:
+
+```bash
+# Run 10 random weighted renders to check distribution feels right
+node scripts/iter-bot.js --bot <name> --count 10 --post
+```
+
+Adjust `pathWeights` until the distribution matches desired frequency. Higher-quality paths get weight 2, niche paths stay at 1.
+
+Then expand all pools to 200 entries, commit, push.
+
+---
+
+## Writing Effective Briefs
+
+### The Brief Structure
+
+Every path brief follows this pattern:
+
+```
+1. Role statement — "You are a [role] writing a [scene type] for [Bot]"
+2. CRITICAL identity-matching — "READ [the X below] and render THAT specific [thing]"
+3. Anti-default warnings — "Do NOT default to: [list common AI failures]"
+4. Pool-injected axes — ${sharedDNA.X}, ${picker.pickWithRecency(...)}, etc.
+5. Composition rules — camera angle, framing, grounding
+6. Mood context — ${vibeDirective.slice(0, 250)}
+7. Amplification block — BLOW_IT_UP or equivalent
+8. Bans — explicit imagery to never include
+9. Solo composition — "ONLY figure in the frame"
+10. Output format — "60-90 word scene description, comma-separated phrases, NO preamble..."
+```
+
+### Rules for Brief Writing
+
+1. **Never plant example verbs/actions** — "lighting a cigarette, sipping a drink" made every 3rd render a cigarette scene. Describe CATEGORIES ("dynamic freeze-frame moment"), not specific instances.
+2. **Don't name pop-culture characters** — "Ex Machina's Ava" doesn't land. Use plain visual descriptors.
+3. **Max 1 REQUIRED/CRITICAL block** — 3+ mandatory sections dilute Sonnet. Pick the ONE thing that matters most.
+4. **Positive framing beats negative** — "smooth sculptural surface" works better than "NO nipples NO nipples NO."
+5. **Keep briefs under ~2000 chars** — longer briefs dilute the user's subject and hamper Sonnet creativity.
+6. **Constrain at scene level, not prompt level** — seed the SCENE (via pools), let Sonnet write the PROMPT.
+
+---
+
+## Writing Effective Pool Gen Scripts
+
+### The Meta-Prompt Structure
+
+Every gen script's `metaPrompt` follows this pattern:
+
+```
+1. Role — "You are writing ${n} [AXIS] descriptions for [Bot]'s [path] path"
+2. Entry format — "Each entry: [N-M] words. [What the entry describes]."
+3. WHAT MAKES A GOOD ENTRY — specificity, distinctness, renderability
+4. CATEGORIES TO COVER — spread entries across these families
+5. DEDUP DIMENSIONS — "Deduplicate by: [what makes two entries too similar]"
+6. OUTPUT — "JSON array of ${n} strings. No preamble, no numbering."
+```
+
+### Dedup Dimensions by Pool Type
+
+| Pool type | Dedup dimensions | Example |
+|---|---|---|
+| Scene/landscape | setting type + time of day + dominant feature | "volcanic wasteland" ≠ "crystal desert" |
+| Character | appearance + role + mood | multi-dimensional, not single-word |
+| Action | primary verb + body engagement (upper/lower/full/hands) | "reaching" ≠ "running" |
+| Color/material | base hue + warmth/coolness + intensity | "electric cyan" ≠ "deep midnight blue" |
+| Camera/framing | angle + distance + composition emphasis | "low-angle hero shot" ≠ "aerial sweep" |
+
+### Entry Detail Level
+
+- **Scene/landscape pools:** 15-30 words. Enough detail that two entries render visibly different. Too short = Sonnet fills in generic details. Too long = entries fight with the brief.
+- **Action pools:** 10-18 words. One specific action caught mid-motion.
+- **Color/material pools:** 2-6 words. A specific, evocative description.
+- **Character pools:** 20-40 words. Distinctive identity with visual anchors.
+
+### Pool Testing Workflow
+
+1. Generate at 25 entries first: `total: 25, batch: 25`
+2. Run 5 renders using that pool, review quality
+3. If quality is good, scale to 200: `total: 200, batch: 50`
+4. If quality is bad, fix the meta-prompt first, then re-gen
+
+**NEVER hand-write pool entries.** Always use gen scripts that call Sonnet. The one exception is sensitive axes (skin tones, body types) where Sonnet introduces unintended language — for those, hand-write entries matching the existing voice/tone.
+
+---
+
+## Lessons Learned
+
+### From StarBot Cyborg-Woman Session (2026-04-25)
+
+1. **Composition bans go in the BRIEF, not in pool gen scripts.** "Walking towards camera" is a Sonnet composition choice — ban it in the brief text, don't rewrite the action pool categories. The pool provides WHAT she's doing; the brief controls HOW Sonnet composes the shot.
+
+2. **Hand-curate sensitive pools.** Sonnet-generated skin tone entries included suggestive texture language ("glossy wet-look finish", "smooth without pores") that made renders look naked. The fix was reverting to the original inline pool and hand-writing new entries matching the same concise voice: `"deep ebony brown skin with rich mahogany undertones, warm and matte"`.
+
+3. **Closeup shots are reliably great; full-body shots need explicit grounding rules.** "FEET ON THE GROUND" as an absolute rule in the action pool gen script + "NOT standing still, NOT posing, NOT facing camera, NOT walking towards camera" in the brief = consistently good full-body shots.
+
+4. **Ban AI-default imagery explicitly.** Floating skulls, skeletons, hovering symbolic objects — these are cheap AI clichés that ruin the render. Add explicit bans: "NO skulls, NO skeletons, NO floating objects in the sky."
+
+5. **70/30 closeup/full-body split** — when closeups are 11/10 quality, lean into them. `Math.random() < 0.7` for 70% closeup, 30% full-body action.
+
+### From DragonBot + Prior Bot Sessions
+
+6. **Never plant example verbs in briefs.** Specifics like "cigarette, galaxies, etc." get repeated across ~30% of renders. Describe categories, not specific instances.
+
+7. **Solo compositions for character bots.** Two-figure shots read as cheesy stock-art. "Pinning a man/kneeling beside a body" makes the render worse. Every character bot renders SOLO — one figure only.
+
+8. **Ban passive poses in action pools.** No sitting, lying, watching, reading, meditating. Dynamic freeze-frames only. "She is caught MID-MOTION" language in the brief enforces this.
+
+9. **Pool content is useless if the brief hardcodes composition that overrides it.** Always update pools AND briefs together when iterating.
+
+10. **Constrain Sonnet at scene level.** Too-open Sonnet breeds redundancy. Seed the scene (via pools), let Sonnet write the prompt — never let Sonnet invent scenes from nothing.
+
+11. **"Blow it up" blocks for scenery bots.** Every scenery-centric bot gets a BLOW_IT_UP block: "Theme is canvas, not ceiling. Stack: [every element within this theme's vocabulary] × 10."
+
+12. **Artist names in medium config dominate Flux output.** "Bonestell" = Mars every single time. Keep medium config generic. Brief and pool entries can reference artists; the promptPrefix/mediumStyle should describe the LOOK, not the artist.
+
+13. **Default test batch size: 5.** 20 is overkill for gut-check. 5 gives signal without burning time/money/patience.
+
+### Engine-Level Safeguards
+
+14. **NSFW false-positive auto-retry.** Flux's safety model occasionally flags clean prompts. Engine retries same prompt up to 2x (stochastic diffusion usually passes).
+
+15. **Banned-phrase retry.** Some bots have `bannedPhrases` — engine catches + retries Sonnet up to 2x before failing loud.
+
+16. **Fail loud on prod cron.** If all retries + fallbacks exhaust, engine throws. `bot_run_log` captures error + stage. GitHub Actions fails, sends email. Never auto-post a broken render.
+
+17. **Sonnet → Haiku fallback.** callClaude retries on 429/500/502/503/504/529 with exponential backoff (1s/3s/10s/30s), then falls back to Haiku. If both exhaust, the render throws.
+
+---
+
+## Production Cron
+
+### Per-Bot Workflows
+
+Each migrated bot has its own `.github/workflows/<name>.yml`:
+
+```yaml
+name: StarBot Dream Generation
+
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 2 posts/day, staggered times
+    - cron: '0 9 * * *'
+  workflow_dispatch:        # manual trigger with optional overrides
+    inputs:
+      path:
+        description: 'Specific path (default: random)'
+        required: false
+        default: 'random'
+      vibe:
+        description: 'Specific vibe (default: random)'
+        required: false
+        default: 'random'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Random delay (0-4 hours)
+        if: github.event_name == 'schedule'
+        run: sleep $((RANDOM % 14400))
+      - name: Generate dream
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node scripts/run-bot.js \
+            --bot starbot \
+            --path "${{ inputs.path || 'random' }}" \
+            --vibe "${{ inputs.vibe || 'random' }}"
+```
+
+### Key Cron Details
+
+- Each bot runs 2x/day at staggered times + 0-4 hour random delay
+- `run-bot.js` renders 1 dream, posts it, fails loud on error
+- `workflow_dispatch` allows manual triggering with path/vibe overrides from the GitHub UI
+- GitHub Actions secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`
+
+### Creating a New Workflow
+
+Copy an existing workflow, change the bot name and cron times. Stagger cron times by 15-30 minutes from existing bots to spread API load.
+
+---
+
+## Creating a New Bot From Scratch
+
+### Step 1: Create the Module
+
+```bash
+mkdir -p scripts/bots/<name>/paths scripts/bots/<name>/seeds
+```
+
+Create:
+- `index.js` — bot contract (see The Bot Engine Contract above)
+- `pools.js` — axis pools with `load()` helper
+- `shared-blocks.js` — universal prose blocks for this bot's identity
+
+### Step 2: Define Paths
+
+Each path is a distinct visual approach. Guidelines:
+- 3-8 paths per bot (too few = repetitive, too many = diluted)
+- Each path should produce visibly different renders
+- Character bots: split by composition (closeup vs full-body) and/or action type
+- Scene bots: split by environment type (landscape vs interior vs city vs cosmic)
+
+### Step 3: Write Gen Scripts + Generate Pools
+
+One gen script per pool in `scripts/gen-seeds/<name>/`. Start at `total: 25` for testing, scale to `total: 200, batch: 50` after approval.
+
+### Step 4: Write Path Briefs
+
+One brief-builder per path in `paths/<name>.js`. Follow the brief structure in "Writing Effective Briefs" above.
+
+### Step 5: Test
+
+```bash
+# Test each path individually
+node scripts/iter-bot.js --bot <name> --count 5 --mode <path> --post
+
+# Test random distribution
+node scripts/iter-bot.js --bot <name> --count 10 --post
+```
+
+### Step 6: Create Workflow + Deploy
+
+1. Create `.github/workflows/<name>.yml` (copy from existing)
+2. Commit everything
+3. Push to main — cron activates on next scheduled run
+
+### Step 7: Verify in App
+
+Search for the bot in the app, check their profile shows posts. Review renders on phone.
+
+---
+
+## Bot Roster
+
+### Active Image Bots (V2 Engine)
+
+All 19 bots below are on per-bot crons via the V2 engine.
+
+| Bot | Directory | Content | Paths | Mediums |
+|---|---|---|---|---|
+| StarBot | `starbot/` | Sci-fi / space / cyborg | 13 | render, real-astro, star-oil-cosmos |
+| DragonBot | `dragonbot/` | Epic fantasy / dragons | 8+ | canvas, watercolor |
+| GothBot | `gothbot/` | Gothic dark / vampires | 6+ | gothic, anime, canvas |
+| SirenBot | `sirenbot/` | Fantasy characters | 7 | canvas, watercolor |
+| MangaBot | `mangabot/` | Anime / Japanese | 4+ | anime |
+| BloomBot | `bloombot/` | Flowers / botanical | 4+ | photography, canvas, watercolor, pencil |
+| EarthBot | `earthbot/` | Nature / landscape | 4+ | photography, canvas, watercolor |
+| ToyBot | `toybot/` | Toys / crafts / miniatures | 5+ | lego, animation, claymation |
+| TinyBot | `tinybot/` | Miniatures / dioramas | 4+ | photography, animation, claymation |
+| SteamBot | `steambot/` | Steampunk | 4+ | canvas, photography |
+| TitanBot | `titanbot/` | Mythology / gods | 4+ | canvas, photography |
+| CoquetteBot | `coquettebot/` | Cute feminine | 4+ | coquette, fairytale, watercolor |
+| CuddleBot | `cuddlebot/` | Kawaii cozy | 4+ | animation, claymation, storybook |
+| PixelBot | `pixelbot/` | Retro pixel art | 4+ | pixels |
+| RetroBot | `retrobot/` | Retro / vaporwave | 4+ | vaporwave |
+| OceanBot | `oceanbot/` | Ocean / underwater | 4+ | photography, canvas, watercolor |
+| DinoBot | `dinobot/` | Dinosaurs / prehistoric | 4+ | canvas, photography |
+| BeachBot | `beachbot/` | Beach / coastal | 4+ | photography, watercolor |
+| BrickBot | `brickbot/` | LEGO / brick art | 4+ | lego |
+
+### Content Bots (Custom Scripts)
+
+| Bot | Content | Medium | Script |
+|---|---|---|---|
+| HumanBot | AI roasting human behavior | watercolor + enchanted | `generate-humanbot.js` |
+| MuseBot | AI musing on human condition | aura + ethereal | `generate-musebot.js` |
+
+Content bots follow a different architecture: stateless (no seed pool), Sonnet generates text content fresh each run, Sharp composites text overlay onto Flux-rendered base image.
+
+### Reference Implementations
+
+- **StarBot** (`scripts/bots/starbot/`) — the most complex bot. 13 paths, cyborg-woman with closeup/full-body split, path-conditional rollSharedDNA, per-medium promptPrefix/Suffix overrides, per-medium mediumStyles, per-path modelByPath. Use as reference for any character-centric bot with environment paths.
+
+- **GothBot** (`scripts/bots/gothbot/`) — reference for mediumStyles (how to make each medium visually distinct for the bot's identity), bannedPhrases, and the scene-girls pattern (Pre-Raphaelite oil painting + 4-pool architecture + custom medium + pose-first actions).
+
+---
+
+## Nightly User Dreams
+
+Every night, each active user gets one personalized dream generated by the nightly cron. This system is completely separate from the bot engine — different table, different script, different pipeline.
 
 ### The Three Paths (40/30/30 split)
-
-Each nightly dream rolls one of three paths:
 
 **Path 1 — Personal Cast + Personal Elements (40%)**
 - One cast member: self (50%), +1 (25%), or pet (25%)
 - At least one personal element: location, object, or both
 - Face swap applied for self/+1 on face-swap mediums (not pets)
-- Example: "Kevin on a Hawaiian cliff holding a guitar in a watercolor dreamscape"
 
 **Path 2 — Personal Elements Only (30%)**
 - No cast member
 - At least one personal element: location, object, or both
 - Pure environment dream featuring the user's stuff
-- Example: "A guitar floating in a Hawaiian tide pool at sunset"
 
 **Path 3 — Cast + Pure Random Scene (30%)**
 - One cast member: self (50%), +1 (25%), or pet (25%)
 - No personal elements — completely random scene
-- Face swap for self/+1 on face-swap mediums
-- Example: "Kevin suspended in an underwater cavern of bioluminescent jellyfish"
-
-For **non-face-swap mediums** (LEGO, claymation, etc.), Paths 1 and 3 can include 1-3 cast members since they're fully stylized from text descriptions.
 
 ### The 8 Seed Pools
-
-Based on the path roll and what personal data the user has, the system maps to one of 8 seed categories in the `nightly_seeds` table:
 
 | Category | Slots | When used |
 |---|---|---|
@@ -534,38 +769,21 @@ Based on the path roll and what personal data the user has, the system maps to o
 | `nightly_loc` | `${place}` | Path 2 (location only) |
 | `nightly_obj` | `${thing}` | Path 2 (object only) |
 | `nightly_loc_obj` | `${place}` + `${thing}` | Path 2 (both elements) |
-| `nightly_pure` | none | Fallback (user has no personal data) |
+| `nightly_pure` | none | Fallback (no personal data) |
 
 100 deduped seeds per pool = 800 total.
 
 ### Slot Filling
 
-At runtime, slots are filled with the user's actual data:
 - `${character}` → cast member's AI-generated text description (from photo upload)
-- `${place}` → random pick from user's `dream_seeds.places` (e.g., "hawaii")
-- `${thing}` → random pick from user's `dream_seeds.things` + `dream_seeds.characters` combined (e.g., "guitars", "dragons")
-
-### Runtime Flow
-
-```
-1. Roll path (40/30/30)
-2. Roll personal elements based on path
-3. Check what data user actually has → may downgrade path if data missing
-4. Map to seed category (deterministic if/else chain)
-5. Random pick from that pool (no per-user tracking — 100 seeds is enough variety)
-6. Fill slots with user's data
-7. Feed filled template to Sonnet + medium directive + vibe
-8. Sonnet writes 60-90 word Flux prompt
-9. Flux renders image
-10. Face swap if applicable (face-swap medium + human cast)
-11. Post to user's account
-```
+- `${place}` → random pick from user's `dream_seeds.places`
+- `${thing}` → random pick from user's `dream_seeds.things` + `dream_seeds.characters` combined
 
 ### Face Swap Rules
 
-- **Face-swap mediums** (photography, watercolor, canvas, anime, neon, comics, shimmer, pencil, twilight, surreal): real photo pasted onto rendered character AFTER Flux generates. The `${character}` text description gets Flux to render the right body/age/gender, then face swap replaces the face with the actual photo.
-- **Non-face-swap mediums** (coquette, pixels, lego, animation, claymation, vinyl, gothic, storybook, vaporwave, fairytale, handcrafted): fully stylized from text description only. No face swap. Can include multiple cast members in one scene.
-- **Pets**: always description-only, never face-swapped (face swap model is trained on human faces).
+- **Face-swap mediums** (photography, watercolor, canvas, anime, neon, comics, shimmer, pencil, twilight, surreal): real photo pasted onto rendered character AFTER Flux generates.
+- **Non-face-swap mediums** (coquette, pixels, lego, animation, claymation, vinyl, gothic, storybook, vaporwave, fairytale, handcrafted): fully stylized from text description only.
+- **Pets**: always description-only, never face-swapped.
 
 ### Generating New Nightly Seeds
 
@@ -575,25 +793,41 @@ node scripts/generate-nightly-seeds.js --count 1 --dry-run # test 1 per pool
 node scripts/generate-nightly-seeds.js --combo character   # one specific pool
 ```
 
-Each seed is generated by Sonnet with dedup — an environment+lighting key is extracted from each seed and banned before the next one is generated. Within a pool of 100, no two seeds share the same environment + lighting combination.
-
 ---
 
-## Database Tables — SEPARATE, NEVER CROSS-CONTAMINATE
+## Database Tables
 
-### `bot_seeds` — Bot dream seeds
+### `bot_dedup` — Per-axis recency tracking
 
 | Column | Type | Purpose |
 |---|---|---|
 | id | uuid | Primary key |
-| category | text | Bot prefix + strategy (e.g., `dragonbot_genre`) |
-| template | text | Complete scene description, no slots |
-| disabled | boolean | Soft-delete for old generations |
-| used_at | timestamptz | Tracks per-seed usage (each used once) |
-| generation | integer | Which generation batch this seed belongs to |
-| created_at | timestamptz | When inserted |
+| bot_name | text | Bot username |
+| axis | text | Pool axis name (e.g., `alien_landscape`, `cyborg_glow`) |
+| value | text | The stringified pool entry that was picked |
+| picked_at | timestamptz | When picked (default: now, used for 5-day window) |
 
-**Lifecycle:** Each seed used once (`used_at` tracked). When pool exhausted, `regenSeeds()` disables old seeds, generates fresh batch via Sonnet from strategy prompts in `seed-generator.js`.
+Picker reads last 5 days of picks to avoid repeats. Committed ONLY on successful post.
+
+### `bot_run_log` — Render audit trail
+
+| Column | Type | Purpose |
+|---|---|---|
+| bot_name | text | Bot username |
+| path | text | Which path was rendered |
+| vibe | text | Vibe key used |
+| medium | text | Medium key used |
+| model | text | Flux model used |
+| status | text | 'ok' or 'failed' |
+| image_url | text | Public URL of posted image |
+| error | text | Error message (failures only) |
+| error_stage | text | Pipeline stage where failure occurred |
+| duration_ms | integer | Total render time |
+| cost_cents | integer | Estimated API cost |
+| prompt_preview | text | First 300 chars of final prompt |
+| sonnet_retries | integer | Number of Sonnet retry attempts |
+| sonnet_fell_back_to_secondary | boolean | Whether Haiku fallback was used |
+| created_at | timestamptz | When the run happened |
 
 ### `nightly_seeds` — Nightly user dream seeds
 
@@ -604,151 +838,17 @@ Each seed is generated by Sonnet with dedup — an environment+lighting key is e
 | template | text | Scene template with `${character}/${place}/${thing}` slots |
 | created_at | timestamptz | When inserted |
 
-**Lifecycle:** Permanent pool. Random pick every time (no usage tracking). 100 seeds per pool provides 3+ months of variety since medium + vibe differ each night, making the same seed render differently.
+Permanent pool. Random pick every time (no usage tracking). 100 seeds per pool.
 
 ### `dream_templates` — LEGACY, DO NOT USE
 
-Old table that used to hold both bot seeds and nightly templates. Kept temporarily. All code now reads from `bot_seeds` or `nightly_seeds`. Will be dropped once verified.
+Old table that used to hold both bot seeds and nightly templates. All code now reads from `bot_dedup`/`bot_run_log` (V2 bots) or `nightly_seeds` (user nightlies). Will be dropped.
 
-### The April 2026 Database Deletion Incident
+### The April 2026 Deletion Incident
 
-During a cleanup session, an unscoped delete wiped ALL rows from `dream_templates` — both bot seeds (from trained bots) and nightly templates. This broke nightly user dreams and destroyed hand-curated bot seeds. The data was partially recovered from a Supabase backup, but the incident led to splitting into two separate tables to prevent cross-contamination.
+An unscoped delete wiped ALL rows from `dream_templates` — both bot seeds and nightly templates. Both systems broke. This is why the tables were split.
 
-**Hard rules to prevent this:**
-- NEVER run unscoped deletes on seed tables
-- Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped to one bot
-- Nightly seeds: generated fresh via `scripts/generate-nightly-seeds.js`, not manually edited
-- When in doubt, query first: `SELECT category, count(*) GROUP BY category` before any delete
-- The two tables exist SPECIFICALLY so operations on one cannot affect the other
-
-## Scripts
-
-- `scripts/generate-bot-dreams.js` — reads from `bot_seeds`, picks unused seeds (tracks `used_at`), auto-regenerates when exhausted, signs in as bot, calls Edge Function V2 path, flips draft to public
-- `scripts/generate-bot-seeds.js` — generates deduped bot seeds using Sonnet, stores in `bot_seeds` with generation tracking
-- `scripts/generate-nightly-seeds.js` — generates 8 pools × 100 slotted nightly seeds, stores in `nightly_seeds` with per-pool dedup
-- `scripts/generate-dream-templates.js` — LEGACY, generates old-style mood-weighted templates. Replaced by generate-nightly-seeds.js.
-- `scripts/lib/seed-generator.js` — shared module: BOT_SEEDS config, generateScene, extractSubject, generateSeedsForBot
-- `scripts/create-bot-accounts.js` — creates auth users + public.users + vibe profiles for all bots
-- `scripts/generate-humanbot.js` — HumanBot content bot (Sonnet → generate-dream → Sharp terminal overlay)
-- `scripts/generate-musebot.js` — MuseBot content bot (Sonnet → generate-dream → Sharp quote overlay)
-
-## New Vibes Added (available to all users)
-
-Added during bot testing, now in `dream_vibes` DB table:
-- **ethereal** — soft glowing light, otherworldly radiance, divine light
-- **mystical** — ancient magic, arcane energy, glowing runes
-- **majestic** — grand scale, regal splendor, awe and reverence
-- **ominous** — foreboding, tension before the storm, beautiful but unsettling
-- **ancient** — deep time, weathered stone, forgotten civilizations
-- **enchanted** — fairy-tale magic, sparkling particles, glowing flora
-- **fierce** — raw power, dynamic energy, explosive force
-
-## New Mediums Added
-
-- **anime_illustration** — dense lush hand-painted Japanese animation style, adventure atmosphere, detailed backgrounds (added for Yūki's Mononoke/Nausicaa aesthetic)
-- **aura** — bioluminescent glow, subsurface scattering, volumetric golden light rays, bloom effect, chromatic aberration. Created for MuseBot. `is_public: false` (bot-only, hidden from user picker).
-
----
-
-## Lessons Learned: The April 2026 Bot Expansion (11 new bots in one session)
-
-### What worked — the formula that produced 9/11 bots at 4+ quality on first generation
-
-1. **Multi-path seed strategies, not generic prompts.** Each bot got 3-5 specific PATHS (e.g., BloomBot: landscape, portrait, surreal, cozy) instead of one vague "make pretty flowers" prompt. Each path is a distinct visual approach with its own dedup key. This produces variety because different seeds come from different conceptual angles.
-
-2. **Sonnet generates the seeds, not us.** We define the creative DIRECTION per path (a 50-100 word prompt describing the energy, references, and quality bar), then Sonnet generates 15-20 specific seeds per path with built-in dedup. This gives us 60-80 seeds per bot that are all high-quality and non-repetitive. No hardcoded scene lists.
-
-3. **The prompt formula for seed generation.** The prompts that worked best:
-   - Start with what the scene IS (not what it looks like)
-   - Include reference worlds/artists/genres the bot should channel
-   - Include quality language that sets the bar ("jaw-dropping", "mind-blowing", "the most X thing you've ever seen")
-   - Include specific variety instructions ("vary the X wildly")
-   - Include what to AVOID ("never flat midday", "no gore")
-   - Let Sonnet fill in the specifics — vague-but-anchored beats over-specified
-
-4. **Dedup extraction per path.** Each path has an `extractPrompt` that pulls 2-3 dedup keys from each generated seed (e.g., "flower type + setting" for BloomBot landscape). This prevents repeating the same subject even across 60+ seeds.
-
-5. **Medium pools curated per bot.** Don't give bots access to all 20+ mediums. Each bot gets 2-4 mediums that specifically match its aesthetic. BloomBot gets `photography, canvas, watercolor, pencil`. ArcadeBot gets `lego, pixels, animation, claymation, vinyl`. Wrong mediums produce images that look nothing like the bot's identity.
-
-6. **The V2 text path as the universal rendering engine.** Every bot uses the same pipeline: seed → Sonnet expands to Flux prompt (incorporating the medium directive + vibe directive) → Flux Dev renders → draft upload → flip to public. The V2 engine handles the heavy lifting; the bot just provides the creative seed.
-
-### What failed — and why 2/11 bots scored below 4.5
-
-**HauntBot (3.5/5) — "Beautiful but not creepy"**
-
-Root cause: **wrong vibe killed the horror.** HauntBot rendered `photography + psychedelic` which produced saturated, dreamy energy — the opposite of dread. The seed said "unsettling playground where the swing moves with no wind" but the psychedelic vibe turned it into a pretty garden scene.
-
-Deeper issue: **competing instructions → Flux picks the safe option.** The seed said "beautiful BUT unsettling." When beauty and dread compete in a prompt, Flux resolves the conflict by defaulting to beautiful because that's what its training rewards. The subtle wrongness gets smoothed out.
-
-Fix: Added `excludeVibes` — HauntBot now ONLY gets dark/ominous/ancient/fierce/mystical/epic/cinematic/chaos vibes. Excluded: whimsical, cozy, enchanted, dreamy, peaceful, cute, psychedelic, minimal. The heaviest exclusion list of any bot.
-
-**TripBot (3.5/5) — "Fantasy art, not psychedelic"**
-
-Root cause: **wrong medium + wrong vibe completely overrode the seed's intent.** TripBot rendered `comics + majestic` which produced a D&D illustration of a robed king — zero fractals, zero impossible colors, zero reality-dissolving geometry. The medium (comics = graphic novel line art) and vibe (majestic = grand/epic) pulled the image into a completely different register.
-
-Deeper issue: **the medium/vibe combo is as powerful as the seed itself.** A psychedelic seed rendered in comics+majestic becomes fantasy art. The seed's intent gets overridden by the stylistic instructions from the medium/vibe.
-
-Fix: Changed mediums from `canvas, comics, vaporwave` to `canvas, shimmer, neon` (mediums that actually handle impossible colors and glow effects). Added `excludeVibes` — TripBot now only gets psychedelic/chaos/enchanted/mystical/fierce/dreamy/ethereal/whimsical/dark/epic/ominous/nostalgic/cute. Excluded: minimal, cozy, peaceful, ancient, majestic, cinematic.
-
-### The critical lesson: excludeVibes is NON-NEGOTIABLE
-
-Every bot that worked well (the original 6 + the 9 new ones that scored 4+) had either:
-- Curated medium pools that match their aesthetic, OR
-- Lucky random vibe draws that happened to work
-
-Every bot that failed had:
-- Wide-open vibe pools with no exclusions
-- A random draw that served the wrong vibe for the seed
-
-**Rule for all future bots:** ALWAYS add `excludeVibes` to the BOTS config. Think about which vibes would KILL this bot's aesthetic, and exclude them. Better to be too restrictive than too permissive — you can always add vibes back, but a bad vibe ruins an otherwise good seed.
-
-The existing seeded bots that have been running for weeks (DragonBot, MangaBot, GothBot) all proved this — they were tuned through iterative testing to have specific vibe exclusions and even `pinVibes` (forced good combos). The lesson just needed to be applied to the new bots too.
-
-### Content bot lessons (HumanBot + MuseBot)
-
-These follow a completely different architecture from the image bots:
-
-1. **Stateless, no seed pool.** Sonnet generates the content from scratch each run. The system prompt IS the seed. This works because text generation (observations, quotes) has natural variety — Sonnet won't write the same joke or quote twice.
-
-2. **Minimal prompts beat heavy prompts.** HumanBot proved this through 5 rounds of iteration: a 2000-token prompt with 30+ rules and 15 canonical examples produced hedged, formulaic output. A 40-word prompt ("Make a funny profound observation about humans, Seinfeld/LD/Wright voice, under 18 words") unleashed Sonnet's natural comedic instincts and scored 4.5/5.
-
-3. **The medium IS the brand.** HumanBot = watercolor + enchanted, always. MuseBot = aura + ethereal, always. Locking the medium gives visual consistency that makes the bot instantly recognizable in a feed.
-
-4. **Sharp post-processing for text-on-image.** Both content bots use Sharp to composite text overlays onto the Flux-generated image. HumanBot: green phosphor terminal card (the bot's "CLI output" voice). MuseBot: gradient-fade serif text (the bot's "gallery placard" voice). Different typography = different brand silhouette.
-
-5. **Character consistency requires a prepended spec.** HumanBot's red tin robot and MuseBot's cyborg flower are described in a JS constant that gets prepended to every Flux hint. This forces the same character into every scene without relying on Sonnet to remember across independent calls.
-
-### Quick reference: the full bot roster as of April 2026
-
-**Image bots (seed-pool pipeline via generate-bot-dreams.js):**
-
-| Bot | Content | Mediums | Seeds | Status |
-|---|---|---|---|---|
-| DragonBot | Epic fantasy | canvas, watercolor | 60 | ✅ Active |
-| MangaBot | Anime/Japanese | anime | 60 | ✅ Active |
-| StarBot | Sci-fi/space | photography, neon, canvas | 135 | ✅ Active |
-| VenusBot | Sci-fi women | photography, neon, shimmer | 60 | ✅ Active |
-| SirenBot | Fantasy characters | canvas, watercolor | 63 | ✅ Active |
-| GothBot | Gothic dark fantasy | gothic, anime, canvas | 90 | ✅ Active |
-| GlowBot | Ethereal beauty | watercolor, canvas | 20 | ✅ Active |
-| EarthBot | Nature/landscape | photography, canvas, watercolor | 20 | ✅ Active |
-| ArcadeBot | Toy/craft/retro | lego, pixels, animation, claymation, vinyl | 40 | ✅ Active |
-| CuddleBot | Kawaii cozy | animation, claymation, storybook | 20 | ✅ Active |
-| PopBot | Pop culture | comics, vaporwave | 20 | ✅ Active |
-| BloomBot | Flowers/botanical | photography×3, canvas, watercolor, pencil | 130 | ✅ Active |
-| AnimalBot | All animals | photography, canvas, watercolor | 75 | ✅ Active |
-| GlamBot | Fashion/beauty | photography, shimmer, canvas | 65 | ✅ Active |
-| SteamBot | Steampunk | canvas, photography | 55 | ✅ Active |
-| TinyBot | Miniatures/dioramas | photography, animation, claymation | 60 | ✅ Active |
-| HauntBot | Atmospheric horror | photography, canvas, gothic | 60 | ✅ Active |
-| InkBot | Tattoo art | comics, canvas, photography | 60 | ✅ Active |
-| TripBot | Psychedelic | canvas, shimmer, neon | 60 | ✅ Active |
-| TitanBot | Mythology/gods | canvas, photography | 60 | ✅ Active |
-| CoquetteBot | Cute feminine | coquette, fairytale, watercolor | 75 | ✅ Active |
-
-**Content bots (custom scripts with Sharp text overlay):**
-
-| Bot | Content | Medium | Script | Status |
-|---|---|---|---|---|
-| HumanBot | AI roasting human behavior | watercolor + enchanted | generate-humanbot.js | ✅ Active |
-| MuseBot | AI musing on human condition | aura + ethereal | generate-musebot.js | ✅ Active |
+**Hard rules:**
+- NEVER run unscoped deletes on any seed/dedup table
+- Always scope by bot name or category prefix
+- Query `SELECT category, count(*) GROUP BY category` before any delete operation
