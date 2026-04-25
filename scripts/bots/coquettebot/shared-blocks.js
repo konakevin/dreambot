@@ -28,13 +28,13 @@ const NO_HUMANS_IN_SWEETS_BLOCK = `━━━ NO HUMANS IN SWEETS PATH ━━━
 
 Sweets path: ZERO humans, zero chefs, zero pastry workers, zero human hands. Cute whimsical animal characters (mouse baker, bunny pastry-chef, hedgehog with tiny apron) are OK as supporting elements — but NEVER human presence of any kind. Pure food still-life or animal-pastry-shop magic.`;
 
-const STYLIZED_AESTHETIC_BLOCK = `━━━ STYLIZED AESTHETIC (except fashion path) ━━━
+const STYLIZED_AESTHETIC_BLOCK = `━━━ STYLIZED AESTHETIC (ALL paths) ━━━
 
-Fairytale / watercolor / illustration leaning dominates. Photography is RESERVED for coquette-fashion path (whimsical editorial). Every render feels painterly / storybook / dreamy — not photorealistic documentary.`;
+Fairytale / watercolor / illustration energy dominates every path. NEVER photorealistic. Every render feels painterly / storybook / dreamy — even fashion and character paths are whimsical illustrations, not photo shoots.`;
 
-const SOLO_COMPOSITION_BLOCK = `━━━ SOLO COMPOSITION (coquette-fashion path only) ━━━
+const SOLO_COMPOSITION_BLOCK = `━━━ SOLO COMPOSITION (character paths) ━━━
 
-When rendering coquette-fashion with a human girl: SHE IS SOLO. No male figures. No second-figure interaction. No "she stands beside him". Girl is the subject, alone, framed editorially. (Two-figure shots read as cheesy stock-art.)`;
+When a girl or character appears: SHE IS SOLO. No male figures. No second-figure interaction. No "she stands beside him". She is the subject, alone, whimsical and dreamy. (Two-figure shots read as cheesy stock-art.)`;
 
 const NO_MALE_FIGURES_BLOCK = `━━━ NO MALE FIGURES (ever) ━━━
 

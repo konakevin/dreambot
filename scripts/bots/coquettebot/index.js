@@ -3,8 +3,7 @@
  *
  * Soft pink pastel everything. Cottagecore / princess / fairy / ballet /
  * Parisian-pastry energy. Adult-feminine-pastel (vs CuddleBot's kid-cute).
- * Mixed: 4 scene-centric paths + 1 fashion (solo human) + 1 couture (varied).
- * No male figures, no dark, no gritty.
+ * Stylized illustrated — NEVER photorealistic. No male figures, no dark.
  */
 
 const pools = require('./pools');
@@ -17,12 +16,20 @@ const pathBuilders = {
   'sweet-treats': require('./paths/sweet-treats'),
   'coquette-fashion': require('./paths/coquette-fashion'),
   'adorable-couture': require('./paths/adorable-couture'),
+  'parisian-daydream': require('./paths/parisian-daydream'),
+  'tea-party-romance': require('./paths/tea-party-romance'),
+  'bedroom-princess': require('./paths/bedroom-princess'),
+  'fairytale-princess': require('./paths/fairytale-princess'),
+  'rainy-cottage': require('./paths/rainy-cottage'),
+  'coquette-portrait': require('./paths/coquette-portrait'),
+  'coastal-coquette': require('./paths/coastal-coquette'),
 };
 
 module.exports = {
   username: 'coquettebot',
   displayName: 'CoquetteBot',
 
+  // Stylized only — NO photography, NO cinematic, NO render
   mediums: [
     'fairytale',
     'watercolor',
@@ -34,30 +41,34 @@ module.exports = {
     'storybook',
   ],
 
-  // Fairytale medium heavily favored coquette/enchanted/whimsical/shimmer
-  // (preserves old pinVibes pattern for fairytale)
+  mediumByPath: {
+    'coquette-portrait': [
+      'photography', 'photography', 'photography',
+      'canvas', 'canvas',
+      'fairytale',
+      'watercolor',
+      'illustration',
+    ],
+  },
+
   vibesByMedium: {
-    fairytale: ['coquette', 'coquette', 'coquette', 'enchanted', 'whimsical', 'shimmer'],
+    fairytale: ['coquette', 'enchanted', 'whimsical', 'shimmer'],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // 9 allowed vibes. coquette is stacked 4× to hit ~31% bot-wide (4/13).
-  // Weighted-random via array repetition (matches engine's resolveVibe).
+  // coquette stacked 4x for ~31%. Replaced arcane with cinematic.
   vibes: [
-    'coquette',
-    'coquette',
-    'coquette',
     'coquette',
     'cozy',
     'nostalgic',
     'peaceful',
     'whimsical',
     'ethereal',
-    'arcane',
     'enchanted',
     'shimmer',
+    'surreal',
   ],
 
   paths: [
@@ -67,17 +78,32 @@ module.exports = {
     'sweet-treats',
     'coquette-fashion',
     'adorable-couture',
+    'parisian-daydream',
+    'tea-party-romance',
+    'bedroom-princess',
+    'fairytale-princess',
+    'rainy-cottage',
+    'coquette-portrait',
+    'coastal-coquette',
   ],
 
-  // Heavier weights on bread-and-butter: cottagecore + pink-nature + adorable-creatures.
-  // Sweet-treats + fashion + couture balance roster.
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+
   pathWeights: {
-    'adorable-creatures': 2,
-    'cottagecore-scene': 2,
-    'pink-nature': 2,
+    'adorable-creatures': 1,
+    'cottagecore-scene': 1,
+    'pink-nature': 1,
     'sweet-treats': 1,
     'coquette-fashion': 1,
     'adorable-couture': 1,
+    'parisian-daydream': 1,
+    'tea-party-romance': 1,
+    'bedroom-princess': 1,
+    'fairytale-princess': 1,
+    'rainy-cottage': 1,
+    'coquette-portrait': 1,
+    'coastal-coquette': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

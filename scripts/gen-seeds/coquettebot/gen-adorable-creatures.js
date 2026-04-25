@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/adorable_creatures.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} ADORABLE CREATURE descriptions for CoquetteBot's adorable-creatures path — tiny cute creatures in soft pink pastel settings. Fantasy + exaggerated-real. Big dewy eyes. No clothing focus (couture path handles clothing).
 

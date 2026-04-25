@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/lighting.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for CoquetteBot — soft warm dreamy lighting treatments. Always precious / delicate / romantic. No harsh / moody / stark.
 

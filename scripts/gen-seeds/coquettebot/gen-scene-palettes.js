@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/scene_palettes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50, append: true,
   metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for CoquetteBot — pink-dominant pastel palettes. Always romantic / feminine / dreamy.
 
 Each entry: 10-20 words. One specific pink-pastel palette with 3-5 color words.

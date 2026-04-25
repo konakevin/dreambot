@@ -1,20 +1,19 @@
 /**
- * CoquetteBot coquette-fashion path — whimsical illustrated girl in a
- * precious romantic outfit moment. SOLO, stylized, never photorealistic.
- * Twirling in a meadow, reading under a tree, holding a bouquet energy.
+ * CoquetteBot parisian-daydream — Paris streets, flower shops, patisseries,
+ * café tables, vintage bikes with baskets, soft rain + umbrellas. No people.
+ * The most romantic city rendered as a pink pastel dream.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const moment = picker.pickWithRecency(pools.COQUETTE_FASHION_MOMENTS, 'fashion_moment');
-  const hair = picker.pickWithRecency(pools.PRINCESS_HAIR, 'hair');
+  const scene = picker.pickWithRecency(pools.PARISIAN_SCENES, 'parisian');
   const accessory = picker.pickWithRecency(pools.CUTE_ACCESSORIES, 'cute_accessory');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are writing a COQUETTE FASHION scene for CoquetteBot — a whimsical illustrated girl in a precious romantic outfit moment. Twirling in a flower field, perched on a garden swing, holding a parasol under cherry blossoms. STYLIZED ILLUSTRATION, never photorealistic. Output wraps with style prefix + suffix.
+  return `You are writing a PARISIAN DAYDREAM scene for CoquetteBot — Paris as a pink pastel fantasy. Café tables with croissants, patisserie windows stacked with macarons, flower carts on cobblestone, vintage bikes with wicker baskets, wrought-iron balconies draped in roses. No people visible. Output wraps with style prefix + suffix.
 
 ${blocks.COQUETTE_ENERGY_BLOCK}
 
@@ -22,21 +21,17 @@ ${blocks.PINK_AND_PASTEL_DOMINANT_BLOCK}
 
 ${blocks.NO_DARK_NO_EDGY_BLOCK}
 
-${blocks.SOLO_COMPOSITION_BLOCK}
-
-${blocks.NO_MALE_FIGURES_BLOCK}
-
 ${blocks.STYLIZED_AESTHETIC_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ HER HAIR ━━━
-${hair}
+━━━ NO HUMANS ━━━
+Pure scene. Objects imply romance — two espresso cups, an open book, a silk scarf left on a chair.
 
-━━━ THE FASHION MOMENT ━━━
-${moment}
+━━━ THE PARISIAN SCENE ━━━
+${scene}
 
-━━━ ACCESSORY DETAIL ━━━
+━━━ DETAIL ELEMENT ━━━
 ${accessory}
 
 ━━━ LIGHTING ━━━
@@ -57,7 +52,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-SOLO girl, illustrated/painterly style. Mid-close or mid-full. She is in a sweet candid moment — NOT posing for a camera, NOT editorial. Dreamy pastel backdrop. Ribbons, bows, lace, florals. Every detail whimsical and romantic. Never two-figure, never male, never photorealistic.
+Street-level or storefront frame. Parisian architectural details — arched windows, iron railings, awnings, lanterns. Pink and cream dominate. Cobblestone texture. Flowers everywhere — window boxes, carts, bouquets. Morning light or golden-hour dusk. The viewer wants to book a flight immediately.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

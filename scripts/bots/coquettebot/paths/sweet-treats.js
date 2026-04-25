@@ -1,7 +1,7 @@
 /**
- * CoquetteBot sweet-treats path — food still-life OR whimsical cute-animal
- * bakery scenes. ZERO humans. Pastel sweets, rose-petal jams, Parisian
- * pastries, macarons, tea-time spreads.
+ * CoquetteBot sweet-treats path — 50/50 split: pure food still-life OR
+ * cute creatures IN the food scene. ZERO humans. Pastel sweets, rose-petal
+ * jams, Parisian pastries, macarons, tea-time spreads.
  */
 
 const pools = require('../pools');
@@ -12,7 +12,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a coquette still-life painter writing SWEET TREAT scenes for CoquetteBot. Food is hero. ZERO humans. Whimsical cute-animal characters (mouse baker, bunny chef, hedgehog with apron) OK as supporting elements — or pure still-life. Output wraps with style prefix + suffix.
+  const hasCreature = Math.random() < 0.8;
+  const creature = hasCreature
+    ? picker.pickWithRecency(pools.ADORABLE_CREATURES, 'sweet_creature')
+    : null;
+
+  const creatureBlock = hasCreature
+    ? `━━━ CUTE CREATURE IN THE SCENE ━━━
+A tiny adorable creature is part of this sweet scene — ${creature}. The creature is IN the food world: sitting on a macaron, peeking out of a teacup, frosting a tiny cake, napping beside a pastry. Dressed in coquette style — tiny pink apron, ribbon bow, pearl necklace, lace collar. Big dewy eyes, soft round shapes, irresistibly cute. The creature and the sweets share the spotlight equally.`
+    : `━━━ PURE FOOD STILL-LIFE ━━━
+No creatures, no characters. The sweets ARE the stars — impossibly beautiful, precisely arranged, dripping with coquette detail. Rose petals, pearl dragées, edible flowers, gold leaf, satin ribbons around boxes.`;
+
+  return `You are writing a SWEET TREAT scene for CoquetteBot. ${hasCreature ? 'A tiny adorable creature shares the scene with impossibly beautiful sweets.' : 'Pure food still-life — the sweets themselves are the stars.'} ZERO humans. Output wraps with style prefix + suffix.
 
 ${blocks.COQUETTE_ENERGY_BLOCK}
 
@@ -28,6 +39,8 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE SWEET TREAT SCENE ━━━
 ${sweet}
+
+${creatureBlock}
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -47,7 +60,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid-close tabletop or bakery-counter frame. Food precisely arranged. Rose-petals, pearl-dragées, edible flowers scattered. Delicate china. Pastel saturation. NO humans, no hands, no chef-figures (except animal-characters in aprons).
+Mid-close tabletop or bakery-counter frame. ${hasCreature ? 'Creature and sweets share the frame — creature is tiny relative to the food world around it.' : 'Food precisely arranged as hero subject.'} Rose-petals, pearl-dragées, edible flowers scattered. Delicate china. Pastel saturation. NO humans, no hands.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

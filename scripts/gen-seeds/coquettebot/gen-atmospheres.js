@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/atmospheres.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for CoquetteBot — soft pastel particles and delicate atmospheric elements. Always soft / warm / romantic / dreamy.
 

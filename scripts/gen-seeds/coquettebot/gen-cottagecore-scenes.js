@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/cottagecore_scenes.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COTTAGECORE SCENE descriptions for CoquetteBot's cottagecore-scene path — places girls want to LIVE IN. Fairy doors, pink velvet bedrooms, ballet studios, Parisian cafés, rose bookshops. Setting is hero, no characters needed.
 

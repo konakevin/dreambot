@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/whimsical_sweets.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} WHIMSICAL SWEET / FOOD STILL-LIFE descriptions for CoquetteBot's sweet-treats path — pastel sweets, pastries, tea-time spreads. ZERO humans. Whimsical cute-animal characters (mouse baker, bunny pastry chef, hedgehog with tiny apron) are OK as supporting elements. Can also be pure still-life.
 

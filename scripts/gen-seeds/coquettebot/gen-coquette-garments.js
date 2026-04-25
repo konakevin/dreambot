@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/coquette_garments.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COQUETTE GARMENT descriptions for CoquetteBot's adorable-couture path — specific clothing items for fantasy characters. Tulle / lace / silk / pearl / ribbon / bow. Precious + romantic.
 

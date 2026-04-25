@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/coquette_fashion_moments.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COQUETTE FASHION MOMENT descriptions for CoquetteBot's coquette-fashion path — ONE young woman, SOLO, in editorial fashion moments. Ribbon-corsets, ballet slippers, silk bows, tulle, lace, pearls. Precious / dreamy / romantic editorial.
 

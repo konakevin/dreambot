@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/cute_accessories.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} CUTE ACCESSORY descriptions for CoquetteBot — small precious detail items that can stack onto any render. Pearls, ribbons, lace, bows, flower crowns, tiaras. Each entry is a single detail element.
 

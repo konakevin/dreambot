@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/couture_scenes.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COUTURE SCENE descriptions for CoquetteBot's adorable-couture path — rich-detailed backdrops for fantasy-character couture scenes. Luxurious / dreamy / magical / pastel settings.
 

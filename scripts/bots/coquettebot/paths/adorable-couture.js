@@ -9,6 +9,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const wearer = picker.pickWithRecency(pools.COUTURE_WEARERS, 'couture_wearer');
+  const hair = picker.pickWithRecency(pools.PRINCESS_HAIR, 'hair');
   const garment = picker.pickWithRecency(pools.COQUETTE_GARMENTS, 'couture_garment');
   const scene = picker.pickWithRecency(pools.COUTURE_SCENES, 'couture_scene');
   const accessory = picker.pickWithRecency(pools.CUTE_ACCESSORIES, 'cute_accessory');
@@ -30,6 +31,9 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE WEARER ━━━
 ${wearer}
+
+━━━ HAIR ━━━
+${hair}
 
 ━━━ THE GARMENT (focal) ━━━
 ${garment}

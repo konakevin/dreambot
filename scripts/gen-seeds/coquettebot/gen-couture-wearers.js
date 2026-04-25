@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/couture_wearers.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COUTURE WEARER descriptions for CoquetteBot's adorable-couture path — varied fantasy/storybook character types that can wear coquette couture. NO human adult women wearing these (that's the coquette-fashion path). NO male figures.
 

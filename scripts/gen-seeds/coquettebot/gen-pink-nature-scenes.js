@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/coquettebot/seeds/pink_nature_scenes.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} PINK NATURE SCENE descriptions for CoquetteBot's pink-nature path — the girliest, most romantic nature imaginable. Cherry-blossom paths, pink peony fields, pastel sunsets, lavender meadows.
 
