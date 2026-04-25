@@ -16,6 +16,7 @@ const pathBuilders = {
   'dragon-scene': require('./paths/dragon-scene'),
   'magic-moment': require('./paths/magic-moment'),
   'cozy-arcane': require('./paths/cozy-arcane'),
+  'enchanted-realm': require('./paths/enchanted-realm'),
 };
 
 module.exports = {
@@ -56,6 +57,7 @@ module.exports = {
     'dragon-scene',
     'magic-moment',
     'cozy-arcane',
+    'enchanted-realm',
   ],
 
   // dragon-scene + landscape co-flagship at 20% each (4/20). Other 4 paths evenly split the remaining 60% at 15% each (3/20).
@@ -66,6 +68,7 @@ module.exports = {
     'dragon-scene': 4,
     'magic-moment': 3,
     'cozy-arcane': 3,
+    'enchanted-realm': 3,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

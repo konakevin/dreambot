@@ -1,65 +1,51 @@
 /**
  * EarthBot — shared prose blocks.
  *
- * EARTH ONLY. Every render is theoretically plausible earthly location dialed
- * to 10× — National-Geographic-cover × 10. Zero fantasy, zero cosmic, zero
- * physics-defying. Scene-centric: no humans, no animal subjects.
+ * The most breathtaking landscapes ever painted — real or imagined.
+ * NatGeo drama meets Pandora beauty meets Ghibli serenity.
+ * Scene-centric: no humans, no animal subjects.
  */
 
 const PROMPT_PREFIX =
-  'National Geographic cover photograph dialed to 10×, dramatic earthly landscape, impossibly beautiful real-world vista, epic natural scene, documentary cinematography, Earth at its most breathtaking';
+  'breathtaking landscape, stunning natural vista, cinematic dramatic lighting, rich vivid colors, epic scale, wallpaper-worthy, gallery-quality, cinematic atmosphere, sharp detail, hyper-detailed environment, photorealistic rendering';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
-
-const EARTH_ONLY_BLOCK = `━━━ EARTH ONLY — NON-NEGOTIABLE ━━━
-
-Every render is a theoretically plausible EARTHLY location. Bound by Earth's actual geographic / geologic / biologic / meteorologic rules. Invented-specific OK (an unnamed glacier valley, a fictitious basalt cliff) — but always bound by Earth physics.
-
-ABSOLUTELY NEVER:
-- Fantasy architecture (no castles, no floating islands, no elvish bridges)
-- Cosmic / alien / otherworldly elements
-- Physics-defying phenomena (no glowing trees, no bioluminescent lakes, no crystalline forests)
-- Built human structures as subject (maybe peripheral, never the focus)
-- Mythical creatures
-- Sci-fi or futuristic elements
-
-ALWAYS:
-- Plausible Earth geography (real-type mountains, lakes, forests, coasts, dunes, reefs)
-- Earth-plausible weather and atmosphere
-- Real-world biomes`;
+const PROMPT_SUFFIX = 'no humans, no people, no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
 const NATURE_IS_HERO_BLOCK = `━━━ NATURE IS THE HERO ━━━
 
-The LAND / SKY / WEATHER / WATER itself is the subject. No narrative focus — the planet is protagonist. The viewer should feel: "Earth is staggering. I want to BE there." Pure geography, amplified. Compose like a National Geographic cover that made it to print because the photographer was in the right place at the right time with the light of a lifetime.`;
+The landscape itself is the subject. No narrative focus — the world is protagonist. The viewer should feel awe, wonder, and the urge to step into the frame. Pure geography and atmosphere, amplified beyond what any camera could capture.`;
 
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE ━━━
 
-No human figures in frame. No hikers, no climbers, no faces, no silhouettes — not even at distance. Pure land + sky + water + weather.`;
-
-const NO_WILDLIFE_BLOCK = `━━━ NO WILDLIFE (animal subjects belong to AnimalBot) ━━━
-
-No animal subjects. No deer, no birds as focal points, no bears, no whales breaching, no creatures in frame. If an animal appears, it's AnimalBot's job. EarthBot is pure landscape / sky / weather / geology / botany. The land is the star.`;
+No human figures anywhere. No hikers, no climbers, no silhouettes, no structures as subject. Pure landscape, pure nature, pure atmosphere.`;
 
 const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ IMPOSSIBLE BEAUTY ━━━
 
-Every render is wall-poster / phone-wallpaper quality. Not documentary-restrained — cranked to the absolute apex of natural beauty. Colors more saturated than real film captures. Atmospheric layering more dense than most photographers catch. Lighting more perfect than nature usually offers. "I can't believe this is Earth" — that's the reaction.`;
+Every render is wall-poster / phone-wallpaper quality. Colors more saturated than film captures. Atmospheric layering more dense than photographers catch. Lighting more perfect than nature usually offers. AI-generated beauty that feels impossible to see in person.`;
 
-const DRAMATIC_LIGHTING_BLOCK = `━━━ DRAMATIC LIGHTING ━━━
+const LIGHTING_IS_EVERYTHING_BLOCK = `━━━ LIGHTING QUALITY ━━━
 
-Name specific light treatments per render. Golden-hour rake across ridgelines. Blue-hour afterglow on still water. God-rays piercing stormclouds. Aurora green across ice. Moonlight silvering dunes. Lightning mid-strike. Backlit mist through old-growth. Never generic "soft light" — always a specific, photographable, nameable moment.`;
+Great lighting is about TIME OF DAY and WEATHER CONDITIONS — not about visible light beams or shafts of light. NEVER describe god-rays, light beams, light shafts, crepuscular rays, or any visible light streak. Instead describe the ambient light quality:
+
+- Golden hour warm side-light with long shadows
+- Overcast soft diffuse light with rich saturated colors
+- Blue hour twilight with deep cool tones
+- Harsh midday sun with high contrast and short shadows
+- Stormy dramatic skies with moody dark atmosphere
+- Dawn pink light on snow or mist
+
+Describe the light's direction, warmth, and shadow quality. The light should shape the landscape naturally — never be a visible element in the frame.`;
 
 const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — AMPLIFICATION ━━━
 
-Earth is the canvas, not the ceiling. Stack weather + atmospheric phenomena. Invent absurd-but-plausible geological features within Earth's rules. Saturate colors beyond realistic. Dial EVERY element to max. Sonnet is encouraged to embellish aggressively — pile on layered clouds, add a second atmospheric element, add drifting particulate, stack multiple light sources, compose the most insane version of this Earth moment that could theoretically exist. Garden-of-Eden energy — the canvas is constrained to Earth, but within Earth there is NO ceiling.`;
+Push scale, depth, and atmosphere to maximum. Layer weather and light phenomena. Add depth through atmospheric perspective — haze, mist, rain, dust. If the render feels flat or generic — add a dramatic sky, a secondary light source, volumetric atmosphere. Every frame should make someone's jaw drop. But keep it GROUNDED — cinematic-real, not fantasy-painted.`;
 
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
-  EARTH_ONLY_BLOCK,
   NATURE_IS_HERO_BLOCK,
   NO_PEOPLE_BLOCK,
-  NO_WILDLIFE_BLOCK,
   IMPOSSIBLE_BEAUTY_BLOCK,
-  DRAMATIC_LIGHTING_BLOCK,
+  LIGHTING_IS_EVERYTHING_BLOCK,
   BLOW_IT_UP_BLOCK,
 };

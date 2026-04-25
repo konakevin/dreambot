@@ -1,18 +1,18 @@
 /**
- * EarthBot hidden-corner — intimate discovered nature moments.
- * Mossy creeks, fern grottos, tide pools, forest clearings.
- * The quiet corner you stumble into.
+ * EarthBot geological-wonder — Earth's geological spectacles.
+ * Crystal caves, basalt columns, slot canyons, geysers, lava tubes.
+ * The raw architecture of the planet.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const corner = picker.pickWithRecency(pools.HIDDEN_CORNERS, 'hidden_corner');
+  const scene = picker.pickWithRecency(pools.GEOLOGICAL_SCENES, 'geological_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an intimate nature photographer writing HIDDEN CORNER scenes for EarthBot. The quiet, discovered, tucked-away nature moment — the place you stumble into and gasp. Tight or mid frame, NOT wide panorama. Lush detail everywhere. Output wraps with style prefix + suffix.
+  return `You are a geological photographer writing GEOLOGICAL WONDER scenes for EarthBot. The raw architecture of the planet — crystal caves with amethyst walls, basalt column formations, slot canyons with light beams, erupting geysers, lava tubes, travertine terraces, glacier ice caves. The geology itself is spectacular and alien. Output wraps with style prefix + suffix.
 
 ${blocks.NATURE_IS_HERO_BLOCK}
 
@@ -22,8 +22,8 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ${blocks.LIGHTING_IS_EVERYTHING_BLOCK}
 
-━━━ THE HIDDEN CORNER ━━━
-${corner}
+━━━ THE GEOLOGICAL WONDER ━━━
+${scene}
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -43,7 +43,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Tight or mid-close frame. Intimate, discovered feel. Rich micro-detail: moss texture, water surface, wet leaves, stones. Light is dappled or filtered. The viewer feels they stumbled into a small beautiful pocket of the world.
+The geological formation dominates the frame. Light interacts with the rock/crystal/water in spectacular ways. The scale can be intimate (cave interior) or epic (canyon vista). Earth's raw architecture as art.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

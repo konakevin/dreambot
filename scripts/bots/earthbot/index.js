@@ -1,67 +1,81 @@
 /**
  * EarthBot — the bot-engine contract.
  *
- * EARTH ONLY. Every render is a theoretically plausible earthly location
- * dialed to 10× drama / saturation / lighting / weather. National-Geographic
- * cover × 10. Zero fantasy, zero cosmic, zero physics-defying. Scene-centric
- * — no humans, no animal subjects (AnimalBot's job).
+ * The most breathtaking landscapes on Earth — real geography amplified
+ * to impossible beauty. NatGeo grandeur, rooted in this planet.
+ * No people, pure atmosphere.
  */
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
 
 const pathBuilders = {
-  vista: require('./paths/vista'),
+  'epic-vista': require('./paths/epic-vista'),
+  'weather-drama': require('./paths/weather-drama'),
   'hidden-corner': require('./paths/hidden-corner'),
-  'weather-moment': require('./paths/weather-moment'),
-  'cozy-nature': require('./paths/cozy-nature'),
-  sky: require('./paths/sky'),
+  'dramatic-sky': require('./paths/dramatic-sky'),
+  'luminous-landscape': require('./paths/luminous-landscape'),
+  'sacred-light': require('./paths/sacred-light'),
+  'national-parks': require('./paths/national-parks'),
+  'seasonal-shift': require('./paths/seasonal-shift'),
+  'geological-wonder': require('./paths/geological-wonder'),
+  'micro-nature': require('./paths/micro-nature'),
 };
 
 module.exports = {
   username: 'earthbot',
   displayName: 'EarthBot',
 
-  // Photography-leaning mediums (Earth-rooted aesthetic)
-  mediums: ['photography', 'canvas', 'watercolor', 'pencil'],
+  mediums: ['photography', 'canvas', 'watercolor', 'oil_painting', 'illustration', 'pencil'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // Inverts old excludeVibes (minimal/psychedelic/macabre). Earth has drama + weather,
-  // so dark + fierce are ALLOWED (thunderstorm / volcanic / stormy energy).
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+
   vibes: [
     'cinematic',
-    'dark',
     'cozy',
+    'dark',
     'epic',
     'nostalgic',
     'peaceful',
-    'whimsical',
     'ethereal',
-    'arcane',
     'ancient',
     'enchanted',
-    'fierce',
-    'coquette',
     'voltage',
     'nightshade',
     'shimmer',
     'surreal',
   ],
 
-  paths: ['vista', 'hidden-corner', 'weather-moment', 'cozy-nature', 'sky'],
+  paths: [
+    'epic-vista',
+    'weather-drama',
+    'hidden-corner',
+    'dramatic-sky',
+    'luminous-landscape',
+    'sacred-light',
+    'national-parks',
+    'seasonal-shift',
+    'geological-wonder',
+    'micro-nature',
+  ],
 
-  // Bread-and-butter are vista + sky; hidden-corner + weather-moment + cozy balance rotation
   pathWeights: {
-    vista: 2,
+    'epic-vista': 1,
+    'weather-drama': 1,
     'hidden-corner': 1,
-    'weather-moment': 2,
-    'cozy-nature': 1,
-    sky: 2,
+    'dramatic-sky': 1,
+    'luminous-landscape': 1,
+    'sacred-light': 1,
+    'national-parks': 1,
+    'seasonal-shift': 1,
+    'geological-wonder': 1,
+    'micro-nature': 1,
   },
 
-  // Scene-centric — sharedDNA is just palette + vibe color
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),

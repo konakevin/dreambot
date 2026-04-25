@@ -41,6 +41,7 @@ module.exports = {
   ARCHITECTURAL_ELEMENTS: load('architectural_elements'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
+  ENCHANTED_SCENES: load('enchanted_scenes'),
   SCENE_PALETTES: load('scene_palettes'),
   VIBE_COLOR,
 };

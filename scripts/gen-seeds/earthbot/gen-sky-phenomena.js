@@ -2,43 +2,32 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/sky_phenomena.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SKY PHENOMENA descriptions for EarthBot's "sky" path. SKY IS THE SUBJECT; ground is peripheral context. Rare + exotic + atmospheric spectacles from Earth's actual sky physics.
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} SKY-AS-SUBJECT descriptions for EarthBot — the sky itself is the entire composition, not just a backdrop. Celestial and atmospheric spectacles viewed from Earth.
 
-Each entry: 15-30 words. One specific sky event with brief ground-context.
+Each entry: 15-25 words. One specific sky phenomenon with a minimal ground anchor. No people.
 
-━━━ CATEGORIES TO DRAW FROM ━━━
-- Aurora borealis / aurora australis (green / pink / violet over tundra / ice / forest)
-- Supercell thunderstorm cloud structure (rotating mothership, anvil top)
-- Mammatus clouds (pouch-like under thunderstorm base)
-- Lenticular clouds (UFO-shaped over mountain peak)
-- Altocumulus wave clouds (repeating ripples overhead)
-- Milky Way arch (terrestrial star-field stretching horizon-to-horizon)
-- Lightning fork / ribbon / cloud-to-cloud
-- God-rays piercing storm clouds
-- Sun-dog / parhelion (rainbow-like spots flanking sun)
-- Moon-halo / lunar halo (ring around moon)
-- Iridescent clouds (pearl-rainbow sheens)
-- Noctilucent clouds (electric-blue wisps at dusk)
-- Volcanic eruption cloud / pyrocumulonimbus
-- Rainbow after storm (primary / double / full-arc)
-- Sunset from plane-window altitude (cloud-carpets below)
-- Fog-bow (white arc in fog)
-- Crepuscular rays (god-rays from behind distant clouds at sunset)
-- Cirrus streamers at high altitude
-- Monsoon rain curtain visible from distance
-- Noctilucent blue-glow clouds at twilight
-- Sandstorm wall approaching across plain (sky-dominated)
-- Ice-fog tundra phenomena (low sun + ice crystals)
+━━━ CATEGORIES (mix across all) ━━━
+- Mammatus clouds (bulging cloud pouches underlit by sunset, purple-orange mammatus fields)
+- Milky Way arcs (galactic core over desert, star river reflected in alpine lake, Milky Way over ocean)
+- Noctilucent clouds (electric blue ice clouds at polar twilight, rippled noctilucent sheets)
+- Sun pillars (vertical light columns in ice crystal air, dawn pillars over frozen tundra)
+- Zodiacal light (pyramid of light along ecliptic after sunset, false dawn in desert sky)
+- Meteor showers (Perseid streaks over mountain silhouette, Geminid fireballs, Leonid storm)
+- Crepuscular rays (god-rays fanning through broken cumulus, anti-crepuscular convergence)
+- Iridescent clouds (nacreous mother-of-pearl clouds, corona around cumulus, cloud iridescence)
+- Star trails (concentric circles around Polaris, equatorial star trails, moonlit star arcs)
+- Twilight gradients (Earth shadow rising as belt of Venus, deep blue-to-orange horizon bands)
+- Cloud formations (anvil thunderheads at sunset, shelf clouds, undulatus asperitas waves)
+- Planetary conjunctions (Venus and Jupiter close together, crescent moon with earthshine)
 
 ━━━ RULES ━━━
-- SKY IS SUBJECT — ground is just context
-- NO humans
-- NO animal subjects
-- Earth-plausible atmospheric physics only
-- NO fantasy, NO cosmic (no nebulas, no planets — that's StarBot)
-- Rare/exotic/dramatic — not "blue sky with clouds"
+- SKY fills 70-90% of the composition — ground is minimal silhouette or reflection
+- Real astronomical and atmospheric phenomena only — no fantasy
+- Mix dark sky, twilight, dawn, and daylight phenomena across entries
+- No two entries should describe the same phenomenon from the same vantage
+- 15-25 words each — expansive, awe-struck, precise language
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
