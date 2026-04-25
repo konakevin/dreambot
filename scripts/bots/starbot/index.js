@@ -34,6 +34,7 @@ module.exports = {
   mediumByPath: {
     'cosmic-vista': 'render',
     'cosmic-oracle': 'star-oil-cosmos',
+    'real-space': 'real-astro',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -63,10 +64,14 @@ module.exports = {
   promptPrefixByMedium: {
     'star-oil-cosmos':
       'cinematic sci-fi oil painting, environment-dominant composition, heavy impasto brushwork, atmospheric depth',
+    'real-astro':
+      'NASA Hubble JWST astrophotography, vibrant false-color composite, luminous glowing gas clouds, blazing star fields, saturated vivid deep-space imaging',
   },
   promptSuffixByMedium: {
     'star-oil-cosmos':
       'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
+    'real-astro':
+      'astrophotography finish, deep black space contrast, pinpoint stars, no text no words no watermarks',
   },
 
   // Per-medium prompt injection — StarBot's dialect for each medium.
@@ -93,6 +98,8 @@ module.exports = {
     // a figure lives WITHIN the environment (NOT a centered portrait).
     'star-oil-cosmos':
       'cinematic sci-fi oil painting, environment-dominant composition with figure WITHIN scene, visible impasto brushwork, heavy canvas texture, dramatic volumetric lighting, gallery-quality masterwork',
+    'real-astro':
+      'NASA-grade astrophotography — Hubble / JWST / ESO false-color composite, vibrant wavelength-mapped colors cranked to maximum, luminous nebula clouds glowing from within, blazing star clusters with diffraction spikes, deep-black void contrast, scientific-imaging aesthetic pushed to wallpaper-worthy vivid, NOT sci-fi concept art NOT painting NOT CGI',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
