@@ -73,10 +73,17 @@ Paste the output into Supabase → Apple → Secret Key.
 
 ## Facebook / Meta Login
 
-| Field | Value |
+| Field | Where to find it |
 |-------|-------|
-| App ID | `3266110716887470` |
-| Client Token | `479742805ecbd92874db6a2544e2d61c` |
+| App ID | `app.json` → `react-native-fbsdk-next` plugin → `appID` |
+| Client Token | `app.json` → `react-native-fbsdk-next` plugin → `clientToken` |
+| App Secret | Supabase Dashboard → Auth → Providers → Facebook (server-side only) |
+
+The App ID is public by design (embedded in every installed app binary).
+The Client Token also ships in client binaries, but rotate it via
+**Meta Developer Dashboard → App Settings → Advanced → Reset Client Token**
+if it's ever exposed in places it shouldn't be (e.g. flagged by GitGuardian).
+After rotating, update `app.json` and ship a new build.
 
 ### Where credentials are configured:
 - **Supabase Dashboard** → Authentication → Providers → Facebook
