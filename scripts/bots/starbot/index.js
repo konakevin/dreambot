@@ -33,7 +33,7 @@ module.exports = {
 
   mediumByPath: {
     'cosmic-vista': 'render',
-    'cosmic-oracle': 'star-oil-cosmos',
+    'cosmic-oracle': 'render',
     'real-space': 'real-astro',
   },
 
