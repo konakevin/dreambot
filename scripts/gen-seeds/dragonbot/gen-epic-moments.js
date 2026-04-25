@@ -2,47 +2,57 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/epic_moments.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} EPIC MOMENT descriptions for DragonBot's epic-moment path — charged narrative beats. Battle-mid-charge, spell-cast, coronation, ritual, army-at-dawn, siege. Described as moment-type, character placed later.
+  total: 25,
+  batch: 25,
+  metaPrompt: (n) => `You are writing ${n} EPIC DRAGON MOMENT scene descriptions for DragonBot — jaw-dropping cinematic narrative beats where DRAGONS are central to the action. Every scene MUST feature at least one traditional winged high-fantasy dragon. 20-35 words each.
 
-Each entry: 15-30 words. One specific epic narrative beat.
+━━━ THE UNIVERSE ━━━
+Gritty, grounded, medieval European high-fantasy. LOTR's Middle-earth, GoT's Westeros, Skyrim's Tamriel. Weathered stone fortresses, ancient forests, volcanic wastelands, vast mountain ranges, crumbling empires, storm-battered coastlines, snow-capped peaks. The world feels LIVED IN, ANCIENT, and REAL. Dragons are PART of this world — apex predators, living gods, weapons of war, ancient beings older than kingdoms.
 
-━━━ CATEGORIES ━━━
-- Army on hilltop at dawn (banners raised, horns blown, first-light on spears)
-- Siege assault (ladders against castle wall, catapults flinging, arrows mid-air)
-- Battle-mid-charge (cavalry thundering forward, dust rising, warhorns)
-- Spell-cast climax (mage hands raised, spell arc visible, allies shielded)
-- Coronation (crown held above bowed head in throne room with torchlight)
-- Council at round table (hooded figures around glowing map)
-- Standoff on bridge (two forces face each other, bridge between them)
-- Duel in courtyard (blades crossed mid-strike, crowd distant)
-- Ritual mid-summoning (circle glowing, smoke rising, chant-wisps)
-- Treaty-signing at weathered table (scrolls, candles, banners)
-- Coronation vigil (lone figure kneeling before altar overnight)
-- Dragon-rider stand-off (rider on peak, dragon circling)
-- Throne-room audience (robed emissary before king-in-throne)
-- Oath-taking on sword (blade held, head bowed, torches)
-- Sacred-bow nock (archer drawing in stance on cliff)
-- Army marching through mountain pass (column stretched far, banners visible)
-- Beacon-fires chain (signal mountains lit in succession)
-- Funeral pyre at sea (longship burning, smoke rising)
-- Summit of wizards (robed figures arriving at tower)
-- Prisoner-led through hall (chained figure, torch-bearing guards)
-- Sacred hunt (horn-blow hunt in autumn forest, hounds)
-- Cathedral light-shafts bathing altar (awaiting figure)
-- Storm-before-battle (clouds gathering over field)
-- Magic-duel mid-strike (two spells colliding in air)
-- Coronation crowd at gate (distant figures awaiting emergence)
-- Ritual bonfire surrounded by hooded chanters
-- Tribal drum-circle with firelight
-- Ship-launch at dock (banners flying, crowds on pier)
-- Signal tower flame going up at night
+━━━ WHAT THESE ARE ━━━
+The most epic 3 seconds involving a dragon — frozen at peak intensity. The dragon is NOT just sitting there. It is DOING something that changes the course of history. Wide cinematic scale, overwhelming beauty, spine-tingling drama.
+
+━━━ DRAGON MOMENTS (spread EVENLY — max 1 per category) ━━━
+1. Dragon attacking a fortress — fire pouring over castle walls, towers crumbling
+2. Dragon vs army — entire battlefield scattered by one beast
+3. Dragon landing on a mountain peak — wings folding, silhouetted against storm
+4. Dragon emerging from volcanic lair — eruption and beast as one
+5. Dragon defending its nest/hoard — surrounded by challengers
+6. Multiple dragons in flight — a flight of dragons crossing a landscape
+7. Dragon and rider in battle — mounted warrior charging through enemy lines
+8. Dragon breathing fire across a naval fleet — ships burning on the sea
+9. Dragon sleeping on treasure hoard — ancient beast in its lair
+10. Dragon fighting another dragon — aerial combat over a landscape
+11. Dragon circling above a coronation/ceremony — blessing or threatening
+12. Dragon frozen in ice/stone — ancient beast being discovered/awakened
+13. Baby dragons hatching — new life in a dangerous world
+14. Dragon perched on cathedral/castle — claiming territory, overlooking a city
+15. Dragon diving from clouds toward the ground — attack dive, wings tucked
+16. Dragon illuminated by lightning — storm flight, electric silhouette
+17. Dragon and army marching together — allied beast alongside warriors
+18. Dragon coiled around a tower — possessive, territorial, enormous
+19. Wounded dragon — crash-landed, arrows protruding, still dangerous, defiant
+20. Dragon at sunset/sunrise — majestic silhouette against spectacular sky
+21. Dragon in a blizzard — frost dragon in winter storm, ice and scale
+22. Dragon underwater/surfacing — sea dragon erupting from ocean depths
+23. Ancient dragon skeleton — bones of a titan, landscape-scale remains
+24. Dragon and wizard — sorcerer confronting or communing with a dragon
+25. Dragon migration — dozens of dragons crossing the sky over a landscape
+
+━━━ DRAGON RULES ━━━
+- Traditional WINGED high-fantasy dragons ONLY — four legs, two wings, scales, fire/ice/lightning breath
+- NO serpentine, NO snake-like, NO wingless, NO wyverns
+- Dragons should feel MASSIVE — castle-sized, mountain-dwarfing, ancient
+- Each dragon should be a different color/type (no two red dragons, etc.)
+
+━━━ DEDUP ━━━
+EXACTLY ONE entry per category. No two entries should share the same dragon action or dominant visual.
 
 ━━━ RULES ━━━
-- Moment-type only (characters + settings placed elsewhere)
-- Charged / narrative / epic
-- Specific beat captured in time
+- Each entry is a COMPLETE scene — dragon + setting + dramatic beat
+- WIDE CINEMATIC SCALE — Peter Jackson establishing shots
+- The landscape is as epic as the dragon
+- No named IP characters
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

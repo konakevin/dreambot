@@ -439,14 +439,47 @@ function resolveVibe({ bot, medium, path }) {
 }
 
 /**
- * Weighted path pick. bot.pathWeights can specify per-path weights;
- * unlisted paths default to 1.
+ * Weighted path pick with rolling dedup window. Re-rolls if the picked
+ * path appears in the last 3 posts (from DB + in-memory batch window).
+ * Falls back to any path after 20 attempts to avoid infinite loops.
  */
-function resolvePath({ bot }) {
+function resolvePath({ bot, recentPaths }) {
   if (!Array.isArray(bot.paths) || bot.paths.length === 0) {
     throw new Error(`Bot ${bot.username} has no paths configured`);
   }
+  const window = recentPaths || [];
+  const maxAttempts = 20;
+  for (let i = 0; i < maxAttempts; i++) {
+    const pick = weightedPick(bot.paths, bot.pathWeights);
+    if (!window.includes(pick)) return pick;
+  }
+  console.warn('  ⚠️ path dedup exhausted after 20 attempts — using last pick');
   return weightedPick(bot.paths, bot.pathWeights);
+}
+
+// In-memory batch path window — shared across renders in a single batch run.
+// Persists for the lifetime of the process so consecutive iter-bot renders dedup.
+const _batchPathWindow = {};
+
+async function getRecentPaths(sb, botName) {
+  const { data, error } = await sb
+    .from('bot_run_log')
+    .select('path')
+    .eq('bot_name', botName)
+    .eq('status', 'ok')
+    .order('created_at', { ascending: false })
+    .limit(3);
+  if (error) {
+    console.warn(`  ⚠️ recent paths query failed: ${error.message}`);
+    return [];
+  }
+  return (data || []).map((r) => r.path);
+}
+
+function pushBatchPath(botName, path) {
+  if (!_batchPathWindow[botName]) _batchPathWindow[botName] = [];
+  _batchPathWindow[botName].push(path);
+  if (_batchPathWindow[botName].length > 3) _batchPathWindow[botName].shift();
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -561,16 +594,20 @@ async function runBot(opts) {
   const isBatchMode = Boolean(outDir); // iter-bot sets this
   const shouldPostToDB = !dryRun && (!isBatchMode || post);
 
-  // Resolve path, medium, vibe
-  const resolvedPath =
-    pathArg === 'random'
-      ? resolvePath({ bot })
-      : (() => {
-          if (!bot.paths.includes(pathArg)) {
-            throw new Error(`Path '${pathArg}' not in bot.paths: ${bot.paths.join(', ')}`);
-          }
-          return pathArg;
-        })();
+  // Resolve path with rolling 3-post dedup window
+  let resolvedPath;
+  if (pathArg === 'random') {
+    const dbRecent = await getRecentPaths(sb, bot.username);
+    const batchRecent = _batchPathWindow[bot.username] || [];
+    const combined = [...new Set([...batchRecent, ...dbRecent])].slice(0, 3);
+    resolvedPath = resolvePath({ bot, recentPaths: combined });
+    pushBatchPath(bot.username, resolvedPath);
+  } else {
+    if (!bot.paths.includes(pathArg)) {
+      throw new Error(`Path '${pathArg}' not in bot.paths: ${bot.paths.join(', ')}`);
+    }
+    resolvedPath = pathArg;
+  }
   const medium = resolveMedium({ bot, path: resolvedPath });
   const vibeKey = vibeArg === 'random' ? resolveVibe({ bot, medium, path: resolvedPath }) : vibeArg;
 

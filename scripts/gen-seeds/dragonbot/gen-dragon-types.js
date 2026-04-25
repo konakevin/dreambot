@@ -2,53 +2,44 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dragon_types.json',
-  total: 200,
-  batch: 12,
-  append: true,
-  metaPrompt: (n) => `You are writing ${n} DRAGON SCENE descriptions for DragonBot. Each entry is a complete fantasy-gallery-wall dragon scene — a specific dragon in a specific pose in a specific setting. Entries 20-40 words. Painterly concept-art fantasy gallery quality.
+  total: 25,
+  batch: 25,
+  metaPrompt: (n) => `You are writing ${n} DRAGON descriptions for DragonBot. Each entry describes a SPECIFIC traditional winged dragon AND the action it is engaged in. 15-30 words. Do NOT describe settings or environments — those come from a separate pool.
 
-━━━ AESTHETIC NORTH STAR ━━━
-Think Ted Nasmith / John Howe / Alan Lee / Frank Frazetta / Iain McCaig. The painterly tradition of Smaug-in-Erebor, the Nazgûl-on-Fell-beast, the dragon-over-Minas-Tirith, the ice-dragon above Skyrim's tundra. Grounded high-fantasy. The dragon is a MYTHIC ANIMAL — ancient, powerful, gnarly, weighty — in a believable natural environment with real physics. Concept-art-book-page quality.
+━━━ DRAGON TYPE: TRADITIONAL WINGED ONLY ━━━
+ALL dragons are TRADITIONAL HIGH-FANTASY WINGED DRAGONS:
+- Four legs + two wings (classic western dragon anatomy)
+- Massive, powerful, ancient creatures with WINGS
+- BANNED TYPES: NO serpentine/snake dragons, NO eastern/Asian dragons, NO wingless dragons, NO sea serpents, NO feathered serpents, NO worm/wyrm without wings. Every dragon MUST have wings.
 
-━━━ GROUNDED HIGH-FANTASY — BANNED TROPES ━━━
-NO surreal AI-looking weirdness:
-- NO floating-crystal halos orbiting the dragon
-- NO bioluminescent-glowing-everything
-- NO rainbow-energy-blasts / neon-lightning-from-everywhere
-- NO multiple-moons / aurora-explosion skies (unless specifically Arctic setting)
-- NO physics-defying architecture surrounding the dragon
-- NO crystalline-armor on dragons (scales only)
-- NO overly-symmetric decorative arrangements
+━━━ TWO-PART STRUCTURE: DRAGON + ACTION ━━━
+Each entry has exactly two parts:
+1. THE DRAGON: scale color, distinctive features (horn shape, scars, eye color, wing membrane detail, weathering, age). Make each visually unique.
+2. THE ACTION: what it's doing RIGHT NOW — a dynamic freeze-frame moment.
 
-BANNED COMPOSITION CLICHÉ:
-- NO "dragon with tail coiled/wrapped around a tower or building" — do NOT describe this ever
+━━━ DEDUP: DRAGON APPEARANCE ━━━
+No two entries should share the same primary scale color + body build. Vary broadly:
+- COLORS: obsidian, crimson, emerald, sapphire, gold, silver, bronze, ivory, amber, copper, iron-grey, midnight-blue, ash-white, blood-red, jade, rust, cobalt, amethyst, bone-white, coal-black, malachite, pewter, burnt-orange, glacial-blue, forest-green, molten-gold, storm-grey, wine-red
+- BUILDS: massive armored tank, lean predator, ancient cathedral-sized elder, young aggressive hunter, scarred veteran, frost-rimed colossus, volcanic behemoth
+- FEATURES: cracked horns, blind milky eye, missing scale patches, moss in old wounds, battle scars across flanks, torn wing edges healed ragged, chipped fangs, barnacle-crusted underbelly
 
-━━━ WHAT TO STACK (painter's recipe) ━━━
-Each entry weaves together:
-- Specific dragon species/variant (describe anatomy, scale-color, horn/wing/eye distinctive features)
-- One primary pose (flying / diving / perched / sleeping / drinking / roaring / mid-breath / emerging / basking / patrolling / coiled-on-hoard / standing-ground / wing-drying / swimming / hunting / preening — vary widely)
-- One natural setting (mountain / cave / cliff / forest / lake / tundra / volcanic-crater / coast / valley / canyon / fjord / waterfall — minimize architecture)
-- Lighting moment (dawn / dusk / golden hour / storm-break / moonlit / misty-morning / backlit / firelight-from-within-cave)
-- Atmospheric cue (mist, falling snow, drifting ash, breath-fog, storm-clouds, rain-break)
-- Scale cue (tiny distant forest / tiny distant tower / mountain-range for scale / visible wing-beat wake)
-
-━━━ HARD DIVERSITY CAPS (200 pool) ━━━
-- Every entry distinct in species + pose + setting combination — no duplicates
-- Max 20 dragons with castle/tower/architecture in scene (architecture is peripheral)
-- Min 40 dragons in pure-wilderness settings (no architecture anywhere)
-- Min 30 dragons in rest/sleep/quiet moments (not all action)
-- Min 30 dragons in mid-flight or airborne compositions
-- Min 20 dragons in subterranean/cave settings
-- Min 20 dragons near water (lake/river/sea/waterfall)
-- Spread species across the full mythology spectrum (western wyrm / eastern serpentine / wyvern / sea / ice / fire / shadow / ancient / young / skeletal / feathered / multi-headed / elemental / etc.)
-- Cover day + night / summer + winter / desert + arctic / sky + underground
+━━━ DEDUP: ACTION/POSE ━━━
+No two entries should have the same action verb. Spread across these categories and NEVER repeat:
+- BREATH ATTACKS: breathing fire across, exhaling frost over, spewing molten slag, releasing lightning arc, vomiting emerald flame
+- COMBAT: clawing at rival, biting through, slamming tail against, rearing back to strike, grappling mid-air with
+- REST: sleeping curled on, basking with wings spread, resting head on forepaws with one eye open, stretching after sleep, yawning revealing rows of teeth
+- FEEDING: tearing into, drinking deeply from, crunching bones of, swallowing whole
+- TERRITORIAL: roaring from atop, bellowing challenge across, marking territory with claw-gouges, spreading wings in threat display
+- MOVEMENT: climbing sheer cliff face, launching from ledge, landing heavily with dust erupting, prowling low through, stalking through, wading chest-deep through
+- SUBTLE: preening wing membranes, scratching horn against rock, shaking rain from wings, sniffing the wind, watching with ancient patience
 
 ━━━ RULES ━━━
-- NO humans, NO named IP dragons (no Smaug, Drogon, Toothless — archetypes only)
-- NO "tail-wrapped-around-tower" composition
-- Dragon is MYTHIC ANIMAL not magical-energy-beast
-- Painterly concept-art — never photoreal, never 3D-cheap
-- GROUNDED high-fantasy, Tolkien-canonical not Reddit-AI-fantasy
+- EVERY entry must have wings mentioned or implied
+- NO settings/environments — just the dragon and its action
+- NO humans
+- NO named IP dragons
+- NEVER cute, NEVER cartoony, NEVER clean/smooth/plastic
+- Each dragon should feel ANCIENT and WEATHERED — scars, chips, moss, age
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

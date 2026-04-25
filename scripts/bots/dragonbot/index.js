@@ -14,35 +14,42 @@ const pathBuilders = {
   'fantasy-scene': require('./paths/fantasy-scene'),
   'epic-moment': require('./paths/epic-moment'),
   'dragon-scene': require('./paths/dragon-scene'),
-  'magic-moment': require('./paths/magic-moment'),
+  'female-warrior': require('./paths/female-warrior'),
+  'male-warrior': require('./paths/male-warrior'),
   'cozy-arcane': require('./paths/cozy-arcane'),
-  'enchanted-realm': require('./paths/enchanted-realm'),
+  'arcane-halls': require('./paths/arcane-halls'),
+  'dark-realm': require('./paths/dark-realm'),
+  'dragon-lore': require('./paths/dragon-lore'),
 };
 
 module.exports = {
   username: 'dragonbot',
   displayName: 'DragonBot',
 
-  mediums: ['canvas', 'watercolor', 'illustration', 'pencil'],
+  mediums: ['canvas', 'watercolor', 'illustration', 'render'],
+
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+
   // Inverts old excludeVibes (minimal/dark).
   vibes: [
     'cinematic',
+    'dark',
     'cozy',
     'epic',
     'nostalgic',
-    'psychedelic',
     'peaceful',
     'whimsical',
     'ethereal',
+    'minimal',
     'arcane',
     'ancient',
     'enchanted',
     'fierce',
-    'coquette',
     'voltage',
     'nightshade',
     'macabre',
@@ -55,20 +62,26 @@ module.exports = {
     'fantasy-scene',
     'epic-moment',
     'dragon-scene',
-    'magic-moment',
+    'female-warrior',
+    'male-warrior',
     'cozy-arcane',
-    'enchanted-realm',
+    'arcane-halls',
+    'dark-realm',
+    'dragon-lore',
   ],
 
   // dragon-scene + landscape co-flagship at 20% each (4/20). Other 4 paths evenly split the remaining 60% at 15% each (3/20).
   pathWeights: {
-    landscape: 4,
+    landscape: 5,
     'fantasy-scene': 3,
     'epic-moment': 3,
     'dragon-scene': 4,
-    'magic-moment': 3,
+    'female-warrior': 5,
+    'male-warrior': 4,
     'cozy-arcane': 3,
-    'enchanted-realm': 3,
+    'arcane-halls': 3,
+    'dark-realm': 4,
+    'dragon-lore': 4,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

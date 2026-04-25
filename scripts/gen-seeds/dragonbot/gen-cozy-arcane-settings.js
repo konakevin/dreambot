@@ -2,51 +2,38 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/cozy_arcane_settings.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} COZY ARCANE SETTING descriptions for DragonBot's cozy-arcane path — cozy fantasy places. Mix inhabited cozy + natural fantasy pockets. Magical wildlife at rest welcome. Warm + tame + peaceful magic, NEVER dramatic.
+  total: 25,
+  batch: 25,
+  metaPrompt: (n) => `You are writing ${n} COZY INTIMATE FANTASY SPACE descriptions for DragonBot. These exist in the same epic high-fantasy universe as dragons and vast landscapes — but these are the WARM PRIVATE CORNERS of that world. The viewer should want to sit down and stay.
 
-Each entry: 15-30 words. One specific cozy fantasy setting.
+Each entry: 15-30 words. One specific cozy space.
 
-━━━ INHABITED CATEGORIES ━━━
-- Hobbiton-style hearth (round-door cottage interior, fire crackling, pipe-smoke)
-- Elven tea-garden (silver-leaved trees, tea-set on moss, afternoon light)
-- Wizard's rainy library (books stacked to ceiling, rain on window, lamp-glow)
-- Tavern-in-snow (warm interior through window, snow outside, hearth fire)
-- Witch's herb-cottage (hanging herbs, bubbling cauldron gently, cat on sill)
-- Dwarf-brewery interior (ale-barrels, rune-carved tables, warm fire)
-- Fae-tree hollow (cozy nook inside old tree, glowing mushroom lantern)
-- Bard's caravan-interior (patchwork cushions, hanging instruments, lantern-lit)
-- Hedge-witch's kitchen (copper pots, herb-drying, cat napping, evening light)
-- Druid's-grove sanctuary (stone-circle with soft moss, antler-crown hanging, peaceful)
-- Rangers' outpost (wooden lookout with animal pelts and weapons racked, warm)
+━━━ SCALE: INTIMATE, NOT GRAND ━━━
+These are NOT cathedral halls or vast libraries. These are the warm private spaces:
+- A wizard's private study off the main tower — roaring hearth, deep armchair, desk covered in scrolls
+- The hearthside corner of a dwarven forge-hall — stone bench with furs, ale warming by the fire
+- A dragon-keeper's quarters carved into warm volcanic rock — lanterns, worn leather gear hanging
+- An elven tree-house bedroom — soft light through woven walls, warm blankets, candles
+- A potion-master's personal workbench — copper instruments, bubbling flasks, warm lamplight
+- A ranger's mountain lookout — fur-draped chair by iron stove, snow falling past the window
+- A ship captain's cabin on a magical vessel — warm wood, maps pinned to walls, lantern swaying
+- A herbalist's drying room — bundles of herbs hanging from ancient beams, warm afternoon sun
+- A blacksmith's private quarters above the forge — heat rising through floorboards, worn tools on walls
+- A monk's meditation alcove in a mountain monastery — single candle, warm stone, silence
+- A tavern's best corner booth — firelight, worn wood table, leaded glass window showing snow
 
-━━━ NATURAL / MAGICAL-CREATURE CATEGORIES ━━━
-- Glowing-moss creek (softly luminescent moss on stones, crystal-clear water)
-- Fae-glen (clearing with silver-mushroom circle, gentle sparkle atmosphere)
-- Sprite-cave (small cave with glowing pool, tiny winged sprites at rest)
-- Sleeping-unicorn meadow (unicorn curled in flower-meadow, dawn light)
-- Fire-moth stump at dusk (glowing moths around forest-stump, warm magic)
-- Firefly-swarm glade (thousands of fireflies in forest clearing)
-- Elk-spirit resting ground (antlered-spirit-deer in twilight meadow)
-- Young-dragon napping in sunny clearing (harmless scale, tail-curled)
-- Fox-spirit at rest (fox with glowing ethereal markings curled on moss)
-- Mushroom-ring with tiny sprites reading
-- Owl-spirit perched in moonlit tree
-- Glowing-pond with koi-spirits
-- Fae-picnic grove (tiny plates laid out, peaceful meadow)
-- Badger-den magical (warm tiny cottage-like burrow entrance)
-- Goblin-market vignette (cozy stall with lanterns, quiet eve)
-- Fairy-lights strung between ancient trees (magical trail)
-- Sleepy dragon-whelp in cottage-corner by fire
-- Pixies gathered around steaming teacup outdoors
-- Deer-spirit grazing in glowing-mushroom-field
+━━━ WHAT MAKES THEM COZY ━━━
+- WARM LIGHT: hearth-fire, candles, oil lanterns, forge-glow, afternoon sun through old glass
+- INTIMATE SCALE: one room, one corner, one nook — not a vast hall
+- TEXTURES: worn wood, aged leather, rough-hewn stone, tarnished metal, dripping wax, fur pelts
+- WARMTH CONTRAST: cold world outside (snow, storm, night) vs warm golden interior
+- Still unmistakably HIGH-FANTASY — rune-carved stone, magical artifacts, enchanted light
 
 ━━━ RULES ━━━
-- Warm + tame + peaceful — NEVER dramatic
-- Magical wildlife OK at REST
-- Inhabited cottage or natural magical pocket — either OK
-- Cozy / warm / quiet-magic emotional target
+- No people or creatures
+- No domestic clutter (no teacups, no cats, no food) — architecture and light create the warmth
+- Every space must feel like it belongs in a world of dragons and epic landscapes
+- Each entry unique in location type
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
