@@ -44,6 +44,19 @@ const REAL_ASTRONOMY_BLOCK = `━━━ REAL ASTRONOMY (real-space path only) �
 
 Photoreal NASA-Hubble / JWST astrophotography. REAL nebulae by name OK (Orion Nebula, Eagle Nebula, Horsehead, Carina, Crab). Real galaxies (Andromeda, Whirlpool, Pinwheel). Real planets (Saturn rings, Jupiter storm bands, Mars surface, Venus clouds). Use specific wavelength-color treatments (JWST infrared-orange-teal, Hubble visible-light blue-amber, false-color mapping). Astronomical facts encouraged. Dial the awe, not the fiction.`;
 
+const COSMIC_CANVAS_BLOCK = `━━━ THE COSMOS IS ALIVE — THIS IS NON-NEGOTIABLE ━━━
+
+Space is not empty — it PULSES, it BREATHES, it has TEXTURE:
+- DEPTH ON DEPTH: foreground dust motes catching starlight, midground nebula pillars glowing from within, background galaxies receding into infinity — the eye travels FOREVER
+- LIVING LIGHT: nebulae glow like organs, gas clouds curl like living creatures, starfields shimmer with depth — light bends, refracts, blooms through cosmic dust
+- COLOR EVERYWHERE: every void has color — deep indigo bruising into violet, coal-ember red bleeding into amber, electric teal where stars are born — NEVER flat black
+- OVERWHELMING SCALE: the viewer should feel VERTIGO at the size of the universe — structures that dwarf planets, distances that break comprehension, beauty that makes you feel small and awestruck
+- TEXTURE IN THE VOID: cosmic dust catches light like underwater particles, nebula edges fray into wisps, stellar winds leave visible trails — space has GRAIN`;
+
+const CINEMATIC_COMPOSITION_BLOCK = `━━━ CINEMATIC COMPOSITION ━━━
+
+Framing, lighting, and depth chosen for MOVIE-SHOT quality. Wide establishing vistas, tight character moments, dramatic low-angle hero shots, impossible aerial sweeps. Every frame could be a still from a Villeneuve or Kubrick sci-fi epic.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -55,4 +68,6 @@ module.exports = {
   BLOW_IT_UP_BLOCK,
   SOLO_ROBOT_BLOCK,
   REAL_ASTRONOMY_BLOCK,
+  COSMIC_CANVAS_BLOCK,
+  CINEMATIC_COMPOSITION_BLOCK,
 };

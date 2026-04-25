@@ -32,6 +32,8 @@ const VIBE_COLOR = {
 
 module.exports = {
   COSMIC_PHENOMENA: load('cosmic_phenomena'),
+  COSMIC_ANCHORS: load('cosmic_anchors'),
+  MEGASTRUCTURES: load('megastructures'),
   ALIEN_LANDSCAPES: load('alien_landscapes'),
   SPACE_OPERA_SCENES: load('space_opera_scenes'),
   SCI_FI_INTERIORS: load('sci_fi_interiors'),
@@ -43,8 +45,15 @@ module.exports = {
   COSMIC_ORACLE_CHARACTERS: load('cosmic_oracle_characters'),
   COSMIC_ORACLE_ACTIONS: load('cosmic_oracle_actions'),
   COSMIC_ORACLE_LOCATIONS: load('cosmic_oracle_locations'),
+  FEMALE_EXPLORERS: load('female_explorers'),
+  MALE_EXPLORERS: load('male_explorers'),
+  SCI_FI_FEMALE_OUTFITS: load('sci_fi_female_outfits'),
+  SCI_FI_MALE_OUTFITS: load('sci_fi_male_outfits'),
+  SCI_FI_ACTIONS: load('sci_fi_actions'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
+  CAMERA_ANGLES: load('camera_angles'),
+  CITY_CAMERA_ANGLES: load('city_camera_angles'),
   SCENE_PALETTES: load('scene_palettes'),
   VIBE_COLOR,
 };

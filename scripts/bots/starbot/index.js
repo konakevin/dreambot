@@ -20,18 +20,19 @@ const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
   'real-space': require('./paths/real-space'),
   'cosmic-oracle': require('./paths/cosmic-oracle'),
+  'female-explorer': require('./paths/female-explorer'),
+  'male-explorer': require('./paths/male-explorer'),
+  'megastructure': require('./paths/megastructure'),
 };
 
 module.exports = {
   username: 'starbot',
   displayName: 'StarBot',
 
-  // 7 mediums — 4 original + 3 added (watercolor/pencil/illustration).
-  // Plus 1 bot-only custom medium (star-oil-cosmos) locked to cosmic-oracle.
-  mediums: ['photography', 'canvas', 'render', 'watercolor', 'pencil', 'illustration'],
+  mediums: ['render'],
 
-  // cosmic-oracle path locks to the custom bot-only star-oil-cosmos medium
   mediumByPath: {
+    'cosmic-vista': 'render',
     'cosmic-oracle': 'star-oil-cosmos',
   },
 
@@ -43,6 +44,7 @@ module.exports = {
   // all paths use flux-dev / flux-1.1-pro 50/50 rotation
   modelByPath: {
     'cosmic-vista': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'alien-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'space-opera': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'sci-fi-interior': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cozy-sci-fi-interior': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
@@ -50,6 +52,9 @@ module.exports = {
     'robot-moment': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'real-space': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cosmic-oracle': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'female-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'male-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'megastructure': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
   },
 
   // Per-medium prompt prefix/suffix overrides. The star-oil-cosmos medium
@@ -112,7 +117,7 @@ module.exports = {
 
   paths: [
     'cosmic-vista',
-    // 'alien-landscape', — deactivated: cosmic-oracle covers this territory better
+    'alien-landscape',
     'space-opera',
     'sci-fi-interior',
     'cozy-sci-fi-interior',
@@ -120,17 +125,24 @@ module.exports = {
     'robot-moment',
     'real-space',
     'cosmic-oracle',
+    'female-explorer',
+    'male-explorer',
+    'megastructure',
   ],
 
   pathWeights: {
-    'cosmic-vista': 3,
-    'space-opera': 1,
+    'cosmic-vista': 4,
+    'alien-landscape': 3,
+    'space-opera': 3,
     'sci-fi-interior': 2,
-    'cozy-sci-fi-interior': 1,
+    'cozy-sci-fi-interior': 2,
     'alien-city': 3,
-    'robot-moment': 1,
+    'robot-moment': 2,
     'real-space': 2,
     'cosmic-oracle': 2,
+    'female-explorer': 4,
+    'male-explorer': 3,
+    'megastructure': 3,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
