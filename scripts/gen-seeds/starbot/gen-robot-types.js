@@ -2,49 +2,39 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/robot_types.json',
-  total: 200,
-  batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ROBOT TYPE descriptions for StarBot's robot-moment path — varied specific robot forms. Massive-mech / rusted / sleek-drone / tiny-companion / bio-mechanical / humanoid-android / industrial. NO cyborg-women (VenusBot territory).
+  total: 25,
+  batch: 25,
+  metaPrompt: (n) => `You are writing ${n} ROBOT descriptions for StarBot's robot-moment path. These are ORNATE, VISUALLY STUNNING machines — not mundane utility bots. Every robot should be a visual showpiece that commands the frame.
 
-Each entry: 10-20 words. One specific robot type with visual details.
+Each entry: 15-25 words. One specific robot with rich visual detail — materials, textures, proportions, distinguishing features.
 
-━━━ CATEGORIES ━━━
-- Massive mech (colossal humanoid walker with heavy-plated armor)
-- Rusted industrial worker-bot (battered utility robot with one arm)
-- Sleek drone (small hovering quadrotor with scanner)
-- Tiny companion-bot (desktop-sized assistant with glowing eyes)
-- Bio-mechanical creature (organic-looking machine with fiber muscles)
-- Humanoid android (gender-neutral android with smooth plating)
-- Heavy loader-bot (forklift-style industrial heavy-lifter)
-- Medical nurse-bot (sleek white medical attendant)
-- Exploration rover (wheeled scientific rover with multiple arms)
-- Combat-drone (aggressive sleek military drone)
-- Terraforming worker-bot (bulldozer-style earth-moving robot)
-- Deep-sea-probe (pressurized submersible robot)
-- Miner-bot (drill-headed industrial digger)
-- Security-sentinel (patrolling four-legged walker)
-- Farmer-bot (field-tending agricultural robot)
-- Janitor-bot (cleaning-service humanoid)
-- Archivist-bot (library-tending robot with scroll-reader)
-- Astrobiologist-bot (sampling-arm science robot)
-- Pilot-exoskeleton (powered-armor suit)
-- Monk-bot (robed humanoid with contemplative pose)
-- Kitchen-chef robot (multi-armed food-preparer)
-- Child-sized companion (toy-like friendly robot)
-- Gardener-bot (plant-tending robot with watering arm)
-- Rescue-bot (heavy-duty emergency responder)
-- Archaeological-excavator (precise digging specialist)
-- Junkyard-rover (scavenger robot covered in patches)
-- Transport-pilot robot (autonomous ship-pilot)
-- Meditation-instructor-bot (zen humanoid)
-- Historian-bot (scholar android with holographic interface)
-- Nature-observer-bot (wildlife-watching quiet drone)
+━━━ CATEGORIES (mix across all) ━━━
+- Ancient alien-built guardian (unknown alloys, crystalline cores, glyphs etched into plating, millennia-old)
+- Ornate ceremonial sentinel (temple guardian with intricate engravings, jeweled optics, ritualistic markings)
+- Massive war titan (battle-scarred colossus, trophy-draped, siege weaponry, intimidating scale)
+- Biomechanical construct (organic-metal fusion, synthetic muscle visible beneath translucent plating, breathing)
+- Regal ambassador android (polished precious-metal finish, diplomatic insignia, elegant proportions)
+- Weathered deep-space explorer (alien modifications bolted on, mismatched repair panels, star-charts scratched into hull)
+- Decommissioned military giant (overgrown with moss/vines, repurposed as monument, weapons deactivated)
+- Insectoid swarm-queen (chitinous plating, compound optical array, antennae, abdomen reactor core)
+- Crystalline intelligence (transparent geometric body, light refracting through internal lattice, hovering)
+- Forge-master (molten-metal veins glowing beneath black iron chassis, anvil-arms, heat shimmer)
+- Aquatic deep-diver (pressure-rated hull, bioluminescent running lights, barnacle-encrusted joints)
+- Clockwork automaton (exposed brass gears, copper filigree, steam vents, Victorian-mechanical precision)
+- Monolithic stone golem (carved from alien rock, glowing rune-seams, moss in crevices, ancient)
+- Sleek racing/pursuit chassis (aerodynamic, low-slung, chrome and carbon-fiber, speed lines)
+- Towering construction architect (crane-arms, blueprint hologram projectors, scaffold-climbing legs)
+
+━━━ DEDUP DIMENSIONS ━━━
+Deduplicate by: body type (humanoid/quadruped/insectoid/spherical/serpentine) + primary material (metal/crystal/stone/organic/brass) + scale (tiny/human-sized/large/colossal) + condition (pristine/weathered/ancient/battle-damaged/overgrown)
 
 ━━━ RULES ━━━
-- NO cyborg-women (VenusBot owns that)
-- Gender-neutral or non-gendered forms
-- Include distinguishing visual detail
-- Variety: mech / drone / android / creature / industrial / companion
+- NO cyborg-women, NO sexy androids (VenusBot territory)
+- NO mundane utility: no janitor-bots, kitchen-bots, nurse-bots, farm-bots, desk companions
+- Every robot should make you say "I want to see THAT rendered"
+- Gender-neutral or non-gendered
+- ORNATE DETAIL: engravings, patina, glowing elements, textured surfaces, visible internals
+- Vary proportions wildly: some massive, some human-scale, some tiny-but-intricate
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
