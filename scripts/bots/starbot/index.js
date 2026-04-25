@@ -86,7 +86,7 @@ module.exports = {
     canvas:
       'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Bruce-Pennington / Frank-Kelly-Freas Analog-SF-magazine tradition, heavy-impasto painted brushwork, painterly atmospheric cosmic depth, dramatic painted-chiaroscuro with nebula-hued ambient shadow, pulp-sci-fi paperback polish, museum-painted masterwork quality',
     render:
-      'high-end cinematic 3D render — ILM / Weta / DNEG / MPC feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, Dune / Blade-Runner-2049 / Arrival / Interstellar CG precision, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, 4K film-finish polish, NOT cartoon NOT toy NOT videogame',
+      'high-end cinematic 3D render — feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, cinematic lighting precision, 4K film-finish polish, NOT cartoon NOT toy NOT videogame',
     watercolor:
       'NASA concept-art watercolor wash — Robert-McCall painted-space-tradition + Jean-Giraud-Moebius watercolor-sci-fi, soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel, NOT cute-watercolor NOT children-book NOT flowers',
     pencil:

@@ -8,7 +8,7 @@
  */
 
 const PROMPT_PREFIX =
-  'cinematic sci-fi concept art, Blade Runner Dune Interstellar Alien 2001 aesthetic, epic scale, awe-inspiring cosmic beauty, movie-poster composition, production-art polish';
+  'cinematic sci-fi concept art, epic scale, awe-inspiring cosmic beauty, hyper-detailed composition, production-art polish';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
