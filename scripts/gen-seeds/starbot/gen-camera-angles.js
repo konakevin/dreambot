@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/camera_angles.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} CAMERA ANGLE / SHOT FRAMING descriptions for StarBot — cinematic camera compositions for sci-fi scenes. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━

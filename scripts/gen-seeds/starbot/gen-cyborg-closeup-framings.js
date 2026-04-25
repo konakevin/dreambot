@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_closeup_framings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} CLOSEUP FRAMING descriptions for StarBot's cyborg-woman path. Each describes a tight camera shot focused on her face, neck, throat, shoulders, or upper chest — showcasing the intricate transition between organic beauty and ornate mechanical internals.
 
 Each entry: 12-20 words. One specific tight framing that highlights ornate mechanical detail near her face.

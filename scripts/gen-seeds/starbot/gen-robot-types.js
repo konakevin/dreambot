@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/robot_types.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ROBOT descriptions for StarBot's robot-moment path. These are ORNATE, VISUALLY STUNNING machines — not mundane utility bots. Every robot should be a visual showpiece that commands the frame.
 
 Each entry: 15-25 words. One specific robot with rich visual detail — materials, textures, proportions, distinguishing features.

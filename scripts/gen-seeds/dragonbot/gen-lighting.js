@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/lighting.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for DragonBot — cinematic fantasy lighting treatments. LOTR/GoT/Elden-Ring/Warhammer cinematography.
 
 Each entry: 10-20 words. One specific cinematic fantasy lighting.

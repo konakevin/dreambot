@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/arcane_phenomena.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ARCANE PHENOMENA descriptions for DragonBot — pure magical events happening in the landscape with NO characters. The magic erupts from the land itself: ancient ley-lines, stone circles, wild magic ruptures, artifacts detonating, rune-carved monuments igniting. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━

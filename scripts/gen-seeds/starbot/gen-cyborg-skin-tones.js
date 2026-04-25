@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_skin_tones.json',
-  total: 50,
+  total: 200,
   batch: 50,
   metaPrompt: (n) => `You are writing ${n} SKIN TONE descriptions for StarBot's cyborg-woman path. Each describes the organic skin visible on the human parts of a half-machine cyborg woman — her face, neck, décolletage, and any exposed organic patches.
 

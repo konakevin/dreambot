@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_female_outfits.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} descriptions of ORNATE FEMALE SCI-FI OUTFITS for StarBot. Each is a form-fitting, sultry but functional space suit, armor, or tactical outfit. 20-35 words each.
 
 ━━━ WHAT THESE OUTFITS ARE ━━━

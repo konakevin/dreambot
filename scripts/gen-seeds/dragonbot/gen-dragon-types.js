@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dragon_types.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DRAGON descriptions for DragonBot. Each entry describes a SPECIFIC traditional winged dragon AND the action it is engaged in. 15-30 words. Do NOT describe settings or environments — those come from a separate pool.
 
 ━━━ DRAGON TYPE: TRADITIONAL WINGED ONLY ━━━

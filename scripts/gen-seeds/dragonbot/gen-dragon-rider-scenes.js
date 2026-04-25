@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dragon_rider_scenes.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DRAGON IN FLIGHT scene descriptions for DragonBot. Dragons in DYNAMIC MOTION — not posed, not hovering, not static. Every entry must convey a living creature moving through space with weight, speed, and purpose. NO HUMANS anywhere.
 
 Each entry: 15-25 words. One specific moment of a dragon in motion.

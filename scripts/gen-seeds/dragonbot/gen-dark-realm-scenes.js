@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/dark_realm_scenes.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DARK REALM scene descriptions for DragonBot. Corrupted wastelands, necromancer kingdoms, fallen empires, cursed lands. Mordor / Dark Souls / Bloodborne / Diablo energy.
 
 Each entry: 15-25 words. One specific dark fantasy landscape or realm.

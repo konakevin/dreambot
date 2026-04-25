@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ACTION descriptions for StarBot's cyborg-woman path. Each describes what the cyborg is DOING when the camera catches her — a dynamic freeze-frame moment, NOT a static pose.
 
 Each entry: 10-18 words. One specific action caught mid-motion.

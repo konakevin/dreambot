@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_characters.json',
-  total: 25,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} CYBORG WOMAN visual descriptions for StarBot. Each describes a specific half-human half-machine being — what she LOOKS LIKE mechanically. NOT mood or archetype — PHYSICAL MECHANICAL DETAIL that Flux can render.
 
 Each entry: 50-70 words. Describe which body parts are chrome/metal, which are translucent showing internal workings, where the glow comes from, what her organic face looks like, what textures and materials are visible. This is a BUILD SHEET for a visual, not a character bio.

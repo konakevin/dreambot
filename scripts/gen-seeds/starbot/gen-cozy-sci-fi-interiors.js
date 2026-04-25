@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cozy_sci_fi_interiors.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} descriptions of COZY SCI-FI INTERIOR SPACES for StarBot — warm, intimate, lived-in corners of the SAME universe as our cosmic vistas, megastructures, and alien landscapes. 20-35 words each.
 
 ━━━ WHAT THESE ARE ━━━

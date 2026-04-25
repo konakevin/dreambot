@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/architectural_elements.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ARCHITECTURAL ELEMENT descriptions for DragonBot — epic-fantasy structures that anchor composition. Castles, towers, temples, bridges, gates, thrones, banners.
 
 Each entry: 10-20 words. One specific fantasy architectural element with style/detail.

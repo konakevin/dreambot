@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/epic_moments.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} EPIC DRAGON MOMENT scene descriptions for DragonBot — jaw-dropping cinematic narrative beats where DRAGONS are central to the action. Every scene MUST feature at least one traditional winged high-fantasy dragon. 20-35 words each.
 
 ━━━ THE UNIVERSE ━━━

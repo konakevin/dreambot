@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/cozy_arcane_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COZY INTIMATE FANTASY SPACE descriptions for DragonBot. These exist in the same epic high-fantasy universe as dragons and vast landscapes — but these are the WARM PRIVATE CORNERS of that world. The viewer should want to sit down and stay.
 
 Each entry: 15-30 words. One specific cozy space.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_features.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DOMINANT CYBORG FEATURE descriptions for StarBot's cyborg-woman path. Each describes one showpiece mechanical body element that dominates 40-50% of the visible frame — the thing your eye goes to first.
 
 Each entry: 15-25 words. One specific mechanical feature with material, texture, and visual detail.

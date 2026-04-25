@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/city_camera_angles.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} CITY-SCALE CAMERA ANGLE descriptions for StarBot's alien-city path — cinematic framings specifically designed for vast alien cityscapes. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━

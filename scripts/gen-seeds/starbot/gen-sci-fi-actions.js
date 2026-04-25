@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} dynamic BODY-SHAPING ACTIONS for sci-fi explorer characters in StarBot. Each describes what a character is physically doing RIGHT NOW — pose-first, caught mid-moment. 15-25 words each. Gender-neutral (used for both male and female).
 
 ━━━ WHAT THESE ARE ━━━

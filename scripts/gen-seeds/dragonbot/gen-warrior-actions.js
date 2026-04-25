@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/warrior_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DYNAMIC ACTION descriptions for fantasy characters. These are candid adventurer moments — things a warrior/ranger/mage does between battles. 8-15 words each.
 
 ━━━ BODY POSITION RULES (CRITICAL) ━━━

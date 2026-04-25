@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/sci_fi_male_outfits.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} descriptions of BADASS MALE SCI-FI OUTFITS for StarBot. Each is an ornate, heavy, "holy fuck" space suit, armor, or tactical rig. 20-35 words each.
 
 ━━━ WHAT THESE OUTFITS ARE ━━━

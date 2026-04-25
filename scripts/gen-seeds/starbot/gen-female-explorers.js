@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/female_explorers.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} descriptions of STUNNING FEMALE sci-fi explorers for StarBot. Each is a beautiful, dangerous WOMAN in an ornate space suit/armor. 25-40 words. Start every entry with "A beautiful female" or "A stunning woman" or "A gorgeous female" — the image model MUST know she is a woman.
 
 ━━━ WHO THESE WOMEN ARE ━━━

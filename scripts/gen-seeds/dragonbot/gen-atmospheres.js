@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for DragonBot — epic-fantasy particle/mist/magical-atmospheric elements. Adds mythic depth to any scene.
 
 Each entry: 6-14 words. One specific fantasy atmospheric element.

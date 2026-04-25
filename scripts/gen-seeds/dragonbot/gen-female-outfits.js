@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/female_outfits.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ORNATE FANTASY OUTFIT descriptions for beautiful female warriors. Each describes ONLY the outfit/armor — NOT the character wearing it. 20-35 words. These outfits are sultry, badass, and jaw-droppingly detailed.
 
 ━━━ THE VIBE ━━━

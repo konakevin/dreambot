@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_glow_colors.json',
-  total: 50,
+  total: 200,
   batch: 50,
   metaPrompt: (n) => `You are writing ${n} GLOW COLOR descriptions for StarBot's cyborg-woman path. Each describes the color of light emitting from a cyborg's eyes, power core, circuit veins, and internal energy systems. This glow is the single unifying light source across her whole body — eyes, chest core, veins under skin ALL glow this color.
 

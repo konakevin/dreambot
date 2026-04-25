@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cosmic_anchors.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} FOREGROUND ANCHOR ELEMENTS for cosmic vista scenes in StarBot. Each is a physical object or structure that sits in the FOREGROUND or MIDGROUND of a vast cosmic scene, giving it SCALE and GROUNDING. 15-25 words each.
 
 ━━━ WHAT THESE ARE ━━━

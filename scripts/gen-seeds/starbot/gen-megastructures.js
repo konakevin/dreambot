@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/megastructures.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} descriptions of JAW-DROPPING MEGASTRUCTURES for StarBot — impossible-scale artificial constructs that make the viewer whisper "holy shit." 20-35 words each.
 
 ━━━ WHAT THESE ARE ━━━

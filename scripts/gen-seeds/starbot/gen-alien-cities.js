@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/alien_cities.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} descriptions of ALIEN CITIES for StarBot — vast, jaw-dropping cityscapes across every flavor of sci-fi. Blade Runner, Coruscant, Fifth Element, Guardians of the Galaxy, Dune, Arrival, Mass Effect, Star Wars prequels. 20-35 words each.
 
 ━━━ WHAT THESE ARE ━━━
