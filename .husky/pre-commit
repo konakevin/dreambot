@@ -14,5 +14,8 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   . "$NVM_DIR/nvm.sh"
 fi
 
+echo "→ Scanning staged changes for secrets..."
+./scripts/check-secrets.sh
+
 echo "→ Running pre-commit checks (prettier, lint, tsc, jest)..."
 npm run check

@@ -12,6 +12,12 @@ const { createClient } = require('@supabase/supabase-js');
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
+const PREFIX = process.env.BOT_PASSWORD_PREFIX;
+if (!PREFIX) {
+  console.error('ERROR: BOT_PASSWORD_PREFIX missing from .env.local');
+  process.exit(1);
+}
+
 const BOTS = [
   // ── Art Accounts (stunning content) ──
   {
@@ -107,7 +113,7 @@ const BOTS = [
     // 1. Create auth user
     const { data: authData, error: authErr } = await sb.auth.admin.createUser({
       email: bot.email,
-      password: 'BotAccount2026!!' + bot.username,
+      password: PREFIX + bot.username,
       email_confirm: true,
       user_metadata: { username: bot.username },
     });

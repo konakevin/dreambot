@@ -36,6 +36,12 @@ const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, getKey('SUPABASE_SERVICE_ROLE_KEY'));
 const sbAuth = createClient(SUPABASE_URL, getKey('SUPABASE_SERVICE_ROLE_KEY'));
 
+const BOT_PASSWORD_PREFIX = getKey('BOT_PASSWORD_PREFIX');
+if (!BOT_PASSWORD_PREFIX) {
+  console.error('ERROR: BOT_PASSWORD_PREFIX missing from .env.local');
+  process.exit(1);
+}
+
 const args = process.argv.slice(2);
 const countIdx = args.indexOf('--count');
 const botIdx = args.indexOf('--bot');
@@ -151,7 +157,7 @@ async function regenSeeds(username, prefix) {
 
     // Sign in as bot
     const botEmail = `bot-${username.replace('.', '-')}@dreambot.app`;
-    const botPassword = 'BotAccount2026!!' + username;
+    const botPassword = BOT_PASSWORD_PREFIX + username;
     const { data: authData, error: authErr } = await sbAuth.auth.signInWithPassword({
       email: botEmail,
       password: botPassword,

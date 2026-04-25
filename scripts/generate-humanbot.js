@@ -764,8 +764,13 @@ async function generateOne(botJwt) {
 }
 
 (async () => {
+  const PREFIX = getKey('BOT_PASSWORD_PREFIX');
+  if (!PREFIX) {
+    console.error('ERROR: BOT_PASSWORD_PREFIX missing from .env.local');
+    process.exit(1);
+  }
   const botEmail = 'bot-humanbot@dreambot.app';
-  const botPassword = 'BotAccount2026!!humanbot';
+  const botPassword = `${PREFIX}humanbot`;
   const sbAuth = createClient(SUPABASE_URL, SERVICE_ROLE);
   const { data: authData, error: authErr } = await sbAuth.auth.signInWithPassword({
     email: botEmail,

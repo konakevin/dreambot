@@ -12,10 +12,15 @@ const { createClient } = require('@supabase/supabase-js');
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
+const PREFIX = process.env.BOT_PASSWORD_PREFIX;
+if (!PREFIX) {
+  console.error('ERROR: BOT_PASSWORD_PREFIX missing from .env.local');
+  process.exit(1);
+}
 const BOT = {
   username: 'MuseBot',
   email: 'bot-musebot@dreambot.app',
-  password: 'BotAccount2026!!musebot',
+  password: `${PREFIX}musebot`,
 };
 
 (async () => {

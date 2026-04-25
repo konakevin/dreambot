@@ -12,6 +12,12 @@ const { createClient } = require('@supabase/supabase-js');
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
+const PREFIX = process.env.BOT_PASSWORD_PREFIX;
+if (!PREFIX) {
+  console.error('ERROR: BOT_PASSWORD_PREFIX missing from .env.local');
+  process.exit(1);
+}
+
 // ── Rename mapping: old username → new username ──
 const RENAMES = [
   { old: 'solaris', oldVariants: ['Solaris'], newName: 'dragonbot', oldPrefix: 'solaris_', newPrefix: 'dragonbot_' },
@@ -115,7 +121,7 @@ async function renameBot(oldUsername, oldVariants, newUsername, oldPrefix, newPr
   // Update auth email
   const oldEmail = `bot-${oldUsername.replace('.', '-')}@dreambot.app`;
   const newEmail = `bot-${newUsername}@dreambot.app`;
-  const newPassword = 'BotAccount2026!!' + newUsername;
+  const newPassword = PREFIX + newUsername;
   try {
     await sb.auth.admin.updateUserById(userId, { email: newEmail, password: newPassword });
     console.log(`   ✅ Auth: ${oldEmail} → ${newEmail}`);
@@ -144,7 +150,7 @@ async function renameBot(oldUsername, oldVariants, newUsername, oldPrefix, newPr
 
 async function createNewBot(bot) {
   const email = `bot-${bot.username}@dreambot.app`;
-  const password = 'BotAccount2026!!' + bot.username;
+  const password = PREFIX + bot.username;
 
   // Create auth user
   const { data: authData, error: authErr } = await sb.auth.admin.createUser({
@@ -210,7 +216,7 @@ async function createNewBot(bot) {
     const { error: authErr } = await sb.auth.admin.createUser({
       id: astraId,
       email: `bot-${ASTRA_RENAME.newName}@dreambot.app`,
-      password: 'BotAccount2026!!' + ASTRA_RENAME.newName,
+      password: PREFIX + ASTRA_RENAME.newName,
       email_confirm: true,
       user_metadata: { username: ASTRA_RENAME.newName },
     });
