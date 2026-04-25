@@ -1,8 +1,9 @@
 /**
  * OceanBot — the bot-engine contract.
  *
- * Underwater + sea-life specialist. Pure beneath-the-surface + marine-
- * creature territory. Nat-Geo × 10.
+ * The full ocean experience — underwater wonder, surface drama, maritime myth,
+ * deep sea horror, coastal beauty, big waves, tropical paradise.
+ * NatGeo × ancient mariner × Moby Dick.
  */
 
 const pools = require('./pools');
@@ -10,20 +11,32 @@ const blocks = require('./shared-blocks');
 
 const pathBuilders = {
   'reef-life': require('./paths/reef-life'),
-  'deep-creature': require('./paths/deep-creature'),
-  'marine-portrait': require('./paths/marine-portrait'),
-  'underwater-world': require('./paths/underwater-world'),
-  'after-dark': require('./paths/after-dark'),
+  'sea-creatures': require('./paths/sea-creatures'),
+  'deep-wonder': require('./paths/deep-wonder'),
+  'deep-horror': require('./paths/deep-horror'),
+  'storm-surface': require('./paths/storm-surface'),
+  'ghost-ship': require('./paths/ghost-ship'),
+  'kraken-leviathan': require('./paths/kraken-leviathan'),
+  'shipwreck-kingdom': require('./paths/shipwreck-kingdom'),
+  'polar-seas': require('./paths/polar-seas'),
+  'coastal-cliffs': require('./paths/coastal-cliffs'),
+  'calm-glass-sea': require('./paths/calm-glass-sea'),
+  'big-wave': require('./paths/big-wave'),
+  'coastal-golden': require('./paths/coastal-golden'),
+  'tropical-paradise': require('./paths/tropical-paradise'),
 };
 
 module.exports = {
   username: 'oceanbot',
   displayName: 'OceanBot',
 
-  mediums: ['photography', 'canvas', 'watercolor', 'pencil'],
+  mediums: ['photography', 'canvas', 'watercolor', 'oil_painting', 'illustration', 'pencil'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
+
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
   vibes: [
     'cinematic',
@@ -31,30 +44,49 @@ module.exports = {
     'cozy',
     'epic',
     'nostalgic',
-    'psychedelic',
     'peaceful',
-    'whimsical',
     'ethereal',
-    'arcane',
     'ancient',
     'enchanted',
     'fierce',
-    'coquette',
     'voltage',
     'nightshade',
-    'macabre',
     'shimmer',
     'surreal',
   ],
 
-  paths: ['reef-life', 'deep-creature', 'marine-portrait', 'underwater-world', 'after-dark'],
+  paths: [
+    'reef-life',
+    'sea-creatures',
+    'deep-wonder',
+    'deep-horror',
+    'storm-surface',
+    'ghost-ship',
+    'kraken-leviathan',
+    'shipwreck-kingdom',
+    'polar-seas',
+    'coastal-cliffs',
+    'calm-glass-sea',
+    'big-wave',
+    'coastal-golden',
+    'tropical-paradise',
+  ],
 
   pathWeights: {
-    'reef-life': 3,
-    'deep-creature': 2,
-    'marine-portrait': 2,
-    'underwater-world': 1,
-    'after-dark': 2,
+    'reef-life': 2,
+    'sea-creatures': 2,
+    'deep-wonder': 2,
+    'deep-horror': 2,
+    'storm-surface': 3,
+    'ghost-ship': 2,
+    'kraken-leviathan': 2,
+    'shipwreck-kingdom': 2,
+    'polar-seas': 1,
+    'coastal-cliffs': 1,
+    'calm-glass-sea': 1,
+    'big-wave': 2,
+    'coastal-golden': 2,
+    'tropical-paradise': 2,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

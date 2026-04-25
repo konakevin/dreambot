@@ -1,21 +1,27 @@
+/**
+ * OceanBot storm-surface — huge waves, lightning, ships battling seas, surface drama.
+ */
+
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const env = picker.pickWithRecency(pools.UNDERWATER_ENVIRONMENTS, 'underwater_environment');
-  const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'ocean_atmosphere');
+  const scene = picker.pickWithRecency(pools.STORM_SURFACE, 'storm_surface');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
-  return `You are an underwater-world cinematographer writing UNDERWATER WORLD scenes for OceanBot. Vast underwater ecosystems. Pure environment.
+  return `You are a maritime storm photographer writing STORM SURFACE scenes for OceanBot. Raw ocean fury at the surface — towering waves, lightning cracking across dark skies, spray and foam, ships as tiny specks against walls of water. The power and violence of the sea unleashed. Output wraps with style prefix + suffix.
 
 ${blocks.OCEAN_IS_HERO_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
 ${blocks.NO_PEOPLE_BLOCK}
 
-━━━ THE UNDERWATER ENVIRONMENT ━━━
-${env}
+${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+
+${blocks.WATER_LIGHTING_BLOCK}
+
+━━━ THE STORM SCENE ━━━
+${scene}
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -35,7 +41,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Wide vast underwater scale. Environment is hero. Dramatic depth + light.
+Surface-level or slightly elevated. Waves dominate the frame — massive, violent, beautiful. Sky is dramatic. If a ship is present it's small against the sea. Spray, foam, and atmospheric chaos everywhere.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

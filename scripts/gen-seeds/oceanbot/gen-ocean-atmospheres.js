@@ -2,56 +2,32 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/oceanbot/seeds/ocean_atmospheres.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} OCEAN ATMOSPHERIC DETAIL descriptions for OceanBot.
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} UNDERWATER/OCEAN ATMOSPHERIC CONDITION descriptions for OceanBot. These describe water conditions, visibility, particulate, currents — the environmental quality of the water itself, not creatures or scenes.
 
-Each entry: 6-14 words. One specific ocean atmospheric element.
+Each entry: 10-20 words. One specific atmospheric condition.
 
-━━━ CATEGORIES ━━━
-- Sunbeams through water column
-- Bioluminescent plankton glow
-- Particulate drift (marine snow)
-- God-rays underwater piercing
-- Moonlight glitter on surface
-- Bio-cyan trail from moving body
-- Bubble-column rising
-- Sediment-swirl from movement
-- Silt-cloud suspended
-- Fish-scale glint caught in light
-- Crystal-clear near-surface
-- Hazy-shadow silhouette backlit
-- Coral-polyp extended tendrils
-- Surface-chop ripples seen from below
-- Plankton-cloud dense
-- Jellyfish-train drifting
-- Eelgrass swaying
-- Seafan swaying gently
-- Light-dapple on sand-floor
-- Whale-song-visualization
-- Salt-crystal suspended
-- Surge-pulse rhythm
-- Wave-refraction caustic-patterns
-- Thermocline haze layer
-- Krill-swarm dense cloud
-- Bubble-ring from exhale
-- Sand-devil on seafloor
-- Light-beam through surface
-- Kelp-fall ancient frond
-- Coral-spawning mass-event
-- Comb-jelly iridescence
-- Marine-snow organic-debris
-- Plankton-cloud biolume patch
-- Glitter-trail fish-wake
-- Bubble-cluster released
-- Ghost-silt memory-cloud
-- Sunset-through-water gold
-- Moonlit-silver-reflection from below
-- Cave-light-shaft distant
+━━━ CATEGORIES (mix across all) ━━━
+- Dense particulate suspension creating hazy blue-green visibility
+- Crystal-clear tropical water with 200-foot visibility and sunbeams
+- Plankton bloom turning water emerald green with reduced visibility
+- Thermocline shimmer where warm and cold layers meet and distort light
+- Surface chop texture seen from below, fractured light dancing
+- Murky estuary water with tannin staining and suspended sediment
+- Current-swept particulate streaming horizontally through the frame
+- Bubble curtain rising from volcanic vents on the seafloor
+- Snow-like marine snow drifting down through deep blue water
+- Surge and backwash creating oscillating visibility near reef
+- Milky blue water from glacial runoff mixing with dark ocean
+- Red tide bloom creating rust-colored water with eerie light
 
 ━━━ RULES ━━━
-- Ocean-specific atmospheric variety
-- Visual / painterly detail
+- WATER CONDITIONS only — not creatures, not scenes, not landscapes
+- Describe what the water itself looks like, how light behaves in it
+- Specific phenomena, not generic "clear water" or "murky water"
+- No repeats — every entry a unique atmospheric condition
+- Concise, technical but vivid language
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

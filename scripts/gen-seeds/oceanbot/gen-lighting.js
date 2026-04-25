@@ -2,56 +2,32 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/oceanbot/seeds/lighting.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for OceanBot — underwater + low-light lighting.
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} OCEAN-SPECIFIC LIGHTING descriptions for OceanBot. How light interacts with water at various depths, times, and weather conditions. These are lighting directions, not scenes.
 
-Each entry: 10-20 words. One specific ocean lighting treatment.
+Each entry: 15-25 words. One specific lighting condition.
 
-━━━ CATEGORIES ━━━
-- Sunbeams through water column (god-rays descending)
-- Filtered blue-gradient depth (light fading with depth)
-- Bioluminescent glow (plankton / jellyfish / fish-lure)
-- Moonlit silver (cool silver surface-down)
-- Starfield (night-ocean stars reflected)
-- Dawn-through-surface (warm amber penetrating)
-- Blue-hour underwater (deep cobalt)
-- Caustic patterns (wave-light on sand)
-- Tropical-noon directly overhead (intense)
-- Deep-sea total-black with single spotlight
-- Aurora-reflected on water surface
-- Sunset-golden through water
-- Storm-cloud-filtered gloomy
-- Cave-shaft single beam
-- Green-flash moment at sunset
-- Thermocline-diffused soft
-- Kelp-dappled forest-like
-- Anglerfish-lure single-point
-- Shipwreck-interior-dim
-- Iceberg-underside blue-glow
-- Cenote-shaft-from-above
-- Ice-cave diffuse blue-white
-- Moon-through-wave crest
-- Night-reef-torch diver-light
-- Anemone-tentacle translucent backlit
-- Bubble-curtain catching light
-- Silhouette-against-surface backlight
-- Rim-light creature from behind
-- Side-lit creature for texture
-- Under-ice-blue soft-from-above
-- Volcanic-vent red-glow
-- Twilight-transition sky-to-deep
-- Blue-hole descent-darkness
-- Crystal-cave prismatic
-- Lantern-fish ascending glow
-- Plankton-trail boat-wake glowing
-- Dolphin-pod silver-silhouette
-- Whale-song-cymatic visualization light
-- Spot-fish-eye reflecting catch
+━━━ CATEGORIES (mix across all) ━━━
+- Caustic light patterns dancing across sandy bottom in shallow water
+- Filtered blue-green light at 60 feet with sun visible as bright disc above
+- Golden hour light on wave faces, warm tones through translucent water
+- Moonpath on ocean swells, silver light stretching to horizon
+- Storm-break light — dramatic sun rays piercing through dark cloud gaps onto water
+- Crepuscular rays underwater — god beams streaming down through surface
+- Bioluminescent glow as sole light source in abyssal darkness
+- Dappled light through surface chop creating moving patterns on reef
+- Green flash moment at sunset where sky meets flat ocean
+- Overcast flat light turning ocean to burnished pewter
+- Split-light at waterline — warm above, cool blue-green below
+- Deep twilight zone light — last traces of surface sun at 600 feet
 
 ━━━ RULES ━━━
-- Underwater + low-light emphasis
-- Named specific treatments
+- LIGHTING ONLY — how light behaves with water, not creatures or scenes
+- Specific depth, time, weather, and water conditions that affect the light
+- Technical but beautiful — these are lighting directions for rendering
+- No repeats — every entry a unique light interaction
+- Vivid, specific language
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

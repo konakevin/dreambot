@@ -2,47 +2,32 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/oceanbot/seeds/scene_palettes.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} SCENE-WIDE COLOR PALETTE descriptions for OceanBot — ocean color moods.
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} OCEAN COLOR PALETTE descriptions for OceanBot. Each is a short color palette describing the dominant tones for an ocean scene rendering.
 
-Each entry: 10-20 words. One specific ocean palette with 3-5 color words.
+Each entry: 10-15 words. One specific ocean color palette.
 
-━━━ CATEGORIES ━━━
-- Turquoise-tropical (turquoise + cream-sand + coral-pink + palm-green)
-- Deep-navy (deep-navy + silver-flash + white-foam + shadow-black)
-- Bioluminescent-blue (electric-blue + black + silver-highlight)
-- Arctic-white (white + ice-blue + silver + pale-grey)
-- Moonlit-silver (silver + navy + pearl + shadow)
-- Twilight-purple (violet + rose + silver + deep-blue)
-- After-sunset-coral (coral + rose-gold + deep-blue + purple)
-- Kelp-forest-green (emerald + gold + brown + shadow)
-- Blood-sunset-sea (crimson + gold + deep-blue + black)
-- Dawn-coastal (peach + cream + pale-blue + sand)
-- Jellyfish-pastel (pale-pink + opalescent + ice-blue + pearl)
-- Shipwreck-rust (rust + blue-green + sepia + shadow)
-- Cenote-freshwater (turquoise + limestone-tan + shadow-emerald)
-- Deep-sea-abyss (black + single-red-glow + deep-navy)
-- Coral-garden explosive (multi-color + sunlit-blue)
-- Shark-shallow (grey + silver + blue + white-foam)
-- Aurora-sea (green-purple + silver + deep-blue)
-- Starfield-reflected (silver + deep-navy + pearl + black)
-- Lightning-storm-sea (charcoal + white-flash + blue)
-- Mist-ocean-dawn (pale-peach + cream + faint-blue + mist)
-- Bubble-trail-silver (silver + turquoise + pearl + black)
-- Sunset-mirror-water (rose-gold + cream + deep-blue-reflection)
-- Volcanic-vent-red (crimson + black + deep-blue)
-- Ice-cave-blue (pale-blue + white + deep-shadow-blue)
-- Night-reef-glow (black + multi-bioluminescent + deep-blue)
-- Sand-lagoon (cream-sand + turquoise + coral + palm-green)
-- Seaweed-rich (olive-green + brown + gold + blue)
-- Reef-spectrum (every color + sunlit-blue + gold-caustic)
-- Stormy-grey (pewter + charcoal + single-white-whitecap)
-- Polar-morning (white + pale-blue + pink-horizon + silver)
+━━━ CATEGORIES (mix across all) ━━━
+- Deep navy blue with silver highlights and white foam accents
+- Turquoise and teal with sandy gold undertones
+- Midnight blue and black with bioluminescent blue-green sparks
+- Coral pink and warm turquoise with white sand reflections
+- Storm grey and dark green with white spray highlights
+- Emerald green and deep blue with dappled gold sunlight
+- Silver and pewter with pale blue-grey horizon
+- Molten gold and copper sunset on dark blue water
+- Ice blue and white with deep cobalt shadows
+- Tropical gradient — pale aqua to deep sapphire
+- Blood orange sunset with silhouetted dark ocean
+- Muted teal and sage with overcast pearl-grey sky
 
 ━━━ RULES ━━━
-- Ocean-specific palettes
-- 3-5 colors per entry
+- COLOR PALETTES only — 3-5 colors/tones per entry
+- Ocean-specific — every palette should feel like water
+- Describe colors with specificity (not just "blue" — navy, cobalt, cerulean, teal)
+- No repeats — every entry a unique ocean palette
+- Concise, evocative language
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

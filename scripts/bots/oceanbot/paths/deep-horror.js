@@ -1,16 +1,16 @@
 /**
- * OceanBot reef-life — coral reef explosions, tropical fish abundance.
+ * OceanBot deep-horror — anglerfish, abyss, monstrous silhouettes, dread.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.REEF_SCENES, 'reef_scene');
+  const scene = picker.pickWithRecency(pools.DEEP_HORROR, 'deep_horror');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
-  return `You are an underwater cinematographer writing CORAL REEF scenes for OceanBot. Maximum abundance — reefs exploding with color, fish, and life. Tropical shallow water, sunbeams filtering down, every coral and creature razor-sharp. Output wraps with style prefix + suffix.
+  return `You are a deep-sea horror cinematographer writing DEEP HORROR scenes for OceanBot. The terrifying side of the abyss — anglerfish lures glowing in void-black water, massive silhouettes emerging from darkness, nightmare anatomy, pressure-crushed alien biology, teeth and tentacles at impossible depth. Beautiful in its horror. Output wraps with style prefix + suffix.
 
 ${blocks.OCEAN_IS_HERO_BLOCK}
 
@@ -18,11 +18,9 @@ ${blocks.NO_PEOPLE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-${blocks.REEF_EXPLOSION_BLOCK}
-
 ${blocks.WATER_LIGHTING_BLOCK}
 
-━━━ THE REEF SCENE ━━━
+━━━ THE DEEP HORROR ━━━
 ${scene}
 
 ━━━ LIGHTING ━━━
@@ -43,7 +41,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Underwater wide shot. Reef fills the frame — dense, colorful, alive. Sunlight from above, fish in motion, coral in sharp detail. Maximum abundance, maximum color.
+Near-total darkness. A single light source — bioluminescent lure, faint glow, distant surface shimmer — reveals something massive or monstrous. Scale implied by shadow. Dread and awe.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

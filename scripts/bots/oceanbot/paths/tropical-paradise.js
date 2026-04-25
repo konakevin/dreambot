@@ -1,16 +1,16 @@
 /**
- * OceanBot reef-life — coral reef explosions, tropical fish abundance.
+ * OceanBot tropical-paradise — crystal lagoons, turquoise shallows, palm-fringed atolls.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.REEF_SCENES, 'reef_scene');
+  const scene = picker.pickWithRecency(pools.TROPICAL_PARADISE, 'tropical_paradise');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
-  return `You are an underwater cinematographer writing CORAL REEF scenes for OceanBot. Maximum abundance — reefs exploding with color, fish, and life. Tropical shallow water, sunbeams filtering down, every coral and creature razor-sharp. Output wraps with style prefix + suffix.
+  return `You are a tropical ocean photographer writing TROPICAL PARADISE scenes for OceanBot. Crystal clear lagoons, turquoise shallows over white sand, palm-fringed atolls, overwater views into impossibly clear water, Maldives/Bora Bora/Seychelles energy. The dream of tropical ocean perfection. Output wraps with style prefix + suffix.
 
 ${blocks.OCEAN_IS_HERO_BLOCK}
 
@@ -18,11 +18,9 @@ ${blocks.NO_PEOPLE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-${blocks.REEF_EXPLOSION_BLOCK}
-
 ${blocks.WATER_LIGHTING_BLOCK}
 
-━━━ THE REEF SCENE ━━━
+━━━ THE TROPICAL SCENE ━━━
 ${scene}
 
 ━━━ LIGHTING ━━━
@@ -43,7 +41,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Underwater wide shot. Reef fills the frame — dense, colorful, alive. Sunlight from above, fish in motion, coral in sharp detail. Maximum abundance, maximum color.
+Wide or mid frame. Turquoise water is the star — crystal clear, impossibly blue-green. White sand below, blue sky above. Paradise perfection. NOT a specific named resort — universal tropical ocean beauty.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

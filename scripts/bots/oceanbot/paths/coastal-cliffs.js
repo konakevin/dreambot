@@ -1,16 +1,16 @@
 /**
- * OceanBot reef-life — coral reef explosions, tropical fish abundance.
+ * OceanBot coastal-cliffs — lighthouses, sea caves, tide pools, stormy shores.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.REEF_SCENES, 'reef_scene');
+  const scene = picker.pickWithRecency(pools.COASTAL_CLIFFS, 'coastal_cliff');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
-  return `You are an underwater cinematographer writing CORAL REEF scenes for OceanBot. Maximum abundance — reefs exploding with color, fish, and life. Tropical shallow water, sunbeams filtering down, every coral and creature razor-sharp. Output wraps with style prefix + suffix.
+  return `You are a coastal photographer writing COASTAL CLIFFS scenes for OceanBot. Where land meets ocean at its most dramatic — jagged cliffs, lighthouses on promontories, sea caves with waves crashing in, tide pools teeming with life, hidden coves, stormy shores with spray flying. The raw edge of the continent. Output wraps with style prefix + suffix.
 
 ${blocks.OCEAN_IS_HERO_BLOCK}
 
@@ -18,11 +18,9 @@ ${blocks.NO_PEOPLE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-${blocks.REEF_EXPLOSION_BLOCK}
-
 ${blocks.WATER_LIGHTING_BLOCK}
 
-━━━ THE REEF SCENE ━━━
+━━━ THE COASTAL SCENE ━━━
 ${scene}
 
 ━━━ LIGHTING ━━━
@@ -43,7 +41,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Underwater wide shot. Reef fills the frame — dense, colorful, alive. Sunlight from above, fish in motion, coral in sharp detail. Maximum abundance, maximum color.
+Land and sea meeting. Cliffs, rocks, caves frame the ocean. Waves crash against stone. Dramatic sky above. The violence and beauty of the coastline.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

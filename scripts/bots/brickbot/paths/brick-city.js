@@ -2,28 +2,22 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const subject = picker.pickWithRecency(pools.MARINE_PORTRAIT_SUBJECTS, 'marine_portrait');
-  const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'ocean_atmosphere');
+  const scene = picker.pickWithRecency(pools.CITY_SCENES, 'city_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
 
-  return `You are an expert aquatic photographer writing MARINE PORTRAIT scenes for OceanBot. ONE real marine creature as sole hero. Candid. Razor-sharp detail.
+  return `You are a LEGO diorama photographer writing BRICK CITY scenes for BrickBot. Massive detailed cityscapes built entirely from LEGO bricks — downtown streets with tiny shops, skylines, neon signs made of transparent bricks, rain puddles on baseplates, traffic, street-level minifig-scale detail. Output wraps with style prefix + suffix.
 
-${blocks.OCEAN_IS_HERO_BLOCK}
+${blocks.EVERYTHING_IS_BRICK_BLOCK}
 
-${blocks.IMPOSSIBLE_CLARITY_BLOCK}
+${blocks.TOY_PHOTOGRAPHY_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+${blocks.BRICK_DETAIL_BLOCK}
 
-${blocks.NO_PEOPLE_BLOCK}
-
-━━━ THE MARINE SUBJECT ━━━
-${subject}
+━━━ THE CITY SCENE ━━━
+${scene}
 
 ━━━ LIGHTING ━━━
 ${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -37,7 +31,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid-close or close marine portrait. Single subject hero. Razor-sharp detail on skin / scale / eye.
+Street-level or slightly elevated. Buildings fill the frame, minifigs populate the scene. Tilt-shift shallow DOF. The city feels alive and impossibly detailed.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

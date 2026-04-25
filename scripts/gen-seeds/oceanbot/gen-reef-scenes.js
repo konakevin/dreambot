@@ -2,54 +2,32 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/oceanbot/seeds/reef_scenes.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} REEF SCENE descriptions for OceanBot's reef-life path — MAXED-OUT reef + tropical fish abundance. Many fish + many coral species + many colors per frame. Density + movement + sunbeams-through-water.
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} CORAL REEF SCENE descriptions for OceanBot. Each is a vivid snapshot of a specific coral reef scene bursting with tropical fish abundance, multi-species chaos, and shallow sunlit water.
 
-Each entry: 20-40 words. One specific reef-explosion scene.
+Each entry: 15-25 words. One specific reef scene.
 
-━━━ CATEGORIES ━━━
-- Schooling jacks swirling around purple-coral pillar with sunbeams
-- Butterflyfish cluster around brain-coral with anemones and angelfish mixed
-- Nudibranch-explosion across reef wall with countless color-variants
-- Clownfish-anemone colony with damselfish and wrasses passing through
-- Sunbeam corridor through massive coral garden with parrotfish grazing
-- Soft-coral forest swaying with gobies + shrimp + nudibranchs mid-reef
-- Multi-story reef cross-section with fish at every level
-- Gorgonian-fan wall with schools of barracuda passing
-- Tabletop-coral colony with dense fish congregation
-- Table-coral garden with blue-tangs cascading across
-- Sea-fan forest with queen-angelfish centerpiece
-- Pink-coral explosion with rainbow-wrasses + butterflyfish
-- Reef-ball cluster with moray-eel + lionfish + damselfish
-- Mushroom-coral field with ghost-pipefish hiding
-- Brain-coral boulder with cleaning-wrasse station
-- Hard-coral garden with schooling snappers overhead
-- Staghorn-coral thicket with yellowtail-damsels darting
-- Pillar-coral tower with anthias-cloud swarming
-- Reef-drop-off with mantas gliding past
-- Reef-top at depth with clearfin-shark patrolling
-- Coral-crevice cave with glassy-sweepers
-- Shallow reef with turtles grazing
-- Reef-wall wrasse-cleaning-station
-- Reef-plateau with octopus hunting
-- Shark-line on reef-edge with fusiliers passing
-- Reef-spire with sergeant-major-swarm
-- Bubble-coral patch with clownfish-variants
-- Whip-coral garden with sea-horses
-- Fire-coral colony with butterflyfish
-- Banded-cleaning-shrimp on coral-head
-- Foxface-rabbitfish school through corals
-- Coral-bommie with moray + grouper + shark visible
-- Wall-of-soldierfish with reef-drop-off backdrop
-- Reef-nursery with juvenile-fish explosion
-- Night-reef with blue-ringed-octopus + bioluminescence
+━━━ CATEGORIES (mix across all) ━━━
+- Dense schooling fish spiraling around coral pillars with sunbeams cutting through
+- Butterflyfish clusters among brain coral with angelfish and wrasses passing
+- Nudibranch explosions across reef walls in countless color variants
+- Clownfish anemone colonies with damselfish swarms
+- Soft coral forests swaying with gobies and shrimp mid-reef
+- Gorgonian fan walls with barracuda schools passing
+- Tabletop coral gardens with blue tang cascades
+- Staghorn thickets with yellowtail damsels darting
+- Reef drop-offs with mantas gliding past dense coral
+- Parrotfish grazing through massive sunlit coral gardens
+- Shallow reef flats with turtles and surgeonfish
+- Multi-story reef cross-sections with fish at every level
 
 ━━━ RULES ━━━
-- MAX abundance — many species per scene
-- Multiple coral types visible
-- Sunbeams + particulate + depth
-- Density IS the art
+- MAX abundance — many species per scene, density is the art
+- Multiple coral types visible per entry
+- Sunbeams, particulate, shallow warm water energy
+- No repeats — every entry a unique reef moment
+- Vivid, specific language — not generic "beautiful reef"
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

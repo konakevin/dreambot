@@ -1,46 +1,52 @@
 /**
  * OceanBot — shared prose blocks.
  *
- * Underwater + sea-life specialist. Pure beneath-the-surface + marine-
- * creature territory. Nat Geo × 10 ocean quality. No humans.
+ * The full ocean experience — underwater wonder, surface drama, maritime myth,
+ * deep sea horror, coastal beauty. NatGeo × ancient mariner × Moby Dick.
+ * No humans unless on a ship (silhouette only).
  */
 
 const PROMPT_PREFIX =
-  'National Geographic underwater photograph dialed to 10×, razor-sharp ocean detail, sunbeam-through-water cinematography, breathtaking marine beauty, impossibly saturated ocean color';
+  'breathtaking ocean scene, cinematic dramatic lighting, rich saturated marine colors, sharp detail, epic scale, wallpaper-worthy, gallery-quality, photorealistic rendering, hyper-detailed water and atmosphere';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
 const OCEAN_IS_HERO_BLOCK = `━━━ OCEAN IS HERO (NON-NEGOTIABLE) ━━━
 
-Ocean / water / marine creatures are always the subject. Surface of water, coral, reef, deep-blue, bioluminescence — the ocean itself is the painting. Never peripheral. Every render a love-letter to the sea.`;
-
-const IMPOSSIBLE_CLARITY_BLOCK = `━━━ IMPOSSIBLE CLARITY ━━━
-
-Razor-sharp detail on creatures. Every scale, every fin-ray, every spot, every eye-shine visible. Individual sand-grains on the sea floor. Bubbles with surface-tension highlights. Clear water clarity beyond what real underwater photography achieves.`;
-
-const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ IMPOSSIBLE BEAUTY — OCEAN EDITION ━━━
-
-Wall-poster / phone-wallpaper Nat-Geo-cover quality. Colors more saturated than real underwater cameras capture. Sunbeams more dramatic than real physics allows. Atmospheric layering of particles, light, and life stacked. "How did they photograph that?" is the reaction.`;
+The ocean is always the subject — above, below, or at the surface. Water in all its forms: crashing, still, deep, shallow, frozen, sunlit, moonlit, stormy. Every render is a love-letter to the sea.`;
 
 const NO_PEOPLE_BLOCK = `━━━ NO PEOPLE ━━━
 
-No divers, no swimmers, no human figures of any kind. Pure ocean + creatures.`;
+No divers, no swimmers, no surfers, no human figures. Ships are allowed but never crewed — ghost ships, distant silhouettes, shipwrecks. The ocean dominates, humans are absent or insignificant.`;
+
+const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ IMPOSSIBLE BEAUTY — OCEAN EDITION ━━━
+
+Wall-poster / phone-wallpaper quality. Colors more saturated than real cameras capture. Water clarity beyond physics. Atmospheric layering of spray, light, and motion stacked to maximum. The reaction should be "how is this real?"`;
+
+const WATER_LIGHTING_BLOCK = `━━━ WATER + LIGHT ━━━
+
+Describe the light's interaction with water specifically — how it refracts, reflects, scatters, or penetrates. Underwater: caustic patterns, sunbeam shafts, filtered blue-green. Surface: golden hour on wave faces, storm light on spray, moonpath on swells. The way light hits water IS the mood.`;
 
 const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — OCEAN AMPLIFICATION ━━━
 
-Ocean is the canvas, not the ceiling. Stack: sunbeam god-rays + particulate density + multi-creature abundance + coral variety + color saturation + atmospheric depth + layered scale. Nat-Geo × 10. Every frame the kind of image that wins underwater-photo-of-the-year.`;
+Push scale, depth, and atmosphere to maximum. Stack weather, light, and water phenomena. Add spray, mist, particulate, secondary light sources. If the render feels flat — add dramatic sky, volumetric atmosphere, more wave energy. Every frame should make someone's jaw drop. Keep it GROUNDED — cinematic-real, not fantasy-painted.`;
 
 const REEF_EXPLOSION_BLOCK = `━━━ REEF EXPLOSION (reef-life path only) ━━━
 
 MAX abundance. Many fish species in frame, many coral types, many colors. Density + movement + multi-species activity + sunbeams-through-water + particulate. If it looks sparse — dial up 3×. Reef should feel alive and bursting.`;
 
+const MARITIME_MYTH_BLOCK = `━━━ MARITIME MYTH ━━━
+
+Old-world sailing age energy. Weathered wood, tattered canvas, barnacle-crusted hulls, fog, moonlight, lantern glow. The romance and terror of the open ocean before engines. Moby Dick, Flying Dutchman, Treasure Island atmosphere.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   OCEAN_IS_HERO_BLOCK,
-  IMPOSSIBLE_CLARITY_BLOCK,
-  IMPOSSIBLE_BEAUTY_BLOCK,
   NO_PEOPLE_BLOCK,
+  IMPOSSIBLE_BEAUTY_BLOCK,
+  WATER_LIGHTING_BLOCK,
   BLOW_IT_UP_BLOCK,
   REEF_EXPLOSION_BLOCK,
+  MARITIME_MYTH_BLOCK,
 };
