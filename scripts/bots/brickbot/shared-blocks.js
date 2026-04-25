@@ -6,17 +6,17 @@
  */
 
 const PROMPT_PREFIX =
-  'highly detailed LEGO diorama scene, built entirely from real LEGO bricks, studs clearly visible, authentic LEGO plastic texture, molded seams and connection points, realistic brick geometry, accurate minifigure scale, intricate brick-built details using slopes tiles plates and transparent pieces, realistic toy photography style, studio-quality macro lens, shallow depth of field, tilt-shift miniature look, subtle reflections on glossy plastic surfaces, soft diffused lighting with cinematic rim light, professional LEGO MOC showcase photography';
+  'highly detailed LEGO diorama scene, built entirely from real LEGO bricks, studs clearly visible, authentic LEGO plastic texture, molded seams and connection points, realistic brick geometry, accurate minifigure scale, intricate brick-built details using slopes tiles plates and transparent pieces, professional LEGO MOC showcase photography';
 
-const PROMPT_SUFFIX = 'no cartoon render, no minecraft, no voxel art, no claymation, no painted textures, no smooth surfaces, no melted plastic, no deformed studs, no text, no watermark, ultra detailed, sharp detail, cinematic composition';
+const PROMPT_SUFFIX = 'no human hands, no human fingers, no human skin, no real people, no cartoon render, no minecraft, no voxel art, no claymation, no painted textures, no smooth surfaces, no melted plastic, no deformed studs, no text, no watermark, ultra detailed, sharp detail';
 
 const EVERYTHING_IS_BRICK_BLOCK = `━━━ EVERYTHING IS BRICK (NON-NEGOTIABLE) ━━━
 
-EVERY element in the scene is built from LEGO bricks — buildings, vehicles, terrain, water, fire, smoke, trees, rocks, sky elements. Nothing is "real" — it's all plastic bricks on a tabletop. Studs must be visible on surfaces. Minifigures have yellow skin, C-shaped hands, and printed faces. The scene looks like a real physical build photographed with a macro lens.`;
+EVERY element in the scene is built from LEGO bricks — buildings, vehicles, terrain, water, fire, smoke, trees, rocks, sky elements. Nothing is "real" — it's all plastic bricks on a tabletop. Studs must be visible on surfaces. Minifigures have yellow skin, C-shaped hands, and printed faces. The scene looks like a real physical build photographed with a macro lens. ABSOLUTELY NO human hands, human fingers, human skin, or real people anywhere in the frame. Only LEGO plastic.`;
 
 const TOY_PHOTOGRAPHY_BLOCK = `━━━ TOY PHOTOGRAPHY QUALITY ━━━
 
-Shot like a professional LEGO photographer — shallow depth of field, tilt-shift miniature look, studio lighting with soft diffusion and rim light. Realistic shadows on the tabletop. Bokeh in the background. The build looks like it could win a LEGO fan convention award. Museum-quality display piece.`;
+Shot like a professional LEGO photographer. The build looks like it could win a LEGO fan convention award. Museum-quality display piece. Realistic shadows. Use the CAMERA STYLE and LIGHTING specified below — do NOT default to shallow DOF or tilt-shift unless that's what was picked.`;
 
 const BRICK_DETAIL_BLOCK = `━━━ BRICK DETAIL ━━━
 

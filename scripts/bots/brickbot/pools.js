@@ -34,7 +34,11 @@ module.exports = {
   NOIR_SCENES: load('noir_scenes'),
   HORROR_SCENES: load('horror_scenes'),
   WILD_WEST_SCENES: load('wild_west_scenes'),
+  MASTERPIECE_BUILDS: load('masterpiece_builds'),
+  VILLAGE_SCENES: load('village_scenes'),
+  ARCHITECTURE_SCENES: load('architecture_scenes'),
   LIGHTING: load('lighting'),
+  CAMERA_STYLES: load('camera_styles'),
   SCENE_PALETTES: load('scene_palettes'),
   VIBE_COLOR,
 };

@@ -19,6 +19,9 @@ ${scene}
 ━━━ LIGHTING ━━━
 ${lighting}
 
+━━━ CAMERA STYLE ━━━
+${sharedDNA.cameraStyle}
+
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
 

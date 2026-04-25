@@ -22,13 +22,16 @@ const pathBuilders = {
   'brick-noir': require('./paths/brick-noir'),
   'brick-horror': require('./paths/brick-horror'),
   'brick-wild-west': require('./paths/brick-wild-west'),
+  'brick-masterpiece': require('./paths/brick-masterpiece'),
+  'brick-village': require('./paths/brick-village'),
+  'brick-architecture': require('./paths/brick-architecture'),
 };
 
 module.exports = {
   username: 'brickbot',
   displayName: 'BrickBot',
 
-  mediums: ['photography', 'illustration', 'canvas'],
+  mediums: ['photography'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -48,7 +51,6 @@ module.exports = {
     'nightshade',
     'shimmer',
     'surreal',
-    'fierce',
   ],
 
   paths: [
@@ -65,28 +67,35 @@ module.exports = {
     'brick-noir',
     'brick-horror',
     'brick-wild-west',
+    'brick-masterpiece',
+    'brick-village',
+    'brick-architecture',
   ],
 
   pathWeights: {
-    'brick-city': 2,
-    'brick-castle': 2,
-    'brick-space': 2,
-    'brick-pirates': 2,
-    'brick-cozy': 2,
-    'brick-mech': 2,
+    'brick-city': 1,
+    'brick-castle': 1,
+    'brick-space': 1,
+    'brick-pirates': 1,
+    'brick-cozy': 1,
+    'brick-mech': 1,
     'brick-landscape': 2,
     'brick-disaster': 1,
-    'brick-micro': 2,
+    'brick-micro': 1,
     'brick-cinematic': 1,
     'brick-noir': 1,
     'brick-horror': 1,
     'brick-wild-west': 1,
+    'brick-masterpiece': 1,
+    'brick-village': 2,
+    'brick-architecture': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
+      cameraStyle: picker.pickWithRecency(pools.CAMERA_STYLES, 'camera_style'),
     };
   },
 
