@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/cute_creatures.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} CUTE CREATURE descriptions for CuddleBot — the adorable stylized creatures that are the hero subjects. Mix of exaggerated-real + fantasy-cute. Pixar / Sanrio / Totoro energy. BIG eyes, soft round shapes, infinite cuteness.
 

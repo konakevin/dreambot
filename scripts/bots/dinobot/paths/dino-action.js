@@ -1,3 +1,8 @@
+/**
+ * DinoBot dino-action — predator hunts, pack pursuits, frozen peak-action.
+ * Nature documentary kill-chase energy. No gore.
+ */
+
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
@@ -8,7 +13,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
-  return `You are a paleo-cinematographer writing DINO ACTION scenes for DinoBot. Dynamic frozen action. Jurassic-cinematic peak-moments. No gore.
+  return `You are a paleo-cinematographer writing DINO ACTION scenes for DinoBot. Dynamic frozen peak-action — the BBC cameraman caught the perfect frame. Predator hunts, ambushes, charges, leaps. Nature documentary intensity. No gore. Output wraps with style prefix + suffix.
 
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
@@ -18,11 +23,11 @@ ${blocks.NO_GORE_BLOCK}
 
 ${blocks.NO_HUMANS_BLOCK}
 
-${blocks.NO_JURASSIC_PARK_NAMES_BLOCK}
+${blocks.DOCUMENTARY_CAMERA_BLOCK}
+
+${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
 
 ━━━ THE DINOSAUR ━━━
 ${species}
@@ -51,7 +56,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Dynamic mid-frame. Frozen peak-action. Cinematic energy.
+Dynamic mid-frame or wide. Frozen at peak action. The environment reacts — the prehistoric world is alive around the action, not just backdrop.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

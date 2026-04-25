@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dinobot/seeds/prehistoric_settings.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PREHISTORIC SETTING descriptions for DinoBot — era-specific prehistoric landscapes.
 
 Each entry: 15-30 words. One specific prehistoric setting.

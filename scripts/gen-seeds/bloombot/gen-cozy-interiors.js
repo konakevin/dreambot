@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/cozy_interiors.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COZY INTERIOR descriptions for BloomBot's cozy path — cottagecore floral interior settings where flowers ARE EVERYWHERE in a warm inviting room. The prettiest interior flower scene you can imagine.
 

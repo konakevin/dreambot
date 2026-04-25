@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/reclaim_spaces.json',
-  total: 25,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} HOSTILE/DESOLATE setting descriptions for BloomBot's "reclaim" path. Each entry describes a harsh, ugly, or desolate environment where flowers are WINNING — nature reclaiming inhospitable places. NO specific flower species or colors (a separate pool handles flowers).
 

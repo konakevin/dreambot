@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/city_flower_spaces.json',
-  total: 25,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} URBAN CITY flower-setting descriptions for BloomBot's city-flowers path. Each entry describes a CITY SETTING where flowers are on full display — NO specific flower species or colors (a separate pool handles flowers).
 

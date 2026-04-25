@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/lighting.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for BloomBot renders. Every render has DRAMATIC lighting — never flat daylight. Each entry names a specific lighting treatment.
 

@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/portrait_features.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} PORTRAIT FEATURE descriptions for CuddleBot's creature-portrait path — close-up cute details to highlight on a creature. These stack onto a creature portrait.
 

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dinobot/seeds/lighting.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for DinoBot — dino-scene lighting.
 
 Each entry: 10-20 words. One specific dino lighting treatment.

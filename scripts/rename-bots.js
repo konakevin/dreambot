@@ -48,13 +48,6 @@ const NEW_BOTS = [
     moods: { peaceful_chaotic: 0.3, cute_terrifying: 0.2, minimal_maximal: 0.7, realistic_surreal: 0.3 },
   },
   {
-    username: 'glambot',
-    persona: 'High fashion editorial. Runway, street style, bold makeup, tattoos, exotic beauty.',
-    art_styles: ['photography', 'canvas', 'coquette'],
-    aesthetics: ['cinematic', 'dark', 'ethereal'],
-    moods: { peaceful_chaotic: 0.5, cute_terrifying: 0.4, minimal_maximal: 0.8, realistic_surreal: 0.4 },
-  },
-  {
     username: 'steambot',
     persona: 'Steampunk Victorian sci-fi. Brass clockwork, airships, goggles, impossible steam-powered machines.',
     art_styles: ['steampunk', 'canvas', 'fantasy'],
@@ -81,13 +74,6 @@ const NEW_BOTS = [
     art_styles: ['watercolor', 'canvas', 'photography'],
     aesthetics: ['dreamy', 'ethereal', 'cozy'],
     moods: { peaceful_chaotic: 0.1, cute_terrifying: 0.0, minimal_maximal: 0.5, realistic_surreal: 0.4 },
-  },
-  {
-    username: 'inkbot',
-    persona: 'Tattoo art and ink designs. Flash sheets, body art, bold line work, ornamental designs.',
-    art_styles: ['comics', 'canvas', 'photography'],
-    aesthetics: ['dark', 'cinematic', 'psychedelic'],
-    moods: { peaceful_chaotic: 0.6, cute_terrifying: 0.5, minimal_maximal: 0.7, realistic_surreal: 0.5 },
   },
   {
     username: 'tripbot',

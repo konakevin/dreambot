@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/lighting.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for CuddleBot — soft storybook lighting treatments with BROAD variety. 10-20 words each. Cozy/wholesome always, but the previous pool had 39/50 entries saying "warm" — far too warm-heavy. Invent fresh treatments spanning the full time-of-day / temperature / source spectrum.
 

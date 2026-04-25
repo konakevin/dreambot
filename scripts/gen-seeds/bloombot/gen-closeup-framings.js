@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/closeup_framings.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} CLOSEUP FRAMING descriptions for BloomBot's closeup path — macro / mid-close shots where FLOWERS ARE THE HERO filling the frame. Could be single bloom, cluster, bouquet, stem-in-field, or vase.
 

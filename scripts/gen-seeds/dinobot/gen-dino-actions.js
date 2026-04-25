@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dinobot/seeds/dino_actions.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DINO ACTION descriptions for DinoBot's dino-action path — dynamic frozen action moments. Species-agnostic.
 
 Each entry: 10-20 words. One specific action beat.

@@ -46,15 +46,8 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
   // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
-  //   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot, starbot
-  // ── Existing accounts, not yet seeded ──
-  arcadebot: { mediums: ['pixels', 'pixels', 'animation', 'comics', 'illustration'], excludeVibes: ['ancient', 'cozy', 'peaceful'] },
-  toybot: { mediums: ['lego', 'claymation', 'vinyl', 'animation', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'psychedelic', 'macabre'] },
-  // ── New bots ──
-  glambot: { mediums: ['photography', 'photography', 'canvas', 'vaporwave', 'render'], excludeVibes: ['ancient', 'cozy', 'minimal'] },
-  steambot: { mediums: ['canvas', 'photography', 'illustration'], excludeVibes: ['minimal', 'psychedelic', 'cozy'] },
-  tinybot: { mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted'], excludeVibes: ['dark', 'fierce', 'macabre'] },
-  inkbot: { mediums: ['comics', 'canvas', 'photography', 'illustration', 'pencil'], excludeVibes: ['whimsical', 'cozy', 'peaceful'] },
+  //   sirenbot, bloombot, glowbot, earthbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot, starbot,
+  //   steambot, tinybot, toybot, beachbot, pixelbot, oceanbot, dinobot, titanbot
 };
 
 /**

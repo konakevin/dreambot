@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/cosmic_scenes.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} COSMIC / ALIEN scene descriptions for BloomBot's cosmic path — otherworldly flower visuals that break physics / biology / location. Alien planets, outer space, bioluminescent jungles, cosmic botanical phenomena. Think Avatar-Pandora, nebula-born flora, flowers in zero-g.
 

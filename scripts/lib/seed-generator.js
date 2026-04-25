@@ -41,13 +41,6 @@ const BOT_SEEDS = {
       { category: 'starbot_androidwoman', prompt: 'an intimate close-up shot of an exquisitely attractive sci-fi android woman — she must be visibly MECHANICAL: exposed circuitry, chrome plating, glowing seams between skin and metal, visible joints, translucent panels showing inner workings, cybernetic implants. Alien aesthetic — alluring and provocative, scantily clad is fine and encouraged. Vary everything: skin tone, hair, eyes, body type (curvy, skinny, athletic, voluptuous, petite), the ratio of skin to machine. She can be seductive but never nude.', separateDedup: true, extractPrompt: 'From this scene give THREE words: the skin tone, the pose, and the unique mechanical feature. Comma separated. Example: bronze, reclining, glowing chest panel' },
     ],
   },
-  venusbot: {
-    strategies: [
-      { category: 'venusbot_androidwoman', prompt: 'an intimate close-up shot of an exquisitely attractive sci-fi android woman — she must be visibly MECHANICAL: exposed circuitry, chrome plating, glowing seams between skin and metal, visible joints, translucent panels showing inner workings, cybernetic implants. Alien aesthetic — alluring and provocative, scantily clad is fine and encouraged. Vary everything: skin tone, hair, eyes, body type (curvy, skinny, athletic, voluptuous, petite), the ratio of skin to machine. She can be seductive but never nude.', separateDedup: true, extractPrompt: 'From this scene give THREE words: the skin tone, the pose, and the unique mechanical feature. Comma separated. Example: bronze, reclining, glowing chest panel' },
-      { category: 'venusbot_cyborgface', prompt: 'a close-up shot of the face and head of a sci-fi cyborg woman — part of her face is exposed chrome and circuitry, mechanical components, visible gears and wiring. She is still exquisitely beautiful despite being heavily mechanical. Sultry gaze, seductive expression. Vary everything: ratio of machine to skin, metal types, skin tone.', separateDedup: true, extractPrompt: 'From this scene give THREE words: the skin tone, the eye color, and the unique mechanical feature. Comma separated. Example: pale, neon-blue, exposed jawline gears' },
-      { category: 'venusbot_alienface', prompt: 'a close-up shot of the face and head of an exquisitely beautiful woman who is half human half alien from somewhere far far away in outerspace — she leans towards the alien side in appearance. Exotic otherworldly features blended with human beauty. Sultry gaze, seductive expression. Vary everything: skin tone, alien features, eye color, facial structure.', separateDedup: true, extractPrompt: 'From this scene give THREE words: the skin tone, the eye color, and the unique alien feature. Comma separated. Example: lavender, gold, bioluminescent tendrils' },
-    ],
-  },
   sirenbot: {
     strategies: [
       { category: 'sirenbot_femalebody', prompt: 'a shot of an exquisitely beautiful and dangerous high fantasy woman — scantily clad is fine and encouraged. Fierce and seductive, dont-fuck-with-me energy. ALWAYS covered enough to avoid nudity but showing skin is great. Vary the race wildly: elf, half-dragon, gnome, dwarf, orc, tiefling, drow, fairy, nymph, centaur, harpy, lamia, succubus, half-giant, goblin princess, merfolk. Ornate flashy details: enchanted armor, magical tattoos, glowing runes, jeweled accessories. Sexy but never nude, never topless.', separateDedup: true, extractPrompt: 'From this scene give THREE words: the race, the pose, and the unique accessory. Comma separated. Example: tiefling, crouching, enchanted gauntlets' },
@@ -89,34 +82,6 @@ const BOT_SEEDS = {
       { category: 'earthbot_genre', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland. Sweeping panoramic vista, deep atmospheric depth, golden hour lighting, dramatic cloud formations, god rays, rich saturated colors' },
       { category: 'earthbot_genre_dedup', prompt: 'an awe-inspiring nature scene that looks real but impossibly beautiful — the kind of place that cant possibly exist but you desperately wish it did, like avatar pandora or patagonia or iceland. Sweeping panoramic vista, deep atmospheric depth, golden hour lighting, dramatic cloud formations, god rays, rich saturated colors', continueDedup: true },
       { category: 'earthbot_landscape', prompt: 'an impossibly beautiful natural landscape — dramatic cinematic lighting, perfect conditions, the most stunning version of earth or an alien world. Sweeping wide vista framing, deep atmospheric perspective, golden hour or magic hour lighting, dramatic skies, god rays streaming through clouds, rich saturated nature colors', separateDedup: true },
-    ],
-  },
-  arcadebot: {
-    strategies: [
-      {
-        category: 'arcadebot_retro', count: 20,
-        prompt: 'a stunning scene from the golden age of gaming — NES, SNES, arcade, Game Boy era. Think: a Zelda overworld at sunset, a Final Fantasy crystal cave, a Metroid alien corridor, a Castlevania gothic throne room, a Pokemon route through tall grass at dusk, a Mega Man boss arena, a Chrono Trigger time portal, a Street Fighter stage. The scene should trigger PURE NOSTALGIA for anyone who grew up with a controller in their hands. Pixel art, 16-bit color palettes, scanline energy. Beautiful enough to hang on a wall. VARY THE SUBJECT wildly — not always a warrior. Include: vehicles, creatures, landscapes, towns, dungeons, space stations, oceans, forests.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give ONE word: the main subject (warrior, dragon, spaceship, town, forest, dungeon, castle, ocean, etc). ONE word only.',
-      },
-      {
-        category: 'arcadebot_gameworld',
-        prompt: 'a breathtaking environment from a video game universe — the kind of vista that makes you put the controller down and just LOOK. A Zelda overworld stretching to distant mountains, an Elden Ring legacy dungeon entrance, a Hollow Knight crystal cavern, a Journey sand dune at sunset, a Shadow of the Colossus ruin, a Breath of the Wild shrine glowing at twilight, a Dark Souls bonfire in a crumbling cathedral. Game concept art energy — painterly, atmospheric, massive scale. The viewer should feel like they could walk into the screen. PURE ENVIRONMENT — no characters, no warriors, no figures. Just the PLACE.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give ONE word: the main environment type (cave, temple, forest, ocean, volcano, city, ruins, etc). ONE word only.',
-      },
-      {
-        category: 'arcadebot_bossfight',
-        prompt: 'an EPIC reimagined video game boss encounter — the moment the health bar appears and the music changes. A massive pixel-art dragon filling the screen, a neon-lit arcade final boss with bullet-hell patterns, a Dark Souls scale colossus emerging from fog, a side-scrolling Mega Man boss with a full arena, a JRPG summon being unleashed. The boss should feel MASSIVE and the scene should feel like the most dramatic moment in the game. Dynamic, explosive, the "oh shit" moment of gaming. VARY THE BOSS wildly — not always a humanoid. Include: dragons, mechs, sea monsters, giant insects, sentient trees, shadow beasts, crystal golems, multi-headed hydras.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give ONE word: the boss creature type (dragon, mech, kraken, golem, hydra, etc). ONE word only.',
-      },
-      {
-        category: 'arcadebot_vibes',
-        prompt: 'the CULTURE and AESTHETIC of gaming — not a game scene but the FEELING of being a gamer. A row of glowing arcade cabinets in a dark neon-lit room, a retro console setup with CRT TV glowing in a dark bedroom, a controller collection arranged like art, a game-over screen rendered as beautiful typography, a save point glowing in an empty room, an inventory screen with lovingly detailed pixel items, a character select screen with dramatic lighting on each fighter. The nostalgia and beauty of gaming ITSELF as an aesthetic.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give ONE word: the main gaming object (cabinet, controller, screen, cartridge, console, etc). ONE word only.',
-      },
     ],
   },
   toybot: {
@@ -198,68 +163,6 @@ const BOT_SEEDS = {
         prompt: 'coquette fashion moment that makes girls think "I WANT TO BE HER" — ribbon-laced corsets with pearl details, ballet slippers on marble floors, silk bows in perfectly curled hair, lace gloves holding a single rose, pink velvet everything, a vanity table dripping with perfume bottles and pearls and soft golden light, a girl twirling in a tulle skirt in a flower field. Soft, feminine, aspirational, princess energy. Characters described by outfit and pose only, never named.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the fashion item and the setting. Comma separated. Example: corset, garden',
-      },
-    ],
-  },
-  animalbot: {
-    strategies: [
-      {
-        category: 'animalbot_portrait', count: 20,
-        prompt: 'an EXTREME closeup of an animal so beautiful it takes your breath away — the detail in a lion eyes at golden hour, the texture of an elephant trunk, the iridescence of a hummingbird feather, the wet nose of a wolf in snow, the pattern of a leopard coat. Every hair, every scale, every feather razor-sharp. National Geographic best-of-the-year × 10. Dramatic lighting. The animal should feel like it is looking directly into your soul. Vary the animal wildly — big cats, birds of prey, wolves, bears, elephants, primates, reptiles, marine life.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the animal and the key detail. Comma separated. Example: lion, golden-eyes',
-      },
-      {
-        category: 'animalbot_landscape',
-        prompt: 'a single majestic animal in a VAST stunning landscape — the animal and the setting are equally breathtaking. A lone wolf on a snowy ridge under aurora, an elephant silhouetted against a blood-orange African sunset, a polar bear on a turquoise iceberg, a deer in a misty bamboo forest at dawn, an eagle soaring over a canyon at golden hour. The landscape should be jaw-dropping on its own — the animal makes it transcendent.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the animal and the landscape. Comma separated. Example: wolf, snowy-ridge',
-      },
-      {
-        category: 'animalbot_action',
-        prompt: 'an animal in DYNAMIC motion — a frozen moment of raw power and beauty. Eagle diving with talons extended, whale breaching against sunset, cheetah mid-sprint with dust flying, dolphins arcing through a wave, a bear catching salmon mid-leap, wolves running through snow. The moment should feel impossible to capture — only AI could freeze this instant with this lighting and this clarity.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the animal and the action. Comma separated. Example: eagle, diving',
-      },
-      {
-        category: 'animalbot_tender',
-        prompt: 'an intimate, emotional animal moment — a mother and cub nuzzling, two birds touching beaks, a fox curled sleeping in autumn leaves, a gorilla cradling its baby, an otter floating on its back holding hands with its partner, a deer and fawn in morning mist. The image should make you FEEL something — tenderness, warmth, the beauty of connection in the animal world.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the animal and the emotional moment. Comma separated. Example: otters, holding-hands',
-      },
-      {
-        category: 'animalbot_underwater',
-        prompt: 'the alien beauty of underwater life — coral reefs exploding with color, a whale shark gliding through sunbeams, sea turtles in crystal clear water, jellyfish glowing in the deep, manta rays in formation, an octopus on a vibrant reef. The ocean rendered with impossible clarity and beauty — every scale, every tentacle, every coral polyp. Light shafts piercing blue water.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the creature and the ocean setting. Comma separated. Example: jellyfish, deep-blue',
-      },
-    ],
-  },
-  glambot: {
-    strategies: [
-      {
-        category: 'glambot_makeup', count: 20,
-        prompt: 'an INSANE creative makeup look that makes girls screenshot and try to recreate — graphic liner art in impossible colors, jewel-toned smoky eyes with crystal accents, bold lip art, holographic highlights that catch light, body glitter, editorial color-blocking, face gems arranged like constellations, metallic eye looks, ombre lips. Close-up face shot where the MAKEUP is the art. This should look like the viral makeup looks that get 10M views. Vary ethnicity wildly. Characters described by features only, never named.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give THREE words: the skin tone, the makeup technique, and the accent detail. Comma separated. Example: deep-brown, graphic-liner, crystal-tears',
-      },
-      {
-        category: 'glambot_fashion', count: 20,
-        prompt: 'a SLEEK, BEAUTIFUL, FUN, EXPRESSIVE fashion moment — the kind of outfit that makes girls think "I NEED THAT." Statement pieces, unexpected styling, bold colors and texture mixing, street-meets-editorial energy. Not runway-stiff — alive, moving, someone you want to BE. Confident poses, killer attitude, clothes that are a MOOD. Vary everything: body type, ethnicity, style (streetwear, couture, Y2K, minimalist, maximalist, avant-garde). Characters described by outfit and vibe only, never named.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give THREE words: the style, the key garment, and the setting. Comma separated. Example: streetwear, oversized-blazer, neon-alley',
-      },
-      {
-        category: 'glambot_beauty',
-        prompt: 'a JAW-DROPPING beauty portrait — the face IS the art. Perfect glowing skin you can almost feel, dramatic eyes that pierce through the screen, bold features, hair that has its own gravity. Magazine cover energy but with PERSONALITY and edge. Diverse — every skin tone, every style, every vibe. The kind of image where you zoom in on the SKIN and think "how is that possible." Vary everything wildly. Characters described by features only, never named.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give THREE words: the skin tone, the eye look, and the hair style. Comma separated. Example: dark-mahogany, amber-smoky, braided-crown',
-      },
-      {
-        category: 'glambot_wild',
-        prompt: 'Met Gala meets AI — the absolutely CRAZY fashion/beauty that could only exist through artificial intelligence. Sculptural garments that defy physics, impossible accessories made of light or water or flowers, makeup that becomes architecture on the face, hair that becomes living art, outfits made of butterflies or crystals or smoke. Fashion-as-spectacle. The "HOW is she wearing that" moments. Still gorgeous — never ugly-weird, always beautiful-impossible. Characters described by outfit only, never named.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give THREE words: the impossible material, the garment type, and the setting. Comma separated. Example: living-butterflies, gown, crystal-ballroom',
       },
     ],
   },
@@ -345,34 +248,6 @@ const BOT_SEEDS = {
         prompt: 'the PRETTIEST flower setting in an interior space a person could dream of — flowers inside homes, cottagecore scenes, gorgeous vases of flowers in beautiful rooms, the warmest coziest most inviting floral interiors imaginable. Think: a rain-streaked cottage window with a wildflower box bursting with blooms, a massive vase of peonies on a farmhouse table with morning light streaming through linen curtains, a greenhouse with warm golden light and rain on the glass, a cozy reading nook with hanging plants and flower garlands, a tiny Parisian flower shop with buckets spilling onto cobblestones, a claw-foot bathtub filled with floating petals and candles, a bedroom nightstand with roses and soft amber lamp glow, a Victorian conservatory with climbing wisteria and old iron chairs, a sun-drenched kitchen drowning in sunflowers and wildflowers in mason jars. Cottagecore meets botanical paradise. The flowers are EVERYWHERE — impossibly abundant, lush, overflowing. The space is warm, golden, inviting. The prettiest interior flower scene you can possibly imagine.',
         separateDedup: true,
         extractPrompt: 'From this scene give TWO words: the flower type and the cozy setting. Comma separated. Example: peonies, kitchen',
-      },
-    ],
-  },
-  inkbot: {
-    strategies: [
-      {
-        category: 'inkbot_flash', count: 20,
-        prompt: 'a STUNNING piece of standalone tattoo art on a clean background — the kind of design that makes someone immediately want it on their body. Bold confident lines, rich saturated ink, perfect symmetry where needed, organic flow where needed. Styles to rotate through: neo-traditional (bold outlines, limited palette, roses/eagles/daggers), Japanese irezumi (dragons, koi, waves, cherry blossoms), fine-line botanical (delicate flowers, leaves, vines), blackwork (heavy black, geometric, sacred geometry, mandala), ornamental (filigree, dotwork, lace patterns), American traditional (anchors, swallows, hearts), dark art (skulls, moths, snakes, occult symbols). Each piece should be gallery-quality — beautiful enough to hang on a wall as art.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the tattoo style and the main subject. Comma separated. Example: irezumi, dragon',
-      },
-      {
-        category: 'inkbot_bodied',
-        prompt: 'incredible tattoo art ON SKIN — you can see the skin texture, the ink saturation, the placement on the body. The human body as canvas. Arm sleeves with intricate interconnected designs, back pieces that tell a story, hand tattoos with fine detail, chest pieces that use the body contours, leg sleeves that flow with the muscle. Dramatic lighting that shows the ink AND the skin. The artistry of tattoo as fine art on the human body. Vary skin tones widely. Characters described by body part and tattoo only.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the body placement and the tattoo subject. Comma separated. Example: full-sleeve, mythology',
-      },
-      {
-        category: 'inkbot_botanical',
-        prompt: 'FINE-LINE botanical tattoo art — the most delicate, detailed, beautiful floral and nature tattoo designs. Single stems, wild bouquets, vines, ferns, mushrooms, insects on flowers. Hair-thin lines, subtle shading, negative space. The prettiest fine-line tattoo work you can imagine — the kind that makes people DM the artist asking "who did this?" Clean background or on skin.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the botanical subject and the style detail. Comma separated. Example: peony, fine-line',
-      },
-      {
-        category: 'inkbot_dark',
-        prompt: 'DARK BLACKWORK tattoo art — heavy black ink, dramatic contrast, gothic energy. Sacred geometry mandalas, occult symbols, moth/skull/serpent motifs, ornamental patterns that could be mistaken for ironwork, dotwork that creates photorealistic depth in pure black. Impressive technical execution — the kind of blackwork that makes other tattoo artists jealous. Clean background.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the dark motif and the technique. Comma separated. Example: skull-mandala, dotwork',
       },
     ],
   },

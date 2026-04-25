@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/landscape_settings.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} DRAMATIC LANDSCAPE SETTING descriptions for BloomBot — locations where an INSANE explosion of flowers takes over a breathtaking backdrop. Garden-of-Eden-times-100 energy. The setting is stunning + dramatic (not intimate — that's the garden-walk path). Wide-scale vistas where a specific flower type DOMINATES across a specific natural or architectural setting.
 

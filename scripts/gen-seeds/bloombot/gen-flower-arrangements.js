@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/flower_arrangements.json',
-  total: 25,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} FLOWER ARRANGEMENT descriptions for BloomBot's conservatory path. Each entry describes a specific combination of flowers with COLORS explicitly named.
 

@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/tropical_flower_arrangements.json',
-  total: 25,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TROPICAL FLOWER ARRANGEMENT descriptions for BloomBot's tropical-paradise path. Each entry describes a specific combination of Hawaiian/tropical flowers with COLORS explicitly named.
 

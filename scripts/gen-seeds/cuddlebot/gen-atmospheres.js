@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/atmospheres.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for CuddleBot — soft particles, warm glows, and gentle atmospheric elements. Always wholesome + soft + warm. Never harsh / dark.
 

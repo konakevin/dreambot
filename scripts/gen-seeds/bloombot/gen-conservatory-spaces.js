@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/conservatory_spaces.json',
-  total: 25,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} CONSERVATORY / GREENHOUSE space descriptions for BloomBot's conservatory path.
 

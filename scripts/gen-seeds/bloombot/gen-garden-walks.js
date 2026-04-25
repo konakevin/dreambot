@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/garden_walks.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} GARDEN-WALK SCENE descriptions for BloomBot's garden-walk path — walkable outdoor flower spaces DIALED TO 10× (physics-defying density, more blooms than should exist). Paths, trails, hedge tunnels, arches, meadows — all OVERTAKEN by flowers. Not dramatic-backdrop (that's landscape path). Not interior (cozy). Walkable-scale OUTDOOR beauty cranked to maximum.
 

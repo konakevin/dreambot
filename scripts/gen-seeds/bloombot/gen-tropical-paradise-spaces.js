@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/tropical_paradise_spaces.json',
-  total: 25,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TROPICAL PARADISE space descriptions for BloomBot's tropical-paradise path. Each entry describes the SETTING ONLY — no specific flower types (a separate pool handles flowers).
 

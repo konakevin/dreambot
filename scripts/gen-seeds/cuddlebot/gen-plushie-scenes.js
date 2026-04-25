@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/plushie_scenes.json',
-  total: 100,
+  total: 200,
   batch: 10,
   append: true,
   metaPrompt: (n) => `You are writing ${n} PLUSHIE SCENE descriptions for CuddleBot's plushie-life path — plushies/soft toys come alive Toy-Story-style doing cozy activities together. Fabric-textured, button-eyes, visible stitching. Wholesome, warm, cozy.

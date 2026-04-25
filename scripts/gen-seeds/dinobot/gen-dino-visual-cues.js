@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dinobot/seeds/dino_visual_cues.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DINO VISUAL CUE descriptions for DinoBot — species-specific visual details.
 
 Each entry: 6-14 words. One specific dino visual cue.

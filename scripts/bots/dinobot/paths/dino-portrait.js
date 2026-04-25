@@ -1,3 +1,8 @@
+/**
+ * DinoBot dino-portrait — single dinosaur hero portrait. Museum-grade
+ * paleoart detail. Telephoto wildlife photography framing.
+ */
+
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
@@ -8,7 +13,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
-  return `You are a paleo-art photographer writing DINO PORTRAIT scenes for DinoBot. Single dinosaur as hero. Razor-sharp species detail.
+  return `You are a paleo-art wildlife photographer writing DINO PORTRAIT scenes for DinoBot. Single dinosaur as hero subject. Telephoto wildlife portrait — the camera caught this animal in a candid moment. Museum-grade paleoart detail. Output wraps with style prefix + suffix.
 
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
@@ -16,20 +21,20 @@ ${blocks.SPECIES_ACCURATE_BLOCK}
 
 ${blocks.NO_HUMANS_BLOCK}
 
-${blocks.NO_JURASSIC_PARK_NAMES_BLOCK}
+${blocks.DOCUMENTARY_CAMERA_BLOCK}
+
+${blocks.ENVIRONMENT_STORYTELLING_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
 
 ━━━ THE DINOSAUR ━━━
 ${species}
 
+━━━ VISUAL DETAIL ━━━
+${cue}
+
 ━━━ SETTING ━━━
 ${setting}
-
-━━━ VISUAL CUE ━━━
-${cue}
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -49,7 +54,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid-close portrait. Single dino hero. Razor-sharp detail.
+Telephoto wildlife portrait. Single dino fills the frame. Candid — not roaring at the camera. Existing. Breathing. Being an animal. Lush prehistoric environment surrounding it.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

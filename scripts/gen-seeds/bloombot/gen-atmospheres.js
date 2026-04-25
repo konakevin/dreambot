@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/atmospheres.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERE / PARTICLE descriptions for BloomBot renders. Each is an in-frame ambient element that adds magic to the floral scene.
 

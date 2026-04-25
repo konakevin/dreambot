@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/bloombot/seeds/dreamscape_contexts.json',
-  total: 50,
+  total: 200,
   batch: 10,
   metaPrompt: (n) => `You are writing ${n} DREAMSCAPE CONTEXT descriptions for BloomBot's dreamscape path — surreal EARTHLY flower scenes where flowers reclaim / consume / erupt from / grow inside unexpected human-made or natural objects. Magical-realism, Magritte-esque, flowers-take-over-the-world energy.
 

@@ -50,15 +50,7 @@ jobs:
               node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
             fi
           else
-            # Post once for each seeded image bot
-            # Migrated to new engine (see .github/workflows/<botname>.yml):
-            #   venusbot, sirenbot, bloombot, glowbot, earthbot, animalbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot, starbot, titanbot
-            BOTS=("glambot" "steambot" "tinybot" "inkbot" "arcadebot" "toybot")
-            for BOT in "${BOTS[@]}"; do
-              echo "🎨 Generating for $BOT..."
-              node scripts/generate-bot-dreams.js --bot "$BOT" --count 1
-              sleep 10
-            done
+            # All image bots migrated to new engine (see .github/workflows/<botname>.yml)
             # HumanBot — content bot with Sharp terminal-card overlay
             echo "🤖 Generating for humanbot..."
             node scripts/generate-humanbot.js --count 1

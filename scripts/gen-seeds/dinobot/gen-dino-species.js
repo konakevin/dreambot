@@ -2,63 +2,52 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dinobot/seeds/dino_species.json',
-  total: 50,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} DINOSAUR SPECIES descriptions for DinoBot — accurate species with signature features.
+  total: 200,
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} DINOSAUR AND PREHISTORIC SPECIES descriptions for DinoBot — accurate species with signature features. Feature DIVERSE and OBSCURE species people have never heard of, not just the famous ones.
 
-Each entry: 10-20 words. One real dinosaur species with distinguishing features.
+Each entry: 10-25 words. One real prehistoric species with distinguishing visual features.
 
-━━━ CATEGORIES (real paleontology) ━━━
-- T-Rex massive theropod with tiny arms and huge jaws
-- Velociraptor feathered pack-hunter with curved sickle-claw
-- Triceratops three-horned frilled ceratopsian
-- Stegosaurus plated back with thagomizer tail
-- Brachiosaurus long-necked gentle giant
-- Spinosaurus sail-backed semi-aquatic
-- Ankylosaurus armored tank with club-tail
-- Pterodactyl fine-boned small flyer
-- Pteranodon crested large flyer
-- Archaeopteryx small feathered transitional
-- Parasaurolophus crested duck-bill hadrosaur
-- Allosaurus predatory theropod with brow-horns
-- Deinonychus raptor with sickle-claw
-- Microraptor four-winged small feathered
-- Carnotaurus horned theropod with stubby arms
-- Iguanodon thumb-spike herbivore
-- Dreadnoughtus massive titanosaur
-- Mosasaurus massive marine reptile
-- Plesiosaurus long-necked marine
-- Pachycephalosaurus dome-skulled rammer
-- Diplodocus long-tailed sauropod
-- Apatosaurus massive long-neck
-- Therizinosaurus scythe-clawed plant-eater
-- Gallimimus ostrich-like fast runner
-- Ceratosaurus nasal-horn predator
-- Oviraptor feathered nest-protector
-- Compsognathus tiny theropod
-- Troodon intelligent raptor-like
-- Dilophosaurus double-crested predator
-- Quetzalcoatlus giraffe-sized flying reptile
-- Rhamphorhynchus long-tailed flyer
-- Dimorphodon small crested flyer
-- Sauropelta armored nodosaurid
-- Euoplocephalus club-tailed armored
-- Utahraptor massive raptor
-- Herrerasaurus early predator
-- Giganotosaurus massive carcharodontosaurid
-- Mapusaurus pack-hunting giant
-- Yutyrannus feathered tyrannosauroid
-- Microraptor 4-winged gliding theropod
-- Archelon massive sea-turtle (prehistoric)
-- Dunkleosteus armored fish
-- Hadrosaur generic duck-bill
-- Ichthyosaurus marine reptile
-- Elasmosaurus extremely long-necked plesiosaur
+━━━ FAMOUS (use sparingly, ~15%) ━━━
+- Tyrannosaurus rex, Triceratops, Velociraptor, Brachiosaurus, Stegosaurus, Spinosaurus
+
+━━━ DEEP CUTS — THEROPODS ━━━
+- Therizinosaurus (scythe-clawed giant), Giganotosaurus, Carcharodontosaurus, Baryonyx
+- Deinocheirus (hump-backed ornithomimid), Concavenator (sail-backed carcharodontosaur)
+- Yi qi (bat-winged theropod), Nothronychus (pot-bellied therizinosaur), Majungasaurus
+- Suchomimus (crocodile-mimic), Torvosaurus, Ceratosaurus, Sinornithosaurus
+- Sinosauropteryx (first feathered dino confirmed), Citipati (crested oviraptor)
+
+━━━ DEEP CUTS — HERBIVORES ━━━
+- Amargasaurus (double-sail-necked sauropod), Nigersaurus (vacuum-mouth sauropod)
+- Dracorex (dragon-king dome-head), Kosmoceratops (most-horned ceratopsian)
+- Styracosaurus (spike-frilled), Pachyrhinosaurus (boss-nosed ceratopsian)
+- Edmontosaurus (mummified skin specimens), Corythosaurus (helmet-crested hadrosaur)
+- Saltasaurus (armored titanosaur), Magyarosaurus (dwarf island sauropod)
+- Sinoceratops (Chinese horned face), Ouranosaurus (sail-backed iguanodontid)
+
+━━━ DEEP CUTS — MARINE ━━━
+- Tylosaurus, Shonisaurus (bus-sized ichthyosaur), Kronosaurus, Archelon (giant sea turtle)
+- Dunkleosteus (armored placoderm fish), Helicoprion (buzzsaw-jaw shark)
+- Thalassomedon (long-necked plesiosaur), Basilosaurus (ancient whale ancestor)
+
+━━━ DEEP CUTS — FLYING ━━━
+- Quetzalcoatlus (giraffe-sized azhdarchid), Hatzegopteryx (island giant pterosaur)
+- Dimorphodon (puffin-faced pterosaur), Tupuxuara (crested tapejarid)
+- Nyctosaurus (huge-crested pteranodontid), Jeholopterus (frog-mouthed anurognathid)
+
+━━━ DEEP CUTS — PRE-DINOSAUR + EARLY ━━━
+- Dimetrodon (sail-backed synapsid), Gorgonops (saber-toothed therapsid)
+- Kaprosuchus (boar-croc), Sarcosuchus (super-croc), Postosuchus (rauisuchian)
+- Sharovipteryx (gliding archosaur), Tanystropheus (absurdly long-necked reptile)
+- Scutosaurus (armored pareiasaur), Estemmenosuchus (antlered therapsid)
 
 ━━━ RULES ━━━
-- Real paleontology species
-- Include signature identifying feature
-- Feathers where paleontologically-correct
+- 85% should be species most people have NEVER heard of
+- Include the visual feature that makes each species unique and recognizable
+- Feathers where paleontologically confirmed
+- Mix all eras: Triassic, Jurassic, Cretaceous, plus key Permian/Paleozoic species
+- Include marine reptiles, pterosaurs, and non-dinosaur prehistoric animals
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
