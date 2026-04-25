@@ -4,7 +4,7 @@
  * Mind-bending sci-fi. Blade Runner / Dune / Interstellar / Alien / 2001 /
  * Arrival / Annihilation / Foundation / Moebius-Jodorowsky / Chesley-Bonestell.
  * Cosmic vistas + alien landscapes + epic space opera + sleek futurism.
- * VenusBot owns cyborg-women — StarBot does not.
+ * Includes cyborg-woman path (inherited from retired VenusBot).
  */
 
 const pools = require('./pools');
@@ -23,6 +23,7 @@ const pathBuilders = {
   'female-explorer': require('./paths/female-explorer'),
   'male-explorer': require('./paths/male-explorer'),
   'megastructure': require('./paths/megastructure'),
+  'cyborg-woman': require('./paths/cyborg-woman'),
 };
 
 module.exports = {
@@ -56,6 +57,7 @@ module.exports = {
     'female-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'male-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'megastructure': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
   },
 
   // Per-medium prompt prefix/suffix overrides. The star-oil-cosmos medium
@@ -135,6 +137,7 @@ module.exports = {
     'female-explorer',
     'male-explorer',
     'megastructure',
+    'cyborg-woman',
   ],
 
   pathWeights: {
@@ -150,13 +153,24 @@ module.exports = {
     'female-explorer': 4,
     'male-explorer': 3,
     'megastructure': 3,
+    'cyborg-woman': 4,
   },
 
-  rollSharedDNA({ vibeKey, picker }) {
-    return {
+  rollSharedDNA({ vibeKey, path, picker }) {
+    const base = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
+    if (path === 'cyborg-woman') {
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_CHARACTERS, 'cyborg_character');
+      base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
+      base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    return base;
   },
 
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {

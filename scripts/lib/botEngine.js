@@ -640,7 +640,7 @@ async function runBot(opts) {
     // 3. Roll shared DNA (optional)
     errorStage = 'roll-shared-dna';
     sharedDNA = bot.rollSharedDNA
-      ? bot.rollSharedDNA({ vibeKey, medium, picker })
+      ? bot.rollSharedDNA({ vibeKey, medium, path: resolvedPath, picker })
       : {};
 
     // 4. Optional text content (HumanBot/MuseBot thinking-bot pattern)
