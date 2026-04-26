@@ -28,10 +28,11 @@
 8. [Writing Effective Pool Gen Scripts](#writing-effective-pool-gen-scripts)
 9. [Lessons Learned](#lessons-learned)
 10. [Production Cron](#production-cron)
-11. [Creating a New Bot From Scratch](#creating-a-new-bot-from-scratch)
-12. [Bot Roster](#bot-roster)
-13. [Nightly User Dreams](#nightly-user-dreams)
-14. [Database Tables](#database-tables)
+11. [Bot Authentication & Credential Rotation](#bot-authentication--credential-rotation)
+12. [Creating a New Bot From Scratch](#creating-a-new-bot-from-scratch)
+13. [Bot Roster](#bot-roster)
+14. [Nightly User Dreams](#nightly-user-dreams)
+15. [Database Tables](#database-tables)
 
 ---
 
@@ -639,6 +640,105 @@ jobs:
 ### Creating a New Workflow
 
 Copy an existing workflow, change the bot name and cron times. Stagger cron times by 15-30 minutes from existing bots to spread API load.
+
+---
+
+## Bot Authentication & Credential Rotation
+
+Bots are real Supabase Auth users (`bot-{username}@dreambot.app`). How they authenticate depends on which engine generates their dreams:
+
+### Two Auth Patterns
+
+| Pattern | Used by | How it auths |
+|---|---|---|
+| **Service role** (no password) | All V2 engine bots — `run-bot.js` invokes `lib/botEngine.js`, which uses `SUPABASE_SERVICE_ROLE_KEY` directly. No `signInWithPassword`. | Server-side admin key bypasses RLS to insert uploads. |
+| **Password sign-in** | Legacy generators — `scripts/generate-humanbot.js`, `scripts/generate-musebot.js`, and (historically) `scripts/generate-bot-dreams.js`. They call `auth.signInWithPassword()`. | Reads `BOT_PASSWORD_PREFIX` env var; password is `${BOT_PASSWORD_PREFIX}${botname}`. |
+
+The `BOT_PASSWORD_PREFIX` system exists only for the legacy password-sign-in path. Once HumanBot/MuseBot are migrated to V2, the prefix can be retired.
+
+### Where the Prefix Lives
+
+| Location | Purpose |
+|---|---|
+| `.env.local` → `BOT_PASSWORD_PREFIX=...` | Local dev — read by `dotenv` in scripts |
+| GitHub Actions secret `BOT_PASSWORD_PREFIX` | CI — passed to `bot-dreams.yml` workflow env block |
+| Supabase Auth (per-user `encrypted_password`) | The actual stored password for each bot user is `${BOT_PASSWORD_PREFIX}${botname}` |
+
+All three must stay in sync. If `.env.local` ≠ GitHub secret, local works but CI fails ("Invalid login credentials"). If either ≠ Supabase Auth, sign-in fails everywhere.
+
+### Why a Prefix System (Not Per-Bot Passwords)
+
+One value rotates ~25 bot passwords. Without a prefix, each bot would need its own unique password stored in `.env.local` + GitHub Actions, and each rotation = 25 manual updates. With a prefix, rotating means: pick a new 16-char random string, run one script, update one env var, update one GitHub secret.
+
+### Rotation Procedure
+
+When the prefix leaks (e.g., GitGuardian fires) or as routine hygiene:
+
+1. **Pick a new prefix** — random 16+ chars, no quote-breaking specials. Example:
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(12).toString('base64').replace(/[+/=]/g,'').slice(0,16) + '!!')"
+   ```
+
+2. **Update `.env.local`** with the new value (don't change the old one yet; the rotation script needs to verify against the old):
+   ```
+   BOT_PASSWORD_PREFIX=<NEW_VALUE>
+   # OLD_BOT_PASSWORD_PREFIX defaults to the historical leaked prefix if
+   # unset (see scripts/rotate-bot-passwords.js). Set this only if you've
+   # previously rotated to a different non-default prefix.
+   OLD_BOT_PASSWORD_PREFIX=<previous prefix, if not the default>
+   ```
+
+3. **Dry-run** to see which bots will rotate cleanly vs which are already on a non-standard password:
+   ```bash
+   node scripts/rotate-bot-passwords.js --dry-run
+   ```
+   Bots that fail the old-password sign-in are flagged "skipped" — usually means they were created/rotated outside the standard flow.
+
+4. **Rotate live.** With `--force`, the script skips the pre/post sign-in verifications (admin API is authoritative) AND avoids Supabase Auth's aggressive rate limiter. Without `--force`, you'll skip mismatched bots — usually fine, but `--force` is what you want when you're trying to bring everyone in line.
+   ```bash
+   node scripts/rotate-bot-passwords.js --force
+   ```
+   Paces ~1.5s between bots to stay under rate limits. ~35s for ~25 bots.
+
+5. **Update GitHub Actions secret** at https://github.com/konakevin/dreambot/settings/secrets/actions — find `BOT_PASSWORD_PREFIX` → "Update" → paste exact `.env.local` value (no quotes, no whitespace).
+
+6. **Verify end-to-end via CI** — manually dispatch the bot-dreams workflow:
+   ```bash
+   gh workflow run bot-dreams.yml -R konakevin/dreambot -f bot=musebot -f count=1
+   gh run watch <run-id> -R konakevin/dreambot
+   ```
+   If you see "Cannot sign in as musebot: Invalid login credentials" the GitHub secret value doesn't match `.env.local`.
+
+7. **Mark the GitGuardian incident resolved** as "Revoked" if applicable.
+
+### Deleting a Bot
+
+`scripts/delete-bot.js` hard-deletes a bot account and ALL associated content in FK-safe order: likes/favorites/comments/shares on uploads → uploads → bot_seeds (matching `{name}_%`) → follows → friendships → notifications (both sides) → user_recipes → public.users → auth.users. Handles auth-only orphans (auth user exists but public.users row doesn't).
+
+```bash
+node scripts/delete-bot.js --bots nyx,glowbot --dry-run    # preview row counts
+node scripts/delete-bot.js --bots nyx,glowbot              # actually delete
+```
+
+### Pre-Commit Secret Scanner
+
+`scripts/check-secrets.sh` runs as part of the husky pre-commit hook and blocks commits that introduce common secret patterns: hardcoded password literals, the historical bot-password pattern, AWS access keys, Slack webhooks, PEM private keys, `api_key=`/`secret_key=` assignments with quoted long-string values.
+
+Allowlist exceptions: `scripts/check-secrets.sh` (the scanner has to contain the patterns it scans for) and `scripts/rotate-bot-passwords.js` (must reference the historical leaked prefix as a fallback for non-force runs).
+
+If a legitimate change trips the scanner, bypass with `git commit --no-verify`. Don't abuse it — every bypass is a chance for a real leak to land.
+
+### Facebook OAuth Credentials
+
+Separate from bot auth, Facebook OAuth uses two values that ship in client builds:
+
+| Field | Storage |
+|---|---|
+| `FACEBOOK_APP_ID` | `.env.local` + EAS secret. Read by `app.config.js` at config-time. |
+| `FACEBOOK_CLIENT_TOKEN` | `.env.local` + EAS secret. Read by `app.config.js` at config-time. |
+| Facebook App Secret | Supabase Dashboard → Auth → Providers → Facebook (server-side only, never in git) |
+
+Both client values are passed to the `react-native-fbsdk-next` plugin in `app.config.js`. They never enter git — `app.json` was migrated to dynamic `app.config.js` specifically for this. Rotation: Meta Developer Dashboard → App Settings → Advanced → Reset Client Token, then update `.env.local` AND run `eas env:create --name FACEBOOK_CLIENT_TOKEN --value <new> --force`. Rebuild via `npx expo prebuild --clean`.
 
 ---
 
