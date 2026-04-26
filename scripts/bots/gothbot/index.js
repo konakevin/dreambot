@@ -15,12 +15,11 @@ const pathBuilders = {
   'gothic-architecture': require('./paths/gothic-architecture'),
   'goth-closeup': require('./paths/goth-closeup'),
   'goth-full-body': require('./paths/goth-full-body'),
-  'legacy-girl': require('./paths/legacy-girl'),
-  'legacy-landscape': require('./paths/legacy-landscape'),
   'castlevania-scene': require('./paths/castlevania-scene'),
   'cozy-goth': require('./paths/cozy-goth'),
   'scene-girls': require('./paths/scene-girls'),
   'vampire-vogue-realism': require('./paths/vampire-vogue-realism'),
+  'horror-creature': require('./paths/horror-creature'),
 };
 
 module.exports = {
@@ -67,7 +66,6 @@ module.exports = {
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
   //   'gothic' → heavy-ink Castlevania-manga stylization (flagship)
   //   'gothic-realistic' → 80s-90s dark-fantasy paperback oil-painting
-  //   'gothic-whimsy' → Tim-Burton whimsical-dark (ONLY via gothic-whimsy path, see mediumByPath)
   mediums: [
     'gothic', 'gothic', 'gothic', 'gothic', // 4× = 29% flagship stylized
     'gothic-realistic', 'gothic-realistic', 'gothic-realistic', // 3× = 21% painterly-realism
@@ -79,21 +77,16 @@ module.exports = {
     'watercolor',
   ],
 
-  // Per-medium prefix/suffix override — gothic-whimsy needs a completely different
-  // stylistic anchor (Tim Burton whimsy) than the bot's default Castlevania-manga.
+  // Per-medium prefix/suffix override —
   // gothic-painted needs the default heavy-ink / "not photoreal" global prefix
   // STRIPPED so the medium's photoreal DNA isn't fought from the front/back.
   promptPrefixByMedium: {
-    'gothic-whimsy':
-      'whimsical gothic dark-fairytale cinematic still — Tim Burton / Coraline / Corpse Bride / Pan\'s Labyrinth visual family. Professional feature-film or stylized-3D-animated-feature render quality. Shadow-dominant low-key lighting, tenebrous atmosphere, dark ominous whimsy',
     'gothic-painted':
       'HYPERREAL PHOTOREALISTIC dark-fantasy vampire portrait render, 4K cinematic film-still quality, photographic skin fidelity with pore-level detail + subsurface scatter + wet dewy skin highlights, shot on ARRI Alexa / RED Komodo with 85mm portrait lens, sharp eyelashes + specular catchlights + realistic eye-reflection, dark gothic-horror atmosphere. Hyperreal-skin-with-surreal-eyes-and-makeup aesthetic',
     'gothic-oil-garden':
       'DARK GOTHIC OIL PAINTING, full-scene Pre-Raphaelite-dark painterly composition — the environment dominates, the figure is a participant within it NOT the centered subject, Waterhouse / Rossetti / Godward / Caspar-David-Friedrich / Goya dark-romanticism tradition, heavy impasto oil brushwork visible, atmospheric depth, chiaroscuro colored shadows, museum-oil-painting masterwork quality',
   },
   promptSuffixByMedium: {
-    'gothic-whimsy':
-      'cinematic film-still polish, professional quality, no text no words no watermarks, NOT Funko, NOT flat-2D-cartoon, NOT pen-and-ink, NOT hobby-felt',
     'gothic-painted':
       'photorealistic 4K film-still finish, sharp photographic detail, skin with real pore + peach-fuzz + subsurface texture, no text no words no watermarks — NOT illustration, NOT cartoon, NOT anime, NOT manga, NOT flat-inked, NOT dark-manga, NOT heavy-ink-shadow, NOT hand-drawn, NOT line-art, NOT stylized-ink, NOT painterly, NOT oil-painted, NOT brushwork, NOT canvas-texture, NOT Artgerm, NOT Rossdraws, NOT DeviantArt-digital, NOT Castlevania-game-art, NOT PS2-game-cover, NOT concept-art-illustration',
     'gothic-oil-garden':
@@ -134,8 +127,6 @@ module.exports = {
     // Interview-with-the-Vampire / Penny-Dreadful / Tilda-Swinton / Theda-Bara refs).
     'gothic-painted':
       'EXTREME CLOSE-UP hyperreal face portrait of a dark-fantasy vampire woman — deathly-pale corpse-drained skin, photographic-fidelity rendering with visible pores, fine peach-fuzz, subsurface light-scatter on cheekbone, translucent epidermis with faint blue-veins visible at temples, wet dewy skin-highlight with tiny water droplets across forehead and cheekbone, individual eyelash strands, realistic skin-tone gradients. The EYES are a hero of the face — GLOWING UNNATURAL LUMINOUS iris rendered as saturated luminous glow against otherwise-realistic eye. INTENSE GLAMOUR-VAMPIRE MAKEUP — heavy black smoky eye-shadow thickly blended on the lid and slightly above the socket, sharp black winged eyeliner extending in a clean cat-eye flick, long dark lashes, sharp defined darkened brows, dramatic chiaroscuro contour carving hollow cheekbones. WET-GLOSS DARK LIPS — deep wine / oxblood / obsidian-black / violet-ink / jet-purple lipstick with heavy specular wet-gloss highlight. Parted lips showing LONG SHARP UPPER VAMPIRE FANGS. Close-crop atmospheric background — wet dark hair framing face or bokeh-lit dark atmosphere behind. Glamour-vampire references: Interview-with-the-Vampire / Only-Lovers-Left-Alive Tilda-Swinton / Penny-Dreadful Eva-Green / Theda-Bara vamp / Lady-Dimitrescu. Hyperreal skin + surreal glowing eyes + heavy glamour-makeup = the "fake/real" look. Feels like a 4K film still, NOT a painting, NOT an illustration, NOT anime, NOT manga, NOT cartoon, NOT painterly, NOT oil-painted, NOT brushwork-visible, NOT Artgerm-smooth, NOT Rossdraws, NOT Castlevania-game-art, NOT magazine-editorial-photo, NOT YA-fantasy, NOT face-paint, NOT ritual-sigils, NOT painted tear-streaks, NOT cracked-mask',
-    'gothic-whimsy':
-      'whimsical-dark cinematic render, Tim Burton / Corpse Bride / Coraline visual family, feature-film polish',
     anime:
       'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic, NOT cute-anime NOT shonen NOT moe',
     comics:
@@ -191,39 +182,29 @@ module.exports = {
     'gothic-architecture',
     'goth-closeup',
     'goth-full-body',
-    'legacy-girl',
-    'legacy-landscape',
     'castlevania-scene',
     'cozy-goth',
     'scene-girls',
     'vampire-vogue-realism',
+    'horror-creature',
   ],
 
   pathWeights: {
-    'dark-landscape': 2,
-    'gothic-architecture': 2,
+    'scene-girls': 4,
+    'dark-landscape': 3,
+    'vampire-vogue-realism': 3,
+    'horror-creature': 3,
     'goth-closeup': 2,
     'goth-full-body': 2,
-    'legacy-girl': 2,
-    'legacy-landscape': 2,
+    'gothic-architecture': 2,
     'castlevania-scene': 2,
     'cozy-goth': 1,
-    'scene-girls': 2,
-    'vampire-vogue-realism': 2,
   },
 
-  rollSharedDNA({ vibeKey, medium, picker }) {
-    // Gothic-whimsy uses its own dedicated palette pool to avoid the homogeneous
-    // moonlit-teal-and-orange-lantern cluster that SCENE_PALETTES produced.
-    const isWhimsy = medium === 'gothic-whimsy';
-    const palettePool =
-      isWhimsy && pools.GOTHIC_WHIMSY_PALETTES && pools.GOTHIC_WHIMSY_PALETTES.length > 0
-        ? pools.GOTHIC_WHIMSY_PALETTES
-        : pools.SCENE_PALETTES;
+  rollSharedDNA({ vibeKey, picker }) {
     return {
-      scenePalette: picker.pickWithRecency(palettePool, isWhimsy ? 'whimsy_palette' : 'scene_palette'),
+      scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.dark,
-      isWhimsy,
     };
   },
 
