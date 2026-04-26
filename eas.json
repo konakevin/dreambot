@@ -8,16 +8,28 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
+        "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN"
       }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
         "simulator": false
+      },
+      "env": {
+        "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
+        "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
+        "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN"
+      }
     }
   },
   "submit": {

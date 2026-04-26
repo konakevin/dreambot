@@ -75,15 +75,22 @@ Paste the output into Supabase → Apple → Secret Key.
 
 | Field | Where to find it |
 |-------|-------|
-| App ID | `app.json` → `react-native-fbsdk-next` plugin → `appID` |
-| Client Token | `app.json` → `react-native-fbsdk-next` plugin → `clientToken` |
+| App ID | `.env.local` → `FACEBOOK_APP_ID` (read by `app.config.js` at build time) |
+| Client Token | `.env.local` → `FACEBOOK_CLIENT_TOKEN` (read by `app.config.js` at build time) |
 | App Secret | Supabase Dashboard → Auth → Providers → Facebook (server-side only) |
 
 The App ID is public by design (embedded in every installed app binary).
 The Client Token also ships in client binaries, but rotate it via
 **Meta Developer Dashboard → App Settings → Advanced → Reset Client Token**
 if it's ever exposed in places it shouldn't be (e.g. flagged by GitGuardian).
-After rotating, update `app.json` and ship a new build.
+
+After rotating:
+1. Update `.env.local` with the new value
+2. Update the EAS secret: `eas secret:create --scope project --name FACEBOOK_CLIENT_TOKEN --value <new>` (or `eas secret:push` from `.env.local`)
+3. Rebuild — `expo prebuild --clean` for local, `eas build` for cloud
+
+The Client Token never enters git — `app.json` was replaced with `app.config.js`
+which reads the value from process.env.
 
 ### Where credentials are configured:
 - **Supabase Dashboard** → Authentication → Providers → Facebook
