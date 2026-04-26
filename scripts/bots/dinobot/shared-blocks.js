@@ -9,7 +9,7 @@
 const PROMPT_PREFIX =
   'cinematic paleoart nature documentary still frame, ultra-realistic prehistoric wildlife photography, scientifically plausible dinosaur anatomy, accurate musculature and proportions, detailed skin texture with scars and mud, natural animal behavior mid-motion, wildlife documentary composition, telephoto framing, dramatic depth of field, volumetric fog, atmospheric perspective, epic ancient landscape, BBC Planet Earth vibe, museum-grade paleoart quality, IMAX realism';
 
-const PROMPT_SUFFIX = 'no humans, no people, no human figures, no cartoon, no kids illustration, no toy-like, no stylized cute, no theme park, no fantasy dragon, no neon colors, no plastic CGI, no text, no watermark, ultra detailed, film grain, masterpiece';
+const PROMPT_SUFFIX = 'ABSOLUTELY NO humans, NO people, NO human figures, NO human silhouettes, NO human hands, NO man-made objects, NO buildings, no cartoon, no kids illustration, no toy-like, no stylized cute, no theme park, no fantasy dragon, no neon colors, no plastic CGI, no text, no watermark, ultra detailed, film grain, masterpiece';
 
 const DINOSAUR_IS_HERO_BLOCK = `━━━ DINOSAUR IS HERO ━━━
 
@@ -23,9 +23,9 @@ const NO_GORE_BLOCK = `━━━ NO GORE ━━━
 
 Predator/prey moments allowed — hunting, chasing, territorial displays. BUT never explicit gore: no bloody wounds, no dismemberment, no blood-spatter, no visible viscera. Tension + dread + power, never slasher. PG-13 nature documentary, not horror.`;
 
-const NO_HUMANS_BLOCK = `━━━ NO HUMANS ━━━
+const NO_HUMANS_BLOCK = `━━━ ABSOLUTE BAN: NO HUMANS ━━━
 
-Pure prehistoric era. No humans anywhere. No hunters, no rangers, no camps, no vehicles, no buildings. This world has never seen a human being.`;
+STRICT BAN. No humans ANYWHERE in any form. No hunters, no rangers, no explorers, no scientists, no children, no silhouettes, no hands, no camps, no vehicles, no buildings, no modern structures, no roads, no fences, no clothing, no tools, no weapons. Not even implied human presence. This world has NEVER seen a human being. 66+ million years before the first human existed. ANY human element = FAILED render.`;
 
 const DOCUMENTARY_CAMERA_BLOCK = `━━━ DOCUMENTARY CAMERA ━━━
 

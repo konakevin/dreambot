@@ -7,13 +7,13 @@
  */
 
 const PROMPT_PREFIX =
-  'tilt-shift miniature magic, dollhouse-scale obsessive detail, extreme-macro lens feel, clever-cute-whoa composition, stare-for-five-minutes quality, master-modelmaker aesthetic';
+  'ultra-detailed miniature diorama photography, tabletop model world, tilt-shift macro lens, extreme shallow depth of field, dollhouse-scale, handcrafted tiny props, miniature set dressing, realistic modelmaking textures, visible tiny imperfections';
 
-const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
+const PROMPT_SUFFIX = 'miniature tabletop diorama model, tilt-shift shallow depth of field, macro lens close-up, tiny handcrafted props, visible miniature scale, no text, no words, no watermarks';
 
-const TILT_SHIFT_MINIATURE_BLOCK = `━━━ TILT-SHIFT MINIATURE AESTHETIC (NON-NEGOTIABLE) ━━━
+const TILT_SHIFT_MINIATURE_BLOCK = `━━━ TILT-SHIFT MINIATURE AESTHETIC (NON-NEGOTIABLE — THIS IS THE MOST IMPORTANT RULE) ━━━
 
-Shallow depth-of-field. Tilt-shift effect making real things feel dollhouse-scale. Macro-lens feel with obsessive surface detail. The dollhouse-scale IS the art — not a thing in the frame, but the WAY the frame makes everything feel tiny and preciously-detailed.`;
+This MUST look like a TABLETOP MODEL / DIORAMA photographed with a MACRO LENS. NOT a real full-scale scene. NEVER a normal photograph of a real place. The viewer must IMMEDIATELY know this is miniature — visible table edge or surface beneath, extreme shallow depth-of-field with foreground and background blur, tiny handcrafted imperfections (brush strokes, glue marks, visible seams, painted surfaces, miniature fabric fibers). Scale anchors required: props must look thumb-sized, furniture matchbox-scale, buildings palm-sized. If it could be mistaken for a real full-scale photo, you have FAILED.`;
 
 const OBSESSIVE_MICRO_DETAIL_BLOCK = `━━━ OBSESSIVE MICRO DETAIL ━━━
 

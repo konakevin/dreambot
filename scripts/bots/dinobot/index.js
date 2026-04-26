@@ -22,13 +22,15 @@ const pathBuilders = {
   'cinematic-silhouette': require('./paths/cinematic-silhouette'),
   'micro-detail': require('./paths/micro-detail'),
   'extinction-event': require('./paths/extinction-event'),
+  'dino-cozy': require('./paths/dino-cozy'),
+  'dino-pack': require('./paths/dino-pack'),
 };
 
 module.exports = {
   username: 'dinobot',
   displayName: 'DinoBot',
 
-  mediums: ['canvas', 'illustration', 'pencil', 'photography', 'oil_painting', 'watercolor'],
+  mediums: ['photography', 'render', 'canvas'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -63,21 +65,25 @@ module.exports = {
     'cinematic-silhouette',
     'micro-detail',
     'extinction-event',
+    'dino-cozy',
+    'dino-pack',
   ],
 
   pathWeights: {
-    'dino-portrait': 6,
-    'dino-action': 6,
-    'paleo-landscape': 30,
-    'herd-migration': 6,
-    'territory-clash': 6,
-    'nesting-ground': 6,
-    'swamp-river': 6,
-    'ocean-reptiles': 6,
-    'volcanic-apocalypse': 6,
-    'cinematic-silhouette': 6,
-    'micro-detail': 6,
-    'extinction-event': 6,
+    'dino-portrait': 1,
+    'dino-action': 1,
+    'paleo-landscape': 1,
+    'herd-migration': 1,
+    'territory-clash': 1,
+    'nesting-ground': 1,
+    'swamp-river': 1,
+    'ocean-reptiles': 1,
+    'volcanic-apocalypse': 1,
+    'cinematic-silhouette': 1,
+    'micro-detail': 1,
+    'extinction-event': 1,
+    'dino-cozy': 1,
+    'dino-pack': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
@@ -92,6 +98,8 @@ module.exports = {
     if (!builder) throw new Error(`DinoBot: unknown path "${path}"`);
     return builder({ sharedDNA, vibeDirective, vibeKey, picker });
   },
+
+  bannedPhrases: ['human', 'person', 'people', 'man ', 'woman', 'child', 'hunter', 'explorer', 'scientist', 'ranger', 'tourist'],
 
   caption({ path }) {
     return `[${path}] DinoBot`;

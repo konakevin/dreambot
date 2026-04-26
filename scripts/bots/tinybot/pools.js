@@ -33,6 +33,7 @@ module.exports = {
   TINY_CREATURES: load('tiny_creatures'),
   MICRO_FANTASY: load('micro_fantasy'),
   MINIATURE_INDUSTRY: load('miniature_industry'),
+  COTTAGE_VILLAGE: load('cottage_village'),
   TILT_SHIFT_LIGHTING: load('tilt_shift_lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),

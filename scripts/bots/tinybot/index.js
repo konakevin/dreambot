@@ -17,13 +17,17 @@ const pathBuilders = {
   'contained-worlds': require('./paths/contained-worlds'),
   'micro-fantasy': require('./paths/micro-fantasy'),
   'miniature-industry': require('./paths/miniature-industry'),
+  'cottage-village': require('./paths/cottage-village'),
 };
 
 module.exports = {
   username: 'tinybot',
   displayName: 'TinyBot',
 
-  mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted'],
+  mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted', 'render'],
+
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -50,17 +54,19 @@ module.exports = {
     'contained-worlds',
     'micro-fantasy',
     'miniature-industry',
+    'cottage-village',
   ],
 
   pathWeights: {
     diorama: 1,
-    'miniature-landscape': 1,
+    'miniature-landscape': 3,
     'macro-nature': 1,
     'miniature-urban': 1,
     'tiny-cozy': 1,
     'contained-worlds': 1,
-    'micro-fantasy': 1,
+    'micro-fantasy': 2,
     'miniature-industry': 1,
+    'cottage-village': 3,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

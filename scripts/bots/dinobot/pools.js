@@ -36,5 +36,7 @@ module.exports = {
   SILHOUETTE_SCENES: load('silhouette_scenes'),
   MICRO_DETAILS: load('micro_details'),
   EXTINCTION_SCENES: load('extinction_scenes'),
+  COZY_DINO_ACTIONS: load('cozy_dino_actions'),
+  PACK_DINO_ACTIONS: load('pack_dino_actions'),
   VIBE_COLOR,
 };
