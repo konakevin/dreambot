@@ -1,9 +1,7 @@
 /**
  * SirenBot — axis pools.
  *
- * All rolled axes are 50-entry Sonnet-seeded pools loaded from seeds/*.json.
  * Regenerate any pool:
- *
  *     node scripts/gen-seeds/sirenbot/gen-<name>.js
  */
 
@@ -17,18 +15,41 @@ function load(name) {
 }
 
 module.exports = {
-  RACES: load('races'),
+  // ── Shared DNA ──
   SCENE_PALETTES: load('scene_palettes'),
   MAGICAL_ATMOSPHERES: load('magical_atmospheres'),
-  FEMALE_POSES: load('female_poses'),
-  MALE_POSES: load('male_poses'),
-  FEMALE_ACTIONS: load('female_actions'),
-  MALE_ACTIONS: load('male_actions'),
-  EXPRESSIONS: load('expressions'),
-  ACCESSORIES_FEMALE: load('accessories_female'),
-  ACCESSORIES_MALE: load('accessories_male'),
-  WEAPONS: load('weapons'),
-  SETTINGS: load('settings'),
-  FACIAL_FEATURES: load('facial_features'),
-  SEDUCTIVE_MOMENTS: load('seductive_moments'),
+
+  // ── Mermaid paths ──
+  MERMAID_FEATURES: load('mermaid_features'),
+  WATER_CONDITIONS: load('water_conditions'),
+  MERMAID_SIREN_SETTINGS: load('mermaid_siren_settings'),
+  MERMAID_SIREN_MOMENTS: load('mermaid_siren_moments'),
+  MERMAID_DEEP_SETTINGS: load('mermaid_deep_settings'),
+  MERMAID_DEEP_ACTIONS: load('mermaid_deep_actions'),
+  MERMAID_REEF_SETTINGS: load('mermaid_reef_settings'),
+  MERMAID_REEF_ACTIONS: load('mermaid_reef_actions'),
+
+  // ── Dark Elf path ──
+  DARK_ELF_SETTINGS: load('dark_elf_settings'),
+  DARK_ELF_ACTIONS: load('dark_elf_actions'),
+
+  // ── Forest Nymph path ──
+  NYMPH_SETTINGS: load('nymph_settings'),
+  NYMPH_ACTIONS: load('nymph_actions'),
+
+  // ── Vampire Queen path ──
+  VAMPIRE_SETTINGS: load('vampire_settings'),
+  VAMPIRE_MOMENTS: load('vampire_moments'),
+
+  // ── Dragon Woman path ──
+  DRAGON_WOMAN_SETTINGS: load('dragon_woman_settings'),
+  DRAGON_WOMAN_ACTIONS: load('dragon_woman_actions'),
+
+  // ── Sorceress path ──
+  SORCERESS_SETTINGS: load('sorceress_settings'),
+  SORCERESS_ACTIONS: load('sorceress_actions'),
+
+  // ── Valkyrie path ──
+  VALKYRIE_SETTINGS: load('valkyrie_settings'),
+  VALKYRIE_ACTIONS: load('valkyrie_actions'),
 };

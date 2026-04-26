@@ -1,9 +1,10 @@
 /**
- * SirenBot — the bot-engine contract.
+ * MermaidBot — the bot-engine contract.
  *
- * Gorgeous dangerous fantasy women across all archetypes — mermaids, dark elves,
- * nymphs, vampires, dragon-women, sorceresses, valkyries. Wildlife-documentary
- * framing: observing these creatures in their natural habitats.
+ * Mermaids in every flavor — seductive sirens, bioluminescent deep-sea aliens,
+ * tropical reef sprites, gothic haunts, underwater royalty, liminal shore-dwellers,
+ * arctic ice-singers, armored ocean warriors.
+ * Waterhouse × concept art × underwater cinematography.
  */
 
 const pools = require('./pools');
@@ -13,17 +14,16 @@ const pathBuilders = {
   'mermaid-siren': require('./paths/mermaid-siren'),
   'mermaid-deep': require('./paths/mermaid-deep'),
   'mermaid-reef': require('./paths/mermaid-reef'),
-  'dark-elf': require('./paths/dark-elf'),
-  'forest-nymph': require('./paths/forest-nymph'),
-  'vampire-queen': require('./paths/vampire-queen'),
-  'dragon-woman': require('./paths/dragon-woman'),
-  'sorceress': require('./paths/sorceress'),
-  'valkyrie': require('./paths/valkyrie'),
+  'mermaid-dark': require('./paths/mermaid-dark'),
+  'mermaid-royal': require('./paths/mermaid-royal'),
+  'mermaid-shore': require('./paths/mermaid-shore'),
+  'mermaid-ice': require('./paths/mermaid-ice'),
+  'mermaid-warrior': require('./paths/mermaid-warrior'),
 };
 
 module.exports = {
-  username: 'sirenbot',
-  displayName: 'SirenBot',
+  username: 'mermaidbot',
+  displayName: 'MermaidBot',
 
   mediums: ['photography', 'render', 'canvas'],
 
@@ -39,56 +39,55 @@ module.exports = {
     'cinematic',
     'dark',
     'epic',
-    'psychedelic',
     'ethereal',
-    'arcane',
-    'ancient',
     'enchanted',
     'fierce',
     'nightshade',
-    'macabre',
     'shimmer',
+    'surreal',
+    'arcane',
+    'ancient',
+    'psychedelic',
   ],
 
   paths: [
     'mermaid-siren',
     'mermaid-deep',
     'mermaid-reef',
-    'dark-elf',
-    'forest-nymph',
-    'vampire-queen',
-    'dragon-woman',
-    'sorceress',
-    'valkyrie',
+    'mermaid-dark',
+    'mermaid-royal',
+    'mermaid-shore',
+    'mermaid-ice',
+    'mermaid-warrior',
   ],
 
   pathWeights: {
     'mermaid-siren': 1,
     'mermaid-deep': 1,
     'mermaid-reef': 1,
-    'dark-elf': 1,
-    'forest-nymph': 1,
-    'vampire-queen': 1,
-    'dragon-woman': 1,
-    'sorceress': 1,
-    'valkyrie': 1,
+    'mermaid-dark': 1,
+    'mermaid-royal': 1,
+    'mermaid-shore': 1,
+    'mermaid-ice': 1,
+    'mermaid-warrior': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
     return {
+      features: picker.pickWithRecency(pools.MERMAID_FEATURES, 'mermaid_features'),
+      waterCondition: picker.pickWithRecency(pools.WATER_CONDITIONS, 'water_condition'),
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
-      atmosphere: picker.pickWithRecency(pools.MAGICAL_ATMOSPHERES, 'atmosphere'),
       vibeKey,
     };
   },
 
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
-    if (!builder) throw new Error(`SirenBot: unknown path "${path}"`);
+    if (!builder) throw new Error(`MermaidBot: unknown path "${path}"`);
     return builder({ sharedDNA, vibeDirective, vibeKey, picker });
   },
 
   caption({ path }) {
-    return `[${path}] SirenBot`;
+    return `[${path}] MermaidBot`;
   },
 };

@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from 'expo-router';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
@@ -93,8 +94,18 @@ export function PostGrid({
     return posts.findIndex((p) => p.id === highlightPostId);
   }, [posts, highlightPostId]);
 
+  const navigation = useNavigation();
   const [hasScrolledToHighlight, setHasScrolledToHighlight] = useState(false);
-  const showJustViewedButton = highlightIndex >= VISIBLE_THRESHOLD && !hasScrolledToHighlight;
+  const [highlightDismissed, setHighlightDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!highlightPostId) return;
+    return navigation.addListener('blur', () => {
+      setHighlightDismissed(true);
+    });
+  }, [navigation, highlightPostId]);
+  const showJustViewedButton =
+    !highlightDismissed && highlightIndex >= VISIBLE_THRESHOLD && !hasScrolledToHighlight;
 
   const scrollToHighlight = useCallback(() => {
     if (highlightIndex >= 0 && listRef.current) {
@@ -159,7 +170,7 @@ export function PostGrid({
             item={item}
             isOwn={isOwn}
             albumSource={source}
-            isHighlighted={item.id === highlightPostId}
+            isHighlighted={!highlightDismissed && item.id === highlightPostId}
             showPrivateBadge={showPrivateBadge}
           />
         )}
