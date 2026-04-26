@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_action_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL ACTION MOMENT descriptions for PixelBot's pixel-action path — dynamic action-moments.
 
 Each entry: 15-30 words. One specific pixel action moment.

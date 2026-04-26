@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_pretty_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL PRETTY SCENE descriptions for PixelBot's pixel-pretty path — pure pretty scenes in pixel art. NO genre, NO characters, NO action. Just beauty. Flagship-quality.
 
 Each entry: 15-30 words. One specific pretty scene in pixel-art medium.

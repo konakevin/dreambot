@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/character_details.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ANIME CHARACTER DETAIL descriptions for MangaBot — visual vocabulary pieces that stack onto any character. Hair, eyes, clothing texture, accessories, specific anime-art tropes.
 
 Each entry: 6-14 words. One specific anime character visual detail.

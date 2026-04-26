@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/slice_of_life_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SLICE-OF-LIFE MOMENT descriptions for MangaBot's slice-of-life path — quiet daily anime. Mundane-beautiful moments rendered with anime-melancholy-warmth. Shinkai Makoto / Sunrise / 5 Centimeters per Second energy.
 
 Each entry: 15-30 words. One specific quiet daily anime moment.

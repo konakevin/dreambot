@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_fantasy_beings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} FANTASY BEING descriptions for PixelBot's pixel-fantasy path. Each entry is a generic fantasy creature or character archetype — NO named IP characters. The setting will be picked separately.
 
 Each entry: 10-20 words. A specific fantasy being with visual detail.

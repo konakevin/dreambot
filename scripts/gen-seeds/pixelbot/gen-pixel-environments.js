@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_environments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL ENVIRONMENT descriptions for PixelBot — cross-path backgrounds.
 
 Each entry: 10-20 words. One specific pixel environment/backdrop.

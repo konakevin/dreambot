@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_pretty_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PRETTY SETTING descriptions for PixelBot's pixel-pretty path. Each entry is a LOCATION/ENVIRONMENT — pure scenery, no characters, no action. The visual element that goes INTO the scene will be picked separately.
 
 Each entry: 10-20 words. A specific beautiful natural or architectural setting.

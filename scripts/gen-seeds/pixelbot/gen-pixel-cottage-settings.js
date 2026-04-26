@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_cottage_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL COTTAGE/VILLAGE SETTING descriptions for PixelBot's pixel-cottage path. Retro RPG village energy — Stardew Valley, JRPG towns, Link to the Past villages, Chrono Trigger hamlets. Each entry is a specific cozy village LOCATION. The lived-in details will be picked separately.
 
 Each entry: 10-20 words. A specific retro-RPG-style village or cottage location.

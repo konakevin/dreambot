@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_cottage_details.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL COTTAGE LIVED-IN DETAIL descriptions for PixelBot's pixel-cottage path. Each entry is a specific charming village detail that makes the scene feel inhabited and warm. Retro RPG energy — the kind of details you'd see zooming into a SNES/GBA town. The SETTING will be picked separately.
 
 Each entry: 8-15 words. One specific village life detail.

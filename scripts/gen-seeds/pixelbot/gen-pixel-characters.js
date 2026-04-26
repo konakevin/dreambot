@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_characters.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL CHARACTER descriptions for PixelBot's pixel-character-moment path — generic pixel archetypes in context. Candid, solo. No IP names.
 
 Each entry: 10-20 words. One pixel archetype with quick detail.

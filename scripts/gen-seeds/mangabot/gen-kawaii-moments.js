@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/kawaii_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} KAWAII MOMENT descriptions for MangaBot's kawaii path — explicitly CUTE anime moments. Chibi / big-eye / magical-girl / sparkle-heavy / shoujo-cover-art energy.
 
 Each entry: 15-30 words. One specific kawaii scene.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_pretty_elements.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PRETTY VISUAL ELEMENT descriptions for PixelBot's pixel-pretty path. Each entry is a specific beautiful visual detail or natural phenomenon that brings a scene to life. The SETTING will be picked separately — your job is the visual element only.
 
 Each entry: 8-15 words. One specific pretty visual detail.

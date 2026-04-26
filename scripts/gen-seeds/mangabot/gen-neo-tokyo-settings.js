@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/neo_tokyo_settings.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} NEO-TOKYO SETTING descriptions for MangaBot's neo-tokyo path — cyberpunk-Japan futuristic locations. Blade Runner meets Akira meets Ghost in the Shell. Neon, rain, density, Japanese signage.
 
 Each entry: 15-30 words. One specific cyberpunk-Japan setting.

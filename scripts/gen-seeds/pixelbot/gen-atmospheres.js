@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL ATMOSPHERE descriptions for PixelBot — pixel atmosphere particles.
 
 Each entry: 6-14 words. One specific pixel atmospheric element.

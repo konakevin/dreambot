@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/food_anime.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} FOOD ANIME scene descriptions for MangaBot — Japanese food culture through anime lens. Food Wars / Sweetness & Lightning / Isekai Izakaya / Laid-Back Camp cooking energy. The FOOD is the star — lovingly rendered, steam rising, glistening.
 
 Each entry: 15-25 words. One specific anime food scene with dish + setting + sensory detail.

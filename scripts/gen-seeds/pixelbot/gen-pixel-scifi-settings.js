@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_scifi_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SCI-FI SETTING descriptions for PixelBot's pixel-sci-fi path. Each entry is a sci-fi LOCATION/ENVIRONMENT. The sci-fi element/subject will be picked separately.
 
 Each entry: 10-20 words. A specific sci-fi environment.

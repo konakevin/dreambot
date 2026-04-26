@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_fantasy_subjects.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL FANTASY SUBJECT descriptions for PixelBot's pixel-fantasy path — pixel fantasy scenes. Dragons, castles, wizards, elves, rune-stones. No IP.
 
 Each entry: 15-30 words. One specific pixel fantasy subject/scene.

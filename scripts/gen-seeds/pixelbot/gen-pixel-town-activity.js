@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_town_activity.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TOWN ACTIVITY descriptions for PixelBot's pixel-town-life path. Each entry is a specific bustling activity or crowd moment happening in a town. The LOCATION will be picked separately.
 
 Each entry: 8-15 words. One specific town-life activity or crowd scene.

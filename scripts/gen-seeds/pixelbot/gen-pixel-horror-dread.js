@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_horror_dread.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL HORROR DREAD ELEMENT descriptions for PixelBot's pixel-horror path. Each entry is a specific creepy visual detail, unsettling object, or horror signal that creates dread WITHOUT gore. The SETTING will be picked separately.
 
 Each entry: 8-15 words. One specific dread-inducing visual detail.

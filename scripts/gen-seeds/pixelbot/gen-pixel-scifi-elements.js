@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_scifi_elements.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SCI-FI ELEMENT descriptions for PixelBot's pixel-sci-fi path. Each entry is a specific sci-fi subject, object, or focal point. The SETTING will be picked separately.
 
 Each entry: 8-15 words. One specific sci-fi visual element.

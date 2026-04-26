@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/shonen_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SHONEN ACTION MOMENT descriptions for MangaBot — big kinetic anime fight/power-up/clash moments. Demon Slayer / Naruto / Dragon Ball / Jujutsu Kaisen / Bleach / One Piece energy. These are THE MOMENT — mid-clash, mid-power-up, mid-technique.
 
 Each entry: 15-25 words. One specific action moment with character archetype + technique + energy.

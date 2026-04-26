@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_cozy_rooms.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COZY ROOM/SPACE descriptions for PixelBot's pixel-cozy path. Each entry is a specific cozy INTERIOR or SMALL SPACE. The warm details/objects will be picked separately.
 
 Each entry: 10-20 words. A specific cozy space.

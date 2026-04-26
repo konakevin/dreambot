@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/atmospheres.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for MangaBot — anime-typical atmospheric particles and effects. Petal-rain, firefly, pollen, rain, fog, snow-drift, spirit-wisps.
 
 Each entry: 6-14 words. One specific anime-atmospheric element.

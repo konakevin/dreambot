@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_town_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BUSTLING TOWN SETTING descriptions for PixelBot's pixel-town-life path. Busy pixel-art towns and cities — marketplaces, ports, taverns, train stations, bazaars. More urban and lively than cottage-core. RPG hub-town energy where adventurers gather and commerce happens.
 
 Each entry: 10-20 words. A specific busy town location.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_characters.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ANIME CHARACTER descriptions for MangaBot's anime-scene path — characters described BY ROLE only (never named). Mix of modern / traditional / mythic / futuristic. Full anime spectrum.
 
 Each entry: 10-20 words. One specific character archetype with distinguishing visual detail.

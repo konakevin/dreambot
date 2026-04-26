@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cozy_anime_moments.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} COZY ANIME MOMENT descriptions for MangaBot's cozy-anime path — Ghibli-warm heartwarming slower-paced vignettes. Totoro / Ponyo / Kiki / Whisper of the Heart energy.
 
 Each entry: 15-30 words. One specific Ghibli-warm cozy moment.

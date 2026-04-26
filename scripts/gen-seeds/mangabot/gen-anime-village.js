@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_village.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ANIME VILLAGE scene descriptions for MangaBot — Japanese cottage/village scenes through anime lens. Ghibli village energy — thatched-roof farmhouses, narrow stone lanes, rice paddy paths, fishing villages, mountain hamlets, shrine towns. Exterior views of charming anime villages and their daily life.
 
 Each entry: 15-25 words. One specific anime village scene with architectural + atmospheric detail.

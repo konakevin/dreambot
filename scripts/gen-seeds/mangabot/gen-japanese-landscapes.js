@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/japanese_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} JAPANESE LANDSCAPE descriptions for MangaBot's anime-landscape path — pure Japanese environments rendered in anime style. No characters. Setting is hero.
 
 Each entry: 15-30 words. One specific Japanese landscape/setting.

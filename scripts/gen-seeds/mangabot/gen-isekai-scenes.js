@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/isekai_scenes.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ISEKAI FANTASY ANIME scene descriptions for MangaBot — fantasy-world anime moments. Mushoku Tensei / Konosuba / Re:Zero / Shield Hero / Overlord / Frieren energy. Medieval-fantasy through anime lens.
 
 Each entry: 15-25 words. One specific isekai/fantasy anime scene with character archetype + fantasy setting.

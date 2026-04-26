@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/mythological_beings.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} MYTHOLOGICAL BEING descriptions for MangaBot's mythological-creature path — specific Japanese mythological creatures as hero subject. Draw authentically from Japanese mythology, not vague fantasy.
 
 Each entry: 15-30 words. One specific mythological being with characteristic visual detail.

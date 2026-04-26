@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_fantasy_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} FANTASY SETTING descriptions for PixelBot's pixel-fantasy path. Each entry is a fantasy LOCATION/ENVIRONMENT. The creature or being will be picked separately.
 
 Each entry: 10-20 words. A specific fantasy environment.

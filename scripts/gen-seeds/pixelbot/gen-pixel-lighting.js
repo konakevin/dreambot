@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_lighting.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL LIGHTING descriptions for PixelBot — pixel-rendered lighting treatments.
 
 Each entry: 10-20 words. One specific pixel lighting treatment.

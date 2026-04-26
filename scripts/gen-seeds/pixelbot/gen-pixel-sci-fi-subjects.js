@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/pixelbot/seeds/pixel_sci_fi_subjects.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PIXEL SCI-FI SUBJECT descriptions for PixelBot's pixel-sci-fi path — pixel cyberpunk / spaceships / alien planets / vaporwave-adjacent.
 
 Each entry: 15-30 words. One specific pixel sci-fi subject.
