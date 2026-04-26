@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
+import Constants from 'expo-constants';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 
@@ -32,10 +33,17 @@ async function registerForPushNotifications(): Promise<string | null> {
     return null;
   }
 
-  // Get Expo push token
-  const { data: tokenData } = await Notifications.getExpoPushTokenAsync({
-    projectId: '315a034e-ee26-4d53-9dc3-e3c5078b4b3c',
-  });
+  // Read projectId from runtime config (app.config.js → extra.eas.projectId)
+  // so this stays in sync if the EAS project is ever re-linked. Hardcoding
+  // bit us once when the original "gas-or-pass" project was deleted.
+  const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
+
+  if (!projectId) {
+    if (__DEV__) console.warn('[Push] No EAS projectId in config; skipping token fetch');
+    return null;
+  }
+
+  const { data: tokenData } = await Notifications.getExpoPushTokenAsync({ projectId });
 
   if (__DEV__) console.log('[Push] Token:', tokenData);
   return tokenData;
