@@ -24,6 +24,7 @@ const pathBuilders = {
   'male-explorer': require('./paths/male-explorer'),
   'megastructure': require('./paths/megastructure'),
   'cyborg-woman': require('./paths/cyborg-woman'),
+  'cyborg-man': require('./paths/cyborg-man'),
 };
 
 module.exports = {
@@ -58,6 +59,13 @@ module.exports = {
     'male-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'megastructure': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  },
+
+  // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
+  promptPrefixByPath: {
+    'cyborg-man': 'handsome adult male man (NOT female NOT woman), masculine face, flat chest, narrow hips, human skin-covered body with cybernetic breakthroughs (not a robotic chassis)',
+    'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
   },
 
   // Per-medium prompt prefix/suffix overrides. The star-oil-cosmos medium
@@ -138,22 +146,24 @@ module.exports = {
     'male-explorer',
     'megastructure',
     'cyborg-woman',
+    'cyborg-man',
   ],
 
   pathWeights: {
     'cosmic-vista': 1,
-    'alien-landscape': 2,
-    'space-opera': 2,
+    'alien-landscape': 1,
+    'space-opera': 1,
     'sci-fi-interior': 1,
     'cozy-sci-fi-interior': 1,
-    'alien-city': 2,
+    'alien-city': 1,
     'robot-moment': 1,
-    'real-space': 2,
+    'real-space': 1,
     'cosmic-oracle': 1,
     'female-explorer': 1,
     'male-explorer': 1,
-    'megastructure': 2,
-    'cyborg-woman': 2,
+    'megastructure': 1,
+    'cyborg-woman': 1,
+    'cyborg-man': 1,
   },
 
   rollSharedDNA({ vibeKey, path, picker }) {
@@ -162,12 +172,21 @@ module.exports = {
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
     if (path === 'cyborg-woman') {
-      base.characterBase = picker.pickWithRecency(pools.CYBORG_CHARACTERS, 'cyborg_character');
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
       base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
       base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    if (path === 'cyborg-man') {
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_MALE_CHARACTERS, 'cyborg_male_character');
+      base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
+      base.bodyType = picker.pick(pools.CYBORG_MALE_BODY_TYPES);
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = picker.pick(pools.CYBORG_MALE_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_MALE_INTERNAL_EXPOSURE, 'cyborg_male_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
     return base;

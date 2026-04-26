@@ -440,7 +440,7 @@ function resolveVibe({ bot, medium, path }) {
 
 /**
  * Weighted path pick with rolling dedup window. Re-rolls if the picked
- * path appears in the last 3 posts (from DB + in-memory batch window).
+ * path appears in the last 5 posts (from DB + in-memory batch window).
  * Falls back to any path after 20 attempts to avoid infinite loops.
  */
 function resolvePath({ bot, recentPaths }) {
@@ -468,7 +468,7 @@ async function getRecentPaths(sb, botName) {
     .eq('bot_name', botName)
     .eq('status', 'ok')
     .order('created_at', { ascending: false })
-    .limit(3);
+    .limit(5);
   if (error) {
     console.warn(`  ⚠️ recent paths query failed: ${error.message}`);
     return [];
@@ -479,7 +479,7 @@ async function getRecentPaths(sb, botName) {
 function pushBatchPath(botName, path) {
   if (!_batchPathWindow[botName]) _batchPathWindow[botName] = [];
   _batchPathWindow[botName].push(path);
-  if (_batchPathWindow[botName].length > 3) _batchPathWindow[botName].shift();
+  if (_batchPathWindow[botName].length > 5) _batchPathWindow[botName].shift();
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -594,12 +594,12 @@ async function runBot(opts) {
   const isBatchMode = Boolean(outDir); // iter-bot sets this
   const shouldPostToDB = !dryRun && (!isBatchMode || post);
 
-  // Resolve path with rolling 3-post dedup window
+  // Resolve path with rolling 5-post dedup window
   let resolvedPath;
   if (pathArg === 'random') {
     const dbRecent = await getRecentPaths(sb, bot.username);
     const batchRecent = _batchPathWindow[bot.username] || [];
-    const combined = [...new Set([...batchRecent, ...dbRecent])].slice(0, 3);
+    const combined = [...new Set([...batchRecent, ...dbRecent])].slice(0, 5);
     resolvedPath = resolvePath({ bot, recentPaths: combined });
     pushBatchPath(bot.username, resolvedPath);
   } else {
@@ -710,6 +710,11 @@ async function runBot(opts) {
       bot.promptSuffix || '';
     const prefix = rawPrefix ? `${rawPrefix}, ` : '';
     const suffix = rawSuffix ? `, ${rawSuffix}` : '';
+    // Per-path prefix — prepended BEFORE style prefix so it's the first tokens Flux sees.
+    // Use case: gender lock for cyborg-man needs to appear before "beauty" in style prefix.
+    const pathPrefix = bot.promptPrefixByPath && bot.promptPrefixByPath[resolvedPath]
+      ? `${bot.promptPrefixByPath[resolvedPath]}, `
+      : '';
     // Per-medium style injection — bot.mediumStyles overrides DB flux_fragment if set.
     // Otherwise falls back to the DB's flux_fragment for this medium.
     const mediumStyle = bot.mediumStyles && bot.mediumStyles[medium]
@@ -717,7 +722,7 @@ async function runBot(opts) {
       : mediumFluxFragment
         ? `${mediumFluxFragment}, `
         : '';
-    finalPrompt = `${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
+    finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
 
     if (dryRun) {
       return {

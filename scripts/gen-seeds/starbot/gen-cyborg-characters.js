@@ -1,34 +1,32 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/starbot/seeds/cyborg_characters.json',
+  outPath: 'scripts/bots/starbot/seeds/cyborg_female_characters.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} CYBORG WOMAN visual descriptions for StarBot. Each describes a specific half-human half-machine being — what she LOOKS LIKE mechanically. NOT mood or archetype — PHYSICAL MECHANICAL DETAIL that Flux can render.
+  metaPrompt: (n) => `You are writing ${n} CYBORG WOMAN face/identity descriptions for StarBot. Each describes ONLY her organic face and which major body regions are mechanical — the brief has SEPARATE pools for skin tone, body type, hair, eyes, internal exposure, and glow color, so do NOT repeat those here.
 
-Each entry: 50-70 words. Describe which body parts are chrome/metal, which are translucent showing internal workings, where the glow comes from, what her organic face looks like, what textures and materials are visible. This is a BUILD SHEET for a visual, not a character bio.
+Each entry: 20-30 words. Face ethnicity + which limbs/regions are mechanical + dominant material + one-word energy.
 
-━━━ WHAT EACH ENTRY MUST DESCRIBE ━━━
-- Her FACE: organic, beautiful, specific ethnicity or alien-skin (the only fully human part)
-- Which LIMBS are mechanical: chrome arms with visible servo joints, articulated fingers, hydraulic pistons
-- TRANSLUCENT SECTIONS: where you can see INTO her body — clear polymer torso panels, transparent skull section, acrylic forearms showing internal structure
-- POWER CORE: a glowing reactor/energy source visible THROUGH a translucent body section
-- SURFACE TEXTURES: engravings, patina, filigree, circuit etchings, brushed metal, carbon fiber weave — NOT smooth sealed armor
-- EXPOSED INTERNALS: gears, wires, fiber-optic cables, hydraulic lines, spinning gyroscopes visible through gaps and panels
+━━━ WHAT EACH ENTRY COVERS ━━━
+- Face: ethnicity or alien-skin, bone structure, expression
+- Mechanical layout: which limbs/regions are chrome vs organic (e.g. "both arms chrome from shoulder down, torso transparent panel")
+- Dominant material: chrome, brass, carbon fiber, rose-gold, obsidian glass, ceramic, etc.
+- Role word (spread EVENLY): assassin, scholar, surgeon, pilot, diplomat, dancer, oracle, engineer, priestess, huntress, medic, siren, navigator, architect, phantom
 
-━━━ MATERIAL VARIETY (spread across entries) ━━━
-Chrome, brushed titanium, polished brass, copper, rose-gold, matte carbon fiber, obsidian glass, ceramic, jade-green biotech, translucent acrylic, frosted polymer, iridescent holographic, corroded steel, blackened bronze, pearlescent white. MIX 2-3 materials per entry.
+━━━ IMPORTANT — DIVERSITY OF ROLES ━━━
+These cyborgs come from ALL walks of life. No more than 20% should be combat roles (assassin/huntress/phantom). The rest are civilian: scholars, surgeons, pilots, diplomats, dancers, oracles, engineers, priestesses, medics, navigators, architects, sirens. ALL are beautiful
 
-━━━ DEDUP DIMENSIONS ━━━
-Deduplicate by: dominant material combo + which body regions are mechanical vs organic + translucent section placement + face ethnicity
+━━━ WHAT NOT TO INCLUDE (handled by other pools) ━━━
+- Skin tone details (separate pool)
+- Eye color/style (separate pool)
+- Hair style (separate pool)
+- Body build/silhouette (separate pool)
+- Internal exposure / translucent panels (separate pool)
+- Glow color (separate pool)
 
-━━━ RULES ━━━
-- She is NOT wearing a suit or armor — her body IS the machine. Visible joints, seams, panels, exposed hydraulics
-- NOT a woman in a jumpsuit. You should see BARE MECHANICAL STRUCTURE — chrome bones, piston joints, cable bundles
-- Every entry must have at least one TRANSLUCENT section showing internal workings
-- Vary face ethnicity widely (dark skin, Asian, freckled pale, alien green/lavender/obsidian)
-- Sexy through silhouette and curves, not through nudity. Rated R not X
-- Include personality/threat energy in the last line (predator, oracle, assassin, etc.)
+━━━ DEDUP ━━━
+Vary: face ethnicity + which body regions are mechanical + dominant material. No two entries should share the same ethnicity AND same mechanical layout.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

@@ -69,20 +69,20 @@ ${sharedDNA.colorPalette}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ DESIGNED TO SEDUCE — MACHINE UNDERNEATH ━━━
-She was BUILT to look human and attractive. Gorgeous face, shapely feminine figure, smooth organic skin in all the right places — she is designed to lure you in. But the illusion BREAKS in places, revealing the beautiful machinery beneath:
+━━━ WOMAN AND MACHINE — SKIN SHOWING ━━━
+She is a cyborg from any walk of life — assassin, diplomat, surgeon, pilot, scholar, dancer, soldier, engineer, oracle, priestess. Whatever her purpose, she is BEAUTIFUL — striking face, feminine figure, real organic skin. But the human exterior BREAKS in places, revealing ornate machinery beneath:
 - TRANSLUCENT SKIN PATCHES where you can see gears, wires, and a glowing reactor core through her body like frosted glass
 - SEAMS where organic skin ends in clean lines, showing chrome structure and fiber-optic cables just beneath
 - EXPOSED MECHANICAL JOINTS at shoulders, elbows, wrists — ornate and intricate, not industrial
 - CIRCUIT-LIGHT VEINS pulsing faintly under organic skin, betraying the machine beneath the beauty
 - A POWER CORE glowing from inside her torso, visible through translucent chest or belly sections
 
-She shows SKIN — real organic skin on her face, neck, décolletage, curves — because that's the disguise. The cyborg reveals are the cracks in the illusion: a forearm that's clearly chrome and servo beneath the skin, a transparent panel at her sternum showing clockwork, a jaw hinge visible at the temple. She is 60% beautiful woman, 40% ornate exposed machine — and the contrast is what makes her mesmerizing.
+She shows SKIN — real organic skin on her face, neck, décolletage, curves. The cyborg reveals are the cracks in the human exterior: a forearm that's clearly chrome and servo beneath the skin, a transparent panel at her sternum showing clockwork, a jaw hinge visible at the temple. She is 60% beautiful woman, 40% ornate exposed machine — and the contrast is what makes her mesmerizing.
 
-NOT a full robot chassis. NOT a skeleton. NOT armor or a bodysuit. She is a seduction machine with her cover partially blown. Rated R, not X.
+NOT a full robot chassis. NOT a skeleton. NOT armor or a bodysuit. NOT head-to-toe plating. She is a beautiful woman with machine underneath — skin and chrome, not a suit of armor.
 
 ━━━ BANNED IMAGERY ━━━
-NO skulls, NO skeletons, NO floating skulls, NO skull motifs, NO bone imagery. These read as cheap AI-generated cliché. Also NO floating objects in the sky, NO random symbolic imagery hovering around her.
+NO skulls, NO skeletons, NO floating skulls, NO skull motifs, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating, NO head-on-robot-body. NO high heels, NO stilettos — she wears boots, flats, or bare mechanical feet. Also NO floating objects in the sky, NO random symbolic imagery hovering around her.
 
 ━━━ SOLO COMPOSITION ━━━
 She is the ONLY figure in the frame. No other person, no companion, no victim, no crowd.
