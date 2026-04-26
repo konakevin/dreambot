@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/tiny_cozy_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TINY COZY SCENE descriptions for TinyBot's tiny-cozy path — warm-inviting-homey dollhouse-scale scenes. Viewer wants to shrink down and LIVE here.
 
 Each entry: 15-30 words. One specific tiny cozy scene.

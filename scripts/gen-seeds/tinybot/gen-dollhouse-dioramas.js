@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/dollhouse_dioramas.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} DOLLHOUSE DIORAMA descriptions for TinyBot's diorama path — technical-wonder dollhouse-scale dioramas. Countable detail density. Train stations, cityscapes, ballrooms, medieval castles, markets.
 
 Each entry: 15-30 words. One specific dollhouse diorama with detail notes.

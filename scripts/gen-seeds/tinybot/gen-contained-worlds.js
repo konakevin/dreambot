@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/contained_worlds.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} CONTAINED WORLD descriptions for TinyBot's contained-worlds path — any contained miniature world. Terrariums + object-containers (teacup/eggshell/book/kettle/lunchbox/perfume-bottle/music-box) + surreal-tiny juxtapositions.
 
 Each entry: 15-30 words. One specific contained-world with surreal-cute idea.

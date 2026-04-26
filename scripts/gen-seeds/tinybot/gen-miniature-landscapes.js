@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/miniature_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} MINIATURE LANDSCAPE descriptions for TinyBot's miniature-landscape path — master-modelmaker miniature landscapes. Rolling hills with countable trees, river-bridge, alpine, stone-cottage.
 
 Each entry: 15-30 words. One specific handcrafted miniature landscape.

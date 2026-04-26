@@ -15,6 +15,8 @@ const pathBuilders = {
   'miniature-urban': require('./paths/miniature-urban'),
   'tiny-cozy': require('./paths/tiny-cozy'),
   'contained-worlds': require('./paths/contained-worlds'),
+  'micro-fantasy': require('./paths/micro-fantasy'),
+  'miniature-industry': require('./paths/miniature-industry'),
 };
 
 module.exports = {
@@ -29,18 +31,12 @@ module.exports = {
   vibes: [
     'cinematic',
     'cozy',
-    'epic',
     'nostalgic',
-    'psychedelic',
     'peaceful',
     'whimsical',
     'ethereal',
-    'arcane',
     'ancient',
     'enchanted',
-    'coquette',
-    'voltage',
-    'nightshade',
     'shimmer',
     'surreal',
   ],
@@ -52,15 +48,19 @@ module.exports = {
     'miniature-urban',
     'tiny-cozy',
     'contained-worlds',
+    'micro-fantasy',
+    'miniature-industry',
   ],
 
   pathWeights: {
-    diorama: 2,
+    diorama: 1,
     'miniature-landscape': 1,
-    'macro-nature': 2,
+    'macro-nature': 1,
     'miniature-urban': 1,
-    'tiny-cozy': 2,
-    'contained-worlds': 2,
+    'tiny-cozy': 1,
+    'contained-worlds': 1,
+    'micro-fantasy': 1,
+    'miniature-industry': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

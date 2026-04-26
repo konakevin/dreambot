@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/tilt_shift_lighting.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TILT-SHIFT LIGHTING descriptions for TinyBot — miniature-feel lighting treatments.
 
 Each entry: 10-20 words. One specific tilt-shift/miniature lighting treatment.

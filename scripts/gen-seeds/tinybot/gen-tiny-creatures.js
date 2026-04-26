@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/tiny_creatures.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TINY CREATURE descriptions for TinyBot — tiny-scale creatures for terrarium + macro-nature paths.
 
 Each entry: 8-16 words. One specific tiny creature with charm note.

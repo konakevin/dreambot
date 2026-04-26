@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/miniature_urban_scenes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} MINIATURE URBAN SCENE descriptions for TinyBot's miniature-urban path — tiny perfect urban scenes. Tilt-shift makes real things feel dollhouse.
 
 Each entry: 15-30 words. One specific miniature urban scene.

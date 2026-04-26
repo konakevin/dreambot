@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/macro_nature_subjects.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} MACRO NATURE SUBJECT descriptions for TinyBot's macro-nature path — real nature at miniature scale as fantasy-kingdom. Mushroom-house, dewdrop-universe, acorn-pool, moss-forest.
 
 Each entry: 15-30 words. One specific macro-nature scene.
