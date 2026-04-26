@@ -39,16 +39,10 @@
 import { useWindowDimensions } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
 import { useAnimatedStyle, useSharedValue, withTiming, runOnJS } from 'react-native-reanimated';
-import {
-  PINCH_MAX_SCALE,
-  PINCH_MIN_SCALE,
-  PINCH_RESET_DURATION,
-  SWIPE_PROFILE_DISTANCE,
-  VELOCITY_THRESHOLD,
-} from '@/constants/gestures';
+import { PINCH_MAX_SCALE, PINCH_MIN_SCALE, PINCH_RESET_DURATION } from '@/constants/gestures';
 
 export interface UseCardGesturesOptions {
-  /** Called when user swipes left past the threshold (and not zoomed). */
+  /** Called when user swipes left past the activation threshold (and not zoomed). */
   onSwipeLeft?: () => void;
   /** Disable the swipe-left gesture without disabling pinch/pan. */
   disableSwipeLeft?: boolean;
@@ -72,17 +66,25 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   }
 
   // Swipe-left to profile — only active when not zoomed, not disabled.
+  //
+  // Snappy-by-design: nav.push fires on `onStart` (gesture activation at
+  // ~8px of leftward travel, ~50ms after touch). The user sees the profile
+  // begin sliding in within that frame instead of waiting for finger-up.
+  //
+  // No card translation: we tried tracking the finger with a Reanimated
+  // shared value, but UIKit's native push animation snapshotted the home
+  // hierarchy while Reanimated was actively transforming it — concurrent
+  // animations on the same view caused compositing hitches. The profile
+  // sliding in within ~50ms IS the feedback; we don't need a second motion
+  // competing with it.
   const swipeGesture = Gesture.Pan()
     .activeOffsetX([-8, 8])
     .failOffsetY([-15, 15])
     .enabled(!options?.disableSwipeLeft)
-    .onEnd((e) => {
+    .onStart(() => {
       'worklet';
-      // Don't fire swipe-left if user is currently zoomed.
-      if (savedScale.value > 1) return;
-      if (e.translationX < -SWIPE_PROFILE_DISTANCE || e.velocityX < -VELOCITY_THRESHOLD) {
-        runOnJS(triggerSwipeLeft)();
-      }
+      if (savedScale.value > 1) return; // suppress while zoomed
+      runOnJS(triggerSwipeLeft)();
     });
 
   // Two-finger pan when zoomed.
