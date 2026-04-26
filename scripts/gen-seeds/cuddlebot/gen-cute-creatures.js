@@ -3,30 +3,28 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/cuddlebot/seeds/cute_creatures.json',
   total: 200,
-  batch: 10,
-  metaPrompt: (n) => `You are writing ${n} CUTE CREATURE descriptions for CuddleBot — the adorable stylized creatures that are the hero subjects. Mix of exaggerated-real + fantasy-cute. Pixar / Sanrio / Totoro energy. BIG eyes, soft round shapes, infinite cuteness.
+  batch: 50,
+  metaPrompt: (n) => `You are writing ${n} CUTE CREATURE descriptions for CuddleBot — adorable stylized creatures rendered in Pixar / Sanrio / Totoro energy. BIG eyes, soft round shapes, infinite cuteness.
 
-Each entry: 10-20 words. One adorable creature with identifying cute details.
+Each entry: 10-20 words. One adorable creature with 2-3 identifying cute details (eye type, fur/texture, accessories, pose).
 
-━━━ CATEGORIES ━━━
-- Exaggerated-real baby animals (tiny sloth with giant dewy eyes, puffy round bunny, fluff-cloud kitten, marshmallow panda cub, chubby baby dragon stylized)
-- Fantasy-cute creatures (moss-sprite with leaf-cap, cloud-kitten with fluff-paws, tiny flower-dragon with petal-wings, star-bunny with constellation-freckles, tea-drop spirit)
-- Forest sprites (mushroom-fairy, acorn-hedgehog, ivy-sprite with leaf-ears)
-- Mythical cute (baby unicorn round-bodied, pastel baby phoenix, starfall fox)
-- Tiny puffy birds (round chickadee with enormous eyes, storybook owl, giant-eyed hummingbird)
-- Puff-ball creatures (soft moss-ball with face, cloud-blob with stubby legs)
-- Oversize-head storybook proportions (chibi proportions — big head, tiny body, giant eyes)
-- Fluff creatures (bunny with impossible fluff, fluff-cat, fluff-fox)
-- Tiny water-spirits (bubble-bub with big eyes, droplet-spirit)
-- Pastel dragon hatchlings (pink egg-hatchling, mint-green baby with curl-tail)
-- Seasonal cute (pumpkin-spice fox, gingerbread-bun creature, cotton-candy sheep)
-- Cozy cute (scarf-wearing bunny, blanket-burrito kitten, mitten-clad hamster)
+━━━ ABSOLUTE RULE — EVERY ENTRY IS A DIFFERENT CREATURE ━━━
+Each of the ${n} entries MUST be a completely different animal or creature species. ZERO repeats. Not two bunnies. Not two foxes. Not two dragons. Not two kittens. 200 entries = 200 unique species. The animal kingdom + mythology + fantasy gives you HUNDREDS to choose from.
 
-━━━ RULES ━━━
+━━━ REAL ANIMALS TO DRAW FROM (use all of these + more) ━━━
+hedgehog, bunny, kitten, fox, mouse, owl, otter, panda, sloth, hamster, squirrel, duckling, frog, turtle, penguin, koala, deer, fawn, lamb, seal, puppy, raccoon, chickadee, hummingbird, robin, bluebird, cardinal, sparrow, finch, wren, dove, quail, chipmunk, beaver, badger, mole, shrew, vole, bat, moth, butterfly, bee, ladybug, caterpillar, firefly, dragonfly, snail, gecko, chameleon, axolotl, salamander, tadpole, goldfish, clownfish, seahorse, jellyfish, starfish, octopus, crab, lobster, whale, dolphin, manatee, narwhal, walrus, pig, piglet, goat, calf, chick, gosling, swan, flamingo, pelican, puffin, toucan, parrot, cockatoo, lovebird, canary, guinea pig, chinchilla, ferret, hedgehog, armadillo, possum, capybara, alpaca, llama, red panda, fennec fox, arctic fox, wolf pup, bear cub, polar bear cub, tiger cub, lion cub, leopard cub, snow leopard cub, lynx kitten, bobcat kitten, elephant calf, hippo calf, rhino calf, giraffe calf, zebra foal, monkey, lemur, sugar glider, flying squirrel, prairie dog, meerkat, wombat, platypus, kiwi bird, pangolin, tapir
+
+━━━ FANTASY / MYTHICAL / MADE-UP CREATURES (~40% of entries) ━━━
+baby dragon, baby unicorn, baby phoenix, fairy, pixie, nymph, sprite, dryad, sylph, will-o-wisp, moss-sprite, cloud-kitten, star-bunny, flower-fairy, mushroom-sprite, crystal fox, moon-rabbit, sun-bear, frost-moth, ember-bird, dewdrop-spirit, petal-dragon, rainbow-fish, thunder-chick, wind-sprite, coral-spirit, aurora-deer, forest nymph, water nymph, flower pixie, leaf fairy, moonbeam sprite, acorn gnome, toadstool elf, honey-bee fairy, firefly spirit, snowflake sprite, cherry-blossom nymph, dandelion wisp, starlight fairy, raindrop spirit, clover pixie, twilight moth-fairy, dawn sprite, meadow nymph, crystal butterfly-fairy, woodland brownie, river sprite
+
+━━━ STYLE RULES ━━━
 - ALWAYS stylized/illustrative — NEVER photoreal
-- BIG eyes, soft round shapes, exaggerated cute proportions
+- BIG eyes, soft round shapes, exaggerated cute proportions (chibi / Sanrio)
 - No dark/edgy/creepy — pure wholesome delight
-- Include 2-3 specific cute details per entry (eye type, fur, accessories, size, etc.)
+- Include 2-3 specific cute details per entry (eye color, fur texture, accessories like scarves/hats, pose, expression)
+
+━━━ DEDUP DIMENSIONS — THIS IS THE MOST IMPORTANT RULE ━━━
+EVERY ENTRY MUST START WITH A UNIQUE CREATURE NAME. Scan the "ALREADY GENERATED" list above — if ANY entry starts with "Hedgehog" you CANNOT write another hedgehog entry. If ANY entry contains "cat" or "kitten" you CANNOT write another cat or kitten. Same species = DUPLICATE even with different adjectives/accessories. "Tabby kitten" and "Calico kitten" are DUPLICATES. "Snow leopard cub" and "Clouded leopard kit" are DUPLICATES. Pick a COMPLETELY DIFFERENT species each time. With 150+ real animals + 50+ fantasy creatures available, there is NO excuse for repeats.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

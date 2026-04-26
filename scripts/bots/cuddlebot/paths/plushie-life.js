@@ -9,6 +9,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.PLUSHIE_SCENES, 'plushie_scene');
+  const creature = picker.pickWithRecency(pools.CUTE_CREATURES, 'creature');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -30,6 +31,9 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE PLUSHIE SCENE ━━━
 ${scene}
 
+━━━ MAIN PLUSHIE (this creature as a handmade plushie) ━━━
+${creature}
+
 ━━━ LIGHTING (warm cozy only) ━━━
 ${lighting}
 
@@ -48,7 +52,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid frame with 2-4 plushies as subjects. Fabric texture prominent. Warm cozy lighting. Cozy props (tiny fabric blanket, mini-felt accessories, stitched cupcakes). Toy-Story-alive but handmade-softness.
+Mid frame with 2-4 plushies as subjects, led by the MAIN PLUSHIE creature above rendered as a handmade stuffed toy. Fabric texture prominent. Warm cozy lighting. Cozy props (tiny fabric blanket, mini-felt accessories, stitched cupcakes). Toy-Story-alive but handmade-softness.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

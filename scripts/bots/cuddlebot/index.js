@@ -20,6 +20,7 @@ const pathBuilders = {
   'bath-time': require('./paths/bath-time'),
   'outdoor-adventure': require('./paths/outdoor-adventure'),
   'storybook-page': require('./paths/storybook-page'),
+  'cottage-core': require('./paths/cottage-core'),
 };
 
 module.exports = {
@@ -69,6 +70,7 @@ module.exports = {
     'bath-time',
     'outdoor-adventure',
     'storybook-page',
+    'cottage-core',
   ],
 
   useModelPicker: true,
@@ -85,7 +87,8 @@ module.exports = {
     'miniature-feast': 1,
     'bath-time': 1,
     'outdoor-adventure': 2,
-    'storybook-page': 12,
+    'storybook-page': 3,
+    'cottage-core': 4,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

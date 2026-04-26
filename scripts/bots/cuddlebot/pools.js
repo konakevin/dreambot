@@ -35,6 +35,7 @@ module.exports = {
   RAINY_DAY_SCENES: load('rainy_day_scenes'),
   MINIATURE_FEAST_SCENES: load('miniature_feast_scenes'),
   BATH_TIME_SCENES: load('bath_time_scenes'),
+  COTTAGECORE_SCENES: load('cottagecore_scenes'),
   OUTDOOR_ADVENTURES: load('outdoor_adventures'),
   SCENE_WEATHER: load('scene_weather'),
   ATMOSPHERES: load('atmospheres'),
