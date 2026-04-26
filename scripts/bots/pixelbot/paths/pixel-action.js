@@ -15,6 +15,9 @@ ${blocks.NO_IP_REFERENCES_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
+━━━ PIXEL ERA ━━━
+${sharedDNA.pixelEra}
+
 ━━━ THE ACTION MOMENT ━━━
 ${moment}
 
@@ -38,8 +41,11 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
 ━━━ COMPOSITION ━━━
-Dynamic mid-close frame. Peak action frozen. Pixel-art clarity.
+Frame through the camera perspective above. Peak action frozen. Pixel-art clarity.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

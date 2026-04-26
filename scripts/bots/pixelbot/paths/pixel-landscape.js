@@ -2,12 +2,12 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const setting = picker.pickWithRecency(pools.PIXEL_FANTASY_SETTINGS, 'pixel_fantasy_setting');
-  const being = picker.pickWithRecency(pools.PIXEL_FANTASY_BEINGS, 'pixel_fantasy_being');
+  const setting = picker.pickWithRecency(pools.PIXEL_PRETTY_SETTINGS, 'pixel_pretty_setting');
+  const element = picker.pickWithRecency(pools.PIXEL_PRETTY_ELEMENTS, 'pixel_pretty_element');
   const lighting = picker.pickWithRecency(pools.PIXEL_LIGHTING, 'pixel_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a pixel-art fantasy-illustrator writing PIXEL FANTASY scenes for PixelBot. Dragons, castles, wizards, elves. No IP.
+  return `You are a pixel-art gallery-artist writing PRETTY PIXEL SCENE renders for PixelBot. Pure beauty — no characters, no action, no genre. Just gorgeous pixel scenery. Flagship quality.
 
 ${blocks.PIXEL_ART_ONLY_BLOCK}
 
@@ -15,14 +15,16 @@ ${blocks.NO_IP_REFERENCES_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
+${blocks.PIXEL_PRETTY_BLOCK}
+
 ━━━ PIXEL ERA ━━━
 ${sharedDNA.pixelEra}
 
-━━━ THE FANTASY SETTING ━━━
+━━━ THE SETTING ━━━
 ${setting}
 
-━━━ THE FANTASY BEING ━━━
-${being}
+━━━ THE VISUAL ELEMENT ━━━
+${element}
 
 ━━━ PIXEL LIGHTING ━━━
 ${lighting}
@@ -45,7 +47,7 @@ ${vibeDirective.slice(0, 250)}
 ${sharedDNA.pixelPerspective}
 
 ━━━ COMPOSITION ━━━
-Frame through the camera perspective above. Indie-game-poster quality.
+Frame through the camera perspective above. Pure beauty + atmosphere. Gallery quality.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

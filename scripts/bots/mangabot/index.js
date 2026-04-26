@@ -17,6 +17,11 @@ const pathBuilders = {
   kawaii: require('./paths/kawaii'),
   'slice-of-life': require('./paths/slice-of-life'),
   'neo-tokyo': require('./paths/neo-tokyo'),
+  'shonen-action': require('./paths/shonen-action'),
+  'samurai-era': require('./paths/samurai-era'),
+  'isekai-fantasy': require('./paths/isekai-fantasy'),
+  'food-anime': require('./paths/food-anime'),
+  'anime-village': require('./paths/anime-village'),
 };
 
 module.exports = {
@@ -24,6 +29,12 @@ module.exports = {
   displayName: 'MangaBot',
 
   mediums: ['anime'],
+
+  useModelPicker: true,
+  allowedModels: [
+    'black-forest-labs/flux-dev',
+    'black-forest-labs/flux-1.1-pro',
+  ],
 
   // Single 'anime' medium — pin heavy on anime-friendly vibes
   vibesByMedium: {
@@ -61,9 +72,13 @@ module.exports = {
     'kawaii',
     'slice-of-life',
     'neo-tokyo',
+    'shonen-action',
+    'samurai-era',
+    'isekai-fantasy',
+    'food-anime',
+    'anime-village',
   ],
 
-  // Bread-and-butter: anime-scene + slice-of-life + cozy-anime (3 cozy paths).
   pathWeights: {
     'anime-scene': 2,
     'anime-landscape': 1,
@@ -72,6 +87,11 @@ module.exports = {
     kawaii: 1,
     'slice-of-life': 2,
     'neo-tokyo': 1,
+    'shonen-action': 1,
+    'samurai-era': 1,
+    'isekai-fantasy': 1,
+    'food-anime': 1,
+    'anime-village': 2,
   },
 
   rollSharedDNA({ vibeKey, picker }) {

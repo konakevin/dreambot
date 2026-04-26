@@ -360,7 +360,10 @@ export default function RootLayout() {
               <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
               <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
               <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-              <Stack.Screen name="user/[userId]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+              <Stack.Screen
+                name="user/[userId]"
+                options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
+              />
               <Stack.Screen
                 name="sharePost"
                 options={{

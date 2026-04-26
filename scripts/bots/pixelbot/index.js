@@ -9,12 +9,15 @@ const pools = require('./pools');
 const blocks = require('./shared-blocks');
 
 const pathBuilders = {
-  'pixel-pretty': require('./paths/pixel-pretty'),
+  'pixel-landscape': require('./paths/pixel-landscape'),
   'pixel-fantasy': require('./paths/pixel-fantasy'),
   'pixel-cozy': require('./paths/pixel-cozy'),
   'pixel-sci-fi': require('./paths/pixel-sci-fi'),
   'pixel-character-moment': require('./paths/pixel-character-moment'),
   'pixel-action': require('./paths/pixel-action'),
+  'pixel-cottage': require('./paths/pixel-cottage'),
+  'pixel-town-life': require('./paths/pixel-town-life'),
+  'pixel-horror': require('./paths/pixel-horror'),
 };
 
 module.exports = {
@@ -22,6 +25,8 @@ module.exports = {
   displayName: 'PixelBot',
 
   mediums: ['pixels'],
+
+  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-2-dev', 'black-forest-labs/flux-2-pro'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
@@ -47,25 +52,33 @@ module.exports = {
   ],
 
   paths: [
-    'pixel-pretty',
+    'pixel-landscape',
     'pixel-fantasy',
     'pixel-cozy',
     'pixel-sci-fi',
     'pixel-character-moment',
     'pixel-action',
+    'pixel-cottage',
+    'pixel-town-life',
+    'pixel-horror',
   ],
 
   pathWeights: {
-    'pixel-pretty': 2,
-    'pixel-fantasy': 2,
-    'pixel-cozy': 2,
+    'pixel-landscape': 1,
+    'pixel-fantasy': 1,
+    'pixel-cozy': 1,
     'pixel-sci-fi': 1,
     'pixel-character-moment': 1,
     'pixel-action': 1,
+    'pixel-cottage': 1,
+    'pixel-town-life': 1,
+    'pixel-horror': 1,
   },
 
   rollSharedDNA({ vibeKey, picker }) {
     return {
+      pixelEra: picker.pickWithRecency(pools.PIXEL_ERAS, 'pixel_era'),
+      pixelPerspective: picker.pickWithRecency(pools.PIXEL_PERSPECTIVES, 'pixel_perspective'),
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };

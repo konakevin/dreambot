@@ -78,7 +78,8 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   // sliding in within ~50ms IS the feedback; we don't need a second motion
   // competing with it.
   const swipeGesture = Gesture.Pan()
-    .activeOffsetX([-8, 8])
+    .activeOffsetX(-8)
+    .failOffsetX(8)
     .failOffsetY([-15, 15])
     .enabled(!options?.disableSwipeLeft)
     .onStart(() => {

@@ -30,13 +30,30 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
-  PIXEL_PRETTY_SCENES: load('pixel_pretty_scenes'),
-  PIXEL_FANTASY_SUBJECTS: load('pixel_fantasy_subjects'),
-  PIXEL_SCI_FI_SUBJECTS: load('pixel_sci_fi_subjects'),
-  PIXEL_COZY_SUBJECTS: load('pixel_cozy_subjects'),
+  // Legacy monolithic (still used by pixel-action + pixel-character-moment)
   PIXEL_CHARACTERS: load('pixel_characters'),
   PIXEL_ACTION_MOMENTS: load('pixel_action_moments'),
   PIXEL_ENVIRONMENTS: load('pixel_environments'),
+
+  // Decomposed axis pools
+  PIXEL_ERAS: load('pixel_eras'),
+  PIXEL_PRETTY_SETTINGS: load('pixel_pretty_settings'),
+  PIXEL_PRETTY_ELEMENTS: load('pixel_pretty_elements'),
+  PIXEL_FANTASY_SETTINGS: load('pixel_fantasy_settings'),
+  PIXEL_FANTASY_BEINGS: load('pixel_fantasy_beings'),
+  PIXEL_COZY_ROOMS: load('pixel_cozy_rooms'),
+  PIXEL_COZY_DETAILS: load('pixel_cozy_details'),
+  PIXEL_SCIFI_SETTINGS: load('pixel_scifi_settings'),
+  PIXEL_SCIFI_ELEMENTS: load('pixel_scifi_elements'),
+  PIXEL_COTTAGE_SETTINGS: load('pixel_cottage_settings'),
+  PIXEL_COTTAGE_DETAILS: load('pixel_cottage_details'),
+  PIXEL_TOWN_SETTINGS: load('pixel_town_settings'),
+  PIXEL_TOWN_ACTIVITY: load('pixel_town_activity'),
+  PIXEL_HORROR_SETTINGS: load('pixel_horror_settings'),
+  PIXEL_HORROR_DREAD: load('pixel_horror_dread'),
+
+  // Shared across all paths
+  PIXEL_PERSPECTIVES: load('pixel_perspectives'),
   PIXEL_LIGHTING: load('pixel_lighting'),
   SCENE_PALETTES: load('scene_palettes'),
   ATMOSPHERES: load('atmospheres'),

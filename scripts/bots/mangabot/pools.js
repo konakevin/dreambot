@@ -42,5 +42,10 @@ module.exports = {
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
   CHARACTER_DETAILS: load('character_details'),
+  SHONEN_ACTIONS: load('shonen_actions'),
+  SAMURAI_SCENES: load('samurai_scenes'),
+  ISEKAI_SCENES: load('isekai_scenes'),
+  FOOD_ANIME: load('food_anime'),
+  ANIME_VILLAGE: load('anime_village'),
   VIBE_COLOR,
 };

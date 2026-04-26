@@ -2,11 +2,12 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.PIXEL_PRETTY_SCENES, 'pixel_pretty_scene');
+  const setting = picker.pickWithRecency(pools.PIXEL_TOWN_SETTINGS, 'pixel_town_setting');
+  const activity = picker.pickWithRecency(pools.PIXEL_TOWN_ACTIVITY, 'pixel_town_activity');
   const lighting = picker.pickWithRecency(pools.PIXEL_LIGHTING, 'pixel_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a pixel-art gallery-artist writing PRETTY PIXEL SCENE renders for PixelBot. Pure beauty — no characters, no action, no genre. Just gorgeous pixel scenery. Flagship quality.
+  return `You are a pixel-art worldbuilder writing BUSTLING TOWN LIFE scenes for PixelBot. Busy RPG hub-towns — marketplaces, ports, taverns, train stations, bazaars. More urban and lively than cozy cottages. The kind of town where adventurers gather, merchants hawk wares, and there's always something happening.
 
 ${blocks.PIXEL_ART_ONLY_BLOCK}
 
@@ -14,10 +15,14 @@ ${blocks.NO_IP_REFERENCES_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-${blocks.PIXEL_PRETTY_BLOCK}
+━━━ PIXEL ERA ━━━
+${sharedDNA.pixelEra}
 
-━━━ THE PRETTY SCENE ━━━
-${scene}
+━━━ THE TOWN SETTING ━━━
+${setting}
+
+━━━ THE ACTIVITY ━━━
+${activity}
 
 ━━━ PIXEL LIGHTING ━━━
 ${lighting}
@@ -36,8 +41,11 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
 ━━━ COMPOSITION ━━━
-Wide or mid-wide pixel vista. Pure beauty + atmosphere. Gallery quality.
+Frame the town through the camera perspective above. Multiple pixel figures and activity details visible. The town feels ALIVE — commerce, craft, travel, social. Dense but readable pixel composition.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

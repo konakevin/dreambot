@@ -2,7 +2,8 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const subject = picker.pickWithRecency(pools.PIXEL_SCI_FI_SUBJECTS, 'pixel_sci_fi_subject');
+  const setting = picker.pickWithRecency(pools.PIXEL_SCIFI_SETTINGS, 'pixel_scifi_setting');
+  const element = picker.pickWithRecency(pools.PIXEL_SCIFI_ELEMENTS, 'pixel_scifi_element');
   const lighting = picker.pickWithRecency(pools.PIXEL_LIGHTING, 'pixel_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -14,8 +15,14 @@ ${blocks.NO_IP_REFERENCES_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ THE SCI-FI SUBJECT ━━━
-${subject}
+━━━ PIXEL ERA ━━━
+${sharedDNA.pixelEra}
+
+━━━ THE SCI-FI SETTING ━━━
+${setting}
+
+━━━ THE SCI-FI ELEMENT ━━━
+${element}
 
 ━━━ PIXEL LIGHTING ━━━
 ${lighting}
@@ -34,8 +41,11 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
 ━━━ COMPOSITION ━━━
-Mid or wide pixel-sci-fi frame. Neon/space/cyberpunk atmosphere.
+Frame through the camera perspective above. Neon/space/cyberpunk atmosphere.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

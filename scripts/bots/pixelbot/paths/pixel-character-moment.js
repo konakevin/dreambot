@@ -15,6 +15,9 @@ ${blocks.NO_IP_REFERENCES_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
+━━━ PIXEL ERA ━━━
+${sharedDNA.pixelEra}
+
 ━━━ THE CHARACTER ━━━
 ${character}
 
@@ -38,8 +41,11 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
 ━━━ COMPOSITION ━━━
-Mid frame. Solo candid character in environment.
+Frame through the camera perspective above. Solo candid character in environment.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };
