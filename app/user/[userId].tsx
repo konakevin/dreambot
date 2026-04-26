@@ -207,23 +207,22 @@ export default function PublicProfileScreen() {
     );
   }
 
-  const backButton = (
-    <View style={styles.backRow}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton} hitSlop={12}>
-        <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
-      {!isOwnProfile && (
-        <TouchableOpacity onPress={handleMoreMenu} style={styles.backButton} hitSlop={12}>
-          <Ionicons name="ellipsis-horizontal" size={22} color={colors.textSecondary} />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  // Single consolidated top row: back chevron, avatar+username, follow
+  // button, ellipsis. Replaces the previous two-row layout (back/ellipsis
+  // on row 1, avatar/follow on row 2) which wasted ~50px vertically.
+  const backButton = null;
 
   const header = (
     <View style={styles.header}>
       <View style={styles.headerTop}>
-        <TouchableOpacity onPress={() => setShowAvatarPreview(true)} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={12}>
+          <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setShowAvatarPreview(true)}
+          activeOpacity={0.8}
+          style={styles.usernameWrap}
+        >
           <GradientUsername
             username={profile.username}
             rank={null}
@@ -235,22 +234,25 @@ export default function PublicProfileScreen() {
           />
         </TouchableOpacity>
         {!isOwnProfile && (
-          <View style={styles.headerButtons}>
-            <TouchableOpacity
-              style={[styles.followButton, (isFollowing || hasRequest) && styles.followingButton]}
-              onPress={handleFollow}
-              activeOpacity={0.8}
+          <TouchableOpacity
+            style={[styles.followButton, (isFollowing || hasRequest) && styles.followingButton]}
+            onPress={handleFollow}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={[
+                styles.followButtonText,
+                (isFollowing || hasRequest) && styles.followingButtonText,
+              ]}
             >
-              <Text
-                style={[
-                  styles.followButtonText,
-                  (isFollowing || hasRequest) && styles.followingButtonText,
-                ]}
-              >
-                {followLabel}
-              </Text>
-            </TouchableOpacity>
-          </View>
+              {followLabel}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {!isOwnProfile && (
+          <TouchableOpacity onPress={handleMoreMenu} style={styles.iconButton} hitSlop={12}>
+            <Ionicons name="ellipsis-horizontal" size={22} color={colors.textSecondary} />
+          </TouchableOpacity>
         )}
       </View>
 
@@ -412,6 +414,7 @@ export default function PublicProfileScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
+  // backRow / backButton kept for the loading-state JSX above (line ~197).
   backRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -421,37 +424,43 @@ const styles = StyleSheet.create({
   },
   backButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+    paddingHorizontal: 8,
+    paddingTop: 4,
+    paddingBottom: 16,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
     marginBottom: 2,
   },
+  // Single consolidated row: back chevron, avatar+username (flex:1), follow, ellipsis.
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 16,
-  },
-  headerButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
     gap: 8,
+    marginBottom: 12,
   },
-  username: { color: colors.textPrimary, fontSize: 22, fontWeight: '800' },
+  iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  usernameWrap: { flex: 1, minWidth: 0 },
+  username: { color: colors.textPrimary, fontSize: 18, fontWeight: '800' },
+  // Asymmetric weight: Follow is the action we want, so it's filled and
+  // bright. Following/Requested is de-emphasized — visible but quiet.
   followButton: {
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.3)',
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 8,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 0,
   },
-  followingButton: { borderColor: colors.border, backgroundColor: 'rgba(255,255,255,0.08)' },
-  followButtonText: { color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: '700' },
-  followingButtonText: { color: colors.textSecondary },
+  followingButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+  },
+  followButtonText: {
+    color: '#000000',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  followingButtonText: { color: 'rgba(255,255,255,0.7)' },
   emptyText: { color: colors.textSecondary, fontSize: 15 },
   avatarOverlay: {
     flex: 1,
