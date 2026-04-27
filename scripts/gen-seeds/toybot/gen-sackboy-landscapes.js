@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/sackboy_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} LITTLEBIGPLANET-WORLD LANDSCAPE scene descriptions for ToyBot's sackboy path. Media-Molecule craft-world — every element is fabric / felt / yarn / paper / cardboard / button with visible thread-stitching.
 
 Each entry: 15-25 words. ONE specific LBP-world landscape scene.

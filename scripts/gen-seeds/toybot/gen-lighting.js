@@ -4,8 +4,8 @@ try { fs.unlinkSync('scripts/bots/toybot/seeds/lighting.json'); } catch (_) {}
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/lighting.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} LIGHTING treatment descriptions for ToyBot — toy-photography lighting. This pool MUST NOT default to warm-key-cool-fill cinematic "teal-and-orange." Force palette variety.
 
 Each entry: 10-20 words. ONE specific lighting treatment naming an exact palette + direction + quality.

@@ -2,92 +2,68 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/dark_creatures.json',
-  total: 200,
+  total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DARK-FANTASY CREATURE descriptions for GothBot's horror-creature path. Each entry is a creature-as-hero description, MID-ACTION, majestic-evil + gorgeous + terrifying. Entries 20-35 words. Castlevania / Bloodborne / Van-Helsing / Berserk / WoW-undead-warlock-art DNA — painterly dark-fantasy concept-art. Never cheap-horror, never slasher-gore.
+  metaPrompt: (n) => `You are writing ${n} BOSS-TIER DARK CREATURE descriptions for GothBot's horror-creature path. These are CASTLEVANIA BOSS ENCOUNTERS — massive, imposing, jaw-dropping creature designs that would be the final boss of a gothic horror game. Each entry is 25-40 words. Gorgeous + terrifying + operatic. The kind of creature art that makes you stop scrolling and stare.
 
-━━━ AESTHETIC NORTH STAR — THE NIGHTSHADE VIBE ━━━
-Castlevania-game-art bosses, Bloodborne-beasts, Van-Helsing werewolves + vampires, Berserk-apostles, Hellboy-Mignola dark-fantasy creatures, Bram-Stoker-Dracula operatic horror, Devil-May-Cry demon-design. Creatures are GORGEOUS + TERRIFYING simultaneously — beautiful, dangerous, alive. Majestic-evil, never monster-of-the-week cheap, never WoW-undead/forsaken/skeleton aesthetic.
+━━━ AESTHETIC NORTH STAR ━━━
+Castlevania bosses (Death, Galamoth, Beelzebub, Legion, Dracula's final forms). Bloodborne bosses (Cleric Beast, Vicar Amelia, Ludwig, Orphan of Kos). Berserk apostles (Femto, Zodd, Slan, Void). Dark Souls bosses (Sif, Ornstein & Smough, Nameless King). Devil May Cry demons. Hellboy's Ogdru Jahad. Van Helsing's werewolf transformation. NOT generic fantasy creatures. NOT D&D monster manual. NOT cute monsters. BOSS-TIER — massive scale, operatic horror, devastating beauty.
 
-Rich Nightshade palette — deep purples, midnight blues, velvet blacks, poison greens, tarnished silver, with blood-red ACCENTS (never red-dominant, never crimson-monochrome).
+━━━ CREATURE TYPES (enforce distribution) ━━━
 
-━━━ MANDATORY DYNAMIC ACTION ━━━
-Every creature is MID-ACTION, never just "standing/posing". Mid-leap from rooftop, mid-lunge across graveyard, mid-unfurl-wings, mid-shriek mouth-open, mid-transform with bones-cracking, mid-howl at blood-moon, mid-stalk through forest mist, mid-glide above moor, mid-emerge from crypt, mid-summon-shadow-tendrils, mid-drink from chalice, mid-kneel over victim (implied-not-gory), mid-turn-to-reveal-face, mid-cast-spell with fel-glow. The picture captures a MOMENT.
+MASSIVE WEREWOLVES / LYCANS (20%) — Van-Helsing / Bloodborne Cleric-Beast scale:
+- 9-foot-tall mid-transformation, half-human jaw distending, spine cracking, silver moonlight backlighting the agony
+- Pack alpha on hind legs howling, massive barrel-chest, silver-black fur matted with rain, yellow eyes like searchlights
+- Werewolf mid-leap across gothic rooftops, claws tearing stone, church spire shattering behind it
+- NOT small wolves, NOT cute werewolves — these are BUILDING-SIZED nightmare lycans
 
-━━━ CREATURE TYPE VARIETY (enforce distribution across 200) ━━━
+VAMPIRES IN MONSTROUS FORM (20%) — Dracula's final form, not aristocrat:
+- Ancient vampire shedding human shell — bat-wings exploding from spine, jaw unhinging to reveal triple-row fangs, human clothes tearing away
+- Massive chiropteran vampire form — 15-foot wingspan, emaciated torso, translucent skin showing black veins, hanging upside-down from cathedral vault
+- Vampire lord mid-transformation into bat-swarm, body dissolving into hundreds of screeching creatures, face the last thing to dissolve
+- The MONSTROUS side of vampirism — not the aristocrat, the THING underneath
 
-VAMPIRES (min 25):
-- Ancient firstborn-vampires with translucent skin and pearl-white fangs
-- Vampire queens mid-float above gothic-garden
-- Vampire-lords mid-turn from throne with velvet-red-lining cloak
-- Vampire-brides mid-rise-from-coffin with veil torn
-- Vampire-children mid-whisper with crimson-lipped smile
-- Vampire-bat-swarm-merging-into-humanoid
+GARGOYLES / STONE HORRORS COME TO LIFE (15%):
+- Cathedral gargoyle cracking free from stone perch, stone chips exploding, one wing still granite while the other flexes living membrane, ember eyes igniting
+- Massive stone guardian awakening on gothic bridge, moss and lichen cracking off as joints grind, rain streaming down carved features now showing expression
+- Gargoyle choir on cathedral roofline all turning their heads simultaneously toward viewer, stone necks grinding
 
-SUCCUBI / INCUBI / DEMON-HUMANOIDS (min 25) — the alluring-danger type:
-- Succubus mid-unfurl-bat-wings with pale skin and black silk
-- Demon-courtesan mid-pour-goblet with fel-green eyes
-- Corrupted-angel-turned with tattered-wings and broken-halo
-- Lamia mid-coil with serpent-lower-body on moonlit steps
-- Incubus mid-whisper with shadow-wreath rising from shoulders
+FALLEN ANGELS / CORRUPTED CELESTIALS (15%):
+- Fallen seraph with six tattered wings trailing black feathers, broken golden halo flickering with dying light, tears of black ichor streaming from luminous eyes, hovering above burning cathedral
+- Corrupted angel mid-descent through stained-glass window, wings of obsidian replacing former glory, celestial armor cracked showing void beneath
+- NOT cute angels — these are TERRIFYING corrupted divine beings, mile-high wingspan, faces too beautiful to look at directly
 
-WEREWOLVES (min 20):
-- Massive lycan mid-transformation — half-human half-beast, silver backlight
-- Pack-alpha mid-howl at blood-moon on cliff-edge
-- Werewolf mid-leap across gothic-courtyard
-- Shadow-fur lycan mid-crouch on gargoyle-ledge
+HELLHOUNDS / DARK BEASTS (10%):
+- Massive cerberus-scale three-headed hound mid-charge through cemetery gates, each head trailing different-colored hellfire, chain-leash dragging broken iron post
+- Shadow-panther the size of a horse stalking through moonlit cloister, made of living darkness with ember eyes, fog retreating from its footfalls
+- Spectral horse mid-gallop across moor, skeletal frame visible through translucent flesh, mane of blue-white ghost-fire streaming
 
-DEMONS / FEL-SPAWN (min 20):
-- Winged demon mid-descent with obsidian horns and ember-eyes
-- Shadow-demon mid-rise from smoke-rift
-- Fel-wreathed void-spawn mid-manifest in ritual-circle
-- Horned demon mid-kneel-to-summon with flaming sigil
+GOTHIC DRAGONS / WYRMS (10%):
+- Skeletal dragon perched on ruined cathedral spire, tattered membrane wings spread against blood-moon, green balefire leaking from ribcage, jaw open in silent roar
+- Wyrm coiled around castle tower like a serpent, obsidian scales reflecting moonlight, crushing stone as it constricts, single amber eye filling a window
 
-WRAITHS / PHANTOMS / BANSHEES (min 20):
-- Tattered-robe wraith mid-glide through cathedral hall
-- Banshee mid-shriek with flowing-hair in translucent white
-- Skeletal phantom mid-drift over graveyard fog
-- Robed lich mid-float with skull-mask and blue-ember eyes
+WRAITHS / REVENANTS (10%):
+- Massive dullahan on nightmare-horse mid-gallop through fog-choked village street, headless body in tarnished armor holding its own screaming skull aloft, green ghost-fire trailing
+- Banshee mid-shriek atop cliff-edge, sound-waves visible as rippling distortion in moonlit air, white hair streaming horizontal, tattered burial-gown, mouth impossibly wide
+- Death-archetype figure (NOT skeleton — hooded, face in shadow with only glowing eyes) hovering above battlefield, massive scythe, tattered robes billowing with supernatural wind
 
-ELDER VAMPIRES / ANCIENT PREDATORS (min 20) — replaces undead-royalty:
-- Ancient vampire elder mid-rise from velvet coffin, fangs bared
-- Bram-Stoker-Dracula-archetype vampire mid-stalk through moonlit crypt
-- Vampire matriarch mid-command bat-swarm at cliff edge
-- Ancient firstborn vampire mid-unfurl black silk cloak over viewer
-
-WENDIGOS / GHOULS / HUNGRY-THINGS (min 15):
-- Antlered wendigo mid-stalk through snow-forest with emaciated body
-- Ghoul mid-scurry between crypts
-- Emaciated horror mid-emerge from mausoleum doorway
-
-HELLHOUNDS / DARK BEASTS (min 15):
-- Massive black hound mid-lunge with ember-eyes and smoke trailing
-- Skeletal horse mid-gallop with flaming-mane
-- Shadow-leopard mid-pounce from rooftop
-- Raven-sized hellbird mid-dive at viewer
-
-DARK-FANTASY DRAGONS / SERPENTS (min 15):
-- Skeletal gothic-dragon mid-unfurl tattered wings on ruin-tower
-- Serpent-king mid-coil with gold-crown and petrifying gaze
-- Cursed wyrm mid-breath with fel-green flame
-
-ELDRITCH / ANCIENT-HORROR (min 15):
-- Tentacle-mouth mindflayer mid-psychic-projection
-- Kraken mid-emerge from gothic-harbor with moonlit tentacles
-- Void-spawn mid-rift-open from dimensional tear
+━━━ SCALE IS EVERYTHING ━━━
+These creatures are MASSIVE. They dwarf buildings. They crack stone when they land. Their wings block out the moon. Their howls shatter windows. They are the thing the hero was warned about. Every entry should convey SCALE — reference architecture, environment destruction, atmospheric distortion. A werewolf isn't "a wolf" — it's a 9-foot-tall muscle-bound nightmare whose shoulders are wider than a doorframe.
 
 ━━━ VISUAL DETAIL MANDATE ━━━
-Each creature entry must include 3-4 specific details: distinguishing anatomy (fangs/claws/horns/wings/fur/scale/bone), color/glow (ember-eyes, crimson-veins, fel-green fire, pale-silver skin, shadow-wreath), texture (tattered-silk, matted-fur, cracked-stone, wet-skin), and setting-anchor (moonlit cliff, blood-moon graveyard, cathedral-spire, foggy moor, cursed-village). Specific details prevent generic fantasy-creature description.
+Each entry must include: creature anatomy (specific — not just "claws" but "obsidian talons each longer than a human forearm"), action verb (mid-leap/mid-howl/mid-shatter/mid-emerge/mid-transform), scale reference (dwarfing the cathedral/cracking the bridge/blocking the moon), atmospheric anchor (blood-moon, storm-lightning, cathedral ruins, fog-choked graveyard), and ONE specific gorgeous detail (moonlight on wet fur, balefire reflecting in rain puddles, feathers dissolving into shadow-motes).
 
-━━━ RULES ━━━
-- Gorgeous + terrifying + majestic-evil (never cheap-horror, never slasher-gore, never on-the-nose satanic)
-- Mid-action MANDATORY — never "standing/posing"
-- Stylized dark-manga-horror concept-art (Castlevania / Bloodborne / Van-Helsing / Hellboy / Bram-Stoker-Dracula DNA) — NOT fantasy-book-cover
-- NO skeletons, NO lich, NO death-knight, NO WoW-forsaken, NO bone-monarch, NO crowned-skeleton (undead-WoW is OFF)
-- NO pentagrams, NO satanic iconography, NO red-red-red monochrome — use Nightshade palette (deep purples + midnight blues + velvet blacks + poison greens + tarnished silver, blood-red as ACCENT only)
-- No named IP (no Dracula, no Sylvanas, etc.)
-- Every entry visibly distinct in creature-type + action + setting combination
-- Min 50 entries in outdoor settings (moor, forest, cliff, courtyard, graveyard, blood-moon sky)
+━━━ HARD BANS ━━━
+- NO lamias, nagas, or snake-women (not GothBot aesthetic)
+- NO ghouls, zombies, shambling-undead (too generic horror)
+- NO mindflayers, krakens, tentacle-monsters (too D&D/Lovecraft)
+- NO incubi/succubi (those are in the character paths, not creature)
+- NO cute or small creatures (no imp, no goblin, no fairy)
+- NO skeletons, liches, bone-monarchs (WoW-undead aesthetic is OFF)
+- NO pentagrams, satanic iconography
+- NO cheap gore, no slasher imagery
+- NO named IP (no Dracula, no Sif, no Cleric Beast by name)
+- NO "standing menacingly" — MID-ACTION always
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

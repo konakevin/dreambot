@@ -43,11 +43,8 @@ ${location}
 
 ═══════════════════════════════════════════════════════════════════
 
-━━━ MASTER TEMPLATE (weave the 4 axes into this quality framework) ━━━
-"high fantasy gothic character illustration of [CHARACTER FROM POOL], cinematic candid moment, NOT posing for the camera, caught mid-action in a natural scene — [ACTION FROM POOL], expression mysterious and introspective, Castlevania / Van-Helsing / Devil-May-Cry / Underworld atmosphere, dark romantic mood, richly detailed environment — [LOCATION FROM POOL], arcane symbols faintly glowing in the air, magical particles, floating embers, drifting mist, [LIGHTING FROM POOL], palette of deep violet / royal purple / crimson red / emerald green / cold moonlit blue highlights / subtle gold accents, volumetric fog, god rays, cinematic depth, intricate fabric textures, painterly detail, masterpiece fantasy illustration, ArtStation-quality, gallery-grade, highly detailed, atmospheric perspective, ultra beautiful composition"
-
 ━━━ WEAVING GUIDANCE ━━━
-Rephrase the template into natural flowing prose — don't robotically slot-fill. Keep ALL the quality anchors (Castlevania / ArtStation-quality / gallery-grade / volumetric fog / god rays / painterly / masterpiece) preserved.
+Weave the 4 axes into vivid flowing prose. DO NOT include style/quality terms like "ArtStation", "gallery-grade", "masterpiece", "painterly", "impasto", "Pre-Raphaelite" — those are handled by the medium wrapper. Your output should be PURE SCENE — what we SEE. Every word should paint the image, not describe the art style.
 
 ━━━ MOOD CONTEXT (subtle — don't override character archetype) ━━━
 ${vibeDirective.slice(0, 250)}

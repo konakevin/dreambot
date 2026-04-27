@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/gi_joe_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} GI-JOE-ERA PLAYSET LANDSCAPE scene descriptions for ToyBot's gi-joe path. 3.75-inch articulated-commando action-figure playset dioramas — iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser), Saturday-morning-cartoon-serial military-toy DNA. Non-IP — archetype only.
 
 Each entry: 15-25 words. ONE specific GI-Joe-era playset landscape scene.

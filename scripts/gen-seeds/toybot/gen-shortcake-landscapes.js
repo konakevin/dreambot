@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/shortcake_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} 1980s STRAWBERRY-SHORTCAKE-era LANDSCAPE scene descriptions for ToyBot's shortcake-scene path. Pastel dessert-fantasy miniature worlds with oversized-scale props (giant strawberries / cupcake-castles / lollipop-trees / rainbow-bridges). Warm golden-hour nostalgic catalog lighting.
 
 Each entry: 15-25 words. ONE specific Strawberry-Shortcake-era landscape scene.

@@ -26,7 +26,7 @@ module.exports = {
   username: 'earthbot',
   displayName: 'EarthBot',
 
-  mediums: ['photography', 'canvas', 'watercolor', 'oil_painting', 'illustration', 'pencil'],
+  mediums: ['photography', 'canvas', 'watercolor', 'illustration', 'pencil'],
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,

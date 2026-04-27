@@ -7,7 +7,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.TROPICAL_PARADISE, 'tropical_paradise');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
   return `You are a tropical ocean photographer writing TROPICAL PARADISE scenes for OceanBot. Crystal clear lagoons, turquoise shallows over white sand, palm-fringed atolls, overwater views into impossibly clear water, Maldives/Bora Bora/Seychelles energy. The dream of tropical ocean perfection. Output wraps with style prefix + suffix.

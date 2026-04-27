@@ -7,7 +7,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.COASTAL_GOLDEN, 'coastal_golden');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
   return `You are a coastal beauty photographer writing COASTAL GOLDEN scenes for OceanBot. Pretty waves and ocean scenery in perfect light — turquoise water glowing with golden hour warmth, sunset reflections on wet sand, small perfect waves with light shining through them, foam patterns on the shore. Not extreme — just achingly beautiful coastal moments. Output wraps with style prefix + suffix.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/calico_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} CALICO-CRITTER / SYLVANIAN-FAMILIES LANDSCAPE scene descriptions for ToyBot's calico-scene path. Cozy dollhouse-scale miniature environments — wooden furniture, tiny dishware, hand-sewn drapes, meticulously-detailed wholesome daily-life world.
 
 Each entry: 15-25 words. ONE specific Calico/Sylvanian-world landscape scene.

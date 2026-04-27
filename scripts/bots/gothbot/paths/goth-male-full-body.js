@@ -22,7 +22,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a dark-manga cinematographer writing THREE-QUARTER / MID-SHOT scene descriptions for GothBot — gothic-horror MAN caught candidly mid-action, framed from WAIST-UP to THIGH-UP (NOT pulled-back full-silhouette). Van-Helsing film-still / Castlevania cutscene / Bloodborne-hunter / Berserk-Guts-splash-page aesthetic. Ayami-Kojima dark-manga inked stylization.
+  return `You are a gothic dark-manga cinematographer writing THREE-QUARTER / MID-SHOT scene descriptions for GothBot — a haunting gothic MAN caught candidly mid-action, framed from WAIST-UP to THIGH-UP (NOT pulled-back full-silhouette). Van-Helsing film-still / Castlevania cutscene aesthetic. Ayami-Kojima dark-manga inked stylization.
 
 TASK: write ONE vivid THREE-QUARTER scene description (60-80 words, comma-separated phrases) of him MID-MOMENT framed from waist-up to thigh-up. He is NOT posing. He is doing something real and the camera catches him in a mid-shot. Output wraps with style prefix + suffix — you produce ONLY the middle scene section.
 
@@ -43,7 +43,8 @@ ${blocks.STYLIZED_MANGA_BLOCK}
 
 ${blocks.SOLO_COMPOSITION_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+━━━ WALL-POSTER TIER — STRIKING, HAUNTING, IMPOSING ━━━
+Every render is STRIKING and HAUNTING — imposing in its darkness, commanding in its menace, magnetic in its power. Dark-manga-horror-game-cover quality. Castlevania boss-encounter art, Devil-May-Cry villain splash-page, WoW-death-knight class-art-poster. Wall-poster worthy. Every render reads "this man could end me" — not "this man is pretty."
 
 ━━━ THE CHARACTER (use as his core identity — don't contradict) ━━━
 ${character}
@@ -69,7 +70,9 @@ This is a LOADED moment — he is mid-something, charged with intent. Something 
 ${backdrop}
 
 ━━━ MASCULINE BEAUTY — HAUNTINGLY BEAUTIFUL MEN ━━━
-These men are HAUNTINGLY BEAUTIFUL in the way a predator is beautiful — jaw structure sharp enough to cut, battle-scarred skin that tells stories, eyes that have seen centuries. Weathered + dangerous + magnetic. NOT pretty-boy, NOT romantic-lead, NOT YA-love-interest. Beauty through MENACE + POWER + ANCIENT WEARINESS. Think Castlevania-boss encounters, Bloodborne-hunter mid-hunt, Berserk-Guts mid-swing, Van-Helsing movie poster.
+These men are IMPOSING and STRIKING — jaw structure sharp enough to cut, scarred weathered skin that tells dark stories, eyes that have seen centuries of ruin. Powerful + magnetic + ancient + MENACING. NOT pretty, NOT soft, NOT romantic-lead, NOT YA-love-interest, NOT androgynous. MASCULINE through MENACE + POWER + ANCIENT WEARINESS. Castlevania-boss energy, Van-Helsing movie poster intensity. He is a MAN — rugged, scarred, angular, MALE.
+
+NO LIPSTICK. NO colored lips. NO lip gloss. NO lip tint. His lips are NATURAL — pale, cracked, wind-chapped, or bloodless. The ONLY exception is solid black lips (black-metal aesthetic). Never red, never oxblood, never plum, never wine, never any color on his mouth.
 
 ━━━ LIGHTING ON HIS BODY + FACE ━━━
 ${lighting}

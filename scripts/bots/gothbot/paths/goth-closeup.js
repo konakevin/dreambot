@@ -1,10 +1,13 @@
 /**
- * GothBot goth-closeup path — tight-frame face-filling candid portrait.
- * Adapted from VenusBot closeup: she is NOT posing, the camera catches her
- * close-up in a moment. Ayami-Kojima dark-manga bust portrait aesthetic.
+ * GothBot goth-closeup — sexy, sultry, evil, feisty gothic women in tight frame.
  *
- * Perspective rotation (migrated from legacy-girl) — 15 camera angles to
- * prevent Flux from clustering to straight-on portrait default.
+ * Haunting corrupted beauty caught candidly close-up. NOT posing, NOT modeling.
+ * Same energy as vampire-girls-2 but broader gothic archetypes (witches,
+ * dark queens, priestesses, enchantresses) — not specifically vampires.
+ *
+ * POOLS: GOTH_FEMALE_ARCHETYPES, GOTH_FEMALE_MAKEUP, GOTH_FEMALE_MOMENTS,
+ *        GOTH_FEMALE_WARDROBE, GOTH_FEMALE_SKIN, GOTH_EYE_COLORS,
+ *        HAIR_COLORS, FEMALE_HAIRSTYLES, LIGHTING, ATMOSPHERES
  */
 
 const pools = require('../pools');
@@ -19,64 +22,71 @@ const PERSPECTIVES = [
   'high-angle closeup looking DOWN at her as she tilts her face up toward the viewer',
   'dutch-angle tilted closeup, composition off-kilter with her gaze unsettling',
   'extreme close-up — just her eyes and upper cheek, lashes and pupil filling the frame',
-  'extreme close-up — lips and chin, fangs pressed against her lower lip',
+  'extreme close-up — lips and chin, dark lips parted',
   'through-the-veil closeup — sheer black lace parted in front of her face',
-  'through-the-hand closeup — her clawed fingers partially obscuring her face, one eye peering between',
-  'from-below looking up her throat — chin raised, eyes half-closed, fangs visible',
+  'through-the-hand closeup — her fingers partially obscuring her face, one eye peering between',
+  'from-below looking up her throat — chin raised, eyes half-closed',
   'close bust-up three-quarter — shoulder turned toward viewer, head swiveled back',
   'extreme close-up reflected in a shattered hand-mirror she holds',
   'closeup through strands of her own hair, face partially hidden, one glowing eye visible',
 ];
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.DARK_FEMALE_CHARACTERS, 'dark_female_character');
-  const accessory = picker.pickWithRecency(pools.FEMALE_ACCESSORIES, 'female_accessory');
-  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'hair_color');
-  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'female_hairstyle');
-  const skinTone = picker.pickWithRecency(pools.SKIN_TONES, 'skin_tone');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const archetype = picker.pickWithRecency(pools.GOTH_FEMALE_ARCHETYPES, 'gc_archetype');
+  const makeup = picker.pickWithRecency(pools.GOTH_FEMALE_MAKEUP, 'gc_makeup');
+  const moment = picker.pickWithRecency(pools.GOTH_FEMALE_MOMENTS, 'gc_moment');
+  const wardrobe = picker.pickWithRecency(pools.GOTH_FEMALE_WARDROBE, 'gc_wardrobe');
+  const skin = picker.pickWithRecency(pools.GOTH_FEMALE_SKIN, 'gc_skin');
+  const eyes = picker.pickWithRecency(pools.GOTH_EYE_COLORS, 'gc_eyes');
+  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'gc_hair_color');
+  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'gc_hairstyle');
+  const lighting = picker.pickWithRecency(pools.LIGHTING, 'gc_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const perspective = PERSPECTIVES[Math.floor(Math.random() * PERSPECTIVES.length)];
 
-  return `You are a dark-manga cinematographer writing TIGHT-FRAME CLOSEUP scene descriptions for GothBot. The camera catches her close-up — she is NOT posing for this, she is simply in the world and the camera happens to be near. Stylized Ayami-Kojima Castlevania / Devil-May-Cry / Bram-Stoker-Dracula bust-portrait illustration aesthetic.
-
-TASK: write ONE vivid CLOSEUP scene description (60-80 words, comma-separated phrases) of a gothic-horror woman caught candidly close-up. The output will be wrapped with style prefix + suffix — you produce ONLY the middle scene section.
+  return `You are a gothic dark-manga concept-art painter writing HAUNTINGLY BEAUTIFUL gothic woman closeups for GothBot. These are SEXY, SULTRY, EVIL, FEISTY women — dark seductresses with corrupted beauty and dangerous power. The camera catches her candidly close-up in a loaded moment. Castlevania / Crimson-Peak / Bloodborne / Devil-May-Cry dark-beauty energy. Output wraps with style prefix + suffix.
 
 ${blocks.ELEGANT_DARKNESS_BLOCK}
 
-${blocks.TWILIGHT_COLOR_BLOCK}
-
-${blocks.ALLURING_BEAUTY_BLOCK}
-
-${blocks.NO_CHEAP_GORE_BLOCK}
-
-${blocks.NO_SATANIC_BLOCK}
-
-${blocks.STYLIZED_MANGA_BLOCK}
-
-${blocks.SOLO_COMPOSITION_BLOCK}
-
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ THE CHARACTER (use as her core identity — don't contradict) ━━━
-${character}
+━━━ ONE WOMAN ALONE ━━━
+ONE woman. No companions, no lovers, no second figure. She is ALONE and DANGEROUS.
+
+━━━ SHE MUST LOOK LIKE SHE ACTUALLY EXISTS — OBSESSIVE DETAIL ━━━
+Render her with obsessive detail — she must feel REAL and DEVASTATING:
+- FACE: every pore visible, cheekbones catching light like carved marble, dark circles that look intentional — you can see power and centuries in her gaze
+- SKIN: render the EXACT skin description from the pool — how light hits it, how shadow pools in her collarbones, how it catches candlelight or moonlight
+- EYES: her eyes are the HERO of the frame — glowing, supernatural, impossibly vivid and detailed. They radiate light onto the skin around them. The iris is a universe
+- MAKEUP: BOLD and DRAMATIC — this is dark glamour she CHOSE. Sharp where it's sharp, smudged where it's smudged. Devastating intentional dark beauty
+- HAIR: wild, wind-caught, rain-damp, tangled with pins or chains or dead flowers — never salon-perfect, always gorgeous in its chaos
+- BODY LANGUAGE: predatory confidence. She knows she's being watched and she doesn't care. Or she does care, and that's worse
+
+━━━ WHO SHE IS (her core identity — let this inform her ENERGY) ━━━
+${archetype}
 
 ━━━ HER SKIN ━━━
-${skinTone}
+${skin}
 
-━━━ HER HAIR COLOR ━━━
-${hairColor}
+━━━ HER EYES ━━━
+${eyes}
 
-━━━ HER HAIRSTYLE ━━━
-${hairstyle}
+━━━ HER MAKEUP ━━━
+${makeup}
 
-━━━ ICONIC STYLING / ACCESSORY DETAIL (visible in tight frame) ━━━
-${accessory}
+━━━ HER HAIR ━━━
+${hairColor}, ${hairstyle}
 
-━━━ LIGHTING ON HER FACE + SKIN ━━━
+━━━ WARDROBE (visible at frame edge — neckline, shoulder, collar) ━━━
+${wardrobe}
+
+━━━ CANDID MOMENT (she was caught doing THIS) ━━━
+${moment}
+
+━━━ LIGHTING ━━━
 ${lighting}
 
-━━━ ATMOSPHERIC DETAIL (mist / fog / smoke / hair-drift) ━━━
+━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
@@ -87,25 +97,32 @@ ${sharedDNA.colorPalette}
 
 ${blocks.BLOW_IT_UP_BLOCK}
 
-━━━ MOOD CONTEXT (subtle — don't override subject) ━━━
+━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ CAMERA PERSPECTIVE (USE THIS EXACT FRAMING / ANGLE) ━━━
+━━━ CAMERA PERSPECTIVE (USE THIS EXACT ANGLE) ━━━
 ${perspective}
 
-━━━ FRAMING — TIGHT CLOSEUP ━━━
-Tight frame — face + throat + one shoulder at most. Either head-and-shoulders, bust-up three-quarter, or side-profile close. Face fills the upper third to half of the frame. NEVER show legs, NEVER show hips, NEVER show full body. She is NOT posing — she is in the middle of something small and loaded: glancing over her shoulder, pulling back from a just-finished drain with blood at her lower lip, mid-whisper to a familiar perched at her ear, mid-turn toward a distant sound, pulling a veil aside to reveal her eyes, fangs bared mid-inhale, mid-smirk catching the viewer watching.
+━━━ FRAMING — TIGHT CLOSEUP, CANDID ━━━
+Tight frame — face + throat + one shoulder at most. Face fills the upper half of the frame. She is NOT posing — she was caught in the middle of the candid moment above. The camera is TOO CLOSE and she is TOO DANGEROUS for comfort.
 
 Use the SPECIFIC camera perspective above — don't default to straight-on.
 
-━━━ FORBIDDEN WORDS + CLICHÉS ━━━
-NEVER use "pose", "posing", "editorial", "fashion shoot", "portrait session", "glamour shot", "heroic stance", "trading card", "RPG character art". She is NOT modeling. NO "holding weapon dramatically above her head". NO pentagrams in frame. NO oversaturated-red lighting. NO Artgerm-smooth-digital-art rendering — this is STYLIZED inked dark-manga-horror.
+DRAMATIC VISUALS: go MAXIMUM. The eyes should BLAZE. The makeup should be DEVASTATING. The lighting should carve her face into something MYTHIC. Every element cranked to jaw-dropping visual impact.
 
-━━━ VISIBLE DETAIL MANDATE ━━━
-Close-up must emphasize: glowing eyes + bold dark makeup + skin tone + fang/corruption detail + hair detail + ONE accessory visible in tight frame (collar, earring, choker, veil edge, weapon grip at chin).
+━━━ HARD BANS ━━━
+- NO devil horns, NO pentagrams, NO satanic symbols
+- NO anime-smooth, NO Halloween costume, NO cosplay
+- NO magazine editorial, NO fashion photography energy
+- NO second person in frame — she is ALONE
+- NO "pose", "posing", "editorial", "fashion shoot", "glamour shot"
+
+${blocks.NO_CHEAP_GORE_BLOCK}
+
+${blocks.NO_SATANIC_BLOCK}
 
 ━━━ STRUCTURE (write in this order) ━━━
-[camera perspective from above], [gothic-horror woman archetype with skin + eyes + hair + makeup], [caught candidly — what she's doing in tight frame], [the accessory/corruption/fangs visible], [lighting on her face], [environment implied at edges], [atmospheric + color palette layer]
+[camera perspective], [her face — skin + eyes + makeup], [her hair], [the candid moment — what she's doing], [wardrobe visible at frame edge], [lighting carving her features], [atmosphere at edges], [color palette]
 
-Output ONLY the 60-80 word scene description, comma-separated phrases. No preamble, no titles, no headers, no ━━━ or ═══ markers, no **bold**, no "render as" suffix.`;
+Output ONLY the 60-80 word scene description, comma-separated phrases. No preamble, no titles, no headers, no markers, no bold, no "render as" suffix.`;
 };

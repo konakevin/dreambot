@@ -20,9 +20,10 @@ const pathBuilders = {
   'horror-creature': require('./paths/horror-creature'),
   'castlevania-scene': require('./paths/castlevania-scene'),
   'cozy-goth': require('./paths/cozy-goth'),
-  'scene-girls': require('./paths/scene-girls'),
-  'vampire-vogue-realism': require('./paths/vampire-vogue-realism'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
+  'vampire-boys': require('./paths/vampire-boys'),
+  'gothic-vista': require('./paths/gothic-vista'),
+  'gothic-darklands': require('./paths/gothic-darklands'),
 };
 
 module.exports = {
@@ -50,23 +51,22 @@ module.exports = {
     // lock isn't needed.
     'castlevania-scene': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cozy-goth': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    // scene-girls locked to flux-dev — best painterly-character-in-scene output.
-    'scene-girls': 'black-forest-labs/flux-dev',
-    // vampire-vogue-realism rotates 50/50 between flux-dev and flux-1.1-pro.
-    // Both produce solid hyperreal vampire portraits; array form triggers
-    // modelByPath random-pick rotation (see botEngine resolver).
-    'vampire-vogue-realism': 'black-forest-labs/flux-dev',
     'vampire-girls-2': 'black-forest-labs/flux-dev',
+    'vampire-boys': 'black-forest-labs/flux-dev',
   },
 
-  // Per-path medium override.
-  // vampire-vogue-realism → gothic-painted (hyperreal cinematic vampire portrait)
-  // scene-girls → gothic-oil-garden (Pre-Raphaelite environment-dominant)
-  // Character paths use bot-level mediums with the cleaned-up promptPrefix.
   mediumByPath: {
-    'vampire-vogue-realism': 'gothic-painted',
     'vampire-girls-2': 'vampire-portrait',
-    'scene-girls': 'gothic-oil-garden',
+    'vampire-boys': 'vampire-portrait',
+    'goth-male-full-body': [
+      'gothic-architecture', 'gothic-architecture', 'gothic-architecture', 'gothic-architecture',
+      'gothic-realistic', 'gothic-realistic', 'gothic-realistic',
+      'anime', 'anime',
+      'comics',
+      'illustration',
+      'canvas',
+      'watercolor',
+    ],
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -84,24 +84,17 @@ module.exports = {
     'watercolor',
   ],
 
-  // Per-medium prefix/suffix override —
-  // gothic-painted needs the default heavy-ink / "not photoreal" global prefix
-  // STRIPPED so the medium's photoreal DNA isn't fought from the front/back.
   promptPrefixByMedium: {
-    'gothic-painted':
-      'EXTREME MACRO CLOSE-UP HYPERREAL PHOTOREALISTIC dark-fantasy vampire face render, face fills entire frame, 4K cinematic film-still quality, photographic skin fidelity with pore-level detail + subsurface scatter + wet dewy skin highlights, sharp eyelashes + specular catchlights + realistic eye-reflection, dark gothic-horror atmosphere',
     'gothic-oil-garden':
-      'DARK GOTHIC OIL PAINTING, full-scene Pre-Raphaelite-dark painterly composition — the environment dominates, the figure is a participant within it NOT the centered subject, Waterhouse / Rossetti / Godward / Caspar-David-Friedrich / Goya dark-romanticism tradition, heavy impasto oil brushwork visible, atmospheric depth, chiaroscuro colored shadows, museum-oil-painting masterwork quality',
+      'Dark gothic oil painting, full-scene composition, environment dominates, atmospheric depth',
     'vampire-portrait':
-      'Extreme macro close-up, face fills entire frame, hyperreal dark-fantasy portrait, 4K, dark atmospheric mood',
+      'Extreme macro close-up, face fills entire frame, sharp vampire fangs visible, dark fine-art portrait painting, dramatic chiaroscuro lighting',
   },
   promptSuffixByMedium: {
-    'gothic-painted':
-      'photorealistic 4K film-still finish, sharp photographic detail, skin with real pore + peach-fuzz + subsurface texture, wet dewy dewy skin, no text no words no watermarks — NOT illustration, NOT cartoon, NOT anime, NOT manga, NOT flat-inked, NOT painterly, NOT oil-painted, NOT Artgerm, NOT Rossdraws, NOT DeviantArt-digital, NOT Castlevania-game-art',
     'gothic-oil-garden':
-      'gothic oil-painting on canvas finish, heavy impasto brushwork visible, canvas-texture polish, full-scene environment-dominant composition, museum-oil-painting masterwork, no text no words no watermarks — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm, NOT anime, NOT manga, NOT flat-cartoon, NOT magazine-editorial, NOT photoreal, NOT 3D-render',
+      'oil-painting canvas finish, no text no words no watermarks, NOT anime NOT cartoon NOT photoreal NOT 3D-render',
     'vampire-portrait':
-      'hyper-detailed skin texture, no text no words no watermarks, NOT anime NOT cartoon NOT illustration NOT Artgerm NOT DeviantArt',
+      'painted portrait finish, no text no words no watermarks, NOT anime NOT cartoon NOT Artgerm NOT DeviantArt NOT stock-photo NOT Photoshop',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
@@ -116,13 +109,8 @@ module.exports = {
     // architecture, character, interior) gets rendered in this style cleanly.
     'gothic-realistic':
       '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture (NOT photoreal, NOT plastic-digital), strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality, NOT flat-inked, NOT manga, NOT smooth-digital-art, NOT Artgerm-plastic, NOT Rossdraws',
-    // gothic-painted — extreme macro vampire face. Anchors: macro close-up,
-    // cold blue-teal skin cast, glowing eyes as hero, wet dewy dewy skin,
-    // low-key lighting. Makeup details come from pools, NOT hardcoded here.
-    'gothic-painted':
-      'EXTREME MACRO CLOSE-UP hyperreal face portrait of a dark-fantasy vampire woman — face fills the ENTIRE frame cropped at forehead and chin. Deathly corpse-pale skin with COLD BLUE-TEAL color cast, photographic pore-level fidelity, wet dewy dewy skin with water droplets on cheekbone and brow. GLOWING UNNATURAL LUMINOUS irises radiating supernatural light onto surrounding skin with fire-like volcanic inner detail — ALL visible eyes glow, never one glowing and one normal. Sharp elongated upper vampire fangs visible through parted lips. Low-key atmospheric lighting with dark bokeh atmosphere pressing in close. Feels like a 4K cinematic film-still, NOT a painting, NOT illustration, NOT anime',
     'vampire-portrait':
-      'hyperreal vampire face macro portrait, photographic skin fidelity with visible pores and subsurface scatter, dark low-key atmospheric lighting, sharp eyelash detail, specular catchlights, DRAMATIC dark gothic-horror mood',
+      'dark gothic portrait, warm candle-light against pitch-black void, bold shadow carving every vein and hollow into sharp relief, skin detail is HERO — render every crack every vein every sunken hollow, DRAMATIC dark gothic mood',
     anime:
       'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic, NOT cute-anime NOT shonen NOT moe',
     comics:
@@ -144,7 +132,7 @@ module.exports = {
     // scene_girls_locations pool (200 varied entries). Medium no longer
     // biases toward rose-gardens specifically.
     'gothic-oil-garden':
-      'Pre-Raphaelite dark oil painting, Waterhouse + Rossetti + Burne-Jones + Godward + Caspar-David-Friedrich + Goya-dark-paintings tradition, full-scene painterly composition showing a figure WITHIN a richly-detailed environment (NOT a centered hero portrait — the setting is the frame, she lives inside it), visible impasto oil brushwork, heavy canvas texture, painterly-realism with atmospheric depth, chiaroscuro lighting with colored ambient shadows, dark-romanticism baroque oil-painting polish, Victorian-gothic painted-canvas tradition, gallery-oil-painting masterwork quality — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm-smooth-digital, NOT anime, NOT manga, NOT magazine-editorial',
+      'Pre-Raphaelite dark oil painting, visible impasto brushwork, heavy canvas texture, chiaroscuro lighting with colored shadows, dark-romanticism baroque polish, figure WITHIN environment NOT centered portrait',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -183,15 +171,18 @@ module.exports = {
     'horror-creature',
     'castlevania-scene',
     'cozy-goth',
-    'scene-girls',
-    'vampire-vogue-realism',
     'vampire-girls-2',
+    'vampire-boys',
+    'gothic-vista',
+    'gothic-darklands',
   ],
 
   pathWeights: {
-    'scene-girls': 4,
     'dark-landscape': 3,
-    'vampire-vogue-realism': 3,
+    'vampire-girls-2': 3,
+    'vampire-boys': 3,
+    'gothic-vista': 3,
+    'gothic-darklands': 3,
     'horror-creature': 3,
     'goth-closeup': 2,
     'goth-full-body': 2,

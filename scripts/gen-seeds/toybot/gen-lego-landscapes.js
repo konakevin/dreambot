@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/lego_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} LEGO-LANDSCAPE scene descriptions for ToyBot's lego-epic path — landscape-dominant composition with either (A) NO minifigure at all, or (B) ONE off-center minifigure in a specific body-shaping pose, with the LEGO-built landscape as the compositional frame. Every element is LEGO brick-built.
 
 Each entry: 15-25 words. ONE specific LEGO-landscape scene.

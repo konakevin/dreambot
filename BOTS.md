@@ -43,7 +43,7 @@
 Every bot render follows this exact pipeline:
 
 ```
-1. Resolve path (weighted random + 3-post dedup window)
+1. Resolve path (cycleAllPaths shuffle-bag OR weighted random + 3-post dedup window)
 2. Resolve medium (per-path override > bot.mediums list > defaultMedium)
 3. Resolve vibe (vibesByPath > vibesByMedium > bot.vibes)
 4. Fetch vibe directive from DB (dream_vibes.directive)
@@ -61,6 +61,29 @@ Every bot render follows this exact pipeline:
 16. Commit dedup picks to bot_dedup (ONLY on successful post)
 17. Write bot_run_log (success or failure)
 ```
+
+### Path Selection: Shuffle-Bag Cycling vs. Dedup Window
+
+Bots have two path-selection strategies:
+
+**Default (dedup window):** Weighted random pick from `bot.paths`, avoiding the last 3 posted paths. Good for bots where some path repetition is fine.
+
+**Shuffle-bag / "mixed bag" (`cycleAllPaths: true`):** Every path is visited exactly once in random order before any path repeats. Once all N paths have posted, the bag refills and a fresh random cycle begins. This guarantees maximum variety — a bot with 15 paths posts all 15 in ~7.5 days (at 2/day) before you see the same path twice.
+
+How it works:
+- **In-batch:** `_batchCycleTracker[botName]` tracks which paths have been used this batch. When the tracker has all N paths, it resets to empty and a new cycle begins.
+- **Across cron runs (DB persistence):** `getCycledUsedPaths()` reads `bot_run_log` for the bot, computes `totalOkPosts % pathCount` to find the current position within the cycle, then fetches the last N posts to reconstruct the "used" set.
+- **Path picking:** `resolvePathCycled()` filters `bot.paths` to only those NOT in the used set, then does a weighted random pick from the remaining. If all paths are used (cycle complete), it picks from the full pool.
+
+```javascript
+// In bot index.js — opt in:
+cycleAllPaths: true,
+```
+
+Implementation: `scripts/lib/botEngine.js` — `resolvePathCycled()`, `getCycledUsedPaths()`, `_batchCycleTracker`.
+Tests: `__tests__/lib/cycleAllPaths.test.ts` — 16 tests covering pure function, multi-cycle simulation, mid-cycle resume, weighted paths.
+
+**Which bots use it:** OceanBot (15 paths). Any bot with high path diversity where you want guaranteed coverage should opt in.
 
 ### 4-Layer Axis Structure
 
@@ -126,6 +149,9 @@ scripts/gen-seeds/<name>/
 module.exports = {
   username: 'starbot',        // matches DB users.username
   displayName: 'StarBot',     // for logs
+
+  // Shuffle-bag path cycling — all paths visited once before any repeats
+  // cycleAllPaths: true,
 
   // Which mediums this bot renders in (random pick per render)
   mediums: ['render'],
@@ -797,14 +823,14 @@ Search for the bot in the app, check their profile shows posts. Review renders o
 
 ### Active Image Bots (V2 Engine)
 
-All 19 bots below are on per-bot crons via the V2 engine.
+All 18 bots below are on per-bot crons via the V2 engine (SirenBot deactivated, see Inactive section).
 
 | Bot | Directory | Content | Paths | Mediums |
 |---|---|---|---|---|
 | StarBot | `starbot/` | Sci-fi / space / cyborg | 13 | render, real-astro, star-oil-cosmos |
 | DragonBot | `dragonbot/` | Epic fantasy / dragons | 8+ | canvas, watercolor |
 | GothBot | `gothbot/` | Gothic dark / vampires | 6+ | gothic, anime, canvas |
-| SirenBot | `sirenbot/` | Fantasy characters | 7 | canvas, watercolor |
+| ~~SirenBot~~ | `_inactive_sirenbot/` | *(inactive)* Fantasy characters | 7 | canvas, watercolor |
 | MangaBot | `mangabot/` | Anime / Japanese | 4+ | anime |
 | BloomBot | `bloombot/` | Flowers / botanical | 4+ | photography, canvas, watercolor, pencil |
 | EarthBot | `earthbot/` | Nature / landscape | 4+ | photography, canvas, watercolor |
@@ -816,7 +842,7 @@ All 19 bots below are on per-bot crons via the V2 engine.
 | CuddleBot | `cuddlebot/` | Kawaii cozy | 4+ | animation, claymation, storybook |
 | PixelBot | `pixelbot/` | Retro pixel art | 4+ | pixels |
 | RetroBot | `retrobot/` | Retro / vaporwave | 4+ | vaporwave |
-| OceanBot | `oceanbot/` | Ocean / underwater | 4+ | photography, canvas, watercolor |
+| OceanBot | `oceanbot/` | Ocean / underwater / mermaid | 15 | canvas, watercolor, illustration, pencil, maritime-oil-legend, maritime-oil-classic | `cycleAllPaths: true` — all 15 paths cycle before repeating |
 | DinoBot | `dinobot/` | Dinosaurs / prehistoric | 4+ | canvas, photography |
 | BeachBot | `beachbot/` | Beach / coastal | 4+ | photography, watercolor |
 | BrickBot | `brickbot/` | LEGO / brick art | 4+ | lego |
@@ -835,6 +861,26 @@ Content bots follow a different architecture: stateless (no seed pool), Sonnet g
 - **StarBot** (`scripts/bots/starbot/`) — the most complex bot. 13 paths, cyborg-woman with closeup/full-body split, path-conditional rollSharedDNA, per-medium promptPrefix/Suffix overrides, per-medium mediumStyles, per-path modelByPath. Use as reference for any character-centric bot with environment paths.
 
 - **GothBot** (`scripts/bots/gothbot/`) — reference for mediumStyles (how to make each medium visually distinct for the bot's identity), bannedPhrases, and the scene-girls pattern (Pre-Raphaelite oil painting + 4-pool architecture + custom medium + pose-first actions).
+
+- **OceanBot** (`scripts/bots/oceanbot/`) — reference for `cycleAllPaths` shuffle-bag cycling (15 paths, all visited before any repeats), custom bot-scoped mediums (`maritime-oil-legend`, `maritime-oil-classic` for mermaid-legend path via `mediumByPath`), and split lighting pools (underwater vs. surface vs. mermaid-specific).
+
+### Inactive Bots (deactivated 2026-04-26, kept for reference)
+
+Directories moved to `scripts/bots/_inactive_<name>/`, gen-seeds to `scripts/gen-seeds/_inactive_<name>/`, workflows renamed to `_inactive_<name>.yml`. All uploads deleted, run logs + dedup rows cleaned, accounts set to `is_public = false`. User rows kept in DB for potential resurrection.
+
+**DB state:**
+- `FaeBot` — user_id `9171772a-b060-4f53-8032-c4e2b5f387e1`, `is_public = false`, 0 uploads
+- `SirenBot` — user_id `ab53c334-9d17-44e9-9b8e-47ebe8ec72eb`, `is_public = false`, 0 uploads
+
+**To resurrect a bot:** move `_inactive_<name>/` back to `<name>/`, set `is_public = true` on the user row, re-enable the workflow (remove `_inactive_` prefix), run a seed batch to populate the feed.
+
+| Bot | Directory | Why Deactivated | Notable Patterns |
+|---|---|---|---|
+| SirenBot | `_inactive_sirenbot/` | Superseded by FaeBot nymph paths, which lifted SirenBot's nymph archetype into a broader enchanted-forest theme. Workflow cron disabled. | Original nymph character archetype (forest creature, living nature growing from skin). 7 paths: stare, lounge, dance, hunt, bathe, emerge, siren-call. Shared NYMPH_HAIR + NYMPH_SKIN dedup pools for character variety. |
+| FaeBot | `_inactive_faebot/` | Experimental bot that was iterating on erotic classical fine art nymphs. Never shipped to production cron. Kept for reference on: direct-prompt mode (Sonnet bypass), Flux NSFW filter calibration, erotic content edge-finding. | 12 paths (nymph, dryad, fae-queen, naiad, mushroom-spirit, hedge-witch, bee-keeper, spore-light, moonwell-keeper, willow-wisp, changeling, siren-nymph). Key innovation: **direct prompt mode** — siren-nymph path returns `{ direct: true, prompt }` to bypass Sonnet (which was refusing/sanitizing erotic content). Engine support added to `botEngine.js`. Flux-dev only (permissive NSFW filter). SIREN_NYMPH_SKIN pool (no coverings) separate from shared NYMPH_SKIN pool (has coverings). |
+| MermaidBot | **DELETED** | Superseded by OceanBot's mermaid-legend path. All files, DB uploads (59), run logs (65), user account, and auth record fully deleted 2026-04-26. Not recoverable. | 8 paths (warrior, ice, shore, royal, dark, reef, deep, siren). Dedicated mermaid character pools (features, hair, coverings). The mermaid-legend path in OceanBot carries forward the concept with maritime oil-painting mediums and better pool architecture. |
+
+**Direct prompt mode** (added to `scripts/lib/botEngine.js` during FaeBot dev): if `buildBrief()` returns `{ direct: true, prompt: '...' }` instead of a string, the engine skips the Sonnet call entirely and uses the prompt as-is. Useful for any path where Sonnet's content policy is a blocker. The refusal detection (checks for "I cannot create", "I'm not able to", etc.) was also added as a safety net for standard Sonnet paths.
 
 ---
 

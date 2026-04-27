@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/action_figure_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ACTION-FIGURE-PLAYSET LANDSCAPE scene descriptions for ToyBot's action-figure path. Collector-grade 1/12-scale playsets (Hot-Toys / Mezco / NECA / Hasbro-Black-Series style) — handcrafted weathering, paint-detail, display-cabinet dramatic lighting.
 
 Each entry: 15-25 words. ONE specific action-figure-playset landscape scene.

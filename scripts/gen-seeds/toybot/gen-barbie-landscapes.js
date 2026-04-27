@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/barbie_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BARBIE-WORLD LANDSCAPE scene descriptions for ToyBot's barbie-scene path. Cinematic Mattel-scale fashion-doll dioramas — DreamHouse architecture, pink-dominant palette, boutique/rooftop-pool/runway/convertible-pink-car playsets, glossy-plastic sheen, Barbie-movie film-still framing.
 
 Each entry: 15-25 words. ONE specific Barbie-world landscape scene.

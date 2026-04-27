@@ -28,7 +28,7 @@ const PERSPECTIVES = [
   'through-the-hand closeup — gauntleted fingers partially obscuring his face, one eye peering between',
   'from-below looking up his throat — chin raised, jaw clenched, fangs visible',
   'close bust-up three-quarter — armored shoulder toward viewer, head swiveled back',
-  'extreme close-up reflected in bloodied blade he holds before his face',
+  'extreme close-up reflected in dark blade he holds before his face',
   'closeup through strands of his own hair, face partially hidden, one glowing eye visible',
 ];
 
@@ -41,7 +41,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const perspective = PERSPECTIVES[Math.floor(Math.random() * PERSPECTIVES.length)];
 
-  return `You are a dark-manga cinematographer writing TIGHT-FRAME CLOSEUP scene descriptions for GothBot. The camera catches him close-up — he is NOT posing, he is in the world and the camera happens to be near. Stylized Ayami-Kojima Castlevania / Devil-May-Cry / Bloodborne / Berserk bust-portrait illustration aesthetic.
+  return `You are a gothic dark-manga cinematographer writing TIGHT-FRAME CLOSEUP scene descriptions for GothBot. The camera catches him close-up — he is NOT posing, he is in the world and the camera happens to be near. Stylized Ayami-Kojima Castlevania / Devil-May-Cry dark-fantasy bust-portrait illustration aesthetic.
 
 TASK: write ONE vivid CLOSEUP scene description (60-80 words, comma-separated phrases) of a gothic-horror MAN caught candidly close-up. The output will be wrapped with style prefix + suffix — you produce ONLY the middle scene section.
 
@@ -60,7 +60,8 @@ ${blocks.STYLIZED_MANGA_BLOCK}
 
 ${blocks.SOLO_COMPOSITION_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+━━━ WALL-POSTER TIER — STRIKING, HAUNTING, IMPOSING ━━━
+Every render is STRIKING and HAUNTING — imposing in its darkness, commanding in its menace, magnetic in its power. Dark-manga-horror-game-cover quality. Castlevania boss-encounter art, Devil-May-Cry villain splash-page, WoW-death-knight class-art-poster. Wall-poster worthy. Every render reads "this man could end me" — not "this man is pretty."
 
 ━━━ THE CHARACTER (use as his core identity — don't contradict) ━━━
 ${character}
@@ -94,11 +95,13 @@ ${vibeDirective.slice(0, 250)}
 ━━━ CAMERA PERSPECTIVE (USE THIS EXACT FRAMING / ANGLE) ━━━
 ${perspective}
 
-━━━ MASCULINE BEAUTY — HAUNTINGLY BEAUTIFUL MEN ━━━
-These men are HAUNTINGLY BEAUTIFUL in the way a predator is beautiful — jaw structure sharp enough to cut, battle-scarred skin that tells stories, eyes that have seen centuries. Weathered + dangerous + magnetic. NOT pretty-boy, NOT romantic-lead, NOT YA-love-interest. Beauty through MENACE + POWER + ANCIENT WEARINESS.
+━━━ MASCULINE — IMPOSING, WEATHERED, DANGEROUS MEN ━━━
+These men are IMPOSING and STRIKING — jaw structure sharp enough to cut, scarred weathered skin that tells dark stories, eyes that have seen centuries of ruin. Powerful + magnetic + ancient + MENACING. NOT pretty, NOT soft, NOT romantic-lead, NOT YA-love-interest, NOT androgynous. MASCULINE through MENACE + POWER + ANCIENT WEARINESS. Castlevania-boss energy, Van-Helsing movie poster intensity. He is a MAN — rugged, scarred, angular, MALE.
+
+NO LIPSTICK. NO colored lips. NO lip gloss. NO lip tint. His lips are NATURAL — pale, cracked, wind-chapped, or bloodless. The ONLY exception is solid black lips (black-metal aesthetic). Never red, never oxblood, never plum, never wine, never any color on his mouth.
 
 ━━━ FRAMING — TIGHT CLOSEUP, CHARACTER ONLY ━━━
-Tight frame — face + throat + one shoulder at most. Face fills the upper third to half of the frame. NEVER show legs, NEVER show hips, NEVER show full body. NEVER show buildings, castles, cathedrals, architecture. Background is PURE ATMOSPHERE — fog, darkness, rain, colored light from an unseen source. He is in the middle of something loaded: mid-turn with eyes catching the viewer, mid-wipe of blood from jaw, mid-exhale with breath misting, mid-snarl with fangs visible, mid-glance back over armored shoulder.
+Tight frame — face + throat + one shoulder at most. Face fills the upper third to half of the frame. NEVER show legs, NEVER show hips, NEVER show full body. NEVER show buildings, castles, cathedrals, architecture. Background is PURE ATMOSPHERE — fog, darkness, rain, colored light from an unseen source. He is in the middle of something loaded: mid-turn with eyes catching the viewer, mid-exhale with breath misting, mid-glance back over armored shoulder, adjusting a gauntlet, pushing back his hood.
 
 Use the SPECIFIC camera perspective above — don't default to straight-on.
 

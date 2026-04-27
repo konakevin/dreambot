@@ -1,69 +1,73 @@
 /**
- * GothBot goth-full-body path — THREE-QUARTER / MID-SHOT framing (not full
- * pulled-back panorama — that creates cheesy trading-card-art poses). She is
- * waist-up to thigh-up, caught mid-action, background partial. A step wider
- * than goth-closeup, NOT a pulled-back full-silhouette.
+ * GothBot goth-full-body — sexy, sultry, evil, feisty gothic women mid-shot.
+ *
+ * THREE-QUARTER / MID-SHOT framing (waist-up to thigh-up). Same pools and
+ * energy as goth-closeup but wider frame showing wardrobe, action, partial
+ * environment. NOT pulled-back full-silhouette trading-card-art.
+ *
+ * POOLS: GOTH_FEMALE_ARCHETYPES, GOTH_FEMALE_MAKEUP, GOTH_FEMALE_MOMENTS,
+ *        GOTH_FEMALE_WARDROBE, GOTH_FEMALE_SKIN, GOTH_EYE_COLORS,
+ *        HAIR_COLORS, FEMALE_HAIRSTYLES, CHARACTER_BACKDROPS, LIGHTING,
+ *        ATMOSPHERES
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.DARK_FEMALE_CHARACTERS, 'dark_female_character');
-  const action = picker.pickWithRecency(pools.FEMALE_CHARACTER_ACTIONS, 'female_character_action');
-  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'hair_color');
-  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'female_hairstyle');
-  const skinTone = picker.pickWithRecency(pools.SKIN_TONES, 'skin_tone');
-  const accessory = picker.pickWithRecency(pools.FEMALE_ACCESSORIES, 'female_accessory');
-  const backdrop = picker.pickWithRecency(pools.CHARACTER_BACKDROPS, 'character_backdrop');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const archetype = picker.pickWithRecency(pools.GOTH_FEMALE_ARCHETYPES, 'gfb_archetype');
+  const makeup = picker.pickWithRecency(pools.GOTH_FEMALE_MAKEUP, 'gfb_makeup');
+  const moment = picker.pickWithRecency(pools.GOTH_FEMALE_MOMENTS, 'gfb_moment');
+  const wardrobe = picker.pickWithRecency(pools.GOTH_FEMALE_WARDROBE, 'gfb_wardrobe');
+  const skin = picker.pickWithRecency(pools.GOTH_FEMALE_SKIN, 'gfb_skin');
+  const eyes = picker.pickWithRecency(pools.GOTH_EYE_COLORS, 'gfb_eyes');
+  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'gfb_hair_color');
+  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'gfb_hairstyle');
+  const backdrop = picker.pickWithRecency(pools.CHARACTER_BACKDROPS, 'gfb_backdrop');
+  const lighting = picker.pickWithRecency(pools.LIGHTING, 'gfb_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a dark-manga cinematographer writing THREE-QUARTER / MID-SHOT scene descriptions for GothBot — gothic-horror woman caught candidly in the middle of something, framed from WAIST-UP to THIGH-UP (NOT pulled-back full-silhouette). Van-Helsing film-still / Castlevania cutscene / Hellboy splash-panel aesthetic. Ayami-Kojima dark-manga inked stylization.
-
-TASK: write ONE vivid THREE-QUARTER scene description (60-80 words, comma-separated phrases) of her MID-MOMENT framed from waist-up to thigh-up. She is NOT posing. She is doing something real and the camera catches her in a mid-shot. Output wraps with style prefix + suffix — you produce ONLY the middle scene section.
+  return `You are a gothic dark-manga concept-art painter writing HAUNTINGLY BEAUTIFUL gothic woman mid-shots for GothBot. These are SEXY, SULTRY, EVIL, FEISTY women — dark seductresses with corrupted beauty and dangerous power, caught candidly from waist-up to thigh-up. Van-Helsing film-still / Castlevania cutscene / Crimson-Peak / Devil-May-Cry dark-beauty energy. Output wraps with style prefix + suffix.
 
 ${blocks.ELEGANT_DARKNESS_BLOCK}
 
-${blocks.TWILIGHT_COLOR_BLOCK}
-
-${blocks.ALLURING_BEAUTY_BLOCK}
-
-${blocks.DYNAMIC_POSE_BLOCK}
-
-${blocks.EXTERIOR_PREFERRED_BLOCK}
-
-${blocks.NO_CHEAP_GORE_BLOCK}
-
-${blocks.NO_SATANIC_BLOCK}
-
-${blocks.STYLIZED_MANGA_BLOCK}
-
-${blocks.SOLO_COMPOSITION_BLOCK}
-
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
-━━━ THE CHARACTER (use as her core identity — don't contradict) ━━━
-${character}
+━━━ ONE WOMAN ALONE ━━━
+ONE woman. No companions, no lovers, no second figure. She is ALONE and DANGEROUS.
+
+━━━ SHE MUST LOOK LIKE SHE ACTUALLY EXISTS — OBSESSIVE DETAIL ━━━
+Render her with obsessive detail — she must feel REAL and DEVASTATING:
+- FACE: every pore visible, cheekbones catching light, dark circles that look intentional — power and centuries in her gaze
+- SKIN: render the EXACT skin description from the pool — how light hits it, how shadow pools in her collarbones
+- EYES: glowing, supernatural, impossibly vivid — they radiate light onto surrounding skin
+- MAKEUP: BOLD and DRAMATIC dark glamour — sharp, intentional, devastating
+- HAIR: wild, wind-caught, tangled with pins or chains or dead flowers — gorgeous chaos
+- WARDROBE: render the FULL outfit with obsessive material detail — every clasp, every stitch, every worn edge. The wider frame SHOWS more wardrobe so make it COUNT
+- BODY LANGUAGE: predatory confidence mid-action. She is DOING something and we caught her
+
+━━━ WHO SHE IS (her core identity — let this inform her ENERGY) ━━━
+${archetype}
 
 ━━━ HER SKIN ━━━
-${skinTone}
+${skin}
 
-━━━ HER HAIR COLOR ━━━
-${hairColor}
+━━━ HER EYES ━━━
+${eyes}
 
-━━━ HER HAIRSTYLE ━━━
-${hairstyle}
+━━━ HER MAKEUP ━━━
+${makeup}
 
-━━━ HER ACCESSORY / WEAPON ━━━
-${accessory}
+━━━ HER HAIR ━━━
+${hairColor}, ${hairstyle}
 
-━━━ THE CONFIDENT PREDATORY ACTION — SHE IS DOING THIS (not posing, not holding weapon aloft) ━━━
-${action}
+━━━ HER WARDROBE (the wider frame shows this — render with detail) ━━━
+${wardrobe}
 
-This is a LOADED moment — she is mid-something, charged with intent. Something just happened, or is about to. Film-still-caught-mid-cut, NEVER heroic-poster-pose, NEVER "standing with weapon held above head", NEVER "arms outstretched summoning". The camera is close — waist-up to thigh-up — catching her mid-verb without pulling back to panorama.
+━━━ CANDID MOMENT (she was caught doing THIS — mid-action, charged) ━━━
+${moment}
 
-━━━ ATMOSPHERIC BACKDROP (behind her — NOT a landscape, NOT architecture) ━━━
+━━━ ATMOSPHERIC BACKDROP (behind her — partial, implied) ━━━
 ${backdrop}
 
 ━━━ LIGHTING ━━━
@@ -84,15 +88,26 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ FRAMING — THREE-QUARTER / MID-SHOT (WAIST-UP TO THIGH-UP) ━━━
-Frame her from WAIST-UP to THIGH-UP at most. NEVER pull back to full silhouette. NEVER show her full legs or feet. The background is IMPLIED / PARTIAL — a suggestion of environment at the edges (gargoyle ledge behind her, cathedral stone wall, misted forest edge, graveyard marker half-visible) — not a panoramic landscape. She FILLS 60-75% of the vertical frame.
+Frame her from WAIST-UP to THIGH-UP. NEVER pull back to full silhouette. NEVER show her full legs or feet. The background is IMPLIED / PARTIAL — a suggestion of gothic environment at the edges (gargoyle ledge, cathedral stone, misted forest, graveyard marker half-visible). She FILLS 60-75% of the vertical frame.
 
-Why mid-shot: pulled-back full-body framing creates cheesy trading-card-art poses (Maleficent stance, weapon-held-overhead, elegant-gown-flowing). Three-quarter framing keeps the viewer IN THE MOMENT with her, sees her wardrobe detail, sees her action — without the cheese.
+She is NOT posing — she was caught mid-action in the candid moment above. Film-still-caught-mid-cut energy. The camera snapped at this exact loaded instant.
 
-━━━ FORBIDDEN WORDS + CLICHÉS ━━━
-NEVER use "pose", "posing", "editorial", "fashion shoot", "runway", "heroic stance", "holding weapon aloft", "trading card", "RPG character art", "power pose", "full body", "full silhouette". NO elegant-floating-in-white-dress. NO levitating-with-arms-out. NO pentagrams in frame. NO oversaturated-red lighting. NO Artgerm-smooth-digital-art. NO centered-character-weapon-overhead. NO landscape-dominating-background. Stylized inked dark-manga-horror, Van-Helsing-film-still grit.
+DRAMATIC VISUALS: go MAXIMUM. The eyes should BLAZE. The makeup should be DEVASTATING. The wardrobe should have obsessive material detail. The lighting should carve her into something MYTHIC.
+
+━━━ HARD BANS ━━━
+- NO devil horns, NO pentagrams, NO satanic symbols
+- NO "pose", "posing", "editorial", "fashion shoot", "heroic stance", "trading card"
+- NO elegant-floating-in-white-dress, NO levitating-with-arms-out
+- NO anime-smooth, NO Halloween costume, NO cosplay
+- NO second person in frame — she is ALONE
+- NO full-body pulled-back silhouette — this is MID-SHOT
+
+${blocks.NO_CHEAP_GORE_BLOCK}
+
+${blocks.NO_SATANIC_BLOCK}
 
 ━━━ STRUCTURE (write in this order) ━━━
-[gothic-horror woman archetype, body + skin + eyes + hair + makeup visible from waist-up], [caught MID the action described above — specific kinetic verb], [her wardrobe / bodice / weapon at her belt detail], [partial environment at frame edges — gothic detail hinted not panoramic], [lighting illuminating her upper body], [atmospheric + color-palette layer]
+[her face — skin + eyes + makeup], [her hair], [her wardrobe with material detail], [the candid moment — what she's doing mid-action], [partial gothic environment at frame edges], [lighting on her body], [atmosphere + color palette]
 
-Output ONLY the 60-80 word scene description, comma-separated phrases. No preamble, no titles, no headers, no ━━━ or ═══ markers, no **bold**, no "render as" suffix.`;
+Output ONLY the 60-80 word scene description, comma-separated phrases. No preamble, no titles, no headers, no markers, no bold, no "render as" suffix.`;
 };

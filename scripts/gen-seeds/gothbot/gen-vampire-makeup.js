@@ -4,25 +4,31 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_makeup.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} DARK TROUBLED BEAUTY makeup descriptions for GothBot's vampire-vogue-realism path. Each entry is a 15-25 word description of a SPECIFIC dramatic makeup look on a hyperreal vampire woman. These are NOT clean beauty looks — they're HAUNTED, WEATHERED, LIVED-IN, TROUBLED. Think McQueen runway after the model cried backstage, Val Garland's smeared deconstructed looks, Hungry's distorted face illusions, Elizaveta Porodina's ghostly unsettling portraits, Paolo Roversi's decayed romantic beauty.
+  metaPrompt: (n) => `You are writing ${n} VAMPIRE MAKEUP descriptions for GothBot's vampire portrait paths. Each entry is a SHORT phrase (15-25 words) describing a specific dramatic makeup look on a vampire face. These compose with separate archetype/hair/skin pools — describe ONLY the makeup.
 
-The energy is: she's been alive for centuries and it SHOWS. Her beauty is DANGEROUS and slightly WRONG. Something about her face makes you uneasy.
+These are ANCIENT IMMORTALS. The makeup is INTENTIONAL, SHARP, APPLIED WITH PURPOSE. NOT melting, NOT dripping, NOT running, NOT crying. Think: a centuries-old being who applies their war-paint with terrifying precision.
 
-━━━ MAKEUP STYLE SPREAD (enforce variety across ${n}) ━━━
-- SMEARED / DECONSTRUCTED (4-5) — Val-Garland-style deliberately smudged dark eye makeup bleeding down the cheek, lipstick kissed off-center, liner dragged past its intended line, mascara that's run and dried. NOT messy — WEATHERED. Like perfect makeup that's survived something.
-- HOLLOW / GAUNT (4-5) — extreme deep-carved contour making cheekbones look skull-like, dark hollowed eye sockets, sunken temple shadow, bruise-purple under-eye. She looks HUNGRY and ANCIENT. Think heroin-chic meets immortal starvation.
-- DARK ROMANTIC DECAY (4-5) — deep wine / oxblood / plum tones applied like a painting left in rain, blurred edges, stained lips like she's been wearing the same dark lipstick for days, smudged kohl that's slept-in and reapplied over itself.
-- ALIEN / UNSETTLING (3-4) — Hungry/Isamaya-style looks that distort the face geometry, overdrawn or displaced features, monochrome washes that make the face look inhuman, deliberately asymmetric application that makes you look twice.
-- SILENT-FILM GOTHIC (3-4) — Theda-Bara / Nosferatu-era extreme: massive dark-ringed eyes, stark white skin, heavy black-rimmed sockets, dark cupid's-bow lips — the earliest vampire aesthetic, grainy and iconic.
-- BRUISED / LIVED-IN (3-4) — looks like she got in a fight and won: deep plum and green-black bruise-tones around the eyes that read as both damage AND beauty, split-dark lips, shadow under the cheekbone that could be contour or could be a mark.
+━━━ MANDATORY VARIETY SPREAD ━━━
+- BOLD GRAPHIC KOHL (5-6) — heavy black kohl around eyes, sharp geometric liner, Egyptian/ancient eye-painting traditions, thick dramatic rings or cat-eye shapes. Clean and deliberate, not smudged.
+- CARVED CONTOUR / SHADOW (4-5) — extreme sculpted cheekbones, hollowed temples via dark contour, face geometry emphasized through shadow-placement. The makeup makes the bone structure MORE extreme.
+- DARK COUTURE EDITORIAL (4-5) — high-fashion dark beauty: matte black lip, metallic eye, graphic shapes, avant-garde placement. Sharp editorial looks that belong on a vampire runway. Clean application.
+- MINIMAL / BARE-FACED (3-4) — almost no visible makeup, raw bare skin, natural chapped lips, dark circles from centuries of not sleeping. The horror IS the bare face — nothing hiding the dead skin beneath. Lips described as: bloodless, cracked, wind-chapped, colorless, bitten-raw.
+- WAR-PAINT / TRIBAL (3-4) — deliberate dark marks across the face like ancient warrior markings, bold stripes or geometric patterns across cheekbone or brow. Applied with fingers, thick and intentional.
+- SMOKE / HAZE (3-4) — heavy smokey eye in dark tones blown wide around the socket, diffused edges fading into skin. NOT dripping — BLENDED. Like charcoal rubbed into skin by hand.
 
-━━━ RULES ━━━
-- Every entry must mention LIPS (color + finish) and EYES (shadow + treatment)
-- Lips are always DARK: obsidian-black, oxblood, deep-wine, violet-ink, blue-black, deep-plum, bruise-berry. NEVER nude, NEVER pink, NEVER natural, NEVER glossy-clean.
-- The overall read should be TROUBLED and BEAUTIFUL — not polished, not pretty, not editorial-clean
-- Think: Tilda Swinton in Only-Lovers-Left-Alive, Eva Green in Penny Dreadful, Noomi Rapace in Prometheus, Rooney Mara in Girl-with-the-Dragon-Tattoo — women who look like they've BEEN THROUGH SOMETHING
-- NEVER face-paint, NEVER ritual-sigils, NEVER painted tear-streaks, NEVER cracked-mask, NEVER ghost-skull, NEVER clown/ICP
-- Each entry should feel like a different dark chapter of the same immortal life
+━━━ LIP RULES — ENFORCE VARIETY ━━━
+At least 5 entries must have BARE/NATURAL/COLORLESS lips (bloodless, cracked, pale, chapped, bitten-raw).
+At least 3 entries must have NO lip mention at all (eyes-only looks).
+Remaining entries can have dark lips (black, oxblood, deep plum) but NEVER more than 10 of ${n} total.
+NEVER "perfect" lipstick. Dark lips should be matte, cracked, stained, or bitten — never glossy or pristine.
+
+━━━ HARD BANS ━━━
+- NO dripping, NO streaking, NO running, NO melting, NO bleeding makeup
+- NO "mascara tears", NO "crying", NO "rain-streaked"
+- NO KISS-band makeup (symmetric black circles covering entire eye area)
+- NO face-paint, NO skull-paint, NO clown, NO ICP
+- NO "slept-in" or "reapplied over itself" — these are PRECISE beings
+- NEVER describe the look as "messy" or "deconstructed"
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

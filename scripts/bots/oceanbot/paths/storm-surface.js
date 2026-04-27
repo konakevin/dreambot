@@ -7,7 +7,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.STORM_SURFACE, 'storm_surface');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
   return `You are a maritime storm photographer writing STORM SURFACE scenes for OceanBot. Raw ocean fury at the surface — towering waves, lightning cracking across dark skies, spray and foam, ships as tiny specks against walls of water. The power and violence of the sea unleashed. Output wraps with style prefix + suffix.

@@ -7,7 +7,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.CALM_SEAS, 'calm_sea');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
   return `You are a fine-art seascape photographer writing CALM GLASS SEA scenes for OceanBot. Mirror-flat ocean, perfect reflections, infinite horizon, pastel light. The ocean at its most still and meditative — total silence, total beauty. Cinematic contrast to the chaos paths. Output wraps with style prefix + suffix.

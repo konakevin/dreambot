@@ -7,7 +7,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.POLAR_SEAS, 'polar_sea');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
   return `You are an arctic ocean photographer writing POLAR SEAS scenes for OceanBot. The frozen ocean — towering icebergs with impossible blue interiors, whales surfacing through ice cracks, frozen ships trapped in pack ice, aurora reflecting on still polar water, eerie blue silence of the far north or south. Output wraps with style prefix + suffix.

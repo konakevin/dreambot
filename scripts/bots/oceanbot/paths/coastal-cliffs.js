@@ -7,7 +7,7 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.COASTAL_CLIFFS, 'coastal_cliff');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
   return `You are a coastal photographer writing COASTAL CLIFFS scenes for OceanBot. Where land meets ocean at its most dramatic — jagged cliffs, lighthouses on promontories, sea caves with waves crashing in, tide pools teeming with life, hidden coves, stormy shores with spray flying. The raw edge of the continent. Output wraps with style prefix + suffix.

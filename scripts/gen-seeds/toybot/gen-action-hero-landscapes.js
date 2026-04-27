@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/action_hero_landscapes.json',
-  total: 50,
-  batch: 10,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} VINTAGE "EPIC" ACTION-FIGURE LANDSCAPE scene descriptions for ToyBot's action-hero path — rolled-up bucket of 80s/90s action-figure environments covering (a) Masters-of-the-Universe sword-and-sorcery realms, (b) Star-Wars-era space-adventurer sets, and (c) cape-and-cowl superhero-headquarters/battlefields. Non-IP — archetype only.
 
 Each entry: 15-25 words. ONE specific vintage-action-figure landscape scene.

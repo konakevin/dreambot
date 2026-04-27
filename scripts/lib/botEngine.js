@@ -457,22 +457,60 @@ function resolvePath({ bot, recentPaths }) {
   return weightedPick(bot.paths, bot.pathWeights);
 }
 
+// Shuffle-bag path selection: cycle through ALL paths before any repeats.
+// Opt in via `cycleAllPaths: true` in bot config.
+function resolvePathCycled({ bot, recentPaths }) {
+  if (!Array.isArray(bot.paths) || bot.paths.length === 0) {
+    throw new Error(`Bot ${bot.username} has no paths configured`);
+  }
+  const used = new Set(recentPaths || []);
+  const remaining = bot.paths.filter((p) => !used.has(p));
+
+  if (remaining.length === 0) {
+    return weightedPick(bot.paths, bot.pathWeights);
+  }
+
+  return weightedPick(remaining, bot.pathWeights);
+}
+
 // In-memory batch path window — shared across renders in a single batch run.
 // Persists for the lifetime of the process so consecutive iter-bot renders dedup.
 const _batchPathWindow = {};
 
-async function getRecentPaths(sb, botName) {
+// Separate cycle tracker for cycleAllPaths bots — resets when cycle completes.
+const _batchCycleTracker = {};
+
+async function getRecentPaths(sb, botName, limit = 5) {
   const { data, error } = await sb
     .from('bot_run_log')
     .select('path')
     .eq('bot_name', botName)
     .eq('status', 'ok')
     .order('created_at', { ascending: false })
-    .limit(5);
+    .limit(limit);
   if (error) {
     console.warn(`  ⚠️ recent paths query failed: ${error.message}`);
     return [];
   }
+  return (data || []).map((r) => r.path);
+}
+
+async function getCycledUsedPaths(sb, botName, pathCount) {
+  const { count, error } = await sb
+    .from('bot_run_log')
+    .select('*', { count: 'exact', head: true })
+    .eq('bot_name', botName)
+    .eq('status', 'ok');
+  if (error || !count) return [];
+  const position = count % pathCount;
+  if (position === 0) return [];
+  const { data } = await sb
+    .from('bot_run_log')
+    .select('path')
+    .eq('bot_name', botName)
+    .eq('status', 'ok')
+    .order('created_at', { ascending: false })
+    .limit(position);
   return (data || []).map((r) => r.path);
 }
 
@@ -594,14 +632,30 @@ async function runBot(opts) {
   const isBatchMode = Boolean(outDir); // iter-bot sets this
   const shouldPostToDB = !dryRun && (!isBatchMode || post);
 
-  // Resolve path with rolling 5-post dedup window
+  // Resolve path — shuffle-bag cycle or rolling dedup window
   let resolvedPath;
   if (pathArg === 'random') {
-    const dbRecent = await getRecentPaths(sb, bot.username);
-    const batchRecent = _batchPathWindow[bot.username] || [];
-    const combined = [...new Set([...batchRecent, ...dbRecent])].slice(0, 5);
-    resolvedPath = resolvePath({ bot, recentPaths: combined });
-    pushBatchPath(bot.username, resolvedPath);
+    if (bot.cycleAllPaths) {
+      const pathCount = bot.paths.length;
+      if (!_batchCycleTracker[bot.username]) {
+        _batchCycleTracker[bot.username] = await getCycledUsedPaths(sb, bot.username, pathCount);
+      }
+      const used = new Set(_batchCycleTracker[bot.username]);
+      const remaining = bot.paths.filter((p) => !used.has(p));
+      if (remaining.length === 0) {
+        _batchCycleTracker[bot.username] = [];
+        resolvedPath = weightedPick(bot.paths, bot.pathWeights);
+      } else {
+        resolvedPath = weightedPick(remaining, bot.pathWeights);
+      }
+      _batchCycleTracker[bot.username].push(resolvedPath);
+    } else {
+      const dbRecent = await getRecentPaths(sb, bot.username);
+      const batchRecent = _batchPathWindow[bot.username] || [];
+      const combined = [...new Set([...batchRecent, ...dbRecent])].slice(0, 5);
+      resolvedPath = resolvePath({ bot, recentPaths: combined });
+      pushBatchPath(bot.username, resolvedPath);
+    }
   } else {
     if (!bot.paths.includes(pathArg)) {
       throw new Error(`Path '${pathArg}' not in bot.paths: ${bot.paths.join(', ')}`);
@@ -656,9 +710,9 @@ async function runBot(opts) {
       sharedDNA.textContent = textContent;
     }
 
-    // 5. Build brief
+    // 5. Build brief (or direct prompt if path opts out of Sonnet)
     errorStage = 'build-brief';
-    const brief = bot.buildBrief({
+    const briefResult = bot.buildBrief({
       path: resolvedPath,
       sharedDNA,
       vibeDirective,
@@ -666,33 +720,73 @@ async function runBot(opts) {
       medium,
       picker,
     });
-    if (!brief || typeof brief !== 'string' || brief.length < 50) {
-      throw new Error(`buildBrief returned invalid brief (len=${brief?.length})`);
-    }
 
-    // 6. Call Sonnet
-    errorStage = 'sonnet';
-    const claude = await callClaude({ brief, maxTokens: 400 });
-    claudeMeta = {
-      retries: claude.retries,
-      fellBackToSecondary: claude.fellBackToSecondary,
-      modelUsed: claude.modelUsed,
-    };
-    let middle = claude.text;
+    let middle;
+    const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
-    // 7. Banned-phrase retry (up to 3 total Sonnet attempts)
-    if (bot.bannedPhrases && bot.bannedPhrases.length > 0) {
-      errorStage = 'banned-phrase-check';
-      const lower = (s) => s.toLowerCase();
-      let retries = 0;
-      while (retries < 2 && bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
-        retries += 1;
-        console.warn(`  ⚠️ banned phrase detected, retrying Sonnet (${retries}/2)`);
-        const retry = await callClaude({ brief, maxTokens: 400 });
-        middle = retry.text;
+    if (isDirectPrompt) {
+      // Path composed the Flux prompt directly — skip Sonnet entirely
+      middle = briefResult.prompt;
+      if (!middle || middle.length < 30) {
+        throw new Error(`direct prompt too short (len=${middle?.length})`);
       }
-      if (bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
-        throw new Error(`banned phrase still present after retries`);
+      console.log('  ⚡ direct prompt (Sonnet bypassed)');
+    } else {
+      // Standard path: brief → Sonnet → scene description
+      const brief = typeof briefResult === 'string' ? briefResult : String(briefResult);
+      if (!brief || brief.length < 50) {
+        throw new Error(`buildBrief returned invalid brief (len=${brief.length})`);
+      }
+
+      // 6. Call Sonnet
+      errorStage = 'sonnet';
+      const claude = await callClaude({ brief, maxTokens: 400 });
+      claudeMeta = {
+        retries: claude.retries,
+        fellBackToSecondary: claude.fellBackToSecondary,
+        modelUsed: claude.modelUsed,
+      };
+      middle = claude.text;
+
+      // 6b. Sonnet refusal detection — retry up to 3 times
+      const REFUSAL_PATTERNS = [
+        'I cannot create',
+        "I'm not able to",
+        'I appreciate your',
+        "I'd be happy to help",
+        'violate content policies',
+        'sexually suggestive',
+        'not able to generate',
+        'alternative approaches',
+      ];
+      const isRefusal = (t) => REFUSAL_PATTERNS.some((p) => t.includes(p));
+      {
+        let refusalRetries = 0;
+        while (refusalRetries < 3 && isRefusal(middle)) {
+          refusalRetries += 1;
+          console.warn(`  ⚠️ Sonnet content refusal, retrying (${refusalRetries}/3)`);
+          const retry = await callClaude({ brief, maxTokens: 400 });
+          middle = retry.text;
+        }
+        if (isRefusal(middle)) {
+          throw new Error('Sonnet refused after 3 retries (content policy)');
+        }
+      }
+
+      // 7. Banned-phrase retry (up to 3 total Sonnet attempts)
+      if (bot.bannedPhrases && bot.bannedPhrases.length > 0) {
+        errorStage = 'banned-phrase-check';
+        const lower = (s) => s.toLowerCase();
+        let retries = 0;
+        while (retries < 2 && bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
+          retries += 1;
+          console.warn(`  ⚠️ banned phrase detected, retrying Sonnet (${retries}/2)`);
+          const retry = await callClaude({ brief, maxTokens: 400 });
+          middle = retry.text;
+        }
+        if (bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
+          throw new Error(`banned phrase still present after retries`);
+        }
       }
     }
 
@@ -910,6 +1004,7 @@ module.exports = {
   resolveMedium,
   resolveVibe,
   resolvePath,
+  resolvePathCycled,
   fetchVibeDirective,
   lookupBotUserId,
   postAsBot,

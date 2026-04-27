@@ -50,9 +50,12 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
       ? pools.VAMPIRE_LIGHTING
       : pools.LIGHTING;
   const lighting = picker.pickWithRecency(lightingPool, 'vg2_lighting');
+  const skinCorruption = pools.VAMPIRE_SKIN_CORRUPTION && pools.VAMPIRE_SKIN_CORRUPTION.length > 0
+    ? picker.pickWithRecency(pools.VAMPIRE_SKIN_CORRUPTION, 'vg2_skin_corruption')
+    : 'blue-black veins mapping temples, cracked porcelain skin, sunken hollows beneath cheekbones';
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are writing ONE extreme macro vampire face portrait for GothBot. This is a hyperreal close-up of a SCARY, hauntingly beautiful, CORRUPTED vampire woman's face. She is gorgeous but something is deeply WRONG — ancient, predatory, inhuman. Not a pretty girl with contact lenses. A MONSTER wearing a beautiful face.
+  return `You are writing ONE extreme macro vampire face portrait for GothBot. This is a hyperreal close-up of a SCARY, CORRUPTED, ANCIENT vampire woman's face. She is STRIKING but something is deeply WRONG — inhuman, predatory, DEAD. Not a model with contact lenses. A MONSTER that happens to have a face.
 
 TASK: write ONE vivid macro face description (50-70 words, comma-separated phrases). Output is wrapped with style prefix + suffix — you produce ONLY the scene.
 
@@ -68,13 +71,13 @@ CHARACTER INGREDIENTS — USE EACH ONE, DO NOT INVENT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${ethnicity ? `ETHNICITY: ${ethnicity}\nUse these specific ethnic features. Name her ethnicity in the first few words.\n\n` : ''}FACE STRUCTURE: ${face}
-Render THIS face — this jaw, this nose, this cheekbone, this brow. NOT a generic pretty face.
+Render THIS face — this jaw, this nose, this cheekbone, this brow. NOT a generic face. ANGULAR, GAUNT, WRONG.
 
 EYES: ${eyeColor || 'glowing supernatural iris with volcanic inner detail'}
 Her eyes GLOW — they radiate light onto the skin around them. Fire-like, volcanic, supernatural. The iris is impossibly detailed and luminous.
 
 MAKEUP: ${makeup}
-Use THIS specific makeup look. Render it BOLD and DRAMATIC — heavy, intense, striking. NOT subtle, NOT dripping, NOT running. The makeup is APPLIED WITH INTENTION — sharp where it's sharp, smeared where it's smeared. This is dark couture war-paint, not melted mascara.
+Use THIS specific makeup look. Render it BOLD and DRAMATIC — heavy, intense, striking. NOT subtle, NOT dripping, NOT running. The makeup is APPLIED WITH INTENTION and PRECISION — sharp, deliberate, ancient. This is war-paint, not beauty editorial.
 
 HAIR: ${hairColor}, ${hairstyle}
 
@@ -92,18 +95,23 @@ LIGHTING: ${lighting}
 MANDATORY QUALITIES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-SKIN: deathly corpse-pale, MORBID. Blue veins visible at temples. She reads as DEAD — not pale, DEAD. Sunken, gaunt, translucent.
+SKIN: she is DEAD. Not pale — DEAD. Deathly corpse-drained, gaunt, translucent. Render THIS specific corruption detail prominently on her face:
+${skinCorruption}
+The skin should make the viewer UNCOMFORTABLE — WRONG. A corpse that forgot to stop moving. NOT smooth, NOT flawless, NOT model skin.
 
-FANGS: sharp elongated upper canine fangs visible through parted lips.
+FANGS: sharp elongated upper canine fangs visible through parted lips — not subtle, not small. PREDATOR teeth.
 
 GAZE: cold, ancient, predatory. She's deciding whether you're worth the effort. NOT seductive, NOT flirty. PREDATOR calm.
 
-DRAMATIC VISUALS: go MAXIMUM. This is AI art — blow it out. The glowing eyes should BLAZE. The makeup should be STRIKING and BOLD. The lighting should carve her face into something MYTHIC. Every element cranked to "oh fuck" levels of visual impact. She is BEAUTIFUL but MORBID and TERRIFYING — something ancient and wrong wearing a gorgeous face. The beauty makes the horror WORSE.
+DRAMATIC VISUALS: go MAXIMUM. The glowing eyes should BLAZE. The makeup should be STRIKING and BOLD. The cracked veined skin should be VISCERAL and DETAILED. The lighting should carve every vein and crack into sharp relief. Every element cranked to jaw-dropping visual impact. She is MONSTROUS and ANCIENT — something dead and wrong that still moves and stares. NOT beautiful, NOT pretty, NOT gorgeous. STRIKING and TERRIFYING. The face of something that should not exist.
 
 ━━━ HARD BANS ━━━
+- NO blood dripping, NO blood on face, NO blood on lips, NO blood on chin, NO blood anywhere
 - NO devil horns, NO pentagrams, NO satanic symbols
 - NO anime-smooth, NO Halloween costume, NO cosplay
-- NO magazine editorial, NO fashion photography energy
+- NO magazine editorial, NO fashion photography, NO model energy, NO beauty shoot
+- She is NOT pretty. She is NOT gorgeous. She is NOT beautiful. She is STRIKING and WRONG and DEAD.
+- NO perfect skin, NO flawless complexion, NO smooth porcelain �� she is a CORPSE
 - NO second person in frame — she is ALONE
 - ONE woman only
 
