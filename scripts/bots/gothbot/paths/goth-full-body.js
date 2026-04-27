@@ -9,9 +9,13 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.DARK_CHARACTERS, 'dark_character');
-  const action = picker.pickWithRecency(pools.CHARACTER_ACTIONS, 'character_action');
-  const landscape = picker.pickWithRecency(pools.GOTHIC_LANDSCAPES, 'gothic_landscape');
+  const character = picker.pickWithRecency(pools.DARK_FEMALE_CHARACTERS, 'dark_female_character');
+  const action = picker.pickWithRecency(pools.FEMALE_CHARACTER_ACTIONS, 'female_character_action');
+  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'hair_color');
+  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'female_hairstyle');
+  const skinTone = picker.pickWithRecency(pools.SKIN_TONES, 'skin_tone');
+  const accessory = picker.pickWithRecency(pools.FEMALE_ACCESSORIES, 'female_accessory');
+  const backdrop = picker.pickWithRecency(pools.CHARACTER_BACKDROPS, 'character_backdrop');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -42,13 +46,25 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE CHARACTER (use as her core identity — don't contradict) ━━━
 ${character}
 
+━━━ HER SKIN ━━━
+${skinTone}
+
+━━━ HER HAIR COLOR ━━━
+${hairColor}
+
+━━━ HER HAIRSTYLE ━━━
+${hairstyle}
+
+━━━ HER ACCESSORY / WEAPON ━━━
+${accessory}
+
 ━━━ THE CONFIDENT PREDATORY ACTION — SHE IS DOING THIS (not posing, not holding weapon aloft) ━━━
 ${action}
 
 This is a LOADED moment — she is mid-something, charged with intent. Something just happened, or is about to. Film-still-caught-mid-cut, NEVER heroic-poster-pose, NEVER "standing with weapon held above head", NEVER "arms outstretched summoning". The camera is close — waist-up to thigh-up — catching her mid-verb without pulling back to panorama.
 
-━━━ SETTING — EXTERIOR PREFERRED ━━━
-${landscape}
+━━━ ATMOSPHERIC BACKDROP (behind her — NOT a landscape, NOT architecture) ━━━
+${backdrop}
 
 ━━━ LIGHTING ━━━
 ${lighting}

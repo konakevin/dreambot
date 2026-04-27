@@ -29,8 +29,11 @@ const PERSPECTIVES = [
 ];
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.DARK_CHARACTERS, 'dark_character');
-  const accessory = picker.pickWithRecency(pools.GOTH_WOMAN_ACCESSORIES, 'goth_accessory');
+  const character = picker.pickWithRecency(pools.DARK_FEMALE_CHARACTERS, 'dark_female_character');
+  const accessory = picker.pickWithRecency(pools.FEMALE_ACCESSORIES, 'female_accessory');
+  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'hair_color');
+  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'female_hairstyle');
+  const skinTone = picker.pickWithRecency(pools.SKIN_TONES, 'skin_tone');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const perspective = PERSPECTIVES[Math.floor(Math.random() * PERSPECTIVES.length)];
@@ -57,6 +60,15 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE CHARACTER (use as her core identity — don't contradict) ━━━
 ${character}
+
+━━━ HER SKIN ━━━
+${skinTone}
+
+━━━ HER HAIR COLOR ━━━
+${hairColor}
+
+━━━ HER HAIRSTYLE ━━━
+${hairstyle}
 
 ━━━ ICONIC STYLING / ACCESSORY DETAIL (visible in tight frame) ━━━
 ${accessory}

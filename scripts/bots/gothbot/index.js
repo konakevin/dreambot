@@ -15,11 +15,14 @@ const pathBuilders = {
   'gothic-architecture': require('./paths/gothic-architecture'),
   'goth-closeup': require('./paths/goth-closeup'),
   'goth-full-body': require('./paths/goth-full-body'),
+  'goth-male-closeup': require('./paths/goth-male-closeup'),
+  'goth-male-full-body': require('./paths/goth-male-full-body'),
+  'horror-creature': require('./paths/horror-creature'),
   'castlevania-scene': require('./paths/castlevania-scene'),
   'cozy-goth': require('./paths/cozy-goth'),
   'scene-girls': require('./paths/scene-girls'),
   'vampire-vogue-realism': require('./paths/vampire-vogue-realism'),
-  'horror-creature': require('./paths/horror-creature'),
+  'vampire-girls-2': require('./paths/vampire-girls-2'),
 };
 
 module.exports = {
@@ -52,22 +55,26 @@ module.exports = {
     // vampire-vogue-realism rotates 50/50 between flux-dev and flux-1.1-pro.
     // Both produce solid hyperreal vampire portraits; array form triggers
     // modelByPath random-pick rotation (see botEngine resolver).
-    'vampire-vogue-realism': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'vampire-vogue-realism': 'black-forest-labs/flux-dev',
+    'vampire-girls-2': 'black-forest-labs/flux-dev',
   },
 
   // Per-path medium override.
   // vampire-vogue-realism → gothic-painted (hyperreal cinematic vampire portrait)
-  // scene-girls → canvas (oil-painted gothic-garden scenes with heavy impasto brushwork)
+  // scene-girls → gothic-oil-garden (Pre-Raphaelite environment-dominant)
+  // Character paths use bot-level mediums with the cleaned-up promptPrefix.
   mediumByPath: {
     'vampire-vogue-realism': 'gothic-painted',
+    'vampire-girls-2': 'vampire-portrait',
     'scene-girls': 'gothic-oil-garden',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
-  //   'gothic' → heavy-ink Castlevania-manga stylization (flagship)
+  //   'gothic-architecture' → heavy-ink Castlevania-manga stylization (landscape/architecture paths)
   //   'gothic-realistic' → 80s-90s dark-fantasy paperback oil-painting
+  // Character paths override via mediumByPath → canvas/illustration/watercolor.
   mediums: [
-    'gothic', 'gothic', 'gothic', 'gothic', // 4× = 29% flagship stylized
+    'gothic-architecture', 'gothic-architecture', 'gothic-architecture', 'gothic-architecture', // 4× = 29% flagship stylized
     'gothic-realistic', 'gothic-realistic', 'gothic-realistic', // 3× = 21% painterly-realism
     'anime', 'anime',                                             // 2× = 14% dark-anime
     'comics',
@@ -82,22 +89,26 @@ module.exports = {
   // STRIPPED so the medium's photoreal DNA isn't fought from the front/back.
   promptPrefixByMedium: {
     'gothic-painted':
-      'HYPERREAL PHOTOREALISTIC dark-fantasy vampire portrait render, 4K cinematic film-still quality, photographic skin fidelity with pore-level detail + subsurface scatter + wet dewy skin highlights, shot on ARRI Alexa / RED Komodo with 85mm portrait lens, sharp eyelashes + specular catchlights + realistic eye-reflection, dark gothic-horror atmosphere. Hyperreal-skin-with-surreal-eyes-and-makeup aesthetic',
+      'EXTREME MACRO CLOSE-UP HYPERREAL PHOTOREALISTIC dark-fantasy vampire face render, face fills entire frame, 4K cinematic film-still quality, photographic skin fidelity with pore-level detail + subsurface scatter + wet dewy skin highlights, sharp eyelashes + specular catchlights + realistic eye-reflection, dark gothic-horror atmosphere',
     'gothic-oil-garden':
       'DARK GOTHIC OIL PAINTING, full-scene Pre-Raphaelite-dark painterly composition — the environment dominates, the figure is a participant within it NOT the centered subject, Waterhouse / Rossetti / Godward / Caspar-David-Friedrich / Goya dark-romanticism tradition, heavy impasto oil brushwork visible, atmospheric depth, chiaroscuro colored shadows, museum-oil-painting masterwork quality',
+    'vampire-portrait':
+      'Extreme macro close-up, face fills entire frame, hyperreal dark-fantasy portrait, 4K, dark atmospheric mood',
   },
   promptSuffixByMedium: {
     'gothic-painted':
-      'photorealistic 4K film-still finish, sharp photographic detail, skin with real pore + peach-fuzz + subsurface texture, no text no words no watermarks — NOT illustration, NOT cartoon, NOT anime, NOT manga, NOT flat-inked, NOT dark-manga, NOT heavy-ink-shadow, NOT hand-drawn, NOT line-art, NOT stylized-ink, NOT painterly, NOT oil-painted, NOT brushwork, NOT canvas-texture, NOT Artgerm, NOT Rossdraws, NOT DeviantArt-digital, NOT Castlevania-game-art, NOT PS2-game-cover, NOT concept-art-illustration',
+      'photorealistic 4K film-still finish, sharp photographic detail, skin with real pore + peach-fuzz + subsurface texture, wet dewy dewy skin, no text no words no watermarks — NOT illustration, NOT cartoon, NOT anime, NOT manga, NOT flat-inked, NOT painterly, NOT oil-painted, NOT Artgerm, NOT Rossdraws, NOT DeviantArt-digital, NOT Castlevania-game-art',
     'gothic-oil-garden':
       'gothic oil-painting on canvas finish, heavy impasto brushwork visible, canvas-texture polish, full-scene environment-dominant composition, museum-oil-painting masterwork, no text no words no watermarks — NOT a portrait, NOT a character card, NOT centered-hero composition, NOT Artgerm, NOT anime, NOT manga, NOT flat-cartoon, NOT magazine-editorial, NOT photoreal, NOT 3D-render',
+    'vampire-portrait':
+      'hyper-detailed skin texture, no text no words no watermarks, NOT anime NOT cartoon NOT illustration NOT Artgerm NOT DeviantArt',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
   // This fragment gets injected between promptPrefix and the Sonnet-written scene.
   mediumStyles: {
-    gothic:
-      'Ayami-Kojima Castlevania-game-art illustration, heavy-ink shadow, sharp-angular dark-manga-horror figures, hyper-baroque ornate detail, high-contrast inked stylization, PS2-era gothic-horror-game cover-art',
+    'gothic-architecture':
+      'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, Castlevania-environment concept-art, moonlit stone and stained-glass atmosphere',
     // Subject-agnostic rewrite — stripped all character/face/makeup/expression
     // language that was leaking into landscape + architecture paths. Medium now
     // describes ONLY the rendering style (painted oil-on-canvas dark-fantasy
@@ -105,28 +116,13 @@ module.exports = {
     // architecture, character, interior) gets rendered in this style cleanly.
     'gothic-realistic':
       '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture (NOT photoreal, NOT plastic-digital), strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality, NOT flat-inked, NOT manga, NOT smooth-digital-art, NOT Artgerm-plastic, NOT Rossdraws',
-    // NEW medium — museum-oil-realism gothic-vampire portrait. Anchors on
-    // classical-portrait-master DNA (Caravaggio/Rembrandt/Vermeer/Sargent/
-    // Ingres — PORTRAITISTS, not landscape illustrators) to drag composition
-    // toward photographic-baroque portrait realism, NOT paperback-landscape
-    // or anime-illustration. Explicit hard bans on illustration/cartoon/anime
-    // so Flux doesn't default to the same look as the `gothic` medium.
-    // Used only by vampire-vogue-realism path.
-    // Front-loads DEATHLY PALLOR + EXTREME DARK MAKEUP + VISIBLE FANGS + DARK
-    // OMINOUS LIGHTING at equal weight with hyperreal skin — prevents Flux
-    // from rendering a normal woman with glowing eyes and nothing else.
-    // Vampire GLAMOUR-GOTH makeup, NOT face-paint / clown / ICP / horror-mask.
-    // References: Interview-with-the-Vampire, Penny-Dreadful Eva Green,
-    // Only-Lovers-Left-Alive Tilda Swinton, Lady-Dimitrescu, Theda-Bara 1920s vamp.
-    // No ritual-sigils, no painted tears, no cracked-stone paint, no ghost-skull
-    // underlayer — just intense smoky eye + sharp winged liner + dark lips + contour.
-    // Hybrid of v20 + v21: keeps v21's strong "EXTREME CLOSE-UP hyperreal face /
-    // eyes-are-hero / wet-gloss-dark-lips / wet-dark-hair close-crop" anchors,
-    // replaces v21's blackwork-filigree / ritual-sigil painted tokens with v20's
-    // glamour-vampire makeup DNA (heavy smoky eye + winged liner + contour +
-    // Interview-with-the-Vampire / Penny-Dreadful / Tilda-Swinton / Theda-Bara refs).
+    // gothic-painted — extreme macro vampire face. Anchors: macro close-up,
+    // cold blue-teal skin cast, glowing eyes as hero, wet dewy dewy skin,
+    // low-key lighting. Makeup details come from pools, NOT hardcoded here.
     'gothic-painted':
-      'EXTREME CLOSE-UP hyperreal face portrait of a dark-fantasy vampire woman — deathly-pale corpse-drained skin, photographic-fidelity rendering with visible pores, fine peach-fuzz, subsurface light-scatter on cheekbone, translucent epidermis with faint blue-veins visible at temples, wet dewy skin-highlight with tiny water droplets across forehead and cheekbone, individual eyelash strands, realistic skin-tone gradients. The EYES are a hero of the face — GLOWING UNNATURAL LUMINOUS iris rendered as saturated luminous glow against otherwise-realistic eye. INTENSE GLAMOUR-VAMPIRE MAKEUP — heavy black smoky eye-shadow thickly blended on the lid and slightly above the socket, sharp black winged eyeliner extending in a clean cat-eye flick, long dark lashes, sharp defined darkened brows, dramatic chiaroscuro contour carving hollow cheekbones. WET-GLOSS DARK LIPS — deep wine / oxblood / obsidian-black / violet-ink / jet-purple lipstick with heavy specular wet-gloss highlight. Parted lips showing LONG SHARP UPPER VAMPIRE FANGS. Close-crop atmospheric background — wet dark hair framing face or bokeh-lit dark atmosphere behind. Glamour-vampire references: Interview-with-the-Vampire / Only-Lovers-Left-Alive Tilda-Swinton / Penny-Dreadful Eva-Green / Theda-Bara vamp / Lady-Dimitrescu. Hyperreal skin + surreal glowing eyes + heavy glamour-makeup = the "fake/real" look. Feels like a 4K film still, NOT a painting, NOT an illustration, NOT anime, NOT manga, NOT cartoon, NOT painterly, NOT oil-painted, NOT brushwork-visible, NOT Artgerm-smooth, NOT Rossdraws, NOT Castlevania-game-art, NOT magazine-editorial-photo, NOT YA-fantasy, NOT face-paint, NOT ritual-sigils, NOT painted tear-streaks, NOT cracked-mask',
+      'EXTREME MACRO CLOSE-UP hyperreal face portrait of a dark-fantasy vampire woman — face fills the ENTIRE frame cropped at forehead and chin. Deathly corpse-pale skin with COLD BLUE-TEAL color cast, photographic pore-level fidelity, wet dewy dewy skin with water droplets on cheekbone and brow. GLOWING UNNATURAL LUMINOUS irises radiating supernatural light onto surrounding skin with fire-like volcanic inner detail — ALL visible eyes glow, never one glowing and one normal. Sharp elongated upper vampire fangs visible through parted lips. Low-key atmospheric lighting with dark bokeh atmosphere pressing in close. Feels like a 4K cinematic film-still, NOT a painting, NOT illustration, NOT anime',
+    'vampire-portrait':
+      'hyperreal vampire face macro portrait, photographic skin fidelity with visible pores and subsurface scatter, dark low-key atmospheric lighting, sharp eyelash detail, specular catchlights, DRAMATIC dark gothic-horror mood',
     anime:
       'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic, NOT cute-anime NOT shonen NOT moe',
     comics:
@@ -182,11 +178,14 @@ module.exports = {
     'gothic-architecture',
     'goth-closeup',
     'goth-full-body',
+    'goth-male-closeup',
+    'goth-male-full-body',
+    'horror-creature',
     'castlevania-scene',
     'cozy-goth',
     'scene-girls',
     'vampire-vogue-realism',
-    'horror-creature',
+    'vampire-girls-2',
   ],
 
   pathWeights: {
@@ -196,6 +195,8 @@ module.exports = {
     'horror-creature': 3,
     'goth-closeup': 2,
     'goth-full-body': 2,
+    'goth-male-closeup': 2,
+    'goth-male-full-body': 2,
     'gothic-architecture': 2,
     'castlevania-scene': 2,
     'cozy-goth': 1,

@@ -11,9 +11,9 @@
  */
 
 const PROMPT_PREFIX =
-  'stylized gothic-horror illustration, heavy-ink shadow with crisp line-art, hand-drawn high-contrast rendering (not smooth digital painting, not photoreal, not Artgerm, not Rossdraws, not Deviantart-digital, not 3D-render) — the specific stylistic flavor (manga-horror / western-comic-ink / dark-graphic-novel / vertigo-horror / decadent-gothic-painterly / film-noir illustration / concept-art-book) varies per medium — Dark gothic fantasy exagerated and blown out the door 11/10 to it\'s most stylish, haunting, and beautiful — operatic dark romance with vampire-hunter danger, Van Helsing + Hellboy + Bloodborne + Bram Stoker Dracula + Crimson Peak + Devil May Cry energy, ornate Victorian-baroque detail, moonlit crypts cathedrals foggy graveyards gargoyles velvet interiors, rich varied palette — deep purples + midnight blues + velvet blacks + poison greens + witch-fire green + fel-violet + blacklight + moonlit silver + twilight lavender + candle-amber + torch-orange + forge-ember + alchemist-gold + crimson accents (NO single-hue monochrome, NO red-red-red clustering — weave multiple accent colors into each scene)';
+  'Dark gothic fantasy, hauntingly beautiful, operatic dark romance with vampire-hunter danger, Castlevania + Bloodborne + Devil-May-Cry + Van-Helsing energy, rich varied palette with deep purples + midnight blues + velvet blacks + poison greens + candle-amber + moonlit silver accents';
 
-const PROMPT_SUFFIX = 'stylized anime-manga horror illustration, heavy-ink shadow, sharp-angular line-art, NOT painterly, NOT photoreal, NOT realistic, NOT 3D-render, NOT fantasy-book-cover, NOT young-adult-novel-cover, NOT generic-digital-art, NOT Artgerm-smooth-illustration, dark-manga stylization, no text no words no watermarks, hyper-detailed, frame-worthy gothic-horror poster art';
+const PROMPT_SUFFIX = 'no text no words no watermarks, hyper-detailed, frame-worthy dark-fantasy art';
 
 const ELEGANT_DARKNESS_BLOCK = `━━━ NIGHTSHADE — BEAUTIFUL, DANGEROUS, ALIVE ━━━
 

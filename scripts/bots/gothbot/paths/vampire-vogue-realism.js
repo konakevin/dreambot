@@ -5,7 +5,11 @@
  * model=flux-1.1-pro.
  *
  * AXIS POOLS (all injected into the brief as AUTHORITATIVE over the look):
- *   - VAMPIRE_LOOKS — wardrobe / makeup style / hair base (200 entries)
+ *   - VAMPIRE_ARCHETYPES — who she IS (role/age/energy/story) (25 entries)
+ *   - VAMPIRE_WARDROBE — chest-up visible outfit (25 entries)
+ *   - VAMPIRE_MAKEUP — avant-garde makeup looks (25 entries)
+ *   - VAMPIRE_CANDID_MOMENTS — micro-actions caught mid-moment (25 entries)
+ *   - HAIR_COLORS + FEMALE_HAIRSTYLES — shared character pools
  *   - VAMPIRE_ETHNICITIES — ethnic features OVERRIDE (30 entries)
  *   - VAMPIRE_EYE_COLORS — glowing iris hue + glow quality + pupil (30 entries)
  *   - VAMPIRE_LIGHTING — hue + shadow + direction composition (25 entries)
@@ -14,8 +18,23 @@
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
+const CROPS = [
+  'SINGLE EYE DOMINANT — one glowing eye fills 50-60% of the frame, the other eye is in deep shadow or cropped out entirely. We see: one massive glowing iris + cheekbone + side of nose + part of lips. The visible eye IS the image.',
+  'BOTH EYES — face framed edge-to-edge showing both glowing eyes with nose between them, cropped at forehead and chin. Classic macro face-portrait.',
+  'HALF-FACE SHADOW — one half of her face is lit, the other half in near-total darkness. The lit side shows one glowing eye + cheekbone + half of lips. Split lighting.',
+  'DIAGONAL TILT — face at a strong diagonal angle across the frame, forehead in one corner, chin in the opposite. Both eyes visible but at dramatic angle.',
+  'EXTREME LOW ANGLE — looking UP at her from below chin level. Both glowing eyes looking down at camera. Jawline and nostrils prominent. Menacing.',
+];
+
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const look = picker.pickWithRecency(pools.VAMPIRE_LOOKS, 'vampire_look');
+  const crop = CROPS[Math.floor(Math.random() * CROPS.length)];
+  const archetype = picker.pickWithRecency(pools.VAMPIRE_ARCHETYPES, 'vampire_archetype');
+  const wardrobe = picker.pickWithRecency(pools.VAMPIRE_WARDROBE, 'vampire_wardrobe');
+  const makeup = picker.pickWithRecency(pools.VAMPIRE_MAKEUP, 'vampire_makeup');
+  const candidMoment = picker.pickWithRecency(pools.VAMPIRE_CANDID_MOMENTS, 'vampire_candid_moment');
+  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'vampire_hair_color');
+  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'vampire_hairstyle');
+  const facialFeatures = picker.pickWithRecency(pools.FACIAL_FEATURES, 'vampire_facial_features');
   const lightingPool =
     pools.VAMPIRE_LIGHTING && pools.VAMPIRE_LIGHTING.length > 0
       ? pools.VAMPIRE_LIGHTING
@@ -49,20 +68,40 @@ ${eyeColor}
 
 Use THIS specific iris color + glow quality + pupil style. DO NOT swap to a different color. DO NOT use "crimson" or "amber" or "ember" if the pool says something else. NAME the specific iris color explicitly in the output.
 
-` : ''}▌ HER WARDROBE / MAKEUP STYLE / HAIR BASE (override ETHNICITY + IRIS from above if they conflict)
-${look}
+` : ''}▌ WHO SHE IS (her archetype — bake this into her ENERGY, not her appearance)
+${archetype}
 
-Treat this as the WARDROBE + MAKEUP-STYLE + HAIR base. If it describes an eye color or ethnicity that conflicts with the axes above, OVERRIDE with the axes above. Keep the wardrobe, couture details, hair styling, makeup style.
+This is her STORY, not her look. Let this color her gaze, her posture, her energy — an ancient aristocrat carries herself differently than a feral newborn.
+
+▌ HER FACE STRUCTURE (use these EXACT bone structure / proportions — this is what makes her face UNIQUE)
+${facialFeatures}
+
+Render THIS specific face geometry. This determines her jawline, nose shape, cheekbone prominence, brow, chin, lip shape. Do NOT default to a generic pretty face. If it says "crooked nose" or "square jaw" or "hollow cheeks" — THAT is what she looks like.
+
+▌ HER HAIR
+Color: ${hairColor}
+Style: ${hairstyle}
+
+▌ HER WARDROBE (chest-up visible only — neckline / collar / shoulders)
+${wardrobe}
+
+▌ HER MAKEUP (extreme avant-garde — Pat-McGrath / McQueen / Isamaya-Ffrench level)
+${makeup}
+
+▌ WHAT SHE'S CAUGHT DOING (candid micro-moment — NOT a pose)
+${candidMoment}
+
+Use this as the mid-moment verb/action. She was caught doing THIS when the camera fired.
 
 ▌ LIGHTING ON HER FACE (use this specific lighting composition)
 ${lighting}
 
 ═══════════════════════════════════════════════════════════════════
 
-━━━ FRAMING — HEAD-AND-SHOULDERS / CHEST-UP PORTRAIT (MANDATORY) ━━━
-Classic head-and-shoulders chest-up portrait — like a dark-couture magazine headshot pulled back enough to show the top of her collarbones and the top of her wardrobe. Her full head is visible with SPACE AROUND IT — a bit of room above her hair, her throat fully visible, her upper chest visible at the bottom of the frame. Face fills 30-45% of the frame (NOT more — do not crop in tight).
+━━━ FRAMING — THIS SPECIFIC CROP IS MANDATORY ━━━
+${crop}
 
-MANDATORY: her FULL FACE + FULL HEAD + FULL NECK + TOP OF CHEST all in frame. NEVER a face-crop. NEVER a macro-close-up. NEVER just-the-eyes crop. NEVER just-the-lips crop. If the viewer can't see her whole head plus her neck plus the top of her wardrobe, the framing is WRONG. Think "chest-up portrait", NOT "extreme face-crop".
+This is a MACRO close-up. Her face fills the ENTIRE frame. Wet rain-soaked skin with water droplets visible. Dark atmosphere pressing in from edges. NEVER a full head-and-shoulders shot. NEVER space above her head. NEVER her neck or chest visible. The face IS the entire image. USE THE CROP DESCRIBED ABOVE EXACTLY.
 
 MANDATORY VARIED ANGLE — rotate per entry:
 - 3/4 profile turn
@@ -85,15 +124,11 @@ Her mouth is parted because she is mid-exhale, mid-cold-breath, mid-lip-lick, mi
 ━━━ DEATHLY VAMPIRE PALLOR (MANDATORY) ━━━
 Her skin reads DEAD. Use multiple descriptors: corpse-white / bone-white / bloodless / deathly-pale / drained-of-blood / ashen-ivory / dead-white / porcelain-corpse / moonstone-pallid / paper-pale / ghost-white / waxy-translucent / blue-tinged / violet-tinted / cold-corpse-blue-tinge. Pale enough that faint blue veins show at temples. DEAD-LOOKING-BUT-ALIVE — skin reads corpse, eyes glow ancient. Name at least 2 pallor descriptors explicitly.
 
-━━━ EXTREME AVANT-GARDE COUTURE MAKEUP (MANDATORY — NAME AT LEAST 4 DETAILS) ━━━
-Ultra-heavy dramatic painted makeup against deathly-pale skin. Runway-extreme McQueen / Pat-McGrath / Isamaya-Ffrench level. Required elements (name at least 4 per entry):
-- MASSIVE smoky-ink-black or obsidian-violet painted eye makeup spilling far out past the socket across brow and OUT to temple / cheekbone / hairline in sharp stylized asymmetric shape
-- GRADIENT painted eyeshadow blown out in dramatic painted wing — use the color of the glowing iris pool pick as the gradient start, bleeding to jet-black or deep-obsidian
-- ORNATE BLACKWORK FILIGREE / RITUAL-SIGIL painted ornamental line-work in matte black or liquid gold on cheekbone / temple / under-eye / jawline
-- WET-GLOSS DARK LIPS — obsidian-black / jet-black / oxblood-wine / violet-ink / deep-plum / blue-black lipstick with heavy wet specular highlight
-- SHARP BLACK CONTOUR — extreme cut-sculpted cheekbone contour carving hollows
-- Crystal / rhinestone / blood-drop / jet-cabochon accent at corner of eye / temple / cheekbone
-- PAINTED TEARS — dark-matte liquid streaks running from inner eye down cheek
+━━━ MAKEUP — USE THE POOL PICK AS THE AUTHORITATIVE LOOK ━━━
+Render the MAKEUP-FROM-POOL entry FAITHFULLY — it describes a SPECIFIC look with specific colors, specific techniques, specific finish. DO NOT override it with generic "heavy black smoky eye." If the pool says "silent-film enormous eyes ringed in heavy black" that's DIFFERENT from "smeared kohl reapplied in layers" which is DIFFERENT from "bruise-tones in plum and green-black."
+
+The makeup should look WET — rain-soaked, dripping slightly, lived-in. But the SPECIFIC look comes from the pool, not from a default.
+NEVER face-paint patterns, NEVER clown/ICP, NEVER ghost-skull underlayers.
 
 ━━━ EVIL PREDATOR GAZE ━━━
 Cold, knowing, unblinking, unnaturally still. The gaze reads like something ancient deciding whether to bother with you. NOT flirty. NOT doe-eyed. NOT seductive-inviting. Predator-bird-calm. Name her gaze quality explicitly: "cold unblinking predator stare" / "unnaturally still knowing gaze" / "empty ancient stare" / "looking through you with bored menace".
@@ -130,13 +165,14 @@ Your output MUST start with the ETHNICITY from the pool (first 5-10 words). Then
 
 Write in this exact order (do NOT deviate):
 1. [ETHNICITY-FROM-POOL — 5-10 words at the very start: "{region} vampire woman with {bone structure} {eye shape} {nose} {lips}"]
-2. [DEATHLY PALLOR — 2+ descriptors: "bone-white corpse-drained skin with blue-vein temple tracery"]
-3. [SPECIFIC IRIS-FROM-POOL — exactly as the pool describes: "{specific color} {glow quality} iris with {pupil style}"]
-4. [GLAMOUR-VAMPIRE MAKEUP — dark, intense, DRAMATIC but NOT face-paint. Describe 4 elements: heavy black smoky eye-shadow thickly blended on the lid and slightly above the socket, sharp black winged eyeliner extending past the outer corner in a clean cat-eye flick, dramatic contour carving hollow cheekbones, WET-GLOSS LACQUERED DARK LIPS in oxblood / deep-wine / obsidian-black / deep-plum with heavy specular highlight. Think Interview-with-the-Vampire / Only-Lovers-Left-Alive / Penny-Dreadful Eva-Green / Theda-Bara 1920s vamp / Lady-Dimitrescu glamour. The makeup is INTENSE AND GLAMOROUS — NOT face-paint, NOT ritual-sigils on the cheek, NOT painted tear-streaks, NOT cracked-mask patterns, NOT ghost-skull underlayers, NOT painted crown-lines, NOT drippy-paint effects, NOT clown-makeup, NOT ICP-style, NOT KISS-style]
-5. [FANGS VISIBLE — "lips parted revealing two long sharp upper canine fangs"]
-6. [COUTURE WARDROBE from the LOOK — neckline/collar visible only]
-7. [HEAD-AND-SHOULDERS framing + varied angle + cold predator gaze + mid-moment verb]
-8. [LIGHTING-FROM-POOL + atmospheric color detail]
+2. [FACIAL-FEATURES-FROM-POOL — her unique face geometry: jaw, nose shape, cheekbone prominence, brow, chin]
+3. [DEATHLY PALLOR with COLD BLUE-TEAL CAST — "corpse-pale skin with cold blue-teal color grade, wet rain-soaked, water droplets on cheekbone"]
+4. [SPECIFIC IRIS-FROM-POOL — MASSIVE GLOWING with fire-like volcanic inner detail, radiating light onto surrounding skin]
+5. [MAKEUP-FROM-POOL — render the SPECIFIC look faithfully, make it WET and rain-soaked]
+6. [HAIR — color + style from pools, wet rain-soaked]
+7. [FANGS — if visible in crop, "sharp upper fangs visible through parted lips"]
+8. [USE THE MANDATORY CROP from above — compose EXACTLY as described]
+9. [LIGHTING-FROM-POOL — low-key, glowing eye as primary light source, most of face in shadow]
 
 Output ONLY the 60-80 word scene description, comma-separated phrases. Begin with the ETHNICITY. No preamble, no titles, no headers, no ━━━ or ═══ markers, no **bold**, no "render as" suffix.`;
 };
