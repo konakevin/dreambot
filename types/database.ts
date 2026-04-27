@@ -1392,6 +1392,14 @@ export type Database = {
         };
         Returns: undefined;
       };
+      get_bot_users: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          avatar_url: string;
+          id: string;
+          username: string;
+        }[];
+      };
       get_comments: {
         Args: { p_limit?: number; p_offset?: number; p_upload_id: string };
         Returns: {
@@ -1431,6 +1439,7 @@ export type Database = {
       };
       get_feed: {
         Args: {
+          p_bot_user_id?: string;
           p_cursor_id?: string;
           p_cursor_score?: number;
           p_limit?: number;

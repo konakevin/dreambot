@@ -15,9 +15,9 @@
  *   --dry-run         # skip flux + download (brief-only debug)
  *
  * Examples:
- *   node scripts/iter-bot.js --bot venusbot --count 10 --mode random --label smoke
- *   node scripts/iter-bot.js --bot venusbot --count 5 --mode stare --label stare-iter
- *   node scripts/iter-bot.js --bot venusbot --count 5 --mode mixed --post --label ship1
+ *   node scripts/iter-bot.js --bot gothbot --count 10 --mode random --label smoke
+ *   node scripts/iter-bot.js --bot gothbot --count 5 --mode stare --label stare-iter
+ *   node scripts/iter-bot.js --bot gothbot --count 5 --mode mixed --post --label ship1
  *
  * Batch mode: failures log + continue (unlike run-bot.js which fails loud).
  * Dev mode defaults: no DB post, no dedup commit, saves to /tmp/<bot>-<label>/.

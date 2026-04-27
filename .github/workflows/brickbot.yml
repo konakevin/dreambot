@@ -1,10 +1,10 @@
-name: TitanBot Dream Generation
+name: BrickBot Dream Generation
 
 on:
   schedule:
-    # 22:00 UTC + 10:00 UTC — staggered from prior migrated bots.
-    - cron: '0 22 * * *'
-    - cron: '0 10 * * *'
+    # 01:00 UTC + 13:00 UTC — staggered from PixelBot (01:30/13:30).
+    - cron: '0 1 * * *'
+    - cron: '0 13 * * *'
   workflow_dispatch:
     inputs:
       path:
@@ -35,13 +35,13 @@ jobs:
         if: github.event_name == 'schedule'
         run: sleep $((RANDOM % 14400))
 
-      - name: Generate TitanBot dream
+      - name: Generate BrickBot dream
         env:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           node scripts/run-bot.js \
-            --bot titanbot \
+            --bot brickbot \
             --path "${{ inputs.path || 'random' }}" \
             --vibe "${{ inputs.vibe || 'random' }}"

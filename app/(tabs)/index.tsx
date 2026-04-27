@@ -15,10 +15,14 @@ import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OverlayPill } from '@/components/OverlayPill';
+import { Image as ExpoImage } from 'expo-image';
+import { BotPillRow } from '@/components/BotPillRow';
+import { useBotUsers } from '@/hooks/useBotUsers';
+import { feedImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-type FeedTab = 'forYou' | 'following';
+type FeedTab = 'forYou' | 'following' | 'bots';
 const PAGE_SIZE = 20;
 
 /**
@@ -62,12 +66,12 @@ interface FeedCursor {
   id: string;
 }
 
-function useDreamFeed(tab: FeedTab) {
+function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
 
   return useInfiniteQuery({
-    queryKey: ['dreamFeed', tab, user?.id, feedSeed],
+    queryKey: ['dreamFeed', tab, user?.id, feedSeed, botUserId ?? null],
     queryFn: async ({ pageParam }): Promise<(DreamPostItem & { feed_score?: number })[]> => {
       const { data, error } = await supabase.rpc('get_feed', {
         p_user_id: user!.id,
@@ -75,6 +79,7 @@ function useDreamFeed(tab: FeedTab) {
         p_seed: feedSeed,
         p_tab: tab,
         ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
+        ...(tab === 'bots' && botUserId ? { p_bot_user_id: botUserId } : {}),
       });
       if (error) throw error;
       return castRows(data).map((row) => ({
@@ -97,6 +102,7 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
   const tabs: { key: FeedTab; label: string }[] = [
     { key: 'following', label: 'Following' },
     { key: 'forYou', label: 'Explore' },
+    { key: 'bots', label: 'Bots' },
   ];
 
   return (
@@ -121,6 +127,11 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
       title: 'No dreams from people you follow',
       sub: 'Follow people to see their creations',
     },
+    bots: {
+      icon: 'sparkles-outline',
+      title: 'No bot dreams yet',
+      sub: 'Bot dreams will appear here soon',
+    },
   };
   const m = msgs[tab];
   return (
@@ -138,9 +149,12 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
+  const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
+  const { data: botUsers } = useBotUsers();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isRefetching } =
-    useDreamFeed(activeTab);
+    useDreamFeed(activeTab, activeTab === 'bots' ? selectedBotId : undefined);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
@@ -191,8 +205,11 @@ export default function HomeScreen() {
     })();
   }, [pendingPostId]);
 
-  // Content diversity: reorder to prevent monotonous sequences
-  const diverseFeed = useMemo(() => applyDiversity(feedPosts), [feedPosts]);
+  // Content diversity: reorder to prevent monotonous sequences (skip for bots — chronological)
+  const diverseFeed = useMemo(
+    () => (activeTab === 'bots' ? feedPosts : applyDiversity(feedPosts)),
+    [feedPosts, activeTab]
+  );
 
   // Prepend pinned post (e.g. deep link, first dream after onboarding)
   const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...diverseFeed] : diverseFeed;
@@ -204,16 +221,40 @@ export default function HomeScreen() {
     }
   }, [pinnedPost]);
 
+  // Prefetch first image for each bot when entering Bots tab
+  useEffect(() => {
+    if (activeTab !== 'bots' || !botUsers?.length || !user) return;
+    Promise.allSettled(
+      botUsers.map(async (bot) => {
+        const { data: rows } = await supabase.rpc('get_feed', {
+          p_user_id: user.id,
+          p_limit: 1,
+          p_seed: 0,
+          p_tab: 'bots',
+          p_bot_user_id: bot.id,
+        });
+        const url = (rows as { image_url?: string }[] | null)?.[0]?.image_url;
+        if (url) ExpoImage.prefetch([feedImageUrl(url)]);
+      })
+    );
+  }, [activeTab, botUsers, user]);
+
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);
+    if (tab !== 'bots') setSelectedBotId(null);
     listRef.current?.scrollToOffset({ offset: 0, animated: false });
-    // Clear pinned post when switching tabs
     if (pinnedPost) setPinnedPost(null);
+  }
+
+  function handleBotSelect(botId: string | null) {
+    setSelectedBotId(botId);
+    listRef.current?.scrollToOffset({ offset: 0, animated: false });
   }
 
   return (
     <View style={s.root}>
       <FullScreenFeed
+        key={activeTab === 'bots' ? `bots-${selectedBotId}` : activeTab}
         posts={posts}
         isLoading={isLoading}
         isRefreshing={isRefetching}
@@ -229,7 +270,10 @@ export default function HomeScreen() {
       <Animated.View style={[s.topOverlayWrap, overlayStyle]}>
         <LinearGradient
           colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.2)', 'transparent']}
-          style={[s.topOverlay, { paddingTop: insets.top }]}
+          style={[
+            s.topOverlay,
+            { paddingTop: insets.top, paddingBottom: activeTab === 'bots' ? 28 : 20 },
+          ]}
           pointerEvents="box-none"
         >
           <View style={s.topRow}>
@@ -237,6 +281,9 @@ export default function HomeScreen() {
             <FeedTabs active={activeTab} onChange={handleTabChange} />
             <View style={{ flex: 1, minWidth: 42 }} />
           </View>
+          {activeTab === 'bots' && botUsers && botUsers.length > 0 && (
+            <BotPillRow bots={botUsers} selectedBotId={selectedBotId} onSelect={handleBotSelect} />
+          )}
         </LinearGradient>
       </Animated.View>
     </View>
@@ -255,7 +302,7 @@ const s = StyleSheet.create({
   emptyTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
-  topOverlay: { paddingBottom: 20 },
+  topOverlay: {},
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',

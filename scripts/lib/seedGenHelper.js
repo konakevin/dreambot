@@ -9,7 +9,7 @@
  * Usage:
  *   const { generatePool } = require('../../lib/seedGenHelper');
  *   generatePool({
- *     outPath: 'scripts/bots/venusbot/seeds/expressions.json',
+ *     outPath: 'scripts/bots/gothbot/seeds/expressions.json',
  *     total: 50,
  *     batch: 10,
  *     metaPrompt: (perBatchCount) => `You are writing ${perBatchCount} expression entries...`

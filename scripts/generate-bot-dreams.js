@@ -54,7 +54,7 @@ const BOTS = {
   // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
   //   bloombot, glowbot, earthbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot, starbot,
   //   steambot, tinybot, toybot, beachbot, pixelbot, oceanbot, dinobot, titanbot
-  // Inactive (scripts/bots/_inactive_*): sirenbot, faebot
+  // All 20 active bots live in scripts/bots/<botname>/
 };
 
 /**

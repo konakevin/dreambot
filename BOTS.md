@@ -824,14 +824,13 @@ Search for the bot in the app, check their profile shows posts. Review renders o
 
 ### Active Image Bots (V2 Engine)
 
-All 18 bots below are on per-bot crons via the V2 engine (SirenBot deactivated, see Inactive section).
+All 18 bots below are on per-bot crons via the V2 engine.
 
 | Bot | Directory | Content | Paths | Mediums |
 |---|---|---|---|---|
 | StarBot | `starbot/` | Sci-fi / space / cyborg | 13 | render, real-astro, star-oil-cosmos |
 | DragonBot | `dragonbot/` | Epic fantasy / dragons | 8+ | canvas, watercolor |
 | GothBot | `gothbot/` | Gothic dark / vampires | 6+ | gothic, anime, canvas |
-| ~~SirenBot~~ | `_inactive_sirenbot/` | *(inactive)* Fantasy characters | 7 | canvas, watercolor |
 | MangaBot | `mangabot/` | Anime / Japanese | 4+ | anime |
 | BloomBot | `bloombot/` | Flowers / botanical | 4+ | photography, canvas, watercolor, pencil |
 | EarthBot | `earthbot/` | Nature / landscape | 4+ | photography, canvas, watercolor |
@@ -865,23 +864,9 @@ Content bots use standalone scripts (NOT the V2 engine). See [Content Bots (Huma
 
 - **OceanBot** (`scripts/bots/oceanbot/`) — reference for `cycleAllPaths` shuffle-bag cycling (15 paths, all visited before any repeats), custom bot-scoped mediums (`maritime-oil-legend`, `maritime-oil-classic` for mermaid-legend path via `mediumByPath`), and split lighting pools (underwater vs. surface vs. mermaid-specific).
 
-### Inactive Bots (deactivated 2026-04-26, kept for reference)
+### Notes
 
-Directories moved to `scripts/bots/_inactive_<name>/`, gen-seeds to `scripts/gen-seeds/_inactive_<name>/`, workflows renamed to `_inactive_<name>.yml`. All uploads deleted, run logs + dedup rows cleaned, accounts set to `is_public = false`. User rows kept in DB for potential resurrection.
-
-**DB state:**
-- `FaeBot` — user_id `9171772a-b060-4f53-8032-c4e2b5f387e1`, `is_public = false`, 0 uploads
-- `SirenBot` — user_id `ab53c334-9d17-44e9-9b8e-47ebe8ec72eb`, `is_public = false`, 0 uploads
-
-**To resurrect a bot:** move `_inactive_<name>/` back to `<name>/`, set `is_public = true` on the user row, re-enable the workflow (remove `_inactive_` prefix), run a seed batch to populate the feed.
-
-| Bot | Directory | Why Deactivated | Notable Patterns |
-|---|---|---|---|
-| SirenBot | `_inactive_sirenbot/` | Superseded by FaeBot nymph paths, which lifted SirenBot's nymph archetype into a broader enchanted-forest theme. Workflow cron disabled. | Original nymph character archetype (forest creature, living nature growing from skin). 7 paths: stare, lounge, dance, hunt, bathe, emerge, siren-call. Shared NYMPH_HAIR + NYMPH_SKIN dedup pools for character variety. |
-| FaeBot | `_inactive_faebot/` | Experimental bot that was iterating on erotic classical fine art nymphs. Never shipped to production cron. Kept for reference on: direct-prompt mode (Sonnet bypass), Flux NSFW filter calibration, erotic content edge-finding. | 12 paths (nymph, dryad, fae-queen, naiad, mushroom-spirit, hedge-witch, bee-keeper, spore-light, moonwell-keeper, willow-wisp, changeling, siren-nymph). Key innovation: **direct prompt mode** — siren-nymph path returns `{ direct: true, prompt }` to bypass Sonnet (which was refusing/sanitizing erotic content). Engine support added to `botEngine.js`. Flux-dev only (permissive NSFW filter). SIREN_NYMPH_SKIN pool (no coverings) separate from shared NYMPH_SKIN pool (has coverings). |
-| MermaidBot | **DELETED** | Superseded by OceanBot's mermaid-legend path. All files, DB uploads (59), run logs (65), user account, and auth record fully deleted 2026-04-26. Not recoverable. | 8 paths (warrior, ice, shore, royal, dark, reef, deep, siren). Dedicated mermaid character pools (features, hair, coverings). The mermaid-legend path in OceanBot carries forward the concept with maritime oil-painting mediums and better pool architecture. |
-
-**Direct prompt mode** (added to `scripts/lib/botEngine.js` during FaeBot dev): if `buildBrief()` returns `{ direct: true, prompt: '...' }` instead of a string, the engine skips the Sonnet call entirely and uses the prompt as-is. Useful for any path where Sonnet's content policy is a blocker. The refusal detection (checks for "I cannot create", "I'm not able to", etc.) was also added as a safety net for standard Sonnet paths.
+**Direct prompt mode** (`scripts/lib/botEngine.js`): if `buildBrief()` returns `{ direct: true, prompt: '...' }` instead of a string, the engine skips the Sonnet call entirely and uses the prompt as-is. The refusal detection (checks for "I cannot create", "I'm not able to", etc.) is a safety net for standard Sonnet paths.
 
 ---
 

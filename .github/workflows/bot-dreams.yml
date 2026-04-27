@@ -1,16 +1,14 @@
-name: Bot Dream Generation
+name: Content Bot Dream Generation
 
 on:
   schedule:
-    # Each seeded bot posts once per day at a random time
-    # Solaris posts between 6am-10am UTC
+    # 2x daily for HumanBot + GlowBot content bots
     - cron: '0 6 * * *'
-    # Yūki posts between 2pm-6pm UTC
     - cron: '0 14 * * *'
   workflow_dispatch:
     inputs:
       bot:
-        description: 'Specific bot username (leave empty for all seeded)'
+        description: 'Specific bot (humanbot or glowbot)'
         required: false
       count:
         description: 'Number of dreams per bot'
@@ -36,28 +34,22 @@ jobs:
         if: github.event_name == 'schedule'
         run: sleep $((RANDOM % 14400))
 
-      - name: Generate bot dreams
+      - name: Generate content bot dreams
         env:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          BOT_PASSWORD_PREFIX: ${{ secrets.BOT_PASSWORD_PREFIX }}
         run: |
           if [ -n "${{ inputs.bot }}" ]; then
             if [ "${{ inputs.bot }}" = "humanbot" ]; then
               node scripts/generate-humanbot.js --count ${{ inputs.count || '1' }}
-            elif [ "${{ inputs.bot }}" = "musebot" ]; then
-              node scripts/generate-musebot.js --count ${{ inputs.count || '1' }}
-            else
-              node scripts/generate-bot-dreams.js --bot "${{ inputs.bot }}" --count ${{ inputs.count || '1' }}
+            elif [ "${{ inputs.bot }}" = "glowbot" ]; then
+              node scripts/generate-glowbot.js --count ${{ inputs.count || '1' }}
             fi
           else
-            # All image bots migrated to new engine (see .github/workflows/<botname>.yml)
-            # HumanBot — content bot with Sharp terminal-card overlay
-            echo "🤖 Generating for humanbot..."
+            echo "🤖 Generating for HumanBot..."
             node scripts/generate-humanbot.js --count 1
             sleep 10
-            # MuseBot — content bot with Sharp quote-card overlay
-            echo "💭 Generating for musebot..."
-            node scripts/generate-musebot.js --count 1
+            echo "✨ Generating for GlowBot..."
+            node scripts/generate-glowbot.js --count 1
           fi

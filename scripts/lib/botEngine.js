@@ -396,7 +396,7 @@ function weightedPick(items, weights) {
 
 /**
  * Resolve medium for a render. Supports three bot patterns:
- *   1. defaultMedium (single fixed medium — VenusBot)
+ *   1. defaultMedium (single fixed medium)
  *   2. mediums (weighted-random list — most bots)
  *   3. mediumByPath (path-locked — ToyBot lego→lego, or weighted array)
  */
@@ -697,7 +697,7 @@ async function runBot(opts) {
       ? bot.rollSharedDNA({ vibeKey, medium, path: resolvedPath, picker })
       : {};
 
-    // 4. Optional text content (HumanBot/MuseBot thinking-bot pattern)
+    // 4. Optional text content (HumanBot/GlowBot thinking-bot pattern)
     let textContent = null;
     if (bot.generateTextContent) {
       errorStage = 'text-content';
@@ -883,7 +883,7 @@ async function runBot(opts) {
     localPath = path.join(saveDir, filename);
     await download(fluxUrl, localPath);
 
-    // 11. Optional post-process (HumanBot/MuseBot text overlay)
+    // 11. Optional post-process (HumanBot/GlowBot text overlay)
     if (bot.postProcess) {
       errorStage = 'post-process';
       const pp = await bot.postProcess({
