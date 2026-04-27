@@ -50,23 +50,7 @@ module.exports = {
 
   cycleAllPaths: true,
 
-  mediums: ['ancient-epic'],
-
-  mediumByPath: {
-    'grand-temple': ['ancient-epic', 'render'],
-    'ancient-city': ['ancient-epic', 'render'],
-    'monument': ['ancient-epic', 'render'],
-    'river-civilization': ['ancient-epic', 'render'],
-    'ancient-harbor': ['ancient-epic', 'render'],
-    'lost-ruins': ['ancient-epic', 'render'],
-    'ancient-interior': ['ancient-epic', 'render'],
-    'ancient-quiet': ['ancient-epic', 'render'],
-    'ancient-waters': ['ancient-epic', 'render'],
-    'ancient-frost': ['ancient-epic', 'render'],
-    'ancient-night': ['ancient-epic', 'render'],
-    'ancient-jungle': ['ancient-epic', 'render'],
-    'ancient-island': ['ancient-epic', 'render'],
-  },
+  mediums: ['ancient-epic', 'render', 'canvas'],
 
   mediumStyles: {
     'ancient-epic':
