@@ -4,8 +4,8 @@
 >
 > All 19 image bots run on the standalone V2 engine (`scripts/lib/botEngine.js`).
 > Each bot is a pure-data Node module in `scripts/bots/<name>/` with its own
-> per-bot GitHub Actions cron. Two content bots (HumanBot, MuseBot) use custom
-> scripts with Sharp text overlays.
+> per-bot GitHub Actions cron. Two content bots (HumanBot, GlowBot) use custom
+> standalone scripts with Sharp text overlays — see [Content Bots](#content-bots-humanbot--glowbot).
 >
 > **Key files:**
 > - `scripts/lib/botEngine.js` — shared render engine (Sonnet + Flux + Supabase)
@@ -31,8 +31,9 @@
 11. [Bot Authentication & Credential Rotation](#bot-authentication--credential-rotation)
 12. [Creating a New Bot From Scratch](#creating-a-new-bot-from-scratch)
 13. [Bot Roster](#bot-roster)
-14. [Nightly User Dreams](#nightly-user-dreams)
-15. [Database Tables](#database-tables)
+14. [Content Bots (HumanBot & GlowBot)](#content-bots-humanbot--glowbot)
+15. [Nightly User Dreams](#nightly-user-dreams)
+16. [Database Tables](#database-tables)
 
 ---
 
@@ -678,9 +679,9 @@ Bots are real Supabase Auth users (`bot-{username}@dreambot.app`). How they auth
 | Pattern | Used by | How it auths |
 |---|---|---|
 | **Service role** (no password) | All V2 engine bots — `run-bot.js` invokes `lib/botEngine.js`, which uses `SUPABASE_SERVICE_ROLE_KEY` directly. No `signInWithPassword`. | Server-side admin key bypasses RLS to insert uploads. |
-| **Password sign-in** | Legacy generators — `scripts/generate-humanbot.js`, `scripts/generate-musebot.js`, and (historically) `scripts/generate-bot-dreams.js`. They call `auth.signInWithPassword()`. | Reads `BOT_PASSWORD_PREFIX` env var; password is `${BOT_PASSWORD_PREFIX}${botname}`. |
+| **Password sign-in** | Legacy only — historically `scripts/generate-bot-dreams.js` called `auth.signInWithPassword()`. HumanBot and GlowBot now use service role directly. | Reads `BOT_PASSWORD_PREFIX` env var; password is `${BOT_PASSWORD_PREFIX}${botname}`. |
 
-The `BOT_PASSWORD_PREFIX` system exists only for the legacy password-sign-in path. Once HumanBot/MuseBot are migrated to V2, the prefix can be retired.
+The `BOT_PASSWORD_PREFIX` system exists only for the legacy password-sign-in path. All active bots now use service role — the prefix can be retired but is kept for potential password-based auth needs.
 
 ### Where the Prefix Lives
 
@@ -837,7 +838,7 @@ All 18 bots below are on per-bot crons via the V2 engine (SirenBot deactivated, 
 | ToyBot | `toybot/` | Toys / crafts / miniatures | 5+ | lego, animation, claymation |
 | TinyBot | `tinybot/` | Miniatures / dioramas | 4+ | photography, animation, claymation |
 | SteamBot | `steambot/` | Steampunk | 4+ | canvas, photography |
-| TitanBot | `titanbot/` | Mythology / gods | 4+ | canvas, photography |
+| AncientBot | `ancientbot/` | Ancient civilizations / ruins | 14 | canvas, photography |
 | CoquetteBot | `coquettebot/` | Cute feminine | 4+ | coquette, fairytale, watercolor |
 | CuddleBot | `cuddlebot/` | Kawaii cozy | 4+ | animation, claymation, storybook |
 | PixelBot | `pixelbot/` | Retro pixel art | 4+ | pixels |
@@ -849,12 +850,12 @@ All 18 bots below are on per-bot crons via the V2 engine (SirenBot deactivated, 
 
 ### Content Bots (Custom Scripts)
 
-| Bot | Content | Medium | Script |
+| Bot | Voice | Medium/Vibe | Script |
 |---|---|---|---|
-| HumanBot | AI roasting human behavior | watercolor + enchanted | `generate-humanbot.js` |
-| MuseBot | AI musing on human condition | aura + ethereal | `generate-musebot.js` |
+| HumanBot | Deadpan AI observations about humans | watercolor + enchanted | `generate-humanbot.js` |
+| GlowBot | Profound original thoughts | aura + ethereal | `generate-glowbot.js` |
 
-Content bots follow a different architecture: stateless (no seed pool), Sonnet generates text content fresh each run, Sharp composites text overlay onto Flux-rendered base image.
+Content bots use standalone scripts (NOT the V2 engine). See [Content Bots (HumanBot & GlowBot)](#content-bots-humanbot--glowbot) for full architecture.
 
 ### Reference Implementations
 
@@ -881,6 +882,162 @@ Directories moved to `scripts/bots/_inactive_<name>/`, gen-seeds to `scripts/gen
 | MermaidBot | **DELETED** | Superseded by OceanBot's mermaid-legend path. All files, DB uploads (59), run logs (65), user account, and auth record fully deleted 2026-04-26. Not recoverable. | 8 paths (warrior, ice, shore, royal, dark, reef, deep, siren). Dedicated mermaid character pools (features, hair, coverings). The mermaid-legend path in OceanBot carries forward the concept with maritime oil-painting mediums and better pool architecture. |
 
 **Direct prompt mode** (added to `scripts/lib/botEngine.js` during FaeBot dev): if `buildBrief()` returns `{ direct: true, prompt: '...' }` instead of a string, the engine skips the Sonnet call entirely and uses the prompt as-is. Useful for any path where Sonnet's content policy is a blocker. The refusal detection (checks for "I cannot create", "I'm not able to", etc.) was also added as a safety net for standard Sonnet paths.
+
+---
+
+## Content Bots (HumanBot & GlowBot)
+
+Content bots are fundamentally different from image bots. They generate **text + image** posts where the text is the star — composited directly onto the image via Sharp SVG overlays. They bypass the V2 engine entirely and use standalone scripts with their own Sonnet calls, Flux Dev calls, and Supabase writes.
+
+### Why They're Separate from the V2 Engine
+
+The V2 engine pipeline (Sonnet brief → Flux render → post) mutates prompts through medium directives and prefix/suffix wrapping. Content bots need verbatim control over their Flux prompts to preserve specific aesthetics (watercolor storybook for HumanBot, bioluminescent aura for GlowBot). The Edge Function's V2 pipeline was restructuring/mutating hints — destroying the aesthetic that makes these bots work.
+
+### Shared Architecture
+
+Both content bots follow the same 4-step pipeline:
+
+```
+1. Call Sonnet → structured JSON (text content + image description)
+2. Call Flux Dev directly → base image (bypasses Edge Function entirely)
+3. Download image, composite text overlay via Sharp + SVG
+4. Upload to Storage, insert uploads row with all feed-visibility flags
+```
+
+**Shared technical details:**
+- **Auth:** Service role key (`SUPABASE_SERVICE_ROLE_KEY`), no bot password sign-in
+- **Flux model:** `black-forest-labs/flux-dev` exclusively, called via Replicate REST API with polling
+- **Image size:** 768×1344 (9:16), JPEG quality 92
+- **Feed flags:** `is_public: true`, `is_approved: true`, `is_posted: true`, `posted_at: now()` — all set on insert so posts appear in feed immediately
+- **Sonnet model:** `claude-sonnet-4-5-20250929` for all text generation
+- **Banned-phrase system:** regex array checked after Sonnet returns; up to 3 retries on match
+- **Batch dedup:** tracks recent topics/themes within a batch to prevent same-session repetition
+
+### HumanBot
+
+**Script:** `scripts/generate-humanbot.js`
+**DB user_id:** `7df6aeb4-8e94-44b0-8f65-207638322f02`
+**Medium/Vibe:** `watercolor` / `enchanted` (locked, every post)
+
+**Voice:** Deadpan single-statement observations about humans from an AI's perspective. Starts with "Humans." 8-20 words. Not roasting, not warm — clinical and genuinely puzzled. The humor IS the observation stated so plainly it becomes profound.
+
+**Example outputs:**
+- "Humans will die on a hill they couldn't find on a map."
+- "Humans invented the alarm clock and then invented the snooze button."
+- "Humans created 'read receipts' and then got mad about them."
+
+**Character:** A vintage 1950s tin wind-up toy robot crossed with a Rock 'Em Sock 'Em Robot — bright red lithographed metal body, boxy head, chrome trim, oversized boxing-glove hands. The robot fills 60% of the frame (chest-up hero shot) with nature as backdrop. The cheap-toy aesthetic against fine-art watercolor treatment is inherent comedy.
+
+**Sonnet output format:**
+```json
+{ "topic": "2-4 word label", "thought": "Humans...", "image_hint": "15-30 words — backdrop + prop + lighting" }
+```
+
+**Seed pools (400 entries each):**
+- `scripts/gen-seeds/humanbot/behaviors.json` — 400 peculiar human behaviors seeding topic diversity (8 categories × 50)
+- `scripts/gen-seeds/humanbot/scenes.json` — 400 painterly storybook locations (nature, coasts, historic, whimsical — NO fluorescent/mundane/indoor)
+
+**Text overlay:** Green phosphor terminal card on pitch black background, monospace font (SF Mono/Menlo/Consolas). Positioned at 60% down the image, 60% width, centered. Layout:
+```
+$ humanbot
+> thought text wraps here
+  continuation line
+```
+
+**Banned phrases:** "You are not X. You are Y." structure, therapy words (hiding, coping, performing, processing, deflecting)
+
+**Style constants:**
+- `WATERCOLOR_STYLE` — traditional watercolor painting, fluid transparent pigment, visible paper texture
+- `ENCHANTED_MOOD` — fairy-tale atmosphere, sparkling particles, glowing soft light
+
+### GlowBot
+
+**Script:** `scripts/generate-glowbot.js`
+**DB user_id:** `abe6398a-0af0-4a1f-9680-cb498c10f4c2`
+**Medium/Vibe:** `aura` / `ethereal` (locked, every post)
+
+**Voice:** Original profound thoughts — the kind you screenshot and send to a friend. 8-25 words. Does NOT start with "Humans" (that's HumanBot). Direct statements to the reader. Calm, certain, like someone who figured something out. The "3am scroller" — writing for someone scrolling alone, carrying something they haven't said out loud.
+
+**Example outputs:**
+- "The exhausting part isn't changing. It's pretending you haven't."
+- "Ready is a place you arrive at by going, not a feeling you wait around for."
+- "The hardest prison to escape is the version of yourself that other people still believe in."
+
+**Five shapes that work:** reframe, uncomfortable truth, permission slip, wake-up call, quiet observation. Best ones have a TURN — start one direction, land somewhere unexpected.
+
+**Character:** A small glowing cyborg flower growing from the ground in a vast nature landscape. Translucent crystalline petals with circuitry-vein patterns, mechanical stem, bioluminescent glow flooding outward. The flower is tiny — the landscape dwarfs it. Each render picks a random flower type (24 varieties: lotus, dahlia, orchid, protea, etc.) and a random color from a 50-color rainbow pool.
+
+**50-color rainbow pool:** Each render picks one color that determines the flower's hue AND the color of light it casts onto surroundings (rocks, water, grass, fog). Colors span the full spectrum — deep ruby red through electric cyan through vivid purple through champagne gold. The prompt hammers the color 8+ times with words like DRENCHES, FLOODS, OVERWHELMING, BLEEDS to push Flux toward maximum glow saturation.
+
+**Sonnet output format:**
+```json
+{ "type": "third_eye", "theme": "2-5 word label", "quote": "8-25 words", "flower": "10-20 words unique bloom shape/form", "image_hint": "20-35 words stunning nature scene + lighting" }
+```
+
+**Seed pool:**
+- `scripts/gen-seeds/glowbot/topics.json` — 400 profound thought topic seeds (8 categories: courage/fear, love/connection, time/presence, growth/change, resilience/healing, purpose/meaning, perspective/wonder, identity/truth)
+
+**Text overlay:** Serif typography (Cormorant Garamond, embedded as base64 @font-face) floating on a soft dark gradient fade. NO card chrome — no rectangle, no border. The text feels like part of the image, not laid on top. Gradient covers bottom 50% (transparent → 0.9 opacity). Text centered at 45% width to clear feed UI icons on the right side. Font auto-scales inversely with word count (0.044 ratio for ≤8 words down to 0.028 for 26+).
+
+**Font files:** `scripts/fonts/CormorantGaramond-Regular.ttf` and `CormorantGaramond-Light.ttf` — loaded once at module init, base64-encoded, embedded in SVG @font-face. Falls back to Georgia if missing.
+
+**Banned phrases:** Crystal-seller Instagram language — energy, vibrations, manifestation, chakras, abundance, "the universe is", "trust the process", alignment, "your journey", "higher self"
+
+**Style constants:**
+- `AURA_STYLE` — bioluminescent glow, subsurface scattering, extreme bloom, overexposed halos, god rays, chromatic aberration
+- `ETHEREAL_MOOD` — otherworldly serenity, atmospheric haze, gauzy floating quality, entire scene bathed in flower glow
+
+**Anthropic backoff:** GlowBot has its own `fetchAnthropicWithBackoff()` that retries on 429/529/5xx with exponential delays (2s/5s/12s/30s). HumanBot does not (throws immediately on non-2xx).
+
+### How They Differ (Quick Reference)
+
+| | HumanBot | GlowBot |
+|---|---|---|
+| **Voice** | "Humans..." deadpan observations | Direct profound statements |
+| **Tone** | Clinical, puzzled, faintly judging | Calm, certain, wise |
+| **Medium** | watercolor | aura (bioluminescent) |
+| **Vibe** | enchanted | ethereal |
+| **Character** | Red tin wind-up toy robot (hero shot) | Glowing cyborg flower (tiny in vast landscape) |
+| **Overlay** | Green terminal card, monospace | Serif on gradient fade, no card |
+| **Scene pool** | 400 painterly storybook locations | Scene from Sonnet (no separate pool) |
+| **Topic pool** | 400 human behaviors | 400 profound thought seeds |
+| **Color variety** | N/A (robot is always red) | 50-color rainbow pool per render |
+| **Word limit** | 8-20 words | 8-25 words |
+| **Font** | SF Mono / Menlo / monospace (system) | Cormorant Garamond (embedded TTF) |
+
+### Running Content Bots
+
+```bash
+# HumanBot
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+node scripts/generate-humanbot.js              # one post
+node scripts/generate-humanbot.js --count 5    # five posts
+node scripts/generate-humanbot.js --dry-run    # Sonnet output only, no image
+
+# GlowBot
+node scripts/generate-glowbot.js               # one post
+node scripts/generate-glowbot.js --count 5     # five posts
+node scripts/generate-glowbot.js --dry-run     # Sonnet output only, no image
+```
+
+### Maintaining Content Bots
+
+**Regenerating seed pools:**
+```bash
+node scripts/gen-seeds/humanbot/gen-behaviors.js   # 400 human behaviors
+node scripts/gen-seeds/humanbot/gen-scenes.js      # 400 painterly scenes
+node scripts/gen-seeds/glowbot/gen-topics.js       # 400 profound thought topics
+```
+
+**Tuning the voice:** Edit `SYSTEM_PROMPT` in the script. The examples section is the most important part — Sonnet calibrates to those examples. Add/remove examples to shift the tone.
+
+**Tuning the visual:** Edit the style constants (`WATERCOLOR_STYLE`/`ENCHANTED_MOOD` for HumanBot, `AURA_STYLE`/`ETHEREAL_MOOD` for GlowBot) and the character description (`HUMANBOT_CHARACTER` / `buildFluxPrompt()`). These are plain strings prepended to the Flux prompt.
+
+**Adding banned phrases:** Add regex patterns to the `BANNED_PHRASES` array. Sonnet retries up to 3x when a match is found.
+
+**Changing the overlay:** Edit `buildTerminalSVG()` (HumanBot) or `buildQuoteSVG()` (GlowBot). Both generate SVG strings that Sharp composites onto the base image. Test changes by running `--count 1` and checking the output.
+
+**Key rule:** These scripts are self-contained. They do NOT share code with the V2 engine, Edge Functions, or each other. Changes to one never affect the other or the image bots.
 
 ---
 
