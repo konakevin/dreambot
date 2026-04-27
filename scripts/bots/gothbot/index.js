@@ -42,15 +42,16 @@ module.exports = {
   allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
   // Per-path model override — takes precedence over pickModel (medium pool).
+  // Scenery/creature paths: 65/35 flux-1.1-pro/flux-dev (weighted object format).
+  // Character paths: locked to flux-dev (1.1-pro's E005 safety filter trips on dark characters).
   modelByPath: {
-    // Landscape/architecture paths — 50/50 flux-dev/flux-1.1-pro rotation
-    // (matches DragonBot's flux-dev landscape-quality + gives flux-1.1-pro
-    // variety). Previously castlevania-scene + cozy-goth were locked to
-    // flux-1.1-pro for safety-filter tolerance on character renders — but
-    // those paths are architecture/interior-only, no characters, so the
-    // lock isn't needed.
-    'castlevania-scene': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'cozy-goth': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'dark-landscape':      { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    'gothic-architecture': { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    'castlevania-scene':   { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    'cozy-goth':           { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    'gothic-vista':        { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    'gothic-darklands':    { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    'horror-creature':     { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
     'vampire-girls-2': 'black-forest-labs/flux-dev',
     'vampire-boys': 'black-forest-labs/flux-dev',
   },
@@ -177,21 +178,7 @@ module.exports = {
     'gothic-darklands',
   ],
 
-  pathWeights: {
-    'dark-landscape': 3,
-    'vampire-girls-2': 3,
-    'vampire-boys': 3,
-    'gothic-vista': 3,
-    'gothic-darklands': 3,
-    'horror-creature': 3,
-    'goth-closeup': 2,
-    'goth-full-body': 2,
-    'goth-male-closeup': 2,
-    'goth-male-full-body': 2,
-    'gothic-architecture': 2,
-    'castlevania-scene': 2,
-    'cozy-goth': 1,
-  },
+  cycleAllPaths: true,
 
   rollSharedDNA({ vibeKey, picker }) {
     return {

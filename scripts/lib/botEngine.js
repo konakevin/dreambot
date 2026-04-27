@@ -840,11 +840,21 @@ async function runBot(opts) {
     let renderInputOverrides = {};
     if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
       const modelVal = bot.modelByPath[resolvedPath];
-      // Support weighted-array rotation (e.g. ['flux-dev', 'flux-1.1-pro'])
-      // mirroring mediumByPath's array behavior.
-      renderModel = Array.isArray(modelVal)
-        ? modelVal[Math.floor(Math.random() * modelVal.length)]
-        : modelVal;
+      // Support three formats:
+      //   string: 'flux-dev' — locked to one model
+      //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
+      //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
+      if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
+        const entries = Object.entries(modelVal);
+        const totalW = entries.reduce((s, [, w]) => s + w, 0);
+        let roll = Math.random() * totalW;
+        renderModel = entries[entries.length - 1][0];
+        for (const [m, w] of entries) { roll -= w; if (roll <= 0) { renderModel = m; break; } }
+      } else {
+        renderModel = Array.isArray(modelVal)
+          ? modelVal[Math.floor(Math.random() * modelVal.length)]
+          : modelVal;
+      }
       // No input overrides for Flux; SDXL would need width/height/steps
       if (renderModel === 'sdxl') renderInputOverrides = { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 };
       console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
