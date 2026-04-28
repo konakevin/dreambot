@@ -22,6 +22,8 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
+import { onboardingStyles as shared } from './sharedStyles';
+import { OnboardingFooter } from './OnboardingFooter';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
 
 interface Props {
@@ -303,10 +305,10 @@ export function DreamCastStep({ onNext, onBack }: Props) {
   }
 
   return (
-    <View style={s.root}>
+    <View style={shared.root}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={s.title}>Who&apos;s coming along?</Text>
-        <Text style={s.subtitle}>
+        <Text style={shared.heroTitle}>Who&apos;s coming along?</Text>
+        <Text style={shared.heroSubtitle}>
           Upload a photo and your DreamBot will weave you right into your dreams. It&apos;s what
           makes them feel personal.
         </Text>
@@ -336,35 +338,18 @@ export function DreamCastStep({ onNext, onBack }: Props) {
       </ScrollView>
 
       {!isEditing && (
-        <View style={s.footer}>
-          <View style={s.footerRow}>
-            <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-              <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-              <Text style={s.backBtnText}>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.nextBtn}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                onNext();
-              }}
-              activeOpacity={0.7}
-            >
-              <Text style={s.nextBtnText}>{dreamCast.length === 0 ? 'Skip' : 'Next'}</Text>
-              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <OnboardingFooter
+          onNext={onNext}
+          onBack={onBack}
+          nextLabel={dreamCast.length === 0 ? 'Skip' : 'Next'}
+        />
       )}
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
-  scroll: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 20 },
-  title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: colors.textSecondary, fontSize: 15, marginBottom: 10, lineHeight: 22 },
+  scroll: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 },
   encourageText: {
     color: colors.textPrimary,
     fontSize: 14,
@@ -491,31 +476,4 @@ const s = StyleSheet.create({
   relPillTextActive: {
     color: '#FFFFFF',
   },
-
-  footer: { paddingHorizontal: 20, paddingBottom: 16 },
-  footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  backBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 16,
-    borderRadius: 14,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.accentBorder,
-  },
-  backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
-  nextBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: 16,
-  },
-  nextBtnText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
 });

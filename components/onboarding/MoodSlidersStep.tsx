@@ -7,7 +7,6 @@ import { useRef } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   findNodeHandle,
   UIManager,
@@ -15,11 +14,12 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import type { MoodAxes } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
+import { onboardingStyles as shared } from './sharedStyles';
+import { OnboardingFooter } from './OnboardingFooter';
 
 const SLIDER_WIDTH = 260;
 const THUMB_SIZE = 28;
@@ -33,6 +33,8 @@ interface SliderCardProps {
   rightHint: string;
   value: number;
   onChange: (v: number) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
 function SliderCard({
@@ -44,6 +46,8 @@ function SliderCard({
   rightHint,
   value,
   onChange,
+  onDragStart,
+  onDragEnd,
 }: SliderCardProps) {
   const trackRef = useRef<View>(null);
   const trackLeft = useRef(0);
@@ -88,11 +92,15 @@ function SliderCard({
           onMoveShouldSetResponderCapture={() => true}
           onResponderTerminationRequest={() => false}
           onResponderGrant={(e) => {
+            onDragStart?.();
             e.currentTarget.setNativeProps?.({});
             handleGrant(e.nativeEvent.pageX);
           }}
           onResponderMove={(e) => handleMove(e.nativeEvent.pageX)}
-          onResponderRelease={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+          onResponderRelease={() => {
+            onDragEnd?.();
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
         >
           <View ref={trackRef} style={s.track}>
             <View style={[s.fill, { width: value * SLIDER_WIDTH }]} />
@@ -165,10 +173,11 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
   const moods = useOnboardingStore((s) => s.profile.moods);
   const setMoodAxis = useOnboardingStore((s) => s.setMoodAxis);
   const isEditing = useOnboardingStore((s) => s.isEditing);
+  const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
 
   return (
     <KeyboardAvoidingView
-      style={s.root}
+      style={shared.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={100}
     >
@@ -177,8 +186,8 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator
       >
-        <Text style={s.title}>Dial it in</Text>
-        <Text style={s.subtitle}>
+        <Text style={shared.heroTitle}>Dial it in</Text>
+        <Text style={[shared.heroSubtitle, s.subtitleSpacing]}>
           These sliders shape your DreamBot&apos;s personality. No wrong answers, just your taste.
         </Text>
 
@@ -193,40 +202,20 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
             rightHint={slider.rightHint}
             value={moods[slider.axis]}
             onChange={(v) => setMoodAxis(slider.axis, v)}
+            onDragStart={() => setScrollLocked(true)}
+            onDragEnd={() => setScrollLocked(false)}
           />
         ))}
       </ScrollView>
 
-      {!isEditing && (
-        <View style={s.footer}>
-          <View style={s.footerRow}>
-            <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-              <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-              <Text style={s.backBtnText}>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.nextBtn}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                onNext();
-              }}
-              activeOpacity={0.7}
-            >
-              <Text style={s.nextBtnText}>Next</Text>
-              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+      {!isEditing && <OnboardingFooter onNext={onNext} onBack={onBack} />}
     </KeyboardAvoidingView>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 20 },
-  title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: colors.textSecondary, fontSize: 15, marginBottom: 20, lineHeight: 22 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 },
+  subtitleSpacing: { marginBottom: 20 },
 
   card: {
     backgroundColor: colors.surface,
@@ -287,40 +276,4 @@ const s = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 4,
   },
-
-  vibeHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
-  vibeInput: {
-    color: colors.textPrimary,
-    fontSize: 15,
-    lineHeight: 20,
-    padding: 0,
-    marginTop: 4,
-  },
-
-  footer: { paddingHorizontal: 20, paddingBottom: 16 },
-  footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  backBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 16,
-    borderRadius: 14,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.accentBorder,
-  },
-  backBtnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
-  nextBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: 16,
-  },
-  nextBtnText: { color: '#FFFFFF', fontSize: 17, fontWeight: '700' },
 });

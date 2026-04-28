@@ -44,6 +44,7 @@ export default function OnboardingPager() {
   const step = useOnboardingStore((s) => s.step);
   const setStep = useOnboardingStore((s) => s.setStep);
   const profile = useOnboardingStore((s) => s.profile);
+  const scrollLocked = useOnboardingStore((s) => s.scrollLocked);
   const user = useAuthStore((s) => s.user);
   const listRef = useRef<FlatList>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -93,6 +94,26 @@ export default function OnboardingPager() {
     }
     goTo(step - 2);
   }, [step, isEditing, goTo]);
+
+  const canProceed = useMemo(() => {
+    const stepKey = steps[step - 1]?.key;
+    switch (stepKey) {
+      case 'locations':
+        return profile.dream_seeds.places.length >= 1;
+      case 'mediums':
+        return profile.art_styles.length >= 1;
+      case 'vibes':
+        return profile.aesthetics.length >= 1;
+      default:
+        return true;
+    }
+  }, [
+    step,
+    steps,
+    profile.dream_seeds.places.length,
+    profile.art_styles.length,
+    profile.aesthetics.length,
+  ]);
 
   const onMomentumScrollEnd = useCallback(
     (e: { nativeEvent: { contentOffset: { x: number } } }) => {
@@ -144,7 +165,7 @@ export default function OnboardingPager() {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        scrollEnabled
+        scrollEnabled={canProceed && !scrollLocked}
         onMomentumScrollEnd={onMomentumScrollEnd}
         keyExtractor={(item) => item.key}
         getItemLayout={(_, index) => ({

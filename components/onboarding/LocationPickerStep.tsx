@@ -13,10 +13,11 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image as ExpoImage } from 'expo-image';
-import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
+import { onboardingStyles as shared } from './sharedStyles';
+import { OnboardingFooter } from './OnboardingFooter';
 import { supabase } from '@/lib/supabase';
 
 if (Platform.OS === 'android') {
@@ -298,20 +299,14 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
   }, []);
 
   return (
-    <View style={s.root}>
-      <BlurView intensity={60} tint="dark" style={s.stickyTop}>
-        <Text style={s.selectedCount}>
-          {places.length > 0 ? `Selected: ${places.length}` : 'None selected'}
-        </Text>
-      </BlurView>
-
+    <View style={shared.root}>
       <ScrollView
         contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: 20 }]}
         showsVerticalScrollIndicator={false}
       >
         <View style={s.hero}>
-          <Text style={s.heroTitle}>First things first: where to?</Text>
-          <Text style={s.heroSubtitle}>
+          <Text style={shared.heroTitle}>First things first: where to?</Text>
+          <Text style={shared.heroSubtitle}>
             Pick the places that make your heart race. Your DreamBot will build entire worlds around
             them.
           </Text>
@@ -397,63 +392,26 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
       </ScrollView>
 
       {!isEditing && (
-        <View style={s.footer}>
-          <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-            <Text style={s.backBtnText}>Back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[s.continueBtn, !canProceed && s.continueBtnDisabled]}
-            onPress={() => {
-              if (!canProceed) return;
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              onNext();
-            }}
-            disabled={!canProceed}
-            activeOpacity={0.7}
-          >
-            <Text style={[s.continueBtnText, !canProceed && s.continueBtnTextDisabled]}>
-              {canProceed
-                ? `Continue (${places.length} selected)`
-                : `Select at least ${MIN_REQUIRED}`}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <OnboardingFooter
+          onNext={onNext}
+          onBack={onBack}
+          disabled={!canProceed}
+          counter={places.length > 0 ? `${places.length} selected` : 'None selected'}
+          counterMet={canProceed}
+        />
       )}
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
-
-  stickyTop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    paddingVertical: 10,
-    paddingHorizontal: TILE_PADDING,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
-  },
-  selectedCount: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.textSecondary,
-    textAlign: 'center',
-  },
-
   scrollContent: {
-    paddingTop: 44,
+    paddingTop: 8,
     paddingBottom: 110,
     paddingHorizontal: TILE_PADDING,
   },
 
-  hero: { paddingTop: 8, paddingBottom: 20 },
-  heroTitle: { fontSize: 28, fontWeight: '700', color: '#FFFFFF', marginBottom: 6 },
-  heroSubtitle: { fontSize: 15, color: colors.textSecondary, lineHeight: 20 },
+  hero: { paddingBottom: 20 },
 
   section: { marginBottom: 32 },
   sectionRow: { flexDirection: 'row' },
@@ -523,39 +481,4 @@ const s = StyleSheet.create({
   selectAllText: { fontSize: 12, fontWeight: '600', marginLeft: 'auto' },
   seeMoreBtn: { paddingTop: 10, paddingBottom: 4 },
   seeMoreText: { fontSize: 14, fontWeight: '500' },
-
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 34,
-    backgroundColor: colors.background,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    gap: 12,
-  },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 4,
-  },
-  backBtnText: { fontSize: 15, color: '#FFFFFF', fontWeight: '500' },
-  continueBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 14,
-    borderRadius: 16,
-    backgroundColor: colors.accent,
-    gap: 6,
-  },
-  continueBtnDisabled: { backgroundColor: colors.surface },
-  continueBtnText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF' },
-  continueBtnTextDisabled: { color: colors.textSecondary },
 });

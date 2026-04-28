@@ -52,6 +52,10 @@ interface OnboardingStore {
   addAvoid: (value: string) => void;
   removeAvoid: (value: string) => void;
 
+  // Scroll lock (sliders disable FlatList paging during drag)
+  scrollLocked: boolean;
+  setScrollLocked: (v: boolean) => void;
+
   // Load existing profile for editing
   loadProfile: (profile: VibeProfile) => void;
 
@@ -224,7 +228,11 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       profile: { ...s.profile, avoid: s.profile.avoid.filter((v) => v !== value) },
     })),
 
+  scrollLocked: false,
+  setScrollLocked: (v) => set({ scrollLocked: v }),
+
   loadProfile: (profile) => set({ profile }),
 
-  reset: () => set({ step: 1, isEditing: false, profile: { ...DEFAULT_VIBE_PROFILE } }),
+  reset: () =>
+    set({ step: 1, isEditing: false, scrollLocked: false, profile: { ...DEFAULT_VIBE_PROFILE } }),
 }));

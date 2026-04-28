@@ -5,11 +5,12 @@
 
 import { useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useDreamMediums } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';
+import { onboardingStyles as shared } from './sharedStyles';
+import { OnboardingFooter } from './OnboardingFooter';
 import type { ArtStyle } from '@/types/vibeProfile';
 
 const MIN_REQUIRED = 1;
@@ -45,33 +46,17 @@ export function MediumsStep({ onNext, onBack }: Props) {
   );
 
   return (
-    <View style={s.root}>
+    <View style={shared.root}>
       <ScrollView
         style={s.scroll}
         contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: 20 }]}
       >
         <View style={s.header}>
-          <Text style={s.title}>What should your dreams look like?</Text>
-          <Text style={s.subtitle}>
+          <Text style={shared.heroTitle}>What should your dreams look like?</Text>
+          <Text style={shared.heroSubtitle}>
             Watercolor? Anime? Oil painting? Your DreamBot can do it all. Pick the styles that speak
             to you.
           </Text>
-          <View style={s.counterRow}>
-            <Text style={[s.counter, canProceed && s.counterMet]}>
-              {artStyles.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}
-            </Text>
-            {allKeys.length > 0 && (
-              <TouchableOpacity
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  setAllArtStyles(allKeys);
-                }}
-                activeOpacity={0.7}
-              >
-                <Text style={s.selectAllText}>{allSelected ? 'Deselect All' : 'Select All'}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
         </View>
 
         <View style={s.grid}>
@@ -99,46 +84,35 @@ export function MediumsStep({ onNext, onBack }: Props) {
       </ScrollView>
 
       {!isEditing && (
-        <View style={s.footer}>
-          <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-            <Text style={s.backBtnText}>Back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[s.continueBtn, !canProceed && s.continueBtnDisabled]}
-            onPress={() => {
-              if (!canProceed) return;
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              onNext();
-            }}
-            disabled={!canProceed}
-            activeOpacity={0.7}
-          >
-            <Text style={[s.continueBtnText, !canProceed && s.continueBtnTextDisabled]}>
-              {canProceed ? 'Continue' : `Continue (${artStyles.length}/${MIN_REQUIRED})`}
-            </Text>
-            <Ionicons
-              name="arrow-forward"
-              size={18}
-              color={canProceed ? '#FFFFFF' : colors.textSecondary}
-            />
-          </TouchableOpacity>
-        </View>
+        <OnboardingFooter
+          onNext={onNext}
+          onBack={onBack}
+          disabled={!canProceed}
+          counter={`${artStyles.length} selected${!canProceed ? ` (${MIN_REQUIRED} required)` : ''}`}
+          counterMet={canProceed}
+          counterRight={
+            allKeys.length > 0 ? (
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setAllArtStyles(allKeys);
+                }}
+                activeOpacity={0.7}
+              >
+                <Text style={s.selectAllText}>{allSelected ? 'Deselect All' : 'Select All'}</Text>
+              </TouchableOpacity>
+            ) : undefined
+          }
+        />
       )}
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   scrollContent: { paddingBottom: 100 },
-  header: { paddingHorizontal: TILE_PADDING, paddingTop: 12, paddingBottom: 4 },
-  title: { fontSize: 22, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 },
-  subtitle: { fontSize: 14, color: colors.textSecondary, marginBottom: 4 },
-  counterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  counter: { fontSize: 13, color: colors.textSecondary, fontWeight: '600' },
-  counterMet: { color: '#4ADE80' },
+  header: { paddingHorizontal: TILE_PADDING, paddingTop: 8, paddingBottom: 4 },
   selectAllText: { fontSize: 13, color: colors.accent, fontWeight: '600' },
 
   grid: {
@@ -163,39 +137,4 @@ const s = StyleSheet.create({
   tileName: { fontSize: 14, fontWeight: '700', color: '#FFFFFF', marginBottom: 2 },
   tileNameSelected: { color: colors.accent },
   tileDesc: { fontSize: 11, color: colors.textSecondary },
-
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 34,
-    backgroundColor: colors.background,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    gap: 12,
-  },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 4,
-  },
-  backBtnText: { fontSize: 15, color: '#FFFFFF', fontWeight: '500' },
-  continueBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: colors.accent,
-    gap: 6,
-  },
-  continueBtnDisabled: { backgroundColor: colors.surface },
-  continueBtnText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF' },
-  continueBtnTextDisabled: { color: colors.textSecondary },
 });

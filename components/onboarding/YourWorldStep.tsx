@@ -332,8 +332,8 @@ export function YourWorldStep({ onNext, onBack }: Props) {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   scroll: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 20 },
-  title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: colors.textSecondary, fontSize: 15, marginBottom: 20, lineHeight: 22 },
+  title: { color: colors.textPrimary, fontSize: 26, fontWeight: '800', marginBottom: 8 },
+  subtitle: { color: colors.textSecondary, fontSize: 14, marginBottom: 20, lineHeight: 20 },
 
   categoryCard: {
     backgroundColor: colors.surface,

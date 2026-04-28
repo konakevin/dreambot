@@ -16,10 +16,11 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
+import { onboardingStyles as shared } from './sharedStyles';
+import { OnboardingFooter } from './OnboardingFooter';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -301,17 +302,11 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
   }, []);
 
   return (
-    <View style={s.root}>
-      <BlurView intensity={60} tint="dark" style={s.stickyTop}>
-        <Text style={s.stickyText}>
-          {things.length === 0 ? 'None selected' : `${things.length} selected`}
-        </Text>
-      </BlurView>
-
+    <View style={shared.root}>
       <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={s.hero}>
-          <Text style={s.heroTitle}>Almost done! One more thing.</Text>
-          <Text style={s.heroSub}>
+          <Text style={shared.heroTitle}>Almost done! One more thing.</Text>
+          <Text style={shared.heroSubtitle}>
             Pick a few of your favorite things and your DreamBot will sprinkle them into your
             dreams. Or skip. It can improvise.
           </Text>
@@ -394,49 +389,20 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
       </ScrollView>
 
       {!isEditing && (
-        <View style={s.footer}>
-          <TouchableOpacity style={s.backBtn} onPress={onBack} activeOpacity={0.7}>
-            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-            <Text style={s.backBtnText}>Back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={s.continueBtn}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              onNext();
-            }}
-            activeOpacity={0.7}
-          >
-            <Text style={s.continueBtnText}>{things.length > 0 ? 'Continue' : 'Skip'}</Text>
-            <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
+        <OnboardingFooter
+          onNext={onNext}
+          onBack={onBack}
+          nextLabel={things.length > 0 ? 'Next' : 'Skip'}
+          counter={things.length === 0 ? 'None selected (optional)' : `${things.length} selected`}
+        />
       )}
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
-
-  stickyTop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
-  },
-  stickyText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
-
-  scrollContent: { paddingHorizontal: TILE_PADDING, paddingTop: 48 },
-
-  hero: { marginBottom: 28, paddingTop: 8 },
-  heroTitle: { fontSize: 24, fontWeight: '800', color: '#FFFFFF', marginBottom: 6 },
-  heroSub: { fontSize: 14, color: colors.textSecondary, lineHeight: 20 },
+  scrollContent: { paddingHorizontal: TILE_PADDING, paddingTop: 8 },
+  hero: { marginBottom: 28 },
 
   section: { marginBottom: 28 },
   sectionRow: { flexDirection: 'row' },
@@ -476,37 +442,4 @@ const s = StyleSheet.create({
   selectAllText: { fontSize: 12, fontWeight: '600', marginLeft: 'auto' },
   seeMoreBtn: { paddingTop: 10, paddingBottom: 4 },
   seeMoreText: { fontSize: 13, fontWeight: '600' },
-
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 34,
-    backgroundColor: colors.background,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    gap: 12,
-  },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 4,
-  },
-  backBtnText: { fontSize: 15, color: '#FFFFFF', fontWeight: '500' },
-  continueBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: colors.accent,
-    gap: 6,
-  },
-  continueBtnText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF' },
 });
