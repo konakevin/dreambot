@@ -309,13 +309,10 @@ export function DreamCastStep({ onNext, onBack }: Props) {
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <Text style={shared.heroTitle}>Who&apos;s coming along?</Text>
         <Text style={shared.heroSubtitle}>
-          Upload a photo and your DreamBot will weave you right into your dreams. It&apos;s what
-          makes them feel personal.
+          Upload a photo and your DreamBot will weave you right into your dreams. Optional, but
+          highly encouraged for a more personalized experience!
         </Text>
-        <Text style={s.encourageText}>
-          Don&apos;t be shy! You&apos;re a work of art and your dreams should reflect that.
-        </Text>
-
+        <View style={{ height: 16 }} />
         {SLOTS.map((slot) => (
           <CastSlot
             key={slot.role}
@@ -354,6 +351,7 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 14,
     fontWeight: '600',
+    marginTop: 10,
     marginBottom: 16,
     lineHeight: 20,
   },
