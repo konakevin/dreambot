@@ -51,8 +51,11 @@ export function MediumsStep({ onNext, onBack }: Props) {
         contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: 20 }]}
       >
         <View style={s.header}>
-          <Text style={s.title}>Pick your art styles</Text>
-          <Text style={s.subtitle}>Pick at least 1. These define how your dreams look.</Text>
+          <Text style={s.title}>What should your dreams look like?</Text>
+          <Text style={s.subtitle}>
+            Watercolor? Anime? Oil painting? Your DreamBot can do it all. Pick the styles that speak
+            to you.
+          </Text>
           <View style={s.counterRow}>
             <Text style={[s.counter, canProceed && s.counterMet]}>
               {artStyles.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}

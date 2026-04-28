@@ -51,8 +51,8 @@ export function VibesStep({ onNext, onBack }: Props) {
         contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: 20 }]}
       >
         <View style={s.header}>
-          <Text style={s.title}>Pick your vibes</Text>
-          <Text style={s.subtitle}>Pick at least 1. These shape the mood of your dreams.</Text>
+          <Text style={s.title}>How should your dreams feel?</Text>
+          <Text style={s.subtitle}>Dreamy? Chaotic? Cozy? Pick the vibes that feel like you.</Text>
           <View style={s.counterRow}>
             <Text style={[s.counter, canProceed && s.counterMet]}>
               {aesthetics.length} selected{!canProceed ? ` (${MIN_REQUIRED} required)` : ''}

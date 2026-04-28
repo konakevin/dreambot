@@ -310,8 +310,11 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         showsVerticalScrollIndicator={false}
       >
         <View style={s.hero}>
-          <Text style={s.heroTitle}>What inspires you?</Text>
-          <Text style={s.heroSubtitle}>Pick places you love. We&apos;ll build your world.</Text>
+          <Text style={s.heroTitle}>First things first: where to?</Text>
+          <Text style={s.heroSubtitle}>
+            Pick the places that make your heart race. Your DreamBot will build entire worlds around
+            them.
+          </Text>
         </View>
 
         {LOCATION_SECTIONS.map((section) => {

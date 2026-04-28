@@ -36,6 +36,7 @@ interface SlotConfig {
   label: string;
   icon: string;
   tip: string;
+  showInfoIcon?: boolean;
 }
 
 const SLOTS: SlotConfig[] = [
@@ -43,13 +44,14 @@ const SLOTS: SlotConfig[] = [
     role: 'self',
     label: 'You',
     icon: 'person',
-    tip: 'Clear, centered, well-lit face photo',
+    tip: 'Clear face photos work best. Good lighting helps!',
+    showInfoIcon: true,
   },
   {
     role: 'plus_one',
     label: 'Your +1',
     icon: 'heart',
-    tip: 'Someone special to dream alongside',
+    tip: 'Bring a friend, partner, or favorite person along for the ride',
   },
 ];
 
@@ -87,7 +89,14 @@ function CastSlot({
         />
         <Text style={s.slotLabel}>{config.label}</Text>
       </View>
-      <Text style={s.slotTip}>{config.tip}</Text>
+      <Text style={s.slotTip}>
+        {config.showInfoIcon && (
+          <>
+            <Ionicons name="information-circle" size={13} color={colors.textSecondary} />{' '}
+          </>
+        )}
+        {config.tip}
+      </Text>
 
       {member ? (
         <>
@@ -296,17 +305,14 @@ export function DreamCastStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={s.title}>Dream Cast</Text>
+        <Text style={s.title}>Who&apos;s coming along?</Text>
         <Text style={s.subtitle}>
-          {`Upload photos and your DreamBot will sometimes dream you into its creations as stylized characters. Totally optional.`}
+          Upload a photo and your DreamBot will weave you right into your dreams. It&apos;s what
+          makes them feel personal.
         </Text>
-
-        <View style={s.photoTip}>
-          <Ionicons name="information-circle" size={16} color={colors.accent} />
-          <Text style={s.photoTipText}>
-            Use clear, centered, well-lit photos for the best results.
-          </Text>
-        </View>
+        <Text style={s.encourageText}>
+          Don&apos;t be shy! You&apos;re a work of art and your dreams should reflect that.
+        </Text>
 
         {SLOTS.map((slot) => (
           <CastSlot
@@ -319,6 +325,14 @@ export function DreamCastStep({ onNext, onBack }: Props) {
             uploading={uploading}
           />
         ))}
+
+        <View style={s.privacyNote}>
+          <Ionicons name="lock-closed" size={13} color={colors.textSecondary} />
+          <Text style={s.privacyNoteText}>
+            Your photo is only used to place your likeness into your dreams. It&apos;s never
+            displayed publicly. Your dreams are 100% private unless you choose to share them.
+          </Text>
+        </View>
       </ScrollView>
 
       {!isEditing && (
@@ -350,22 +364,25 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   scroll: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 20 },
   title: { color: colors.textPrimary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: colors.textSecondary, fontSize: 15, marginBottom: 16, lineHeight: 22 },
-
-  photoTip: {
+  subtitle: { color: colors.textSecondary, fontSize: 15, marginBottom: 10, lineHeight: 22 },
+  encourageText: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  privacyNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 8,
-    backgroundColor: `${colors.accent}10`,
-    borderRadius: 12,
-    padding: 12,
+    gap: 6,
     marginBottom: 16,
   },
-  photoTipText: {
+  privacyNoteText: {
     flex: 1,
     color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 17,
   },
 
   slotCard: {

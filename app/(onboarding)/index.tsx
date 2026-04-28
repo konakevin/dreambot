@@ -29,13 +29,13 @@ interface StepConfig {
 }
 
 const STEPS: StepConfig[] = [
-  { key: 'welcome', component: WelcomeStep, skipInEdit: true },
+  { key: 'welcome', component: WelcomeStep },
+  { key: 'locations', component: LocationPickerStep },
+  { key: 'cast', component: DreamCastStep },
   { key: 'mediums', component: MediumsStep },
   { key: 'vibes', component: VibesStep },
   { key: 'personality', component: MoodSlidersStep },
-  { key: 'locations', component: LocationPickerStep },
   { key: 'objects', component: ObjectPickerStep },
-  { key: 'cast', component: DreamCastStep },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
 
@@ -106,40 +106,37 @@ export default function OnboardingPager() {
 
   return (
     <SafeAreaView style={s.root}>
-      {(isEditing || step > 1) && (
-        <View style={s.headerRow}>
-          <OnboardingHeader
-            stepNumber={isEditing ? step : step - 1}
-            totalSteps={isEditing ? steps.length : steps.length - 1}
-            onBack={step > 1 || isEditing ? goBack : undefined}
-          />
-          {isEditing && (
-            <TouchableOpacity
-              style={s.doneButton}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                // Force immediate save before leaving
-                if (user) {
-                  supabase.from('user_recipes').upsert(
-                    {
-                      user_id: user.id,
-                      recipe: JSON.parse(JSON.stringify(profile)),
-                      onboarding_completed: true,
-                      ai_enabled: true,
-                      updated_at: new Date().toISOString(),
-                    },
-                    { onConflict: 'user_id' }
-                  );
-                }
-                router.back();
-              }}
-              activeOpacity={0.7}
-            >
-              <Text style={s.doneText}>Done</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
+      <View style={s.headerRow}>
+        <OnboardingHeader
+          stepNumber={step}
+          totalSteps={steps.length}
+          onBack={step > 1 || isEditing ? goBack : undefined}
+        />
+        {isEditing && (
+          <TouchableOpacity
+            style={s.doneButton}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (user) {
+                supabase.from('user_recipes').upsert(
+                  {
+                    user_id: user.id,
+                    recipe: JSON.parse(JSON.stringify(profile)),
+                    onboarding_completed: true,
+                    ai_enabled: true,
+                    updated_at: new Date().toISOString(),
+                  },
+                  { onConflict: 'user_id' }
+                );
+              }
+              router.back();
+            }}
+            activeOpacity={0.7}
+          >
+            <Text style={s.doneText}>Done</Text>
+          </TouchableOpacity>
+        )}
+      </View>
 
       <FlatList
         ref={listRef}

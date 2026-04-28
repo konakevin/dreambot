@@ -124,7 +124,7 @@ const SLIDERS: {
   {
     axis: 'peaceful_chaotic',
     title: 'Energy',
-    description: 'Controls the intensity of your dreams. Quiet sunsets or raging storms?',
+    description: 'Quiet sunsets or raging thunderstorms? You tell your DreamBot.',
     left: 'Calm',
     right: 'Wild',
     leftHint: 'Still water, soft light',
@@ -133,7 +133,7 @@ const SLIDERS: {
   {
     axis: 'cute_terrifying',
     title: 'Tone',
-    description: 'Sets the emotional temperature. Cozy vibes or creepy shadows?',
+    description: 'Warm blankets or creeping shadows? This sets the emotional temperature.',
     left: 'Cozy',
     right: 'Eerie',
     leftHint: 'Cozy, friendly, safe',
@@ -142,7 +142,7 @@ const SLIDERS: {
   {
     axis: 'minimal_maximal',
     title: 'Detail',
-    description: 'How much visual information gets packed into each dream.',
+    description: 'One perfect object in empty space... or every inch packed to the edges.',
     left: 'Spare',
     right: 'Lush',
     leftHint: 'One subject, one mood',
@@ -151,7 +151,7 @@ const SLIDERS: {
   {
     axis: 'realistic_surreal',
     title: 'Reality',
-    description: 'How grounded in the real world — or how far from it.',
+    description: 'Photoreal or melting-clocks-weird? How far should your DreamBot go?',
     left: 'Grounded',
     right: 'Surreal',
     leftHint: 'Could be a photo',
@@ -175,9 +175,9 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator
       >
-        <Text style={s.title}>Tune its personality</Text>
+        <Text style={s.title}>Dial it in</Text>
         <Text style={s.subtitle}>
-          {`These dials shape how your DreamBot dreams. Scroll down to set them all.`}
+          These sliders shape your DreamBot&apos;s personality. No wrong answers, just your taste.
         </Text>
 
         {SLIDERS.map((slider) => (
