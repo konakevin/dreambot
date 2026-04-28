@@ -4,5 +4,5 @@ export const LIMITS = {
   art_styles: { min: 2 },
 } as const;
 
-/** Total steps in the onboarding flow (excluding welcome) */
-export const TOTAL_STEPS = 6;
+/** Total steps in the onboarding flow (including welcome + reveal) */
+export const TOTAL_STEPS = 8;

@@ -94,16 +94,14 @@ export default function OnboardingPager() {
     goTo(step - 2);
   }, [step, isEditing, goTo]);
 
-  // In edit mode, track scroll position to update step indicator
   const onMomentumScrollEnd = useCallback(
     (e: { nativeEvent: { contentOffset: { x: number } } }) => {
-      if (!isEditing) return;
       const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
       if (idx >= 0 && idx < steps.length) {
         setStep(idx + 1);
       }
     },
-    [isEditing, steps.length, setStep]
+    [steps.length, setStep]
   );
 
   return (
@@ -112,6 +110,7 @@ export default function OnboardingPager() {
         <View style={s.headerRow}>
           <OnboardingHeader
             stepNumber={isEditing ? step : step - 1}
+            totalSteps={isEditing ? steps.length : steps.length - 1}
             onBack={step > 1 || isEditing ? goBack : undefined}
           />
           {isEditing && (
@@ -148,7 +147,7 @@ export default function OnboardingPager() {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        scrollEnabled={isEditing}
+        scrollEnabled
         onMomentumScrollEnd={onMomentumScrollEnd}
         keyExtractor={(item) => item.key}
         getItemLayout={(_, index) => ({

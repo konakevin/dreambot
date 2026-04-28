@@ -20,7 +20,7 @@ const sb = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const LOCATION_FUSION_COUNTS = { realistic: 17, fantasy: 17, scifi: 16 };
+const LOCATION_FUSION_COUNTS = { realistic: 50, fantasy: 50, scifi: 50 };
 
 const BANNED_PHRASES = [
   'looking out over', 'gazing at horizon', 'standing at the edge',
@@ -102,7 +102,7 @@ async function generateAnchors(name, genre, count) {
 
   const msg = await client.messages.create({
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 1000,
+    max_tokens: 2500,
     messages: [{
       role: 'user',
       content: `Generate ${count} unique ${genreGuide[genre]} scene concepts for "${name}".
@@ -133,7 +133,7 @@ async function expandAnchors(name, genre, anchors) {
 
     const msg = await client.messages.create({
       model: 'claude-sonnet-4-5-20250929',
-      max_tokens: 1500,
+      max_tokens: 2500,
       messages: [{
         role: 'user',
         content: `Expand each anchor into a polished cinematic scene setting for "${name}" (${genre} genre).
@@ -197,9 +197,16 @@ async function generateFullCard(name) {
     console.log(`  ${genre}: generating ${count} anchors...`);
     const anchors = await generateAnchors(name, genre, count);
     console.log(`  ${genre}: expanding ${anchors.length} anchors...`);
-    const fusions = await expandAnchors(name, genre, anchors);
+    const raw = await expandAnchors(name, genre, anchors);
+    const seen = new Set();
+    const fusions = raw.filter(f => {
+      const key = f.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     fusionSettings[genre] = fusions;
-    console.log(`  ${genre}: ${fusions.length} fusions`);
+    console.log(`  ${genre}: ${fusions.length} fusions (${raw.length - fusions.length} dupes removed)`);
   }
   card.fusion_settings = fusionSettings;
 

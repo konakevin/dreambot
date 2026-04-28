@@ -23,9 +23,11 @@ interface OnboardingStore {
 
   // Mediums
   toggleArtStyle: (key: ArtStyle) => void;
+  setAllArtStyles: (keys: ArtStyle[]) => void;
 
   // Vibes
   toggleAesthetic: (key: Aesthetic) => void;
+  setAllAesthetics: (keys: Aesthetic[]) => void;
 
   // Personality
   setMoodAxis: (axis: keyof MoodAxes, value: number) => void;
@@ -43,6 +45,8 @@ interface OnboardingStore {
   toggleObject: (key: string) => void;
   addLocationPack: (keys: string[]) => void;
   addObjectPack: (keys: string[]) => void;
+  toggleAllLocations: (keys: string[]) => void;
+  toggleAllObjects: (keys: string[]) => void;
 
   // Avoid list
   addAvoid: (value: string) => void;
@@ -74,8 +78,20 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   toggleArtStyle: (key) =>
     set((s) => ({ profile: { ...s.profile, art_styles: toggle(s.profile.art_styles, key) } })),
 
+  setAllArtStyles: (keys) =>
+    set((s) => {
+      const allSelected = keys.every((k) => s.profile.art_styles.includes(k));
+      return { profile: { ...s.profile, art_styles: allSelected ? [] : [...keys] } };
+    }),
+
   toggleAesthetic: (key) =>
     set((s) => ({ profile: { ...s.profile, aesthetics: toggle(s.profile.aesthetics, key) } })),
+
+  setAllAesthetics: (keys) =>
+    set((s) => {
+      const allSelected = keys.every((k) => s.profile.aesthetics.includes(k));
+      return { profile: { ...s.profile, aesthetics: allSelected ? [] : [...keys] } };
+    }),
 
   setMoodAxis: (axis, value) =>
     set((s) => ({
@@ -153,6 +169,21 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       };
     }),
 
+  toggleAllLocations: (keys) =>
+    set((s) => {
+      const current = s.profile.dream_seeds.places;
+      const allSelected = keys.every((k) => current.includes(k));
+      const newPlaces = allSelected
+        ? current.filter((k) => !keys.includes(k))
+        : [...current, ...keys.filter((k) => !current.includes(k))].slice(0, 25);
+      return {
+        profile: {
+          ...s.profile,
+          dream_seeds: { ...s.profile.dream_seeds, places: newPlaces },
+        },
+      };
+    }),
+
   addObjectPack: (keys) =>
     set((s) => {
       const current = s.profile.dream_seeds.things;
@@ -162,6 +193,21 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
         profile: {
           ...s.profile,
           dream_seeds: { ...s.profile.dream_seeds, things: [...current, ...newKeys].slice(0, 25) },
+        },
+      };
+    }),
+
+  toggleAllObjects: (keys) =>
+    set((s) => {
+      const current = s.profile.dream_seeds.things;
+      const allSelected = keys.every((k) => current.includes(k));
+      const newThings = allSelected
+        ? current.filter((k) => !keys.includes(k))
+        : [...current, ...keys.filter((k) => !current.includes(k))].slice(0, 25);
+      return {
+        profile: {
+          ...s.profile,
+          dream_seeds: { ...s.profile.dream_seeds, things: newThings },
         },
       };
     }),

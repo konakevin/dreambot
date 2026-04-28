@@ -19,7 +19,7 @@ import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.t
 import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
-import { getLocationCard } from '../_shared/essenceCards.ts';
+import { getLocationCard, normalizeName } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
@@ -362,7 +362,7 @@ Deno.serve(async (req) => {
       const filtered = thingsPool.filter((t: string) => !excludeSet.has(t));
       if (filtered.length >= 1) thingsPool = filtered;
     }
-    const userThing =
+    let userThing =
       includeObject && thingsPool.length > 0
         ? thingsPool[Math.floor(Math.random() * thingsPool.length)]
         : undefined;
@@ -377,6 +377,84 @@ Deno.serve(async (req) => {
         fallbackReasons.push(`location_card_failed:${(err as Error).message}`);
       }
     }
+
+    // ── Object-location compatibility filter ──────────────────────────
+    // If the randomly-picked object's tags clash with the location's tags,
+    // re-select from compatible pool items. 12% chaos gate preserves
+    // unexpected combos. Fully fail-safe: errors keep the original pick.
+    const COMPAT_CONFLICTS: Record<string, string[]> = {
+      snow: ['tropical', 'desert', 'underwater'],
+      water: ['desert', 'space'],
+      ocean: ['desert', 'space', 'underground'],
+      fire: ['underwater', 'snow'],
+      plant: ['space', 'underwater'],
+    };
+
+    if (
+      userThing &&
+      locationCard &&
+      locationCard.tags &&
+      locationCard.tags.length > 0 &&
+      Math.random() >= 0.12
+    ) {
+      try {
+        const normalizedPool = thingsPool.map((t: string) => normalizeName(t));
+        const { data: tagRows } = await supabase
+          .from('object_cards')
+          .select('name, tags')
+          .in('name', normalizedPool)
+          .eq('is_approved', true);
+
+        if (tagRows && tagRows.length > 0) {
+          const tagMap = new Map<string, string[]>();
+          for (const row of tagRows) {
+            tagMap.set(row.name, row.tags ?? []);
+          }
+          const locTags = new Set(locationCard.tags);
+
+          const isCompat = (objName: string): boolean => {
+            const oTags = tagMap.get(normalizeName(objName)) ?? [];
+            for (const oTag of oTags) {
+              const banned = COMPAT_CONFLICTS[oTag];
+              if (!banned) continue;
+              for (const b of banned) {
+                if (locTags.has(b)) return false;
+              }
+            }
+            return true;
+          };
+
+          if (!isCompat(userThing)) {
+            const compatible = thingsPool.filter((t: string) => isCompat(t));
+            if (compatible.length > 0) {
+              const originalThing = userThing;
+              userThing = compatible[Math.floor(Math.random() * compatible.length)];
+              console.log(
+                `[nightly-dreams] Compat filter: "${originalThing}" -> "${userThing}"`,
+                `| loc: [${locationCard.tags.join(',')}]`,
+                `| ${compatible.length}/${thingsPool.length} compatible`
+              );
+              logAxes.compatFilter = {
+                original: originalThing,
+                replacement: userThing,
+                locationTags: locationCard.tags,
+                compatibleCount: compatible.length,
+                poolSize: thingsPool.length,
+              };
+            } else {
+              console.log(
+                `[nightly-dreams] Compat filter: no alternatives, keeping "${userThing}"`
+              );
+              logAxes.compatFilter = { original: userThing, replacement: null };
+            }
+          }
+        }
+      } catch (compatErr) {
+        console.warn('[nightly-dreams] Compat filter error:', (compatErr as Error).message);
+        fallbackReasons.push(`compat_filter_error:${(compatErr as Error).message}`);
+      }
+    }
+
     console.log(
       '[nightly-dreams] Essence cards | place:',
       userPlace ?? 'none',
@@ -883,7 +961,11 @@ function buildRelationshipTone(
   const plusOne = selectedCast.find((c) => c.role === 'plus_one');
   const rel = plusOne?.relationship;
 
-  if (roles.has('self') && roles.has('plus_one') && rel === 'significant_other') {
+  if (
+    roles.has('self') &&
+    roles.has('plus_one') &&
+    (rel === 'partner' || rel === 'significant_other')
+  ) {
     return {
       kind: 'romantic',
       block: `RELATIONSHIP TONE — apply throughout the scene:
@@ -894,7 +976,7 @@ The two characters are life partners — deeply close in every way. The scene ca
   if (
     roles.has('self') &&
     roles.has('plus_one') &&
-    (rel === 'parent' || rel === 'child' || rel === 'grandchild')
+    (rel === 'family' || rel === 'parent' || rel === 'child' || rel === 'grandchild')
   ) {
     return {
       kind: 'family',

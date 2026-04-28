@@ -68,39 +68,54 @@ export type Database = {
           created_at: string;
           enhanced_prompt: string;
           error_message: string | null;
+          fallback_reasons: string[];
           id: string;
           model_used: string;
           recipe_snapshot: Json;
+          replicate_prediction_id: string | null;
           rolled_axes: Json;
+          sonnet_brief: string | null;
+          sonnet_raw_response: string | null;
           status: string;
           upload_id: string | null;
           user_id: string;
+          vision_description: string | null;
         };
         Insert: {
           cost_cents?: number;
           created_at?: string;
           enhanced_prompt: string;
           error_message?: string | null;
+          fallback_reasons?: string[];
           id?: string;
           model_used?: string;
           recipe_snapshot: Json;
+          replicate_prediction_id?: string | null;
           rolled_axes: Json;
+          sonnet_brief?: string | null;
+          sonnet_raw_response?: string | null;
           status?: string;
           upload_id?: string | null;
           user_id: string;
+          vision_description?: string | null;
         };
         Update: {
           cost_cents?: number;
           created_at?: string;
           enhanced_prompt?: string;
           error_message?: string | null;
+          fallback_reasons?: string[];
           id?: string;
           model_used?: string;
           recipe_snapshot?: Json;
+          replicate_prediction_id?: string | null;
           rolled_axes?: Json;
+          sonnet_brief?: string | null;
+          sonnet_raw_response?: string | null;
           status?: string;
           upload_id?: string | null;
           user_id?: string;
+          vision_description?: string | null;
         };
         Relationships: [
           {
@@ -151,6 +166,87 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      bot_dedup: {
+        Row: {
+          axis: string;
+          bot_name: string;
+          id: number;
+          picked_at: string;
+          value: string;
+        };
+        Insert: {
+          axis: string;
+          bot_name: string;
+          id?: number;
+          picked_at?: string;
+          value: string;
+        };
+        Update: {
+          axis?: string;
+          bot_name?: string;
+          id?: number;
+          picked_at?: string;
+          value?: string;
+        };
+        Relationships: [];
+      };
+      bot_run_log: {
+        Row: {
+          bot_name: string;
+          cost_cents: number | null;
+          created_at: string;
+          duration_ms: number | null;
+          error: string | null;
+          error_stage: string | null;
+          id: string;
+          image_url: string | null;
+          medium: string | null;
+          model: string | null;
+          path: string | null;
+          prompt_preview: string | null;
+          sonnet_fell_back_to_secondary: boolean | null;
+          sonnet_retries: number | null;
+          status: string;
+          vibe: string | null;
+        };
+        Insert: {
+          bot_name: string;
+          cost_cents?: number | null;
+          created_at?: string;
+          duration_ms?: number | null;
+          error?: string | null;
+          error_stage?: string | null;
+          id?: string;
+          image_url?: string | null;
+          medium?: string | null;
+          model?: string | null;
+          path?: string | null;
+          prompt_preview?: string | null;
+          sonnet_fell_back_to_secondary?: boolean | null;
+          sonnet_retries?: number | null;
+          status: string;
+          vibe?: string | null;
+        };
+        Update: {
+          bot_name?: string;
+          cost_cents?: number | null;
+          created_at?: string;
+          duration_ms?: number | null;
+          error?: string | null;
+          error_stage?: string | null;
+          id?: string;
+          image_url?: string | null;
+          medium?: string | null;
+          model?: string | null;
+          path?: string | null;
+          prompt_preview?: string | null;
+          sonnet_fell_back_to_secondary?: boolean | null;
+          sonnet_retries?: number | null;
+          status?: string;
+          vibe?: string | null;
+        };
+        Relationships: [];
       };
       bot_seeds: {
         Row: {
@@ -389,88 +485,67 @@ export type Database = {
       };
       dream_mediums: {
         Row: {
+          allowed_models: string[] | null;
           character_render_mode: string;
           created_at: string;
           directive: string;
+          engine: string | null;
           face_swaps: boolean;
           flux_fragment: string;
           is_active: boolean;
+          is_bot_only: boolean;
           is_character_only: boolean;
           is_public: boolean;
           is_scene_only: boolean;
           key: string;
+          kontext_directive: string | null;
           label: string;
           nightly_skip: boolean;
+          preferred_model: string | null;
+          render_base: string | null;
           sort_order: number;
         };
         Insert: {
+          allowed_models?: string[] | null;
           character_render_mode?: string;
           created_at?: string;
           directive: string;
+          engine?: string | null;
           face_swaps?: boolean;
           flux_fragment: string;
           is_active?: boolean;
+          is_bot_only?: boolean;
           is_character_only?: boolean;
           is_public?: boolean;
           is_scene_only?: boolean;
           key: string;
+          kontext_directive?: string | null;
           label: string;
           nightly_skip?: boolean;
+          preferred_model?: string | null;
+          render_base?: string | null;
           sort_order?: number;
         };
         Update: {
+          allowed_models?: string[] | null;
           character_render_mode?: string;
           created_at?: string;
           directive?: string;
+          engine?: string | null;
           face_swaps?: boolean;
           flux_fragment?: string;
           is_active?: boolean;
+          is_bot_only?: boolean;
           is_character_only?: boolean;
           is_public?: boolean;
           is_scene_only?: boolean;
           key?: string;
+          kontext_directive?: string | null;
           label?: string;
           nightly_skip?: boolean;
+          preferred_model?: string | null;
+          render_base?: string | null;
           sort_order?: number;
-        };
-        Relationships: [];
-      };
-      dream_templates: {
-        Row: {
-          active_from: string | null;
-          active_until: string | null;
-          category: string;
-          created_at: string;
-          disabled: boolean;
-          generation: number;
-          id: string;
-          seasonal: boolean;
-          template: string;
-          used_at: string | null;
-        };
-        Insert: {
-          active_from?: string | null;
-          active_until?: string | null;
-          category: string;
-          created_at?: string;
-          disabled?: boolean;
-          generation?: number;
-          id?: string;
-          seasonal?: boolean;
-          template: string;
-          used_at?: string | null;
-        };
-        Update: {
-          active_from?: string | null;
-          active_until?: string | null;
-          category?: string;
-          created_at?: string;
-          disabled?: boolean;
-          generation?: number;
-          id?: string;
-          seasonal?: boolean;
-          template?: string;
-          used_at?: string | null;
         };
         Relationships: [];
       };
@@ -481,6 +556,7 @@ export type Database = {
           is_active: boolean;
           key: string;
           label: string;
+          mood_profile: Json | null;
           sort_order: number;
         };
         Insert: {
@@ -489,6 +565,7 @@ export type Database = {
           is_active?: boolean;
           key: string;
           label: string;
+          mood_profile?: Json | null;
           sort_order?: number;
         };
         Update: {
@@ -497,6 +574,7 @@ export type Database = {
           is_active?: boolean;
           key?: string;
           label?: string;
+          mood_profile?: Json | null;
           sort_order?: number;
         };
         Relationships: [];
@@ -706,6 +784,7 @@ export type Database = {
           prompt_version: number;
           tags: string[];
           texture_details: string[];
+          thumbnail_url: string | null;
           updated_at: string;
           visual_palette: string[];
         };
@@ -723,6 +802,7 @@ export type Database = {
           prompt_version?: number;
           tags?: string[];
           texture_details?: string[];
+          thumbnail_url?: string | null;
           updated_at?: string;
           visual_palette?: string[];
         };
@@ -740,8 +820,27 @@ export type Database = {
           prompt_version?: number;
           tags?: string[];
           texture_details?: string[];
+          thumbnail_url?: string | null;
           updated_at?: string;
           visual_palette?: string[];
+        };
+        Relationships: [];
+      };
+      model_overrides: {
+        Row: {
+          allowed_models: string[];
+          medium_key: string;
+          vibe_key: string;
+        };
+        Insert: {
+          allowed_models: string[];
+          medium_key: string;
+          vibe_key: string;
+        };
+        Update: {
+          allowed_models?: string[];
+          medium_key?: string;
+          vibe_key?: string;
         };
         Relationships: [];
       };
@@ -1326,6 +1425,7 @@ export type Database = {
           has_ai_recipe: boolean;
           id: string;
           is_admin: boolean | null;
+          is_bot: boolean;
           is_public: boolean;
           last_active_at: string | null;
           sparkle_balance: number;
@@ -1338,6 +1438,7 @@ export type Database = {
           has_ai_recipe?: boolean;
           id: string;
           is_admin?: boolean | null;
+          is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
           sparkle_balance?: number;
@@ -1350,6 +1451,7 @@ export type Database = {
           has_ai_recipe?: boolean;
           id?: string;
           is_admin?: boolean | null;
+          is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
           sparkle_balance?: number;
@@ -1384,6 +1486,13 @@ export type Database = {
         Args: { p_requester_id: string };
         Returns: undefined;
       };
+      fetch_nightly_history: {
+        Args: { p_user_id: string };
+        Returns: {
+          created_at: string;
+          rolled_axes: Json;
+        }[];
+      };
       finalize_nightly_upload: {
         Args: {
           p_bot_message?: string;
@@ -1393,7 +1502,7 @@ export type Database = {
         Returns: undefined;
       };
       get_bot_users: {
-        Args: Record<PropertyKey, never>;
+        Args: never;
         Returns: {
           avatar_url: string;
           id: string;
@@ -1424,6 +1533,7 @@ export type Database = {
           is_character_only: boolean;
           is_scene_only: boolean;
           key: string;
+          kontext_directive: string;
           label: string;
           nightly_skip: boolean;
           sort_order: number;
@@ -1435,6 +1545,7 @@ export type Database = {
           directive: string;
           key: string;
           label: string;
+          mood_profile: Json;
         }[];
       };
       get_feed: {

@@ -13,7 +13,6 @@ import { runOnJS } from 'react-native-reanimated';
 import { useOnboardingStore } from '@/store/onboarding';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { colors } from '@/constants/theme';
-import { TOTAL_STEPS } from '@/constants/onboarding';
 
 interface Tile {
   key: string;
@@ -74,6 +73,7 @@ export function OnboardingTileScreen({
       {!hideChrome && (
         <OnboardingHeader
           stepNumber={stepNumber}
+          totalSteps={7}
           onBack={onBack ?? (isEditing ? () => router.replace('/(tabs)') : undefined)}
         />
       )}

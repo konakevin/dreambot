@@ -5,19 +5,15 @@
 
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { colors } from '@/constants/theme';
-import { TOTAL_STEPS } from '@/constants/onboarding';
-
-/** Steps visible in the progress bar (excludes welcome screen) */
-const VISIBLE_STEPS = TOTAL_STEPS - 1;
 
 interface Props {
   stepNumber: number;
+  totalSteps: number;
   onBack?: () => void;
 }
 
-export function OnboardingHeader({ stepNumber, onBack }: Props) {
+export function OnboardingHeader({ stepNumber, totalSteps, onBack }: Props) {
   return (
     <View style={s.wrap}>
       {onBack ? (
@@ -29,7 +25,7 @@ export function OnboardingHeader({ stepNumber, onBack }: Props) {
       )}
       <View style={s.center}>
         <View style={s.bar}>
-          {Array.from({ length: VISIBLE_STEPS }, (_, i) => (
+          {Array.from({ length: totalSteps }, (_, i) => (
             <View key={i} style={[s.dot, i < stepNumber && s.dotActive]} />
           ))}
         </View>

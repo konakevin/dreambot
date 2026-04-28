@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase';
 export interface DreamMedium {
   key: string;
   label: string;
+  description?: string;
   directive: string;
   flux_fragment: string;
   is_scene_only: boolean;
@@ -22,6 +23,7 @@ export interface DreamMedium {
 export interface DreamVibe {
   key: string;
   label: string;
+  description?: string;
   directive: string;
 }
 

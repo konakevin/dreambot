@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Generate a complete object card with context bridges, mood-neutral language.
- * Creates all fields including fusion_forms (20 per object) and context_bridges.
+ * Generate a complete object card with rich visual data + 15 fusion forms per genre.
+ * Creates base card fields + genre-specific fusion_forms in one shot.
  *
  * Usage:
- *   node scripts/generate-full-object-card.js sword
- *   node scripts/generate-full-object-card.js --all          # all from CURATED_OBJECTS
- *   node scripts/generate-full-object-card.js --list          # print the curated list
+ *   node scripts/generate-full-object-card.js sword guitar
+ *   node scripts/generate-full-object-card.js --all        # all approved objects
+ *   node scripts/generate-full-object-card.js --missing     # only objects without fusion_forms
  */
 
 require('dotenv').config({ path: '.env.local' });
@@ -19,90 +19,29 @@ const sb = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const CURATED_OBJECTS = [
-  // Weapons / Adventure
-  { name: 'sword', category: 'weapon', scale: 'handheld' },
-  { name: 'bow and arrow', category: 'weapon', scale: 'handheld' },
-  { name: 'lightsaber', category: 'weapon', scale: 'handheld' },
-  { name: 'trident', category: 'weapon', scale: 'handheld' },
-  { name: 'wand', category: 'weapon', scale: 'handheld' },
-  { name: 'dagger', category: 'weapon', scale: 'handheld' },
-  { name: 'katana', category: 'weapon', scale: 'handheld' },
-  // Vehicles
-  { name: 'motorcycle', category: 'vehicle', scale: 'large' },
-  { name: 'classic muscle car', category: 'vehicle', scale: 'massive' },
-  { name: 'sailboat', category: 'vehicle', scale: 'massive' },
-  { name: 'helicopter', category: 'vehicle', scale: 'massive' },
-  { name: 'spaceship', category: 'vehicle', scale: 'massive' },
-  { name: 'hot air balloon', category: 'vehicle', scale: 'massive' },
-  // Instruments
-  { name: 'guitar', category: 'instrument', scale: 'handheld' },
-  { name: 'piano', category: 'instrument', scale: 'large' },
-  { name: 'violin', category: 'instrument', scale: 'handheld' },
-  { name: 'drums', category: 'instrument', scale: 'large' },
-  // Animals / Creatures
-  { name: 'dragon', category: 'creature', scale: 'massive' },
-  { name: 'phoenix', category: 'creature', scale: 'large' },
-  { name: 'wolf', category: 'creature', scale: 'large' },
-  { name: 'horse', category: 'creature', scale: 'massive' },
-  { name: 'owl', category: 'creature', scale: 'handheld' },
-  { name: 'cat', category: 'creature', scale: 'handheld' },
-  // Technology
-  { name: 'robot', category: 'technology', scale: 'large' },
-  { name: 'drone', category: 'technology', scale: 'handheld' },
-  { name: 'telescope', category: 'technology', scale: 'large' },
-  { name: 'compass', category: 'technology', scale: 'tiny' },
-  { name: 'lantern', category: 'technology', scale: 'handheld' },
-  // Sports / Outdoor
-  { name: 'surfboard', category: 'sport', scale: 'large' },
-  { name: 'skateboard', category: 'sport', scale: 'handheld' },
-  { name: 'campfire', category: 'outdoor', scale: 'large' },
-  { name: 'bicycle', category: 'sport', scale: 'large' },
-  { name: 'snowboard', category: 'sport', scale: 'large' },
-  // Toys / Whimsy
-  { name: 'teddy bear', category: 'toy', scale: 'handheld' },
-  { name: 'kite', category: 'toy', scale: 'handheld' },
-  { name: 'music box', category: 'toy', scale: 'tiny' },
-  { name: 'snow globe', category: 'toy', scale: 'tiny' },
-  { name: 'balloons', category: 'toy', scale: 'handheld' },
-  // Mythical / Artifacts
-  { name: 'crystal orb', category: 'artifact', scale: 'handheld' },
-  { name: 'ancient book', category: 'artifact', scale: 'handheld' },
-  { name: 'treasure chest', category: 'artifact', scale: 'large' },
-  { name: 'hourglass', category: 'artifact', scale: 'handheld' },
-  { name: 'magic mirror', category: 'artifact', scale: 'large' },
-  // Nature / Elements
-  { name: 'giant flower', category: 'nature', scale: 'large' },
-  { name: 'butterfly swarm', category: 'nature', scale: 'large' },
-  { name: 'bonsai tree', category: 'nature', scale: 'handheld' },
-  { name: 'crystals', category: 'nature', scale: 'handheld' },
-  { name: 'seashell', category: 'nature', scale: 'tiny' },
-  // Girly / Glam / Coquette
-  { name: 'jewelry box', category: 'glam', scale: 'handheld' },
-  { name: 'crystal chandelier', category: 'glam', scale: 'massive' },
-  { name: 'ornate hand mirror', category: 'glam', scale: 'handheld' },
-  { name: 'rose bouquet', category: 'glam', scale: 'handheld' },
-  { name: 'perfume bottle', category: 'glam', scale: 'tiny' },
-  { name: 'jeweled hand fan', category: 'glam', scale: 'handheld' },
-  { name: 'parasol', category: 'glam', scale: 'handheld' },
-  { name: 'vanity table', category: 'glam', scale: 'large' },
-  { name: 'music locket', category: 'glam', scale: 'tiny' },
-  { name: 'glass terrarium', category: 'glam', scale: 'handheld' },
-];
+const FUSION_COUNT = 15;
 
-const OBJECT_FUSION_COUNTS = { realistic: 7, fantasy: 7, scifi: 6 };
+const BANNED_PHRASES = [
+  'looking out over', 'gazing at horizon', 'standing at the edge',
+  'silhouette against', 'from behind', 'rear angle', 'seen from the back',
+];
 
 const MOOD_WORDS = [
   'dark', 'eerie', 'haunting', 'ghostly', 'ominous', 'sinister',
   'foreboding', 'menace', 'menacing', 'dread', 'gloomy', 'creepy',
+  'terrifying', 'horror', 'nightmarish', 'demonic', 'cursed',
 ];
 
 function validate(text) {
   const lower = text.toLowerCase();
-  return !MOOD_WORDS.some(w => lower.includes(w));
+  if (BANNED_PHRASES.some(p => lower.includes(p))) return false;
+  if (MOOD_WORDS.some(w => lower.includes(w))) return false;
+  return true;
 }
 
-async function generateBaseCard(name, category, scale) {
+// ── Step 1: Generate base card fields ──
+
+async function generateBaseCard(name) {
   console.log(`  Generating base card...`);
 
   const msg = await client.messages.create({
@@ -110,28 +49,27 @@ async function generateBaseCard(name, category, scale) {
     max_tokens: 3000,
     messages: [{
       role: 'user',
-      content: `You are a cinematic prop master. Create a visual essence card for the object: "${name}"
-Category: ${category}, Scale: ${scale}
+      content: `You are a cinematic prop designer. Create a rich visual essence card for the object "${name}".
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with these keys:
+
 {
-  "tags": ["3-5 tags from: weapon, vehicle, instrument, creature, technology, sport, outdoor, toy, artifact, nature, glam, face_risk"],
-  "visual_forms": ["8 visually striking versions of this object with specific details, 8-12 words each"],
-  "material_textures": ["8 close-up tactile details — surface finish, wear, materials, 6-10 words each"],
-  "signature_details": ["6 cinematic micro-details that catch light or draw the eye, 6-10 words each"],
-  "scale_contexts": ["6 ways this object relates to a human body in size/position, 6-10 words each"],
-  "interaction_modes": ["8 natural ways a person interacts with this object, 6-10 words each — NOT wearing it"],
-  "environment_bindings": ["10 ways this object is physically grounded in a scene, 6-10 words each"],
-  "role_options": ["artifact on a pedestal", "hero prop in foreground", "carried casually", "background element", "surreal giant-scale version"],
-  "context_bridges": ["12 story justifications for WHY this object is in a random scene, 6-10 words each — washed up, left behind, salvaged, discovered, abandoned, displayed, etc."],
-  "soft_presence_forms": ["6 indirect/symbolic appearances — as mural, sign, shadow, carving, 8-12 words each"],
-  "faceswap_forbidden": ["constraints if this object could cover a face, or empty array"],
-  "faceswap_safe_positive": ["3 safe positioning phrases for face-swap mode, 6-10 words each"]
+  "visual_forms": ["8 specific physical variations of this object — different materials, styles, eras, cultures. 8-12 words each."],
+  "material_textures": ["8 tactile surface details — what it feels like, how light hits it. 6-10 words each."],
+  "signature_details": ["5 tiny identifying details a close-up camera would catch. 6-10 words each."],
+  "scale_contexts": ["6 phrases showing how this object relates to human body scale. 6-10 words each."],
+  "interaction_modes": ["8 ways a person physically touches, holds, or uses this object. 8-12 words each."],
+  "environment_bindings": ["10 ways this object could be placed or found in a scene — leaning, hanging, resting, etc. 6-10 words each."],
+  "role_options": ["5 compositional roles: e.g. 'artifact on a pedestal', 'hero prop in foreground', 'carried casually', 'background element', 'surreal giant-scale version'"],
+  "soft_presence_forms": ["5 indirect/symbolic ways this object could appear — shadows, reflections, patterns, imprints. 8-12 words each."],
+  "context_bridges": ["5 phrases connecting this object to broader scene contexts — what kind of scene it naturally belongs in. 6-10 words each."]
 }
 
-MOOD-NEUTRAL: describe physical appearance ONLY. No emotional tone, no darkness, no eeriness.
-Objects should be beautiful, interesting, and wonder-filled.
-Each phrase max 12 words. No duplicates. No metaphors.`
+CRITICAL RULES:
+- Be SPECIFIC to "${name}". Not generic.
+- MOOD-NEUTRAL: describe physical object ONLY. No emotional tone, no darkness, no menace.
+- Every phrase must be something a camera can see or a hand can feel.
+- No duplicates within any field.`
     }, {
       role: 'assistant',
       content: '{'
@@ -150,56 +88,58 @@ Each phrase max 12 words. No duplicates. No metaphors.`
   }
 }
 
-async function generateFusionAnchors(name, genre, count) {
+// ── Step 2: Generate fusion forms (genre-specific object reimaginings) ──
+
+async function generateFusionForms(name, genre) {
   const genreGuide = {
-    realistic: 'grounded, real-world cinematic',
+    realistic: 'grounded, real-world, photorealistic',
     fantasy: 'magical, mythical, enchanted, wonder-filled',
-    scifi: 'futuristic, sci-fi, technological, awe-inspiring',
+    scifi: 'futuristic, sci-fi, technological, high-tech',
   };
 
   const msg = await client.messages.create({
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 500,
+    max_tokens: 1500,
     messages: [{
       role: 'user',
-      content: `Generate ${count} unique ${genreGuide[genre]} visual variations of "${name}".
-Each must be a DIFFERENT material, style, or visual treatment.
-Format: one per line, numbered. Each is 8-12 words.
-MOOD-NEUTRAL: beautiful and wonder-filled, not dark or threatening.
-Output ONLY the numbered list.`,
+      content: `Generate ${FUSION_COUNT} unique ${genreGuide[genre]} reimaginings of "${name}" as a visual object in a dream scene.
+
+Each entry describes what this object LOOKS LIKE in a ${genre} world — materials, colors, textures, glow effects, surface treatments.
+
+RULES:
+- Each is 8-15 words, a comma-separated visual description
+- Every entry must be visually DISTINCT from the others
+- MOOD-NEUTRAL: describe physical appearance only, no emotional language
+- No duplicates, no generic entries
+- Output ONLY a numbered list, one per line`
     }],
   });
 
-  return msg.content[0].text.split('\n')
+  const raw = msg.content[0].text.split('\n')
     .map(line => line.replace(/^\d+[\.\)]\s*/, '').trim())
     .filter(line => line.length > 5)
     .filter(validate);
+
+  const seen = new Set();
+  return raw.filter(f => {
+    const key = f.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
-async function generateFullCard(obj) {
-  console.log(`\n🎸 ${obj.name} (${obj.category}/${obj.scale})`);
+// ── Main: generate full card ──
 
-  const base = await generateBaseCard(obj.name, obj.category, obj.scale);
+async function generateFullCard(name) {
+  console.log(`\n🎁 ${name}`);
+
+  const base = await generateBaseCard(name);
   if (!base) return;
 
   const filterField = (arr) => (arr || []).filter(validate);
 
-  // Generate fusion forms (20 total: 7+7+6)
-  const fusionForms = {};
-  for (const [genre, count] of Object.entries(OBJECT_FUSION_COUNTS)) {
-    console.log(`  ${genre}: generating ${count} fusion forms...`);
-    const forms = await generateFusionAnchors(obj.name, genre, count);
-    fusionForms[genre] = forms;
-    console.log(`  ${genre}: ${forms.length} forms`);
-  }
-
   const card = {
-    name: obj.name.toLowerCase().trim(),
-    tags: base.tags || [],
-    category: obj.category,
-    scale: obj.scale,
-    prompt_version: 2,
-    model_version: 'claude-sonnet-4-5-20250929',
     visual_forms: filterField(base.visual_forms),
     material_textures: filterField(base.material_textures),
     signature_details: filterField(base.signature_details),
@@ -207,43 +147,72 @@ async function generateFullCard(obj) {
     interaction_modes: filterField(base.interaction_modes),
     environment_bindings: filterField(base.environment_bindings),
     role_options: base.role_options || [],
-    fusion_forms: fusionForms,
-    context_bridges: filterField(base.context_bridges),
     soft_presence_forms: filterField(base.soft_presence_forms),
-    faceswap_forbidden: base.faceswap_forbidden || [],
-    faceswap_safe_positive: base.faceswap_safe_positive || [],
+    context_bridges: filterField(base.context_bridges),
+    prompt_version: 2,
+    model_version: 'claude-sonnet-4-5-20250929',
   };
 
-  const totalForms = Object.values(fusionForms).reduce((s, a) => s + a.length, 0);
-  console.log(`  Base: ${card.visual_forms.length} forms, ${card.context_bridges.length} bridges, ${totalForms} fusions`);
+  console.log(`  Base: ${card.visual_forms.length} forms, ${card.environment_bindings.length} bindings`);
 
-  // Upsert
-  await sb.from('object_cards').delete().eq('name', card.name);
-  const { error } = await sb.from('object_cards').insert(card);
+  const fusionForms = {};
+  for (const genre of ['realistic', 'fantasy', 'scifi']) {
+    console.log(`  ${genre}: generating ${FUSION_COUNT} fusion forms...`);
+    const forms = await generateFusionForms(name, genre);
+    fusionForms[genre] = forms;
+    console.log(`  ${genre}: ${forms.length} forms`);
+  }
+  card.fusion_forms = fusionForms;
+
+  const totalForms = Object.values(fusionForms).reduce((s, a) => s + a.length, 0);
+  console.log(`  Total: ${totalForms} fusion forms`);
+
+  // Update existing row, preserving tags/category/scale/faceswap fields
+  const normalizedName = name.toLowerCase().trim();
+  const { error } = await sb
+    .from('object_cards')
+    .update(card)
+    .eq('name', normalizedName);
+
   if (error) {
-    console.error(`  ❌ Insert failed:`, error.message);
+    console.error(`  ❌ Update failed:`, error.message);
   } else {
-    console.log(`  ✅ Saved`);
+    console.log(`  ✅ Saved to DB`);
   }
 }
+
+// ── CLI ──
 
 (async () => {
   const args = process.argv.slice(2);
 
-  if (args[0] === '--list') {
-    CURATED_OBJECTS.forEach((o, i) => console.log(`${i + 1}. ${o.name} (${o.category}/${o.scale})`));
-    console.log(`\nTotal: ${CURATED_OBJECTS.length}`);
-    return;
+  if (args.length === 0) {
+    console.log('Usage: node scripts/generate-full-object-card.js <object>');
+    console.log('       node scripts/generate-full-object-card.js --all');
+    console.log('       node scripts/generate-full-object-card.js --missing');
+    process.exit(1);
   }
 
   if (args[0] === '--all') {
-    for (const obj of CURATED_OBJECTS) {
-      await generateFullCard(obj);
+    const { data } = await sb.from('object_cards').select('name').eq('is_approved', true);
+    for (const obj of (data || [])) {
+      await generateFullCard(obj.name);
+    }
+  } else if (args[0] === '--missing') {
+    const { data } = await sb
+      .from('object_cards')
+      .select('name, fusion_forms')
+      .eq('is_approved', true);
+    const missing = (data || []).filter(r =>
+      !r.fusion_forms || Object.keys(r.fusion_forms).length === 0
+    );
+    console.log(`${missing.length} objects missing fusion_forms...`);
+    for (const obj of missing) {
+      await generateFullCard(obj.name);
     }
   } else {
     for (const name of args) {
-      const obj = CURATED_OBJECTS.find(o => o.name === name.toLowerCase()) || { name, category: 'misc', scale: 'handheld' };
-      await generateFullCard(obj);
+      await generateFullCard(name);
     }
   }
 

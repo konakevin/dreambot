@@ -34,13 +34,7 @@ export interface DreamSeeds {
 }
 
 /** Relationship type for the +1 cast member — affects how they appear in dreams */
-export type CastRelationship =
-  | 'significant_other'
-  | 'friend'
-  | 'sibling'
-  | 'parent'
-  | 'child'
-  | 'grandchild';
+export type CastRelationship = 'partner' | 'friend' | 'family';
 
 /** A person or pet the user uploads — photo gets described once, description used in dreams */
 export interface DreamCastMember {

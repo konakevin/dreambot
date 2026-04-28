@@ -54,12 +54,9 @@ const SLOTS: SlotConfig[] = [
 ];
 
 const RELATIONSHIPS: { key: CastRelationship; label: string }[] = [
-  { key: 'significant_other', label: 'Significant Other' },
+  { key: 'partner', label: 'Partner' },
   { key: 'friend', label: 'Friend' },
-  { key: 'sibling', label: 'Sibling' },
-  { key: 'parent', label: 'Parent' },
-  { key: 'child', label: 'Child' },
-  { key: 'grandchild', label: 'Grandchild' },
+  { key: 'family', label: 'Family' },
 ];
 
 function CastSlot({
