@@ -15,7 +15,7 @@ import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
-import { useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
 import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
 import { feedImageUrl } from '@/lib/imageUrl';
@@ -25,9 +25,8 @@ import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
 import { useToggleLike } from '@/hooks/useToggleLike';
+import { useDeletePost } from '@/hooks/useDeletePost';
 import { useAuthStore } from '@/store/auth';
-import { supabase } from '@/lib/supabase';
-import { Toast } from '@/components/Toast';
 import { LikesSheet } from '@/components/LikesSheet';
 import { colors } from '@/constants/theme';
 
@@ -127,64 +126,31 @@ export function FullScreenFeed({
 
   const user = useAuthStore((s) => s.user);
   const isAdmin = useAuthStore((s) => s.isAdmin);
-  const queryClient = useQueryClient();
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
   const { mutate: toggleFavorite } = useToggleFavorite();
   const { data: likeIds = new Set<string>() } = useLikeIds();
   const { mutate: toggleLike } = useToggleLike();
+  const { mutate: deletePost } = useDeletePost();
   const [likesPostId, setLikesPostId] = useState<string | null>(null);
   const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
   const handleDelete = useCallback(
-    async (uploadId: string) => {
+    (uploadId: string) => {
       const idx = currentIndex.current;
       const totalBefore = posts.length;
 
-      // Fetch image URL so we can clean up storage
-      const { data: row } = await supabase
-        .from('uploads')
-        .select('image_url')
-        .eq('id', uploadId)
-        .single();
-
-      const { error } = isAdmin
-        ? await supabase.rpc('admin_delete_upload' as never, { p_upload_id: uploadId } as never)
-        : await supabase.from('uploads').delete().eq('id', uploadId);
-      if (error) {
-        Toast.show('Failed to delete', 'close-circle');
-        return;
-      }
-
-      // Clean up the image from Supabase Storage
-      if (row?.image_url) {
-        const match = row.image_url.match(/\/uploads\/(.+)$/);
-        if (match?.[1]) {
-          supabase.storage.from('uploads').remove([decodeURIComponent(match[1])]);
-        }
-      }
-
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      Toast.show('Dream deleted', 'checkmark-circle');
-
-      // Invalidate all caches so grids and feeds refresh
-      queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-      queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-      queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-      queryClient.invalidateQueries({ queryKey: ['explore'] });
-      queryClient.invalidateQueries({ queryKey: ['publicProfilePosts'] });
-      queryClient.invalidateQueries({ queryKey: ['favoritePosts'] });
-      queryClient.invalidateQueries({ queryKey: ['albumPosts'] });
-
-      // If this was the only post, go back
-      if (totalBefore <= 1) {
-        if (router.canGoBack()) router.back();
-      } else {
-        // Adjust index so the re-snap effect (below) lands on the right page
-        const newIdx = idx >= totalBefore - 1 ? Math.max(0, idx - 1) : idx;
-        currentIndex.current = newIdx;
-      }
+      deletePost(uploadId, {
+        onSuccess: () => {
+          if (totalBefore <= 1) {
+            if (router.canGoBack()) router.back();
+          } else {
+            const newIdx = idx >= totalBefore - 1 ? Math.max(0, idx - 1) : idx;
+            currentIndex.current = newIdx;
+          }
+        },
+      });
     },
-    [queryClient, posts, ref]
+    [deletePost, posts.length]
   );
 
   const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;

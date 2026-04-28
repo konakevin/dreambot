@@ -61,7 +61,6 @@ export default function CreateScreen() {
   const { data: dbVibes = [] } = useDreamVibes();
 
   const [kbOpen, setKbOpen] = useState(false);
-  const [hasCastSelf, setHasCastSelf] = useState(false);
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const promptRef = useRef<TextInput>(null);
@@ -82,14 +81,6 @@ export default function CreateScreen() {
           const vp = raw as VibeProfile;
           if (vp.art_styles?.length) setUserArtStyles(vp.art_styles);
           if (vp.aesthetics?.length) setUserAesthetics(vp.aesthetics);
-          const cast = vp.dream_cast;
-          if (cast && Array.isArray(cast)) {
-            setHasCastSelf(
-              cast.some(
-                (m: { role: string; thumb_url?: string }) => m.role === 'self' && !!m.thumb_url
-              )
-            );
-          }
         }
       });
   }, [user]);
@@ -117,24 +108,31 @@ export default function CreateScreen() {
   const mediumOptions = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbMediums];
   const vibeOptions = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbVibes];
 
-  const mediumLabel =
-    mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium;
+  const isSurpriseMedium =
+    config.selectedMedium === 'surprise_me_face' || config.selectedMedium === 'surprise_me_art';
+  const mediumLabel = isSurpriseMedium
+    ? 'Surprise Me'
+    : (mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium);
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
 
-  // Self-reference detection
-  const SELF_REF_REGEX =
-    /\b(put me|place me|make me|show me|me as|me in|me on|me at|me \w+ing|i am|i'm|myself|my face)\b/i;
-  const mentionsSelf = hasPrompt && SELF_REF_REGEX.test(config.userPrompt);
+  // Self-reference detection — first-person singular pronouns (NOT "my" alone)
+  const SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
+  const mentionsSelf = hasPrompt && !hasPhoto && SELF_REF_REGEX.test(config.userPrompt);
+
+  // Relationship reference — user mentions a cast member by relationship
+  const RELATIONSHIP_REGEX =
+    /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
+  const mentionsOther = hasPrompt && !hasPhoto && RELATIONSHIP_REGEX.test(config.userPrompt);
 
   // Whether the selected medium face-swaps (composites real face into scene)
-  // Pulled from DB single source of truth — no hardcoded lists
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
-  const mediumFaceSwaps =
-    config.selectedMedium === 'surprise_me' ? true : (selectedMediumRow?.face_swaps ?? true);
+  const mediumFaceSwaps = isSurpriseMedium
+    ? config.selectedMedium === 'surprise_me_face'
+    : (selectedMediumRow?.face_swaps ?? true);
 
-  // Face is involved if: photo uploaded + prompt, OR self-reference + cast self photo exists
-  const faceInvolved = (hasPhoto && hasPrompt) || (mentionsSelf && hasCastSelf);
+  // Multi-person on face-swap medium warning
+  const showMultiCastWarning = mentionsSelf && mentionsOther && mediumFaceSwaps;
 
   // Contextual hint above Dream button
   const contextHint = hasPhoto
@@ -366,18 +364,6 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Face tooltip — only when a face is actually involved */}
-          {faceInvolved && (
-            <View className="flex-row items-center gap-1.5 mb-2 px-1">
-              <Ionicons name="information-circle-outline" size={14} color={colors.textSecondary} />
-              <Text className="text-xs flex-1" style={{ color: colors.textSecondary }}>
-                {mediumFaceSwaps
-                  ? 'Your face will be added into the dream.'
-                  : "This medium can't use your face — you'll be drawn from your Cast description."}
-              </Text>
-            </View>
-          )}
-
           {/* Prompt input */}
           <View
             className="rounded-xl mb-4"
@@ -413,53 +399,85 @@ export default function CreateScreen() {
           {/* Style pills */}
           {
             <View className="flex-row gap-3 mb-4">
-              <TouchableOpacity
-                className="flex-1 flex-row items-center justify-between px-4 py-3 rounded-xl"
-                style={{
-                  backgroundColor: colors.surface,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  setPickerType('medium');
-                }}
-                activeOpacity={0.7}
-              >
-                <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+              <View className="flex-1">
+                <Text
+                  className="text-xs font-medium mb-1.5 ml-1"
+                  style={{ color: colors.textSecondary }}
+                >
                   Medium
                 </Text>
-                <View className="flex-row items-center gap-1">
-                  <Text
-                    className="text-sm font-semibold"
-                    style={{ color: colors.textPrimary }}
-                    numberOfLines={1}
-                  >
-                    {mediumLabel}
-                  </Text>
+                <TouchableOpacity
+                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setPickerType('medium');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: colors.textPrimary }}
+                      numberOfLines={1}
+                    >
+                      {mediumLabel}
+                    </Text>
+                    {(isSurpriseMedium || selectedMediumRow) && (
+                      <View
+                        style={{
+                          paddingHorizontal: 5,
+                          paddingVertical: 1,
+                          borderRadius: 5,
+                          backgroundColor: mediumFaceSwaps
+                            ? 'rgba(96,165,250,0.15)'
+                            : 'rgba(245,158,11,0.15)',
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            fontWeight: '700',
+                            color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
+                            textTransform: 'uppercase',
+                            letterSpacing: 0.5,
+                          }}
+                        >
+                          {mediumFaceSwaps ? 'face' : 'art'}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
                   <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
 
-              <TouchableOpacity
-                className="flex-1 flex-row items-center justify-between px-4 py-3 rounded-xl"
-                style={{
-                  backgroundColor: colors.surface,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  setPickerType('vibe');
-                }}
-                activeOpacity={0.7}
-              >
-                <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+              <View className="flex-1">
+                <Text
+                  className="text-xs font-medium mb-1.5 ml-1"
+                  style={{ color: colors.textSecondary }}
+                >
                   Vibe
                 </Text>
-                <View className="flex-row items-center gap-1">
+                <TouchableOpacity
+                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setPickerType('vibe');
+                  }}
+                  activeOpacity={0.7}
+                >
                   <Text
                     className="text-sm font-semibold"
                     style={{ color: colors.textPrimary }}
@@ -468,17 +486,27 @@ export default function CreateScreen() {
                     {vibeLabel}
                   </Text>
                   <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             </View>
           }
         </ScrollView>
 
         {/* Fixed footer — always visible above keyboard */}
         <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : vs(96) }}>
+          {/* Multi-cast + face-swap warning */}
+          {showMultiCastWarning && (
+            <View className="flex-row items-center justify-center gap-1 mb-1">
+              <Ionicons name="alert-circle" size={12} color="#F59E0B" />
+              <Text style={{ color: '#F59E0B', fontSize: 11, fontWeight: '500' }}>
+                Face mediums show one person — switch to Dream Art for both
+              </Text>
+            </View>
+          )}
+
           {/* Contextual hint */}
           <View className="flex-row items-center justify-center gap-1.5 mb-2">
-            {((hasPhoto && hasPrompt) || mentionsSelf) && (
+            {((hasPhoto && hasPrompt) || mentionsSelf || mentionsOther) && (
               <Ionicons name="information-circle" size={14} color={colors.accent} />
             )}
             <Text

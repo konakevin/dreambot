@@ -38,7 +38,6 @@ interface SlotConfig {
   label: string;
   icon: string;
   tip: string;
-  showInfoIcon?: boolean;
 }
 
 const SLOTS: SlotConfig[] = [
@@ -47,7 +46,6 @@ const SLOTS: SlotConfig[] = [
     label: 'You',
     icon: 'person',
     tip: 'Clear face photos work best. Good lighting helps!',
-    showInfoIcon: true,
   },
   {
     role: 'plus_one',
@@ -90,15 +88,28 @@ function CastSlot({
           color={colors.accent}
         />
         <Text style={s.slotLabel}>{config.label}</Text>
+        <View
+          style={{
+            paddingHorizontal: 5,
+            paddingVertical: 1,
+            borderRadius: 5,
+            backgroundColor: 'rgba(96,165,250,0.15)',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 8,
+              fontWeight: '700',
+              color: '#60A5FA',
+              textTransform: 'uppercase',
+              letterSpacing: 0.5,
+            }}
+          >
+            face
+          </Text>
+        </View>
       </View>
-      <Text style={s.slotTip}>
-        {config.showInfoIcon && (
-          <>
-            <Ionicons name="information-circle" size={13} color={colors.textSecondary} />{' '}
-          </>
-        )}
-        {config.tip}
-      </Text>
+      <Text style={s.slotTip}>{config.tip}</Text>
 
       {member ? (
         <>
@@ -278,6 +289,7 @@ export function DreamCastStep({ onNext, onBack }: Props) {
         thumb_url: publicUrl,
         description: descData.description,
         ...(descData.gender ? { gender: descData.gender } : {}),
+        ...(descData.physical_summary ? { physical_summary: descData.physical_summary } : {}),
         ...(current?.relationship ? { relationship: current.relationship } : {}),
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

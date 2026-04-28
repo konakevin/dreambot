@@ -158,10 +158,13 @@ function RealtimeSubscriber() {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
         () => {
-          // New dream generated for this user — refresh feeds
-          queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-          queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-          queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
+          // New dream generated for this user — refresh feeds (single predicate call)
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              const key = query.queryKey[0];
+              return key === 'dreamFeed' || key === 'userPosts' || key === 'my-dreams';
+            },
+          });
         }
       )
       .on(
@@ -304,7 +307,12 @@ function DataPrefetcher() {
       } else if (state === 'active' && backgroundedAt.current > 0) {
         const elapsed = Date.now() - backgroundedAt.current;
         if (elapsed > 60 * 1000) {
-          queryClient.invalidateQueries();
+          queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+          if (user) {
+            queryClient.invalidateQueries({ queryKey: ['inbox', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
+            queryClient.invalidateQueries({ queryKey: ['unreadNotificationCount', user.id] });
+          }
         }
 
         // Mark stale processing jobs as failed (>3 min old)

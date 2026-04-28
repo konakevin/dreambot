@@ -33,6 +33,7 @@ import {
   classifyPhoto,
   type PhotoClassification,
 } from '@/lib/dreamApi';
+import type { DreamMedium } from '@/hooks/useDreamStyles';
 import { router } from 'expo-router';
 
 type GenerateStatus = 'idle' | 'generating' | 'done' | 'error' | 'cancelled';
@@ -105,6 +106,23 @@ export function useDreamCreate() {
 
       const { config } = useDreamStore.getState();
 
+      // Resolve surprise_me_face / surprise_me_art to a concrete medium key
+      let resolvedMediumKey = config.selectedMedium;
+      if (resolvedMediumKey === 'surprise_me_face' || resolvedMediumKey === 'surprise_me_art') {
+        const wantFace = resolvedMediumKey === 'surprise_me_face';
+        const cachedMediums = queryClient.getQueryData<DreamMedium[]>(['dreamMediums']) ?? [];
+        const pool = cachedMediums.filter((m) =>
+          wantFace ? m.face_swaps === true : m.face_swaps === false
+        );
+        if (pool.length > 0) {
+          resolvedMediumKey = pool[Math.floor(Math.random() * pool.length)].key;
+        } else {
+          resolvedMediumKey = 'surprise_me';
+        }
+        if (__DEV__)
+          console.log(`[useDreamCreate] Resolved ${config.selectedMedium} → ${resolvedMediumKey}`);
+      }
+
       // ── Photo path: classify FIRST, before sparkle is spent ──────────────
       // Classification only runs for new_scene (Flux + face-swap) since the
       // Kontext restyle path doesn't branch on subject type.
@@ -175,7 +193,7 @@ export function useDreamCreate() {
             result = await generateDream({
               mode: 'flux-kontext',
               vibe_profile: vibeProfile ?? undefined,
-              medium_key: config.selectedMedium,
+              medium_key: resolvedMediumKey,
               vibe_key: config.selectedVibe,
               input_image: refUrl,
               hint: config.userPrompt.trim() || undefined,
@@ -192,7 +210,7 @@ export function useDreamCreate() {
             // Restyle: Kontext transform via dedicated restyle-photo endpoint (keeps pose/composition)
             result = await restylePhoto({
               inputImageBase64: refUrl,
-              mediumKey: config.selectedMedium ?? 'photography',
+              mediumKey: resolvedMediumKey ?? 'photography',
               vibeKey: config.selectedVibe ?? 'cinematic',
               vibeProfile: vibeProfile ?? undefined,
               hint: config.userPrompt.trim() || undefined,
@@ -207,7 +225,7 @@ export function useDreamCreate() {
           }
 
           result = await generateFromVibeProfile(vibeProfile ?? ({} as VibeProfile), {
-            mediumKey: config.selectedMedium,
+            mediumKey: resolvedMediumKey,
             vibeKey: config.selectedVibe,
             hint: config.userPrompt.trim() || undefined,
             jobId,

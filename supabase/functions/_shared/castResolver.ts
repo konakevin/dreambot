@@ -13,7 +13,8 @@ export interface DreamCastMember {
   description: string;
   /** Explicit gender set at describe-photo time — preferred over regex inference */
   gender?: 'male' | 'female';
-  structured_traits?: Record<string, unknown>;
+  /** Concise physical traits summary from Haiku vision — saved at describe-photo time */
+  physical_summary?: string;
   relationship?: string;
 }
 
@@ -22,6 +23,7 @@ export interface ResolvedCastMember {
   promptDesc: string;
   genderLock: string | null;
   sourcePhotoUrl: string;
+  physicalTraits: string;
 }
 
 export function resolveCastForPrompt(
@@ -47,16 +49,12 @@ export function resolveCastForPrompt(
         .replace(/\*\*/g, '')
         .trim();
 
-      // Determine gender: explicit field > structured_traits > regex fallback
+      // Determine gender: explicit field > regex fallback
       let gender: 'male' | 'female';
       if (member.gender) {
         gender = member.gender;
       } else {
-        const traits = member.structured_traits as Record<string, string> | undefined;
-        const isFemale =
-          traits && traits.gender
-            ? traits.gender === 'female'
-            : /woman|female|girl|she\b|her\b/i.test(rawDesc);
+        const isFemale = /woman|female|girl|she\b|her\b/i.test(rawDesc);
         gender = isFemale ? 'female' : 'male';
       }
 
@@ -80,6 +78,7 @@ export function resolveCastForPrompt(
         promptDesc,
         genderLock,
         sourcePhotoUrl: member.thumb_url,
+        physicalTraits: member.physical_summary || '',
       };
     });
 }

@@ -71,7 +71,7 @@ const INITIAL_CONFIG: DreamConfig = {
   // Sonnet-invented scenes. Users who want to preserve their photo's pose
   // can toggle to 'restyle'.
   photoStyle: 'new_scene',
-  selectedMedium: 'surprise_me',
+  selectedMedium: 'surprise_me_face',
   selectedVibe: 'surprise_me',
   userPrompt: '',
   stylePrompt: null,

@@ -41,6 +41,8 @@ export interface DreamCastMember {
   description: string;
   /** Explicit gender from vision describe — used by castResolver for gender lock. Pets have no gender. */
   gender?: 'male' | 'female';
+  /** Concise physical traits summary from Haiku vision — hair, skin, build, eyes. Used for trait enforcement in prompts. */
+  physical_summary?: string;
   /** Relationship to the user — only for plus_one role. Affects dream context (romantic vs platonic). */
   relationship?: CastRelationship;
 }

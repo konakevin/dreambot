@@ -33,7 +33,7 @@ import {
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
-import { faceSwap } from '../_shared/faceSwap.ts';
+import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
@@ -232,6 +232,7 @@ Deno.serve(async (req) => {
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined; // original photo for face swap after generation
+  let faceSwapSources: Array<{ role: string; sourceUrl: string }> | undefined;
 
   // ── Observability (Phase 1 of V4 hardening) ─────────────────────────────────
   // Capture the full LLM exchange + fallback audit trail so every generation
@@ -588,32 +589,47 @@ Output ONLY the prompt.`;
       // ── TEXT PATH ──
       const userSubject = rawPrompt ?? hint ?? '';
 
-      // ── V2 SELF-INSERT DETECTION (using new detector) ──
-      // force_cast_role overrides which cast member is used (test mode)
-      const castRole = force_cast_role ?? 'self';
-      const selfCast = !isPhoto
-        ? vibeProfile?.dream_cast?.find(
-            (m: DreamCastMember) => m.role === castRole && m.thumb_url && m.description
-          )
-        : undefined;
+      // ── V2 SELF-INSERT / CAST DETECTION ──
       const selfInsertResult = userSubject
         ? detectSelfInsert(userSubject)
-        : { isSelfInsert: false, cleanedPrompt: '' };
-      // force_cast_role also forces the self-insert path even if prompt doesn't say "me"
-      // or prompt is empty entirely (surprise-me + cast = new scene with face-swap).
-      const mentionsSelf = (selfInsertResult.isSelfInsert || force_cast_role) && selfCast;
+        : { isSelfInsert: false, cleanedPrompt: '', referencedRoles: new Set<string>() };
 
-      if (mentionsSelf) {
-        // ── SELF-INSERT: cast + scene expansion + chaos + compiler ──
+      const dreamCast: DreamCastMember[] = vibeProfile?.dream_cast ?? [];
+      const describedCast = dreamCast.filter((m: DreamCastMember) => m.thumb_url && m.description);
+
+      let castMembers: DreamCastMember[] = [];
+
+      if (force_cast_role) {
+        const forced = describedCast.find((m: DreamCastMember) => m.role === force_cast_role);
+        if (forced) castMembers = [forced];
+      } else if (selfInsertResult.isSelfInsert && !isPhoto) {
+        castMembers = describedCast.filter((m: DreamCastMember) =>
+          selfInsertResult.referencedRoles.has(m.role as 'self' | 'plus_one' | 'pet')
+        );
+      }
+
+      const isFaceSwapEligible = medium.faceSwaps && medium.characterRenderMode === 'natural';
+
+      if (isFaceSwapEligible && castMembers.length > 2) {
+        const self = castMembers.find((m: DreamCastMember) => m.role === 'self');
+        const plusOne = castMembers.find((m: DreamCastMember) => m.role === 'plus_one');
+        castMembers = self && plusOne ? [self, plusOne] : [self ?? castMembers[0]];
+      }
+
+      const hasCastInjection =
+        castMembers.length > 0 || (force_cast_role && describedCast.length > 0);
+
+      if (hasCastInjection) {
+        // ── CAST INJECTION: one or more cast members + scene expansion + chaos + compiler ──
         const cleanedPrompt = sanitizeUserPrompt(selfInsertResult.cleanedPrompt);
-        const resolvedCast = resolveCastForPrompt([selfCast as DreamCastMember], {
+        const resolvedCast = resolveCastForPrompt(castMembers, {
           characterRenderMode: medium.characterRenderMode,
           key: medium.key,
         });
-        const isFaceSwapEligible = medium.faceSwaps && medium.characterRenderMode === 'natural';
 
+        const castRoles = castMembers.map((m: DreamCastMember) => m.role).join('+');
         console.log(
-          `[generate-dream] 🎭 SELF-INSERT: ${medium.characterRenderMode} / faceSwap=${isFaceSwapEligible}`
+          `[generate-dream] 🎭 CAST-INJECT: roles=${castRoles} / ${medium.characterRenderMode} / faceSwap=${isFaceSwapEligible}`
         );
 
         // Scene expansion + chaos
@@ -673,11 +689,15 @@ Output ONLY the prompt.`;
           if (compiled.faceSwapSource) {
             faceSwapSource = compiled.faceSwapSource;
           }
+          if (compiled.faceSwapSources) {
+            faceSwapSources = compiled.faceSwapSources;
+          }
           logAxes = {
             medium: medium.key,
             vibe: vibe.key,
             engine: 'v2-compiler-self-insert',
             faceSwap: isFaceSwapEligible,
+            dualFaceSwap: !!faceSwapSources,
             chaosIntensity: chaosProfile.intensity,
           };
           console.log('[generate-dream] V2 compiler (self-insert):', finalPrompt.slice(0, 150));
@@ -837,17 +857,38 @@ Output ONLY the prompt.`;
       `[generate-dream] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
     );
 
-    // Face swap: paste original face onto generated image
-    if (faceSwapSource && tempUrl) {
+    // Face swap: dual (two people) or single
+    if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
+      try {
+        console.log('[generate-dream] Dual face swap starting...');
+        tempUrl = await dualFaceSwap(
+          faceSwapSources[0].sourceUrl,
+          faceSwapSources[1].sourceUrl,
+          tempUrl,
+          REPLICATE_TOKEN,
+          supabase,
+          userId
+        );
+        lap('dual-face-swap');
+        console.log('[generate-dream] Dual face swap complete');
+        logAxes.faceSwapResult = 'dual-success';
+      } catch (err) {
+        console.warn(
+          '[generate-dream] Dual face swap failed, using unswapped:',
+          (err as Error).message
+        );
+        fallbackReasons.push(`dual_face_swap_failed:${(err as Error).message}`);
+        logAxes.faceSwapResult = 'dual-failed';
+        logAxes.faceSwapError = (err as Error).message;
+      }
+    } else if (faceSwapSource && tempUrl) {
       try {
         let sourceUrl: string;
         let swapFileName: string | null = null;
         if (faceSwapSource.startsWith('http')) {
-          // Already a public URL (e.g., cast thumb_url)
           sourceUrl = faceSwapSource;
           lap('face-swap-upload');
         } else {
-          // Base64 data URL — upload to temp storage first
           console.log('[generate-dream] ⏱ Starting face swap upload...');
           const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
           const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));

@@ -13,18 +13,13 @@
  * Non-face-swap mediums: 1-3 cast members rendered stylized.
  */
 
-// ── Configuration ──────────────────────────────────────────────────────
-
-/** Mediums that ALWAYS render as pure scene (no cast). Mirrors dream_mediums.is_scene_only. */
-export const SCENE_ONLY_MEDIUMS = new Set(['canvas', 'watercolor', 'vaporwave', 'pixels']);
-
-/** Mediums that ALWAYS use the character composition path. Mirrors dream_mediums.is_character_only. */
-export const CHARACTER_MEDIUMS = new Set(['claymation', 'lego', 'vinyl']);
-
-/** Mediums that should be skipped (re-rolled) in nightly dreams. Mirrors dream_mediums.nightly_skip. */
-export const NIGHTLY_SKIP_MEDIUMS = new Set(['watercolor']);
-
 // ── Types ──────────────────────────────────────────────────────────────
+
+export interface MediumProps {
+  isSceneOnly: boolean;
+  isCharacterOnly: boolean;
+  faceSwaps: boolean;
+}
 
 export interface CastMember {
   role: string;
@@ -62,21 +57,15 @@ export interface DreamRoll {
 /**
  * Roll the nightly dream algorithm with independent character/location/object decisions.
  *
- * @param describedCast - Cast members with descriptions (filtered for non-empty)
- * @param mediumKey - The selected medium key
- * @param isFaceSwapMedium - Whether the medium supports face swap
- * @param forceCastRole - Test mode override (e.g. 'self')
- * @param forceNightlyPath - Test mode override for backwards compat
+ * All medium behavior is driven by DB properties passed via `medium` — no hardcoded sets.
  */
 export function rollDream(
   describedCast: CastMember[],
-  mediumKey: string,
-  isFaceSwapMedium: boolean,
+  medium: MediumProps,
   forceCastRole?: string | null,
   forceNightlyPath?: string | null
 ): DreamRoll {
   const findRole = (r: string) => describedCast.find((m) => m.role === r);
-  const isSceneOnly = SCENE_ONLY_MEDIUMS.has(mediumKey);
 
   // ── Backwards compat for force_nightly_path ──
   if (
@@ -84,15 +73,7 @@ export function rollDream(
     forceNightlyPath === 'personal_scene' ||
     forceNightlyPath === 'cast_random'
   ) {
-    return rollLegacyPath(
-      forceNightlyPath,
-      describedCast,
-      mediumKey,
-      isFaceSwapMedium,
-      isSceneOnly,
-      forceCastRole,
-      findRole
-    );
+    return rollLegacyPath(forceNightlyPath, describedCast, medium, forceCastRole, findRole);
   }
 
   // ── Step 1: Character roll (50%) ──
@@ -100,7 +81,7 @@ export function rollDream(
 
   if (forceCastRole === null) {
     includeCharacter = false;
-  } else if (isSceneOnly) {
+  } else if (medium.isSceneOnly) {
     includeCharacter = false;
   } else if (describedCast.length === 0) {
     includeCharacter = false;
@@ -122,10 +103,8 @@ export function rollDream(
   if (!includeCharacter) {
     const pureSceneRoll = Math.random();
     if (pureSceneRoll < 0.15) {
-      // 15% deliberate pure scene — no object, but location still included
       includeObject = false;
     }
-    // 85% keep whatever Step 3 rolled for includeObject
   }
 
   // ── Step 5: Cast selection ──
@@ -135,15 +114,22 @@ export function rollDream(
     if (forceCastRole) {
       const forced = findRole(forceCastRole);
       if (forced) castMembers = [forced];
-    } else if (isFaceSwapMedium) {
-      // Face-swap: single cast only (50% self, 25% +1, 25% pet)
-      const whoRoll = Math.random() * 100;
-      let pick: CastMember | undefined;
-      if (whoRoll < 50) pick = findRole('self');
-      else if (whoRoll < 75) pick = findRole('plus_one');
-      else pick = findRole('pet');
-      if (!pick) pick = describedCast[0];
-      if (pick) castMembers = [pick];
+    } else if (medium.faceSwaps) {
+      const selfMember = findRole('self');
+      const plusOne = findRole('plus_one');
+      if (selfMember && plusOne && Math.random() < 0.25) {
+        // 25% dual face swap when both self + plus_one exist
+        castMembers = [selfMember, plusOne];
+      } else {
+        // Single face swap (50% self, 25% +1, 25% pet)
+        const whoRoll = Math.random() * 100;
+        let pick: CastMember | undefined;
+        if (whoRoll < 50) pick = findRole('self');
+        else if (whoRoll < 75) pick = findRole('plus_one');
+        else pick = findRole('pet');
+        if (!pick) pick = describedCast[0];
+        if (pick) castMembers = [pick];
+      }
     } else {
       // Non-face-swap: can include 1, 2, or all 3
       const available = [...describedCast];
@@ -174,18 +160,15 @@ export function rollDream(
 
   if (!includeCharacter) {
     if (!includeLocation && !includeObject) {
-      // Pure scene (deliberate or fallback)
       composition = 'pure_scene';
-    } else if (isSceneOnly) {
-      // Scene-only mediums never get epic_tiny
+    } else if (medium.isSceneOnly) {
       composition = 'pure_scene';
     } else {
-      // Non-character with personal elements: 70% pure_scene, 30% epic_tiny (anonymous figure)
       composition = Math.random() < 0.7 ? 'pure_scene' : 'epic_tiny';
     }
-  } else if (isSceneOnly) {
+  } else if (medium.isSceneOnly) {
     composition = 'pure_scene';
-  } else if (CHARACTER_MEDIUMS.has(mediumKey) || isFaceSwapMedium) {
+  } else if (medium.isCharacterOnly || medium.faceSwaps) {
     composition = 'character';
   } else {
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';
@@ -210,7 +193,7 @@ export function rollDream(
     'low_angle_hero',
   ]);
   const eligibleWeights =
-    isFaceSwapMedium && includeCharacter
+    medium.faceSwaps && includeCharacter
       ? COMPOSITION_WEIGHTS.filter(([mode]) => FACESWAP_ALLOWED.has(mode))
       : COMPOSITION_WEIGHTS;
   const totalCompWeight = eligibleWeights.reduce((s, [, w]) => s + w, 0);
@@ -249,9 +232,7 @@ export function rollDream(
 function rollLegacyPath(
   path: 'personal_cast' | 'personal_scene' | 'cast_random',
   describedCast: CastMember[],
-  mediumKey: string,
-  isFaceSwapMedium: boolean,
-  isSceneOnly: boolean,
+  medium: MediumProps,
   forceCastRole: string | null | undefined,
   findRole: (r: string) => CastMember | undefined
 ): DreamRoll {
@@ -276,22 +257,19 @@ function rollLegacyPath(
       else includeObject = true;
     }
   } else {
-    // cast_random — loosened: char=yes, loc 30%, obj 30%
     includeCharacter = true;
     includeLocation = true;
     includeObject = Math.random() < 0.3;
   }
 
-  // Override for scene-only / no cast
-  if (isSceneOnly || describedCast.length === 0) includeCharacter = false;
+  if (medium.isSceneOnly || describedCast.length === 0) includeCharacter = false;
 
-  // Cast selection (same as main algorithm)
   let castMembers: CastMember[] = [];
   if (includeCharacter) {
     if (forceCastRole) {
       const forced = findRole(forceCastRole);
       if (forced) castMembers = [forced];
-    } else if (isFaceSwapMedium) {
+    } else if (medium.faceSwaps) {
       const whoRoll = Math.random() * 100;
       let pick: CastMember | undefined;
       if (whoRoll < 50) pick = findRole('self');
@@ -304,11 +282,10 @@ function rollLegacyPath(
     }
   }
 
-  // Composition
   let composition: 'character' | 'epic_tiny' | 'pure_scene';
   if (!includeCharacter) {
     composition = 'pure_scene';
-  } else if (CHARACTER_MEDIUMS.has(mediumKey) || isFaceSwapMedium) {
+  } else if (medium.isCharacterOnly || medium.faceSwaps) {
     composition = 'character';
   } else {
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';

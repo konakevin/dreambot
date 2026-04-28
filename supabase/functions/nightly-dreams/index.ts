@@ -16,7 +16,7 @@
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
-import { rollDream, NIGHTLY_SKIP_MEDIUMS } from '../_shared/dreamAlgorithm.ts';
+import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
 import { getLocationCard, normalizeName } from '../_shared/essenceCards.ts';
@@ -26,7 +26,7 @@ import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
-import { faceSwap } from '../_shared/faceSwap.ts';
+import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 
@@ -123,6 +123,7 @@ Deno.serve(async (req) => {
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined;
+  let faceSwapSources: Array<{ role: string; sourceUrl: string }> | undefined;
   let finalPrompt: string;
 
   // Budget tracking
@@ -192,19 +193,19 @@ Deno.serve(async (req) => {
       nightlyProfile.art_styles,
       recentMediums
     );
-    if (nightlyMedium.key === 'watercolor') {
+    if (nightlyMedium.nightlySkip) {
       nightlyMedium = await resolveMediumFromDb(
         'my_mediums',
         nightlyProfile.art_styles,
         recentMediums
       );
-      if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
+      if (nightlyMedium.nightlySkip) {
         nightlyMedium = await resolveMediumFromDb(
           'my_mediums',
           nightlyProfile.art_styles,
           recentMediums
         );
-        if (NIGHTLY_SKIP_MEDIUMS.has(nightlyMedium.key)) {
+        if (nightlyMedium.nightlySkip) {
           nightlyMedium = await resolveMediumFromDb('anime');
         }
       }
@@ -312,8 +313,7 @@ Deno.serve(async (req) => {
     // Roll the dream algorithm (path selection + cast + personal elements)
     const dreamRoll = rollDream(
       describedCastMembers,
-      nightlyMedium.key,
-      nightlyMedium.faceSwaps,
+      nightlyMedium,
       force_cast_role,
       force_nightly_path
     );
@@ -483,6 +483,7 @@ Deno.serve(async (req) => {
       composition === 'pure_scene' ? 'none' : nightlyMedium.characterRenderMode;
     const faceSwapEligible =
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
+    const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
 
     // ── Resolve character descriptions: single source of truth per render mode ──
     // Natural -> raw cast description (face swap handles identity)
@@ -569,11 +570,16 @@ Deno.serve(async (req) => {
       resolvedCast.length > 0
         ? resolvedCast
             .map((rc, i) => {
-              return resolvedCast.length === 1
-                ? renderMode === 'embodied'
+              if (resolvedCast.length === 1) {
+                return renderMode === 'embodied'
                   ? `THE CHARACTER (already transformed into ${mediumStyle} style — place them in the scene as-is):\n${rc.promptDesc}`
-                  : `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${rc.promptDesc}`
-                : `CHARACTER ${i + 1} (${rc.role}):\n${rc.promptDesc}`;
+                  : `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${rc.promptDesc}`;
+              }
+              if (isDualFaceSwap) {
+                const side = i === 0 ? 'left of frame' : 'right of frame';
+                return `CHARACTER ${i + 1} (${side} — ${rc.role}):\n${rc.promptDesc}`;
+              }
+              return `CHARACTER ${i + 1} (${rc.role}):\n${rc.promptDesc}`;
             })
             .join('\n\n')
         : '';
@@ -590,14 +596,23 @@ Deno.serve(async (req) => {
 
     if (composition === 'character') {
       if (faceSwapEligible) {
-        // Face-swap brief: scene first, then HARD face lock, then character
+        const faceLockPhrase = isDualFaceSwap
+          ? 'two people facing camera, both faces three-quarter front angle, both faces visible and sharp, no back views, no silhouettes'
+          : 'front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no rear angle';
+        const dualSepRule = isDualFaceSwap
+          ? "\n- Left character's face in the left half, right character's face in the right half. They can interact naturally as long as faces stay on their sides."
+          : '';
+        const faceDescRule = isDualFaceSwap
+          ? 'Do NOT over-describe faces. Push detail into clothing, pose, and environment.'
+          : 'Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.';
+
         nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
 STRUCTURE:
 1. Start with: "${baseMedium.fluxFragment}"
 2. SCENE/ENVIRONMENT (50% of words)
 3. SUBJECT FRAMING (must be early in the prompt)
-4. CHARACTER (20% of words)
+4. CHARACTER${isDualFaceSwap ? 'S' : ''} (20% of words)
 5. CAMERA + MOOD (20% of words)
 6. End with: no text, no words, no letters, no watermarks, ultra detailed
 
@@ -610,16 +625,17 @@ SELECT AND SUBORDINATE (critical):
 - If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
-"front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no rear angle"
+"${faceLockPhrase}"
 
 COMPOSITION RULES (must obey):
-- Subject facing camera. No back view. No rear angle. No over-the-shoulder. No silhouette.
+- ${isDualFaceSwap ? 'Both subjects' : 'Subject'} facing camera. No back view. No rear angle. No over-the-shoulder. No silhouette.${dualSepRule}
 - No crouching, no kneeling, no looking down, no looking away from camera.
-- The character is visible and facing the viewer in the scene.
+- ${isDualFaceSwap ? 'Both characters are' : 'The character is'} visible and facing the viewer in the scene.
+- Character faces must have realistic human proportions — real photo faces will be composited on.
 
-CHARACTER IN THE SCENE:
+CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
-Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.
+${faceDescRule}
 
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
@@ -768,12 +784,32 @@ Output ONLY the prompt.`;
 
     // Post-process: brute force face lock for face-swap-eligible dreams.
     if (faceSwapEligible) {
-      finalPrompt +=
-        ', front-facing subject facing the camera, three-quarter front angle, head turned toward camera, eyes visible, no back view, no rear angle, no silhouette';
+      if (isDualFaceSwap) {
+        finalPrompt +=
+          ', two people facing camera, both faces three-quarter front angle, both faces visible and sharp, no back views, no silhouettes';
+      } else {
+        finalPrompt +=
+          ', front-facing subject facing the camera, three-quarter front angle, head turned toward camera, eyes visible, no back view, no rear angle, no silhouette';
+      }
     }
 
-    // Face swap — only fires for natural render mode with face-swap-eligible medium.
-    if (
+    // Face swap source assignment
+    if (isDualFaceSwap) {
+      const s = selectedCast[0] as DreamCastMember;
+      const p = selectedCast[1] as DreamCastMember;
+      if (
+        s.thumb_url &&
+        s.thumb_url.startsWith('http') &&
+        p.thumb_url &&
+        p.thumb_url.startsWith('http')
+      ) {
+        faceSwapSources = [
+          { role: s.role, sourceUrl: s.thumb_url },
+          { role: p.role, sourceUrl: p.thumb_url },
+        ];
+        console.log(`[nightly-dreams] Dual face swap: ${s.role}+${p.role} -> ${nightlyMedium.key}`);
+      }
+    } else if (
       faceSwapEligible &&
       castPick &&
       castPick.thumb_url &&
@@ -833,8 +869,31 @@ Output ONLY the prompt.`;
       `[nightly-dreams] Image generation complete (prediction: ${genResult.predictionId})`
     );
 
-    // Face swap: paste original face onto generated image
-    if (faceSwapSource && tempUrl) {
+    // Face swap: dual (two people) or single
+    if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
+      try {
+        console.log('[nightly-dreams] Dual face swap starting...');
+        tempUrl = await dualFaceSwap(
+          faceSwapSources[0].sourceUrl,
+          faceSwapSources[1].sourceUrl,
+          tempUrl,
+          REPLICATE_TOKEN,
+          supabase,
+          userId
+        );
+        lap('dual-face-swap');
+        console.log('[nightly-dreams] Dual face swap complete');
+        logAxes.faceSwapResult = 'dual-success';
+      } catch (err) {
+        console.warn(
+          '[nightly-dreams] Dual face swap failed, using unswapped:',
+          (err as Error).message
+        );
+        fallbackReasons.push(`dual_face_swap_failed:${(err as Error).message}`);
+        logAxes.faceSwapResult = 'dual-failed';
+        logAxes.faceSwapError = (err as Error).message;
+      }
+    } else if (faceSwapSource && tempUrl) {
       try {
         const sourceUrl = faceSwapSource;
         console.log('[nightly-dreams] Starting face swap...');

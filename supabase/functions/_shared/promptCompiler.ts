@@ -68,8 +68,10 @@ export interface CompilerOutput {
   postProcess: {
     appendFaceLock: boolean;
     appendPortraitTags: boolean;
+    dualFaceSwap: boolean;
   };
   faceSwapSource: string | null;
+  faceSwapSources: Array<{ role: string; sourceUrl: string }> | null;
 }
 
 // ── Focal Anchor Derivation ──
@@ -149,6 +151,8 @@ function buildCharacterBlock(
   const isEmbodied = medium.characterRenderMode === 'embodied';
   const parts: string[] = [];
 
+  let genderLockHandled = false;
+
   if (cast.length === 1) {
     const c = cast[0];
     if (isEmbodied) {
@@ -159,36 +163,81 @@ function buildCharacterBlock(
     } else {
       parts.push('THE MAIN CHARACTER:');
       parts.push(c.promptDesc);
+      if (c.physicalTraits) {
+        parts.push(
+          `CRITICAL — character MUST have: ${c.physicalTraits}. Do NOT change hair, facial hair, skin tone, or build.`
+        );
+      }
       if (composition.faceSwapEligible) {
         parts.push('Do NOT over-describe the face. Push detail into clothing, pose, environment.');
       }
     }
+  } else if (cast.length === 2 && composition.faceSwapEligible) {
+    parts.push(`CHARACTER 1 (left of frame — ${cast[0].role}): ${cast[0].promptDesc}`);
+    if (cast[0].physicalTraits) {
+      parts.push(
+        `CRITICAL — CHARACTER 1 MUST have: ${cast[0].physicalTraits}. Do NOT change hair, facial hair, skin tone, or build.`
+      );
+    }
+    parts.push(`CHARACTER 2 (right of frame — ${cast[1].role}): ${cast[1].promptDesc}`);
+    if (cast[1].physicalTraits) {
+      parts.push(
+        `CRITICAL — CHARACTER 2 MUST have: ${cast[1].physicalTraits}. Do NOT change hair, facial hair, skin tone, or build.`
+      );
+    }
+    parts.push(
+      "Position each character so their face is on their respective side — left character's face in the left half, right character's face in the right half. They can interact naturally (close together, touching) as long as each face stays on its side."
+    );
+    parts.push('Do NOT over-describe faces. Push detail into clothing, pose, environment.');
+    const genderParts: string[] = [];
+    for (const c of cast) {
+      if (c.genderLock) {
+        genderParts.push(`${c.role.toUpperCase()}: ${c.genderLock}`);
+      }
+    }
+    if (genderParts.length > 0) {
+      parts.push(`\nGENDER — NON-NEGOTIABLE:\n${genderParts.join('\n')}`);
+    }
+    genderLockHandled = true;
   } else {
     cast.forEach((c, i) => {
       parts.push(`CHARACTER ${i + 1} (${c.role}): ${c.promptDesc}`);
+      if (c.physicalTraits) {
+        parts.push(
+          `CRITICAL — CHARACTER ${i + 1} MUST have: ${c.physicalTraits}. Do NOT change hair, facial hair, skin tone, or build.`
+        );
+      }
     });
     parts.push(`Render ALL ${cast.length} characters as ${mediumStyle} style. Show them TOGETHER.`);
   }
 
-  // Gender lock
-  const genderCast = cast.find((c) => c.genderLock);
-  if (genderCast && genderCast.genderLock) {
-    parts.push(`\nGENDER — NON-NEGOTIABLE: ${genderCast.genderLock}`);
+  // Gender lock (skipped when dual face swap handles it inline)
+  if (!genderLockHandled) {
+    const genderCast = cast.find((c) => c.genderLock);
+    if (genderCast && genderCast.genderLock) {
+      parts.push(`\nGENDER — NON-NEGOTIABLE: ${genderCast.genderLock}`);
+    }
   }
 
   return parts.join('\n');
 }
 
-function buildCameraBlock(composition: CompilerInput['composition']): string {
+function buildCameraBlock(composition: CompilerInput['composition'], castCount: number): string {
   const parts: string[] = [];
   parts.push(composition.shotDirection);
 
   if (composition.faceSwapEligible) {
+    if (castCount === 2) {
+      parts.push(
+        'BOTH faces must be three-quarter view toward camera — eyes, noses, and mouths all visible. No profiles, no back views, no silhouettes. Both faces sharp and well-lit. Medium-wide shot showing both figures with environment.'
+      );
+    } else {
+      parts.push(
+        'Face at least three-quarter view toward camera — eyes, nose, and mouth all visible. No full profiles, no back views, no silhouettes, no faces in shadow.'
+      );
+    }
     parts.push(
-      'Subject facing camera, eyes visible, face well-lit. No back views, no silhouettes, no faces in shadow.'
-    );
-    parts.push(
-      'Character face must have realistic human proportions — normal sized eyes, natural face shape. A real photo face will be composited on, so the rendered face must be proportionally compatible.'
+      'Character faces must have realistic human proportions — normal sized eyes, natural face shape. Real photo faces will be composited on, so rendered faces must be proportionally compatible.'
     );
   }
 
@@ -245,7 +294,7 @@ export function compilePrompt(input: CompilerInput): CompilerOutput {
   const budget = getWordBudget(composition.type, composition.faceSwapEligible);
   const sceneBlock = buildSceneBlock(scene);
   const characterBlock = hasCast ? buildCharacterBlock(cast, medium, composition) : '';
-  const cameraBlock = buildCameraBlock(composition);
+  const cameraBlock = buildCameraBlock(composition, cast.length);
   const mediumSummary = summarizeMediumDirective(medium.directive);
 
   // Engine-specific output format instructions
@@ -311,7 +360,7 @@ Output ONLY the prompt.`;
   fallbackParts.push('no text, no words, no letters, no watermarks, hyper detailed');
   const fallback = fallbackParts.join(', ');
 
-  // Face swap source
+  // Face swap source (single)
   let faceSwapSource: string | null = null;
   if (
     composition.faceSwapEligible &&
@@ -322,6 +371,24 @@ Output ONLY the prompt.`;
     faceSwapSource = cast[0].sourcePhotoUrl;
   }
 
+  // Face swap sources (dual — two cast members)
+  let faceSwapSources: Array<{ role: string; sourceUrl: string }> | null = null;
+  if (
+    composition.faceSwapEligible &&
+    cast.length === 2 &&
+    cast[0].sourcePhotoUrl &&
+    cast[0].sourcePhotoUrl.startsWith('http') &&
+    cast[1].sourcePhotoUrl &&
+    cast[1].sourcePhotoUrl.startsWith('http')
+  ) {
+    faceSwapSources = [
+      { role: cast[0].role, sourceUrl: cast[0].sourcePhotoUrl },
+      { role: cast[1].role, sourceUrl: cast[1].sourcePhotoUrl },
+    ];
+  }
+
+  const isDualFaceSwap = faceSwapSources !== null && faceSwapSources.length === 2;
+
   return {
     sonnetBrief: brief,
     fallbackPrompt: fallback,
@@ -329,8 +396,10 @@ Output ONLY the prompt.`;
     postProcess: {
       appendFaceLock: composition.faceSwapEligible,
       appendPortraitTags: true,
+      dualFaceSwap: isDualFaceSwap,
     },
     faceSwapSource,
+    faceSwapSources,
   };
 }
 
@@ -340,8 +409,13 @@ export function postProcessPrompt(prompt: string, rules: CompilerOutput['postPro
   let result = prompt;
 
   if (rules.appendFaceLock) {
-    result +=
-      ', front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no silhouette';
+    if (rules.dualFaceSwap) {
+      result +=
+        ', two people facing camera, both faces three-quarter front angle, both faces visible and sharp, no back views, no silhouettes';
+    } else {
+      result +=
+        ', front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no silhouette';
+    }
   }
 
   if (rules.appendPortraitTags) {

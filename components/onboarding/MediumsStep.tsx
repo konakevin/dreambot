@@ -69,14 +69,40 @@ export function MediumsStep({ onNext, onBack }: Props) {
                 onPress={() => handleToggle(m.key)}
                 activeOpacity={0.7}
               >
-                <Text style={[s.tileName, isSelected && s.tileNameSelected]} numberOfLines={1}>
-                  {m.label}
-                </Text>
-                {m.description && (
-                  <Text style={s.tileDesc} numberOfLines={1}>
-                    {m.description}
-                  </Text>
-                )}
+                <View style={s.tileRow}>
+                  <View style={s.tileText}>
+                    <Text style={[s.tileName, isSelected && s.tileNameSelected]} numberOfLines={1}>
+                      {m.label}
+                    </Text>
+                    {m.description && (
+                      <Text style={s.tileDesc} numberOfLines={1}>
+                        {m.description}
+                      </Text>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      paddingHorizontal: 5,
+                      paddingVertical: 1,
+                      borderRadius: 5,
+                      backgroundColor: m.face_swaps
+                        ? 'rgba(96,165,250,0.15)'
+                        : 'rgba(245,158,11,0.15)',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 8,
+                        fontWeight: '700',
+                        color: m.face_swaps ? '#60A5FA' : '#F59E0B',
+                        textTransform: 'uppercase',
+                        letterSpacing: 0.5,
+                      }}
+                    >
+                      {m.face_swaps ? 'face' : 'art'}
+                    </Text>
+                  </View>
+                </View>
               </TouchableOpacity>
             );
           })}
@@ -133,6 +159,8 @@ const s = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
+  tileRow: { flexDirection: 'row', alignItems: 'center' },
+  tileText: { flex: 1 },
   tileSelected: { borderColor: colors.accent, borderWidth: 2 },
   tileName: { fontSize: 14, fontWeight: '700', color: '#FFFFFF', marginBottom: 2 },
   tileNameSelected: { color: colors.accent },

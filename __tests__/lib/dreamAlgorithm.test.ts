@@ -1,4 +1,4 @@
-import { rollDream, SCENE_ONLY_MEDIUMS, CHARACTER_MEDIUMS, CastMember } from '@/lib/dreamAlgorithm';
+import { rollDream, MediumProps, CastMember } from '@/lib/dreamAlgorithm';
 
 const SELF: CastMember = {
   role: 'self',
@@ -17,10 +17,15 @@ const PET: CastMember = {
 };
 const ALL_CAST = [SELF, PARTNER, PET];
 
+const FACE_SWAP: MediumProps = { isSceneOnly: false, isCharacterOnly: false, faceSwaps: true };
+const ARTISTIC: MediumProps = { isSceneOnly: false, isCharacterOnly: false, faceSwaps: false };
+const SCENE_ONLY: MediumProps = { isSceneOnly: true, isCharacterOnly: false, faceSwaps: false };
+const CHAR_ONLY: MediumProps = { isSceneOnly: false, isCharacterOnly: true, faceSwaps: false };
+
 describe('rollDream', () => {
   it('force_cast_role "self" always picks self', () => {
     for (let i = 0; i < 20; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true, 'self');
+      const result = rollDream(ALL_CAST, FACE_SWAP, 'self');
       expect(result.castMembers).toHaveLength(1);
       expect(result.castMembers[0].role).toBe('self');
     }
@@ -28,42 +33,36 @@ describe('rollDream', () => {
 
   it('force_cast_role null means no cast', () => {
     for (let i = 0; i < 20; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true, null);
+      const result = rollDream(ALL_CAST, FACE_SWAP, null);
+      expect(result.castMembers).toHaveLength(0);
+    }
+  });
+
+  it('scene-only mediums never include characters', () => {
+    for (let i = 0; i < 50; i++) {
+      const result = rollDream(ALL_CAST, SCENE_ONLY);
       expect(result.castMembers).toHaveLength(0);
       expect(result.composition).toBe('pure_scene');
     }
   });
 
-  it('scene-only mediums always return pure_scene path', () => {
-    for (const medium of SCENE_ONLY_MEDIUMS) {
-      for (let i = 0; i < 10; i++) {
-        const result = rollDream(ALL_CAST, medium, false);
-        expect(result.nightlyPath).toBe('personal_scene');
-        expect(result.composition).toBe('pure_scene');
-      }
-    }
-  });
-
-  it('character mediums always return character composition when cast is picked', () => {
-    for (const medium of CHARACTER_MEDIUMS) {
-      for (let i = 0; i < 20; i++) {
-        const result = rollDream(ALL_CAST, medium, false, 'self');
-        expect(result.composition).toBe('character');
-      }
-    }
-  });
-
-  it('empty cast always returns personal_scene', () => {
+  it('character-only mediums always return character composition when cast is picked', () => {
     for (let i = 0; i < 20; i++) {
-      const result = rollDream([], 'anime', true);
+      const result = rollDream(ALL_CAST, CHAR_ONLY, 'self');
+      expect(result.composition).toBe('character');
+    }
+  });
+
+  it('empty cast always returns no characters', () => {
+    for (let i = 0; i < 20; i++) {
+      const result = rollDream([], FACE_SWAP);
       expect(result.castMembers).toHaveLength(0);
-      expect(result.nightlyPath).toBe('personal_scene');
     }
   });
 
   it('face-swap medium always picks single cast member', () => {
     for (let i = 0; i < 50; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true);
+      const result = rollDream(ALL_CAST, FACE_SWAP);
       if (result.castMembers.length > 0) {
         expect(result.castMembers).toHaveLength(1);
       }
@@ -73,7 +72,12 @@ describe('rollDream', () => {
   it('non-face-swap medium can pick multiple cast members', () => {
     let gotMultiple = false;
     for (let i = 0; i < 100; i++) {
-      const result = rollDream(ALL_CAST, 'lego', false, undefined, 'personal_cast');
+      const result = rollDream(ALL_CAST, ARTISTIC, 'self');
+      // Force character inclusion, but multi-cast only when not forcing a single role
+    }
+    // Use no force to allow multi-pick
+    for (let i = 0; i < 200; i++) {
+      const result = rollDream(ALL_CAST, ARTISTIC);
       if (result.castMembers.length > 1) {
         gotMultiple = true;
         break;
@@ -82,49 +86,69 @@ describe('rollDream', () => {
     expect(gotMultiple).toBe(true);
   });
 
-  it('three nightly paths fire with roughly 40/30/30 distribution', () => {
-    const N = 3000;
-    const counts = { personal_cast: 0, personal_scene: 0, cast_random: 0 };
-    for (let i = 0; i < N; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true);
-      counts[result.nightlyPath]++;
-    }
-    expect(counts.personal_cast / N).toBeGreaterThan(0.33);
-    expect(counts.personal_cast / N).toBeLessThan(0.47);
-    expect(counts.personal_scene / N).toBeGreaterThan(0.23);
-    expect(counts.personal_scene / N).toBeLessThan(0.37);
-    expect(counts.cast_random / N).toBeGreaterThan(0.23);
-    expect(counts.cast_random / N).toBeLessThan(0.37);
-  });
-
-  it('personal_cast and personal_scene always have at least one personal element', () => {
-    for (let i = 0; i < 100; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true);
-      if (result.nightlyPath === 'personal_cast' || result.nightlyPath === 'personal_scene') {
-        expect(result.includeLocation || result.includeObject).toBe(true);
-      }
+  it('location is always included', () => {
+    for (let i = 0; i < 50; i++) {
+      const result = rollDream(ALL_CAST, FACE_SWAP);
+      expect(result.includeLocation).toBe(true);
     }
   });
 
-  it('cast_random never has personal elements', () => {
-    for (let i = 0; i < 100; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true, undefined, 'cast_random');
-      expect(result.includeLocation).toBe(false);
-      expect(result.includeObject).toBe(false);
-    }
-  });
-
-  it('character and epic_tiny split for cast dreams', () => {
+  it('character and epic_tiny split for cast dreams on artistic medium', () => {
     let charCount = 0;
     let epicCount = 0;
     const N = 500;
     for (let i = 0; i < N; i++) {
-      const result = rollDream(ALL_CAST, 'anime', true, 'self');
+      const result = rollDream(ALL_CAST, ARTISTIC, 'self');
       if (result.composition === 'character') charCount++;
       if (result.composition === 'epic_tiny') epicCount++;
     }
     expect(charCount / N).toBeGreaterThan(0.5);
     expect(charCount / N).toBeLessThan(0.7);
     expect(epicCount).toBeGreaterThan(0);
+  });
+
+  it('face-swap medium always uses character composition (never epic_tiny)', () => {
+    for (let i = 0; i < 50; i++) {
+      const result = rollDream(ALL_CAST, FACE_SWAP, 'self');
+      expect(result.composition).toBe('character');
+    }
+  });
+
+  it('compositionMode is always a valid value', () => {
+    const VALID_MODES = new Set([
+      'balanced',
+      'open_vista',
+      'layered_depth',
+      'negative_space',
+      'low_angle_hero',
+      'overhead',
+      'intimate_close',
+    ]);
+    for (let i = 0; i < 50; i++) {
+      const result = rollDream(ALL_CAST, FACE_SWAP);
+      expect(VALID_MODES.has(result.compositionMode)).toBe(true);
+    }
+  });
+
+  it('face-swap compositionMode excludes overhead and negative_space', () => {
+    const BANNED = new Set(['overhead', 'negative_space']);
+    for (let i = 0; i < 200; i++) {
+      const result = rollDream(ALL_CAST, FACE_SWAP, 'self');
+      expect(BANNED.has(result.compositionMode)).toBe(false);
+    }
+  });
+
+  it('nightlyPath label reflects roll results', () => {
+    // Forced character + location always true → should start with 'char_loc'
+    for (let i = 0; i < 20; i++) {
+      const result = rollDream(ALL_CAST, FACE_SWAP, 'self');
+      expect(result.nightlyPath).toMatch(/^char_loc/);
+    }
+  });
+
+  it('legacy forceNightlyPath still works', () => {
+    const result = rollDream(ALL_CAST, FACE_SWAP, undefined, 'personal_cast');
+    expect(result.nightlyPath).toBe('personal_cast');
+    expect(result.castMembers.length).toBeGreaterThan(0);
   });
 });

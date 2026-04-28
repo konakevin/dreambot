@@ -11,7 +11,7 @@ describe('useDreamStore', () => {
     expect(config.photoBase64).toBeNull();
     expect(config.photoUri).toBeNull();
     expect(config.photoStyle).toBe('new_scene');
-    expect(config.selectedMedium).toBe('surprise_me');
+    expect(config.selectedMedium).toBe('surprise_me_face');
     expect(config.selectedVibe).toBe('surprise_me');
     expect(config.userPrompt).toBe('');
     expect(result).toBeNull();
@@ -103,7 +103,7 @@ describe('useDreamStore', () => {
     useDreamStore.getState().reset();
 
     const { config, result } = useDreamStore.getState();
-    expect(config.selectedMedium).toBe('surprise_me');
+    expect(config.selectedMedium).toBe('surprise_me_face');
     expect(config.photoBase64).toBeNull();
     expect(result).toBeNull();
   });

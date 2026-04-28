@@ -101,6 +101,7 @@ export function RevealStep({ onBack }: Props) {
             ...member,
             description: data.description ?? '',
             ...(data.gender ? { gender: data.gender } : {}),
+            ...(data.physical_summary ? { physical_summary: data.physical_summary } : {}),
           };
         } catch (err) {
           if (__DEV__) console.warn(`[Reveal] Failed to describe ${member.role}:`, err);

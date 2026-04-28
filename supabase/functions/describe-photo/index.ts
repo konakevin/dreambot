@@ -1,6 +1,6 @@
 /**
- * describe-photo — Takes a photo URL, sends it to Llama Vision (via Replicate),
- * returns a detailed text description of the person/pet's appearance.
+ * describe-photo — Takes a photo URL, sends it to Claude Haiku vision,
+ * returns a detailed text description + physical trait summary.
  * One-time cost at profile save time.
  */
 
@@ -45,39 +45,54 @@ Deno.serve(async (req: Request) => {
     }
 
     const prompt = role === 'pet' ? VISION_PROMPTS.castPet : VISION_PROMPTS.castPerson;
-    const rawDescription = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 300);
+    const rawDescription = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 400);
+
+    // Split TRAITS: line from the description
+    let mainText = rawDescription;
+    let physicalSummary = '';
+    const traitsMatch = rawDescription.match(/\n\s*TRAITS:\s*(.+)/i);
+    if (traitsMatch) {
+      physicalSummary = traitsMatch[1].trim();
+      mainText = rawDescription.slice(0, traitsMatch.index).trim();
+    }
 
     // Extract gender from the "Male:" / "Female:" prefix and strip it from the description
     let gender: 'male' | 'female' | null = null;
-    let description = rawDescription;
+    let description = mainText;
     if (role !== 'pet') {
-      const lower = rawDescription.toLowerCase();
+      const lower = mainText.toLowerCase();
       if (
         lower.startsWith('female:') ||
         lower.startsWith('female,') ||
         lower.startsWith('female ')
       ) {
         gender = 'female';
-        description = rawDescription.replace(/^(?:female)[:\s,]+/i, '').trim();
+        description = mainText.replace(/^(?:female)[:\s,]+/i, '').trim();
       } else if (
         lower.startsWith('male:') ||
         lower.startsWith('male,') ||
         lower.startsWith('male ')
       ) {
         gender = 'male';
-        description = rawDescription.replace(/^(?:male)[:\s,]+/i, '').trim();
+        description = mainText.replace(/^(?:male)[:\s,]+/i, '').trim();
       } else {
         // Fallback: regex on the full text
-        gender = /woman|female|girl|she|her\b/i.test(rawDescription) ? 'female' : 'male';
+        gender = /woman|female|girl|she|her\b/i.test(mainText) ? 'female' : 'male';
       }
     }
 
     console.log(`[describe-photo] ${role} (${gender ?? 'pet'}):`, description.slice(0, 120));
+    if (physicalSummary) {
+      console.log(`[describe-photo] traits: ${physicalSummary}`);
+    }
 
-    return new Response(JSON.stringify({ description, gender }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ description, gender, physical_summary: physicalSummary || null }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   } catch (err) {
     console.error('[describe-photo] Error:', (err as Error).message);
     return new Response(JSON.stringify({ error: (err as Error).message }), { status: 500 });
