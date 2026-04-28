@@ -18,7 +18,8 @@ import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
-import { MASCOT_URLS } from '@/constants/mascots';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const MASCOT = require('@/assets/images/icon.png');
 import { Toast } from '@/components/Toast';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -28,14 +29,7 @@ const MAX_DREAMS = Infinity;
 
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';
 
-const BOOT_MESSAGES = [
-  'Initializing your DreamBot...',
-  'Sharpening pencils...',
-  'Adjusting the mood lighting...',
-  'Giving it an attitude...',
-  'Filling its head with your weird stuff...',
-  'Here goes nothing...',
-];
+const BOOT_MESSAGE = 'Your DreamBot is dreaming up something special...';
 
 interface Dream {
   url: string;
@@ -60,7 +54,7 @@ export function RevealStep({ onBack }: Props) {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [bootMessage, setBootMessage] = useState(BOOT_MESSAGES[0]);
+  const [bootMessage] = useState(BOOT_MESSAGE);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -69,10 +63,7 @@ export function RevealStep({ onBack }: Props) {
   const describedProfile = useRef(profile);
 
   async function runBootSequence() {
-    for (let i = 0; i < BOOT_MESSAGES.length; i++) {
-      setBootMessage(BOOT_MESSAGES[i]);
-      await new Promise((r) => setTimeout(r, 600));
-    }
+    await new Promise((r) => setTimeout(r, 1500));
   }
 
   async function describeCastPhotos(): Promise<typeof profile.dream_cast> {
@@ -327,7 +318,7 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Image source={{ uri: MASCOT_URLS[1] }} style={s.idleMascot} contentFit="cover" />
+          <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
           <Text style={s.bigTitle}>Save your changes</Text>
           <Text style={s.centeredSub}>Your updated taste profile will shape all future dreams</Text>
           <TouchableOpacity
@@ -374,15 +365,18 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Image source={{ uri: MASCOT_URLS[1] }} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>Your DreamBot is built</Text>
-          <Text style={s.centeredSub}>{`Stand back. It's about to wake up.`}</Text>
+          <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
+          <Text style={s.bigTitle}>Ready to see what it dreams up?</Text>
+          <Text style={s.centeredSub}>
+            Your DreamBot knows your taste. Let it loose and see what happens.
+          </Text>
           <TouchableOpacity
             style={[s.createButton, { alignSelf: 'stretch', marginTop: 8 }]}
             onPress={() => generateImage()}
             activeOpacity={0.7}
           >
-            <Text style={s.createButtonText}>Activate DreamBot</Text>
+            <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+            <Text style={s.createButtonText}>Dream It</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ marginTop: 12 }} onPress={onBack} activeOpacity={0.7}>
             <Text style={{ color: colors.textSecondary, fontSize: 15, fontWeight: '600' }}>
@@ -399,7 +393,7 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Image source={{ uri: MASCOT_URLS[2] }} style={s.idleMascot} contentFit="cover" />
+          <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
           <Text style={s.bigTitle}>{bootMessage}</Text>
           <ActivityIndicator size="small" color={colors.accent} />
         </View>
@@ -412,9 +406,9 @@ export function RevealStep({ onBack }: Props) {
     return (
       <View style={s.root}>
         <View style={s.centeredContent}>
-          <Image source={{ uri: MASCOT_URLS[2] }} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>Generating first dream...</Text>
-          <Text style={s.centeredSub}>Your DreamBot is online</Text>
+          <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
+          <Text style={s.bigTitle}>Dreaming...</Text>
+          <Text style={s.centeredSub}>Your DreamBot is painting something just for you</Text>
           <ActivityIndicator size="small" color={colors.accent} />
         </View>
       </View>

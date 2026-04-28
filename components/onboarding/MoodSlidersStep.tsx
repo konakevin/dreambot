@@ -83,7 +83,9 @@ function SliderCard({
         <View
           style={s.hitArea}
           onStartShouldSetResponder={() => true}
+          onStartShouldSetResponderCapture={() => true}
           onMoveShouldSetResponder={() => true}
+          onMoveShouldSetResponderCapture={() => true}
           onResponderTerminationRequest={() => false}
           onResponderGrant={(e) => {
             e.currentTarget.setNativeProps?.({});

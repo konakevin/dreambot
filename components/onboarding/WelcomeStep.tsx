@@ -3,7 +3,6 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
-import { MASCOT_URLS } from '@/constants/mascots';
 
 interface Props {
   onNext: () => void;
@@ -44,7 +43,7 @@ export function WelcomeStep({ onNext }: Props) {
     <View style={s.root}>
       <View style={s.content}>
         <View style={s.iconStack}>
-          <Image source={{ uri: MASCOT_URLS[0] }} style={s.mascot} contentFit="cover" />
+          <Image source={require('@/assets/images/icon.png')} style={s.mascot} contentFit="cover" />
         </View>
 
         <Text style={s.title}>Create Your DreamBot</Text>
@@ -72,7 +71,7 @@ export function WelcomeStep({ onNext }: Props) {
           />
         </View>
 
-        <Text style={s.footnote}>Takes about 30 seconds. You can rebuild it anytime.</Text>
+        <Text style={s.footnote}>You can change these settings anytime.</Text>
       </View>
 
       <View style={s.footer}>
