@@ -134,20 +134,6 @@ const LOCATION_SECTIONS: LocationSection[] = [
     ],
   },
   {
-    id: 'cozy',
-    title: 'Cozy / Aesthetic Worlds',
-    icon: 'heart-outline',
-    description: 'Romantic, soft, and beautiful spaces',
-    items: [
-      { key: 'paris cafe', label: 'Paris Caf\u00e9' },
-      { key: 'cherry blossoms', label: 'Cherry Blossoms' },
-      { key: 'japanese garden', label: 'Japanese Garden' },
-      { key: 'fairy cottage', label: 'Fairy Cottage' },
-      { key: 'princess garden castle', label: 'Princess Garden Castle' },
-      { key: 'rose palace', label: 'Rose Palace' },
-    ],
-  },
-  {
     id: 'fantasy',
     title: 'Fantasy & Magical Realms',
     icon: 'sparkles-outline',
@@ -163,6 +149,20 @@ const LOCATION_SECTIONS: LocationSection[] = [
       { key: 'crystal caverns', label: 'Crystal Caverns' },
       { key: 'cloud kingdom', label: 'Cloud Kingdom' },
       { key: 'fairy tale kingdom', label: 'Fairy Tale Kingdom' },
+    ],
+  },
+  {
+    id: 'cozy',
+    title: 'Cozy / Aesthetic Worlds',
+    icon: 'heart-outline',
+    description: 'Romantic, soft, and beautiful spaces',
+    items: [
+      { key: 'paris cafe', label: 'Paris Caf\u00e9' },
+      { key: 'cherry blossoms', label: 'Cherry Blossoms' },
+      { key: 'japanese garden', label: 'Japanese Garden' },
+      { key: 'fairy cottage', label: 'Fairy Cottage' },
+      { key: 'princess garden castle', label: 'Princess Garden Castle' },
+      { key: 'rose palace', label: 'Rose Palace' },
     ],
   },
   {
@@ -185,8 +185,8 @@ const SECTION_COLORS: Record<string, { gradient: [string, string]; tint: string 
   ancient: { gradient: ['#CA8A04', '#713F12'], tint: 'rgba(202,138,4,0.45)' },
   epic_nature: { gradient: ['#16A34A', '#14532D'], tint: 'rgba(22,163,74,0.45)' },
   scifi: { gradient: ['#0891B2', '#083344'], tint: 'rgba(8,145,178,0.45)' },
-  cozy: { gradient: ['#2563EB', '#1E3A5F'], tint: 'rgba(37,99,235,0.45)' },
-  fantasy: { gradient: ['#4F46E5', '#1E1B4B'], tint: 'rgba(79,70,229,0.45)' },
+  cozy: { gradient: ['#4F46E5', '#1E1B4B'], tint: 'rgba(79,70,229,0.45)' },
+  fantasy: { gradient: ['#2563EB', '#1E3A5F'], tint: 'rgba(37,99,235,0.45)' },
   gothic: { gradient: ['#7C3AED', '#3B0764'], tint: 'rgba(124,58,237,0.45)' },
 };
 
