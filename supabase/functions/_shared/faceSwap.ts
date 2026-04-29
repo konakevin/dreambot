@@ -126,13 +126,33 @@ function stitchHalves(
   rightSkip: number,
   outW: number
 ): Uint8Array {
+  const BLEND_PX = 40;
+  const halfBlend = Math.min(BLEND_PX >> 1, leftTake, outW - leftTake);
+  const blendStart = leftTake - halfBlend;
+  const blendEnd = leftTake + halfBlend;
+  const blendWidth = blendEnd - blendStart;
+
   const rightTake = outW - leftTake;
   const out = new Uint8Array(outW * h * 4);
   for (let y = 0; y < h; y++) {
     const dstRow = y * outW * 4;
-    out.set(leftData.subarray(y * leftW * 4, y * leftW * 4 + leftTake * 4), dstRow);
-    const rSrc = (y * rightW + rightSkip) * 4;
-    out.set(rightData.subarray(rSrc, rSrc + rightTake * 4), dstRow + leftTake * 4);
+    // Pure left zone
+    out.set(leftData.subarray(y * leftW * 4, y * leftW * 4 + blendStart * 4), dstRow);
+    // Blend zone — linear crossfade between left and right
+    for (let x = blendStart; x < blendEnd; x++) {
+      const t = (x - blendStart) / blendWidth; // 0→1
+      const lOff = (y * leftW + x) * 4;
+      const rX = x - leftTake + rightSkip;
+      const rOff = (y * rightW + rX) * 4;
+      const dOff = dstRow + x * 4;
+      out[dOff] = Math.round(leftData[lOff] * (1 - t) + rightData[rOff] * t);
+      out[dOff + 1] = Math.round(leftData[lOff + 1] * (1 - t) + rightData[rOff + 1] * t);
+      out[dOff + 2] = Math.round(leftData[lOff + 2] * (1 - t) + rightData[rOff + 2] * t);
+      out[dOff + 3] = 255;
+    }
+    // Pure right zone
+    const rSrc = (y * rightW + (blendEnd - leftTake + rightSkip)) * 4;
+    out.set(rightData.subarray(rSrc, rSrc + (outW - blendEnd) * 4), dstRow + blendEnd * 4);
   }
   return out;
 }
