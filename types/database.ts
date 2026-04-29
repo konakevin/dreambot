@@ -496,11 +496,9 @@ export type Database = {
           is_bot_only: boolean;
           is_character_only: boolean;
           is_public: boolean;
-          is_scene_only: boolean;
           key: string;
           kontext_directive: string | null;
           label: string;
-          nightly_skip: boolean;
           preferred_model: string | null;
           render_base: string | null;
           sort_order: number;
@@ -517,11 +515,9 @@ export type Database = {
           is_bot_only?: boolean;
           is_character_only?: boolean;
           is_public?: boolean;
-          is_scene_only?: boolean;
           key: string;
           kontext_directive?: string | null;
           label: string;
-          nightly_skip?: boolean;
           preferred_model?: string | null;
           render_base?: string | null;
           sort_order?: number;
@@ -538,11 +534,9 @@ export type Database = {
           is_bot_only?: boolean;
           is_character_only?: boolean;
           is_public?: boolean;
-          is_scene_only?: boolean;
           key?: string;
           kontext_directive?: string | null;
           label?: string;
-          nightly_skip?: boolean;
           preferred_model?: string | null;
           render_base?: string | null;
           sort_order?: number;
@@ -1531,11 +1525,9 @@ export type Database = {
           face_swaps: boolean;
           flux_fragment: string;
           is_character_only: boolean;
-          is_scene_only: boolean;
           key: string;
           kontext_directive: string;
           label: string;
-          nightly_skip: boolean;
           sort_order: number;
         }[];
       };

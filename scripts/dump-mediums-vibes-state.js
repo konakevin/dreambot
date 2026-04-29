@@ -58,16 +58,16 @@ function insertStatement(table, row, cols) {
 
   // ── Mediums summary table ─────────────────────────────────────────────
   md += `## Mediums (\`dream_mediums\`) — ${mediums.data.length} rows\n\n`;
-  md += `| key | label | active | face_swap | scene_only | char_only | nightly_skip | render_mode | allowed_models |\n`;
-  md += `|---|---|---|---|---|---|---|---|---|\n`;
+  md += `| key | label | active | face_swap | char_only | render_mode | allowed_models |\n`;
+  md += `|---|---|---|---|---|---|---|\n`;
   for (const m of mediums.data) {
     const models = (m.allowed_models || []).join('<br>') || '—';
-    md += `| \`${m.key}\` | ${m.label} | ${m.is_active ? '✓' : '—'} | ${m.face_swaps ? '✓' : '—'} | ${m.is_scene_only ? '✓' : '—'} | ${m.is_character_only ? '✓' : '—'} | ${m.nightly_skip ? '✓' : '—'} | ${m.character_render_mode || '—'} | ${models} |\n`;
+    md += `| \`${m.key}\` | ${m.label} | ${m.is_active ? '✓' : '—'} | ${m.face_swaps ? '✓' : '—'} | ${m.is_character_only ? '✓' : '—'} | ${m.character_render_mode || '—'} | ${models} |\n`;
   }
   md += `\n### Full medium details (directives + flux_fragments)\n\n`;
   for (const m of mediums.data) {
     md += `#### \`${m.key}\` — ${m.label}\n\n`;
-    md += `- **active:** ${m.is_active} | **face_swaps:** ${m.face_swaps} | **is_scene_only:** ${m.is_scene_only} | **is_character_only:** ${m.is_character_only} | **nightly_skip:** ${m.nightly_skip}\n`;
+    md += `- **active:** ${m.is_active} | **face_swaps:** ${m.face_swaps} | **is_character_only:** ${m.is_character_only}\n`;
     md += `- **character_render_mode:** ${m.character_render_mode || 'null'} | **sort_order:** ${m.sort_order}\n`;
     md += `- **preferred_model:** ${m.preferred_model || 'null'}\n`;
     md += `- **allowed_models:** ${JSON.stringify(m.allowed_models)}\n`;
@@ -111,7 +111,7 @@ function insertStatement(table, row, cols) {
 
   const mediumCols = [
     'key', 'label', 'directive', 'flux_fragment', 'sort_order', 'is_active',
-    'is_scene_only', 'is_character_only', 'nightly_skip', 'face_swaps',
+    'is_character_only', 'face_swaps',
     'is_public', 'character_render_mode', 'preferred_model', 'allowed_models',
     'kontext_directive', 'render_base', 'engine',
   ];

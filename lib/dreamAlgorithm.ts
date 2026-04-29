@@ -16,7 +16,6 @@
 // ── Types ──────────────────────────────────────────────────────────────
 
 export interface MediumProps {
-  isSceneOnly: boolean;
   isCharacterOnly: boolean;
   faceSwaps: boolean;
 }

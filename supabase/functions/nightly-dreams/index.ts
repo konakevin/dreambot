@@ -189,29 +189,11 @@ Deno.serve(async (req) => {
       recentThings.slice(0, 5).join(', ')
     );
 
-    // Watercolor removed from nightly — Kontext restyle consistently fails to transform
     let nightlyMedium = await resolveMediumFromDb(
       'my_mediums',
       nightlyProfile.art_styles,
       recentMediums
     );
-    if (nightlyMedium.nightlySkip) {
-      nightlyMedium = await resolveMediumFromDb(
-        'my_mediums',
-        nightlyProfile.art_styles,
-        recentMediums
-      );
-      if (nightlyMedium.nightlySkip) {
-        nightlyMedium = await resolveMediumFromDb(
-          'my_mediums',
-          nightlyProfile.art_styles,
-          recentMediums
-        );
-        if (nightlyMedium.nightlySkip) {
-          nightlyMedium = await resolveMediumFromDb('anime');
-        }
-      }
-    }
     // Test mode overrides: force specific medium/vibe
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);

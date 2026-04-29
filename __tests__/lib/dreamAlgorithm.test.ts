@@ -17,10 +17,9 @@ const PET: CastMember = {
 };
 const ALL_CAST = [SELF, PARTNER, PET];
 
-const FACE_SWAP: MediumProps = { isSceneOnly: false, isCharacterOnly: false, faceSwaps: true };
-const ARTISTIC: MediumProps = { isSceneOnly: false, isCharacterOnly: false, faceSwaps: false };
-const SCENE_ONLY: MediumProps = { isSceneOnly: true, isCharacterOnly: false, faceSwaps: false };
-const CHAR_ONLY: MediumProps = { isSceneOnly: false, isCharacterOnly: true, faceSwaps: false };
+const FACE_SWAP: MediumProps = { isCharacterOnly: false, faceSwaps: true };
+const ARTISTIC: MediumProps = { isCharacterOnly: false, faceSwaps: false };
+const CHAR_ONLY: MediumProps = { isCharacterOnly: true, faceSwaps: false };
 
 describe('rollDream', () => {
   it('force_cast_role "self" always picks self', () => {
@@ -36,18 +35,6 @@ describe('rollDream', () => {
       const result = rollDream(ALL_CAST, FACE_SWAP, null);
       expect(result.castMembers).toHaveLength(0);
     }
-  });
-
-  it('scene-only flag does not block characters (legacy constraint removed)', () => {
-    let gotCharacter = false;
-    for (let i = 0; i < 100; i++) {
-      const result = rollDream(ALL_CAST, SCENE_ONLY);
-      if (result.castMembers.length > 0) {
-        gotCharacter = true;
-        break;
-      }
-    }
-    expect(gotCharacter).toBe(true);
   });
 
   it('character-only mediums always return character composition when cast is picked', () => {

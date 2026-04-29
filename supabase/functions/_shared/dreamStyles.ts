@@ -11,9 +11,7 @@ interface DbMediumRow {
   label: string;
   directive: string;
   flux_fragment: string;
-  is_scene_only: boolean;
   is_character_only: boolean;
-  nightly_skip: boolean;
   face_swaps: boolean;
   character_render_mode: string;
   kontext_directive: string | null;
@@ -27,9 +25,7 @@ export interface ResolvedMedium {
   label: string;
   directive: string;
   fluxFragment: string;
-  isSceneOnly: boolean;
   isCharacterOnly: boolean;
-  nightlySkip: boolean;
   faceSwaps: boolean;
   characterRenderMode: 'natural' | 'embodied';
   kontextDirective: string | null;
@@ -49,9 +45,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     label: row.label,
     directive: row.directive,
     fluxFragment: row.flux_fragment,
-    isSceneOnly: row.is_scene_only,
     isCharacterOnly: row.is_character_only,
-    nightlySkip: row.nightly_skip,
     faceSwaps: row.face_swaps,
     characterRenderMode: (row.character_render_mode === 'embodied' ? 'embodied' : 'natural') as
       | 'natural'
@@ -83,7 +77,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_scene_only,is_character_only,nightly_skip,face_swaps,character_render_mode,kontext_directive,render_base,engine'
+      'key,label,directive,flux_fragment,is_character_only,face_swaps,character_render_mode,kontext_directive,render_base,engine'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {
