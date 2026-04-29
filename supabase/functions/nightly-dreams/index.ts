@@ -493,6 +493,18 @@ Deno.serve(async (req) => {
         fluxFragment:
           'colored pencil drawing, prismacolor art, visible pencil strokes, directional hatching, paper texture showing through, layered transparent color, hand-drawn quality, grainy tooth texture, confident linework, realistic human face with natural proportions',
       },
+      anime: {
+        fluxFragment:
+          'realistic human face with normal sized eyes and natural proportions, eyes open and visible, thin subtle eyebrows, NOT anime eyes, NOT manga eyes, NOT chibi, NOT exaggerated facial expressions, cel-shaded illustrated scene, Japanese illustrated environments, vibrant color palette, clean linework, painted backgrounds, atmospheric lighting, strictly 2D not 3D CGI',
+        directive:
+          'Create images with cel-shaded illustrated environments inspired by Japanese illustration. Strictly 2D, never 3D CGI. Visual qualities: painted environments, vibrant color palettes, clean confident linework, atmospheric lighting, cel-shaded scenery. Imagery: cherry blossoms, neon-lit streets, traditional architecture, modern cityscapes, fantasy elements. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size and OPEN, never closed, never squinting in laughter, never exaggerated. Do NOT use anime, manga, or chibi character design for faces. Thin natural eyebrows only. Faces stay realistic regardless of emotion or scene. The ENVIRONMENT is illustrated but the FACES are realistic. Apply this aesthetic to whatever subject and framing is provided.',
+      },
+      animation: {
+        fluxFragment:
+          'realistic human face with normal sized eyes and natural proportions, thin subtle eyebrows, NOT cartoon eyes, NOT exaggerated features, illustrated scene set in an animated world, painted backgrounds, smooth Western 2D animation aesthetic, vibrant color palette, strictly 2D not 3D CGI',
+        directive:
+          'Create images set in a hand-drawn animated world. Strictly 2D, never 3D CGI. Visual qualities: painted backgrounds, smooth Western 2D animation aesthetic, vibrant color palettes, confident linework, atmospheric lighting. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size — the same size you would see in a photograph. Do NOT enlarge eyes. Do NOT use cartoon or animated character design for faces. Thin natural eyebrows only. The WORLD is animated but the FACES are realistic. Apply this style to whatever subject and framing is provided.',
+      },
     };
     if (faceSwapEligible && baseMedium.key in FACE_SWAP_FLUX_OVERRIDES) {
       const override = FACE_SWAP_FLUX_OVERRIDES[baseMedium.key];
@@ -628,7 +640,7 @@ Deno.serve(async (req) => {
         const dualSepRule = isDualFaceSwap
           ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
           : '';
-        const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale']);
+        const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime', 'animation']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
         const faceRealismRule = needsRealisticFaces
           ? '\nFACE REALISM — CRITICAL: faces must have realistic human proportions with detailed eyes, nose, mouth, and jawline. Do NOT simplify faces into cartoon, chibi, or dot-eye proportions. Do NOT draw thick or prominent eyebrows — keep eyebrows subtle, thin, and natural. Scene and clothing can be fully stylized but FACES must look like real people with natural brow lines.'
