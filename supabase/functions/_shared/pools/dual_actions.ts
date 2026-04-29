@@ -68,10 +68,8 @@ export const DUAL_ACTIONS_COMPANION: string[] = [
 
 export const DUAL_ACTIONS_PARTNER: string[] = [
   'sitting side by side, comfortable silence, one with chin in hand, the other with arms resting on their knees',
-  'standing close, one murmuring something, the other smiling slightly without turning',
   'both holding the same railing or ledge, hands close but not touching',
   'both standing at an overlook, one with elbows on the railing, the other standing close with arms crossed',
-  'sharing a drink or food, one holding it out, the other reaching for it',
   'one with chin resting on their own hand, the other standing beside them',
   'standing near each other at a scenic overlook, one leaning on the railing, the other standing with arms crossed',
   'both laughing at something, caught mid-reaction, standing a couple feet apart',
@@ -81,11 +79,10 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
   'both standing close together, one with arms crossed, the other with hands clasped behind their back',
   'one absentmindedly fixing their sleeve, the other standing close',
   'both leaning forward on a railing, elbows on the rail, standing close',
-  'one gesturing to explain something about the scene, the other standing beside them listening',
-  'sharing a quiet moment, standing close with no words needed',
+  'sharing a quiet moment, both looking outward, standing close with no words needed',
   'one resting a hand on a railing, the other standing close with their arms loosely crossed',
   'both standing under a tree, one leaning against the trunk, the other standing close with their shoulder almost touching',
-  'one holding the other by the elbow, both standing still',
+  'both standing still, shoulders close, one with hands in pockets, the other with arms loosely at their sides',
   'both sitting on steps, at slightly different heights, shoulders close',
 ];
 

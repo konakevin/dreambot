@@ -641,7 +641,7 @@ MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 
 COMPOSITION RULES:${dualSepRule}
 - ${isDualFaceSwap ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot.' : 'Character visible from waist up, filling at least 50% of frame height.'}
-- ${isDualFaceSwap ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera.' : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.'}
+- ${isDualFaceSwap ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera. NEVER gazing at scenery or horizon.' : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.'}
 - ${isDualFaceSwap ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.' : ''}
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
 - Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.${faceRealismRule}
@@ -795,6 +795,28 @@ Output ONLY the prompt.`;
       finalPrompt = `set in ${userPlace}, ` + finalPrompt;
     }
 
+    // Post-process: strip contemplative/directional/interaction language for dual face swap
+    if (isDualFaceSwap) {
+      finalPrompt = finalPrompt
+        .replace(/looking (out )?(at|toward|into|across|over|up at) [^,]+/gi, '')
+        .replace(/gazing (at|toward|into|across|over) [^,]+/gi, '')
+        .replace(/overlooking [^,]+/gi, '')
+        .replace(/staring (at|into|toward) [^,]+/gi, '')
+        .replace(/watching [^,]+/gi, '')
+        .replace(/from behind/gi, '')
+        .replace(/rear view/gi, '')
+        .replace(/back view/gi, '')
+        .replace(/backs? to (the )?(camera|viewer)/gi, '')
+        .replace(/sharing [^,]+ with /gi, '')
+        .replace(/murmuring [^,]*/gi, '')
+        .replace(/whispering [^,]*/gi, '')
+        .replace(/turned toward (each other|the other|one another)/gi, '')
+        .replace(/facing (each other|one another)/gi, '')
+        .replace(/looking at (each other|one another)/gi, '')
+        .replace(/,\s*,/g, ',')
+        .replace(/,\s*$/g, '');
+    }
+
     // Post-process: brute force face lock for face-swap-eligible dreams.
     if (faceSwapEligible) {
       const realisticFaceTag =
@@ -803,8 +825,9 @@ Output ONLY the prompt.`;
           : '';
       if (isDualFaceSwap) {
         finalPrompt =
-          `candid medium shot, ${realisticFaceTag}two people side by side both angled toward viewer, three-quarter view, ` +
-          finalPrompt;
+          `both people looking directly at the camera, ${realisticFaceTag}exactly two people side by side, not facing each other, three-quarter view toward viewer, both faces fully visible and well-lit, not from behind, not silhouette, ` +
+          finalPrompt +
+          `, both subjects face the camera not each other`;
       } else {
         finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
       }
