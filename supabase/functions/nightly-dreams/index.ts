@@ -833,7 +833,7 @@ Output ONLY the prompt.`;
     if (faceSwapEligible) {
       const realisticFaceTag =
         baseMedium && ['storybook', 'pencil', 'fairytale'].includes(baseMedium.key)
-          ? 'realistic detailed human face, '
+          ? 'photorealistic human face with natural eye proportions, '
           : '';
       if (isDualFaceSwap) {
         const dualPath = pickDualCompositionPath();
