@@ -27,11 +27,22 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
-import { persistToStorage } from '../_shared/persistence.ts';
+import {
+  aHashHex,
+  hammingDistance,
+  persistBufferToStorage,
+  persistToStorage,
+} from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
+import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
+import {
+  pickSceneAngle,
+  pickMoodTwist,
+  pickNarratorHint,
+} from '../_shared/pools/universal_axes.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -582,6 +593,24 @@ Deno.serve(async (req) => {
     console.log('[nightly-dreams] Scene DNA:', dreamSubject.slice(0, 200));
     lap('nightly-subject');
 
+    // ── Entropy axes — extra layers picked independently each render to
+    //    break Sonnet's tendency to cluster on default imagery patterns.
+    const sceneCluster = pickSceneCluster(userPlace);
+    const sceneAngle = pickSceneAngle();
+    const moodTwist = pickMoodTwist();
+    const narratorHint = pickNarratorHint();
+    console.log(
+      `[nightly-dreams] entropy axes: cluster="${sceneCluster?.slice(0, 60) ?? 'none'}" angle="${sceneAngle.slice(0, 40)}" mood="${moodTwist.slice(0, 40)}" hint="${narratorHint.slice(0, 40)}"`
+    );
+    const entropyBlock = `
+ENTROPY LAYERS — work these into the prompt naturally (do NOT name the layers):
+${sceneCluster ? `- SCENE CLUSTER (specific spot within ${userPlace}): ${sceneCluster}` : ''}
+- COMPOSITIONAL ANGLE: ${sceneAngle}
+- ATMOSPHERIC BEAT: ${moodTwist}
+- STORYTELLING HINT: ${narratorHint}
+Layer these on top of the medium and vibe — each is an independent randomization so the same location renders differently each time.
+`;
+
     // Step 2: Shared context for both cast and non-cast paths
     const SHOT_DIRECTIONS = [
       'extreme low angle looking up, dramatic forced perspective, towering scale',
@@ -691,6 +720,7 @@ CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
 ${faceDescRule}
 
+${entropyBlock}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
@@ -737,6 +767,7 @@ ${
 }
 - Do NOT generalize ("a man" / "a woman") — be SPECIFIC ("mid-30s man with sandy brown hair and full medium beard" / "mid-40s woman with shoulder-length wavy brown hair with highlights").
 
+${entropyBlock}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
@@ -785,6 +816,7 @@ SELECT AND SUBORDINATE (critical):
 Somewhere in this vast scene, barely visible: ${tinyDesc}. They occupy less than 5% of the image. The scene is EVERYTHING.
 ${relationshipTone && selectedCast.length >= 2 ? `\n${relationshipTone.block}\n` : ''}
 CAMERA: ${shotDirection}
+${entropyBlock}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
@@ -816,6 +848,7 @@ SELECT AND SUBORDINATE (critical):
 - If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
 CAMERA/COMPOSITION: ${shotDirection}
+${entropyBlock}
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
@@ -1056,10 +1089,89 @@ Output ONLY the prompt.`;
     let imageUrl = tempUrl;
     observability.preStoragetUrl = tempUrl;
 
+    // ── Duplicate detect + retry (yan-ops face_swap canned-output bug) ──
+    // The model occasionally returns a hardcoded scene with our face swapped
+    // onto it instead of using our target_image. Bytes vary slightly (JPEG
+    // re-encoding) so SHA-256 misses it; we use perceptual aHash + Hamming
+    // distance to match by visual similarity.
+    const DUP_RETRY_MAX = 2;
+    const HAMMING_THRESHOLD = 6;
+    let outBuf: ArrayBuffer | null = null;
+    let outPhash: string | null = null;
+    if (faceSwapSource || faceSwapSources) {
+      const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const { data: recent } = await supabase
+        .from('uploads')
+        .select('output_phash')
+        .eq('user_id', userId)
+        .gte('created_at', since)
+        .not('output_phash', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      const recentPhashes = ((recent ?? []) as { output_phash: string }[])
+        .map((r) => r.output_phash)
+        .filter((h): h is string => !!h);
+      for (let dupAttempt = 0; dupAttempt <= DUP_RETRY_MAX; dupAttempt++) {
+        const fetchResp = await fetch(tempUrl);
+        if (!fetchResp.ok) {
+          console.warn(`[dup-detect] fetch failed, skipping: ${fetchResp.status}`);
+          break;
+        }
+        outBuf = await fetchResp.arrayBuffer();
+        try {
+          outPhash = aHashHex(outBuf);
+        } catch (e) {
+          console.warn(`[dup-detect] aHash failed: ${(e as Error).message}`);
+          break;
+        }
+        const collision = recentPhashes.find(
+          (h) => hammingDistance(h, outPhash!) <= HAMMING_THRESHOLD
+        );
+        if (!collision) {
+          if (dupAttempt > 0) console.log(`[dup-detect] cleared after ${dupAttempt} retry/retries`);
+          break;
+        }
+        if (dupAttempt === DUP_RETRY_MAX) {
+          console.warn(
+            `[dup-detect] DUPLICATE PERSISTS after ${dupAttempt} retries — accepting | phash=${outPhash} dist=${hammingDistance(collision, outPhash)} pred=${replicatePredictionId}`
+          );
+          fallbackReasons.push(`dup_unresolved:${outPhash}`);
+          break;
+        }
+        console.warn(
+          `[dup-detect] HIT attempt=${dupAttempt + 1}/${DUP_RETRY_MAX + 1} phash=${outPhash} match=${collision} dist=${hammingDistance(collision, outPhash)} — retrying face swap`
+        );
+        if (dupAttempt > 0) await new Promise((r) => setTimeout(r, 350));
+        try {
+          if (faceSwapSources && faceSwapSources.length === 2) {
+            tempUrl = await dualFaceSwap(
+              faceSwapSources[0].sourceUrl,
+              faceSwapSources[1].sourceUrl,
+              genResult.url,
+              REPLICATE_TOKEN,
+              supabase,
+              userId,
+              t0 + 140_000
+            );
+          } else if (faceSwapSource) {
+            tempUrl = await faceSwap(faceSwapSource, genResult.url, REPLICATE_TOKEN);
+          }
+        } catch (err) {
+          console.warn(`[dup-detect] retry face swap failed:`, (err as Error).message);
+          break;
+        }
+      }
+      observability.outputPhash = outPhash;
+      observability.preStoragetUrl = tempUrl;
+    }
+
     // Persist to Storage + log in parallel
     timings.total = Date.now() - t0;
+    const persistPromise = outBuf
+      ? persistBufferToStorage(outBuf, userId, supabase)
+      : persistToStorage(tempUrl, userId, supabase);
     const [persistedUrl] = await Promise.all([
-      persistToStorage(tempUrl, userId, supabase),
+      persistPromise,
       insertGenerationLog(supabase, {
         user_id: userId,
         recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
@@ -1095,6 +1207,7 @@ Output ONLY the prompt.`;
           is_public: false,
           width: 768,
           height: 1664,
+          ...(outPhash ? { output_phash: outPhash } : {}),
         })
         .select('id')
         .single(),

@@ -12,7 +12,9 @@
 // deno-lint-ignore-file no-explicit-any
 import { decode as decodeJpeg, encode as encodeJpeg } from 'https://esm.sh/jpeg-js@0.4.4';
 
-const FACE_SWAP_VERSION = 'd5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab';
+// cdingram/face-swap (replaces yan-ops/face_swap which had a canned-output
+// bug for some face embeddings). Different param names: swap_image/input_image.
+const FACE_SWAP_VERSION = 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111';
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
 
@@ -72,8 +74,9 @@ async function faceSwapOnce(
     body: JSON.stringify({
       version: FACE_SWAP_VERSION,
       input: {
-        source_image: sourceForReplicate,
-        target_image: targetImageUrl,
+        // cdingram/face-swap param names
+        swap_image: sourceForReplicate,
+        input_image: targetImageUrl,
       },
     }),
   });
