@@ -103,6 +103,41 @@ The runtime maps the roll to a seed category (`nightly_char`, `nightly_char_loc`
 
 See `BOTS.md` for the full architecture, all 8 seed pools, face swap rules, and the database table structure.
 
+### Dual Character Face Swap (Two People in One Scene)
+
+When a user has both self + plus_one cast photos, the nightly engine can render both people in a single scene with both faces swapped. This is a 7-layer system — every layer must align or the render breaks.
+
+**The 7 Layers:**
+
+1. **Composition path** (`_shared/pools/dual_composition.ts`) — 6 camera presets (candid, portrait, cinematic, intimate, environmental, editorial) controlling framing/angle. Prepended to the Flux prompt.
+2. **Action pool** (`_shared/pools/dual_actions.ts`) — 200+ companion poses + 17 partner poses (Sonnet-seeded). Each describes BOTH characters' body language. Rules: side-by-side, stationary, body-only, scene-neutral.
+3. **Flux fragment override** (`FACE_SWAP_FLUX_OVERRIDES` in nightly-dreams) — runtime override of the medium's art style prefix ONLY when face swap is active. Strips stylized character design language, adds face realism.
+4. **Directive override** (same record) — overrides the STYLE GUIDE paragraph Sonnet reads. Must agree with the flux fragment.
+5. **Sonnet brief** (nightly-dreams ~line 657) — structured instructions telling Sonnet how to write the prompt: mandatory face-lock phrase, left/right separation, face realism rule, action injection.
+6. **Post-processing prepend** — composition path's camera string prepended after Sonnet writes.
+7. **Face swap execution** (`dualFaceSwap()`) — crop left 55% → crop right 55% → swap each in parallel → stitch at midpoint. Retries up to 3× before fallback.
+
+**The Recipe for Great Dual Renders:**
+
+- **Flux fragment:** Front-load face realism ("realistic human face with normal sized eyes") BEFORE any style language. Flux early-token weighting makes this critical.
+- **Style separation:** Apply style modifiers to the WORLD, not the characters. "Illustration set in a fairy tale world" NOT "fairy tale animation style." This is the single most important insight.
+- **Explicit negatives:** "NOT cartoon eyes, NOT anime eyes, NOT Disney princess eyes" — weak alone but help as reinforcement.
+- **Eyebrow fix:** "thin subtle eyebrows" in flux fragment + "Do NOT draw thick or prominent eyebrows" in Sonnet brief. Prevents animated character's drawn brows from bleeding through the face swap.
+- **Max tokens:** `isDualFaceSwap ? 300 : 200` — dual prompts need more room or the second character description gets truncated (causes both-male renders).
+- **Medium shot enforcement:** "Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot." — characters too small = face swap can't detect faces.
+- **Three-quarter toward viewer:** "both angled slightly toward the VIEWER, like a candid movie still" — critical for face swap to have a clean face to work with.
+
+**QA Iteration Process (for tuning any medium's face swap):**
+
+1. Run 5 renders with `force_medium` + `force_cast_role: 'dual'`
+2. Grade every image: eye proportions, eyebrows, genders, face integration, swap applied
+3. Identify which LAYER is causing the artifact
+4. Make ONE change to that layer
+5. Deploy, run another 5, grade
+6. Repeat until 3 consecutive 5/5 perfect rounds
+
+**Current FACE_SWAP_FLUX_OVERRIDES:** fairytale, storybook, pencil. The DB `dream_mediums` entries are UNCHANGED — overrides are runtime-only so generic (non-face-swap) renders keep their original style.
+
 ### Bot Dreams
 
 Bots post 2x daily via GitHub Actions cron. Each bot has curated seed prompts in the `bot_seeds` DB table with `used_at` tracking and auto-regeneration. See `BOTS.md` for the complete bot training process, all 19 active image bots + 2 content bots.

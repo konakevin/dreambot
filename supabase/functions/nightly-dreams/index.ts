@@ -223,7 +223,7 @@ Deno.serve(async (req) => {
     resolvedMediumKey = nightlyMedium.key;
     resolvedVibeKey = nightlyVibe.key;
 
-    const baseMedium = nightlyMedium;
+    let baseMedium = nightlyMedium;
 
     console.log(
       '[nightly-dreams] NIGHTLY DREAMBOT | medium:',
@@ -486,6 +486,42 @@ Deno.serve(async (req) => {
     const faceSwapEligible =
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
     const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
+
+    // Override flux fragment for stylized mediums during face swap —
+    // strip exaggerated-feature language that fights the face swap model
+    const FACE_SWAP_FLUX_OVERRIDES: Record<string, { fluxFragment: string; directive?: string }> = {
+      fairytale: {
+        fluxFragment:
+          'realistic human face with normal sized eyes and natural proportions, thin subtle eyebrows, NOT cartoon eyes, NOT anime eyes, NOT Disney princess eyes, hand-drawn 2D illustration set in a fairy tale world, painted watercolor backgrounds, flowing organic linework, golden hour lighting, painterly environments, rich warm color palette, strictly 2D not 3D CGI',
+        directive:
+          'Create images set in a hand-drawn 2D fairy tale world. Strictly 2D, never 3D CGI. Visual qualities: lush painted watercolor backgrounds, flowing organic linework, romantic golden hour lighting, painterly atmospheric environments, rich warm color palettes. Fairy tale imagery: castles, enchanted forests, magical transformations. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size — the same size you would see in a photograph. Do NOT enlarge eyes even slightly. Do NOT use cartoon, anime, or Disney character design for faces. Thin natural eyebrows only. The WORLD is fairy tale but the FACES are realistic. Apply this style to whatever subject and framing is provided.',
+      },
+      storybook: {
+        fluxFragment:
+          'picture book illustration, hand-painted with visible brush or pencil texture, warm golden color palette, cozy intimate feeling, watercolor gouache techniques, printed page quality, soft hand-drawn look, realistic human face with normal sized eyes and natural proportions, NOT cartoon eyes',
+        directive:
+          baseMedium.key === 'storybook'
+            ? (baseMedium.directive ?? '').replace(
+                'friendly simplified character design with expressive faces',
+                'detailed character rendering with photorealistic human faces and natural proportions'
+              )
+            : undefined,
+      },
+      pencil: {
+        fluxFragment:
+          'colored pencil drawing, prismacolor art, visible pencil strokes, directional hatching, paper texture showing through, layered transparent color, hand-drawn quality, grainy tooth texture, confident linework, realistic human face with natural proportions',
+      },
+    };
+    if (faceSwapEligible && baseMedium.key in FACE_SWAP_FLUX_OVERRIDES) {
+      const override = FACE_SWAP_FLUX_OVERRIDES[baseMedium.key];
+      baseMedium = {
+        ...baseMedium,
+        fluxFragment: override.fluxFragment,
+        ...(override.directive ? { directive: override.directive } : {}),
+      };
+      console.log(`[nightly] face swap flux+directive override for ${baseMedium.key}`);
+    }
+
     const dualAction = isDualFaceSwap
       ? pickDualAction(selectedCast.find((c) => c.role === 'plus_one')?.relationship)
       : null;
@@ -613,7 +649,7 @@ Deno.serve(async (req) => {
         const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
         const faceRealismRule = needsRealisticFaces
-          ? '\nFACE REALISM — CRITICAL: faces must have realistic human proportions with detailed eyes, nose, mouth, and jawline. Do NOT simplify faces into cartoon, chibi, or dot-eye proportions. Scene and clothing can be fully stylized but FACES must look like real people.'
+          ? '\nFACE REALISM — CRITICAL: faces must have realistic human proportions with detailed eyes, nose, mouth, and jawline. Do NOT simplify faces into cartoon, chibi, or dot-eye proportions. Do NOT draw thick or prominent eyebrows — keep eyebrows subtle, thin, and natural. Scene and clothing can be fully stylized but FACES must look like real people with natural brow lines.'
           : '';
         const faceDescRule = isDualFaceSwap
           ? 'Do NOT over-describe faces. Push detail into clothing, pose, and environment.'
@@ -779,7 +815,7 @@ Output ONLY the prompt.`;
     }
 
     try {
-      const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY, 200);
+      const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY, isDualFaceSwap ? 300 : 200);
       sonnetBrief = sonnet.brief;
       sonnetRawResponse = sonnet.rawResponse;
       if (sonnet.text.length < 20) throw new Error('too short');
@@ -831,10 +867,7 @@ Output ONLY the prompt.`;
 
     // Post-process: brute force face lock for face-swap-eligible dreams.
     if (faceSwapEligible) {
-      const realisticFaceTag =
-        baseMedium && ['storybook', 'pencil', 'fairytale'].includes(baseMedium.key)
-          ? 'photorealistic human face with natural eye proportions, '
-          : '';
+      const realisticFaceTag = '';
       if (isDualFaceSwap) {
         const dualPath = pickDualCompositionPath();
         const prepend = dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
@@ -921,47 +954,66 @@ Output ONLY the prompt.`;
       `[nightly-dreams] Image generation complete (prediction: ${genResult.predictionId})`
     );
 
-    // Face swap: dual (two people) or single
+    // Face swap: dual (two people) or single — retry up to 3 times
+    const FACE_SWAP_MAX_RETRIES = 3;
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
-      try {
-        console.log('[nightly-dreams] Dual face swap starting...');
-        tempUrl = await dualFaceSwap(
-          faceSwapSources[0].sourceUrl,
-          faceSwapSources[1].sourceUrl,
-          tempUrl,
-          REPLICATE_TOKEN,
-          supabase,
-          userId,
-          t0 + 140_000
-        );
-        lap('dual-face-swap');
-        console.log('[nightly-dreams] Dual face swap complete');
-        logAxes.faceSwapResult = 'dual-success';
-      } catch (err) {
-        console.warn(
-          '[nightly-dreams] Dual face swap failed, using unswapped:',
-          (err as Error).message
-        );
-        fallbackReasons.push(`dual_face_swap_failed:${(err as Error).message}`);
-        logAxes.faceSwapResult = 'dual-failed';
-        logAxes.faceSwapError = (err as Error).message;
+      let swapSuccess = false;
+      for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+        try {
+          console.log(
+            `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
+          );
+          tempUrl = await dualFaceSwap(
+            faceSwapSources[0].sourceUrl,
+            faceSwapSources[1].sourceUrl,
+            tempUrl,
+            REPLICATE_TOKEN,
+            supabase,
+            userId,
+            t0 + 140_000
+          );
+          lap('dual-face-swap');
+          console.log('[nightly-dreams] Dual face swap complete');
+          logAxes.faceSwapResult = 'dual-success';
+          logAxes.faceSwapAttempts = attempt;
+          swapSuccess = true;
+          break;
+        } catch (err) {
+          console.warn(
+            `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+            (err as Error).message
+          );
+          if (attempt === FACE_SWAP_MAX_RETRIES) {
+            fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
+            logAxes.faceSwapResult = 'dual-failed';
+            logAxes.faceSwapError = (err as Error).message;
+            logAxes.faceSwapAttempts = attempt;
+          }
+        }
       }
     } else if (faceSwapSource && tempUrl) {
-      try {
-        const sourceUrl = faceSwapSource;
-        console.log('[nightly-dreams] Starting face swap...');
-        tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
-        lap('face-swap-model');
-        console.log('[nightly-dreams] Face swap complete');
-        logAxes.faceSwapResult = 'success';
-      } catch (err) {
-        console.warn(
-          '[nightly-dreams] Face swap failed, using unswapped image:',
-          (err as Error).message
-        );
-        fallbackReasons.push(`face_swap_failed:${(err as Error).message}`);
-        logAxes.faceSwapResult = 'failed';
-        logAxes.faceSwapError = (err as Error).message;
+      for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+        try {
+          const sourceUrl = faceSwapSource;
+          console.log(`[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`);
+          tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
+          lap('face-swap-model');
+          console.log('[nightly-dreams] Face swap complete');
+          logAxes.faceSwapResult = 'success';
+          logAxes.faceSwapAttempts = attempt;
+          break;
+        } catch (err) {
+          console.warn(
+            `[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+            (err as Error).message
+          );
+          if (attempt === FACE_SWAP_MAX_RETRIES) {
+            fallbackReasons.push(`face_swap_failed_${attempt}x:${(err as Error).message}`);
+            logAxes.faceSwapResult = 'failed';
+            logAxes.faceSwapError = (err as Error).message;
+            logAxes.faceSwapAttempts = attempt;
+          }
+        }
       }
     }
 

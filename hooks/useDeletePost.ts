@@ -5,10 +5,24 @@ import { useAuthStore } from '@/store/auth';
 import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 
-type PagedData = InfiniteData<DreamPostItem[]>;
+interface RowPage {
+  rows: DreamPostItem[];
+  offset: number;
+}
+type FlatPage = DreamPostItem[];
+type AnyPage = RowPage | FlatPage;
 
-function removeFromPages(pages: DreamPostItem[][], uploadId: string): DreamPostItem[][] {
-  return pages.map((page) => page.filter((p) => p.id !== uploadId));
+function isRowPage(page: AnyPage): page is RowPage {
+  return !Array.isArray(page) && Array.isArray((page as RowPage).rows);
+}
+
+function removeFromAnyPages(pages: AnyPage[], uploadId: string): AnyPage[] {
+  return pages.map((page) => {
+    if (isRowPage(page)) {
+      return { ...page, rows: page.rows.filter((p) => p.id !== uploadId) };
+    }
+    return page.filter((p) => p.id !== uploadId);
+  });
 }
 
 const INFINITE_QUERY_KEYS = [
@@ -59,12 +73,12 @@ export function useDeletePost() {
         const queries = qc.getQueryCache().findAll({ queryKey: [prefix] });
         for (const query of queries) {
           await qc.cancelQueries({ queryKey: query.queryKey });
-          const prev = qc.getQueryData<PagedData>(query.queryKey);
+          const prev = qc.getQueryData<InfiniteData<AnyPage>>(query.queryKey);
           if (prev) {
             snapshots.set(JSON.stringify(query.queryKey), prev);
-            qc.setQueryData<PagedData>(query.queryKey, {
+            qc.setQueryData<InfiniteData<AnyPage>>(query.queryKey, {
               ...prev,
-              pages: removeFromPages(prev.pages, uploadId),
+              pages: removeFromAnyPages(prev.pages, uploadId),
             });
           }
         }
