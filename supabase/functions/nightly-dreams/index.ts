@@ -604,10 +604,10 @@ Deno.serve(async (req) => {
     if (composition === 'character') {
       if (faceSwapEligible) {
         const faceLockPhrase = isDualFaceSwap
-          ? 'medium shot, two people in scene, both faces turned toward viewer with eyes and nose visible, person on left 40 percent of frame, person on right 40 percent of frame, clear gap between them'
-          : 'face turned toward viewer, eyes and nose visible, no back view, no silhouette';
+          ? 'two people, three-quarter view, person on left side, person on right side, clear gap between them'
+          : 'three-quarter view, eyes and nose visible, no back view, no silhouette';
         const dualSepRule = isDualFaceSwap
-          ? '\n- Character 1 in LEFT half of frame, Character 2 in RIGHT half. BOTH FACES MUST BE VISIBLE — three-quarter FRONT angle toward the viewer. Eyes and nose on BOTH characters must be clearly visible. NO turned-away faces, NO back of heads, NO full profiles.'
+          ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
           : '';
         const faceDescRule = isDualFaceSwap
           ? 'Do NOT over-describe faces. Push detail into clothing, pose, and environment.'
@@ -634,12 +634,13 @@ SELECT AND SUBORDINATE (critical):
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 
-COMPOSITION RULES (must obey):${dualSepRule}
-- ${isDualFaceSwap ? 'MEDIUM SHOT — both characters visible from waist up, filling at least 60% of frame height. NOT a wide establishing shot.' : 'Character visible from waist up, filling at least 50% of frame height.'}
-- ${isDualFaceSwap ? 'BOTH FACES must angle toward the viewer — eyes and nose clearly visible on both. Real photo faces will be composited on, so faces must be LARGE and CLEAR.' : 'Face must angle toward viewer — eyes and nose visible. Real face will be composited on.'}
-- ${isDualFaceSwap ? 'Characters grounded in the scene — environmental lighting on them, casting shadows, feet on the ground. They exist IN this world.' : 'Character grounded in the scene with environmental lighting.'}
-- NEVER describe where characters are looking or gazing. NEVER use words like "gazing", "staring", "watching", "scanning", "peering". Describe BODY POSE and CLOTHING only.
-${dualAction ? `\nACTION IN SCENE (body pose only — do NOT describe eye direction):\n"${dualAction}"\nAdapt this action to fit the scene. Describe what their BODIES are doing, not where their eyes are pointed.\n` : ''}
+COMPOSITION RULES:${dualSepRule}
+- ${isDualFaceSwap ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot.' : 'Character visible from waist up, filling at least 50% of frame height.'}
+- ${isDualFaceSwap ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera.' : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.'}
+- ${isDualFaceSwap ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.' : ''}
+- Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
+- Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.
+${dualAction ? `\nACTION IN SCENE (body language only):\n"${dualAction}"\nUse this for body pose. Do NOT describe eye direction.\n` : ''}
 CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
 ${faceDescRule}
@@ -793,7 +794,7 @@ Output ONLY the prompt.`;
     if (faceSwapEligible) {
       if (isDualFaceSwap) {
         finalPrompt =
-          'medium shot of two people facing camera, both faces clearly visible with eyes and nose showing, person on left side and person on right side with clear gap between them, ' +
+          'candid medium shot, two people side by side both angled toward viewer, three-quarter view, ' +
           finalPrompt;
       } else {
         finalPrompt += ', face visible, eyes and nose visible, no back view, no silhouette';
