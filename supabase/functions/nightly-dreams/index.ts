@@ -94,6 +94,8 @@ Deno.serve(async (req) => {
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
+  const force_dual_pool =
+    (body.force_dual_pool as 'partner' | 'companion' | undefined) || undefined;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -499,12 +501,6 @@ Deno.serve(async (req) => {
         directive:
           'Create images with cel-shaded illustrated environments inspired by Japanese illustration. Strictly 2D, never 3D CGI. Visual qualities: painted environments, vibrant color palettes, clean confident linework, atmospheric lighting, cel-shaded scenery. Imagery: cherry blossoms, neon-lit streets, traditional architecture, modern cityscapes, fantasy elements. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size and OPEN, never closed, never squinting in laughter, never exaggerated. Do NOT use anime, manga, or chibi character design for faces. Thin natural eyebrows only. Faces stay realistic regardless of emotion or scene. The ENVIRONMENT is illustrated but the FACES are realistic. Apply this aesthetic to whatever subject and framing is provided.',
       },
-      animation: {
-        fluxFragment:
-          'realistic human face with normal sized eyes and natural proportions, thin subtle eyebrows, NOT cartoon eyes, NOT exaggerated features, illustrated scene set in an animated world, painted backgrounds, smooth Western 2D animation aesthetic, vibrant color palette, strictly 2D not 3D CGI',
-        directive:
-          'Create images set in a hand-drawn animated world. Strictly 2D, never 3D CGI. Visual qualities: painted backgrounds, smooth Western 2D animation aesthetic, vibrant color palettes, confident linework, atmospheric lighting. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size — the same size you would see in a photograph. Do NOT enlarge eyes. Do NOT use cartoon or animated character design for faces. Thin natural eyebrows only. The WORLD is animated but the FACES are realistic. Apply this style to whatever subject and framing is provided.',
-      },
     };
     if (faceSwapEligible && baseMedium.key in FACE_SWAP_FLUX_OVERRIDES) {
       const override = FACE_SWAP_FLUX_OVERRIDES[baseMedium.key];
@@ -516,9 +512,14 @@ Deno.serve(async (req) => {
       console.log(`[nightly] face swap flux+directive override for ${baseMedium.key}`);
     }
 
-    const dualAction = isDualFaceSwap
-      ? pickDualAction(selectedCast.find((c) => c.role === 'plus_one')?.relationship)
-      : null;
+    const isDualCharacter = composition === 'character' && selectedCast.length === 2;
+    const dualAction =
+      isDualFaceSwap || isDualCharacter
+        ? pickDualAction(
+            selectedCast.find((c) => c.role === 'plus_one')?.relationship,
+            force_dual_pool
+          )
+        : null;
     console.log(
       `[nightly-dreams] DUAL DEBUG: composition=${composition} isChar=${isCharacterDream} castPick=${castPick?.role} selectedCast=${selectedCast.length} faceSwap=${faceSwapEligible} isDual=${isDualFaceSwap} medium=${nightlyMedium.key} renderMode=${renderMode}${dualAction ? ` action="${dualAction}"` : ''}`
     );
@@ -640,7 +641,7 @@ Deno.serve(async (req) => {
         const dualSepRule = isDualFaceSwap
           ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
           : '';
-        const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime', 'animation']);
+        const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
         const faceRealismRule = needsRealisticFaces
           ? '\nFACE REALISM — CRITICAL: faces must have realistic human proportions with detailed eyes, nose, mouth, and jawline. Do NOT simplify faces into cartoon, chibi, or dot-eye proportions. Do NOT draw thick or prominent eyebrows — keep eyebrows subtle, thin, and natural. Scene and clothing can be fully stylized but FACES must look like real people with natural brow lines.'
@@ -695,14 +696,17 @@ RULES:
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
       } else {
-        // Non-face-swap brief: standard scene-first approach
-        nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
+        // Non-face-swap brief: scene + character description must come through accurately
+        const isDualCast = resolvedCast.length === 2;
+        const castWordsTarget = isDualCast ? '40-50 words' : '25-35 words';
+        const sceneWordsTarget = isDualCast ? '40-50 words' : '50-60 words';
+        nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (90-130 words, comma-separated).
 
 CRITICAL STRUCTURE — follow this order EXACTLY:
 1. Start with: "${baseMedium.fluxFragment}"
-2. SCENE/ENVIRONMENT (spend 60% of words here — this is the star)
-3. CHARACTER placed naturally in the scene (spend 20% of words)
-4. CAMERA + MOOD (spend 20% of words)
+2. SCENE/ENVIRONMENT (${sceneWordsTarget})
+3. CHARACTER${isDualCast ? 'S' : ''} placed naturally in the scene (${castWordsTarget} — this MUST be detailed)
+4. CAMERA + MOOD (15-20 words)
 5. End with: no text, no words, no letters, no watermarks, ultra detailed
 
 DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
@@ -711,12 +715,21 @@ ${dreamSubject}
 SELECT AND SUBORDINATE (critical):
 - The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
 - A strong single image with harmonious supporting details beats a busy one with everything crammed in.
-- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
 
-CHARACTER IN THE SCENE:
+CHARACTER${isDualCast ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
 ${castInstruction}
 ${relationshipTone ? `\n${relationshipTone.block}\n` : ''}
+CAST DESCRIPTION RULES — NON-NEGOTIABLE:
+- PRESERVE every identifying physical trait from the description above: age, gender, hair color and length, eye color, beard/no beard, build, complexion. These traits are how the user recognizes themselves and their loved ones — do NOT compress them away.
+${
+  isDualCast
+    ? `- BOTH characters must be clearly visible and clearly distinguishable. Describe ${resolvedCast[0].role} (${resolvedCast[0].promptDesc.split(',')[0].slice(0, 60)}) AND ${resolvedCast[1].role} (${resolvedCast[1].promptDesc.split(',')[0].slice(0, 60)}) with their full identifying traits.
+- Two complete people in the frame, both faces visible, neither hidden, neither merged with the other.`
+    : '- The character must be clearly visible with their identifying traits showing.'
+}
+- Do NOT generalize ("a man" / "a woman") — be SPECIFIC ("mid-30s man with sandy brown hair and full medium beard" / "mid-40s woman with shoulder-length wavy brown hair with highlights").
+
 MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
@@ -724,9 +737,14 @@ COMPOSITION: ${compositionMode === 'balanced' ? 'natural cinematic framing' : co
 
 RULES:
 - SCENE FIRST in the prompt. The environment must be rich, detailed, layered.
-- Include "foreground midground background stacked top to bottom, layered depth" in the prompt. Compose with depth — stack layers top to bottom, not left to right.
-- The character is actively DOING something interesting in the world — fighting, climbing, leaping, exploring, casting, riding. Dynamic action, not standing still.
-- Character visible from front or side angle — never a back-turned or rear-view shot.
+- Include "foreground midground background stacked top to bottom, layered depth" in the prompt.
+- The character${isDualCast ? 's are' : ' is'} actively DOING something interesting in the world. Dynamic action, not standing still.
+- Character${isDualCast ? 's' : ''} visible from front or three-quarter angle — never back-turned or rear-view.
+- ${
+          isDualCast
+            ? 'BOTH characters MUST be present in the scene. Wide and far shots are welcome — be creative with framing — but two distinct people must be visible somewhere in the frame. NOT one person alone. NOT empty scenery. The cast description above is non-negotiable: both individuals must appear.'
+            : 'The character MUST be present and visible in the scene. Wide and far shots are welcome.'
+        }
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
       }
@@ -870,6 +888,19 @@ Output ONLY the prompt.`;
       } else {
         finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
       }
+    } else if (composition === 'character' && resolvedCast.length === 2) {
+      // Non-face-swap dual cast: bake the SPECIFIC cast descriptions into
+      // the prepend so Flux locks gender + identifying traits at the front
+      // of the prompt. Without this Flux invents random pairs (two girls,
+      // two boys, generic strangers).
+      const shortDesc = (full: string): string => {
+        // Pull the first ~16 words to get age + gender + 1-2 traits.
+        const words = full.split(/\s+/).slice(0, 16).join(' ');
+        return words.replace(/[.,;]+$/, '').replace(/^A\s+/i, 'a ');
+      };
+      const cast1 = shortDesc(resolvedCast[0].rawDescription || resolvedCast[0].promptDesc);
+      const cast2 = shortDesc(resolvedCast[1].rawDescription || resolvedCast[1].promptDesc);
+      finalPrompt = `${cast1} and ${cast2}, both visible in the scene, ` + finalPrompt;
     }
 
     // Face swap source assignment

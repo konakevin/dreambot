@@ -168,6 +168,8 @@ export function rollDream(
     }
   } else if (medium.isCharacterOnly || medium.faceSwaps) {
     composition = 'character';
+  } else if (castMembers.length >= 2) {
+    composition = 'character';
   } else {
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';
   }
@@ -294,6 +296,8 @@ function rollLegacyPath(
   if (!includeCharacter) {
     composition = 'pure_scene';
   } else if (medium.isCharacterOnly || medium.faceSwaps) {
+    composition = 'character';
+  } else if (castMembers.length >= 2) {
     composition = 'character';
   } else {
     composition = Math.random() < 0.6 ? 'character' : 'epic_tiny';
