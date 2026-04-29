@@ -16,12 +16,53 @@ const FACE_SWAP_VERSION = 'd5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
 
+/**
+ * Cache-bust the source image bytes by re-encoding the JPEG with a random
+ * quality and perturbing one corner pixel by a random amount. The bytes
+ * differ on every call, so Replicate's input-hash cache can't lock us
+ * onto a stale prediction output (the duplicate-render bug we saw 2026-04-29).
+ *
+ * Visually identical — face is untouched, only the bottom-right pixel
+ * shifts by a few RGB values, well below perceptible.
+ */
+async function perturbSourceImage(sourceImageUrl: string): Promise<string> {
+  const resp = await fetch(sourceImageUrl);
+  if (!resp.ok) throw new Error(`Source download failed: ${resp.status}`);
+  const buf = new Uint8Array(await resp.arrayBuffer());
+  const decoded = decodeJpeg(buf, { useTArray: true });
+  const data = decoded.data as Uint8Array;
+  const w = decoded.width;
+  const h = decoded.height;
+  // Perturb a random pixel near the bottom-right corner — face is upper-half so unaffected
+  const px = w - 1 - Math.floor(Math.random() * 4);
+  const py = h - 1 - Math.floor(Math.random() * 4);
+  const off = (py * w + px) * 4;
+  data[off] = Math.floor(Math.random() * 256);
+  data[off + 1] = Math.floor(Math.random() * 256);
+  data[off + 2] = Math.floor(Math.random() * 256);
+  const quality = 89 + Math.floor(Math.random() * 4); // 89-92, hugs the existing 90 baseline
+  const encoded = encodeJpeg({ data, width: w, height: h }, quality);
+  const bytes = encoded.data as Uint8Array;
+  const parts: string[] = [];
+  for (let i = 0; i < bytes.length; i += 4096) {
+    parts.push(String.fromCharCode(...bytes.subarray(i, Math.min(i + 4096, bytes.length))));
+  }
+  return `data:image/jpeg;base64,${btoa(parts.join(''))}`;
+}
+
 async function faceSwapOnce(
   sourceImageDataUrl: string,
   targetImageUrl: string,
   replicateToken: string,
   maxWaitMs: number = DEFAULT_MAX_WAIT_MS
 ): Promise<string> {
+  // Cache-bust the source image so Replicate cannot lock onto a stale
+  // prediction output. Skip if already a data URI (dualFaceSwap passes
+  // already-perturbed crops as data URIs).
+  const sourceForReplicate = sourceImageDataUrl.startsWith('data:')
+    ? sourceImageDataUrl
+    : await perturbSourceImage(sourceImageDataUrl);
+
   const res = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
@@ -31,7 +72,7 @@ async function faceSwapOnce(
     body: JSON.stringify({
       version: FACE_SWAP_VERSION,
       input: {
-        source_image: sourceImageDataUrl,
+        source_image: sourceForReplicate,
         target_image: targetImageUrl,
       },
     }),

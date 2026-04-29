@@ -31,6 +31,7 @@ import { persistToStorage } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
+import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -96,6 +97,8 @@ Deno.serve(async (req) => {
   const force_model = (body.force_model as string) || undefined;
   const force_dual_pool =
     (body.force_dual_pool as 'partner' | 'companion' | undefined) || undefined;
+  const force_single_pool =
+    (body.force_single_pool as 'portrait' | 'candid' | undefined) || undefined;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -513,6 +516,7 @@ Deno.serve(async (req) => {
     }
 
     const isDualCharacter = composition === 'character' && selectedCast.length === 2;
+    const isSingleCharacter = composition === 'character' && selectedCast.length === 1;
     const dualAction =
       isDualFaceSwap || isDualCharacter
         ? pickDualAction(
@@ -520,6 +524,9 @@ Deno.serve(async (req) => {
             force_dual_pool
           )
         : null;
+    const singleActionObj = isSingleCharacter ? pickSingleAction(force_single_pool) : null;
+    const singleAction = singleActionObj?.pose ?? null;
+    const needsEpicBackdrop = singleActionObj?.needsEpicBackdrop ?? false;
     console.log(
       `[nightly-dreams] DUAL DEBUG: composition=${composition} isChar=${isCharacterDream} castPick=${castPick?.role} selectedCast=${selectedCast.length} faceSwap=${faceSwapEligible} isDual=${isDualFaceSwap} medium=${nightlyMedium.key} renderMode=${renderMode}${dualAction ? ` action="${dualAction}"` : ''}`
     );
@@ -679,7 +686,7 @@ COMPOSITION RULES:${dualSepRule}
 - ${isDualFaceSwap ? 'Both characters should feel CONNECTED — sharing the same moment, reacting to the same world. Not doing separate isolated activities.' : ''}
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
 - Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.${faceRealismRule}
-${dualAction ? `\nACTION IN SCENE (body language only):\n"${dualAction}"\nUse this for body pose. Do NOT describe eye direction.\n` : ''}
+${dualAction ? `\nACTION IN SCENE (body language only):\n"${dualAction}"\nUse this for body pose. Do NOT describe eye direction.\n` : ''}${singleAction ? `\nACTION IN SCENE${needsEpicBackdrop ? ' (POSED PORTRAIT)' : ''}:\n"${singleAction}"\nUse this exact action. Adapt it to fit the medium and scene. Do NOT describe eye direction; the action describes what the body is doing.\n${needsEpicBackdrop ? '\nBACKDROP RULE — NON-NEGOTIABLE: This is a POSED PHOTO. The character is posing for the camera, so the SCENE/BACKDROP must be the reason this photo exists. Push the location HARD: pull the most striking elements from the scene DNA above (towering scale, dramatic sky, magical atmosphere, iconic landmark, sweeping vista, unusual color, theatrical light). Use AT LEAST 3 specific environmental details. Do NOT default to a generic backdrop — this scene is what makes the photo memorable.\n' : ''}` : ''}
 CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
 ${faceDescRule}
@@ -719,7 +726,7 @@ SELECT AND SUBORDINATE (critical):
 CHARACTER${isDualCast ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
 ${castInstruction}
-${relationshipTone ? `\n${relationshipTone.block}\n` : ''}
+${dualAction ? `\nACTION IN SCENE (both characters):\n"${dualAction}"\nUse this for body pose.\n` : ''}${singleAction ? `\nACTION IN SCENE${needsEpicBackdrop ? ' (POSED PORTRAIT)' : ''}:\n"${singleAction}"\nUse this exact action verbatim. Adapt it to fit the medium aesthetic but keep the verbs.\n${needsEpicBackdrop ? '\nBACKDROP RULE — NON-NEGOTIABLE: This is a POSED PHOTO. The character is posing for the camera, so the SCENE/BACKDROP is the reason this photo exists. Push the location HARD: pull the most striking elements from the scene DNA (towering scale, dramatic sky, magical atmosphere, iconic landmark, sweeping vista, unusual color, theatrical light). Use AT LEAST 3 specific environmental details.\n' : ''}` : ''}${relationshipTone ? `\n${relationshipTone.block}\n` : ''}
 CAST DESCRIPTION RULES — NON-NEGOTIABLE:
 - PRESERVE every identifying physical trait from the description above: age, gender, hair color and length, eye color, beard/no beard, build, complexion. These traits are how the user recognizes themselves and their loved ones — do NOT compress them away.
 ${
@@ -959,6 +966,8 @@ Output ONLY the prompt.`;
 
   try {
     console.log(`[nightly-dreams] Starting image generation (model: ${pickedModel})...`);
+    // Capture for duplicate-bug observability
+    const observability: Record<string, unknown> = {};
     const genResult = await generateImage(
       'flux-dev',
       finalPrompt,
@@ -968,6 +977,8 @@ Output ONLY the prompt.`;
     );
     let tempUrl = genResult.url;
     replicatePredictionId = genResult.predictionId;
+    observability.replicateRawUrl = genResult.url;
+    observability.replicatePredictionId = genResult.predictionId;
     if (genResult.nsfwRetries && genResult.nsfwRetries > 0) {
       logAxes.nsfwRetries = genResult.nsfwRetries;
       console.log(
@@ -1043,6 +1054,7 @@ Output ONLY the prompt.`;
     }
 
     let imageUrl = tempUrl;
+    observability.preStoragetUrl = tempUrl;
 
     // Persist to Storage + log in parallel
     timings.total = Date.now() - t0;
@@ -1051,7 +1063,7 @@ Output ONLY the prompt.`;
       insertGenerationLog(supabase, {
         user_id: userId,
         recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
-        rolled_axes: { ...logAxes, timings },
+        rolled_axes: { ...logAxes, timings, observability },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
         cost_cents: 3,
