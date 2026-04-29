@@ -186,7 +186,7 @@ function buildCharacterBlock(
       );
     }
     parts.push(
-      "Position each character so their face is on their respective side — left character's face in the left half, right character's face in the right half. They can interact naturally (close together, touching) as long as each face stays on its side."
+      'POSITIONING:\n- Character 1 in LEFT half of frame, Character 2 in RIGHT half.\n- BOTH FACES MUST BE VISIBLE — three-quarter FRONT angle toward the viewer. Eyes and nose on BOTH characters clearly visible.\n- No turned-away faces. No back of heads. No full side profiles. No faces hidden in shadow.'
     );
     parts.push('Do NOT over-describe faces. Push detail into clothing, pose, environment.');
     const genderParts: string[] = [];
@@ -229,7 +229,7 @@ function buildCameraBlock(composition: CompilerInput['composition'], castCount: 
   if (composition.faceSwapEligible) {
     if (castCount === 2) {
       parts.push(
-        'BOTH faces must be three-quarter view toward camera — eyes, noses, and mouths all visible. No profiles, no back views, no silhouettes. Both faces sharp and well-lit. Medium-wide shot showing both figures with environment.'
+        'BOTH FACES MUST BE VISIBLE — three-quarter FRONT angle toward the viewer, eyes and nose visible on both. No turned-away faces, no back of heads, no full side profiles. Medium-wide shot showing both figures within the environment.'
       );
     } else {
       parts.push(
@@ -411,7 +411,7 @@ export function postProcessPrompt(prompt: string, rules: CompilerOutput['postPro
   if (rules.appendFaceLock) {
     if (rules.dualFaceSwap) {
       result +=
-        ', two people facing camera, both faces three-quarter front angle, both faces visible and sharp, no back views, no silhouettes';
+        ', two people in scene, both faces turned toward viewer with eyes and nose visible, person on left side, person on right side';
     } else {
       result +=
         ', front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no silhouette';

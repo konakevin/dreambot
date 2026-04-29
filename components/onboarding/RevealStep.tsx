@@ -18,9 +18,9 @@ import { useFeedStore } from '@/store/feed';
 import { supabase } from '@/lib/supabase';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const MASCOT = require('@/assets/images/icon.png');
 import { Toast } from '@/components/Toast';
+
+const MASCOT = require('@/assets/images/icon.png');
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;

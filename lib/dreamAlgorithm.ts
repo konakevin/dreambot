@@ -81,12 +81,10 @@ export function rollDream(
 
   if (forceCastRole === null) {
     includeCharacter = false;
-  } else if (medium.isSceneOnly) {
-    includeCharacter = false;
-  } else if (describedCast.length === 0) {
-    includeCharacter = false;
   } else if (forceCastRole) {
     includeCharacter = true;
+  } else if (describedCast.length === 0) {
+    includeCharacter = false;
   } else {
     includeCharacter = Math.random() < 0.5;
   }
@@ -111,18 +109,30 @@ export function rollDream(
   let castMembers: CastMember[] = [];
 
   if (includeCharacter) {
-    if (forceCastRole) {
+    if (forceCastRole === 'dual') {
+      const s = findRole('self');
+      const p = findRole('plus_one');
+      if (s && p) castMembers = [s, p];
+      else if (s) castMembers = [s];
+    } else if (forceCastRole) {
       const forced = findRole(forceCastRole);
       if (forced) castMembers = [forced];
     } else if (medium.faceSwaps) {
-      // Face-swap: single cast only (50% self, 25% +1, 25% pet)
-      const whoRoll = Math.random() * 100;
-      let pick: CastMember | undefined;
-      if (whoRoll < 50) pick = findRole('self');
-      else if (whoRoll < 75) pick = findRole('plus_one');
-      else pick = findRole('pet');
-      if (!pick) pick = describedCast[0];
-      if (pick) castMembers = [pick];
+      const selfMember = findRole('self');
+      const plusOne = findRole('plus_one');
+      if (selfMember && plusOne && Math.random() < 0.25) {
+        // 25% dual face swap when both self + plus_one exist
+        castMembers = [selfMember, plusOne];
+      } else {
+        // Single face swap (50% self, 25% +1, 25% pet)
+        const whoRoll = Math.random() * 100;
+        let pick: CastMember | undefined;
+        if (whoRoll < 50) pick = findRole('self');
+        else if (whoRoll < 75) pick = findRole('plus_one');
+        else pick = findRole('pet');
+        if (!pick) pick = describedCast[0];
+        if (pick) castMembers = [pick];
+      }
     } else {
       // Non-face-swap: can include 1, 2, or all 3
       const available = [...describedCast];
@@ -154,13 +164,9 @@ export function rollDream(
   if (!includeCharacter) {
     if (!includeLocation && !includeObject) {
       composition = 'pure_scene';
-    } else if (medium.isSceneOnly) {
-      composition = 'pure_scene';
     } else {
       composition = Math.random() < 0.7 ? 'pure_scene' : 'epic_tiny';
     }
-  } else if (medium.isSceneOnly) {
-    composition = 'pure_scene';
   } else if (medium.isCharacterOnly || medium.faceSwaps) {
     composition = 'character';
   } else {
@@ -185,10 +191,20 @@ export function rollDream(
     'intimate_close',
     'low_angle_hero',
   ]);
-  const eligibleWeights =
-    medium.faceSwaps && includeCharacter
-      ? COMPOSITION_WEIGHTS.filter(([mode]) => FACESWAP_ALLOWED.has(mode))
-      : COMPOSITION_WEIGHTS;
+  const DUAL_FACESWAP_ALLOWED: Set<CompositionMode> = new Set([
+    'balanced',
+    'intimate_close',
+    'layered_depth',
+  ]);
+  const isDual = medium.faceSwaps && includeCharacter && castMembers.length === 2;
+  const allowedSet = isDual
+    ? DUAL_FACESWAP_ALLOWED
+    : medium.faceSwaps && includeCharacter
+      ? FACESWAP_ALLOWED
+      : null;
+  const eligibleWeights = allowedSet
+    ? COMPOSITION_WEIGHTS.filter(([mode]) => allowedSet.has(mode))
+    : COMPOSITION_WEIGHTS;
   const totalCompWeight = eligibleWeights.reduce((s, [, w]) => s + w, 0);
   let compRoll = Math.random() * totalCompWeight;
   let compositionMode: CompositionMode = 'balanced';
@@ -255,7 +271,7 @@ function rollLegacyPath(
     includeObject = Math.random() < 0.3;
   }
 
-  if (medium.isSceneOnly || describedCast.length === 0) includeCharacter = false;
+  if (describedCast.length === 0) includeCharacter = false;
 
   let castMembers: CastMember[] = [];
   if (includeCharacter) {

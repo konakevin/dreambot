@@ -29,6 +29,7 @@ import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
+import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -484,6 +485,12 @@ Deno.serve(async (req) => {
     const faceSwapEligible =
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
     const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
+    const dualAction = isDualFaceSwap
+      ? pickDualAction(selectedCast.find((c) => c.role === 'plus_one')?.relationship)
+      : null;
+    console.log(
+      `[nightly-dreams] DUAL DEBUG: composition=${composition} isChar=${isCharacterDream} castPick=${castPick?.role} selectedCast=${selectedCast.length} faceSwap=${faceSwapEligible} isDual=${isDualFaceSwap} medium=${nightlyMedium.key} renderMode=${renderMode}${dualAction ? ` action="${dualAction}"` : ''}`
+    );
 
     // ── Resolve character descriptions: single source of truth per render mode ──
     // Natural -> raw cast description (face swap handles identity)
@@ -597,10 +604,10 @@ Deno.serve(async (req) => {
     if (composition === 'character') {
       if (faceSwapEligible) {
         const faceLockPhrase = isDualFaceSwap
-          ? 'two people facing camera, both faces three-quarter front angle, both faces visible and sharp, no back views, no silhouettes'
-          : 'front-facing subject facing the camera, three-quarter front angle, eyes visible, no back view, no rear angle';
+          ? 'medium shot, two people in scene, both faces turned toward viewer with eyes and nose visible, person on left 40 percent of frame, person on right 40 percent of frame, clear gap between them'
+          : 'face turned toward viewer, eyes and nose visible, no back view, no silhouette';
         const dualSepRule = isDualFaceSwap
-          ? "\n- Left character's face in the left half, right character's face in the right half. They can interact naturally as long as faces stay on their sides."
+          ? '\n- Character 1 in LEFT half of frame, Character 2 in RIGHT half. BOTH FACES MUST BE VISIBLE — three-quarter FRONT angle toward the viewer. Eyes and nose on BOTH characters must be clearly visible. NO turned-away faces, NO back of heads, NO full profiles.'
           : '';
         const faceDescRule = isDualFaceSwap
           ? 'Do NOT over-describe faces. Push detail into clothing, pose, and environment.'
@@ -627,12 +634,12 @@ SELECT AND SUBORDINATE (critical):
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 
-COMPOSITION RULES (must obey):
-- ${isDualFaceSwap ? 'Both subjects' : 'Subject'} facing camera. No back view. No rear angle. No over-the-shoulder. No silhouette.${dualSepRule}
-- No crouching, no kneeling, no looking down, no looking away from camera.
-- ${isDualFaceSwap ? 'Both characters are' : 'The character is'} visible and facing the viewer in the scene.
-- Character faces must have realistic human proportions — real photo faces will be composited on.
-
+COMPOSITION RULES (must obey):${dualSepRule}
+- ${isDualFaceSwap ? 'MEDIUM SHOT — both characters visible from waist up, filling at least 60% of frame height. NOT a wide establishing shot.' : 'Character visible from waist up, filling at least 50% of frame height.'}
+- ${isDualFaceSwap ? 'BOTH FACES must angle toward the viewer — eyes and nose clearly visible on both. Real photo faces will be composited on, so faces must be LARGE and CLEAR.' : 'Face must angle toward viewer — eyes and nose visible. Real face will be composited on.'}
+- ${isDualFaceSwap ? 'Characters grounded in the scene — environmental lighting on them, casting shadows, feet on the ground. They exist IN this world.' : 'Character grounded in the scene with environmental lighting.'}
+- NEVER describe where characters are looking or gazing. NEVER use words like "gazing", "staring", "watching", "scanning", "peering". Describe BODY POSE and CLOTHING only.
+${dualAction ? `\nACTION IN SCENE (body pose only — do NOT describe eye direction):\n"${dualAction}"\nAdapt this action to fit the scene. Describe what their BODIES are doing, not where their eyes are pointed.\n` : ''}
 CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
 ${faceDescRule}
@@ -785,11 +792,11 @@ Output ONLY the prompt.`;
     // Post-process: brute force face lock for face-swap-eligible dreams.
     if (faceSwapEligible) {
       if (isDualFaceSwap) {
-        finalPrompt +=
-          ', two people facing camera, both faces three-quarter front angle, both faces visible and sharp, no back views, no silhouettes';
+        finalPrompt =
+          'medium shot of two people facing camera, both faces clearly visible with eyes and nose showing, person on left side and person on right side with clear gap between them, ' +
+          finalPrompt;
       } else {
-        finalPrompt +=
-          ', front-facing subject facing the camera, three-quarter front angle, head turned toward camera, eyes visible, no back view, no rear angle, no silhouette';
+        finalPrompt += ', face visible, eyes and nose visible, no back view, no silhouette';
       }
     }
 
@@ -879,7 +886,8 @@ Output ONLY the prompt.`;
           tempUrl,
           REPLICATE_TOKEN,
           supabase,
-          userId
+          userId,
+          t0 + 140_000
         );
         lap('dual-face-swap');
         console.log('[nightly-dreams] Dual face swap complete');

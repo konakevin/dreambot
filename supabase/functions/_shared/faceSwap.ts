@@ -1,25 +1,26 @@
 /**
  * Face swap — composites the source face onto the target image using
- * codeplugtech/face-swap (Replicate). Used by V4 (self-insert, photo
+ * yan-ops/face_swap (Replicate). Used by V4 (self-insert, photo
  * reimagine) and nightly (cast-bearing dreams).
  *
  * Single swap: faceSwap() — one face onto one image.
  * Dual swap: dualFaceSwap() — crop→swap→paste pipeline for two people.
  *
- * The source can be a public URL or a base64 data URL. Target must be a
- * public URL. Polling is generous (45 × 2s = 90s) because the model cold-
- * starts slowly.
+ * Both source and target must be public URLs (no base64 data URIs).
  */
 
 // deno-lint-ignore-file no-explicit-any
 import { decode as decodeJpeg, encode as encodeJpeg } from 'https://esm.sh/jpeg-js@0.4.4';
 
-const FACE_SWAP_VERSION = '278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34';
+const FACE_SWAP_VERSION = 'd5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab';
+const DEFAULT_MAX_WAIT_MS = 90_000;
+const POLL_INTERVAL_MS = 1000;
 
 async function faceSwapOnce(
   sourceImageDataUrl: string,
   targetImageUrl: string,
-  replicateToken: string
+  replicateToken: string,
+  maxWaitMs: number = DEFAULT_MAX_WAIT_MS
 ): Promise<string> {
   const res = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
@@ -30,8 +31,8 @@ async function faceSwapOnce(
     body: JSON.stringify({
       version: FACE_SWAP_VERSION,
       input: {
-        swap_image: sourceImageDataUrl,
-        input_image: targetImageUrl,
+        source_image: sourceImageDataUrl,
+        target_image: targetImageUrl,
       },
     }),
   });
@@ -40,14 +41,26 @@ async function faceSwapOnce(
   const data = await res.json();
   if (!data.id) throw new Error('No prediction ID from face swap');
 
-  for (let i = 0; i < 45; i++) {
-    await new Promise((r) => setTimeout(r, 2000));
+  const maxPolls = Math.ceil(maxWaitMs / POLL_INTERVAL_MS);
+  for (let i = 0; i < maxPolls; i++) {
+    await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
     const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${data.id}`, {
       headers: { Authorization: `Bearer ${replicateToken}` },
     });
     const pollData = await pollRes.json();
     if (pollData.status === 'succeeded') {
-      const url = typeof pollData.output === 'string' ? pollData.output : pollData.output?.[0];
+      const output = pollData.output;
+      let url: string | undefined;
+      if (typeof output === 'string') {
+        url = output;
+      } else if (Array.isArray(output)) {
+        url = output[0];
+      } else if (output && typeof output === 'object') {
+        if (output.status === 'failed' || output.code === 500) {
+          throw new Error(`Face swap model error: ${output.msg || 'unknown'}`);
+        }
+        url = output.image;
+      }
       if (url) return url;
     }
     if (pollData.status === 'failed' || pollData.status === 'canceled') {
@@ -58,24 +71,29 @@ async function faceSwapOnce(
 }
 
 /**
- * Ship C: wraps faceSwapOnce with a single retry on timeout. Cold-start
- * timeouts on Replicate's side are common and usually transient — the
- * first attempt warms the container, the second almost always succeeds.
- * Only retries on timeout (not on `failed` or `canceled` which are
- * deterministic errors that won't recover).
+ * Single face swap with retry on timeout. Cold-start timeouts on
+ * Replicate are common and transient — first attempt warms the
+ * container, second almost always succeeds.
+ *
+ * When called from dualFaceSwap, retry is disabled (retrying two
+ * parallel swaps would double the total time and blow the Edge
+ * Function limit).
  */
 export async function faceSwap(
   sourceImageDataUrl: string,
   targetImageUrl: string,
-  replicateToken: string
+  replicateToken: string,
+  opts?: { maxWaitMs?: number; retry?: boolean }
 ): Promise<string> {
+  const maxWaitMs = opts?.maxWaitMs ?? DEFAULT_MAX_WAIT_MS;
+  const retry = opts?.retry ?? true;
   try {
-    return await faceSwapOnce(sourceImageDataUrl, targetImageUrl, replicateToken);
+    return await faceSwapOnce(sourceImageDataUrl, targetImageUrl, replicateToken, maxWaitMs);
   } catch (err) {
     const msg = (err as Error).message || '';
-    if (msg.includes('timed out')) {
+    if (retry && msg.includes('timed out')) {
       console.warn('[faceSwap] first attempt timed out — retrying once');
-      return await faceSwapOnce(sourceImageDataUrl, targetImageUrl, replicateToken);
+      return await faceSwapOnce(sourceImageDataUrl, targetImageUrl, replicateToken, maxWaitMs);
     }
     throw err;
   }
@@ -159,6 +177,11 @@ function toBase64(bytes: Uint8Array): string {
  * Crops left 55% and right 55% (10% overlap at center), swaps each face
  * independently in parallel, stitches left half + right half at midpoint.
  * Uploads stitched result to Supabase temp storage, returns public URL.
+ *
+ * `deadlineMs` is the absolute deadline (Date.now() + remaining). The swap
+ * budget is computed from whatever time remains, minus 15s reserved for
+ * download/stitch/upload. No retry on individual swaps — retrying in
+ * parallel doubles total time and blows the Edge Function limit.
  */
 export async function dualFaceSwap(
   leftSourceUrl: string,
@@ -166,9 +189,11 @@ export async function dualFaceSwap(
   targetImageUrl: string,
   replicateToken: string,
   supabase: any,
-  userId: string
+  userId: string,
+  deadlineMs?: number
 ): Promise<string> {
-  console.log('[dualFaceSwap] Starting crop→swap→paste pipeline');
+  const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
+  console.log(`[dualFaceSwap] Starting — budget ${Math.round((deadline - Date.now()) / 1000)}s`);
 
   const targetResp = await fetch(targetImageUrl);
   if (!targetResp.ok) throw new Error(`Download target failed: ${targetResp.status}`);
@@ -195,13 +220,32 @@ export async function dualFaceSwap(
     leftJpeg.data instanceof Uint8Array ? leftJpeg.data : new Uint8Array(leftJpeg.data);
   const rightJpegData =
     rightJpeg.data instanceof Uint8Array ? rightJpeg.data : new Uint8Array(rightJpeg.data);
-  const leftUri = `data:image/jpeg;base64,${toBase64(leftJpegData)}`;
-  const rightUri = `data:image/jpeg;base64,${toBase64(rightJpegData)}`;
 
-  console.log('[dualFaceSwap] Swapping both faces in parallel...');
+  const ts = Date.now();
+  const leftPath = `temp/${userId}/crop-left-${ts}.jpg`;
+  const rightPath = `temp/${userId}/crop-right-${ts}.jpg`;
+  const [leftUp, rightUp] = await Promise.all([
+    supabase.storage
+      .from('uploads')
+      .upload(leftPath, leftJpegData, { contentType: 'image/jpeg', upsert: true }),
+    supabase.storage
+      .from('uploads')
+      .upload(rightPath, rightJpegData, { contentType: 'image/jpeg', upsert: true }),
+  ]);
+  if (leftUp.error) throw new Error(`Upload left crop failed: ${leftUp.error.message}`);
+  if (rightUp.error) throw new Error(`Upload right crop failed: ${rightUp.error.message}`);
+  const leftCropUrl = supabase.storage.from('uploads').getPublicUrl(leftPath).data.publicUrl;
+  const rightCropUrl = supabase.storage.from('uploads').getPublicUrl(rightPath).data.publicUrl;
+  console.log(`[dualFaceSwap] Crops uploaded: ${leftPath}, ${rightPath}`);
+
+  const swapBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
+  console.log(`[dualFaceSwap] Swap budget: ${Math.round(swapBudgetMs / 1000)}s`);
   const [leftSwapUrl, rightSwapUrl] = await Promise.all([
-    faceSwap(leftSourceUrl, leftUri, replicateToken),
-    faceSwap(rightSourceUrl, rightUri, replicateToken),
+    faceSwap(leftSourceUrl, leftCropUrl, replicateToken, { maxWaitMs: swapBudgetMs, retry: false }),
+    faceSwap(rightSourceUrl, rightCropUrl, replicateToken, {
+      maxWaitMs: swapBudgetMs,
+      retry: false,
+    }),
   ]);
   console.log('[dualFaceSwap] Both swaps complete');
 
@@ -262,6 +306,10 @@ export async function dualFaceSwap(
   if (upErr) throw new Error(`Stitched upload failed: ${upErr.message}`);
   const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(tempFile);
 
+  supabase.storage
+    .from('uploads')
+    .remove([leftPath, rightPath])
+    .catch(() => {});
   console.log('[dualFaceSwap] Pipeline complete');
   return urlData.publicUrl;
 }

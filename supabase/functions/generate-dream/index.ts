@@ -867,7 +867,8 @@ Output ONLY the prompt.`;
           tempUrl,
           REPLICATE_TOKEN,
           supabase,
-          userId
+          userId,
+          t0 + 140_000
         );
         lap('dual-face-swap');
         console.log('[generate-dream] Dual face swap complete');

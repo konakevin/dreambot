@@ -38,12 +38,16 @@ describe('rollDream', () => {
     }
   });
 
-  it('scene-only mediums never include characters', () => {
-    for (let i = 0; i < 50; i++) {
+  it('scene-only flag does not block characters (legacy constraint removed)', () => {
+    let gotCharacter = false;
+    for (let i = 0; i < 100; i++) {
       const result = rollDream(ALL_CAST, SCENE_ONLY);
-      expect(result.castMembers).toHaveLength(0);
-      expect(result.composition).toBe('pure_scene');
+      if (result.castMembers.length > 0) {
+        gotCharacter = true;
+        break;
+      }
     }
+    expect(gotCharacter).toBe(true);
   });
 
   it('character-only mediums always return character composition when cast is picked', () => {
@@ -60,11 +64,11 @@ describe('rollDream', () => {
     }
   });
 
-  it('face-swap medium always picks single cast member', () => {
+  it('face-swap medium picks 1 or 2 cast members (dual 25%)', () => {
     for (let i = 0; i < 50; i++) {
       const result = rollDream(ALL_CAST, FACE_SWAP);
       if (result.castMembers.length > 0) {
-        expect(result.castMembers).toHaveLength(1);
+        expect(result.castMembers.length).toBeLessThanOrEqual(2);
       }
     }
   });
