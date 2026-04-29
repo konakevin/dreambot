@@ -30,6 +30,7 @@ import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
+import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -640,9 +641,11 @@ MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 
 COMPOSITION RULES:${dualSepRule}
-- ${isDualFaceSwap ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot.' : 'Character visible from waist up, filling at least 50% of frame height.'}
+- ${isDualFaceSwap ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.' : 'Character visible from waist up, filling at least 50% of frame height.'}
 - ${isDualFaceSwap ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera. NEVER gazing at scenery or horizon.' : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.'}
 - ${isDualFaceSwap ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.' : ''}
+- ${isDualFaceSwap ? 'Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.' : ''}
+- ${isDualFaceSwap ? 'Both characters should feel CONNECTED — sharing the same moment, reacting to the same world. Not doing separate isolated activities.' : ''}
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
 - Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.${faceRealismRule}
 ${dualAction ? `\nACTION IN SCENE (body language only):\n"${dualAction}"\nUse this for body pose. Do NOT describe eye direction.\n` : ''}
@@ -813,6 +816,15 @@ Output ONLY the prompt.`;
         .replace(/turned toward (each other|the other|one another)/gi, '')
         .replace(/facing (each other|one another)/gi, '')
         .replace(/looking at (each other|one another)/gi, '')
+        .replace(/leaning (in )?(toward|into|close to) (each other|the other|one another)/gi, '')
+        .replace(/eye contact/gi, '')
+        .replace(/locked eyes/gi, '')
+        .replace(/eyes locked/gi, '')
+        .replace(/standing opposite/gi, '')
+        .replace(/face[- ]to[- ]face/gi, '')
+        .replace(/about to kiss/gi, '')
+        .replace(/leaning in for/gi, '')
+        .replace(/noses (almost )?touching/gi, '')
         .replace(/,\s*,/g, ',')
         .replace(/,\s*$/g, '');
     }
@@ -824,10 +836,10 @@ Output ONLY the prompt.`;
           ? 'realistic detailed human face, '
           : '';
       if (isDualFaceSwap) {
-        finalPrompt =
-          `both people looking directly at the camera, ${realisticFaceTag}exactly two people side by side, not facing each other, three-quarter view toward viewer, both faces fully visible and well-lit, not from behind, not silhouette, ` +
-          finalPrompt +
-          `, both subjects face the camera not each other`;
+        const dualPath = pickDualCompositionPath();
+        const prepend = dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
+        console.log(`[nightly] dual composition path: ${dualPath.name}`);
+        finalPrompt = prepend + ' ' + finalPrompt;
       } else {
         finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
       }
