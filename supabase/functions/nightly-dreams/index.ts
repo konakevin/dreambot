@@ -609,6 +609,11 @@ Deno.serve(async (req) => {
         const dualSepRule = isDualFaceSwap
           ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
           : '';
+        const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale']);
+        const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
+        const faceRealismRule = needsRealisticFaces
+          ? '\nFACE REALISM — CRITICAL: faces must have realistic human proportions with detailed eyes, nose, mouth, and jawline. Do NOT simplify faces into cartoon, chibi, or dot-eye proportions. Scene and clothing can be fully stylized but FACES must look like real people.'
+          : '';
         const faceDescRule = isDualFaceSwap
           ? 'Do NOT over-describe faces. Push detail into clothing, pose, and environment.'
           : 'Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.';
@@ -639,7 +644,7 @@ COMPOSITION RULES:${dualSepRule}
 - ${isDualFaceSwap ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera.' : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.'}
 - ${isDualFaceSwap ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.' : ''}
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
-- Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.
+- Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.${faceRealismRule}
 ${dualAction ? `\nACTION IN SCENE (body language only):\n"${dualAction}"\nUse this for body pose. Do NOT describe eye direction.\n` : ''}
 CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
@@ -792,12 +797,16 @@ Output ONLY the prompt.`;
 
     // Post-process: brute force face lock for face-swap-eligible dreams.
     if (faceSwapEligible) {
+      const realisticFaceTag =
+        baseMedium && ['storybook', 'pencil', 'fairytale'].includes(baseMedium.key)
+          ? 'realistic detailed human face, '
+          : '';
       if (isDualFaceSwap) {
         finalPrompt =
-          'candid medium shot, two people side by side both angled toward viewer, three-quarter view, ' +
+          `candid medium shot, ${realisticFaceTag}two people side by side both angled toward viewer, three-quarter view, ` +
           finalPrompt;
       } else {
-        finalPrompt += ', face visible, eyes and nose visible, no back view, no silhouette';
+        finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
       }
     }
 
