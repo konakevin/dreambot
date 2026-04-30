@@ -1,10 +1,11 @@
 /**
  * Face swap — composites the source face onto the target image using
- * yan-ops/face_swap (Replicate). Used by V4 (self-insert, photo
+ * cdingram/face-swap (Replicate). Used by V4 (self-insert, photo
  * reimagine) and nightly (cast-bearing dreams).
  *
  * Single swap: faceSwap() — one face onto one image.
- * Dual swap: dualFaceSwap() — crop→swap→paste pipeline for two people.
+ * Dual swap: dualFaceSwap() — fixed left-55%/right-55% crop pipeline for
+ *            two-character side-by-side compositions.
  *
  * Both source and target must be public URLs (no base64 data URIs).
  */

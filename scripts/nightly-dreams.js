@@ -86,28 +86,54 @@ async function callNightlyEdgeFunction(jwt, vibeProfile, dreamWish) {
   };
   if (dreamWish) body.dream_wish = dreamWish;
 
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/nightly-dreams`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`,
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = await res.json();
-  if (!res.ok) {
-    const isNsfw =
-      data.error && (data.error.includes('NSFW') || data.error.includes('safety'));
-    return { error: data.error || `HTTP ${res.status}`, isNsfw };
+  // Retry up to 2x on transient infrastructure errors (IDLE_TIMEOUT,
+  // WORKER_RESOURCE_LIMIT). These are platform issues, not Edge Function
+  // logic failures, and re-running typically succeeds.
+  const MAX_RETRIES = 2;
+  let lastErr = null;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/nightly-dreams`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify(body),
+    });
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = {};
+    }
+    if (res.ok) {
+      return {
+        upload_id: data.upload_id,
+        image_url: data.image_url,
+        prompt_used: data.prompt_used,
+        resolved_medium: data.resolved_medium,
+        resolved_vibe: data.resolved_vibe,
+      };
+    }
+    const errMsg = data.error || data.code || data.message || `HTTP ${res.status}`;
+    const isNsfw = errMsg && (errMsg.includes('NSFW') || errMsg.includes('safety'));
+    if (isNsfw) return { error: errMsg, isNsfw: true };
+    const isTransient =
+      errMsg.includes('IDLE_TIMEOUT') ||
+      errMsg.includes('WORKER_RESOURCE_LIMIT') ||
+      errMsg.includes('worker boot error') ||
+      res.status >= 500;
+    if (!isTransient || attempt === MAX_RETRIES) {
+      return { error: errMsg, isNsfw: false };
+    }
+    lastErr = errMsg;
+    const backoffMs = 5_000 * (attempt + 1);
+    console.log(
+      `  retry ${attempt + 1}/${MAX_RETRIES} after transient error (${errMsg}) — waiting ${backoffMs}ms`
+    );
+    await new Promise((r) => setTimeout(r, backoffMs));
   }
-  return {
-    upload_id: data.upload_id,
-    image_url: data.image_url,
-    prompt_used: data.prompt_used,
-    resolved_medium: data.resolved_medium,
-    resolved_vibe: data.resolved_vibe,
-  };
+  return { error: lastErr || 'unknown error after retries' };
 }
 
 // ── Bot Message ──────────────────────────────────────────────────────────────

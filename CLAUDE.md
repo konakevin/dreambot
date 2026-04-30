@@ -138,6 +138,39 @@ When a user has both self + plus_one cast photos, the nightly engine can render 
 
 **Current FACE_SWAP_FLUX_OVERRIDES:** fairytale, storybook, pencil. The DB `dream_mediums` entries are UNCHANGED — overrides are runtime-only so generic (non-face-swap) renders keep their original style.
 
+### Automated QA feedback loop
+
+Kevin's standing protocol when he says "run an automated QA loop on path X" or "auto-tune path X" — Claude does the **entire** loop without human review. Kevin sets the goal and walks away.
+
+**The loop:**
+
+1. **Tag the run** — every render in this loop is force-posted with a unique caption like `auto-qa: <path-name> R<round>` (e.g., `auto-qa: staggered-depth R3`). Kevin can later filter `uploads.caption` to find them and heart the ones he likes.
+2. **Run a batch of 5** — use `force_*` body params on the relevant Edge Function (typically nightly-dreams) so the path under test fires deterministically. Force-post to feed via `is_posted=true`. Always 5 per round; never larger.
+3. **Pull the renders + prompts back from the DB** — `uploads` row gives `image_url`, `ai_prompt`, `dream_medium`, `dream_vibe`, `output_phash`. Use the Read tool on the JPEG to actually look at each image.
+4. **Self-grade each render** — score 0–5 on the dimensions that matter for the path under test. For dual cast: character placement, face swap landed, face quality (no seams/artifacts), scene quality, overall. Be brutal. 5/5 means you'd ship it. 3/5 means visible problems.
+5. **Identify the failing layer** — composition prepend? Sonnet brief? action pool? medium directive? swap pipeline? Read the prompt to confirm what Sonnet wrote vs what Flux rendered. Pick ONE layer to change.
+6. **Make ONE change** — never multi-variate. One layer per round, so the next round's grade tells you whether that single change helped. Document the change in a memory file (`project_auto_qa_<path>.md`) under a "Round N" heading: what was changed, why, what you expected.
+7. **Deploy + run round N+1** — same 5-render batch, new caption tag (`R<N+1>`).
+8. **Stop conditions:**
+   - **Success:** 3 consecutive rounds where all 5 images grade 4.5+/5 → declare path production-ready, write summary to memory, stop.
+   - **Cap:** 20 rounds max. If still not converging, stop and report the failure mode + best-attempt config.
+   - **User interrupt:** Kevin says stop, you stop.
+9. **Cross-reference with Kevin's hearts** — periodically (every ~5 rounds) query `likes` joined to `uploads` filtered by the auto-qa caption pattern to find which renders Kevin actually hearted. Compare those prompts/configs against the ones you scored highly. Mismatch = your grader is miscalibrated; recalibrate self-grading rubric to match Kevin's taste.
+
+**Memory protocol:** while the loop runs, maintain `memory/project_auto_qa_<path>.md` with:
+- Round-by-round log: what was changed, what improved, what regressed
+- Running config (current prepend / brief / pool entries / hard constraints)
+- "Hearted by Kevin" list — IDs of renders Kevin liked, with their prompts inline so commonalities surface
+- Final production config when the loop converges
+
+**Caption taxonomy** (so it's queryable):
+- `auto-qa: <path> R<N>` — round tag during iteration
+- `auto-qa: <path> FINAL` — after convergence, the production config's representative renders
+
+**Why "automated":** Kevin doesn't grade. Claude grades. Kevin only intervenes by hearting renders that surfaced in his feed — those hearts are the ground-truth signal that calibrates Claude's grader against actual user taste. The loop runs unattended.
+
+**Don't fake-converge.** If 3 rounds in a row score 4.5+ but you suspect your grader is being lenient, run another round with stricter criteria before declaring victory. Better to admit "I can't tell if this is good" than to ship something Kevin will reject.
+
 ### Bot Dreams
 
 Bots post 2x daily via GitHub Actions cron. Each bot has curated seed prompts in the `bot_seeds` DB table with `used_at` tracking and auto-regeneration. See `BOTS.md` for the complete bot training process, all 19 active image bots + 2 content bots.
