@@ -168,10 +168,16 @@ export function FullScreenFeed({
         if (upcoming.length > 0) {
           ExpoImage.prefetch(upcoming.map((p) => feedImageUrl(p.image_url)));
         }
-        // Record impression after 1 second of visibility
+        // Record impression after 1 second of visibility. Defensive guard:
+        // skip non-UUID ids (e.g., synthetic `temp-{ts}` ids that some
+        // upstream code paths used as fallbacks). Postgres rejects those
+        // with "invalid input syntax for type uuid" and the toast surfaces
+        // for every visible card, polluting the console. Real upload ids
+        // are always UUIDs.
         if (impressionTimer.current) clearTimeout(impressionTimer.current);
         const post = posts[idx];
-        if (post && user && !recordedImpressions.current.has(post.id)) {
+        const isUuid = post && /^[0-9a-f-]{36}$/i.test(post.id);
+        if (post && user && isUuid && !recordedImpressions.current.has(post.id)) {
           impressionTimer.current = setTimeout(() => {
             recordedImpressions.current.add(post.id);
             supabase

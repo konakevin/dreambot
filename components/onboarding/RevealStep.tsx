@@ -265,8 +265,12 @@ export function RevealStep({ onBack }: Props) {
           image_url: activeDream.url,
           caption: null,
           ai_prompt: activeDream.prompt || null,
-          medium: activeDream.medium || null,
-          vibe: activeDream.vibe || null,
+          // Schema uses dream_medium / dream_vibe (not medium / vibe). Using
+          // the wrong names was a silent bug — every onboarding upload INSERT
+          // was failing, the fake `temp-${Date.now()}` id was getting pinned,
+          // and the home feed crashed trying to record_impression with it.
+          dream_medium: activeDream.medium || null,
+          dream_vibe: activeDream.vibe || null,
         })
         .select('id')
         .single();
@@ -275,17 +279,22 @@ export function RevealStep({ onBack }: Props) {
         if (__DEV__) console.warn('[Reveal] Upload error:', uploadError);
       }
 
-      // Pin this dream so the home feed shows it as the first card
-      setPinnedPost({
-        id: insertedRow?.id ?? `temp-${Date.now()}`,
-        user_id: user.id,
-        image_url: activeDream.url,
-        caption: null,
-        username: user.user_metadata?.username ?? '',
-        avatar_url: user.user_metadata?.avatar_url ?? null,
-        created_at: new Date().toISOString(),
-        comment_count: 0,
-      });
+      // Only pin the post if we got a real UUID back. Pinning a fake
+      // `temp-${Date.now()}` id used to cause the home feed to crash with
+      // a Postgres "invalid input syntax for type uuid" error when its
+      // record_impression RPC fired with the synthetic id.
+      if (insertedRow?.id) {
+        setPinnedPost({
+          id: insertedRow.id,
+          user_id: user.id,
+          image_url: activeDream.url,
+          caption: null,
+          username: user.user_metadata?.username ?? '',
+          avatar_url: user.user_metadata?.avatar_url ?? null,
+          created_at: new Date().toISOString(),
+          comment_count: 0,
+        });
+      }
 
       // Grant 25 welcome sparkles (check balance first to avoid double-grant on retry)
       const { data: balanceCheck } = await supabase
