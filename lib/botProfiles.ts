@@ -1,18 +1,21 @@
 /**
  * Bot profiles for the "Meet the bots" onboarding screen.
  *
- * Each bot gets ONE short description — content only, no medium/style words.
- * Just what the bot posts about. Aim for ~6-12 words. Drop adjectives that
- * describe HOW it's rendered (oil-painted, photographed, anime-style) and
- * keep WHAT it shows (vampires, castles, dinosaurs, beaches).
+ * Each bot is described as a CHARACTER, not a content menu. The blurb
+ * captures the bot's archetype/personality — what it cares about, how it
+ * sees the world. The TYPE of content the bot posts is implied, never
+ * listed. Don't expose the underlying paths/seeds — those are internal
+ * formula, not user-facing copy.
+ *
+ * Aim for ~6-12 words. Cheeky, evocative, slightly weird. No exclamation
+ * marks. No "you'll see" framing — these are character cards, not pitches.
  *
  * Avatar URL still comes from the live `useBotUsers` query — we never
  * hardcode avatars. If a bot is renamed or retired, it silently drops out.
  *
- * To update: edit the description below. The bot's actual content is
- * driven by `scripts/bots/<botname>/index.js` (paths/seeds/etc.) — that's
- * the source of truth for what gets posted; this file is the source of
- * truth for how we describe it on the meet-the-bots screen.
+ * The bot's actual content is driven by `scripts/bots/<botname>/index.js`
+ * (paths/seeds/etc.) — that's the source of truth for what gets posted.
+ * This file is the source of truth for how we INTRODUCE the bot.
  */
 
 export interface BotProfile {
@@ -28,75 +31,75 @@ export interface BotProfile {
 export const BOT_PROFILES: Record<string, BotProfile> = {
   ancientbot: {
     username: 'ancientbot',
-    description: 'Lost civilizations, ancient temples, monumental ruins',
+    description: 'Convinced the world was more interesting 3000 years ago',
   },
   beachbot: {
     username: 'beachbot',
-    description: 'Beaches, tropical coasts, tide pools, ocean moods',
+    description: 'Salt in the hair, sand between the toes, perpetually',
   },
   bloombot: {
     username: 'bloombot',
-    description: 'Flowers, gardens, blooming meadows, botanical wonder',
+    description: 'Sees the world entirely through petals',
   },
   brickbot: {
     username: 'brickbot',
-    description: 'LEGO cities, brick-built castles, mini disasters',
+    description: 'Builds whole universes out of plastic bricks. No instructions.',
   },
   coquettebot: {
     username: 'coquettebot',
-    description: 'Princess bedrooms, tea parties, cottagecore romance, Parisian daydreams',
+    description: 'Always dressed for a tea party, even at 2am',
   },
   cuddlebot: {
     username: 'cuddlebot',
-    description: 'Cute creatures, sleepy animals, heartwarming tiny moments',
+    description: 'Just wants everyone to feel safe and warm',
   },
   dinobot: {
     username: 'dinobot',
-    description: 'Dinosaurs, prehistoric herds, volcanic eras, paleo wildlife',
+    description: 'Believes the dinosaurs had it figured out',
   },
   dragonbot: {
     username: 'dragonbot',
-    description: 'Dragons, magical realms, warriors, high-fantasy worlds',
+    description: 'Talks to dragons. They talk back.',
   },
   earthbot: {
     username: 'earthbot',
-    description: 'Mountains, deserts, oceans, real-Earth landscapes amplified',
+    description: 'Has hiked every trail, photographed every horizon',
   },
   gothbot: {
     username: 'gothbot',
-    description: 'Vampires, gothic castles, witchcore, elegant darkness',
+    description: 'A romantic at heart. The kind that sleeps in a coffin.',
   },
   mangabot: {
     username: 'mangabot',
-    description: 'Tokyo streets, samurai, slice-of-life Japan, mythical creatures',
+    description: 'Lives somewhere between Tokyo and a Ghibli film',
   },
   oceanbot: {
     username: 'oceanbot',
-    description: 'Underwater worlds, mermaids, krakens, maritime myth',
+    description: 'Heard a sea shanty once and never came back',
   },
   pixelbot: {
     username: 'pixelbot',
-    description: 'Fantasy quests, cozy cottages, cyberpunk cities, pixel adventures',
+    description: "Sees the world in 16-bit, even when it isn't",
   },
   retrobot: {
     username: 'retrobot',
-    description: '90s malls, video stores, summer afternoons, childhood frozen',
+    description: 'Stuck in 1994 and proud of it',
   },
   starbot: {
     username: 'starbot',
-    description: 'Cosmic vistas, alien worlds, space opera, futuristic cities',
+    description: 'Has been to the stars. Twice.',
   },
   steambot: {
     username: 'steambot',
-    description: 'Steampunk airships, clockwork contraptions, Victorian industry',
+    description: 'Tinkers with brass gears in a Victorian workshop',
   },
   tinybot: {
     username: 'tinybot',
-    description: 'Miniature villages, dollhouse interiors, dioramas, macro magic',
+    description: 'Lives in a world half an inch tall',
   },
   toybot: {
     username: 'toybot',
-    description: 'Toys come alive: LEGO epics, action figures, designer toys',
+    description: 'Treats the toy aisle as a sacred space',
   },
 };
 
