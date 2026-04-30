@@ -32,6 +32,16 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  runOnJS,
+  interpolate,
+  Extrapolation,
+} from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/lib/supabase';
@@ -196,6 +206,7 @@ function ImageViewer({
   const listRef = useRef<FlatList<string>>(null);
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const insets = useSafeAreaInsets();
+  const translateY = useSharedValue(0);
 
   function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
     const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_W);
@@ -210,32 +221,70 @@ function ImageViewer({
     onClose();
   }
 
-  return (
-    <Modal visible animationType="fade" transparent={false} onRequestClose={onClose}>
-      <View style={vs.root}>
-        <FlatList
-          ref={listRef}
-          data={urls}
-          keyExtractor={(url, idx) => `${idx}-${url}`}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          initialScrollIndex={initialIndex}
-          getItemLayout={(_, index) => ({
-            length: SCREEN_W,
-            offset: SCREEN_W * index,
-            index,
-          })}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          renderItem={({ item }) => (
-            <View style={vs.page}>
-              <Image source={{ uri: item }} style={vs.image} contentFit="contain" />
-            </View>
-          )}
-        />
+  // Swipe-down-to-dismiss. failOffsetX keeps the horizontal FlatList paging
+  // intact — the vertical gesture only activates if the user moves clearly
+  // downward without much horizontal drift. Release past 120pt OR with
+  // strong downward velocity triggers dismiss.
+  const DISMISS_DISTANCE = 120;
+  const DISMISS_VELOCITY = 800;
+  const panGesture = Gesture.Pan()
+    .activeOffsetY([10, 9999])
+    .failOffsetX([-15, 15])
+    .onUpdate((e) => {
+      // Only follow downward drag; clamp upward to 0 so it doesn't drift up
+      translateY.value = Math.max(0, e.translationY);
+    })
+    .onEnd((e) => {
+      const shouldDismiss = e.translationY > DISMISS_DISTANCE || e.velocityY > DISMISS_VELOCITY;
+      if (shouldDismiss) {
+        translateY.value = withTiming(SCREEN_H, { duration: 200 }, () => {
+          runOnJS(onClose)();
+        });
+      } else {
+        translateY.value = withSpring(0, { damping: 18, stiffness: 220 });
+      }
+    });
 
-        <View style={[vs.closeWrap, { top: insets.top + 16 }]} pointerEvents="box-none">
+  // Image translates with the drag; black backdrop fades as the user pulls
+  // down so the dismissal feels like the image is being pushed off-screen.
+  const contentStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }));
+  const backdropStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(translateY.value, [0, SCREEN_H * 0.4], [1, 0], Extrapolation.CLAMP),
+  }));
+
+  return (
+    <Modal visible animationType="fade" transparent onRequestClose={onClose}>
+      <View style={vs.root}>
+        <Animated.View style={[StyleSheet.absoluteFillObject, vs.backdrop, backdropStyle]} />
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[vs.page, contentStyle]}>
+            <FlatList
+              ref={listRef}
+              data={urls}
+              keyExtractor={(url, idx) => `${idx}-${url}`}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              initialScrollIndex={initialIndex}
+              getItemLayout={(_, index) => ({
+                length: SCREEN_W,
+                offset: SCREEN_W * index,
+                index,
+              })}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+              renderItem={({ item }) => (
+                <View style={vs.page}>
+                  <Image source={{ uri: item }} style={vs.image} contentFit="contain" />
+                </View>
+              )}
+            />
+          </Animated.View>
+        </GestureDetector>
+
+        <View style={[vs.closeWrap, { top: insets.top + 36 }]} pointerEvents="box-none">
           <TouchableOpacity
             style={vs.closeBtn}
             onPress={handleClose}
@@ -479,6 +528,8 @@ const s = StyleSheet.create({
 const vs = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  backdrop: {
     backgroundColor: '#000000',
   },
   page: {
