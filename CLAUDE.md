@@ -650,3 +650,126 @@ export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && SUPABASE_SERVICE_ROLE
 ### Kevin's User ID
 
 `eab700d8-f11a-4f47-a3a1-addda6fb67ec`
+
+---
+
+## Future Scaling Initiative
+
+This section captures everything we know about the system's scaling ceilings, the architectural work already done to push them higher, and the playbook for the next refactor when we actually need it. Read this before proposing anything that touches the dream-generation hot path.
+
+### Background — the 2026-04-30 compute-limit incident
+
+The dual face-swap pipeline started intermittently failing with HTTP **546 (`WORKER_LIMIT_EXCEEDED`)** during open-prompt dual-cast renders ("me kissing my wife", "me giving my wife a piggyback", etc.). Specific failure mode: function isolate exceeded Supabase Pro's per-invocation budget (~150 MB memory, ~2 s CPU time, 150 s wall-clock), got killed mid-execution, no DB row was ever written.
+
+**Why it surfaced exactly when it did** — three things stacked together that didn't stack during the previous night's predefined-action testing:
+
+1. **Brief size grew.** Open-prompt dual-cast briefs now include the full user-prompt SACRED block + the swap-breaking-action reframe block (~500 chars) + the face-decoration ban paragraph (~300 chars). Sonnet takes longer to respond, the function lives longer, resource accounting accumulates the entire time.
+2. **Replicate latency varies wildly under load** — observed dual-face-swap step ranging from 15s to 43s on identical work. When Replicate is slow, the function lives 30s+ longer holding all pixel state in memory.
+3. **Rapid-fire test cadence** — 8 dual renders in 5 minutes contended for Supabase's worker pool, tightening per-isolate budgets.
+
+The **fundamental issue**: the dual face-swap pipeline was always operating right at the edge of the per-invocation ceiling. The exact pixel work hadn't changed — when conditions (1)+(2)+(3) stacked on a single invocation, it crossed over.
+
+### What the dual face-swap pipeline holds in memory
+
+The dualFaceSwap path in `_shared/faceSwap.ts` holds 6+ image buffers concurrently:
+
+1. Cast photo 1 (downloaded for face-swap source)
+2. Cast photo 2 (downloaded for face-swap source)
+3. Flux render output (downloaded — 1024×1664 JPEG ~1-2 MB, ~5 MB RGBA after decode)
+4. Left 55% crop (~2.8 MB RGBA)
+5. Right 55% crop (~2.8 MB RGBA)
+6. Swapped left half (downloaded back from Replicate)
+7. Swapped right half (downloaded back from Replicate)
+8. Stitched final image (~5 MB RGBA + ~500 KB JPEG)
+
+Peak pixel data alone: ~47-50 MB. Plus V8/Deno baseline (~30-40 MB), parent-scope state (Sonnet payloads, prompt strings, supabase client), and base64 strings if the perturb path is buffering. That can spike past 90-100 MB out of 150 MB.
+
+### Phase 1 (shipped) — in-place memory hygiene in `_shared/faceSwap.ts`
+
+Three targeted fixes, no new function, no API changes. See commit history for `_shared/faceSwap.ts`.
+
+1. **`perturbSourceImage` uploads to temp storage instead of returning base64.** Earlier versions returned a ~5-7 MB base64 data URI per call; with two parallel dual-swap calls that pushed the function past the ceiling. Now uploads the perturbed JPEG to `temp/${userId}/perturbed-...jpg` and returns the public URL. Caller cleans up in a `finally` block.
+2. **Sequential post-swap downloads.** Replaced `Promise.all` on the two swap-result downloads with a sequential `for`-style flow. Costs ~500 ms wall-clock, halves the memory window where 2 JPEG buffers + 2 RGBA arrays are simultaneously live.
+3. **Eagerly null buffers after last use.** `imgData` (target RGBA) nulled after cropping; `leftPixels`/`rightPixels` nulled after JPEG encode; `leftSwapData`/`rightSwapData` nulled after stitch. Each step gives V8 a GC hint before the next allocation.
+
+**Net memory savings**: ~10-15 MB peak across the pipeline. Helped, but wasn't enough on its own — compute errors persisted under rapid testing. Phase 2 was the durable fix.
+
+### Phase 2 (shipped, dormant) — function split via `DUAL_SWAP_FANOUT` env flag
+
+A new Edge Function `face-swap-dual` (`supabase/functions/face-swap-dual/index.ts`) owns the entire `dualFaceSwap` body. It accepts `{ targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs }`, returns `{ swappedUrl }`. Each invocation gets its own fresh 150 MB memory + ~2 s CPU budget, isolated from the orchestrator.
+
+Callers (`generate-dream` + `nightly-dreams`) route through `_shared/dualSwapDispatch.ts:dispatchDualFaceSwap()`, which checks the `DUAL_SWAP_FANOUT` env var:
+
+- **`DUAL_SWAP_FANOUT=true`** → uses `supabase.functions.invoke('face-swap-dual', ...)` for memory-isolated dual swap
+- **unset / anything else** → uses in-process `dualFaceSwap()` (current behavior, kept as fallback)
+
+After Phase 2 with the flag on:
+- **generate-dream** is lightweight (Sonnet brief + Flux gen + invoke + logging, ~20-30 MB peak, <1 s CPU)
+- **face-swap-dual** holds the pixel work in its own isolate (~80-100 MB peak, ~1-1.5 s CPU)
+
+To activate: `supabase secrets set DUAL_SWAP_FANOUT=true`. To roll back: unset the secret. Zero code change either way.
+
+**Single-cast face swap is NOT split** — it's lightweight enough (~25-30 MB peak, no cropping/stitching) that it stays in-process. Same `_shared/faceSwap.ts` file, same `faceSwap()` function, same callers.
+
+### What's NOT solved by Phase 2 — the actual scaling ceilings
+
+Phase 2 fixes per-invocation reliability. It does NOT increase the ceilings on upstream services. At ~100-1000 concurrent users we'd hit different walls in this order:
+
+1. **Replicate concurrent prediction quota** — first wall. Default plans allow ~5-25 concurrent predictions. 1000 users firing dreams = 1000+ predictions queued, average wait time blows out from 8 s to several minutes. **Fix**: upgrade Replicate plan (their enterprise tier is custom-quoted) or move to a queue/worker pattern.
+2. **Anthropic Sonnet rate limits** — Tier 2 is ~4000 RPM (~67/sec) and ~80K input TPM. 1000 concurrent dream generations = ~1000 Sonnet calls in seconds → 429s. **Fix**: higher Anthropic tier, or batch/queue.
+3. **Supabase Edge Function invocation rate** — Pro has generous limits but 1000 simultaneous long-running (~30-45s) invocations is a lot of in-flight isolates. Cold-start latency and possible throttling. **Fix**: Supabase support ticket if hit, or queue+worker pattern.
+4. **Postgres connection pool** — sudden burst could exhaust the pool. **Fix**: Postgres compute upgrade.
+5. **Storage upload throughput** — usually fine, but worth monitoring.
+
+### The eventual scaling architecture — async queue + workers
+
+When Phase 2 is no longer enough (signals below), the durable refactor is to move from synchronous "user waits while everything happens" to async queue + workers:
+
+1. User taps "generate" → Edge Function inserts a queued-dream row, returns `{status: 'queued', dreamId}` in <500 ms
+2. **Worker pool** pulls from the queue, runs Sonnet + Flux + face swap. Workers can be:
+   - Edge Functions triggered on a cron (cheapest, ~1-2 min latency floor)
+   - Vercel Functions with higher memory limits (~30 s latency floor, more reliable)
+   - A dedicated worker pool on Fly.io / Railway / Modal (best for high throughput)
+3. Client subscribes to Supabase Realtime on the `uploads` row → pushed when ready
+4. Failed jobs get retried automatically with exponential backoff
+5. **Rate-limit downstream services per-worker** (Replicate, Anthropic) so we don't 429 even at 1000 concurrent users
+
+**Benefits at scale:**
+- User request returns in <500 ms (vs current ~30-45 s)
+- Demand can be buffered without crashing — burst absorbed by the queue
+- Worker count scales independently of user count
+- Per-worker rate limits keep upstream services happy
+- Failed renders retry automatically, no user re-submit needed
+
+**Cost of the refactor:** 1-2 weeks. Adds: queue table + RPC, worker function, retry/dead-letter logic, realtime subscription on the client, "queued" / "in progress" / "failed" UI states. The Phase 2 split is most of the way there — `face-swap-dual` becomes a worker, `generate-dream` becomes the dispatcher.
+
+### Signals that it's time to refactor to queue+workers
+
+Don't pre-build the queue architecture — premature for current scale. Watch for these signals and refactor when one or more starts firing:
+
+- **Replicate queue times exceed 30 s** consistently (currently 5-15 s on Flux Dev) — your renders are competing for Replicate capacity
+- **Anthropic 429s** showing up in `ai_generation_log.fallback_reasons` — Sonnet rate limit hit
+- **`generate-dream` invocation queue depth grows** in Supabase logs — Edge Function workers are saturated
+- **User complaints about long wait times** during peak hours — perceived slowness from any of the above
+- **More than ~200 concurrent users** or **more than ~10 dreams/sec sustained** — likely one of the above is about to hit
+- **Concurrent compute errors return** despite Phase 2 — Supabase per-project caps
+- **Daily renders > 5,000** — costs and capacity start to matter as a business problem
+
+Until one of these signals fires, **Phase 2 with the flag on is the right architecture for current scale**. We're not painting ourselves into a corner — the next refactor builds on what we already have.
+
+### Critical files for this initiative
+
+- `supabase/functions/_shared/faceSwap.ts` — the dual face swap pipeline. Both `faceSwap()` (single) and `dualFaceSwap()` live here. Phase 1 changes are in this file.
+- `supabase/functions/_shared/dualSwapDispatch.ts` — the flag-gated dispatcher. Phase 2 entry point.
+- `supabase/functions/face-swap-dual/index.ts` — the new isolated Edge Function created in Phase 2.
+- `supabase/functions/generate-dream/index.ts` — calls `dispatchDualFaceSwap()` for dual-cast swaps, in-process `faceSwap()` for single-cast.
+- `supabase/functions/nightly-dreams/index.ts` — same pattern. Two call sites: regular flow + dup-detect retry.
+
+### Hard rules (no exceptions)
+
+- **Don't disable Phase 1 memory hygiene** thinking it's "just optimization." Each item (perturb upload, sequential downloads, null buffers) is load-bearing. They prevent a fragile pipeline from being even more fragile.
+- **Don't add new pixel work to `dualFaceSwap` in-process.** If you need another image step (e.g., color correction, face refinement), add it as a separate Edge Function in the fanout path. The in-process pipeline is at the edge of viability already.
+- **Don't introduce another base64 data URI for image data anywhere in the swap pipeline.** Always upload to temp storage and pass URLs. The base64 path was a 10-14 MB heap hog at peak.
+- **Don't run heavy work (decode/encode/stitch) in `generate-dream` directly.** Delegate to Edge Functions. The orchestrator should stay light.
+- **Don't pre-build the queue+worker architecture** until at least one of the scaling signals above fires. Premature scaling work is the second most common way to break a working system.
+

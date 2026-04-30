@@ -34,7 +34,8 @@ import {
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
-import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
+import { faceSwap } from '../_shared/faceSwap.ts';
+import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
@@ -866,16 +867,23 @@ Output ONLY the prompt.`;
     );
 
     // Face swap: dual (two people) or single — retry up to 3x on transient
-    // timeouts (Replicate cold start). Same retry behavior as nightly.
+    // failures (Replicate cold start, 5xx, 429). Backoff between attempts
+    // gives a cold model time to boot before we hammer it again.
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
       const FACE_SWAP_MAX_RETRIES = 3;
+      const FACE_SWAP_BACKOFF_MS = [2_000, 4_000]; // before attempt 2, attempt 3
       let swapSuccess = false;
       for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
         try {
+          if (attempt > 1) {
+            const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+            console.log(`[generate-dream] Backoff ${delay}ms before retry ${attempt}`);
+            await new Promise((r) => setTimeout(r, delay));
+          }
           console.log(
             `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
           );
-          tempUrl = await dualFaceSwap(
+          tempUrl = await dispatchDualFaceSwap(
             faceSwapSources[0].sourceUrl,
             faceSwapSources[1].sourceUrl,
             tempUrl,
@@ -925,7 +933,7 @@ Output ONLY the prompt.`;
         }
         console.log('[generate-dream] ⏱ Face swap upload done, starting swap...');
 
-        tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
+        tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN, supabase, userId);
 
         if (swapFileName) {
           supabase.storage

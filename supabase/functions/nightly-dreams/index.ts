@@ -26,7 +26,8 @@ import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
-import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
+import { faceSwap } from '../_shared/faceSwap.ts';
+import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import {
   aHashHex,
   hammingDistance,
@@ -1047,16 +1048,23 @@ Output ONLY the prompt.`;
       `[nightly-dreams] Image generation complete (prediction: ${genResult.predictionId})`
     );
 
-    // Face swap: dual (two people) or single — retry up to 3 times.
+    // Face swap: dual (two people) or single — retry up to 3 times with
+    // backoff between attempts so a cold Replicate model has time to boot.
     const FACE_SWAP_MAX_RETRIES = 3;
+    const FACE_SWAP_BACKOFF_MS = [2_000, 4_000];
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
       let swapSuccess = false;
       for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
         try {
+          if (attempt > 1) {
+            const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+            console.log(`[nightly-dreams] Backoff ${delay}ms before retry ${attempt}`);
+            await new Promise((r) => setTimeout(r, delay));
+          }
           console.log(
             `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
           );
-          tempUrl = await dualFaceSwap(
+          tempUrl = await dispatchDualFaceSwap(
             faceSwapSources[0].sourceUrl,
             faceSwapSources[1].sourceUrl,
             tempUrl,
@@ -1087,9 +1095,16 @@ Output ONLY the prompt.`;
     } else if (faceSwapSource && tempUrl) {
       for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
         try {
+          if (attempt > 1) {
+            const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+            console.log(`[nightly-dreams] Backoff ${delay}ms before retry ${attempt}`);
+            await new Promise((r) => setTimeout(r, delay));
+          }
           const sourceUrl = faceSwapSource;
           console.log(`[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`);
-          tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN);
+          tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN, supabase, userId, {
+            retry: false,
+          });
           lap('face-swap-model');
           console.log('[nightly-dreams] Face swap complete');
           logAxes.faceSwapResult = 'success';
@@ -1168,7 +1183,7 @@ Output ONLY the prompt.`;
         if (dupAttempt > 0) await new Promise((r) => setTimeout(r, 350));
         try {
           if (faceSwapSources && faceSwapSources.length === 2) {
-            tempUrl = await dualFaceSwap(
+            tempUrl = await dispatchDualFaceSwap(
               faceSwapSources[0].sourceUrl,
               faceSwapSources[1].sourceUrl,
               genResult.url,
@@ -1178,7 +1193,13 @@ Output ONLY the prompt.`;
               t0 + 140_000
             );
           } else if (faceSwapSource) {
-            tempUrl = await faceSwap(faceSwapSource, genResult.url, REPLICATE_TOKEN);
+            tempUrl = await faceSwap(
+              faceSwapSource,
+              genResult.url,
+              REPLICATE_TOKEN,
+              supabase,
+              userId
+            );
           }
         } catch (err) {
           console.warn(`[dup-detect] retry face swap failed:`, (err as Error).message);
