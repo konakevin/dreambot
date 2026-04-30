@@ -928,11 +928,21 @@ Output ONLY the prompt.`;
       } else {
         finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
       }
-    } else if (composition === 'character' && resolvedCast.length === 2) {
-      // Non-face-swap dual cast: bake the SPECIFIC cast descriptions into
-      // the prepend so Flux locks gender + identifying traits at the front
-      // of the prompt. Without this Flux invents random pairs (two girls,
-      // two boys, generic strangers).
+    } else if (
+      composition === 'character' &&
+      resolvedCast.length === 2 &&
+      renderMode !== 'embodied'
+    ) {
+      // Non-face-swap dual cast (NATURAL mediums only): bake the SPECIFIC
+      // cast descriptions into the prepend so Flux locks gender + identifying
+      // traits at the front of the prompt. Without this Flux invents random
+      // pairs (two girls, two boys, generic strangers).
+      //
+      // SKIPPED for embodied mediums (LEGO/claymation/vinyl/pixels/animation):
+      // raw natural-prose descriptions ("a friendly man in his mid-30s with
+      // hazel-brown eyes...") at the front of the prompt force Flux to render
+      // photoreal humans, defeating the embodied medium directive. Sonnet's
+      // prompt body + the medium directive carry character identity for these.
       const shortDesc = (full: string): string => {
         // Pull the first ~16 words to get age + gender + 1-2 traits.
         const words = full.split(/\s+/).slice(0, 16).join(' ');
