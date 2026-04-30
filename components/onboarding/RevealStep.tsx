@@ -312,7 +312,10 @@ export function RevealStep({ onBack }: Props) {
 
       reset();
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      router.replace('/(tabs)');
+      // First-time post: route to the Meet-the-bots showcase before home.
+      // The screen sets the AsyncStorage flag on mount so users can't get
+      // re-trapped here on subsequent runs.
+      router.replace('/onboarding/meet-the-bots');
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Create error:', err);
       setPhase('reveal');

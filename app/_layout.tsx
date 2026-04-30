@@ -389,6 +389,7 @@ export default function RootLayout() {
               <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
               <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
               <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
+              <Stack.Screen name="onboarding/meet-the-bots" options={SCREEN_PRESETS.MODAL_LOCKED} />
             </Stack>
             <StatusBar style="light" />
             <ToastHost />

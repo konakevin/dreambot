@@ -488,6 +488,7 @@ export type Database = {
           allowed_models: string[] | null;
           character_render_mode: string;
           created_at: string;
+          description: string | null;
           directive: string;
           engine: string | null;
           face_swaps: boolean;
@@ -507,6 +508,7 @@ export type Database = {
           allowed_models?: string[] | null;
           character_render_mode?: string;
           created_at?: string;
+          description?: string | null;
           directive: string;
           engine?: string | null;
           face_swaps?: boolean;
@@ -526,6 +528,7 @@ export type Database = {
           allowed_models?: string[] | null;
           character_render_mode?: string;
           created_at?: string;
+          description?: string | null;
           directive?: string;
           engine?: string | null;
           face_swaps?: boolean;
@@ -546,6 +549,7 @@ export type Database = {
       dream_vibes: {
         Row: {
           created_at: string;
+          description: string | null;
           directive: string;
           is_active: boolean;
           key: string;
@@ -555,6 +559,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          description?: string | null;
           directive: string;
           is_active?: boolean;
           key: string;
@@ -564,6 +569,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          description?: string | null;
           directive?: string;
           is_active?: boolean;
           key?: string;
@@ -1237,6 +1243,8 @@ export type Database = {
           is_public: boolean;
           like_count: number;
           media_type: string;
+          output_hash: string | null;
+          output_phash: string | null;
           posted_at: string | null;
           recipe_id: string | null;
           save_count: number;
@@ -1272,6 +1280,8 @@ export type Database = {
           is_public?: boolean;
           like_count?: number;
           media_type?: string;
+          output_hash?: string | null;
+          output_phash?: string | null;
           posted_at?: string | null;
           recipe_id?: string | null;
           save_count?: number;
@@ -1307,6 +1317,8 @@ export type Database = {
           is_public?: boolean;
           like_count?: number;
           media_type?: string;
+          output_hash?: string | null;
+          output_phash?: string | null;
           posted_at?: string | null;
           recipe_id?: string | null;
           save_count?: number;
@@ -1495,6 +1507,13 @@ export type Database = {
         };
         Returns: undefined;
       };
+      get_bot_thumbnails: {
+        Args: { p_per_bot?: number };
+        Returns: {
+          bot_user_id: string;
+          thumbnail_urls: string[];
+        }[];
+      };
       get_bot_users: {
         Args: never;
         Returns: {
@@ -1521,12 +1540,12 @@ export type Database = {
         Args: never;
         Returns: {
           character_render_mode: string;
+          description: string;
           directive: string;
           face_swaps: boolean;
           flux_fragment: string;
           is_character_only: boolean;
           key: string;
-          kontext_directive: string;
           label: string;
           sort_order: number;
         }[];
@@ -1534,10 +1553,11 @@ export type Database = {
       get_dream_vibes: {
         Args: never;
         Returns: {
+          description: string;
           directive: string;
           key: string;
           label: string;
-          mood_profile: Json;
+          sort_order: number;
         }[];
       };
       get_feed: {
@@ -1643,6 +1663,15 @@ export type Database = {
       record_impression: {
         Args: { p_upload_id: string; p_user_id: string };
         Returns: undefined;
+      };
+      refund_sparkles: {
+        Args: {
+          p_amount: number;
+          p_reason: string;
+          p_reference_id: string;
+          p_user_id: string;
+        };
+        Returns: boolean;
       };
       spend_sparkles: {
         Args: {
