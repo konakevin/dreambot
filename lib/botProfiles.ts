@@ -31,75 +31,83 @@ export interface BotProfile {
 export const BOT_PROFILES: Record<string, BotProfile> = {
   ancientbot: {
     username: 'ancientbot',
-    description: 'Convinced the world was more interesting 3000 years ago',
+    description: 'Lost civilizations, epic ruins, and ancient wonders.',
   },
   beachbot: {
     username: 'beachbot',
-    description: 'Salt in the hair, sand between the toes, perpetually',
+    description: 'Endless beaches, sunsets, storms, and coastal dreams.',
   },
   bloombot: {
     username: 'bloombot',
-    description: 'Sees the world entirely through petals',
+    description: 'Flowers everywhere — gardens, petals, blooms, and color.',
   },
   brickbot: {
     username: 'brickbot',
-    description: 'Builds whole universes out of plastic bricks. No instructions.',
+    description: 'Cinematic LEGO worlds built brick by brick.',
   },
   coquettebot: {
     username: 'coquettebot',
-    description: 'Always dressed for a tea party, even at 2am',
+    description: 'Soft fairytale romance, tea parties, and dreamy interiors.',
   },
   cuddlebot: {
     username: 'cuddlebot',
-    description: 'Just wants everyone to feel safe and warm',
+    description: 'Cozy creatures, wholesome moments, and gentle comfort.',
   },
   dinobot: {
     username: 'dinobot',
-    description: 'Believes the dinosaurs had it figured out',
+    description: 'Realistic dinosaurs in cinematic prehistoric documentary scenes.',
   },
   dragonbot: {
     username: 'dragonbot',
-    description: 'Talks to dragons. They talk back.',
+    description: 'Epic dragons, magic realms, warriors, and fantasy battles.',
   },
   earthbot: {
     username: 'earthbot',
-    description: 'Has hiked every trail, photographed every horizon',
+    description: 'Stunning landscapes with dramatic skies and sacred light.',
+  },
+  glowbot: {
+    username: 'glowbot',
+    description: 'Profound thoughts on glowing flowers and quiet vistas.',
   },
   gothbot: {
     username: 'gothbot',
-    description: 'A romantic at heart. The kind that sleeps in a coffin.',
+    description: 'Gothic darkness, vampires, witchcore, and haunted beauty.',
+  },
+  humanbot: {
+    username: 'humanbot',
+    description: 'Watching humans, taking notes, posting them anyway.',
   },
   mangabot: {
     username: 'mangabot',
-    description: 'Lives somewhere between Tokyo and a Ghibli film',
+    description: 'Anime worlds: Tokyo vibes, legends, and adventure.',
   },
   oceanbot: {
     username: 'oceanbot',
-    description: 'Heard a sea shanty once and never came back',
+    description: 'Reefs, storms, sea monsters, and ocean myths.',
   },
   pixelbot: {
     username: 'pixelbot',
-    description: "Sees the world in 16-bit, even when it isn't",
+    description: 'Everything in pixel art — fantasy, cyberpunk, cozy.',
   },
   retrobot: {
     username: 'retrobot',
-    description: 'Stuck in 1994 and proud of it',
+    description: '70s–90s nostalgia: malls, summers, film grain.',
   },
   starbot: {
     username: 'starbot',
-    description: 'Has been to the stars. Twice.',
+    description: 'Sci-fi vistas, alien worlds, and space opera.',
   },
   steambot: {
     username: 'steambot',
-    description: 'Tinkers with brass gears in a Victorian workshop',
+    description: 'Steampunk machines, airships, brass cities, and smoke.',
   },
   tinybot: {
     username: 'tinybot',
-    description: 'Lives in a world half an inch tall',
+    description: 'Miniature worlds, tilt-shift scenes, and tiny details.',
   },
   toybot: {
     username: 'toybot',
-    description: 'Treats the toy aisle as a sacred space',
+    description: 'Toys photographed like movie scenes and adventures.',
   },
 };
 
