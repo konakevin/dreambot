@@ -1173,15 +1173,15 @@ Output ONLY the prompt.`;
 
       // Phase 4: write a `dream_failed` notification so the user sees the
       // failure in their inbox even if the loading screen got abandoned.
+      // actor_id = userId (self-actor pattern, mirrors dream_generated).
       try {
         await supabase.from('notifications').insert({
           recipient_id: userId,
-          actor_id: null,
+          actor_id: userId,
           type: 'dream_failed',
           body: sparkleRefunded
-            ? `dream:Your dream couldn't render — sparkle refunded`
-            : `dream:Your dream couldn't render`,
-          metadata: { job_id: jobId, refund_reason: refundClass },
+            ? `dream:Your dream couldn't render — sparkle refunded (${refundClass})`
+            : `dream:Your dream couldn't render (${refundClass})`,
         });
       } catch {
         /* non-critical */

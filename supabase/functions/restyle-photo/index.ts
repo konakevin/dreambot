@@ -506,12 +506,11 @@ Deno.serve(async (req) => {
       try {
         await supabase.from('notifications').insert({
           recipient_id: userId,
-          actor_id: null,
+          actor_id: userId,
           type: 'dream_failed',
           body: sparkleRefunded
-            ? `dream:Your dream couldn't render — sparkle refunded`
-            : `dream:Your dream couldn't render`,
-          metadata: { job_id: jobId, refund_reason: refundClass },
+            ? `dream:Your dream couldn't render — sparkle refunded (${refundClass})`
+            : `dream:Your dream couldn't render (${refundClass})`,
         });
       } catch {
         /* non-critical */

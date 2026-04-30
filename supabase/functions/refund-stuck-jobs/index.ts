@@ -104,16 +104,16 @@ Deno.serve(async (req) => {
       // Phase 4: also notify the user. Failure notifications are kind of
       // gentle — the loading screen probably already showed transport
       // error if the client was watching, but if they backgrounded we want
-      // them to see it on next inbox visit.
+      // them to see it on next inbox visit. actor_id = recipient (self-actor
+      // pattern, mirrors dream_generated notifications).
       try {
         await supabase.from('notifications').insert({
           recipient_id: job.user_id,
-          actor_id: null,
+          actor_id: job.user_id,
           type: 'dream_failed',
           body: didRefund
-            ? `dream:Your dream couldn't render — sparkle refunded`
-            : `dream:Your dream couldn't render`,
-          metadata: { job_id: job.id, refund_reason: 'timeout' },
+            ? `dream:Your dream couldn't render — sparkle refunded (timeout)`
+            : `dream:Your dream couldn't render (timeout)`,
         });
       } catch {
         // Non-critical — refund already landed
