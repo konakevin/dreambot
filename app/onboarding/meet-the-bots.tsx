@@ -31,7 +31,7 @@ import {
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/lib/supabase';
@@ -195,6 +195,7 @@ function ImageViewer({
 }) {
   const listRef = useRef<FlatList<string>>(null);
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const insets = useSafeAreaInsets();
 
   function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
     const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_W);
@@ -234,7 +235,7 @@ function ImageViewer({
           )}
         />
 
-        <SafeAreaView style={vs.closeWrap} pointerEvents="box-none">
+        <View style={[vs.closeWrap, { top: insets.top + 16 }]} pointerEvents="box-none">
           <TouchableOpacity
             style={vs.closeBtn}
             onPress={handleClose}
@@ -243,7 +244,7 @@ function ImageViewer({
           >
             <Ionicons name="close" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-        </SafeAreaView>
+        </View>
       </View>
     </Modal>
   );
@@ -492,11 +493,9 @@ const vs = StyleSheet.create({
   },
   closeWrap: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    right: 12,
   },
   closeBtn: {
-    margin: 12,
     width: 40,
     height: 40,
     borderRadius: 20,
