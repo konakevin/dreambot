@@ -307,7 +307,7 @@ export function RevealStep({ onBack }: Props) {
         actor_id: user.id,
         type: 'dream_generated',
         upload_id: insertedRow?.id ?? null,
-        body: "welcome:Hello, I'm DreamBot, your new AI buddy. Here's 25 Sparkles to help you get dreaming. Sweet Dreams!",
+        body: "welcome:Hey. I'm your DreamBot. I left you 25 sparkles to start dreaming. Sleep well.",
       });
 
       reset();
@@ -488,10 +488,10 @@ export function RevealStep({ onBack }: Props) {
             )}
             {revealBeat === 2 && (
               <>
-                <Text style={s.revealTitle}>It dreams while you sleep</Text>
+                <Text style={s.revealTitle}>This happens every night</Text>
                 <Text style={s.revealBody}>
-                  Your DreamBot will dream a fresh one tonight. You&apos;ll wake up to a new dream
-                  in your feed every morning.
+                  Your DreamBot makes a new one while you sleep. Tomorrow morning, it&apos;ll be
+                  waiting.
                 </Text>
                 <TouchableOpacity
                   style={s.createButton}

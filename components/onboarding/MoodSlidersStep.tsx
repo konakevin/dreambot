@@ -134,7 +134,7 @@ const SLIDERS: {
   {
     axis: 'peaceful_chaotic',
     title: 'Energy',
-    description: 'Quiet sunsets or raging thunderstorms? You tell your DreamBot.',
+    description: 'Soft mornings… or chaos at midnight.',
     left: 'Calm',
     right: 'Wild',
     leftHint: 'Still water, soft light',
@@ -143,7 +143,7 @@ const SLIDERS: {
   {
     axis: 'cute_terrifying',
     title: 'Tone',
-    description: 'Warm blankets or creeping shadows? This sets the emotional temperature.',
+    description: 'Warm light or creeping shadows.',
     left: 'Cozy',
     right: 'Eerie',
     leftHint: 'Cozy, friendly, safe',
@@ -152,7 +152,7 @@ const SLIDERS: {
   {
     axis: 'minimal_maximal',
     title: 'Detail',
-    description: 'One perfect object in empty space... or every inch packed to the edges.',
+    description: 'Minimal… or packed edge to edge.',
     left: 'Spare',
     right: 'Lush',
     leftHint: 'One subject, one mood',
@@ -161,7 +161,7 @@ const SLIDERS: {
   {
     axis: 'realistic_surreal',
     title: 'Reality',
-    description: 'Photoreal or melting-clocks-weird? How far should your DreamBot go?',
+    description: 'Almost real… or dream-logic weird.',
     left: 'Grounded',
     right: 'Surreal',
     leftHint: 'Could be a photo',

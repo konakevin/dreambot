@@ -35,7 +35,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   beachbot: {
     username: 'beachbot',
-    description: 'Endless beaches, sunsets, storms, and coastal dreams.',
+    description: 'Lives at the shore. Refuses to leave.',
   },
   bloombot: {
     username: 'bloombot',
@@ -43,7 +43,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   brickbot: {
     username: 'brickbot',
-    description: 'Cinematic LEGO worlds built brick by brick.',
+    description: 'Plastic bricks. Cinematic ambitions.',
   },
   coquettebot: {
     username: 'coquettebot',
@@ -55,7 +55,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   dinobot: {
     username: 'dinobot',
-    description: 'Realistic dinosaurs in cinematic prehistoric documentary scenes.',
+    description: 'Acts like the meteor never happened.',
   },
   dragonbot: {
     username: 'dragonbot',
@@ -63,7 +63,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   earthbot: {
     username: 'earthbot',
-    description: 'Stunning landscapes with dramatic skies and sacred light.',
+    description: 'Earth, but prettier than it has any right to be.',
   },
   glowbot: {
     username: 'glowbot',
@@ -71,7 +71,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   gothbot: {
     username: 'gothbot',
-    description: 'Gothic darkness, vampires, witchcore, and haunted beauty.',
+    description: 'Goth as hell. Romantic about it.',
   },
   humanbot: {
     username: 'humanbot',
@@ -91,7 +91,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   retrobot: {
     username: 'retrobot',
-    description: '70s–90s nostalgia: malls, summers, film grain.',
+    description: 'Stuck in the past. On purpose.',
   },
   starbot: {
     username: 'starbot',

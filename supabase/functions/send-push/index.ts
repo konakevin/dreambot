@@ -21,6 +21,28 @@ interface WebhookPayload {
   };
 }
 
+// Rotating push copy for the nightly-dream notification. Short, mysterious,
+// personal — leans on the "while you slept" emotional hook. Picked at random
+// per-send so users don't see the same line every morning.
+const DREAM_PUSH_TITLES = [
+  'New dream waiting',
+  'Your DreamBot made something',
+  'It dreamed while you slept',
+  'A new dream just landed',
+];
+const DREAM_PUSH_BODIES = [
+  'Tap to see what it made.',
+  'You were sleeping. It wasn’t.',
+  'Painted just for you.',
+  'Open to see tonight’s dream.',
+];
+function pickDreamPushTitle(): string {
+  return DREAM_PUSH_TITLES[Math.floor(Math.random() * DREAM_PUSH_TITLES.length)];
+}
+function pickDreamPushBody(): string {
+  return DREAM_PUSH_BODIES[Math.floor(Math.random() * DREAM_PUSH_BODIES.length)];
+}
+
 function getNotificationContent(type: string, actorName: string, body: string | null) {
   switch (type) {
     case 'post_comment':
@@ -40,9 +62,13 @@ function getNotificationContent(type: string, actorName: string, body: string | 
     case 'follow_accepted':
       return { title: `${actorName} accepted your follow request`, body: '' };
     case 'dream_generated':
+      // Rotating push copy — short, mysterious, personal. The emotional hook
+      // of DreamBot is "while you slept," so leaning into that. If the
+      // notification body field is populated (e.g., wish text), prefer that;
+      // otherwise rotate one of the curated lines.
       return {
-        title: 'A new dream awaits',
-        body: body ?? 'DreamBot created something for you',
+        title: pickDreamPushTitle(),
+        body: body ?? pickDreamPushBody(),
       };
     default:
       return { title: 'New notification', body: '' };

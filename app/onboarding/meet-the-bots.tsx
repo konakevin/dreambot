@@ -178,7 +178,7 @@ export default function MeetTheBotsScreen() {
 
       <View style={s.footer}>
         <TouchableOpacity style={s.doneBtn} onPress={handleDone} activeOpacity={0.7}>
-          <Text style={s.doneBtnText}>Done</Text>
+          <Text style={s.doneBtnText}>Take me to my feed</Text>
         </TouchableOpacity>
       </View>
 

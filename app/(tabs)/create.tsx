@@ -32,8 +32,13 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
+
+// One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
+// opens the Create tab. Stops surfacing once dismissed (per-device flag).
+const SEEN_SPARKLE_HINT_KEY = 'dreambot.seenSparkleHint.v1';
 import { vs } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -84,6 +89,33 @@ export default function CreateScreen() {
         }
       });
   }, [user]);
+
+  // First-Create-tap teaching toast — explains the sparkle unit cost the
+  // moment a new user opens the Create tab. Fires ONCE per device per
+  // install (AsyncStorage flag), then never surfaces again.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const seen = await AsyncStorage.getItem(SEEN_SPARKLE_HINT_KEY);
+        if (seen === '1' || cancelled) return;
+        // Wait a tick so the toast doesn't fight the screen mount animation
+        setTimeout(() => {
+          if (cancelled) return;
+          Toast.show(`1 sparkle = 1 dream. You've got ${sparkleBalance}.`, 'sparkles');
+          AsyncStorage.setItem(SEEN_SPARKLE_HINT_KEY, '1').catch(() => {});
+        }, 700);
+      } catch {
+        // Toast is non-critical; silent fail
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // Only run once on mount — sparkleBalance is captured in closure but
+    // we deliberately don't re-fire when it changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
