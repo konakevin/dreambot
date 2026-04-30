@@ -16,6 +16,7 @@ import { useDreamCreate } from '@/hooks/useDreamCreate';
 import { useDreamStore } from '@/store/dream';
 import { Toast } from '@/components/Toast';
 import type { PhotoClassification } from '@/lib/dreamApi';
+import { DreamFailureCard } from '@/components/DreamFailureCard';
 
 const TIPS = [
   'Dreaming up something special...',
@@ -32,6 +33,10 @@ export default function DreamLoadingScreen() {
   const started = useRef(false);
   const queued = useRef(false);
   const [showQueue, setShowQueue] = useState(false);
+  // Failure state set by useDreamCreate's catch block. When non-null, the
+  // failure card is rendered and the spinner is hidden.
+  const failure = useDreamStore((s) => s.activeJobFailure);
+  const setActiveJobFailure = useDreamStore((s) => s.setActiveJobFailure);
 
   // Classification confirmation modal — shown when photo is ambiguous (group/unclear).
   // The Promise resolver is held in a ref so the generate() hook can await user input.
@@ -63,6 +68,9 @@ export default function DreamLoadingScreen() {
     if (started.current) return;
     started.current = true;
 
+    // Reset any prior failure state when a new generation starts
+    setActiveJobFailure(null);
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     generate(requestConfirmation).then((status) => {
@@ -74,12 +82,26 @@ export default function DreamLoadingScreen() {
       } else if (status === 'cancelled') {
         // User cancelled at classification modal — back to Create, no charge
         router.back();
-      } else {
-        // Error — go back to configure (or create if no configure step)
-        router.back();
       }
+      // status === 'error' → stay on this screen and let the failure card
+      // (driven by activeJobFailure in the store) take over. The user can
+      // tap "Try Again" or "Back to Dream" from there.
     });
-  }, [generate]);
+  }, [generate, setActiveJobFailure]);
+
+  function handleRetry() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setActiveJobFailure(null);
+    started.current = false;
+    // Re-trigger the generation effect by setting started back to false and
+    // forcing a re-mount via router.replace to the same path
+    router.replace('/dream/loading');
+  }
+
+  function handleDismissFailure() {
+    setActiveJobFailure(null);
+    router.back();
+  }
 
   // Show "Queue This" button immediately
   useEffect(() => {
@@ -109,13 +131,24 @@ export default function DreamLoadingScreen() {
     <SafeAreaView style={s.container}>
       <View style={s.content}>
         <Image source={{ uri: mascotUrl }} style={s.mascot} contentFit="cover" />
-        <ActivityIndicator size="large" color={colors.accent} style={s.spinner} />
-        <Text style={s.tip}>{tip}</Text>
-        {showQueue && (
-          <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
-            <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
-            <Text style={s.queueText}>Queue This</Text>
-          </TouchableOpacity>
+        {!failure && (
+          <>
+            <ActivityIndicator size="large" color={colors.accent} style={s.spinner} />
+            <Text style={s.tip}>{tip}</Text>
+            {showQueue && (
+              <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
+                <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
+                <Text style={s.queueText}>Queue This</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        )}
+        {failure && (
+          <DreamFailureCard
+            failure={failure}
+            onRetry={handleRetry}
+            onDismiss={handleDismissFailure}
+          />
         )}
       </View>
 

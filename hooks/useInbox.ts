@@ -15,6 +15,7 @@ export interface NotificationItem {
     | 'friend_request'
     | 'friend_accepted'
     | 'dream_generated'
+    | 'dream_failed'
     | 'post_like'
     | 'post_fuse'
     | 'follow_request'

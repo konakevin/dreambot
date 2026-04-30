@@ -911,7 +911,16 @@ Output ONLY the prompt.`;
           }
         }
       }
-      void swapSuccess;
+      // Phase 3 / Option A: if all 3 attempts exhausted both primary and the
+      // entire fallback chain, this is a hard fail. The user paid for
+      // "me + my wife" but face-swap couldn't deliver it. Throw so the outer
+      // catch refunds the sparkle. Previously this fell through with
+      // unswapped output (random Sonnet faces) and no refund.
+      if (!swapSuccess) {
+        throw new Error(
+          `face_swap: dual cast face swap exhausted after ${FACE_SWAP_MAX_RETRIES} attempts (${logAxes.faceSwapError ?? 'unknown'})`
+        );
+      }
     } else if (faceSwapSource && tempUrl) {
       try {
         let sourceUrl: string;
@@ -945,13 +954,15 @@ Output ONLY the prompt.`;
         console.log('[generate-dream] ⏱ Face swap complete');
         logAxes.faceSwapResult = 'success';
       } catch (err) {
-        console.warn(
-          '[generate-dream] Face swap failed, using unswapped image:',
-          (err as Error).message
-        );
+        console.warn('[generate-dream] Single face swap failed:', (err as Error).message);
         fallbackReasons.push(`face_swap_failed:${(err as Error).message}`);
         logAxes.faceSwapResult = 'failed';
         logAxes.faceSwapError = (err as Error).message;
+        // Phase 3 / Option A: hard-fail when single-cast face swap exhausts
+        // (cdingram → yan-ops → pikachupichu25 fallback chain). The user
+        // requested a self-insert dream; without the swap, the output has a
+        // generic Sonnet face. Throw to refund.
+        throw new Error(`face_swap: single cast face swap exhausted (${(err as Error).message})`);
       }
     }
 
@@ -1028,8 +1039,12 @@ Output ONLY the prompt.`;
         ),
     ]);
     uploadId = uploadResult.data?.id;
-    if (uploadResult.error) {
-      console.error('[generate-dream] Failed to create draft upload:', uploadResult.error.message);
+    if (uploadResult.error || !uploadId) {
+      // Throw so the outer catch refunds the sparkle. Previously we logged
+      // and continued, leaving the user with no visible dream AND no refund.
+      throw new Error(
+        `db_insert: uploads insert failed (${uploadResult.error?.message ?? 'no row returned'})`
+      );
     }
 
     // Job update + notification in parallel (both need uploadId but not each other)
@@ -1097,26 +1112,51 @@ Output ONLY the prompt.`;
     );
   } catch (err) {
     const errMsg = (err as Error).message;
-    const isNsfw =
-      errMsg.startsWith('NSFW_CONTENT') || errMsg.includes('NSFW') || errMsg.includes('safety');
     console.error(`[generate-dream] Error for user ${userId}:`, errMsg);
 
-    // Ship 2.5: NSFW sparkle refund — unconditional on NSFW (not gated by jobId).
-    // Server owns the refund; client should NOT double-refund.
-    if (isNsfw) {
+    // ── Classify the failure for refund + UI messaging ──
+    // Every hard-fail category routes to refund_sparkles (idempotent on jobId).
+    // Soft-fails are NOT thrown — they fall through with degraded output and
+    // return 200, so they never reach this catch.
+    const refundClass = classifyFailure(errMsg);
+    const isNsfw = refundClass === 'nsfw';
+
+    // Server-side refund — only fires when we have a jobId (reference for
+    // idempotency). Refunds without a jobId fall back to the legacy
+    // grant_sparkles path for NSFW so existing behavior is preserved.
+    let sparkleRefunded = false;
+    if (jobId) {
+      try {
+        const { data: refunded } = await supabase.rpc('refund_sparkles', {
+          p_user_id: userId,
+          p_amount: 1,
+          p_reason: `refund:hard_fail:${refundClass}`,
+          p_reference_id: jobId,
+        });
+        // refund_sparkles returns false if a prior refund already exists for
+        // this jobId. Both outcomes mean "user is whole" from their POV.
+        sparkleRefunded = true;
+        console.log(
+          `[generate-dream] Refund applied (class=${refundClass}, prior=${refunded === false})`
+        );
+      } catch (refundErr) {
+        console.error('[generate-dream] Refund FAILED:', (refundErr as Error).message);
+      }
+    } else if (isNsfw) {
+      // Legacy fallback for callers that didn't send a jobId
       try {
         await supabase.rpc('grant_sparkles', {
           p_user_id: userId,
           p_amount: 1,
           p_reason: 'nsfw_refund',
         });
-        console.log('[generate-dream] NSFW sparkle refunded');
+        sparkleRefunded = true;
       } catch (refundErr) {
-        console.error('[generate-dream] NSFW refund FAILED:', (refundErr as Error).message);
+        console.error('[generate-dream] Legacy NSFW refund FAILED:', (refundErr as Error).message);
       }
     }
 
-    // Update dream job on failure (best-effort)
+    // Update dream_jobs status (best-effort)
     if (jobId) {
       try {
         await supabase
@@ -1130,18 +1170,57 @@ Output ONLY the prompt.`;
       } catch {
         /* non-critical */
       }
+
+      // Phase 4: write a `dream_failed` notification so the user sees the
+      // failure in their inbox even if the loading screen got abandoned.
+      try {
+        await supabase.from('notifications').insert({
+          recipient_id: userId,
+          actor_id: null,
+          type: 'dream_failed',
+          body: sparkleRefunded
+            ? `dream:Your dream couldn't render — sparkle refunded`
+            : `dream:Your dream couldn't render`,
+          metadata: { job_id: jobId, refund_reason: refundClass },
+        });
+      } catch {
+        /* non-critical */
+      }
     }
 
     return new Response(
       JSON.stringify({
         error: errMsg,
-        nsfw: isNsfw, // explicit flag — clients should branch on this
-        sparkle_refunded: isNsfw, // tells client to refresh balance
+        hard_fail: true,
+        nsfw: isNsfw, // legacy field — clients still branch on this for NSFW copy
+        sparkle_refunded: sparkleRefunded,
+        refund_reason: refundClass,
+        job_id: jobId ?? null,
       }),
       { status: 500 }
     );
   }
 });
+
+// ── Failure classification ────────────────────────────────────────────
+//
+// Maps an error message string to a refund class. Reasons land in
+// sparkle_transactions.reason as `refund:hard_fail:<class>` so we can audit
+// which failure mode is most common and where to invest reliability work.
+
+function classifyFailure(errMsg: string): string {
+  const m = errMsg.toLowerCase();
+  if (m.startsWith('nsfw_content') || m.includes('nsfw') || m.includes('safety')) return 'nsfw';
+  if (m.includes('flux') && (m.includes('failed') || m.includes('timed out'))) return 'flux_gen';
+  if (m.includes('replicate') && (m.includes('failed') || m.includes('5'))) return 'flux_gen';
+  if (m.includes('persiststorage') || m.includes('storage upload')) return 'storage_upload';
+  if (m.includes('upload') && m.includes('failed')) return 'storage_upload';
+  if (m.includes('uploads insert') || m.includes('db insert')) return 'db_insert';
+  if (m.includes('face swap') || m.includes('face_swap')) return 'face_swap';
+  if (m.includes('rate limit') || m.includes('rate-limit')) return 'rate_limit';
+  if (m.includes('timed out') || m.includes('deadline')) return 'timeout';
+  return 'unknown';
+}
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

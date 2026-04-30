@@ -74,6 +74,13 @@ function getNotificationText(item: NotificationItem): { action: string; preview:
         preview: botMsg || null,
       };
     }
+    case 'dream_failed': {
+      const body = item.body?.replace(/^dream:/, '') || null;
+      return {
+        action: "Your dream couldn't render",
+        preview: body,
+      };
+    }
     case 'post_like':
       return { action: 'liked your dream', preview: null };
     case 'post_fuse':
@@ -95,6 +102,8 @@ function getNotificationIcon(type: NotificationItem['type']): string {
       return 'at';
     case 'dream_generated':
       return 'sparkles';
+    case 'dream_failed':
+      return 'cloud-offline-outline';
     case 'post_like':
       return 'heart';
     case 'post_fuse':

@@ -452,25 +452,42 @@ Deno.serve(async (req) => {
       () => {}
     );
 
-    const isNsfw =
-      errMsg.startsWith('NSFW_CONTENT') || errMsg.includes('NSFW') || errMsg.includes('safety');
+    // ── Classify the failure for refund + UI messaging ──
+    const refundClass = classifyFailure(errMsg);
+    const isNsfw = refundClass === 'nsfw';
 
-    // Ship 2.5: NSFW sparkle refund — unconditional on NSFW (not gated by jobId).
-    // Server owns the refund; client should NOT double-refund.
-    if (isNsfw) {
+    // Server-side refund — only fires when we have a jobId. Without a jobId,
+    // refund_sparkles can't enforce idempotency, so fall back to legacy NSFW path.
+    let sparkleRefunded = false;
+    if (jobId) {
+      try {
+        const { data: refunded } = await supabase.rpc('refund_sparkles', {
+          p_user_id: userId,
+          p_amount: 1,
+          p_reason: `refund:hard_fail:${refundClass}`,
+          p_reference_id: jobId,
+        });
+        sparkleRefunded = true;
+        console.log(
+          `[restyle-photo] Refund applied (class=${refundClass}, prior=${refunded === false})`
+        );
+      } catch (refundErr) {
+        console.error('[restyle-photo] Refund FAILED:', (refundErr as Error).message);
+      }
+    } else if (isNsfw) {
       try {
         await supabase.rpc('grant_sparkles', {
           p_user_id: userId,
           p_amount: 1,
           p_reason: 'nsfw_refund',
         });
-        console.log('[restyle-photo] NSFW sparkle refunded');
+        sparkleRefunded = true;
       } catch (refundErr) {
-        console.error('[restyle-photo] NSFW refund FAILED:', (refundErr as Error).message);
+        console.error('[restyle-photo] Legacy NSFW refund FAILED:', (refundErr as Error).message);
       }
     }
 
-    // Update dream job on failure (best-effort)
+    // Update dream_jobs status (best-effort)
     if (jobId) {
       try {
         await supabase
@@ -484,15 +501,47 @@ Deno.serve(async (req) => {
       } catch {
         /* non-critical */
       }
+
+      // Phase 4: write a `dream_failed` notification
+      try {
+        await supabase.from('notifications').insert({
+          recipient_id: userId,
+          actor_id: null,
+          type: 'dream_failed',
+          body: sparkleRefunded
+            ? `dream:Your dream couldn't render — sparkle refunded`
+            : `dream:Your dream couldn't render`,
+          metadata: { job_id: jobId, refund_reason: refundClass },
+        });
+      } catch {
+        /* non-critical */
+      }
     }
 
     return new Response(
       JSON.stringify({
         error: errMsg,
+        hard_fail: true,
         nsfw: isNsfw,
-        sparkle_refunded: isNsfw,
+        sparkle_refunded: sparkleRefunded,
+        refund_reason: refundClass,
+        job_id: jobId ?? null,
       }),
       { status: 500 }
     );
   }
 });
+
+function classifyFailure(errMsg: string): string {
+  const m = errMsg.toLowerCase();
+  if (m.startsWith('nsfw_content') || m.includes('nsfw') || m.includes('safety')) return 'nsfw';
+  if (m.includes('flux') && (m.includes('failed') || m.includes('timed out'))) return 'flux_gen';
+  if (m.includes('replicate') && (m.includes('failed') || m.includes('5'))) return 'flux_gen';
+  if (m.includes('persiststorage') || m.includes('storage upload')) return 'storage_upload';
+  if (m.includes('upload') && m.includes('failed')) return 'storage_upload';
+  if (m.includes('uploads insert') || m.includes('db insert')) return 'db_insert';
+  if (m.includes('face swap') || m.includes('face_swap')) return 'face_swap';
+  if (m.includes('rate limit') || m.includes('rate-limit')) return 'rate_limit';
+  if (m.includes('timed out') || m.includes('deadline')) return 'timeout';
+  return 'unknown';
+}

@@ -41,6 +41,22 @@ interface DreamResult {
   uploadId: string | null;
 }
 
+/**
+ * Set when a generate-dream call fails. The Loading screen reads this
+ * and renders the appropriate failure card (refunded / refund-pending /
+ * NSFW / pre-flight moderation).
+ */
+export interface DreamFailure {
+  jobId: string;
+  message: string;
+  /** True if the server confirmed a refund landed (or self-moderation refund succeeded). */
+  refunded: boolean;
+  /** Server-provided classification of the failure (e.g., 'flux_gen', 'storage_upload'). */
+  refundReason: string | null;
+  isNsfw: boolean;
+  isPreFlightModeration: boolean;
+}
+
 interface DreamStore {
   // Config (set by Create + Configure screens)
   config: DreamConfig;
@@ -48,6 +64,8 @@ interface DreamStore {
   result: DreamResult | null;
   // Queue tracking
   activeJobId: string | null;
+  // Failure state — set by useDreamCreate's catch block, consumed by Loading screen
+  activeJobFailure: DreamFailure | null;
   // Actions
   setMode: (mode: DreamFlowMode) => void;
   setPhoto: (base64: string, uri: string) => void;
@@ -60,6 +78,7 @@ interface DreamStore {
   clearResult: () => void;
   clearPhoto: () => void;
   setActiveJobId: (id: string | null) => void;
+  setActiveJobFailure: (failure: DreamFailure | null) => void;
   reset: () => void;
 }
 
@@ -81,6 +100,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   config: { ...INITIAL_CONFIG },
   result: null,
   activeJobId: null,
+  activeJobFailure: null,
 
   setMode: (mode) => set((s) => ({ config: { ...s.config, mode } })),
   setPhoto: (base64, uri) =>
@@ -97,5 +117,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
       config: { ...s.config, photoBase64: null, photoUri: null, photoStyle: 'new_scene' },
     })),
   setActiveJobId: (id) => set({ activeJobId: id }),
-  reset: () => set({ config: { ...INITIAL_CONFIG }, result: null, activeJobId: null }),
+  setActiveJobFailure: (failure) => set({ activeJobFailure: failure }),
+  reset: () =>
+    set({ config: { ...INITIAL_CONFIG }, result: null, activeJobId: null, activeJobFailure: null }),
 }));

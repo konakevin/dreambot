@@ -68,29 +68,34 @@ export function useDreamCreate() {
     return { recipe: (raw as Recipe) ?? DEFAULT_RECIPE, vibeProfile: null };
   }, [user]);
 
-  const trySpendSparkle = useCallback(async (): Promise<boolean> => {
-    if (sparkleBalance < 1) {
-      showAlert(
-        'Not enough sparkles',
-        'You need 1 sparkle to dream. Get more sparkles to keep dreaming!',
-        [
+  const trySpendSparkle = useCallback(
+    async (jobId: string): Promise<boolean> => {
+      if (sparkleBalance < 1) {
+        showAlert(
+          'Not enough sparkles',
+          'You need 1 sparkle to dream. Get more sparkles to keep dreaming!',
+          [
+            { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
+            { text: 'Cancel', style: 'cancel' },
+          ]
+        );
+        return false;
+      }
+      try {
+        // Pass jobId as referenceId so refund_sparkles can correlate the
+        // spend with any later refund for the same job (idempotent).
+        await spendSparkles({ amount: 1, reason: 'dream', referenceId: jobId });
+        return true;
+      } catch {
+        showAlert('Not enough sparkles', 'You need 1 sparkle to dream.', [
           { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
           { text: 'Cancel', style: 'cancel' },
-        ]
-      );
-      return false;
-    }
-    try {
-      await spendSparkles({ amount: 1, reason: 'dream' });
-      return true;
-    } catch {
-      showAlert('Not enough sparkles', 'You need 1 sparkle to dream.', [
-        { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
-        { text: 'Cancel', style: 'cancel' },
-      ]);
-      return false;
-    }
-  }, [sparkleBalance, spendSparkles]);
+        ]);
+        return false;
+      }
+    },
+    [sparkleBalance, spendSparkles]
+  );
 
   /**
    * Generate a dream. Returns status so the Loading screen can navigate.
@@ -153,15 +158,18 @@ export function useDreamCreate() {
         }
       }
 
-      if (!(await trySpendSparkle())) return 'error';
-      busy.current = true;
-
-      // Generate a job ID for queue tracking (Hermes doesn't have crypto.randomUUID)
+      // Generate the job ID FIRST so the sparkle spend can carry it as
+      // reference_id. Refunds are idempotent per (user_id, jobId) so the
+      // server-side catch and the refund-stuck-jobs sweeper can both safely
+      // attempt a refund without double-crediting.
       const jobId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         const r = (Math.random() * 16) | 0;
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
       });
       useDreamStore.getState().setActiveJobId(jobId);
+
+      if (!(await trySpendSparkle(jobId))) return 'error';
+      busy.current = true;
 
       try {
         const { recipe, vibeProfile } = await loadProfile();
@@ -256,18 +264,55 @@ export function useDreamCreate() {
         const msg = err instanceof Error ? err.message : 'Unknown error';
         if (__DEV__) console.error('[useDreamCreate] ERROR:', msg);
 
-        if (msg.includes('NSFW_CONTENT') && user) {
-          // Server-side handles the refund (generate-dream + restyle-photo both
-          // call grant_sparkles on NSFW). Client's job: refresh balance so the
-          // UI shows the refund, and show a user-friendly toast.
-          queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-          Toast.show(
-            'This dream was flagged by our safety filters. Your sparkle has been refunded.',
-            'shield-checkmark'
-          );
-        } else {
-          Toast.show(`Dream error: ${msg}`, 'close-circle');
+        // The server signals refund status via either a structured response
+        // (FunctionsHttpError exposes the body) or a thrown message including
+        // "sparkle_refunded". We default to "refund pending" for transport-level
+        // failures because the refund-stuck-jobs sweeper will catch those
+        // within 5 minutes.
+        const errAny = err as { context?: { body?: string }; sparkle_refunded?: boolean };
+        let serverRefunded = errAny?.sparkle_refunded === true;
+        let refundReason: string | null = null;
+        try {
+          if (errAny?.context?.body) {
+            const parsed = JSON.parse(errAny.context.body);
+            if (parsed?.sparkle_refunded === true) serverRefunded = true;
+            refundReason = parsed?.refund_reason ?? null;
+          }
+        } catch {
+          // body wasn't JSON — treat as transport-level failure
         }
+
+        // Pre-flight client failures (text moderation, classify, etc.) — sparkle
+        // was already spent on line 156. Hit refund-self-moderation to refund.
+        const preFlightFail =
+          msg.toLowerCase().includes('flagged') ||
+          msg.toLowerCase().includes('moderation') ||
+          msg.toLowerCase().includes('inappropriate');
+        if (preFlightFail && user) {
+          try {
+            await supabase.functions.invoke('refund-self-moderation', {
+              body: { job_id: jobId, reason: 'refund:hard_fail:client_moderation' },
+            });
+            serverRefunded = true;
+          } catch (refundErr) {
+            if (__DEV__) console.warn('[useDreamCreate] self-moderation refund failed', refundErr);
+          }
+        }
+
+        if (user) {
+          queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
+        }
+
+        // Surface the failure to the loading screen via the dream store. The
+        // loading screen reads activeJobFailure and renders the failure card.
+        useDreamStore.getState().setActiveJobFailure({
+          jobId,
+          message: msg,
+          refunded: serverRefunded,
+          refundReason,
+          isNsfw: msg.includes('NSFW_CONTENT') || msg.includes('NSFW'),
+          isPreFlightModeration: preFlightFail,
+        });
 
         return 'error';
       } finally {

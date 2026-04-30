@@ -1,0 +1,44 @@
+name: Refund Stuck Dream Jobs
+
+# Sweeps for `dream_jobs` rows stuck in `processing` for >5 minutes and
+# refunds the user's sparkle. Catches the case where the Edge Function
+# died mid-execution (HTTP 546 worker-limit, 504 timeout, OOM) and no
+# inline catch could run. Refunds are idempotent on jobId — safe if the
+# inline catch already ran.
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # every 5 minutes
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - name: Invoke refund-stuck-jobs Edge Function
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ]; then
+            SUPABASE_URL="https://jimftynwrinwenonjrlj.supabase.co"
+          fi
+          RESP=$(curl -sS -w "\nHTTP_STATUS:%{http_code}" -X POST \
+            "${SUPABASE_URL}/functions/v1/refund-stuck-jobs" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{"older_than_min": 5}')
+          STATUS=$(echo "$RESP" | tail -1 | cut -d: -f2)
+          BODY=$(echo "$RESP" | sed '$d')
+          echo "Status: $STATUS"
+          echo "Body: $BODY"
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::Sweeper returned non-200 status"
+            exit 1
+          fi
