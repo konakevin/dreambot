@@ -80,6 +80,8 @@ interface RequestBody {
    *   - 'scenery' → description path: scene built inspired by the place, no face-swap
    */
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
+  /** Optional user-supplied scene description. If absent, Haiku auto-generates from the final prompt. */
+  description?: string;
 }
 
 Deno.serve(async (req) => {
@@ -168,9 +170,7 @@ Deno.serve(async (req) => {
   // Optional user-supplied description for this dream. If absent, a Haiku
   // call generates one from finalPrompt before insert.
   const userDescription =
-    typeof (body as { description?: unknown }).description === 'string'
-      ? (body as { description: string }).description.trim() || null
-      : null;
+    typeof body.description === 'string' ? body.description.trim() || null : null;
 
   if (!mode || !['flux-dev', 'flux-kontext'].includes(mode)) {
     return new Response(
