@@ -10,6 +10,7 @@
  */
 
 import type { ResolvedCastMember } from './castResolver.ts';
+import { buildDualBrief } from './dualBriefBuilder.ts';
 
 // ── Public Types ──
 
@@ -69,6 +70,13 @@ export interface CompilerOutput {
     appendFaceLock: boolean;
     appendPortraitTags: boolean;
     dualFaceSwap: boolean;
+    /**
+     * Prepend string applied at the very front of the Flux prompt by
+     * postProcessPrompt. Currently populated only by the dual brief builder
+     * for two-cast face-swap renders (composition path: candid/portrait/etc.)
+     * — front-loaded so Flux's early-token bias picks it up.
+     */
+    dualPrepend?: string;
   };
   faceSwapSource: string | null;
   faceSwapSources: Array<{ role: string; sourceUrl: string }> | null;
@@ -278,6 +286,16 @@ export function applyVibeGenderModifier(
 
 export function compilePrompt(input: CompilerInput): CompilerOutput {
   const { medium, vibe, scene, cast, composition, profile } = input;
+
+  // ── ISOLATED DUAL FACE-SWAP PATH ──
+  // When exactly 2 cast members are present and the medium is face-swap
+  // eligible, delegate entirely to buildDualBrief. All other scenarios
+  // (single cast, pure scene, embodied dual, photo restyle) fall through
+  // to the existing compiler logic below — byte-identical to before.
+  if (cast.length === 2 && composition.faceSwapEligible) {
+    return buildDualBrief(input);
+  }
+
   const mediumStyle = medium.key.replace(/_/g, ' ');
   const hasCast = cast.length > 0 && composition.type !== 'pure_scene';
 
@@ -407,6 +425,13 @@ Output ONLY the prompt.`;
 
 export function postProcessPrompt(prompt: string, rules: CompilerOutput['postProcess']): string {
   let result = prompt;
+
+  // Dual face-swap renders prepend a composition string (candid/portrait/etc.)
+  // at the front of the prompt — Flux's early-token weighting locks in the
+  // framing/lighting style ahead of the long scene description.
+  if (rules.dualPrepend) {
+    result = `${rules.dualPrepend} ${result}`;
+  }
 
   if (rules.appendFaceLock) {
     if (rules.dualFaceSwap) {

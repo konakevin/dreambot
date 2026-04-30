@@ -131,9 +131,6 @@ export default function CreateScreen() {
     ? config.selectedMedium === 'surprise_me_face'
     : (selectedMediumRow?.face_swaps ?? true);
 
-  // Multi-person on face-swap medium warning
-  const showMultiCastWarning = mentionsSelf && mentionsOther && mediumFaceSwaps;
-
   // Contextual hint above Dream button
   const contextHint = hasPhoto
     ? config.photoStyle === 'new_scene'
@@ -494,16 +491,6 @@ export default function CreateScreen() {
 
         {/* Fixed footer — always visible above keyboard */}
         <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : vs(96) }}>
-          {/* Multi-cast + face-swap warning */}
-          {showMultiCastWarning && (
-            <View className="flex-row items-center justify-center gap-1 mb-1">
-              <Ionicons name="alert-circle" size={12} color="#F59E0B" />
-              <Text style={{ color: '#F59E0B', fontSize: 11, fontWeight: '500' }}>
-                Face mediums show one person — switch to Dream Art for both
-              </Text>
-            </View>
-          )}
-
           {/* Contextual hint */}
           <View className="flex-row items-center justify-center gap-1.5 mb-2">
             {((hasPhoto && hasPrompt) || mentionsSelf || mentionsOther) && (

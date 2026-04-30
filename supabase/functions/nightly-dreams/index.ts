@@ -38,6 +38,8 @@ import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
+import { generateSceneDescription } from '../_shared/sceneDescription.ts';
+import { FACE_SWAP_FLUX_OVERRIDES } from '../_shared/faceSwapFluxOverrides.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -207,10 +209,14 @@ Deno.serve(async (req) => {
     // photoreal renders that read as "AI photoshop collage" when combined
     // with imaginative scene elements (per Kevin 2026-04-30). Excluded from
     // the medium roll for nightly path. Still allowed via force_medium for QA.
+    // Safety: if filtering would starve the pool (user has ONLY photography),
+    // fall back to the full art_styles so the render doesn't fail.
     const NIGHTLY_BANNED_MEDIUMS = new Set(['photography']);
-    const nightlyEligibleMediums = (nightlyProfile.art_styles ?? []).filter(
+    const filtered = (nightlyProfile.art_styles ?? []).filter(
       (m) => !NIGHTLY_BANNED_MEDIUMS.has(m.toLowerCase())
     );
+    const nightlyEligibleMediums =
+      filtered.length > 0 ? filtered : (nightlyProfile.art_styles ?? []);
     let nightlyMedium = await resolveMediumFromDb(
       'my_mediums',
       nightlyEligibleMediums,
@@ -491,43 +497,20 @@ Deno.serve(async (req) => {
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
     const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
 
-    // Override flux fragment for stylized mediums during face swap —
-    // strip exaggerated-feature language that fights the face swap model
-    const FACE_SWAP_FLUX_OVERRIDES: Record<string, { fluxFragment: string; directive?: string }> = {
-      fairytale: {
-        fluxFragment:
-          'realistic human face with normal sized eyes and natural proportions, thin subtle eyebrows, NOT cartoon eyes, NOT anime eyes, NOT Disney princess eyes, hand-drawn 2D illustration set in a fairy tale world, painted watercolor backgrounds, flowing organic linework, golden hour lighting, painterly environments, rich warm color palette, strictly 2D not 3D CGI',
-        directive:
-          'Create images set in a hand-drawn 2D fairy tale world. Strictly 2D, never 3D CGI. Visual qualities: lush painted watercolor backgrounds, flowing organic linework, romantic golden hour lighting, painterly atmospheric environments, rich warm color palettes. Fairy tale imagery: castles, enchanted forests, magical transformations. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size — the same size you would see in a photograph. Do NOT enlarge eyes even slightly. Do NOT use cartoon, anime, or Disney character design for faces. Thin natural eyebrows only. The WORLD is fairy tale but the FACES are realistic. Apply this style to whatever subject and framing is provided.',
-      },
-      storybook: {
-        fluxFragment:
-          'picture book illustration, hand-painted with visible brush or pencil texture, warm golden color palette, cozy intimate feeling, watercolor gouache techniques, printed page quality, soft hand-drawn look, realistic human face with normal sized eyes and natural proportions, NOT cartoon eyes',
-        directive:
-          baseMedium.key === 'storybook'
-            ? (baseMedium.directive ?? '').replace(
-                'friendly simplified character design with expressive faces',
-                'detailed character rendering with photorealistic human faces and natural proportions'
-              )
-            : undefined,
-      },
-      pencil: {
-        fluxFragment:
-          'colored pencil drawing, prismacolor art, visible pencil strokes, directional hatching, paper texture showing through, layered transparent color, hand-drawn quality, grainy tooth texture, confident linework, realistic human face with natural proportions',
-      },
-      anime: {
-        fluxFragment:
-          'realistic human face with normal sized eyes and natural proportions, eyes open and visible, thin subtle eyebrows, NOT anime eyes, NOT manga eyes, NOT chibi, NOT exaggerated facial expressions, cel-shaded illustrated scene, Japanese illustrated environments, vibrant color palette, clean linework, painted backgrounds, atmospheric lighting, strictly 2D not 3D CGI',
-        directive:
-          'Create images with cel-shaded illustrated environments inspired by Japanese illustration. Strictly 2D, never 3D CGI. Visual qualities: painted environments, vibrant color palettes, clean confident linework, atmospheric lighting, cel-shaded scenery. Imagery: cherry blossoms, neon-lit streets, traditional architecture, modern cityscapes, fantasy elements. CRITICAL FACE RULE — NON-NEGOTIABLE: ALL characters MUST have photorealistic adult human face proportions. Eyes MUST be normal human size and OPEN, never closed, never squinting in laughter, never exaggerated. Do NOT use anime, manga, or chibi character design for faces. Thin natural eyebrows only. Faces stay realistic regardless of emotion or scene. The ENVIRONMENT is illustrated but the FACES are realistic. Apply this aesthetic to whatever subject and framing is provided.',
-      },
-    };
+    // Override flux fragment + directive for stylized mediums during face
+    // swap — front-loads "realistic human face" so cdingram's swap doesn't
+    // fight cartoon-eye proportions. Shared with V4 dual cast path via
+    // _shared/faceSwapFluxOverrides.ts (single source of truth).
     if (faceSwapEligible && baseMedium.key in FACE_SWAP_FLUX_OVERRIDES) {
       const override = FACE_SWAP_FLUX_OVERRIDES[baseMedium.key];
+      let directive = baseMedium.directive;
+      if (override.directive) directive = override.directive;
+      else if (override.directiveTransform)
+        directive = override.directiveTransform(baseMedium.directive);
       baseMedium = {
         ...baseMedium,
         fluxFragment: override.fluxFragment,
-        ...(override.directive ? { directive: override.directive } : {}),
+        directive,
       };
       console.log(`[nightly] face swap flux+directive override for ${baseMedium.key}`);
     }
@@ -1030,6 +1013,17 @@ Output ONLY the prompt.`;
     console.log(`[nightly-dreams] Starting image generation (model: ${pickedModel})...`);
     // Capture for duplicate-bug observability
     const observability: Record<string, unknown> = {};
+
+    // ── Scene description (parallel with image gen) ──────────────────────
+    // Frank Instagram-style caption paraphrased from finalPrompt.
+    // Runs concurrent with image gen; latency-free.
+    const descPromise: Promise<string | null> = ANTHROPIC_KEY
+      ? generateSceneDescription(finalPrompt, ANTHROPIC_KEY).catch((err) => {
+          console.warn(`[nightly-dreams] description gen failed: ${(err as Error).message}`);
+          return null;
+        })
+      : Promise.resolve(null);
+
     const genResult = await generateImage(
       'flux-dev',
       finalPrompt,
@@ -1220,6 +1214,12 @@ Output ONLY the prompt.`;
     imageUrl = persistedUrl;
     lap('persist-done');
 
+    // Wait for the parallel description gen now that image is persisted
+    const description = await descPromise;
+    if (description) {
+      console.log(`[nightly-dreams] description: "${description}"`);
+    }
+
     // Draft upload + budget upsert in parallel
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
@@ -1237,6 +1237,7 @@ Output ONLY the prompt.`;
           is_public: false,
           width: 768,
           height: 1664,
+          ...(description ? { description } : {}),
           ...(outPhash ? { output_phash: outPhash } : {}),
         })
         .select('id')

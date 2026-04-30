@@ -21,6 +21,7 @@ import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
+import { generateSceneDescription } from '../_shared/sceneDescription.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
 import { expandScene } from '../_shared/sceneExpander.ts';
 import { rollChaos, applyChaos } from '../_shared/chaosLayer.ts';
@@ -163,6 +164,13 @@ Deno.serve(async (req) => {
     subject_description,
     subject_type,
   } = body;
+
+  // Optional user-supplied description for this dream. If absent, a Haiku
+  // call generates one from finalPrompt before insert.
+  const userDescription =
+    typeof (body as { description?: unknown }).description === 'string'
+      ? (body as { description: string }).description.trim() || null
+      : null;
 
   if (!mode || !['flux-dev', 'flux-kontext'].includes(mode)) {
     return new Response(
@@ -857,31 +865,45 @@ Output ONLY the prompt.`;
       `[generate-dream] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
     );
 
-    // Face swap: dual (two people) or single
+    // Face swap: dual (two people) or single — retry up to 3x on transient
+    // timeouts (Replicate cold start). Same retry behavior as nightly.
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
-      try {
-        console.log('[generate-dream] Dual face swap starting...');
-        tempUrl = await dualFaceSwap(
-          faceSwapSources[0].sourceUrl,
-          faceSwapSources[1].sourceUrl,
-          tempUrl,
-          REPLICATE_TOKEN,
-          supabase,
-          userId,
-          t0 + 140_000
-        );
-        lap('dual-face-swap');
-        console.log('[generate-dream] Dual face swap complete');
-        logAxes.faceSwapResult = 'dual-success';
-      } catch (err) {
-        console.warn(
-          '[generate-dream] Dual face swap failed, using unswapped:',
-          (err as Error).message
-        );
-        fallbackReasons.push(`dual_face_swap_failed:${(err as Error).message}`);
-        logAxes.faceSwapResult = 'dual-failed';
-        logAxes.faceSwapError = (err as Error).message;
+      const FACE_SWAP_MAX_RETRIES = 3;
+      let swapSuccess = false;
+      for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+        try {
+          console.log(
+            `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
+          );
+          tempUrl = await dualFaceSwap(
+            faceSwapSources[0].sourceUrl,
+            faceSwapSources[1].sourceUrl,
+            tempUrl,
+            REPLICATE_TOKEN,
+            supabase,
+            userId,
+            t0 + 140_000
+          );
+          lap('dual-face-swap');
+          console.log('[generate-dream] Dual face swap complete');
+          logAxes.faceSwapResult = 'dual-success';
+          logAxes.faceSwapAttempts = attempt;
+          swapSuccess = true;
+          break;
+        } catch (err) {
+          console.warn(
+            `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+            (err as Error).message
+          );
+          if (attempt === FACE_SWAP_MAX_RETRIES) {
+            fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
+            logAxes.faceSwapResult = 'dual-failed';
+            logAxes.faceSwapError = (err as Error).message;
+            logAxes.faceSwapAttempts = attempt;
+          }
+        }
       }
+      void swapSuccess;
     } else if (faceSwapSource && tempUrl) {
       try {
         let sourceUrl: string;
@@ -949,6 +971,17 @@ Output ONLY the prompt.`;
     imageUrl = persistedUrl;
     lap('persist-done');
 
+    // Scene description: user-supplied wins; otherwise generate via Haiku.
+    let description: string | null = userDescription;
+    if (!description && ANTHROPIC_KEY) {
+      try {
+        description = await generateSceneDescription(finalPrompt, ANTHROPIC_KEY);
+      } catch (err) {
+        console.warn(`[generate-dream] description gen failed: ${(err as Error).message}`);
+      }
+    }
+    if (description) console.log(`[generate-dream] description: "${description}"`);
+
     // Draft upload + budget upsert in parallel (both need imageUrl but not each other)
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
@@ -966,6 +999,7 @@ Output ONLY the prompt.`;
           is_public: false,
           width: 768,
           height: 1664,
+          ...(description ? { description } : {}),
         })
         .select('id')
         .single(),
