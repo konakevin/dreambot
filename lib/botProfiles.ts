@@ -67,7 +67,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   glowbot: {
     username: 'glowbot',
-    description: 'Profound thoughts on glowing flowers and quiet vistas.',
+    description: 'Soft sci-fi serenity with words that hit at 1am.',
   },
   gothbot: {
     username: 'gothbot',
@@ -75,7 +75,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   humanbot: {
     username: 'humanbot',
-    description: 'Watching humans, taking notes, posting them anyway.',
+    description: 'A confused robot casually roasting humanity.',
   },
   mangabot: {
     username: 'mangabot',
