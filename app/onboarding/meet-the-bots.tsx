@@ -14,7 +14,7 @@
  * app mid-flow.
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,11 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Modal,
+  FlatList,
+  Dimensions,
+  type NativeSyntheticEvent,
+  type NativeScrollEvent,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -40,6 +45,8 @@ import { useBotThumbnails } from '@/hooks/useBotThumbnails';
 import { curateBotsForAesthetics } from '@/lib/curatedBots';
 import { getBotProfile } from '@/lib/botProfiles';
 
+const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
+
 const SEEN_BOT_INTRO_KEY = 'dreambot.seenBotIntro.v1';
 
 export default function MeetTheBotsScreen() {
@@ -51,6 +58,16 @@ export default function MeetTheBotsScreen() {
 
   const [aesthetics, setAesthetics] = useState<string[]>([]);
   const [profileLoaded, setProfileLoaded] = useState(false);
+  // Fullscreen image viewer state — null when closed, otherwise the urls + which one was tapped
+  const [viewer, setViewer] = useState<{ urls: string[]; initialIndex: number } | null>(null);
+
+  const openViewer = useCallback((urls: string[], initialIndex: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setViewer({ urls, initialIndex });
+  }, []);
+  const closeViewer = useCallback(() => {
+    setViewer(null);
+  }, []);
 
   // Mark the screen as seen the moment we render — this is the user's
   // explicit visit, even if they bounce out without following anyone.
@@ -142,6 +159,7 @@ export default function MeetTheBotsScreen() {
                 bot={bot}
                 isFollowing={followingSet.has(bot.id)}
                 thumbnailUrls={thumbnails?.get(bot.id) ?? []}
+                onOpenViewer={openViewer}
               />
             ))
           )}
@@ -153,7 +171,81 @@ export default function MeetTheBotsScreen() {
           <Text style={s.doneBtnText}>Done</Text>
         </TouchableOpacity>
       </View>
+
+      {viewer && (
+        <ImageViewer urls={viewer.urls} initialIndex={viewer.initialIndex} onClose={closeViewer} />
+      )}
     </SafeAreaView>
+  );
+}
+
+/**
+ * Fullscreen swipeable image viewer. No overlays except the X close badge.
+ * Horizontal pager-style FlatList scrolls between the bot's 3 thumbnails.
+ * Initial scroll position respects which thumbnail the user tapped.
+ */
+function ImageViewer({
+  urls,
+  initialIndex,
+  onClose,
+}: {
+  urls: string[];
+  initialIndex: number;
+  onClose: () => void;
+}) {
+  const listRef = useRef<FlatList<string>>(null);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_W);
+    if (idx !== currentIndex) {
+      setCurrentIndex(idx);
+      Haptics.selectionAsync();
+    }
+  }
+
+  function handleClose() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onClose();
+  }
+
+  return (
+    <Modal visible animationType="fade" transparent={false} onRequestClose={onClose}>
+      <View style={vs.root}>
+        <FlatList
+          ref={listRef}
+          data={urls}
+          keyExtractor={(url, idx) => `${idx}-${url}`}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          initialScrollIndex={initialIndex}
+          getItemLayout={(_, index) => ({
+            length: SCREEN_W,
+            offset: SCREEN_W * index,
+            index,
+          })}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          renderItem={({ item }) => (
+            <View style={vs.page}>
+              <Image source={{ uri: item }} style={vs.image} contentFit="contain" />
+            </View>
+          )}
+        />
+
+        <SafeAreaView style={vs.closeWrap} pointerEvents="box-none">
+          <TouchableOpacity
+            style={vs.closeBtn}
+            onPress={handleClose}
+            activeOpacity={0.7}
+            hitSlop={12}
+          >
+            <Ionicons name="close" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </SafeAreaView>
+      </View>
+    </Modal>
   );
 }
 
@@ -161,10 +253,12 @@ function BotCard({
   bot,
   isFollowing,
   thumbnailUrls,
+  onOpenViewer,
 }: {
   bot: BotUser;
   isFollowing: boolean;
   thumbnailUrls: string[];
+  onOpenViewer: (urls: string[], initialIndex: number) => void;
 }) {
   const profile = getBotProfile(bot.username);
   const { mutate: toggleFollow, isPending } = useToggleFollow();
@@ -185,8 +279,9 @@ function BotCard({
     );
   }
 
-  // Avatar and thumbnails are non-interactive — users complete the screen
-  // via Done. Tapping out is not allowed during onboarding.
+  // Avatar is non-interactive (no tapping out during onboarding). Thumbnails
+  // open a fullscreen swipeable viewer so users can preview content before
+  // following — the viewer itself doesn't navigate to the bot's profile.
   return (
     <View style={s.card}>
       <View style={s.cardTop}>
@@ -216,16 +311,24 @@ function BotCard({
       <View style={s.thumbnailRow}>
         {[0, 1, 2].map((idx) => {
           const url = thumbnailUrls[idx];
-          return (
-            <View key={idx} style={s.thumbnail}>
-              {url ? (
-                <Image source={{ uri: url }} style={s.thumbnailImage} contentFit="cover" />
-              ) : (
+          if (!url) {
+            return (
+              <View key={idx} style={s.thumbnail}>
                 <View style={s.thumbnailEmpty}>
                   <Ionicons name="moon-outline" size={20} color={colors.border} />
                 </View>
-              )}
-            </View>
+              </View>
+            );
+          }
+          return (
+            <TouchableOpacity
+              key={idx}
+              style={s.thumbnail}
+              onPress={() => onOpenViewer(thumbnailUrls, idx)}
+              activeOpacity={0.7}
+            >
+              <Image source={{ uri: url }} style={s.thumbnailImage} contentFit="cover" />
+            </TouchableOpacity>
           );
         })}
       </View>
@@ -369,5 +472,36 @@ const s = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',
+  },
+});
+
+const vs = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#000000',
+  },
+  page: {
+    width: SCREEN_W,
+    height: SCREEN_H,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: SCREEN_W,
+    height: SCREEN_H,
+  },
+  closeWrap: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  closeBtn: {
+    margin: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
