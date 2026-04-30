@@ -39,7 +39,6 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
 import { curateBotsForAesthetics } from '@/lib/curatedBots';
 import { getBotProfile } from '@/lib/botProfiles';
-import * as nav from '@/lib/navigate';
 
 const SEEN_BOT_INTRO_KEY = 'dreambot.seenBotIntro.v1';
 
@@ -186,37 +185,21 @@ function BotCard({
     );
   }
 
-  function handleAvatarTap() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    nav.push(`/user/${bot.id}`);
-  }
-
-  function handleThumbnailTap() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    nav.push(`/user/${bot.id}`);
-  }
-
-  const tagline = profile?.tagline ?? 'AI bot';
-  const tags = profile?.tags ?? [];
-
+  // Avatar and thumbnails are non-interactive — users complete the screen
+  // via Done. Tapping out is not allowed during onboarding.
   return (
     <View style={s.card}>
       <View style={s.cardTop}>
-        <TouchableOpacity onPress={handleAvatarTap} activeOpacity={0.7}>
-          {bot.avatar_url ? (
-            <Image source={{ uri: bot.avatar_url }} style={s.avatar} contentFit="cover" />
-          ) : (
-            <View style={[s.avatar, s.avatarFallback]}>
-              <Ionicons name="sparkles" size={20} color={colors.accent} />
-            </View>
-          )}
-        </TouchableOpacity>
+        {bot.avatar_url ? (
+          <Image source={{ uri: bot.avatar_url }} style={s.avatar} contentFit="cover" />
+        ) : (
+          <View style={[s.avatar, s.avatarFallback]}>
+            <Ionicons name="sparkles" size={20} color={colors.accent} />
+          </View>
+        )}
         <View style={s.cardText}>
-          <TouchableOpacity onPress={handleAvatarTap} activeOpacity={0.7}>
-            <Text style={s.username}>{bot.username}</Text>
-          </TouchableOpacity>
-          <Text style={s.tagline}>{tagline}</Text>
-          {tags.length > 0 && <Text style={s.tagsLine}>{tags.join(' · ')}</Text>}
+          <Text style={s.username}>{bot.username}</Text>
+          {profile?.description && <Text style={s.tagline}>{profile.description}</Text>}
         </View>
         <TouchableOpacity
           style={[s.followBtn, showFollowing && s.followBtnActive]}
@@ -230,19 +213,11 @@ function BotCard({
         </TouchableOpacity>
       </View>
 
-      {profile?.description && <Text style={s.description}>{profile.description}</Text>}
-
       <View style={s.thumbnailRow}>
         {[0, 1, 2].map((idx) => {
           const url = thumbnailUrls[idx];
           return (
-            <TouchableOpacity
-              key={idx}
-              style={s.thumbnail}
-              onPress={url ? handleThumbnailTap : undefined}
-              activeOpacity={0.7}
-              disabled={!url}
-            >
+            <View key={idx} style={s.thumbnail}>
               {url ? (
                 <Image source={{ uri: url }} style={s.thumbnailImage} contentFit="cover" />
               ) : (
@@ -250,7 +225,7 @@ function BotCard({
                   <Ionicons name="moon-outline" size={20} color={colors.border} />
                 </View>
               )}
-            </TouchableOpacity>
+            </View>
           );
         })}
       </View>
@@ -330,12 +305,6 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 18,
-  },
-  tagsLine: {
-    color: colors.textSecondary,
-    fontSize: 11,
-    opacity: 0.7,
-    marginTop: 2,
   },
   followBtn: {
     paddingHorizontal: 14,
