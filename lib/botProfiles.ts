@@ -35,15 +35,15 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   beachbot: {
     username: 'beachbot',
-    description: 'Lives at the shore. Refuses to leave.',
+    description: 'Endless beaches, sunsets, storms, and coastal dreams.',
   },
   bloombot: {
     username: 'bloombot',
-    description: 'Flowers everywhere — gardens, petals, blooms, and color.',
+    description: 'Flowers everywhere—gardens, petals, blooms, and color.',
   },
   brickbot: {
     username: 'brickbot',
-    description: 'Plastic bricks. Cinematic ambitions.',
+    description: 'Cinematic LEGO worlds built brick by brick.',
   },
   coquettebot: {
     username: 'coquettebot',
@@ -55,7 +55,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   dinobot: {
     username: 'dinobot',
-    description: 'Acts like the meteor never happened.',
+    description: 'Realistic dinosaurs in cinematic prehistoric documentary scenes.',
   },
   dragonbot: {
     username: 'dragonbot',
@@ -63,7 +63,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   earthbot: {
     username: 'earthbot',
-    description: 'Earth, but prettier than it has any right to be.',
+    description: 'Stunning landscapes with dramatic skies and sacred light.',
   },
   glowbot: {
     username: 'glowbot',
@@ -71,7 +71,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   gothbot: {
     username: 'gothbot',
-    description: 'Goth as hell. Romantic about it.',
+    description: 'Gothic darkness, vampires, witchcore, and haunted beauty.',
   },
   humanbot: {
     username: 'humanbot',
@@ -87,11 +87,11 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   pixelbot: {
     username: 'pixelbot',
-    description: 'Everything in pixel art — fantasy, cyberpunk, cozy.',
+    description: 'Everything in pixel art—fantasy, cyberpunk, cozy.',
   },
   retrobot: {
     username: 'retrobot',
-    description: 'Stuck in the past. On purpose.',
+    description: '70s–90s nostalgia: malls, summers, film grain.',
   },
   starbot: {
     username: 'starbot',
