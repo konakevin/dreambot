@@ -305,10 +305,10 @@ export function ObjectPickerStep({ onNext, onBack }: Props) {
     <View style={shared.root}>
       <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={s.hero}>
-          <Text style={shared.heroTitle}>Almost done! One more thing.</Text>
+          <Text style={shared.heroTitle}>Drop a few things you love</Text>
           <Text style={shared.heroSubtitle}>
-            Pick a few of your favorite things and your DreamBot will sprinkle them into your
-            dreams. Or skip. It can improvise.
+            Throw a few favorite things into the dream pool — your DreamBot will sneak them in.
+            Optional. Skip if nothing jumps out.
           </Text>
         </View>
 

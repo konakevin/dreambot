@@ -307,8 +307,8 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         <View style={s.hero}>
           <Text style={shared.heroTitle}>First things first: where to?</Text>
           <Text style={shared.heroSubtitle}>
-            Pick the places that make your heart race. Your DreamBot will build entire worlds around
-            them.
+            Pick where you want to dream tonight. Real cities, fantasy realms, sci-fi worlds — your
+            DreamBot drops you into one every night. More variety = more surprising dreams.
           </Text>
         </View>
 

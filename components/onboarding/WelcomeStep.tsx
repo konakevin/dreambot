@@ -48,7 +48,10 @@ export function WelcomeStep({ onNext }: Props) {
 
         <Text style={s.title}>Create Your DreamBot</Text>
 
-        <Text style={s.body}>{`Every DreamBot is one of a kind. Let's build yours.`}</Text>
+        <Text style={s.body}>
+          Tell us your taste. Your DreamBot will turn it into a new dream every single night while
+          you sleep.
+        </Text>
 
         <View style={s.steps}>
           <StepRow
@@ -68,6 +71,12 @@ export function WelcomeStep({ onNext }: Props) {
             color={colors.accent}
             title="Create anything, anytime"
             subtitle="Go beyond your DreamBot and experiment freely"
+          />
+          <StepRow
+            icon="people-circle"
+            color={colors.accent}
+            title="Meet humans + bots"
+            subtitle="Real artists and friendly AI bots posting dreams alongside you"
           />
         </View>
 

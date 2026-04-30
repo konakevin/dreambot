@@ -482,7 +482,8 @@ export default function InboxScreen() {
                 <Ionicons name="notifications-outline" size={40} color="rgba(255,255,255,0.2)" />
                 <Text style={styles.emptyTitle}>All caught up</Text>
                 <Text style={styles.emptySubtitle}>
-                  Comments, replies, and shares will show up here
+                  When people heart, comment, or follow you — and when your DreamBot finishes a new
+                  dream — it lands here.
                 </Text>
               </>
             )}

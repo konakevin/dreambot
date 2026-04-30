@@ -54,8 +54,8 @@ export function MediumsStep({ onNext, onBack }: Props) {
         <View style={s.header}>
           <Text style={shared.heroTitle}>What should your dreams look like?</Text>
           <Text style={shared.heroSubtitle}>
-            Watercolor? Anime? Oil painting? Your DreamBot can do it all. Pick the styles that speak
-            to you.
+            Pick the art styles your DreamBot can use. Every dream rolls a different one — so the
+            more you pick, the more variety you&apos;ll get.
           </Text>
         </View>
 

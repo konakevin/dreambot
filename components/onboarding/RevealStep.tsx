@@ -28,6 +28,15 @@ const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCRE
 const MAX_DREAMS = Infinity;
 
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles';
+/**
+ * Three-beat education sequence shown over the reveal image. Beat 1 anchors
+ * the moment ("this is your first dream"), beat 2 teaches the nightly loop,
+ * beat 3 offers the post action. User taps Continue to advance through
+ * beats 1→2→3. The "Keep it private" path is intentionally NOT implemented
+ * yet — it needs the privacy/visibility migration first (see memory:
+ * project_privacy_visibility). Single CTA preserves current behavior.
+ */
+type RevealBeat = 1 | 2 | 3;
 
 const BOOT_MESSAGE = 'Your DreamBot is dreaming up something special...';
 
@@ -55,6 +64,8 @@ export function RevealStep({ onBack }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [bootMessage] = useState(BOOT_MESSAGE);
+  // 3-beat education sequence on reveal — starts at beat 1 when dream lands
+  const [revealBeat, setRevealBeat] = useState<RevealBeat>(1);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -434,7 +445,7 @@ export function RevealStep({ onBack }: Props) {
             transition={300}
           />
 
-          {/* Gradient overlay at bottom for button */}
+          {/* 3-beat education overlay at bottom */}
           <View
             style={{
               position: 'absolute',
@@ -447,46 +458,71 @@ export function RevealStep({ onBack }: Props) {
               backgroundColor: 'transparent',
             }}
           >
-            {/* Dark gradient behind button */}
             <View
               style={{
                 ...StyleSheet.absoluteFillObject,
-                backgroundColor: 'rgba(0,0,0,0.6)',
+                backgroundColor: 'rgba(0,0,0,0.65)',
               }}
             />
-            <Text
-              style={{
-                color: '#FFFFFF',
-                fontSize: 22,
-                fontWeight: '800',
-                textAlign: 'center',
-                marginBottom: 8,
-              }}
-            >
-              Your first dream
-            </Text>
-            <Text
-              style={{
-                color: 'rgba(255,255,255,0.7)',
-                fontSize: 14,
-                textAlign: 'center',
-                marginBottom: 20,
-              }}
-            >
-              {activeDream.medium?.replace(/_/g, ' ')} / {activeDream.vibe}
-            </Text>
-            <TouchableOpacity
-              style={s.createButton}
-              onPress={handleCreateBot}
-              disabled={phase === 'creating'}
-              activeOpacity={0.7}
-            >
-              {phase === 'creating' ? (
-                <ActivityIndicator color="#FFFFFF" />
-              ) : (
-                <Text style={s.createButtonText}>Post my Dream</Text>
-              )}
-            </TouchableOpacity>
+            {revealBeat === 1 && (
+              <>
+                <Text style={s.revealTitle}>This is your first dream</Text>
+                <Text style={s.revealBody}>
+                  Your DreamBot dreamed it for you using your taste.{' '}
+                  {activeDream.medium?.replace(/_/g, ' ')} · {activeDream.vibe}
+                </Text>
+                <TouchableOpacity
+                  style={s.createButton}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setRevealBeat(2);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.createButtonText}>Continue</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {revealBeat === 2 && (
+              <>
+                <Text style={s.revealTitle}>It dreams while you sleep</Text>
+                <Text style={s.revealBody}>
+                  Your DreamBot will dream a fresh one tonight. You&apos;ll wake up to a new dream
+                  in your feed every morning.
+                </Text>
+                <TouchableOpacity
+                  style={s.createButton}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setRevealBeat(3);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.createButtonText}>Got it</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {revealBeat === 3 && (
+              <>
+                <Text style={s.revealTitle}>Share your first dream?</Text>
+                <Text style={s.revealBody}>
+                  Post it to your feed so people who follow you can see what your DreamBot cooked
+                  up.
+                </Text>
+                <TouchableOpacity
+                  style={s.createButton}
+                  onPress={handleCreateBot}
+                  disabled={phase === 'creating'}
+                  activeOpacity={0.7}
+                >
+                  {phase === 'creating' ? (
+                    <ActivityIndicator color="#FFFFFF" />
+                  ) : (
+                    <Text style={s.createButtonText}>Post my Dream</Text>
+                  )}
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </View>
       ) : null}
@@ -512,6 +548,20 @@ const s = StyleSheet.create({
   },
   bigTitle: { color: colors.textPrimary, fontSize: 22, fontWeight: '800', textAlign: 'center' },
   centeredSub: { color: colors.textSecondary, fontSize: 15, textAlign: 'center' },
+  revealTitle: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  revealBody: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 15,
+    lineHeight: 21,
+    textAlign: 'center',
+    marginBottom: 22,
+  },
 
   content: { flex: 1, paddingTop: 4, alignItems: 'center' },
   heading: {

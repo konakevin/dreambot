@@ -167,8 +167,9 @@ export default function ProfileScreen() {
       dreams: { type: 'dreams' as const },
     };
     const emptyMap = {
-      posts: 'No posts yet',
-      saved: 'Nothing saved yet',
+      posts:
+        'Nothing posted yet. Anything you create or that your DreamBot dreams up can land here.',
+      saved: 'Bookmark dreams you love. They live here.',
       dreams: 'No dreams yet. Create your first dream!',
     };
     return (

@@ -20,6 +20,14 @@ import { BotPillRow } from '@/components/BotPillRow';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { feedImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
+import { MeetTheBotsSheet } from '@/components/MeetTheBotsSheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isVibeProfile } from '@/lib/migrateRecipe';
+
+// One-time onboarding moments. Each key is set to '1' once the user has
+// seen that moment; subsequent app launches skip it. Live in AsyncStorage
+// (per-device, per-install) — no SQL.
+const SEEN_BOT_INTRO_KEY = 'dreambot.seenBotIntro.v1';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 type FeedTab = 'forYou' | 'following' | 'bots';
@@ -121,16 +129,20 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
 
 function EmptyFeed({ tab }: { tab: FeedTab }) {
   const msgs: Record<FeedTab, { icon: string; title: string; sub: string }> = {
-    forYou: { icon: 'moon-outline', title: 'No dreams yet', sub: 'Dreams will appear here' },
+    forYou: {
+      icon: 'moon-outline',
+      title: 'Your feed is warming up',
+      sub: 'Your nightly dreams will land here every morning. Check back tomorrow.',
+    },
     following: {
       icon: 'people-outline',
-      title: 'No dreams from people you follow',
-      sub: 'Follow people to see their creations',
+      title: 'Nobody yet',
+      sub: 'Follow some people (or bots) and their dreams show up here. The Bots tab is a great place to start.',
     },
     bots: {
       icon: 'sparkles-outline',
-      title: 'No bot dreams yet',
-      sub: 'Bot dreams will appear here soon',
+      title: 'Pick a bot above',
+      sub: 'Each bot has its own style. Tap one to see what it dreams.',
     },
   };
   const m = msgs[tab];
@@ -186,6 +198,47 @@ export default function HomeScreen() {
     },
     [overlayOpacity, setHudVisible]
   );
+
+  // Meet-the-bots sheet — first-launch-only intro to the bot accounts.
+  // Loads the user's recipe to curate which bots to feature based on their
+  // selected aesthetics. Suppressed once dismissed (AsyncStorage flag).
+  const [showBotIntro, setShowBotIntro] = useState(false);
+  const [introAesthetics, setIntroAesthetics] = useState<string[]>([]);
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const seen = await AsyncStorage.getItem(SEEN_BOT_INTRO_KEY);
+        if (seen === '1' || cancelled) return;
+        const { data: recipe } = await supabase
+          .from('user_recipes')
+          .select('recipe')
+          .eq('user_id', user.id)
+          .single();
+        const raw = recipe?.recipe as unknown;
+        const aesthetics = isVibeProfile(raw)
+          ? raw.aesthetics
+          : (((raw as { aesthetics?: string[] } | null)?.aesthetics ?? []) as string[]);
+        if (cancelled) return;
+        setIntroAesthetics(aesthetics);
+        // Small delay so the sheet doesn't pop up before the home feed renders
+        setTimeout(() => {
+          if (!cancelled) setShowBotIntro(true);
+        }, 600);
+      } catch {
+        // Silent fail — sheet is non-critical
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  const handleDismissBotIntro = useCallback(() => {
+    setShowBotIntro(false);
+    AsyncStorage.setItem(SEEN_BOT_INTRO_KEY, '1').catch(() => {});
+  }, []);
 
   // Deep link: when a pending post ID arrives, fetch it and pin to feed
   useEffect(() => {
@@ -286,6 +339,12 @@ export default function HomeScreen() {
           )}
         </LinearGradient>
       </Animated.View>
+
+      <MeetTheBotsSheet
+        visible={showBotIntro}
+        aesthetics={introAesthetics}
+        onDismiss={handleDismissBotIntro}
+      />
     </View>
   );
 }

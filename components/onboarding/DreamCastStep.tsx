@@ -321,8 +321,8 @@ export function DreamCastStep({ onNext, onBack }: Props) {
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <Text style={shared.heroTitle}>Who&apos;s coming along?</Text>
         <Text style={shared.heroSubtitle}>
-          Upload a photo and your DreamBot will weave you right into your dreams. Optional, but
-          highly encouraged for a more personalized experience!
+          Upload your face and we&apos;ll put YOU into your nightly dreams. Add a +1 and you&apos;ll
+          get scenes of you two together. Optional — but highly recommended.
         </Text>
         <View style={{ height: 16 }} />
         {SLOTS.map((slot) => (

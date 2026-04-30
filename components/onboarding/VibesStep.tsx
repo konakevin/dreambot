@@ -54,7 +54,7 @@ export function VibesStep({ onNext, onBack }: Props) {
         <View style={s.header}>
           <Text style={shared.heroTitle}>How should your dreams feel?</Text>
           <Text style={shared.heroSubtitle}>
-            Dreamy? Chaotic? Cozy? Pick the vibes that feel like you.
+            Pick how your dreams should feel. Mediums are the medium — vibes are the mood.
           </Text>
         </View>
 
