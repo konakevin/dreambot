@@ -21,7 +21,6 @@ const pathBuilders = {
   'castlevania-scene': require('./paths/castlevania-scene'),
   'cozy-goth': require('./paths/cozy-goth'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
-  'vampire-boys': require('./paths/vampire-boys'),
   'gothic-vista': require('./paths/gothic-vista'),
   'gothic-darklands': require('./paths/gothic-darklands'),
 };
@@ -53,12 +52,10 @@ module.exports = {
     'gothic-darklands':    { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
     'horror-creature':     { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
     'vampire-girls-2': 'black-forest-labs/flux-dev',
-    'vampire-boys': 'black-forest-labs/flux-dev',
   },
 
   mediumByPath: {
     'vampire-girls-2': 'vampire-portrait',
-    'vampire-boys': 'vampire-portrait',
     'goth-male-full-body': [
       'gothic-architecture', 'gothic-architecture', 'gothic-architecture', 'gothic-architecture',
       'gothic-realistic', 'gothic-realistic', 'gothic-realistic',
@@ -86,14 +83,10 @@ module.exports = {
   ],
 
   promptPrefixByMedium: {
-    'gothic-oil-garden':
-      'Dark gothic oil painting, full-scene composition, environment dominates, atmospheric depth',
     'vampire-portrait':
       'Extreme macro close-up, face fills entire frame, sharp vampire fangs visible, dark fine-art portrait painting, dramatic chiaroscuro lighting',
   },
   promptSuffixByMedium: {
-    'gothic-oil-garden':
-      'oil-painting canvas finish, no text no words no watermarks, NOT anime NOT cartoon NOT photoreal NOT 3D-render',
     'vampire-portrait':
       'painted portrait finish, no text no words no watermarks, NOT anime NOT cartoon NOT Artgerm NOT DeviantArt NOT stock-photo NOT Photoshop',
   },
@@ -124,16 +117,6 @@ module.exports = {
       'oil-painted gothic-horror portrait, heavy impasto brushwork, chiaroscuro painterly-horror tradition (Caravaggio-meets-Castlevania), painterly dark-fantasy baroque canvas',
     watercolor:
       'gothic watercolor horror illustration, blood-ink wash bleed, wet-on-wet dark fantasy tradition, atmospheric watercolor with ink-line overlay, gothic sumi-e inkwash',
-    // Custom medium for scene-girls path — optimized for dark-gothic GARDEN
-    // scenes with a figure IN the environment (NOT a centered portrait). Leads
-    // with environment + painting-style tokens; avoids "portrait" / "character
-    // card" language that pulls Flux into centered-hero composition.
-    // Subject-agnostic oil-painting medium — describes RENDERING STYLE only.
-    // The specific garden flora / architecture / setting comes from the
-    // scene_girls_locations pool (200 varied entries). Medium no longer
-    // biases toward rose-gardens specifically.
-    'gothic-oil-garden':
-      'Pre-Raphaelite dark oil painting, visible impasto brushwork, heavy canvas texture, chiaroscuro lighting with colored shadows, dark-romanticism baroque polish, figure WITHIN environment NOT centered portrait',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -173,7 +156,6 @@ module.exports = {
     'castlevania-scene',
     'cozy-goth',
     'vampire-girls-2',
-    'vampire-boys',
     'gothic-vista',
     'gothic-darklands',
   ],

@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_archetypes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} VAMPIRE ARCHETYPE descriptions for GothBot's vampire-vogue-realism path. Each entry is a SHORT phrase (8-15 words) describing WHO this vampire woman IS — her role, her age, her energy, her story. NOT what she looks like — WHO she is. These get composed with separate makeup/wardrobe/hair pools.
+  metaPrompt: (n) => `You are writing ${n} VAMPIRE ARCHETYPE descriptions for GothBot's vampire-girls-2 path. Each entry is a SHORT phrase (8-15 words) describing WHO this vampire woman IS — her role, her age, her energy, her story. NOT what she looks like — WHO she is. These get composed with separate makeup/wardrobe/hair pools.
 
 ━━━ ARCHETYPE SPREAD (enforce variety across ${n}) ━━━
 - ANCIENT ARISTOCRATS (5-6) — countess who's outlived empires, centuries-old matriarch of a vampire dynasty, bored immortal who remembers when Rome burned, ancient queen in exile, collector of lost civilizations' art, noblewoman who watched her mortal family line go extinct

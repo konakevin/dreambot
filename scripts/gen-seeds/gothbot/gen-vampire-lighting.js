@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_lighting.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} CINEMATIC LIGHTING + SHADOW + HUE compositions for GothBot's vampire-vogue-realism path — extreme close-up face portraits of vampire women. Each entry is ONE dramatic lighting composition for a face-dominant portrait.
+  metaPrompt: (n) => `You are writing ${n} CINEMATIC LIGHTING + SHADOW + HUE compositions for GothBot's vampire-girls-2 path — extreme close-up face portraits of vampire women. Each entry is ONE dramatic lighting composition for a face-dominant portrait.
 
 Each entry: 25-40 words. Specifies KEY LIGHT (hue + direction + quality) + FILL / RIM / BOUNCE (cool or warm counter) + SHADOW behavior + ONE atmospheric detail. The subject is ALREADY a pale drained vampire woman — your lighting shapes her face dramatically.
 

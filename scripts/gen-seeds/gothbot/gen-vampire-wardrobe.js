@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_wardrobe.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} VAMPIRE WARDROBE descriptions for GothBot's vampire-vogue-realism path. Each entry is a SHORT phrase (8-15 words) describing ONLY what's visible at her neckline/collar/throat in an extreme face close-up — we see barely a hint of clothing at the very bottom edge of a tight face portrait. Dark fantasy game-art aesthetic — think Warcraft III / Diablo / Castlevania / Bloodborne character select screen.
+  metaPrompt: (n) => `You are writing ${n} VAMPIRE WARDROBE descriptions for GothBot's vampire-girls-2 path. Each entry is a SHORT phrase (8-15 words) describing ONLY what's visible at her neckline/collar/throat in an extreme face close-up — we see barely a hint of clothing at the very bottom edge of a tight face portrait. Dark fantasy game-art aesthetic — think Warcraft III / Diablo / Castlevania / Bloodborne character select screen.
 
 ━━━ WARDROBE SPREAD (enforce variety across ${n}) ━━━
 - HIGH COLLAR / COVERED (6-7) — high-collar black velvet with tarnished clasps, armored gorget at throat, black turtleneck pulled tight, fur-trimmed collar rising to jaw, high mandarin collar in black silk, mourning-dress collar with cameo brooch

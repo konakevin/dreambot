@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_looks.json',
   total: 50,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GLAMOUR-VAMPIRE LOOK descriptions for GothBot's vampire-vogue-realism path. Each entry is ONE vampire woman — deathly pale, glamorous, terrifying, sexy-in-a-predator-way. Interview-with-the-Vampire / Only-Lovers-Left-Alive / Penny-Dreadful Eva-Green / Theda-Bara / Lady-Dimitrescu glamour-vampire energy.
+  metaPrompt: (n) => `You are writing ${n} GLAMOUR-VAMPIRE LOOK descriptions for GothBot's vampire-girls-2 path. Each entry is ONE vampire woman — deathly pale, glamorous, terrifying, sexy-in-a-predator-way. Interview-with-the-Vampire / Only-Lovers-Left-Alive / Penny-Dreadful Eva-Green / Theda-Bara / Lady-Dimitrescu glamour-vampire energy.
 
 Each entry: 25-40 words. Describes ONE vampire's complete GLAMOUR LOOK. NO setting, NO action (path brief handles those). Just the look.
 

@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_eye_colors.json',
   total: 30,
   batch: 15,
-  metaPrompt: (n) => `You are writing ${n} GLOWING VAMPIRE-EYE descriptions for GothBot's vampire-vogue-realism path. Every entry is ONE extreme glowing-iris color + glow-quality + pupil description for an extreme vampire woman's eye.
+  metaPrompt: (n) => `You are writing ${n} GLOWING VAMPIRE-EYE descriptions for GothBot's vampire-girls-2 path. Every entry is ONE extreme glowing-iris color + glow-quality + pupil description for an extreme vampire woman's eye.
 
 Each entry: 12-25 words. ONE eye-color + glow-quality description — Sonnet will weave it into the larger face description.
 

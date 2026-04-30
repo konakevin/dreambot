@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_candid_moments.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} CANDID MICRO-MOMENT descriptions for GothBot's vampire-vogue-realism path. Each entry is a SHORT phrase (6-12 words) describing a specific thing a vampire woman is caught doing in a chest-up portrait. These are NOT poses — they're the split-second between poses, the unconscious gestures of a predator at rest.
+  metaPrompt: (n) => `You are writing ${n} CANDID MICRO-MOMENT descriptions for GothBot's vampire-girls-2 path. Each entry is a SHORT phrase (6-12 words) describing a specific thing a vampire woman is caught doing in a chest-up portrait. These are NOT poses — they're the split-second between poses, the unconscious gestures of a predator at rest.
 
 ━━━ MOMENT TYPES (enforce variety across ${n}) ━━━
 - WEATHER / SENSATION (5-6) — rain running down her face without blinking, breath misting in cold air, wind catching her hair across one eye, snowflakes melting on corpse-cold skin, fog curling around her jaw, frost forming on her eyelashes
