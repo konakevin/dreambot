@@ -47,11 +47,11 @@ export const STAGGERED_OVERRIDES: DualDepthOverrides = {
   faceLockPhrase:
     'two people at different depths, one closer to camera and one set back, person on left side, person on right side, both faces clearly visible, three-quarter view, eyes and nose visible',
   separationRule:
-    '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear horizontal separation. Heads MUST NOT overlap horizontally. Neither character crosses the vertical midline. No back-of-head views, no full profiles.',
+    "\n- Character 1 in LEFT half, Character 2 in RIGHT half. CRITICAL: characters must be HORIZONTALLY SEPARATED with empty space between their heads — heads do NOT overlap, do NOT touch, and neither character is positioned behind or in front of the other character's body. Each character occupies their own column of the frame. No back-of-head views, no full profiles.",
   framingRule:
     'DEPTH-STAGGERED FRAMING — one character is closer to camera (foreground, larger in frame), the other is set back 6-10 feet behind in mid-distance (smaller but face still clearly visible and recognizable). NOT a wide establishing shot. NOT a flat side-by-side composition.',
   faceAngleRule:
-    'Both faces three-quarter view toward the VIEWER — even the further character has their face angled toward the camera with eyes and nose clearly visible. NOT facing each other. NOT looking away from camera. NOT in profile.',
+    "BOTH FACES VISIBLE FROM CAMERA ANGLE — eyes and nose readable on BOTH characters. Characters can be looking at each other or engaged with something in the scene — that's natural and good. CRITICAL: but neither character is in PURE PROFILE (no 90-degree side views), neither is BACK-TURNED, neither has their face fully obscured. Both faces three-quarter or front toward camera. Pure profile = face swap fails.",
   staticRule:
     'Characters are STATIONARY — standing, sitting, leaning. No walking through scene, no motion blur.',
   cameraRule:
@@ -59,7 +59,7 @@ export const STAGGERED_OVERRIDES: DualDepthOverrides = {
   connectionRule:
     "Both characters share the same moment — the further character watches, listens, walks alongside, or reacts to the closer character's action. Connected, not isolated.",
   extraConstraints:
-    "\n\nDEPTH HARD CONSTRAINTS — NON-NEGOTIABLE:\n- The further character's face MUST occupy AT LEAST 25% of frame height (recognizable, not tiny background figure)\n- Neither character crosses the vertical midline of the frame\n- The two characters' heads must be horizontally separated — no overlap\n- Both characters' eyes and noses clearly visible toward camera\n- Foreground/background assignment is your choice — pick whichever feels natural for the moment",
+    "\n\nDEPTH HARD CONSTRAINTS — NON-NEGOTIABLE (will fail face swap if violated):\n- The further character's face MUST occupy AT LEAST 25% of frame height — describe them as MID-DISTANCE not BACKGROUND (no tiny figures, no atmospheric haze obscuring the further face)\n- The two characters' heads do NOT overlap — clear empty space between their heads horizontally\n- Neither character is BEHIND the other — each character is in their own column of the frame at their own depth\n- Neither character is in PURE PROFILE (90-degree side view) — both faces must be three-quarter or front. They can be looking at each other or at something in the scene, but their face angle stays three-quarter toward camera, not in side-profile.\n- Both characters' eyes and noses readable from the camera angle\n- Foreground/background assignment is your choice",
 };
 
 /**

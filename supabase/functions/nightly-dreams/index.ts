@@ -35,7 +35,10 @@ import {
 } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
-import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
+import {
+  pickDualCompositionPath,
+  pickDualCompositionPathStaggered,
+} from '../_shared/pools/dual_composition.ts';
 import { pickDualDepthMode, type DualDepthOverrides } from '../_shared/pools/dual_depth_modes.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
@@ -982,9 +985,14 @@ Output ONLY the prompt.`;
     if (faceSwapEligible) {
       const realisticFaceTag = '';
       if (isDualFaceSwap) {
-        const dualPath = pickDualCompositionPath();
+        // Staggered depth uses a fully separate, isolated set of composition
+        // paths (`DUAL_COMPOSITION_PATHS_STAGGERED`). Flat path is unchanged.
+        const dualPath =
+          dualDepth.mode === 'staggered'
+            ? pickDualCompositionPathStaggered()
+            : pickDualCompositionPath();
         const prepend = dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
-        console.log(`[nightly] dual composition path: ${dualPath.name}`);
+        console.log(`[nightly] dual composition path: ${dualPath.name} (depth=${dualDepth.mode})`);
         finalPrompt = prepend + ' ' + finalPrompt;
       } else {
         finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
