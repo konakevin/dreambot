@@ -26,7 +26,7 @@ import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
-import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
+import { faceSwap, dualFaceSwap, dualFaceSwapV2 } from '../_shared/faceSwap.ts';
 import {
   aHashHex,
   hammingDistance,
@@ -36,6 +36,7 @@ import {
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
+import { pickDualDepthMode, type DualDepthOverrides } from '../_shared/pools/dual_depth_modes.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import {
@@ -110,6 +111,16 @@ Deno.serve(async (req) => {
     (body.force_dual_pool as 'partner' | 'companion' | undefined) || undefined;
   const force_single_pool =
     (body.force_single_pool as 'portrait' | 'candid' | undefined) || undefined;
+  // Experimental: route dual face swap through dualFaceSwapV2 (face-detection
+  // crop + selective paste-back) instead of v1 (fixed 55%/55% split). Required
+  // for depth-staggered compositions where one character is closer/larger.
+  // Currently dormant — kept for future use if brief-only depth approach plateaus.
+  const force_dual_v2 = body.force_dual_v2 === true;
+  // Experimental dual face-swap composition mode. 'flat' (default) = today's
+  // side-by-side. 'staggered' = depth-varied, one character closer / one set
+  // back. Brief overrides only — pipeline (dualFaceSwap v1) unchanged.
+  const force_dual_depth_mode =
+    (body.force_dual_depth_mode as 'flat' | 'staggered' | null) || undefined;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -485,6 +496,18 @@ Deno.serve(async (req) => {
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
     const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
 
+    // Roll dual depth mode (only meaningful when isDualFaceSwap). Default
+    // is 'flat' — overrides is null and brief assembly stays byte-identical
+    // to today. 'staggered' overrides specific brief lines for depth-varied
+    // composition. Force via body param `force_dual_depth_mode` for QA.
+    const dualDepth = isDualFaceSwap
+      ? pickDualDepthMode(force_dual_depth_mode ?? null)
+      : { mode: 'flat' as const, overrides: null };
+    const dualOverrides: DualDepthOverrides | null = dualDepth.overrides;
+    if (isDualFaceSwap) {
+      console.log(`[nightly-dreams] dual depth mode: ${dualDepth.mode}`);
+    }
+
     // Override flux fragment for stylized mediums during face swap —
     // strip exaggerated-feature language that fights the face swap model
     const FACE_SWAP_FLUX_OVERRIDES: Record<string, { fluxFragment: string; directive?: string }> = {
@@ -671,12 +694,19 @@ Layer these on top of the medium and vibe — each is an independent randomizati
 
     if (composition === 'character') {
       if (faceSwapEligible) {
-        const faceLockPhrase = isDualFaceSwap
-          ? 'two people, three-quarter view, person on left side, person on right side, clear gap between them'
-          : 'three-quarter view, eyes and nose visible, no back view, no silhouette';
-        const dualSepRule = isDualFaceSwap
-          ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
-          : '';
+        // Flat-path defaults — unchanged. dualOverrides (staggered mode)
+        // replaces these specific strings later, leaving the flat path
+        // byte-identical when no override is active.
+        const faceLockPhrase = dualOverrides
+          ? dualOverrides.faceLockPhrase
+          : isDualFaceSwap
+            ? 'two people, three-quarter view, person on left side, person on right side, clear gap between them'
+            : 'three-quarter view, eyes and nose visible, no back view, no silhouette';
+        const dualSepRule = dualOverrides
+          ? dualOverrides.separationRule
+          : isDualFaceSwap
+            ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
+            : '';
         const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
         const faceRealismRule = needsRealisticFaces
@@ -685,6 +715,37 @@ Layer these on top of the medium and vibe — each is an independent randomizati
         const faceDescRule = isDualFaceSwap
           ? 'Do NOT over-describe faces. Push detail into clothing, pose, and environment.'
           : 'Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, and environment.';
+
+        // COMPOSITION RULES lines — factored out so dual depth overrides can
+        // replace specific rules without touching the flat code path. When
+        // dualOverrides is null (flat mode or single face swap), the strings
+        // below match today's inline ternaries byte-for-byte.
+        const framingLine = dualOverrides
+          ? dualOverrides.framingRule
+          : isDualFaceSwap
+            ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.'
+            : 'Character visible from waist up, filling at least 50% of frame height.';
+        const faceAngleLine = dualOverrides
+          ? dualOverrides.faceAngleRule
+          : isDualFaceSwap
+            ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera. NEVER gazing at scenery or horizon.'
+            : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.';
+        const staticLine = dualOverrides
+          ? dualOverrides.staticRule
+          : isDualFaceSwap
+            ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.'
+            : '';
+        const cameraLine = dualOverrides
+          ? dualOverrides.cameraRule
+          : isDualFaceSwap
+            ? 'Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.'
+            : '';
+        const connectionLine = dualOverrides
+          ? dualOverrides.connectionRule
+          : isDualFaceSwap
+            ? 'Both characters should feel CONNECTED — sharing the same moment, reacting to the same world. Not doing separate isolated activities.'
+            : '';
+        const extraConstraintsBlock = dualOverrides ? dualOverrides.extraConstraints : '';
 
         nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
@@ -708,13 +769,13 @@ MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 
 COMPOSITION RULES:${dualSepRule}
-- ${isDualFaceSwap ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.' : 'Character visible from waist up, filling at least 50% of frame height.'}
-- ${isDualFaceSwap ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera. NEVER gazing at scenery or horizon.' : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.'}
-- ${isDualFaceSwap ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.' : ''}
-- ${isDualFaceSwap ? 'Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.' : ''}
-- ${isDualFaceSwap ? 'Both characters should feel CONNECTED — sharing the same moment, reacting to the same world. Not doing separate isolated activities.' : ''}
+- ${framingLine}
+- ${faceAngleLine}
+- ${staticLine}
+- ${cameraLine}
+- ${connectionLine}
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
-- Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.${faceRealismRule}
+- Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.${faceRealismRule}${extraConstraintsBlock}
 ${dualAction ? `\nACTION IN SCENE (body language only):\n"${dualAction}"\nUse this for body pose. Do NOT describe eye direction.\n` : ''}${singleAction ? `\nACTION IN SCENE${needsEpicBackdrop ? ' (POSED PORTRAIT)' : ''}:\n"${singleAction}"\nUse this exact action. Adapt it to fit the medium and scene. Do NOT describe eye direction; the action describes what the body is doing.\n${needsEpicBackdrop ? '\nBACKDROP RULE — NON-NEGOTIABLE: This is a POSED PHOTO. The character is posing for the camera, so the SCENE/BACKDROP must be the reason this photo exists. Push the location HARD: pull the most striking elements from the scene DNA above (towering scale, dramatic sky, magical atmosphere, iconic landmark, sweeping vista, unusual color, theatrical light). Use AT LEAST 3 specific environmental details. Do NOT default to a generic backdrop — this scene is what makes the photo memorable.\n' : ''}` : ''}
 CHARACTER${isDualFaceSwap ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
@@ -1033,7 +1094,29 @@ Output ONLY the prompt.`;
       `[nightly-dreams] Image generation complete (prediction: ${genResult.predictionId})`
     );
 
-    // Face swap: dual (two people) or single — retry up to 3 times
+    // Face swap: dual (two people) or single — retry up to 3 times.
+    // When force_dual_v2 is set, route through dualFaceSwapV2 (face-detection
+    // crop + selective paste-back). On v2_insufficient_faces, fall back to v1.
+    const runDualSwap = async (
+      lSrc: string,
+      rSrc: string,
+      tgt: string,
+      deadline: number
+    ): Promise<string> => {
+      if (force_dual_v2) {
+        try {
+          return await dualFaceSwapV2(lSrc, rSrc, tgt, REPLICATE_TOKEN, supabase, userId, deadline);
+        } catch (err) {
+          const msg = (err as Error).message || '';
+          if (msg.startsWith('v2_insufficient_faces')) {
+            console.warn(`[nightly-dreams] v2 -> v1 fallback: ${msg}`);
+            return await dualFaceSwap(lSrc, rSrc, tgt, REPLICATE_TOKEN, supabase, userId, deadline);
+          }
+          throw err;
+        }
+      }
+      return await dualFaceSwap(lSrc, rSrc, tgt, REPLICATE_TOKEN, supabase, userId, deadline);
+    };
     const FACE_SWAP_MAX_RETRIES = 3;
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
       let swapSuccess = false;
@@ -1042,13 +1125,10 @@ Output ONLY the prompt.`;
           console.log(
             `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
           );
-          tempUrl = await dualFaceSwap(
+          tempUrl = await runDualSwap(
             faceSwapSources[0].sourceUrl,
             faceSwapSources[1].sourceUrl,
             tempUrl,
-            REPLICATE_TOKEN,
-            supabase,
-            userId,
             t0 + 140_000
           );
           lap('dual-face-swap');
@@ -1154,13 +1234,10 @@ Output ONLY the prompt.`;
         if (dupAttempt > 0) await new Promise((r) => setTimeout(r, 350));
         try {
           if (faceSwapSources && faceSwapSources.length === 2) {
-            tempUrl = await dualFaceSwap(
+            tempUrl = await runDualSwap(
               faceSwapSources[0].sourceUrl,
               faceSwapSources[1].sourceUrl,
               genResult.url,
-              REPLICATE_TOKEN,
-              supabase,
-              userId,
               t0 + 140_000
             );
           } else if (faceSwapSource) {

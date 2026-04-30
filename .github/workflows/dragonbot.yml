@@ -2,9 +2,8 @@ name: DragonBot Dream Generation
 
 on:
   schedule:
-    # 19:00 UTC + 07:00 UTC — staggered from prior migrated bots.
-    - cron: '0 19 * * *'
-    - cron: '0 7 * * *'
+    - cron: '33 4 * * *'
+    - cron: '33 16 * * *'
   workflow_dispatch:
     inputs:
       path:
@@ -15,6 +14,10 @@ on:
         description: 'Specific vibe (default: random)'
         required: false
         default: 'random'
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   generate:
@@ -27,13 +30,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
-
-      - name: Random delay (0-4 hours)
-        if: github.event_name == 'schedule'
-        run: sleep $((RANDOM % 14400))
 
       - name: Generate DragonBot dream
         env:
