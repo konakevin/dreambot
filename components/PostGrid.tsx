@@ -22,7 +22,6 @@ import { vs } from '@/lib/responsive';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const TILE_GAP = 2;
-const VISIBLE_THRESHOLD = 8;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TILE_SIZE = (SCREEN_WIDTH - TILE_GAP) / 2;
 const ROW_HEIGHT = TILE_SIZE + TILE_GAP;
@@ -53,7 +52,8 @@ export function PostGrid({
   showPrivateBadge = false,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
-  const headerHeight = useRef(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
 
   useEffect(() => {
     if (scrollToTopToken && scrollToTopToken > 0) {
@@ -95,8 +95,9 @@ export function PostGrid({
   }, [posts, highlightPostId]);
 
   const navigation = useNavigation();
-  const [hasScrolledToHighlight, setHasScrolledToHighlight] = useState(false);
   const [highlightDismissed, setHighlightDismissed] = useState(false);
+  const [badgeTapped, setBadgeTapped] = useState(false);
+  const [isFetchingHighlight, setIsFetchingHighlight] = useState(false);
 
   useEffect(() => {
     if (!highlightPostId) return;
@@ -104,25 +105,89 @@ export function PostGrid({
       setHighlightDismissed(true);
     });
   }, [navigation, highlightPostId]);
+
+  const [scrollOverlay, setScrollOverlay] = useState(false);
+
+  const scrollToHighlightRow = useCallback(
+    (idx: number) => {
+      if (!listRef.current || idx < 0) return;
+      const targetRow = Math.floor(idx / 2);
+      const targetOffset = Math.max(0, headerHeight + targetRow * ROW_HEIGHT - ROW_HEIGHT * 0.3);
+
+      setScrollOverlay(true);
+      listRef.current.scrollToOffset({ offset: targetOffset, animated: false });
+
+      setTimeout(() => {
+        setScrollOverlay(false);
+        setBadgeTapped(true);
+      }, 300);
+    },
+    [headerHeight]
+  );
+
+  useEffect(() => {
+    if (isFetchingHighlight && highlightIndex >= 0) {
+      setIsFetchingHighlight(false);
+      requestAnimationFrame(() => {
+        scrollToHighlightRow(highlightIndex);
+      });
+    }
+  }, [isFetchingHighlight, highlightIndex, scrollToHighlightRow]);
+
+  // Keep fetching pages while searching for the highlight post (user tapped badge)
+  useEffect(() => {
+    if (
+      isFetchingHighlight &&
+      highlightIndex === -1 &&
+      activeQuery.hasNextPage &&
+      !activeQuery.isFetchingNextPage
+    ) {
+      activeQuery.fetchNextPage();
+    }
+  }, [
+    isFetchingHighlight,
+    highlightIndex,
+    activeQuery.hasNextPage,
+    activeQuery.isFetchingNextPage,
+  ]);
+
+  const gridArea = containerHeight - headerHeight;
+  const visibleRows = gridArea > 0 ? Math.floor(gridArea / ROW_HEIGHT) : 0;
+  const maxVisibleIndex = visibleRows > 0 ? visibleRows * 2 - 1 : -1;
+
   const showJustViewedButton =
-    !highlightDismissed && highlightIndex >= VISIBLE_THRESHOLD && !hasScrolledToHighlight;
+    !!highlightPostId &&
+    !highlightDismissed &&
+    !badgeTapped &&
+    !isFetchingHighlight &&
+    (highlightIndex === -1
+      ? !activeQuery.isLoading
+      : containerHeight > 0 && highlightIndex > maxVisibleIndex);
 
   const scrollToHighlight = useCallback(() => {
-    if (highlightIndex >= 0 && listRef.current) {
-      const row = Math.floor(highlightIndex / 2);
-      const offset = headerHeight.current + row * ROW_HEIGHT;
-      listRef.current.scrollToOffset({ offset, animated: true });
-      setHasScrolledToHighlight(true);
+    if (highlightIndex >= 0) {
+      scrollToHighlightRow(highlightIndex);
+    } else if (activeQuery.hasNextPage) {
+      setIsFetchingHighlight(true);
+      activeQuery.fetchNextPage();
     }
-  }, [highlightIndex]);
+  }, [highlightIndex, activeQuery.hasNextPage, activeQuery.fetchNextPage, scrollToHighlightRow]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
+    >
       <FlatList<DreamPostItem>
         ref={listRef}
         data={posts}
         keyExtractor={(item) => item.id}
         numColumns={2}
+        getItemLayout={(_, index) => ({
+          length: ROW_HEIGHT,
+          offset: headerHeight + index * ROW_HEIGHT,
+          index,
+        })}
         columnWrapperStyle={styles.row}
         contentContainerStyle={{ paddingBottom: vs(90) }}
         windowSize={5}
@@ -138,11 +203,7 @@ export function PostGrid({
         }
         ListHeaderComponent={
           ListHeaderComponent ? (
-            <View
-              onLayout={(e) => {
-                headerHeight.current = e.nativeEvent.layout.height;
-              }}
-            >
+            <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
               {ListHeaderComponent}
             </View>
           ) : undefined
@@ -175,6 +236,11 @@ export function PostGrid({
           />
         )}
       />
+      {scrollOverlay && (
+        <View style={styles.scrollOverlay} pointerEvents="none">
+          <ActivityIndicator size="small" color={colors.textSecondary} />
+        </View>
+      )}
       {showJustViewedButton && (
         <TouchableOpacity
           style={styles.justViewedButton}
@@ -196,6 +262,13 @@ const styles = StyleSheet.create({
   emptyText: { color: colors.textSecondary, fontSize: 15 },
   footer: { paddingVertical: 20, alignItems: 'center' },
   container: { flex: 1 },
+  scrollOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#0F0F1A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
   justViewedButton: {
     position: 'absolute',
     bottom: 24,
