@@ -17,11 +17,23 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ━━━ CRITICAL — MATCH THE ROBOT'S IDENTITY ━━━
 The robot description below defines WHAT KIND of machine this is. READ it and render THAT specific robot with OBSESSIVE SURFACE DETAIL — every engraving, every patina layer, every glowing element, every scratch and modification. Do NOT default to:
-- the same weathered-paint-and-panel-seams on every robot (some are pristine, some are organic, some are crystalline, some are ancient stone)
+- the same weathered-paint-and-panel-seams on every robot (some are pristine, some are crystalline, some are alien-organic, some are armored, some are skeletal)
 - teal-and-orange lighting on every scene
 - nebula backdrop behind every robot (some are in forests, cities, deserts, interiors, ruins)
 - "poignant" mood every time (some robots are working, some are dangerous, some are playful)
-- generic smooth metal — every surface has TEXTURE (engravings, patina, moss, rust, glow, filigree, scarring)
+- generic smooth metal — every surface has TEXTURE (engravings, patina, oxidation, rust, glow, filigree, scarring, plate-stress)
+
+━━━ ABSOLUTE BANS — MACHINE-ONLY, NO FANTASY DRIFT ━━━
+The robot is a MACHINE — futuristic, industrial, alien-engineered, or experimental. NEVER render as:
+- carved stone, limestone, sandstone, or rock-body sculpture
+- gargoyle, statue, idol, totem, sphinx, or any architectural-creature
+- chapel / cathedral / abbey / monastery / shrine / temple / crypt / cloister architecture
+- stained-glass body parts, prayer inscriptions, religious iconography
+- mossy-ruins-overgrown-with-vines (the robot itself is not stone-overgrown — environment can be ruined, robot stays mechanical)
+- fairy-tale, medieval, or ancient-mythology aesthetic
+- wooden bodies, vine-wrapped frames, or organic plant-grown machine parts as the figure itself
+
+If the seeded robot description below uses ambiguous language ("ancient" / "ornate" / "weathered"), interpret it as ALIEN-ANCIENT, INDUSTRIAL-ANCIENT, or POST-APOCALYPTIC-ANCIENT — never as gothic-cathedral-ancient. The robot reads as a sci-fi machine, not a fantasy artifact.
 
 ━━━ NO CYBORG WOMEN ━━━
 Never render a sexy/feminine cyborg or android woman — that's VenusBot's territory. StarBot robots are MACHINES — industrial, military, scientific, ceremonial, or alien. They can be humanoid in shape but should read as MECHANICAL, not human.
