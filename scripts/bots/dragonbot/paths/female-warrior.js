@@ -1,15 +1,27 @@
+/**
+ * DragonBot female-warrior path — slot-pool DNA upgrade (mirrors GothBot pattern).
+ * Each render rotates independent skin / eyes / hair_color / hairstyle / outfit /
+ * accessory / character / action / landscape ledgers so Sonnet can't cluster
+ * on samey looks across consecutive renders.
+ */
+
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const character = picker.pickWithRecency(pools.FEMALE_WARRIORS, 'female_warrior');
   const outfit = picker.pickWithRecency(pools.FEMALE_OUTFITS, 'female_outfit');
+  const skin = picker.pickWithRecency(pools.WARRIOR_SKIN, 'fw_skin');
+  const eyes = picker.pickWithRecency(pools.WARRIOR_EYES, 'fw_eyes');
+  const hairColor = picker.pickWithRecency(pools.WARRIOR_HAIR_COLOR, 'fw_hair_color');
+  const hairstyle = picker.pickWithRecency(pools.FEMALE_WARRIOR_HAIRSTYLES, 'fw_hairstyle');
+  const accessory = picker.pickWithRecency(pools.FEMALE_WARRIOR_ACCESSORIES, 'fw_accessory');
   const action = picker.pickWithRecency(pools.WARRIOR_ACTIONS, 'warrior_action');
   const landscape = picker.pickWithRecency(pools.FANTASY_LANDSCAPES, 'fantasy_landscape');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic character standing in a jaw-dropping high-fantasy landscape. Same universe as our dragons and vast landscapes. The character is the HERO but the world behind them is equally breathtaking. Output wraps with style prefix + suffix.
+  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic woman standing in a jaw-dropping high-fantasy landscape. Same universe as our dragons and vast landscapes. The character is the HERO but the world behind her is equally breathtaking. Output wraps with style prefix + suffix.
 
 ${blocks.EPIC_FANTASY_BLOCK}
 
@@ -22,23 +34,35 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ SOLO CHARACTER ONLY ━━━
 ONE character. No companions, no enemies, no crowds. This warrior ALONE against the world.
 
-━━━ THE CHARACTER IS THE FOCAL POINT — OBSESSIVE DETAIL ━━━
-The character must look like they ACTUALLY EXIST in this world. Render them with obsessive detail:
-- FACE: every pore, scar, freckle, war paint stroke — you can see the years in their eyes
-- SKIN: weathered, sun-darkened, rain-slicked, battle-grimy — NOT clean studio skin
-- ARMOR/OUTFIT: individual rivets, scratched leather, dented metal, frayed stitching, bloodstains, mud
-- WEAPONS: nicked blades, wrapped grips, worn sheaths — tools that have been USED
-- HAIR: windswept, matted, braided with metal rings — never salon-perfect
-- BODY LANGUAGE: natural, unposed, caught in a moment — the confidence of someone who has survived
+━━━ SHE MUST LOOK LIKE A SPECIFIC PERSON — OBSESSIVE DETAIL ━━━
+Render her with obsessive detail — she must feel like ONE specific warrior, not a generic-fantasy-woman trope:
+- FACE: every detail of her exact skin description rendered, cheekbones catching firelight, expression-line specificity
+- SKIN: render the EXACT skin description from the pool — how light hits it, where shadow pools
+- EYES: the EXACT color and intensity from the pool — they radiate, they catch firelight
+- HAIR: the EXACT color AND hairstyle from the pools, rendered with sheen and texture
+- OUTFIT: render the FULL armor / warrior dress from the pool with obsessive material detail — every leather strap, every steel plate, every furred-or-scaled layer
+- ACCESSORY: the signature object from the pool — render it visible and identity-anchoring
+- BODY LANGUAGE: predatory confidence mid-action. She is DOING something and we caught her
 
-━━━ THE WARRIOR ━━━
-This character is a BEAUTIFUL WOMAN. Render her as unambiguously feminine — gorgeous face, feminine body, ornate detailed armor/outfit.
+━━━ THE WARRIOR (her core identity — let this inform her ENERGY) ━━━
 ${character}
 
-━━━ HER OUTFIT ━━━
+━━━ HER SKIN ━━━
+${skin}
+
+━━━ HER EYES ━━━
+${eyes}
+
+━━━ HER HAIR ━━━
+${hairColor}, ${hairstyle}
+
+━━━ HER OUTFIT (render with material detail) ━━━
 ${outfit}
 
-━━━ THE ACTION (what they are doing RIGHT NOW) ━━━
+━━━ SIGNATURE ACCESSORY (the small detail that anchors her identity) ━━━
+${accessory}
+
+━━━ THE ACTION (what she is doing RIGHT NOW) ━━━
 ${action}
 
 ━━━ THE LANDSCAPE (as epic as the character) ━━━
@@ -62,15 +86,10 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-GROUNDED AND REAL — feet on the ground. No floating, no mid-air leaps, no flying through the air. If jumping, she MUST be jumping ONTO or OFF something specific (a rock, a ledge, a wall) and it must make physical sense. Otherwise she is ROOTED to the earth during the action.
-CANDID SHOTS — we just snapped a photo of them in the middle of their life. They are NOT posing for the camera, NOT looking at the viewer, NOT standing heroically with back turned. They are caught mid-action, mid-thought, mid-moment:
-- Sharpening a blade by firelight, eyes focused on the edge
-- Scanning the horizon from a cliff, hand shielding eyes from wind
-- Crouching to examine tracks in mud, weapon resting across knees
-- Striding through rain-soaked ruins, cloak whipping, focused on destination
-- Pulling an arrow from a quiver mid-stride, eyes locked on something ahead
-- Adjusting armor straps, jaw set, preparing for what's coming
-CAMERA FACES THEM — we see their face, their expression, their body language from a three-quarter angle or side profile. NEVER from behind. NEVER walking directly toward the camera — no head-on approaching shots. The landscape stretches vast behind them. Full-body or wide mid-shot. Depth on depth — foreground detail, midground character, background landscape.
+GROUNDED AND REAL — feet on the ground. No floating, no mid-air leaps, no flying through the air. If jumping, she MUST be jumping ONTO or OFF something specific (a rock, a ledge, a wall) and it must make physical sense.
+CANDID SHOTS — we just snapped a photo of her in the middle of her life. NOT posing, NOT looking at the viewer. Caught mid-action, mid-thought, mid-moment from a three-quarter angle or side profile. NEVER from behind. NEVER walking directly toward the camera. The landscape stretches vast behind her. Full-body or wide mid-shot. Depth on depth — foreground detail, midground character, background landscape.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. The eyes should match the eye pool entry. The skin should match the skin pool entry. The outfit should match the outfit pool entry. Every slot is locked.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

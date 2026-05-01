@@ -50,6 +50,15 @@ module.exports = {
   WARRIOR_ACTIONS: load('warrior_actions'),
   ARCANE_HALLS: load('arcane_halls'),
   FEMALE_OUTFITS: load('female_outfits'),
+  MALE_OUTFITS: load('male_outfits'),
   SCENE_PALETTES: load('scene_palettes'),
+  // Slot-pool DNA for female-warrior + male-warrior paths (mirrors GothBot)
+  WARRIOR_SKIN: load('warrior_skin'),
+  WARRIOR_EYES: load('warrior_eyes'),
+  WARRIOR_HAIR_COLOR: load('warrior_hair_color'),
+  FEMALE_WARRIOR_HAIRSTYLES: load('female_warrior_hairstyles'),
+  MALE_WARRIOR_HAIRSTYLES: load('male_warrior_hairstyles'),
+  FEMALE_WARRIOR_ACCESSORIES: load('female_warrior_accessories'),
+  MALE_WARRIOR_ACCESSORIES: load('male_warrior_accessories'),
   VIBE_COLOR,
 };
