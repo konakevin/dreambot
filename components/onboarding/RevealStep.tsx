@@ -204,19 +204,29 @@ export function RevealStep({ onBack }: Props) {
     } = await supabase.auth.getSession();
     if (!session?.access_token) throw new Error('Not authenticated');
 
-    const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/generate-dream`, {
+    // Feature flag — when enabled, route the first-dream render through the
+    // dedicated generate-first-dream Edge Function (persona × location-class
+    // matrix). Spec: memory/project_first_dream_engine_spec.md.
+    const useFirstDreamEngine = process.env.EXPO_PUBLIC_FIRST_DREAM_ENGINE_ENABLED === 'true';
+
+    const endpoint = useFirstDreamEngine ? 'generate-first-dream' : 'generate-dream';
+    const reqBody = useFirstDreamEngine
+      ? { vibe_profile: describedProfile.current }
+      : {
+          mode: 'flux-dev',
+          medium_key: mediumKey,
+          vibe_key: vibeKey,
+          vibe_profile: describedProfile.current,
+          persist: false,
+        };
+
+    const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({
-        mode: 'flux-dev',
-        medium_key: mediumKey,
-        vibe_key: vibeKey,
-        vibe_profile: describedProfile.current,
-        persist: false,
-      }),
+      body: JSON.stringify(reqBody),
     });
 
     if (!res.ok) {
