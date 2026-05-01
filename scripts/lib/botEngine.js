@@ -726,7 +726,7 @@ async function runBot(opts) {
 
     let middle;
     let chaosProfile = { intensity: 0, injections: [], channelKey: null };
-    let sensoryProfile = { anchors: [], channelKeys: [] };
+    let sensoryProfile = { anchors: [], channelKeys: [], context: null };
     const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
     if (isDirectPrompt) {
@@ -766,7 +766,7 @@ async function runBot(opts) {
       const sensoryBlock = buildSensoryBriefBlock(sensoryProfile);
       if (sensoryBlock) {
         brief = brief + sensoryBlock;
-        console.log(`  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} (n=${sensoryProfile.anchors.length})`);
+        console.log(`  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`);
       }
 
       // 6. Generate "middle" — either single-pass Sonnet OR two-pass Sonnet→Haiku.
@@ -784,11 +784,18 @@ async function runBot(opts) {
           const conceptWords = tp.conceptWords || 150;
           const conceptBrief = extendBriefForConcept(brief, conceptWords);
           const sonnet = await callClaude({ brief: conceptBrief, maxTokens: 600 });
-          // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases
-          const polishedWords = tp.polishedWords || '65-90';
-          const preservePhrases =
+          // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases.
+          // Per-path word range overrides global (vampire-girls-2 needs more headroom).
+          const polishedWords =
+            (tp.polishedWordsByPath && tp.polishedWordsByPath[resolvedPath]) ||
+            tp.polishedWords || '65-90';
+          // Merge bot-config preserve phrases with the sensory anchors actually
+          // rolled this turn — Haiku gets explicit instruction to keep both.
+          const basePreserve =
             (tp.preservePhrasesByPath && tp.preservePhrasesByPath[resolvedPath]) ||
             tp.preservePhrases || [];
+          const sensoryPreserve = (sensoryProfile.anchors || []).map((a) => a.phrase);
+          const preservePhrases = [...basePreserve, ...sensoryPreserve];
           const polishBrief = buildPolishBrief({
             concept: sonnet.text,
             polishedWords,

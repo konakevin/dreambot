@@ -178,60 +178,35 @@ module.exports = {
   // seed gen once the layer is validated — same pattern as vampire_hair etc).
   sensoryAnchors: {
     enabled: true,
-    poolsByChannel: {
-      smell: [
-        'frankincense',
-        'wet stone moss',
-        'dried roses',
-        'candle smoke',
-        'embalming wax',
-        'mildew velvet',
-      ],
-      sound: [
-        'pipe-organ swell echoing through the nave',
-        'a bell tower chiming midnight',
-        'candle wick crackling',
-        'a distant pew creaking',
-        'choir whisper rising under stone vaulting',
-        'raven wings beating against stained glass',
-      ],
-      touch: [
-        'cold marble through silk slipper',
-        'damp velvet clinging to skin',
-        'lace digging at her throat',
-        'gilt frame scraping fingertips',
-        'blood drying tacky on her chin',
-        'candle wax cooling on her hand',
-      ],
-      temperature: [
-        'stone floor radiating crypt-cold',
-        'fever-heat trapped in her fur collar',
-        'breath fogging in still air',
-        'a single candle’s amber pocket of warmth',
-        'midnight chill seeping through stained glass',
-        'body heat absent from her skin',
-      ],
-      weight: [
-        'a chainmail hood pulling her shoulders down',
-        'a century-heavy crown pressing her brow',
-        'a train of velvet dragging across mosaic',
-        'a single jet locket against her sternum',
-        'a robe pooling at her ankles',
-        'a brass crucifix swinging from her belt',
-      ],
-      air: [
-        'incense haze drifting between pillars',
-        'dust motes turning slow in chapel light',
-        'frost crystallizing on the rose window',
-        'candle smoke curling toward vaulted ceiling',
-        'cobwebs trembling in unseen draft',
-        'rain-damp air pressing through broken stained glass',
-      ],
+    // Mandatory channels — always fire, on top of stochastic count.
+    // lightcolor is required so every render gets a punchy lighting palette
+    // (otherwise Sonnet defaults to safe warm-amber/cool-violet).
+    requiredChannels: ['lightcolor'],
+
+    // Map each path to its subject context. Pools are split into three
+    // variants (female / male / scene) so language matches the subject:
+    //   - female paths: "her throat", "lace digging", feminine garments
+    //   - male paths: "his jaw", "gauntlet leather", masculine gear
+    //   - scene paths: no human, environmental anchors only
+    // Paths not listed default to 'scene' in the layer.
+    pathContext: {
+      'vampire-girls-2': 'female',
+      'goth-closeup': 'female',
+      'goth-full-body': 'female',
+      'goth-male-closeup': 'male',
+      'goth-male-full-body': 'male',
+      'horror-creature': 'scene',
+      'dark-landscape': 'scene',
+      'gothic-architecture': 'scene',
+      'gothic-vista': 'scene',
+      'gothic-darklands': 'scene',
+      'castlevania-scene': 'scene',
+      'cozy-goth': 'scene',
     },
-    // Per-path overrides go here when a path needs distinct anchors (e.g.
-    // vampire-girls-2 might eventually want blood-smell + pulse-warmth instead
-    // of the cathedral-default pool above).
-    // poolsByChannelByPath: { 'vampire-girls-2': { smell: [...] } },
+
+    // 21 Sonnet-seeded pools (3 contexts × 7 channels × 50 entries each)
+    // loaded from scripts/bots/gothbot/seeds/sensory_<ctx>_<ch>.json.
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
   // Two-pass Sonnet→Haiku polish (V4/nightly Step 2 enhancement port).
@@ -243,8 +218,15 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
+    // Per-path word ceiling overrides — paths with sensory anchors + many
+    // mandatory anchors need more headroom or Haiku drops sensory detail.
+    polishedWordsByPath: {
+      'vampire-girls-2': '80-110',
+    },
     // Per-path anchor phrases that Haiku must preserve through compression.
     // Falls back to twoPassPolish.preservePhrases (global) if path not listed.
+    // Sensory anchor phrases that rolled this turn are auto-merged into this
+    // list at runtime (engine appends them — no need to enumerate here).
     preservePhrasesByPath: {
       'vampire-girls-2': [
         'glowing', 'radiating', 'inhuman',

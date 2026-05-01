@@ -82,15 +82,27 @@ const DEFAULT_POOLS = {
     'leaves trembling in invisible draft',
     'smoke curling upward',
   ],
+  // lightcolor is technically visual, not sensory — but stochastic injection
+  // works identically. Forces specific punchy lighting choices instead of
+  // letting Sonnet default to safe warm-amber/cool-violet on every render.
+  lightcolor: [
+    'warm amber key light from low angle',
+    'cool blue moonlight rim',
+    'violet sidelight tracing the silhouette',
+    'harsh white spotlight from above',
+    'flickering orange firelight on the face',
+    'soft pink rim light from behind',
+  ],
 };
 
 const CHANNEL_WEIGHTS = {
-  smell: 20,
-  sound: 20,
-  touch: 18,
-  temperature: 18,
-  weight: 15,
-  air: 15,
+  smell: 18,
+  sound: 18,
+  touch: 16,
+  temperature: 16,
+  weight: 14,
+  air: 14,
+  lightcolor: 18,
 };
 
 function pickWeightedChannel(channels, excludeKeys) {
@@ -117,44 +129,70 @@ function pickFromPool(pool) {
  * @param {object} args
  * @param {string} args.path           — the bot path being rendered
  * @param {object} args.botSensory     — bot.sensoryAnchors config block
- * @returns {{ anchors: Array<{channel: string, phrase: string}>, channelKeys: string[] }}
+ *
+ * Required channels (botSensory.requiredChannels): always roll one phrase
+ * from each, regardless of stochastic count. Stochastic channels (anything
+ * else in CHANNEL_WEIGHTS) roll on top per the 70/30 count rule.
+ *
+ * Pool resolution per channel (deepest wins):
+ *   1. botSensory.poolsByChannelByPath[path][channel]   — per-path override
+ *   2. botSensory.poolsByContextAndChannel[ctx][channel] — per-context (female/male/scene)
+ *   3. botSensory.poolsByChannel[channel]                — bot-wide
+ *   4. DEFAULT_POOLS[channel]                            — built-in fallback
+ *
+ * Context for the path comes from botSensory.pathContext[path] (defaults
+ * to 'scene' if path not listed).
+ *
+ * @returns {{ anchors: Array<{channel: string, phrase: string}>, channelKeys: string[], context: string }}
  */
 function rollSensoryAnchors({ path, botSensory }) {
   if (!botSensory || !botSensory.enabled) {
-    return { anchors: [], channelKeys: [] };
+    return { anchors: [], channelKeys: [], context: null };
   }
   if (botSensory.skipPaths && botSensory.skipPaths.includes(path)) {
-    return { anchors: [], channelKeys: [] };
+    return { anchors: [], channelKeys: [], context: null };
   }
 
-  // Resolve pools per channel: per-path > per-bot > defaults.
+  const context = (botSensory.pathContext && botSensory.pathContext[path]) || 'scene';
   const pathPools =
     (botSensory.poolsByChannelByPath && botSensory.poolsByChannelByPath[path]) || {};
+  const contextPools =
+    (botSensory.poolsByContextAndChannel && botSensory.poolsByContextAndChannel[context]) || {};
   const botPools = botSensory.poolsByChannel || {};
+  const requiredKeys = botSensory.requiredChannels || [];
 
-  const channels = Object.keys(CHANNEL_WEIGHTS)
+  const allChannels = Object.keys(CHANNEL_WEIGHTS)
     .map((key) => ({
       key,
       weight: CHANNEL_WEIGHTS[key],
-      pool: pathPools[key] || botPools[key] || DEFAULT_POOLS[key],
+      pool: pathPools[key] || contextPools[key] || botPools[key] || DEFAULT_POOLS[key],
     }))
     .filter((c) => c.pool && c.pool.length > 0);
 
-  if (channels.length === 0) return { anchors: [], channelKeys: [] };
+  if (allChannels.length === 0) return { anchors: [], channelKeys: [], context };
 
-  // 70% one anchor / 30% two anchors (different channels)
-  const count = Math.random() < 0.30 ? 2 : 1;
   const anchors = [];
   const usedKeys = [];
 
+  // Required channels first — one phrase from each, always.
+  for (const reqKey of requiredKeys) {
+    const channel = allChannels.find((c) => c.key === reqKey);
+    if (!channel) continue;
+    usedKeys.push(channel.key);
+    anchors.push({ channel: channel.key, phrase: pickFromPool(channel.pool) });
+  }
+
+  // Stochastic channels on top — 70% one extra anchor / 30% two extra anchors.
+  const stochasticChannels = allChannels.filter((c) => !requiredKeys.includes(c.key));
+  const count = Math.random() < 0.30 ? 2 : 1;
   for (let i = 0; i < count; i++) {
-    const channel = pickWeightedChannel(channels, usedKeys);
+    const channel = pickWeightedChannel(stochasticChannels, usedKeys);
     if (!channel) break;
     usedKeys.push(channel.key);
     anchors.push({ channel: channel.key, phrase: pickFromPool(channel.pool) });
   }
 
-  return { anchors, channelKeys: usedKeys };
+  return { anchors, channelKeys: usedKeys, context };
 }
 
 /**
