@@ -86,6 +86,21 @@ module.exports = {
     'dino-pack': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','volcanic-apocalypse','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-portrait': '80-110','dino-action': '80-110','dino-pack': '80-110' }, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'dino-portrait': 'dinosaur','dino-action': 'dinosaur','dino-pack': 'dinosaur',
+      'paleo-landscape': 'scene','herd-migration': 'dinosaur','territory-clash': 'dinosaur',
+      'nesting-ground': 'dinosaur','swamp-river': 'scene','ocean-reptiles': 'dinosaur',
+      'volcanic-apocalypse': 'scene','cinematic-silhouette': 'dinosaur','micro-detail': 'scene',
+      'extinction-event': 'scene','dino-cozy': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
