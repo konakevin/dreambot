@@ -17,9 +17,10 @@ const PET: CastMember = {
 };
 const ALL_CAST = [SELF, PARTNER, PET];
 
-const FACE_SWAP: MediumProps = { isCharacterOnly: false, faceSwaps: true };
-const ARTISTIC: MediumProps = { isCharacterOnly: false, faceSwaps: false };
-const CHAR_ONLY: MediumProps = { isCharacterOnly: true, faceSwaps: false };
+const FACE_SWAP: MediumProps = { isCharacterOnly: false, isSceneOnly: false, faceSwaps: true };
+const ARTISTIC: MediumProps = { isCharacterOnly: false, isSceneOnly: false, faceSwaps: false };
+const CHAR_ONLY: MediumProps = { isCharacterOnly: true, isSceneOnly: false, faceSwaps: false };
+const SCENE_ONLY: MediumProps = { isCharacterOnly: false, isSceneOnly: true, faceSwaps: false };
 
 describe('rollDream', () => {
   it('force_cast_role "self" always picks self', () => {
@@ -141,5 +142,20 @@ describe('rollDream', () => {
     const result = rollDream(ALL_CAST, FACE_SWAP, undefined, 'personal_cast');
     expect(result.nightlyPath).toBe('personal_cast');
     expect(result.castMembers.length).toBeGreaterThan(0);
+  });
+
+  it('scene-only mediums NEVER include a character — even with cast + force', () => {
+    // Random rolls
+    for (let i = 0; i < 100; i++) {
+      const r = rollDream(ALL_CAST, SCENE_ONLY);
+      expect(r.castMembers).toHaveLength(0);
+      expect(r.composition).toBe('pure_scene');
+    }
+    // Forced cast role gets overridden by isSceneOnly
+    for (const role of ['self', 'plus_one', 'pet'] as const) {
+      const r = rollDream(ALL_CAST, SCENE_ONLY, role);
+      expect(r.castMembers).toHaveLength(0);
+      expect(r.composition).toBe('pure_scene');
+    }
   });
 });

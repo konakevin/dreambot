@@ -164,6 +164,76 @@ module.exports = {
     ],
   },
 
+  // Sensory anchors (V4/nightly Step 3 enhancement port).
+  // Adds 1-2 non-visual sensory cues (smell/sound/touch/temperature/weight/air)
+  // to the Sonnet brief on every render. Sonnet weaves them into the scene so
+  // verbs/adjectives around them sharpen — frankincense smoke clinging to her
+  // hair, stone radiating crypt-cold up through her bare feet, etc.
+  //
+  // Bot-wide pools live in poolsByChannel (used for any path that doesn't
+  // override). Per-path richer pools live in poolsByChannelByPath. Resolution
+  // order per channel: per-path > per-bot > built-in DEFAULT_POOLS.
+  //
+  // Testing pools at 6 entries each (will scale to 100/channel via Sonnet
+  // seed gen once the layer is validated — same pattern as vampire_hair etc).
+  sensoryAnchors: {
+    enabled: true,
+    poolsByChannel: {
+      smell: [
+        'frankincense',
+        'wet stone moss',
+        'dried roses',
+        'candle smoke',
+        'embalming wax',
+        'mildew velvet',
+      ],
+      sound: [
+        'pipe-organ swell echoing through the nave',
+        'a bell tower chiming midnight',
+        'candle wick crackling',
+        'a distant pew creaking',
+        'choir whisper rising under stone vaulting',
+        'raven wings beating against stained glass',
+      ],
+      touch: [
+        'cold marble through silk slipper',
+        'damp velvet clinging to skin',
+        'lace digging at her throat',
+        'gilt frame scraping fingertips',
+        'blood drying tacky on her chin',
+        'candle wax cooling on her hand',
+      ],
+      temperature: [
+        'stone floor radiating crypt-cold',
+        'fever-heat trapped in her fur collar',
+        'breath fogging in still air',
+        'a single candle’s amber pocket of warmth',
+        'midnight chill seeping through stained glass',
+        'body heat absent from her skin',
+      ],
+      weight: [
+        'a chainmail hood pulling her shoulders down',
+        'a century-heavy crown pressing her brow',
+        'a train of velvet dragging across mosaic',
+        'a single jet locket against her sternum',
+        'a robe pooling at her ankles',
+        'a brass crucifix swinging from her belt',
+      ],
+      air: [
+        'incense haze drifting between pillars',
+        'dust motes turning slow in chapel light',
+        'frost crystallizing on the rose window',
+        'candle smoke curling toward vaulted ceiling',
+        'cobwebs trembling in unseen draft',
+        'rain-damp air pressing through broken stained glass',
+      ],
+    },
+    // Per-path overrides go here when a path needs distinct anchors (e.g.
+    // vampire-girls-2 might eventually want blood-smell + pulse-warmth instead
+    // of the cathedral-default pool above).
+    // poolsByChannelByPath: { 'vampire-girls-2': { smell: [...] } },
+  },
+
   // Two-pass Sonnet→Haiku polish (V4/nightly Step 2 enhancement port).
   // Sonnet writes a vivid 150-word concept (no compression pressure),
   // then Haiku compresses to Flux-ready length while preserving anchor

@@ -320,13 +320,13 @@ A "medium" is an art style (e.g., "Anime", "Gothic", "Twilight"). The `dream_med
 ```sql
 INSERT INTO public.dream_mediums (
   key, label, directive, flux_fragment,
-  is_active, is_scene_only, is_character_only, face_swaps, nightly_skip,
+  is_active, is_bot_only, is_character_only, face_swaps, character_render_mode,
   sort_order
 ) VALUES (
   'newmedium', 'NewMedium',                       -- key MUST match snake_case label
   '...tight ~120-150 word directive...',
   '...compact comma-separated flux phrase...',
-  true, false, false, false, false, 99
+  true, false, false, false, 'natural', 99
 );
 ```
 
@@ -337,14 +337,20 @@ INSERT INTO public.dream_mediums (
 - **Avoid female-coded language** if the medium should render any gender: ban "shojo", "gowns", "veils", "delicate jewelry" — they skew Flux/Kontext feminine. Use neutral terms or split by "if male: X / if female: Y".
 - **No camera/composition language** — conflicts with user photos.
 
-**Classification flag meanings:**
+**Classification flag meanings (DB columns that exist today):**
 
 | Flag | Effect |
 |---|---|
-| `is_scene_only` | Pure environment, no people. Cast excluded. |
+| `is_active` | Visible in user picker (mediums screen). `false` hides it but engine can still resolve. |
+| `is_bot_only` | Set with `is_active=false` for bot-only mediums (resolver finds them, picker doesn't show them). |
 | `is_character_only` | Always uses character composition path (LEGO, Claymation, Vinyl). |
 | `face_swaps` | Photo path will face-swap from user's cast thumb. |
-| `nightly_skip` | Re-rolled if picked in nightly cron. |
+| `character_render_mode` | `'natural'` = face-swap onto stylized rendering. `'embodied'` = medium IS the body (LEGO Minifig). |
+
+**Flags CLAUDE.md used to claim existed but DON'T:**
+
+- `is_scene_only` — never been a column. Currently no way to enforce "render scene-only, never include a character" at the algorithm level. See `memory/project_medium_flags_audit.md` for the open work to add this.
+- `nightly_skip` — never been a column. Today there's a single inline `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `nightly-dreams/index.ts:216`. Same memory file covers replacing this with a column.
 
 ### Step 2 — `supabase/functions/_shared/photoPrompts.ts` MEDIUM_CONFIGS (CRITICAL — never skip)
 
@@ -375,15 +381,11 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 
 **After adding, grep the file for the key to confirm there are no duplicates.** Duplicate keys silently let the LATER definition win — caused Claymation to render as Sack Boy and Neon to render as cyberpunk cybernetics in Apr 2026.
 
-### Step 3 — Path override sets (mirror in 3 files)
+### Step 3 — (deprecated)
 
-If the new medium needs path overrides, update ALL THREE locations to keep them in sync:
+This step used to require mirroring `SCENE_ONLY_MEDIUMS` / `CHARACTER_MEDIUMS` / `NIGHTLY_SKIP_MEDIUMS` Sets across `_shared/dreamAlgorithm.ts`, `lib/dreamAlgorithm.ts`, and `scripts/nightly-dreams.js`. **None of those Sets exist anymore** — the algorithm reads `medium.isCharacterOnly`, `medium.faceSwaps`, and `medium.characterRenderMode` straight from the resolver. Adding a new medium = step 1 (DB row) and step 2 (photoPrompts.ts).
 
-- `supabase/functions/_shared/dreamAlgorithm.ts` — `SCENE_ONLY_MEDIUMS`, `CHARACTER_MEDIUMS`, `NIGHTLY_SKIP_MEDIUMS`
-- `lib/dreamAlgorithm.ts` — same three sets (must match)
-- `scripts/nightly-dreams.js` — `SCENE_ONLY_SET`, `CHARACTER_SET`, `STYLIZED_MEDIUMS`
-
-These should mirror the DB columns. (Tech debt: should read from DB at startup.)
+The one still-hardcoded medium classification is `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `supabase/functions/nightly-dreams/index.ts:216`. If you need to ban another medium from nightly, add it there OR (preferred) ship the `nightly_skip` column refactor described in `memory/project_medium_flags_audit.md`.
 
 ### Step 4 — Bot config (`scripts/generate-bot-dreams.js`)
 

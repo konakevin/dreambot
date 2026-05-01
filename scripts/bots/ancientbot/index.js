@@ -50,19 +50,19 @@ module.exports = {
 
   cycleAllPaths: true,
 
-  mediums: ['ancient-epic', 'render', 'canvas'],
+  mediums: ['ancient_epic', 'render', 'canvas'],
 
   mediumStyles: {
-    'ancient-epic':
+    ancient_epic:
       'lush oil painting on heavy canvas, thick visible impasto brushwork, soft painterly edges, warm pigment glow, rich saturated color layered wet-on-wet, deep jewel-tone shadows, dramatic chiaroscuro with colored light, Romanticism-era monumental grandeur, every surface reads as PAINTED not photographed',
   },
 
   promptPrefixByMedium: {
-    'ancient-epic':
+    ancient_epic:
       'Lush oil painting, ancient civilization, rich saturated color, soft painterly brushwork, thick canvas texture, dramatic warm lighting, monumental scale',
   },
   promptSuffixByMedium: {
-    'ancient-epic':
+    ancient_epic:
       'oil-painting finish, visible brushstrokes, soft painted edges, no text no words no watermarks, NOT sharp NOT crisp NOT photorealistic NOT digital-art NOT 3D-render NOT anime',
   },
 

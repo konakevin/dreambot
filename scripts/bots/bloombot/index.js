@@ -31,22 +31,22 @@ module.exports = {
   // Multi-medium with photography weighted 3x (matches old config)
   mediums: ['photography', 'canvas', 'watercolor', 'pencil', 'illustration', 'render', 'animation', 'anime', 'storybook', 'fairytale'],
 
-  // conservatory path locks to custom bot-only bloom-conservatory medium
+  // conservatory path locks to custom bot-only bloom_conservatory medium
   mediumByPath: {
-    conservatory: 'bloom-conservatory',
+    conservatory: 'bloom_conservatory',
   },
 
   promptPrefixByMedium: {
-    'bloom-conservatory':
+    bloom_conservatory:
       'botanical conservatory interior, glass-and-iron greenhouse architecture, impossibly lush floral density',
   },
   promptSuffixByMedium: {
-    'bloom-conservatory':
+    bloom_conservatory:
       'no text, no words, no watermarks, hyper detailed, masterpiece quality',
   },
 
   mediumStyles: {
-    'bloom-conservatory':
+    bloom_conservatory:
       'botanical conservatory — glass panes, iron framework, arched architecture, flowers overflowing through structure',
   },
 

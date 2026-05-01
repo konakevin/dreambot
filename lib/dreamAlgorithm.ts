@@ -17,6 +17,7 @@
 
 export interface MediumProps {
   isCharacterOnly: boolean;
+  isSceneOnly: boolean;
   faceSwaps: boolean;
 }
 
@@ -76,9 +77,16 @@ export function rollDream(
   }
 
   // ── Step 1: Character roll (50%) ──
+  // Scene-only mediums (e.g., real_astro NASA astrophotography) NEVER render
+  // a character — even if forceCastRole is set or the user has cast members.
+  // The medium's intent is environment-only; injecting a character breaks
+  // the visual contract. Resolves at the very top so every downstream step
+  // (cast selection, composition) sees includeCharacter=false consistently.
   let includeCharacter: boolean;
 
-  if (forceCastRole === null) {
+  if (medium.isSceneOnly) {
+    includeCharacter = false;
+  } else if (forceCastRole === null) {
     includeCharacter = false;
   } else if (forceCastRole) {
     includeCharacter = true;
@@ -158,9 +166,14 @@ export function rollDream(
   }
 
   // ── Step 6: Composition ──
+  // Scene-only mediums are pinned to pure_scene — even epic_tiny would put
+  // a silhouette in the frame, which breaks the medium's contract (e.g.,
+  // NASA astrophotography has no human silhouettes anywhere).
   let composition: 'character' | 'epic_tiny' | 'pure_scene';
 
-  if (!includeCharacter) {
+  if (medium.isSceneOnly) {
+    composition = 'pure_scene';
+  } else if (!includeCharacter) {
     if (!includeLocation && !includeObject) {
       composition = 'pure_scene';
     } else {

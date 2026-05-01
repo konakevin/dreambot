@@ -15,7 +15,7 @@
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
-import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { fetchMediums, resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
@@ -207,15 +207,16 @@ Deno.serve(async (req) => {
       recentThings.slice(0, 5).join(', ')
     );
 
-    // Photography ruins the dream aesthetic in nightly — produces literal
-    // photoreal renders that read as "AI photoshop collage" when combined
-    // with imaginative scene elements (per Kevin 2026-04-30). Excluded from
-    // the medium roll for nightly path. Still allowed via force_medium for QA.
-    // Safety: if filtering would starve the pool (user has ONLY photography),
+    // Filter out mediums marked nightly_skip in the DB (e.g., photography —
+    // produces literal photoreal renders that read as "AI photoshop collage"
+    // when combined with imaginative scene elements). Still resolvable via
+    // force_medium for QA.
+    // Safety: if filtering would starve the pool (user has ONLY skip mediums),
     // fall back to the full art_styles so the render doesn't fail.
-    const NIGHTLY_BANNED_MEDIUMS = new Set(['photography']);
+    const allMediums = await fetchMediums();
+    const skipKeys = new Set(allMediums.filter((m) => m.nightlySkip).map((m) => m.key));
     const filtered = (nightlyProfile.art_styles ?? []).filter(
-      (m) => !NIGHTLY_BANNED_MEDIUMS.has(m.toLowerCase())
+      (m) => !skipKeys.has(m.toLowerCase())
     );
     const nightlyEligibleMediums =
       filtered.length > 0 ? filtered : (nightlyProfile.art_styles ?? []);

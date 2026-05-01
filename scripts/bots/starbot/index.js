@@ -36,7 +36,7 @@ module.exports = {
   mediumByPath: {
     'cosmic-vista': 'render',
     'cosmic-oracle': 'render',
-    'real-space': 'real-astro',
+    'real-space': 'real_astro',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -68,19 +68,19 @@ module.exports = {
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
   },
 
-  // Per-medium prompt prefix/suffix overrides. The star-oil-cosmos medium
+  // Per-medium prompt prefix/suffix overrides. The star_oil_cosmos medium
   // uses environment-dominant language so the scene wins over the figure
-  // (mirrors gothbot gothic-oil-garden pattern).
+  // (mirrors gothbot gothic_oil_garden pattern).
   promptPrefixByMedium: {
-    'star-oil-cosmos':
+    star_oil_cosmos:
       'cinematic sci-fi oil painting, environment-dominant composition, heavy impasto brushwork, atmospheric depth',
-    'real-astro':
+    real_astro:
       'NASA Hubble JWST astrophotography, vibrant false-color composite, luminous glowing gas clouds, blazing star fields, saturated vivid deep-space imaging',
   },
   promptSuffixByMedium: {
-    'star-oil-cosmos':
+    star_oil_cosmos:
       'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
-    'real-astro':
+    real_astro:
       'astrophotography finish, deep black space contrast, pinpoint stars, no text no words no watermarks',
   },
 
@@ -104,11 +104,11 @@ module.exports = {
     illustration:
       'Moebius / Jean-Giraud / Philippe-Druillet / Enki-Bilal / Jodorowsky Heavy-Metal-magazine ink-and-color sci-fi BD tradition, clean-ink linework + flat-color-wash with gradient-field cosmic backgrounds, European bande-dessinée science-fiction craftsmanship, Arzach / Incal / The-Airtight-Garage visual family, dream-logic cosmic surrealism, NOT superhero-comic NOT manga NOT cartoon',
     // Bot-only custom medium for cosmic-oracle path — sci-fi adaptation of
-    // gothbot's gothic-oil-garden. Full-scene painted cosmic oil-canvas where
+    // gothbot's gothic_oil_garden. Full-scene painted cosmic oil-canvas where
     // a figure lives WITHIN the environment (NOT a centered portrait).
-    'star-oil-cosmos':
+    star_oil_cosmos:
       'cinematic sci-fi oil painting, environment-dominant composition with figure WITHIN scene, visible impasto brushwork, heavy canvas texture, dramatic volumetric lighting, gallery-quality masterwork',
-    'real-astro':
+    real_astro:
       'NASA-grade astrophotography — Hubble / JWST / ESO false-color composite, vibrant wavelength-mapped colors cranked to maximum, luminous nebula clouds glowing from within, blazing star clusters with diffraction spikes, deep-black void contrast, scientific-imaging aesthetic pushed to wallpaper-worthy vivid, NOT sci-fi concept art NOT painting NOT CGI',
   },
 
