@@ -69,6 +69,18 @@ module.exports = {
     'cottage-village': 3,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['diorama','miniature-landscape','macro-nature','miniature-urban','tiny-cozy','contained-worlds','micro-fantasy','miniature-industry','cottage-village'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      diorama: 'scene','miniature-landscape': 'scene','macro-nature': 'scene','miniature-urban': 'scene',
+      'tiny-cozy': 'scene','contained-worlds': 'scene','micro-fantasy': 'scene','miniature-industry': 'scene','cottage-village': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
