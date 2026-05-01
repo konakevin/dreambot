@@ -53,4 +53,9 @@ module.exports = {
   SPACE_BLOOM_SPACES: load('space_bloom_spaces'),
   // Inline
   VIBE_COLOR,
+
+  SENSORY_POOLS: {
+    bloom: { smell: load('sensory_bloom_smell'), sound: load('sensory_bloom_sound'), touch: load('sensory_bloom_touch'), temperature: load('sensory_bloom_temperature'), weight: load('sensory_bloom_weight'), air: load('sensory_bloom_air'), lightcolor: load('sensory_bloom_lightcolor') },
+    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+  },
 };

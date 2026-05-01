@@ -58,4 +58,9 @@ module.exports = {
   SCENE_PALETTES: load('scene_palettes'),
   ATMOSPHERES: load('atmospheres'),
   VIBE_COLOR,
+
+  SENSORY_POOLS: {
+    figure: { smell: load('sensory_figure_smell'), sound: load('sensory_figure_sound'), touch: load('sensory_figure_touch'), temperature: load('sensory_figure_temperature'), weight: load('sensory_figure_weight'), air: load('sensory_figure_air'), lightcolor: load('sensory_figure_lightcolor') },
+    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+  },
 };

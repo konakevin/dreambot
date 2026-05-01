@@ -53,4 +53,10 @@ module.exports = {
   STEAMPUNK_WOMEN_WARDROBE: load('steampunk_women_wardrobe'),
   STEAMPUNK_WOMEN_ACCESSORIES: load('steampunk_women_accessories'),
   VIBE_COLOR,
+
+  SENSORY_POOLS: {
+    female: { smell: load('sensory_female_smell'), sound: load('sensory_female_sound'), touch: load('sensory_female_touch'), temperature: load('sensory_female_temperature'), weight: load('sensory_female_weight'), air: load('sensory_female_air'), lightcolor: load('sensory_female_lightcolor') },
+    male: { smell: load('sensory_male_smell'), sound: load('sensory_male_sound'), touch: load('sensory_male_touch'), temperature: load('sensory_male_temperature'), weight: load('sensory_male_weight'), air: load('sensory_male_air'), lightcolor: load('sensory_male_lightcolor') },
+    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+  },
 };

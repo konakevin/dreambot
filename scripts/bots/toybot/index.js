@@ -147,6 +147,21 @@ module.exports = {
     'action-hero': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['lego-epic','toy-landscape'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'action-figure': 'figure', 'action-hero': 'figure', sackboy: 'figure', vinyl: 'figure',
+      'gi-joe': 'figure', 'army-men': 'figure', 'calico-scene': 'figure',
+      'shortcake-scene': 'figure', 'barbie-scene': 'figure', claymation: 'figure',
+      'tabletop-minis': 'figure',
+      'lego-epic': 'scene', 'toy-landscape': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),

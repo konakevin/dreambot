@@ -10,7 +10,23 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
-  return `You are a mythic-maritime painter writing KRAKEN & LEVIATHAN scenes for OceanBot. Ancient sea monsters of impossible scale — tentacles rising around old sailing ships, massive silhouettes beneath the hull, whirlpools pulling vessels down, serpentine bodies breaking the surface. The terror and awe of the unknown deep. Output wraps with style prefix + suffix.
+  return `You are a mythic-maritime painter writing KRAKEN & LEVIATHAN scenes for OceanBot. Ancient maritime-fable creatures of impossible scale attacking pre-1850 wooden sailing ships — galleons, frigates, schooners, whaling ships, longships. The terror and awe of the unknown deep. Output wraps with style prefix + suffix.
+
+━━━ ONLY THESE FOUR CREATURES (NO OTHERS) ━━━
+1. KRAKEN — multi-tentacled cephalopodic horror with massive bullet-mantle and giant eye. Norse-myth tradition.
+2. GIANT SQUID — eight arms + two whip-tentacles with hooked clubs, enormous bullet-mantle, single huge eye. Architeuthis / colossal squid.
+3. GIANT OCTOPUS — eight arms with rows of suckers, mottled red-brown skin, mantle the size of a longboat, central beak. Pliny's polypus.
+4. LEVIATHAN-WHALE — Moby Dick / sperm whale / Bible-leviathan: ancient massive whale, scarred, harpoon-bristling back, single ancient eye, flukes the size of cathedral doors.
+
+━━━ ABSOLUTELY BANNED ━━━
+- NO sea serpents, sea-snakes, wyrms, eel-like creatures, serpentine bodies, snake coils. ZERO serpentine subjects.
+- NO dragons, sea-dragons, dragon-turtles.
+- NO megalodons or modern sharks (those are sea-creatures path).
+- NO mermaids (mermaid-legend path).
+- NO modern motor ships or submarines.
+
+━━━ EMBODIMENT RULE (CRITICAL) ━━━
+The creature's BODY must be visible in every render — mantle / head / eye / bulk / shoulder / fluke. NEVER render a disembodied tentacle floating in the scene without the squid/octopus/kraken body alongside it. A floating tentacle without a body looks stupid. Show the WHOLE BEAST attacking — its mantle rising beside the ship, its eye reflecting the lantern, its head breaking the surface, its bulk visible alongside the arms.
 
 ${blocks.OCEAN_IS_HERO_BLOCK}
 

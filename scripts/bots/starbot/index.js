@@ -166,6 +166,60 @@ module.exports = {
     'cyborg-man': 1,
   },
 
+  // Chaos layer — sci-fi works well with chaos. Skip face-dominant cyborg
+  // closeups (none here — cyborg-woman/man are full-figure). Allow subject
+  // chaos on scenery + megastructure paths (silhouette/echo distortions).
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: [
+      'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
+      'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
+      'megastructure',
+    ],
+  },
+
+  // Two-pass Sonnet→Haiku polish.
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    polishedWordsByPath: {
+      'cyborg-woman': '80-110',
+      'cyborg-man': '80-110',
+      'female-explorer': '80-110',
+      'male-explorer': '80-110',
+      'robot-moment': '80-110',
+    },
+    preservePhrasesByPath: {},
+  },
+
+  // Sensory anchors — 6 contexts (cyborg-female / cyborg-male /
+  // explorer-female / explorer-male / robot / scene). 42 pools at 100 each.
+  // Cyborg/explorer split per Kevin's catch — different body types
+  // (machine anatomy vs organic-in-EVA), can't share a pool.
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'cyborg-woman': 'cyborg-female',
+      'cyborg-man': 'cyborg-male',
+      'female-explorer': 'explorer-female',
+      'male-explorer': 'explorer-male',
+      'robot-moment': 'robot',
+      'cosmic-vista': 'scene',
+      'alien-landscape': 'scene',
+      'space-opera': 'scene',
+      'sci-fi-interior': 'scene',
+      'cozy-sci-fi-interior': 'scene',
+      'alien-city': 'scene',
+      'real-space': 'scene',
+      'cosmic-oracle': 'scene',
+      'megastructure': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, path, picker }) {
     const base = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),

@@ -39,4 +39,9 @@ module.exports = {
   COZY_DINO_ACTIONS: load('cozy_dino_actions'),
   PACK_DINO_ACTIONS: load('pack_dino_actions'),
   VIBE_COLOR,
+
+  SENSORY_POOLS: {
+    dinosaur: { smell: load('sensory_dinosaur_smell'), sound: load('sensory_dinosaur_sound'), touch: load('sensory_dinosaur_touch'), temperature: load('sensory_dinosaur_temperature'), weight: load('sensory_dinosaur_weight'), air: load('sensory_dinosaur_air'), lightcolor: load('sensory_dinosaur_lightcolor') },
+    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+  },
 };

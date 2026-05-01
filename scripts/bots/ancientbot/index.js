@@ -95,6 +95,20 @@ module.exports = {
     'ancient-island',
   ],
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['grand-temple','ancient-city','monument','river-civilization','ancient-harbor','lost-ruins','ancient-interior','ancient-quiet','ancient-waters','ancient-frost','ancient-night','ancient-jungle','ancient-island'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'grand-temple': 'scene','ancient-city': 'scene',monument: 'scene','river-civilization': 'scene',
+      'ancient-harbor': 'scene','lost-ruins': 'scene','ancient-interior': 'scene','ancient-quiet': 'scene',
+      'ancient-waters': 'scene','ancient-frost': 'scene','ancient-night': 'scene','ancient-jungle': 'scene',
+      'ancient-island': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),

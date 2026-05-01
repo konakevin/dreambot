@@ -79,6 +79,18 @@ module.exports = {
     'retro-tech': 2,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['saturday-morning','mall-hangout','video-store-friday','summer-golden','bedroom-time-capsule','holiday-seasons','road-trip','sleepover-night','retro-tech'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'saturday-morning': 'scene','mall-hangout': 'scene','video-store-friday': 'scene','summer-golden': 'scene',
+      'bedroom-time-capsule': 'scene','holiday-seasons': 'scene','road-trip': 'scene','sleepover-night': 'scene','retro-tech': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       eraPalette: pools.ERA_PALETTES[vibeKey] || pools.ERA_PALETTES.nostalgic,

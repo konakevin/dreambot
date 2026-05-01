@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/oceanbot/seeds/ocean_surface_lighting.json',
-  total: 25,
+  total: 200,
+  append: true,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} SURFACE MARITIME LIGHTING descriptions for OceanBot. These describe the light in above-water ocean scenes — the surface of the sea, coastlines, harbors, wave faces, horizons. Think NatGeo ocean photography, dramatic seascapes, weather photography.
 

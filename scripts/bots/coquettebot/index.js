@@ -106,6 +106,20 @@ module.exports = {
     'coastal-coquette': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['cottagecore-scene','pink-nature','sweet-treats','rainy-cottage','coastal-coquette','adorable-creatures'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'coquette-portrait': '80-110','fairytale-princess': '80-110','bedroom-princess': '80-110' }, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'coquette-portrait': 'female','fairytale-princess': 'female','bedroom-princess': 'female',
+      'coquette-fashion': 'female','adorable-couture': 'female','parisian-daydream': 'female','tea-party-romance': 'female',
+      'cottagecore-scene': 'scene','pink-nature': 'scene','sweet-treats': 'scene',
+      'rainy-cottage': 'scene','coastal-coquette': 'scene','adorable-creatures': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),

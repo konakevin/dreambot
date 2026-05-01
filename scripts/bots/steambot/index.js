@@ -87,6 +87,20 @@ module.exports = {
     'steam-transport': 2,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['steampunk-scene','steampunk-landscape','contraption','airship-skies','cozy-steampunk','steampunk-hybrid','steampunk-spectacle','steam-transport'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'sexy-steampunk-woman': '80-110' }, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'sexy-steampunk-woman': 'female',
+      'steampunk-scene': 'scene', 'steampunk-landscape': 'scene', contraption: 'scene',
+      'airship-skies': 'scene', 'cozy-steampunk': 'scene', 'steampunk-hybrid': 'scene',
+      'steampunk-spectacle': 'scene', 'steam-transport': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
