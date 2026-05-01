@@ -17,6 +17,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'hair_color');
   const hairstyle = picker.pickWithRecency(pools.MALE_HAIRSTYLES, 'male_hairstyle');
   const skinTone = picker.pickWithRecency(pools.SKIN_TONES, 'skin_tone');
+  const eyes = picker.pickWithRecency(pools.GOTH_MALE_EYE_COLORS, 'gmfb_eyes');
   const accessory = picker.pickWithRecency(pools.MALE_ACCESSORIES, 'male_accessory');
   const backdrop = picker.pickWithRecency(pools.CHARACTER_BACKDROPS, 'character_backdrop');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
@@ -51,6 +52,9 @@ ${character}
 
 ━━━ HIS SKIN ━━━
 ${skinTone}
+
+━━━ HIS EYES ━━━
+${eyes}
 
 ━━━ HIS HAIR COLOR ━━━
 ${hairColor}

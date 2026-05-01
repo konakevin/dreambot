@@ -40,6 +40,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const eyes = picker.pickWithRecency(pools.GOTH_EYE_COLORS, 'gc_eyes');
   const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'gc_hair_color');
   const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'gc_hairstyle');
+  const accessory = picker.pickWithRecency(pools.FEMALE_ACCESSORIES, 'gc_accessory');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'gc_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const perspective = PERSPECTIVES[Math.floor(Math.random() * PERSPECTIVES.length)];
@@ -79,6 +80,9 @@ ${hairColor}, ${hairstyle}
 
 ━━━ WARDROBE (visible at frame edge — neckline, shoulder, collar) ━━━
 ${wardrobe}
+
+━━━ HER SIGNATURE ACCESSORY (close-frame detail — collarbone, neckline, hand) ━━━
+${accessory}
 
 ━━━ CANDID MOMENT (she was caught doing THIS) ━━━
 ${moment}

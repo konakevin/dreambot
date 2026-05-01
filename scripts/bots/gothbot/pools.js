@@ -68,6 +68,7 @@ module.exports = {
   GOTH_FEMALE_WARDROBE: loadOptional('goth_female_wardrobe'),
   GOTH_FEMALE_SKIN: loadOptional('goth_female_skin'),
   GOTH_EYE_COLORS: loadOptional('goth_eye_colors'),
+  GOTH_MALE_EYE_COLORS: loadOptional('goth_male_eye_colors'),
   VAMPIRE_LIGHTING: loadOptional('vampire_lighting'),
   VAMPIRE_ETHNICITIES: loadOptional('vampire_ethnicities'),
   ATMOSPHERES: load('atmospheres'),
