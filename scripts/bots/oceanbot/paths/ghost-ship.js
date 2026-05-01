@@ -10,7 +10,15 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.OCEAN_SURFACE_LIGHTING, 'surface_lighting');
   const atmosphere = picker.pickWithRecency(pools.OCEAN_ATMOSPHERES, 'atmosphere');
 
-  return `You are a maritime painter writing GHOST SHIP scenes for OceanBot. Derelict vessels drifting through fog, tattered sails hanging limp, barnacle-crusted hulls, phantom silhouettes on the horizon, lanterns swinging on empty decks. Flying Dutchman energy. Eerie, beautiful, haunted. No crew visible — the ships are alone. Output wraps with style prefix + suffix.
+  return `You are a maritime painter writing GHOST SHIP scenes for OceanBot. Derelict CLASSICAL WOODEN sailing vessels drifting through fog — pre-1850 era ONLY. Galleons, schooners, frigates, brigs, sloops, junks, longships, dhows, caravels. Tattered sails hanging limp, barnacle-crusted wooden hulls, phantom silhouettes on the horizon, lanterns swinging on empty decks. Flying Dutchman energy. Eerie, beautiful, haunted. No crew visible — the ships are alone. Output wraps with style prefix + suffix.
+
+━━━ ABSOLUTELY BANNED (NO MODERN SHIPS) ━━━
+- NO submarines / U-boats / naval destroyers / battleships / cruisers / aircraft carriers
+- NO steamships / paddlewheelers / smokestacks / funnels / propellers
+- NO engines / diesel / gas-powered / combustion / motor boats / yachts
+- NO cargo ships / container ships / oil tankers / fishing trawlers
+- NO metal / iron / steel hulls / naval gun turrets
+- NO post-1850 era vessels of any kind — ONLY pre-1850 wooden sailing ships
 
 ${blocks.OCEAN_IS_HERO_BLOCK}
 
