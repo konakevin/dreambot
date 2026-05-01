@@ -60,9 +60,11 @@ module.exports = {
   MALE_WARRIOR_HAIRSTYLES: load('male_warrior_hairstyles'),
   FEMALE_WARRIOR_ACCESSORIES: load('female_warrior_accessories'),
   MALE_WARRIOR_ACCESSORIES: load('male_warrior_accessories'),
-  // Fantasy race + action variety pools (drow / tiefling / dragonborn / etc.)
+  // Fantasy race + adventuring action variety pools (drow / tiefling / dragonborn / etc.)
+  // Battle pool deleted 2026-05-01 — these paths are PEACEFUL adventuring shots,
+  // never combat / dying / wounded / violence.
   FANTASY_RACE: load('fantasy_race'),
-  WARRIOR_BATTLE_ACTIONS: load('warrior_battle_actions'),
+  WARRIOR_ADVENTURE_ACTIONS: load('warrior_adventure_actions'),
   FANTASY_LINEAGE_ACTIONS: load('fantasy_lineage_actions'),
   VIBE_COLOR,
 };

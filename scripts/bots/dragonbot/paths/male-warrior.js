@@ -1,12 +1,12 @@
 /**
- * DragonBot male-warrior path — slot-pool DNA + fantasy race upgrade.
+ * DragonBot male-warrior path — slot-pool DNA + fantasy race + ADVENTURING.
  *
- * Each render rotates independent skin / eyes / hair_color / hairstyle / outfit /
- * accessory ledgers, locks a fantasy RACE (drow / tiefling / dragonborn / etc.)
- * that drives the visual identity, and rolls one of THREE action types:
- *   30% candid (warrior_actions — atmospheric / traveling)
- *   50% battle (warrior_battle_actions — peak combat freeze-frames)
- *   20% lineage (fantasy_lineage_actions — race-flavored signature moments)
+ * NO battle scenes, NO combat, NO mid-strike, NO violence. These paths are
+ * candid / adventuring / atmospheric — warriors caught hiking, traveling,
+ * sitting in a tavern, scouting, breaking camp, or in a peaceful lineage-
+ * signature moment.
+ *
+ * Action roll: 40% generic candid / 40% adventuring / 20% peaceful lineage.
  */
 
 const pools = require('../pools');
@@ -25,21 +25,27 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  // 3-way action roll: 30% candid / 50% battle / 20% lineage
+  // 3-way action roll: 40% candid / 40% adventuring / 20% lineage
+  // ALL peaceful — no battle, no combat, no violence
   const actionRoll = Math.random();
   let action, actionType;
-  if (actionRoll < 0.3) {
+  if (actionRoll < 0.4) {
     action = picker.pickWithRecency(pools.WARRIOR_ACTIONS, 'warrior_action');
-    actionType = 'CANDID MOMENT (atmospheric, between battles)';
+    actionType = 'CANDID MOMENT (atmospheric quiet — render this exact peaceful frame)';
   } else if (actionRoll < 0.8) {
-    action = picker.pickWithRecency(pools.WARRIOR_BATTLE_ACTIONS, 'mw_battle_action');
-    actionType = 'BATTLE PEAK (mid-strike, parry, charge — render this exact freeze-frame)';
+    action = picker.pickWithRecency(pools.WARRIOR_ADVENTURE_ACTIONS, 'mw_adventure_action');
+    actionType = 'ADVENTURING MOMENT (hiking / traveling / town / tavern / camp — peaceful candid life)';
   } else {
     action = picker.pickWithRecency(pools.FANTASY_LINEAGE_ACTIONS, 'mw_lineage_action');
-    actionType = 'LINEAGE-SIGNATURE MOMENT (race-flavored — let his ancestry SHINE in this moment)';
+    actionType = 'LINEAGE-SIGNATURE MOMENT (race-flavored peaceful moment — let his ancestry SHINE)';
   }
 
-  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic man of a SPECIFIC fantasy lineage (drow, dragonborn, tiefling, blood elf, dwarf, orc, etc.) caught in a powerful moment. Same universe as our dragons and vast landscapes. The character is the HERO and his LINEAGE is unmistakable. Output wraps with style prefix + suffix.
+  return `You are a fantasy concept-art painter writing PEACEFUL ADVENTURING scenes for DragonBot — a single heroic man of a SPECIFIC fantasy lineage (drow, dragonborn, tiefling, blood elf, dwarf, orc, etc.) caught in a CANDID peaceful moment of adventuring life: hiking, traveling, in a tavern, breaking camp, scouting, in a quiet lineage-flavored moment. Same universe as our dragons and vast landscapes. The character is ALIVE, CAPABLE, and the camera caught him between battles, never IN one. Output wraps with style prefix + suffix.
+
+━━━ ABSOLUTE BANS — NO BATTLE / NO COMBAT / NO VIOLENCE ━━━
+NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood, NO fighting another being. NO "battle peak", NO charging-forward-with-weapon, NO standing-over-defeated-foe.
+
+Weapons can be HOLSTERED, sheathed across the back, slung at the hip, or being maintained (sharpened, restrung, polished). Weapons are NEVER in active combat use. The mood is candid / quiet / contemplative / adventurous — never violent.
 
 ${blocks.EPIC_FANTASY_BLOCK}
 

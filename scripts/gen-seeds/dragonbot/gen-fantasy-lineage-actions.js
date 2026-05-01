@@ -4,70 +4,67 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/fantasy_lineage_actions.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} RACE-FLAVORED ACTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (12-22 words) describing a SIGNATURE action that lets a fantasy lineage's flavor SHINE — drawing on canonical D&D / LOTR / WoW / Elder Scrolls / Witcher / Pathfinder / Eberron iconography.
+  metaPrompt: (n) => `You are writing ${n} RACE-FLAVORED PEACEFUL ACTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (12-22 words) describing a SIGNATURE peaceful / candid / atmospheric moment that lets a fantasy lineage's flavor SHINE — drawing on canonical D&D / LOTR / WoW / Elder Scrolls / Witcher / Pathfinder / Eberron iconography.
 
-These are NOT generic battle actions and NOT race descriptions — they are MOMENTS that ONLY a specific lineage would do, written generically enough to render with whatever race the path has rolled. Sonnet sees the race entry + the lineage action and builds a coherent moment.
+ABSOLUTELY NO BATTLE SCENES. NO COMBAT. NO MID-STRIKE. NO DYING / DEAD / WOUNDED. NO VIOLENCE. These are PEACEFUL moments that ONLY a specific lineage would do, written generically enough to render with whatever race the path has rolled. Sonnet sees the race entry + the lineage action and builds a coherent peaceful moment.
 
 ━━━ ACTION SPREAD (enforce variety across ${n}) ━━━
 
-ELVEN-ARCHETYPE ACTIONS (5-6, drawing on elf canon):
-- stringing a hand-crossbow with a single fluid motion, bolt-tip stained dark with poison
-- mid-step on a tree-branch hundreds of feet above the forest floor, weight perfectly balanced
-- pulling a longbow at full draw with three fingers in classical archer-form, eye sighting down the shaft
-- weaving a glyph in the air with a single fingertip, runic light trailing behind the gesture
-- drawing a graceful curved scimitar from a back-sheath in one continuous motion, blade catching dawn-light
+ELVEN-ARCHETYPE ACTIONS (5-6, peaceful elf canon):
+- mid-step on a tree-branch hundreds of feet above the forest floor, weight perfectly balanced, eyes scanning canopy
 - reading from an ancient elven tome by candlelight, fingers tracing a glowing rune on the page
+- weaving a glyph in the air with a single fingertip, runic light trailing behind the gesture without intent
+- braiding a small wildflower into long hair while seated on a moss-covered stump
+- listening at the base of a great tree, palm pressed to the bark, eyes closed in concentration
+- restringing a longbow at a wooden bench in golden afternoon light, full concentration on the gut-string
 
-DRAGONBORN / SCALED ACTIONS (3-4):
-- inhaling deeply, throat-scales swelling and glowing as breath-fire builds in the lungs
-- exhaling a controlled burst of flame onto a forge-anvil with practiced precision
-- catching a thrown spear in mid-flight with reptilian reflexes, scales flexing
-- biting through a chain in one snap of fanged jaws, pieces falling to the floor
+DRAGONBORN / SCALED ACTIONS (3):
+- breathing controlled flame onto a forge-anvil with practiced precision, sparks rising into cool air
+- warming hands at a campfire, scaled palms catching the warmth, wisps of breath in cold night
+- slowly running a clawed fingertip along a runic etching in stone, reading by touch
 
-TIEFLING / FIENDISH ACTIONS (3-4):
-- channeling infernal flame to curl around the wrist, fire dancing along the forearm without burning skin
-- flicking a tail-tip dismissively at a much larger opponent who's about to learn a lesson
-- horns catching a single beam of moonlight, expression unreadable in the half-light
-- letting eyes shift to full slit-pupil in a moment of focus, infernal heritage visible
+TIEFLING / FIENDISH ACTIONS (3):
+- letting infernal flame curl gently around the wrist by candlelight, fire dancing along forearm without burning
+- horns silhouetted against tavern firelight, head bent over an open spellbook
+- adjusting the tail-tip absentmindedly while reading by lamplight in a quiet study
 
-DROW / DARK-ELF ACTIONS (3-4):
-- emerging from shadow with a hand-crossbow already leveled, bolt-tip glistening with sleep-poison
-- stepping into pure darkness like into water, drow-stealth cloak swallowing all light around them
-- balancing along a stalactite-edge in the Underdark, no torch needed for those night-cursed eyes
-- weaving spider-silk into a hidden net with practiced fingers, faint Lolth-prayer on the lips
+DROW / DARK-ELF ACTIONS (2-3):
+- moving through pure shadow like through water, drow-cloak swallowing all light around
+- balancing along a stalactite-ridge in the Underdark, no torch needed for those night-cursed eyes
+- tracing a Lolth-prayer in the air with a single fingertip, faint silver-violet light following
 
 DWARVEN ACTIONS (2-3):
-- forging mid-strike with a massive hammer at a glowing rune-blade on the anvil, sparks flying
+- braiding a small bone-clasp into a long forked beard with practiced muscle-memory by firelight
 - reading a stone-rune by torchlight, fingers tracing carved letters older than memory
-- braiding a beard-clasp into the long forked beard with practiced muscle-memory
+- pouring stout from a wooden cask into a clay mug at a low tavern table
 
-ORCISH / TUSKED ACTIONS (2-3):
-- flexing tusks in a feral grin at a fallen weapon held aloft as trophy
-- shouldering a massive war-axe with one arm like it weighs nothing
-- letting out a guttural roar that echoes off canyon walls, breath visible in cold air
+ORCISH / TUSKED ACTIONS (2):
+- shouldering a massive pack with one arm at a mountain trailhead, breath visible in cold dawn air
+- studying a hand-drawn map at a tavern table, brow furrowed beneath bone-piercings, tusks softly visible
 
 BEAST-FOLK / SHIFTER ACTIONS (3-4):
-- dropping into a low feline crouch mid-stalk, claws extended and silent
-- catching a falling cloak in mid-leap with the agility of a born predator
-- shifting partial form mid-sprint, hands flexing into clawed reach
-- raising muzzle to scent the wind, ear-tufts pricked toward an approaching threat
+- raising muzzle to scent the wind on a high ridge, ear-tufts pricked toward an interesting smell
+- grooming a ruff of neck-fur with a silver comb at a wooden bench in low candlelight
+- catching a falling leaf on a clawed fingertip with the agility of a born predator
+- curled comfortably into a corner armchair at a tavern, tail wrapped around feet
 
-CONSTRUCTED / WARFORGED ACTIONS (2):
-- runic eyes flaring brighter as combat-protocols engage, mechanical limbs locking into stance
-- inscribing a new battle-rune onto an exposed chest-plate by hand, mid-meditation
+CONSTRUCTED / WARFORGED ACTIONS (1-2):
+- runic eye-slits flickering as constructed-self runs a dawn-routine system check, mechanical limbs flexing
+- kneeling to inscribe a new runic line onto an exposed forearm-plate, hammer and chisel in hand
 
 CELESTIAL / AASIMAR ACTIONS (1-2):
-- raising a hand and letting golden divine-light spill from the palm, banishing a lesser darkness
-- chanting a celestial prayer in the moment before drawing a glowing-rune blade
+- raising a palm to let warm golden divine-light spill softly into a cold bed-chamber, lighting it gently
+- chanting a quiet celestial prayer at dawn on a cliff-edge, light gathering around the head
 
 ━━━ RULES ━━━
-- Each entry is a RACE-FLAVORED MOMENT — uses canonical iconography from that lineage
-- 12-22 words — vivid + specific
+- Each entry is a RACE-FLAVORED PEACEFUL MOMENT — uses canonical iconography from that lineage
+- 12-22 words — vivid + specific + paintable
 - The action must REVEAL the race — non-elf races wouldn't do this action this way
 - NEVER name the race in the entry itself — just describe the action so any matching race fits
 - Suitable for BOTH male and female warriors
-- Avoid mythical creatures that aren't humanoid (no full-dragon actions)
-- One entry MUST involve a dragon-bond moment (signature DragonBot)
+- ABSOLUTELY NO battle / combat / weapon-IN-USE / violence
+- Weapons can be HOLSTERED / SHEATHED / being MAINTAINED — never IN COMBAT USE
+- Calm / curious / contemplative emotional tone
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
