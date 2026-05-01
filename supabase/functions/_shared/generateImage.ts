@@ -74,11 +74,11 @@ async function generateImageOnce(
           aspect_ratio: '9:16',
           num_outputs: 1,
           output_format: 'jpg',
-          // JPEG encoding quality (Replicate default is 80). Q95 is the
-          // sweet spot — captures ~95% of the perceptible improvement of
-          // Q100 at ~70% of the file-size cost. Zero impact on render
-          // time or Replicate cost (purely encoding, not diffusion).
-          output_quality: 95,
+          // JPEG encoding quality (Replicate default is 80). Maxed to 100
+          // for cleanest output — every render archived at the highest
+          // quality the model produces. Zero impact on render time or
+          // Replicate cost (purely encoding, not diffusion).
+          output_quality: 100,
         }
       : {
           width: 768,
