@@ -97,6 +97,19 @@ module.exports = {
     'epic-sunset': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['coastal-vista','wave','tropical-paradise','beach-landscape','tide-pool','beach-moment','cozy-beach','hawaii-flowers','reef-paradise','big-wave','seashell','beach-night','epic-sunset'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'coastal-vista': 'scene',wave: 'scene','tropical-paradise': 'scene','beach-landscape': 'scene',
+      'tide-pool': 'scene','beach-moment': 'scene','cozy-beach': 'scene','hawaii-flowers': 'scene',
+      'reef-paradise': 'scene','big-wave': 'scene',seashell: 'scene','beach-night': 'scene','epic-sunset': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
