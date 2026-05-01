@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_wardrobe.json',
-  total: 25,
+  total: 100,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} VAMPIRE WARDROBE descriptions for GothBot's vampire-girls-2 path. Each entry describes the dramatic fantasy-vampire wardrobe visible in a BUST or 3/4 portrait. Energy: D&D vampire character portrait, dark-fantasy paperback cover (Frazetta / Vallejo / Royo), Castlevania splash page (Ayami Kojima), dark-fantasy game character art (Diablo, Dragon Age vampire-noble, World of Warcraft blood-elf-aristocrat). NOT subdued period costume. NOT museum gown. DRAMATIC FANTASY-GLAMOUR-VAMPIRE wardrobe. Each entry: 14-22 words, comma-separated phrases.
 

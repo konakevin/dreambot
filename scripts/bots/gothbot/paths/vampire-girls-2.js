@@ -54,8 +54,15 @@ const MENACE_FEATURES = [
 ];
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const composition = COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
-  const menaceFeature = MENACE_FEATURES[Math.floor(Math.random() * MENACE_FEATURES.length)];
+  // Pool-first with inline fallback. Pools were Sonnet-scaled to 100 entries
+  // each, calibrated to the inline reference entries that drove the QA-loop
+  // wins. Keep inline arrays as safety fallback.
+  const composition = pools.VAMPIRE_COMPOSITIONS && pools.VAMPIRE_COMPOSITIONS.length > 0
+    ? picker.pickWithRecency(pools.VAMPIRE_COMPOSITIONS, 'vg2_composition')
+    : COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
+  const menaceFeature = pools.VAMPIRE_MENACE_FEATURES && pools.VAMPIRE_MENACE_FEATURES.length > 0
+    ? picker.pickWithRecency(pools.VAMPIRE_MENACE_FEATURES, 'vg2_menace')
+    : MENACE_FEATURES[Math.floor(Math.random() * MENACE_FEATURES.length)];
 
   const scenario = pools.VAMPIRE_SETTINGS && pools.VAMPIRE_SETTINGS.length > 0
     ? picker.pickWithRecency(pools.VAMPIRE_SETTINGS, 'vg2_setting')

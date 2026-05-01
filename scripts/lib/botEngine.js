@@ -35,6 +35,7 @@ const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
+const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -756,17 +757,60 @@ async function runBot(opts) {
         console.log(`  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`);
       }
 
-      // 6. Call Sonnet
+      // 6. Generate "middle" — either single-pass Sonnet OR two-pass Sonnet→Haiku.
+      // Two-pass is opt-in via bot.twoPassPolish — see README/docs for the contract.
+      // Reusable across bots: any bot can add the same config block to enable.
       errorStage = 'sonnet';
-      const claude = await callClaude({ brief, maxTokens: 400 });
+      const tp = bot.twoPassPolish;
+      const useTwoPass = Boolean(
+        tp && tp.enabled && !(tp.skipPaths && tp.skipPaths.includes(resolvedPath))
+      );
+
+      const generateMiddle = async () => {
+        if (useTwoPass) {
+          // Pass 1: Sonnet writes a vivid extended concept (no compression pressure)
+          const conceptWords = tp.conceptWords || 150;
+          const conceptBrief = extendBriefForConcept(brief, conceptWords);
+          const sonnet = await callClaude({ brief: conceptBrief, maxTokens: 600 });
+          // Pass 2: Haiku polishes to Flux-ready length, preserving anchor phrases
+          const polishedWords = tp.polishedWords || '65-90';
+          const preservePhrases =
+            (tp.preservePhrasesByPath && tp.preservePhrasesByPath[resolvedPath]) ||
+            tp.preservePhrases || [];
+          const polishBrief = buildPolishBrief({
+            concept: sonnet.text,
+            polishedWords,
+            preservePhrases,
+          });
+          const haiku = await callClaude({
+            brief: polishBrief,
+            maxTokens: 400,
+            primary: SECONDARY_MODEL,
+            secondary: PRIMARY_MODEL,
+          });
+          return {
+            text: haiku.text,
+            modelUsed: `${sonnet.modelUsed}+${haiku.modelUsed}`,
+            retries: sonnet.retries + haiku.retries,
+            fellBackToSecondary: sonnet.fellBackToSecondary || haiku.fellBackToSecondary,
+          };
+        }
+        // Standard single-pass
+        return callClaude({ brief, maxTokens: 400 });
+      };
+
+      const claude = await generateMiddle();
       claudeMeta = {
         retries: claude.retries,
         fellBackToSecondary: claude.fellBackToSecondary,
         modelUsed: claude.modelUsed,
       };
       middle = claude.text;
+      if (useTwoPass) {
+        console.log(`  🔁 two-pass polish: concept→Haiku-polished (${middle.split(/\s+/).length} words)`);
+      }
 
-      // 6b. Sonnet refusal detection — retry up to 3 times
+      // 6b. Refusal detection — retry full pipeline up to 3 times
       const REFUSAL_PATTERNS = [
         'I cannot create',
         "I'm not able to",
@@ -782,24 +826,24 @@ async function runBot(opts) {
         let refusalRetries = 0;
         while (refusalRetries < 3 && isRefusal(middle)) {
           refusalRetries += 1;
-          console.warn(`  ⚠️ Sonnet content refusal, retrying (${refusalRetries}/3)`);
-          const retry = await callClaude({ brief, maxTokens: 400 });
+          console.warn(`  ⚠️ content refusal, retrying (${refusalRetries}/3)`);
+          const retry = await generateMiddle();
           middle = retry.text;
         }
         if (isRefusal(middle)) {
-          throw new Error('Sonnet refused after 3 retries (content policy)');
+          throw new Error('Content refusal after 3 retries (policy)');
         }
       }
 
-      // 7. Banned-phrase retry (up to 3 total Sonnet attempts)
+      // 7. Banned-phrase retry (up to 2 retries = 3 total attempts)
       if (bot.bannedPhrases && bot.bannedPhrases.length > 0) {
         errorStage = 'banned-phrase-check';
         const lower = (s) => s.toLowerCase();
         let retries = 0;
         while (retries < 2 && bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {
           retries += 1;
-          console.warn(`  ⚠️ banned phrase detected, retrying Sonnet (${retries}/2)`);
-          const retry = await callClaude({ brief, maxTokens: 400 });
+          console.warn(`  ⚠️ banned phrase detected, retrying (${retries}/2)`);
+          const retry = await generateMiddle();
           middle = retry.text;
         }
         if (bot.bannedPhrases.some((p) => lower(middle).includes(lower(p)))) {

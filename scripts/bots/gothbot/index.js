@@ -156,13 +156,34 @@ module.exports = {
     skipPaths: [
       'goth-closeup',
       'goth-male-closeup',
-      'vampire-girls-2',
       'horror-creature',
     ],
     allowSubjectChaosPaths: [
       'goth-full-body',
       'goth-male-full-body',
     ],
+  },
+
+  // Two-pass Sonnet→Haiku polish (V4/nightly Step 2 enhancement port).
+  // Sonnet writes a vivid 150-word concept (no compression pressure),
+  // then Haiku compresses to Flux-ready length while preserving anchor
+  // phrases. Reusable for any bot — copy this block and customize
+  // preservePhrasesByPath to enable.
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    // Per-path anchor phrases that Haiku must preserve through compression.
+    // Falls back to twoPassPolish.preservePhrases (global) if path not listed.
+    preservePhrasesByPath: {
+      'vampire-girls-2': [
+        'glowing', 'radiating', 'inhuman',
+        'heavy', 'dark smoky-eye', 'sharp dark eyeliner',
+        'blood-red', 'corpse-pale', 'gothic',
+      ],
+    },
+    // Optional: skip two-pass on specific paths
+    // skipPaths: [],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);

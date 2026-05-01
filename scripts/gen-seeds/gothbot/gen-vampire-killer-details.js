@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_killer_details.json',
-  total: 25,
+  total: 100,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} VAMPIRE KILLER-DETAIL descriptions for GothBot's vampire-girls-2 path. Each entry is ONE distinctive vampire-coded hero element ON or HELD BY her. Energy: D&D vampire character portrait, dark-fantasy paperback cover, Castlevania splash page (Ayami Kojima), dark-fantasy game character art. Each entry: 6-15 words, comma-separated noun phrase.
 

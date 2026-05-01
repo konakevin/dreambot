@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_settings.json',
-  total: 25,
+  total: 100,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} DRAMATIC GOTHIC SETTING descriptions for GothBot's vampire-girls-2 path. Each entry describes a STUNNING DRAMATIC ENVIRONMENT seen as the BACKDROP behind a bust closeup of a vampire woman. The vampire is the focal point of the painting (50-65% of frame); the setting is the dramatic backdrop visible in the remaining 35-50%. Each entry: 18-30 words, present-tense, comma-separated phrases.
 

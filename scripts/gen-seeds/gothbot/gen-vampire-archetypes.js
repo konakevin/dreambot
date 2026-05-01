@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_archetypes.json',
-  total: 25,
+  total: 100,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} VAMPIRE ARCHETYPE descriptions for GothBot's vampire-girls-2 path. Each entry is a SHORT phrase (8-15 words) describing WHO this vampire woman IS — her role, her age, her energy, her story. NOT what she looks like — WHO she is. These get composed with separate makeup/wardrobe/hair pools.
 
