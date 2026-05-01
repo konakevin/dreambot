@@ -105,6 +105,20 @@ module.exports = {
   },
 
   // Scene-centric bot — sharedDNA is minimal (just palette + color)
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['landscape','cozy','garden-walk','cosmic','dreamscape','conservatory','tropical-paradise','city-flowers','reclaim','space-bloom'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { closeup: '80-110' }, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      closeup: 'bloom', conservatory: 'bloom',
+      landscape: 'scene', cozy: 'scene', 'garden-walk': 'scene', cosmic: 'scene',
+      dreamscape: 'scene', 'tropical-paradise': 'scene', 'city-flowers': 'scene',
+      reclaim: 'scene', 'space-bloom': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
