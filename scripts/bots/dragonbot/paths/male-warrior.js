@@ -1,26 +1,45 @@
 /**
- * DragonBot male-warrior path — slot-pool DNA upgrade (mirrors GothBot pattern).
+ * DragonBot male-warrior path — slot-pool DNA + fantasy race upgrade.
+ *
  * Each render rotates independent skin / eyes / hair_color / hairstyle / outfit /
- * accessory / character / action / landscape ledgers.
+ * accessory ledgers, locks a fantasy RACE (drow / tiefling / dragonborn / etc.)
+ * that drives the visual identity, and rolls one of THREE action types:
+ *   30% candid (warrior_actions — atmospheric / traveling)
+ *   50% battle (warrior_battle_actions — peak combat freeze-frames)
+ *   20% lineage (fantasy_lineage_actions — race-flavored signature moments)
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.MALE_WARRIORS, 'male_warrior');
+  const race = picker.pickWithRecency(pools.FANTASY_RACE, 'mw_race');
+  const archetype = picker.pickWithRecency(pools.MALE_WARRIORS, 'male_warrior');
   const outfit = picker.pickWithRecency(pools.MALE_OUTFITS, 'male_outfit');
   const skin = picker.pickWithRecency(pools.WARRIOR_SKIN, 'mw_skin');
   const eyes = picker.pickWithRecency(pools.WARRIOR_EYES, 'mw_eyes');
   const hairColor = picker.pickWithRecency(pools.WARRIOR_HAIR_COLOR, 'mw_hair_color');
   const hairstyle = picker.pickWithRecency(pools.MALE_WARRIOR_HAIRSTYLES, 'mw_hairstyle');
   const accessory = picker.pickWithRecency(pools.MALE_WARRIOR_ACCESSORIES, 'mw_accessory');
-  const action = picker.pickWithRecency(pools.WARRIOR_ACTIONS, 'warrior_action');
   const landscape = picker.pickWithRecency(pools.FANTASY_LANDSCAPES, 'fantasy_landscape');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic man standing in a jaw-dropping high-fantasy landscape. Same universe as our dragons and vast landscapes. The character is the HERO but the world behind him is equally breathtaking. Output wraps with style prefix + suffix.
+  // 3-way action roll: 30% candid / 50% battle / 20% lineage
+  const actionRoll = Math.random();
+  let action, actionType;
+  if (actionRoll < 0.3) {
+    action = picker.pickWithRecency(pools.WARRIOR_ACTIONS, 'warrior_action');
+    actionType = 'CANDID MOMENT (atmospheric, between battles)';
+  } else if (actionRoll < 0.8) {
+    action = picker.pickWithRecency(pools.WARRIOR_BATTLE_ACTIONS, 'mw_battle_action');
+    actionType = 'BATTLE PEAK (mid-strike, parry, charge — render this exact freeze-frame)';
+  } else {
+    action = picker.pickWithRecency(pools.FANTASY_LINEAGE_ACTIONS, 'mw_lineage_action');
+    actionType = 'LINEAGE-SIGNATURE MOMENT (race-flavored — let his ancestry SHINE in this moment)';
+  }
+
+  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic man of a SPECIFIC fantasy lineage (drow, dragonborn, tiefling, blood elf, dwarf, orc, etc.) caught in a powerful moment. Same universe as our dragons and vast landscapes. The character is the HERO and his LINEAGE is unmistakable. Output wraps with style prefix + suffix.
 
 ${blocks.EPIC_FANTASY_BLOCK}
 
@@ -31,21 +50,24 @@ ${blocks.CINEMATIC_COMPOSITION_BLOCK}
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. This warrior ALONE against the world.
+ONE character. No companions, no enemies, no crowds. This warrior ALONE in his moment.
 
-━━━ HE MUST LOOK LIKE A SPECIFIC PERSON — OBSESSIVE DETAIL ━━━
-Render him with obsessive detail — he must feel like ONE specific warrior, not a generic-fantasy-man trope:
-- FACE: every detail of his exact skin description rendered, jaw catching firelight, expression-line specificity, scars and battle-marks where the pool calls for them
-- SKIN: render the EXACT skin description from the pool — how light hits it, where shadow pools
-- EYES: the EXACT color and intensity from the pool — they radiate, they catch firelight
-- HAIR: the EXACT color AND hairstyle from the pools (beard included where described)
-- OUTFIT: render the FULL armor / warrior dress from the pool with obsessive material detail — every leather strap, every steel plate, every furred-or-scaled layer
+━━━ HIS LINEAGE / RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
+${race}
+
+This race is NON-NEGOTIABLE. Render him with the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features above. If drow, obsidian-grey skin and white-silver hair. If tiefling, horns and slit-pupil eyes. If dragonborn, scaled face and draconic snout. If orc, green skin and tusks. The lineage is the HERO of identity.
+
+━━━ HE MUST LOOK LIKE A SPECIFIC PERSON OF HIS RACE — OBSESSIVE DETAIL ━━━
+He is MASCULINE — rugged, scarred, angular, powerful build, masculine features filtered through the race's anatomy.
+- FACE: render the EXACT race-anatomy first (ears, scales, horns, tusks, eye-shape), THEN layer the skin description
+- SKIN: render the EXACT skin description from the pool, in the race's natural tone
+- EYES: the EXACT color from the pool, filtered through the race's eye-type
+- HAIR: the EXACT color AND hairstyle (beard included where described, or absent if the race doesn't have hair)
+- OUTFIT: render the FULL armor / warrior dress from the pool with obsessive material detail
 - ACCESSORY: the signature object from the pool — render it visible and identity-anchoring
-- BODY LANGUAGE: predatory confidence mid-action
 
-━━━ THE WARRIOR (his core identity — let this inform his ENERGY) ━━━
-He is MASCULINE — rugged, scarred, angular. Render him as unambiguously male: powerful build, battle-worn jaw, masculine wardrobe.
-${character}
+━━━ HIS WARRIOR ARCHETYPE (his role / energy) ━━━
+${archetype}
 
 ━━━ HIS SKIN ━━━
 ${skin}
@@ -59,10 +81,10 @@ ${hairColor}, ${hairstyle}
 ━━━ HIS OUTFIT (render with material detail) ━━━
 ${outfit}
 
-━━━ SIGNATURE ACCESSORY (the small detail that anchors his identity) ━━━
+━━━ SIGNATURE ACCESSORY ━━━
 ${accessory}
 
-━━━ THE ACTION (what he is doing RIGHT NOW) ━━━
+━━━ THE ACTION — ${actionType} ━━━
 ${action}
 
 ━━━ THE LANDSCAPE (as epic as the character) ━━━
@@ -86,10 +108,11 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-GROUNDED AND REAL — feet on the ground. No floating, no mid-air leaps, no flying through the air. If jumping, he MUST be jumping ONTO or OFF something specific.
-CANDID SHOTS — caught mid-action, mid-thought, mid-moment from a three-quarter angle or side profile. NEVER from behind. NEVER walking directly toward the camera. The landscape stretches vast behind him. Full-body or wide mid-shot. Depth on depth — foreground detail, midground character, background landscape.
+GROUNDED — feet on the ground for non-flight moments. No floating, no impossible mid-air leaps unless the action explicitly calls for one (then render that specific moment).
+The action above defines the body-position. Render it EXACTLY — if battle peak, freeze him at that loaded instant. If lineage-flavored, let the race-iconography drive the moment.
+CAMERA — three-quarter angle or side profile so we see his face and lineage clearly. NEVER from behind. NEVER walking head-on toward camera. Full-body or wide mid-shot. Foreground detail, midground character, background landscape.
 
-DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. The eyes should match the eye pool entry. The skin should match the skin pool entry. The outfit should match the outfit pool entry. Every slot is locked.
+DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

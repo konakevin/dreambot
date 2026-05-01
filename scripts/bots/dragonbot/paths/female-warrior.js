@@ -1,27 +1,48 @@
 /**
- * DragonBot female-warrior path — slot-pool DNA upgrade (mirrors GothBot pattern).
+ * DragonBot female-warrior path — slot-pool DNA + fantasy race upgrade.
+ *
  * Each render rotates independent skin / eyes / hair_color / hairstyle / outfit /
- * accessory / character / action / landscape ledgers so Sonnet can't cluster
- * on samey looks across consecutive renders.
+ * accessory ledgers, locks a fantasy RACE (drow / tiefling / dragonborn / etc.)
+ * that drives the visual identity, and rolls one of THREE action types:
+ *   30% candid (warrior_actions — atmospheric / traveling)
+ *   50% battle (warrior_battle_actions — peak combat freeze-frames)
+ *   20% lineage (fantasy_lineage_actions — race-flavored signature moments)
+ *
+ * Race always renders. Sonnet builds a coherent moment from race + action +
+ * locked DNA + landscape.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.FEMALE_WARRIORS, 'female_warrior');
+  const race = picker.pickWithRecency(pools.FANTASY_RACE, 'fw_race');
+  const archetype = picker.pickWithRecency(pools.FEMALE_WARRIORS, 'female_warrior');
   const outfit = picker.pickWithRecency(pools.FEMALE_OUTFITS, 'female_outfit');
   const skin = picker.pickWithRecency(pools.WARRIOR_SKIN, 'fw_skin');
   const eyes = picker.pickWithRecency(pools.WARRIOR_EYES, 'fw_eyes');
   const hairColor = picker.pickWithRecency(pools.WARRIOR_HAIR_COLOR, 'fw_hair_color');
   const hairstyle = picker.pickWithRecency(pools.FEMALE_WARRIOR_HAIRSTYLES, 'fw_hairstyle');
   const accessory = picker.pickWithRecency(pools.FEMALE_WARRIOR_ACCESSORIES, 'fw_accessory');
-  const action = picker.pickWithRecency(pools.WARRIOR_ACTIONS, 'warrior_action');
   const landscape = picker.pickWithRecency(pools.FANTASY_LANDSCAPES, 'fantasy_landscape');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic woman standing in a jaw-dropping high-fantasy landscape. Same universe as our dragons and vast landscapes. The character is the HERO but the world behind her is equally breathtaking. Output wraps with style prefix + suffix.
+  // 3-way action roll: 30% candid / 50% battle / 20% lineage
+  const actionRoll = Math.random();
+  let action, actionType;
+  if (actionRoll < 0.3) {
+    action = picker.pickWithRecency(pools.WARRIOR_ACTIONS, 'warrior_action');
+    actionType = 'CANDID MOMENT (atmospheric, between battles)';
+  } else if (actionRoll < 0.8) {
+    action = picker.pickWithRecency(pools.WARRIOR_BATTLE_ACTIONS, 'fw_battle_action');
+    actionType = 'BATTLE PEAK (mid-strike, parry, charge — render this exact freeze-frame)';
+  } else {
+    action = picker.pickWithRecency(pools.FANTASY_LINEAGE_ACTIONS, 'fw_lineage_action');
+    actionType = 'LINEAGE-SIGNATURE MOMENT (race-flavored — let her ancestry SHINE in this moment)';
+  }
+
+  return `You are a fantasy concept-art painter writing EPIC FANTASY WARRIOR scenes for DragonBot — a single heroic woman of a SPECIFIC fantasy lineage (drow, dragonborn, tiefling, blood elf, etc.) caught in a powerful moment. Same universe as our dragons and vast landscapes. The character is the HERO and her LINEAGE is unmistakable. Output wraps with style prefix + suffix.
 
 ${blocks.EPIC_FANTASY_BLOCK}
 
@@ -32,20 +53,23 @@ ${blocks.CINEMATIC_COMPOSITION_BLOCK}
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. This warrior ALONE against the world.
+ONE character. No companions, no enemies, no crowds. This warrior ALONE in her moment.
 
-━━━ SHE MUST LOOK LIKE A SPECIFIC PERSON — OBSESSIVE DETAIL ━━━
-Render her with obsessive detail — she must feel like ONE specific warrior, not a generic-fantasy-woman trope:
-- FACE: every detail of her exact skin description rendered, cheekbones catching firelight, expression-line specificity
-- SKIN: render the EXACT skin description from the pool — how light hits it, where shadow pools
-- EYES: the EXACT color and intensity from the pool — they radiate, they catch firelight
-- HAIR: the EXACT color AND hairstyle from the pools, rendered with sheen and texture
-- OUTFIT: render the FULL armor / warrior dress from the pool with obsessive material detail — every leather strap, every steel plate, every furred-or-scaled layer
+━━━ HER LINEAGE / RACE (LOCKED — render her unmistakably as THIS lineage) ━━━
+${race}
+
+This race is NON-NEGOTIABLE. Render her with the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features above. If the race is drow, she has obsidian-grey skin and white-silver hair — NOT a default-fantasy-blonde human. If tiefling, she has horns and slit-pupil eyes. If dragonborn, scaled face and draconic snout. The lineage is the HERO of identity.
+
+━━━ SHE MUST LOOK LIKE A SPECIFIC PERSON OF HER RACE — OBSESSIVE DETAIL ━━━
+- FACE: render the EXACT race-anatomy first (ears, scales, horns, eye-shape), THEN layer the skin description from the pool
+- SKIN: render the EXACT skin description from the pool, in the race's natural tone (drow obsidian, dragonborn scaled, etc.)
+- EYES: the EXACT color and intensity from the pool, filtered through the race's eye-type (slit-pupil for dragonborn, glowing for blood elf, etc.)
+- HAIR: the EXACT color AND hairstyle from the pools (or absent if the race doesn't have hair)
+- OUTFIT: render the FULL armor / warrior dress from the pool with obsessive material detail
 - ACCESSORY: the signature object from the pool — render it visible and identity-anchoring
-- BODY LANGUAGE: predatory confidence mid-action. She is DOING something and we caught her
 
-━━━ THE WARRIOR (her core identity — let this inform her ENERGY) ━━━
-${character}
+━━━ HER WARRIOR ARCHETYPE (her role / energy — informs how she carries herself) ━━━
+${archetype}
 
 ━━━ HER SKIN ━━━
 ${skin}
@@ -59,10 +83,10 @@ ${hairColor}, ${hairstyle}
 ━━━ HER OUTFIT (render with material detail) ━━━
 ${outfit}
 
-━━━ SIGNATURE ACCESSORY (the small detail that anchors her identity) ━━━
+━━━ SIGNATURE ACCESSORY ━━━
 ${accessory}
 
-━━━ THE ACTION (what she is doing RIGHT NOW) ━━━
+━━━ THE ACTION — ${actionType} ━━━
 ${action}
 
 ━━━ THE LANDSCAPE (as epic as the character) ━━━
@@ -86,10 +110,11 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-GROUNDED AND REAL — feet on the ground. No floating, no mid-air leaps, no flying through the air. If jumping, she MUST be jumping ONTO or OFF something specific (a rock, a ledge, a wall) and it must make physical sense.
-CANDID SHOTS — we just snapped a photo of her in the middle of her life. NOT posing, NOT looking at the viewer. Caught mid-action, mid-thought, mid-moment from a three-quarter angle or side profile. NEVER from behind. NEVER walking directly toward the camera. The landscape stretches vast behind her. Full-body or wide mid-shot. Depth on depth — foreground detail, midground character, background landscape.
+GROUNDED — feet on the ground for non-flight moments. No floating, no impossible mid-air leaps unless the action explicitly calls for one (then render that specific moment).
+The action above defines the body-position. Render it EXACTLY — if it's a battle peak, freeze her at that loaded instant. If it's lineage-flavored, let the race-iconography drive the moment.
+CAMERA — three-quarter angle or side profile so we see her face and lineage clearly. NEVER from behind. NEVER walking head-on toward camera. Full-body or wide mid-shot. Foreground detail, midground character, background landscape.
 
-DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. The eyes should match the eye pool entry. The skin should match the skin pool entry. The outfit should match the outfit pool entry. Every slot is locked.
+DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };
