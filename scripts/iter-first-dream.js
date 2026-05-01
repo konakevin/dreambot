@@ -107,6 +107,28 @@ async function main() {
   // (Edge Function does its own auth check — for QA we use bypass_one_shot).
   const url = `${SUPABASE_URL}/functions/v1/generate-first-dream`;
 
+  // Mint a user JWT via admin API (service-role can generate session for any user).
+  // This is the proper way to call user-facing Edge Functions from QA scripts.
+  const { data: linkData, error: linkErr } = await sb.auth.admin.generateLink({
+    type: 'magiclink',
+    email: 'konakevin@gmail.com',
+  });
+  if (linkErr) {
+    console.error('Failed to mint admin link:', linkErr.message);
+    process.exit(1);
+  }
+  // Exchange the link token for a session
+  const otpToken = new URL(linkData.properties.action_link).searchParams.get('token');
+  const { data: sessionData, error: otpErr } = await sb.auth.verifyOtp({
+    token_hash: otpToken,
+    type: 'magiclink',
+  });
+  if (otpErr || !sessionData?.session?.access_token) {
+    console.error('Failed to exchange token:', otpErr?.message);
+    process.exit(1);
+  }
+  const userJwt = sessionData.session.access_token;
+
   for (let i = 1; i <= count; i++) {
     console.log(`━━━ #${i}/${count} | ${persona}/${location} | ${pickedLoc.name} ━━━`);
     try {
@@ -114,7 +136,7 @@ async function main() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${SERVICE_ROLE}`,
+          Authorization: `Bearer ${userJwt}`,
         },
         body: JSON.stringify({
           vibe_profile: vibeProfile,

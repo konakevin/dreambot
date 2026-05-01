@@ -44,6 +44,8 @@ interface RequestBody {
   selected_objects?: ResolvedObjectCard[];
   /** Test mode — bypass the one-shot guard so QA can re-run this for the same user */
   bypass_one_shot?: boolean;
+  /** Test mode — set userId from body (only honored when bearer = service role) */
+  test_user_id?: string;
 }
 
 Deno.serve(async (req) => {
@@ -68,28 +70,42 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Server misconfigured' }), { status: 500 });
   }
 
-  // Auth
-  const authHeader = req.headers.get('authorization') ?? '';
-  const userClient = createClient(SUPABASE_URL, Deno.env.get('SUPABASE_ANON_KEY') ?? SERVICE_ROLE, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  const {
-    data: { user },
-    error: authError,
-  } = await userClient.auth.getUser();
-  if (authError || !user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
-  }
-  const userId = user.id;
-
-  // Service-role client (for first_dream_cells RLS bypass + writes)
-  const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
-
   let body: RequestBody;
   try {
     body = (await req.json()) as RequestBody;
   } catch {
     body = {};
+  }
+
+  // Service-role client (for first_dream_cells RLS bypass + writes)
+  const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
+
+  // Auth — production path uses end-user JWT. Test path: when bearer
+  // matches the service role and body provides test_user_id, skip the
+  // user-JWT check (used by scripts/iter-first-dream.js for QA loops).
+  const authHeader = req.headers.get('authorization') ?? '';
+  const bearer = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const isServiceRoleCall = !!bearer && bearer === SERVICE_ROLE;
+
+  let userId: string;
+  if (isServiceRoleCall && body.test_user_id) {
+    userId = body.test_user_id;
+  } else {
+    const userClient = createClient(
+      SUPABASE_URL,
+      Deno.env.get('SUPABASE_ANON_KEY') ?? SERVICE_ROLE,
+      {
+        global: { headers: { Authorization: authHeader } },
+      }
+    );
+    const {
+      data: { user },
+      error: authError,
+    } = await userClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    }
+    userId = user.id;
   }
 
   // ── One-shot guard ──
@@ -332,24 +348,43 @@ Vibe: ${vibe.label}. ${vibe.directive}
   }
 
   // ── Insert upload row + flip first_dream_completed_at ──
-  const { data: upload, error: insertErr } = await supabase
-    .from('uploads')
-    .insert({
-      user_id: userId,
-      image_url: storedUrl,
-      ai_prompt: finalPrompt,
-      bot_message: brief.bannerCaption,
-      dream_medium: brief.resolvedMediumKey,
-      dream_vibe: brief.resolvedVibeKey,
-      caption: `[first-dream] ${brief.roll.persona}/${brief.roll.locationClass}`,
-      is_ai_generated: true,
-      is_posted: true,
-      is_approved: true,
-      fallback_reasons: brief.fallbackReasons.length > 0 ? brief.fallbackReasons : null,
-      first_dream: true,
-    })
-    .select('id')
-    .single();
+  // Build the insert payload. fallback_reasons + first_dream are added
+  // conditionally — they require migrations 140 (first_dream_completed_at)
+  // and 141 (uploads.first_dream). When 141 hasn't run yet, the insert
+  // would fail; we omit those fields and rely on the caption tag for
+  // post-launch telemetry.
+  const insertPayload: Record<string, unknown> = {
+    user_id: userId,
+    image_url: storedUrl,
+    ai_prompt: finalPrompt,
+    bot_message: brief.bannerCaption,
+    dream_medium: brief.resolvedMediumKey,
+    dream_vibe: brief.resolvedVibeKey,
+    caption: `[first-dream] ${brief.roll.persona}/${brief.roll.locationClass}`,
+    is_ai_generated: true,
+    is_posted: true,
+    is_approved: true,
+  };
+
+  // Try-with-first_dream first, fall back to without if column missing.
+  // This keeps the function working before/after migration 141 lands.
+  let upload: { id: string } | null = null;
+  let insertErr: { message: string } | null = null;
+  {
+    const tryWithFlag = await supabase
+      .from('uploads')
+      .insert({ ...insertPayload, first_dream: true })
+      .select('id')
+      .single();
+    if (tryWithFlag.error && /'first_dream'|first_dream/i.test(tryWithFlag.error.message)) {
+      const tryWithout = await supabase.from('uploads').insert(insertPayload).select('id').single();
+      upload = tryWithout.data as { id: string } | null;
+      insertErr = tryWithout.error;
+    } else {
+      upload = tryWithFlag.data as { id: string } | null;
+      insertErr = tryWithFlag.error;
+    }
+  }
 
   if (insertErr) {
     console.error('[first-dream] insert failed:', insertErr.message);
