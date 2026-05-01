@@ -34,6 +34,7 @@ const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
+const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -722,6 +723,7 @@ async function runBot(opts) {
     });
 
     let middle;
+    let chaosProfile = { intensity: 0, injections: [], channelKey: null };
     const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
     if (isDirectPrompt) {
@@ -732,10 +734,26 @@ async function runBot(opts) {
       }
       console.log('  ⚡ direct prompt (Sonnet bypassed)');
     } else {
-      // Standard path: brief → Sonnet → scene description
-      const brief = typeof briefResult === 'string' ? briefResult : String(briefResult);
+      // Standard path: brief → (optional chaos block) → Sonnet → scene description
+      let brief = typeof briefResult === 'string' ? briefResult : String(briefResult);
       if (!brief || brief.length < 50) {
         throw new Error(`buildBrief returned invalid brief (len=${brief.length})`);
+      }
+
+      // 5b. Roll chaos and append distortion block to the brief.
+      // bot.chaos.allowSubjectChaosPaths controls which paths permit subject-level
+      // chaos (silhouette/echo distortions). Default: subject chaos OFF (safe for
+      // character-centric paths). Scenery paths can opt in via allowSubjectChaosPaths.
+      const allowSubjectChaos = Boolean(
+        bot.chaos &&
+        bot.chaos.allowSubjectChaosPaths &&
+        bot.chaos.allowSubjectChaosPaths.includes(resolvedPath)
+      );
+      chaosProfile = rollChaos({ path: resolvedPath, botChaos: bot.chaos, allowSubjectChaos });
+      const chaosBlock = buildChaosBriefBlock(chaosProfile);
+      if (chaosBlock) {
+        brief = brief + chaosBlock;
+        console.log(`  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`);
       }
 
       // 6. Call Sonnet
@@ -953,6 +971,7 @@ async function runBot(opts) {
       localPath,
       durationMs,
       costCents,
+      chaos: chaosProfile,
     };
   } catch (err) {
     const durationMs = Date.now() - startedAt;

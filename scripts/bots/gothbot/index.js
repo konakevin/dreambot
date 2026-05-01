@@ -54,6 +54,21 @@ module.exports = {
     'vampire-girls-2': 'black-forest-labs/flux-dev',
   },
 
+  // Per-path vibe restriction — vampire-girls-2 only renders well with
+  // dark-coded vibes. Pretty-coded vibes (coquette/shimmer/ethereal/psychedelic)
+  // and tone-neutral ones (cinematic/epic) fight the vampire intent.
+  vibesByPath: {
+    'vampire-girls-2': [
+      'macabre', 'macabre', 'macabre',
+      'nightshade', 'nightshade', 'nightshade',
+      'arcane', 'arcane', 'arcane',
+      'dark',
+      'fierce',
+      'ancient',
+      'surreal',
+    ],
+  },
+
   mediumByPath: {
     'vampire-girls-2': 'vampire-portrait',
     'goth-male-full-body': [
@@ -84,11 +99,11 @@ module.exports = {
 
   promptPrefixByMedium: {
     'vampire-portrait':
-      'Extreme macro close-up, face fills entire frame, sharp vampire fangs visible, dark fine-art portrait painting, dramatic chiaroscuro lighting',
+      'wallpaper-worthy operatic gothic vampire painting, dramatic theatrical composition, gallery-poster gravity',
   },
   promptSuffixByMedium: {
     'vampire-portrait':
-      'painted portrait finish, no text no words no watermarks, NOT anime NOT cartoon NOT Artgerm NOT DeviantArt NOT stock-photo NOT Photoshop',
+      'operatic gothic dark-fantasy painting finish, painterly brushwork with bold heavy shadow, gallery-poster gravity, no text no words no watermarks, NOT photoreal NOT cinematic film-still NOT 35mm NOT magazine editorial NOT plastic-skin NOT Halloween costume NOT modern fashion photography',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
@@ -104,7 +119,7 @@ module.exports = {
     'gothic-realistic':
       '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture (NOT photoreal, NOT plastic-digital), strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality, NOT flat-inked, NOT manga, NOT smooth-digital-art, NOT Artgerm-plastic, NOT Rossdraws',
     'vampire-portrait':
-      'dark gothic portrait, warm candle-light against pitch-black void, bold shadow carving every vein and hollow into sharp relief, skin detail is HERO — render every crack every vein every sunken hollow, DRAMATIC dark gothic mood',
+      'WALLPAPER-WORTHY operatic gothic-theatrical painting fusing old-master-oil-painting tradition with painted-fantasy-poster drama, visible painterly brushwork, punchy jewel-tone palette anchored by deep velvet shadow, theatrical chiaroscuro pushed to operatic extreme, dramatic single-source key-light cutting through gloom, frame-worthy gallery-painting composition, dark gothic horror character energy, NOT photoreal NOT cinematic film-still NOT magazine editorial NOT plastic-skin NOT smooth-digital-art NOT modern fashion photography NOT pretty-girl-in-dress',
     anime:
       'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic, NOT cute-anime NOT shonen NOT moe',
     comics:
@@ -123,6 +138,32 @@ module.exports = {
   promptSuffix: blocks.PROMPT_SUFFIX,
 
   bannedPhrases: ['jack skellington', 'nightmare before christmas'],
+
+  // Chaos layer — port of V4's chaosLayer.ts. Adds 1-2 dream-logic perception
+  // distortions (geometry/reflection/scale/framing/secondary-light) to the
+  // Sonnet brief on ~70% of renders. Sonnet weaves the distortion into the
+  // scene description naturally.
+  //
+  // skipPaths: face-dominant paths where perception distortion would fight
+  // the face-swap aesthetic or muddy a portrait. horror-creature is opted out
+  // because the creature itself IS the chaos — adding more dilutes it.
+  //
+  // allowSubjectChaosPaths: only paths with a figure IN an environment (not
+  // face-dominant) get subject-chaos channel enabled. Pure scenery paths
+  // also benefit (figure becomes optional landmark).
+  chaos: {
+    enabled: true,
+    skipPaths: [
+      'goth-closeup',
+      'goth-male-closeup',
+      'vampire-girls-2',
+      'horror-creature',
+    ],
+    allowSubjectChaosPaths: [
+      'goth-full-body',
+      'goth-male-full-body',
+    ],
+  },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
   // excludes: minimal/cozy/peaceful (off-brand). Coquette + shimmer re-added

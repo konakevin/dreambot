@@ -1,130 +1,130 @@
 /**
- * GothBot vampire-girls-2 — extreme macro vampire face portraits.
+ * GothBot vampire-girls-2 — modern stylized fantasy vampire character art.
  *
- * Clean-slate path. The medium (vampire-portrait) is SHORT — just rendering
- * style (hyperreal, macro, wet skin). ALL character details come from pools.
- * Composition is forced via random CROP pick, not left to Sonnet.
+ * AESTHETIC TARGET (Kevin's reference screenshots): stylized dark-fantasy
+ * vampire character art / dark gothic horror splash painting / dramatic
+ * heavy-shadow stylization. NOT old-master oil portrait, NOT aged canvas,
+ * NOT museum patina, NOT smooth-digital-art, NOT pretty-girl-in-dress.
  *
- * POOLS:
- *   - VAMPIRE_ARCHETYPES — who she is (energy/story)
- *   - FACIAL_FEATURES — bone structure / face geometry
- *   - VAMPIRE_MAKEUP — specific makeup look
- *   - HAIR_COLORS + FEMALE_HAIRSTYLES — hair
- *   - VAMPIRE_WARDROBE — hint of clothing at frame edge
- *   - VAMPIRE_CANDID_MOMENTS — micro-action
- *   - VAMPIRE_ETHNICITIES — ethnic features
- *   - VAMPIRE_EYE_COLORS — glowing iris
- *   - VAMPIRE_LIGHTING — directional light composition
+ * BRIEF STRUCTURE: 5 sections. THE VAMPIRE is ONE UNIFIED paragraph weaving
+ * ethnicity + makeup + glow + hair + wardrobe + posture into a single
+ * coherent vampire description — no separate fields for Sonnet to summarize.
  */
 
 const pools = require('../pools');
-const blocks = require('../shared-blocks');
 
-const CROPS = [
-  'SINGLE EYE DOMINANT: one massive glowing eye fills 50%+ of the frame. The other eye is cropped out or lost in total shadow. We see: one huge iris + cheekbone + side of nose + edge of lips. Asymmetric, off-center.',
-  'BOTH EYES FRONTAL: both glowing eyes staring directly into camera, face framed tight — forehead cropped, chin cropped. Nose between the eyes, lips at very bottom of frame. Confrontational, symmetric, unsettling.',
-  'HALF-FACE SPLIT LIGHT: hard split — one half lit, other half in near-total blackness. One glowing eye visible, one invisible. Half of nose, half of lips. Dramatic chiaroscuro bisection.',
-  'EXTREME LOW ANGLE: camera below her chin looking UP. Both glowing eyes looking DOWN at us. Underside of jaw, nostrils, the underlit menace of something looking down at prey.',
-  'THREE-QUARTER TURN: face turned 30-40 degrees. Near eye large and glowing, far eye smaller and partially occluded by nose bridge. Cheekbone catching light. Classic portrait angle but MACRO tight.',
+const COMPOSITIONS = [
+  'bust portrait, frontal, head and shoulders centered, eyes meeting camera with confident predator gaze',
+  'three-quarter bust, face turned 30-40 degrees, dramatic confident pose',
+  'bust at the left third, face turned right, dramatic backdrop unfolding',
+  'chin-up heroic bust, head tilted up, throat exposed, regal posture',
+  'window-framed bust by a tall arched gothic window, dramatic backlight',
+  'over-shoulder turn-back, face in 3/4 looking past camera with cold confidence',
+];
+
+// MENACE_FEATURES — HEAVY theatrical-vampire-club-goth-stage-makeup. NOT
+// subtle, NOT model-light. Caked-on dramatic dark vampire makeup is the
+// PRIMARY visual character — heavy blackened eye-sockets blown across the
+// orbital bone, painted-on dark eyebrows, theatrical blood-red or jet-black
+// matte lips, heavy contour. Plus the GLOWING inhuman iris radiating light.
+// DEAD-BEAUTIFUL DEMONIC vampire formula:
+//   1. DEAD-PALE corpse-skin (pallid / blue-tinted / ash-grey — undead, NOT alive-healthy)
+//   2. HEAVY DARK GOTH MAKEUP (caked-on jet-black eyeshadow, dark brow, oxblood/jet-black lips)
+//   3. BEAUTIFUL bone structure preserved (she's a beautiful corpse, NOT a skeleton)
+//   4. DEMONIC EDGE (one inhuman tell: single fang visible at lip, clawed fingertip, predator pupil)
+//   + glowing eye color radiating light
+const MENACE_FEATURES = [
+  'glowing crimson eyes radiating inner red light, HEAVY caked-on jet-black eyeshadow piled thick on the lid, severe dark eyebrow, oxblood matte lips, DEAD-PALE corpse-blue-tinted skin, single sharp fang visible at her lip',
+  'glowing sapphire-blue eyes radiating cold luminous light, HEAVY thick jet-black smoky-eye on the lid, severe dark brow, oxblood matte lips, ASH-GREY corpse-pallid skin, single sharp fang visible at her lip',
+  'glowing amber-gold eyes with hourglass-slit pupils radiating molten light, HEAVY caked-on charcoal eyeshadow, severe dark eyebrow, blood-red matte lips, DEAD-PALE alabaster corpse-skin, clawed black-lacquered fingertips',
+  'glowing fel-green witch-fire eyes radiating green light, HEAVY thick jet-black eyeshadow piled on the lid, severe dark brow, jet-black matte lips, ASH-GREY corpse-skin with faint translucence, single sharp fang at her lip',
+  'glowing magenta-red eyes radiating crimson inner light, HEAVY caked-on dark-violet eyeshadow, severe dark brow, blood-red matte lips, DEAD-PALE blue-tinted corpse-skin, predator-still gaze',
+  'glowing void-violet eyes with no whites (full void-black sclera with iris centers radiating violet light), HEAVY thick jet-black smoky-eye, severe dark brow, jet-black matte lips, ASH-PALE corpse-skin',
+  'glowing crimson eyes with hourglass-slit pupils radiating predator light, HEAVY caked-on jet-black eyeshadow piled thick, severe dark brow, oxblood matte lips, DEAD-PALE alabaster corpse-skin, two sharp fangs visible against the lip',
+  'glowing necrotic-white eyes radiating pale luminescence, HEAVY thick charcoal eyeshadow on the lid, severe dark brow, blood-red matte lips, ASH-GREY corpse-skin with sickly undertone, demon-slit pupil',
+  'glowing ember-gold eyes with vertical-slit demon pupils radiating molten light, HEAVY caked-on dark-violet eyeshadow, severe dark brow, oxblood matte lips, DEAD-PALE corpse-skin',
+  'glowing electric-purple eyes radiating violet light, HEAVY thick jet-black eyeshadow piled on the lid, severe dark brow, jet-black matte lips, DEAD-PALE corpse-blue-tinted skin, single fang visible at her lip',
+  'glowing mercury-silver eyes with star-shaped pupils radiating unnatural light, HEAVY caked-on jet-black eyeshadow, severe dark brow, oxblood matte lips, DEAD-PALE corpse-skin, clawed fingertips',
+  'glowing cyan-deep-ocean eyes with hourglass-slit pupils radiating blue inner light, HEAVY thick jet-black eyeshadow on the lid, severe dark brow, jet-black matte lips, ASH-PALE corpse-skin',
+  'glowing bright-yellow eyes radiating molten light visible across a dark room, HEAVY caked-on charcoal eyeshadow, severe dark brow, blood-red matte lips, DEAD-PALE corpse-skin, single sharp fang at the lip',
+  'glowing violet eyes with thin gold-rim iris radiating inner light, HEAVY thick jet-black eyeshadow piled on the lid, severe dark brow, oxblood matte lips, ASH-GREY corpse-pallid skin, demon-slit pupil',
+  'glowing crimson eyes radiating visible inner fire, HEAVY caked-on jet-black eyeshadow, severe dark brow, oxblood matte lips, DEAD-PALE corpse-skin, two sharp upper fangs unmistakably visible against the lip',
+  'glowing rose-quartz eyes radiating luminous pink light, HEAVY thick charcoal eyeshadow on the lid, severe dark brow, jet-black matte lips, DEAD-PALE corpse-blue-tinted skin, demon pupil',
+  'glowing emerald eyes with hourglass-slit pupils radiating green inner light, HEAVY caked-on jet-black eyeshadow, severe dark brow, blood-red matte lips, ASH-PALE corpse-skin, single fang visible',
 ];
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const crop = CROPS[Math.floor(Math.random() * CROPS.length)];
-  const archetype = picker.pickWithRecency(pools.VAMPIRE_ARCHETYPES, 'vg2_archetype');
-  const face = picker.pickWithRecency(pools.FACIAL_FEATURES, 'vg2_face');
-  const makeup = picker.pickWithRecency(pools.VAMPIRE_MAKEUP, 'vg2_makeup');
-  const hairColor = picker.pickWithRecency(pools.HAIR_COLORS, 'vg2_hair_color');
-  const hairstyle = picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'vg2_hairstyle');
+  const composition = COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
+  const menaceFeature = MENACE_FEATURES[Math.floor(Math.random() * MENACE_FEATURES.length)];
+
+  const scenario = pools.VAMPIRE_SETTINGS && pools.VAMPIRE_SETTINGS.length > 0
+    ? picker.pickWithRecency(pools.VAMPIRE_SETTINGS, 'vg2_setting')
+    : 'a vast moonlit cathedral nave with massive rose window blazing crimson light';
+  const killerDetail = pools.VAMPIRE_KILLER_DETAILS && pools.VAMPIRE_KILLER_DETAILS.length > 0
+    ? picker.pickWithRecency(pools.VAMPIRE_KILLER_DETAILS, 'vg2_killer_detail')
+    : 'an ornate vampire-queen crown of dark gold and obsidian set high on her hair';
+  const hair = pools.VAMPIRE_HAIR && pools.VAMPIRE_HAIR.length > 0
+    ? picker.pickWithRecency(pools.VAMPIRE_HAIR, 'vg2_hair')
+    : `${picker.pickWithRecency(pools.HAIR_COLORS, 'vg2_hair_color')}, ${picker.pickWithRecency(pools.FEMALE_HAIRSTYLES, 'vg2_hairstyle')}`;
   const wardrobe = picker.pickWithRecency(pools.VAMPIRE_WARDROBE, 'vg2_wardrobe');
-  const moment = picker.pickWithRecency(pools.VAMPIRE_CANDID_MOMENTS, 'vg2_moment');
+  const archetype = picker.pickWithRecency(pools.VAMPIRE_ARCHETYPES, 'vg2_archetype');
   const ethnicity =
     pools.VAMPIRE_ETHNICITIES && pools.VAMPIRE_ETHNICITIES.length > 0
       ? picker.pickWithRecency(pools.VAMPIRE_ETHNICITIES, 'vg2_ethnicity')
-      : null;
-  const eyeColor =
-    pools.VAMPIRE_EYE_COLORS && pools.VAMPIRE_EYE_COLORS.length > 0
-      ? picker.pickWithRecency(pools.VAMPIRE_EYE_COLORS, 'vg2_eye_color')
       : null;
   const lightingPool =
     pools.VAMPIRE_LIGHTING && pools.VAMPIRE_LIGHTING.length > 0
       ? pools.VAMPIRE_LIGHTING
       : pools.LIGHTING;
   const lighting = picker.pickWithRecency(lightingPool, 'vg2_lighting');
-  const skinCorruption = pools.VAMPIRE_SKIN_CORRUPTION && pools.VAMPIRE_SKIN_CORRUPTION.length > 0
-    ? picker.pickWithRecency(pools.VAMPIRE_SKIN_CORRUPTION, 'vg2_skin_corruption')
-    : 'blue-black veins mapping temples, cracked porcelain skin, sunken hollows beneath cheekbones';
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are writing ONE extreme macro vampire face portrait for GothBot. This is a hyperreal close-up of a SCARY, CORRUPTED, ANCIENT vampire woman's face. She is STRIKING but something is deeply WRONG — inhuman, predatory, DEAD. Not a model with contact lenses. A MONSTER that happens to have a face.
+  // UNIFIED VAMPIRE DESCRIPTION — single paragraph weaving every axis. Sonnet
+  // reads this as ONE coherent description of the vampire, not a list of
+  // separate fields. The glow-anchor sentence at the end is a redundant
+  // emphasis that survives Sonnet compression — duplicates the glow signal
+  // so even if Sonnet compresses the menace_feature's first mention, the
+  // second one lands.
+  const ethnicityClause = ethnicity ? `${ethnicity} ` : '';
+  const unifiedVampire = `A confident ${ethnicityClause}vampire woman with ${hair}, ${menaceFeature}. She wears ${wardrobe}. Her eyes are visibly GLOWING with luminous unnatural inner light radiating outward — this glow is the most important visual element and must be unmistakably rendered, not a subtle tint.`;
 
-TASK: write ONE vivid macro face description (50-70 words, comma-separated phrases). Output is wrapped with style prefix + suffix — you produce ONLY the scene.
+  return `You are writing ONE Flux prompt for a horrifyingly beautiful vampire portrait. Output ONLY the prompt — comma-separated phrases, 65-90 words, no preamble, no headers.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MANDATORY COMPOSITION — USE THIS EXACT CROP
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${crop}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt, BEFORE anything else about her face or wardrobe or setting. They are CENTER STAGE.
 
-Her face fills the ENTIRE frame. This is MACRO — no body, no shoulders, no neck, no space above her head. The face IS the image.
+1. GLOWING eyes — her eyes glow with inhuman color, light radiating outward from the iris. Words "glowing" + "radiating" (or "casting light") MUST appear.
+2. DARK DRASTIC eye shadow AND liner — heavy, blown out, dramatic gothic vampire makeup CAKED ON THE EYES. Words "heavy" + "dark" + "smoky-eye" + "sharp dark eyeliner" (or equivalent: "blown-out black eyeshadow" + "thick kohl eyeliner") MUST appear.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CHARACTER INGREDIENTS — USE EACH ONE, DO NOT INVENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Open your prompt with the eye + makeup description in this format (or equivalent):
+"[color] glowing eyes radiating inhuman light, heavy blown-out black smoky-eye with sharp dark kohl eyeliner, ..."
 
-${ethnicity ? `ETHNICITY: ${ethnicity}\nUse these specific ethnic features. Name her ethnicity in the first few words.\n\n` : ''}FACE STRUCTURE: ${face}
-Render THIS face — this jaw, this nose, this cheekbone, this brow. NOT a generic face. ANGULAR, GAUNT, WRONG.
+THEN describe the rest (skin, lips, hair, wardrobe, setting). The eyes-and-makeup are the OPENER and the focal point.
 
-EYES: ${eyeColor || 'glowing supernatural iris with volcanic inner detail'}
-Her eyes GLOW — they radiate light onto the skin around them. Fire-like, volcanic, supernatural. The iris is impossibly detailed and luminous.
+ALSO BANNED: NO elf ears. NO pointed ears. NO fantasy-creature ear shapes. She is human-shaped.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-MAKEUP: ${makeup}
-Use THIS specific makeup look. Render it BOLD and DRAMATIC — heavy, intense, striking. NOT subtle, NOT dripping, NOT running. The makeup is APPLIED WITH INTENTION and PRECISION — sharp, deliberate, ancient. This is war-paint, not beauty editorial.
 
-HAIR: ${hairColor}, ${hairstyle}
+━━━ 1. THE SCENE (gothic backdrop behind her) ━━━
+${scenario}
+Composition: ${composition}.
+Lighting: ${lighting}.
 
-WARDROBE (barely visible at frame edge): ${wardrobe}
+━━━ 2. THE VAMPIRE (one unified description — render her exactly this way) ━━━
+${unifiedVampire}
 
-CANDID MOMENT: ${moment}
-She was caught doing THIS. Use it as her expression/action.
+She is a DEAD-PALE corpse-vampire with HEAVY DARK GOTH MAKEUP — beautiful bone structure preserved BENEATH the deadness, but the skin reads as undead-corpse-pale (NOT alive-pretty), the makeup is HEAVY caked-on gothic (NOT subtle), the eyes are GLOWING with inhuman color, and a DEMONIC tell (visible fang, clawed fingertip, slit pupil) marks her as not-human. She is human-shaped — NO elf ears, NO pointed ears, NO fantasy-creature features beyond the vampire markers. She is BEAUTIFUL but DEAD — almost a demon. Expression both seductive and terrifying — ancient and inhuman presence. Her face is the focal point — bust framing 40-50% of frame.
 
-WHO SHE IS: ${archetype}
-Let this inform her ENERGY — her gaze, her stillness, her menace. Ancient vs feral vs bored vs grief-stricken.
+━━━ 3. THE HERO ELEMENT (the unforgettable focal piece on her) ━━━
+${killerDetail}. Render this clearly and prominently.
 
-LIGHTING: ${lighting}
+━━━ 4. PALETTE & MOOD ━━━
+${sharedDNA.scenePalette}. ${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 120)}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MANDATORY QUALITIES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The painting feels DARK, OMINOUS, GOTHIC. Heavy shadow dominates. Single dramatic candlelit key-light cuts through deep velvet darkness. Atmosphere heavy with dread.
 
-SKIN: she is DEAD. Not pale — DEAD. Deathly corpse-drained, gaunt, translucent. Render THIS specific corruption detail prominently on her face:
-${skinCorruption}
-The skin should make the viewer UNCOMFORTABLE — WRONG. A corpse that forgot to stop moving. NOT smooth, NOT flawless, NOT model skin.
-
-FANGS: sharp elongated upper canine fangs visible through parted lips — not subtle, not small. PREDATOR teeth.
-
-GAZE: cold, ancient, predatory. She's deciding whether you're worth the effort. NOT seductive, NOT flirty. PREDATOR calm.
-
-DRAMATIC VISUALS: go MAXIMUM. The glowing eyes should BLAZE. The makeup should be STRIKING and BOLD. The cracked veined skin should be VISCERAL and DETAILED. The lighting should carve every vein and crack into sharp relief. Every element cranked to jaw-dropping visual impact. She is MONSTROUS and ANCIENT — something dead and wrong that still moves and stares. NOT beautiful, NOT pretty, NOT gorgeous. STRIKING and TERRIFYING. The face of something that should not exist.
-
-━━━ HARD BANS ━━━
-- NO blood dripping, NO blood on face, NO blood on lips, NO blood on chin, NO blood anywhere
-- NO devil horns, NO pentagrams, NO satanic symbols
-- NO anime-smooth, NO Halloween costume, NO cosplay
-- NO magazine editorial, NO fashion photography, NO model energy, NO beauty shoot
-- She is NOT pretty. She is NOT gorgeous. She is NOT beautiful. She is STRIKING and WRONG and DEAD.
-- NO perfect skin, NO flawless complexion, NO smooth porcelain �� she is a CORPSE
-- NO second person in frame — she is ALONE
-- ONE woman only
-
-${blocks.NO_CHEAP_GORE_BLOCK}
-
-━━━ ATMOSPHERE ━━━
-${atmosphere}
-
-━━━ PALETTE ━━━
-${sharedDNA.scenePalette}
-${sharedDNA.colorPalette}
-${vibeDirective.slice(0, 200)}
+━━━ 5. HARD BANS ━━━
+NO second figures, NO animals, NO blood splatter, NO bodies, NO clown-stripe painted color streaks beneath the eye, NO ritual face-paint stripes, NO photoreal/cinematic/film-still aesthetic, NO modern fashion photography, NO bare black-void background — the gothic setting MUST be visible behind her, NO bright cheerful colors.
 
 ━━━ OUTPUT ━━━
-50-70 words, comma-separated phrases. Start with her ETHNICITY. Follow with face structure, skin, eyes, makeup, hair, expression, crop/angle, lighting. No preamble, no headers, no bold, no markers.`;
+Write 65-90 words, comma-separated phrases. The unified vampire description in section 2 is the primary face description — preserve the HEAVY MAKEUP, GLOWING EYE, DEAD-PALE skin, and DEMONIC tell language unmistakably. The gothic setting fills the rest of the frame as the dramatic painted backdrop. NO preamble, NO headers.`;
 };
