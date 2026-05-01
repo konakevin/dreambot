@@ -52,4 +52,9 @@ module.exports = {
   MERMAID_LEGEND_LIGHTING: load('mermaid_legend_lighting'),
   OCEAN_SURFACE_LIGHTING: load('ocean_surface_lighting'),
   VIBE_COLOR,
+
+  SENSORY_POOLS: {
+    mermaid: { smell: load('sensory_mermaid_smell'), sound: load('sensory_mermaid_sound'), touch: load('sensory_mermaid_touch'), temperature: load('sensory_mermaid_temperature'), weight: load('sensory_mermaid_weight'), air: load('sensory_mermaid_air'), lightcolor: load('sensory_mermaid_lightcolor') },
+    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+  },
 };

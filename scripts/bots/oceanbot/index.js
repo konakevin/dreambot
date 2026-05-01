@@ -126,6 +126,21 @@ module.exports = {
     'mermaid-legend': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['reef-life','sea-creatures','deep-wonder','deep-horror','storm-surface','ghost-ship','kraken-leviathan','shipwreck-kingdom','polar-seas','coastal-cliffs','calm-glass-sea','big-wave','coastal-golden','tropical-paradise'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'mermaid-legend': '80-110' }, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'mermaid-legend': 'mermaid',
+      'reef-life': 'scene','sea-creatures': 'scene','deep-wonder': 'scene','deep-horror': 'scene',
+      'storm-surface': 'scene','ghost-ship': 'scene','kraken-leviathan': 'scene','shipwreck-kingdom': 'scene',
+      'polar-seas': 'scene','coastal-cliffs': 'scene','calm-glass-sea': 'scene','big-wave': 'scene',
+      'coastal-golden': 'scene','tropical-paradise': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
