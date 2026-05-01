@@ -84,6 +84,58 @@ module.exports = {
     'dragon-lore': 4,
   },
 
+  // Chaos layer (V4 perception-distortion port). Skip face-dominant character
+  // closeups (none here — both warrior paths are full-body). Allow subject
+  // chaos on scenery + dragon paths so silhouette/echo distortions can fire.
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: [
+      'landscape',
+      'fantasy-scene',
+      'epic-moment',
+      'dragon-scene',
+      'cozy-arcane',
+      'arcane-halls',
+      'dark-realm',
+      'dragon-lore',
+    ],
+  },
+
+  // Two-pass Sonnet→Haiku polish.
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    polishedWordsByPath: {
+      'female-warrior': '80-110',
+      'male-warrior': '80-110',
+      'dragon-scene': '80-110',
+    },
+    preservePhrasesByPath: {},
+  },
+
+  // Sensory anchors — 4 contexts × 7 channels × 100 entries each.
+  // Lightcolor required on every render (forces specific punchy lighting
+  // palettes instead of Sonnet defaulting to safe warm-amber).
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'female-warrior': 'female',
+      'male-warrior': 'male',
+      'dragon-scene': 'creature',
+      'landscape': 'scene',
+      'fantasy-scene': 'scene',
+      'epic-moment': 'scene',
+      'cozy-arcane': 'scene',
+      'arcane-halls': 'scene',
+      'dark-realm': 'scene',
+      'dragon-lore': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
