@@ -1048,11 +1048,19 @@ Output ONLY the prompt.`;
       );
     }
 
-    // Plan C — fire-and-forget: distill the style fingerprint via Haiku
-    // and write it to uploads.style_summary. DLT later reads this column
-    // (subject-stripped) instead of the raw ai_prompt. Async so the
-    // user's response isn't blocked. Failure → NULL, DLT falls back.
-    distillStyle(finalPrompt, ANTHROPIC_KEY)
+    // Plan C — fire-and-forget: distill the unified style fingerprint
+    // (medium + vibe + ai_prompt) via Haiku and write to uploads.style_summary.
+    // Async so the user's response isn't blocked. Failure → NULL → DLT
+    // falls back to ai_prompt with the existing weaker filtering.
+    distillStyle(
+      {
+        rawPrompt: finalPrompt,
+        mediumKey: resolvedMediumKey ?? null,
+        vibeKey: resolvedVibeKey ?? null,
+      },
+      ANTHROPIC_KEY,
+      supabase
+    )
       .then((summary) => {
         if (!summary || !uploadId) return;
         return supabase.from('uploads').update({ style_summary: summary }).eq('id', uploadId);

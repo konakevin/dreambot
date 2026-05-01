@@ -1285,13 +1285,20 @@ Output ONLY the prompt.`;
       console.error('[nightly-dreams] Failed to create draft upload:', uploadResult.error.message);
     }
 
-    // Plan C — fire-and-forget Haiku style distillation. Writes a
-    // subject-stripped style fingerprint to uploads.style_summary so DLT
-    // can recreate this dream's style without subject bleed. Failure →
-    // NULL → DLT falls back to ai_prompt.
+    // Plan C — fire-and-forget unified Haiku style distillation. Synthesizes
+    // medium + vibe + ai_prompt into a subject-stripped style fingerprint
+    // for DLT. Failure → NULL → DLT falls back to ai_prompt.
     if (uploadId) {
       const targetUploadId = uploadId;
-      distillStyle(finalPrompt, ANTHROPIC_KEY)
+      distillStyle(
+        {
+          rawPrompt: finalPrompt,
+          mediumKey: resolvedMediumKey ?? null,
+          vibeKey: resolvedVibeKey ?? null,
+        },
+        ANTHROPIC_KEY,
+        supabase
+      )
         .then((summary) => {
           if (!summary) return;
           return supabase

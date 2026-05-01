@@ -71,20 +71,69 @@ const sb = createClient(SUPABASE_URL, SERVICE_ROLE);
 
 // ── Distiller (mirrors _shared/styleDistiller.ts) ─────────────────────
 
-const SYSTEM_PROMPT = `You extract pure style descriptors from a Flux AI prompt.
+const SYSTEM_PROMPT = `You synthesize a unified style fingerprint from three sources that together defined a rendered image: a MEDIUM (art style identity), a VIBE (mood identity), and the final FLUX PROMPT used by the image model.
 
-OUTPUT: a comma-separated list of style descriptors. Max 25 words total.
+The fingerprint is used by a "Dream Like This" feature — when a user taps a post they love, your output is fed to the image model alongside their NEW subject prompt. The user wants to FAITHFULLY RECREATE the look of the original post applied to whatever they're dreaming about now.
 
-KEEP: color words, palette, light direction/quality/temperature, camera/lens descriptors, medium-and-technique words ("oil paint", "heavy ink", "watercolor washes", "pixel art", "claymation"), atmosphere/mood words ("haunting", "luminous", "moody", "dreamy"), texture words, time-of-day if it's about LIGHT not subject ("golden hour", "blue hour"), abstract era/genre style descriptors ("baroque", "art deco", "noir") IF they describe the technique not the subject.
+So: your job is to capture HOW the source image looked — palette, lighting, technique, mood, character-design conventions, named aesthetics — while removing the specific subjects-in-the-scene (which would replace the user's new subject and ruin the recreation).
 
-STRIP COMPLETELY: subjects (people, animals, creatures, objects, vehicles, weapons), body parts, named characters, named places, named IP/franchises (Castlevania, Blade Runner, Bloodborne, Studio Ghibli, etc — convert to generic mood words instead, e.g. "Castlevania" → "gothic horror mood"), specific buildings ("cathedral", "castle", "tower" — DROP unless it's purely architectural style language), clothing items, actions/poses, body language, named tech ("light saber", "iPhone"), specific numbers, named events, pets, dates, anything a camera would see as a "thing" rather than a "quality."
+OUTPUT FORMAT: a comma-separated list, max 35 words. Lead with the most distinctive style anchors. Be specific. The more vivid the style language, the better the recreation.
 
-If the prompt is too thin to extract style (e.g., 10 words of pure subject with no style language), output exactly: NO_STYLE_SIGNAL
+KEEP (these define the LOOK and should be preserved):
+- Medium / technique words: "watercolor washes", "oil paint", "heavy ink", "pixel art", "claymation", "3D render", "ray-traced", "cel-shaded"
+- Named aesthetics and references: "Tim Burton aesthetic", "Studio Ghibli", "Pixar character design", "Wes Anderson", "Bauhaus", "Art Deco", "Bloodborne dread", "Castlevania energy", "Moebius linework" — these are STYLE SHORTHAND
+- Stylistic body/figure language: "spindly elongated proportions", "exaggerated facial features", "anime-large eyes", "pale gothic skin tones", "dark sunken eye sockets", "Disney princess proportions" — these describe HOW figures are drawn
+- Color palette, light direction/quality/temperature
+- Camera/lens descriptors, depth of field, color grading
+- Atmosphere and mood words
+- Texture and material language
+- Era/genre style descriptors
 
-Do NOT add a preamble. Do NOT wrap in quotes. Output the comma-separated descriptors only.`;
+STRIP (these are the SUBJECT — what the source image was OF):
+- Specific creatures and beings IN the scene: "vampire", "dragon", "T-rex", "warrior", "mermaid", "robot"
+- Specific buildings/structures: "cathedral", "castle", "tower", "mall", "diner"
+- Specific named places, objects, vehicles, weapons, animals-as-pets, plants-as-subjects, food
+- Actions/poses: "running", "kissing", "holding"
+- Specific named characters/IP-figures (distinct from named-aesthetic references)
 
-async function distill(rawPrompt) {
-  if (!rawPrompt || !rawPrompt.trim()) return null;
+The key distinction: if removing it changes WHAT the picture is OF, strip it. If removing it changes HOW the picture LOOKS, keep it.
+
+WEIGHT THE MEDIUM AND VIBE: even if the FLUX PROMPT's language is light on them, anchor the fingerprint in the medium and vibe character.
+
+If all three sources are too thin to extract any meaningful style, output exactly: NO_STYLE_SIGNAL
+
+Output the comma-separated descriptors only. No preamble. No quotes. No labels.`;
+
+// Cache directives so we don't refetch them per row. Loaded once at startup.
+const directiveCache = { mediums: new Map(), vibes: new Map() };
+async function loadDirectives() {
+  const [m, v] = await Promise.all([
+    sb.from('dream_mediums').select('key, directive'),
+    sb.from('dream_vibes').select('key, directive'),
+  ]);
+  (m.data || []).forEach((r) => directiveCache.mediums.set(r.key, r.directive));
+  (v.data || []).forEach((r) => directiveCache.vibes.set(r.key, r.directive));
+  console.log(
+    `Loaded ${directiveCache.mediums.size} mediums, ${directiveCache.vibes.size} vibes from DB`
+  );
+}
+
+function truncateDirective(d) {
+  if (!d) return null;
+  const cleaned = d.replace(/\s+/g, ' ').trim();
+  if (cleaned.length <= 400) return cleaned;
+  return cleaned.slice(0, 400).replace(/\s+\S*$/, '') + '…';
+}
+
+async function distill({ rawPrompt, mediumKey, vibeKey }) {
+  if (!rawPrompt?.trim() && !mediumKey && !vibeKey) return null;
+  const mediumDir = mediumKey ? truncateDirective(directiveCache.mediums.get(mediumKey)) : null;
+  const vibeDir = vibeKey ? truncateDirective(directiveCache.vibes.get(vibeKey)) : null;
+  const mediumLine = mediumDir ? `${mediumKey} (${mediumDir})` : mediumKey || '(none)';
+  const vibeLine = vibeDir ? `${vibeKey} (${vibeDir})` : vibeKey || '(none)';
+  const promptLine = rawPrompt?.trim() || '(none)';
+  const userMessage = `MEDIUM: ${mediumLine}\nVIBE: ${vibeLine}\nFLUX PROMPT: "${promptLine}"`;
+
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -96,9 +145,9 @@ async function distill(rawPrompt) {
         },
         body: JSON.stringify({
           model: HAIKU_MODEL,
-          max_tokens: 80,
+          max_tokens: 100,
           system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: rawPrompt }],
+          messages: [{ role: 'user', content: userMessage }],
         }),
       });
       if (!res.ok) {
@@ -111,7 +160,7 @@ async function distill(rawPrompt) {
       const data = await res.json();
       const text = (data?.content?.[0]?.text ?? '').trim();
       if (!text || text.startsWith('NO_STYLE_SIGNAL')) return null;
-      return text.length > 280 ? text.slice(0, 280) : text;
+      return text.length > 320 ? text.slice(0, 320) : text;
     } catch (err) {
       if (attempt < 2) {
         await sleep(2000 * (attempt + 1));
@@ -135,6 +184,9 @@ async function main() {
   console.log(`  BATCH_GAP_MS: ${BATCH_GAP_MS}`);
   console.log('');
 
+  await loadDirectives();
+  console.log('');
+
   let processed = 0;
   let updated = 0;
   let nullResults = 0;
@@ -148,7 +200,7 @@ async function main() {
 
     let q = sb
       .from('uploads')
-      .select('id, ai_prompt, created_at')
+      .select('id, ai_prompt, dream_medium, dream_vibe, created_at')
       .is('style_summary', null)
       .not('ai_prompt', 'is', null)
       .or('is_posted.eq.true,is_active.eq.true')
@@ -168,9 +220,17 @@ async function main() {
 
     if (DRY_RUN) {
       console.log(`[dry-run] would process batch of ${data.length}, sample:`);
-      data.slice(0, 2).forEach((r) =>
-        console.log(`  ${r.id.slice(0, 8)} @ ${r.created_at} — "${r.ai_prompt.slice(0, 80)}..."`)
-      );
+      for (const r of data.slice(0, 5)) {
+        const summary = await distill({
+          rawPrompt: r.ai_prompt,
+          mediumKey: r.dream_medium,
+          vibeKey: r.dream_vibe,
+        });
+        console.log(`\n  ${r.id.slice(0, 8)} (${r.dream_medium}/${r.dream_vibe})`);
+        console.log(`    PROMPT: ${r.ai_prompt.slice(0, 100)}...`);
+        console.log(`    STYLE:  ${summary ?? '(NO_STYLE_SIGNAL)'}`);
+        await sleep(BATCH_GAP_MS / data.length);
+      }
       processed += data.length;
       cursor = data[data.length - 1].created_at;
       if (LIMIT && processed >= LIMIT) break;
@@ -180,7 +240,11 @@ async function main() {
     const results = await Promise.all(
       data.map(async (row) => {
         try {
-          const summary = await distill(row.ai_prompt);
+          const summary = await distill({
+            rawPrompt: row.ai_prompt,
+            mediumKey: row.dream_medium,
+            vibeKey: row.dream_vibe,
+          });
           if (summary) {
             const { error: updErr } = await sb
               .from('uploads')
