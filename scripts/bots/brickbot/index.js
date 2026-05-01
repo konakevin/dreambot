@@ -91,6 +91,20 @@ module.exports = {
     'brick-architecture': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['brick-city','brick-castle','brick-space','brick-pirates','brick-cozy','brick-mech','brick-landscape','brick-disaster','brick-micro','brick-cinematic','brick-noir','brick-horror','brick-wild-west','brick-masterpiece','brick-village','brick-architecture'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'brick-city': 'scene', 'brick-castle': 'scene', 'brick-space': 'scene', 'brick-pirates': 'scene',
+      'brick-cozy': 'scene', 'brick-mech': 'scene', 'brick-landscape': 'scene', 'brick-disaster': 'scene',
+      'brick-micro': 'scene', 'brick-cinematic': 'scene', 'brick-noir': 'scene', 'brick-horror': 'scene',
+      'brick-wild-west': 'scene', 'brick-masterpiece': 'scene', 'brick-village': 'scene', 'brick-architecture': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
