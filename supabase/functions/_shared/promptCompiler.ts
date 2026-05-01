@@ -131,8 +131,12 @@ function buildSceneBlock(scene: CompilerInput['scene']): string {
     parts.push(scene.sceneExpansion);
   }
   if (scene.styleReference) {
+    // The styleReference is pre-distilled (subject-stripped) by
+    // _shared/styleDistiller.ts when sourced from uploads.style_summary.
+    // Older posts that don't have a distilled summary fall back to raw
+    // ai_prompt — the wording below holds the line in both cases.
     parts.push(
-      `REFERENCE STYLE (match this aesthetic — palette, lighting, composition, texture — but apply to NEW subject):\n"${scene.styleReference.slice(0, 400)}"\nCopy VISUAL STYLE, not subject.`
+      `REFERENCE STYLE (apply ONLY these style descriptors — palette, lighting, technique, mood, atmosphere, texture):\n"${scene.styleReference.slice(0, 400)}"\nApply these directly to the SUBJECT defined in SCENE above. Do NOT introduce any subjects, characters, body parts, places, named entities, named IP, or specific objects from this reference. This describes HOW the image looks, not WHAT it shows.`
     );
   }
   if (scene.photoDescription) {

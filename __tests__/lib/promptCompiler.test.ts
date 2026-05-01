@@ -99,7 +99,10 @@ describe('compilePrompt', () => {
     const output = compilePrompt(input);
     expect(output.sonnetBrief).toContain('REFERENCE STYLE');
     expect(output.sonnetBrief).toContain('dark moody oil painting');
-    expect(output.sonnetBrief).toContain('Copy VISUAL STYLE, not subject');
+    // Plan C: tightened wording to forbid subject leakage explicitly
+    expect(output.sonnetBrief).toContain(
+      'Do NOT introduce any subjects, characters, body parts, places'
+    );
   });
 
   it('includes NEVER INCLUDE section when avoid list is provided', () => {

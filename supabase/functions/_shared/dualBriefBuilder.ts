@@ -79,6 +79,16 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their N
     : '';
   const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';
 
+  // Style reference (DLT) — distilled, subject-stripped style descriptors
+  // from the source post. Plan C: these come pre-cleaned by styleDistiller
+  // (palette, lighting, technique, mood — no subjects). Apply ONLY these
+  // descriptors; the SUBJECT comes from the user prompt above.
+  const styleReference = scene.styleReference
+    ? `\nREFERENCE STYLE (apply ONLY these style descriptors — do NOT introduce any subjects, characters, places, or named entities from the reference):
+"${scene.styleReference.slice(0, 400)}"
+`
+    : '';
+
   // Realism reinforcement is now in the flux_fragment override itself
   // (faceSwapFluxOverrides.ts) for fairytale/storybook/pencil/anime —
   // applied via applyFaceSwapOverride() above. No separate brief-level
@@ -123,7 +133,7 @@ STRUCTURE:
 4. CHARACTERS (20% of words)
 5. CAMERA + MOOD (20% of words)
 6. End with: no text, no words, no letters, no watermarks, ultra detailed
-${userPrompt}${sceneExpansion}
+${userPrompt}${sceneExpansion}${styleReference}
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 

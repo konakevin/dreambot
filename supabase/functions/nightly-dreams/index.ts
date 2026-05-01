@@ -22,6 +22,7 @@ import { assembleScene } from '../_shared/sceneEngine.ts';
 import { getLocationCard, normalizeName } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { distillStyle } from '../_shared/styleDistiller.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
@@ -1282,6 +1283,25 @@ Output ONLY the prompt.`;
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;
     if (uploadResult.error) {
       console.error('[nightly-dreams] Failed to create draft upload:', uploadResult.error.message);
+    }
+
+    // Plan C — fire-and-forget Haiku style distillation. Writes a
+    // subject-stripped style fingerprint to uploads.style_summary so DLT
+    // can recreate this dream's style without subject bleed. Failure →
+    // NULL → DLT falls back to ai_prompt.
+    if (uploadId) {
+      const targetUploadId = uploadId;
+      distillStyle(finalPrompt, ANTHROPIC_KEY)
+        .then((summary) => {
+          if (!summary) return;
+          return supabase
+            .from('uploads')
+            .update({ style_summary: summary })
+            .eq('id', targetUploadId);
+        })
+        .catch(() => {
+          /* swallow — graceful fallback */
+        });
     }
 
     lap('total');

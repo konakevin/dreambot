@@ -96,7 +96,7 @@ export default function DreamLikeThisScreen() {
     (async () => {
       const { data } = await supabase
         .from('uploads')
-        .select('dream_medium, dream_vibe, ai_prompt')
+        .select('dream_medium, dream_vibe, ai_prompt, style_summary')
         .eq('id', params.postId)
         .single();
       const row = data as unknown as Record<string, unknown> | null;
@@ -104,7 +104,16 @@ export default function DreamLikeThisScreen() {
         const mk = (row.dream_medium as string) ?? null;
         setRefMedium(mk);
         setRefVibe((row.dream_vibe as string) ?? null);
-        setRefPrompt(params.prompt ?? (row.ai_prompt as string) ?? null);
+        // Plan C: prefer the distilled style_summary (subject-stripped via
+        // Haiku at insert time) over the raw ai_prompt. Falls back to
+        // ai_prompt for older posts not yet backfilled, then to params.prompt
+        // (legacy callers).
+        const styleRef =
+          (row.style_summary as string | null) ??
+          (row.ai_prompt as string | null) ??
+          params.prompt ??
+          null;
+        setRefPrompt(styleRef);
         // Direct-fetch the medium row — covers bot-only mediums that aren't
         // returned by useDreamMediums() (gothic / gothic-realistic / etc).
         if (mk) {

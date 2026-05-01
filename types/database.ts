@@ -1250,6 +1250,7 @@ export type Database = {
           save_count: number;
           search_tsv: unknown;
           share_count: number;
+          style_summary: string | null;
           thumbnail_url: string | null;
           user_id: string;
           view_count: number;
@@ -1287,6 +1288,7 @@ export type Database = {
           save_count?: number;
           search_tsv?: unknown;
           share_count?: number;
+          style_summary?: string | null;
           thumbnail_url?: string | null;
           user_id: string;
           view_count?: number;
@@ -1324,6 +1326,7 @@ export type Database = {
           save_count?: number;
           search_tsv?: unknown;
           share_count?: number;
+          style_summary?: string | null;
           thumbnail_url?: string | null;
           user_id?: string;
           view_count?: number;

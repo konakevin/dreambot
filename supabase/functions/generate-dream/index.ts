@@ -38,6 +38,7 @@ import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { distillStyle } from '../_shared/styleDistiller.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 
@@ -1046,6 +1047,19 @@ Output ONLY the prompt.`;
         `db_insert: uploads insert failed (${uploadResult.error?.message ?? 'no row returned'})`
       );
     }
+
+    // Plan C — fire-and-forget: distill the style fingerprint via Haiku
+    // and write it to uploads.style_summary. DLT later reads this column
+    // (subject-stripped) instead of the raw ai_prompt. Async so the
+    // user's response isn't blocked. Failure → NULL, DLT falls back.
+    distillStyle(finalPrompt, ANTHROPIC_KEY)
+      .then((summary) => {
+        if (!summary || !uploadId) return;
+        return supabase.from('uploads').update({ style_summary: summary }).eq('id', uploadId);
+      })
+      .catch(() => {
+        /* swallow — style_summary stays NULL, DLT falls back gracefully */
+      });
 
     // Job update + notification in parallel (both need uploadId but not each other)
     const notifBody = hint
