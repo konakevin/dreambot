@@ -511,7 +511,14 @@ export const X = arr.filter(m => m.foo && m.foo.length > 0);
 
 ## GitHub & CI/CD
 
-**Repo:** `konakevin/dreambot` on GitHub. Single `main` branch, push directly.
+**Repo:** `konakevin/dreambot` on GitHub. `main` is the trunk.
+
+**Branching policy (always — no exceptions):**
+1. Before starting any task, check out a fresh feature branch off latest `main`. Name it after the task (e.g., `dlt-photo-dual-cast`, `medium-flags-refactor`).
+2. Commit work onto that branch as you go. Use fixup commits (`git commit --fixup=<sha>`) and `git rebase -i --autosquash` to keep history clean.
+3. When the task is fully ready (tests pass, smoke tested, Kevin signs off), merge the branch back into `main`.
+4. **Feature branches are short-lived** — a single task or a tightly-scoped bundle. If a branch starts living for more than a couple of sessions or growing across multiple unrelated tasks, that's a signal to land what's done and start a new branch.
+5. Never commit directly to `main` once on a feature branch. Never let two unrelated tasks share a branch.
 
 **CI pipeline** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
 
@@ -521,7 +528,7 @@ export const X = arr.filter(m => m.foo && m.foo.length > 0);
 
 ## Team
 
-Kevin is the sole human developer. Claude is the other dev. No team, no PR process. Push directly to `main`.
+Kevin is the sole human developer. Claude is the other dev. No team, no PR review process — feature branches still exist, but they're for cleanliness/atomicity, not approval. Land them via merge once ready.
 
 ---
 
