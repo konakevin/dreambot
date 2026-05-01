@@ -22,9 +22,7 @@ import { useSparkleBalance, useSpendSparkles } from '@/hooks/useSparkles';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { moderateText } from '@/lib/moderation';
-import { isVibeProfile } from '@/lib/migrateRecipe';
-import { DEFAULT_RECIPE } from '@/types/recipe';
-import type { Recipe } from '@/types/recipe';
+import { isVibeProfile } from '@/types/vibeProfile';
 import type { VibeProfile } from '@/types/vibeProfile';
 import {
   generateDream,
@@ -53,19 +51,15 @@ export function useDreamCreate() {
   const setResult = useDreamStore((s) => s.setResult);
   const busy = useRef(false);
 
-  const loadProfile = useCallback(async (): Promise<{
-    recipe: Recipe | null;
-    vibeProfile: VibeProfile | null;
-  }> => {
-    if (!user) return { recipe: DEFAULT_RECIPE, vibeProfile: null };
+  const loadProfile = useCallback(async (): Promise<VibeProfile | null> => {
+    if (!user) return null;
     const { data } = await supabase
       .from('user_recipes')
       .select('recipe')
       .eq('user_id', user.id)
       .single();
     const raw = data?.recipe as unknown;
-    if (isVibeProfile(raw)) return { recipe: null, vibeProfile: raw };
-    return { recipe: (raw as Recipe) ?? DEFAULT_RECIPE, vibeProfile: null };
+    return isVibeProfile(raw) ? raw : null;
   }, [user]);
 
   const trySpendSparkle = useCallback(
@@ -172,7 +166,7 @@ export function useDreamCreate() {
       busy.current = true;
 
       try {
-        const { recipe, vibeProfile } = await loadProfile();
+        const vibeProfile = await loadProfile();
 
         let result: {
           image_url: string;

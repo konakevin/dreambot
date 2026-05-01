@@ -26,7 +26,7 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useOnboardingStore } from '@/store/onboarding';
-import { isVibeProfile } from '@/lib/migrateRecipe';
+import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { moderateText } from '@/lib/moderation';
 

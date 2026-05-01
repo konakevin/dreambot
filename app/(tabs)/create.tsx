@@ -45,7 +45,7 @@ import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
-import { isVibeProfile } from '@/lib/migrateRecipe';
+import { isVibeProfile } from '@/types/vibeProfile';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';

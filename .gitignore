@@ -45,3 +45,6 @@ app-example
 /ios
 /android
 Screenshot*.png
+
+# Local benchmark / experiment outputs
+scripts/*-bench-results.json

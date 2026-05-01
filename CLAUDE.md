@@ -181,7 +181,7 @@ Each nightly dream gets a short whimsical message from DreamBot via a dedicated 
 
 ### Legacy Support
 
-Old users with Recipe (no version field) still work through `lib/recipeEngine.ts`. Migration helper exists at `lib/migrateRecipe.ts`. Both paths coexist in the Edge Function.
+VibeProfile v2 is the only supported format. The legacy v1 `Recipe` engine + migration helper were deleted 2026-04-30 after a DB audit confirmed zero remaining v1 users. All `user_recipes.recipe` rows are v2. The runtime `isVibeProfile()` type guard lives at `types/vibeProfile.ts`.
 
 ---
 
@@ -270,16 +270,13 @@ lib/
   supabase.ts                     # Supabase client
   vibeEngine.ts                   # Two-pass concept generator + prompt polisher
   dreamApi.ts                     # Edge Function client (generateDream, generateFromVibeProfile, etc.)
-  migrateRecipe.ts                # Recipe → VibeProfile converter
-  recipeEngine.ts                 # LEGACY — old single-pass recipe engine
   moderation.ts                   # Local wordlist text moderation
   revenuecat.ts                   # RevenueCat IAP setup
   dreamPost.ts                    # Insert dream into uploads, pin to feed
   geneticMerge.ts                 # Genetic recipe fusion
 
 types/
-  vibeProfile.ts                  # VibeProfile, MoodAxes, PersonalAnchors, ConceptRecipe, PromptMode
-  recipe.ts                       # LEGACY Recipe types
+  vibeProfile.ts                  # VibeProfile, MoodAxes, PersonalAnchors, ConceptRecipe, PromptMode + isVibeProfile() guard
   database.ts                     # Supabase auto-generated DB types
 
 constants/
@@ -299,8 +296,6 @@ supabase/
     _shared/                      # Shared types + engine for Edge Functions
       vibeProfile.ts              # Deploy copy of types/vibeProfile.ts
       vibeEngine.ts               # Deploy copy of lib/vibeEngine.ts
-      recipe.ts                   # Legacy recipe types
-      recipeEngine.ts             # Legacy recipe engine
 
 scripts/
   nightly-dreams.js               # Node.js version for GitHub Actions cron

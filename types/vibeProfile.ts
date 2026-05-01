@@ -108,3 +108,14 @@ export interface ConceptRecipe {
   composition: string;
   mood: string;
 }
+
+/**
+ * Type guard for runtime-validated VibeProfile shape. Used by code paths that
+ * load `user_recipes.recipe` JSON from the DB and need to confirm it's the
+ * current v2 format before passing to the engine.
+ */
+export function isVibeProfile(data: unknown): data is VibeProfile {
+  return (
+    typeof data === 'object' && data !== null && (data as Record<string, unknown>).version === 2
+  );
+}

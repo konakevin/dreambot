@@ -46,7 +46,7 @@ import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { isVibeProfile } from '@/lib/migrateRecipe';
+import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
 import { useFollowingIds } from '@/hooks/useFollowingIds';

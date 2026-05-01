@@ -30,7 +30,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { isVibeProfile } from '@/lib/migrateRecipe';
+import { isVibeProfile } from '@/types/vibeProfile';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';

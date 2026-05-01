@@ -9,7 +9,6 @@
  */
 
 import { supabase } from '@/lib/supabase';
-import type { Recipe } from '@/types/recipe';
 import type { VibeProfile, PromptMode } from '@/types/vibeProfile';
 
 interface GenerateDreamOpts {
@@ -37,8 +36,7 @@ interface GenerateDreamOpts {
   subject_description?: string;
   /** Pre-classified subject type (from classifyPhoto). Determines server routing. */
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
-  // Legacy fields kept for backward compat during transition
-  recipe?: Recipe;
+  /** V4 prompt mode override (defaults applied server-side). */
   prompt_mode?: PromptMode;
 }
 
