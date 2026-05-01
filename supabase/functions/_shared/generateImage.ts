@@ -74,6 +74,11 @@ async function generateImageOnce(
           aspect_ratio: '9:16',
           num_outputs: 1,
           output_format: 'jpg',
+          // JPEG encoding quality (Replicate default is 80). Q95 is the
+          // sweet spot — captures ~95% of the perceptible improvement of
+          // Q100 at ~70% of the file-size cost. Zero impact on render
+          // time or Replicate cost (purely encoding, not diffusion).
+          output_quality: 95,
         }
       : {
           width: 768,
@@ -85,7 +90,7 @@ async function generateImageOnce(
 
   if (mode === 'flux-kontext' && inputImage) {
     input.input_image = inputImage;
-    input.output_quality = 90;
+    input.output_quality = 95;
     input.safety_tolerance = 2;
     input.prompt_upsampling = true;
   }
