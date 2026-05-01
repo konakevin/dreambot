@@ -75,6 +75,19 @@ module.exports = {
     'pixel-horror': 1,
   },
 
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['pixel-landscape','pixel-fantasy','pixel-cozy','pixel-sci-fi','pixel-action','pixel-cottage','pixel-town-life','pixel-horror'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'pixel-character-moment': 'figure',
+      'pixel-landscape': 'scene','pixel-fantasy': 'scene','pixel-cozy': 'scene','pixel-sci-fi': 'scene',
+      'pixel-action': 'scene','pixel-cottage': 'scene','pixel-town-life': 'scene','pixel-horror': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       pixelEra: picker.pickWithRecency(pools.PIXEL_ERAS, 'pixel_era'),
