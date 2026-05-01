@@ -520,6 +520,28 @@ export const X = arr.filter(m => m.foo && m.foo.length > 0);
 4. **Feature branches are short-lived** — a single task or a tightly-scoped bundle. If a branch starts living for more than a couple of sessions or growing across multiple unrelated tasks, that's a signal to land what's done and start a new branch.
 5. Never commit directly to `main` once on a feature branch. Never let two unrelated tasks share a branch.
 
+**Concurrent agents — git worktrees (always — no exceptions):**
+
+Two Claude Code sessions running in the same project directory share ONE working tree. If one agent runs `git checkout other-branch`, the filesystem flips for both agents — silently. Recent commits have landed on the wrong branch because of this.
+
+When you want concurrent agents on different branches, give each its own worktree:
+
+```bash
+# From the main repo dir
+git worktree add ../dreambot-<task> <branch-name>
+```
+
+Then `cd` the second agent into the new worktree directory and start `claude` there. Each worktree has its own checked-out branch, its own working files, and its own state for `npm` / `node` / `supabase` commands. They share the underlying `.git/objects`, so it's cheap.
+
+When the branch merges to `main`:
+
+```bash
+git worktree remove ../dreambot-<task>
+git push origin --delete <branch-name>   # if pushed
+```
+
+Single-agent work can stay in the main repo dir. Multi-agent work MUST split worktrees — otherwise two agents will keep stepping on each other's checkouts.
+
 **CI pipeline** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
 
 **Nightly dreams** (`.github/workflows/nightly-dreams.yml`): GitHub Actions cron at 1am MST + random delay. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
