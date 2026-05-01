@@ -39,4 +39,17 @@ module.exports = {
   NATIONAL_PARKS: load('national_parks'),
   SCENE_PALETTES: load('scene_palettes'),
   VIBE_COLOR,
+
+  // Sensory anchor pools — 1 context (scene) × 7 channels × 100 entries.
+  SENSORY_POOLS: {
+    scene: {
+      smell: load('sensory_scene_smell'),
+      sound: load('sensory_scene_sound'),
+      touch: load('sensory_scene_touch'),
+      temperature: load('sensory_scene_temperature'),
+      weight: load('sensory_scene_weight'),
+      air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
+    },
+  },
 };

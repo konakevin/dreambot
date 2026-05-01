@@ -76,6 +76,43 @@ module.exports = {
     'micro-nature': 1,
   },
 
+  // Chaos layer — pure scenery bot, all paths benefit from perception-
+  // distortion in scene channels (geometry/scale/framing/secondary-light).
+  // No subject chaos needed since there's no subject — scene IS the subject.
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: [],
+  },
+
+  // Two-pass Sonnet→Haiku polish.
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    preservePhrasesByPath: {},
+  },
+
+  // Sensory anchors — single scene context, 7 channels × 100 entries.
+  // Lightcolor required (forces specific natural-light palette every render).
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'epic-vista': 'scene',
+      'weather-drama': 'scene',
+      'hidden-corner': 'scene',
+      'dramatic-sky': 'scene',
+      'luminous-landscape': 'scene',
+      'sacred-light': 'scene',
+      'national-parks': 'scene',
+      'seasonal-shift': 'scene',
+      'geological-wonder': 'scene',
+      'micro-nature': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
