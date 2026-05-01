@@ -1,6 +1,8 @@
 # Bot Character-Path Pool Audit
 
 **Run:** 2026-05-01
+**Status (2026-05-01):** ALL FINDINGS RESOLVED. SteamBot (`b7fd9ce`), GothBot polish + DragonBot warriors + StarBot explorers (this branch). Cyborg paths confirmed already wired (false positive in original grep).
+
 **Scope:** GothBot, DragonBot, StarBot — does each bot's male/female character path follow the slot-pool DNA standard set by GothBot's `goth-full-body.js` (the reference implementation)?
 
 **Standard (GothBot reference):** Each character path picks ~10 independent dimension slots — archetype, skin, eyes, makeup (women), hair color, hairstyle, wardrobe, accessory/feature, action/moment, lighting, atmosphere — each from its own seed pool with `picker.pickWithRecency` for independent dedup. Slot sizes are typically 25 entries (combinatorial variety comes from COMBINATION, not pool depth).
