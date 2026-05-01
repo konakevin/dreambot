@@ -91,6 +91,44 @@ module.exports = {
     'cottage-core': 4,
   },
 
+  // Chaos layer — light touch for cute bots. Subject chaos OFF (don't
+  // distort the cute creature's silhouette). Scenery + storybook paths
+  // get scene-channel chaos only.
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core'],
+  },
+
+  // Two-pass Sonnet→Haiku polish.
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    preservePhrasesByPath: {},
+  },
+
+  // Sensory anchors — 2 contexts × 7 channels × 100 entries.
+  // Lightcolor required (forces specific cozy palette every render).
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      'creature-portrait': 'creature',
+      'plushie-life': 'creature',
+      'sleepy-naptime': 'creature',
+      'bath-time': 'creature',
+      'outdoor-adventure': 'creature',
+      'miniature-feast': 'creature',
+      'heartwarming-scene': 'scene',
+      'cozy-landscape': 'scene',
+      'rainy-day-cozy': 'scene',
+      'storybook-page': 'scene',
+      'cottage-core': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
