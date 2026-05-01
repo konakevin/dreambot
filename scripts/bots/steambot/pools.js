@@ -43,5 +43,14 @@ module.exports = {
   STEAMPUNK_ATMOSPHERES: load('steampunk_atmospheres'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
+  // Slot-pool DNA for sexy-steampunk-woman path (mirrors GothBot pattern)
+  STEAMPUNK_WOMEN_ARCHETYPES: load('steampunk_women_archetypes'),
+  STEAMPUNK_WOMEN_SKIN: load('steampunk_women_skin'),
+  STEAMPUNK_WOMEN_EYES: load('steampunk_women_eyes'),
+  STEAMPUNK_WOMEN_MAKEUP: load('steampunk_women_makeup'),
+  STEAMPUNK_WOMEN_HAIR_COLOR: load('steampunk_women_hair_color'),
+  STEAMPUNK_WOMEN_HAIRSTYLES: load('steampunk_women_hairstyles'),
+  STEAMPUNK_WOMEN_WARDROBE: load('steampunk_women_wardrobe'),
+  STEAMPUNK_WOMEN_ACCESSORIES: load('steampunk_women_accessories'),
   VIBE_COLOR,
 };
