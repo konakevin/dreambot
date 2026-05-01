@@ -35,6 +35,7 @@ const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
+const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
 
 // ─────────────────────────────────────────────────────────────
@@ -725,6 +726,7 @@ async function runBot(opts) {
 
     let middle;
     let chaosProfile = { intensity: 0, injections: [], channelKey: null };
+    let sensoryProfile = { anchors: [], channelKeys: [] };
     const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
     if (isDirectPrompt) {
@@ -755,6 +757,16 @@ async function runBot(opts) {
       if (chaosBlock) {
         brief = brief + chaosBlock;
         console.log(`  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`);
+      }
+
+      // 5c. Roll sensory anchors and append. Layered after chaos (chaos warps
+      // perception, sensory grounds it). Opt-in via bot.sensoryAnchors — bots
+      // without the config block get nothing here.
+      sensoryProfile = rollSensoryAnchors({ path: resolvedPath, botSensory: bot.sensoryAnchors });
+      const sensoryBlock = buildSensoryBriefBlock(sensoryProfile);
+      if (sensoryBlock) {
+        brief = brief + sensoryBlock;
+        console.log(`  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} (n=${sensoryProfile.anchors.length})`);
       }
 
       // 6. Generate "middle" — either single-pass Sonnet OR two-pass Sonnet→Haiku.
@@ -1016,6 +1028,7 @@ async function runBot(opts) {
       durationMs,
       costCents,
       chaos: chaosProfile,
+      sensory: sensoryProfile,
     };
   } catch (err) {
     const durationMs = Date.now() - startedAt;
