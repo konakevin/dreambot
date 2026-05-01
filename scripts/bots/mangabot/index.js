@@ -94,6 +94,43 @@ module.exports = {
     'anime-village': 2,
   },
 
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: ['anime-scene', 'anime-landscape', 'neo-tokyo', 'isekai-fantasy', 'food-anime', 'anime-village', 'mythological-creature'],
+  },
+
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    polishedWordsByPath: {
+      kawaii: '80-110', 'slice-of-life': '80-110', 'cozy-anime': '80-110',
+      'shonen-action': '80-110', 'samurai-era': '80-110',
+      'mythological-creature': '80-110',
+    },
+    preservePhrasesByPath: {},
+  },
+
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      // Hard female: kawaii (always young anime girl) + slice-of-life (almost always
+      // a young woman protagonist). cozy-anime moved to scene per Kevin's catch on
+      // an elderly-luthier render — cozy-anime briefs sometimes drift to non-female
+      // subjects (craftsman, parent, scene-only quiet moments), so forced female
+      // anchors clash. Treat cozy-anime as scene to be safe.
+      kawaii: 'female', 'slice-of-life': 'female',
+      'shonen-action': 'male', 'samurai-era': 'male',
+      'mythological-creature': 'creature',
+      'cozy-anime': 'scene',
+      'anime-scene': 'scene', 'anime-landscape': 'scene', 'anime-village': 'scene',
+      'neo-tokyo': 'scene', 'isekai-fantasy': 'scene', 'food-anime': 'scene',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
