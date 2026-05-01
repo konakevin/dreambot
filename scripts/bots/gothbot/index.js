@@ -70,10 +70,10 @@ module.exports = {
   },
 
   mediumByPath: {
-    'vampire-girls-2': 'vampire-portrait',
+    'vampire-girls-2': 'vampire_portrait',
     'goth-male-full-body': [
-      'gothic-architecture', 'gothic-architecture', 'gothic-architecture', 'gothic-architecture',
-      'gothic-realistic', 'gothic-realistic', 'gothic-realistic',
+      'gothic_architecture', 'gothic_architecture', 'gothic_architecture', 'gothic_architecture',
+      'gothic_realistic', 'gothic_realistic', 'gothic_realistic',
       'anime', 'anime',
       'comics',
       'illustration',
@@ -83,12 +83,12 @@ module.exports = {
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
-  //   'gothic-architecture' → heavy-ink Castlevania-manga stylization (landscape/architecture paths)
-  //   'gothic-realistic' → 80s-90s dark-fantasy paperback oil-painting
+  //   'gothic_architecture' → heavy-ink Castlevania-manga stylization (landscape/architecture paths)
+  //   'gothic_realistic' → 80s-90s dark-fantasy paperback oil-painting
   // Character paths override via mediumByPath → canvas/illustration/watercolor.
   mediums: [
-    'gothic-architecture', 'gothic-architecture', 'gothic-architecture', 'gothic-architecture', // 4× = 29% flagship stylized
-    'gothic-realistic', 'gothic-realistic', 'gothic-realistic', // 3× = 21% painterly-realism
+    'gothic_architecture', 'gothic_architecture', 'gothic_architecture', 'gothic_architecture', // 4× = 29% flagship stylized
+    'gothic_realistic', 'gothic_realistic', 'gothic_realistic', // 3× = 21% painterly-realism
     'anime', 'anime',                                             // 2× = 14% dark-anime
     'comics',
     'pencil',
@@ -98,27 +98,27 @@ module.exports = {
   ],
 
   promptPrefixByMedium: {
-    'vampire-portrait':
+    vampire_portrait:
       'wallpaper-worthy operatic gothic vampire painting, dramatic theatrical composition, gallery-poster gravity',
   },
   promptSuffixByMedium: {
-    'vampire-portrait':
+    vampire_portrait:
       'operatic gothic dark-fantasy painting finish, painterly brushwork with bold heavy shadow, gallery-poster gravity, no text no words no watermarks, NOT photoreal NOT cinematic film-still NOT 35mm NOT magazine editorial NOT plastic-skin NOT Halloween costume NOT modern fashion photography',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
   // This fragment gets injected between promptPrefix and the Sonnet-written scene.
   mediumStyles: {
-    'gothic-architecture':
+    gothic_architecture:
       'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, Castlevania-environment concept-art, moonlit stone and stained-glass atmosphere',
     // Subject-agnostic rewrite — stripped all character/face/makeup/expression
     // language that was leaking into landscape + architecture paths. Medium now
     // describes ONLY the rendering style (painted oil-on-canvas dark-fantasy
     // paperback polish) with no subject implied. Any path's subject (landscape,
     // architecture, character, interior) gets rendered in this style cleanly.
-    'gothic-realistic':
+    gothic_realistic:
       '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture (NOT photoreal, NOT plastic-digital), strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality, NOT flat-inked, NOT manga, NOT smooth-digital-art, NOT Artgerm-plastic, NOT Rossdraws',
-    'vampire-portrait':
+    vampire_portrait:
       'WALLPAPER-WORTHY operatic gothic-theatrical painting fusing old-master-oil-painting tradition with painted-fantasy-poster drama, visible painterly brushwork, punchy jewel-tone palette anchored by deep velvet shadow, theatrical chiaroscuro pushed to operatic extreme, dramatic single-source key-light cutting through gloom, frame-worthy gallery-painting composition, dark gothic horror character energy, NOT photoreal NOT cinematic film-still NOT magazine editorial NOT plastic-skin NOT smooth-digital-art NOT modern fashion photography NOT pretty-girl-in-dress',
     anime:
       'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic, NOT cute-anime NOT shonen NOT moe',
