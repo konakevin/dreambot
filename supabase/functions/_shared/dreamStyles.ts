@@ -166,7 +166,15 @@ export async function resolveMediumFromDb(
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked) ?? rand();
   }
-  return mediums.find((m) => m.key === key) ?? rand();
+  // Explicit key resolution. If the key isn't found (legacy upload key,
+  // typo, retired medium, schema cache lag), fall back to a STABLE default
+  // (canvas) instead of random. Random pick was a silent style-loss bug —
+  // every DLT against a legacy-keyed post was rendering in a roulette
+  // medium. Canvas is generic painted style and degrades gracefully.
+  const found = mediums.find((m) => m.key === key);
+  if (found) return found;
+  console.warn(`[dreamStyles] Unknown medium key: ${key} — falling back to canvas`);
+  return mediums.find((m) => m.key === 'canvas') ?? rand();
 }
 
 /**
@@ -203,5 +211,11 @@ export async function resolveVibeFromDb(
     const picked = pick(pool);
     return vibes.find((v) => v.key === picked) ?? rand();
   }
-  return vibes.find((v) => v.key === key) ?? rand();
+  // Explicit key resolution. Stable fallback to 'cinematic' (most generic
+  // mood) instead of random pick. Same rationale as resolveMediumFromDb —
+  // unknown vibe keys should degrade predictably, not roulette.
+  const found = vibes.find((v) => v.key === key);
+  if (found) return found;
+  console.warn(`[dreamStyles] Unknown vibe key: ${key} — falling back to cinematic`);
+  return vibes.find((v) => v.key === 'cinematic') ?? rand();
 }

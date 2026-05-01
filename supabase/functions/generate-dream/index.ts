@@ -280,6 +280,19 @@ Deno.serve(async (req) => {
     resolvedMediumKey = medium.key;
     resolvedVibeKey = vibe.key;
 
+    // Log unknown-key fallbacks to ai_generation_log.fallback_reasons so we
+    // can SQL-grep production for missing mediums/vibes (legacy keys, typos,
+    // retired entries) and add them to the DB or remap them. Only counts when
+    // the user passed an explicit key (not surprise_me/my_mediums/my_vibes)
+    // and the resolver had to fall back to a default.
+    const surpriseKeys = new Set(['surprise_me', 'my_mediums', 'my_vibes']);
+    if (medium_key && !surpriseKeys.has(medium_key) && medium.key !== medium_key) {
+      fallbackReasons.push(`unknown_medium_key:${medium_key}→${medium.key}`);
+    }
+    if (vibe_key && !surpriseKeys.has(vibe_key) && vibe.key !== vibe_key) {
+      fallbackReasons.push(`unknown_vibe_key:${vibe_key}→${vibe.key}`);
+    }
+
     const isPhoto = !!input_image;
     console.log(
       '[generate-dream] V2 ENGINE | medium:',
@@ -421,7 +434,7 @@ Deno.serve(async (req) => {
           characterRenderMode: medium.characterRenderMode,
           key: medium.key,
         });
-        const isFaceSwapEligible = medium.faceSwaps && medium.characterRenderMode === 'natural';
+        const isFaceSwapEligible = medium.characterRenderMode === 'natural';
 
         // Scene expansion + chaos (same as self-insert)
         const expanded = expandScene({
@@ -578,7 +591,7 @@ Output ONLY the prompt.`;
       // Ship 2: face-swap the original photo onto the generated scene when the
       // medium supports it. Reimagine used to be caricature-only; now if the
       // medium is face-swap eligible, we get real face preservation + new scene.
-      if (medium.faceSwaps && medium.characterRenderMode === 'natural') {
+      if (medium.characterRenderMode === 'natural') {
         faceSwapSource = input_image!;
         logAxes.faceSwap = true;
         console.log('[generate-dream] Reimagine + face-swap enabled for this medium');
@@ -618,7 +631,7 @@ Output ONLY the prompt.`;
         );
       }
 
-      const isFaceSwapEligible = medium.faceSwaps && medium.characterRenderMode === 'natural';
+      const isFaceSwapEligible = medium.characterRenderMode === 'natural';
 
       if (isFaceSwapEligible && castMembers.length > 2) {
         const self = castMembers.find((m: DreamCastMember) => m.role === 'self');
