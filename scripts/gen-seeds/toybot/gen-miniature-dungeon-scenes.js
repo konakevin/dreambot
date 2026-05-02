@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/tabletop_scenes.json',
+  outPath: 'scripts/bots/toybot/seeds/miniature_dungeon_scenes.json',
   total: 200,
   batch: 10,
   append: true,

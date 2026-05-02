@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/gi_joe_landscapes.json',
+  outPath: 'scripts/bots/toybot/seeds/gi_joe_missions_landscapes.json',
   total: 200,
-  batch: 50,
+  batch: 25,
   metaPrompt: (n) => `You are writing ${n} GI-JOE-ERA PLAYSET LANDSCAPE scene descriptions for ToyBot's gi-joe path. 3.75-inch articulated-commando action-figure playset dioramas — iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser), Saturday-morning-cartoon-serial military-toy DNA. Non-IP — archetype only.
 
 Each entry: 15-25 words. ONE specific GI-Joe-era playset landscape scene.
@@ -18,6 +18,13 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / prone
 ━━━ CONTEXT DNA ━━━
 - GI-Joe-era playsets: terror-organization-volcano-fortress / motor-pool-garage / arctic-ice-station / jungle-base / missile-silo-launch-bay / submarine-deck / aircraft-carrier-deck / desert-base-with-radar / commando-HQ-war-room / holotable-briefing-room / space-station-platform / swamp-ambush-dock / rope-bridge-collapse / control-room-console / terror-holding-cell / water-tower-overwatch / catwalk-gantry / cliff-rope-extraction / weapons-locker / demolitions-timer-reactor / motor-speed-chase-desert / cave-lair / satellite-dish-rotating / barbed-wire-obstacle-course
 - Commando DNA: 3.75-inch articulated action-figure, swivel-waist / ball-joint arms / rubber-band-waist construction, hand-painted multicolor commando wardrobe (camo fatigues / berets / goggles / bandannas / chest-rig / dogtags / ammo-belts). Archetype: masked-operative / mohawk-soldier / ninja-operative (black or white armor + face-mask) / gruff-sergeant (beret) / demolitions-expert / pilot-ace / jungle-specialist / arctic-specialist / tank-commander — OR masked-terror-organization-trooper (silver-visor helmet + armored jumpsuit) / chrome-faceplate-commander / hooded-cloak-commander / snake-motif-commander
+
+━━━ NON-NEGOTIABLE: ANTI-HUMAN-LEAK RULE ━━━
+Every figure is a PLASTIC TOY. Anchor that with toy-medium language INSIDE the description: "molded", "painted", "sculpted", "articulated", "ball-jointed", "plastic", "vinyl", "weathered (paint)".
+
+NEVER use "skin" (use "painted skin-tone"), "flesh", "real eyes", "tears", "sweat", "breath", "alive", or "his face" / "her face" alone (use "painted face" / "sculpted face").
+
+When you describe a commando archetype, ALWAYS attach "action figure" / "3.75-inch articulated figure" / "plastic figure" so Sonnet/Flux render the toy, not a human.
 
 ━━━ MUST-HAVE ━━━
 - Reference ARTICULATED / 3.75-inch / commando / action-figure / hand-painted / plastic-playset LANGUAGE

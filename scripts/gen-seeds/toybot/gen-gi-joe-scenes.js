@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/gi_joe_scenes.json',
+  outPath: 'scripts/bots/toybot/seeds/gi_joe_missions_scenes.json',
   total: 200,
-  batch: 10,
-  append: true,
+  batch: 25,
   metaPrompt: (n) => `You are writing ${n} 1980s GI-JOE-era articulated-commando action-figure scene descriptions for ToyBot's gi-joe path — Saturday-morning-cartoon-serial military-toy storytelling. 3.75-inch hand-painted articulated figures with signature code-name commandos vs masked terror-organization troopers. Iconic plastic vehicles, battle playsets, Cobra-vs-Joe-style tableau cinema. Non-IP — archetype only.
 
 Each entry: 18-28 words. ONE specific scene with articulated-commando figures mid-action in a handcrafted playset diorama.
@@ -55,6 +54,15 @@ Each entry: 18-28 words. ONE specific scene with articulated-commando figures mi
 - Ninja-commando rooftop-leap — all-black ninja-figure mid-flying-kick toward masked terror-trooper on neighboring rooftop
 - Helicopter-rescue-sling scene — commando hoisted on plastic-sling-line toward hovering chopper, enemy troops firing below
 - Motor-speed-chase diorama — commando-motorcycle and terror-sidecar-motorcycle neck-and-neck through plastic-desert
+
+━━━ NON-NEGOTIABLE: ANTI-HUMAN-LEAK RULE ━━━
+Every figure is a PLASTIC TOY. Anchor that with toy-medium language INSIDE the description: "molded", "painted", "sculpted", "articulated", "ball-jointed", "plastic", "vinyl", "weathered (paint)".
+
+NEVER use "skin" (use "painted skin-tone"), "flesh", "real eyes", "wet eyes", "tears", "sweat", "breath", "alive", or "his face" / "her face" alone (use "painted face" / "sculpted face").
+
+When you describe a commando archetype, ALWAYS attach "action figure" / "3.75-inch articulated figure" / "plastic figure". Examples:
+  ❌ "Ninja-operative leaping..."  → cues real human
+  ✅ "Ninja-operative action figure leaping, ball-joint shoulders torqued, painted-katana raised..."
 
 ━━━ MUST-HAVE FOR EVERY ENTRY ━━━
 - Reference ARTICULATED / 3.75-inch / commando / action-figure / hand-painted-commando / plastic-playset LANGUAGE

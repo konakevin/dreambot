@@ -3,8 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/shortcake_scenes.json',
   total: 200,
-  batch: 10,
-  append: true,
+  batch: 25,
   metaPrompt: (n) => `You are writing ${n} STRAWBERRY-SHORTCAKE-era-toy scene descriptions for ToyBot's shortcake-scene path — 1980s OG girl-targeted scented-doll figurines (Strawberry Shortcake / Rainbow Brite / My-Little-Pony / Popples / Rose-Petal-Place / Lady-Lovely-Locks DNA). Soft-plastic dolls with oversized heads, rosy-cheeks, pastel-yarn hair, dessert/flower-themed wardrobe, photographed in hand-built dessert-fantasy playsets.
 
 Each entry: 18-28 words. ONE specific 80s-toy-catalog scene with scented-doll figurines mid-activity in a pastel dessert-or-flower-themed miniature world.
@@ -38,6 +37,15 @@ Classic 1980s girl-targeted soft-plastic dolls — oversized heads with huge rou
 - Teddy-bear picnic — dolls and oversized teddy-figurines sharing mini-cakes on quilted blanket
 - Hot-cocoa fireside — dolls in matching nightcaps with mugs topped by marshmallow-mounds
 - Pastel-unicorn meadow — dolls braiding yarn-mane of tiny pink unicorn, flower-crown nearby
+
+━━━ NON-NEGOTIABLE: ANTI-HUMAN-LEAK RULE ━━━
+Every figure is a 3-5-inch SOFT-PLASTIC DOLL. Anchor that with toy-medium language INSIDE the description: "soft-plastic", "molded", "painted", "rooted yarn-hair", "doll", "figurine", "playset-miniature", "oversized-head".
+
+NEVER use "skin" (use "soft-plastic skin-tone"), "flesh", "real eyes" (use "huge round painted eyes"), "tears", "sweat", "breath", "alive", or "her face" alone (use "painted face" / "molded face").
+
+When you describe an archetype (girl, princess, baker, etc.) ALWAYS attach "doll" / "scented-doll" / "soft-plastic figurine":
+  ❌ "Strawberry-haired girl baking..."  → cues real child
+  ✅ "Strawberry-haired scented-doll baking, oversized molded head, huge round painted eyes, rooted yarn-hair pigtails..."
 
 ━━━ MUST-HAVE FOR EVERY ENTRY ━━━
 - Reference DOLL / figurine / soft-plastic / rooted-hair / playset-miniature LANGUAGE

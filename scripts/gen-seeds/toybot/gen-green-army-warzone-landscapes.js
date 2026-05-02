@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/army_men_landscapes.json',
+  outPath: 'scripts/bots/toybot/seeds/green_army_warzone_landscapes.json',
   total: 200,
   batch: 50,
   metaPrompt: (n) => `You are writing ${n} GREEN-ARMY-MEN BATTLE-DIORAMA LANDSCAPE scene descriptions for ToyBot's army-men path. Classic Bucket-O-Soldiers / Toy-Story-2nd-battalion single-pose molded-plastic toy-soldier aesthetic on handcrafted WWII-diorama or backyard-epic practical sets. Cotton-ball smoke, flash-bulb explosion-bursts, dramatic spotlight lighting.

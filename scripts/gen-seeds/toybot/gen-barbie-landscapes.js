@@ -3,7 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/barbie_landscapes.json',
   total: 200,
-  batch: 50,
+  batch: 25,
   metaPrompt: (n) => `You are writing ${n} BARBIE-WORLD LANDSCAPE scene descriptions for ToyBot's barbie-scene path. Cinematic Mattel-scale fashion-doll dioramas — DreamHouse architecture, pink-dominant palette, boutique/rooftop-pool/runway/convertible-pink-car playsets, glossy-plastic sheen, Barbie-movie film-still framing.
 
 Each entry: 15-25 words. ONE specific Barbie-world landscape scene.
@@ -18,6 +18,13 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / recli
 ━━━ CONTEXT DNA ━━━
 - Barbie environments: DreamHouse pink-spiral-staircase / rooftop-pool cabana / pink-convertible beach-drive / fashion-runway backstage / Malibu-beach sunset / DreamHouse kitchen / boutique storefront / country-club tennis-court / pink-jet cockpit / veterinary-clinic / concert-stage / fashion-week front-row / walk-in closet / yacht-deck / horse-riding stable / ice-skating rink / astronaut moon-surface / pool-party / pink-salon / chef-bistro / red-carpet premiere / ballet-studio / ski-chalet / tropical-jungle / pink-bathroom vanity
 - Doll DNA: 11.5-inch articulated plastic body, molded hair (blonde / brunette / redhead / black / pastel-dyed variety), oversized head with glossy painted-makeup (winged-liner, pink-lip, highlight), fashion-forward mini-wardrobe (evening-gown / power-suit / swimsuit / astronaut / chef / rockstar / ballerina / vet-coat), spike-heel plastic shoes
+
+━━━ NON-NEGOTIABLE: ANTI-HUMAN-LEAK RULE ━━━
+Every figure is a PLASTIC FASHION DOLL. Anchor that with toy-medium language INSIDE the description: "molded", "painted", "articulated", "plastic", "vinyl", "rooted hair", "11.5-inch", "doll", "Mattel-scale".
+
+NEVER use "skin" (use "molded plastic skin-tone"), "flesh", "real eyes", "tears", "sweat", "breath", "alive", or "her face" alone (use "painted face" / "molded face").
+
+When you describe an archetype (model, ballerina, etc.) ALWAYS attach "doll" / "fashion-doll" / "11.5-inch articulated doll" so Sonnet/Flux render the toy, not a real woman.
 
 ━━━ MUST-HAVE ━━━
 - Reference FASHION-DOLL / plastic-doll / Mattel-scale / articulated-doll / playset / pink-dominant LANGUAGE
