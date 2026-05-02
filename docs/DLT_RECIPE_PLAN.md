@@ -213,7 +213,7 @@ If anything is partially done, complete that file before moving on. Don't redo c
 - [x] **Phase 1.4** — `botEngine.js` wired (recipe captured + inserted)
 - [ ] **Phase 1.5** — Replicate seed capture for botEngine (deferred — null in Phase 1)
 - [x] **Phase 1.6** — Phase 1 unit tests written (36 tests passing)
-- [ ] **Phase 1.7** — Test render verifies recipe populated end-to-end (BLOCKED on migration apply)
+- [x] **Phase 1.7** — End-to-end smoke verified — cuddlebot plushie-life upload `a22c6a0d` has fully populated recipe column (all required fields + prefix/suffix/palettes/sensory captured, expected nulls for non-opt-in path-builder fields)
 - [x] **Phase 1.8** — Commit Phase 1 (c4e9299)
 - [x] **Phase 2.1** — `recipeReplay.ts` shared module (validateRecipe + resolveRecipeAnchors + buildLookFragment)
 - [ ] **Phase 2.2** — Edge Functions wired (`generate-dream`, `nightly-dreams`) — BLOCKED on Phase 1.7 verification

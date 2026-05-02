@@ -41,6 +41,7 @@ import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
+import { buildRecipe } from '../_shared/recipeBuilder.ts';
 
 interface RequestBody {
   /** Which Flux model to use */
@@ -1015,6 +1016,33 @@ Output ONLY the prompt.`;
     }
     if (description) console.log(`[generate-dream] description: "${description}"`);
 
+    // Build the DLT recipe — frozen LOOK anchors captured at insert time.
+    // Phase 2.2a (capture-only): user-side V4 pipeline doesn't surface
+    // intermediate rolls (camera, lighting, palette) outside the compiler,
+    // so this recipe is sparse vs. bot-side recipes. Sufficient for DLT
+    // replay because medium_key + vibe_key + ai_prompt is the load-bearing
+    // identity. Fuller enrichment is a follow-up that would have the V4
+    // compiler expose internal rolls. See docs/DLT_RECIPE_PLAN.md.
+    let recipeForInsert = null as ReturnType<typeof buildRecipe> | null;
+    if (resolvedMediumKey && resolvedVibeKey) {
+      try {
+        recipeForInsert = buildRecipe({
+          model: pickedModel,
+          mediumKey: resolvedMediumKey,
+          vibeKey: resolvedVibeKey,
+          aiPrompt: finalPrompt,
+          fluxSeed: null,
+          // User-side V4 doesn't use bot-style overrides — leave style anchors
+          // empty, the medium directive resolves fresh from DB at DLT time.
+        });
+      } catch (err) {
+        // Recipe build is best-effort; if construction fails (e.g. unexpected
+        // null fields under a future code path) we keep recipeForInsert null
+        // and DLT falls back to style_summary. Same zero-regression contract.
+        console.warn(`[generate-dream] recipe build failed: ${(err as Error).message}`);
+      }
+    }
+
     // Draft upload + budget upsert in parallel (both need imageUrl but not each other)
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
@@ -1032,6 +1060,8 @@ Output ONLY the prompt.`;
           is_public: false,
           width: 768,
           height: 1664,
+          recipe: recipeForInsert,
+          flux_seed: null,
           ...(description ? { description } : {}),
         })
         .select('id')
