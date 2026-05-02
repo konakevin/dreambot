@@ -41,6 +41,8 @@ import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
+import { buildRecipe } from '../_shared/recipeBuilder.ts';
+import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
 
 interface RequestBody {
   /** Which Flux model to use */
@@ -84,6 +86,11 @@ interface RequestBody {
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
   /** Optional user-supplied scene description. If absent, Haiku auto-generates from the final prompt. */
   description?: string;
+  /** DLT recipe-replay: when present + valid, locks medium/vibe/model from
+   *  the source post's frozen recipe instead of using user-picker values.
+   *  See docs/DLT_RECIPE_PLAN.md. NULL/missing → existing style_summary
+   *  fallback path runs (zero regression). */
+  dlt_recipe?: unknown;
 }
 
 Deno.serve(async (req) => {
@@ -152,22 +159,55 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
+  // Pull body fields. medium_key / vibe_key / force_model are mutable so we
+  // can override them from a DLT recipe before resolution.
+  let {
+    medium_key,
+    vibe_key,
+    force_model,
+  } = body;
   const {
     mode,
     vibe_profile,
-    medium_key,
-    vibe_key,
     prompt: rawPrompt,
     hint,
     input_image,
     photo_style = 'restyle',
-    force_model,
     force_cast_role,
     job_id: jobId,
     style_prompt,
     subject_description,
     subject_type,
+    dlt_recipe,
   } = body;
+
+  // ── DLT recipe replay (consume-side) ────────────────────────────────────
+  // When the client passes a valid frozen recipe, lock the LOOK identity
+  // from the source post: substitute medium_key + vibe_key + force_model so
+  // every downstream resolver/picker uses the source's exact values. The
+  // user's subject text + cast/photo flow through the existing pipeline
+  // unchanged — DLT only affects look, never content.
+  // If the recipe is null/missing/malformed, fall through to the existing
+  // style_summary path (zero regression).
+  let dltReplayActive = false;
+  let dltReplayAnchors: ReturnType<typeof resolveRecipeAnchors> | null = null;
+  if (dlt_recipe !== undefined && dlt_recipe !== null) {
+    const validRecipe = validateRecipe(dlt_recipe);
+    if (validRecipe) {
+      dltReplayAnchors = resolveRecipeAnchors(validRecipe);
+      medium_key = dltReplayAnchors.mediumKey;
+      vibe_key = dltReplayAnchors.vibeKey;
+      force_model = force_model || dltReplayAnchors.model; // body force_model still wins for tests
+      dltReplayActive = true;
+      console.log(
+        `[generate-dream] DLT recipe-replay active: medium=${dltReplayAnchors.mediumKey} vibe=${dltReplayAnchors.vibeKey} model=${dltReplayAnchors.model}`
+      );
+    } else {
+      console.warn(
+        '[generate-dream] dlt_recipe present but failed validation — falling back to style_summary path'
+      );
+    }
+  }
 
   // Optional user-supplied description for this dream. If absent, a Haiku
   // call generates one from finalPrompt before insert.
@@ -274,8 +314,33 @@ Deno.serve(async (req) => {
     const vibeProfile = vibe_profile as VibeProfile | undefined;
 
     // Resolve medium and vibe to real curated entries — never store placeholders
-    const medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
+    let medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
     const vibe = await resolveVibeFromDb(vibe_key, vibeProfile?.aesthetics);
+
+    // DLT recipe-replay: if the source post used a bot-internal medium that
+    // isn't registered in dream_mediums (e.g. plush_fabric, dollhouse_figures,
+    // model_train_diorama), resolveMediumFromDb falls back to canvas. The
+    // recipe's medium_style_override has the actual look anchor — synthesize
+    // a medium object so the look reproduces faithfully without requiring
+    // every bot-internal medium to be registered in DB.
+    if (dltReplayActive && dltReplayAnchors && medium.key !== dltReplayAnchors.mediumKey) {
+      const override = dltReplayAnchors.mediumStyleOverride;
+      if (override) {
+        medium = {
+          ...medium, // inherit safe defaults (face_swaps, render_mode, etc.) from canvas
+          key: dltReplayAnchors.mediumKey,
+          label: dltReplayAnchors.mediumKey,
+          directive: override,
+          fluxFragment: override,
+        };
+        console.log(
+          `[generate-dream] DLT recipe-replay synthesized medium "${dltReplayAnchors.mediumKey}" from recipe override (DB had no entry)`
+        );
+        // Strip the fallback reason — we recovered correctly via recipe override
+        const idx = fallbackReasons.findIndex((r) => r.startsWith('unknown_medium_key:'));
+        if (idx >= 0) fallbackReasons.splice(idx, 1);
+      }
+    }
 
     resolvedMediumKey = medium.key;
     resolvedVibeKey = vibe.key;
@@ -1015,6 +1080,33 @@ Output ONLY the prompt.`;
     }
     if (description) console.log(`[generate-dream] description: "${description}"`);
 
+    // Build the DLT recipe — frozen LOOK anchors captured at insert time.
+    // Phase 2.2a (capture-only): user-side V4 pipeline doesn't surface
+    // intermediate rolls (camera, lighting, palette) outside the compiler,
+    // so this recipe is sparse vs. bot-side recipes. Sufficient for DLT
+    // replay because medium_key + vibe_key + ai_prompt is the load-bearing
+    // identity. Fuller enrichment is a follow-up that would have the V4
+    // compiler expose internal rolls. See docs/DLT_RECIPE_PLAN.md.
+    let recipeForInsert = null as ReturnType<typeof buildRecipe> | null;
+    if (resolvedMediumKey && resolvedVibeKey) {
+      try {
+        recipeForInsert = buildRecipe({
+          model: pickedModel,
+          mediumKey: resolvedMediumKey,
+          vibeKey: resolvedVibeKey,
+          aiPrompt: finalPrompt,
+          fluxSeed: null,
+          // User-side V4 doesn't use bot-style overrides — leave style anchors
+          // empty, the medium directive resolves fresh from DB at DLT time.
+        });
+      } catch (err) {
+        // Recipe build is best-effort; if construction fails (e.g. unexpected
+        // null fields under a future code path) we keep recipeForInsert null
+        // and DLT falls back to style_summary. Same zero-regression contract.
+        console.warn(`[generate-dream] recipe build failed: ${(err as Error).message}`);
+      }
+    }
+
     // Draft upload + budget upsert in parallel (both need imageUrl but not each other)
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
@@ -1032,6 +1124,8 @@ Output ONLY the prompt.`;
           is_public: false,
           width: 768,
           height: 1664,
+          recipe: recipeForInsert,
+          flux_seed: null,
           ...(description ? { description } : {}),
         })
         .select('id')

@@ -3,9 +3,10 @@
  * backfill-style-summary.js — populate uploads.style_summary for all
  * publicly-viewable posts that don't have one yet.
  *
- * Plan C migration. Calls Haiku once per row to extract a subject-stripped
- * style fingerprint from the existing ai_prompt, then updates the row.
- * Idempotent + resumable — re-running picks up wherever it left off.
+ * Plan C migration. Uses the shared distiller (scripts/lib/styleDistiller.js,
+ * which mirrors supabase/functions/_shared/styleDistiller.ts). Calls Haiku
+ * once per row to extract a subject-stripped style fingerprint, then
+ * updates the row. Idempotent + resumable.
  *
  * Throttling: processes BATCH_SIZE rows in parallel, then sleeps
  * BATCH_GAP_MS before the next batch. Defaults stay well under
@@ -24,6 +25,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
+const { distillStyle } = require('./lib/styleDistiller');
 
 // ── Config ──────────────────────────────────────────────────────────────
 
@@ -32,7 +34,6 @@ const DRY_RUN = !args.includes('--execute');
 const LIMIT = parseInt(getArg('--limit', ''), 10) || null; // null = all
 const BATCH_SIZE = parseInt(getArg('--batch', '5'), 10);
 const BATCH_GAP_MS = parseInt(getArg('--gap', '1000'), 10);
-const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 
 function getArg(flag, fallback) {
   const idx = args.indexOf(flag);
@@ -69,109 +70,6 @@ if (!ANTHROPIC_KEY) {
 
 const sb = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-// ── Distiller (mirrors _shared/styleDistiller.ts) ─────────────────────
-
-const SYSTEM_PROMPT = `You synthesize a unified style fingerprint from three sources that together defined a rendered image: a MEDIUM (art style identity), a VIBE (mood identity), and the final FLUX PROMPT used by the image model.
-
-The fingerprint is used by a "Dream Like This" feature — when a user taps a post they love, your output is fed to the image model alongside their NEW subject prompt. The user wants to FAITHFULLY RECREATE the look of the original post applied to whatever they're dreaming about now.
-
-So: your job is to capture HOW the source image looked — palette, lighting, technique, mood, character-design conventions, named aesthetics — while removing the specific subjects-in-the-scene (which would replace the user's new subject and ruin the recreation).
-
-OUTPUT FORMAT: a comma-separated list, max 35 words. Lead with the most distinctive style anchors. Be specific. The more vivid the style language, the better the recreation.
-
-KEEP (these define the LOOK and should be preserved):
-- Medium / technique words: "watercolor washes", "oil paint", "heavy ink", "pixel art", "claymation", "3D render", "ray-traced", "cel-shaded"
-- Named aesthetics and references: "Tim Burton aesthetic", "Studio Ghibli", "Pixar character design", "Wes Anderson", "Bauhaus", "Art Deco", "Bloodborne dread", "Castlevania energy", "Moebius linework" — these are STYLE SHORTHAND
-- Stylistic body/figure language: "spindly elongated proportions", "exaggerated facial features", "anime-large eyes", "pale gothic skin tones", "dark sunken eye sockets", "Disney princess proportions" — these describe HOW figures are drawn
-- Color palette, light direction/quality/temperature
-- Camera/lens descriptors, depth of field, color grading
-- Atmosphere and mood words
-- Texture and material language
-- Era/genre style descriptors
-
-STRIP (these are the SUBJECT — what the source image was OF):
-- Specific creatures and beings IN the scene: "vampire", "dragon", "T-rex", "warrior", "mermaid", "robot"
-- Specific buildings/structures: "cathedral", "castle", "tower", "mall", "diner"
-- Specific named places, objects, vehicles, weapons, animals-as-pets, plants-as-subjects, food
-- Actions/poses: "running", "kissing", "holding"
-- Specific named characters/IP-figures (distinct from named-aesthetic references)
-
-The key distinction: if removing it changes WHAT the picture is OF, strip it. If removing it changes HOW the picture LOOKS, keep it.
-
-WEIGHT THE MEDIUM AND VIBE: even if the FLUX PROMPT's language is light on them, anchor the fingerprint in the medium and vibe character.
-
-If all three sources are too thin to extract any meaningful style, output exactly: NO_STYLE_SIGNAL
-
-Output the comma-separated descriptors only. No preamble. No quotes. No labels.`;
-
-// Cache directives so we don't refetch them per row. Loaded once at startup.
-const directiveCache = { mediums: new Map(), vibes: new Map() };
-async function loadDirectives() {
-  const [m, v] = await Promise.all([
-    sb.from('dream_mediums').select('key, directive'),
-    sb.from('dream_vibes').select('key, directive'),
-  ]);
-  (m.data || []).forEach((r) => directiveCache.mediums.set(r.key, r.directive));
-  (v.data || []).forEach((r) => directiveCache.vibes.set(r.key, r.directive));
-  console.log(
-    `Loaded ${directiveCache.mediums.size} mediums, ${directiveCache.vibes.size} vibes from DB`
-  );
-}
-
-function truncateDirective(d) {
-  if (!d) return null;
-  const cleaned = d.replace(/\s+/g, ' ').trim();
-  if (cleaned.length <= 400) return cleaned;
-  return cleaned.slice(0, 400).replace(/\s+\S*$/, '') + '…';
-}
-
-async function distill({ rawPrompt, mediumKey, vibeKey }) {
-  if (!rawPrompt?.trim() && !mediumKey && !vibeKey) return null;
-  const mediumDir = mediumKey ? truncateDirective(directiveCache.mediums.get(mediumKey)) : null;
-  const vibeDir = vibeKey ? truncateDirective(directiveCache.vibes.get(vibeKey)) : null;
-  const mediumLine = mediumDir ? `${mediumKey} (${mediumDir})` : mediumKey || '(none)';
-  const vibeLine = vibeDir ? `${vibeKey} (${vibeDir})` : vibeKey || '(none)';
-  const promptLine = rawPrompt?.trim() || '(none)';
-  const userMessage = `MEDIUM: ${mediumLine}\nVIBE: ${vibeLine}\nFLUX PROMPT: "${promptLine}"`;
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: HAIKU_MODEL,
-          max_tokens: 100,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: userMessage }],
-        }),
-      });
-      if (!res.ok) {
-        if ([429, 500, 502, 503, 504, 529].includes(res.status) && attempt < 2) {
-          await sleep(2000 * (attempt + 1));
-          continue;
-        }
-        return null;
-      }
-      const data = await res.json();
-      const text = (data?.content?.[0]?.text ?? '').trim();
-      if (!text || text.startsWith('NO_STYLE_SIGNAL')) return null;
-      return text.length > 320 ? text.slice(0, 320) : text;
-    } catch (err) {
-      if (attempt < 2) {
-        await sleep(2000 * (attempt + 1));
-        continue;
-      }
-      return null;
-    }
-  }
-  return null;
-}
-
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ── Main ─────────────────────────────────────────────────────────────
@@ -182,9 +80,7 @@ async function main() {
   console.log(`  LIMIT       : ${LIMIT ?? 'all'}`);
   console.log(`  BATCH_SIZE  : ${BATCH_SIZE}`);
   console.log(`  BATCH_GAP_MS: ${BATCH_GAP_MS}`);
-  console.log('');
-
-  await loadDirectives();
+  console.log('  Distiller   : scripts/lib/styleDistiller.js (shared with botEngine)');
   console.log('');
 
   let processed = 0;
@@ -221,11 +117,11 @@ async function main() {
     if (DRY_RUN) {
       console.log(`[dry-run] would process batch of ${data.length}, sample:`);
       for (const r of data.slice(0, 5)) {
-        const summary = await distill({
-          rawPrompt: r.ai_prompt,
-          mediumKey: r.dream_medium,
-          vibeKey: r.dream_vibe,
-        });
+        const summary = await distillStyle(
+          { rawPrompt: r.ai_prompt, mediumKey: r.dream_medium, vibeKey: r.dream_vibe },
+          ANTHROPIC_KEY,
+          sb
+        );
         console.log(`\n  ${r.id.slice(0, 8)} (${r.dream_medium}/${r.dream_vibe})`);
         console.log(`    PROMPT: ${r.ai_prompt.slice(0, 100)}...`);
         console.log(`    STYLE:  ${summary ?? '(NO_STYLE_SIGNAL)'}`);
@@ -240,11 +136,11 @@ async function main() {
     const results = await Promise.all(
       data.map(async (row) => {
         try {
-          const summary = await distill({
-            rawPrompt: row.ai_prompt,
-            mediumKey: row.dream_medium,
-            vibeKey: row.dream_vibe,
-          });
+          const summary = await distillStyle(
+            { rawPrompt: row.ai_prompt, mediumKey: row.dream_medium, vibeKey: row.dream_vibe },
+            ANTHROPIC_KEY,
+            sb
+          );
           if (summary) {
             const { error: updErr } = await sb
               .from('uploads')

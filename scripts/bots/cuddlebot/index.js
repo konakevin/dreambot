@@ -32,6 +32,7 @@ const pathBuilders = {
   'sunny-pair': require('./paths/sunny-pair'),
   'sunny-village': require('./paths/sunny-village'),
   'cozy-interior': require('./paths/cozy-interior'),
+  'dollhouse-life': require('./paths/dollhouse-life'),
 };
 
 module.exports = {
@@ -52,8 +53,37 @@ module.exports = {
     'canvas',
   ],
 
+  // Per-path medium override — plushie-life and dollhouse-life lock to toy-
+  // photography mediums (plush_fabric / dollhouse_figures), intentionally
+  // breaking cuddlebot's "stylized only" brand for these 2 paths to deliver
+  // the toybot toy-photography aesthetic.
+  mediumByPath: {
+    'plushie-life': 'plush_fabric',
+    'dollhouse-life': 'dollhouse_figures',
+  },
+
+  // Toy-photography mediumStyles (copied from toybot for plushie + dollhouse).
+  mediumStyles: {
+    plush_fabric:
+      'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR or KNIT TEXTURE, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, optional tiny knit sweaters or cloth bandanas, fully-dressed handcrafted miniature sets (forest campsite, sailboat, picnic meadow, attic bedroom, treehouse), warm firelight / lantern-glow / golden-hour / moonlit-window practical lighting, storybook warmth — NOT LBP burlap-with-zipper (that is Sackboy) NOT real animal NOT CGI NOT illustration',
+    dollhouse_figures:
+      'dollhouse-scale miniature figurines in a fully-appointed handcrafted miniature interior — flocked plush-creature small-animals, tiny cloth outfits, wooden furniture / tiny dishware / mini books / hand-sewn drapes / miniature appliances at scale, warm window-glow or lamp-glow practical lighting, cozy wholesome daily-life energy — NOT real human NOT real animal NOT CGI NOT illustration',
+  },
+
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
+
+  // Per-medium prompt prefix override — toy-photography prefix for plush_fabric
+  // and dollhouse_figures so the final Flux prompt opens with toy-photography
+  // language instead of cuddlebot's "stylized cute cuddly" prefix.
+  promptPrefixByMedium: {
+    plush_fabric: blocks.TOY_PHOTO_PROMPT_PREFIX,
+    dollhouse_figures: blocks.TOY_PHOTO_PROMPT_PREFIX,
+  },
+  promptSuffixByMedium: {
+    plush_fabric: blocks.TOY_PHOTO_PROMPT_SUFFIX,
+    dollhouse_figures: blocks.TOY_PHOTO_PROMPT_SUFFIX,
+  },
 
   // Cute-forward vibes. BANNED: dark, fierce, macabre, nightshade, psychedelic,
   // ancient, epic, voltage, arcane.
@@ -93,6 +123,7 @@ module.exports = {
     'sunny-pair',
     'sunny-village',
     'cozy-interior',
+    'dollhouse-life',
   ],
 
   useModelPicker: true,
@@ -126,6 +157,7 @@ module.exports = {
     'sunny-pair': 1,
     'sunny-village': 1,
     'cozy-interior': 1,
+    'dollhouse-life': 1,
   },
 
   // Chaos layer — light touch for cute bots. Subject chaos OFF for
@@ -173,6 +205,7 @@ module.exports = {
       'sunny-pair': 'creature',
       'sunny-village': 'scene',
       'cozy-interior': 'scene',
+      'dollhouse-life': 'creature',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

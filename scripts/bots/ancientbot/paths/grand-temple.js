@@ -6,9 +6,7 @@
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const civilization = picker.pickWithRecency(pools.CIVILIZATIONS, 'civilization');
-  const temple = picker.pickWithRecency(pools.GRAND_TEMPLES, 'grand_temple');
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {  const temple = picker.pickWithRecency(pools.GRAND_TEMPLES, 'grand_temple');
   const archDetail = picker.pickWithRecency(pools.ARCHITECTURAL_DETAILS, 'arch_detail');
   const activity = picker.pickWithRecency(pools.HUMAN_ACTIVITY, 'human_activity');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
@@ -18,13 +16,11 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ANCIENT_WORLD_BLOCK}
 
+${blocks.IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK}
+
 ${blocks.MONUMENTAL_SCALE_BLOCK}
 
 ${blocks.HUMAN_ACTIVITY_BLOCK}
-
-━━━ CIVILIZATION ━━━
-${civilization}
-Root every architectural detail in THIS specific civilization's building traditions. Use THEIR materials, THEIR decorative motifs, THEIR construction techniques.
 
 ━━━ THE TEMPLE SCENE ━━━
 ${temple}

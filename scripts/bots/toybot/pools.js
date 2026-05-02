@@ -1,6 +1,9 @@
 /**
- * ToyBot — axis pools. All Sonnet-seeded 50-entry pools.
+ * ToyBot — axis pools. All Sonnet-seeded.
  * Regenerate: node scripts/gen-seeds/toybot/gen-<name>.js
+ *
+ * Naming convention — pools are keyed by PATH name (post-2026-05 scene-oriented
+ * rename). Each path has its own SCENES + LANDSCAPES pool, except where noted.
  */
 
 const fs = require('fs');
@@ -31,38 +34,90 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── existing paths (unchanged) ─────────────────────────────────────
   LEGO_SCENES: load('lego_scenes'),
-  CLAYMATION_SCENES: load('claymation_scenes'),
-  VINYL_DIORAMAS: load('vinyl_dioramas'),
-  ACTION_FIGURE_BATTLES: load('action_figure_battles'),
-  SACKBOY_SCENES: load('sackboy_scenes'),
-  TOY_LANDSCAPES: load('toy_landscapes'),
-  CALICO_SCENES: load('calico_scenes'),
-  SHORTCAKE_SCENES: load('shortcake_scenes'),
-  BARBIE_SCENES: load('barbie_scenes'),
-  TABLETOP_SCENES: load('tabletop_scenes'),
-  ARMY_MEN_SCENES: load('army_men_scenes'),
-  GI_JOE_SCENES: load('gi_joe_scenes'),
-  ACTION_HERO_SCENES: load('action_hero_scenes'),
   LEGO_LANDSCAPES: load('lego_landscapes'),
+  CLAYMATION_SCENES: load('claymation_scenes'),
   CLAYMATION_LANDSCAPES: load('claymation_landscapes'),
+  VINYL_DIORAMAS: load('vinyl_dioramas'),
   VINYL_LANDSCAPES: load('vinyl_landscapes'),
-  ACTION_FIGURE_LANDSCAPES: load('action_figure_landscapes'),
+  SACKBOY_SCENES: load('sackboy_scenes'),
   SACKBOY_LANDSCAPES: load('sackboy_landscapes'),
-  CALICO_LANDSCAPES: load('calico_landscapes'),
+  TOY_LANDSCAPES: load('toy_landscapes'),
+  SHORTCAKE_SCENES: load('shortcake_scenes'),
   SHORTCAKE_LANDSCAPES: load('shortcake_landscapes'),
+  BARBIE_SCENES: load('barbie_scenes'),
   BARBIE_LANDSCAPES: load('barbie_landscapes'),
-  TABLETOP_LANDSCAPES: load('tabletop_landscapes'),
-  ARMY_MEN_LANDSCAPES: load('army_men_landscapes'),
-  GI_JOE_LANDSCAPES: load('gi_joe_landscapes'),
-  ACTION_HERO_LANDSCAPES: load('action_hero_landscapes'),
+
+  // ─── renamed (2026-05) — content preserved, scene-oriented names ────
+  GI_JOE_MISSIONS_SCENES: load('gi_joe_missions_scenes'),
+  GI_JOE_MISSIONS_LANDSCAPES: load('gi_joe_missions_landscapes'),
+  GREEN_ARMY_WARZONE_SCENES: load('green_army_warzone_scenes'),
+  GREEN_ARMY_WARZONE_LANDSCAPES: load('green_army_warzone_landscapes'),
+  MINIATURE_DUNGEON_SCENES: load('miniature_dungeon_scenes'),
+  MINIATURE_DUNGEON_LANDSCAPES: load('miniature_dungeon_landscapes'),
+  COLLECTOR_SHELF_SCENES: load('collector_shelf_scenes'),
+  COLLECTOR_SHELF_LANDSCAPES: load('collector_shelf_landscapes'),
+  EPIC_HERO_BUCKET_SCENES: load('epic_hero_bucket_scenes'),
+  EPIC_HERO_BUCKET_LANDSCAPES: load('epic_hero_bucket_landscapes'),
+
+  // ─── rebrand (2026-05) — calico → broader dollhouse-life ────────────
+  DOLLHOUSE_LIFE_SCENES: load('dollhouse_life_scenes'),
+  DOLLHOUSE_LIFE_LANDSCAPES: load('dollhouse_life_landscapes'),
+
+  // ─── new (2026-05) ──────────────────────────────────────────────────
+  HOTWHEELS_SCENES: load('hotwheels_scenes'),
+  HOTWHEELS_LANDSCAPES: load('hotwheels_landscapes'),
+  MODEL_TRAIN_SCENES: load('model_train_scenes'),
+  MODEL_TRAIN_LANDSCAPES: load('model_train_landscapes'),
+  PLUSH_SCENES: load('plush_scenes'),
+  PLUSH_LANDSCAPES: load('plush_landscapes'),
+  MECH_TOY_SCENES: load('mech_toy_scenes'),
+  MECH_TOY_LANDSCAPES: load('mech_toy_landscapes'),
+  TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // mixed-medium, single pool
+  SPACE_SAGA_SCENES: load('space_saga_scenes'),
+  SPACE_SAGA_LANDSCAPES: load('space_saga_landscapes'),
+  SPACE_SAGA_FIGURES: load('space_saga_figures'),
+  SPACE_SAGA_LIGHTING: load('space_saga_lighting'),
+
+  // ─── slot-pool DNA — rolled per render to force per-render variety ─
+  // (anti-bias: defeats Sonnet's training-default toward teddy-bear /
+  // muscle-car / humanoid-mecha / steam-engine repetition)
+  PLUSH_CREATURES: load('plush_creatures'),
+  HOTWHEELS_CARS: load('hotwheels_cars'),
+  MECH_ARCHETYPES: load('mech_archetypes'),
+  TRAIN_CONSISTS: load('train_consists'),
+  TRAIN_WEATHER: load('train_weather'),
+  MECH_LIGHTING: load('mech_lighting'),
+  PLUSH_LIGHTING: load('plush_lighting'),
+  HOTWHEELS_LIGHTING: load('hotwheels_lighting'),
+  DOLLHOUSE_LIGHTING: load('dollhouse_lighting'),
+
+  // ─── shared ────────────────────────────────────────────────────────
   LIGHTING: load('lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),
+  CAMERA_ANGLES: load('camera_angles'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {
-    figure: { smell: load('sensory_figure_smell'), sound: load('sensory_figure_sound'), touch: load('sensory_figure_touch'), temperature: load('sensory_figure_temperature'), weight: load('sensory_figure_weight'), air: load('sensory_figure_air'), lightcolor: load('sensory_figure_lightcolor') },
-    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+    figure: {
+      smell: load('sensory_figure_smell'),
+      sound: load('sensory_figure_sound'),
+      touch: load('sensory_figure_touch'),
+      temperature: load('sensory_figure_temperature'),
+      weight: load('sensory_figure_weight'),
+      air: load('sensory_figure_air'),
+      lightcolor: load('sensory_figure_lightcolor'),
+    },
+    scene: {
+      smell: load('sensory_scene_smell'),
+      sound: load('sensory_scene_sound'),
+      touch: load('sensory_scene_touch'),
+      temperature: load('sensory_scene_temperature'),
+      weight: load('sensory_scene_weight'),
+      air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
+    },
   },
 };

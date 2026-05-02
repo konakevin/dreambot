@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/grand_temples.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GRAND TEMPLE / SACRED SITE scene descriptions for AncientBot. Each entry is 15-25 words describing a specific ancient temple, sanctuary, or sacred ceremonial scene. Pre-600 BC civilizations ONLY.
+  metaPrompt: (n) => `You are writing ${n} GRAND TEMPLE / SACRED SITE scene descriptions for AncientBot. Each entry is 15-25 words describing a specific ancient temple, sanctuary, or sacred ceremonial scene. Pre-1000 AD ancient global civilizations.
 
 These should describe the SCENE — what you'd see standing there. Include architectural features, ritual activity, decorative elements, atmosphere.
 
@@ -16,15 +16,39 @@ These should describe the SCENE — what you'd see standing there. Include archi
 - Sacred groves and open-air sanctuaries (stone altars, carved pillars, offerings)
 - Tomb-temple complexes (mortuary temples, offering halls, painted burial chambers)
 
-━━━ CIVILIZATIONS TO DRAW FROM ━━━
-Egyptian (Karnak, Luxor, Abu Simbel, Hatshepsut's mortuary temple), Sumerian/Akkadian (ziggurats of Ur, Eridu, Nippur), Babylonian (Etemenanki, Marduk's temple), Hittite (Yazilikaya rock sanctuary), Minoan (peak sanctuaries, lustral basins), Phoenician (Temple of Melqart), Nubian (Jebel Barkal temples), Elamite (Chogha Zanbil ziggurat), Olmec (La Venta ceremonial complex), Norte Chico (Caral platform mounds), Gobekli Tepe (carved T-pillars), Malta (Mnajdra/Hagar Qim temples)
+━━━ GEOGRAPHIC DISTRIBUTION — NON-NEGOTIABLE ━━━
+The civilizations represented in these ${n} entries MUST be spread across the global ancient world. Distribute approximately:
+- ~25% Mesopotamian / Egyptian / Levantine (Sumer, Akkad, Babylon, Assyria, Hittite, Phoenician, Old/Middle/New Kingdom Egypt, Nubia/Kush)
+- ~20% East Asian (Shang/Zhou/Qin/Han/Tang/Song China; Yayoi/Kofun/Asuka/Nara/Heian Japan; Three Kingdoms / Goryeo Korea)
+- ~15% Pre-Columbian Americas (Olmec, Maya Pre-Classic + Classic, Teotihuacan, Toltec, Aztec, Inca, Moche, Nazca, Tiwanaku)
+- ~10% Southeast Asian (Khmer / Angkor, Champa, Pyu, Srivijaya, Java)
+- ~10% Persian / Steppe (Achaemenid, Parthian, Sassanian, Scythian, Saka, Xiongnu)
+- ~10% Greco-Roman (Minoan, Mycenaean, Archaic + Classical Greece, Hellenistic, Roman Republic + Empire, Etruscan)
+- ~5% African (Aksum, Great Zimbabwe, Mali, Carthage, Ghana, Benin)
+- ~3% Celtic / Norse (La Tène Celts, Hallstatt, Pictish, Norse pre-Viking and Viking-Age)
+- ~2% Polynesian / Pacific (Easter Island Rapa Nui, pre-contact Hawaiian, early Maori, Lapita)
+
+If a region has only 2-3 entries, that's fine — but EVERY region above must appear at least once.
+
+━━━ GEOGRAPHIC DISTRIBUTION — NON-NEGOTIABLE ━━━
+The civilizations represented in these ${n} entries MUST be spread across the global ancient world. Distribute approximately:
+- ~25% Mesopotamian / Egyptian / Levantine (Sumer, Akkad, Babylon, Assyria, Hittite, Phoenician, Old/Middle/New Kingdom Egypt, Nubia/Kush)
+- ~20% East Asian (Shang/Zhou/Qin/Han/Tang/Song China; Yayoi/Kofun/Asuka/Nara/Heian Japan; Three Kingdoms / Goryeo Korea)
+- ~15% Pre-Columbian Americas (Olmec, Maya Pre-Classic + Classic, Teotihuacan, Toltec, Aztec, Inca, Moche, Nazca, Tiwanaku)
+- ~10% Southeast Asian (Khmer / Angkor, Champa, Pyu, Srivijaya, Java)
+- ~10% Persian / Steppe (Achaemenid, Parthian, Sassanian, Scythian, Saka, Xiongnu)
+- ~10% Greco-Roman (Minoan, Mycenaean, Archaic + Classical Greece, Hellenistic, Roman Republic + Empire, Etruscan)
+- ~5% African (Aksum, Great Zimbabwe, Mali, Carthage, Ghana, Benin)
+- ~3% Celtic / Norse (La Tène Celts, Hallstatt, Pictish, Norse pre-Viking and Viking-Age)
+- ~2% Polynesian / Pacific (Easter Island Rapa Nui, pre-contact Hawaiian, early Maori, Lapita)
+
+Every region above must appear at least once.
 
 ━━━ RULES ━━━
 - Each entry is ONE specific scene, not a list of features
 - Include a sense of ACTIVITY — smoke, fire, procession, offering, ceremony
 - Vary the civilizations — not all Egyptian
 - 15-25 words, vivid and specific
-- NO medieval, NO Greek/Roman, NO fantasy
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

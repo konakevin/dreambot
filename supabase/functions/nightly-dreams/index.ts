@@ -23,6 +23,7 @@ import { getLocationCard, normalizeName } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
+import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
@@ -1243,6 +1244,25 @@ Output ONLY the prompt.`;
       console.log(`[nightly-dreams] description: "${description}"`);
     }
 
+    // Build the DLT recipe — frozen LOOK anchors captured at insert time.
+    // Phase 2.2a: nightly path is sparse vs. bot-side; sufficient for DLT
+    // replay because medium_key + vibe_key + ai_prompt is the load-bearing
+    // identity. See docs/DLT_RECIPE_PLAN.md.
+    let recipeForInsert = null as ReturnType<typeof buildRecipe> | null;
+    if (resolvedMediumKey && resolvedVibeKey) {
+      try {
+        recipeForInsert = buildRecipe({
+          model: pickedModel,
+          mediumKey: resolvedMediumKey,
+          vibeKey: resolvedVibeKey,
+          aiPrompt: finalPrompt,
+          fluxSeed: null,
+        });
+      } catch (err) {
+        console.warn(`[nightly-dreams] recipe build failed: ${(err as Error).message}`);
+      }
+    }
+
     // Draft upload + budget upsert in parallel
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
@@ -1260,6 +1280,8 @@ Output ONLY the prompt.`;
           is_public: false,
           width: 768,
           height: 1664,
+          recipe: recipeForInsert,
+          flux_seed: null,
           ...(description ? { description } : {}),
           ...(outPhash ? { output_phash: outPhash } : {}),
         })

@@ -6,9 +6,7 @@
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const civilization = picker.pickWithRecency(pools.CIVILIZATIONS, 'civilization');
-  const ruin = picker.pickWithRecency(pools.LOST_RUINS, 'lost_ruin');
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {  const ruin = picker.pickWithRecency(pools.LOST_RUINS, 'lost_ruin');
   const archDetail = picker.pickWithRecency(pools.ARCHITECTURAL_DETAILS, 'arch_detail');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
@@ -17,11 +15,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ANCIENT_WORLD_BLOCK}
 
+${blocks.IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK}
+
 ━━━ THE TENSION ━━━
 These ruins are BEAUTIFUL in their decay. Grandeur and erosion coexist. Carved reliefs still visible under lichen. Painted plaster fragments clinging to crumbling walls. Colossal statuary half-buried in drifted sand with only a face emerging. Tree roots threading through precisely cut stone joints. The viewer should feel the WEIGHT OF TIME — and the stubborn persistence of human ambition beneath it.
-
-━━━ CIVILIZATION (original builders) ━━━
-${civilization}
 
 ━━━ THE RUIN SCENE ━━━
 ${ruin}
