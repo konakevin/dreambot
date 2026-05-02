@@ -7,7 +7,7 @@
 const pools = require('../pools');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const cyborgFeature = picker.pickWithRecency(pools.CYBORG_FEATURES, 'cyborg_feature');
+  const cyborgFeature = picker.pickWithRecency(pools.CYBORG_MALE_FEATURES, 'cyborg_male_feature');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 

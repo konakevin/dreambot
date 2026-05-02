@@ -1140,3 +1140,98 @@ An unscoped delete wiped ALL rows from `dream_templates` — both bot seeds and 
 - NEVER run unscoped deletes on any seed/dedup table
 - Always scope by bot name or category prefix
 - Query `SELECT category, count(*) GROUP BY category` before any delete operation
+
+---
+
+## Adding Sci-Fi Universe Paths to StarBot (Landscape + Architecture)
+
+Pattern proven 2026-05-02 (Kevin). Use this whenever you want to adapt a sci-fi universe (Dune, Aliens, Star Wars, Guardians of the Galaxy, Mass Effect, Halo, Star Trek, StarCraft, etc.) into scene-only paths for StarBot.
+
+The output is **2 new paths per universe**: `<universe>-landscape` (outdoor planet vistas) and `<universe>-architecture` (interior spaces). Both pure-scene, no characters.
+
+### The 8-Step Recipe
+
+**1. Identify the universe's visual signature**
+   - 6-10 iconic biomes (landscape) and 6-10 iconic interiors (architecture). Each should be a recognizable visual category at a glance.
+   - Identify color signatures per faction/world if multi-faction (e.g., StarCraft: rust-Terran / gold-blue-Protoss / red-Zerg).
+   - Identify the universe's CONCEPT-ART tradition (Ralph McQuarrie for Star Wars, H.R. Giger for Aliens, Sparth for Halo, Sam Didier for StarCraft, etc.).
+
+**2. Write 2 gen scripts** at `scripts/gen-seeds/starbot/gen-<universe>-landscapes.js` and `gen-<universe>-architecture.js`. Each:
+   - `total: 25, batch: 12` — small focused pools.
+   - Each entry is **25-50 words**, dense and paintable.
+   - **CRITICAL** — every brief must have these sections:
+     - **AESTHETIC DNA** paragraph naming the concept-art lineage and visual mood
+     - **CATEGORY VARIETY** with explicit minimum-per-category counts (e.g., "TWIN-SUN DESERTS (~4)", "ICE-PLAIN WASTELANDS (~3)", etc.) — typically 6-10 categories per pool
+     - **NO CHARACTERS** absolute ban (no people, no aliens, no foreground figures, no foreground spaceships — distant silhouettes at scale OK only when explicitly allowed)
+     - **NO PROPER NOUNS** absolute ban — list every iconic franchise name to never use (Tatooine, Reaper, Khaydarin, etc.) and require generic-aesthetic descriptors instead
+     - 2-3 example entries showing the desired voice and density
+
+**3. Run gen scripts in parallel** for the universe (both landscape + architecture concurrently, ~30-90 sec each via Sonnet).
+
+**4. Write 2 path files** at `scripts/bots/starbot/paths/<universe>-landscape.js` and `<universe>-architecture.js`. Each is a thin module that:
+   - Picks one entry from the dedicated pool: `picker.pickWithRecency(pools.<UNIVERSE>_LANDSCAPES, ...)`
+   - Picks lighting + atmosphere from shared pools
+   - Wraps in this template:
+     - SCI_FI_AWE_BLOCK + COSMIC_CANVAS_BLOCK + IMPOSSIBLE_BEAUTY_BLOCK
+     - **NO CHARACTERS — NON-NEGOTIABLE** explicit reminder
+     - The picked scene
+     - Lighting / Atmosphere / scene palette / vibe color
+     - **BLOW_IT_UP_BLOCK** (the generic sci-fi amplification — proven to work universally, do NOT make a per-universe variant unless tested)
+     - Mood context from vibe directive
+     - **NO FRANCHISE PROPER NOUNS** repeated reminder
+     - Composition guidance (cinematic vista vs claustrophobic interior)
+     - Output format spec
+
+**5. Wire pool refs into `pools.js`:**
+   - Add `<UNIVERSE>_LANDSCAPES: load('<universe>_landscapes')` and `<UNIVERSE>_ARCHITECTURE: load('<universe>_architecture')` to module exports
+   - Append the new pools to `PLANET_SETTING` (landscape only) and `CHARACTER_INTERIOR` (architecture only) — additive, never replace
+   - Append both to `COSMIC_ORACLE_LOCATIONS` (oracle path uses everything as flavor) — additive
+
+**6. Wire path files into `index.js`:**
+   - Add to the `pathBuilders` dictionary at the top
+   - Add to `modelByPath` (flux-dev / flux-1.1-pro 50/50 rotation)
+   - Add to `paths` array
+   - Add to `pathWeights` map (default `1`)
+   - Add to `chaos.allowSubjectChaosPaths` array
+   - Add to `sensoryAnchors.pathContext` map → `'scene'`
+
+**7. Verify load** with `node -e "const bot = require('./scripts/bots/starbot'); console.log('Active paths:', bot.paths.length);"` — should be old count + 2.
+
+**8. Test 5-batch each via iter-bot:**
+   ```bash
+   node scripts/iter-bot.js --bot starbot --mode <universe>-landscape --count 5 --post --caption "v5-<universe>-landscape R1"
+   node scripts/iter-bot.js --bot starbot --mode <universe>-architecture --count 5 --post --caption "v5-<universe>-architecture R1"
+   ```
+   Get user confirmation before moving to next universe. Scrap any path that doesn't land (e.g., mass-effect-landscape, dune-architecture, star-trek-architecture were all scrapped on first review).
+
+### Why This Works
+
+- **Aesthetic DNA reference** in the brief grounds Sonnet's vocabulary in a specific concept-art tradition rather than generic sci-fi clichés.
+- **Per-category minimums** prevent Sonnet from clustering on 1-2 iconic biomes (otherwise you get all twin-sun deserts, no Hoth, no Endor).
+- **Hard franchise-name bans** keep entries shippable (no IP issues) while preserving the ASTHETIC.
+- **NO CHARACTERS** rule is non-negotiable — the moment you allow figures, Sonnet writes character-portraits and Flux renders close-up portraits, missing the whole "scene-only" point.
+- **Same BLOW_IT_UP_BLOCK** across all paths means amplification is consistent and tunable in one place.
+- **Scene pools also additively merge into character paths' location pools** (PLANET_SETTING, COSMIC_ORACLE_LOCATIONS, CHARACTER_INTERIOR) — so a Dune desert can show up as a backdrop for an explorer character render too. Pure additive: never replace existing entries, only extend.
+
+### Universes Built So Far (2026-05-02)
+
+| Universe | Landscape | Architecture | Notes |
+|---|---|---|---|
+| Dune | ✅ | ❌ scrapped | Polar/ice-coded entries felt off-brand |
+| Aliens (Ridley Scott) | ✅ | ✅ | Architecture uses ALIENS-specific BLOW_IT_UP variant (Giger × Cameron × Cobb) |
+| Star Wars | ✅ | ✅ | |
+| Guardians of the Galaxy | ✅ | ✅ | |
+| Mass Effect | ❌ scrapped | ✅ | Landscape was too generic-sci-fi |
+| Halo | ✅ | ✅ | Halo-arc visible across sky is signature for landscape |
+| Star Trek | ✅ | ❌ scrapped | Architecture too clean-sterile |
+| StarCraft | ✅ | ✅ | 3-faction split (Terran/Protoss/Zerg) |
+
+### Pinned Suggestions for Future Adaptations
+
+| World | Visual Hook |
+|---|---|
+| Warhammer 40K | gothic-imperial hive cities, Forge World industrial-titan factories |
+| Foundation | Trantor city-planet covering an entire world, Imperial classical-future |
+| Stargate | Goa'uld gold-pyramid ships, Wraith biomechanical hive-ships, Atlantis underwater-city |
+| The Expanse | Belt asteroid stations carved into rock, Mars Mariner Valley colonies |
+| Babylon 5 | Vorlon organic-bioship, Shadow black-spider-ship, Centauri ornate empire |

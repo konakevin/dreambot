@@ -1,72 +1,113 @@
 /**
- * StarBot male-explorer path — slot-pool DNA upgrade (mirrors GothBot pattern).
- * Each render rotates independent skin / eyes / hair_color / hairstyle / outfit /
- * accessory / character / action / landscape ledgers.
+ * StarBot male-explorer path — alien-planet wilderness, scenery as costar.
+ *
+ * Per Kevin (2026-05-01 v3): characters out on alien planets ONLY. Wide
+ * cinematic shots, character ~25-40% of frame, scenery + epic backdrop
+ * dominate the rest. Tactical-explorer outfit aesthetic.
+ *
+ * Locks: SCI-FI RACE + PLANET SETTING + EPIC BACKDROP + ACTION
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.MALE_EXPLORERS, 'male_explorer');
-  const outfit = picker.pickWithRecency(pools.SCI_FI_MALE_OUTFITS, 'sci_fi_male_outfit');
+  const race = picker.pickWithRecency(pools.SCI_FI_RACE, 'me_race');
+  const archetype = picker.pickWithRecency(pools.MALE_EXPLORERS, 'male_explorer');
+  const outfit = picker.pickWithRecency(pools.EXPLORER_OUTFITS_MALE, 'me_outfit');
   const skin = picker.pickWithRecency(pools.EXPLORER_SKIN, 'me_skin');
   const eyes = picker.pickWithRecency(pools.EXPLORER_EYES, 'me_eyes');
   const hairColor = picker.pickWithRecency(pools.EXPLORER_HAIR_COLOR, 'me_hair_color');
   const hairstyle = picker.pickWithRecency(pools.MALE_EXPLORER_HAIRSTYLES, 'me_hairstyle');
   const accessory = picker.pickWithRecency(pools.MALE_EXPLORER_ACCESSORIES, 'me_accessory');
-  const action = picker.pickWithRecency(pools.SCI_FI_ACTIONS, 'sci_fi_action');
-  const landscape = picker.pickWithRecency(pools.ALIEN_LANDSCAPES, 'alien_landscape');
+  const planetSetting = picker.pickWithRecency(pools.PLANET_SETTING, 'me_planet_setting');
+  const epicBackdrop = picker.pickWithRecency(pools.EXPLORER_EPIC_BACKDROPS, 'me_epic_backdrop');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a sci-fi concept-art painter writing EPIC SCI-FI EXPLORER scenes for StarBot — a single badass MAN standing in a jaw-dropping alien or cosmic environment. Same universe as our cosmic vistas and alien cities. The character is the HERO but the world around him is equally breathtaking. Output wraps with style prefix + suffix.
+  // 75% candid body / 25% lineage gesture — both LOCATION-AGNOSTIC
+  const actionRoll = Math.random();
+  let action, actionType;
+  if (actionRoll < 0.75) {
+    action = picker.pickWithRecency(pools.EXPLORER_ADVENTURE_ACTIONS, 'me_adventure_action');
+    actionType = 'CANDID BODY POSITION (location-agnostic — fits the alien biome below)';
+  } else {
+    action = picker.pickWithRecency(pools.SCI_FI_LINEAGE_ACTIONS, 'me_lineage_action');
+    actionType = 'LINEAGE-SIGNATURE GESTURE (race-flavored — let his ancestry SHINE)';
+  }
 
-${blocks.SCI_FI_AWE_BLOCK}
+  return `You are a sci-fi concept-art painter writing a CANDID DEEP-SPACE EXPLORER scene for StarBot. The character is a sleek tactical cosmonaut man of a SPECIFIC sci-fi lineage standing OUT IN THE WILD ON AN ALIEN PLANET. The alien WORLD is the costar of this image — scenery shares the spotlight equally with the character. Output wraps with style prefix + suffix.
 
-${blocks.COSMIC_CANVAS_BLOCK}
+━━━ COMPOSITION (NON-NEGOTIABLE) ━━━
+WIDE CINEMATIC FULL-BODY SHOT. The character occupies 25-40% of the frame (NOT a portrait, NOT waist-up). The alien planet biome + epic backdrop fill 60-75% of the frame. Scenery and character share the costar spotlight equally.
 
-${blocks.CINEMATIC_COMPOSITION_BLOCK}
+Camera angle options: side-profile / three-quarter rear / three-quarter front. Sometimes character is walking AWAY into the world (back of character visible). Sometimes character is paused on a ridge or outcrop. NEVER head-on at the camera. NEVER posing.
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+Strong silhouette > facial detail. Face can be partial / masked / hooded / in profile shadow.
 
-━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. This explorer ALONE against the cosmos.
+━━━ THE ALIEN PLANET — WILD AND VAST ━━━
+This is an alien-planet wilderness scene. NEVER inside a ship, NEVER in a station, NEVER in a bar or interior. Always OUT on the surface of a strange world.
 
-━━━ HE MUST LOOK LIKE A SPECIFIC PERSON — OBSESSIVE DETAIL ━━━
-Render him with obsessive detail — he must feel like ONE specific explorer, not a generic-sci-fi-man trope:
-- FACE: every detail of his exact skin description rendered, expression-line specificity
-- SKIN: render the EXACT skin description from the pool — how sci-fi light hits it, where shadow pools
-- EYES: the EXACT color and intensity from the pool — they radiate, they catch HUD-glow
-- HAIR: the EXACT color AND hairstyle from the pools (beard included where described)
-- OUTFIT: render the FULL suit / armor from the pool with obsessive material detail
-- ACCESSORY: the signature object from the pool — render it visible and identity-anchoring
-- BODY LANGUAGE: capable confidence mid-action
+━━━ ABSOLUTE BANS — NO BATTLE / NO COMBAT / NO VIOLENCE ━━━
+NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood, NO fighting. Weapons can be HOLSTERED, sheathed, slung — never IN COMBAT USE.
 
-━━━ THE EXPLORER (his core identity) ━━━
-He is MASCULINE — strong jaw, broad shoulders, powerful build, rugged features, masculine clothing and armor.
-${character}
+━━━ ABSOLUTE BANS — NO STATIC / NO SEATED / NO MEDITATION (CRITICAL) ━━━
+ABSOLUTELY NO seated poses. NO cross-legged sitting. NO kneeling-still. NO meditation poses. NO eyes-closed. NO leaning-back. NO curled-up "resting". NO "sitting on a rock looking thoughtfully into the distance". NO "standing perfectly still gazing at the horizon".
 
-━━━ HIS SKIN ━━━
-${skin}
+The character is ALWAYS IN MOTION — STRIDING / CLIMBING / TRAVERSING / LOOKING UP / REACHING / TURNING / VAULTING / WADING. Body weight is shifted, a limb is in motion, captured at a loaded instant of EXPLORATION. Camera caught him mid-step, mid-climb, mid-reach. They are EXPLORERS doing exploring stuff — never standing-still-posing-for-the-camera.
 
-━━━ HIS EYES ━━━
-${eyes}
+If the action below somehow reads as static, OVERRIDE IT with a dynamic interpretation. Never render a still seated/cross-legged figure.
 
-━━━ HIS HAIR (and beard if described) ━━━
-${hairColor}, ${hairstyle}
+━━━ HIS LINEAGE / SCI-FI RACE (LOCKED) ━━━
+${race}
 
-━━━ HIS OUTFIT (render with material detail) ━━━
+This race is NON-NEGOTIABLE. Render him with the EXACT anatomy, distinguishing features above.
+
+━━━ THE LOOK — TACTICAL EXPLORER ━━━
+He is a TACTICAL EXPLORER ready to step into the unknown. Tough capable practical gear: armored plate, weathered hooded cloak, mercenary-coat, scout-vest with cargo pants, heavy power-armor, deep-space EVA suit, cyber-augmented edgerunner outfit, desert-warrior moisture-suit, arctic-explorer parka — pull from any of these silhouette traditions.
+
+ABSOLUTE FRANCHISE LOOKALIKE BAN: NO Stormtrooper white-and-black plastic armor. NO Mandalorian T-visor full-body burnished plate. NO Halo Spartan green-and-gold helmet. NO Mass Effect N7 uniform. NO Star Wars Imperial officer. NO Dune Fremen stillsuit (use neutral "moisture-recycler suit" instead). NO Jedi or Sith robes. The look should be GENERIC sci-fi tactical, not any specific film/game's signature armor.
+
+━━━ HIS OUTFIT (render full-body — silhouette matters) ━━━
 ${outfit}
 
-━━━ SIGNATURE ACCESSORY (the small detail that anchors his identity) ━━━
+Helmets / face-masks / respirators OPTIONAL — sometimes covering, sometimes pulled-down-to-throat, sometimes pushed-up-on-the-brow.
+
+━━━ HIS PHYSICAL DNA (visible at wide-shot, but lineage + outfit dominate) ━━━
+- Face: ${race.split(':')[0]} race-anatomy first, then skin description below
+- Skin: ${skin}
+- Eyes: ${eyes}
+- Hair (and beard if described): ${hairColor}, ${hairstyle}
+
+━━━ HIS EXPLORER ARCHETYPE (his energy) ━━━
+${archetype}
+
+━━━ HIS SIGNATURE ACCESSORY (visible at wide-shot) ━━━
 ${accessory}
 
-━━━ THE ACTION (what he is doing RIGHT NOW) ━━━
-${action}
+━━━ THE PLANET BIOME (the GROUND / FLORA / NEAR-ATMOSPHERE — costar) ━━━
+${planetSetting}
 
-━━━ THE ENVIRONMENT (as epic as the character) ━━━
-${landscape}
+Render this biome with FULL DEPTH. Foreground: tactile detail near the character. Midground: the character standing in the biome. Background: the biome receding into atmospheric haze.
+
+━━━ THE EPIC BACKDROP (the SCALE-DEFINING ELEMENT — sky / horizon dominates) ━━━
+${epicBackdrop}
+
+This backdrop DWARFS the character. It fills the upper portion of the frame OR dominates the horizon. Render with awe-inspiring scale. The character is small relative to it. Atmospheric haze separates the character from the backdrop's massive scale.
+
+━━━ HIS BODY ACTION ━━━
+${actionType}: ${action}
+
+Place his body doing this action INSIDE the alien planet biome with the epic backdrop above. The biome wins for setting.
+
+━━━ ATMOSPHERIC DEPTH (CRITICAL) ━━━
+Render LAYERED ATMOSPHERIC DEPTH:
+- Foreground particles (dust, spores, mist, snow, ash) caught in light
+- Midground haze separating character from epic backdrop
+- Background atmospheric thinning toward the horizon
+- Light rays / god-rays / volumetric beams cutting through atmosphere
+
+The frame must FEEL inhabited and ALIVE — never sterile flat-color staging.
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -85,13 +126,10 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ ENVIRONMENT GEAR (NON-NEGOTIABLE) ━━━
-He is OUTDOORS on an alien world. He MUST have visible environmental protection — helmet with visor (up or down), breathing mask, rebreather apparatus, sealed EVA hood, or atmospheric filter across his face. The gear should be RUGGED and battle-worn, matching his outfit's aesthetic.
+━━━ STRUCTURE (write the prompt in this order for best results) ━━━
+[the scene as a whole — alien planet wide shot], [the epic backdrop dominating], [the planet biome surrounding], [the character in tactical explorer outfit at full-body scale, ${race.split(':')[0].toLowerCase()} lineage], [his body action / pose], [atmospheric depth and lighting], [color palette and mood]
 
-━━━ COMPOSITION ━━━
-GROUNDED AND REAL — feet on the ground. No floating. CANDID SHOTS — caught mid-action, mid-thought, from a three-quarter angle or side profile. NEVER from behind. NEVER walking directly toward the camera. The environment stretches vast behind him. Full-body or wide mid-shot. Depth on depth — foreground detail, midground character, background alien landscape.
-
-DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. Every slot is locked.
+DRAMATIC VISUALS: race lineage unmistakable. Outfit TACTICAL not fashion. Composition WIDE — character dwarfed by scenery + backdrop. Scenery is the COSTAR.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

@@ -4,7 +4,8 @@
     "https://esm.sh/@supabase/supabase-js@2": "https://esm.sh/@supabase/supabase-js@2.103.3"
   },
   "remote": {
-    "https://esm.sh/@supabase/supabase-js@2.103.3": "f6efbe62d34ae9d50f3cf7eb51496246ec9378f422c38ff2b637a38157d4fc6b"
+    "https://esm.sh/@supabase/supabase-js@2.103.3": "f6efbe62d34ae9d50f3cf7eb51496246ec9378f422c38ff2b637a38157d4fc6b",
+    "https://esm.sh/jpeg-js@0.4.4": "42a7c0c44335295014457724ddd096d3bf93696ab24f52391aae8be50e4cb732"
   },
   "workspace": {
     "packageJson": {
@@ -20,11 +21,13 @@
         "npm:@react-navigation/native@^7.1.8",
         "npm:@supabase/supabase-js@^2.100.0",
         "npm:@tanstack/react-query@^5.95.2",
+        "npm:@tensorflow/tfjs-node@^4.22.0",
         "npm:@testing-library/react-native@^13.3.3",
         "npm:@types/jest@30",
         "npm:@types/react@19.1",
         "npm:@typescript-eslint/eslint-plugin@^8.57.2",
         "npm:@typescript-eslint/parser@^8.57.2",
+        "npm:@vladmandic/face-api@^1.7.15",
         "npm:eslint-config-expo@10.0",
         "npm:eslint-plugin-react-hooks@^7.0.1",
         "npm:eslint-plugin-react-native@5",

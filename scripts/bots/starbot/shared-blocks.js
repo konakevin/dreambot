@@ -36,6 +36,14 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — SCI-FI AMPLIFICATION ━━�
 
 Sci-fi is the canvas, not the ceiling. Stack: cosmic scale + multiple atmospheric layers + cinematic lighting + impossible geometry + nebula/atmosphere glow + architectural-tech detail + visible FX response. Blade Runner × Interstellar × Annihilation × 10. Frame-worthy poster art every render.`;
 
+const DUNE_BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — DUNE-CODED AMPLIFICATION ━━━
+
+The desert empire is the canvas, not the ceiling. Stack: BIBLICAL desert scale + twin-sun light raking across dunes + spice-blue dawn haze + sandstorm-wall scale + dust-haze atmospheric depth + hand-carved architectural ornament + monumental empire grandeur + ancient-bronze-and-stone material weight. Frank Herbert × David Lean × Denis Villeneuve × Stanley Kubrick × Akira Kurosawa × Lawrence-of-Arabia × Apocalypse-Now-desert-vista × 10. Every frame a museum-poster painting. The world feels ANCIENT, VAST, and SACRED — the desert is alive, the empire is eternal, dust shimmers in every light shaft.`;
+
+const ALIENS_BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — ALIENS-CODED AMPLIFICATION ━━━
+
+Hostile-alien-world dread is the canvas, not the ceiling. Stack: industrial-grit scale + biomechanical organic-meets-machine surfaces + sodium emergency strobes piercing atmospheric haze + steam-vent volumetric depth + acid-rain wet-glistening texture + claustrophobic dread OR biblical Engineer-architecture scale + cold pale ambient with single accent color (red strobe, sodium amber, sterile blue) + visible wear and decay (scuffs, scratches, biomech secretion drips). H.R.-Giger × Ridley-Scott × James-Cameron × Ron-Cobb × Syd-Mead-industrial × Annihilation × 10. Every frame a museum-poster painting of TERRIFYING-AND-MAJESTIC space. The world feels HAUNTED, INDUSTRIAL, and WRONG — alien resin pulses, machinery hums, the silence is heavy with menace.`;
+
 const SOLO_ROBOT_BLOCK = `━━━ SOLO ROBOT (robot-moment path only) ━━━
 
 Robot-moment renders one robot only. No robot-and-human pair, no robot-gang, no multi-bot scene. Single robot in a tranquil human-moment activity (meditating / reading / watching-sunrise / tinkering / gazing).`;
@@ -66,6 +74,8 @@ module.exports = {
   NO_CYBORG_WOMEN_BLOCK,
   IMPOSSIBLE_BEAUTY_BLOCK,
   BLOW_IT_UP_BLOCK,
+  DUNE_BLOW_IT_UP_BLOCK,
+  ALIENS_BLOW_IT_UP_BLOCK,
   SOLO_ROBOT_BLOCK,
   REAL_ASTRONOMY_BLOCK,
   COSMIC_CANVAS_BLOCK,
