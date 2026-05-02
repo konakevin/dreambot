@@ -18,13 +18,12 @@ export function usePublicProfilePosts(userId: string, enabled = true) {
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const rows = castRows(data).map(mapToDreamPost);
-      return { rows, offset };
+      // hasMore captured at fetch time so optimistic deletes don't break
+      // pagination by shrinking rows.length below PAGE_SIZE.
+      return { rows, offset, hasMore: rows.length === PAGE_SIZE };
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) =>
-      !lastPage?.rows?.length || lastPage.rows.length < PAGE_SIZE
-        ? undefined
-        : lastPage.offset + PAGE_SIZE,
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.offset + PAGE_SIZE : undefined),
     enabled: !!userId && enabled,
     staleTime: 60_000,
   });

@@ -295,7 +295,8 @@ export default function InboxScreen() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [allSelectedGlobal, setAllSelectedGlobal] = useState(false);
 
-  const inbox = useMemo(() => data?.pages.flat() ?? [], [data]);
+  // Page shape is { rows, hasMore, nextOffset } — flatMap rows, ignore metadata
+  const inbox = useMemo(() => data?.pages.flatMap((p) => p.rows) ?? [], [data]);
   const hasUnread = inbox.some((item) => !item.isSeen);
   const hasAny = inbox.length > 0;
   const allSelected = hasAny && selected.size === inbox.length;

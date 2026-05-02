@@ -48,12 +48,18 @@ function mapRow(row: Record<string, unknown>): NotificationItem {
   };
 }
 
+interface InboxPage {
+  rows: NotificationItem[];
+  hasMore: boolean;
+  nextOffset: number;
+}
+
 export function useInbox() {
   const user = useAuthStore((s) => s.user);
 
   return useInfiniteQuery({
     queryKey: ['inbox', user?.id],
-    queryFn: async ({ pageParam = 0 }): Promise<NotificationItem[]> => {
+    queryFn: async ({ pageParam = 0 }): Promise<InboxPage> => {
       const { data, error } = await supabase.rpc('get_notifications', {
         p_user_id: user!.id,
         p_limit: PAGE_SIZE,
@@ -61,13 +67,18 @@ export function useInbox() {
       });
 
       if (error) throw error;
-      return (data ?? []).map(mapRow);
+      const rows = (data ?? []).map(mapRow);
+      // Both hasMore and nextOffset captured at fetch time so optimistic
+      // mutations (mark-seen, delete) don't break pagination by shrinking
+      // rows.length below PAGE_SIZE.
+      return {
+        rows,
+        hasMore: rows.length === PAGE_SIZE,
+        nextOffset: (pageParam as number) + rows.length,
+      };
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length < PAGE_SIZE) return undefined;
-      return allPages.reduce((total, page) => total + page.length, 0);
-    },
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextOffset : undefined),
     enabled: !!user,
     staleTime: 30_000,
   });

@@ -26,6 +26,9 @@ interface PageResult {
   rows: DreamPostItem[];
   userId: string;
   nextOffset: number;
+  // hasMore is captured at fetch time. Stored on the page so optimistic
+  // deletes (which shrink rows below PAGE_SIZE) don't break pagination.
+  hasMore: boolean;
 }
 
 type PageParam = 0 | { offset: number; userId: string };
@@ -67,7 +70,15 @@ export function useUserContextFeed(currentId: string, enabled = true) {
           description: (row.description as string | null) ?? null,
         }));
 
-        return { rows: [target, ...context], userId, nextOffset: PAGE_SIZE };
+        // hasMore captures whether the SERVER returned a full page of context
+        // (excluding the prepended target). When server returns < PAGE_SIZE,
+        // we know that's the last page.
+        return {
+          rows: [target, ...context],
+          userId,
+          nextOffset: PAGE_SIZE,
+          hasMore: context.length === PAGE_SIZE,
+        };
       }
 
       // Subsequent pages: pageParam carries userId for continuity (since the
@@ -90,13 +101,14 @@ export function useUserContextFeed(currentId: string, enabled = true) {
         description: (row.description as string | null) ?? null,
       }));
 
-      return { rows, userId, nextOffset: offset + PAGE_SIZE };
+      return { rows, userId, nextOffset: offset + PAGE_SIZE, hasMore: rows.length === PAGE_SIZE };
     },
     initialPageParam: 0 as PageParam,
+    // Use hasMore (captured at fetch time) instead of current cached row count.
+    // Otherwise optimistic deletes shrink lastPage.rows below PAGE_SIZE and
+    // pagination silently dies.
     getNextPageParam: (lastPage): PageParam | undefined =>
-      lastPage.rows.length < PAGE_SIZE
-        ? undefined
-        : { offset: lastPage.nextOffset, userId: lastPage.userId },
+      lastPage.hasMore ? { offset: lastPage.nextOffset, userId: lastPage.userId } : undefined,
     enabled: !!currentId && enabled,
     staleTime: 60_000,
   });

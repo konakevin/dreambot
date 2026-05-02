@@ -22,13 +22,13 @@ export function useFavoritePosts(enabled = true) {
         .map((r) => r.uploads as Record<string, unknown> | null)
         .filter((u): u is Record<string, unknown> => u !== null)
         .map(mapToDreamPost);
-      return { rows, offset };
+      // hasMore captured against the SOURCE data length, not post-filter rows
+      // (server returned this many; the filter just drops nulls). Survives
+      // optimistic deletes since hasMore is fixed at fetch time.
+      return { rows, offset, hasMore: (data?.length ?? 0) === PAGE_SIZE };
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) =>
-      !lastPage?.rows?.length || lastPage.rows.length < PAGE_SIZE
-        ? undefined
-        : lastPage.offset + PAGE_SIZE,
+    getNextPageParam: (lastPage) => (lastPage?.hasMore ? lastPage.offset + PAGE_SIZE : undefined),
     enabled: !!user && enabled,
     staleTime: 60_000,
   });

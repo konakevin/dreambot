@@ -8,7 +8,14 @@
 
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { View, StyleSheet, Dimensions, RefreshControl, InteractionManager } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  RefreshControl,
+  InteractionManager,
+  AppState,
+} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -111,6 +118,26 @@ export function FullScreenFeed({
       return () => handle.cancel();
     }
   }, [isFocused, posts.length, pageHeight]);
+
+  // Also re-snap when the APP returns from background. useIsFocused only tracks
+  // navigation-stack focus, not app foreground/background — so on minimize+reopen,
+  // isFocused doesn't change but the layout often shifts (safe-area inset recalc,
+  // status bar visibility, etc.) and the FlatList ends up off by ~50-100px. The
+  // user sees the post shifted down until they tap something that triggers a
+  // navigation event. AppState listener catches the resume and re-snaps.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next === 'active' && posts.length > 0) {
+        InteractionManager.runAfterInteractions(() => {
+          const idx = currentIndex.current;
+          if (idx >= 0 && idx < posts.length) {
+            ref.current?.scrollToIndex({ index: idx, animated: false });
+          }
+        });
+      }
+    });
+    return () => sub.remove();
+  }, [posts.length, ref]);
 
   // Clean up impression timer on unmount
   useEffect(() => {

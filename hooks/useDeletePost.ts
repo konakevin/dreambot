@@ -4,26 +4,20 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
+import { removeUploadFromPages } from '@/lib/feedHelpers';
 
+// Page shape used by hooks that delete-post needs to mutate. Both shapes
+// are still in the codebase (paginated infinite queries returning {rows,...}
+// and a few legacy flat-array callers). The helper handles both.
 interface RowPage {
   rows: DreamPostItem[];
-  offset: number;
+  offset?: number;
+  hasMore?: boolean;
+  nextCursor?: unknown;
+  nextOffset?: number;
 }
 type FlatPage = DreamPostItem[];
 type AnyPage = RowPage | FlatPage;
-
-function isRowPage(page: AnyPage): page is RowPage {
-  return !Array.isArray(page) && Array.isArray((page as RowPage).rows);
-}
-
-function removeFromAnyPages(pages: AnyPage[], uploadId: string): AnyPage[] {
-  return pages.map((page) => {
-    if (isRowPage(page)) {
-      return { ...page, rows: page.rows.filter((p) => p.id !== uploadId) };
-    }
-    return page.filter((p) => p.id !== uploadId);
-  });
-}
 
 const INFINITE_QUERY_KEYS = [
   'dreamFeed',
@@ -78,7 +72,7 @@ export function useDeletePost() {
             snapshots.set(JSON.stringify(query.queryKey), prev);
             qc.setQueryData<InfiniteData<AnyPage>>(query.queryKey, {
               ...prev,
-              pages: removeFromAnyPages(prev.pages, uploadId),
+              pages: removeUploadFromPages(prev.pages, uploadId) as AnyPage[],
             });
           }
         }

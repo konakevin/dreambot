@@ -159,7 +159,8 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
       });
   }, [currentUser?.id]);
   const [optimisticComments, setOptimisticComments] = useState<Comment[]>([]);
-  const serverComments = useMemo(() => data?.pages.flat() ?? [], [data]);
+  // Page shape is { rows, hasMore, nextOffset } — flatMap rows
+  const serverComments = useMemo(() => data?.pages.flatMap((p) => p.rows) ?? [], [data]);
   // Clear optimistic comments once server data refreshes with new entries
   const serverCount = serverComments.length;
   useEffect(() => {
