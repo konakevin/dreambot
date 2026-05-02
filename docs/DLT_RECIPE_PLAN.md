@@ -216,8 +216,9 @@ If anything is partially done, complete that file before moving on. Don't redo c
 - [x] **Phase 1.7** — End-to-end smoke verified — cuddlebot plushie-life upload `a22c6a0d` has fully populated recipe column (all required fields + prefix/suffix/palettes/sensory captured, expected nulls for non-opt-in path-builder fields)
 - [x] **Phase 1.8** — Commit Phase 1 (c4e9299)
 - [x] **Phase 2.1** — `recipeReplay.ts` shared module (validateRecipe + resolveRecipeAnchors + buildLookFragment)
-- [ ] **Phase 2.2** — Edge Functions wired (`generate-dream`, `nightly-dreams`) — BLOCKED on Phase 1.7 verification
-- [ ] **Phase 2.3** — App DLT entry point uses recipe path when available
+- [x] **Phase 2.2a** — Edge Function CAPTURE wired (`generate-dream` + `nightly-dreams` write recipe at insert) — DEPLOYED (aedae16)
+- [x] **Phase 2.2b** — Edge Function REPLAY wired — `generate-dream` accepts `dlt_recipe`, locks medium/vibe/model when valid; legacy fallback when null. DEPLOYED.
+- [x] **Phase 2.3** — App DLT entry point fetches `recipe` column from source post, threads through dream store → useDreamCreate → dreamApi → Edge Function
 - [x] **Phase 2.4** — Phase 2 recipeReplay unit tests (26 tests passing — TS validation, replay, look fragment, privacy, adversarial)
 - [ ] **Phase 2.5** — Manual verification: DLT 5 bot posts, eyeball look fidelity
 - [ ] **Phase 2.6** — Commit Phase 2

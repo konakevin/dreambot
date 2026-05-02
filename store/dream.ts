@@ -28,6 +28,11 @@ interface DreamConfig {
   selectedVibe: string;
   userPrompt: string;
   stylePrompt: string | null;
+  /** DLT recipe-replay payload — frozen LOOK anchors from the source post.
+   *  When set, the server locks medium/vibe/model from the recipe instead of
+   *  using the user's picker values. See docs/DLT_RECIPE_PLAN.md. Null for
+   *  non-DLT flows or when source post has no recipe (pre-Phase-1). */
+  dltRecipe: Record<string, unknown> | null;
 }
 
 interface DreamResult {
@@ -74,6 +79,7 @@ interface DreamStore {
   setVibe: (key: string) => void;
   setPrompt: (text: string) => void;
   setStylePrompt: (prompt: string | null) => void;
+  setDltRecipe: (recipe: Record<string, unknown> | null) => void;
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
   clearPhoto: () => void;
@@ -94,6 +100,7 @@ const INITIAL_CONFIG: DreamConfig = {
   selectedVibe: 'surprise_me',
   userPrompt: '',
   stylePrompt: null,
+  dltRecipe: null,
 };
 
 export const useDreamStore = create<DreamStore>((set) => ({
@@ -110,6 +117,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setVibe: (key) => set((s) => ({ config: { ...s.config, selectedVibe: key } })),
   setPrompt: (text) => set((s) => ({ config: { ...s.config, userPrompt: text } })),
   setStylePrompt: (prompt) => set((s) => ({ config: { ...s.config, stylePrompt: prompt } })),
+  setDltRecipe: (recipe) => set((s) => ({ config: { ...s.config, dltRecipe: recipe } })),
   setResult: (result) => set({ result }),
   clearResult: () => set({ result: null }),
   clearPhoto: () =>

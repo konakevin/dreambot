@@ -42,6 +42,7 @@ import { distillStyle } from '../_shared/styleDistiller.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
+import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
 
 interface RequestBody {
   /** Which Flux model to use */
@@ -85,6 +86,11 @@ interface RequestBody {
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
   /** Optional user-supplied scene description. If absent, Haiku auto-generates from the final prompt. */
   description?: string;
+  /** DLT recipe-replay: when present + valid, locks medium/vibe/model from
+   *  the source post's frozen recipe instead of using user-picker values.
+   *  See docs/DLT_RECIPE_PLAN.md. NULL/missing → existing style_summary
+   *  fallback path runs (zero regression). */
+  dlt_recipe?: unknown;
 }
 
 Deno.serve(async (req) => {
@@ -153,22 +159,54 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
+  // Pull body fields. medium_key / vibe_key / force_model are mutable so we
+  // can override them from a DLT recipe before resolution.
+  let {
+    medium_key,
+    vibe_key,
+    force_model,
+  } = body;
   const {
     mode,
     vibe_profile,
-    medium_key,
-    vibe_key,
     prompt: rawPrompt,
     hint,
     input_image,
     photo_style = 'restyle',
-    force_model,
     force_cast_role,
     job_id: jobId,
     style_prompt,
     subject_description,
     subject_type,
+    dlt_recipe,
   } = body;
+
+  // ── DLT recipe replay (consume-side) ────────────────────────────────────
+  // When the client passes a valid frozen recipe, lock the LOOK identity
+  // from the source post: substitute medium_key + vibe_key + force_model so
+  // every downstream resolver/picker uses the source's exact values. The
+  // user's subject text + cast/photo flow through the existing pipeline
+  // unchanged — DLT only affects look, never content.
+  // If the recipe is null/missing/malformed, fall through to the existing
+  // style_summary path (zero regression).
+  let dltReplayActive = false;
+  if (dlt_recipe !== undefined && dlt_recipe !== null) {
+    const validRecipe = validateRecipe(dlt_recipe);
+    if (validRecipe) {
+      const anchors = resolveRecipeAnchors(validRecipe);
+      medium_key = anchors.mediumKey;
+      vibe_key = anchors.vibeKey;
+      force_model = force_model || anchors.model; // body force_model still wins for tests
+      dltReplayActive = true;
+      console.log(
+        `[generate-dream] DLT recipe-replay active: medium=${anchors.mediumKey} vibe=${anchors.vibeKey} model=${anchors.model}`
+      );
+    } else {
+      console.warn(
+        '[generate-dream] dlt_recipe present but failed validation — falling back to style_summary path'
+      );
+    }
+  }
 
   // Optional user-supplied description for this dream. If absent, a Haiku
   // call generates one from finalPrompt before insert.
