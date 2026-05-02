@@ -21,6 +21,17 @@ const pathBuilders = {
   'outdoor-adventure': require('./paths/outdoor-adventure'),
   'storybook-page': require('./paths/storybook-page'),
   'cottage-core': require('./paths/cottage-core'),
+  'cuddly-aquatic': require('./paths/cuddly-aquatic'),
+  'jungle-canopy': require('./paths/jungle-canopy'),
+  'snowy-arctic': require('./paths/snowy-arctic'),
+  'night-meadow': require('./paths/night-meadow'),
+  'aquatic-village': require('./paths/aquatic-village'),
+  'jungle-village': require('./paths/jungle-village'),
+  'arctic-village': require('./paths/arctic-village'),
+  'twilight-village': require('./paths/twilight-village'),
+  'sunny-pair': require('./paths/sunny-pair'),
+  'sunny-village': require('./paths/sunny-village'),
+  'cozy-interior': require('./paths/cozy-interior'),
 };
 
 module.exports = {
@@ -71,33 +82,59 @@ module.exports = {
     'outdoor-adventure',
     'storybook-page',
     'cottage-core',
+    'cuddly-aquatic',
+    'jungle-canopy',
+    'snowy-arctic',
+    'night-meadow',
+    'aquatic-village',
+    'jungle-village',
+    'arctic-village',
+    'twilight-village',
+    'sunny-pair',
+    'sunny-village',
+    'cozy-interior',
   ],
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
-  // storybook-page 50%, cozy-landscape 15%, outdoor-adventure 10%, rest ~25%
+  // All 22 paths roll equally (~4.5% each). Architecture is a 2-axis
+  // matrix: 6 outdoor biomes (cottagecore, sunny, aquatic, jungle, arctic,
+  // twilight) × 2 modes (creature-pair + cozy-village) plus 10 non-matrix
+  // paths (biome-agnostic + interior-moment + temperate-action +
+  // cozy-interior space).
   pathWeights: {
     'heartwarming-scene': 1,
-    'cozy-landscape': 3,
+    'cozy-landscape': 1,
     'plushie-life': 1,
     'creature-portrait': 1,
     'sleepy-naptime': 1,
     'rainy-day-cozy': 1,
     'miniature-feast': 1,
     'bath-time': 1,
-    'outdoor-adventure': 2,
-    'storybook-page': 3,
-    'cottage-core': 4,
+    'outdoor-adventure': 1,
+    'storybook-page': 1,
+    'cottage-core': 1,
+    'cuddly-aquatic': 1,
+    'jungle-canopy': 1,
+    'snowy-arctic': 1,
+    'night-meadow': 1,
+    'aquatic-village': 1,
+    'jungle-village': 1,
+    'arctic-village': 1,
+    'twilight-village': 1,
+    'sunny-pair': 1,
+    'sunny-village': 1,
+    'cozy-interior': 1,
   },
 
-  // Chaos layer — light touch for cute bots. Subject chaos OFF (don't
-  // distort the cute creature's silhouette). Scenery + storybook paths
-  // get scene-channel chaos only.
+  // Chaos layer — light touch for cute bots. Subject chaos OFF for
+  // creature-centric paths (don't distort the cute silhouette). All
+  // village + scenery + storybook + cozy-interior paths get subject-chaos.
   chaos: {
     enabled: true,
     skipPaths: [],
-    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core'],
+    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core', 'night-meadow', 'aquatic-village', 'jungle-village', 'arctic-village', 'twilight-village', 'sunny-village', 'cozy-interior'],
   },
 
   // Two-pass Sonnet→Haiku polish.
@@ -125,6 +162,17 @@ module.exports = {
       'rainy-day-cozy': 'scene',
       'storybook-page': 'scene',
       'cottage-core': 'scene',
+      'cuddly-aquatic': 'creature',
+      'jungle-canopy': 'creature',
+      'snowy-arctic': 'creature',
+      'night-meadow': 'scene',
+      'aquatic-village': 'scene',
+      'jungle-village': 'scene',
+      'arctic-village': 'scene',
+      'twilight-village': 'scene',
+      'sunny-pair': 'creature',
+      'sunny-village': 'scene',
+      'cozy-interior': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

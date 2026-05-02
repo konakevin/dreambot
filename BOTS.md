@@ -18,22 +18,27 @@
 
 ## Table of Contents
 
-1. [Architecture Overview](#architecture-overview)
-2. [Bot Module Structure](#bot-module-structure)
-3. [The Bot Engine Contract](#the-bot-engine-contract)
-4. [Seed Pool System](#seed-pool-system)
-5. [Testing & Iteration (iter-bot.js)](#testing--iteration-iter-botjs)
-6. [The "Bring It Alive" Process](#the-bring-it-alive-process)
-7. [Writing Effective Briefs](#writing-effective-briefs)
-8. [Writing Effective Pool Gen Scripts](#writing-effective-pool-gen-scripts)
-9. [Lessons Learned](#lessons-learned)
-10. [Production Cron](#production-cron)
-11. [Bot Authentication & Credential Rotation](#bot-authentication--credential-rotation)
-12. [Creating a New Bot From Scratch](#creating-a-new-bot-from-scratch)
-13. [Bot Roster](#bot-roster)
-14. [Content Bots (HumanBot & GlowBot)](#content-bots-humanbot--glowbot)
-15. [Nightly User Dreams](#nightly-user-dreams)
-16. [Database Tables](#database-tables)
+1. [Architecture Overview](#architecture-overview) — render pipeline, 4-layer axis structure, **3 engine layer enhancements** (chaos / two-pass / sensory)
+2. [Bot Module Structure](#bot-module-structure) — file layout + **bot idempotence rule**
+3. [The Bot Engine Contract](#the-bot-engine-contract) — required + optional fields including the 3 engine layers
+4. [The Slot-Pool DNA Pattern](#the-slot-pool-dna-pattern) — defeats Sonnet's training-bias toward common archetypes
+5. [Composition Architecture](#composition-architecture) — spatial anchor, camera-pool, cast block, CHAOS LEVEL 11, solo/ensemble split
+6. [Path-Specific Lighting + Atmosphere](#path-specific-lighting--atmosphere) — per-path lighting pools (replaces shared LIGHTING/ATMOSPHERES)
+7. [The NO LOCATION LEAKS Rule](#the-no-location-leaks-rule) — locations only from rolled pools, never from path-builder directive
+8. [Seed Pool System](#seed-pool-system) — 200/50 standard, gen scripts, dedup
+9. [Testing & Iteration (iter-bot.js)](#testing--iteration-iter-botjs) — CLI + **iteration workflow with Kevin** + **pulling actual ai_prompts**
+10. [The "Bring It Alive" Process](#the-bring-it-alive-process) — modern architecture-first flow
+11. [Writing Effective Briefs](#writing-effective-briefs) — structure, rules, anti-patterns
+12. [Writing Effective Pool Gen Scripts](#writing-effective-pool-gen-scripts) — meta-prompts, dedup dimensions, anti-bias
+13. [Lessons Learned](#lessons-learned) — 30 production lessons
+14. [Production Cron](#production-cron) — per-bot GitHub Actions
+15. [Bot Authentication & Credential Rotation](#bot-authentication--credential-rotation)
+16. [Multi-Agent Worktree Workflow](#multi-agent-worktree-workflow) — concurrent Claude sessions need separate worktrees
+17. [Creating a New Bot From Scratch](#creating-a-new-bot-from-scratch)
+18. [Bot Roster](#bot-roster)
+19. [Content Bots (HumanBot & GlowBot)](#content-bots-humanbot--glowbot)
+20. [Nightly User Dreams](#nightly-user-dreams)
+21. [Database Tables](#database-tables)
 
 ---
 
@@ -97,6 +102,106 @@ Every render is a combination of FOUR layers:
 | **3. Universal prose blocks** (`shared-blocks.js`) | Text injected verbatim into every brief | BLOW_IT_UP, NO_NAMED_CHARACTERS, SOLO_COMPOSITION |
 | **4. Flux wrapping** (`promptPrefix` + `promptSuffix` + `mediumStyles`) | Style anchor applied to every final prompt | golden first-sentence + per-medium style + no-text suffix |
 
+### 3 Engine Layer Enhancements (Chaos + Two-Pass Polish + Sensory Anchors)
+
+```
+━━━ PROVEN PATTERN — 3 engine layers (chaos / two-pass / sensory) ━━━
+What worked: per-render distortion + tighter polish + multi-channel sensory
+  anchoring lift renders from "static brief output" to "richly-detailed cinematic
+  with controlled variation per render."
+Reference impls (most recent first):
+  • ToyBot 18 paths (2026-05-02, toybot-scene-paths branch) — full coverage
+  • CuddleBot 22 paths (origin/main) — sensory pathContext for creature/scene split
+  • StarBot 14 paths (commit 80e22ab "StarBot: chaos + two-pass + sensory anchors
+    (6-context) + robot-moment fantasy ban") ← original implementation
+Code reference: scripts/bots/starbot/index.js (canonical wiring),
+                scripts/lib/{chaosLayer.js, sensoryAnchors.js, twoPassPolish.js}
+Engine integration: scripts/lib/botEngine.js applies all 3 layers automatically
+  if the bot.index.js has them configured.
+```
+
+These 3 layers are configured per-bot in `index.js` and applied automatically by `botEngine.js` per render. Without them, a bot still works but renders feel flat/repetitive.
+
+#### Layer 1 — Chaos (`bot.chaos`)
+
+```javascript
+chaos: {
+  enabled: true,
+  skipPaths: [],                    // paths that opt OUT of chaos entirely
+  allowSubjectChaosPaths: [          // paths that allow SUBJECT-level distortions
+    'cosmic-vista', 'alien-landscape', 'space-opera',
+    // ... all path names here
+  ],
+}
+```
+
+- **Subject-level chaos** = silhouette / echo distortions that warp the subject. Safe for SCENERY paths (landscape / city / vista). Risky for CHARACTER paths (deforms faces / bodies). Default: subject-chaos OFF.
+- **Scene-level chaos** = atmospheric distortions (color refraction, smoke pattern shift, geometry tweak). Safe everywhere. Always enabled when `chaos.enabled: true`.
+- **`skipPaths`** = paths where chaos is fully disabled (use sparingly).
+- **Module:** `scripts/lib/chaosLayer.js` — `rollChaos()` + `buildChaosBriefBlock()`.
+
+When a render fires, console output shows: `🌀 chaos: <channelKey> (intensity=0.62, n=1)`.
+
+#### Layer 2 — Two-Pass Polish (`bot.twoPassPolish`)
+
+```javascript
+twoPassPolish: {
+  enabled: true,
+  conceptWords: 150,                // Sonnet concept-pass word target
+  polishedWords: '65-90',           // Default Haiku polished-output target
+  polishedWordsByPath: {            // Per-path overrides (character paths need more room)
+    'cyborg-woman': '80-110',
+    'cyborg-man': '80-110',
+    'female-explorer': '80-110',
+  },
+  preservePhrasesByPath: {},        // Phrases the polish step MUST preserve
+},
+```
+
+- **Pass 1 (Sonnet concept):** writes the rich brief-driven concept (~150 words).
+- **Pass 2 (Haiku polish):** compresses concept to Flux-ready compound-phrase prose (~65-110 words depending on path).
+- Character/cyborg/explorer paths get more polish room (80-110) because they need anatomy + outfit + pose detail in the polished output.
+- **Module:** `scripts/lib/twoPassPolish.js` — `extendBriefForConcept()` + `buildPolishBrief()`.
+
+When firing: `🔁 two-pass polish: concept→Haiku-polished (108 words)`.
+
+#### Layer 3 — Sensory Anchors (`bot.sensoryAnchors`)
+
+```javascript
+sensoryAnchors: {
+  enabled: true,
+  requiredChannels: ['lightcolor'],         // Always rolled per render
+  pathContext: {                            // Maps each path to a sensory CONTEXT
+    'cyborg-woman': 'cyborg-female',        // pulls from cyborg-female sensory pools
+    'cyborg-man': 'cyborg-male',
+    'female-explorer': 'explorer-female',
+    'cosmic-vista': 'scene',                // scene-context for scenery paths
+    // ...
+  },
+  poolsByContextAndChannel: pools.SENSORY_POOLS,
+}
+```
+
+- **Channels:** `lightcolor` (required), plus optional `smell / sound / touch / temperature / weight / air`. Engine rolls 1-3 channels per render including the required ones.
+- **Contexts:** subject-type-specific pools (e.g., `cyborg-female` vs `scene`) so a cyborg gets cyborg-flavored sensory anchors and a landscape gets landscape-flavored anchors.
+- **`requiredChannels: ['lightcolor']`** — guarantees a specific lighting/color anchor every render. Keeps palette discipline tight.
+- **Module:** `scripts/lib/sensoryAnchors.js` — `rollSensoryAnchors()` + `buildSensoryBriefBlock()`.
+
+When firing: `🌿 sensory: lightcolor+smell+temperature [figure] (n=3)`.
+
+#### Wiring Sequence (botEngine.js)
+
+```
+brief = buildBrief(...)                              // Step 1: path-builder
+brief += buildChaosBriefBlock(rollChaos(...))        // Step 2: append chaos
+brief += buildSensoryBriefBlock(rollSensoryAnchors(...)) // Step 3: append sensory
+concept = sonnet.generate(brief)                     // Step 4: pass 1
+polished = haiku.generate(buildPolishBrief(concept)) // Step 5: pass 2
+fluxPrompt = promptPrefix + mediumStyle + polished + promptSuffix
+```
+
+All 3 layers are opt-in. A bot without them still works — but it loses controlled variation, tighter polish, and per-render lighting/sensory anchoring.
+
 ### The Picker (DB-Backed Recency)
 
 `createPicker()` pre-loads the last 5 days of picks from `bot_dedup` for the bot. Within a render:
@@ -137,6 +242,24 @@ scripts/gen-seeds/<name>/
   gen-cyborg-actions.js
   ...
 ```
+
+### Bot Idempotence — Each Bot is Self-Contained
+
+```
+━━━ HARD RULE — bots NEVER cross-import each other's files ━━━
+Reference: feedback Kevin enforced 2026-05-02 during cuddlebot/toybot port.
+```
+
+Each bot directory must be fully self-contained:
+- `scripts/bots/<bot>/index.js` only requires from its own `./pools` and `./shared-blocks` and `./paths/`
+- `scripts/bots/<bot>/pools.js` only loads from its own `./seeds/` directory
+- **NEVER** require a pool file or seed JSON from another bot's directory
+
+If a pool concept needs to be reused (e.g., `camera_angles.json`), **COPY** the JSON file into the new bot's `seeds/` folder. Don't symlink. Don't reach across.
+
+**Why:** every bot is independently deletable. `rm -rf scripts/bots/<bot>/` should leave NO dangling references anywhere in the codebase. Cross-bot imports break this — deleting one bot would silently corrupt another.
+
+Verification: `grep -rn "<otherbot>" scripts/bots/<thisbot>/` should return zero matches.
 
 ---
 
@@ -210,6 +333,16 @@ module.exports = {
 ```javascript
 // Per-medium style injection — overrides DB flux_fragment for this bot.
 // THIS IS HOW YOU MAKE EACH MEDIUM VISUALLY DISTINCT FOR YOUR BOT.
+//
+// IMPORTANT: keep mediumStyles concise (~150-300 chars per medium).
+// DO NOT bake composition / framing / lens directives into the medium-style —
+// "dramatic low-angle hero composition" / "shallow-depth-of-field" / "macro
+// close" hardcoded into a medium-style overrides any rolled camera-angle and
+// forces every render into hero-shot / single-subject framing. Medium-style
+// describes ANATOMY / TEXTURE / MATERIAL only. Composition comes from rolled
+// camera_angles + path-builder composition-lock blocks.
+//
+// (Lesson learned 2026-05-02 on toybot mech-toy-rampage — see Lessons section.)
 mediumStyles: {
   photography: '35mm cinematic sci-fi film-still — Denis-Villeneuve ...',
   canvas: 'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell ...',
@@ -232,6 +365,37 @@ modelByPath: {
 
 // Phrases that trigger Sonnet re-roll (up to 2 retries)
 bannedPhrases: ['jack skellington', 'tim burton'],
+
+// 3 ENGINE-LAYER ENHANCEMENTS — see Architecture Overview > 3 Engine Layer Enhancements
+// for full documentation. All three are opt-in. botEngine.js applies them
+// automatically per render.
+
+chaos: {
+  enabled: true,
+  skipPaths: [],
+  allowSubjectChaosPaths: ['cosmic-vista', 'alien-landscape', /* ... */],
+},
+
+twoPassPolish: {
+  enabled: true,
+  conceptWords: 150,
+  polishedWords: '65-90',
+  polishedWordsByPath: {
+    'cyborg-woman': '80-110',  // character paths get more room
+  },
+  preservePhrasesByPath: {},
+},
+
+sensoryAnchors: {
+  enabled: true,
+  requiredChannels: ['lightcolor'],
+  pathContext: {
+    'cyborg-woman': 'cyborg-female',
+    'cosmic-vista': 'scene',
+    /* ... */
+  },
+  poolsByContextAndChannel: pools.SENSORY_POOLS,
+},
 
 // Content bot hooks (HumanBot/MuseBot only)
 generateTextContent({ picker, sharedDNA, path, vibeKey }) { ... },
@@ -267,6 +431,390 @@ ${vibeDirective.slice(0, 250)}
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. ...`;
 };
 ```
+
+---
+
+## The Slot-Pool DNA Pattern
+
+```
+━━━ PROVEN PATTERN — slot-pool DNA ━━━
+What worked: defeats Sonnet's training-bias toward common archetypes (teddy-bear,
+  muscle-car, humanoid-mecha, steam-locomotive, hooded-monk) by injecting an
+  explicit cast-roster per render that Sonnet must use, instead of letting
+  Sonnet invent characters/subjects.
+Reference impls (most recent first):
+  • CuddleBot plushie-life + dollhouse-life (2026-05-02, toybot-scene-paths
+    branch) — 30/70 solo-ensemble using CUTE_CREATURES pool
+  • ToyBot plush-world / mech-toy-rampage / hotwheels-city / model-train-world
+    / dollhouse-life / space-saga-figures (2026-05-02, toybot-scene-paths
+    branch) — 6 paths with full slot-pool DNA
+  • StarBot female-explorer / male-explorer (commit 004e40c "StarBot explorer
+    paths: slot-pool DNA upgrade", 2026-04-30)
+  • StarBot cyborg-woman / cyborg-man (commit 7c09211 "StarBot cyborg overhaul",
+    2026-04-26) ← original
+Code reference: scripts/bots/starbot/paths/cyborg-man.js (canonical, well-commented)
+                scripts/bots/toybot/paths/mech-toy-rampage.js (modern with all layers)
+                scripts/bots/toybot/seeds/{plush_creatures,hotwheels_cars,
+                  mech_archetypes,train_consists,space_saga_figures}.json (200 each)
+```
+
+### Why slot-pool DNA
+
+Without it, every render of a plush path gives you a teddy bear (Sonnet's default for "plush"). Every mech render gives you a humanoid mecha (Sonnet's default for "mech"). Every Hot-Wheels render gives you a chrome muscle car (Sonnet's default for "Hot Wheels"). Variety dies.
+
+The slot-pool pattern fixes this: a dedicated `<subject>_<plural>.json` pool of 200 individual archetypes is rolled at render-time, and the path-builder injects the rolled cast as an explicit "RENDER THESE EXACT" block in the brief. Sonnet must use the listed creatures/cars/mechs — it can no longer default.
+
+### The 4 essential slot-pools per path
+
+For any path that has a clear subject type, build all 4:
+
+| Pool | Purpose | Size | Example |
+|---|---|---|---|
+| `<path>_scenes.json` | Mid-action scenarios | 200 | "Five rebel pilots mid-trench-run, blaster-bolts streaking past canopies" |
+| `<path>_landscapes.json` | Wide vistas / playset dioramas | 200 | "Wide Tatooine cantina interior, sandstone-arch entrance, jukebox alcove" |
+| `<path>_<subjects>.json` | Individual subject archetypes (the slot-pool) | 200 | "vintage 3.75-inch Kenner Boba Fett, T-visor green-armor, jetpack with rocket" |
+| `<path>_lighting.json` | Path-specific atmosphere + light + season | 100 | "Death Star Throne Room red-lit dais, single overhead spotlight on throne" |
+
+Plus shared `camera_angles.json` (60-150 entries, copied per-bot for idempotence).
+
+### Path-builder injection pattern
+
+```javascript
+const pools = require('../pools');
+
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {
+  // Roll scene + landscape (70/30 typical split)
+  const useLandscape = Math.random() < 0.3;
+  const scene = useLandscape
+    ? picker.pickWithRecency(pools.PATH_LANDSCAPES, 'path_landscape')
+    : picker.pickWithRecency(pools.PATH_SCENES, 'path_scene');
+
+  // Roll path-specific lighting + camera
+  const lighting = picker.pickWithRecency(pools.PATH_LIGHTING, 'path_lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
+
+  // Slot-pool DNA: roll N subjects per render to defeat training-bias
+  const castSize = 2 + Math.floor(Math.random() * 2);  // 2-3 typical
+  const cast = [];
+  for (let i = 0; i < castSize; i++) {
+    cast.push(picker.pickWithRecency(pools.PATH_SUBJECTS, `path_subject_${i}`));
+  }
+
+  return `[role statement]
+
+[shared blocks]
+
+━━━ MEDIUM LOCK ━━━
+[anatomy / texture / material — NO composition language]
+
+━━━ CAMERA ━━━
+${camera}
+
+━━━ COMPOSITION LOCK — SPATIAL ANCHOR ━━━
+WIDE DIORAMA FRAME — exactly ${castSize} distinct subjects visible simultaneously,
+spatially separated as ${castSize === 2 ? 'left and right' : 'left, center, right'}.
+Each occupies its OWN silhouette zone. NO single hero subject dominating.
+
+━━━ THE SCENE ━━━
+${scene}
+
+━━━ THE CAST — RENDER THESE EXACT (NON-NEGOTIABLE) ━━━
+The subjects in this scene MUST be exactly these specific archetypes — render
+the EXACT class, gear, and signature detail of each:
+${cast.map((c, i) => \`\${i + 1}. \${c}\`).join('\n')}
+
+━━━ LIGHTING + ATMOSPHERE ━━━
+${lighting}
+
+[remaining blocks]`;
+};
+```
+
+### Cast-roll size recommendations
+
+| Subject type | Roll size | Why |
+|---|---|---|
+| Plush creatures | 1 (solo, 30%) or 3-5 (ensemble, 70%) | Mix tender hero + group adventure |
+| Mech-toys | 2-3 | Larger casts dilute battle action — 3 max |
+| Die-cast cars | 3-6 | Race / parade scenes need pack |
+| Train consists | 1 | One train per scene (era + cars baked in) |
+| Dollhouse figurines | 1 (solo, 30%) or 3-5 (ensemble, 70%) | Cozy domestic moments |
+| Space-saga figures | 2-3 | Battle scenes need a duel + supporting cast |
+
+Larger casts → static lineup feel + feature fusion (Flux merging multiple subjects into one). Smaller casts → action front-and-center.
+
+---
+
+## Composition Architecture
+
+```
+━━━ PROVEN PATTERN — composition-lock + spatial-anchor + camera-pool ━━━
+What worked: solving Flux's "collapse multiple subjects into one hero shot"
+  failure mode requires layered composition control.
+Reference: ToyBot mech-toy-rampage R5-R8 iteration (toybot-scene-paths branch,
+  2026-05-02) — diagnosed multi-mech collapse, fixed in 4 layers.
+```
+
+### Why composition is hard with Flux
+
+When a polished prompt describes "powered-armor exosuit + snowplow-mech + manta-ray-mech all mid-action," Flux often renders ONE mech with all 3 sets of features ("feature fusion"). It happens because:
+
+1. The PROMPT_PREFIX biases toward "the subject" (singular)
+2. The medium-style hardcodes hero-shot composition ("low-angle hero", "shallow-DOF", "macro close")
+3. The polished output is dense compound-noun prose where Flux struggles to parse separate subjects
+4. Flux's training-bias for "mech" / "robot" defaults to single-mech vanity shot regardless
+
+ChatGPT's diagnosis (2026-05-02): mechs are a known weak point for diffusion models. **Plushies have the same problem**. **Cars work fine** because they have rigid distinct silhouettes. **Multi-character only works when each subject is simple** (humans-in-clothes, cars) — but if subjects are visually rich (mechs, plushies), Flux compresses.
+
+### Layer 1 — Spatial anchor (the killer fix)
+
+Add a non-negotiable spatial anchor block to the path-builder:
+
+```
+━━━ COMPOSITION LOCK — NON-NEGOTIABLE SPATIAL ANCHOR ━━━
+WIDE DIORAMA FRAME — exactly ${castSize} distinct mech-toys visible simultaneously,
+spatially separated as ${castSize === 2 ? 'left and right' : 'left, center, right'}.
+Each occupies its OWN silhouette zone — no overlap, no merging.
+NO single hero subject dominating the frame.
+ALL ${castSize} mechs visible in clear frame at the same time.
+(Camera direction above sets the lens.)
+```
+
+Diffusion models respond to **spatial language** ("left/center/right", "foreground/midground/background") much better than narrative count ("three mechs"). This single block fixed mech-toy-rampage's multi-character collapse in one R5 iteration.
+
+### Layer 2 — Strip composition language from mediumStyles
+
+Most original `mediumStyles` entries had baked-in composition: "dramatic low-angle hero composition", "shallow-depth-of-field", "macro close depth-of-field". These come BEFORE the polished output in the final Flux prompt and override any rolled camera-angle.
+
+**Fix:** describe ANATOMY / TEXTURE / MATERIAL only. Let `camera_angles` pool drive composition.
+
+```javascript
+// BAD — composition baked in (caused all mechs to render as single hero)
+mech_toys: 'articulated mech-toy aesthetic — robot-toy with ball-joint articulation,
+  ... mecha-anime-toy-line dramatic low-angle hero composition, chrome reflections,
+  cockpit-glow, sparks-flying — NEVER CGI',
+
+// GOOD — anatomy only, camera comes from pool roll
+mech_toys: 'articulated mech-toys — robot-toys with ball-joint articulation at
+  neck/shoulders/elbows/wrists/hips/knees/ankles, chrome-plated paneling, visible
+  transformation seams, cockpit-canopy with glowing tinted plastic, hand-painted
+  weathering, snap-on weapon accessories, 1/144 to 1/100 collector scale,
+  real-physical-toys on a handcrafted set, chrome reflections, cockpit-glow,
+  sparks-flying — NEVER IP-named, NEVER CGI',
+```
+
+The smoking-gun phrases to strip from any mediumStyle: `dramatic low-angle hero composition`, `shallow-depth-of-field`, `macro close`, `extreme low macro angle`, `display-cabinet photography`, `wide-diorama framing`, `hero composition`. These ALL force singular-subject framing.
+
+### Layer 3 — Camera-angle slot-pool
+
+Generate a `camera_angles.json` pool with 60-150 cinematic angles + lens cues. Roll one per render. This becomes the SOLE composition directive in the final prompt:
+
+```javascript
+const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
+// brief includes:
+// ━━━ CAMERA ━━━
+// ${camera}
+```
+
+Sample entries:
+```
+"low-angle hero shot looking up, wide-90mm, deep-focus, dramatic chrome highlights"
+"worm's-eye floor-level dust-cam, 2.39:1 cinemascope, foreground silhouettes blurred"
+"high-angle bird's-eye 75-degrees-down, deep-focus diorama-overview, even spacing"
+"canted dutch-tilt 15-degrees, telephoto-compression, foreground-action sharp"
+```
+
+Generate at **150-200 entries** to avoid pool exhaustion. ToyBot's initial 60-entry pool exhausted in 5 days under heavy iteration — picker fell back to full-pool random.
+
+### Layer 4 — Cast block AFTER scene (not before)
+
+Earlier impl had cast block BEFORE scene block. Result: Sonnet read the cast list as a static lineup directive ("here are 3 mechs to render") rather than as actors performing the scene. Renders defaulted to portrait-pose group shots.
+
+**Fix:** scene block goes FIRST, then cast block reframed as "the action above is performed BY these specific archetypes":
+
+```
+━━━ THE MECH-TOY SCENE ━━━
+${scene}    // e.g., "Four chrome mechs vs four dark in chaotic free-for-all..."
+
+━━━ THE MECHS PERFORMING THIS SCENE ━━━
+The battle-action above is performed BY these specific mech archetypes — render
+their distinctive features WHILE they engage in the scene's action (mid-clash /
+mid-volley / mid-charge / mid-rescue). NEVER render them as a static lineup or
+standing-pose group portrait. They are ACTIVE participants in the battle, not
+posing for a photo:
+${cast.map((c, i) => \`\${i + 1}. \${c}\`).join('\n')}
+```
+
+### Solo / Ensemble Split (30/70)
+
+For creature/character paths where single tender moments are worth keeping alongside group action, gate the cast roll:
+
+```javascript
+// 30% solo (1 subject) / 70% ensemble (3-5 subjects)
+const isSolo = Math.random() < 0.3;
+const castSize = isSolo ? 1 : 3 + Math.floor(Math.random() * 3);
+
+// Then use isSolo to swap composition lock + cast block style:
+${isSolo
+  ? `━━━ COMPOSITION — SOLO TENDER MOMENT ━━━
+A SINGLE subject in the frame, mid-cozy-activity. Intimate storybook composition.`
+  : `━━━ COMPOSITION LOCK — SPATIAL ANCHOR ━━━
+WIDE DIORAMA FRAME — exactly ${castSize} distinct subjects visible simultaneously...`}
+```
+
+When testing solo / ensemble independently, temp-hardcode `isSolo = true` (or `false`), run 5 batches, then revert to the random gate. Reference: toybot/paths/plush-world.js + cuddlebot/paths/plushie-life.js.
+
+### CHAOS LEVEL 11 — Multi-Event Action
+
+```
+━━━ PROVEN PATTERN — CHAOS LEVEL 11 multi-event scenes ━━━
+What worked: action paths felt static even with mid-action verbs because each
+  scene-pool entry described ONE action (e.g., "soldiers mid-charge"). Forcing
+  3+ simultaneous events per scene (vehicle exploding + figures mid-leap +
+  blaster-bolts streaking + environmental destruction) creates true cinematic
+  chaos that Flux renders as battle.
+Reference: ToyBot space-saga-figures (toybot-scene-paths branch, 2026-05-02)
+  scenes pool regen with explicit chaos rules.
+Code: scripts/gen-seeds/toybot/gen-space-saga-scenes.js
+```
+
+For battle / action paths, the gen-script meta-prompt must enforce simultaneity:
+
+```
+━━━ CHAOS-LEVEL-11 RULE — NON-NEGOTIABLE ━━━
+EVERY entry must contain MINIMUM 3 simultaneous things happening:
+- 3+ characters mid-action (not standing) — firing / leaping / falling / dueling / charging
+- VEHICLE in frame mid-action (TIE Fighter exploding / X-wing strafing / AT-AT falling)
+- VISIBLE PYROTECHNICS — explosion-bloom + blaster-bolts streaking + debris-shrapnel
+- ENVIRONMENTAL DESTRUCTION — wall mid-shatter / floor mid-collapse / panel mid-explode
+```
+
+Static tableau scenes ("haggling", "discussing", "setting-up", "surrounding-projector", "fueling-quietly") are explicitly BANNED in the gen-script meta-prompt for action paths. The pool entries must describe peak-chaos cinematic moments — not setup or aftermath.
+
+---
+
+## Path-Specific Lighting + Atmosphere
+
+```
+━━━ PROVEN PATTERN — path-specific lighting pools ━━━
+What worked: shared LIGHTING + ATMOSPHERES pools made every path feel like the
+  same toy-photo studio. Path-specific lighting+atmosphere pools (combined into
+  one richer entry per render) gave each path distinct atmospheric DNA.
+Reference: ToyBot 5 paths (toybot-scene-paths branch, 2026-05-02):
+  • mech_lighting.json — battle atmospheres (neon-cityscape, volcano-glow,
+    orbital-station, megacity-rain)
+  • plush_lighting.json — cozy storybook (campfire-flicker, fairy-light strings,
+    snowfall-window, attic-dust-motes)
+  • hotwheels_lighting.json — household event-driven (BBQ-twilight, Christmas-
+    tree, sleepover-fairy-light, halloween-driveway-fog)
+  • dollhouse_lighting.json — interior cozy-domestic (Victorian fringed-lamp,
+    nursery-nightlight, library-readinglamp)
+  • train_weather.json — full season × weather × time-of-day axis
+Plus CuddleBot: cuddle_plush_lighting.json + cuddle_dollhouse_lighting.json
+  (cute-nudged variants for Sanrio/Pusheen kawaii energy)
+Code: scripts/bots/toybot/paths/{mech-toy-rampage,plush-world,hotwheels-city,
+      dollhouse-life,model-train-world}.js — all use path-specific lighting,
+      none use shared LIGHTING/ATMOSPHERES rolls
+```
+
+### Why path-specific lighting
+
+The shared `LIGHTING` + `ATMOSPHERES` pools were generic toy-photo lighting (studio strobe / noir / golden-hour / etc.). When every path drew from the same shared pool, paths felt repetitive even with distinct subjects.
+
+Each path needs its OWN signature lighting/atmosphere DNA tied to the path's world:
+- **mech battle paths** want neon megacity / orbital station / volcano lab
+- **plush cozy paths** want campfire flicker / fairy lights / attic dust-motes
+- **car event paths** want BBQ twilight / Christmas tree / driveway sunset
+- **dollhouse interior paths** want Victorian fringed-lamp / nursery nightlight
+- **train diorama paths** want autumn dawn / blizzard whiteout / aurora-borealis
+
+### Pool size + content
+
+100 entries per path, each entry combining ENVIRONMENT + LIGHT + ATMOSPHERE in one 10-20 word phrase:
+
+```
+"neon-cityscape backlit dawn, magenta-cyan crossfire glow, polluted smog haze, dramatic silhouettes"
+"forest-campfire pink flicker dusk, ember-rose drift, pollen sparkles in golden flame-light"
+"BBQ-twilight grill-smoke haze, ember-glow, sodium patio-lights flickering on, peach sky"
+"Victorian-parlor fringed-lamp warm-amber pool, dust-motes in afternoon-window beam"
+"winter blizzard whiteout, late-afternoon flat-pewter sky, snow-flurries obscuring distant terrain"
+```
+
+### Path-builder integration
+
+REPLACE the `LIGHTING` + `ATMOSPHERES` rolls with a single path-specific lighting roll:
+
+```javascript
+// BEFORE (shared, generic, repetitive across paths)
+const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
+// ...
+// ━━━ LIGHTING ━━━ ${lighting}
+// ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+
+// AFTER (path-specific, distinct atmospheric DNA)
+const lighting = picker.pickWithRecency(pools.PATH_LIGHTING, 'path_lighting');
+// ...
+// ━━━ LIGHTING + ATMOSPHERE ━━━ ${lighting}
+```
+
+### When to add path-specific lighting
+
+- Path has a clear distinct world (battle / cozy-cottage / household-event / interior-domestic / weather-driven outdoor)
+- Renders feel atmospherically repetitive across the path's batches
+- Path uses sharedDNA.scenePalette + sharedDNA.colorPalette but those + shared LIGHTING create muddy color-stack
+
+When NOT to add:
+- Path is fundamentally a generic toy-photo shoot (lego-epic, claymation, vinyl) — shared LIGHTING is fine
+- Path-specific atmosphere isn't compelling enough to fill 100 entries with distinct cues
+
+---
+
+## The NO LOCATION LEAKS Rule
+
+```
+━━━ HARD RULE — locations only from rolled pools, never from path-builder ━━━
+What worked: keeping the path-builder's directive 100% architectural (rules,
+  energy, framing) means the location/setting variety comes ENTIRELY from the
+  rolled scene-pool entry. Mixing in directive-level location examples kills
+  variety because every render gets those locations as anchors.
+Reference: feedback Kevin caught 2026-05-02 in toybot/paths/space-saga-figures.js
+  composition-lock (had "Hoth, Endor, Trench Run, Cantina, Sarlacc Pit" baked
+  in as examples — leaked into every render)
+Memory file: feedback_no_location_leaks.md
+```
+
+**The rule:** never hardcode specific locations / scenes / settings into a path-builder's base directive. Specific locations MUST come from the rolled Sonnet seed pool entry.
+
+### What this means in practice
+
+Path-builder directives describe **architecture, rules, energy** only:
+- ✅ "WIDE DIORAMA FRAME — exactly N subjects visible simultaneously"
+- ✅ "Frozen frame of cinematic chaos — multiple things happening simultaneously"
+- ✅ "NEVER static / NEVER posed / NEVER lineup"
+- ✅ "3+ figures mid-action + vehicle mid-action + visible pyrotechnics"
+
+Path-builder directives **NEVER** name:
+- ❌ Specific planets, cities, or worlds (no "Tatooine, Hoth, Endor")
+- ❌ Specific scenes or moments (no "the Trench Run, the Cantina shootout")
+- ❌ Specific eras or franchise-specific settings (no "1977 Mos Eisley")
+
+### Where examples DO belong
+
+If you need to give Sonnet examples of locations or scenes, put them in the **gen-script meta-prompt** (which produces the seed pool — runs once, not per-render):
+
+```javascript
+// In scripts/gen-seeds/<bot>/gen-<path>-scenes.js — examples here are FINE
+metaPrompt: (n) => `Write ${n} Star Wars action scenes. Cover all iconic
+  locations: Mos Eisley cantina, Hoth ice trench, Endor speeder chase,
+  Death Star trench run, Cloud City duel, Mustafar lava platform...`,
+```
+
+Examples in gen-scripts produce a varied pool. Examples in path-builders compound across every render and kill variety.
+
+### Quick check
+
+Re-read your path-builder directive. If you can identify what bot/path/franchise it's for from the directive alone, you've leaked too much. The directive should be neutral architecture that would work for any bot doing similar work.
 
 ---
 
@@ -418,75 +966,166 @@ const isCloseup = Math.random() < 0.7;  // 70% closeup, 30% full-body
 - **After any code change, render 5 and verify.** Don't trust "deployed green" alone.
 - **Test pools at 25 before scaling to 200.** Generate 25, test quality, then scale after approval.
 
+### The Iteration Workflow with Kevin
+
+```
+━━━ PROVEN PATTERN — fire-grade-iterate cadence ━━━
+What worked: tight 5-render loops with Kevin grading on phone, Claude making
+  ONE targeted change per round based on feedback, never multi-variating.
+Reference: ToyBot 5 new paths (toybot-scene-paths branch, 2026-05-02) — 35
+  iterations across hotwheels / mech / plush / train / dollhouse converged in
+  one session.
+```
+
+The standard back-and-forth that took ToyBot from "everything broken" to "approved across 6 paths":
+
+1. **Claude fires** a 5-render batch with `--post --label <path>-r<N>`
+2. **Console output** shows what fired per render (chaos / sensory / polish word counts) — Claude pastes the table back to Kevin
+3. **Kevin grades on phone** while Claude waits. Typical responses:
+   - `"good, next"` → fire next path's batch
+   - `"good"` (no "next") → that path is locked in, ask what's next
+   - `"X is wrong"` (e.g., "all single", "too red", "no track") → diagnose ONE layer, fix ONE thing, fire R<N+1>
+   - `"hardcode X and run 5 more"` → temp-force the failing branch (e.g., `isSolo = true`), run 5, then revert to the random gate
+4. **Claude diagnoses by pulling the actual `ai_prompt` from DB** when feedback isn't obvious from console output — this is what caught the medium-style "low-angle hero" override and the "characters standing around" feedback-fusion problem.
+5. **One change per round.** Never multi-variate. If R2 fails, the next round changes ONE layer. The next round's grade tells you whether THAT change moved the needle.
+6. **Commit on approval.** When Kevin says "good" / "perfect" / "next" — commit IMMEDIATELY before doing anything else. (See `feedback_commit_on_approval.md` memory — Kevin lost hours to this.)
+
+#### Caption tagging for traceability
+
+Use `--label <path>-r<N>-<descriptor>`:
+- `mech-r1` — first batch, baseline
+- `mech-r2` — second batch
+- `mech-r5-spatial` — fifth batch with spatial-anchor change
+- `mech-r7-no-comp` — seventh batch with composition-stripped medium-style
+
+The label appears in caption like `[mech-toy-rampage] ToyBot` — Kevin can later filter `uploads.caption` by label to find specific iterations he hearted.
+
+#### Pulling actual Flux prompts when stuck
+
+When the console output and your edits look right but the render is still bad, pull what actually reached Flux:
+
+```javascript
+// Run via: node -e "<this script>"
+const { createClient } = require('@supabase/supabase-js');
+const sb = createClient(URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const { data } = await sb
+  .from('uploads')
+  .select('caption, ai_prompt')
+  .ilike('caption', '%<path>%')
+  .order('created_at', { ascending: false })
+  .limit(5);
+data.forEach(r => console.log(r.caption + ':\n' + r.ai_prompt + '\n'));
+```
+
+Look for:
+- **Frontloaded directives in the medium-style** (e.g., "low-angle hero composition" overriding camera roll)
+- **Stacked color sources** (mediumStyle + scenePalette + colorPalette + sensory all pushing the same color = muddy)
+- **Truncation** at the end (Sonnet output cut off because medium-style ate too much budget)
+- **Polish flattening** (cast list collapsed into compound prose)
+
+This is how the "everything looks single-mech" diagnosis worked: Sonnet output was multi-mech good, but `mediumStyles.mech_toys` had "dramatic low-angle hero composition" hardcoded as the medium prefix, dominating Flux's interpretation. Fix was stripping composition language from medium-styles, leaving the rolled `camera_angles` to drive framing.
+
+#### Auto-QA loop (no human in loop)
+
+For longer convergence work, the auto-QA loop pattern (Claude grades own renders against pre-registered rubric) lives in `CLAUDE.md` under "Automated QA feedback loop". Use when Kevin's standing protocol is: "auto-tune path X to convergence" without per-round grading.
+
 ---
 
 ## The "Bring It Alive" Process
 
-This is the 5-step process developed through StarBot and DragonBot for taking a bot from functional to stunning. Apply this to every bot.
+```
+━━━ MODERN 7-step flow (post slot-pool DNA, post 3 engine layers) ━━━
+What worked: architecture-first approach. Get the slot-pool + spatial anchor +
+  camera + path-specific lighting + 3 layers wired BEFORE iterating on briefs.
+  Brief tweaks compound poorly without the architectural foundation.
+Reference: ToyBot 5 new paths (toybot-scene-paths branch, 2026-05-02) — this
+  flow took mech-toy-rampage from "all single mechs" → "ensemble battles with
+  varied camera + lighting" in ~7 iteration rounds.
+```
 
 ### Step 1: Audit the Current State
 
-Before changing anything, understand what the bot is rendering:
-
 ```bash
-# Run 5 random renders to see current quality
 node scripts/iter-bot.js --bot <name> --count 5 --post
-
-# Run 5 per specific path to identify weak spots
 node scripts/iter-bot.js --bot <name> --count 5 --mode <path> --post
 ```
 
-Review on phone. Score each render 1-5. Identify:
-- Which paths produce stunning results?
-- Which paths produce repetitive/boring/broken results?
-- Are the briefs constraining Sonnet too much or too little?
-- Are pool entries specific enough to produce distinct renders?
+Score on phone 1-5. Identify which paths are weakest. Note specific failure modes (single-character collapse / repetitive lighting / boring tableau / muddy color stack / etc.).
 
-### Step 2: Fix the Brief
+**Pull actual ai_prompts** for failing renders — see Testing & Iteration section. Diagnose at the layer where the failure originates: medium-style / scenes pool / path-builder directive / cast block / polish step.
 
-The brief is the single most important file. Common fixes:
-
-- **Add identity-matching language** — "READ the [X] below and render THAT specific [thing]. Do NOT default to: [list the 4-5 most common AI defaults for this genre]"
-- **Add composition bans** — "NOT walking towards camera, NOT facing camera, NOT posing, NOT standing still" (put these in the brief, NOT in pool gen scripts)
-- **Add explicit banned imagery** — "NO skulls, NO skeletons, NO floating objects" (whatever the AI keeps defaulting to)
-- **Add the BLOW_IT_UP block** — tells Sonnet to max every element within the theme's constraints
-- **Enforce solo composition** — "She is the ONLY figure in the frame" for character bots
-- **Cap the output format** — "Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers..."
-
-**CRITICAL: Composition problems belong in the BRIEF, not in pool gen scripts.** The brief controls what Sonnet writes. The pool provides what the scene IS. "Walking towards camera" is a Sonnet composition problem — ban it in the brief, don't rewrite all your action entries.
-
-### Step 3: Tune the Pools
-
-After the brief is solid, iterate on pool quality:
-
-- **Expand thin pools** — anything under 200 entries gets expanded
-- **Check pool-to-brief alignment** — pool content is useless if the brief hardcodes composition that overrides it. Always update both together.
-- **Add dedup dimensions to gen scripts** — "Deduplicate by: base hue + warmth/coolness + intensity" for colors, "verb + body engagement" for actions, "setting type + time of day" for scenes
-- **For sensitive axes (skin/body/hair), hand-curate** — Sonnet-generated entries can introduce unintended texture language. Match the tone/voice of existing entries.
-
-### Step 4: Add mediumStyles
-
-Each `mediumStyles` entry gives the bot's visual DNA for that medium. Without it, the bot uses the generic DB `flux_fragment` which has no personality.
+### Step 2: Wire the 3 Engine Layers (if not already)
 
 ```javascript
-mediumStyles: {
-  render: 'high-end cinematic 3D render — feature-film VFX quality, ...',
-  photography: '35mm cinematic sci-fi film-still — Denis-Villeneuve Blade-Runner-2049 ...',
-},
+// In bot/index.js — see Architecture > 3 Engine Layer Enhancements for full schema
+chaos: { enabled: true, ... },
+twoPassPolish: { enabled: true, ... },
+sensoryAnchors: { enabled: true, requiredChannels: ['lightcolor'], ... },
 ```
 
-### Step 5: Weight Paths and Lock In
+This is one-time wiring per bot. Without these, every render lacks controlled variation, polish discipline, and per-render sensory anchoring.
 
-After all paths render well individually:
+### Step 3: Architect the Modern Stack (per failing path)
+
+For each path that needs upgrade, build:
+
+1. **Slot-pool DNA** — `<path>_<subjects>.json` (200 entries) of individual subject archetypes. Roll 2-5 per render and inject as cast block.
+2. **Spatial-anchor composition lock** — non-negotiable left/center/right framing for multi-character paths.
+3. **Camera-angle pool** (shared, copied to bot's seeds) — 100-200 cinematic angles + lens cues, rolled per render.
+4. **Path-specific lighting pool** — `<path>_lighting.json` (100 entries) combining environment + light + atmosphere into one richer entry. Replaces shared LIGHTING+ATMOSPHERES rolls.
+5. **30/70 solo-ensemble split** (for creature/character paths only) — gate cast roll by `Math.random() < 0.3`.
+6. **Cast block AFTER scene** — never before. Frame as "the action above is performed BY these archetypes".
+
+### Step 4: Fix the Medium-Style Prefix
+
+Strip composition / framing / lens directives from `bot.mediumStyles[medium]`. Keep ANATOMY / TEXTURE / MATERIAL only. See Composition Architecture > Layer 2 for examples.
+
+### Step 5: Generate Pools (Sonnet-seeded)
+
+```bash
+# Test at 25 first
+node scripts/gen-seeds/<bot>/gen-<pool>.js   # set total: 25 initially
+
+# Approval-gated scale to 200
+# Update gen-script: total: 200, batch: 50
+node scripts/gen-seeds/<bot>/gen-<pool>.js
+```
+
+Run gen-scripts in parallel where possible:
+
+```bash
+for f in scripts/gen-seeds/<bot>/gen-*.js; do node "$f" & done; wait
+```
+
+Verify all pools at 200 entries before iterating further.
+
+### Step 6: Fire-Grade-Iterate
+
+```bash
+node scripts/iter-bot.js --bot <name> --count 5 --mode <path> --post --label <path>-r1
+# Kevin grades on phone
+# "good, next" → next path
+# "X is wrong" → diagnose ONE layer, fix ONE thing, fire R2
+```
+
+Use the iteration workflow in Testing & Iteration section. ONE change per round. Multi-variating makes signal impossible to read.
+
+### Step 7: Weight Paths and Lock In
 
 ```bash
 # Run 10 random weighted renders to check distribution feels right
 node scripts/iter-bot.js --bot <name> --count 10 --post
 ```
 
-Adjust `pathWeights` until the distribution matches desired frequency. Higher-quality paths get weight 2, niche paths stay at 1.
+Adjust `pathWeights` until the distribution matches desired frequency. Higher-quality paths get weight 2-3, niche paths stay at 1.
 
-Then expand all pools to 200 entries, commit, push.
+Commit, push. (Per `feedback_commit_on_approval.md` — commit IMMEDIATELY when Kevin signs off, before doing anything else.)
+
+### When to skip steps
+
+- **Only Step 6 needed** when a working bot has one weak path and the architecture is otherwise sound. Pull ai_prompts, diagnose, fire targeted batches.
+- **Skip Step 2** if the bot already has the 3 engine layers (StarBot / ToyBot / CuddleBot all do).
+- **Skip Step 3** for "base" architecture paths where slot-pool isn't worth the build (lego-epic / claymation / vinyl).
 
 ---
 
@@ -604,6 +1243,34 @@ Every gen script's `metaPrompt` follows this pattern:
 16. **Fail loud on prod cron.** If all retries + fallbacks exhaust, engine throws. `bot_run_log` captures error + stage. GitHub Actions fails, sends email. Never auto-post a broken render.
 
 17. **Sonnet → Haiku fallback.** callClaude retries on 429/500/502/503/504/529 with exponential backoff (1s/3s/10s/30s), then falls back to Haiku. If both exhaust, the render throws.
+
+### From ToyBot 18-Path Build Session (2026-05-02, toybot-scene-paths branch)
+
+18. **Bloated gen-script prompts dilute Sonnet output.** Initial gen-scripts for hotwheels / mech / plush / toybox-chaos / dollhouse-life were 8000-10000 chars each (40+ category examples + redundant rule blocks). Sonnet output was solo-vanity-shot biased despite "70%+ ensemble" instructions because the bloated prompt diluted the signal. Fix: trim gen-scripts to 3000-5000 chars (cut category examples from 40+ → 12 archetypal). Match the existing well-working gen-scripts (e.g., gen-tabletop-scenes.js at ~4500 chars) — that's the size standard.
+
+19. **MediumStyle composition language overrides camera roll.** ToyBot mech-toy-rampage rendered every mech as "single low-angle hero" despite rolling varied camera_angles per render. The cause: `mediumStyles.mech_toys` had "mecha-anime-toy-line dramatic low-angle hero composition" hardcoded — Flux read this 600-char prefix BEFORE the polished output and forced hero-shot framing every time. Fix: strip composition / lens / framing language from mediumStyles. Keep anatomy / texture / material only. Let camera_angles pool drive composition.
+
+20. **Cast block AFTER scene, not before.** Initial impl injected the cast list BEFORE the scene block. Result: Sonnet read it as a static lineup directive ("here are 3 mechs to render"). Fix: scene block first, cast block AFTER reframed as "the action above is performed BY these specific archetypes". Subjects became active participants instead of posing for a portrait.
+
+21. **Smaller cast counts beat larger.** Mech cast 3-5 → 2-3 reduced static-lineup feel and cut feature-fusion (Flux merging multiple subjects into one "hero with all 3 sets of features"). Plush cast 4-6 → 3-5 same fix. Larger casts → static lineup. Smaller casts → action front-and-center.
+
+22. **Diffusion models respond to spatial language, not narrative count.** Telling Flux "render 3 distinct mechs" doesn't work. Telling it "WIDE DIORAMA FRAME — 3 distinct mechs spatially separated as left, center, right, each in own silhouette zone" works. Spatial anchors > narrative anchors. (Diagnosed via ChatGPT consultation 2026-05-02 — see Composition Architecture section.)
+
+23. **Single-color authority for some paths.** ToyBot space-saga-figures had RED/PURPLE muddy renders because 4 color sources stacked: path-specific lighting + scenePalette + colorPalette + sensory lightcolor. Fix: skip sharedDNA.scenePalette + sharedDNA.colorPalette injection in space-saga path-builder; let `space_saga_lighting` pool drive color alone. Use this fix when a path has a strong distinctive lighting pool — drops the multi-color compounding.
+
+24. **Action paths need CHAOS LEVEL 11 multi-event scenes.** Space-saga R3 felt flat because each scene-pool entry described ONE action ("soldiers mid-charge"). Fix: gen-script meta-prompt enforces "MINIMUM 3 simultaneous things happening per entry — 3+ characters mid-action + vehicle mid-action + visible pyrotechnics + environmental destruction". Static tableau ("haggling", "discussing", "setting-up") explicitly BANNED. See Composition Architecture > CHAOS LEVEL 11.
+
+25. **Camera-angle pool exhausts at 60 entries under heavy iteration.** ToyBot's 60-entry camera_angles ran the picker into "5-day window exhausted, falling back to full pool" within a session. Fix: generate camera_angles at 150-200 entries minimum.
+
+26. **Wide-lens-macro doesn't pull Flux back; it stays close regardless.** Tested forcing wide-angle (14-24mm wide-lens macro) on green-army-warzone — Flux still rendered close-up framing. Wide-angle directive added some variety but didn't substantially change shot scale. Conclusion: Flux's training-bias for "toy-photography" is close-up regardless of lens directive. Pulled-back establishing shots are NOT reliably achievable through prompt language alone.
+
+27. **Star Wars IP renders cleanly through Flux.** ToyBot space-saga path tested both archetype-only (no IP names) and full-Star-Wars-IP (Luke / Leia / Vader / X-wing / Tatooine / etc.) versions. Flux rendered both without refusal. Star Wars characters/locations are actually rendered MORE accurately when explicitly named because Flux has strong training data on those. The archetype-only approach produced more generic results. (For toybot specifically; YMMV per franchise.)
+
+28. **NO LOCATION LEAKS in directives.** Path-builder composition-locks must NEVER name specific locations / scenes / franchise-specific settings. Setting variety comes EXCLUSIVELY from rolled scene-pool entries. Examples in gen-script meta-prompts are fine (they produce varied pool); examples in runtime path-builders compound across every render and kill variety. See "The NO LOCATION LEAKS Rule" section + memory file `feedback_no_location_leaks.md`.
+
+29. **Pull actual Flux ai_prompts from DB when feedback isn't obvious.** When console output and code edits look correct but renders are still bad, query `uploads.ai_prompt` directly for the last N renders. This catches: medium-style frontloaded directives that override path-builder, color-stack muddy compounding, polished-output truncation, cast-list flattening into compound prose. The "everything looks single-mech" diagnosis was solved by reading ai_prompts and finding "low-angle hero composition" hardcoded in `mediumStyles.mech_toys`.
+
+30. **One change per round.** Never multi-variate during iteration. If R2 fails, the next round changes ONE layer. The next round's grade tells you whether THAT change moved the needle. Multi-variate iterations make signal impossible to read.
 
 ---
 
@@ -769,18 +1436,113 @@ Both client values are passed to the `react-native-fbsdk-next` plugin in `app.co
 
 ---
 
+## Multi-Agent Worktree Workflow
+
+```
+━━━ HARD RULE — multi-agent work MUST split worktrees ━━━
+What worked: each Claude session in its own git worktree on its own branch.
+  Multiple agents in the same project directory share ONE working tree, and
+  any agent's `git checkout other-branch` flips files for ALL agents silently.
+  Tonight's ToyBot work was lost twice to this collision before recovering
+  via stashes the parallel agent had made.
+Reference: CLAUDE.md "Concurrent agents — git worktrees" section
+Memory file: stash_before_revert.md (related)
+Branch: docs/multi-agent-worktree exists in repo as planning doc
+```
+
+Bots are typical multi-agent territory — Kevin often runs concurrent sessions to build / iterate / test different bots in parallel.
+
+### Setup (per agent)
+
+```bash
+# From the main repo dir
+git worktree add ../dreambot-<task> <branch-name>
+
+# Optional: branch off main if creating a fresh task branch
+git worktree add ../dreambot-<task> -b <new-branch-name> main
+```
+
+Each worktree has its own checked-out branch, its own working files, and its own state for `npm` / `node` / `supabase` commands. They share the underlying `.git/objects`, so it's cheap.
+
+### Per-worktree quick-setup
+
+```bash
+cd ../dreambot-<task>
+
+# Symlink node_modules from main repo (saves npm install time)
+ln -s /Users/kevinmchenry/Development/apps/dreambot/node_modules node_modules
+
+# Symlink .env.local (gitignored, won't propagate via git)
+ln -s /Users/kevinmchenry/Development/apps/dreambot/.env.local .env.local
+```
+
+Both symlinks are safe because:
+- `node_modules` is identical across all worktrees (same package.json)
+- `.env.local` is read at runtime only (no concurrent-write conflicts)
+
+### Cleanup (when branch merges)
+
+```bash
+git worktree remove ../dreambot-<task>
+git push origin --delete <branch-name>   # if pushed
+git branch -d <branch-name>              # if not pushed
+```
+
+### When to use worktrees
+
+- ANY time 2+ Claude sessions are open on the same project
+- ANY time you want to keep WIP from one task isolated from another
+- ANY long-running iteration loop (e.g., bot "Bring It Alive" sessions) where you don't want to risk a parallel agent's checkout sweeping away your in-progress files
+
+### What goes wrong without worktrees
+
+```
+Agent A: git checkout my-feature-branch     # files now reflect my-feature
+Agent B: git checkout other-branch          # files now reflect other-branch
+                                             # ← Agent A's session sees other-branch files now,
+                                             # any uncommitted Agent A work is invisible/lost
+                                             # until A re-checks out my-feature
+```
+
+Tonight (2026-05-02) lost ~30 minutes to this exact collision. The parallel agent stashed Agent A's work before checking out — but stashes drop the rename-history (only modifications survive). 5 path file renames + new path files + gen scripts + seed JSONs had to be partially reconstructed from stashes (recovered ~70%) and partially rebuilt from this conversation's context.
+
+### Recovery if it happens
+
+```bash
+git stash list                # check for any "WIP: <task>" stashes
+git reflog                    # find the SHA of HEAD just before the chaos
+git stash show stash@{N} --name-status   # see what's in a stash
+git stash apply stash@{N}     # restore a stash to current branch
+```
+
+Stashes preserve modifications + new files (with `-u`) but DROP rename-history. Renames must be re-applied via `git mv`.
+
+---
+
 ## Creating a New Bot From Scratch
 
-### Step 1: Create the Module
+```
+━━━ MODERN flow — start with the architecture, not the briefs ━━━
+What worked: building the 3 engine layers + slot-pool DNA + camera + path-
+  specific lighting + spatial anchor IN THAT ORDER before writing path briefs.
+  Briefs are easy to iterate; architecture is hard to retrofit.
+Reference: CuddleBot plushie-life + dollhouse-life port (toybot-scene-paths
+  branch, 2026-05-02) — used this exact flow to bring 2 new paths online.
+```
+
+### Step 1: Create the Module + Wire 3 Engine Layers
 
 ```bash
 mkdir -p scripts/bots/<name>/paths scripts/bots/<name>/seeds
+mkdir -p scripts/gen-seeds/<name>
 ```
 
-Create:
-- `index.js` — bot contract (see The Bot Engine Contract above)
-- `pools.js` — axis pools with `load()` helper
-- `shared-blocks.js` — universal prose blocks for this bot's identity
+Create with the full modern contract:
+- `index.js` — bot contract WITH chaos / twoPassPolish / sensoryAnchors fields populated
+- `pools.js` — axis pools with `load()` helper (will fill as pools generate)
+- `shared-blocks.js` — universal prose blocks (TOY_PHOTOGRAPHY_BLOCK / CINEMATIC_STORY_BLOCK / BLOW_IT_UP_BLOCK / WIDE_LENS_MACRO_BLOCK / etc.)
+
+Verify idempotence: `grep -rn "<otherbot>" scripts/bots/<thisbot>/` returns 0. No cross-bot imports.
 
 ### Step 2: Define Paths
 
@@ -790,28 +1552,55 @@ Each path is a distinct visual approach. Guidelines:
 - Character bots: split by composition (closeup vs full-body) and/or action type
 - Scene bots: split by environment type (landscape vs interior vs city vs cosmic)
 
-### Step 3: Write Gen Scripts + Generate Pools
+For each path, decide which architecture stack to use:
+- **Modern stack** (slot-pool + spatial anchor + camera + path-lighting) — for paths with a clear subject type and atmosphere DNA
+- **Base** — for paths where slot-pool isn't worth the build
 
-One gen script per pool in `scripts/gen-seeds/<name>/`. Start at `total: 25` for testing, scale to `total: 200, batch: 50` after approval.
+### Step 3: Generate Pools (Sonnet-seeded)
+
+For each modern-stack path, generate the 4 essential pools:
+- `<path>_scenes.json` (200 entries, batch 50) — mid-action scenarios
+- `<path>_landscapes.json` (200) — wide vistas
+- `<path>_<subjects>.json` (200) — slot-pool of individual subject archetypes
+- `<path>_lighting.json` (100) — environment + light + atmosphere combined
+
+Plus one shared pool per bot:
+- `camera_angles.json` (150-200, copied from another bot or generated fresh)
+
+Run gen-scripts at `total: 25` initially, verify quality, then scale to `total: 200`.
 
 ### Step 4: Write Path Briefs
 
-One brief-builder per path in `paths/<name>.js`. Follow the brief structure in "Writing Effective Briefs" above.
+One brief-builder per path in `paths/<name>.js`. Follow the brief structure in "Writing Effective Briefs" + the slot-pool injection pattern in "The Slot-Pool DNA Pattern" + the composition-lock pattern in "Composition Architecture".
 
-### Step 5: Test
+Path-builder directive should be 100% architectural — NEVER leak specific locations / scenes / franchise-specific settings. See "The NO LOCATION LEAKS Rule".
+
+### Step 5: Test (Fire-Grade-Iterate)
 
 ```bash
-# Test each path individually
-node scripts/iter-bot.js --bot <name> --count 5 --mode <path> --post
+# Test each path individually with --label tagging
+node scripts/iter-bot.js --bot <name> --count 5 --mode <path> --post --label <path>-r1
 
-# Test random distribution
+# Pull actual ai_prompts when feedback isn't obvious
+node -e "
+const {createClient} = require('@supabase/supabase-js');
+const sb = createClient(URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+sb.from('uploads').select('caption, ai_prompt')
+  .ilike('caption', '%<path>%')
+  .order('created_at', {ascending: false})
+  .limit(5).then(({data}) => data.forEach(r => console.log(r.ai_prompt)));
+"
+
+# Test random distribution at end
 node scripts/iter-bot.js --bot <name> --count 10 --post
 ```
 
+Iterate per "The Iteration Workflow with Kevin" section.
+
 ### Step 6: Create Workflow + Deploy
 
-1. Create `.github/workflows/<name>.yml` (copy from existing)
-2. Commit everything
+1. Create `.github/workflows/<name>.yml` (copy from existing — adjust bot name + cron times)
+2. Commit everything (per `feedback_commit_on_approval.md` — commit IMMEDIATELY when Kevin approves)
 3. Push to main — cron activates on next scheduled run
 
 ### Step 7: Verify in App
@@ -826,26 +1615,31 @@ Search for the bot in the app, check their profile shows posts. Review renders o
 
 All 18 bots below are on per-bot crons via the V2 engine.
 
-| Bot | Directory | Content | Paths | Mediums |
+| Bot | Directory | Content | Paths | Architecture status |
 |---|---|---|---|---|
-| StarBot | `starbot/` | Sci-fi / space / cyborg | 13 | render, real-astro, star-oil-cosmos |
-| DragonBot | `dragonbot/` | Epic fantasy / dragons | 8+ | canvas, watercolor |
-| GothBot | `gothbot/` | Gothic dark / vampires | 6+ | gothic, anime, canvas |
-| MangaBot | `mangabot/` | Anime / Japanese | 4+ | anime |
-| BloomBot | `bloombot/` | Flowers / botanical | 4+ | photography, canvas, watercolor, pencil |
-| EarthBot | `earthbot/` | Nature / landscape | 4+ | photography, canvas, watercolor |
-| ToyBot | `toybot/` | Toys / crafts / miniatures | 5+ | lego, animation, claymation |
-| TinyBot | `tinybot/` | Miniatures / dioramas | 4+ | photography, animation, claymation |
-| SteamBot | `steambot/` | Steampunk | 4+ | canvas, photography |
-| AncientBot | `ancientbot/` | Ancient civilizations / ruins | 14 | canvas, photography |
-| CoquetteBot | `coquettebot/` | Cute feminine | 4+ | coquette, fairytale, watercolor |
-| CuddleBot | `cuddlebot/` | Kawaii cozy | 4+ | animation, claymation, storybook |
-| PixelBot | `pixelbot/` | Retro pixel art | 4+ | pixels |
-| RetroBot | `retrobot/` | Retro / vaporwave | 4+ | vaporwave |
-| OceanBot | `oceanbot/` | Ocean / underwater / mermaid | 15 | canvas, watercolor, illustration, pencil, maritime-oil-legend, maritime-oil-classic | `cycleAllPaths: true` — all 15 paths cycle before repeating |
-| DinoBot | `dinobot/` | Dinosaurs / prehistoric | 4+ | canvas, photography |
-| BeachBot | `beachbot/` | Beach / coastal | 4+ | photography, watercolor |
-| BrickBot | `brickbot/` | LEGO / brick art | 4+ | lego |
+| StarBot | `starbot/` | Sci-fi / space / cyborg | 14 | ✅ slot-pool DNA + 3 layers (cyborg-man / cyborg-woman / explorers) — **canonical reference impl** |
+| ToyBot | `toybot/` | Toys / crafts / miniatures | 19 | ✅ 6 paths (mech / plush / hotwheels / train / dollhouse / space-saga) full slot-pool + spatial anchor + path-specific lighting + camera + 3 layers (toybot-scene-paths branch as of 2026-05-02) |
+| CuddleBot | `cuddlebot/` | Kawaii cozy | 23 | ✅ plushie-life + dollhouse-life ported with cute-nudged pools (toybot-scene-paths branch); 21 other paths use base architecture |
+| OceanBot | `oceanbot/` | Ocean / underwater / mermaid | 15 | ✅ `cycleAllPaths: true` — all 15 paths cycle before repeating; split lighting pools (underwater / surface / mermaid-specific) |
+| AncientBot | `ancientbot/` | Ancient civilizations / ruins | 14 | base |
+| DragonBot | `dragonbot/` | Epic fantasy / dragons | 8+ | ✅ scene-girls Pre-Raphaelite oil painting reference impl |
+| GothBot | `gothbot/` | Gothic dark / vampires | 6+ | ✅ closeup+full-body split + bannedPhrases reference impl |
+| MangaBot | `mangabot/` | Anime / Japanese | 4+ | base |
+| BloomBot | `bloombot/` | Flowers / botanical | 4+ | base |
+| EarthBot | `earthbot/` | Nature / landscape | 4+ | base |
+| TinyBot | `tinybot/` | Miniatures / dioramas | 4+ | base |
+| SteamBot | `steambot/` | Steampunk | 4+ | base |
+| CoquetteBot | `coquettebot/` | Cute feminine | 4+ | base |
+| PixelBot | `pixelbot/` | Retro pixel art | 4+ | base |
+| RetroBot | `retrobot/` | Retro / vaporwave | 4+ | base |
+| DinoBot | `dinobot/` | Dinosaurs / prehistoric | 4+ | base |
+| BeachBot | `beachbot/` | Beach / coastal | 4+ | base |
+| BrickBot | `brickbot/` | LEGO / brick art | 4+ | base |
+
+**Architecture status legend:**
+- **base** — uses path-builder + shared LIGHTING/ATMOSPHERES + may have 3 engine layers if migrated post-`80e22ab`
+- **✅ + features listed** — has the modern architecture stack (slot-pool DNA / spatial anchor / camera-pool / path-specific lighting / 3 layers / etc.)
+- The "base" bots are candidates for the modern-architecture upgrade pattern — see `Creating a New Bot From Scratch` and `The "Bring It Alive" Process`.
 
 ### Content Bots (Custom Scripts)
 
@@ -858,11 +1652,23 @@ Content bots use standalone scripts (NOT the V2 engine). See [Content Bots (Huma
 
 ### Reference Implementations
 
-- **StarBot** (`scripts/bots/starbot/`) — the most complex bot. 13 paths, cyborg-woman with closeup/full-body split, path-conditional rollSharedDNA, per-medium promptPrefix/Suffix overrides, per-medium mediumStyles, per-path modelByPath. Use as reference for any character-centric bot with environment paths.
+#### Modern architecture stack (slot-pool + spatial anchor + camera + path-specific lighting + 3 layers)
+
+- **ToyBot mech-toy-rampage** (`scripts/bots/toybot/paths/mech-toy-rampage.js`, toybot-scene-paths branch) — most complete modern reference impl. Slot-pool DNA (mech_archetypes, 200 entries), spatial-anchor composition lock (left/center/right), camera_angles roll, path-specific mech_lighting (100 entries — neon megacity / volcano / orbital), composition-stripped medium-style, cast block AFTER scene with "performing this scene" framing. ALL learnings from the 2026-05-02 ToyBot session encoded here.
+
+- **ToyBot plush-world** (`scripts/bots/toybot/paths/plush-world.js`, toybot-scene-paths branch) — reference for 30/70 solo-ensemble split. Solo branch suppresses spatial anchor and uses intimate-storybook composition. Ensemble branch uses standard slot-pool + spatial anchor.
+
+- **CuddleBot plushie-life** (`scripts/bots/cuddlebot/paths/plushie-life.js`, toybot-scene-paths branch) — reference for porting the modern stack to a different bot's brand. Reuses CuddleBot's existing CUTE_CREATURES + PLUSHIE_SCENES pools, generates new cute-nudged lighting + landscape pools, copies camera_angles in for idempotence.
+
+- **ToyBot space-saga-figures** (`scripts/bots/toybot/paths/space-saga-figures.js`, toybot-scene-paths branch) — reference for CHAOS LEVEL 11 multi-event scenes + single-color-source path-builders (skip scenePalette + colorPalette injection when path-specific lighting alone is enough).
+
+#### Legacy reference impls
+
+- **StarBot** (`scripts/bots/starbot/`) — 14 paths. Canonical impl of cyborg-man / cyborg-woman closeup-vs-full-body split, path-conditional rollSharedDNA, per-medium promptPrefix/Suffix overrides, per-medium mediumStyles, per-path modelByPath. Originator of the slot-pool DNA pattern (commit 7c09211). Originator of the 3 engine layers (commit 80e22ab).
 
 - **GothBot** (`scripts/bots/gothbot/`) — reference for mediumStyles (how to make each medium visually distinct for the bot's identity), bannedPhrases, and the scene-girls pattern (Pre-Raphaelite oil painting + 4-pool architecture + custom medium + pose-first actions).
 
-- **OceanBot** (`scripts/bots/oceanbot/`) — reference for `cycleAllPaths` shuffle-bag cycling (15 paths, all visited before any repeats), custom bot-scoped mediums (`maritime-oil-legend`, `maritime-oil-classic` for mermaid-legend path via `mediumByPath`), and split lighting pools (underwater vs. surface vs. mermaid-specific).
+- **OceanBot** (`scripts/bots/oceanbot/`) — reference for `cycleAllPaths` shuffle-bag cycling (15 paths, all visited before any repeats), custom bot-scoped mediums (`maritime-oil-legend`, `maritime-oil-classic` for mermaid-legend path via `mediumByPath`), and split lighting pools (underwater vs. surface vs. mermaid-specific) — predecessor to the path-specific-lighting pattern.
 
 ### Notes
 
