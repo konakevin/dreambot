@@ -76,6 +76,14 @@ module.exports = {
   MECH_TOY_LANDSCAPES: load('mech_toy_landscapes'),
   TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // mixed-medium, single pool
 
+  // ─── slot-pool DNA — rolled per render to force per-render variety ─
+  // (anti-bias: defeats Sonnet's training-default toward teddy-bear /
+  // muscle-car / humanoid-mecha / steam-engine repetition)
+  PLUSH_CREATURES: load('plush_creatures'),
+  HOTWHEELS_CARS: load('hotwheels_cars'),
+  MECH_ARCHETYPES: load('mech_archetypes'),
+  TRAIN_CONSISTS: load('train_consists'),
+
   // ─── shared ────────────────────────────────────────────────────────
   LIGHTING: load('lighting'),
   ATMOSPHERES: load('atmospheres'),

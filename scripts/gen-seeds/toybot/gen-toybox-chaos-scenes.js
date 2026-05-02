@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/toybox_chaos_scenes.json',
-  total: 200,
-  batch: 50,
+  total: 400,
+  batch: 15,
   metaPrompt: (n) => `Write ${n} TOYBOX-CHAOS scenes for ToyBot's toybox-chaos path. The toybox just got dumped. MIXED-MEDIUM ensemble — multiple toy types coexist on a real-world surface at REAL-WORLD scale. Size-mismatch IS the point. Each toy keeps its OWN native style. Each entry 20-32 words.
 
 ━━━ HARD RULES ━━━
@@ -36,6 +36,11 @@ LEGO minifigs (~1.5", studs, blocky), 3.75" action-figures (jointed), plush tedd
 - Each toy in own native medium language
 - Visible scale-mismatch
 - Mid-action narrative
+
+━━━ SCENE/SETTING DEDUP RULE (critical at 400 entries) ━━━
+- No two entries share the same SETTING + CORE-NARRATIVE combo
+- Vary settings: kid's bedroom floor, coffee table, playmat, garage floor, picnic blanket, kitchen counter, bathroom tile, stairs, shoe-rack closet, basement carpet, bookshelf top, dining table, garden patio, pool deck, attic, hallway runner, rug pattern, slipper line, sock pile, blanket fort, cardboard box, bath tub, sink, fireplace hearth, windowsill, desk top, dresser top, cereal box landscape, lego-pile mountain, backpack interior, lunch box arena, christmas tree base, halloween candy bowl, easter basket, birthday-cake centerpiece, sandbox, sandcastle, pillow fort, treehouse interior, cookie jar, fridge magnets cityscape
+- Vary core-narratives: raid / rescue / parade / wedding / election / heist / talent show / detective case / cooking competition / sports tournament / archaeological dig / fashion show / movie premiere / concert / fireworks / picnic / parade / hostage situation / gold rush / spy infiltration / royal coronation / pirate plunder / time-travel / dimensional portal / pet rescue / library scavenger hunt / lighthouse rescue / submarine voyage / circus train / haunted mansion exploration / scientific experiment / superhero origin / villain reveal / undercover sting / lost treasure dig / underwater adventure / castle siege / gladiator arena
 
 ━━━ BANNED ━━━
 - Unifying art style across the toys (each keeps its own)
