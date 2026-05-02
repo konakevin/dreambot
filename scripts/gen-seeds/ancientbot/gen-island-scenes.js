@@ -8,17 +8,15 @@ generatePool({
 
 Massive stone on windswept islands surrounded by endless ocean. These civilizations built monuments that seem impossible given their isolation — the mystery of HOW is part of every scene.
 
-━━━ CIVILIZATIONS TO DRAW FROM ━━━
-- Malta's megalithic temples (Ħaġar Qim, Mnajdra, Tarxien — oldest freestanding structures on Earth, 3600-2500 BC, limestone on sea-cliff edges)
-- Sardinia's nuraghe towers (Bronze Age stone towers dotting the island, 1900-730 BC, cone-shaped fortresses)
-- Cycladic island settlements (white-stone Aegean villages, 3200-2000 BC, marble figurines, terraced hillsides above blue sea)
-- Minoan Crete (Knossos, Phaistos — palatial complexes, frescoed walls, bull-horn symbols, harbor towns)
-- Cyprus Bronze Age (copper-trading harbors, stone fortifications, mixed Aegean-Levantine architecture)
-- Balearic Islands (taulas — T-shaped stone monuments, talayots — stone watchtowers, navetas — stone boat-shaped tombs, 1500-123 BC)
-- Easter Island / Rapa Nui (moai statues on volcanic coastline, ahu platforms facing inland, quarry at Rano Raraku — BEND RULES for this iconic culture)
-- Nan Madol, Micronesia (basalt-log city built on artificial islands in a lagoon, "Venice of the Pacific" — BEND RULES)
-- Tonga (Ha'amonga 'a Maui trilithon — Pacific Stonehenge, coral-block platforms)
-- Polynesian navigation culture (double-hulled voyaging canoes, star-navigation, stone marae platforms on volcanic shores)
+━━━ GEOGRAPHIC DISTRIBUTION — ISLAND / ARCHIPELAGO CIVILIZATIONS ONLY ━━━
+This pool is climate-locked to island and archipelago civilizations. Distribute across:
+- ~25% Polynesian (Easter Island Rapa Nui moai, pre-contact Hawaiian heiau temples, early Maori pa fortifications, Marquesas, Tahiti, Lapita Pacific outposts)
+- ~20% Aegean Greek + Minoan / Mycenaean (Santorini Akrotiri, Knossos Crete, Delos, Lesbos)
+- ~15% Japanese archipelago (Heian-era island shrines, early Buddhist island temples)
+- ~15% Indonesian / SE Asian island (Borobudur Java, Prambanan, Srivijaya Sumatra, Bali early temples)
+- ~10% Mediterranean island (Phoenician Cyprus, Roman Sicily, Etruscan Elba, Malta megalithic temples)
+- ~10% Caribbean / Pre-Columbian island (Taino, Calusa, Bahamian)
+- ~5% British Isles (Pictish brochs, Iron Age Hebridean, Skellig Michael Christian-monastic stone)
 
 ━━━ SCENE TYPES (mix across all) ━━━
 - Megalithic temples on sea cliffs (massive stone structures perched above crashing waves, ocean horizon behind)
@@ -36,10 +34,19 @@ Massive stone on windswept islands surrounded by endless ocean. These civilizati
 - MOSTLY pre-600 BC, with SELECTIVE exceptions for iconic island megalithic cultures
 - ALLOWED exceptions (these feel authentically ancient despite dates): Easter Island moai, Nan Madol, Tongan trilithon, Polynesian voyaging
 - Malta 3600-2500 BC ✓ | Sardinia nuraghe 1900-730 BC ✓ | Cycladic 3200-2000 BC ✓ | Minoan 2700-1450 BC ✓
-- NO medieval castles on islands, NO Greek classical temples (Doric/Ionic columns), NO Roman villas
 - NO modern harbors, NO sailing ships with multiple masts, NO cannon, NO glass windows
 - Materials: limestone, basalt, volcanic rock, coral blocks, timber, thatch, obsidian, shell, bone, copper
 - Construction should look PRIMITIVE-MONUMENTAL — massive stone moved by human labor, not refined engineering
+
+━━━ GEOGRAPHIC DISTRIBUTION — ISLAND / ARCHIPELAGO CIVILIZATIONS ONLY ━━━
+This pool is climate-locked to island and archipelago civilizations. Distribute across:
+- ~25% Polynesian (Easter Island Rapa Nui moai, pre-contact Hawaiian heiau temples, early Maori pa fortifications, Marquesas, Tahiti, Lapita Pacific outposts)
+- ~20% Aegean Greek + Minoan / Mycenaean (Santorini Akrotiri, Knossos Crete, Delos, Lesbos)
+- ~15% Japanese archipelago (Heian-era island shrines, early Buddhist island temples)
+- ~15% Indonesian / SE Asian island (Borobudur Java, Prambanan, Srivijaya Sumatra, Bali early temples)
+- ~10% Mediterranean island (Phoenician Cyprus, Roman Sicily, Etruscan Elba, Malta megalithic temples)
+- ~10% Caribbean / Pre-Columbian island (Taino, Calusa, Bahamian)
+- ~5% British Isles (Pictish brochs, Iron Age Hebridean, Skellig Michael Christian-monastic stone)
 
 ━━━ RULES ━━━
 - Each entry is ONE specific island scene with civilization and ocean baked in
@@ -48,7 +55,6 @@ Massive stone on windswept islands surrounded by endless ocean. These civilizati
 - Wind and weather are characters: salt spray, sea mist, wind-bent grass, dramatic island clouds
 - Light is dramatic: unobstructed ocean horizons mean BIG sunrises/sunsets, strong shadows, vivid sky color
 - 25-40 words
-- NO medieval, NO mainland cities, NO fantasy, NO Greek/Roman classical
 - Mix coastal and interior-island compositions, always with ocean context
 
 ━━━ OUTPUT ━━━

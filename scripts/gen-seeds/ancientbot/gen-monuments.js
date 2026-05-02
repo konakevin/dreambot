@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/monuments.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} MONUMENTAL STRUCTURE descriptions for AncientBot. Each entry is 15-25 words describing a single colossal ancient structure or megalithic site — the kind that makes humans feel small. Pre-600 BC ONLY.
+  metaPrompt: (n) => `You are writing ${n} MONUMENTAL STRUCTURE descriptions for AncientBot. Each entry is 15-25 words describing a single colossal ancient structure or megalithic site — the kind that makes humans feel small. Pre-1000 AD ancient global civilizations.
 
 The monument should DOMINATE the frame. Everything else is context for its scale.
 
@@ -17,6 +17,20 @@ The monument should DOMINATE the frame. Everything else is context for its scale
 - City walls and gates (Walls of Babylon, Ishtar Gate, Hattusa lion gates, Mycenae lion gate)
 - Dam and canal engineering (Marib Dam in Yemen, Sumerian canal headworks)
 
+━━━ GEOGRAPHIC DISTRIBUTION — NON-NEGOTIABLE ━━━
+The civilizations represented in these ${n} entries MUST be spread across the global ancient world. Distribute approximately:
+- ~25% Mesopotamian / Egyptian / Levantine (Sumer, Akkad, Babylon, Assyria, Hittite, Phoenician, Old/Middle/New Kingdom Egypt, Nubia/Kush)
+- ~20% East Asian (Shang/Zhou/Qin/Han/Tang/Song China; Yayoi/Kofun/Asuka/Nara/Heian Japan; Three Kingdoms / Goryeo Korea)
+- ~15% Pre-Columbian Americas (Olmec, Maya Pre-Classic + Classic, Teotihuacan, Toltec, Aztec, Inca, Moche, Nazca, Tiwanaku)
+- ~10% Southeast Asian (Khmer / Angkor, Champa, Pyu, Srivijaya, Java)
+- ~10% Persian / Steppe (Achaemenid, Parthian, Sassanian, Scythian, Saka, Xiongnu)
+- ~10% Greco-Roman (Minoan, Mycenaean, Archaic + Classical Greece, Hellenistic, Roman Republic + Empire, Etruscan)
+- ~5% African (Aksum, Great Zimbabwe, Mali, Carthage, Ghana, Benin)
+- ~3% Celtic / Norse (La Tène Celts, Hallstatt, Pictish, Norse pre-Viking and Viking-Age)
+- ~2% Polynesian / Pacific (Easter Island Rapa Nui, pre-contact Hawaiian, early Maori, Lapita)
+
+Every region above must appear at least once.
+
 ━━━ RULES ━━━
 - Each entry describes ONE specific monument or megalithic site
 - Include a sense of SCALE — mention tiny human figures, surrounding landscape, sky
@@ -24,7 +38,7 @@ The monument should DOMINATE the frame. Everything else is context for its scale
 - Others shown COMPLETE at their peak (painted, gilded, with ceremonial activity)
 - Vary across all civilizations, not just Egypt
 - 15-25 words
-- NO medieval, NO Greek/Roman Parthenon/Colosseum, NO fantasy
+- NO European-medieval (no knights, no plate armor, no flying buttresses, no Gothic stained glass), NO fantasy magic
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

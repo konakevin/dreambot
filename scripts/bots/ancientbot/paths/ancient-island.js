@@ -16,6 +16,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ANCIENT_WORLD_BLOCK}
 
+${blocks.IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK}
+
 ━━━ PERIOD CONSTRAINTS — ISLANDS ━━━
 MOSTLY pre-600 BC with selective exceptions for iconic island megalithic cultures that FEEL authentically ancient. Malta 3600-2500 BC, Sardinia nuraghe 1900-730 BC, Cycladic 3200-2000 BC, Minoan Crete 2700-1450 BC, Balearic Islands 1500 BC. ALLOWED EXCEPTIONS: Easter Island moai, Nan Madol, Tongan trilithon, Polynesian voyaging — these cultures feel timeless and ancient. NO medieval island castles, NO Greek classical temples (Doric/Ionic columns), NO Roman villas, NO sailing ships with multiple masts. Materials: limestone, basalt, volcanic rock, coral blocks, timber, thatch, obsidian, shell, bone, copper. Construction is PRIMITIVE-MONUMENTAL — massive stone moved by human labor.
 

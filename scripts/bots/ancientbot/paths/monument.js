@@ -6,9 +6,7 @@
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const civilization = picker.pickWithRecency(pools.CIVILIZATIONS, 'civilization');
-  const monument = picker.pickWithRecency(pools.MONUMENTS, 'monument');
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {  const monument = picker.pickWithRecency(pools.MONUMENTS, 'monument');
   const archDetail = picker.pickWithRecency(pools.ARCHITECTURAL_DETAILS, 'arch_detail');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
@@ -17,10 +15,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ANCIENT_WORLD_BLOCK}
 
-${blocks.MONUMENTAL_SCALE_BLOCK}
+${blocks.IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK}
 
-━━━ CIVILIZATION ━━━
-${civilization}
+${blocks.MONUMENTAL_SCALE_BLOCK}
 
 ━━━ THE MONUMENT ━━━
 ${monument}
