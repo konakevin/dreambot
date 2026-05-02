@@ -31,6 +31,23 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — TOY AMPLIFICATION ━━━
 
 Stack medium-signature detail to the max: LEGO studs + printed minifig faces + transparent brick-water; clay fingerprints + painted-eyes + subtle thumb-marks; vinyl glossy sheen + oversized head + matte-paint panel-lines; action-figure joint-articulation + weathered paint + explosion effects; stitched fabric textures + button-eyes + yarn-hair + visible stitching-seams. Every render is obsessive medium-craft.`;
 
+// Anti-human-leak rule for action-figure paths. Sonnet/Flux otherwise read
+// archetype words ("priestess", "warrior", "ninja") + skin/flesh language
+// as REAL HUMANS instead of plastic action figures. Collector-shelf-epic
+// hit this on a "voodoo priestess" entry — rendered as a human with violet
+// skin instead of an articulated plastic figure with painted skin-tone.
+const ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK = `━━━ ANTI-HUMAN-LEAK — FIGURE IS PLASTIC ━━━
+
+Every figure in the scene is a PLASTIC ACTION FIGURE, not a real person. Anchor that with toy-medium language INSIDE the figure description, not just in the medium prefix.
+
+REQUIRE these words about the figure: molded, painted, sculpted, cast, articulated, ball-jointed, plastic, vinyl, weathered (paint), primer (chips), 1/12-scale.
+
+FORBID these words about the figure: "skin" (use "painted skin-tone" or "plastic skin-tone"), "flesh", "real eyes", "wet eyes", "tears", "sweat", "breath", "alive", "her face" / "his face" alone (use "painted face" or "sculpted face").
+
+If the archetype is a person (priestess, warrior, ninja, knight, etc.), ALWAYS attach "action figure" / "1/12-scale plastic figure" / "articulated figurine" so Flux renders the toy, not a human.
+
+The figure is OPENLY ARTIFICIAL — ball-joints showing, primer-chip weathering, brushwork visible, oversized accessories at scale. Embrace plastic-toy language throughout.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -39,4 +56,5 @@ module.exports = {
   DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK,
   PATH_MEDIUM_LOCK_BLOCK,
   BLOW_IT_UP_BLOCK,
+  ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK,
 };

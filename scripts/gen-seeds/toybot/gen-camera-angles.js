@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/camera_angles.json',
-  total: 60,
-  batch: 30,
+  total: 200,
+  batch: 25,
   metaPrompt: (n) => `Write ${n} camera-angle / lens / framing descriptors for toy-photography dioramas. Each entry = ONE specific camera setup (angle + framing + optional lens cue), written as comma-separated phrases. 8-18 words per entry.
 
 ━━━ HARD ANTI-BIAS RULES ━━━

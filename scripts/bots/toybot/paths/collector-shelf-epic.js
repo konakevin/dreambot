@@ -19,6 +19,8 @@ ${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
 
 ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 
+${blocks.ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK}
+
 ━━━ ACTION-FIGURE MEDIUM LOCK ━━━
 80s/90s action-figure plastic. Joint-articulation visible at hips/shoulders. Painted details. Weathered paint OK. Explosion effects practical.
 
