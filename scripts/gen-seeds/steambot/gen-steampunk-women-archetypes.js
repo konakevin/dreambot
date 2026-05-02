@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_archetypes.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} STEAMPUNK FEMALE ARCHETYPE descriptions for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (8-15 words) describing WHO this steampunk woman IS — her role, her competence, her edge. NOT what she looks like — WHO she is. These compose with separate makeup/wardrobe/hair/skin/eyes pools.
 

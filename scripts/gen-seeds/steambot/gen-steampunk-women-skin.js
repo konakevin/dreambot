@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_skin.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} SKIN-DESCRIPTION entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-20 words) describing the EXACT visual texture of her skin in steampunk light — how light hits it, where shadow pools, what tones it carries.
 

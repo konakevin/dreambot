@@ -13,9 +13,11 @@ const PROMPT_SUFFIX =
 
 const ANCIENT_WORLD_BLOCK = `━━━ THE ANCIENT WORLD ━━━
 
-This is the REAL ancient world — pre-600 BC. Bronze Age and earlier. These civilizations ACTUALLY EXISTED. Every detail must be archaeologically plausible: mud-brick and limestone walls, cedar and acacia timber, bronze and copper tools, lapis lazuli and carnelian inlay, gold leaf on carved reliefs, alabaster vessels, reed-and-bitumen waterproofing, painted plaster walls in vivid mineral pigments.
+This is the REAL ancient world — pre-1000 AD pre-modern global civilizations from across every continent. Bronze Age, Iron Age, Classical Antiquity, and the great early-medieval Asian / African / Pre-Columbian / Pacific civilizations all qualify. The test: does it feel mythic-ancient and pre-industrial? If yes, it qualifies.
 
-The goal is AWE — the viewer should feel transported 4000 years into the past, standing before something monumental that real human hands built. NOT fantasy. NOT medieval. NOT Roman or Greek classical. OLDER.`;
+Every detail must be archaeologically plausible. Use period-appropriate materials (mud-brick, limestone, sandstone, granite, jade, bronze, copper, iron-where-appropriate, cedar, acacia, lacquered wood, papyrus, vellum, painted plaster, gold leaf, lapis lazuli, carnelian, jadeite, obsidian) and period-appropriate construction techniques (corbel-arches, post-and-lintel, ziggurat-stepping, Chinese tou-kung bracketing, Khmer corbel-vault, Mesoamerican pyramid-platform, Roman concrete-and-brick, Persian iwan).
+
+The goal is AWE — the viewer should feel transported deep into the past, standing before something monumental that real human hands built. NOT fantasy. NOT European medieval (no knights, no plate armor, no flying buttresses, no stained glass). NOT modern.`;
 
 const HUMAN_ACTIVITY_BLOCK = `━━━ BACKGROUND HUMAN ACTIVITY ━━━
 
@@ -31,13 +33,32 @@ Push EVERYTHING to maximum. Layer atmospheric depth — heat shimmer, incense sm
 
 const PERIOD_ACCURACY_BLOCK = `━━━ PERIOD ACCURACY — HARD BANS ━━━
 
-- NO medieval elements (castles, knights, pointed arches, stained glass, plate armor)
-- NO Roman/Greek classical architecture (Corinthian columns, marble temples, amphitheaters)
-- NO pointed arches, NO flying buttresses, NO glass windows
-- NO steel, NO concrete, NO iron (this is the BRONZE Age)
-- NO fantasy magic, NO dragons, NO glowing runes, NO floating objects
-- NO modern clothing, NO modern materials
-- Materials MUST be period-accurate: mud-brick, fired brick, limestone, sandstone, granite, cedar, acacia, bronze, copper, gold, lapis lazuli, carnelian, alabaster, reed, papyrus, bitumen, obsidian, flint`;
+- NO European-medieval elements (NO knights in plate armor, NO flying buttresses, NO Gothic stained glass, NO pointed-arch cathedrals)
+- NO industrial-modern materials (NO modern steel beams, NO modern concrete, NO float glass, NO plastic)
+- NO fantasy magic (NO dragons, NO glowing runes, NO floating objects, NO wizards)
+- NO modern clothing, NO modern infrastructure (NO cars, NO power-lines, NO asphalt)
+
+PERIOD-APPROPRIATE materials by era and region:
+- Mesopotamian / Egyptian: mud-brick, fired brick, limestone, sandstone, granite, cedar, acacia, bronze, copper, gold, lapis lazuli, carnelian, alabaster, reed, papyrus, bitumen
+- Greco-Roman: marble, travertine, brick, Roman-concrete (opus caementicium), bronze, iron, terracotta, painted plaster, mosaic
+- East Asian (China/Japan/Korea): rammed-earth, fired-brick, hand-shaped tile, lacquered cedar/cypress, jade, jadeite, bronze, iron, gold, painted silk, paper-and-wood lattice screens
+- Khmer / SE Asian: laterite, sandstone, brick, palm-thatch, lacquered teak, gilded bronze
+- Pre-Columbian: limestone, andesite, basalt, jade, jadeite, obsidian, gold, turquoise, painted stucco, woven feathers
+- Persian: glazed tile, fired brick, stone, painted gypsum, gold inlay
+- Norse / Celtic: timber, thatch, iron, bronze, antler, leather
+- African (Aksum, Mali, Zimbabwe): hewn-stone (Aksumite stelae), mud-brick (Mali), drystone (Zimbabwe), gold, ivory
+- Polynesian: basalt (Easter Island), volcanic stone, palm-thatch, woven mats, carved wood`;
+
+
+const PAINTERLY_HISTORICAL_BLOCK = `━━━ PAINTERLY HISTORICAL REGISTER (LOCK) ━━━
+
+The render IS a painting. Visible brushwork, painterly edges, museum-canvas surface. Concept-art-painting / matte-painting / illustrated-history-book / National-Geographic-painting / oil-on-board / Met-Museum-canvas register ONLY. The image should look hand-painted by an academic master OR a great book-cover illustrator.
+
+Hard bans on the wrong register: NEVER photoreal-tourist-snapshot, NEVER 3D-render-archaeology-reconstruction, NEVER cheap-Hollywood-stage-set, NEVER drone-footage-aesthetic, NEVER video-game-screenshot, NEVER AI-rendered-glossiness.`;
+
+const IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK = `━━━ IMPOSSIBLE BEAUTY — ANCIENT EDITION ━━━
+
+Smithsonian-magazine-cover × 10. Met-Museum exhibition-catalog-cover quality. The kind of painting commissioned for a National-Geographic-Society retrospective on lost civilizations. Wall-poster gorgeous — the kind of image someone would buy as a print and frame above their desk. Dense detail, masterful composition. Every render is the chapter-opener illustration of a great history book.`;
 
 module.exports = {
   PROMPT_PREFIX,
@@ -47,4 +68,6 @@ module.exports = {
   MONUMENTAL_SCALE_BLOCK,
   BLOW_IT_UP_BLOCK,
   PERIOD_ACCURACY_BLOCK,
+  PAINTERLY_HISTORICAL_BLOCK,
+  IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK,
 };

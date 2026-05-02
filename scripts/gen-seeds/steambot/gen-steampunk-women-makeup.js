@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_makeup.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} MAKEUP entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (12-22 words) describing INTENTIONAL, SOOT-ADJACENT, BRASS-WORLD makeup — these women aren't fashion-magazine glossy, they're working-class-glamour, machinist-chic, weathered-and-deliberate.
 

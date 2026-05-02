@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_accessories.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} ACCESSORY entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (8-16 words) describing ONE signature accessory she's wearing or carrying — the small detail that makes her unmistakably HER.
 

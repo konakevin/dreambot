@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_hairstyles.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle — including the Victorian / mechanical / aviation / forge-context details that make it unmistakably steampunk.
 

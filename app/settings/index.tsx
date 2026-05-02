@@ -399,6 +399,12 @@ export default function SettingsScreen() {
           />
         </View>
 
+        {/* Bots */}
+        <Text style={styles.sectionHeader}>BOTS</Text>
+        <View style={styles.section}>
+          <SettingsRow icon="planet" label="Bots" onPress={() => nav.push('/settings/bots')} />
+        </View>
+
         {/* Dream Engine */}
         <Text style={styles.sectionHeader}>DREAM ENGINE</Text>
         <View style={styles.section}>

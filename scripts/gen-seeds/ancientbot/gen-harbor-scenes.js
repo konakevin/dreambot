@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/harbor_scenes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} ANCIENT HARBOR / PORT scene descriptions for AncientBot. Each entry is 15-25 words describing a bustling ancient harbor, port, or maritime trade scene. Pre-600 BC civilizations ONLY.
+  metaPrompt: (n) => `You are writing ${n} ANCIENT HARBOR / PORT scene descriptions for AncientBot. Each entry is 15-25 words describing a bustling ancient harbor, port, or maritime trade scene. Pre-1000 AD ancient global civilizations.
 
 Harbors are where civilizations MEET — goods, languages, ideas flowing between cultures. These scenes should feel ALIVE with commerce and connection.
 
@@ -17,6 +17,16 @@ Harbors are where civilizations MEET — goods, languages, ideas flowing between
 - Byblos harbor (ancient cedar trade to Egypt, stone quays, Pharaoh's ships)
 - Coastal Phoenician colonies (early Carthage, trading posts along Mediterranean)
 - Nile delta ports (ship-building yards, rope-making, sail-cloth weaving)
+
+━━━ GEOGRAPHIC DISTRIBUTION — COASTAL / HARBOR CIVILIZATIONS ONLY ━━━
+This pool is climate-locked to coastal port civilizations. Distribute across:
+- ~25% Phoenician + Carthaginian (Tyre, Sidon, Byblos, Carthage cothon harbors)
+- ~20% Greco-Roman (Piraeus, Ostia, Alexandria, Roman Empire ports)
+- ~15% East Asian coastal (Tang/Song Quanzhou + Guangzhou, Heian Japan ports, Goryeo Korea)
+- ~15% Southeast Asian (Khmer Tonle Sap port-cities, Srivijaya Palembang, Champa coastal temples)
+- ~10% Egyptian / Mesopotamian river-mouth (Nile delta ports, Indus Valley Lothal dockyard, Eridu)
+- ~10% East African (Aksum Adulis, Swahili coast pre-1000)
+- ~5% Norse / Viking (Hedeby, Birka, longship-harbors)
 
 ━━━ RULES ━━━
 - Each entry is ONE vivid harbor/port scene

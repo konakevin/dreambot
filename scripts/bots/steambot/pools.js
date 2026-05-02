@@ -52,6 +52,18 @@ module.exports = {
   STEAMPUNK_WOMEN_HAIRSTYLES: load('steampunk_women_hairstyles'),
   STEAMPUNK_WOMEN_WARDROBE: load('steampunk_women_wardrobe'),
   STEAMPUNK_WOMEN_ACCESSORIES: load('steampunk_women_accessories'),
+  // Slot-pool DNA for steampunk-man path (mirrors female axis architecture,
+  // adapted for handsome period-accurate Victorian-industrial men).
+  // Replaces women's MAKEUP axis with male-specific FACIAL_HAIR.
+  STEAMPUNK_MEN_ARCHETYPES: load('steampunk_men_archetypes'),
+  STEAMPUNK_MEN_SKIN: load('steampunk_men_skin'),
+  STEAMPUNK_MEN_EYES: load('steampunk_men_eyes'),
+  STEAMPUNK_MEN_FACIAL_HAIR: load('steampunk_men_facial_hair'),
+  STEAMPUNK_MEN_HAIR_COLOR: load('steampunk_men_hair_color'),
+  STEAMPUNK_MEN_HAIRSTYLES: load('steampunk_men_hairstyles'),
+  STEAMPUNK_MEN_WARDROBE: load('steampunk_men_wardrobe'),
+  STEAMPUNK_MEN_ACCESSORIES: load('steampunk_men_accessories'),
+  STEAMPUNK_MEN_CANDID_MOMENTS: load('steampunk_men_candid_moments'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

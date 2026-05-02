@@ -3,6 +3,10 @@
  * Slot-pool DNA (CUTE_CREATURES rolled per render) + spatial anchor +
  * path-specific cute-cozy lighting + camera-angle variety.
  * 30% solo (intimate tender hero portrait) / 70% ensemble (3-5 plushies together).
+ *
+ * NOTE: this path uses TOY-PHOTOGRAPHY blocks, NOT cuddlebot's stylized
+ * blocks — intentional brand-break to deliver toybot toy-photo aesthetic.
+ * Medium locked to plush_fabric in cuddlebot/index.js mediumByPath.
  */
 
 const pools = require('../pools');
@@ -17,7 +21,6 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: 30% solo (1 plushie) / 70% ensemble (3-5 plushies).
-  // Solo branch = intimate tender hero. Ensemble = group cozy adventure.
   const isSolo = Math.random() < 0.3;
   const castSize = isSolo ? 1 : 3 + Math.floor(Math.random() * 3);
   const cast = [];

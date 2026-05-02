@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/quiet_scenes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} INTIMATE QUIET ANCIENT SCENE descriptions for AncientBot. Each entry is 25-40 words describing a specific small, warm, intimate corner of the ancient world. Pre-600 BC ONLY.
+  metaPrompt: (n) => `You are writing ${n} INTIMATE QUIET ANCIENT SCENE descriptions for AncientBot. Each entry is 25-40 words describing a specific small, warm, intimate corner of the ancient world. Pre-1000 AD ancient global civilizations.
 
 These are COZY and INTIMATE — the viewer should want to SIT DOWN in this space. NOT grand, NOT monumental — personal, warm, lived-in. The small human spaces tucked inside or alongside great civilizations.
 
@@ -25,13 +25,27 @@ These are COZY and INTIMATE — the viewer should want to SIT DOWN in this space
 - Lookout post on city wall (guard's reed mat, water skin, bronze spear leaning on mudbrick, distant campfires)
 - Child's sleeping corner (small woven mat, clay animal toy, oil lamp turned low, parent's loom nearby)
 
+━━━ GEOGRAPHIC DISTRIBUTION — NON-NEGOTIABLE ━━━
+The civilizations represented in these ${n} entries MUST be spread across the global ancient world. Distribute approximately:
+- ~25% Mesopotamian / Egyptian / Levantine (Sumer, Akkad, Babylon, Assyria, Hittite, Phoenician, Old/Middle/New Kingdom Egypt, Nubia/Kush)
+- ~20% East Asian (Shang/Zhou/Qin/Han/Tang/Song China; Yayoi/Kofun/Asuka/Nara/Heian Japan; Three Kingdoms / Goryeo Korea)
+- ~15% Pre-Columbian Americas (Olmec, Maya Pre-Classic + Classic, Teotihuacan, Toltec, Aztec, Inca, Moche, Nazca, Tiwanaku)
+- ~10% Southeast Asian (Khmer / Angkor, Champa, Pyu, Srivijaya, Java)
+- ~10% Persian / Steppe (Achaemenid, Parthian, Sassanian, Scythian, Saka, Xiongnu)
+- ~10% Greco-Roman (Minoan, Mycenaean, Archaic + Classical Greece, Hellenistic, Roman Republic + Empire, Etruscan)
+- ~5% African (Aksum, Great Zimbabwe, Mali, Carthage, Ghana, Benin)
+- ~3% Celtic / Norse (La Tène Celts, Hallstatt, Pictish, Norse pre-Viking and Viking-Age)
+- ~2% Polynesian / Pacific (Easter Island Rapa Nui, pre-contact Hawaiian, early Maori, Lapita)
+
+Every region above must appear at least once.
+
 ━━━ RULES ━━━
 - Each entry is ONE specific intimate scene with civilization baked in (name the culture or city)
 - SMALL SCALE — personal objects, single light source, close framing
 - Include specific period-accurate OBJECTS that make it feel lived-in (clay tablets, bronze tools, linen, reed matting, ceramic vessels)
 - Include warmth — a light source, a texture, a sense of human presence even if no humans shown
 - 25-40 words each
-- NO medieval, NO Greek/Roman, NO fantasy
+- NO European-medieval (no knights, no plate armor, no flying buttresses, no Gothic stained glass), NO fantasy magic
 - Wide variety — NOT all workshops, NOT all scribes, spread across all scene types
 
 ━━━ OUTPUT ━━━
