@@ -1,32 +1,20 @@
 /**
- * Meet the Bots — onboarding screen shown ONCE after the user posts their
- * first dream. Replaces the small bottom-sheet preview with a full
- * showcase of every bot: avatar, tagline, 3 sample post thumbnails,
- * Follow button.
+ * Settings → Bots — management surface for the user's bot follows.
  *
- * Order: bots curated to the user's selected aesthetics first (using the
- * existing `curateBotsForAesthetics` scoring), then alphabetical for the
- * rest. Tapping a thumbnail opens that bot's profile.
+ * Mirrors the onboarding meet-the-bots screen (same BotCard layout, same
+ * 3-thumbnail preview, same Follow toggle), but framed inside ScreenLayout
+ * so it's accessible any time from the settings screen rather than as a
+ * one-shot post-onboarding showcase.
  *
- * One-time gating: same AsyncStorage flag as the legacy sheet
- * (`dreambot.seenBotIntro.v1`). The flag is set the moment the user
- * lands on this screen so they can't get re-trapped if they kill the
- * app mid-flow.
+ * Ordering: bots the user already follows first, then aesthetics-curated
+ * recommendations, then alphabetical for everything else. This makes it
+ * useful as a management surface — you can immediately see who you follow.
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
-import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScreenLayout } from '@/components/ScreenLayout';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { isVibeProfile } from '@/types/vibeProfile';
@@ -38,9 +26,7 @@ import { curateBotsForAesthetics } from '@/lib/curatedBots';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
 
-const SEEN_BOT_INTRO_KEY = 'dreambot.seenBotIntro.v1';
-
-export default function MeetTheBotsScreen() {
+export default function SettingsBotsScreen() {
   const user = useAuthStore((s) => s.user);
   const { data: allBots = [], isLoading: botsLoading } = useBotUsers();
   const { data: thumbnails } = useBotThumbnails(3);
@@ -49,7 +35,6 @@ export default function MeetTheBotsScreen() {
 
   const [aesthetics, setAesthetics] = useState<string[]>([]);
   const [profileLoaded, setProfileLoaded] = useState(false);
-  // Fullscreen image viewer state — null when closed, otherwise the urls + which one was tapped
   const [viewer, setViewer] = useState<{ urls: string[]; initialIndex: number } | null>(null);
 
   const openViewer = useCallback((urls: string[], initialIndex: number) => {
@@ -58,12 +43,6 @@ export default function MeetTheBotsScreen() {
   }, []);
   const closeViewer = useCallback(() => {
     setViewer(null);
-  }, []);
-
-  // Mark the screen as seen the moment we render — this is the user's
-  // explicit visit, even if they bounce out without following anyone.
-  useEffect(() => {
-    AsyncStorage.setItem(SEEN_BOT_INTRO_KEY, '1').catch(() => {});
   }, []);
 
   // Pull the user's aesthetics so we can sort the bot list by relevance.
@@ -96,42 +75,45 @@ export default function MeetTheBotsScreen() {
     };
   }, [user]);
 
-  // Curated-first ordering: top recommendations from the user's aesthetics,
-  // then everything else alphabetical for stable layout. Dedupe by id.
+  // Followed-first ordering: bots you already follow up top, then aesthetics-
+  // curated recommendations, then everything else alphabetical. Dedupe by id.
+  // Different from meet-the-bots (which leads with curated) — here you usually
+  // want to see who you're already following first so you can manage.
   const orderedBots = useMemo<BotUser[]>(() => {
     if (allBots.length === 0) return [];
+    const followed = allBots
+      .filter((b) => followingSet.has(b.id))
+      .sort((a, b) => a.username.localeCompare(b.username));
+
     const recommended = curateBotsForAesthetics(aesthetics);
     const byUsername = new Map(allBots.map((b) => [b.username.toLowerCase(), b]));
 
-    const seen = new Set<string>();
-    const head: BotUser[] = [];
+    const seen = new Set<string>(followed.map((b) => b.id));
+    const recommendedTier: BotUser[] = [];
     for (const u of recommended) {
       const b = byUsername.get(u.toLowerCase());
       if (b && !seen.has(b.id)) {
-        head.push(b);
+        recommendedTier.push(b);
         seen.add(b.id);
       }
     }
     const tail = [...allBots]
       .filter((b) => !seen.has(b.id))
       .sort((a, b) => a.username.localeCompare(b.username));
-    return [...head, ...tail];
-  }, [allBots, aesthetics]);
-
-  function handleDone() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    router.replace('/(tabs)');
-  }
+    return [...followed, ...recommendedTier, ...tail];
+  }, [allBots, aesthetics, followingSet]);
 
   const isLoading = botsLoading || !profileLoaded;
+  const followingCount = allBots.filter((b) => followingSet.has(b.id)).length;
 
   return (
-    <SafeAreaView style={s.root}>
-      <View style={s.header}>
-        <Text style={s.title}>Meet the bots</Text>
+    <ScreenLayout header="back" title="Bots">
+      <View style={s.subtitleWrap}>
         <Text style={s.subtitle}>
-          Each bot has its own taste. Follow the ones whose style speaks to you — their dreams will
-          land in your feed alongside everyone else&apos;s.
+          Follow the bots whose taste speaks to you — their dreams will land in your feed.{' '}
+          {followingCount > 0
+            ? `Following ${followingCount} of ${allBots.length}.`
+            : `${allBots.length} available.`}
         </Text>
       </View>
 
@@ -142,7 +124,7 @@ export default function MeetTheBotsScreen() {
       ) : (
         <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
           {orderedBots.length === 0 ? (
-            <Text style={s.emptyText}>No bots available right now. Skip ahead.</Text>
+            <Text style={s.emptyText}>No bots available right now.</Text>
           ) : (
             orderedBots.map((bot) => (
               <BotCard
@@ -157,12 +139,6 @@ export default function MeetTheBotsScreen() {
         </ScrollView>
       )}
 
-      <View style={s.footer}>
-        <TouchableOpacity style={s.doneBtn} onPress={handleDone} activeOpacity={0.7}>
-          <Text style={s.doneBtnText}>Take me to my feed</Text>
-        </TouchableOpacity>
-      </View>
-
       {viewer && (
         <BotImageViewer
           urls={viewer.urls}
@@ -170,25 +146,14 @@ export default function MeetTheBotsScreen() {
           onClose={closeViewer}
         />
       )}
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }
 
 const s = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  header: {
+  subtitleWrap: {
     paddingHorizontal: 24,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  title: {
-    color: colors.textPrimary,
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 8,
+    paddingBottom: 12,
   },
   subtitle: {
     color: colors.textSecondary,
@@ -210,23 +175,5 @@ const s = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     paddingVertical: 30,
-  },
-  footer: {
-    paddingHorizontal: 24,
-    paddingTop: 12,
-    paddingBottom: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  doneBtn: {
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  doneBtnText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '800',
   },
 });
