@@ -25,6 +25,13 @@ const pathBuilders = {
   'jungle-canopy': require('./paths/jungle-canopy'),
   'snowy-arctic': require('./paths/snowy-arctic'),
   'night-meadow': require('./paths/night-meadow'),
+  'aquatic-village': require('./paths/aquatic-village'),
+  'jungle-village': require('./paths/jungle-village'),
+  'arctic-village': require('./paths/arctic-village'),
+  'twilight-village': require('./paths/twilight-village'),
+  'sunny-pair': require('./paths/sunny-pair'),
+  'sunny-village': require('./paths/sunny-village'),
+  'cozy-interior': require('./paths/cozy-interior'),
 };
 
 module.exports = {
@@ -79,12 +86,23 @@ module.exports = {
     'jungle-canopy',
     'snowy-arctic',
     'night-meadow',
+    'aquatic-village',
+    'jungle-village',
+    'arctic-village',
+    'twilight-village',
+    'sunny-pair',
+    'sunny-village',
+    'cozy-interior',
   ],
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
-  // All 15 paths roll equally (~6.7% each).
+  // All 22 paths roll equally (~4.5% each). Architecture is a 2-axis
+  // matrix: 6 outdoor biomes (cottagecore, sunny, aquatic, jungle, arctic,
+  // twilight) × 2 modes (creature-pair + cozy-village) plus 10 non-matrix
+  // paths (biome-agnostic + interior-moment + temperate-action +
+  // cozy-interior space).
   pathWeights: {
     'heartwarming-scene': 1,
     'cozy-landscape': 1,
@@ -101,15 +119,22 @@ module.exports = {
     'jungle-canopy': 1,
     'snowy-arctic': 1,
     'night-meadow': 1,
+    'aquatic-village': 1,
+    'jungle-village': 1,
+    'arctic-village': 1,
+    'twilight-village': 1,
+    'sunny-pair': 1,
+    'sunny-village': 1,
+    'cozy-interior': 1,
   },
 
   // Chaos layer — light touch for cute bots. Subject chaos OFF for
-  // creature-centric paths (don't distort the cute silhouette). Scenery
-  // + storybook + night-meadow paths get scene-channel chaos.
+  // creature-centric paths (don't distort the cute silhouette). All
+  // village + scenery + storybook + cozy-interior paths get subject-chaos.
   chaos: {
     enabled: true,
     skipPaths: [],
-    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core', 'night-meadow'],
+    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core', 'night-meadow', 'aquatic-village', 'jungle-village', 'arctic-village', 'twilight-village', 'sunny-village', 'cozy-interior'],
   },
 
   // Two-pass Sonnet→Haiku polish.
@@ -141,6 +166,13 @@ module.exports = {
       'jungle-canopy': 'creature',
       'snowy-arctic': 'creature',
       'night-meadow': 'scene',
+      'aquatic-village': 'scene',
+      'jungle-village': 'scene',
+      'arctic-village': 'scene',
+      'twilight-village': 'scene',
+      'sunny-pair': 'creature',
+      'sunny-village': 'scene',
+      'cozy-interior': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
