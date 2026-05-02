@@ -190,16 +190,17 @@ Deno.serve(async (req) => {
   // If the recipe is null/missing/malformed, fall through to the existing
   // style_summary path (zero regression).
   let dltReplayActive = false;
+  let dltReplayAnchors: ReturnType<typeof resolveRecipeAnchors> | null = null;
   if (dlt_recipe !== undefined && dlt_recipe !== null) {
     const validRecipe = validateRecipe(dlt_recipe);
     if (validRecipe) {
-      const anchors = resolveRecipeAnchors(validRecipe);
-      medium_key = anchors.mediumKey;
-      vibe_key = anchors.vibeKey;
-      force_model = force_model || anchors.model; // body force_model still wins for tests
+      dltReplayAnchors = resolveRecipeAnchors(validRecipe);
+      medium_key = dltReplayAnchors.mediumKey;
+      vibe_key = dltReplayAnchors.vibeKey;
+      force_model = force_model || dltReplayAnchors.model; // body force_model still wins for tests
       dltReplayActive = true;
       console.log(
-        `[generate-dream] DLT recipe-replay active: medium=${anchors.mediumKey} vibe=${anchors.vibeKey} model=${anchors.model}`
+        `[generate-dream] DLT recipe-replay active: medium=${dltReplayAnchors.mediumKey} vibe=${dltReplayAnchors.vibeKey} model=${dltReplayAnchors.model}`
       );
     } else {
       console.warn(
@@ -313,8 +314,33 @@ Deno.serve(async (req) => {
     const vibeProfile = vibe_profile as VibeProfile | undefined;
 
     // Resolve medium and vibe to real curated entries — never store placeholders
-    const medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
+    let medium = await resolveMediumFromDb(medium_key, vibeProfile?.art_styles);
     const vibe = await resolveVibeFromDb(vibe_key, vibeProfile?.aesthetics);
+
+    // DLT recipe-replay: if the source post used a bot-internal medium that
+    // isn't registered in dream_mediums (e.g. plush_fabric, dollhouse_figures,
+    // model_train_diorama), resolveMediumFromDb falls back to canvas. The
+    // recipe's medium_style_override has the actual look anchor — synthesize
+    // a medium object so the look reproduces faithfully without requiring
+    // every bot-internal medium to be registered in DB.
+    if (dltReplayActive && dltReplayAnchors && medium.key !== dltReplayAnchors.mediumKey) {
+      const override = dltReplayAnchors.mediumStyleOverride;
+      if (override) {
+        medium = {
+          ...medium, // inherit safe defaults (face_swaps, render_mode, etc.) from canvas
+          key: dltReplayAnchors.mediumKey,
+          label: dltReplayAnchors.mediumKey,
+          directive: override,
+          fluxFragment: override,
+        };
+        console.log(
+          `[generate-dream] DLT recipe-replay synthesized medium "${dltReplayAnchors.mediumKey}" from recipe override (DB had no entry)`
+        );
+        // Strip the fallback reason — we recovered correctly via recipe override
+        const idx = fallbackReasons.findIndex((r) => r.startsWith('unknown_medium_key:'));
+        if (idx >= 0) fallbackReasons.splice(idx, 1);
+      }
+    }
 
     resolvedMediumKey = medium.key;
     resolvedVibeKey = vibe.key;
