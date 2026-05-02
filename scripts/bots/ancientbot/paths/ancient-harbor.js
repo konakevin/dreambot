@@ -6,9 +6,7 @@
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const civilization = picker.pickWithRecency(pools.CIVILIZATIONS, 'civilization');
-  const harbor = picker.pickWithRecency(pools.HARBOR_SCENES, 'harbor_scene');
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {  const harbor = picker.pickWithRecency(pools.HARBOR_SCENES, 'harbor_scene');
   const archDetail = picker.pickWithRecency(pools.ARCHITECTURAL_DETAILS, 'arch_detail');
   const activity = picker.pickWithRecency(pools.HUMAN_ACTIVITY, 'human_activity');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
@@ -18,10 +16,9 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ANCIENT_WORLD_BLOCK}
 
-${blocks.HUMAN_ACTIVITY_BLOCK}
+${blocks.IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK}
 
-━━━ CIVILIZATION ━━━
-${civilization}
+${blocks.HUMAN_ACTIVITY_BLOCK}
 Root every detail in THIS civilization's maritime traditions — their ship designs, dock construction, trade goods, harbor engineering.
 
 ━━━ THE HARBOR SCENE ━━━

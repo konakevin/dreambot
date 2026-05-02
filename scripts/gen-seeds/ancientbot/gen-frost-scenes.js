@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/frost_scenes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} FROZEN / HIGHLAND ANCIENT CIVILIZATION scene descriptions for AncientBot. Each entry is 25-40 words describing a specific cold-weather or high-altitude ancient scene. Pre-600 BC ONLY.
+  metaPrompt: (n) => `You are writing ${n} FROZEN / HIGHLAND ANCIENT CIVILIZATION scene descriptions for AncientBot. Each entry is 25-40 words describing a specific cold-weather or high-altitude ancient scene. Pre-1000 AD ancient global civilizations.
 
 These are civilizations in HARSH COLD environments — mountain fortresses, frozen highland plateaus, snow-dusted stone monuments, winter storms over ancient cities. The cold is a character in every scene.
 
@@ -19,6 +19,15 @@ These are civilizations in HARSH COLD environments — mountain fortresses, froz
 - Hittite Hattusa in mountain cold (lion gates with frost, massive stone walls against grey winter sky)
 - Nomadic highland camps (felt/hide shelters, central hearth, bronze weapons stacked, breath-fog, stars above treeline)
 - Frozen river crossings (armies or caravans crossing ice, distant fortress on opposite bank)
+
+━━━ GEOGRAPHIC DISTRIBUTION — COLD-CLIMATE CIVILIZATIONS ONLY ━━━
+This pool is climate-locked to civilizations with snowy / frozen / alpine variants. Distribute across:
+- ~35% Norse + Celtic + early Germanic (Norse longhouses in snow, Pictish brochs in winter, Hallstatt Celts)
+- ~20% Steppe (Scythian + Xiongnu kurgans + camps in winter steppe)
+- ~20% East Asian winter (snowy Tang Dynasty palaces, Heian Japan in snow, Goryeo Korea, Tibetan-Himalayan monasteries)
+- ~10% Andean high-altitude (Inca / Tiwanaku in snow-capped Andes, Moche in cold deserts)
+- ~10% Anatolian / Persian highlands in winter (Urartu, Persepolis in snow, Sassanian fire temples)
+- ~5% Mesopotamian / Anatolian rare-snow events (Gobekli Tepe, ziggurats dusted with snow)
 
 ━━━ RULES ━━━
 - Each entry is ONE specific cold/highland scene with civilization baked in

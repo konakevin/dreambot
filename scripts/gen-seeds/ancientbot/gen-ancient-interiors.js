@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/ancient_interiors.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} GRAND ANCIENT INTERIOR scene descriptions for AncientBot. Each entry is 25-40 words describing a specific GRAND-SCALE interior space from an ancient civilization. Pre-600 BC ONLY.
+  metaPrompt: (n) => `You are writing ${n} GRAND ANCIENT INTERIOR scene descriptions for AncientBot. Each entry is 25-40 words describing a specific GRAND-SCALE interior space from an ancient civilization. Pre-1000 AD ancient global civilizations.
 
 These are AWE-INSPIRING interiors — cathedral-scale, vast, monumental. The architecture makes you feel SMALL. NOT intimate, NOT cozy — GRAND.
 
@@ -20,13 +20,27 @@ These are AWE-INSPIRING interiors — cathedral-scale, vast, monumental. The arc
 - Nubian temple interiors (painted sandstone columns, hybrid Egyptian-Nubian decoration)
 - Indus Valley Great Bath complex (fired-brick interior, descending steps, waterproofed with bitumen)
 
+━━━ GEOGRAPHIC DISTRIBUTION — NON-NEGOTIABLE ━━━
+The civilizations represented in these ${n} entries MUST be spread across the global ancient world. Distribute approximately:
+- ~25% Mesopotamian / Egyptian / Levantine (Sumer, Akkad, Babylon, Assyria, Hittite, Phoenician, Old/Middle/New Kingdom Egypt, Nubia/Kush)
+- ~20% East Asian (Shang/Zhou/Qin/Han/Tang/Song China; Yayoi/Kofun/Asuka/Nara/Heian Japan; Three Kingdoms / Goryeo Korea)
+- ~15% Pre-Columbian Americas (Olmec, Maya Pre-Classic + Classic, Teotihuacan, Toltec, Aztec, Inca, Moche, Nazca, Tiwanaku)
+- ~10% Southeast Asian (Khmer / Angkor, Champa, Pyu, Srivijaya, Java)
+- ~10% Persian / Steppe (Achaemenid, Parthian, Sassanian, Scythian, Saka, Xiongnu)
+- ~10% Greco-Roman (Minoan, Mycenaean, Archaic + Classical Greece, Hellenistic, Roman Republic + Empire, Etruscan)
+- ~5% African (Aksum, Great Zimbabwe, Mali, Carthage, Ghana, Benin)
+- ~3% Celtic / Norse (La Tène Celts, Hallstatt, Pictish, Norse pre-Viking and Viking-Age)
+- ~2% Polynesian / Pacific (Easter Island Rapa Nui, pre-contact Hawaiian, early Maori, Lapita)
+
+Every region above must appear at least once.
+
 ━━━ RULES ━━━
 - Each entry is ONE specific grand interior with civilization baked in
 - GRAND SCALE — these spaces are vast, the ceiling is far above, columns stretch into distance
 - Include specific materials and decorative details (painted plaster, carved relief, glazed brick, gold leaf, lapis inlay)
 - Include a light source (oil lamps, torches, clerestory shafts, light wells, ceremonial fire)
 - 25-40 words each
-- NO medieval, NO Greek/Roman, NO fantasy
+- NO European-medieval (no knights, no plate armor, no flying buttresses, no Gothic stained glass), NO fantasy magic
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

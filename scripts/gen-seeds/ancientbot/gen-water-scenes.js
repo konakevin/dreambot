@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/ancientbot/seeds/water_scenes.json',
   total: 25,
   batch: 12,
-  metaPrompt: (n) => `You are writing ${n} AQUATIC / COASTAL ANCIENT CIVILIZATION scene descriptions for AncientBot. Each entry is 25-40 words describing a specific water-dominated ancient scene. Pre-600 BC ONLY.
+  metaPrompt: (n) => `You are writing ${n} AQUATIC / COASTAL ANCIENT CIVILIZATION scene descriptions for AncientBot. Each entry is 25-40 words describing a specific water-dominated ancient scene. Pre-1000 AD ancient global civilizations.
 
 These civilizations lived WITH water — on islands, along coasts, over marshes, beside lakes. Water is not background, it is PART of the architecture and life.
 
@@ -20,12 +20,26 @@ These civilizations lived WITH water — on islands, along coasts, over marshes,
 - Underwater ruins glimpsed through clear shallows (submerged harbor stones, reef growing on ancient breakwaters)
 - Coastal cliff settlements (sea-cave dwellings, cliff-face tombs above crashing waves)
 
+━━━ GEOGRAPHIC DISTRIBUTION — NON-NEGOTIABLE ━━━
+The civilizations represented in these ${n} entries MUST be spread across the global ancient world. Distribute approximately:
+- ~25% Mesopotamian / Egyptian / Levantine (Sumer, Akkad, Babylon, Assyria, Hittite, Phoenician, Old/Middle/New Kingdom Egypt, Nubia/Kush)
+- ~20% East Asian (Shang/Zhou/Qin/Han/Tang/Song China; Yayoi/Kofun/Asuka/Nara/Heian Japan; Three Kingdoms / Goryeo Korea)
+- ~15% Pre-Columbian Americas (Olmec, Maya Pre-Classic + Classic, Teotihuacan, Toltec, Aztec, Inca, Moche, Nazca, Tiwanaku)
+- ~10% Southeast Asian (Khmer / Angkor, Champa, Pyu, Srivijaya, Java)
+- ~10% Persian / Steppe (Achaemenid, Parthian, Sassanian, Scythian, Saka, Xiongnu)
+- ~10% Greco-Roman (Minoan, Mycenaean, Archaic + Classical Greece, Hellenistic, Roman Republic + Empire, Etruscan)
+- ~5% African (Aksum, Great Zimbabwe, Mali, Carthage, Ghana, Benin)
+- ~3% Celtic / Norse (La Tène Celts, Hallstatt, Pictish, Norse pre-Viking and Viking-Age)
+- ~2% Polynesian / Pacific (Easter Island Rapa Nui, pre-contact Hawaiian, early Maori, Lapita)
+
+Every region above must appear at least once.
+
 ━━━ RULES ━━━
 - Each entry is ONE specific water-dominated scene with civilization baked in
 - WATER must be prominent — reflections, waves, mist, flooding, still lake surface
 - Include specific period details (reed construction, bitumen waterproofing, cedar hulls, limestone quays)
 - 25-40 words
-- NO medieval, NO Greek/Roman, NO fantasy
+- NO European-medieval (no knights, no plate armor, no flying buttresses, no Gothic stained glass), NO fantasy magic
 - Spread across many civilizations, not just Phoenician
 
 ━━━ OUTPUT ━━━

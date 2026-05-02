@@ -16,6 +16,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
 
 ${blocks.ANCIENT_WORLD_BLOCK}
 
+${blocks.IMPOSSIBLE_BEAUTY_ANCIENT_BLOCK}
+
 ${blocks.PERIOD_ACCURACY_BLOCK}
 
 ━━━ PERIOD CONSTRAINTS — JUNGLE ━━━
