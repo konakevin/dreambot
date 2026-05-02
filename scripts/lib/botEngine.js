@@ -38,6 +38,7 @@ const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
 const { distillStyle } = require('./styleDistiller');
+const { buildRecipe } = require('./recipeBuilder');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -561,7 +562,7 @@ async function lookupBotUserId(sb, username) {
   return data.id;
 }
 
-async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption }) {
+async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption, recipe, fluxSeed }) {
   const bytes = fs.readFileSync(localPath);
   const key = `${userId}/${Date.now()}-${username}-${Math.random().toString(36).slice(2, 8)}.jpg`;
   const up = await sb.storage.from('uploads').upload(key, bytes, { contentType: 'image/jpeg' });
@@ -586,6 +587,8 @@ async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, med
       is_ai_generated: true,
       posted_at: new Date().toISOString(),
       caption: caption || null,
+      recipe: recipe || null,
+      flux_seed: fluxSeed ?? null,
     })
     .select('id')
     .single();
@@ -724,6 +727,19 @@ async function runBot(opts) {
   let localPath = null;
   let imageUrl = null;
 
+  // Accumulator for the DLT recipe — populated as the engine rolls/builds.
+  // Path-builders may also contribute lighting/camera/blow-it-up via the
+  // optional briefMeta return shape (see step 5 below). Phase 1 captures
+  // what the engine itself can see; missing fields stay null and can be
+  // progressively enriched in a follow-up.
+  const recipeBlocks = {
+    chaosBlock: null,
+    sensoryBlock: null,
+    blowItUpBlock: null,
+    camera: null,
+    lighting: null,
+  };
+
   try {
     // 1. Fetch vibe directive + medium flux fragment
     errorStage = 'vibe-lookup';
@@ -769,6 +785,22 @@ async function runBot(opts) {
     let sensoryProfile = { anchors: [], channelKeys: [], context: null };
     const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
+    // briefMeta — optional path-builder-supplied recipe enrichment.
+    // Path builders may return either:
+    //   string  — the brief (legacy)
+    //   { direct: true, prompt: string, briefMeta? } — Sonnet-bypass with optional meta
+    //   { brief: string, briefMeta: {...} } — brief + recipe metadata (camera/lighting/blowItUpBlock)
+    // briefMeta fields populate the recipe's per-path look anchors so DLT
+    // can replay them. If a builder doesn't return briefMeta, those fields
+    // stay null in the recipe (ai_prompt fallback covers them).
+    const briefMeta =
+      briefResult && typeof briefResult === 'object' && briefResult.briefMeta
+        ? briefResult.briefMeta
+        : {};
+    if (briefMeta.camera) recipeBlocks.camera = briefMeta.camera;
+    if (briefMeta.lighting) recipeBlocks.lighting = briefMeta.lighting;
+    if (briefMeta.blowItUpBlock) recipeBlocks.blowItUpBlock = briefMeta.blowItUpBlock;
+
     if (isDirectPrompt) {
       // Path composed the Flux prompt directly — skip Sonnet entirely
       middle = briefResult.prompt;
@@ -778,7 +810,15 @@ async function runBot(opts) {
       console.log('  ⚡ direct prompt (Sonnet bypassed)');
     } else {
       // Standard path: brief → (optional chaos block) → Sonnet → scene description
-      let brief = typeof briefResult === 'string' ? briefResult : String(briefResult);
+      // Support shape { brief, briefMeta } too — brief lives at .brief.
+      let brief;
+      if (typeof briefResult === 'string') {
+        brief = briefResult;
+      } else if (briefResult && typeof briefResult.brief === 'string') {
+        brief = briefResult.brief;
+      } else {
+        brief = String(briefResult);
+      }
       if (!brief || brief.length < 50) {
         throw new Error(`buildBrief returned invalid brief (len=${brief.length})`);
       }
@@ -796,6 +836,7 @@ async function runBot(opts) {
       const chaosBlock = buildChaosBriefBlock(chaosProfile);
       if (chaosBlock) {
         brief = brief + chaosBlock;
+        recipeBlocks.chaosBlock = chaosBlock;
         console.log(`  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`);
       }
 
@@ -806,6 +847,7 @@ async function runBot(opts) {
       const sensoryBlock = buildSensoryBriefBlock(sensoryProfile);
       if (sensoryBlock) {
         brief = brief + sensoryBlock;
+        recipeBlocks.sensoryBlock = sensoryBlock;
         console.log(`  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`);
       }
 
@@ -939,6 +981,36 @@ async function runBot(opts) {
         : '';
     finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
 
+    // Build the DLT recipe — frozen LOOK anchors captured at posting time.
+    // See docs/DLT_RECIPE_PLAN.md for full architecture. Stored on the
+    // upload row as JSONB; replayed at DLT time to reproduce source's
+    // medium + look against a new user's subject/cast.
+    const recipe = buildRecipe({
+      model: renderModel,
+      mediumKey: medium,
+      vibeKey,
+      aiPrompt: finalPrompt,
+      // fluxSeed left null in Phase 1 — Replicate response capture is a
+      // follow-up enrichment (see DLT_RECIPE_PLAN Phase 1.5).
+      fluxSeed: null,
+      promptPrefix: pathPrefix
+        ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
+        : rawPrefix,
+      mediumStyleOverride: bot.mediumStyles && bot.mediumStyles[medium]
+        ? bot.mediumStyles[medium]
+        : (mediumFluxFragment || ''),
+      promptSuffix: rawSuffix,
+      camera: recipeBlocks.camera,
+      lighting: recipeBlocks.lighting || '',
+      scenePalette: sharedDNA?.scenePalette || '',
+      colorPalette: sharedDNA?.colorPalette || '',
+      chaosBlock: recipeBlocks.chaosBlock,
+      sensoryBlock: recipeBlocks.sensoryBlock,
+      blowItUpBlock: recipeBlocks.blowItUpBlock,
+      botUsername: bot.username,
+      path: resolvedPath,
+    });
+
     if (dryRun) {
       return {
         ok: true,
@@ -948,6 +1020,7 @@ async function runBot(opts) {
         path: resolvedPath,
         vibeKey,
         medium,
+        recipe,
       };
     }
 
@@ -1030,6 +1103,8 @@ async function runBot(opts) {
         vibeKey,
         medium,
         caption,
+        recipe,
+        fluxSeed: null,
       });
 
       // 13. Commit dedup picks ONLY on successful post
@@ -1076,6 +1151,7 @@ async function runBot(opts) {
       costCents,
       chaos: chaosProfile,
       sensory: sensoryProfile,
+      recipe,
     };
   } catch (err) {
     const durationMs = Date.now() - startedAt;
