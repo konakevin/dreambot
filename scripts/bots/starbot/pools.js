@@ -10,6 +10,21 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+// Test override — set STARBOT_FORCE_LOCATION_POOL to 'dune-landscape',
+// 'dune-architecture', 'aliens-landscape', or 'aliens-architecture' to
+// force PLANET_SETTING / CHARACTER_INTERIOR / COSMIC_ORACLE_LOCATIONS to a
+// single pool's content. Used during QA testing to verify how each pool
+// blends with each character path.
+const FORCE = process.env.STARBOT_FORCE_LOCATION_POOL;
+const FORCE_MAP = FORCE
+  ? { 'dune-landscape': load('dune_landscapes'),
+      'dune-architecture': load('dune_architecture'),
+      'aliens-landscape': load('aliens_landscapes'),
+      'aliens-architecture': load('aliens_architecture') }[FORCE]
+  : null;
+if (FORCE && !FORCE_MAP) console.warn('Unknown STARBOT_FORCE_LOCATION_POOL:', FORCE);
+if (FORCE_MAP) console.log('🔧 Forcing all location pools to:', FORCE);
+
 // ─────────────────────────────────────────────────────────────
 // CYBORG SHARED POOLS (Sonnet-seeded, 200 entries each)
 // ─────────────────────────────────────────────────────────────
@@ -30,6 +45,8 @@ const CYBORG_BODY_TYPES = load('cyborg_female_body_types');
 
 const CYBORG_MALE_BODY_TYPES = load('cyborg_male_body_types');
 const CYBORG_MALE_HAIR_STYLES = load('cyborg_male_hair');
+const CYBORG_MALE_SKIN_TONES = load('cyborg_male_skin_tones');
+const CYBORG_MALE_FEATURES = load('cyborg_male_features');
 
 const CYBORG_INTERNAL_EXPOSURE = load('cyborg_female_internal');
 
@@ -73,6 +90,8 @@ module.exports = {
   // Cyborg-man pools
   CYBORG_MALE_HAIR_STYLES,
   CYBORG_MALE_BODY_TYPES,
+  CYBORG_MALE_SKIN_TONES,
+  CYBORG_MALE_FEATURES,
   CYBORG_MALE_INTERNAL_EXPOSURE,
   CYBORG_MALE_CHARACTERS: load('cyborg_male_characters'),
   CYBORG_MALE_ACTIONS: load('cyborg_male_actions'),
@@ -90,7 +109,25 @@ module.exports = {
   REAL_SPACE_SUBJECTS: load('real_space_subjects'),
   COSMIC_ORACLE_CHARACTERS: load('cosmic_oracle_characters'),
   COSMIC_ORACLE_ACTIONS: load('cosmic_oracle_actions'),
-  COSMIC_ORACLE_LOCATIONS: load('cosmic_oracle_locations'),
+  COSMIC_ORACLE_LOCATIONS: FORCE_MAP ? FORCE_MAP : [
+    ...load('cosmic_oracle_locations'),
+    ...load('dune_landscapes'),
+    ...load('dune_architecture'),
+    ...load('aliens_landscapes'),
+    ...load('aliens_architecture'),
+    ...load('starwars_landscapes'),
+    ...load('starwars_architecture'),
+    ...load('guardians_landscapes'),
+    ...load('guardians_architecture'),
+    ...load('mass_effect_landscapes'),
+    ...load('mass_effect_architecture'),
+    ...load('halo_landscapes'),
+    ...load('halo_architecture'),
+    ...load('startrek_landscapes'),
+    ...load('startrek_architecture'),
+    ...load('starcraft_landscapes'),
+    ...load('starcraft_architecture'),
+  ],
   FEMALE_EXPLORERS: load('female_explorers'),
   MALE_EXPLORERS: load('male_explorers'),
   SCI_FI_FEMALE_OUTFITS: load('sci_fi_female_outfits'),
@@ -104,6 +141,78 @@ module.exports = {
   MALE_EXPLORER_HAIRSTYLES: load('male_explorer_hairstyles'),
   FEMALE_EXPLORER_ACCESSORIES: load('female_explorer_accessories'),
   MALE_EXPLORER_ACCESSORIES: load('male_explorer_accessories'),
+  // Sci-fi race + adventuring action variety (mirrors DragonBot's race upgrade)
+  // All HUMAN-SHAPED races only (Twi'lek, Vulcan, Mandalorian, Replicant, etc.)
+  // No combat / battle / violence — peaceful adventuring scenes only.
+  SCI_FI_RACE: load('sci_fi_race'),
+  EXPLORER_ADVENTURE_ACTIONS: load('explorer_adventure_actions'),
+  SCI_FI_LINEAGE_ACTIONS: load('sci_fi_lineage_actions'),
+  // Explorer paths — alien-planet-only with scenery as costar (per Kevin
+  // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
+  // to wide cinematic shots where the alien world dominates the frame).
+  EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  EXPLORER_OUTFITS_MALE: load('explorer_outfits_male'),
+  // BIOME / TERRAIN — where the character stands (50 diverse alien biomes)
+  // PLANET_SETTING is a flat merge of 11 biome-specific 25-entry pools.
+  // Equal random roll across the merged 275-entry collection (1/11 odds per
+  // biome, 1/25 within). Old `planet_setting.json` retired.
+  PLANET_SETTING: FORCE_MAP ? FORCE_MAP : [
+    ...load('planet_jungle'),
+    ...load('planet_swamp'),
+    ...load('planet_ocean'),
+    ...load('planet_ice'),
+    ...load('planet_desert'),
+    ...load('planet_crystal'),
+    ...load('planet_volcanic'),
+    ...load('planet_sky'),
+    ...load('planet_ruins'),
+    ...load('planet_cave'),
+    ...load('planet_extreme'),
+    ...load('dune_landscapes'),
+    ...load('aliens_landscapes'),
+    ...load('starwars_landscapes'),
+    ...load('guardians_landscapes'),
+    ...load('mass_effect_landscapes'),
+    ...load('startrek_landscapes'),
+    ...load('halo_landscapes'),
+    ...load('starcraft_landscapes'),
+  ],
+  // Indoor / architectural settings for character paths that go inside spaces
+  // (cyborg-woman, robot-moment, cosmic-oracle). Dune palace + Aliens biomech
+  // hive aesthetics merged.
+  CHARACTER_INTERIOR: FORCE_MAP ? FORCE_MAP : [
+    ...load('dune_architecture'),
+    ...load('aliens_architecture'),
+    ...load('halo_architecture'),
+    ...load('starwars_architecture'),
+    ...load('guardians_architecture'),
+    ...load('mass_effect_architecture'),
+    ...load('startrek_architecture'),
+    ...load('starcraft_architecture'),
+  ],
+  // Dedicated full-frame scene pools for the scene-only paths
+  DUNE_LANDSCAPES: load('dune_landscapes'),
+  DUNE_ARCHITECTURE: load('dune_architecture'),
+  ALIENS_LANDSCAPES: load('aliens_landscapes'),
+  ALIENS_ARCHITECTURE: load('aliens_architecture'),
+  STARWARS_LANDSCAPES: load('starwars_landscapes'),
+  STARWARS_ARCHITECTURE: load('starwars_architecture'),
+  GUARDIANS_LANDSCAPES: load('guardians_landscapes'),
+  GUARDIANS_ARCHITECTURE: load('guardians_architecture'),
+  MASS_EFFECT_LANDSCAPES: load('mass_effect_landscapes'),
+  MASS_EFFECT_ARCHITECTURE: load('mass_effect_architecture'),
+  HALO_LANDSCAPES: load('halo_landscapes'),
+  HALO_ARCHITECTURE: load('halo_architecture'),
+  STARTREK_LANDSCAPES: load('startrek_landscapes'),
+  STARTREK_ARCHITECTURE: load('startrek_architecture'),
+  STARCRAFT_LANDSCAPES: load('starcraft_landscapes'),
+  STARCRAFT_ARCHITECTURE: load('starcraft_architecture'),
+  // SCALE-DEFINING BACKDROP — massive thing in the sky/horizon dwarfing the character
+  EXPLORER_EPIC_BACKDROPS: load('explorer_epic_backdrops'),
+  // Retired (kept for safety; explorer paths no longer consume):
+  EXPLORER_ALIEN_LOCATIONS: load('explorer_alien_locations'),
+  EXPLORER_SHIP_LOCATIONS: load('explorer_ship_locations'),
+  EXPLORER_COZY_LOCATIONS: load('explorer_cozy_locations'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   CAMERA_ANGLES: load('camera_angles'),

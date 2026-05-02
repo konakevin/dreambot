@@ -25,6 +25,22 @@ const pathBuilders = {
   'megastructure': require('./paths/megastructure'),
   'cyborg-woman': require('./paths/cyborg-woman'),
   'cyborg-man': require('./paths/cyborg-man'),
+  'dune-landscape': require('./paths/dune-landscape'),
+  'dune-architecture': require('./paths/dune-architecture'),
+  'aliens-landscape': require('./paths/aliens-landscape'),
+  'aliens-architecture': require('./paths/aliens-architecture'),
+  'starwars-landscape': require('./paths/starwars-landscape'),
+  'starwars-architecture': require('./paths/starwars-architecture'),
+  'guardians-landscape': require('./paths/guardians-landscape'),
+  'guardians-architecture': require('./paths/guardians-architecture'),
+  'mass-effect-landscape': require('./paths/mass-effect-landscape'),
+  'mass-effect-architecture': require('./paths/mass-effect-architecture'),
+  'halo-landscape': require('./paths/halo-landscape'),
+  'halo-architecture': require('./paths/halo-architecture'),
+  'star-trek-landscape': require('./paths/star-trek-landscape'),
+  'star-trek-architecture': require('./paths/star-trek-architecture'),
+  'starcraft-landscape': require('./paths/starcraft-landscape'),
+  'starcraft-architecture': require('./paths/starcraft-architecture'),
 };
 
 module.exports = {
@@ -60,11 +76,27 @@ module.exports = {
     'megastructure': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'dune-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'dune-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'aliens-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'aliens-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starwars-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starwars-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'guardians-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'guardians-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'mass-effect-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'mass-effect-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'halo-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'halo-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'star-trek-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'star-trek-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starcraft-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starcraft-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
   },
 
   // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
   promptPrefixByPath: {
-    'cyborg-man': 'handsome adult male man (NOT female NOT woman), masculine face, flat chest, narrow hips, human skin-covered body with cybernetic breakthroughs (not a robotic chassis)',
+    'cyborg-man': 'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
   },
 
@@ -146,7 +178,23 @@ module.exports = {
     'male-explorer',
     'megastructure',
     'cyborg-woman',
-    'cyborg-man',
+    // 'cyborg-man' — deactivated 2026-05-02 (Kevin: renders looked like GQ model shoot, not cyborg)
+    'dune-landscape',
+    // 'dune-architecture' — deactivated 2026-05-02
+    'aliens-landscape',
+    'aliens-architecture',
+    'starwars-landscape',
+    'starwars-architecture',
+    'guardians-landscape',
+    'guardians-architecture',
+    // 'mass-effect-landscape' — scrapped 2026-05-02 (Kevin)
+    'mass-effect-architecture',
+    'halo-landscape',
+    'halo-architecture',
+    'star-trek-landscape',
+    // 'star-trek-architecture' — scrapped 2026-05-02 (Kevin)
+    'starcraft-landscape',
+    'starcraft-architecture',
   ],
 
   pathWeights: {
@@ -163,7 +211,23 @@ module.exports = {
     'male-explorer': 1,
     'megastructure': 1,
     'cyborg-woman': 1,
-    'cyborg-man': 1,
+    // 'cyborg-man': 1,  // deactivated
+    'dune-landscape': 1,
+    // 'dune-architecture': 1,  // deactivated
+    'aliens-landscape': 1,
+    'aliens-architecture': 1,
+    'starwars-landscape': 1,
+    'starwars-architecture': 1,
+    'guardians-landscape': 1,
+    'guardians-architecture': 1,
+    // 'mass-effect-landscape': 1,  // scrapped
+    'mass-effect-architecture': 1,
+    'halo-landscape': 1,
+    'halo-architecture': 1,
+    'star-trek-landscape': 1,
+    // 'star-trek-architecture': 1,  // scrapped
+    'starcraft-landscape': 1,
+    'starcraft-architecture': 1,
   },
 
   // Chaos layer — sci-fi works well with chaos. Skip face-dominant cyborg
@@ -176,6 +240,15 @@ module.exports = {
       'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
       'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
       'megastructure',
+      'cyborg-woman',
+      'cyborg-man',
+      'dune-landscape', 'dune-architecture', 'aliens-landscape', 'aliens-architecture',
+      'starwars-landscape', 'starwars-architecture',
+      'guardians-landscape', 'guardians-architecture',
+      'mass-effect-landscape', 'mass-effect-architecture',
+      'halo-landscape', 'halo-architecture',
+      'star-trek-landscape', 'star-trek-architecture',
+      'starcraft-landscape', 'starcraft-architecture',
     ],
   },
 
@@ -216,6 +289,22 @@ module.exports = {
       'real-space': 'scene',
       'cosmic-oracle': 'scene',
       'megastructure': 'scene',
+      'dune-landscape': 'scene',
+      'dune-architecture': 'scene',
+      'aliens-landscape': 'scene',
+      'aliens-architecture': 'scene',
+      'starwars-landscape': 'scene',
+      'starwars-architecture': 'scene',
+      'guardians-landscape': 'scene',
+      'guardians-architecture': 'scene',
+      'mass-effect-landscape': 'scene',
+      'mass-effect-architecture': 'scene',
+      'halo-landscape': 'scene',
+      'halo-architecture': 'scene',
+      'star-trek-landscape': 'scene',
+      'star-trek-architecture': 'scene',
+      'starcraft-landscape': 'scene',
+      'starcraft-architecture': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
@@ -236,7 +325,7 @@ module.exports = {
     }
     if (path === 'cyborg-man') {
       base.characterBase = picker.pickWithRecency(pools.CYBORG_MALE_CHARACTERS, 'cyborg_male_character');
-      base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
+      base.skin = picker.pickWithRecency(pools.CYBORG_MALE_SKIN_TONES, 'cyborg_male_skin');
       base.bodyType = picker.pick(pools.CYBORG_MALE_BODY_TYPES);
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
       base.hair = picker.pick(pools.CYBORG_MALE_HAIR_STYLES);

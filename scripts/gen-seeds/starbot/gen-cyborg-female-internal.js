@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/starbot/seeds/cyborg_female_internal.json',
-  total: 25,
+  total: 200,
+  append: true,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} CYBORG INTERNAL EXPOSURE descriptions for a female cyborg character. Each describes ONE visible translucent or open section of her body where you can see the mechanical workings inside.
 
