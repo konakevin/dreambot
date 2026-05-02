@@ -174,6 +174,58 @@ module.exports = {
     'toybox-chaos': 2,
   },
 
+  // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: [
+      'lego-epic', 'claymation', 'vinyl', 'sackboy', 'toy-landscape',
+      'shortcake-scene', 'barbie-scene', 'gi-joe-missions',
+      'green-army-warzone', 'miniature-dungeon', 'collector-shelf-epic',
+      'epic-hero-bucket', 'dollhouse-life', 'hotwheels-city',
+      'model-train-world', 'plush-world', 'mech-toy-rampage', 'toybox-chaos',
+    ],
+  },
+
+  // Two-pass Sonnet→Haiku polish for tighter Flux-ready prompts.
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '65-90',
+    polishedWordsByPath: {},
+    preservePhrasesByPath: {},
+  },
+
+  // Sensory anchors — lightcolor required, additional channels rolled.
+  // pathContext: 'figure' for paths where toys are the subject, 'scene' for
+  // pure-scenery paths (toy-landscape, model-train-world).
+  sensoryAnchors: {
+    enabled: true,
+    requiredChannels: ['lightcolor'],
+    pathContext: {
+      // Figure-centric (toys are the subject)
+      'lego-epic': 'scene',
+      claymation: 'figure',
+      vinyl: 'figure',
+      sackboy: 'figure',
+      'toy-landscape': 'scene',
+      'shortcake-scene': 'figure',
+      'barbie-scene': 'figure',
+      'gi-joe-missions': 'figure',
+      'green-army-warzone': 'figure',
+      'miniature-dungeon': 'figure',
+      'collector-shelf-epic': 'figure',
+      'epic-hero-bucket': 'figure',
+      'dollhouse-life': 'figure',
+      'hotwheels-city': 'figure',
+      'model-train-world': 'scene', // no human/animal figures by design
+      'plush-world': 'figure',
+      'mech-toy-rampage': 'figure',
+      'toybox-chaos': 'figure',
+    },
+    poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
