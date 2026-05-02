@@ -13,9 +13,15 @@
  *   - No cast/scene/subject fields exist (privacy invariant by construction)
  */
 
-import { buildRecipe as buildRecipeTs, RECIPE_VERSION as TS_VERSION } from '../../supabase/functions/_shared/recipeBuilder';
+import {
+  buildRecipe as buildRecipeTs,
+  RECIPE_VERSION as TS_VERSION,
+} from '../../supabase/functions/_shared/recipeBuilder';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { buildRecipe: buildRecipeJs, RECIPE_VERSION: JS_VERSION } = require('../../scripts/lib/recipeBuilder');
+const {
+  buildRecipe: buildRecipeJs,
+  RECIPE_VERSION: JS_VERSION,
+} = require('../../scripts/lib/recipeBuilder');
 
 const MIN_CONTEXT = {
   model: 'black-forest-labs/flux-1.1-pro',
@@ -28,7 +34,8 @@ const FULL_CONTEXT = {
   ...MIN_CONTEXT,
   fluxSeed: 12345678,
   promptPrefix: 'plush stuffed-animal characters',
-  mediumStyleOverride: 'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR',
+  mediumStyleOverride:
+    'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR',
   promptSuffix: 'no text, no watermark',
   camera: 'medium-wide eye-level shot',
   lighting: 'firelight + lantern-glow + golden-hour',
@@ -164,7 +171,17 @@ describe('buildRecipe — privacy invariant', () => {
   it('recipe has no cast/face/scene/subject fields', () => {
     const r = buildRecipeTs(FULL_CONTEXT);
     const keys = Object.keys(r);
-    const forbidden = ['cast', 'face', 'subject', 'scene_text', 'cast_text', 'source_cast_role', 'user_id', 'photo_url', 'face_swap'];
+    const forbidden = [
+      'cast',
+      'face',
+      'subject',
+      'scene_text',
+      'cast_text',
+      'source_cast_role',
+      'user_id',
+      'photo_url',
+      'face_swap',
+    ];
     for (const f of forbidden) {
       expect(keys).not.toContain(f);
     }

@@ -179,7 +179,17 @@ describe('privacy invariant — replay output contains no cast info', () => {
 
   it('ReplayAnchors has no cast/face/subject keys', () => {
     const keys = Object.keys(anchors);
-    const forbidden = ['cast', 'face', 'subject', 'scene_text', 'cast_text', 'sourceCastRole', 'userId', 'photoUrl', 'faceSwap'];
+    const forbidden = [
+      'cast',
+      'face',
+      'subject',
+      'scene_text',
+      'cast_text',
+      'sourceCastRole',
+      'userId',
+      'photoUrl',
+      'faceSwap',
+    ];
     for (const f of forbidden) {
       expect(keys).not.toContain(f);
     }

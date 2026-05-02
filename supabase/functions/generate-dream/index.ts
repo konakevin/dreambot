@@ -161,11 +161,7 @@ Deno.serve(async (req) => {
 
   // Pull body fields. medium_key / vibe_key / force_model are mutable so we
   // can override them from a DLT recipe before resolution.
-  let {
-    medium_key,
-    vibe_key,
-    force_model,
-  } = body;
+  let { medium_key, vibe_key, force_model } = body;
   const {
     mode,
     vibe_profile,
