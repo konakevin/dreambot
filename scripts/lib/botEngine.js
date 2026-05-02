@@ -37,6 +37,7 @@ const { pickModel } = require('./modelPicker');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
+const { distillStyle } = require('./styleDistiller');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -567,23 +568,62 @@ async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, med
   if (up.error) throw new Error(`storage upload failed: ${up.error.message}`);
   const publicUrl = sb.storage.from('uploads').getPublicUrl(key).data.publicUrl;
 
-  const { error: insErr } = await sb.from('uploads').insert({
-    user_id: userId,
-    image_url: publicUrl,
-    thumbnail_url: null,
-    ai_prompt: prompt,
-    dream_medium: medium,
-    dream_vibe: vibeKey,
-    width: 768,
-    height: 1344,
-    is_active: true,
-    is_posted: true,
-    is_public: true,
-    is_ai_generated: true,
-    posted_at: new Date().toISOString(),
-    caption: caption || null,
-  });
+  // Insert uploads row + select id back so we can populate style_summary after.
+  const { data: insRow, error: insErr } = await sb
+    .from('uploads')
+    .insert({
+      user_id: userId,
+      image_url: publicUrl,
+      thumbnail_url: null,
+      ai_prompt: prompt,
+      dream_medium: medium,
+      dream_vibe: vibeKey,
+      width: 768,
+      height: 1344,
+      is_active: true,
+      is_posted: true,
+      is_public: true,
+      is_ai_generated: true,
+      posted_at: new Date().toISOString(),
+      caption: caption || null,
+    })
+    .select('id')
+    .single();
   if (insErr) throw new Error(`uploads insert failed: ${insErr.message}`);
+  const uploadId = insRow.id;
+
+  // Plan C — distill the unified style fingerprint (medium + vibe + ai_prompt)
+  // via Haiku and write to uploads.style_summary. AWAITED (cron-safe — without
+  // await the script exits before the UPDATE lands). Failure → null → DLT
+  // falls back to ai_prompt with the existing weaker filtering. Zero-regression.
+  // Mirrors supabase/functions/_shared/styleDistiller.ts (Edge fires-and-forget;
+  // bot context awaits because there's no user response to block).
+  try {
+    const anthropicKey = getKey('ANTHROPIC_API_KEY');
+    const summary = await distillStyle(
+      { rawPrompt: prompt, mediumKey: medium, vibeKey },
+      anthropicKey,
+      sb
+    );
+    if (summary) {
+      const { error: updErr } = await sb
+        .from('uploads')
+        .update({ style_summary: summary })
+        .eq('id', uploadId);
+      if (updErr) {
+        console.warn(`  ⚠️ style_summary update failed: ${updErr.message}`);
+      } else {
+        console.log(
+          `  🎨 style_summary: ${summary.slice(0, 100)}${summary.length > 100 ? '…' : ''}`
+        );
+      }
+    } else {
+      console.log(`  ⚠️ style_summary: NULL (DLT will fall back to ai_prompt)`);
+    }
+  } catch (err) {
+    console.warn(`  ⚠️ style_summary distill failed: ${err.message}`);
+  }
+
   return publicUrl;
 }
 
