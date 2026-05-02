@@ -197,37 +197,45 @@ module.exports = {
     'starcraft-architecture',
   ],
 
+  // Path weights tuned for ~40% universe-coded scenes / ~30% character paths /
+  // ~30% generic scene paths.
+  // Universe paths (13): weight 4 each → 52 / 132 = ~39.4%
+  // Character paths (5): weight 8 each → 40 / 132 = ~30.3%
+  // Generic scene paths (8): weight 5 each → 40 / 132 = ~30.3%
   pathWeights: {
-    'cosmic-vista': 1,
-    'alien-landscape': 1,
-    'space-opera': 1,
-    'sci-fi-interior': 1,
-    'cozy-sci-fi-interior': 1,
-    'alien-city': 1,
-    'robot-moment': 1,
-    'real-space': 1,
-    'cosmic-oracle': 1,
-    'female-explorer': 1,
-    'male-explorer': 1,
-    'megastructure': 1,
-    'cyborg-woman': 1,
-    // 'cyborg-man': 1,  // deactivated
-    'dune-landscape': 1,
-    // 'dune-architecture': 1,  // deactivated
-    'aliens-landscape': 1,
-    'aliens-architecture': 1,
-    'starwars-landscape': 1,
-    'starwars-architecture': 1,
-    'guardians-landscape': 1,
-    'guardians-architecture': 1,
-    // 'mass-effect-landscape': 1,  // scrapped
-    'mass-effect-architecture': 1,
-    'halo-landscape': 1,
-    'halo-architecture': 1,
-    'star-trek-landscape': 1,
-    // 'star-trek-architecture': 1,  // scrapped
-    'starcraft-landscape': 1,
-    'starcraft-architecture': 1,
+    // Generic scene paths (weight 5 each)
+    'cosmic-vista': 5,
+    'alien-landscape': 5,
+    'space-opera': 5,
+    'sci-fi-interior': 5,
+    'cozy-sci-fi-interior': 5,
+    'alien-city': 5,
+    'real-space': 5,
+    'megastructure': 5,
+    // Character paths (weight 8 each)
+    'robot-moment': 8,
+    'cosmic-oracle': 8,
+    'female-explorer': 8,
+    'male-explorer': 8,
+    'cyborg-woman': 8,
+    // 'cyborg-man': 8,  // deactivated
+    // Universe-coded scene-only paths (weight 4 each)
+    'dune-landscape': 4,
+    // 'dune-architecture': 4,  // deactivated
+    'aliens-landscape': 4,
+    'aliens-architecture': 4,
+    'starwars-landscape': 4,
+    'starwars-architecture': 4,
+    'guardians-landscape': 4,
+    'guardians-architecture': 4,
+    // 'mass-effect-landscape': 4,  // scrapped
+    'mass-effect-architecture': 4,
+    'halo-landscape': 4,
+    'halo-architecture': 4,
+    'star-trek-landscape': 4,
+    // 'star-trek-architecture': 4,  // scrapped
+    'starcraft-landscape': 4,
+    'starcraft-architecture': 4,
   },
 
   // Chaos layer — sci-fi works well with chaos. Skip face-dominant cyborg

@@ -1,0 +1,103 @@
+/**
+ * useUserContextFeed — paginated context feed for the photo detail view
+ * when the user navigated in WITHOUT an album set (i.e., from a profile post
+ * tap, a notification, or a deep link, rather than from their own gallery).
+ *
+ * Replaces the non-album branch of useAlbumPosts which was a non-paginated
+ * useQuery with a hard CONTEXT_LIMIT = 40 — that branch produced the "black
+ * screen below post 41" bug because the FlatList ran out of data with no way
+ * to fetch more.
+ *
+ * Page 0 fetches the target post + the first PAGE_SIZE of the poster's
+ * other public posts. Subsequent pages just paginate that user's posts.
+ *
+ * The album branch (useAlbumPosts when albumIds.length > 0) is unchanged —
+ * albums are bounded by definition and don't need pagination.
+ */
+
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
+import { POST_SELECT, mapToDreamPost, castRow, castRows } from '@/lib/mapPost';
+import type { DreamPostItem } from '@/components/DreamCard';
+
+const PAGE_SIZE = 20;
+
+interface PageResult {
+  rows: DreamPostItem[];
+  userId: string;
+  nextOffset: number;
+}
+
+type PageParam = 0 | { offset: number; userId: string };
+
+export function useUserContextFeed(currentId: string, enabled = true) {
+  return useInfiniteQuery({
+    queryKey: ['userContextFeed', currentId],
+    queryFn: async ({ pageParam }): Promise<PageResult> => {
+      // Page 0: fetch target by id, derive its user_id, fetch first page of context.
+      if (pageParam === 0) {
+        const { data: single, error: singleErr } = await supabase
+          .from('uploads')
+          .select(POST_SELECT)
+          .eq('id', currentId)
+          .single();
+        if (singleErr) throw singleErr;
+        const targetRow = castRow(single);
+        const target: DreamPostItem = {
+          ...mapToDreamPost(targetRow),
+          is_public: (targetRow.is_public as boolean) ?? false,
+          posted_at: (targetRow.posted_at as string | null) ?? null,
+          description: (targetRow.description as string | null) ?? null,
+        };
+        const userId = target.user_id;
+
+        const { data: contextData } = await supabase
+          .from('uploads')
+          .select(POST_SELECT)
+          .eq('user_id', userId)
+          .eq('is_public', true)
+          .neq('id', currentId)
+          .order('created_at', { ascending: false })
+          .range(0, PAGE_SIZE - 1);
+
+        const context = castRows(contextData).map((row) => ({
+          ...mapToDreamPost(row),
+          is_public: (row.is_public as boolean) ?? false,
+          posted_at: (row.posted_at as string | null) ?? null,
+          description: (row.description as string | null) ?? null,
+        }));
+
+        return { rows: [target, ...context], userId, nextOffset: PAGE_SIZE };
+      }
+
+      // Subsequent pages: pageParam carries userId for continuity (since the
+      // hook doesn't know it at call time — it's derived from the target).
+      const { offset, userId } = pageParam;
+      const { data, error } = await supabase
+        .from('uploads')
+        .select(POST_SELECT)
+        .eq('user_id', userId)
+        .eq('is_public', true)
+        .neq('id', currentId)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + PAGE_SIZE - 1);
+      if (error) throw error;
+
+      const rows = castRows(data).map((row) => ({
+        ...mapToDreamPost(row),
+        is_public: (row.is_public as boolean) ?? false,
+        posted_at: (row.posted_at as string | null) ?? null,
+        description: (row.description as string | null) ?? null,
+      }));
+
+      return { rows, userId, nextOffset: offset + PAGE_SIZE };
+    },
+    initialPageParam: 0 as PageParam,
+    getNextPageParam: (lastPage): PageParam | undefined =>
+      lastPage.rows.length < PAGE_SIZE
+        ? undefined
+        : { offset: lastPage.nextOffset, userId: lastPage.userId },
+    enabled: !!currentId && enabled,
+    staleTime: 60_000,
+  });
+}

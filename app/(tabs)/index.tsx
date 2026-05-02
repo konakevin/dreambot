@@ -82,10 +82,16 @@ function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
         ...(tab === 'bots' && botUserId ? { p_bot_user_id: botUserId } : {}),
       });
       if (error) throw error;
-      return castRows(data).map((row) => ({
+      const rows = castRows(data).map((row) => ({
         ...mapRpcToDreamPost(row),
         feed_score: row.feed_score as number,
       }));
+      // Diversify PER-PAGE so each page is order-stable on its own.
+      // Earlier pages never reshuffle when fetchNextPage arrives — fixes the
+      // "wrong post pops in mid-scroll at the page boundary" bug. Trade-off:
+      // streak detection is within-page only, so cross-page-boundary streaks
+      // are possible (acceptable at PAGE_SIZE=20).
+      return tab === 'bots' ? rows : (applyDiversity(rows) as typeof rows);
     },
     initialPageParam: null as FeedCursor | null,
     getNextPageParam: (lastPage) => {
@@ -209,14 +215,12 @@ export default function HomeScreen() {
     })();
   }, [pendingPostId]);
 
-  // Content diversity: reorder to prevent monotonous sequences (skip for bots — chronological)
-  const diverseFeed = useMemo(
-    () => (activeTab === 'bots' ? feedPosts : applyDiversity(feedPosts)),
-    [feedPosts, activeTab]
-  );
-
-  // Prepend pinned post (e.g. deep link, first dream after onboarding)
-  const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...diverseFeed] : diverseFeed;
+  // Diversity is applied per-page inside useDreamFeed.queryFn (see comment
+  // there). feedPosts is already-diversified at the page level — flat-merging
+  // pages preserves order, which keeps earlier-page items stable when a new
+  // page arrives. NO render-time reorder pass — that was the "wrong post
+  // pops in mid-scroll" bug.
+  const posts = pinnedPost && activeTab === 'forYou' ? [pinnedPost, ...feedPosts] : feedPosts;
 
   // Scroll to top when a pinned post appears
   useEffect(() => {

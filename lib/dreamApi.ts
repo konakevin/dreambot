@@ -32,6 +32,10 @@ interface GenerateDreamOpts {
   job_id?: string;
   /** Style transfer: original post's ai_prompt used as style template for DLT */
   style_prompt?: string;
+  /** DLT recipe-replay: frozen LOOK anchors from the source post.
+   *  When present + valid, the server locks medium/vibe/model from this
+   *  recipe instead of the user's picker values. See docs/DLT_RECIPE_PLAN.md. */
+  dlt_recipe?: Record<string, unknown> | null;
   /** Pre-classified subject description (from classifyPhoto). Skips redundant vision on server. */
   subject_description?: string;
   /** Pre-classified subject type (from classifyPhoto). Determines server routing. */
@@ -131,6 +135,7 @@ export async function generateFromVibeProfile(
     vibeKey?: string;
     jobId?: string;
     stylePrompt?: string;
+    dltRecipe?: Record<string, unknown> | null;
   }
 ): Promise<GenerateDreamResult> {
   return generateDream({
@@ -142,6 +147,7 @@ export async function generateFromVibeProfile(
     vibe_key: opts?.vibeKey,
     job_id: opts?.jobId,
     style_prompt: opts?.stylePrompt,
+    dlt_recipe: opts?.dltRecipe ?? undefined,
   });
 }
 

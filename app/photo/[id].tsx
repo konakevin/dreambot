@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumPosts } from '@/hooks/useAlbumPosts';
+import { useUserContextFeed } from '@/hooks/useUserContextFeed';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { Toast } from '@/components/Toast';
@@ -20,7 +21,42 @@ export default function PhotoDetailScreen() {
   const albumIds = useAlbumStore((s) => s.ids);
   const queryClient = useQueryClient();
 
-  const { data: posts = [], isLoading, refetch, isRefetching } = useAlbumPosts(albumIds, id);
+  // Two modes:
+  //  - Album mode (albumIds populated): bounded list, single useQuery
+  //  - Context mode (no album, e.g. tapped from profile/notification/deep-link):
+  //    paginated useInfiniteQuery so the user can keep scrolling past 40 posts
+  //    without hitting black screen below.
+  const isAlbum = albumIds.length > 0;
+  const albumQuery = useAlbumPosts(albumIds, id);
+  const contextQuery = useUserContextFeed(id, !isAlbum);
+
+  // Flat-merge context-feed pages with defensive dedup (in case the poster
+  // creates a new post during the user's scroll session — that would shift
+  // offset-pagination and could double-include a boundary row).
+  const contextPosts = useMemo(() => {
+    const rows = contextQuery.data?.pages.flatMap((p) => p.rows) ?? [];
+    const seen = new Set<string>();
+    return rows.filter((r) => {
+      if (seen.has(r.id)) return false;
+      seen.add(r.id);
+      return true;
+    });
+  }, [contextQuery.data]);
+
+  const posts: DreamPostItem[] = isAlbum ? (albumQuery.data ?? []) : contextPosts;
+  const isLoading = isAlbum ? albumQuery.isLoading : contextQuery.isLoading;
+  const isRefetching = isAlbum ? albumQuery.isRefetching : contextQuery.isRefetching;
+  const refetch = isAlbum ? albumQuery.refetch : contextQuery.refetch;
+  const handleEndReached = useCallback(() => {
+    if (!isAlbum && contextQuery.hasNextPage && !contextQuery.isFetchingNextPage) {
+      contextQuery.fetchNextPage();
+    }
+  }, [
+    isAlbum,
+    contextQuery.hasNextPage,
+    contextQuery.isFetchingNextPage,
+    contextQuery.fetchNextPage,
+  ]);
 
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
@@ -57,12 +93,40 @@ export default function PhotoDetailScreen() {
       const newPublic = !post.is_public;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-      // Optimistic update
-      queryClient.setQueryData(
-        ['albumPosts', albumIds.join(','), id],
-        (old: DreamPostItem[] | undefined) =>
-          old?.map((p) => (p.id === postId ? { ...p, is_public: newPublic } : p))
-      );
+      // Optimistic update — write to whichever cache key is active
+      // (album mode → albumPosts, context mode → userContextFeed).
+      const applyToCaches = (publicValue: boolean) => {
+        // Album mode cache shape: DreamPostItem[]
+        queryClient.setQueryData(
+          ['albumPosts', albumIds.join(','), id],
+          (old: DreamPostItem[] | undefined) =>
+            old?.map((p) => (p.id === postId ? { ...p, is_public: publicValue } : p))
+        );
+        // Context mode cache shape: { pages: [{ rows, userId, nextOffset }, ...] }
+        queryClient.setQueryData(
+          ['userContextFeed', id],
+          (
+            old:
+              | {
+                  pages: { rows: DreamPostItem[]; userId: string; nextOffset: number }[];
+                  pageParams: unknown[];
+                }
+              | undefined
+          ) =>
+            old
+              ? {
+                  ...old,
+                  pages: old.pages.map((page) => ({
+                    ...page,
+                    rows: page.rows.map((p) =>
+                      p.id === postId ? { ...p, is_public: publicValue } : p
+                    ),
+                  })),
+                }
+              : old
+        );
+      };
+      applyToCaches(newPublic);
 
       const { error } = await supabase
         .from('uploads')
@@ -71,11 +135,7 @@ export default function PhotoDetailScreen() {
         .eq('user_id', user.id);
 
       if (error) {
-        queryClient.setQueryData(
-          ['albumPosts', albumIds.join(','), id],
-          (old: DreamPostItem[] | undefined) =>
-            old?.map((p) => (p.id === postId ? { ...p, is_public: !newPublic } : p))
-        );
+        applyToCaches(!newPublic);
         Toast.show('Failed to update', 'close-circle');
       } else {
         Toast.show(
@@ -116,6 +176,7 @@ export default function PhotoDetailScreen() {
         showVisibilityToggle
         onTogglePosted={handleTogglePosted}
         onHudToggle={handleHudToggle}
+        onEndReached={handleEndReached}
       />
     </View>
   );

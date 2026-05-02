@@ -37,6 +37,8 @@ const { pickModel } = require('./modelPicker');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
+const { distillStyle } = require('./styleDistiller');
+const { buildRecipe } = require('./recipeBuilder');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -560,30 +562,71 @@ async function lookupBotUserId(sb, username) {
   return data.id;
 }
 
-async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption }) {
+async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption, recipe, fluxSeed }) {
   const bytes = fs.readFileSync(localPath);
   const key = `${userId}/${Date.now()}-${username}-${Math.random().toString(36).slice(2, 8)}.jpg`;
   const up = await sb.storage.from('uploads').upload(key, bytes, { contentType: 'image/jpeg' });
   if (up.error) throw new Error(`storage upload failed: ${up.error.message}`);
   const publicUrl = sb.storage.from('uploads').getPublicUrl(key).data.publicUrl;
 
-  const { error: insErr } = await sb.from('uploads').insert({
-    user_id: userId,
-    image_url: publicUrl,
-    thumbnail_url: null,
-    ai_prompt: prompt,
-    dream_medium: medium,
-    dream_vibe: vibeKey,
-    width: 768,
-    height: 1344,
-    is_active: true,
-    is_posted: true,
-    is_public: true,
-    is_ai_generated: true,
-    posted_at: new Date().toISOString(),
-    caption: caption || null,
-  });
+  // Insert uploads row + select id back so we can populate style_summary after.
+  const { data: insRow, error: insErr } = await sb
+    .from('uploads')
+    .insert({
+      user_id: userId,
+      image_url: publicUrl,
+      thumbnail_url: null,
+      ai_prompt: prompt,
+      dream_medium: medium,
+      dream_vibe: vibeKey,
+      width: 768,
+      height: 1344,
+      is_active: true,
+      is_posted: true,
+      is_public: true,
+      is_ai_generated: true,
+      posted_at: new Date().toISOString(),
+      caption: caption || null,
+      recipe: recipe || null,
+      flux_seed: fluxSeed ?? null,
+    })
+    .select('id')
+    .single();
   if (insErr) throw new Error(`uploads insert failed: ${insErr.message}`);
+  const uploadId = insRow.id;
+
+  // Plan C — distill the unified style fingerprint (medium + vibe + ai_prompt)
+  // via Haiku and write to uploads.style_summary. AWAITED (cron-safe — without
+  // await the script exits before the UPDATE lands). Failure → null → DLT
+  // falls back to ai_prompt with the existing weaker filtering. Zero-regression.
+  // Mirrors supabase/functions/_shared/styleDistiller.ts (Edge fires-and-forget;
+  // bot context awaits because there's no user response to block).
+  try {
+    const anthropicKey = getKey('ANTHROPIC_API_KEY');
+    const summary = await distillStyle(
+      { rawPrompt: prompt, mediumKey: medium, vibeKey },
+      anthropicKey,
+      sb
+    );
+    if (summary) {
+      const { error: updErr } = await sb
+        .from('uploads')
+        .update({ style_summary: summary })
+        .eq('id', uploadId);
+      if (updErr) {
+        console.warn(`  ⚠️ style_summary update failed: ${updErr.message}`);
+      } else {
+        console.log(
+          `  🎨 style_summary: ${summary.slice(0, 100)}${summary.length > 100 ? '…' : ''}`
+        );
+      }
+    } else {
+      console.log(`  ⚠️ style_summary: NULL (DLT will fall back to ai_prompt)`);
+    }
+  } catch (err) {
+    console.warn(`  ⚠️ style_summary distill failed: ${err.message}`);
+  }
+
   return publicUrl;
 }
 
@@ -684,6 +727,19 @@ async function runBot(opts) {
   let localPath = null;
   let imageUrl = null;
 
+  // Accumulator for the DLT recipe — populated as the engine rolls/builds.
+  // Path-builders may also contribute lighting/camera/blow-it-up via the
+  // optional briefMeta return shape (see step 5 below). Phase 1 captures
+  // what the engine itself can see; missing fields stay null and can be
+  // progressively enriched in a follow-up.
+  const recipeBlocks = {
+    chaosBlock: null,
+    sensoryBlock: null,
+    blowItUpBlock: null,
+    camera: null,
+    lighting: null,
+  };
+
   try {
     // 1. Fetch vibe directive + medium flux fragment
     errorStage = 'vibe-lookup';
@@ -729,6 +785,22 @@ async function runBot(opts) {
     let sensoryProfile = { anchors: [], channelKeys: [], context: null };
     const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
+    // briefMeta — optional path-builder-supplied recipe enrichment.
+    // Path builders may return either:
+    //   string  — the brief (legacy)
+    //   { direct: true, prompt: string, briefMeta? } — Sonnet-bypass with optional meta
+    //   { brief: string, briefMeta: {...} } — brief + recipe metadata (camera/lighting/blowItUpBlock)
+    // briefMeta fields populate the recipe's per-path look anchors so DLT
+    // can replay them. If a builder doesn't return briefMeta, those fields
+    // stay null in the recipe (ai_prompt fallback covers them).
+    const briefMeta =
+      briefResult && typeof briefResult === 'object' && briefResult.briefMeta
+        ? briefResult.briefMeta
+        : {};
+    if (briefMeta.camera) recipeBlocks.camera = briefMeta.camera;
+    if (briefMeta.lighting) recipeBlocks.lighting = briefMeta.lighting;
+    if (briefMeta.blowItUpBlock) recipeBlocks.blowItUpBlock = briefMeta.blowItUpBlock;
+
     if (isDirectPrompt) {
       // Path composed the Flux prompt directly — skip Sonnet entirely
       middle = briefResult.prompt;
@@ -738,7 +810,15 @@ async function runBot(opts) {
       console.log('  ⚡ direct prompt (Sonnet bypassed)');
     } else {
       // Standard path: brief → (optional chaos block) → Sonnet → scene description
-      let brief = typeof briefResult === 'string' ? briefResult : String(briefResult);
+      // Support shape { brief, briefMeta } too — brief lives at .brief.
+      let brief;
+      if (typeof briefResult === 'string') {
+        brief = briefResult;
+      } else if (briefResult && typeof briefResult.brief === 'string') {
+        brief = briefResult.brief;
+      } else {
+        brief = String(briefResult);
+      }
       if (!brief || brief.length < 50) {
         throw new Error(`buildBrief returned invalid brief (len=${brief.length})`);
       }
@@ -756,6 +836,7 @@ async function runBot(opts) {
       const chaosBlock = buildChaosBriefBlock(chaosProfile);
       if (chaosBlock) {
         brief = brief + chaosBlock;
+        recipeBlocks.chaosBlock = chaosBlock;
         console.log(`  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`);
       }
 
@@ -766,6 +847,7 @@ async function runBot(opts) {
       const sensoryBlock = buildSensoryBriefBlock(sensoryProfile);
       if (sensoryBlock) {
         brief = brief + sensoryBlock;
+        recipeBlocks.sensoryBlock = sensoryBlock;
         console.log(`  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`);
       }
 
@@ -899,6 +981,36 @@ async function runBot(opts) {
         : '';
     finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
 
+    // Build the DLT recipe — frozen LOOK anchors captured at posting time.
+    // See docs/DLT_RECIPE_PLAN.md for full architecture. Stored on the
+    // upload row as JSONB; replayed at DLT time to reproduce source's
+    // medium + look against a new user's subject/cast.
+    const recipe = buildRecipe({
+      model: renderModel,
+      mediumKey: medium,
+      vibeKey,
+      aiPrompt: finalPrompt,
+      // fluxSeed left null in Phase 1 — Replicate response capture is a
+      // follow-up enrichment (see DLT_RECIPE_PLAN Phase 1.5).
+      fluxSeed: null,
+      promptPrefix: pathPrefix
+        ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
+        : rawPrefix,
+      mediumStyleOverride: bot.mediumStyles && bot.mediumStyles[medium]
+        ? bot.mediumStyles[medium]
+        : (mediumFluxFragment || ''),
+      promptSuffix: rawSuffix,
+      camera: recipeBlocks.camera,
+      lighting: recipeBlocks.lighting || '',
+      scenePalette: sharedDNA?.scenePalette || '',
+      colorPalette: sharedDNA?.colorPalette || '',
+      chaosBlock: recipeBlocks.chaosBlock,
+      sensoryBlock: recipeBlocks.sensoryBlock,
+      blowItUpBlock: recipeBlocks.blowItUpBlock,
+      botUsername: bot.username,
+      path: resolvedPath,
+    });
+
     if (dryRun) {
       return {
         ok: true,
@@ -908,6 +1020,7 @@ async function runBot(opts) {
         path: resolvedPath,
         vibeKey,
         medium,
+        recipe,
       };
     }
 
@@ -990,6 +1103,8 @@ async function runBot(opts) {
         vibeKey,
         medium,
         caption,
+        recipe,
+        fluxSeed: null,
       });
 
       // 13. Commit dedup picks ONLY on successful post
@@ -1036,6 +1151,7 @@ async function runBot(opts) {
       costCents,
       chaos: chaosProfile,
       sensory: sensoryProfile,
+      recipe,
     };
   } catch (err) {
     const durationMs = Date.now() - startedAt;

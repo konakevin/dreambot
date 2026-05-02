@@ -2041,3 +2041,77 @@ The output is **2 new paths per universe**: `<universe>-landscape` (outdoor plan
 | Stargate | Goa'uld gold-pyramid ships, Wraith biomechanical hive-ships, Atlantis underwater-city |
 | The Expanse | Belt asteroid stations carved into rock, Mars Mariner Valley colonies |
 | Babylon 5 | Vorlon organic-bioship, Shadow black-spider-ship, Centauri ornate empire |
+
+---
+
+## Tuning a Bot's Path Weight Distribution
+
+Every bot's `index.js` exports a `pathWeights: {}` map where each path has a numeric weight. The picker draws weighted-random across the active set: a path with weight 4 is rendered twice as often as a path with weight 2. This is the lever for shaping a bot's overall "feed vibe."
+
+### Why Aggregate Paths Into High-Level Categories First
+
+Once a bot has 15+ active paths, looking at individual `pathWeights` becomes useless. You can't tell at a glance whether the feed leans scenery-heavy, character-heavy, or franchise-flavored. **Group paths into 3-5 high-level categories** that map to user-facing vibes, then reason about weights at the category level. Once you have target shares per category (e.g., "I want 40% universe-coded scenes / 30% character / 30% generic"), back into per-path weights.
+
+For StarBot (2026-05-02 example):
+
+| Category | Paths in category | Why grouped together |
+|---|---|---|
+| Universe-coded scene-only | dune-landscape, aliens-landscape, aliens-architecture, starwars-landscape, starwars-architecture, guardians-landscape, guardians-architecture, mass-effect-architecture, halo-landscape, halo-architecture, star-trek-landscape, starcraft-landscape, starcraft-architecture (13 paths) | All "fan-service IP-coded scenes, no characters" — same user-facing vibe |
+| Character paths | female-explorer, male-explorer, cyborg-woman, robot-moment, cosmic-oracle (5 paths) | All render a character as primary subject |
+| Generic scene paths | cosmic-vista, alien-landscape, space-opera, sci-fi-interior, cozy-sci-fi-interior, alien-city, real-space, megastructure (8 paths) | All "open sci-fi worldbuilding scenes, no franchise codes" |
+
+### Computing Per-Path Weights From Category Targets
+
+Given target category shares and path counts:
+
+```
+target_share_X
+weight_per_path_in_X = (target_share_X / 100) × TOTAL / count_in_X
+```
+
+Example: StarBot's 26 active paths, target 40 / 30 / 30 split:
+
+| Category | Target share | Path count | Weight each | Subtotal | Actual share |
+|---|---|---|---|---|---|
+| Universe scene | 40% | 13 | 4 | 52 | 39.4% |
+| Character | 30% | 5 | 8 | 40 | 30.3% |
+| Generic scene | 30% | 8 | 5 | 40 | 30.3% |
+| **Total weight** | 100% | 26 | — | **132** | 100% |
+
+Pick the smallest weights that hit the target. 4 / 8 / 5 reads as actually-40/30/30 once you compute (52/132, 40/132, 40/132). Avoid floats — integer weights are simpler to reason about and to update later.
+
+### Layout Pattern
+
+Group the entries in `pathWeights` by category in source order with a comment header per group. This makes weight-tuning a one-line edit per category and keeps audit-by-eye trivial:
+
+```javascript
+pathWeights: {
+  // Generic scene paths (weight 5 each)
+  'cosmic-vista': 5,
+  'alien-landscape': 5,
+  // ... 6 more
+
+  // Character paths (weight 8 each)
+  'robot-moment': 8,
+  'cosmic-oracle': 8,
+  // ... 3 more
+
+  // Universe-coded scene-only paths (weight 4 each)
+  'dune-landscape': 4,
+  'aliens-landscape': 4,
+  // ... 11 more
+}
+```
+
+### When To Re-Tune
+
+- After adding/removing paths in a category — recompute per-path weights so the category's target share holds.
+- When user feedback says the feed "feels too X" — bump the underweighted category by one weight-tier.
+- After a path is deactivated (commented out) — adjust the remaining paths in that category if you want the category's total share preserved.
+- Quarterly sanity-check: run a 50-100 random batch and confirm the empirical category split matches the configured weights (recency-picker can sometimes cluster within categories).
+
+### Hard Rules
+
+- ALWAYS show a comment in `pathWeights` explaining the category structure and current target shares (so future edits don't drift the distribution by accident).
+- Use integer weights — easier to update and easier to read.
+- Comment out (don't delete) deactivated paths' weight lines — preserves the audit trail and makes re-enable a one-line revert.

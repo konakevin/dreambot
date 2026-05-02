@@ -69,11 +69,15 @@ export default function DreamLikeThisScreen() {
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
   const setStylePrompt = useDreamStore((s) => s.setStylePrompt);
+  const setDltRecipe = useDreamStore((s) => s.setDltRecipe);
 
   // Reference post data
   const [refMedium, setRefMedium] = useState<string | null>(null);
   const [refVibe, setRefVibe] = useState<string | null>(null);
   const [refPrompt, setRefPrompt] = useState<string | null>(null);
+  // Frozen LOOK recipe — present on Phase-1+ posts; null on legacy posts.
+  // Threaded into generateDream so the server can lock medium/vibe/model.
+  const [refRecipe, setRefRecipe] = useState<Record<string, unknown> | null>(null);
   // Direct-fetched medium row — covers bot-only mediums (gothic / gothic-realistic /
   // gothic-painted / gothic-whimsy) that `useDreamMediums()` excludes. Without this,
   // DLT on a bot post showed the raw key as label and defaulted face_swaps=true.
@@ -96,7 +100,7 @@ export default function DreamLikeThisScreen() {
     (async () => {
       const { data } = await supabase
         .from('uploads')
-        .select('dream_medium, dream_vibe, ai_prompt, style_summary')
+        .select('dream_medium, dream_vibe, ai_prompt, style_summary, recipe')
         .eq('id', params.postId)
         .single();
       const row = data as unknown as Record<string, unknown> | null;
@@ -104,10 +108,12 @@ export default function DreamLikeThisScreen() {
         const mk = (row.dream_medium as string) ?? null;
         setRefMedium(mk);
         setRefVibe((row.dream_vibe as string) ?? null);
-        // Plan C: prefer the distilled style_summary (subject-stripped via
-        // Haiku at insert time) over the raw ai_prompt. Falls back to
-        // ai_prompt for older posts not yet backfilled, then to params.prompt
-        // (legacy callers).
+        // Phase 2.2b: prefer the frozen recipe (rolled values verbatim) over
+        // style_summary (Haiku interpretation) over ai_prompt (raw). Recipe
+        // is the strongest fidelity signal — locks medium/vibe/model from the
+        // source on the server. Falls back gracefully when null.
+        const recipe = (row.recipe as Record<string, unknown> | null) ?? null;
+        setRefRecipe(recipe);
         const styleRef =
           (row.style_summary as string | null) ??
           (row.ai_prompt as string | null) ??
@@ -226,6 +232,7 @@ export default function DreamLikeThisScreen() {
     setVibe(refVibe ?? 'surprise_me');
     setPrompt(userPrompt.trim());
     setStylePrompt(refPrompt);
+    setDltRecipe(refRecipe);
 
     // Navigate to Loading → Reveal (same as Create flow)
     nav.push('/dream/loading');
