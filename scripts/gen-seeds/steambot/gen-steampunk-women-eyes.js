@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/steambot/seeds/steampunk_women_eyes.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for SteamBot's sexy-steampunk-woman path. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of her eyes AND how steampunk-world light interacts with them — gaslight glint, brass reflection, forge-flame catch, oil-lamp glow.
 

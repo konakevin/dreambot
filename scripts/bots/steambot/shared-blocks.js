@@ -43,6 +43,10 @@ const STEAMPUNK_WOMAN_CANDID_BLOCK = `━━━ STEAMPUNK WOMAN CANDID (sexy-ste
 
 Really-fucking-sexy steampunk woman, candid solo, doing a SPECIFIC steampunk-identity action — corseted airship-captain at helm, brass-prosthetic mechanic oiling gauntlets, Victorian-adventuress reloading steam-rifle, mad-scientist at workbench with cybernetic goggles. Capable + dangerous-magnetic + unmistakably-steampunk. Caught-in-the-moment voyeuristic framing. Solo — no men, no second figure.`;
 
+const STEAMPUNK_MAN_CANDID_BLOCK = `━━━ STEAMPUNK MAN CANDID (steampunk-man path only) ━━━
+
+Handsome / dashing / rugged / intent / capable steampunk man, candid solo, doing a SPECIFIC steampunk-identity action — airship-captain at helm with hand on throttle, gear-engineer at the workbench with magnifying loupe, brass-limbed war-veteran cleaning his prosthetic, dapper inventor sketching a blueprint, steam-gunslinger drawing twin brass-revolvers, alchemist watching a glowing alembic. Capable + intent + unmistakably-steampunk. Period-accurate Victorian-industrial menswear ALWAYS. He is NOT posing for the camera — he was caught mid-action. Solo — no women, no second figure. NEVER "sexy" / "seductive" / "smoldering" — handsome and intent through ACTION.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -54,4 +58,5 @@ module.exports = {
   BLOW_IT_UP_BLOCK,
   CONTRAPTION_VARIETY_BLOCK,
   STEAMPUNK_WOMAN_CANDID_BLOCK,
+  STEAMPUNK_MAN_CANDID_BLOCK,
 };
