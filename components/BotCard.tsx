@@ -19,11 +19,15 @@ export function BotCard({
   isFollowing,
   thumbnailUrls,
   onOpenViewer,
+  onPressBot,
 }: {
   bot: BotUser;
   isFollowing: boolean;
   thumbnailUrls: string[];
   onOpenViewer: (urls: string[], initialIndex: number) => void;
+  /** When provided, the avatar + name area becomes tappable (e.g. navigate
+   *  to the bot's profile). Omit to keep it non-interactive (onboarding). */
+  onPressBot?: () => void;
 }) {
   const profile = getBotProfile(bot.username);
   const { mutate: toggleFollow, isPending } = useToggleFollow();
@@ -43,20 +47,38 @@ export function BotCard({
     );
   }
 
+  function handlePressBot() {
+    if (!onPressBot) return;
+    Haptics.selectionAsync();
+    onPressBot();
+  }
+
+  const botInfo = (
+    <>
+      {bot.avatar_url ? (
+        <Image source={{ uri: bot.avatar_url }} style={s.avatar} contentFit="cover" />
+      ) : (
+        <View style={[s.avatar, s.avatarFallback]}>
+          <Ionicons name="sparkles" size={20} color={colors.accent} />
+        </View>
+      )}
+      <View style={s.cardText}>
+        <Text style={s.username}>{bot.username}</Text>
+        {profile?.description ? <Text style={s.tagline}>{profile.description}</Text> : null}
+      </View>
+    </>
+  );
+
   return (
     <View style={s.card}>
       <View style={s.cardTop}>
-        {bot.avatar_url ? (
-          <Image source={{ uri: bot.avatar_url }} style={s.avatar} contentFit="cover" />
+        {onPressBot ? (
+          <TouchableOpacity style={s.botInfoTap} onPress={handlePressBot} activeOpacity={0.7}>
+            {botInfo}
+          </TouchableOpacity>
         ) : (
-          <View style={[s.avatar, s.avatarFallback]}>
-            <Ionicons name="sparkles" size={20} color={colors.accent} />
-          </View>
+          <View style={s.botInfoTap}>{botInfo}</View>
         )}
-        <View style={s.cardText}>
-          <Text style={s.username}>{bot.username}</Text>
-          {profile?.description ? <Text style={s.tagline}>{profile.description}</Text> : null}
-        </View>
         <TouchableOpacity
           style={[s.followBtn, showFollowing && s.followBtnActive]}
           onPress={handleFollow}
@@ -106,6 +128,12 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   cardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  botInfoTap: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,

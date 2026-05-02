@@ -14,6 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
@@ -133,6 +134,7 @@ export default function SettingsBotsScreen() {
                 isFollowing={followingSet.has(bot.id)}
                 thumbnailUrls={thumbnails?.get(bot.id) ?? []}
                 onOpenViewer={openViewer}
+                onPressBot={() => router.push(`/user/${bot.id}`)}
               />
             ))
           )}
