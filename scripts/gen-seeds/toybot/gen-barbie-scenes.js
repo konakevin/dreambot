@@ -3,8 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/barbie_scenes.json',
   total: 200,
-  batch: 10,
-  append: true,
+  batch: 25,
   metaPrompt: (n) => `You are writing ${n} BARBIE-WORLD scene descriptions for ToyBot's barbie-scene path — cinematic Mattel-fashion-doll dioramas. Glossy 11-inch fashion-dolls on hand-built playsets with pink-dominant palette, DreamHouse architecture, fashion-boutique signage, convertible-pink-car scale, photographed like a Barbie-movie film still.
 
 Each entry: 18-28 words. ONE specific Barbie-world cinematic scene with fashion-doll figurines mid-action in a fully-dressed playset.
@@ -38,6 +37,15 @@ Classic 11.5-inch Mattel fashion-dolls — articulated plastic bodies, molded ha
 - Ski-chalet apres — dolls in parkas toasting mugs by stone fireplace, ski-rack on wall
 - Tropical-jungle explorer — doll with camera and safari-hat peeking through plastic fronds
 - DreamHouse pink-bathroom — doll at vanity with curlers, bubblegum-pink robe, perfume bottles
+
+━━━ NON-NEGOTIABLE: ANTI-HUMAN-LEAK RULE ━━━
+Every figure is a PLASTIC FASHION DOLL. Anchor that with toy-medium language INSIDE the description: "molded", "painted", "articulated", "plastic", "vinyl", "rooted hair", "11.5-inch", "doll", "Mattel-scale".
+
+NEVER use "skin" (use "molded plastic skin-tone" or "painted skin-tone"), "flesh", "real eyes", "wet eyes", "tears", "sweat", "breath", "alive", or "her face" alone (use "painted face" / "molded face" / "glossy painted-makeup face").
+
+When you describe an archetype (model, ballerina, vet, etc.) ALWAYS attach "doll" / "fashion-doll" / "11.5-inch articulated doll":
+  ❌ "Ballerina mid-spin..."  → cues real woman
+  ✅ "Ballerina fashion-doll mid-spin, articulated leg extended, painted glossy makeup, rooted hair flying..."
 
 ━━━ MUST-HAVE FOR EVERY ENTRY ━━━
 - Reference FASHION-DOLL / plastic-doll / Mattel-scale / articulated-doll / playset LANGUAGE

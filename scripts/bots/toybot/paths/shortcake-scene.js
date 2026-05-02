@@ -19,6 +19,8 @@ ${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
 
 ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 
+${blocks.ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK}
+
 ━━━ SHORTCAKE-FIGURES MEDIUM LOCK ━━━
 EVERY character is a 1980s-style soft-plastic scented-doll — 3–5 inches, oversized head with huge round eyes, tiny nose, rosy blush, thick rooted pastel-yarn hair (strawberry-blonde / raspberry-pink / blueberry-blue / lemon-yellow / mint), gingham or calico apron-dress, pinafore, pantaloons, big bonnet or berry-hat. Environment is a pastel dessert-or-flower-themed miniature playset with oversized-scale props (giant strawberry, cupcake-castle, lollipop-tree). Faded-catalog palette. Wholesome, no edge. NEVER real girl, NEVER modern doll, NEVER CGI.
 

@@ -3,7 +3,7 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/shortcake_landscapes.json',
   total: 200,
-  batch: 50,
+  batch: 25,
   metaPrompt: (n) => `You are writing ${n} 1980s STRAWBERRY-SHORTCAKE-era LANDSCAPE scene descriptions for ToyBot's shortcake-scene path. Pastel dessert-fantasy miniature worlds with oversized-scale props (giant strawberries / cupcake-castles / lollipop-trees / rainbow-bridges). Warm golden-hour nostalgic catalog lighting.
 
 Each entry: 15-25 words. ONE specific Strawberry-Shortcake-era landscape scene.
@@ -18,6 +18,13 @@ Lead with body-position in first 5-8 words (kneeling / crouched / seated / recli
 ━━━ CONTEXT DNA ━━━
 - Shortcake-era environments: berry-patch / cupcake-cottage-kitchen / rainbow-bridge / pie-baking-booth / lollipop-forest / ice-cream-parlor / flower-garden tea-party / cotton-candy carnival / cupcake-castle / sleepover-cupcake-liner-bedroom / gingerbread-cottage / pastel-meadow / cloud-carriage / candy-shop / hot-air-balloon / ice-skating-pond / tulip-field / cake-slice-bedroom / dessert-train / strawberry-patch / pastel-cloud-treehouse / candy-stripe bakery / teddy-bear-picnic / pastel-unicorn-meadow
 - Doll DNA: 3-5-inch soft-plastic with oversized head, huge round eyes, tiny nose, rosy blush, thick rooted pastel-yarn hair (strawberry-blonde / raspberry-pink / blueberry-blue / lemon-yellow / mint), gingham or calico apron-dress / pinafore / pantaloons / big bonnet or berry-hat, striped tights, ankle-boots
+
+━━━ NON-NEGOTIABLE: ANTI-HUMAN-LEAK RULE ━━━
+Every figure is a 3-5-inch SOFT-PLASTIC DOLL. Anchor that with toy-medium language INSIDE the description: "soft-plastic", "molded", "painted", "rooted yarn-hair", "doll", "figurine", "playset-miniature", "oversized-head".
+
+NEVER use "skin" (use "soft-plastic skin-tone"), "flesh", "real eyes" (use "huge round painted eyes"), "tears", "sweat", "breath", "alive", or "her face" alone (use "painted face").
+
+When you describe an archetype (girl, princess, baker, etc.) ALWAYS attach "doll" / "scented-doll" / "soft-plastic figurine" so Sonnet/Flux render the toy, not a real child.
 
 ━━━ MUST-HAVE ━━━
 - Reference DOLL / figurine / soft-plastic / rooted-hair / playset-miniature LANGUAGE

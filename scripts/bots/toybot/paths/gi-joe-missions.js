@@ -19,6 +19,8 @@ ${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
 
 ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 
+${blocks.ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK}
+
 ━━━ GI-JOE-FIGURES MEDIUM LOCK ━━━
 EVERY figure is a 3.75-inch articulated action-figure with swivel-waist / ball-joint arms / rubber-band-waist construction. Hand-painted multicolor commando wardrobe (camo fatigues / berets / goggles / bandannas / chest-rig / dogtags). Code-name commando archetypes (masked-operative / mohawk-soldier / ninja-operative / gruff-sergeant / demolitions-expert / pilot-ace / jungle-specialist / arctic-specialist / tank-commander). Opponents are masked terror-organization faceless-troopers (silver-visor helmets, armored jumpsuits) and commanders (chrome-faceplate / hooded-cloak / snake-motif / serpent-eye mask). Playset diorama with iconic plastic military vehicles (tank / jeep / assault-chopper / hoverbike / attack-cruiser). NEVER classic single-pose army-men, NEVER real soldier, NEVER CGI.
 

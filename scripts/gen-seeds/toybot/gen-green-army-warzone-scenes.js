@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/army_men_scenes.json',
+  outPath: 'scripts/bots/toybot/seeds/green_army_warzone_scenes.json',
   total: 200,
   batch: 10,
   append: true,

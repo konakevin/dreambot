@@ -19,6 +19,8 @@ ${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
 
 ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 
+${blocks.ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK}
+
 ━━━ BARBIE-FIGURES MEDIUM LOCK ━━━
 EVERY character is an 11.5-inch articulated Mattel-scale fashion-doll — plastic body, molded hair, oversized head with glossy painted-makeup (winged-liner, pink-lip), fashion-forward mini-wardrobe (gown / swimsuit / power-suit / astronaut / chef / rockstar / ballerina / vet), spike-heel plastic shoes. Environment is a fully-dressed DreamHouse / boutique / rooftop-pool / runway / convertible-pink-car playset. Pink-dominant signature palette. Cinematic Barbie-film framing. NEVER real woman, NEVER CGI-render, NEVER illustration.
 

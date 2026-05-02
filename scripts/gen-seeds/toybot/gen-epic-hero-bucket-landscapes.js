@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/action_hero_landscapes.json',
+  outPath: 'scripts/bots/toybot/seeds/epic_hero_bucket_landscapes.json',
   total: 200,
   batch: 50,
   metaPrompt: (n) => `You are writing ${n} VINTAGE "EPIC" ACTION-FIGURE LANDSCAPE scene descriptions for ToyBot's action-hero path — rolled-up bucket of 80s/90s action-figure environments covering (a) Masters-of-the-Universe sword-and-sorcery realms, (b) Star-Wars-era space-adventurer sets, and (c) cape-and-cowl superhero-headquarters/battlefields. Non-IP — archetype only.

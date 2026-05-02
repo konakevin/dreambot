@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
-  outPath: 'scripts/bots/toybot/seeds/tabletop_landscapes.json',
+  outPath: 'scripts/bots/toybot/seeds/miniature_dungeon_landscapes.json',
   total: 200,
   batch: 50,
   metaPrompt: (n) => `You are writing ${n} WARHAMMER / D&D TABLETOP-MINIATURE TERRAIN LANDSCAPE scene descriptions for ToyBot's tabletop-minis path. Handcrafted terrain dioramas — sculpted-foam rocks, lichen-trees, plaster ruins, resin-water, flocked-bases. Games-Workshop / Reaper / WizKids display-cabinet pro-painter aesthetic.
