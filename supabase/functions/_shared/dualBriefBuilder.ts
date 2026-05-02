@@ -141,13 +141,24 @@ COMPOSITION RULES:
 - Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.
 - Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.
 - Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera.
-- Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.
+- Characters default to STATIONARY (standing, sitting, leaning) UNLESS the user prompt specifies an action verb — see ACTION/POSE RULE below for the override.
 - Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.
 - Both characters should feel CONNECTED — sharing the same moment, reacting to the same world. Not doing separate isolated activities.
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
 - Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.
 - DO NOT include any face-bearing decorative objects in the same frame as the two characters: NO statues, busts, mannequins, dolls, masks, helmets with visible faceplates, totems, idols, gargoyles, carved figures, painted portraits, sculpted heads, or cartoon/character imagery on signs/billboards. These compete with the character faces during the face swap step and cause swap failures. If the scene calls for them, describe equivalent decoration that has no face (urns, banners, abstract carvings, geometric patterns, plants, lanterns, etc.).${faceRealismRule}
-${swapBreakingReframe}${dualAction ? `\nFALLBACK BODY LANGUAGE (use ONLY if user prompt doesn't specify what characters are doing — if they did, ignore this and use theirs):\n"${dualAction}"\n` : ''}
+${swapBreakingReframe}${dualAction ? `\nFALLBACK BODY LANGUAGE (use ONLY if user prompt doesn't specify what characters are doing — if they did, ignore this and use theirs):\n"${dualAction}"\n` : ''}${
+    scene.userPrompt
+      ? `
+USER INTENT — EXPRESSION & POSE:
+If the user prompt specifies a facial EXPRESSION (scared, angry, sad, surprised, joyful, smirking, sultry, etc.), translate it to physical face description (eyes / brows / mouth) early in the prompt. OVERRIDES default "warm / facing camera" cues. If different expressions per character, apply each to the correct LEFT/RIGHT character.
+
+If the user prompt specifies an ACTION (walking, running, dancing, hiking, kissing, sitting, etc.), render BOTH characters mid-action with documentary candid framing — body mechanics, weight transfer, tracking 3/4 angle, like a film still. OVERRIDES the default "stationary, three-quarter view facing camera" cue. NON-NEGOTIABLE dual constraint: both still in their L/R halves, both faces still partially visible (3/4 toward camera, never pure profile, never from behind), both in synchronized parallel motion (NOT one ahead of the other).
+
+If the user prompt specifies a HAND GESTURE (shaka, peace sign, thumbs up, middle finger / the bird, rock on, ok sign, fist, point, wave, salute, etc.), spell out FINGER GEOMETRY explicitly — Flux defaults "shaka" to a wave unless you describe which fingers are extended and which are curled. Example: shaka = "thumb and pinky extended outward, three middle fingers curled into palm." Middle finger is allowed. If different gestures per character, apply each to the correct LEFT/RIGHT character.
+`
+      : ''
+  }
 CHARACTERS IN THE SCENE:
 ${castDescBlock}
 
