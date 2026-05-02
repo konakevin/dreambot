@@ -31,23 +31,34 @@ function mapRow(row: Record<string, unknown>): Comment {
   };
 }
 
+interface CommentsPage {
+  rows: Comment[];
+  hasMore: boolean;
+  nextOffset: number;
+}
+
 export function useComments(uploadId: string) {
   return useInfiniteQuery({
     queryKey: ['comments', uploadId],
-    queryFn: async ({ pageParam = 0 }): Promise<Comment[]> => {
+    queryFn: async ({ pageParam = 0 }): Promise<CommentsPage> => {
       const { data, error } = await supabase.rpc('get_comments', {
         p_upload_id: uploadId,
         p_limit: PAGE_SIZE,
         p_offset: pageParam,
       });
       if (error) throw error;
-      return (data ?? []).map(mapRow);
+      const rows = (data ?? []).map(mapRow);
+      // Both hasMore and nextOffset captured at fetch time so optimistic
+      // mutations (delete-comment, like-comment) don't break pagination by
+      // shrinking rows.length below PAGE_SIZE.
+      return {
+        rows,
+        hasMore: rows.length === PAGE_SIZE,
+        nextOffset: (pageParam as number) + rows.length,
+      };
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length < PAGE_SIZE) return undefined;
-      return allPages.reduce((total, page) => total + page.length, 0);
-    },
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextOffset : undefined),
     enabled: !!uploadId,
     staleTime: 30_000,
   });

@@ -53,7 +53,8 @@ export default function CommentsScreen() {
   const mentionStart = useRef(-1);
   const inputRef = useRef<TextInput>(null);
 
-  const comments = useMemo(() => data?.pages.flat() ?? [], [data]);
+  // Page shape is { rows, hasMore, nextOffset } — flatMap rows
+  const comments = useMemo(() => data?.pages.flatMap((p) => p.rows) ?? [], [data]);
   const { data: mentionResults = [] } = useSearchUsers(mentionQuery);
 
   function handleTextChange(newText: string) {

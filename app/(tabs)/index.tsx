@@ -25,46 +25,16 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 type FeedTab = 'forYou' | 'following' | 'bots';
 const PAGE_SIZE = 20;
 
-/**
- * Content diversity post-processing.
- * Reorders scored feed to prevent monotonous sequences:
- * - No more than 2 consecutive posts from the same user
- * - No more than 3 consecutive posts of the same medium
- */
-function applyDiversity(posts: DreamPostItem[]): DreamPostItem[] {
-  if (posts.length <= 2) return posts;
-  const result: DreamPostItem[] = [];
-  const deferred: DreamPostItem[] = [];
-
-  for (const post of posts) {
-    const len = result.length;
-    // Check same-user streak (max 2)
-    const sameUser =
-      len >= 2 &&
-      result[len - 1].user_id === post.user_id &&
-      result[len - 2].user_id === post.user_id;
-    // Check same-medium streak (max 3)
-    const sameMedium =
-      len >= 3 &&
-      post.dream_medium != null &&
-      result[len - 1].dream_medium === post.dream_medium &&
-      result[len - 2].dream_medium === post.dream_medium &&
-      result[len - 3].dream_medium === post.dream_medium;
-
-    if (sameUser || sameMedium) {
-      deferred.push(post);
-    } else {
-      result.push(post);
-    }
-  }
-  // Append deferred posts at the end (still visible, just not in a streak)
-  return result.concat(deferred);
-}
+// Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
+import { applyDiversity } from '@/lib/feedDiversity';
 
 interface FeedCursor {
   score: number;
   id: string;
 }
+
+type FeedRow = DreamPostItem & { feed_score?: number };
+type FeedPage = { rows: FeedRow[]; nextCursor: FeedCursor | null };
 
 function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
   const user = useAuthStore((s) => s.user);
@@ -72,7 +42,7 @@ function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
 
   return useInfiniteQuery({
     queryKey: ['dreamFeed', tab, user?.id, feedSeed, botUserId ?? null],
-    queryFn: async ({ pageParam }): Promise<(DreamPostItem & { feed_score?: number })[]> => {
+    queryFn: async ({ pageParam }): Promise<FeedPage> => {
       const { data, error } = await supabase.rpc('get_feed', {
         p_user_id: user!.id,
         p_limit: PAGE_SIZE,
@@ -82,7 +52,7 @@ function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
         ...(tab === 'bots' && botUserId ? { p_bot_user_id: botUserId } : {}),
       });
       if (error) throw error;
-      const rows = castRows(data).map((row) => ({
+      const rawRows = castRows(data).map((row) => ({
         ...mapRpcToDreamPost(row),
         feed_score: row.feed_score as number,
       }));
@@ -91,14 +61,23 @@ function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
       // "wrong post pops in mid-scroll at the page boundary" bug. Trade-off:
       // streak detection is within-page only, so cross-page-boundary streaks
       // are possible (acceptable at PAGE_SIZE=20).
-      return tab === 'bots' ? rows : (applyDiversity(rows) as typeof rows);
+      const rows: FeedRow[] = tab === 'bots' ? rawRows : (applyDiversity(rawRows) as FeedRow[]);
+      // Compute cursor at FETCH time from raw RPC result, NOT from current
+      // cached row count. Otherwise optimistic deletes shrink lastPage.length
+      // below PAGE_SIZE → getNextPageParam returns undefined → pagination
+      // dies. Cursor is fixed at the moment the page lands and never changes,
+      // so deletes can't break "has more pages" detection.
+      const last = rawRows[rawRows.length - 1];
+      const nextCursor: FeedCursor | null =
+        rawRows.length === PAGE_SIZE && last?.feed_score != null
+          ? { score: last.feed_score, id: last.id }
+          : null;
+      return { rows, nextCursor };
     },
     initialPageParam: null as FeedCursor | null,
     getNextPageParam: (lastPage) => {
-      if (lastPage.length < PAGE_SIZE) return undefined;
-      const last = lastPage[lastPage.length - 1];
-      if (last.feed_score == null) return undefined;
-      return { score: last.feed_score, id: last.id } as FeedCursor;
+      // Use the cursor stored at fetch time — survives optimistic deletes.
+      return lastPage.nextCursor ?? undefined;
     },
     enabled: !!useAuthStore.getState().user,
   });
@@ -174,7 +153,8 @@ export default function HomeScreen() {
   // feed_score and the tiebreaker overlaps). Kills both data-level duplicates
   // and the "reappearing post every ~10 scrolls" visual bug they cause.
   const feedPosts = useMemo(() => {
-    const rows = data?.pages.flat() ?? [];
+    // Page shape is now { rows, nextCursor } — flatMap rows out, ignore nextCursor metadata
+    const rows = data?.pages.flatMap((p) => p.rows) ?? [];
     const seen = new Set<string>();
     return rows.filter((r) => {
       if (seen.has(r.id)) return false;

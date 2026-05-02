@@ -18,7 +18,7 @@ export function useMyDreams() {
     queryKey: ['my-dreams', userId],
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
-      if (!userId) return { rows: [], offset };
+      if (!userId) return { rows: [], offset, hasMore: false };
       const { data, error } = await supabase
         .from('uploads')
         .select(POST_SELECT)
@@ -32,13 +32,11 @@ export function useMyDreams() {
         posted_at: (row.posted_at as string | null) ?? null,
         description: (row.description as string | null) ?? null,
       }));
-      return { rows, offset };
+      // hasMore captured at fetch time — survives optimistic deletes.
+      return { rows, offset, hasMore: rows.length === PAGE_SIZE };
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) =>
-      !lastPage?.rows?.length || lastPage.rows.length < PAGE_SIZE
-        ? undefined
-        : lastPage.offset + PAGE_SIZE,
+    getNextPageParam: (lastPage) => (lastPage?.hasMore ? lastPage.offset + PAGE_SIZE : undefined),
     enabled: !!userId,
     staleTime: 60_000,
   });
