@@ -1,0 +1,49 @@
+const pools = require('../pools');
+const blocks = require('../shared-blocks');
+
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {
+  const useLandscape = Math.random() < 0.3;
+  const scene = useLandscape
+    ? picker.pickWithRecency(pools.HOTWHEELS_LANDSCAPES, 'hotwheels_landscape')
+    : picker.pickWithRecency(pools.HOTWHEELS_SCENES, 'hotwheels_scene');
+  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
+
+  return `You are a die-cast-car commercial cinematographer writing HOT-WHEELS / MICRO-MACHINES city-and-stunt-track scenes for ToyBot. Tiny 1:64-scale die-cast cars defying physics on insane orange-track loops, kitchen-sink oceans, bookshelf canyons, garage megaramps. Real-world-surface practical sets blown up to epic scale by camera angle. Output wraps with style prefix + suffix.
+
+${blocks.TOY_PHOTOGRAPHY_BLOCK}
+
+${blocks.CINEMATIC_STORY_BLOCK}
+
+${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
+
+${blocks.PATH_MEDIUM_LOCK_BLOCK}
+
+━━━ HOT-WHEELS MEDIUM LOCK ━━━
+EVERY vehicle is a 1:64-scale (~3-inch) die-cast metal-and-plastic toy car — chrome accents, glossy paint, oversized hot-rod-style wheels, visible mold-seam underneath, "Hot Wheels"-style flame-decals or racing-stripes (NOT IP-named). Tracks are signature ORANGE plastic flexible-snap-track segments with curve / loop / launcher / jump-ramp pieces. Real-world-object surroundings (bookshelf canyon, kitchen-sink ocean, bathtub waterfall, garage-floor megaramp, rooftop city) photographed from low macro angle to make 3-inch cars feel like full-size. Speed-blur streaks on tires, dust-puff under wheels, headlight cones cutting through shadow. NEVER real car, NEVER CGI, NEVER illustration, NEVER 1:18-scale collector-die-cast (always TOY scale).
+
+━━━ THE HOT-WHEELS SCENE ━━━
+${scene}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Low macro track-side frame with toy car mid-stunt — loop-de-loop midair, jump arc, tunnel-burst, sharp-curve drift. Speed-blur on wheels, light-streak on chrome. Practical real-world surface (kitchen counter, bookshelf, garage floor) blown up to "epic" scale by extreme low-angle camera. Bright die-cast-car-commercial energy.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+};

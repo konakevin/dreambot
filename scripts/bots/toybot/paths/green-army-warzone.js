@@ -4,8 +4,8 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const useLandscape = Math.random() < 0.3;
   const scene = useLandscape
-    ? picker.pickWithRecency(pools.ARMY_MEN_LANDSCAPES, 'army_men_landscape')
-    : picker.pickWithRecency(pools.ARMY_MEN_SCENES, 'army_men_scene');
+    ? picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_LANDSCAPES, 'green_army_warzone_landscape')
+    : picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_SCENES, 'green_army_warzone_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
