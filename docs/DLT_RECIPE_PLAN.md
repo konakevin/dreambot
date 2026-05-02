@@ -214,11 +214,11 @@ If anything is partially done, complete that file before moving on. Don't redo c
 - [ ] **Phase 1.5** — Replicate seed capture for botEngine (deferred — null in Phase 1)
 - [x] **Phase 1.6** — Phase 1 unit tests written (36 tests passing)
 - [ ] **Phase 1.7** — Test render verifies recipe populated end-to-end (BLOCKED on migration apply)
-- [ ] **Phase 1.8** — Commit Phase 1
-- [ ] **Phase 2.1** — `recipeReplay.ts` shared module
-- [ ] **Phase 2.2** — Edge Functions wired (`generate-dream`, `nightly-dreams`)
+- [x] **Phase 1.8** — Commit Phase 1 (c4e9299)
+- [x] **Phase 2.1** — `recipeReplay.ts` shared module (validateRecipe + resolveRecipeAnchors + buildLookFragment)
+- [ ] **Phase 2.2** — Edge Functions wired (`generate-dream`, `nightly-dreams`) — BLOCKED on Phase 1.7 verification
 - [ ] **Phase 2.3** — App DLT entry point uses recipe path when available
-- [ ] **Phase 2.4** — Phase 2 unit tests
+- [x] **Phase 2.4** — Phase 2 recipeReplay unit tests (26 tests passing — TS validation, replay, look fragment, privacy, adversarial)
 - [ ] **Phase 2.5** — Manual verification: DLT 5 bot posts, eyeball look fidelity
 - [ ] **Phase 2.6** — Commit Phase 2
 - [ ] **Phase 3** — Cleanup, docs, deprecate paths
