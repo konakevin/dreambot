@@ -54,6 +54,14 @@ module.exports = {
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
+
+  // ─── ToyBot-pattern slot-pool architecture (2026-05) ────────────────
+  // Used by plushie-life (overwritten) and dollhouse-life (new).
+  CUDDLE_PLUSH_LANDSCAPES: load('cuddle_plush_landscapes'),
+  CUDDLE_PLUSH_LIGHTING: load('cuddle_plush_lighting'),
+  CUDDLE_DOLLHOUSE_LIGHTING: load('cuddle_dollhouse_lighting'),
+  CAMERA_ANGLES: load('camera_angles'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries.

@@ -37,6 +37,7 @@ const pathBuilders = {
   'plush-world': require('./paths/plush-world'),
   'mech-toy-rampage': require('./paths/mech-toy-rampage'),
   'toybox-chaos': require('./paths/toybox-chaos'),
+  'space-saga-figures': require('./paths/space-saga-figures'),
 };
 
 module.exports = {
@@ -65,6 +66,7 @@ module.exports = {
     'plush-world': 'plush_fabric',
     'mech-toy-rampage': 'mech_toys',
     'toybox-chaos': ['lego', 'action_figure', 'plush_fabric', 'hot_wheels', 'barbie_figures', 'army_men'],
+    'space-saga-figures': 'space_saga_figures',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -111,6 +113,11 @@ module.exports = {
       'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR or KNIT TEXTURE, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, optional tiny knit sweaters or cloth bandanas, fully-dressed handcrafted miniature sets (forest campsite, sailboat, picnic meadow, attic bedroom, treehouse), warm firelight / lantern-glow / golden-hour / moonlit-window practical lighting, storybook warmth — NOT LBP burlap-with-zipper (that is Sackboy) NOT real animal NOT CGI NOT illustration',
     mech_toys:
       'articulated mech-toys — robot-toys / Gundam-style model-kits / transforming-mech-toys with visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, chrome-plated paneling and armor plates, visible transformation seams (line-cuts where panels would fold/flip), cockpit-canopy with glowing tinted plastic, hand-painted weathering / battle-damage / panel-line wash, snap-on weapon accessories (energy-sword / plasma-rifle / shield / shoulder-cannon / missile-pod), 1/144 to 1/100 collector scale, real-physical-toys on a handcrafted set, chrome reflections, cockpit-glow, sparks-flying, missile-trail haze — NEVER IP-named NEVER CGI NEVER illustration',
+    // Vintage Kenner 3.75-inch space-saga action-figures (rebels / imperials /
+    // hooded-monks / smugglers / bounty-hunters / droids / aliens). Bot-only.
+    // Archetype-only — bans IP names (no Star Wars / Lucasfilm).
+    space_saga_figures:
+      'authentic vintage Kenner 1977-1985 Star Wars 3.75-inch action-figures — hand-painted plastic, bubble-card-mint paint quality, swivel-waist or limited-articulation, signature gear molded as part of body (lightsabers, blasters, jetpacks, helmets, capes, robes, droid-tools), real-physical-toys on handcrafted playset dioramas, named characters allowed (Luke / Leia / Han / Vader / Yoda / Boba Fett / Stormtroopers / R2-D2 / C-3PO / Chewbacca / Obi-Wan / Greedo / Ewoks / Tusken Raiders / Wampa / etc.), iconic Star Wars locations and ships (Tatooine / Hoth / Endor / Dagobah / Bespin / Death Star / Mos Eisley cantina / X-wings / TIE Fighters / Millennium Falcon / AT-ATs / Sandcrawlers), NEVER CGI, NEVER illustration',
   },
 
   // Inverts old excludeVibes (dark/fierce/psychedelic/macabre).
@@ -151,6 +158,7 @@ module.exports = {
     'plush-world',
     'mech-toy-rampage',
     'toybox-chaos',
+    'space-saga-figures',
   ],
 
   pathWeights: {
@@ -172,6 +180,7 @@ module.exports = {
     'plush-world': 1,
     'mech-toy-rampage': 1,
     'toybox-chaos': 2,
+    'space-saga-figures': 1,
   },
 
   // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
@@ -184,6 +193,7 @@ module.exports = {
       'green-army-warzone', 'miniature-dungeon', 'collector-shelf-epic',
       'epic-hero-bucket', 'dollhouse-life', 'hotwheels-city',
       'model-train-world', 'plush-world', 'mech-toy-rampage', 'toybox-chaos',
+      'space-saga-figures',
     ],
   },
 
@@ -222,6 +232,7 @@ module.exports = {
       'plush-world': 'figure',
       'mech-toy-rampage': 'figure',
       'toybox-chaos': 'figure',
+      'space-saga-figures': 'figure',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

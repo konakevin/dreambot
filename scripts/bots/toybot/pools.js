@@ -75,6 +75,10 @@ module.exports = {
   MECH_TOY_SCENES: load('mech_toy_scenes'),
   MECH_TOY_LANDSCAPES: load('mech_toy_landscapes'),
   TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // mixed-medium, single pool
+  SPACE_SAGA_SCENES: load('space_saga_scenes'),
+  SPACE_SAGA_LANDSCAPES: load('space_saga_landscapes'),
+  SPACE_SAGA_FIGURES: load('space_saga_figures'),
+  SPACE_SAGA_LIGHTING: load('space_saga_lighting'),
 
   // ─── slot-pool DNA — rolled per render to force per-render variety ─
   // (anti-bias: defeats Sonnet's training-default toward teddy-bear /
