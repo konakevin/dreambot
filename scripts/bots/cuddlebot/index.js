@@ -21,6 +21,10 @@ const pathBuilders = {
   'outdoor-adventure': require('./paths/outdoor-adventure'),
   'storybook-page': require('./paths/storybook-page'),
   'cottage-core': require('./paths/cottage-core'),
+  'cuddly-aquatic': require('./paths/cuddly-aquatic'),
+  'jungle-canopy': require('./paths/jungle-canopy'),
+  'snowy-arctic': require('./paths/snowy-arctic'),
+  'night-meadow': require('./paths/night-meadow'),
 };
 
 module.exports = {
@@ -71,33 +75,41 @@ module.exports = {
     'outdoor-adventure',
     'storybook-page',
     'cottage-core',
+    'cuddly-aquatic',
+    'jungle-canopy',
+    'snowy-arctic',
+    'night-meadow',
   ],
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
-  // storybook-page 50%, cozy-landscape 15%, outdoor-adventure 10%, rest ~25%
+  // All 15 paths roll equally (~6.7% each).
   pathWeights: {
     'heartwarming-scene': 1,
-    'cozy-landscape': 3,
+    'cozy-landscape': 1,
     'plushie-life': 1,
     'creature-portrait': 1,
     'sleepy-naptime': 1,
     'rainy-day-cozy': 1,
     'miniature-feast': 1,
     'bath-time': 1,
-    'outdoor-adventure': 2,
-    'storybook-page': 3,
-    'cottage-core': 4,
+    'outdoor-adventure': 1,
+    'storybook-page': 1,
+    'cottage-core': 1,
+    'cuddly-aquatic': 1,
+    'jungle-canopy': 1,
+    'snowy-arctic': 1,
+    'night-meadow': 1,
   },
 
-  // Chaos layer — light touch for cute bots. Subject chaos OFF (don't
-  // distort the cute creature's silhouette). Scenery + storybook paths
-  // get scene-channel chaos only.
+  // Chaos layer — light touch for cute bots. Subject chaos OFF for
+  // creature-centric paths (don't distort the cute silhouette). Scenery
+  // + storybook + night-meadow paths get scene-channel chaos.
   chaos: {
     enabled: true,
     skipPaths: [],
-    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core'],
+    allowSubjectChaosPaths: ['cozy-landscape', 'rainy-day-cozy', 'storybook-page', 'cottage-core', 'night-meadow'],
   },
 
   // Two-pass Sonnet→Haiku polish.
@@ -125,6 +137,10 @@ module.exports = {
       'rainy-day-cozy': 'scene',
       'storybook-page': 'scene',
       'cottage-core': 'scene',
+      'cuddly-aquatic': 'creature',
+      'jungle-canopy': 'creature',
+      'snowy-arctic': 'creature',
+      'night-meadow': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
