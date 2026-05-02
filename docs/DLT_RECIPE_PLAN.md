@@ -92,7 +92,7 @@ Render via `recipe.model` with `recipe.flux_seed` if available.
 Goal: every NEW post (bot or user) gets a recipe stored at posting time.
 
 #### Files to create
-1. **`supabase/migrations/143_uploads_recipe_jsonb.sql`** — adds `uploads.recipe JSONB` + `uploads.flux_seed BIGINT` columns
+1. **`supabase/migrations/144_uploads_recipe_jsonb.sql`** — adds `uploads.recipe JSONB` + `uploads.flux_seed BIGINT` columns
 2. **`scripts/lib/recipeBuilder.js`** — pure Node function `buildRecipe(renderContext) → Recipe`
 3. **`supabase/functions/_shared/recipeBuilder.ts`** — pure Deno/TS twin (verbatim port)
 
@@ -185,7 +185,7 @@ If you're reading this after a compaction, here's what to check:
 
 1. **Branch state**: `cd /Users/kevinmchenry/Development/apps/dreambot-toybot && git status && git log --oneline -10`
 2. **Phase 1 progress markers**:
-   - `ls supabase/migrations/143*` — does the migration file exist?
+   - `ls supabase/migrations/144*` — does the migration file exist?
    - `ls scripts/lib/recipeBuilder.js` — does the Node module exist?
    - `ls supabase/functions/_shared/recipeBuilder.ts` — does the TS twin exist?
    - `grep "buildRecipe" scripts/lib/botEngine.js` — is botEngine wired?
@@ -207,7 +207,7 @@ If anything is partially done, complete that file before moving on. Don't redo c
 
 ## Status tracker (updated as we go)
 
-- [x] **Phase 1.1** — Migration 143 written (PENDING APPLY in SQL editor)
+- [x] **Phase 1.1** — Migration 144 written (PENDING APPLY in SQL editor)
 - [x] **Phase 1.2** — `scripts/lib/recipeBuilder.js` created
 - [x] **Phase 1.3** — `supabase/functions/_shared/recipeBuilder.ts` created (TS twin)
 - [x] **Phase 1.4** — `botEngine.js` wired (recipe captured + inserted)

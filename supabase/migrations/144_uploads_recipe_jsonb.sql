@@ -1,4 +1,4 @@
--- Migration 143: Add recipe (JSONB) and flux_seed (BIGINT) columns to uploads
+-- Migration 144: Add recipe (JSONB) and flux_seed (BIGINT) columns to uploads
 -- for the DLT recipe-replay architecture.
 --
 -- Recipe captures the LOOK ANCHORS at posting time (medium directive,
