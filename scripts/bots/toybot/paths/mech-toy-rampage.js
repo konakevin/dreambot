@@ -6,8 +6,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = useLandscape
     ? picker.pickWithRecency(pools.MECH_TOY_LANDSCAPES, 'mech_toy_landscape')
     : picker.pickWithRecency(pools.MECH_TOY_SCENES, 'mech_toy_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
+  const lighting = picker.pickWithRecency(pools.MECH_LIGHTING, 'mech_lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: roll 3-5 distinct mech archetypes per render to defeat
   // Sonnet's humanoid-mecha training-bias. Forces SPECIFIC mech classes.
@@ -30,6 +30,12 @@ ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 ━━━ MECH-TOY MEDIUM LOCK ━━━
 EVERY mech is an articulated robot-toy / Gundam-style model-kit / transforming-mech-toy — visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, chrome-plated paneling and armor plates, visible transformation seams (line-cuts where panels would fold/flip), cockpit-canopy with glowing tinted plastic, hand-painted weathering / battle-damage / panel-line wash, snap-on weapon accessories (energy-sword / plasma-rifle / shield / shoulder-cannon / missile-pod), sometimes 1/144-scale (Gundam-kit) or 1/100-scale or larger collector size. Archetypes: humanoid mecha, transforming car-mecha, beast-form mecha (lion / tiger / wolf / dragon mech), powered-armor exosuits. NEVER IP-named (no Optimus Prime, no Megatron, no specific Gundam model designation). NEVER CGI, NEVER illustration. Real-physical-toy on a handcrafted set.
 
+━━━ CAMERA ━━━
+${camera}
+
+━━━ COMPOSITION LOCK — NON-NEGOTIABLE SPATIAL ANCHOR ━━━
+WIDE DIORAMA FRAME — exactly ${castSize} distinct mech-toys visible simultaneously, spatially separated as ${castSize === 2 ? 'left-side and right-side' : castSize === 3 ? 'left, center, right (or foreground / midground / background)' : castSize === 4 ? 'left, center-left, center-right, right' : 'left, center-left, center, center-right, right'}. Each occupies its OWN silhouette zone — no overlap, no merging. NO single hero subject dominating the frame. ALL ${castSize} mechs visible in clear frame at the same time. (Camera/framing direction above is the spatial-perspective lens for this composition.)
+
 ━━━ THE MECHS — RENDER THESE EXACT ARCHETYPES (NON-NEGOTIABLE) ━━━
 The mechs in this scene MUST be exactly these specific mech-toy archetypes — do NOT default to "generic humanoid mecha" repeats, render the EXACT class, weapon, and signature detail of each:
 ${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
@@ -37,11 +43,8 @@ ${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
 ━━━ THE MECH-TOY SCENE ━━━
 ${scene}
 
-━━━ LIGHTING ━━━
+━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}

@@ -14,8 +14,8 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = useLandscape
     ? picker.pickWithRecency(pools.DOLLHOUSE_LIFE_LANDSCAPES, 'dollhouse_life_landscape')
     : picker.pickWithRecency(pools.DOLLHOUSE_LIFE_SCENES, 'dollhouse_life_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
+  const lighting = picker.pickWithRecency(pools.DOLLHOUSE_LIGHTING, 'dollhouse_lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Roll one of three figurine traditions for variety. Each render commits
   // fully to ONE tradition — never mix flocked-animals with human-dolls in
@@ -49,14 +49,14 @@ ${figureTradition}
 ━━━ DOLLHOUSE-LIFE MEDIUM LOCK ━━━
 Environment is a fully-dressed dollhouse-scale miniature interior — wooden furniture, tiny dishware, mini books, hand-sewn drapes, miniature appliances, scale-accurate household details (tiny lamps, miniature framed art, scale rugs). Cozy daily-life energy — baking, reading, tea, gardening, bedtime, dinner-party. NEVER mix figurine traditions within one scene — commit fully to the rolled tradition above. NEVER real human, NEVER real animal, NEVER CGI.
 
+━━━ CAMERA ━━━
+${camera}
+
 ━━━ THE DOLLHOUSE SCENE ━━━
 ${scene}
 
-━━━ LIGHTING ━━━
+━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}

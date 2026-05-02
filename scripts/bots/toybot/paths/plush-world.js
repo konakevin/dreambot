@@ -6,12 +6,14 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = useLandscape
     ? picker.pickWithRecency(pools.PLUSH_LANDSCAPES, 'plush_landscape')
     : picker.pickWithRecency(pools.PLUSH_SCENES, 'plush_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
+  const lighting = picker.pickWithRecency(pools.PLUSH_LIGHTING, 'plush_lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
-  // Slot-pool DNA: roll 4-6 distinct plush creatures per render to defeat
-  // Sonnet's teddy-bear training-bias. Cast block forces SPECIFIC creatures.
-  const castSize = 4 + Math.floor(Math.random() * 3);
+  // Slot-pool DNA: 30% solo (1 creature) / 70% ensemble (3-5 creatures).
+  // Solo entries give the path a tender beat amid the group adventures.
+  // Ensemble defeats Sonnet's teddy-bear training-bias.
+  const isSolo = Math.random() < 0.3;
+  const castSize = isSolo ? 1 : 3 + Math.floor(Math.random() * 3);
   const cast = [];
   for (let i = 0; i < castSize; i++) {
     cast.push(picker.pickWithRecency(pools.PLUSH_CREATURES, `plush_creature_${i}`));
@@ -30,18 +32,24 @@ ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 ━━━ PLUSH MEDIUM LOCK ━━━
 EVERY character is a soft-fabric stuffed animal — teddy bear / plush bunny / stuffed fox / knitted cat / stitched dragon / fabric owl / felt duck / cuddly raccoon. Visible plush-fiber FUR or KNIT TEXTURE on body, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, optional tiny knit sweaters or cloth bandanas. NEVER LBP burlap-with-zipper (that's Sackboy). NEVER real animal. NEVER CGI. Photographed in a fully-dressed handcrafted miniature set. Practical lighting, shallow depth-of-field, storybook warmth.
 
-━━━ THE CAST — RENDER THESE EXACT CREATURES (NON-NEGOTIABLE) ━━━
-The plush characters in this scene MUST be exactly these specific stuffies — do NOT default to teddy-bears or generic plushies, render the EXACT archetype, color, and signature detail of each:
-${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
+━━━ CAMERA ━━━
+${camera}
+
+${isSolo
+  ? `━━━ COMPOSITION — SOLO TENDER MOMENT ━━━
+A SINGLE plush creature in the frame, mid-cozy-activity. Intimate storybook composition — the one creature is the focal point of the moment. (Camera/framing direction above sets the perspective; this is a quiet solo beat, not an ensemble.)`
+  : `━━━ COMPOSITION LOCK — NON-NEGOTIABLE SPATIAL ANCHOR ━━━
+WIDE DIORAMA FRAME — exactly ${castSize} distinct plush creatures visible simultaneously, spatially separated as ${castSize === 3 ? 'left, center, right (or foreground / midground / background)' : castSize === 4 ? 'left, center-left, center-right, right' : 'left, center-left, center, center-right, right'}. Each occupies its OWN silhouette zone — no overlap, no merging. NO single hero subject dominating. ALL ${castSize} stuffies visible in clear frame at the same time. (Camera/framing direction above is the spatial-perspective lens for this composition.)`}
+
+━━━ ${isSolo ? 'THE CREATURE' : 'THE CAST'} — RENDER ${isSolo ? 'THIS EXACT CREATURE' : 'THESE EXACT CREATURES'} (NON-NEGOTIABLE) ━━━
+${isSolo ? 'The plush character in this scene MUST be this specific stuffie — do NOT default to a teddy-bear or generic plushie, render the EXACT archetype, color, and signature detail:' : 'The plush characters in this scene MUST be exactly these specific stuffies — do NOT default to teddy-bears or generic plushies, render the EXACT archetype, color, and signature detail of each:'}
+${cast.map((c, i) => `${isSolo ? '' : `${i + 1}. `}${c}`).join('\n')}
 
 ━━━ THE PLUSH SCENE ━━━
 ${scene}
 
-━━━ LIGHTING ━━━
+━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}

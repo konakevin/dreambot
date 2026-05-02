@@ -83,11 +83,17 @@ module.exports = {
   HOTWHEELS_CARS: load('hotwheels_cars'),
   MECH_ARCHETYPES: load('mech_archetypes'),
   TRAIN_CONSISTS: load('train_consists'),
+  TRAIN_WEATHER: load('train_weather'),
+  MECH_LIGHTING: load('mech_lighting'),
+  PLUSH_LIGHTING: load('plush_lighting'),
+  HOTWHEELS_LIGHTING: load('hotwheels_lighting'),
+  DOLLHOUSE_LIGHTING: load('dollhouse_lighting'),
 
   // ─── shared ────────────────────────────────────────────────────────
   LIGHTING: load('lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),
+  CAMERA_ANGLES: load('camera_angles'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {
