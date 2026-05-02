@@ -20,6 +20,14 @@ const pathBuilders = {
   'arcane-halls': require('./paths/arcane-halls'),
   'dark-realm': require('./paths/dark-realm'),
   'dragon-lore': require('./paths/dragon-lore'),
+  'wow-landscape': require('./paths/wow-landscape'),
+  'wow-architecture': require('./paths/wow-architecture'),
+  'lotr-landscape': require('./paths/lotr-landscape'),
+  'lotr-architecture': require('./paths/lotr-architecture'),
+  'eldenring-landscape': require('./paths/eldenring-landscape'),
+  'eldenring-architecture': require('./paths/eldenring-architecture'),
+  'got-landscape': require('./paths/got-landscape'),
+  'got-architecture': require('./paths/got-architecture'),
 };
 
 module.exports = {
@@ -68,9 +76,17 @@ module.exports = {
     'arcane-halls',
     'dark-realm',
     'dragon-lore',
+    'wow-landscape',
+    // 'wow-architecture' — scrapped 2026-05-02 (Kevin)
+    'lotr-landscape',
+    'lotr-architecture',
+    // 'eldenring-landscape' — scrapped 2026-05-02 (Kevin)
+    // 'eldenring-architecture' — scrapped 2026-05-02 (Kevin)
+    'got-landscape',
+    'got-architecture',
   ],
 
-  // dragon-scene + landscape co-flagship at 20% each (4/20). Other 4 paths evenly split the remaining 60% at 15% each (3/20).
+  // dragon-scene + landscape co-flagship; warriors heavy; new wow paths weight 4 each.
   pathWeights: {
     landscape: 5,
     'fantasy-scene': 3,
@@ -82,6 +98,14 @@ module.exports = {
     'arcane-halls': 3,
     'dark-realm': 4,
     'dragon-lore': 4,
+    'wow-landscape': 4,
+    // 'wow-architecture': 4,  // scrapped
+    'lotr-landscape': 4,
+    'lotr-architecture': 4,
+    // 'eldenring-landscape': 4,  // scrapped
+    // 'eldenring-architecture': 4,  // scrapped
+    'got-landscape': 4,
+    'got-architecture': 4,
   },
 
   // Chaos layer (V4 perception-distortion port). Skip face-dominant character
@@ -99,6 +123,11 @@ module.exports = {
       'arcane-halls',
       'dark-realm',
       'dragon-lore',
+      'wow-landscape',
+      'wow-architecture',
+      'lotr-landscape', 'lotr-architecture',
+      'eldenring-landscape', 'eldenring-architecture',
+      'got-landscape', 'got-architecture',
     ],
   },
 
@@ -132,6 +161,14 @@ module.exports = {
       'arcane-halls': 'scene',
       'dark-realm': 'scene',
       'dragon-lore': 'scene',
+      'wow-landscape': 'scene',
+      'wow-architecture': 'scene',
+      'lotr-landscape': 'scene',
+      'lotr-architecture': 'scene',
+      'eldenring-landscape': 'scene',
+      'eldenring-architecture': 'scene',
+      'got-landscape': 'scene',
+      'got-architecture': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
