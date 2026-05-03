@@ -9,13 +9,12 @@ generatePool({
 
 This pool composes with separate skin/hair/eyes/makeup/accessory pools.
 
-━━━ ARCHETYPE-MATCHED OUTFITS (enforce variety across ${n}) ━━━
-- AVIATION / CAPTAIN (5-6) — corseted leather flight-jacket over high-collar linen blouse, brass-buckled gauntlets to the elbow, navy wool aviator skirt slit for movement, tall lace-up leather boots with brass eyelets — full sky-deck outfit with goggles pushed up on her brow
-- MECHANIC / FORGE (5-6) — leather welder's apron over forge-shop coveralls rolled to the elbows, brass-plated arm-prosthetic visible, oil-stained linen shirt under a deep-V leather corset, work-trousers tucked into mid-calf brass-buckled boots, tool-belt loaded with copper-handled instruments
-- VICTORIAN-ADVENTURESS (4-5) — fitted brass-button safari jacket over cream blouse, layered cargo-skirt with leather belt-pouches stuffed with brass instruments, knee-high lace-up boots, bandolier of small brass-cased ammunition across the chest, brass cuff at the wrist
-- ALCHEMIST / SCIENTIST (3-4) — leather-bound apron over a high-collar Edwardian blouse, multi-strap brass goggles with rotating lenses, fitted dark-wool waistcoat with copper buttons, pocket-watch chain visible, leather work-skirt to the knee, brass-mesh fingerless gloves
-- ELEGANT / NOBLE / DIRIGIBLE BALL (4-5) — brass-corseted full-length deep-emerald velvet gown with copper trim, gear-detailed brooch at the throat, opera-length brass-mesh gloves, layered tulle underskirt with hidden brass clockwork ornaments, bustle that subtly conceals brass-prosthetic mechanism
-- WAR-CORRESPONDENT / RUGGED (3-4) — heavy oilskin coat over fitted linen-and-leather travel suit, cracked leather messenger bag bulging with field-notes and brass instruments, sturdy ankle-boots, brass-rimmed monocle on a chain
+━━━ ARCHETYPE-MATCHED OUTFITS — feminine archetypes only (NO mechanic / forge — too masculine) ━━━
+- AVIATION / CAPTAIN (~25%) — corseted leather flight-jacket over high-collar linen blouse, brass-buckled gauntlets to the elbow, navy wool aviator skirt slit for movement, tall lace-up leather boots with brass eyelets — full sky-deck outfit with goggles pushed up on her brow
+- VICTORIAN-ADVENTURESS (~25%) — fitted brass-button safari jacket over cream blouse, layered cargo-skirt with leather belt-pouches stuffed with brass instruments, knee-high lace-up boots, bandolier of small brass-cased ammunition across the chest, brass cuff at the wrist
+- ELEGANT / NOBLE / DIRIGIBLE BALL (~25%) — brass-corseted full-length deep-emerald velvet gown with copper trim, gear-detailed brooch at the throat, opera-length brass-mesh gloves, layered tulle underskirt with hidden brass clockwork ornaments, bustle that subtly conceals brass-prosthetic mechanism
+- ALCHEMIST / SCIENTIST (~12%) — leather-bound apron over a high-collar Edwardian blouse, multi-strap brass goggles with rotating lenses, fitted dark-wool waistcoat with copper buttons, pocket-watch chain visible, leather work-skirt to the knee, brass-mesh fingerless gloves
+- WAR-CORRESPONDENT / RUGGED (~13%) — heavy oilskin coat over fitted linen-and-leather travel suit, cracked leather messenger bag bulging with field-notes and brass instruments, sturdy ankle-boots, brass-rimmed monocle on a chain
 
 ━━━ RULES ━━━
 - Each entry is OBSESSIVELY DETAILED — every layer, every clasp, every material

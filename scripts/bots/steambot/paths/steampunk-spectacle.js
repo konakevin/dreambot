@@ -11,7 +11,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.STEAMPUNK_ATMOSPHERES, 'atmosphere');
 
-  return `You are a steampunk event-painter writing SPECTACLE scenes for SteamBot. Grand steampunk events — ceremonies, festivals, performances, uprisings. Crowd energy and drama. Output wraps with style prefix + suffix.
+  return `You are a cinematic concept-RENDER artist writing SPECTACLE scenes for SteamBot. Grand steampunk events — ceremonies, festivals, performances, uprisings. Crowd energy and drama. Output wraps with style prefix + suffix.
 
 ${blocks.STEAMPUNK_OBSESSIVE_DETAIL_BLOCK}
 

@@ -31,7 +31,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.STEAMPUNK_ATMOSPHERES, 'atmosphere');
 
-  return `You are a steampunk character-portrait painter writing STEAMPUNK MAN scenes for SteamBot. A handsome / dashing / rugged / intent / capable steampunk gentleman doing a specific steampunk action. Solo. Candid character-portrait framing — caught mid-action, NOT posing. Output wraps with style prefix + suffix.
+  return `You are a hyperreal cinematic film-still concept artist writing STEAMPUNK MAN scenes for SteamBot. A handsome / dashing / rugged / intent / capable steampunk gentleman doing a specific steampunk action. Solo. Candid character-portrait framing — caught mid-action, NOT posing. Output wraps with style prefix + suffix.
 
 ${blocks.STEAMPUNK_OBSESSIVE_DETAIL_BLOCK}
 
@@ -41,9 +41,12 @@ ${blocks.NO_NAMED_CHARACTERS_BLOCK}
 
 ${blocks.SOLO_COMPOSITION_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+${blocks.HYPERREAL_REGISTER_LOCK}
 
 ${blocks.STEAMPUNK_MAN_CANDID_BLOCK}
+
+━━━ CHARACTER FRAME LOCK — NON-NEGOTIABLE ━━━
+This is a SOLO CHARACTER PORTRAIT, not a scene. HE fills 60-75% of the vertical frame. NO mythic-scale machinery dominating the frame. NO cathedral-sized gear assemblies. NO terraced industrial cities. NO colossal brass dirigibles overhead. NO crowds. NO foreground/midground/distant-figures stacking. Background is partial steampunk environment at the frame edges only — soft enough to keep him the unmistakable subject. The viewer's eye lands on HIS face first.
 
 ━━━ HE MUST LOOK LIKE A SPECIFIC PERSON — OBSESSIVE DETAIL ━━━
 Render him with obsessive detail — he must feel like ONE specific man, not a generic steampunk-man-trope:
@@ -92,13 +95,11 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
-${blocks.BLOW_IT_UP_BLOCK}
-
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Mid-close candid character-portrait frame (waist-up to thigh-up). He is DOING the specific steampunk action above. Solo — no women, no second figure. Brass / copper / gaslight dramatic lighting. He FILLS 60-75% of the vertical frame. NEVER full-body silhouette pulled-back.
+Three-quarter or FULL BODY cinematic character portrait — camera pulled back enough to show his full outfit + the candid action he's performing. He is DOING the specific steampunk action above. Solo — no women, no second figure. Brass / copper / gaslight dramatic lighting. He FILLS 60-75% of the vertical frame. The frame has breathing room around him — he's not crammed face-first.
 
 He is NOT posing — he was caught mid-action in the candid moment above. Film-still / character-portrait energy. The camera snapped at this exact loaded instant.
 

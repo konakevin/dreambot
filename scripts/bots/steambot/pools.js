@@ -16,7 +16,7 @@ const VIBE_COLOR = {
   epic: 'dramatic brass-god-rays, rich copper highlights, heroic steam drama',
   nostalgic: 'faded sepia-brass, burnt-umber, weathered Victorian palette',
   peaceful: 'warm-amber gaslight interior, soft copper glow, quiet brass',
-  whimsical: 'buoyant saturated steampunk-pastels, Ghibli-inflected brass',
+  whimsical: 'buoyant saturated steampunk-pastels, atmospheric prestige-fantasy-inflected brass',
   ethereal: 'pearl-white steam-mist, opalescent brass, luminous copper',
   arcane: 'deep violet alchemy, emerald copper-oxide, mystical brass',
   ancient: 'weathered bronze-and-copper, patina-green, deep umber',
@@ -27,20 +27,18 @@ const VIBE_COLOR = {
   nightshade: 'deep violet moonlit-brass, silver airship, plum shadows',
   macabre: 'blood-crimson and oil-black brass, dread-steampunk palette',
   shimmer: 'shimmering brass-dust, iridescent copper, warm gleam',
-  surreal: 'impossible steampunk-color pairings, Ghibli-Howl hallucinatory',
+  surreal: 'impossible steampunk-color pairings, prestige fantasy hallucinatory',
 };
 
 module.exports = {
   STEAMPUNK_CHARACTERS: load('steampunk_characters'),
   STEAMPUNK_LANDSCAPES: load('steampunk_landscapes'),
-  CONTRAPTION_TYPES: load('contraption_types'),
   AIRSHIP_SCENES: load('airship_scenes'),
-  COZY_STEAMPUNK_SETTINGS: load('cozy_steampunk_settings'),
   STEAMPUNK_WOMEN_CANDID_MOMENTS: load('steampunk_women_candid_moments'),
-  HYBRID_WORLDS: load('hybrid_worlds'),
   SPECTACLE_EVENTS: load('spectacle_events'),
   TRANSPORT_SCENES: load('transport_scenes'),
   STEAMPUNK_ATMOSPHERES: load('steampunk_atmospheres'),
+  STEAMPUNK_CURIOS: load('steampunk_curios'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
   // Slot-pool DNA for sexy-steampunk-woman path (mirrors GothBot pattern)
@@ -52,6 +50,8 @@ module.exports = {
   STEAMPUNK_WOMEN_HAIRSTYLES: load('steampunk_women_hairstyles'),
   STEAMPUNK_WOMEN_WARDROBE: load('steampunk_women_wardrobe'),
   STEAMPUNK_WOMEN_ACCESSORIES: load('steampunk_women_accessories'),
+  STEAMPUNK_WOMEN_ACTIONS: load('steampunk_women_actions'),
+  STEAMPUNK_WOMEN_SETTINGS: load('steampunk_women_settings'),
   // Slot-pool DNA for steampunk-man path (mirrors female axis architecture,
   // adapted for handsome period-accurate Victorian-industrial men).
   // Replaces women's MAKEUP axis with male-specific FACIAL_HAIR.
