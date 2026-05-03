@@ -29,10 +29,6 @@ export interface BotProfile {
 }
 
 export const BOT_PROFILES: Record<string, BotProfile> = {
-  ancientbot: {
-    username: 'ancientbot',
-    description: 'Lost civilizations, epic ruins, and ancient wonders.',
-  },
   beachbot: {
     username: 'beachbot',
     description: 'Endless beaches, sunsets, storms, and coastal dreams.',

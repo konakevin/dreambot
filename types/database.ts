@@ -497,9 +497,11 @@ export type Database = {
           is_bot_only: boolean;
           is_character_only: boolean;
           is_public: boolean;
+          is_scene_only: boolean;
           key: string;
           kontext_directive: string | null;
           label: string;
+          nightly_skip: boolean;
           preferred_model: string | null;
           render_base: string | null;
           sort_order: number;
@@ -517,9 +519,11 @@ export type Database = {
           is_bot_only?: boolean;
           is_character_only?: boolean;
           is_public?: boolean;
+          is_scene_only?: boolean;
           key: string;
           kontext_directive?: string | null;
           label: string;
+          nightly_skip?: boolean;
           preferred_model?: string | null;
           render_base?: string | null;
           sort_order?: number;
@@ -537,9 +541,11 @@ export type Database = {
           is_bot_only?: boolean;
           is_character_only?: boolean;
           is_public?: boolean;
+          is_scene_only?: boolean;
           key?: string;
           kontext_directive?: string | null;
           label?: string;
+          nightly_skip?: boolean;
           preferred_model?: string | null;
           render_base?: string | null;
           sort_order?: number;
@@ -614,6 +620,66 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      first_dream_cells: {
+        Row: {
+          allowed_mediums: string[];
+          allowed_object_classes: string[];
+          banned_phrases: string[];
+          banner_caption_template: string;
+          camera_recipe: string;
+          composition_brief: string;
+          created_at: string;
+          forced_vibe_key: string;
+          is_base_fallback: boolean;
+          last_tuned_at: string | null;
+          lighting_recipe: string;
+          location_class: string;
+          persona: string;
+          quality_grade: number | null;
+          quality_runs: number;
+          sensory_anchor_keys: string[];
+          updated_at: string;
+        };
+        Insert: {
+          allowed_mediums: string[];
+          allowed_object_classes?: string[];
+          banned_phrases?: string[];
+          banner_caption_template: string;
+          camera_recipe: string;
+          composition_brief: string;
+          created_at?: string;
+          forced_vibe_key: string;
+          is_base_fallback?: boolean;
+          last_tuned_at?: string | null;
+          lighting_recipe: string;
+          location_class: string;
+          persona: string;
+          quality_grade?: number | null;
+          quality_runs?: number;
+          sensory_anchor_keys?: string[];
+          updated_at?: string;
+        };
+        Update: {
+          allowed_mediums?: string[];
+          allowed_object_classes?: string[];
+          banned_phrases?: string[];
+          banner_caption_template?: string;
+          camera_recipe?: string;
+          composition_brief?: string;
+          created_at?: string;
+          forced_vibe_key?: string;
+          is_base_fallback?: boolean;
+          last_tuned_at?: string | null;
+          lighting_recipe?: string;
+          location_class?: string;
+          persona?: string;
+          quality_grade?: number | null;
+          quality_runs?: number;
+          sensory_anchor_keys?: string[];
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       follow_requests: {
         Row: {
@@ -779,6 +845,7 @@ export type Database = {
           id: string;
           is_approved: boolean;
           light_signature: string[];
+          location_class: string;
           model_version: string;
           name: string;
           prompt_version: number;
@@ -797,6 +864,7 @@ export type Database = {
           id?: string;
           is_approved?: boolean;
           light_signature?: string[];
+          location_class?: string;
           model_version?: string;
           name: string;
           prompt_version?: number;
@@ -815,6 +883,7 @@ export type Database = {
           id?: string;
           is_approved?: boolean;
           light_signature?: string[];
+          location_class?: string;
           model_version?: string;
           name?: string;
           prompt_version?: number;
@@ -954,6 +1023,7 @@ export type Database = {
           material_textures: string[];
           model_version: string;
           name: string;
+          object_class: string;
           prompt_version: number;
           role_options: string[];
           scale: string;
@@ -978,6 +1048,7 @@ export type Database = {
           material_textures?: string[];
           model_version?: string;
           name: string;
+          object_class?: string;
           prompt_version?: number;
           role_options?: string[];
           scale?: string;
@@ -1002,6 +1073,7 @@ export type Database = {
           material_textures?: string[];
           model_version?: string;
           name?: string;
+          object_class?: string;
           prompt_version?: number;
           role_options?: string[];
           scale?: string;
@@ -1229,6 +1301,7 @@ export type Database = {
           description: string | null;
           dream_medium: string | null;
           dream_vibe: string | null;
+          flux_seed: number | null;
           from_wish: string | null;
           fuse_count: number;
           fuse_of: string | null;
@@ -1246,6 +1319,7 @@ export type Database = {
           output_hash: string | null;
           output_phash: string | null;
           posted_at: string | null;
+          recipe: Json | null;
           recipe_id: string | null;
           save_count: number;
           search_tsv: unknown;
@@ -1267,6 +1341,7 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
+          flux_seed?: number | null;
           from_wish?: string | null;
           fuse_count?: number;
           fuse_of?: string | null;
@@ -1284,6 +1359,7 @@ export type Database = {
           output_hash?: string | null;
           output_phash?: string | null;
           posted_at?: string | null;
+          recipe?: Json | null;
           recipe_id?: string | null;
           save_count?: number;
           search_tsv?: unknown;
@@ -1305,6 +1381,7 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
+          flux_seed?: number | null;
           from_wish?: string | null;
           fuse_count?: number;
           fuse_of?: string | null;
@@ -1322,6 +1399,7 @@ export type Database = {
           output_hash?: string | null;
           output_phash?: string | null;
           posted_at?: string | null;
+          recipe?: Json | null;
           recipe_id?: string | null;
           save_count?: number;
           search_tsv?: unknown;
@@ -1431,6 +1509,7 @@ export type Database = {
           avatar_url: string | null;
           created_at: string;
           email: string;
+          first_dream_completed_at: string | null;
           has_ai_recipe: boolean;
           id: string;
           is_admin: boolean | null;
@@ -1444,6 +1523,7 @@ export type Database = {
           avatar_url?: string | null;
           created_at?: string;
           email: string;
+          first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
           id: string;
           is_admin?: boolean | null;
@@ -1457,6 +1537,7 @@ export type Database = {
           avatar_url?: string | null;
           created_at?: string;
           email?: string;
+          first_dream_completed_at?: string | null;
           has_ai_recipe?: boolean;
           id?: string;
           is_admin?: boolean | null;

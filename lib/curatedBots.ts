@@ -16,17 +16,17 @@
 
 const AESTHETIC_BOT_MAP: Record<string, string[]> = {
   // Dark / gothic / macabre
-  dark: ['gothbot', 'dragonbot', 'ancientbot'],
-  macabre: ['gothbot', 'ancientbot', 'dragonbot'],
-  nightshade: ['gothbot', 'ancientbot'],
-  arcane: ['ancientbot', 'dragonbot', 'gothbot'],
+  dark: ['gothbot', 'dragonbot'],
+  macabre: ['gothbot', 'dragonbot'],
+  nightshade: ['gothbot'],
+  arcane: ['dragonbot', 'gothbot'],
 
   // Cozy / cute / soft
   cozy: ['cuddlebot', 'coquettebot', 'bloombot', 'tinybot'],
   whimsical: ['bloombot', 'coquettebot', 'tinybot'],
   coquette: ['coquettebot', 'bloombot'],
   peaceful: ['bloombot', 'oceanbot', 'earthbot'],
-  enchanted: ['bloombot', 'tinybot', 'ancientbot'],
+  enchanted: ['bloombot', 'tinybot'],
 
   // Sci-fi / retro / digital
   voltage: ['starbot', 'retrobot', 'pixelbot'],
@@ -34,7 +34,7 @@ const AESTHETIC_BOT_MAP: Record<string, string[]> = {
 
   // Nature
   ethereal: ['oceanbot', 'bloombot', 'earthbot'],
-  ancient: ['ancientbot', 'earthbot', 'dragonbot'],
+  ancient: ['earthbot', 'dragonbot'],
 
   // Surreal / weird
   psychedelic: ['mangabot', 'pixelbot', 'retrobot'],

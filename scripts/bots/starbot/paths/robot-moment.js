@@ -86,5 +86,19 @@ The world around this robot is NOT a blank backdrop. It REACTS to the robot's pr
 ━━━ COMPOSITION ━━━
 Use the camera angle above as your framing guide. ONE robot, no companions. The robot is the focal point — render it with the detail of a museum piece. Body language tells the story. Depth and layering — foreground environment detail, midground robot sharp and ornate, background world stretching out.
 
+CRITICAL — LEG COUNT FIDELITY (NON-NEGOTIABLE): if the ROBOT description specifies a leg count (tripedal / quadrupedal / hexapod / octopod / four-legged / six-legged), the polished prompt MUST repeat the exact leg count TWICE — once near the start ("hexapod war-mech with six pneumatic legs") and once mid-prompt ("all six legs splayed across the rocky surface"). Flux defaults to bipedal humanoid forms unless the leg count is HEAVILY reinforced. If seed says "tripedal" → render MUST show three legs. If "hexapod" → six legs. NO exceptions, NO collapsing to bipedal. For multi-armed seeds (four-armed / six-armed) same rule: repeat the arm count twice.
+
+CRITICAL — FULL-BODY VISIBLE (NON-NEGOTIABLE): the ENTIRE robot must be visible from FEET (or base/wheels/treads) to TOP-OF-HEAD. The robot occupies between 50% and 85% of the vertical frame from head to feet. NEVER:
+- portrait closeup (head-and-shoulders only)
+- bust shot (chest-up only)
+- detail closeup (hand / arm / gauntlet / foot / single mechanical part filling the frame)
+- face-only or helmet-only shot
+- waist-up or knees-up cropping
+The viewer must SEE THE WHOLE ROBOT — feet/base on the lower edge, head/dome on the upper edge, all limbs visible. Wide-shot or full-body cinematic framing only. If the camera angle pool suggests a closeup, IGNORE it — full body wins.
+
+CRITICAL — AVOID CYCLOPS / SINGLE-DOMINATING-EYE FACE: do NOT design the robot's head as one giant glowing optical disc / one big porthole-eye. Heads should have STRUCTURE (visor-slit / helmet with multiple small lenses / antenna-crown / multi-iris compound-eye dome / sensor-bridge / skull-cap with side pods / dome with scanning bar). The head from the seed description WINS — render exactly the head archetype the seed specifies. Single-large-optic faces are only allowed when the seed EXPLICITLY says so AND the body has dense gear-detail mechanical interest justifying it. Default = NO cyclops face.
+
+CRITICAL — NO FEMININE-CYBORG DRIFT: this is a MACHINE, not a humanoid character. NEVER render with breast-plate / chest-bust / hourglass-torso / feminine-figure curves. The body is mechanical and angular. If the seed says "humanoid chassis," interpret as armored mechanical chassis with no human-anatomy mimicry — flat or geometric chest plating, NOT human-figure shaping. (Cyborg-woman is a separate path.)
+
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };
