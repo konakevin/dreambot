@@ -8,16 +8,27 @@ interface ToggleArgs {
   currentlyLiked: boolean;
 }
 
+// Page shape is now { rows, nextCursor } per the 2026-05-02 scroll-bug fix.
+// useDreamFeed pages are RowPage objects; some legacy hooks may still hand
+// flat arrays. Handle both.
+type RowPage<T> = { rows: T[]; [k: string]: unknown };
+type AnyPage<T> = RowPage<T> | T[];
+
+function bumpItem(p: DreamPostItem, uploadId: string, delta: number): DreamPostItem {
+  return p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p;
+}
+
 function bumpLikeCount(
-  pages: DreamPostItem[][],
+  pages: AnyPage<DreamPostItem>[],
   uploadId: string,
   delta: number
-): DreamPostItem[][] {
-  return pages.map((page) =>
-    page.map((p) =>
-      p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p
-    )
-  );
+): AnyPage<DreamPostItem>[] {
+  return pages.map((page) => {
+    if (Array.isArray(page)) {
+      return page.map((p) => bumpItem(p, uploadId, delta));
+    }
+    return { ...page, rows: page.rows.map((p) => bumpItem(p, uploadId, delta)) };
+  });
 }
 
 export function useToggleLike() {
@@ -56,7 +67,7 @@ export function useToggleLike() {
       const delta = currentlyLiked ? -1 : 1;
       const feedKeys = qc.getQueryCache().findAll({ queryKey: ['dreamFeed'] });
       for (const query of feedKeys) {
-        qc.setQueryData<InfiniteData<DreamPostItem[]>>(query.queryKey, (prev) => {
+        qc.setQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey, (prev) => {
           if (!prev) return prev;
           return { ...prev, pages: bumpLikeCount(prev.pages, uploadId, delta) };
         });

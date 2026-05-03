@@ -72,29 +72,38 @@ export function useAddComment() {
           };
         });
       } else {
-        // Add top-level comment optimistically — prepend (newest first)
+        // Add top-level comment optimistically — prepend (newest first).
+        // Comments page shape changed 2026-05-02: now { rows, hasMore, nextOffset }.
         const commentsKey = ['comments', uploadId];
-        queryClient.setQueryData<InfiniteData<Comment[]>>(commentsKey, (prev) => {
+        type CommentsPage = { rows: Comment[]; [k: string]: unknown };
+        queryClient.setQueryData<InfiniteData<CommentsPage>>(commentsKey, (prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            pages: prev.pages.map((page, i) => (i === 0 ? [newComment, ...page] : page)),
+            pages: prev.pages.map((page, i) =>
+              i === 0 ? { ...page, rows: [newComment, ...page.rows] } : page
+            ),
           };
         });
       }
 
-      // Bump comment count on the card in all feed caches
+      // Bump comment count on the card in all feed caches.
+      // Feed page shape changed 2026-05-02: now { rows, nextCursor }.
+      // Some legacy hooks may still hand flat arrays — handle both.
+      type FeedRowPage = { rows: DreamPostItem[]; [k: string]: unknown };
+      type FeedAnyPage = FeedRowPage | DreamPostItem[];
+      const bumpComment = (p: DreamPostItem) =>
+        p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p;
       const feedKeys = queryClient.getQueryCache().findAll({ queryKey: ['dreamFeed'] });
       for (const query of feedKeys) {
-        queryClient.setQueryData<InfiniteData<DreamPostItem[]>>(query.queryKey, (prev) => {
+        queryClient.setQueryData<InfiniteData<FeedAnyPage>>(query.queryKey, (prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            pages: prev.pages.map((page) =>
-              page.map((p) =>
-                p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p
-              )
-            ),
+            pages: prev.pages.map((page) => {
+              if (Array.isArray(page)) return page.map(bumpComment);
+              return { ...page, rows: page.rows.map(bumpComment) };
+            }),
           };
         });
       }
