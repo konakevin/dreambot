@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/warrior_eyes.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of warrior eyes AND how fantasy-world light interacts with them — torchlight glint, firelight catch, dragon-flame reflection, moonlight bounce.
 

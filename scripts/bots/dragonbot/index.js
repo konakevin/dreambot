@@ -23,25 +23,57 @@ const pathBuilders = {
   'wow-landscape': require('./paths/wow-landscape'),
   'wow-architecture': require('./paths/wow-architecture'),
   'lotr-landscape': require('./paths/lotr-landscape'),
-  'lotr-architecture': require('./paths/lotr-architecture'),
   'eldenring-landscape': require('./paths/eldenring-landscape'),
   'eldenring-architecture': require('./paths/eldenring-architecture'),
-  'got-landscape': require('./paths/got-landscape'),
-  'got-architecture': require('./paths/got-architecture'),
 };
 
 module.exports = {
   username: 'dragonbot',
   displayName: 'DragonBot',
 
-  mediums: ['canvas', 'watercolor', 'illustration', 'render'],
+  // EXPERIMENT (2026-05-03) — hardcode FaeBot's painterly fantasy medium
+  // across every DragonBot path. Tests whether the same minimal medium tag
+  // + creature-description-leads structure that worked for FaeBot also
+  // produces stop-and-stare fantasy renders for DragonBot subjects.
+  // Old `mediums: ['canvas', 'watercolor', 'illustration', 'render']` was
+  // a 4-medium roulette; replaced with single locked bot-internal medium.
+  defaultMedium: 'painted_fantasy_novel',
 
+  // Minimal medium tag — FaeBot lesson: long medium descriptors at frontload
+  // hijack Flux into rendering trained-cliche compositions. Short tag here
+  // lets each path's creature/scene description lead the prompt.
+  // Bit-identical to FaeBot's mediumStyles (with the one "enchanted-forest"
+  // context word dropped — DragonBot is dragon-fantasy, not forest).
+  // FaeBot uses: 'enchanted-forest fantasy concept art, painterly'
+  mediumStyles: {
+    painted_fantasy_novel: 'fantasy concept art, painterly',
+  },
 
-  promptPrefix: blocks.PROMPT_PREFIX,
-  promptSuffix: blocks.PROMPT_SUFFIX,
+  // Override prefix to empty (matches FaeBot exactly).
+  promptPrefix: '',
+  // Bit-identical to FaeBot's PROMPT_SUFFIX (with forest-specific phrases
+  // dropped — "atmospheric forest illustration" and the
+  // "Brian Froud + Mononoke + Magic-the-Gathering green-mana" lineage,
+  // both forest-fae specific). Otherwise identical.
+  promptSuffix:
+    'painted fantasy concept art, soft brushwork, dreamy dappled light, no text, no watermarks',
 
-  useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // Lock to flux-1.1-pro for the painterly look (matches FaeBot setup).
+  useModelPicker: false,
+  modelByPath: {
+    landscape: 'black-forest-labs/flux-1.1-pro',
+    'fantasy-scene': 'black-forest-labs/flux-1.1-pro',
+    'epic-moment': 'black-forest-labs/flux-1.1-pro',
+    'dragon-scene': 'black-forest-labs/flux-1.1-pro',
+    'female-warrior': 'black-forest-labs/flux-1.1-pro',
+    'male-warrior': 'black-forest-labs/flux-1.1-pro',
+    'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
+    'arcane-halls': 'black-forest-labs/flux-1.1-pro',
+    'dark-realm': 'black-forest-labs/flux-1.1-pro',
+    'dragon-lore': 'black-forest-labs/flux-1.1-pro',
+    'wow-landscape': 'black-forest-labs/flux-1.1-pro',
+    'lotr-landscape': 'black-forest-labs/flux-1.1-pro',
+  },
 
   // Inverts old excludeVibes (minimal/dark).
   vibes: [
@@ -50,10 +82,8 @@ module.exports = {
     'cozy',
     'epic',
     'nostalgic',
-    'peaceful',
     'whimsical',
     'ethereal',
-    'minimal',
     'arcane',
     'ancient',
     'enchanted',
@@ -64,6 +94,22 @@ module.exports = {
     'shimmer',
     'surreal',
   ],
+
+  // Per-path vibe overrides — scene-only paths exclude `macabre`
+  // (renders weird gore-coded landscapes; only fits character paths).
+  // Character paths (female-warrior, male-warrior, dragon-scene) inherit
+  // the full bot.vibes list.
+  vibesByPath: {
+    landscape: ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'fantasy-scene': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'epic-moment': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'cozy-arcane': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'arcane-halls': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'dark-realm': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'dragon-lore': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'wow-landscape': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+    'lotr-landscape': ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
+  },
 
   paths: [
     'landscape',
@@ -79,11 +125,8 @@ module.exports = {
     'wow-landscape',
     // 'wow-architecture' — scrapped 2026-05-02 (Kevin)
     'lotr-landscape',
-    'lotr-architecture',
     // 'eldenring-landscape' — scrapped 2026-05-02 (Kevin)
     // 'eldenring-architecture' — scrapped 2026-05-02 (Kevin)
-    'got-landscape',
-    'got-architecture',
   ],
 
   // dragon-scene + landscape co-flagship; warriors heavy; new wow paths weight 4 each.
@@ -101,11 +144,8 @@ module.exports = {
     'wow-landscape': 4,
     // 'wow-architecture': 4,  // scrapped
     'lotr-landscape': 4,
-    'lotr-architecture': 4,
     // 'eldenring-landscape': 4,  // scrapped
     // 'eldenring-architecture': 4,  // scrapped
-    'got-landscape': 4,
-    'got-architecture': 4,
   },
 
   // Chaos layer (V4 perception-distortion port). Skip face-dominant character
@@ -125,9 +165,8 @@ module.exports = {
       'dragon-lore',
       'wow-landscape',
       'wow-architecture',
-      'lotr-landscape', 'lotr-architecture',
+      'lotr-landscape',
       'eldenring-landscape', 'eldenring-architecture',
-      'got-landscape', 'got-architecture',
     ],
   },
 
@@ -164,11 +203,8 @@ module.exports = {
       'wow-landscape': 'scene',
       'wow-architecture': 'scene',
       'lotr-landscape': 'scene',
-      'lotr-architecture': 'scene',
       'eldenring-landscape': 'scene',
       'eldenring-architecture': 'scene',
-      'got-landscape': 'scene',
-      'got-architecture': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

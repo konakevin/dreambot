@@ -28,7 +28,7 @@ No two entries should have the same action verb. Spread across these categories 
 - BREATH ATTACKS: breathing fire across, exhaling frost over, spewing molten slag, releasing lightning arc, vomiting emerald flame
 - COMBAT: clawing at rival, biting through, slamming tail against, rearing back to strike, grappling mid-air with
 - REST: sleeping curled on, basking with wings spread, resting head on forepaws with one eye open, stretching after sleep, yawning revealing rows of teeth
-- FEEDING: tearing into, drinking deeply from, crunching bones of, swallowing whole
+- (FEEDING category REMOVED — never show dragons eating kills, gnawing carcasses, or devouring prey. Gross / off-brand for DragonBot.)
 - TERRITORIAL: roaring from atop, bellowing challenge across, marking territory with claw-gouges, spreading wings in threat display
 - MOVEMENT: climbing sheer cliff face, launching from ledge, landing heavily with dust erupting, prowling low through, stalking through, wading chest-deep through
 - SUBTLE: preening wing membranes, scratching horn against rock, shaking rain from wings, sniffing the wind, watching with ancient patience
@@ -38,6 +38,7 @@ No two entries should have the same action verb. Spread across these categories 
 - NO settings/environments — just the dragon and its action
 - NO humans
 - NO named IP dragons
+- NO eating / feeding / devouring / gnawing / chewing / tearing into prey / carcass interaction (BANNED — gross, off-brand for this bot)
 - NEVER cute, NEVER cartoony, NEVER clean/smooth/plastic
 - Each dragon should feel ANCIENT and WEATHERED — scars, chips, moss, age
 
