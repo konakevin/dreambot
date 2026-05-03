@@ -13,6 +13,10 @@ const blocks = require('./shared-blocks');
 
 const pathBuilders = {
   'forest-fairy-scene': require('./paths/forest-fairy-scene'),
+  'dryad-portrait': require('./paths/dryad-portrait'),
+  'tiny-fae': require('./paths/tiny-fae'),
+  'fairy-court': require('./paths/fairy-court'),
+  'enchanted-vista': require('./paths/enchanted-vista'),
 };
 
 module.exports = {
@@ -40,9 +44,13 @@ module.exports = {
   // (from dream_vibes DB) which Sonnet uses for mood context.
   vibes: ['peaceful', 'enchanted', 'ethereal', 'nostalgic', 'whimsical'],
 
-  paths: ['forest-fairy-scene'],
+  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'fairy-court', 'enchanted-vista'],
   pathWeights: {
     'forest-fairy-scene': 1,
+    'dryad-portrait': 1,
+    'tiny-fae': 1,
+    'fairy-court': 1,
+    'enchanted-vista': 1,
   },
 
   // Use flux-dev for painterly / illustrative looks (better than 1.1-pro
@@ -50,6 +58,10 @@ module.exports = {
   useModelPicker: false,
   modelByPath: {
     'forest-fairy-scene': 'black-forest-labs/flux-1.1-pro',
+    'dryad-portrait': 'black-forest-labs/flux-1.1-pro',
+    'tiny-fae': 'black-forest-labs/flux-1.1-pro',
+    'fairy-court': 'black-forest-labs/flux-1.1-pro',
+    'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Disable chaos + sensory anchors for POC — keep the prompt clean and
