@@ -25,5 +25,9 @@ const VIBE_COLOR = {
 module.exports = {
   FOREST_FAIRY_SCENES: load('forest_fairy_scenes'),
   FOREST_CREATURES: load('forest_creatures'),
+  DRYAD_PORTRAITS: load('dryad_portraits'),
+  TINY_FAE: load('tiny_fae'),
+  FAIRY_COURT: load('fairy_court'),
+  ENCHANTED_VISTA: load('enchanted_vista'),
   VIBE_COLOR,
 };
