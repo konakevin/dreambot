@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/male_warrior_hairstyles.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} HAIRSTYLE entries for DragonBot's male-warrior path. Each entry is a SHORT phrase (10-22 words) describing the EXACT hairstyle for a battle-ready fantasy warrior man — practical, weathered, often tied for combat or shaved for war.
 

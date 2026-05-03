@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/warrior_skin.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} SKIN-DESCRIPTION entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (10-20 words) describing the EXACT visual texture of warrior skin in fantasy light — how lantern-glow / firelight / moonlight hits it, where shadow pools, what tones it carries.
 

@@ -48,6 +48,49 @@ const WARM_QUIET_MAGIC_BLOCK = `━━━ WARM QUIET MAGIC (cozy-arcane path onl
 
 Tame peaceful magic. PLACES + ATMOSPHERE + magical wildlife at rest. Inhabited: Hobbiton-hearth / elven-tea-garden / wizard-rainy-library / tavern-in-snow / witch-herb-cottage. Natural: glowing-moss creek / fae-glen / sprite-cave / sleeping-unicorn meadow / fire-moth stump. Magical critters at rest welcome. NEVER dramatic action, NEVER battle — warm + tame + quiet magic.`;
 
+// BLOWN-UP LANDSCAPE mandate — for landscape / lotr-landscape / dragon-lore
+// scene-only paths. The point is OVER THE TOP AI-RENDER CRAZY visuals.
+// Never settle for "here's a building" or "here's a vista."
+const BLOWN_UP_LANDSCAPE_BLOCK = `━━━ BLOWN UP — AI-CRAZY LANDSCAPE (NON-NEGOTIABLE, OVER THE TOP) ━━━
+
+This is an AI render. The point is IMPOSSIBLE, JAW-DROPPING, OVER-THE-TOP visuals — never "here's a pic of a castle." Stack 5+ of these EPIC LANDSCAPE FEATURES per render so every frame is a stop-and-stare masterpiece:
+
+EPIC SCALE / IMPOSSIBLE GEOMETRY (mandatory ≥1):
+- Massive floating islands suspended in the sky, waterfalls cascading off their edges into the void below
+- Cathedral-mountains carved into towering spires with thousands of windows lit from within
+- A colossal ancient dragon-skeleton mountain with vines and ruins growing through its ribs
+- A sky-piercing tree taller than mountains, branches lit from within
+- A continent-spanning canyon cracked open to reveal a glowing world below
+- A frozen tidal wave the size of a city wall, suspended forever
+- An infinite staircase carved into a cliff disappearing into clouds
+- A city-scale crystal jutting from the earth, refracting light into rainbow shafts
+- Concentric ring-mountains around a central spell-circle valley
+
+MULTIPLE STACKED LIGHT SOURCES (mandatory ≥3 in same frame):
+- Massive god-rays piercing through dramatic clouds
+- Magical aurora rippling across the sky in impossible colors (violet / emerald / rose-magenta)
+- Multiple moons / suns visible at once (twin suns, three moons, eclipsed sun-and-moon)
+- Bioluminescent moss / lichen / fungi glowing from below
+- Distant city lights or magical fires dotting the horizon
+- Crackling magical lightning between distant peaks
+- Floating glowing wisps / orbs suspended throughout the air at scale
+- Lava-crack-lines glowing through cracked stone
+
+LIVING SKY / MAGICAL WEATHER (mandatory ≥1):
+- An aurora-storm with magical lightning in the distance
+- Floating petals / leaves / embers / snowflakes drifting across the entire scene
+- A spell-storm rotating slowly over the horizon, runes lightning-flashing inside it
+- Migrating cloud-leviathans (whales / dragons / serpentine creatures) drifting across the sky
+- An eclipsed sun bleeding rays of light around the moon
+- Pillars of light descending from the heavens onto the landscape
+- Ash from a distant volcano / glowing snow / phosphorescent rain
+
+DENSE FOREGROUND DETAIL (mandatory): every plant, every rock, every dewdrop, every leaf rendered. Ferns / flowers / mossy boulders / gnarled roots / fallen logs in tactile detail anchoring the foreground. The foreground should be ALIVE with specific micro-detail.
+
+SATURATED IMPOSSIBLE COLOR — multiple saturated colors coexisting in the frame at once (violet sunset + emerald aurora + amber lightning + rose-magenta clouds + cyan glowing moss). Heaven-tier saturation — never restrained, never tasteful-quiet. CRANK EVERYTHING TO 11.
+
+ATMOSPHERIC PARTICLES THICK IN THE FRAME: drifting magical pollen, sparks, embers, glowing motes, snow, petals, ash, spell-particles. The air itself should be ALIVE.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -60,4 +103,5 @@ module.exports = {
   BLOW_IT_UP_BLOCK,
   ARCANE_MAXIMALISM_BLOCK,
   WARM_QUIET_MAGIC_BLOCK,
+  BLOWN_UP_LANDSCAPE_BLOCK,
 };

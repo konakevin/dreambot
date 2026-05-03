@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/male_warrior_accessories.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} ACCESSORY entries for DragonBot's male-warrior path. Each entry is a SHORT phrase (8-16 words) describing ONE signature object he's wearing or carrying — the small detail that anchors his warrior identity.
 

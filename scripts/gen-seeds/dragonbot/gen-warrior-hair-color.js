@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/warrior_hair_color.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} HAIR-COLOR entries for DragonBot's female-warrior and male-warrior paths. Each entry is a SHORT phrase (6-14 words) describing the EXACT vivid hair color AND a fantasy-light interaction — torchlight glow, firelight sheen, dragon-flame catch, moonlight shimmer.
 

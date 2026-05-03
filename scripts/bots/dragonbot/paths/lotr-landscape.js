@@ -12,6 +12,8 @@ ${blocks.EPIC_FANTASY_BLOCK}
 
 ${blocks.PAINTERLY_ILLUSTRATION_BLOCK}
 
+${blocks.BLOWN_UP_LANDSCAPE_BLOCK}
+
 ━━━ NO CHARACTERS — NON-NEGOTIABLE ━━━
 Pure landscape. NO foreground figures, NO heroes. Distant beast/dragon silhouettes against horizon at scale OK only.
 

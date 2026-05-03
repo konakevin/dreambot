@@ -20,6 +20,22 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ NO CHARACTERS ━━━
 No humans, no riders, no people. Dragon only.
 
+━━━ TRADITIONAL WESTERN DRAGON ANATOMY (NON-NEGOTIABLE) ━━━
+This is a TRADITIONAL high-fantasy WESTERN dragon — Smaug, the LOTR / GoT / Elden Ring / Skyrim / Warcraft / D&D archetype. Anatomy MUST include:
+- FOUR muscular legs (NOT a wingless wyrm, NOT a snake, NOT a serpent)
+- TWO MASSIVE membrane wings (bat-like, scaled, ribbed) — wings ALWAYS visible (folded against the back, half-furled, or fully extended)
+- HORNED head with reptilian skull — sharp horns, swept-back crests, jaw with rows of fangs
+- THICK SCALED body with armored plating, muscular shoulders, broad chest
+- LONG THICK TAIL (not a snake-tail — a powerful muscular tail, sometimes spike-tipped or fan-tipped)
+- CLAWED forefeet and hindfeet
+- Reptilian-mammalian hybrid silhouette — like a giant winged bull-lizard, NEVER like a python with arms
+
+ABSOLUTELY NOT:
+- Eastern Chinese-style wingless serpentine dragon (those are not for this path)
+- Snake / serpent / wyrm / lindworm body shape
+- Wingless or two-legged wyvern (this path requires 4 legs + 2 wings = TRUE DRAGON)
+- Sky-snake / spirit-serpent / cloud-snake — these are SERPENTS, not dragons
+
 ━━━ THE DRAGON ━━━
 ${dragon}
 

@@ -22,6 +22,8 @@ ${blocks.CINEMATIC_COMPOSITION_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
+${blocks.BLOWN_UP_LANDSCAPE_BLOCK}
+
 ━━━ NO CHARACTERS ━━━
 Landscape is hero. Pure fantasy world. No hero figures, no soldiers, no warriors.
 

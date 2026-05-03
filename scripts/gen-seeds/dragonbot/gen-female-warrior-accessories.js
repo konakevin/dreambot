@@ -2,7 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/female_warrior_accessories.json',
-  total: 25,
+  total: 100,
+  append: true,
   batch: 12,
   metaPrompt: (n) => `You are writing ${n} ACCESSORY entries for DragonBot's female-warrior path. Each entry is a SHORT phrase (8-16 words) describing ONE signature object she's wearing or carrying — the small detail that anchors her warrior identity.
 
