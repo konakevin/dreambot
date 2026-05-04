@@ -339,9 +339,20 @@ export default function SearchExploreScreen() {
 
   const activeMediums = selectedMedium ? [selectedMedium] : [];
   const activeVibes = selectedVibe ? [selectedVibe] : [];
-  const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useExploreDreams(activeMediums, activeVibes);
   const posts = data?.pages.flat() ?? [];
+
+  // Local pull-to-refresh spinner — see FullScreenFeed for rationale.
+  const [isPulling, setIsPulling] = useState(false);
+  const handlePullToRefresh = useCallback(async () => {
+    setIsPulling(true);
+    try {
+      await refetch();
+    } finally {
+      setIsPulling(false);
+    }
+  }, [refetch]);
 
   const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 
@@ -364,8 +375,8 @@ export default function SearchExploreScreen() {
           removeClippedSubviews
           refreshControl={
             <RefreshControl
-              refreshing={isRefetching && !isFetchingNextPage}
-              onRefresh={() => refetch()}
+              refreshing={isPulling && !isFetchingNextPage}
+              onRefresh={handlePullToRefresh}
               tintColor={colors.accent}
               progressViewOffset={overlayHeight}
             />

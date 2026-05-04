@@ -21,12 +21,12 @@ import { useBotUsers } from '@/hooks/useBotUsers';
 import { feedImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 
+// Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
+import { applyDiversity } from '@/lib/feedDiversity';
+
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 type FeedTab = 'forYou' | 'following' | 'bots';
 const PAGE_SIZE = 20;
-
-// Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
-import { applyDiversity } from '@/lib/feedDiversity';
 
 interface FeedCursor {
   score: number;
@@ -245,7 +245,6 @@ export default function HomeScreen() {
         key={activeTab === 'bots' ? `bots-${selectedBotId}` : activeTab}
         posts={posts}
         isLoading={isLoading}
-        isRefreshing={isRefetching}
         onRefresh={() => refetch()}
         listRef={listRef}
         onEndReached={() => {

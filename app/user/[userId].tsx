@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -51,8 +51,17 @@ export default function PublicProfileScreen() {
     data: profile,
     isLoading: profileLoading,
     refetch: refetchProfile,
-    isRefetching,
   } = usePublicProfile(userId);
+  // Local pull-to-refresh spinner — see FullScreenFeed for rationale.
+  const [isPulling, setIsPulling] = useState(false);
+  const handlePullToRefresh = useCallback(async () => {
+    setIsPulling(true);
+    try {
+      await refetchProfile();
+    } finally {
+      setIsPulling(false);
+    }
+  }, [refetchProfile]);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(userId);
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(userId);
   const { data: followingIds = new Set<string>() } = useFollowingIds();
@@ -383,8 +392,8 @@ export default function PublicProfileScreen() {
           keyExtractor={(item) => item.id}
           refreshControl={
             <RefreshControl
-              refreshing={isRefetching}
-              onRefresh={() => refetchProfile()}
+              refreshing={isPulling}
+              onRefresh={handlePullToRefresh}
               tintColor={colors.accent}
             />
           }

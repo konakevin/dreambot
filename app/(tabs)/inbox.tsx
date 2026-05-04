@@ -1,5 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   View,
@@ -283,8 +283,18 @@ function NotificationRow({
 }
 
 export default function InboxScreen() {
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, refetch, isRefetching } =
-    useInbox();
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, refetch } = useInbox();
+  // Local pull-to-refresh spinner state — see FullScreenFeed for the rationale.
+  // iOS only resets contentOffset cleanly after a gesture-driven refresh.
+  const [isPulling, setIsPulling] = useState(false);
+  const handlePullToRefresh = useCallback(async () => {
+    setIsPulling(true);
+    try {
+      await refetch();
+    } finally {
+      setIsPulling(false);
+    }
+  }, [refetch]);
   const { mutate: markSeen } = useMarkShareSeen();
   const { mutate: deleteNotification } = useDeleteShare();
   const { mutate: markAllSeen, isPending: markingAll } = useMarkAllSeen();
@@ -447,8 +457,8 @@ export default function InboxScreen() {
         keyExtractor={(item) => item.id}
         refreshControl={
           <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={() => refetch()}
+            refreshing={isPulling}
+            onRefresh={handlePullToRefresh}
             tintColor={colors.accent}
           />
         }
