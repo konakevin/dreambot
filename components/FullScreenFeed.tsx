@@ -42,8 +42,16 @@ const FALLBACK_HEIGHT = Dimensions.get('window').height;
 interface Props {
   posts: DreamPostItem[];
   isLoading?: boolean;
-  isRefreshing?: boolean;
-  onRefresh?: () => void;
+  /**
+   * Pull-to-refresh handler. The spinner is owned internally and only shows
+   * while the user-initiated pull resolves — programmatic refetches (e.g.,
+   * from AppState resume invalidation) never trigger the spinner. Decoupling
+   * RefreshControl from `isRefetching` is what fixes the post-background
+   * "scrolled down ~60px until tap" bug: iOS only auto-resets contentOffset
+   * after a gesture-driven refresh, so flipping `refreshing` programmatically
+   * left the contentInset shift in place.
+   */
+  onRefresh?: () => void | Promise<unknown>;
   onEndReached?: () => void;
   /** Index to scroll to on mount (for album deep links) */
   initialIndex?: number;
@@ -68,7 +76,6 @@ interface Props {
 export function FullScreenFeed({
   posts,
   isLoading,
-  isRefreshing,
   onRefresh: onRefreshProp,
   onEndReached,
   initialIndex = 0,
@@ -146,8 +153,20 @@ export function FullScreenFeed({
     };
   }, []);
 
-  const handleRefresh = useCallback(() => {
-    onRefreshProp?.();
+  // Spinner state owned here, not driven from parent's `isRefetching`. iOS only
+  // auto-resets contentOffset after a gesture-driven RefreshControl cycle —
+  // flipping `refreshing` programmatically (e.g., from AppState resume
+  // invalidation) leaves the contentInset shift in place, which is the
+  // post-background "scrolled down ~60px until tap" bug.
+  const [isPulling, setIsPulling] = useState(false);
+  const handleRefresh = useCallback(async () => {
+    if (!onRefreshProp) return;
+    setIsPulling(true);
+    try {
+      await onRefreshProp();
+    } finally {
+      setIsPulling(false);
+    }
     setTimeout(() => ref.current?.scrollToOffset({ offset: 0, animated: true }), 300);
   }, [onRefreshProp, ref]);
 
@@ -264,7 +283,7 @@ export function FullScreenFeed({
         refreshControl={
           onRefreshProp ? (
             <RefreshControl
-              refreshing={!!isRefreshing}
+              refreshing={isPulling}
               onRefresh={handleRefresh}
               tintColor={colors.textPrimary}
             />

@@ -45,7 +45,6 @@ export default function PhotoDetailScreen() {
 
   const posts: DreamPostItem[] = isAlbum ? (albumQuery.data ?? []) : contextPosts;
   const isLoading = isAlbum ? albumQuery.isLoading : contextQuery.isLoading;
-  const isRefetching = isAlbum ? albumQuery.isRefetching : contextQuery.isRefetching;
   const refetch = isAlbum ? albumQuery.refetch : contextQuery.refetch;
   const handleEndReached = useCallback(() => {
     if (!isAlbum && contextQuery.hasNextPage && !contextQuery.isFetchingNextPage) {
@@ -168,7 +167,6 @@ export default function PhotoDetailScreen() {
       <FullScreenFeed
         posts={posts}
         isLoading={isLoading}
-        isRefreshing={isRefetching}
         onRefresh={() => refetch()}
         initialIndex={initialIndex}
         disableSwipeToProfile

@@ -47,7 +47,7 @@ export default function ProfileScreen() {
 
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
-  const { data: profile, refetch: refetchProfile, isRefetching } = usePublicProfile(user?.id ?? '');
+  const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -56,11 +56,22 @@ export default function ProfileScreen() {
   );
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { mutate: toggleFollow } = useToggleFollow();
-  const handleRefresh = useCallback(() => {
-    refetchProfile();
-    queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-    queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-    queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
+  // Spinner state owned locally so it only shows during a user-initiated pull.
+  // Programmatic refetches (AppState resume invalidation) won't trigger the
+  // spinner — fixes the post-background "scrolled down ~60px until tap" bug.
+  const [isPulling, setIsPulling] = useState(false);
+  const handleRefresh = useCallback(async () => {
+    setIsPulling(true);
+    try {
+      await Promise.all([
+        refetchProfile(),
+        queryClient.invalidateQueries({ queryKey: ['userPosts'] }),
+        queryClient.invalidateQueries({ queryKey: ['publicProfile'] }),
+        queryClient.invalidateQueries({ queryKey: ['my-dreams'] }),
+      ]);
+    } finally {
+      setIsPulling(false);
+    }
   }, [refetchProfile, queryClient]);
 
   function handleFollowUser(targetId: string) {
@@ -197,7 +208,7 @@ export default function ProfileScreen() {
         data={listData}
         refreshControl={
           <RefreshControl
-            refreshing={isRefetching}
+            refreshing={isPulling}
             onRefresh={handleRefresh}
             tintColor={colors.accent}
           />
