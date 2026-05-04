@@ -25,6 +25,7 @@ const pathBuilders = {
   'lotr-landscape': require('./paths/lotr-landscape'),
   'eldenring-landscape': require('./paths/eldenring-landscape'),
   'eldenring-architecture': require('./paths/eldenring-architecture'),
+  'sexy-warrior-bedroom': require('./paths/sexy-warrior-bedroom'),
 };
 
 module.exports = {
@@ -73,6 +74,7 @@ module.exports = {
     'dragon-lore': 'black-forest-labs/flux-1.1-pro',
     'wow-landscape': 'black-forest-labs/flux-1.1-pro',
     'lotr-landscape': 'black-forest-labs/flux-1.1-pro',
+    'sexy-warrior-bedroom': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Inverts old excludeVibes (minimal/dark).
@@ -127,6 +129,7 @@ module.exports = {
     'lotr-landscape',
     // 'eldenring-landscape' — scrapped 2026-05-02 (Kevin)
     // 'eldenring-architecture' — scrapped 2026-05-02 (Kevin)
+    'sexy-warrior-bedroom',
   ],
 
   // dragon-scene + landscape co-flagship; warriors heavy; new wow paths weight 4 each.
@@ -146,6 +149,7 @@ module.exports = {
     'lotr-landscape': 4,
     // 'eldenring-landscape': 4,  // scrapped
     // 'eldenring-architecture': 4,  // scrapped
+    'sexy-warrior-bedroom': 0,  // weight 0 — manual iter-bot only, not nightly
   },
 
   // Chaos layer (V4 perception-distortion port). Skip face-dominant character

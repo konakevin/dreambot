@@ -20,6 +20,7 @@ const pathBuilders = {
   'airship-skies': require('./paths/airship-skies'),
   'steampunk-curio': require('./paths/steampunk-curio'),
   'sexy-steampunk-woman': require('./paths/sexy-steampunk-woman'),
+  'sexy-bedroom-test': require('./paths/sexy-bedroom-test'),
   'steampunk-man': require('./paths/steampunk-man'),
   'steampunk-spectacle': require('./paths/steampunk-spectacle'),
   'steam-transport': require('./paths/steam-transport'),
@@ -46,6 +47,7 @@ module.exports = {
     // Female path stays on main's two-model rotation — proven to give
     // face-geometry diversity. Other paths keep hyperreal lock.
     'sexy-steampunk-woman':  ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'sexy-bedroom-test':     ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'steampunk-man':         { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-spectacle':   { 'black-forest-labs/flux-1.1-pro': 100 },
     'steam-transport':       { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -58,6 +60,7 @@ module.exports = {
   mediumByPath: {
     // Female path hardcoded to render (testing).
     'sexy-steampunk-woman': 'render',
+    'sexy-bedroom-test': 'render',
   },
 
   mediumStyles: {
@@ -75,6 +78,7 @@ module.exports = {
   vibes: ['cinematic'],
 
   vibesByPath: {
+    'sexy-bedroom-test': ['cinematic', 'nostalgic', 'enchanted', 'shimmer', 'coquette', 'ethereal'],
     'sexy-steampunk-woman': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'peaceful', 'whimsical',
       'ethereal', 'arcane', 'ancient', 'enchanted', 'fierce', 'coquette',
@@ -104,6 +108,7 @@ module.exports = {
     'steampunk-man',
     'steampunk-spectacle',
     'steam-transport',
+    'sexy-bedroom-test',
   ],
 
   pathWeights: {
@@ -114,6 +119,7 @@ module.exports = {
     'steampunk-man': 2,
     'steampunk-spectacle': 1,
     'steam-transport': 2,
+    'sexy-bedroom-test': 0,  // weight 0 — only invokable via iter-bot --mode, not nightly
   },
 
   chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['steampunk-scene','airship-skies','steampunk-curio','steampunk-spectacle','steam-transport'] },

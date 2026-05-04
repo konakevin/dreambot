@@ -41,6 +41,7 @@ const pathBuilders = {
   'star-trek-architecture': require('./paths/star-trek-architecture'),
   'starcraft-landscape': require('./paths/starcraft-landscape'),
   'starcraft-architecture': require('./paths/starcraft-architecture'),
+  'sexy-cyborg-bedroom': require('./paths/sexy-cyborg-bedroom'),
 };
 
 module.exports = {
@@ -59,6 +60,7 @@ module.exports = {
     // peeled off the new starbot_hyperreal default.
     'cyborg-woman': 'render',
     'cyborg-man': 'render',
+    'sexy-cyborg-bedroom': 'render',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -68,6 +70,7 @@ module.exports = {
     // the locked single 'cinematic' default. Restores main render behavior.
     'cyborg-woman': ['cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal', 'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal'],
     'cyborg-man': ['cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient', 'fierce', 'voltage', 'nightshade', 'macabre', 'surreal'],
+    'sexy-cyborg-bedroom': ['cinematic', 'nostalgic', 'enchanted', 'shimmer', 'voltage', 'ethereal'],
   },
 
   // all paths use flux-dev / flux-1.1-pro 50/50 rotation
@@ -86,6 +89,7 @@ module.exports = {
     'megastructure': { 'black-forest-labs/flux-1.1-pro': 100 },
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'sexy-cyborg-bedroom': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'dune-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
     'dune-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
     'aliens-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -206,6 +210,7 @@ module.exports = {
     // 'star-trek-architecture' — scrapped 2026-05-02
     'starcraft-landscape',
     'starcraft-architecture',
+    'sexy-cyborg-bedroom',
   ],
 
   // Path weights tuned for ~40% universe-coded scenes / ~30% character paths /
@@ -247,6 +252,7 @@ module.exports = {
     // 'star-trek-architecture': 4,  // scrapped
     'starcraft-landscape': 4,
     'starcraft-architecture': 4,
+    'sexy-cyborg-bedroom': 0,  // weight 0 — manual iter-bot only, not nightly
   },
 
   // Chaos layer — sci-fi works well with chaos. Skip face-dominant cyborg
