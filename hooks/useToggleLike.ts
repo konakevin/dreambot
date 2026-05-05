@@ -63,16 +63,30 @@ export function useToggleLike() {
         return next;
       });
 
-      // Bump like_count on the post across all feed caches
+      // Bump like_count on the post across all feed caches.
+      // Infinite queries with {rows, ...} page shape: dreamFeed, userContextFeed,
+      // searchPosts, myDreams, favoritePosts, userPosts, publicProfilePosts, inbox.
+      // Flat-array queries: albumPosts.
       const delta = currentlyLiked ? -1 : 1;
-      const feedKeys = qc.getQueryCache().findAll({ queryKey: ['dreamFeed'] });
-      for (const query of feedKeys) {
-        qc.setQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey, (prev) => {
-          if (!prev) return prev;
-          return { ...prev, pages: bumpLikeCount(prev.pages, uploadId, delta) };
-        });
+      const infiniteKeys = [
+        'dreamFeed',
+        'userContextFeed',
+        'searchPosts',
+        'my-dreams',
+        'favoritePosts',
+        'userPosts',
+        'publicProfilePosts',
+      ];
+      for (const root of infiniteKeys) {
+        const queries = qc.getQueryCache().findAll({ queryKey: [root] });
+        for (const query of queries) {
+          qc.setQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey, (prev) => {
+            if (!prev) return prev;
+            return { ...prev, pages: bumpLikeCount(prev.pages, uploadId, delta) };
+          });
+        }
       }
-      // Also bump in album posts
+      // Also bump in album posts (flat-array shape)
       const albumKeys = qc.getQueryCache().findAll({ queryKey: ['albumPosts'] });
       for (const query of albumKeys) {
         qc.setQueryData<DreamPostItem[]>(query.queryKey, (prev) => {
