@@ -188,17 +188,21 @@ export function PostGrid({
   // scroll once and clear.
   const [pendingAutoAnchor, setPendingAutoAnchor] = useState(false);
 
-  // Live anchor: re-trigger pagination + scroll whenever the store's
-  // currentPostId changes — even while the grid is blurred behind the
-  // photo detail screen. This makes swipe-back instant: the grid is
-  // already at the right scroll offset by the time it's revealed, no
-  // post-focus pop. (Cheap: the grid is offscreen, scrollToOffset has
-  // no visual cost; pagination data benefits both screens.)
+  // Live auto-anchor — ONLY for store-driven highlights (i.e. the user
+  // came from this profile's photo detail and scrolled there). Triggered
+  // by setCurrentPostId calls in PostTile.handlePress + FullScreenFeed
+  // onIndexChange. Runs while the grid is blurred so swipe-back lands at
+  // the right offset with no visible pop.
+  //
+  // URL-param highlights (e.g. user/[userId]?viewedPost=X — clicked an
+  // avatar from the main feed) deliberately DO NOT trigger auto-anchor.
+  // Those just light up the "Just viewed" badge; the user has to tap it
+  // to scroll, since they didn't actually drill into that post.
   useEffect(() => {
-    if (!effectiveHighlightId) return;
+    if (!storeCurrentPostId) return;
     setHighlightDismissed(false);
     setPendingAutoAnchor(true);
-  }, [effectiveHighlightId]);
+  }, [storeCurrentPostId]);
 
   // Reset the focus ref on focus enter (kept so the deep-link badge path
   // remains correct).

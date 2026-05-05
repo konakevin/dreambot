@@ -29,6 +29,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
 import { useAuthStore } from '@/store/auth';
+import { useAlbumStore } from '@/store/album';
 import { PostGrid } from '@/components/PostGrid';
 import { GradientUsername } from '@/components/GradientUsername';
 import { colors } from '@/constants/theme';
@@ -46,6 +47,16 @@ export default function PublicProfileScreen() {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnProfile = currentUser?.id === userId;
   const [activeTab, setActiveTab] = useState<Tab>('posts');
+
+  // URL-param entry (avatar tap from main feed): viewedPost lights up the
+  // "Just viewed" badge but should NOT trigger auto-scroll. Clear any
+  // stale album-store currentPostId from a prior session so PostGrid's
+  // live auto-anchor effect doesn't fire on it.
+  useEffect(() => {
+    if (viewedPost) {
+      useAlbumStore.getState().setCurrentPostId(null);
+    }
+  }, [viewedPost]);
 
   const {
     data: profile,
