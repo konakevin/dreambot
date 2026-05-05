@@ -124,14 +124,14 @@ async function perturbSourceImage(
   data[off] = Math.floor(Math.random() * 256);
   data[off + 1] = Math.floor(Math.random() * 256);
   data[off + 2] = Math.floor(Math.random() * 256);
-  const quality = 89 + Math.floor(Math.random() * 4); // 89-92, hugs the existing 90 baseline
+  const quality = 94 + Math.floor(Math.random() * 4); // 94-97, near-lossless
   const encoded = encodeJpeg({ data, width: w, height: h }, quality);
   const bytes = encoded.data instanceof Uint8Array ? encoded.data : new Uint8Array(encoded.data);
 
   const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
   const { error } = await supabase.storage
     .from('uploads')
-    .upload(path, bytes, { contentType: 'image/jpeg', upsert: true });
+    .upload(path, bytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
   if (error) throw new Error(`Perturbed source upload failed: ${error.message}`);
   return {
     url: supabase.storage.from('uploads').getPublicUrl(path).data.publicUrl,
@@ -464,8 +464,8 @@ export async function dualFaceSwap(
   // Drop the full target RGBA — we only need the crops from here on (~5MB freed)
   imgData = null;
 
-  const leftJpeg = encodeJpeg({ data: leftPixels, width: leftW, height: H }, 90);
-  const rightJpeg = encodeJpeg({ data: rightPixels, width: rightW, height: H }, 90);
+  const leftJpeg = encodeJpeg({ data: leftPixels, width: leftW, height: H }, 95);
+  const rightJpeg = encodeJpeg({ data: rightPixels, width: rightW, height: H }, 95);
   const leftJpegData =
     leftJpeg.data instanceof Uint8Array ? leftJpeg.data : new Uint8Array(leftJpeg.data);
   const rightJpegData =
@@ -480,10 +480,10 @@ export async function dualFaceSwap(
   const [leftUp, rightUp] = await Promise.all([
     supabase.storage
       .from('uploads')
-      .upload(leftPath, leftJpegData, { contentType: 'image/jpeg', upsert: true }),
+      .upload(leftPath, leftJpegData, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' }),
     supabase.storage
       .from('uploads')
-      .upload(rightPath, rightJpegData, { contentType: 'image/jpeg', upsert: true }),
+      .upload(rightPath, rightJpegData, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' }),
   ]);
   if (leftUp.error) throw new Error(`Upload left crop failed: ${leftUp.error.message}`);
   if (rightUp.error) throw new Error(`Upload right crop failed: ${rightUp.error.message}`);
@@ -555,13 +555,13 @@ export async function dualFaceSwap(
   leftSwapData = null;
   rightSwapData = null;
 
-  const stitchedJpeg = encodeJpeg({ data: stitched, width: W, height: H }, 90);
+  const stitchedJpeg = encodeJpeg({ data: stitched, width: W, height: H }, 95);
   const stitchedBytes =
     stitchedJpeg.data instanceof Uint8Array ? stitchedJpeg.data : new Uint8Array(stitchedJpeg.data);
   const tempFile = `temp/${userId}/stitched-${Date.now()}.jpg`;
   const { error: upErr } = await supabase.storage
     .from('uploads')
-    .upload(tempFile, stitchedBytes, { contentType: 'image/jpeg', upsert: true });
+    .upload(tempFile, stitchedBytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
   if (upErr) throw new Error(`Stitched upload failed: ${upErr.message}`);
   const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(tempFile);
 
