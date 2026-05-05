@@ -560,6 +560,7 @@ async function replaceStorageImage(imageUrl, newBuffer) {
   const { error } = await sb.storage.from('uploads').upload(path, newBuffer, {
     contentType: 'image/jpeg',
     upsert: true,
+    cacheControl: '2592000',
   });
   if (error) throw new Error(`Storage upload: ${error.message}`);
 }
@@ -684,6 +685,7 @@ async function generateOne() {
   const { error: uploadErr } = await sb.storage.from('uploads').upload(storagePath, composited, {
     contentType: 'image/jpeg',
     upsert: false,
+    cacheControl: '2592000',
   });
   if (uploadErr) throw new Error(`Storage upload: ${uploadErr.message}`);
 
