@@ -11,11 +11,15 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
+import { Image as ExpoImage } from 'expo-image';
+import { feedImageUrl } from '@/lib/imageUrl';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { PostTile } from '@/components/PostTile';
+import { useAlbumStore } from '@/store/album';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
 import { vs } from '@/lib/responsive';
@@ -89,10 +93,17 @@ export function PostGrid({
     }
   }, [hasNextPage, isFetchingNextPage, activeQuery.fetchNextPage]);
 
+  // Subscribe to store directly so the latest currentPostId is reflected
+  // even if the parent screen's render of the prop is stale. Store value
+  // wins — the prop is only a fallback for screens that don't track via
+  // the album store (e.g. user/[userId] with ?viewedPost= URL param).
+  const storeCurrentPostId = useAlbumStore((s) => s.currentPostId);
+  const effectiveHighlightId = storeCurrentPostId ?? highlightPostId ?? undefined;
+
   const highlightIndex = useMemo(() => {
-    if (!highlightPostId) return -1;
-    return posts.findIndex((p) => p.id === highlightPostId);
-  }, [posts, highlightPostId]);
+    if (!effectiveHighlightId) return -1;
+    return posts.findIndex((p) => p.id === effectiveHighlightId);
+  }, [posts, effectiveHighlightId]);
 
   const navigation = useNavigation();
   const [highlightDismissed, setHighlightDismissed] = useState(false);
@@ -108,13 +119,48 @@ export function PostGrid({
 
   const [scrollOverlay, setScrollOverlay] = useState(false);
 
+  // Auto-scroll to the highlighted post on every focus enter — fixes the
+  // "lose your place after detail-view scroll" bug. PostTile sets the album
+  // store's currentPostId on tap, FullScreenFeed updates it via onIndexChange
+  // as the user scrolls through detail view, and on swipe-back this grid
+  // refocuses and silently snaps to the row the user was just on.
+  // Ref ensures we only run once per focus, even if highlightIndex resolves
+  // late (deep-link landing → posts fetch → index resolves).
+  const didAutoScrollForFocus = useRef(false);
+
+  // Prefetch full-detail-size image for any tile that scrolls into view, so
+  // tapping into the detail view is instant. Skip already-prefetched IDs.
+  const prefetchedRef = useRef<Set<string>>(new Set());
+  const viewabilityConfigRef = useRef({ viewAreaCoveragePercentThreshold: 30 });
+  const onGridViewableChanged = useRef(
+    ({ viewableItems }: { viewableItems: { item?: DreamPostItem }[] }) => {
+      const toPrefetch: string[] = [];
+      for (const v of viewableItems) {
+        if (!v.item) continue;
+        if (prefetchedRef.current.has(v.item.id)) continue;
+        prefetchedRef.current.add(v.item.id);
+        toPrefetch.push(feedImageUrl(v.item.image_url));
+      }
+      if (toPrefetch.length > 0) {
+        ExpoImage.prefetch(toPrefetch);
+      }
+    }
+  );
+
   const scrollToHighlightRow = useCallback(
-    (idx: number) => {
+    (idx: number, opts?: { silent?: boolean }) => {
       if (!listRef.current || idx < 0) return;
       const targetRow = Math.floor(idx / 2);
-      const targetOffset = Math.max(0, headerHeight + targetRow * ROW_HEIGHT - ROW_HEIGHT * 0.3);
+      // Center the row in the visible grid area (below the sticky header)
+      // so the tile the user was just viewing lands mid-screen, not at the top.
+      const visibleArea = Math.max(ROW_HEIGHT, containerHeight - headerHeight);
+      const centeredOffset = headerHeight + targetRow * ROW_HEIGHT - (visibleArea - ROW_HEIGHT) / 2;
+      const targetOffset = Math.max(0, centeredOffset);
 
-      setScrollOverlay(true);
+      // Silent mode (auto-scroll on focus return): skip the dim overlay flash.
+      // The grid is already visible — a 300ms black overlay is jarring vs the
+      // badge-tap path where the user explicitly initiated the jump.
+      if (!opts?.silent) setScrollOverlay(true);
       listRef.current.scrollToOffset({ offset: targetOffset, animated: false });
 
       setTimeout(() => {
@@ -122,7 +168,7 @@ export function PostGrid({
         setBadgeTapped(true);
       }, 300);
     },
-    [headerHeight]
+    [headerHeight, containerHeight]
   );
 
   useEffect(() => {
@@ -133,6 +179,60 @@ export function PostGrid({
       });
     }
   }, [isFetchingHighlight, highlightIndex, scrollToHighlightRow]);
+
+  // Auto-anchor on focus enter. The hard case is when the user scrolled past
+  // the grid's first page (PAGE_SIZE=18) in detail view: highlightPostId is
+  // set, but highlightIndex === -1 because the post isn't in the loaded
+  // grid pages yet. We must fetch pages until found, THEN scroll.
+  // `pendingAutoAnchor` flag drives both: while true, paginate; when found,
+  // scroll once and clear.
+  const [pendingAutoAnchor, setPendingAutoAnchor] = useState(false);
+
+  // Live anchor: re-trigger pagination + scroll whenever the store's
+  // currentPostId changes — even while the grid is blurred behind the
+  // photo detail screen. This makes swipe-back instant: the grid is
+  // already at the right scroll offset by the time it's revealed, no
+  // post-focus pop. (Cheap: the grid is offscreen, scrollToOffset has
+  // no visual cost; pagination data benefits both screens.)
+  useEffect(() => {
+    if (!effectiveHighlightId) return;
+    setHighlightDismissed(false);
+    setPendingAutoAnchor(true);
+  }, [effectiveHighlightId]);
+
+  // Reset the focus ref on focus enter (kept so the deep-link badge path
+  // remains correct).
+  useFocusEffect(
+    useCallback(() => {
+      didAutoScrollForFocus.current = false;
+      return undefined;
+    }, [])
+  );
+
+  // Step 1: paginate until the highlighted post enters the loaded set.
+  useEffect(() => {
+    if (!pendingAutoAnchor) return;
+    if (highlightIndex >= 0) return;
+    if (activeQuery.hasNextPage && !activeQuery.isFetchingNextPage) {
+      activeQuery.fetchNextPage();
+    }
+  }, [
+    pendingAutoAnchor,
+    highlightIndex,
+    activeQuery.hasNextPage,
+    activeQuery.isFetchingNextPage,
+    activeQuery.fetchNextPage,
+  ]);
+
+  // Step 2: once the post is in loaded pages and the layout is measured,
+  // silently scroll to it, then clear the pending flag.
+  useEffect(() => {
+    if (!pendingAutoAnchor) return;
+    if (highlightIndex < 0 || containerHeight === 0) return;
+    setPendingAutoAnchor(false);
+    didAutoScrollForFocus.current = true;
+    requestAnimationFrame(() => scrollToHighlightRow(highlightIndex, { silent: true }));
+  }, [pendingAutoAnchor, highlightIndex, containerHeight, scrollToHighlightRow]);
 
   // Keep fetching pages while searching for the highlight post (user tapped badge)
   useEffect(() => {
@@ -210,6 +310,8 @@ export function PostGrid({
         }
         onEndReachedThreshold={0.5}
         onEndReached={handleEndReached}
+        viewabilityConfig={viewabilityConfigRef.current}
+        onViewableItemsChanged={onGridViewableChanged.current}
         ListEmptyComponent={
           isLoading ? (
             <GridSkeleton />
@@ -233,6 +335,7 @@ export function PostGrid({
             albumSource={source}
             isHighlighted={!highlightDismissed && item.id === highlightPostId}
             showPrivateBadge={showPrivateBadge}
+            allPosts={posts}
           />
         )}
       />

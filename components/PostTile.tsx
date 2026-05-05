@@ -16,7 +16,6 @@ import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { useAlbumStore } from '@/store/album';
-import { supabase } from '@/lib/supabase';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
 import { thumbnailUrl } from '@/lib/imageUrl';
@@ -124,6 +123,10 @@ interface PostTileProps {
   albumSource?: PostGridSource;
   isHighlighted?: boolean;
   showPrivateBadge?: boolean;
+  // Full posts array for this grid — passed down from PostGrid so tap can
+  // stash it in the album store without re-fetching. Reference-stable
+  // (memoized at PostGrid level) so memo'd PostTile doesn't re-render.
+  allPosts?: DreamPostItem[];
 }
 
 export const PostTile = memo(function PostTile({
@@ -132,6 +135,7 @@ export const PostTile = memo(function PostTile({
   albumSource,
   isHighlighted = false,
   showPrivateBadge = false,
+  allPosts,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const isAdminUser = useAuthStore((s) => s.isAdmin);
@@ -150,34 +154,16 @@ export const PostTile = memo(function PostTile({
   const hazeStyle = useAnimatedStyle(() => ({ opacity: hazeOpacity.value }));
 
   async function handlePress() {
-    // Navigate immediately — album IDs load in parallel
+    // Stash the source array + source type so PhotoDetailScreen can reuse
+    // the grid's TanStack query (shared cache) and fetchNextPage as the
+    // user scrolls past the grid's currently-loaded pages.
+    const store = useAlbumStore.getState();
+    store.setAlbumPosts(allPosts && allPosts.length > 0 ? allPosts : []);
+    store.setAlbumSource(albumSource ?? null);
+    // Track currentPostId so PostGrid can auto-scroll back to this row on
+    // swipe-back. FullScreenFeed updates this as the user scrolls in detail.
+    store.setCurrentPostId(item.id);
     nav.push(`/photo/${item.id}`);
-
-    if (!albumSource) {
-      useAlbumStore.getState().clearAlbum();
-      return;
-    }
-
-    // Fetch ALL post IDs for this source (lightweight — IDs only, no joins)
-    try {
-      let query = supabase.from('uploads').select('id').order('created_at', { ascending: false });
-
-      if (albumSource.type === 'user') {
-        query = query.eq('user_id', albumSource.userId).eq('is_public', true);
-      } else if (albumSource.type === 'own') {
-        query = query.eq('user_id', item.user_id);
-      } else if (albumSource.type === 'dreams') {
-        query = query.eq('user_id', item.user_id).eq('is_ai_generated', true);
-      }
-      // 'saved' source uses a different table (favorites) — fall back to empty album
-
-      const { data } = await query.limit(500);
-      if (data && data.length > 0) {
-        useAlbumStore.getState().setAlbum(data.map((r: { id: string }) => r.id));
-      }
-    } catch {
-      // Non-critical — fullscreen view falls back to single-post + context mode
-    }
   }
 
   function handleLongPress() {

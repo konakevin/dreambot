@@ -14,7 +14,8 @@ function transform(
   url: string,
   width: number,
   height?: number,
-  mode: 'contain' | 'cover' = 'contain'
+  mode: 'contain' | 'cover' = 'contain',
+  quality?: number
 ): string {
   // Only transform Supabase Storage URLs
   if (!url.includes(SUPABASE_URL)) return url;
@@ -25,6 +26,7 @@ function transform(
 
   const params = new URLSearchParams({ width: String(width), resize: mode });
   if (height) params.set('height', String(height));
+  if (quality) params.set('quality', String(quality));
 
   return `${SUPABASE_URL}/storage/v1/render/image/public/${match[1]}?${params.toString()}`;
 }

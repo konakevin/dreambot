@@ -35,10 +35,6 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
-
-// One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
-// opens the Create tab. Stops surfacing once dismissed (per-device flag).
-const SEEN_SPARKLE_HINT_KEY = 'dreambot.seenSparkleHint.v1';
 import { vs } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -50,6 +46,10 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import type { VibeProfile } from '@/types/vibeProfile';
+
+// One-time toast: "1 sparkle = 1 dream" surfaces the first time a user
+// opens the Create tab. Stops surfacing once dismissed (per-device flag).
+const SEEN_SPARKLE_HINT_KEY = 'dreambot.seenSparkleHint.v1';
 
 export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
