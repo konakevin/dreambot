@@ -31,9 +31,12 @@ function transform(
   return `${SUPABASE_URL}/storage/v1/render/image/public/${match[1]}?${params.toString()}`;
 }
 
-/** Grid thumbnail — 9:16 portrait, 400×711 (2-column grid, ~200pt × 2x retina) */
+/** Grid thumbnail — 4:5 portrait, 400×500, server-side cropped via mode='cover'.
+ *  Matches the 3-col Instagram-style tile aspect (PORTRAIT_RATIO = 5/4) so the
+ *  client doesn't download pixels that contentFit="cover" would crop anyway.
+ *  ~30% smaller payload than the prior 400×711 source-aspect thumb. */
 export function thumbnailUrl(url: string): string {
-  return transform(url, 400, 711, 'contain', 80);
+  return transform(url, 400, 500, 'cover', 80);
 }
 
 /** Feed card — 9:16 full-screen. 720px width @ q=82 is plenty for any phone
