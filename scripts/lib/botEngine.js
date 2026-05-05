@@ -565,7 +565,9 @@ async function lookupBotUserId(sb, username) {
 async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption, recipe, fluxSeed }) {
   const bytes = fs.readFileSync(localPath);
   const key = `${userId}/${Date.now()}-${username}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-  const up = await sb.storage.from('uploads').upload(key, bytes, { contentType: 'image/jpeg' });
+  const up = await sb.storage
+    .from('uploads')
+    .upload(key, bytes, { contentType: 'image/jpeg', cacheControl: '2592000' });
   if (up.error) throw new Error(`storage upload failed: ${up.error.message}`);
   const publicUrl = sb.storage.from('uploads').getPublicUrl(key).data.publicUrl;
 
