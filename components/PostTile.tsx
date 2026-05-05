@@ -1,5 +1,5 @@
 import { useEffect, memo } from 'react';
-import { TouchableOpacity, Text, StyleSheet, Dimensions, View } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,10 +20,7 @@ import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
 import { thumbnailUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
-
-const TILE_GAP = 2;
-const TILE_WIDTH = (Dimensions.get('window').width - TILE_GAP) / 2;
-const TILE_HEIGHT = TILE_WIDTH;
+import { TILE_WIDTH, TILE_HEIGHT } from '@/constants/grid';
 
 function seededRandom(seed: number) {
   const x = Math.sin(seed * 9301 + 49297) * 49297;

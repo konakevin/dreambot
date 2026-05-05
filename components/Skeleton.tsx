@@ -13,6 +13,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
+import { TILE_WIDTH, TILE_HEIGHT } from '@/constants/grid';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -55,14 +56,13 @@ export function FeedCardSkeleton() {
   );
 }
 
-/** Grid tile skeleton — matches PostTile layout */
+/** Grid tile skeleton — matches PostTile layout (3-col portrait) */
 export function GridTileSkeleton() {
-  const size = (SCREEN_WIDTH - 2) / 2;
-  return <ShimmerBlock style={{ width: size, height: size, borderRadius: 0 }} />;
+  return <ShimmerBlock style={{ width: TILE_WIDTH, height: TILE_HEIGHT, borderRadius: 0 }} />;
 }
 
-/** Grid skeleton — 2-column grid of shimmer tiles */
-export function GridSkeleton({ count = 6 }: { count?: number }) {
+/** Grid skeleton — 3-column portrait grid of shimmer tiles. */
+export function GridSkeleton({ count = 9 }: { count?: number }) {
   return (
     <View style={s.grid}>
       {Array.from({ length: count }).map((_, i) => (

@@ -7,7 +7,6 @@ import {
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
@@ -23,12 +22,8 @@ import { useAlbumStore } from '@/store/album';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
 import { vs } from '@/lib/responsive';
+import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import type { DreamPostItem } from '@/components/DreamCard';
-
-const TILE_GAP = 2;
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const TILE_SIZE = (SCREEN_WIDTH - TILE_GAP) / 2;
-const ROW_HEIGHT = TILE_SIZE + TILE_GAP;
 
 export type PostGridSource =
   | { type: 'own' }
@@ -150,7 +145,7 @@ export function PostGrid({
   const scrollToHighlightRow = useCallback(
     (idx: number, opts?: { silent?: boolean }) => {
       if (!listRef.current || idx < 0) return;
-      const targetRow = Math.floor(idx / 2);
+      const targetRow = Math.floor(idx / NUM_COLUMNS);
       // Center the row in the visible grid area (below the sticky header)
       // so the tile the user was just viewing lands mid-screen, not at the top.
       const visibleArea = Math.max(ROW_HEIGHT, containerHeight - headerHeight);
@@ -257,7 +252,7 @@ export function PostGrid({
 
   const gridArea = containerHeight - headerHeight;
   const visibleRows = gridArea > 0 ? Math.floor(gridArea / ROW_HEIGHT) : 0;
-  const maxVisibleIndex = visibleRows > 0 ? visibleRows * 2 - 1 : -1;
+  const maxVisibleIndex = visibleRows > 0 ? visibleRows * NUM_COLUMNS - 1 : -1;
 
   const showJustViewedButton =
     !!highlightPostId &&
@@ -286,10 +281,14 @@ export function PostGrid({
         ref={listRef}
         data={posts}
         keyExtractor={(item) => item.id}
-        numColumns={2}
+        numColumns={NUM_COLUMNS}
         getItemLayout={(_, index) => ({
           length: ROW_HEIGHT,
-          offset: headerHeight + index * ROW_HEIGHT,
+          // numColumns=N means item I lives in row floor(I/N) — items in the
+          // same row share an offset. Old code used `index * ROW_HEIGHT`
+          // which assigned each item a unique offset; FlatList tolerates the
+          // mismatch in practice but it can drift on long-list scrollToIndex.
+          offset: headerHeight + Math.floor(index / NUM_COLUMNS) * ROW_HEIGHT,
           index,
         })}
         columnWrapperStyle={styles.row}

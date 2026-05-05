@@ -17,7 +17,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Dimensions,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -41,6 +40,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
+import { NUM_COLUMNS, TILE_GAP, TILE_WIDTH } from '@/constants/grid';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
@@ -98,14 +98,16 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
 
 // ── Search result components ─────────────────────────────────────────────────
 
-const TILE_GAP = 2;
-const TILE_WIDTH = (Dimensions.get('window').width - TILE_GAP) / 2;
-
 type SearchItem =
   | { type: 'userHeader' }
   | { type: 'user'; user: SearchUser }
   | { type: 'postHeader' }
-  | { type: 'postPair'; left: DreamPostItem; right?: DreamPostItem };
+  | {
+      type: 'postTriplet';
+      left: DreamPostItem;
+      middle?: DreamPostItem;
+      right?: DreamPostItem;
+    };
 
 function SearchRow({ user }: { user: SearchUser }) {
   const { data: followingIds = new Set<string>() } = useFollowingIds();
@@ -177,12 +179,27 @@ function SearchRow({ user }: { user: SearchUser }) {
   );
 }
 
-function PostPairRow({ left, right }: { left: DreamPostItem; right?: DreamPostItem }) {
+function PostTripletRow({
+  left,
+  middle,
+  right,
+}: {
+  left: DreamPostItem;
+  middle?: DreamPostItem;
+  right?: DreamPostItem;
+}) {
   return (
-    <View style={s.postPairRow}>
+    <View style={s.postTripletRow}>
       <View style={{ width: TILE_WIDTH }}>
         <PostTile item={left} />
       </View>
+      {middle ? (
+        <View style={{ width: TILE_WIDTH }}>
+          <PostTile item={middle} />
+        </View>
+      ) : (
+        <View style={{ width: TILE_WIDTH }} />
+      )}
       {right ? (
         <View style={{ width: TILE_WIDTH }}>
           <PostTile item={right} />
@@ -292,8 +309,13 @@ export default function SearchExploreScreen() {
     }
     if (searchPosts.length > 0) {
       items.push({ type: 'postHeader' });
-      for (let i = 0; i < searchPosts.length; i += 2) {
-        items.push({ type: 'postPair', left: searchPosts[i], right: searchPosts[i + 1] });
+      for (let i = 0; i < searchPosts.length; i += 3) {
+        items.push({
+          type: 'postTriplet',
+          left: searchPosts[i],
+          middle: searchPosts[i + 1],
+          right: searchPosts[i + 2],
+        });
       }
     }
     return items;
@@ -307,8 +329,8 @@ export default function SearchExploreScreen() {
         return <SearchRow user={item.user} />;
       case 'postHeader':
         return <SectionHeader title="Dreams" />;
-      case 'postPair':
-        return <PostPairRow left={item.left} right={item.right} />;
+      case 'postTriplet':
+        return <PostTripletRow left={item.left} middle={item.middle} right={item.right} />;
       default:
         return null;
     }
@@ -322,8 +344,8 @@ export default function SearchExploreScreen() {
         return `u-${item.user.id}`;
       case 'postHeader':
         return 'ph';
-      case 'postPair':
-        return `pp-${item.left.id}`;
+      case 'postTriplet':
+        return `pt-${item.left.id}`;
       default:
         return `i-${index}`;
     }
@@ -366,7 +388,7 @@ export default function SearchExploreScreen() {
           ref={gridRef}
           data={posts}
           keyExtractor={(item) => item.id}
-          numColumns={2}
+          numColumns={NUM_COLUMNS}
           columnWrapperStyle={s.gridRow}
           contentContainerStyle={{ paddingTop: overlayHeight, paddingBottom: vs(90) }}
           windowSize={7}
@@ -567,7 +589,7 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
 
   // Browse grid
-  gridRow: { gap: 2, marginBottom: 2 },
+  gridRow: { gap: TILE_GAP, marginBottom: TILE_GAP },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingTop: 60 },
   emptyTitle: { color: colors.textSecondary, fontSize: 17, fontWeight: '600' },
   emptySubtitle: { color: colors.textMuted, fontSize: 14 },
@@ -672,7 +694,7 @@ const s = StyleSheet.create({
   followingPillText: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
 
   // Search results — posts
-  postPairRow: { flexDirection: 'row', gap: TILE_GAP },
+  postTripletRow: { flexDirection: 'row', gap: TILE_GAP },
   sectionHeader: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
   sectionHeaderText: {
     color: colors.textSecondary,
