@@ -293,10 +293,10 @@ export function PostGrid({
         })}
         columnWrapperStyle={styles.row}
         contentContainerStyle={{ paddingBottom: vs(90) }}
-        windowSize={5}
+        windowSize={7}
         maxToRenderPerBatch={6}
         initialNumToRender={12}
-        removeClippedSubviews
+        removeClippedSubviews={false}
         refreshControl={
           <RefreshControl
             refreshing={activeQuery.isRefetching && !isFetchingNextPage}

@@ -180,10 +180,10 @@ export const PostTile = memo(function PostTile({
       activeOpacity={0.9}
     >
       <Image
-        source={{ uri: item.image_url }}
+        source={{ uri: thumbnailUrl(item.image_url) }}
         style={styles.image}
         contentFit="cover"
-        transition={150}
+        transition={0}
         cachePolicy="memory-disk"
       />
       {isHighlighted && (
