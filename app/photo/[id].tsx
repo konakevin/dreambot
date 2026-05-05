@@ -69,6 +69,18 @@ export default function PhotoDetailScreen() {
     [overlayOpacity]
   );
 
+  // Track the visible post in the album store so PostGrid can re-anchor on
+  // back-navigation. Without this, scrolling through 50 posts in detail view
+  // and swiping back leaves the grid at the originally-tapped tile.
+  const setCurrentPostId = useAlbumStore((s) => s.setCurrentPostId);
+  const handleIndexChange = useCallback(
+    (idx: number) => {
+      const post = posts[idx];
+      if (post) setCurrentPostId(post.id);
+    },
+    [posts, setCurrentPostId]
+  );
+
   const initialIndex = useMemo(() => {
     const idx = posts.findIndex((p) => p.id === id);
     return idx >= 0 ? idx : 0;
@@ -169,6 +181,7 @@ export default function PhotoDetailScreen() {
         isLoading={isLoading}
         onRefresh={() => refetch()}
         initialIndex={initialIndex}
+        onIndexChange={handleIndexChange}
         disableSwipeToProfile
         hideTabBar
         showVisibilityToggle

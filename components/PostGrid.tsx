@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
@@ -106,15 +107,27 @@ export function PostGrid({
     });
   }, [navigation, highlightPostId]);
 
+  // Auto-scroll to the highlighted post on every focus enter — fixes the
+  // "lose your place after detail-view scroll" bug. PostTile sets the album
+  // store's currentPostId on tap, FullScreenFeed updates it via onIndexChange
+  // as the user scrolls through detail view, and on swipe-back this grid
+  // refocuses and silently snaps to the row the user was just on.
+  // Ref ensures we only run once per focus, even if highlightIndex resolves
+  // late (deep-link landing → posts fetch → index resolves).
+  const didAutoScrollForFocus = useRef(false);
+
   const [scrollOverlay, setScrollOverlay] = useState(false);
 
   const scrollToHighlightRow = useCallback(
-    (idx: number) => {
+    (idx: number, opts?: { silent?: boolean }) => {
       if (!listRef.current || idx < 0) return;
       const targetRow = Math.floor(idx / 2);
       const targetOffset = Math.max(0, headerHeight + targetRow * ROW_HEIGHT - ROW_HEIGHT * 0.3);
 
-      setScrollOverlay(true);
+      // Silent mode (auto-scroll on focus return): skip the dim overlay flash.
+      // The grid is already visible — a 300ms black overlay is jarring vs the
+      // badge-tap path where the user explicitly initiated the jump.
+      if (!opts?.silent) setScrollOverlay(true);
       listRef.current.scrollToOffset({ offset: targetOffset, animated: false });
 
       setTimeout(() => {
@@ -133,6 +146,22 @@ export function PostGrid({
       });
     }
   }, [isFetchingHighlight, highlightIndex, scrollToHighlightRow]);
+
+  useFocusEffect(
+    useCallback(() => {
+      didAutoScrollForFocus.current = false;
+      return undefined;
+    }, [])
+  );
+
+  useEffect(() => {
+    if (didAutoScrollForFocus.current) return;
+    if (!highlightPostId || highlightIndex < 0) return;
+    if (containerHeight === 0) return; // wait for layout
+    didAutoScrollForFocus.current = true;
+    setHighlightDismissed(false);
+    requestAnimationFrame(() => scrollToHighlightRow(highlightIndex, { silent: true }));
+  }, [highlightPostId, highlightIndex, containerHeight, scrollToHighlightRow]);
 
   // Keep fetching pages while searching for the highlight post (user tapped badge)
   useEffect(() => {

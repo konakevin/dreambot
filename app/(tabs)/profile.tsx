@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
+import { useAlbumStore } from '@/store/album';
 import { DreamWishBadge } from '@/components/DreamWishBadge';
 import {
   View,
@@ -34,6 +35,7 @@ export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<Tab>('posts');
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
+  const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
 
   // Reset to posts tab only when profile tab icon is re-tapped
@@ -192,6 +194,7 @@ export default function ProfileScreen() {
           ListHeaderComponent={header}
           scrollToTopToken={profileResetToken}
           showPrivateBadge={activeTab === 'dreams'}
+          highlightPostId={currentPostId ?? undefined}
         />
       </SafeAreaView>
     );

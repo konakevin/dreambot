@@ -151,6 +151,7 @@ export const PostTile = memo(function PostTile({
 
   async function handlePress() {
     // Navigate immediately — album IDs load in parallel
+    useAlbumStore.getState().setCurrentPostId(item.id);
     nav.push(`/photo/${item.id}`);
 
     if (!albumSource) {
