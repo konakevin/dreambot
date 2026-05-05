@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/wave_moments.json',
   total: 200,
@@ -54,6 +55,8 @@ Each entry: 15-30 words. One specific wave perspective/moment.
 - Wave is subject — unusual perspective
 - Clark-Little inspired
 - Rich atmospheric backdrop
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

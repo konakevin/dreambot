@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/beach_night_scenes.json',
   total: 200,
@@ -60,6 +61,8 @@ No humans, couples, parties, gatherings. Empty paradise — only the beach, the 
 
 ━━━ DEDUP ━━━
 Each entry must feature a DIFFERENT primary light source + beach setting combo. No two entries with the same lighting at the same type of location.
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

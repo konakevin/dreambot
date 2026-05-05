@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/coastal_vistas.json',
   total: 200,
@@ -55,6 +56,8 @@ Each entry: 15-30 words. One specific craggy-coast scene.
 - Include sea-color + weather
 - Real places or plausible-invented
 - Striking composition angles
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

@@ -30,6 +30,8 @@ ${scene}
 
 ${blocks.DRAMATIC_LIGHTING_BLOCK}
 
+${blocks.BLOWN_UP_BEACH_BLOCK}
+
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 

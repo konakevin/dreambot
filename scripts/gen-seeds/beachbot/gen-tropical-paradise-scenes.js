@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/tropical_paradise_scenes.json',
   total: 200,
@@ -60,6 +61,8 @@ Each entry: 15-30 words. One specific tropical-paradise destination/scene.
 - Crystal water + palms + sand
 - No humans
 - Travel-magazine-cover feel
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

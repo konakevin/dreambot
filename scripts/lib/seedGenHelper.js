@@ -82,6 +82,14 @@ async function generatePool({
   const anthropicKey = process.env.ANTHROPIC_API_KEY || ENV.ANTHROPIC_API_KEY;
   if (!anthropicKey) throw new Error('ANTHROPIC_API_KEY missing');
 
+  // POC override — SEED_TOTAL env var caps the pool size for fast prove-out runs.
+  const envTotal = parseInt(process.env.SEED_TOTAL || '0', 10);
+  if (envTotal > 0) {
+    console.log(`🔧 SEED_TOTAL override: capping pool at ${envTotal} (configured was ${total})`);
+    total = envTotal;
+    if (batch > total) batch = total;
+  }
+
   const all = [];
   if (append) {
     try {

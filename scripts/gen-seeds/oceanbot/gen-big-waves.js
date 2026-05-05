@@ -1,30 +1,30 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_OCEAN_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/oceanbot/seeds/big_waves.json',
   total: 200,
-  append: true,
+  append: false,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} MASSIVE WAVE descriptions for OceanBot's big-wave path. The theme is RAW DESTRUCTIVE POWER OF THE SEA — heavy seas, terrifying scale, cliff-exploding impact moments, walls of water meeting the coast. Scary, awe-inspiring, biblical-fury. NOT side-view wave portraits — IMPACT moments where massive water meets COASTLINE / CLIFFS / LIGHTHOUSES / WOODEN BOATS / BEACHES / HARBORS.
+  metaPrompt: (n) => `You are writing ${n} MASSIVE WAVE descriptions for OceanBot's big-wave path. The theme is RAW DESTRUCTIVE POWER OF THE SEA — heavy seas, terrifying scale, cliff-exploding impact moments, walls of water meeting the coast — but BLOWN UP to AI-impossible levels. NOT side-view wave portraits — IMPACT moments where massive water meets COASTLINE / CLIFFS / LIGHTHOUSES / WOODEN BOATS / BEACHES / HARBORS, with stacked extreme phenomena.
 
-Each entry: 18-28 words. ONE specific dramatic IMPACT or FURY moment.
+Each entry: 28-40 words. ONE specific dramatic IMPACT or FURY moment with 3+ stacked extreme phenomena.
 
-━━━ SCENE TYPES — emphasis on IMPACT ━━━
-1. **CLIFF EXPLOSION** — 80-foot wave detonating against vertical sea-cliff, white spray erupting hundreds of feet upward, cliff walls vanishing in the explosion
-2. **LIGHTHOUSE STRIKE** — massive wave engulfing historic stone lighthouse halfway up the tower, foam climbing past the lantern room, beam still cutting through spray
-3. **HARBOR BREACH** — rogue wave overtopping a stone breakwater into a harbor, smaller wooden boats tossed at impossible angles
-4. **BEACH SURGE** — apocalyptic surge of foaming water sweeping a beach, dragging massive driftwood and debris up the strand
-5. **COASTAL DEVASTATION** — entire coastline churning under wave train, headlands disappearing in spray-foam, cliffs taking direct hits
-6. **GALLEON-IN-PERIL** — pre-1850 wooden sailing ship dwarfed by towering wave wall, hull crashing through the trough, masts tipping under storm-pressure
-7. **FISHING VILLAGE FURY** — old harbor village with stone houses, wave overtopping the seawall and slamming into stone walls, spray flying past windows
-8. **SUBMERGED LIGHTHOUSE** — historic stone lighthouse half-engulfed in storm surge, only the lantern room visible above churning water
-9. **REEF EXPLOSION** — Teahupo'o-style slab breaking over shallow reef, water detonating, blue-green explosion
-10. **NAZARÉ CANYON GIANT** — 100-foot wall stacking up over deep canyon, dwarfing distant lighthouse on cliff
-11. **STORM SURGE** — heavy storm at sea, massive waves rolling in pyramidal formations, no land visible, raw open-ocean fury
-12. **WAVE-OVER-CLIFF SPRAY-PILLAR** — geyser of seawater shooting straight up the cliff face after wave impact
-13. **BREAKWATER OBLITERATION** — stone breakwater being overtopped and partially destroyed by sustained wave assault
-14. **FOAM-ENGULFED COASTAL CLIFF PATH** — abandoned coastal cliff path with car-sized foam-tongues sweeping across
-15. **WOODEN BOAT CAUGHT IN STORM** — pre-1850 wooden vessel being lifted vertically by wave wall in dark grey storm sea
+${BLOWN_UP_OCEAN_ENTRY_MANDATE}
+
+━━━ SCENE TYPES — emphasis on IMPACT + STACKED PHENOMENA ━━━
+1. **CLIFF EXPLOSION** — 80-foot wave detonating against vertical sea-cliff + spray catching godrays + double-rainbow forming in mist + bioluminescent foam at the base
+2. **LIGHTHOUSE STRIKE** — massive wave engulfing historic stone lighthouse + lightning forking inside distant storm wall + sun blasting hole in clouds above + spray-pillar lit from within
+3. **HARBOR BREACH** — rogue wave overtopping breakwater + storm cell over distant islands with rainbow + godrays piercing through into harbor
+4. **BEACH SURGE** — apocalyptic surge dragging driftwood + impossible 6-color sunset sky overhead + bioluminescent plankton glowing in the foam
+5. **COASTAL DEVASTATION** — coastline churning under wave train + twin waterspouts on horizon + aurora overhead reflecting on wet rock
+6. **GALLEON-IN-PERIL** — pre-1850 wooden ship dwarfed by towering wall + lightning + multi-moon sky + rainbow over the trough
+7. **FISHING VILLAGE FURY** — old harbor village + wave overtopping seawall + sun blazing through hole in storm wall + cathedral-scale spray-pillar
+8. **NAZARÉ CANYON GIANT** — 100-foot wall stacking up over deep canyon + sun blasting through translucent face like stained glass + lightning in distance
+9. **WAVE-INSIDE-WAVE** — Teahupo'o slab + sets stacked to horizon + bioluminescent reef visible through translucent foreground wall
+10. **STORM SURGE OPEN OCEAN** — pyramidal wave formations + storm wall on one side + rainbow on the other + cloud-leviathan drifting overhead
+11. **BREAKWATER OBLITERATION** — stone breakwater + sustained wave assault + spray catching multiple sunbeam-shafts simultaneously + saturated impossible color stacking
+12. **SUNSET BARREL** — massive curling barrel with sunset BLASTING through translucent water like stained glass + bioluminescent spray + double-rainbow
 
 ━━━ ABSOLUTELY BANNED ━━━
 - NO surfers / surfboards (focus is power, not sport)
@@ -34,21 +34,14 @@ Each entry: 18-28 words. ONE specific dramatic IMPACT or FURY moment.
 - NO cute beach moments — ALL renders should feel SCARY and POWERFUL
 - NO calm seas (calm-glass-sea path)
 - **NO BOATS BEING DESTROYED AGAINST SHORE / CLIFF / ROCKS / WALLS / DOCKS / PIERS / BREAKWATERS** — that's distress/disaster, not awe-of-nature. A wooden vessel riding heavy open seas / dwarfed by an open-ocean wave wall is FINE. A boat smashed against rocks / hurled into a cottage / torn from a dock is BANNED.
-- The path is primarily an **AWE-OF-NATURE** scene path — POWER and SCALE of the SEA itself. Boats may appear in open-water scenes, but never as victims of coastal impact.
 
 ━━━ MOOD ━━━
-SCARY. AWE-INSPIRING. POWERFUL. BIBLICAL. The Old Testament's Leviathan-in-the-deep energy. The viewer should feel the danger and the indifference of the sea.
-
-━━━ EXAMPLES (DO NOT REUSE) ━━━
-- "100-foot wave detonating against vertical basalt sea-cliff, white spray erupting four hundred feet skyward, cliff face vanishing in mist for ten breathless seconds"
-- "Massive storm-surge engulfs historic stone lighthouse halfway up the tower, foam climbing past the lantern room, beam still cutting through the spray"
-- "Old harbor breakwater overtopped by rogue wave, three small wooden fishing boats tossed at impossible angles in the harbor beyond, stone houses spray-blasted"
-- "Apocalyptic surge sweeps a deserted beach, foaming wall of water dragging massive driftwood logs and seaweed up the strand at house-window height"
-- "Pre-1850 wooden galleon dwarfed by towering wave wall in dark grey storm sea, hull crashing through the trough, mainmast tipping under hurricane-pressure"
+SCARY. AWE-INSPIRING. POWERFUL. BIBLICAL. The Old Testament's Leviathan-in-the-deep energy compounded with AI-impossible-sky drama.
 
 ━━━ RULES ━━━
-- 18-28 words, ONE concrete IMPACT moment per entry
-- Mix scene types broadly — emphasis on CLIFF/LIGHTHOUSE/HARBOR/COAST IMPACT
+- 28-40 words, ONE concrete IMPACT moment per entry
+- 3+ stacked extreme phenomena per entry (impact + sky drama + light source + atmospheric particles + impossible color)
+- Mix scene types broadly
 - SCALE + POWER + SCARINESS over surf-photography aesthetics
 - Specific landmarks (lighthouse, breakwater, cliff, harbor village) over abstract waves
 - Vivid, visceral, scary language
