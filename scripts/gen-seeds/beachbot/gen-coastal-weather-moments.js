@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/coastal_weather_moments.json',
   total: 200,
@@ -59,6 +60,8 @@ No humans, swimmers, surfers, fishermen. Objects OK (tiki torches, lanterns, boa
 
 ━━━ DEDUP ━━━
 Each entry must be a DIFFERENT lighting/weather combination. No two entries describing the same time of day with the same conditions.
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

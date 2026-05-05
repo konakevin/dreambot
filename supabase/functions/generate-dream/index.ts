@@ -1010,7 +1010,7 @@ Output ONLY the prompt.`;
           swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
           await supabase.storage
             .from('uploads')
-            .upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true });
+            .upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
           const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
           sourceUrl = swapUrlData.publicUrl;
           lap('face-swap-upload');

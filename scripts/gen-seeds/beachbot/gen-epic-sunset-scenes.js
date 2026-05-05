@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/epic_sunset_scenes.json',
   total: 200,
@@ -68,6 +69,8 @@ No humans, couples, silhouettes of people. Empty paradise — only the sunset, t
 
 ━━━ DEDUP ━━━
 Each entry must feature a DIFFERENT color palette + cloud formation + setting combo. No two entries with the same dominant color at the same location type.
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

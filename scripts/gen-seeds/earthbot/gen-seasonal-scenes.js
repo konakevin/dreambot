@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/seasonal_scenes.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific seasonal landscape moment. No people.
 - Real seasonal phenomena from diverse global regions
 - No two entries should describe the same season in the same geography
 - 15-25 words each — vivid, transient, emotionally charged language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

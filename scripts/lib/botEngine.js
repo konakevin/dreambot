@@ -188,7 +188,7 @@ async function fluxOnce({
     prompt,
     ...(isSDXL
       ? { num_outputs: 1 }
-      : { aspect_ratio: aspectRatio, num_outputs: 1, output_format: 'jpg' }),
+      : { aspect_ratio: aspectRatio, num_outputs: 1, output_format: 'jpg', output_quality: 100 }),
     ...inputOverrides,
   };
   const url = isSDXL

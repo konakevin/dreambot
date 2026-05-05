@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/hawaii_coastal_spaces.json',
   total: 200,
@@ -56,6 +57,8 @@ Absolutely NO people, surfers, swimmers, tourists. Empty beaches — only flower
 
 ━━━ DEDUP ━━━
 Each entry must be a DIFFERENT island + location + angle combo. No two entries on the same beach.
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

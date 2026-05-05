@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/bioluminescent_scenes.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific glowing landscape scene. No people, no ani
 - Landscapes only — no creature subjects, no people
 - No two entries should describe the same glow source in the same setting
 - 15-25 words each — ethereal, magical, immersive language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

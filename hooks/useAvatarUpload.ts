@@ -24,7 +24,11 @@ export function useAvatarUpload() {
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: true });
+        .upload(fileName, arrayBuffer, {
+          contentType: 'image/jpeg',
+          upsert: true,
+          cacheControl: '2592000',
+        });
 
       if (uploadError) throw uploadError;
 

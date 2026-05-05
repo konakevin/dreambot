@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/beach_landscape_scenes.json',
   total: 200,
@@ -54,6 +55,8 @@ Each entry: 15-30 words. One specific wide beach-composition scene.
 - WIDE postcard composition
 - Beach + surroundings + weather in one frame
 - Multi-element scene
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

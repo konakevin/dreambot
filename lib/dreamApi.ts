@@ -271,7 +271,9 @@ export async function persistImage(tempUrl: string, userId: string): Promise<str
   const contentType = isPng ? 'image/png' : 'image/jpeg';
 
   const fileName = `${userId}/${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('uploads').upload(fileName, buf, { contentType });
+  const { error } = await supabase.storage
+    .from('uploads')
+    .upload(fileName, buf, { contentType, cacheControl: '2592000' });
   if (error) throw new Error(`Storage upload failed: ${error.message}`);
 
   const { data } = supabase.storage.from('uploads').getPublicUrl(fileName);

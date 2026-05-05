@@ -228,6 +228,7 @@ export function DreamCastStep({ onNext, onBack }: Props) {
         .upload(path, arrayBuffer, {
           contentType: 'image/jpeg',
           upsert: true,
+          cacheControl: '2592000',
         });
       if (uploadError) throw uploadError;
 

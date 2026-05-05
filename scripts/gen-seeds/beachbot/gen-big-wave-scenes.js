@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/big_wave_scenes.json',
   total: 200,
@@ -51,6 +52,8 @@ No surfers, swimmers, people on beach, boats in water. Empty — only waves, coa
 
 ━━━ DEDUP ━━━
 Each entry must be a DIFFERENT wave type + coastal setting combo. No two entries with the same wave breaking at the same location type.
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

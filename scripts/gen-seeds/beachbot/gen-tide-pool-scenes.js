@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/tide_pool_scenes.json',
   total: 200,
@@ -55,6 +56,8 @@ Each entry: 10-20 words. One specific tide-pool detail scene.
 - Crystal-clear shallow detail
 - Specific marine subjects
 - No humans
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

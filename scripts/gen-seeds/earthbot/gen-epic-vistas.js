@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/epic_vistas.json',
   total: 200,
@@ -28,6 +29,8 @@ Each entry: 15-25 words. One specific landscape vista. No people, no animals, no
 - Mix golden hour, storm light, dawn, dusk, midday harsh sun across entries
 - No two entries should describe the same region or formation
 - 15-25 words each — vivid, specific, painterly language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

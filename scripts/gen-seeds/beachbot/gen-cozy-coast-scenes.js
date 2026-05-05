@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_BEACH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/beachbot/seeds/cozy_coast_scenes.json',
   total: 200,
@@ -60,6 +61,8 @@ Each entry: 15-30 words. One specific cozy coastal scene.
 - Cozy / inhabited-feel (no humans visible)
 - Real coastal styles
 - Warm + inviting
+
+${BLOWN_UP_BEACH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
