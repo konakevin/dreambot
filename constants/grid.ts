@@ -8,9 +8,10 @@
  * meant any column-count or aspect-ratio change had to be made — perfectly —
  * in three files at once. Now they all import from here.
  *
- * Layout: 3-column portrait grid (Instagram/TikTok-style). Tiles render at
- * the source dream's native aspect ratio (1024×1664 = 1:1.625) so no image
- * content is cropped from the thumbnail.
+ * Layout: 3-column 4:5 portrait grid (Instagram-style). Tile aspect is
+ * shorter than the source dream's native 1024×1664 ratio so the grid
+ * doesn't feel lanky on a phone — `contentFit="cover"` center-crops the
+ * top/bottom (~23%), preserving the main subject in most compositions.
  */
 
 import { Dimensions } from 'react-native';
@@ -18,8 +19,8 @@ import { Dimensions } from 'react-native';
 export const NUM_COLUMNS = 3;
 export const TILE_GAP = 2;
 
-/** height / width of a generated dream image (1024×1664 portrait) */
-export const PORTRAIT_RATIO = 1664 / 1024;
+/** Tile aspect ratio (height / width). 4:5 = Instagram's modern portrait grid. */
+export const PORTRAIT_RATIO = 5 / 4;
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
