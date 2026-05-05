@@ -17,7 +17,7 @@
 import { Dimensions } from 'react-native';
 
 export const NUM_COLUMNS = 3;
-export const TILE_GAP = 2;
+export const TILE_GAP = 1;
 
 /** Tile aspect ratio (height / width). 4:5 = Instagram's modern portrait grid. */
 export const PORTRAIT_RATIO = 5 / 4;
