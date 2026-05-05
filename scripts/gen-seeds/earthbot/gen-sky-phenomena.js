@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/sky_phenomena.json',
   total: 200,
@@ -28,6 +29,8 @@ Each entry: 15-25 words. One specific sky phenomenon with a minimal ground ancho
 - Mix dark sky, twilight, dawn, and daylight phenomena across entries
 - No two entries should describe the same phenomenon from the same vantage
 - 15-25 words each — expansive, awe-struck, precise language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

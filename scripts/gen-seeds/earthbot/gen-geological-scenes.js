@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/geological_scenes.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific geological scene. No people.
 - Mix underground, surface, and exposed geological features across entries
 - No two entries should describe the same formation type in the same region
 - 15-25 words each — elemental, ancient, monumental language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

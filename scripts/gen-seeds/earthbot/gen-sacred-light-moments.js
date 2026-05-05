@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/sacred_light_moments.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific moment of extraordinary light in a specifi
 - Real or plausibly real phenomena — no magic beams, no fantasy portals
 - No two entries should use the same light source in the same setting type
 - 15-25 words each — reverent, hushed, awe-struck language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

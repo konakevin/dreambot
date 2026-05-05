@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/weather_phenomena.json',
   total: 200,
@@ -28,6 +29,8 @@ Each entry: 15-25 words. One specific weather phenomenon in a specific setting. 
 - Mix seasons, latitudes, and times of day across entries
 - No two entries should describe the same phenomenon in the same setting
 - 15-25 words each — visceral, specific, awe-inspiring language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

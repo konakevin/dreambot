@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/national_parks.json',
   total: 200,
@@ -46,6 +47,8 @@ Each entry: 15-25 words. One specific scene at a named US national park or monum
 - Mix seasons, weather, and times of day across entries
 - No two entries should describe the same formation at the same park
 - 15-25 words each — vivid, specific, grounded in real places
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

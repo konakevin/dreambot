@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/luminous_scenes.json',
   total: 200,
@@ -28,6 +29,8 @@ Each entry: 15-25 words. One specific landscape transformed by extraordinary lig
 - Real lighting phenomena only — no fantasy glow or magical light
 - No two entries should use the same light type on the same terrain
 - 15-25 words each — luminous, reverent, painterly language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

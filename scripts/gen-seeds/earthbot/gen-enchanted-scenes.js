@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/enchanted_scenes.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific enchanted landscape scene. No people, no c
 - Rich in texture and detail — moss, vines, water, light, stone, crystal
 - No two entries should describe the same type of enchanted setting
 - 15-25 words each — wondrous, lush, painterly language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

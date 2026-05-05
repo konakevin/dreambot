@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/micro_nature.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific macro/close-up natural subject. No people,
 - Mix wet/dry, warm/cold, living/mineral subjects across entries
 - No two entries should describe the same subject type with the same light
 - 15-25 words each — precise, intimate, wonder-filled language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

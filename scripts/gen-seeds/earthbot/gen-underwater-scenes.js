@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+const { BLOWN_UP_EARTH_ENTRY_MANDATE } = require('../../lib/blownUpSeedMandate');
 generatePool({
   outPath: 'scripts/bots/earthbot/seeds/underwater_scenes.json',
   total: 200,
@@ -29,6 +30,8 @@ Each entry: 15-25 words. One specific underwater landscape scene. No people, no 
 - Real underwater environments amplified for drama — not pure fantasy
 - No two entries should describe the same underwater terrain type
 - 15-25 words each — immersive, fluid, luminous language
+
+${BLOWN_UP_EARTH_ENTRY_MANDATE}
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

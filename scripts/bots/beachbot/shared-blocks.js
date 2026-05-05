@@ -6,8 +6,13 @@
  * viewer want to book a flight.
  */
 
+// PROMPT_PREFIX: pure aesthetic modifiers only — NO subject claims.
+// "Beach beauty" / "tropical paradise" / "crystal-turquoise water" all
+// got pulled out because they made Flux lock onto a generic postcard
+// before reading Sonnet's blown-up scene. Subject always comes from
+// the path's seeds (the middle of the prompt). DragonBot/FaeBot pattern.
 const PROMPT_PREFIX =
-  'stunning beach beauty, crystal-turquoise water, dramatic saturated sky, impossibly gorgeous coastal scene, wallpaper-worthy tropical paradise';
+  'travel photography, sharp detail, dramatic saturated color, hyperreal rendering, wallpaper-worthy, masterpiece';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 

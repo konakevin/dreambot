@@ -6,8 +6,13 @@
  * No humans unless on a ship (silhouette only).
  */
 
+// PROMPT_PREFIX: pure aesthetic modifiers only — NO subject claims.
+// Anything like "ocean scene" or "wave" goes here would lock Flux onto
+// a generic composition before Sonnet's stacked-phenomena scene gets read.
+// Subject content always comes from the path's seeds (the middle of the
+// prompt). DragonBot/FaeBot pattern.
 const PROMPT_PREFIX =
-  'breathtaking ocean scene, cinematic dramatic lighting, rich saturated marine colors, sharp detail, epic scale, wallpaper-worthy, gallery-quality, photorealistic rendering, hyper-detailed water and atmosphere';
+  'cinematic photography, sharp detail, rich saturated color, hyperreal rendering, gallery-quality, masterpiece';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
