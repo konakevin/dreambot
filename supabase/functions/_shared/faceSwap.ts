@@ -478,12 +478,16 @@ export async function dualFaceSwap(
   const leftPath = `temp/${userId}/crop-left-${ts}.jpg`;
   const rightPath = `temp/${userId}/crop-right-${ts}.jpg`;
   const [leftUp, rightUp] = await Promise.all([
-    supabase.storage
-      .from('uploads')
-      .upload(leftPath, leftJpegData, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' }),
-    supabase.storage
-      .from('uploads')
-      .upload(rightPath, rightJpegData, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' }),
+    supabase.storage.from('uploads').upload(leftPath, leftJpegData, {
+      contentType: 'image/jpeg',
+      upsert: true,
+      cacheControl: '2592000',
+    }),
+    supabase.storage.from('uploads').upload(rightPath, rightJpegData, {
+      contentType: 'image/jpeg',
+      upsert: true,
+      cacheControl: '2592000',
+    }),
   ]);
   if (leftUp.error) throw new Error(`Upload left crop failed: ${leftUp.error.message}`);
   if (rightUp.error) throw new Error(`Upload right crop failed: ${rightUp.error.message}`);
@@ -559,9 +563,11 @@ export async function dualFaceSwap(
   const stitchedBytes =
     stitchedJpeg.data instanceof Uint8Array ? stitchedJpeg.data : new Uint8Array(stitchedJpeg.data);
   const tempFile = `temp/${userId}/stitched-${Date.now()}.jpg`;
-  const { error: upErr } = await supabase.storage
-    .from('uploads')
-    .upload(tempFile, stitchedBytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
+  const { error: upErr } = await supabase.storage.from('uploads').upload(tempFile, stitchedBytes, {
+    contentType: 'image/jpeg',
+    upsert: true,
+    cacheControl: '2592000',
+  });
   if (upErr) throw new Error(`Stitched upload failed: ${upErr.message}`);
   const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(tempFile);
 

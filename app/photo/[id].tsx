@@ -1,5 +1,6 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
@@ -10,6 +11,10 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumPosts } from '@/hooks/useAlbumPosts';
 import { useUserContextFeed } from '@/hooks/useUserContextFeed';
+import { useUserPosts } from '@/hooks/useUserPosts';
+import { useFavoritePosts } from '@/hooks/useFavoritePosts';
+import { useMyDreams } from '@/hooks/useMyDreams';
+import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { Toast } from '@/components/Toast';
@@ -43,15 +48,66 @@ export default function PhotoDetailScreen() {
     });
   }, [contextQuery.data]);
 
-  const posts: DreamPostItem[] = isAlbum ? (albumQuery.data ?? []) : contextPosts;
-  const isLoading = isAlbum ? albumQuery.isLoading : contextQuery.isLoading;
+  // Source-mode: re-subscribe to the SAME TanStack query the grid uses
+  // (queryKeys are dedup-shared, so this is the same cache instance — no
+  // refetch). PhotoDetailScreen can then call fetchNextPage as the user
+  // scrolls past the grid's currently-loaded pages. The albumSource was
+  // stashed in the store by PostTile on tap.
+  const albumSource = useAlbumStore((s) => s.albumSource);
+  const storeModeRef = useRef<boolean | null>(null);
+  if (storeModeRef.current === null) {
+    storeModeRef.current = useAlbumStore.getState().posts.length > 0;
+  }
+
+  // Call all four hooks (TanStack dedupes by queryKey; only the matching
+  // one is enabled by source). Always-call is required for hook stability.
+  const ownPosts = useUserPosts(albumSource?.type === 'own');
+  const savedPosts = useFavoritePosts(albumSource?.type === 'saved');
+  const dreamsPosts = useMyDreams();
+  const userPosts = usePublicProfilePosts(
+    albumSource?.type === 'user' ? albumSource.userId : '',
+    albumSource?.type === 'user'
+  );
+  const sourceQuery =
+    albumSource?.type === 'own'
+      ? ownPosts
+      : albumSource?.type === 'saved'
+        ? savedPosts
+        : albumSource?.type === 'dreams'
+          ? dreamsPosts
+          : albumSource?.type === 'user'
+            ? userPosts
+            : null;
+  const sourcePosts: DreamPostItem[] = useMemo(
+    () => sourceQuery?.data?.pages.flatMap((p) => p.rows) ?? [],
+    [sourceQuery?.data]
+  );
+
+  // Initial render: snapshot from store (instant — what the grid already had).
+  // After mount: switch to live source-query data so fetchNextPage growth shows.
+  const storePosts = useAlbumStore((s) => s.posts);
+  const queryPosts: DreamPostItem[] = isAlbum ? (albumQuery.data ?? []) : contextPosts;
+  const posts: DreamPostItem[] = storeModeRef.current
+    ? sourcePosts.length > storePosts.length
+      ? sourcePosts
+      : storePosts
+    : queryPosts;
+  const isLoading = posts.length === 0 && (isAlbum ? albumQuery.isLoading : contextQuery.isLoading);
   const refetch = isAlbum ? albumQuery.refetch : contextQuery.refetch;
   const handleEndReached = useCallback(() => {
+    // Source mode: paginate the grid's underlying query.
+    if (storeModeRef.current && sourceQuery?.hasNextPage && !sourceQuery.isFetchingNextPage) {
+      sourceQuery.fetchNextPage();
+      return;
+    }
     if (!isAlbum && contextQuery.hasNextPage && !contextQuery.isFetchingNextPage) {
       contextQuery.fetchNextPage();
     }
   }, [
     isAlbum,
+    sourceQuery?.hasNextPage,
+    sourceQuery?.isFetchingNextPage,
+    sourceQuery?.fetchNextPage,
     contextQuery.hasNextPage,
     contextQuery.isFetchingNextPage,
     contextQuery.fetchNextPage,
@@ -86,6 +142,8 @@ export default function PhotoDetailScreen() {
     return idx >= 0 ? idx : 0;
   }, [posts, id]);
 
+  const photoListRef = useRef<FlatList | null>(null);
+
   const handleTogglePosted = useCallback(
     async (postId: string) => {
       if (!user) return;
@@ -104,9 +162,19 @@ export default function PhotoDetailScreen() {
       const newPublic = !post.is_public;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-      // Optimistic update — write to whichever cache key is active
-      // (album mode → albumPosts, context mode → userContextFeed).
+      // Optimistic update — write to whichever data source is active:
+      //  - store mode (grid tap) → mutate album store
+      //  - album mode (legacy ids) → setQueryData on ['albumPosts', ...]
+      //  - context mode (deep link) → setQueryData on ['userContextFeed', id]
       const applyToCaches = (publicValue: boolean) => {
+        if (storeModeRef.current) {
+          const current = useAlbumStore.getState().posts;
+          useAlbumStore
+            .getState()
+            .setAlbumPosts(
+              current.map((p) => (p.id === postId ? { ...p, is_public: publicValue } : p))
+            );
+        }
         // Album mode cache shape: DreamPostItem[]
         queryClient.setQueryData(
           ['albumPosts', albumIds.join(','), id],
@@ -182,6 +250,7 @@ export default function PhotoDetailScreen() {
         onRefresh={() => refetch()}
         initialIndex={initialIndex}
         onIndexChange={handleIndexChange}
+        listRef={photoListRef as React.RefObject<FlatList>}
         disableSwipeToProfile
         hideTabBar
         showVisibilityToggle

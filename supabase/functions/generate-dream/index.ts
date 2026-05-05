@@ -1008,9 +1008,11 @@ Output ONLY the prompt.`;
           const base64Data = faceSwapSource.replace(/^data:image\/\w+;base64,/, '');
           const swapBytes = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
           swapFileName = `temp/${userId}/faceswap-${Date.now()}.jpg`;
-          await supabase.storage
-            .from('uploads')
-            .upload(swapFileName, swapBytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
+          await supabase.storage.from('uploads').upload(swapFileName, swapBytes, {
+            contentType: 'image/jpeg',
+            upsert: true,
+            cacheControl: '2592000',
+          });
           const { data: swapUrlData } = supabase.storage.from('uploads').getPublicUrl(swapFileName);
           sourceUrl = swapUrlData.publicUrl;
           lap('face-swap-upload');

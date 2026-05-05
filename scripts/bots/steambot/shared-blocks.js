@@ -7,7 +7,7 @@
  */
 
 const PROMPT_PREFIX =
-  'gorgeous steampunk illustration, brass and copper clockwork detail, BioShock-Infinite Mortal-Engines Howl aesthetic, Victorian-industrial impossibly-detailed, painterly production art, warm gaslit atmosphere';
+  'gorgeous steampunk illustration, brass and copper clockwork detail, Victorian-industrial impossibly-detailed, warm gaslit atmosphere';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 

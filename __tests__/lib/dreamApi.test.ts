@@ -221,7 +221,7 @@ describe('persistImage', () => {
     expect(mockUpload).toHaveBeenCalledWith(
       expect.stringMatching(/^user1\/\d+\.jpg$/),
       mockArrayBuffer,
-      { contentType: 'image/jpeg' }
+      { contentType: 'image/jpeg', cacheControl: '2592000' }
     );
     expect(url).toBe('https://storage.example.com/uploads/user1/123.jpg');
   });
