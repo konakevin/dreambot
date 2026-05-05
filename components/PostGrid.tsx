@@ -295,7 +295,7 @@ export function PostGrid({
         contentContainerStyle={{ paddingBottom: vs(90) }}
         windowSize={5}
         maxToRenderPerBatch={6}
-        initialNumToRender={8}
+        initialNumToRender={12}
         removeClippedSubviews
         refreshControl={
           <RefreshControl
