@@ -16,6 +16,12 @@ const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
   'cyborg-woman': require('./paths/cyborg-woman'),
   'cyborg-man': require('./paths/cyborg-man'),
+  'mecha-pilots': require('./paths/mecha-pilots'),
+  'titan-war-machines': require('./paths/titan-war-machines'),
+  'power-armor-infantry': require('./paths/power-armor-infantry'),
+  'industrial-machines': require('./paths/industrial-machines'),
+  'post-apoc-rust-tech': require('./paths/post-apoc-rust-tech'),
+  'alien-biomechs': require('./paths/alien-biomechs'),
 };
 
 module.exports = {
@@ -41,12 +47,42 @@ module.exports = {
       'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
       'fierce', 'voltage', 'nightshade', 'ethereal', 'minimal', 'peaceful',
     ],
+    'mecha-pilots': [
+      'cinematic', 'dark', 'epic', 'nostalgic', 'voltage', 'fierce',
+      'shimmer', 'surreal', 'minimal',
+    ],
+    'titan-war-machines': [
+      'cinematic', 'dark', 'epic', 'fierce', 'voltage', 'macabre',
+      'nightshade', 'ancient',
+    ],
+    'power-armor-infantry': [
+      'cinematic', 'dark', 'epic', 'fierce', 'voltage', 'nightshade',
+      'macabre', 'minimal', 'ancient',
+    ],
+    'industrial-machines': [
+      'cinematic', 'dark', 'nostalgic', 'minimal', 'ancient', 'voltage',
+      'epic',
+    ],
+    'post-apoc-rust-tech': [
+      'cinematic', 'dark', 'fierce', 'macabre', 'nightshade', 'ancient',
+      'voltage', 'nostalgic',
+    ],
+    'alien-biomechs': [
+      'dark', 'macabre', 'nightshade', 'voltage', 'arcane', 'surreal',
+      'fierce', 'cinematic', 'psychedelic',
+    ],
   },
 
   modelByPath: {
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'mecha-pilots': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'titan-war-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'power-armor-infantry': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'industrial-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'post-apoc-rust-tech': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'alien-biomechs': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
@@ -73,21 +109,35 @@ module.exports = {
     'robot-moment',
     'cyborg-woman',
     'cyborg-man',
+    'mecha-pilots',
+    'titan-war-machines',
+    'power-armor-infantry',
+    'industrial-machines',
+    'post-apoc-rust-tech',
+    'alien-biomechs',
   ],
 
-  // Even split — all three are character paths and equally weighted.
+  // Even split — equal weights for first-pass bring-up.
   pathWeights: {
     'robot-moment': 1,
     'cyborg-woman': 1,
     'cyborg-man': 1,
+    'mecha-pilots': 1,
+    'titan-war-machines': 1,
+    'power-armor-infantry': 1,
+    'industrial-machines': 1,
+    'post-apoc-rust-tech': 1,
+    'alien-biomechs': 1,
   },
 
-  // Chaos layer — both cyborg paths can take subject chaos (silhouette /
-  // echo distortions). Robot-moment also benefits.
   chaos: {
     enabled: true,
     skipPaths: [],
-    allowSubjectChaosPaths: ['cyborg-woman', 'cyborg-man', 'robot-moment'],
+    allowSubjectChaosPaths: [
+      'cyborg-woman', 'cyborg-man', 'robot-moment',
+      'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
+      'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
+    ],
   },
 
   // Two-pass Sonnet→Haiku polish.
@@ -107,10 +157,29 @@ module.exports = {
         'octopod', 'eight legs',
         'four mechanical arms', 'four arms', 'six arms', 'multi-armed',
       ],
+      'titan-war-machines': [
+        'tripedal', 'three legs',
+        'quadrupedal', 'four-legged', 'four legs',
+        'hexapedal', 'hexapod', 'six-legged', 'six legs',
+        'serpentine', 'wormlike',
+        'centaur', 'centaur-base',
+      ],
+      'industrial-machines': [
+        'quadrupedal', 'four-legged',
+        'hexapedal', 'hexapod', 'six-legged', 'six legs',
+        'multi-arm', 'six-armed', 'four-armed',
+      ],
+      'alien-biomechs': [
+        'arthropod', 'eight legs',
+        'six-legged', 'six legs',
+        'cephalopod', 'six tendrils', 'four tendrils', 'eight tendrils',
+        'serpentine', 'segmented',
+      ],
     },
   },
 
-  // Sensory anchors — 3 contexts (cyborg-female / cyborg-male / robot).
+  // Sensory anchors — 4 contexts. New paths map to 'scene' until they earn
+  // dedicated sensory pools (next iteration).
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
@@ -118,6 +187,12 @@ module.exports = {
       'cyborg-woman': 'cyborg-female',
       'cyborg-man': 'cyborg-male',
       'robot-moment': 'robot',
+      'mecha-pilots': 'scene',
+      'titan-war-machines': 'scene',
+      'power-armor-infantry': 'scene',
+      'industrial-machines': 'scene',
+      'post-apoc-rust-tech': 'scene',
+      'alien-biomechs': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

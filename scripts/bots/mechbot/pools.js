@@ -84,6 +84,31 @@ module.exports = {
   ROBOT_TYPES: load('robot_types'),
   TRANQUIL_MOMENTS: load('tranquil_moments'),
 
+  // Mecha-pilots path
+  MECHA_PILOT_SUBJECTS: load('mecha_pilot_subjects'),
+  MECHA_PILOT_ACTIONS: load('mecha_pilot_actions'),
+  MECHA_PILOT_SETTINGS: load('mecha_pilot_settings'),
+  // Titan-war-machines path
+  TITAN_WAR_SUBJECTS: load('titan_war_subjects'),
+  TITAN_WAR_ACTIONS: load('titan_war_actions'),
+  TITAN_WAR_SETTINGS: load('titan_war_settings'),
+  // Power-armor-infantry path
+  POWER_ARMOR_SUBJECTS: load('power_armor_subjects'),
+  POWER_ARMOR_ACTIONS: load('power_armor_actions'),
+  POWER_ARMOR_SETTINGS: load('power_armor_settings'),
+  // Industrial-machines path
+  INDUSTRIAL_SUBJECTS: load('industrial_subjects'),
+  INDUSTRIAL_ACTIONS: load('industrial_actions'),
+  INDUSTRIAL_SETTINGS: load('industrial_settings'),
+  // Post-apoc-rust-tech path
+  RUST_APOC_SUBJECTS: load('rust_apoc_subjects'),
+  RUST_APOC_ACTIONS: load('rust_apoc_actions'),
+  RUST_APOC_SETTINGS: load('rust_apoc_settings'),
+  // Alien-biomechs path
+  ALIEN_BIOMECH_SUBJECTS: load('alien_biomech_subjects'),
+  ALIEN_BIOMECH_ACTIONS: load('alien_biomech_actions'),
+  ALIEN_BIOMECH_SETTINGS: load('alien_biomech_settings'),
+
   // Settings — robot-moment uses CHARACTER_INTERIOR (50%) + PLANET_SETTING (50%)
   // for variety. Kept as merge pools matching StarBot's behavior so the path's
   // outputs are identical post-migration. The IP-flavored architecture pools
@@ -128,8 +153,10 @@ module.exports = {
   SCENE_PALETTES: load('scene_palettes'),
   VIBE_COLOR,
 
-  // Sensory anchor pools — 3 contexts (cyborg-female / cyborg-male / robot)
-  // × 7 channels × 100 entries each.
+  // Sensory anchor pools — 4 contexts (cyborg-female / cyborg-male / robot / scene)
+  // × 7 channels × 100 entries each. New paths (mecha-pilots, titan-war-machines,
+  // power-armor-infantry, industrial-machines, post-apoc-rust-tech, alien-biomechs)
+  // map to 'scene' for now — dedicated contexts can be added in a future pass.
   SENSORY_POOLS: {
     'cyborg-female': {
       smell: load('sensory_cyborg-female_smell'),
@@ -157,6 +184,15 @@ module.exports = {
       weight: load('sensory_robot_weight'),
       air: load('sensory_robot_air'),
       lightcolor: load('sensory_robot_lightcolor'),
+    },
+    scene: {
+      smell: load('sensory_scene_smell'),
+      sound: load('sensory_scene_sound'),
+      touch: load('sensory_scene_touch'),
+      temperature: load('sensory_scene_temperature'),
+      weight: load('sensory_scene_weight'),
+      air: load('sensory_scene_air'),
+      lightcolor: load('sensory_scene_lightcolor'),
     },
   },
 };
