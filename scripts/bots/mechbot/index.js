@@ -22,6 +22,7 @@ const pathBuilders = {
   'industrial-machines': require('./paths/industrial-machines'),
   'post-apoc-rust-tech': require('./paths/post-apoc-rust-tech'),
   'alien-biomechs': require('./paths/alien-biomechs'),
+  'mech-skyships': require('./paths/mech-skyships'),
 };
 
 module.exports = {
@@ -71,6 +72,10 @@ module.exports = {
       'dark', 'macabre', 'nightshade', 'voltage', 'arcane', 'surreal',
       'fierce', 'cinematic', 'psychedelic',
     ],
+    'mech-skyships': [
+      'cinematic', 'epic', 'dark', 'fierce', 'voltage', 'shimmer',
+      'ethereal', 'nightshade', 'ancient', 'surreal',
+    ],
   },
 
   modelByPath: {
@@ -83,6 +88,7 @@ module.exports = {
     'industrial-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
     'post-apoc-rust-tech': { 'black-forest-labs/flux-1.1-pro': 100 },
     'alien-biomechs': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'mech-skyships': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
@@ -115,6 +121,7 @@ module.exports = {
     'industrial-machines',
     'post-apoc-rust-tech',
     'alien-biomechs',
+    'mech-skyships',
   ],
 
   // Even split — equal weights for first-pass bring-up.
@@ -128,6 +135,7 @@ module.exports = {
     'industrial-machines': 1,
     'post-apoc-rust-tech': 1,
     'alien-biomechs': 1,
+    'mech-skyships': 1,
   },
 
   chaos: {
@@ -137,6 +145,7 @@ module.exports = {
       'cyborg-woman', 'cyborg-man', 'robot-moment',
       'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
       'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
+      'mech-skyships',
     ],
   },
 
@@ -193,6 +202,7 @@ module.exports = {
       'industrial-machines': 'scene',
       'post-apoc-rust-tech': 'scene',
       'alien-biomechs': 'scene',
+      'mech-skyships': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
