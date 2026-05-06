@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/power_armor_subjects.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SQUAD descriptions for MechBot's power-armor-infantry path. Each describes a squad of 2-5 humans in heavy exosuit armor, 14-22 words.
 
 Each entry: squad size + role + armor archetype + faction signature + signature load-out.

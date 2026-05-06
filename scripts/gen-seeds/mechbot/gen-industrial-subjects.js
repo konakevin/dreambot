@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/industrial_subjects.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} INDUSTRIAL MACHINE descriptions for MechBot's industrial-machines path. Each describes a working heavy-industry machine, 14-22 words.
 
 Each entry: industry role + body plan + signature equipment + scale anchor + scuff/wear language.

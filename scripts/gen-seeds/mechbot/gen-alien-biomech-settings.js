@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/alien_biomech_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} HABITAT descriptions for MechBot's alien-biomechs path. Each describes WHERE the biomech is in 14-22 words. Eerie habitats where flesh-machine creatures live.
 
 ━━━ SETTING CATEGORIES ━━━

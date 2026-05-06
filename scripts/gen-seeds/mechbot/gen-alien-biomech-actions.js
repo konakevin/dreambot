@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/alien_biomech_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's alien-biomechs path. Each describes what the biomech is DOING, 12-18 words. Mid-motion alive — the organism is acting like an organism.
 
 ━━━ ACTION CATEGORIES ━━━

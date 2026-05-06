@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/alien_biomech_subjects.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BIOMECHANICAL ORGANISM descriptions for MechBot's alien-biomechs path. Each describes a single creature-scale flesh-and-machine fusion organism, 14-22 words.
 
 Each entry: body plan + flesh-machine fusion ratio + signature anatomy + bioluminescent/fluid accents.

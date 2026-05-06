@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/industrial_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SETTING descriptions for MechBot's industrial-machines path. Each describes WHERE the work is happening, 14-22 words. Industrial work environments — gritty, productive, dust + sparks + fluorescents.
 
 ━━━ SETTING CATEGORIES ━━━

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/rust_apoc_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's post-apoc-rust-tech path. Each describes what the rig + crew are DOING, 12-18 words.
 
 ━━━ ABSOLUTE RULE — RIG IS ALIVE & MOVING ━━━

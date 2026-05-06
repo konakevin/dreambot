@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/power_armor_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's power-armor-infantry path. Each describes what the SQUAD is doing, 12-18 words. Squad-level coordination, not individual heroics.
 
 ━━━ ABSOLUTE RULES ━━━

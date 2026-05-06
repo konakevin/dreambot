@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/titan_war_subjects.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} TITAN descriptions for MechBot's titan-war-machines path. Each describes a kilometer-scale combat machine in 14-22 words.
 
 Each entry: scale anchor + body plan + signature weapons + aesthetic accent.

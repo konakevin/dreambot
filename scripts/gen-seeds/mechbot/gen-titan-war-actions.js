@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/titan_war_actions.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} ACTION descriptions for MechBot's titan-war-machines path. Each describes what the titan is DOING mid-combat, 12-18 words.
 
 ━━━ ABSOLUTE RULE — ACTIVE WAR ━━━

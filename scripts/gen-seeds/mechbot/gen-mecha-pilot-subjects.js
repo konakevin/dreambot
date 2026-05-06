@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mecha_pilot_subjects.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} PILOT+MECH pairing descriptions for MechBot's mecha-pilots path. Each describes a specific pilot AND their specific mech in a single 14-22 word phrase.
 
 Each entry: pilot biology + pilot signature gear + mech archetype + mech signature silhouette.

@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/titan_war_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} BATTLEFIELD descriptions for MechBot's titan-war-machines path. Each describes WHERE the titan combat is happening, 14-22 words. Includes scale-reference (tiny humans / tanks / aircraft) and atmospheric context (smoke / fire / debris).
 
 ━━━ SETTING CATEGORIES ━━━

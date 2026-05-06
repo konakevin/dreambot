@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/rust_apoc_subjects.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SCAVENGER-RIG descriptions for MechBot's post-apoc-rust-tech path. Each describes a working scavenger machine + its crew, 14-22 words.
 
 Each entry: rig type + signature jury-rigging + crew configuration + faction/aesthetic accent.

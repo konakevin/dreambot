@@ -2,8 +2,8 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mechbot/seeds/mecha_pilot_settings.json',
-  total: 25,
-  batch: 25,
+  total: 200,
+  batch: 50,
   metaPrompt: (n) => `You are writing ${n} SETTING descriptions for MechBot's mecha-pilots path. Each describes WHERE the pilot+mech scene takes place, 14-22 words. Setting is half the storytelling.
 
 ━━━ SETTING CATEGORIES (spread across all) ━━━
