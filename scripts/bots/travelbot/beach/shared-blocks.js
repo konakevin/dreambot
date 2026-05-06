@@ -92,7 +92,7 @@ DENSE FOREGROUND DETAIL (mandatory): every grain of sand, every shell, every flo
 
 SATURATED EARTH COLOR (real pigments cranked) — turquoise lagoon + violet sunset + emerald hills + rose-magenta clouds + amber distant-lightning all in one frame. Heaven-tier saturation. CRANK EVERYTHING TO 11.
 
-ATMOSPHERIC PARTICLES THICK IN THE FRAME: spray, mist, foam, sea-spray drifting through godrays, sand-particulate kicked up by surf, pollen from tropical flowers thick in golden air, plankton-motes glowing at twilight, salt-haze. The air itself should be ALIVE.
+ATMOSPHERIC PARTICLES (only when the specific scene calls for them — NOT a default): foam at the surf line, spray-mist at a waterfall base, plankton-motes glowing at twilight on bioluminescent paths, salt-haze on a stormy day. Default to CRISP CLEAR AIR with sharp distance visibility — fog/mist/haze should be the exception driven by the scene, never blanketed across every render.
 
 ABSOLUTELY BANNED (this is not sci-fi, not fantasy):
 - NO multi-moons, twin-suns, triple-moons (Earth has one of each)

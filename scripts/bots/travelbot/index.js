@@ -98,26 +98,12 @@ const BEACH_PREFIX =
 const BEACH_SUFFIX =
   'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
-// Curated travel-destination vibe list. Audited 2026-05-05 — cut whimsical /
-// coquette / surreal because they pushed renders into fantasy / femme /
-// non-real territory (whimsical produced magical glass-egg creature on
-// tide-pool, coquette is off-brand for travel-destination identity, surreal
-// literally means non-real). Unified across all 25 paths since post-cuts the
-// Earth and Beach lists are identical.
-const TRAVEL_VIBES = [
-  'cinematic',
-  'cozy',
-  'dark',
-  'epic',
-  'nostalgic',
-  'peaceful',
-  'ethereal',
-  'ancient',
-  'enchanted',
-  'voltage',
-  'nightshade',
-  'shimmer',
-];
+// Locked to cinematic only — Kevin's preferred single-vibe lock for
+// TravelBot 2026-05-05. Combined with the locked travelbot_hyperreal medium
+// + locked flux-1.1-pro model, the bot has a fully homogeneous lighting
+// identity (teal-and-orange cinematic grade across all renders). Variety
+// comes entirely from the 25 path-specific scene pools.
+const TRAVEL_VIBES = ['cinematic'];
 
 // Helpers to build per-path config objects without manual repetition.
 const byPath = (paths, value) => paths.reduce((acc, p) => ({ ...acc, [p]: value }), {});

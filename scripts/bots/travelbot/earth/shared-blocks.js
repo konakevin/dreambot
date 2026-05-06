@@ -98,11 +98,11 @@ REAL WEATHER DRAMA — RARE NATURE STACKED (mandatory ≥1):
 - Real 6+ color natural sunset gradient
 - Sea of fog covering valley with mountaintops poking through
 
-DENSE FOREGROUND DETAIL (mandatory): every leaf catching light, every dewdrop, every petal, every mossy stone, every fallen log, every fern frond, every wildflower rendered. Suspended particulate (pollen, mist, snow, dust) thick in volumetric light. The frame is ALIVE with specific micro-detail.
+DENSE FOREGROUND DETAIL (mandatory): every leaf catching light, every dewdrop, every petal, every mossy stone, every fallen log, every fern frond, every wildflower rendered. The frame is ALIVE with specific micro-detail.
 
 SATURATED EARTH COLOR (real pigments cranked) — autumn forest blazing red-orange-gold-magenta + violet alpine glow + cerulean glacier ice + emerald moss + cobalt sky + amber distant-lightning all in one frame. Six-color natural sunset gradient. Polar aurora + crimson volcanic glow + cold blue ice. Heaven-tier saturation. CRANK EVERYTHING TO 11.
 
-ATMOSPHERIC PARTICLES THICK IN THE FRAME: volumetric mist through forest, pollen drifting through golden afternoon light, snowflakes catching low sun, ash from distant volcano, spray-mist at waterfall base, fog rolling through pine canopy, dust-haze in desert sunset. The air itself should be ALIVE.
+ATMOSPHERIC PARTICLES (only when the specific scene calls for them — NOT a default): waterfall spray-mist at the base of a falls, snowflakes catching low sun in winter scenes, pollen drifting in a forest godray, dust-haze in a desert sunset. Default to CRISP CLEAR AIR with sharp distance visibility — fog/mist/haze should be the exception driven by the scene, never blanketed across every render.
 
 ABSOLUTELY BANNED (this is not sci-fi, not fantasy):
 - NO multi-moons, twin-suns, triple-moons (Earth has one of each)
