@@ -1,9 +1,11 @@
 name: BeachBot Dream Generation
 
 on:
-  schedule:
-    - cron: '45 0 * * *'
-    - cron: '45 12 * * *'
+  # Disabled — content consolidated into TravelBot 2026-05-05.
+  # Bot account, post history, and code preserved for reference.
+  # schedule:
+  #   - cron: '45 0 * * *'
+  #   - cron: '45 12 * * *'
   workflow_dispatch:
     inputs:
       path:

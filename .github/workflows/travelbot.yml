@@ -1,11 +1,9 @@
-name: OceanBot Dream Generation
+name: TravelBot Dream Generation
 
 on:
-  # Disabled — content consolidated into TravelBot 2026-05-05.
-  # Bot account, post history, and code preserved for reference.
-  # schedule:
-  #   - cron: '5 7 * * *'
-  #   - cron: '5 19 * * *'
+  schedule:
+    - cron: '11 5 * * *'
+    - cron: '11 17 * * *'
   workflow_dispatch:
     inputs:
       path:
@@ -37,13 +35,13 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Generate OceanBot dream
+      - name: Generate TravelBot dream
         env:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           node scripts/run-bot.js \
-            --bot oceanbot \
+            --bot travelbot \
             --path "${{ inputs.path || 'random' }}" \
             --vibe "${{ inputs.vibe || 'random' }}"

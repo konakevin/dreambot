@@ -1,9 +1,11 @@
 name: EarthBot Dream Generation
 
 on:
-  schedule:
-    - cron: '11 5 * * *'
-    - cron: '11 17 * * *'
+  # Disabled — content consolidated into TravelBot 2026-05-05.
+  # Bot account, post history, and code preserved for reference.
+  # schedule:
+  #   - cron: '11 5 * * *'
+  #   - cron: '11 17 * * *'
   workflow_dispatch:
     inputs:
       path:
