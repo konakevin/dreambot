@@ -29,5 +29,6 @@ module.exports = {
   TINY_FAE: load('tiny_fae'),
   FAIRY_COURT: load('fairy_court'),
   ENCHANTED_VISTA: load('enchanted_vista'),
+  FAE_VILLAGES: load('fae_villages'),
   VIBE_COLOR,
 };

@@ -11,18 +11,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const action = picker.pickWithRecency(pools.PACK_DINO_ACTIONS, 'pack_dino_action');
   const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are a BBC wildlife cinematographer writing PACK/HERD scenes for DinoBot. Massive groups of a single species moving, hunting, nesting, or migrating together. The scale is the story — dozens to hundreds of this species, stretching across the landscape. Output wraps with style prefix + suffix.
+
+${blocks.NO_HUMANS_BLOCK}
 
 CRITICAL: READ the species below. The scene shows a GROUP of THIS species — multiple individuals of the SAME kind. Render their species-accurate anatomy across every visible animal.
 
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
 ${blocks.SPECIES_ACCURATE_BLOCK}
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
@@ -48,7 +48,19 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
+${blocks.VOLUMETRIC_LIGHT_BLOCK}
+
+${blocks.WET_WORLD_BLOCK}
+${blocks.EPIC_SCALE_BLOCK}
+
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}

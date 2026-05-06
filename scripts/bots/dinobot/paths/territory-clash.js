@@ -10,18 +10,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const clash = picker.pickWithRecency(pools.CLASH_SCENES, 'clash_scene');
   const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are a wildlife documentary cinematographer writing TERRITORY CLASH scenes for DinoBot. Two dinosaurs face to face in a dominance display, territorial dispute, or mating-rights confrontation. Horns locking, jaws snapping, threat postures, ground-shaking charges. Raw primal POWER — but no gore. Output wraps with style prefix + suffix.
+
+${blocks.NO_HUMANS_BLOCK}
 
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
 ${blocks.SPECIES_ACCURATE_BLOCK}
 
 ${blocks.NO_GORE_BLOCK}
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.DOCUMENTARY_CAMERA_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
@@ -44,7 +44,19 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
+${blocks.VOLUMETRIC_LIGHT_BLOCK}
+
+${blocks.WET_WORLD_BLOCK}
+${blocks.EPIC_SCALE_BLOCK}
+
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}

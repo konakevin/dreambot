@@ -38,6 +38,11 @@ module.exports = {
   EXTINCTION_SCENES: load('extinction_scenes'),
   COZY_DINO_ACTIONS: load('cozy_dino_actions'),
   PACK_DINO_ACTIONS: load('pack_dino_actions'),
+  // Aerial-perspectives path
+  AERIAL_SUBJECTS: load('aerial_subjects'),
+  AERIAL_ACTIONS: load('aerial_actions'),
+  AERIAL_SETTINGS: load('aerial_settings'),
+  CAMERA_ANGLES: load('camera_angles'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

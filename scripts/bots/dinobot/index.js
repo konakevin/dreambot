@@ -24,33 +24,70 @@ const pathBuilders = {
   'extinction-event': require('./paths/extinction-event'),
   'dino-cozy': require('./paths/dino-cozy'),
   'dino-pack': require('./paths/dino-pack'),
+  'aerial-perspectives': require('./paths/aerial-perspectives'),
 };
 
 module.exports = {
   username: 'dinobot',
   displayName: 'DinoBot',
 
-  mediums: ['photography', 'render', 'canvas'],
+  // Single locked medium — Unreal Engine 5 cinematic raytracing for every render.
+  // Was rotating photography/render/canvas; that produced inconsistent quality
+  // (watercolor / pencil / etc. flatness on some renders). Lock to `render`
+  // and pump the override hard so every output reads as UE5-killed-it polish.
+  mediums: ['render'],
+
+  // Per-medium override — Avatar Pandora × Skull Island × Land of the Lost
+  // overgrown-jungle cinematics (NOT documentary-savanna). The dinosaur is a
+  // photoreal real animal in an UNHINGED-LUSH primordial jungle.
+  //
+  // Documentary references like "Prehistoric Planet" or "wildlife photography"
+  // pull Flux toward open-savanna training data with sparse cover. We want
+  // the OPPOSITE — buried in jungle, leaves the size of cars, vines hanging
+  // from impossible heights. Lost-world cinematics, not nature-doc.
+  // Per-medium override — SETTING-AGNOSTIC visual signature only. Setting
+  // (jungle vs savanna vs canyon vs volcanic vs ocean) comes from the
+  // path's own pools and per-path blocks, NOT from the global wrapper.
+  // Was pumping "dense Mesozoic jungle / mega-flora / overgrown" here,
+  // which collapsed every path's render into jungle regardless of intent.
+  mediumStyles: {
+    render:
+      'NO HUMANS NO PEOPLE — this world is 66 million years before humans existed, cinematic 35mm film still, photoreal living animal with leathery scarred biological hide, hyperreal organic textures, ray-traced reflections, PBR materials, IMAX cinematic precision — NOT cartoon NOT painted NOT watercolor NOT pencil NOT toy NOT 3D-character-model NOT video-game-render NOT plastic-CGI',
+  },
+  promptSuffixByMedium: {
+    render:
+      'NO HUMANS NO PEOPLE NO HUMAN FIGURES, photoreal cinematic film still, the dinosaur is a REAL LIVING ANIMAL, hyperreal organic detail, NOT plastic NOT 3D-render',
+  },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  // Per-path prefix override — JUNGLE-CODED paths wrap their Flux prompt
+  // with lush-overgrown-jungle language so the rendered scene reads as
+  // dense primordial jungle (not the setting-neutral global wrapper that
+  // open paths use). Open paths (herd, paleo, volcanic, ocean, action,
+  // territory, pack, extinction, silhouette, aerial) inherit the global
+  // setting-neutral PROMPT_PREFIX and let their setting pools dictate.
+  promptPrefixByPath: {
+    'dino-cozy':
+      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+    'nesting-ground':
+      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+    'swamp-river':
+      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world riparian wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle along tannin-dark waters, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+    'dino-portrait':
+      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+    'micro-detail':
+      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+  },
 
-  vibes: [
-    'cinematic',
-    'cozy',
-    'dark',
-    'epic',
-    'ancient',
-    'ethereal',
-    'fierce',
-    'voltage',
-    'nightshade',
-    'shimmer',
-    'surreal',
-  ],
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-1.1-pro'],
+
+  // Single locked vibe — cinematic. Was rotating 11 vibes which produced
+  // inconsistent moods (cozy/ethereal/shimmer pulled away from the
+  // hyperreal Prehistoric-Planet-cinematic look). Lock to cinematic.
+  vibes: ['cinematic'],
 
   paths: [
     'dino-portrait',
@@ -67,6 +104,7 @@ module.exports = {
     'extinction-event',
     'dino-cozy',
     'dino-pack',
+    'aerial-perspectives',
   ],
 
   pathWeights: {
@@ -84,9 +122,10 @@ module.exports = {
     'extinction-event': 1,
     'dino-cozy': 1,
     'dino-pack': 1,
+    'aerial-perspectives': 1,
   },
 
-  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','volcanic-apocalypse','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack'] },
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','volcanic-apocalypse','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack','aerial-perspectives'] },
   twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-portrait': '80-110','dino-action': '80-110','dino-pack': '80-110' }, preservePhrasesByPath: {} },
   sensoryAnchors: {
     enabled: true,
@@ -97,6 +136,7 @@ module.exports = {
       'nesting-ground': 'dinosaur','swamp-river': 'scene','ocean-reptiles': 'dinosaur',
       'volcanic-apocalypse': 'scene','cinematic-silhouette': 'dinosaur','micro-detail': 'scene',
       'extinction-event': 'scene','dino-cozy': 'scene',
+      'aerial-perspectives': 'dinosaur',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

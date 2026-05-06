@@ -1619,7 +1619,7 @@ All 18 bots below are on per-bot crons via the V2 engine.
 |---|---|---|---|---|
 | StarBot | `starbot/` | Sci-fi / space / cyborg | 14 | ✅ slot-pool DNA + 3 layers (cyborg-man / cyborg-woman / explorers) — **canonical reference impl** |
 | ToyBot | `toybot/` | Toys / crafts / miniatures | 19 | ✅ 6 paths (mech / plush / hotwheels / train / dollhouse / space-saga) full slot-pool + spatial anchor + path-specific lighting + camera + 3 layers (toybot-scene-paths branch as of 2026-05-02) |
-| CuddleBot | `cuddlebot/` | Kawaii cozy | 23 | ✅ plushie-life + dollhouse-life ported with cute-nudged pools (toybot-scene-paths branch); 21 other paths use base architecture |
+| CozyBot | `cozybot/` | Kawaii cozy + cottagecore villages + snug interiors | 26 | ✅ Merged from CuddleBot 2026-05-06 — locked to `cozybot_pixar` medium (modern Pixar register), 23 inherited CuddleBot paths + 3 CozyBot-original indoor paths (rainy-interior / fireplace-cabin / bookish-sanctuary). Indoor paths weighted 2× to balance against the 23 outdoor/character paths. Plushie-life + dollhouse-life keep their toy-photography overrides |
 | OceanBot | `oceanbot/` | Ocean / underwater / mermaid | 15 | ✅ `cycleAllPaths: true` — all 15 paths cycle before repeating; split lighting pools (underwater / surface / mermaid-specific) |
 | DragonBot | `dragonbot/` | Epic fantasy / dragons | 8+ | ✅ scene-girls Pre-Raphaelite oil painting reference impl |
 | GothBot | `gothbot/` | Gothic dark / vampires | 6+ | ✅ closeup+full-body split + bannedPhrases reference impl |

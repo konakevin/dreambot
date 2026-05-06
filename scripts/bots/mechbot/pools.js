@@ -108,6 +108,10 @@ module.exports = {
   ALIEN_BIOMECH_SUBJECTS: load('alien_biomech_subjects'),
   ALIEN_BIOMECH_ACTIONS: load('alien_biomech_actions'),
   ALIEN_BIOMECH_SETTINGS: load('alien_biomech_settings'),
+  // Mech-skyships path — flying sci-fi mech-vessels in epic skies
+  MECH_SKYSHIPS_SUBJECTS: load('mech_skyships_subjects'),
+  MECH_SKYSHIPS_ACTIONS: load('mech_skyships_actions'),
+  MECH_SKYSHIPS_SETTINGS: load('mech_skyships_settings'),
 
   // Settings — robot-moment uses CHARACTER_INTERIOR (50%) + PLANET_SETTING (50%)
   // for variety. Kept as merge pools matching StarBot's behavior so the path's
