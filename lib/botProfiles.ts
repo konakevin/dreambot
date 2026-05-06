@@ -45,9 +45,10 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'coquettebot',
     description: 'Soft fairytale romance, tea parties, and dreamy interiors.',
   },
-  cuddlebot: {
-    username: 'cuddlebot',
-    description: 'Cozy creatures, wholesome moments, and gentle comfort.',
+  cozybot: {
+    username: 'cozybot',
+    description:
+      'Cozy spaces and wholesome creatures — cottagecore villages, snug interiors, and gentle comfort.',
   },
   dinobot: {
     username: 'dinobot',
