@@ -35,6 +35,8 @@ const pathBuilders = {
   'seasonal-shift': require('./earth/paths/seasonal-shift'),
   'geological-wonder': require('./earth/paths/geological-wonder'),
   'micro-nature': require('./earth/paths/micro-nature'),
+  'deep-forest': require('./earth/paths/deep-forest'),
+  'lush-jungle': require('./earth/paths/lush-jungle'),
   // Beach paths (13)
   'coastal-vista': require('./beach/paths/coastal-vista'),
   wave: require('./beach/paths/wave'),
@@ -62,6 +64,8 @@ const EARTH_PATHS = [
   'seasonal-shift',
   'geological-wonder',
   'micro-nature',
+  'deep-forest',
+  'lush-jungle',
 ];
 
 const BEACH_PATHS = [
@@ -94,10 +98,13 @@ const BEACH_PREFIX =
 const BEACH_SUFFIX =
   'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
-// Source bot vibe lists — preserved per path via vibesByPath. Kept as
-// distinct constants so future audits can see exactly which path inherited
-// from which bot.
-const EARTH_VIBES = [
+// Curated travel-destination vibe list. Audited 2026-05-05 — cut whimsical /
+// coquette / surreal because they pushed renders into fantasy / femme /
+// non-real territory (whimsical produced magical glass-egg creature on
+// tide-pool, coquette is off-brand for travel-destination identity, surreal
+// literally means non-real). Unified across all 25 paths since post-cuts the
+// Earth and Beach lists are identical.
+const TRAVEL_VIBES = [
   'cinematic',
   'cozy',
   'dark',
@@ -110,23 +117,6 @@ const EARTH_VIBES = [
   'voltage',
   'nightshade',
   'shimmer',
-  'surreal',
-];
-
-const BEACH_VIBES = [
-  'cinematic',
-  'cozy',
-  'epic',
-  'nostalgic',
-  'peaceful',
-  'whimsical',
-  'ethereal',
-  'ancient',
-  'enchanted',
-  'coquette',
-  'voltage',
-  'shimmer',
-  'surreal',
 ];
 
 // Helpers to build per-path config objects without manual repetition.
@@ -140,11 +130,12 @@ module.exports = {
   // 2 posts/day. Same pattern OceanBot used for path coverage.
   cycleAllPaths: true,
 
-  // The one approved consolidation: EarthBot's 5-medium list across all
-  // paths. Beach paths previously rendered in 10 mediums (incl. anime,
-  // storybook, fairytale, render, animation) — those are dropped here
-  // because the Earth list is proven for nature-grandeur quality.
-  mediums: ['photography', 'canvas', 'watercolor', 'illustration', 'pencil'],
+  // Locked to a single custom hyperreal Unreal-Engine-style medium across
+  // all 25 paths. travelbot_hyperreal is a bot-only DB row in dream_mediums
+  // (is_active: false, is_bot_only: true) — never exposed to user pickers.
+  // Its flux_fragment in the DB IS the override; no mediumStyles entry
+  // needed since there's no DB fragment to replace.
+  defaultMedium: 'travelbot_hyperreal',
 
   // Bot-level prefix/suffix kept empty so the per-path overrides below
   // are the SOLE prefix/suffix sources. Engine prepends promptPrefixByPath
@@ -171,14 +162,10 @@ module.exports = {
     ...byPath(BEACH_PATHS, BEACH_SUFFIX),
   },
 
-  // Per-path vibe lists — Earth gets EarthBot's 13 (incl. dark, nightshade
-  // which Beach doesn't have); Beach gets BeachBot's 13 (incl. whimsical,
-  // coquette which Earth doesn't have).
-  vibes: EARTH_VIBES, // fallback for any unmapped path
-  vibesByPath: {
-    ...byPath(EARTH_PATHS, EARTH_VIBES),
-    ...byPath(BEACH_PATHS, BEACH_VIBES),
-  },
+  // Single unified vibe list across all 25 paths (no vibesByPath split).
+  // Post-audit list cuts whimsical / coquette / surreal — see TRAVEL_VIBES
+  // declaration above for rationale.
+  vibes: TRAVEL_VIBES,
 
   paths: ALL_PATHS,
   pathWeights: byPath(ALL_PATHS, 1),
@@ -187,8 +174,11 @@ module.exports = {
   // Earth used useModelPicker:true + allowedModels at bot level; Beach
   // used modelByPath. Same effective allowed set — using the simpler
   // bot-level config here.
+  // Locked to flux-1.1-pro only — highest-fidelity Flux model for the
+  // hyperreal look. Picker semantics retained but with a single allowed
+  // model so every render is the same quality.
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  allowedModels: ['black-forest-labs/flux-1.1-pro'],
 
   // Chaos layer — both source bots had chaos enabled. Earth had no
   // subject-chaos (allowSubjectChaosPaths: []) because there's no human

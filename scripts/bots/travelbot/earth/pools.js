@@ -34,6 +34,8 @@ module.exports = {
   SEASONAL_SCENES: load('seasonal_scenes'),
   GEOLOGICAL_SCENES: load('geological_scenes'),
   MICRO_NATURE: load('micro_nature'),
+  DEEP_FOREST_SCENES: load('deep_forest_scenes'),
+  LUSH_JUNGLE_SCENES: load('lush_jungle_scenes'),
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   NATIONAL_PARKS: load('national_parks'),
