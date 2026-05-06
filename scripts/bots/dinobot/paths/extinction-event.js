@@ -45,6 +45,14 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
+${blocks.VOLUMETRIC_LIGHT_BLOCK}
+
+${blocks.WET_WORLD_BLOCK}
+
+${blocks.LUSH_PRIMORDIAL_BLOCK}
+
+${blocks.EPIC_SCALE_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
