@@ -965,6 +965,7 @@ async function runBot(opts) {
       (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
       bot.promptPrefix || '';
     const rawSuffix =
+      (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
       (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
       bot.promptSuffix || '';
     const prefix = rawPrefix ? `${rawPrefix}, ` : '';
