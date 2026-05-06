@@ -1,0 +1,162 @@
+/**
+ * MechBot — axis pools. All Sonnet-seeded.
+ * Migrated from StarBot 2026-05-05 (cyborg + robot paths split into their own bot).
+ * Regenerate cyborg/robot pools: node scripts/gen-seeds/starbot/gen-<name>.js
+ *   (gen scripts still live under starbot/ until copied over — the JSON they
+ *   produce is identical regardless of which bot consumes it.)
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+function load(name) {
+  return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
+}
+
+// ─────────────────────────────────────────────────────────────
+// CYBORG SHARED POOLS
+// ─────────────────────────────────────────────────────────────
+
+const CYBORG_SKIN_TONES = load('cyborg_skin_tones');
+const CYBORG_EYE_STYLES = load('cyborg_eye_styles');
+const CYBORG_INTERNAL_EXPOSURE = load('cyborg_female_internal');
+const CYBORG_MALE_INTERNAL_EXPOSURE = load('cyborg_male_internal');
+const CYBORG_GLOW_COLORS = load('cyborg_glow_colors');
+
+// ─────────────────────────────────────────────────────────────
+// CYBORG-WOMAN POOLS
+// ─────────────────────────────────────────────────────────────
+
+const CYBORG_HAIR_STYLES = load('cyborg_female_hair');
+const CYBORG_BODY_TYPES = load('cyborg_female_body_types');
+
+// ─────────────────────────────────────────────────────────────
+// CYBORG-MAN POOLS
+// ─────────────────────────────────────────────────────────────
+
+const CYBORG_MALE_BODY_TYPES = load('cyborg_male_body_types');
+const CYBORG_MALE_HAIR_STYLES = load('cyborg_male_hair');
+const CYBORG_MALE_SKIN_TONES = load('cyborg_male_skin_tones');
+const CYBORG_MALE_FEATURES = load('cyborg_male_features');
+
+const VIBE_COLOR = {
+  cinematic: 'teal-and-orange sci-fi cinematic grade, deep shadows, luminous highlights',
+  dark: 'oil-black dominant, single nebula-glow accent, stark void',
+  epic: 'dramatic cosmic god-rays, rich indigo-and-gold, heroic scale palette',
+  nostalgic: 'faded 70s-sci-fi palette, muted copper, warm-amber control panels',
+  psychedelic: 'impossible magenta-violet nebula hues, hallucinatory cosmic shifts',
+  peaceful: 'soft pastel nebula-pinks, gentle luminous calm, tranquil space',
+  ethereal: 'pearl-white cosmic mist, opalescent space-gas, luminous pale tones',
+  arcane: 'deep violet nebula, emerald spacedust, mystical cosmic hues',
+  ancient: 'weathered bronze + deep-copper, sepia-sunset palette',
+  enchanted: 'soft magical nebula glow, dreamy lavender-and-blue cosmic',
+  fierce: 'stark crimson-and-obsidian, savage solar flare contrast',
+  voltage: 'electric blue plasma, neon cyberpunk accents, stark contrast',
+  nightshade: 'deep violet void with silver starfield, plum-shadow palette',
+  macabre: 'inked blood-crimson cosmic-dread, dark-nebula palette',
+  shimmer: 'shimmering starlight + iridescent cosmic-dust highlights',
+  surreal: 'impossible cosmic color pairings, hallucinatory space shifts',
+  minimal: 'spare monochromatic palette, single-color accent, clean negative space',
+};
+
+module.exports = {
+  // Cyborg shared pools
+  CYBORG_SKIN_TONES,
+  CYBORG_EYE_STYLES,
+  CYBORG_INTERNAL_EXPOSURE,
+  CYBORG_GLOW_COLORS,
+  CYBORG_FEATURES: load('cyborg_features'),
+  CYBORG_CLOSEUP_FRAMINGS: load('cyborg_closeup_framings'),
+  // Cyborg-woman pools
+  CYBORG_HAIR_STYLES,
+  CYBORG_BODY_TYPES,
+  CYBORG_FEMALE_CHARACTERS: load('cyborg_female_characters'),
+  CYBORG_ACTIONS: load('cyborg_actions'),
+  // Cyborg-man pools
+  CYBORG_MALE_HAIR_STYLES,
+  CYBORG_MALE_BODY_TYPES,
+  CYBORG_MALE_SKIN_TONES,
+  CYBORG_MALE_FEATURES,
+  CYBORG_MALE_INTERNAL_EXPOSURE,
+  CYBORG_MALE_CHARACTERS: load('cyborg_male_characters'),
+  CYBORG_MALE_ACTIONS: load('cyborg_male_actions'),
+  // Robot pools (robot-moment path)
+  ROBOT_TYPES: load('robot_types'),
+  TRANQUIL_MOMENTS: load('tranquil_moments'),
+
+  // Settings — robot-moment uses CHARACTER_INTERIOR (50%) + PLANET_SETTING (50%)
+  // for variety. Kept as merge pools matching StarBot's behavior so the path's
+  // outputs are identical post-migration. The IP-flavored architecture pools
+  // (dune/aliens/halo/etc.) provide texture variety without being recognizable
+  // as IP at the prompt level.
+  CHARACTER_INTERIOR: [
+    ...load('dune_architecture'),
+    ...load('aliens_architecture'),
+    ...load('halo_architecture'),
+    ...load('starwars_architecture'),
+    ...load('guardians_architecture'),
+    ...load('mass_effect_architecture'),
+    ...load('startrek_architecture'),
+    ...load('starcraft_architecture'),
+  ],
+  PLANET_SETTING: [
+    ...load('planet_jungle'),
+    ...load('planet_swamp'),
+    ...load('planet_ocean'),
+    ...load('planet_ice'),
+    ...load('planet_desert'),
+    ...load('planet_crystal'),
+    ...load('planet_volcanic'),
+    ...load('planet_sky'),
+    ...load('planet_ruins'),
+    ...load('planet_cave'),
+    ...load('planet_extreme'),
+    ...load('dune_landscapes'),
+    ...load('aliens_landscapes'),
+    ...load('starwars_landscapes'),
+    ...load('guardians_landscapes'),
+    ...load('mass_effect_landscapes'),
+    ...load('startrek_landscapes'),
+    ...load('halo_landscapes'),
+    ...load('starcraft_landscapes'),
+  ],
+
+  // Shared infrastructure
+  ATMOSPHERES: load('atmospheres'),
+  LIGHTING: load('lighting'),
+  CAMERA_ANGLES: load('camera_angles'),
+  SCENE_PALETTES: load('scene_palettes'),
+  VIBE_COLOR,
+
+  // Sensory anchor pools — 3 contexts (cyborg-female / cyborg-male / robot)
+  // × 7 channels × 100 entries each.
+  SENSORY_POOLS: {
+    'cyborg-female': {
+      smell: load('sensory_cyborg-female_smell'),
+      sound: load('sensory_cyborg-female_sound'),
+      touch: load('sensory_cyborg-female_touch'),
+      temperature: load('sensory_cyborg-female_temperature'),
+      weight: load('sensory_cyborg-female_weight'),
+      air: load('sensory_cyborg-female_air'),
+      lightcolor: load('sensory_cyborg-female_lightcolor'),
+    },
+    'cyborg-male': {
+      smell: load('sensory_cyborg-male_smell'),
+      sound: load('sensory_cyborg-male_sound'),
+      touch: load('sensory_cyborg-male_touch'),
+      temperature: load('sensory_cyborg-male_temperature'),
+      weight: load('sensory_cyborg-male_weight'),
+      air: load('sensory_cyborg-male_air'),
+      lightcolor: load('sensory_cyborg-male_lightcolor'),
+    },
+    robot: {
+      smell: load('sensory_robot_smell'),
+      sound: load('sensory_robot_sound'),
+      touch: load('sensory_robot_touch'),
+      temperature: load('sensory_robot_temperature'),
+      weight: load('sensory_robot_weight'),
+      air: load('sensory_robot_air'),
+      lightcolor: load('sensory_robot_lightcolor'),
+    },
+  },
+};

@@ -4,9 +4,7 @@
  * Mind-bending sci-fi. Blade Runner / Dune / Interstellar / Alien / 2001 /
  * Arrival / Annihilation / Foundation / Moebius-Jodorowsky / Chesley-Bonestell.
  * Cosmic vistas + alien landscapes + epic space opera + sleek futurism.
- *
- * Cyborg / robot character paths split into MechBot 2026-05-05 — see
- * scripts/bots/mechbot/.
+ * Includes cyborg-woman path (inherited from retired VenusBot).
  */
 
 const pools = require('./pools');
@@ -19,11 +17,14 @@ const pathBuilders = {
   'sci-fi-interior': require('./paths/sci-fi-interior'),
   'cozy-sci-fi-interior': require('./paths/cozy-sci-fi-interior'),
   'alien-city': require('./paths/alien-city'),
+  'robot-moment': require('./paths/robot-moment'),
   'real-space': require('./paths/real-space'),
   'cosmic-oracle': require('./paths/cosmic-oracle'),
   'female-explorer': require('./paths/female-explorer'),
   'male-explorer': require('./paths/male-explorer'),
   'megastructure': require('./paths/megastructure'),
+  'cyborg-woman': require('./paths/cyborg-woman'),
+  'cyborg-man': require('./paths/cyborg-man'),
   'dune-landscape': require('./paths/dune-landscape'),
   'dune-architecture': require('./paths/dune-architecture'),
   'aliens-landscape': require('./paths/aliens-landscape'),
@@ -46,14 +47,12 @@ module.exports = {
   username: 'starbot',
   displayName: 'StarBot',
 
-  // Single locked medium — starbot_hyperreal is a bot-only medium added in
-  // migration 145, formalizing what was previously a render-medium override.
-  // Recipe: cinematic photoreal sci-fi concept art — Denis Villeneuve /
-  // Blade Runner 2049 / Dune / Interstellar live-action film aesthetic.
-  mediums: ['starbot_hyperreal'],
+  mediums: ['render'],
 
   mediumByPath: {
-    'real-space': 'real_astro', // NASA-grade astrophotography stays separate
+    'cosmic-vista': 'render',
+    'cosmic-oracle': 'render',
+    'real-space': 'real_astro',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -63,33 +62,42 @@ module.exports = {
 
   // all paths use flux-dev / flux-1.1-pro 50/50 rotation
   modelByPath: {
-    'cosmic-vista': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'alien-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'space-opera': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'sci-fi-interior': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'cozy-sci-fi-interior': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'alien-city': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'real-space': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'cosmic-oracle': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'megastructure': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'dune-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'dune-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'aliens-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'aliens-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starwars-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starwars-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'guardians-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'guardians-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'mass-effect-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'mass-effect-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'halo-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'halo-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'star-trek-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'star-trek-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starcraft-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starcraft-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'cosmic-vista': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'alien-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'space-opera': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'sci-fi-interior': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cozy-sci-fi-interior': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'alien-city': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'robot-moment': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'real-space': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cosmic-oracle': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'female-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'male-explorer': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'megastructure': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'dune-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'dune-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'aliens-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'aliens-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starwars-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starwars-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'guardians-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'guardians-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'mass-effect-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'mass-effect-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'halo-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'halo-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'star-trek-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'star-trek-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starcraft-landscape': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'starcraft-architecture': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  },
+
+  // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
+  promptPrefixByPath: {
+    'cyborg-man': 'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
+    'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
   },
 
   // Per-medium prompt prefix/suffix overrides. The star_oil_cosmos medium
@@ -99,19 +107,13 @@ module.exports = {
     star_oil_cosmos:
       'cinematic sci-fi oil painting, environment-dominant composition, heavy impasto brushwork, atmospheric depth',
     real_astro:
-      'NASA Hubble JWST astrophotography PUNCHED UP to maximum, vibrant false-color composite cranked to 11, dramatic events captured mid-action — jets shooting / shockwaves expanding / aurora flaring / accretion disks burning / gravitational lensing distorting backgrounds, multiple celestial elements happening at once in the same frame, luminous glowing structures saturated to wallpaper-worthy intensity, blazing star fields with diffraction spikes',
-    // Hyperreal sci-fi concept-art prefix for starbot_hyperreal medium (migration 145).
-    starbot_hyperreal:
-      'hyperrealistic photoreal rendering of a science-fiction world, cinematic concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech surfaces, mythic epic scale, movie-poster composition',
+      'NASA Hubble JWST astrophotography, vibrant false-color composite, luminous glowing gas clouds, blazing star fields, saturated vivid deep-space imaging',
   },
   promptSuffixByMedium: {
     star_oil_cosmos:
       'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
     real_astro:
-      'astrophotography finish cranked to wallpaper saturation, deep black space contrast, pinpoint stars with diffraction spikes, multi-wavelength false-color composite, dramatic mid-event detail (jets / shockwaves / accretion disks / lensing) visible in frame, the celestial object is the MAIN SUBJECT (occupies the bulk of the frame), spaceships permitted only as small silhouette / scale-reference elements at the frame edge, no text, no words, no watermarks, NO monitors NO screens NO viewports NO characters NO industrial scene framing',
-    // Hyperreal sci-fi concept-art suffix for starbot_hyperreal medium (migration 145).
-    starbot_hyperreal:
-      '8K cinematic concept art precision, photoreal materials and lighting, atmospheric lens flare and slight bloom, dust motes in light shafts, every plane filled with detail, no text, no words, no watermarks, photorealistic film still — NOT painted, NOT illustration, NOT drawing, NOT cartoon, NOT stylized',
+      'astrophotography finish, deep black space contrast, pinpoint stars, no text no words no watermarks',
   },
 
   // Per-medium prompt injection — StarBot's dialect for each medium.
@@ -125,11 +127,8 @@ module.exports = {
       'late-80s / early-90s retrofuturism — Syd-Mead + Moebius painted chrome-and-neon-pink-cyan palette, gridded-horizon vanishing-point perspective, synthwave-cosmos sunset, tropical-palm-silhouette against gradient-sky, VHS-glitch scanlines, Miami-Vice-in-space mood, Blade-Runner-original-era neon-signage, pastel-gradient nebula backdrop',
     canvas:
       'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Bruce-Pennington / Frank-Kelly-Freas Analog-SF-magazine tradition, heavy-impasto painted brushwork, painterly atmospheric cosmic depth, dramatic painted-chiaroscuro with nebula-hued ambient shadow, pulp-sci-fi paperback polish, museum-painted masterwork quality',
-    // Hyperreal sci-fi concept-art mediumStyle — formalized as the bot-only
-    // medium `starbot_hyperreal` in migration 145. Mirrors the DB row's
-    // flux_fragment so the override is explicit rather than implicit.
-    starbot_hyperreal:
-      'hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech and alien-world surfaces, slight bloom and lens flare, 8K film-still precision, mythic epic scale, like a still from a Denis Villeneuve sci-fi film — NOT painted, NOT illustration, NOT drawing, NOT cartoon, NOT stylized, NOT toy, NOT videogame',
+    render:
+      'high-end cinematic 3D render — feature-film VFX quality, physically-based rendering with realistic subsurface-scatter and raytraced reflections, practical-plus-digital hybrid aesthetic, volumetric atmospheric depth, cinematic lighting precision, 4K film-finish polish, NOT cartoon NOT toy NOT videogame',
     watercolor:
       'NASA concept-art watercolor wash — Robert-McCall painted-space-tradition + Jean-Giraud-Moebius watercolor-sci-fi, soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel, NOT cute-watercolor NOT children-book NOT flowers',
     pencil:
@@ -151,6 +150,18 @@ module.exports = {
   // Inverts old excludeVibes (minimal/whimsical/cozy).
   vibes: [
     'cinematic',
+    'dark',
+    'epic',
+    'nostalgic',
+    'psychedelic',
+    'ethereal',
+    'arcane',
+    'enchanted',
+    'voltage',
+    'shimmer',
+    'surreal',
+    'peaceful',
+    'minimal',
   ],
 
   paths: [
@@ -160,11 +171,14 @@ module.exports = {
     'sci-fi-interior',
     'cozy-sci-fi-interior',
     'alien-city',
+    'robot-moment',
     'real-space',
     'cosmic-oracle',
     'female-explorer',
     'male-explorer',
     'megastructure',
+    'cyborg-woman',
+    // 'cyborg-man' — deactivated 2026-05-02 (Kevin: renders looked like GQ model shoot, not cyborg)
     'dune-landscape',
     // 'dune-architecture' — deactivated 2026-05-02
     'aliens-landscape',
@@ -173,18 +187,21 @@ module.exports = {
     'starwars-architecture',
     'guardians-landscape',
     'guardians-architecture',
-    // 'mass-effect-landscape' — scrapped 2026-05-02
+    // 'mass-effect-landscape' — scrapped 2026-05-02 (Kevin)
     'mass-effect-architecture',
     'halo-landscape',
     'halo-architecture',
     'star-trek-landscape',
-    // 'star-trek-architecture' — scrapped 2026-05-02
+    // 'star-trek-architecture' — scrapped 2026-05-02 (Kevin)
     'starcraft-landscape',
     'starcraft-architecture',
   ],
 
-  // Path weights — universe-coded scenes / character paths / generic scenes.
-  // Cyborg + robot-moment moved to MechBot 2026-05-05.
+  // Path weights tuned for ~40% universe-coded scenes / ~30% character paths /
+  // ~30% generic scene paths.
+  // Universe paths (13): weight 4 each → 52 / 132 = ~39.4%
+  // Character paths (5): weight 8 each → 40 / 132 = ~30.3%
+  // Generic scene paths (8): weight 5 each → 40 / 132 = ~30.3%
   pathWeights: {
     // Generic scene paths (weight 5 each)
     'cosmic-vista': 5,
@@ -196,9 +213,12 @@ module.exports = {
     'real-space': 5,
     'megastructure': 5,
     // Character paths (weight 8 each)
+    'robot-moment': 8,
     'cosmic-oracle': 8,
     'female-explorer': 8,
     'male-explorer': 8,
+    'cyborg-woman': 8,
+    // 'cyborg-man': 8,  // deactivated
     // Universe-coded scene-only paths (weight 4 each)
     'dune-landscape': 4,
     // 'dune-architecture': 4,  // deactivated
@@ -218,8 +238,9 @@ module.exports = {
     'starcraft-architecture': 4,
   },
 
-  // Chaos layer — allow subject chaos on scenery + megastructure paths
-  // (silhouette/echo distortions).
+  // Chaos layer — sci-fi works well with chaos. Skip face-dominant cyborg
+  // closeups (none here — cyborg-woman/man are full-figure). Allow subject
+  // chaos on scenery + megastructure paths (silhouette/echo distortions).
   chaos: {
     enabled: true,
     skipPaths: [],
@@ -227,6 +248,8 @@ module.exports = {
       'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
       'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
       'megastructure',
+      'cyborg-woman',
+      'cyborg-man',
       'dune-landscape', 'dune-architecture', 'aliens-landscape', 'aliens-architecture',
       'starwars-landscape', 'starwars-architecture',
       'guardians-landscape', 'guardians-architecture',
@@ -243,19 +266,28 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
+      'cyborg-woman': '80-110',
+      'cyborg-man': '80-110',
       'female-explorer': '80-110',
       'male-explorer': '80-110',
+      'robot-moment': '80-110',
     },
+    preservePhrasesByPath: {},
   },
 
-  // Sensory anchors — 3 contexts (explorer-female / explorer-male / scene)
-  // since cyborg + robot moved to MechBot 2026-05-05.
+  // Sensory anchors — 6 contexts (cyborg-female / cyborg-male /
+  // explorer-female / explorer-male / robot / scene). 42 pools at 100 each.
+  // Cyborg/explorer split per Kevin's catch — different body types
+  // (machine anatomy vs organic-in-EVA), can't share a pool.
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
+      'cyborg-woman': 'cyborg-female',
+      'cyborg-man': 'cyborg-male',
       'female-explorer': 'explorer-female',
       'male-explorer': 'explorer-male',
+      'robot-moment': 'robot',
       'cosmic-vista': 'scene',
       'alien-landscape': 'scene',
       'space-opera': 'scene',
@@ -286,10 +318,29 @@ module.exports = {
   },
 
   rollSharedDNA({ vibeKey, path, picker }) {
-    return {
+    const base = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
+    if (path === 'cyborg-woman') {
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
+      base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
+      base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    if (path === 'cyborg-man') {
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_MALE_CHARACTERS, 'cyborg_male_character');
+      base.skin = picker.pickWithRecency(pools.CYBORG_MALE_SKIN_TONES, 'cyborg_male_skin');
+      base.bodyType = picker.pick(pools.CYBORG_MALE_BODY_TYPES);
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = picker.pick(pools.CYBORG_MALE_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_MALE_INTERNAL_EXPOSURE, 'cyborg_male_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    return base;
   },
 
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {

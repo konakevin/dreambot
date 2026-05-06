@@ -25,34 +25,7 @@ const FORCE_MAP = FORCE
 if (FORCE && !FORCE_MAP) console.warn('Unknown STARBOT_FORCE_LOCATION_POOL:', FORCE);
 if (FORCE_MAP) console.log('🔧 Forcing all location pools to:', FORCE);
 
-// ─────────────────────────────────────────────────────────────
-// CYBORG SHARED POOLS (Sonnet-seeded, 200 entries each)
-// ─────────────────────────────────────────────────────────────
-
-const CYBORG_SKIN_TONES = load('cyborg_skin_tones');
-const CYBORG_EYE_STYLES = load('cyborg_eye_styles');
-
-// ─────────────────────────────────────────────────────────────
-// CYBORG-WOMAN POOLS
-// ─────────────────────────────────────────────────────────────
-
-const CYBORG_HAIR_STYLES = load('cyborg_female_hair');
-const CYBORG_BODY_TYPES = load('cyborg_female_body_types');
-
-// ─────────────────────────────────────────────────────────────
-// CYBORG-MAN POOLS
-// ─────────────────────────────────────────────────────────────
-
-const CYBORG_MALE_BODY_TYPES = load('cyborg_male_body_types');
-const CYBORG_MALE_HAIR_STYLES = load('cyborg_male_hair');
-const CYBORG_MALE_SKIN_TONES = load('cyborg_male_skin_tones');
-const CYBORG_MALE_FEATURES = load('cyborg_male_features');
-
-const CYBORG_INTERNAL_EXPOSURE = load('cyborg_female_internal');
-
-const CYBORG_MALE_INTERNAL_EXPOSURE = load('cyborg_male_internal');
-
-const CYBORG_GLOW_COLORS = load('cyborg_glow_colors');
+// Cyborg + robot pools moved to MechBot 2026-05-05 — see scripts/bots/mechbot/pools.js.
 
 const VIBE_COLOR = {
   cinematic: 'teal-and-orange sci-fi cinematic grade, deep shadows, luminous highlights',
@@ -75,26 +48,6 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
-  // Cyborg shared pools
-  CYBORG_SKIN_TONES,
-  CYBORG_EYE_STYLES,
-  CYBORG_INTERNAL_EXPOSURE,
-  CYBORG_GLOW_COLORS,
-  CYBORG_FEATURES: load('cyborg_features'),
-  CYBORG_CLOSEUP_FRAMINGS: load('cyborg_closeup_framings'),
-  // Cyborg-woman pools
-  CYBORG_HAIR_STYLES,
-  CYBORG_BODY_TYPES,
-  CYBORG_FEMALE_CHARACTERS: load('cyborg_female_characters'),
-  CYBORG_ACTIONS: load('cyborg_actions'),
-  // Cyborg-man pools
-  CYBORG_MALE_HAIR_STYLES,
-  CYBORG_MALE_BODY_TYPES,
-  CYBORG_MALE_SKIN_TONES,
-  CYBORG_MALE_FEATURES,
-  CYBORG_MALE_INTERNAL_EXPOSURE,
-  CYBORG_MALE_CHARACTERS: load('cyborg_male_characters'),
-  CYBORG_MALE_ACTIONS: load('cyborg_male_actions'),
   // Scene pools
   COSMIC_PHENOMENA: load('cosmic_phenomena'),
   COSMIC_ANCHORS: load('cosmic_anchors'),
@@ -104,8 +57,6 @@ module.exports = {
   SCI_FI_INTERIORS: load('sci_fi_interiors'),
   COZY_SCI_FI_INTERIORS: load('cozy_sci_fi_interiors'),
   ALIEN_CITIES: load('alien_cities'),
-  ROBOT_TYPES: load('robot_types'),
-  TRANQUIL_MOMENTS: load('tranquil_moments'),
   REAL_SPACE_SUBJECTS: load('real_space_subjects'),
   COSMIC_ORACLE_CHARACTERS: load('cosmic_oracle_characters'),
   COSMIC_ORACLE_ACTIONS: load('cosmic_oracle_actions'),
@@ -221,27 +172,8 @@ module.exports = {
   VIBE_COLOR,
 
   // Sensory anchor pools — 6 contexts × 7 channels × 100 entries each.
-  // cyborg/explorer split by Kevin's catch — cyborg has machine anatomy,
-  // explorer is fully organic in EVA suit (different body types).
+  // Cyborg/robot sensory pools moved to MechBot 2026-05-05.
   SENSORY_POOLS: {
-    'cyborg-female': {
-      smell: load('sensory_cyborg-female_smell'),
-      sound: load('sensory_cyborg-female_sound'),
-      touch: load('sensory_cyborg-female_touch'),
-      temperature: load('sensory_cyborg-female_temperature'),
-      weight: load('sensory_cyborg-female_weight'),
-      air: load('sensory_cyborg-female_air'),
-      lightcolor: load('sensory_cyborg-female_lightcolor'),
-    },
-    'cyborg-male': {
-      smell: load('sensory_cyborg-male_smell'),
-      sound: load('sensory_cyborg-male_sound'),
-      touch: load('sensory_cyborg-male_touch'),
-      temperature: load('sensory_cyborg-male_temperature'),
-      weight: load('sensory_cyborg-male_weight'),
-      air: load('sensory_cyborg-male_air'),
-      lightcolor: load('sensory_cyborg-male_lightcolor'),
-    },
     'explorer-female': {
       smell: load('sensory_explorer-female_smell'),
       sound: load('sensory_explorer-female_sound'),
@@ -259,15 +191,6 @@ module.exports = {
       weight: load('sensory_explorer-male_weight'),
       air: load('sensory_explorer-male_air'),
       lightcolor: load('sensory_explorer-male_lightcolor'),
-    },
-    robot: {
-      smell: load('sensory_robot_smell'),
-      sound: load('sensory_robot_sound'),
-      touch: load('sensory_robot_touch'),
-      temperature: load('sensory_robot_temperature'),
-      weight: load('sensory_robot_weight'),
-      air: load('sensory_robot_air'),
-      lightcolor: load('sensory_robot_lightcolor'),
     },
     scene: {
       smell: load('sensory_scene_smell'),

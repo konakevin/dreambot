@@ -4,9 +4,7 @@
  * Mind-bending sci-fi. Blade Runner / Dune / Interstellar / Alien / 2001 /
  * Arrival / Annihilation / Foundation / Moebius-Jodorowsky / Chesley-Bonestell.
  * Cosmic vistas + alien landscapes + epic space opera + sleek futurism.
- *
- * Cyborg / robot character paths split into MechBot 2026-05-05 — see
- * scripts/bots/mechbot/.
+ * Includes cyborg-woman path (inherited from retired VenusBot).
  */
 
 const pools = require('./pools');
@@ -19,11 +17,14 @@ const pathBuilders = {
   'sci-fi-interior': require('./paths/sci-fi-interior'),
   'cozy-sci-fi-interior': require('./paths/cozy-sci-fi-interior'),
   'alien-city': require('./paths/alien-city'),
+  'robot-moment': require('./paths/robot-moment'),
   'real-space': require('./paths/real-space'),
   'cosmic-oracle': require('./paths/cosmic-oracle'),
   'female-explorer': require('./paths/female-explorer'),
   'male-explorer': require('./paths/male-explorer'),
   'megastructure': require('./paths/megastructure'),
+  'cyborg-woman': require('./paths/cyborg-woman'),
+  'cyborg-man': require('./paths/cyborg-man'),
   'dune-landscape': require('./paths/dune-landscape'),
   'dune-architecture': require('./paths/dune-architecture'),
   'aliens-landscape': require('./paths/aliens-landscape'),
@@ -69,11 +70,14 @@ module.exports = {
     'sci-fi-interior': { 'black-forest-labs/flux-1.1-pro': 100 },
     'cozy-sci-fi-interior': { 'black-forest-labs/flux-1.1-pro': 100 },
     'alien-city': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
     'real-space': { 'black-forest-labs/flux-1.1-pro': 100 },
     'cosmic-oracle': { 'black-forest-labs/flux-1.1-pro': 100 },
     'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'megastructure': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'cyborg-woman': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'cyborg-man': { 'black-forest-labs/flux-1.1-pro': 100 },
     'dune-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
     'dune-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
     'aliens-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -90,6 +94,12 @@ module.exports = {
     'star-trek-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
     'starcraft-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
     'starcraft-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
+  },
+
+  // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
+  promptPrefixByPath: {
+    'cyborg-man': 'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
+    'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
   },
 
   // Per-medium prompt prefix/suffix overrides. The star_oil_cosmos medium
@@ -153,38 +163,13 @@ module.exports = {
     'cinematic',
   ],
 
-  paths: [
-    'cosmic-vista',
-    'alien-landscape',
-    'space-opera',
-    'sci-fi-interior',
-    'cozy-sci-fi-interior',
-    'alien-city',
-    'real-space',
-    'cosmic-oracle',
-    'female-explorer',
-    'male-explorer',
-    'megastructure',
-    'dune-landscape',
-    // 'dune-architecture' — deactivated 2026-05-02
-    'aliens-landscape',
-    'aliens-architecture',
-    'starwars-landscape',
-    'starwars-architecture',
-    'guardians-landscape',
-    'guardians-architecture',
-    // 'mass-effect-landscape' — scrapped 2026-05-02
-    'mass-effect-architecture',
-    'halo-landscape',
-    'halo-architecture',
-    'star-trek-landscape',
-    // 'star-trek-architecture' — scrapped 2026-05-02
-    'starcraft-landscape',
-    'starcraft-architecture',
-  ],
+  paths: ['real-space'],
 
-  // Path weights — universe-coded scenes / character paths / generic scenes.
-  // Cyborg + robot-moment moved to MechBot 2026-05-05.
+  // Path weights tuned for ~40% universe-coded scenes / ~30% character paths /
+  // ~30% generic scene paths.
+  // Universe paths (13): weight 4 each → 52 / 132 = ~39.4%
+  // Character paths (5): weight 8 each → 40 / 132 = ~30.3%
+  // Generic scene paths (8): weight 5 each → 40 / 132 = ~30.3%
   pathWeights: {
     // Generic scene paths (weight 5 each)
     'cosmic-vista': 5,
@@ -196,9 +181,12 @@ module.exports = {
     'real-space': 5,
     'megastructure': 5,
     // Character paths (weight 8 each)
+    'robot-moment': 8,
     'cosmic-oracle': 8,
     'female-explorer': 8,
     'male-explorer': 8,
+    'cyborg-woman': 8,
+    // 'cyborg-man': 8,  // deactivated
     // Universe-coded scene-only paths (weight 4 each)
     'dune-landscape': 4,
     // 'dune-architecture': 4,  // deactivated
@@ -218,8 +206,9 @@ module.exports = {
     'starcraft-architecture': 4,
   },
 
-  // Chaos layer — allow subject chaos on scenery + megastructure paths
-  // (silhouette/echo distortions).
+  // Chaos layer — sci-fi works well with chaos. Skip face-dominant cyborg
+  // closeups (none here — cyborg-woman/man are full-figure). Allow subject
+  // chaos on scenery + megastructure paths (silhouette/echo distortions).
   chaos: {
     enabled: true,
     skipPaths: [],
@@ -227,6 +216,8 @@ module.exports = {
       'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
       'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
       'megastructure',
+      'cyborg-woman',
+      'cyborg-man',
       'dune-landscape', 'dune-architecture', 'aliens-landscape', 'aliens-architecture',
       'starwars-landscape', 'starwars-architecture',
       'guardians-landscape', 'guardians-architecture',
@@ -243,19 +234,40 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
+      'cyborg-woman': '80-110',
+      'cyborg-man': '80-110',
       'female-explorer': '80-110',
       'male-explorer': '80-110',
+      'robot-moment': '80-110',
+    },
+    preservePhrasesByPath: {
+      // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
+      // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
+      // unless the count is HEAVILY repeated in the prompt.
+      'robot-moment': [
+        'tripedal', 'tripod',
+        'three legs', 'three pneumatic legs', 'three telescoping legs', 'three strut legs', 'three hydraulic legs',
+        'quadrupedal', 'four-legged', 'four legs', 'four pneumatic legs', 'four reinforced legs', 'four strut legs',
+        'hexapod', 'six-legged', 'six legs', 'six pneumatic legs', 'six articulated legs', 'six rubber-tipped legs',
+        'octopod', 'eight legs',
+        'four mechanical arms', 'four arms', 'six arms', 'multi-armed',
+      ],
     },
   },
 
-  // Sensory anchors — 3 contexts (explorer-female / explorer-male / scene)
-  // since cyborg + robot moved to MechBot 2026-05-05.
+  // Sensory anchors — 6 contexts (cyborg-female / cyborg-male /
+  // explorer-female / explorer-male / robot / scene). 42 pools at 100 each.
+  // Cyborg/explorer split per Kevin's catch — different body types
+  // (machine anatomy vs organic-in-EVA), can't share a pool.
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
+      'cyborg-woman': 'cyborg-female',
+      'cyborg-man': 'cyborg-male',
       'female-explorer': 'explorer-female',
       'male-explorer': 'explorer-male',
+      'robot-moment': 'robot',
       'cosmic-vista': 'scene',
       'alien-landscape': 'scene',
       'space-opera': 'scene',
@@ -286,10 +298,29 @@ module.exports = {
   },
 
   rollSharedDNA({ vibeKey, path, picker }) {
-    return {
+    const base = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
+    if (path === 'cyborg-woman') {
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
+      base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
+      base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    if (path === 'cyborg-man') {
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_MALE_CHARACTERS, 'cyborg_male_character');
+      base.skin = picker.pickWithRecency(pools.CYBORG_MALE_SKIN_TONES, 'cyborg_male_skin');
+      base.bodyType = picker.pick(pools.CYBORG_MALE_BODY_TYPES);
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = picker.pick(pools.CYBORG_MALE_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_MALE_INTERNAL_EXPOSURE, 'cyborg_male_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    return base;
   },
 
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
