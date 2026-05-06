@@ -4,50 +4,61 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/dino_species.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} DINOSAUR AND PREHISTORIC SPECIES descriptions for DinoBot — accurate species with signature features. Feature DIVERSE and OBSCURE species people have never heard of, not just the famous ones.
+  metaPrompt: (n) => `You are writing ${n} DINOSAUR species descriptions for DinoBot. Each entry is 10-22 words, naming a species and giving its UNMISTAKABLY DINOSAUR signature features.
 
-Each entry: 10-25 words. One real prehistoric species with distinguishing visual features.
+━━━ NON-NEGOTIABLE ━━━
+Every entry must read clearly as a DINOSAUR (or closely-grouped Mesozoic reptile). Flux must render an obvious dinosaur silhouette — NOT a bird, NOT a mammal, NOT a fish, NOT a generic creature.
 
-━━━ FAMOUS (use sparingly, ~15%) ━━━
-- Tyrannosaurus rex, Triceratops, Velociraptor, Brachiosaurus, Stegosaurus, Spinosaurus
+━━━ ABSOLUTE BANS — these are NOT dinosaurs and break the bot ━━━
+- NO Helicoprion (it's a SHARK)
+- NO Dunkleosteus (placoderm FISH)
+- NO Yi qi (bat-winged glider — Flux renders as a bat)
+- NO Basilosaurus (early WHALE — mammal)
+- NO Sharovipteryx (lizard glider)
+- NO Estemmenosuchus / Gorgonops / Dimetrodon as primary subjects (pre-dinosaur synapsids)
+- NO mammal-coded species, NO fish, NO sharks, NO insects
+- NO species so obscure Flux has no training data (it will hallucinate weird hybrids)
 
-━━━ DEEP CUTS — THEROPODS ━━━
-- Therizinosaurus (scythe-clawed giant), Giganotosaurus, Carcharodontosaurus, Baryonyx
-- Deinocheirus (hump-backed ornithomimid), Concavenator (sail-backed carcharodontosaur)
-- Yi qi (bat-winged theropod), Nothronychus (pot-bellied therizinosaur), Majungasaurus
-- Suchomimus (crocodile-mimic), Torvosaurus, Ceratosaurus, Sinornithosaurus
-- Sinosauropteryx (first feathered dino confirmed), Citipati (crested oviraptor)
+━━━ DISTRIBUTION ━━━
+- ~50% ICONIC dinosaurs (Flux renders these perfectly)
+- ~35% MID-TIER recognizable dinosaurs (still well-known shape templates)
+- ~10% Marine reptiles (Mosasaurus, Plesiosaurus, Liopleurodon, Ichthyosaurus, Tylosaurus — clearly reptile-shaped)
+- ~5% Pterosaurs (Pteranodon, Quetzalcoatlus, Pterodactylus, Tupuxuara — clearly pterosaur-shaped, leathery wings)
 
-━━━ DEEP CUTS — HERBIVORES ━━━
-- Amargasaurus (double-sail-necked sauropod), Nigersaurus (vacuum-mouth sauropod)
-- Dracorex (dragon-king dome-head), Kosmoceratops (most-horned ceratopsian)
-- Styracosaurus (spike-frilled), Pachyrhinosaurus (boss-nosed ceratopsian)
-- Edmontosaurus (mummified skin specimens), Corythosaurus (helmet-crested hadrosaur)
-- Saltasaurus (armored titanosaur), Magyarosaurus (dwarf island sauropod)
-- Sinoceratops (Chinese horned face), Ouranosaurus (sail-backed iguanodontid)
+━━━ ICONIC TIER (use heavily — repeat with different angles is fine) ━━━
+Tyrannosaurus rex, Triceratops, Brachiosaurus, Velociraptor, Stegosaurus, Spinosaurus, Allosaurus, Apatosaurus, Diplodocus, Parasaurolophus, Edmontosaurus, Iguanodon, Ankylosaurus, Pachycephalosaurus, Carnotaurus, Compsognathus, Deinonychus, Mosasaurus, Pteranodon, Quetzalcoatlus
 
-━━━ DEEP CUTS — MARINE ━━━
-- Tylosaurus, Shonisaurus (bus-sized ichthyosaur), Kronosaurus, Archelon (giant sea turtle)
-- Dunkleosteus (armored placoderm fish), Helicoprion (buzzsaw-jaw shark)
-- Thalassomedon (long-necked plesiosaur), Basilosaurus (ancient whale ancestor)
+━━━ MID-TIER RECOGNIZABLE ━━━
+Therizinosaurus (large bipedal pot-bellied dinosaur with long claws — emphasize GROUND-DWELLING, not a flier),
+Giganotosaurus, Albertosaurus, Daspletosaurus, Tarbosaurus,
+Styracosaurus, Pachyrhinosaurus, Centrosaurus, Chasmosaurus, Torosaurus,
+Amargasaurus (double sail-neck), Saltasaurus (armored), Argentinosaurus (titanic), Camarasaurus,
+Corythosaurus, Lambeosaurus, Maiasaura, Hypacrosaurus,
+Baryonyx, Suchomimus, Ceratosaurus, Majungasaurus, Utahraptor,
+Kentrosaurus (more spikes than Stegosaurus), Tuojiangosaurus,
+Euoplocephalus, Borealopelta, Gastonia,
+Plesiosaurus, Liopleurodon, Elasmosaurus, Kronosaurus, Tylosaurus, Ichthyosaurus,
+Pterodactylus, Dimorphodon, Tupuxuara, Tropeognathus, Anhanguera, Nyctosaurus
 
-━━━ DEEP CUTS — FLYING ━━━
-- Quetzalcoatlus (giraffe-sized azhdarchid), Hatzegopteryx (island giant pterosaur)
-- Dimorphodon (puffin-faced pterosaur), Tupuxuara (crested tapejarid)
-- Nyctosaurus (huge-crested pteranodontid), Jeholopterus (frog-mouthed anurognathid)
+━━━ ENTRY FORMAT ━━━
+"[Species name]: [size + body plan + 1-2 signature features that lock the silhouette]"
 
-━━━ DEEP CUTS — PRE-DINOSAUR + EARLY ━━━
-- Dimetrodon (sail-backed synapsid), Gorgonops (saber-toothed therapsid)
-- Kaprosuchus (boar-croc), Sarcosuchus (super-croc), Postosuchus (rauisuchian)
-- Sharovipteryx (gliding archosaur), Tanystropheus (absurdly long-necked reptile)
-- Scutosaurus (armored pareiasaur), Estemmenosuchus (antlered therapsid)
+EXAMPLES:
+- "Tyrannosaurus rex: massive bipedal apex predator with huge skull, tiny two-fingered arms, muscular tail, scaled hide"
+- "Triceratops: nine-meter quadrupedal herbivore with three forward-pointing horns and broad bony neck frill"
+- "Spinosaurus: large semi-aquatic theropod with tall sail along back and crocodilian jaws"
+- "Mosasaurus: fifteen-meter marine reptile with paddle limbs, scaled body, long tooth-filled jaws, dolphin-like profile"
+- "Quetzalcoatlus: giraffe-sized pterosaur, ten-meter wingspan of leathery membrane, long stork-like beak"
+- "Therizinosaurus: large bipedal ground-dwelling dinosaur with pot belly, feathered shaggy body, meter-long curved scythe claws on each hand"
 
-━━━ RULES ━━━
-- 85% should be species most people have NEVER heard of
-- Include the visual feature that makes each species unique and recognizable
-- Feathers where paleontologically confirmed
-- Mix all eras: Triassic, Jurassic, Cretaceous, plus key Permian/Paleozoic species
-- Include marine reptiles, pterosaurs, and non-dinosaur prehistoric animals
+━━━ EVERY ENTRY MUST INCLUDE ━━━
+- Species name
+- Body-plan keyword (bipedal / quadrupedal / sauropod / theropod / hadrosaur / ceratopsian / sailed / armored / aquatic / pterosaur)
+- 1-2 signature features that LOCK THE SILHOUETTE so Flux renders the right thing
+- Size cue when relevant ("massive" / "small" / "giraffe-sized" / "ten-meter")
+
+━━━ DEDUP DIMENSIONS ━━━
+Deduplicate by: species + body plan + signature angle. Repeated iconic species with different angles ("T-Rex with mud-caked flanks" vs "T-Rex with battle-scarred face") is encouraged for the iconic tier.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

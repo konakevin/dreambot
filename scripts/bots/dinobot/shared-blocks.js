@@ -8,25 +8,73 @@
  */
 
 const PROMPT_PREFIX =
-  'IMAX cinematic paleoart concept art, primordial Jurassic-Cretaceous wilderness, ultra-realistic prehistoric wildlife photography, scientifically plausible dinosaur anatomy with detailed skin texture, scars, mud caked on flanks, slick wet hide where appropriate, volumetric god-rays piercing dense canopy, sun-shafts cutting through humid haze, wet reflective surfaces (rivers, mud-pools, rain-slick scales), exaggerated primordial foliage (mega-ferns the size of trees, house-sized cycads, vine-curtain canopies, towering horsetails), rugged untamed Mesozoic earth, multi-layered atmospheric depth, Prehistoric-Planet × Avatar-Pandora × Jurassic-World cinematics, museum-grade paleoart polish, IMAX scale composition';
+  'NO HUMANS — 66 million years before humans evolved, cinematic primordial Mesozoic wilderness, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail';
 
 const PROMPT_SUFFIX = 'ABSOLUTELY NO humans, NO people, NO human figures, NO human silhouettes, NO human hands, NO man-made objects, NO buildings, no cartoon, no kids illustration, no toy-like, no stylized cute, no theme park, no fantasy dragon, no neon colors, no plastic CGI, no text, no watermark, ultra detailed, film grain, masterpiece';
 
-const DINOSAUR_IS_HERO_BLOCK = `━━━ DINOSAUR IS HERO ━━━
+const DINOSAUR_IS_HERO_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST words of your output, BEFORE setting/lighting/anything else.
 
-Dinosaurs are the wildlife. This is a nature documentary frozen in time — 66+ million years ago. Every frame treats dinosaurs as REAL ANIMALS, not monsters. They eat, sleep, hunt, nest, migrate, fight, drink, rest. Candid wildlife moments, not posed. The camera caught them existing.`;
+1. THE DINOSAUR IS THE SUBJECT — and it is CLEARLY VISIBLE AT FULL BODY in the frame. The dinosaur is the eye's first landing place. NEVER tiny silhouette in distance. NEVER skull / fossil / bones in place of a living dinosaur — the subject must be ALIVE and BREATHING.
 
-const SPECIES_ACCURATE_BLOCK = `━━━ SPECIES-ACCURATE ANATOMY ━━━
+2. SHOW THE SCALE. The dinosaur is impressive because of its SIZE relative to its world. Render it at a distance where the whole body reads, NOT zoomed-in to fill the frame with face/torso. Aim for the dinosaur occupying 20-45% of the frame — large enough to dominate the eye, small enough that the lush mega-foliage, vast terrain, and atmospheric depth are ALL visible around it. This is NOT a portrait crop — this is a wildlife-cinema establishing shot where the dinosaur is the obvious star and the world wraps around it.
 
-Scientifically informed. Feathers where paleontology confirms (raptors, smaller theropods, coelurosaurs). Correct body proportions — T-Rex arms small, Brachiosaurus neck long + upright, Triceratops frill + horns accurate. Sauropods with correct mass-distribution. Skin has texture: scars, mud, parasites, wear. NOT toy-smooth. NOT monster-movie exaggerated. Museum-grade paleoart accuracy.`;
+3. ONE DINOSAUR PER PROMPT (or one cohesive group/herd if the path calls for one). Do NOT mash unrelated dinosaurs.
+
+4. OPEN YOUR OUTPUT WITH THE DINOSAUR. Format:
+"[dinosaur species + signature anatomy + action at full body], [environment wrapping around it — foliage, terrain, atmosphere], [lighting]."
+The dinosaur opens. Everything else is its richly-shown WORLD.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dinosaurs are the wildlife. This is a nature documentary frozen in time — but cinematic, hyperreal, jaw-dropping. They eat, sleep, hunt, nest, migrate, fight, drink, rest. Candid wildlife moments, not posed. The camera caught them existing in their VAST WORLD — and the world is shown alongside them.
+
+NEVER zoomed-in portrait crops. NEVER macro details that fill the frame with one body part. The mega-foliage, vast terrain, biblical weather, and primordial scale we mandate elsewhere can only show through if the framing is WIDE enough to reveal them. Show the WORLD with the dinosaur in it.`;
+
+const SPECIES_ACCURATE_BLOCK = `━━━ SPECIES-ACCURATE ANATOMY — REAL LIVING ANIMAL ━━━
+
+The dinosaur is a REAL LIVING ANIMAL captured by a wildlife cinematographer. Photoreal, biological, breathing.
+
+CRITICAL — the dinosaur is NOT:
+- A 3D-rendered character model from a video game (no rigid plastic-y polished surfaces)
+- A toy or sculpture (no smooth uniform color, no perfect symmetry)
+- A monster-movie exaggeration (no over-stylized horror anatomy)
+- A CGI-perfect cartoon dinosaur (no flat saturated colors, no rubber-y feel)
+
+The dinosaur IS:
+- A photographed living animal — leathery organic hide with pores, wrinkles, and asymmetry
+- Skin textured with scars, mud, parasites, healing wounds, weather wear
+- Naturalistic muscle visible beneath skin, asymmetric in motion
+- Earthy biological coloring (browns, ochres, dusty greens, weathered greys, with display patches)
+- Wet, dry, dusty, or muddy depending on context — NEVER pristine
+- Feathered where paleontology confirms (raptors, smaller theropods, coelurosaurs)
+- Correct proportions: T-Rex arms small, Brachiosaurus neck long + upright, Triceratops frill + horns accurate
+
+Like a still from Prehistoric Planet (BBC) shot on 35mm film. Museum-grade paleoart accuracy with photoreal wildlife-photography polish.`;
 
 const NO_GORE_BLOCK = `━━━ NO GORE ━━━
 
 Predator/prey moments allowed — hunting, chasing, territorial displays. BUT never explicit gore: no bloody wounds, no dismemberment, no blood-spatter, no visible viscera. Tension + dread + power, never slasher. PG-13 nature documentary, not horror.`;
 
-const NO_HUMANS_BLOCK = `━━━ ABSOLUTE BAN: NO HUMANS ━━━
+const NO_HUMANS_BLOCK = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE — NO HUMANS, EVER
 
-STRICT BAN. No humans ANYWHERE in any form. No hunters, no rangers, no explorers, no scientists, no children, no silhouettes, no hands, no camps, no vehicles, no buildings, no modern structures, no roads, no fences, no clothing, no tools, no weapons. Not even implied human presence. This world has NEVER seen a human being. 66+ million years before the first human existed. ANY human element = FAILED render.`;
+This world existed 66+ million years before the first human. Humans had not evolved. There can be NO human element in any frame.
+
+BANNED — none of the following can appear:
+- People, humans, persons, humanoids, hominins, primates, apes
+- Hunters, rangers, explorers, scientists, children, tribespeople, settlers
+- Human silhouettes, hands, faces, body parts
+- Camps, tents, fires, cooking sites, dwellings
+- Vehicles, helicopters, drones, planes, boats, carts, wagons
+- Buildings, walls, structures, ruins of structures, foundations
+- Roads, paths, fences, signs, markers
+- Clothing, fabric, robes, capes, leather goods
+- Tools, weapons, spears, bows, swords, shields
+- Cinematic references that imply humans (NOT "Avatar Pandora", NOT "Skull Island", NOT "Land of the Lost", NOT "Annihilation", NOT "Jurassic Park" — all feature humans)
+- ANY trace, footprint, marker, or implied presence of humans
+
+This is the wild Mesozoic — pure ecosystem of dinosaurs and prehistoric flora. ANY human element = CATASTROPHIC FAILURE.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
 const DOCUMENTARY_CAMERA_BLOCK = `━━━ DOCUMENTARY CAMERA ━━━
 
@@ -40,58 +88,106 @@ const SCALE_AND_ATMOSPHERE_BLOCK = `━━━ SCALE + ATMOSPHERE ━━━
 
 Emphasize SCALE — tiny foreground plants dwarf by massive animals. Volumetric fog, drifting dust, pollen clouds, humid air haze. Wet reflections in rivers and swamps. Wind-blown ferns. Atmospheric perspective — distant mountains fade to blue. The prehistoric world feels VAST and ALIVE.`;
 
-const VOLUMETRIC_LIGHT_BLOCK = `━━━ VOLUMETRIC LIGHT — NON-NEGOTIABLE ━━━
+const VOLUMETRIC_LIGHT_BLOCK = `━━━ DRAMATIC LIGHTING — VOLUMETRIC OR CRISP, NOT ALWAYS FOGGY ━━━
 
-EVERY render must have visible light SHAPED by atmosphere. Stack at least three of:
-- God-rays / sun-shafts piercing dense canopy from above (cathedral-of-light through fern-tops)
-- Volumetric haze (humid jungle air, mist over water, dust kicked from a herd's passage, pollen-clouds catching light)
-- Backlit dust motes / pollen / insects / spore-clouds visible in light beams
-- Storm-light contrast — dark clouds with a single break of golden raking light
-- Backlit silhouette + rim-light on dinosaur silhouettes against bright sky/water
-- Bioluminescent glow at dawn/dusk (firefly clouds, glowing fungi, lit moss)
+Light is a CHARACTER in every frame, but it does NOT mean every render is hazy. Pick ONE of two modes per render and commit to it:
 
-Light is a CHARACTER in every frame. Not just illumination — atmospheric architecture you can see THROUGH.`;
+MODE A — VOLUMETRIC (~40% of renders, when the scene calls for it):
+- God-rays / sun-shafts piercing dense canopy (cathedral-of-light through tree-fern tops)
+- Visible particulates in beams (dust motes, pollen, spore-cloud, insects backlit)
+- Mist columns rising from water at dawn
+- Rain-curtain blowing diagonally through golden backlight
+- Heavy humid-jungle haze diffusing distant silhouettes
+Use when: jungle understory, mist-canyon, dawn-fog, stormlight, backlit canopy.
 
-const WET_WORLD_BLOCK = `━━━ WET, REFLECTIVE WORLD ━━━
+MODE B — CRISP, CLEAR, RAY-TRACED (~60% of renders, the default):
+- Razor-sharp specular highlights on wet hide and water (Unreal Engine 5 PBR)
+- Crisp shadows with hard edges, full saturation, no haze diffusion
+- Mirror-flat water doubling sky / clouds / dinosaur in perfect reflection
+- Bright midday sun with chrome-bright wet-scale reflections
+- Post-rain CRYSTALLINE air (clearer than usual, every detail razor-sharp)
+- Storm-cleared aftermath with rainbow + still-wet-everything sparkle
+- Cold-blue arctic clarity with sharp mountain silhouettes
+- Dry-desert hard-light with stark shadows
+- Golden hour with crisp edges, no haze, just rich color
+Use when: open landscapes, water-reflection scenes, post-rain freshness, midday clarity, dramatic chiaroscuro contrast.
 
-The Mesozoic was HUMID. Water and wetness EVERYWHERE — incorporate at least one:
-- Rivers, swamps, ponds, tidal flats reflecting the dinosaurs and the sky above
-- Rain-slick mud-flats with footprint puddles holding the sky
-- Wet-glistening dinosaur scales / hide / feathers (post-bath, sweating, post-rain, after a kill)
-- Slick mossy rocks with hanging water-films
-- Dew-soaked mega-ferns dripping water
-- Mist-condensation beading on hide and on broad leaves
-- Splash-rings, ripples, wake-trails through water from a tail or footstep
-- Light reflecting off wet things — doubled, glittering, alive
+LIGHT STILL DOES THE WORK in MODE B — through specular highlights, reflections, shadow-architecture, color contrast — but the AIR IS CLEAR. Don't default to foggy. The world has bright crisp days too.`;
 
-Reflective surfaces double the visual richness — ground reflects sky, water reflects animals, wet hide catches the sun.`;
+const WET_WORLD_BLOCK = `━━━ WET, REFLECTIVE WORLD — UNREAL ENGINE 5 KILLED-IT QUALITY ━━━
 
-const LUSH_PRIMORDIAL_BLOCK = `━━━ LUSH PRIMORDIAL FOLIAGE — EXAGGERATED SCALE & DISTRIBUTED ━━━
+This is the MONEY-SHOT layer. Wetness and reflection are the bot's signature. Push every render toward Unreal Engine 5 cinematic raytracing — PBR materials, mirror reflections, sharp specular highlights, caustics in clear water.
 
-The plants are MASSIVE and EVERYWHERE in the frame. Mesozoic flora was bigger, denser, weirder than anything alive today. Foliage must appear at MULTIPLE depths, not just as a backdrop wall.
+Stack AT LEAST TWO of these per render (more if the setting allows):
 
-Plant variety (Jurassic AND Cretaceous-era flora welcome):
-- Mega-ferns the size of trees, frond-spans 6-10 meters across (tree-ferns, Cyathea, Dicksonia)
-- House-sized cycads with crown of palm-like fronds (Cycas, Bennettitales)
-- Towering horsetails (Equisetum) growing 15 meters tall like green spears
-- Conifers — Araucaria (monkey puzzle), Wollemia, Sequoia ancestors, ginkgo trees with fan-leaves
-- Tree-fern canopies forming cathedrals of green overhead
-- Vine-curtains and lianas draping from titanic conifers
-- Carpet-thick moss, liverwort, and ground-ferns across every surface — rocks, fallen logs, even branches
-- Cycad-and-fern thickets at understory dense as walls
-- Bennettitales (extinct cycadeoids) with showy cone-flowers
-- Cretaceous-era flowering plants where appropriate (early magnolias, water lilies, ginger-relatives)
-- Fallen-log microhabitats coated in fungi and moss
-- Forests stretching to vanishing point in atmospheric haze
+WATER REFLECTIONS (heavy emphasis):
+- Mirror-flat water doubling the dinosaur in perfect ray-traced reflection
+- Calm shallow lake reflecting sky-blue and gnarled trees, dinosaur silhouette mirrored upside-down
+- Rain-slick mud-flat with each footprint puddle holding a fragment of sky in clear reflection
+- Glassy lagoon at dawn, reflection so still it doubles the scene, ripples only where the dinosaur wades
+- Tannin-dark river surface with crisp reflection of overhead canopy
+- Polished travertine pool surface holding sky like glass
 
-DISTRIBUTION through the frame — non-negotiable:
-- FOREGROUND: at least one giant fern frond, draping vine, or moss-clad branch close to camera
-- LEFT/RIGHT EDGES: plants framing the shot (cycad silhouette, hanging vines, fern wall)
-- AROUND THE DINOSAUR: scattered ground ferns, fallen fronds disturbed by passage, broken horsetail stalks
-- MIDGROUND: tree-ferns and cycads at dinosaur scale
-- BACKGROUND: receding canopy + distant horsetail-spires fading into atmospheric haze
+WET HIDE / SPECULAR HIGHLIGHTS:
+- Rain-slick scaled hide catching CHROME-BRIGHT specular highlights (Unreal Engine PBR shader quality)
+- Post-bath sauropod with water sheeting off, every ridge of skin catching sunlight
+- Wet-glistening feathered raptor with droplets beading on individual feathers, each catching light
+- Slick mud-coated flank reflecting golden hour, mud-sheen as bright as polished bronze
+- Post-rain triceratops with frill running with water, individual drops gleaming
 
-The dinosaurs are wading or stomping through OVERWHELMING vegetation that surrounds them on all sides. The world feels OLDER, WILDER, MORE FERTILE than anything modern.`;
+WATER INTERACTION (active wetness):
+- Splash-corona around a wading dinosaur foot, droplets frozen mid-air catching backlight
+- Wake trail behind a swimming sauropod neck, each ripple catching light edge
+- Tail-slap sending up a sheet of water, each droplet a tiny lens
+- Drinking-dinosaur with concentric ripples expanding from its lips
+- Charging through shallows, water spraying outward in arcs
+
+CAUSTICS & SUBSURFACE:
+- Sun-caustics dancing on shallow lake bed beneath a wading dinosaur
+- Subsurface scattering on translucent jellyfish-flesh of water lilies
+- Wet leaf surfaces with rain-droplet lens-effects refracting sun
+- Rainbow-spectral light through waterfall-spray
+
+WET SURFACE TEXTURE:
+- Slick mossy rocks in rivers, water-film over emerald moss, polished-stone shine beneath
+- Dew-soaked mega-ferns with droplets refracting like beaded curtains
+- Wet bark on mile-high megatrees, gleaming after rain, individual rivulets visible
+- Rain-glistening canopy leaves with light bouncing back to camera
+
+This is THE LAYER that makes a render look "killed it" vs. flat. Wet, reflective, ray-traced, crisp specular — these are the words that pull Flux toward UE5 cinematic quality. Don't be subtle; demand the specular shine.`;
+
+const LUSH_PRIMORDIAL_BLOCK = `━━━ ABSOLUTELY UNHINGED PRIMORDIAL FOLIAGE — JUNGLE-DENSE ━━━
+
+The plants are MASSIVE, OVERGROWN, IMPOSSIBLE. This is a lost world overflowing with primordial vegetation, 66 million years before humans existed — pure Mesozoic ecosystem. You have FULL CREATIVE LICENSE to invent flora that doesn't exist. Make plants that make the viewer say "what IS that?"
+
+ABSOLUTE BAN: NO HUMANS, NO documentary-savanna, NO open ground, NO sparse cover, NO clean negative space. The dinosaur thrives in DENSE Mesozoic jungle.
+
+Push WAY past documentary restraint. Examples (use these as inspiration, invent your own):
+- Mile-high gnarled trees with twisting trunks the diameter of buildings, branches arching into living cathedrals
+- Megaferns spanning entire clearings, fronds the size of small islands
+- Cycads and tree-ferns the size of houses, with showy fluorescent cone-flowers
+- Towering horsetail-spires hundreds of meters tall, glowing at the joints
+- Vine-curtains hanging like waterfalls of green from impossible heights
+- Hanging mosses dripping water-films like luminous beaded curtains
+- Fungi the size of vehicles — bracket-fungi staircases climbing tree-trunks, mushroom canopies forming their own undergrowth
+- Bioluminescent plants pulsing slow at dawn and dusk, lighting up the understory
+- Trees with bark that ripples, weeps sap, glistens like obsidian
+- Strangler-vine networks knotting whole groves into single super-organisms
+- Rainbow flowering plants the size of cars erupting from canopy
+- Spiral-growing trees that twist like corkscrews, branches forking impossibly
+- Carnivorous mega-pitcher plants tall as elephants
+- Gnarled twisted ancient survivors, hollows large enough to walk through
+- Floating-spore plants releasing huge translucent seed-balloons
+
+DISTRIBUTION through the frame — non-negotiable, every render:
+- WIDE FRAMING is the default. The dinosaur is full-body visible at distance, in dense jungle context, NOT a close-up framed by leaves at the camera lens.
+- AROUND THE DINOSAUR: bigger-than-the-dinosaur trees, mega-fern groves, vine networks, hanging mosses — surrounding the dinosaur on all sides at midground distance
+- LEFT/RIGHT EDGES: mile-high tree silhouettes, cycad clusters, hanging vine-walls — framing the shot from the EDGES at midground/background distance (NOT inches from camera)
+- MIDGROUND: living-cathedral canopy structures, weird and wonderful plant-forms at dinosaur scale
+- BACKGROUND: layers of canopy and distant primordial terrain receding into atmospheric haze
+- OPTIONAL FOREGROUND: occasional fern frond or vine wisp at frame edge is OK for depth — but NEVER a massive close-up leaf dominating the foreground that pulls the framing tight. The lens stays WIDE; the jungle wraps around the dinosaur from every distance.
+
+The dinosaurs are smaller than the trees. The plants WIN this world — through density at every distance, NOT through close-up framing. The viewer sees a dinosaur THRIVING in dense Mesozoic jungle from a wide cinematic vantage. Give the viewer something they have never seen.`;
 
 const EPIC_SCALE_BLOCK = `━━━ EPIC SCALE — IMAX CINEMATIC ━━━
 
@@ -103,6 +199,47 @@ Compose every frame for IMAX-screen impact:
 - Scale anchors — small details (insects, lizards, birds, smaller dinosaurs) for size reference
 
 Avoid flat documentary framing. Avoid empty negative space. Every pixel earns its place. The viewer should feel TRANSPORTED.`;
+
+const VAST_TERRAIN_BLOCK = `━━━ VAST TERRAIN — THE LANDSCAPE IS BIGGER THAN LIFE ━━━
+
+The terrain itself is mythic. Nobody has ever seen this world. CREATIVE LICENSE encouraged — invent landforms that surprise. Stack at least one major terrain feature per render:
+
+- Vast canyons plunging into mist — bottomless, miles wide, dwarfing the dinosaurs walking the rim
+- Thousand-meter waterfalls thundering off cliff-edges, mist-curtains rising hundreds of meters
+- Sky-piercing mountain ranges in the background — jagged peaks higher than the Himalayas
+- Mesa-and-spire towers like Monument Valley × 10, eroded into impossible shapes
+- Ravines carved by primordial rivers, walls layered in rust-orange + ochre + chalk-white strata
+- Glacial valleys with sheer ice-walls, crevasses glowing turquoise from within
+- Volcanic chains with smoking cones marching to the horizon, lava-rivers visible in the dark
+- Coastal sea-cliffs hundreds of meters tall, waves shattering at the base far below
+- Inland sea bays with limestone arches and stacks rising from blue water
+- Salt-flat plains stretching to vanishing point with mineral-blue sky and distant rain-curtains
+- Karst-tower forests (limestone megaspires) covered in jungle, rising out of mist
+- Lava-tube cave networks with bioluminescent ceilings, scale visible only by glow
+
+The TERRAIN is a co-star. It dwarfs everything in it. Skull Island × Pandora × Land of the Lost × Avatar-floating-mountains energy. Make the viewer's jaw drop at the WORLD, not just the animals.`;
+
+const SURPRISING_WEATHER_BLOCK = `━━━ SURPRISING WEATHER — BIBLICAL SCALE ━━━
+
+Weather is dramatic and bigger-than-life. Stack atmospheric drama at world-scale, not local:
+
+- Mile-wide rain-walls visibly approaching across a plain, sun on one side, dark on the other
+- Supercell thunderheads with their own internal weather (cloud-stair structure, anvil-spread, sub-storm rotation)
+- Lightning striking miles away, illuminating an entire valley for one frame
+- Aurora-bands rippling across a daytime sky (impossible but THIS world allows it)
+- Double rainbows arching over a herd, prismatic
+- Sun-pillars / parhelion / sun-dogs visible in cold air
+- Pyrocumulus cloud rising from a distant volcano, lit from below by lava
+- Mist-rivers flowing through a canyon system, dinosaurs wading through them
+- Hail-storm at edge of frame, ice-stones bouncing off broad megaleaves
+- Snow-squall slicing across a valley, half-visible dinosaur silhouettes
+- Tornado on the horizon, dust-funnel kissing a primordial plain
+- Sand-storm wall sweeping across desert, herd silhouetted in front
+- Comet visible in the daytime sky (Cretaceous-extinction omen energy)
+- Rare cloud formations — lenticular clouds capping mountains, undulatus asperitas wave-clouds
+- Sheet-lightning lighting up the whole sky cyclically (impossible storm)
+
+The weather is a CHARACTER. Don't settle for "cloudy" — give us weather we've never seen happen on Earth.`;
 
 const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ IMPOSSIBLE BEAUTY — PALEO EDITION ━━━
 
@@ -126,6 +263,8 @@ module.exports = {
   WET_WORLD_BLOCK,
   LUSH_PRIMORDIAL_BLOCK,
   EPIC_SCALE_BLOCK,
+  VAST_TERRAIN_BLOCK,
+  SURPRISING_WEATHER_BLOCK,
   IMPOSSIBLE_BEAUTY_BLOCK,
   BLOW_IT_UP_BLOCK,
 };

@@ -4,63 +4,75 @@ generatePool({
   outPath: 'scripts/bots/dinobot/seeds/prehistoric_atmospheres.json',
   total: 200,
   batch: 50,
-  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for DinoBot — humid, primordial, layered atmosphere with VISIBLE depth. Each entry is 12-22 words and describes a specific atmospheric element FILLING THE FRAME.
+  metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC DETAIL descriptions for DinoBot — Unreal Engine 5 cinematic paleoart. Each entry is 12-22 words and describes a specific atmospheric or surface element in the frame.
 
-━━━ NON-NEGOTIABLE — ATMOSPHERE IS VISIBLE & MULTI-LAYERED ━━━
-Every entry must describe atmosphere that the camera SEES — not invisible humidity, but visible vapor, dust, pollen, mist, particulates, sheet-rain, light-shaped fog. Multi-distance preferred (foreground particulates + midground volume + background haze).
+━━━ NON-NEGOTIABLE — REBALANCE: NOT EVERYTHING IS FOGGY ━━━
+Distribute entries across these proportions to fix over-foggy renders:
+- ~30% volumetric/foggy (dust, mist, pollen, steam, sheet-rain)
+- ~70% CRISP / CLEAR / WET / REFLECTIVE (post-rain freshness, specular reflections, raytraced caustics, mirror-water, dramatic shadow architecture, dry contrast, raindrop-specular)
 
 ━━━ CATEGORIES ━━━
 
-JUNGLE / FOREST HUMIDITY (heavy emphasis):
-- Steam columns rising from forest floor at dawn, individual vapor strands visible against backlit canopy
-- Heavy humidity haze diffusing tree-fern silhouettes into milky middle-distance softness
-- Pollen drift through golden-hour shafts, individual grains catching light like particles
-- Spore-cloud from burst fungus, lit by raking sidelight, drifting through fern understory
-- Mist condensing on broad cycad leaves, droplets catching light like beads
+WET-AND-REFLECTIVE (heavy emphasis — 35%+):
+- Mirror-flat lake reflecting dinosaur silhouette in perfect ray-traced doubling
+- Rain-slick mud-flat with each footprint puddle holding a fragment of sky
+- Splash-corona around a wading dinosaur foot, droplets frozen mid-air catching backlight
+- Wet-glistening hide with chrome-bright specular highlights post-rain
+- Glassy lagoon at dawn with reflection so still it doubles the scene
+- Sun-caustics dancing on shallow lake bed beneath a wading dinosaur
+- Wake trail behind swimming sauropod, each ripple catching light edge
+- Polished-stone-river-rocks with water-film and mirror sheen
+- Rain-droplet lenses on broad megaleaves refracting sunlight
+- Wet bark on a mile-high tree gleaming after rain, rivulets visible
 
-WATER / WET ATMOSPHERE:
-- Spray plume from a tail-slap into shallows, droplets backlit, ripples spreading outward in sky-mirror water
-- Sheet-rain blowing diagonally through a clearing, individual drops catching golden backlight
-- Waterfall mist curtain rising as a wall of vapor, prismatic rainbow forming in the spray
-- Lake-surface fog rolling outward at sunrise, dinosaur silhouettes wading into it
-- Post-rain steam rising from sun-warmed mud, the air feeling heavy and tropical
+POST-WEATHER CRISP CLARITY (15%+):
+- Just-after-rain crystalline air, every detail razor-sharp, water dripping from foliage
+- Storm-cleared aftermath with rainbow arc and still-wet everything sparkling
+- Post-shower clear-edged sunlight, no haze, every leaf gleaming
+- Cold-front-passed crisp air with razor-sharp distant peaks
+- Rain-cleared sky with shafts of sunlight breaking through retreating clouds
 
-DUST / EARTH PARTICULATES:
-- Dust-cloud kicked by a herd's stampede, individual pillars rising hundreds of feet, lit warm-orange
-- Footfall dust-puff drifting backward from a single dinosaur stride, lit by raking dawn light
-- Pollen-yellow haze from massive cycad-coning event, the air thick with reproductive dust
-- Wind-blown sand veiling a desert horizon, primordial dunes fading into ochre infinity
+CRISP SPECULAR DETAIL (10%+):
+- Bright midday hard-light shadows with chrome-bright specular on wet scales
+- Dry-desert raking sunlight with razor-sharp shadow architecture
+- Cold-blue arctic clarity with sharp mountain silhouettes
+- Golden-hour with crisp edges and rich color saturation, no haze diffusion
+- Dramatic chiaroscuro storm-light through a single cloud-break, rest of frame stark
 
-VOLCANIC / GEOTHERMAL:
-- Sulfur-yellow steam venting from a fumarole, visible columns rising into a slate-grey sky
-- Ash-fall drifting like grey snow, settling on dinosaur backs and broad fern-fronds
-- Heat-shimmer rising from cooled lava-flow, distorting the dinosaur silhouettes beyond it
-- Pyroclastic-cloud wall on the horizon, tiny figures fleeing across a foreground plain
+DRAMATIC WEATHER (15%+):
+- Mile-wide rain-wall approaching across a plain, sun on one side, dark on the other
+- Lightning fork freezing motion, briefly revealing herd in stark blue-white
+- Aurora curtains across daytime sky (creative license — this world allows it)
+- Double rainbow arching over a herd, prismatic
+- Pyrocumulus rising from distant volcano, lit from below by lava
 
-LIVING ATMOSPHERE (insects/seeds):
-- Cloud of giant dragonflies catching low-angle sun, wings flashing iridescent against fern-green
-- Drifting seed-fluff (early angiosperm) floating like snow through a still understory
+VOLUMETRIC / FOGGY (only ~30% — DON'T overdo this):
+- Dust-cloud kicked by herd stampede, individual pillars rising hundreds of feet
+- Steam columns rising from forest floor at dawn, vapor strands backlit
+- Pollen drift through golden-hour shafts catching light like particles
+- Rolling mist filling a canyon floor at sunrise
+- Light cathedral god-rays piercing dense canopy with visible beams
+
+ACTIVE WET INTERACTION:
+- Tail-slap sending up sheet of water, each droplet a tiny lens
+- Charging dinosaur sending water arcing outward in spray
+- Drinking dinosaur with concentric ripples expanding from its lips
+- Tail dragging behind a swimming sauropod, V-wake doubled in mirror water
+
+LIVING ATMOSPHERE (sparingly):
+- Cloud of giant dragonflies with iridescent wing-flash against fern-green
+- Drifting seed-fluff floating like snow through still understory
 - Firefly swarm at dusk speckling the air, sleeping sauropod silhouetted within
-- Mosquito-swarm pillar over a bog, lit golden against shadowed tree line
-
-WEATHER DRAMA:
-- Storm cell on the horizon trailing dark rain-curtains, light breaking through one crack
-- Lightning-fork freezing for one frame, briefly revealing a herd in stark blue-white
-- Hail-shower at edge of frame, individual stones bouncing off broad leaves
-- Heavy rain sheeting across a clearing, the world reduced to grey verticals and a single dinosaur
-
-ATMOSPHERIC PERSPECTIVE:
-- Distant mountains fading into milky blue layers receding to vanishing point
-- Forest receding into atmospheric haze, color desaturating with each layer of distance
-- Multiple cloud levels at different altitudes, near-clouds dark, far-clouds light
 
 ━━━ EVERY ENTRY MUST INCLUDE ━━━
-- A visible particulate or vapor element (mist, steam, pollen, dust, ash, spore, droplet, smoke)
-- Either light interaction (backlit / sidelit / shafted) OR multi-distance depth language
-- Specific texture descriptor (sheet, curtain, column, drift, swirl, plume, halo)
+- A specific visual element (mirror reflection / chrome specular / sharp shadow / particulate / weather phenomenon / wet detail)
+- A texture or material descriptor (mirror-flat / chrome-bright / razor-sharp / rain-slick / glassy / crisp / specular / matte / etc.)
+
+━━━ PRIORITIZE ━━━
+Reflections, specular highlights, wet textures, raytraced clarity OVER fog and haze. Foggy/misty entries should feel like DELIBERATE atmospheric choices, not the default.
 
 ━━━ DEDUP DIMENSIONS ━━━
-Deduplicate by: particulate type + behavior (rising/falling/drifting/streaming) + light interaction.
+Deduplicate by: element type + texture descriptor + interaction (with light, with water, with subject).
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

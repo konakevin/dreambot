@@ -11,16 +11,16 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const detail = picker.pickWithRecency(pools.MICRO_DETAILS, 'micro_detail');
   const species = picker.pickWithRecency(pools.DINO_SPECIES, 'micro_species');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are a macro wildlife photographer writing EXTREME CLOSE-UP scenes for DinoBot. The intimate details of dinosaur anatomy — the texture of a scale, the iris of an eye, the barb of a feather, the serration of a tooth, the callus of a foot. Macro lens, shallow depth of field, the animal fills the entire frame. Output wraps with style prefix + suffix.
 
+${blocks.NO_HUMANS_BLOCK}
+
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
 ${blocks.SPECIES_ACCURATE_BLOCK}
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.ENVIRONMENT_STORYTELLING_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
@@ -51,7 +51,14 @@ ${blocks.LUSH_PRIMORDIAL_BLOCK}
 
 ${blocks.EPIC_SCALE_BLOCK}
 
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}

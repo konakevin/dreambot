@@ -11,18 +11,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.EXTINCTION_SCENES, 'extinction_scene');
   const species = picker.pickWithRecency(pools.DINO_SPECIES, 'extinction_species');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are an apocalyptic nature documentary cinematographer writing EXTINCTION EVENT scenes for DinoBot. The asteroid has struck or is about to. The final chapter of the Mesozoic — firestorms on the horizon, darkened skies, the last dinosaurs in a dying world. Epic tragedy. Beautiful devastation. The end of an era. Output wraps with style prefix + suffix.
+
+${blocks.NO_HUMANS_BLOCK}
 
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
 ${blocks.SPECIES_ACCURATE_BLOCK}
 
 ${blocks.NO_GORE_BLOCK}
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
 
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
@@ -48,12 +48,16 @@ ${sharedDNA.colorPalette}
 ${blocks.VOLUMETRIC_LIGHT_BLOCK}
 
 ${blocks.WET_WORLD_BLOCK}
-
-${blocks.LUSH_PRIMORDIAL_BLOCK}
-
 ${blocks.EPIC_SCALE_BLOCK}
 
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}

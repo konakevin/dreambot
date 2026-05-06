@@ -10,12 +10,10 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are an IMAX nature documentary cinematographer writing ANCIENT WORLD VISTA scenes for DinoBot. The prehistoric world itself is the subject — lush, alive, breathtaking, alien in its beauty. This Earth looks nothing like ours. Distant dinosaur silhouettes for scale only. Output wraps with style prefix + suffix.
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
 
 ${blocks.ENVIRONMENT_STORYTELLING_BLOCK}
@@ -40,12 +38,16 @@ ${sharedDNA.colorPalette}
 ${blocks.VOLUMETRIC_LIGHT_BLOCK}
 
 ${blocks.WET_WORLD_BLOCK}
-
-${blocks.LUSH_PRIMORDIAL_BLOCK}
-
 ${blocks.EPIC_SCALE_BLOCK}
 
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}

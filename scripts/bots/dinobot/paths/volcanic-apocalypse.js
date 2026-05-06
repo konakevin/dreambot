@@ -11,18 +11,18 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.VOLCANIC_SCENES, 'volcanic_scene');
   const species = picker.pickWithRecency(pools.DINO_SPECIES, 'volcanic_species');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are a disaster-documentary cinematographer writing VOLCANIC APOCALYPSE scenes for DinoBot. Dinosaurs amid volcanic eruptions — lava rivers, ash-darkened skies, glowing pyroclastic flows, fleeing herds silhouetted against fire. The raw power of a volcanic Earth meeting the animals that lived on it. Dramatic and awe-inspiring, not gory. Output wraps with style prefix + suffix.
+
+${blocks.NO_HUMANS_BLOCK}
 
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
 ${blocks.SPECIES_ACCURATE_BLOCK}
 
 ${blocks.NO_GORE_BLOCK}
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 
 ━━━ THE DINOSAUR ━━━
@@ -46,12 +46,16 @@ ${sharedDNA.colorPalette}
 ${blocks.VOLUMETRIC_LIGHT_BLOCK}
 
 ${blocks.WET_WORLD_BLOCK}
-
-${blocks.LUSH_PRIMORDIAL_BLOCK}
-
 ${blocks.EPIC_SCALE_BLOCK}
 
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}

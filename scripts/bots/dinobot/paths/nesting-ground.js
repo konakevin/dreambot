@@ -10,16 +10,16 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const nest = picker.pickWithRecency(pools.NESTING_SCENES, 'nesting_scene');
   const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
   const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
 
   return `You are a wildlife documentary cinematographer writing NESTING GROUND scenes for DinoBot. The full spectrum of dinosaur family life — not just eggs in a nest. Parents teaching juveniles to forage, hatchlings adventuring away from the nest, siblings play-fighting, family groups migrating together, parents defending young from threats, juveniles discovering water for the first time, communal nurseries with multiple families. These are ANIMALS with complex family behavior, not just egg-sitters. Output wraps with style prefix + suffix.
 
+${blocks.NO_HUMANS_BLOCK}
+
 ${blocks.DINOSAUR_IS_HERO_BLOCK}
 
 ${blocks.SPECIES_ACCURATE_BLOCK}
-
-${blocks.NO_HUMANS_BLOCK}
-
 ${blocks.DOCUMENTARY_CAMERA_BLOCK}
 
 ${blocks.ENVIRONMENT_STORYTELLING_BLOCK}
@@ -52,7 +52,14 @@ ${blocks.LUSH_PRIMORDIAL_BLOCK}
 
 ${blocks.EPIC_SCALE_BLOCK}
 
+${blocks.VAST_TERRAIN_BLOCK}
+
+${blocks.SURPRISING_WEATHER_BLOCK}
+
 ${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ CAMERA / FRAMING ━━━
+${camera}
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
