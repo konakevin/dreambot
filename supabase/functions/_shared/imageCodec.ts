@@ -53,10 +53,14 @@ export function detectImageFormat(buf: ArrayBuffer | Uint8Array): ImageFormat {
 }
 
 export async function decodeImage(buf: ArrayBuffer | Uint8Array): Promise<DecodedImage> {
-  const ab =
+  // Normalize to a plain ArrayBuffer (Deno's strict typings reject the
+  // implicit `ArrayBuffer | SharedArrayBuffer` union from `.buffer.slice()`).
+  // We never use SharedArrayBuffer at runtime, so the cast is sound.
+  const ab = (
     buf instanceof Uint8Array
       ? buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)
-      : buf;
+      : buf
+  ) as ArrayBuffer;
   const fmt = detectImageFormat(ab);
 
   if (fmt === 'jpeg') {
@@ -70,7 +74,7 @@ export async function decodeImage(buf: ArrayBuffer | Uint8Array): Promise<Decode
 
   if (fmt === 'webp') {
     // @jsquash/webp returns ImageData with Uint8ClampedArray RGBA
-    const imageData = await decodeWebpLib(new Uint8Array(ab));
+    const imageData = await decodeWebpLib(new Uint8Array(ab) as Uint8Array<ArrayBuffer>);
     return {
       data: new Uint8Array(
         imageData.data.buffer,
@@ -115,14 +119,16 @@ export async function encodeWebp(
   image: { data: Uint8Array; width: number; height: number },
   quality = 95
 ): Promise<Uint8Array> {
-  // @jsquash/webp expects ImageData-shaped input
+  // @jsquash/webp expects ImageData-shaped input. Deno's strict ImageData
+  // typing also requires `pixelFormat`, but jsquash doesn't read it — pass
+  // a plain shape and cast through unknown to satisfy the strict type.
   const imageData = {
     data: new Uint8ClampedArray(image.data.buffer, image.data.byteOffset, image.data.byteLength),
     width: image.width,
     height: image.height,
     colorSpace: 'srgb' as const,
   };
-  const ab = await encodeWebpLib(imageData, { quality });
+  const ab = await encodeWebpLib(imageData as unknown as ImageData, { quality });
   return new Uint8Array(ab);
 }
 
