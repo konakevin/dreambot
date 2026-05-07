@@ -1161,7 +1161,7 @@ Output ONLY the prompt.`;
         }
         outBuf = await fetchResp.arrayBuffer();
         try {
-          outPhash = await aHashHex(outBuf);
+          outPhash = aHashHex(outBuf);
         } catch (e) {
           console.warn(`[dup-detect] aHash failed: ${(e as Error).message}`);
           break;
