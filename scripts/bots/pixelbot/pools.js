@@ -1,6 +1,10 @@
 /**
- * PixelBot — axis pools. All Sonnet-seeded 50-entry pools.
- * Regenerate: node scripts/gen-seeds/pixelbot/gen-<name>.js
+ * PixelBot — axis pools. 8 gaming-genre paths, each with its own
+ * SCENE + LIGHTING + ATMOSPHERE pool. PERSPECTIVE / PALETTE / VIBE-COLOR
+ * stay shared across paths (they're camera/grade decisions).
+ *
+ * Regenerate per-path pools: node scripts/gen-seeds/pixelbot/gen-<name>-<axis>.js
+ * Regenerate shared pools:   node scripts/gen-seeds/pixelbot/gen-pixel-perspectives.js (etc.)
  */
 
 const fs = require('fs');
@@ -30,33 +34,45 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
-  // Legacy monolithic (still used by pixel-action + pixel-character-moment)
-  PIXEL_CHARACTERS: load('pixel_characters'),
-  PIXEL_ACTION_MOMENTS: load('pixel_action_moments'),
-  PIXEL_ENVIRONMENTS: load('pixel_environments'),
+  // Per-path scene pools
+  COZY_RPG_TOWN_SCENES: load('cozy_rpg_town_scenes'),
+  DUNGEON_DEPTH_SCENES: load('dungeon_depth_scenes'),
+  SIDE_SCROLLER_SCENES: load('side_scroller_scenes'),
+  BOSS_ARENA_SCENES: load('boss_arena_scenes'),
+  JRPG_DREAMSCAPE_SCENES: load('jrpg_dreamscape_scenes'),
+  PIXEL_HORROR_SCENES: load('pixel_horror_scenes'),
+  COZY_FARMING_SCENES: load('cozy_farming_scenes'),
+  PIXEL_SCI_FI_ACTION_SCENES: load('pixel_sci_fi_action_scenes'),
+  CLASSIC_JRPG_SCENES: load('classic_jrpg_scenes'),
+  EPIC_VISTA_SCENES: load('epic_vista_scenes'),
 
-  // Decomposed axis pools
-  PIXEL_ERAS: load('pixel_eras'),
-  PIXEL_PRETTY_SETTINGS: load('pixel_pretty_settings'),
-  PIXEL_PRETTY_ELEMENTS: load('pixel_pretty_elements'),
-  PIXEL_FANTASY_SETTINGS: load('pixel_fantasy_settings'),
-  PIXEL_FANTASY_BEINGS: load('pixel_fantasy_beings'),
-  PIXEL_COZY_ROOMS: load('pixel_cozy_rooms'),
-  PIXEL_COZY_DETAILS: load('pixel_cozy_details'),
-  PIXEL_SCIFI_SETTINGS: load('pixel_scifi_settings'),
-  PIXEL_SCIFI_ELEMENTS: load('pixel_scifi_elements'),
-  PIXEL_COTTAGE_SETTINGS: load('pixel_cottage_settings'),
-  PIXEL_COTTAGE_DETAILS: load('pixel_cottage_details'),
-  PIXEL_TOWN_SETTINGS: load('pixel_town_settings'),
-  PIXEL_TOWN_ACTIVITY: load('pixel_town_activity'),
-  PIXEL_HORROR_SETTINGS: load('pixel_horror_settings'),
-  PIXEL_HORROR_DREAD: load('pixel_horror_dread'),
+  // Per-path lighting pools
+  COZY_RPG_TOWN_LIGHTING: load('cozy_rpg_town_lighting'),
+  DUNGEON_DEPTH_LIGHTING: load('dungeon_depth_lighting'),
+  SIDE_SCROLLER_LIGHTING: load('side_scroller_lighting'),
+  BOSS_ARENA_LIGHTING: load('boss_arena_lighting'),
+  JRPG_DREAMSCAPE_LIGHTING: load('jrpg_dreamscape_lighting'),
+  PIXEL_HORROR_LIGHTING: load('pixel_horror_lighting'),
+  COZY_FARMING_LIGHTING: load('cozy_farming_lighting'),
+  PIXEL_SCI_FI_ACTION_LIGHTING: load('pixel_sci_fi_action_lighting'),
+  CLASSIC_JRPG_LIGHTING: load('classic_jrpg_lighting'),
+  EPIC_VISTA_LIGHTING: load('epic_vista_lighting'),
 
-  // Shared across all paths
+  // Per-path atmosphere pools
+  COZY_RPG_TOWN_ATMOSPHERE: load('cozy_rpg_town_atmosphere'),
+  DUNGEON_DEPTH_ATMOSPHERE: load('dungeon_depth_atmosphere'),
+  SIDE_SCROLLER_ATMOSPHERE: load('side_scroller_atmosphere'),
+  BOSS_ARENA_ATMOSPHERE: load('boss_arena_atmosphere'),
+  JRPG_DREAMSCAPE_ATMOSPHERE: load('jrpg_dreamscape_atmosphere'),
+  PIXEL_HORROR_ATMOSPHERE: load('pixel_horror_atmosphere'),
+  COZY_FARMING_ATMOSPHERE: load('cozy_farming_atmosphere'),
+  PIXEL_SCI_FI_ACTION_ATMOSPHERE: load('pixel_sci_fi_action_atmosphere'),
+  CLASSIC_JRPG_ATMOSPHERE: load('classic_jrpg_atmosphere'),
+  EPIC_VISTA_ATMOSPHERE: load('epic_vista_atmosphere'),
+
+  // Shared across all paths (camera/grade)
   PIXEL_PERSPECTIVES: load('pixel_perspectives'),
-  PIXEL_LIGHTING: load('pixel_lighting'),
   SCENE_PALETTES: load('scene_palettes'),
-  ATMOSPHERES: load('atmospheres'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {
