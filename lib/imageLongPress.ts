@@ -19,7 +19,11 @@ async function saveToPhotos(id: string, imageUrl: string) {
     const rawExt = (urlMatch?.[1] ?? '').toLowerCase();
     const ext = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'gif'].includes(rawExt) ? rawExt : 'jpg';
 
+    // Clear stale cache file from a prior save attempt — downloadFileAsync
+    // throws "Destination already exists" instead of overwriting.
     const dest = new File(Paths.cache, `${id}.${ext}`);
+    if (dest.exists) dest.delete();
+
     const downloaded = await File.downloadFileAsync(imageUrl, dest);
 
     // iOS PHPhotoLibrary rejects WebP outright. Convert webp→PNG before
