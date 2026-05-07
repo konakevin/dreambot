@@ -19,7 +19,7 @@ module.exports = ({ sharedDNA, vibeDirective, vibeKey, picker }) => {
   const wildlife = picker.pickWithRecency(pools.VILLAGE_WILDLIFE, 'village_wildlife');
   const forestDetail = picker.pickWithRecency(pools.VILLAGE_FOREST_DETAIL, 'village_forest_detail');
 
-  return `You are writing ONE Flux prompt for an enchanted fae-village painting. Output ONLY the prompt — comma-separated phrases, 70-95 words, no preamble, no headers.
+  return `You are writing ONE Flux prompt for an enchanted fae-village painting. Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt, BEFORE setting/lighting/anything else.
@@ -53,10 +53,10 @@ ${forestDetail}
 
 Weave this rich forest texture into the scene. EXPLOSIVE FOREGROUND wildflowers, OVERHANGING BRANCHES drooping from frame edges, dense painted midground, atmospheric haze background — the forest must feel PACKED with painted detail at every distance.
 
-━━━ 4. WILDLIFE + LIVED-IN ━━━
+━━━ 4. WILDLIFE + LIVED-IN (NON-NEGOTIABLE — render the SCENE BUZZING WITH LIFE) ━━━
 ${wildlife}
 
-Weave these wildlife and lived-in details into the scene. The village is INHABITED — small creatures and tiny life-signs animate the painting at varied distances.
+This wildlife description is NON-NEGOTIABLE. The village is BUZZING WITH VISIBLE CRITTER ACTIVITY — hummingbirds darting at flowers, butterflies clustered on blossoms, squirrels balancing on railings, chipmunks scampering on paths, baby rabbits in clover, songbirds on beams, fireflies drifting. Every critter and action mentioned above MUST appear in your final prompt — DO NOT compress, summarize, or drop critters. Preserve the specific counts, species, and actions exactly. The scene must FEEL ALIVE — Studio Ghibli forest density, Cinderella's woodland helpers, Snow White's animal companions.
 
 ━━━ 4. PAINTED-FANTASY LINEAGE (NON-NEGOTIABLE CLOSING) ━━━
 Greg Manchess + Donato Giancola + Paul Bonner + NC Wyeth + Brian Froud + Eyvind Earle painted-fantasy lineage. VISIBLE THICK BRUSH STROKES on every surface — bark, foliage, rocks, water, dwelling walls, thatched roofs. Edges PAINTED (one color stops, another begins, with a soft painted seam). NEVER black ink outlines, NEVER vector borders, NEVER animation-cel contour, NEVER 3D-CGI plastic look. Saturated deep forest greens, warm umber bark-tones, mossy roof greens, glowing amber window-light, muted blue-grey atmospheric distance. Painted brushwork.
