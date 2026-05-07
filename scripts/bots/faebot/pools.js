@@ -30,5 +30,8 @@ module.exports = {
   FAIRY_COURT: load('fairy_court'),
   ENCHANTED_VISTA: load('enchanted_vista'),
   FAE_VILLAGES: load('fae_villages'),
+  VILLAGE_LIGHTING: load('village_lighting'),
+  VILLAGE_WILDLIFE: load('village_wildlife'),
+  VILLAGE_FOREST_DETAIL: load('village_forest_detail'),
   VIBE_COLOR,
 };
