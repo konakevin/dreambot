@@ -1,10 +1,20 @@
 /**
- * BloomBot — the bot-engine contract.
+ * BloomBot — full rewrite 2026-05-06 (branch: bloombot-from-scratch).
  *
- * Character: scene-centric bot. Flowers are the hero of every render.
- * No character DNA, no solo-composition rule. 6 paths spanning
- * dramatic-landscape / macro-closeup / cottagecore-interior /
- * walkable-garden / cosmic-alien / dreamscape-earthly-surreal.
+ * Compositional architecture, not big-pool architecture:
+ *   palette (40 hand-authored)  + region (10 rotation, flora roster)
+ *   + lighting (30 hand-authored) + per-path scene (hardcoded in builder)
+ *   = the brief's color/species/light/scene DNA.
+ *
+ * Locked: medium = bloom_hyperreal_cgi (the "turtle" aesthetic),
+ *         vibe   = cinematic only,
+ *         model  = flux-1.1-pro only.
+ *
+ * Why locked: prior version's vibe rotation, medium overrides, and big
+ * pool generators were the drift surfaces. Removing them.
+ *
+ * Adding a path: drop a builder in paths/, add to pathBuilders + paths +
+ * pathWeights + sensoryAnchors.pathContext.
  */
 
 const pools = require('./pools');
@@ -15,121 +25,103 @@ const pathBuilders = {
   closeup: require('./paths/closeup'),
   cozy: require('./paths/cozy'),
   'garden-walk': require('./paths/garden-walk'),
-  cosmic: require('./paths/cosmic'),
   dreamscape: require('./paths/dreamscape'),
   conservatory: require('./paths/conservatory'),
   'tropical-paradise': require('./paths/tropical-paradise'),
   'city-flowers': require('./paths/city-flowers'),
   reclaim: require('./paths/reclaim'),
-  'space-bloom': require('./paths/space-bloom'),
 };
 
 module.exports = {
   username: 'bloombot',
   displayName: 'BloomBot',
 
-  // Multi-medium with photography weighted 3x (matches old config)
-  mediums: ['photography', 'canvas', 'watercolor', 'pencil', 'illustration', 'render', 'animation', 'anime', 'storybook', 'fairytale'],
+  mediums: ['bloom_hyperreal_cgi'],
 
-  // conservatory path locks to custom bot-only bloom_conservatory medium
-  mediumByPath: {
-    conservatory: 'bloom_conservatory',
-  },
-
-  promptPrefixByMedium: {
-    bloom_conservatory:
-      'botanical conservatory interior, glass-and-iron greenhouse architecture, impossibly lush floral density',
-  },
-  promptSuffixByMedium: {
-    bloom_conservatory:
-      'no text, no words, no watermarks, hyper detailed, masterpiece quality',
-  },
-
-  mediumStyles: {
-    bloom_conservatory:
-      'botanical conservatory — glass panes, iron framework, arched architecture, flowers overflowing through structure',
+  useModelPicker: true,
+  allowedModels: ['black-forest-labs/flux-1.1-pro'],
+  modelByPath: {
+    landscape: { 'black-forest-labs/flux-1.1-pro': 100 },
+    closeup: { 'black-forest-labs/flux-1.1-pro': 100 },
+    cozy: { 'black-forest-labs/flux-1.1-pro': 100 },
+    'garden-walk': { 'black-forest-labs/flux-1.1-pro': 100 },
+    dreamscape: { 'black-forest-labs/flux-1.1-pro': 100 },
+    conservatory: { 'black-forest-labs/flux-1.1-pro': 100 },
+    'tropical-paradise': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'city-flowers': { 'black-forest-labs/flux-1.1-pro': 100 },
+    reclaim: { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // Allowed vibes — inverted excludeVibes ['dark', 'fierce', 'minimal', 'macabre']
-  vibes: [
-    'cinematic',
+  vibes: ['cinematic'],
+
+  paths: [
+    'landscape',
+    'closeup',
     'cozy',
-    'epic',
-    'nostalgic',
-    'psychedelic',
-    'peaceful',
-    'whimsical',
-    'ethereal',
-    'arcane',
-    'ancient',
-    'enchanted',
-    'coquette',
-    'voltage',
-    'nightshade',
-    'shimmer',
-    'surreal',
+    'garden-walk',
+    'dreamscape',
+    'conservatory',
+    'tropical-paradise',
+    'city-flowers',
+    'reclaim',
   ],
-
-  paths: ['landscape', 'closeup', 'cozy', 'garden-walk', 'cosmic', 'dreamscape', 'conservatory', 'tropical-paradise', 'city-flowers', 'reclaim', 'space-bloom'],
-
-  // 50/50 flux-dev / flux-1.1-pro rotation on all paths
-  modelByPath: {
-    landscape: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    closeup: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    cozy: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'garden-walk': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    cosmic: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    dreamscape: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    conservatory: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'tropical-paradise': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'city-flowers': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    reclaim: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'space-bloom': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-  },
 
   pathWeights: {
     landscape: 2,
     closeup: 1,
     cozy: 1,
-    'garden-walk': 1,
-    cosmic: 2,
+    'garden-walk': 2,
     dreamscape: 1,
     conservatory: 2,
     'tropical-paradise': 2,
     'city-flowers': 1,
     reclaim: 1,
-    'space-bloom': 2,
   },
 
-  // Scene-centric bot — sharedDNA is minimal (just palette + color)
-  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['landscape','cozy','garden-walk','cosmic','dreamscape','conservatory','tropical-paradise','city-flowers','reclaim','space-bloom'] },
-  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { closeup: '80-110' }, preservePhrasesByPath: {} },
+  chaos: {
+    enabled: true,
+    skipPaths: [],
+    allowSubjectChaosPaths: [
+      'landscape', 'cozy', 'garden-walk', 'dreamscape',
+      'conservatory', 'tropical-paradise', 'city-flowers', 'reclaim',
+    ],
+  },
+
+  twoPassPolish: {
+    enabled: true,
+    conceptWords: 150,
+    polishedWords: '70-100',
+    polishedWordsByPath: {
+      closeup: '85-115',
+    },
+  },
+
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
-      closeup: 'bloom', conservatory: 'bloom',
-      landscape: 'scene', cozy: 'scene', 'garden-walk': 'scene', cosmic: 'scene',
-      dreamscape: 'scene', 'tropical-paradise': 'scene', 'city-flowers': 'scene',
-      reclaim: 'scene', 'space-bloom': 'scene',
+      landscape: 'scene', closeup: 'scene', cozy: 'scene',
+      'garden-walk': 'scene', dreamscape: 'scene',
+      conservatory: 'scene', 'tropical-paradise': 'scene',
+      'city-flowers': 'scene', reclaim: 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
-  rollSharedDNA({ vibeKey, picker }) {
+  rollSharedDNA({ picker }) {
     return {
-      scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
-      colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
+      palette: picker.pickWithRecency(pools.PALETTES, 'palette'),
+      lighting: picker.pickWithRecency(pools.LIGHTING, 'lighting'),
     };
   },
 
-  buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
+  buildBrief({ path, sharedDNA, vibeDirective, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`BloomBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    return builder({ sharedDNA, vibeDirective, picker });
   },
 
   caption({ path }) {

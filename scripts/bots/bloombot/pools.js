@@ -1,7 +1,9 @@
 /**
- * BloomBot — axis pools. All Sonnet-seeded 50-entry pools.
+ * BloomBot pools — small + load-bearing.
  *
- * Regenerate:  node scripts/gen-seeds/bloombot/gen-<name>.js
+ * Two hand-authored pools (palettes + lighting) plus one Sonnet-generated
+ * sensory pool. Regional flora roster lives in species-roster.js as a JS
+ * module rather than JSON because it's keyed lookup, not random pick.
  */
 
 const fs = require('fs');
@@ -11,51 +13,12 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
-// VIBE_COLOR — secondary lighting palette keyed to vibe (inline, not rolled).
-const VIBE_COLOR = {
-  cinematic: 'teal-and-orange cinematic grade, honey-gold highlights',
-  cozy: 'warm amber ambient, soft golden-hour glow, deep magenta shadows',
-  ancient: 'molten amber sunbeams, bronze patina, electric teal shadows',
-  ethereal: 'pearl-white ambient, opalescent mist, prismatic sparkles',
-  epic: 'dramatic god rays, molten gold, deep magenta shadows',
-  psychedelic: 'kaleidoscopic color splits, impossible magentas, acid greens',
-  nostalgic: 'warm amber light, golden particles drifting, soft copper glow',
-  voltage: 'electric blue arcs, neon magenta accents',
-  shimmer: 'shimmering gold particles, iridescent highlights, soft warm rim',
-  arcane: 'deep violet and emerald glows, mystical candlelight',
-  enchanted: 'soft magical glow, gentle sparkles, dreamy luminescence',
-  peaceful: 'soft diffuse light, gentle pastels, serene calm',
-  whimsical: 'playful pastels, warm creamy light, sparkle motes',
-  coquette: 'rose-pink blush atmosphere, cream highlights, soft golden-hour',
-  nightshade: 'deep plum and obsidian, cold moonlight silver accents',
-  surreal: 'impossible color pairings, dream-logic lighting, hallucinatory',
-};
-
 module.exports = {
-  // Shared axes
-  FLOWER_TYPES: load('flower_types'),
-  SCENE_PALETTES: load('scene_palettes'),
+  PALETTES: load('palettes'),
   LIGHTING: load('lighting'),
-  ATMOSPHERES: load('atmospheres'),
-  // Path-specific
-  LANDSCAPE_SETTINGS: load('landscape_settings'),
-  CLOSEUP_FRAMINGS: load('closeup_framings'),
-  COZY_INTERIORS: load('cozy_interiors'),
-  GARDEN_WALKS: load('garden_walks'),
-  COSMIC_SCENES: load('cosmic_scenes'),
-  DREAMSCAPE_CONTEXTS: load('dreamscape_contexts'),
-  CONSERVATORY_SPACES: load('conservatory_spaces'),
-  FLOWER_ARRANGEMENTS: load('flower_arrangements'),
-  TROPICAL_PARADISE_SPACES: load('tropical_paradise_spaces'),
-  TROPICAL_FLOWER_ARRANGEMENTS: load('tropical_flower_arrangements'),
-  CITY_FLOWER_SPACES: load('city_flower_spaces'),
-  RECLAIM_SPACES: load('reclaim_spaces'),
-  SPACE_BLOOM_SPACES: load('space_bloom_spaces'),
-  // Inline
-  VIBE_COLOR,
-
   SENSORY_POOLS: {
-    bloom: { smell: load('sensory_bloom_smell'), sound: load('sensory_bloom_sound'), touch: load('sensory_bloom_touch'), temperature: load('sensory_bloom_temperature'), weight: load('sensory_bloom_weight'), air: load('sensory_bloom_air'), lightcolor: load('sensory_bloom_lightcolor') },
-    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
+    scene: {
+      lightcolor: load('sensory_lightcolor'),
+    },
   },
 };

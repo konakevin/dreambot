@@ -1,55 +1,12 @@
 /**
- * BloomBot dreamscape path — surreal EARTHLY flower takeovers.
- * Flowers reclaim / consume / erupt from unexpected human-made objects.
+ * BloomBot dreamscape — surreal, impossible, gravity-defying floral scene.
+ * Earth-bound species, but composed in physically impossible arrangements.
  */
+const compose = require('../compose');
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const SCENE = `A SURREAL FLORAL DREAMSCAPE — physically impossible composition rendered with hyperreal precision. Pick one impossible-arrangement type: blooms suspended in mid-air at multiple altitudes like a constellation, flowers growing OUT from a floating sphere of stone or water, a river flowing UPWARD through the air carrying blooms with it, gravity-flipped flowers rooted in the sky raining down, a spiral helical bloom-staircase ascending into nothing, a Magritte-style window opening onto a bloom-storm, a lake reflecting a different bloom-scene than the one above it, a single oversized bloom inside which a smaller bloom-world exists.
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const flower = picker.pickWithRecency(pools.FLOWER_TYPES, 'flower');
-  const context = picker.pickWithRecency(pools.DREAMSCAPE_CONTEXTS, 'dreamscape_context');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pick(pools.ATMOSPHERES);
+Earth-bound species (real flowers) but the COMPOSITION breaks physics. The render technique is hyperreal/photoreal — the impossibility is in the LAYOUT, not in any "alien flower" detail. Treat it like a fine-art painting that happens to be impossible.`;
 
-  return `You are a magical-realism photographer writing SURREAL EARTHLY flower-takeover scenes for BloomBot. Flowers reclaim / consume / erupt from unexpected human-made or natural objects. Magical-realism, Magritte-esque — beauty first, surrealism second. Earthly context (recognizable objects) but impossible floral takeover. Output wraps with style prefix + suffix.
-
-${blocks.FLORAL_DOMINANCE_BLOCK}
-
-${blocks.NO_PEOPLE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE DREAMSCAPE CONTEXT ━━━
-${context}
-
-━━━ THE DOMINANT FLOWER ━━━
-${flower}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ RULES ━━━
-- EARTHLY context — recognizable objects / scenes (piano, cathedral, clockwork, sunken ship, etc.)
-- Flowers overtake / consume / erupt from the object
-- NOT cosmic / alien (that's separate path)
-- NOT dramatic wilderness (that's landscape path)
-- Beauty FIRST, surrealism second — always gorgeous
-- Magical-realism painterly vibe
-
-Output ONLY the 60-90 word scene description. Comma-separated phrases. No preamble, no quotes.`;
-};
+module.exports = ({ sharedDNA, vibeDirective, picker }) =>
+  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });

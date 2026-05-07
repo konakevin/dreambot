@@ -1,53 +1,16 @@
 /**
- * BloomBot cozy path — cottagecore INTERIOR flower scenes.
+ * BloomBot cozy — interior space that has been overgrown by flowers.
+ * Window/sill/sunroom/breakfast nook with climbing florals everywhere.
  */
+const compose = require('../compose');
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const SCENE = `A COZY INTERIOR overgrown by flowers. Pick one specific architectural setting: a tall arched window with stone sill, a sunroom with white wicker chair, a breakfast nook with checkered tablecloth, a stairwell landing with carved wooden banister, a writing desk under a leaded-glass window, an attic dormer with brass hooks.
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const flower = picker.pickWithRecency(pools.FLOWER_TYPES, 'flower');
-  const interior = picker.pickWithRecency(pools.COZY_INTERIORS, 'cozy_interior');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pick(pools.ATMOSPHERES);
+Flowers cascade from the ceiling, climb the walls, drape across furniture, fill every vase + jug + bowl. Vines in profusion across every horizontal and vertical surface. The interior architecture is visible and recognizable but the flowers are CLEARLY the dominant subject — half the frame is bloom, the architecture is the framework holding it up.
 
-  return `You are a cottagecore interior photographer writing COZY INDOOR floral scenes for BloomBot. The warmest, coziest, most inviting floral interior you can imagine — flowers EVERYWHERE in a beautiful warm room. Cottagecore meets botanical paradise. Output wraps with style prefix + suffix.
+Light pours in through the window at a dramatic angle, chosen to match the lighting block.
 
-${blocks.FLORAL_DOMINANCE_BLOCK}
+Cozy = warm humble domestic space. NOT formal, NOT grand, NOT a palace, NOT a ballroom. Think: someone's beloved home that the garden has consumed.`;
 
-${blocks.NO_PEOPLE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE INTERIOR SCENE ━━━
-${interior}
-
-━━━ THE DOMINANT FLOWER TYPE ━━━
-${flower}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ RULES ━━━
-- INTERIOR — always indoors (this is the key path differentiator)
-- Warm, inviting, cottagecore energy
-- Flowers IMPOSSIBLY ABUNDANT — not just a pretty vase, a ROOM DROWNING in flowers
-- Space feels lived-in and loved — not sterile / not staged
-- No people in frame
-
-Output ONLY the 60-90 word scene description. Comma-separated phrases. No preamble, no quotes.`;
-};
+module.exports = ({ sharedDNA, vibeDirective, picker }) =>
+  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });

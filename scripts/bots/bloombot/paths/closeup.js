@@ -1,54 +1,23 @@
 /**
- * BloomBot closeup path — macro / mid-close frame where flowers are the
- * hero. Single bloom / cluster / bouquet / stem-in-field / vase.
+ * BloomBot closeup — macro view INTO a dense bloom wall in its natural environment.
+ *
+ * CRITICAL: this path's failure mode in the prior version was Sonnet drifting
+ * to "studio bouquet on a dark background" or "florist arrangement on a wooden
+ * plate". Anti-bouquet language is FRONT-LOADED in the scene.
  */
+const compose = require('../compose');
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const SCENE = `A MACRO CLOSEUP looking INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. The viewer is standing close enough to count the petals on the front-most blooms; the focal plane is shallow but the wall of flowers fills the entire frame and recedes into a softly-blurred bloom mass behind.
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const flower = picker.pickWithRecency(pools.FLOWER_TYPES, 'flower');
-  const framing = picker.pickWithRecency(pools.CLOSEUP_FRAMINGS, 'closeup_framing');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pick(pools.ATMOSPHERES);
+ABSOLUTELY FORBIDDEN — do NOT write any of these:
+  • cut flowers, bouquet, arrangement, vase, basket, plate, bowl, tray, shelf
+  • dark studio backdrop, neutral backdrop, "on a wooden surface", "against dark wall"
+  • still-life, florist composition, table-top, gift-shop scene
+  • picked flowers, gathered stems, harvested blooms
 
-  return `You are a macro-botanical photographer writing CLOSEUP floral scenes for BloomBot. Tight frame — flowers fill 60%+ of the frame and are unmistakably the hero. Could be a single stunning bloom, a tight cluster, a bouquet in an interesting vase, or a stem with a few heads against a moody backdrop. Output wraps with style prefix + suffix.
+REQUIRED: this is a macro view into LIVING flowers GROWING IN PLACE — on a vine, on a bush, in a wild meadow, in a cottage garden, climbing a wall, blanketing a hillside, lining a path. The background is the rest of the bloom field receding into shallow-DOF blur, NOT a dark photo studio.
 
-${blocks.FLORAL_DOMINANCE_BLOCK}
+Pick one growing context: hedgerow wall of climbing blooms, wildflower meadow at petal-level, garden border with hovering bee, cottage path with cascading vines, jungle understory carpet, pond's edge with water-flower mass.`;
 
-${blocks.NO_PEOPLE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE FLOWER (hero species) ━━━
-${flower}
-
-━━━ FRAMING / COMPOSITION ━━━
-${framing}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ KEY RULES ━━━
-- Flowers fill 60%+ of frame
-- Supporting context (vase / surface / stem / immediate environment) is fine and welcome
-- NEVER show full environment / wide landscape — this is a tight frame
-- Every petal / dewdrop / vein rendered in razor-sharp detail
-- Dramatic lighting (never flat daylight)
-
-Output ONLY the 60-90 word scene description. Comma-separated phrases. No preamble, no quotes.`;
-};
+module.exports = ({ sharedDNA, vibeDirective, picker }) =>
+  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });

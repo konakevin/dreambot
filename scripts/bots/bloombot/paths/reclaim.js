@@ -1,64 +1,14 @@
 /**
- * BloomBot reclaim path — flowers conquering hostile, ugly, desolate environments.
- * Swamps, deserts, caves, ruins, junkyards, volcanic wastelands.
- * The contrast IS the beauty — flowers are WINNING.
+ * BloomBot reclaim — abandoned ruins reclaimed by flowers.
+ * Post-civilization mood: nature has won, in beauty.
  */
+const compose = require('../compose');
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const SCENE = `ABANDONED HUMAN STRUCTURES being reclaimed by flowers. Pick one specific ruin: a marble Greek temple half-collapsed, a stone Mayan pyramid cracked open, a rusted abandoned greenhouse with broken panes, a half-sunken cathedral with open roof, a derelict lighthouse on a cliff, a forgotten library with collapsed walls, an abandoned amusement-park carousel, a wrecked ocean liner on a beach, an ancient Roman aqueduct, a moss-covered castle ruin.
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const arrangement = picker.pickWithRecency(pools.FLOWER_ARRANGEMENTS, 'flower_arrangement');
-  const space = picker.pickWithRecency(pools.RECLAIM_SPACES, 'reclaim_space');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pick(pools.ATMOSPHERES);
+The structure is in deep disrepair — cracked, mossy, half-fallen, vine-strangled, time-worn — but it's still RECOGNIZABLE as the specific kind of place it was. Flowers have CONSUMED the ruin: climbing vines wrap every column, blooms blanket every fallen stone, root systems crack the masonry from inside, petals carpet the floor, vines drape from broken arches.
 
-  return `You are a post-apocalyptic botanical photographer writing RECLAIM scenes for BloomBot. Harsh, ugly, desolate environments where flowers are WINNING — nature reclaiming hostile places. The CONTRAST between ugly setting and beautiful flowers IS the entire point. Output wraps with style prefix + suffix.
+The mood is awe + melancholy + triumphant nature, not horror. The composition is wide cinematic — the ruin centered or framed, the bloom-overgrowth its co-star. Sun-shafts pour through the broken roof / wall / window in the lighting-specified style.`;
 
-${blocks.FLORAL_DOMINANCE_BLOCK}
-
-${blocks.NO_PEOPLE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE HOSTILE SETTING ━━━
-${space}
-
-━━━ THE FLOWERS CONQUERING THIS PLACE ━━━
-${arrangement}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ RECLAIM SIGNATURE — NON-NEGOTIABLE ━━━
-- The setting must look HOSTILE, UGLY, or DESOLATE — rust, decay, ash, ice, rubble, murk
-- The flowers are WINNING — not just surviving, CONQUERING. They dominate the scene
-- CONTRAST is everything — soft petals against hard rust, vivid color against grey decay
-- The flowers should look IMPOSSIBLE in this setting — that's what makes it beautiful
-- Show the battle being WON — flowers cracking concrete, overtaking metal, softening ruins
-
-━━━ BLOW IT UP — FLOWERS ARE WINNING ━━━
-The flowers have already WON this war against the hostile environment:
-- Blooms erupting through every crack, gap, hole, and broken surface
-- Flowers cascading over rusted metal, crumbling walls, broken machinery
-- Petals carpeting ash, rubble, ice — softening every hard edge
-- Vines consuming entire structures, pulling them back into nature
-- The hostile setting is LOSING — flowers cover 60-70% of the frame
-- Beauty has overwhelmed ugliness — the reclamation is nearly complete
-
-Output ONLY the 60-90 word scene description. Comma-separated phrases. No preamble, no quotes.`;
-};
+module.exports = ({ sharedDNA, vibeDirective, picker }) =>
+  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
