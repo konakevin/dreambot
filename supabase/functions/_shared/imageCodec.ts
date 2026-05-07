@@ -74,7 +74,7 @@ export async function decodeImage(buf: ArrayBuffer | Uint8Array): Promise<Decode
 
   if (fmt === 'webp') {
     // @jsquash/webp returns ImageData with Uint8ClampedArray RGBA
-    const imageData = await decodeWebpLib(new Uint8Array(ab) as Uint8Array<ArrayBuffer>);
+    const imageData = await decodeWebpLib(ab);
     return {
       data: new Uint8Array(
         imageData.data.buffer,
