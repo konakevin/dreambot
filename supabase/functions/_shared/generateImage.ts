@@ -73,11 +73,13 @@ async function generateImageOnce(
       ? {
           aspect_ratio: '9:16',
           num_outputs: 1,
-          output_format: 'jpg',
-          // JPEG encoding quality (Replicate default is 80). Maxed to 100
-          // for cleanest output — every render archived at the highest
-          // quality the model produces. Zero impact on render time or
-          // Replicate cost (purely encoding, not diffusion).
+          // Replicate's default output_format is 'webp'. We removed the
+          // 'jpg' override 2026-05-06 because: (a) webp at q=100 is ~30%
+          // smaller than JPEG at q=100 with visually identical output, and
+          // (b) the face-swap pipeline now decodes whichever format is
+          // returned via _shared/imageCodec.ts. output_quality: 100 is
+          // maxed so source archives at the highest quality the model
+          // produces. Zero impact on render time or Replicate cost.
           output_quality: 100,
         }
       : {

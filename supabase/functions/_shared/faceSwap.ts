@@ -17,7 +17,7 @@
  */
 
 // deno-lint-ignore-file no-explicit-any
-import { decode as decodeJpeg, encode as encodeJpeg } from 'https://esm.sh/jpeg-js@0.4.4';
+import { decodeImage, encodeWebp } from './imageCodec.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
@@ -113,8 +113,8 @@ async function perturbSourceImage(
   const resp = await fetch(sourceImageUrl);
   if (!resp.ok) throw new Error(`Source download failed: ${resp.status}`);
   const buf = new Uint8Array(await resp.arrayBuffer());
-  const decoded = decodeJpeg(buf, { useTArray: true });
-  const data = decoded.data as Uint8Array;
+  const decoded = await decodeImage(buf);
+  const data = decoded.data;
   const w = decoded.width;
   const h = decoded.height;
   // Perturb a random pixel near the bottom-right corner — face is upper-half so unaffected
@@ -124,14 +124,13 @@ async function perturbSourceImage(
   data[off] = Math.floor(Math.random() * 256);
   data[off + 1] = Math.floor(Math.random() * 256);
   data[off + 2] = Math.floor(Math.random() * 256);
-  const quality = 94 + Math.floor(Math.random() * 4); // 94-97, near-lossless
-  const encoded = encodeJpeg({ data, width: w, height: h }, quality);
-  const bytes = encoded.data instanceof Uint8Array ? encoded.data : new Uint8Array(encoded.data);
+  const quality = 90 + Math.floor(Math.random() * 6); // 90-95, near-lossless webp
+  const bytes = await encodeWebp({ data, width: w, height: h }, quality);
 
-  const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+  const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
   const { error } = await supabase.storage
     .from('uploads')
-    .upload(path, bytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
+    .upload(path, bytes, { contentType: 'image/webp', upsert: true, cacheControl: '2592000' });
   if (error) throw new Error(`Perturbed source upload failed: ${error.message}`);
   return {
     url: supabase.storage.from('uploads').getPublicUrl(path).data.publicUrl,
@@ -445,13 +444,10 @@ export async function dualFaceSwap(
 
   const targetResp = await fetch(targetImageUrl);
   if (!targetResp.ok) throw new Error(`Download target failed: ${targetResp.status}`);
-  const targetImg = decodeJpeg(new Uint8Array(await targetResp.arrayBuffer()), {
-    formatAsRGBA: true,
-  });
+  const targetImg = await decodeImage(new Uint8Array(await targetResp.arrayBuffer()));
   const W = targetImg.width;
   const H = targetImg.height;
-  let imgData: Uint8Array | null =
-    targetImg.data instanceof Uint8Array ? targetImg.data : new Uint8Array(targetImg.data);
+  let imgData: Uint8Array | null = targetImg.data;
   console.log(`[dualFaceSwap] Target: ${W}x${H}`);
 
   const leftW = Math.floor(W * 0.55);
@@ -464,27 +460,23 @@ export async function dualFaceSwap(
   // Drop the full target RGBA — we only need the crops from here on (~5MB freed)
   imgData = null;
 
-  const leftJpeg = encodeJpeg({ data: leftPixels, width: leftW, height: H }, 95);
-  const rightJpeg = encodeJpeg({ data: rightPixels, width: rightW, height: H }, 95);
-  const leftJpegData =
-    leftJpeg.data instanceof Uint8Array ? leftJpeg.data : new Uint8Array(leftJpeg.data);
-  const rightJpegData =
-    rightJpeg.data instanceof Uint8Array ? rightJpeg.data : new Uint8Array(rightJpeg.data);
-  // Drop the crop RGBA — we only need the encoded JPEGs for upload (~5.6MB freed)
+  const leftWebp = await encodeWebp({ data: leftPixels, width: leftW, height: H }, 92);
+  const rightWebp = await encodeWebp({ data: rightPixels, width: rightW, height: H }, 92);
+  // Drop the crop RGBA — we only need the encoded WebPs for upload (~5.6MB freed)
   leftPixels = null;
   rightPixels = null;
 
   const ts = Date.now();
-  const leftPath = `temp/${userId}/crop-left-${ts}.jpg`;
-  const rightPath = `temp/${userId}/crop-right-${ts}.jpg`;
+  const leftPath = `temp/${userId}/crop-left-${ts}.webp`;
+  const rightPath = `temp/${userId}/crop-right-${ts}.webp`;
   const [leftUp, rightUp] = await Promise.all([
-    supabase.storage.from('uploads').upload(leftPath, leftJpegData, {
-      contentType: 'image/jpeg',
+    supabase.storage.from('uploads').upload(leftPath, leftWebp, {
+      contentType: 'image/webp',
       upsert: true,
       cacheControl: '2592000',
     }),
-    supabase.storage.from('uploads').upload(rightPath, rightJpegData, {
-      contentType: 'image/jpeg',
+    supabase.storage.from('uploads').upload(rightPath, rightWebp, {
+      contentType: 'image/webp',
       upsert: true,
       cacheControl: '2592000',
     }),
@@ -510,14 +502,11 @@ export async function dualFaceSwap(
   console.log('[dualFaceSwap] Both swaps complete');
 
   // Sequential download + decode of the swap results — parallel here held
-  // 2 JPEG buffers + 2 RGBA arrays simultaneously (~12MB peak); sequential
+  // 2 encoded buffers + 2 RGBA arrays simultaneously (~12MB peak); sequential
   // halves the window at a cost of ~500ms wall-clock.
   const leftSwapResp = await fetch(leftSwapUrl);
-  const leftSwapImg = decodeJpeg(new Uint8Array(await leftSwapResp.arrayBuffer()), {
-    formatAsRGBA: true,
-  });
-  let leftSwapData: Uint8Array | null =
-    leftSwapImg.data instanceof Uint8Array ? leftSwapImg.data : new Uint8Array(leftSwapImg.data);
+  const leftSwapImg = await decodeImage(new Uint8Array(await leftSwapResp.arrayBuffer()));
+  let leftSwapData: Uint8Array | null = leftSwapImg.data;
   if (leftSwapImg.width !== leftW || leftSwapImg.height !== H) {
     console.warn(
       `[dualFaceSwap] Left swap resize: ${leftSwapImg.width}x${leftSwapImg.height} -> ${leftW}x${H}`
@@ -526,11 +515,8 @@ export async function dualFaceSwap(
   }
 
   const rightSwapResp = await fetch(rightSwapUrl);
-  const rightSwapImg = decodeJpeg(new Uint8Array(await rightSwapResp.arrayBuffer()), {
-    formatAsRGBA: true,
-  });
-  let rightSwapData: Uint8Array | null =
-    rightSwapImg.data instanceof Uint8Array ? rightSwapImg.data : new Uint8Array(rightSwapImg.data);
+  const rightSwapImg = await decodeImage(new Uint8Array(await rightSwapResp.arrayBuffer()));
+  let rightSwapData: Uint8Array | null = rightSwapImg.data;
   if (rightSwapImg.width !== rightW || rightSwapImg.height !== H) {
     console.warn(
       `[dualFaceSwap] Right swap resize: ${rightSwapImg.width}x${rightSwapImg.height} -> ${rightW}x${H}`
@@ -559,12 +545,10 @@ export async function dualFaceSwap(
   leftSwapData = null;
   rightSwapData = null;
 
-  const stitchedJpeg = encodeJpeg({ data: stitched, width: W, height: H }, 95);
-  const stitchedBytes =
-    stitchedJpeg.data instanceof Uint8Array ? stitchedJpeg.data : new Uint8Array(stitchedJpeg.data);
-  const tempFile = `temp/${userId}/stitched-${Date.now()}.jpg`;
+  const stitchedBytes = await encodeWebp({ data: stitched, width: W, height: H }, 92);
+  const tempFile = `temp/${userId}/stitched-${Date.now()}.webp`;
   const { error: upErr } = await supabase.storage.from('uploads').upload(tempFile, stitchedBytes, {
-    contentType: 'image/jpeg',
+    contentType: 'image/webp',
     upsert: true,
     cacheControl: '2592000',
   });
