@@ -18,7 +18,6 @@ import { OverlayPill } from '@/components/OverlayPill';
 import { Image as ExpoImage } from 'expo-image';
 import { BotPillRow } from '@/components/BotPillRow';
 import { useBotUsers } from '@/hooks/useBotUsers';
-import { feedImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 // Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
@@ -222,7 +221,7 @@ export default function HomeScreen() {
           p_bot_user_id: bot.id,
         });
         const url = (rows as { image_url?: string }[] | null)?.[0]?.image_url;
-        if (url) ExpoImage.prefetch([feedImageUrl(url)]);
+        if (url) ExpoImage.prefetch([url]);
       })
     );
   }, [activeTab, botUsers, user]);

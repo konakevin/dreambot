@@ -39,15 +39,6 @@ export function thumbnailUrl(url: string): string {
   return transform(url, 400, 500, 'cover', 80);
 }
 
-/** Feed card — 9:16 full-screen. 720px width @ q=82 is plenty for any phone
- *  (largest iPhone is 430pt × 3x = 1290px but no perceptible quality loss
- *  scaling 720 → 1290 with expo-image's contentFit). Original Flux source
- *  is 768×1344 at q=100 — feedImageUrl trades a tiny bit of detail for
- *  ~3× faster initial load over the wire. */
-export function feedImageUrl(url: string): string {
-  return transform(url, 720, undefined, 'contain', 82);
-}
-
 /** Avatar — small circle, 128px is plenty for 64pt × 2x */
 export function avatarUrl(url: string): string {
   return transform(url, 128, 128, 'cover', 80);

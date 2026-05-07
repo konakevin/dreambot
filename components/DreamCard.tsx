@@ -37,7 +37,7 @@ import { colors, ui, ANIM } from '@/constants/theme';
 import { handleImageLongPress } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { MediumVibeBadge } from '@/components/MediumVibeBadge';
-import { feedImageUrl, avatarUrl } from '@/lib/imageUrl';
+import { avatarUrl } from '@/lib/imageUrl';
 import { useExploreStore } from '@/store/explore';
 import { useFeedStore } from '@/store/feed';
 import { useAuthStore } from '@/store/auth';
@@ -353,7 +353,7 @@ export const DreamCard = memo(function DreamCard({
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
             <Image
-              source={{ uri: feedImageUrl(item.image_url) }}
+              source={{ uri: item.image_url }}
               style={s.fullImage}
               contentFit="cover"
               cachePolicy="memory-disk"
