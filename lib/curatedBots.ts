@@ -22,9 +22,9 @@ const AESTHETIC_BOT_MAP: Record<string, string[]> = {
   arcane: ['dragonbot', 'gothbot'],
 
   // Cozy / cute / soft
-  cozy: ['chibibot', 'coquettebot', 'bloombot', 'tinybot'],
-  whimsical: ['bloombot', 'coquettebot', 'tinybot'],
-  coquette: ['coquettebot', 'bloombot'],
+  cozy: ['chibibot', 'bloombot', 'tinybot'],
+  whimsical: ['bloombot', 'tinybot'],
+  coquette: ['bloombot'],
   peaceful: ['bloombot', 'oceanbot', 'earthbot'],
   enchanted: ['bloombot', 'tinybot'],
 
@@ -39,7 +39,7 @@ const AESTHETIC_BOT_MAP: Record<string, string[]> = {
   // Surreal / weird
   psychedelic: ['mangabot', 'pixelbot', 'retrobot'],
   surreal: ['mangabot', 'starbot', 'tinybot'],
-  shimmer: ['bloombot', 'coquettebot', 'starbot'],
+  shimmer: ['bloombot', 'starbot'],
 
   // Bold / loud
   epic: ['dragonbot', 'dinobot', 'starbot'],

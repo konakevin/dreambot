@@ -1628,7 +1628,6 @@ All 18 bots below are on per-bot crons via the V2 engine.
 | EarthBot | `earthbot/` | Nature / landscape | 4+ | base |
 | TinyBot | `tinybot/` | Miniatures / dioramas | 4+ | base |
 | SteamBot | `steambot/` | Steampunk | 4+ | base |
-| CoquetteBot | `coquettebot/` | Cute feminine | 4+ | base |
 | PixelBot | `pixelbot/` | Retro pixel art | 4+ | base |
 | RetroBot | `retrobot/` | Retro / vaporwave | 4+ | base |
 | DinoBot | `dinobot/` | Dinosaurs / prehistoric | 4+ | base |

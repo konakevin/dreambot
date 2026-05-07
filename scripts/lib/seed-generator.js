@@ -132,40 +132,6 @@ const BOT_SEEDS = {
     ],
   },
   // ── New bots — base prompts for iteration ──
-  coquettebot: {
-    strategies: [
-      {
-        category: 'coquettebot_creatures', count: 20,
-        prompt: 'the MOST ADORABLE thing you have ever seen — a tiny cute creature in a soft pastel setting that makes girls absolutely LOSE THEIR MINDS with cuteness. Baby bunnies in teacups with flower crowns, kittens sleeping in rose petals, tiny fantasy dragons with HUGE sparkly eyes curled in silk ribbons, crystal foxes on pink clouds, fairy kittens with butterfly wings, hedgehogs in tiny knit sweaters, baby deer with butterflies on their nose, cloud puppies, iridescent baby birds, tiny unicorn foals. Make up ADORABLE creatures that dont exist — fantasy pets with big dewy eyes. Every creature must have BIG EYES. Every setting must be SOFT PASTEL PINK. The image should make someone literally say "OH MY GOD" out loud.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the creature and the setting. Comma separated. Example: bunny, teacup',
-      },
-      {
-        category: 'coquettebot_scenes',
-        prompt: 'the prettiest most adorable cottagecore/fairy/princess scene that girls want to LIVE IN — a fairy door in a mossy tree with tiny lanterns and pink mushrooms, a picnic blanket with strawberries and pink macarons and wildflowers, a pink velvet bedroom with canopy bed and fairy lights and stuffed animals, a ballet studio with pink tulle and mirrors, a tiny Parisian café with pink awning and pastries, a bookshop with climbing roses and window seat and blankets. Everything PASTEL, everything SOFT, everything makes you want to climb inside the screen.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the main element and the setting. Comma separated. Example: macarons, picnic',
-      },
-      {
-        category: 'coquettebot_nature',
-        prompt: 'the GIRLIEST nature scene possible — nature but make it PINK. Cherry blossom paths with petals falling like pink snow, fields of pink peonies stretching forever, pastel sunsets over still water with a single white bunny, a garden path lined with roses and butterflies everywhere, lavender fields at golden hour with dragonflies, a meadow of wildflowers in pastels with dewdrops catching rainbow light. Soft, dreamy, impossibly pretty.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the flower and the setting. Comma separated. Example: cherry-blossom, path',
-      },
-      {
-        category: 'coquettebot_sweet',
-        prompt: 'food and treats SO PRETTY you could never eat them in a FANTASTICAL whimsical setting — a tower of pink macarons on a marble stand in a fairy kitchen, a strawberry cake being decorated by tiny mice in aprons, a princess arranging petit fours in a rose garden, a bunny barista making latte art in a pastel café, a magical bakery run by hedgehogs in tiny hats. If characters are present they must be WHIMSICAL — cute animals, fairy-tale princesses, tiny magical creatures. NEVER a realistic human chef or pastry worker. Everything pink, pastel, fantastical, precious. NEVER repeat the same food item — every seed must feature a DIFFERENT treat.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give ONE word: the specific food item (macarons, cake, croissant, latte, cupcake, etc). ONE word only.',
-      },
-      {
-        category: 'coquettebot_fashion',
-        prompt: 'coquette fashion moment that makes girls think "I WANT TO BE HER" — ribbon-laced corsets with pearl details, ballet slippers on marble floors, silk bows in perfectly curled hair, lace gloves holding a single rose, pink velvet everything, a vanity table dripping with perfume bottles and pearls and soft golden light, a girl twirling in a tulle skirt in a flower field. Soft, feminine, aspirational, princess energy. Characters described by outfit and pose only, never named.',
-        separateDedup: true,
-        extractPrompt: 'From this scene give TWO words: the fashion item and the setting. Comma separated. Example: corset, garden',
-      },
-    ],
-  },
   steambot: {
     strategies: [
       {

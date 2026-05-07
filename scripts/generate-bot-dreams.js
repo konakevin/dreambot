@@ -52,7 +52,7 @@ const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const BOTS = {
   // Migrated to new engine — see scripts/bots/<name>/ + .github/workflows/<name>.yml:
-  //   bloombot, glowbot, earthbot, cuddlebot, coquettebot, mangabot, dragonbot, gothbot, starbot,
+  //   bloombot, glowbot, earthbot, cuddlebot, mangabot, dragonbot, gothbot, starbot,
   //   steambot, tinybot, toybot, beachbot, pixelbot, oceanbot, dinobot, titanbot
   // All 20 active bots live in scripts/bots/<botname>/
 };

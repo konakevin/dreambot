@@ -41,10 +41,6 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'brickbot',
     description: 'Cinematic LEGO worlds built brick by brick.',
   },
-  coquettebot: {
-    username: 'coquettebot',
-    description: 'Soft fairytale romance, tea parties, and dreamy interiors.',
-  },
   chibibot: {
     username: 'chibibot',
     description:
