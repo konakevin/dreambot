@@ -27,44 +27,69 @@ function arg(name) {
 
 const onlyPath = arg('path');
 const onlyKind = arg('kind');
+const SCENE_TOTAL = parseInt(arg('scene-total'), 10) || 25; // default 25 for fast iteration; use --scene-total 200 for prod
 
-const sceneMeta = (cfg, n) => `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} scene seeds for a LEGO MOC photographer. Each seed becomes one render.
+// Camera-framing distribution per entry. Default split favors variety
+// across scales; "wide" skew is for camera-defined paths (macro-display,
+// lego-masters, landscape) where the path's identity IS the wide framing.
+// MACRO removed 2026-05-07 — extreme-zoom shots lost their LEGO character
+// (looked like real-life metal/leather/etc instead of brick).
+const FRAMING_SPLIT = {
+  default: { wide: 25, medium: 30, close: 35, atmospheric: 10 },
+  wide: { wide: 55, medium: 30, close: 15, atmospheric: 0 },
+};
+
+const sceneMeta = (cfg, n) => {
+  const skew = cfg.cameraSkew === 'wide' ? FRAMING_SPLIT.wide : FRAMING_SPLIT.default;
+  return `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} scene seeds for a LEGO MOC photographer. Each seed becomes one render.
 
 ━━━ SUBJECT ━━━
 ${cfg.subject}
 
 ━━━ SEED FORMAT ━━━
-Each entry is 18-32 words. Comma-separated descriptive phrase clusters. NO sentences with periods. Example shape: "{element1}, {element2}, {minifig action}, {detail}, {atmospheric note}".
+Each entry is 18-32 words. Comma-separated descriptive phrase clusters. NO sentences with periods.
+EVERY entry must lead with a FRAMING TAG (one of WIDE / MEDIUM / CLOSE / ATMOSPHERIC) so the framing is unambiguous to the renderer. Example shape:
+  "WIDE: {whole-build description}, {context detail}, {minifig scale-reference if any}, {atmospheric note}"
+  "CLOSE: {minifig mid-action}, {target/object}, {other figure reaction}, {detail}"
 
-━━━ COVERAGE — DELIVER ALL THREE TYPES ━━━
-~40% ARCHITECTURE / WORLD shots (the BUILD is the subject):
-  • Building cross-sections, vehicle exteriors, structure-defining establishing shots
-  • Examples: "pirate galleon under full sail, weathered planks, cannons run out, parrot on bowsprit"
-  • Examples: "fantasy castle keep — battlements, banners snapping, drawbridge half-raised, moat shimmering below"
+━━━ FRAMING DISTRIBUTION (deliver ALL types in this proportion) ━━━
 
-~50% STORY scenes (minifigs in MID-ACTION with narrative beats):
-  • Use action verbs. Show what's happening AT THIS MOMENT, with cause and reaction.
-  • Format: "{minifig} {verb}-ing {object/target} while {other figure} {reacting}".
-  • Examples: "captain crossing swords with mutineer mid-deck while crew watches, storm clouds gathering"
-  • Examples: "wizard hurling fireball spell at troll while ranger draws bow from cover"
-  • NEVER static "minifigs standing around" — always a NARRATIVE BEAT.
+~${skew.wide}% WIDE — entire build / diorama / vista in frame, baseplate edges visible, multiple build elements visible at once. The camera is pulled back; the BUILD is the hero.
+  Examples:
+  • "WIDE: complete pirate harbor diorama, three galleons docked, brick-built pier with crates, harbor town backdrop with lit windows, entire baseplate visible"
+  • "WIDE: full LEGO Masters turntable showcase of crumbling cathedral interior, every floor visible, dramatic spotlight overhead, fog rolling across base"
+  • "WIDE: alpine ski village from elevated angle, multiple chalets, gondola tower, mountain backdrop, snow-covered baseplate edges"
 
-~10% MOOD / ATMOSPHERIC establishing shots:
-  • No characters in focus. Pure place / weather / object detail.
-  • Examples: "treasure cave entrance dripping with stalactites, pile of gold doubloons, single torch flickering"
+~${skew.medium}% MEDIUM — one part of the scene visible, multiple minifigs in context, depth and surroundings clear but not the full build. Mid-distance.
+  Examples:
+  • "MEDIUM: pirate captain on quarterdeck addressing crew of six, ship's wheel visible, sails behind, evening sky"
+  • "MEDIUM: fantasy market square with three vendor stalls, customers browsing, half of the city wall visible behind"
+
+~${skew.close}% CLOSE — story beat, single moment, tight framing on minifig action. The minifig + immediate surroundings fill the frame, but the LEGO build context is still visible (NOT extreme zoom on a single object). Action verbs + cause/reaction.
+  Examples:
+  • "CLOSE: captain crossing swords with mutineer on deck planks, blades clashing, crew watching frozen, storm rain streaking, mast and rigging visible"
+  • "CLOSE: wizard hurling transparent-blue spell-ball at advancing troll, ranger drawing bow from cover behind brick column, sparks flying, dungeon walls visible"
+
+~${skew.atmospheric}% ATMOSPHERIC — mood/weather/place, no character focus. Pure environment.
+  Examples:
+  • "ATMOSPHERIC: foggy harbor dawn, ghost-ship shadow on horizon, brick-built bell-buoy ringing, pale silver light"
+  • "ATMOSPHERIC: thunderstorm over castle ramparts, lightning forking sky, rain on banners, no figures visible"
 
 ━━━ HARD RULES ━━━
-- Every entry must read as the subject specified above. ${cfg.label.toUpperCase()} unmistakably.
+- Every entry must lead with a FRAMING TAG (WIDE: / MEDIUM: / CLOSE: / ATMOSPHERIC:).
+- Every entry must read as ${cfg.label.toUpperCase()} unmistakably.
 - Use specific brick / build language: "transparent piece," "slope brick," "minifig accessory," "technic beam," "molded element"
 - NO HUMAN HANDS, NO HUMAN SKIN, NO REAL PEOPLE in scene descriptions
-- Vary the camera-implied subjects across the pool (don't lead with the same noun every entry)
-- For story scenes: always show CAUSE → EFFECT. Someone reacts to what someone else does.
+- NO EXTREME ZOOM on a single small object (no "extreme close-up of a badge," no "macro of a single gear filling the frame"). The LEGO build context must always be visible — multiple bricks, multiple build elements, or at minimum a clear brick-built environment around the subject.
+- For CLOSE story scenes: always show CAUSE → EFFECT. Someone reacts to what someone else does.
+- For WIDE shots: explicitly mention "whole build," "entire diorama," "edges of baseplate," "multiple build elements," or similar wide-framing language.
 
 ━━━ DEDUP ━━━
-No two entries share the same subject + action combination. Spread across different sub-themes within ${cfg.label.toUpperCase()}.
+No two entries share the same subject + framing combination.
 
 ━━━ OUTPUT ━━━
-JSON array of ${n} strings. No preamble, no numbering.`;
+JSON array of ${n} strings, each starting with its FRAMING TAG (WIDE: / MEDIUM: / CLOSE: / ATMOSPHERIC: only — no MACRO). No preamble, no numbering.`;
+};
 
 const lightingMeta = (cfg, n) => `You are writing ${n} BrickBot ${cfg.label.toUpperCase()} LIGHTING DESCRIPTIONS — short prose phrases that lock the lighting / atmosphere of a single render.
 
@@ -124,7 +149,7 @@ async function genOne(cfg, kind) {
   const filename = `${cfg.key}_${kind}`;
   const outPath = `${SEED_DIR}/${filename}.json`;
   const config = (() => {
-    if (kind === 'scenes') return { total: 200, batch: 25, metaPrompt: (n) => sceneMeta(cfg, n) };
+    if (kind === 'scenes') return { total: SCENE_TOTAL, batch: Math.min(SCENE_TOTAL, 25), metaPrompt: (n) => sceneMeta(cfg, n) };
     if (kind === 'lighting') return { total: 40, batch: 20, metaPrompt: (n) => lightingMeta(cfg, n) };
     if (kind === 'palette') return { total: 40, batch: 20, metaPrompt: (n) => paletteMeta(cfg, n) };
     throw new Error('unknown kind: ' + kind);

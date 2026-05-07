@@ -13,6 +13,7 @@ module.exports = [
     subject: `Pulled-back wide-camera view of a complete LEGO diorama on a tabletop — convention-display / LEGO Masters showcase scale. The whole built world fits in frame; you can see edge baseplates, multiple build elements, the diorama as a finished masterpiece. Subjects vary widely (ski village, mars colony, ocean port, medieval siege, theme park, mountain pass) — what unifies the path is the WIDE-CAMERA SCALE that shows the entire build.`,
     lightingMood: `theatrical display lighting — overhead spotlights, atmospheric haze, studio-style key + fill, dramatic showcase reveal lighting. Think LEGO convention floor or LEGO Masters finale stage`,
     paletteMood: `vivid showcase palettes designed to make the diorama POP — bold primaries with neon transparent accents, multi-color jewel tones for visual impact at convention-display distance`,
+    cameraSkew: 'wide',
   },
   {
     key: 'girly',
@@ -27,6 +28,7 @@ module.exports = [
     subject: `Single hero showcase build of the kind featured on LEGO Masters TV show finale episodes. Themed narrative builds: "the moment a mountain village erupts in chaos as the dragon lands," "a cross-section dollhouse showing tragedy on each floor," "a steampunk submarine breaching the deep with a kraken," "the carnival fairground at the moment the lights go out." Single dramatic centerpiece, finale-reveal lighting (theatrical spotlight + atmospheric haze + base-glow), turntable composition, narrative density.`,
     lightingMood: `dramatic finale-reveal lighting — theatrical spotlight from overhead, atmospheric haze, edge rim-light around the build, deep black surrounding void, sometimes fog billows, sometimes laser beams or projection mapping`,
     paletteMood: `dramatic narrative palettes that match the build's story — could be any color but always saturated, always with a clear mood (tragic = oxblood + ash + gold leaf; triumphant = emerald + sunrise gold + white; mysterious = deep purple + electric cyan + black)`,
+    cameraSkew: 'wide',
   },
   {
     key: 'western',
@@ -97,5 +99,6 @@ module.exports = [
     subject: `EarthBot-style natural vistas rendered entirely in brick. Mountain ranges with snowcaps and clouds, glacier-carved valleys, redwood old-growth forests, desert canyons at golden hour, coastal cliffs above crashing surf, alpine meadows with wildflower carpets, stormy ocean from a beach, sequoia groves, plateau mesas, river deltas, savanna at sunrise, frozen waterfalls. The world is the subject; minifigs (if present) are scale references — tiny hikers, photographers, climbers — never the focus.`,
     lightingMood: `epic natural lighting — golden-hour mountain rim-light, storm-broken sunbeams across valley, alpenglow on snowcaps, dawn fog over forest, midday harsh desert sun, polar-night aurora, sunset over coast with sea-foam catching last light, moonlit canyon`,
     paletteMood: `natural earth — granite gray + snow white + pine green + sandstone red + alpine sky-blue + meadow gold + desert ochre + ocean cobalt + forest deep-green + autumn-leaf scarlet + glacier turquoise + storm-cloud slate`,
+    cameraSkew: 'wide',
   },
 ];
