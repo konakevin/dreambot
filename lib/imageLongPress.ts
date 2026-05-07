@@ -1,30 +1,61 @@
 import * as Haptics from 'expo-haptics';
 import * as MediaLibrary from 'expo-media-library';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { File, Paths } from 'expo-file-system';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 
 async function saveToPhotos(id: string, imageUrl: string) {
+  console.log('[SAVE] start', { id, imageUrl });
   const { status } = await MediaLibrary.requestPermissionsAsync();
+  console.log('[SAVE] permission status:', status);
   if (status !== 'granted') {
     showAlert('Permission needed', 'Allow access to save images.');
     return;
   }
   try {
-    // Match cache-file extension to the actual remote format. After the
-    // 2026-05-06 webp pipeline migration, image_url ends in .webp for
-    // direct Flux output, .jpg for face-swap output, .png in rare cases.
-    // Hardcoding .jpg made iOS reject the file (format/extension mismatch)
-    // → MediaLibrary.saveToLibraryAsync threw → "Failed to save image".
     const urlMatch = imageUrl.match(/\.(\w+)(?:\?[^/]*)?$/);
     const rawExt = (urlMatch?.[1] ?? '').toLowerCase();
     const ext = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'gif'].includes(rawExt) ? rawExt : 'jpg';
+    console.log('[SAVE] detected ext:', ext, 'rawExt:', rawExt);
+
     const dest = new File(Paths.cache, `${id}.${ext}`);
+    console.log('[SAVE] cache dest:', dest.uri);
+
     const downloaded = await File.downloadFileAsync(imageUrl, dest);
-    await MediaLibrary.saveToLibraryAsync(downloaded.uri);
+    console.log(
+      '[SAVE] downloaded uri:',
+      downloaded.uri,
+      'exists:',
+      downloaded.exists,
+      'size:',
+      downloaded.size
+    );
+
+    // iOS PHPhotoLibrary rejects WebP outright ("Asset couldn't be saved
+    // to photo library: Unknown error"). Convert webp to PNG (lossless)
+    // before saving — preserves the source pixels exactly with no
+    // additional compression loss on top of the original webp encode.
+    // PNG output is larger (~3-5MB vs the source ~500KB webp) but it's
+    // a one-shot user-initiated save, file size is acceptable.
+    let saveUri = downloaded.uri;
+    if (ext === 'webp') {
+      const converted = await ImageManipulator.manipulateAsync(downloaded.uri, [], {
+        format: ImageManipulator.SaveFormat.PNG,
+      });
+      saveUri = converted.uri;
+      console.log('[SAVE] webp→png (lossless) converted:', saveUri);
+    }
+
+    await MediaLibrary.saveToLibraryAsync(saveUri);
+    console.log('[SAVE] saveToLibraryAsync OK');
+
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     Toast.show('Saved to photos', 'checkmark-circle');
-  } catch {
+  } catch (err) {
+    const e = err as Error;
+    console.log('[SAVE] FAILED:', e?.message || String(err));
+    console.log('[SAVE] stack:', e?.stack || '(no stack)');
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     Toast.show('Failed to save image', 'close-circle');
   }
