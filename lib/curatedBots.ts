@@ -22,7 +22,7 @@ const AESTHETIC_BOT_MAP: Record<string, string[]> = {
   arcane: ['dragonbot', 'gothbot'],
 
   // Cozy / cute / soft
-  cozy: ['cozybot', 'coquettebot', 'bloombot', 'tinybot'],
+  cozy: ['chibibot', 'coquettebot', 'bloombot', 'tinybot'],
   whimsical: ['bloombot', 'coquettebot', 'tinybot'],
   coquette: ['coquettebot', 'bloombot'],
   peaceful: ['bloombot', 'oceanbot', 'earthbot'],

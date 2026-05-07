@@ -45,10 +45,10 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'coquettebot',
     description: 'Soft fairytale romance, tea parties, and dreamy interiors.',
   },
-  cozybot: {
-    username: 'cozybot',
+  chibibot: {
+    username: 'chibibot',
     description:
-      'Cozy spaces and wholesome creatures — cottagecore villages, snug interiors, and gentle comfort.',
+      'Adorable chibi-rendered critters — cottage villages, magical hamlets, and snug interiors in a designer-vinyl storybook world.',
   },
   dinobot: {
     username: 'dinobot',
