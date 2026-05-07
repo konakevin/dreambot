@@ -1,53 +1,14 @@
 /**
- * BloomBot garden-walk path — walkable outdoor garden/path scenes dialed to 10×.
+ * BloomBot garden-walk — walkable bloom-tunnel/archway/path inviting the viewer in.
+ * The viewer is at the entrance about to walk through.
  */
+const compose = require('../compose');
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+const SCENE = `A WALKABLE FLORAL PASSAGE inviting the viewer in. Pick one architectural framing: stone gothic archway smothered in climbing blooms, gnarled wisteria pergola tunnel with hanging racemes, ivy-and-rose covered stone gateway, weathered iron arbor in an overgrown garden, mossy forest path framed by flowering branches, ancient temple ruin with vine-curtained doorway.
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const flower = picker.pickWithRecency(pools.FLOWER_TYPES, 'flower');
-  const walk = picker.pickWithRecency(pools.GARDEN_WALKS, 'garden_walk');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pick(pools.ATMOSPHERES);
+The PATH itself is visible — flagstone, mossy steps, packed earth, a carpet of fallen petals, a stream stepping-stones — and leads INTO the frame, drawing the eye through. Beyond the archway is more bloom-field receding into atmospheric depth — never just a blank backdrop.
 
-  return `You are a garden photographer writing WALKABLE OUTDOOR flower path / garden scenes for BloomBot. The space is intimate-scale (you could step into it) but the floral density is IMPOSSIBLE — 10× more blooms than reality. Paths, trails, arches, hedge tunnels, meadows — all OVERTAKEN by specific flowers. Output wraps with style prefix + suffix.
+Composition is symmetric portrait — the archway centered, frame divided into a foreground bloom-mass on each side and a glowing depth-of-field at the path's far end. Light streams through the opening like a doorway to somewhere magical.`;
 
-${blocks.FLORAL_DOMINANCE_BLOCK}
-
-${blocks.NO_PEOPLE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE WALKABLE SPACE ━━━
-${walk}
-
-━━━ THE DOMINANT FLOWER TYPE ━━━
-${flower}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.DRAMATIC_LIGHTING_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ RULES ━━━
-- Walkable / intimate scale — path, trail, arch, garden corner (not dramatic backdrop, not interior)
-- Flowers DIALED TO 10× density — more blooms than physics should allow
-- Specific flower species visible dominating the scene
-- Outdoor (not indoor — that's cozy path)
-- No people in frame
-
-Output ONLY the 60-90 word scene description. Comma-separated phrases. No preamble, no quotes.`;
-};
+module.exports = ({ sharedDNA, vibeDirective, picker }) =>
+  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
