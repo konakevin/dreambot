@@ -11,7 +11,15 @@ async function saveToPhotos(id: string, imageUrl: string) {
     return;
   }
   try {
-    const dest = new File(Paths.cache, `${id}.jpg`);
+    // Match cache-file extension to the actual remote format. After the
+    // 2026-05-06 webp pipeline migration, image_url ends in .webp for
+    // direct Flux output, .jpg for face-swap output, .png in rare cases.
+    // Hardcoding .jpg made iOS reject the file (format/extension mismatch)
+    // → MediaLibrary.saveToLibraryAsync threw → "Failed to save image".
+    const urlMatch = imageUrl.match(/\.(\w+)(?:\?[^/]*)?$/);
+    const rawExt = (urlMatch?.[1] ?? '').toLowerCase();
+    const ext = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'gif'].includes(rawExt) ? rawExt : 'jpg';
+    const dest = new File(Paths.cache, `${id}.${ext}`);
     const downloaded = await File.downloadFileAsync(imageUrl, dest);
     await MediaLibrary.saveToLibraryAsync(downloaded.uri);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
