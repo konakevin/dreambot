@@ -1,3 +1,11 @@
+/**
+ * BrickBot pools — shared camera-axis + per-path triplets (scenes, lighting,
+ * palette).
+ *
+ * 13 paths × 3 pools each = 39 path-specific JSON pools, plus 1 shared
+ * camera_axis pool. Flat naming: {path}_{kind}.json.
+ */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -5,44 +13,38 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
-const VIBE_COLOR = {
-  cinematic: 'teal-and-orange cinematic grade, dramatic shadows on plastic',
-  dark: 'moody low-key lighting, deep shadows, single spotlight on build',
-  cozy: 'warm amber glow, firelit warmth on brick surfaces, inviting',
-  epic: 'dramatic rim lighting, heroic scale, golden highlights on studs',
-  nostalgic: 'faded warm vintage tone, retro LEGO catalog photography feel',
-  peaceful: 'soft diffuse natural light, gentle pastel brick colors',
-  ethereal: 'soft dreamy glow through transparent pieces, luminous',
-  voltage: 'electric-blue accent lighting, neon glow on dark builds',
-  nightshade: 'deep purple moonlit scene, silver highlights on brick edges',
-  shimmer: 'golden light catching glossy plastic, iridescent reflections',
-  surreal: 'impossible color combinations, dreamlike brick diorama',
-  fierce: 'harsh dramatic lighting, high contrast, action-frozen energy',
-};
+// Kebab-case path identifiers (used in code + captions).
+// Pool filenames convert to snake_case via toFile().
+const PATHS = [
+  'macro-display',
+  'girly',
+  'lego-masters',
+  'western',
+  'fantasy',
+  'space',
+  'aquatic',
+  'winter',
+  'pirates',
+  'mech',
+  'theme-park',
+  'forest',
+  'landscape',
+];
+
+const toFile = (p) => p.replace(/-/g, '_');
+
+const PER_PATH = {};
+for (const p of PATHS) {
+  const f = toFile(p);
+  PER_PATH[p] = {
+    scenes: load(`${f}_scenes`),
+    lighting: load(`${f}_lighting`),
+    palette: load(`${f}_palette`),
+  };
+}
 
 module.exports = {
-  CITY_SCENES: load('city_scenes'),
-  CASTLE_SCENES: load('castle_scenes'),
-  SPACE_SCENES: load('space_scenes'),
-  PIRATE_SCENES: load('pirate_scenes'),
-  COZY_SCENES: load('cozy_scenes'),
-  MECH_SCENES: load('mech_scenes'),
-  LANDSCAPE_SCENES: load('landscape_scenes'),
-  DISASTER_SCENES: load('disaster_scenes'),
-  MICRO_SCENES: load('micro_scenes'),
-  CINEMATIC_SCENES: load('cinematic_scenes'),
-  NOIR_SCENES: load('noir_scenes'),
-  HORROR_SCENES: load('horror_scenes'),
-  WILD_WEST_SCENES: load('wild_west_scenes'),
-  MASTERPIECE_BUILDS: load('masterpiece_builds'),
-  VILLAGE_SCENES: load('village_scenes'),
-  ARCHITECTURE_SCENES: load('architecture_scenes'),
-  LIGHTING: load('lighting'),
-  CAMERA_STYLES: load('camera_styles'),
-  SCENE_PALETTES: load('scene_palettes'),
-  VIBE_COLOR,
-
-  SENSORY_POOLS: {
-    scene: { smell: load('sensory_scene_smell'), sound: load('sensory_scene_sound'), touch: load('sensory_scene_touch'), temperature: load('sensory_scene_temperature'), weight: load('sensory_scene_weight'), air: load('sensory_scene_air'), lightcolor: load('sensory_scene_lightcolor') },
-  },
+  CAMERA_AXIS: load('camera_axis'),
+  PER_PATH,
+  PATHS,
 };
