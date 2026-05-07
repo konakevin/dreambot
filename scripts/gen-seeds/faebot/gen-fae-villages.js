@@ -2,11 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/faebot/seeds/fae_villages.json',
-  // Iteration mode: total=50 fast turnaround. Scale to 200 when recipe locks.
-  total: 50,
-  batch: 25,
+  total: 200,
+  batch: 50,
   append: false,
-  maxTokens: 4000,
+  maxTokens: 6000,
   metaPrompt: (n) => `Write ${n} unified scene descriptions of FAE DWELLINGS for FaeBot's fae-village path. Painterly enchanted-forest world matching FaeBot's other paths. Brian Froud + Greg Manchess + Eyvind Earle painted-fantasy lineage. Each entry feeds a Flux concept-art prompt-writer.
 
 Each entry: 35-55 words, ONE paragraph, focused PURELY on the DWELLING + ITS NATURAL FEATURE + LAYOUT.
@@ -71,6 +70,19 @@ Dwellings suspended in the canopy. Some entries are SINGLE suspended dwellings (
 - Forcing multi-bridge networks into every entry — only ~30% should be Pattern A
 - Crammed clusters of 10+ cottages on one side
 - Flat single-story shacks
+
+━━━ STRUCTURAL VARIETY (NON-NEGOTIABLE — pool will be 200 entries, MUST avoid repetition) ━━━
+
+When 200 entries are generated, the pool MUST feel diverse, not formulaic. Each entry should differ from prior entries on MULTIPLE axes:
+- DWELLING TYPE (rotate ALL 19 types — don't lean on hollow-tree / mushroom)
+- COMPOSITION PATTERN (A/B/C/D as scoped above)
+- NUMBER OF DWELLINGS (1, 2, 3, 4-5, 6+)
+- NATURAL FEATURE the dwelling integrates with (oak / cliff / brambles / roots / pond / waterfall / mushroom-ring / canopy / boulder / hollow / glade)
+- SCALE (intimate close-up / mid-village / sprawling vista)
+- OPENING WORD/STRUCTURE — vary how each entry begins, do not start every entry with "A village..." or "A small..." — mix in "Three cottages...", "The hamlet sprawls...", "Five hanging-nests dangle...", "An ancient oak holds...", "Six toadstools cluster...", "On either side of the brook...", "High in the canopy...", etc.
+- VOCABULARY — rotate adjectives across entries (don't reuse "lush" / "ancient" / "twisted" 200 times — also: gnarled, mossy, vine-strangled, fern-girdled, boulder-flanked, ivy-clad, age-blackened, sun-dappled, mist-veiled, wisteria-draped, cherry-strewn, lichen-mottled, root-knotted, cliff-perched, glade-bound, hollow-cradled)
+
+When a prior batch is shown to you as "ALREADY GENERATED" — actively diverge from those structures, dwelling types, scales, and opening words.
 
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete scene description (35-55 words). No preamble, no commentary, no markdown code fences.`,
