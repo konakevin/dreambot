@@ -282,15 +282,14 @@ export function PostGrid({
         data={posts}
         keyExtractor={(item) => item.id}
         numColumns={NUM_COLUMNS}
-        getItemLayout={(_, index) => ({
-          length: ROW_HEIGHT,
-          // numColumns=N means item I lives in row floor(I/N) — items in the
-          // same row share an offset. Old code used `index * ROW_HEIGHT`
-          // which assigned each item a unique offset; FlatList tolerates the
-          // mismatch in practice but it can drift on long-list scrollToIndex.
-          offset: headerHeight + Math.floor(index / NUM_COLUMNS) * ROW_HEIGHT,
-          index,
-        })}
+        // No getItemLayout: with numColumns the only way to express
+        // "items in the same row share an offset" is per-item length =
+        // ROW_HEIGHT with shared offsets, which makes FlatList compute
+        // sum-of-lengths total content height as N_items × ROW_HEIGHT
+        // (3× actual at numColumns=3). That inflated total breaks
+        // virtualization windowing — in-viewport tiles get spuriously
+        // evicted and remounted during slow drags. Letting FlatList
+        // measure is correct and we don't use scrollToIndex anywhere.
         columnWrapperStyle={styles.row}
         contentContainerStyle={{ paddingBottom: vs(90) }}
         windowSize={7}
