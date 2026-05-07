@@ -29,10 +29,20 @@ export async function persistBufferToStorage(
   userId: string,
   supabase: SupabaseClient
 ): Promise<string> {
-  const bytes = new Uint8Array(buf.slice(0, 4));
-  const isPng = bytes[0] === 0x89 && bytes[1] === 0x50;
-  const ext = isPng ? 'png' : 'jpg';
-  const contentType = isPng ? 'image/png' : 'image/jpeg';
+  const head = new Uint8Array(buf.slice(0, 12));
+  const isPng = head[0] === 0x89 && head[1] === 0x50;
+  // WebP: "RIFF" at 0..3, "WEBP" at 8..11
+  const isWebp =
+    head[0] === 0x52 &&
+    head[1] === 0x49 &&
+    head[2] === 0x46 &&
+    head[3] === 0x46 &&
+    head[8] === 0x57 &&
+    head[9] === 0x45 &&
+    head[10] === 0x42 &&
+    head[11] === 0x50;
+  const ext = isPng ? 'png' : isWebp ? 'webp' : 'jpg';
+  const contentType = isPng ? 'image/png' : isWebp ? 'image/webp' : 'image/jpeg';
 
   const fileName = `${userId}/${Date.now()}.${ext}`;
   const { error } = await supabase.storage
@@ -71,11 +81,11 @@ export async function sha256Hex(buf: ArrayBuffer): Promise<string> {
  *   4. Each pixel: 1 if >= average, 0 otherwise
  *   5. Pack 64 bits into 16-char hex
  */
-import { decode as decodeJpeg } from 'https://esm.sh/jpeg-js@0.4.4';
+import { decodeImage } from './imageCodec.ts';
 
-export function aHashHex(buf: ArrayBuffer): string {
-  const decoded = decodeJpeg(new Uint8Array(buf), { useTArray: true });
-  const data = decoded.data as Uint8Array;
+export async function aHashHex(buf: ArrayBuffer): Promise<string> {
+  const decoded = await decodeImage(new Uint8Array(buf));
+  const data = decoded.data;
   const w = decoded.width;
   const h = decoded.height;
   const N = 8;

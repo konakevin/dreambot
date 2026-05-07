@@ -12,7 +12,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image as ExpoImage } from 'expo-image';
-import { feedImageUrl } from '@/lib/imageUrl';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
@@ -134,7 +133,7 @@ export function PostGrid({
         if (!v.item) continue;
         if (prefetchedRef.current.has(v.item.id)) continue;
         prefetchedRef.current.add(v.item.id);
-        toPrefetch.push(feedImageUrl(v.item.image_url));
+        toPrefetch.push(v.item.image_url);
       }
       if (toPrefetch.length > 0) {
         ExpoImage.prefetch(toPrefetch);

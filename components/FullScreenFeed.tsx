@@ -25,7 +25,6 @@ import * as nav from '@/lib/navigate';
 import { supabase } from '@/lib/supabase';
 import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
-import { feedImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { CommentOverlay } from '@/components/CommentOverlay';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
@@ -212,7 +211,7 @@ export function FullScreenFeed({
         // Prefetch next 3 images
         const upcoming = posts.slice(idx + 1, idx + 4);
         if (upcoming.length > 0) {
-          ExpoImage.prefetch(upcoming.map((p) => feedImageUrl(p.image_url)));
+          ExpoImage.prefetch(upcoming.map((p) => p.image_url));
         }
         // Record impression after 1 second of visibility. Defensive guard:
         // skip non-UUID ids (e.g., synthetic `temp-{ts}` ids that some
