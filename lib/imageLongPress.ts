@@ -44,7 +44,7 @@ async function saveToPhotos(id: string, imageUrl: string) {
 
 /**
  * Standard long-press handler for images.
- * - Not your post: straight to save confirmation
+ * - Not your post: saves immediately (toast confirms)
  * - Your post: Options menu with Save + Delete
  */
 export function handleImageLongPress(opts: {
@@ -60,12 +60,7 @@ export function handleImageLongPress(opts: {
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Save to Photos',
-        onPress: () => {
-          showAlert('Save Image', 'Save this dream to your photos?', [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl) },
-          ]);
-        },
+        onPress: () => saveToPhotos(opts.id, opts.imageUrl),
       },
       {
         text: 'Delete',
@@ -74,9 +69,6 @@ export function handleImageLongPress(opts: {
       },
     ]);
   } else {
-    showAlert('Save Image', 'Save this dream to your photos?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl) },
-    ]);
+    saveToPhotos(opts.id, opts.imageUrl);
   }
 }
