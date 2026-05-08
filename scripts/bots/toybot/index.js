@@ -16,7 +16,6 @@ const blocks = require('./shared-blocks');
 
 const pathBuilders = {
   // existing
-  'lego-epic': require('./paths/lego-epic'),
   claymation: require('./paths/claymation'),
   vinyl: require('./paths/vinyl'),
   sackboy: require('./paths/sackboy'),
@@ -38,6 +37,8 @@ const pathBuilders = {
   'mech-toy-rampage': require('./paths/mech-toy-rampage'),
   'toybox-chaos': require('./paths/toybox-chaos'),
   'space-saga-figures': require('./paths/space-saga-figures'),
+  // new (2026-05-08) — flagship boss-clash path using shared FINAL_BOSSES pool
+  'monster-boss-battle': require('./paths/monster-boss-battle'),
 };
 
 module.exports = {
@@ -48,11 +49,10 @@ module.exports = {
   // toybox-chaos rotates across an array per render to deliberately mix
   // the visual signature.
   mediumByPath: {
-    'lego-epic': 'lego',
     claymation: 'claymation',
     vinyl: 'vinyl',
     sackboy: 'stitched',
-    'toy-landscape': ['lego', 'lego', 'lego', 'claymation', 'vinyl'],
+    'toy-landscape': ['claymation', 'vinyl'],
     'shortcake-scene': 'shortcake_figures',
     'barbie-scene': 'barbie_figures',
     'gi-joe-missions': 'gi_joe_figures',
@@ -65,23 +65,40 @@ module.exports = {
     'model-train-world': 'model_train_diorama',
     'plush-world': 'plush_fabric',
     'mech-toy-rampage': 'mech_toys',
-    'toybox-chaos': ['lego', 'action_figure', 'plush_fabric', 'hot_wheels', 'barbie_figures', 'army_men'],
+    'toybox-chaos': ['action_figure', 'plush_fabric', 'hot_wheels', 'barbie_figures', 'army_men'],
     'space-saga-figures': 'space_saga_figures',
+    // monster-boss-battle rotates across the full toy-medium roster so the
+    // boss + heroes can land in any toy world (vinyl Funko vs kaiju, action
+    // figures vs demon lord, mechs vs alien overlord, etc.)
+    'monster-boss-battle': [
+      'action_figure',
+      'vinyl',
+      'mech_toys',
+      'gi_joe_figures',
+      'space_saga_figures',
+      'plush_fabric',
+    ],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  // Per-path prompt prefix override — Funko Pop visual identity is front-loaded
+  // for the vinyl path so Flux's early-token weighting locks the look. Without
+  // this, the generic toy-photography prefix dilutes Funko-specific cues.
+  promptPrefixByPath: {
+    vinyl:
+      'photograph of authentic Funko Pop vinyl collectible figures with signature oversized SQUARE CUBE heads, small stocky bodies, tiny legs, large round solid-black dot eyes (no pupils), glossy matte vinyl, classic Funko Pop boxed-collectible look',
+  },
+
   // Per-medium prompt injection — ToyBot's dialect for each toy medium.
   // Injected between promptPrefix and the Sonnet-written scene. Each medium
   // is rendered as a REAL PHYSICAL TOY photographed in a practical set.
   mediumStyles: {
-    lego:
-      'authentic LEGO brick-construction figure, visible 4-stud tops on torso and shoulders, cylindrical hand-clips, blocky segmented limbs with pin-joint articulation, Minifig-scale proportions, smooth glossy ABS-plastic sheen with injection-mold seams, printed face decal, practical brick-set photography with soft studio light, toy-photography macro close depth-of-field, NOT digital-render NOT CGI NOT illustration',
     claymation:
       'stop-motion Plasticine clay puppet, visible thumbprints and sculpting-tool marks on the clay surface, slightly-asymmetric hand-sculpted features, painted glossy-enamel irises, armature-supported body with subtle clay seams, Aardman / Laika / Coraline / Wallace-and-Gromit aesthetic, matte-clay texture with occasional glossy highlight, practical miniature-set cinematography, NOT digital-render NOT illustration',
     vinyl:
-      'designer art-toy vinyl figure, oversized-head proportions (approx 3:1 head-to-body), glossy ABS-plastic sheen with specular highlights, visible mold-parting seams, hand-painted details with crisp paint-lines, articulated ball-joints at shoulders and hips, Dunny / Bearbrick / Kidrobot / Mighty-Jaxx designer-toy aesthetic, collector-grade paint work, display-case studio photography, NOT Funko-Pop NOT cartoon NOT illustration',
+      'Funko Pop vinyl collectible figure, signature Funko Pop proportions (oversized SQUARE CUBE head approx 1:1 with body, small stocky body, tiny legs), large round solid-black dot eyes (no pupils, glossy black), tiny printed mouth or no mouth, glossy matte vinyl finish, mass-produced collectible aesthetic, printed costume / fur / accessory details, Funko Pop figure boxed-collectible look — NOT Dunny NOT Bearbrick NOT Kidrobot NOT designer-art-toy, ONLY classic Funko Pop visual language',
     action_figure:
       '1/12-scale posable action-figure, visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, hard-plastic body with cloth-hybrid costume elements, hand-painted weathering and detail wash, interchangeable accessories at scale, GI-Joe / Hot-Toys / Mezco / NECA / Hasbro-Black-Series aesthetic, practical diorama lighting with shallow depth-of-field, NOT CGI NOT illustration',
     stitched:
@@ -120,7 +137,7 @@ module.exports = {
       'authentic vintage Kenner 1977-1985 Star Wars 3.75-inch action-figures — hand-painted plastic, bubble-card-mint paint quality, swivel-waist or limited-articulation, signature gear molded as part of body (lightsabers, blasters, jetpacks, helmets, capes, robes, droid-tools), real-physical-toys on handcrafted playset dioramas, named characters allowed (Luke / Leia / Han / Vader / Yoda / Boba Fett / Stormtroopers / R2-D2 / C-3PO / Chewbacca / Obi-Wan / Greedo / Ewoks / Tusken Raiders / Wampa / etc.), iconic Star Wars locations and ships (Tatooine / Hoth / Endor / Dagobah / Bespin / Death Star / Mos Eisley cantina / X-wings / TIE Fighters / Millennium Falcon / AT-ATs / Sandcrawlers), NEVER CGI, NEVER illustration',
   },
 
-  // Inverts old excludeVibes (dark/fierce/psychedelic/macabre).
+  // Bot-wide fallback. Per-path filtering happens in `vibesByPath` below.
   vibes: [
     'cinematic',
     'cozy',
@@ -139,8 +156,33 @@ module.exports = {
     'surreal',
   ],
 
+  // Per-path vibe whitelists. Engine (lib/botEngine.js:resolveVibe) picks
+  // from this when set; falls back to bot.vibes otherwise. Curated 2026-05-08
+  // so each path only rolls vibes that match its tone (no coquette boss
+  // battles, no voltage dollhouses, no shimmer army-men).
+  vibesByPath: {
+    claymation: ['cozy', 'whimsical', 'peaceful', 'nostalgic', 'enchanted', 'ethereal', 'ancient', 'nightshade'],
+    vinyl: ['cinematic', 'cozy', 'whimsical', 'nostalgic', 'voltage', 'coquette', 'shimmer', 'peaceful', 'nightshade'],
+    sackboy: ['cozy', 'whimsical', 'peaceful', 'enchanted', 'coquette', 'shimmer', 'ethereal', 'nostalgic'],
+    'toy-landscape': ['cinematic', 'cozy', 'epic', 'peaceful', 'ethereal', 'ancient', 'enchanted', 'nostalgic', 'nightshade', 'shimmer', 'voltage'],
+    'shortcake-scene': ['cozy', 'whimsical', 'coquette', 'shimmer', 'peaceful', 'enchanted', 'ethereal'],
+    'barbie-scene': ['cozy', 'whimsical', 'coquette', 'shimmer', 'peaceful', 'ethereal', 'nostalgic'],
+    'gi-joe-missions': ['cinematic', 'epic', 'voltage', 'nostalgic', 'ancient', 'nightshade'],
+    'green-army-warzone': ['cinematic', 'epic', 'voltage', 'nostalgic', 'nightshade', 'ancient'],
+    'miniature-dungeon': ['cinematic', 'epic', 'arcane', 'ancient', 'enchanted', 'nightshade', 'ethereal', 'surreal'],
+    'collector-shelf-epic': ['cinematic', 'epic', 'voltage', 'nostalgic', 'nightshade', 'ancient'],
+    'epic-hero-bucket': ['cinematic', 'epic', 'voltage', 'nostalgic', 'ancient', 'nightshade'],
+    'dollhouse-life': ['cozy', 'whimsical', 'coquette', 'shimmer', 'peaceful', 'ethereal', 'nostalgic', 'enchanted'],
+    'hotwheels-city': ['cinematic', 'epic', 'voltage', 'nostalgic', 'nightshade', 'ancient'],
+    'model-train-world': ['cozy', 'peaceful', 'nostalgic', 'ancient', 'ethereal', 'enchanted', 'cinematic'],
+    'plush-world': ['cozy', 'whimsical', 'peaceful', 'enchanted', 'coquette', 'shimmer', 'ethereal', 'nostalgic'],
+    'mech-toy-rampage': ['cinematic', 'epic', 'voltage', 'nightshade', 'ancient', 'surreal', 'arcane'],
+    'toybox-chaos': ['cinematic', 'cozy', 'epic', 'nostalgic', 'peaceful', 'whimsical', 'ethereal', 'arcane', 'ancient', 'enchanted', 'coquette', 'voltage', 'nightshade', 'shimmer', 'surreal'],
+    'space-saga-figures': ['cinematic', 'epic', 'voltage', 'nostalgic', 'ancient', 'nightshade', 'ethereal', 'surreal'],
+    'monster-boss-battle': ['cinematic', 'epic', 'voltage', 'nightshade', 'arcane', 'ancient', 'surreal'],
+  },
+
   paths: [
-    'lego-epic',
     'claymation',
     'vinyl',
     'sackboy',
@@ -159,10 +201,10 @@ module.exports = {
     'mech-toy-rampage',
     'toybox-chaos',
     'space-saga-figures',
+    'monster-boss-battle',
   ],
 
   pathWeights: {
-    'lego-epic': 3,
     claymation: 1,
     vinyl: 1,
     sackboy: 1,
@@ -181,6 +223,7 @@ module.exports = {
     'mech-toy-rampage': 1,
     'toybox-chaos': 2,
     'space-saga-figures': 1,
+    'monster-boss-battle': 1,
   },
 
   // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
@@ -188,7 +231,7 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'lego-epic', 'claymation', 'vinyl', 'sackboy', 'toy-landscape',
+      'claymation', 'vinyl', 'sackboy', 'toy-landscape',
       'shortcake-scene', 'barbie-scene', 'gi-joe-missions',
       'green-army-warzone', 'miniature-dungeon', 'collector-shelf-epic',
       'epic-hero-bucket', 'dollhouse-life', 'hotwheels-city',
@@ -214,7 +257,6 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       // Figure-centric (toys are the subject)
-      'lego-epic': 'scene',
       claymation: 'figure',
       vinyl: 'figure',
       sackboy: 'figure',
@@ -237,10 +279,22 @@ module.exports = {
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
-  rollSharedDNA({ vibeKey, picker }) {
+  rollSharedDNA({ vibeKey, path, picker }) {
+    // 50/50 classic vs world. Vinyl + monster-boss-battle don't have
+    // path-native classic SCENES pools (vinyl was rebuilt for Funko slice-of-
+    // life, boss-battle is new in 2026-05) — force them to world mode.
+    const noClassicMode = new Set(['vinyl', 'monster-boss-battle']);
+    const renderMode = noClassicMode.has(path)
+      ? 'world'
+      : Math.random() < 0.5
+        ? 'classic'
+        : 'world';
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
+      staging: picker.pickWithRecency(pools.STAGING_AXIS, 'staging'),
+      camera: picker.pickWithRecency(pools.CAMERA_FRAMING, 'camera_framing'),
+      renderMode,
     };
   },
 

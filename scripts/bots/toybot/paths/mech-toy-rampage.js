@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.MECH_TOY_LANDSCAPES, 'mech_toy_landscape')
     : picker.pickWithRecency(pools.MECH_TOY_SCENES, 'mech_toy_scene');
   const lighting = picker.pickWithRecency(pools.MECH_LIGHTING, 'mech_lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: roll 3-5 distinct mech archetypes per render to defeat
@@ -42,6 +46,14 @@ ${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
 
 ━━━ THE MECH-TOY SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}

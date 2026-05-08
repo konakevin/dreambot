@@ -12,6 +12,10 @@ const blocks = require('../shared-blocks');
  */
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.TOYBOX_CHAOS_SCENES, 'toybox_chaos_scene');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -34,6 +38,14 @@ NEVER unify the toys' art style — each toy is rendered in its OWN native mediu
 
 ━━━ THE TOYBOX-CHAOS SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

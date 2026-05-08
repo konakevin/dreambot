@@ -3,6 +3,10 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const landscape = picker.pickWithRecency(pools.TOY_LANDSCAPES, 'toy_landscape');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
@@ -19,6 +23,14 @@ Pure landscape. No minifigures, no clay-people, no vinyl. Medium-of-the-landscap
 
 ━━━ THE TOY LANDSCAPE ━━━
 ${landscape}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

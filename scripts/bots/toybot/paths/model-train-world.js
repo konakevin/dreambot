@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.MODEL_TRAIN_LANDSCAPES, 'model_train_landscape')
     : picker.pickWithRecency(pools.MODEL_TRAIN_SCENES, 'model_train_scene');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
 
   // Slot-pool DNA: roll 1 specific train consist (era + engine + cars) to
   // defeat Sonnet's "steam-locomotive" training-bias. Forces era + type variety.
@@ -40,6 +44,14 @@ ${train}
 
 ━━━ THE MODEL-TRAIN SCENE ━━━
 ${scene}
+
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
 
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━

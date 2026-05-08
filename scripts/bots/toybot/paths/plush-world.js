@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.PLUSH_LANDSCAPES, 'plush_landscape')
     : picker.pickWithRecency(pools.PLUSH_SCENES, 'plush_scene');
   const lighting = picker.pickWithRecency(pools.PLUSH_LIGHTING, 'plush_lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: 30% solo (1 creature) / 70% ensemble (3-5 creatures).
@@ -47,6 +51,14 @@ ${cast.map((c, i) => `${isSolo ? '' : `${i + 1}. `}${c}`).join('\n')}
 
 ━━━ THE PLUSH SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}

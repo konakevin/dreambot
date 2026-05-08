@@ -16,6 +16,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.SPACE_SAGA_LANDSCAPES, 'space_saga_landscape')
     : picker.pickWithRecency(pools.SPACE_SAGA_SCENES, 'space_saga_scene');
   const lighting = picker.pickWithRecency(pools.SPACE_SAGA_LIGHTING, 'space_saga_lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: 2-3 distinct figures per render to defeat
@@ -57,6 +61,14 @@ This render is a FROZEN FRAME OF CINEMATIC CHAOS. NEVER static / NEVER posed / N
 
 ━━━ THE SPACE-SAGA SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING + ATMOSPHERE (sole color authority for this path) ━━━
 ${lighting}

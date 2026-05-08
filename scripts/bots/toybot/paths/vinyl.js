@@ -2,14 +2,12 @@ const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const useLandscape = Math.random() < 0.3;
-  const diorama = useLandscape
-    ? picker.pickWithRecency(pools.VINYL_LANDSCAPES, 'vinyl_landscape')
-    : picker.pickWithRecency(pools.VINYL_DIORAMAS, 'vinyl_diorama');
+  const cast = picker.pickWithRecency(pools.VINYL_FUNKO_CAST, 'vinyl_funko_cast');
+  const scenario = picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are a designer-toy photographer writing VINYL DIORAMA scenes for ToyBot. Funko-Pop oversized-head figures in themed dioramas. Kidrobot / designer-toy. Output wraps with style prefix + suffix.
+  return `You are a Funko Pop slice-of-life photographer writing FUNKO POP SCENES for ToyBot. The vinyl path is now a feed of multi-character Funko Pop figures living everyday lives in the real world at their tiny scale — grocery shopping, park hangs, sandbox play, tree climbing, beach trips, coffee shops, library reading, beach bonfires, road trips. Output wraps with style prefix + suffix.
 
 ${blocks.TOY_PHOTOGRAPHY_BLOCK}
 
@@ -19,11 +17,28 @@ ${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
 
 ${blocks.PATH_MEDIUM_LOCK_BLOCK}
 
-━━━ VINYL MEDIUM LOCK ━━━
-Oversized-head small-body vinyl figure. Glossy sheen on surface. Matte-painted panel lines. Smooth sculpted form.
+━━━ FUNKO POP MEDIUM LOCK ━━━
+EVERY figure is a Funko Pop vinyl figure: signature oversized SQUARE head (the big "Pop" cube proportions), small stocky body, tiny legs, glossy matte vinyl finish, large round dot eyes (sometimes with tiny pupils, no expressions beyond stylized), no nose or mouth (or simple printed mouth), printed costume / fur / accessories, mass-produced collectible toy aesthetic. Animals, humans, monsters, robots, fantasy creatures — ALL rendered in the unmistakable Funko Pop visual language. This is collectible vinyl Funko Pop photography, NOT generic designer toy or boutique vinyl. Multiple Funko Pops in the scene, NEVER solo hero.
 
-━━━ THE VINYL DIORAMA ━━━
-${diorama}
+━━━ THE FUNKO POP CAST (the WHO) ━━━
+${cast}
+
+━━━ THE SCENARIO (the WHAT — multi-character story moment, real-world setting) ━━━
+${scenario}
+
+Combine the cast above with the scenario above into a single scene. The Funko Pops are the figures performing the scenario.
+
+━━━ REAL-WORLD STAGING — TOY LIVING IN OUR WORLD AT ITS SCALE ━━━
+${sharedDNA.staging}
+
+${blocks.REAL_WORLD_STAGING_BLOCK}
+
+━━━ CAMERA FRAMING — VARY THE ZOOM (no more single-character portraits) ━━━
+${sharedDNA.camera}
+
+${blocks.STORY_AND_CAST_BLOCK}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

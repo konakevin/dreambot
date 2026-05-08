@@ -15,6 +15,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.DOLLHOUSE_LIFE_LANDSCAPES, 'dollhouse_life_landscape')
     : picker.pickWithRecency(pools.DOLLHOUSE_LIFE_SCENES, 'dollhouse_life_scene');
   const lighting = picker.pickWithRecency(pools.DOLLHOUSE_LIGHTING, 'dollhouse_lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Roll one of three figurine traditions for variety. Each render commits
@@ -54,6 +58,14 @@ ${camera}
 
 ━━━ THE DOLLHOUSE SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}

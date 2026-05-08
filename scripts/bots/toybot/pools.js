@@ -35,8 +35,6 @@ const VIBE_COLOR = {
 
 module.exports = {
   // ─── existing paths (unchanged) ─────────────────────────────────────
-  LEGO_SCENES: load('lego_scenes'),
-  LEGO_LANDSCAPES: load('lego_landscapes'),
   CLAYMATION_SCENES: load('claymation_scenes'),
   CLAYMATION_LANDSCAPES: load('claymation_landscapes'),
   VINYL_DIORAMAS: load('vinyl_dioramas'),
@@ -98,6 +96,13 @@ module.exports = {
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),
   CAMERA_ANGLES: load('camera_angles'),
+  STAGING_AXIS: load('staging_axis'),
+  CAMERA_FRAMING: load('camera_framing'),
+  TOY_SCENARIOS: load('toy_scenarios'),
+  ARMY_SCENARIOS: load('army_scenarios'),
+  HOTWHEELS_SCENARIOS: load('hotwheels_scenarios'),
+  VINYL_FUNKO_CAST: load('vinyl_funko_cast'),
+  FINAL_BOSSES: load('final_bosses'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

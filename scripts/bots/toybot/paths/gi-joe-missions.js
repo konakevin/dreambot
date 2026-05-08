@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.GI_JOE_MISSIONS_LANDSCAPES, 'gi_joe_missions_landscape')
     : picker.pickWithRecency(pools.GI_JOE_MISSIONS_SCENES, 'gi_joe_missions_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.ARMY_SCENARIOS, 'army_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a GI-Joe-era toy-commercial cinematographer writing articulated-commando action-figure scenes for ToyBot. 3.75-inch hand-painted code-name commandos vs masked terror-organization troopers on handcrafted playset dioramas. Saturday-morning-cartoon-serial military-toy storytelling. Non-IP — archetype only. Output wraps with style prefix + suffix.
@@ -26,6 +30,14 @@ EVERY figure is a 3.75-inch articulated action-figure with swivel-waist / ball-j
 
 ━━━ THE GI-JOE SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

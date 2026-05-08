@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.SACKBOY_LANDSCAPES, 'sackboy_landscape')
     : picker.pickWithRecency(pools.SACKBOY_SCENES, 'sackboy_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a fabric-world photographer writing SACKBOY/STITCHED scenes for ToyBot. LBP-style fabric world with stitched Sackboy-style characters. Everything fabric/felt/yarn/paper/cardboard. Output wraps with style prefix + suffix.
@@ -24,6 +28,14 @@ EVERYTHING fabric / felt / yarn / paper / cardboard. Visible stitching. Button-e
 
 ━━━ THE SACKBOY SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

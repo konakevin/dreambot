@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_LANDSCAPES, 'green_army_warzone_landscape')
     : picker.pickWithRecency(pools.GREEN_ARMY_WARZONE_SCENES, 'green_army_warzone_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.ARMY_SCENARIOS, 'army_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
@@ -38,6 +42,14 @@ ${framingBlock}
 
 ━━━ THE ARMY-MEN SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

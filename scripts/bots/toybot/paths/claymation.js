@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.CLAYMATION_LANDSCAPES, 'claymation_landscape')
     : picker.pickWithRecency(pools.CLAYMATION_SCENES, 'claymation_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a claymation stop-motion photographer writing CLAYMATION SCENES for ToyBot. Clay-everything. Wallace-Gromit / Coraline / Laika / Play-Doh energy. Output wraps with style prefix + suffix.
@@ -24,6 +28,14 @@ EVERYTHING is clay. Thumbprints visible. Paint-strokes on clay-figures. Subtle i
 
 ━━━ THE CLAYMATION SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

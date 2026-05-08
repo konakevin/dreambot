@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.EPIC_HERO_BUCKET_LANDSCAPES, 'epic_hero_bucket_landscape')
     : picker.pickWithRecency(pools.EPIC_HERO_BUCKET_SCENES, 'epic_hero_bucket_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are an 80s-toy-commercial cinematographer writing VINTAGE "EPIC" ACTION-FIGURE scenes for ToyBot — a rolled-up bucket covering (a) muscular sword-and-sorcery barbarian/sorceress heroes, (b) space-adventurer archetypes (hooded laser-sword monks / dark-helmet villains / scruffy smugglers / plastic droids / bounty-hunters), and (c) cape-and-cowl superhero figures (caped champions / dark vigilantes / powered-armor heroes / cosmic-gauntlet villains). All non-IP — archetype only, never named characters. Handcrafted playset dioramas, dramatic toy-photography lighting. Output wraps with style prefix + suffix.
@@ -24,6 +28,14 @@ EVERY character is a vintage 80s/90s hand-painted articulated action-figure — 
 
 ━━━ THE ACTION-HERO SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

@@ -1,58 +1,67 @@
 #!/usr/bin/env node
 const { generatePool } = require('../../lib/seedGenHelper');
+
+// Total + append: tune for iteration vs prod.
+//   Quick iteration: TOTAL=25 APPEND=false (overwrites — fast smoke test)
+//   Production:      TOTAL=200 APPEND=false (full regen)
+const TOTAL = parseInt(process.env.TOTAL, 10) || 25;
+const APPEND = process.env.APPEND === 'true';
+
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/miniature_dungeon_scenes.json',
-  total: 200,
-  batch: 10,
-  append: true,
-  metaPrompt: (n) => `You are writing ${n} TABLETOP-MINIATURE scene descriptions for ToyBot's tabletop-minis path — Warhammer / Dungeons-&-Dragons / Reaper / WizKids painted pewter-or-plastic miniatures arranged on handcrafted terrain dioramas. 28mm–32mm scale figures with visible brush-strokes, drybrushed highlights, base-flocking, mounted on round bases, photographed like a pro-painter's display cabinet lit for a Games-Workshop catalog.
+  total: TOTAL,
+  batch: Math.min(TOTAL, 25),
+  append: APPEND,
+  metaPrompt: (n) => `You are writing ${n} TABLETOP-MINIATURE DIORAMA scene descriptions for ToyBot's miniature-dungeon path. The path is a flagship cinematic-tabletop-miniature feed — D&D adventuring parties, Warhammer-scale battles, dungeon crawls, taverns, boss fights, painted figurines, terrain kits, dice, spell effects, tiny-world storytelling. Reaction goal: "holy shit this miniature scene is insane" / "I want to play this campaign" / "I can't stop zooming in."
 
-Each entry: 18-28 words. ONE specific cinematic tabletop-miniature battle or narrative scene with painted figures mid-action on a built-up terrain piece.
+Each entry: 30-50 words. Comma-separated descriptive phrase clusters. NO sentences with periods.
 
-━━━ THE CHARACTERS ━━━
-Painted 28mm-32mm scale tabletop-miniatures — knights, orcs, dwarves, elves, wizards, skeletons, dragons, goblins, paladins, rangers, clerics, barbarians, necromancers, ogres, space-marines. Hand-painted with visible brush-strokes, wash-shading, drybrush-highlights, metallic-armor-paint, freehand shield-crest detail, static-grass/flock bases. Multiple figures per scene — this is a cinematic diorama.
+━━━ SUB-THEME DISTRIBUTION (deliver ALL 8 in roughly equal proportion) ━━━
 
-━━━ SCENE CATEGORIES (rotate, don't cluster) ━━━
-- Orc warband charging across a scorched-earth battlefield toward a line of spear-wall dwarves
-- Paladin miniature last-stand atop a cobblestone hill, sword raised, skeleton horde ascending
-- Dragon miniature perched on crumbling tower, jaws open mid-roar, adventurers below on cliff-edge
-- Dwarven hold gate scene — axe-wielding dwarves defending portcullis, goblins climbing walls
-- Wizard miniature mid-cast with arcane-blue glowing hand, robes swirling, spell-effect swirling
-- Tavern-interior diorama — adventuring party clustered around table, mugs raised, lute-player
-- Dungeon-crawl chamber — thief miniature picking lock on treasure-chest, torch-bearer behind
-- Siege-tower rolling toward castle wall — pikemen defenders on ramparts, boiling-oil cauldrons
-- Necromancer miniature raising skeletons from graveyard, green-glow base, crumbling tombstones
-- Knight cavalry charge — lances lowered, banner streaming, foot-archers aiming volley
-- Elven ranger on tree-stump ambush — miniature bow drawn, arrow mid-nock, forest-diorama
-- Ogre mini crushing cart with warhammer, screaming townsfolk-miniatures fleeing
-- Wizard's sanctum — miniature at scroll-cluttered desk, crystal-ball glowing, familiar on perch
-- Goblin cave raiders pouring out of cavern mouth, torches held high, drum-bearer
-- Undead pirate captain on ship's-wheel diorama, skeleton-crew in rigging, cannon-smoke
-- Dragonborn paladin miniature squared off against black dragon on crumbled bridge
-- Ruined temple floor-trap scene — rogue leaping over pit, cleric trailing with lantern
-- Frost-giant miniature striding through snow-drift, pine-tree diorama, warriors retreating
-- Dwarven forge-hall diorama — miniature smith at anvil with orange-glow, bellows-apprentice
-- Crypt reveal — adventuring party frozen mid-step as lich miniature rises from sarcophagus
-- Cavalry skirmish in wheatfield diorama — knights clashing with orc-wolf-riders mid-collision
-- Warlock miniature at summoning-circle with chalk-glyph base, demon-mini materializing
-- Hobbit-village riverside scene — minis fishing, gardening, smoking pipes on cottage stoops
-- Drow ambush in mushroom-forest — giant-mushroom terrain, stealth-figures mid-strike
-- Paladin funeral pyre diorama — fallen knight on bier, companions standing vigil at dusk
+~13% DUNGEON CRAWL — torchlit corridors, skeleton crypts, treasure rooms, trap halls, eerie tunnels, loot piles, glowing runes, fog hugging the floor, stone tile floors, dripping water, moss and cobwebs in corners, dungeon doorway arches.
 
-━━━ MUST-HAVE FOR EVERY ENTRY ━━━
-- Reference PAINTED-MINIATURE / tabletop-scale / brush-strokes / flocked-base / terrain-diorama LANGUAGE
-- Warhammer / D&D / pro-painter aesthetic — this is COLLECTOR-GRADE display-cabinet toy-photography
-- Fantasy archetype specificity (dwarf / orc / wizard / dragon) — don't say "fantasy character"
-- Practical display-case lighting (dramatic spotlight / cabinet-LED / warm-key rim-light)
-- Cinematic verb — mid-charge / mid-swing / mid-cast / mid-roar
+~13% TAVERN QUEST HUB — cozy medieval fantasy tavern interiors, adventuring party miniatures at wooden tables with tiny mugs of ale and plates of stew, quest board covered in parchment notes, warm fireplace glow, hanging lanterns, barrels stacked, miniature rugs, hooded stranger lurking, bards mid-song.
+
+~13% CAMPFIRE ADVENTURE — fantasy wilderness camps, miniature adventurers around glowing campfires in forest clearings or mountain passes, tiny bedrolls and backpacks, cooking pots over flames, scattered scrolls and maps on rocks, glowing fireflies, miniature pine trees, distant ruined arches, soft mist, starry sky.
+
+~13% BOSS BATTLE ARENA — epic boss fights on tabletop, miniature heroes facing massive boss minis (dragons on treasure hoards, lich kings, demon portals, giant beasts in collapsed cathedrals, ancient elemental titans). Glowing spell effects swirling, shattered columns, ruined temple tiles, gold coins and jewels scattered, smoke and embers rising, glowing runic circles, miniature skulls and broken shields.
+
+~13% WARGAME BATTLEFIELD — Warhammer-scale wargame board dioramas, miniature soldiers / armored armies / tanks / walkers / mechs on ruined-city or alien-world terrain. Trenches, sandbags, broken concrete, smoke drifting, bullet casings and debris, glowing plasma weapon effects, banners waving, artillery emplacements, fortifications, cratered ground.
+
+~12% WIZARD TOWER LIBRARY — arcane study interiors, miniature mages at desks, tiny bookshelves overflowing with tomes, floating candles, glowing crystal balls, potion bottles and scrolls scattered, intricate magic circles carved into floors, stained glass windows casting colored light, cobwebs in corners, miniature ladders, shimmering magical dust, alchemical apparatus, astrolabes, summoning circles.
+
+~12% ANCIENT RUINS EXPEDITION — jungle temple and lost-civilization scenes, miniature adventurers climbing mossy stone steps, vine-covered temple doorways, tiny carved statues and cracked stone blocks, glowing golden idols on altars, scattered coins and relic fragments, miniature ferns and flowers, damp ground with puddles, sunlight breaking through canopy, floating dust motes and mist.
+
+~11% GAME NIGHT OVERHEAD — top-down or near-overhead "game night" tabletop scene, detailed battle map spread across a wooden table, hand-painted miniatures positioned mid-encounter, polyhedral dice scattered near character sheets, tiny treasure tokens and spell cards, candlelit atmosphere, open leather-bound rulebook, miniature dungeon walls placed on the map, glowing lantern light, GM screen visible, scribbled notes on parchment.
+
+━━━ HARD RULES (every entry must satisfy ALL) ━━━
+
+1. Every entry must read as a PHYSICAL TABLETOP DIORAMA — hand-painted miniatures on handcrafted terrain. NEVER digital fantasy illustration. (The signature phrases like "macro lens miniature photography" / "shallow depth of field" / "hand-painted tabletop miniature figures" are added at the path-builder level — DO NOT include them in your seeds.)
+
+2. Every entry must list AT LEAST 6 specific MICRO-DETAILS by name from this menu (or beyond): polyhedral dice, battle map, treasure tokens, tiny barrels, scrolls, candles, skull piles, moss flocking, sandbags, crates, lanterns, spell cards, coin piles, rubble, books, potion bottles, torches, traps, banners, weapon racks, broken shields, cobwebs, bedrolls, cooking pots, character sheets, parchment notes, mugs of ale, plates of stew, tiny rugs, miniature ladders, ferns, vines, statues, altars, bones, scattered weapons, glowing runes, plasma effects, smoke trails, magical particles.
+
+3. Every entry must include AT LEAST 2 ATMOSPHERE EFFECTS: fog, smoke, dust motes, embers, candle flicker, volumetric light beams, rain droplets, magical particles, mist drift, swirling dust, shimmer, glowing-rune particle, firefly motes.
+
+4. Every entry must include AT LEAST 1 SCALE CUE proving it's a tabletop diorama: visible brush strokes on figures, paint texture on armor, drybrushed highlights, static-grass on bases, flocked-base detail, tabletop edge visible, hobbyist hand JUST out of frame holding paintbrush, display-cabinet glass reflection, tiny molded seams.
+
+5. Every entry must include CINEMATIC LIGHTING LANGUAGE: warm torchlight, moody shadows, rim light, god rays, dramatic contrast, key-light, single-source spotlight, volumetric haze.
+
+6. Use specific archetypes (dwarf / orc / wizard / dragon / paladin) — never "fantasy character".
 
 ━━━ BANNED ━━━
-- NO "real person" / "real creature" — these are MINIATURES on a tabletop
-- NO game-IP proper nouns (Frodo / Gandalf / Drizzt / Space Marine chapter names / Astartes) — archetype only
-- NO CGI / 3D-render / digital illustration language
-- NO sexual content
-- NO graphic gore — injured poses OK, no spraying-blood
+- NO "real person" / "real creature" / "real human" — these are MINIATURES on a tabletop.
+- NO game-IP proper nouns (Frodo / Gandalf / Drizzt / Space Marine chapter names / Astartes / Pikachu).
+- NO CGI / 3D-render / digital-illustration language.
+- NO sexual content.
+- NO graphic gore — injured poses OK, no spraying blood.
+- NO extreme zoom on a single small object — broader diorama context must always be visible.
+
+━━━ DEDUP ━━━
+No two entries share the same sub-theme + key character + key prop combination. Spread widely across the 8 sub-themes.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,
-}).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
+}).catch((e) => {
+  console.error('Fatal:', e.message);
+  process.exit(1);
+});

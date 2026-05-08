@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.BARBIE_LANDSCAPES, 'barbie_landscape')
     : picker.pickWithRecency(pools.BARBIE_SCENES, 'barbie_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a Barbie-movie-style toy cinematographer writing fashion-doll dioramas for ToyBot. Classic 11.5-inch Mattel-scale fashion-dolls on hand-built DreamHouse / boutique / beach / runway playsets. Pink-dominant palette, glossy-plastic sheen, cinematic framing like a Barbie-film still. Output wraps with style prefix + suffix.
@@ -26,6 +30,14 @@ EVERY character is an 11.5-inch articulated Mattel-scale fashion-doll — plasti
 
 ━━━ THE BARBIE SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}

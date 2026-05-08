@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.HOTWHEELS_LANDSCAPES, 'hotwheels_landscape')
     : picker.pickWithRecency(pools.HOTWHEELS_SCENES, 'hotwheels_scene');
   const lighting = picker.pickWithRecency(pools.HOTWHEELS_LIGHTING, 'hotwheels_lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.HOTWHEELS_SCENARIOS, 'hotwheels_scenario')
+      : null;
   const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
 
   // Slot-pool DNA: roll 3-6 distinct cars per render to defeat Sonnet's
@@ -43,6 +47,14 @@ ${cast.map((c, i) => `${i + 1}. ${c}`).join('\n')}
 
 ━━━ THE HOT-WHEELS SCENE ━━━
 ${scene}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING + ATMOSPHERE ━━━
 ${lighting}

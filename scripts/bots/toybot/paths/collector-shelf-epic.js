@@ -7,6 +7,10 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.COLLECTOR_SHELF_LANDSCAPES, 'collector_shelf_landscape')
     : picker.pickWithRecency(pools.COLLECTOR_SHELF_SCENES, 'collector_shelf_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const scenario =
+    sharedDNA.renderMode === 'world'
+      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
+      : null;
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are an action-figure photographer writing ACTION FIGURE BATTLE scenes for ToyBot. 80s/90s action-figure cinematic dioramas. Joint-articulation visible + explosion effects. Output wraps with style prefix + suffix.
@@ -26,6 +30,14 @@ ${blocks.ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK}
 
 ━━━ THE ACTION FIGURE BATTLE ━━━
 ${battle}
+
+${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
+━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${blocks.storyCastSection(sharedDNA.renderMode)}
+
+
 
 ━━━ LIGHTING ━━━
 ${lighting}
