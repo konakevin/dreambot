@@ -66,8 +66,11 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
+            // Re-tap active Home tab → IG-style scroll-to-top + refetch
+            // (the screen subscribes to homeFeedResetToken to do both).
             if (activeTab === 'index') {
               regenerateSeed();
+              useFeedStore.getState().bumpHomeFeedReset();
             }
             setActiveTab('index');
           },
@@ -84,7 +87,9 @@ export default function TabLayout() {
             if (searchActive) {
               setSearchActive(false);
             } else if (activeTab === 'top') {
+              // Re-tap active Top tab → scroll-to-top + refetch
               regenerateSeed();
+              useFeedStore.getState().bumpTopGridReset();
             }
             setActiveTab('top');
           },

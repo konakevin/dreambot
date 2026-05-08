@@ -40,6 +40,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
+import { NewPostsPill } from '@/components/NewPostsPill';
 import { NUM_COLUMNS, TILE_GAP, TILE_WIDTH } from '@/constants/grid';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
@@ -353,6 +354,8 @@ export default function SearchExploreScreen() {
 
   // ── Browse feed (grid mode) ──
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const topGridResetToken = useFeedStore((s) => s.topGridResetToken);
+  const bumpTopGridReset = useFeedStore((s) => s.bumpTopGridReset);
   const gridRef = useRef<RNFlatList>(null);
 
   useEffect(() => {
@@ -364,6 +367,48 @@ export default function SearchExploreScreen() {
   const { data, isLoading, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useExploreDreams(activeMediums, activeVibes);
   const posts = data?.pages.flat() ?? [];
+
+  // ── Tap-active-tab gesture (Instagram-style) ──
+  // Scroll-to-top is already handled by the feedSeed effect above (regenerateSeed
+  // fires on re-tap which bumps feedSeed). Here we add the refetch + clear pill.
+  const skipFirstTopReset = useRef(true);
+  useEffect(() => {
+    if (skipFirstTopReset.current) {
+      skipFirstTopReset.current = false;
+      return;
+    }
+    refetch();
+    setHasNewTopPosts(false);
+    gridRef.current?.scrollToOffset({ offset: 0, animated: true });
+  }, [topGridResetToken, refetch]);
+
+  // ── New posts pill detection ──
+  const [isScrolledAway, setIsScrolledAway] = useState(false);
+  const [hasNewTopPosts, setHasNewTopPosts] = useState(false);
+  const lastSeenTopGridId = useRef<string | null>(null);
+  const handleScroll = useCallback(
+    (e: { nativeEvent: { contentOffset: { y: number } } }) => {
+      const y = e.nativeEvent.contentOffset.y;
+      const scrolledAway = y > 200;
+      if (scrolledAway !== isScrolledAway) setIsScrolledAway(scrolledAway);
+    },
+    [isScrolledAway]
+  );
+  useEffect(() => {
+    const topId = posts[0]?.id ?? null;
+    if (!topId) return;
+    if (lastSeenTopGridId.current === null) {
+      lastSeenTopGridId.current = topId;
+      return;
+    }
+    if (topId !== lastSeenTopGridId.current) {
+      lastSeenTopGridId.current = topId;
+      if (isScrolledAway) setHasNewTopPosts(true);
+    }
+  }, [posts, isScrolledAway]);
+  useEffect(() => {
+    if (!isScrolledAway && hasNewTopPosts) setHasNewTopPosts(false);
+  }, [isScrolledAway, hasNewTopPosts]);
 
   // Local pull-to-refresh spinner — see FullScreenFeed for rationale.
   const [isPulling, setIsPulling] = useState(false);
@@ -395,6 +440,8 @@ export default function SearchExploreScreen() {
           maxToRenderPerBatch={8}
           initialNumToRender={10}
           removeClippedSubviews
+          onScroll={handleScroll}
+          scrollEventThrottle={100}
           refreshControl={
             <RefreshControl
               refreshing={isPulling && !isFetchingNextPage}
@@ -424,6 +471,15 @@ export default function SearchExploreScreen() {
             ) : null
           }
           renderItem={({ item }) => <PostTile item={item} />}
+        />
+      )}
+
+      {/* New posts pill — slides down from the top when fresh content lands while scrolled away */}
+      {!searchActive && (
+        <NewPostsPill
+          visible={hasNewTopPosts}
+          onPress={bumpTopGridReset}
+          topInset={insets.top + 4}
         />
       )}
 

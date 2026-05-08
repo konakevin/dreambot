@@ -70,6 +70,13 @@ interface Props {
   onTogglePosted?: (postId: string) => void;
   /** Called when the card HUD is toggled (single tap) */
   onHudToggle?: (visible: boolean) => void;
+  /**
+   * Bumpable token — when its value changes, the feed scrolls to the top
+   * AND resets the internal currentIndex (so the auto-resnap on focus/resume
+   * doesn't yank the user back). Used by the Instagram-style "tap active tab
+   * to jump to top" gesture.
+   */
+  scrollToTopToken?: number;
 }
 
 export function FullScreenFeed({
@@ -86,6 +93,7 @@ export function FullScreenFeed({
   showVisibilityToggle,
   onTogglePosted,
   onHudToggle,
+  scrollToTopToken,
 }: Props) {
   const insets = useSafeAreaInsets();
   const internalRef = useRef<FlatList>(null);
@@ -151,6 +159,19 @@ export function FullScreenFeed({
       if (impressionTimer.current) clearTimeout(impressionTimer.current);
     };
   }, []);
+
+  // Tap-active-tab-to-top gesture (Instagram-style). When the parent bumps
+  // scrollToTopToken, jump to index 0 AND reset currentIndex so the next
+  // focus/resume re-snap doesn't yank us back to where the user was scrolled.
+  const skipFirstScrollToTop = useRef(true);
+  useEffect(() => {
+    if (skipFirstScrollToTop.current) {
+      skipFirstScrollToTop.current = false;
+      return;
+    }
+    currentIndex.current = 0;
+    ref.current?.scrollToOffset({ offset: 0, animated: true });
+  }, [scrollToTopToken, ref]);
 
   // Spinner state owned here, not driven from parent's `isRefetching`. iOS only
   // auto-resets contentOffset after a gesture-driven RefreshControl cycle —

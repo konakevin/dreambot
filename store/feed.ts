@@ -16,6 +16,12 @@ export interface FeedStore {
   // Profile tab reset
   profileResetToken: number;
   bumpProfileReset: () => void;
+  // Home tab tap-to-top reset (Instagram-style: re-tap active tab → scroll-to-top + refetch)
+  homeFeedResetToken: number;
+  bumpHomeFeedReset: () => void;
+  // Top tab (explore grid) tap-to-top reset
+  topGridResetToken: number;
+  bumpTopGridReset: () => void;
   // Active tab tracking (for programmatic navigation)
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -38,6 +44,10 @@ export const useFeedStore = create<FeedStore>((set) => ({
   regenerateSeed: () => set({ feedSeed: Math.random() }),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
+  homeFeedResetToken: 0,
+  bumpHomeFeedReset: () => set((s) => ({ homeFeedResetToken: s.homeFeedResetToken + 1 })),
+  topGridResetToken: 0,
+  bumpTopGridReset: () => set((s) => ({ topGridResetToken: s.topGridResetToken + 1 })),
   activeTab: 'index',
   setActiveTab: (tab) => set({ activeTab: tab }),
   pendingPostId: null,
