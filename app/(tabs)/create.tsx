@@ -517,25 +517,6 @@ export default function CreateScreen() {
                   />
                 </TouchableOpacity>
               </View>
-              {showProModeInfo && (
-                <View
-                  className="px-4 pb-3 pt-1"
-                  style={{ borderTopWidth: 1, borderTopColor: colors.border, marginTop: -1 }}
-                >
-                  <Text style={{ color: colors.textSecondary, fontSize: 12, lineHeight: 17 }}>
-                    Sends your prompt directly to Flux. Skips AI enhancement and face swap — best
-                    for fully-polished prompts you want rendered exactly as written. Pick which Flux
-                    model in{' '}
-                    <Text
-                      style={{ color: colors.accent, fontWeight: '600' }}
-                      onPress={() => nav.push('/settings/pro-mode')}
-                    >
-                      Settings → Pro Mode
-                    </Text>
-                    .
-                  </Text>
-                </View>
-              )}
             </View>
           )}
 
@@ -707,6 +688,84 @@ export default function CreateScreen() {
             onPress={() => setPreviewPhoto(false)}
           >
             <Ionicons name="close" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Pro Mode info modal — centered card explaining what Pro Mode does
+          and pointing the user to Settings → Pro Mode to choose Flux model.
+          Modal floats above the keyboard so the user can read it without
+          dismissing input. */}
+      <Modal
+        visible={showProModeInfo}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowProModeInfo(false)}
+      >
+        <TouchableOpacity
+          className="flex-1 items-center justify-center px-6"
+          style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
+          onPress={() => setShowProModeInfo(false)}
+          activeOpacity={1}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {}}
+            style={{
+              backgroundColor: colors.surface,
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: colors.border,
+              padding: 22,
+              width: '100%',
+              maxWidth: 360,
+            }}
+          >
+            <View className="flex-row items-center mb-3">
+              <Ionicons name="flash-outline" size={20} color={colors.accent} />
+              <Text
+                style={{
+                  color: colors.textPrimary,
+                  fontSize: 17,
+                  fontWeight: '700',
+                  marginLeft: 8,
+                }}
+              >
+                Pro Mode
+              </Text>
+            </View>
+            <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
+              Sends your prompt directly to Flux. Skips AI enhancement and face swap — best for
+              fully-polished prompts you want rendered exactly as written.
+            </Text>
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontSize: 14,
+                lineHeight: 21,
+                marginTop: 12,
+              }}
+            >
+              Pick which Flux model handles your Pro Mode renders in{' '}
+              <Text
+                style={{ color: colors.accent, fontWeight: '600' }}
+                onPress={() => {
+                  setShowProModeInfo(false);
+                  nav.push('/settings/pro-mode');
+                }}
+              >
+                Settings → Pro Mode
+              </Text>
+              .
+            </Text>
+            <TouchableOpacity
+              onPress={() => setShowProModeInfo(false)}
+              activeOpacity={0.7}
+              className="self-end mt-5 py-2 px-4 rounded-lg"
+              style={{ backgroundColor: colors.accent }}
+            >
+              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>Got it</Text>
+            </TouchableOpacity>
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
