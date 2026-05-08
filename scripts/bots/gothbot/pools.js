@@ -89,6 +89,9 @@ module.exports = {
   ASSASSIN_OUTFITS_MALE: load('assassin_outfits_male'),
   ASSASSIN_HAIRSTYLES_MALE: load('assassin_hairstyles_male'),
   ASSASSIN_ACCESSORIES_MALE: load('assassin_accessories_male'),
+  // Combat path pools (added 2026-05-08).
+  COMBAT_FOE: load('combat_foe'),
+  COMBAT_MOMENT: load('combat_moment'),
   VIBE_COLOR,
 
   // Sensory anchor pools — 3 contexts × 7 channels × 50 entries.

@@ -25,6 +25,7 @@ const pathBuilders = {
   'gothic-darklands': require('./paths/gothic-darklands'),
   'vampire-assassin-female': require('./paths/vampire-assassin-female'),
   'vampire-assassin-male': require('./paths/vampire-assassin-male'),
+  'vampire-assassin-combat': require('./paths/vampire-assassin-combat'),
 };
 
 module.exports = {
@@ -59,6 +60,7 @@ module.exports = {
     // 1.1-pro renders best on anime+gothic combo).
     'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-male':   'black-forest-labs/flux-1.1-pro',
+    'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with
@@ -85,6 +87,7 @@ module.exports = {
     // Vampire-assassin paths locked to the dark triad.
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-male':   ['dark', 'nightshade', 'macabre'],
+    'vampire-assassin-combat': ['dark', 'nightshade', 'macabre'],
   },
 
   mediumByPath: {
@@ -109,6 +112,7 @@ module.exports = {
     // Vampire-assassin paths locked to anime medium for the trial.
     'vampire-assassin-female': 'anime',
     'vampire-assassin-male':   'anime',
+    'vampire-assassin-combat': 'anime',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -309,6 +313,7 @@ module.exports = {
     'gothic-darklands',
     'vampire-assassin-female',
     'vampire-assassin-male',
+    'vampire-assassin-combat',
   ],
 
   cycleAllPaths: true,
