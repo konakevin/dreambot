@@ -2,8 +2,10 @@ import * as Haptics from 'expo-haptics';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { File, Paths } from 'expo-file-system';
+import { router } from 'expo-router';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
+import { useAuthStore } from '@/store/auth';
 
 async function saveToPhotos(id: string, imageUrl: string) {
   const { status } = await MediaLibrary.requestPermissionsAsync();
@@ -48,9 +50,14 @@ async function saveToPhotos(id: string, imageUrl: string) {
 
 /**
  * Standard long-press handler for images.
- * - Not your post: Save Image confirm → save
- * - Your post: Options menu (Save + Delete) — Save fires immediately,
- *   no second confirm step
+ *
+ * Save-to-Photos is gated by ownership + Pro entitlement:
+ *   - Your own post (or you're admin) → callers pass `onDelete`. Save is
+ *     unrestricted; menu shows Save + Delete.
+ *   - Someone else's post (bot or other user) → callers omit `onDelete`.
+ *     Save requires `isPro` (active Pro subscription). If not Pro, the
+ *     long-press shows an upsell prompt routing to /sparkleStore instead
+ *     of saving the image.
  */
 export function handleImageLongPress(opts: {
   id: string;
@@ -61,6 +68,7 @@ export function handleImageLongPress(opts: {
   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
   if (opts.onDelete) {
+    // Own post (or admin) — always unrestricted save + delete
     showAlert('Options', '', [
       { text: 'Cancel', style: 'cancel' },
       {
@@ -73,10 +81,26 @@ export function handleImageLongPress(opts: {
         onPress: opts.onDelete!,
       },
     ]);
-  } else {
+    return;
+  }
+
+  // Someone else's content — gate save on Pro entitlement
+  const { isPro } = useAuthStore.getState();
+  if (isPro) {
     showAlert('Save Image', 'Save this dream to your photos?', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl) },
     ]);
+    return;
   }
+
+  // Free user — show upsell instead of save
+  showAlert(
+    'Pro Feature',
+    'Saving dreams from other creators is a Pro feature. Subscribe for unlimited HQ downloads.',
+    [
+      { text: 'Not now', style: 'cancel' },
+      { text: 'See Pro', onPress: () => router.push('/sparkleStore') },
+    ]
+  );
 }
