@@ -433,7 +433,10 @@ export default function CreateScreen() {
               className="px-4 pt-4 pb-10 text-base"
               style={{
                 color: colors.textPrimary,
-                minHeight: 120,
+                // Fixed height — long prompts scroll internally rather than
+                // stretching the box. iOS multiline TextInputs scroll
+                // automatically when height is fixed.
+                height: 120,
                 textAlignVertical: 'top',
               }}
               placeholder={placeholder}
@@ -442,6 +445,7 @@ export default function CreateScreen() {
               onChangeText={setPrompt}
               maxLength={2000}
               multiline
+              scrollEnabled
               returnKeyType="default"
             />
             {/* Photo icon inside prompt field */}
