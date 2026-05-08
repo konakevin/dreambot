@@ -69,6 +69,7 @@ export default function CreateScreen() {
   const [kbOpen, setKbOpen] = useState(false);
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
+  const [showProModeInfo, setShowProModeInfo] = useState(false);
   const promptRef = useRef<TextInput>(null);
 
   // Load user's art_styles/aesthetics for filtering
@@ -457,43 +458,80 @@ export default function CreateScreen() {
           {/* Pro Mode toggle — only shown when there's a custom prompt with
               no photo. When ON: prompt goes verbatim to flux-1.1-pro, skipping
               Sonnet expansion, chaos, medium/vibe directives, AND face swap.
-              Face-swap warning surfaces in the footer contextHint to stay
-              visible above the keyboard. */}
+              Slim row: "Pro Mode" label + (i) info icon (tap to expand inline
+              explanation) + switch on the right. Face-swap warning still
+              surfaces in the footer contextHint to stay above the keyboard. */}
           {hasPrompt && !hasPhoto && (
-            <TouchableOpacity
-              onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
-              activeOpacity={0.7}
-              className="flex-row items-center justify-between rounded-xl px-4 py-3 mb-4"
+            <View
+              className="rounded-xl mb-4"
               style={{
                 backgroundColor: config.useExactPrompt ? colors.accent + '22' : colors.surface,
                 borderWidth: 1,
                 borderColor: config.useExactPrompt ? colors.accent : colors.border,
               }}
             >
-              <View className="flex-1 mr-3">
-                <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                  Pro Mode — Use my exact prompt
-                </Text>
-                <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
-                  Send your prompt directly to Flux 1.1 Pro. Skips AI enhancement and face swap.
-                </Text>
-              </View>
-              <View
-                className="w-12 h-7 rounded-full justify-center"
-                style={{
-                  backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
-                  paddingHorizontal: 2,
-                }}
-              >
-                <View
-                  className="w-6 h-6 rounded-full"
+              <View className="flex-row items-center px-4 py-3">
+                <TouchableOpacity
+                  onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
+                  activeOpacity={0.7}
+                  className="flex-row items-center flex-1"
+                  hitSlop={6}
+                >
+                  <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                    Pro Mode
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setShowProModeInfo((v) => !v)}
+                  activeOpacity={0.6}
+                  className="px-2"
+                  hitSlop={10}
+                >
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={18}
+                    color={colors.textSecondary}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
+                  activeOpacity={0.7}
+                  hitSlop={6}
+                  className="w-12 h-7 rounded-full justify-center ml-2"
                   style={{
-                    backgroundColor: '#fff',
-                    transform: [{ translateX: config.useExactPrompt ? 20 : 0 }],
+                    backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
+                    paddingHorizontal: 2,
                   }}
-                />
+                >
+                  <View
+                    className="w-6 h-6 rounded-full"
+                    style={{
+                      backgroundColor: '#fff',
+                      transform: [{ translateX: config.useExactPrompt ? 20 : 0 }],
+                    }}
+                  />
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+              {showProModeInfo && (
+                <View
+                  className="px-4 pb-3 pt-1"
+                  style={{ borderTopWidth: 1, borderTopColor: colors.border, marginTop: -1 }}
+                >
+                  <Text style={{ color: colors.textSecondary, fontSize: 12, lineHeight: 17 }}>
+                    Sends your prompt directly to Flux. Skips AI enhancement and face swap — best
+                    for fully-polished prompts you want rendered exactly as written. Pick which Flux
+                    model in{' '}
+                    <Text
+                      style={{ color: colors.accent, fontWeight: '600' }}
+                      onPress={() => nav.push('/settings/pro-mode')}
+                    >
+                      Settings → Pro Mode
+                    </Text>
+                    .
+                  </Text>
+                </View>
+              )}
+            </View>
           )}
 
           {/* Style pills — disabled when "use my exact prompt" is on, since

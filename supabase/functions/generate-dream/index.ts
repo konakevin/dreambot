@@ -806,10 +806,24 @@ Output ONLY the prompt.`;
         // ── DIRECT PASS-THROUGH: power-user mode ──
         // User opted into "use my exact prompt" — skip all Sonnet expansion,
         // chaos, medium directive, vibe directive, focal anchor, two-pass
-        // polish. Send the prompt verbatim to flux-1.1-pro. Sparkle spend +
-        // moderation + storage + DB insert all unchanged.
+        // polish. Send the prompt verbatim to the user's chosen Flux model
+        // (Settings → Pro Mode). Sparkle spend + moderation + storage + DB
+        // insert all unchanged.
         finalPrompt = sanitizeUserPrompt(userSubject.trim());
-        force_model = 'black-forest-labs/flux-1.1-pro';
+
+        // Read the user's Pro Mode Flux model preference (default flux-1.1-pro
+        // if column unset / row missing — preserves backward compatibility
+        // before migration 149 lands).
+        const { data: userRow } = await supabase
+          .from('users')
+          .select('pro_mode_flux_model')
+          .eq('id', userId)
+          .single();
+        const proModeModel =
+          (userRow as { pro_mode_flux_model?: string } | null)?.pro_mode_flux_model ||
+          'black-forest-labs/flux-1.1-pro';
+        force_model = proModeModel;
+        console.log(`[generate-dream] DIRECT PASS-THROUGH model preference: ${proModeModel}`);
         logAxes = {
           medium: medium.key,
           vibe: vibe.key,
@@ -819,7 +833,7 @@ Output ONLY the prompt.`;
         };
         fallbackReasons.push('direct_pass_thru:no_sonnet');
         console.log(
-          `[generate-dream] DIRECT PASS-THROUGH (flux-1.1-pro): ${finalPrompt.slice(0, 150)}`
+          `[generate-dream] DIRECT PASS-THROUGH (${proModeModel}): ${finalPrompt.slice(0, 150)}`
         );
         lap('direct-pass-thru-done');
       } else {

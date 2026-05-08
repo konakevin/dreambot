@@ -455,6 +455,17 @@ export default function SettingsScreen() {
             onPress={() => nav.push('/settings/dream-cast')}
           />
         </View>
+        {/* Pro Mode section — power-user Flux model preference for the
+            Create-screen "Use my exact prompt" toggle. */}
+        <Text style={styles.sectionHeader}>PRO MODE</Text>
+        <View style={styles.section}>
+          <SettingsRow
+            icon="flash-outline"
+            label="Pro Mode Flux Model"
+            onPress={() => nav.push('/settings/pro-mode')}
+          />
+        </View>
+
         <View style={styles.section}>
           {isAdmin && (
             <SettingsRow

@@ -1516,6 +1516,7 @@ export type Database = {
           is_bot: boolean;
           is_public: boolean;
           last_active_at: string | null;
+          pro_mode_flux_model: string;
           sparkle_balance: number;
           username: string;
         };
@@ -1530,6 +1531,7 @@ export type Database = {
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
+          pro_mode_flux_model?: string;
           sparkle_balance?: number;
           username: string;
         };
@@ -1544,6 +1546,7 @@ export type Database = {
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
+          pro_mode_flux_model?: string;
           sparkle_balance?: number;
           username?: string;
         };
