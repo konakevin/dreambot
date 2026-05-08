@@ -1,5 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   View,
@@ -297,7 +298,7 @@ export default function InboxScreen() {
   }, [refetch]);
   const { mutate: markSeen } = useMarkShareSeen();
   const { mutate: deleteNotification } = useDeleteShare();
-  const { mutate: markAllSeen, isPending: markingAll } = useMarkAllSeen();
+  const { mutate: markAllSeen } = useMarkAllSeen();
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const queryClient = useQueryClient();
 
@@ -310,6 +311,21 @@ export default function InboxScreen() {
   const hasUnread = inbox.some((item) => !item.isSeen);
   const hasAny = inbox.length > 0;
   const allSelected = hasAny && selected.size === inbox.length;
+
+  // Instagram-style auto-clear: viewing the Inbox screen IS the trigger that
+  // marks all unread notifications as seen. Fires once per focus to avoid
+  // re-marking on every render. Notifications stay in the list with their
+  // content; they just lose the "unread" highlight.
+  const lastFocusFireRef = useRef(0);
+  useFocusEffect(
+    useCallback(() => {
+      if (!hasUnread) return;
+      const now = Date.now();
+      if (now - lastFocusFireRef.current < 500) return; // de-dupe rapid focus events
+      lastFocusFireRef.current = now;
+      markAllSeen();
+    }, [hasUnread, markAllSeen])
+  );
 
   function toggleSelect(id: string) {
     setSelected((prev) => {
@@ -423,21 +439,6 @@ export default function InboxScreen() {
           <>
             <Text style={styles.headerTitle}>Inbox</Text>
             <View style={styles.headerActions}>
-              {hasUnread && (
-                <TouchableOpacity
-                  onPress={() => markAllSeen()}
-                  activeOpacity={0.7}
-                  hitSlop={8}
-                  disabled={markingAll}
-                >
-                  <View style={styles.markAllRow}>
-                    {markingAll && <ActivityIndicator size="small" color={colors.accent} />}
-                    <Text style={styles.markAllRead}>
-                      {markingAll ? 'Marking...' : 'Mark all read'}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              )}
               {hasAny && (
                 <TouchableOpacity
                   onPress={() => setSelectMode(true)}
@@ -525,12 +526,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-  },
-  markAllRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  markAllRead: {
-    color: colors.accent,
-    fontSize: 14,
-    fontWeight: '700',
   },
   row: {
     flexDirection: 'row',
