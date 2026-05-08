@@ -66,17 +66,14 @@ export default function AboutScreen() {
           </Text>
 
           <Text style={styles.paragraph}>
-            To <Text style={styles.bold}>my family</Text> — for believing in me through every
-            late-night coding session, even from afar. Thank you for the support, the patience, and
-            never once asking me to &ldquo;get a real job.&rdquo;
+            To <Text style={styles.bold}>my family</Text> — thanks for believing in me, even from
+            afar.
           </Text>
 
           <Text style={styles.paragraph}>
-            Special thanks to <Text style={styles.bold}>Hannah</Text> (my oldest, and the one still
-            at home) and her friend <Text style={styles.bold}>Nick</Text> — DreamBot&rsquo;s
-            unofficial QA team. They tested every weird build, broke it in creative ways, and gave
-            me the kind of unfiltered feedback every solo dev needs. Hannah, thanks for putting up
-            with my hermit phase.
+            To <Text style={styles.bold}>Hannah</Text> (my oldest, still at home) and her friend{' '}
+            <Text style={styles.bold}>Nick</Text> — thanks for testing every weird build and putting
+            up with my hermit phase.
           </Text>
 
           <Text style={styles.paragraph}>
