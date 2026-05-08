@@ -183,13 +183,23 @@ export default function CreateScreen() {
     : (selectedMediumRow?.face_swaps ?? true);
 
   // Contextual hint above Dream button
-  const contextHint = hasPhoto
-    ? config.photoStyle === 'new_scene'
-      ? 'Put your photo in a new scene'
-      : 'Restyle your photo in this medium'
-    : hasPrompt
-      ? 'Generate from your prompt'
-      : 'Leave blank for a surprise';
+  // Footer hint — surfaces the face-swap-off warning when exact-prompt mode
+  // is on + the prompt mentions self/relationship. Footer is always visible
+  // above the keyboard, so the user sees this even when the inline area is
+  // squeezed.
+  const exactPromptSelfWarning =
+    config.useExactPrompt && (mentionsSelf || mentionsOther)
+      ? `Face swap is off — your face won${'’'}t appear in this dream`
+      : null;
+  const contextHint = exactPromptSelfWarning
+    ? exactPromptSelfWarning
+    : hasPhoto
+      ? config.photoStyle === 'new_scene'
+        ? 'Put your photo in a new scene'
+        : 'Restyle your photo in this medium'
+      : hasPrompt
+        ? 'Generate from your prompt'
+        : 'Leave blank for a surprise';
 
   // Placeholder text
   const placeholder = hasPhoto
@@ -444,73 +454,46 @@ export default function CreateScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* "Use my exact prompt" toggle — only shown when there's a custom
-              prompt with no photo. When ON: prompt goes verbatim to flux-1.1-pro,
-              skipping Sonnet expansion, chaos, medium/vibe directives, AND face swap. */}
+          {/* Pro Mode toggle — only shown when there's a custom prompt with
+              no photo. When ON: prompt goes verbatim to flux-1.1-pro, skipping
+              Sonnet expansion, chaos, medium/vibe directives, AND face swap.
+              Face-swap warning surfaces in the footer contextHint to stay
+              visible above the keyboard. */}
           {hasPrompt && !hasPhoto && (
-            <>
-              <TouchableOpacity
-                onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
-                activeOpacity={0.7}
-                className="flex-row items-center justify-between rounded-xl px-4 py-3"
+            <TouchableOpacity
+              onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
+              activeOpacity={0.7}
+              className="flex-row items-center justify-between rounded-xl px-4 py-3 mb-4"
+              style={{
+                backgroundColor: config.useExactPrompt ? colors.accent + '22' : colors.surface,
+                borderWidth: 1,
+                borderColor: config.useExactPrompt ? colors.accent : colors.border,
+              }}
+            >
+              <View className="flex-1 mr-3">
+                <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                  Pro Mode — Use my exact prompt
+                </Text>
+                <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+                  Send your prompt directly to Flux 1.1 Pro. Skips AI enhancement and face swap.
+                </Text>
+              </View>
+              <View
+                className="w-12 h-7 rounded-full justify-center"
                 style={{
-                  backgroundColor: config.useExactPrompt ? colors.accent + '22' : colors.surface,
-                  borderWidth: 1,
-                  borderColor: config.useExactPrompt ? colors.accent : colors.border,
-                  marginBottom: config.useExactPrompt && (mentionsSelf || mentionsOther) ? 8 : 16,
+                  backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
+                  paddingHorizontal: 2,
                 }}
               >
-                <View className="flex-1 mr-3">
-                  <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                    Use my exact prompt
-                  </Text>
-                  <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
-                    Send your prompt directly to Flux 1.1 Pro. Skips AI enhancement and face swap.
-                  </Text>
-                </View>
                 <View
-                  className="w-12 h-7 rounded-full justify-center"
+                  className="w-6 h-6 rounded-full"
                   style={{
-                    backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
-                    paddingHorizontal: 2,
+                    backgroundColor: '#fff',
+                    transform: [{ translateX: config.useExactPrompt ? 20 : 0 }],
                   }}
-                >
-                  <View
-                    className="w-6 h-6 rounded-full"
-                    style={{
-                      backgroundColor: '#fff',
-                      transform: [{ translateX: config.useExactPrompt ? 20 : 0 }],
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
-
-              {/* Inline warning when toggle is ON and the prompt references
-                  self / relationships — clarifies that face swap won't run
-                  even though the prompt mentions a person. */}
-              {config.useExactPrompt && (mentionsSelf || mentionsOther) && (
-                <View
-                  className="flex-row items-start rounded-xl px-4 py-3 mb-4"
-                  style={{
-                    backgroundColor: 'rgba(245,158,11,0.10)',
-                    borderWidth: 1,
-                    borderColor: 'rgba(245,158,11,0.35)',
-                  }}
-                >
-                  <Ionicons
-                    name="warning-outline"
-                    size={16}
-                    color="#F59E0B"
-                    style={{ marginTop: 1, marginRight: 8 }}
-                  />
-                  <Text style={{ color: '#F59E0B', fontSize: 12, flex: 1, lineHeight: 17 }}>
-                    Face swap is off in this mode — even though your prompt mentions{' '}
-                    {mentionsSelf ? 'you' : 'a person'}, your face won&apos;t be added to the
-                    render. Turn this off if you want your face in the dream.
-                  </Text>
-                </View>
-              )}
-            </>
+                />
+              </View>
+            </TouchableOpacity>
           )}
 
           {/* Style pills — disabled when "use my exact prompt" is on, since
@@ -618,12 +601,14 @@ export default function CreateScreen() {
         <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : vs(96) }}>
           {/* Contextual hint */}
           <View className="flex-row items-center justify-center gap-1.5 mb-2">
-            {((hasPhoto && hasPrompt) || mentionsSelf || mentionsOther) && (
+            {exactPromptSelfWarning ? (
+              <Ionicons name="warning-outline" size={14} color="#F59E0B" />
+            ) : (hasPhoto && hasPrompt) || mentionsSelf || mentionsOther ? (
               <Ionicons name="information-circle" size={14} color={colors.accent} />
-            )}
+            ) : null}
             <Text
               className="text-center text-sm font-medium"
-              style={{ color: 'rgba(255,255,255,0.5)' }}
+              style={{ color: exactPromptSelfWarning ? '#F59E0B' : 'rgba(255,255,255,0.5)' }}
             >
               {contextHint}
             </Text>
