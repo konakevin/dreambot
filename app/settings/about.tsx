@@ -71,9 +71,9 @@ export default function AboutScreen() {
           </Text>
 
           <Text style={styles.paragraph}>
-            To <Text style={styles.bold}>Hannah</Text> (my oldest, still at home) and her friend{' '}
-            <Text style={styles.bold}>Nick</Text> — thanks for testing every weird build and putting
-            up with my hermit phase.
+            To <Text style={styles.bold}>Hannah</Text> and <Text style={styles.bold}>Nick</Text> —
+            thanks for testing, listening to me blab about this app for hours, and getting dragged
+            into every new batch of renders.
           </Text>
 
           <Text style={styles.paragraph}>
