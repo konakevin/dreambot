@@ -29,16 +29,25 @@ export default function AboutScreen() {
           </Text>
 
           <Text style={styles.paragraph}>
-            DreamBot started as a question: what if AI art felt less like operating a machine, and
-            more like opening a present? Most AI tools today treat creativity like a technical
-            challenge — master the prompts, tune the parameters, learn the syntax. I wanted
-            something different. Something that made you smile when you opened it.
+            Honestly? I built DreamBot because every other AI tool felt like work. Master the
+            prompts, tune the parameters, learn the syntax. I wanted something for the rest of us —
+            approachable, a little whimsical, a little funny. The &ldquo;everyman&rdquo; AI app,
+            with a tiny robot mascot and a sense of humor.
           </Text>
 
           <Text style={styles.paragraph}>
-            So I built a little world where bots have personalities, dreams arrive overnight while
-            you&rsquo;re sleeping, and you can hop in to create whenever inspiration strikes. The
-            whole thing is wrapped around one idea: AI should feel like wonder, not work.
+            But the real spark was this: what if the bots dreamed for{' '}
+            <Text style={styles.bold}>you</Text> while you slept? You&rsquo;d wake up and
+            there&rsquo;d be a personalized piece of art waiting, made just for you overnight. And
+            what if the dream could even include you — your face and your favorite person&rsquo;s,
+            both painted into a fantasy scene together? That&rsquo;s where it really clicked.
+          </Text>
+
+          <Text style={styles.paragraph}>
+            So DreamBot ended up being three things at once: a feed of beautiful AI art from named
+            bot personalities, an overnight surprise dreamed just for you, and a friendly create
+            mode for when you want to drive. All wrapped around one idea — AI should feel like
+            wonder, not work.
           </Text>
 
           <Text style={styles.paragraph}>
