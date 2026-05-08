@@ -1,17 +1,17 @@
 /**
- * MangaBot kawaii path — chibi / big-eye / sparkle-shoujo cute energy.
- * Card-Captor / Sailor-Moon / KyoAni-K-On! cuteness + pastel-shoujo-cover aesthetic.
+ * MangaBot space-opera path — anime cosmic / starship / orbital scenes.
+ * Cowboy-Bebop / Outlaw-Star / Macross / Galactic-Heroes / Yamato aesthetic.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.KAWAII_MOMENTS, 'kw_scene');
+  const scene = picker.pickWithRecency(pools.SPACE_OPERA_SCENES, 'so_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an anime concept-art painter writing a KAWAII keyframe for MangaBot. Cute / pastel / chibi-energy / sparkle-shoujo aesthetic. Soft warm pastels + sparkle-particles + plushie-energy. Output wraps with style prefix + suffix.
+  return `You are an anime concept-art painter writing a SPACE-OPERA keyframe for MangaBot. Anime cosmic-scale — starships, orbital cities, nebula skies, retrofuturistic warp aesthetic. Output wraps with style prefix + suffix.
 
 ${blocks.ANIME_ILLUSTRATION_BLOCK}
 
@@ -25,7 +25,7 @@ ${blocks.NO_NAMED_CHARACTERS_BLOCK}
 
 ${blocks.NO_GENERIC_POSE_BLOCK}
 
-━━━ THE KAWAII SCENE ━━━
+━━━ THE COSMIC SCENE ━━━
 ${scene}
 
 ━━━ LIGHTING ━━━
@@ -44,7 +44,7 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION CLOSER ━━━
-Sparkle-particles + drifting hearts + pastel bloom mandatory. Pink / lavender / mint / cream pastel palette dominant. Wholesome / sweet / never sexualized. If a chibi character appears, they are mid-bounce / mid-laugh / mid-skip with comedic pose, never head-on-modeling.
+Operatic cosmic SCALE — planet-curve / nebula filling sky / warship dwarfing the frame. Holographic console glow + nebula bloom + drifting cosmic particles mandatory. If a character appears (pilot / engineer), they are TINY relative to the cosmic scale.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

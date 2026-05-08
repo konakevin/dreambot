@@ -1,31 +1,34 @@
+/**
+ * MangaBot samurai-era path — historical Japan / jidaigeki / bamboo-and-shrine.
+ * Mononoke / Demon-Slayer / Rurouni-Kenshin / Vagabond aesthetic.
+ */
+
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.SAMURAI_SCENES, 'samurai_scene');
-  const cultural = picker.pickWithRecency(pools.CULTURAL_ELEMENTS, 'cultural_element');
-  const detail = picker.pickWithRecency(pools.CHARACTER_DETAILS, 'character_detail');
+  const scene = picker.pickWithRecency(pools.SAMURAI_SCENES, 'se_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an anime illustrator writing SAMURAI-ERA scenes for MangaBot. Feudal Japan through anime lens — ronin, duels, castles, Edo streets, bamboo forests. Samurai Champloo / Rurouni Kenshin / Sword of the Stranger energy. Output wraps with style prefix + suffix.
+  return `You are an anime concept-art painter writing a SAMURAI-ERA keyframe for MangaBot. Historical Japan / jidaigeki — bamboo forests, shrines, lanterns, snowy mountains, katana-warriors. Output wraps with style prefix + suffix.
 
-${blocks.ANIME_AESTHETIC_BLOCK}
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.KEYFRAME_COMPOSITION_BLOCK}
+
+${blocks.DENSITY_BLOCK}
+
+${blocks.STORY_MOMENT_BLOCK}
 
 ${blocks.NO_NAMED_CHARACTERS_BLOCK}
 
+${blocks.NO_GENERIC_POSE_BLOCK}
+
 ${blocks.CULTURAL_RESPECT_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE SAMURAI SCENE ━━━
+━━━ THE SAMURAI-ERA SCENE ━━━
 ${scene}
-
-━━━ CHARACTER DETAIL ━━━
-${detail}
-
-━━━ CULTURAL ELEMENT ━━━
-${cultural}
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -39,16 +42,11 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
-${blocks.BLOW_IT_UP_BLOCK}
-
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ SAMURAI-ERA DNA ━━━
-Historical Japan rendered through anime mastery. Architecture, clothing, and weapons are culturally accurate — castle rooflines, hakama folds, katana tsuba, geta sandals, paper lanterns. The mood swings between tense stillness (hand on hilt, wind holding its breath) and explosive action (blade drawn, cherry blossoms scattering). Ink-wash backgrounds meeting cel-shaded characters. Every frame feels like a lost Kurosawa film redrawn by Kyoto Animation.
-
-━━━ COMPOSITION ━━━
-Cinematic wide or mid frame. Character in feudal Japanese setting. Atmospheric depth with mist, rain, or petals. Hand-drawn anime illustration.
+━━━ COMPOSITION CLOSER ━━━
+Falling leaves / drifting petals / snow / mist atmospheric effects mandatory. Bamboo / shrine / lantern / wooden-architecture density. If a samurai or ronin appears, they are mid-step / mid-draw / mid-breath, never head-on-modeling. Mononoke / Demon-Slayer painterly quality.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

@@ -10,11 +10,9 @@ const pools = require('./pools');
 const blocks = require('./shared-blocks');
 
 const pathBuilders = {
-  'anime-scene': require('./paths/anime-scene'),
-  'anime-landscape': require('./paths/anime-landscape'),
+  // Existing (11 retained, all rewritten 2026-05-08 for keyframe framework):
   'mythological-creature': require('./paths/mythological-creature'),
-  'cozy-anime': require('./paths/cozy-anime'),
-  kawaii: require('./paths/kawaii'),
+  'kawaii': require('./paths/kawaii'),
   'slice-of-life': require('./paths/slice-of-life'),
   'neo-tokyo': require('./paths/neo-tokyo'),
   'shonen-action': require('./paths/shonen-action'),
@@ -22,6 +20,21 @@ const pathBuilders = {
   'isekai-fantasy': require('./paths/isekai-fantasy'),
   'food-anime': require('./paths/food-anime'),
   'anime-village': require('./paths/anime-village'),
+  'anime-character-female': require('./paths/anime-character-female'),
+  'anime-character-male': require('./paths/anime-character-male'),
+  // 12 new paths (built 2026-05-08):
+  'mecha-hangars': require('./paths/mecha-hangars'),
+  'festival-nights': require('./paths/festival-nights'),
+  'magical-girl': require('./paths/magical-girl'),
+  'ghibli-countryside': require('./paths/ghibli-countryside'),
+  'occult-tokyo': require('./paths/occult-tokyo'),
+  'post-apocalyptic': require('./paths/post-apocalyptic'),
+  'beach-episode': require('./paths/beach-episode'),
+  'rooftop-sunsets': require('./paths/rooftop-sunsets'),
+  'cherry-blossom-romance': require('./paths/cherry-blossom-romance'),
+  'space-opera': require('./paths/space-opera'),
+  'underwater': require('./paths/underwater'),
+  'noir': require('./paths/noir'),
 };
 
 module.exports = {
@@ -31,10 +44,7 @@ module.exports = {
   mediums: ['anime'],
 
   useModelPicker: true,
-  allowedModels: [
-    'black-forest-labs/flux-dev',
-    'black-forest-labs/flux-1.1-pro',
-  ],
+  allowedModels: ['black-forest-labs/flux-1.1-pro'],
 
   // Single 'anime' medium — pin heavy on anime-friendly vibes
   vibesByMedium: {
@@ -65,10 +75,8 @@ module.exports = {
   ],
 
   paths: [
-    'anime-scene',
-    'anime-landscape',
+    // Retained (11)
     'mythological-creature',
-    'cozy-anime',
     'kawaii',
     'slice-of-life',
     'neo-tokyo',
@@ -77,27 +85,61 @@ module.exports = {
     'isekai-fantasy',
     'food-anime',
     'anime-village',
+    'anime-character-female',
+    'anime-character-male',
+    // New (12)
+    'mecha-hangars',
+    'festival-nights',
+    'magical-girl',
+    'ghibli-countryside',
+    'occult-tokyo',
+    'post-apocalyptic',
+    'beach-episode',
+    'rooftop-sunsets',
+    'cherry-blossom-romance',
+    'space-opera',
+    'underwater',
+    'noir',
   ],
 
   pathWeights: {
-    'anime-scene': 2,
-    'anime-landscape': 1,
-    'mythological-creature': 1,
-    'cozy-anime': 2,
-    kawaii: 1,
-    'slice-of-life': 2,
-    'neo-tokyo': 1,
-    'shonen-action': 1,
-    'samurai-era': 1,
-    'isekai-fantasy': 1,
+    // Big-genre canon — flagship anime categories that fans recognize instantly
+    'neo-tokyo': 2,
+    'samurai-era': 2,
+    'shonen-action': 2,
+    'isekai-fantasy': 2,
+    'mecha-hangars': 2,
+    // Character-forward (Kevin's recent likes)
+    'anime-character-female': 2,
+    'anime-character-male': 2,
+    // Pretty / poster-coded
+    'cherry-blossom-romance': 2,
+    'rooftop-sunsets': 2,
+    'festival-nights': 2,
+    // Standard weight (still core)
+    'slice-of-life': 1,
+    'kawaii': 1,
     'food-anime': 1,
-    'anime-village': 2,
+    'anime-village': 1,
+    'mythological-creature': 1,
+    'magical-girl': 1,
+    'ghibli-countryside': 1,
+    'occult-tokyo': 1,
+    'post-apocalyptic': 1,
+    'beach-episode': 1,
+    'space-opera': 1,
+    'underwater': 1,
+    'noir': 1,
   },
 
   chaos: {
     enabled: true,
     skipPaths: [],
-    allowSubjectChaosPaths: ['anime-scene', 'anime-landscape', 'neo-tokyo', 'isekai-fantasy', 'food-anime', 'anime-village', 'mythological-creature'],
+    allowSubjectChaosPaths: [
+      'neo-tokyo', 'isekai-fantasy', 'food-anime', 'anime-village', 'mythological-creature',
+      'mecha-hangars', 'occult-tokyo', 'post-apocalyptic', 'space-opera', 'underwater',
+      'ghibli-countryside', 'festival-nights', 'rooftop-sunsets', 'noir',
+    ],
   },
 
   twoPassPolish: {
@@ -105,9 +147,19 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
-      kawaii: '80-110', 'slice-of-life': '80-110', 'cozy-anime': '80-110',
+      // Character-rich paths need extra word budget for archetype + outfit + setting + vista
+      'anime-character-female': '90-130',
+      'anime-character-male': '90-130',
+      // Density-mandated paths — extra room for 8+ micro-details + 2+ atmosphere + 2+ lighting
+      kawaii: '80-110', 'slice-of-life': '80-110',
       'shonen-action': '80-110', 'samurai-era': '80-110',
       'mythological-creature': '80-110',
+      'mecha-hangars': '80-110', 'festival-nights': '80-110',
+      'magical-girl': '80-110', 'ghibli-countryside': '80-110',
+      'occult-tokyo': '80-110', 'post-apocalyptic': '80-110',
+      'beach-episode': '80-110', 'rooftop-sunsets': '80-110',
+      'cherry-blossom-romance': '80-110', 'space-opera': '80-110',
+      'underwater': '80-110', 'noir': '80-110',
     },
     preservePhrasesByPath: {},
   },
@@ -116,17 +168,33 @@ module.exports = {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
-      // Hard female: kawaii (always young anime girl) + slice-of-life (almost always
-      // a young woman protagonist). cozy-anime moved to scene per Kevin's catch on
-      // an elderly-luthier render — cozy-anime briefs sometimes drift to non-female
-      // subjects (craftsman, parent, scene-only quiet moments), so forced female
-      // anchors clash. Treat cozy-anime as scene to be safe.
-      kawaii: 'female', 'slice-of-life': 'female',
-      'shonen-action': 'male', 'samurai-era': 'male',
+      // Female-coded paths
+      kawaii: 'female',
+      'slice-of-life': 'female',
+      'cherry-blossom-romance': 'female',
+      'magical-girl': 'female',
+      'anime-character-female': 'female',
+      // Male-coded paths
+      'shonen-action': 'male',
+      'samurai-era': 'male',
+      'noir': 'male',
+      'anime-character-male': 'male',
+      // Creature-coded
       'mythological-creature': 'creature',
-      'cozy-anime': 'scene',
-      'anime-scene': 'scene', 'anime-landscape': 'scene', 'anime-village': 'scene',
-      'neo-tokyo': 'scene', 'isekai-fantasy': 'scene', 'food-anime': 'scene',
+      // Scene-coded (no specific gender for sensory anchors)
+      'anime-village': 'scene',
+      'neo-tokyo': 'scene',
+      'isekai-fantasy': 'scene',
+      'food-anime': 'scene',
+      'mecha-hangars': 'scene',
+      'festival-nights': 'scene',
+      'ghibli-countryside': 'scene',
+      'occult-tokyo': 'scene',
+      'post-apocalyptic': 'scene',
+      'beach-episode': 'scene',
+      'rooftop-sunsets': 'scene',
+      'space-opera': 'scene',
+      'underwater': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

@@ -1,17 +1,17 @@
 /**
- * MangaBot kawaii path — chibi / big-eye / sparkle-shoujo cute energy.
- * Card-Captor / Sailor-Moon / KyoAni-K-On! cuteness + pastel-shoujo-cover aesthetic.
+ * MangaBot mecha-hangars path — giant robots, hangars, launch bays.
+ * Gundam / Eva / Macross / Patlabor / Code-Geass aesthetic.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.KAWAII_MOMENTS, 'kw_scene');
+  const scene = picker.pickWithRecency(pools.MECHA_HANGAR_SCENES, 'mh_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an anime concept-art painter writing a KAWAII keyframe for MangaBot. Cute / pastel / chibi-energy / sparkle-shoujo aesthetic. Soft warm pastels + sparkle-particles + plushie-energy. Output wraps with style prefix + suffix.
+  return `You are an anime concept-art painter writing a MECHA HANGAR / LAUNCH BAY keyframe for MangaBot. Industrial-mechanical scale + dramatic lighting + dwarf-the-pilot proportions. Output wraps with style prefix + suffix.
 
 ${blocks.ANIME_ILLUSTRATION_BLOCK}
 
@@ -25,7 +25,7 @@ ${blocks.NO_NAMED_CHARACTERS_BLOCK}
 
 ${blocks.NO_GENERIC_POSE_BLOCK}
 
-━━━ THE KAWAII SCENE ━━━
+━━━ THE MECHA HANGAR SCENE ━━━
 ${scene}
 
 ━━━ LIGHTING ━━━
@@ -44,7 +44,7 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION CLOSER ━━━
-Sparkle-particles + drifting hearts + pastel bloom mandatory. Pink / lavender / mint / cream pastel palette dominant. Wholesome / sweet / never sexualized. If a chibi character appears, they are mid-bounce / mid-laugh / mid-skip with comedic pose, never head-on-modeling.
+The MECH dwarfs everything. Pilots / engineers (if shown) are TINY figures emphasizing scale. Industrial detail at maximum density (scaffolding, klaxons, fuel-cables, painted hangar-floor markings, technical kanji signage, hanging chains). NO mech in combat — this is hangar / pre-launch / repair only.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

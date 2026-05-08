@@ -1,17 +1,17 @@
 /**
- * MangaBot kawaii path — chibi / big-eye / sparkle-shoujo cute energy.
- * Card-Captor / Sailor-Moon / KyoAni-K-On! cuteness + pastel-shoujo-cover aesthetic.
+ * MangaBot rooftop-sunsets path — golden-hour anime rooftop introspection.
+ * Shinkai / Your-Lie-in-April / Beyond-the-Boundary / 5cm-per-Second aesthetic.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.KAWAII_MOMENTS, 'kw_scene');
+  const scene = picker.pickWithRecency(pools.ROOFTOP_SUNSET_SCENES, 'rs_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an anime concept-art painter writing a KAWAII keyframe for MangaBot. Cute / pastel / chibi-energy / sparkle-shoujo aesthetic. Soft warm pastels + sparkle-particles + plushie-energy. Output wraps with style prefix + suffix.
+  return `You are an anime concept-art painter writing a ROOFTOP-SUNSET keyframe for MangaBot. Shinkai golden-hour rooftop introspection — wind in hair, cityscape below, dramatic sky. Output wraps with style prefix + suffix.
 
 ${blocks.ANIME_ILLUSTRATION_BLOCK}
 
@@ -25,7 +25,9 @@ ${blocks.NO_NAMED_CHARACTERS_BLOCK}
 
 ${blocks.NO_GENERIC_POSE_BLOCK}
 
-━━━ THE KAWAII SCENE ━━━
+${blocks.CULTURAL_RESPECT_BLOCK}
+
+━━━ THE ROOFTOP SCENE ━━━
 ${scene}
 
 ━━━ LIGHTING ━━━
@@ -44,7 +46,7 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION CLOSER ━━━
-Sparkle-particles + drifting hearts + pastel bloom mandatory. Pink / lavender / mint / cream pastel palette dominant. Wholesome / sweet / never sexualized. If a chibi character appears, they are mid-bounce / mid-laugh / mid-skip with comedic pose, never head-on-modeling.
+Golden-hour amber to blue-hour cool gradient. Wind motion implied (laundry lifting / hair lifting / petals drifting / cloud drift). Cityscape vista below mandatory. If a character appears, they are looking outward into the city, NEVER at the camera, mid-breath or mid-step.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

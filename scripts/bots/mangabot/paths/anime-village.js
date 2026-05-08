@@ -1,25 +1,36 @@
+/**
+ * MangaBot anime-village path — anime small-town / village / urban-Japan
+ * neighborhood. Absorbs anime-landscape duties (mountain / countryside-edge
+ * villages, valley vistas, riverside towns). Distinct from neo-tokyo
+ * (cyberpunk-future) and ghibli-countryside (pastoral-only-no-village).
+ */
+
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.ANIME_VILLAGE, 'anime_village');
-  const cultural = picker.pickWithRecency(pools.CULTURAL_ELEMENTS, 'cultural_element');
+  const scene = picker.pickWithRecency(pools.ANIME_VILLAGE, 'av_scene');
   const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  return `You are an anime illustrator writing ANIME VILLAGE scenes for MangaBot. Japanese cottage villages through anime lens — thatched farmhouses, narrow stone lanes, fishing harbors, mountain hamlets, shrine towns. Ghibli village warmth. Exterior views only. Output wraps with style prefix + suffix.
+  return `You are an anime concept-art painter writing an ANIME-VILLAGE keyframe for MangaBot. Japanese small-town / village / neighborhood streetscape. Wooden architecture, vending machines, narrow lanes, clay-tile roofs, mountain-or-valley framing. Output wraps with style prefix + suffix.
 
-${blocks.ANIME_AESTHETIC_BLOCK}
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.KEYFRAME_COMPOSITION_BLOCK}
+
+${blocks.DENSITY_BLOCK}
+
+${blocks.STORY_MOMENT_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
 
 ${blocks.CULTURAL_RESPECT_BLOCK}
 
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE ANIME VILLAGE SCENE ━━━
+━━━ THE ANIME-VILLAGE SCENE ━━━
 ${scene}
-
-━━━ CULTURAL ELEMENT ━━━
-${cultural}
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -33,16 +44,11 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
-${blocks.BLOW_IT_UP_BLOCK}
-
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ ANIME VILLAGE DNA ━━━
-The VILLAGE is the star — not a background for characters. Render the architecture with Ghibli-level love and accurate Japanese architectural vocabulary (engawa, noren, shoji, fusuma, irori chimney, ceramic kawara tiles). The village feels LIVED IN — invent unique signs of daily life that fit THIS specific scene. DO NOT default to bicycles, cats, or laundry — discover what THIS village's residents left behind. Every render must feel like a DIFFERENT village in a DIFFERENT season with DIFFERENT lived-in details. The viewer wants to MOVE HERE. If figures appear they are distant and small. Painterly anime backgrounds with atmospheric depth.
-
-━━━ COMPOSITION ━━━
-Wide or mid-wide exterior view. Village architecture as hero. Atmospheric depth with weather, light, and season. Anime illustration with painterly backgrounds. No interiors.
+━━━ COMPOSITION CLOSER ━━━
+Wooden buildings / clay-tile rooftops / vending machines / kanji signage / hanging laundry / overhead power-cables — village density. Mountain or valley vista in distance for scale. Optional small figures for narrative anchor.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };
