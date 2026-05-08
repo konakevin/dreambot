@@ -10,7 +10,9 @@ import {
   StyleSheet,
   ActivityIndicator,
   Switch,
+  Linking,
 } from 'react-native';
+import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -509,6 +511,31 @@ export default function SettingsScreen() {
             destructive
             trailing={null}
           />
+        </View>
+
+        {/* About / Legal */}
+        <Text style={styles.sectionHeader}>ABOUT</Text>
+        <View style={styles.section}>
+          <SettingsRow
+            icon="heart-outline"
+            label="Acknowledgements"
+            onPress={() => nav.push('/settings/acknowledgements')}
+          />
+          <SettingsRow
+            icon="lock-closed-outline"
+            label="Privacy Policy"
+            onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
+          />
+          <SettingsRow
+            icon="document-text-outline"
+            label="Terms of Service"
+            onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
+          />
+          <View style={styles.row}>
+            <Ionicons name="information-circle-outline" size={20} color={colors.accent} />
+            <Text style={[styles.rowLabel, { flex: 1 }]}>Version</Text>
+            <Text style={styles.rowValue}>{Constants.expoConfig?.version ?? '1.0.0'}</Text>
+          </View>
         </View>
       </ScrollView>
     </ScreenLayout>
