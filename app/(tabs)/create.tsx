@@ -430,7 +430,7 @@ export default function CreateScreen() {
           >
             <TextInput
               ref={promptRef}
-              className="px-4 pt-4 pb-10 text-base"
+              className="pl-4 pr-14 pt-4 pb-10 text-base"
               style={{
                 color: colors.textPrimary,
                 // Fixed height — long prompts scroll internally rather than
