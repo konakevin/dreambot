@@ -9,7 +9,8 @@
 const PROMPT_PREFIX =
   'ultra-detailed miniature diorama photography, tabletop model world, tilt-shift macro lens, extreme shallow depth of field, dollhouse-scale, handcrafted tiny props, miniature set dressing, realistic modelmaking textures, visible tiny imperfections';
 
-const PROMPT_SUFFIX = 'miniature tabletop diorama model, tilt-shift shallow depth of field, macro lens close-up, tiny handcrafted props, visible miniature scale, no text, no words, no watermarks';
+const PROMPT_SUFFIX =
+  'miniature tabletop diorama model, tilt-shift shallow depth of field, macro lens close-up, tiny handcrafted props, visible miniature scale, no text, no words, no watermarks';
 
 const TILT_SHIFT_MINIATURE_BLOCK = `━━━ TILT-SHIFT MINIATURE AESTHETIC (NON-NEGOTIABLE — THIS IS THE MOST IMPORTANT RULE) ━━━
 
@@ -29,11 +30,11 @@ No identifiable humans in frame. Miniature WORLDS are the subject. Tiny creature
 
 const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ IMPOSSIBLE BEAUTY — MINIATURE EDITION ━━━
 
-Snow-globe-world quality × 10. The kind of image you want to shrink down and live inside. Wall-poster gorgeous. Tilt-shift + macro + obsessive detail + warm palette.`;
+Snow-globe-world quality × 10. The kind of image you want to shrink down and live inside. Wall-poster gorgeous. Tilt-shift + macro + obsessive detail.`;
 
 const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — MINIATURE AMPLIFICATION ━━━
 
-Miniature magic is the canvas, not the ceiling. Stack: obsessive micro-detail + tilt-shift-blur-gradient + warm-palette + countable elements + clever juxtaposition + surprising scale + cozy homey quality. If viewer doesn't want to shrink down and live in it, dial up.`;
+Miniature magic is the canvas, not the ceiling. Stack: obsessive micro-detail + tilt-shift-blur-gradient + countable elements + clever juxtaposition + surprising scale. Color palette comes from the LIGHTING + WEATHER + VIBE blocks below — do NOT default to warm-cozy. If viewer doesn't want to shrink down and live in it, dial up.`;
 
 const TINY_COZY_WARMTH_BLOCK = `━━━ TINY COZY WARMTH (tiny-cozy path only) ━━━
 
@@ -42,6 +43,29 @@ Warm + inviting + homey + lived-in. Dollhouse-scale homes that feel actually inh
 const CONTAINED_WORLD_SURREAL_BLOCK = `━━━ CONTAINED WORLD SURREAL (contained-worlds path only) ━━━
 
 Loose "container" definition: classic glass terrariums OK, but also teacups, eggshells, books, kettles, lunchboxes, perfume-bottles, music-boxes, croissants, clam-shells. Surreal-tiny juxtapositions welcome (tiny climbers on croissant, picnic on open book, beach on clam-shell). Cute + clever energy. NEVER sci-fi, NEVER dark, NEVER horror.`;
+
+// Variety axes — the 4 "splash" overrides that bend renders away from
+// the warm-cozy-twilight default. Rolled per-render and injected into
+// every path with HARD OVERRIDE language so Sonnet/Flux can't soften them.
+const VARIETY_AXES_HEADER = `━━━ VARIETY AXES — HARD OVERRIDE (NON-NEGOTIABLE) ━━━
+
+The 4 blocks below override anything implied by the scene seed. Do NOT soften them back to "cozy warm twilight". The scene happens IN this BIOME, AT this WEATHER, UNDER this LIGHTING, WITH this ENERGY. If the scene seed says "cottage" but the BIOME says "desert canyon", the cottage is in the canyon. If the WEATHER says "lightning flash", the lightning is fork-frozen in the render. Treat these as Flux's primary direction — not background flavor.`;
+
+function varietyAxesSection({ biome, weather, lighting, energy }) {
+  return `${VARIETY_AXES_HEADER}
+
+━━━ BIOME (where this happens — overrides scene's default location) ━━━
+${biome}
+
+━━━ WEATHER (visible atmospheric event — must be executable in the render) ━━━
+${weather}
+
+━━━ LIGHTING (palette + quality — overrides default warm-cozy) ━━━
+${lighting}
+
+━━━ ENERGY / MOOD (emotional register + visual cue) ━━━
+${energy}`;
+}
 
 module.exports = {
   PROMPT_PREFIX,
@@ -54,4 +78,5 @@ module.exports = {
   BLOW_IT_UP_BLOCK,
   TINY_COZY_WARMTH_BLOCK,
   CONTAINED_WORLD_SURREAL_BLOCK,
+  varietyAxesSection,
 };

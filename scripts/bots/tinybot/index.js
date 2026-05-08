@@ -98,6 +98,12 @@ module.exports = {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cozy,
+      // Variety axes — rolled per render, injected into every path with HARD
+      // OVERRIDE language. Pulls renders out of the warm-cozy-twilight default.
+      biome: picker.pickWithRecency(pools.BIOME_AXIS, 'biome'),
+      weather: picker.pickWithRecency(pools.WEATHER_AXIS, 'weather'),
+      lighting: picker.pickWithRecency(pools.LIGHTING_AXIS, 'lighting_axis'),
+      energy: picker.pickWithRecency(pools.ENERGY_AXIS, 'energy'),
     };
   },
 

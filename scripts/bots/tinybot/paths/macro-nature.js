@@ -4,7 +4,6 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const subject = picker.pickWithRecency(pools.MACRO_NATURE_SUBJECTS, 'macro_nature_subject');
   const creature = picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature');
-  const lighting = picker.pickWithRecency(pools.TILT_SHIFT_LIGHTING, 'tilt_shift_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a macro-nature photographer writing MACRO NATURE scenes for TinyBot. Real nature at miniature scale as fantasy-kingdom. Output wraps with style prefix + suffix.
@@ -23,8 +22,7 @@ ${subject}
 ━━━ OPTIONAL TINY CREATURE ━━━
 ${creature}
 
-━━━ LIGHTING (morning-dew / macro preferred) ━━━
-${lighting}
+${blocks.varietyAxesSection(sharedDNA)}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}

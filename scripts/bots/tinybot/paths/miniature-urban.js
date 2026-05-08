@@ -3,7 +3,6 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.MINIATURE_URBAN_SCENES, 'miniature_urban_scene');
-  const lighting = picker.pickWithRecency(pools.TILT_SHIFT_LIGHTING, 'tilt_shift_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a tilt-shift urban photographer writing MINIATURE URBAN scenes for TinyBot. Real places made tiny via tilt-shift. Output wraps with style prefix + suffix.
@@ -21,8 +20,7 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE MINIATURE URBAN SCENE ━━━
 ${scene}
 
-━━━ LIGHTING ━━━
-${lighting}
+${blocks.varietyAxesSection(sharedDNA)}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}

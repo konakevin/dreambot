@@ -3,7 +3,6 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const diorama = picker.pickWithRecency(pools.DOLLHOUSE_DIORAMAS, 'dollhouse_diorama');
-  const lighting = picker.pickWithRecency(pools.TILT_SHIFT_LIGHTING, 'tilt_shift_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a miniature-photographer writing DOLLHOUSE DIORAMA scenes for TinyBot. Technical-wonder dollhouse-scale dioramas with countable detail. Output wraps with style prefix + suffix.
@@ -21,8 +20,7 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE DIORAMA ━━━
 ${diorama}
 
-━━━ LIGHTING ━━━
-${lighting}
+${blocks.varietyAxesSection(sharedDNA)}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -39,7 +37,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Wide or mid-wide diorama frame. Tilt-shift shallow-DOF. Obsessive detail density — countable elements. Warm palette dominant.
+Wide or mid-wide diorama frame. Tilt-shift shallow-DOF. Obsessive detail density — countable elements. Palette dictated by LIGHTING + WEATHER + VIBE blocks above.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

@@ -10,17 +10,21 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+// Each vibe pushes a DIFFERENT corner of the color spectrum. Diversified
+// 2026-05-08 — previously all-warm-amber-honey, which was a major source of
+// homogeneity. Now only `cozy` and `nostalgic` are warm; the rest are cool /
+// monochrome / surreal / high-key to break the default.
 const VIBE_COLOR = {
-  cinematic: 'warm teal-and-amber miniature grade, shallow depth',
-  cozy: 'warm amber miniature glow, honey highlights, inviting soft',
-  nostalgic: 'faded sepia-miniature, warm copper, dollhouse storybook',
-  peaceful: 'soft pastel miniature dawn, gentle warm calm',
-  whimsical: 'buoyant miniature pastels, Ghibli-tiny palette, warm cream',
-  ethereal: 'pearl-white miniature haze, luminous miniature mist',
-  ancient: 'weathered bronze-miniature, faded warm umber, tiny patina',
-  enchanted: 'soft magical miniature glow, dreamy tiny sparkles',
-  shimmer: 'shimmering gold-miniature particles, tiny iridescence',
-  surreal: 'impossible miniature color pairings, clever-tiny sweetness',
+  cinematic: 'high-contrast monochrome noir, hard black shadows, single white key light, no color cast',
+  cozy: 'warm amber miniature glow, honey highlights, inviting soft, warm key only',
+  nostalgic: 'faded sepia-miniature, warm copper, dollhouse storybook, yellowed-paper tint',
+  peaceful: 'soft pale-blue dawn light, cool gentle calm, NO warm tones, overcast diffused',
+  whimsical: 'buoyant pastel pop palette, primary-color miniature catalog energy, flat clean',
+  ethereal: 'pearl-white high-key miniature haze, everything dissolving into luminous pale',
+  ancient: 'weathered bronze-and-dust monochrome, sun-bleached desert tones, no blue',
+  enchanted: 'cool bioluminescent cyan-green glow on all surfaces, NO warm fill anywhere',
+  shimmer: 'iridescent holographic rainbow sheen, oil-slick prismatic, hard white key',
+  surreal: 'clashing impossible color pairings (lime-green sky + hot-pink ground), saturated-flat',
 };
 
 module.exports = {
@@ -41,6 +45,11 @@ module.exports = {
   TILT_SHIFT_LIGHTING: load('tilt_shift_lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),
+  // ─── variety axes (2026-05-08) — break the warm-cozy-twilight default ─
+  BIOME_AXIS: load('biome_axis'),
+  WEATHER_AXIS: load('weather_axis'),
+  LIGHTING_AXIS: load('lighting_axis'),
+  ENERGY_AXIS: load('energy_axis'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

@@ -4,7 +4,6 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const world = picker.pickWithRecency(pools.CONTAINED_WORLDS, 'contained_world');
   const creature = picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature');
-  const lighting = picker.pickWithRecency(pools.TILT_SHIFT_LIGHTING, 'tilt_shift_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a surreal-miniature artist writing CONTAINED WORLD scenes for TinyBot. Terrariums + object-containers + surreal-tiny juxtapositions. Cute + clever. Never sci-fi / dark / horror. Output wraps with style prefix + suffix.
@@ -25,8 +24,7 @@ ${world}
 ━━━ OPTIONAL TINY CREATURE INHABITANT ━━━
 ${creature}
 
-━━━ LIGHTING ━━━
-${lighting}
+${blocks.varietyAxesSection(sharedDNA)}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}

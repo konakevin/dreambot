@@ -3,7 +3,6 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.TINY_COZY_SCENES, 'tiny_cozy_scene');
-  const lighting = picker.pickWithRecency(pools.TILT_SHIFT_LIGHTING, 'tilt_shift_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a cozy-miniature photographer writing TINY COZY scenes for TinyBot. Warm-inviting-homey dollhouse spaces. Output wraps with style prefix + suffix.
@@ -21,8 +20,7 @@ ${blocks.TINY_COZY_WARMTH_BLOCK}
 ━━━ THE TINY COZY SCENE ━━━
 ${scene}
 
-━━━ LIGHTING (warm preferred) ━━━
-${lighting}
+${blocks.varietyAxesSection(sharedDNA)}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}

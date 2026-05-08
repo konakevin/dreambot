@@ -3,7 +3,6 @@ const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const landscape = picker.pickWithRecency(pools.MINIATURE_LANDSCAPES, 'miniature_landscape');
-  const lighting = picker.pickWithRecency(pools.TILT_SHIFT_LIGHTING, 'tilt_shift_lighting');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
   return `You are a model-maker-photographer writing MINIATURE LANDSCAPE scenes for TinyBot. Master-modelmaker dioramas. Output wraps with style prefix + suffix.
@@ -21,8 +20,7 @@ ${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
 ━━━ THE MINIATURE LANDSCAPE ━━━
 ${landscape}
 
-━━━ LIGHTING ━━━
-${lighting}
+${blocks.varietyAxesSection(sharedDNA)}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
