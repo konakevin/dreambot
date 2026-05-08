@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_accessories_female.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} ANIME FEMALE ACCESSORY / SIGNATURE-OBJECT descriptions for MangaBot. Each entry is 14-22 words. The accessory is a single distinctive item the character carries / wears that adds personality.
 

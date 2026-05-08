@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_vista.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} ANIME VISTA descriptions for MangaBot's character paths. Each entry is 20-35 words. The vista is a SCALE-DEFINING backdrop visible behind/around the character — the awe-inspiring scenic anchor that makes each render feel like a wall-poster anime moment.
 

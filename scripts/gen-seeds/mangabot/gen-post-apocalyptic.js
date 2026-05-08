@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/post_apocalyptic_scenes.json',
-  total: 25,
+  total: 200,
   batch: 25,
-  append: false,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} POST-APOCALYPTIC scene descriptions for MangaBot's post-apocalyptic path. Each entry is 30-50 words. Setting-only.
 

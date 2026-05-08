@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/ghibli_countryside_scenes.json',
-  total: 25,
+  total: 200,
   batch: 25,
-  append: false,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} GHIBLI-COUNTRYSIDE scene descriptions for MangaBot's ghibli-countryside path. Each entry is 30-50 words. Setting-only.
 

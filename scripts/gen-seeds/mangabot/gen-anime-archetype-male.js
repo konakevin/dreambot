@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_archetype_male.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} ANIME MALE ARCHETYPE descriptions for MangaBot's character paths. Each entry is 22-38 words. The archetype is WHO he is + his vibe / energy / story-flavor — NOT outfit (separate pool), NOT face details (separate pools).
 

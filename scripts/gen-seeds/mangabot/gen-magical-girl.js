@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/magical_girl_scenes.json',
-  total: 25,
+  total: 200,
   batch: 25,
-  append: false,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} MAGICAL-GIRL CELESTIAL scene descriptions for MangaBot's magical-girl path. Each entry is 30-50 words. Setting-only — describe the cosmic / celestial / transformation backdrop, not the magical-girl herself.
 

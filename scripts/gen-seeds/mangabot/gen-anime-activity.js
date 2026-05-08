@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_activity.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} ANIME CHARACTER ACTIVITY descriptions for MangaBot's character paths. Each entry is 14-22 words. The activity is what the character is DOING — a candid mid-action body-pose. Place-agnostic so it fits any anime setting.
 

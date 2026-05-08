@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/cherry_blossom_scenes.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} CHERRY-BLOSSOM-ROMANCE scene descriptions for MangaBot's cherry-blossom-romance path. Each entry is 30-50 words. Setting-only — describe the cherry-blossom setting, not the characters.
 

@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_outfits_female.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} ANIME FEMALE OUTFIT descriptions for MangaBot's character paths. Each entry is 25-40 words. The outfit defines silhouette across the anime genre spectrum.
 

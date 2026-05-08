@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/mangabot/seeds/anime_setting.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} ANIME SETTING descriptions for MangaBot's character paths. Each entry is 25-40 words. The "setting" is the immediate place + atmosphere where an anime character is out and about — NOT adventuring, just being in a beautifully-rendered slice-of-anime-life moment.
 
