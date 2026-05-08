@@ -474,7 +474,7 @@ export default function CreateScreen() {
                 <TouchableOpacity
                   onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
                   activeOpacity={0.7}
-                  className="flex-row items-center flex-1"
+                  className="flex-row items-center"
                   hitSlop={6}
                 >
                   <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
@@ -484,8 +484,8 @@ export default function CreateScreen() {
                 <TouchableOpacity
                   onPress={() => setShowProModeInfo((v) => !v)}
                   activeOpacity={0.6}
-                  className="px-2"
                   hitSlop={10}
+                  style={{ marginLeft: 6 }}
                 >
                   <Ionicons
                     name="information-circle-outline"
@@ -493,11 +493,12 @@ export default function CreateScreen() {
                     color={colors.textSecondary}
                   />
                 </TouchableOpacity>
+                <View style={{ flex: 1 }} />
                 <TouchableOpacity
                   onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
                   activeOpacity={0.7}
                   hitSlop={6}
-                  className="w-12 h-7 rounded-full justify-center ml-2"
+                  className="w-12 h-7 rounded-full justify-center"
                   style={{
                     backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
                     paddingHorizontal: 2,
