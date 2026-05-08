@@ -285,17 +285,13 @@ export const DreamCard = memo(function DreamCard({
     disableSwipeLeft: disableSwipeToProfile,
   });
 
-  const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   function handleTap() {
+    // Single-tap-to-hide-HUD intentionally removed — clean-screenshot bypass
+    // for the screenshot-upsell paywall. Double-tap-to-like still works via
+    // the lastTap.current detection below. HUD remains visible always.
     const now = Date.now();
     if (now - lastTap.current < 300) {
-      // Double tap — cancel the pending single tap
-      if (singleTapTimer.current) {
-        clearTimeout(singleTapTimer.current);
-        singleTapTimer.current = null;
-      }
-
+      // Double tap → like
       // If still zoomed (e.g. pinch animation hasn't settled), skip toggling like
       // — user was trying to reset zoom, not double-tap. Pinch release auto-resets
       // scale via useCardGestures.
@@ -326,14 +322,6 @@ export const DreamCard = memo(function DreamCard({
     }
 
     lastTap.current = now;
-
-    // Wait to see if a second tap comes — if not, it's a single tap (toggle HUD)
-    singleTapTimer.current = setTimeout(() => {
-      singleTapTimer.current = null;
-      hudHidden.current = !hudHidden.current;
-      hudOpacity.value = withTiming(hudHidden.current ? 0 : 1, { duration: ANIM.HUD_FADE_MS });
-      onHudToggle?.(!hudHidden.current);
-    }, 300);
   }
 
   function handleLongPress() {
