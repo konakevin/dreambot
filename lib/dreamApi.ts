@@ -42,6 +42,10 @@ interface GenerateDreamOpts {
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
   /** V4 prompt mode override (defaults applied server-side). */
   prompt_mode?: PromptMode;
+  /** Direct pass-through mode — user's prompt sent verbatim to flux-1.1-pro,
+   *  no Sonnet expansion, no chaos, no medium/vibe directive merging. For
+   *  power users with fully-polished prompts. */
+  use_exact_prompt?: boolean;
 }
 
 export type PhotoSubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';
@@ -136,6 +140,7 @@ export async function generateFromVibeProfile(
     jobId?: string;
     stylePrompt?: string;
     dltRecipe?: Record<string, unknown> | null;
+    useExactPrompt?: boolean;
   }
 ): Promise<GenerateDreamResult> {
   return generateDream({
@@ -148,6 +153,7 @@ export async function generateFromVibeProfile(
     job_id: opts?.jobId,
     style_prompt: opts?.stylePrompt,
     dlt_recipe: opts?.dltRecipe ?? undefined,
+    use_exact_prompt: opts?.useExactPrompt,
   });
 }
 

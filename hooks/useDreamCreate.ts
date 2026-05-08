@@ -234,6 +234,7 @@ export function useDreamCreate() {
             jobId,
             stylePrompt: config.stylePrompt || undefined,
             dltRecipe: config.dltRecipe,
+            useExactPrompt: config.useExactPrompt,
           });
         }
 

@@ -59,6 +59,7 @@ export default function CreateScreen() {
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
   const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);
+  const setUseExactPrompt = useDreamStore((s) => s.setUseExactPrompt);
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const user = useAuthStore((s) => s.user);
@@ -89,6 +90,24 @@ export default function CreateScreen() {
         }
       });
   }, [user]);
+
+  // Rehydrate "use my exact prompt" toggle on mount + persist on changes.
+  // Power users only flip it once.
+  const USE_EXACT_PROMPT_KEY = 'create.useExactPrompt.v1';
+  useEffect(() => {
+    AsyncStorage.getItem(USE_EXACT_PROMPT_KEY)
+      .then((val) => {
+        if (val === '1') setUseExactPrompt(true);
+      })
+      .catch(() => {});
+  }, [setUseExactPrompt]);
+  const toggleUseExactPrompt = useCallback(
+    (next: boolean) => {
+      setUseExactPrompt(next);
+      AsyncStorage.setItem(USE_EXACT_PROMPT_KEY, next ? '1' : '0').catch(() => {});
+    },
+    [setUseExactPrompt]
+  );
 
   // First-Create-tap teaching toast — explains the sparkle unit cost the
   // moment a new user opens the Create tab. Fires ONCE per device per
@@ -410,7 +429,7 @@ export default function CreateScreen() {
               placeholderTextColor={colors.textMuted ?? '#6B7280'}
               value={config.userPrompt}
               onChangeText={setPrompt}
-              maxLength={300}
+              maxLength={2000}
               multiline
               returnKeyType="default"
             />
@@ -425,9 +444,54 @@ export default function CreateScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Style pills */}
+          {/* "Use my exact prompt" toggle — only shown when there's a custom
+              prompt with no photo. When ON: prompt goes verbatim to flux-1.1-pro,
+              skipping Sonnet expansion / chaos / medium-vibe directive merging. */}
+          {hasPrompt && !hasPhoto && (
+            <TouchableOpacity
+              onPress={() => toggleUseExactPrompt(!config.useExactPrompt)}
+              activeOpacity={0.7}
+              className="flex-row items-center justify-between rounded-xl px-4 py-3 mb-4"
+              style={{
+                backgroundColor: config.useExactPrompt ? colors.accent + '22' : colors.surface,
+                borderWidth: 1,
+                borderColor: config.useExactPrompt ? colors.accent : colors.border,
+              }}
+            >
+              <View className="flex-1 mr-3">
+                <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
+                  Use my exact prompt
+                </Text>
+                <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+                  Skip AI enhancement — send your prompt directly to Flux 1.1 Pro
+                </Text>
+              </View>
+              <View
+                className="w-12 h-7 rounded-full justify-center"
+                style={{
+                  backgroundColor: config.useExactPrompt ? colors.accent : colors.border,
+                  paddingHorizontal: 2,
+                }}
+              >
+                <View
+                  className="w-6 h-6 rounded-full"
+                  style={{
+                    backgroundColor: '#fff',
+                    transform: [{ translateX: config.useExactPrompt ? 20 : 0 }],
+                  }}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+
+          {/* Style pills — disabled when "use my exact prompt" is on, since
+              that mode bypasses medium/vibe directives entirely. */}
           {
-            <View className="flex-row gap-3 mb-4">
+            <View
+              className="flex-row gap-3 mb-4"
+              style={{ opacity: config.useExactPrompt ? 0.35 : 1 }}
+              pointerEvents={config.useExactPrompt ? 'none' : 'auto'}
+            >
               <View className="flex-1">
                 <Text
                   className="text-xs font-medium mb-1.5 ml-1"

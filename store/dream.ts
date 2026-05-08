@@ -33,6 +33,10 @@ interface DreamConfig {
    *  using the user's picker values. See docs/DLT_RECIPE_PLAN.md. Null for
    *  non-DLT flows or when source post has no recipe (pre-Phase-1). */
   dltRecipe: Record<string, unknown> | null;
+  /** When true, the user's prompt is sent verbatim to flux-1.1-pro with NO
+   *  Sonnet expansion, NO chaos layer, NO medium/vibe directive merging.
+   *  Power-user mode for people pasting fully polished prompts. */
+  useExactPrompt: boolean;
 }
 
 interface DreamResult {
@@ -80,6 +84,7 @@ interface DreamStore {
   setPrompt: (text: string) => void;
   setStylePrompt: (prompt: string | null) => void;
   setDltRecipe: (recipe: Record<string, unknown> | null) => void;
+  setUseExactPrompt: (value: boolean) => void;
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
   clearPhoto: () => void;
@@ -101,6 +106,7 @@ const INITIAL_CONFIG: DreamConfig = {
   userPrompt: '',
   stylePrompt: null,
   dltRecipe: null,
+  useExactPrompt: false,
 };
 
 export const useDreamStore = create<DreamStore>((set) => ({
@@ -118,6 +124,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setPrompt: (text) => set((s) => ({ config: { ...s.config, userPrompt: text } })),
   setStylePrompt: (prompt) => set((s) => ({ config: { ...s.config, stylePrompt: prompt } })),
   setDltRecipe: (recipe) => set((s) => ({ config: { ...s.config, dltRecipe: recipe } })),
+  setUseExactPrompt: (value) => set((s) => ({ config: { ...s.config, useExactPrompt: value } })),
   setResult: (result) => set({ result }),
   clearResult: () => set({ result: null }),
   clearPhoto: () =>

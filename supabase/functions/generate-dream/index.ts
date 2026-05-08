@@ -91,6 +91,10 @@ interface RequestBody {
    *  See docs/DLT_RECIPE_PLAN.md. NULL/missing → existing style_summary
    *  fallback path runs (zero regression). */
   dlt_recipe?: unknown;
+  /** Direct pass-through mode: when true + a user prompt is present, send
+   *  the prompt verbatim to flux-1.1-pro with NO Sonnet expansion / chaos /
+   *  medium / vibe directive merging. Power-user mode. */
+  use_exact_prompt?: boolean;
 }
 
 Deno.serve(async (req) => {
@@ -798,6 +802,26 @@ Output ONLY the prompt.`;
           };
           lap('self-insert-done');
         }
+      } else if (body.use_exact_prompt && userSubject && userSubject.trim()) {
+        // ── DIRECT PASS-THROUGH: power-user mode ──
+        // User opted into "use my exact prompt" — skip all Sonnet expansion,
+        // chaos, medium directive, vibe directive, focal anchor, two-pass
+        // polish. Send the prompt verbatim to flux-1.1-pro. Sparkle spend +
+        // moderation + storage + DB insert all unchanged.
+        finalPrompt = sanitizeUserPrompt(userSubject.trim());
+        force_model = 'black-forest-labs/flux-1.1-pro';
+        logAxes = {
+          medium: medium.key,
+          vibe: vibe.key,
+          engine: 'direct-pass-thru',
+          chaosIntensity: 0,
+          chaosInjections: 0,
+        };
+        fallbackReasons.push('direct_pass_thru:no_sonnet');
+        console.log(
+          `[generate-dream] DIRECT PASS-THROUGH (flux-1.1-pro): ${finalPrompt.slice(0, 150)}`
+        );
+        lap('direct-pass-thru-done');
       } else {
         // ── V2 COMPILER PATHS: style transfer, text directive, surprise ──
         const sanitizedPrompt = userSubject ? sanitizeUserPrompt(userSubject) : '';
