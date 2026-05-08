@@ -51,9 +51,9 @@ export default function AboutScreen() {
           <Text style={styles.sectionTitle}>With love and thanks</Text>
 
           <Text style={styles.paragraph}>
-            To <Text style={styles.bold}>my wife</Text> — for letting me disappear into my cave for
-            months while I chased this idea down a dozen rabbit holes. Your patience is the only
-            reason this app exists. I love you, and I owe you a thousand date nights.
+            To my wife, <Text style={styles.bold}>Stephanie</Text> — for letting me disappear into
+            my cave for months while I chased this idea down a dozen rabbit holes. Your patience is
+            the only reason this app exists. I love you, and I owe you a thousand date nights.
           </Text>
 
           <Text style={styles.paragraph}>
