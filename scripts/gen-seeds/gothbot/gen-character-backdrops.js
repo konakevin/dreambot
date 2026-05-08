@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/character_backdrops.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} ATMOSPHERIC BACKDROP descriptions for GothBot's character paths (full-body male and female). Each entry is a SHORT phrase (6-12 words) describing an ATMOSPHERIC ENVIRONMENT HINT behind a character. NOT a full landscape — just enough to ground the character in a place without overpowering them.
 
 ━━━ THE KEY RULE ━━━

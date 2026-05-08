@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/combat_moment.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} COMBAT MOMENT descriptions for GothBot's vampire-assassin-combat path. Each entry is 18-30 words. This is the SPECIFIC moment of action — what the assassin and foe are doing in the frozen instant of the frame.
 

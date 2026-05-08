@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/assassin_stage.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN STAGE descriptions for GothBot's vampire-assassin paths. Each entry is 25-40 words. The "stage" is the gothic biome / hunting-ground where the assassin is OUT IN THE WILD doing assassin business.
 

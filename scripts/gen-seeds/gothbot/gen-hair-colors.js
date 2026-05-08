@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/hair_colors.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} HAIR COLOR descriptions for GothBot's character paths. Each entry is a SHORT phrase (3-8 words) describing ONLY a specific hair color/tone. Shared across male AND female gothic-horror characters.
 
 ━━━ COLOR SPECTRUM (enforce even distribution across ${n}) ━━━

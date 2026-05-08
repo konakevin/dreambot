@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_eye_colors.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} SUPERNATURAL EYE COLOR descriptions for GothBot's female character paths. Each entry is a SHORT phrase (8-15 words) describing her eyes — color, glow, inner detail, the feeling they give. These compose with separate archetype/makeup/hair pools.
 
 Her eyes are the most STRIKING thing in the frame. They should feel SUPERNATURAL — glowing, luminous, impossibly vivid. Not contact lenses, not color filters. Eyes that make you stop scrolling.

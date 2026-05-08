@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_female_moments.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} CANDID MOMENT descriptions for GothBot's goth-closeup and goth-full-body female paths. Each entry is a SHORT phrase (8-15 words) describing what she was caught doing RIGHT NOW. These are micro-actions — the camera snapped at this exact instant.
 
 She is SEXY, SULTRY, DANGEROUS, FEISTY — caught in a loaded candid moment. Not posing. Not modeling. Caught mid-something by a camera that shouldn't be this close.

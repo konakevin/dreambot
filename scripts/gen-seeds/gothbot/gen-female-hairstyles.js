@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/female_hairstyles.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} FEMALE HAIRSTYLE descriptions for GothBot's female character paths. Each entry is a SHORT phrase (4-10 words) describing ONLY a specific hairstyle/texture/length. Gothic-horror women — Castlevania / Crimson-Peak / gothic-fairy-tale aesthetic.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━

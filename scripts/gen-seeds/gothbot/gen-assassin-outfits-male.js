@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/assassin_outfits_male.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-MALE OUTFIT descriptions for GothBot. Each entry is 30-50 words. The outfit is the SILHOUETTE — what defines his shape against the gothic backdrop. ORNATE, agile, sleek, deadly. Castlevania-Belmont + Devil May Cry-Dante + Van Helsing aesthetic.
 

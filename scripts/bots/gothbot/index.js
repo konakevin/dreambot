@@ -26,6 +26,7 @@ const pathBuilders = {
   'vampire-assassin-female': require('./paths/vampire-assassin-female'),
   'vampire-assassin-male': require('./paths/vampire-assassin-male'),
   'vampire-assassin-combat': require('./paths/vampire-assassin-combat'),
+  'monster-prowl': require('./paths/monster-prowl'),
 };
 
 module.exports = {
@@ -61,21 +62,19 @@ module.exports = {
     'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-male':   'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
+    'monster-prowl':           'black-forest-labs/flux-1.1-pro',
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with
   // dark-coded vibes. Pretty-coded vibes (coquette/shimmer/ethereal/psychedelic)
   // and tone-neutral ones (cinematic/epic) fight the vampire intent.
   vibesByPath: {
-    'vampire-girls-2': [
-      'macabre', 'macabre', 'macabre',
-      'nightshade', 'nightshade', 'nightshade',
-      'arcane', 'arcane', 'arcane',
-      'dark',
-      'fierce',
-      'ancient',
-      'surreal',
-    ],
+    // Character paths consolidated to the dark/nightshade/macabre triad.
+    'goth-closeup':      ['dark', 'nightshade', 'macabre'],
+    'goth-full-body':    ['dark', 'nightshade', 'macabre'],
+    'goth-male-closeup': ['dark', 'nightshade', 'macabre'],
+    'goth-male-full-body': ['dark', 'nightshade', 'macabre'],
+    'vampire-girls-2':   ['dark', 'nightshade', 'macabre'],
     // Scene paths locked to the dark / nightshade / macabre triad for the trial.
     'dark-landscape':      ['dark', 'nightshade', 'macabre'],
     'gothic-architecture': ['dark', 'nightshade', 'macabre'],
@@ -88,19 +87,16 @@ module.exports = {
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-male':   ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-combat': ['dark', 'nightshade', 'macabre'],
+    'monster-prowl':           ['dark', 'nightshade', 'macabre'],
   },
 
   mediumByPath: {
-    'vampire-girls-2': 'vampire_portrait',
-    'goth-male-full-body': [
-      'gothic_architecture', 'gothic_architecture', 'gothic_architecture', 'gothic_architecture',
-      'gothic_realistic', 'gothic_realistic', 'gothic_realistic',
-      'anime', 'anime',
-      'comics',
-      'illustration',
-      'canvas',
-      'watercolor',
-    ],
+    // Character paths consolidated to anime medium (matches scene paths).
+    'goth-closeup':      'anime',
+    'goth-full-body':    'anime',
+    'goth-male-closeup': 'anime',
+    'goth-male-full-body': 'anime',
+    'vampire-girls-2':   'anime',
     // Scene/landscape paths hardcoded to anime medium for the trial.
     'dark-landscape':      'anime',
     'gothic-architecture': 'anime',
@@ -113,6 +109,7 @@ module.exports = {
     'vampire-assassin-female': 'anime',
     'vampire-assassin-male':   'anime',
     'vampire-assassin-combat': 'anime',
+    'monster-prowl':           'anime',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -314,6 +311,7 @@ module.exports = {
     'vampire-assassin-female',
     'vampire-assassin-male',
     'vampire-assassin-combat',
+    'monster-prowl',
   ],
 
   cycleAllPaths: true,

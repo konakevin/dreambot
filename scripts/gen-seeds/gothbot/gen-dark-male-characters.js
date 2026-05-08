@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/dark_male_characters.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 25,
+  maxTokens: 4000,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} DARK MALE CHARACTER descriptions for GothBot's male character paths. Each entry is a ONE-LINE description of a MENACING + POWERFUL + HAUNTINGLY BEAUTIFUL male gothic archetype. Entries 15-25 words. Castlevania (Ayami Kojima) / Devil-May-Cry / Bloodborne / Berserk / Van-Helsing aesthetic. Dark-manga-horror stylization.
 
 ━━━ WHAT THIS BOT IS — THE NIGHTSHADE AESTHETIC ━━━

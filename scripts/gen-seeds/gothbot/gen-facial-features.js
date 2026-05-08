@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/facial_features.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} DISTINCTIVE FACIAL FEATURE descriptions for GothBot's vampire character paths. Each entry is a SHORT phrase (10-18 words) describing a UNIQUE face — bone structure, nose shape, jaw, brow, lip shape, cheekbone prominence, forehead, chin. These are the STRUCTURAL features that make one face look completely different from another, BEFORE any makeup or styling is applied.
 
 ━━━ FACE STRUCTURE SPREAD (enforce variety across ${n}) ━━━

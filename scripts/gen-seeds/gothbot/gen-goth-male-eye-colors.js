@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_male_eye_colors.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} EYE-COLOR-AND-INTENSITY entries for GothBot's goth-male-closeup and goth-male-full-body paths. Each entry is a SHORT phrase (10-18 words) describing the EXACT vivid color of his eyes AND how gothic-world light interacts with them — candle-glow, moonlight catch, lantern-flicker, blood-light bounce.
 
 This pool composes with separate skin/hair/wardrobe/accessory pools. The eyes should feel SUPERNATURALLY VIVID — power and centuries radiating outward.

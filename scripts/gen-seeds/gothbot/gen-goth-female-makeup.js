@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_female_makeup.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} GOTHIC FEMALE MAKEUP descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is ONE specific makeup look described in 10-20 words. These compose with separate archetype/wardrobe/hair pools.
 
 These are BOLD, DRAMATIC, dark-beauty looks. Sultry, sexy, wicked. Think dark glamour — not subtle natural beauty, not corpse-paint horror. She CHOSE this look and it's devastating.

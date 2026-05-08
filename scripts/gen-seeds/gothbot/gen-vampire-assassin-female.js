@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/vampire_assassin_female.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-FEMALE archetype descriptions for GothBot. Each entry is 25-40 words. This is the character's identity / energy / story-flavor — NOT outfit (separate pool), NOT face details (separate pools). Just WHO she is and HOW she moves through the night.
 

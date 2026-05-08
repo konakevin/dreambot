@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/combat_foe.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} GOTHIC-FANTASY COMBAT FOE descriptions for GothBot's vampire-assassin-combat path. Each entry is 25-40 words. The foe is the THING the assassin is fighting — a stylized supernatural creature.
 

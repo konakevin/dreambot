@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/assassin_skin.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN SKIN descriptions for GothBot's vampire-assassin paths (gender-neutral — used for both male and female assassins). Each entry is 14-22 words.
 

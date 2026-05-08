@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/assassin_hair_color.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN HAIR-COLOR descriptions for GothBot's vampire-assassin paths (gender-neutral). Each entry is 8-16 words.
 

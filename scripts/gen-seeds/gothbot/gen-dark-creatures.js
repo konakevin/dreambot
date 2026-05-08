@@ -2,8 +2,10 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/dark_creatures.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 25,
+  maxTokens: 4000,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} BOSS-TIER DARK CREATURE descriptions for GothBot's horror-creature path. These are CASTLEVANIA BOSS ENCOUNTERS — massive, imposing, jaw-dropping creature designs that would be the final boss of a gothic horror game. Each entry is 25-40 words. Gorgeous + terrifying + operatic. The kind of creature art that makes you stop scrolling and stare.
 
 ━━━ AESTHETIC NORTH STAR ━━━

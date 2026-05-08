@@ -3,7 +3,8 @@ const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/lighting.json',
   total: 200,
-  batch: 12,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} LIGHTING descriptions for GothBot — the specific light-source + quality of light + how it interacts with the scene. Entries 12-22 words. Gothic chiaroscuro + twilight color + occult-source variety.
 
 ━━━ AESTHETIC NORTH STAR ━━━

@@ -92,6 +92,9 @@ module.exports = {
   // Combat path pools (added 2026-05-08).
   COMBAT_FOE: load('combat_foe'),
   COMBAT_MOMENT: load('combat_moment'),
+  // Monster-prowl path pools (added 2026-05-08).
+  CREATURE_ARCHETYPE: load('creature_archetype'),
+  CREATURE_WILD_ACTION: load('creature_wild_action'),
   VIBE_COLOR,
 
   // Sensory anchor pools — 3 contexts × 7 channels × 50 entries.

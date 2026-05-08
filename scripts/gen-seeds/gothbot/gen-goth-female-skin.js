@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_female_skin.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} GOTHIC SKIN TONE descriptions for GothBot's female character paths. Each entry is a SHORT phrase (8-15 words) describing her skin with gothic-specific detail. These compose with separate archetype/makeup/hair pools.
 
 These are hauntingly beautiful skin descriptions — NOT clinical color swatches. Every skin tone should feel GOTHIC — touched by moonlight, kissed by shadow, lit by candlefire. Include the color AND the quality/texture.

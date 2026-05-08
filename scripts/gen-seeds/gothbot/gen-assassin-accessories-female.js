@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/assassin_accessories_female.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} VAMPIRE-ASSASSIN-FEMALE WEAPON & ACCESSORY descriptions for GothBot. Each entry is 16-26 words. The accessory is the SIGNATURE OBJECT visible at full-body wide-shot — what makes her readable as an assassin from across the frame.
 

@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/male_character_actions.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} MALE CHARACTER ACTION descriptions for GothBot's male character paths — specific mid-action verbs/stances that pair with a male character seed. Entries 10-18 words. MASCULINE MENACE + POWER + DANGER energy. Castlevania / Devil-May-Cry / Bloodborne / Berserk / Van-Helsing poster composition.
 
 ━━━ THE NORTH STAR ━━━

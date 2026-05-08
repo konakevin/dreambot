@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/goth_female_wardrobe.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} GOTHIC FEMALE WARDROBE descriptions for GothBot's goth-closeup and goth-full-body paths. Each entry is ONE specific outfit described in 12-20 words. These compose with separate archetype/makeup/hair pools.
 
 These outfits are DARK, SEXY, POWERFUL — period-gothic with attitude. She dresses like she's attending her own coronation in hell. NOT modern fashion, NOT casual — these are dramatic gothic costumes with presence.

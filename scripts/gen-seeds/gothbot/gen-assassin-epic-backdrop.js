@@ -2,9 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/assassin_epic_backdrop.json',
-  total: 25,
-  batch: 25,
-  append: false,
+  total: 200,
+  batch: 50,
+  append: true,
   maxTokens: 4000,
   metaPrompt: (n) => `Write ${n} EPIC GOTHIC BACKDROP descriptions for GothBot's vampire-assassin paths. Each entry is 20-35 words. This backdrop DWARFS the character — the scale-defining gothic anchor that fills the upper portion of the frame OR dominates the horizon.
 

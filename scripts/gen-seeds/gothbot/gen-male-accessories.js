@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/male_accessories.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} MALE ACCESSORY / WEAPON descriptions for GothBot's male character paths. Each entry is a SHORT phrase (5-12 words) describing ONE specific weapon, piece of gear, or accessory visible on a gothic-horror man. Castlevania / Bloodborne / Devil-May-Cry / Van-Helsing aesthetic.
 
 ━━━ ACCESSORY TYPES (enforce variety across ${n}) ━━━

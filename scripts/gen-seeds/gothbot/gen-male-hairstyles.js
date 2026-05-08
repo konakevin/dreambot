@@ -2,8 +2,9 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/gothbot/seeds/male_hairstyles.json',
-  total: 25,
-  batch: 12,
+  total: 200,
+  batch: 50,
+  append: true,
   metaPrompt: (n) => `You are writing ${n} MALE HAIRSTYLE descriptions for GothBot's male character paths. Each entry is a SHORT phrase (4-10 words) describing ONLY a specific hairstyle/texture/length. Gothic-horror men — Castlevania / Bloodborne / Devil-May-Cry / Berserk / Van-Helsing aesthetic.
 
 ━━━ STYLE SPREAD (enforce variety across ${n}) ━━━
