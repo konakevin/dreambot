@@ -23,6 +23,8 @@ const pathBuilders = {
   'vampire-girls-2': require('./paths/vampire-girls-2'),
   'gothic-vista': require('./paths/gothic-vista'),
   'gothic-darklands': require('./paths/gothic-darklands'),
+  'vampire-assassin-female': require('./paths/vampire-assassin-female'),
+  'vampire-assassin-male': require('./paths/vampire-assassin-male'),
 };
 
 module.exports = {
@@ -44,14 +46,19 @@ module.exports = {
   // Scenery/creature paths: 65/35 flux-1.1-pro/flux-dev (weighted object format).
   // Character paths: locked to flux-dev (1.1-pro's E005 safety filter trips on dark characters).
   modelByPath: {
-    'dark-landscape':      { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
-    'gothic-architecture': { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
-    'castlevania-scene':   { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
-    'cozy-goth':           { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
-    'gothic-vista':        { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
-    'gothic-darklands':    { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
-    'horror-creature':     { 'black-forest-labs/flux-1.1-pro': 65, 'black-forest-labs/flux-dev': 35 },
+    // Scene paths locked to flux-1.1-pro for anime-medium trial.
+    'dark-landscape':      'black-forest-labs/flux-1.1-pro',
+    'gothic-architecture': 'black-forest-labs/flux-1.1-pro',
+    'castlevania-scene':   'black-forest-labs/flux-1.1-pro',
+    'cozy-goth':           'black-forest-labs/flux-1.1-pro',
+    'gothic-vista':        'black-forest-labs/flux-1.1-pro',
+    'gothic-darklands':    'black-forest-labs/flux-1.1-pro',
+    'horror-creature':     'black-forest-labs/flux-1.1-pro',
     'vampire-girls-2': 'black-forest-labs/flux-dev',
+    // Vampire-assassin paths locked to flux-1.1-pro (Kevin's hearts confirmed
+    // 1.1-pro renders best on anime+gothic combo).
+    'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro',
+    'vampire-assassin-male':   'black-forest-labs/flux-1.1-pro',
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with
@@ -67,6 +74,17 @@ module.exports = {
       'ancient',
       'surreal',
     ],
+    // Scene paths locked to the dark / nightshade / macabre triad for the trial.
+    'dark-landscape':      ['dark', 'nightshade', 'macabre'],
+    'gothic-architecture': ['dark', 'nightshade', 'macabre'],
+    'castlevania-scene':   ['dark', 'nightshade', 'macabre'],
+    'cozy-goth':           ['dark', 'nightshade', 'macabre'],
+    'gothic-vista':        ['dark', 'nightshade', 'macabre'],
+    'gothic-darklands':    ['dark', 'nightshade', 'macabre'],
+    'horror-creature':     ['dark', 'nightshade', 'macabre'],
+    // Vampire-assassin paths locked to the dark triad.
+    'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
+    'vampire-assassin-male':   ['dark', 'nightshade', 'macabre'],
   },
 
   mediumByPath: {
@@ -80,6 +98,17 @@ module.exports = {
       'canvas',
       'watercolor',
     ],
+    // Scene/landscape paths hardcoded to anime medium for the trial.
+    'dark-landscape':      'anime',
+    'gothic-architecture': 'anime',
+    'castlevania-scene':   'anime',
+    'cozy-goth':           'anime',
+    'gothic-vista':        'anime',
+    'gothic-darklands':    'anime',
+    'horror-creature':     'anime',
+    // Vampire-assassin paths locked to anime medium for the trial.
+    'vampire-assassin-female': 'anime',
+    'vampire-assassin-male':   'anime',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -100,10 +129,13 @@ module.exports = {
   promptPrefixByMedium: {
     vampire_portrait:
       'wallpaper-worthy operatic gothic vampire painting, dramatic theatrical composition, gallery-poster gravity',
+    // FaeBot-pattern: empty prefix so the scene leads, not style language.
+    painted_gothic_fantasy: blocks.PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY,
   },
   promptSuffixByMedium: {
     vampire_portrait:
       'operatic gothic dark-fantasy painting finish, painterly brushwork with bold heavy shadow, gallery-poster gravity, no text no words no watermarks, NOT photoreal NOT cinematic film-still NOT 35mm NOT magazine editorial NOT plastic-skin NOT Halloween costume NOT modern fashion photography',
+    painted_gothic_fantasy: blocks.PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY,
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
@@ -132,6 +164,9 @@ module.exports = {
       'oil-painted gothic-horror portrait, heavy impasto brushwork, chiaroscuro painterly-horror tradition (Caravaggio-meets-Castlevania), painterly dark-fantasy baroque canvas',
     watercolor:
       'gothic watercolor horror illustration, blood-ink wash bleed, wet-on-wet dark fantasy tradition, atmospheric watercolor with ink-line overlay, gothic sumi-e inkwash',
+    // FaeBot-pattern tiny medium tag — small enough not to hijack early-
+    // token weight. The path's scene description leads the prompt.
+    painted_gothic_fantasy: blocks.PAINTED_GOTHIC_FANTASY_MEDIUM,
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -272,6 +307,8 @@ module.exports = {
     'vampire-girls-2',
     'gothic-vista',
     'gothic-darklands',
+    'vampire-assassin-female',
+    'vampire-assassin-male',
   ],
 
   cycleAllPaths: true,

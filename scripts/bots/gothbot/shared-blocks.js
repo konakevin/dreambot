@@ -84,6 +84,17 @@ const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — GO TO 11 ━━━
 
 This bot is Castlevania + Devil-May-Cry + Berserk + vampire-goth-manga-horror + WoW-undead-warlock art on STEROIDS. 11/10 stylized dark-manga-horror scenes. Stack hard: dynamic pose + twilight color + moonlight or occult-glow + heavy-ink shadow + sharp-angular baroque detail + mist-or-fog-or-smoke + crimson or fel-green or violet accents + velvet-leather-lace-iron textures + architectural grandeur or blood-moon landscape. The stylized-manga-horror aesthetic is the CANVAS, not the ceiling. Amp every element to 11. Make the viewer stop scrolling.`;
 
+// FaeBot-pattern unified medium for scene/landscape paths (and creature
+// scenes). Pinned via mediumByPath in index.js. Mirrors FaeBot's recipe:
+// empty prefix (subject leads, no early-token style hijack) + tiny medium
+// tag + suffix-only painterly DNA.
+const PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY = '';
+
+const PAINTED_GOTHIC_FANTASY_MEDIUM = 'gothic dark-fantasy concept art, painterly';
+
+const PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY =
+  'painted dark-fantasy concept art, atmospheric gothic illustration, dramatic chiaroscuro, oil-painted brushwork, deep saturated jewel-tones with painted shadow, Frank Frazetta + Brom + Wayne Barlowe + Luis Royo + dark-paperback-cover lineage, no text, no watermarks';
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -101,6 +112,9 @@ module.exports = {
   SOLO_COMPOSITION_BLOCK,
   IMPOSSIBLE_BEAUTY_BLOCK,
   BLOW_IT_UP_BLOCK,
+  PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY,
+  PAINTED_GOTHIC_FANTASY_MEDIUM,
+  PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY,
   // Aliases for backwards-compat with existing path imports:
   PAINTERLY_ILLUSTRATION_BLOCK: STYLIZED_MANGA_BLOCK,
   NO_BLOOD_NO_GORE_NO_CLOWNS_BLOCK: NO_CHEAP_GORE_BLOCK,

@@ -74,6 +74,21 @@ module.exports = {
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
+  // Vampire-assassin paths (added 2026-05-08). 6 shared pools + 4 female + 4 male.
+  ASSASSIN_SKIN: load('assassin_skin'),
+  ASSASSIN_EYES: load('assassin_eyes'),
+  ASSASSIN_HAIR_COLOR: load('assassin_hair_color'),
+  ASSASSIN_STAGE: load('assassin_stage'),
+  ASSASSIN_EPIC_BACKDROP: load('assassin_epic_backdrop'),
+  ASSASSIN_ADVENTURE_ACTIONS: load('assassin_adventure_actions'),
+  VAMPIRE_ASSASSIN_FEMALE: load('vampire_assassin_female'),
+  ASSASSIN_OUTFITS_FEMALE: load('assassin_outfits_female'),
+  ASSASSIN_HAIRSTYLES_FEMALE: load('assassin_hairstyles_female'),
+  ASSASSIN_ACCESSORIES_FEMALE: load('assassin_accessories_female'),
+  VAMPIRE_ASSASSIN_MALE: load('vampire_assassin_male'),
+  ASSASSIN_OUTFITS_MALE: load('assassin_outfits_male'),
+  ASSASSIN_HAIRSTYLES_MALE: load('assassin_hairstyles_male'),
+  ASSASSIN_ACCESSORIES_MALE: load('assassin_accessories_male'),
   VIBE_COLOR,
 
   // Sensory anchor pools — 3 contexts × 7 channels × 50 entries.
