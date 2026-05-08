@@ -517,6 +517,11 @@ export default function SettingsScreen() {
         <Text style={styles.sectionHeader}>ABOUT</Text>
         <View style={styles.section}>
           <SettingsRow
+            icon="information-circle-outline"
+            label="About DreamBot"
+            onPress={() => nav.push('/settings/about')}
+          />
+          <SettingsRow
             icon="heart-outline"
             label="Acknowledgements"
             onPress={() => nav.push('/settings/acknowledgements')}
