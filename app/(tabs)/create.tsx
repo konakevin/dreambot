@@ -289,16 +289,30 @@ export default function CreateScreen() {
           <Text className="text-2xl font-extrabold" style={{ color: colors.textPrimary }}>
             Create
           </Text>
-          <TouchableOpacity
-            onPress={() => nav.push('/sparkleStore')}
-            className="flex-row items-center gap-1 px-2.5 py-1.5 rounded-2xl"
-            style={{ backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
-          >
-            <Ionicons name="sparkles" size={14} color={colors.accent} />
-            <Text className="text-xs font-bold" style={{ color: colors.accent }}>
-              {formatCompact(sparkleBalance)}
-            </Text>
-          </TouchableOpacity>
+          <View className="flex-row items-center gap-2">
+            <TouchableOpacity
+              onPress={() => nav.push('/sparkleStore')}
+              className="flex-row items-center gap-1 px-2.5 py-1.5 rounded-2xl"
+              style={{
+                backgroundColor: colors.surface,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <Ionicons name="sparkles" size={14} color={colors.accent} />
+              <Text className="text-xs font-bold" style={{ color: colors.accent }}>
+                {formatCompact(sparkleBalance)}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handlePickPhoto}
+              className="w-8 h-8 rounded-full items-center justify-center"
+              style={{ backgroundColor: colors.accent }}
+              hitSlop={6}
+            >
+              <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={16} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Scrollable content */}
@@ -430,7 +444,7 @@ export default function CreateScreen() {
           >
             <TextInput
               ref={promptRef}
-              className="pl-4 pr-14 pt-4 pb-10 text-base"
+              className="px-4 py-4 text-base"
               style={{
                 color: colors.textPrimary,
                 // Fixed height — long prompts scroll internally rather than
@@ -448,15 +462,6 @@ export default function CreateScreen() {
               scrollEnabled
               returnKeyType="default"
             />
-            {/* Photo icon inside prompt field */}
-            <TouchableOpacity
-              className="absolute bottom-2 right-3 w-9 h-9 rounded-full items-center justify-center"
-              style={{ backgroundColor: colors.accent }}
-              onPress={handlePickPhoto}
-              hitSlop={8}
-            >
-              <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={18} color="#fff" />
-            </TouchableOpacity>
           </View>
 
           {/* Pro Mode toggle — only shown when there's a custom prompt with
