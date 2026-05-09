@@ -478,8 +478,10 @@ export default function CreateScreen() {
                 color: colors.textPrimary,
                 // Fixed height — long prompts scroll internally rather than
                 // stretching the box. iOS multiline TextInputs scroll
-                // automatically when height is fixed.
-                height: 120,
+                // automatically when height is fixed. Shrink in the
+                // photo-uploaded + keyboard-open state so Medium and Vibe
+                // dropdowns stay visible below.
+                height: hasPhoto && kbOpen ? 80 : 120,
                 textAlignVertical: 'top',
               }}
               placeholder={placeholder}
