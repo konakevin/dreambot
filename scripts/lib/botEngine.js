@@ -994,6 +994,50 @@ async function runBot(opts) {
         : '';
     finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
 
+    // Resolve the render model BEFORE building the recipe — buildRecipe
+    // freezes recipe.model into the upload row, and DLT replay reads it
+    // back to pick the model on replay. Resolving after recipe-build
+    // (the prior order) silently stamped every recipe with the unmodified
+    // default ('flux-dev'), even on paths that modelByPath locked to
+    // flux-1.1-pro. DLT replay then re-rolled on flux-dev. See May 2026.
+    //
+    // Priority: bot.modelByPath > pickModel (medium+vibe → pool) > default.
+    // If bot.useModelPicker is true, pickModel() reads dream_mediums.allowed_models
+    // (with bot-scope, includes bot-only mediums) and random-picks a Flux/SDXL model.
+    // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
+    // the medium pool — use this when a path's aesthetic needs a specific model.
+    let renderInputOverrides = {};
+    if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
+      const modelVal = bot.modelByPath[resolvedPath];
+      // Support three formats:
+      //   string: 'flux-dev' — locked to one model
+      //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
+      //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
+      if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
+        const entries = Object.entries(modelVal);
+        const totalW = entries.reduce((s, [, w]) => s + w, 0);
+        let roll = Math.random() * totalW;
+        renderModel = entries[entries.length - 1][0];
+        for (const [m, w] of entries) { roll -= w; if (roll <= 0) { renderModel = m; break; } }
+      } else {
+        renderModel = Array.isArray(modelVal)
+          ? modelVal[Math.floor(Math.random() * modelVal.length)]
+          : modelVal;
+      }
+      // No input overrides for Flux; SDXL would need width/height/steps
+      if (renderModel === 'sdxl') renderInputOverrides = { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 };
+      console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
+    } else if (bot.useModelPicker) {
+      const picked = await pickModel({
+        mediumKey: medium,
+        vibeKey: vibeKey,
+        allowedModels: bot.allowedModels,
+      });
+      renderModel = picked.model;
+      renderInputOverrides = picked.inputOverrides;
+      console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
+    }
+
     // Build the DLT recipe — frozen LOOK anchors captured at posting time.
     // See docs/DLT_RECIPE_PLAN.md for full architecture. Stored on the
     // upload row as JSONB; replayed at DLT time to reproduce source's
@@ -1037,44 +1081,8 @@ async function runBot(opts) {
       };
     }
 
-    // 9. Replicate render — opt-in per-medium routing via pickModel().
-    // Priority: bot.modelByPath > pickModel (medium+vibe → pool) > flux-dev default.
-    // If bot.useModelPicker is true, pickModel() reads dream_mediums.allowed_models
-    // (with bot-scope, includes bot-only mediums) and random-picks a Flux/SDXL model.
-    // Bot.modelByPath HARDCODES a specific model for a specific path, overriding
-    // the medium pool — use this when a path's aesthetic needs a specific model.
+    // 9. Replicate render — uses the renderModel + inputOverrides resolved above.
     errorStage = 'flux';
-    let renderInputOverrides = {};
-    if (bot.modelByPath && bot.modelByPath[resolvedPath]) {
-      const modelVal = bot.modelByPath[resolvedPath];
-      // Support three formats:
-      //   string: 'flux-dev' — locked to one model
-      //   array:  ['flux-dev', 'flux-1.1-pro'] — uniform random pick
-      //   weighted object: { 'flux-1.1-pro': 65, 'flux-dev': 35 } — weighted random
-      if (typeof modelVal === 'object' && !Array.isArray(modelVal)) {
-        const entries = Object.entries(modelVal);
-        const totalW = entries.reduce((s, [, w]) => s + w, 0);
-        let roll = Math.random() * totalW;
-        renderModel = entries[entries.length - 1][0];
-        for (const [m, w] of entries) { roll -= w; if (roll <= 0) { renderModel = m; break; } }
-      } else {
-        renderModel = Array.isArray(modelVal)
-          ? modelVal[Math.floor(Math.random() * modelVal.length)]
-          : modelVal;
-      }
-      // No input overrides for Flux; SDXL would need width/height/steps
-      if (renderModel === 'sdxl') renderInputOverrides = { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 };
-      console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
-    } else if (bot.useModelPicker) {
-      const picked = await pickModel({
-        mediumKey: medium,
-        vibeKey: vibeKey,
-        allowedModels: bot.allowedModels,
-      });
-      renderModel = picked.model;
-      renderInputOverrides = picked.inputOverrides;
-      console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
-    }
     const fluxUrl = await flux({
       prompt: finalPrompt,
       aspectRatio: '9:16',
