@@ -466,34 +466,43 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Prompt input */}
-          <View
-            className="rounded-xl mb-4"
-            style={{ backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}
-          >
-            <TextInput
-              ref={promptRef}
-              className="px-4 py-4 text-base"
+          {/* Prompt input — hidden when a photo is in Restyle mode, since
+              that path is medium+vibe only (no prompt influence). The
+              underlying `config.userPrompt` is preserved so flipping back
+              to New Scene restores whatever the user had typed. */}
+          {!(hasPhoto && config.photoStyle === 'restyle') && (
+            <View
+              className="rounded-xl mb-4"
               style={{
-                color: colors.textPrimary,
-                // Fixed height — long prompts scroll internally rather than
-                // stretching the box. iOS multiline TextInputs scroll
-                // automatically when height is fixed. Shrink in the
-                // photo-uploaded + keyboard-open state so Medium and Vibe
-                // dropdowns stay visible below.
-                height: hasPhoto && kbOpen ? 80 : 120,
-                textAlignVertical: 'top',
+                backgroundColor: colors.surface,
+                borderWidth: 1,
+                borderColor: colors.border,
               }}
-              placeholder={placeholder}
-              placeholderTextColor={colors.textMuted ?? '#6B7280'}
-              value={config.userPrompt}
-              onChangeText={setPrompt}
-              maxLength={2000}
-              multiline
-              scrollEnabled
-              returnKeyType="default"
-            />
-          </View>
+            >
+              <TextInput
+                ref={promptRef}
+                className="px-4 py-4 text-base"
+                style={{
+                  color: colors.textPrimary,
+                  // Fixed height — long prompts scroll internally rather than
+                  // stretching the box. iOS multiline TextInputs scroll
+                  // automatically when height is fixed. Shrink in the
+                  // photo-uploaded + keyboard-open state so Medium and Vibe
+                  // dropdowns stay visible below.
+                  height: hasPhoto && kbOpen ? 80 : 120,
+                  textAlignVertical: 'top',
+                }}
+                placeholder={placeholder}
+                placeholderTextColor={colors.textMuted ?? '#6B7280'}
+                value={config.userPrompt}
+                onChangeText={setPrompt}
+                maxLength={2000}
+                multiline
+                scrollEnabled
+                returnKeyType="default"
+              />
+            </View>
+          )}
 
           {/* Advanced Mode toggle — only shown when there's a custom prompt
               with no photo. When ON: prompt goes verbatim to the user's

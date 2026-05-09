@@ -211,13 +211,15 @@ export function useDreamCreate() {
               force_model: config.forceModel ?? undefined,
             });
           } else {
-            // Restyle: Kontext transform via dedicated restyle-photo endpoint (keeps pose/composition)
+            // Restyle: Kontext transform via dedicated restyle-photo endpoint (keeps pose/composition).
+            // Restyle is intentionally medium+vibe only — no `hint` so the user
+            // can't accidentally prompt-engineer a transform; the UI hides the
+            // prompt box in this state to make the contract obvious.
             result = await restylePhoto({
               inputImageBase64: refUrl,
               mediumKey: resolvedMediumKey ?? 'photography',
               vibeKey: config.selectedVibe ?? 'cinematic',
               vibeProfile: vibeProfile ?? undefined,
-              hint: config.userPrompt.trim() || undefined,
               jobId,
             });
           }
