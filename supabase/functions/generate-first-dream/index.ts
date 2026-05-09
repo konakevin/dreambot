@@ -1,429 +1,650 @@
 /**
- * generate-first-dream — dedicated pipeline for the very first dream a
- * user sees at the end of onboarding. Single-shot, curated, banger-rate.
+ * Edge Function: generate-first-dream
  *
- * Spec: memory/project_first_dream_engine_spec.md
+ * Single-shot, curated, banger-rate first-dream pipeline. Re-uses the
+ * nightly assembleScene engine but replaces rollDream's randomness with
+ * persona-locked composition + curated medium/vibe rankings.
  *
- * Why a separate function (instead of weaving into generate-dream):
- *   - Lower risk: cannot regress V4 / Create / DLT pipelines
- *   - Clean code path: this function does ONE thing well
- *   - Independent deploy: can be tuned/redeployed without touching the
- *     main engine
+ * Spec: FIRST_DREAM_BANGER_SPEC.md
  *
  * Flow:
- *   1. Auth user, check users.first_dream_completed_at (one-shot guard)
- *   2. Load user's vibe_profile + dream_seeds + selected location/object cards
- *   3. routeArchetype + fetch first_dream_cells row → FirstDreamBrief
- *   4. compilePrompt with cell's composition/lighting/camera/sensory anchors
- *   5. callSonnet for the polished Flux prompt
- *   6. Flux render via flux-dev
- *   7. If face-swap eligible: faceSwap or dualFaceSwap with up to 3 retries
- *   8. On retry exhaustion: rebuild brief with forceNoCast=true, re-render once
- *   9. Persist to storage + uploads + set users.first_dream_completed_at
- *   10. Return image URL + caption + metadata
+ *   1. Auth + load profile (vibe_profile, dream_seeds, dream_cast)
+ *   2. One-shot guard (users.first_dream_completed_at)
+ *   3. Derive persona + pick medium + pick vibe (firstDreamPicker)
+ *   4. Describe undescribed cast photos via Llama Vision
+ *   5. Lock composition + compositionMode + includeObject from persona config
+ *   6. assembleScene() with always-on first chosen location
+ *   7. Build Sonnet brief (one of 3 templates per persona)
+ *   8. Sonnet → 70-100 word Flux prompt
+ *   9. Flux render (NSFW retry inside generateImage)
+ *   10. Face swap (single via faceSwap, dual via dispatchDualFaceSwap)
+ *   11. Persist + mark first_dream_completed_at
+ *
+ * POST /functions/v1/generate-first-dream
+ * Authorization: Bearer <user JWT>
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
+import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { assembleScene } from '../_shared/sceneEngine.ts';
+import { getLocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { sanitizePrompt } from '../_shared/sanitize.ts';
+import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
+import { faceSwap } from '../_shared/faceSwap.ts';
+import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
+import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
+import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
-import { faceSwap, dualFaceSwap } from '../_shared/faceSwap.ts';
-import { fetchMediums, fetchVibes } from '../_shared/dreamStyles.ts';
+import { insertGenerationLog } from '../_shared/logging.ts';
+import { pickDualAction } from '../_shared/pools/dual_actions.ts';
+import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import {
-  buildFirstDreamBrief,
-  type ResolvedLocationCard,
-  type ResolvedObjectCard,
-} from '../_shared/firstDreamPipeline.ts';
-import { FIRST_DREAM_GUARDRAILS } from '../_shared/firstDream.ts';
+  derivePersona,
+  pickFirstDreamMedium,
+  pickFirstDreamVibe,
+  pickCompositionMode,
+  rollIncludeObject,
+  FirstDreamCastInput,
+} from '../_shared/firstDreamPicker.ts';
+import {
+  PERSONA_COMPOSITION,
+  FIRST_DREAM_BANNED_PHRASES,
+  FirstDreamPersona,
+} from '../_shared/firstDream.ts';
 
 interface RequestBody {
-  /** Optional override (test mode) — normally read from user_recipes */
-  vibe_profile?: unknown;
-  /** Optional override (test mode) — normally read from dream_seeds */
-  selected_locations?: ResolvedLocationCard[];
-  selected_objects?: ResolvedObjectCard[];
-  /** Test mode — bypass the one-shot guard so QA can re-run this for the same user */
+  /** Test mode — bypass one-shot guard */
   bypass_one_shot?: boolean;
-  /** Test mode — set userId from body (only honored when bearer = service role) */
-  test_user_id?: string;
+  /** Test mode — force a specific persona regardless of cast (for QA loops) */
+  force_persona?: FirstDreamPersona;
 }
 
 Deno.serve(async (req) => {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-      },
+  const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
+  const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
+
+  if (!REPLICATE_TOKEN) {
+    return new Response(JSON.stringify({ error: 'Missing REPLICATE_API_TOKEN' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+
+  // ── Auth ───────────────────────────────────────────────────────────────
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'Missing Authorization header' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
-  const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY')!;
-  const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
-  const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-  if (!REPLICATE_TOKEN || !ANTHROPIC_KEY) {
-    return new Response(JSON.stringify({ error: 'Server misconfigured' }), { status: 500 });
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  const supabaseUser: SupabaseClient = createClient(
+    supabaseUrl,
+    Deno.env.get('SUPABASE_ANON_KEY')!,
+    { global: { headers: { Authorization: authHeader } } }
+  );
+  const {
+    data: { user },
+  } = await supabaseUser.auth.getUser();
+  if (!user) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
+  const userId = user.id;
+  const supabase: SupabaseClient = createClient(supabaseUrl, serviceRoleKey);
 
-  let body: RequestBody;
+  // ── Body ───────────────────────────────────────────────────────────────
+  let body: RequestBody = {};
   try {
     body = (await req.json()) as RequestBody;
   } catch {
     body = {};
   }
 
-  // Service-role client (for first_dream_cells RLS bypass + writes)
-  const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
-
-  // Auth — production path uses end-user JWT. Test path: when bearer
-  // matches the service role and body provides test_user_id, skip the
-  // user-JWT check (used by scripts/iter-first-dream.js for QA loops).
-  const authHeader = req.headers.get('authorization') ?? '';
-  const bearer = authHeader.replace(/^Bearer\s+/i, '').trim();
-  const isServiceRoleCall = !!bearer && bearer === SERVICE_ROLE;
-
-  let userId: string;
-  if (isServiceRoleCall && body.test_user_id) {
-    userId = body.test_user_id;
-  } else {
-    const userClient = createClient(
-      SUPABASE_URL,
-      Deno.env.get('SUPABASE_ANON_KEY') ?? SERVICE_ROLE,
-      {
-        global: { headers: { Authorization: authHeader } },
-      }
-    );
-    const {
-      data: { user },
-      error: authError,
-    } = await userClient.auth.getUser();
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  // ── One-shot guard ─────────────────────────────────────────────────────
+  if (!body.bypass_one_shot) {
+    const { data: userRow } = await supabase
+      .from('users')
+      .select('first_dream_completed_at')
+      .eq('id', userId)
+      .single();
+    if (userRow?.first_dream_completed_at) {
+      return new Response(
+        JSON.stringify({
+          error: 'first_dream_already_completed',
+          completed_at: userRow.first_dream_completed_at,
+        }),
+        { status: 409, headers: { 'Content-Type': 'application/json' } }
+      );
     }
-    userId = user.id;
   }
 
-  // ── One-shot guard ──
-  const { data: userRow } = await supabase
-    .from('users')
-    .select('first_dream_completed_at')
-    .eq('id', userId)
+  // ── Load profile ───────────────────────────────────────────────────────
+  const { data: recipeRow } = await supabase
+    .from('user_recipes')
+    .select('recipe')
+    .eq('user_id', userId)
     .single();
-  if (userRow?.first_dream_completed_at && !body.bypass_one_shot) {
+  const profile = recipeRow?.recipe as VibeProfile | null;
+  if (!profile) {
+    return new Response(JSON.stringify({ error: 'no_vibe_profile' }), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // ── Persona derivation + ranked picks ──────────────────────────────────
+  const cast = profile.dream_cast ?? [];
+  const castInput: FirstDreamCastInput[] = cast.map((c) => ({
+    role: c.role,
+    hasPhoto: !!(c.thumb_url && c.thumb_url.startsWith('http')),
+    gender: c.gender,
+  }));
+  const persona: FirstDreamPersona = body.force_persona ?? derivePersona(castInput);
+  const userMediums = profile.art_styles ?? [];
+  const userVibes = profile.aesthetics ?? [];
+
+  const mediumPick = pickFirstDreamMedium(userMediums, persona);
+  const vibePick = pickFirstDreamVibe(userVibes, persona);
+  console.log(
+    `[first-dream] persona=${persona} medium=${mediumPick.value}(${mediumPick.reason}) vibe=${vibePick.value}(${vibePick.reason})`
+  );
+
+  // Resolve to DB rows for full medium/vibe metadata
+  const medium = await resolveMediumFromDb(mediumPick.value);
+  if (!medium) {
     return new Response(
-      JSON.stringify({
-        error: 'first_dream_already_completed',
-        completed_at: userRow.first_dream_completed_at,
-      }),
-      { status: 409 }
+      JSON.stringify({ error: 'medium_not_found', attempted: mediumPick.value }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
-
-  // ── Load profile + seeds ──
-  let vibeProfile = body.vibe_profile as
-    | {
-        dream_cast?: {
-          role: 'self' | 'plus_one' | 'pet';
-          thumb_url?: string;
-          description?: string;
-        }[];
-      }
-    | undefined;
-  if (!vibeProfile) {
-    const { data: row } = await supabase
-      .from('user_recipes')
-      .select('recipe')
-      .eq('user_id', userId)
-      .single();
-    vibeProfile = row?.recipe as typeof vibeProfile;
-  }
-  if (!vibeProfile) {
-    return new Response(JSON.stringify({ error: 'No vibe profile found' }), { status: 400 });
+  const vibe = await resolveVibeFromDb(vibePick.value);
+  if (!vibe) {
+    return new Response(JSON.stringify({ error: 'vibe_not_found', attempted: vibePick.value }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  // Selected locations / objects: fetch via dream_seeds + classification join
-  let selectedLocations: ResolvedLocationCard[] = body.selected_locations ?? [];
-  let selectedObjects: ResolvedObjectCard[] = body.selected_objects ?? [];
-  if (selectedLocations.length === 0 || selectedObjects.length === 0) {
-    const { data: seedRow } = await supabase
-      .from('dream_seeds')
-      .select('places,things')
-      .eq('user_id', userId)
-      .single();
-    if (seedRow) {
+  // ── Describe undescribed cast photos ───────────────────────────────────
+  if (persona !== 'no_cast') {
+    for (const member of cast) {
       if (
-        selectedLocations.length === 0 &&
-        Array.isArray(seedRow.places) &&
-        seedRow.places.length > 0
+        !member.description &&
+        member.thumb_url &&
+        member.thumb_url.startsWith('http') &&
+        REPLICATE_TOKEN
       ) {
-        const { data: locs } = await supabase
-          .from('location_cards')
-          .select('name,location_class')
-          .in('name', seedRow.places);
-        selectedLocations = (locs ?? []) as ResolvedLocationCard[];
-      }
-      if (
-        selectedObjects.length === 0 &&
-        Array.isArray(seedRow.things) &&
-        seedRow.things.length > 0
-      ) {
-        const { data: objs } = await supabase
-          .from('object_cards')
-          .select('name,object_class')
-          .in('name', seedRow.things);
-        selectedObjects = (objs ?? []) as ResolvedObjectCard[];
+        try {
+          const descPrompt =
+            member.role === 'pet'
+              ? 'Describe this animal: species, breed, coat color/pattern, fur texture, eye color, ear shape, size, build, age, distinguishing features. 2-3 sentences.'
+              : 'Describe this person for an AI artist creating a stylized character. Include: exact age estimate, face shape, eye color, hair (exact color, length, texture, style), facial hair if any, skin tone, build, clothing colors/style, distinguishing features (glasses, freckles, jewelry, tattoos). 3 sentences max. Be EXTREMELY specific.';
+          const createRes = await fetch(
+            'https://api.replicate.com/v1/models/meta/llama-3.2-90b-vision/predictions',
+            {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${REPLICATE_TOKEN}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                input: { image: member.thumb_url, prompt: descPrompt, max_tokens: 300 },
+              }),
+            }
+          );
+          if (!createRes.ok) throw new Error(`Replicate ${createRes.status}`);
+          const pred = await createRes.json();
+          for (let i = 0; i < 30; i++) {
+            await new Promise((r) => setTimeout(r, 2000));
+            const poll = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
+              headers: { Authorization: `Bearer ${REPLICATE_TOKEN}` },
+            });
+            const pData = await poll.json();
+            if (pData.status === 'succeeded') {
+              member.description = (
+                Array.isArray(pData.output) ? pData.output.join('') : (pData.output ?? '')
+              ).trim();
+              break;
+            }
+            if (pData.status === 'failed') throw new Error(pData.error);
+          }
+        } catch (err) {
+          console.warn(
+            `[first-dream] cast describe failed for ${member.role}:`,
+            (err as Error).message
+          );
+        }
       }
     }
   }
 
-  // ── Build the first-dream brief ──
-  const brief = await buildFirstDreamBrief(
-    {
-      profile: vibeProfile,
-      selectedLocations,
-      selectedObjects,
-      forceNoCast: false,
-    },
-    supabase
-  );
+  // ── Persona-locked composition knobs ───────────────────────────────────
+  const personaConfig = PERSONA_COMPOSITION[persona];
+  const compositionMode = pickCompositionMode(persona);
+  const includeObject = rollIncludeObject(persona);
+  const composition = personaConfig.composition;
 
-  console.log(
-    `[first-dream] persona=${brief.roll.persona} location=${brief.roll.locationClass} ` +
-      `medium=${brief.resolvedMediumKey} vibe=${brief.resolvedVibeKey} ` +
-      `cast=${brief.castMembers.map((c) => c.role).join('+') || 'none'} ` +
-      `fallbacks=${brief.fallbackReasons.join(',') || 'none'}`
-  );
-
-  // ── Resolve medium + vibe rows (for the directive text) ──
-  const mediums = await fetchMediums();
-  const vibes = await fetchVibes();
-  const medium = mediums.find((m) => m.key === brief.resolvedMediumKey) ?? mediums[0];
-  const vibe = vibes.find((v) => v.key === brief.resolvedVibeKey) ?? vibes[0];
-
-  // ── Compose Sonnet brief — purpose-built, no compilePrompt complexity ──
-  const sonnetBrief = `You are writing a Flux AI image-generation prompt for the very first dream this user will ever see. This is the most important render they will ever generate — it must be a banger.
-
-═══ THE CELL RECIPE (FOLLOW EXACTLY) ═══
-${brief.sceneInstructions}
-
-═══ STYLE ═══
-Medium: ${medium.label}. ${medium.directive}
-
-═══ MOOD ═══
-Vibe: ${vibe.label}. ${vibe.directive}
-
-═══ OUTPUT ═══
-Write a single dense Flux prompt of 65-90 words, comma-separated phrases, starting with the medium's signature look and ending with quality terms (NOT photorealistic if the medium is painted, etc.). Bake every layer of the cell recipe into the prompt naturally — composition, lighting, camera, sensory anchors. The subject (described above) MUST be the visual focus. Output ONLY the prompt, no preamble.`;
-
-  let finalPrompt: string;
-  try {
-    const sonnet = await callSonnet(sonnetBrief, ANTHROPIC_KEY, 250);
-    finalPrompt = sonnet.text.trim();
-    if (finalPrompt.length < 30) throw new Error('sonnet returned too-short prompt');
-  } catch (err) {
-    console.error('[first-dream] Sonnet failed:', (err as Error).message);
-    // Mechanical fallback — concatenate cell + medium fragments
-    finalPrompt = `${medium.fluxFragment}, ${brief.cell.compositionBrief.slice(0, 200)}, ${brief.cell.lightingRecipe.slice(0, 100)}, ${vibe.directive.split('.')[0]}, hyper detailed masterpiece quality`;
+  // Cast selection (deterministic per persona)
+  let selectedCast: DreamCastMember[] = [];
+  if (persona === 'duo') {
+    const self = cast.find((c) => c.role === 'self');
+    const plusOne = cast.find((c) => c.role === 'plus_one');
+    if (self) selectedCast.push(self);
+    if (plusOne) selectedCast.push(plusOne);
+  } else if (persona === 'solo_male' || persona === 'solo_female') {
+    const self = cast.find((c) => c.role === 'self' && c.thumb_url);
+    const plusOne = cast.find((c) => c.role === 'plus_one' && c.thumb_url);
+    if (self) selectedCast = [self];
+    else if (plusOne) selectedCast = [plusOne];
   }
 
-  // ── Generate the image ──
-  let renderedUrl: string;
+  const isCharacterDream = composition === 'character' && selectedCast.length > 0;
+  const renderMode: 'natural' | 'embodied' | 'none' =
+    composition === 'pure_scene' ? 'none' : medium.characterRenderMode;
+  const faceSwapEligible = isCharacterDream && medium.faceSwaps && renderMode === 'natural';
+  const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
+
+  // Apply face-swap medium overrides for stylized mediums (anime, fairytale, etc.)
+  let baseMedium = medium;
+  if (faceSwapEligible) {
+    baseMedium = applyFaceSwapOverride(baseMedium);
+  }
+
+  // ── Always include user's first chosen location ────────────────────────
+  const seeds = profile.dream_seeds ?? { characters: [], places: [], things: [] };
+  const userPlace = seeds.places && seeds.places.length > 0 ? seeds.places[0] : undefined;
+
+  // Object: persona-configured percentage
+  let userThing: string | undefined;
+  if (includeObject) {
+    const thingsPool = [...(seeds.things ?? []), ...(seeds.characters ?? [])];
+    if (thingsPool.length > 0) {
+      userThing = thingsPool[Math.floor(Math.random() * thingsPool.length)];
+    }
+  }
+
+  // ── Location card (cinematic phrases, fusion settings, tags) ───────────
+  const locationCard =
+    userPlace && ANTHROPIC_KEY
+      ? await getLocationCard(userPlace, ANTHROPIC_KEY).catch((err) => {
+          console.warn('[first-dream] locationCard failed:', (err as Error).message);
+          return null;
+        })
+      : null;
+
+  // ── Cast gender (drives assembleScene + brief modifiers) ──────────────
+  let castGender: 'male' | 'female' | undefined;
+  if (selectedCast.length > 0 && selectedCast[0].role !== 'pet') {
+    castGender = persona === 'solo_female' ? 'female' : 'male';
+  }
+
+  // ── Action injection per template ──────────────────────────────────────
+  // pickDualAction takes 'partner' | 'companion' only — map our extra
+  // 'friends' and 'random' values to 'companion' (closest match for friends).
+  const dualPool: 'partner' | 'companion' | undefined =
+    personaConfig.actionPool?.kind === 'dual'
+      ? personaConfig.actionPool.subPool === 'partner'
+        ? 'partner'
+        : 'companion'
+      : undefined;
+  const dualAction =
+    isDualFaceSwap || (composition === 'character' && selectedCast.length === 2)
+      ? pickDualAction(undefined, dualPool)
+      : null;
+  const singleActionObj =
+    composition === 'character' && selectedCast.length === 1 ? pickSingleAction(undefined) : null;
+  const singleAction = singleActionObj?.pose ?? null;
+  const needsEpicBackdrop =
+    personaConfig.actionPool?.kind === 'single' ? personaConfig.actionPool.epicBackdropBias : false;
+
+  // ── Assemble the scene DNA ─────────────────────────────────────────────
+  const moods = profile.moods ?? {
+    peaceful_chaotic: 0.5,
+    cute_terrifying: 0.3,
+    minimal_maximal: 0.5,
+    realistic_surreal: 0.5,
+  };
+  const dreamSubject = assembleScene({
+    renderMode,
+    faceSwapEligible,
+    compositionMode,
+    includeLocation: !!userPlace,
+    includeObject: !!userThing,
+    userPlace,
+    userThing,
+    locationCard: locationCard ?? undefined,
+    castGender,
+    moodAxis: moods,
+  });
+
+  // ── Build Sonnet brief (one of 3 templates) ────────────────────────────
+  const mediumStyle = medium.key.replace(/_/g, ' ');
+  const avoidList =
+    profile.avoid && profile.avoid.length > 0 ? `\nNEVER INCLUDE: ${profile.avoid.join(', ')}` : '';
+
+  let nightlyBrief: string;
+
+  if (composition === 'character') {
+    const castDescBlock = selectedCast
+      .map((rc, i) => {
+        const desc = rc.description ?? 'a person';
+        if (selectedCast.length === 1) {
+          return `THE MAIN CHARACTER (preserve every identifying trait — STYLIZED to match the medium):\n${desc}`;
+        }
+        const side = i === 0 ? 'left of frame' : 'right of frame';
+        return `CHARACTER ${i + 1} (${side} — ${rc.role}):\n${desc}`;
+      })
+      .join('\n\n');
+
+    if (isDualFaceSwap) {
+      nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
+
+THIS IS A FIRST DREAM — the user's very first generated image. Goal: JAW-DROPPING wonder + warmth.
+
+STRUCTURE:
+1. Start with: "${baseMedium.fluxFragment}"
+2. SCENE/ENVIRONMENT (50%)
+3. SUBJECT FRAMING (early)
+4. CHARACTERS (20%)
+5. CAMERA + MOOD (20%)
+6. End with: no text, no words, no letters, no watermarks, ultra detailed
+
+DREAM SCENE${userPlace ? ` (set in ${userPlace} — honor this location)` : ''} — pick ONE dominant anchor + 2-3 supporting details, discard the rest:
+${dreamSubject}
+
+MANDATORY — include this EXACT phrase unchanged:
+"two people, three-quarter view, person on left side, person on right side, clear gap between them"
+
+COMPOSITION RULES:
+- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap. No back-of-head, no full profiles.
+- Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot.
+- Three-quarter view on both, both angled slightly toward the VIEWER, eyes and nose visible.
+- Characters STATIONARY — standing, sitting, leaning. No walking, no movement through the scene.
+- FRIENDS TONE: they share this wonder moment together. Companionship, candid joy, "look at this together" energy. NEVER romantic or intimate gesture.
+- Eye-level camera. Warm atmospheric lighting — never harsh overhead.
+
+ACTION (body language only):
+"${dualAction ?? 'standing together side-by-side, taking in the scene, friends'}"
+
+CHARACTERS IN THE SCENE:
+${castDescBlock}
+Do NOT over-describe faces. Push detail into clothing, pose, environment.
+
+MOOD: ${applyVibeGenderModifier(vibe.key, vibe.directive, castGender ?? null)}
+${avoidList}
+
+COMPOSITION: ${compositionMode.replace(/_/g, ' ')}
+
+RULES:
+- SCENE FIRST, then the mandatory face phrase, then character details.
+- Include "foreground midground background stacked top to bottom, layered depth" in the prompt.
+- Every word must be something a camera can see. No feelings, no metaphors.
+- This is a FIRST IMPRESSION — push for awe-inspiring beauty.
+Output ONLY the prompt.`;
+    } else if (faceSwapEligible) {
+      nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
+
+THIS IS A FIRST DREAM — the user's very first generated image. Goal: JAW-DROPPING wonder.
+
+STRUCTURE:
+1. Start with: "${baseMedium.fluxFragment}"
+2. SCENE/ENVIRONMENT (50%)
+3. SUBJECT FRAMING (early)
+4. CHARACTER (20%)
+5. CAMERA + MOOD (20%)
+6. End with: no text, no words, no letters, no watermarks, ultra detailed
+
+DREAM SCENE${userPlace ? ` (set in ${userPlace} — honor this location)` : ''} — pick ONE dominant anchor + 2-3 harmonizing details:
+${dreamSubject}
+
+MANDATORY — include this EXACT phrase unchanged:
+"three-quarter view, eyes and nose visible, no back view, no silhouette"
+
+COMPOSITION RULES:
+- Character visible from waist up, filling at least 50% of frame height.
+- Three-quarter view — eyes and nose visible.
+- Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.
+- Character grounded in the scene — environmental lighting, casting shadows.
+
+ACTION IN SCENE${needsEpicBackdrop ? ' (POSED PORTRAIT)' : ''}:
+"${singleAction ?? 'standing in the scene, taking it in'}"
+${needsEpicBackdrop ? '\nBACKDROP RULE — NON-NEGOTIABLE: This is a POSED PHOTO. The scene/backdrop is the reason this photo exists. Push the location HARD: pull the most striking elements (towering scale, dramatic sky, magical atmosphere, iconic landmark, sweeping vista, unusual color, theatrical light). Use AT LEAST 3 specific environmental details.\n' : ''}
+CHARACTER IN THE SCENE:
+${castDescBlock}
+Do NOT over-describe the face. Just "natural human face" is enough. Push detail into clothing, pose, environment.
+
+MOOD: ${applyVibeGenderModifier(vibe.key, vibe.directive, castGender ?? null)}
+${avoidList}
+
+COMPOSITION: ${compositionMode.replace(/_/g, ' ')}
+
+RULES:
+- SCENE FIRST, then the mandatory face phrase, then character details.
+- Include "foreground midground background stacked top to bottom, layered depth" in the prompt.
+- Every word must be something a camera can see. No feelings, no metaphors.
+- This is a FIRST IMPRESSION — push for awe-inspiring beauty.
+Output ONLY the prompt.`;
+    } else {
+      // Embodied medium (LEGO/claymation/etc.)
+      nightlyBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (90-130 words, comma-separated).
+
+THIS IS A FIRST DREAM — push for jaw-dropping wonder.
+
+STRUCTURE:
+1. Start with: "${baseMedium.fluxFragment}"
+2. SCENE/ENVIRONMENT (50-60 words)
+3. CHARACTER placed naturally in the scene (25-35 words)
+4. CAMERA + MOOD (15-20 words)
+5. End with: no text, no words, no letters, no watermarks, ultra detailed
+
+DREAM SCENE${userPlace ? ` (set in ${userPlace})` : ''} — pick ONE dominant anchor:
+${dreamSubject}
+
+CHARACTER IN THE SCENE:
+${castDescBlock}
+Render them as a ${mediumStyle} CHARACTER — stylized, illustrated. NOT a real photograph.
+
+ACTION: "${singleAction ?? 'in the scene, fully present'}"
+
+MOOD: ${applyVibeGenderModifier(vibe.key, vibe.directive, castGender ?? null)}
+${avoidList}
+
+COMPOSITION: ${compositionMode.replace(/_/g, ' ')}
+
+RULES:
+- SCENE FIRST. Environment must be rich, detailed, layered.
+- Include "foreground midground background stacked top to bottom, layered depth" in the prompt.
+- The character is actively DOING something interesting. Dynamic, not standing still.
+- Front or three-quarter angle — never back-turned.
+- Every word must be something a camera can see.
+Output ONLY the prompt.`;
+    }
+  } else {
+    // Pure scene
+    nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
+
+THIS IS A FIRST DREAM — the user's first impression. Push for jaw-dropping wonder.
+
+MEDIUM: ${baseMedium.fluxFragment}
+
+DREAM SCENE${userPlace ? ` (set in ${userPlace} — honor this location)` : ''} — pick ONE dominant anchor + 2-3 harmonizing details:
+${dreamSubject}
+
+COMPOSITION: ${compositionMode.replace(/_/g, ' ')}
+
+MOOD: ${applyVibeGenderModifier(vibe.key, vibe.directive, null)}
+${avoidList}
+
+Write the prompt:
+1. Start with the art medium
+2. Describe the EXACT scene — every striking detail preserved
+3. NO PEOPLE. NO CHARACTERS. NO FIGURES. Pure environment.
+4. Name specific materials, textures, light sources (NOUNS not adjectives)
+5. End with: no text, no words, no letters, no watermarks, ultra detailed, masterwork composition
+Output ONLY the prompt.`;
+  }
+
+  // ── Sonnet → Flux prompt ───────────────────────────────────────────────
+  let finalPrompt: string;
+  let sonnetBrief: string | null = null;
+  let sonnetRawResponse: string | null = null;
+  const fallbackReasons: string[] = [];
   try {
-    const result = await generateImage(
+    const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY!, isDualFaceSwap ? 350 : 300);
+    sonnetBrief = sonnet.brief;
+    sonnetRawResponse = sonnet.rawResponse;
+    if (sonnet.text.length < 20) throw new Error('too short');
+    finalPrompt = sonnet.text;
+  } catch (err) {
+    fallbackReasons.push(`first_dream_sonnet_failed:${(err as Error).message}`);
+    finalPrompt = `${baseMedium.fluxFragment}, ${dreamSubject.slice(0, 400)}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
+  }
+
+  // Force location to appear in final prompt
+  if (userPlace && !finalPrompt.toLowerCase().includes(userPlace.toLowerCase())) {
+    finalPrompt = `set in ${userPlace}, ${finalPrompt}`;
+  }
+
+  // Banned-phrase scrub
+  for (const bad of FIRST_DREAM_BANNED_PHRASES) {
+    const re = new RegExp(`\\b${bad}\\b`, 'gi');
+    finalPrompt = finalPrompt.replace(re, '');
+  }
+
+  finalPrompt = sanitizePrompt(finalPrompt);
+
+  // ── Flux render ────────────────────────────────────────────────────────
+  const picked = await pickModel('flux-dev', finalPrompt, baseMedium.key, vibe.key);
+  const renderModel = picked.model;
+  let imageUrl: string;
+  let replicatePredictionId: string | null = null;
+  try {
+    const genResult = await generateImage(
       'flux-dev',
       finalPrompt,
       undefined,
       REPLICATE_TOKEN,
-      'black-forest-labs/flux-dev'
+      renderModel
     );
-    renderedUrl = result.url;
+    imageUrl = genResult.url;
+    replicatePredictionId = genResult.predictionId ?? null;
   } catch (err) {
-    console.error('[first-dream] Flux render failed:', (err as Error).message);
-    return new Response(
-      JSON.stringify({ error: 'render_failed', detail: (err as Error).message }),
-      { status: 500 }
-    );
-  }
-
-  // ── Face-swap with retry (cast-bearing personas only) ──
-  let finalImageUrl = renderedUrl;
-  let faceSwapAttempts = 0;
-  let faceSwapApplied = false;
-
-  const isFaceSwapEligible =
-    !brief.isNoCast &&
-    medium.characterRenderMode === 'natural' &&
-    brief.castMembers.length > 0 &&
-    brief.castMembers.every((c) => !!c.thumb_url);
-
-  if (isFaceSwapEligible) {
-    const isDual = brief.castMembers.length === 2;
-    for (let attempt = 1; attempt <= FIRST_DREAM_GUARDRAILS.FACE_SWAP_MAX_RETRIES; attempt++) {
-      faceSwapAttempts = attempt;
-      try {
-        if (isDual) {
-          const left = brief.castMembers[0].thumb_url!;
-          const right = brief.castMembers[1].thumb_url!;
-          finalImageUrl = await dualFaceSwap(
-            left,
-            right,
-            renderedUrl,
-            REPLICATE_TOKEN,
-            supabase,
-            userId
-          );
-        } else {
-          const src = brief.castMembers[0].thumb_url!;
-          finalImageUrl = await faceSwap(src, renderedUrl, REPLICATE_TOKEN, supabase, userId);
-        }
-        faceSwapApplied = true;
-        console.log(`[first-dream] face-swap success on attempt ${attempt}`);
-        break;
-      } catch (err) {
-        console.error(`[first-dream] face-swap attempt ${attempt} failed:`, (err as Error).message);
-        if (attempt === FIRST_DREAM_GUARDRAILS.FACE_SWAP_MAX_RETRIES) {
-          console.warn(
-            '[first-dream] all face-swap retries exhausted, falling back to no-cast variant'
-          );
-        }
-      }
-    }
-  }
-
-  // ── No-cast fallback render if face-swap exhausted ──
-  if (isFaceSwapEligible && !faceSwapApplied) {
-    const noCastBrief = await buildFirstDreamBrief(
-      {
-        profile: vibeProfile,
-        selectedLocations,
-        selectedObjects,
-        forceNoCast: true,
-      },
-      supabase
-    );
-    const noCastSonnet = `You are writing a Flux AI prompt for a pure-environment first-dream render (no characters at all). Vast atmospheric scene that ties to the user's location.
-
-═══ CELL RECIPE ═══
-${noCastBrief.sceneInstructions}
-
-═══ STYLE ═══
-Medium: ${medium.label}. ${medium.directive}
-
-═══ MOOD ═══
-Vibe: ${vibe.label}. ${vibe.directive}
-
-═══ OUTPUT ═══
-65-90 word Flux prompt, comma-separated, no characters. Output ONLY the prompt.`;
-    try {
-      const sonnet = await callSonnet(noCastSonnet, ANTHROPIC_KEY, 200);
-      const noCastPrompt = sonnet.text.trim();
-      const result = await generateImage(
-        'flux-dev',
-        noCastPrompt,
-        undefined,
-        REPLICATE_TOKEN,
-        'black-forest-labs/flux-dev'
-      );
-      finalImageUrl = result.url;
-      finalPrompt = noCastPrompt;
-      console.log('[first-dream] no-cast fallback render succeeded');
-    } catch (err) {
-      console.error('[first-dream] no-cast fallback also failed:', (err as Error).message);
-      // Last resort — keep the original render with no face-swap
-    }
-  }
-
-  // ── Persist to storage ──
-  let storedUrl: string;
-  try {
-    storedUrl = await persistToStorage(finalImageUrl, userId, supabase);
-  } catch (err) {
-    console.error('[first-dream] persist failed:', (err as Error).message);
-    storedUrl = finalImageUrl;
-  }
-
-  // ── Insert upload row + flip first_dream_completed_at ──
-  // Build the insert payload. fallback_reasons + first_dream are added
-  // conditionally — they require migrations 140 (first_dream_completed_at)
-  // and 141 (uploads.first_dream). When 141 hasn't run yet, the insert
-  // would fail; we omit those fields and rely on the caption tag for
-  // post-launch telemetry.
-  const insertPayload: Record<string, unknown> = {
-    user_id: userId,
-    image_url: storedUrl,
-    ai_prompt: finalPrompt,
-    bot_message: brief.bannerCaption,
-    dream_medium: brief.resolvedMediumKey,
-    dream_vibe: brief.resolvedVibeKey,
-    caption: `[first-dream] ${brief.roll.persona}/${brief.roll.locationClass}`,
-    is_ai_generated: true,
-    is_posted: true,
-    is_approved: true,
-  };
-
-  // Try-with-first_dream first, fall back to without if column missing.
-  // This keeps the function working before/after migration 141 lands.
-  let upload: { id: string } | null = null;
-  let insertErr: { message: string } | null = null;
-  {
-    const tryWithFlag = await supabase
-      .from('uploads')
-      .insert({ ...insertPayload, first_dream: true })
-      .select('id')
-      .single();
-    if (tryWithFlag.error && /'first_dream'|first_dream/i.test(tryWithFlag.error.message)) {
-      const tryWithout = await supabase.from('uploads').insert(insertPayload).select('id').single();
-      upload = tryWithout.data as { id: string } | null;
-      insertErr = tryWithout.error;
-    } else {
-      upload = tryWithFlag.data as { id: string } | null;
-      insertErr = tryWithFlag.error;
-    }
-  }
-
-  if (insertErr) {
-    console.error('[first-dream] insert failed:', insertErr.message);
-    return new Response(JSON.stringify({ error: 'persist_failed', detail: insertErr.message }), {
+    return new Response(JSON.stringify({ error: 'flux_failed', detail: (err as Error).message }), {
       status: 500,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  // Flip the one-shot guard
+  // ── Face swap (if applicable) ──────────────────────────────────────────
+  let tempUrl = imageUrl;
+  let faceSwapResult: 'none' | 'single-success' | 'dual-success' | 'failed' = 'none';
+  if (isDualFaceSwap && selectedCast.length === 2) {
+    const left = selectedCast[0].thumb_url;
+    const right = selectedCast[1].thumb_url;
+    if (left && right) {
+      try {
+        tempUrl = await dispatchDualFaceSwap(
+          left,
+          right,
+          tempUrl,
+          REPLICATE_TOKEN,
+          supabase,
+          userId
+        );
+        faceSwapResult = 'dual-success';
+      } catch (err) {
+        fallbackReasons.push(`first_dream_dual_swap_failed:${(err as Error).message}`);
+        faceSwapResult = 'failed';
+      }
+    }
+  } else if (faceSwapEligible && selectedCast.length === 1 && selectedCast[0].thumb_url) {
+    try {
+      tempUrl = await faceSwap(
+        selectedCast[0].thumb_url,
+        tempUrl,
+        REPLICATE_TOKEN,
+        supabase,
+        userId
+      );
+      faceSwapResult = 'single-success';
+    } catch (err) {
+      fallbackReasons.push(`first_dream_swap_failed:${(err as Error).message}`);
+      faceSwapResult = 'failed';
+    }
+  }
+
+  // ── Persist + mark first_dream_completed_at ───────────────────────────
+  const persistedUrl = await persistToStorage(tempUrl, userId, supabase);
+  const { data: uploadRow } = await supabase
+    .from('uploads')
+    .insert({
+      user_id: userId,
+      image_url: persistedUrl,
+      ai_prompt: finalPrompt,
+      dream_medium: medium.key,
+      dream_vibe: vibe.key,
+      is_ai_generated: true,
+      is_approved: true,
+      is_posted: true,
+      first_dream: true,
+    })
+    .select('id')
+    .single();
+
   await supabase
     .from('users')
     .update({ first_dream_completed_at: new Date().toISOString() })
     .eq('id', userId);
 
+  await insertGenerationLog(supabase, {
+    user_id: userId,
+    recipe_snapshot: { vibe_profile: profile },
+    enhanced_prompt: finalPrompt,
+    rolled_axes: {
+      engine: 'first-dream-banger',
+      persona,
+      medium: medium.key,
+      vibe: vibe.key,
+      compositionMode,
+      composition,
+      includeObject,
+      userPlace,
+      userThing,
+      faceSwapResult,
+      mediumPickReason: mediumPick.reason,
+      vibePickReason: vibePick.reason,
+      uploadId: uploadRow?.id ?? null,
+    },
+    sonnet_brief: sonnetBrief,
+    sonnet_raw_response: sonnetRawResponse,
+    vision_description: null,
+    fallback_reasons: fallbackReasons,
+    replicate_prediction_id: replicatePredictionId,
+    model_used: renderModel,
+    cost_cents: 5,
+    status: 'completed',
+  });
+
   return new Response(
     JSON.stringify({
-      image_url: storedUrl,
-      prompt_used: finalPrompt,
-      bot_message: brief.bannerCaption,
-      resolved_medium: brief.resolvedMediumKey,
-      resolved_vibe: brief.resolvedVibeKey,
-      upload_id: upload?.id,
-      archetype: {
-        persona: brief.roll.persona,
-        location_class: brief.roll.locationClass,
-        primary_location: brief.roll.primaryLocation,
-        primary_object: brief.roll.primaryObject,
-      },
-      face_swap_attempts: faceSwapAttempts,
-      face_swap_applied: faceSwapApplied,
-      no_cast_variant: brief.isNoCast || (isFaceSwapEligible && !faceSwapApplied),
-      fallback_reasons: brief.fallbackReasons,
+      upload_id: uploadRow?.id,
+      image_url: persistedUrl,
+      persona,
+      medium: medium.key,
+      vibe: vibe.key,
+      composition,
+      composition_mode: compositionMode,
+      face_swap_result: faceSwapResult,
     }),
-    {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    }
+    { status: 200, headers: { 'Content-Type': 'application/json' } }
   );
 });
