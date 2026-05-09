@@ -14,6 +14,7 @@ import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
+import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
 import { NewPostsPill } from '@/components/NewPostsPill';
 import { OverlayPill } from '@/components/OverlayPill';
 import { Image as ExpoImage } from 'expo-image';
@@ -276,26 +277,39 @@ export default function HomeScreen() {
   }, [currentVisibleIndex, hasNewPosts]);
 
   function handleBotSelect(botId: string | null) {
+    // Pill tap → updates state; the BotsHorizontalPager observes
+    // selectedBotId and animates to the matching page.
     setSelectedBotId(botId);
-    listRef.current?.scrollToOffset({ offset: 0, animated: false });
   }
+
+  const inBotsMode = activeTab === 'bots' && botUsers != null && botUsers.length > 0;
 
   return (
     <View style={s.root}>
-      <FullScreenFeed
-        key={activeTab === 'bots' ? `bots-${selectedBotId}` : activeTab}
-        posts={posts}
-        isLoading={isLoading}
-        onRefresh={() => refetch()}
-        listRef={listRef}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-        }}
-        ListEmptyComponent={<EmptyFeed tab={activeTab} />}
-        onHudToggle={handleHudToggle}
-        scrollToTopToken={homeFeedResetToken}
-        onIndexChange={setCurrentVisibleIndex}
-      />
+      {inBotsMode ? (
+        <BotsHorizontalPager
+          bots={botUsers!}
+          selectedBotId={selectedBotId}
+          onSelectedBotChange={setSelectedBotId}
+          onHudToggle={handleHudToggle}
+          emptyComponent={<EmptyFeed tab="bots" />}
+        />
+      ) : (
+        <FullScreenFeed
+          key={activeTab}
+          posts={posts}
+          isLoading={isLoading}
+          onRefresh={() => refetch()}
+          listRef={listRef}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+          }}
+          ListEmptyComponent={<EmptyFeed tab={activeTab} />}
+          onHudToggle={handleHudToggle}
+          scrollToTopToken={homeFeedResetToken}
+          onIndexChange={setCurrentVisibleIndex}
+        />
+      )}
 
       <NewPostsPill
         visible={hasNewPosts && activeTab === 'forYou'}
