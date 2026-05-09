@@ -90,6 +90,11 @@ interface Props {
   onTogglePosted?: () => void;
   /** Called when the HUD is toggled (single tap) */
   onHudToggle?: (visible: boolean) => void;
+  /** Bumped by FullScreenFeed on every viewable-card change. Forces the
+   *  in-card HUD-reset effect to refire — defends against FlatList
+   *  recycling a previously-tapped instance back into view with stale
+   *  hudOpacity = 0. */
+  hudResetToken?: number;
 }
 
 /** A single sparkle particle that floats along the border edge */
@@ -216,6 +221,7 @@ export const DreamCard = memo(function DreamCard({
   showVisibilityToggle,
   onTogglePosted,
   onHudToggle,
+  hudResetToken,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const isOwnPost = currentUser?.id === item.user_id;
@@ -241,12 +247,22 @@ export const DreamCard = memo(function DreamCard({
   // HUD visibility — single tap toggles, fades in/out
   const hudOpacity = useSharedValue(1);
   const hudHidden = useRef(false);
+  // Pending single-tap timer (hoisted above the reset effect so the
+  // effect can clear it when the card is swiped past mid-tap). Used by
+  // handleTap further below.
+  const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Reset HUD when scrolling to a different card
+  // Reset HUD when scrolling to a different card. Watches BOTH item.id
+  // (handles new mounts) AND hudResetToken (handles FlatList recycling
+  // an existing instance back into view with stale hudOpacity = 0).
   useEffect(() => {
+    if (singleTapTimer.current) {
+      clearTimeout(singleTapTimer.current);
+      singleTapTimer.current = null;
+    }
     hudHidden.current = false;
     hudOpacity.value = 1;
-  }, [item.id]);
+  }, [item.id, hudResetToken, hudOpacity]);
 
   const hudStyle = useAnimatedStyle(() => ({
     opacity: hudOpacity.value,
@@ -284,8 +300,6 @@ export const DreamCard = memo(function DreamCard({
     onSwipeLeft: goToProfile,
     disableSwipeLeft: disableSwipeToProfile,
   });
-
-  const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function handleTap() {
     // Single tap toggles HUD (clean-image view). Double tap likes.

@@ -103,6 +103,13 @@ export function FullScreenFeed({
   const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
 
+  // Bumped every time the viewable card changes. Passed into DreamCard so
+  // its HUD-reset effect refires on swipe even when the same component
+  // instance is recycled by FlatList (per-item.id reset alone misses that
+  // case — leaving a previously-tapped card's chrome stuck at opacity 0
+  // when it scrolls back into view).
+  const [hudResetToken, setHudResetToken] = useState(0);
+
   // Measure the actual container height — this is the true page size
   const [containerHeight, setContainerHeight] = useState(FALLBACK_HEIGHT);
   const pageHeight = containerHeight > 0 ? containerHeight : FALLBACK_HEIGHT;
@@ -229,6 +236,9 @@ export function FullScreenFeed({
         onIndexChange?.(idx);
         // Reset HUD to visible when scrolling to a new card
         onHudToggle?.(true);
+        // Force in-card HUD reset on every visible-card change. setHudResetToken
+        // re-renders + bumps the prop on DreamCard so its reset effect refires.
+        setHudResetToken((t) => t + 1);
         // Prefetch next 3 images
         const upcoming = posts.slice(idx + 1, idx + 4);
         if (upcoming.length > 0) {
@@ -347,6 +357,7 @@ export function FullScreenFeed({
             showVisibilityToggle={showVisibilityToggle && item.user_id === user?.id}
             onTogglePosted={onTogglePosted ? () => onTogglePosted(item.id) : undefined}
             onHudToggle={onHudToggle}
+            hudResetToken={hudResetToken}
           />
         )}
       />
