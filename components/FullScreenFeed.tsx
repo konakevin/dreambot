@@ -32,6 +32,7 @@ import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
 import { useToggleLike } from '@/hooks/useToggleLike';
 import { useDeletePost } from '@/hooks/useDeletePost';
+import { useScreenshotUpsell } from '@/hooks/useScreenshotUpsell';
 import { useAuthStore } from '@/store/auth';
 import { LikesSheet } from '@/components/LikesSheet';
 import { colors } from '@/constants/theme';
@@ -102,6 +103,16 @@ export function FullScreenFeed({
   const impressionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
+
+  // Screenshot upsell — fires the modal at most once per session if a
+  // free, non-admin user screenshots someone else's dream. Reads the
+  // currently-visible post via the same currentIndex ref the rest of
+  // the component uses, so it stays accurate as the user scrolls.
+  useScreenshotUpsell(() => {
+    if (!isFocused) return null;
+    const idx = currentIndex.current;
+    return posts[idx] ?? null;
+  });
 
   // Measure the actual container height — this is the true page size
   const [containerHeight, setContainerHeight] = useState(FALLBACK_HEIGHT);
