@@ -18,6 +18,8 @@ interface DbMediumRow {
   character_render_mode: string;
   kontext_directive: string | null;
   flux_dev_prompt_template: string | null;
+  face_swap_directive: string | null;
+  face_swap_flux_fragment: string | null;
   render_base: string | null;
   engine: string | null;
 }
@@ -38,6 +40,13 @@ export interface ResolvedMedium {
    *  (lego, vinyl — non-human proportions). Placeholders: {{photo}},
    *  {{vibe}}, {{hint}}. See migration 153. */
   fluxDevPromptTemplate: string | null;
+  /** Optional directive override applied only when face_swap is active.
+   *  Front-loads "realistic human face" so cdingram swap doesn't fight
+   *  cartoon-eye proportions. NULL → use regular directive. Migration 154. */
+  faceSwapDirective: string | null;
+  /** Optional flux_fragment override applied only when face_swap is active.
+   *  Same purpose as faceSwapDirective. NULL → use regular flux_fragment. */
+  faceSwapFluxFragment: string | null;
   renderBase: string | null;
   engine: string | null;
 }
@@ -63,6 +72,8 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
       | 'embodied',
     kontextDirective: row.kontext_directive,
     fluxDevPromptTemplate: row.flux_dev_prompt_template,
+    faceSwapDirective: row.face_swap_directive,
+    faceSwapFluxFragment: row.face_swap_flux_fragment,
     renderBase: row.render_base,
     engine: row.engine,
   };
@@ -89,7 +100,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,character_render_mode,kontext_directive,flux_dev_prompt_template,render_base,engine'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {

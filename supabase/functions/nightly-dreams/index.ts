@@ -42,7 +42,7 @@ import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { generateSceneDescription } from '../_shared/sceneDescription.ts';
-import { FACE_SWAP_FLUX_OVERRIDES } from '../_shared/faceSwapFluxOverrides.ts';
+import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -503,20 +503,16 @@ Deno.serve(async (req) => {
 
     // Override flux fragment + directive for stylized mediums during face
     // swap — front-loads "realistic human face" so cdingram's swap doesn't
-    // fight cartoon-eye proportions. Shared with V4 dual cast path via
-    // _shared/faceSwapFluxOverrides.ts (single source of truth).
-    if (faceSwapEligible && baseMedium.key in FACE_SWAP_FLUX_OVERRIDES) {
-      const override = FACE_SWAP_FLUX_OVERRIDES[baseMedium.key];
-      let directive = baseMedium.directive;
-      if (override.directive) directive = override.directive;
-      else if (override.directiveTransform)
-        directive = override.directiveTransform(baseMedium.directive);
-      baseMedium = {
-        ...baseMedium,
-        fluxFragment: override.fluxFragment,
-        directive,
-      };
-      console.log(`[nightly] face swap flux+directive override for ${baseMedium.key}`);
+    // fight cartoon-eye proportions. Override values live on dream_mediums
+    // (face_swap_directive + face_swap_flux_fragment) — see migration 154
+    // and _shared/faceSwapFluxOverrides.ts. No-op when the medium has no
+    // override columns set.
+    if (faceSwapEligible) {
+      const overridden = applyFaceSwapOverride(baseMedium);
+      if (overridden !== baseMedium) {
+        baseMedium = overridden;
+        console.log(`[nightly] face swap flux+directive override for ${baseMedium.key}`);
+      }
     }
 
     const isDualCharacter = composition === 'character' && selectedCast.length === 2;
