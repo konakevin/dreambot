@@ -208,6 +208,7 @@ export function useDreamCreate() {
               job_id: jobId,
               style_prompt: config.stylePrompt || undefined,
               dlt_recipe: config.dltRecipe ?? undefined,
+              force_model: config.forceModel ?? undefined,
             });
           } else {
             // Restyle: Kontext transform via dedicated restyle-photo endpoint (keeps pose/composition)
@@ -235,6 +236,7 @@ export function useDreamCreate() {
             stylePrompt: config.stylePrompt || undefined,
             dltRecipe: config.dltRecipe,
             useExactPrompt: config.useExactPrompt,
+            forceModel: config.forceModel ?? undefined,
           });
         }
 

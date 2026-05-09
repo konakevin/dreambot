@@ -46,6 +46,11 @@ interface GenerateDreamOpts {
    *  no Sonnet expansion, no chaos, no medium/vibe directive merging. For
    *  power users with fully-polished prompts. */
   use_exact_prompt?: boolean;
+  /** Override the model picker. DLT uses this to inherit the source post's
+   *  `model_used` so a render that landed on a particular Flux variant
+   *  doesn't get re-rolled. The Edge Function falls back to its picker if
+   *  the value isn't in the medium's `allowed_models`. */
+  force_model?: string;
 }
 
 export type PhotoSubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';
@@ -141,6 +146,7 @@ export async function generateFromVibeProfile(
     stylePrompt?: string;
     dltRecipe?: Record<string, unknown> | null;
     useExactPrompt?: boolean;
+    forceModel?: string;
   }
 ): Promise<GenerateDreamResult> {
   return generateDream({
@@ -154,6 +160,7 @@ export async function generateFromVibeProfile(
     style_prompt: opts?.stylePrompt,
     dlt_recipe: opts?.dltRecipe ?? undefined,
     use_exact_prompt: opts?.useExactPrompt,
+    force_model: opts?.forceModel,
   });
 }
 

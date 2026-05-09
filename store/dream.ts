@@ -37,6 +37,12 @@ interface DreamConfig {
    *  Sonnet expansion, NO chaos layer, NO medium/vibe directive merging.
    *  Power-user mode for people pasting fully polished prompts. */
   useExactPrompt: boolean;
+  /** DLT only — the source post's `uploads.model_used`. Threaded through to
+   *  the Edge Function as `force_model` so a render that landed perfectly on
+   *  e.g. flux-1.1-pro doesn't get re-rolled on flux-dev. The recipe path
+   *  already locks model when present; this covers legacy posts that have
+   *  `model_used` but no recipe. Null for non-DLT flows. */
+  forceModel: string | null;
 }
 
 interface DreamResult {
@@ -85,6 +91,7 @@ interface DreamStore {
   setStylePrompt: (prompt: string | null) => void;
   setDltRecipe: (recipe: Record<string, unknown> | null) => void;
   setUseExactPrompt: (value: boolean) => void;
+  setForceModel: (model: string | null) => void;
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
   clearPhoto: () => void;
@@ -107,6 +114,7 @@ const INITIAL_CONFIG: DreamConfig = {
   stylePrompt: null,
   dltRecipe: null,
   useExactPrompt: false,
+  forceModel: null,
 };
 
 export const useDreamStore = create<DreamStore>((set) => ({
@@ -125,6 +133,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setStylePrompt: (prompt) => set((s) => ({ config: { ...s.config, stylePrompt: prompt } })),
   setDltRecipe: (recipe) => set((s) => ({ config: { ...s.config, dltRecipe: recipe } })),
   setUseExactPrompt: (value) => set((s) => ({ config: { ...s.config, useExactPrompt: value } })),
+  setForceModel: (model) => set((s) => ({ config: { ...s.config, forceModel: model } })),
   setResult: (result) => set({ result }),
   clearResult: () => set({ result: null }),
   clearPhoto: () =>
