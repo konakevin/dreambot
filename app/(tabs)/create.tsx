@@ -362,6 +362,35 @@ export default function CreateScreen() {
             </View>
           )}
 
+          {/* Advanced Mode + photo notice — Advanced Mode is text-only, so
+              when a photo is attached the toggle is hidden but the user's
+              preference (config.useExactPrompt) is preserved for when the
+              photo is removed. Surface a one-line note so the override
+              isn't silent. */}
+          {hasPhoto && config.useExactPrompt && (
+            <View
+              className="flex-row items-start gap-2 px-3 py-2 mb-3 rounded-xl"
+              style={{
+                backgroundColor: colors.surface,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <Ionicons
+                name="information-circle-outline"
+                size={16}
+                color={colors.textSecondary}
+                style={{ marginTop: 1 }}
+              />
+              <Text
+                className="flex-1 text-xs"
+                style={{ color: colors.textSecondary, lineHeight: 16 }}
+              >
+                Photo dreams use the regular engine — Advanced Mode applies to text-only dreams.
+              </Text>
+            </View>
+          )}
+
           {/* Photo mode toggle — only when a photo is attached */}
           {hasPhoto && (
             <View className="mb-3">
