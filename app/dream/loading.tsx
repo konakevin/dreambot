@@ -18,21 +18,32 @@ import { Toast } from '@/components/Toast';
 import type { PhotoClassification } from '@/lib/dreamApi';
 import { DreamFailureCard } from '@/components/DreamFailureCard';
 
-const TIPS = [
-  'Dreaming up something special...',
-  'Mixing colors and light...',
-  'Channeling your vibe...',
-  'Painting your imagination...',
-  'Almost there...',
-];
+// Self / relationship detection — kept in sync with the matching regexes
+// on the Create screen. Used once at mount to decide whether to surface
+// the longer-wait subline (face-swap renders take noticeably more time).
+const SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
+const RELATIONSHIP_REGEX =
+  /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
 
 export default function DreamLoadingScreen() {
   const mascotUrl = useRef(randomMascot()).current;
-  const tipIndex = useRef(0);
   const { generate } = useDreamCreate();
   const started = useRef(false);
   const queued = useRef(false);
   const [showQueue, setShowQueue] = useState(false);
+
+  // Decide once on mount whether the longer-wait subline applies. We
+  // can't know exact render time (Replicate variance is large), so the
+  // copy stays static — but face-swap paths add a real per-render step
+  // worth flagging so the user doesn't feel like the app is stuck.
+  const isFaceSwap = useRef(
+    (() => {
+      const { config } = useDreamStore.getState();
+      if (config.photoBase64 && config.photoStyle === 'new_scene') return true;
+      const prompt = config.userPrompt ?? '';
+      return SELF_REF_REGEX.test(prompt) || RELATIONSHIP_REGEX.test(prompt);
+    })()
+  ).current;
   // Failure state set by useDreamCreate's catch block. When non-null, the
   // failure card is rendered and the spinner is hidden.
   const failure = useDreamStore((s) => s.activeJobFailure);
@@ -108,16 +119,6 @@ export default function DreamLoadingScreen() {
     setShowQueue(true);
   }, []);
 
-  // Cycle tips every 4 seconds
-  const [tip, setTip] = useState(TIPS[0]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      tipIndex.current = (tipIndex.current + 1) % TIPS.length;
-      setTip(TIPS[tipIndex.current]);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
   function handleQueue() {
     queued.current = true;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -134,7 +135,10 @@ export default function DreamLoadingScreen() {
         {!failure && (
           <>
             <ActivityIndicator size="large" color={colors.accent} style={s.spinner} />
-            <Text style={s.tip}>{tip}</Text>
+            <Text style={s.tip}>Working on it — hold tight.</Text>
+            {isFaceSwap && (
+              <Text style={s.subtip}>Face swaps take a little longer — feel free to queue it.</Text>
+            )}
             {showQueue && (
               <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
                 <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
@@ -223,6 +227,13 @@ const s = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontWeight: '600',
+  },
+  subtip: {
+    color: colors.textMuted,
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: -16,
+    paddingHorizontal: 8,
   },
   queueBtn: {
     flexDirection: 'row',
