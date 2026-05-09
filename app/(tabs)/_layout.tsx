@@ -99,7 +99,7 @@ export default function TabLayout() {
         name="create"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="moon-outline" size={size} color={color} />
+            <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
         }}
         listeners={{
