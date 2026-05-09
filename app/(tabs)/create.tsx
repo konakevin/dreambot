@@ -487,7 +487,7 @@ export default function CreateScreen() {
                   hitSlop={6}
                 >
                   <Text style={{ color: colors.textPrimary, fontSize: 15, fontWeight: '600' }}>
-                    Pro Mode
+                    Advanced Mode
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -736,12 +736,13 @@ export default function CreateScreen() {
                   marginLeft: 8,
                 }}
               >
-                Pro Mode
+                Advanced Mode
               </Text>
             </View>
             <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 21 }}>
               Sends your prompt directly to Flux. Skips AI enhancement and face swap — best for
-              fully-polished prompts you want rendered exactly as written.
+              fully-polished prompts you want rendered exactly as written. Costs one sparkle per
+              render, same as a normal dream.
             </Text>
             <Text
               style={{
@@ -751,15 +752,15 @@ export default function CreateScreen() {
                 marginTop: 12,
               }}
             >
-              Pick which Flux model handles your Pro Mode renders in{' '}
+              Pick which Flux model handles your Advanced Mode renders in{' '}
               <Text
                 style={{ color: colors.accent, fontWeight: '600' }}
                 onPress={() => {
                   setShowProModeInfo(false);
-                  nav.push('/settings/pro-mode');
+                  nav.push('/settings/advanced-mode');
                 }}
               >
-                Settings → Pro Mode
+                Settings → Advanced Mode
               </Text>
               .
             </Text>

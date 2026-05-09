@@ -56,8 +56,8 @@ async function saveToPhotos(id: string, imageUrl: string) {
  *     unrestricted; menu shows Save + Delete.
  *   - Someone else's post (bot or other user) → callers omit `onDelete`.
  *     Save requires `isPro` (active Pro subscription). If not Pro, the
- *     long-press shows an upsell prompt routing to /sparkleStore instead
- *     of saving the image.
+ *     long-press shows an upsell prompt routing to /proStore instead of
+ *     saving the image.
  */
 export function handleImageLongPress(opts: {
   id: string;
@@ -100,7 +100,7 @@ export function handleImageLongPress(opts: {
     'Saving dreams from other creators is a Pro feature. Subscribe for unlimited HQ downloads.',
     [
       { text: 'Not now', style: 'cancel' },
-      { text: 'See Pro', onPress: () => router.push('/sparkleStore') },
+      { text: 'See Pro', onPress: () => router.push('/proStore') },
     ]
   );
 }

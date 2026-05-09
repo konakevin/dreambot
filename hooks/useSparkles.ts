@@ -2,7 +2,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { getSparklePackages, purchaseSparklePackage, restorePurchases } from '@/lib/revenuecat';
+import {
+  getProPackages,
+  getSparklePackages,
+  purchaseProPackage,
+  purchaseSparklePackage,
+  restorePurchases,
+} from '@/lib/revenuecat';
 
 export function useSparkleBalance() {
   const user = useAuthStore((s) => s.user);
@@ -54,6 +60,38 @@ export function usePurchaseSparkles() {
 export function useRestorePurchases() {
   return useMutation({
     mutationFn: restorePurchases,
+  });
+}
+
+export function useProPackages() {
+  return useQuery({
+    queryKey: ['proPackages'],
+    queryFn: getProPackages,
+    staleTime: 5 * 60_000,
+  });
+}
+
+export function usePurchasePro() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (pkg: PurchasesPackage) => {
+      const success = await purchaseProPackage(pkg);
+      if (!success) throw new Error('cancelled');
+      return success;
+    },
+    onSuccess: () => {
+      const userId = useAuthStore.getState().user?.id;
+      // Webhook is what authoritatively flips pro_subscription + grants the
+      // bundled sparkles. Refresh both after a short delay (typical webhook
+      // latency is sub-second), and again immediately for an optimistic feel.
+      const refresh = () => {
+        useAuthStore.getState().refreshEntitlements();
+        queryClient.invalidateQueries({ queryKey: ['sparkleBalance', userId] });
+      };
+      refresh();
+      setTimeout(refresh, 2000);
+    },
   });
 }
 

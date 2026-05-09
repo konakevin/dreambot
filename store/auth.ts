@@ -15,6 +15,10 @@ interface AuthState {
   initialized: boolean;
   setSession: (session: Session | null) => void;
   signOut: () => Promise<void>;
+  /** Re-read is_admin + pro_subscription from the DB. Call after a Pro
+   *  purchase or any flow that may have changed entitlement state, so
+   *  client-side gating (long-press save, Pro perks, etc.) reflects it. */
+  refreshEntitlements: () => Promise<void>;
   initialize: () => () => void;
 }
 
@@ -53,6 +57,21 @@ export const useAuthStore = create<AuthState>((set) => ({
     useFeedStore.getState().bumpReset();
     // Clear TanStack Query cache
     queryClient.clear();
+  },
+
+  refreshEntitlements: async () => {
+    const userId = useAuthStore.getState().user?.id;
+    if (!userId) return;
+    const { data } = await supabase
+      .from('users')
+      .select('is_admin, pro_subscription')
+      .eq('id', userId)
+      .single();
+    const row = data as unknown as {
+      is_admin?: boolean;
+      pro_subscription?: boolean;
+    } | null;
+    set({ isAdmin: !!row?.is_admin, isPro: !!row?.pro_subscription });
   },
 
   initialize: () => {

@@ -1,9 +1,14 @@
 /**
- * Settings → Pro Mode — power-user Flux model preference.
+ * Settings → Advanced Mode — power-user Flux model preference.
  *
- * Lets the user choose which Flux model their Create-screen "Pro Mode"
- * renders use. Reads/writes users.pro_mode_flux_model. Default is
- * flux-1.1-pro (set by migration 149).
+ * Lets the user choose which Flux model their Create-screen "Advanced Mode"
+ * renders use. Reads/writes users.pro_mode_flux_model (column name kept for
+ * back-compat — was named before the user-facing rename Pro Mode → Advanced
+ * Mode). Default is flux-1.1-pro (set by migration 149).
+ *
+ * Advanced Mode is FREE — anyone can use it, costs one sparkle per render
+ * same as a normal dream. The Pro subscription (separate, see /proStore) is
+ * about unlimited downloads + bonus sparkles + nightly dreams.
  */
 
 import { useEffect, useState } from 'react';
@@ -69,16 +74,16 @@ export default function SettingsProModeScreen() {
       .update({ pro_mode_flux_model: modelKey })
       .eq('id', user.id);
     if (error) {
-      console.error('[settings/pro-mode] save failed:', error.message);
+      console.error('[settings/advanced-mode] save failed:', error.message);
     }
     setSaving(false);
   };
 
   return (
-    <ScreenLayout title="Pro Mode">
+    <ScreenLayout title="Advanced Mode">
       <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
-          When Pro Mode is on (Create tab), your prompt is sent verbatim to Flux — no AI
+          When Advanced Mode is on (Create tab), your prompt is sent verbatim to Flux — no AI
           enhancement, no medium or vibe directives, no face swap. Pick which Flux model handles
           those renders.
         </Text>
