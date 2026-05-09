@@ -75,7 +75,19 @@ export function BotsHorizontalPager({
   }, [selectedBotId, pages]);
 
   // Page-driven sync: when a horizontal swipe settles on a new page,
-  // notify the parent so the pill row highlights it.
+  // notify the parent so the pill row highlights + scrolls to it. The
+  // handler reference must be STABLE across renders (FlatList rejects
+  // changes to onViewableItemsChanged at runtime), but it needs to read
+  // the LATEST pages + callback, so we wrap them in refs.
+  const pagesRef = useRef(pages);
+  const onSelectedBotChangeRef = useRef(onSelectedBotChange);
+  useEffect(() => {
+    pagesRef.current = pages;
+  }, [pages]);
+  useEffect(() => {
+    onSelectedBotChangeRef.current = onSelectedBotChange;
+  }, [onSelectedBotChange]);
+
   const handleViewableItemsChanged = useRef(
     ({ viewableItems }: { viewableItems: { index: number | null }[] }) => {
       const settled = viewableItems.find((v) => v.index != null);
@@ -83,8 +95,8 @@ export function BotsHorizontalPager({
       const idx = settled.index;
       if (idx === currentIndexRef.current) return;
       currentIndexRef.current = idx;
-      const targetBotId = pages[idx]?.botId ?? null;
-      onSelectedBotChange(targetBotId);
+      const targetBotId = pagesRef.current[idx]?.botId ?? null;
+      onSelectedBotChangeRef.current(targetBotId);
     }
   ).current;
 

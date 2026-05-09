@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { ScrollView, View, StyleSheet, LayoutChangeEvent } from 'react-native';
 import { OverlayPill } from '@/components/OverlayPill';
 import type { BotUser } from '@/hooks/useBotUsers';
@@ -20,16 +20,30 @@ export function BotPillRow({ bots, selectedBotId, onSelect }: Props) {
     []
   );
 
+  // Scroll the active pill into view. Used by both the tap path and the
+  // external-driven path (when the BotsHorizontalPager swipes to a new bot,
+  // selectedBotId changes from outside and this effect fires the scroll).
+  const scrollToActive = useCallback((botId: string | null) => {
+    const key = botId ?? '__all__';
+    const x = pillPositions.current[key];
+    if (x != null) {
+      scrollRef.current?.scrollTo({ x: Math.max(0, x - 16), animated: true });
+    }
+  }, []);
+
+  // External sync: when selectedBotId changes for any reason (including
+  // horizontal swipe in the pager), scroll the matching pill into view so
+  // the user can actually see the highlight update — not just the data.
+  useEffect(() => {
+    scrollToActive(selectedBotId);
+  }, [selectedBotId, scrollToActive]);
+
   const handleSelect = useCallback(
     (botId: string | null) => {
       onSelect(botId);
-      const key = botId ?? '__all__';
-      const x = pillPositions.current[key];
-      if (x != null) {
-        scrollRef.current?.scrollTo({ x: Math.max(0, x - 16), animated: true });
-      }
+      scrollToActive(botId);
     },
-    [onSelect]
+    [onSelect, scrollToActive]
   );
 
   return (
