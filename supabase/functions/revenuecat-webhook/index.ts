@@ -105,6 +105,27 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
+    // Verify the appUserId resolves to a real Supabase user. If it
+    // doesn't, RevenueCat is pushing a transaction we can't link to an
+    // account — likely a stale anonymous ID or a user that's been
+    // deleted. Return 200 so RevenueCat doesn't retry forever, but log
+    // it loudly so we notice.
+    {
+      const { data: userExists, error: userLookupError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', appUserId)
+        .maybeSingle();
+      if (userLookupError) {
+        console.error(`[RevenueCat] User lookup failed for ${appUserId}:`, userLookupError);
+        return new Response(JSON.stringify({ error: userLookupError.message }), { status: 500 });
+      }
+      if (!userExists) {
+        console.error(`[RevenueCat] Unknown app_user_id, dropping event: ${appUserId}`);
+        return new Response(JSON.stringify({ message: 'Unknown user, dropped' }), { status: 200 });
+      }
+    }
+
     // ── ROUTING ────────────────────────────────────────────────────────
     // Determine whether this event is for sparkle packs or Pro subscription.
     const isSparklePack = SPARKLE_PACKS[productId] !== undefined;

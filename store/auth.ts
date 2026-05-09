@@ -9,18 +9,39 @@ interface AuthState {
   user: User | null;
   isAdmin: boolean;
   /** Pro-subscription entitlement — true when the user has an active Pro
-   *  subscription. Gates long-press Save-to-Photos and future paid features.
-   *  Set by revenuecat-webhook when the user purchases. */
+   *  subscription AND its expiry timestamp is in the future. Gates
+   *  long-press Save-to-Photos and future paid features. The webhook is
+   *  the authoritative writer of pro_subscription + pro_subscription_expires_at;
+   *  we still re-validate the timestamp on every read so a missed
+   *  EXPIRATION webhook can't leave a user with permanent Pro access. */
   isPro: boolean;
   initialized: boolean;
   setSession: (session: Session | null) => void;
   signOut: () => Promise<void>;
-  /** Re-read is_admin + pro_subscription from the DB. Call after a Pro
-   *  purchase or any flow that may have changed entitlement state, so
-   *  client-side gating (long-press save, Pro perks, etc.) reflects it. */
+  /** Re-read entitlement columns from the DB. Call after a Pro purchase
+   *  or any flow that may have changed entitlement state. */
   refreshEntitlements: () => Promise<void>;
   initialize: () => () => void;
 }
+
+interface EntitlementRow {
+  is_admin?: boolean;
+  pro_subscription?: boolean;
+  pro_subscription_expires_at?: string | null;
+}
+
+/** Resolve the effective Pro state from a DB row. The boolean alone is
+ *  not enough — if a RevenueCat EXPIRATION event ever misses, the column
+ *  could stay `true` past the expiry date. Treat an expired timestamp as
+ *  not-Pro on the client. */
+function isProActive(row: EntitlementRow | null): boolean {
+  if (!row?.pro_subscription) return false;
+  const expiresAt = row.pro_subscription_expires_at;
+  if (!expiresAt) return true;
+  return new Date(expiresAt).getTime() > Date.now();
+}
+
+const ENTITLEMENT_COLUMNS = 'is_admin, pro_subscription, pro_subscription_expires_at';
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
@@ -35,15 +56,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (session?.user) {
       supabase
         .from('users')
-        .select('is_admin, pro_subscription')
+        .select(ENTITLEMENT_COLUMNS)
         .eq('id', session.user.id)
         .single()
         .then(({ data }) => {
-          const row = data as unknown as {
-            is_admin?: boolean;
-            pro_subscription?: boolean;
-          } | null;
-          set({ isAdmin: !!row?.is_admin, isPro: !!row?.pro_subscription });
+          const row = data as unknown as EntitlementRow | null;
+          set({ isAdmin: !!row?.is_admin, isPro: isProActive(row) });
         });
     } else {
       set({ isAdmin: false, isPro: false });
@@ -64,29 +82,23 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (!userId) return;
     const { data } = await supabase
       .from('users')
-      .select('is_admin, pro_subscription')
+      .select(ENTITLEMENT_COLUMNS)
       .eq('id', userId)
       .single();
-    const row = data as unknown as {
-      is_admin?: boolean;
-      pro_subscription?: boolean;
-    } | null;
-    set({ isAdmin: !!row?.is_admin, isPro: !!row?.pro_subscription });
+    const row = data as unknown as EntitlementRow | null;
+    set({ isAdmin: !!row?.is_admin, isPro: isProActive(row) });
   },
 
   initialize: () => {
     const checkEntitlements = (userId: string) => {
       supabase
         .from('users')
-        .select('is_admin, pro_subscription')
+        .select(ENTITLEMENT_COLUMNS)
         .eq('id', userId)
         .single()
         .then(({ data }) => {
-          const row = data as unknown as {
-            is_admin?: boolean;
-            pro_subscription?: boolean;
-          } | null;
-          set({ isAdmin: !!row?.is_admin, isPro: !!row?.pro_subscription });
+          const row = data as unknown as EntitlementRow | null;
+          set({ isAdmin: !!row?.is_admin, isPro: isProActive(row) });
         });
     };
 

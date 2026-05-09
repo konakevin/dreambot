@@ -20,7 +20,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
 
-const MODEL_OPTIONS: Array<{ key: string; label: string; sub: string }> = [
+const MODEL_OPTIONS: { key: string; label: string; sub: string }[] = [
   {
     key: 'black-forest-labs/flux-dev',
     label: 'Flux 1 Dev',
