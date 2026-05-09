@@ -464,12 +464,13 @@ export default function CreateScreen() {
             />
           </View>
 
-          {/* Pro Mode toggle — only shown when there's a custom prompt with
-              no photo. When ON: prompt goes verbatim to flux-1.1-pro, skipping
-              Sonnet expansion, chaos, medium/vibe directives, AND face swap.
-              Slim row: "Pro Mode" label + (i) info icon (tap to expand inline
-              explanation) + switch on the right. Face-swap warning still
-              surfaces in the footer contextHint to stay above the keyboard. */}
+          {/* Advanced Mode toggle — only shown when there's a custom prompt
+              with no photo. When ON: prompt goes verbatim to the user's
+              chosen Flux model, skipping Sonnet expansion, chaos, medium/vibe
+              directives, AND face swap. Slim row: "Advanced Mode" label +
+              (i) info icon (tap to open the info modal) + switch on the
+              right. Face-swap warning still surfaces in the footer
+              contextHint to stay above the keyboard. */}
           {hasPrompt && !hasPhoto && (
             <View
               className="rounded-xl mb-4"
@@ -697,10 +698,10 @@ export default function CreateScreen() {
         </TouchableOpacity>
       </Modal>
 
-      {/* Pro Mode info modal — centered card explaining what Pro Mode does
-          and pointing the user to Settings → Pro Mode to choose Flux model.
-          Modal floats above the keyboard so the user can read it without
-          dismissing input. */}
+      {/* Advanced Mode info modal — centered card explaining what Advanced
+          Mode does and pointing the user to Settings → Advanced Mode to
+          choose Flux model. Modal floats above the keyboard so the user can
+          read it without dismissing input. */}
       <Modal
         visible={showProModeInfo}
         transparent
