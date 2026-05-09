@@ -17,6 +17,7 @@ interface DbMediumRow {
   nightly_skip: boolean;
   character_render_mode: string;
   kontext_directive: string | null;
+  flux_dev_prompt_template: string | null;
   render_base: string | null;
   engine: string | null;
 }
@@ -33,6 +34,10 @@ export interface ResolvedMedium {
   nightlySkip: boolean;
   characterRenderMode: 'natural' | 'embodied';
   kontextDirective: string | null;
+  /** Optional flux-dev rebuild template for mediums that can't use Kontext
+   *  (lego, vinyl — non-human proportions). Placeholders: {{photo}},
+   *  {{vibe}}, {{hint}}. See migration 153. */
+  fluxDevPromptTemplate: string | null;
   renderBase: string | null;
   engine: string | null;
 }
@@ -57,6 +62,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
       | 'natural'
       | 'embodied',
     kontextDirective: row.kontext_directive,
+    fluxDevPromptTemplate: row.flux_dev_prompt_template,
     renderBase: row.render_base,
     engine: row.engine,
   };
@@ -83,7 +89,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,character_render_mode,kontext_directive,render_base,engine'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,character_render_mode,kontext_directive,flux_dev_prompt_template,render_base,engine'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {

@@ -1,17 +1,25 @@
 /**
- * Medium-specific photo restyle prompt templates.
+ * Photo restyle prompt resolver — fully DB-driven.
  *
- * Each medium defines:
- *   - model: which AI model produces the best results
- *   - buildPrompt: custom prompt template with vibe woven into the medium's language
+ * Two paths, decided per-medium by the DB:
  *
- * The vibe is NOT appended at the end — it's integrated into each medium's
- * visual language so the mood manifests through the medium's own tools
- * (brush intensity, brick colors, palette warmth, etc.)
+ *   1. flux-dev rebuild — `dream_mediums.flux_dev_prompt_template` is set.
+ *      For mediums whose subjects need non-human proportions (lego
+ *      minifigures, Funko Pop vinyl) — Kontext can't reshape a head 3x
+ *      body, it has to be invented from a vision description. Template
+ *      uses {{photo}} / {{vibe}} / {{hint}} placeholders, substituted
+ *      server-side.
  *
- * Models:
- *   'kontext-pro' — Preserves face/likeness. Used for most mediums.
- *   'flux-dev'    — Full artistic rebuild. Only for LEGO (minifigures are non-human).
+ *   2. kontext-pro transform — `dream_mediums.kontext_directive` is set.
+ *      Default for every other medium. Preserves face/likeness; the
+ *      directive is the literal first paragraph Kontext sees.
+ *
+ *   3. fallback — no kontext_directive AND no flux_dev_prompt_template:
+ *      auto-generate a generic Kontext prompt from the regular directive.
+ *      Last resort, intentionally bland.
+ *
+ * Editing any directive in the DB takes effect on the next request — no
+ * Edge Function redeploy required.
  */
 
 export type PhotoModel = 'kontext-pro' | 'flux-dev';
@@ -21,31 +29,52 @@ interface PhotoRestyleConfig {
   buildPrompt: (photo: string, vibe: string, hint: string) => string;
 }
 
+interface MediumLike {
+  directive?: string;
+  label?: string;
+  characterRenderMode?: string;
+  kontextDirective?: string | null;
+  fluxDevPromptTemplate?: string | null;
+}
+
 /**
- * Get restyle config for a medium. Custom configs override, otherwise
- * auto-generates based on render mode:
- *   - Embodied (gothic, claymation, etc.) → flux-dev full rebuild from vision description
- *   - Natural (watercolor, pencil, etc.) → kontext-pro transform from DB directive
- *
- * Both paths derive from the DB directive — single source of truth.
+ * Substitute {{photo}}, {{vibe}}, {{hint}} placeholders in a flux-dev
+ * template stored in the DB. Anything wrapped in {{ }} that isn't one of
+ * the known placeholders is left as-is so a typo doesn't silently swallow
+ * legitimate brace-text in a directive.
+ */
+function applyTemplate(template: string, photo: string, vibe: string, hint: string): string {
+  // {{hint}} expands with the framing line OR collapses to empty so the
+  // template can place it on its own line without leaving a blank.
+  const hintLine = hint ? `USER REQUEST: "${hint}"` : '';
+  return template
+    .replace(/\{\{photo\}\}/g, photo)
+    .replace(/\{\{vibe\}\}/g, vibe)
+    .replace(/\{\{hint\}\}/g, hintLine);
+}
+
+/**
+ * Resolve the restyle config for a medium. All three paths are DB-driven —
+ * see file header. Returns null only when no medium info is available
+ * AND no fallback is possible.
  */
 export function getPhotoRestyleConfig(
-  mediumKey: string,
-  medium?: {
-    directive?: string;
-    label?: string;
-    characterRenderMode?: string;
-    kontextDirective?: string | null;
-  }
+  _mediumKey: string,
+  medium?: MediumLike
 ): PhotoRestyleConfig | null {
-  // Custom config takes priority (LEGO/vinyl need flux-dev full rebuild — non-human proportions)
-  if (MEDIUM_CONFIGS[mediumKey]) return MEDIUM_CONFIGS[mediumKey];
+  if (!medium) return null;
 
-  if (!medium || !medium.directive) return null;
+  // 1. flux-dev rebuild path (lego, vinyl, future non-human mediums)
+  const fluxTemplate = medium.fluxDevPromptTemplate;
+  if (fluxTemplate && fluxTemplate.trim().length > 0) {
+    return {
+      model: 'flux-dev',
+      buildPrompt: (photo, vibe, hint) => applyTemplate(fluxTemplate, photo, vibe, hint),
+    };
+  }
 
-  // All other mediums: Kontext transform from photo directly
-  // Uses kontext_directive (tuned for Kontext's instruction format) if available,
-  // falls back to regular directive
+  // 2. kontext-pro transform path (default for every standard medium)
+  if (!medium.directive) return null;
   const kontextPrompt = medium.kontextDirective || medium.directive;
   return {
     model: 'kontext-pro',
@@ -53,60 +82,6 @@ export function getPhotoRestyleConfig(
       `${kontextPrompt}\n\nMood: ${vibe}${hint ? '\n' + hint : ''}`,
   };
 }
-
-const MEDIUM_CONFIGS: Record<string, PhotoRestyleConfig> = {
-  // ═══════════════════════════════════════════════════════════════════════
-  // FLUX-DEV — full artistic rebuild (non-human output, needs vision → Sonnet → Flux)
-  // All other mediums auto-generate Kontext instructions from DB directive.
-  // ═══════════════════════════════════════════════════════════════════════
-
-  lego: {
-    model: 'flux-dev',
-    buildPrompt: (
-      photo,
-      vibe,
-      hint
-    ) => `You are writing a prompt for Flux AI to generate a photograph of a real LEGO diorama.
-
-PHOTO TO RECREATE AS LEGO:
-${photo}
-
-Write a prompt (50-70 words, comma-separated) for a PHOTOGRAPH of a REAL LEGO SET:
-- Start with: "Photograph of a real LEGO brick diorama"
-- The person is a LEGO MINIFIGURE: painted dot eyes, printed smile, C-shaped hands, snap-on hair piece, skin tone matching the person. Match their clothing colors.
-- EVERY object is built from LEGO bricks — visible studs, snap-together construction
-- Floor is a LEGO baseplate. Walls are stacked bricks. Furniture is brick-built.
-- If the person is very young/small, use a short-legs minifigure. Match gender with hair piece.
-- Portrait 9:16
-
-MOOD — express this through brick color choices, lighting angle, and atmosphere of the diorama:
-${vibe}
-${hint ? `\nUSER REQUEST: "${hint}"` : ''}
-Output ONLY the prompt.`,
-  },
-
-  vinyl: {
-    model: 'flux-dev',
-    buildPrompt: (
-      photo,
-      vibe,
-      hint
-    ) => `You are writing a prompt for Flux AI to generate a photograph of a Funko Pop vinyl figure.
-
-PERSON TO RECREATE AS FUNKO POP:
-${photo}
-
-Write a prompt (50-70 words, comma-separated) for a PRODUCT PHOTOGRAPH of a FUNKO POP FIGURE:
-- Start with: "Product photograph of a Funko Pop vinyl collectible figure on a display shelf, soft studio lighting"
-- The person becomes a FUNKO POP: massively oversized head (3x body), tiny body, dot eyes, no mouth, glossy vinyl plastic surface, painted-on clothing details matching their real colors
-- Hair is a solid sculpted plastic piece matching their hair color
-- Standing on a small circular black base
-- Apply the vibe through background color and lighting mood: ${vibe}
-- Portrait 9:16
-${hint ? `USER REQUEST: "${hint}"` : ''}
-Output ONLY the prompt.`,
-  },
-};
 
 // ── Reimagine prompt builders ──────────────────────────────────────────────
 // Reimagine always uses flux-dev (new scene from scratch).
