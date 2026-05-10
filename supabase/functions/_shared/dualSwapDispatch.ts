@@ -1,20 +1,21 @@
 /**
  * Dispatch helper for dual face swap — routes to either the in-process
- * `dualFaceSwap()` (current behavior) or the standalone `face-swap-dual`
- * Edge Function (Phase 2 split) based on the `DUAL_SWAP_FANOUT` env flag.
+ * `dualFaceSwap()` or the standalone `face-swap-dual` Edge Function based
+ * on the `DUAL_SWAP_FANOUT` env flag.
  *
- * Default: in-process. Setting `DUAL_SWAP_FANOUT=true` flips both
- * `generate-dream` and `nightly-dreams` to the fanout path. Per-function
- * granularity isn't needed yet — if we want it later, branch on
- * `DUAL_SWAP_FANOUT_LIVE` / `DUAL_SWAP_FANOUT_NIGHTLY` env vars.
+ * Default: in-process. Setting `DUAL_SWAP_FANOUT=true` routes the pixel-
+ * heavy decode/crop/encode/stitch work into its own Edge Function isolate,
+ * isolating it from the orchestrator's Sonnet/Flux/logging memory footprint.
  *
- * The fanout path uses `supabase.functions.invoke()` to hit the new
- * function. Each invocation gets its own 150 MB memory + ~2 s CPU
- * budget, isolating the pixel-heavy work from the orchestrator's
- * Sonnet/Flux/logging memory footprint.
- *
- * Same signature as `dualFaceSwap` so callers can swap in this helper
- * without other changes.
+ * 2026-05-09: switched fanout transport from `supabase.functions.invoke()`
+ * to raw `fetch()`. The SDK invoke pattern is designed for client-to-Edge-
+ * Function calls where the user's auth context propagates automatically.
+ * For Edge-Function-to-Edge-Function (server-to-server) we already have
+ * explicit service-role context — the SDK's auth abstraction adds opacity
+ * without value, and was returning "non-2xx" for reasons we never fully
+ * isolated. Raw fetch with an explicit `Authorization: Bearer` header is
+ * the same transport our external smoke tests verified, and makes the
+ * auth flow transparent + debuggable.
  */
 
 import { dualFaceSwap } from './faceSwap.ts';
@@ -43,23 +44,49 @@ export async function dispatchDualFaceSwap(
     );
   }
 
-  console.log('[dispatchDualFaceSwap] Using fanout → face-swap-dual');
-  const { data, error } = await supabase.functions.invoke('face-swap-dual', {
-    body: {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+  const t0 = Date.now();
+  const res = await fetch(`${supabaseUrl}/functions/v1/face-swap-dual`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${serviceRoleKey}`,
+    },
+    body: JSON.stringify({
       targetUrl: targetImageUrl,
       leftSourceUrl,
       rightSourceUrl,
       userId,
       deadlineMs,
-    },
+    }),
   });
 
-  if (error) {
-    throw new Error(`face-swap-dual invoke failed: ${error.message ?? String(error)}`);
+  const elapsedMs = Date.now() - t0;
+  const text = await res.text();
+
+  if (!res.ok) {
+    throw new Error(
+      `face-swap-dual returned ${res.status} after ${elapsedMs}ms: ${text.slice(0, 300)}`
+    );
   }
-  if (!data?.swappedUrl) {
-    const errMsg = data?.error ?? 'face-swap-dual returned no swappedUrl';
-    throw new Error(`face-swap-dual: ${errMsg}`);
+
+  let parsed: { swappedUrl?: string; error?: string };
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error(
+      `face-swap-dual returned invalid JSON (${res.status} after ${elapsedMs}ms): ${text.slice(0, 200)}`
+    );
   }
-  return data.swappedUrl;
+
+  if (!parsed.swappedUrl) {
+    throw new Error(
+      `face-swap-dual: ${parsed.error ?? 'no swappedUrl in response'} (${elapsedMs}ms)`
+    );
+  }
+
+  console.log(`[dispatchDualFaceSwap] face-swap-dual succeeded in ${elapsedMs}ms`);
+  return parsed.swappedUrl;
 }

@@ -127,7 +127,7 @@ const outDir = '/tmp/first-dream-smoke';
       );
       console.log(`  url: ${body.image_url}`);
       // Download the image
-      const ext = body.image_url.endsWith('.webp') ? 'webp' : 'jpg';
+      const ext = 'jpg';
       const out = path.join(outDir, `${persona}.${ext}`);
       const buf = await fetch(body.image_url).then((r) => r.arrayBuffer());
       fs.writeFileSync(out, Buffer.from(buf));

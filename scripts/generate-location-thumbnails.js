@@ -139,13 +139,13 @@ async function generateThumbnail(locationKey) {
   const res = await fetch(imageUrl);
   const buffer = Buffer.from(await res.arrayBuffer());
 
-  const filename = `${locationKey.replace(/\s+/g, '-')}.webp`;
+  const filename = `${locationKey.replace(/\s+/g, '-')}.jpg`;
   console.log(`  Uploading to ${BUCKET}/${filename}...`);
 
   const { error: uploadErr } = await sb.storage
     .from(BUCKET)
     .upload(filename, buffer, {
-      contentType: 'image/webp',
+      contentType: 'image/jpeg',
       upsert: true,
     });
 

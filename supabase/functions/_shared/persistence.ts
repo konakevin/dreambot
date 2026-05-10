@@ -29,20 +29,13 @@ export async function persistBufferToStorage(
   userId: string,
   supabase: SupabaseClient
 ): Promise<string> {
-  const head = new Uint8Array(buf.slice(0, 12));
+  // We force JPEG output across the pipeline (2026-05-09 revert from WebP).
+  // PNG detection kept because Replicate occasionally returns PNG for
+  // safety-redacted outputs, and we shouldn't repaint those as JPEG.
+  const head = new Uint8Array(buf.slice(0, 4));
   const isPng = head[0] === 0x89 && head[1] === 0x50;
-  // WebP: "RIFF" at 0..3, "WEBP" at 8..11
-  const isWebp =
-    head[0] === 0x52 &&
-    head[1] === 0x49 &&
-    head[2] === 0x46 &&
-    head[3] === 0x46 &&
-    head[8] === 0x57 &&
-    head[9] === 0x45 &&
-    head[10] === 0x42 &&
-    head[11] === 0x50;
-  const ext = isPng ? 'png' : isWebp ? 'webp' : 'jpg';
-  const contentType = isPng ? 'image/png' : isWebp ? 'image/webp' : 'image/jpeg';
+  const ext = isPng ? 'png' : 'jpg';
+  const contentType = isPng ? 'image/png' : 'image/jpeg';
 
   const fileName = `${userId}/${Date.now()}.${ext}`;
   const { error } = await supabase.storage

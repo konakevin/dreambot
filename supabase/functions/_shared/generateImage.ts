@@ -73,13 +73,14 @@ async function generateImageOnce(
       ? {
           aspect_ratio: '9:16',
           num_outputs: 1,
-          // Replicate's default output_format is 'webp'. We removed the
-          // 'jpg' override 2026-05-06 because: (a) webp at q=100 is ~30%
-          // smaller than JPEG at q=100 with visually identical output, and
-          // (b) the face-swap pipeline now decodes whichever format is
-          // returned via _shared/imageCodec.ts. output_quality: 100 is
-          // maxed so source archives at the highest quality the model
-          // produces. Zero impact on render time or Replicate cost.
+          // Force JPEG output. WebP migration (2026-05-06) was reverted
+          // 2026-05-09: WebP decode in the dual-face-swap pipeline pushed
+          // the function past Supabase's 150 MB / 2 s per-invocation
+          // budget (HTTP 546 WORKER_RESOURCE_LIMIT). JPEG decode is
+          // lighter and the visual difference at quality 100 is
+          // imperceptible. Storage cost is ~30% higher per image vs WebP
+          // — acceptable tradeoff for dual-face-swap reliability.
+          output_format: 'jpg',
           output_quality: 100,
         }
       : {

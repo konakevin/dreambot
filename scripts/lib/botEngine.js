@@ -564,16 +564,12 @@ async function lookupBotUserId(sb, username) {
 
 async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption, recipe, fluxSeed }) {
   const bytes = fs.readFileSync(localPath);
-  // Detect format from magic bytes — Replicate returns WebP by default
-  // (no output_format override), but iter-bot saves the local file as
-  // `.jpg` regardless of actual bytes. Match content-type + URL extension
-  // to the actual format so CDN serves correct headers.
-  const isWebp =
-    bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 &&
-    bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
+  // Pipeline produces JPG (post 2026-05-09 webp revert). PNG kept as a
+  // fallback because Replicate occasionally returns PNG for safety-redacted
+  // outputs.
   const isPng = bytes[0] === 0x89 && bytes[1] === 0x50;
-  const ext = isWebp ? 'webp' : isPng ? 'png' : 'jpg';
-  const contentType = isWebp ? 'image/webp' : isPng ? 'image/png' : 'image/jpeg';
+  const ext = isPng ? 'png' : 'jpg';
+  const contentType = isPng ? 'image/png' : 'image/jpeg';
   const key = `${userId}/${Date.now()}-${username}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const up = await sb.storage
     .from('uploads')

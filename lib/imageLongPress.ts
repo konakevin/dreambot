@@ -1,6 +1,5 @@
 import * as Haptics from 'expo-haptics';
 import * as MediaLibrary from 'expo-media-library';
-import * as ImageManipulator from 'expo-image-manipulator';
 import { File, Paths } from 'expo-file-system';
 import { router } from 'expo-router';
 import { showAlert } from '@/components/CustomAlert';
@@ -14,12 +13,11 @@ async function saveToPhotos(id: string, imageUrl: string) {
     return;
   }
   try {
-    // Match cache-file extension to the actual remote format. After the
-    // 2026-05-06 webp pipeline migration, image_url ends in .webp for
-    // direct Flux output, .jpg for face-swap output, .png in rare cases.
+    // Pipeline produces JPG end-to-end. Match cache extension to URL's
+    // ext for the rare PNG case (safety-redacted output).
     const urlMatch = imageUrl.match(/\.(\w+)(?:\?[^/]*)?$/);
     const rawExt = (urlMatch?.[1] ?? '').toLowerCase();
-    const ext = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'gif'].includes(rawExt) ? rawExt : 'jpg';
+    const ext = ['jpg', 'jpeg', 'png'].includes(rawExt) ? rawExt : 'jpg';
 
     // Clear stale cache file from a prior save attempt — downloadFileAsync
     // throws "Destination already exists" instead of overwriting.
@@ -28,18 +26,7 @@ async function saveToPhotos(id: string, imageUrl: string) {
 
     const downloaded = await File.downloadFileAsync(imageUrl, dest);
 
-    // iOS PHPhotoLibrary rejects WebP outright. Convert webp→PNG before
-    // saving — PNG is lossless so the saved pixels are bit-for-bit
-    // identical to the decoded webp (no second lossy compression).
-    let saveUri = downloaded.uri;
-    if (ext === 'webp') {
-      const converted = await ImageManipulator.manipulateAsync(downloaded.uri, [], {
-        format: ImageManipulator.SaveFormat.PNG,
-      });
-      saveUri = converted.uri;
-    }
-
-    await MediaLibrary.saveToLibraryAsync(saveUri);
+    await MediaLibrary.saveToLibraryAsync(downloaded.uri);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     Toast.show('Saved to photos', 'checkmark-circle');
   } catch {

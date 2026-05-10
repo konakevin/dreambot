@@ -17,7 +17,7 @@
  */
 
 // deno-lint-ignore-file no-explicit-any
-import { decodeImage, encodeWebp } from './imageCodec.ts';
+import { decodeImage, encodeJpeg } from './imageCodec.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
@@ -124,13 +124,13 @@ async function perturbSourceImage(
   data[off] = Math.floor(Math.random() * 256);
   data[off + 1] = Math.floor(Math.random() * 256);
   data[off + 2] = Math.floor(Math.random() * 256);
-  const quality = 90 + Math.floor(Math.random() * 6); // 90-95, near-lossless webp
-  const bytes = await encodeWebp({ data, width: w, height: h }, quality);
+  const quality = 90 + Math.floor(Math.random() * 6); // 90-95, near-lossless JPEG
+  const bytes = await encodeJpeg({ data, width: w, height: h }, quality);
 
-  const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+  const path = `temp/${userId}/perturbed-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
   const { error } = await supabase.storage
     .from('uploads')
-    .upload(path, bytes, { contentType: 'image/webp', upsert: true, cacheControl: '2592000' });
+    .upload(path, bytes, { contentType: 'image/jpeg', upsert: true, cacheControl: '2592000' });
   if (error) throw new Error(`Perturbed source upload failed: ${error.message}`);
   return {
     url: supabase.storage.from('uploads').getPublicUrl(path).data.publicUrl,
@@ -148,14 +148,17 @@ async function faceSwapOnce(
   model: FaceSwapModel,
   maxWaitMs: number = DEFAULT_MAX_WAIT_MS
 ): Promise<string> {
-  // Perturb + upload the source so Replicate cannot lock onto a stale
-  // prediction output. The returned URL is what we hand Replicate;
-  // `path` is the storage location we delete in finally.
-  const { url: sourceForReplicate, path: perturbedPath } = await perturbSourceImage(
-    sourceImageUrl,
-    supabase,
-    userId
-  );
+  // Pass the source URL directly with a query string for cache-busting.
+  // The original perturbSourceImage step (decode + encode + upload) was
+  // the CPU bottleneck for dual face swap (4 simultaneous decode/encodes
+  // when run in parallel), pushing us past Supabase's 2s budget.
+  const sourceForReplicate =
+    sourceImageUrl +
+    (sourceImageUrl.includes('?') ? '&' : '?') +
+    'b=' +
+    Date.now() +
+    Math.random().toString(36).slice(2, 6);
+  const perturbedPath: string | null = null;
 
   try {
     const res = await fetch('https://api.replicate.com/v1/predictions', {
@@ -196,11 +199,14 @@ async function faceSwapOnce(
     }
     throw new Error(`Face swap timed out (${model.name})`);
   } finally {
-    // Fire-and-forget cleanup of the perturbed source upload
-    supabase.storage
-      .from('uploads')
-      .remove([perturbedPath])
-      .catch(() => {});
+    // Cleanup of perturbed source upload — no-op now that we use query-string
+    // cache-bust. perturbedPath is null. Kept block for future toggle.
+    if (perturbedPath) {
+      supabase.storage
+        .from('uploads')
+        .remove([perturbedPath as string])
+        .catch(() => {});
+    }
   }
 }
 
@@ -460,23 +466,25 @@ export async function dualFaceSwap(
   // Drop the full target RGBA — we only need the crops from here on (~5MB freed)
   imgData = null;
 
-  const leftWebp = await encodeWebp({ data: leftPixels, width: leftW, height: H }, 92);
-  const rightWebp = await encodeWebp({ data: rightPixels, width: rightW, height: H }, 92);
-  // Drop the crop RGBA — we only need the encoded WebPs for upload (~5.6MB freed)
+  const [leftJpeg, rightJpeg] = await Promise.all([
+    encodeJpeg({ data: leftPixels, width: leftW, height: H }, 92),
+    encodeJpeg({ data: rightPixels, width: rightW, height: H }, 92),
+  ]);
+  // Drop the crop RGBA — we only need the encoded JPEGs for upload (~5.6MB freed)
   leftPixels = null;
   rightPixels = null;
 
   const ts = Date.now();
-  const leftPath = `temp/${userId}/crop-left-${ts}.webp`;
-  const rightPath = `temp/${userId}/crop-right-${ts}.webp`;
+  const leftPath = `temp/${userId}/crop-left-${ts}.jpg`;
+  const rightPath = `temp/${userId}/crop-right-${ts}.jpg`;
   const [leftUp, rightUp] = await Promise.all([
-    supabase.storage.from('uploads').upload(leftPath, leftWebp, {
-      contentType: 'image/webp',
+    supabase.storage.from('uploads').upload(leftPath, leftJpeg, {
+      contentType: 'image/jpeg',
       upsert: true,
       cacheControl: '2592000',
     }),
-    supabase.storage.from('uploads').upload(rightPath, rightWebp, {
-      contentType: 'image/webp',
+    supabase.storage.from('uploads').upload(rightPath, rightJpeg, {
+      contentType: 'image/jpeg',
       upsert: true,
       cacheControl: '2592000',
     }),
@@ -545,10 +553,10 @@ export async function dualFaceSwap(
   leftSwapData = null;
   rightSwapData = null;
 
-  const stitchedBytes = await encodeWebp({ data: stitched, width: W, height: H }, 92);
-  const tempFile = `temp/${userId}/stitched-${Date.now()}.webp`;
+  const stitchedBytes = await encodeJpeg({ data: stitched, width: W, height: H }, 92);
+  const tempFile = `temp/${userId}/stitched-${Date.now()}.jpg`;
   const { error: upErr } = await supabase.storage.from('uploads').upload(tempFile, stitchedBytes, {
-    contentType: 'image/webp',
+    contentType: 'image/jpeg',
     upsert: true,
     cacheControl: '2592000',
   });

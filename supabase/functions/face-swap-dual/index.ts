@@ -2,15 +2,7 @@
  * Edge Function: face-swap-dual — isolated dual face-swap pipeline.
  *
  * Lives in its own Edge Function invocation so it gets a fresh memory +
- * CPU budget separate from generate-dream / nightly-dreams. The dual
- * pipeline holds 6+ image buffers in memory (target RGBA, 2 crops,
- * 2 swap-output RGBA, stitched RGBA) plus Replicate polling state, and
- * was hitting Supabase's per-invocation 150 MB / ~2 s CPU ceiling when
- * combined with the rest of the dream pipeline.
- *
- * Called via supabase.functions.invoke() from the orchestrator function
- * when DUAL_SWAP_FANOUT=true. Otherwise the orchestrator runs the
- * in-process dualFaceSwap() path (kept as fallback for the rollout).
+ * CPU budget separate from generate-dream / nightly-dreams.
  *
  * POST /functions/v1/face-swap-dual
  * Body: { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs? }
@@ -26,7 +18,6 @@ interface RequestBody {
   leftSourceUrl: string;
   rightSourceUrl: string;
   userId: string;
-  /** Absolute deadline (Date.now() + remaining). Optional — defaults to now + 105s. */
   deadlineMs?: number;
 }
 
@@ -48,13 +39,10 @@ Deno.serve(async (req) => {
 
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
   if (!REPLICATE_TOKEN) {
-    return new Response(
-      JSON.stringify({ error: 'Server misconfigured: missing REPLICATE_API_TOKEN' }),
-      {
-        status: 500,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ error: 'missing REPLICATE_API_TOKEN' }), {
+      status: 500,
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+    });
   }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -73,15 +61,10 @@ Deno.serve(async (req) => {
 
   const { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs } = body;
   if (!targetUrl || !leftSourceUrl || !rightSourceUrl || !userId) {
-    return new Response(
-      JSON.stringify({
-        error: 'Missing required field (targetUrl, leftSourceUrl, rightSourceUrl, userId)',
-      }),
-      {
-        status: 400,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ error: 'Missing required field' }), {
+      status: 400,
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+    });
   }
 
   const t0 = Date.now();
