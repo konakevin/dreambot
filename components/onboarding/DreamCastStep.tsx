@@ -302,11 +302,25 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (__DEV__) console.error('[DreamCast] UPLOAD FAILED for', role, ':', msg);
-      setCastMember({
-        role,
-        thumb_url: asset.uri,
-        description: '',
-      });
+      // NEVER persist a local file:// URI as thumb_url — it's not accessible
+      // from the server and silently breaks face-swap downstream. If the
+      // storage upload succeeded but the describe call failed, the publicUrl
+      // is already in the store from the line 241-246 setCastMember above —
+      // leave it alone and let the Edge Function describe via Llama Vision
+      // at render time. If storage upload itself failed, drop the cast
+      // member so the user re-uploads instead of saving a half-broken state.
+      const hasUploadedThumb = !!getMember(role)?.thumb_url?.startsWith('http');
+      if (!hasUploadedThumb) {
+        removeCastMember(role);
+      }
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      showAlert(
+        'Upload had an issue',
+        hasUploadedThumb
+          ? "We saved your photo but couldn't analyze it right now. We'll try again when your dream renders."
+          : "We couldn't upload that photo. Please try again with a different photo or check your connection.",
+        [{ text: 'OK' }]
+      );
     } finally {
       setUploading(null);
     }
