@@ -491,11 +491,15 @@ export type Database = {
           description: string | null;
           directive: string;
           engine: string | null;
+          face_swap_directive: string | null;
+          face_swap_flux_fragment: string | null;
           face_swaps: boolean;
+          flux_dev_prompt_template: string | null;
           flux_fragment: string;
           is_active: boolean;
           is_bot_only: boolean;
           is_character_only: boolean;
+          is_dream_eligible: boolean;
           is_public: boolean;
           is_scene_only: boolean;
           key: string;
@@ -513,11 +517,15 @@ export type Database = {
           description?: string | null;
           directive: string;
           engine?: string | null;
+          face_swap_directive?: string | null;
+          face_swap_flux_fragment?: string | null;
           face_swaps?: boolean;
+          flux_dev_prompt_template?: string | null;
           flux_fragment: string;
           is_active?: boolean;
           is_bot_only?: boolean;
           is_character_only?: boolean;
+          is_dream_eligible?: boolean;
           is_public?: boolean;
           is_scene_only?: boolean;
           key: string;
@@ -535,11 +543,15 @@ export type Database = {
           description?: string | null;
           directive?: string;
           engine?: string | null;
+          face_swap_directive?: string | null;
+          face_swap_flux_fragment?: string | null;
           face_swaps?: boolean;
+          flux_dev_prompt_template?: string | null;
           flux_fragment?: string;
           is_active?: boolean;
           is_bot_only?: boolean;
           is_character_only?: boolean;
+          is_dream_eligible?: boolean;
           is_public?: boolean;
           is_scene_only?: boolean;
           key?: string;
@@ -552,12 +564,73 @@ export type Database = {
         };
         Relationships: [];
       };
+      dream_queue: {
+        Row: {
+          attempt_count: number;
+          completed_at: string | null;
+          created_at: string;
+          id: string;
+          last_error: string | null;
+          payload: Json;
+          source: string;
+          started_at: string | null;
+          status: string;
+          upload_id: string | null;
+          user_id: string;
+          worker_id: string | null;
+        };
+        Insert: {
+          attempt_count?: number;
+          completed_at?: string | null;
+          created_at?: string;
+          id?: string;
+          last_error?: string | null;
+          payload: Json;
+          source: string;
+          started_at?: string | null;
+          status?: string;
+          upload_id?: string | null;
+          user_id: string;
+          worker_id?: string | null;
+        };
+        Update: {
+          attempt_count?: number;
+          completed_at?: string | null;
+          created_at?: string;
+          id?: string;
+          last_error?: string | null;
+          payload?: Json;
+          source?: string;
+          started_at?: string | null;
+          status?: string;
+          upload_id?: string | null;
+          user_id?: string;
+          worker_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_queue_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_queue_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       dream_vibes: {
         Row: {
           created_at: string;
           description: string | null;
           directive: string;
           is_active: boolean;
+          is_dream_eligible: boolean;
           key: string;
           label: string;
           mood_profile: Json | null;
@@ -568,6 +641,7 @@ export type Database = {
           description?: string | null;
           directive: string;
           is_active?: boolean;
+          is_dream_eligible?: boolean;
           key: string;
           label: string;
           mood_profile?: Json | null;
@@ -578,6 +652,7 @@ export type Database = {
           description?: string | null;
           directive?: string;
           is_active?: boolean;
+          is_dream_eligible?: boolean;
           key?: string;
           label?: string;
           mood_profile?: Json | null;
@@ -621,63 +696,54 @@ export type Database = {
           },
         ];
       };
-      first_dream_cells: {
+      first_dream_scene_cards: {
         Row: {
-          allowed_mediums: string[];
-          allowed_object_classes: string[];
-          banned_phrases: string[];
-          banner_caption_template: string;
-          camera_recipe: string;
+          banned_motifs: string[];
           composition_brief: string;
           created_at: string;
-          forced_vibe_key: string;
-          is_base_fallback: boolean;
-          last_tuned_at: string | null;
+          iconic_motifs: string[];
+          id: string;
           lighting_recipe: string;
-          location_class: string;
-          persona: string;
-          quality_grade: number | null;
-          quality_runs: number;
-          sensory_anchor_keys: string[];
-          updated_at: string;
+          location_key: string;
+          mood: string;
+          pose_duo: string | null;
+          pose_no_cast: string | null;
+          pose_solo: string | null;
+          scene_title: string;
+          slot_idx: number;
+          works_for_personas: string[];
         };
         Insert: {
-          allowed_mediums: string[];
-          allowed_object_classes?: string[];
-          banned_phrases?: string[];
-          banner_caption_template: string;
-          camera_recipe: string;
+          banned_motifs?: string[];
           composition_brief: string;
           created_at?: string;
-          forced_vibe_key: string;
-          is_base_fallback?: boolean;
-          last_tuned_at?: string | null;
+          iconic_motifs: string[];
+          id?: string;
           lighting_recipe: string;
-          location_class: string;
-          persona: string;
-          quality_grade?: number | null;
-          quality_runs?: number;
-          sensory_anchor_keys?: string[];
-          updated_at?: string;
+          location_key: string;
+          mood: string;
+          pose_duo?: string | null;
+          pose_no_cast?: string | null;
+          pose_solo?: string | null;
+          scene_title: string;
+          slot_idx: number;
+          works_for_personas: string[];
         };
         Update: {
-          allowed_mediums?: string[];
-          allowed_object_classes?: string[];
-          banned_phrases?: string[];
-          banner_caption_template?: string;
-          camera_recipe?: string;
+          banned_motifs?: string[];
           composition_brief?: string;
           created_at?: string;
-          forced_vibe_key?: string;
-          is_base_fallback?: boolean;
-          last_tuned_at?: string | null;
+          iconic_motifs?: string[];
+          id?: string;
           lighting_recipe?: string;
-          location_class?: string;
-          persona?: string;
-          quality_grade?: number | null;
-          quality_runs?: number;
-          sensory_anchor_keys?: string[];
-          updated_at?: string;
+          location_key?: string;
+          mood?: string;
+          pose_duo?: string | null;
+          pose_no_cast?: string | null;
+          pose_solo?: string | null;
+          scene_title?: string;
+          slot_idx?: number;
+          works_for_personas?: string[];
         };
         Relationships: [];
       };
@@ -839,16 +905,21 @@ export type Database = {
         Row: {
           architecture: string[];
           atmosphere: string[];
+          biome: string | null;
           cinematic_phrases: string[];
           created_at: string;
+          display_name: string | null;
           fusion_settings: Json;
           id: string;
           is_approved: boolean;
           light_signature: string[];
-          location_class: string;
           model_version: string;
+          must_include: string[] | null;
           name: string;
+          picker_category: string | null;
+          picker_sort_order: number | null;
           prompt_version: number;
+          sub_regions: string[] | null;
           tags: string[];
           texture_details: string[];
           thumbnail_url: string | null;
@@ -858,16 +929,21 @@ export type Database = {
         Insert: {
           architecture?: string[];
           atmosphere?: string[];
+          biome?: string | null;
           cinematic_phrases?: string[];
           created_at?: string;
+          display_name?: string | null;
           fusion_settings?: Json;
           id?: string;
           is_approved?: boolean;
           light_signature?: string[];
-          location_class?: string;
           model_version?: string;
+          must_include?: string[] | null;
           name: string;
+          picker_category?: string | null;
+          picker_sort_order?: number | null;
           prompt_version?: number;
+          sub_regions?: string[] | null;
           tags?: string[];
           texture_details?: string[];
           thumbnail_url?: string | null;
@@ -877,21 +953,56 @@ export type Database = {
         Update: {
           architecture?: string[];
           atmosphere?: string[];
+          biome?: string | null;
           cinematic_phrases?: string[];
           created_at?: string;
+          display_name?: string | null;
           fusion_settings?: Json;
           id?: string;
           is_approved?: boolean;
           light_signature?: string[];
-          location_class?: string;
           model_version?: string;
+          must_include?: string[] | null;
           name?: string;
+          picker_category?: string | null;
+          picker_sort_order?: number | null;
           prompt_version?: number;
+          sub_regions?: string[] | null;
           tags?: string[];
           texture_details?: string[];
           thumbnail_url?: string | null;
           updated_at?: string;
           visual_palette?: string[];
+        };
+        Relationships: [];
+      };
+      location_iconic_spots: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_active: boolean;
+          location_key: string;
+          quality_tier: string;
+          spot_kind: string;
+          spot_text: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          location_key: string;
+          quality_tier?: string;
+          spot_kind?: string;
+          spot_text: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          location_key?: string;
+          quality_tier?: string;
+          spot_kind?: string;
+          spot_text?: string;
         };
         Relationships: [];
       };
@@ -1023,7 +1134,6 @@ export type Database = {
           material_textures: string[];
           model_version: string;
           name: string;
-          object_class: string;
           prompt_version: number;
           role_options: string[];
           scale: string;
@@ -1048,7 +1158,6 @@ export type Database = {
           material_textures?: string[];
           model_version?: string;
           name: string;
-          object_class?: string;
           prompt_version?: number;
           role_options?: string[];
           scale?: string;
@@ -1073,7 +1182,6 @@ export type Database = {
           material_textures?: string[];
           model_version?: string;
           name?: string;
-          object_class?: string;
           prompt_version?: number;
           role_options?: string[];
           scale?: string;
@@ -1301,6 +1409,7 @@ export type Database = {
           description: string | null;
           dream_medium: string | null;
           dream_vibe: string | null;
+          first_dream: boolean;
           flux_seed: number | null;
           from_wish: string | null;
           fuse_count: number;
@@ -1341,6 +1450,7 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
+          first_dream?: boolean;
           flux_seed?: number | null;
           from_wish?: string | null;
           fuse_count?: number;
@@ -1381,6 +1491,7 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
+          first_dream?: boolean;
           flux_seed?: number | null;
           from_wish?: string | null;
           fuse_count?: number;
@@ -1580,6 +1691,29 @@ export type Database = {
         Returns: undefined;
       };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
+      claim_dream_queue_job: {
+        Args: { p_worker_id: string };
+        Returns: {
+          attempt_count: number;
+          completed_at: string | null;
+          created_at: string;
+          id: string;
+          last_error: string | null;
+          payload: Json;
+          source: string;
+          started_at: string | null;
+          status: string;
+          upload_id: string | null;
+          user_id: string;
+          worker_id: string | null;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'dream_queue';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       delete_own_account: { Args: never; Returns: undefined };
       deny_follow_request: {
         Args: { p_requester_id: string };

@@ -15,6 +15,7 @@ interface DbMediumRow {
   is_scene_only: boolean;
   face_swaps: boolean;
   nightly_skip: boolean;
+  is_dream_eligible: boolean;
   character_render_mode: string;
   kontext_directive: string | null;
   flux_dev_prompt_template: string | null;
@@ -34,6 +35,7 @@ export interface ResolvedMedium {
   isSceneOnly: boolean;
   faceSwaps: boolean;
   nightlySkip: boolean;
+  isDreamEligible: boolean;
   characterRenderMode: 'natural' | 'embodied';
   kontextDirective: string | null;
   /** Optional flux-dev rebuild template for mediums that can't use Kontext
@@ -55,6 +57,7 @@ export interface ResolvedVibe {
   key: string;
   label: string;
   directive: string;
+  isDreamEligible: boolean;
 }
 
 function toMedium(row: DbMediumRow): ResolvedMedium {
@@ -67,6 +70,7 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     isSceneOnly: !!row.is_scene_only,
     faceSwaps: row.face_swaps,
     nightlySkip: !!row.nightly_skip,
+    isDreamEligible: !!row.is_dream_eligible,
     characterRenderMode: (row.character_render_mode === 'embodied' ? 'embodied' : 'natural') as
       | 'natural'
       | 'embodied',
@@ -100,7 +104,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {
@@ -111,16 +115,29 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   return cachedMediums;
 }
 
-/** Fetch all active vibes from DB (cached per invocation) */
+/** Fetch all active vibes from DB (cached per invocation).
+ *  Queries the table directly (not the RPC) so we can pull is_dream_eligible.
+ *  Migration 160 added the curation column. */
 export async function fetchVibes(): Promise<ResolvedVibe[]> {
   if (cachedVibes) return cachedVibes;
   const sb = getServiceClient();
-  const { data, error } = await sb.rpc('get_dream_vibes');
+  const { data, error } = await sb
+    .from('dream_vibes')
+    .select('key, label, directive, is_dream_eligible')
+    .eq('is_active', true)
+    .order('sort_order');
   if (error) {
     console.error('[dreamStyles] Failed to fetch vibes:', error.message);
     return [];
   }
-  cachedVibes = (data ?? []) as ResolvedVibe[];
+  cachedVibes = (data ?? []).map(
+    (r: { key: string; label: string; directive: string; is_dream_eligible: boolean }) => ({
+      key: r.key,
+      label: r.label,
+      directive: r.directive,
+      isDreamEligible: !!r.is_dream_eligible,
+    })
+  );
   return cachedVibes;
 }
 
@@ -173,6 +190,31 @@ export async function resolveMediumFromDb(
   const rand = () => mediums[Math.floor(Math.random() * mediums.length)];
   const activeKeys = new Set(mediums.map((m) => m.key));
 
+  // Nightly + first-dream: ignore the user's stored art_styles entirely.
+  // Pick from the curated dream-eligible pool (DB column is_dream_eligible).
+  // The user's create-screen options stay broad; the auto-gen layer is
+  // quality-gated by DB curation. See migration 160.
+  if (key === 'dream_eligible') {
+    const eligibleKeys = mediums.filter((m) => m.isDreamEligible).map((m) => m.key);
+    const pool = filterRecent(eligibleKeys, excludeRecent);
+    const picked = pick(pool);
+    return mediums.find((m) => m.key === picked)!;
+  }
+  // Nightly auto-roll for character/face-swap renders: filter to mediums
+  // that face-swap WELL on auto-roll. Photoreal mediums (hyperreal /
+  // render / photography) keep face_swaps=true so users can manually pick
+  // them, but auto-rolling them onto cast photos produces uncanny
+  // composites. The exclusion list is hardcoded — small, stable, no
+  // schema needed.
+  if (key === 'dream_eligible_face_swap') {
+    const NIGHTLY_FACE_SWAP_INELIGIBLE = new Set(['hyperreal', 'render', 'photography']);
+    const eligibleKeys = mediums
+      .filter((m) => m.isDreamEligible && m.faceSwaps && !NIGHTLY_FACE_SWAP_INELIGIBLE.has(m.key))
+      .map((m) => m.key);
+    const pool = filterRecent(eligibleKeys, excludeRecent);
+    const picked = pick(pool);
+    return mediums.find((m) => m.key === picked)!;
+  }
   if (
     (key === 'surprise_me' || key === 'my_mediums') &&
     userArtStyles &&
@@ -221,6 +263,15 @@ export async function resolveVibeFromDb(
   const rand = () => vibes[Math.floor(Math.random() * vibes.length)];
   const activeKeys = new Set(vibes.map((v) => v.key));
 
+  // Nightly + first-dream: pick from the curated dream-eligible vibe pool
+  // (DB column is_dream_eligible). Coquette is excluded because it forces
+  // female-coded rendering even on male subjects. See migration 160.
+  if (key === 'dream_eligible') {
+    const eligibleKeys = vibes.filter((v) => v.isDreamEligible).map((v) => v.key);
+    const pool = filterRecent(eligibleKeys, excludeRecent);
+    const picked = pick(pool);
+    return vibes.find((v) => v.key === picked)!;
+  }
   if (
     (key === 'surprise_me' || key === 'my_vibes') &&
     userAesthetics &&

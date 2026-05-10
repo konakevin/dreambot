@@ -37,12 +37,6 @@ export const DUAL_COMPOSITION_PATHS: DualCompositionPath[] = [
     briefHint: 'Movie still — dramatic lighting, purposeful framing, like a film poster moment.',
   },
   {
-    name: 'intimate',
-    prepend:
-      'warm close-up portrait, {realisticFaceTag}two people close together both angled toward viewer, soft diffused lighting, both faces visible in three-quarter view, not facing each other, not from behind, not silhouette,',
-    briefHint: 'Intimate framing — tighter crop, warm tones, characters close together.',
-  },
-  {
     name: 'environmental',
     prepend:
       'environmental portrait, {realisticFaceTag}two people side by side filling the lower frame, eye-level camera, warm atmospheric lighting, both faces visible, not from behind,',

@@ -15,7 +15,8 @@
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
-import { fetchMediums, resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
+import { getBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 // buildRenderEntity removed — full cast description now passes to Sonnet directly
@@ -101,7 +102,11 @@ Deno.serve(async (req) => {
 
   const vibe_profile = body.vibe_profile as VibeProfile | undefined;
   const dream_wish = (body.dream_wish as string) || undefined;
-  const force_cast_role = (body.force_cast_role as string | null) || undefined;
+  // Preserve explicit null — caller passes null to mean "force scene-only,
+  // no cast". `||` would coerce null → undefined and break the
+  // forceCastRole === null branch downstream in rollDream.
+  const force_cast_role: string | null | undefined =
+    'force_cast_role' in body ? (body.force_cast_role as string | null) : undefined;
   const force_medium = (body.force_medium as string) || undefined;
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
@@ -210,27 +215,16 @@ Deno.serve(async (req) => {
 
     // Filter out mediums marked nightly_skip in the DB (e.g., photography —
     // produces literal photoreal renders that read as "AI photoshop collage"
-    // when combined with imaginative scene elements). Still resolvable via
-    // force_medium for QA.
-    // Safety: if filtering would starve the pool (user has ONLY skip mediums),
-    // fall back to the full art_styles so the render doesn't fail.
-    const allMediums = await fetchMediums();
-    const skipKeys = new Set(allMediums.filter((m) => m.nightlySkip).map((m) => m.key));
-    const filtered = (nightlyProfile.art_styles ?? []).filter(
-      (m) => !skipKeys.has(m.toLowerCase())
-    );
-    const nightlyEligibleMediums =
-      filtered.length > 0 ? filtered : (nightlyProfile.art_styles ?? []);
-    let nightlyMedium = await resolveMediumFromDb(
-      'my_mediums',
-      nightlyEligibleMediums,
-      recentMediums
-    );
-    // Test mode overrides: force specific medium/vibe (bypasses the ban)
+    // Pick from the curated dream-eligible pool — NOT from the user's
+    // stored art_styles/aesthetics. Migration 160 added is_dream_eligible
+    // as the auto-gen quality gate. The user's create-screen options stay
+    // broad; nightly is curated. recentMediums/recentVibes still apply for
+    // rotation across the eligible pool.
+    let nightlyMedium = await resolveMediumFromDb('dream_eligible', undefined, recentMediums);
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }
-    let nightlyVibe = await resolveVibeFromDb('my_vibes', nightlyProfile.aesthetics, recentVibes);
+    let nightlyVibe = await resolveVibeFromDb('dream_eligible', undefined, recentVibes);
     if (force_vibe) {
       nightlyVibe = await resolveVibeFromDb(force_vibe);
     }
@@ -637,8 +631,8 @@ Deno.serve(async (req) => {
                   : `THE MAIN CHARACTER (include these traits but STYLIZED — NOT photorealistic):\n${rc.promptDesc}`;
               }
               if (isDualFaceSwap) {
-                const side = i === 0 ? 'left of frame' : 'right of frame';
-                return `CHARACTER ${i + 1} (${side} — ${rc.role}):\n${rc.promptDesc}`;
+                const side = i === 0 ? 'LEFT SIDE OF FRAME' : 'RIGHT SIDE OF FRAME';
+                return `${side} (${rc.role} — locked to this side, do NOT swap):\n${rc.promptDesc}`;
               }
               return `CHARACTER ${i + 1} (${rc.role}):\n${rc.promptDesc}`;
             })
@@ -653,15 +647,47 @@ Deno.serve(async (req) => {
 
     const shortCastDesc = resolvedCast.length > 0 ? resolvedCast[0].promptDesc.split(',')[0] : null;
 
+    // ── Biome-driven axes + curated iconic anchor ─────────────────────
+    // ONE source of truth for: pillar (location identity) + axes (TIME /
+    // WEATHER / CAMERA / PHENOMENON). Used by all three composition
+    // branches: character, epic_tiny, pure_scene. For character path the
+    // pillar is the BACKDROP; for pure_scene the pillar IS the subject.
+    let iconicAnchor: string | null = null;
+    let biomeKey: string | null = null;
+    if (userPlace) {
+      const [{ data: spots }, { data: locCard }] = await Promise.all([
+        supabase
+          .from('location_iconic_spots')
+          .select('spot_text')
+          .eq('location_key', userPlace)
+          .eq('is_active', true)
+          .in('quality_tier', ['S', 'A']),
+        supabase.from('location_cards').select('biome').eq('name', userPlace).maybeSingle(),
+      ]);
+      if (spots && spots.length > 0) {
+        iconicAnchor = spots[Math.floor(Math.random() * spots.length)].spot_text;
+      }
+      biomeKey = locCard?.biome ?? null;
+    }
+    const biomeConfig = getBiomeConfig(biomeKey);
+    const pickAxis = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+    const timeAxis = pickAxis(biomeConfig.TIME);
+    const weatherAxis = pickAxis(biomeConfig.WEATHER);
+    const cameraAxis = pickAxis(biomeConfig.CAMERA);
+    const phenomenaAxis = pickAxis(biomeConfig.PHENOMENA);
+    console.log(
+      `[nightly-dreams] biome="${biomeKey || '(default)'}" anchor="${iconicAnchor || '(none)'}" composition=${composition} time="${timeAxis.split(' — ')[0]}"`
+    );
+
     let nightlyBrief: string;
 
     if (composition === 'character') {
       if (faceSwapEligible) {
         const faceLockPhrase = isDualFaceSwap
-          ? 'two people, three-quarter view, person on left side, person on right side, clear gap between them'
-          : 'three-quarter view, eyes and nose visible, no back view, no silhouette';
+          ? 'two people, three-quarter view to camera, both faces visible to camera, person on left side, person on right side, clear gap between them, NEITHER facing away, NEITHER from behind, NO back view, NO back of head, both heads turned toward camera'
+          : 'three-quarter view to camera, face visible to camera, eyes and nose visible, head turned toward camera, NO back view, NO back of head, NO silhouette, NOT facing away';
         const dualSepRule = isDualFaceSwap
-          ? '\n- Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.'
+          ? `\n- ━━━ ROLE-TO-SIDE LOCK (NON-NEGOTIABLE) ━━━\n- The FIRST cast member (${resolvedCast[0]?.role ?? 'self'}) MUST be on the LEFT half of the frame.\n- The SECOND cast member (${resolvedCast[1]?.role ?? 'plus_one'}) MUST be on the RIGHT half of the frame.\n- DO NOT swap their positions. Reversing breaks the face-swap pipeline (faces land on wrong bodies → gender swap disaster).\n- Clear ~2-3 ft gap between them. NO overlap across the midline.\n- BOTH at SAME VERTICAL HEIGHT — both standing OR both sitting OR both crouching. NEVER one tall + one short.\n- BOTH faces three-quarter to camera. NO back views. NO profiles. NO faces away.\n- Both heads at the SAME Y-axis line so the L/R crop captures each face cleanly.`
           : '';
         const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
@@ -698,13 +724,16 @@ STRUCTURE:
 5. CAMERA + MOOD (20% of words)
 6. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
-${dreamSubject}
+━━━ THE BACKDROP (NON-NEGOTIABLE) ━━━
+The character${isDualFaceSwap ? 's are' : ' is'} placed at this specific location: ${iconicAnchor || userPlace || 'the location'}
 
-SELECT AND SUBORDINATE (critical):
-- The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
-- A strong single image with harmonious supporting details beats a busy one with everything crammed in.
-- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
+This is the LOCKED BACKDROP. Do NOT substitute another feature of ${userPlace || 'the location'}. The backdrop must be RECOGNIZABLE as ${iconicAnchor || userPlace || 'the location'}.
+
+ATMOSPHERIC CONDITIONS (axes — apply ALL — these alter LIGHT, WEATHER, FRAMING, never the backdrop or characters):
+- TIME: ${timeAxis}
+- WEATHER: ${weatherAxis}
+- CAMERA: ${cameraAxis}
+- ATMOSPHERIC PHENOMENON: ${phenomenaAxis}
 
 MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
@@ -748,12 +777,16 @@ CRITICAL STRUCTURE — follow this order EXACTLY:
 4. CAMERA + MOOD (15-20 words)
 5. End with: no text, no words, no letters, no watermarks, ultra detailed
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
-${dreamSubject}
+━━━ THE BACKDROP (NON-NEGOTIABLE) ━━━
+The character${isDualCast ? 's are' : ' is'} placed at this specific location: ${iconicAnchor || userPlace || 'the location'}
 
-SELECT AND SUBORDINATE (critical):
-- The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
-- A strong single image with harmonious supporting details beats a busy one with everything crammed in.
+This is the LOCKED BACKDROP. Do NOT substitute another feature of ${userPlace || 'the location'}. The backdrop must be RECOGNIZABLE as ${iconicAnchor || userPlace || 'the location'}.
+
+ATMOSPHERIC CONDITIONS (axes — apply ALL):
+- TIME: ${timeAxis}
+- WEATHER: ${weatherAxis}
+- CAMERA: ${cameraAxis}
+- ATMOSPHERIC PHENOMENON: ${phenomenaAxis}
 
 CHARACTER${isDualCast ? 'S' : ''} IN THE SCENE:
 ${castDescBlock}
@@ -836,35 +869,53 @@ Output ONLY the prompt.`;
         castRoles: selectedCast.map((m) => m.role),
       };
     } else {
-      // ── Pure scene — no character, just breathtaking art ──
-      nightlyBrief = `You are a cinematographer composing a single breathtaking frame. Write a Flux AI prompt (60-90 words, comma-separated).
+      // ── Pure scene — uses upstream iconicAnchor + biomeConfig + axes ──
+      const banLines = biomeConfig.BANS.map((b) => `- ${b}`).join('\n');
+      nightlyBrief = `You are a cinematographer composing a JAW-DROPPING postcard of ${userPlace || 'the location'}. Write a Flux AI prompt (70-100 words, comma-separated).
+
+━━━ THE SUBJECT (NON-NEGOTIABLE) ━━━
+The render MUST depict: ${iconicAnchor || userPlace || 'the location'}
+
+This is the LOCKED SUBJECT of the image. Do NOT substitute another feature of ${userPlace || 'the location'} (no swapping in different cliffs, valleys, beaches, or landmarks). Do NOT add multiple competing iconic features. The image IS this specific view — render this view, enhanced and dramatized.
 
 MEDIUM: ${baseMedium.fluxFragment}
 
-DREAM SCENE${includeLocation && userPlace ? ` (set in ${userPlace} — this is the location, honor it)` : ''} — use as inspiration, SELECT and SUBORDINATE:
-${dreamSubject}
+SUBJECT FRAMING: ${biomeConfig.SUBJECT_RULE}
 
-SELECT AND SUBORDINATE (critical):
-- The DREAM SCENE contains many raw elements. Pick ONE dominant visual anchor. Pick 2-3 supporting details that harmonize with it. Discard anything that competes or clashes.
-- A strong single image with harmonious supporting details beats a busy one with everything crammed in.
-- If the scene lists icicles AND desert dunes AND cable cars — pick the ONE that fits the vibe and location, skip the others.
+VARIATION AXES (these layer ONTO the locked subject above — they alter LIGHT, ATMOSPHERE, and CAMERA ONLY, never the subject):
+- TIME: ${timeAxis}
+- WEATHER: ${weatherAxis}
+- CAMERA: ${cameraAxis}
+- ATMOSPHERIC PHENOMENON: ${phenomenaAxis}
 
-CAMERA/COMPOSITION: ${shotDirection}
-${entropyBlock}
-MOOD: ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
+ENHANCING LANGUAGE (mandatory):
+- DEFINED LIGHT SOURCE — name the light explicitly (direct sun, golden rim, sharp shadow play, glittering reflections, god-rays, etc.) — pick what fits the rolled WEATHER + TIME, not a default
+- LAYERED DEPTH — lush foreground anchor + dense midground + distant background
+- SATURATED COLOR — pigments cranked, sky vivid, foliage emerald, water cerulean
+- DENSE NATURAL DETAIL — every leaf, dewdrop, petal, fern, wet stone, blade catching light
+
+ATMOSPHERIC RULE — WEATHER axis is the SOLE source of truth for atmosphere. Render exactly the conditions specified by the rolled WEATHER. Do NOT add fog, mist, haze, god-rays, or atmospheric particles unless the WEATHER axis asks for them. Do NOT strip them if it does. WEATHER decides — full stop.
+
+MOOD (tone only — do NOT let mood words pull in new subjects/scenes):
+${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
 ${avoidList}
 
-Write the prompt:
-1. Start with the art medium
-2. Describe the EXACT scene — every surreal detail preserved
-3. NO PEOPLE. NO CHARACTERS. NO FIGURES. Pure environment.
-4. Name specific materials, textures, light sources (NOUNS not adjectives)
-5. End with: no text, no words, no letters, no watermarks, hyper detailed, masterwork composition
+ABSOLUTELY BANNED:
+${banLines}
+
+Render the LOCKED SUBJECT above, lit by the rolled TIME + WEATHER + PHENOMENON, framed by the rolled CAMERA. The image must NAME the locked subject explicitly in the prompt (e.g., "Nā Pali Coast emerald cliffs and Pacific surf, ..." not "Hawaiian rainforest canyon, ...").
+
+End with: no text, no words, no letters, no watermarks, hyper detailed, masterwork composition.
+
 Output ONLY the prompt.`;
       logAxes = {
         medium: nightlyMedium.key,
         vibe: nightlyVibe.key,
         engine: 'nightly-pure-scene',
+        biome: biomeKey || null,
+        anchor: iconicAnchor || null,
+        time: timeAxis.split(' — ')[0],
+        weather: weatherAxis.split(',')[0],
       };
     }
 
@@ -1001,6 +1052,14 @@ Output ONLY the prompt.`;
 
   // ── Post-pipeline: sanitize, generate, face swap, persist ──────────────
   finalPrompt = sanitizePrompt(finalPrompt);
+
+  // Force any bare "cave" reference to "lava cave" — generic caves drift
+  // toward dungeon/temple aesthetics. Lava caves anchor back to volcanic
+  // landscape (Hawaii lava tubes etc.). Negative lookbehind skips matches
+  // already prefixed with "lava ".
+  finalPrompt = finalPrompt.replace(/(?<!\blava\s)\bcaves?\b/gi, (m) =>
+    m.toLowerCase().endsWith('s') ? 'lava caves' : 'lava cave'
+  );
 
   const autoPicked = await pickModel('flux-dev', finalPrompt, resolvedMediumKey, resolvedVibeKey);
   const pickedModel = force_model || autoPicked.model;

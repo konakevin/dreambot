@@ -47,143 +47,72 @@ interface LocationSection {
   items: LocationItem[];
 }
 
-const LOCATION_SECTIONS: LocationSection[] = [
+// Section metadata (icons / titles / descriptions / order) lives in code
+// since it's pure UI presentation. The LIST OF LOCATIONS in each section
+// comes from location_cards.picker_category in the DB. Adding a new
+// location = INSERT a row with picker_category set; appears here on next
+// app load. No code change.
+interface SectionMeta {
+  id: string;
+  title: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  description: string;
+}
+const SECTION_META: SectionMeta[] = [
   {
     id: 'iconic_cities',
     title: 'Iconic Cities & Travel',
     icon: 'globe-outline',
     description: 'Famous destinations around the world',
-    items: [
-      { key: 'new york city', label: 'New York City' },
-      { key: 'tokyo', label: 'Tokyo' },
-      { key: 'paris', label: 'Paris' },
-      { key: 'venice', label: 'Venice' },
-      { key: 'london', label: 'London' },
-      { key: 'dubai', label: 'Dubai' },
-      { key: 'santorini', label: 'Santorini' },
-      { key: 'hong kong', label: 'Hong Kong' },
-      { key: 'rome', label: 'Rome' },
-      { key: 'los angeles', label: 'Los Angeles' },
-      { key: 'miami', label: 'Miami' },
-      { key: 'san francisco', label: 'San Francisco' },
-      { key: 'barcelona', label: 'Barcelona' },
-      { key: 'rio de janeiro', label: 'Rio de Janeiro' },
-      { key: 'seoul', label: 'Seoul' },
-      { key: 'las vegas', label: 'Las Vegas' },
-    ],
   },
   {
     id: 'tropical',
     title: 'Tropical Escapes',
     icon: 'sunny-outline',
     description: 'Crystal waters and island paradise',
-    items: [
-      { key: 'hawaii', label: 'Hawaii' },
-      { key: 'maldives', label: 'Maldives' },
-      { key: 'bali', label: 'Bali' },
-      { key: 'caribbean island', label: 'Caribbean Island' },
-      { key: 'costa rica', label: 'Costa Rica' },
-      { key: 'bora bora tahiti', label: 'Bora Bora / Tahiti' },
-    ],
   },
   {
-    id: 'ancient',
+    id: 'ancient_wonders',
     title: 'Ancient Wonders',
     icon: 'trophy-outline',
-    description: 'Monuments and ruins of lost civilizations',
-    items: [
-      { key: 'ancient egypt', label: 'Ancient Egypt' },
-      { key: 'machu picchu', label: 'Machu Picchu' },
-      { key: 'angkor wat', label: 'Angkor Wat' },
-      { key: 'ancient rome', label: 'Ancient Rome' },
-      { key: 'petra', label: 'Petra' },
-      { key: 'taj mahal', label: 'Taj Mahal' },
-      { key: 'great wall of china', label: 'Great Wall of China' },
-      { key: 'stonehenge', label: 'Stonehenge' },
-    ],
+    description: 'Iconic monuments and ruins from across the ancient world',
   },
   {
     id: 'epic_nature',
     title: 'Epic Nature',
     icon: 'leaf-outline',
     description: 'Mountains, canyons, and wild landscapes',
-    items: [
-      { key: 'yosemite', label: 'Yosemite' },
-      { key: 'moab arches', label: 'Moab / Arches' },
-      { key: 'swiss alps', label: 'Swiss Alps' },
-      { key: 'iceland', label: 'Iceland' },
-      { key: 'canadian rockies', label: 'Canadian Rockies' },
-      { key: 'grand canyon', label: 'Grand Canyon' },
-      { key: 'zion national park', label: 'Zion National Park' },
-      { key: 'redwood forest', label: 'Redwood Forest' },
-      { key: 'amazon rainforest', label: 'Amazon Rainforest' },
-      { key: 'arctic wilderness', label: 'Arctic Wilderness' },
-      { key: 'sahara desert', label: 'Sahara Desert' },
-      { key: 'big sur cliffs', label: 'Big Sur Cliffs' },
-    ],
   },
   {
     id: 'scifi',
     title: 'Sci-Fi / Futuristic',
     icon: 'rocket-outline',
     description: 'Space stations, megacities, and alien worlds',
-    items: [
-      { key: 'alien planet', label: 'Alien Planet' },
-      { key: 'cyberpunk megacity', label: 'Cyberpunk Megacity' },
-      { key: 'space station', label: 'Space Station' },
-      { key: 'mars colony', label: 'Mars Colony' },
-    ],
   },
   {
     id: 'fantasy',
     title: 'Fantasy & Magical Realms',
     icon: 'sparkles-outline',
     description: 'Enchanted worlds and mythical places',
-    items: [
-      { key: 'enchanted forest', label: 'Enchanted Forest' },
-      { key: 'floating sky islands', label: 'Floating Sky Islands' },
-      { key: 'wizard academy', label: 'Wizard Academy' },
-      { key: 'underwater city atlantis', label: 'Underwater City (Atlantis)' },
-      { key: 'ancient elven city', label: 'Ancient Elven City' },
-      { key: 'dwarven fortress', label: 'Dwarven Fortress' },
-      { key: 'dragons keep', label: "Dragon's Keep" },
-      { key: 'crystal caverns', label: 'Crystal Caverns' },
-      { key: 'cloud kingdom', label: 'Cloud Kingdom' },
-      { key: 'fairy tale kingdom', label: 'Fairy Tale Kingdom' },
-    ],
   },
   {
     id: 'cozy',
     title: 'Cozy / Aesthetic Worlds',
     icon: 'heart-outline',
     description: 'Romantic, soft, and beautiful spaces',
-    items: [
-      { key: 'paris cafe', label: 'Paris Caf\u00e9' },
-      { key: 'cherry blossoms', label: 'Cherry Blossoms' },
-      { key: 'japanese garden', label: 'Japanese Garden' },
-      { key: 'fairy cottage', label: 'Fairy Cottage' },
-      { key: 'princess garden castle', label: 'Princess Garden Castle' },
-      { key: 'rose palace', label: 'Rose Palace' },
-    ],
   },
   {
     id: 'gothic',
     title: 'Gothic / Cinematic Mood',
     icon: 'moon-outline',
     description: 'Dark atmosphere and dramatic settings',
-    items: [
-      { key: 'victorian london', label: 'Victorian London' },
-      { key: 'transylvania', label: 'Transylvania' },
-      { key: 'haunted cathedral', label: 'Haunted Cathedral' },
-      { key: 'noir cityscape', label: 'Noir Cityscape' },
-    ],
   },
 ];
 
 const SECTION_COLORS: Record<string, { gradient: [string, string]; tint: string }> = {
   iconic_cities: { gradient: ['#DC2626', '#7F1D1D'], tint: 'rgba(220,38,38,0.45)' },
   tropical: { gradient: ['#EA580C', '#7C2D12'], tint: 'rgba(234,88,12,0.45)' },
-  ancient: { gradient: ['#CA8A04', '#713F12'], tint: 'rgba(202,138,4,0.45)' },
+  ancient_wonders: { gradient: ['#CA8A04', '#713F12'], tint: 'rgba(202,138,4,0.45)' },
   epic_nature: { gradient: ['#16A34A', '#14532D'], tint: 'rgba(22,163,74,0.45)' },
   scifi: { gradient: ['#0891B2', '#083344'], tint: 'rgba(8,145,178,0.45)' },
   cozy: { gradient: ['#4F46E5', '#1E1B4B'], tint: 'rgba(79,70,229,0.45)' },
@@ -260,22 +189,44 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
   const isEditing = useOnboardingStore((st) => st.isEditing);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
+  const [sections, setSections] = useState<LocationSection[]>([]);
 
   const canProceed = places.length >= MIN_REQUIRED;
   const atMax = places.length >= (isEditing ? 25 : MAX_ONBOARDING);
 
+  // Load locations from DB (location_cards). Group by picker_category,
+  // sort by picker_sort_order. Section icons + titles + descriptions
+  // come from SECTION_META; the location list itself is fully DB-driven.
   useEffect(() => {
     supabase
       .from('location_cards')
-      .select('name, thumbnail_url')
-      .not('thumbnail_url', 'is', null)
+      .select('name, display_name, picker_category, picker_sort_order, thumbnail_url')
+      .eq('is_approved', true)
+      .not('picker_category', 'is', null)
+      .order('picker_sort_order')
       .then(({ data }) => {
         if (!data) return;
-        const map = new Map<string, string>();
+        const thumbMap = new Map<string, string>();
+        const byCategory = new Map<string, LocationItem[]>();
         for (const row of data) {
-          if (row.thumbnail_url) map.set(row.name, row.thumbnail_url);
+          if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
+          if (!row.picker_category) continue;
+          const items = byCategory.get(row.picker_category) ?? [];
+          items.push({ key: row.name, label: row.display_name ?? row.name });
+          byCategory.set(row.picker_category, items);
         }
-        setThumbnails(map);
+        // Build section list in the order defined by SECTION_META
+        const built: LocationSection[] = SECTION_META.filter((m) => byCategory.has(m.id)).map(
+          (m) => ({
+            id: m.id,
+            title: m.title,
+            icon: m.icon,
+            description: m.description,
+            items: byCategory.get(m.id) ?? [],
+          })
+        );
+        setSections(built);
+        setThumbnails(thumbMap);
       });
   }, []);
 
@@ -312,7 +263,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           </Text>
         </View>
 
-        {LOCATION_SECTIONS.map((section) => {
+        {sections.map((section) => {
           const isExpanded = expandedSections.has(section.id);
           const visibleItems =
             isExpanded || section.items.length <= TILES_COLLAPSED
