@@ -102,7 +102,12 @@ export const useAuthStore = create<AuthState>((set) => ({
         });
     };
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session }, error }) => {
+      if (error?.message?.toLowerCase().includes('refresh token')) {
+        await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+        set({ session: null, user: null, initialized: true });
+        return;
+      }
       set({ session, user: session?.user ?? null, initialized: true });
       if (session?.user) checkEntitlements(session.user.id);
     });

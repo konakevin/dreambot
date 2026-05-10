@@ -12,10 +12,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image as ExpoImage } from 'expo-image';
+import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
+import { useAuthStore } from '@/store/auth';
 import { PostTile } from '@/components/PostTile';
 import { useAlbumStore } from '@/store/album';
 import { GridSkeleton } from '@/components/Skeleton';
@@ -71,6 +73,27 @@ export function PostGrid({
   const dreamsQuery = useMyDreams();
 
   const activeQuery = isOwn_ ? ownQuery : isSaved ? savedQuery : isDreams ? dreamsQuery : userQuery;
+
+  // Pull-to-refresh on an infinite query refetches EVERY loaded page in
+  // sequence (TanStack Query v5 removed the per-page `refetchPage` opt).
+  // After scrolling deep, that's 5+ sequential round-trips. Trim the
+  // cache to the first page before refetching so the refresh is one
+  // round-trip — the user keeps scroll position, deeper pages reload as
+  // they re-scroll into view.
+  const queryClient = useQueryClient();
+  const authUserId = useAuthStore((s) => s.user?.id);
+  const activeQueryKey = useMemo(() => {
+    if (isOwn_) return ['userPosts', authUserId];
+    if (isSaved) return ['favoritePosts', authUserId];
+    if (isDreams) return ['my-dreams', authUserId];
+    return ['publicProfilePosts', userId];
+  }, [isOwn_, isSaved, isDreams, userId, authUserId]);
+  const handleRefresh = useCallback(() => {
+    queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
+      old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old
+    );
+    activeQuery.refetch();
+  }, [queryClient, activeQueryKey, activeQuery]);
 
   const posts: DreamPostItem[] = useMemo(
     () => activeQuery.data?.pages.flatMap((p) => p.rows) ?? [],
@@ -298,7 +321,7 @@ export function PostGrid({
         refreshControl={
           <RefreshControl
             refreshing={activeQuery.isRefetching && !isFetchingNextPage}
-            onRefresh={() => activeQuery.refetch()}
+            onRefresh={handleRefresh}
             tintColor="#fff"
           />
         }
