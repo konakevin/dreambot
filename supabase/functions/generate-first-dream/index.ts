@@ -29,16 +29,8 @@ import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
 import { getLocationCard } from '../_shared/essenceCards.ts';
-import { callSonnet } from '../_shared/llm.ts';
-import { sanitizePrompt } from '../_shared/sanitize.ts';
-import { pickModel } from '../_shared/modelPicker.ts';
-import { generateImage } from '../_shared/generateImage.ts';
-import { faceSwap } from '../_shared/faceSwap.ts';
-import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
-import { persistToStorage } from '../_shared/persistence.ts';
-import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import {
@@ -49,11 +41,7 @@ import {
   rollIncludeObject,
   FirstDreamCastInput,
 } from '../_shared/firstDreamPicker.ts';
-import {
-  PERSONA_COMPOSITION,
-  FIRST_DREAM_BANNED_PHRASES,
-  FirstDreamPersona,
-} from '../_shared/firstDream.ts';
+import { PERSONA_COMPOSITION, FirstDreamPersona } from '../_shared/firstDream.ts';
 
 interface RequestBody {
   /** Test mode — bypass one-shot guard */
@@ -493,158 +481,61 @@ Write the prompt:
 Output ONLY the prompt.`;
   }
 
-  // ── Sonnet → Flux prompt ───────────────────────────────────────────────
-  let finalPrompt: string;
-  let sonnetBrief: string | null = null;
-  let sonnetRawResponse: string | null = null;
-  const fallbackReasons: string[] = [];
-  try {
-    const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY!, isDualFaceSwap ? 350 : 300);
-    sonnetBrief = sonnet.brief;
-    sonnetRawResponse = sonnet.rawResponse;
-    if (sonnet.text.length < 20) throw new Error('too short');
-    finalPrompt = sonnet.text;
-  } catch (err) {
-    fallbackReasons.push(`first_dream_sonnet_failed:${(err as Error).message}`);
-    finalPrompt = `${baseMedium.fluxFragment}, ${dreamSubject.slice(0, 400)}, ${vibe.directive?.split('.')[0] ?? 'dramatic atmosphere'}, no text, hyper detailed`;
-  }
+  // ── Enqueue the heavy work for the worker ─────────────────────────────
+  // We've built the brief synchronously (cheap — no API calls except the
+  // optional one-time location card lookup). The worker handles Sonnet,
+  // Flux, face swap, and persist — at its own pace, without the user's
+  // 150 MB / 2 s budget. Returning <500 ms after enqueue.
+  const queuePayload = {
+    persona,
+    medium_key: medium.key,
+    vibe_key: vibe.key,
+    composition,
+    composition_mode: compositionMode,
+    sonnet_brief: nightlyBrief,
+    is_dual_face_swap: isDualFaceSwap,
+    face_swap_eligible: faceSwapEligible,
+    user_place: userPlace ?? null,
+    user_thing: userThing ?? null,
+    cast: selectedCast.map((c) => ({
+      role: c.role,
+      thumb_url: c.thumb_url,
+      description: c.description ?? '',
+      gender: c.gender,
+    })),
+    medium_pick_reason: mediumPick.reason,
+    vibe_pick_reason: vibePick.reason,
+    recipe_snapshot: { vibe_profile: profile },
+  };
 
-  // Force location to appear in final prompt
-  if (userPlace && !finalPrompt.toLowerCase().includes(userPlace.toLowerCase())) {
-    finalPrompt = `set in ${userPlace}, ${finalPrompt}`;
-  }
-
-  // Banned-phrase scrub
-  for (const bad of FIRST_DREAM_BANNED_PHRASES) {
-    const re = new RegExp(`\\b${bad}\\b`, 'gi');
-    finalPrompt = finalPrompt.replace(re, '');
-  }
-
-  finalPrompt = sanitizePrompt(finalPrompt);
-
-  // ── Flux render ────────────────────────────────────────────────────────
-  const picked = await pickModel('flux-dev', finalPrompt, baseMedium.key, vibe.key);
-  const renderModel = picked.model;
-  let imageUrl: string;
-  let replicatePredictionId: string | null = null;
-  try {
-    const genResult = await generateImage(
-      'flux-dev',
-      finalPrompt,
-      undefined,
-      REPLICATE_TOKEN,
-      renderModel
-    );
-    imageUrl = genResult.url;
-    replicatePredictionId = genResult.predictionId ?? null;
-  } catch (err) {
-    return new Response(JSON.stringify({ error: 'flux_failed', detail: (err as Error).message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // ── Face swap (if applicable) ──────────────────────────────────────────
-  let tempUrl = imageUrl;
-  let faceSwapResult: 'none' | 'single-success' | 'dual-success' | 'failed' = 'none';
-  if (isDualFaceSwap && selectedCast.length === 2) {
-    const left = selectedCast[0].thumb_url;
-    const right = selectedCast[1].thumb_url;
-    if (left && right) {
-      try {
-        tempUrl = await dispatchDualFaceSwap(
-          left,
-          right,
-          tempUrl,
-          REPLICATE_TOKEN,
-          supabase,
-          userId
-        );
-        faceSwapResult = 'dual-success';
-      } catch (err) {
-        fallbackReasons.push(`first_dream_dual_swap_failed:${(err as Error).message}`);
-        faceSwapResult = 'failed';
-      }
-    }
-  } else if (faceSwapEligible && selectedCast.length === 1 && selectedCast[0].thumb_url) {
-    try {
-      tempUrl = await faceSwap(
-        selectedCast[0].thumb_url,
-        tempUrl,
-        REPLICATE_TOKEN,
-        supabase,
-        userId
-      );
-      faceSwapResult = 'single-success';
-    } catch (err) {
-      fallbackReasons.push(`first_dream_swap_failed:${(err as Error).message}`);
-      faceSwapResult = 'failed';
-    }
-  }
-
-  // ── Persist + mark first_dream_completed_at ───────────────────────────
-  const persistedUrl = await persistToStorage(tempUrl, userId, supabase);
-  const { data: uploadRow } = await supabase
-    .from('uploads')
+  const { data: queueRow, error: queueErr } = await supabase
+    .from('dream_queue')
     .insert({
       user_id: userId,
-      image_url: persistedUrl,
-      ai_prompt: finalPrompt,
-      dream_medium: medium.key,
-      dream_vibe: vibe.key,
-      is_ai_generated: true,
-      is_approved: true,
-      is_posted: true,
-      first_dream: true,
+      source: 'first_dream',
+      payload: queuePayload,
     })
-    .select('id')
+    .select('id, status, created_at')
     .single();
 
-  await supabase
-    .from('users')
-    .update({ first_dream_completed_at: new Date().toISOString() })
-    .eq('id', userId);
-
-  await insertGenerationLog(supabase, {
-    user_id: userId,
-    recipe_snapshot: { vibe_profile: profile },
-    enhanced_prompt: finalPrompt,
-    rolled_axes: {
-      engine: 'first-dream-banger',
-      persona,
-      medium: medium.key,
-      vibe: vibe.key,
-      compositionMode,
-      composition,
-      includeObject,
-      userPlace,
-      userThing,
-      faceSwapResult,
-      mediumPickReason: mediumPick.reason,
-      vibePickReason: vibePick.reason,
-      uploadId: uploadRow?.id ?? null,
-    },
-    sonnet_brief: sonnetBrief,
-    sonnet_raw_response: sonnetRawResponse,
-    vision_description: null,
-    fallback_reasons: fallbackReasons,
-    replicate_prediction_id: replicatePredictionId,
-    model_used: renderModel,
-    cost_cents: 5,
-    status: 'completed',
-  });
+  if (queueErr || !queueRow) {
+    return new Response(
+      JSON.stringify({ error: 'enqueue_failed', detail: queueErr?.message ?? 'no row returned' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 
   return new Response(
     JSON.stringify({
-      upload_id: uploadRow?.id,
-      image_url: persistedUrl,
+      dream_id: queueRow.id,
+      status: queueRow.status,
+      created_at: queueRow.created_at,
       persona,
       medium: medium.key,
       vibe: vibe.key,
       composition,
       composition_mode: compositionMode,
-      face_swap_result: faceSwapResult,
     }),
-    { status: 200, headers: { 'Content-Type': 'application/json' } }
+    { status: 202, headers: { 'Content-Type': 'application/json' } }
   );
 });
