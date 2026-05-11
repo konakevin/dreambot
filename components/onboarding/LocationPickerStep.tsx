@@ -61,9 +61,9 @@ interface SectionMeta {
 const SECTION_META: SectionMeta[] = [
   {
     id: 'iconic_cities',
-    title: 'Iconic Cities & Travel',
+    title: 'Cities & Countries',
     icon: 'globe-outline',
-    description: 'Famous destinations around the world',
+    description: 'Famous cities and country-wide destinations',
   },
   {
     id: 'tropical',
@@ -72,52 +72,24 @@ const SECTION_META: SectionMeta[] = [
     description: 'Crystal waters and island paradise',
   },
   {
-    id: 'ancient_wonders',
-    title: 'Ancient Wonders',
-    icon: 'trophy-outline',
-    description: 'Iconic monuments and ruins from across the ancient world',
-  },
-  {
     id: 'epic_nature',
     title: 'Epic Nature',
     icon: 'leaf-outline',
     description: 'Mountains, canyons, and wild landscapes',
   },
   {
-    id: 'scifi',
-    title: 'Sci-Fi / Futuristic',
-    icon: 'rocket-outline',
-    description: 'Space stations, megacities, and alien worlds',
-  },
-  {
-    id: 'fantasy',
-    title: 'Fantasy & Magical Realms',
+    id: 'fantasy_worlds',
+    title: 'Fantasy Worlds',
     icon: 'sparkles-outline',
-    description: 'Enchanted worlds and mythical places',
-  },
-  {
-    id: 'cozy',
-    title: 'Cozy / Aesthetic Worlds',
-    icon: 'heart-outline',
-    description: 'Romantic, soft, and beautiful spaces',
-  },
-  {
-    id: 'gothic',
-    title: 'Gothic / Cinematic Mood',
-    icon: 'moon-outline',
-    description: 'Dark atmosphere and dramatic settings',
+    description: 'Enchanted, gothic, and storybook places',
   },
 ];
 
 const SECTION_COLORS: Record<string, { gradient: [string, string]; tint: string }> = {
   iconic_cities: { gradient: ['#DC2626', '#7F1D1D'], tint: 'rgba(220,38,38,0.45)' },
   tropical: { gradient: ['#EA580C', '#7C2D12'], tint: 'rgba(234,88,12,0.45)' },
-  ancient_wonders: { gradient: ['#CA8A04', '#713F12'], tint: 'rgba(202,138,4,0.45)' },
   epic_nature: { gradient: ['#16A34A', '#14532D'], tint: 'rgba(22,163,74,0.45)' },
-  scifi: { gradient: ['#0891B2', '#083344'], tint: 'rgba(8,145,178,0.45)' },
-  cozy: { gradient: ['#4F46E5', '#1E1B4B'], tint: 'rgba(79,70,229,0.45)' },
-  fantasy: { gradient: ['#2563EB', '#1E3A5F'], tint: 'rgba(37,99,235,0.45)' },
-  gothic: { gradient: ['#7C3AED', '#3B0764'], tint: 'rgba(124,58,237,0.45)' },
+  fantasy_worlds: { gradient: ['#8B5CF6', '#3B0764'], tint: 'rgba(139,92,246,0.45)' },
 };
 
 interface Props {
