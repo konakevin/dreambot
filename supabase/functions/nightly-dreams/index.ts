@@ -152,7 +152,7 @@ Deno.serve(async (req) => {
   let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined;
   let faceSwapSources: Array<{ role: string; sourceUrl: string }> | undefined;
-  let finalPrompt: string;
+  let finalPrompt: string = '';
   // Hoisted face-swap-character flag so the post-try model picker can branch
   // on it. Set true for BOTH single and dual face-swap renders (humans only —
   // pets stay on the legacy freeform path). Inner block-scoped flags
