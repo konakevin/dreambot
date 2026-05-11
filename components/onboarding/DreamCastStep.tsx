@@ -4,7 +4,7 @@
  * is used in dreams forever (no per-dream image processing cost).
  */
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -77,7 +77,22 @@ function CastSlot({
   uploading: CastRole | null;
 }) {
   const isUploading = uploading === config.role;
+  // Disable ALL upload buttons whenever ANY upload is in flight — parallel
+  // uploads can race and leave one cast member with a half-broken state
+  // (thumb_url set, description empty) if describe-photo errors.
+  const anyUploading = uploading !== null;
   const showRelationship = config.role === 'plus_one' && member;
+  // A cast member is "complete" only when describe-photo populated everything
+  // we need: a real description, gender, and (for people) age. Without these
+  // dual face-swap renders silently degrade. Surface the failure clearly so
+  // the user re-uploads instead of trusting a fake "Ready for dreams".
+  const isPet = config.role === 'pet';
+  const isComplete = !!(
+    member &&
+    member.description &&
+    member.description.length >= 20 &&
+    (isPet || (member.gender && typeof member.age === 'number'))
+  );
 
   return (
     <View style={s.slotCard}>
@@ -123,9 +138,20 @@ function CastSlot({
               )}
             </View>
             <View style={s.uploadedInfo}>
-              <Text style={s.uploadedCheck}>
-                {isUploading ? 'Analyzing...' : 'Ready for dreams'}
-              </Text>
+              {isUploading ? (
+                <Text style={s.uploadedCheck}>Analyzing...</Text>
+              ) : isComplete ? (
+                <Text style={s.uploadedCheck}>Ready for dreams</Text>
+              ) : (
+                <>
+                  <Text style={[s.uploadedCheck, { color: colors.like }]}>
+                    Couldn&apos;t analyze this photo
+                  </Text>
+                  <Text style={[s.slotTip, { marginTop: 4 }]}>
+                    Tap the X to try again, or try a different photo.
+                  </Text>
+                </>
+              )}
             </View>
             {!isUploading && (
               <TouchableOpacity
@@ -167,9 +193,9 @@ function CastSlot({
         </>
       ) : (
         <TouchableOpacity
-          style={s.uploadButton}
+          style={[s.uploadButton, anyUploading && !isUploading ? { opacity: 0.4 } : null]}
           onPress={() => onUpload(config.role)}
-          disabled={isUploading}
+          disabled={anyUploading}
           activeOpacity={0.7}
         >
           {isUploading ? (
@@ -193,10 +219,47 @@ export function DreamCastStep({ onNext, onBack }: Props) {
   const removeCastMember = useOnboardingStore((s) => s.removeCastMember);
   const user = useAuthStore((s) => s.user);
   const [uploading, setUploading] = useState<CastRole | null>(null);
+  const validatedOnceRef = useRef(false);
 
   function getMember(role: CastRole): DreamCastMember | undefined {
     return dreamCast.find((m) => m.role === role);
   }
+
+  // Load-time validation: scan cast members and clean up any with a thumb
+  // but missing description / gender / age. Runs once on mount. Without
+  // this, users carrying stale records from before the AGE field — or who
+  // hit a describe-photo failure — would see "Ready for dreams" while
+  // every face-swap render silently uses fallback data. Auto-removing the
+  // broken record forces a re-upload, which is the only fix.
+  useEffect(() => {
+    if (validatedOnceRef.current) return;
+    validatedOnceRef.current = true;
+    let removedAny = false;
+    for (const m of dreamCast) {
+      if (!m.thumb_url || !m.thumb_url.startsWith('http')) continue;
+      const isPet = m.role === 'pet';
+      const ok =
+        m.description &&
+        m.description.length >= 20 &&
+        (isPet || (m.gender && typeof m.age === 'number'));
+      if (!ok) {
+        if (__DEV__)
+          console.warn(
+            `[DreamCast] removing incomplete cast (${m.role}): desc=${m.description?.length ?? 0} gender=${m.gender ?? 'none'} age=${m.age ?? 'none'}`
+          );
+        removeCastMember(m.role);
+        removedAny = true;
+      }
+    }
+    if (removedAny) {
+      showAlert(
+        'Re-upload needed',
+        "We couldn't fully analyze one of your photos. Try uploading it again, or try a different photo.",
+        [{ text: 'OK' }]
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleRelationship(rel: CastRelationship) {
     const member = getMember('plus_one');
@@ -251,18 +314,22 @@ export function DreamCastStep({ onNext, onBack }: Props) {
       } = await supabase.auth.getSession();
       if (!session?.access_token) throw new Error('No session');
 
-      const descRes = await fetch(
-        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`,
-        {
+      // Call describe-photo with 1 retry on 5xx (Haiku flakiness / mid-deploy)
+      const describeOnce = async () =>
+        fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ image_url: publicUrl, role }),
-        }
-      );
-
+        });
+      let descRes = await describeOnce();
+      if (!descRes.ok && descRes.status >= 500) {
+        if (__DEV__) console.warn(`[DreamCast] describe-photo ${descRes.status}, retrying once...`);
+        await new Promise((r) => setTimeout(r, 1500));
+        descRes = await describeOnce();
+      }
       if (!descRes.ok) throw new Error(`describe-photo failed: ${descRes.status}`);
       const descData = await descRes.json();
 
@@ -290,6 +357,7 @@ export function DreamCastStep({ onNext, onBack }: Props) {
         thumb_url: publicUrl,
         description: descData.description,
         ...(descData.gender ? { gender: descData.gender } : {}),
+        ...(typeof descData.age === 'number' ? { age: descData.age } : {}),
         ...(descData.physical_summary ? { physical_summary: descData.physical_summary } : {}),
         ...(current?.relationship ? { relationship: current.relationship } : {}),
       });
@@ -302,23 +370,17 @@ export function DreamCastStep({ onNext, onBack }: Props) {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (__DEV__) console.error('[DreamCast] UPLOAD FAILED for', role, ':', msg);
-      // NEVER persist a local file:// URI as thumb_url — it's not accessible
-      // from the server and silently breaks face-swap downstream. If the
-      // storage upload succeeded but the describe call failed, the publicUrl
-      // is already in the store from the line 241-246 setCastMember above —
-      // leave it alone and let the Edge Function describe via Llama Vision
-      // at render time. If storage upload itself failed, drop the cast
-      // member so the user re-uploads instead of saving a half-broken state.
-      const hasUploadedThumb = !!getMember(role)?.thumb_url?.startsWith('http');
-      if (!hasUploadedThumb) {
-        removeCastMember(role);
-      }
+      // ALWAYS remove the cast member on failure. We used to keep the thumb
+      // around hoping Llama Vision would describe at render time — but nothing
+      // re-describes downstream, so the result was a broken half-state
+      // (thumb_url present, description empty, age missing) that silently
+      // corrupted every future face-swap render. Better to force the user to
+      // re-upload than ship corrupted state.
+      removeCastMember(role);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       showAlert(
-        'Upload had an issue',
-        hasUploadedThumb
-          ? "We saved your photo but couldn't analyze it right now. We'll try again when your dream renders."
-          : "We couldn't upload that photo. Please try again with a different photo or check your connection.",
+        "Couldn't analyze that photo",
+        'Try again, or try a different photo. Clear, well-lit shots work best.',
         [{ text: 'OK' }]
       );
     } finally {

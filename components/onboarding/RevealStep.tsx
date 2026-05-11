@@ -112,6 +112,7 @@ export function RevealStep({ onBack }: Props) {
             ...member,
             description: data.description ?? '',
             ...(data.gender ? { gender: data.gender } : {}),
+            ...(typeof data.age === 'number' ? { age: data.age } : {}),
             ...(data.physical_summary ? { physical_summary: data.physical_summary } : {}),
           };
         } catch (err) {

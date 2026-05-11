@@ -47,13 +47,23 @@ Deno.serve(async (req: Request) => {
     const prompt = role === 'pet' ? VISION_PROMPTS.castPet : VISION_PROMPTS.castPerson;
     const rawDescription = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 400);
 
-    // Split TRAITS: line from the description
+    // Split AGE: and TRAITS: lines from the description
     let mainText = rawDescription;
     let physicalSummary = '';
+    let age: number | null = null;
+    const ageMatch = rawDescription.match(/\n\s*AGE:\s*(\d{1,3})\b/i);
+    if (ageMatch) {
+      const n = parseInt(ageMatch[1], 10);
+      if (Number.isFinite(n) && n >= 1 && n <= 120) age = n;
+    }
     const traitsMatch = rawDescription.match(/\n\s*TRAITS:\s*(.+)/i);
     if (traitsMatch) {
       physicalSummary = traitsMatch[1].trim();
-      mainText = rawDescription.slice(0, traitsMatch.index).trim();
+    }
+    // mainText = everything before the first AGE: or TRAITS: line
+    const firstStructuredMatch = rawDescription.match(/\n\s*(?:AGE|TRAITS):/i);
+    if (firstStructuredMatch && firstStructuredMatch.index !== undefined) {
+      mainText = rawDescription.slice(0, firstStructuredMatch.index).trim();
     }
 
     // Extract gender from the "Male:" / "Female:" prefix and strip it from the description
@@ -81,13 +91,16 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    console.log(`[describe-photo] ${role} (${gender ?? 'pet'}):`, description.slice(0, 120));
+    console.log(
+      `[describe-photo] ${role} (${gender ?? 'pet'}, age=${age ?? '?'}):`,
+      description.slice(0, 120)
+    );
     if (physicalSummary) {
       console.log(`[describe-photo] traits: ${physicalSummary}`);
     }
 
     return new Response(
-      JSON.stringify({ description, gender, physical_summary: physicalSummary || null }),
+      JSON.stringify({ description, gender, age, physical_summary: physicalSummary || null }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },

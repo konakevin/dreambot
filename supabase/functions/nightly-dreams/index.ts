@@ -40,10 +40,12 @@ import {
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
+import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { generateSceneDescription } from '../_shared/sceneDescription.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
+import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -151,6 +153,16 @@ Deno.serve(async (req) => {
   let faceSwapSource: string | undefined;
   let faceSwapSources: Array<{ role: string; sourceUrl: string }> | undefined;
   let finalPrompt: string;
+  // Hoisted face-swap-character flag so the post-try model picker can branch
+  // on it. Set true for BOTH single and dual face-swap renders (humans only —
+  // pets stay on the legacy freeform path). Inner block-scoped flags
+  // (isDualFaceSwap, isSingleCharacter) are computed in the outer try.
+  let isFaceSwapCharacterOuter = false;
+  // Pre-decided model for the face-swap-character path (rolled inside the
+  // try block so we can override the medium fragment for flux-1.1-pro before
+  // the slot pipeline runs). Hoisted so the post-try image-gen step uses
+  // the same model.
+  let faceSwapPrePickedModel: string | null = null;
 
   // Budget tracking
   const today = new Date().toISOString().slice(0, 10);
@@ -335,6 +347,31 @@ Deno.serve(async (req) => {
       includeLocation,
       includeObject,
     } = dreamRoll;
+    // Character renders MUST be stylized art mediums — realistic mediums
+    // (hyperreal / render / photography) push Flux into "generic adult"
+    // proportions (older + bulkier + wrong hair) that fight every face-swap
+    // axis we set. The stylization is what lets face swap land cleanly on
+    // top of a rendered character. Scene-only renders still allow realistic
+    // mediums; this ban is character-path only.
+    const REALISTIC_BANNED_FOR_CHARACTER = new Set(['hyperreal', 'render', 'photography']);
+    if (
+      composition === 'character' &&
+      !force_medium &&
+      REALISTIC_BANNED_FOR_CHARACTER.has(nightlyMedium.key)
+    ) {
+      const oldKey = nightlyMedium.key;
+      nightlyMedium = await resolveMediumFromDb(
+        'dream_eligible_face_swap',
+        undefined,
+        recentMediums
+      );
+      baseMedium = nightlyMedium;
+      resolvedMediumKey = nightlyMedium.key;
+      console.log(
+        `[nightly-dreams] character path: re-rolled realistic medium '${oldKey}' -> stylized '${nightlyMedium.key}'`
+      );
+    }
+
     const castPick = selectedCast.length > 0 ? (selectedCast[0] as DreamCastMember) : null;
     console.log(
       '[nightly-dreams] Dream roll:',
@@ -494,6 +531,15 @@ Deno.serve(async (req) => {
     const faceSwapEligible =
       isCharacterDream && nightlyMedium.faceSwaps && renderMode === 'natural';
     const isDualFaceSwap = faceSwapEligible && selectedCast.length === 2;
+    // Single human face swap = single cast, face-swap-eligible medium, and the
+    // cast member is a human (not a pet — pets stay on the legacy freeform
+    // brief because the slot pipeline assumes human gender/age/build).
+    const isSingleHumanFaceSwap =
+      faceSwapEligible && selectedCast.length === 1 && selectedCast[0]?.role !== 'pet';
+    // Both single human and dual humans run through the unified character
+    // slot pipeline + share the model rotation + override library.
+    const isFaceSwapCharacter = isDualFaceSwap || isSingleHumanFaceSwap;
+    isFaceSwapCharacterOuter = isFaceSwapCharacter;
 
     // Override flux fragment + directive for stylized mediums during face
     // swap — front-loads "realistic human face" so cdingram's swap doesn't
@@ -501,11 +547,53 @@ Deno.serve(async (req) => {
     // (face_swap_directive + face_swap_flux_fragment) — see migration 154
     // and _shared/faceSwapFluxOverrides.ts. No-op when the medium has no
     // override columns set.
+    // Per-medium face-swap override: replaces flux_fragment with one that
+    // has explicit "NOT cartoon eyes / NOT anime eyes / NOT Disney princess"
+    // language for stylized mediums (anime, fairytale). Without this, Flux
+    // pulls into chibi/oversized-eye proportions that face-swap can't
+    // detect. Used for BOTH single and dual face swap.
     if (faceSwapEligible) {
       const overridden = applyFaceSwapOverride(baseMedium);
       if (overridden !== baseMedium) {
         baseMedium = overridden;
         console.log(`[nightly] face swap flux+directive override for ${baseMedium.key}`);
+      }
+    }
+
+    // Pre-pick the Flux model for face-swap character renders (single human
+    // OR dual). 3-way rotation so we can conditionally swap the medium
+    // fluxFragment BEFORE the slot pipeline assembles the prompt:
+    //   - flux-dev / flux-2-dev — honor the medium's face_swap fragment as-is
+    //   - flux-1.1-pro          — triggers curated override library
+    // flux-1.1-pro-ultra is excluded (compute cap blows face-swap-dual).
+    // Same rotation + override applies to single and dual so the two paths
+    // stay in parity.
+    if (isFaceSwapCharacter) {
+      if (force_model) {
+        faceSwapPrePickedModel = force_model;
+      } else {
+        const FACE_SWAP_MODELS = [
+          'black-forest-labs/flux-dev',
+          'black-forest-labs/flux-2-dev',
+          'black-forest-labs/flux-1.1-pro',
+        ];
+        faceSwapPrePickedModel =
+          FACE_SWAP_MODELS[Math.floor(Math.random() * FACE_SWAP_MODELS.length)];
+      }
+      console.log(
+        `[nightly] face-swap character model (${selectedCast.length === 2 ? 'dual' : 'single'}): ${faceSwapPrePickedModel}`
+      );
+      // Per-model curated medium-fragment override library. Same library
+      // serves single and dual — fragments are subject-agnostic.
+      const modelOverride = pickFaceSwapModelOverride(
+        faceSwapPrePickedModel,
+        nightlyVibe?.key ?? null
+      );
+      if (modelOverride) {
+        baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+        console.log(
+          `[nightly] face-swap ${faceSwapPrePickedModel}: applied curated medium override (${modelOverride.length} chars)`
+        );
       }
     }
 
@@ -680,6 +768,60 @@ Deno.serve(async (req) => {
     );
 
     let nightlyBrief: string;
+    let slotPipelineHandled = false;
+    let slotPipelineFallbacks: string[] = [];
+
+    // ── Unified character face-swap slot pipeline ──
+    // Handles BOTH single-human and dual-character face swap. Sonnet only
+    // fills controlled slots; geometry/identity/gender/(side for dual) are
+    // hard-baked downstream. Eliminates the freeform failure modes.
+    // Pet single-character keeps using the legacy freeform brief below.
+    if (composition === 'character' && isFaceSwapCharacter) {
+      try {
+        // Single-cast action comes from pickSingleAction (pose only — we drop
+        // the legacy needsEpicBackdrop signal because the slot pipeline owns
+        // its own framing). Dual-cast action comes from pickDualAction.
+        const action = selectedCast.length === 2 ? dualAction : (singleAction ?? null);
+        const slotResult = await runCharacterSlotPipeline(
+          {
+            cast: resolvedCast.map((rc, i) => ({
+              role: rc.role,
+              promptDesc: rc.promptDesc,
+              age: (selectedCast[i] as DreamCastMember).age ?? null,
+              physicalSummary: (selectedCast[i] as DreamCastMember).physical_summary ?? null,
+            })),
+            iconicAnchor,
+            userPlace,
+            timeAxis,
+            weatherAxis,
+            phenomenaAxis,
+            mediumFluxFragment: baseMedium.fluxFragment,
+            vibeDirective: applyVibeGenderModifier(
+              nightlyVibe.key,
+              nightlyVibe.directive,
+              castGender ?? null
+            ),
+            avoidList,
+            action,
+          },
+          ANTHROPIC_KEY!
+        );
+        sonnetBrief = slotResult.briefUsed;
+        sonnetRawResponse = slotResult.rawResponse;
+        finalPrompt = slotResult.assembledPrompt;
+        slotPipelineFallbacks = slotResult.fallbackReasons;
+        slotPipelineHandled = true;
+        console.log(
+          `[nightly-dreams] character slot pipeline (${selectedCast.length}-cast): retries=${slotResult.retries} fallbacks=${slotResult.fallbackReasons.length}`
+        );
+      } catch (slotErr) {
+        console.error(
+          '[nightly-dreams] character slot pipeline threw — falling back to freeform brief:',
+          (slotErr as Error).message
+        );
+        fallbackReasons.push(`character_slot_pipeline_threw:${(slotErr as Error).message}`);
+      }
+    }
 
     if (composition === 'character') {
       if (faceSwapEligible) {
@@ -919,15 +1061,21 @@ Output ONLY the prompt.`;
       };
     }
 
-    try {
-      const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY, isDualFaceSwap ? 350 : 300);
-      sonnetBrief = sonnet.brief;
-      sonnetRawResponse = sonnet.rawResponse;
-      if (sonnet.text.length < 20) throw new Error('too short');
-      finalPrompt = sonnet.text;
-    } catch (err) {
-      fallbackReasons.push(`nightly_sonnet_failed:${(err as Error).message}`);
-      finalPrompt = `${baseMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive && nightlyVibe.directive.length > 0 ? nightlyVibe.directive.split('.')[0] : 'dramatic atmosphere'}, no text, hyper detailed`;
+    if (slotPipelineHandled) {
+      // Slot pipeline already populated finalPrompt — register its fallbacks
+      // and skip the freeform Sonnet call so we don't overwrite the prompt.
+      if (slotPipelineFallbacks.length > 0) fallbackReasons.push(...slotPipelineFallbacks);
+    } else {
+      try {
+        const sonnet = await callSonnet(nightlyBrief, ANTHROPIC_KEY, isDualFaceSwap ? 350 : 300);
+        sonnetBrief = sonnet.brief;
+        sonnetRawResponse = sonnet.rawResponse;
+        if (sonnet.text.length < 20) throw new Error('too short');
+        finalPrompt = sonnet.text;
+      } catch (err) {
+        fallbackReasons.push(`nightly_sonnet_failed:${(err as Error).message}`);
+        finalPrompt = `${baseMedium.fluxFragment}, ${dreamSubject}, ${nightlyVibe.directive && nightlyVibe.directive.length > 0 ? nightlyVibe.directive.split('.')[0] : 'dramatic atmosphere'}, no text, hyper detailed`;
+      }
     }
 
     // Post-process: ensure location name appears in final prompt (Sonnet sometimes drifts)
@@ -939,8 +1087,9 @@ Output ONLY the prompt.`;
       finalPrompt = `set in ${userPlace}, ` + finalPrompt;
     }
 
-    // Post-process: strip contemplative/directional/interaction language for dual face swap
-    if (isDualFaceSwap) {
+    // Post-process: strip contemplative/directional/interaction language for dual face swap.
+    // Skipped when slot pipeline ran — assembled prompt is clean already.
+    if (isDualFaceSwap && !slotPipelineHandled) {
       finalPrompt = finalPrompt
         .replace(/looking (out )?(at|toward|into|across|over|up at) [^,]+/gi, '')
         .replace(/gazing (at|toward|into|across|over) [^,]+/gi, '')
@@ -971,25 +1120,34 @@ Output ONLY the prompt.`;
     }
 
     // Post-process: brute force face lock for face-swap-eligible dreams.
-    if (faceSwapEligible) {
+    // SKIPPED entirely when the slot pipeline ran — it already owns framing
+    // and face visibility. Only the legacy freeform paths (pet single, or
+    // dual fallback when slot threw) get these post-processing tags.
+    if (faceSwapEligible && !slotPipelineHandled) {
       const realisticFaceTag = '';
       if (isDualFaceSwap) {
+        // Only prepend the dual composition path for the LEGACY freeform
+        // dual brief (slot pipeline threw / fell back).
         const dualPath = pickDualCompositionPath();
         const prepend = dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
         console.log(`[nightly] dual composition path: ${dualPath.name}`);
         finalPrompt = prepend + ' ' + finalPrompt;
       } else {
+        // Single (pet, or single human falling back). Append face-visibility.
         finalPrompt += `, ${realisticFaceTag}face visible, eyes and nose visible, no back view, no silhouette`;
       }
     } else if (
+      !faceSwapEligible &&
       composition === 'character' &&
       resolvedCast.length === 2 &&
       renderMode !== 'embodied'
     ) {
-      // Non-face-swap dual cast (NATURAL mediums only): bake the SPECIFIC
-      // cast descriptions into the prepend so Flux locks gender + identifying
-      // traits at the front of the prompt. Without this Flux invents random
-      // pairs (two girls, two boys, generic strangers).
+      // Non-face-swap dual cast (NATURAL mediums where face_swap_flux_fragment
+      // is missing / faceSwaps=false): bake the SPECIFIC cast descriptions
+      // into the prepend so Flux locks gender + identifying traits at the
+      // front of the prompt. Without this Flux invents random pairs (two
+      // girls, two boys, generic strangers). NOT applied to face-swap dual
+      // (slot pipeline owns those prompts).
       //
       // SKIPPED for embodied mediums (LEGO/claymation/vinyl/pixels/animation):
       // raw natural-prose descriptions ("a friendly man in his mid-30s with
@@ -1062,7 +1220,12 @@ Output ONLY the prompt.`;
   );
 
   const autoPicked = await pickModel('flux-dev', finalPrompt, resolvedMediumKey, resolvedVibeKey);
-  const pickedModel = force_model || autoPicked.model;
+  // Face-swap character paths (single human OR dual) use the pre-picked
+  // model rolled earlier so the medium fragment could be overridden before
+  // the slot pipeline assembled the prompt. 3-way rotation: flux-dev /
+  // flux-2-dev / flux-1.1-pro. Scene-only + pet single use the per-medium
+  // model resolver as before.
+  const pickedModel = force_model ? force_model : faceSwapPrePickedModel || autoPicked.model;
   logAxes.model = pickedModel;
   console.log(
     `[nightly-dreams] User ${userId}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`

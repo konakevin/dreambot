@@ -47,6 +47,7 @@ const ROUND = parseInt(flag('round', '1'), 10);
 const COUNT = parseInt(flag('count', '5'), 10);
 const FORCE_MEDIUM = flag('medium', null);
 const FORCE_VIBE = flag('vibe', null);
+const FORCE_MODEL = flag('model', null); // e.g. 'black-forest-labs/flux-1.1-pro'
 const FORCE_LOCATION = flag('location', null); // override profile.dream_seeds.places[0]
 const CAST_MODE = flag('cast', 'none'); // 'none' | 'single' | 'dual' | 'self' | 'plus_one' | 'pet'
 const USER_ID = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
@@ -91,22 +92,35 @@ const USER_ID = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
     await sb.from('ai_generation_budget').delete().eq('user_id', USER_ID).eq('date', today);
 
     const t0 = Date.now();
+    // CAST_MODE behavior:
+    //   'natural' | 'random' / 'auto' / unset → omit force_cast_role entirely
+    //                                            → rollDream picks naturally
+    //   'none'   → force_cast_role: null       → scene-only (no character)
+    //   'single' → force_cast_role: 'self'     → single self
+    //   'dual'   → force_cast_role: 'dual'     → both self + plus_one
+    //   '<role>' → force_cast_role: '<role>'   → specific role (self/plus_one/pet)
+    const naturalCastMode = !CAST_MODE || CAST_MODE === 'natural' || CAST_MODE === 'random' || CAST_MODE === 'auto';
+    const forceCastBody = naturalCastMode
+      ? {} // omit force_cast_role → algorithm rolls naturally
+      : {
+          force_cast_role:
+            CAST_MODE === 'none'
+              ? null
+              : CAST_MODE === 'single'
+                ? 'self'
+                : CAST_MODE === 'dual'
+                  ? 'dual'
+                  : CAST_MODE,
+        };
     const res = await fetch(`${SB_URL}/functions/v1/nightly-dreams`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwt}` },
       body: JSON.stringify({
         vibe_profile: profile,
-        // CAST_MODE: 'none' = scene-only (null), 'single' = self, 'dual' = both, or specific role
-        force_cast_role:
-          CAST_MODE === 'none'
-            ? null
-            : CAST_MODE === 'single'
-              ? 'self'
-              : CAST_MODE === 'dual'
-                ? 'dual'
-                : CAST_MODE,
+        ...forceCastBody,
         ...(FORCE_MEDIUM ? { force_medium: FORCE_MEDIUM } : {}),
         ...(FORCE_VIBE ? { force_vibe: FORCE_VIBE } : {}),
+        ...(FORCE_MODEL ? { force_model: FORCE_MODEL } : {}),
       }),
     });
     const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
