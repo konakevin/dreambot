@@ -811,7 +811,7 @@ Deno.serve(async (req) => {
               physicalSummary: (selectedCast[i] as DreamCastMember).physical_summary ?? null,
             })),
             iconicAnchor,
-            userPlace,
+            userPlace: userPlace ?? null,
             timeAxis,
             weatherAxis,
             phenomenaAxis,
