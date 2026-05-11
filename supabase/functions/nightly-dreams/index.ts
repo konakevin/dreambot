@@ -742,6 +742,10 @@ Deno.serve(async (req) => {
     // pillar is the BACKDROP; for pure_scene the pillar IS the subject.
     let iconicAnchor: string | null = null;
     let biomeKey: string | null = null;
+    // Per-location bespoke biome (migration 170). When set, it OVERRIDES
+    // the shared biomeAxes lookup so atmospheres feel recognizable to
+    // travelers who have been to that specific place.
+    let bespokeBiome: ReturnType<typeof getBiomeConfig> | null = null;
     if (userPlace) {
       const [{ data: spots }, { data: locCard }] = await Promise.all([
         supabase
@@ -749,21 +753,38 @@ Deno.serve(async (req) => {
           .select('spot_text')
           .eq('location_key', userPlace)
           .eq('is_active', true),
-        supabase.from('location_cards').select('biome').eq('name', userPlace).maybeSingle(),
+        supabase
+          .from('location_cards')
+          .select('biome, biome_config')
+          .eq('name', userPlace)
+          .maybeSingle(),
       ]);
       if (spots && spots.length > 0) {
         iconicAnchor = spots[Math.floor(Math.random() * spots.length)].spot_text;
       }
       biomeKey = locCard?.biome ?? null;
+      // biome_config schema matches BiomeConfig; basic shape check before use.
+      const cfg = locCard?.biome_config as Record<string, unknown> | null | undefined;
+      if (
+        cfg &&
+        Array.isArray(cfg.TIME) &&
+        Array.isArray(cfg.WEATHER) &&
+        Array.isArray(cfg.CAMERA) &&
+        Array.isArray(cfg.PHENOMENA) &&
+        typeof cfg.SUBJECT_RULE === 'string' &&
+        Array.isArray(cfg.BANS)
+      ) {
+        bespokeBiome = cfg as unknown as ReturnType<typeof getBiomeConfig>;
+      }
     }
-    const biomeConfig = getBiomeConfig(biomeKey);
+    const biomeConfig = bespokeBiome ?? getBiomeConfig(biomeKey);
     const pickAxis = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
     const timeAxis = pickAxis(biomeConfig.TIME);
     const weatherAxis = pickAxis(biomeConfig.WEATHER);
     const cameraAxis = pickAxis(biomeConfig.CAMERA);
     const phenomenaAxis = pickAxis(biomeConfig.PHENOMENA);
     console.log(
-      `[nightly-dreams] biome="${biomeKey || '(default)'}" anchor="${iconicAnchor || '(none)'}" composition=${composition} time="${timeAxis.split(' — ')[0]}"`
+      `[nightly-dreams] biome="${biomeKey || '(default)'}"${bespokeBiome ? ' [BESPOKE]' : ''} anchor="${iconicAnchor || '(none)'}" composition=${composition} time="${timeAxis.split(' — ')[0]}"`
     );
 
     let nightlyBrief: string;
