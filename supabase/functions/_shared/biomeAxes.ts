@@ -259,6 +259,53 @@ export const BIOME_AXES: Record<string, BiomeConfig> = {
       'NO industrial or contemporary urban',
     ],
   },
+
+  gothic_historic: {
+    TIME: [
+      'midnight under full moon — silver light flooding stone, deep blue-purple shadows',
+      'twilight hour — sky deep indigo, gas lamps just lit, stone glowing amber',
+      'fog-shrouded dawn — gray-pink mist hugging cobblestones, distant figures faint',
+      'stormy late afternoon — overcast sky, low brooding clouds, intermittent rain',
+      'candlelit night — interiors warm with candles, exteriors dark stone in moonlight',
+      'blue hour over cathedral — sky deep cobalt twilight, stained glass glowing from within',
+      'pre-storm dusk — heavy black clouds gathering, gas lamps flickering',
+      'moonlit graveyard hour — silver light on weathered headstones, long inky shadows',
+    ],
+    WEATHER: [
+      'thick rolling fog drifting through alleys, visibility limited',
+      'steady cold rain glossing cobblestones, surfaces reflective and inky',
+      'light snow drifting onto stone parapets, soft white blanket on dark stone',
+      'stormy with distant lightning illuminating gothic spires',
+      'mist hugging rooftops, distant stone fading into atmosphere',
+      'clear cold night with sharp star points above stone silhouettes',
+      'sleet at twilight with ice glaze on iron railings',
+    ],
+    CAMERA: SHARED_CAMERA,
+    PHENOMENA: [
+      'fog-glow around gas lamps, soft halos in the mist',
+      'moonlight glinting on wet cobblestones',
+      'candlelight pouring from cathedral windows into darkness',
+      'shadow play of gargoyles and ornaments cast across stone walls',
+      'colored light from stained glass casting patterns onto stone floors',
+      'smoke from chimneys rising into starlit sky',
+      'lightning silhouetting gothic spires against storm clouds',
+      'torchlight flickering in stone archways',
+      'luminous mist with shafts of moonlight cutting through',
+      'ravens or bats wheeling around a clocktower silhouette',
+    ],
+    SUBJECT_RULE:
+      'unmistakably gothic atmosphere — towering stone architecture (cathedrals, manors, mausoleums, gas-lit alleys, cobblestone streets, abandoned chapels), moody atmospheric environment, dark ornate beauty, gothic ornamentation, brooding presence. The gothic setting IS the hero of the frame, rendered massive and atmospheric.',
+    BANS: [
+      'NO PEOPLE, NO FIGURES, NO CHARACTERS',
+      'NO MODERN ELEMENTS — no cars, phones, contemporary signage, modern fashion',
+      'NO BRIGHT DAYLIGHT — gothic is twilight, night, or storm-light',
+      'NO TROPICAL or warm-climate elements',
+      'NO SCI-FI elements (no spaceships, neon, holograms)',
+      'NO IMPOSSIBLE PHYSICS (no floating buildings, no fantasy-magical glow)',
+      'NO CONTEMPORARY URBAN scenes (no modern skyscrapers, no neon signs)',
+      'NO CHEERFUL or pastel color palettes — gothic palette is deep blues, blacks, greys, dim ambers',
+    ],
+  },
 };
 
 /** Look up the biome config, fall back to tropical_coastal if unknown. */
