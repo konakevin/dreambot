@@ -815,6 +815,12 @@ Deno.serve(async (req) => {
             timeAxis,
             weatherAxis,
             phenomenaAxis,
+            wardrobeAnchor:
+              bespokeBiome &&
+              Array.isArray((bespokeBiome as unknown as { WARDROBE?: string[] }).WARDROBE) &&
+              (bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE.length > 0
+                ? pickAxis((bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE)
+                : null,
             mediumFluxFragment: baseMedium.fluxFragment,
             vibeDirective: applyVibeGenderModifier(
               nightlyVibe.key,

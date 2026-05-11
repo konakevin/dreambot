@@ -66,6 +66,11 @@ export interface CharacterSlotPipelineInput {
   timeAxis: string;
   weatherAxis: string;
   phenomenaAxis: string;
+  /** Optional location-specific wardrobe anchor rolled from biome_config.WARDROBE
+   * (added 2026-05). If set, supersedes the generic WARDROBE_MOODS pick so
+   * characters render in on-location attire (fairy-tale tunics at Fairy Cottage,
+   * yukata at Tokyo, etc.). If null, falls back to the generic mood randomizer. */
+  wardrobeAnchor?: string | null;
   // Medium + tone
   mediumFluxFragment: string;
   vibeDirective: string;
@@ -219,7 +224,15 @@ function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const location = input.iconicAnchor || input.userPlace || 'the location';
   const wardrobeMood = WARDROBE_MOODS[Math.floor(Math.random() * WARDROBE_MOODS.length)];
 
-  const climateGuidance = `wardrobe MUST be what real people actually wear at ${location} given its climate, setting, and cultural context. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`;
+  // When a location-specific wardrobe anchor is provided (rolled from
+  // biome_config.WARDROBE), use it as style GUIDANCE — period/setting
+  // inspiration for Sonnet to riff on, not a hard lock. Sonnet has
+  // creative latitude to adapt for the character; the anchor just keeps
+  // the wardrobe on-vibe for the location. When no anchor is provided,
+  // fall back to the legacy climate-guess behavior.
+  const climateGuidance = input.wardrobeAnchor
+    ? `WARDROBE STYLE GUIDANCE — wardrobe should fit the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Treat this as ONE possible direction — adapt freely for the character's gender, body, and personal flair, or remix into something equally on-location. Secondary mood for variation: ${wardrobeMood}. Avoid generic "linen shirt + chinos" defaults — bring distinctive pieces appropriate to the location.`
+    : `wardrobe MUST be what real people actually wear at ${location} given its climate, setting, and cultural context. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
 - Camera / lens / framing: close-up, wide shot, medium shot, low angle, 85mm, depth of field, fisheye
