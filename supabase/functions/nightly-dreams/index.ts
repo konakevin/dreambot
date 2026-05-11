@@ -748,8 +748,7 @@ Deno.serve(async (req) => {
           .from('location_iconic_spots')
           .select('spot_text')
           .eq('location_key', userPlace)
-          .eq('is_active', true)
-          .in('quality_tier', ['S', 'A']),
+          .eq('is_active', true),
         supabase.from('location_cards').select('biome').eq('name', userPlace).maybeSingle(),
       ]);
       if (spots && spots.length > 0) {

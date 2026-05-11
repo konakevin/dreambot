@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
+const { flavorBlock, getFlavor } = require('./locationFlavor');
 
 function readEnvFile() {
   try {
@@ -48,7 +49,9 @@ const flag = (n, fb) => {
 };
 const has = (n) => args.includes('--' + n);
 const LOCATION = flag('location', 'hawaii');
-const COUNT = parseInt(flag('count', '100'), 10);
+// Default count comes from per-location flavor; --count CLI flag overrides.
+const FLAVOR_COUNT = getFlavor(LOCATION).count;
+const COUNT = parseInt(flag('count', String(FLAVOR_COUNT)), 10);
 const DRY = has('dry-run');
 const SB_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SB_URL, KEY);
@@ -77,7 +80,7 @@ function hintsBlock(subRegions, mustInclude) {
 }
 
 function fantasyMetaPrompt(loc, count, subRegions, mustInclude) {
-  return `Generate the TOP ${count} most ICONIC FICTIONAL LANDMARKS within "${loc}" — the recognizable named locations that fans of this fictional place would immediately know.${hintsBlock(subRegions, mustInclude)}
+  return `Generate the TOP ${count} most ICONIC FICTIONAL LANDMARKS within "${loc}" — the recognizable named locations that fans of this fictional place would immediately know.${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
 
 These are PURE LOCATION PILLARS used as scene anchors for AI image generation. The user picked "${loc}" because they love it (the source material — book / film / game / mythology). Each pillar must be a SPECIFIC NAMED LOCATION from THAT canon.
 
@@ -125,7 +128,7 @@ Return EXACTLY ${count} entries, one per line, no numbering, no commentary. Just
 }
 
 function scifiMetaPrompt(loc, count, subRegions, mustInclude) {
-  return `Generate the TOP ${count} most ICONIC FICTIONAL LANDMARKS within "${loc}" — recognizable named sci-fi locations from canon (book / film / game / world-building lore).${hintsBlock(subRegions, mustInclude)}
+  return `Generate the TOP ${count} most ICONIC FICTIONAL LANDMARKS within "${loc}" — recognizable named sci-fi locations from canon (book / film / game / world-building lore).${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
 
 These are PURE LOCATION PILLARS for AI image generation. Each must be a SPECIFIC NAMED feature within the fictional sci-fi world.
 
@@ -161,7 +164,7 @@ Return EXACTLY ${count} entries, one per line, no numbering, no commentary.`;
 }
 
 function realLocationMetaPrompt(loc, count, subRegions, mustInclude) {
-  return `Generate the TOP ${count} most ICONIC, POSTCARD-WORTHY NAMED LANDMARKS in "${loc}" — including named beaches, named natural landmarks, and iconic outdoor scenes that define the place.${hintsBlock(subRegions, mustInclude)}
+  return `Generate the TOP ${count} most ICONIC, POSTCARD-WORTHY NAMED LANDMARKS in "${loc}" — the specific named places a tourist would put on their postcards from this location. Include architectural landmarks, named beaches (where coastal), iconic natural features, signature city anchors, and cultural/sacred sites — whatever DEFINES this specific place.${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
 
 These are PURE LOCATION PILLARS used as scene anchors for AI image generation. The user picked "${loc}" because they love it — these pillars must depict the absolute "must-see" spots a tourist would put on their postcards. If "${loc}" has multiple islands or sub-regions, the 50 MUST be spread across all of them.
 
@@ -238,16 +241,20 @@ async function callSonnet(prompt) {
 }
 
 (async () => {
-  // Look up biome for this location so we use the right meta-prompt variant
+  // Look up biome + Stage 1 hints (sub_regions, must_include) for this location
   const { data: locCard } = await sb
     .from('location_cards')
-    .select('biome')
+    .select('biome, sub_regions, must_include')
     .eq('name', LOCATION)
     .maybeSingle();
   const biome = locCard?.biome ?? 'tropical_coastal';
-  console.log(`Generating ${COUNT} iconic spots for "${LOCATION}" (biome: ${biome})${DRY ? ' (dry-run)' : ''}...`);
+  const subRegions = locCard?.sub_regions || [];
+  const mustInclude = locCard?.must_include || [];
+  console.log(
+    `Generating ${COUNT} iconic spots for "${LOCATION}" (biome: ${biome}, ${subRegions.length} sub_regions, ${mustInclude.length} must_include)${DRY ? ' (dry-run)' : ''}...`
+  );
   const t0 = Date.now();
-  const text = await callSonnet(metaPrompt(LOCATION, COUNT, biome));
+  const text = await callSonnet(metaPrompt(LOCATION, COUNT, biome, subRegions, mustInclude));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
 
   const lines = text

@@ -20,6 +20,7 @@
 
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
+const { flavorBlock } = require('./locationFlavor');
 
 function readEnvFile() {
   try {
@@ -63,10 +64,12 @@ function buildPrompt(loc, biome) {
       ? 'This is a FICTIONAL sci-fi location. Sub-regions are named areas of the world-building. Feature categories are the kinds of iconic structures, terrain, and phenomena that define this setting.'
       : 'This is a REAL Earth location. Sub-regions are actual geographic / cultural / thematic areas the location is divided into (e.g., islands, neighborhoods, coastlines, valleys). Feature categories are the kinds of named landmarks tourists travel to see.';
 
+  const flavor = flavorBlock(loc);
+
   return `For the location "${loc}" (biome: ${biome}), generate two arrays of pool-generation hints used by an AI image generator's iconic-spot pillar generator.
 
 ${sourceHint}
-
+${flavor}
 ━━━ OUTPUT FORMAT (JSON) ━━━
 Return ONLY a JSON object with these two keys, no preamble, no commentary:
 
@@ -86,24 +89,39 @@ Return ONLY a JSON object with these two keys, no preamble, no commentary:
 - Each entry should be ~3–10 words, naming a real (or canonical) sub-area, ideally with 2-3 example landmarks in parens to anchor it
 - Do NOT collapse multi-region locations into too few zones — over-split is better than under-split
 
-━━━ must_include — UNIVERSAL CORE CATEGORIES ━━━
-Every comprehensive location pool MUST include these standard categories (skip only if genuinely inapplicable to the location):
-- named beaches / shoreline (specific named ones)
-- iconic surf / aquatic spots (where applicable)
-- snorkel reefs / underwater / sea-life spots (where applicable)
-- waterfalls / natural water features
+━━━ must_include — PICK FROM THIS MENU WHAT FITS "${loc}" SPECIFICALLY ━━━
+Choose ONLY the categories that genuinely fit this location's geography and identity. Do not force-include categories that don't fit. The LOCATION IDENTITY block above is the source of truth — let it guide your category selection.
+
+Coastal/island menu (use only for actually-coastal locations):
+- named beaches / shoreline
+- iconic surf / aquatic spots
+- snorkel reefs / underwater / sea-life
+- cliffs and dramatic coasts
+- sea features — blowholes / arches / sea stacks / lava tubes
+
+Inland/mountain menu (use for inland-heavy regions):
 - iconic mountains / volcanic / canyon / valley features
-- cliffs and dramatic coasts (where applicable)
-- sea features — blowholes / arches / sea stacks / lava tubes (where applicable)
+- waterfalls / natural water features
 - iconic hikes / trails
 - lookouts / scenic viewpoints
-- botanical gardens / curated nature spaces
-- iconic named towns / villages / historic districts
-- temples / shrines / sacred sites (where applicable)
+- alpine lakes / glacial features
+
+Cultural/architectural menu (use where applicable):
 - iconic landmarks (architectural or geographic, location-specific)
+- temples / shrines / sacred sites
+- palaces / castles / fortresses
+- iconic named towns / villages / historic districts
+- ancient ruins / archaeological sites
+- markets / souks / bazaars
+- modern cityscape / skyline anchors
+
+Desert/arid menu (use for desert regions):
+- dunes / oases
+- canyon and rock formations
+- ancient caravan stops / kasbahs
 
 ━━━ must_include — LOCATION-SPECIFIC ADDITIONS ━━━
-Additionally include any categories that are SIGNATURE for "${loc}" specifically (e.g., for Iceland: glacial / ice features, geothermal sites, aurora-viewing spots; for Tokyo: neon districts, bridges/rivers, modern landmarks).
+Beyond the menu above, include any categories that are SIGNATURE for "${loc}" specifically (e.g., for Iceland: glacial / ice features, geothermal sites, aurora-viewing spots; for Cappadocia: hot air balloon valleys, fairy chimney clusters; for India: Mughal mausoleums, holy ghats).
 
 Total must_include: 10-15 categories. Each entry is a category name + 2-4 example landmarks in parens.
 
