@@ -48,6 +48,42 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // Story-scene template axes (added 2026-05-11) — every path rolls one of
+  // each so renders carry a story beat + explicit subject presence +
+  // massive-scale anchor. Replaces the static "just describe the world"
+  // pattern that produced flat compositions.
+  STORY_BEATS: load('story_beats'),
+  SUBJECT_PRESENCE: load('subject_presence'),
+  MASSIVE_SCALE: load('massive_scale'),
+
+  // Slot-pool composition axes (added 2026-05-11) — universal Tier 1
+  // axes shared across all StarBot paths. See BOT_SCENE_QUALITY_PLAYBOOK.md
+  // for the full architecture. Rolled per render by every path file.
+  ANCHOR_SCALE: load('anchor_scale'),
+  COMPOSITION_FRAME: load('composition_frame'),
+  SCALE_PROVERS: load('scale_provers'),
+  WEATHER_PARTICULATE: load('weather_particulate'),
+  EMOTIONAL_DNA: load('emotional_dna'),
+  // Tier 2 — bot-level (StarBot-specific entities + skies). Shared across
+  // most StarBot paths; a path can override via its own axis if needed.
+  STARBOT_ANCHOR_ENTITY: load('starbot_anchor_entity'),
+  ALIEN_SKY_LAYER: load('alien_sky_layer'),
+  // Tier 3 — path-specific primary pool. alien-landscape gets its own
+  // alien_planet_biome.json; other paths get their own primary pools
+  // when they're rolled out to the slot-composer pattern.
+  ALIEN_PLANET_BIOME: load('alien_planet_biome'),
+  // CHARACTER_ACTION — cinematic sci-fi-movie verbs for character paths.
+  // Modeled on MechBot's power_armor_actions: specific, dynamic, multiple
+  // elements happening. Used by female-explorer / male-explorer paths to
+  // break Flux's default portrait drift.
+  CHARACTER_ACTION: load('character_action'),
+  // SURPRISE_ELEMENT — a secondary visual accent woven into the scene to
+  // add interest: alien creature / robot / fellow explorer / ship / vehicle
+  // / artifact / distant conflict / orbital station / wildlife / etc.
+  // Used by both scene + character paths to populate the frame beyond just
+  // "the main subject in a setting".
+  SURPRISE_ELEMENT: load('surprise_element'),
+
   // Scene pools
   COSMIC_PHENOMENA: load('cosmic_phenomena'),
   COSMIC_ANCHORS: load('cosmic_anchors'),

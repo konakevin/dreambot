@@ -1,26 +1,27 @@
 /**
- * StarBot female-explorer path — alien-planet wilderness, scenery as costar.
+ * StarBot female-explorer path — character is THE SHOW.
  *
- * Per Kevin (2026-05-01 v3): characters out on alien planets ONLY. No more
- * ship interiors, no cozy bars, no station scenes. The alien WORLD is the
- * costar of the frame. Wide cinematic shot, character ~25-40% of frame,
- * massive backdrop dwarfs the figure, scenery shares the spotlight.
+ * Modeled on DragonBot's female-warrior brief structure (proven good):
+ * each character DNA element gets its OWN section with "obsessive detail"
+ * demand. Race-first identity hierarchy. Camera shows her face and lineage.
+ * The alien world serves as her stage, not her co-star.
  *
- * Outfit: tactical-explorer silhouettes — armored, hooded, cloaked, mercenary,
- * deep-space EVA, cyber-augmented. NO franchise lookalikes (Stormtrooper /
- * Mandalorian / Spartan / N7 / Fremen / Jedi armor all banned downstream).
- *
- * Each render rotates: skin / eyes / hair_color / hairstyle / outfit / accessory
- * Locks: a SCI-FI RACE (alien-coded humanoid)
- *        a PLANET SETTING (biome / terrain / flora / sky)
- *        an EPIC BACKDROP (megaship / huge moon / megastructure dominating)
- *        an ACTION (75% candid body / 25% lineage gesture — both location-agnostic)
+ * Combined with StarBot's slot-pool composition (story beats, lighting,
+ * weather, biome, sky) but with the character DOMINATING the frame at
+ * 25-40% MEDIUM scale.
  */
 
 const pools = require('../pools');
 const blocks = require('../shared-blocks');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
+  // ── Scene-stage axes (the world serves her) ──
+  const biome = picker.pickWithRecency(pools.ALIEN_PLANET_BIOME, 'alien_planet_biome');
+  const skyLayer = picker.pickWithRecency(pools.ALIEN_SKY_LAYER, 'alien_sky_layer');
+  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const weatherParticulate = picker.pickWithRecency(pools.WEATHER_PARTICULATE, 'weather_particulate');
+
+  // ── Character DNA — each element separate, demanded in detail ──
   const race = picker.pickWithRecency(pools.SCI_FI_RACE, 'fe_race');
   const archetype = picker.pickWithRecency(pools.FEMALE_EXPLORERS, 'female_explorer');
   const outfit = picker.pickWithRecency(pools.EXPLORER_OUTFITS_FEMALE, 'fe_outfit');
@@ -29,100 +30,70 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const hairColor = picker.pickWithRecency(pools.EXPLORER_HAIR_COLOR, 'fe_hair_color');
   const hairstyle = picker.pickWithRecency(pools.FEMALE_EXPLORER_HAIRSTYLES, 'fe_hairstyle');
   const accessory = picker.pickWithRecency(pools.FEMALE_EXPLORER_ACCESSORIES, 'fe_accessory');
-  const planetSetting = picker.pickWithRecency(pools.PLANET_SETTING, 'fe_planet_setting');
-  const epicBackdrop = picker.pickWithRecency(pools.EXPLORER_EPIC_BACKDROPS, 'fe_epic_backdrop');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
 
-  // 75% candid body / 25% lineage gesture — both LOCATION-AGNOSTIC
-  const actionRoll = Math.random();
-  let action, actionType;
-  if (actionRoll < 0.75) {
-    action = picker.pickWithRecency(pools.EXPLORER_ADVENTURE_ACTIONS, 'fe_adventure_action');
-    actionType = 'CANDID BODY POSITION (location-agnostic — fits the alien biome below)';
-  } else {
-    action = picker.pickWithRecency(pools.SCI_FI_LINEAGE_ACTIONS, 'fe_lineage_action');
-    actionType = 'LINEAGE-SIGNATURE GESTURE (race-flavored — let her ancestry SHINE)';
-  }
+  // Action — a grounded interactive moment from the rewritten pool
+  const action = picker.pickWithRecency(pools.CHARACTER_ACTION, 'character_action');
+  // Surprise element — a secondary subject woven into the scene
+  const surpriseElement = picker.pickWithRecency(pools.SURPRISE_ELEMENT, 'surprise_element');
 
-  return `You are a sci-fi concept-art painter writing a CANDID DEEP-SPACE EXPLORER scene for StarBot. The character is a sleek tactical cosmonaut woman of a SPECIFIC sci-fi lineage standing OUT IN THE WILD ON AN ALIEN PLANET. The alien WORLD is the costar of this image — scenery shares the spotlight equally with the character. Output wraps with style prefix + suffix.
+  return `You are a sci-fi concept-art painter writing a CHARACTER MOMENT for StarBot — a single heroic woman of a SPECIFIC sci-fi lineage caught in a candid grounded moment of alien-wilderness adventuring. Same universe as our cosmic vistas and alien cities. The character is ALIVE, CAPABLE, and the camera caught her doing real work in a real place. Output wraps with style prefix + suffix.
 
-━━━ COMPOSITION (NON-NEGOTIABLE) ━━━
-WIDE CINEMATIC FULL-BODY SHOT. The character occupies 25-40% of the frame (NOT a portrait, NOT waist-up, NOT thigh-up). The alien planet biome + epic backdrop fill 60-75% of the frame around her. Scenery and character share the costar spotlight equally.
+━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
+The female explorer is the MAIN SUBJECT of this render. Her face, gear, outfit, lineage, action, and pose are the DRAW — the viewer is here for HER. Her appearance is meant to be ADMIRED — every detail of her outfit and equipment readable and CRISP. She is the hero of the frame; the alien world is her stage.
 
-Camera angle options: side-profile / three-quarter rear / three-quarter front. Sometimes character is walking AWAY into the world (back of character visible). Sometimes character is paused on a ridge or outcrop. NEVER head-on at the camera. NEVER posing.
+She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame height. NOT tiny silhouette (that's the landscape path). NOT centered portrait (that's a headshot). MEDIUM scale where her outfit, gear, and lineage are CLEARLY READABLE.
 
-Strong silhouette > facial detail. Face can be partial / masked / hooded / in profile shadow — the SILHOUETTE against the world is the hero.
+━━━ SOLO CHARACTER ONLY ━━━
+EXACTLY ONE character. No companions, no enemies, no crowds. This explorer ALONE in her moment.
 
-━━━ THE ALIEN PLANET — WILD AND VAST ━━━
-This is an alien-planet wilderness scene. NEVER inside a ship, NEVER in a station, NEVER in a bar or interior. Always OUT on the surface of a strange world.
+━━━ ENGAGED IN THE SCENE — NON-NEGOTIABLE ━━━
+She is DOING SOMETHING SPECIFIC in this frame. The action below is the PRIMARY SUBJECT of the prompt — she is mid-act, captured at a loaded instant. Combat / battling / hunting / spying / tinkering / scheming / reconnaissance / artifact-discovery / infiltration / extraction — these are ALL fair game. Weapons MAY be in active use during battling-coded actions. The mood is purposeful and capable.
 
-━━━ ABSOLUTE BANS — NO BATTLE / NO COMBAT / NO VIOLENCE ━━━
-NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood, NO fighting. Weapons can be HOLSTERED, sheathed, slung — never IN COMBAT USE.
+━━━ THE ACTION — what she is doing in this exact frame ━━━
+${action}
 
-━━━ ABSOLUTE BANS — NO STATIC / NO SEATED / NO MEDITATION (CRITICAL) ━━━
-ABSOLUTELY NO seated poses. NO cross-legged sitting. NO kneeling-still. NO meditation poses. NO eyes-closed. NO leaning-back. NO curled-up "resting". NO "sitting on a rock looking thoughtfully into the distance". NO "kneeling beside a stream with hand on chest". NO "standing perfectly still gazing at the horizon".
+GROUNDED — feet on the ground or interacting with terrain. No floating, no impossible mid-air leaps. The action defines the body-position. Render it EXACTLY — body weight visible, captured at a loaded instant of doing the action.
 
-The character is ALWAYS IN MOTION — STRIDING / CLIMBING / TRAVERSING / LOOKING UP / REACHING / TURNING / VAULTING / WADING. Body weight is shifted, a limb is in motion, captured at a loaded instant of EXPLORATION. Camera caught them mid-step, mid-climb, mid-reach. They are EXPLORERS doing exploring stuff — never standing-still-posing-for-the-camera.
-
-If the action below somehow reads as static, OVERRIDE IT with a dynamic interpretation: "seated examining tracks" → "crouched mid-motion examining tracks, body coiled to spring up". Never render a still seated/cross-legged figure.
-
-━━━ HER LINEAGE / SCI-FI RACE (LOCKED) ━━━
+━━━ HER LINEAGE / SCI-FI RACE (LOCKED — render her unmistakably as THIS lineage) ━━━
 ${race}
 
-This race is NON-NEGOTIABLE. Render her with the EXACT anatomy, distinguishing features, skin tone, ridges/horns/lekku/montrals/antennae above. Even at full-body wide-shot scale, the lineage signature must be readable.
+This race is NON-NEGOTIABLE. Render her with the EXACT anatomy, distinguishing features, skin tone, ridges/horns/lekku/montrals/antennae above. If the race is Twi'lek-coded, she has head-tails. If Vulcan-coded, pointed ears + arched brows. If Mandalorian-coded, beskar-style helmet visible. The lineage is the HERO of her identity.
 
-━━━ THE LOOK — TACTICAL EXPLORER ━━━
-She is a TACTICAL EXPLORER ready to step into the unknown. Tough capable practical gear: armored plate, weathered hooded cloak, mercenary-coat, scout-vest with cargo pants, heavy power-armor, deep-space EVA suit, cyber-augmented edgerunner outfit, desert-warrior moisture-suit, arctic-explorer parka — pull from any of these silhouette traditions.
+━━━ HER COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
+A ${race.split(':')[0]} woman with ${hairColor.split(',')[0]} hair, wearing ${outfit}, carrying ${accessory}.
 
-ABSOLUTE FRANCHISE LOOKALIKE BAN: NO Stormtrooper white-and-black plastic armor. NO Mandalorian T-visor full-body burnished plate. NO Halo Spartan green-and-gold helmet. NO Mass Effect N7 uniform. NO Star Wars Imperial officer. NO Dune Fremen stillsuit (use neutral "moisture-recycler suit" instead). NO Jedi or Sith robes. The look should be GENERIC sci-fi tactical, not any specific film/game's signature armor.
+(skin tone, eye color, and hairstyle are minor details — only visible at the face if a helmet is up. Do NOT describe "exposed forearms" or "bare skin" — she is sealed in armor.)
 
-━━━ HER OUTFIT (render full-body — silhouette matters) ━━━
-${outfit}
+ABSOLUTE FRANCHISE LOOKALIKE BAN: NO Stormtrooper plastic armor. NO Mandalorian T-visor full-body burnished plate. NO Halo Spartan green-and-gold helmet. NO Mass Effect N7. NO Imperial officer. NO Fremen stillsuit. NO Jedi or Sith robes.
 
-Helmets / face-masks / respirators OPTIONAL — sometimes covering, sometimes pulled-down-to-throat, sometimes pushed-up-on-the-brow. If shown, they enhance silhouette.
+Render the outfit EXACTLY as described — sealed armor plates, equipment-laden. Treat her with the same dignity as a male soldier in the same role.
 
-━━━ HER PHYSICAL DNA (visible at wide-shot, but lineage + outfit dominate) ━━━
-- Face: ${race.split(':')[0]} race-anatomy first, then skin description below
-- Skin: ${skin}
-- Eyes: ${eyes}
-- Hair: ${hairColor}, ${hairstyle}
+━━━ BIOME-APPROPRIATE OUTFIT — HARD RULE ━━━
+The outfit MUST match the biome's hazards. If the rolled outfit conflicts with the biome, OVERRIDE the outfit:
+- AIRLESS / VACUUM / TOXIC / METHANE biome → sealed EVA pressure suit with helmet, NO skin exposed
+- HOSTILE COLD / GLACIAL / ICE biome → heavy insulated parka, hood, gloves, no skin exposed
+- HOT DESERT / DUNE / VOLCANIC biome → moisture-recycler suit, face wrap, light layered fabric
+- Temperate / habitable biome → standard tactical-explorer gear, any of the outfit pool
+NEVER bikini-warriors on ice planets. NEVER bare skin in vacuum/toxic atmosphere. Function follows biome.
 
-━━━ HER EXPLORER ARCHETYPE (her energy) ━━━
-${archetype}
+OUTFIT MUST MATCH BIOME CONDITIONS: vacuum/toxic biome → sealed EVA pressure suit; glacial/ice biome → heavy insulated parka; hot desert biome → moisture-recycler suit with face wrap; jungle biome → tactical fatigues breathable; bioluminescent forest / temperate → standard explorer gear. If the rolled outfit conflicts with the biome, override outfit to match biome.
 
-━━━ HER SIGNATURE ACCESSORY (visible at wide-shot — bag, scope, weapon-on-back, etc.) ━━━
-${accessory}
+━━━ SURPRISE ELEMENT — a secondary subject in the scene that adds story ━━━
+${surpriseElement}
 
-━━━ THE PLANET BIOME (the GROUND / FLORA / NEAR-ATMOSPHERE — costar) ━━━
-${planetSetting}
+Place this surprise element appropriately within the scene — typically at midground or deep midground, NOT in front of her. It adds visual interest and implies a wider world beyond just her and her action.
 
-Render this biome with FULL DEPTH. Foreground: tactile detail near the character (alien plants, rock formations, spore-drift, ground-pattern). Midground: the character standing in the biome. Background: the biome receding into atmospheric haze.
+━━━ THE ALIEN BIOME (her stage) ━━━
+${biome}
 
-━━━ THE EPIC BACKDROP (the SCALE-DEFINING ELEMENT — sky / horizon dominates) ━━━
-${epicBackdrop}
-
-This backdrop DWARFS the character. It fills the upper portion of the frame OR dominates the horizon. Render with awe-inspiring scale. The character is small relative to it. Atmospheric haze separates the character from the backdrop's massive scale.
-
-━━━ HER BODY ACTION ━━━
-${actionType}: ${action}
-
-Place her body doing this action INSIDE the alien planet biome with the epic backdrop above. The biome wins for setting; the action is just her body-pose.
-
-━━━ ATMOSPHERIC DEPTH (CRITICAL) ━━━
-Render LAYERED ATMOSPHERIC DEPTH:
-- Foreground particles (dust, spores, mist, snow, ash) caught in light
-- Midground haze separating character from epic backdrop
-- Background atmospheric thinning toward the horizon
-- Light rays / god-rays / volumetric beams cutting through atmosphere
-
-The frame must FEEL inhabited and ALIVE — never sterile flat-color staging.
+━━━ SKY OVERHEAD ━━━
+${skyLayer}
 
 ━━━ LIGHTING ━━━
 ${lighting}
 
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
+━━━ WEATHER / PARTICULATE ━━━
+${weatherParticulate}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -130,15 +101,18 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
-${blocks.BLOW_IT_UP_BLOCK}
-
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ STRUCTURE (write the prompt in this order for best results) ━━━
-[the scene as a whole — alien planet wide shot], [the epic backdrop dominating], [the planet biome surrounding], [the character in tactical explorer outfit at full-body scale, ${race.split(':')[0].toLowerCase()} lineage], [her body action / pose], [atmospheric depth and lighting], [color palette and mood]
+━━━ COMPOSITION ━━━
+Three-quarter angle or side profile so we see her face and lineage clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her feet (alien plant, rock, ground texture). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the alien biome receding into atmospheric haze.
 
-DRAMATIC VISUALS: render the EXACT slot-pool details above. Race lineage is unmistakable. Outfit is TACTICAL not fashion. Composition is WIDE — character is dwarfed by the scenery + backdrop. Scenery is the COSTAR.
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a wide cinematic action shot of a [race-coded woman] [DOING THE EXACT CINEMATIC ACTION FROM THE ACTION SLOT] in an alien wilderness — the action verb leads the prompt], [she wears [outfit] with full material detail — armor / plates / utility / glow], [her race anatomy + skin + eyes + hair locked from the DNA slots], [her signature accessory visible], [the alien biome wrapping around her — depth and atmospheric layers], [sky overhead], [lighting and weather particles], [color palette and mood]
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+CRITICAL — the OPENING tokens of the prompt are "[character] [DOING ACTION]" — the action verb leads. The character DNA flows after the action is established. The world establishes the stage. She fills 25-40% of frame, FULL-BODY, captured at the loaded instant of her action.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked. Her outfit + accessory + action all readable at full-body scale.
+
+Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

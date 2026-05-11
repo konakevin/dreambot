@@ -65,6 +65,21 @@ const CINEMATIC_COMPOSITION_BLOCK = `━━━ CINEMATIC COMPOSITION ━━━
 
 Framing, lighting, and depth chosen for MOVIE-SHOT quality. Wide establishing vistas, tight character moments, dramatic low-angle hero shots, impossible aerial sweeps. Every frame could be a still from a Villeneuve or Kubrick sci-fi epic.`;
 
+// ━━━ STORY-SCENE TEMPLATE (added 2026-05-11) ━━━
+// Every StarBot path injects this block + 3 rolled axes (STORY_BEAT,
+// SUBJECT_PRESENCE, MASSIVE_SCALE) into Sonnet's brief. The goal is to
+// turn flat compositions into story scenes — every render carries a
+// narrative moment + an explicit figure-or-ship at explicit scale.
+const STORY_SCENE_TEMPLATE_BLOCK = `━━━ STORY SCENE — NON-NEGOTIABLE ━━━
+
+Every StarBot scene tells a STORY. Three axes below define WHAT moment is captured, WHO/WHAT is in the frame, and at WHAT scale. Honor all three.
+
+• STORY BEAT — the narrative moment this still captures. Pose, light, and atmosphere all serve THIS beat.
+• SUBJECT PRESENCE — what figures or craft are in the frame and at what compositional weight. Render at the prescribed proportions.
+• MASSIVE SCALE — explicit-number anchoring so Flux renders structures at the impossible-monumental sizes that produce awe.
+
+NOT a static landscape painting. NOT a "ship in nebula" stock composition. EVERY render is a still from an unmade sci-fi film — implies a before and after.`;
+
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
@@ -80,4 +95,5 @@ module.exports = {
   REAL_ASTRONOMY_BLOCK,
   COSMIC_CANVAS_BLOCK,
   CINEMATIC_COMPOSITION_BLOCK,
+  STORY_SCENE_TEMPLATE_BLOCK,
 };

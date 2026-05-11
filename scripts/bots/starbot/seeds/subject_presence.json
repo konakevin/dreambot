@@ -1,0 +1,10 @@
+[
+  "ONE_TINY_FIGURE — exactly one human-scale figure rendered TINY (occupying ~2% of the frame), placed mid-distance for scale. The figure is back-turned or in profile, never in close detail. Pose conveys the story beat through silhouette.",
+  "ONE_SHIP_SMALL — exactly one sci-fi craft rendered SMALL (occupying ~5% of the frame), crossing or hovering at mid-distance. The ship is detailed but the environment dominates.",
+  "FIGURE_PLUS_SHIP — one tiny figure on terrain + one small ship in air or descending. Two scale anchors at different elevations. The composition implies the figure arrived via the ship, or the ship has come for the figure.",
+  "TINY_CARAVAN — a small procession of 3-5 figures or 3-5 ships moving across the frame. The collective is small in scale but visible. Conveys exodus, migration, formation.",
+  "FIGURES_AS_ANTS — multiple humanoid silhouettes rendered as tiny specks (each occupying <1% of frame) on a vast structure or terrain. The structure is the hero. The figures prove the scale is monumental.",
+  "TWO_FIGURES_MEETING — two figures positioned for a quiet exchange — one approaching, one waiting; or both facing the same horizon. Story beat is between them. Rendered small-to-medium in the environment.",
+  "LANDSCAPE_ONLY — no figures, no ships. Scale conveyed entirely through geological / architectural / atmospheric features. Reserved for scenes where the environment alone carries the story (impossible weather, dramatic light moment).",
+  "FOREGROUND_FIGURE_BACK — single figure in foreground, rendered medium-to-large but seen from BEHIND or in silhouette so face is not detailed. The figure watches the wonder unfold ahead of them. Classic Caspar-Friedrich / Spielberg awe-pose."
+]

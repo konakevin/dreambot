@@ -54,6 +54,12 @@ module.exports = {
 
   mediumByPath: {
     'real-space': 'real_astro', // NASA-grade astrophotography stays separate
+    // Character paths: starbot_hyperreal biases hero-portraits hard. Override
+    // to canvas (sci-fi paperback-cover oil-painting tradition — Frazetta /
+    // Mead / Bonestell — full-body action heroes in dramatic scenes, NOT
+    // portraits). Tested 2026-05-11 in R6 of female-explorer iteration.
+    'female-explorer': 'canvas',
+    'male-explorer': 'canvas',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -154,10 +160,10 @@ module.exports = {
   ],
 
   paths: [
-    'cosmic-vista',
-    'alien-landscape',
-    'space-opera',
-    'sci-fi-interior',
+    // 'cosmic-vista' — disabled 2026-05-11 (Kevin QA: not interesting enough)
+    'alien-landscape', // must include alien or character (see path file)
+    'space-opera', // needs cooler ships (see path file)
+    // 'sci-fi-interior' — disabled 2026-05-11 (cozy-sci-fi-interior wins)
     'cozy-sci-fi-interior',
     'alien-city',
     'real-space',
@@ -165,32 +171,32 @@ module.exports = {
     'female-explorer',
     'male-explorer',
     'megastructure',
-    'dune-landscape',
+    'dune-landscape', // should include char or ship (see path file)
     // 'dune-architecture' — deactivated 2026-05-02
-    'aliens-landscape',
+    // 'aliens-landscape' — disabled 2026-05-11
     'aliens-architecture',
     'starwars-landscape',
-    'starwars-architecture',
-    'guardians-landscape',
-    'guardians-architecture',
+    // 'starwars-architecture' — disabled 2026-05-11
+    // 'guardians-landscape' — disabled 2026-05-11
+    'guardians-architecture', // ban skulls (see path file)
     // 'mass-effect-landscape' — scrapped 2026-05-02
     'mass-effect-architecture',
     'halo-landscape',
-    'halo-architecture',
+    // 'halo-architecture' — disabled 2026-05-11
     'star-trek-landscape',
     // 'star-trek-architecture' — scrapped 2026-05-02
     'starcraft-landscape',
-    'starcraft-architecture',
+    // 'starcraft-architecture' — disabled 2026-05-11
   ],
 
   // Path weights — universe-coded scenes / character paths / generic scenes.
   // Cyborg + robot-moment moved to MechBot 2026-05-05.
   pathWeights: {
     // Generic scene paths (weight 5 each)
-    'cosmic-vista': 5,
+    // 'cosmic-vista': 5,  // disabled 2026-05-11
     'alien-landscape': 5,
     'space-opera': 5,
-    'sci-fi-interior': 5,
+    // 'sci-fi-interior': 5,  // disabled 2026-05-11 (cozy variant wins)
     'cozy-sci-fi-interior': 5,
     'alien-city': 5,
     'real-space': 5,
@@ -202,20 +208,20 @@ module.exports = {
     // Universe-coded scene-only paths (weight 4 each)
     'dune-landscape': 4,
     // 'dune-architecture': 4,  // deactivated
-    'aliens-landscape': 4,
+    // 'aliens-landscape': 4,  // disabled 2026-05-11
     'aliens-architecture': 4,
     'starwars-landscape': 4,
-    'starwars-architecture': 4,
-    'guardians-landscape': 4,
+    // 'starwars-architecture': 4,  // disabled 2026-05-11
+    // 'guardians-landscape': 4,  // disabled 2026-05-11
     'guardians-architecture': 4,
     // 'mass-effect-landscape': 4,  // scrapped
     'mass-effect-architecture': 4,
     'halo-landscape': 4,
-    'halo-architecture': 4,
+    // 'halo-architecture': 4,  // disabled 2026-05-11
     'star-trek-landscape': 4,
     // 'star-trek-architecture': 4,  // scrapped
     'starcraft-landscape': 4,
-    'starcraft-architecture': 4,
+    // 'starcraft-architecture': 4,  // disabled 2026-05-11
   },
 
   // Chaos layer — allow subject chaos on scenery + megastructure paths

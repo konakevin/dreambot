@@ -38,6 +38,9 @@ ${vibeDirective.slice(0, 250)}
 ━━━ NO FRANCHISE PROPER NOUNS ━━━
 NEVER write "Knowhere", "Xandar", "Contraxia", "Sovereign", "Yondu", "Star-Lord", "Rocket", "Groot", "Ego", "Nova Corps" in the output.
 
+━━━ NO SKULLS — HARD BAN ━━━
+NEVER render skulls of any kind: no giant celestial skull (Knowhere code), no skull-shaped architecture, no skull-bone fragments, no cracked-cranium spaces. Cosmic-weird architecture should lean into temple-arcades, spire-cities, color-saturated cathedrals, kaleidoscopic geometry — NOT macabre bone forms.
+
 ━━━ COMPOSITION ━━━
 SATURATED COLOR is the signature — neon, classical-perfect, or rainbow-clashing palettes. Less gritty than Star Wars, more PLAYFUL-EXTRAVAGANT-WEIRD. Foreground architectural detail, midground form, background atmospheric color-bleed.
 
