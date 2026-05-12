@@ -124,6 +124,8 @@ module.exports = {
   RITUAL_MOMENT: load('ritual_moment'),
   // Conditional cosmic event for cosmic-vista path (40% gate)
   COSMIC_EVENT: load('cosmic_event'),
+  // Conditional cozy intimate moment for cozy-sci-fi-interior path (40% gate)
+  COZY_MOMENT: load('cozy_moment'),
   COSMIC_ORACLE_LOCATIONS: FORCE_MAP ? FORCE_MAP : [
     ...load('cosmic_oracle_locations'),
     ...load('dune_landscapes'),

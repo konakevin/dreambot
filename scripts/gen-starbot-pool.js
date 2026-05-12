@@ -853,6 +853,21 @@ Examples:
 
 Format: one detailed sentence per entry, 100-160 words. Include: instrument/composite name + named real object + multi-color saturated rendering language + ONE small mechanical scale-prover. NO fictional objects, NO franchise references.`,
   },
+  cozy_moment: {
+    format: 'simple',
+    theme: 'Small intimate cozy moments visible in a warm sci-fi interior — a steam curl, a turned page, a sleeping pet, a hand reaching for a mug. Conditional 40%-gated layer for cozy-sci-fi-interior path.',
+    touchpoints: [],
+    instructions: `Write 50 small intimate cozy moments — a single tiny action or detail caught freeze-frame in a warm sci-fi interior. Each entry: one sentence describing the specific moment. Sci-fi context still present (the moment happens in a starship galley / generation-ship quarters / hydroponics bay / etc.) but the moment itself is human-scale, intimate, warm.
+
+Examples:
+1. Steam curling from a forgotten mug of coffee on the navigation console, catching the warm amber readout glow.
+2. A figure seen from behind reading a paperback book, one socked foot tucked under them, a soft blanket draped across their shoulders.
+3. A small striped cat asleep on a coiled fiber-optic cable, tail flicking once in dream-sleep.
+4. Two hands meeting in lamplight to pass a thermos, fingertips briefly touching, a small smile implied off-frame.
+5. A plant leaf unfurling under purple grow-lamp, fresh green against worn metal bulkheads.
+
+The moment is QUIET — no action set-pieces. No combat, no awe, no epic scale. Soft, lived-in, human. Mix: solitary moments / paired moments / animal moments / sensory moments (steam, light, fabric, food, plants). Sometimes no person visible, just evidence of one. Output 50 numbered list entries.`,
+  },
   cosmic_event: {
     format: 'simple',
     theme: 'Dramatic cosmic events for cosmic-vista scenes — the moment a cosmic phenomenon erupts into ACTION. Conditional 40%-gated drama layer.',
@@ -939,18 +954,47 @@ Examples:
 Avoid duplicating: AWE, DREAD, MELANCHOLY, SACRED, INDIFFERENT-MEGALOPOLIS, ALIEN-WONDER, FRONTIER-ISOLATION, TRIUMPHANT-DISCOVERY. Invent NEW moods — EUPHORIC-ASCENSION, COSMIC-HOSTILITY, ANCIENT-PATIENCE, NEUROTIC-SUBLIME, TENDER-LONELINESS, EXALTED-VIGIL, etc. Output 25 numbered list entries.`,
   },
   cozy_sci_fi_interiors: {
-    theme: 'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary.',
+    theme: 'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary. Includes private quarters AND cozy social spaces (bars, lounges, observation decks, skybars, viewport lookouts).',
     touchpoints: [
       'Cowboy Bebop Bebop ship interior (lived-in, gritty, warm lamps)',
-      "Howl's Moving Castle interior",
+      'Star Trek Ten Forward lounge (curved viewport, plush seating, soft amber light)',
+      'Mass Effect Citadel skybar (planet view, intimate booths)',
+      'Star Wars cantina (alien clientele, bar lights, low-key warmth)',
+      'Blade Runner noodle bar (steam, neon, cramped intimacy)',
       'Studio Ghibli pastoral kitchens',
-      'Star Trek captain quarters (personal items, plants, lit warmly)',
       'Solar Sands homestead aesthetic',
       'Firefly Serenity cargo hold + galley',
-      'Old-future retrofuture homestead (Mead pastoral)',
       'Ad Astra capsule interior (clean isolation)',
+      'Babylon 5 ZocaloAvatar — Pandora floating mountains observation lounge',
+      'The Expanse Belter dive bar',
+      'observation deck looking down at a planet below — Earth-like, Mars-like, or gas-giant',
     ],
-    instructions: `Cozy + lived-in is the KEY. Warm light, personal objects, plants, soft fabrics. The SCI-FI is in the materials (alien view through window, transparent floor, holographic accent) but the MOOD is "home". Camera intimate. May include ONE figure visible from behind through a window-edge, but optional.`,
+    instructions: `Cozy + lived-in is the KEY. Warm light, personal objects, plants, soft fabrics. SCI-FI is in materials (alien view through window, transparent floor, holographic accent) but MOOD is "home" or "neighborhood haunt".
+
+ONLY THESE SCENE TYPES (mix them, never repeat the same archetype twice):
+- Cozy command bridge / cockpit (single pilot at console, warm panel glow, porthole view of stars/nebula/planet)
+- Bedroom / private quarters / sleeping nook / berth / captain's cabin (hammocks, quilts, personal mementos)
+- Bar / lounge / cantina / cafe / noodle joint / tea house / pub (warm intimate booths, sometimes 2-4 distant patrons)
+- Lab / workshop / engineering nook / tinkerer's corner (researcher's cozy lab with porthole, specimens, plants)
+- Atrium / greenhouse / hydroponics / botanical garden / arboretum / conservatory / terrarium / aquarium (lush plants, often biomech or alien biology mixed in, porthole or skylight)
+- Reading nook / sitting area / study / den / library corner
+- Galley / kitchen / mess hall (warm cooking, baking, dining)
+- Observation deck / skybar / sky-lounge / panoramic viewport lookout / dome (BIG curved window with planet below or nebula)
+
+FORBIDDEN scene types (NEVER write these):
+- Cargo holds / cargo bays / cargo containers / storage lockers / storage closets / supply rooms
+- Corridors / hallways / passages / maintenance tunnels / utility shafts / access ducts / crawlspaces
+- Waiting areas / departure lounges / terminal lobbies / queue zones
+- Escape pods / emergency capsules / life pods (unless converted into a fully-decorated bedroom-style nook)
+- Airlocks / airlock staging areas (only OK if explicitly described as "converted into a [bedroom/sitting nook]")
+- Gyms / locker rooms / showers / toilets / bathrooms / wash rooms
+- War rooms / tactical centers / interrogation rooms / operating theaters
+- Foundries / smelting bays / forge rooms / industrial floors / factory floors
+- Memorial / shrine / temple / monastery / cult / ritual chamber spaces
+
+For observation-deck / skybar / lounge scenes: BIG curved viewport showing a planet below (Earth-like, Mars-like ringed gas giant, etc.) or vast nebula is the centerpiece. Cozy still wins the foreground — armchairs, plush booths, glowing lamps — but the window is the gravitational pull.
+
+Camera INTIMATE — small enclosed space, never wide corridor or transit area. May include 0-1 figures (rarely 2-4 distant patrons in bar/lounge). NEVER first-person POV.`,
   },
   dune_landscapes: {
     theme: 'Dune-coded alien desert vistas — twin-sun horizons, ribbed sandstone formations, dust-haze atmospherics, Villeneuve cinematography. Inspired by but not literal franchise references.',
