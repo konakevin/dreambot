@@ -823,6 +823,36 @@ ABSOLUTE BANS:
 
 Output 15 numbered list entries.`,
   },
+  weather_particulate: {
+    format: 'simple',
+    theme: 'Universal atmospheric particulate / weather effects that fill the air in a sci-fi scene — dust, mist, vapor, ash, plasma, aurora, radiation, glitter, etc.',
+    touchpoints: [],
+    instructions: `Write 30 atmospheric particulate / weather effects. Each entry: lowercase descriptive phrase — short body explaining how it fills the air and catches light. One sentence per entry.
+
+Examples:
+1. thick atmospheric haze — dense particulate suspending light into visible volumetric beams, distance fades into gradient
+2. wind-driven dust haze — orange or amber dust streaming horizontally across the frame, sand-grain texture in the air
+3. acid-rain fog — corrosive humid mist clinging to surfaces, vapor visible at ground level
+4. ash drift — fine dark particulate falling slowly through the frame, accumulating on horizontal surfaces, sky overcast
+5. ionized plasma shimmer — heat-rippled distortion across the frame, brief electric flickers along edges
+
+Avoid duplicating: thick atmospheric haze, wind-driven dust haze, acid-rain fog, vapor streams from vents, clear cold air, ash drift. Invent NEW particulate — coral spore drift, magnetic-storm aurora veil, radiation snow, crystalline frost crystals suspended, bioluminescent plankton drift, gravitational lensing distortion, solar-wind ribbon, etc. Mix terrestrial, atmospheric, vacuum, and supernatural effects. Output 30 numbered list entries.`,
+  },
+  real_space_subjects: {
+    format: 'simple',
+    theme: 'Photoreal NASA / Hubble / JWST / Chandra / EHT astrophotography subjects — real astronomical objects rendered in punched-up multi-wavelength composite style. Named objects OK. Each entry is a complete scene seed with instrument, framing, and scale-prover baked in.',
+    touchpoints: [],
+    instructions: `Write complete photoreal astrophotography scene seeds. Each entry is ONE detailed paragraph (3-5 clauses) describing a REAL astronomical object as a JWST / Hubble / Chandra / EHT / multi-wavelength composite — punched-up saturated colors, vibrant glowing detail, with a TINY mechanical scale-prover (drone / craft / probe / station) silhouette somewhere in frame.
+
+Use the FULL CATALOG — Messier objects (M1-M110), NGC catalog, named exoplanets (TRAPPIST-1, Proxima b, Kepler-452b, etc.), named stars (Betelgeuse, Rigel, Sirius, Vega, Eta Carinae, R136a1, VY Canis Majoris), planets and moons (Jupiter, Saturn rings, Io, Europa, Titan, Enceladus, Triton, Pluto-Charon), nebulae (Crab, Orion, Eagle, Carina, Helix, Cat's Eye, Veil, Lagoon, Trifid, Pelican, Tarantula, Boomerang), galaxies (Andromeda, Whirlpool, Sombrero, Cartwheel, Mice, Antennae, Stephan's Quintet), black holes (M87, Sgr A*, Cygnus X-1), quasars, pulsars, magnetars, supernova remnants (Cas A, Vela, SN 1054), asteroid fields (Psyche, Vesta, Ceres, Eros, Bennu), comets (Hale-Bopp, NEOWISE, Halley), star-forming regions (Pillars of Creation, Mystic Mountain), globular clusters (Omega Centauri, 47 Tucanae, M13). Reach widely.
+
+Examples:
+1. Jupiter cropped close in JWST near-infrared, Great Red Spot mid-rotation churning vivid crimson-amber against electric cyan bands, volcanic eruption from Io silhouetted against planet limb ejecting sulfur plume, Europa's ice-crack network glowing faint blue at upper-right, tiny mining drone silhouette at lower frame for scale, polar aurora crown blazing violet.
+2. M87 supermassive black hole event horizon shadow in EHT radio composite, asymmetric accretion disk glowing orange-white from Doppler boosting, relativistic jet shooting electric blue 5,000 light-years into elliptical halo, photon ring razor-sharp at event boundary, background galaxy lensed into Einstein ring, research probe silhouette lower-left for scale.
+3. Crab Nebula in Chandra x-ray plus Hubble visible composite, pulsar wind nebula expanding outward in electric violet filaments, central neutron star blazing cyan-white at heart, surrounding gas filaments glowing crimson and gold, supernova remnant boundary sharp against deep black, tiny radio telescope array silhouetted at lower frame for scale.
+
+Format: one detailed sentence per entry, 100-160 words. Include: instrument/composite name + named real object + multi-color saturated rendering language + ONE small mechanical scale-prover. NO fictional objects, NO franchise references.`,
+  },
   cosmic_event: {
     format: 'simple',
     theme: 'Dramatic cosmic events for cosmic-vista scenes — the moment a cosmic phenomenon erupts into ACTION. Conditional 40%-gated drama layer.',
