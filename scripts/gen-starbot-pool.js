@@ -823,6 +823,20 @@ ABSOLUTE BANS:
 
 Output 15 numbered list entries.`,
   },
+  ritual_moment: {
+    format: 'simple',
+    theme: 'Mystic / oracle action moments for cosmic-oracle scenes — channeling cosmic energy, divining starlight, casting sigils, communing with the void.',
+    touchpoints: [],
+    instructions: `Write 25 mystic action moments — what the cosmic oracle is DOING when ritual energy is active. Each one sentence. Visible glow, sigil, energy thread, or supernatural presence.
+
+Examples:
+1. Channeling violet starlight through outstretched palms, golden sigils orbiting the figure in slow rotation.
+2. Drawing a glowing constellation map mid-air with one finger, lines forming an ancient star-pattern.
+3. Communing with a tethered cosmic entity, faint silvery thread connecting their forehead to a hovering nebula-form.
+4. Casting a divination — three glowing dice tumble in midair leaving violet trails.
+
+Future sci-fi mystic aesthetic, not fantasy wizard. Output 25 numbered list entries.`,
+  },
   cozy_sci_fi_interiors: {
     theme: 'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary.',
     touchpoints: [

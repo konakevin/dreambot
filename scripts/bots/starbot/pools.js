@@ -120,6 +120,8 @@ module.exports = {
   REAL_SPACE_SUBJECTS: load('real_space_subjects'),
   COSMIC_ORACLE_CHARACTERS: load('cosmic_oracle_characters'),
   COSMIC_ORACLE_ACTIONS: load('cosmic_oracle_actions'),
+  // Conditional ritual/mystic moment for cosmic-oracle path (40% gate)
+  RITUAL_MOMENT: load('ritual_moment'),
   COSMIC_ORACLE_LOCATIONS: FORCE_MAP ? FORCE_MAP : [
     ...load('cosmic_oracle_locations'),
     ...load('dune_landscapes'),
