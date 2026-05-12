@@ -1172,23 +1172,41 @@ function signatureOf(entry) {
   return [...new Set(tokens)].sort().slice(0, 12).join(' ');
 }
 
+// Title-only signature for pools with "TITLE — description" or
+// "lowercase phrase — description" shape. Two entries with the same
+// title but different bodies should still be treated as duplicates —
+// signatureOf strips titles, so we need a separate guard.
+function titleOf(entry) {
+  const dashIdx = entry.indexOf(' — ');
+  if (dashIdx < 0) return null; // no title — fall back to signature-only dedup
+  return entry.slice(0, dashIdx).trim().toLowerCase();
+}
+
 function dedupe(entries) {
-  const seen = new Map(); // signature → first entry that claimed it
+  const seenSigs = new Map(); // body-signature → first entry that claimed it
+  const seenTitles = new Map(); // title (lowercased) → first entry that claimed it
   const kept = [];
   const dropped = [];
   for (const e of entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
+    const title = titleOf(e);
+    if (title && seenTitles.has(title)) {
+      dropped.push({ entry: e.slice(0, 80), duplicateOf: seenTitles.get(title).slice(0, 80), reason: 'title' });
+      continue;
+    }
     const sig = signatureOf(e);
     if (sig.length < 10) {
-      // Body was too short to signature — keep
+      // Body was too short to signature — keep (and register title)
+      if (title) seenTitles.set(title, e);
       kept.push(e);
       continue;
     }
-    if (seen.has(sig)) {
-      dropped.push({ entry: e.slice(0, 80), duplicateOf: seen.get(sig).slice(0, 80) });
+    if (seenSigs.has(sig)) {
+      dropped.push({ entry: e.slice(0, 80), duplicateOf: seenSigs.get(sig).slice(0, 80), reason: 'body' });
       continue;
     }
-    seen.set(sig, e);
+    seenSigs.set(sig, e);
+    if (title) seenTitles.set(title, e);
     kept.push(e);
   }
   return { kept, dropped };
@@ -1258,9 +1276,15 @@ async function generateBatch(batchCount) {
     if (within.dropped.length > 0) {
       console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
     }
-    // Cross-batch dedup against current pool
+    // Cross-batch dedup against current pool — body signature AND title
     const existingSigs = new Set(pool.map((e) => signatureOf(e)));
-    const newUnique = within.kept.filter((e) => !existingSigs.has(signatureOf(e)));
+    const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
+    const newUnique = within.kept.filter((e) => {
+      if (existingSigs.has(signatureOf(e))) return false;
+      const t = titleOf(e);
+      if (t && existingTitles.has(t)) return false;
+      return true;
+    });
     const crossDropped = within.kept.length - newUnique.length;
     if (crossDropped > 0) {
       console.log(`  • cross-batch dedup dropped ${crossDropped}`);
