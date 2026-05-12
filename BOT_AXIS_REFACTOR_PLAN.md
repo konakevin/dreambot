@@ -397,7 +397,7 @@ Subsequent bots (GothBot, SteamBot, MechBot, DinoBot, BrickBot) follow the same 
 | megastructure | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, no conditional drama | Phase 3 #5 |
 | space-opera | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, 3 conditional drama layers | Phase 3 #6 |
 | cosmic-oracle | CHARACTER | hand-written brief, 3 slim bespoke pools, full canonical, ritual_moment conditional | Phase 3 #3 |
-| cosmic-vista | PURE_COSMOS | hand-written brief, slim pool, full canonical (no anchor), cosmic_event conditional | Phase 2 (first) |
+| cosmic-vista | PURE_COSMOS | ✅ MIGRATED 2026-05-12 — composer-driven, 9-line declaration; Kevin signed off "looks just as good" | Phase 2 DONE |
 | real-space | PHOTOREAL_ASTRO | hand-written brief, FAT pool (400 entries @ 100-160w), canonical-LITE (only narrative axes), cosmic_event conditional | Phase 3 #2 |
 | cozy-sci-fi-interior | INDOOR_INTIMATE | hand-written brief, FAT pool (400 entries @ 46w — needs reseeding slim), canonical-LITE, cozy_moment conditional + framing modes | Phase 3 #9 (pool reseed first) |
 | alien-landscape | OUTDOOR_LANDSCAPE | hand-written brief, MEDIUM-shape pool (shared ALIEN_PLANET_BIOME at 42w), full canonical, no conditional drama, no bespoke pool | Phase 4 |

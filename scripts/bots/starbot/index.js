@@ -309,10 +309,56 @@ module.exports = {
     };
   },
 
+  // Bot-level pool defaults — slot name → pool key in pools.js. The shared
+  // brief-composer reads this when a path doesn't override a slot. Universal
+  // axes (story_beat, lighting, etc.) are sci-fi-coded by content in StarBot's
+  // pools; other bots ship their own genre-coded versions.
+  // See BOT_AXIS_REFACTOR_PLAN.md for the pool resolution hierarchy.
+  defaultPools: {
+    // Universal axes
+    story_beat: 'STORY_BEATS',
+    composition_frame: 'COMPOSITION_FRAME',
+    scale_provers: 'SCALE_PROVERS',
+    weather_particulate: 'WEATHER_PARTICULATE',
+    emotional_dna: 'EMOTIONAL_DNA',
+    lighting: 'LIGHTING',
+    anchor_scale: 'ANCHOR_SCALE',
+    // Bot-level axes
+    surprise_element: 'SURPRISE_ELEMENT',
+    sky_layer: 'ALIEN_SKY_LAYER',
+    anchor_entity: 'STARBOT_ANCHOR_ENTITY',
+  },
+
+  // Lookup a pool array by its key in pools.js. Used by the brief-composer
+  // to resolve slot → pool at render time. Throws if the pool is unknown.
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`StarBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`StarBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Two supported path module shapes:
+    //   (a) function — legacy hand-written path; called directly
+    //   (b) object  { archetype, pools, ... } — declarative; routed through
+    //       the shared brief-composer at scripts/lib/brief-composer.js
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`StarBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {
