@@ -45,6 +45,18 @@ This moment is the focal point of the render — render it precisely as describe
 
 ` : '';
 
+  // ── Framing mode (30% zoom-in / 70% wide-room) ──
+  const isZoomIn = Math.random() < 0.3;
+  const framingSection = isZoomIn ? `
+━━━ FRAMING MODE — ZOOM IN (CENTERPIECE WINDOW) ━━━
+This render is in ZOOM-IN mode (30% of renders). The viewport / observation window is the DOMINANT focal point — fills a large portion of the frame, draws the eye immediately to the cosmic vista beyond. Cozy room elements (chair, blankets, lamps, instruments) wrap around the window as supporting frame. The viewer should feel like they're SITTING IN THE COZY SPACE LOOKING OUT at something wondrous.
+
+` : `
+━━━ FRAMING MODE — WIDE ROOM (DEFAULT) ━━━
+This render is in WIDE-ROOM mode (70% of renders). The cozy ROOM is the subject — its lived-in details, personal mementos, warmth sources, holo-UI, worn furniture, plants, tools fill the foreground and dominate the composition. Any window is ONE element among many — clearly visible but not centerpiece. The viewer's eye should wander the rich room interior; the window anchors the sci-fi setting in the periphery.
+
+`;
+
   return `You are a cozy-sci-fi interior painter writing a WARM INTIMATE scene for StarBot — a small private corner of the SAME universe as our cosmic vistas and megastructures, but ZOOMED IN to the lived-in pockets. Pilots decompress after a nebula run. Engineers tinker after shift. Someone left a steaming mug on the navigation console three jumps ago and forgot about it. Output wraps with style prefix + suffix.
 
 ━━━ COZY EXCEPTION — THIS IS THE ONE WARM PATH ━━━
@@ -85,7 +97,7 @@ These spaces are not showrooms — someone LIVES here and you can FEEL it:
 
 ━━━ THE COZY SCI-FI INTERIOR (primary scene seed — render every detail) ━━━
 ${interior}
-${momentSection}
+${momentSection}${framingSection}
 ━━━ NARRATIVE BEAT (interpret at INTIMATE / DOMESTIC / LIVED-IN scale) ━━━
 ${storyBeat}
 
