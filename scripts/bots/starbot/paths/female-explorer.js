@@ -60,23 +60,21 @@ ${race}
 This race is NON-NEGOTIABLE. Render her with the EXACT anatomy, distinguishing features, skin tone, ridges/horns/lekku/montrals/antennae above. If the race is Twi'lek-coded, she has head-tails. If Vulcan-coded, pointed ears + arched brows. If Mandalorian-coded, beskar-style helmet visible. The lineage is the HERO of her identity.
 
 ━━━ HER COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
-A ${race.split(':')[0]} woman with ${hairColor.split(',')[0]} hair, wearing ${outfit}, carrying ${accessory}.
+A ${race.split(':')[0]} woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hairColor.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory}.
 
-(skin tone, eye color, and hairstyle are minor details — only visible at the face if a helmet is up. Do NOT describe "exposed forearms" or "bare skin" — she is sealed in armor.)
+(All seven DNA elements — race / skin / eyes / hair color / hairstyle / outfit / accessory — should be discernible in the render when the biome permits a visible face. If the biome demands a sealed helmet, face DNA may be obscured — that's fine, the outfit and accessory still carry her identity.)
 
 ABSOLUTE FRANCHISE LOOKALIKE BAN: NO Stormtrooper plastic armor. NO Mandalorian T-visor full-body burnished plate. NO Halo Spartan green-and-gold helmet. NO Mass Effect N7. NO Imperial officer. NO Fremen stillsuit. NO Jedi or Sith robes.
 
-Render the outfit EXACTLY as described — sealed armor plates, equipment-laden. Treat her with the same dignity as a male soldier in the same role.
+Render the outfit EXACTLY as described. Treat her with the same dignity as a male soldier in the same role.
 
 ━━━ BIOME-APPROPRIATE OUTFIT — HARD RULE ━━━
-The outfit MUST match the biome's hazards. If the rolled outfit conflicts with the biome, OVERRIDE the outfit:
-- AIRLESS / VACUUM / TOXIC / METHANE biome → sealed EVA pressure suit with helmet, NO skin exposed
-- HOSTILE COLD / GLACIAL / ICE biome → heavy insulated parka, hood, gloves, no skin exposed
-- HOT DESERT / DUNE / VOLCANIC biome → moisture-recycler suit, face wrap, light layered fabric
-- Temperate / habitable biome → standard tactical-explorer gear, any of the outfit pool
-NEVER bikini-warriors on ice planets. NEVER bare skin in vacuum/toxic atmosphere. Function follows biome.
-
-OUTFIT MUST MATCH BIOME CONDITIONS: vacuum/toxic biome → sealed EVA pressure suit; glacial/ice biome → heavy insulated parka; hot desert biome → moisture-recycler suit with face wrap; jungle biome → tactical fatigues breathable; bioluminescent forest / temperate → standard explorer gear. If the rolled outfit conflicts with the biome, override outfit to match biome.
+The outfit MUST match the biome's hazards. Face visibility follows from the biome — helmets are environmental, not mandatory:
+- AIRLESS / VACUUM / TOXIC / METHANE biome → sealed EVA pressure suit with helmet, face behind visor (face DNA partially obscured — fine)
+- HOSTILE COLD / GLACIAL / ICE biome → heavy insulated parka with hood up, face may be partially visible
+- HOT DESERT / DUNE / VOLCANIC biome → moisture-recycler suit, face wrap optional, face often partially visible
+- TEMPERATE / JUNGLE / BIOLUMINESCENT / HABITABLE biome → tactical gear, helmet OFF or absent, FACE FULLY VISIBLE so her lineage + skin + eyes + hair all read clearly
+NEVER bikini-warriors on ice planets. NEVER bare skin in vacuum/toxic atmosphere. Function follows biome. When the biome is habitable, prefer face-visible compositions so the character DNA reads.
 
 ━━━ SURPRISE ELEMENT — a secondary subject in the scene that adds story ━━━
 ${surpriseElement}

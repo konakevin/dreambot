@@ -46,6 +46,8 @@ const flag = (n, fb) => {
 const has = (n) => args.includes('--' + n);
 const POOL = flag('pool', null);
 const COUNT = parseInt(flag('count', '50'), 10);
+const TARGET = flag('target', null) ? parseInt(flag('target', '0'), 10) : null;
+const MAX_ITERATIONS = parseInt(flag('max-iter', '15'), 10);
 const DRY = has('dry-run');
 
 if (!POOL) {
@@ -160,6 +162,260 @@ EXAMPLES of varied entries the pool should contain (use these as flavor anchors,
 
 Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — distinct visual identity.`,
   },
+  architecture_style: {
+    theme: 'distinct architectural style vocabulary for alien cities — each entry names a specific structural language so Flux renders varied architecture instead of defaulting to "cyberpunk spires" every time. Each entry 30-60 words.',
+    touchpoints: [
+      'brutalist concrete (Stalinist scale)',
+      'biomechanical Giger chitin',
+      'crystalline Halo-Forerunner lattice',
+      'Mayan stepped ziggurats',
+      'Kirby cosmic kaleidoscopic',
+      'Gaudí flowing organic',
+      'art-deco retrofuture (Hugh Ferriss)',
+      'Soviet dieselpunk industrial',
+      'walking-megastructure (Howl)',
+      'cliff-built carved-stone (Petra-scale)',
+      'crashed ship assimilated into city',
+      'modular hab-spheres (NASA-Apollo)',
+      'floating-platform archipelago',
+      'underground cyclopean halls',
+      'mushroom-cap domed colonies',
+      'temple-city processional avenues',
+      'desert-oasis walled (Middle Eastern)',
+      'Banks Culture elegant curves',
+      'orbital ring segments grounded',
+      'shipyard cradle integrated',
+    ],
+    instructions: `Each entry names a SINGLE distinct architectural style with specific structural language. Format: "STYLE NAME — visual description of forms / materials / textures / scale". Vary across all 100 entries — never repeat a style; each must feel like a different civilization or aesthetic tradition. NO generic "alien architecture" — every entry has a precise style identity.`,
+  },
+  character_action: {
+    theme: 'cinematic engagement verbs for sci-fi explorer characters — what they are DOING in this exact frame. Modeled on MechBot power_armor_actions: specific, dynamic, grounded interaction with environment. NO floating-in-air verbs.',
+    touchpoints: [
+      'gun battle / firefight with cover',
+      'climbing sheer rock / structural element',
+      'rappelling / controlled descent',
+      'face-to-face with alien creature',
+      'examining ancient marker / artifact',
+      'tinkering / repairing tech',
+      'spying / scope-watching from cover',
+      'hunting / tracking / stalking prey',
+      'reconnaissance / scanning / mapping',
+      'wading through hazardous terrain',
+      'infiltration / sneaking past patrol',
+      'defending position / overwatch',
+      'extraction / signaling pickup',
+      'salvaging from wreckage',
+      'piloting craft / driving rover',
+      'open-handed parley',
+      'kneeling at terminal / hacking',
+      'mid-leap landing on ledge',
+      'carrying wounded ally',
+    ],
+    instructions: `Each entry is a specific cinematic moment in 25-60 words. EVERY entry MUST have the character GROUNDED — feet on terrain, three points of contact, or interacting with an object. NO floating verbs ("MID-LEAP" → "LANDING ON LEDGE"; "AIRBORNE" → reframe as ground-contact moment).
+
+Format: "ACTION-VERB-CAP — body position + interaction with environment + 1-2 visible details". Example: "IN A FIREFIGHT — crouched LOW behind a rock or wall in cover, rifle braced against shoulder, plasma rounds streaking past her shoulder, ammo casings on the ground".
+
+Cover all genre categories: combat (battling), exploring (climbing/wading), tinkering (repairing/hacking), spying (surveillance/sneaking), hunting (tracking/stalking), reconnaissance (scanning/mapping), discovery (artifact/marker), survival (signaling/carrying), social (parley/conferring).
+
+NO franchise proper nouns. NO superhero poses. Every action is a working professional doing real work.`,
+  },
+  starbot_anchor_entity: {
+    theme: 'sci-fi anchor entities for StarBot scenes — what figure / ship / creature populates the scene at the prescribed scale. Each entry 15-40 words describing ONE entity type.',
+    touchpoints: [
+      'robed wandering explorer',
+      'vac-suit scientist (Ad Astra/Interstellar)',
+      'armored military soldier',
+      'desert nomad in dust-cloak',
+      'alien creature biped (sentient)',
+      'alien creature quadruped (native fauna)',
+      'tiny exploration shuttle',
+      'mid-size cargo freighter',
+      'elegant crystalline yacht',
+      'oracle / ritual figure in flowing robes',
+      'bipedal android / synthetic',
+      'corporate operative in slim suit',
+      'merchant / trader / spice-runner',
+      'pilgrim / monastic / cultist',
+      'jetpack-equipped scout',
+      'beast-rider on alien mount',
+      'small spherical drone',
+      'six-legged crab-walker mech (small)',
+      'cyber-edgerunner with augments',
+      'arctic-suited polar explorer',
+    ],
+    instructions: `Each entry describes ONE entity type — a figure, ship, creature, or vehicle that could be a SILHOUETTE / SMALL element in a scene path render. Variety required across all 50 entries: humanoid figures of various professions, ships of various designs, alien creatures of various biologies, vehicles of various scales. NO franchise lookalikes. Each entry is the TYPE not a specific named character.`,
+  },
+  alien_sky_layer: {
+    theme: 'sci-fi alien sky / overhead atmosphere layers for StarBot. Each entry describes what is OVERHEAD in 15-40 words — the sky layer that completes the scene composition.',
+    touchpoints: [
+      'twin suns at different altitudes',
+      'ring-curve overhead (Halo/Niven)',
+      'gas giant looming (Avatar)',
+      'aurora cascades (green/magenta)',
+      'Milky Way galactic arch',
+      'binary eclipse / solar corona',
+      'orbital station visible architecture',
+      'storm-broken sun with shaft',
+      'bioluminescent spore clouds',
+      'plasma storm with lightning',
+      'dust-red overcast Mars sky',
+      'crystal-blue clear vacuum view',
+      'meteor shower streaks',
+      'distant supernova remnant',
+      'spaceship traffic visible as dots',
+      'partial-eclipse twin-moons',
+      'pre-dawn pink terminator',
+      'storm wall approaching',
+      'nebula color clouds visible by day',
+      'orbital ring under construction',
+    ],
+    instructions: `Each entry is a complete sky layer description for a sci-fi scene. The sky is the upper third of the frame composition. Vary across all 30 entries: day skies / night skies / dawn / dusk / storm / clear / nebula / orbital structures visible / multiple celestial bodies / weather phenomena. NO franchise proper nouns (don't say "Death Star overhead" — describe it generically).`,
+  },
+  surprise_element: {
+    theme: 'sci-fi secondary subjects woven into scenes to add visual interest. Each entry describes ONE element that can be placed at midground or deep midground.',
+    touchpoints: [
+      'alien creature watching',
+      'fellow explorer at distance',
+      'enemy patrol moving in formation',
+      'distant hunter with rifle',
+      'parked ship ready for departure',
+      'descending transport ship',
+      'crashed ship wreck',
+      'companion drone hovering',
+      'alien artifact pulsing',
+      'abandoned outpost in distance',
+      'distant smoke column / conflict',
+      'orbital station overhead',
+      'wildlife flock passing',
+      'rival explorer at far edge',
+      'alien statue colossal',
+      'enigmatic floating orb',
+      'crashed probe blinking',
+      'alien procession in distance',
+      'damaged patrol droid half-buried',
+      'beast carcass freshly killed',
+      'alien mount tethered',
+      'distant battle aftermath',
+      'alien pilgrimage line',
+      'rival faction encampment',
+      'collapsed bridge dangling cables',
+    ],
+    instructions: `Each entry is a single secondary subject that adds story to a scene without overwhelming the primary subject. Format: "ELEMENT NAME — description of what it looks like + where it sits in the scene + atmospheric/story implication". Variety across all 100 entries: creatures, sentient figures, ships, drones, vehicles, artifacts, ruins, distant phenomena, traces of past events. Each must imply a wider world.`,
+  },
+  explorer_outfits_male: {
+    theme: 'tactical-explorer outfits for male sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Sealed coverage, equipment-laden, professional military / explorer kit, like Master Chief or Aliens colonial marine.',
+    touchpoints: [
+      'Halo Spartan armor',
+      'Mass Effect N7',
+      'Edge of Tomorrow exosuit',
+      'Aliens colonial marine',
+      'Starship Troopers power armor',
+      'The Expanse Martian Marine',
+      'Apollo / NASA EVA suit',
+      'Dune stillsuit (utility-focused)',
+      'Mandalorian armor (plated)',
+      'Mad-Max wasteland-scavenger',
+      'Cyberpunk-2077 corporate operative',
+      'Blade-Runner trenchcoat-detective',
+    ],
+    instructions: `Each entry is a complete tactical outfit in 30-50 words. Lead with the ARMOR LAYER. Emphasize SEALED COVERAGE. Include FUNCTIONAL EQUIPMENT (utility belt, gauntlets, boots, sidearm, scanner, gear pouches).
+
+VARIETY MANDATE across all entries — hit each:
+- COLORS: red / orange / olive / black / desert tan / cobalt / brass / chrome / forest green / oxblood / charcoal / off-white / sand / arctic-white / midnight / copper-brown
+- TEXTURES: weathered leather / segmented metal / canvas-kevlar / chitin carapace / ceramic / mesh / brushed alloy
+- SILHOUETTES: slim scout / bulky power-armor / hooded cloaked / vest-and-pants / heavy backpack / minimalist / poncho / cape-flowing
+- STYLE FAMILIES: imperial soldier / merchant ranger / drifter scavenger / corporate operative / monastic order / desert nomad / arctic explorer / jungle ranger / cyber-edgerunner / clean military / dirty mercenary / scientific researcher / pirate / pilot
+
+50% of entries include head covering (helmet/hood/visor/mask); 50% head uncovered (hair visible, hood pulled back, helmet held).`,
+  },
+  female_explorer_hairstyles: {
+    theme: 'sci-fi female hairstyles — functional, helmet-compatible, characterful. Each entry is a hairstyle description in 10-25 words.',
+    touchpoints: [
+      'tight low ponytail (EVA-compatible)',
+      'shaved sides with top braid',
+      'long flowing loose for non-helmet wear',
+      'twin space-buns Princess Leia inspired',
+      'short pixie utilitarian',
+      'shoulder-length asymmetric cut',
+      'cornrows / box braids',
+      'high topknot',
+      'french-braided side-swept',
+      'dreadlocks practical bound',
+      'undercut with long top swept back',
+      'mohawk practical short',
+      'natural afro',
+      'shaved head (military-clean)',
+      'beaded warrior braids',
+      'space-explorer half-up half-down',
+    ],
+    instructions: `Each entry describes ONE hairstyle in 10-25 words: cut + length + how it's worn + functional consideration (e.g., "for helmet clearance" or "for EVA work"). Variety across cut types, lengths, ethnicities, formality. Practical for sci-fi explorers doing real work.`,
+  },
+  male_explorer_hairstyles: {
+    theme: 'sci-fi male hairstyles — functional, characterful, practical. Each entry 10-25 words.',
+    touchpoints: [
+      'high-and-tight military',
+      'shaved head clean',
+      'short slicked-back',
+      'medium beard-and-mustache short hair',
+      'long warrior braid',
+      'top-knot samurai-coded',
+      'dreadlocks tied back',
+      'mohawk practical',
+      'shaggy chin-length scavenger',
+      'mustache-and-undercut',
+      'corporate slicked',
+      'desert-nomad headwrap-covered',
+      'gray-bearded distinguished',
+      'punk-spiked liberty',
+      'cyberpunk-asymmetric',
+      'beard-only bald',
+    ],
+    instructions: `Each entry describes ONE male hairstyle in 10-25 words: cut + length + facial hair (if any) + characterful detail. Variety across cuts, beards, ages, ethnicities, formality. Practical for sci-fi explorers.`,
+  },
+  female_explorer_accessories: {
+    theme: 'signature accessory / weapon / tool for female sci-fi explorer. Each entry 10-25 words describing ONE accessory she carries visibly.',
+    touchpoints: [
+      'plasma pistol holstered',
+      'long-range scanner handheld',
+      'tactical climbing-rope coiled',
+      'multi-tool clipped to belt',
+      'sniper-rifle slung across back',
+      'jetpack mounted between shoulders',
+      'energy-sword sheathed at hip',
+      'comm-headset wrapped around ear',
+      'thermal-vision goggles on brow',
+      'mech-frame backpack with sensor arms',
+      'ceremonial staff / focusing-rod',
+      'data-tablet at hip',
+      'shotgun pump-action slung',
+      'medical-kit shoulder-bag',
+      'flame-projector hose to backpack',
+      'pet drone hovering at shoulder',
+    ],
+    instructions: `Each entry describes ONE accessory: what it is + where she carries it + signature detail. Vary across weapons / tools / scanners / armor accessories / mounts / pets. Each accessory should look DISTINCTIVE and identity-anchoring.`,
+  },
+  male_explorer_accessories: {
+    theme: 'signature accessory / weapon / tool for male sci-fi explorer. Each entry 10-25 words.',
+    touchpoints: [
+      'heavy assault rifle slung',
+      'plasma-pistol thigh-holstered',
+      'climbing-axe at hip',
+      'multi-tool wristband',
+      'large utility-backpack with antenna',
+      'sword-and-shield strapped to back',
+      'engineering-toolbelt utility',
+      'scanner-visor lifted',
+      'comm-headset',
+      'flamethrower hose-to-pack',
+      'sniper-rifle scoped',
+      'med-kit shoulder slung',
+      'flare-launcher at hip',
+      'shovel / pickaxe gear-strapped',
+      'jetpack',
+      'pet drone',
+    ],
+    instructions: `Each entry: what + where + signature. Variety across weapons / tools / scanners / mounts. Each distinctive.`,
+  },
   alien_planet_biome: {
     theme: 'alien planetary BIOMES — each entry is ONE distinctive ecological/geological identity used as a SETTING pool for the slot-pool composer. Used in alien-landscape path. Concise but specific — each biome is a 3-5 sentence description Sonnet weaves with other rolled axes.',
     touchpoints: [
@@ -209,6 +465,363 @@ Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — d
       'Eldar Craftworld (Warhammer 40K — graceful + alien)',
     ],
     instructions: `Ships must be VISUALLY DISTINCTIVE per entry — pick a DESIGN DNA (organic-biological / crystalline-lattice / Kirby-cosmic / ribbed-shell / impossible-geometry / weathered-cargo-haulers) and commit hard. NO gun-grey navy. NO blocky 60s-rocket. NO generic "sleek arrow." Each seed describes ONE ship type at compositional scale + environment that frames it.`,
+  },
+  space_opera_ships: {
+    format: 'simple',
+    theme: 'Cool sci-fi spaceships — vast megastructure forms AND winged fighters AND iconic flagship designs. Variety is the point.',
+    touchpoints: [],
+    instructions: `Write 30 cool sci-fi spaceship concepts. Each one sentence, detailed, visually distinct.
+
+Mix all three styles in roughly equal proportions:
+
+A) MEGASTRUCTURE / DEEP-SPACE VESSELS — kilometer-scale angular structures, layered hull planes, glowing internal energy seams, segmented blocks, lattice frames, fractured geometry. Like:
+- "A kilometer-scale angular deep-space vessel with layered hull planes and glowing internal energy seams."
+- "A vast segmented structure ship composed of interlocking geometric blocks drifting in controlled alignment."
+
+B) WINGED FIGHTERS / SLEEK CRUISERS — X-wing-style multi-wing, forward-swept wings, dart-shape interceptors, blade-bow fighters with visible weapon mounts and plasma engines. Like:
+- "Obsidian-black needle-class interceptor 45 meters long shaped like a dagger blade with serrated wing-edges, twin plasma engines glowing crimson, wingtip-mounted cannons."
+- "Sleek 24-meter forward-swept-wing strike fighter, matte gunmetal hull with cyan accent stripes, twin engine nacelles, wing-root laser emitters."
+
+C) ICONIC FLAGSHIPS / INDUSTRIAL HAULERS — chunky multi-tier sci-fi capital ships, weathered orange-rust cargo leviathans, sleek teardrop-form vessels, brass-and-copper retrofuturist cruisers. Like:
+- "Weathered orange-rust cargo hauler stacked nine container modules high in asymmetric tower configuration, exposed maintenance gantries with yellow safety rails, hull scarred with re-entry burns."
+- "Clean ceramic-white teardrop-form vessel 350 meters long with three elegant nacelle fins, glowing blue accent strips along seams, organic-patterned window grids."
+
+Future sci-fi aesthetic, not modern-day military. Vary silhouette, color, scale, mood. Make them iconic and distinct.
+
+Output 30 numbered list entries.`,
+  },
+  space_opera_setting: {
+    theme: 'DYNAMIC FIGHTER-ACTION SETTINGS — places where starfighters dogfight, recon, chase, or skim. Each entry is one specific action environment with motion-friendly cinematic depth. NO static landscape views. NO ground-level architecture. Pure space + atmospheric action contexts.',
+    touchpoints: [
+      'asteroid canyon (rocks at varied scale + tight spaces)',
+      'debris field of broken capital wreck (twisted hull fragments)',
+      'capital ship hull surface (skimming low along armor terraces)',
+      'nebula cloud chase corridor (gas wisps + reduced visibility)',
+      'station approach choke point (narrow corridor + defense turrets)',
+      'planet ring plane traverse (ice + rock + reflected sunlight)',
+      'low-orbital strike zone above industrial planet',
+      'gas giant cloud dive (storm bands + lightning)',
+      'enemy fighter formation interception zone',
+      'orbital shipyard scaffolding maze (skeletal frames)',
+      'comet tail trail (vapor streams)',
+      'mining-belt industrial cluster (rigs + cargo frames)',
+    ],
+    instructions: `EACH ENTRY IS A DYNAMIC SCI-FI ACTION SETTING — 25-50 words. SINGLE FLOWING SENTENCE PER ENTRY. No ship described. No camera. Just the SETTING where the fighter is acting.
+
+FORMAT: numbered 1-25. One sentence each.
+
+Per entry MUST include:
+- SETTING TYPE (canyon / debris field / hull surface / nebula corridor / station maze / etc.)
+- MOTION FRIENDLINESS — tight spaces, obstacles to weave around, or open vistas with depth markers
+- COSMIC ANCHOR (planet / station / capital backdrop / asteroid / nebula — at least one element)
+- ONE memorable detail (drifting wreckage / lightning flash / running-lights pulsing / etc.)
+
+VARIETY MANDATE across 25 entries:
+- Tight spaces (50%): asteroid canyons / debris fields / station corridors / shipyard mazes / capital-hull skim
+- Open vistas (50%): nebula chases / planet ring traverses / low-orbital strikes / gas giant dives / open void with capital backdrop
+
+EXAMPLES (flavor anchors; invent 25 distinct):
+
+1. Tight asteroid canyon with massive rocks tumbling at varied scales, narrow gaps between fragments forcing the fighter to weave through, distant starfield through the canyon opening.
+
+2. Skimming low along the hull surface of a massive capital ship, armor terraces and weapon emplacements blurring past beneath the fighter, dorsal sensor pylons and antenna clusters rushing by.
+
+3. Inside a debris field of a broken capital wreck, twisted hull fragments and glowing wreckage drifting at varied angles, vapor streams from ruptured fuel lines creating a smoky maze.
+
+ABSOLUTE BANS:
+- NO ship described (ships come from a separate axis)
+- NO action described (actions come from a separate axis)
+- NO ground-level / planetary-surface views — these are SPACE / HIGH-ATMOSPHERE settings
+- NO cathedral / temple / fortress / planetary architecture
+- NO franchise proper nouns
+
+Output 25 numbered list entries.`,
+  },
+  busy_fleet_elements: {
+    format: 'simple',
+    theme: 'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews on tethers, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
+    touchpoints: [],
+    instructions: `Write 30 scene-filling sci-fi space elements that go AROUND the featured spaceship in a busy scene. One sentence each. Detailed, specific, visual — describe count + motion + glowing detail.
+
+Mix industrial activity (EVA crews on tethers, gantries with welding sparks, magnetic grapples docking, supply ships running parallel, refueling tenders, cargo bay traffic) with combat support (escort craft, drone swarms, sensor buoys, capital ship silhouettes in deep background, debris fragments).
+
+Each entry should add depth and density to a scene — not be the hero itself, just a textural element making the scene FULL.
+
+Examples:
+1. White EVA-suited figures moving like stretched marionettes along tether lines anchored to a hull breach, magnetic grapples glowing blue at contact points.
+2. A parallel supply ship 200 meters off the starboard flank, exposed aluminum truss-work gantry extending across the gap, cargo pods crawling on rails.
+3. The deep-background silhouette of a kilometer-class capital hull receding into atmospheric haze, lit window-grids speckling its flanks, weapon batteries flashing distantly.
+
+Output 30 numbered list entries.`,
+  },
+  battle_dynamics: {
+    format: 'simple',
+    theme: 'Action and drama moments that bring a sci-fi space scene alive: weapons firing, shields flaring, hull-strikes sparking, missile contrails streaking, refinery accidents venting, reactor overloads glowing, debris tumbling, drive sections venting plasma.',
+    touchpoints: [],
+    instructions: `Write 30 action / drama moments that add visible activity to a sci-fi space scene. One sentence each. Frozen at a loaded instant — visual cues that read in a still frame.
+
+Mix combat dynamics (laser bolts mid-flight, missile contrails arcing, shields flaring under impact, explosion blooms, hull-strike sparks) with industrial drama (refinery venting, reactor coolant flares, drive overloads, structural failures, escape pods launching).
+
+Each entry adds motion + energy + drama to the frame.
+
+Examples:
+1. Twin energy lances mid-discharge crossing the frame in parallel streams, recoil-heat venting from accordion radiators glowing dull red.
+2. Reactor coolant pump rupturing mid-frame, friction-heat sparks cascading through bulkhead struts, blue micro-discharges crackling along antenna edges.
+3. A salvo of missiles spiraling outward in helical contrails, intercept bursts blooming in the deep midground, scattering hot debris.
+
+Output 30 numbered list entries.`,
+  },
+  ship_action: {
+    format: 'simple',
+    theme: 'What the featured spaceship is doing in this exact frame — posture, motion, drive state, weapons status, hull condition. Verb-led when possible.',
+    touchpoints: [],
+    instructions: `Write 30 ship-action descriptions — what the featured sci-fi spaceship is DOING in the scene. One sentence each. Frozen at a loaded instant.
+
+Mix dynamic combat (banking hard / strafing / firing main weapons / launching missiles) with industrial activity (docking with station / mating to refueling tender / opening cargo bay doors / deploying repair drones / venting coolant) with cinematic stillness (coasting cold through debris / drifting damaged / silent observation / mid-FTL exit).
+
+Each entry adds posture and meaning to the featured ship.
+
+Examples:
+1. Drifting damaged through Lagrange anchorage, hull breach venting orange sparks, twin micro-adjustment thrusters firing crystalline vapor to maintain attitude.
+2. Mating dock with parallel supply ship, exposed aluminum truss-work gantry extended, magnetic grapples engaging in blue arcs.
+3. Banking hard 60 degrees through a debris field, engine plasma trails curving in a spiral, point-defense web tracking incoming fragments.
+
+Output 30 numbered list entries.`,
+  },
+  space_opera_story_beat: {
+    theme: 'ACTION NARRATIVE BEATS for fighter-action scenes — the dramatic moment the scene captures. Pursuit / Dogfight / Recon Discovery / Spy Mission Penetration / Wingmate Loss / Breakaway / Last-Stand / Bombing Run / Ambush / Daring Escape. Each entry sets the narrative stakes.',
+    touchpoints: [
+      'mid-pursuit fighter chase',
+      'dogfight in tight formation',
+      'recon discovery (sensor ping reveals threat)',
+      'spy mission penetration past defenses',
+      'wingmate just went down',
+      'breakaway after critical mission',
+      'last-stand defense run',
+      'bombing run on capital target',
+      'ambush sprung from debris',
+      'daring escape through enemy formation',
+      'rescue extraction under fire',
+      'reconnaissance silent approach',
+    ],
+    instructions: `EACH ENTRY IS A NARRATIVE STORY BEAT — 20-35 words. SINGLE SENTENCE PER ENTRY. Describes the DRAMATIC MOMENT the scene captures — what's at stake, what just happened, or what's about to happen.
+
+FORMAT: numbered 1-20. One sentence each.
+
+Per entry MUST include:
+- A NARRATIVE FRAME (mid-pursuit / dogfight peak / recon discovery / etc.)
+- WHAT'S AT STAKE (rescue / escape / sabotage / silent observation / etc.)
+- DRAMATIC TENSION (the moment of decision, action, or consequence)
+
+VARIETY MANDATE across 20 entries:
+- Combat beats (50%): dogfight peak / strafing run / bombing target / last-stand / ambush
+- Pursuit/escape beats (25%): chase mid-flight / daring escape / breakaway / pursuit weave
+- Stealth beats (15%): spy penetration / recon silent / sensor discovery / silent approach
+- Loss/heroic beats (10%): wingmate destruction / rescue extraction / sacrifice moment
+
+EXAMPLES (flavor anchors; invent 20 distinct):
+
+1. Mid-pursuit fighter chase — the hero is being hunted by superior enemy formation through narrow asteroid corridors, every maneuver risking destruction.
+
+2. Recon discovery — the hero's sensors just lit up with massive enemy presence, the moment of frozen realization before evasive action begins.
+
+3. Bombing run on capital target — the hero is mid-strafing along an enemy capital's vulnerable section, weapons firing, dodging defense fire.
+
+ABSOLUTE BANS:
+- NO franchise proper nouns
+- NO description longer than 35 words
+- NO settings described
+- NO ship described
+
+Output 20 numbered list entries.`,
+  },
+  space_opera_composition: {
+    theme: 'FIGHTER FRAMING / CAMERA PERSPECTIVES — how the camera frames the action. Cockpit POV / wingman view / under-the-keel skim / overhead chase / behind-shoulder / cinematic 3/4 / diving angle / asteroid-gap perspective / etc. Each entry is one specific camera framing rule.',
+    touchpoints: [
+      'cockpit POV looking forward through canopy',
+      'wingman-view from companion fighter',
+      'under-keel skim camera (skimming asteroid surface)',
+      'overhead chase cam',
+      'behind-shoulder pursuit framing',
+      'cinematic 3/4 angle on the hero',
+      'diving angle looking down past wings',
+      'asteroid-gap perspective (thin opening)',
+      'side-profile racing camera',
+      'tail-chase POV (camera behind enemy)',
+      'mid-bank rotated camera',
+      'low-angle hero shot (camera below fighter looking up)',
+    ],
+    instructions: `EACH ENTRY IS A CAMERA FRAMING / COMPOSITION RULE — 15-30 words. SINGLE SENTENCE PER ENTRY. Describes WHERE THE CAMERA IS and how it FRAMES the fighter action.
+
+FORMAT: numbered 1-20. One sentence each.
+
+Per entry MUST include:
+- CAMERA POSITION (cockpit / wingman / overhead / behind-shoulder / under-keel / etc.)
+- WHAT THE FRAME SHOWS (forward through canopy / hero in 3/4 / etc.)
+- ONE compositional detail (motion blur / depth-of-field / wide vs tight / etc.)
+
+VARIETY MANDATE across 20 entries:
+- POV cameras (35%): cockpit forward / canopy view / pilot's perspective
+- Chase cameras (25%): behind-shoulder / tail-chase / wingman-view / overhead chase
+- Cinematic angles (25%): 3/4 hero / low-angle dramatic / side-profile racing / diving angle
+- Tight-spaces (15%): asteroid-gap / station-corridor / debris-thread / hull-skim
+
+EXAMPLES (flavor anchors; invent 20 distinct):
+
+1. Cockpit POV looking forward through the canopy, HUD targeting overlays visible against the starfield, hands gripping flight stick in foreground.
+
+2. Wingman-view from a companion fighter at 50-meter offset, the hero captured in 3/4 angle banking right, engine plasma streaks blurring with motion.
+
+3. Under-keel skim camera, the fighter rushing above an asteroid surface or hull terrace, scale-blurring detail rushing past beneath.
+
+ABSOLUTE BANS:
+- NO franchise proper nouns
+- NO description longer than 30 words
+- NO settings described (separate axis)
+- NO ship described (separate axis)
+
+Output 20 numbered list entries.`,
+  },
+  space_opera_lighting: {
+    theme: 'SPACE-ACTION LIGHTING — engine bloom / weapon flash / nebula backlight / hull-strike spark / explosion glow / sun rim-light / planet earthlight / etc. Each entry is one specific lighting situation for fighter-action scenes.',
+    touchpoints: [
+      'engine plasma bloom as primary light',
+      'weapon-fire flash from forward cannons',
+      'nebula backlight (magenta-cyan diffuse)',
+      'hull-strike spark + ricochet light',
+      'explosion glow filling the frame',
+      'distant sun rim-light on hull edges',
+      'planet earthlight reflecting from below',
+      'station floodlights catching the fighter',
+      'shield-impact flare illuminating the cockpit',
+      'missile contrail trail glow',
+      'volumetric god-rays through nebula gaps',
+      'cold deep-void starlight with strong contrast',
+    ],
+    instructions: `EACH ENTRY IS A LIGHTING SETUP — 20-35 words. SINGLE SENTENCE PER ENTRY. Describes the dominant light source and how it illuminates the fighter-action scene.
+
+FORMAT: numbered 1-20. One sentence each.
+
+Per entry MUST include:
+- PRIMARY LIGHT SOURCE (engine bloom / weapon flash / nebula glow / sun / planet earthlight / etc.)
+- COLOR / TEMPERATURE (cyan-blue / orange-red / magenta-violet / cold-white / etc.)
+- HOW IT HITS THE HERO (rim-light on hull / fill on canopy / silhouette backlight / etc.)
+- CONTRAST quality (dramatic chiaroscuro / soft volumetric / harsh strobing)
+
+VARIETY MANDATE across 20 entries:
+- Engine/weapon light (40%): plasma bloom dominant / cannon flash / missile trail glow / shield flare
+- Cosmic light (35%): nebula backlight / sun rim-light / star strobe / volumetric god-rays
+- Environment light (25%): planet earthlight / station floodlights / capital-ship hull-glow / explosion fill
+
+EXAMPLES (flavor anchors; invent 20 distinct):
+
+1. Engine plasma bloom as primary light — cyan-blue glow from the fighter's twin nozzles illuminating the hull and casting motion-streaks across the dark backdrop.
+
+2. Nebula backlight in magenta and cyan, the fighter silhouetted against soft volumetric gas wisps, hull edges catching faint diffuse pink light.
+
+3. Weapon-fire flash from forward cannons — harsh strobing white-blue light pulsing on the hull and momentarily blowing out the dark backdrop.
+
+ABSOLUTE BANS:
+- NO franchise proper nouns
+- NO description longer than 35 words
+- NO settings described (separate axis)
+- NO ship described (separate axis)
+- NO Earth-natural lighting (forest sunset / beach sunrise / etc.) — pure space/cosmic lighting
+
+Output 20 numbered list entries.`,
+  },
+  space_opera_particulate: {
+    theme: 'COSMIC PARTICULATE FOR FIGHTER-ACTION — debris haze, plasma cloud, nebula gas, ice crystals streaming, vapor trails, smoke contrails, atmospheric particle scattering. Adds depth and motion to the scene.',
+    touchpoints: [
+      'debris haze drifting through frame',
+      'plasma cloud from engine wash',
+      'nebula gas wisps swirling',
+      'ice crystal streams in vacuum',
+      'vapor contrail trail behind fighter',
+      'smoke trail from damaged hull',
+      'atmospheric particle scatter',
+      'dust kicked up from low skim',
+      'frost vapor from coolant vent',
+      'asteroid pulverized fragments',
+      'energy-weapon ionization residue',
+      'electrical micro-discharge sparks',
+    ],
+    instructions: `EACH ENTRY IS A PARTICULATE / ATMOSPHERIC EFFECT — 15-30 words. SINGLE SENTENCE PER ENTRY. Describes airborne or vacuum particulate that adds depth and motion.
+
+FORMAT: numbered 1-20. One sentence each.
+
+Per entry MUST include:
+- WHAT KIND of particulate (debris / plasma / gas / ice / vapor / smoke / dust / etc.)
+- HOW IT MOVES (drifting / streaming / swirling / arcing / etc.)
+- COLOR / OPACITY (faint magenta haze / orange plume / ice-white crystals / etc.)
+
+VARIETY MANDATE across 20 entries:
+- Engine/weapon particulate (35%): plasma wash, vapor contrails, smoke trails, ionization residue
+- Debris particulate (30%): pulverized rock fragments, hull-strike sparks, asteroid dust, wreckage fragments
+- Cosmic particulate (35%): nebula gas, ice crystals, planetary frost, electrical micro-discharge
+
+EXAMPLES (flavor anchors; invent 20 distinct):
+
+1. Plasma cloud trailing from the fighter's engine wash, cyan-blue ionized particles streaming behind in a turbulent vortex.
+
+2. Debris haze drifting across the frame at varied speeds, broken hull fragments and dust particles scattering light from distant explosions.
+
+3. Ice crystal streams in vacuum, the fighter passing through frozen vapor catching starlight as a sparkling cloud.
+
+ABSOLUTE BANS:
+- NO franchise proper nouns
+- NO description longer than 30 words
+- NO Earth-weather (rain / snow / fog / hail) — pure cosmic/sci-fi particulate
+- NO settings described (separate axis)
+- NO ship described (separate axis)
+
+Output 20 numbered list entries.`,
+  },
+  space_opera_emotion: {
+    theme: 'ACTION-MOOD EMOTIONAL DNA for fighter scenes — adrenaline, pursuit-thrill, desperation, defiant heroism, triumph, focused-calm-before-strike, dread of overwhelming force, righteous fury, exhilaration. Each entry is one emotional tone for the scene.',
+    touchpoints: [
+      'adrenaline rush mid-dogfight',
+      'pursuit-thrill chasing target',
+      'desperation breaking from disaster',
+      'defiant heroism against odds',
+      'triumph after critical kill',
+      'focused calm before the strike',
+      'dread of overwhelming force',
+      'righteous fury at injustice',
+      'exhilaration of breakneck speed',
+      'silent stealth-tension',
+      'last-stand resolve',
+      'survival-mode raw nerve',
+    ],
+    instructions: `EACH ENTRY IS AN EMOTIONAL DNA TONE — 15-25 words. SINGLE SENTENCE PER ENTRY. Describes the emotional mood / energetic atmosphere of the fighter-action scene.
+
+FORMAT: numbered 1-15. One sentence each.
+
+Per entry MUST include:
+- EMOTIONAL TONE (adrenaline / dread / triumph / desperation / etc.)
+- ENERGETIC QUALITY (high-tempo / slow-tension / explosive / focused / etc.)
+- VISUAL CUE that conveys it (sharp contrast / motion blur / wide eyes / etc.)
+
+VARIETY MANDATE across 15 entries:
+- High-energy: adrenaline / exhilaration / pursuit-thrill / fury / triumph
+- Mid-energy: focused calm / defiant heroism / righteous resolve / survival-mode
+- Tension: stealth-tension / dread / desperation / last-stand
+
+EXAMPLES (flavor anchors; invent 15 distinct):
+
+1. Adrenaline rush mid-dogfight, high-tempo motion blur and harsh-contrast lighting conveying frantic energy.
+
+2. Defiant heroism against impossible odds, the hero fighter blazing forward with engine plasma at full burn despite overwhelming enemy presence.
+
+3. Silent stealth-tension, the fighter creeping through cover with engines barely glowing, every hull seam dimmed.
+
+ABSOLUTE BANS:
+- NO franchise proper nouns
+- NO description longer than 25 words
+- NO settings described (separate axis)
+- NO ship described (separate axis)
+
+Output 15 numbered list entries.`,
   },
   cozy_sci_fi_interiors: {
     theme: 'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary.',
@@ -330,6 +943,16 @@ if (!recipe) {
 }
 
 function buildPrompt(count, recipe) {
+  // Simple format opt-out — recipes can set `format: 'simple'` to skip the
+  // Rich Scene Seed scaffolding and just pass through theme + instructions.
+  if (recipe.format === 'simple') {
+    return `${recipe.theme}
+
+${recipe.instructions}
+
+Output ${count} numbered list entries (1. ... 2. ... 3. ...). Each entry on its own single line. NO preamble, NO commentary, NO markdown fences.`;
+  }
+
   return `Generate ${count} Rich Scene Seeds for the StarBot ${POOL} pool. StarBot is a sci-fi image-generation bot whose renders should feel like stills from an unmade epic film — multi-tier depth, scale provers, materially specific, narratively suggestive.
 
 ━━━ POOL THEME ━━━
@@ -368,47 +991,142 @@ EMOTIONAL DNA: [the feeling — awe, dread, wonder, melancholy, alien-indifferen
 - Single-hero-building isolation — every seed has supporting density
 - Teal+orange default palette mention — let LIGHTING/VIBE handle palette, don't lock it in the seed
 
-━━━ OUTPUT ━━━
-Return EXACTLY ${count} entries. ONE per element of a JSON array of strings. No preamble, no markdown fences, no commentary — JUST the JSON array.
+━━━ OUTPUT FORMAT — STRICT ━━━
+Return EXACTLY ${count} entries as a NUMBERED LIST. Each entry on its OWN SINGLE LINE prefixed by "<number>. ". NO internal newlines within an entry — use commas / semicolons / dashes for internal structure. NO preamble, NO commentary, NO markdown fences, NO JSON.
 
-Example shape:
-[
-  "MEGACITY OF STACKED ZIGGURATS — five-kilometer-tall ribbed obsidian ziggurats arrayed in a grid, each tower a layered city of thousands, connected at seven elevations by 200-meter-wide skybridges thick with traffic. FOREGROUND: hanging-garden terrace edge, vines spilling over rusted railing, two species of birds startled into flight. MIDGROUND: ziggurats marching into smog, hundreds of golden window-lights per face, tiny ships threading the gaps. DEEP DISTANCE: the largest tower of all rising above siblings, glowing crown beacons cycling slowly. SKY: low cloud ceiling lit from below by city glow, twin moons partially visible through smog. SCALE PROVERS: ships are dots, figures on bridges are pinpricks, windows are honey-grain. MATERIAL: ribbed obsidian over engineered concrete, copper-green oxide on bridge-trusses. EMOTIONAL DNA: indifferent megalopolis, you are insignificant.",
-  "..."
-]`;
+Example output (the WHOLE response is just this format, nothing else):
+1. MEGACITY OF STACKED ZIGGURATS — five-kilometer-tall ribbed obsidian ziggurats in a grid, each a layered city of thousands, connected at seven elevations by 200-meter skybridges, hanging-garden terraces, copper-green oxide bridge-trusses, ships threading the gaps as dots, indifferent megalopolis mood.
+2. CANYON CITY OF SUSPENDED BRIDGES — vertical city carved into both faces of a 3-kilometer canyon, linked by 80+ suspension bridges at staggered heights, eroded stone balconies, prayer flags whipping in updraft, canyon walls weeping mineral stains.
+3. (... and so on, ${count} numbered entries total)
+
+CRITICAL: each entry MUST be ONE LINE only. If you need to convey FG/MG/Deep/Sky/Material/Emotional context, combine them into ONE comma-separated line. Multi-line entries WILL BE PARSED INCORRECTLY.`;
 }
 
 async function callSonnet(prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
-      max_tokens: 16000,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  if (!res.ok) {
-    throw new Error(`Sonnet ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  // Node's undici defaults to a 5-minute headers timeout — Sonnet's larger
+  // responses (16K output tokens with content) can exceed this. Use a
+  // dispatcher with a longer timeout via AbortController fallback.
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15 * 60 * 1000); // 15min
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': ANTHROPIC,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5-20250929',
+        max_tokens: 16000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      throw new Error(`Sonnet ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    }
+    const data = await res.json();
+    return (data.content?.[0]?.text || '').trim();
+  } finally {
+    clearTimeout(timeoutId);
   }
-  const data = await res.json();
-  return (data.content?.[0]?.text || '').trim();
 }
 
+// Numbered-list parser. Each entry starts with "<number>. ". Lines that
+// don't start with a number are treated as continuations of the previous
+// entry (in case Sonnet ignores the "one line per entry" rule and wraps).
 function parseArray(text) {
-  const m = text.match(/\[[\s\S]*\]/);
-  if (!m) throw new Error('No JSON array found');
-  return JSON.parse(m[0]);
+  const body = text
+    .replace(/```[a-z]*\n?/gi, '')
+    .replace(/```/g, '')
+    .trim();
+  const lines = body.split('\n');
+  const entries = [];
+  let current = null;
+  const numRe = /^\s*(\d+)\s*[.):\]]\s*(.+)$/;
+  for (const raw of lines) {
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    const m = trimmed.match(numRe);
+    if (m) {
+      if (current) entries.push(current);
+      current = m[2].trim();
+    } else if (current) {
+      // continuation line — append with a space
+      current += ' ' + trimmed;
+    }
+  }
+  if (current) entries.push(current);
+  const cleaned = entries
+    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .filter((e) => e.length > 20 && e.length < 1200);
+  if (cleaned.length === 0) throw new Error('No numbered entries found in response');
+  return cleaned;
 }
 
-(async () => {
-  console.log(`Generating ${COUNT} Rich Scene Seeds for "${POOL}"${DRY ? ' (dry-run)' : ''}...`);
+// ─── DEDUP ────────────────────────────────────────────────────────────────
+// Sonnet clusters within batches and across batches — same theme, slightly
+// different wording. Catch it programmatically by hashing a signature of
+// each entry (significant keywords from the body, stopwords removed,
+// sorted alphabetically). Entries with identical signatures are duplicates.
+
+const STOPWORDS = new Set([
+  'the','a','an','and','or','but','with','of','in','on','at','to','for','from',
+  'by','as','is','are','was','were','be','been','being','have','has','had',
+  'this','that','these','those','it','its','they','them','their','her','his',
+  'into','onto','through','across','over','under','near','around','between',
+  'one','two','three','some','any','all','no','not','than','then','also','so',
+  'very','more','most','many','much','each','every','other','another','same',
+  'such','only','own','just','still','here','there','where','when','what','who',
+  'kilometer','kilometers','meter','meters','foot','feet','mile','miles','wide',
+  'tall','long','high','low','large','small','massive','huge','vast','huge',
+  'across','above','below','beside','behind','toward','within','throughout',
+  'meterdiameter','kilometerdiameter','metertall','kilometertall',
+]);
+
+function signatureOf(entry) {
+  // Strip the title prefix (everything before the first " — ")
+  const dashIdx = entry.indexOf(' — ');
+  let body = dashIdx >= 0 ? entry.slice(dashIdx + 3) : entry;
+  // Strip any Rich-Scene-Seed bloat
+  const fgIdx = body.indexOf(' FOREGROUND:');
+  if (fgIdx > 0) body = body.slice(0, fgIdx);
+  // Tokenize and extract significant content nouns/adjectives
+  const tokens = body.toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 4 && !STOPWORDS.has(w))
+    .slice(0, 20); // first 20 significant words of the body
+  // Sort alphabetically so word-order shuffling doesn't escape dedup
+  return [...new Set(tokens)].sort().slice(0, 12).join(' ');
+}
+
+function dedupe(entries) {
+  const seen = new Map(); // signature → first entry that claimed it
+  const kept = [];
+  const dropped = [];
+  for (const e of entries) {
+    if (typeof e !== 'string' || e.length < 20) continue;
+    const sig = signatureOf(e);
+    if (sig.length < 10) {
+      // Body was too short to signature — keep
+      kept.push(e);
+      continue;
+    }
+    if (seen.has(sig)) {
+      dropped.push({ entry: e.slice(0, 80), duplicateOf: seen.get(sig).slice(0, 80) });
+      continue;
+    }
+    seen.set(sig, e);
+    kept.push(e);
+  }
+  return { kept, dropped };
+}
+
+async function generateBatch(batchCount) {
   const t0 = Date.now();
-  const text = await callSonnet(buildPrompt(COUNT, recipe));
+  const text = await callSonnet(buildPrompt(batchCount, recipe));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   let arr;
   try {
@@ -416,29 +1134,92 @@ function parseArray(text) {
   } catch (e) {
     console.error('Parse failed:', e.message);
     console.error('First 400 chars:', text.slice(0, 400));
-    process.exit(1);
+    return [];
   }
   if (!Array.isArray(arr) || arr.length === 0) {
-    console.error(`Got ${arr?.length || 0} entries — empty result`);
-    process.exit(1);
+    console.warn(`  ⚠ Sonnet returned no usable entries`);
+    return [];
   }
-  if (arr.length < COUNT * 0.5) {
-    console.warn(`⚠️  Got ${arr.length} of ${COUNT} requested — Sonnet shortfall`);
+  // Strip Rich-Scene-Seed bloat so signatures aren't polluted
+  const stripped = arr.map((e) => {
+    if (typeof e !== 'string') return null;
+    const i = e.indexOf(' FOREGROUND:');
+    return i > 0 ? e.slice(0, i).trim() : e;
+  }).filter(Boolean);
+  console.log(`  • Sonnet returned ${stripped.length} entries in ${elapsed}s`);
+  return stripped;
+}
+
+(async () => {
+  const outPath = path.resolve(`scripts/bots/starbot/seeds/${POOL}.json`);
+  let preExisting = [];
+  if (fs.existsSync(outPath)) {
+    try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {}
   }
-  console.log(`✓ Sonnet returned ${arr.length} entries in ${elapsed}s`);
-  console.log('\nSample (first 2):');
-  arr.slice(0, 2).forEach((e, i) => console.log(`\n[${i + 1}] ${e.slice(0, 400)}...`));
+
+  // Determine final target.
+  // --target N → fill up to N via iterative gen+dedup loop
+  // --count N → single batch of N (legacy behavior)
+  const finalTarget = TARGET ?? (preExisting.length + COUNT);
+  const startCount = preExisting.length;
+
+  if (TARGET !== null) {
+    console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
+  } else {
+    console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
+  }
+
+  let pool = [...preExisting];
+  let iteration = 0;
+  while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
+    iteration++;
+    const stillNeeded = finalTarget - pool.length;
+    // Smaller batches (15-25) — Sonnet writes faster + ~10K-token responses
+    // stay well under fetch timeouts. Overgen by ~50% to absorb dedup losses.
+    const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
+    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    const fresh = await generateBatch(batchSize);
+    if (fresh.length === 0) {
+      console.warn('  ⚠ empty Sonnet response — stopping iteration');
+      break;
+    }
+    // Within-batch dedup
+    const within = dedupe(fresh);
+    if (within.dropped.length > 0) {
+      console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+    }
+    // Cross-batch dedup against current pool
+    const existingSigs = new Set(pool.map((e) => signatureOf(e)));
+    const newUnique = within.kept.filter((e) => !existingSigs.has(signatureOf(e)));
+    const crossDropped = within.kept.length - newUnique.length;
+    if (crossDropped > 0) {
+      console.log(`  • cross-batch dedup dropped ${crossDropped}`);
+    }
+    // Trim to target if we overshot
+    const room = finalTarget - pool.length;
+    const toAdd = newUnique.slice(0, room);
+    pool = [...pool, ...toAdd];
+    console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
+    if (toAdd.length === 0 && newUnique.length === 0) {
+      console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping');
+      break;
+    }
+  }
+
+  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
+
+  console.log('\nSample (last 2 added):');
+  pool.slice(-2).forEach((e, i) => console.log(`\n[${pool.length - 1 + i}] ${e.slice(0, 400)}...`));
 
   if (DRY) {
     console.log('\nDry-run — not writing to disk.');
     return;
   }
-  const outPath = path.resolve(`scripts/bots/starbot/seeds/${POOL}.json`);
   const bakPath = outPath + '.bak-' + Date.now();
   if (fs.existsSync(outPath)) {
     fs.copyFileSync(outPath, bakPath);
     console.log(`Backed up existing pool → ${bakPath}`);
   }
-  fs.writeFileSync(outPath, JSON.stringify(arr, null, 2));
-  console.log(`✓ Wrote ${arr.length} entries → ${outPath}`);
+  fs.writeFileSync(outPath, JSON.stringify(pool, null, 2));
+  console.log(`✓ Wrote ${pool.length} entries → ${outPath}`);
 })();

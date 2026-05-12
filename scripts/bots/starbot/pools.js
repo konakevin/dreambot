@@ -93,6 +93,27 @@ module.exports = {
   MEGASTRUCTURES: load('megastructures'),
   ALIEN_LANDSCAPES: load('alien_landscapes'),
   SPACE_OPERA_SCENES: load('space_opera_scenes'),
+  // Space-opera Tier 3 axes — 2026-05-11 migration to slot-pool composition.
+  // Replaces the SPACE_OPERA_SCENES single-pool pattern. Each axis is rolled
+  // independently and Sonnet composes them per render (50 × 30 × 30 = 45K combos).
+  SPACE_OPERA_SHIPS: load('space_opera_ships'),
+  SPACE_OPERA_SETTING: load('space_opera_setting'),
+  SHIP_ACTION: load('ship_action'),
+  // Smaller craft (10-200m) populating space-opera scenes around the kilometer-
+  // class behemoth — fighters, cargo trains, satellites, escorts, drones.
+  BUSY_FLEET_ELEMENTS: load('busy_fleet_elements'),
+  // Combat moments injected when the space-opera path rolls a BATTLE scene
+  // (~60% of renders) — energy beams crossing frame, hull breaches venting,
+  // capital broadsides, fighter dogfights, boarding-pod swarms.
+  BATTLE_DYNAMICS: load('battle_dynamics'),
+  // Space-opera path-level axes (replace universal axes for this path) —
+  // spaceship-action-coded versions of story-beats / composition / lighting /
+  // particulate / emotional-dna. Added 2026-05-12 for fighter-action rewrite.
+  SPACE_OPERA_STORY_BEAT: load('space_opera_story_beat'),
+  SPACE_OPERA_COMPOSITION: load('space_opera_composition'),
+  SPACE_OPERA_LIGHTING: load('space_opera_lighting'),
+  SPACE_OPERA_PARTICULATE: load('space_opera_particulate'),
+  SPACE_OPERA_EMOTION: load('space_opera_emotion'),
   SCI_FI_INTERIORS: load('sci_fi_interiors'),
   COZY_SCI_FI_INTERIORS: load('cozy_sci_fi_interiors'),
   ALIEN_CITIES: load('alien_cities'),

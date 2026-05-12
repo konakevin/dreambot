@@ -133,6 +133,50 @@ The work of overhauling a new bot = author its bespoke per-bot pools (race / out
 
 ---
 
+## Pool generation MUST have dedup (CRITICAL — every gen script)
+
+Sonnet clusters within batches and across batches — same theme, slightly different wording. Without programmatic dedup, the pool ends up with many semantic duplicates (e.g., 3 "orbital ring habitat" variants in different words) and you get clustering at render time.
+
+**Every pool-gen script MUST include:**
+1. **Within-batch dedup** — after Sonnet returns N entries, dedupe to unique entries before writing
+2. **Cross-batch dedup** — when appending to an existing pool, dedupe new entries against existing pool's entries
+3. **Signature-based detection** — extract significant content keywords from each entry (strip title prefix, strip stopwords, sort alphabetically, take first 12), hash to a signature. Entries with matching signatures are duplicates.
+
+Reference implementation in `scripts/gen-starbot-pool.js`:
+- `signatureOf(entry)` — extracts content signature
+- `dedupe(entries)` — within-batch dedup
+- Cross-batch dedup against existing pool entries before write
+
+**Why this matters:** even with explicit variety mandates in the gen recipe, Sonnet defaults to thematic clustering. Programmatic dedup is the safety net. Without it, "200 entries" may actually be "75 unique entries with 125 near-duplicates" — defeating the production-sizing investment.
+
+**`--target N` iterative mode** — gen-starbot-pool.js supports a target-mode where it loops gen + dedup until the pool reaches N entries. Each iteration overgens by ~40% to absorb dedup losses; max 8 iterations to prevent infinite loops on exhausted themes. The script reports final count vs target if Sonnet runs out of variety before hitting target.
+
+---
+
+## The two-stage path-overhaul process (CRITICAL)
+
+Every path overhaul has TWO mandatory stages. Skipping stage 2 means the path renders well but the **subject array is too narrow** — over thousands of bot posts, users see repetition.
+
+**Stage 1: Iteration (MVP pool + brief tuning)**
+- Author a 25-30 entry MVP path-defining pool (Sonnet, rich-description style)
+- Iterate the brief and path file against the MVP pool until renders hit 4.5+/5 consistently
+- Fast cycles — small pool means cheap Sonnet regens during iteration
+- Outcome: locked recipe (brief structure + pool format + medium + universal axes)
+
+**Stage 2: Production sizing (backfill the subject array)**
+- Once stage 1 recipe locks, expand path-defining pools to project-standard 200 entries
+- Append-mode generation (don't regen — preserves the well-tested MVP entries)
+- Universal modifier pools rightsized to 20-75 entries based on diminishing-returns judgment (weather has ~25 useful entries before repetition; emotional DNA has ~20; scale-provers ~30)
+- Outcome: each render pulls from a wide subject array → users perceive infinite variety even across thousands of posts
+
+**Why stage 2 matters:** at 2 bot posts/day × 365 days × 5 years = 1,800 renders per path. With 30 entries in the path-defining pool that's 60 repeats per entry over 5 years — visible. With 200 entries that's 9 repeats per entry — invisible.
+
+**The old architecture (flat pools, brief-driven) already had 200-entry pools** — `alien_cities` (200), `alien_landscapes` (200), `megastructures` (200), etc. — but those were ONE-LINE flat descriptions authored for the old brief style. The new slot-composer architecture needs RICH-DESCRIPTION 200-entry pools authored for the new brief style. The old pools are orphaned (still in pools.js but unused by overhauled paths).
+
+**Skipping stage 2 was the mistake** behind the "wait, did we actually back-seed the pools?" question. MVP-sized pools are for proving the recipe — production needs the full 200.
+
+---
+
 ## THE #1 PRINCIPLE: Pool quality dominates everything
 
 After 8 rounds of iteration on StarBot's alien-city and female-explorer paths, the single most important lesson:
@@ -214,6 +258,53 @@ module.exports = {
 The path file becomes a tiny declaration: "this path uses these scale-range constraints + optionally subsets the entity pool." Everything else is universal pipeline.
 
 **Combinatorial space:** ~12 (beats) × 4 (scales) × 12 (entities) × 12 (frames) × 50 (lighting) × C(12,3) (provers) × 8 (weather) × 8 (emotion) × 10 (architecture) × 10 (biome) × 8 (sky) = **~10^10** distinct combinations per bot before vibe directives. Effectively infinite; same path can produce a different scene every single render.
+
+---
+
+## Conditional axis layers — opt-in drama modes (new 2026-05-11)
+
+Some path attributes are GREAT some of the time but would feel forced if every render had them — battle scenes in space-opera, dramatic weather in landscape, romance moments in character, ambient creature in fantasy, structural damage in architecture, supernatural visitation in gothic. The fix is a **probability-gated extra axis** that's rolled per render: ~60% the layer fires (with its own dedicated pool of contributions), ~40% the layer is empty and the render uses the base axes.
+
+**The pattern in code (from `space-opera.js` BATTLE_DYNAMICS layer):**
+
+```js
+// Inside the build function, after the always-on axes are picked:
+const isBattle = Math.random() < 0.6; // 60% gate
+const battleDynamics = isBattle ? pickN(pools.BATTLE_DYNAMICS, 3, picker, 'battle_dynamic') : [];
+const battleSection = isBattle ? `
+━━━ THIS IS A BATTLE — NON-NEGOTIABLE ━━━
+The scene is an ACTIVE COMBAT ENGAGEMENT. [...]
+
+━━━ BATTLE DYNAMICS — render ALL THREE visibly across the frame ━━━
+- ${battleDynamics[0]}
+- ${battleDynamics[1]}
+- ${battleDynamics[2]}
+` : '';
+
+return `[...brief...]
+${battleSection}
+[...rest of brief...]`;
+```
+
+**The architecture:**
+- One additional Tier-3 pool (e.g. `BATTLE_DYNAMICS`, `WEATHER_DRAMA`, `ROMANCE_MOMENTS`, `AMBIENT_CREATURE`) — entries describe one "drama beat" each
+- A probability-gated roll (50/50, 60/40, 30/70 — tune to match how often you want that drama)
+- A `${conditionalSection}` injection in the brief — empty string when off, full section when on
+- The conditional section can include: a mode-mandate paragraph, 2-3 picks from the conditional pool, and any necessary bans/reframes for that mode
+
+**When to use this pattern:**
+- A path attribute that you want SOMETIMES but not always
+- An attribute that fundamentally changes the scene's mood (battle vs peaceful, storm vs calm, magic vs mundane)
+- An attribute that you don't want diluting the baseline — i.e. if every render had it, the rare-occurrence drama would be lost
+
+**When NOT to use it:**
+- For attributes that should always be present (use a regular always-on axis)
+- For micro-variation within a single mood (use multiple entries in the regular pool)
+
+**Compounding:**
+A path can have multiple conditional layers — e.g. space-opera could roll BATTLE_DYNAMICS (60%), DAMAGED_HERO (30%), and AMBIENT_PHENOMENON (40%) independently. Pure variety with controlled drama density.
+
+**Rule:** the gate probability is a tuning knob. Start at 50/50 and adjust based on what fraction of renders you want carrying the drama. Kevin's space-opera ask was "lots of action and dynamic shit" → 60% gate, biased toward battle. For rarer drama (a once-in-10-renders supernatural visitation) drop to 10-15%.
 
 ---
 
@@ -429,6 +520,20 @@ Same applies to character actions — `female_explorer_action` should be cinemat
 
 **Round 12 — KEVIN APPROVED ✓** — Simplified DNA bio further: just `[race] woman with [hair-color] hair, wearing [outfit], carrying [accessory]`. Dropped skin/eyes/hairstyle from the visible brief (they had body-emphasis language like "exposed forearms" that contradicted sealed armor). Kevin: "i think you've done it on this last batch... those are all very good". **BAR MET** for female-explorer.
 
+**Round 12.5 — DIVERSITY CORRECTION (2026-05-11)** — Kevin reversed the R12 decision to drop skin/eyes/hairstyle. The R12 "drop the DNA from the template" approach over-corrected: it killed three diversity options (and made FEMALE_EXPLORER_HAIRSTYLES dead-weight in the pool) just to fix the "exposed forearms" artifact. The right fix is to keep ALL DNA slots wired and gate VISIBILITY through the biome.
+
+- Restored skin, eyes, hairstyle to the compact bio line: `[race] woman with [skin] skin, [eyes] eyes, and [hair-color] hair styled [hairstyle], wearing [outfit], carrying [accessory]`
+- Replaced absolute "she is sealed in armor" rule with environment-conditional BIOME-APPROPRIATE OUTFIT block:
+  - Vacuum/toxic → sealed EVA, face DNA partially obscured (fine)
+  - Glacial → parka with hood, face may be partially visible
+  - Desert → moisture-recycler, face wrap optional
+  - **Temperate/jungle/habitable → helmet OFF, face fully visible so DNA reads**
+- Same fix applied to male-explorer.js (it never even picked from MALE_EXPLORER_HAIRSTYLES, EXPLORER_SKIN, or EXPLORER_EYES). Now picks and injects all DNA.
+
+Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops them, oh well, but we want the diversity option — and besides not all female explorers have to have on helmets, it just has to match the environment they're in. some of the test renderes showed them without helmets and that's fine"
+
+**Cross-path lesson: never strip a DNA pool from a template to fix a downstream artifact. Fix the artifact at its source (the conflicting pool entry, the conflicting rule) and let the diversity slots stay live.**
+
 ### male-explorer (StarBot) — recipe-transfer test
 
 **Round 1 — BAR MET FIRST TRY ✓** (avg ~4.9/5). Copied the R12 female-explorer brief verbatim, swapped pool references (FEMALE_EXPLORERS → MALE_EXPLORERS, etc.). All 5 renders at 4.5+: artifact discovery, glowing-sigil examiner, two-figure-with-alien-beast, cliff climber under twin suns, lava-sigil explorer. Recipe transfers cleanly between character paths within the same bot.
@@ -453,7 +558,7 @@ Same applies to character actions — `female_explorer_action` should be cinemat
 - Path-level: ALIEN_PLANET_BIOME, CHARACTER_ACTION (engagement verbs), full character DNA stack (SCI_FI_RACE / FEMALE_EXPLORERS / EXPLORER_OUTFITS_FEMALE-rewritten / EXPLORER_SKIN / EXPLORER_EYES / EXPLORER_HAIR_COLOR / FEMALE_EXPLORER_HAIRSTYLES / FEMALE_EXPLORER_ACCESSORIES)
 - ANCHOR_SCALE: MEDIUM (25-40% of frame)
 - Medium: `canvas` (override via `mediumByPath`)
-- Brief structure: DragonBot female-warrior pattern (race-first, separate DNA sections, action-led)
+- Brief structure: DragonBot female-warrior pattern (race-first, compact one-line bio with ALL 7 DNA slots injected, action-led, biome-conditional helmet rule)
 
 ### megastructure
 *Pending — apply alien-city lessons once locked*
@@ -504,3 +609,38 @@ Same applies to character actions — `female_explorer_action` should be cinemat
 - **Figure placement requires counter-anchoring.** Saying "tiny figure" without "NOT foreground, NOT centered" yields a centered foreground figure every time.
 - **Material truth lifts photoreal renders.** Generic "smooth chrome" produces generic results; "weathered ribbed obsidian with copper-green oxide" produces texture.
 - **Don't add 5 new axes at once.** The render brief has a word ceiling — adding axes without removing or condensing existing ones dilutes.
+- **Never strip a DNA pool from a template to fix an artifact.** (StarBot R12→R12.5.) Keep all diversity slots wired; fix the conflicting pool entry or the conflicting rule instead. If skin/eyes/hair clashed with "sealed armor", the fix is to make the sealed-armor rule biome-conditional, NOT to drop skin/eyes/hair from the bio. Dropped DNA = dead pool + lost diversity.
+- **Helmets and face-coverings are environmental, not absolute.** Gate face visibility through the BIOME-APPROPRIATE OUTFIT block: vacuum/toxic = sealed visor, glacial = hood, desert = optional face wrap, **temperate/habitable = face fully visible.** Kevin's preference: when the biome is breathable, prefer face-visible compositions so character DNA reads.
+- **Pool DNA dominates brief admonitions, EVERY time.** (StarBot space-opera R1.) When a ship pool entry uses "cathedral / fortress / citadel / temple / Gothic Revival / stained-glass / flying-buttress" language, Flux renders the prompt as a planetary temple — no brief-level "NOT a building, this is a STARSHIP" guard overrides it. The fix is to strip the offending language from BOTH the seed entries AND the gen-recipe's silhouette / scale / example / instruction text, then regenerate. Brief stays lean.
+- **Ban building-coded vocabulary in any spaceship pool.** `cathedral`, `cathedral-class`, `cathedral-stack`, `fortress`, `fortress-citadel`, `citadel`, `temple`, `temple-ship`, `monastery`, `Gothic Revival`, `stained-glass`, `rose window`, `flying buttresses`, `bell housings`, `vertical city-spire`, `mosque`, `minaret`, `pagoda`, `ziggurat`. Vertical / tower silhouettes are still fine — describe them as `segmented-worm`, `obelisk-vessel`, `totem-hull`, `stacked-modules`, `spire-needle vessel`. Never as architecture.
+
+---
+
+## Diagnostic order — when a render surprises you
+
+When auto-QA renders come back with content that doesn't match the path's identity (wrong subject class, wrong setting type, recurring weird artifacts), follow this order. Don't reach for brief rewrites first — brief admonitions almost never override pool DNA.
+
+1. **Read the actual rendered prompt in the DB.** Pull `ai_prompt` for the failing render. What WORDS ended up in Flux's input? The failure mode is in those words.
+2. **Grep the seed pools the path consumes for those words.** Use the wiring-audit list to know which pools the path reads. The bad render's words almost always trace back to one pool entry.
+3. **Audit the gen recipe that produced that entry.** Look at `theme` / `touchpoints` / `instructions` / `examples` in the gen-script's recipe. The bad language usually appears there first — Sonnet just expanded what it was told.
+4. **Fix at the pool layer:** strip offending vocabulary from the gen recipe (so future regens are clean) AND purge contaminated entries from the seed file. Then regenerate the missing entries with the cleaned recipe.
+5. **Only THEN consider brief-level changes** — and only if the pool is verifiably clean and the issue persists.
+
+**Litmus test:** if you find yourself writing a brief-level rule that begins with "Even when the pool says X, render Y instead" — that's the cue that the pool needs to stop saying X in the first place.
+
+**Origin (2026-05-11):** StarBot space-opera R1 had 2 of 5 renders come back as desert mosques. I first tried fixing it with a brief guard ("ABSOLUTE — THIS IS A STARSHIP IN VACUUM"). Kevin: "having words like 'cathedral' won't help... i thought i saw that type of ship in one of the seeds or examples in the gen script." Audit confirmed: 8 of 50 ship seeds had building-coded vocabulary; the gen recipe itself listed `cathedral-stack` as a silhouette family, `titan-class cathedral` as a scale example. Brief revert + pool scrub fixed it cleanly.
+
+---
+
+## Wiring audit checklist (run before any pool expansion batch)
+
+Before targeting a pool for production-size expansion (50/100/200 entries), run this checklist. R12 dead-wired the hair pool by stripping the template variable while leaving the picker call in place — a similar bug can hide in any path.
+
+For each pool slated for expansion:
+
+1. **Exported from `pools.js`?** `grep "POOL_NAME:" scripts/bots/<bot>/pools.js`
+2. **At least one path file picks from it?** `grep -l "pools.POOL_NAME" scripts/bots/<bot>/paths/*.js`
+3. **The picked variable is INJECTED in the returned template?** Look for `${variableName}` in the template literal. If a path picks the pool but never injects the value, that's a template bug, not a dead pool — fix the template OR remove the pick.
+4. **The injection point isn't shadowed by an absolute rule.** E.g. "she is sealed in armor" + `${hairstyle}` is wired but cancelled — Flux sees "sealed in armor" and ignores the hairstyle. Make any conflicting rule biome-conditional.
+
+Skipping this audit wastes ~10 min of Sonnet calls per pool expanded into nothing. The pool sits there padded to 200 entries while the prompt never references it.

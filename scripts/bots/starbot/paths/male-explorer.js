@@ -19,11 +19,14 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const action = picker.pickWithRecency(pools.CHARACTER_ACTION, 'character_action');
   const surpriseElement = picker.pickWithRecency(pools.SURPRISE_ELEMENT, 'surprise_element');
 
-  // ── Character DNA (compact one-line bio — race + hair + outfit + accessory) ──
+  // ── Character DNA (compact one-line bio — full diversity slots) ──
   const race = picker.pickWithRecency(pools.SCI_FI_RACE, 'me_race');
   const archetype = picker.pickWithRecency(pools.MALE_EXPLORERS, 'male_explorer');
   const outfit = picker.pickWithRecency(pools.EXPLORER_OUTFITS_MALE, 'me_outfit');
+  const skin = picker.pickWithRecency(pools.EXPLORER_SKIN, 'me_skin');
+  const eyes = picker.pickWithRecency(pools.EXPLORER_EYES, 'me_eyes');
   const hairColor = picker.pickWithRecency(pools.EXPLORER_HAIR_COLOR, 'me_hair_color');
+  const hairstyle = picker.pickWithRecency(pools.MALE_EXPLORER_HAIRSTYLES, 'me_hairstyle');
   const accessory = picker.pickWithRecency(pools.MALE_EXPLORER_ACCESSORIES, 'me_accessory');
 
   return `You are a sci-fi concept-art painter writing a CHARACTER MOMENT for StarBot — a single heroic man of a SPECIFIC sci-fi lineage caught in a candid grounded moment of alien-wilderness adventuring. The character is ALIVE, CAPABLE, and the camera caught him doing real work in a real place. Output wraps with style prefix + suffix.
@@ -50,20 +53,21 @@ ${race}
 This race is NON-NEGOTIABLE. Render him with the EXACT anatomy, distinguishing features, skin tone, ridges/horns/lekku/montrals/antennae above. The lineage is the HERO of his identity.
 
 ━━━ HIS COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
-A ${race.split(':')[0]} man with ${hairColor.split(',')[0]} hair, wearing ${outfit}, carrying ${accessory}.
+A ${race.split(':')[0]} man with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hairColor.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory}.
 
-(skin tone, eye color, and hairstyle are minor details — only visible at the face if a helmet is up. He is sealed in armor or appropriate biome gear.)
+(All seven DNA elements — race / skin / eyes / hair color / hairstyle / outfit / accessory — should be discernible in the render when the biome permits a visible face. If the biome demands a sealed helmet, face DNA may be obscured — that's fine, the outfit and accessory still carry his identity.)
 
 ABSOLUTE FRANCHISE LOOKALIKE BAN: NO Stormtrooper plastic armor. NO Mandalorian T-visor full-body. NO Halo Spartan helmet. NO Mass Effect N7. NO Imperial officer. NO Fremen stillsuit. NO Jedi or Sith robes.
 
-Render the outfit EXACTLY as described — sealed armor plates, equipment-laden.
+Render the outfit EXACTLY as described.
 
 ━━━ BIOME-APPROPRIATE OUTFIT — HARD RULE ━━━
-The outfit MUST match the biome's hazards. If the rolled outfit conflicts with the biome, OVERRIDE the outfit:
-- AIRLESS / VACUUM / TOXIC / METHANE biome → sealed EVA pressure suit with helmet
-- HOSTILE COLD / GLACIAL / ICE biome → heavy insulated parka, hood, gloves
-- HOT DESERT / DUNE / VOLCANIC biome → moisture-recycler suit, face wrap
-- Temperate / habitable biome → standard tactical-explorer gear
+The outfit MUST match the biome's hazards. Face visibility follows from the biome — helmets are environmental, not mandatory:
+- AIRLESS / VACUUM / TOXIC / METHANE biome → sealed EVA pressure suit with helmet, face behind visor (face DNA partially obscured — fine)
+- HOSTILE COLD / GLACIAL / ICE biome → heavy insulated parka with hood up, face may be partially visible
+- HOT DESERT / DUNE / VOLCANIC biome → moisture-recycler suit, face wrap optional, face often partially visible
+- TEMPERATE / JUNGLE / BIOLUMINESCENT / HABITABLE biome → tactical gear, helmet OFF or absent, FACE FULLY VISIBLE so his lineage + skin + eyes + hair all read clearly
+NEVER bare skin in vacuum/toxic atmosphere. Function follows biome. When the biome is habitable, prefer face-visible compositions so the character DNA reads.
 
 ━━━ HIS ARCHETYPE (his energy / role) ━━━
 ${archetype}

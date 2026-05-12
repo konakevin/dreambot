@@ -109,6 +109,10 @@ module.exports = {
     // Hyperreal sci-fi concept-art prefix for starbot_hyperreal medium (migration 145).
     starbot_hyperreal:
       'hyperrealistic photoreal rendering of a science-fiction world, cinematic concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech surfaces, mythic epic scale, movie-poster composition',
+    // Cosmic-void prefix for space-opera path — mandates pure space vacuum
+    // context with ship-as-subject. NO landscape/world bias. Added 2026-05-11.
+    starbot_cosmic_void:
+      'epic cosmic space scene set in pure vacuum, deep void of space, kilometer-class capital spaceships dominating the frame, starfield and nebula backdrop only, NOT planetary surface, NOT canyon, NOT ground-level, NOT atmospheric, hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting in vacuum, ship-as-subject composition',
   },
   promptSuffixByMedium: {
     star_oil_cosmos:
@@ -118,6 +122,9 @@ module.exports = {
     // Hyperreal sci-fi concept-art suffix for starbot_hyperreal medium (migration 145).
     starbot_hyperreal:
       '8K cinematic concept art precision, photoreal materials and lighting, atmospheric lens flare and slight bloom, dust motes in light shafts, every plane filled with detail, no text, no words, no watermarks, photorealistic film still — NOT painted, NOT illustration, NOT drawing, NOT cartoon, NOT stylized',
+    // Cosmic-void suffix — reinforces vacuum context + ship-as-subject.
+    starbot_cosmic_void:
+      '8K cinematic concept art precision, photoreal materials in vacuum, lens flare from distant stars, atmospheric haze from nebula clouds only, the kilometer-class capital spaceship is the MAIN SUBJECT filling the frame, surrounded by smaller craft and starfield, NO planet surface NO canyon NO city NO ground NO buildings, deep black void backdrop, no text, no words, no watermarks, photorealistic film still in deep space',
   },
 
   // Per-medium prompt injection — StarBot's dialect for each medium.
@@ -149,6 +156,10 @@ module.exports = {
       'cinematic sci-fi oil painting, environment-dominant composition with figure WITHIN scene, visible impasto brushwork, heavy canvas texture, dramatic volumetric lighting, gallery-quality masterwork',
     real_astro:
       'NASA-grade astrophotography — Hubble / JWST / ESO false-color composite, vibrant wavelength-mapped colors cranked to maximum, luminous nebula clouds glowing from within, blazing star clusters with diffraction spikes, deep-black void contrast, scientific-imaging aesthetic pushed to wallpaper-worthy vivid, NOT sci-fi concept art NOT painting NOT CGI',
+    // Cosmic-void mediumStyle — kilometer-class capital spaceships in pure
+    // vacuum, ship-as-subject, no landscape bias.
+    starbot_cosmic_void:
+      'hyperrealistic photoreal cinematic sci-fi concept art of a kilometer-class capital spaceship in deep space vacuum, ray-traced volumetric lighting from nebulae and distant stars, photoreal hull materials with weapon batteries lit-window grids and hangar bays visible, surrounded by smaller fighter wings cargo trains and satellites as scale provers, atmospheric nebula haze in deep space, 8K film-still precision, like a still from a Denis Villeneuve cosmic sci-fi film — pure vacuum context — NOT planetary surface NOT canyon NOT ground NOT atmospheric',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
