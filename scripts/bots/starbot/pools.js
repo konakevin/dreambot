@@ -122,6 +122,8 @@ module.exports = {
   COSMIC_ORACLE_ACTIONS: load('cosmic_oracle_actions'),
   // Conditional ritual/mystic moment for cosmic-oracle path (40% gate)
   RITUAL_MOMENT: load('ritual_moment'),
+  // Conditional cosmic event for cosmic-vista path (40% gate)
+  COSMIC_EVENT: load('cosmic_event'),
   COSMIC_ORACLE_LOCATIONS: FORCE_MAP ? FORCE_MAP : [
     ...load('cosmic_oracle_locations'),
     ...load('dune_landscapes'),

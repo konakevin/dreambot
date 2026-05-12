@@ -171,7 +171,7 @@ module.exports = {
   ],
 
   paths: [
-    // 'cosmic-vista' — disabled 2026-05-11 (Kevin QA: not interesting enough)
+    'cosmic-vista', // re-enabled 2026-05-11 with canonical 7-axis + cosmic_event drama layer
     'alien-landscape', // must include alien or character (see path file)
     'space-opera', // needs cooler ships (see path file)
     // 'sci-fi-interior' — disabled 2026-05-11 (cozy-sci-fi-interior wins)
