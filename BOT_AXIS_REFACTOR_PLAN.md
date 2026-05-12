@@ -163,36 +163,76 @@ module.exports = {
 
 That's the whole path file post-refactor. The composer does the rest.
 
-### 1.4 File Layout
+### 1.4 Pool resolution hierarchy (locked 2026-05-12, after Kevin chose "Option B")
+
+The composer resolves each axis at render time with this order:
+
+1. **Path override** — if the path file declares its own pool for this axis (e.g. cozy declares its own `story_beats` because intimate-scale beats differ from monumental beats), use it.
+2. **Bot default** — otherwise use the bot's genre-coded version of that axis (e.g. StarBot's `story_beats` is sci-fi-coded; GothBot's is gothic-coded).
+3. **No shared lib fallback** — every bot ships its own version of every universal axis. The shared lib only holds the COMPOSER and the ARCHETYPE DEFINITIONS, never default pool content. New-bot bootstrap = clone an existing bot's universal pools and re-gen with genre-coded recipe.
+
+This is the **Layered Defaults with Path Overrides** model. Universal axis CONCEPTS are universal (every bot has a `story_beats` axis); the actual seed content is bot-coded by default and path-overridable when divergence matters.
+
+| Axis category | Resolution |
+|---|---|
+| `biome` / `setting` / `interior` / `phenomenon` / `subject` (primary path subject) | Always path-bespoke |
+| Conditional drama (`phenomenon` / `drama` / `moment` / `event`) | Always path-bespoke |
+| Character action (CHARACTER archetype only) | Always path-bespoke |
+| `anchor_entity` / `sky_layer` / `surprise_element` / `architecture_style` (bot-level) | Bot default; path may override |
+| `story_beats` / `composition_frame` / `scale_provers` / `weather_particulate` / `emotional_dna` / `lighting` / `anchor_scale` (universal axes) | Bot default; path may override when needs diverge significantly (e.g. cozy intimate-scale story_beats) |
+
+### 1.5 File Layout
 
 ```
 scripts/
   lib/
-    archetypes.js               # the 6 archetype declarations
-    brief-composer.js           # the shared brief assembler
+    archetypes.js               # the 6 archetype declarations + slot definitions
+    brief-composer.js           # the shared brief assembler — resolves slots
+                                # via path → bot hierarchy
     archetype-templates.js      # the 6 brief templates per archetype
-    gen-bot-pool.js             # bot-agnostic pool generator (extracted from gen-starbot-pool.js)
-    seeds/                      # universal pools shared across bots
-      story_beats.json
-      composition_frame.json
-      scale_provers.json
-      emotional_dna.json
-      weather_particulate.json
-      lighting.json
-      anchor_scale.json
+    gen-bot-pool.js             # bot-agnostic pool generator (extracted
+                                # from gen-starbot-pool.js)
   bots/
     starbot/
-      index.js                  # bot config: mediums, vibes, anchor_entity pool ref
+      index.js                  # bot config: mediums, vibes, default-pool registry
       paths/                    # tiny declarations (5-15 lines each, post-refactor)
-        legacy/                 # original hand-written path files preserved for 30 days post-migration
-      seeds/                    # bot-level + path-level bespoke pools
-      recipes/                  # bot-specific gen recipes for bespoke pools
+        legacy/                 # original hand-written path files preserved
+                                # for 30 days post-migration
+      seeds/
+        universal/              # bot's genre-coded versions of universal axes
+          story_beats.json      # StarBot sci-fi-coded
+          composition_frame.json
+          scale_provers.json
+          weather_particulate.json
+          emotional_dna.json
+          lighting.json
+          anchor_scale.json
+        bot/                    # bot-level axes
+          anchor_entity.json
+          sky_layer.json
+          surprise_element.json
+          architecture_style.json
+        path/                   # path-level bespoke pools
+          alien_landscape_biome.json
+          alien_landscape_phenomenon.json
+          cosmic_oracle_locations.json
+          ...
+        path_overrides/         # rare per-path overrides of universal axes
+          cozy_story_beats.json # intimate-scale story beats (overrides bot default)
+          ...
+      recipes/                  # bot-specific gen recipes for ALL its pools
     dragonbot/                  # future bots plug in the same way
       index.js
       paths/
       seeds/
+        universal/              # DragonBot fantasy-coded universal axes
+        bot/
+        path/
+        path_overrides/
       recipes/
 ```
+
+**Note on migration of existing pools:** StarBot currently has its universal pools at `seeds/<axis>.json` (flat). They're already sci-fi-coded by content. The Phase 1 refactor moves them to `seeds/universal/<axis>.json` and registers them as the bot's defaults in `bots/starbot/index.js`. No content change.
 
 ---
 

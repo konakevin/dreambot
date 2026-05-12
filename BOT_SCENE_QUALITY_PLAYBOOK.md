@@ -127,9 +127,22 @@ Each bot keeps the same 14 / 8-9 axis structure but swaps pool sources per genre
 | GothBot | (gothic lineage pool TBD) | (gothic outfits TBD) | (gothic actions TBD) | (gothic settings TBD) |
 | SteamBot | (steampunk lineage TBD) | (steampunk outfits TBD) | (steampunk actions TBD) | (steampunk settings TBD) |
 
-Universal axes (LIGHTING / COMPOSITION_FRAME / SCALE_PROVERS / WEATHER_PARTICULATE / EMOTIONAL_DNA / SURPRISE_ELEMENT / STORY_BEATS / ANCHOR_SCALE) are shared.
+**Universal axis CONCEPTS are universal — content is bot-coded (locked 2026-05-12).** Every bot ships its own version of the universal pools (LIGHTING / COMPOSITION_FRAME / SCALE_PROVERS / WEATHER_PARTICULATE / EMOTIONAL_DNA / STORY_BEATS / ANCHOR_SCALE) with genre-coded language. StarBot's `lighting` describes twin-sun nebula glow; GothBot's `lighting` describes candlelight through stained-glass at dusk; SteamBot's describes gas-mantle gaslight and brass-tinted hearth. Same axis concept, genre-tailored content.
 
-The work of overhauling a new bot = author its bespoke per-bot pools (race / outfit / action / setting / sky / architecture-style), reuse universal axes, plug into the same path file template.
+**Pool resolution hierarchy (composer resolves at render time):**
+
+1. **Path override** — if a path declares its own pool for an axis, use it (e.g. cozy-sci-fi-interior overrides `story_beats` because intimate-scale beats differ from monumental beats)
+2. **Bot default** — otherwise use the bot's genre-coded version of that axis
+3. **No shared lib fallback** — every bot ships every universal axis. New-bot bootstrap = clone an existing bot's universal pools and re-gen with genre-coded recipe.
+
+The work of overhauling a new bot:
+1. Author bot-coded versions of the 7 universal pools (genre-tailored)
+2. Author bot-level pools (anchor_entity / sky_layer / surprise_element / architecture_style)
+3. For each path: author path-bespoke pools (biome/setting/interior + conditional drama + character action if CHARACTER archetype)
+4. Optionally override universal axes per path when divergence matters
+5. Each path file is a ~5-line archetype declaration that taps the shared composer
+
+The full refactor architecture and migration sequence: `BOT_AXIS_REFACTOR_PLAN.md`.
 
 ---
 
@@ -208,17 +221,19 @@ This is the production architecture all story-driven bots converge on. Every ren
 - **Anchor entity is bot-genre-coded.** Universal axis (ANCHOR_SCALE) + bot-specific pool (ANCHOR_ENTITY).
 - **Face-swap is an override**, not a separate pipeline. User cast member overrides ANCHOR_ENTITY; scale forced to MEDIUM/LARGE so the face is renderable.
 
-**Universal axes — shared across all story bots:**
+**Universal axes — concepts shared across all bots, content bot-coded per bot:**
 
-| Axis | Pool size | Purpose |
-|---|---|---|
-| STORY_BEATS | 12 | Narrative moment (Arrival / Discovery / Awe / Ruin / etc.) |
-| ANCHOR_SCALE | 4 | TINY / SMALL / MEDIUM / LARGE — what figure/entity scale the render targets |
-| COMPOSITION_FRAME | ~12 | Camera framing rule (wide vista / aerial sweep / low-angle hero / etc.) |
-| LIGHTING | 30-50 | Light source + atmospheric quality |
-| SCALE_PROVERS | 12 | Pickable small-things-that-prove-big-things (ships-as-dots / lit-windows-honey-grain / etc.) |
-| WEATHER_PARTICULATE | 6-8 | Acid-rain fog / dust haze / vapor streams / clear-air visibility |
-| EMOTIONAL_DNA | 8 | Awe / dread / melancholy / sacred / indifferent-megalopolis / etc. |
+(Architecture decision locked 2026-05-12. See "Per-bot variation" section above for the pool resolution hierarchy.)
+
+| Axis | Pool size (typical) | Purpose | Resolution |
+|---|---|---|---|
+| STORY_BEATS | 50-100 | Narrative moment (Arrival / Discovery / Awe / Ruin / etc.) | Bot default; path may override (e.g. cozy uses intimate-scale beats) |
+| ANCHOR_SCALE | 4 | TINY / SMALL / MEDIUM / LARGE — what figure/entity scale the render targets | Universal labels; per-path range constraint |
+| COMPOSITION_FRAME | 50 | Camera framing rule (wide vista / aerial sweep / low-angle hero / etc.) | Bot default; path may override |
+| LIGHTING | 200 | Light source + atmospheric quality | Bot default; path may override |
+| SCALE_PROVERS | 50 | Pickable small-things-that-prove-big-things (ships-as-dots / lit-windows-honey-grain / etc.) | Bot default; path may override |
+| WEATHER_PARTICULATE | 200 | Acid-rain fog / dust haze / vapor streams / clear-air visibility | Bot default; path may override |
+| EMOTIONAL_DNA | 50 | Awe / dread / melancholy / sacred / indifferent-megalopolis / etc. | Bot default; path may override |
 
 **Per-bot axes — genre-specific:**
 
