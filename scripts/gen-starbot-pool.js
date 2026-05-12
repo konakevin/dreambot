@@ -88,6 +88,34 @@ const POOL_RECIPES = {
     ],
     instructions: `Each landscape must read as a specific ecology — biology, geology, atmosphere coherent. MG layer: biology / formations / weather. Scene must include EITHER a sentient figure (1-2% frame, midground-back silhouette) OR an alien creature native to this world.`,
   },
+  megastructure_setting: {
+    theme: 'colossal artificial megastructures at planet-scale or greater — orbital ring worlds, Dyson constructs, planetary mantles, generation ships, space elevators, megaship hulks. Each entry is a SPECIFIC megastructure with multi-tier composition.',
+    touchpoints: [
+      'Halo Ring orbital (visible curvature arc)',
+      "Niven's Ringworld",
+      'Dyson Sphere / Dyson Swarm',
+      'Bishop Ring habitat',
+      "Banks's Culture Orbital",
+      "Foundation's Trantor planetary mantle",
+      'space elevator (pillar from ground into orbit)',
+      'McGuire-coded generation ship interior',
+      'Stanford Torus rotating wheel station',
+      'Death-Star-scale spherical battle station',
+      'Eldritch geometric Forerunner structures',
+      'crashed leviathan ship integrated into terrain',
+    ],
+    instructions: `Each entry is 60-120 words describing ONE distinctive megastructure with multi-tier composition. Include: STRUCTURAL TYPE (ring / sphere / mantle / spire / shell / etc.), SCALE-DEFINING CUE (curvature visible / horizon-spanning / kilometer thick), ATMOSPHERIC LAYERS at multiple altitudes, SCALE PROVERS named (ships as dots, tiny figures, lit-window-grain, atmospheric haze bands), MATERIAL identity (alien alloy / weathered Forerunner stone / engineered diamond / etc.).
+
+Each entry must FILL THE FRAME at planet-or-greater scale. The viewer is dwarfed.
+
+Variety REQUIRED across all 30 entries:
+- Ring-worlds vs spheres vs mantles vs spires vs swarms vs hulks
+- Pristine new construction vs ancient overgrown ruin vs damaged battle-scarred
+- Active inhabited (lights / traffic) vs abandoned dormant vs partially under construction
+- Visible viewpoint variety — from inside looking up / from below looking up / from far away horizon-filling / mid-orbit looking down
+
+NEVER use franchise proper nouns (Halo / Citadel / Death Star etc. — INSPIRED BY, not literal).`,
+  },
   explorer_outfits_female: {
     theme: 'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
     touchpoints: [

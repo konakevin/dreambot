@@ -72,6 +72,9 @@ module.exports = {
   // alien_planet_biome.json; other paths get their own primary pools
   // when they're rolled out to the slot-composer pattern.
   ALIEN_PLANET_BIOME: load('alien_planet_biome'),
+  // MEGASTRUCTURE_SETTING — colossal artificial structures at planet-or-greater
+  // scale. Each entry a specific megastructure with multi-tier composition.
+  MEGASTRUCTURE_SETTING: load('megastructure_setting'),
   // CHARACTER_ACTION — cinematic sci-fi-movie verbs for character paths.
   // Modeled on MechBot's power_armor_actions: specific, dynamic, multiple
   // elements happening. Used by female-explorer / male-explorer paths to

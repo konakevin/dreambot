@@ -429,6 +429,23 @@ Same applies to character actions — `female_explorer_action` should be cinemat
 
 **Round 12 — KEVIN APPROVED ✓** — Simplified DNA bio further: just `[race] woman with [hair-color] hair, wearing [outfit], carrying [accessory]`. Dropped skin/eyes/hairstyle from the visible brief (they had body-emphasis language like "exposed forearms" that contradicted sealed armor). Kevin: "i think you've done it on this last batch... those are all very good". **BAR MET** for female-explorer.
 
+### male-explorer (StarBot) — recipe-transfer test
+
+**Round 1 — BAR MET FIRST TRY ✓** (avg ~4.9/5). Copied the R12 female-explorer brief verbatim, swapped pool references (FEMALE_EXPLORERS → MALE_EXPLORERS, etc.). All 5 renders at 4.5+: artifact discovery, glowing-sigil examiner, two-figure-with-alien-beast, cliff climber under twin suns, lava-sigil explorer. Recipe transfers cleanly between character paths within the same bot.
+
+### megastructure (StarBot) — recipe-transfer test
+
+**Round 1** (avg ~4.2/5) — Applied alien-city slot composer recipe with new MEGASTRUCTURE_SETTING pool (30 Sonnet-authored entries: orbital rings / Dyson swarms / planetary mantles / megaships / impossible portals). 4 of 5 hit the bar; 1 rendered as a canyon settlement (pool entry was too ambiguous about scale).
+
+**Round 2 — BAR MET ✓** (avg ~4.5/5). Tightened brief to demand "post-planetary scale, NOT a settlement / NOT city / NOT canyon-level — visible curvature or horizon-spanning or atmospheric-passing extent". All 5 renders now read as proper megastructures: tower-spire forest, floating-city with vehicles, figure-before-cosmic-portal, platform megastructure over clouds, disc-station on red canyon.
+
+### Recipe transfer learnings
+
+- Paths 3 and 4 (male-explorer, megastructure) hit the bar in 1-2 rounds vs paths 1 and 2 (alien-city: 8 rounds, female-explorer: 12 rounds).
+- The 12-round investment on female-explorer bought the RECIPE — character paths now copy-paste with pool swaps.
+- The 8-round investment on alien-city bought the SCENE PATH RECIPE — megastructure inherits the slot-composer pattern with a new Tier 3 pool.
+- For each new path: 1) author a bespoke Tier 3 setting pool with attention to its subject matter (Sonnet generates 30+ entries with variety mandate + aesthetic touchpoints), 2) instantiate the path file using the proven scene/character template, 3) 1-2 rounds to tune any path-specific issues.
+
 **Config (current production):**
 - Path file: `scripts/bots/starbot/paths/female-explorer.js`
 - Universal axes: STORY_BEATS, COMPOSITION_FRAME, SCALE_PROVERS, WEATHER_PARTICULATE, EMOTIONAL_DNA, LIGHTING
