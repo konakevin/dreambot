@@ -168,6 +168,11 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for starcraft-landscape (2026-05-13) — Blizzard /
+  // Sam Didier / Glenn Rane / Trent Kaniuga tradition.
+  STARCRAFT_ANCHOR_ENTITY: load('starcraft_anchor_entity'),
+  STARCRAFT_MOMENT: load('starcraft_moment'),
+  STARCRAFT_DEEP_DISTANCE: load('starcraft_deep_distance'),
   // Path-bespoke pools for star-trek-landscape (2026-05-13) — Probert /
   // Sternbach / classic-Trek painted-matte tradition.
   STARTREK_ANCHOR_ENTITY: load('startrek_anchor_entity'),
