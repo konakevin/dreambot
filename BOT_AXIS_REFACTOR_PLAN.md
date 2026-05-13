@@ -519,6 +519,26 @@ Before declaring a new bot ready:
 
 ---
 
+## Part 2.5: Character-path lessons learned
+
+(Added 2026-05-12 after the female-explorer EXPLORER-archetype migration regressed and was reverted.)
+
+**Hard rule: character-path briefs must be GENDER-LOCKED.** Flux uses gendered pronouns + nouns ("she / her / woman" or "he / his / man") as primary signals for which body to render. A brief that goes gender-neutral ("the character / they / them / explorer") softens Flux's commitment and renders inconsistent / less-focused / lower-quality character figures.
+
+The female-explorer brief that landed and stayed in production yesterday uses "she", "her", "woman", "female explorer" consistently throughout — that consistency is doing real rendering work, not just style. Tonight's composer migration replaced these with gender-neutral pronouns + an archetype-noun-derived bio line (in pursuit of one-template-two-genders reusability for female + male explorer). The result regressed visibly enough that Kevin caught it on the first 5 renders.
+
+**Two valid architectures for character paths going forward:**
+
+A. **Parametrized-gender single archetype** — one EXPLORER archetype + one EXPLORER template, but the template reads `slots.gender` (from `pathConfig.gender: 'female' | 'male'`) and injects "she / her / woman" or "he / his / man" everywhere. The template is gender-locked at render time per path.
+
+B. **Sibling archetypes per gender** — FEMALE_EXPLORER + MALE_EXPLORER each with its own gender-locked template (no shared template at all). Matches the cosmic-oracle pattern of per-path bespoke template.
+
+Both are viable. **Option A is DRYer** (one template, branching strings). **Option B is more explicit** (no string-injection complexity, but more duplication). For character paths beyond explorers (e.g. cosmic-oracle, which uses bespoke single-pool character entries instead of stacked DNA), the CHARACTER archetype already handles its case via gender-baked-into-the-character-pool-entry — those don't need this fix.
+
+**One thing not to try:** one gender-neutral template serving multiple genders. Empirically broken.
+
+---
+
 ## Part 3: Hard Safety Rules
 
 1. **Snapshot tests are mandatory.** Any commit that breaks an existing brief-snapshot test fails CI. No exceptions.
