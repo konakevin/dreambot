@@ -615,6 +615,80 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  MASS_EFFECT_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
+
+    const incidentSection = incident
+      ? `
+━━━ INCIDENT — render this visibly active ━━━
+${incident}
+
+Clean-futurism event woven into the scene. Mass-effect-field activation / biotic surge / holo-conference / defense-field test. Controlled, never chaotic.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a MASS-EFFECT-CODED ARCHITECTURE INTERIOR for StarBot — BioWare / Sparth / Matt-Rhodes tradition. CLEAN-FUTURE-MEETS-DISTINCT-ALIEN. Each species/world has its own architectural language. CONTROLLED PALETTES — never gaudy.
+
+━━━ MOOD — NON-NEGOTIABLE ━━━
+CLEAN + ELEGANT + ALIEN-DISTINCT. Holographic UI panels glow soft blue. Biotic-energy ribbons curl through space. Neural-link cabling arcs in elegant loops. Mass-effect-field shimmer at thresholds. The architecture is sleek, intentional, ALIEN — never gritty (Aliens) or grim (Star Wars) or extravagant (Guardians).
+
+━━━ NO FIGURES — ABSOLUTE ━━━
+Pure architecture. NO Shepard, NO Garrus, NO Tali, NO Krogan, NO geth-as-figures, NO foreground ships. Empty interior reads through architectural language + holo-elements + light.
+
+━━━ THE ARCHITECTURE (render this exact interior) ━━━
+${setting}
+
+Each interior has SPECIFIC architectural language — Citadel-style flowing curves / Krogan-coded weathered military / Quarian-style modular and patched / Asari-coded crystalline organic / Salarian-precise lab interior / Cerberus-style sterile lab. Honor the species/world the pool entry encodes.
+
+━━━ ATMOSPHERIC TEXTURE — controlled-color signature ━━━
+${atmosphere}
+
+━━━ DEEP-DISTANCE SIGNATURE — receding through clean atmospheric depth ━━━
+${deep_distance}
+
+The far layer adds intentional depth — sleek tower-spire receding / observation glass with planet beyond / massive holo-projection at far end / data-pillar core extending through chamber.
+${incidentSection}
+━━━ CONTROLLED COLOR — THE MASS EFFECT SIGNATURE ━━━
+Controlled blues (Citadel cyan), oranges (Krogan amber), purples (Asari violet), greens (Salarian / Quarian), whites (Cerberus sterile). NEVER gaudy. NEVER rainbow saturation. ONE dominant color per frame with controlled accent palette.
+
+━━━ STORY BEAT (interpret at clean-future scale) ━━━
+${story_beat}
+
+Translate at sleek-future scale: ARRIVAL = mass-effect-field threshold cycling open. VIGIL = empty observation deck with planet beyond glass. SOLITUDE = vast chamber with holo-projection. CONFRONTATION = defense-field active at threshold.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Cool ambient (Citadel-blue / Asari-violet / Salarian-green) with ONE warm accent. Holographic UI casts soft glow. Mass-effect-field shimmer at thresholds. Never harsh fluorescent.
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Clean-future architectural composition. FOREGROUND: tactile sleek detail (holo-panel edge, biotic-cable, sleek alloy threshold, translucent partition). MIDGROUND: architecture body — chamber / lab / observation deck / bridge / hub. DEEP DISTANCE: signature feature receding through controlled atmospheric depth.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Citadel", "Normandy", "Tuchanka", "Thessia", "Reaper", "Sovereign", "Geth", "Quarian", "Krogan", "Asari", "Salarian", "Cerberus", "Mass Effect", "Shepard", "Garrus", "Tali", "Wrex" in the output. Use generic descriptive language only.
+
+━━━ FORBIDDEN ━━━
+- NO foreground figures
+- NO gaudy rainbow saturation — controlled palette only
+- NO industrial grit — clean futurism only
+- NO chaotic crowds or commotion
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   HALO_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
 

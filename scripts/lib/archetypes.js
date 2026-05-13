@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  MASS_EFFECT_ARCHITECTURE: {
+    description: 'PATH-BESPOKE — Mass-Effect-franchise architecture interior (BioWare / Sparth / Matt Rhodes tradition). CLEAN-FUTURE-MEETS-DISTINCT-ALIEN. Each species/world has its own architectural language. Controlled color palette — blues, oranges, purples. Holographic UI / biotic-energy / mass-effect-fields. NO figures.',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting'],
+      bot: [],
+      path: ['setting', 'atmosphere', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'incident', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   HALO_LANDSCAPE: {
     description: 'PATH-BESPOKE — Halo-franchise landscape (Bungie / 343 Industries / Sparth / Pat Rawlings tradition). Ring-installation arc visible across sky is the signature. Ancient precursor megaliths, frontier military bases, sacred-ancient → military-industrial → biblical-ringworld mood range. Path-bespoke pools.',
     slots: {

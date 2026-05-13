@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  archetype: 'ARCHITECTURE_INTERIOR',
+  archetype: 'MASS_EFFECT_ARCHITECTURE', // BESPOKE (2026-05-13 retry)
   pools: {
     setting: 'MASS_EFFECT_ARCHITECTURE',
     atmosphere: 'MASS_EFFECT_ATMOSPHERE_DETAIL',
