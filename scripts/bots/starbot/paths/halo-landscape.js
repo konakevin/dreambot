@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  archetype: 'ALIEN_LANDSCAPE',
+  archetype: 'HALO_LANDSCAPE', // BESPOKE (2026-05-13 retry)
   pools: {
     biome: 'HALO_LANDSCAPES', // existing primary path pool
     anchor_entity: 'HALO_ANCHOR_ENTITY',

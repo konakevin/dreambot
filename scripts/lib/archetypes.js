@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  HALO_LANDSCAPE: {
+    description: 'PATH-BESPOKE — Halo-franchise landscape (Bungie / 343 Industries / Sparth / Pat Rawlings tradition). Ring-installation arc visible across sky is the signature. Ancient precursor megaliths, frontier military bases, sacred-ancient → military-industrial → biblical-ringworld mood range. Path-bespoke pools.',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting', 'weather_particulate'],
+      bot: [],
+      path: ['biome', 'anchor_entity', 'moment', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GUARDIANS_ARCHITECTURE: {
     description: 'PATH-BESPOKE — Guardians-of-the-Galaxy-franchise architecture interior (James Gunn / Jack Kirby cosmic / 70s album-cover sci-fi). PLAYFUL-EXTRAVAGANT-WEIRD. SATURATED COLOR signature. Less gritty than Star Wars, more whimsical-cosmic-grand. NO skulls, NO figures. Path-bespoke pools (setting + atmosphere + deep_distance + 40% incident).',
     slots: {

@@ -615,6 +615,82 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  HALO_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
+
+    return `You are a sci-fi concept-art painter writing a HALO-CODED LANDSCAPE for StarBot — Bungie / 343-Industries / Sparth / Pat-Rawlings / Eddie-Smith concept-art tradition. Vast cinematic alien-world vista. The RING-INSTALLATION ARC visible across the sky is the franchise signature.
+
+━━━ THE LANDSCAPE IS THE SUBJECT — NON-NEGOTIABLE ━━━
+Wide cinematic vista. The world fills the frame. Witness is small for scale — proves the world's scale, never dominates.
+
+━━━ MOOD RANGE ━━━
+Each render lands somewhere on the spectrum: SACRED-ANCIENT (precursor-megalith calm) → MILITARY-INDUSTRIAL (frontier base grit) → BIBLICAL-RINGWORLD (vast ring-arc awe). The mood is determined by the rolled biome's specific character.
+
+━━━ ONE SMALL WITNESS — for scale ━━━
+${anchor_entity}
+
+This witness is SMALL — silhouette in midground-back proving scale. EXACTLY ONE. Never crowds.
+
+━━━ WHAT THE WITNESS IS DOING — candid moment ━━━
+${moment}
+
+Small grounded action — boots on terrain. NEVER hero posing.
+
+━━━ THE BIOME (render this exact landscape) ━━━
+${biome}
+
+Render every detail of the biome's specific character — ringworld inner-surface curve / Forerunner-style precursor stone / military prefab outpost / volcanic wasteland / alpine plateau / dropship-staging plain / coastal megastructure.
+
+━━━ DEEP-DISTANCE SIGNATURE — THE RING-ARC IS THE HALO HALLMARK ━━━
+${deep_distance}
+
+Render at the deepest layer — receding through atmospheric perspective. When the rolled feature is a ringworld arc, the curve sweeps across the sky bending overhead — the iconic Halo silhouette.
+
+━━━ HALO COMPOSITION SIGNATURE ━━━
+Sky often shows the RING-INSTALLATION ARC bending overhead — translucent through atmospheric haze, distant inner-surface visible. Halo's defining shot. Mix in: precursor monolith on horizon, distant Forerunner-style tower, atmospheric processor smoke columns, military base sketched into far valley.
+
+━━━ STORY BEAT (interpret at vast-vista scale) ━━━
+${story_beat}
+
+Translate at frontier-scale: ARRIVAL = dropship descending against ring-arc. VIGIL = sentinel on ridge. SOLITUDE = empty precursor temple plaza. CONFRONTATION = distant patrol meeting at outpost.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Painted-concept-art lighting — atmospheric perspective, cool-greens / cobalt-blues / golden-Sun-Earth-spectrum / ringworld inner-shadow accents.
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+Palette references the franchise: forest-green precursor + military-coyote + ring-cobalt + atmospheric-haze grey + golden ring-amber.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Wide cinematic vista. FOREGROUND: textural detail (rock outcrop / Forerunner-style stone / military debris / native vegetation). MIDGROUND: the biome body + small witness in profile. DEEP DISTANCE: ring-arc OR precursor megalith OR distant base receding through atmospheric perspective. Sky carries 40-60% — often shows the ring's curve sweeping overhead.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Halo", "Forerunner", "Covenant", "Reach", "Master Chief", "Spartan", "Cortana", "Sangheili", "Elite", "UNSC", "Pelican", "Warthog", "Brute", "ODST", "Banished" in the output.
+
+━━━ FORBIDDEN ━━━
+- NO centered foreground large figure
+- NO Bungie/343 logos or visual nouns
+- NO crowds — exactly one witness
+- NO modern military fatigues — armor is sci-fi tactical, generic
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   GUARDIANS_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
 
