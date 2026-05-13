@@ -22,6 +22,14 @@
 module.exports = {
   archetype: 'MEGASTRUCTURE',
   pools: {
-    setting: 'MEGASTRUCTURE_SETTING', // primary megastructure pool (slim)
+    setting: 'MEGASTRUCTURE_SETTING', // primary megastructure pool
+    // Bot anchor_entity slot overridden with megastructure-scale witnesses
+    // (lone shuttle / construction-mech / fighter-wing dwarfed by structure).
+    anchor_entity: 'MEGASTRUCTURE_ANCHOR_ENTITY',
+    // Path-bespoke deep-distance feature (gas-giant behind / second megastructure).
+    deep_distance: 'MEGASTRUCTURE_DEEP_DISTANCE',
+    // Wired 2026-05-13 — conditional drama layer (40% gate) was declared by
+    // archetype but never fired because no path drama pool existed.
+    drama: 'MEGASTRUCTURE_DRAMA',
   },
 };

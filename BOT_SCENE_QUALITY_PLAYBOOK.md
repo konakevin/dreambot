@@ -168,6 +168,41 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 ---
 
+## Path migrations MUST seed bespoke pools — never wrap with shared defaults only (CRITICAL — 2026-05-13)
+
+When migrating a path to the new composer (declarative form), the path config MUST declare **path-bespoke pools** that give the path its distinct identity. Wrapping a path with only `archetype: 'X'` and a single `setting` or `biome` pool pointing at a bot-shared default is INSUFFICIENT. The result is a "wrapper" path that renders barren generic scenes indistinguishable from any other path of the same archetype.
+
+**Hard rule for every path migration — every path MUST:**
+
+1. **Wire EVERY axis the archetype declares.** If the archetype's `slots.bot` lists `surprise_element`, the path config or bot default MUST point to a pool. Don't leave any axis "missing." (Confirmed problem: 2026-05-13 alien-landscape was wired with the archetype declaring 9 slots but only 1 path-bespoke pool; alien-city + megastructure had the same problem with `drama` conditional layers never firing because no `drama` pool was wired.)
+2. **Seed at least 3 path-bespoke pools per path.** Pick the axes that most define the path's identity and seed bespoke pools for them. Examples:
+   - Character path (FE / ME): **10 bespoke pools** — biome + action + explorer_archetype + 7 character DNA (race / skin / eyes / hair_color / hairstyle / outfit / accessory)
+   - Landscape path (alien-landscape): **3 bespoke pools** — landscape_anchor_entity (lone wilderness witnesses) + landscape_moment (small action verbs) + landscape_deep_distance (signature far-back feature) + biome (path-primary)
+   - City path (alien-city): **drama + city-specific anchor_entity + city-specific deep-distance** + setting (path-primary)
+   - Megastructure path: **drama + structure-scale anchor_entity + structure-specific deep-distance** + setting (path-primary)
+3. **Wire ALL conditional layers the archetype declares.** If `archetype.conditionalLayer = { slot: 'drama', gate: 0.4 }`, the path MUST declare a `drama` pool — otherwise the 40% drama event NEVER FIRES (the composer skips conditional pools that aren't wired).
+4. **Audit BEFORE declaring "done."** Run the audit one-liner:
+   ```bash
+   node -e "
+   const { ARCHETYPES } = require('./scripts/lib/archetypes');
+   const cfg = require('./scripts/bots/<bot>/paths/<path>');
+   const arch = ARCHETYPES[cfg.archetype];
+   const path = Object.keys(cfg.pools || {});
+   console.log('archetype:', cfg.archetype);
+   console.log('  arch.slots.path:', arch.slots.path);
+   console.log('  arch.slots.bot:', arch.slots.bot);
+   console.log('  arch.conditionalLayer:', arch.conditionalLayer);
+   console.log('  cfg.pools wired:', path);
+   "
+   ```
+   If `cfg.pools` doesn't include the conditional-layer slot AND at least 3 path-bespoke pools, the path is NOT done.
+
+**Why this matters:** the entire point of the new composer architecture is the **path-bespoke pools that encode each path's identity**. A path with only one bespoke pool produces renders that look like any other path of the same archetype — the architecture works architecturally but produces generic content. FE/ME converged to 4.5/5 hearted because they had 10 bespoke pools each shaping the gender-locked DNA. alien-landscape rendered barren because it had only 1 path pool.
+
+**Bot defaults are for the universal modifier axes (lighting, weather, composition_frame, etc.) — NOT for the path-identity axes.** A path's identity axes should always be path-bespoke.
+
+---
+
 ## The two-stage path-overhaul process (CRITICAL)
 
 Every path overhaul has TWO mandatory stages. Skipping stage 2 means the path renders well but the **subject array is too narrow** — over thousands of bot posts, users see repetition.

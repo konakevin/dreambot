@@ -21,7 +21,14 @@
 module.exports = {
   archetype: 'OUTDOOR_CITY',
   pools: {
-    setting: 'ALIEN_CITIES', // primary city pool (slim)
-    // no drama pool — alien-city carries drama via busy-metropolis language
+    setting: 'ALIEN_CITIES', // primary city pool
+    // Bot anchor_entity slot overridden with city-specific witnesses
+    // (street vendor / hovercar / lone pedestrian — not capital ships).
+    anchor_entity: 'ALIEN_CITY_ANCHOR_ENTITY',
+    // Path-bespoke deep-distance feature (orbital ring / megabuilding spire).
+    deep_distance: 'ALIEN_CITY_DEEP_DISTANCE',
+    // Wired 2026-05-13 — conditional drama layer (40% gate) was declared by
+    // archetype but never fired because no path drama pool existed.
+    drama: 'ALIEN_CITY_DRAMA',
   },
 };

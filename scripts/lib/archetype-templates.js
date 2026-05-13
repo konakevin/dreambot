@@ -130,32 +130,36 @@ Output ONLY the raw 130-150 word scene description. Comma-separated phrases. NO 
       lighting,
       sky_layer,
       surprise_element,
+      anchor_entity,
       setting,
       drama,
+      deep_distance,
     } = slots;
 
     const dramaSection = drama
       ? `
-━━━ DRAMA MOMENT — one striking event unfolding around the building ━━━
+━━━ DRAMA MOMENT — a city-wide event woven through the scene ━━━
 ${drama}
+
+This drama is something happening ACROSS the city, NOT concentrated on the featured landmark. The featured building does NOT emit, radiate, or generate the drama — the drama is environmental / atmospheric / city-spanning. If the drama implies an action source, place it AWAY from the featured landmark.
 
 `
       : '';
 
-    return `You are writing an EPIC CYBERPUNK ANIME MEGACITY keyframe for StarBot — an iconic notable building within a vast bustling sci-fi city, anime cinematic illustration style. Output wraps with style prefix + suffix.
+    return `You are writing an EPIC CYBERPUNK ANIME MEGACITY keyframe for StarBot — a vast impressive sci-fi city with one notable landmark visible among many cool buildings. Anime cinematic illustration. Output wraps with style prefix + suffix.
 
 ━━━ CORE PROMPT DNA (weave these phrases into the polished output) ━━━
 "epic futuristic cyberpunk megacity, anime cinematic keyframe illustration, ultra-detailed skyline stretching endlessly into the horizon, towering neon skyscrapers stacked in vertical layers, glowing holographic billboards, dense glowing signage in japanese kanji and futuristic alien glyphs, rain-soaked or steam-soaked streets reflecting neon light, flying cars and hovering taxi traffic streams, illuminated skybridges connecting buildings, massive industrial pipes and ventilation systems, rooftop markets and crowded alleyways, glowing windows everywhere, thousands of tiny lights, atmospheric fog and steam rising between buildings, volumetric light beams, vibrant neon color palette (magenta, cyan, electric blue, purple, gold), extreme detail saturation, bustling city life, tiny dark figures of people on balconies, distant megastructures disappearing into haze, sharp anime linework, rich shading, high contrast lighting, dramatic anime lighting, masterpiece quality, insanely detailed, no blur, no empty areas, every surface covered in detail."
 
 These are MANDATORY core descriptors. The Sonnet polish must include language matching these themes throughout the prompt.
 
-━━━ THE SUBJECT IS A SINGLE ICONIC BUILDING — NON-NEGOTIABLE ━━━
-The focus is ONE specific notable structure within a sci-fi city — a tower / spire / building / habitat block with DISTINCTIVE visual character (cool architecture, lighting, graffiti, surface treatment, cultural marks). The building occupies 40-60% of the frame as the SUBJECT. NOT a megastructure cluster, NOT a planet-spanning construct — a single building you could walk into.
+━━━ THE SUBJECT IS A VAST IMPRESSIVE CYBERPUNK CITY — NON-NEGOTIABLE ━━━
+The CITY itself is the hero — a sprawling, dense, ALIVE alien-cyberpunk megacity that feels overwhelming in scope. Multiple impressive buildings throughout the frame, each at different distances, each contributing to a UNIFIED sense of "this city is incredible." NOT a single weird centered building dominating the frame.
 
-━━━ THE BUILDING ━━━
+━━━ THE FEATURED LANDMARK (one building among many) ━━━
 ${setting}
 
-Render its distinctive design / lighting / graffiti / texture / surface treatment in vivid detail. This is THE hero of the frame.
+This is ONE notable building in the city — not THE subject, but A LANDMARK. It should be visible and recognizable, occupying ~25-35% of the frame at most. The city around it is equally impressive — multiple OTHER cool towers / habitat blocks / megabuildings at different distances, each carrying their own character. NEVER let the featured landmark visually dominate as a singular weird structure. It is one cool building in a city of cool buildings.
 
 ━━━ THE CITY AROUND IT IS THE BACKDROP — OVERWHELMING DETAIL REQUIRED ━━━
 The featured building does NOT exist alone. The frame is PACKED with surrounding city detail — the city is as much the atmospheric hero as the featured building. NEVER an isolated building in fog.
@@ -238,6 +242,11 @@ ${surprise_element}
 
 Place at midground in the bustling city around the featured building.
 
+━━━ DEEP-DISTANCE SIGNATURE — visible at the FAR horizon behind the city ━━━
+${deep_distance}
+
+This is the far-back layer punching up depth — render it visibly behind/beyond the featured building.
+
 ━━━ FORBIDDEN ━━━
 - NO aerial / overhead / orbital / wide-skyline-from-outside camera positions — camera is INSIDE the city
 - NO megastructure / orbital ring / Dyson swarm / planetary mantle / space elevator — that was the old archetype direction. This path is ICONIC BUILDING IN CYBERPUNK CITY.
@@ -285,6 +294,7 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
       surprise_element,
       setting,
       drama,
+      deep_distance,
     } = slots;
 
     const dramaSection = drama
@@ -356,6 +366,11 @@ ${emotional_dna}
 ${surprise_element}
 
 Place this at midground or deep midground in the busy city scene — alongside the ships and crowds and traffic already happening.
+
+━━━ DEEP-DISTANCE SIGNATURE — visible at the FAR horizon behind the city ━━━
+${deep_distance}
+
+This is the far-back layer that punches up the city's depth — render it through atmospheric haze beyond the city body.
 
 ━━━ THE WORLD REACTS ━━━
 The city is ALIVE. Tiny ships threading between towers, light glowing from windows at multiple elevations, holographic signage flickering, atmospheric haze separating depth bands. Never a static lifeless diorama.
@@ -598,6 +613,95 @@ CRITICAL — the OPENING tokens of the prompt are "[character] [DOING ACTION]" �
 DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked. His outfit + accessory + action all readable at full-body scale. RUGGED + WEATHERED + DANGEROUS — bulk reads as competence.
 
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  ALIEN_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      story_beat,
+      anchor_scale,
+      composition_frame,
+      scale_provers,
+      weather_particulate,
+      emotional_dna,
+      lighting,
+      anchor_entity,
+      sky_layer,
+      surprise_element,
+      biome,
+      moment,
+      deep_distance,
+    } = slots;
+
+    return `You are a sci-fi concept artist composing a STORY SCENE for StarBot's alien-landscape path. You are NOT free to invent the scene — you are weaving together the rolled axes below into a 120-180 word scene description that integrates ALL of them coherently. The BIOME is the hero; the anchor entity is a small witness proving the scale. Output wraps with style prefix + suffix.
+
+━━━ STORY BEAT — the narrative moment this still captures ━━━
+${story_beat}
+
+━━━ ANCHOR ENTITY — what's in the frame (small witness, silhouette) ━━━
+${anchor_entity}
+
+━━━ ANCHOR SCALE — how big the entity is in frame ━━━
+${anchor_scale}
+
+━━━ THE WITNESS'S MOMENT — what they are doing right now (small candid action) ━━━
+${moment}
+
+━━━ THE BIOME — the alien world the scene is set in (THE HERO) ━━━
+${biome}
+
+━━━ DEEP-DISTANCE SIGNATURE — visible at the far horizon ━━━
+${deep_distance}
+
+This is the far-back layer punching up depth — render it behind the biome.
+
+━━━ SURPRISE ELEMENT — woven into the scene for added story ━━━
+${surprise_element}
+
+Place at midground or deep-midground.
+
+━━━ SKY LAYER — what's overhead ━━━
+${sky_layer}
+
+━━━ COMPOSITION FRAME — the camera/framing rule ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ SCALE PROVERS — include BOTH of these in the scene as visible elements ━━━
+- ${scale_provers[0]}
+- ${scale_provers[1]}
+
+━━━ EMOTIONAL DNA — the feeling the render carries ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HOW TO COMPOSE ━━━
+Weave EVERY rolled axis into a single coherent 120-180 word scene description. The BIOME defines what world we're on (it is the HERO of the frame). The ANCHOR ENTITY at the ANCHOR SCALE proves the scale and gives the story a witness. The STORY BEAT is the moment captured. The COMPOSITION FRAME is the camera. The SKY LAYER is overhead. WEATHER and LIGHTING shape the atmosphere. SCALE PROVERS appear as named visible elements. EMOTIONAL DNA dictates light and tone.
+
+Demand FOUR explicit depth layers in your output: FOREGROUND (specific tangible detail — a rock, plant, machinery, ruin), MIDGROUND (the biome's body, where the anchor entity sits, scale provers visible), DEEP DISTANCE (the biome's signature feature looming, atmospheric haze), SKY (the sky layer rolled).
+
+The anchor entity is NOT center-foreground unless ANCHOR_SCALE = MEDIUM or LARGE. For TINY/SMALL: place the entity in MIDGROUND-BACK as a SILHOUETTE — back-turned or in profile — at the prescribed proportion. NEVER render a centered foreground large figure for TINY/SMALL paths.
+
+━━━ HARD BANS ━━━
+- Do NOT default to bioluminescent everything unless the BIOME specifies it
+- Do NOT default to twin-moon sky unless the SKY LAYER specifies it
+- Do NOT default to "atmospheric haze" softness unless WEATHER specifies haze
+- Do NOT center a large foreground entity when ANCHOR_SCALE is TINY or SMALL
+- Do NOT invent biome details outside what's described in the BIOME axis
+
+Output ONLY the raw 120-180 word scene description. Comma-separated phrases or short sentences. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the scene content.`;
   },
 
   CHARACTER: ({ slots, sharedDNA, vibeDirective }) => {

@@ -83,7 +83,7 @@ const ARCHETYPES = {
   },
 
   OUTDOOR_CITY: {
-    description: 'Architecture / megastructure / city as hero. Anchor entity at TINY/SMALL scale (scale prover only). City fills 80%+ of frame.',
+    description: 'Architecture / city as hero. Anchor entity at TINY/SMALL scale (scale prover only). City fills 80%+ of frame. Path-bespoke pools for setting + lone city-witness (anchor_entity override) + signature deep-distance feature + conditional drama (40% gate).',
     slots: {
       universal: [
         'story_beat',
@@ -95,10 +95,10 @@ const ARCHETYPES = {
         'lighting',
       ],
       bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
-      path: ['setting'],
+      path: ['setting', 'deep_distance'],
     },
     pickN: { scale_provers: 2 },
-    conditionalLayer: { slot: 'drama', gate: 0.4 }, // optional — fires only if path declares a 'drama' pool
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
     framingModes: null,
     anchorScaleRange: ['TINY', 'SMALL'],
   },
@@ -131,7 +131,7 @@ const ARCHETYPES = {
   },
 
   MEGASTRUCTURE: {
-    description: 'Colossal post-planetary engineered construct as hero — orbital rings, Dyson constructs, planetary mantles, megaships. Anchor at TINY/SMALL (scale prover). Structure fills 85%+ of frame.',
+    description: 'Colossal post-planetary engineered construct as hero — orbital rings, Dyson constructs, planetary mantles, megaships. Anchor at TINY/SMALL (scale prover). Structure fills 85%+ of frame. Path-bespoke pools for setting + lone structure-scale witness (anchor_entity override) + signature deep-distance feature + conditional drama (40% gate).',
     slots: {
       universal: [
         'story_beat',
@@ -143,10 +143,31 @@ const ARCHETYPES = {
         'lighting',
       ],
       bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
-      path: ['setting'],
+      path: ['setting', 'deep_distance'],
     },
-    pickN: { scale_provers: 3 }, // more scale provers — post-planetary scale needs more anchoring
+    pickN: { scale_provers: 3 },
     conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: ['TINY', 'SMALL'],
+  },
+
+  ALIEN_LANDSCAPE: {
+    description: 'Alien planet biome as hero. Anchor entity at TINY/SMALL scale (silhouette scale prover). Path-bespoke pools for biome, lone wilderness witness (anchor_entity overrides bot default), candid landscape moment, signature deep-distance feature. Bot surprise_element is wired (was previously missing).',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
+      path: ['biome', 'moment', 'deep_distance'],
+    },
+    pickN: { scale_provers: 2 },
+    conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: ['TINY', 'SMALL'],
   },

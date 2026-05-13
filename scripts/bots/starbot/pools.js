@@ -168,6 +168,21 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for alien-landscape (2026-05-13) — lone wilderness
+  // witnesses, candid landscape moments, signature deep-distance features.
+  LANDSCAPE_ANCHOR_ENTITY: load('landscape_anchor_entity'),
+  LANDSCAPE_MOMENT: load('landscape_moment'),
+  LANDSCAPE_DEEP_DISTANCE: load('landscape_deep_distance'),
+  // Path-bespoke pools for alien-city (2026-05-13) — drama (40% gated),
+  // city-specific anchor witnesses, signature deep-distance features.
+  ALIEN_CITY_DRAMA: load('alien_city_drama'),
+  ALIEN_CITY_ANCHOR_ENTITY: load('alien_city_anchor_entity'),
+  ALIEN_CITY_DEEP_DISTANCE: load('alien_city_deep_distance'),
+  // Path-bespoke pools for megastructure (2026-05-13) — drama (40% gated),
+  // megastructure-scale anchor witnesses, signature far-back features.
+  MEGASTRUCTURE_DRAMA: load('megastructure_drama'),
+  MEGASTRUCTURE_ANCHOR_ENTITY: load('megastructure_anchor_entity'),
+  MEGASTRUCTURE_DEEP_DISTANCE: load('megastructure_deep_distance'),
   // Sleek, form-fitting, attractive futuristic outfits — bespoke for the
   // female-explorer path (2026-05-12). Replaces EXPLORER_OUTFITS_FEMALE
   // for FE because that pool drifted to cloth/leather/dieselpunk. New pool
