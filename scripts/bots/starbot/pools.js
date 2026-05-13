@@ -168,6 +168,11 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for guardians-architecture (2026-05-13) — James Gunn /
+  // Jack Kirby cosmic / 70s album-cover sci-fi tradition.
+  GUARDIANS_ATMOSPHERE_DETAIL: load('guardians_atmosphere_detail'),
+  GUARDIANS_DEEP_DISTANCE: load('guardians_deep_distance'),
+  GUARDIANS_INCIDENT: load('guardians_incident'),
   // Path-bespoke pools for dune-landscape (2026-05-13) — Frank Herbert /
   // Villeneuve aesthetic. Lone witness + candid moment + far-back signature.
   DUNE_ANCHOR_ENTITY: load('dune_anchor_entity'),
