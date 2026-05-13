@@ -30,6 +30,30 @@ const ARCHETYPES = {
     framingModes: null,
   },
 
+  CHARACTER: {
+    description: 'Figure is protagonist within a scene. Anchor at MEDIUM/LARGE scale. Slim character + location + action pools layered with full canonical axes; Sonnet weaves the figure INTO the scene.',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['sky_layer', 'surprise_element'],
+      path: ['character', 'location', 'action'],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    // anchor_scale pool entries start with TINY/SMALL/MEDIUM/LARGE prefix;
+    // CHARACTER paths declare which range applies (default MEDIUM/LARGE so
+    // the figure is the subject, not a scale prover).
+    anchorScaleRange: ['MEDIUM', 'LARGE'],
+  },
+
   PHOTOREAL_ASTRO: {
     description: 'NASA-grade photoreal astrophotography — slim seed (named astronomical objects) + full canonical axes. Sonnet weaves the layers; medium wrapper adds Hubble/JWST/Chandra/EHT cranked-to-11 framing.',
     slots: {

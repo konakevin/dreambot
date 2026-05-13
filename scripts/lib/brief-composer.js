@@ -33,6 +33,20 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   for (const slot of arch.slots.universal) {
     const pool = resolvePool(slot, pathConfig, bot);
     const n = arch.pickN?.[slot];
+    // anchor_scale is filtered by the archetype's anchorScaleRange (or path
+    // override). Pool entries start with TINY/SMALL/MEDIUM/LARGE prefix.
+    if (slot === 'anchor_scale' && arch.anchorScaleRange) {
+      const range = pathConfig.anchorScaleRange || arch.anchorScaleRange;
+      const filtered = pool.filter((entry) =>
+        range.some((label) => typeof entry === 'string' && entry.startsWith(label))
+      );
+      if (filtered.length === 0) {
+        slots[slot] = pool[0];
+      } else {
+        slots[slot] = picker.pickWithRecency(filtered, slot);
+      }
+      continue;
+    }
     slots[slot] = n ? pickN(pool, n, picker, slot) : picker.pickWithRecency(pool, slot);
   }
 

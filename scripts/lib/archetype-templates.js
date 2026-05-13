@@ -9,6 +9,134 @@
  */
 
 const TEMPLATES = {
+  CHARACTER: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      story_beat,
+      anchor_scale,
+      composition_frame,
+      scale_provers,
+      weather_particulate,
+      emotional_dna,
+      lighting,
+      sky_layer,
+      surprise_element,
+      character,
+      location,
+      action,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ RITUAL / MYSTIC MOMENT — render this visibly in the scene ━━━
+${drama}
+
+The mystic energy is part of the scene — the character is channeling / divining / manifesting / communing with the cosmos. Visible glow, sigil, energy thread, or supernatural presence.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a CHARACTER-WITHIN-COSMIC-SCENE for StarBot — one solo figure of a specific sci-fi lineage caught in a candid moment within a richly-detailed cosmic environment. The scene is painted, atmospheric, gallery-grade. The character is INSIDE the scene, not posed in front of it. Output wraps with style prefix + suffix (painted cosmic oil-canvas medium).
+
+━━━ NON-NEGOTIABLE — CHARACTER MUST BE VISIBLE ━━━
+EXACTLY ONE character is visibly rendered in the frame at MEDIUM-LARGE anchor scale (20-40% of frame height) — off-center at rule-of-thirds position, NOT centered portrait, NOT a tiny dot. Face partially visible (3/4 profile or side-lit). Helmets have visor up or transparent. Without the character the render fails — the character is the focal point even though the scene wraps them.
+
+━━━ SOLO CHARACTER ONLY ━━━
+EXACTLY ONE figure. No companions, no enemies, no crowds. This figure ALONE in their cosmic moment.
+
+━━━ NON-NEGOTIABLE — MULTI-TIER PAINTED SCENE ━━━
+Foreground: tactile detail (rock edge / mist / shimmer / glyph). Midground: THE CHARACTER, off-center, mid-action. Deep distance: the cosmic environment receding into atmospheric haze and impossibly-scaled astronomical anchors.
+
+━━━ THE STORY MOMENT — what's happening in this frame ━━━
+${story_beat}
+
+Interpret this beat at COSMIC scale as a moment of AWESOMENESS / WONDER / TRANSCENDENCE for the character — discovery, communion, mastery, witness to the sublime. Even dark-coded beats (THREAT / RUIN / COLLAPSE) apply ONLY to the environment around the figure, NEVER to the figure themselves. The character is alive, present, in awe of the cosmos — never dying, never collapsed, never fatalistic.
+${dramaSection}
+━━━ THE CHARACTER (anchor entity at MEDIUM-LARGE scale — render EXACTLY) ━━━
+${character}
+
+The character is LOCKED — render the species anatomy / gear / wardrobe / accessories described above. Their face is partially visible. They are off-center, mid-action.
+
+━━━ THE ACTION (body-shaping, posed within the scene) ━━━
+${action}
+
+━━━ THE LOCATION (cosmic environment wrapping the character) ━━━
+${location}
+
+━━━ SKY OVERHEAD / COSMIC LAYER ━━━
+${sky_layer}
+
+━━━ ANCHOR SCALE ━━━
+${anchor_scale}
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ SCALE PROVERS — include ALL THREE visibly ━━━
+- ${scale_provers[0]}
+- ${scale_provers[1]}
+- ${scale_provers[2]}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SURPRISE ELEMENT — secondary subject woven into the scene ━━━
+${surprise_element}
+
+━━━ FORBIDDEN ━━━
+- NO centered portrait — character is OFF-CENTER, scene dominates
+- NO posed beauty shot — character is mid-action within scene
+- NO companion / second figure / crowd
+- NO modern Earth clothes / military uniforms / contemporary fashion
+- NO gore / blood-spray / wounds / injuries
+- NO franchise proper-noun characters
+- NO biomech tentacled horrors
+- NO fatalistic framings — NO lying-flat / collapsed / dying / dead figures, NO ruin-of-the-figure compositions, NO grim hopelessness
+- NO undead / zombie / decayed-figure language — even if a "RUIN" or "COLLAPSE" story_beat rolls, interpret as RUIN OF THE ENVIRONMENT around a still-vital character, never the character themselves
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-140 words ━━━
+OPEN WITH THE CHARACTER. The first 25-30 words name the figure (species / gear / wardrobe / face partially visible) and the action they are mid-performing.
+
+━━━ HARD FRAMING RULES (non-negotiable) ━━━
+- The character is OFF-CENTER at rule-of-thirds position — body anchored to the left third OR right third of the frame, never centered.
+- The character occupies 20-35% of the frame — NOT a centered portrait closeup, NOT a face-fills-the-frame headshot, NOT a beauty shot.
+- The remaining 65-80% of the frame is the COSMIC ENVIRONMENT — name AT LEAST THREE specific scene-depth elements visible around them (a distant astronomical anchor, a midground architectural feature, a foreground tactile detail).
+- The viewer can see the character's body language AND the scene wrapping them simultaneously.
+
+After opening with the character: paint the cosmic environment wrapping them — atmosphere, lighting, sky, deep-distance anchors, midground forms, foreground texture.
+
+━━━ EMBRACE THE SURREAL — DREAMLIKE IMPOSSIBLE WONDER ━━━
+The scene should feel DREAMLIKE, SURREAL, IMPOSSIBLE — but in an "oh WOW" direction, not an "oh no" direction. Lean into anatomical and physical strangeness pointed at WONDER:
+- Figure proportions IMPOSSIBLY-ELONGATED or IMPOSSIBLY-STRETCHED by gravitational tides — body warped beautifully, not injured
+- Helmet / mask OVERSIZED / CRYSTALLINE / IRIDESCENT — strange anatomy in service of mysticism, not horror
+- Figure FLOATING / DRIFTING / HOVERING with no clear gravity — physics dreamlike, not falling
+- Light bending the WRONG WAY but BEAUTIFULLY (starlight curving around the figure, shadows pointing wrong-but-magical)
+- TIME-DILATED frozen moment — figure caught mid-blink of revelation, edges shimmering, particles suspended
+- IMPOSSIBLE SCALE — figure dwarfed by cosmic phenomenon, in awe not in fear
+- ONE haunting-but-WONDROUS detail — a fractal pattern in their armor, a halo of impossible light, stars arranging into a sigil only they can see
+
+The vibe: David Bowman in 2001's Beyond the Infinite. Major Tom drifting in awe. The Star-Child. Annihilation's Shimmer-touched figures. Surreal-transcendent, not surreal-doomed.
+
+━━━ POSITIVE TWIST ONLY (non-negotiable) ━━━
+The character is ALIVE and AWED — never dying, never collapsed, never wounded, never decayed, never fatalistic. The dreamlike-impossible quality applies to their PROPORTIONS / POSE / RELATIONSHIP TO GRAVITY / RELATIONSHIP TO LIGHT — never to their vitality. "Oh wow what is happening to this person" should feel like AWE, not pity.
+
+The character is the subject. The cosmos is the stage. The strangeness is the magic. If the result is either (a) a normal-proportions action-pose character OR (b) a fatalistic / dying / wounded figure, the prompt fails.
+
+Output ONLY the raw 110-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**. Just the scene content.`;
+  },
+
   PHOTOREAL_ASTRO: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

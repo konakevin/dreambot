@@ -559,7 +559,7 @@ Before declaring a new bot ready:
 | male-explorer | CHARACTER | same as female, recipe-transferred | Phase 3 #8 |
 | megastructure | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, no conditional drama | Phase 3 #5 |
 | space-opera | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, 3 conditional drama layers | Phase 3 #6 |
-| cosmic-oracle | CHARACTER | hand-written brief, 3 slim bespoke pools, full canonical, ritual_moment conditional | Phase 3 #3 |
+| cosmic-oracle | CHARACTER | ✅ MIGRATED 2026-05-12 — composer-driven, full CHARACTER archetype (7 univ + 2 bot + 3 path + 1 conditional), anchor_scale range filter, surreal-positive reframe (no fatalism, dreamlike-impossible WONDER); Kevin: "these are good" | Phase 3 #3 DONE |
 | cosmic-vista | PURE_COSMOS | ✅ MIGRATED 2026-05-12 — composer-driven, 9-line declaration; Kevin signed off "looks just as good" | Phase 2 DONE |
 | real-space | PHOTOREAL_ASTRO | ✅ MIGRATED 2026-05-12 — composer-driven, slim 30-entry MVP pool (avg 19.6w), full canonical axes (6 universal + 1 bot + 1 path + 1 conditional); Kevin signed off "these are better"; needs 30→200 scale-up | Phase 3 #2 DONE (MVP) |
 | cozy-sci-fi-interior | INDOOR_INTIMATE | hand-written brief, FAT pool (400 entries @ 46w — needs reseeding slim), canonical-LITE, cozy_moment conditional + framing modes | Phase 3 #9 (pool reseed first) |
