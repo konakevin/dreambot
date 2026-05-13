@@ -168,6 +168,11 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for dune-landscape (2026-05-13) — Frank Herbert /
+  // Villeneuve aesthetic. Lone witness + candid moment + far-back signature.
+  DUNE_ANCHOR_ENTITY: load('dune_anchor_entity'),
+  DUNE_MOMENT: load('dune_moment'),
+  DUNE_DEEP_DISTANCE: load('dune_deep_distance'),
   // Path-bespoke pools for aliens-architecture (2026-05-13) — H.R. Giger /
   // Ridley Scott / Cameron Aliens-coded interior atmospheric DNA.
   ALIENS_ATMOSPHERE_DETAIL: load('aliens_atmosphere_detail'),
