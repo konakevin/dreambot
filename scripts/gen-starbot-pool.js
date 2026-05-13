@@ -143,6 +143,32 @@ Vary the role: planetary surveyor / EVA fieldworker / bounty-hunter on planet-si
 The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars above — never less detail, never more abstract. Output JSON array of strings.`;
     })(),
   },
+  cozy_warmth_source: {
+    theme: 'The ONE dominant warmth source defining each cozy sci-fi interior — every cozy space has its own specific source of warmth (visual + emotional). Each entry names a single warmth source with enough detail that Sonnet+Flux can render the room AROUND that warmth. Each entry 20-50 words.',
+    touchpoints: [
+      'amber engine-bay glow leaking through floor grates',
+      'grow-lamp lighting a hanging garden of xeno-ferns',
+      'cooking steam from a galley pot, kettle whistle',
+      'bioluminescent moss/lichen cluster casting soft teal',
+      'tealight cluster / candles in an alien sconce',
+      'amber console panel with old-style toggles glowing warm',
+      'fireplace hearth fueled by alien crystals',
+      'body heat — sleeping person under blanket, breath fogging visor',
+      'reactor-coolant pipe radiating cherry-red warmth',
+      'samovar / hot-drink dispenser with steam',
+      'sun-shaft through window from a yellow-class star',
+      'string-light cluster (paper-lantern strings strung across beams)',
+      'forge-glow from a small fabricator working a part',
+      'incense brazier with smoldering xeno-resin',
+      'aquarium tank with bioluminescent specimens',
+      'amber holo-projector throwing gentle ambient glow',
+      'oven hatch open spilling baking heat into the cabin',
+      'fire-pit on a balcony watching the stars',
+      'workbench task-light bent over a project',
+      'lava-lamp-style bioluminescent fluid lamp',
+    ],
+    instructions: `Each entry is ONE dominant warmth source, 20-50 words. Format: "WARMTH NAME — visual description + how it lights the room + sensory hook". The warmth should be the FOCAL point of the room's atmosphere. Variety across all 30: machinery / culinary / biological / electrical / fire-based / ambient cosmic / body / ritual. NO outdoor weather. NO industrial-cold-blue lights. Each is intimate, lived-in, dominant. Output JSON array of strings.`,
+  },
   alien_city_drama: {
     theme: 'Path-specific drama events for alien-city scenes — visible incidents that bring story to a still of a vast alien metropolis. Examples: street protest with crowd torches, atmospheric phenomenon over city (auroras, debris field, eclipse), military lockdown checkpoint, alien festival with hanging lanterns, sky-train passing between megabuildings, fire on lower-tier ledge, parade with banners. Each entry 25-50 words.',
     touchpoints: [

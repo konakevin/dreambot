@@ -151,6 +151,22 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  COZY_INTERIOR: {
+    description: 'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting'],
+      bot: [],
+      path: ['interior', 'warmth_source'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'cozy_moment', gate: 0.4 },
+    framingModes: {
+      modes: ['wide-room', 'zoom-in'],
+      weights: [70, 30],
+    },
+    anchorScaleRange: null,
+  },
+
   ALIEN_LANDSCAPE: {
     description: 'Alien planet biome as hero. Anchor entity at TINY/SMALL scale (silhouette scale prover). Path-bespoke pools for biome, lone wilderness witness (anchor_entity overrides bot default), candid landscape moment, signature deep-distance feature. Bot surprise_element is wired (was previously missing).',
     slots: {

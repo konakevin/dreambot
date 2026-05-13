@@ -168,6 +168,9 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pool for cozy-sci-fi-interior (2026-05-13) — the ONE
+  // dominant warmth source defining each cozy scene's heat-and-light center.
+  COZY_WARMTH_SOURCE: load('cozy_warmth_source'),
   // Path-bespoke pools for alien-landscape (2026-05-13) — lone wilderness
   // witnesses, candid landscape moments, signature deep-distance features.
   LANDSCAPE_ANCHOR_ENTITY: load('landscape_anchor_entity'),

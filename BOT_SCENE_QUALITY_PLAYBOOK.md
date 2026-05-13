@@ -168,6 +168,24 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 ---
 
+## Axis count is path-specific — expand or shrink for the path's vibe (CRITICAL — 2026-05-13)
+
+The "3+ bespoke pools per path" rule is a MINIMUM, not a fixed number. Some paths need MORE axes (character paths use 10+ — race / skin / eyes / hair_color / hairstyle / outfit / accessory / biome / action / archetype). Some paths need FEWER axes because more would over-stuff the intimate / cozy / specific vibe.
+
+**Reference: cozy-sci-fi-interior (2026-05-13)** — intentionally minimalist. The COZY_INTERIOR archetype declares only 4 universal axes (story_beat / composition_frame / emotional_dna / lighting) + 3 path-bespoke pools (interior / warmth_source / cozy_moment-40%-gated). It deliberately SKIPS scale_provers (no monumental scale in cozy), surprise_element (over-stuffs intimate scenes), weather_particulate (mostly interior, vacuum/dust irrelevant), and sky_layer (no sky in most cozy interiors). The cozy render bar would be HURT by adding axes — every extra rolled element competes with the intimate focus.
+
+**Rule:** when migrating a path, ask "does this axis serve the path's vibe?" before wiring. Universal axes are NOT mandatory — they're available to pull from a bot-shared pool when appropriate. Cozy paths drop monumental-scale axes. Action paths drop quiet-moment axes. Photoreal-astro paths drop figure axes. Match axis count to the path's needs.
+
+**Pattern: lean axis selection by vibe.**
+- **Epic / cinematic** path → wire MOST universal axes (story_beat, scale_provers, weather, lighting, etc.) — many rolled elements compose the awe
+- **Character-driven** path → wire many DNA axes (race / skin / eyes / hair / outfit / accessory / action) — character identity needs many slots
+- **Intimate / cozy** path → wire FEWER axes (just narrative ones + 1-2 path-bespoke) — restraint preserves the vibe
+- **Pure photoreal-astro / phenomenon** path → wire narrative-only universal axes (no anchor_entity, no surprise — just astronomical phenomenon + event)
+
+The 3+ bespoke minimum still applies. But the count of TOTAL axes per path can swing from ~6 (cozy) to ~14 (character). Pick what serves the render.
+
+---
+
 ## Path migrations MUST seed bespoke pools — never wrap with shared defaults only (CRITICAL — 2026-05-13)
 
 When migrating a path to the new composer (declarative form), the path config MUST declare **path-bespoke pools** that give the path its distinct identity. Wrapping a path with only `archetype: 'X'` and a single `setting` or `biome` pool pointing at a bot-shared default is INSUFFICIENT. The result is a "wrapper" path that renders barren generic scenes indistinguishable from any other path of the same archetype.
