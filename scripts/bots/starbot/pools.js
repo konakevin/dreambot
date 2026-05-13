@@ -168,7 +168,19 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Sleek, form-fitting, attractive futuristic outfits — bespoke for the
+  // female-explorer path (2026-05-12). Replaces EXPLORER_OUTFITS_FEMALE
+  // for FE because that pool drifted to cloth/leather/dieselpunk. New pool
+  // is pure form-fit base + futuristic accents (no boxy power armor, no
+  // baggy cloth). 30 entries to start; expand to 200 after lock.
+  SLEEK_FEMALE_EXPLORER_OUTFITS: load('sleek_female_explorer_outfits'),
   EXPLORER_OUTFITS_MALE: load('explorer_outfits_male'),
+  // Rugged, badass, weathered field outfits for the male-explorer path
+  // (2026-05-13). Sibling to SLEEK_FEMALE_EXPLORER_OUTFITS but tuned for
+  // "rugged + tactical + weapon-bristled" vs FE's "sleek form-fit". Mandalorian
+  // protagonist / Mass Effect Shepard / Joel / Geralt / Mal Reynolds / Cad Bane
+  // / Halo ODST aesthetic. 30 entries to start.
+  RUGGED_MALE_EXPLORER_OUTFITS: load('rugged_male_explorer_outfits'),
   // BIOME / TERRAIN — where the character stands (50 diverse alien biomes)
   // PLANET_SETTING is a flat merge of 11 biome-specific 25-entry pools.
   // Equal random roll across the merged 275-entry collection (1/11 odds per

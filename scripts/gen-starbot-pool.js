@@ -90,6 +90,120 @@ const POOL_RECIPES = {
     ],
     instructions: `Each landscape must read as a specific ecology — biology, geology, atmosphere coherent. MG layer: biology / formations / weather. Scene must include EITHER a sentient figure (1-2% frame, midground-back silhouette) OR an alien creature native to this world.`,
   },
+  sleek_female_explorer_outfits: {
+    theme: 'Sleek, form-fit FUTURISTIC EVA EXPLORER outfits modeled on the StarBot-hearted exemplars 2026-05-12: gold-mirror-visor pressure-suit climbers, hydraulic-exoskeleton scientists with brass chestplates, prone marksmen in olive-drab + chrome chest plates, bald-tattooed bubble-helm scouts, Tron-blue circuit-line android operatives. Every outfit is a complete EVA-class explorer kit — form-fitting pressure suit base + sealed helmet + multiple pieces of visible engineered tech + ONE distinguishing identity marker that makes her unmistakably herself. Sci-fi paperback-cover oil-painting tradition: Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Frank-Kelly-Freas covers.\n\nABSOLUTE BAN — NO Mandalorian / NO beskar plate / NO T-visor / NO Boba Fett / NO Star Wars helmet language. Flux renders the actual franchise IP from those tokens regardless of brief admonitions. Use generic descriptive language instead (sealed visor / bubble helmet / gold mirror visor / amber HUD faceplate / full-coverage helm).',
+    touchpoints: [
+      'Mass Effect Andromeda Pathfinder Ryder — form-fit N7 + sealed helmet + amber HUD visor',
+      'Apollo / NASA EVA pressure suit — sealed bubble helmet + life-support backpack',
+      'hydraulic exoskeleton scientist — burgundy hood + brass sigil chestplate + exposed pistons + battery-pack glow',
+      'EVA bubble-helmet climber — gold mirror visor + life-support backpack + mag-boots',
+      'olive-drab prone marksman — chrome chest plate + sealed helmet w/ amber HUD + bipod rifle',
+      'Tron-coded android operative — midnight-blue bodysuit w/ electric-blue circuit-lines + plasma-blue eyes',
+      'mutant explorer — pearl-white pressure suit + oxblood ceramic chest plate + chrome backpack venting',
+      'bald-tattooed scout — matte-black tactical bodysuit + sealed bubble helmet reflecting prismatic sand',
+      'Dune-coded stillsuit — rust-orange moisture recycler + armored shoulder + brass-filter goggles',
+      'Sunshine Icarus crew — gold mirror visor pressure suit',
+    ],
+    instructions: (() => {
+      // Load the 30 hearted-render exemplars (live render bodies from recent
+      // FE batches Kevin hearted) and feed them as few-shot to Sonnet. The
+      // pool entries should READ LIKE these real prompts — not abstract rules.
+      let exemplars = [];
+      try {
+        exemplars = require('fs').existsSync('/tmp/fe-30-truncated.json')
+          ? require('/tmp/fe-30-truncated.json')
+          : [];
+      } catch (_) {}
+      const exemplarBlock = exemplars.length
+        ? exemplars.map((e, i) => `EXEMPLAR ${i + 1}: ${e}`).join('\n\n')
+        : '';
+      return `Write ${COUNT} EVA-class explorer outfit entries, ~50-80 words each. Format: "SETTING — full character + outfit + tech description". Each entry is DENSE with engineered tech detail.
+
+Below are ${exemplars.length} REAL prompts from previously-hearted renders. These are the bar. Generate new entries that read EXACTLY like these — same texture, same tech density, same identity-marker richness, same kind of distinctive non-default skin coloring + ceremonial markings + visible engineered tech. Vary the setting, race, color palette, helmet style, and tech configuration, but every new entry should feel like it BELONGS in this list.
+
+═══════ HEARTED EXEMPLARS — WRITE NEW ENTRIES LIKE THESE ═══════
+
+${exemplarBlock}
+
+═══════ END EXEMPLARS ═══════
+
+EVERY new entry MUST have:
+- DISTINCTIVE NON-DEFAULT SKIN COLOR or anatomy (deep umber / light blue / pale-ivory / yellow-green / bronze / iridescent pink / pale-grey / mutant / low-grav evolved / long-limbed / pointed-eared / sensory antennae / etc.) — never just "human woman"
+- FORM-FITTING PRESSURE SUIT BASE in a specific color (burnished steel / matte black / midnight-blue / pearl-white / oxblood / olive-drab / charcoal / chrome / bronze)
+- SEALED HELMET / BUBBLE HELM / GOLD MIRROR VISOR / AMBER HUD VISOR / FACEPLATE / FULL-COVERAGE HELM (mandatory — 90% of entries)
+- 2-4 distinct ENGINEERED TECH PIECES (life-support backpack venting / hydraulic exoskeleton with exposed pistons / retractable grapple-launcher / wrist-mounted scanner or laser / mag-boots / chest-mounted sensor pod / battery-pack glow / cryogenic vapor lines)
+- ONE DISTINGUISHING IDENTITY MARKER (geometric facial tattoo / cybernetic eye glow / ceremonial clan markings / brand-plate at temple / chrome twist-braids / brass sigil engraving / scar)
+
+ABSOLUTE BANS:
+- NO "Mandalorian" / NO "beskar" / NO "T-visor" / NO "T-shaped visor" / NO Boba Fett / NO Star Wars (Flux renders the franchise IP)
+- NO bare-headed bodyglove fashion / NO Tron-circuit clubwear without helmet / NO "no armor" entries / NO monastic-robe-only / NO bare feet / NO pilot cockpit suits / NO runway-coded entries
+
+Vary the role: planetary surveyor / EVA fieldworker / bounty-hunter on planet-side hunt / scientist with sample kit / prone marksman / cliff-climber / cave-diver / atmospheric specialist / android operative.
+
+The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars above — never less detail, never more abstract. Output JSON array of strings.`;
+    })(),
+  },
+  rugged_male_explorer_outfits: {
+    theme: 'Tactical sci-fi EXPLORER / ROGUE / ASSASSIN outfits for a male character — Destiny Guardian / Destiny 2 Hunter / Mass Effect operative / Halo ODST / Mandalorian protagonist / Cad Bane / Star-Lord / Cowboy Bebop Spike / Han Solo with armor / John Wick in space. Armored cloaks over sealed helms, tactical armor over thermal underlayers, weapon-bristled mercenary kit, weathered cybernetic-augmented operative gear. He is CAPABLE, MYSTERIOUS, stylish-tactical — Destiny Guardian energy.\n\nFULLY CLOTHED RULE — NEVER shirtless, NEVER bare-chested, NEVER exposed torso, NEVER tank top, NEVER sleeveless, NEVER beefcake. Torso is ALWAYS covered in armor / coat / pressure suit / harness.\n\nABSOLUTE BAN — NO Mandalorian (the word) / NO beskar / NO T-visor / NO Boba Fett / NO Star Wars (the words). Flux renders the franchise IP from those tokens. Use generic descriptive language instead (sealed visor / amber HUD faceplate / full-coverage helm / armored cloak with hood).',
+    touchpoints: [
+      'Destiny 2 Guardian Hunter — armored cloak + sealed helm + utility belt + tactical armor',
+      'Destiny 2 Guardian Titan — heavy plate armor + helmet + shoulder mantle',
+      'Destiny 2 Guardian Warlock — armored robe-coat + bond-strap + visor helm',
+      'Mass Effect operative — armored field tactical with curved plates + visor helm',
+      'Mass Effect Shepard-coded — sealed helmet + tactical armor with shoulder pauldrons',
+      'Halo ODST drop-trooper male — full sealed helmet + ballistic harness + flight suit',
+      'Cad Bane bounty hunter (generic) — wide-brim hat + armored duster + twin pistols',
+      'Star-Lord operative — armored jacket + helmet (handheld) + utility belt',
+      'Cowboy Bebop Spike Spiegel — fitted blazer over tactical underlayer + sidearm + smoke',
+      'cyberpunk operative — long armored coat + neural visor + augmented arm covered by sleeve',
+    ],
+    instructions: (() => {
+      // Optional: load male-rendered exemplars if available (none yet for ME path)
+      let exemplars = [];
+      try {
+        exemplars = require('fs').existsSync('/tmp/me-exemplars.json')
+          ? require('/tmp/me-exemplars.json')
+          : [];
+      } catch (_) {}
+      const exemplarBlock = exemplars.length
+        ? `\n\n═══════ HEARTED EXEMPLARS — WRITE NEW ENTRIES LIKE THESE ═══════\n\n${exemplars.map((e, i) => `EXEMPLAR ${i + 1}: ${e}`).join('\n\n')}\n\n═══════ END EXEMPLARS ═══════\n\n`
+        : '';
+      return `Write ${COUNT} male sci-fi explorer/rogue/assassin OUTFIT entries, 50-80 words each. Each entry MUST describe a man in full tactical kit — outfit, armor pieces, weapons, identity markers. Setting is just a 2-3 word prefix; the BODY of every entry is the CHARACTER + OUTFIT + GEAR description.
+
+CORRECT FORMAT (every entry must look like this):
+"SETTING-NAME — [skin/race detail], [helmet/face], [armor/coat description], [tech pieces], [weapons], [identity marker]."
+
+EXAMPLE OF CORRECT ENTRY:
+"DEAD ORBITAL RING CITY — bronze-skinned operative with weathered stubble and ritual face scars, sealed amber-HUD visor helm, gunmetal-grey armored duster over segmented ceramic chest plate, life-support backpack with cyan power cells, twin pistols in shoulder holsters, rifle mag-locked to spine, vibroblade on hip"
+
+WRONG (DO NOT DO THIS — these are settings, not outfits): "TIDE-LOCKED STORM WORLD OUTPOST — research garrison perched on cliff overlooking eternal hurricane"
+
+Every entry MUST have ALL of these in the description body:
+1. Skin tone + identity marker (scars / tattoos / stubble / beard / shaven skull / cybernetic eye)
+2. Helmet OR head covering (sealed visor / full-coverage helm / hood / face-wrap / gas mask)
+3. Body armor / coat / harness (armored duster / armored cloak / sealed pressure suit / ballistic harness over thermal layer)
+4. Tactical color (gunmetal / matte-black / coyote-tan / olive-drab / oxblood / charcoal)
+5. 2-4 tech pieces (life-support backpack / wrist-comm / mag-boots / sensor pod / cybernetic limb)
+6. Multiple visible weapons (rifle / pistol / shotgun / vibro-blade / grenades)${exemplarBlock}
+EVERY new entry MUST have:
+- DISTINCTIVE non-default skin color or anatomy (deep umber / weathered tan / pale-grey / yellow-green / bronze / scarred / cybernetic-eyed / long-bearded / shaven-skulled / pointed-eared / etc.) — never just "human man"
+- TACTICAL OPERATIVE OUTFIT BASE — armored cloak with hood / armored field jacket / armored duster coat / sealed pressure suit / segmented plate armor over thermal layer / ballistic harness over flight suit. Tactical color (gunmetal-grey / matte-black / coyote-tan / olive-drab / oxblood / charcoal / sand-bleached / weathered-brown). His TORSO IS COVERED — never bare.
+- SEALED HELMET / FULL-COVERAGE HELM / VISOR HELM / FACEPLATE / GAS MASK (70% of entries — others have helmet held in hand / hood up / face-wrap-with-goggles)
+- 2-4 distinct ENGINEERED TECH PIECES (life-support backpack / wrist-comm / sensor pod / mag-boots / grenade bandolier / scanner / cybernetic eye / shoulder pauldron / mantled cloak / power-pack glow)
+- WEAPON-BRISTLED — multiple visible weapons (rifle slung over back / pistol holstered at thigh / shotgun mag-locked / vibro-blade on hip / grenade pouches / breach charges)
+- IDENTITY MARKERS (battle scar across face / cybernetic eye replacement / weathered stubble / face tattoos / clan markings / cigar clenched in teeth / bandaged hand / missing finger / war paint)
+
+ABSOLUTE BANS:
+- NEVER shirtless, NEVER bare-chested, NEVER exposed torso, NEVER tank top, NEVER sleeveless, NEVER beefcake. Even cyborgs wear coats over their torso.
+- NO "Mandalorian" / NO "beskar" / NO "T-visor" / NO "T-shaped visor" / NO Boba Fett / NO Star Wars (Flux renders the franchise IP)
+- NO form-fitting bodyglove fashion / NO sleek runway suits / NO clean parade uniforms / NO pilot cockpit suits without armor / NO glamour kit
+- NOT bulky-tank power-armor brute — this is a TACTICAL OPERATIVE / Destiny Guardian / rogue / assassin, not a Halo MJOLNIR berserker
+
+Vary the role: bounty hunter / mercenary / planetary surveyor / EVA fieldworker / scout / marksman sniper / breacher / scavenger / cave-diver / hazmat specialist / heavy-weapons operative / cyberpunk operative / Destiny Guardian Hunter or Titan or Warlock / Mass Effect operative.
+
+The bar: each entry should read as a Destiny Guardian, Mass Effect operative, Halo ODST, or sci-fi rogue/assassin you'd see in a hostile alien planet cinematic. Tactical + capable + stylish + COVERED. Output JSON array of strings.`;
+    })(),
+  },
   explorer_outfits_female: {
     theme: 'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
     touchpoints: [
@@ -161,31 +275,35 @@ Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — d
     instructions: `Each entry names a SINGLE distinct architectural style with specific structural language. Format: "STYLE NAME — visual description of forms / materials / textures / scale". Vary across all 100 entries — never repeat a style; each must feel like a different civilization or aesthetic tradition. NO generic "alien architecture" — every entry has a precise style identity.`,
   },
   character_action: {
-    theme: 'cinematic engagement verbs for sci-fi explorer characters — what they are DOING in this exact frame. Modeled on MechBot power_armor_actions: specific, dynamic, grounded interaction with environment. NO floating-in-air verbs.',
+    theme: 'Clear simple action verbs for a sci-fi female explorer — what she is DOING right now. Each entry is ONE simple action, no obscure setup, no extra props. The verb leads. Reader sees the action immediately.',
     touchpoints: [
-      'gun battle / firefight with cover',
-      'climbing sheer rock / structural element',
-      'rappelling / controlled descent',
-      'face-to-face with alien creature',
-      'examining ancient marker / artifact',
-      'tinkering / repairing tech',
-      'spying / scope-watching from cover',
-      'hunting / tracking / stalking prey',
-      'reconnaissance / scanning / mapping',
-      'wading through hazardous terrain',
-      'infiltration / sneaking past patrol',
-      'defending position / overwatch',
-      'extraction / signaling pickup',
-      'salvaging from wreckage',
-      'piloting craft / driving rover',
-      'open-handed parley',
-      'kneeling at terminal / hacking',
-      'mid-leap landing on ledge',
-      'carrying wounded ally',
+      'BATTLING — firefight from cover',
+      'CLIMBING — three points of contact on alien rock',
+      'RAPPELLING — controlled descent on rope',
+      'AIMING — rifle braced at distant target',
+      'CROUCHING — examining tracks / artifact on ground',
+      'HACKING — at glowing alien terminal',
+      'SPYING — scope to eye from cover',
+      'WADING — through alien liquid up to knees',
+      'SNEAKING — flat against wall, peeking around corner',
+      'SIGNALING — flare gun raised for pickup',
+      'DEFENDING — rifle aimed at offscreen threat',
+      'REPAIRING — kneeling with multitool at damaged tech',
+      'HOLDING WEAPON — rifle low and ready, scanning',
+      'KNEELING AT ARTIFACT — hand on alien relic',
+      'TRACKING — body low and stalking through brush',
+      'PUSHING THROUGH — shoulder against blast door',
+      'PROTECTING — body shielding small object behind her',
+      'ZIPLINING — sliding down cable in motion',
+      'SCANNING — handheld scanner sweeping',
     ],
-    instructions: `Each entry is a specific cinematic moment in 25-60 words. EVERY entry MUST have the character GROUNDED — feet on terrain, three points of contact, or interacting with an object. NO floating verbs ("MID-LEAP" → "LANDING ON LEDGE"; "AIRBORNE" → reframe as ground-contact moment).
+    instructions: `Each entry is ONE simple clear action in 15-30 words. NO obscure setups, NO extra props, NO numbered measurements, NO atmospheric details. Just: VERB + body position + weapon/tool. The reader must understand the action in the first 5 words.
 
-Format: "ACTION-VERB-CAP — body position + interaction with environment + 1-2 visible details". Example: "IN A FIREFIGHT — crouched LOW behind a rock or wall in cover, rifle braced against shoulder, plasma rounds streaking past her shoulder, ammo casings on the ground".
+Format: "ACTION-VERB-CAP — body position + tool/weapon + 1 simple detail". Example: "BATTLING — crouched behind cover, rifle braced against shoulder, muzzle flash". Another: "CLIMBING — three points of contact on sheer rock, fingers gripping ledge".
+
+KEEP IT SIMPLE: short clear sentences, no rover descents, no compound scenarios, no "extracting data from research station". One verb, one action, one frame.
+
+EVERY entry GROUNDED — feet on terrain or three points of contact. NO floating, NO mid-air.
 
 Cover all genre categories: combat (battling), exploring (climbing/wading), tinkering (repairing/hacking), spying (surveillance/sneaking), hunting (tracking/stalking), reconnaissance (scanning/mapping), discovery (artifact/marker), survival (signaling/carrying), social (parley/conferring).
 

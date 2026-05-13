@@ -273,6 +273,21 @@ module.exports = {
       'female-explorer': '80-110',
       'male-explorer': '80-110',
     },
+    // Helmet/visor/EVA tokens kept stripping during compression on
+    // female-explorer (2026-05-12 — Kevin called out "no helmets?"
+    // despite 100% helmet pool). Force Haiku to preserve them.
+    preservePhrasesByPath: {
+      'female-explorer': [
+        'woman', 'she', 'her',
+        'helmet', 'visor', 'faceplate', 'bubble helm', 'breathing apparatus',
+        'form-fit', 'pressure suit', 'EVA',
+      ],
+      'male-explorer': [
+        'man', 'he', 'his',
+        'helmet', 'visor', 'faceplate', 'sealed', 'full-coverage helm',
+        'tactical armor', 'armored coat', 'cloak', 'ballistic harness',
+      ],
+    },
   },
 
   // Sensory anchors — 3 contexts (explorer-female / explorer-male / scene)

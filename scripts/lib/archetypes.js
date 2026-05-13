@@ -30,8 +30,8 @@ const ARCHETYPES = {
     framingModes: null,
   },
 
-  EXPLORER: {
-    description: 'Sci-fi explorer character path — full 7-axis DNA stack (race / skin / eyes / hair_color / hairstyle / outfit / accessory) composed at runtime. Character is the SHOW at MEDIUM scale (25-40% frame). Alien biome serves as her/his stage. Distinct from CHARACTER archetype (cosmic-oracle pattern with bespoke single-pool character entries).',
+  FEMALE_EXPLORER: {
+    description: 'Sci-fi female explorer character path — gender-locked to "she/her/woman" throughout the template (per 2026-05-12 lesson: Flux uses gendered pronouns + nouns as primary gender-rendering signals, gender-neutral templates regress character renders). Full 7-axis female DNA stack composed at runtime. Character is the SHOW at MEDIUM scale (25-40% frame). Alien biome serves as her stage.',
     slots: {
       universal: ['lighting', 'weather_particulate'],
       bot: ['sky_layer', 'surprise_element'],
@@ -41,7 +41,21 @@ const ARCHETYPES = {
     pickN: {},
     conditionalLayer: null,
     framingModes: null,
-    anchorScaleRange: null, // anchor scale not picked; brief locks 25-40% frame
+    anchorScaleRange: null,
+  },
+
+  MALE_EXPLORER: {
+    description: 'Sci-fi male explorer character path — gender-locked to "he/his/man" throughout the template. Sibling archetype to FEMALE_EXPLORER; separate template per gender per the 2026-05-12 hard rule about character-path gender-locking. Full 7-axis male DNA stack composed at runtime.',
+    slots: {
+      universal: ['lighting', 'weather_particulate'],
+      bot: ['sky_layer', 'surprise_element'],
+      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['biome', 'action', 'explorer_archetype'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
   },
 
   CHARACTER: {
