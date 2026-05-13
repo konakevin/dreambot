@@ -615,6 +615,81 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  ALIENS_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
+
+    const incidentSection = incident
+      ? `
+━━━ INCIDENT — render this visibly active in the scene ━━━
+${incident}
+
+This is a moment of disruption woven INTO the architecture — visible evidence (steam burst, light strobe, structural damage, leaked fluid, electrical fault). NOT the subject.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing an ALIENS-CODED ARCHITECTURE INTERIOR for StarBot — H.R.-Giger / Ridley-Scott / James-Cameron / Ron-Cobb / Syd-Mead-industrial / Annihilation tradition. TERRIFYING-AND-MAJESTIC. The architecture is the subject — NO FIGURES, NO PEOPLE, NO XENOMORPHS, NO CREATURES.
+
+━━━ MOOD — NON-NEGOTIABLE ━━━
+HAUNTED + INDUSTRIAL + WRONG. The world feels haunted by absent inhabitants. Alien resin pulses with wet-organic life. Machinery hums in distant systems. Silence is heavy with menace. Every frame is a museum-poster painting of hostile-alien-world dread OR biblical Engineer-architecture awe.
+
+━━━ NO FIGURES — ABSOLUTE ━━━
+Pure architecture. NO humans, NO xenomorphs, NO aliens, NO engineers, NO androids, NO creatures of any kind. The empty terrifying space speaks for itself through architectural detail, condition, and atmosphere.
+
+━━━ THE ARCHITECTURE (render this exact interior) ━━━
+${setting}
+
+━━━ ATMOSPHERIC TEXTURE — render WOVEN through the space ━━━
+${atmosphere}
+
+━━━ DEEP-DISTANCE SIGNATURE — visible at the far end / through doorway / down corridor ━━━
+${deep_distance}
+
+This is the far-back layer creating depth and dread — render it receding through atmospheric steam-haze.
+${incidentSection}
+━━━ MATERIAL SPECIFICITY — REQUIRED ━━━
+Every surface NAMED with material: biomech resin (glossy wet-organic), ribbed steel beam, prefab metal panel, cryo-glass, blast-shielded ceramic, acid-pitted alloy, wet-organic secretion, fossilized chitin, drainage-channel grating, condensation-streaked bulkhead, cable-bundle veins, ductwork-coiled walls.
+
+━━━ DRAMATIC LIGHTING — name specific sources ━━━
+Sodium emergency strips (warm amber along floor/wall channels), blue-white sterile fluorescents (cold clinical), red strobe pulses (rhythmic alarm), single recessed emergency lights (pinpoint haloed in steam), steam-filtered work lights (volumetric shafts), single shaft of daylight piercing dust, sodium-yellow channel lighting. Cold pale ambient with ONE accent color dominating per frame.
+
+━━━ STORY BEAT (interpret architecturally — no figures acting it out) ━━━
+${story_beat}
+
+Translate to space-mood: ARRIVAL = door cycling open with depressurization haze. VIGIL = silent corridor watched by emergency lights. SOLITUDE = cavernous chamber empty of life. CONFRONTATION = blast-door half-cycled stuck with sparks. DEPARTURE = vapor-trail through bulkhead pressure-cycle.
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Cinematic architectural composition. CLAUSTROPHOBIC + DREAD-LADEN where the space calls for it (biomech corridors / vent tunnels / abandoned barracks / cryo-bays). MAJESTIC + BIBLICAL where appropriate (Engineer-class chambers / atmospheric processor cavities / cathedral hangars).
+
+FOREGROUND: tactile architectural detail (resin drips, cable bundles, floor grating, overturned equipment, condensation streaks). MIDGROUND: the architecture body (corridor / chamber / hangar / lab — wet-glistening surface, ribbed structural language). DEEP DISTANCE: signature feature receding through atmospheric steam-haze and dread.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "LV-426", "Nostromo", "Sulaco", "Hadley's Hope", "Weyland-Yutani", "Xenomorph", "Facehugger", "Engineer-ship", "Prometheus", "MUTHUR", "Alien" (as proper noun), "Ripley" in the output. Render the visual language generically.
+
+━━━ FORBIDDEN ━━━
+- NO foreground figures of any kind
+- NO bright cheerful color — always cold ambient + ONE accent
+- NO clean futurism — must be wet-glistening / decay-streaked / industrial-grit
+- NO action shots — atmosphere over event
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   ARCHITECTURE_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  ALIENS_ARCHITECTURE: {
+    description: 'PATH-BESPOKE — Aliens-franchise architecture interior (H.R. Giger / Ridley Scott / Cameron / Ron Cobb / Syd Mead industrial). TERRIFYING-AND-MAJESTIC mood. Biomech hive / derelict spacecraft / abandoned colony / atmospheric processor / sterile lab / dropship interior. NO figures. Path-bespoke pools (setting + atmosphere + deep_distance + 40% incident).',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting'],
+      bot: [],
+      path: ['setting', 'atmosphere', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'incident', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   ARCHITECTURE_INTERIOR: {
     description: 'Pure architecture interior (corridors / chambers / hangars / labs) — NO FIGURE required. Structure is hero. Path-bespoke pools for setting + atmospheric detail + deep-distance signature + conditional incident drama (40% gate). Atmosphere-heavy vs ALIEN_LANDSCAPE which mandates a witness.',
     slots: {

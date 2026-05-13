@@ -14,11 +14,11 @@
  */
 
 module.exports = {
-  archetype: 'ARCHITECTURE_INTERIOR',
+  archetype: 'ALIENS_ARCHITECTURE', // BESPOKE archetype (2026-05-13 retry)
   pools: {
-    setting: 'ALIENS_ARCHITECTURE', // primary path pool (existing)
-    atmosphere: 'ALIENS_ATMOSPHERE_DETAIL', // path-bespoke (30 entries)
-    deep_distance: 'ALIENS_DEEP_DISTANCE', // path-bespoke (30 entries)
-    incident: 'ALIENS_INCIDENT', // 40% gated conditional layer
+    setting: 'ALIENS_ARCHITECTURE', // primary biome pool (50 entries — Stage 2 expansion deferred)
+    atmosphere: 'ALIENS_ATMOSPHERE_DETAIL',
+    deep_distance: 'ALIENS_DEEP_DISTANCE',
+    incident: 'ALIENS_INCIDENT', // 40% gated
   },
 };
