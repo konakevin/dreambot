@@ -57,6 +57,15 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
     slots[slot] = n ? pickN(pool, n, picker, slot) : picker.pickWithRecency(pool, slot);
   }
 
+  // 2b. Character DNA axes — path override → bot default → bot.<slot>_<dnaKey>
+  // pattern (e.g. female_explorer might map race→SCI_FI_RACE and outfit→
+  // EXPLORER_OUTFITS_FEMALE). Same resolution order as universal.
+  for (const slot of arch.slots.characterDnaAxes || []) {
+    const pool = resolvePool(slot, pathConfig, bot);
+    const n = arch.pickN?.[slot];
+    slots[slot] = n ? pickN(pool, n, picker, slot) : picker.pickWithRecency(pool, slot);
+  }
+
   // 3. Path-level axes — always path-bespoke (no fallback)
   for (const slot of arch.slots.path) {
     const poolName = pathConfig.pools?.[slot];

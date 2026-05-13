@@ -30,6 +30,20 @@ const ARCHETYPES = {
     framingModes: null,
   },
 
+  EXPLORER: {
+    description: 'Sci-fi explorer character path — full 7-axis DNA stack (race / skin / eyes / hair_color / hairstyle / outfit / accessory) composed at runtime. Character is the SHOW at MEDIUM scale (25-40% frame). Alien biome serves as her/his stage. Distinct from CHARACTER archetype (cosmic-oracle pattern with bespoke single-pool character entries).',
+    slots: {
+      universal: ['lighting', 'weather_particulate'],
+      bot: ['sky_layer', 'surprise_element'],
+      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['biome', 'action', 'explorer_archetype'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null, // anchor scale not picked; brief locks 25-40% frame
+  },
+
   CHARACTER: {
     description: 'Figure is protagonist within a scene. Anchor at MEDIUM/LARGE scale. Slim character + location + action pools layered with full canonical axes; Sonnet weaves the figure INTO the scene.',
     slots: {

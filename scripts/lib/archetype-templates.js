@@ -380,6 +380,106 @@ CRITICAL — anchor entity goes at the END of the prompt only. If you mention it
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the scene content.`;
   },
 
+  EXPLORER: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      weather_particulate,
+      sky_layer,
+      surprise_element,
+      race,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      biome,
+      action,
+      explorer_archetype,
+    } = slots;
+
+    return `You are a sci-fi concept-art painter writing a CHARACTER MOMENT for StarBot — a single heroic explorer of a SPECIFIC sci-fi lineage caught in a candid grounded moment of alien-wilderness adventuring. Same universe as our cosmic vistas and alien cities. The character is ALIVE, CAPABLE, and the camera caught them doing real work in a real place. Output wraps with style prefix + suffix.
+
+━━━ THEY ARE THE SHOW — NON-NEGOTIABLE ━━━
+The explorer is the MAIN SUBJECT of this render. Face, gear, outfit, lineage, action, and pose are the DRAW. Appearance is meant to be ADMIRED — every detail of outfit and equipment readable and CRISP. Character is the hero of the frame; the alien world is the stage.
+
+The character occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame height. NOT tiny silhouette (that's the landscape path). NOT centered portrait (that's a headshot). MEDIUM scale where outfit, gear, and lineage are CLEARLY READABLE.
+
+━━━ SOLO CHARACTER ONLY ━━━
+EXACTLY ONE character. No companions, no enemies, no crowds. This explorer ALONE in their moment.
+
+━━━ ENGAGED IN THE SCENE — NON-NEGOTIABLE ━━━
+They are DOING SOMETHING SPECIFIC in this frame. The action below is the PRIMARY SUBJECT of the prompt — mid-act, captured at a loaded instant. Combat / battling / hunting / spying / tinkering / scheming / reconnaissance / artifact-discovery / infiltration / extraction. Weapons MAY be in active use during battling-coded actions. The mood is purposeful and capable.
+
+━━━ THE ACTION — what they are doing in this exact frame ━━━
+${action}
+
+GROUNDED — feet on the ground or interacting with terrain. No floating, no impossible mid-air leaps. The action defines the body-position. Render it EXACTLY — body weight visible, captured at a loaded instant of doing the action.
+
+━━━ LINEAGE / SCI-FI RACE (LOCKED — render unmistakably as THIS lineage) ━━━
+${race}
+
+This race is NON-NEGOTIABLE. Render with the EXACT anatomy, distinguishing features, skin tone, ridges/horns/lekku/montrals/antennae above. The lineage is the HERO of identity.
+
+━━━ EXPLORER ARCHETYPE (LOCKED) ━━━
+${explorer_archetype}
+
+━━━ COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
+A ${race.split(':')[0]} ${explorer_archetype.split(/[—,:]/)[0].trim()} with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory}.
+
+(All seven DNA elements — race / skin / eyes / hair color / hairstyle / outfit / accessory — should be discernible in the render when the biome permits a visible face. If the biome demands a sealed helmet, face DNA may be obscured — that's fine, the outfit and accessory still carry identity.)
+
+ABSOLUTE FRANCHISE LOOKALIKE BAN: NO Stormtrooper plastic armor. NO Mandalorian T-visor full-body burnished plate. NO Halo Spartan green-and-gold helmet. NO Mass Effect N7. NO Imperial officer. NO Fremen stillsuit. NO Jedi or Sith robes.
+
+Render the outfit EXACTLY as described. Treat with the same dignity as a male soldier in the same role.
+
+━━━ BIOME-APPROPRIATE OUTFIT — HARD RULE ━━━
+The outfit MUST match the biome's hazards. Face visibility follows from the biome — helmets are environmental, not mandatory:
+- AIRLESS / VACUUM / TOXIC / METHANE biome → sealed EVA pressure suit with helmet, face behind visor (face DNA partially obscured — fine)
+- HOSTILE COLD / GLACIAL / ICE biome → heavy insulated parka with hood up, face may be partially visible
+- HOT DESERT / DUNE / VOLCANIC biome → moisture-recycler suit, face wrap optional, face often partially visible
+- TEMPERATE / JUNGLE / BIOLUMINESCENT / HABITABLE biome → tactical gear, helmet OFF or absent, FACE FULLY VISIBLE so lineage + skin + eyes + hair all read clearly
+NEVER bikini-warriors on ice planets. NEVER bare skin in vacuum/toxic atmosphere. Function follows biome. When habitable, prefer face-visible compositions so character DNA reads.
+
+━━━ SURPRISE ELEMENT — a secondary subject in the scene that adds story ━━━
+${surprise_element}
+
+Place this surprise element appropriately within the scene — typically at midground or deep midground, NOT in front of them. It adds visual interest and implies a wider world beyond just the character and the action.
+
+━━━ THE ALIEN BIOME (the stage) ━━━
+${biome}
+
+━━━ SKY OVERHEAD ━━━
+${sky_layer}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Three-quarter angle or side profile so we see face and lineage clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near the feet (alien plant, rock, ground texture). MIDGROUND: THE CHARACTER, full body, mid-action, 25-40% of frame. BACKGROUND: the alien biome receding into atmospheric haze.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a wide cinematic action shot of a [race-coded character] [DOING THE EXACT CINEMATIC ACTION FROM THE ACTION SLOT] in an alien wilderness — the action verb leads the prompt], [wearing [outfit] with full material detail — armor / plates / utility / glow], [race anatomy + skin + eyes + hair locked from the DNA slots], [signature accessory visible], [the alien biome wrapping around them — depth and atmospheric layers], [sky overhead], [lighting and weather particles], [color palette and mood]
+
+CRITICAL — the OPENING tokens of the prompt are "[character] [DOING ACTION]" — the action verb leads. The character DNA flows after the action is established. The world establishes the stage. Fills 25-40% of frame, FULL-BODY, captured at the loaded instant of action.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked. Outfit + accessory + action all readable at full-body scale.
+
+Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
   CHARACTER: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
