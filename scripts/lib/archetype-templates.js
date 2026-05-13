@@ -615,6 +615,83 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STARCRAFT_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
+
+    return `You are a sci-fi concept-art painter writing a STARCRAFT-CODED PLANET VISTA for StarBot — Blizzard / Sam-Didier / Glenn-Rane / Trent-Kaniuga concept-art tradition. Three faction-coded biomes with STRONG faction-color identity readable in 2 seconds.
+
+━━━ THE LANDSCAPE IS THE SUBJECT — NON-NEGOTIABLE ━━━
+Wide cinematic landscape. The world is the hero. Witness is small for scale. Strong faction-color signature dominates the palette.
+
+━━━ THREE FACTION CODES — pick from the rolled biome's specific code ━━━
+- TERRAN: rust-orange industrial wasteland, weathered mining rig, blast-burned military structure, dust-storm haze, grit-grain texture — Wild-West-in-space frontier aesthetic
+- PROTOSS: gold-blue-purple crystalline psionic vista, gravity-defying spire structures, glowing energy-thread foliage, sacred geometry, ancient warrior-priest tone
+- ZERG: red-purple organic-biomech wasteland, creep-spread coverage, fleshy-tendril growth, chitinous tower-fauna, parasitic alien hostility
+
+The biome pool entry specifies which faction's world. Lock the faction palette and aesthetic accordingly.
+
+━━━ ONE SMALL WITNESS — for scale ━━━
+${anchor_entity}
+
+Witness is SMALL — silhouette proving the world's scale.
+
+━━━ WHAT THE WITNESS IS DOING — candid moment ━━━
+${moment}
+
+Small action — soldier scanning / scout climbing / observer pointing / industrial worker tending.
+
+━━━ THE BIOME (render this exact landscape) ━━━
+${biome}
+
+Render every faction-specific detail — Terran prefab structures and rust-stained surfaces / Protoss gold-crystalline spires and energy-glow / Zerg organic-biomech growth and creep-spread.
+
+━━━ DEEP-DISTANCE SIGNATURE — receding through atmosphere ━━━
+${deep_distance}
+
+Render the franchise's signature far-back element — distant mining rig / gold-crystalline tower / biomech tower-fauna / capital ship hovering / shipyard silhouette.
+
+━━━ BLIZZARD CONCEPT-ART STYLE ━━━
+Painted concept-art mood. Strong saturated color signature per faction. Dramatic atmospheric perspective. Detail-dense foreground. Bold silhouettes. Frame-worthy production-painting quality.
+
+━━━ STORY BEAT (interpret at faction-vista scale) ━━━
+${story_beat}
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Faction-coded lighting — Terran harsh-amber dustlight / Protoss gold-shaft psionic radiance / Zerg blood-orange volcanic-glow under-purple-haze.
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+Locked to faction: rust-orange-grit (Terran) / gold-blue-purple (Protoss) / red-purple-organic (Zerg). Pick the dominant from the rolled biome.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Wide cinematic landscape. FOREGROUND: faction-coded textural detail (rust-burned metal / gold-crystal cluster / fleshy creep tendril). MIDGROUND: biome body + small witness in profile. DEEP DISTANCE: faction-signature feature receding into atmosphere. Bold saturated faction palette.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Terran", "Protoss", "Zerg", "Kerrigan", "Raynor", "Aiur", "Char", "Mar Sara", "Korhal", "Battlecruiser", "Khaydarin", "Starcraft" in the output. Use generic descriptions of the visual language.
+
+━━━ FORBIDDEN ━━━
+- NO centered foreground large figure
+- NO mixing faction palettes — each render commits to ONE faction signature
+- NO crowds — exactly one witness
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   STARTREK_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
 

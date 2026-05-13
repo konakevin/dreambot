@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  STARCRAFT_LANDSCAPE: {
+    description: 'PATH-BESPOKE — Starcraft-franchise landscape (Blizzard / Sam Didier / Glenn Rane / Trent Kaniuga concept-art tradition). Three faction-coded biomes: TERRAN frontier-industrial-rust + PROTOSS gold-crystalline-psionic + ZERG organic-biomech-creep-wasteland. Strong color identity per faction. NO figures dominating.',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting', 'weather_particulate'],
+      bot: [],
+      path: ['biome', 'anchor_entity', 'moment', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   STARTREK_LANDSCAPE: {
     description: 'PATH-BESPOKE — Star-Trek-franchise landscape (Andrew Probert / Rick Sternbach / classic-Trek painted-matte tradition). Each world reads as distinct COLOR-CODED species/empire aesthetic. Red-desert temple-worlds, orange-stone monasteries, tropical paradises, matte-black Borg-cube stations, volcanic warrior-empires, classical-future Federation colonies, green-bronze Romulan-style, bone-rust Cardassian-style. NO figures (pure landscape).',
     slots: {
