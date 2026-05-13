@@ -168,6 +168,11 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for halo-landscape (2026-05-13) — Bungie / 343 /
+  // Sparth / Pat Rawlings tradition.
+  HALO_ANCHOR_ENTITY: load('halo_anchor_entity'),
+  HALO_MOMENT: load('halo_moment'),
+  HALO_DEEP_DISTANCE: load('halo_deep_distance'),
   // Path-bespoke pools for guardians-architecture (2026-05-13) — James Gunn /
   // Jack Kirby cosmic / 70s album-cover sci-fi tradition.
   GUARDIANS_ATMOSPHERE_DETAIL: load('guardians_atmosphere_detail'),
