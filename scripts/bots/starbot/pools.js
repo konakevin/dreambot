@@ -168,6 +168,11 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for mass-effect-architecture (2026-05-13) — BioWare /
+  // Sparth / Matt Rhodes clean-future-meets-distinct-alien tradition.
+  MASS_EFFECT_ATMOSPHERE_DETAIL: load('mass_effect_atmosphere_detail'),
+  MASS_EFFECT_DEEP_DISTANCE: load('mass_effect_deep_distance'),
+  MASS_EFFECT_INCIDENT: load('mass_effect_incident'),
   // Path-bespoke pools for halo-landscape (2026-05-13) — Bungie / 343 /
   // Sparth / Pat Rawlings tradition.
   HALO_ANCHOR_ENTITY: load('halo_anchor_entity'),
