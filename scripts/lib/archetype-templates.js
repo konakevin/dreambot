@@ -9,6 +9,117 @@
  */
 
 const TEMPLATES = {
+  SPACE_OPERA: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      story_beat,
+      anchor_scale,
+      composition_frame,
+      scale_provers,
+      weather_particulate,
+      emotional_dna,
+      lighting,
+      sky_layer,
+      surprise_element,
+      ship,
+      setting,
+      ship_action,
+      traffic,
+      battle,
+      _conditionalFired,
+    } = slots;
+
+    const wideActionSection = _conditionalFired
+      ? `
+━━━ WIDE-ACTION MODE — MULTI-SHIP SCENE ━━━
+The frame is a CHAOTIC ACTION SCENE with multiple ships at varied depths, motion, weapons firing, missile contrails streaking, plasma engines blazing. Not a quiet hero portrait — a busy fleet engagement / traffic chaos / battle.
+
+━━━ OTHER SHIPS IN THE SCENE (3 must be visibly rendered) ━━━
+- ${traffic[0]}
+- ${traffic[1]}
+- ${traffic[2]}
+
+━━━ COMBAT / ACTION MOMENTS (3 must be visibly rendered) ━━━
+- ${battle[0]}
+- ${battle[1]}
+- ${battle[2]}
+
+`
+      : `
+━━━ CLOSE-UP HERO MODE — SHIP AS THE SHOW ━━━
+The frame is a CINEMATIC HERO SHOT of the featured ship. Scale-proving figures or smaller craft visible nearby. Hull detail readable — paneling, gantries, antennas, weathering, lived-in complexity. Like a poster shot.
+
+`;
+
+    return `You are a sci-fi concept-art painter writing a SINGLE CINEMATIC FRAME of a spaceship scene for StarBot. The ship is the ANCHOR ENTITY at MEDIUM-LARGE scale, set in a sci-fi environment with multi-tier depth. Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — SHIP AS HERO ━━━
+The featured spaceship is the SUBJECT at MEDIUM-LARGE anchor scale (25-50% of frame). Hull detail clearly readable — paneling, weapon mounts, engine glow, weathering, sci-fi industrial complexity. NOT a tiny silhouette in a vast environment.
+
+━━━ NON-NEGOTIABLE — MULTI-TIER DEPTH ━━━
+Foreground: tactile detail near the ship (debris / smaller craft / hull surface). Midground: the FEATURED SHIP, dominant. Deep distance: setting + cosmic anchors receding into atmospheric haze.
+${wideActionSection}
+━━━ THE STORY MOMENT — what's happening in this frame ━━━
+${story_beat}
+
+━━━ THE FEATURED SHIP (anchor entity at MEDIUM-LARGE scale) ━━━
+${ship}
+
+━━━ THE SHIP'S ACTION (posture / state / motion) ━━━
+${ship_action}
+
+━━━ THE SETTING (sci-fi environment wrapping the ship) ━━━
+${setting}
+
+━━━ SKY OVERHEAD / COSMIC LAYER ━━━
+${sky_layer}
+
+━━━ ANCHOR SCALE ━━━
+${anchor_scale}
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ SCALE PROVERS — include ALL THREE visibly in the scene ━━━
+- ${scale_provers[0]}
+- ${scale_provers[1]}
+- ${scale_provers[2]}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SURPRISE ELEMENT — secondary subject woven into the scene ━━━
+${surprise_element}
+
+━━━ FORBIDDEN ━━━
+- NO biomech / tentacled / organic creature ships (no octopus / squid / spider / chitin / kraken)
+- NO modern naval / US-navy / WWII / army-coded aesthetic
+- NO planetary architecture rendered as the ship
+- NO franchise proper nouns (Millennium Falcon / Normandy / Star Destroyer / etc. — inspired by, not literal)
+- NO static empty frame — multi-tier depth + scale provers + setting always present
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — CRITICAL ━━━
+Write ONE LONG DENSE FLOWING comma-separated composition. Do NOT separate elements into sections or bullet points — every axis above must be WOVEN INTO the single flowing scene description with SPECIFIC NUMBERS and COUNTS naming each element.
+
+Reference for the density target — this is what a good scene description looks like:
+"6.1-kilometer ceramic-white teardrop Banks-Culture vessel, 200+ micro-drones spiraling from 95-meter tender like glowing fireflies, 22 octagonal defense satellites in spherical formation, four angular 180-meter picket ships in diamond formation, twenty 6-meter navigation beacons strobing amber, cosmic graveyard of massive capital hulks with catastrophic breaches"
+
+Every entry you pull from the axes above must be NAMED IN THE PROMPT with a count, color, scale, or position. The other ships / scale provers / surprise element MUST appear by name with concrete counts in the scene. NOT "a fleet visible" — "twelve 80m supply ships parallel-running" / "200+ EVA workers tethered" / "a kilometer-class capital silhouette receding into haze". Sonnet writes ONE flowing 130-150 word enumeration.
+
+Output ONLY the raw 130-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the scene content.`;
+  },
+
   MEGASTRUCTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

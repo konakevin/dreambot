@@ -74,13 +74,30 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   }
 
   // 4. Conditional drama layer (probability-gated)
+  // Two shapes supported:
+  //   (a) { slot, gate }                                  — single-pool layer (single pick)
+  //   (b) { gate, pools: { slot1: { name, pickN }, ... } } — multi-pool layer (each pool picks N entries when fired)
   if (arch.conditionalLayer && Math.random() < arch.conditionalLayer.gate) {
-    const slot = arch.conditionalLayer.slot;
-    const poolName = pathConfig.pools?.[slot];
-    if (poolName) {
-      const pool = bot.poolByName(poolName);
-      if (pool && pool.length > 0) {
-        slots[slot] = picker.pickWithRecency(pool, slot);
+    if (arch.conditionalLayer.pools) {
+      // Multi-pool conditional — fire all sub-pools together
+      slots._conditionalFired = true;
+      for (const [subSlot, cfg] of Object.entries(arch.conditionalLayer.pools)) {
+        const poolName = pathConfig.pools?.[subSlot] || cfg.name;
+        if (!poolName) continue;
+        const pool = bot.poolByName(poolName);
+        if (pool && pool.length > 0) {
+          slots[subSlot] = cfg.pickN ? pickN(pool, cfg.pickN, picker, subSlot) : picker.pickWithRecency(pool, subSlot);
+        }
+      }
+    } else {
+      // Single-pool conditional (legacy shape)
+      const slot = arch.conditionalLayer.slot;
+      const poolName = pathConfig.pools?.[slot];
+      if (poolName) {
+        const pool = bot.poolByName(poolName);
+        if (pool && pool.length > 0) {
+          slots[slot] = picker.pickWithRecency(pool, slot);
+        }
       }
     }
   }

@@ -75,6 +75,33 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  SPACE_OPERA: {
+    description: 'Sci-fi spaceship as anchor entity, MEDIUM/LARGE scale. Hero ship in cosmic setting with optional 50%-gated wide-action mode (multi-ship battle/traffic chaos with two sub-pools rolled together).',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['sky_layer', 'surprise_element'],
+      path: ['ship', 'setting', 'ship_action'],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: {
+      gate: 0.5,
+      pools: {
+        traffic: { name: 'BUSY_FLEET_ELEMENTS', pickN: 3 },
+        battle: { name: 'BATTLE_DYNAMICS', pickN: 3 },
+      },
+    },
+    framingModes: null,
+    anchorScaleRange: ['MEDIUM', 'LARGE'],
+  },
+
   MEGASTRUCTURE: {
     description: 'Colossal post-planetary engineered construct as hero — orbital rings, Dyson constructs, planetary mantles, megaships. Anchor at TINY/SMALL (scale prover). Structure fills 85%+ of frame.',
     slots: {

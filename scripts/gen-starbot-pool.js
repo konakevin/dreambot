@@ -476,27 +476,45 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
   },
   space_opera_ships: {
     format: 'simple',
-    theme: 'Cool sci-fi spaceships — vast megastructure forms AND winged fighters AND iconic flagship designs. Variety is the point.',
+    theme: 'Cool ICONIC sci-fi spaceships with strong recognizable silhouettes and visible functional parts. Mass Effect Normandy / Halo UNSC Pelican / Cyberpunk Edgerunners AV-4 / Cowboy Bebop Bebop / Expanse Rocinante / Star Wars X-wing-class fighters / Star Trek shuttlecraft / Blade Runner Spinner aesthetic — INSPIRED BY, not literal franchise names. Every ship has a clear cockpit + wings/fins + engines + sometimes weapons.',
     touchpoints: [],
-    instructions: `Write 30 cool sci-fi spaceship concepts. Each one sentence, detailed, visually distinct.
+    instructions: `Write 30 SLIM atomic iconic sci-fi spaceship seeds. Each entry: ONE short phrase (20-35 words) naming a single ship + its DISTINCTIVE FUNCTIONAL ANATOMY.
 
-Mix all three styles in roughly equal proportions:
+THE FOCUS: COOL RECOGNIZABLE SHIPS with strong silhouettes the eye can read instantly. NOT abstract orb/sphere/megastructure blobs. NOT modern Earth naval (no aircraft carriers / battleships / destroyers). NOT steampunk / dieselpunk / brass-and-copper / Victorian zeppelin. NOT biomech / wraithbone / dolphin-shaped / creature-hull / chitin. PURE FUTURE SCI-FI silhouettes.
 
-A) MEGASTRUCTURE / DEEP-SPACE VESSELS — kilometer-scale angular structures, layered hull planes, glowing internal energy seams, segmented blocks, lattice frames, fractured geometry. Like:
-- "A kilometer-scale angular deep-space vessel with layered hull planes and glowing internal energy seams."
-- "A vast segmented structure ship composed of interlocking geometric blocks drifting in controlled alignment."
+ALWAYS bake in:
+(1) Specific HULL SHAPE — wedge / arrowhead / cigar / cruciform / disc / dart / blade / pod-cluster / hammerhead / forward-swept-wing / triangular-wedge / etc.
+(2) Visible COCKPIT or BRIDGE TOWER — where the crew sits, near the front or upper hull
+(3) Visible WINGS / FINS / NACELLES — angled, swept-back, or paired engines on pylons
+(4) Visible ENGINES / THRUSTERS — glowing exhaust at the back, plasma trails, ion glow
+(5) Optional: visible TURRETS / WEAPONS / SENSOR-ARRAYS / LANDING-GEAR / DOCKING-CLAMPS / CARGO-MODULES
 
-B) WINGED FIGHTERS / SLEEK CRUISERS — X-wing-style multi-wing, forward-swept wings, dart-shape interceptors, blade-bow fighters with visible weapon mounts and plasma engines. Like:
-- "Obsidian-black needle-class interceptor 45 meters long shaped like a dagger blade with serrated wing-edges, twin plasma engines glowing crimson, wingtip-mounted cannons."
-- "Sleek 24-meter forward-swept-wing strike fighter, matte gunmetal hull with cyan accent stripes, twin engine nacelles, wing-root laser emitters."
+Each ship should look like something out of Mass Effect / Halo / Cyberpunk 2077 spinners / Star Wars / The Expanse / Cowboy Bebop / Star Trek shuttles — clean, sleek-or-utilitarian sci-fi with named parts.
 
-C) ICONIC FLAGSHIPS / INDUSTRIAL HAULERS — chunky multi-tier sci-fi capital ships, weathered orange-rust cargo leviathans, sleek teardrop-form vessels, brass-and-copper retrofuturist cruisers. Like:
-- "Weathered orange-rust cargo hauler stacked nine container modules high in asymmetric tower configuration, exposed maintenance gantries with yellow safety rails, hull scarred with re-entry burns."
-- "Clean ceramic-white teardrop-form vessel 350 meters long with three elegant nacelle fins, glowing blue accent strips along seams, organic-patterned window grids."
+VARIETY across 30 entries — mix the categories evenly:
+- SLEEK INTERCEPTORS / FIGHTERS (20-40m, wedge or dart, fast)
+- ARMED FRIGATES / CORVETTES (80-200m, cruiser silhouettes, weapons visible)
+- HEAVY HAULERS / CARGO-RIGS (200-500m, blocky modular industrial)
+- ELEGANT SCIENCE / EXPLORATION VESSELS (150-300m, smooth lines, sensor arrays)
+- WORKING SHIPS — tugs, miners, atmospheric transports (50-150m, utilitarian with visible tools)
+- CIVILIAN — passenger shuttles, smuggler runabouts, pleasure yachts (30-100m)
+- BIG GUNS — armed cruisers / patrol craft / strike-frigates (150-400m, weapon-heavy)
 
-Future sci-fi aesthetic, not modern-day military. Vary silhouette, color, scale, mood. Make them iconic and distinct.
+Examples:
+1. Sleek 40-meter wedge-fighter with paired forward-swept wings, gunmetal hull with cyan accent stripes, twin plasma thrusters at rear, single cockpit canopy at the nose, wing-tip gauss cannons.
+2. Boxy 180-meter modular corvette with rectangular cargo bay slung beneath central hull, bridge tower amidships with viewport row, four ion thrusters in square formation, dorsal twin-barrel turret.
+3. Battered 320-meter cargo-rig with stacked container modules along central spine, exposed maintenance gantries with yellow safety rails, single bridge module forward, four massive fusion thrusters trailing blue exhaust.
+4. Hammerhead-bow patrol cruiser 240 meters long with wide flat forward weapon platform, three bridge towers stepped along dorsal spine, paired engine nacelles on swept-back pylons, hull paneled in matte-charcoal armor.
+5. Arrowhead-shaped 80-meter strike fighter with single canopy at apex, two delta-wings with leading-edge gauss-cannons, twin ramjet thrusters in tandem, ventral missile-bay.
+6. 220-meter angular science cruiser with elongated forward sensor probe, glass observation dome at bow, paired ion-drive nacelles on extending pylons, hull painted clean white with orange identification bands.
+7. 95-meter utility tug with chunky cylindrical hull, four-pronged docking claws extended forward, side-mounted maneuvering thrusters, single armored cockpit module at the rear, magnetic tow-arrays visible.
+8. Sleek 65-meter civilian runabout with sweeping curved hull, panoramic forward viewport, two engine pods slung beneath wing-roots, single belly-mounted entry ramp lowered.
+9. Heavy 380-meter assault carrier with broad flight-deck forward, three command towers along port flank, twenty visible launch tubes along ventral hull, paired massive engine nacelles aft glowing teal.
+10. 110-meter Mass-Effect-Normandy-coded stealth frigate with rounded organic-clean curves, paired sweep-wing engine pods, central canopy bridge forward, ventral weapon recess, hull glowing soft blue along seams.
+11. Cigar-shaped 280-meter generation transport with rotating habitat ring midship for spin-grav, paired RCS thruster clusters at bow and stern, exposed solar-panel arrays, no weapons.
+12. Cruciform 130-meter strike interceptor with four perpendicular swept wings and a wing-tip engine on each, single canopy at intersection, central railgun protruding forward.
 
-Output 30 numbered list entries.`,
+Format: ONE entry per line, 20-35 words each. Distinctive ship + clear silhouette + named functional parts. NO franchise proper nouns. NO modern Earth naval. NO steampunk / dieselpunk / brass-and-copper. NO biomech / creature-shaped / dolphin / whale / chitin / wraithbone. NO abstract "vessel with geometric volumes" — every entry must have a CLEAR readable silhouette.`,
   },
   space_opera_setting: {
     theme: 'DYNAMIC FIGHTER-ACTION SETTINGS — places where starfighters dogfight, recon, chase, or skim. Each entry is one specific action environment with motion-friendly cinematic depth. NO static landscape views. NO ground-level architecture. Pure space + atmospheric action contexts.',

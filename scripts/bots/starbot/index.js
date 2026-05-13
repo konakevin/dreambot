@@ -177,7 +177,13 @@ module.exports = {
   paths: [
     'cosmic-vista', // re-enabled 2026-05-11 with canonical 7-axis + cosmic_event drama layer
     'alien-landscape', // must include alien or character (see path file)
-    'space-opera', // needs cooler ships (see path file)
+    // 'space-opera' — DISABLED 2026-05-12. Flux cannot reliably render
+    // cool sci-fi spaceship silhouettes — output drifts to abstract orb/blob
+    // shapes, modern-naval carrier-coded forms, or steampunk regardless of
+    // brief admonitions and pool cleanup. Multiple iterations (R1-R3) failed
+    // to reach the bar; path retired from rotation. The SPACE_OPERA archetype
+    // + composer wiring + iconic-silhouette pool are preserved in case a
+    // future Flux release renders ships more reliably.
     // 'sci-fi-interior' — disabled 2026-05-11 (cozy-sci-fi-interior wins)
     'cozy-sci-fi-interior',
     'alien-city',
@@ -210,7 +216,7 @@ module.exports = {
     // Generic scene paths (weight 5 each)
     // 'cosmic-vista': 5,  // disabled 2026-05-11
     'alien-landscape': 5,
-    'space-opera': 5,
+    // 'space-opera': 5, // DISABLED 2026-05-12 (see bot.paths comment)
     // 'sci-fi-interior': 5,  // disabled 2026-05-11 (cozy variant wins)
     'cozy-sci-fi-interior': 5,
     'alien-city': 5,
