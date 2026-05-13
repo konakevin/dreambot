@@ -29,6 +29,29 @@ const ARCHETYPES = {
     conditionalLayer: { slot: 'event', gate: 0.4 },
     framingModes: null,
   },
+
+  PHOTOREAL_ASTRO: {
+    description: 'NASA-grade photoreal astrophotography — slim seed (named astronomical objects) + full canonical axes. Sonnet weaves the layers; medium wrapper adds Hubble/JWST/Chandra/EHT cranked-to-11 framing.',
+    slots: {
+      // Slim seed + full canonical axes — same shape as PURE_COSMOS but
+      // distinct brief template (NASA multi-wavelength photoreal, not
+      // painted oil-canvas). Reseeding 2026-05-12 moved this away from the
+      // fat-seed exception.
+      universal: [
+        'story_beat',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['surprise_element'],
+      path: ['subject'],
+    },
+    pickN: { scale_provers: 3 },
+    conditionalLayer: { slot: 'event', gate: 0.35 },
+    framingModes: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

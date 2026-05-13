@@ -343,16 +343,179 @@ Paths to migrate in Phase 4 (in any order Kevin prefers — recommend alien-land
 
 ### Phase 6 — Apply to Other Bots (proof of cross-bot portability)
 
-DragonBot is the proof. Steps:
+DragonBot is the proof. Follow the NEW BOT INITIALIZATION CHECKLIST below.
 
-1. Write `scripts/bots/dragonbot/index.js` with bot config (mediums, vibes, anchor_entity pool, sky_layer pool).
-2. For each desired DragonBot path: declare archetype + bespoke pool names (e.g. `fantasy_forest_biome`, `dragon_action`, `castle_setting`).
-3. Run `gen-bot-pool.js --bot dragonbot --pool <bespoke> --target 200` for each path.
-4. R0 baseline → iterate.
-5. Document DragonBot-specific lessons in playbook per-bot section.
-6. If the system worked for DragonBot with no architectural change to `scripts/lib/`, **portability is proven**.
+Subsequent bots (GothBot, SteamBot, MechBot, DinoBot, BrickBot) follow the same checklist.
 
-Subsequent bots (GothBot, SteamBot, MechBot, DinoBot, BrickBot) follow the same recipe.
+If the system worked for DragonBot with no architectural change to `scripts/lib/`, **portability is proven**.
+
+---
+
+## NEW BOT INITIALIZATION CHECKLIST
+
+When starting a new bot, establish every pool listed below BEFORE any path migration. Skipping pools causes silent fallbacks or composer errors mid-render. This is the canonical setup recipe.
+
+### Two-stage pool gen pattern (applies to every Stage A/B/C pool — locked 2026-05-12)
+
+**Never go straight to production size.** Every new pool follows this two-stage gate:
+
+1. **MVP — gen 25-30 entries first.** Run the recipe at target 25-30. Fast cycle (~2-3 min, ~$0.20 Sonnet). Render-test 5 against the path/bot/archetype the pool will feed.
+2. **Approval gate — Kevin signs off on the recipe.** If the MVP renders hit the playbook bar (4.5+/5), the recipe is locked. If they don't, iterate the recipe (touchpoints / instructions / ban list / examples) and regen MVP. Repeat until approved.
+3. **Production — scale to target via append-mode.** Once the recipe is locked, run `--target <N>` to append-gen up to production size (50-200 depending on pool type). The original 25-30 MVP entries are preserved.
+
+**Why two-stage:** a bad recipe produces 200 mediocre entries instead of 30. Catching the recipe issue at MVP saves ~$1-2 of Sonnet + several minutes of regen. Production-sizing should only happen after the pool's first 25-30 entries have been visually validated through actual renders.
+
+**The 25-30 MVP is a HARD gate.** Never declare a pool production-sized without prior MVP approval. The render-test must use the actual path the pool feeds — not synthetic prompts.
+
+---
+
+### Stage A — Universal axis pools (genre-coded, per-bot defaults)
+
+Every bot ships its own version of all 7 universal pools. Genre-tailor the content (StarBot sci-fi-coded / DragonBot fantasy-coded / GothBot gothic-coded). The CONCEPTS are universal; the descriptions are bot-flavored.
+
+| Pool | Target entries | Avg words/entry | Slot |
+|---|---|---|---|
+| `story_beats` | 50-100 | ~20 | `story_beat` |
+| `composition_frame` | 50 | ~25 | `composition_frame` |
+| `scale_provers` | 50 | ~20 | `scale_provers` |
+| `weather_particulate` | 50-200 | ~20 | `weather_particulate` |
+| `emotional_dna` | 50 | ~20 | `emotional_dna` |
+| `lighting` | 100-200 | ~25 | `lighting` |
+| `anchor_scale` | 4 | label-only | `anchor_scale` |
+
+`anchor_scale` is universal labels (TINY / SMALL / MEDIUM / LARGE) — same content across bots; can be bot-shipped or shared.
+
+**Bootstrap path for new bot:** clone StarBot's universal pool recipes from `scripts/gen-starbot-pool.js`, rewrite the recipe's `theme` + `touchpoints` for the new bot's genre, run `gen-bot-pool.js --bot <bot> --pool <axis> --target <N>` for each.
+
+### Stage B — Bot-level axis pools (genre-coded)
+
+| Pool | Target entries | Avg words/entry | Slot | Required for |
+|---|---|---|---|---|
+| `anchor_entity` | 50-100 | ~15-25 | `anchor_entity` | OUTDOOR_LANDSCAPE, OUTDOOR_CITY paths (figure/ship/creature anchor) |
+| `sky_layer` | 30-50 | ~20 | `sky_layer` | OUTDOOR_LANDSCAPE, OUTDOOR_CITY, CHARACTER paths |
+| `surprise_element` | 50-100 | ~15-25 | `surprise_element` | All paths except PHOTOREAL_ASTRO (secondary visual subject) |
+| `architecture_style` | 25-50 | ~20 | `architecture_style` | OUTDOOR_CITY paths only (distinct structural languages) |
+
+### Stage C — Per-path bespoke pools (path-coded)
+
+Per path, run `gen-bot-pool.js --bot <bot> --pool <name> --target <N>`. The pools required depend on the path's archetype:
+
+| Archetype | Required path-bespoke pools | Notes |
+|---|---|---|
+| **OUTDOOR_LANDSCAPE** | `<path>_biome` (slim, 200) + `<path>_phenomenon` (conditional, 50, 40% gate) | biome = geology+biology emphasis |
+| **OUTDOOR_CITY** | `<path>_setting` (slim, 200) + `<path>_drama` (conditional, 50, 40% gate) | setting = architecture/megastructure emphasis |
+| **INDOOR_INTIMATE** | `<path>_interior` (slim, 200) + `<path>_moment` (conditional, 50-200, 40% gate) | + framing modes auto-applied by archetype |
+| **CHARACTER** | `<path>_setting` (slim, 200) + `<path>_action` (slim, 100-200) + `<path>_drama` (conditional, 50, 40% gate) | PLUS 7 character DNA pools (see Stage D) |
+| **PURE_COSMOS** | `<path>_phenomenon` (slim, 200) + `<path>_event` (conditional, 50-100, 40% gate) | no figure |
+| **PHOTOREAL_ASTRO** | `<path>_subject` (slim, 200 — named astronomical objects) + `<path>_event` (conditional, 50-100, 35% gate) | photoreal multi-wavelength wrapper added by template |
+
+### Stage D — Character DNA pools (CHARACTER archetype only, per bot)
+
+Each bot supplies the genre-coded race + appearance pools. Outfit and accessory pools may be path-specific:
+
+| Pool | Target | Path or Bot level |
+|---|---|---|
+| `<bot>_race` (sci_fi_race / fantasy_race / etc.) | 25-50 | Bot-level (shared across the bot's CHARACTER paths) |
+| `<bot>_skin` / `_eyes` / `_hair_color` | 25 each | Bot-level |
+| `<path>_outfits` (female + male variants if both paths exist) | 100-200 | Path-level (action-stage-ready coverage) |
+| `<path>_accessories` (female + male) | 50-100 | Path-level |
+| `<path>_hairstyles` (female + male) | 50 | Path-level |
+| `<path>_action` (engagement verbs for this character path) | 100-200 | Path-level |
+
+### Stage E — Path overrides (rare, on-demand)
+
+A path may override any universal or bot-level axis when its needs diverge significantly from the bot's default. Examples:
+
+- `cozy-sci-fi-interior` overrides `story_beats` because the bot's default beats are monumental-scale (ARRIVAL / DEPARTURE / AWE) and cozy needs intimate-scale beats (RETURN HOME / EVENING IN / QUIET WATCHING).
+- A path inside-a-vacuum might override `weather_particulate` to be cosmic-dust-only.
+
+Override = author a new `<path>_<axis>.json` pool and declare it in the path's pool registry: `pools: { story_beat: '<path>_story_beats' }`.
+
+### Stage F — Bot index.js (the bot's bind)
+
+```js
+module.exports = {
+  username: '<bot>',
+  displayName: '<Bot>',
+  mediums: [...],          // bot's allowed mediums
+  mediumByPath: {...},     // path → medium override
+  vibes: [...],            // bot's allowed vibes
+  vibesByPath: {...},      // path → vibe override
+  modelByPath: {...},      // path → Flux model weights
+
+  // Pool defaults registry — slot → pool name in pools.js. Composer reads
+  // this when a path doesn't override a slot.
+  defaultPools: {
+    story_beat: '<BOT>_STORY_BEATS',
+    composition_frame: '<BOT>_COMPOSITION_FRAME',
+    scale_provers: '<BOT>_SCALE_PROVERS',
+    weather_particulate: '<BOT>_WEATHER_PARTICULATE',
+    emotional_dna: '<BOT>_EMOTIONAL_DNA',
+    lighting: '<BOT>_LIGHTING',
+    anchor_scale: '<BOT>_ANCHOR_SCALE',
+    anchor_entity: '<BOT>_ANCHOR_ENTITY',
+    sky_layer: '<BOT>_SKY_LAYER',
+    surprise_element: '<BOT>_SURPRISE_ELEMENT',
+    architecture_style: '<BOT>_ARCHITECTURE_STYLE', // if any OUTDOOR_CITY paths
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) throw new Error(`<Bot>.poolByName: unknown pool "${name}"`);
+    return pools[name];
+  },
+
+  rollSharedDNA({ vibeKey, path, picker }) { /* bot's scene palette + color palette */ },
+
+  buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
+    const builder = pathBuilders[path];
+    if (!builder) throw new Error(`<Bot>: unknown path "${path}"`);
+    if (typeof builder === 'function') return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({ bot: module.exports, pathConfig: builder, sharedDNA, vibeDirective, picker });
+    }
+    throw new Error(`<Bot>: path "${path}" has invalid export shape`);
+  },
+
+  caption({ path }) { return `[${path}] <Bot>`; },
+};
+```
+
+### Stage G — Path files (declarations)
+
+Each path file = ~10-line archetype declaration:
+
+```js
+module.exports = {
+  archetype: 'OUTDOOR_LANDSCAPE',
+  pools: {
+    biome: 'FANTASY_FOREST_BIOME',          // path-bespoke (slim)
+    phenomenon: 'FANTASY_FOREST_PHENOMENON', // conditional drama
+    // optionally override universal axes:
+    // story_beat: 'FANTASY_FOREST_STORY_BEATS', // override only if divergence matters
+  },
+};
+```
+
+### Stage H — Verification
+
+Before declaring a new bot ready:
+
+1. Every slot in every path's archetype must resolve (path override OR bot default). Run a smoke test that calls `composeBrief` for each path with synthetic inputs — error if any slot fails to resolve.
+2. Run R0 baseline (5 renders per path) → grade against playbook's 8 components → iterate.
+3. Cross-reference Kevin's hearts on the new bot's renders to calibrate quality.
+4. Document bot-specific lessons in playbook's per-bot section.
+
+### Estimated setup cost per new bot
+
+- Stage A (7 universal pools): ~$2-3 in Sonnet gen
+- Stage B (4 bot-level pools): ~$1-2
+- Stage C (per-path bespoke): ~$0.30-1 per path × N paths
+- Stage D (character DNA, if applicable): ~$2-3
+- Stage F-G code: ~30 min copy-paste-edit from StarBot's index.js
+- Stage H QA: 1-2 days of iteration
+
+**Total bootstrap cost per new bot: ~1-3 days of work + ~$10-20 in Sonnet API.**
 
 ---
 
@@ -398,7 +561,7 @@ Subsequent bots (GothBot, SteamBot, MechBot, DinoBot, BrickBot) follow the same 
 | space-opera | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, 3 conditional drama layers | Phase 3 #6 |
 | cosmic-oracle | CHARACTER | hand-written brief, 3 slim bespoke pools, full canonical, ritual_moment conditional | Phase 3 #3 |
 | cosmic-vista | PURE_COSMOS | ✅ MIGRATED 2026-05-12 — composer-driven, 9-line declaration; Kevin signed off "looks just as good" | Phase 2 DONE |
-| real-space | PHOTOREAL_ASTRO | hand-written brief, FAT pool (400 entries @ 100-160w), canonical-LITE (only narrative axes), cosmic_event conditional | Phase 3 #2 |
+| real-space | PHOTOREAL_ASTRO | ✅ MIGRATED 2026-05-12 — composer-driven, slim 30-entry MVP pool (avg 19.6w), full canonical axes (6 universal + 1 bot + 1 path + 1 conditional); Kevin signed off "these are better"; needs 30→200 scale-up | Phase 3 #2 DONE (MVP) |
 | cozy-sci-fi-interior | INDOOR_INTIMATE | hand-written brief, FAT pool (400 entries @ 46w — needs reseeding slim), canonical-LITE, cozy_moment conditional + framing modes | Phase 3 #9 (pool reseed first) |
 | alien-landscape | OUTDOOR_LANDSCAPE | hand-written brief, MEDIUM-shape pool (shared ALIEN_PLANET_BIOME at 42w), full canonical, no conditional drama, no bespoke pool | Phase 4 |
 | dune-landscape | OUTDOOR_LANDSCAPE | legacy 3-pool flat design, no canonical axes wired | Phase 4 |

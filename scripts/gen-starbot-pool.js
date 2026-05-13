@@ -840,18 +840,25 @@ Avoid duplicating: thick atmospheric haze, wind-driven dust haze, acid-rain fog,
   },
   real_space_subjects: {
     format: 'simple',
-    theme: 'Photoreal NASA / Hubble / JWST / Chandra / EHT astrophotography subjects — real astronomical objects rendered in punched-up multi-wavelength composite style. Named objects OK. Each entry is a complete scene seed with instrument, framing, and scale-prover baked in.',
+    theme: 'SLIM atomic seeds for photoreal astrophotography — named real astronomical objects, ~15-25 words each. The brief composer layers in scale_provers / weather / surprise_element / story_beat / composition / lighting at render time, and Sonnet weaves it all into the polished multi-wavelength composite prompt. Pool entries provide the SUBJECT IDENTITY only; layering is the axis system\'s job.',
     touchpoints: [],
-    instructions: `Write complete photoreal astrophotography scene seeds. Each entry is ONE detailed paragraph (3-5 clauses) describing a REAL astronomical object as a JWST / Hubble / Chandra / EHT / multi-wavelength composite — punched-up saturated colors, vibrant glowing detail, with a TINY mechanical scale-prover (drone / craft / probe / station) silhouette somewhere in frame.
+    instructions: `Write 30 SLIM atomic astronomical-subject seeds. Each entry is ONE short phrase (15-25 words) naming a real astronomical object + a 1-clause characterization of its distinctive visual signature. NO full scene paragraphs. NO scale-prover spacecraft (that's an axis layer). NO instrument framing language (the medium wrapper handles that). Just: named object + its defining visual feature.
 
-Use the FULL CATALOG — Messier objects (M1-M110), NGC catalog, named exoplanets (TRAPPIST-1, Proxima b, Kepler-452b, etc.), named stars (Betelgeuse, Rigel, Sirius, Vega, Eta Carinae, R136a1, VY Canis Majoris), planets and moons (Jupiter, Saturn rings, Io, Europa, Titan, Enceladus, Triton, Pluto-Charon), nebulae (Crab, Orion, Eagle, Carina, Helix, Cat's Eye, Veil, Lagoon, Trifid, Pelican, Tarantula, Boomerang), galaxies (Andromeda, Whirlpool, Sombrero, Cartwheel, Mice, Antennae, Stephan's Quintet), black holes (M87, Sgr A*, Cygnus X-1), quasars, pulsars, magnetars, supernova remnants (Cas A, Vela, SN 1054), asteroid fields (Psyche, Vesta, Ceres, Eros, Bennu), comets (Hale-Bopp, NEOWISE, Halley), star-forming regions (Pillars of Creation, Mystic Mountain), globular clusters (Omega Centauri, 47 Tucanae, M13). Reach widely.
+Use the FULL CATALOG widely — never repeat the same object class. Messier (M1-M110), NGC catalog, named exoplanets (TRAPPIST-1 / Proxima b / Kepler-452b), supergiant stars (Betelgeuse / Rigel / Eta Carinae / R136a1 / VY Canis Majoris), planets + moons (Jupiter / Saturn rings / Io / Europa / Titan / Enceladus / Triton / Pluto-Charon), nebulae (Crab / Orion / Eagle / Carina / Helix / Cat's Eye / Veil / Lagoon / Trifid / Pelican / Tarantula / Boomerang / Pillars of Creation / Mystic Mountain), galaxies (Andromeda / Whirlpool / Sombrero / Cartwheel / Mice / Antennae / Stephan's Quintet), galaxy collisions (Antennae / Mice / Cartwheel), black holes (M87 / Sgr A* / Cygnus X-1), quasars + AGN (3C 273), pulsars + magnetars, supernova remnants (Cassiopeia A / Vela / SN 1054), asteroid fields + Kuiper belt objects (Psyche / Vesta / Ceres / Eros / Bennu / Arrokoth), comets (Hale-Bopp / NEOWISE / Halley / Borisov), globular + open clusters (Omega Centauri / 47 Tucanae / M13 / Pleiades), molecular clouds, star-forming regions, neutron-star mergers, kilonovas, gamma-ray bursts.
 
 Examples:
-1. Jupiter cropped close in JWST near-infrared, Great Red Spot mid-rotation churning vivid crimson-amber against electric cyan bands, volcanic eruption from Io silhouetted against planet limb ejecting sulfur plume, Europa's ice-crack network glowing faint blue at upper-right, tiny mining drone silhouette at lower frame for scale, polar aurora crown blazing violet.
-2. M87 supermassive black hole event horizon shadow in EHT radio composite, asymmetric accretion disk glowing orange-white from Doppler boosting, relativistic jet shooting electric blue 5,000 light-years into elliptical halo, photon ring razor-sharp at event boundary, background galaxy lensed into Einstein ring, research probe silhouette lower-left for scale.
-3. Crab Nebula in Chandra x-ray plus Hubble visible composite, pulsar wind nebula expanding outward in electric violet filaments, central neutron star blazing cyan-white at heart, surrounding gas filaments glowing crimson and gold, supernova remnant boundary sharp against deep black, tiny radio telescope array silhouetted at lower frame for scale.
+1. NGC 4038/4039 Antennae Galaxies mid-collision — twin spiral nuclei spiraling kiloparsecs apart with tidal bridge of disrupted stars.
+2. Cassiopeia A supernova remnant — expanding electric-orange shockwave shell with neutron-star pulsar ejecting particle streams at center.
+3. M87 supermassive black hole — asymmetric accretion disk Doppler-boosted around event horizon shadow with relativistic jet shooting 5,000 light-years.
+4. Crab Nebula M1 — pulsar wind nebula with electric violet filaments and crimson-gold gas shell.
+5. Carina Nebula Mystic Mountain — three-light-year column of cold molecular hydrogen with embedded protostar jets erupting at tip.
+6. Jupiter Great Red Spot — anticyclonic storm 1.3 Earth-widths wide churning crimson-amber against electric cyan banded clouds.
+7. Saturn's rings backlit — gossamer A/B/C/D ring structure with Cassini Division and shepherd moons casting shadow scallops.
+8. Pillars of Creation — Eagle Nebula's elephant-trunk gas pillars sculpted by stellar wind with photoevaporating tips.
+9. R136a1 hypergiant — most massive known star blazing blue-white at 9 million suns from cluster heart of 30 Doradus.
+10. Kilonova merger GW170817 — neutron-star collision afterglow fountaining gold + platinum atoms in white-hot jets.
 
-Format: one detailed sentence per entry, 100-160 words. Include: instrument/composite name + named real object + multi-color saturated rendering language + ONE small mechanical scale-prover. NO fictional objects, NO franchise references.`,
+Format: ONE entry per line, 15-25 words each. ALL-CAPS or capitalized named object + descriptive clause. NO fictional objects, NO franchise references, NO scale-prover spacecraft, NO instrument-name framing.`,
   },
   cozy_moment: {
     format: 'simple',

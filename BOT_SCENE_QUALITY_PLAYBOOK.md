@@ -142,6 +142,8 @@ The work of overhauling a new bot:
 4. Optionally override universal axes per path when divergence matters
 5. Each path file is a ~5-line archetype declaration that taps the shared composer
 
+**Detailed setup recipe: `BOT_AXIS_REFACTOR_PLAN.md` → "NEW BOT INITIALIZATION CHECKLIST"** (Stages A-H with pool sizes, slot lists per archetype, index.js boilerplate, and estimated cost per bot). Always reference this before bootstrapping a new bot — every pool listed must exist or the composer errors mid-render.
+
 The full refactor architecture and migration sequence: `BOT_AXIS_REFACTOR_PLAN.md`.
 
 ---
@@ -170,17 +172,21 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 Every path overhaul has TWO mandatory stages. Skipping stage 2 means the path renders well but the **subject array is too narrow** — over thousands of bot posts, users see repetition.
 
-**Stage 1: Iteration (MVP pool + brief tuning)**
-- Author a 25-30 entry MVP path-defining pool (Sonnet, rich-description style)
-- Iterate the brief and path file against the MVP pool until renders hit 4.5+/5 consistently
-- Fast cycles — small pool means cheap Sonnet regens during iteration
-- Outcome: locked recipe (brief structure + pool format + medium + universal axes)
+**Stage 1: Iteration (MVP pool + brief tuning) — HARD GATE**
+- Author a 25-30 entry MVP path-defining pool (Sonnet, slim atomic style for canonical paths; rich-description fat-seed style is the exception)
+- Render-test 5 against the actual path/bot/archetype the pool feeds
+- Kevin sign-off required on the MVP renders before any production sizing
+- Iterate the recipe (touchpoints / instructions / ban list / examples) and regen MVP if it doesn't hit 4.5+/5
+- Fast cycles — small pool means ~2-3 min and ~$0.20 per regen
+- Outcome: locked recipe + Kevin-approved MVP
 
-**Stage 2: Production sizing (backfill the subject array)**
-- Once stage 1 recipe locks, expand path-defining pools to project-standard 200 entries
-- Append-mode generation (don't regen — preserves the well-tested MVP entries)
-- Universal modifier pools rightsized to 20-75 entries based on diminishing-returns judgment (weather has ~25 useful entries before repetition; emotional DNA has ~20; scale-provers ~30)
+**Stage 2: Production sizing (backfill the subject array) — only after Stage-1 approval**
+- Expand path-defining pools to project-standard 200 entries
+- Append-mode generation (don't regen — preserves the well-tested MVP entries) via `--target 200`
+- Universal modifier pools rightsized per pool nature (lighting ~200; weather ~50-200; story_beats / composition_frame / scale_provers / emotional_dna ~50; anchor_scale = 4 labels)
 - Outcome: each render pulls from a wide subject array → users perceive infinite variety even across thousands of posts
+
+**Hard rule:** never go straight to production size. The MVP gate exists because a bad recipe produces 200 mediocre entries instead of 30 — caught at MVP, it's a $0.20 fix; caught at 200, it's a $5 regen + lost time.
 
 **Why stage 2 matters:** at 2 bot posts/day × 365 days × 5 years = 1,800 renders per path. With 30 entries in the path-defining pool that's 60 repeats per entry over 5 years — visible. With 200 entries that's 9 repeats per entry — invisible.
 
