@@ -557,7 +557,7 @@ Before declaring a new bot ready:
 | alien-city | OUTDOOR_CITY | ✅ MIGRATED 2026-05-12 — composer-driven, reused ALIEN_CITIES (200 slim, no reseed needed), no conditional drama declared (city carries its own drama via busy-metropolis language); Kevin: "these are good" | Phase 3 #4 DONE |
 | female-explorer | CHARACTER | hand-written brief, MEDIUM-shape pool (shared ALIEN_PLANET_BIOME at 42w), full canonical, no conditional drama | Phase 3 #7 |
 | male-explorer | CHARACTER | same as female, recipe-transferred | Phase 3 #8 |
-| megastructure | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, no conditional drama | Phase 3 #5 |
+| megastructure | MEGASTRUCTURE archetype | ✅ MIGRATED 2026-05-12 — PIVOTED from "post-planetary megastructure" to "iconic cyberpunk building in bustling sci-fi city". Anime medium + flux-1.1-pro-ultra. Pool reseeded with cyberpunk DNA (sexy android holos + neon + flight traffic baked in). Brief mandates foreground-anchor-first + no romantic couples + no silhouette wording. Kevin: "these are good" | Phase 3 #5 DONE |
 | space-opera | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, 3 conditional drama layers | Phase 3 #6 |
 | cosmic-oracle | CHARACTER | ✅ MIGRATED 2026-05-12 — composer-driven, full CHARACTER archetype (7 univ + 2 bot + 3 path + 1 conditional), anchor_scale range filter, surreal-positive reframe (no fatalism, dreamlike-impossible WONDER); Kevin: "these are good" | Phase 3 #3 DONE |
 | cosmic-vista | PURE_COSMOS | ✅ MIGRATED 2026-05-12 — composer-driven, 9-line declaration; Kevin signed off "looks just as good" | Phase 2 DONE |

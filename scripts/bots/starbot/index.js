@@ -60,6 +60,10 @@ module.exports = {
     // portraits). Tested 2026-05-11 in R6 of female-explorer iteration.
     'female-explorer': 'canvas',
     'male-explorer': 'canvas',
+    // megastructure (cyberpunk-building-in-city archetype) — anime medium
+    // for Akira / Ghost in the Shell / Cyberpunk Edgerunners aesthetic.
+    // Kevin asked 2026-05-12 to test anime spin on the iconic-building feel.
+    'megastructure': 'anime',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -79,7 +83,7 @@ module.exports = {
     'cosmic-oracle': { 'black-forest-labs/flux-1.1-pro': 100 },
     'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'megastructure': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'megastructure': { 'black-forest-labs/flux-1.1-pro-ultra': 100 },
     'dune-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
     'dune-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
     'aliens-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },

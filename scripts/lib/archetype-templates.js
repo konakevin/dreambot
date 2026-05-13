@@ -9,6 +9,157 @@
  */
 
 const TEMPLATES = {
+  MEGASTRUCTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      story_beat,
+      composition_frame,
+      scale_provers,
+      weather_particulate,
+      emotional_dna,
+      lighting,
+      sky_layer,
+      surprise_element,
+      setting,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA MOMENT — one striking event unfolding around the building ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are writing an EPIC CYBERPUNK ANIME MEGACITY keyframe for StarBot — an iconic notable building within a vast bustling sci-fi city, anime cinematic illustration style. Output wraps with style prefix + suffix.
+
+━━━ CORE PROMPT DNA (weave these phrases into the polished output) ━━━
+"epic futuristic cyberpunk megacity, anime cinematic keyframe illustration, ultra-detailed skyline stretching endlessly into the horizon, towering neon skyscrapers stacked in vertical layers, glowing holographic billboards, dense glowing signage in japanese kanji and futuristic alien glyphs, rain-soaked or steam-soaked streets reflecting neon light, flying cars and hovering taxi traffic streams, illuminated skybridges connecting buildings, massive industrial pipes and ventilation systems, rooftop markets and crowded alleyways, glowing windows everywhere, thousands of tiny lights, atmospheric fog and steam rising between buildings, volumetric light beams, vibrant neon color palette (magenta, cyan, electric blue, purple, gold), extreme detail saturation, bustling city life, tiny dark figures of people on balconies, distant megastructures disappearing into haze, sharp anime linework, rich shading, high contrast lighting, dramatic anime lighting, masterpiece quality, insanely detailed, no blur, no empty areas, every surface covered in detail."
+
+These are MANDATORY core descriptors. The Sonnet polish must include language matching these themes throughout the prompt.
+
+━━━ THE SUBJECT IS A SINGLE ICONIC BUILDING — NON-NEGOTIABLE ━━━
+The focus is ONE specific notable structure within a sci-fi city — a tower / spire / building / habitat block with DISTINCTIVE visual character (cool architecture, lighting, graffiti, surface treatment, cultural marks). The building occupies 40-60% of the frame as the SUBJECT. NOT a megastructure cluster, NOT a planet-spanning construct — a single building you could walk into.
+
+━━━ THE BUILDING ━━━
+${setting}
+
+Render its distinctive design / lighting / graffiti / texture / surface treatment in vivid detail. This is THE hero of the frame.
+
+━━━ THE CITY AROUND IT IS THE BACKDROP — OVERWHELMING DETAIL REQUIRED ━━━
+The featured building does NOT exist alone. The frame is PACKED with surrounding city detail — the city is as much the atmospheric hero as the featured building. NEVER an isolated building in fog.
+
+Explicit minimum requirements visible in the frame:
+- **AT LEAST 8-12 supporting towers / buildings** of varying heights surrounding and behind the featured building, at multiple distances (some close, some receding into atmospheric haze)
+- **AT LEAST 4-6 flying vehicles / drones / ships** streaking between buildings at different elevations (commuter craft, freight, hovercars, taxi drones)
+- **AT LEAST 3-5 multi-tier skybridges / connecting walkways** visible between buildings, populated with tiny shadowed pedestrian figures
+- **AT LEAST 5-10 holographic billboards / signage / projected logos / AR overlays** flickering on building faces (alien glyphs, animated propaganda, advertising)
+- **Hundreds of pinprick lit windows** speckling EVERY visible tower face — read as honey-grain across the whole frame
+- **Atmospheric haze bands** at multiple altitudes separating depth layers
+- **Distant city skyline** extending to horizon behind/beyond the featured building — never a clean sky background
+- **Street-level or low-level activity** if visible: traffic / pedestrians / crowds / vendors / steam vents / spotlight beams
+
+REFERENCE FEEL: looking out from a high apartment window in a Coruscant-class megacity or Akira's Neo-Tokyo. The featured building is the eye-catch but the BEEHIVE of city activity around it is what sells the scale. Hundreds of lights, dozens of towers, flying traffic at every layer.
+
+THE COMMON FAILURE: rendering the featured building "isolated in fog" with vague background haze. This is FORBIDDEN. The city detail must be DENSE and EVERYWHERE.
+
+━━━ TIME OF DAY — pick from the lighting axis below; vary across renders ━━━
+The lighting axis defines mood (golden hour / midday / dusk / night neon / dawn / rain-soaked / overcast / etc.). Honor it. Different renders should land at different times of day so the path doesn't feel monotonous.
+
+━━━ THE STORY MOMENT — what's happening near or to the building ━━━
+${story_beat}
+${dramaSection}
+━━━ SKY OVERHEAD ━━━
+${sky_layer}
+
+━━━ CAMERA POSITION — NON-NEGOTIABLE ━━━
+The camera is INSIDE the city — pick ONE:
+(A) **STREET LEVEL looking UP** at the featured building at a dramatic upward angle. Camera at sidewalk / plaza / skybridge / rooftop-pedestrian-level. Tilt up. Building looms above. Surrounding city visible at street level around the camera (other tower bases, signage, traffic, pedestrians, vehicles passing).
+(B) **MIDWAY UP looking ACROSS** at the featured building from another building's balcony / window / terrace / skybridge. Camera at 100-300m elevation. The featured building's mid-section fills the frame, surrounded by other towers at similar heights, with flying vehicles / drones passing between buildings at the camera's level.
+
+━━━ MANDATORY FOREGROUND CITY ELEMENTS — THIS IS HOW WE PROVE THE VIEWER IS INSIDE ━━━
+The IMMEDIATE FOREGROUND of the frame MUST contain CITY ELEMENTS that put the viewer physically INSIDE the city, NOT floating outside. Required: pick AT LEAST 2 of these in the foreground (close to camera):
+- The EDGE of the adjacent building the camera is on — a balcony railing / window frame / rooftop ledge / skybridge guardrail / cracked-tile floor
+- Vegetation in the foreground — a hanging vine spilling off the balcony / potted xeno-plants / cracked-asphalt weed / overgrown rooftop garden bordering the shot
+- Single-figure or scattered-pedestrian figures in the foreground — a lone shadowed figure leaning on a railing / pedestrians walking past at distance / a vendor stall / small dark figures dwarfed by the view. NEVER a romantic couple, NEVER two paired figures — solo figure or scattered crowd only.
+- Tower bases or walls FRAMING the shot left/right — corners of two flanking buildings cropped at the edges of the frame, with the featured building visible BETWEEN them
+- Adjacent building's signage / pipes / antennas / cables intruding into the foreground (one building's lit window-grid right at the edge of frame)
+- Flying vehicles / drones / ships PASSING THROUGH the foreground — close enough to read as full vehicles, not distant dots
+- Cables / power lines / hanging holographic banners stretching across the foreground at camera level
+
+The foreground tells the viewer's eye "you are standing here, in this place, in this city" — not "you are looking at a postcard from outside." This is the SINGLE MOST IMPORTANT compositional rule for this archetype.
+
+REFERENCE FEEL: like opening a hotel-room window in a Coruscant megacity and looking out — your hand is on the windowsill, a vine hangs from the planter beside you, the neighbor's building wall cuts off your left view, a hover-taxi whooshes past at your eye level, and across the gap rises the featured building. THAT is the camera position.
+
+FORBIDDEN camera positions:
+- Aerial / overhead / bird's-eye / orbital views
+- Wide vista showing city skyline from outside
+- Establishing shots from a distance / mountain / hilltop
+- Camera level above the buildings looking down
+- Camera floating in open sky away from the city
+- FEATURED BUILDING ISOLATED IN FOG/CLOUDS WITHOUT FOREGROUND CITY ELEMENTS — this is the most common failure and the WORST one. Empty foreground = render fails.
+
+The viewer is INSIDE the city, immersed. Looking up from the street, or peering across from another high-rise — never floating above or outside.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+Honor the composition frame ONLY to the extent it works with street-level-up OR mid-elevation-across camera. If the composition rolls suggest aerial / overhead / wide-vista — REINTERPRET as the closest street-level or across-from-building equivalent.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+If lighting language pulls strongly toward one time of day (golden hour, night, etc.), commit fully — render the entire scene at that time of day for atmospheric coherence.
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ SCALE PROVERS — include ALL THREE visibly throughout the scene ━━━
+- ${scale_provers[0]}
+- ${scale_provers[1]}
+- ${scale_provers[2]}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SURPRISE ELEMENT — woven into the city for added story interest ━━━
+${surprise_element}
+
+Place at midground in the bustling city around the featured building.
+
+━━━ FORBIDDEN ━━━
+- NO aerial / overhead / orbital / wide-skyline-from-outside camera positions — camera is INSIDE the city
+- NO megastructure / orbital ring / Dyson swarm / planetary mantle / space elevator — that was the old archetype direction. This path is ICONIC BUILDING IN CYBERPUNK CITY.
+- NO empty isolated building floating in fog without surrounding city
+- NO static lifeless diorama — the city must be ALIVE with traffic, lights, signage, motion
+- NO portrait composition / character closeup — the building is subject
+- NO featured-character foreground figure — pedestrians + crowds are part of the city activity, never single foreground subject
+- NO romantic couples / paired figures / "lovers on balcony" — these read as character-romance not cyberpunk-city. Single shadowed figures or scattered crowds only.
+- NO use of the word "silhouette" in the prompt — it pulls Flux toward feminine curves AND cylindrical column shapes. Use "shadowed figure" / "tiny dark figure" / "small dark form" / "pedestrian" / "person" instead.
+- NO franchise proper nouns (Blade Runner / Tyrell / Coruscant / Arasaka — INSPIRED BY, not literal)
+- NO low detail / minimalism / empty streets / bland lighting / soft pastel / washed-out colors / low contrast / blurry / foggy blur / simple buildings / flat shading / chibi / realistic-photo / dull colors / boring skyline / empty areas
+- NO REALISTIC PHOTO aesthetic — this path is ANIME ILLUSTRATION (sharp linework, rich shading, high contrast)
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 100-130 words IN THIS ORDER ━━━
+1. **OPEN with the FOREGROUND city anchor** — the railing / balcony / vegetation / adjacent-tower-edge / shadowed pedestrian / vehicle-passing that puts the camera physically inside the city. First 15 words. This is the viewer's "I am standing here" moment.
+2. **Camera viewpoint** — second clause names the perspective: "viewed from skybridge at 200m elevation" / "looking up from neon-lit plaza" / "from adjacent building's balcony" / etc.
+3. **The featured building visible THROUGH the foreground frame** — distinctive design / lighting / hologram / signage. The building is what the viewer SEES from their perch, not what dominates the frame independently.
+4. **The DENSE surrounding city** with explicit numeric counts — "12 towers stacked deep into haze" / "six hovercars streaking past" / "four skywalks with tiny dark pedestrians" / "nine holographic billboards in alien glyphs" / "hundreds of lit windows speckling every face".
+5. **Atmospheric depth + time-of-day** from lighting axis + ONE small narrative beat woven in.
+
+The foreground anchor is the FIRST thing written. The building is mentioned AFTER. The city's specific element counts are explicit. This ordering is non-negotiable — if the building opens the prompt, REWRITE with the foreground anchor first.
+
+Cranked atmospheric depth, photoreal cinematic finish.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**. Just the scene content.`;
+  },
+
   OUTDOOR_CITY: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

@@ -90,34 +90,6 @@ const POOL_RECIPES = {
     ],
     instructions: `Each landscape must read as a specific ecology — biology, geology, atmosphere coherent. MG layer: biology / formations / weather. Scene must include EITHER a sentient figure (1-2% frame, midground-back silhouette) OR an alien creature native to this world.`,
   },
-  megastructure_setting: {
-    theme: 'colossal artificial megastructures at planet-scale or greater — orbital ring worlds, Dyson constructs, planetary mantles, generation ships, space elevators, megaship hulks. Each entry is a SPECIFIC megastructure with multi-tier composition.',
-    touchpoints: [
-      'Halo Ring orbital (visible curvature arc)',
-      "Niven's Ringworld",
-      'Dyson Sphere / Dyson Swarm',
-      'Bishop Ring habitat',
-      "Banks's Culture Orbital",
-      "Foundation's Trantor planetary mantle",
-      'space elevator (pillar from ground into orbit)',
-      'McGuire-coded generation ship interior',
-      'Stanford Torus rotating wheel station',
-      'Death-Star-scale spherical battle station',
-      'Eldritch geometric Forerunner structures',
-      'crashed leviathan ship integrated into terrain',
-    ],
-    instructions: `Each entry is 60-120 words describing ONE distinctive megastructure with multi-tier composition. Include: STRUCTURAL TYPE (ring / sphere / mantle / spire / shell / etc.), SCALE-DEFINING CUE (curvature visible / horizon-spanning / kilometer thick), ATMOSPHERIC LAYERS at multiple altitudes, SCALE PROVERS named (ships as dots, tiny figures, lit-window-grain, atmospheric haze bands), MATERIAL identity (alien alloy / weathered Forerunner stone / engineered diamond / etc.).
-
-Each entry must FILL THE FRAME at planet-or-greater scale. The viewer is dwarfed.
-
-Variety REQUIRED across all 30 entries:
-- Ring-worlds vs spheres vs mantles vs spires vs swarms vs hulks
-- Pristine new construction vs ancient overgrown ruin vs damaged battle-scarred
-- Active inhabited (lights / traffic) vs abandoned dormant vs partially under construction
-- Visible viewpoint variety — from inside looking up / from below looking up / from far away horizon-filling / mid-orbit looking down
-
-NEVER use franchise proper nouns (Halo / Citadel / Death Star etc. — INSPIRED BY, not literal).`,
-  },
   explorer_outfits_female: {
     theme: 'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
     touchpoints: [
@@ -437,8 +409,44 @@ VARIETY MANDATE across all entries — hit each:
     ],
     instructions: `Each entry is 60-120 words describing ONE specific alien biome. Include: PRIMARY GEOLOGY (what the ground is — sand / basalt / chitin / ice / glass), DOMINANT BIOLOGY (what grows / lives here — towers, kelps, crystalline mineral life, plasma fauna), ATMOSPHERIC CHARACTER (color of sky, particulate, weather), DISTINCTIVE FEATURE (the thing that makes THIS biome unmistakable — geyser fields / floating boulders / fractal coral / etc.), and SCALE CUE (how big the features are). Each biome must be VISUALLY DISTINCT from the others. Reference real-world biomes pushed to alien extremes (Atacama → glass-crystal desert at -200C; Yellowstone → planet-spanning geyser field; Amazon → bioluminescent jungle 500m canopy; Sahara → twin-sun ochre dune sea 1km dunes).`,
   },
+  megastructure_setting: {
+    format: 'simple',
+    theme: 'SLIM atomic seeds for ICONIC CYBERPUNK BUILDINGS within a bustling sci-fi city — single notable towers featuring distinctive shape + MASSIVE HOLOGRAPHIC ADVERTISEMENTS (often sexy fashion-coded or seductive cyborg/android pitch) + dense neon signage + clear relationship to flying-vehicle traffic. Blade Runner 2049 / Cyberpunk 2077 / Ghost in the Shell aesthetic baked into every entry.',
+    touchpoints: [],
+    instructions: `Write 30 SLIM atomic cyberpunk-building seeds for a sci-fi cityscape. Each entry is ONE short phrase (20-30 words) naming a SINGLE notable building/tower within a cyberpunk megacity, with these elements ALWAYS baked into the seed text:
+
+(1) Distinctive architectural shape (chrome obelisk / brutalist ziggurat / twisted spire / inverted pyramid / fractal-tiered / etc.)
+(2) MASSIVE HOLOGRAPHIC ADVERTISEMENT visible on the building face — often a beautiful android/sexy fashion model/seductive geisha pitching a corporate product (sake / cybernetic upgrade / luxury fragrance / synthetic companion / etc.). Could also be a giant CEO face, propaganda banner, or animated kaiju logo — but lean into the "sexy ad" cyberpunk-trope flavor often.
+(3) Dense neon signage (kanji / glyphs / brand logos / flickering tubes) wrapping or climbing the structure
+(4) IMPLIED flight traffic — flight-deck balconies / anti-grav landing pads / hovering signage / drone-thoroughfares around the building
+
+THE AESTHETIC: Blade Runner 2049's holographic Joi, Cyberpunk 2077's Lizzy Wizzy spire, Ghost in the Shell's geisha pop-up, Akira's neon-soaked apartment blocks, Fifth Element's vertical city. NEON, HOLOGRAMS, FLYING SPINNERS, DENSE.
+
+Each entry must ALWAYS include:
+- The distinctive building (architecture)
+- A specific holographic advertisement (often featuring an attractive android/model/geisha — adult-coded fashion/luxury/cybernetic-product pitch)
+- Neon signage wrapping it
+- A hint of nearby flight traffic / hovering activity
+
+Examples:
+1. 800-meter chrome obelisk wrapped in 40-story holographic geisha advertising synthetic sake, neon-pink kanji climbing every column, anti-grav landing pads jutting from upper tiers.
+2. Brutalist pyramid corporate tower, massive animated hologram of an iridescent android model in dripping lingerie pitching cybernetic enhancement serum, drone delivery thoroughfares ringing midsection.
+3. Twisted Y-shaped Arasaka-style spire, projected face of a corporate CEO smiling across 200 stories, scrolling neon-red propaganda banners, executive spinner-pads ringing penthouse.
+4. Inverted-pyramid residential tower with rotating holographic perfume ad showing nude android-figure spritzing glow-mist, electric-blue tube-neon spiraling its scaffold-clad base.
+5. Black-mirror skyscraper with giant projected face of a smiling cyborg fashion model selling synth-coffee, hot-pink kanji vertical banners, hover-spinners darting between mid-tier balconies.
+6. 200-floor housing block faced with animated mega-billboard of a synthetic geisha bowing in iridescent kimono advertising memory-implants, drone traffic streaking around its peak.
+7. Spiral neon-helix tower with projected hologram of a winking pin-up android pitching corporate cigarettes, anti-grav cargo pads at every fifth tier, ion-trail vehicles passing through helix gaps.
+8. Brutalist concrete block with full-facade hologram of a swimsuit-clad android lounging on synthetic beach selling vacation memory-tourism packages, neon-kanji climbing scaffolds.
+9. Crystalline modular tower with each face displaying different rotating ad-hologram (sexy android pop-star / luxury cyber-watch / synth-companion), drone delivery formations between modules.
+10. Pagoda-tiered skyscraper with massive hologram of a kimono-cyborg fashion model advertising designer cyborg-cosmetics, neon-red lantern strings between every tier, hover-taxi traffic at multiple elevations.
+11. Coral-organic biomech tower with projected hologram of a translucent android beauty model pitching luxury skin-grafts, bioluminescent neon vines pulsing electric blue.
+12. Stepped ziggurat-spire with rotating animated ad of a synthetic dancer in liquid-metal bodysuit selling holo-entertainment subscriptions, neon billboards on every terrace.
+
+Format: ONE entry per line, 20-30 words each. Distinctive building + holographic ad (often sexy/fashion-coded) + neon signage + implied flight traffic. NO franchise proper nouns (Blade Runner / Tyrell / Coruscant / Arasaka — INSPIRED BY, not literal). NO "megastructure" / "Dyson" / "ringworld" — those are different paths. NO sexually explicit content — adult fashion / lingerie / pin-up / model-coded is fine; nudity OK if tasteful (no pornography).`,
+  },
+
   megastructures: {
-    theme: 'colossal artificial structures at planet-or-greater scale — orbital rings, Dyson constructs, planetary mantles. Civilization-as-superstructure.',
+    theme: 'colossal artificial structures at planet-or-greater scale — orbital rings, Dyson constructs, planetary mantles. Civilization-as-superstructure. NOTE: this recipe builds the LEGACY MEGASTRUCTURES pool (POOLS.MEGASTRUCTURES). The active megastructure path uses MEGASTRUCTURE_SETTING (iconic buildings in cities) — see the megastructure_setting recipe above.',
     touchpoints: [
       'Halo ring (orbital ring world, visible curvature)',
       "Niven's Ringworld",
