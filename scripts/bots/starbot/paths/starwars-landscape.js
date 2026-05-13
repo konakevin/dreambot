@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  archetype: 'ALIEN_LANDSCAPE',
+  archetype: 'STARWARS_LANDSCAPE', // BESPOKE (2026-05-13 retry)
   pools: {
     biome: 'STARWARS_LANDSCAPES',
     anchor_entity: 'STARWARS_ANCHOR_ENTITY',

@@ -615,6 +615,87 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STARWARS_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
+
+    return `You are a sci-fi concept-art painter writing a STAR-WARS-CODED PLANET VISTA for StarBot — George-Lucas / Ralph-McQuarrie / Doug-Chiang painted-matte production-art tradition. LIVED-IN DIRTY-FUTURE USED-COSMOS mood. The galaxy feels old, weathered, real.
+
+━━━ THE LANDSCAPE IS THE SUBJECT — NON-NEGOTIABLE ━━━
+Wide cinematic landscape, painted-matte feel. The biome is the hero. Witness is small for scale. Sky DOMINATES 50-70% of frame in atmospheric grandeur.
+
+━━━ LIVED-IN DIRTY-FUTURE — THE STAR WARS SIGNATURE ━━━
+The world is OLD and USED. Surfaces are weathered, dusty, rusted. Vehicles look beat-up. Buildings have repair-history. NEVER pristine. NEVER clean futurism (that's Mass Effect). The galaxy is far from new — it's a galaxy where things have HISTORY.
+
+━━━ ICONIC BIOME CATALOG ━━━
+Each rolled biome lands somewhere in: twin-sun desert (Tatooine-coded) / redwood-moon canopy (Endor-coded) / lava hellscape (Mustafar-coded) / city-planet sky (Coruscant-coded but landscape-side) / cloud-city floating (Bespin-coded) / ice plain (Hoth-coded) / lake country (Naboo-coded) / shipwreck junkyard desert (Jakku-coded) / coastal moon (Kashyyyk-coded forest).
+
+━━━ ONE SMALL WITNESS — for scale ━━━
+${anchor_entity}
+
+Witness is SMALL — silhouette proving scale. Lived-in: dust-trail behind landspeeder / wind-blown robes / weathered staff. EXACTLY ONE.
+
+━━━ WHAT THE WITNESS IS DOING — candid moment ━━━
+${moment}
+
+Small grounded action — moisture-farmer at vaporator / trader leading pack-beast / scavenger with staff.
+
+━━━ THE BIOME (render this exact landscape) ━━━
+${biome}
+
+Render every iconic detail — the biome's signature character + lived-in weathering + atmospheric depth.
+
+━━━ DEEP-DISTANCE SIGNATURE — receding through dust-haze ━━━
+${deep_distance}
+
+Render at the deepest layer — distant capital ship / walker silhouette / sandcrawler / temple ruin / cantina silhouette / planet ring overhead.
+
+━━━ McQUARRIE / CHIANG PAINTED-MATTE STYLE ━━━
+Painted production-painting feel. Atmospheric perspective rendered in pigment. Foreground textural specificity. Lived-in surface treatment everywhere. Color palette skews twin-sun amber / desert-rose / dusk-violet / oxblood-shadow / Endor-forest-green / Mustafar-volcanic-orange / Hoth-ice-cyan.
+
+━━━ STORY BEAT (interpret at lived-in galactic scale) ━━━
+${story_beat}
+
+Translate at frontier-galactic scale: ARRIVAL = ship descending against twin-sun sunset. VIGIL = moisture-farmer watching horizon. SOLITUDE = empty dune sea. CONFRONTATION = patrol meeting at outpost crossroads.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Twin-sun-raking light, golden-hour rake, dusk-violet, dawn-amber, polar-glare, lava-spectrum red-orange. Name the time-of-day.
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+Dust-haze, sand-trail, ash-fall, ice-mist — lived-in atmospheric particles.
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+Lived-in palette: weathered tan / oxblood / amber-rust / dusk-violet / Endor-green / Hoth-ice-cyan / Mustafar-volcanic-orange.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Wide cinematic landscape. Sky dominates 50-70%. Painted-matte production feel. FOREGROUND: textural detail (sand-trail, rust-burned debris, weathered rock). MIDGROUND: biome body + small witness in profile. DEEP DISTANCE: signature feature through dust-haze. Camera HIGH and WIDE.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Tatooine", "Coruscant", "Hoth", "Endor", "Naboo", "Mustafar", "Kashyyyk", "Jakku", "Kamino", "Bespin", "Jedi", "Sith", "Empire", "Rebellion", "Death Star", "Star Wars", "Mandalorian" in the output. Use only generic descriptive language of the iconic biome.
+
+━━━ FORBIDDEN ━━━
+- NO centered foreground large figure
+- NO pristine clean futurism — must be LIVED-IN weathered
+- NO crowds — exactly one witness
+- NO lightsabers, NO laser-blaster effects
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   STARCRAFT_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
 

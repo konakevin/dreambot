@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  STARWARS_LANDSCAPE: {
+    description: 'PATH-BESPOKE — Star-Wars-franchise landscape (George Lucas / Ralph McQuarrie / Doug Chiang painted-matte tradition). Lived-in DIRTY-FUTURE used-cosmos mood. Iconic biomes — twin-sun desert / redwood-moon canopy / lava hellscape / city-planet sky / lake country / shipwreck junkyard desert. NO foreground figures dominating.',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting', 'weather_particulate'],
+      bot: [],
+      path: ['biome', 'anchor_entity', 'moment', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   STARCRAFT_LANDSCAPE: {
     description: 'PATH-BESPOKE — Starcraft-franchise landscape (Blizzard / Sam Didier / Glenn Rane / Trent Kaniuga concept-art tradition). Three faction-coded biomes: TERRAN frontier-industrial-rust + PROTOSS gold-crystalline-psionic + ZERG organic-biomech-creep-wasteland. Strong color identity per faction. NO figures dominating.',
     slots: {
