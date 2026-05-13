@@ -168,6 +168,11 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
+  // Path-bespoke pools for star-trek-landscape (2026-05-13) — Probert /
+  // Sternbach / classic-Trek painted-matte tradition.
+  STARTREK_ANCHOR_ENTITY: load('startrek_anchor_entity'),
+  STARTREK_MOMENT: load('startrek_moment'),
+  STARTREK_DEEP_DISTANCE: load('startrek_deep_distance'),
   // Path-bespoke pools for mass-effect-architecture (2026-05-13) — BioWare /
   // Sparth / Matt Rhodes clean-future-meets-distinct-alien tradition.
   MASS_EFFECT_ATMOSPHERE_DETAIL: load('mass_effect_atmosphere_detail'),
