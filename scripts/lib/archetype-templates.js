@@ -615,6 +615,75 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  ARCHITECTURE_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      story_beat,
+      composition_frame,
+      emotional_dna,
+      lighting,
+      setting,
+      atmosphere,
+      deep_distance,
+      incident,
+    } = slots;
+
+    const incidentSection = incident
+      ? `
+━━━ INCIDENT — render this visibly active in the scene ━━━
+${incident}
+
+This is a moment of disruption — render the visible evidence (steam burst, light strobe, structural damage, leaked fluid, fire). It is woven INTO the architecture, not the subject.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing an ARCHITECTURE INTERIOR scene for StarBot. NO CHARACTERS, NO PEOPLE, NO FIGURES — the architecture itself is the subject. Cinematic atmospheric interior — corridors, chambers, hangars, labs, control rooms. Output wraps with style prefix + suffix.
+
+━━━ NO FIGURES — NON-NEGOTIABLE ━━━
+This is PURE ARCHITECTURE. NO humans, NO creatures, NO figures of any kind. The empty terrifying / majestic / sacred / industrial space speaks for itself. Atmosphere is rendered through architectural detail, lighting, and condition — not through inhabitants.
+
+━━━ THE ARCHITECTURE (render this exact interior) ━━━
+${setting}
+
+━━━ ATMOSPHERIC DETAIL — render this woven through the scene ━━━
+${atmosphere}
+
+━━━ DEEP-DISTANCE SIGNATURE — visible at the far end / through doorway / down corridor ━━━
+${deep_distance}
+
+This is the far-back layer that gives depth and mystery — render it receding through atmospheric haze.
+${incidentSection}
+━━━ STORY BEAT (interpret at architectural / atmospheric scale) ━━━
+${story_beat}
+
+Translate this beat to architectural atmosphere — no figures acting it out. ARRIVAL = a door cycling open. VIGIL = a silent corridor watched by emergency lights. SOLITUDE = a cavernous chamber empty of life. Translate to space-mood.
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Cinematic architectural composition. FOREGROUND: tangible architectural element (floor grating, cable bundle, console edge, pipe, vent). MIDGROUND: the architecture body — chamber / corridor / hangar / lab. DEEP DISTANCE: the signature far-back element through doorway/down-corridor/across-hangar receding into atmospheric haze.
+
+Heavy material specificity — every surface named (biomech resin / ribbed steel / prefab metal / cryo-glass / ceramic / weathered alloy / wet-organic / etc.). DRAMATIC lighting from named sources (emergency strips / sodium fluorescents / red strobes / spotlight beams / atmospheric haze diffusing).
+
+━━━ FRANCHISE LANGUAGE ━━━
+The setting / atmosphere / deep_distance pools carry the franchise visual DNA (Aliens / Mass Effect / etc.). Honor what those pools describe. Do NOT add franchise proper nouns to the output (no "LV-426", "Citadel", "Normandy", etc.) — render the visual language the pools encode, generically named.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

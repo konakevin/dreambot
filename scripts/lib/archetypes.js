@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  ARCHITECTURE_INTERIOR: {
+    description: 'Pure architecture interior (corridors / chambers / hangars / labs) — NO FIGURE required. Structure is hero. Path-bespoke pools for setting + atmospheric detail + deep-distance signature + conditional incident drama (40% gate). Atmosphere-heavy vs ALIEN_LANDSCAPE which mandates a witness.',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting'],
+      bot: [],
+      path: ['setting', 'atmosphere', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'incident', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description: 'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',
     slots: {
