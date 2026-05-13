@@ -11,11 +11,11 @@
  */
 
 module.exports = {
-  archetype: 'ALIEN_LANDSCAPE',
+  archetype: 'DUNE_LANDSCAPE', // BESPOKE (2026-05-13 retry)
   pools: {
-    biome: 'DUNE_LANDSCAPES', // existing primary path pool
-    anchor_entity: 'DUNE_ANCHOR_ENTITY', // path-bespoke
-    moment: 'DUNE_MOMENT', // path-bespoke
-    deep_distance: 'DUNE_DEEP_DISTANCE', // path-bespoke
+    biome: 'DUNE_LANDSCAPES',
+    anchor_entity: 'DUNE_ANCHOR_ENTITY',
+    moment: 'DUNE_MOMENT',
+    deep_distance: 'DUNE_DEEP_DISTANCE',
   },
 };

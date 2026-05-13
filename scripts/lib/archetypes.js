@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  DUNE_LANDSCAPE: {
+    description: 'PATH-BESPOKE — Dune-franchise desert vista (Frank Herbert / Denis Villeneuve / David Lean / Kubrick / Lawrence-of-Arabia tradition). BIBLICAL scale. Sky dominates 50-70% of frame. Twin-sun light raking dunes. Spice-blue dawn haze. Sandstorm-wall scale. Hand-carved architectural ornament. Monumental empire grandeur. Ancient-bronze-and-stone material weight. Path-bespoke pools (biome + anchor_entity + moment + deep_distance).',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting', 'weather_particulate'],
+      bot: [],
+      path: ['biome', 'anchor_entity', 'moment', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   ALIENS_ARCHITECTURE: {
     description: 'PATH-BESPOKE — Aliens-franchise architecture interior (H.R. Giger / Ridley Scott / Cameron / Ron Cobb / Syd Mead industrial). TERRIFYING-AND-MAJESTIC mood. Biomech hive / derelict spacecraft / abandoned colony / atmospheric processor / sterile lab / dropship interior. NO figures. Path-bespoke pools (setting + atmosphere + deep_distance + 40% incident).',
     slots: {

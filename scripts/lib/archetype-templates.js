@@ -615,6 +615,81 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  DUNE_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
+
+    return `You are a sci-fi concept-art painter writing a DUNE-CODED DESERT VISTA for StarBot — Frank-Herbert / Denis-Villeneuve / David-Lean / Stanley-Kubrick / Lawrence-of-Arabia / Apocalypse-Now-desert-vista painted-matte tradition. BIBLICAL scale. The desert is the hero. Sky DOMINATES 50-70% of frame in sweeping atmospheric grandeur. The empire feels ANCIENT, VAST, and SACRED.
+
+━━━ THE DESERT IS THE SUBJECT — NON-NEGOTIABLE ━━━
+The vast desert/empire vista is the hero. Twin-sun light raking endless dunes, spice-blue dawn haze, sandstorm-wall scale, polar-ice horizon, wormtrail terrain at MASSIVE scale. The empty world is 90% of the frame. The figure or craft is small — proves scale only.
+
+━━━ ONE SMALL WITNESS — for scale ━━━
+${anchor_entity}
+
+This witness is SMALL in the frame. NOT a centered figure. Place in MIDGROUND-BACK as silhouette proving scale of the immense desert. EXACTLY ONE — never crowds.
+
+━━━ WHAT THE WITNESS IS DOING — candid moment ━━━
+${moment}
+
+Small-scale action — a grounded human moment in the vast empire. NEVER heroic posing.
+
+━━━ THE DESERT BIOME (render this exact landscape) ━━━
+${biome}
+
+This is THE scene. Render every detail of the desert's specific character — its dunes, formations, atmospheric perspective, materials. The desert vocabulary is biblical-ancient: amber dune-seas, sandstone cathedrals, hand-carved architectural ornament, weathered-bronze monuments, hexagonal basalt, polar-ice edges, methane lakes, glassed crater fields.
+
+━━━ DEEP-DISTANCE SIGNATURE — at the horizon ━━━
+${deep_distance}
+
+Render at the deepest layer — receding through dust-haze atmospheric perspective. Adds biblical-scale depth.
+
+━━━ DUNE BLOW-IT-UP AMPLIFICATION ━━━
+Stack: BIBLICAL desert scale + twin-sun light raking dunes + spice-blue dawn haze + sandstorm-wall scale + dust-haze atmospheric depth + hand-carved architectural ornament + monumental empire grandeur + ancient-bronze-and-stone material weight. Frank-Herbert × David-Lean × Denis-Villeneuve × Kurosawa × 10. Every frame a museum-poster painting. The world feels ANCIENT, VAST, SACRED.
+
+━━━ STORY BEAT (interpret at biblical desert scale) ━━━
+${story_beat}
+
+Translate at empire-scale: ARRIVAL = caravan cresting horizon. VIGIL = lone figure watching twin-suns set. SOLITUDE = empty dune-sea. CONFRONTATION = sandstorm-wall approaching pilgrim.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Twin-sun raking light, copper-amber midday, spice-blue dawn glow, oxblood dusk, polar-ice glare — name the time-of-day specifically.
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+Dust-haze, sand-spray, heat-shimmer, wind-traced ripple, atmospheric perspective.
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+Palette skews ancient-bronze, amber-sand, copper-sun, spice-blue, oxblood-shadow, polar-bone. NEVER bright cheerful.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Wide cinematic landscape, BIBLICAL scale. Sky dominates 50-70% of frame. Horizon stretches into atmospheric perspective. FOREGROUND: textural detail (dune ripples / sandstone cracks / wind-traced sand / fossilized bone-shard). MIDGROUND: the desert body + the small witness in profile. DEEP DISTANCE: signature feature looming through dust-haze. Camera HIGH and WIDE — emphasizing the scale of the empty world. Painted-matte production-painting feel.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Arrakis", "Dune", "Fremen", "Harkonnen", "Atreides", "ornithopter", "spice" (as proper noun), "Bene Gesserit", "Shai-Hulud", "Paul" in the output. Use original phrasing — "insectoid-bladed flyer" not "ornithopter", "spice-blue haze" only as descriptive color.
+
+━━━ FORBIDDEN ━━━
+- NO centered foreground large figure — witness is small in midground
+- NO bright cheerful color — desert palette is bronze / amber / copper / oxblood
+- NO modern military aesthetics — this is ancient-empire-grandeur
+- NO crowds — exactly one witness
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   ALIENS_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
 
