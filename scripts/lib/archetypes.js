@@ -54,6 +54,27 @@ const ARCHETYPES = {
     anchorScaleRange: ['MEDIUM', 'LARGE'],
   },
 
+  OUTDOOR_CITY: {
+    description: 'Architecture / megastructure / city as hero. Anchor entity at TINY/SMALL scale (scale prover only). City fills 80%+ of frame.',
+    slots: {
+      universal: [
+        'story_beat',
+        'anchor_scale',
+        'composition_frame',
+        'scale_provers',
+        'weather_particulate',
+        'emotional_dna',
+        'lighting',
+      ],
+      bot: ['anchor_entity', 'sky_layer', 'surprise_element'],
+      path: ['setting'],
+    },
+    pickN: { scale_provers: 2 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 }, // optional — fires only if path declares a 'drama' pool
+    framingModes: null,
+    anchorScaleRange: ['TINY', 'SMALL'],
+  },
+
   PHOTOREAL_ASTRO: {
     description: 'NASA-grade photoreal astrophotography — slim seed (named astronomical objects) + full canonical axes. Sonnet weaves the layers; medium wrapper adds Hubble/JWST/Chandra/EHT cranked-to-11 framing.',
     slots: {

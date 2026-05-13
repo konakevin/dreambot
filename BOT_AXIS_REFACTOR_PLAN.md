@@ -554,7 +554,7 @@ Before declaring a new bot ready:
 
 | Path | Archetype | Current state | Migration phase |
 |---|---|---|---|
-| alien-city | OUTDOOR_CITY | hand-written brief, slim pool, full canonical axes, no conditional drama | Phase 3 #4 |
+| alien-city | OUTDOOR_CITY | ✅ MIGRATED 2026-05-12 — composer-driven, reused ALIEN_CITIES (200 slim, no reseed needed), no conditional drama declared (city carries its own drama via busy-metropolis language); Kevin: "these are good" | Phase 3 #4 DONE |
 | female-explorer | CHARACTER | hand-written brief, MEDIUM-shape pool (shared ALIEN_PLANET_BIOME at 42w), full canonical, no conditional drama | Phase 3 #7 |
 | male-explorer | CHARACTER | same as female, recipe-transferred | Phase 3 #8 |
 | megastructure | OUTDOOR_CITY | hand-written brief, slim pool, full canonical, no conditional drama | Phase 3 #5 |
