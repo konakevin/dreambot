@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  STARTREK_LANDSCAPE: {
+    description: 'PATH-BESPOKE — Star-Trek-franchise landscape (Andrew Probert / Rick Sternbach / classic-Trek painted-matte tradition). Each world reads as distinct COLOR-CODED species/empire aesthetic. Red-desert temple-worlds, orange-stone monasteries, tropical paradises, matte-black Borg-cube stations, volcanic warrior-empires, classical-future Federation colonies, green-bronze Romulan-style, bone-rust Cardassian-style. NO figures (pure landscape).',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting', 'weather_particulate'],
+      bot: [],
+      path: ['biome', 'anchor_entity', 'moment', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MASS_EFFECT_ARCHITECTURE: {
     description: 'PATH-BESPOKE — Mass-Effect-franchise architecture interior (BioWare / Sparth / Matt Rhodes tradition). CLEAN-FUTURE-MEETS-DISTINCT-ALIEN. Each species/world has its own architectural language. Controlled color palette — blues, oranges, purples. Holographic UI / biotic-energy / mass-effect-fields. NO figures.',
     slots: {

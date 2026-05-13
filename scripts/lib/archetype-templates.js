@@ -615,6 +615,90 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STARTREK_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
+
+    return `You are a sci-fi concept-art painter writing a STAR-TREK-CODED PLANET VISTA for StarBot — Andrew-Probert / Rick-Sternbach / classic-Star-Trek painted-matte tradition (TNG / DS9 / Voyager / Discovery era concept art). Each world reads as a distinct COLOR-CODED species/empire aesthetic at first glance.
+
+━━━ THE LANDSCAPE IS THE SUBJECT — NON-NEGOTIABLE ━━━
+Wide cinematic landscape OR claustrophobic mechanical interior depending on world. Strong species/empire color signature readable in 2 seconds. Painted-matte concept-art mood. NO foreground figures dominating.
+
+━━━ COLOR-CODED EMPIRE LANGUAGE — THE STAR TREK SIGNATURE ━━━
+Each world has its color identity at a glance:
+- Red-rust temple-world (Vulcan-coded austere logic)
+- Orange-stone monastery-cliff (Bajoran-coded spiritual)
+- Tropical paradise pleasure-planet (Risa-coded indulgent)
+- Matte-black-green Borg-cube-station mechanical (Borg-coded mechanical horror)
+- Volcanic forge warrior-empire homeworld (Klingon-coded martial)
+- White-and-bronze classical-future Federation colony (Federation-coded optimistic)
+- Green-bronze Romulan-style ringed empire (Romulan-coded secretive)
+- Bone-rust military station decay (Cardassian-coded oppressive)
+- Pastoral farming planet (rustic generic-Trek)
+
+Pick from the rolled biome's specific color/empire code.
+
+━━━ ONE SMALL WITNESS — for scale ━━━
+${anchor_entity}
+
+This witness is SMALL — silhouette proving scale. EXACTLY ONE. Never crowds.
+
+━━━ WHAT THE WITNESS IS DOING — candid moment ━━━
+${moment}
+
+Small grounded action — pilgrim climbing temple steps / observer at canyon rim / agricultural worker tending field.
+
+━━━ THE BIOME (render this exact landscape) ━━━
+${biome}
+
+Render every detail — the world's specific architectural language, materials, color palette, time of day.
+
+━━━ DEEP-DISTANCE SIGNATURE — receding through atmospheric perspective ━━━
+${deep_distance}
+
+Render at deepest layer — temple-spire / forge-city / orbital ring / Cardassian-style station.
+
+━━━ STORY BEAT (interpret at painted-matte scale) ━━━
+${story_beat}
+
+Translate at classical-matte scale: ARRIVAL = pilgrim approaching temple complex. VIGIL = sentinel watching from monastery balcony. SOLITUDE = empty agricultural plain. CONFRONTATION = patrol meeting at gate.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Painted-matte color treatment — strong color signature per world. Sun-spectrum dialed warm or cold per empire. Never garish.
+
+━━━ WEATHER / PARTICULATE ━━━
+${weather_particulate}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+Palette is empire-coded — red-rust / orange-stone / matte-black-green / white-and-bronze / bone-rust / green-bronze / volcanic-orange.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Wide cinematic landscape. FOREGROUND: textural detail (architectural ornament / temple stone / cropland row / mechanical strut). MIDGROUND: the biome body + small witness in profile. DEEP DISTANCE: signature feature receding through atmospheric perspective. Painted-matte production-painting feel.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Vulcan", "Klingon", "Romulan", "Cardassian", "Bajoran", "Federation", "Starfleet", "Borg", "Trill", "Risa", "Deep Space Nine", "Enterprise", "Picard", "Spock", "Star Trek" in the output. Render the visual language only.
+
+━━━ FORBIDDEN ━━━
+- NO centered foreground large figure
+- NO modern Earth-coded architecture
+- NO crowds — exactly one witness
+- NO franchise nouns
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   MASS_EFFECT_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
 

@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  archetype: 'ALIEN_LANDSCAPE',
+  archetype: 'STARTREK_LANDSCAPE', // BESPOKE (2026-05-13 retry)
   pools: {
     biome: 'STARTREK_LANDSCAPES',
     anchor_entity: 'STARTREK_ANCHOR_ENTITY',
