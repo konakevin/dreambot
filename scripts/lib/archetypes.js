@@ -151,6 +151,19 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  GUARDIANS_ARCHITECTURE: {
+    description: 'PATH-BESPOKE — Guardians-of-the-Galaxy-franchise architecture interior (James Gunn / Jack Kirby cosmic / 70s album-cover sci-fi). PLAYFUL-EXTRAVAGANT-WEIRD. SATURATED COLOR signature. Less gritty than Star Wars, more whimsical-cosmic-grand. NO skulls, NO figures. Path-bespoke pools (setting + atmosphere + deep_distance + 40% incident).',
+    slots: {
+      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting'],
+      bot: [],
+      path: ['setting', 'atmosphere', 'deep_distance'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'incident', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DUNE_LANDSCAPE: {
     description: 'PATH-BESPOKE — Dune-franchise desert vista (Frank Herbert / Denis Villeneuve / David Lean / Kubrick / Lawrence-of-Arabia tradition). BIBLICAL scale. Sky dominates 50-70% of frame. Twin-sun light raking dunes. Spice-blue dawn haze. Sandstorm-wall scale. Hand-carved architectural ornament. Monumental empire grandeur. Ancient-bronze-and-stone material weight. Path-bespoke pools (biome + anchor_entity + moment + deep_distance).',
     slots: {

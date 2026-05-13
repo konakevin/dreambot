@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  archetype: 'ARCHITECTURE_INTERIOR',
+  archetype: 'GUARDIANS_ARCHITECTURE', // BESPOKE (2026-05-13 retry)
   pools: {
     setting: 'GUARDIANS_ARCHITECTURE', // existing primary path pool
     atmosphere: 'GUARDIANS_ATMOSPHERE_DETAIL',

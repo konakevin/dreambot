@@ -615,6 +615,79 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  GUARDIANS_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
+
+    const incidentSection = incident
+      ? `
+━━━ PLAYFUL-COSMIC DISRUPTION — render this visibly active ━━━
+${incident}
+
+A whimsical-cosmic event woven into the scene. Light show / floating banners / energy bloom / parade — never grim, always wonder.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a GUARDIANS-OF-THE-GALAXY-CODED ARCHITECTURE INTERIOR for StarBot — James-Gunn / Jack-Kirby-cosmic / 70s-album-cover-sci-fi tradition. PLAYFUL + EXTRAVAGANT + WEIRD + SATURATED-COLOR. Less gritty than Star Wars, more whimsical-cosmic-grand. NO FIGURES, NO PEOPLE, NO ALIENS-AS-FIGURES.
+
+━━━ MOOD — NON-NEGOTIABLE ━━━
+COSMIC + PLAYFUL + EXTRAVAGANT. Color-saturated cathedrals, kaleidoscopic geometry, temple-arcades, spire-cities. The cosmos is exuberant, weird, alive. Whimsy over dread. NEVER macabre.
+
+━━━ NO SKULLS — ABSOLUTE BAN ━━━
+NEVER render skulls of any kind. No giant celestial skull, no skull-shaped architecture, no skull-bone fragments, no cracked-cranium spaces. Cosmic-weird leans into temple-arcade / spire-city / color-saturated cathedral / kaleidoscopic geometry — NOT macabre bone forms.
+
+━━━ NO FIGURES — ABSOLUTE ━━━
+Pure architecture. NO Star-Lord, NO Rocket, NO Groot, NO humans, NO aliens-as-figures, NO foreground spaceships. Empty cosmic-weird space speaks through architectural color + light.
+
+━━━ THE ARCHITECTURE (render this exact interior) ━━━
+${setting}
+
+━━━ ATMOSPHERIC TEXTURE — saturated color is the signature ━━━
+${atmosphere}
+
+━━━ DEEP-DISTANCE SIGNATURE — receding through cosmic haze ━━━
+${deep_distance}
+
+This is the far-back layer — kaleidoscopic geometry stretching to vanishing point, color-bleed atmospheric depth.
+${incidentSection}
+━━━ SATURATED COLOR — THE GUARDIANS SIGNATURE ━━━
+Push saturation HARD. Neon-magenta, electric-cyan, gold-leaf, prism-rainbow, oxblood-magenta, plasma-violet. Color is the language. Multiple color blocks per frame. Never washed out, never grey-on-grey. Color-saturated cathedrals stacking palettes.
+
+━━━ STORY BEAT (interpret at cosmic-playful scale) ━━━
+${story_beat}
+
+Translate at cosmic-celebration scale: ARRIVAL = beam descending through atrium. VIGIL = light-show ritual. SOLITUDE = empty cathedral with prismatic glow. CONFRONTATION = ceremonial energy field.
+
+━━━ COMPOSITION FRAME ━━━
+${composition_frame}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ EMOTIONAL DNA ━━━
+${emotional_dna}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Color-saturated cosmic architecture composition. FOREGROUND: prismatic detail (refraction, crystal cluster, color-block tile). MIDGROUND: architecture body (cathedral / temple-arcade / spire-cluster / kaleidoscopic chamber). DEEP DISTANCE: color-bleed atmospheric depth receding through cosmic haze. Push color-saturation EVERYWHERE.
+
+━━━ FRANCHISE BAN — ABSOLUTE ━━━
+NEVER write "Knowhere", "Xandar", "Contraxia", "Sovereign", "Yondu", "Star-Lord", "Rocket", "Groot", "Ego", "Nova Corps", "Guardians" in the output.
+
+━━━ FORBIDDEN ━━━
+- NO skulls of any kind (Knowhere code) — hard ban
+- NO foreground figures
+- NO grim-gritty palette — saturation must be HIGH
+- NO macabre bone forms
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   DUNE_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { story_beat, composition_frame, emotional_dna, lighting, weather_particulate, biome, anchor_entity, moment, deep_distance } = slots;
 
