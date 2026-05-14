@@ -168,6 +168,65 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 ---
 
+## The 2026-05-13 franchise-path massacre — what NOT to do (CRITICAL POST-MORTEM)
+
+8 franchise-themed paths (aliens-architecture / dune-landscape / guardians-architecture / halo-landscape / mass-effect-architecture / star-trek-landscape / starcraft-landscape / starwars-landscape) were migrated through THREE consecutive attempts in one session. **All three attempts produced renders Kevin rejected as "boring hallways," "empty chambers," or "the same generic path."** Eventually ALL 8 paths were deleted from the repo entirely. ~$50-100 of Sonnet + Flux compute burned for zero shippable output.
+
+**What was tried, in order, and why each failed:**
+
+### Attempt 1 — composer migration with shared archetypes
+- Migrated 8 franchise paths to declarative composer form
+- Used 2 shared archetypes (`ALIEN_LANDSCAPE` for 5 landscapes, `ARCHITECTURE_INTERIOR` for 3 architectures)
+- Each path got 3 bespoke pools (anchor_entity / moment / deep_distance for landscapes; atmosphere / deep_distance / incident for architecture)
+- **Result:** Every path's renders looked structurally identical. Same Sonnet brief language. Same scale-prover-style framing. Franchise flavor flowed only through pool content (~30% of token budget). Kevin: "they all literally look like the same generic path."
+
+### Attempt 2 — bespoke per-path archetypes + templates
+- Replaced shared archetypes with 8 unique archetypes + 8 unique templates
+- Each template embedded franchise-specific painter/director references (McQuarrie+Chiang for Star Wars / Probert+Sternbach for Star Trek / etc.)
+- **Result:** Still the same generic look. Diagnosis: the `promptPrefixByMedium` + `mediumStyles` + `promptPrefix` (bot-level) wrapper layers injected ~150-200 generic "hyperrealistic photoreal cinematic sci-fi concept art" tokens BEFORE Sonnet's franchise-specific body. Flux first-token bias locked the visual style from those layers, not from Sonnet's bespoke content downstream. **The wrapper layer was missing from "bespoke per path."**
+
+### Attempt 3 — character-first rebuild + path-prefix override + STORY_EVENT axis
+- Added `promptPrefixByPath` per-path overrides (franchise vocabulary as the FIRST tokens Flux reads)
+- Pivoted 3 architecture paths from "no figures, pure architecture" to character-first (clone female-explorer structure with franchise characters)
+- Added mandatory `STORY_EVENT` axis (cinematic mid-action moments instead of static scenes)
+- Generated franchise character + outfit + action + hairstyle + accessory pools
+- **Result:** Cumulative bugs accumulated. The `promptSuffixByPath` still contained "NO FIGURES NO CREATURES IN FRAME" from earlier rounds, which Flux read AFTER Sonnet's character-rich body and obeyed the ban instead. By the time the bug was found, Kevin had lost faith. All 8 paths were deleted entirely.
+
+**Hard rules extracted from this failure (READ before attempting another franchise migration):**
+
+1. **Visual franchise vocabulary must land in the FIRST 50 tokens Flux reads.** That means `promptPrefixByPath` (or per-path custom mediums), NOT just the Sonnet body. The wrapper layer is load-bearing.
+2. **When pivoting a path's design (e.g., "no figures" → "character-first"), audit EVERY layer for contradictory directives.** Template + path prefix + path suffix + medium prefix + medium suffix + medium style — any of them can contain anti-pivot bans that override the new design. Use `grep -rn "NO FIGURES\|NO CHARACTERS\|empty" path-related-files/` before declaring done.
+3. **3 failed iteration rounds = STOP.** After two visibly-bad rounds on the same path, the next attempt needs structural changes (different archetype, different template approach, different mandate). Trying a third "fix one more thing" round burns trust and compute for the same result.
+4. **Pure-architecture / pure-landscape framing produces empty scenes by design.** Flux renders what's described. If the brief says "no figures, pure architecture," the render is a hallway. To get a render of a franchise scene, the FRANCHISE ICONOGRAPHY (creatures / characters / ships / weapons / etc.) must be IN THE FRAME by design — anchored on a character or a clear story event, never relegated to "atmosphere only."
+5. **Render-test ONE path end-to-end before applying the pattern to siblings.** The 8-path attempt rolled out the same flawed pattern to 8 paths simultaneously, then required 8 reverts. One-path-at-a-time would have caught the wrapper bug after path 1.
+
+---
+
+## What WORKED for cozy-sci-fi-interior (reverted to 2026-05-12 commit 2e10622 state)
+
+After tonight's collapse Kevin reverted `cozy-sci-fi-interior.js` to commit `2e10622` (function-based hand-written form). Six renders from that commit were just hearted in QA. The reverted state is the production-ready cozy path. Replicate this pattern for similar "intimate / domestic / non-epic" paths going forward.
+
+**Cozy path design that produces hearted renders:**
+
+- **Function-based hand-written brief, NOT declarative composer form.** Cozy is one of the few paths where the inline framing-roll logic (`Math.random() < 0.3`) and warmth-source-from-pool selection live in the path file itself rather than being delegated to a shared archetype + template. The cozy template is too specific (intimate-scale reinterpretation of every axis, anti-monumental anti-epic guards) to fit the generic composer well.
+- **Drops the bot-level epic-awe shared blocks.** Cozy deliberately omits `SCI_FI_AWE_BLOCK`, `CINEMATIC_COMPOSITION_BLOCK`, `IMPOSSIBLE_BEAUTY_BLOCK`, and `BLOW_IT_UP_BLOCK` — those push EPIC scale and fight the cozy intent. Other StarBot paths INCLUDE these blocks; cozy excludes them.
+- **Canonical-LITE axis selection:** only 4 universal axes (story_beat / composition_frame / emotional_dna / lighting), all REINTERPRETED at intimate scale in the template. Skips scale_provers / surprise_element / weather_particulate / alien_sky_layer (all over-stuff intimate scenes). The cozy_sci_fi_interiors pool entries (400 entries, fat-seed format) already bake personal details / warmth source / lived-in props into each seed.
+- **One conditional drama layer (40% gate): `cozy_moment`** — a small intimate human-scale action / detail caught freeze-frame. Mandatory action that fits cozy register (someone sipping tea, a hand on a console, a foot tucked under a blanket).
+- **2-mode framing roll inline in the brief:**
+  - **30% ZOOM-IN:** viewport / observation window is the dominant focal point. Cozy room elements wrap around the window. Sitting-in-cozy-looking-out shot.
+  - **70% WIDE-ROOM:** the cozy room is the subject. Lived-in details / personal mementos / warmth sources / holo-UI / worn furniture / plants / tools fill the foreground. Window is one element among many in the periphery.
+- **Per-axis intimate-scale reinterpretation:** the template explicitly tells Sonnet "if the rolled story_beat is ARRIVAL, render someone coming through a door with grocery bags. If VIGIL, someone watching stars through porthole while waiting for tea to brew." Same for emotional_dna and composition_frame. Generic axis pools serve cozy renders by getting translated to the cozy register.
+- **Long inline brief with rich SCI-FI ANCHORS catalog:** window / bulkhead-rib / holographic-UI / anti-grav-detail / alien-biology / sci-fi-material / tech-as-furniture / sci-fi-instrumentation / cosmic-light-source — pick at least 3 to "decorate the cozy room." This is what makes cozy READ as sci-fi within 1 second instead of generic-rustic-cottage.
+- **Sexy-or-no-figures rule:** if the cozy_moment names a person, render them minimally visible (from behind / partial / hands only). If face shows, must be conventionally attractive. ABSOLUTELY no uncanny / ugly / weird humans.
+- **Very long FORBIDDEN section.** 25+ specific anti-patterns: NO monumental scale / NO biblical awe / NO action set-pieces / NO weird humans / NO Christ-pose / NO clinical lab / NO blanket forts / etc. Cozy is so easy to derail that the brief over-bans.
+
+**Generalization for future intimate paths:**
+- Keep these paths in hand-written function form. The composer architecture is for paths that share archetype structure; cozy / intimate / domestic / "deep interior corner" paths are one-off briefs that bake in too much axis-reinterpretation to fit the generic composer.
+- Drop the epic-awe shared blocks for any "non-spectacle" path.
+- Use 2-3 framing modes via inline `Math.random()` for compositional variety without needing archetype framingModes wiring.
+
+---
+
 ## "Bespoke per path" extends to the PROMPT WRAPPER LAYER, NOT just pools (CRITICAL — 2026-05-13)
 
 Pool variety is INSUFFICIENT for a path to feel distinct from other paths sharing the same bot. **The prompt wrapper layer dominates Flux's first-token bias.** A bot-level / medium-level prefix injected before Sonnet's bespoke body locks the visual style BEFORE Flux reads any pool content.
