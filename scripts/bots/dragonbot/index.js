@@ -60,7 +60,7 @@ module.exports = {
     'dragon-scene':
       'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, traditional Western high-fantasy DRAGON as the hero — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long muscular tail (NOT a serpent NOT a wyvern), jaw-dropping epic fantasy landscape with multi-layer depth, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Warcraft + D&D visual lineage, awe-inducing concept-art masterwork',
     'female-warrior':
-      'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, a single heroic WOMAN of a SPECIFIC fantasy lineage (drow OR tiefling OR dragonborn OR elf OR dwarf OR orc OR halfling OR aasimar OR genasi) as the hero at 25-40% of frame full body mid-action, CANDID PEACEFUL ADVENTURING moment between battles (NO combat NO mid-strike NO violence — weapons holstered or being maintained only), epic fantasy landscape as her stage, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Witcher visual lineage, awe-inducing concept-art masterwork',
+      'epic painted oil fantasy art, painterly concept-art masterwork, a single heroic adventurer WOMAN of a SPECIFIC fantasy lineage (drow OR wood-elf OR high-elf OR half-elf OR halfling OR mountain-dwarf OR hill-dwarf OR half-orc OR orc OR human-coded varied culture: Norse / Persian / Mongol / Aztec / Roman / Bedouin) as described in the scene, at 25-40% of frame full body mid-action, CANDID PEACEFUL ADVENTURING moment between battles (NO combat NO mid-strike NO violence — weapons holstered or being maintained only), epic fantasy landscape as her stage, painterly atmospheric grandeur, awe-inducing concept-art masterwork',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -197,7 +197,7 @@ module.exports = {
     // muted and more uniform; with it off, Sonnet's single-pass output gave
     // more lush + colorful + varied renders. Kevin adopted this as the
     // baseline for the path.
-    skipPaths: ['artsy-girl'],
+    skipPaths: ['artsy-girl', 'female-warrior'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
