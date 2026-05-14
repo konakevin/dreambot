@@ -32,6 +32,13 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
+  // system to DragonBot as a fresh-test on a new bot per Kevin).
+  DRAGON_SCENE_DRAGON: load('dragon_scene_dragon'),
+  DRAGON_SCENE_ACTION: load('dragon_scene_action'),
+  DRAGON_SCENE_LANDSCAPE: load('dragon_scene_landscape'),
+  DRAGON_SCENE_DRAMA: load('dragon_scene_drama'),
+  DRAGON_SCENE_SURPRISE_ELEMENT: load('dragon_scene_surprise_element'),
   FANTASY_CHARACTERS: load('fantasy_characters'),
   FANTASY_LANDSCAPES: load('fantasy_landscapes'),
   WOW_LANDSCAPES: load('wow_landscapes'),

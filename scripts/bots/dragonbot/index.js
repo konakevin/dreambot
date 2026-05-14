@@ -51,6 +51,14 @@ module.exports = {
 
   // Override prefix to empty (matches FaeBot exactly).
   promptPrefix: '',
+
+  // Per-path prefix override — locks Flux's first-token interpretation to
+  // the path's visual lineage. Engine prepends this BEFORE all other prefix
+  // layers (scripts/lib/botEngine.js line 981).
+  promptPrefixByPath: {
+    'dragon-scene':
+      'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, traditional Western high-fantasy DRAGON as the hero — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long muscular tail (NOT a serpent NOT a wyvern), jaw-dropping epic fantasy landscape with multi-layer depth, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Warcraft + D&D visual lineage, awe-inducing concept-art masterwork',
+  },
   // Bit-identical to FaeBot's PROMPT_SUFFIX (with forest-specific phrases
   // dropped — "atmospheric forest illustration" and the
   // "Brian Froud + Mononoke + Magic-the-Gathering green-mana" lineage,
@@ -216,10 +224,37 @@ module.exports = {
     };
   },
 
+  // Bot-level pool defaults for the new composer architecture (2026-05-14).
+  // Universal axes resolve from these when a path doesn't override.
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'ATMOSPHERES',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`DragonBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`DragonBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`DragonBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

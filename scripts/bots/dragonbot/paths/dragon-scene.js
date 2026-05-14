@@ -1,66 +1,33 @@
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+/**
+ * DragonBot dragon-scene path — declarative form (2026-05-14).
+ *
+ * First DragonBot path migrated to the new bespoke biome+axes system.
+ * Western dragon is the SUBJECT in a jaw-dropping fantasy landscape.
+ * NO characters/riders/humans.
+ *
+ * Path-bespoke pools (5 × 30 entries = Stage 1 MVP):
+ *   - dragon: DRAGON_SCENE_DRAGON (Western dragon anatomy + visual identity)
+ *   - action: DRAGON_SCENE_ACTION (mid-action cinematic moment)
+ *   - landscape: DRAGON_SCENE_LANDSCAPE (epic fantasy biome)
+ *   - drama: DRAGON_SCENE_DRAMA (40% gated environmental event)
+ *   - surprise_element: DRAGON_SCENE_SURPRISE_ELEMENT (tiny secondary subject)
+ *
+ * Pre-refactor file preserved at paths/legacy/dragon-scene.js.
+ *
+ * See:
+ *   - scripts/lib/archetypes.js          (DRAGON_SCENE slot definitions)
+ *   - scripts/lib/archetype-templates.js (DRAGON_SCENE brief template)
+ *   - scripts/bots/dragonbot/index.js    (promptPrefixByPath wrapper)
+ *   - BOT_SCENE_QUALITY_PLAYBOOK.md      (architecture decision record)
+ */
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const dragon = picker.pickWithRecency(pools.DRAGON_TYPES, 'dragon_type');
-  const landscape = picker.pickWithRecency(pools.FANTASY_LANDSCAPES, 'fantasy_landscape');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are a fantasy concept-art painter writing AWE-INDUCING DRAGON scenes for DragonBot — the dragon is hero. Traditional winged high-fantasy dragons in jaw-dropping landscapes. LOTR / GoT / Elden Ring / Skyrim energy. The scene should make the viewer GASP. Output wraps with style prefix + suffix.
-
-${blocks.EPIC_FANTASY_BLOCK}
-
-${blocks.PAINTERLY_ILLUSTRATION_BLOCK}
-
-${blocks.CINEMATIC_COMPOSITION_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ NO CHARACTERS ━━━
-No humans, no riders, no people. Dragon only.
-
-━━━ TRADITIONAL WESTERN DRAGON ANATOMY (NON-NEGOTIABLE) ━━━
-This is a TRADITIONAL high-fantasy WESTERN dragon — Smaug, the LOTR / GoT / Elden Ring / Skyrim / Warcraft / D&D archetype. Anatomy MUST include:
-- FOUR muscular legs (NOT a wingless wyrm, NOT a snake, NOT a serpent)
-- TWO MASSIVE membrane wings (bat-like, scaled, ribbed) — wings ALWAYS visible (folded against the back, half-furled, or fully extended)
-- HORNED head with reptilian skull — sharp horns, swept-back crests, jaw with rows of fangs
-- THICK SCALED body with armored plating, muscular shoulders, broad chest
-- LONG THICK TAIL (not a snake-tail — a powerful muscular tail, sometimes spike-tipped or fan-tipped)
-- CLAWED forefeet and hindfeet
-- Reptilian-mammalian hybrid silhouette — like a giant winged bull-lizard, NEVER like a python with arms
-
-ABSOLUTELY NOT:
-- Eastern Chinese-style wingless serpentine dragon (those are not for this path)
-- Snake / serpent / wyrm / lindworm body shape
-- Wingless or two-legged wyvern (this path requires 4 legs + 2 wings = TRUE DRAGON)
-- Sky-snake / spirit-serpent / cloud-snake — these are SERPENTS, not dragons
-
-━━━ THE DRAGON ━━━
-${dragon}
-
-━━━ THE LANDSCAPE (as epic as the dragon) ━━━
-${landscape}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Dragon dominates a vast, lush, dynamically-lit landscape. The setting matches the dragon's grandeur — not a flat backdrop. Depth on depth — foreground detail, midground dragon, background terrain stacked in layers. Sell scale through peripheral elements (tiny trees, distant castles, storm clouds). NEVER "tail wrapped around tower." Vary poses broadly: perched, mid-breath, sleeping on hoard, emerging from cave, silhouetted against sky, mid-roar, resting head on forepaws.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DRAGON_SCENE',
+  pools: {
+    dragon: 'DRAGON_SCENE_DRAGON',
+    action: 'DRAGON_SCENE_ACTION',
+    landscape: 'DRAGON_SCENE_LANDSCAPE',
+    drama: 'DRAGON_SCENE_DRAMA', // 40% gated conditional
+    surprise_element: 'DRAGON_SCENE_SURPRISE_ELEMENT',
+  },
 };

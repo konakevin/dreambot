@@ -617,6 +617,88 @@ Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO p
   },
 
 
+  DRAGON_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, dragon, action, landscape, surprise_element, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ENVIRONMENTAL DRAMA — render this visibly in the scene ━━━
+${drama}
+
+This is an atmospheric event happening in the world around the dragon — render it as a visible secondary focal point (NOT eclipsing the dragon, but adding awe to the frame).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an AWE-INDUCING DRAGON scene for DragonBot — a traditional Western high-fantasy dragon as the hero in a jaw-dropping fantasy landscape. Frank Frazetta + Brian Froud + Brom + Hildebrandt + Michael Whelan painted-fantasy-novel tradition. LOTR / GoT / Elden Ring / Skyrim / Warcraft / D&D energy. The scene should make the viewer GASP.
+
+━━━ TRADITIONAL WESTERN DRAGON ANATOMY — NON-NEGOTIABLE ━━━
+This is a TRADITIONAL high-fantasy WESTERN dragon — Smaug / LOTR / GoT / Elden Ring / Skyrim / Warcraft / D&D archetype. Anatomy MUST include:
+- FOUR muscular legs (NOT a wingless wyrm, NOT a snake, NOT a serpent)
+- TWO MASSIVE membrane wings (bat-like, scaled, ribbed) — wings ALWAYS visible (folded against the back, half-furled, or fully extended)
+- HORNED head with reptilian skull — sharp horns, swept-back crests, jaw with rows of fangs
+- THICK SCALED body with armored plating, muscular shoulders, broad chest
+- LONG THICK TAIL (not a snake-tail — a powerful muscular tail, sometimes spike-tipped or fan-tipped)
+- CLAWED forefeet and hindfeet
+- Reptilian-mammalian hybrid silhouette — like a giant winged bull-lizard, NEVER like a python with arms
+
+ABSOLUTELY NOT:
+- Eastern Chinese-style wingless serpentine dragon
+- Snake / serpent / wyrm / lindworm body shape
+- Wingless or two-legged wyvern (this path requires 4 legs + 2 wings = TRUE DRAGON)
+- Sky-snake / spirit-serpent / cloud-snake
+
+━━━ NO CHARACTERS — ABSOLUTE ━━━
+No humans, no riders, no people. Dragon ONLY. (Tiny secondary subjects like a distant knight silhouette via the surprise_element axis are OK at scale-prover scale only — never foreground figures.)
+
+━━━ THE DRAGON ━━━
+${dragon}
+
+Render the EXACT anatomy + color + horn / wing / body distinguishing features described. Wings ALWAYS visible.
+
+━━━ THE ACTION — what the dragon is doing RIGHT NOW (mid-action cinematic moment) ━━━
+${action}
+
+The dragon is captured at a LOADED INSTANT — mid-roar, mid-flight, mid-breath, mid-strike, perched-watching, sleeping-on-hoard. NEVER static "standing in front of camera." The action defines body position + visible motion (jaw / wings / claws / tail / fire / smoke / debris).
+
+━━━ THE LANDSCAPE (the stage — epic high-fantasy biome) ━━━
+${landscape}
+
+Render every detail. Depth on depth — FOREGROUND tangible detail (rocks / vegetation / ruins) → MIDGROUND landscape body + the dragon → DEEP DISTANCE atmospheric layers stacked. Never flat backdrop.
+${dramaSection}
+━━━ SURPRISE ELEMENT — secondary subject for added story ━━━
+${surprise_element}
+
+Place at midground or deep midground — a small detail that implies the wider world. NEVER foreground or competing with the dragon for attention.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Dragon dominates a vast, lush, dynamically-lit landscape. Setting matches the dragon's grandeur — not a flat backdrop. Depth-on-depth: foreground tactile detail → midground dragon body + setting → background terrain stacked in atmospheric layers. Scale proven through peripheral elements (tiny trees / distant castles / storm clouds / surprise element silhouette).
+
+VARY POSES BROADLY — perched / mid-breath / sleeping on hoard / emerging from cave / silhouetted against sky / mid-roar / resting head on forepaws / banking in flight / clutching prey / clawing the sky / taking off / landing. Never the same composition twice.
+
+NEVER "tail wrapped around tower" cliché. NEVER tiny dragon in vast empty sky.
+
+━━━ STRUCTURE — write 100-130 words ━━━
+Open with the dragon + its action ("Crimson dragon mid-roar with bone-spike crest, jaw extended over volcanic peaks..."). Then weave in: landscape backdrop with depth layers, lighting/atmosphere, surprise element at midground, any drama event, color palette and mood. Painted-fantasy-novel finish.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
