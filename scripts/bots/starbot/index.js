@@ -44,9 +44,9 @@ module.exports = {
     // portraits). Tested 2026-05-11 in R6 of female-explorer iteration.
     'female-explorer': 'canvas',
     'male-explorer': 'canvas',
-    // megastructure (cyberpunk-building-in-city archetype) — anime medium
-    // for Akira / Ghost in the Shell / Cyberpunk Edgerunners aesthetic.
-    // Kevin asked 2026-05-12 to test anime spin on the iconic-building feel.
+    // megastructure: anime medium (richer color / Akira / Ghost-in-the-Shell
+    // / Cyberpunk Edgerunners aesthetic) — re-enabled 2026-05-14 after a brief
+    // starbot_hyperreal swap produced less-colorful results.
     'megastructure': 'anime',
   },
 
