@@ -36,6 +36,7 @@ module.exports = {
   // from female-warrior. 12-axis split system per new playbook. NSFW-clean
   // — no artist callouts, no cheesecake language. Sleek adventuring gear
   // across all D&D × LOTR fantasy classes + races).
+  FEMALE_ADVENTURER_RACE: load('female_adventurer_race'),
   FEMALE_ADVENTURER_CLASS: load('female_adventurer_class'),
   FEMALE_ADVENTURER_OUTFIT: load('female_adventurer_outfit'),
   FEMALE_ADVENTURER_ACCESSORY: load('female_adventurer_accessory'),

@@ -41,8 +41,11 @@ module.exports = {
     landscape: 'FEMALE_ADVENTURER_LANDSCAPE',
     drama: 'FEMALE_ADVENTURER_DRAMA',
     surprise_element: 'FEMALE_ADVENTURER_SURPRISE_ELEMENT',
-    // Reused bot-level DNA
-    race: 'FANTASY_RACE',
+    // Forked race pool (2026-05-14 R2): female-anatomy-clean version of
+    // FANTASY_RACE. Beards stripped from dwarven entries, neutral build
+    // language on orcs. Fixes R1 gender-slip on Mahakaman dwarf render.
+    race: 'FEMALE_ADVENTURER_RACE',
+    // Reused bot-level DNA (gender-neutral; no beards in these)
     skin: 'WARRIOR_SKIN',
     eyes: 'WARRIOR_EYES',
     hair_color: 'WARRIOR_HAIR_COLOR',
