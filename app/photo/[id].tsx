@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
@@ -94,6 +94,13 @@ export default function PhotoDetailScreen() {
     : queryPosts;
   const isLoading = posts.length === 0 && (isAlbum ? albumQuery.isLoading : contextQuery.isLoading);
   const refetch = isAlbum ? albumQuery.refetch : contextQuery.refetch;
+
+  // Context mode (deep link / notification tap) can error if the target
+  // upload isn't readable by the current user — RLS-filtered private posts,
+  // deleted posts, blocked authors. Postgrest returns PGRST116 ("Cannot
+  // coerce the result to a single JSON object") in all three cases.
+  // Without this guard the screen renders an empty FullScreenFeed (black).
+  const targetUnavailable = !isAlbum && !!contextQuery.error && posts.length === 0;
   const handleEndReached = useCallback(() => {
     // Source mode: paginate the grid's underlying query.
     if (storeModeRef.current && sourceQuery?.hasNextPage && !sourceQuery.isFetchingNextPage) {
@@ -233,6 +240,29 @@ export default function PhotoDetailScreen() {
   // (fullScreenGestureEnabled: true in SCREEN_PRESETS.MODAL_SWIPEABLE).
   // No custom GestureDetector needed — native gesture coordinates with
   // FlatList scroll automatically.
+  if (targetUnavailable) {
+    return (
+      <View style={s.root}>
+        <StatusBar hidden />
+        <Animated.View style={[s.backButton, overlayStyle]}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+            <View style={s.backCircle}>
+              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+        <View style={s.unavailable}>
+          <Ionicons name="lock-closed" size={40} color="#9CA3AF" />
+          <Text style={s.unavailableTitle}>Post unavailable</Text>
+          <Text style={s.unavailableBody}>This dream is private or no longer available.</Text>
+          <TouchableOpacity style={s.unavailableBtn} onPress={() => router.back()}>
+            <Text style={s.unavailableBtnText}>Go back</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={s.root}>
       <StatusBar hidden />
@@ -272,5 +302,37 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  unavailable: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+  },
+  unavailableTitle: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: '600',
+    marginTop: 16,
+  },
+  unavailableBody: {
+    color: '#9CA3AF',
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  unavailableBtn: {
+    marginTop: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 24,
+    backgroundColor: '#1A1A2E',
+    borderWidth: 1,
+    borderColor: '#2D2D44',
+  },
+  unavailableBtnText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '500',
   },
 });

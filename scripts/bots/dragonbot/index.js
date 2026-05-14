@@ -193,6 +193,11 @@ module.exports = {
   // Two-pass Sonnet→Haiku polish.
   twoPassPolish: {
     enabled: true,
+    // 2026-05-13 — artsy-girl skips Haiku polish. With it on, renders were
+    // muted and more uniform; with it off, Sonnet's single-pass output gave
+    // more lush + colorful + varied renders. Kevin adopted this as the
+    // baseline for the path.
+    skipPaths: ['artsy-girl'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
