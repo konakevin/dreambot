@@ -26,10 +26,15 @@ async function saveToPhotos(id: string, imageUrl: string) {
 
     const downloaded = await File.downloadFileAsync(imageUrl, dest);
 
-    await MediaLibrary.saveToLibraryAsync(downloaded.uri);
+    // Use createAssetAsync (modern PHPhotoLibrary.performChanges API), not
+    // saveToLibraryAsync — the latter wraps the legacy
+    // UIImageWriteToSavedPhotosAlbum which intermittently fails with
+    // "Asset couldn't be saved to photo library: Unknown error" on iOS 18+.
+    await MediaLibrary.createAssetAsync(downloaded.uri);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     Toast.show('Saved to photos', 'checkmark-circle');
-  } catch {
+  } catch (err) {
+    if (__DEV__) console.warn('[saveToPhotos] failed', err);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     Toast.show('Failed to save image', 'close-circle');
   }
