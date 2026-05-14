@@ -260,6 +260,46 @@ After tonight's collapse Kevin reverted `cozy-sci-fi-interior.js` to commit `2e1
 
 ---
 
+## Stuffed wrappers GRIDLOCK diversity — keep promptPrefixByPath short (CRITICAL — 2026-05-14)
+
+The companion-lesson to the section below. The wrapper is a load-bearing first-tokens lever, but **adding tokens to it does NOT help — it actively hurts**. Long wrappers lock Flux on the most-trained generic archetype matching the wrapper's nouns, before Sonnet's diversity-rich body can land.
+
+**The 2026-05-14 female-adventurer rebuild incident:**
+
+I added a 120-token `promptPrefixByPath['female-adventurer']` wrapper:
+
+```
+painterly fantasy concept art, oil-painting tradition, soft brushwork,
+a single WOMAN of a SPECIFIC D&D × LOTR fantasy race (high-elf OR wood-elf
+OR drow OR half-elf OR ... long OR-list ...) of a specific class (rogue
+OR ranger OR sorceress OR ...) at 25-40% of frame full body mid-action,
+candid adventuring moment out in the wild — sleek functional adventuring
+gear (NOT bulky/massive armor, NOT minimal-coverage cheesecake), weapons
+holstered or carried only, painterly atmospheric grandeur, awe-inducing
+concept-art masterwork
+```
+
+Intent: lock the diversity (specific race + specific class) and NSFW-clean (no cheesecake gear) signals in the first tokens Flux reads.
+
+Result: every render was the SAME pale-European pretty heroine in cream tunic-dress + brown belt + sword + boots against a mountain backdrop, regardless of what race / class / outfit / landscape Sonnet's body rolled. Flux locked on "fantasy adventurer woman + sleek gear" from the wrapper's nouns and ignored the body's "rock gnome" or "Witcher orc" or "Mahakaman dwarf" as flavoring.
+
+The fix: emptied the wrapper to `''`. Sonnet's body became the first content tokens after the medium tag. Immediately on the next 5-render batch, races (halfling / Zandalari troll / Mahakaman dwarf / Númenórean / Eladrin), outfits (samurai scale / Bedouin wraps / bearskin furs / desert layers / moss-hide), scenes (flooded temple / blood-moon watchtower / alpine signpost / tundra rapids / red slot canyon), and poses all diversified.
+
+**Pre-axis-migration historic renders (May 3 era)** had varied races (tabaxi with fur, drow with obsidian skin, night elf with purple-tinted moon-pale skin, jaguar-furred warrior) because the wrapper there was literally `"fantasy concept art, painterly,"` — 4 tokens — letting Sonnet's race-led body land first.
+
+**Hard rules:**
+
+1. **Default `promptPrefixByPath` to empty** unless you've measured that adding tokens INCREASES diversity rather than reducing it. Short wins.
+2. **OR-lists in wrappers don't add diversity — they LOCK on the trained-default for the wrapper's archetype noun.** `"fantasy race (high-elf OR drow OR tiefling OR ...)"` reads to Flux as "fantasy race" with a flavor-list it can ignore. Flux picks the most-trained interpretation (default human). The race needs to be NAMED SINGULARLY in the body Sonnet writes, not enumerated as choices in the wrapper.
+3. **"NOT cheesecake" / "NOT bulky armor" guards in the wrapper don't work.** Negation in the first-tokens layer doesn't beat Flux's training-default. Solve cheesecake by stripping cheesecake-DNA from the POOL entries (outfit pool language) and from artist references (Frazetta/Brom/Vallejo) — not by wrapper negations.
+4. **When a path's renders feel homogenous, audit the wrapper FIRST.** Before changing pools, templates, or mediums. Stuffed wrappers are the most common diversity-killer. Match working-bot pattern (FaeBot / pre-migration DragonBot): `promptPrefix: ''` + minimal `mediumStyles` tag + let Sonnet's body lead.
+
+**Per Kevin's pinned memory:** *"Working bots have SHORT prompt prefixes + multi-medium rotation, not stuffed custom medium fragments."* Stuffed wrappers are the second-most-common path failure mode (after pool DNA contamination, see "Pool DNA dominates brief admonitions").
+
+**Diagnostic test:** count tokens in `promptPrefixByPath[path]`. If it's >20 tokens AND the path's renders feel homogenous, empty the wrapper and re-test. Single-variable change. If diversity returns → wrapper was the lock.
+
+---
+
 ## "Bespoke per path" extends to the PROMPT WRAPPER LAYER, NOT just pools (CRITICAL — 2026-05-13)
 
 Pool variety is INSUFFICIENT for a path to feel distinct from other paths sharing the same bot. **The prompt wrapper layer dominates Flux's first-token bias.** A bot-level / medium-level prefix injected before Sonnet's bespoke body locks the visual style BEFORE Flux reads any pool content.
