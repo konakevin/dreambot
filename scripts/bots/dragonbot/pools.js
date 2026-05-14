@@ -39,6 +39,15 @@ module.exports = {
   FEMALE_WARRIOR_LANDSCAPE: load('female_warrior_landscape'),
   FEMALE_WARRIOR_DRAMA: load('female_warrior_drama'),
   FEMALE_WARRIOR_SURPRISE_ELEMENT: load('female_warrior_surprise_element'),
+  // Path-bespoke pools for artsy-girl (2026-05-13 — frozen clone of
+  // female_warrior_* at the moment it produced the Frazetta-cheesecake
+  // painted-fantasy-cover renders Kevin loved). Independent seed files —
+  // future female_warrior_* edits do NOT affect this path.
+  ARTSY_GIRL_OUTFIT: load('artsy_girl_outfit'),
+  ARTSY_GIRL_ACTION: load('artsy_girl_action'),
+  ARTSY_GIRL_LANDSCAPE: load('artsy_girl_landscape'),
+  ARTSY_GIRL_DRAMA: load('artsy_girl_drama'),
+  ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
   DRAGON_SCENE_DRAGON: load('dragon_scene_dragon'),

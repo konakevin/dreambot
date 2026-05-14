@@ -15,6 +15,7 @@ const pathBuilders = {
   'epic-moment': require('./paths/epic-moment'),
   'dragon-scene': require('./paths/dragon-scene'),
   'female-warrior': require('./paths/female-warrior'),
+  'artsy-girl': require('./paths/artsy-girl'),
   'male-warrior': require('./paths/male-warrior'),
   'cozy-arcane': require('./paths/cozy-arcane'),
   'arcane-halls': require('./paths/arcane-halls'),
@@ -60,6 +61,12 @@ module.exports = {
       'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, traditional Western high-fantasy DRAGON as the hero — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long muscular tail (NOT a serpent NOT a wyvern), jaw-dropping epic fantasy landscape with multi-layer depth, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Warcraft + D&D visual lineage, awe-inducing concept-art masterwork',
     'female-warrior':
       'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, a single heroic WOMAN of a SPECIFIC fantasy lineage (drow OR tiefling OR dragonborn OR elf OR dwarf OR orc OR halfling OR aasimar OR genasi) as the hero at 25-40% of frame full body mid-action, CANDID PEACEFUL ADVENTURING moment between battles (NO combat NO mid-strike NO violence — weapons holstered or being maintained only), epic fantasy landscape as her stage, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Witcher visual lineage, awe-inducing concept-art masterwork',
+    // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
+    // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
+    // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
+    // future female-warrior tuning belongs above; this is the locked snapshot.
+    'artsy-girl':
+      'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, a single heroic WOMAN of a SPECIFIC NON-DEFAULT-HUMAN fantasy lineage — render the race anatomy and tone as the ABSOLUTE FIRST visual property (drow = obsidian skin OR dragonborn = scaled face OR tiefling = horns AND red/violet skin OR orc = green skin AND tusks OR night-elf = purple skin AND glowing silver eyes OR blood-elf = glowing fel-green eyes OR aasimar = alabaster with inner glow OR genasi = elemental-tinted skin) — race is NEVER a pale-European-woman default, at 25-40% of frame full body mid-action wearing fitted BATTLE-READY armor (chainmail / plate / engraved leather / dragonscale + visible weapon + functional pauldrons-bracers-greaves — NO fur NO soft cloth NO peasant dress), CANDID PEACEFUL ADVENTURING moment between battles (NO combat NO violence — weapons holstered or being maintained), epic fantasy landscape as her stage, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Witcher visual lineage, awe-inducing concept-art masterwork',
   },
   // Bit-identical to FaeBot's PROMPT_SUFFIX (with forest-specific phrases
   // dropped — "atmospheric forest illustration" and the
@@ -76,6 +83,7 @@ module.exports = {
     'epic-moment': 'black-forest-labs/flux-1.1-pro',
     'dragon-scene': 'black-forest-labs/flux-1.1-pro',
     'female-warrior': 'black-forest-labs/flux-1.1-pro',
+    'artsy-girl': 'black-forest-labs/flux-1.1-pro',
     'male-warrior': 'black-forest-labs/flux-1.1-pro',
     'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
     'arcane-halls': 'black-forest-labs/flux-1.1-pro',
@@ -127,6 +135,7 @@ module.exports = {
     'epic-moment',
     'dragon-scene',
     'female-warrior',
+    'artsy-girl',
     'male-warrior',
     'cozy-arcane',
     'arcane-halls',
@@ -146,6 +155,7 @@ module.exports = {
     'epic-moment': 3,
     'dragon-scene': 4,
     'female-warrior': 5,
+    'artsy-girl': 4,
     'male-warrior': 4,
     'cozy-arcane': 3,
     'arcane-halls': 3,
@@ -187,6 +197,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {
       'female-warrior': '80-110',
+      'artsy-girl': '80-110',
       'male-warrior': '80-110',
       'dragon-scene': '80-110',
     },
@@ -201,6 +212,7 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       'female-warrior': 'female',
+      'artsy-girl': 'female',
       'male-warrior': 'male',
       'dragon-scene': 'creature',
       'landscape': 'scene',
