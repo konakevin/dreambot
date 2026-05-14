@@ -43,7 +43,8 @@ module.exports = {
   // female_warrior_* at the moment it produced the Frazetta-cheesecake
   // painted-fantasy-cover renders Kevin loved). Independent seed files —
   // future female_warrior_* edits do NOT affect this path.
-  ARTSY_GIRL_OUTFIT: load('artsy_girl_outfit'),
+  ARTSY_GIRL_ARMOR_STYLE: load('artsy_girl_armor_style'),
+  ARTSY_GIRL_WEAPON: load('artsy_girl_weapon'),
   ARTSY_GIRL_ACTION: load('artsy_girl_action'),
   ARTSY_GIRL_LANDSCAPE: load('artsy_girl_landscape'),
   ARTSY_GIRL_DRAMA: load('artsy_girl_drama'),

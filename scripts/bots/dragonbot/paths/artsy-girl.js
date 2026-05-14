@@ -1,22 +1,20 @@
 /**
- * DragonBot artsy-girl path — frozen snapshot (2026-05-13).
+ * DragonBot artsy-girl path.
  *
- * EXACT CLONE of female-warrior at the moment it was producing
- * Frazetta-cheesecake painted-fantasy-cover renders that Kevin loved
- * (R3 batch: lkz161 / zi3xxo / 94utqp / pqgzmb / madto1). The clone
- * captures the FULL state — archetype, template, pools, and path-prefix
- * wrapper — so that ongoing female-warrior tuning never disturbs this
- * aesthetic.
+ * 2026-05-13 — Started as a snapshot clone of female-warrior at the
+ * Frazetta-cheesecake-cover state Kevin loved. Phase 2 split the single
+ * outfit axis into independent armor_style + weapon axes for
+ * combinatorial variety (30 × 30 = 900 unique pairings vs. 30 fixed pairs).
  *
- * Bespoke pools (cloned, independent from female_warrior_*):
- *   - action: ARTSY_GIRL_ACTION
- *   - landscape: ARTSY_GIRL_LANDSCAPE
+ * Bespoke pools:
+ *   - armor_style: ARTSY_GIRL_ARMOR_STYLE (the outfit, no weapon)
+ *   - weapon: ARTSY_GIRL_WEAPON (signature weapon, rolled independently)
+ *   - action: ARTSY_GIRL_ACTION (peaceful candid moments)
+ *   - landscape: ARTSY_GIRL_LANDSCAPE (fantasy biomes)
  *   - drama: ARTSY_GIRL_DRAMA (40% gated)
  *   - surprise_element: ARTSY_GIRL_SURPRISE_ELEMENT
- *   - outfit: ARTSY_GIRL_OUTFIT (path-bespoke)
  *
- * Reused character DNA pools (shared with female-warrior — these are
- * shared on purpose, they're the lineage DNA stack used across the bot):
+ * Reused character DNA pools (shared with female-warrior):
  *   - race: FANTASY_RACE
  *   - skin: WARRIOR_SKIN
  *   - eyes: WARRIOR_EYES
@@ -24,27 +22,25 @@
  *   - hairstyle: FEMALE_WARRIOR_HAIRSTYLES
  *   - accessory: FEMALE_WARRIOR_ACCESSORIES
  *   - warrior_archetype: FEMALE_WARRIORS
- *
- * Archetype + template are CLONED (ARTSY_GIRL) so they're locked.
- * Path-prefix wrapper in dragonbot/index.js is cloned exactly.
  */
 
 module.exports = {
   archetype: 'ARTSY_GIRL',
   pools: {
-    // Path-bespoke pools (cloned, frozen)
+    // Path-bespoke pools
     action: 'ARTSY_GIRL_ACTION',
     landscape: 'ARTSY_GIRL_LANDSCAPE',
     drama: 'ARTSY_GIRL_DRAMA',
     surprise_element: 'ARTSY_GIRL_SURPRISE_ELEMENT',
     warrior_archetype: 'FEMALE_WARRIORS',
-    // Character DNA pools (shared with female-warrior)
+    // Character DNA pools
     race: 'FANTASY_RACE',
     skin: 'WARRIOR_SKIN',
     eyes: 'WARRIOR_EYES',
     hair_color: 'WARRIOR_HAIR_COLOR',
     hairstyle: 'FEMALE_WARRIOR_HAIRSTYLES',
-    outfit: 'ARTSY_GIRL_OUTFIT',
+    armor_style: 'ARTSY_GIRL_ARMOR_STYLE',
+    weapon: 'ARTSY_GIRL_WEAPON',
     accessory: 'FEMALE_WARRIOR_ACCESSORIES',
   },
 };
