@@ -180,61 +180,6 @@ const POOL_RECIPES = {
     ],
     instructions: `Each entry is ONE exotic painted-fantasy-cover battle outfit, 30-60 words. Format: "[ARCHETYPE NAME / CULTURE — short headline] — [armor description: material + cut + fit] + [named visible armor pieces] + [signature weapon] + [signature flourish: runes / tattoos / ornaments / helm]". The body describes the OUTFIT, never the location. Frazetta-cheesecake silhouette is allowed and encouraged — sleek, sexy, body-readable. The MISSION is exotic VARIETY: every entry must look DIFFERENT from every other entry in metal palette, armor archetype, cultural flavor, AND weapon. NO TWO entries share the same weapon. NO TWO share the same metal palette. Push exotic: lamellar / scale / chitin / dragonbone / coral / mithril / lacquered / ornate-engraved / desert-nomad-wrap / barbarian-fur-and-bone / samurai-bound-silk. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
-  // ─── artsy-girl axis split (2026-05-13 Phase 2) ─────────────────────────
-  // Outfit was one fused axis (armor + weapon coupled in each entry, 30 fixed
-  // pairs). Splitting into independent armor_style + weapon axes gives
-  // combinatorial variety (30 × 30 = 900 unique pairings) and lets Sonnet
-  // compose them fresh per render. The legacy artsy_girl_outfit pool +
-  // recipe are kept for revert safety but no longer loaded.
-  artsy_girl_armor_style: {
-    format: 'simple',
-    theme: 'EXOTIC FANTASY-NOVEL-COVER armor + outfit (NO weapon — that\'s a separate axis). One armor description per entry. Frank Frazetta / Boris Vallejo / Brom / Hildebrandt / Michael Whelan painted-fantasy-cover lineage. The Frazetta-cheesecake silhouette is allowed and encouraged — sleek, sexy, body-readable, painterly. The mission is VISUAL VARIETY across material + cut + culture + ornaments. Time-period LOTR / D&D / GoT / Witcher / Skyrim / Conan / Warhammer / Forgotten Realms / Eastern fantasy. Each entry 25-50 words describing only the ARMOR / OUTFIT / ORNAMENT — never the weapon, never the location.\n\nVARIETY MANDATE — across the pool, NO entry should look like another. Vary every axis:\n• METAL/MATERIAL palette: mirror-bright steel / patinated bronze / blackened obsidian / dragonscale / chitin / silvered elven mithril / lacquered red / hammered copper / ivory bone-plate / pearl-and-gold / verdigris-green bronze / brushed gunmetal / sun-bleached leather / lacquered black / coral-and-pearl\n• ARMOR ARCHETYPE: full engraved breastplate / asymmetric single-pauldron warrior / lamellar Eastern scale / segmented banded mail / dragon-bone curved cuirass / mail hauberk / leather harness with armor accents / scale-and-leather hybrid / ornate paladin plate / minimalist battle-bra-and-greaves rogue / chitin shell / fur-and-bone barbarian / runic-glowing plate / coral aquatic / desert nomad leather-and-cloth wrap / Norse winged-plate / Aztec feather-mantle / Persian scale-bikini / monk-warrior wrapped silk\n• CULTURE / FLAVOR: Norse Valkyrie / Roman gladiatrix / samurai-coded ronin / Persian-coded / Aztec-coded / Mongol horse-lord / Conan barbarian / dark-elf assassin / blood-elf paladin / dragonborn warlord / tiefling demon-hunter / desert corsair / arctic Stormcloak / forest druidic / underdark drow / coral aquatic\n• SIGNATURE FLOURISH: glowing runes / tribal facepaint / dragon-skull pauldron / horn-helm / hooded cowl / chain-veil / ornate jewelry / blood-clan tattoos / silver mask / antler headdress / feather-cloak / chain-belt of trophies / sigil-embossed gorget / coin-mail veil',
-    touchpoints: [
-      'NORSE VALKYRIE — Mirror-bright steel breastplate sculpted to torso with eagle-wing engravings, chainmail skirt split high at thighs, steel vambraces and war-belt, raven-emblem gorget at throat',
-      'ROMAN GLADIATRIX — Bronze segmented banded mail across torso, leather pteruges skirt, single bronze pauldron, manica forearm-guard, scarred sandal-laced greaves to mid-calf',
-      'CONAN BARBARIAN — Minimal leather-and-fur harness with bone-spike pauldron, fur thigh-wraps, chain-belt of skull-trophies, blood-painted facepaint streaks across cheekbones',
-      'DROW SHADOWBLADE — Fitted obsidian-black hardened leather cuirass studded with chitin shards, hooded shadowsilk cowl pulled back, spider-emblem chest sigil glowing faintly',
-      'TIEFLING DEMON-HUNTER — Black-leather corset cuirass embossed with infernal script, asymmetric single shoulder-spike pauldron, chain-veil over half her face, infernal-rune bracers',
-      'SAMURAI RONIN — Lacquered red-and-gold lamellar scale armor with bound silk underrobe, kabuto horn-helm tucked under arm, mempo half-mask painted black at chin',
-      'PERSIAN-CODED — Hammered copper scale-mail bikini-top and low-slung hip-guards over flowing silk harem pants, bronze vambraces with sun-disc engravings, beaded chain-belt, kohl-lined eyes',
-      'AZTEC WARRIOR-PRIESTESS — Feathered shoulder-mantle in turquoise and gold, jaguar-pelt half-cloak, jade ear-plugs, painted face-stripes in red and black, gold spiral arm-bands',
-      'MONGOL HORSE-LORD — Layered lamellar scale across chest, conical riveted helm, fur-lined collar (winter steppe), thick fur-trim boots, lacquered leather belt with bone-toggle clasps',
-      'WITCHER MONSTER-HUNTER — Fitted black leather coat-armor with chainmail panels and silver studs, bandolier of glowing potion vials across chest, silver wolf-head medallion on chain',
-      'HIGH-ELF MAGUS — Mithril mail bodysuit in silver-and-pearl iridescence, asymmetric runic pauldron, floating sigils of starlight orbiting her shoulders, half-cape of woven moonlight',
-      'BLOOD-ELF PALADIN — Ornate red-and-gold engraved breastplate carved with phoenix motif, glowing rune-bracers, twin braided side-tails, ornate filigreed greaves',
-      'DRAGONBORN WARLORD — Full dragonscale cuirass in bronze-and-obsidian iridescent pattern, massive horned shoulder-pauldrons, dragon-tooth necklace, scaled tail wrapped around one ankle',
-      'SORCERESS-WARRIOR — Fitted dark-violet leather harness with floating rune-sigils glowing along sternum, half-cape of starfield silk, sigil tattoos coiling down both arms',
-      'DESERT NOMAD CORSAIR — Sun-bleached leather harness with brass rivets, layered cloth wraps in sand-colored silks, goggles pushed to forehead, kohl-stained sun-baked skin',
-      'ARCTIC STORMCLOAK — Fitted blackened-steel banded mail, studded leather kilt, bear-skull pauldron on one shoulder, twin braids and frost-blue warpaint, fur-trim boots',
-      'UNDERDARK RANGER — Silver-and-black chitin segmented chest-plate, hooded shadowsilk cloak, glowing spider-eye gem at throat, web-pattern arm tattoos',
-      'DRAGONBONE NECROMANCER — Curved dragon-rib cuirass bound with leather strapping, skull-pauldron on one shoulder, blood-runes painted across midriff, bone-bead chest-piece',
-      'CORAL AQUATIC WARRIOR — Iridescent scale-armor in teal and pearl, finned helm with cresting wave-motif, sea-shell ornaments at her belt, gill-flap arm-fins',
-      'FOREST DRUID RANGER — Green-and-brown leaf-pattern fitted leather, antler headdress, vine-and-moss accents on pauldron, twig-and-feather hair-weaves',
-    ],
-    instructions: `Each entry is ONE armor/outfit description, 25-50 words. Format: "[ARCHETYPE / CULTURE] — [primary armor body: material + cut + fit] + [named visible pieces: pauldrons/bracers/greaves/cuirass/helm] + [signature flourish: runes / tattoos / ornaments / helm]". NEVER mention a weapon — weapon is a separate axis. NEVER mention the location. Body describes ONLY the armor/outfit/ornaments. Frazetta-cheesecake silhouette is allowed. Every entry must look DIFFERENT from every other entry in metal palette + archetype + cultural flavor. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
-  },
-  artsy_girl_weapon: {
-    format: 'simple',
-    theme: 'Signature fantasy weapons for a heroic painted-fantasy-cover adventurer woman. Each entry describes ONE weapon — type + ornament + how she carries it. Frank Frazetta / Boris Vallejo painted-fantasy-cover lineage. The mission is VARIETY: NO entry duplicates another\'s weapon type. Time-period LOTR / D&D / GoT / Witcher / Skyrim / Conan / Forgotten Realms / Eastern fantasy. Each entry 15-30 words.\n\nVARIETY MANDATE — covered weapon types across the pool:\n• Bladed: longsword / great-sword / saber / scimitar / shamshir / katana / nodachi / falchion / khopesh / kukri / katar pair / sai pair / cutlass / dao / wakizashi\n• Polearm: war-spear / pike / glaive / halberd / naginata / partisan / trident / bone-spike club / war-pick\n• Hafted: great-axe / war-axe / war-hammer / mace / morningstar / flail / chain-flail / mauls / bone-club\n• Ranged: longbow / recurve composite bow / crossbow / hand-crossbow / horse-bow / throwing-axes / bola / sling / blowgun\n• Magical/Special: war-staff / runeblade / spell-rod / focusing crystal / glowing whip / chain-sigil / soulblade\n• Dual/Pair: twin scimitars / twin daggers / twin sabers / sword-and-dagger / sword-and-shield / spear-and-buckler\n\nVARIETY in ORNAMENT: glowing-rune-etched / dragon-tooth-pommel / wolf-head-hilt / bone-handle / jeweled-grip / silver-tipped / blood-stained / star-metal / cold-iron / engraved-floral / sigil-carved / pearl-inlaid / serpent-coiled / phoenix-feather-tassel / clan-banner-tied / chain-link / lacquered',
-    touchpoints: [
-      'Twin curved scimitars strapped in cross-back harness, dragon-tooth pommels, blades catching firelight',
-      'Massive two-handed bone-spike club resting at her side, skull-shard embedded in haft, blood-runes carved along grip',
-      'Recurved composite horsebow + thigh-quiver of falcon-fletched arrows, silver-inlay riser carved with steppe motifs',
-      'War-staff topped with floating crystal orb, runic shaft pulsing violet light, leather grip wrapped with sinew',
-      'Naginata polearm with chrysanthemum-etched curved blade and lacquered red haft, slung across her back',
-      'Twin katar punch-daggers sheathed on hip-belt, blades etched with cobra motifs, jewelled hand-guards',
-      'Great-axe with double bearded blade and dragon-tooth chips embedded in haft, slung across back',
-      'Curved shamshir saber in silvered-leather scabbard at hip, gold-coin pommel, blue-steel blade visible at the tip',
-      'Glaive with crescent-moon blade and silver-spiraled haft, butt-spike for grounding, partway pulled into ready stance',
-      'Long recurve bow with phoenix-feather string and gold-inlay grip, quiver of star-fletched arrows on shoulder',
-      'War-pick with serrated moonstone head, leather grip wound with sinew and bone-bead charms',
-      'Twin daggers in thigh-sheaths, obsidian blades with hilt-wrappings of red silk, poison-vial pommels',
-      'Falchion with broad blade etched in clan-runes, leather-wrapped grip, walrus-tusk pommel weight',
-      'Trident with three barbed prongs, pearl-and-coral inlay along the shaft, kelp-rope wrapped grip',
-      'Runeblade longsword with glowing fel-green sigils along the fuller, slung in a back-harness',
-    ],
-    instructions: `Each entry is ONE weapon, 15-30 words. Format: "[Weapon type] + [ornament/material/etching detail] + [how she carries it: sheath / harness / hand / belt / back / hip / thigh]". NEVER mention the body or armor — weapon only. Variety MANDATE: NO TWO entries share the same weapon type. Cover the full spectrum (blade / polearm / hafted / ranged / magical / dual). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
-  },
   artsy_girl_action: {
     theme: 'Peaceful adventuring / candid / lineage-flavored moments for a female fantasy warrior — caught between battles, never in one. NO combat, NO mid-strike, NO weapon-aimed-at-foe. Hiking, traveling, in a tavern, breaking camp, scouting, polishing a sword, sharpening a blade, looking out from a cliff, eating by a campfire, sitting in a hostel, drawing a map, talking to a horse, drinking from a stream, examining a relic, fastening armor, lacing boots, etc. Each entry 20-40 words. CINEMATIC mid-moment, body in motion or candid stillness — never staged posing.',
     touchpoints: [

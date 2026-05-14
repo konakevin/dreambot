@@ -730,8 +730,7 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
       eyes,
       hair_color,
       hairstyle,
-      armor_style,
-      weapon,
+      outfit,
       accessory,
       landscape,
       action,
@@ -762,7 +761,7 @@ NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wou
 ONE character. No companions, no enemies, no crowds. This warrior ALONE in her moment.
 
 ━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
-The female warrior is the MAIN SUBJECT. Her face, gear, lineage, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where armor / weapon / face / lineage all CLEARLY READABLE.
+The female warrior is the MAIN SUBJECT. Her face, gear, lineage, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / weapon / face / lineage all CLEARLY READABLE.
 
 ━━━ HER LINEAGE / RACE (LOCKED — render her unmistakably as THIS lineage) — ABSOLUTE FIRST VISUAL PROPERTY ━━━
 ${race}
@@ -790,18 +789,10 @@ Render the race tone FIRST, then layer the skin pool's TEXTURE detail (freckles,
 ━━━ HER WARRIOR ARCHETYPE (her role / energy — informs how she carries herself) ━━━
 ${archetype}
 
-━━━ HER ARMOR / OUTFIT (the look — render EXACTLY as described) ━━━
-${armor_style}
-
-━━━ HER WEAPON (a SPECIFIC signature weapon — render this EXACT weapon, NEVER substitute a generic sword) ━━━
-${weapon}
-
-Armor and weapon are INDEPENDENT axes — render BOTH exactly as described. Do NOT default to "longsword" if the weapon slot says glaive / axe / bow / staff / hammer / kukri / scimitars / etc. — render the named weapon precisely. If the weapon is ranged (bow / crossbow), it's NOCKED / SLUNG / HELD-READY (never being fired at a target — that's combat).
-
 ━━━ HER COMPACT BIO (one-line block — DO NOT expand) ━━━
-A ${race.split(':')[0]} woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${armor_style.split('—')[1] ? armor_style.split('—')[1].trim() : armor_style}, wielding ${weapon}, carrying ${accessory}.
+A ${race.split(':')[0]} woman with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
 
-All eight DNA elements (race / skin / eyes / hair color / hairstyle / armor / weapon / accessory) should be discernible in the render. Face fully visible (she's not in a sealed helmet — this is fantasy, not sci-fi).
+All seven DNA elements (race / skin / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Face fully visible (she's not in a sealed helmet — this is fantasy, not sci-fi).
 
 ━━━ THE ACTION — what she is doing RIGHT NOW (CANDID PEACEFUL MOMENT) ━━━
 ${action}
@@ -837,11 +828,11 @@ ${vibeDirective.slice(0, 200)}
 Three-quarter angle or side profile so we see her FACE and LINEAGE clearly. Face must be VISIBLE in the frame — NEVER back-to-camera, NEVER fully turned away, NEVER facing AWAY from the viewer. NEVER walking head-on toward camera either. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her feet (gear, rocks, vegetation, table edge). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
 
 ━━━ STRUCTURE — write the prompt in this order ━━━
-[OPENING: "a [race-coded] WOMAN [doing exact action] in [landscape]" — race-noun "woman" leads], [she wears [armor_style] with full material detail], [wielding her specific [weapon] visibly], [her skin + eyes + hair locked from DNA slots], [signature accessory visible], [the fantasy landscape wrapping around her — depth + atmospheric layers], [lighting + atmosphere particles], [color palette + mood]
+[OPENING: "a [race-coded] WOMAN [doing exact action] in [landscape]" — race-noun "woman" leads], [she wears [outfit] with full material detail], [her skin + eyes + hair locked from DNA slots], [signature accessory visible], [the fantasy landscape wrapping around her — depth + atmospheric layers], [lighting + atmosphere particles], [color palette + mood]
 
 CRITICAL — the OPENING tokens are "[race-coded woman] [DOING ACTION]" — woman comes BEFORE warrior / paladin / etc. She fills 25-40% of frame, FULL-BODY, captured at the loaded candid instant.
 
-DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute generic descriptions. Race comes FIRST visually. Armor + weapon are INDEPENDENT slots — render BOTH precisely as named. Every other slot is locked.
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },

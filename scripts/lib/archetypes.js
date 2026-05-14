@@ -165,18 +165,17 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
-  // ARTSY_GIRL — DragonBot painted-fantasy-cover heroine path.
-  //
-  // 2026-05-13: Started as a clone of FEMALE_WARRIOR (commit 3ba87c2).
-  // Phase 2 (commit pending) split the single outfit axis into independent
-  // armor_style + weapon axes for combinatorial variety — 30 × 30 = 900
-  // unique pairings vs. 30 fixed pairs in the legacy fused-outfit design.
+  // ARTSY_GIRL — frozen snapshot of FEMALE_WARRIOR (2026-05-13). Kevin
+  // loved the Frazetta-cheesecake painted-fantasy-cover output female-warrior
+  // was producing and asked for it bottled as its own path, independent of
+  // future female-warrior tuning. Identical archetype shape; separate
+  // identity so the template/pools/wrapper can be frozen.
   ARTSY_GIRL: {
-    description: 'PATH-BESPOKE — DragonBot artsy-girl path producing Frazetta / Brom / Vallejo painted-fantasy-novel-cover heroines in cinematic peaceful adventuring moments. Cheesecake-friendly painterly aesthetic. armor_style and weapon are split axes (rolled independently) for combinatorial variety.',
+    description: 'PATH-BESPOKE — DragonBot artsy-girl path. Frozen 2026-05-13 clone of FEMALE_WARRIOR producing Frazetta / Brom / Vallejo painted-fantasy-novel-cover heroines in cinematic peaceful adventuring moments. Cheesecake-friendly painterly aesthetic. Locked separately from female-warrior so race-lock / armor-coverage tuning on female-warrior never touches this path.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'armor_style', 'weapon', 'accessory'],
+      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
       path: ['landscape', 'action', 'warrior_archetype', 'surprise_element'],
     },
     pickN: {},
