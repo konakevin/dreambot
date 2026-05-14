@@ -151,13 +151,13 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
-  FEMALE_WARRIOR: {
-    description: 'PATH-BESPOKE — DragonBot female-warrior path. Gender-locked WOMAN of a specific fantasy lineage (drow / tiefling / dragonborn / elf / etc.) caught in a CANDID peaceful moment of adventuring life. NO combat, NO battle, NO violence. Cinematic mid-moment between battles. Character is SHOW at 25-40% frame. Frazetta / Brom / Vallejo / Hildebrandt painted-fantasy-novel-cover lineage. Full character DNA stack (7 axes) + 4 path-bespoke (action / landscape / drama 40%-gated / surprise_element).',
+  FEMALE_ADVENTURER: {
+    description: 'PATH-BESPOKE — DragonBot female-adventurer path (2026-05-14 rebuild from female-warrior). Gender-locked WOMAN of any D&D × LOTR fantasy race, any class (rogue / ranger / sorceress / warlock / mage / paladin / warrior / monk / druid / bard / cleric / barbarian / artificer / etc.), in the wild doing her adventurer thing. SLEEK adventuring gear — no bulky/massive armor, no cheesecake, no artist-name lineage callouts. NSFW-clean rebuild. Character at 25-40% frame in a candid mid-action moment. Painterly fantasy concept art aesthetic. Full character DNA stack (8 axes incl. class) + 4 path-bespoke (action / landscape / drama 40%-gated / surprise_element).',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
-      path: ['landscape', 'action', 'warrior_archetype', 'surprise_element'],
+      characterDnaAxes: ['race', 'class', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['landscape', 'action', 'surprise_element'],
     },
     pickN: {},
     conditionalLayer: { slot: 'drama', gate: 0.4 },

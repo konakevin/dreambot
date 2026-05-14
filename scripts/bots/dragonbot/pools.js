@@ -32,9 +32,22 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
-  // Path-bespoke pools for female-warrior (2026-05-14 — second DragonBot
-  // path migrated to the new system; clones dragon-scene canonical pattern
-  // with character DNA stack).
+  // Path-bespoke pools for female-adventurer (2026-05-14 — full rebuild
+  // from female-warrior. 12-axis split system per new playbook. NSFW-clean
+  // — no artist callouts, no cheesecake language. Sleek adventuring gear
+  // across all D&D × LOTR fantasy classes + races).
+  FEMALE_ADVENTURER_CLASS: load('female_adventurer_class'),
+  FEMALE_ADVENTURER_OUTFIT: load('female_adventurer_outfit'),
+  FEMALE_ADVENTURER_ACCESSORY: load('female_adventurer_accessory'),
+  FEMALE_ADVENTURER_HAIRSTYLE: load('female_adventurer_hairstyle'),
+  FEMALE_ADVENTURER_ACTION: load('female_adventurer_action'),
+  FEMALE_ADVENTURER_LANDSCAPE: load('female_adventurer_landscape'),
+  FEMALE_ADVENTURER_DRAMA: load('female_adventurer_drama'),
+  FEMALE_ADVENTURER_SURPRISE_ELEMENT: load('female_adventurer_surprise_element'),
+  // Path-bespoke pools for female-warrior (LEGACY — kept for any orphan
+  // refs; female-warrior path was deleted 2026-05-14 in favor of
+  // female-adventurer rebuild. Pools retained to keep artsy-girl side
+  // unaffected if it references any).
   FEMALE_WARRIOR_ACTION: load('female_warrior_action'),
   FEMALE_WARRIOR_LANDSCAPE: load('female_warrior_landscape'),
   FEMALE_WARRIOR_DRAMA: load('female_warrior_drama'),
