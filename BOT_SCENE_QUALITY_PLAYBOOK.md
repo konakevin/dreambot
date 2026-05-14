@@ -168,6 +168,47 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 ---
 
+## "Bespoke per path" extends to the PROMPT WRAPPER LAYER, NOT just pools (CRITICAL — 2026-05-13)
+
+Pool variety is INSUFFICIENT for a path to feel distinct from other paths sharing the same bot. **The prompt wrapper layer dominates Flux's first-token bias.** A bot-level / medium-level prefix injected before Sonnet's bespoke body locks the visual style BEFORE Flux reads any pool content.
+
+**The Flux input pipeline (read this — it's the whole problem):**
+
+```
+1. PROMPT_PREFIX (bot-level)                ~50 tokens — same for ALL paths on a bot
+2. promptPrefixByMedium[medium]             ~50 tokens — same for paths sharing a medium
+3. mediumStyles[medium]                     ~50 tokens — same for paths sharing a medium
+4. Sonnet-written bespoke body              ~100 tokens — the only path-bespoke text
+5. promptSuffixByMedium[medium]             ~50 tokens — same for paths sharing a medium
+                                            ─────────
+                                            ~300 tokens total
+```
+
+If 8 franchise paths all share `starbot_hyperreal` medium and the StarBot bot-level prefix, **~200 of those 300 tokens are identical for every path**. Flux locks the style from layers 1-3 and treats Sonnet's body as decoration.
+
+**Diagnostic test before declaring a path "done":**
+
+Pull the final `ai_prompt` from a recent render and inspect the FIRST 100 characters. If they're identical (or near-identical) across paths on the same bot, the path is NOT bespoke even if its archetype + pools are.
+
+```bash
+# Compare first-100-chars across paths
+for path in path1 path2 path3; do
+  echo "=== $path ===";
+  psql -c "SELECT substring(ai_prompt, 1, 200) FROM uploads WHERE caption LIKE '[$path]%' ORDER BY created_at DESC LIMIT 1";
+done
+```
+
+**Hard rule: every path with a distinct visual identity must own its prefix/suffix/mediumStyle layer.** Mechanisms (any of these works):
+1. **Per-path custom medium** — define `starbot_<franchise>` with bespoke `promptPrefixByMedium`, `mediumStyles`, `promptSuffixByMedium`, and point `mediumByPath` at it
+2. **Per-path prefix override** — add a `promptPrefix` field on the path config that REPLACES (not appends) the bot-level prefix when present (requires engine support)
+3. **Per-archetype prefix** — store the prefix on the archetype definition; engine reads `archetype.promptPrefix` if present
+
+The franchise vocabulary (Frank Herbert + Villeneuve / McQuarrie + Chiang / Bungie + Sparth / etc.) must land in the FIRST ~50 tokens or Flux won't render it as that franchise — it'll render as "generic hyperreal sci-fi" regardless of what Sonnet writes downstream.
+
+**The 2026-05-13 incident:** 8 franchise paths were migrated with bespoke archetypes, templates, and 30-entry path-bespoke pools — but ALL shared `starbot_hyperreal` medium + StarBot bot-level prefix. Every render came back looking like "generic photoreal sci-fi concept art" regardless of which franchise's pools rolled. Kevin's QA: "they all literally look like the same generic path." The diagnosis came from inspecting `ai_prompt` first-tokens across paths and noticing the ~200 shared characters. Fix: per-path custom mediums + per-path prefix overrides at the engine layer.
+
+---
+
 ## Axis count is path-specific — expand or shrink for the path's vibe (CRITICAL — 2026-05-13)
 
 The "3+ bespoke pools per path" rule is a MINIMUM, not a fixed number. Some paths need MORE axes (character paths use 10+ — race / skin / eyes / hair_color / hairstyle / outfit / accessory / biome / action / archetype). Some paths need FEWER axes because more would over-stuff the intimate / cozy / specific vibe.

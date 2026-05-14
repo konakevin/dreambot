@@ -243,14 +243,14 @@ const ARCHETYPES = {
   },
 
   ALIENS_ARCHITECTURE: {
-    description: 'PATH-BESPOKE — Aliens-franchise architecture interior (H.R. Giger / Ridley Scott / Cameron / Ron Cobb / Syd Mead industrial). TERRIFYING-AND-MAJESTIC mood. Biomech hive / derelict spacecraft / abandoned colony / atmospheric processor / sterile lab / dropship interior. NO figures. Path-bespoke pools (setting + atmosphere + deep_distance + 40% incident).',
+    description: 'PATH-BESPOKE CHARACTER-FIRST (2026-05-13 ROUND 3) — Aliens-franchise scene anchored around a SPECIFIC franchise character (colonial marine / civilian survivor / android / scientist / mercenary). Architecture is the STAGE; character is the SUBJECT at MEDIUM scale (25-40% frame); action is a dynamic story moment. Like female-explorer but Aliens-coded.',
     slots: {
-      universal: ['story_beat', 'composition_frame', 'emotional_dna', 'lighting'],
+      universal: ['composition_frame', 'emotional_dna', 'lighting'],
       bot: [],
-      path: ['setting', 'atmosphere', 'deep_distance'],
+      path: ['setting', 'character', 'outfit', 'action', 'atmosphere'],
     },
     pickN: {},
-    conditionalLayer: { slot: 'incident', gate: 0.4 },
+    conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
   },

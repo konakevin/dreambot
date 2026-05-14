@@ -1156,47 +1156,42 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
   ALIENS_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { story_beat, composition_frame, emotional_dna, lighting, setting, atmosphere, deep_distance, incident } = slots;
+    const { composition_frame, emotional_dna, lighting, setting, character, outfit, action, atmosphere } = slots;
 
-    const incidentSection = incident
-      ? `
-━━━ INCIDENT — render this visibly active in the scene ━━━
-${incident}
+    return `You are a sci-fi concept-art painter writing an ALIENS-CODED CHARACTER MOMENT for StarBot — H.R.-Giger / Ridley-Scott / James-Cameron / Ron-Cobb / Syd-Mead-industrial / Annihilation tradition. A single character is the SUBJECT inside an Aliens-coded architecture, captured at a cinematic action moment. Movie-poster quality.
 
-This is a moment of disruption woven INTO the architecture — visible evidence (steam burst, light strobe, structural damage, leaked fluid, electrical fault). NOT the subject.
+━━━ THE CHARACTER IS THE SUBJECT — NON-NEGOTIABLE ━━━
+The character is the MAIN SUBJECT of this render. Their face, gear, outfit, action, and pose are the DRAW. They fill 25-40% of the frame vertically — FULL BODY visible, head no larger than 10% of frame. NOT a tiny silhouette in distant fog, NOT a centered portrait. MEDIUM scale where outfit / weapon / face all READABLE.
 
-`
-      : '';
+━━━ THE CHARACTER (LOCKED — render this specific archetype) ━━━
+${character}
 
-    return `You are a sci-fi concept-art painter writing an ALIENS-CODED ARCHITECTURE INTERIOR for StarBot — H.R.-Giger / Ridley-Scott / James-Cameron / Ron-Cobb / Syd-Mead-industrial / Annihilation tradition. TERRIFYING-AND-MAJESTIC. The architecture is the subject — NO FIGURES, NO PEOPLE, NO XENOMORPHS, NO CREATURES.
+This is WHO they are. Render their archetype unmistakably — Colonial Marine reads as Colonial Marine, Civilian Survivor reads as terrified civilian, Android reads as uncanny synthetic. The archetype defines posture, gear baseline, demeanor.
 
-━━━ MOOD — NON-NEGOTIABLE ━━━
-HAUNTED + INDUSTRIAL + WRONG. The world feels haunted by absent inhabitants. Alien resin pulses with wet-organic life. Machinery hums in distant systems. Silence is heavy with menace. Every frame is a museum-poster painting of hostile-alien-world dread OR biblical Engineer-architecture awe.
+━━━ THE OUTFIT (LOCKED — render this exact kit) ━━━
+${outfit}
 
-━━━ NO FIGURES — ABSOLUTE ━━━
-Pure architecture. NO humans, NO xenomorphs, NO aliens, NO engineers, NO androids, NO creatures of any kind. The empty terrifying space speaks for itself through architectural detail, condition, and atmosphere.
+Every detail of the outfit readable — material, color, gear, weapon, patches, wear-and-tear. Cameron-Aliens military aesthetic OR Scott-Alien civilian / corporate aesthetic depending on archetype.
 
-━━━ THE ARCHITECTURE (render this exact interior) ━━━
+━━━ THE ACTION — WHAT THEY ARE DOING RIGHT NOW (MANDATORY CINEMATIC MOMENT) ━━━
+${action}
+
+This is the FOCAL MOMENT — mid-action, captured at the loaded instant. The action defines body position, motion, what's happening to the environment around them (muzzle flash / blood trail / smoke / debris / acid / etc.). NEVER static posing. NEVER "standing there looking around." Movie-poster moment.
+
+━━━ THE ARCHITECTURE (the stage — Aliens-coded) ━━━
 ${setting}
+
+The architecture is the STAGE. Render its biomech-resin / industrial-prefab / atmospheric-processor character around the character, but the architecture serves the character moment — it's the BACKDROP, not the subject.
 
 ━━━ ATMOSPHERIC TEXTURE — render WOVEN through the space ━━━
 ${atmosphere}
 
-━━━ DEEP-DISTANCE SIGNATURE — visible at the far end / through doorway / down corridor ━━━
-${deep_distance}
+Sodium-emergency-amber, red-strobe-pulse, steam-haze, condensation, wet-organic-resin drips, sparking cables. Make the space feel HAUNTED and INDUSTRIAL around the character.
 
-This is the far-back layer creating depth and dread — render it receding through atmospheric steam-haze.
-${incidentSection}
-━━━ MATERIAL SPECIFICITY — REQUIRED ━━━
-Every surface NAMED with material: biomech resin (glossy wet-organic), ribbed steel beam, prefab metal panel, cryo-glass, blast-shielded ceramic, acid-pitted alloy, wet-organic secretion, fossilized chitin, drainage-channel grating, condensation-streaked bulkhead, cable-bundle veins, ductwork-coiled walls.
+━━━ LIGHTING ━━━
+${lighting}
 
-━━━ DRAMATIC LIGHTING — name specific sources ━━━
-Sodium emergency strips (warm amber along floor/wall channels), blue-white sterile fluorescents (cold clinical), red strobe pulses (rhythmic alarm), single recessed emergency lights (pinpoint haloed in steam), steam-filtered work lights (volumetric shafts), single shaft of daylight piercing dust, sodium-yellow channel lighting. Cold pale ambient with ONE accent color dominating per frame.
-
-━━━ STORY BEAT (interpret architecturally — no figures acting it out) ━━━
-${story_beat}
-
-Translate to space-mood: ARRIVAL = door cycling open with depressurization haze. VIGIL = silent corridor watched by emergency lights. SOLITUDE = cavernous chamber empty of life. CONFRONTATION = blast-door half-cycled stuck with sparks. DEPARTURE = vapor-trail through bulkhead pressure-cycle.
+Cold pale ambient with ONE accent color (red strobe / sodium amber / sterile blue). High-contrast cinematic chiaroscuro — light catches the character, shadow conceals threats.
 
 ━━━ EMOTIONAL DNA ━━━
 ${emotional_dna}
@@ -1204,8 +1199,8 @@ ${emotional_dna}
 ━━━ COMPOSITION FRAME ━━━
 ${composition_frame}
 
-━━━ LIGHTING ━━━
-${lighting}
+━━━ MOOD ━━━
+HAUNTED + INDUSTRIAL + DESPERATE + KINETIC. Cameron-Aliens military-survival-horror cinematography. Every frame is a still from an unmade Aliens film — implies a before and after.
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -1214,20 +1209,25 @@ ${sharedDNA.scenePalette}
 ${vibeDirective.slice(0, 200)}
 
 ━━━ COMPOSITION ━━━
-Cinematic architectural composition. CLAUSTROPHOBIC + DREAD-LADEN where the space calls for it (biomech corridors / vent tunnels / abandoned barracks / cryo-bays). MAJESTIC + BIBLICAL where appropriate (Engineer-class chambers / atmospheric processor cavities / cathedral hangars).
+Cinematic action composition. CHARACTER is the foreground / midground subject, doing the action — 25-40% of frame, full body, three-quarter or side angle. ARCHITECTURE wraps around them as the dread-laden stage. DEEP DISTANCE: corridor receding into smoke-haze / chamber vanishing into red-strobe-pulse / far blast-door buckling.
 
-FOREGROUND: tactile architectural detail (resin drips, cable bundles, floor grating, overturned equipment, condensation streaks). MIDGROUND: the architecture body (corridor / chamber / hangar / lab — wet-glistening surface, ribbed structural language). DEEP DISTANCE: signature feature receding through atmospheric steam-haze and dread.
+FOREGROUND: tactile detail near the character (spent shell casings, blood pool, scorch marks on floor, cable bundles). MIDGROUND: the character mid-action with weapon firing / dragging / running. BACKGROUND: architecture body receding into atmospheric steam-haze.
 
 ━━━ FRANCHISE BAN — ABSOLUTE ━━━
-NEVER write "LV-426", "Nostromo", "Sulaco", "Hadley's Hope", "Weyland-Yutani", "Xenomorph", "Facehugger", "Engineer-ship", "Prometheus", "MUTHUR", "Alien" (as proper noun), "Ripley" in the output. Render the visual language generically.
+NEVER write "LV-426", "Nostromo", "Sulaco", "Hadley's Hope", "Weyland-Yutani", "Xenomorph", "Facehugger", "Engineer", "Prometheus", "MUTHUR", "Alien" (as proper noun), "Ripley", "Hicks", "Vasquez" in the output. Generic descriptions only — "biomechanical creature with elongated skull" not "xenomorph".
 
 ━━━ FORBIDDEN ━━━
-- NO foreground figures of any kind
-- NO bright cheerful color — always cold ambient + ONE accent
-- NO clean futurism — must be wet-glistening / decay-streaked / industrial-grit
-- NO action shots — atmosphere over event
+- NO static posing — every render captures mid-action motion
+- NO tiny figure in distance — character is MEDIUM scale 25-40% frame
+- NO empty hallway — character + action + architecture together
+- NO bright cheerful color — Aliens palette is cold ambient + accent
+- NO clean futurism — wet-glistening / decay-streaked / industrial-grit only
+- NO pretty figures — Aliens characters are weathered, dirty, tense, dangerous
 
-Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — the action verb leads], [the character — archetype + face + outfit + weapon], [the architecture wrapping around them], [atmospheric texture + lighting + accent color], [deep distance + mood]
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
   ARCHITECTURE_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {

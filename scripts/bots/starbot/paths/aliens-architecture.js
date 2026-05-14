@@ -14,11 +14,12 @@
  */
 
 module.exports = {
-  archetype: 'ALIENS_ARCHITECTURE', // BESPOKE archetype (2026-05-13 retry)
+  archetype: 'ALIENS_ARCHITECTURE', // BESPOKE CHARACTER-FIRST (2026-05-13 ROUND 3)
   pools: {
-    setting: 'ALIENS_ARCHITECTURE', // primary biome pool (50 entries — Stage 2 expansion deferred)
+    setting: 'ALIENS_ARCHITECTURE', // architecture as STAGE
+    character: 'ALIENS_CHARACTER_ARCHETYPE', // colonial marine / survivor / android / etc.
+    outfit: 'ALIENS_OUTFIT',
+    action: 'ALIENS_ACTION', // mandatory mid-action cinematic moment
     atmosphere: 'ALIENS_ATMOSPHERE_DETAIL',
-    deep_distance: 'ALIENS_DEEP_DISTANCE',
-    incident: 'ALIENS_INCIDENT', // 40% gated
   },
 };

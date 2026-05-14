@@ -203,6 +203,16 @@ module.exports = {
   DUNE_ANCHOR_ENTITY: load('dune_anchor_entity'),
   DUNE_MOMENT: load('dune_moment'),
   DUNE_DEEP_DISTANCE: load('dune_deep_distance'),
+  // Path-bespoke CHARACTER-FIRST pools for aliens-architecture (2026-05-13 ROUND 3).
+  // The path is being rebuilt as character-first per Kevin: anchor a cool
+  // franchise character in the biome, MANDATE a dynamic story action.
+  ALIENS_CHARACTER_ARCHETYPE: load('aliens_character_archetype'),
+  ALIENS_OUTFIT: load('aliens_outfit'),
+  ALIENS_ACTION: load('aliens_action'),
+  // Path-bespoke STORY_EVENT pool for aliens-architecture (2026-05-13 ROUND 2).
+  // Mandatory event that's HAPPENING in every render — fixes "boring empty
+  // hallway" renders by requiring a cinematic action focal point.
+  ALIENS_STORY_EVENT: load('aliens_story_event'),
   // Path-bespoke pools for aliens-architecture (2026-05-13) — H.R. Giger /
   // Ridley Scott / Cameron Aliens-coded interior atmospheric DNA.
   ALIENS_ATMOSPHERE_DETAIL: load('aliens_atmosphere_detail'),
