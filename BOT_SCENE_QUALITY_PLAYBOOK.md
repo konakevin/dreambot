@@ -12,7 +12,9 @@ This playbook is **only** about **bot dreams** — the curated content created b
 
 Bot pipeline = `scripts/bots/<bot>/index.js` (config) + `scripts/bots/<bot>/paths/*.js` (path builders) + `scripts/lib/botEngine.js` (orchestrator) + `scripts/run-bot.js` (production entry, GH Actions cron). NO nightly-dreams code, NO user cast, NO biome/wardrobe per-location work.
 
-**Currently iterating:** StarBot (the proving ground).
+**Currently iterating:** DragonBot (proving ground for the system as of 2026-05-14 — 5 paths migrated: dragon-scene, female-adventurer, female-action-scenes, male-adventurer, male-action-scenes). Up next: landscape (flagship pure-landscape path).
+
+Prior StarBot work informed the lessons but was R&D — the proven canonical recipe is in DragonBot's character-paths reference below.
 
 **Future targets** (apply same overhaul once StarBot is locked):
 - DragonBot
@@ -198,6 +200,195 @@ Plus universal axes (lighting + atmosphere from bot defaults).
 **File-by-file change set** (replicate verbatim for next path migration): see `memory/project_dragon_scene_reference_migration.md` for the canonical 8-step checklist (path file / legacy backup / pools.js registration / 5 seed JSONs / gen-pool recipe / archetype definition / template / bot index.js composer wiring).
 
 **Read this section before starting any new path migration.** If your plan deviates from this pattern, justify the deviation explicitly OR reconsider.
+
+---
+
+## CANONICAL REFERENCE — DragonBot 4-character-path migration recipe (2026-05-14)
+
+After dragon-scene proved the OUTDOOR_LANDSCAPE-adjacent reference, the next four character paths were migrated cleanly using the recipe below. **Female-adventurer / female-action-scenes / male-adventurer / male-action-scenes all hit production** within one session, with detailed lessons distilled per failure mode. Read this section before migrating any CHARACTER path.
+
+**Commits in order (read top-to-bottom to see iteration trail):**
+
+| Commit | Lesson |
+|---|---|
+| `9891f15` | female-adventurer R1: rebuild + **empty promptPrefixByPath** (diversity unlock) |
+| `ecfdbdc` | R2: forked race pool, female-anatomy-clean (gender lock) |
+| `d6b4b4a` | R3: action pool body-position variety mandate |
+| `560ec47` | R4: outfit pool strict-high-fantasy + climate distribution |
+| `9e4ed9a` | female-adventurer production scale-up (200/150/50 sizes) |
+| `d7b7703` | Playbook: stuffed-wrapper gridlock lesson |
+| `70e1753` | female-action-scenes new path + R0 |
+| `5893943` | action-scenes R1: multi-effect stack mandate (cranked intensity) |
+| `b498763` | action-scenes production scale-up |
+| `77c9713` | male-adventurer + male-action-scenes full bespoke male rebuild |
+| `84a068b` | male: surgical fix to residual shirtless leakage |
+| `ca3e0e8` | male production scale-up |
+
+### The 12-axis character-path split (canonical)
+
+Every character path uses the same 12-axis architecture (mirror of FEMALE_ADVENTURER / MALE_ADVENTURER archetypes):
+
+| Axis category | Slots | Pool nature |
+|---|---|---|
+| Universal (bot defaults) | `lighting`, `atmosphere` | Bot-shared (LIGHTING, ATMOSPHERES) |
+| Character DNA (8 axes) | `race`, `class`, `skin`, `eyes`, `hair_color`, `hairstyle`, `outfit`, `accessory` | All path-bespoke |
+| Path-bespoke (3 axes) | `landscape`, `action`, `surprise_element` | All path-bespoke |
+| Conditional (1 axis, 40% gate) | `drama` | Path-bespoke |
+
+**The action axis IS the lever that distinguishes "adventurer" (candid) from "action-scenes" (peak-action multi-effect). Every other axis can be cloned between the two paths.**
+
+### Production target pool sizes (per path)
+
+| Pool | Target | Conceptual ceiling observed | Notes |
+|---|---|---|---|
+| race | 50 | 50 ✓ | Bot-level may share with sibling male/female path of opposite gender |
+| class | 50 | 36-38 typical cap | Sonnet exhausts unique class concepts around 36-50 |
+| skin | 100 | 100 ✓ | |
+| eyes | 100 | 100 ✓ | |
+| hair_color | 100 | 100 ✓ | |
+| hairstyle | 50 | 44-50 typical cap | Practical adventuring hairstyles cap at ~50 |
+| outfit | 200 | 200 ✓ | |
+| accessory | 150 | 49-98 typical cap | Sonnet exhausts unique accessory concepts |
+| action | 200 | 200 ✓ | |
+| landscape | 200 | 200 ✓ | |
+| drama (40% gated) | 50 | 50 ✓ | Stays small intentionally |
+| surprise_element | 150 | 150 ✓ | |
+
+**Conceptual ceilings are real — don't push past them, just accept the cap.** Once a pool stops hitting `--target N`, you're done. The `gen-bot-pool.js --target` loop caps at 8 iterations.
+
+### CRITICAL — the wrapper-strip lesson (READ FIRST)
+
+For EVERY character path: **`promptPrefixByPath[path] = ''`**. Empty. Do NOT add a stuffed wrapper. See section "Stuffed wrappers GRIDLOCK diversity" above. This is the #1 lesson — verified across all 4 character paths. Without it, every render comes back as the same generic-fantasy-heroine regardless of pool diversity.
+
+### NSFW-clean mandates per gender
+
+**Female bans (in pool recipes + template):**
+- "minimal coverage" / "battle bikini" / "bare midriff" / "exposed cleavage" / "exposed thighs"
+- "form-fitting" / "skin-tight" / "second-skin"
+- "harness across torso" / "bondage-coded"
+- "sultry" / "sensual" / "alluring" / "seductive" / "provocative"
+- "curves emphasized" / "bust-accentuating" / "low-cut"
+- NO artist names (Frazetta / Brom / Vallejo / Boris / Hildebrandt / Whelan)
+
+**Male bans (in pool recipes + template) — DIFFERENT failure mode:**
+- "shirtless" / "bare-chested" / "oiled-pecs" / "loincloth"
+- "sleeveless" — triggers Flux's bare-arms-and-implied-bare-torso default when combined with orc race + war-action
+- "leather shorts" / single-piece-only outfits without explicit chest-covering
+- "open vest revealing chest" / "strategically torn" / "tunic torn from action"
+- "rugged hero pose" / "smoldering"
+- "gleaming like polished stone" / "sweat-gleaming" / "oiled" / "sculpted" / "chiseled" / "muscular neck" — these in the SKIN pool trigger bare-chest rendering even with covered outfits
+- "war-paint across chest" — keep paint/scars on FACE only
+- **Pirate tropes** for action-scenes: "swinging from rigging" / "skyship boarding" / "between airborne vessels with cutlass" — Flux trains "dynamic male action" as shirtless pirate. Replace with rooftop-to-rooftop leaps / cliff-vaults / wall-runs / battlement-sprints.
+
+**Male outfit MUST mandate:** every entry explicitly names a chest-covering item (tunic / cuirass / breastplate / gambeson / scale-armor / robe / coat / surcoat / mail hauberk / brigandine / chest-plate / chest-piece).
+
+**Male skin MUST stay FACE-FOCUSED:** describe cheekbones / forehead / jaw / temples / brow ONLY. NEVER describe torso / chest / shoulders / arms / muscular-body.
+
+### Race-anatomy rendering — let action variety do the work
+
+Race anatomy (dwarves rendering at human size, orcs rendering as default-human, etc.) is often partial in early rounds. **It self-resolves when action-pool variety is rich.** Verified on R3 of female-adventurer (action variety → orc rendered green-skinned with tusks) and again on male-adventurer R1 (action variety → kenku rendered with bird-anatomy). Don't add explicit "race anatomy anchor" injection as a first-line fix — try action variety first.
+
+**EXCEPT for beard-rendering on males**: dwarves / humans / half-orcs benefit from explicit beard mentions in the race pool entries ("heavily-braided beard with iron clan-rings" / "thick beard with worked-iron clasps"). Elves / dragonborn stay beardless per canon.
+
+### Pool gen — structural variety mandates that work
+
+**Outfit pool — climate distribution + silhouette variety:**
+
+The pool defaults to "hooded coat + tunic + boots" silhouette if not constrained. Mandate climate distribution AND silhouette variety:
+
+- **Climate target distribution** (35% warm / 35% temperate / 30% cold). Actual at 200 entries: ~24/61/16 — temperate dominates organically, which is fine. The mandate tilts the pool away from cold-only.
+- **Silhouette variety**: distribute across robes/dresses-as-armor / cuirass-focus / single-layer-fitted / hooded-coat / wrapped-cloth / plate-and-heavy. DO NOT default to "long coat over trouser-and-boot".
+- **Structural entry-shape variety**: mix silhouette-led / material-led / single-piece-focus / what-she-is-NOT-wearing / lived-in-detail / color-palette-led forms. DO NOT use a rigid "[CULTURE] — [garments list]" headline format.
+
+**Action pool — body-position distribution:**
+
+Default Sonnet output is kneel-heavy (kneeling/crouching/seated/working in 60%+ of entries). Mandate distribution:
+
+- ~20% mounted / with companion animal
+- ~20% dynamic travel (mid-stride / running / wading / vaulting)
+- ~10% climbing / vertical
+- ~15% standing / surveying / reading the world
+- ~20% kneeling / crouching / working (kept but MINORITY share)
+- ~10% reaching up / lifting / straining
+- ~5% seated / resting / crafting
+
+**Class pool — full party roster:**
+
+Don't let Sonnet generate a robe-heavy mage-subset. Mandate distribution:
+
+- ~30% martial (warrior / knight / paladin / templar / barbarian / champion)
+- ~15% stealth / shadow (rogue / assassin / nightblade / shadowmancer)
+- ~15% ranged / wilderness (ranger / hunter / warden / scout / bladedancer)
+- ~20% arcane (wizard / mage / sorcerer / arcanist / battlemage / bloodmage)
+- ~10% occult / dark (warlock / necromancer / hexblade / deathknight)
+- ~10% divine / spirit (cleric / druid / monk / shaman / bard / oracle / inquisitor / artificer)
+
+### Multi-effect stack mandate for action-scenes paths
+
+The "action-scenes" sibling of an adventurer path uses the SAME architecture but a different action recipe. The action recipe MUST mandate:
+
+**Every entry stacks 3+ simultaneous dynamic elements:**
+
+1. **Primary action** (her/his direct beat: spell-released / arrow-loosed / mid-leap / mid-strike)
+2. **Environmental reaction** (debris / shockwave / glass-shatter / sparks / motion-blur / cracking flagstones)
+3. **Active background context** (fleeing crowd / collapsing tower / distant explosion / arrow-volley / dragon shadow / allied caster / battle silhouettes)
+
+Entry length: 40-70 words (longer than typical pool — each entry must describe 3 elements).
+
+**Scale-the-magic-up sub-mandate**: not a wisp, a MAELSTROM. Not a fireball, a fireball amid arcing tendrils of secondary flame and glowing-rune wake. Not a portal, a portal CRACKING REALITY with creatures emerging.
+
+### File-by-file checklist for migrating a character path
+
+For each new character path (e.g., when migrating dragon-lore / cozy-arcane / dark-realm / etc.):
+
+1. **Add archetype** to `scripts/lib/archetypes.js` — clone FEMALE_ADVENTURER or MALE_ADVENTURER shape, change name
+2. **Add template** to `scripts/lib/archetype-templates.js` — clone FEMALE_ADVENTURER or MALE_ADVENTURER template, change `she/her` ↔ `he/his` if gender shifts, adjust opener language
+3. **Write path file** `scripts/bots/<bot>/paths/<path>.js` — declarative form, point at the new pools
+4. **Add 12 pool recipes** to `scripts/gen-<bot>-pool.js`
+5. **Initialize pool files** to `[]` then run `node scripts/gen-<bot>-pool.js --pool <pool> --count 25` in parallel for all 12
+6. **Register pools** in `scripts/bots/<bot>/pools.js`
+7. **Wire into bot's `index.js`** — across these maps: `pathBuilders` / `paths` / `pathWeights` / `vibesByPath` (if needed) / `modelByPath` / `promptPrefixByPath` (EMPTY '') / `twoPassPolish.skipPaths` + `polishedWordsByPath` / `sensoryAnchors.pathContext`
+8. **Delete legacy path file** if replacing one
+9. **Sanity check wiring** via:
+   ```js
+   node -e "
+   const bot = require('./scripts/bots/<bot>'); const TMPL = require('./scripts/lib/archetype-templates'); const { ARCHETYPES } = require('./scripts/lib/archetypes'); const pc = require('./scripts/bots/<bot>/paths/<path>'); const arch = ARCHETYPES[pc.archetype]; const need = [...arch.slots.characterDnaAxes||[], ...arch.slots.path, arch.conditionalLayer?.slot].filter(Boolean); const missing = need.filter(s => !pc.pools[s]); console.log({arch: !!arch, tmpl: !!TMPL[pc.archetype], inPaths: bot.paths.includes('<path>'), missing});
+   "
+   ```
+10. **Run 5 test renders** (`node scripts/iter-bot.js --bot <bot> --mode <path> --count 5 --post --label <path>-r0`)
+11. **Iterate** — one variable per round (per playbook hard rule)
+12. **Scale to production** when MVP recipes lock — append-mode `--target N`
+13. **Audit production pools for shirtless / cheesecake / drift triggers** before declaring done
+
+### Action-scenes-clone shortcut
+
+To add an `<path>-action-scenes` sibling to an existing `<path>` adventurer migration:
+
+1. `cp` all 12 seed files → `<path>_action_scenes_<axis>.json`
+2. Add new archetype + template (mirror of source with "PEAK-ACTION" framing + multi-effect mandate)
+3. Wipe `<path>_action_scenes_action.json` to `[]`
+4. Write new cranked-action recipe in gen-pool.js
+5. Regen at `--count 25` MVP, then scale to 200
+6. Wire into bot's index.js
+
+The other 11 pools stay identical to the source path. Only the action pool diverges.
+
+### Surgical-fix-over-regen pattern
+
+When auditing finds a small number of bad entries (1-10), edit them directly with Node string-replace rather than regenerating the whole pool. Per 84a068b: 3 skin entries + 5 outfit entries + 1 action entry were patched surgically in ~30 seconds vs $5+ of Sonnet to regen the pools.
+
+ALSO strengthen the recipe at the same time so future regens stay clean.
+
+### Diagnostic order when something looks wrong
+
+(Same as the existing playbook section — re-stated here in context):
+
+1. **Read the actual rendered prompt in the DB** — pull `ai_prompt` for the failing render
+2. **Grep the source pool** for the trigger words
+3. **Audit the gen recipe** that produced that entry
+4. **Fix at the pool layer** (surgical or regen)
+5. **Update the recipe** so future regens are clean
+6. **Only THEN consider brief/template changes**
 
 ---
 

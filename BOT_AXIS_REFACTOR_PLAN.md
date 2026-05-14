@@ -570,7 +570,31 @@ Both are viable. **Option A is DRYer** (one template, branching strings). **Opti
 
 ## Active state tracking
 
-### Path migration status (as of plan lock 2026-05-12)
+### DragonBot path migration status (as of 2026-05-14)
+
+DragonBot became the proving ground for the new axis system after StarBot's R&D trail. Five paths migrated this week with detailed lessons in `BOT_SCENE_QUALITY_PLAYBOOK.md` → "DragonBot 4-character-path migration recipe".
+
+| Path | Archetype | Status | Notes |
+|---|---|---|---|
+| **dragon-scene** | bespoke `DRAGON_SCENE` | ✅ MIGRATED 2026-05-14 (`bfbf771`) | Canonical reference for OUTDOOR_LANDSCAPE-adjacent migration; 5-axis pool design (dragon / action / landscape / drama 40% / surprise_element); first clean 5/5 win |
+| **female-adventurer** | bespoke `FEMALE_ADVENTURER` | ✅ MIGRATED 2026-05-14 (R1-R4: `9891f15` / `ecfdbdc` / `d6b4b4a` / `560ec47`, prod `9e4ed9a`) | Full bespoke female rebuild from legacy female-warrior; 12-axis split; canonical reference for CHARACTER migrations |
+| **female-action-scenes** | bespoke `FEMALE_ACTION_SCENES` | ✅ MIGRATED 2026-05-14 (`70e1753` / `5893943` / `b498763`) | Peak-action sibling with multi-effect stack mandate; clone-from-female-adventurer pattern |
+| **male-adventurer** | bespoke `MALE_ADVENTURER` | ✅ MIGRATED 2026-05-14 (`77c9713` / `84a068b` / `ca3e0e8`) | Full bespoke male rebuild from legacy male-warrior; mirror of female-adventurer with male-coded pools (beards allowed for canon races, badass/weathered tone, NSFW-clean with explicit anti-shirtless/anti-sleeveless rules) |
+| **male-action-scenes** | bespoke `MALE_ACTION_SCENES` | ✅ MIGRATED 2026-05-14 (`77c9713` / `84a068b` / `ca3e0e8`) | Peak-action sibling for male; multi-effect stack + clothed-mandate + pirate-trope ban |
+| artsy-girl | bespoke `ARTSY_GIRL` (frozen 2026-05-13) | ✅ FROZEN | Kevin loved this exact aesthetic — DO NOT TOUCH. Locked snapshot of Frazetta-cheesecake painted-fantasy-cover output. |
+
+DragonBot's remaining 9 legacy paths to migrate (priority order):
+1. **landscape** (weight 5, flagship — pure scenery, tests OUTDOOR_LANDSCAPE archetype at production scale — RECOMMENDED NEXT)
+2. dragon-lore (weight 4 — natural sibling to dragon-scene)
+3. dark-realm (weight 4 — dark/menacing dragon-scene-mood)
+4. wow-landscape (weight 4 — franchise landscape)
+5. lotr-landscape (weight 4 — franchise landscape)
+6. fantasy-scene (weight 3 — general scene)
+7. epic-moment (weight 3 — story-beat path)
+8. cozy-arcane (weight 3 — cozy intimate magic; INDOOR_INTIMATE archetype shape)
+9. arcane-halls (weight 3 — arcane interior; INDOOR_INTIMATE)
+
+### Old StarBot path migration status (as of plan lock 2026-05-12 — historical R&D)
 
 | Path | Archetype | Current state | Migration phase |
 |---|---|---|---|
