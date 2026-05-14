@@ -38,6 +38,20 @@ module.exports = {
   // across all D&D × LOTR fantasy classes + races).
   FEMALE_ADVENTURER_RACE: load('female_adventurer_race'),
   FEMALE_ADVENTURER_CLASS: load('female_adventurer_class'),
+  // ─── female-action-scenes path (2026-05-14 — clone of female-adventurer
+  // massaged into pure-action energy: mages mid-spell with explosions,
+  // ranger mid-loose, rogue sneaking through night market, paladin
+  // mid-strike with divine light, sorceress at summon apex, druid
+  // mid-shape-shift, warlock eldritch blast, etc.)
+  FEMALE_ACTION_SCENES_RACE: load('female_action_scenes_race'),
+  FEMALE_ACTION_SCENES_CLASS: load('female_action_scenes_class'),
+  FEMALE_ACTION_SCENES_OUTFIT: load('female_action_scenes_outfit'),
+  FEMALE_ACTION_SCENES_ACCESSORY: load('female_action_scenes_accessory'),
+  FEMALE_ACTION_SCENES_HAIRSTYLE: load('female_action_scenes_hairstyle'),
+  FEMALE_ACTION_SCENES_ACTION: load('female_action_scenes_action'),
+  FEMALE_ACTION_SCENES_LANDSCAPE: load('female_action_scenes_landscape'),
+  FEMALE_ACTION_SCENES_DRAMA: load('female_action_scenes_drama'),
+  FEMALE_ACTION_SCENES_SURPRISE_ELEMENT: load('female_action_scenes_surprise_element'),
   FEMALE_ADVENTURER_OUTFIT: load('female_adventurer_outfit'),
   FEMALE_ADVENTURER_ACCESSORY: load('female_adventurer_accessory'),
   FEMALE_ADVENTURER_HAIRSTYLE: load('female_adventurer_hairstyle'),

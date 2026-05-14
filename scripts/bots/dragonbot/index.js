@@ -15,6 +15,7 @@ const pathBuilders = {
   'epic-moment': require('./paths/epic-moment'),
   'dragon-scene': require('./paths/dragon-scene'),
   'female-adventurer': require('./paths/female-adventurer'),
+  'female-action-scenes': require('./paths/female-action-scenes'),
   'artsy-girl': require('./paths/artsy-girl'),
   'male-warrior': require('./paths/male-warrior'),
   'cozy-arcane': require('./paths/cozy-arcane'),
@@ -66,6 +67,9 @@ module.exports = {
     // tokens Flux reads. The 120-token stuffed prefix I added gridlocked
     // every render onto generic-fantasy-heroine. Match historic: empty.
     'female-adventurer': '',
+    // EMPTY by design — same lesson as female-adventurer. Sonnet's peak-
+    // action body is what Flux needs to read first, not a stuffed wrapper.
+    'female-action-scenes': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -88,6 +92,7 @@ module.exports = {
     'epic-moment': 'black-forest-labs/flux-1.1-pro',
     'dragon-scene': 'black-forest-labs/flux-1.1-pro',
     'female-adventurer': 'black-forest-labs/flux-1.1-pro',
+    'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'artsy-girl': 'black-forest-labs/flux-1.1-pro',
     'male-warrior': 'black-forest-labs/flux-1.1-pro',
     'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
@@ -140,6 +145,7 @@ module.exports = {
     'epic-moment',
     'dragon-scene',
     'female-adventurer',
+    'female-action-scenes',
     'artsy-girl',
     'male-warrior',
     'cozy-arcane',
@@ -160,6 +166,7 @@ module.exports = {
     'epic-moment': 3,
     'dragon-scene': 4,
     'female-adventurer': 5,
+    'female-action-scenes': 5,
     'artsy-girl': 4,
     'male-warrior': 4,
     'cozy-arcane': 3,
@@ -202,11 +209,12 @@ module.exports = {
     // muted and more uniform; with it off, Sonnet's single-pass output gave
     // more lush + colorful + varied renders. Kevin adopted this as the
     // baseline for the path.
-    skipPaths: ['artsy-girl', 'female-adventurer'],
+    skipPaths: ['artsy-girl', 'female-adventurer', 'female-action-scenes'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
       'female-adventurer': '80-110',
+      'female-action-scenes': '100-130',
       'artsy-girl': '80-110',
       'male-warrior': '80-110',
       'dragon-scene': '80-110',
@@ -222,6 +230,7 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       'female-adventurer': 'female',
+      'female-action-scenes': 'female',
       'artsy-girl': 'female',
       'male-warrior': 'male',
       'dragon-scene': 'creature',
