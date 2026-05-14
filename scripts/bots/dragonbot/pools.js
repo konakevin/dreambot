@@ -81,6 +81,13 @@ module.exports = {
   MALE_ACTION_SCENES_LANDSCAPE: load('male_action_scenes_landscape'),
   MALE_ACTION_SCENES_DRAMA: load('male_action_scenes_drama'),
   MALE_ACTION_SCENES_SURPRISE_ELEMENT: load('male_action_scenes_surprise_element'),
+  // ─── landscape path (2026-05-14, flagship migration from legacy
+  // function-based form to bespoke 5-axis system).
+  LANDSCAPE_BIOME: load('landscape_biome'),
+  LANDSCAPE_ARCHITECTURE: load('landscape_architecture'),
+  LANDSCAPE_PHENOMENON: load('landscape_phenomenon'),
+  LANDSCAPE_SURPRISE_ELEMENT: load('landscape_surprise_element'),
+  LANDSCAPE_SKY: load('landscape_sky'),
   FEMALE_ADVENTURER_OUTFIT: load('female_adventurer_outfit'),
   FEMALE_ADVENTURER_ACCESSORY: load('female_adventurer_accessory'),
   FEMALE_ADVENTURER_HAIRSTYLE: load('female_adventurer_hairstyle'),

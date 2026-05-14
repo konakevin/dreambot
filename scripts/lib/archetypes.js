@@ -207,6 +207,19 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DRAGONBOT_LANDSCAPE: {
+    description: 'PATH-BESPOKE — DragonBot landscape path (2026-05-14 migration from legacy function-based form). Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is alive" mandate: LUSH / DYNAMICALLY LIT / FULL OF LIFE / AWE-STRUCK SCALE / RICH DETAIL. 5 path-bespoke axes (biome / architecture / phenomenon 40%-gated / surprise_element / sky_layer) + universal lighting + atmosphere. Flagship weight-5 path.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'architecture', 'surprise_element', 'sky_layer'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // ARTSY_GIRL — frozen snapshot of FEMALE_WARRIOR (2026-05-13). Kevin
   // loved the Frazetta-cheesecake painted-fantasy-cover output female-warrior
   // was producing and asked for it bottled as its own path, independent of
