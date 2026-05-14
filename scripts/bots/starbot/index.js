@@ -24,22 +24,6 @@ const pathBuilders = {
   'female-explorer': require('./paths/female-explorer'),
   'male-explorer': require('./paths/male-explorer'),
   'megastructure': require('./paths/megastructure'),
-  'dune-landscape': require('./paths/dune-landscape'),
-  'dune-architecture': require('./paths/dune-architecture'),
-  'aliens-landscape': require('./paths/aliens-landscape'),
-  'aliens-architecture': require('./paths/aliens-architecture'),
-  'starwars-landscape': require('./paths/starwars-landscape'),
-  'starwars-architecture': require('./paths/starwars-architecture'),
-  'guardians-landscape': require('./paths/guardians-landscape'),
-  'guardians-architecture': require('./paths/guardians-architecture'),
-  'mass-effect-landscape': require('./paths/mass-effect-landscape'),
-  'mass-effect-architecture': require('./paths/mass-effect-architecture'),
-  'halo-landscape': require('./paths/halo-landscape'),
-  'halo-architecture': require('./paths/halo-architecture'),
-  'star-trek-landscape': require('./paths/star-trek-landscape'),
-  'star-trek-architecture': require('./paths/star-trek-architecture'),
-  'starcraft-landscape': require('./paths/starcraft-landscape'),
-  'starcraft-architecture': require('./paths/starcraft-architecture'),
 };
 
 module.exports = {
@@ -84,22 +68,6 @@ module.exports = {
     'female-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'male-explorer': { 'black-forest-labs/flux-1.1-pro': 100 },
     'megastructure': { 'black-forest-labs/flux-1.1-pro-ultra': 100 },
-    'dune-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'dune-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'aliens-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'aliens-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starwars-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starwars-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'guardians-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'guardians-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'mass-effect-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'mass-effect-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'halo-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'halo-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'star-trek-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'star-trek-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starcraft-landscape': { 'black-forest-labs/flux-1.1-pro': 100 },
-    'starcraft-architecture': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   // Per-medium prompt prefix/suffix overrides. The star_oil_cosmos medium
@@ -175,15 +143,10 @@ module.exports = {
   ],
 
   paths: [
-    'cosmic-vista', // re-enabled 2026-05-11 with canonical 7-axis + cosmic_event drama layer
-    'alien-landscape', // must include alien or character (see path file)
+    'cosmic-vista',
+    'alien-landscape',
     // 'space-opera' — DISABLED 2026-05-12. Flux cannot reliably render
-    // cool sci-fi spaceship silhouettes — output drifts to abstract orb/blob
-    // shapes, modern-naval carrier-coded forms, or steampunk regardless of
-    // brief admonitions and pool cleanup. Multiple iterations (R1-R3) failed
-    // to reach the bar; path retired from rotation. The SPACE_OPERA archetype
-    // + composer wiring + iconic-silhouette pool are preserved in case a
-    // future Flux release renders ships more reliably.
+    // cool sci-fi spaceship silhouettes.
     // 'sci-fi-interior' — disabled 2026-05-11 (cozy-sci-fi-interior wins)
     'cozy-sci-fi-interior',
     'alien-city',
@@ -192,57 +155,22 @@ module.exports = {
     'female-explorer',
     'male-explorer',
     'megastructure',
-    'dune-landscape', // should include char or ship (see path file)
-    // 'dune-architecture' — deactivated 2026-05-02
-    // 'aliens-landscape' — disabled 2026-05-11
-    'aliens-architecture',
-    'starwars-landscape',
-    // 'starwars-architecture' — disabled 2026-05-11
-    // 'guardians-landscape' — disabled 2026-05-11
-    'guardians-architecture', // ban skulls (see path file)
-    // 'mass-effect-landscape' — scrapped 2026-05-02
-    'mass-effect-architecture',
-    'halo-landscape',
-    // 'halo-architecture' — disabled 2026-05-11
-    'star-trek-landscape',
-    // 'star-trek-architecture' — scrapped 2026-05-02
-    'starcraft-landscape',
-    // 'starcraft-architecture' — disabled 2026-05-11
+    // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
+    // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
+    // migration attempts produced "hallway" renders that Kevin rejected;
+    // path/archetype/template/pool artifacts removed from repo.
   ],
 
-  // Path weights — universe-coded scenes / character paths / generic scenes.
-  // Cyborg + robot-moment moved to MechBot 2026-05-05.
+  // Path weights.
   pathWeights: {
-    // Generic scene paths (weight 5 each)
-    // 'cosmic-vista': 5,  // disabled 2026-05-11
     'alien-landscape': 5,
-    // 'space-opera': 5, // DISABLED 2026-05-12 (see bot.paths comment)
-    // 'sci-fi-interior': 5,  // disabled 2026-05-11 (cozy variant wins)
     'cozy-sci-fi-interior': 5,
     'alien-city': 5,
     'real-space': 5,
     'megastructure': 5,
-    // Character paths (weight 8 each)
     'cosmic-oracle': 8,
     'female-explorer': 8,
     'male-explorer': 8,
-    // Universe-coded scene-only paths (weight 4 each)
-    'dune-landscape': 4,
-    // 'dune-architecture': 4,  // deactivated
-    // 'aliens-landscape': 4,  // disabled 2026-05-11
-    'aliens-architecture': 4,
-    'starwars-landscape': 4,
-    // 'starwars-architecture': 4,  // disabled 2026-05-11
-    // 'guardians-landscape': 4,  // disabled 2026-05-11
-    'guardians-architecture': 4,
-    // 'mass-effect-landscape': 4,  // scrapped
-    'mass-effect-architecture': 4,
-    'halo-landscape': 4,
-    // 'halo-architecture': 4,  // disabled 2026-05-11
-    'star-trek-landscape': 4,
-    // 'star-trek-architecture': 4,  // scrapped
-    'starcraft-landscape': 4,
-    // 'starcraft-architecture': 4,  // disabled 2026-05-11
   },
 
   // Chaos layer — allow subject chaos on scenery + megastructure paths
@@ -254,13 +182,6 @@ module.exports = {
       'cosmic-vista', 'alien-landscape', 'space-opera', 'sci-fi-interior',
       'cozy-sci-fi-interior', 'alien-city', 'real-space', 'cosmic-oracle',
       'megastructure',
-      'dune-landscape', 'dune-architecture', 'aliens-landscape', 'aliens-architecture',
-      'starwars-landscape', 'starwars-architecture',
-      'guardians-landscape', 'guardians-architecture',
-      'mass-effect-landscape', 'mass-effect-architecture',
-      'halo-landscape', 'halo-architecture',
-      'star-trek-landscape', 'star-trek-architecture',
-      'starcraft-landscape', 'starcraft-architecture',
     ],
   },
 
@@ -307,22 +228,6 @@ module.exports = {
       'real-space': 'scene',
       'cosmic-oracle': 'scene',
       'megastructure': 'scene',
-      'dune-landscape': 'scene',
-      'dune-architecture': 'scene',
-      'aliens-landscape': 'scene',
-      'aliens-architecture': 'scene',
-      'starwars-landscape': 'scene',
-      'starwars-architecture': 'scene',
-      'guardians-landscape': 'scene',
-      'guardians-architecture': 'scene',
-      'mass-effect-landscape': 'scene',
-      'mass-effect-architecture': 'scene',
-      'halo-landscape': 'scene',
-      'halo-architecture': 'scene',
-      'star-trek-landscape': 'scene',
-      'star-trek-architecture': 'scene',
-      'starcraft-landscape': 'scene',
-      'starcraft-architecture': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

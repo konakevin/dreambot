@@ -15,15 +15,9 @@ function load(name) {
 // force PLANET_SETTING / CHARACTER_INTERIOR / COSMIC_ORACLE_LOCATIONS to a
 // single pool's content. Used during QA testing to verify how each pool
 // blends with each character path.
-const FORCE = process.env.STARBOT_FORCE_LOCATION_POOL;
-const FORCE_MAP = FORCE
-  ? { 'dune-landscape': load('dune_landscapes'),
-      'dune-architecture': load('dune_architecture'),
-      'aliens-landscape': load('aliens_landscapes'),
-      'aliens-architecture': load('aliens_architecture') }[FORCE]
-  : null;
-if (FORCE && !FORCE_MAP) console.warn('Unknown STARBOT_FORCE_LOCATION_POOL:', FORCE);
-if (FORCE_MAP) console.log('🔧 Forcing all location pools to:', FORCE);
+// STARBOT_FORCE_LOCATION_POOL override deleted 2026-05-14 along with the
+// 8 franchise paths it forced into.
+const FORCE_MAP = null;
 
 // Cyborg + robot pools moved to MechBot 2026-05-05 — see scripts/bots/mechbot/pools.js.
 
@@ -126,25 +120,7 @@ module.exports = {
   COSMIC_EVENT: load('cosmic_event'),
   // Conditional cozy intimate moment for cozy-sci-fi-interior path (40% gate)
   COZY_MOMENT: load('cozy_moment'),
-  COSMIC_ORACLE_LOCATIONS: FORCE_MAP ? FORCE_MAP : [
-    ...load('cosmic_oracle_locations'),
-    ...load('dune_landscapes'),
-    ...load('dune_architecture'),
-    ...load('aliens_landscapes'),
-    ...load('aliens_architecture'),
-    ...load('starwars_landscapes'),
-    ...load('starwars_architecture'),
-    ...load('guardians_landscapes'),
-    ...load('guardians_architecture'),
-    ...load('mass_effect_landscapes'),
-    ...load('mass_effect_architecture'),
-    ...load('halo_landscapes'),
-    ...load('halo_architecture'),
-    ...load('startrek_landscapes'),
-    ...load('startrek_architecture'),
-    ...load('starcraft_landscapes'),
-    ...load('starcraft_architecture'),
-  ],
+  COSMIC_ORACLE_LOCATIONS: load('cosmic_oracle_locations'),
   FEMALE_EXPLORERS: load('female_explorers'),
   MALE_EXPLORERS: load('male_explorers'),
   SCI_FI_FEMALE_OUTFITS: load('sci_fi_female_outfits'),
@@ -168,56 +144,6 @@ module.exports = {
   // 2026-05-01: drop ship/cozy locations, drop fashion-officer outfits, lock
   // to wide cinematic shots where the alien world dominates the frame).
   EXPLORER_OUTFITS_FEMALE: load('explorer_outfits_female'),
-  // Path-bespoke pools for starwars-landscape (2026-05-13) — Ralph McQuarrie /
-  // Doug Chiang painted-matte tradition.
-  STARWARS_ANCHOR_ENTITY: load('starwars_anchor_entity'),
-  STARWARS_MOMENT: load('starwars_moment'),
-  STARWARS_DEEP_DISTANCE: load('starwars_deep_distance'),
-  // Path-bespoke pools for starcraft-landscape (2026-05-13) — Blizzard /
-  // Sam Didier / Glenn Rane / Trent Kaniuga tradition.
-  STARCRAFT_ANCHOR_ENTITY: load('starcraft_anchor_entity'),
-  STARCRAFT_MOMENT: load('starcraft_moment'),
-  STARCRAFT_DEEP_DISTANCE: load('starcraft_deep_distance'),
-  // Path-bespoke pools for star-trek-landscape (2026-05-13) — Probert /
-  // Sternbach / classic-Trek painted-matte tradition.
-  STARTREK_ANCHOR_ENTITY: load('startrek_anchor_entity'),
-  STARTREK_MOMENT: load('startrek_moment'),
-  STARTREK_DEEP_DISTANCE: load('startrek_deep_distance'),
-  // Path-bespoke pools for mass-effect-architecture (2026-05-13) — BioWare /
-  // Sparth / Matt Rhodes clean-future-meets-distinct-alien tradition.
-  MASS_EFFECT_ATMOSPHERE_DETAIL: load('mass_effect_atmosphere_detail'),
-  MASS_EFFECT_DEEP_DISTANCE: load('mass_effect_deep_distance'),
-  MASS_EFFECT_INCIDENT: load('mass_effect_incident'),
-  // Path-bespoke pools for halo-landscape (2026-05-13) — Bungie / 343 /
-  // Sparth / Pat Rawlings tradition.
-  HALO_ANCHOR_ENTITY: load('halo_anchor_entity'),
-  HALO_MOMENT: load('halo_moment'),
-  HALO_DEEP_DISTANCE: load('halo_deep_distance'),
-  // Path-bespoke pools for guardians-architecture (2026-05-13) — James Gunn /
-  // Jack Kirby cosmic / 70s album-cover sci-fi tradition.
-  GUARDIANS_ATMOSPHERE_DETAIL: load('guardians_atmosphere_detail'),
-  GUARDIANS_DEEP_DISTANCE: load('guardians_deep_distance'),
-  GUARDIANS_INCIDENT: load('guardians_incident'),
-  // Path-bespoke pools for dune-landscape (2026-05-13) — Frank Herbert /
-  // Villeneuve aesthetic. Lone witness + candid moment + far-back signature.
-  DUNE_ANCHOR_ENTITY: load('dune_anchor_entity'),
-  DUNE_MOMENT: load('dune_moment'),
-  DUNE_DEEP_DISTANCE: load('dune_deep_distance'),
-  // Path-bespoke CHARACTER-FIRST pools for aliens-architecture (2026-05-13 ROUND 3).
-  // The path is being rebuilt as character-first per Kevin: anchor a cool
-  // franchise character in the biome, MANDATE a dynamic story action.
-  ALIENS_CHARACTER_ARCHETYPE: load('aliens_character_archetype'),
-  ALIENS_OUTFIT: load('aliens_outfit'),
-  ALIENS_ACTION: load('aliens_action'),
-  // Path-bespoke STORY_EVENT pool for aliens-architecture (2026-05-13 ROUND 2).
-  // Mandatory event that's HAPPENING in every render — fixes "boring empty
-  // hallway" renders by requiring a cinematic action focal point.
-  ALIENS_STORY_EVENT: load('aliens_story_event'),
-  // Path-bespoke pools for aliens-architecture (2026-05-13) — H.R. Giger /
-  // Ridley Scott / Cameron Aliens-coded interior atmospheric DNA.
-  ALIENS_ATMOSPHERE_DETAIL: load('aliens_atmosphere_detail'),
-  ALIENS_DEEP_DISTANCE: load('aliens_deep_distance'),
-  ALIENS_INCIDENT: load('aliens_incident'),
   // Path-bespoke pool for cozy-sci-fi-interior (2026-05-13) — the ONE
   // dominant warmth source defining each cozy scene's heat-and-light center.
   COZY_WARMTH_SOURCE: load('cozy_warmth_source'),
@@ -265,45 +191,7 @@ module.exports = {
     ...load('planet_ruins'),
     ...load('planet_cave'),
     ...load('planet_extreme'),
-    ...load('dune_landscapes'),
-    ...load('aliens_landscapes'),
-    ...load('starwars_landscapes'),
-    ...load('guardians_landscapes'),
-    ...load('mass_effect_landscapes'),
-    ...load('startrek_landscapes'),
-    ...load('halo_landscapes'),
-    ...load('starcraft_landscapes'),
   ],
-  // Indoor / architectural settings for character paths that go inside spaces
-  // (cyborg-woman, robot-moment, cosmic-oracle). Dune palace + Aliens biomech
-  // hive aesthetics merged.
-  CHARACTER_INTERIOR: FORCE_MAP ? FORCE_MAP : [
-    ...load('dune_architecture'),
-    ...load('aliens_architecture'),
-    ...load('halo_architecture'),
-    ...load('starwars_architecture'),
-    ...load('guardians_architecture'),
-    ...load('mass_effect_architecture'),
-    ...load('startrek_architecture'),
-    ...load('starcraft_architecture'),
-  ],
-  // Dedicated full-frame scene pools for the scene-only paths
-  DUNE_LANDSCAPES: load('dune_landscapes'),
-  DUNE_ARCHITECTURE: load('dune_architecture'),
-  ALIENS_LANDSCAPES: load('aliens_landscapes'),
-  ALIENS_ARCHITECTURE: load('aliens_architecture'),
-  STARWARS_LANDSCAPES: load('starwars_landscapes'),
-  STARWARS_ARCHITECTURE: load('starwars_architecture'),
-  GUARDIANS_LANDSCAPES: load('guardians_landscapes'),
-  GUARDIANS_ARCHITECTURE: load('guardians_architecture'),
-  MASS_EFFECT_LANDSCAPES: load('mass_effect_landscapes'),
-  MASS_EFFECT_ARCHITECTURE: load('mass_effect_architecture'),
-  HALO_LANDSCAPES: load('halo_landscapes'),
-  HALO_ARCHITECTURE: load('halo_architecture'),
-  STARTREK_LANDSCAPES: load('startrek_landscapes'),
-  STARTREK_ARCHITECTURE: load('startrek_architecture'),
-  STARCRAFT_LANDSCAPES: load('starcraft_landscapes'),
-  STARCRAFT_ARCHITECTURE: load('starcraft_architecture'),
   // SCALE-DEFINING BACKDROP — massive thing in the sky/horizon dwarfing the character
   EXPLORER_EPIC_BACKDROPS: load('explorer_epic_backdrops'),
   // Retired (kept for safety; explorer paths no longer consume):
