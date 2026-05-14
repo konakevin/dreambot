@@ -17,7 +17,8 @@ const pathBuilders = {
   'female-adventurer': require('./paths/female-adventurer'),
   'female-action-scenes': require('./paths/female-action-scenes'),
   'artsy-girl': require('./paths/artsy-girl'),
-  'male-warrior': require('./paths/male-warrior'),
+  'male-adventurer': require('./paths/male-adventurer'),
+  'male-action-scenes': require('./paths/male-action-scenes'),
   'cozy-arcane': require('./paths/cozy-arcane'),
   'arcane-halls': require('./paths/arcane-halls'),
   'dark-realm': require('./paths/dark-realm'),
@@ -70,6 +71,10 @@ module.exports = {
     // EMPTY by design — same lesson as female-adventurer. Sonnet's peak-
     // action body is what Flux needs to read first, not a stuffed wrapper.
     'female-action-scenes': '',
+    // EMPTY by design — male mirror of female-adventurer.
+    'male-adventurer': '',
+    // EMPTY by design — male mirror of female-action-scenes (cranked multi-effect)
+    'male-action-scenes': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -94,7 +99,8 @@ module.exports = {
     'female-adventurer': 'black-forest-labs/flux-1.1-pro',
     'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'artsy-girl': 'black-forest-labs/flux-1.1-pro',
-    'male-warrior': 'black-forest-labs/flux-1.1-pro',
+    'male-adventurer': 'black-forest-labs/flux-1.1-pro',
+    'male-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
     'arcane-halls': 'black-forest-labs/flux-1.1-pro',
     'dark-realm': 'black-forest-labs/flux-1.1-pro',
@@ -125,7 +131,7 @@ module.exports = {
 
   // Per-path vibe overrides — scene-only paths exclude `macabre`
   // (renders weird gore-coded landscapes; only fits character paths).
-  // Character paths (female-warrior, male-warrior, dragon-scene) inherit
+  // Character paths (female-adventurer, female-action-scenes, male-adventurer, dragon-scene) inherit
   // the full bot.vibes list.
   vibesByPath: {
     landscape: ['cinematic','dark','cozy','epic','nostalgic','whimsical','ethereal','arcane','ancient','enchanted','fierce','voltage','nightshade','shimmer','surreal'],
@@ -147,7 +153,8 @@ module.exports = {
     'female-adventurer',
     'female-action-scenes',
     'artsy-girl',
-    'male-warrior',
+    'male-adventurer',
+    'male-action-scenes',
     'cozy-arcane',
     'arcane-halls',
     'dark-realm',
@@ -168,7 +175,8 @@ module.exports = {
     'female-adventurer': 5,
     'female-action-scenes': 5,
     'artsy-girl': 4,
-    'male-warrior': 4,
+    'male-adventurer': 5,
+    'male-action-scenes': 5,
     'cozy-arcane': 3,
     'arcane-halls': 3,
     'dark-realm': 4,
@@ -209,14 +217,15 @@ module.exports = {
     // muted and more uniform; with it off, Sonnet's single-pass output gave
     // more lush + colorful + varied renders. Kevin adopted this as the
     // baseline for the path.
-    skipPaths: ['artsy-girl', 'female-adventurer', 'female-action-scenes'],
+    skipPaths: ['artsy-girl', 'female-adventurer', 'female-action-scenes', 'male-adventurer', 'male-action-scenes'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
       'female-adventurer': '80-110',
       'female-action-scenes': '100-130',
       'artsy-girl': '80-110',
-      'male-warrior': '80-110',
+      'male-adventurer': '80-110',
+      'male-action-scenes': '100-130',
       'dragon-scene': '80-110',
     },
     preservePhrasesByPath: {},
@@ -232,7 +241,8 @@ module.exports = {
       'female-adventurer': 'female',
       'female-action-scenes': 'female',
       'artsy-girl': 'female',
-      'male-warrior': 'male',
+      'male-adventurer': 'male',
+      'male-action-scenes': 'male',
       'dragon-scene': 'creature',
       'landscape': 'scene',
       'fantasy-scene': 'scene',

@@ -834,6 +834,223 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute ge
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MALE_ADVENTURER: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      race,
+      class: charClass,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+      surprise_element,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ENVIRONMENTAL DRAMA — render this visibly in the scene ━━━
+${drama}
+
+An atmospheric event happening in the world around him — render as a visible secondary focal point (NOT eclipsing him). Adds awe / story to the frame. NEVER combat or enemies.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a CANDID ADVENTURING scene for DragonBot — a single MAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, doing his adventurer thing out in the wild. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. He is ALIVE, CAPABLE, road-tested, in a story-rich candid moment.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [race-coded] MAN [doing action] in [landscape]..." — "man" comes BEFORE any class noun. Use he/him/his throughout. The class slot describes his ROLE, not his gendered noun — append role AFTER "man" appears.
+
+━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
+• NO combat, NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
+• Weapons stay holstered / sheathed / slung / carried — NEVER in active combat use
+• NO male-cheesecake: NO "shirtless" / "bare-chested" / "oiled pecs" / "strategically torn" / "rugged hero pose" / "smoldering" / "form-fitting" / "skin-tight"
+• His outfit reads FUNCTIONAL + COVERED — sleek adventuring gear, not sexualized
+• NO posing for the camera. NEVER staged. Candid moment, body in motion or charged stillness
+
+━━━ SOLO CHARACTER ONLY ━━━
+ONE character. No companions, no enemies, no crowds. He is ALONE in his moment.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+The adventurer is the MAIN SUBJECT. His face, gear, race, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+
+━━━ HIS RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
+${race}
+
+Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Drow = obsidian-grey skin and white-silver hair, beardless. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout, beardless. Half-orc = green-grey skin and tusks. Mountain dwarf = heavily-braided beard with iron clan-rings. Rohirrim = golden-blond braided beard. Nord = blond braided beard. Beards are male-coded for many races — RENDER THEM if the race entry calls for them. Race is the HERO of identity.
+
+━━━ HIS CLASS (his role / energy — informs how he carries himself) ━━━
+${charClass}
+
+━━━ HIS COMPACT BIO (one-line block — DO NOT expand) ━━━
+A ${race.split(':')[0]} man with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+
+All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Face fully visible (this is fantasy, not sci-fi — no sealed helmet).
+
+━━━ THE ACTION — what he is doing RIGHT NOW (CANDID, NEVER COMBAT) ━━━
+${action}
+
+GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
+
+━━━ THE LANDSCAPE (the wild stage — fantasy biome) ━━━
+${landscape}
+
+Depth on depth — FOREGROUND tactile detail (rocks / vegetation / camp gear / cliff-edge) → MIDGROUND landscape body + him → DEEP DISTANCE atmospheric layers stacked. Never flat backdrop. The landscape sets the stage but never competes with him for focus.
+${dramaSection}
+━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or deep midground — a small detail implying the wider world. NEVER foreground or competing with him for attention.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Three-quarter angle or side profile so we see his face and race clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near his feet (gear, rocks, vegetation, trail-edge). MIDGROUND: HIM, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "a [race-coded] MAN [doing exact action] in [landscape]" — race-noun "man" leads], [he wears [outfit] with full material detail], [his skin + eyes + hair + beard locked from DNA slots], [signature accessory visible], [the fantasy landscape wrapping around him — depth + atmospheric layers], [lighting + atmosphere particles], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[race-coded man] [DOING ACTION]" — man comes BEFORE rogue / ranger / mage / paladin / etc. He fills 25-40% of frame, FULL-BODY, captured at the loaded candid instant.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  MALE_ACTION_SCENES: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      race,
+      class: charClass,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+      surprise_element,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ENVIRONMENTAL DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A magical / atmospheric event amplifying the action — render as a visible secondary focal point. Adds awe / chaos / story.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a PEAK-ACTION CINEMATIC MOMENT for DragonBot — a MAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, captured at the apex of dynamic action. LOTR / GoT / Elden Ring / Skyrim / Witcher / Warcraft visual lineage. He is ALIVE, mid-motion, RIPPING with cinematic energy.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "mage", "rogue", "ranger", "paladin", "warrior" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [race-coded] MAN [doing action] in [landscape]..." — "man" comes BEFORE any class noun. Use he/him/his throughout. The class slot describes his ROLE, not his gendered noun — append role AFTER "man" appears.
+
+━━━ ABSOLUTE BANS — NSFW-CLEAN ━━━
+• NO male-cheesecake: NO "shirtless" / "bare-chested" / "oiled" / "strategically torn" / "rugged hero pose" / "smoldering" / "form-fitting" / "skin-tight"
+• His outfit reads FUNCTIONAL + COVERED — sleek action gear, not sexualized
+• NO posing for the camera. NEVER staged. Captured at a cinematic loaded INSTANT
+• NO real-world ethnic / historical costume codes — STRICT WESTERN HIGH FANTASY ONLY
+
+━━━ THIS IS PEAK ACTION — NOT A CANDID MOMENT ━━━
+The action axis describes a CINEMATIC MID-ACTION BEAT — mid-spell at the apex of a fireball, mid-loose with arrow streaking from his bow, mid-leap from a rooftop in a chase, the moment of summoning, the second a paladin's hammer crashes down, the instant a rogue's blade reverses for a kill.
+
+━━━ MULTI-EFFECT STACK — MANDATORY ━━━
+Every render MUST show AT LEAST 2-3 LAYERED VISIBLE EFFECTS / DYNAMIC ELEMENTS happening SIMULTANEOUSLY. ONE effect = boring. STACK them:
+• PRIMARY: his direct action (spell-released / arrow-loosed / blade-arc / leap-mid-air / portal-cracking)
+• SECONDARY: environmental reaction (debris kicked up / glass shattering / dust cloud / sparks raining / spell-light blooming outward / shockwave radiating / hair-and-cloak whipped by magical wind / motion-blur on his swung arm)
+• TERTIARY (scene context): active background — fleeing crowd / collapsing tower / distant explosion / arrow-volley overhead / dragon shadow / allied caster also mid-spell / battle silhouettes / cracking flagstones / smoke billowing / burning building / charging cavalry / scattered enemies retreating
+
+The frame should be ALIVE with chaos / motion / magic — not just him with one effect on a quiet background. THINK MOVIE-POSTER PROMOTIONAL STILL — every quadrant of the frame has something happening.
+
+━━━ SCALE THE MAGIC UP ━━━
+If the action involves magic, don't render a wisp — render a MAELSTROM. Not just a fireball — a fireball amid arcing tendrils of secondary flame and glowing-rune wake. Not just lightning — lightning forking down WITH an arcane storm circle radiating from his feet. Not just a portal — a portal CRACKING REALITY with creatures emerging and the air rippling. The magic should DOMINATE its quadrant of the frame.
+
+━━━ SOLO PROTAGONIST ━━━
+ONE character — he is the focus. Enemies / targets / mooks may exist in the scene but as scale-provers / context, NEVER eclipsing him. No fallen-body gore. No fights between two equally-prominent figures. HE is the show.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+His face, gear, race, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+
+━━━ HIS RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
+${race}
+
+Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Beards are male-coded for many races — RENDER THEM if the race entry calls for them. Race is the HERO of identity.
+
+━━━ HIS CLASS (his role / energy — informs HOW the action reads) ━━━
+${charClass}
+
+━━━ HIS COMPACT BIO (one-line block — DO NOT expand) ━━━
+A ${race.split(':')[0]} man with ${skin.split(',')[0]} skin, ${eyes.split(',')[0]} eyes, and ${hair_color.split(',')[0]} hair styled ${hairstyle.split('—')[0].trim()}, wearing ${outfit.split('—')[1] ? outfit.split('—')[1].trim() : outfit}, carrying ${accessory}.
+
+All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / outfit / accessory) should be discernible in the render. Face fully visible. NO sealed helmet (this is fantasy).
+
+━━━ THE PEAK-ACTION BEAT — what he is doing AT THIS EXACT INSTANT ━━━
+${action}
+
+Render at the LOADED INSTANT — body in motion, motion-blur where appropriate, effects in full bloom, the moment the camera caught him in. NOT before, NOT after — AT IT. Effects-rich, lit by the magic / fire / energy he is wielding.
+
+━━━ THE LANDSCAPE (the stage — action-scene context) ━━━
+${landscape}
+
+Depth on depth — FOREGROUND tactile detail (rubble / sparks / spell-residue / debris) → MIDGROUND him + the action → DEEP DISTANCE atmospheric layers / cityscape / battle-context. The landscape SETS the scene's stakes — burning towers, lantern-lit night market, magic-storm horizon, dragon attack on castle, collapsing dungeon.
+${dramaSection}
+━━━ SURPRISE ELEMENT — secondary detail amplifying the action ━━━
+${surprise_element}
+
+Place at midground or deep midground — a small detail implying wider stakes (fleeing enemies / falling banners / arcane sparks / scattered coins / hovering scrolls / fleeing crowd / smoldering ruin). NEVER eclipses him.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION — DYNAMIC ANGLES ━━━
+Action shots benefit from DYNAMIC camera angles. Mix across renders: three-quarter / dutch-tilt / low-angle hero / over-shoulder / sweeping pursuit / dramatic upshot. NEVER head-on at the camera. NEVER posing. FOREGROUND: tactile action detail (rubble / sparks / motion-blur / spell-residue). MIDGROUND: HIM, full body, AT THE PEAK INSTANT, 25-40% of frame. BACKGROUND: the action-scene landscape with stakes visible.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "a [race-coded] MAN [PEAK-ACTION verb] in [action landscape]" — race-noun "man" leads, then immediately the peak-action beat], [he wears [outfit]], [his skin + eyes + hair + beard from DNA], [signature accessory IN MOTION], [the landscape with action-stakes], [lighting + effects + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[race-coded man] [PEAK-ACTION-VERB]" — man comes BEFORE class. The action verb IS the composition driver. He fills 25-40% of frame, FULL-BODY, captured at the loaded action instant with MOTION + EFFECTS visible.
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute generic descriptions. Race comes FIRST visually. Every other slot is locked. EFFECTS, MAGIC, MOTION — let them BLOOM.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   // ARTSY_GIRL — frozen 2026-05-13 clone of the strengthened FEMALE_WARRIOR
   // template at the moment Kevin loved the Frazetta-cheesecake painted-
   // fantasy-cover output. Cloned so that ongoing female-warrior tuning never

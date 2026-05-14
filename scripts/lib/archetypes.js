@@ -179,6 +179,34 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MALE_ADVENTURER: {
+    description: 'PATH-BESPOKE — DragonBot male-adventurer path (2026-05-14 mirror of FEMALE_ADVENTURER, completely bespoke male pools). Gender-locked MAN of any D&D × LOTR fantasy race, any class. SLEEK adventuring gear — no bulky/massive armor, no shirtless/cheesecake, no artist-name lineage callouts. NSFW-clean. Strict Western high fantasy. Beards allowed for races where canon-appropriate (dwarves / humans / half-orcs / etc.). Character at 25-40% frame in candid mid-action moment. Painterly fantasy concept art. Full character DNA stack (8 axes incl. class) + 4 path-bespoke (action / landscape / drama 40%-gated / surprise_element).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['race', 'class', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['landscape', 'action', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MALE_ACTION_SCENES: {
+    description: 'PATH-BESPOKE — DragonBot male-action-scenes path (2026-05-14 clone of MALE_ADVENTURER, massaged for pure action energy). Same gender-locked MAN, NSFW-clean, sleek-gear, strict-high-fantasy. Same 12-axis split. The DIFFERENCE: action pool is rewritten for peak-action mid-moment cinematic beats with multi-effect stacking. Mirror of FEMALE_ACTION_SCENES for male protagonists. Character at 25-40% frame.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['race', 'class', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['landscape', 'action', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   // ARTSY_GIRL — frozen snapshot of FEMALE_WARRIOR (2026-05-13). Kevin
   // loved the Frazetta-cheesecake painted-fantasy-cover output female-warrior
   // was producing and asked for it bottled as its own path, independent of
