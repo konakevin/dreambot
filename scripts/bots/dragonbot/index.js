@@ -58,6 +58,8 @@ module.exports = {
   promptPrefixByPath: {
     'dragon-scene':
       'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, traditional Western high-fantasy DRAGON as the hero — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long muscular tail (NOT a serpent NOT a wyvern), jaw-dropping epic fantasy landscape with multi-layer depth, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Warcraft + D&D visual lineage, awe-inducing concept-art masterwork',
+    'female-warrior':
+      'Frank Frazetta + Brom + Boris Vallejo + Greg Hildebrandt + Michael Whelan painted-fantasy-novel-cover oil tradition, a single heroic WOMAN of a SPECIFIC fantasy lineage (drow OR tiefling OR dragonborn OR elf OR dwarf OR orc OR halfling OR aasimar OR genasi) as the hero at 25-40% of frame full body mid-action, CANDID PEACEFUL ADVENTURING moment between battles (NO combat NO mid-strike NO violence — weapons holstered or being maintained only), epic fantasy landscape as her stage, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + Skyrim + Witcher visual lineage, awe-inducing concept-art masterwork',
   },
   // Bit-identical to FaeBot's PROMPT_SUFFIX (with forest-specific phrases
   // dropped — "atmospheric forest illustration" and the

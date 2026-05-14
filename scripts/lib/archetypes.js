@@ -151,6 +151,20 @@ const ARCHETYPES = {
     anchorScaleRange: ['TINY', 'SMALL'],
   },
 
+  FEMALE_WARRIOR: {
+    description: 'PATH-BESPOKE — DragonBot female-warrior path. Gender-locked WOMAN of a specific fantasy lineage (drow / tiefling / dragonborn / elf / etc.) caught in a CANDID peaceful moment of adventuring life. NO combat, NO battle, NO violence. Cinematic mid-moment between battles. Character is SHOW at 25-40% frame. Frazetta / Brom / Vallejo / Hildebrandt painted-fantasy-novel-cover lineage. Full character DNA stack (7 axes) + 4 path-bespoke (action / landscape / drama 40%-gated / surprise_element).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: ['race', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      path: ['landscape', 'action', 'warrior_archetype', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_SCENE: {
     description: 'PATH-BESPOKE — DragonBot dragon-scene path. Traditional Western dragon (4 legs + 2 wings + horned reptilian skull) is the SUBJECT in a jaw-dropping fantasy landscape. NO characters/riders/humans. Path-bespoke pools for dragon (anatomy) + action (mid-action moment) + landscape (epic biome) + drama (40% gated environmental event) + surprise_element (tiny secondary subject). Canonical-LITE — DragonBot uses minimal wrapper layer so Sonnet body leads.',
     slots: {

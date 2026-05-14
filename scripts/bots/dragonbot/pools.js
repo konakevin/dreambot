@@ -32,6 +32,13 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // Path-bespoke pools for female-warrior (2026-05-14 — second DragonBot
+  // path migrated to the new system; clones dragon-scene canonical pattern
+  // with character DNA stack).
+  FEMALE_WARRIOR_ACTION: load('female_warrior_action'),
+  FEMALE_WARRIOR_LANDSCAPE: load('female_warrior_landscape'),
+  FEMALE_WARRIOR_DRAMA: load('female_warrior_drama'),
+  FEMALE_WARRIOR_SURPRISE_ELEMENT: load('female_warrior_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
   DRAGON_SCENE_DRAGON: load('dragon_scene_dragon'),
