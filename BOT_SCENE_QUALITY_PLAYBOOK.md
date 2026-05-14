@@ -168,6 +168,39 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 ---
 
+## CANONICAL REFERENCE — DragonBot dragon-scene (2026-05-14 first clean win)
+
+After the 2026-05-13 franchise-path massacre (next section), the same bespoke biome+axes system applied to DragonBot's `dragon-scene` path produced **5/5 hearted renders on the first batch** with no iteration. This is the reference migration. Clone this pattern for every future path overhaul.
+
+**Commit:** `bfbf771` — "DragonBot dragon-scene: migrate to bespoke biome+axes system"
+
+**What dragon-scene did differently from the failed StarBot 8-path migrations:**
+
+1. **Three-layer bespokeness from the start** — bespoke archetype + bespoke template + bespoke path-prefix wrapper. NOT added in later rounds.
+2. **Path-prefix wrapper locks visual lineage in the FIRST ~80 tokens.** Frazetta / Brom / Vallejo / Hildebrandt / Whelan painted-fantasy-novel-cover tradition embedded BEFORE Sonnet's body so Flux locks the style early.
+3. **Preserved the bot's intentional wrapper aesthetic.** DragonBot uses minimal wrappers (`promptPrefix: ''` + short suffix) — that was kept. Only added the path-prefix-by-path layer. No fighting accumulating contradictory directives.
+4. **Anatomy mandates in the template, not the pool.** The Western-dragon anatomy lock (4 legs + 2 wings + horned reptilian skull) is in the TEMPLATE. The pool stays focused on visual identity (color / horn pattern / wing character).
+5. **Separated `subject` from `action` axis.** Pool 1 (`dragon`) describes the dragon visual identity only. Pool 2 (`action`) describes what it's doing right now. Cleaner than the legacy DRAGON_TYPES pool which mixed both.
+6. **Render-tested 5 BEFORE moving on.** No rolling the pattern out to other DragonBot paths until dragon-scene is proven.
+
+**The 5-axis pool design pattern (replicate this for any character-or-subject-as-hero path):**
+
+| Axis | Purpose | Pool | Conditional |
+|---|---|---|---|
+| `subject` | Hero visual identity only (no action) | `<path>_<subject>` | always |
+| `action` | Mid-action cinematic moment | `<path>_action` | always |
+| `landscape` / `biome` / `setting` | The stage | `<path>_landscape` | always |
+| `drama` | Environmental / atmospheric event woven in | `<path>_drama` | **40% gated** |
+| `surprise_element` | Tiny secondary subject implying wider world | `<path>_surprise_element` | always |
+
+Plus universal axes (lighting + atmosphere from bot defaults).
+
+**File-by-file change set** (replicate verbatim for next path migration): see `memory/project_dragon_scene_reference_migration.md` for the canonical 8-step checklist (path file / legacy backup / pools.js registration / 5 seed JSONs / gen-pool recipe / archetype definition / template / bot index.js composer wiring).
+
+**Read this section before starting any new path migration.** If your plan deviates from this pattern, justify the deviation explicitly OR reconsider.
+
+---
+
 ## The 2026-05-13 franchise-path massacre — what NOT to do (CRITICAL POST-MORTEM)
 
 8 franchise-themed paths (aliens-architecture / dune-landscape / guardians-architecture / halo-landscape / mass-effect-architecture / star-trek-landscape / starcraft-landscape / starwars-landscape) were migrated through THREE consecutive attempts in one session. **All three attempts produced renders Kevin rejected as "boring hallways," "empty chambers," or "the same generic path."** Eventually ALL 8 paths were deleted from the repo entirely. ~$50-100 of Sonnet + Flux compute burned for zero shippable output.
