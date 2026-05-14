@@ -44,10 +44,8 @@ module.exports = {
     // portraits). Tested 2026-05-11 in R6 of female-explorer iteration.
     'female-explorer': 'canvas',
     'male-explorer': 'canvas',
-    // megastructure: anime medium (richer color / Akira / Ghost-in-the-Shell
-    // / Cyberpunk Edgerunners aesthetic) — re-enabled 2026-05-14 after a brief
-    // starbot_hyperreal swap produced less-colorful results.
-    'megastructure': 'anime',
+    // megastructure: reverted to default starbot_hyperreal medium
+    // (Kevin 2026-05-14 — align with all other scene paths)
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
