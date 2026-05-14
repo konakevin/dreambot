@@ -208,14 +208,14 @@ const ARCHETYPES = {
   },
 
   DRAGONBOT_LANDSCAPE: {
-    description: 'PATH-BESPOKE — DragonBot landscape path (2026-05-14 migration from legacy function-based form). Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is alive" mandate: LUSH / DYNAMICALLY LIT / FULL OF LIFE / AWE-STRUCK SCALE / RICH DETAIL. 5 path-bespoke axes (biome / architecture / phenomenon 40%-gated / surprise_element / sky_layer) + universal lighting + atmosphere. Flagship weight-5 path.',
+    description: 'PATH-BESPOKE — DragonBot landscape path (2026-05-14 migration from legacy function-based form, cranked to movie-poster intensity 2026-05-14). Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is alive" + "MOVIE POSTER" mandate: every render stacks 3+ visually striking elements (biome + architecture + dramatic phenomenon + scale-prover) for maximum awe. 5 path-bespoke axes (biome / architecture / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere. Flagship weight-5 path.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
       path: ['biome', 'architecture', 'surprise_element', 'sky_layer'],
     },
     pickN: {},
-    conditionalLayer: { slot: 'phenomenon', gate: 0.4 },
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
     framingModes: null,
     anchorScaleRange: null,
   },
