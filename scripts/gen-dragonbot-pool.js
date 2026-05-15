@@ -17,6 +17,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { SONNET } = require('./lib/models');
 
 function readEnvFile() {
   try {
@@ -122,30 +123,44 @@ const POOL_RECIPES = {
 
   dragon_lore_phenomenon: {
     format: 'simple',
-    theme: `80%-gated ATMOSPHERIC PHENOMENON woven into a dragon-lore scene — an awe-inducing event that elevates the scene from ruin to MEMORABLE. Each entry 25-50 words.\n\n⚠️ STRICT WESTERN HIGH FANTASY ONLY. 🚫 NO sci-fi / sky-whales / nebulas / floating islands / orbital structures / cosmic horror.\n\n✓ FANTASY-CANON PHENOMENA (especially those that ADD TO the dragon-lore mood — wonder + melancholy + ancient mystery):\n• Aurora borealis (mournful colors)\n• Twin moons rising over the ruin\n• Blood moon\n• Lightning storm illuminating the ruin\n• Solar / lunar eclipse\n• Meteor shower / shooting stars / comet\n• Distant living dragon passing far above the ruin (fantasy-canon echo of the lost)\n• God-rays piercing through broken roof\n• Heavy snowfall settling on the bones\n• Fog rolling through colonnade\n• Petrified-flame still flickering blue-cold mid-air over hoard\n• Will-o-wisp cluster in a dragon-skull\n• Ghostly dragon-shape visible briefly through mist\n• Beacon-fires lit on distant ridges (Gondor-coded)\n• Distant pyre-smoke rising\n• Rune-stones glowing faintly\n• Ground-fog with phosphorescent shimmer\n• Storm-front with crepuscular rays\n• Dust-motes catching shafts of light through ruin\n• Petals or feathers drifting through frame (Lothlórien-coded)`,
+    theme: `80%-gated UNIQUE DRAGON-SHAPED HABITAT for a dragon-lore scene — never-before-seen environmental features that ONLY a long-departed dragon's presence could have created. The HABITAT IS the phenomenon — the landscape itself bears the impossible mark of the dragon's living. Each entry 30-60 words.\n\n⚠️ STRICT WESTERN HIGH FANTASY ONLY. 🚫 NO sci-fi / sky-whales / nebulas / floating islands / orbital / cosmic horror / modern industrial. NO real-world ethnic codes.\n\n⚠️ MOVIE-POSTER INTENSITY — each habitat feature should DOMINATE its quadrant of the frame. Scale-vertigo mandatory: glass-trees rising 50 meters / petrified-fire flowing for miles / ash-snow blanketing horizon / crystalline geysers hundreds of meters tall. THINK STUDIO-GHIBLI-PETER-JACKSON-CONCEPT-ART scale, not subtle.\n\n⚠️ NEVER-BEFORE-SEEN — these must feel UNIQUE to a dragon-touched world. NOT generic fantasy ruins / NOT standard biomes / NOT recognizable from a real-world reference. Each habitat is an IMPOSSIBLE consequence of dragon-fire / dragon-blood / dragon-breath / dragon-tears / dragon-spittle / dragon-shed-scales / dragon-pyre-ash mineralizing or transforming the world.\n\nCategory tilt — distribute roughly:\n  A. **PETRIFIED-FIRE TRANSFORMATIONS** (~25%): dragon-fire fused things into glass / obsidian / crystal that still hums with residual heat or glow\n  B. **MINERAL-TEAR / BLOOD / SPITTLE POOLS** (~20%): dragon-fluids mineralized into impossible color patterns / prismatic surfaces / glowing pools\n  C. **ASH / EMBER / PYRE FALLOUT** (~15%): centuries-after a dragon-pyre, ash or embers or feathers still drifting / falling / accumulating\n  D. **DRAGON-CARVED GEOLOGY** (~15%): canyons fused / cliff-faces molten / valleys claw-rent / spires shaped by dragon-passage\n  E. **BONE / CORAL / FOSSIL REEFS** (~10%): dragon-bones became reefs / fossil-coral / mineral-formations growing over centuries\n  F. **ETERNAL ANOMALIES** (~15%): impossible perpetual states — flames that don't go out / ice that doesn't melt / runes that pulse / mirrors that show centuries-old reflections / time-paused phenomena`,
     touchpoints: [
-      'AURORA OVER THE RUIN — mournful green-and-violet curtains rippling across the night sky above the dragon-temple, illuminating the broken roof from above',
-      'BLOOD MOON RISE — massive crimson moon cresting the eastern horizon above the dragon-tomb, bathing the bones in rust-red light',
-      'GOD-RAYS THROUGH BROKEN ROOF — single thick column of sunlight piercing the collapsed cathedral dome, spotlighting the central altar',
-      'LIGHTNING ILLUMINATING THE RUIN — distant bolt forking across purple storm-cloud, briefly silhouetting the dragon-skeleton in white-hot light',
-      'FOG ROLLING THROUGH COLONNADE — wall of low mist advancing through the bone-pillared corridor, swallowing each rib-arch as it comes',
-      'DISTANT LIVING DRAGON PASSING ABOVE — winged silhouette gliding across the sky far above the ruin, scale-glint visible — the lost reaches still, briefly remember',
-      'GHOSTLY DRAGON-SHAPE IN MIST — translucent draconic silhouette briefly visible through fog over the ruin, fading as you watch',
-      'PETRIFIED-FLAME FLICKERING — over the abandoned hoard, the crystallized dragon-flame still flickers blue-cold, an impossible eternal ember',
-      'WILL-O\'-WISP CLUSTER IN DRAGON-SKULL — floating lantern-spirits drifting between the eye-sockets and through the jaw of the skeleton',
-      'MEMORIAL PYRE-SMOKE — single column of pale smoke rising from a distant ridge, an offering still kept by some forgotten clan',
-      'METEOR SHOWER OVER THE TOMB — dozens of fire-streaks tracing across a star-dense sky above the dragon-marker field',
-      'TWIN MOONS OVER THE AERIE — two moons rising together above the dragon-rider outpost, one full-white, one pale-amber',
-      'BEACON-FIRES LIT — fires burning on distant ridges visible from the ruin, sign that the watch is kept somewhere still',
-      'RUNE-STONES PULSING — the surrounding standing-stones flickering with soft blue-white runic light in slow waves',
-      'HEAVY SNOWFALL ON THE BONES — slow drifting flakes settling on the dragon-skeleton, accumulating in the eye-sockets and curve of ribs',
-      'COMET CROSSING THE SKY — bright tailed body passing overhead, its tail a long pale arc, the kind of event seen once a thousand years',
-      'PETAL-STORM OVER THE SHRINE — drifting pink petals from a distant grove carried by the wind across the ruined shrine',
-      'PHOSPHORESCENT GROUND-FOG — eerie blue-green shimmer through low fog at knee-height, drifting between the standing stones',
-      'CREPUSCULAR RAYS OVER THE TEMPLE — sun-shaft columns piercing storm-clouds, illuminating different sections of the temple in shifting spotlight',
-      'DUST-MOTES IN A LIGHT-SHAFT — single shaft of late-afternoon sun spotlighting the central hoard, dust-motes drifting through the beam like falling stars',
+      // PETRIFIED-FIRE TRANSFORMATIONS
+      'PETRIFIED-FIRE GLASS FOREST — entire pine forest flash-fossilized by ancient dragon-breath, every tree turned to translucent blue-cold obsidian-glass still humming with residual heat, the forest covers a whole valley with each glass-trunk fifty meters tall, light refracting through them in shafts',
+      'OBSIDIAN-FLOW VALLEY — dragon-fire ran through this valley centuries ago and never fully cooled, the lava-glass surface still warm to the touch with faint orange seams between cooled-black plates extending for miles, vapor rising in places',
+      'FROZEN-FLAME FOREST — entire grove of stone-fire columns where the dragon-flames crystallized mid-burn into upward-reaching petrified shapes, eternal frozen-flicker visible in the late-afternoon light',
+      'CRYSTAL-FUSED CLIFF FACE — entire cliff-wall melted and re-cooled by dragon-breath into towering prismatic crystal columns, refracting sunlight into rainbow shafts that paint the valley floor in shifting color',
+      'GLASS-CANYON OF FUSED STONE — canyon whose walls were heat-fused by dragon-fire into smooth glassy-black mirrors, the canyon-floor reflecting sky like a frozen river of obsidian',
+      // MINERAL-TEAR / BLOOD / SPITTLE
+      'CRYSTALLIZED-TEAR SALT-FLAT — vast salt-mirror surface where the wounded wyrm wept, the tears mineralized into prismatic patterns visible from on high, rainbow refraction in every footprint',
+      'DRAGON-BLOOD GEYSER FIELD — geysers steaming colored vapor where the ancient wyrm bled into the earth, the steam-clouds tinted crimson and gold in slow eternal exhale across a wide plain',
+      'PRISMATIC POOL OF DRAGON-TEARS — perfectly mirror-still pool that catches every color of the sky, the water-surface holding centuries-old reflections that don\'t match the current sky',
+      'SPITTLE-CRYSTAL FOREST — every surface of a grotto cluster grown over with iridescent crystal-formations from where the wyrm rested, each crystal humming faintly with dragon-residue',
+      'BLOOD-OBSIDIAN RIVER — solidified ribbon of dark glass winding through a valley, the path of dragon-blood spilled millennia ago and never reabsorbed by the earth',
+      // ASH / EMBER / PYRE FALLOUT
+      'ASH-SNOW FOREST — centuries after the dragon-pyre, luminescent ash still falls in an unending soft snow across the forest, accumulating in white-grey drifts that glow faintly at dusk',
+      'EMBER-RAIN PLAIN — drifting glowing embers fall slowly from a sky still healing from the pyre, the plain perpetually orange-lit from below by gentle ember-drift across the entire horizon',
+      'DRAGON-PYRE PETAL STORM — pale petals from a long-dead dragon-pyre-tree still drift on the wind a thousand years on, a constant slow-falling cloud of pink-white across the ruin',
+      'FEATHER-FALL MEADOW — feather-light dragon-down from the long-departed wyrm still drifts in the air over its old aerie, falling and re-rising in gentle gusts',
+      // DRAGON-CARVED GEOLOGY
+      'CLAW-RAVINE CANYON — canyon walls rent by single massive claw-strikes carved into the stone, six-meter-deep parallel grooves stretching for kilometers along the cliff-face',
+      'WING-CARVED MOUNTAIN — entire mountainside hollowed into a vast wing-shaped cavern where the dragon roosted, the negative-space outline of its wing still visible',
+      'WYRM-TAIL VALLEY — entire valley follows the impossibly long serpentine path where the dragon\'s tail rested for millennia, the valley walls perfectly fitted to its absent body',
+      'BREATH-FUSED COLUMN FIELD — vertical obsidian columns rising hundreds of meters across a plain where dragon-fire compressed the stone into prismatic spires',
+      // BONE / CORAL / FOSSIL REEFS
+      'BONE-CORAL REEF FIELD — where ancient dragon-bones became seed for coral growth over centuries, now a forest of branching white coral-bone-structures rising from a fossilized seabed',
+      'FOSSIL-VERTEBRAE BRIDGE-CHAIN — chain of connected islands formed when an ancient dragon\'s vertebrae mineralized into stone, each island the size of a hill',
+      'CALCIFIED SCALE-DRIFT — vast scattered field of fossilized dragon-scales each the size of a shield, accumulated over millennia from the shedding of one immense wyrm',
+      'WYRM-RIB CATHEDRAL FOREST — natural underground space where ancient dragon-ribs grew into pillars supporting cave-roofs over centuries, a rib-vaulted living-stone space',
+      // ETERNAL ANOMALIES
+      'PETRIFIED-FLAME FLICKERING ETERNAL — crystallized dragon-flame still flickers blue-cold over the abandoned hoard, an impossible eternal ember frozen mid-burn',
+      'TIME-PAUSED RAINSTORM — a single moment of dragon-fire flash-fossilized an entire rainstorm mid-fall, thousands of glass-droplets hovering on invisible stems-of-air',
+      'RUNE-STONES PULSING OUTWARD — the dragon-tomb-markers pulse with soft blue-white runic light in slow rolling waves, the pulse traveling stone-to-stone across the field',
+      'GHOSTLY-DRAGON SHAPES IN MIST — translucent draconic silhouettes briefly visible through fog over the ruin, multiple shapes moving slowly, fading as you watch',
+      'MIRROR-POND THAT SHOWS THE PAST — perfectly reflective pool whose surface holds a thousand-year-old reflection of the living dragon, visible only at dusk',
+      'PHOSPHORESCENT BLOOD-VEIN GLOW — visible glowing veins of dragon-blood snake through the rock-floor of the ruin, pulsing softly with each second',
     ],
-    instructions: `Each entry is ONE atmospheric phenomenon for a dragon-lore scene, 25-50 words. Adds awe + amplifies the wonder/melancholy mood. STRICT Western high fantasy. NO sci-fi / cosmic / orbital. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+    instructions: `Each entry is ONE UNIQUE DRAGON-SHAPED HABITAT phenomenon, 30-60 words. Format: "[NAME-CAP] — [what the dragon did + how the world bears its mark + the visual impossibility / scale]". The habitat IS the phenomenon. Movie-poster scale, NEVER-BEFORE-SEEN, only-a-dragon-could-do-this. STRICT Western high fantasy. NO sci-fi / cosmic / modern. Variety across petrified-fire / mineral-fluid / ash-pyre / dragon-geology / bone-fossil / eternal-anomaly. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
   dragon_lore_surprise_element: {
@@ -2905,7 +2920,7 @@ async function callSonnet(prompt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5-20250929',
+        model: SONNET,
         max_tokens: 16000,
         messages: [{ role: 'user', content: prompt }],
       }),
