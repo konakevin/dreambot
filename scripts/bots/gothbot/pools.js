@@ -64,6 +64,12 @@ module.exports = {
   GOTHBOT_DARK_LANDSCAPE_PHENOMENON: load('gothbot_dark_landscape_phenomenon'),
   GOTHBOT_DARK_LANDSCAPE_SURPRISE_ELEMENT: load('gothbot_dark_landscape_surprise_element'),
   GOTHBOT_DARK_LANDSCAPE_SKY: load('gothbot_dark_landscape_sky'),
+  // ─── gothic-vista path (2026-05-15, bespoke axis migration with LAND-IS-ALIVE mandate)
+  GOTHBOT_GOTHIC_VISTA_BIOME: load('gothbot_gothic_vista_biome'),
+  GOTHBOT_GOTHIC_VISTA_ARCHITECTURE: load('gothbot_gothic_vista_architecture'),
+  GOTHBOT_GOTHIC_VISTA_PHENOMENON: load('gothbot_gothic_vista_phenomenon'),
+  GOTHBOT_GOTHIC_VISTA_SURPRISE_ELEMENT: load('gothbot_gothic_vista_surprise_element'),
+  GOTHBOT_GOTHIC_VISTA_SKY: load('gothbot_gothic_vista_sky'),
   DARK_CREATURES: load('dark_creatures'),
   CASTLEVANIA_CONTEXTS: load('castlevania_contexts'),
   COZY_GOTH_SETTINGS: load('cozy_goth_settings'),
