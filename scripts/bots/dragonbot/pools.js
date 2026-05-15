@@ -133,6 +133,9 @@ module.exports = {
   DRAGON_SCENE_SURPRISE_ELEMENT: load('dragon_scene_surprise_element'),
   FANTASY_CHARACTERS: load('fantasy_characters'),
   FANTASY_LANDSCAPES: load('fantasy_landscapes'),
+  // ─── fantasy-scene path (2026-05-14, migration from legacy)
+  FANTASY_SCENE_ACTION: load('fantasy_scene_action'),
+  FANTASY_SCENE_DRAMA: load('fantasy_scene_drama'),
   WOW_LANDSCAPES: load('wow_landscapes'),
   WOW_ARCHITECTURE: load('wow_architecture'),
   LOTR_LANDSCAPES: load('lotr_landscapes'),

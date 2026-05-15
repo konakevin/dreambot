@@ -82,6 +82,9 @@ module.exports = {
     'dragon-lore': '',
     // EMPTY by design — dark-realm corrupted-wasteland scene path
     'dark-realm': '',
+    // EMPTY by design — fantasy-scene character+landscape path. Sonnet's
+    // character+landscape body must lead, not a stuffed prefix.
+    'fantasy-scene': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —

@@ -1,57 +1,24 @@
 /**
- * DragonBot fantasy-scene path — character in rich magical-atmospheric scene.
- * Wizard at cliff / ranger in forest / mage mid-ritual. Character is engaged
- * with magic.
+ * DragonBot fantasy-scene path — declarative form (2026-05-14).
+ *
+ * A single fantasy character integrated into an epic magical landscape,
+ * engaged with the magic / setting (not posed).
+ *
+ * Path-bespoke pools:
+ *   - character: FANTASY_CHARACTERS (reused legacy 200-entry pool)
+ *   - landscape: FANTASY_LANDSCAPES (reused legacy 280-entry pool)
+ *   - action: FANTASY_SCENE_ACTION (new 50-entry MVP)
+ *   - drama: FANTASY_SCENE_DRAMA (new 30-entry, 40%-gated)
+ *
+ * Pre-refactor file preserved at paths/legacy/fantasy-scene.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const character = picker.pickWithRecency(pools.FANTASY_CHARACTERS, 'fantasy_character');
-  const landscape = picker.pickWithRecency(pools.FANTASY_LANDSCAPES, 'fantasy_landscape');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-
-  return `You are a fantasy concept-art illustrator writing FANTASY CHARACTER SCENE compositions for DragonBot — character in a rich magical scene. Character is engaged with the magic / setting, not posed. Output wraps with style prefix + suffix.
-
-${blocks.EPIC_FANTASY_BLOCK}
-
-${blocks.MAGICAL_ATMOSPHERE_EVERYWHERE_BLOCK}
-
-${blocks.PAINTERLY_ILLUSTRATION_BLOCK}
-
-${blocks.NO_NAMED_CHARACTERS_BLOCK}
-
-${blocks.CINEMATIC_COMPOSITION_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE CHARACTER ━━━
-${character}
-
-━━━ THE SETTING ━━━
-${landscape}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Mid frame. Character integrated with scene — mid-gesture, mid-movement, mid-contemplation. Setting still visible and epic. Character is part of the moment, not staged. Painterly fantasy-illustration.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'FANTASY_SCENE',
+  pools: {
+    character: 'FANTASY_CHARACTERS',
+    landscape: 'FANTASY_LANDSCAPES',
+    action: 'FANTASY_SCENE_ACTION',
+    drama: 'FANTASY_SCENE_DRAMA',
+  },
 };
