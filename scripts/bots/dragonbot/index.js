@@ -91,6 +91,9 @@ module.exports = {
     // EMPTY by design — iconic-landscape merged path. Sonnet's stylized-biome
     // body must lead.
     'iconic-landscape': '',
+    // EMPTY by design — arcane-halls cathedral-magic-interior path.
+    // Sonnet's hall + magic-overload body must lead.
+    'arcane-halls': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -367,6 +370,7 @@ module.exports = {
       'landscape',
       'dragon-lore',
       'dark-realm',
+      'arcane-halls',
     ],
     conceptWords: 150,
     polishedWords: '65-90',

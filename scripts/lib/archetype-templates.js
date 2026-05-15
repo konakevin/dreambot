@@ -1233,6 +1233,143 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  ARCANE_HALLS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, hall, caster, spell_moment, magic_phenomena } = slots;
+    const phenomena = Array.isArray(magic_phenomena) ? magic_phenomena : [magic_phenomena];
+
+    return `You are a fantasy concept-art painter writing GRAND ARCANE MAGIC MOMENTS for DragonBot — a single spellcaster caught at the apex of their magical moment inside a grand magical interior. The character is the FOCAL POINT and MAGIC IS PARAMOUNT, visibly pouring from them and saturating the space. LOTR / GoT / Hogwarts / D&D / Witcher / Elden Ring visual lineage. Strict Western high fantasy.
+
+━━━ THE MAGIC MOMENT — ROOM-FILLING SATURATION ━━━
+ONE spellcaster (mage / cleric / sorceress / druid / warlock / archmage / necromancer / etc.) at the LOADED INSTANT of a MAJOR spell — and the magic is NOT a small effect at their hands. The magic SATURATES THE FRAME. The caster is INSIDE / WRAPPED BY / ENVELOPED IN the spell, not just adjacent to it.
+
+Think Doctor Strange opening a portal that fills the cathedral / Wanda erupting chaos-magic that consumes the room / Saruman summoning a storm that fills the tower / Gandalf at Khazad-dûm becoming the white-fire — the spell IS the room.
+
+━━━ MAGIC FILLS 60%+ OF THE FRAME — NON-NEGOTIABLE ━━━
+The spell-effect must DOMINATE the frame's visual surface area. Examples of correct intensity:
+• A vortex of swirling fire filling the entire upper half of the frame, embers raining throughout the room, the caster at the center
+• A storm-cell of lightning with dozens of forks cracking floor-to-ceiling through the whole room, the caster wreathed in arc-glow
+• A massive portal blooming so large it fills 70% of the frame, the caster a silhouette before its swirling depths
+• Fel-energy tendrils wrapping the entire room in violet light, the caster at the heart with energy flowing through them
+• A vast spell-circle ten meters across blazing on the floor with magical-light pillars rising from every rune
+• Cascading holy-light pouring from above and below at once, the caster floating at the center of overlapping light-columns
+
+NOT a wisp of smoke. NOT a bolt of lightning. NOT a small flame-orb. FULL ROOM-FILLING SATURATION.
+
+The character occupies 20-30% of frame, OFF-CENTER, with the magic CONSUMING the rest of the frame and visibly INTERACTING with their body — hair lifted by the magical wind, robes whipping in the energy, body silhouetted by the light from within the spell. NOT posing. NOT looking at viewer. INSIDE the magic.
+
+━━━ MAGIC IS THE SHOW — STACK THE EFFECTS ━━━
+Every render MUST stack 3+ visible magical effects simultaneously:
+  1. **THE CASTER\'S OWN MAGIC** — pouring from their hands / face / staff / circle / cauldron — the visible spell-effect from the spell_moment slot
+  2. **AMBIENT ROOM MAGIC** — phenomena listed below + glowing-rune-carvings on columns + floating-motes thick in the air + drifting magical-mist + scattered active spell-circles + floating spell-orbs / hovering grimoires / arc-lightning between conduits
+  3. **GLOWING ARTIFACTS** — potion-vials on a table glowing different colors / crystal-orb on pedestal pulsing / dragon-skull with glowing eyes on a shelf / mounted magical-relics catching light
+
+THE TWO ADDITIONAL MAGIC PHENOMENA (render BOTH visibly in the space):
+  • PHENOMENON A: ${phenomena[0] || ''}
+  • PHENOMENON B: ${phenomena[1] || ''}
+
+━━━ THE GRAND INTERIOR (the stage) ━━━
+${hall}
+
+Honor the SPECIFIC interior type from the slot — throne room / courtyard / stairwell / cathedral / vault / banquet hall / etc. Do NOT default to "vast cathedral hall with light shaft" if the slot describes something else. The interior is grand-scale (substantial, not intimate cottage) but the architectural shape varies.
+
+━━━ THE CASTER (render exactly — RACE IS THE HERO) ━━━
+${caster}
+
+🚫 NEVER DEFAULT TO "OLD WHITE-BEARDED HUMAN WIZARD." This is Flux's strongest fantasy-caster prior and must be actively rejected. If the slot says "Drow sorceress in her thirties" — render obsidian-grey-skinned drow woman, NOT bearded-old-white-man. If the slot says "Half-orc cleric" — render green-grey-skinned half-orc with tusks, NOT bearded-old-white-man. The race + gender + age in the slot is NON-NEGOTIABLE.
+
+Race anatomy UNMISTAKABLE:
+• Drow = obsidian-grey skin + white-silver hair + violet eyes
+• Tiefling = horns curling from forehead + slit-pupil eyes + red-or-violet skin
+• Half-orc = green-grey skin + tusks visible
+• Dragonborn = scaled face + reptilian snout
+• Aasimar = alabaster skin + inner-glow + halo
+• Genasi = elemental-tinted skin (sky-blue / ember-red / earth-bronze / etc.)
+• Gnome = small stature + wild colorful hair
+• Tabaxi = furred face + slit-pupil eyes
+• Wood Elf = pointed ears + leaf-green eyes
+• Firbolg = blue-grey skin + pointed ears
+• Goliath = ash-grey skin + clan-markings
+• Shadar-kai = bone-pale ashen skin + silver eyes
+• Halfling = small stature + youthful round face
+
+The character is the visual hook at 25-35% of frame, off-center.
+
+━━━ THE SPELL MOMENT — what magic is happening RIGHT NOW ━━━
+${spell_moment}
+
+The magic is at PEAK INTENSITY — frozen at the most jaw-dropping moment. Visible, saturated, multi-colored. Effects bloom outward from the caster into the space.
+
+━━━ ROOM-WIDE MAGIC OVERLOAD ━━━
+The interior is BUZZING with magic, not just the caster\'s spell:
+• EVERY COLUMN has glowing runic carvings pulsing softly
+• THE AIR is thick with glowing motes / sparkles / magical-pollen / drifting particles
+• SCATTERED active spell-circles glow at various points on the floor / walls
+• FLOATING spell-orbs / hovering grimoires / suspended crystals dot the space
+• ARC-LIGHTNING flickering between columns or crystals
+• MULTI-COLORED FLAMES burning in braziers (emerald / violet / amber / silver)
+• GLOWING POTION-VIALS / artifacts on tables and shelves around the caster
+• DRIFTING MAGICAL MIST coiling between columns
+
+━━━ MULTIPLE STACKED LIGHT SOURCES (≥3) ━━━
+God-rays through stained-glass + glowing floor-runes from below + the caster\'s own spell-glow + floating spell-orb halos + crackling arc-lightning + glowing crystal clusters. The space glows from MULTIPLE COMPETING SOURCES.
+
+━━━ SATURATED IMPOSSIBLE COLOR ━━━
+Violet / azure / emerald / amber / rose-magenta / shimmer-gold all coexisting in the frame. Heaven-tier saturation. CRANK EVERYTHING TO 11.
+
+━━━ STRICT WESTERN HIGH FANTASY ━━━
+🚫 NO sci-fi / cyberpunk / neon-modern / orbital / cosmic
+🚫 NO modern (no industrial / electric bulbs / plastic / chrome)
+🚫 NO real-world ethnic-coded interiors (no Forbidden-City / Persian / Aztec / etc.)
+🚫 NO additional figures — solo caster only
+✓ LOTR / GoT / Hogwarts / D&D / Witcher / Elden Ring / Warcraft / fantasy-novel-cover lineage
+
+━━━ SOLO CASTER ONLY ━━━
+ONE character. No second figure, no enemies, no apprentices, no crowds. The caster is alone in their magical moment. A small familiar (raven / cat / wisp) is permitted.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MOVIE POSTER MANDATE — STACK EVERY QUADRANT ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 4+ visually arresting elements:
+
+  1. **THE CASTER + ROOM-FILLING SPELL** in midground left-or-right (25-35% of frame, off-center, wrapped in the saturated magic)
+  2. **ARCHITECTURAL ORNAMENT** clearly readable — columns / stained-glass / arches / chandeliers / vaulted ceiling / mosaic floor / suspended banners — the room is VISIBLE and detailed alongside the magic, NOT consumed by it
+  3. **FOREGROUND TACTILE ANCHOR** at the front of the frame — an open glowing-grimoire on a pedestal / a cluster of glowing potion-vials on a table / a floating crystal-orb / a brass orrery / a runic-floor section / a column-base with runic-carvings — the eye lands here first
+  4. **AMBIENT MAGIC PHENOMENA** beyond the caster's central spell — floating sigils orbiting columns / drifting magical-motes throughout the air / suspended spell-orbs at the ceiling / scattered active spell-circles on the floor / glowing-rune-carvings on every wall
+
+THE EYE SHOULD LAND ON 4 DIFFERENT DETAILS in the frame. Not just "caster + spell" symmetric and centered. Off-center the caster, fill foreground with magical-clutter, show the architecture, layer ambient magic everywhere.
+
+━━━ MULTI-TIER DEPTH — NON-NEGOTIABLE ━━━
+• FOREGROUND TIER (front 20% of frame): tactile magical detail anchoring the viewer — glowing pedestal / floating orb / runic-floor / open grimoire / spell-orb cluster
+• MIDGROUND TIER (middle 50%): the caster off-center wrapped in their room-filling spell, the ambient magic phenomena, the architectural feature
+• DEEP-DISTANCE TIER (back 30%): the grand interior receding into magical haze — more columns / more stained-glass / more architectural depth / more ambient magic at distance
+
+Flat compositions are FAILED. Multi-tier depth is mandatory.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+CRITICAL: the OPENING TOKENS must lead with RACE + CLASS — Flux early-token weighting collapses any "elderly / middle-aged male / young female" lead into "old white-bearded wizard." Always open with "A [RACE] [CLASS]" (e.g., "A Drow sorceress" / "A Tiefling warlock" / "An Aasimar cleric").
+
+CRITICAL: the SECOND structural beat must be the FOREGROUND ANCHOR (a glowing tactile detail at the front of frame) — Flux uses early prompt context to set composition, so introducing the foreground tier early forces the multi-tier composition. NOT the architecture, NOT the spell, the FOREGROUND ANCHOR first after the caster.
+
+[OPENING: "A [RACE] [CLASS], [age + gender + outfit specifics], wrapped in [spell_moment room-filling effect]"], [FOREGROUND ANCHOR: open glowing-grimoire on pedestal / cluster of glowing potion-vials / floating crystal-orb / runic-floor section catching the eye at the front of frame], [the GRAND INTERIOR architecture clearly visible — columns / stained-glass / arches / vaulted ceiling — alongside the magic], [the two ambient phenomena visible at midground and deep distance], [room-wide magic overload — runic columns / motes / floating spell-orbs / glowing artifacts in alcoves], [stacked light sources], [color palette + mood]
+
+DRAMATIC VISUALS: render the EXACT caster + spell moment + hall + ALL TWO ambient phenomena from slots. The caster is mid-action with their magic POURING out. The interior is BUZZING with ambient magic. Magic is PARAMOUNT — every quadrant has magical effects happening.
+
+Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   ICONIC_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, biome, sky_layer, phenomenon } = slots;
 

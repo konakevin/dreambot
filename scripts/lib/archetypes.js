@@ -281,6 +281,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  ARCANE_HALLS: {
+    description:
+      'PATH-BESPOKE — DragonBot arcane-halls path (2026-05-15 pivot — was no-character magic-overload, NOW character-mid-magic-moment). A single spellcaster (mage / cleric / sorceress / druid / warlock / archmage / etc.) caught at the apex of their magical moment INSIDE a grand magical interior (cathedral hall / throne room / courtyard / stairwell / vault / banquet hall / observatory / etc.). The character is the focal point — MAGIC IS PARAMOUNT, visibly pouring from them and saturating the space. Path-bespoke axes (hall / caster / spell_moment / magic_phenomena pickN:2) + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['hall', 'caster', 'spell_moment', 'magic_phenomena'],
+    },
+    pickN: { magic_phenomena: 2 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   ICONIC_LANDSCAPE: {
     description:
       'PATH-BESPOKE — DragonBot iconic-landscape path (2026-05-14 merger of wow-landscape + lotr-landscape into a single stylized-fantasy-biome path). Stylized/saturated/iconic fantasy biomes drawing from BOTH the Tolkien-mythic-grandeur tradition AND the Blizzard-hand-painted-stylized tradition. Iconic archetypal biomes: Shire-pastoral / Mordor-volcanic / Rivendell-valley / Moonglade-elven / fel-corrupted-alien / Misty-Mountains-cold / Lothlorien-golden-wood / Northrend-tundra / Pandaria-bamboo / etc. NO CHARACTERS — pure landscape. Saturated stylized aesthetic distinct from the realistic-coded main `landscape` path. 3 path-bespoke axes (biome / sky_layer / phenomenon 60%-gated) + universal lighting + atmosphere.',

@@ -143,6 +143,11 @@ module.exports = {
   ICONIC_BIOME: load('iconic_biome'),
   ICONIC_LANDSCAPE_SKY: load('iconic_landscape_sky'),
   ICONIC_LANDSCAPE_PHENOMENON: load('iconic_landscape_phenomenon'),
+  // ─── arcane-halls path (2026-05-15 pivot — character-mid-magic-moment)
+  ARCANE_HALL: load('arcane_hall'),
+  ARCANE_HALL_PHENOMENA: load('arcane_hall_phenomena'),
+  ARCANE_CASTER: load('arcane_caster'),
+  ARCANE_SPELL_MOMENT: load('arcane_spell_moment'),
   WOW_LANDSCAPES: load('wow_landscapes'),
   WOW_ARCHITECTURE: load('wow_architecture'),
   LOTR_LANDSCAPES: load('lotr_landscapes'),
