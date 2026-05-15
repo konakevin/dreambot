@@ -504,14 +504,17 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* Advanced Mode toggle — only shown when there's a custom prompt
-              with no photo. When ON: prompt goes verbatim to the user's
-              chosen Flux model, skipping Sonnet expansion, chaos, medium/vibe
-              directives, AND face swap. Slim row: "Advanced Mode" label +
-              (i) info icon (tap to open the info modal) + switch on the
-              right. Face-swap warning still surfaces in the footer
-              contextHint to stay above the keyboard. */}
-          {hasPrompt && !hasPhoto && (
+          {/* Advanced Mode toggle — always visible when there's no photo
+              (toggle state is sticky per-user via AsyncStorage, see
+              USE_EXACT_PROMPT_KEY above). When ON: prompt goes verbatim
+              to the user's chosen Flux model, skipping Sonnet expansion,
+              chaos, medium/vibe directives, AND face swap. Slim row:
+              "Advanced Mode" label + (i) info icon (tap to open the info
+              modal) + switch on the right. Face-swap warning still
+              surfaces in the footer contextHint to stay above the
+              keyboard. Photo path shows the inline override note above
+              instead (Advanced Mode is text-only). */}
+          {!hasPhoto && (
             <View
               className="rounded-xl mb-4"
               style={{
