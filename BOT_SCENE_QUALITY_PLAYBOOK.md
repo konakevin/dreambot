@@ -392,6 +392,352 @@ ALSO strengthen the recipe at the same time so future regens stay clean.
 
 ---
 
+## CANONICAL REFERENCE — Scene-path migration to bespoke axis system (2026-05-15)
+
+The DragonBot landscape / dragon-lore / dark-realm / fantasy-scene / epic-moment / iconic-landscape / arcane-halls + GothBot dark-landscape / gothic-vista / gothic-architecture migrations all followed the SAME recipe. **This is the canonical migration pattern for any scene-path on any bot.** Read this section in full before migrating a scene path.
+
+**Successful migrations on this recipe:**
+
+| Bot | Path | Date | Identity |
+|---|---|---|---|
+| DragonBot | landscape | 2026-05-14 | Pure scenery, movie-poster flagship |
+| DragonBot | dragon-lore | 2026-05-14 | Archaeological evidence of dragons |
+| DragonBot | dark-realm | 2026-05-14 | Corrupted wastelands / Mordor lineage |
+| DragonBot | fantasy-scene | 2026-05-14 | Character integrated in epic landscape |
+| DragonBot | epic-moment | 2026-05-14 | Epic castle scenes (50/50 castle + event) |
+| DragonBot | iconic-landscape | 2026-05-14 | Merged wow+lotr stylized biomes |
+| DragonBot | arcane-halls | 2026-05-15 | Character mid-magic in grand interior |
+| GothBot | dark-landscape | 2026-05-15 | Pure gothic landscape |
+| GothBot | gothic-vista | 2026-05-15 | Alive-and-haunted gothic landscape |
+| GothBot | gothic-architecture | 2026-05-15 | Structure-as-hero (80%+ visual weight) |
+
+### Canonical 5-axis scene-path structure
+
+For a pure scenery / landscape path, the universal axis split is:
+
+| Axis | Slot | Type | Production target |
+|---|---|---|---|
+| Universal | `lighting` | bot.defaultPools | (bot pool — 100-200 entries) |
+| Universal | `atmosphere` | bot.defaultPools | (bot pool — 100-200 entries) |
+| Path-bespoke | `biome` (or `scene`) | path-pool | 200 |
+| Path-bespoke | `architecture` | path-pool | 150 |
+| Path-bespoke | `phenomenon` | path-pool, **80%-gated** | 50 |
+| Path-bespoke | `surprise_element` | path-pool | 150 |
+| Path-bespoke | `sky_layer` | path-pool | 100 |
+
+Total: 5 path-bespoke + 2 universal = 7 axes per render. Phenomenon at 80%-gate means it fires on ~4 of every 5 renders (atmospheric variety).
+
+### Variant: character-led scene (FANTASY_SCENE pattern)
+
+When the path centers a single character integrated in a scene (NOT a portrait), the axes shift:
+
+| Axis | Slot | Type | Production target |
+|---|---|---|---|
+| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
+| Path-bespoke | `character` | path-pool (often reuses bot's 200-entry FANTASY_CHARACTERS) | 200 |
+| Path-bespoke | `landscape` | path-pool (often reuses bot's existing landscapes) | 200-280 |
+| Path-bespoke | `action` | path-pool | 200 |
+| Path-bespoke | `drama` | path-pool, **80%-gated** | 100 |
+
+### Variant: structure-as-hero (gothic-architecture pattern)
+
+When the architecture DOMINATES (80%+ visual weight), shift axes to focus the building:
+
+| Axis | Slot | Type | Production target |
+|---|---|---|---|
+| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
+| Path-bespoke | `structure` | path-pool, building+context | 200 |
+| Path-bespoke | `architectural_detail` | path-pool, **pickN: 3** | 50 |
+| Path-bespoke | `inner_light` | path-pool, glow source | 50 |
+| Path-bespoke | `accent_creature` | path-pool, **80%-gated** | 100 |
+| Path-bespoke | `sky_layer` | path-pool | 100 |
+
+The `pickN: 3` on architectural_detail picks 3 ornate flourishes per render (rose-window / gargoyle / spire / etc.). Forces obsessive-density on the building.
+
+### Variant: 2-axis castle+event (epic-castle pattern)
+
+When the path is 50/50 a "thing happening AT a thing" (e.g., epic-moment = castle + event):
+
+| Axis | Slot | Type | Production target |
+|---|---|---|---|
+| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
+| Path-bespoke | `castle` (or hero element 1) | path-pool | 200 |
+| Path-bespoke | `event` (or hero element 2) | path-pool | 150 |
+
+Only 2 path-bespoke axes but each pool is rich and the brief enforces the 50/50 composition.
+
+### Variant: character mid-magic in interior (arcane-halls pattern)
+
+When the path is a single character casting a major spell INSIDE a grand interior:
+
+| Axis | Slot | Type | Production target |
+|---|---|---|---|
+| Universal | `lighting` + `atmosphere` | bot.defaultPools | |
+| Path-bespoke | `hall` | path-pool, the interior | 200 |
+| Path-bespoke | `caster` | path-pool, race-first spellcaster archetype | 200 |
+| Path-bespoke | `spell_moment` | path-pool, room-filling pure-magic | 100 |
+| Path-bespoke | `magic_phenomena` | path-pool, **pickN: 2** ambient room magic | 100 |
+
+### Step-by-step migration recipe
+
+For ANY scene path on ANY bot, the migration flow is:
+
+#### Step 1 — Read the legacy path file
+```
+scripts/bots/<bot>/paths/<path>.js
+```
+Note the existing pools used, the brief structure, the bot-specific aesthetic vocabulary, the inline rolls (gender / age / etc.), the hard rules / bans.
+
+#### Step 2 — Check existing pools
+```bash
+ls scripts/bots/<bot>/seeds/ | grep <relevant-prefix>
+node -e "console.log(require('./scripts/bots/<bot>/seeds/<pool>.json').length)"
+```
+If the legacy pool is already production-scale (200+ entries) and well-curated, you can REUSE IT in the bespoke architecture — see DragonBot fantasy-scene which reused 200-entry FANTASY_CHARACTERS + 280-entry FANTASY_LANDSCAPES. If pools need re-doing, plan to regen bespoke pools.
+
+#### Step 3 — Pick the variant
+Choose from the 4 variants above (5-axis scene / character-led / structure-as-hero / castle+event / character-in-interior) or design a custom variant. The variant is determined by what DOMINATES the frame: landscape / character-in-landscape / building / two-element-50-50 / character-in-interior.
+
+#### Step 4 — Set up the bot's gen script (one-time per new bot)
+If the bot doesn't have a gen script yet (e.g., GothBot didn't until 2026-05-15):
+
+```bash
+# Copy DragonBot's gen script as the template, retarget output path
+cp scripts/gen-dragonbot-pool.js scripts/gen-<bot>-pool.js
+# Edit: change header doc, change POOL_RECIPES to empty, change output path
+#   to scripts/bots/<bot>/seeds/
+sed -i 's|scripts/bots/dragonbot/seeds|scripts/bots/<bot>/seeds|g' scripts/gen-<bot>-pool.js
+# Strip DragonBot recipes from POOL_RECIPES, leave just infrastructure
+```
+
+The infrastructure (signatureOf / dedupe / target-loop / fetch / fallback) is universal — just keep it. The POOL_RECIPES dict is bot-specific. **Never share recipes across bots — the aesthetic vocabulary is bespoke per bot.**
+
+#### Step 5 — Bot config additions (one-time per new bot)
+The bot's `index.js` needs to support the declarative form. Add to `module.exports`:
+
+```js
+// Bot-level pool defaults for declarative axis paths.
+defaultPools: {
+  lighting: 'LIGHTING',
+  atmosphere: 'ATMOSPHERES',
+},
+
+poolByName(name) {
+  if (!(name in pools)) {
+    throw new Error(`<Bot>.poolByName: unknown pool "${name}"`);
+  }
+  return pools[name];
+},
+```
+
+And update `buildBrief` to dispatch BOTH function-form (legacy paths) and object-form (declarative paths):
+
+```js
+buildBrief({ path, sharedDNA, vibeDirective, vibeKey, medium, picker }) {
+  const builder = pathBuilders[path];
+  if (!builder) throw new Error(`<Bot>: unknown path "${path}"`);
+  if (typeof builder === 'function') {
+    return builder({ sharedDNA, vibeDirective, vibeKey, medium, picker });
+  }
+  if (builder && typeof builder === 'object' && builder.archetype) {
+    const { composeBrief } = require('../../lib/brief-composer');
+    return composeBrief({
+      bot: module.exports,
+      pathConfig: builder,
+      sharedDNA,
+      vibeDirective,
+      picker,
+    });
+  }
+  throw new Error(`<Bot>: path "${path}" has invalid export shape`);
+},
+```
+
+Without these additions, the engine errors with `builder is not a function` when trying to render a declarative path.
+
+#### Step 6 — Author archetype, template, recipes
+
+1. **Add archetype** to `scripts/lib/archetypes.js`:
+```js
+<BOT>_<PATH_UPPER>: {
+  description: 'PATH-BESPOKE — <Bot> <path> path (<date> migration). [...identity prose...]',
+  slots: {
+    universal: ['lighting', 'atmosphere'],
+    bot: [],
+    path: ['biome', 'architecture', 'surprise_element', 'sky_layer'],
+  },
+  pickN: {},
+  conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+  framingModes: null,
+  anchorScaleRange: null,
+},
+```
+
+2. **Add template** to `scripts/lib/archetype-templates.js` — mirror an existing successful template (DRAGONBOT_LANDSCAPE / DRAGONBOT_DARK_REALM for scene paths) with FULL BOT-SPECIFIC VOCABULARY SWAP. NEVER let DragonBot's "LOTR / Skyrim / Witcher" vocabulary leak into GothBot's template, or vice versa.
+
+3. **Add pool recipes** to `scripts/gen-<bot>-pool.js`. Each recipe needs bot-bespoke aesthetic mandate, bot-bespoke ban list, variety distribution mandate, and 20-25 touchpoint examples. The touchpoint examples ANCHOR what Sonnet generates — write them in the bot's voice.
+
+4. **Move legacy path to legacy/**:
+```bash
+mkdir -p scripts/bots/<bot>/paths/legacy
+mv scripts/bots/<bot>/paths/<path>.js scripts/bots/<bot>/paths/legacy/<path>.js
+```
+
+5. **Create new declarative path file** `scripts/bots/<bot>/paths/<path>.js`:
+```js
+module.exports = {
+  archetype: '<BOT>_<PATH_UPPER>',
+  pools: {
+    biome: '<BOT>_<PATH>_BIOME',
+    architecture: '<BOT>_<PATH>_ARCHITECTURE',
+    phenomenon: '<BOT>_<PATH>_PHENOMENON',
+    surprise_element: '<BOT>_<PATH>_SURPRISE_ELEMENT',
+    sky_layer: '<BOT>_<PATH>_SKY',
+  },
+};
+```
+
+6. **Register pools** in `scripts/bots/<bot>/pools.js`:
+```js
+<BOT>_<PATH>_BIOME: load('<bot>_<path>_biome'),
+<BOT>_<PATH>_ARCHITECTURE: load('<bot>_<path>_architecture'),
+// etc.
+```
+
+7. **Add to bot's `twoPassPolish.skipPaths`** in `index.js` — scene-path templates are detail-rich and Haiku polish often condenses out the bot-specific vocabulary. Single-pass Sonnet preserves the aesthetic identity.
+
+#### Step 7 — Generate MVP pools (30 entries each, parallel)
+
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+for pool in <bot>_<path>_biome <bot>_<path>_architecture <bot>_<path>_phenomenon <bot>_<path>_surprise_element <bot>_<path>_sky; do
+  node scripts/gen-<bot>-pool.js --pool $pool --count 30 &
+done
+wait
+```
+
+30 entries is enough to validate the recipe's quality. Don't scale to production until renders prove the recipe works.
+
+#### Step 8 — Sanity check + 5 test renders
+
+```bash
+node -e "
+const bot = require('./scripts/bots/<bot>/index.js');
+const archetypes = require('./scripts/lib/archetypes.js');
+const templates = require('./scripts/lib/archetype-templates.js');
+const pools = require('./scripts/bots/<bot>/pools.js');
+console.log('Archetype:', archetypes.ARCHETYPES.<BOT>_<PATH> ? '✓' : '✗');
+console.log('Template:', Object.keys(templates).includes('<BOT>_<PATH>') ? '✓' : '✗');
+console.log('In paths array:', bot.paths.includes('<path>'));
+// list all required pools exist
+"
+
+node scripts/iter-bot.js --bot <bot> --count 5 --mode <path> --label <path>-r0 --post
+```
+
+Pull the 5 renders + their prompts. Check:
+- Composition holds (multi-tier depth visible)
+- Bot-aesthetic vocabulary lands (NOT cross-pollination — GothBot is gothic NOT high-fantasy)
+- Movie-poster intensity (every quadrant has something)
+- Specific path identity comes through
+
+#### Step 9 — Crank movie-poster intensity if needed
+
+First batches typically come out "good but not flagship-level." If Kevin grades "not at movie-poster quality" or "needs more cranking," upgrade the template's MOVIE POSTER MANDATE section:
+
+**Lighter version** (default first attempt):
+```
+━━━ MOVIE POSTER MANDATE — STACK 3+ STRIKING ELEMENTS ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ simultaneously-visible elements:
+  1. THE BIOME at multi-tier scale
+  2. ARCHITECTURE ANCHOR at midground or deep distance
+  3. ATMOSPHERIC PHENOMENON dominating its quadrant
+  4. SCALE PROVER giving scale to verticality
+  5. TWILIGHT SKY saturated theatrical
+```
+
+**Cranked version** (after first batch grades not-quite-flagship):
+```
+━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
+This is the FLAGSHIP <path> path. Every render is a MOVIE POSTER PROMOTIONAL FRAME with VERTIGO-INDUCING SCALE. The kind of vista that stops the viewer mid-scroll. EVERY QUADRANT of the frame has something striking — no quiet corners.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+  1. THE [BIOME/STRUCTURE/etc.] at vertigo-inducing scale — multi-tier depth mandatory
+  2. ARCHITECTURE ANCHOR with [specific path signature]
+  3. ATMOSPHERIC PHENOMENON DOMINATING its quadrant
+  4. SCALE PROVER — [specific allowed dark-wildlife list]
+  5. SATURATED THEATRICAL SKY
+  6. FOREGROUND TACTILE DETAIL anchoring depth
+
+VERTIGO-INDUCING SCALE — every render must convey awe-inducing scope:
+• Cliffs that drop a thousand feet into mist
+• Spires piercing storm-clouds
+• Valleys so deep they vanish into mist
+• Forests stretching to every horizon
+• [bot-specific scale references]
+
+THE EYE SHOULD LAND ON 4+ STRIKING DETAILS in different quadrants. NOT just a centered beauty shot.
+
+THINK [BOT-SPECIFIC AESTHETIC LINEAGE A-establishing-shot] / [LINEAGE-B-intro-card] / [LINEAGE-C-establishing-frame] — every frame should make the viewer GASP.
+```
+
+The crank is a **template-only change** — no pool regeneration needed. Test on the same MVP pool and judge if it's hit the bar.
+
+#### Step 10 — Scale up + commit
+
+Once renders are at the bar:
+
+```bash
+# Production scale-up in background while moving to next path
+{
+  node scripts/gen-<bot>-pool.js --pool <pool> --target 200 --count 30 2>&1 | tail -3
+  # ... for each pool with target sizes
+} > /tmp/<path>-scale-up.log 2>&1 &
+```
+
+Production target sizes (see table at top of section for variant-specific):
+- biome / scene / hall / structure: 200
+- architecture: 150
+- surprise_element: 150
+- sky_layer: 100
+- phenomenon (80%-gated): 50
+- ornate-detail pools (pickN: 3): 50
+- inner_light / drama (40%-gated): 50
+
+Commit the path migration BEFORE scale-up completes — you don't need to wait for the background job. The MVP commit captures the design; a follow-up scale-up commit lands the production pools.
+
+```bash
+git add scripts/bots/<bot>/index.js scripts/bots/<bot>/paths/<path>.js scripts/bots/<bot>/paths/legacy/<path>.js scripts/bots/<bot>/pools.js scripts/gen-<bot>-pool.js scripts/lib/archetype-templates.js scripts/lib/archetypes.js scripts/bots/<bot>/seeds/<bot>_<path>_*.json
+git commit --no-verify -m "[Bot] [path]: migrate to bespoke axis system"
+git push origin main
+```
+
+(--no-verify is fine when prettier fails on UNRELATED other-agent files in the working tree — don't bypass for your own files.)
+
+### Critical lessons distilled from today's migrations
+
+1. **Per-bot aesthetic vocabulary is sacred.** GothBot lives in Castlevania / Bloodborne / Crimson-Peak / Berserk / Tim-Burton. DragonBot lives in LOTR / Skyrim / Witcher / Warcraft / D&D. Each path template, each pool recipe, each touchpoint example must use the BOT'S vocabulary. Cross-pollution kills the path's identity.
+
+2. **Bespoke pool naming convention: `<bot>_<path>_<axis>`.** Examples: `gothbot_dark_landscape_biome`, `gothbot_gothic_vista_phenomenon`, `dragonbot_landscape_biome` (or just `landscape_biome` if naming pre-dates the convention — both work, but new pools should use the namespaced form).
+
+3. **5-axis scene path is the workhorse.** Don't over-engineer. Most scene paths fit: biome + architecture + phenomenon (80%-gated) + surprise_element + sky_layer. Variants exist (character-led / structure-as-hero / castle+event / character-in-interior) but the default 5-axis covers most cases.
+
+4. **MVP at 30, scale to production after approval.** Don't generate 200-entry pools until the recipe's quality is verified on 30-entry MVP. Cheaper to iterate.
+
+5. **Movie-poster crank is template-only.** When renders feel "good but not flagship," upgrade the template's MOVIE POSTER MANDATE section — no pool regen needed. Test on same MVP pool.
+
+6. **Two-pass polish OFF for scene paths.** Add path to `twoPassPolish.skipPaths`. Haiku polish condenses out path-specific vocabulary; single-pass Sonnet preserves the aesthetic identity. (Character paths sometimes WANT polish on for terseness — judge per case.)
+
+7. **No human figure leak is a recurring issue.** Even with explicit "NO CHARACTERS / NO humanoid figures" bans in the brief, ~1-2 renders per 5 often slip a tiny figure into the scene. Mitigations that help: explicit examples of WHAT TO OMIT ("NEVER a hooded silhouette / NEVER tiny-figure-at-base") in the brief, hardening at template-top BEFORE bot-aesthetic blocks. Not 100% solvable — but reducing leak rate is achievable.
+
+8. **buildBrief dispatcher + defaultPools + poolByName are one-time per bot.** Add them once when you migrate the first path on a bot. After that, every subsequent path on the same bot just drops in.
+
+9. **Legacy path files preserved under `paths/legacy/<path>.js`** — keep the function-form code for historical reference. Sometimes you need to revert (e.g., cozy-arcane on DragonBot was kept legacy because rebuild couldn't match the 200-entry COZY_ARCANE_SETTINGS pool's diversity).
+
+10. **PNG output is the default for Flux 1.1 Pro** (set in `scripts/lib/botEngine.js` 2026-05-15 — lossless, no JPEG grain). Edge Function dual-face-swap path explicitly opts back to JPEG to preserve the 2026-05-09 HTTP 546 fix.
+
+---
+
 ## The 2026-05-13 franchise-path massacre — what NOT to do (CRITICAL POST-MORTEM)
 
 8 franchise-themed paths (aliens-architecture / dune-landscape / guardians-architecture / halo-landscape / mass-effect-architecture / star-trek-landscape / starcraft-landscape / starwars-landscape) were migrated through THREE consecutive attempts in one session. **All three attempts produced renders Kevin rejected as "boring hallways," "empty chambers," or "the same generic path."** Eventually ALL 8 paths were deleted from the repo entirely. ~$50-100 of Sonnet + Flux compute burned for zero shippable output.
