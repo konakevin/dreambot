@@ -13,6 +13,7 @@
  *   node scripts/generate-nightly-seeds.js --dry-run          # show without inserting
  */
 
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const Anthropic = require('@anthropic-ai/sdk');
 const { createClient } = require('@supabase/supabase-js');
@@ -135,7 +136,7 @@ async function generateSeed(combo, banList) {
     : '';
 
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 1024,
     messages: [
       {
@@ -173,7 +174,7 @@ Output ONLY the template string. No quotes, no commentary.`,
 
 async function extractKey(combo, seed) {
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 50,
     messages: [
       {

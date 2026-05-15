@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { SONNET } = require('./lib/models');
 /**
  * Autonomous cast dream quality tester.
  *
@@ -185,7 +186,7 @@ async function evaluateWithVision(imageUrl, promptUsed, castDescription, mediumK
   const base64 = imgBuf.toString('base64');
 
   const msg = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: SONNET,
     max_tokens: 300,
     messages: [
       {
@@ -331,7 +332,7 @@ async function main() {
 
     try {
       const msg = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: SONNET,
         max_tokens: 200,
         messages: [{ role: 'user', content: promptBrief }],
       });

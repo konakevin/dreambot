@@ -11,6 +11,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { HAIKU } from '../_shared/models.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -62,7 +63,7 @@ Deno.serve(async (req) => {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: HAIKU,
         max_tokens: 100,
         messages: [
           {

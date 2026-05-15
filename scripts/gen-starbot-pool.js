@@ -17,6 +17,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { SONNET } = require('./lib/models');
 
 function readEnvFile() {
   try {
@@ -1455,7 +1456,7 @@ async function callSonnet(prompt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5-20250929',
+        model: SONNET,
         max_tokens: 16000,
         messages: [{ role: 'user', content: prompt }],
       }),

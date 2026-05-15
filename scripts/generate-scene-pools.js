@@ -11,6 +11,7 @@
  *   node scripts/generate-scene-pools.js --dry-run          # print without writing files
  */
 
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
@@ -214,7 +215,7 @@ async function generateEntry(poolDef, banList) {
     : '';
 
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 200,
     messages: [{
       role: 'user',
@@ -238,7 +239,7 @@ Output ONLY the entry. No quotes, no commentary, no numbering.`,
 
 async function extractKey(poolDef, entry) {
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 30,
     messages: [{
       role: 'user',
@@ -251,7 +252,7 @@ async function extractKey(poolDef, entry) {
 async function assignTags(poolDef, entry) {
   if (!poolDef.needsTags) return [];
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 30,
     messages: [{
       role: 'user',
@@ -266,7 +267,7 @@ async function assignTags(poolDef, entry) {
 async function assignRarity(poolDef, entry) {
   if (!poolDef.needsRarity) return undefined;
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 10,
     messages: [{
       role: 'user',

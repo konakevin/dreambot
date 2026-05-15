@@ -7,6 +7,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { SONNET } from './models.ts';
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ export function normalizeName(raw: string): string {
 }
 
 const PROMPT_VERSION = 1;
-const MODEL_VERSION = 'claude-sonnet-4-5-20250929';
+const MODEL_VERSION = SONNET;
 
 // ── Sonnet call ───────────────────────────────────────────────────────
 

@@ -20,6 +20,7 @@
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
 const { flavorBlock, getFlavor } = require('./locationFlavor');
+const { SONNET } = require('./lib/models');
 
 function readEnvFile() {
   try {
@@ -228,7 +229,7 @@ async function callSonnet(prompt) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 6000,
       messages: [{ role: 'user', content: prompt }],
     }),

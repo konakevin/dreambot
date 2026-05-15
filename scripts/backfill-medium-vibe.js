@@ -7,6 +7,7 @@
  * Reads keys from .env.local
  */
 
+const { HAIKU } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
@@ -72,7 +73,7 @@ Pick the BEST match. If unsure, pick the closest one — do not say "none".`;
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: HAIKU,
       max_tokens: 50,
       messages: [
         { role: 'user', content: brief },

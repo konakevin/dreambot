@@ -2,6 +2,7 @@
  * Generate Sonnet-written directives + fluxFragments for all mediums.
  * Outputs JSON lines to stdout.
  */
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -43,7 +44,7 @@ async function main() {
   for (const m of MEDIUMS) {
     try {
       const msg = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: SONNET,
         max_tokens: 500,
         messages: [{
           role: 'user',

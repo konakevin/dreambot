@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { HAIKU } = require('./lib/models');
 /**
  * nightly-dreams.js — Generate one dream per eligible user.
  *
@@ -161,7 +162,7 @@ async function generateBotMessage(userId, promptUsed, wish) {
     if (wish) memoryBlock += `\n- Tonight's wish: "${wish}"`;
 
     const msgRes = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+      model: HAIKU,
       max_tokens: 60,
       messages: [
         {

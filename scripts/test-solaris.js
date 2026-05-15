@@ -4,6 +4,7 @@
  * Sonnet writes the prompt in character, Flux Dev renders it.
  */
 
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
@@ -46,7 +47,7 @@ async function sonnet(prompt) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: SONNET,
       max_tokens: 250,
       system: SOLARIS_PERSONA,
       messages: [{ role: 'user', content: prompt }],

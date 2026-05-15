@@ -20,6 +20,7 @@
 
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
+const { HAIKU } = require('./lib/models');
 
 function readEnvFile() {
   try {
@@ -111,7 +112,7 @@ async function callHaiku(prompt) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: HAIKU,
       max_tokens: 4000,
       messages: [{ role: 'user', content: prompt }],
     }),

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const { HAIKU } = require('./lib/models');
 'use strict';
 
 /**
@@ -227,7 +228,7 @@ async function generateThreeEnhancedPrompts(anthropic, idea) {
     process.stdout.write(`  Enhancing variant ${i + 1} via Haiku...`);
 
     const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+      model: HAIKU,
       max_tokens: 150,
       messages: [
         {

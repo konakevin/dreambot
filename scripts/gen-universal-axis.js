@@ -15,6 +15,7 @@
  */
 
 const fs = require('fs');
+const { SONNET } = require('./lib/models');
 
 function readEnvFile() {
   try {
@@ -154,7 +155,7 @@ async function callSonnet(prompt) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 8192, messages: [{ role: 'user', content: prompt }] }),
+    body: JSON.stringify({ model: SONNET, max_tokens: 8192, messages: [{ role: 'user', content: prompt }] }),
   });
   if (!res.ok) throw new Error(`Sonnet API error: ${res.status}`);
   return (await res.json()).content[0].text;

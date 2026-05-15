@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { SONNET } = require('./lib/models');
 /**
  * Test Kontext cast injection — generates dreams with the user's cast photo
  * placed into surreal Sonnet templates via Flux Kontext Pro.
@@ -145,7 +146,7 @@ Output ONLY the instruction.`;
     let kontextPrompt;
     try {
       const msg = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: SONNET,
         max_tokens: 150,
         messages: [{ role: 'user', content: brief }],
       });

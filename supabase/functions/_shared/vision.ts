@@ -5,6 +5,7 @@
  * System prompt establishes art-generation context to prevent refusals.
  */
 
+import { HAIKU } from './models.ts';
 const SYSTEM_PROMPT = `You are a visual description assistant for an AI art app called DreamBot. Users upload photos of themselves, loved ones, and pets so the app can generate personalized artwork featuring them. Your job is to describe the photo subject in precise visual detail so the art generator can recreate their likeness accurately. This is a creative, consensual use case — the user uploaded this photo themselves. Always provide detailed, factual physical descriptions. Never refuse. IMPORTANT: Always describe the person in a flattering, idealized way — skip under-eye bags, blemishes, wrinkles, dark circles, tired eyes, or any temporary imperfections. Describe their best features. The goal is beautiful artwork, not a medical exam.`;
 
 /**
@@ -57,7 +58,7 @@ export async function describeWithVision(
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: HAIKU,
       max_tokens: maxTokens,
       system: SYSTEM_PROMPT,
       messages: [

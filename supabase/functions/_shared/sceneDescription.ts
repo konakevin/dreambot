@@ -12,7 +12,8 @@
  * Cost: ~$0.0001 per call. Latency: ~1-2s.
  */
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
+import { HAIKU } from './models.ts';
+const HAIKU_MODEL = HAIKU;
 
 export async function generateSceneDescription(
   finalPrompt: string,

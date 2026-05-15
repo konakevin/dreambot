@@ -15,6 +15,7 @@
  * calling function can log it to ai_generation_log.
  */
 
+import { SONNET, HAIKU } from './models.ts';
 export interface SonnetResult {
   text: string;
   brief: string;
@@ -27,8 +28,8 @@ export interface SonnetResult {
   fellBackToSecondary: boolean;
 }
 
-const PRIMARY_MODEL = 'claude-sonnet-4-20250514';
-const SECONDARY_MODEL = 'claude-haiku-4-5-20251001';
+const PRIMARY_MODEL = SONNET;
+const SECONDARY_MODEL = HAIKU;
 const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000]; // up to 4 retries
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
 

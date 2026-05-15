@@ -9,6 +9,7 @@
  * Usage: node scripts/gen-iconic-spots-test.js --location hawaii
  */
 const fs = require('fs');
+const { SONNET } = require('./lib/models');
 function readEnvFile() {
   try {
     const lines = fs.readFileSync('.env.local', 'utf8').split('\n');
@@ -88,7 +89,7 @@ Return EXACTLY 5 entries, one per line, no numbering, no commentary. Just the 5 
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 500,
       messages: [{ role: 'user', content: metaPrompt(LOCATION) }],
     }),

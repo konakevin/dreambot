@@ -5,6 +5,7 @@
  */
 
 const Anthropic = require('@anthropic-ai/sdk');
+const { SONNET } = require('./models');
 
 // ── Bot seed configurations ──
 // Each bot has 3+ strategies with prompt formulas.
@@ -265,7 +266,7 @@ async function withRetry(fn, maxRetries = 4) {
 async function generateScene(anthropic, basePrompt, banList) {
   const ban = banList.length > 0 ? ' DO NOT include: ' + banList.join(', ') : '';
   const msg = await withRetry(() => anthropic.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 60,
     messages: [
       {
@@ -284,14 +285,14 @@ async function generateScene(anthropic, basePrompt, banList) {
 async function extractSubject(anthropic, scene, extractPrompt) {
   if (extractPrompt) {
     const msg = await withRetry(() => anthropic.messages.create({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 20,
       messages: [{ role: 'user', content: extractPrompt + '\n\n' + scene }],
     }));
     return (msg.content[0].text || '').trim().toLowerCase().split(',').map(s => s.trim());
   }
   const msg = await withRetry(() => anthropic.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 10,
     messages: [{ role: 'user', content: 'One word for main element? ' + scene + '\nONE word.' }],
   }));

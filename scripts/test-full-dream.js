@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { SONNET, HAIKU } = require('./lib/models');
 /**
  * Full nightly dream pipeline test — exercises EVERY piece of onboarding data:
  *   - Mood-weighted template category selection
@@ -301,7 +302,7 @@ async function main() {
               : 'This is a photo of someone important to the user.';
 
         const msg = await anthropic.messages.create({
-          model: 'claude-haiku-4-5-20251001',
+          model: HAIKU,
           max_tokens: 100,
           messages: [
             {
@@ -456,7 +457,7 @@ Output ONLY the instruction.`;
 
       try {
         const msg = await anthropic.messages.create({
-          model: 'claude-sonnet-4-20250514',
+          model: SONNET,
           max_tokens: 150,
           messages: [{ role: 'user', content: kontextBrief }],
         });
@@ -500,7 +501,7 @@ No quotation marks. Output ONLY the prompt.`;
 
       try {
         const msg = await anthropic.messages.create({
-          model: 'claude-sonnet-4-20250514',
+          model: SONNET,
           max_tokens: 200,
           messages: [{ role: 'user', content: fluxBrief }],
         });

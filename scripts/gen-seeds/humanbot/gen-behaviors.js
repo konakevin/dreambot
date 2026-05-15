@@ -9,6 +9,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { SONNET } = require('../../lib/models');
 
 function readEnvFile() {
   try {
@@ -121,7 +122,7 @@ Every entry must be a DIFFERENT specific behavior. No duplicates, no rephrasing 
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 4096,
       system: SYSTEM,
       messages: [{ role: 'user', content: userMsg }],

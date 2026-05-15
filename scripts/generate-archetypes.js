@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const { HAIKU } = require('./lib/models');
 'use strict';
 
 /**
@@ -90,7 +91,7 @@ async function callHaiku(prompt) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: HAIKU,
       max_tokens: 800,
       messages: [{ role: 'user', content: prompt }],
     }),

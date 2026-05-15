@@ -26,7 +26,8 @@
  * existing weaker filtering. Zero-regression scenario.
  */
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
+import { HAIKU } from './models.ts';
+const HAIKU_MODEL = HAIKU;
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
 const RETRY_DELAYS_MS = [1000, 3000, 8000];
 

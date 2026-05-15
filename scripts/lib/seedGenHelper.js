@@ -18,6 +18,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { SONNET } = require('./models');
 
 function loadEnv() {
   const env = {};
@@ -65,7 +66,7 @@ async function callWithRetry(body, anthropicKey) {
  *   metaPrompt      - function(perBatchCount) => string — the per-call brief
  *                     (does not need to include prior-batch dedup — helper adds that)
  *   maxTokens       - optional, default 2500
- *   model           - optional, default claude-sonnet-4-5-20250929
+ *   model           - optional, default SONNET (see ./models.js)
  *
  * Writes JSON array to outPath. Resolves with the full array on success.
  */
@@ -75,7 +76,7 @@ async function generatePool({
   batch = 10,
   metaPrompt,
   maxTokens = 2500,
-  model = 'claude-sonnet-4-5-20250929',
+  model = SONNET,
   append = false,
 }) {
   const ENV = loadEnv();

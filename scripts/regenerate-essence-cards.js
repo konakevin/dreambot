@@ -13,6 +13,7 @@
  *   node scripts/regenerate-essence-cards.js --name hawaii        # one specific card
  */
 
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const Anthropic = require('@anthropic-ai/sdk');
 const { createClient } = require('@supabase/supabase-js');
@@ -52,7 +53,7 @@ async function generateAnchors(name, type, genre, count) {
   };
 
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 1000,
     messages: [{
       role: 'user',
@@ -88,7 +89,7 @@ async function expandAnchors(name, type, genre, anchors) {
     const anchorList = batch.map((a, idx) => `${idx + 1}. ${a}`).join('\n');
 
     const msg = await client.messages.create({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 1500,
       messages: [{
         role: 'user',

@@ -10,6 +10,7 @@
  *   node scripts/generate-full-location-card.js --list file.txt # from a file, one per line
  */
 
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const Anthropic = require('@anthropic-ai/sdk');
 const { createClient } = require('@supabase/supabase-js');
@@ -47,7 +48,7 @@ async function generateBaseCard(name) {
   console.log(`  Generating base card...`);
 
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 3000,
     messages: [{
       role: 'user',
@@ -101,7 +102,7 @@ async function generateAnchors(name, genre, count) {
   };
 
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: SONNET,
     max_tokens: 2500,
     messages: [{
       role: 'user',
@@ -132,7 +133,7 @@ async function expandAnchors(name, genre, anchors) {
     const anchorList = batch.map((a, idx) => `${idx + 1}. ${a}`).join('\n');
 
     const msg = await client.messages.create({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 2500,
       messages: [{
         role: 'user',
@@ -186,7 +187,7 @@ async function generateFullCard(name) {
     texture_details: filterField(base.texture_details),
     cinematic_phrases: filterField(base.cinematic_phrases),
     prompt_version: 2,
-    model_version: 'claude-sonnet-4-5-20250929',
+    model_version: SONNET,
   };
 
   console.log(`  Base: ${card.visual_palette.length} visuals, ${card.atmosphere.length} atmosphere, ${card.cinematic_phrases.length} phrases`);

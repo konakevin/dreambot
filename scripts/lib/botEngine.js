@@ -39,6 +39,7 @@ const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
 const { distillStyle } = require('./styleDistiller');
 const { buildRecipe } = require('./recipeBuilder');
+const { SONNET, HAIKU } = require('./models');
 
 // ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
@@ -72,8 +73,8 @@ function getSupabase() {
 // CLAUDE (Sonnet + Haiku fallback)
 // ─────────────────────────────────────────────────────────────
 
-const PRIMARY_MODEL = 'claude-sonnet-4-5-20250929';
-const SECONDARY_MODEL = 'claude-haiku-4-5-20251001';
+const PRIMARY_MODEL = SONNET;
+const SECONDARY_MODEL = HAIKU;
 const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000];
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
 

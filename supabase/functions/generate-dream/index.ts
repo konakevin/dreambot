@@ -31,6 +31,7 @@ import {
   sanitizeUserPrompt,
   deriveFocalAnchor,
 } from '../_shared/promptCompiler.ts';
+import { HAIKU } from '../_shared/models.ts';
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -1415,7 +1416,7 @@ async function enhanceViaHaiku(
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
+          model: HAIKU,
           max_tokens: maxTokens,
           messages: [{ role: 'user', content: brief }],
         }),

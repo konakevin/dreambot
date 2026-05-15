@@ -1,3 +1,4 @@
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '/Users/kevinmchenry/Development/apps/dreambot/.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 const Anthropic = require('@anthropic-ai/sdk');
@@ -261,7 +262,7 @@ Do NOT mention aspect ratio or orientation in the prompt. Output ONLY the prompt
     let scenePrompt;
     try {
       const msg = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: SONNET,
         max_tokens: 200,
         messages: [{ role: 'user', content: sceneBrief }],
       });

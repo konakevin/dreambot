@@ -9,6 +9,7 @@
  * Reads ANTHROPIC_API_KEY and SUPABASE_SERVICE_ROLE_KEY from .env.local
  */
 
+const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
 const Anthropic = require('@anthropic-ai/sdk');
 const { createClient } = require('@supabase/supabase-js');
@@ -210,7 +211,7 @@ const CATEGORIES = [
 
 async function generateBatch(category, batchNum) {
   const msg = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: SONNET,
     max_tokens: 8000,
     messages: [
       {

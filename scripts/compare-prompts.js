@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { SONNET } = require('./lib/models');
 /**
  * A/B comparison: textPrompts.ts templates vs directive-only approach.
  *
@@ -89,7 +90,7 @@ async function generateFluxDev(prompt) {
 
 async function sonnetPrompt(brief) {
   const msg = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: SONNET,
     max_tokens: 200,
     messages: [{ role: 'user', content: brief }],
   });
@@ -102,7 +103,7 @@ async function evaluate(imageUrl, mediumKey) {
   const base64 = imgBuf.toString('base64');
 
   const msg = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: SONNET,
     max_tokens: 150,
     messages: [{
       role: 'user',

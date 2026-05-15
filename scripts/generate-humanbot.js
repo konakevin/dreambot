@@ -22,6 +22,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const sharp = require('sharp');
+const { SONNET } = require('./lib/models');
 
 function readEnvFile() {
   try {
@@ -206,7 +207,7 @@ async function callSonnet(recentTopics = [], lastRejection = null) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
+      model: SONNET,
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userMessage }],
