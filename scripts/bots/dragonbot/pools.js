@@ -136,6 +136,9 @@ module.exports = {
   // ─── fantasy-scene path (2026-05-14, migration from legacy)
   FANTASY_SCENE_ACTION: load('fantasy_scene_action'),
   FANTASY_SCENE_DRAMA: load('fantasy_scene_drama'),
+  // ─── epic-moment path = epic castle scenes (2026-05-14, reframed)
+  EPIC_CASTLE: load('epic_castle'),
+  EPIC_CASTLE_EVENT: load('epic_castle_event'),
   WOW_LANDSCAPES: load('wow_landscapes'),
   WOW_ARCHITECTURE: load('wow_architecture'),
   LOTR_LANDSCAPES: load('lotr_landscapes'),

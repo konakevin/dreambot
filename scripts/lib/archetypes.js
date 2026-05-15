@@ -281,6 +281,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  EPIC_MOMENT: {
+    description:
+      'PATH-BESPOKE — DragonBot epic-moment path = EPIC CASTLE SCENES (2026-05-14 migration + reframing). The CASTLE is the hero — massive, sweeping, awe-inducing fantasy castle filling the frame. A huge cinematic event is happening at/in/around it: dragons attacking / massive siege underway / magic portal opening above the courtyard / royal coronation procession / cavalry charge through the gates / summoning ritual on the battlements / fleet of war-galleys approaching the harbor / leyline-storm breaking over the spires. Wide cinematic establishing shots. People/armies/crowds at scale-prover size, dwarfed by both castle and event. 2 path-bespoke axes (castle / event) + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['castle', 'event'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FANTASY_SCENE: {
     description:
       'PATH-BESPOKE — DragonBot fantasy-scene path (2026-05-14 migration from legacy + cranked to movie-poster intensity). A single fantasy character integrated into an epic magical landscape, engaged with the magic / setting. Movie-poster mandate: every render stacks 3+ visually-striking elements (character + epic landscape + atmospheric phenomenon + scale-prover or magic-effect). Reuses 200-entry FANTASY_CHARACTERS + 280-entry FANTASY_LANDSCAPES + bespoke 50-entry action + 30-entry drama (80%-gated almost-always-fires).',
