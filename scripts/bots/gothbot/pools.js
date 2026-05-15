@@ -18,11 +18,13 @@ const VIBE_COLOR = {
   dark: 'oil-black dominant with warm amber-and-orange candle glow cutting the shadow',
   epic: 'dramatic moonbeams through gothic arches, silver + fel-violet + forge-ember accents',
   nostalgic: 'faded sepia gothic, burnt umber + tarnished-gold + weathered plum',
-  psychedelic: 'impossible violet + poisonous witch-fire green + amber flashes, hallucinatory gothic',
+  psychedelic:
+    'impossible violet + poisonous witch-fire green + amber flashes, hallucinatory gothic',
   ethereal: 'pearl-white ghost-mist, opalescent fog, lavender with pale-gold candle-gleam',
   arcane: 'deep violet + emerald ritual-glow + mystical candle-amber + witch-fire green mix',
   ancient: 'weathered bronze + stone-grey + warm alchemist-gold + crypt-dust + faded plum',
-  enchanted: 'soft ghostly glow, lavender-and-midnight + warm candle secondary against twilight-indigo',
+  enchanted:
+    'soft ghostly glow, lavender-and-midnight + warm candle secondary against twilight-indigo',
   fierce: 'stark violet + obsidian, forge-ember backlight, torch-orange rim-light',
   coquette: 'dark-rose pastel + cream + black lace + warm candle-amber + midnight-indigo',
   voltage: 'electric-violet storm-arcs + fel-green neon + amber-sparks, high contrast',
@@ -34,7 +36,11 @@ const VIBE_COLOR = {
 
 // GOTHIC_STRUCTURES may not exist yet during regen — load defensively
 function loadOptional(name) {
-  try { return load(name); } catch { return []; }
+  try {
+    return load(name);
+  } catch {
+    return [];
+  }
 }
 
 module.exports = {
@@ -52,6 +58,12 @@ module.exports = {
   MALE_ACCESSORIES: loadOptional('male_accessories'),
   GOTHIC_LANDSCAPES: load('gothic_landscapes'),
   GOTHIC_STRUCTURES: loadOptional('gothic_structures'),
+  // ─── dark-landscape path (2026-05-15, bespoke axis migration)
+  GOTHBOT_DARK_LANDSCAPE_BIOME: load('gothbot_dark_landscape_biome'),
+  GOTHBOT_DARK_LANDSCAPE_ARCHITECTURE: load('gothbot_dark_landscape_architecture'),
+  GOTHBOT_DARK_LANDSCAPE_PHENOMENON: load('gothbot_dark_landscape_phenomenon'),
+  GOTHBOT_DARK_LANDSCAPE_SURPRISE_ELEMENT: load('gothbot_dark_landscape_surprise_element'),
+  GOTHBOT_DARK_LANDSCAPE_SKY: load('gothbot_dark_landscape_sky'),
   DARK_CREATURES: load('dark_creatures'),
   CASTLEVANIA_CONTEXTS: load('castlevania_contexts'),
   COZY_GOTH_SETTINGS: load('cozy_goth_settings'),

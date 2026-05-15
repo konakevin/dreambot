@@ -57,24 +57,24 @@ module.exports = {
   // flux-dev — keep the rest on Ultra.
   modelByPath: {
     // Scene / landscape / architecture paths
-    'dark-landscape':      'black-forest-labs/flux-1.1-pro-ultra',
+    'dark-landscape': 'black-forest-labs/flux-1.1-pro-ultra',
     'gothic-architecture': 'black-forest-labs/flux-1.1-pro-ultra',
-    'castlevania-scene':   'black-forest-labs/flux-1.1-pro-ultra',
-    'cozy-goth':           'black-forest-labs/flux-1.1-pro-ultra',
-    'gothic-vista':        'black-forest-labs/flux-1.1-pro-ultra',
-    'gothic-darklands':    'black-forest-labs/flux-1.1-pro-ultra',
-    'horror-creature':     'black-forest-labs/flux-1.1-pro-ultra',
+    'castlevania-scene': 'black-forest-labs/flux-1.1-pro-ultra',
+    'cozy-goth': 'black-forest-labs/flux-1.1-pro-ultra',
+    'gothic-vista': 'black-forest-labs/flux-1.1-pro-ultra',
+    'gothic-darklands': 'black-forest-labs/flux-1.1-pro-ultra',
+    'horror-creature': 'black-forest-labs/flux-1.1-pro-ultra',
     // Character paths
-    'goth-closeup':        'black-forest-labs/flux-1.1-pro-ultra',
-    'goth-full-body':      'black-forest-labs/flux-1.1-pro-ultra',
-    'goth-male-closeup':   'black-forest-labs/flux-1.1-pro-ultra',
+    'goth-closeup': 'black-forest-labs/flux-1.1-pro-ultra',
+    'goth-full-body': 'black-forest-labs/flux-1.1-pro-ultra',
+    'goth-male-closeup': 'black-forest-labs/flux-1.1-pro-ultra',
     'goth-male-full-body': 'black-forest-labs/flux-1.1-pro-ultra',
     // Vampire paths
-    'vampire-girls-2':         'black-forest-labs/flux-1.1-pro-ultra',
+    'vampire-girls-2': 'black-forest-labs/flux-1.1-pro-ultra',
     'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro-ultra',
-    'vampire-assassin-male':   'black-forest-labs/flux-1.1-pro-ultra',
+    'vampire-assassin-male': 'black-forest-labs/flux-1.1-pro-ultra',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro-ultra',
-    'monster-prowl':           'black-forest-labs/flux-1.1-pro-ultra',
+    'monster-prowl': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with
@@ -82,46 +82,46 @@ module.exports = {
   // and tone-neutral ones (cinematic/epic) fight the vampire intent.
   vibesByPath: {
     // Character paths consolidated to the dark/nightshade/macabre triad.
-    'goth-closeup':      ['dark', 'nightshade', 'macabre'],
-    'goth-full-body':    ['dark', 'nightshade', 'macabre'],
+    'goth-closeup': ['dark', 'nightshade', 'macabre'],
+    'goth-full-body': ['dark', 'nightshade', 'macabre'],
     'goth-male-closeup': ['dark', 'nightshade', 'macabre'],
     'goth-male-full-body': ['dark', 'nightshade', 'macabre'],
-    'vampire-girls-2':   ['dark', 'nightshade', 'macabre'],
+    'vampire-girls-2': ['dark', 'nightshade', 'macabre'],
     // Scene paths locked to the dark / nightshade / macabre triad for the trial.
-    'dark-landscape':      ['dark', 'nightshade', 'macabre'],
+    'dark-landscape': ['dark', 'nightshade', 'macabre'],
     'gothic-architecture': ['dark', 'nightshade', 'macabre'],
-    'castlevania-scene':   ['dark', 'nightshade', 'macabre'],
-    'cozy-goth':           ['dark', 'nightshade', 'macabre'],
-    'gothic-vista':        ['dark', 'nightshade', 'macabre'],
-    'gothic-darklands':    ['dark', 'nightshade', 'macabre'],
-    'horror-creature':     ['dark', 'nightshade', 'macabre'],
+    'castlevania-scene': ['dark', 'nightshade', 'macabre'],
+    'cozy-goth': ['dark', 'nightshade', 'macabre'],
+    'gothic-vista': ['dark', 'nightshade', 'macabre'],
+    'gothic-darklands': ['dark', 'nightshade', 'macabre'],
+    'horror-creature': ['dark', 'nightshade', 'macabre'],
     // Vampire-assassin paths locked to the dark triad.
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
-    'vampire-assassin-male':   ['dark', 'nightshade', 'macabre'],
+    'vampire-assassin-male': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-combat': ['dark', 'nightshade', 'macabre'],
-    'monster-prowl':           ['dark', 'nightshade', 'macabre'],
+    'monster-prowl': ['dark', 'nightshade', 'macabre'],
   },
 
   mediumByPath: {
     // Character paths consolidated to anime medium (matches scene paths).
-    'goth-closeup':      'anime',
-    'goth-full-body':    'anime',
+    'goth-closeup': 'anime',
+    'goth-full-body': 'anime',
     'goth-male-closeup': 'anime',
     'goth-male-full-body': 'anime',
-    'vampire-girls-2':   'anime',
+    'vampire-girls-2': 'anime',
     // Scene/landscape paths hardcoded to anime medium for the trial.
-    'dark-landscape':      'anime',
+    'dark-landscape': 'anime',
     'gothic-architecture': 'anime',
-    'castlevania-scene':   'anime',
-    'cozy-goth':           'anime',
-    'gothic-vista':        'anime',
-    'gothic-darklands':    'anime',
-    'horror-creature':     'anime',
+    'castlevania-scene': 'anime',
+    'cozy-goth': 'anime',
+    'gothic-vista': 'anime',
+    'gothic-darklands': 'anime',
+    'horror-creature': 'anime',
     // Vampire-assassin paths locked to anime medium for the trial.
     'vampire-assassin-female': 'anime',
-    'vampire-assassin-male':   'anime',
+    'vampire-assassin-male': 'anime',
     'vampire-assassin-combat': 'anime',
-    'monster-prowl':           'anime',
+    'monster-prowl': 'anime',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -129,9 +129,15 @@ module.exports = {
   //   'gothic_realistic' → 80s-90s dark-fantasy paperback oil-painting
   // Character paths override via mediumByPath → canvas/illustration/watercolor.
   mediums: [
-    'gothic_architecture', 'gothic_architecture', 'gothic_architecture', 'gothic_architecture', // 4× = 29% flagship stylized
-    'gothic_realistic', 'gothic_realistic', 'gothic_realistic', // 3× = 21% painterly-realism
-    'anime', 'anime',                                             // 2× = 14% dark-anime
+    'gothic_architecture',
+    'gothic_architecture',
+    'gothic_architecture',
+    'gothic_architecture', // 4× = 29% flagship stylized
+    'gothic_realistic',
+    'gothic_realistic',
+    'gothic_realistic', // 3× = 21% painterly-realism
+    'anime',
+    'anime', // 2× = 14% dark-anime
     'comics',
     'pencil',
     'illustration',
@@ -201,15 +207,8 @@ module.exports = {
   // also benefit (figure becomes optional landmark).
   chaos: {
     enabled: true,
-    skipPaths: [
-      'goth-closeup',
-      'goth-male-closeup',
-      'horror-creature',
-    ],
-    allowSubjectChaosPaths: [
-      'goth-full-body',
-      'goth-male-full-body',
-    ],
+    skipPaths: ['goth-closeup', 'goth-male-closeup', 'horror-creature'],
+    allowSubjectChaosPaths: ['goth-full-body', 'goth-male-full-body'],
   },
 
   // Sensory anchors (V4/nightly Step 3 enhancement port).
@@ -277,13 +276,19 @@ module.exports = {
     // list at runtime (engine appends them — no need to enumerate here).
     preservePhrasesByPath: {
       'vampire-girls-2': [
-        'glowing', 'radiating', 'inhuman',
-        'heavy', 'dark smoky-eye', 'sharp dark eyeliner',
-        'blood-red', 'corpse-pale', 'gothic',
+        'glowing',
+        'radiating',
+        'inhuman',
+        'heavy',
+        'dark smoky-eye',
+        'sharp dark eyeliner',
+        'blood-red',
+        'corpse-pale',
+        'gothic',
       ],
     },
     // Optional: skip two-pass on specific paths
-    // skipPaths: [],
+    skipPaths: ['dark-landscape'],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
@@ -292,9 +297,15 @@ module.exports = {
   // and tarnished-silver/gold-glint work for extreme vampire fashion).
   // Array repetition weights: macabre/nightshade/arcane 3× (flagship trio), others 1×.
   vibes: [
-    'macabre', 'macabre', 'macabre',
-    'nightshade', 'nightshade', 'nightshade',
-    'arcane', 'arcane', 'arcane',
+    'macabre',
+    'macabre',
+    'macabre',
+    'nightshade',
+    'nightshade',
+    'nightshade',
+    'arcane',
+    'arcane',
+    'arcane',
     'cinematic',
     'dark',
     'epic',
@@ -335,10 +346,36 @@ module.exports = {
     };
   },
 
+  // Bot-level pool defaults for declarative axis paths.
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'ATMOSPHERES',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`GothBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, medium, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`GothBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, medium, picker });
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, medium, picker });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`GothBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

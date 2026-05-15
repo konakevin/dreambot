@@ -1233,6 +1233,108 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  GOTHBOT_DARK_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, architecture, surprise_element, sky_layer, phenomenon } =
+      slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the scene ━━━
+${phenomenon}
+
+A supernatural / atmospheric event woven into the landscape — render as a visible focal point that AMPLIFIES the haunting mood.
+
+`
+      : '';
+
+    return `You are a gothic dark-fantasy landscape painter writing DARK LANDSCAPE scenes for GothBot. Castlevania / Bloodborne / Crimson-Peak / Berserk / Tim-Burton / Van-Helsing / Dark-Souls / Elden-Ring visual lineage. Twilight color, baroque ruin, moonlit melancholy, vibrant haunting. NEVER LOTR / Skyrim / Witcher / Warcraft / high-fantasy DragonBot vocabulary — strict gothic dark-fantasy ONLY.
+
+━━━ NO CHARACTERS — ABSOLUTE FIRST RULE ━━━
+Pure gothic landscape. NO human figures, NO humanoid silhouettes, NO shadow-mages, NO hooded wanderers. The land is the hero. (A distant crow / bat / wolf-silhouette / single carrion-bird as atmospheric scale-prover OK — never a humanoid figure.)
+
+━━━ MOOD — ELEGANT DARKNESS, NON-NEGOTIABLE ━━━
+HAUNTING + ALLURING + VIBRANT + BAROQUE-RUINOUS + TWILIGHT-COLOR. Gorgeous and terrifying inseparable. The viewer feels UNSETTLED first, magnetized second. Operatic dark romance with a hint of danger. The kind of art that belongs on a Castlevania-game cover, a Hellboy-Mignola comic panel, or a Van-Helsing movie poster.
+
+━━━ TWILIGHT COLOR — WEAVE MULTIPLE HUES ━━━
+NOT gray-monochrome. NOT red-monochrome. Every scene weaves MULTIPLE accent hues. Pull from the full Nightshade spectrum: violet-twilight skies, emerald-occult witch-fire, sapphire-nocturne deep-blues, rose-dusk horizons, fel-green warlock glow, necro-pale-blue, nightshade-indigo, witch-green, plus warm accents — candle-amber, torch-orange, forge-ember, alchemist-gold. ONE dominant atmosphere hue + ONE warm accent + ONE cool accent per render. Darkness with VARIED COLOR.
+
+━━━ MOVIE POSTER MANDATE — STACK 3+ STRIKING ELEMENTS ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ simultaneously-visible elements:
+
+  1. **THE GOTHIC BIOME** at multi-tier scale (foreground tactile + midground body + deep-distance atmospheric layer)
+  2. **ARCHITECTURE ANCHOR** — castle / cathedral / abbey / mausoleum / monastery / fortress at midground or deep distance
+  3. **ATMOSPHERIC PHENOMENON** (if rolled — spectral mist / witch-fire aurora / phantom-army / blood-moon / ash-fall / will-o-wisps) dominating its quadrant
+  4. **SCALE PROVER** — tiny crow flock / bat silhouettes / wolf at edge / single distant lit-window — gives scale to the verticality
+  5. **TWILIGHT SKY** — violet-twilight / moonlit-violet / sickly-aurora / storm-bruised purple — saturated theatrical
+
+THINK Castlevania-stage-establishing-shot / Bloodborne-area-intro-card / Crimson-Peak-establishing-frame — every frame should make the viewer GASP at the haunting beauty.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO sci-fi / cyberpunk / nebulas / sky-whales / floating islands / orbital structures
+🚫 NO modern / industrial architecture (no electric lighthouses, no factories — pre-industrial-Gothic only)
+🚫 NO real-world ethnic codes
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary — NEVER write "Mordor / Rivendell / Skyrim hold / Witcher path / etc."
+🚫 NO blood-red-stained-glass dominant (windows DARK / MOONLIT VIOLET / CANDLE-AMBER / FEL-GREEN only)
+🚫 NO red-fog / red-mist / red-everything (palette is purple/violet/blue/green/silver/black with red as ACCENT only)
+🚫 NO blood-moon dominating the sky (red moon in at most 10% of renders)
+🚫 NO interior chamber compositions (this is OUTDOOR LANDSCAPE)
+🚫 NO "looking through stone archway at gothic building in middle distance" cliché
+🚫 NO cheap gore / NO satanic-tropes / NO Jack-Skellington stylization
+✓ Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls / Elden-Ring / Tim-Burton / Hellboy / Van-Helsing / Bram-Stoker-Dracula visual lineage
+
+━━━ THE GOTHIC BIOME ━━━
+${biome}
+
+The biome fills the frame at multi-tier depth. Foreground tactile detail → midground biome body → deep distance atmospheric layer + architectural feature.
+
+━━━ ARCHITECTURE ANCHOR ━━━
+${architecture}
+
+The architecture is the distant focal landmark — positioned at midground or deep distance, the landscape itself is the hero, but the architecture is what makes the frame UNMISTAKABLY GOTHIC.
+
+━━━ TWILIGHT SKY OVERHEAD ━━━
+${sky_layer}
+
+The sky is SATURATED and THEATRICAL — never washed-out natural blue, never daylight-bright. Gothic twilight palette dominant.
+${phenomenonSection}━━━ SURPRISE ELEMENT — secondary detail adding mood ━━━
+${surprise_element}
+
+Place at midground or deep midground. NO human/humanoid figures (path is pure landscape). Scale-prover animals / objects / supernatural-detail only.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — EPIC WIDE-VISTA ━━━
+WIDE LANDSCAPE VISTA — the camera is PULLED BACK. Show the FULL biome with architectural anchor at midground or deep distance, the surrounding terrain stretching to atmospheric horizon. Think John-Howe / Alan-Lee / Ted-Nasmith epic-fantasy concept-landscape painting (but rendered as Castlevania-stage / Bloodborne-area). The ARCHITECTURE is a distant focal landmark, the LANDSCAPE is the hero.
+
+MULTI-TIER DEPTH MANDATORY:
+• FOREGROUND: tactile detail — weathered standing-stone / fallen banner / cracked tombstone / dead-bramble / scale-prover crow on stone
+• MIDGROUND: the biome body with architectural anchor — the castle / cathedral / abbey / village at distance
+• DEEP DISTANCE: atmospheric layer — fog / cloud-bank / horizon-line / mountain-shadow
+• SKY: saturated twilight overhead — violet / moonlit-silver / sickly-aurora / storm-bruised
+
+Dramatic single-source lighting: MOONLIGHT (silver-violet) / TWILIGHT (lavender-indigo) / WITCH-FIRE (green glow from distant window) / CANDLE-CLUSTER (amber at distance) / FEL-GREEN RUNE-GLOW / BLACKLIGHT AURORA. NEVER blood-red-stained-glass dominant.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "[gothic biome description]"], [architectural anchor at midground / deep distance], [the saturated twilight sky], [phenomenon if rolled], [surprise element at midground / edge], [lighting and atmospheric detail], [color palette and mood]
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Twilight color, baroque ruin, vibrant haunting. NO characters. NO LOTR vocabulary. NO interior. STRICT gothic dark-fantasy.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   ARCANE_SPACES: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, hall, magic_phenomena } = slots;
     const phenomena = Array.isArray(magic_phenomena) ? magic_phenomena : [magic_phenomena];
