@@ -23,9 +23,9 @@ const pathBuilders = {
   'arcane-halls': require('./paths/arcane-halls'),
   'dark-realm': require('./paths/dark-realm'),
   'dragon-lore': require('./paths/dragon-lore'),
-  'wow-landscape': require('./paths/wow-landscape'),
+  // 2026-05-14: wow-landscape + lotr-landscape merged into iconic-landscape
+  'iconic-landscape': require('./paths/iconic-landscape'),
   'wow-architecture': require('./paths/wow-architecture'),
-  'lotr-landscape': require('./paths/lotr-landscape'),
   'eldenring-landscape': require('./paths/eldenring-landscape'),
   'eldenring-architecture': require('./paths/eldenring-architecture'),
 };
@@ -88,6 +88,9 @@ module.exports = {
     // EMPTY by design — epic-moment (epic castle scenes) wide-shot path.
     // Sonnet's castle+event body must lead.
     'epic-moment': '',
+    // EMPTY by design — iconic-landscape merged path. Sonnet's stylized-biome
+    // body must lead.
+    'iconic-landscape': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -118,8 +121,7 @@ module.exports = {
     'arcane-halls': 'black-forest-labs/flux-1.1-pro',
     'dark-realm': 'black-forest-labs/flux-1.1-pro',
     'dragon-lore': 'black-forest-labs/flux-1.1-pro',
-    'wow-landscape': 'black-forest-labs/flux-1.1-pro',
-    'lotr-landscape': 'black-forest-labs/flux-1.1-pro',
+    'iconic-landscape': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Inverts old excludeVibes (minimal/dark).
@@ -266,24 +268,7 @@ module.exports = {
       'shimmer',
       'surreal',
     ],
-    'wow-landscape': [
-      'cinematic',
-      'dark',
-      'cozy',
-      'epic',
-      'nostalgic',
-      'whimsical',
-      'ethereal',
-      'arcane',
-      'ancient',
-      'enchanted',
-      'fierce',
-      'voltage',
-      'nightshade',
-      'shimmer',
-      'surreal',
-    ],
-    'lotr-landscape': [
+    'iconic-landscape': [
       'cinematic',
       'dark',
       'cozy',
@@ -316,9 +301,9 @@ module.exports = {
     'arcane-halls',
     'dark-realm',
     'dragon-lore',
-    'wow-landscape',
+    // 2026-05-14: wow-landscape + lotr-landscape merged into iconic-landscape
+    'iconic-landscape',
     // 'wow-architecture' — scrapped 2026-05-02 (Kevin)
-    'lotr-landscape',
     // 'eldenring-landscape' — scrapped 2026-05-02 (Kevin)
     // 'eldenring-architecture' — scrapped 2026-05-02 (Kevin)
   ],
@@ -338,9 +323,8 @@ module.exports = {
     'arcane-halls': 3,
     'dark-realm': 4,
     'dragon-lore': 4,
-    'wow-landscape': 4,
+    'iconic-landscape': 5, // merged weight (was wow 4 + lotr 4)
     // 'wow-architecture': 4,  // scrapped
-    'lotr-landscape': 4,
     // 'eldenring-landscape': 4,  // scrapped
     // 'eldenring-architecture': 4,  // scrapped
   },
@@ -360,9 +344,8 @@ module.exports = {
       'arcane-halls',
       'dark-realm',
       'dragon-lore',
-      'wow-landscape',
+      'iconic-landscape',
       'wow-architecture',
-      'lotr-landscape',
       'eldenring-landscape',
       'eldenring-architecture',
     ],
@@ -418,9 +401,8 @@ module.exports = {
       'arcane-halls': 'scene',
       'dark-realm': 'scene',
       'dragon-lore': 'scene',
-      'wow-landscape': 'scene',
+      'iconic-landscape': 'scene',
       'wow-architecture': 'scene',
-      'lotr-landscape': 'scene',
       'eldenring-landscape': 'scene',
       'eldenring-architecture': 'scene',
     },

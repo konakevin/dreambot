@@ -139,6 +139,10 @@ module.exports = {
   // ─── epic-moment path = epic castle scenes (2026-05-14, reframed)
   EPIC_CASTLE: load('epic_castle'),
   EPIC_CASTLE_EVENT: load('epic_castle_event'),
+  // ─── iconic-landscape path (2026-05-14, merger of wow + lotr landscapes)
+  ICONIC_BIOME: load('iconic_biome'),
+  ICONIC_LANDSCAPE_SKY: load('iconic_landscape_sky'),
+  ICONIC_LANDSCAPE_PHENOMENON: load('iconic_landscape_phenomenon'),
   WOW_LANDSCAPES: load('wow_landscapes'),
   WOW_ARCHITECTURE: load('wow_architecture'),
   LOTR_LANDSCAPES: load('lotr_landscapes'),
