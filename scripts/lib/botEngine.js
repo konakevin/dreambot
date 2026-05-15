@@ -177,19 +177,18 @@ const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c92
  * shape; Flux family uses model-based `/v1/models/{model}/predictions`.
  * Mirrors supabase/functions/_shared/generateImage.ts dispatch logic.
  */
-async function fluxOnce({
-  prompt,
-  aspectRatio,
-  model,
-  replicateKey,
-  inputOverrides = {},
-}) {
+async function fluxOnce({ prompt, aspectRatio, model, replicateKey, inputOverrides = {} }) {
   const isSDXL = model === 'sdxl';
   const input = {
     prompt,
     ...(isSDXL
       ? { num_outputs: 1 }
-      : { aspect_ratio: aspectRatio, num_outputs: 1, output_quality: 100 }),
+      : {
+          aspect_ratio: aspectRatio,
+          num_outputs: 1,
+          output_format: 'png',
+          output_quality: 100,
+        }),
     ...inputOverrides,
   };
   const url = isSDXL
@@ -259,7 +258,9 @@ async function flux({
       const isSafetyFlag =
         err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
       if (isSafetyFlag && attempt < nsfwRetries) {
-        console.warn(`  ⚠️ Replicate safety-filter (possibly false-positive), retry ${attempt + 1}/${nsfwRetries}`);
+        console.warn(
+          `  ⚠️ Replicate safety-filter (possibly false-positive), retry ${attempt + 1}/${nsfwRetries}`
+        );
         continue;
       }
       throw err;
@@ -563,7 +564,18 @@ async function lookupBotUserId(sb, username) {
   return data.id;
 }
 
-async function postAsBot({ sb, userId, username, localPath, prompt, vibeKey, medium, caption, recipe, fluxSeed }) {
+async function postAsBot({
+  sb,
+  userId,
+  username,
+  localPath,
+  prompt,
+  vibeKey,
+  medium,
+  caption,
+  recipe,
+  fluxSeed,
+}) {
   const bytes = fs.readFileSync(localPath);
   // Pipeline produces JPG (post 2026-05-09 webp revert). PNG kept as a
   // fallback because Replicate occasionally returns PNG for safety-redacted
@@ -846,7 +858,9 @@ async function runBot(opts) {
       if (chaosBlock) {
         brief = brief + chaosBlock;
         recipeBlocks.chaosBlock = chaosBlock;
-        console.log(`  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`);
+        console.log(
+          `  🌀 chaos: ${chaosProfile.channelKey} (intensity=${chaosProfile.intensity.toFixed(2)}, n=${chaosProfile.injections.length})`
+        );
       }
 
       // 5c. Roll sensory anchors and append. Layered after chaos (chaos warps
@@ -857,7 +871,9 @@ async function runBot(opts) {
       if (sensoryBlock) {
         brief = brief + sensoryBlock;
         recipeBlocks.sensoryBlock = sensoryBlock;
-        console.log(`  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`);
+        console.log(
+          `  🌿 sensory: ${sensoryProfile.channelKeys.join('+')} [${sensoryProfile.context}] (n=${sensoryProfile.anchors.length})`
+        );
       }
 
       // 6. Generate "middle" — either single-pass Sonnet OR two-pass Sonnet→Haiku.
@@ -879,12 +895,14 @@ async function runBot(opts) {
           // Per-path word range overrides global (vampire-girls-2 needs more headroom).
           const polishedWords =
             (tp.polishedWordsByPath && tp.polishedWordsByPath[resolvedPath]) ||
-            tp.polishedWords || '65-90';
+            tp.polishedWords ||
+            '65-90';
           // Merge bot-config preserve phrases with the sensory anchors actually
           // rolled this turn — Haiku gets explicit instruction to keep both.
           const basePreserve =
             (tp.preservePhrasesByPath && tp.preservePhrasesByPath[resolvedPath]) ||
-            tp.preservePhrases || [];
+            tp.preservePhrases ||
+            [];
           const sensoryPreserve = (sensoryProfile.anchors || []).map((a) => a.phrase);
           const preservePhrases = [...basePreserve, ...sensoryPreserve];
           const polishBrief = buildPolishBrief({
@@ -917,7 +935,9 @@ async function runBot(opts) {
       };
       middle = claude.text;
       if (useTwoPass) {
-        console.log(`  🔁 two-pass polish: concept→Haiku-polished (${middle.split(/\s+/).length} words)`);
+        console.log(
+          `  🔁 two-pass polish: concept→Haiku-polished (${middle.split(/\s+/).length} words)`
+        );
       }
 
       // 6b. Refusal detection — retry full pipeline up to 3 times
@@ -969,27 +989,31 @@ async function runBot(opts) {
     // a totally different stylistic anchor (e.g. gothic-whimsy uses Tim-Burton-whimsical prefix
     // instead of the bot's default Castlevania-manga prefix).
     const rawPrefix =
-      (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
-      bot.promptPrefix || '';
+      (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
     const rawSuffix =
       (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
       (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
-      bot.promptSuffix || '';
+      bot.promptSuffix ||
+      '';
     const prefix = rawPrefix ? `${rawPrefix}, ` : '';
     const suffix = rawSuffix ? `, ${rawSuffix}` : '';
     // Per-path prefix — prepended BEFORE style prefix so it's the first tokens Flux sees.
     // Use case: gender lock for cyborg-man needs to appear before "beauty" in style prefix.
-    const pathPrefix = bot.promptPrefixByPath && bot.promptPrefixByPath[resolvedPath]
-      ? `${bot.promptPrefixByPath[resolvedPath]}, `
-      : '';
+    const pathPrefix =
+      bot.promptPrefixByPath && bot.promptPrefixByPath[resolvedPath]
+        ? `${bot.promptPrefixByPath[resolvedPath]}, `
+        : '';
     // Per-medium style injection — bot.mediumStyles overrides DB flux_fragment if set.
     // Otherwise falls back to the DB's flux_fragment for this medium.
-    const mediumStyle = bot.mediumStyles && bot.mediumStyles[medium]
-      ? `${bot.mediumStyles[medium]}, `
-      : mediumFluxFragment
-        ? `${mediumFluxFragment}, `
-        : '';
-    finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim();
+    const mediumStyle =
+      bot.mediumStyles && bot.mediumStyles[medium]
+        ? `${bot.mediumStyles[medium]}, `
+        : mediumFluxFragment
+          ? `${mediumFluxFragment}, `
+          : '';
+    finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`
+      .replace(/\s+,/g, ',')
+      .trim();
 
     // Resolve the render model BEFORE building the recipe — buildRecipe
     // freezes recipe.model into the upload row, and DLT replay reads it
@@ -1015,14 +1039,27 @@ async function runBot(opts) {
         const totalW = entries.reduce((s, [, w]) => s + w, 0);
         let roll = Math.random() * totalW;
         renderModel = entries[entries.length - 1][0];
-        for (const [m, w] of entries) { roll -= w; if (roll <= 0) { renderModel = m; break; } }
+        for (const [m, w] of entries) {
+          roll -= w;
+          if (roll <= 0) {
+            renderModel = m;
+            break;
+          }
+        }
       } else {
         renderModel = Array.isArray(modelVal)
           ? modelVal[Math.floor(Math.random() * modelVal.length)]
           : modelVal;
       }
-      // No input overrides for Flux; SDXL would need width/height/steps
-      if (renderModel === 'sdxl') renderInputOverrides = { width: 768, height: 1344, num_inference_steps: 30, guidance_scale: 7.5 };
+      // PNG output is the global Flux default (set in fluxOnce, 2026-05-15).
+      // SDXL needs explicit dimensions.
+      if (renderModel === 'sdxl')
+        renderInputOverrides = {
+          width: 768,
+          height: 1344,
+          num_inference_steps: 30,
+          guidance_scale: 7.5,
+        };
       console.log(`  🎨 model=${renderModel} (path-locked for path=${resolvedPath})`);
     } else if (bot.useModelPicker) {
       const picked = await pickModel({
@@ -1050,9 +1087,10 @@ async function runBot(opts) {
       promptPrefix: pathPrefix
         ? `${bot.promptPrefixByPath[resolvedPath]}, ${rawPrefix}`
         : rawPrefix,
-      mediumStyleOverride: bot.mediumStyles && bot.mediumStyles[medium]
-        ? bot.mediumStyles[medium]
-        : (mediumFluxFragment || ''),
+      mediumStyleOverride:
+        bot.mediumStyles && bot.mediumStyles[medium]
+          ? bot.mediumStyles[medium]
+          : mediumFluxFragment || '',
       promptSuffix: rawSuffix,
       camera: recipeBlocks.camera,
       lighting: recipeBlocks.lighting || '',

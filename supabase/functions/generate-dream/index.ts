@@ -960,12 +960,16 @@ Output ONLY the prompt.`;
   // ── Generate image via Replicate ──────────────────────────────────────────
   try {
     console.log(`[generate-dream] ⏱ Starting image generation (model: ${pickedModel})...`);
+    // Force JPEG when this dream will go through dual-face-swap (preserves
+    // the 2026-05-09 HTTP 546 fix). Otherwise PNG for lossless quality.
+    const willDualFaceSwap = !!(faceSwapSources && faceSwapSources.length === 2);
     const genResult = await generateImage(
       effectiveMode,
       finalPrompt,
       effectiveInputImage,
       REPLICATE_TOKEN,
-      pickedModel
+      pickedModel,
+      willDualFaceSwap ? 'jpg' : 'png'
     );
     let tempUrl = genResult.url;
     replicatePredictionId = genResult.predictionId;

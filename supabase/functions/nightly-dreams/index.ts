@@ -1277,7 +1277,10 @@ Output ONLY the prompt.`;
       finalPrompt,
       undefined,
       REPLICATE_TOKEN,
-      pickedModel
+      pickedModel,
+      // Force JPEG when this dream will go through the dual-face-swap
+      // pipeline — preserves the 2026-05-09 HTTP 546 fix. Otherwise PNG.
+      isDualFaceSwap ? 'jpg' : 'png'
     );
 
     let tempUrl = genResult.url;

@@ -27,7 +27,8 @@ export async function generateImage(
   prompt: string,
   inputImage: string | undefined,
   replicateToken: string,
-  modelOverride?: string
+  modelOverride?: string,
+  outputFormat: 'png' | 'jpg' = 'png'
 ): Promise<GenerateImageResult> {
   let lastErr: Error | null = null;
   for (let attempt = 0; attempt <= NSFW_MAX_RETRIES; attempt++) {
@@ -37,7 +38,8 @@ export async function generateImage(
         prompt,
         inputImage,
         replicateToken,
-        modelOverride
+        modelOverride,
+        outputFormat
       );
       return { ...result, nsfwRetries: attempt };
     } catch (err) {
@@ -60,7 +62,8 @@ async function generateImageOnce(
   prompt: string,
   inputImage: string | undefined,
   replicateToken: string,
-  modelOverride?: string
+  modelOverride?: string,
+  outputFormat: 'png' | 'jpg' = 'png'
 ): Promise<GenerateImageResult> {
   const picked = await pickModel(mode, prompt);
   const model = modelOverride || picked.model;
@@ -73,14 +76,14 @@ async function generateImageOnce(
       ? {
           aspect_ratio: '9:16',
           num_outputs: 1,
-          // Force JPEG output. WebP migration (2026-05-06) was reverted
-          // 2026-05-09: WebP decode in the dual-face-swap pipeline pushed
-          // the function past Supabase's 150 MB / 2 s per-invocation
-          // budget (HTTP 546 WORKER_RESOURCE_LIMIT). JPEG decode is
-          // lighter and the visual difference at quality 100 is
-          // imperceptible. Storage cost is ~30% higher per image vs WebP
-          // — acceptable tradeoff for dual-face-swap reliability.
-          output_format: 'jpg',
+          // Default to PNG output (lossless, no grain). Caller passes
+          // outputFormat='jpg' when the result feeds the dual-face-swap
+          // pipeline — see 2026-05-09 incident note where WebP decode
+          // blew through Supabase's 150 MB / 2 s per-invocation budget
+          // (HTTP 546 WORKER_RESOURCE_LIMIT). PNG decode is lighter than
+          // WebP but still heavier than JPEG, so we keep JPEG for the
+          // dual-face-swap path explicitly to preserve that fix.
+          output_format: outputFormat,
           output_quality: 100,
         }
       : {
