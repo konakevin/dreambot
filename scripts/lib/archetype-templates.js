@@ -1233,6 +1233,104 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  ARCANE_SPACES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, hall, magic_phenomena } = slots;
+    const phenomena = Array.isArray(magic_phenomena) ? magic_phenomena : [magic_phenomena];
+
+    return `You are a fantasy concept-art painter writing GRAND ARCANE INTERIOR SPACES for DragonBot — vast magical architectural marvels saturated with active magic. NO CHARACTERS. The architecture is the hero, the magic phenomena are the show. Strict Western high fantasy.
+
+━━━ NO CHARACTERS — ABSOLUTE FIRST RULE ━━━
+Pure environment. ABSOLUTELY NO people, no robed-figures-at-base, no tiny-silhouettes-on-the-stair, no monks, no wizards, no humanoid figures of any kind anywhere in the frame. NEVER mention "figure" / "silhouette" / "hooded one" / "robed mage" / "figures arrayed" — the SPACE itself tells the story. If the urge arises to add a "lone figure for scale" — DO NOT. The architectural scale and magical phenomena provide their own scale.
+
+━━━ GRAND INTERIOR SCALE + VARIETY — NON-NEGOTIABLE ━━━
+The space is SUBSTANTIAL (not intimate cottage) but the EXACT shape varies per render — sometimes cathedral-vaulted, sometimes a soaring stairwell, sometimes a multi-tier circular library viewed up/down, sometimes a long banquet hall, sometimes a wide throne-room, sometimes a floating-platform library, sometimes a gateway-arch chamber. Render the SPECIFIC interior type from the slot — honor the architectural shape described. Variety across batches is mandatory.
+
+Lean toward architectural richness when in doubt: multi-tier galleries, layered lanterns at every level, vertical depth, iron-railed mezzanines — these compositions consistently produce stronger renders than flat horizontal-gallery shots.
+
+━━━ MAGIC SATURATION MANDATE — EVERY SURFACE ALIVE ━━━
+The space is BUZZING with active magic, not "magical-themed decor." NOT a clean hall with 3 magical accents — the ENTIRE SPACE is alive with magic at every level. The eye should land on something magical EVERYWHERE it looks.
+
+Render ALL THREE of these primary phenomena VISIBLY in the frame, stacked at different points in the space:
+
+  • PHENOMENON 1: ${phenomena[0] || ''}
+  • PHENOMENON 2: ${phenomena[1] || ''}
+  • PHENOMENON 3: ${phenomena[2] || ''}
+
+PLUS layer ALL of these throughout the space (obsessive density):
+• EVERY COLUMN has glowing runic carvings pulsing in slow rhythm
+• EVERY FLOOR TILE has faint inlaid runes catching light
+• EVERY WALL has carved magical-script glowing softly
+• THE AIR is THICK with glowing motes / sparkles / magical-pollen / floating particles
+• THE CEILING has floating spell-orbs / suspended glowing crystals / hanging magical-lanterns
+• SHELVES + ALCOVES + PEDESTALS each hold their own glowing magical artifact — glowing potion-bottles, jarred magical specimens, polished crystals, ancient relics
+• DRIFTING MAGICAL MIST coils across the floor between columns
+• MULTIPLE smaller spell-circles glow at various points beside the main one
+• SCATTERED FLOATING OBJECTS — books / scrolls / orbs / crystals — hovering at varying heights
+• ARC-LIGHTNING flickering between columns / between crystals / through suspended energy-globes
+• MULTI-COLORED FLAME-BRAZIERS at column-bases (emerald / violet / silver / amber)
+
+The cumulative effect: the viewer cannot find a quiet corner. Every quadrant has 2-3 active magical effects happening. The space is ALIVE.
+
+━━━ MOVIE POSTER MANDATE — STACK EVERY QUADRANT ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Multi-tier depth:
+• FOREGROUND TIER (front 20%): tactile detail — column-base with runic-carvings / runic-floor section / suspended floating orb close to viewer / brass railing with runic-inlay / shelf-edge with glowing potion-vials / a stone balustrade
+• MIDGROUND TIER (middle 50%): the primary architecture + the featured magical phenomena
+• DEEP-DISTANCE TIER (back 30%): more architecture receding / atmospheric magical-haze / additional phenomena at distance
+
+🚫 BANNED CENTRAL COMPOSITION: NEVER put a single open book / grimoire / tome on a central altar / pedestal / plinth as the main focal element. The "open glowing tome on altar" composition is cheesy fantasy-cliche. Books and grimoires are PERMITTED as SIDE clutter (on shelves, scattered on tables, floating in the air alongside other magic) but NEVER as the centered focal subject on a raised plinth. If a pedestal is central, put something else on it — a hovering crystal cluster, a brass orrery, a scrying-bowl, a glowing artifact, a sigil-stone, etc. — NOT an open tome.
+
+The eye should land on 4+ different magical details in different quadrants.
+
+━━━ MULTIPLE STACKED LIGHT SOURCES (MANDATORY ≥3) ━━━
+The space glows from MULTIPLE COMPETING SOURCES at once:
+• God-rays through stained-glass windows
+• Glowing floor-runes lighting from below
+• Floating spell-orbs casting colored halos
+• Ambient magic-haze
+• Crackling arc-lightning highlights
+• Glowing crystal clusters
+At least 3 visibly active.
+
+━━━ SATURATED IMPOSSIBLE COLOR ━━━
+Violet / azure / emerald / amber / rose-magenta / shimmer-gold all coexisting. Heaven-tier saturation. CRANK EVERYTHING TO 11.
+
+━━━ STRICT WESTERN HIGH FANTASY ━━━
+🚫 NO sci-fi / cyberpunk / neon-modern / orbital / cosmic
+🚫 NO modern (no industrial / electric bulbs / plastic / chrome)
+🚫 NO real-world ethnic-coded interiors (no Forbidden-City / Persian / Aztec / etc.)
+🚫 NO characters / figures
+✓ LOTR / GoT / Hogwarts / D&D / Witcher / Elden Ring / Warcraft lineage
+
+━━━ THE ARCANE SPACE ━━━
+${hall}
+
+The space is rendered at GRAND SCALE — architectural features readable, depth extending into atmospheric haze, columns and ornament clearly visible.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+CRITICAL: lead with the architecture + the first magical phenomenon for early-token weighting. Open with the space, immediately fuse with active magic.
+
+[OPENING: "[space description] at grand scale, [phenomenon 1] dominating central space"], [phenomenon 2 at midground], [phenomenon 3 at deep distance or ceiling], [foreground tactile anchor — glowing grimoire / runic-floor / floating-orb / brass-railing], [obsessive magic-density layers — glowing-rune-carvings on every column / floating-motes throughout / scattered active spell-circles / drifting magical-mist / floating spell-orbs / arc-lightning between conduits / multi-colored brazier-flames], [stacked light sources], [color palette + mood]
+
+DRAMATIC VISUALS: render the EXACT space + ALL THREE phenomena from slots. OBSESSIVE-DENSITY magic-overload — every column glows, every surface has runic carvings, the air is thick with motes, drifting magical mist coils across the floor. NO characters. NO figures.
+
+Output ONLY the raw 160-220 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   ARCANE_HALLS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, hall, caster, spell_moment, magic_phenomena } = slots;
     const phenomena = Array.isArray(magic_phenomena) ? magic_phenomena : [magic_phenomena];
@@ -1346,7 +1444,7 @@ Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has somethin
 
   1. **THE CASTER + ROOM-FILLING SPELL** in midground left-or-right (25-35% of frame, off-center, wrapped in the saturated magic)
   2. **ARCHITECTURAL ORNAMENT** clearly readable — columns / stained-glass / arches / chandeliers / vaulted ceiling / mosaic floor / suspended banners — the room is VISIBLE and detailed alongside the magic, NOT consumed by it
-  3. **FOREGROUND TACTILE ANCHOR** at the front of the frame — an open glowing-grimoire on a pedestal / a cluster of glowing potion-vials on a table / a floating crystal-orb / a brass orrery / a runic-floor section / a column-base with runic-carvings — the eye lands here first
+  3. **FOREGROUND TACTILE ANCHOR** at the front of the frame — a cluster of glowing potion-vials on a table / a floating crystal-orb / a brass orrery / a runic-floor section / a column-base with runic-carvings / a stone balustrade / shelf-edge with magical clutter — the eye lands here first. 🚫 NEVER an open tome / grimoire / book on a central pedestal — that composition is cheesy fantasy-cliche; books are permitted as SIDE clutter, NEVER as the centered focal anchor
   4. **AMBIENT MAGIC PHENOMENA** beyond the caster's central spell — floating sigils orbiting columns / drifting magical-motes throughout the air / suspended spell-orbs at the ceiling / scattered active spell-circles on the floor / glowing-rune-carvings on every wall
 
 THE EYE SHOULD LAND ON 4 DIFFERENT DETAILS in the frame. Not just "caster + spell" symmetric and centered. Off-center the caster, fill foreground with magical-clutter, show the architecture, layer ambient magic everywhere.

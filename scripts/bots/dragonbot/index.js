@@ -21,6 +21,7 @@ const pathBuilders = {
   'male-action-scenes': require('./paths/male-action-scenes'),
   'cozy-arcane': require('./paths/cozy-arcane'),
   'arcane-halls': require('./paths/arcane-halls'),
+  'arcane-spaces': require('./paths/arcane-spaces'),
   'dark-realm': require('./paths/dark-realm'),
   'dragon-lore': require('./paths/dragon-lore'),
   // 2026-05-14: wow-landscape + lotr-landscape merged into iconic-landscape
@@ -94,6 +95,8 @@ module.exports = {
     // EMPTY by design — arcane-halls cathedral-magic-interior path.
     // Sonnet's hall + magic-overload body must lead.
     'arcane-halls': '',
+    // EMPTY by design — arcane-spaces no-character grand-interior path.
+    'arcane-spaces': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -122,6 +125,7 @@ module.exports = {
     'male-action-scenes': 'black-forest-labs/flux-1.1-pro',
     'cozy-arcane': 'black-forest-labs/flux-1.1-pro',
     'arcane-halls': 'black-forest-labs/flux-1.1-pro',
+    'arcane-spaces': 'black-forest-labs/flux-1.1-pro',
     'dark-realm': 'black-forest-labs/flux-1.1-pro',
     'dragon-lore': 'black-forest-labs/flux-1.1-pro',
     'iconic-landscape': 'black-forest-labs/flux-1.1-pro',
@@ -237,6 +241,23 @@ module.exports = {
       'shimmer',
       'surreal',
     ],
+    'arcane-spaces': [
+      'cinematic',
+      'dark',
+      'cozy',
+      'epic',
+      'nostalgic',
+      'whimsical',
+      'ethereal',
+      'arcane',
+      'ancient',
+      'enchanted',
+      'fierce',
+      'voltage',
+      'nightshade',
+      'shimmer',
+      'surreal',
+    ],
     'dark-realm': [
       'cinematic',
       'dark',
@@ -302,6 +323,9 @@ module.exports = {
     'male-action-scenes',
     'cozy-arcane',
     'arcane-halls',
+    // 'arcane-spaces' — paused 2026-05-15 (Kevin). Aesthetic not landing
+    // consistently; revisit later. All wiring + pools preserved.
+    // 'arcane-spaces',
     'dark-realm',
     'dragon-lore',
     // 2026-05-14: wow-landscape + lotr-landscape merged into iconic-landscape
@@ -324,6 +348,7 @@ module.exports = {
     'male-action-scenes': 5,
     'cozy-arcane': 3,
     'arcane-halls': 3,
+    'arcane-spaces': 3,
     'dark-realm': 4,
     'dragon-lore': 4,
     'iconic-landscape': 5, // merged weight (was wow 4 + lotr 4)
@@ -345,6 +370,7 @@ module.exports = {
       'dragon-scene',
       'cozy-arcane',
       'arcane-halls',
+      'arcane-spaces',
       'dark-realm',
       'dragon-lore',
       'iconic-landscape',
@@ -371,6 +397,7 @@ module.exports = {
       'dragon-lore',
       'dark-realm',
       'arcane-halls',
+      'arcane-spaces',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -403,6 +430,7 @@ module.exports = {
       'epic-moment': 'scene',
       'cozy-arcane': 'scene',
       'arcane-halls': 'scene',
+      'arcane-spaces': 'scene',
       'dark-realm': 'scene',
       'dragon-lore': 'scene',
       'iconic-landscape': 'scene',
