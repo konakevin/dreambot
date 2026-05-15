@@ -88,6 +88,12 @@ module.exports = {
   LANDSCAPE_PHENOMENON: load('landscape_phenomenon'),
   LANDSCAPE_SURPRISE_ELEMENT: load('landscape_surprise_element'),
   LANDSCAPE_SKY: load('landscape_sky'),
+  // ─── dragon-lore path (2026-05-14, migration from legacy)
+  DRAGON_LORE_SCENE: load('dragon_lore_scene'),
+  DRAGON_LORE_ARCHITECTURE: load('dragon_lore_architecture'),
+  DRAGON_LORE_PHENOMENON: load('dragon_lore_phenomenon'),
+  DRAGON_LORE_SURPRISE_ELEMENT: load('dragon_lore_surprise_element'),
+  DRAGON_LORE_SKY: load('dragon_lore_sky'),
   FEMALE_ADVENTURER_OUTFIT: load('female_adventurer_outfit'),
   FEMALE_ADVENTURER_ACCESSORY: load('female_adventurer_accessory'),
   FEMALE_ADVENTURER_HAIRSTYLE: load('female_adventurer_hairstyle'),

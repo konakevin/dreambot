@@ -78,6 +78,8 @@ module.exports = {
     // EMPTY by design — flagship landscape path. Per wrapper-gridlock lesson,
     // Sonnet's land-is-alive body must lead, not a stuffed prefix.
     'landscape': '',
+    // EMPTY by design — dragon-lore archaeological-fantasy scene path
+    'dragon-lore': '',
     // FROZEN 2026-05-13 — exact clone of female-warrior wrapper at the moment
     // it produced the Frazetta-cheesecake painted-fantasy-cover renders Kevin
     // loved (R3 batch lkz161/zi3xxo/94utqp/pqgzmb/madto1). DO NOT EDIT —
@@ -220,7 +222,7 @@ module.exports = {
     // muted and more uniform; with it off, Sonnet's single-pass output gave
     // more lush + colorful + varied renders. Kevin adopted this as the
     // baseline for the path.
-    skipPaths: ['artsy-girl', 'female-adventurer', 'female-action-scenes', 'male-adventurer', 'male-action-scenes', 'landscape'],
+    skipPaths: ['artsy-girl', 'female-adventurer', 'female-action-scenes', 'male-adventurer', 'male-action-scenes', 'landscape', 'dragon-lore'],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
