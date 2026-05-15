@@ -94,6 +94,12 @@ module.exports = {
   DRAGON_LORE_PHENOMENON: load('dragon_lore_phenomenon'),
   DRAGON_LORE_SURPRISE_ELEMENT: load('dragon_lore_surprise_element'),
   DRAGON_LORE_SKY: load('dragon_lore_sky'),
+  // ─── dark-realm path (2026-05-14, migration from legacy)
+  DARK_REALM_SCENE: load('dark_realm_scene'),
+  DARK_REALM_ARCHITECTURE: load('dark_realm_architecture'),
+  DARK_REALM_PHENOMENON: load('dark_realm_phenomenon'),
+  DARK_REALM_SURPRISE_ELEMENT: load('dark_realm_surprise_element'),
+  DARK_REALM_SKY: load('dark_realm_sky'),
   FEMALE_ADVENTURER_OUTFIT: load('female_adventurer_outfit'),
   FEMALE_ADVENTURER_ACCESSORY: load('female_adventurer_accessory'),
   FEMALE_ADVENTURER_HAIRSTYLE: load('female_adventurer_hairstyle'),

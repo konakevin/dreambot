@@ -1,45 +1,25 @@
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+/**
+ * DragonBot dark-realm path — corrupted wastelands / cursed lands.
+ *
+ * Migrated 2026-05-14 from legacy function-based form to declarative
+ * 5-axis bespoke system. Mordor / Shadowfell / Dark Souls / Bloodborne
+ * / Diablo / Witcher's Wild Hunt visual lineage. Beautiful but MENACING.
+ *
+ * 5 path-bespoke pools (mirror of dragon-lore pattern, dark-tilted):
+ *   - scene: DARK_REALM_SCENE
+ *   - architecture: DARK_REALM_ARCHITECTURE
+ *   - phenomenon: DARK_REALM_PHENOMENON (80% gated)
+ *   - surprise_element: DARK_REALM_SURPRISE_ELEMENT
+ *   - sky_layer: DARK_REALM_SKY
+ */
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.DARK_REALM_SCENES, 'dark_realm_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are a dark-fantasy concept-art painter writing DARK REALM scenes for DragonBot — corrupted wastelands, necromancer kingdoms, fallen empires, cursed lands. Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo energy. Beautiful but MENACING. The land itself feels hostile, wrong, corrupted. Output wraps with style prefix + suffix.
-
-${blocks.EPIC_FANTASY_BLOCK}
-
-${blocks.MAGICAL_ATMOSPHERE_EVERYWHERE_BLOCK}
-
-${blocks.PAINTERLY_ILLUSTRATION_BLOCK}
-
-${blocks.CINEMATIC_COMPOSITION_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE DARK REALM ━━━
-${scene}
-
-━━━ LIGHTING (ominous / sickly / volcanic / moonlit) ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Wide or mid-wide establishing shots of corrupted landscapes. The land is the villain — twisted trees, poisoned rivers, crumbling dark citadels, ashen skies, cursed architecture. Characters optional and small against the hostile terrain. Beautiful in a terrible way — concept art you'd hang on your wall even though it's menacing. Dark Souls bonfire-glow-in-the-dark energy.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DRAGONBOT_DARK_REALM',
+  pools: {
+    scene: 'DARK_REALM_SCENE',
+    architecture: 'DARK_REALM_ARCHITECTURE',
+    phenomenon: 'DARK_REALM_PHENOMENON',
+    surprise_element: 'DARK_REALM_SURPRISE_ELEMENT',
+    sky_layer: 'DARK_REALM_SKY',
+  },
 };

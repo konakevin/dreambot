@@ -59,6 +59,159 @@ if (!POOL) {
 // Per-pool recipe — what kind of scenes this pool authors + aesthetic
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
+  // ─── DRAGONBOT dark-realm path (2026-05-14, migration from legacy
+  // function-based form to bespoke 5-axis system). Corrupted wastelands /
+  // necromancer kingdoms / fallen empires / cursed lands. Mordor /
+  // Shadowfell / Dark Souls / Bloodborne / Diablo / Witcher's Wild Hunt.
+
+  dark_realm_scene: {
+    format: 'simple',
+    theme: `DARK FANTASY REALM SCENES for DragonBot's dark-realm path. Each entry is a CORRUPTED / BLIGHTED / CURSED LANDSCAPE at maximum movie-poster intensity. STRICT WESTERN DARK HIGH FANTASY ONLY — Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo / Witcher's Wild Hunt / Skyrim-Soul-Cairn / Elden Ring's Caelid / D&D Avernus / Demon's Souls visual lineage. Each entry 50-80 words.\n\n⚠️ MOOD: MENACING + BEAUTIFUL + HOSTILE + CORRUPTED + OPPRESSIVE. Dark Fantasy DREAD, not horror-gore. The world is WRONG here.\n\nMANDATORY in every entry:\n• A SPECIFIC DARK BIOME / REALM (blighted forest / poisoned wetland / ash plain / sundered abyss / cursed necropolis / demon-touched volcanic / etc.)\n• MULTI-TIER DEPTH — foreground tactile detail + midground body + deep distance atmospheric layer\n• "WRONG" SIGNAL — twisted / blackened / corrupted / cursed / silent / hostile\n• MOVIE-POSTER SCALE — vast, oppressive, dwarfing\n\n🚫 ABSOLUTE BANS:\n• NO gratuitous gore / slasher / explicit horror — DARK FANTASY DREAD only\n• NO modern / industrial elements\n• NO real-world ethnic-coded sites\n• NO sci-fi / cosmic / floating-island / sky-whale drift\n• NO living dragons (those are dragon-scene / dragon-lore paths)\n• NO clean / bright / cheerful / peaceful biomes — this path is STRICTLY DARK\n\nVARIETY MANDATE — distribute across these dark-realm categories:\n\n  A. **BLIGHTED FOREST / TWISTED WOOD** (~15%): blackened trees / withered groves / blood-soaked roots / undead-touched forest / hag-marked wood / wytch-blasted heath\n  B. **POISONED WETLAND / CURSED MARSH** (~15%): plague-pool / blood-river / blackwater swamp / will-o-wisp marsh / drowned-fortress wetland / Dead Marshes\n  C. **ASH PLAIN / VOLCANIC WASTELAND** (~15%): Mordor-coded ash-fields / lava-cracked plains / cinder-deserts / volcanic-glass wastes / Sauron-eye-coded ridges / smoking-fissure plains\n  D. **CURSED NECROPOLIS / CITY OF DEAD** (~15%): undead-walked ruins / open-grave city / bone-tower district / spectral-army camp / lich-king kingdom / haunted capital\n  E. **DEMON-TOUCHED / HELLSCAPE-ADJACENT** (~10%): demon-summoning circle field / infernal-portal area / chained-soul plain / hellfire-cracked land / Avernus-coded scorched-earth\n  F. **SUNDERED LAND / ABYSS-EDGE** (~10%): void-touched canyon / abyss-edge cliff / sundered continent / shattered-world fragment / world-wound\n  G. **CURSED MOOR / WITCH-REALM** (~10%): hag-haunted moor / witch-fen / cursed heath / blackthorn waste / blood-stone field\n  H. **CRUMBLING DARK CITADEL FORELAND** (~10%): fortress at the dark-realm border / approach to a necromancer-keep / fall-of-empire vista`,
+    touchpoints: [
+      'BLIGHTED FOREST OF THE WHISPERING DEAD — blackened trees with red-veined leaves stretching for miles, the ground covered in bone-meal and dead leaves; foreground: a single twisted root erupting from the earth gripping a moss-covered skull; midground: the forest interior receding into red mist, weeping branches dripping black sap; deep distance: a Gothic cathedral spire visible above the canopy.',
+      'POISONED RIVER OF BLOOD AND ASH — slow-flowing black river with crimson tributaries cutting through cinder-plains, the water steaming softly; foreground: a fallen banner half-submerged in the dark current; midground: the river coiling between ash-dunes toward a distant burning citadel; deep distance: storm-clouds gathering, the city in flames; sky: blood-red.',
+      'MORDOR-CODED ASH WASTELAND — endless plain of black volcanic ash under a burning sky, lit by distant lava-cracks; foreground: a single dragon-tooth-shaped boulder half-buried in ash; midground: the wasteland stretching toward jagged peaks; deep distance: a Sauron-eye-coded tower silhouetted against the burning horizon; sky: ash-fall and lightning.',
+      'CURSED NECROPOLIS AT MIDNIGHT — vast city of the dead, every building a tomb, every street a procession-path; foreground: an open grave with a fallen helm at its edge; midground: bone-spire towers and mausoleum-cathedrals stretching to the horizon; deep distance: a colossal lich-king statue silhouetted against the moon; sky: blood-moon rising.',
+      'DEMON-PORTAL-CRACKED PLAIN — barren scorched land where multiple infernal portals stand half-active in a wide circle, chained souls visible at each portal; foreground: blackened claw-prints scorched into the stone; midground: the portal-ring crackling with violet flame; deep distance: a massive demon-summoning ziggurat rising against burning sky; sky: hellfire purple.',
+      'VOID-EDGE CANYON OF SUNDERED STONE — canyon where the earth has been torn open down to the void itself, the abyss visible miles below as featureless black; foreground: gnarled dead tree clinging to the cliff-edge; midground: the canyon walls falling into impossible depth; deep distance: the other cliff barely visible across the void-rift; sky: bruised purple-black storm.',
+      "WITCH-HAUNTED BLACKTHORN MOOR — windswept moorland of dead heather and twisted black thorns under perpetual gloom; foreground: a single weathered standing-stone with hag-runes carved deep; midground: rolling blackthorn waste with a distant covered cart abandoned at a crossroads; deep distance: a witch's tower silhouetted at sunset; sky: green-bruise storm-cloud.",
+      "NECROMANCER-KEEP APPROACH — long causeway leading to a black-iron fortress on a basalt outcrop, the road lined with weathered impaled banners; foreground: a fallen knight's helm half-buried in road-dust; midground: the causeway stretching toward the fortress, fog rolling across; deep distance: the keep itself, multi-towered and bone-decorated; sky: storm-cracked with violet lightning.",
+      'POISONED FUNGAL WETLAND — black-water swamp lit by sickly bioluminescent fungi growing across drowned trees and pool-edges; foreground: a single luminescent mushroom-cluster glowing acid-green; midground: drowned cypress receding into mist with floating corpse-candles; deep distance: a partially-submerged dark fortress; sky: green-tinted overcast.',
+      'CINDER-DESERT WITH OBSIDIAN FANG SPIRES — vast plain of black volcanic glass with scattered jagged obsidian spires reaching skyward; foreground: cracked black glass scattered with ember-marks; midground: a forest of glass-fangs receding; deep distance: a smoking volcanic peak with lava-veins; sky: ash-fall with crimson clouds.',
+      'HELLFIRE-CRACKED CHAINED-SOUL PLAIN — wide flat plain of cracked black earth with chained soul-figures bound to obsidian pillars across miles; foreground: a single broken chain coiling among ember-coals; midground: the chained-pillar grid stretching to horizon; deep distance: a demonic ziggurat rising from the haze; sky: hellfire purple-orange with lightning.',
+      'SUNDERED CONTINENT FRAGMENT EDGE — broken edge of land where half the continent fell into the abyss eons ago, the cliff-face still scarred; foreground: a fallen tree half-overhanging the void; midground: the broken cliff-line stretching in a serrated edge; deep distance: distant land-fragments hanging in the haze; sky: storm-bruised with floating ash.',
+      'DEAD-MARSHES-CODED CORPSE-WETLAND — vast flooded plain with corpse-candles flickering at midnight, partially-submerged battlefield-remains visible; foreground: a single corpse-candle floating above mossy stones; midground: drowned helmets and shield-bosses in the water; deep distance: a ruined-bridge silhouette; sky: pale-green corpse-light glow.',
+      'BLIGHTED VINEYARDS OF THE BLOOD-CULT — terraced hillside where black-leafed vines once worshipped grow wild, each vine dripping crimson; foreground: a single black-grape cluster bleeding crimson juice onto stone; midground: the terraces receding upward toward a cult-temple; deep distance: a cathedral on the hilltop; sky: blood-moon rising.',
+      'BONE-TOWER CITY DISTRICT — district of a once-grand city where every building is now built of weathered dragon and human bones; foreground: a single femur-pillar carved with funerary runes; midground: bone-spire towers and rib-arched alleys stretching; deep distance: the central necropolis-cathedral; sky: storm-grey with crows wheeling.',
+      'WYVERN-PIT WASTELAND — vast plain pocked with crater-pits where extinct wyverns died, each pit a sunken grave-bowl; foreground: a single talon protruding from a smaller pit; midground: dozens of crater-pits receding; deep distance: a black-iron memorial tower; sky: ash-fall.',
+      'EDGE OF AVERNUS — D&D-coded burning plain at the edge of the first hell, fire pits scattered across cracked black stone; foreground: a single still-smoking fire-pit with chains scattered; midground: the plain stretching toward demon-towers; deep distance: the Styx-coded river of blood visible at horizon; sky: red-and-orange perpetual sunset.',
+      "HAG-FEN MARSHLAND — dim fen filled with willow-wisps and rotted bog-trees, hag-shrines on every hillock; foreground: a single hag-mark stone half-buried in moss; midground: bog-water and dead-tree stumps with floating spirits; deep distance: a witch's cottage on stilts; sky: pale-green overcast.",
+      'BLEAK-FORTRESS APPROACH — barren stone-and-thorn approach to a Gothic black-iron fortress, road lined with skeletal scarecrows; foreground: a weathered milestone marker tilted at an angle; midground: the road through thorn-and-stone toward the fortress gate; deep distance: the fortress wall and central spire; sky: storm-broken with violet lightning.',
+      "BEACON-OF-FALLEN-EMPIRE — once-glorious capital city in ruins, the great central beacon still burning sickly green at night; foreground: fallen heraldic stone with the dead king's sigil; midground: ruined cathedrals and palaces; deep distance: the central tower still burning green; sky: corrupted-violet aurora.",
+      'BLOOD-FIELD BATTLEFIELD AFTERMATH — vast plain where a generations-old battle has left the soil still iron-rich, dotted with broken weapons and fallen helms; foreground: a half-buried sword with rune-blade still gleaming; midground: the battlefield receding with weather-bleached banners; deep distance: a distant memorial cairn; sky: blood-red dusk.',
+      "CRYPTGATE OF THE LICH-KING — massive stone gate carved into a mountainside leading to the lich-king's domain, flanked by skeletal-warrior statues; foreground: a single bone-armor fragment on the gate-step; midground: the gate itself with iron-bound doors; deep distance: the mountain rising into corrupted-cloud; sky: green-glow corruption.",
+      'SCRYING-POOL CURSED GROVE — quiet grove with a single perfectly-still scrying pool at center, the trees around it blackened and dripping; foreground: a fallen scroll with curse-runes inked across it; midground: the pool reflecting an impossibly different sky; deep distance: a hag-shrine half-hidden in foliage; sky: clouded but the pool shows starless void.',
+      "PLAGUE-PIT MEMORIAL GROUND — vast field of weathered tombstones marking a centuries-old plague mass-grave, every stone weathered identical; foreground: a single tilted stone with worn-illegible name; midground: rows of stones receding in identical pattern; deep distance: a chapel-ruin at the field's end; sky: overcast with pale corpse-light.",
+      'CHAINED-MOUNTAIN PRISON-PEAK — single mountain wrapped in massive iron chains and rune-stones, marking the prison of some bound ancient evil; foreground: a single broken chain-link the size of a horse; midground: the mountain itself, chains visible spiraling its peak; deep distance: smaller bound peaks beyond; sky: void-purple storm.',
+    ],
+    instructions: `Each entry is ONE dark-realm scene, 50-80 words. Format: "[NAME-CAP] — [primary dark element]; foreground [tactile wrong detail]; midground [body of the realm]; deep distance [atmospheric/architectural layer]; sky [oppressive overhead]". STRICT Western dark high fantasy. NO sci-fi / cosmic / modern / real-world ethnic. NO gratuitous gore — DARK FANTASY DREAD only. Variety: blighted-forest / poisoned-wetland / ash-plain / cursed-necropolis / demon-touched / sundered-abyss / witch-moor / dark-citadel-foreland. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  dark_realm_architecture: {
+    format: 'simple',
+    theme: `ARCHITECTURE ANCHORS for dark-realm scenes — fantasy-canon DARK structures positioned at midground or deep distance. Each entry 20-40 words. STRICT WESTERN DARK HIGH FANTASY — Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo / Sword of Truth / Witcher's Wild Hunt.\n\n🚫 ABSOLUTE BANS: NO modern (no lighthouses / clocktowers / industrial), NO real-world ethnic codes, NO sci-fi (no floating islands / orbital), NO cheerful / bright / clean structures.\n\n✓ DARK ARCHITECTURE: necromancer towers / black-iron fortresses / bone-throne halls / cursed obelisks / haunted keeps / Gothic spires / demon-altars / void-shrines / fallen-empire ruins / blood-cathedrals / lich-king tomb-cities / scarecrow-fields / hag-shrines / Avernus-coded ziggurats / chained-mountain prisons / Bloodborne-coded Gothic / Dark-Souls-coded ruined castles.`,
+    touchpoints: [
+      'A vast Gothic black-iron fortress at midground, multi-towered with skeletal scarecrows at each crenellation, all upper windows dark.',
+      "A necromancer's tower at deep distance — single tall spire with green-glow at the peak window, surrounded by lesser obelisk-stones.",
+      'A bone-throne hall at midground — open-air ruin with a massive throne carved from a single dragon-skull at the central platform.',
+      'A cursed obelisk at midground — twenty-meter black-stone monolith covered in runic curses, faintly pulsing red at the seams.',
+      'A Gothic blood-cathedral at deep distance — cathedral of black stone with red stained-glass windows still partially intact, a single spire collapsed.',
+      'A demon-summoning altar at midground — circular stone platform with thirteen black pillars, central altar still smoking from past use.',
+      'A void-shrine at midground — small circular stone shrine with a single empty pedestal where the void-stone was, its absence still humming.',
+      'A fallen-empire ruin at midground — collapsed colonnade with toppled statues, all weathered down to ancient menace.',
+      "A lich-king's tomb-cathedral at deep distance — cathedral-sized mausoleum with a central spire and surrounding bone-spire towers.",
+      'A scarecrow-field watchtower at midground — square tower surrounded by skeletal scarecrow figures impaled on poles, their cloaks ragged.',
+      'A hag-shrine at midground — small open-air structure with three pillars supporting a stone roof, central altar with bone-offering still in place.',
+      'An Avernus-coded ziggurat at deep distance — stepped pyramid of black-stone surrounded by hellfire pits, its peak crowned with horns.',
+      'A chained-mountain prison at deep distance — massive iron chains wrapping a single peak, rune-stones embedded at each chain-link.',
+      'A black-marble shrine at midground — Bloodborne-coded Gothic structure with single spire and an iron-bound door at its base, weather-stained.',
+      'A ruined-castle keep at midground — Dark-Souls-coded castle with collapsed walls and a single intact central tower, banners long-rotted.',
+      'A cursed-bridge at midground — stone bridge spanning a dark river with hag-rune carvings on each stone, the keystones glowing faintly red.',
+      'A Black-Spire watchpost at deep distance — multi-tower fortress on a basalt cliff, all towers dark and abandoned.',
+      'A blood-cult monastery at midground — circular stone monastery on a hilltop with cult-symbols carved into every wall.',
+      'A skull-arch entrance at midground — entrance to a tomb-city through a colossal carved-stone dragon-skull, jaw-bones serving as side-pillars.',
+      'A void-rift containment-structure at deep distance — circular stone wall surrounding a sealed void-tear, runic stones marking its perimeter.',
+    ],
+    instructions: `Each entry is ONE dark-realm architecture element, 20-40 words. STRICT Western dark high fantasy. Positioned at MIDGROUND or DEEP DISTANCE. NO modern / sci-fi / real-world ethnic / cheerful. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  dark_realm_phenomenon: {
+    format: 'simple',
+    theme: `80%-gated CURSED ATMOSPHERIC PHENOMENON for a dark-realm scene — a supernatural / dark / oppressive event that elevates the menacing mood. Each entry 25-50 words.\n\n⚠️ STRICT WESTERN DARK HIGH FANTASY — Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo. 🚫 NO sci-fi / nebulas / orbital / Lovecraftian-cosmic-horror-tentacles (mild eldritch references OK).\n\n✓ DARK PHENOMENA (allowed because the mood is corrupted/menacing):\n• Blood rain falling slowly across the realm\n• Ash storm sweeping the plain\n• Spectral mist that moves against the wind\n• Sickly aurora in poisoned colors (acid-green / blood-violet)\n• Blackened sun (eclipsed permanently)\n• Hellfire rain (slow-falling embers)\n• Eldritch storm with violet lightning\n• Void-tear visible in the sky\n• Nightmare-bird flock (carrion crows / hellish ravens)\n• Plague-haze rolling across the land\n• Corrupted leyline visible as a glowing scar across the ground\n• Ghost-army marching at distance\n• Blood-moon-eclipse\n• Spectral-army camp visible at distance\n• Sickly green god-ray piercing through cloud\n• Falling-stars of corrupted light\n• Phantom-bell-toll heard as ripples in mist\n• Lich-aura visible as faint glow on horizon\n• Ash-snow falling perpetually\n• Will-o\'-wisp swarm leading travelers astray`,
+    touchpoints: [
+      'BLOOD RAIN — slow crimson droplets falling perpendicular across the scene, the ground beneath red-stained with each strike',
+      'ASH STORM ROLLING ACROSS — wall of black ash advancing across the plain, swallowing the horizon in choking grey',
+      'SPECTRAL MIST AGAINST THE WIND — wall of pale mist moving directly against prevailing wind, faces almost visible within',
+      'SICKLY ACID-GREEN AURORA — corrupted aurora rippling across the night sky in poisoned green-and-violet curtains',
+      'BLACKENED SUN ETERNAL — sun reduced to a permanent black disk haloed in dim red, casting half-light across the realm',
+      'HELLFIRE EMBER RAIN — slow-falling glowing embers dropping from a corrupted sky across miles of plain, the ground perpetually warm',
+      'ELDRITCH VIOLET LIGHTNING STORM — fork-pattern violet lightning crashing across the entire frame, illuminating dark architecture below in flashes',
+      'VOID-TEAR IN THE SKY — vertical rip in the sky showing pure impossible darkness beyond, the rip edges glowing faintly violet',
+      'NIGHTMARE-RAVEN FLOCK — vast flock of hell-ravens circling overhead like a living black cloud, their calls echoing',
+      'PLAGUE-HAZE ROLLING IN — wall of sickly-green plague-mist advancing across the realm, knee-high and creeping',
+      'CORRUPTED LEYLINE GLOWING SCAR — visible glowing red-violet line scarred across the ground horizon-to-horizon, pulsing in slow waves',
+      'GHOST-ARMY MARCHING — translucent army of soldiers visible at deep distance marching across the plain, faintly luminous',
+      'BLOOD-MOON ECLIPSE — moon turning to crimson disk haloed in black, hanging massive over the realm',
+      'SPECTRAL-ARMY CAMP — campfires visible at distance but the figures around them flicker as ghosts',
+      'SICKLY GREEN GOD-RAY — single thick column of acid-green light piercing through corrupted cloud onto a single point of the landscape',
+      'CORRUPTED FALLING STARS — meteor-streaks crossing the night sky but each star burns black-red instead of white',
+      'PHANTOM-BELL TOLL RIPPLES — ripples visible expanding through mist as a phantom bell tolls across the silent realm',
+      "LICH-AURA HORIZON GLOW — pale-green glow on the horizon marking a lich-king's active influence, the light pulsing slowly",
+      'PERPETUAL ASH-SNOW — slow black ash-flakes falling like snow across the realm, accumulating in drifts of grey-black',
+      'WILL-O-WISP SWARM LEADING ASTRAY — dozens of pale phantom-lights drifting at knee-height across the plain in misleading directions',
+    ],
+    instructions: `Each entry is ONE cursed atmospheric phenomenon for a dark-realm scene, 25-50 words. STRICT Western dark high fantasy. NO sci-fi / cosmic / Lovecraftian-tentacles. Adds DREAD + amplifies menacing mood. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  dark_realm_surprise_element: {
+    format: 'simple',
+    theme: `TINY SECONDARY SUBJECTS for a dark-realm scene — small details implying the wider corruption. Each entry 15-35 words.\n\n✓ ALLOWED: tiny hooded figures permitted (lone wanderer / cursed knight / dark pilgrim / scout) as SCALE-PROVERS — REVERENT, UNNERVED, NEVER combat / NEVER action. Render at 5-15% of frame max. PLUS dark wildlife (ravens / hellish-ravens / shadow-wolves / corpse-crows / vultures) / cursed objects (fallen banner / abandoned helm / weathered tomb-marker / cult-sigil scratched in stone).\n\n🚫 ABSOLUTE BANS: NO living dragons. NO modern / industrial / sci-fi objects. NO explicit gore (skeleton / bone / fallen-helm OK; visceral entrails NOT).`,
+    touchpoints: [
+      'a hooded lone wanderer standing at the edge of frame on a cliff-overlook, gazing out at the corrupted realm — midground silhouette',
+      'a single cursed knight in dark armor kneeling at a roadside shrine, head bowed, his sword planted in the earth — midground',
+      'a dark pilgrim with staff walking the long causeway toward the necromancer-keep, half-lost in fog — deep midground',
+      'a flock of hell-ravens circling overhead, dozens of black silhouettes against the corrupted sky — deep midground',
+      'a single shadow-wolf watching from a rock-outcrop at midground edge, fur ragged and eyes faintly luminous',
+      'a corpse-crow perched on a fallen-banner standard at midground, head turned to watch the camera',
+      "a fallen knight's helm half-buried in the road-dust at foreground edge, dark-tarnished and weather-beaten",
+      'a chained-corpse silhouette visible against a distant cliff at deep midground, motionless, the chains rusted',
+      'a weathered tomb-marker at midground edge, single rune carved deep, listing slightly with age',
+      'a cult-sigil scratched fresh into the bark of a dead tree at foreground edge, paint still wet-looking',
+      'a tattered banner-pole at midground, fabric long-rotted but the rusted iron of the standard still hooked',
+      'a fallen war-helm with broken plumes resting at the foot of a black-iron statue, weather-beaten',
+      'an abandoned cart half-overgrown with black-thorn vines at midground edge, its cargo long-rotted away',
+      'a single black-eyed cat watching from a tomb-step at midground, motionless and unnaturally still',
+      'a hooded figure kneeling at a roadside altar at midground, candles flickering blue-cold',
+      'a vulture flock visible on a distant gibbet at deep midground, perched and patient',
+      'a partially-buried skull at foreground edge, weathered smooth but with faint dark-rune carvings',
+      'a lone wanderer with lantern silhouetted at the dark-realm threshold at midground, hesitating before entering',
+      'a black-iron-bound spellbook left open at midground on a stone pedestal, pages turning by themselves in still air',
+      'a single suit of empty cursed armor standing at midground edge, helm-visor down, sword planted in ground',
+      'an obsidian dagger embedded blade-down in the foreground at edge of frame, runic-etched and faintly glowing',
+      'a hooded scout with bow drawn-but-relaxed at midground edge, surveying the corruption — clearly inspecting, not hunting',
+      'a single dark-blossom flower growing impossibly from a skull at foreground edge, black-petaled and faintly luminous',
+    ],
+    instructions: `Each entry is ONE tiny secondary subject for a dark-realm scene, 15-35 words. Tiny hooded figures (wanderer / cursed knight / pilgrim) ARE permitted at 5-15% of frame. Dark wildlife / cursed objects also OK. NO explicit gore / NO living dragons / NO modern / NO sci-fi. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  dark_realm_sky: {
+    format: 'simple',
+    theme: `OPPRESSIVE DARK SKY for a dark-realm scene. Each entry 15-30 words. The sky NEVER clean / never blue / always wrong — storm-bruised / ash-fall / blood-red / sickly-green / blackened-sun / void-purple / corpse-light-pale.\n\n⚠️ STRICT WESTERN DARK HIGH FANTASY — Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo / Witcher's Wild Hunt visual lineage.\n\n🚫 NO sci-fi / nebulas-in-daylight / galaxy-arms / floating-islands / sky-whales / orbital structures / cheerful-blue. 🚫 NO clear bright weather.`,
+    touchpoints: [
+      'Storm-bruised purple-black sky with violet lightning forking, mammatus pouches visible above the realm',
+      'Blood-red sky bleeding to deep crimson at the horizon, the sun a black disk haloed in burning red',
+      'Ash-fall overcast sky with grey-black flakes drifting perpetually, no sun visible behind the haze',
+      'Sickly acid-green corrupted sky with poisoned aurora rippling overhead in slow waves',
+      'Blackened-sun perpetual eclipse — sun is a black disk haloed in dim red, half-light across the realm below',
+      'Void-purple storm-cloud sky with sickly-violet glow at the cloud-edges, no stars visible behind the haze',
+      'Corpse-light-pale sky with phosphorescent green tint, no warmth in the light, everything cast cold',
+      'Hellfire-orange perpetual sunset sky, fires burning in the distance on the horizon, no sun visible',
+      'Storm-cracked sky with violet lightning forking horizon-to-horizon, the entire upper third in shadow',
+      'Plague-haze yellow-green sky with sickly mist hanging at altitude, no stars or sun visible',
+      'Ash-snow falling perpetually from a grey-black sky, visibility limited to a few hundred meters',
+      'Twin moons hanging dim-and-red against a void-violet sky, both blood-stained and forbidding',
+      'Single moon turning blood-red as a permanent corrupted eclipse hangs above the realm',
+      'Ghost-light pale overcast sky with no sun, no stars, only featureless cold luminescence',
+      'Sickly green god-ray piercing through corrupted cloud onto a single spot of the landscape below',
+      'Lightning-cracked storm sky with mammatus pouches and forking bolts illuminating dark architecture in flashes',
+      'Pyre-smoke and ash-fall sky, with distant fires visible at the cloud-cap horizon',
+      'Bone-white overcast sky with thin black cracks visible as if the sky itself were ceramic and breaking',
+      'Spectral-army marching visible in the cloud-bank as ghostly silhouettes, the cloud lit faintly luminous',
+      'Pale-violet corruption sky with phantom-bird silhouettes circling at altitude',
+    ],
+    instructions: `Each entry is ONE oppressive dark sky, 15-30 words. NEVER clean / cheerful / bright. STRICT Western dark high fantasy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
   // ─── DRAGONBOT dragon-lore path (2026-05-14, migration from legacy
   // function-based form to bespoke 5-axis system). Archaeological-
   // fantasy evidence of dragons — skeletons / murals / abandoned lairs
@@ -70,25 +223,25 @@ const POOL_RECIPES = {
     theme: `ARCHAEOLOGICAL DRAGON LORE SCENES for DragonBot's dragon-lore path. Each entry is ANCIENT EVIDENCE of dragons — the absence made visible. NOT living dragons (that's dragon-scene). Each entry 50-80 words.\n\n⚠️ STRICT WESTERN HIGH FANTASY ONLY — LOTR / GoT / Skyrim / Witcher / Warcraft / D&D Forgotten Realms / Elden Ring lineage.\n\nMANDATORY in every entry:\n• A SPECIFIC PIECE OF DRAGON EVIDENCE (skeleton / mural / abandoned lair / hoard / fossilized egg / dragon-temple / dragon-rider outpost / petrified dragon-stone / weathered claw-marks / monument / tomb / ruin / dragon-bone-bridge / etc.)\n• MULTI-TIER DEPTH — foreground tactile detail (fragments of bone / scattered coins / cracked eggshells) + midground main lore-element + deep distance atmospheric layer\n• "ABSENCE" SIGNAL — dust / vines / centuries / dragons-are-gone / silence / lost-civilization\n• SCALE-OF-ABSENCE — massive size relative to any human element (skeleton-the-size-of-a-cathedral / mural-stretching-half-a-mile / hoard-knee-deep-in-a-vault)\n\n🚫 ABSOLUTE BANS:\n• NO living dragons in the frame (that's dragon-scene path)\n• NO combat / armies / heroes-in-action — only AFTERMATH and RUIN\n• NO modern / industrial elements\n• NO real-world ethnic-coded sites\n• NO sci-fi / cosmic / floating-island / sky-whale drift\n• Tiny figures (scholars / explorers / archaeologists / lone-wanderers) ARE allowed but as SCALE-PROVERS only, never the focus\n• 🚫 DRAGON SKELETONS MUST READ DEAD: NO glowing eyes / NO eyes at all (empty sockets) / NO scales attached / NO flickering soul / NO animate poses / NO breath visible. BONES ONLY — bleached, picked clean, centuries-weathered. Skeletons are SKELETONS, not preserved-alive-wyrms.\n\nVARIETY MANDATE — distribute across these dragon-evidence categories:\n\n  A. **DRAGON SKELETON / FOSSIL** (~25%): Massive dragon-skeleton bleached by centuries, embedded in cliff-face / lying across a valley / coiled in a vault / half-buried in glacier ice / vertical-pinned to a mountain like the original death-pose / partially excavated with rune-markers at each joint\n  B. **WEATHERED MURAL / FRESCO** (~15%): Cathedral-wall depicting the Dragon Wars / colonnade of crumbling reliefs showing each dragon-clan / underground-cave painting in ochre and dragon's-blood / mosaic-floor depicting a dragon-rider's last stand\n  C. **ABANDONED LAIR / HOARD** (~25%): Vaulted cavern with knee-deep gold and gems / coin-flooded chamber with throne carved for a dragon / hoard with petrified flames still glowing faintly / pile of crowns from devoured kings / hoard-vault with crystallized dragon-spittle\n  D. **FOSSILIZED / PETRIFIED DRAGON EGG** (~10%): Single intact dragon-egg the size of a carriage on a stone pedestal in a shrine / cluster of cracked eggshells scattered across a clutch-floor / stone-hardened egg cradled by tree-roots / fossilized egg embedded in ice / mineralized egg in a vault\n  E. **DRAGON-TEMPLE / SHRINE RUIN** (~15%): Crumbling temple built TO dragons with massive scaled-architecture / dome-roofed shrine collapsed inward / colonnade-of-bones temple / mountain-cut dragon-cathedral / standing-stones shrine carved with dragon-runes\n  F. **DRAGON-RIDER OUTPOST / MONUMENT** (~10%): Cliff-top crumbling dragon-rider barracks / monument-tomb-stone for a fallen rider and mount / abandoned eyrie with weathered rune-stones / dragon-rider colossal statue half-fallen / saddle-stand still standing in an empty roost`,
     touchpoints: [
       'COLOSSAL DRAGON SKELETON IN A SCREE VALLEY — massive vertebrae arched like a ruined cathedral nave, ribcage cradling whole groves of pine that have grown inside it over centuries; foreground: fragmented bone shards and lichen-painted skull-fragments; midground: the skeleton stretches three hundred meters end to end; deep distance: granite peaks rising beyond, snow on the upper slopes; sky: pale dawn with crepuscular rays piercing through.',
-      'CAVERNOUS HOARD VAULT — gold coins, jeweled crowns, and engraved goblets piled knee-deep across an entire underground chamber, the dragon\'s throne-impression still visible in the metal; foreground: a single fallen sword half-buried in coin-drift; midground: heaps of treasure receding into the dragon-stamped throne-floor; deep distance: the vault opens to a black corridor; sky/ceiling: vaulted stone with stalactites.',
+      "CAVERNOUS HOARD VAULT — gold coins, jeweled crowns, and engraved goblets piled knee-deep across an entire underground chamber, the dragon's throne-impression still visible in the metal; foreground: a single fallen sword half-buried in coin-drift; midground: heaps of treasure receding into the dragon-stamped throne-floor; deep distance: the vault opens to a black corridor; sky/ceiling: vaulted stone with stalactites.",
       'WEATHERED DRAGON-WAR MURAL — cathedral-scale wall of weathered fresco depicting the great wyrm-wars, paint flaking but compositions still visible; foreground: a single ochre-faded dragon claw outlined in detail; midground: the entire wall stretching half a kilometer along the colonnade, multiple battle-scenes; deep distance: the wall continues into a vanishing point; sky: shafts of light through broken cathedral roof.',
-      'FOSSILIZED DRAGON EGG ON A SHRINE PEDESTAL — single intact dragon-egg the size of a small carriage cradled on a stone pedestal carved with offering-bowls; foreground: smaller cracked eggshell fragments scattered around the pedestal; midground: the egg with its mineralized surface still showing scale-pattern; deep distance: the shrine\'s vaulted ceiling rises into shadow; sky: a single shaft of light from a broken oculus.',
+      "FOSSILIZED DRAGON EGG ON A SHRINE PEDESTAL — single intact dragon-egg the size of a small carriage cradled on a stone pedestal carved with offering-bowls; foreground: smaller cracked eggshell fragments scattered around the pedestal; midground: the egg with its mineralized surface still showing scale-pattern; deep distance: the shrine's vaulted ceiling rises into shadow; sky: a single shaft of light from a broken oculus.",
       'COLLAPSED DRAGON-TEMPLE INTERIOR — vast circular temple with massive scaled-columns half-fallen and a dome partially open to the sky; foreground: fallen capstone with a dragon-rune carved on its face; midground: the central altar with petrified dragon-flame still flickering blue-cold; deep distance: the temple continues into shadowed transepts; sky: aurora visible through the broken dome above.',
-      'CLIFF-TOP DRAGON-RIDER OUTPOST RUIN — ancient watchtower at the edge of a sheer cliff, the saddle-stand still standing in the open-air upper level; foreground: weathered runic banner-pole fallen across stone; midground: the outpost\'s stone walls partially collapsed showing the saddle stand and dragon-claw-marks on the stone; deep distance: the valley below with a winding river; sky: storm-clouds gathering with first lightning.',
+      "CLIFF-TOP DRAGON-RIDER OUTPOST RUIN — ancient watchtower at the edge of a sheer cliff, the saddle-stand still standing in the open-air upper level; foreground: weathered runic banner-pole fallen across stone; midground: the outpost's stone walls partially collapsed showing the saddle stand and dragon-claw-marks on the stone; deep distance: the valley below with a winding river; sky: storm-clouds gathering with first lightning.",
       'GLACIER-EMBEDDED DRAGON SKELETON — a dragon-skeleton frozen in glacier-ice, visible through several meters of clear blue ice; foreground: a chunk of broken ice with a single dragon-tooth still embedded; midground: the skull and forequarters visible through the wall of ice, perfectly preserved; deep distance: the glacier curves away into mist; sky: an ice-blue sky with thin cirrus streaks.',
-      'WEATHERED MOSAIC FLOOR — circular mosaic depicting a dragon-rider\'s last stand, individual tiles fallen out leaving gaps but the central rider-and-mount composition still readable; foreground: scattered loose mosaic-tiles in red and gold; midground: the central composition spanning ten meters across; deep distance: the mosaic-floor continues into a roofless ruin; sky: storm-clouds with sun breaking through.',
+      "WEATHERED MOSAIC FLOOR — circular mosaic depicting a dragon-rider's last stand, individual tiles fallen out leaving gaps but the central rider-and-mount composition still readable; foreground: scattered loose mosaic-tiles in red and gold; midground: the central composition spanning ten meters across; deep distance: the mosaic-floor continues into a roofless ruin; sky: storm-clouds with sun breaking through.",
       'STANDING STONES OF THE DRAGON CLAN — circle of weathered standing-stones each carved with a different dragon-rune, in a high alpine meadow at golden hour; foreground: wildflowers in mountain pink and yellow scattered between the stones; midground: the stone-circle, each pillar twice human height; deep distance: distant mountain peaks; sky: aurora beginning to ripple in green-and-violet.',
       'CLUTCH OF CRACKED DRAGON-EGGS — abandoned dragon-clutch in a stone-walled cave, dozen-plus mineralized eggs cracked at the top as though the brood successfully hatched eons ago; foreground: a single intact egg in the center; midground: the cracked clutch arranged in a careful nesting pattern; deep distance: the cave widens into a vaulted chamber with daylight pouring in.',
       'DRAGON-BONE BRIDGE OVER GORGE — bridge made from a single massive dragon-rib spanning a deep canyon, polished by wind and centuries; foreground: weathered carving at the bridge-anchor showing dragon-rider sigil; midground: the bone-bridge itself, fifty meters long, end-to-end visible; deep distance: opposite cliff continuing the trail; sky: god-rays piercing through cloud above the gorge.',
       'CATHEDRAL COLONNADE OF DRAGON-BONES — corridor lined with massive dragon-rib pillars supporting a stone vault, walking down it like through a ribcage; foreground: a single rib at floor-level showing carved offering-marks; midground: the corridor stretching with paired ribs; deep distance: the corridor ends in a doorway opening to outside light; sky: visible through high arrow-slits.',
-      'ABANDONED HOARD WITH PETRIFIED FLAMES — vault chamber where the dragon\'s breath petrified mid-exhale, suspended blue-cold flame-tendrils crystallized in mid-air over the hoard; foreground: scattered gold and a crystal-flame-fragment; midground: the main hoard with the petrified flame-cloud frozen above it; deep distance: throne-impression visible; sky/ceiling: dripstone vault.',
-      'MURAL OF THE DRAGON-RIDERS — long horizontal frieze stretching across a fortress wall depicting every dragon-rider lineage, faces weathered but pose-and-mount visible; foreground: fallen sword and helmet of a rider depicted in the mural; midground: the mural\'s body, the rider-lineage stretching down the corridor; deep distance: the wall meets ruined arch; sky: red dawn through arch.',
-      'CRUMBLING DRAGON-RIDER STATUE — fifty-meter-tall stone statue of a dragon-rider on his mount, the mount\'s wing partially shattered, the rider\'s head fallen at the base; foreground: the fallen stone head, weathered but still recognizable; midground: the statue itself, mount and rider; deep distance: more ruined statues in a row receding into mist; sky: storm-cloud with lightning.',
-      'DRAGON-SKULL CATHEDRAL ENTRANCE — entrance to an underground vault carved through an actual dragon\'s skull, the eye-sockets serving as windows; foreground: rune-carved threshold-stone; midground: the skull-arch revealing a dim interior with treasure-glow; deep distance: dragon-vertebrae receding into shadow; sky: a single shaft of late afternoon sun.',
+      "ABANDONED HOARD WITH PETRIFIED FLAMES — vault chamber where the dragon's breath petrified mid-exhale, suspended blue-cold flame-tendrils crystallized in mid-air over the hoard; foreground: scattered gold and a crystal-flame-fragment; midground: the main hoard with the petrified flame-cloud frozen above it; deep distance: throne-impression visible; sky/ceiling: dripstone vault.",
+      "MURAL OF THE DRAGON-RIDERS — long horizontal frieze stretching across a fortress wall depicting every dragon-rider lineage, faces weathered but pose-and-mount visible; foreground: fallen sword and helmet of a rider depicted in the mural; midground: the mural's body, the rider-lineage stretching down the corridor; deep distance: the wall meets ruined arch; sky: red dawn through arch.",
+      "CRUMBLING DRAGON-RIDER STATUE — fifty-meter-tall stone statue of a dragon-rider on his mount, the mount's wing partially shattered, the rider's head fallen at the base; foreground: the fallen stone head, weathered but still recognizable; midground: the statue itself, mount and rider; deep distance: more ruined statues in a row receding into mist; sky: storm-cloud with lightning.",
+      "DRAGON-SKULL CATHEDRAL ENTRANCE — entrance to an underground vault carved through an actual dragon's skull, the eye-sockets serving as windows; foreground: rune-carved threshold-stone; midground: the skull-arch revealing a dim interior with treasure-glow; deep distance: dragon-vertebrae receding into shadow; sky: a single shaft of late afternoon sun.",
       'OBSIDIAN DRAGON-TOMB MARKERS — field of weathered obsidian gravestones each carved with a single dragon-rune, marking the resting places of the wyrm-clans; foreground: a single carved marker tilted at an angle with vines climbing it; midground: rows of markers receding through purple twilight mist; deep distance: a single great pyre-mound silhouetted; sky: blood moon rising.',
       'PETRIFIED DRAGON-EGGSHELL IN TREE-ROOTS — single broken dragon-eggshell cradled by the spreading roots of a now-massive oak that grew over the centuries, the shell now stone-hardened; foreground: scattered shell-shards mossed with lichen; midground: the main shell cradled by gnarled roots; deep distance: the oak rises out of frame; sky: dappled gold through canopy.',
-      'CLIFF-CARVED DRAGON-FACE WATCHING THE VALLEY — massive dragon-face carved into a cliff-wall hundreds of meters high, eyes-sockets serving as cave-entrances; foreground: scree-slope of fallen stone-chunks below the face; midground: the carved face\'s lower jaw and chin visible; deep distance: the valley spread below with a winding river; sky: morning mist rolling up the cliff.',
-      'ABANDONED SADDLE-STAND IN A WIND-SCOURED ROOST — circular open-air aerie at the top of a mountain spire, single weathered saddle-stand still bolted to the stone, dragon-claw-marks raked across the floor; foreground: a fallen rider\'s helm half-buried in scree; midground: the saddle-stand and claw-marked floor; deep distance: the mountain-tops below; sky: thin air, clouds at lower altitude than the roost.',
+      "CLIFF-CARVED DRAGON-FACE WATCHING THE VALLEY — massive dragon-face carved into a cliff-wall hundreds of meters high, eyes-sockets serving as cave-entrances; foreground: scree-slope of fallen stone-chunks below the face; midground: the carved face's lower jaw and chin visible; deep distance: the valley spread below with a winding river; sky: morning mist rolling up the cliff.",
+      "ABANDONED SADDLE-STAND IN A WIND-SCOURED ROOST — circular open-air aerie at the top of a mountain spire, single weathered saddle-stand still bolted to the stone, dragon-claw-marks raked across the floor; foreground: a fallen rider's helm half-buried in scree; midground: the saddle-stand and claw-marked floor; deep distance: the mountain-tops below; sky: thin air, clouds at lower altitude than the roost.",
     ],
     instructions: `Each entry is ONE archaeological dragon-lore scene, 50-80 words. Format: "[SCENE NAME] — [primary lore element]; foreground [tactile fragment]; midground [main element]; deep distance [atmospheric/contextual layer]; sky [overhead element]". STRICT Western high fantasy. NO living dragons / combat / heroes-in-action. Mood: WONDER + MELANCHOLY + ABSENCE-AT-IMPOSSIBLE-SCALE. Variety: skeleton / mural / hoard / egg / temple / outpost. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -112,11 +265,11 @@ const POOL_RECIPES = {
       'A scaled-column hall at midground — interior corridor with each column carved to resemble a coiling dragon, the column-capitals showing dragon-heads.',
       'A wing-shaped flying-buttress at midground — massive stone wing-arch supporting a half-collapsed temple, the buttress weathered but its feather-like detail still visible.',
       'A petrified-flame chandelier hall at midground — long hall whose ceiling is hung with stone-frozen tongues of dragon-fire suspended in mid-flicker, dimly glowing.',
-      'A dragon-eye window cathedral at midground — narrow chapel with the rear wall pierced by a massive circular window shaped as a dragon\'s eye, stained glass still partially intact.',
+      "A dragon-eye window cathedral at midground — narrow chapel with the rear wall pierced by a massive circular window shaped as a dragon's eye, stained glass still partially intact.",
       'A claw-carved buttress-row at midground — exterior wall of a ruined keep reinforced with massive stone buttresses each ending in a clawed talon.',
       'A wyrm-skeleton arch at deep distance — natural rock-formation framing the entrance to a vault, the upper-arch curving like a dragon-spine.',
       'A dragon-tooth crenellation watchtower at midground — square stone tower whose battlements are carved as massive interlocking dragon-teeth.',
-      'A great wyrm-skeleton incorporated into a temple at midground — the natural skeleton serving as the temple\'s central support structure, the chamber built around it.',
+      "A great wyrm-skeleton incorporated into a temple at midground — the natural skeleton serving as the temple's central support structure, the chamber built around it.",
     ],
     instructions: `Each entry is ONE dragon-lore architecture element, 20-40 words. STRICT Western high fantasy. NO modern / industrial / sci-fi / real-world ethnic codes. Positioned at MIDGROUND or DEEP DISTANCE. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -134,7 +287,7 @@ const POOL_RECIPES = {
       // MINERAL-TEAR / BLOOD / SPITTLE
       'CRYSTALLIZED-TEAR SALT-FLAT — vast salt-mirror surface where the wounded wyrm wept, the tears mineralized into prismatic patterns visible from on high, rainbow refraction in every footprint',
       'DRAGON-BLOOD GEYSER FIELD — geysers steaming colored vapor where the ancient wyrm bled into the earth, the steam-clouds tinted crimson and gold in slow eternal exhale across a wide plain',
-      'PRISMATIC POOL OF DRAGON-TEARS — perfectly mirror-still pool that catches every color of the sky, the water-surface holding centuries-old reflections that don\'t match the current sky',
+      "PRISMATIC POOL OF DRAGON-TEARS — perfectly mirror-still pool that catches every color of the sky, the water-surface holding centuries-old reflections that don't match the current sky",
       'SPITTLE-CRYSTAL FOREST — every surface of a grotto cluster grown over with iridescent crystal-formations from where the wyrm rested, each crystal humming faintly with dragon-residue',
       'BLOOD-OBSIDIAN RIVER — solidified ribbon of dark glass winding through a valley, the path of dragon-blood spilled millennia ago and never reabsorbed by the earth',
       // ASH / EMBER / PYRE FALLOUT
@@ -145,11 +298,11 @@ const POOL_RECIPES = {
       // DRAGON-CARVED GEOLOGY
       'CLAW-RAVINE CANYON — canyon walls rent by single massive claw-strikes carved into the stone, six-meter-deep parallel grooves stretching for kilometers along the cliff-face',
       'WING-CARVED MOUNTAIN — entire mountainside hollowed into a vast wing-shaped cavern where the dragon roosted, the negative-space outline of its wing still visible',
-      'WYRM-TAIL VALLEY — entire valley follows the impossibly long serpentine path where the dragon\'s tail rested for millennia, the valley walls perfectly fitted to its absent body',
+      "WYRM-TAIL VALLEY — entire valley follows the impossibly long serpentine path where the dragon's tail rested for millennia, the valley walls perfectly fitted to its absent body",
       'BREATH-FUSED COLUMN FIELD — vertical obsidian columns rising hundreds of meters across a plain where dragon-fire compressed the stone into prismatic spires',
       // BONE / CORAL / FOSSIL REEFS
       'BONE-CORAL REEF FIELD — where ancient dragon-bones became seed for coral growth over centuries, now a forest of branching white coral-bone-structures rising from a fossilized seabed',
-      'FOSSIL-VERTEBRAE BRIDGE-CHAIN — chain of connected islands formed when an ancient dragon\'s vertebrae mineralized into stone, each island the size of a hill',
+      "FOSSIL-VERTEBRAE BRIDGE-CHAIN — chain of connected islands formed when an ancient dragon's vertebrae mineralized into stone, each island the size of a hill",
       'CALCIFIED SCALE-DRIFT — vast scattered field of fossilized dragon-scales each the size of a shield, accumulated over millennia from the shedding of one immense wyrm',
       'WYRM-RIB CATHEDRAL FOREST — natural underground space where ancient dragon-ribs grew into pillars supporting cave-roofs over centuries, a rib-vaulted living-stone space',
       // ETERNAL ANOMALIES
@@ -173,9 +326,9 @@ const POOL_RECIPES = {
       'a small group of explorers in furs camped at the base of the cliff-carved dragon-face, their campfire a single point of orange — deep distance',
       'an awe-struck pilgrim kneeling at a dragon-tomb-marker, head bowed, distance lending him reverence — midground',
       'a red fox watching from the edge of the dragon-skeleton, ears pricked, half-hidden in the rib-grass — foreground',
-      'a hawk perched on the dragon-statue\'s extended claw, alert, head turning toward the camera — midground',
+      "a hawk perched on the dragon-statue's extended claw, alert, head turning toward the camera — midground",
       'a single intact dragon-tooth at the foreground edge, half-buried in earth and moss, twenty centimeters long',
-      'a fallen scholar\'s rucksack at the foreground edge, opened with a leather-bound dragon-grimoire spilling out',
+      "a fallen scholar's rucksack at the foreground edge, opened with a leather-bound dragon-grimoire spilling out",
       'an ancient banner-pole at the edge of the frame, the cloth long-rotted but the dragon-clan sigil still faintly visible',
       'a circle of charcoal at the central altar marking an offering-fire long-extinguished, surrounded by small bone-fragments',
       'a single weathered scroll partially unrolled in the foreground, dragon-runes visible across its surface',
@@ -273,7 +426,7 @@ const POOL_RECIPES = {
       'An elven Sindar-coded treehouse complex visible in midground, suspended walkways spiraling around massive oaks, lanterns glowing softly at twilight.',
       'A Gondorian-coded fortress at deep distance perched atop a cliff, white-stone walls catching the last light, the silver-tree banner snapping in the wind.',
       'A half-buried colonnade at midground, columns broken at various heights, the surviving lintel-stones carved with crumbling reliefs.',
-      'A wizard\'s academy tower at midground, multiple connected spires of different heights, narrow windows lit from within with arcane blue-violet light.',
+      "A wizard's academy tower at midground, multiple connected spires of different heights, narrow windows lit from within with arcane blue-violet light.",
       'A LOTR-coded Argonath-style colossal stone statue at deep distance, its features weathered nearly featureless, hand outstretched.',
       'A ruined chapel half-collapsed at midground, stained-glass windows mostly shattered but the rose-window still intact, ivy climbing the bell-spire.',
       'A floating island visible in deep distance, suspended by visible arcane currents, with a small temple structure perched on top, tethered to nothing.',
@@ -294,7 +447,7 @@ const POOL_RECIPES = {
       'METEOR SHOWER — dozens of fire-streaks tracing across a star-dense sky, brief and dazzling',
       'BLOOD MOON RISE — massive crimson moon cresting the eastern horizon, bathing the landscape in rust-red light',
       'PASSING DRAGON AT DISTANCE — winged silhouette gliding across a far ridge-line, scale-glint visible in the morning sun',
-      'WILL-O\'-WISP CLUSTER — floating lantern-spirits drifting at knee-height across a misty grove',
+      "WILL-O'-WISP CLUSTER — floating lantern-spirits drifting at knee-height across a misty grove",
       'GOD-RAY DAWN — single thick column of sunlight piercing dense morning cloud onto the valley floor',
       'COMET — bright tailed body crossing the sky, its tail visible as a long pale arc',
       'MAGICAL PORTAL IN THE SKY — swirling glowing ring of light mid-air at a far distance, shape just resolving from haze',
@@ -337,7 +490,7 @@ const POOL_RECIPES = {
       'a small fey ring of mushrooms in a forest clearing in midground, perfectly circular, glowing faintly at dusk',
       'a sunken rowboat half-submerged at the edge of a riverbank in midground, vines climbing its prow',
       'a single tower-light visible in deep-distance, unmistakably from a high window of a fortress otherwise lost in mist',
-      'a fallen knight\'s helm half-buried in moss at foreground, vines flowering white through the visor',
+      "a fallen knight's helm half-buried in moss at foreground, vines flowering white through the visor",
       'a thread of distant cookfire smoke rising thin above a far ridge in deep distance, suggesting unseen travelers',
       'a butterfly cloud rising from a wildflower patch in midground, hundreds of bright wings briefly visible',
       'a luminous salamander perched on a rock at midground, its skin faintly glowing blue-green',
@@ -392,34 +545,34 @@ const POOL_RECIPES = {
       'KNIGHT SHIELD-CHARGE — sprinting forward behind raised tower shield, the steel face catching a lightning-flash, mud and grass spraying from his boots with each pounding step, banner trailing horizontal behind him, the gate-line of enemy spear-formation visible twenty feet ahead with their front rank already breaking',
       'BARBARIAN MAELSTROM-CHARGE — full sprint with greataxe held two-handed overhead, mouth open in a war-cry, dust and grass kicked up in his wake and motion-blur on his trailing beard, war-paint glowing faintly in the dusk, three scattered foes recoiling in the foreground muddy battlefield and allied raiders charging alongside',
       'MONK AERIAL KICK — caught mid-air, body twisted side-on parallel to the ground, chi-glow trailing his extended leg in a brilliant luminous arc, robe rippling violently and cherry-petals blasted outward from the impact-zone, a temple gong cracking from the impact behind him',
-      'WARRIOR PARRY-EXPLOSION — half-turned mid-block with sword angled up, the impact-point a starburst of sparks where his blade meets an unseen attacker\'s, his sword glowing red-hot from the speed of motion, foreground a burst of orange and white debris, a chaotic melee around him',
+      "WARRIOR PARRY-EXPLOSION — half-turned mid-block with sword angled up, the impact-point a starburst of sparks where his blade meets an unseen attacker's, his sword glowing red-hot from the speed of motion, foreground a burst of orange and white debris, a chaotic melee around him",
       // RANGED MID-LOOSE
-      'RANGER MID-LOOSE — bow drawn full to his cheek and the arrow JUST released, the shaft streaking from his fingers with a motion-trail spanning the frame, enchanted ember-glow trailing the arrow-tip, his cloak snapping from the shot\'s force, in a forest at golden hour with bandits scattering in the foreground',
+      "RANGER MID-LOOSE — bow drawn full to his cheek and the arrow JUST released, the shaft streaking from his fingers with a motion-trail spanning the frame, enchanted ember-glow trailing the arrow-tip, his cloak snapping from the shot's force, in a forest at golden hour with bandits scattering in the foreground",
       'CROSSBOW VOLLEY — emerging from behind a stone column on a battlement, heavy crossbow snapped to his shoulder, bolt already blurring across the frame toward a distant rider, another bolt streak in the foreground from an unseen ally, a castle corridor lit by lantern-fire with siege machines visible below',
       'WALL-VAULT BACK-SHOT — mid-jump up a stone wall using a single foothold, twisting backwards mid-flight to release an arrow at a pursuer below, motion-blur trail across his bow-arm and lantern-glow lighting him from below, a lantern-lit alley in chaos with two armed pursuers entering',
       'THROWING-AXE TRIPLE — arm in full follow-through, the lead axe already mid-flight blurring across the foreground with two more spinning behind it from his other hand, sparks raining from the embedded axes in the wooden tavern wall behind, a tavern interior with patrons diving away',
       // ROGUES MID-INFILTRATION
       'NIGHT MARKET PURSUIT — moving smoothly through a dense lantern-lit market crowd, hood up, cloak whipping behind him, motion-blur on his trailing edge, his hooded target visible twenty paces ahead already breaking into a run, three guards pushing through the crowd in the deep midground behind, paper lanterns swaying overhead',
-      'ROOFTOP DESCENT — mid-leap from a steep clay rooftop, dagger reversed in his hand, descending toward a guard\'s shoulders below, his cloak streaming straight up, motion-blur on the trailing leg, a moonlit citadel courtyard with two more guards reacting to his arrival, a distant fire on the next rooftop',
+      "ROOFTOP DESCENT — mid-leap from a steep clay rooftop, dagger reversed in his hand, descending toward a guard's shoulders below, his cloak streaming straight up, motion-blur on the trailing leg, a moonlit citadel courtyard with two more guards reacting to his arrival, a distant fire on the next rooftop",
       'COLLAPSING-ROOF SPRINT — full sprint across an unstable burning rooftop, arrows whistling past him in audible volleys, the roof breaking apart behind each footfall with embers and tiles cascading down, a moonlit city with three pursuers already on the rooftop behind him, archers visible on a distant battlement',
       'TAVERN DOOR EXPLOSION — bursting in shoulder-first through a heavy oak tavern door, splinters flying outward, blade already half-drawn at his hip, lantern-light spilling out behind him into the rain-slick street, inside is a brawl already in progress with patrons fighting on overturned tables',
       'PLAZA PURSUIT VAULT — caught mid-vault over a stone fountain in pursuit, startled pigeons exploding outward in a cloud of feathers and a shower of coins scattering from a knocked-over cart, his quarry rounding the far corner with cloak streaming, market crowd parting in alarm',
       // DIVINE / DRUIDIC / SHAMANIC
-      'CLERIC HEALING DOME — kneeling with arms outstretched, a golden dome of divine light expanding outward in motes-of-light particles, motes of gold raining down around him, wounded crouched allies within the growing sphere visibly recovering as the wave passes, a shadowy enemy line retreating at the dome\'s edge',
+      "CLERIC HEALING DOME — kneeling with arms outstretched, a golden dome of divine light expanding outward in motes-of-light particles, motes of gold raining down around him, wounded crouched allies within the growing sphere visibly recovering as the wave passes, a shadowy enemy line retreating at the dome's edge",
       'DRUID MID-SHIFT — caught at the moment of half-transformation, fur erupting through splitting skin on his arms and chest visible through the torn shirt-collar, paws emerging from where boots fell, motes of green forest-magic swirling around him, a forest clearing with surprised hunters in the foreground lowering their bows',
       'NECROMANCER RAISING DEAD — standing in a graveyard at dusk, palms pressed downward toward the earth, skeletal hands erupting from the soil around his feet in a wide ring, mist curling upward in tendrils, his eyes glowing white-blank, a distant battle visible in the deep midground with armies clashing',
       'STORM-CALLER MAELSTROM — arms raised to a roiling storm-cloud sky on a high cliff, lightning bolts arcing down BEHIND him into the sea AND from his upturned palms upward into the cloud, his hair and cloak whipped horizontal by the gale, a galleon-fleet visible far below in the storm-tossed waves with sails tearing',
       'DIVINE-STRIKE SWORD — sword raised overhead, a COLUMN of golden light erupting from the blade upward into a starless sky, a circle of paladin-light blooming around his boots and divine motes raining down, holy script glowing in air around him, shadow-demons fleeing in all directions',
       // TRAVEL / ESCAPE
       'COLLAPSING-BRIDGE SPRINT — full sprint along a rope bridge as planks break free behind each footfall, the rope-rail flailing, mist plumes erupting from the gorge as planks fall, a distant tower visible across the gorge with a pursuit-party emerging onto its battlement to fire arrows',
-      'MOUNTED GALLOP-BY — at full gallop on his horse leaning low past the camera, banner streaming horizontal behind him, hooves throwing chunks of mud, his mount\'s breath visible in the cold, a burning village receding in the background with civilians fleeing, an enemy cavalry line cresting a hill in pursuit',
+      "MOUNTED GALLOP-BY — at full gallop on his horse leaning low past the camera, banner streaming horizontal behind him, hooves throwing chunks of mud, his mount's breath visible in the cold, a burning village receding in the background with civilians fleeing, an enemy cavalry line cresting a hill in pursuit",
       'CLIFF-DIVE ESCAPE — captured mid-air after the leap from a high cliff, arms wide, his cloak billowing upward like a parachute, motion-blur on his plummeting silhouette, a pursuing arrow streaking past where he just was, three pursuers visible on the cliff-edge above firing more arrows',
       'WALL-RUN ESCAPE — wall-running across a battlement at full speed, behind him a fireball-strike erupting against the stone with debris exploding outward, foreground crenellation sparks, a moat far below with crocodiles, archers on the far tower reloading',
       'SCREE-SLIDE PURSUIT — sliding down a steep scree slope on his heels at speed, dust trailing in a long plume behind him, small stones cascading ahead, bow held forward already nocked, the canyon-floor below opening into a chaotic melee battle with multiple allied raiders engaging an enemy patrol',
       // DRAGON-RIDER
-      'DRAGONBACK DIVE — clinging to his dragon\'s neck-horn as it dives steeply past a tower, wind plastering him against its neck, dragon-scales catching the sun in iridescent ripples, the tower spire blurring past with motion-blur trail, a city wall under siege below with catapults firing upward',
-      'DRAGON-SHOULDER ROAR — standing at his great dragon\'s shoulder mid-roar, fire erupting from its maw in a wide gout illuminating the entire foreground orange, his own cloak whipping back in the heat-blast, the air shimmering from the inferno, a distant siege engine bursting into flame',
-      'SADDLED LONGBOW LOOSE — mounted on his flying dragon, bow drawn back, arrow JUST released streaking forward in flight, wind whipping his hair and the dragon\'s mane horizontal, motion-blur on his draw-arm, a city wall and battle far below receding under them',
+      "DRAGONBACK DIVE — clinging to his dragon's neck-horn as it dives steeply past a tower, wind plastering him against its neck, dragon-scales catching the sun in iridescent ripples, the tower spire blurring past with motion-blur trail, a city wall under siege below with catapults firing upward",
+      "DRAGON-SHOULDER ROAR — standing at his great dragon's shoulder mid-roar, fire erupting from its maw in a wide gout illuminating the entire foreground orange, his own cloak whipping back in the heat-blast, the air shimmering from the inferno, a distant siege engine bursting into flame",
+      "SADDLED LONGBOW LOOSE — mounted on his flying dragon, bow drawn back, arrow JUST released streaking forward in flight, wind whipping his hair and the dragon's mane horizontal, motion-blur on his draw-arm, a city wall and battle far below receding under them",
     ],
     instructions: `Each entry is ONE peak-action cinematic moment for a male protagonist, 40-70 words. Format: "ACTION-HEADLINE — body position AT THE LOADED INSTANT + specific magical/mechanical EFFECT IN MOTION + specific cinematic CONTEXT". Mid-cast / mid-loose / mid-strike / mid-leap / mid-summon. EFFECTS visible (flame-orb / arrow-streaking / divine-light / motion-blur / debris / cloak-whipping). NO candid quiet moments. NO gore. NO shirtless / male-cheesecake / posing-for-camera. NO real-world ethnic codes. Variety mandate: distribute across spellcaster / martial / ranged / rogue / divine-shaman / travel-escape / dragon-rider. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -446,10 +599,10 @@ const POOL_RECIPES = {
       'Wood elf: sharply pointed ears, almond-shaped forest-green eyes, sun-kissed olive skin, beardless, lithe woodland features, alert grace',
       'Witcher orc: grey-green skin, sharp underbite tusks, scarified tribal face, heavy iron piercings, scruff beard, Northern Realms savage bearing',
       'Halfling: oversized hairy bare feet, curly chestnut hair, warm round face, possible sideburns or short beard, easy-going Shire bearing',
-      'Forest gnome: small stature with weathered olive skin, vivid green eyes, wild flyaway hair, possible neat little beard or clean-shaven, tinker\'s curiosity in his gaze',
+      "Forest gnome: small stature with weathered olive skin, vivid green eyes, wild flyaway hair, possible neat little beard or clean-shaven, tinker's curiosity in his gaze",
       'Tabaxi: spotted fur-covered feline humanoid, cat-slit amber eyes, whiskers, feline predator features, jaguar-like prowling grace',
       'Aarakocra: bird-headed eagle humanoid, keen raptor eyes, feathered wings for arms, avian beak and talons, skyborne hunter bearing',
-      'Rohirrim: sun-warmed Northern fair skin, blue-green eyes, golden-blond braided beard and warrior-tail, weathered horse-clan features, rider\'s proud stance',
+      "Rohirrim: sun-warmed Northern fair skin, blue-green eyes, golden-blond braided beard and warrior-tail, weathered horse-clan features, rider's proud stance",
       'Gondorian: Mediterranean-olive skin, dark hawkish eyes, dark hair, full-bearded sharply noble aquiline features, austere southern bearing, tower-guard discipline',
       'Dúnedain ranger: weather-tanned skin, sharp grey eyes, dark hair with grey at temples, full road-bearded weathered features, sworn-keeper bearing',
       'Númenórean: long-lived noble human, sharply chiseled features, grey-blue eyes, raven-dark hair and short trimmed beard, tall regal Dúnedain bearing',
@@ -457,12 +610,12 @@ const POOL_RECIPES = {
       'Breton: ivory-fair skin with magical undertone, hazel-green eyes, auburn hair and trim beard, faint magical-glow at temples, spellsword heritage',
       'Imperial: warm olive Cyrodiilic skin, brown eyes, dark wavy hair, soldierly aristocratic features with mustache or stubble, disciplined legionnaire bearing',
       'Redguard: deep umber dark skin, dark almond eyes, close-cropped or twist-braided hair, neat beard or clean-shaven, Hammerfell desert-warrior bearing',
-      'Blood-elf: pale ivory skin, glowing fel-green eyes, sharply tapered long ears, beardless or thin trimmed goatee, magic-fed elegant gaunt features, Sin\'dorei pride',
+      "Blood-elf: pale ivory skin, glowing fel-green eyes, sharply tapered long ears, beardless or thin trimmed goatee, magic-fed elegant gaunt features, Sin'dorei pride",
       'Night-elf: purple-tinted moon-pale skin, glowing silver eyes, exceptionally long ears, druidic facial tattoos, beardless, Kaldorei moonlight grace',
       'Dunmer: ash-grey skin, blood-red eyes, sharply pointed ears, beardless or thin chin-tuft, eastern-volcanic sharp features, ash-warrior bearing from Morrowind',
       'Zandalari troll: tall lanky tusked humanoid, walnut-brown skin, jutting upward tusks, glowing yellow-amber eyes, voodoo-painted tribal features, dark warrior-braids',
       'Stormcloak: pale Skyrim-Northern skin, ice-blue eyes, weathered face, thick blond or red beard with braid-clasps, ursine build, Eastmarch warrior bearing',
-      'Free-Folk wildling: weather-cracked face, ice-blue or pale-grey eyes, wild matted hair, full unkempt beard, broad survivor\'s build, Beyond-the-Wall hardiness',
+      "Free-Folk wildling: weather-cracked face, ice-blue or pale-grey eyes, wild matted hair, full unkempt beard, broad survivor's build, Beyond-the-Wall hardiness",
     ],
     instructions: `Each entry is ONE fantasy race descriptor for a male adventurer, 12-25 words. Format: "[Race-name]: [signature anatomy] + [skin] + [eye-type] + [beard/face-feature note: beardless / full-beard / scaled / horned] + [bearing]". STRICT WESTERN HIGH FANTASY ONLY — no real-world ethnic codes. Cover elves / dwarves / halflings / gnomes / tieflings / dragonborn / half-orcs / aasimar / genasi / humans (LOTR + Elder Scrolls + GoT + Witcher races) / Eladrin / tabaxi / aarakocra. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -483,7 +636,7 @@ const POOL_RECIPES = {
       'BARD — quick smile and quicker tongue, the practiced confidence of someone who has talked his way out of more trouble than he has fought through',
       'CLERIC — solemn devotion in his bearing, faint divine light reflected in his irises in dim places, hands that have closed both wounds and eyes',
       'BARBARIAN — sheer brute presence with controlled fury banked just below the surface, ritual scars or tribal markings, the heavy stillness of weather about to break',
-      'ARTIFICER — fingertips stained with reagent-ink, tinkerer\'s pouches at his hip, eyes that catch and measure every mechanical detail in a room',
+      "ARTIFICER — fingertips stained with reagent-ink, tinkerer's pouches at his hip, eyes that catch and measure every mechanical detail in a room",
       'NECROMANCER — pale calm of someone who has shaken hands with death, faint sigil-tattoos along his forearms, a voice that whispers more than speaks',
       'SHAMAN — feather-and-bone fetishes braided into his clothes and beard, eyes that go elsewhere mid-conversation listening to ancestor-spirits',
       'KNIGHT-ERRANT — square-shouldered honor-bound traveler, sworn-promise gravity in his speech, the patience of a long road walked alone',
@@ -499,15 +652,15 @@ const POOL_RECIPES = {
     format: 'simple',
     theme: `SKIN DESCRIPTIONS for a male adventurer — weathered, lived-in, road-tested. Each entry 15-25 words. Format: "[skin tone with light-interaction detail + textural truth: scars / weathering / beard-shadow / stubble / sun-burn / tattoos]".\n\n⚠️ FACE-FOCUSED ONLY — describe his face / cheekbones / forehead / jaw / temples / brow. NEVER describe his TORSO / CHEST / SHOULDERS / NECK / ARMS / MUSCULAR-BODY. The skin pool reads only his visible face (chest/shoulders are covered by outfit).\n\n🚫 ABSOLUTE BANS — these trigger Flux to render bare-chested/shirtless:\n• NO "gleaming like polished [X]" / "polished stone" / "polished basalt" — these read as bare-chest gleam\n• NO "sweat-gleaming" / "sweat-glistening" / "sheen of sweat"\n• NO "oiled" / "sculpted" / "chiseled" / "muscular neck" / "broad shoulders"\n• NO "war-paint across chest" / "ritual scars across torso/back" — keep scars on FACE only\n• NO "rope-burn wrapping muscular neck"\n• NO "hide" as a synonym for skin (race entries use "hide" for orc scales, but skin entries should say "skin" only)\n\nMandatory: every entry reads MALE — beard-shadow / stubble / road-roughened FACE / scar-tracked FACE / weathered crow's-feet / sunburn at the nose-bridge / weather-cracked cheekbones. Skin tones span every fantasy palette from alabaster to obsidian, but the surface texture details stay on the FACE.\n\nNo cheesecake. No "smooth" / "soft" / "milky" language.`,
     touchpoints: [
-      'Pale Northern complexion catching torchlight warm at the cheekbones, faint crow\'s-feet at the temple corners, three-day stubble shadow',
+      "Pale Northern complexion catching torchlight warm at the cheekbones, faint crow's-feet at the temple corners, three-day stubble shadow",
       'Milk-white Highland skin sun-burned across the nose-bridge, firelight pooling gold in the hollow of the throat, neat trimmed beard',
       'Alabaster pale that flushes pink at the collarbone with exertion, moonlight casting blue shadows along the jawline, dark beard-shadow at the chin',
-      'Weather-tanned brown leather-like skin with deep crow\'s-feet at the eyes, scarred cheekbone from an old blade-strike, road-stubble',
+      "Weather-tanned brown leather-like skin with deep crow's-feet at the eyes, scarred cheekbone from an old blade-strike, road-stubble",
       'Sun-darkened Mediterranean olive with road-dust caked at the temples, an old scar across the bridge of the nose, full road-beard',
       'Deep umber Hammerfell-Redguard skin, smooth at the cheekbones but with scars across one brow, neat-trimmed black beard',
       'Pale ash-grey Dunmer complexion with darker ash-streaks at the temples, faint volcanic-vein patterns under the cheekbones, beardless and gaunt',
       'Obsidian-grey Drow skin catching cool moonlight at the planes of the face, beardless and elegant, faint silvery clan-tattoos at the temple',
-      'Olive-warm Cyrodiilic skin with a soldier\'s sun-creases, an ear half-notched from an old fight, brushed-back mustache',
+      "Olive-warm Cyrodiilic skin with a soldier's sun-creases, an ear half-notched from an old fight, brushed-back mustache",
       'Dark cocoa skin with deep texture and scars from caravan-road life, full thick beard going slightly grey at the chin, hawkish features',
       'Verdant green orcish skin with prominent jaw-scars from tusks growing through, broad-shouldered build implied by the neck-thickness',
       'Bronze-scaled dragonborn skin with iridescent shifts between bronze and obsidian, the scales rough textured along the brow-ridge',
@@ -515,7 +668,7 @@ const POOL_RECIPES = {
       'Crimson tiefling skin with faint infernal vein-patterns at the brow, a goatee around the chin, slit-pupils reflecting fire',
       'Pale tundra-blanched skin with frost-cracked cheeks, full red Stormcloak beard with braid-clasps, ice-blue eye-shadow from cold',
       'Olive-warm Witcher-coded skin with the pale silver-grey of mutation-tinge at the temples, beardless and sharp-featured, white scar across one cheek',
-      'Sun-warmed Northern fair skin with rider\'s tan, golden-blond braided beard, blue-green eyes with weather-creases',
+      "Sun-warmed Northern fair skin with rider's tan, golden-blond braided beard, blue-green eyes with weather-creases",
       'Indian-subcontinent warmth tinged ochre by lantern-glow, dark almond eyes, neat black beard and short-cropped hair',
       'Polynesian-coded Free-Folk tan with wind-cracked cheeks and full untrimmed beard, pale-grey eyes survey-narrowed',
       'Walnut-brown Zandalari-troll skin with darker brow-ridges, jutting tusks, dark warrior-braids in the side-shaved hair',
@@ -527,20 +680,20 @@ const POOL_RECIPES = {
     format: 'simple',
     theme: `EYE DESCRIPTIONS for a male adventurer — color + intensity + how they catch light + a weathering / character detail. Each entry 15-25 words. Format: "[eye color] catching [light source] to [secondary color], with [scar / crow's-feet / squint-lines / battle-narrowed expression / weather-creased detail]".\n\nNo cheesecake. No "smoldering" / "bedroom eyes" / "piercing gaze" stock-romance language. WEATHERED, ALERT, CAPABLE — that's the register.`,
     touchpoints: [
-      'Deep amber eyes catching torchlight to liquid gold, with copper rings tightening around the pupil, crow\'s-feet at the corners from years of wind',
+      "Deep amber eyes catching torchlight to liquid gold, with copper rings tightening around the pupil, crow's-feet at the corners from years of wind",
       'Forest-green so vivid they seem lit from within, darkening to hunter-emerald when battle-focus sharpens, fine scar-line through one eyebrow',
-      'Northern ice-blue burning cold under torchlight, ringed with frost-silver that intensifies when he\'s hunting, weather-narrowed at the corners',
+      "Northern ice-blue burning cold under torchlight, ringed with frost-silver that intensifies when he's hunting, weather-narrowed at the corners",
       'Storm-grey eyes with darker rims, catching cloud-light to slate-blue, alert and squint-lined from years of sun and snow',
       'Whiskey-amber eyes with tiger-eye bands reflecting firelight, half-closed in concentration, an old scar splitting the left brow',
       'Brass-gold eyes igniting molten-copper in lantern-light, fierce and unblinking, slight gunmetal undertone in cold weather',
       'Dark hazel eyes with chocolate-brown depths, lit copper by sundered-gold sidelight, weather-creased and watchful',
       'Glowing violet Drow eyes burning cold against obsidian skin, slit-narrowed in shadow, intelligent and predatory',
-      'Slate-grey eyes flecked with iron, hunter-narrowed in falling snow, crow\'s-feet from decades on the road',
+      "Slate-grey eyes flecked with iron, hunter-narrowed in falling snow, crow's-feet from decades on the road",
       'Pale fel-green Blood-elf eyes glowing faintly with arcane hunger, sunken into gaunt fey-features, scholar-keen',
       'Glacier-pale grey eyes with darker rims, flushed scarlet at the lower lid from cold and exhaustion, full of hard-won wisdom',
       'Slit-pupiled amber dragonborn eyes set into scaled face, predatory and unblinking, gold leaf radiating from the iris',
       'Russet-brown eyes with copper outer rim, focused downward in concentration, an old burn-scar across one cheekbone',
-      'Sable-brown eyes with molten-copper cores, scanning the deep distance with rider\'s vigilance, weather-tightened',
+      "Sable-brown eyes with molten-copper cores, scanning the deep distance with rider's vigilance, weather-tightened",
       'Glowing silver night-elf eyes burning like starlight through dawn-mist, druidic tattoos framing the cheekbones',
       'Dim glowing grey Duergar eyes, gaunt and sun-deprived, lit briefly red by his own lantern in the Underdark',
       'Burnt sienna eyes with amber veins radiating from the pupils, weather-creased and bandit-wary, scar across the brow',
@@ -556,9 +709,9 @@ const POOL_RECIPES = {
     theme: `HAIR COLOR DESCRIPTIONS for a male adventurer — applies to both head hair and beard (where present). Each entry 12-25 words. Format: "[color] with [secondary tone or interaction with light] + [weathering / grey-streaks / sun-bleach / road-grime detail]".\n\nNo cheesecake / shampoo-commercial language. WEATHERED, LIVED-IN, ROAD-DUSTED hair.`,
     touchpoints: [
       'coal-black with a dragon-fire copper sheen catching at the edges, grey just beginning at the temples',
-      'chestnut-brown going deep copper under the forge\'s hungry firelight, road-dust caked at the roots',
+      "chestnut-brown going deep copper under the forge's hungry firelight, road-dust caked at the roots",
       'fiery auburn that looks perpetually lit by dragon-flame from within, beard the same auburn shade',
-      'iron-grey at the temples blending to coal-black through the body, hard-won veteran\'s palette',
+      "iron-grey at the temples blending to coal-black through the body, hard-won veteran's palette",
       'warm chestnut with burnished copper along fire-touched strands, beard going slightly darker than the head hair',
       'jet-black with indigo depths braided into a warrior-tail, the beard the same dark shade',
       'platinum-blond Northern hair, sun-bleached at the tips, beard a shade darker than the head hair',
@@ -593,8 +746,8 @@ const POOL_RECIPES = {
       'long braided side-tails framing his face, clan-tattoos visible on the temples, no beard',
       'shaved head with battle-runes inked into the scalp, full forked beard with iron-rings',
       'dreadlocked with bone-clasps and bound at the tail, shaman beard adorned with feather-trinkets',
-      'low utility-knot at the nape, neat trimmed dark beard, weathered ranger\'s face',
-      'shoulder-length and tousled from the road, light stubble, alert ranger\'s posture',
+      "low utility-knot at the nape, neat trimmed dark beard, weathered ranger's face",
+      "shoulder-length and tousled from the road, light stubble, alert ranger's posture",
       'hooded so only the front edge of his hair shows under the cowl, full beard partly visible',
       'Sindar-elf long pale hair bound in twin temple-braids, beardless and elegant',
       'Mahakaman dwarven warrior-topknot with a full forked beard, iron clasps in both',
@@ -602,7 +755,7 @@ const POOL_RECIPES = {
       'long single rope-braid wound around the head and pinned, beardless Elven elegance',
       'side-shaved with the long side falling forward over one eye, neat trimmed beard',
       'cropped to a Brutus-cut, clean-shaven jaw with one knife-scar along it',
-      'rider\'s warrior-tail with leather thong, full Norse beard with golden-blond braid-clasps',
+      "rider's warrior-tail with leather thong, full Norse beard with golden-blond braid-clasps",
     ],
     instructions: `Each entry is ONE practical male-adventurer hairstyle — head hair and/or beard. 10-25 words. NEVER salon-styled. NEVER product-shiny. Beards encouraged for races where canon-appropriate but include some beardless options (elves, dragonborn, draconic). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -617,32 +770,32 @@ const POOL_RECIPES = {
       'A Chultan jungle ranger in a fitted dark-green sleeveless leather vest over a thin linen shirt, knee-length breeches, calf-wrapped boots, feather-and-cord bracers',
       'A Stranglethorn explorer in light fitted hide gear, bare forearms, dark short cloak knotted at one shoulder, broad belt with multiple pouches',
       'A sleeveless quilted cream gambeson with red embroidery at the seams, exposing tattooed forearms (clan-ink), light trousers, low boots — Southron warm-climate kit',
-      'A Calishite wizard\'s flowing cream robe with fitted bodice and skirt-to-mid-calf, gold-thread sigils at the hem, sandals — robe, NOT coat',
-      'Haradrim rider\'s sleeveless dark-red leather vest over a thin linen tunic, loose-fit trousers, simple riding boots — a Southron in summer',
+      "A Calishite wizard's flowing cream robe with fitted bodice and skirt-to-mid-calf, gold-thread sigils at the hem, sandals — robe, NOT coat",
+      "Haradrim rider's sleeveless dark-red leather vest over a thin linen tunic, loose-fit trousers, simple riding boots — a Southron in summer",
       // TEMPERATE
       'Fitted forest-green Sindar woodland gear — leather scout-jerkin over a brown linen under-tunic, breeches, leaf-patterned bracers, low travel boots, NO long cloak',
-      'A Gondorian paladin\'s half-plate articulated from gorget to shin-guards, silver-tree surcoat over the chest, dust-stained from the road — dressy, not bundled',
+      "A Gondorian paladin's half-plate articulated from gorget to shin-guards, silver-tree surcoat over the chest, dust-stained from the road — dressy, not bundled",
       'A fitted Witcher-school under-coat in dark grey leather, gambeson beneath, riding gloves, mid-calf boots — Northern Realms kit but cut SHORT',
-      'A Quel\'Thalas blood-elf paladin in burnished red-and-gold breastplate over a fitted cream under-coat, knee-skirt of leather strips, light bracers',
+      "A Quel'Thalas blood-elf paladin in burnished red-and-gold breastplate over a fitted cream under-coat, knee-skirt of leather strips, light bracers",
       'No armor — just a fitted dark wool tunic, breeches, soft boots, a heavy spellbook on a baldric across his chest — a Cormyrean court-mage on the road',
-      'A flowing midnight-teal Carian wizard\'s robe with fitted bodice and skirt-to-mid-calf, silver-thread runes at the hem, a moon-glass focus on a long chain',
+      "A flowing midnight-teal Carian wizard's robe with fitted bodice and skirt-to-mid-calf, silver-thread runes at the hem, a moon-glass focus on a long chain",
       'A Drow scout coat in matte-black leather to the HIP ONLY (not long), deep hood, dark trousers, soft climbing boots — fitted, glare-suppressed Underdark gear',
       'Cropped Rohirric riding jacket and breeches in russet wool, knee-high boots, a single bronze horse-motif pauldron — NO long coat NO cloak',
       'A fitted Mahakaman dwarven scale corset in verdigris-bronze over a thin under-coat, plain breeches, sturdy boots — the scale is the centerpiece',
       'A Breton spellsword in a fitted dark blue doublet with brass buckles, light mail beneath, riding trousers, low boots, hawthorn focus-rod at the belt',
       // COLD
       'A Nord warrior in a heavy bearskin half-cloak over a dark wool tunic and breeches, painted clan-marks on his cheekbones, leather wrist-wraps',
-      'A pewter mail hauberk falling to mid-thigh, leather belt at the waist, plain wool trousers, sturdy boots — Dúnedain warden\'s practical loadout',
+      "A pewter mail hauberk falling to mid-thigh, leather belt at the waist, plain wool trousers, sturdy boots — Dúnedain warden's practical loadout",
       'A long forest-green Ranger-cloak to the ankle, beneath it a simple brown tunic and breeches, weathered boots — Eriador winter gear',
       'A Free-Folk wildling layered against the Wall — heavy hide-and-fur overcloak, hardened leather chest-piece beneath, bone-clasped at the throat',
       'A patched dark leather Witcher coat with mismatched horn buttons, elbows re-hided in darker leather, the original color long faded',
       'A Forodwaith arctic mantle of bear-fur over layered linen, bone-fetish belt, fur-topped boots, breath visible — high-tundra cold gear',
       'A Stormcloak heavy gambeson in dark blue and bronze, mail underneath, fur-trimmed collar, Skyrim winter trousers — Eastmarch winter kit',
       // Some additional silhouettes
-      'A Stormwind cavalry officer\'s cobalt tabard over polished steel breastplate, white wool trousers, black riding boots to mid-calf, lion-crest pauldron on left shoulder',
-      'A Highgarden duelist\'s fitted forest-green silk doublet, leather trousers, knee-high boots, rapier on hip, no armor — speed not steel',
-      'A monk\'s saffron-and-charcoal wrap-tunic with rope-belt, fitted under-leggings, hand-and-forearm wraps, sturdy bare-soled walking sandals',
-      'A druidic ranger\'s brown-and-green layered hide cloak with antler-clasp at the throat, deep green linen tunic and breeches beneath, hand-bound vine-wrap bracers',
+      "A Stormwind cavalry officer's cobalt tabard over polished steel breastplate, white wool trousers, black riding boots to mid-calf, lion-crest pauldron on left shoulder",
+      "A Highgarden duelist's fitted forest-green silk doublet, leather trousers, knee-high boots, rapier on hip, no armor — speed not steel",
+      "A monk's saffron-and-charcoal wrap-tunic with rope-belt, fitted under-leggings, hand-and-forearm wraps, sturdy bare-soled walking sandals",
+      "A druidic ranger's brown-and-green layered hide cloak with antler-clasp at the throat, deep green linen tunic and breeches beneath, hand-bound vine-wrap bracers",
     ],
     instructions: `Each entry is ONE sleek male-adventurer outfit, 20-50 words. STRICTLY WESTERN HIGH FANTASY — NO real-world ethnic codes. NSFW-CLEAN — no shirtless / bare-chested / oiled / male-cheesecake. Functional + covered + road-tested. STRUCTURAL VARIETY — mix silhouette-led / material-led / single-piece-focus / lived-in-detail / color-palette-led / what-he-is-NOT-wearing. NO TWO entries share archetype/material/culture. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -659,23 +812,23 @@ const POOL_RECIPES = {
       'recurve bow carried in one hand with a leather wrist-guard on his draw-arm',
       'hooded raven familiar perched on his left shoulder, alert and silent',
       'pact-sigil ring on his index finger glowing faintly when his gaze flickers elsewhere',
-      'shaman\'s hand-drum slung over one shoulder, painted with bone-rune patterns',
-      'cartographer\'s tube on his belt with rolled maps poking from the open end',
+      "shaman's hand-drum slung over one shoulder, painted with bone-rune patterns",
+      "cartographer's tube on his belt with rolled maps poking from the open end",
       'pair of throwing-axes in cross-back harness, blades carbon-blacked to suppress glare',
       'iron-shod oak walking staff held in one hand, carved with weathered runes',
       'silver holy symbol on a chain at his throat, palm-sized, faintly luminous in dim light',
-      'falconer\'s glove on his left hand with a hooded hawk standing alert on it',
+      "falconer's glove on his left hand with a hooded hawk standing alert on it",
       'leather lockpick roll tucked into his belt, picks held in place by oiled loops',
       'crossbow slung across his back with bolt-quiver clipped to his hip belt',
       'hand-crossbow holstered on each thigh, dark-stained wood with iron fittings',
       'glaive carried point-up in one hand, the polearm head wrapped in leather for travel',
       'paired shortswords in cross-back sheaths, both hilts wound in green-dyed cord',
-      'herbalist\'s satchel at his hip overflowing with bundled herbs and tied root-bags',
+      "herbalist's satchel at his hip overflowing with bundled herbs and tied root-bags",
       'iron-banded oak quarterstaff held in one hand, carved with weathered runes along its length',
       'lineage banner-pole strapped across his back, banner furled tight in oilcloth',
       'lantern hooked at his hip on a brass swivel-arm, the flame guttering as he moves',
       'silver moon-disc amulet on a fine chain, the disc engraved with a single crescent',
-      'tinkerer\'s tool-belt at his waist with tiny brass instruments tucked into loops',
+      "tinkerer's tool-belt at his waist with tiny brass instruments tucked into loops",
     ],
     instructions: `Each entry is ONE signature carried item for a male adventurer, 15-30 words. Format: "[OBJECT] — [where carried] + [visual detail]". Variety: martial weapon / caster focus / utility item / iconic personal. NEVER in active combat use. NO cheesecake language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -715,7 +868,7 @@ const POOL_RECIPES = {
       'WRITING IN JOURNAL AT CAMP — seated cross-legged in firelight, leather book open on one knee, his mount grazing in the background',
       'FLETCHING ARROW AT REST — seated cross-legged on a flat rock, a half-fletched shaft braced between his knees, feather-vane held in steady fingers',
       // More variety
-      'MOUNTING UP — one foot in the stirrup, mid-swing into the saddle, his cloak already lifting in the wind he\'s about to ride into',
+      "MOUNTING UP — one foot in the stirrup, mid-swing into the saddle, his cloak already lifting in the wind he's about to ride into",
       'MID-SLIDE DOWN SCREE — heels dug in, body angled back, dust and small stones cascading around his boots, the trail-end visible far below',
       'PALM TO ANCIENT MENHIR — kneeling beside the standing stone, hand pressed flat against weathered runes, head bowed in concentration',
       'CONSULTING MAP AT CROSSROADS — kneeling at a flat stone with vellum map spread out, one hand pinning a corner, signpost above',
@@ -767,7 +920,7 @@ const POOL_RECIPES = {
       'SOLAR ECLIPSE — sun reduced to a fire-ringed black disk, shadow racing across the landscape',
       'PASSING DRAGON AT DISTANCE — winged silhouette gliding across a far ridge-line, scale-glint visible',
       'FALLING STAR — single bright streak overhead, briefly outshining everything else in the sky',
-      'WILL-O\'-WISP CLUSTER — floating lantern-spirits drifting at knee-height across a misty grove',
+      "WILL-O'-WISP CLUSTER — floating lantern-spirits drifting at knee-height across a misty grove",
       'GOD-RAY DAWN — single thick column of sunlight piercing dense morning cloud onto the valley floor',
       'COMET — bright tailed body crossing the sky, its tail visible as a long pale arc',
       'MAGICAL PORTAL — swirling glowing ring of light mid-air at a far distance, shape just resolving from haze',
@@ -806,7 +959,7 @@ const POOL_RECIPES = {
       'a tied warhorse at the edge of frame, head dipped to crop sparse grass',
       'a distant cookfire smoke-thread rising thin above a far ridge, suggesting other travelers',
       'a wildflower patch blooming at the edge of a cliff trail, pale blue against scorched earth',
-      'a fallen knight\'s helm half-buried in moss, vines flowering white through the visor',
+      "a fallen knight's helm half-buried in moss, vines flowering white through the visor",
       'a single white moth circling a lantern at the edge of frame, oversized and pale',
       'a partial skeleton of some great beast in the midground, ribs arching from the earth',
       'a small painted shrine tucked into the base of a roadside tree, candle-stub still burning',
@@ -846,34 +999,34 @@ const POOL_RECIPES = {
       'KNIGHT SHIELD-CHARGE — sprinting forward behind raised tower shield, the steel face catching a lightning-flash, [environmental:] mud and grass spraying from her boots with each pounding step, banner trailing horizontal behind her, [context:] the gate-line of enemy spear-formation visible twenty feet ahead with their front rank already breaking, a burning castle keep silhouetted in the distance',
       'BARBARIAN MAELSTROM-CHARGE — full sprint with greataxe held two-handed overhead, mouth open in a war-cry, [environmental:] dust and grass kicked up in her wake and motion-blur on her trailing braids, war-paint glowing faintly in the dusk, [context:] three scattered foes recoiling in the foreground muddy battlefield, allied raiders charging alongside in the deep midground, a sky-wide red moon overhead',
       'MONK AERIAL KICK — caught mid-air, body twisted side-on parallel to the ground, chi-glow trailing her extended leg in a brilliant luminous arc, [environmental:] robe rippling violently and cherry-petals blasted outward from the impact-zone, [context:] a temple gong cracking from the impact behind her with debris already falling, a second monk leaping forward to support, mountain temple in the deep distance',
-      'WARRIOR PARRY-EXPLOSION — half-turned mid-block with sword angled up, the impact-point a starburst of sparks where her blade meets an unseen attacker\'s, [environmental:] her sword glowing red-hot from the speed of motion, foreground a burst of orange and white debris, [context:] a chaotic melee around her with allied figures clashing further back in the smoke-and-fire midground',
+      "WARRIOR PARRY-EXPLOSION — half-turned mid-block with sword angled up, the impact-point a starburst of sparks where her blade meets an unseen attacker's, [environmental:] her sword glowing red-hot from the speed of motion, foreground a burst of orange and white debris, [context:] a chaotic melee around her with allied figures clashing further back in the smoke-and-fire midground",
       // RANGED MID-LOOSE — STACK THE EFFECTS
-      'RANGER MID-LOOSE — bow drawn full to her cheek and the arrow JUST released, the shaft streaking from her fingers with a motion-trail spanning the frame, [environmental:] enchanted ember-glow trailing the arrow-tip, her cloak snapping from the shot\'s force, [context:] in a forest at golden hour with bandits scattering in the foreground silhouettes and a second arrow already nocked in her right hand, a burning wagon visible behind',
+      "RANGER MID-LOOSE — bow drawn full to her cheek and the arrow JUST released, the shaft streaking from her fingers with a motion-trail spanning the frame, [environmental:] enchanted ember-glow trailing the arrow-tip, her cloak snapping from the shot's force, [context:] in a forest at golden hour with bandits scattering in the foreground silhouettes and a second arrow already nocked in her right hand, a burning wagon visible behind",
       'CROSSBOW VOLLEY — emerging from behind a stone column on a battlement, heavy crossbow snapped to her shoulder, bolt already blurring across the frame toward a distant rider, [environmental:] another bolt streak in the foreground from an unseen ally also firing, [context:] a castle corridor lit by lantern-fire with siege machines visible firing through the courtyard arch below, dust falling from cracked masonry above',
       'WALL-VAULT BACK-SHOT — mid-jump up a stone wall using a single foothold, twisting backwards mid-flight to release an arrow at a pursuer below, [environmental:] motion-blur trail across her bow-arm and lantern-glow lighting her from below, [context:] a lantern-lit alley in chaos with two armed pursuers entering the foreground and shop-windows reflecting torch-fire',
       'THROWING-AXE TRIPLE — arm in full follow-through, the lead axe already mid-flight blurring across the foreground with two more spinning behind it from her other hand, [environmental:] sparks raining from the embedded axes in the wooden tavern wall behind, [context:] a tavern interior with patrons diving away from upturned tables, guard-bursting through the splintering door, lantern crashing to the floor',
       // ROGUES MID-INFILTRATION — STACK THE EFFECTS
       'NIGHT MARKET PURSUIT — moving smoothly through a dense lantern-lit market crowd, hood up, [environmental:] cloak whipping behind her as she weaves past startled merchants, motion-blur on her trailing edge, [context:] her hooded target visible twenty paces ahead already breaking into a run, three guards pushing through the crowd in the deep midground behind, paper lanterns swaying overhead, food-stalls scattering as the chase passes',
-      'ROOFTOP DESCENT — mid-leap from a steep clay rooftop, knife reversed in her hand, descending toward a guard\'s shoulders below, [environmental:] her hair streaming straight up, motion-blur on the trailing leg, [context:] a moonlit citadel courtyard with two more guards reacting to her arrival, a distant fire on the next rooftop, torch-bearers crossing the courtyard unaware',
+      "ROOFTOP DESCENT — mid-leap from a steep clay rooftop, knife reversed in her hand, descending toward a guard's shoulders below, [environmental:] her hair streaming straight up, motion-blur on the trailing leg, [context:] a moonlit citadel courtyard with two more guards reacting to her arrival, a distant fire on the next rooftop, torch-bearers crossing the courtyard unaware",
       'COLLAPSING-ROOF SPRINT — full sprint across an unstable burning rooftop, [environmental:] arrows whistling past her in audible volleys, the roof breaking apart behind each footfall with embers and tiles cascading down, [context:] a moonlit city with three pursuers already on the rooftop behind her, archers visible on a distant battlement, the entire eastern quarter aflame in the deep distance',
       'TAVERN DOOR EXPLOSION — bursting in shoulder-first through a heavy oak tavern door, [environmental:] splinters flying outward, blade already half-drawn at her hip, lantern-light spilling out behind her into the rain-slick street, [context:] inside is a brawl already in progress with patrons fighting on overturned tables, a guard with his back to her at the bar, smoke from a kicked-over hearth filling the upper half of the frame',
       'PLAZA PURSUIT VAULT — caught mid-vault over a stone fountain in pursuit, [environmental:] startled pigeons exploding outward in a cloud of feathers and a shower of coins scattering from a knocked-over cart, [context:] her quarry rounding the far corner with cloak streaming, market crowd parting in alarm in the foreground, a guard captain pointing from the deep midground commanding response',
       // DIVINE / DRUIDIC / SHAMANIC — STACK THE EFFECTS
-      'CLERIC HEALING DOME — kneeling with arms outstretched, a golden dome of divine light expanding outward in motes-of-light particles, [environmental:] motes of gold raining down around her, her hair lifting in the upward magical pulse, [context:] wounded crouched allies within the growing sphere visibly recovering as the wave passes, the dark forest beyond pushed back by the glow, a shadowy enemy line retreating at the dome\'s edge',
+      "CLERIC HEALING DOME — kneeling with arms outstretched, a golden dome of divine light expanding outward in motes-of-light particles, [environmental:] motes of gold raining down around her, her hair lifting in the upward magical pulse, [context:] wounded crouched allies within the growing sphere visibly recovering as the wave passes, the dark forest beyond pushed back by the glow, a shadowy enemy line retreating at the dome's edge",
       'DRUID MID-SHIFT — caught at the moment of half-transformation, wolf fur erupting through splitting skin on her arms and face, [environmental:] paws emerging from where boots fell, motes of green forest-magic swirling around her, [context:] a forest clearing with surprised hunters in the foreground lowering their bows, a real wolf-pack emerging from the treeline behind her to flank',
       'NECROMANCER RAISING DEAD — standing in a graveyard at dusk, palms pressed downward toward the earth, [environmental:] skeletal hands erupting from the soil around her feet in a wide ring, mist curling upward in tendrils, her eyes glowing white-blank, [context:] a distant battle visible in the deep midground with armies clashing, ravens circling overhead, the cathedral on the hill at the horizon already burning',
       'STORM-CALLER MAELSTROM — arms raised to a roiling storm-cloud sky on a high cliff, [environmental:] lightning bolts arcing down BEHIND her into the sea AND from her upturned palms upward into the cloud, her hair and cloak whipped horizontal by the gale, [context:] a galleon-fleet visible far below in the storm-tossed waves with sails tearing, a sea-serpent breaching from the foaming sea-floor',
       'DIVINE-STRIKE SWORD — sword raised overhead, a COLUMN of golden light erupting from the blade upward into a starless sky, [environmental:] a circle of paladin-light blooming around her boots and divine motes raining down, holy script glowing in air around her, [context:] shadow-demons fleeing in all directions, a fallen ally she protected lying half-visible at her feet, the night battlefield revealed by her column of light',
       // TRAVEL / ESCAPE — STACK THE EFFECTS
       'COLLAPSING-BRIDGE SPRINT — full sprint along a rope bridge as planks break free behind each footfall, [environmental:] the rope-rail flailing, mist plumes erupting from the gorge as planks fall into it, [context:] a distant tower visible across the gorge with a pursuit-party emerging onto its battlement to fire arrows, the far cliff-edge ten more meters away',
-      'MOUNTED GALLOP-BY — at full gallop on her horse leaning low past the camera, [environmental:] banner streaming horizontal behind her, hooves throwing chunks of mud, her mount\'s breath visible in the cold, [context:] a burning village receding in the background with civilians fleeing, an enemy cavalry line cresting a hill in the deep midground in pursuit, a comet streaking across the morning sky',
+      "MOUNTED GALLOP-BY — at full gallop on her horse leaning low past the camera, [environmental:] banner streaming horizontal behind her, hooves throwing chunks of mud, her mount's breath visible in the cold, [context:] a burning village receding in the background with civilians fleeing, an enemy cavalry line cresting a hill in the deep midground in pursuit, a comet streaking across the morning sky",
       'CLIFF-DIVE ESCAPE — captured mid-air after the leap from a high cliff, arms wide, hair streaming up, [environmental:] her cloak billowing upward like a parachute, motion-blur on her plummeting silhouette, [context:] a pursuing arrow streaking past where she just was, three pursuers visible on the cliff-edge above firing more arrows, a river-pool far below with rocks visible at its edge',
       'WALL-RUN ESCAPE — wall-running across a battlement at full speed, [environmental:] behind her a fireball-strike erupting against the stone with debris exploding outward, foreground crenellation sparks, [context:] a moat far below with crocodiles, archers on the far tower reloading, a banner of her enemy snapping in the wind above',
       'SCREE-SLIDE PURSUIT — sliding down a steep scree slope on her heels at speed, [environmental:] dust trailing in a long plume behind her, small stones cascading ahead, [context:] bow held forward already nocked, the canyon-floor below opening into a chaotic melee battle with multiple allied raiders engaging an enemy patrol, a hawk-rider circling overhead',
       // DRAGON-RIDER — STACK THE EFFECTS
-      'DRAGONBACK DIVE — clinging to her dragon\'s neck-horn as it dives steeply past a tower, [environmental:] wind plastering her against its neck, dragon-scales catching the sun in iridescent ripples, the tower spire blurring past with motion-blur trail, [context:] a city wall under siege below with catapults firing upward and trebuchet-stones arcing past, allied dragons swooping in formation in the deep midground',
-      'DRAGON-SHOULDER ROAR — standing at her great dragon\'s shoulder mid-roar, [environmental:] fire erupting from its maw in a wide gout illuminating the entire foreground orange, her own cloak whipping back in the heat-blast, the air shimmering from the inferno, [context:] a distant siege engine bursting into flame from the dragonfire, retreating soldiers visible silhouettes in the foreground, smoke columns rising from previous strikes',
-      'SADDLED LONGBOW LOOSE — mounted on her flying dragon, bow drawn back, arrow JUST released streaking forward in flight, [environmental:] wind whipping her braid and the dragon\'s mane horizontal, motion-blur on her draw-arm, [context:] a city wall and battle far below receding under them with civilian boats fleeing the harbor, a second dragon-rider visible in the deep distance also engaging',
+      "DRAGONBACK DIVE — clinging to her dragon's neck-horn as it dives steeply past a tower, [environmental:] wind plastering her against its neck, dragon-scales catching the sun in iridescent ripples, the tower spire blurring past with motion-blur trail, [context:] a city wall under siege below with catapults firing upward and trebuchet-stones arcing past, allied dragons swooping in formation in the deep midground",
+      "DRAGON-SHOULDER ROAR — standing at her great dragon's shoulder mid-roar, [environmental:] fire erupting from its maw in a wide gout illuminating the entire foreground orange, her own cloak whipping back in the heat-blast, the air shimmering from the inferno, [context:] a distant siege engine bursting into flame from the dragonfire, retreating soldiers visible silhouettes in the foreground, smoke columns rising from previous strikes",
+      "SADDLED LONGBOW LOOSE — mounted on her flying dragon, bow drawn back, arrow JUST released streaking forward in flight, [environmental:] wind whipping her braid and the dragon's mane horizontal, motion-blur on her draw-arm, [context:] a city wall and battle far below receding under them with civilian boats fleeing the harbor, a second dragon-rider visible in the deep distance also engaging",
     ],
     instructions: `Each entry is ONE peak-action cinematic moment, 30-55 words. Format: "ACTION-HEADLINE — body position AT THE LOADED INSTANT + specific magical/mechanical EFFECT IN MOTION + specific cinematic CONTEXT". Mid-cast / mid-loose / mid-strike / mid-leap / mid-summon — the LOADED INSTANT before the next frame changes everything. EFFECTS visible (flame-orb-just-released, arrow-streaking, divine-light-blooming, motion-blur, debris kicked up, hair-and-cloak whipping, magical-wind). NO candid quiet moments. NO gore. NO posing for camera. NO real-world ethnic codes. Variety mandate: distribute across spellcaster / martial / ranged / rogue / divine-shaman / travel-escape / dragon-rider action types. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -900,7 +1053,7 @@ const POOL_RECIPES = {
       'BARD — quick smile and quicker tongue, the practiced confidence of someone who has talked her way out of more trouble than she has fought through',
       'CLERIC — solemn devotion in her bearing, faint divine light reflected in her irises in dim places, hands that have closed both wounds and eyes',
       'BARBARIAN — controlled fury banked just below the surface, ritual scars or tribal markings, the heavy stillness of weather about to break',
-      'ARTIFICER — fingertips stained with reagent-ink, tinkerer\'s pouches at her hip, eyes that catch and measure every mechanical detail in a room',
+      "ARTIFICER — fingertips stained with reagent-ink, tinkerer's pouches at her hip, eyes that catch and measure every mechanical detail in a room",
       'NECROMANCER — pale calm of someone who has shaken hands with death, faint sigil-tattoos along her forearms, a voice that whispers more than speaks',
       'SHAMAN — feather-and-bone fetishes braided into her clothes, eyes that go elsewhere mid-conversation listening to ancestor-spirits',
       'KNIGHT-ERRANT — square-shouldered honor-bound traveler, sworn-promise gravity in her speech, the patience of a long road walked alone',
@@ -924,9 +1077,9 @@ const POOL_RECIPES = {
       'A Free Folk wildling-summer kit: light fitted hide tunic, bare arms, dark riding trousers, leather wrist-wraps — South of the Wall warm-season explorer',
       // TEMPERATE / MID — HIGH FANTASY ONLY (target ~35%)
       'Fitted forest-green Sindar woodland gear — leather scout-jerkin over a brown linen under-tunic and breeches, leaf-patterned bracers, low travel boots, NO coat NO long cloak',
-      'A Gondorian paladin\'s half-plate articulated from gorget to shin-guards, silver-tree surcoat over the chest, dust-stained from the road — dressy, not bundled',
+      "A Gondorian paladin's half-plate articulated from gorget to shin-guards, silver-tree surcoat over the chest, dust-stained from the road — dressy, not bundled",
       'A fitted Witcher-school under-coat in dark grey leather, gambeson beneath, riding gloves, mid-calf boots — Northern Realms kit but cut short, NOT a long coat',
-      'A Quel\'Thalas blood-elf paladin in burnished red-and-gold breastplate over a fitted cream under-coat, knee-skirt of leather strips, light bracers',
+      "A Quel'Thalas blood-elf paladin in burnished red-and-gold breastplate over a fitted cream under-coat, knee-skirt of leather strips, light bracers",
       'No armor at all — just a fitted dark wool tunic, breeches, soft boots, a heavy spellbook on a baldric across her chest — a Cormyrean court-mage on the road',
       'A flowing midnight-teal Carian sorceress robe with fitted bodice and skirt-to-mid-calf, silver-thread runes at the hem, a moon-glass focus on a long chain',
       'A Drow scout coat in matte-black leather to the HIP ONLY (not long), deep hood, dark trousers, soft climbing boots — fitted, glare-suppressed Underdark gear',
@@ -935,7 +1088,7 @@ const POOL_RECIPES = {
       'A Breton spellsword in a fitted dark blue doublet with brass buckles, light mail beneath, riding trousers, low boots, hawthorn focus-rod tucked at the belt',
       // COLD-CLIMATE / LAYERED — HIGH FANTASY ONLY (target ~30%, NOT MORE)
       'A Nord shieldmaiden in a heavy bearskin half-cloak over a dark wool tunic and breeches, painted clan-marks on her cheekbones, leather wrist-wraps',
-      'A Pewter mail hauberk falling to mid-thigh, leather belt at the waist, plain wool trousers, sturdy boots — Dúnedain warden\'s practical loadout',
+      "A Pewter mail hauberk falling to mid-thigh, leather belt at the waist, plain wool trousers, sturdy boots — Dúnedain warden's practical loadout",
       'A long forest-green Ranger-cloak to the ankle, beneath it a simple brown tunic and breeches, weathered boots — Eriador winter gear',
       'A Free-Folk wildling layered against the Wall — heavy hide-and-fur overcloak, hardened leather chest-piece beneath, bone-clasped at the throat',
       'A patched dark leather Witcher coat with mismatched horn buttons, elbows re-hided in darker leather, the original color long faded — a decade of monster-hunting visible',
@@ -957,23 +1110,23 @@ const POOL_RECIPES = {
       'recurve bow carried in one hand with a leather wrist-guard on her draw-arm',
       'hooded raven familiar perched on her left shoulder, alert and silent',
       'pact-sigil ring on her index finger glowing faintly when her gaze flickers elsewhere',
-      'shaman\'s hand-drum slung over one shoulder, painted with bone-rune patterns',
-      'cartographer\'s tube on her belt with rolled maps poking from the open end',
+      "shaman's hand-drum slung over one shoulder, painted with bone-rune patterns",
+      "cartographer's tube on her belt with rolled maps poking from the open end",
       'pair of throwing-axes in cross-back harness, blades carbon-blacked to suppress glare',
       'wolf-headed walking staff with iron-shod tip, her hand resting at the carved grip',
       'silver holy symbol on a chain at her throat, palm-sized, faintly luminous in dim light',
-      'falconer\'s glove on her left hand with a hooded hawk standing alert on it',
+      "falconer's glove on her left hand with a hooded hawk standing alert on it",
       'leather lockpick roll tucked into her belt, picks held in place by oiled loops',
       'crossbow slung across her back with bolt-quiver clipped to her hip belt',
       'hand-crossbow holstered on each thigh, dark-stained wood with iron fittings',
       'glaive carried point-up in one hand, the polearm head wrapped in leather for travel',
       'paired shortswords in cross-back sheaths, both hilts wound in green-dyed cord',
-      'herbalist\'s satchel at her hip overflowing with bundled herbs and tied root-bags',
+      "herbalist's satchel at her hip overflowing with bundled herbs and tied root-bags",
       'iron-banded oak quarterstaff held in one hand, carved with weathered runes along its length',
       'lineage banner-pole strapped across her back, banner furled tight in oilcloth',
       'lantern hooked at her hip on a brass swivel-arm, the flame guttering as she moves',
       'silver moon-disc amulet on a fine chain, the disc engraved with a single crescent',
-      'tinkerer\'s tool-belt at her waist with tiny brass instruments tucked into loops',
+      "tinkerer's tool-belt at her waist with tiny brass instruments tucked into loops",
     ],
     instructions: `Each entry is ONE signature carried item, 15-30 words. Format: "[OBJECT] — [where carried] + [visual detail]". Variety: martial weapon / caster focus / utility item / iconic personal. NEVER in active combat use — sheathed, slung, holstered, or carried. NO cheesecake / sultry / sensual / curves language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
@@ -1098,7 +1251,7 @@ const POOL_RECIPES = {
       'SOLAR ECLIPSE — sun reduced to a fire-ringed black disk, shadow racing across the landscape',
       'PASSING DRAGON AT DISTANCE — winged silhouette gliding across a far ridge-line, scale-glint visible',
       'FALLING STAR — single bright streak overhead, briefly outshining everything else in the sky',
-      'WILL-O\'-WISP CLUSTER — floating lantern-spirits drifting at knee-height across a misty grove',
+      "WILL-O'-WISP CLUSTER — floating lantern-spirits drifting at knee-height across a misty grove",
       'GOD-RAY DAWN — single thick column of sunlight piercing dense morning cloud onto the valley floor',
       'COMET — bright tailed body crossing the sky, its tail visible as a long pale arc',
       'MAGICAL PORTAL — swirling glowing ring of light mid-air at a far distance, shape just resolving from haze',
@@ -1138,7 +1291,7 @@ const POOL_RECIPES = {
       'a tied warhorse at the edge of frame, head dipped to crop sparse grass',
       'a distant cookfire smoke-thread rising thin above a far ridge, suggesting other travelers',
       'a wildflower patch blooming at the edge of a cliff trail, pale blue against scorched earth',
-      'a fallen knight\'s helm half-buried in moss, vines flowering white through the visor',
+      "a fallen knight's helm half-buried in moss, vines flowering white through the visor",
       'a single white moth circling a lantern at the edge of frame, oversized and pale',
       'a partial skeleton of some great beast in the midground, ribs arching from the earth',
       'a small painted shrine tucked into the base of a roadside tree, candle-stub still burning',
@@ -1154,7 +1307,8 @@ const POOL_RECIPES = {
   // ─── DRAGONBOT female-warrior path-bespoke pools (2026-05-14) ───────────
   female_warrior_action: {
     format: 'simple',
-    theme: 'STORY-RICH non-combat adventuring moments for a fantasy warrior — caught in vivid scenes of stakes, mystery, discovery, infiltration, ritual, exploration, or interaction. NOT mundane camp chores — each moment is the kind that would open a CHAPTER in a fantasy novel. NO combat, NO mid-strike, NO weapon-aimed-at-foe, NO active fighting. Weapons can be DRAWN-AT-READY, sheathed, or stashed. The mood is taut + cinematic + narratively loaded — something is HAPPENING, even if it\'s quiet.\n\nABSOLUTE BANS (these are what made the previous pool boring):\n• NO "sharpening blade / polishing sword / lacing boots" type chores\n• NO "drinking from waterskin / eating by campfire / sitting in tavern" type rest\n• NO "scanning horizon / hand to brow" stock pose\n• NO "kneeling at shrine / saying lineage prayer" reverence\n• NO mundane camp setup\n\nMANDATORY in every entry:\n• A STORYTELLING HOOK — what is happening, why it matters, what\'s at stake\n• A SPECIFIC PROP or OBJECT she is interacting with (artifact / map / lock / sigil / corpse / scroll / ally / messenger / mount / scout-sign)\n• A SPECIFIC LOCATION beat (rope bridge over chasm / tomb antechamber / ruined throne room / ship deck / smuggler\'s tunnel / etc.)\n• CINEMATIC TENSION — held breath, mid-motion, charged stillness, intercepted glance\n\nVARIETY MANDATE — cover the full storytelling spectrum:\n• INFILTRATION: scaling fortress wall / lockpicking vault / sneaking past guards / dropping from rafters / cutting through silk screen\n• EXPLORATION: rappelling into ruins / wading through flooded crypt / picking through ancient battlefield / opening sealed tomb door / following glow-mushroom trail\n• MYSTERY: decoding runes by torchlight / examining bloody trail / interrogating prisoner / reading scroll by candlelight / discovering hidden message\n• INTERACTION: receiving relic from ghost / negotiating with merchant / consoling wounded ally / accepting quest from king / being knighted at altar / handing tribute to elder\n• RIDING: cresting hill on warhorse / fording icy river on mount / leaning over saddle pursuing trail / drawing rein at crossroads\n• AT-A-DISTANCE THREAT: holding bow drawn-but-aimed-at-empty-air-not-target / loading crossbow at watchtower / lowering torch into pitch-black opening\n• RITUAL: anointing altar with blood / casting ward circle / consulting bone-runes / lighting funeral pyre / cutting palm to seal pact\n• DISCOVERY: lifting cloth from treasure cache / finding signet ring in dirt / brushing dust from carved sigil / unrolling forbidden map / pulling sword from stone',
+    theme:
+      'STORY-RICH non-combat adventuring moments for a fantasy warrior — caught in vivid scenes of stakes, mystery, discovery, infiltration, ritual, exploration, or interaction. NOT mundane camp chores — each moment is the kind that would open a CHAPTER in a fantasy novel. NO combat, NO mid-strike, NO weapon-aimed-at-foe, NO active fighting. Weapons can be DRAWN-AT-READY, sheathed, or stashed. The mood is taut + cinematic + narratively loaded — something is HAPPENING, even if it\'s quiet.\n\nABSOLUTE BANS (these are what made the previous pool boring):\n• NO "sharpening blade / polishing sword / lacing boots" type chores\n• NO "drinking from waterskin / eating by campfire / sitting in tavern" type rest\n• NO "scanning horizon / hand to brow" stock pose\n• NO "kneeling at shrine / saying lineage prayer" reverence\n• NO mundane camp setup\n\nMANDATORY in every entry:\n• A STORYTELLING HOOK — what is happening, why it matters, what\'s at stake\n• A SPECIFIC PROP or OBJECT she is interacting with (artifact / map / lock / sigil / corpse / scroll / ally / messenger / mount / scout-sign)\n• A SPECIFIC LOCATION beat (rope bridge over chasm / tomb antechamber / ruined throne room / ship deck / smuggler\'s tunnel / etc.)\n• CINEMATIC TENSION — held breath, mid-motion, charged stillness, intercepted glance\n\nVARIETY MANDATE — cover the full storytelling spectrum:\n• INFILTRATION: scaling fortress wall / lockpicking vault / sneaking past guards / dropping from rafters / cutting through silk screen\n• EXPLORATION: rappelling into ruins / wading through flooded crypt / picking through ancient battlefield / opening sealed tomb door / following glow-mushroom trail\n• MYSTERY: decoding runes by torchlight / examining bloody trail / interrogating prisoner / reading scroll by candlelight / discovering hidden message\n• INTERACTION: receiving relic from ghost / negotiating with merchant / consoling wounded ally / accepting quest from king / being knighted at altar / handing tribute to elder\n• RIDING: cresting hill on warhorse / fording icy river on mount / leaning over saddle pursuing trail / drawing rein at crossroads\n• AT-A-DISTANCE THREAT: holding bow drawn-but-aimed-at-empty-air-not-target / loading crossbow at watchtower / lowering torch into pitch-black opening\n• RITUAL: anointing altar with blood / casting ward circle / consulting bone-runes / lighting funeral pyre / cutting palm to seal pact\n• DISCOVERY: lifting cloth from treasure cache / finding signet ring in dirt / brushing dust from carved sigil / unrolling forbidden map / pulling sword from stone',
     touchpoints: [
       'LOCKPICKING A VAULT — kneeling at iron-banded door, picks in steady hands, torchlight glinting off tumblers, silk-purse of jewels at her belt waiting',
       'RAPPELLING INTO RUINS — descending rope down ancient shaft, dust falling in her wake, glowstone in mouth illuminating moss-covered walls below',
@@ -1164,7 +1318,7 @@ const POOL_RECIPES = {
       'CRESTING A HILL ON WARHORSE — leaning forward on galloping black destrier, banner of her clan whipping behind, target valley visible below',
       'WADING THROUGH FLOODED CRYPT — knee-deep in dark water, lantern held high, eyes scanning waterline for signs of sunken sarcophagi',
       'LOWERING TORCH INTO PIT — kneeling at edge of yawning black hole, torch dangled on rope, fire-light flickering on wet stone walls below',
-      'CUTTING THROUGH SILK SCREEN — knife slicing through painted screen of sultan\'s palace, eye visible through tear, jewels visible beyond',
+      "CUTTING THROUGH SILK SCREEN — knife slicing through painted screen of sultan's palace, eye visible through tear, jewels visible beyond",
       'INTERROGATING PRISONER — leaning over bound figure tied to chair, dagger-tip resting under his chin, her braid swinging forward in the lamplight',
       'BEING KNIGHTED AT ALTAR — kneeling on stone steps, ancient queen lowering ceremonial sword to her shoulder, court watching in silence',
       'EXAMINING BLOODY TRAIL — crouched in forest path, fingertip touching dark crimson on leaf, eyes following the drips into deep undergrowth',
@@ -1173,7 +1327,7 @@ const POOL_RECIPES = {
       'CASTING WARD CIRCLE — kneeling in chalk-drawn protective ring on tavern floor, scattering bone-runes, breath ghosting in suddenly cold air',
       'ANOINTING ALTAR WITH BLOOD — pressing cut palm to stone altar, blood-runes appearing where her hand passes, eyes shut in concentration',
       'CONSOLING WOUNDED ALLY — kneeling beside fallen companion, his head in her lap, pressing folded cloth to chest-wound, eyes hard with resolve',
-      'NEGOTIATING WITH MERCHANT — leaning across counter of caravan-wagon, pouch of coin in one hand, scroll in other, merchant\'s sly grin in shadow',
+      "NEGOTIATING WITH MERCHANT — leaning across counter of caravan-wagon, pouch of coin in one hand, scroll in other, merchant's sly grin in shadow",
       'CROSSING ROPE BRIDGE OVER GORGE — mid-step on swaying plank-and-rope bridge, hands gripping guide ropes, gorge yawning a thousand feet below',
       'SCALING FORTRESS WALL — clinging to stones partway up castle wall, climbing-hooks in hand, shadow-cloak pulled tight, sentries pacing far below',
       'READING FORBIDDEN SCROLL — kneeling alone in library, unrolled scroll spread on floor, candle guttering, eyes wide reading something forbidden',
@@ -1190,7 +1344,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE story-rich non-combat moment, 25-45 words. Format: "ACTION-CAP — body position + specific prop/object + specific location detail + cinematic tension". Story-loaded NOT mundane. NEVER chores (sharpening / polishing / lacing / drinking water / eating). NEVER stock poses (scanning horizon / kneeling at shrine). Every entry has STAKES or DISCOVERY or INFILTRATION or RITUAL. Variety mandate: cover infiltration / exploration / mystery / interaction / riding / threat / ritual / discovery. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
   female_warrior_landscape: {
-    theme: 'Fantasy landscapes serving as the STAGE for a female warrior in a peaceful moment — biomes she travels through or rests in. NOT generic painted backdrop. Specific epic-fantasy locations with multi-layer depth. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. Each entry 30-55 words.',
+    theme:
+      'Fantasy landscapes serving as the STAGE for a female warrior in a peaceful moment — biomes she travels through or rests in. NOT generic painted backdrop. Specific epic-fantasy locations with multi-layer depth. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. Each entry 30-55 words.',
     touchpoints: [
       'misty primeval forest with thousand-year trees and shaft-of-light through canopy',
       'wind-carved desert mesa with bone-bleached stone at sunset',
@@ -1211,7 +1366,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE fantasy landscape, 30-55 words. Format: "[landscape type] with [signature feature + texture detail + atmospheric depth]". Must include FOREGROUND tactile detail + MIDGROUND form + DEEP DISTANCE atmospheric layer. Variety: mountain / forest / desert / coastal / ruin / tavern-interior / city / glacier / volcanic / battlefield. Output JSON array of strings.`,
   },
   female_warrior_drama: {
-    theme: 'Environmental / atmospheric drama woven into the warrior scene — a 40%-gated event that adds awe but never combat. LOTR / GoT / Skyrim weather/cosmic-event language. Each entry 25-50 words. NO violence, NO battle, NO enemies.',
+    theme:
+      'Environmental / atmospheric drama woven into the warrior scene — a 40%-gated event that adds awe but never combat. LOTR / GoT / Skyrim weather/cosmic-event language. Each entry 25-50 words. NO violence, NO battle, NO enemies.',
     touchpoints: [
       'LIGHTNING STORM — bolt cracking across distant sky',
       'AURORA BOREALIS — green-and-violet curtains over peaks',
@@ -1232,7 +1388,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE atmospheric/environmental drama, 25-50 words. Format: "EVENT-CAP — visible description and where in the scene". Adds awe / story to the frame. NO violence. Output JSON array of strings.`,
   },
   female_warrior_surprise_element: {
-    theme: 'Tiny secondary subjects that add story to a warrior scene — a small element at midground or deep midground implying a wider world. Each entry 15-40 words.',
+    theme:
+      'Tiny secondary subjects that add story to a warrior scene — a small element at midground or deep midground implying a wider world. Each entry 15-40 words.',
     touchpoints: [
       'a fox watching from underbrush',
       'distant pilgrim figures on far ridge',
@@ -1264,7 +1421,8 @@ const POOL_RECIPES = {
     // ~88% scene-polluted because Sonnet followed the scaffold over the
     // recipe. Simple format forces theme+instructions only.
     format: 'simple',
-    theme: 'EXOTIC FANTASY-NOVEL-COVER battle outfit for a heroic adventurer woman. Frank Frazetta / Boris Vallejo / Brom / Hildebrandt / Michael Whelan painted-fantasy-cover lineage. Sleek, sexy, body-readable, painterly — the iconic Frazetta-cheesecake silhouette is ON THE TABLE. The mission is VISUAL VARIETY across exotic armor styles + diverse weapons. Time-period LOTR / D&D / GoT / Witcher / Skyrim / Conan / Warhammer / Forgotten Realms / Eastern fantasy. Each entry 30-60 words describing the ARMOR + WEAPON + signature visual flourish.\n\nVARIETY MANDATE — across the pool, NO entry should look like another. Vary every axis:\n• METAL/MATERIAL palette: mirror-bright steel / patinated bronze / blackened obsidian / dragonscale / chitin / silvered elven mithril / lacquered red / hammered copper / ivory bone-plate / pearl-and-gold / verdigris-green bronze / brushed gunmetal\n• ARMOR ARCHETYPE: full engraved breastplate / asymmetric single-pauldron warrior / lamellar Eastern scale / segmented banded mail / dragon-bone curved cuirass / mail hauberk / leather harness with armor accents / scale-and-leather hybrid / ornate paladin plate / minimalist battle-bra-and-greaves rogue / chitin shell / fur-and-bone barbarian (yes fur ok if barbarian-coded only) / runic-glowing plate / coral-and-pearl aquatic / desert nomad leather-and-cloth wrap\n• CULTURE / FLAVOR: Norse Valkyrie / Roman gladiatrix / samurai-coded ronin / Persian-coded shamshir-wielder / Aztec-coded warrior-priestess / Mongol horse-lord / barbarian Conan-coded / dark-elf assassin / blood-elf paladin / dragonborn warlord / tiefling demon-hunter / desert corsair / arctic Skyrim Stormcloak / forest druidic / underdark explorer\n• WEAPON: longsword / great-axe / two-handed warhammer / war-spear / glaive / longbow + arrow-quiver / crossbow / twin scimitars / runeblade / war-staff / chain-flail / katar pair / khopesh / kukri / war-pick / falchion / saber / curved dao / ornate halberd / bone-spike club / runed throwing-axes\n• SIGNATURE FLOURISH: glowing runes / tribal facepaint / dragon-skull pauldron / horn-helm / hooded cowl / chain-veil / ornate jewelry / blood-clan tattoos / silver mask / antler headdress / feather-cloak / chain-belt of trophies',
+    theme:
+      'EXOTIC FANTASY-NOVEL-COVER battle outfit for a heroic adventurer woman. Frank Frazetta / Boris Vallejo / Brom / Hildebrandt / Michael Whelan painted-fantasy-cover lineage. Sleek, sexy, body-readable, painterly — the iconic Frazetta-cheesecake silhouette is ON THE TABLE. The mission is VISUAL VARIETY across exotic armor styles + diverse weapons. Time-period LOTR / D&D / GoT / Witcher / Skyrim / Conan / Warhammer / Forgotten Realms / Eastern fantasy. Each entry 30-60 words describing the ARMOR + WEAPON + signature visual flourish.\n\nVARIETY MANDATE — across the pool, NO entry should look like another. Vary every axis:\n• METAL/MATERIAL palette: mirror-bright steel / patinated bronze / blackened obsidian / dragonscale / chitin / silvered elven mithril / lacquered red / hammered copper / ivory bone-plate / pearl-and-gold / verdigris-green bronze / brushed gunmetal\n• ARMOR ARCHETYPE: full engraved breastplate / asymmetric single-pauldron warrior / lamellar Eastern scale / segmented banded mail / dragon-bone curved cuirass / mail hauberk / leather harness with armor accents / scale-and-leather hybrid / ornate paladin plate / minimalist battle-bra-and-greaves rogue / chitin shell / fur-and-bone barbarian (yes fur ok if barbarian-coded only) / runic-glowing plate / coral-and-pearl aquatic / desert nomad leather-and-cloth wrap\n• CULTURE / FLAVOR: Norse Valkyrie / Roman gladiatrix / samurai-coded ronin / Persian-coded shamshir-wielder / Aztec-coded warrior-priestess / Mongol horse-lord / barbarian Conan-coded / dark-elf assassin / blood-elf paladin / dragonborn warlord / tiefling demon-hunter / desert corsair / arctic Skyrim Stormcloak / forest druidic / underdark explorer\n• WEAPON: longsword / great-axe / two-handed warhammer / war-spear / glaive / longbow + arrow-quiver / crossbow / twin scimitars / runeblade / war-staff / chain-flail / katar pair / khopesh / kukri / war-pick / falchion / saber / curved dao / ornate halberd / bone-spike club / runed throwing-axes\n• SIGNATURE FLOURISH: glowing runes / tribal facepaint / dragon-skull pauldron / horn-helm / hooded cowl / chain-veil / ornate jewelry / blood-clan tattoos / silver mask / antler headdress / feather-cloak / chain-belt of trophies',
     touchpoints: [
       'Norse Valkyrie — mirror-bright winged steel breastplate, twin shoulder pauldrons with raven engravings, chainmail skirt over fitted leggings, longsword at hip, round shield on back',
       'Roman gladiatrix — bronze segmented banded mail across torso, leather pteruges skirt, single bronze pauldron, manica forearm-guard, gladius at hip, trident in hand',
@@ -1290,7 +1448,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE exotic painted-fantasy-cover battle outfit, 30-60 words. Format: "[ARCHETYPE NAME / CULTURE — short headline] — [armor description: material + cut + fit] + [named visible armor pieces] + [signature weapon] + [signature flourish: runes / tattoos / ornaments / helm]". The body describes the OUTFIT, never the location. Frazetta-cheesecake silhouette is allowed and encouraged — sleek, sexy, body-readable. The MISSION is exotic VARIETY: every entry must look DIFFERENT from every other entry in metal palette, armor archetype, cultural flavor, AND weapon. NO TWO entries share the same weapon. NO TWO share the same metal palette. Push exotic: lamellar / scale / chitin / dragonbone / coral / mithril / lacquered / ornate-engraved / desert-nomad-wrap / barbarian-fur-and-bone / samurai-bound-silk. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
   artsy_girl_action: {
-    theme: 'Peaceful adventuring / candid / lineage-flavored moments for a female fantasy warrior — caught between battles, never in one. NO combat, NO mid-strike, NO weapon-aimed-at-foe. Hiking, traveling, in a tavern, breaking camp, scouting, polishing a sword, sharpening a blade, looking out from a cliff, eating by a campfire, sitting in a hostel, drawing a map, talking to a horse, drinking from a stream, examining a relic, fastening armor, lacing boots, etc. Each entry 20-40 words. CINEMATIC mid-moment, body in motion or candid stillness — never staged posing.',
+    theme:
+      'Peaceful adventuring / candid / lineage-flavored moments for a female fantasy warrior — caught between battles, never in one. NO combat, NO mid-strike, NO weapon-aimed-at-foe. Hiking, traveling, in a tavern, breaking camp, scouting, polishing a sword, sharpening a blade, looking out from a cliff, eating by a campfire, sitting in a hostel, drawing a map, talking to a horse, drinking from a stream, examining a relic, fastening armor, lacing boots, etc. Each entry 20-40 words. CINEMATIC mid-moment, body in motion or candid stillness — never staged posing.',
     touchpoints: [
       'CLIMBING ROCKY PATH — three-point contact ascending switchback',
       'POLISHING SWORD — kneeling beside campfire, cloth in hand',
@@ -1311,7 +1470,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE peaceful adventuring moment, 20-40 words. Format: "ACTION-CAP — body position + visible detail (tool / object / setting)". Captured at a candid loaded instant. NEVER in combat. NEVER mid-strike. Variety: travel / camp / tavern / inn / shrine / wilderness / town. Output JSON array of strings.`,
   },
   artsy_girl_landscape: {
-    theme: 'Fantasy landscapes serving as the STAGE for a female warrior in a peaceful moment — biomes she travels through or rests in. NOT generic painted backdrop. Specific epic-fantasy locations with multi-layer depth. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. Each entry 30-55 words.',
+    theme:
+      'Fantasy landscapes serving as the STAGE for a female warrior in a peaceful moment — biomes she travels through or rests in. NOT generic painted backdrop. Specific epic-fantasy locations with multi-layer depth. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. Each entry 30-55 words.',
     touchpoints: [
       'misty primeval forest with thousand-year trees and shaft-of-light through canopy',
       'wind-carved desert mesa with bone-bleached stone at sunset',
@@ -1332,7 +1492,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE fantasy landscape, 30-55 words. Format: "[landscape type] with [signature feature + texture detail + atmospheric depth]". Must include FOREGROUND tactile detail + MIDGROUND form + DEEP DISTANCE atmospheric layer. Variety: mountain / forest / desert / coastal / ruin / tavern-interior / city / glacier / volcanic / battlefield. Output JSON array of strings.`,
   },
   artsy_girl_drama: {
-    theme: 'Environmental / atmospheric drama woven into the warrior scene — a 40%-gated event that adds awe but never combat. LOTR / GoT / Skyrim weather/cosmic-event language. Each entry 25-50 words. NO violence, NO battle, NO enemies.',
+    theme:
+      'Environmental / atmospheric drama woven into the warrior scene — a 40%-gated event that adds awe but never combat. LOTR / GoT / Skyrim weather/cosmic-event language. Each entry 25-50 words. NO violence, NO battle, NO enemies.',
     touchpoints: [
       'LIGHTNING STORM — bolt cracking across distant sky',
       'AURORA BOREALIS — green-and-violet curtains over peaks',
@@ -1353,7 +1514,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE atmospheric/environmental drama, 25-50 words. Format: "EVENT-CAP — visible description and where in the scene". Adds awe / story to the frame. NO violence. Output JSON array of strings.`,
   },
   artsy_girl_surprise_element: {
-    theme: 'Tiny secondary subjects that add story to a warrior scene — a small element at midground or deep midground implying a wider world. Each entry 15-40 words.',
+    theme:
+      'Tiny secondary subjects that add story to a warrior scene — a small element at midground or deep midground implying a wider world. Each entry 15-40 words.',
     touchpoints: [
       'a fox watching from underbrush',
       'distant pilgrim figures on far ridge',
@@ -1380,7 +1542,8 @@ const POOL_RECIPES = {
   // the wrapper no longer needs the comma-soup character template.
   female_warriors: {
     format: 'simple',
-    theme: 'COMPREHENSIVE FANTASY ADVENTURER WOMAN archetype — each entry is ONE complete character: fantasy lineage + class role (ROGUE / RANGER / HUNTER / SCOUT / ASSASSIN / SPELLBLADE / TRACKER / SHADOW DANCER / WILD MAGE / SCOUT) + form-fitting sleek leather/cloth outfit + visible weapons + signature flourish (tattoos / cowl / facepaint / trophies / amulet). Frank Frazetta painted-fantasy-novel-cover tradition BUT rogue/ranger-coded NOT paladin-coded. NEVER plate-armored. NEVER bikini-armor cheesecake. NEVER exposed-chest. Sleek + functional + dark + dangerous.\n\nABSOLUTE BANS:\n• NO plate-armored paladin / valkyrie / shieldmaiden look\n• NO bikini-armor / bare-midriff / chainmail-bikini / pasties\n• NO ornate gold-and-bronze cuirass\n• NO sword-and-shield template\n• NO long flowing dresses\n\nMANDATORY in every entry:\n• Form-fitting sleek leather OR fitted hide OR close-fit dark cloth\n• Visible practical weapons (NOT longsword default — daggers / bow / crossbow / kukri / war-pick / twin shortswords / hand-crossbow / throwing-axes / blowgun / spell-rod / glaive / chain-flail)\n• Hooded cowl OR utility-belt OR thigh-harness OR cross-back harness\n• Race-coded anatomy from rolled lineage (drow / wood-elf / halfling / dwarf / orc / human varied culture)\n\nVARIETY MANDATE — every entry differs on:\n• RACE: Drow / Wood-elf / High-elf / Half-elf / Halfling / Hill dwarf / Mountain dwarf / Half-orc / Orc / Human-coded varied culture (Norse / Persian / Mongol / Aztec / Roman / Bedouin)\n• ROLE: Shadow-blade assassin / Forest ranger / Crossbow scout / Wild hunter / Spellblade / Tracker / Tomb burglar / Beast-master / Wandering swordswoman / Mystic shadow-dancer\n• OUTFIT MATERIAL: oiled black leather / forest-green hide / tan suede / blackened studded leather / pale linen wraps / dark waxed cloak / scaled brigandine / hardened lacquered leather\n• WEAPON: twin shortswords / longbow + quiver / heavy crossbow / hand-crossbow / twin daggers / war-pick / kukri / glaive / katana / spear / sai pair / chain-flail / spell-rod\n• FLOURISH: hooded cowl / tribal facepaint / clan-tattoos / scar across cheek / silver mask / antler-pin cloak / bone-trophy belt / glowing rune-bracers',
+    theme:
+      'COMPREHENSIVE FANTASY ADVENTURER WOMAN archetype — each entry is ONE complete character: fantasy lineage + class role (ROGUE / RANGER / HUNTER / SCOUT / ASSASSIN / SPELLBLADE / TRACKER / SHADOW DANCER / WILD MAGE / SCOUT) + form-fitting sleek leather/cloth outfit + visible weapons + signature flourish (tattoos / cowl / facepaint / trophies / amulet). Frank Frazetta painted-fantasy-novel-cover tradition BUT rogue/ranger-coded NOT paladin-coded. NEVER plate-armored. NEVER bikini-armor cheesecake. NEVER exposed-chest. Sleek + functional + dark + dangerous.\n\nABSOLUTE BANS:\n• NO plate-armored paladin / valkyrie / shieldmaiden look\n• NO bikini-armor / bare-midriff / chainmail-bikini / pasties\n• NO ornate gold-and-bronze cuirass\n• NO sword-and-shield template\n• NO long flowing dresses\n\nMANDATORY in every entry:\n• Form-fitting sleek leather OR fitted hide OR close-fit dark cloth\n• Visible practical weapons (NOT longsword default — daggers / bow / crossbow / kukri / war-pick / twin shortswords / hand-crossbow / throwing-axes / blowgun / spell-rod / glaive / chain-flail)\n• Hooded cowl OR utility-belt OR thigh-harness OR cross-back harness\n• Race-coded anatomy from rolled lineage (drow / wood-elf / halfling / dwarf / orc / human varied culture)\n\nVARIETY MANDATE — every entry differs on:\n• RACE: Drow / Wood-elf / High-elf / Half-elf / Halfling / Hill dwarf / Mountain dwarf / Half-orc / Orc / Human-coded varied culture (Norse / Persian / Mongol / Aztec / Roman / Bedouin)\n• ROLE: Shadow-blade assassin / Forest ranger / Crossbow scout / Wild hunter / Spellblade / Tracker / Tomb burglar / Beast-master / Wandering swordswoman / Mystic shadow-dancer\n• OUTFIT MATERIAL: oiled black leather / forest-green hide / tan suede / blackened studded leather / pale linen wraps / dark waxed cloak / scaled brigandine / hardened lacquered leather\n• WEAPON: twin shortswords / longbow + quiver / heavy crossbow / hand-crossbow / twin daggers / war-pick / kukri / glaive / katana / spear / sai pair / chain-flail / spell-rod\n• FLOURISH: hooded cowl / tribal facepaint / clan-tattoos / scar across cheek / silver mask / antler-pin cloak / bone-trophy belt / glowing rune-bracers',
     touchpoints: [
       'Drow shadow-blade assassin in fitted obsidian-black leather harness with cowl pulled low over ash-grey face, twin shortswords cross-back, throwing-daggers strapped to thigh',
       'Wood-elf forest ranger in green-and-brown fitted hide with longbow and leaf-fletched quiver across back, hand-axe on belt, antler-pin cloak',
@@ -1419,7 +1582,8 @@ const POOL_RECIPES = {
   // Stage 1 MVP — 30 entries each. Scaled later only after Kevin signs off
   // on render quality.
   dragon_scene_dragon: {
-    theme: 'TRADITIONAL WESTERN high-fantasy dragon ANATOMY + signature visual identity — Smaug / LOTR / GoT / Elden Ring / Skyrim / Warcraft / D&D archetype. Each entry describes ONE dragon at full body — scale color + horn pattern + wing character + body distinguishing features. NO ACTION (action is a separate axis). NO Eastern serpentine dragons, NO wyverns (must be 4 legs + 2 wings). NO RIDERS / NO HUMANS. Each entry 25-50 words.',
+    theme:
+      'TRADITIONAL WESTERN high-fantasy dragon ANATOMY + signature visual identity — Smaug / LOTR / GoT / Elden Ring / Skyrim / Warcraft / D&D archetype. Each entry describes ONE dragon at full body — scale color + horn pattern + wing character + body distinguishing features. NO ACTION (action is a separate axis). NO Eastern serpentine dragons, NO wyverns (must be 4 legs + 2 wings). NO RIDERS / NO HUMANS. Each entry 25-50 words.',
     touchpoints: [
       'Smaug — golden scales, smoke-stained breath, jewel-glinting belly',
       'crimson red-and-black with bone-spike crest and torn wing membranes',
@@ -1440,7 +1604,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE specific Western dragon, 25-50 words. Format: "[primary color/scale type] dragon with [distinguishing horn/wing/eye/body trait] and [signature visible texture]". Variety required across hue / horn pattern / wing character / body size / unique-feature (scar / glow / mineral-coating / battle-damage). NO action verbs ("breathing fire" / "flying" / "perched" all banned — those go in dragon_action pool). ALWAYS 4 legs + 2 wings + horned reptilian skull (Western anatomy mandatory). Output JSON array of strings.`,
   },
   dragon_scene_action: {
-    theme: 'Mid-action dragon moments — what the dragon is DOING right now in the frame. Cinematic, captured at a loaded instant. Movie-poster moments. Skyrim / GoT / LOTR / Elden Ring tradition. Each entry 20-40 words.',
+    theme:
+      'Mid-action dragon moments — what the dragon is DOING right now in the frame. Cinematic, captured at a loaded instant. Movie-poster moments. Skyrim / GoT / LOTR / Elden Ring tradition. Each entry 20-40 words.',
     touchpoints: [
       'MID-ROAR — jaw extended wide, throat glowing with fire about to release',
       'BREATHING FIRE — cone of flame mid-arc, smoke trailing from nostrils',
@@ -1461,7 +1626,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE cinematic mid-action dragon moment, 20-40 words. Format: "ACTION-CAP — body position + what's visible (jaw / wings / claws / tail / fire / smoke / debris)". Captured at the loaded instant. NEVER static perched-and-staring (unless that's the explicit beat). Variety: combat / flight / hunting / feeding / sleeping / takeoff / landing / interaction. Output JSON array of strings.`,
   },
   dragon_scene_landscape: {
-    theme: 'Epic high-fantasy landscapes worthy of a dragon — biomes where dragons live in LOTR / GoT / Skyrim / Elden Ring / Warcraft. NOT generic mountain — specific epic landscape types. Each entry 30-60 words with multi-layer depth.',
+    theme:
+      'Epic high-fantasy landscapes worthy of a dragon — biomes where dragons live in LOTR / GoT / Skyrim / Elden Ring / Warcraft. NOT generic mountain — specific epic landscape types. Each entry 30-60 words with multi-layer depth.',
     touchpoints: [
       'jagged volcanic mountain range with lava rivers and ash plumes',
       'frozen glacial canyon with cathedral ice-pillars',
@@ -1482,7 +1648,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE epic fantasy landscape, 30-60 words. Format: "[landscape type] with [signature features + texture detail + atmospheric depth]". Must include FOREGROUND tactile detail + MIDGROUND form + DEEP DISTANCE atmospheric layer. NEVER flat backdrop. Variety: mountain / glacial / forest / desert / coastal / ruin / sky-island / battlefield / cavern / city. Output JSON array of strings.`,
   },
   dragon_scene_drama: {
-    theme: 'Environmental DRAMA woven into the dragon scene — a 40%-gated atmospheric event happening in the world around the dragon. LOTR / GoT / Skyrim weather/cosmic-event language. Each entry 25-50 words.',
+    theme:
+      'Environmental DRAMA woven into the dragon scene — a 40%-gated atmospheric event happening in the world around the dragon. LOTR / GoT / Skyrim weather/cosmic-event language. Each entry 25-50 words.',
     touchpoints: [
       'LIGHTNING STORM — bolt cracking across sky behind dragon',
       'AURORA BOREALIS — green-and-violet curtains over peaks',
@@ -1503,7 +1670,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE atmospheric/environmental drama event, 25-50 words. Format: "EVENT-CAP — visible description of what's happening and where in the scene". Adds awe / drama / story to the frame. Output JSON array of strings.`,
   },
   dragon_scene_surprise_element: {
-    theme: 'Tiny secondary subjects that add story to a dragon scene — a small element placed at midground or deep midground that implies a wider world. Each entry 15-40 words.',
+    theme:
+      'Tiny secondary subjects that add story to a dragon scene — a small element placed at midground or deep midground that implies a wider world. Each entry 15-40 words.',
     touchpoints: [
       'tiny knight on distant cliff, sword drawn',
       'ruined castle silhouette on far ridge',
@@ -1524,7 +1692,8 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE tiny secondary subject, 15-40 words. Format: "ELEMENT — visual description + where it sits in the scene". Small element implying a wider world. Output JSON array of strings.`,
   },
   alien_cities: {
-    theme: 'vast alien CITY scenes — multi-tier megacity density, planet-scale ecumenopolis, layered urban verticality, atmospheric depth. NOT a single hero building — DENSE cities with hundreds of supporting structures.',
+    theme:
+      'vast alien CITY scenes — multi-tier megacity density, planet-scale ecumenopolis, layered urban verticality, atmospheric depth. NOT a single hero building — DENSE cities with hundreds of supporting structures.',
     touchpoints: [
       'Coruscant (planet-city stacked levels)',
       'Blade Runner 2049 megaholograms + fog layers',
@@ -1542,7 +1711,8 @@ const POOL_RECIPES = {
     instructions: `Each city must feel like a CIVILIZATION, not a single building. The MG layer is where this is proven — name DOZENS of supporting structures, hundreds of windows, multi-elevation skybridges, tiny ships threading the gaps. The Hero anchor is dominant but never alone.`,
   },
   alien_landscapes: {
-    theme: 'alien planetary surfaces — distinctive biomes with strong geological / biological / atmospheric identity. NOT generic "alien planet" — each is a specific ecology.',
+    theme:
+      'alien planetary surfaces — distinctive biomes with strong geological / biological / atmospheric identity. NOT generic "alien planet" — each is a specific ecology.',
     touchpoints: [
       'Dune Arrakis (twin suns, biblical desert scale)',
       'Solaris ocean (sentient world)',
@@ -1551,12 +1721,13 @@ const POOL_RECIPES = {
       'Avatar Pandora (bioluminescent verticality)',
       'Beksinski painted dread landscapes',
       'Brian Despain alien-flora paintings',
-      "Roadside Picnic Zone (broken physics)",
+      'Roadside Picnic Zone (broken physics)',
     ],
     instructions: `Each landscape must read as a specific ecology — biology, geology, atmosphere coherent. MG layer: biology / formations / weather. Scene must include EITHER a sentient figure (1-2% frame, midground-back silhouette) OR an alien creature native to this world.`,
   },
   sleek_female_explorer_outfits: {
-    theme: 'Sleek, form-fit FUTURISTIC EVA EXPLORER outfits modeled on the StarBot-hearted exemplars 2026-05-12: gold-mirror-visor pressure-suit climbers, hydraulic-exoskeleton scientists with brass chestplates, prone marksmen in olive-drab + chrome chest plates, bald-tattooed bubble-helm scouts, Tron-blue circuit-line android operatives. Every outfit is a complete EVA-class explorer kit — form-fitting pressure suit base + sealed helmet + multiple pieces of visible engineered tech + ONE distinguishing identity marker that makes her unmistakably herself. Sci-fi paperback-cover oil-painting tradition: Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Frank-Kelly-Freas covers.\n\nABSOLUTE BAN — NO Mandalorian / NO beskar plate / NO T-visor / NO Boba Fett / NO Star Wars helmet language. Flux renders the actual franchise IP from those tokens regardless of brief admonitions. Use generic descriptive language instead (sealed visor / bubble helmet / gold mirror visor / amber HUD faceplate / full-coverage helm).',
+    theme:
+      'Sleek, form-fit FUTURISTIC EVA EXPLORER outfits modeled on the StarBot-hearted exemplars 2026-05-12: gold-mirror-visor pressure-suit climbers, hydraulic-exoskeleton scientists with brass chestplates, prone marksmen in olive-drab + chrome chest plates, bald-tattooed bubble-helm scouts, Tron-blue circuit-line android operatives. Every outfit is a complete EVA-class explorer kit — form-fitting pressure suit base + sealed helmet + multiple pieces of visible engineered tech + ONE distinguishing identity marker that makes her unmistakably herself. Sci-fi paperback-cover oil-painting tradition: Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Frank-Kelly-Freas covers.\n\nABSOLUTE BAN — NO Mandalorian / NO beskar plate / NO T-visor / NO Boba Fett / NO Star Wars helmet language. Flux renders the actual franchise IP from those tokens regardless of brief admonitions. Use generic descriptive language instead (sealed visor / bubble helmet / gold mirror visor / amber HUD faceplate / full-coverage helm).',
     touchpoints: [
       'Mass Effect Andromeda Pathfinder Ryder — form-fit N7 + sealed helmet + amber HUD visor',
       'Apollo / NASA EVA pressure suit — sealed bubble helmet + life-support backpack',
@@ -1609,7 +1780,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     })(),
   },
   cozy_warmth_source: {
-    theme: 'The ONE dominant warmth source defining each cozy sci-fi interior — every cozy space has its own specific source of warmth (visual + emotional). Each entry names a single warmth source with enough detail that Sonnet+Flux can render the room AROUND that warmth. Each entry 20-50 words.',
+    theme:
+      'The ONE dominant warmth source defining each cozy sci-fi interior — every cozy space has its own specific source of warmth (visual + emotional). Each entry names a single warmth source with enough detail that Sonnet+Flux can render the room AROUND that warmth. Each entry 20-50 words.',
     touchpoints: [
       'amber engine-bay glow leaking through floor grates',
       'grow-lamp lighting a hanging garden of xeno-ferns',
@@ -1635,7 +1807,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE dominant warmth source, 20-50 words. Format: "WARMTH NAME — visual description + how it lights the room + sensory hook". The warmth should be the FOCAL point of the room's atmosphere. Variety across all 30: machinery / culinary / biological / electrical / fire-based / ambient cosmic / body / ritual. NO outdoor weather. NO industrial-cold-blue lights. Each is intimate, lived-in, dominant. Output JSON array of strings.`,
   },
   alien_city_drama: {
-    theme: 'Path-specific drama events for alien-city scenes — visible incidents that bring story to a still of a vast alien metropolis. Examples: street protest with crowd torches, atmospheric phenomenon over city (auroras, debris field, eclipse), military lockdown checkpoint, alien festival with hanging lanterns, sky-train passing between megabuildings, fire on lower-tier ledge, parade with banners. Each entry 25-50 words.',
+    theme:
+      'Path-specific drama events for alien-city scenes — visible incidents that bring story to a still of a vast alien metropolis. Examples: street protest with crowd torches, atmospheric phenomenon over city (auroras, debris field, eclipse), military lockdown checkpoint, alien festival with hanging lanterns, sky-train passing between megabuildings, fire on lower-tier ledge, parade with banners. Each entry 25-50 words.',
     touchpoints: [
       'street protest — crowd with torches in lower-tier plaza',
       'atmospheric phenomenon — aurora curtains over the skyline',
@@ -1656,7 +1829,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE visible drama element woven into an alien city scene, 25-50 words. Format: "DRAMA NAME — description of what's happening, where in the city, what the viewer SEES". Visible from a wide shot — NOT internal-only events. Variety: civil unrest, atmospheric phenomena, religious/festival, military, technological, environmental, criminal, ceremonial. Output JSON array of strings.`,
   },
   alien_city_anchor_entity: {
-    theme: 'Lone city-witness entities for alien-city scenes — a SINGLE figure / vehicle visible at TINY/SMALL frame proportion in a vast alien metropolis. Street-level witnesses, sky-tier traffic, low-altitude flyers. NOT capital ships, NOT cities (we ARE in the city), NOT megastructures. Just lone witnesses: a vendor, a hovercar, a pedestrian, a patrol drone, a lone skybridge walker. Each entry 15-40 words.',
+    theme:
+      'Lone city-witness entities for alien-city scenes — a SINGLE figure / vehicle visible at TINY/SMALL frame proportion in a vast alien metropolis. Street-level witnesses, sky-tier traffic, low-altitude flyers. NOT capital ships, NOT cities (we ARE in the city), NOT megastructures. Just lone witnesses: a vendor, a hovercar, a pedestrian, a patrol drone, a lone skybridge walker. Each entry 15-40 words.',
     touchpoints: [
       'lone hovercar threading between towers',
       'sky-tier pedestrian crossing a transparent skybridge',
@@ -1677,7 +1851,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE lone witness in a city, 15-40 words. Format: "ENTITY NAME — visual description of one figure/vehicle at TINY/SMALL scale within the alien city". NEVER crowds, NEVER capital ships, NEVER architecture (that's the city itself). Output JSON array of strings.`,
   },
   alien_city_deep_distance: {
-    theme: 'The signature deep-distance feature defining the alien-city FAR-back layer. Each city has a horizon-defining detail beyond the immediate megabuilding cluster — distant orbital ring, ecumenopolis canyon vanishing to horizon, megabuilding piercing clouds, planetary curvature at top of skyline, distant temple-spire, broken arcology silhouette. Each entry 20-50 words.',
+    theme:
+      'The signature deep-distance feature defining the alien-city FAR-back layer. Each city has a horizon-defining detail beyond the immediate megabuilding cluster — distant orbital ring, ecumenopolis canyon vanishing to horizon, megabuilding piercing clouds, planetary curvature at top of skyline, distant temple-spire, broken arcology silhouette. Each entry 20-50 words.',
     touchpoints: [
       'orbital ring visible overhead through gap in towers',
       'distant ecumenopolis canyon vanishing to horizon',
@@ -1698,7 +1873,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE deep-distance signature feature, 20-50 words. Specific visible feature that punches up the far-back layer. NOT generic atmospheric haze. Output JSON array of strings.`,
   },
   megastructure_drama: {
-    theme: 'Path-specific drama events for megastructure scenes — visible incidents at colossal post-planetary engineered scale. Examples: energy beam firing from structure, ring-section rotating slowly, atmospheric leak venting, fleet passing through hangar, construction-mech swarm working surface, debris field of dead ships nearby. Each entry 25-50 words.',
+    theme:
+      'Path-specific drama events for megastructure scenes — visible incidents at colossal post-planetary engineered scale. Examples: energy beam firing from structure, ring-section rotating slowly, atmospheric leak venting, fleet passing through hangar, construction-mech swarm working surface, debris field of dead ships nearby. Each entry 25-50 words.',
     touchpoints: [
       'energy beam firing from a structure aperture',
       'ring-section rotating against starfield',
@@ -1719,7 +1895,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE visible megastructure-scale drama, 25-50 words. Format: "DRAMA NAME — description of what's happening and what the viewer SEES at megastructure scale". Variety: combat, atmospheric, mechanical, civic, industrial, environmental. Output JSON array of strings.`,
   },
   megastructure_anchor_entity: {
-    theme: 'Lone megastructure-scale witness entities — a SINGLE small vehicle / figure / ship visible at TINY/SMALL frame proportion against the megastructure. Capital ships are TINY against a megastructure; fighters are SUB-pixel; engineers in suits are dust motes. Each entry 15-40 words.',
+    theme:
+      'Lone megastructure-scale witness entities — a SINGLE small vehicle / figure / ship visible at TINY/SMALL frame proportion against the megastructure. Capital ships are TINY against a megastructure; fighters are SUB-pixel; engineers in suits are dust motes. Each entry 15-40 words.',
     touchpoints: [
       'small shuttle threading toward docking maw',
       'fighter-wing in formation passing structure spine',
@@ -1740,7 +1917,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE lone witness at megastructure scale, 15-40 words. Format: "ENTITY NAME — visual description". NEVER cities, NEVER groups, NEVER the megastructure itself. Single small witness proving scale. Output JSON array of strings.`,
   },
   megastructure_deep_distance: {
-    theme: 'The signature deep-distance feature defining the megastructure FAR-back layer. Planet visible through structure gap, gas-giant looming behind, fleet at far edge, secondary megastructure on horizon, cosmic phenomenon framing the structure. Each entry 20-50 words.',
+    theme:
+      'The signature deep-distance feature defining the megastructure FAR-back layer. Planet visible through structure gap, gas-giant looming behind, fleet at far edge, secondary megastructure on horizon, cosmic phenomenon framing the structure. Each entry 20-50 words.',
     touchpoints: [
       'planet visible through structural gap',
       'gas giant looming behind megastructure',
@@ -1761,7 +1939,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE specific deep-distance signature feature, 20-50 words. Specific visible mega-feature far behind the megastructure. Output JSON array of strings.`,
   },
   landscape_anchor_entity: {
-    theme: 'Lone wilderness witness entities for alien-landscape scenes — a SINGLE figure / creature / small vehicle placed in midground-back of an alien wilderness as a SCALE PROVER (TINY/SMALL frame proportion). NEVER cities, NEVER capital ships, NEVER megastructures, NEVER architecture. Just lone witnesses in the wild — vac-suit explorers, native creatures, scout drones, ground rovers, hovering probes, single tents, lone xeno-fauna. Each entry 15-40 words.',
+    theme:
+      'Lone wilderness witness entities for alien-landscape scenes — a SINGLE figure / creature / small vehicle placed in midground-back of an alien wilderness as a SCALE PROVER (TINY/SMALL frame proportion). NEVER cities, NEVER capital ships, NEVER megastructures, NEVER architecture. Just lone witnesses in the wild — vac-suit explorers, native creatures, scout drones, ground rovers, hovering probes, single tents, lone xeno-fauna. Each entry 15-40 words.',
     touchpoints: [
       'vac-suit explorer in EVA gear with backpack',
       'native alien creature (sentient biped)',
@@ -1787,7 +1966,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE lone wilderness witness entity, 15-40 words. Format: "ENTITY NAME — visual description of the entity at TINY/SMALL scale in alien-landscape composition". Variety required across all entries: human explorers in EVA gear, native alien creatures (sentient AND fauna), small scout vehicles, single survival objects. NO cities, NO architecture, NO capital ships, NO megastructures, NO crowds, NO multiple figures. ALWAYS a single witness. Output JSON array of strings.`,
   },
   landscape_moment: {
-    theme: 'The candid action moment a lone wilderness witness is captured doing — a small-scale verb that adds story to a landscape still. Each entry is ONE simple visible action: cresting a ridge, hesitating at the canyon edge, kneeling at strange formation, scanning the horizon, approaching alien glow, brushing dust from artifact. NOT epic-scale heroics — small candid moments that show "she/he/it is real and alive in this landscape." Each entry 15-30 words.',
+    theme:
+      'The candid action moment a lone wilderness witness is captured doing — a small-scale verb that adds story to a landscape still. Each entry is ONE simple visible action: cresting a ridge, hesitating at the canyon edge, kneeling at strange formation, scanning the horizon, approaching alien glow, brushing dust from artifact. NOT epic-scale heroics — small candid moments that show "she/he/it is real and alive in this landscape." Each entry 15-30 words.',
     touchpoints: [
       'CRESTING RIDGE — silhouetted as horizon emerges',
       'HESITATING — paused at canyon edge',
@@ -1808,7 +1988,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE simple landscape moment in 15-30 words. Format: "ACTION-VERB-CAP — body position + tool/object". The action is SMALL-SCALE candid (not combat, not heroics) — a witness moment in alien wilderness. Examples: "CRESTING RIDGE — silhouetted figure topping ridge, distant horizon emerging beyond"; "KNEELING AT ARTIFACT — figure low to ground, hand pressed to luminous alien formation". GROUNDED, single moment, readable in first 5 words. Output JSON array of strings.`,
   },
   landscape_deep_distance: {
-    theme: 'The signature deep-distance feature that defines the alien-landscape FAR-back layer. NOT generic "atmospheric haze" — a specific MEGA-FEATURE looming on the horizon that proves the world is alien AND vast. Examples: 10km-tall gas geyser, megaflora silhouette, distant alien herd migration, crashed generation ship overgrown, megafauna walking the horizon, alien archology miniature on far ridge, eclipse arch, falling debris field, gravitational lensing distortion. Each entry 20-50 words.',
+    theme:
+      'The signature deep-distance feature that defines the alien-landscape FAR-back layer. NOT generic "atmospheric haze" — a specific MEGA-FEATURE looming on the horizon that proves the world is alien AND vast. Examples: 10km-tall gas geyser, megaflora silhouette, distant alien herd migration, crashed generation ship overgrown, megafauna walking the horizon, alien archology miniature on far ridge, eclipse arch, falling debris field, gravitational lensing distortion. Each entry 20-50 words.',
     touchpoints: [
       '10-kilometer gas pillar venting cryogenic vapor',
       'megaflora silhouette — 500m trees miniature on horizon',
@@ -1834,7 +2015,8 @@ The bar: each new entry should read as RICHLY and SPECIFICALLY as the exemplars 
     instructions: `Each entry is ONE specific deep-distance signature feature, 20-50 words. Format: "FEATURE NAME — description of what it looks like + sense of distance/scale". Variety: gas geysers, distant herds, crashed wrecks, megafauna, atmospheric phenomena, orbital fragments visible, lensing/cosmic effects. NO generic "alien sky" or "atmospheric haze". Each must be a SPECIFIC visible mega-feature that punches up the far-back layer. Output JSON array of strings.`,
   },
   rugged_male_explorer_outfits: {
-    theme: 'Tactical sci-fi EXPLORER / ROGUE / ASSASSIN outfits for a male character — Destiny Guardian / Destiny 2 Hunter / Mass Effect operative / Halo ODST / Mandalorian protagonist / Cad Bane / Star-Lord / Cowboy Bebop Spike / Han Solo with armor / John Wick in space. Armored cloaks over sealed helms, tactical armor over thermal underlayers, weapon-bristled mercenary kit, weathered cybernetic-augmented operative gear. He is CAPABLE, MYSTERIOUS, stylish-tactical — Destiny Guardian energy.\n\nFULLY CLOTHED RULE — NEVER shirtless, NEVER bare-chested, NEVER exposed torso, NEVER tank top, NEVER sleeveless, NEVER beefcake. Torso is ALWAYS covered in armor / coat / pressure suit / harness.\n\nABSOLUTE BAN — NO Mandalorian (the word) / NO beskar / NO T-visor / NO Boba Fett / NO Star Wars (the words). Flux renders the franchise IP from those tokens. Use generic descriptive language instead (sealed visor / amber HUD faceplate / full-coverage helm / armored cloak with hood).',
+    theme:
+      'Tactical sci-fi EXPLORER / ROGUE / ASSASSIN outfits for a male character — Destiny Guardian / Destiny 2 Hunter / Mass Effect operative / Halo ODST / Mandalorian protagonist / Cad Bane / Star-Lord / Cowboy Bebop Spike / Han Solo with armor / John Wick in space. Armored cloaks over sealed helms, tactical armor over thermal underlayers, weapon-bristled mercenary kit, weathered cybernetic-augmented operative gear. He is CAPABLE, MYSTERIOUS, stylish-tactical — Destiny Guardian energy.\n\nFULLY CLOTHED RULE — NEVER shirtless, NEVER bare-chested, NEVER exposed torso, NEVER tank top, NEVER sleeveless, NEVER beefcake. Torso is ALWAYS covered in armor / coat / pressure suit / harness.\n\nABSOLUTE BAN — NO Mandalorian (the word) / NO beskar / NO T-visor / NO Boba Fett / NO Star Wars (the words). Flux renders the franchise IP from those tokens. Use generic descriptive language instead (sealed visor / amber HUD faceplate / full-coverage helm / armored cloak with hood).',
     touchpoints: [
       'Destiny 2 Guardian Hunter — armored cloak + sealed helm + utility belt + tactical armor',
       'Destiny 2 Guardian Titan — heavy plate armor + helmet + shoulder mantle',
@@ -1895,7 +2077,8 @@ The bar: each entry should read as a Destiny Guardian, Mass Effect operative, Ha
     })(),
   },
   explorer_outfits_female: {
-    theme: 'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
+    theme:
+      'tactical-explorer outfits for female sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Treat the character with the same dignity as a male soldier — full coverage, professional military / explorer kit, no cheesecake.',
     touchpoints: [
       'Halo Spartan armor (full sealed plate)',
       'Mass Effect N7 (sealed tactical suit)',
@@ -1939,7 +2122,8 @@ EXAMPLES of varied entries the pool should contain (use these as flavor anchors,
 Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — distinct visual identity.`,
   },
   architecture_style: {
-    theme: 'distinct architectural style vocabulary for alien cities — each entry names a specific structural language so Flux renders varied architecture instead of defaulting to "cyberpunk spires" every time. Each entry 30-60 words.',
+    theme:
+      'distinct architectural style vocabulary for alien cities — each entry names a specific structural language so Flux renders varied architecture instead of defaulting to "cyberpunk spires" every time. Each entry 30-60 words.',
     touchpoints: [
       'brutalist concrete (Stalinist scale)',
       'biomechanical Giger chitin',
@@ -1965,7 +2149,8 @@ Each entry should feel like a CHARACTER you'd recognize from sci-fi cinema — d
     instructions: `Each entry names a SINGLE distinct architectural style with specific structural language. Format: "STYLE NAME — visual description of forms / materials / textures / scale". Vary across all 100 entries — never repeat a style; each must feel like a different civilization or aesthetic tradition. NO generic "alien architecture" — every entry has a precise style identity.`,
   },
   character_action: {
-    theme: 'Clear simple action verbs for a sci-fi female explorer — what she is DOING right now. Each entry is ONE simple action, no obscure setup, no extra props. The verb leads. Reader sees the action immediately.',
+    theme:
+      'Clear simple action verbs for a sci-fi female explorer — what she is DOING right now. Each entry is ONE simple action, no obscure setup, no extra props. The verb leads. Reader sees the action immediately.',
     touchpoints: [
       'BATTLING — firefight from cover',
       'CLIMBING — three points of contact on alien rock',
@@ -2000,7 +2185,8 @@ Cover all genre categories: combat (battling), exploring (climbing/wading), tink
 NO franchise proper nouns. NO superhero poses. Every action is a working professional doing real work.`,
   },
   starbot_anchor_entity: {
-    theme: 'sci-fi anchor entities for StarBot scenes — what figure / ship / creature populates the scene at the prescribed scale. Each entry 15-40 words describing ONE entity type.',
+    theme:
+      'sci-fi anchor entities for StarBot scenes — what figure / ship / creature populates the scene at the prescribed scale. Each entry 15-40 words describing ONE entity type.',
     touchpoints: [
       'robed wandering explorer',
       'vac-suit scientist (Ad Astra/Interstellar)',
@@ -2026,7 +2212,8 @@ NO franchise proper nouns. NO superhero poses. Every action is a working profess
     instructions: `Each entry describes ONE entity type — a figure, ship, creature, or vehicle that could be a SILHOUETTE / SMALL element in a scene path render. Variety required across all 50 entries: humanoid figures of various professions, ships of various designs, alien creatures of various biologies, vehicles of various scales. NO franchise lookalikes. Each entry is the TYPE not a specific named character.`,
   },
   alien_sky_layer: {
-    theme: 'sci-fi alien sky / overhead atmosphere layers for StarBot. Each entry describes what is OVERHEAD in 15-40 words — the sky layer that completes the scene composition.',
+    theme:
+      'sci-fi alien sky / overhead atmosphere layers for StarBot. Each entry describes what is OVERHEAD in 15-40 words — the sky layer that completes the scene composition.',
     touchpoints: [
       'twin suns at different altitudes',
       'ring-curve overhead (Halo/Niven)',
@@ -2052,7 +2239,8 @@ NO franchise proper nouns. NO superhero poses. Every action is a working profess
     instructions: `Each entry is a complete sky layer description for a sci-fi scene. The sky is the upper third of the frame composition. Vary across all 30 entries: day skies / night skies / dawn / dusk / storm / clear / nebula / orbital structures visible / multiple celestial bodies / weather phenomena. NO franchise proper nouns (don't say "Death Star overhead" — describe it generically).`,
   },
   surprise_element: {
-    theme: 'sci-fi secondary subjects woven into scenes to add visual interest. Each entry describes ONE element that can be placed at midground or deep midground.',
+    theme:
+      'sci-fi secondary subjects woven into scenes to add visual interest. Each entry describes ONE element that can be placed at midground or deep midground.',
     touchpoints: [
       'alien creature watching',
       'fellow explorer at distance',
@@ -2083,7 +2271,8 @@ NO franchise proper nouns. NO superhero poses. Every action is a working profess
     instructions: `Each entry is a single secondary subject that adds story to a scene without overwhelming the primary subject. Format: "ELEMENT NAME — description of what it looks like + where it sits in the scene + atmospheric/story implication". Variety across all 100 entries: creatures, sentient figures, ships, drones, vehicles, artifacts, ruins, distant phenomena, traces of past events. Each must imply a wider world.`,
   },
   explorer_outfits_male: {
-    theme: 'tactical-explorer outfits for male sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Sealed coverage, equipment-laden, professional military / explorer kit, like Master Chief or Aliens colonial marine.',
+    theme:
+      'tactical-explorer outfits for male sci-fi characters — every entry is a complete SEALED ARMORED outfit emphasizing FUNCTION over form. Sealed coverage, equipment-laden, professional military / explorer kit, like Master Chief or Aliens colonial marine.',
     touchpoints: [
       'Halo Spartan armor',
       'Mass Effect N7',
@@ -2109,7 +2298,8 @@ VARIETY MANDATE across all entries — hit each:
 50% of entries include head covering (helmet/hood/visor/mask); 50% head uncovered (hair visible, hood pulled back, helmet held).`,
   },
   female_explorer_hairstyles: {
-    theme: 'sci-fi female hairstyles — functional, helmet-compatible, characterful. Each entry is a hairstyle description in 10-25 words.',
+    theme:
+      'sci-fi female hairstyles — functional, helmet-compatible, characterful. Each entry is a hairstyle description in 10-25 words.',
     touchpoints: [
       'tight low ponytail (EVA-compatible)',
       'shaved sides with top braid',
@@ -2153,7 +2343,8 @@ VARIETY MANDATE across all entries — hit each:
     instructions: `Each entry describes ONE male hairstyle in 10-25 words: cut + length + facial hair (if any) + characterful detail. Variety across cuts, beards, ages, ethnicities, formality. Practical for sci-fi explorers.`,
   },
   female_explorer_accessories: {
-    theme: 'signature accessory / weapon / tool for female sci-fi explorer. Each entry 10-25 words describing ONE accessory she carries visibly.',
+    theme:
+      'signature accessory / weapon / tool for female sci-fi explorer. Each entry 10-25 words describing ONE accessory she carries visibly.',
     touchpoints: [
       'plasma pistol holstered',
       'long-range scanner handheld',
@@ -2197,7 +2388,8 @@ VARIETY MANDATE across all entries — hit each:
     instructions: `Each entry: what + where + signature. Variety across weapons / tools / scanners / mounts. Each distinctive.`,
   },
   alien_planet_biome: {
-    theme: 'alien planetary BIOMES — each entry is ONE distinctive ecological/geological identity used as a SETTING pool for the slot-pool composer. Used in alien-landscape path. Concise but specific — each biome is a 3-5 sentence description Sonnet weaves with other rolled axes.',
+    theme:
+      'alien planetary BIOMES — each entry is ONE distinctive ecological/geological identity used as a SETTING pool for the slot-pool composer. Used in alien-landscape path. Concise but specific — each biome is a 3-5 sentence description Sonnet weaves with other rolled axes.',
     touchpoints: [
       'Dune Arrakis dune sea',
       'Solaris sentient ocean',
@@ -2205,7 +2397,7 @@ VARIETY MANDATE across all entries — hit each:
       'Annihilation Shimmer (color-refracted)',
       'Avatar Pandora bioluminescent forest',
       'Beksinski painted dread plain',
-      "Roadside Picnic Zone (broken physics anomalies)",
+      'Roadside Picnic Zone (broken physics anomalies)',
       'Tatooine binary-sun desert',
       'Hoth glacial polar',
       'Mustafar volcanic obsidian river',
@@ -2219,7 +2411,8 @@ VARIETY MANDATE across all entries — hit each:
   },
   megastructure_setting: {
     format: 'simple',
-    theme: 'SLIM atomic seeds for ICONIC CYBERPUNK BUILDINGS within a bustling sci-fi city — single notable towers featuring distinctive shape + MASSIVE HOLOGRAPHIC ADVERTISEMENTS (often sexy fashion-coded or seductive cyborg/android pitch) + dense neon signage + clear relationship to flying-vehicle traffic. Blade Runner 2049 / Cyberpunk 2077 / Ghost in the Shell aesthetic baked into every entry.',
+    theme:
+      'SLIM atomic seeds for ICONIC CYBERPUNK BUILDINGS within a bustling sci-fi city — single notable towers featuring distinctive shape + MASSIVE HOLOGRAPHIC ADVERTISEMENTS (often sexy fashion-coded or seductive cyborg/android pitch) + dense neon signage + clear relationship to flying-vehicle traffic. Blade Runner 2049 / Cyberpunk 2077 / Ghost in the Shell aesthetic baked into every entry.',
     touchpoints: [],
     instructions: `Write 30 SLIM atomic cyberpunk-building seeds for a sci-fi cityscape. Each entry is ONE short phrase (20-30 words) naming a SINGLE notable building/tower within a cyberpunk megacity, with these elements ALWAYS baked into the seed text:
 
@@ -2254,7 +2447,8 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
   },
 
   megastructures: {
-    theme: 'colossal artificial structures at planet-or-greater scale — orbital rings, Dyson constructs, planetary mantles. Civilization-as-superstructure. NOTE: this recipe builds the LEGACY MEGASTRUCTURES pool (POOLS.MEGASTRUCTURES). The active megastructure path uses MEGASTRUCTURE_SETTING (iconic buildings in cities) — see the megastructure_setting recipe above.',
+    theme:
+      'colossal artificial structures at planet-or-greater scale — orbital rings, Dyson constructs, planetary mantles. Civilization-as-superstructure. NOTE: this recipe builds the LEGACY MEGASTRUCTURES pool (POOLS.MEGASTRUCTURES). The active megastructure path uses MEGASTRUCTURE_SETTING (iconic buildings in cities) — see the megastructure_setting recipe above.',
     touchpoints: [
       'Halo ring (orbital ring world, visible curvature)',
       "Niven's Ringworld",
@@ -2268,7 +2462,8 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
     instructions: `Scale must EXCEED planetary. Visible curvature, atmospheric haze at impossible distances. Scale provers: ships are dots, cities are dots-of-dots. Foreground ALWAYS has something at human-comprehensible scale for the brain to anchor on.`,
   },
   space_opera_scenes: {
-    theme: 'spacecraft scenes — distinctive vessels with strong design DNA, in dramatic cosmic settings. Push HARD away from navy-grey-military and tail-fin-50s-rocket clichés.',
+    theme:
+      'spacecraft scenes — distinctive vessels with strong design DNA, in dramatic cosmic settings. Push HARD away from navy-grey-military and tail-fin-50s-rocket clichés.',
     touchpoints: [
       'Heighliners (Dune crystalline impossibles)',
       'Mass Effect Reaper (squid-organic alien)',
@@ -2284,7 +2479,8 @@ Format: ONE entry per line, 20-30 words each. Distinctive building + holographic
   },
   space_opera_ships: {
     format: 'simple',
-    theme: 'Cool ICONIC sci-fi spaceships with strong recognizable silhouettes and visible functional parts. Mass Effect Normandy / Halo UNSC Pelican / Cyberpunk Edgerunners AV-4 / Cowboy Bebop Bebop / Expanse Rocinante / Star Wars X-wing-class fighters / Star Trek shuttlecraft / Blade Runner Spinner aesthetic — INSPIRED BY, not literal franchise names. Every ship has a clear cockpit + wings/fins + engines + sometimes weapons.',
+    theme:
+      'Cool ICONIC sci-fi spaceships with strong recognizable silhouettes and visible functional parts. Mass Effect Normandy / Halo UNSC Pelican / Cyberpunk Edgerunners AV-4 / Cowboy Bebop Bebop / Expanse Rocinante / Star Wars X-wing-class fighters / Star Trek shuttlecraft / Blade Runner Spinner aesthetic — INSPIRED BY, not literal franchise names. Every ship has a clear cockpit + wings/fins + engines + sometimes weapons.',
     touchpoints: [],
     instructions: `Write 30 SLIM atomic iconic sci-fi spaceship seeds. Each entry: ONE short phrase (20-35 words) naming a single ship + its DISTINCTIVE FUNCTIONAL ANATOMY.
 
@@ -2325,7 +2521,8 @@ Examples:
 Format: ONE entry per line, 20-35 words each. Distinctive ship + clear silhouette + named functional parts. NO franchise proper nouns. NO modern Earth naval. NO steampunk / dieselpunk / brass-and-copper. NO biomech / creature-shaped / dolphin / whale / chitin / wraithbone. NO abstract "vessel with geometric volumes" — every entry must have a CLEAR readable silhouette.`,
   },
   space_opera_setting: {
-    theme: 'DYNAMIC FIGHTER-ACTION SETTINGS — places where starfighters dogfight, recon, chase, or skim. Each entry is one specific action environment with motion-friendly cinematic depth. NO static landscape views. NO ground-level architecture. Pure space + atmospheric action contexts.',
+    theme:
+      'DYNAMIC FIGHTER-ACTION SETTINGS — places where starfighters dogfight, recon, chase, or skim. Each entry is one specific action environment with motion-friendly cinematic depth. NO static landscape views. NO ground-level architecture. Pure space + atmospheric action contexts.',
     touchpoints: [
       'asteroid canyon (rocks at varied scale + tight spaces)',
       'debris field of broken capital wreck (twisted hull fragments)',
@@ -2373,7 +2570,8 @@ Output 25 numbered list entries.`,
   },
   busy_fleet_elements: {
     format: 'simple',
-    theme: 'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews on tethers, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
+    theme:
+      'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews on tethers, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
     touchpoints: [],
     instructions: `Write 30 scene-filling sci-fi space elements that go AROUND the featured spaceship in a busy scene. One sentence each. Detailed, specific, visual — describe count + motion + glowing detail.
 
@@ -2390,7 +2588,8 @@ Output 30 numbered list entries.`,
   },
   battle_dynamics: {
     format: 'simple',
-    theme: 'Action and drama moments that bring a sci-fi space scene alive: weapons firing, shields flaring, hull-strikes sparking, missile contrails streaking, refinery accidents venting, reactor overloads glowing, debris tumbling, drive sections venting plasma.',
+    theme:
+      'Action and drama moments that bring a sci-fi space scene alive: weapons firing, shields flaring, hull-strikes sparking, missile contrails streaking, refinery accidents venting, reactor overloads glowing, debris tumbling, drive sections venting plasma.',
     touchpoints: [],
     instructions: `Write 30 action / drama moments that add visible activity to a sci-fi space scene. One sentence each. Frozen at a loaded instant — visual cues that read in a still frame.
 
@@ -2407,7 +2606,8 @@ Output 30 numbered list entries.`,
   },
   ship_action: {
     format: 'simple',
-    theme: 'What the featured spaceship is doing in this exact frame — posture, motion, drive state, weapons status, hull condition. Verb-led when possible.',
+    theme:
+      'What the featured spaceship is doing in this exact frame — posture, motion, drive state, weapons status, hull condition. Verb-led when possible.',
     touchpoints: [],
     instructions: `Write 30 ship-action descriptions — what the featured sci-fi spaceship is DOING in the scene. One sentence each. Frozen at a loaded instant.
 
@@ -2423,7 +2623,8 @@ Examples:
 Output 30 numbered list entries.`,
   },
   space_opera_story_beat: {
-    theme: 'ACTION NARRATIVE BEATS for fighter-action scenes — the dramatic moment the scene captures. Pursuit / Dogfight / Recon Discovery / Spy Mission Penetration / Wingmate Loss / Breakaway / Last-Stand / Bombing Run / Ambush / Daring Escape. Each entry sets the narrative stakes.',
+    theme:
+      'ACTION NARRATIVE BEATS for fighter-action scenes — the dramatic moment the scene captures. Pursuit / Dogfight / Recon Discovery / Spy Mission Penetration / Wingmate Loss / Breakaway / Last-Stand / Bombing Run / Ambush / Daring Escape. Each entry sets the narrative stakes.',
     touchpoints: [
       'mid-pursuit fighter chase',
       'dogfight in tight formation',
@@ -2470,7 +2671,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_composition: {
-    theme: 'FIGHTER FRAMING / CAMERA PERSPECTIVES — how the camera frames the action. Cockpit POV / wingman view / under-the-keel skim / overhead chase / behind-shoulder / cinematic 3/4 / diving angle / asteroid-gap perspective / etc. Each entry is one specific camera framing rule.',
+    theme:
+      'FIGHTER FRAMING / CAMERA PERSPECTIVES — how the camera frames the action. Cockpit POV / wingman view / under-the-keel skim / overhead chase / behind-shoulder / cinematic 3/4 / diving angle / asteroid-gap perspective / etc. Each entry is one specific camera framing rule.',
     touchpoints: [
       'cockpit POV looking forward through canopy',
       'wingman-view from companion fighter',
@@ -2517,7 +2719,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_lighting: {
-    theme: 'SPACE-ACTION LIGHTING — engine bloom / weapon flash / nebula backlight / hull-strike spark / explosion glow / sun rim-light / planet earthlight / etc. Each entry is one specific lighting situation for fighter-action scenes.',
+    theme:
+      'SPACE-ACTION LIGHTING — engine bloom / weapon flash / nebula backlight / hull-strike spark / explosion glow / sun rim-light / planet earthlight / etc. Each entry is one specific lighting situation for fighter-action scenes.',
     touchpoints: [
       'engine plasma bloom as primary light',
       'weapon-fire flash from forward cannons',
@@ -2565,7 +2768,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_particulate: {
-    theme: 'COSMIC PARTICULATE FOR FIGHTER-ACTION — debris haze, plasma cloud, nebula gas, ice crystals streaming, vapor trails, smoke contrails, atmospheric particle scattering. Adds depth and motion to the scene.',
+    theme:
+      'COSMIC PARTICULATE FOR FIGHTER-ACTION — debris haze, plasma cloud, nebula gas, ice crystals streaming, vapor trails, smoke contrails, atmospheric particle scattering. Adds depth and motion to the scene.',
     touchpoints: [
       'debris haze drifting through frame',
       'plasma cloud from engine wash',
@@ -2612,7 +2816,8 @@ ABSOLUTE BANS:
 Output 20 numbered list entries.`,
   },
   space_opera_emotion: {
-    theme: 'ACTION-MOOD EMOTIONAL DNA for fighter scenes — adrenaline, pursuit-thrill, desperation, defiant heroism, triumph, focused-calm-before-strike, dread of overwhelming force, righteous fury, exhilaration. Each entry is one emotional tone for the scene.',
+    theme:
+      'ACTION-MOOD EMOTIONAL DNA for fighter scenes — adrenaline, pursuit-thrill, desperation, defiant heroism, triumph, focused-calm-before-strike, dread of overwhelming force, righteous fury, exhilaration. Each entry is one emotional tone for the scene.',
     touchpoints: [
       'adrenaline rush mid-dogfight',
       'pursuit-thrill chasing target',
@@ -2659,7 +2864,8 @@ Output 15 numbered list entries.`,
   },
   weather_particulate: {
     format: 'simple',
-    theme: 'Universal atmospheric particulate / weather effects that fill the air in a sci-fi scene — dust, mist, vapor, ash, plasma, aurora, radiation, glitter, etc.',
+    theme:
+      'Universal atmospheric particulate / weather effects that fill the air in a sci-fi scene — dust, mist, vapor, ash, plasma, aurora, radiation, glitter, etc.',
     touchpoints: [],
     instructions: `Write 30 atmospheric particulate / weather effects. Each entry: lowercase descriptive phrase — short body explaining how it fills the air and catches light. One sentence per entry.
 
@@ -2674,7 +2880,8 @@ Avoid duplicating: thick atmospheric haze, wind-driven dust haze, acid-rain fog,
   },
   real_space_subjects: {
     format: 'simple',
-    theme: 'SLIM atomic seeds for photoreal astrophotography — named real astronomical objects, ~15-25 words each. The brief composer layers in scale_provers / weather / surprise_element / story_beat / composition / lighting at render time, and Sonnet weaves it all into the polished multi-wavelength composite prompt. Pool entries provide the SUBJECT IDENTITY only; layering is the axis system\'s job.',
+    theme:
+      "SLIM atomic seeds for photoreal astrophotography — named real astronomical objects, ~15-25 words each. The brief composer layers in scale_provers / weather / surprise_element / story_beat / composition / lighting at render time, and Sonnet weaves it all into the polished multi-wavelength composite prompt. Pool entries provide the SUBJECT IDENTITY only; layering is the axis system's job.",
     touchpoints: [],
     instructions: `Write 30 SLIM atomic astronomical-subject seeds. Each entry is ONE short phrase (15-25 words) naming a real astronomical object + a 1-clause characterization of its distinctive visual signature. NO full scene paragraphs. NO scale-prover spacecraft (that's an axis layer). NO instrument framing language (the medium wrapper handles that). Just: named object + its defining visual feature.
 
@@ -2696,7 +2903,8 @@ Format: ONE entry per line, 15-25 words each. ALL-CAPS or capitalized named obje
   },
   cozy_moment: {
     format: 'simple',
-    theme: 'Small intimate cozy moments visible in a warm sci-fi interior — a steam curl, a turned page, a sleeping pet, a hand reaching for a mug. Conditional 40%-gated layer for cozy-sci-fi-interior path.',
+    theme:
+      'Small intimate cozy moments visible in a warm sci-fi interior — a steam curl, a turned page, a sleeping pet, a hand reaching for a mug. Conditional 40%-gated layer for cozy-sci-fi-interior path.',
     touchpoints: [],
     instructions: `Write 50 small intimate cozy moments — a single tiny action or detail caught freeze-frame in a warm sci-fi interior. Each entry: one sentence describing the specific moment. Sci-fi context still present (the moment happens in a starship galley / generation-ship quarters / hydroponics bay / etc.) but the moment itself is human-scale, intimate, warm.
 
@@ -2711,7 +2919,8 @@ The moment is QUIET — no action set-pieces. No combat, no awe, no epic scale. 
   },
   cosmic_event: {
     format: 'simple',
-    theme: 'Dramatic cosmic events for cosmic-vista scenes — the moment a cosmic phenomenon erupts into ACTION. Conditional 40%-gated drama layer.',
+    theme:
+      'Dramatic cosmic events for cosmic-vista scenes — the moment a cosmic phenomenon erupts into ACTION. Conditional 40%-gated drama layer.',
     touchpoints: [],
     instructions: `Write 30 dramatic cosmic events — the MOMENT a cosmic phenomenon detonates into action. Each one sentence describing what is happening RIGHT NOW in the scene (not "could happen", not "was happening" — the freeze-frame). Pure cosmos, no figures, no ships, no human elements. Hubble / Webb / Villeneuve cosmic horror aesthetic.
 
@@ -2726,7 +2935,8 @@ Format: ALL-CAPS event-name OR descriptive opening — short body. One sentence.
   },
   ritual_moment: {
     format: 'simple',
-    theme: 'Mystic / oracle action moments for cosmic-oracle scenes — channeling cosmic energy, divining starlight, casting sigils, communing with the void.',
+    theme:
+      'Mystic / oracle action moments for cosmic-oracle scenes — channeling cosmic energy, divining starlight, casting sigils, communing with the void.',
     touchpoints: [],
     instructions: `Write 25 mystic action moments — what the cosmic oracle is DOING when ritual energy is active. Each one sentence. Visible glow, sigil, energy thread, or supernatural presence.
 
@@ -2768,7 +2978,8 @@ Avoid duplicating: WIDE CINEMATIC VISTA, EXTREME LOW ANGLE LOOKING UP, AERIAL SW
   },
   scale_provers: {
     format: 'simple',
-    theme: 'Universal visual scale-reference elements — small details that prove an environment is monumentally large.',
+    theme:
+      'Universal visual scale-reference elements — small details that prove an environment is monumentally large.',
     touchpoints: [],
     instructions: `Write 25 visual scale-reference elements. Each entry: lowercase descriptive phrase — short explanation of how this element conveys scale. One sentence per entry.
 
@@ -2782,7 +2993,8 @@ Avoid duplicating: ships as dots, lit windows as honey-grain, figures-as-pinpric
   },
   emotional_dna: {
     format: 'simple',
-    theme: 'Universal sci-fi mood / atmosphere concepts — the EMOTIONAL register a cosmic / sci-fi scene is operating in.',
+    theme:
+      'Universal sci-fi mood / atmosphere concepts — the EMOTIONAL register a cosmic / sci-fi scene is operating in.',
     touchpoints: [],
     instructions: `Write 25 mood / atmosphere concepts. Each entry: ALL-CAPS NAME — short description of the emotional register, the light quality, how the entity / viewer feels. One sentence per entry.
 
@@ -2795,7 +3007,8 @@ Examples:
 Avoid duplicating: AWE, DREAD, MELANCHOLY, SACRED, INDIFFERENT-MEGALOPOLIS, ALIEN-WONDER, FRONTIER-ISOLATION, TRIUMPHANT-DISCOVERY. Invent NEW moods — EUPHORIC-ASCENSION, COSMIC-HOSTILITY, ANCIENT-PATIENCE, NEUROTIC-SUBLIME, TENDER-LONELINESS, EXALTED-VIGIL, etc. Output 25 numbered list entries.`,
   },
   cozy_sci_fi_interiors: {
-    theme: 'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary. Includes private quarters AND cozy social spaces (bars, lounges, observation decks, skybars, viewport lookouts).',
+    theme:
+      'WARM lived-in sci-fi interiors — the OPPOSITE of monumental awe. Personal scale, soft light, intimate moments. A view from inside a quiet sanctuary. Includes private quarters AND cozy social spaces (bars, lounges, observation decks, skybars, viewport lookouts).',
     touchpoints: [
       'Cowboy Bebop Bebop ship interior (lived-in, gritty, warm lamps)',
       'Star Trek Ten Forward lounge (curved viewport, plush seating, soft amber light)',
@@ -2962,7 +3175,12 @@ function parseArray(text) {
   }
   if (current) entries.push(current);
   const cleaned = entries
-    .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+    .map((e) =>
+      e
+        .replace(/^["']|["']$/g, '')
+        .replace(/^[-•*]\s*/, '')
+        .trim()
+    )
     .filter((e) => e.length > 20 && e.length < 1200);
   if (cleaned.length === 0) throw new Error('No numbered entries found in response');
   return cleaned;
@@ -2975,17 +3193,116 @@ function parseArray(text) {
 // sorted alphabetically). Entries with identical signatures are duplicates.
 
 const STOPWORDS = new Set([
-  'the','a','an','and','or','but','with','of','in','on','at','to','for','from',
-  'by','as','is','are','was','were','be','been','being','have','has','had',
-  'this','that','these','those','it','its','they','them','their','her','his',
-  'into','onto','through','across','over','under','near','around','between',
-  'one','two','three','some','any','all','no','not','than','then','also','so',
-  'very','more','most','many','much','each','every','other','another','same',
-  'such','only','own','just','still','here','there','where','when','what','who',
-  'kilometer','kilometers','meter','meters','foot','feet','mile','miles','wide',
-  'tall','long','high','low','large','small','massive','huge','vast','huge',
-  'across','above','below','beside','behind','toward','within','throughout',
-  'meterdiameter','kilometerdiameter','metertall','kilometertall',
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'with',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'from',
+  'by',
+  'as',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'they',
+  'them',
+  'their',
+  'her',
+  'his',
+  'into',
+  'onto',
+  'through',
+  'across',
+  'over',
+  'under',
+  'near',
+  'around',
+  'between',
+  'one',
+  'two',
+  'three',
+  'some',
+  'any',
+  'all',
+  'no',
+  'not',
+  'than',
+  'then',
+  'also',
+  'so',
+  'very',
+  'more',
+  'most',
+  'many',
+  'much',
+  'each',
+  'every',
+  'other',
+  'another',
+  'same',
+  'such',
+  'only',
+  'own',
+  'just',
+  'still',
+  'here',
+  'there',
+  'where',
+  'when',
+  'what',
+  'who',
+  'kilometer',
+  'kilometers',
+  'meter',
+  'meters',
+  'foot',
+  'feet',
+  'mile',
+  'miles',
+  'wide',
+  'tall',
+  'long',
+  'high',
+  'low',
+  'large',
+  'small',
+  'massive',
+  'huge',
+  'vast',
+  'huge',
+  'across',
+  'above',
+  'below',
+  'beside',
+  'behind',
+  'toward',
+  'within',
+  'throughout',
+  'meterdiameter',
+  'kilometerdiameter',
+  'metertall',
+  'kilometertall',
 ]);
 
 function signatureOf(entry) {
@@ -2996,7 +3313,8 @@ function signatureOf(entry) {
   const fgIdx = body.indexOf(' FOREGROUND:');
   if (fgIdx > 0) body = body.slice(0, fgIdx);
   // Tokenize and extract significant content nouns/adjectives
-  const tokens = body.toLowerCase()
+  const tokens = body
+    .toLowerCase()
     .replace(/[^a-z0-9 ]/g, ' ')
     .split(/\s+/)
     .filter((w) => w.length > 4 && !STOPWORDS.has(w))
@@ -3024,7 +3342,11 @@ function dedupe(entries) {
     if (typeof e !== 'string' || e.length < 20) continue;
     const title = titleOf(e);
     if (title && seenTitles.has(title)) {
-      dropped.push({ entry: e.slice(0, 80), duplicateOf: seenTitles.get(title).slice(0, 80), reason: 'title' });
+      dropped.push({
+        entry: e.slice(0, 80),
+        duplicateOf: seenTitles.get(title).slice(0, 80),
+        reason: 'title',
+      });
       continue;
     }
     const sig = signatureOf(e);
@@ -3035,7 +3357,11 @@ function dedupe(entries) {
       continue;
     }
     if (seenSigs.has(sig)) {
-      dropped.push({ entry: e.slice(0, 80), duplicateOf: seenSigs.get(sig).slice(0, 80), reason: 'body' });
+      dropped.push({
+        entry: e.slice(0, 80),
+        duplicateOf: seenSigs.get(sig).slice(0, 80),
+        reason: 'body',
+      });
       continue;
     }
     seenSigs.set(sig, e);
@@ -3062,11 +3388,13 @@ async function generateBatch(batchCount) {
     return [];
   }
   // Strip Rich-Scene-Seed bloat so signatures aren't polluted
-  const stripped = arr.map((e) => {
-    if (typeof e !== 'string') return null;
-    const i = e.indexOf(' FOREGROUND:');
-    return i > 0 ? e.slice(0, i).trim() : e;
-  }).filter(Boolean);
+  const stripped = arr
+    .map((e) => {
+      if (typeof e !== 'string') return null;
+      const i = e.indexOf(' FOREGROUND:');
+      return i > 0 ? e.slice(0, i).trim() : e;
+    })
+    .filter(Boolean);
   console.log(`  • Sonnet returned ${stripped.length} entries in ${elapsed}s`);
   return stripped;
 }
@@ -3075,17 +3403,21 @@ async function generateBatch(batchCount) {
   const outPath = path.resolve(`scripts/bots/dragonbot/seeds/${POOL}.json`);
   let preExisting = [];
   if (fs.existsSync(outPath)) {
-    try { preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8')); } catch {}
+    try {
+      preExisting = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch {}
   }
 
   // Determine final target.
   // --target N → fill up to N via iterative gen+dedup loop
   // --count N → single batch of N (legacy behavior)
-  const finalTarget = TARGET ?? (preExisting.length + COUNT);
+  const finalTarget = TARGET ?? preExisting.length + COUNT;
   const startCount = preExisting.length;
 
   if (TARGET !== null) {
-    console.log(`Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`);
+    console.log(
+      `Pool "${POOL}": ${startCount} → ${finalTarget} (iterative gen+dedup)${DRY ? ' (dry-run)' : ''}`
+    );
   } else {
     console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
   }
@@ -3098,7 +3430,9 @@ async function generateBatch(batchCount) {
     // Smaller batches (15-25) — Sonnet writes faster + ~10K-token responses
     // stay well under fetch timeouts. Overgen by ~50% to absorb dedup losses.
     const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(`\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`);
+    console.log(
+      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+    );
     const fresh = await generateBatch(batchSize);
     if (fresh.length === 0) {
       console.warn('  ⚠ empty Sonnet response — stopping iteration');
@@ -3133,7 +3467,9 @@ async function generateBatch(batchCount) {
     }
   }
 
-  console.log(`\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`);
+  console.log(
+    `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`
+  );
 
   console.log('\nSample (last 2 added):');
   pool.slice(-2).forEach((e, i) => console.log(`\n[${pool.length - 1 + i}] ${e.slice(0, 400)}...`));

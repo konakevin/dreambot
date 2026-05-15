@@ -616,7 +616,6 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above — DO NOT substitute
 Output ONLY the raw 80-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
-
   FEMALE_ADVENTURER: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
@@ -1051,16 +1050,99 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. Do NOT substitute ge
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGONBOT_DARK_REALM: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, scene, architecture, surprise_element, sky_layer, phenomenon } =
+      slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ CURSED ATMOSPHERIC PHENOMENON — render this visibly ━━━
+${phenomenon}
+
+A dark / corrupted / supernatural event woven into the realm — render as a visible focal point. Amplifies the menacing mood.
+
+`
+      : '';
+
+    return `You are a dark-fantasy concept-art painter writing DARK REALM scenes for DragonBot — corrupted wastelands, necromancer kingdoms, fallen empires, cursed lands. STRICT WESTERN HIGH FANTASY — Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo / Sword of Truth / Witcher's-Wild-Hunt visual lineage. Beautiful but MENACING. The land itself feels hostile, wrong, corrupted.
+
+━━━ THE MOOD — NON-NEGOTIABLE ━━━
+MENACING + BEAUTIFUL + HOSTILE + CORRUPTED + OPPRESSIVE. The viewer should feel UNEASE. Not horror-gore, not slasher — DARK FANTASY DREAD. The world is wrong here.
+
+━━━ MOVIE POSTER MANDATE — STACK THE ELEMENTS ━━━
+Every render MUST be a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ visually-arresting elements simultaneously:
+
+  1. **PRIMARY DARK SCENE** — the corrupted landscape at maximum scale (blighted forest / poisoned wetland / ash plain / cursed necropolis / demon-touched volcanic / sundered abyss-edge)
+  2. **ARCHITECTURE ANCHOR** — dark citadel / necromancer tower / bone-throne / cursed shrine / Gothic cathedral / demon-summoning circle, positioned at midground or deep distance
+  3. **CURSED PHENOMENON** — blood rain / ash storm / spectral mist / sickly aurora / blackened sun / eldritch storm / void-tear / nightmare-bird flock, dominating its quadrant
+  4. **SCALE PROVER** — tiny hooded wanderer / cursed knight / lone pilgrim (5-15% of frame max) OR dark wildlife (raven flock / shadow-wolves / corpse-eating crows) OR cursed object (fallen banner / abandoned helm / chained body in the mist)
+
+THINK Diablo-cinematic / Sword-of-Truth-cover / Mordor-establishing-shot — every frame should make the viewer GASP at the DARK BEAUTY.
+
+━━━ TILT DARK + MENACING EVERYWHERE ━━━
+Every quadrant signals "wrong": twisted trees, blackened stone, sickly glow, blood-stained ground, ash-fall, dead silence implied, vines like black veins, rivers running dark. The world IS the threat.
+
+━━━ STRICT WESTERN HIGH FANTASY ━━━
+🚫 NO sci-fi / cosmic / nebulas / sky-whales / floating islands / orbital structures
+🚫 NO modern / industrial architecture (no lighthouses / clocktowers / factories)
+🚫 NO real-world ethnic codes
+🚫 NO gratuitous gore / slasher / explicit horror — DARK FANTASY DREAD only (some bone / fallen helm / blood-tinted river is fine; visceral organ-stew is NOT)
+🚫 NO living dragons in the scene (those are dragon-scene / dragon-lore paths)
+✓ Mordor / Shadowfell / Dark Souls / Bloodborne / Diablo / Witcher's Wild Hunt / Skyrim-Soul-Cairn / Elden Ring's-Caelid / D&D-Avernus / Demon's-Souls visual lineage
+
+━━━ THE DARK REALM SCENE ━━━
+${scene}
+
+━━━ ARCHITECTURE ANCHOR ━━━
+${architecture}
+
+The architecture is fantasy-canon dark: necromancer tower / blood-cathedral / bone-throne hall / cursed obelisk / haunted keep / black-iron fortress / Gothic spire / demon-altar / void-shrine / fallen-empire ruin. Positioned at midground or deep distance.
+
+━━━ SKY OVERHEAD ━━━
+${sky_layer}
+
+The sky is OPPRESSIVE — never blue, never clean. Storm-bruised / ash-fall / blood-red / sickly-green / blackened-sun / void-purple. The sky weighs on the land.
+${phenomenonSection}
+━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or deep midground. Optional tiny figure (hooded wanderer / cursed knight / pilgrim) at 5-15% of frame max — they are UNNERVED, REVERENT, INVESTIGATING, NEVER combat / NEVER action. OR dark wildlife / cursed object.
+
+━━━ LIGHTING (ominous / sickly / volcanic / moonlit / Bloodborne-coded) ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+MULTI-TIER DEPTH MANDATORY:
+• FOREGROUND: tactile wrong detail — blackened stones / fallen banner / dead branches / blood-streaked moss / withered roots
+• MIDGROUND: the dark scene's body — necropolis / ruined fortress / blighted forest / poisoned river — where the architecture anchors
+• DEEP DISTANCE: atmospheric layer — distant ash-clouds / corrupted peaks / horizon of storm / pale-glowing portal
+• SKY: oppressive overhead — storm-bruised / blood-red / ash-fall / blackened-sun / void-purple
+
+Multi-element stacking: scene + architecture + cursed phenomenon (80% gated) + tiny figure scale-prover all in frame. Movie-poster intensity.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "[scene description]" — scene leads], [architecture anchoring at midground / deep distance], [the oppressive sky], [phenomenon if rolled], [surprise element at midground / edge], [lighting and atmospheric detail], [color palette and mood]
+
+DRAMATIC VISUALS: render the EXACT slot-pool details above. Beautiful but MENACING — every frame is a Diablo-cinematic establishing shot.
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   DRAGONBOT_DRAGON_LORE: ({ slots, sharedDNA, vibeDirective }) => {
-    const {
-      lighting,
-      atmosphere,
-      scene,
-      architecture,
-      surprise_element,
-      sky_layer,
-      phenomenon,
-    } = slots;
+    const { lighting, atmosphere, scene, architecture, surprise_element, sky_layer, phenomenon } =
+      slots;
 
     const phenomenonSection = phenomenon
       ? `
@@ -1152,15 +1234,8 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
   },
 
   DRAGONBOT_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
-    const {
-      lighting,
-      atmosphere,
-      biome,
-      architecture,
-      surprise_element,
-      sky_layer,
-      phenomenon,
-    } = slots;
+    const { lighting, atmosphere, biome, architecture, surprise_element, sky_layer, phenomenon } =
+      slots;
 
     const phenomenonSection = phenomenon
       ? `
