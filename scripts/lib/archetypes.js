@@ -281,6 +281,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  GOTHBOT_GOTHIC_ARCHITECTURE: {
+    description:
+      'PATH-BESPOKE — GothBot gothic-architecture path (2026-05-15 bespoke migration). STRUCTURE IS THE HERO with MASSIVE VERTICAL EPIC SCALE — towering, clawing upward, dwarfing everything. Inner dark-magic light glows from within. Ornate architectural detail porn. Two accent layers: accent_creature (80%-gated dark-wildlife) + spice_decoration (100% small atmospheric flourish — vivid moons, lanterns, wisps, sigils). Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls lineage. Exterior-only. 6 path-bespoke axes (structure / architectural_detail pickN:3 / inner_light / accent_creature 80%-gated / spice_decoration / sky_layer) + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['structure', 'architectural_detail', 'inner_light', 'spice_decoration', 'sky_layer'],
+    },
+    pickN: { architectural_detail: 3 },
+    conditionalLayer: { slot: 'accent_creature', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GOTHBOT_GOTHIC_VISTA: {
     description:
       'PATH-BESPOKE — GothBot gothic-vista path (2026-05-15 migration). Sister to dark-landscape but with "LAND IS ALIVE" mandate: every render saturated with dark-wildlife (crows / bats / wolves / fireflies), bioluminescent dark-flora (nightshade / moonflowers / glowing-fungi), structures glowing-from-within (witch-fire windows / candle-towers), and SUPERNATURAL-PRESENCE (fog-moving-wrong / shadow-pools / will-o-wisps). Haunted gorgeous awe-and-dread. NO CHARACTERS. 5 path-bespoke axes (biome / architecture / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',
@@ -488,6 +502,29 @@ const ARCHETYPES = {
     pickN: { scale_provers: 3 },
     conditionalLayer: { slot: 'event', gate: 0.35 },
     framingModes: null,
+  },
+
+  STEAMBOT_STEAMPUNK_WOMAN: {
+    description:
+      'PATH-BESPOKE — SteamBot sexy-steampunk-woman path (2026-05-15 rewrite to canonical character-path shape). Single steampunk WOMAN at 25-40% frame, FULL BODY, in a candid mid-action moment in a Victorian-industrial setting. THE OUTFIT IS THE MAIN SHOW — super ornate, layered, tasteful Victorian opulent couture (Mucha / Klimt / Pre-Raphaelite / BioShock-Infinite Elizabeth lineage). NSFW-clean vocabulary. Sister to DragonBot ARTSY_GIRL and StarBot FEMALE_EXPLORER. 7 character DNA axes (skin/eyes/makeup/hair_color/hairstyle/outfit/accessory) + 3 path-bespoke (persona/landscape/action) + 2 universal (lighting/atmosphere).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'skin',
+        'eyes',
+        'makeup',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['persona', 'landscape', 'action'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
   },
 };
 

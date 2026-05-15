@@ -1233,6 +1233,147 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  GOTHBOT_GOTHIC_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      structure,
+      architectural_detail,
+      inner_light,
+      accent_creature,
+      spice_decoration,
+      sky_layer,
+    } = slots;
+    const details = Array.isArray(architectural_detail)
+      ? architectural_detail
+      : [architectural_detail];
+
+    const accentSection = accent_creature
+      ? `
+━━━ ACCENT CREATURE (dark-wildlife, atmospheric scale-prover) ━━━
+${accent_creature}
+
+A small dark-wildlife accent that adds life without competing with the structure. Renders at midground edge or perched on the architecture itself.
+
+`
+      : '';
+
+    return `You are a gothic-architecture concept-art painter writing STRUCTURE-AS-HERO scenes for GothBot. The gothic building IS the show — fills the frame, ornate detail everywhere, lit from within by dark magic. Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls / Elden-Ring / Van-Helsing visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ STRUCTURE IS THE HERO — ABSOLUTE FIRST RULE ━━━
+The gothic building DOMINATES the frame (80%+ visual weight). The landscape around it SUPPORTS, never competes. NO humans as primary subject. NO interior shots — EXTERIOR ARCHITECTURE only. The viewer's eye lands on the BUILDING first, the architectural details second, the inner-glow third, the surrounding context fourth.
+
+━━━ GRAND MASSIVE SCALE — NON-NEGOTIABLE ━━━
+The structure is VAST and COMPLEX — a full-blown castle / cathedral / fortress with ALL the bells and whistles. Multiple wings, multi-tier curtain walls, central keep, dozens of towers and spires, ornate facades, deep courtyards, sprawling battlements. Like Hogwarts / Minas Tirith / Stormwind / Castlevania-2-Dracula's-castle / Helm's-Deep / Notre-Dame — not a single tall spire-tower, but a SPRAWLING ARCHITECTURAL COMPLEX with massive scope.
+
+Compositional language for massive scale:
+• The structure is COMPLEX — multiple visible wings, sections, towers, courtyards, walls all working together
+• Foreground at the BASE of the structure — cliff-edge / approach-road / lower courtyard / valley-floor / moat
+• Camera angle EYE-LEVEL or LOW-ANGLE looking up/across (never high-angle aerial)
+• Structure fills most of the frame — base near bottom, complex roofline reaching upper third
+• Surrounding context (mountains / forest / cliffs / sea) is BELOW or AROUND the structure
+• Use scale-prover language: "vast multi-wing fortress sprawling across the cliff-top," "the central keep flanked by twin lesser wings spreading wide," "stacked tier-on-tier curtain walls," "the cathedral-complex spreading across the entire ridge"
+
+🚫 NEVER a single needle-thin spire-tower as the whole structure
+🚫 NEVER a slim vertical-only silhouette — combine vertical AND horizontal mass together
+🚫 NEVER a tall narrow lighthouse-style isolation
+
+THINK HOGWARTS-CASTLE establishing-shot / MINAS-TIRITH-from-Pelennor / STORMWIND-cathedral-quarter / CASTLEVANIA-2-DRACULA'S-CASTLE / HELM'S-DEEP-establishing / NOTRE-DAME-with-flying-buttresses-and-towers / CRIMSON-PEAK-MANSION-from-the-approach — the SPRAWLING COMPLEX of architecture with massive scope is the signature.
+
+━━━ INNER DARK-MAGIC LIGHT — MANDATORY ━━━
+The structure is LIT FROM WITHIN — light leaks through windows / rose-windows / cracks / doorways. Source is dark magic / candles / witch-fire / fel-green / sapphire-necromantic / violet-spell / alchemist-gold / amber / blacklight — NEVER sunlight, NEVER exterior illumination as primary. The building feels ALIVE from inside.
+
+━━━ ARCHITECTURAL DETAIL PORN — NON-NEGOTIABLE ━━━
+EVERY SURFACE OF THE STRUCTURE IS OBSESSIVELY ORNATE. Hyper-detailed gothic-horror architecture porn — every wall has carved relief, every window has stone tracery, every cornice has gargoyles, every spire has crockets, every buttress has scrollwork. The building is a fractal of intricate detail at every readable scale. The viewer should want to STUDY every quadrant of the structure for ornament.
+
+Render ALL THREE of these specific architectural flourishes VISIBLY in the frame:
+
+  • DETAIL 1: ${details[0] || ''}
+  • DETAIL 2: ${details[1] || ''}
+  • DETAIL 3: ${details[2] || ''}
+
+PLUS layer additional ornate detail throughout — every surface reads as carved, weathered, intricate:
+• FLYING BUTTRESSES with carved-stone scrollwork
+• ROSE-WINDOWS with intricate tracery
+• POINTED SPIRES with crockets and pinnacles
+• GARGOYLES and GROTESQUES at every corner
+• WROUGHT-IRON gates and weathervanes
+• STONE-ANGEL statuary lining buttresses
+• DRAGON-HEAD water-spouts and bat-motif finials
+• VAULTED ARCHES with carved keystones
+• WEATHERED relief carvings of saints / demons / wyrms
+• IVY and bioluminescent moss creeping along walls
+
+━━━ MOOD — ELEGANT GOTHIC DARKNESS ━━━
+HAUNTING + ALLURING + ORNATE + WEATHERED + ALIVE-FROM-WITHIN. The structure is gorgeous and unsettling. Centuries-old, ruined-but-not-fallen, something inside still breathes. Operatic dark romance. The kind of building that belongs on a Castlevania-game cover, a Crimson-Peak movie poster, a Bloodborne-area-establishing-shot.
+
+━━━ TWILIGHT COLOR — WEAVE MULTIPLE HUES ━━━
+NOT gray-monochrome. NOT red-monochrome. The Nightshade spectrum: violet-twilight skies, emerald-occult witch-fire, sapphire-nocturne deep-blues, rose-dusk horizons, fel-green warlock glow, necro-pale-blue, plus warm accents — candle-amber, torch-orange, forge-ember, alchemist-gold. ONE dominant atmosphere hue + ONE warm accent + ONE cool accent per render.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / cyberpunk / neon
+🚫 NO real-world ethnic codes
+🚫 NO humans as primary subject (accent-only for atmospheric scale)
+🚫 NO red-fog / red-mist / blood-red-stained-glass dominant (palette is purple/violet/blue/green/silver/black with red as ACCENT only)
+🚫 NO blood-moon dominating the sky (~10% max)
+🚫 NO interior shots — EXTERIOR architecture only
+🚫 NO generic "castle silhouette on cliff" — SHOW the architectural detail
+🚫 NO pentagrams / satanic iconography
+🚫 NO cheap gore / NO Jack-Skellington stylization
+✓ Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls / Elden-Ring / Van-Helsing visual lineage
+
+━━━ THE GOTHIC STRUCTURE (hero of the frame, 80%+ visual weight) ━━━
+${structure}
+
+The structure fills the frame at multi-tier depth. Camera angles vary — low-angle looking up at towering spires / high-angle looking down on courtyards / eye-level frontal establishing / over-the-hill approach / across-the-moat / through-gate perspective.
+
+━━━ INNER DARK-MAGIC LIGHT ━━━
+${inner_light}
+
+The glow leaks from windows / rose-windows / cracks / doorways. The structure feels ALIVE from inside.
+
+━━━ TWILIGHT SKY OVERHEAD ━━━
+${sky_layer}
+
+The sky is SATURATED and THEATRICAL. Gothic twilight palette dominant. CRITICAL — the sky must FRAME the structure, never compete with it. Aurora / phenomena should be confined to upper-frame edges, not consume the upper third. Lean toward CLEAN sky backdrops (deep violet, single vivid moon, distant clouds) that let the structure's vertical silhouette dominate.
+${accentSection}━━━ SPICE DECORATION — small atmospheric flourish (mandatory) ━━━
+${spice_decoration}
+
+A SMALL atmospheric flourish — never frame-filling. If the spice is a vivid moon, render it as a focal element behind the structure (one quadrant) but NOT consuming the whole sky. If the spice is an aurora, keep it to a stripe at the upper edge. If the spice is lanterns, place them at the structure's base or along an approach. The spice ADDS character, never competes with the structure's vertical scale.
+
+━━━ LIGHTING (ambient weather lighting outside the structure) ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — STRUCTURE-DOMINATES, MULTI-TIER DEPTH ━━━
+The structure FILLS THE FRAME (80%+ visual weight). Multi-tier depth mandatory:
+• FOREGROUND: closest architectural detail — a carved buttress / gargoyle in profile / wrought-iron gate / weathered statuary / ornamental crenellation
+• MIDGROUND: the structure body with inner-glow visible through windows / rose-windows / doorways
+• DEEP DISTANCE: more of the structure receding / outer towers / supporting wings / one slice of surrounding landscape
+• SKY: dramatic twilight overhead
+
+Camera angle varies but the building DOMINATES. Inner-glow leaks through openings. Ornate gothic detail at every readable scale.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "[gothic structure description]" leading the frame at 80%+ weight], [the three architectural details visible in the frame], [inner-glow leaking through windows / rose-windows / cracks], [accent creature if rolled], [sky overhead], [supporting landscape context briefly], [lighting + atmospheric layer], [color palette + mood]
+
+DRAMATIC VISUALS: the STRUCTURE is the hero. Render the EXACT architectural detail from slots. Inner-glow mandatory. Ornate detail porn. NO humans primary. NO interior shots. STRICT gothic dark-fantasy.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   GOTHBOT_GOTHIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, biome, architecture, surprise_element, sky_layer, phenomenon } =
       slots;
@@ -2764,6 +2905,104 @@ ${vibeDirective.slice(0, 200)}
 Open with the PRIMARY PHENOMENON dominating the frame. Then layer the cosmic environment — secondary astronomical anchors, lighting quality, particulate matter, dust lanes, scale-prover astronomical bodies. ONE haunting detail (impossible geometry / light bending the wrong way / time visibly dilating / a star where one shouldn't be). Painted finish, gallery-grade atmospheric depth, Hubble-photograph realism + Villeneuve cinematography.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**. Just the scene content.`;
+  },
+
+  STEAMBOT_STEAMPUNK_WOMAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      persona,
+      skin,
+      eyes,
+      makeup,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+    } = slots;
+
+    return `You are an Art Nouveau illustration painter writing a CANDID STEAMPUNK SCENE for SteamBot — a single gorgeous WOMAN caught mid-action inside a fully-realized Victorian-industrial world. Mucha + Klimt + Pre-Raphaelite illustration tradition meets BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle production-art. THE OUTFIT IS THE MAIN SHOW. The setting is her STAGE — a specific, lived-in, sock-blowing steampunk world. Solo. Candid. Tasteful. Sock-blowing.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "captain", "engineer", "mechanic", "explorer" or any gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [ethnicity-coded] WOMAN [doing action] in [setting]..." — "woman" comes BEFORE her persona/role. Use she/her throughout.
+
+━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
+The steampunk woman is the MAIN SUBJECT. Her face, the COUTURE OUTFIT, persona, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette. NOT a centered head-portrait. MEDIUM scale where outfit / face / hair / accessory all CLEARLY READABLE. THE OUTFIT IS THE MAIN SHOW — every layer must read.
+
+━━━ THE OUTFIT IS THE MAIN SHOW — NON-NEGOTIABLE ━━━
+Render the COUTURE outfit with OBSESSIVE craftsmanship detail — this is what the viewer is here to see. Victorian opulent couture, super ornate, super layered, tasteful. Multiple visible layers stacked as separate planes (structured bodice + layered skirts + brass-cage crinoline + lace cuffs + embroidered sleeves + opera-length gloves with jeweled cuffs). Every brass clasp, every copper button, every jeweled brooch, every gear medallion, every gold filigree, every velvet panel, every brocade flourish rendered explicitly. The outfit gets the MAJORITY of the prompt word-budget — every visible layer named.
+
+━━━ SOLO CHARACTER ONLY ━━━
+EXACTLY ONE character. No companions, no second figures, no crowds. She is ALONE in her moment.
+
+━━━ TASTEFUL VICTORIAN GLAMOUR — NOT MODERN-SKIN-SHOW ━━━
+She is GORGEOUS, GLAMOROUS, CAPTIVATING — a high-fashion Art Nouveau heroine. Beauty reads through couture craftsmanship, regal posture, painterly gaze, jewel-toned color, ornate hair ornament — NOT through exposed skin or body-focus framing. Pre-Raphaelite muse + Mucha poster + BioShock-Infinite Elizabeth + Howl's-Moving-Castle Sophie. Refined, luminous, aristocratic.
+
+━━━ THE STEAMPUNK SETTING — HER STAGE — BLOW SOCKS OFF ━━━
+${landscape}
+
+This setting is HER WORLD. Render it as a FULLY-REALIZED steampunk environment with depth-on-depth — FOREGROUND tactile detail near her (workbench surface, ship railing, console knobs, alchemy table, pipework she's leaning against) → MIDGROUND her + the immediate environment (the room/space she stands in) → DEEP DISTANCE the wider world (corridor extending back, sky beyond the porthole, factory floor receding, balcony view, conservatory glass roof). Never a flat backdrop. Never decorative-clutter framing of clocks/gears/pipes pasted around her edges — the setting is LIVED IN, FUNCTIONAL, real. Make the viewer want to BE in that room.
+
+━━━ HER PERSONA (her role / energy — informs how she carries herself) ━━━
+${persona}
+
+━━━ HER COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
+A ${skin.split(',')[0]}, with ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory}. Her makeup: ${makeup.split(',')[0]}.
+
+(All eight DNA elements — ethnicity/skin / eyes / makeup / hair color / hairstyle / outfit / accessory / persona — should be discernible in the render. Face fully visible — she's not in a sealed helmet.)
+
+━━━ THE CANDID ACTION — what she is doing RIGHT NOW (caught mid-moment) ━━━
+${action}
+
+GROUNDED — feet planted, body weight visible, captured at a loaded instant of doing the action. She is NOT posing for the camera — the camera caught her mid-task. Hands and body engaged with what she is doing.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Three-quarter angle or side profile so we see her face, body, and ornate outfit. NEVER posing for the camera. NEVER walking head-on toward camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her (object she's interacting with). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the steampunk setting extending into depth with atmospheric haze. The frame is composed like a Mucha poster or BioShock-Infinite key art — character + her world, harmoniously balanced.
+
+━━━ ALLOWED VOCABULARY (use often) ━━━
+glamorous, captivating, luminous, regal, elegant, couture, tailored, structured, romantic, opulent, aristocratic, refined, ornamental, jewel-toned, filigree, brocade, lace overlay, embroidered, velvet, satin, brass detailing, clockwork accents, porcelain complexion, painterly gaze, graceful posture, theatrical, dramatic silhouette, ornate.
+
+━━━ FORBIDDEN VOCABULARY — DO NOT WRITE ANY OF THESE WORDS ━━━
+- sexy, erotic, sensual, seductive, provocative, temptress, lingerie, pinup, pin-up
+- voyeuristic, voyeur, bedroom, boudoir, sultry
+- bustier, décolletage, decolletage, cleavage
+- "strategic cutouts", "lace windows", "see-through", "sheer", "exposure"
+- body-focus terms: hips, thighs, rear, bare, midriff, underboob
+- moisture/heat-on-skin imagery: wet lips, beads of sweat, moisture on skin, humidity beading
+- decorative-cliché framing language: "brass piping at frame edges", "gears at frame edges", "clockwork ornaments framing", "art-nouveau borders" — the setting IS the steampunk world, not a decorative border
+
+Do NOT imply nudity. Do NOT describe body parts — describe the COUTURE that adorns them.
+
+━━━ HARD BANS — COMPOSITION ━━━
+- NO second person in frame — she is ALONE
+- NO tight head-portrait crop — full body, 25-40% frame
+- NO posing-for-camera, NO modeling shot, NO trading-card art
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative clutter framing (clocks/gears/pipes pasted around the edges as decoration)
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING: "a [ethnicity-coded] WOMAN [doing exact action] in [steampunk setting]" — woman comes before persona], [her couture outfit with OBSESSIVE LAYERED material detail — every visible layer + every brass clasp / lace cuff / embroidered sleeve / jeweled brooch], [signature accessory visible], [her face: skin tone + eyes + makeup + hair from DNA slots], [the steampunk setting with depth + atmospheric layers], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[ethnicity-coded woman] [DOING ACTION] in [steampunk setting]". She fills 25-40% of frame, FULL-BODY. The OUTFIT gets the most word-budget — that's where the obsessive material detail lives.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 };
 

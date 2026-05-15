@@ -70,6 +70,13 @@ module.exports = {
   GOTHBOT_GOTHIC_VISTA_PHENOMENON: load('gothbot_gothic_vista_phenomenon'),
   GOTHBOT_GOTHIC_VISTA_SURPRISE_ELEMENT: load('gothbot_gothic_vista_surprise_element'),
   GOTHBOT_GOTHIC_VISTA_SKY: load('gothbot_gothic_vista_sky'),
+  // ─── gothic-architecture path (2026-05-15, bespoke axis migration with STRUCTURE-IS-HERO)
+  GOTHBOT_GOTHIC_ARCHITECTURE_STRUCTURE: load('gothbot_gothic_architecture_structure'),
+  GOTHBOT_GOTHIC_ARCHITECTURE_DETAIL: load('gothbot_gothic_architecture_detail'),
+  GOTHBOT_GOTHIC_ARCHITECTURE_INNER_LIGHT: load('gothbot_gothic_architecture_inner_light'),
+  GOTHBOT_GOTHIC_ARCHITECTURE_ACCENT_CREATURE: load('gothbot_gothic_architecture_accent_creature'),
+  GOTHBOT_GOTHIC_ARCHITECTURE_SPICE: load('gothbot_gothic_architecture_spice'),
+  GOTHBOT_GOTHIC_ARCHITECTURE_SKY: load('gothbot_gothic_architecture_sky'),
   DARK_CREATURES: load('dark_creatures'),
   CASTLEVANIA_CONTEXTS: load('castlevania_contexts'),
   COZY_GOTH_SETTINGS: load('cozy_goth_settings'),

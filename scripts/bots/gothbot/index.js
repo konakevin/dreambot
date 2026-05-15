@@ -111,7 +111,7 @@ module.exports = {
     'vampire-girls-2': 'anime',
     // Scene/landscape paths hardcoded to anime medium for the trial.
     'dark-landscape': 'anime',
-    'gothic-architecture': 'anime',
+    'gothic-architecture': 'gothbot_gothic_print',
     'castlevania-scene': 'anime',
     'cozy-goth': 'anime',
     'gothic-vista': 'anime',
@@ -150,16 +150,23 @@ module.exports = {
       'wallpaper-worthy operatic gothic vampire painting, dramatic theatrical composition, gallery-poster gravity',
     // FaeBot-pattern: empty prefix so the scene leads, not style language.
     painted_gothic_fantasy: blocks.PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY,
+    // gothic-architecture path bespoke (2026-05-15). Empty so the structure
+    // description leads — style language lives in mediumStyles + suffix.
+    gothbot_gothic_print: '',
   },
   promptSuffixByMedium: {
     vampire_portrait:
       'operatic gothic dark-fantasy painting finish, painterly brushwork with bold heavy shadow, gallery-poster gravity, no text no words no watermarks, NOT photoreal NOT cinematic film-still NOT 35mm NOT magazine editorial NOT plastic-skin NOT Halloween costume NOT modern fashion photography',
     painted_gothic_fantasy: blocks.PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY,
+    gothbot_gothic_print:
+      'Castlevania-promotional-art finish, hyper-detailed sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks, NOT photoreal NOT film-still NOT 35mm NOT photo-realistic CGI NOT plain-anime',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
   // This fragment gets injected between promptPrefix and the Sonnet-written scene.
   mediumStyles: {
+    gothbot_gothic_print:
+      'hyper-detailed Castlevania-illustration concept-art, Symphony-of-the-Night promotional-art lineage, Devil-May-Cry environment-art tradition, Bloodborne concept-illustration polish, Berserk-manga Kentaro-Miura ink-detail stylization but painted-not-flat, sharp clean linework, every architectural ornament rendered crisp at every readable scale, theatrical high-contrast lighting, rich tonal depth, high-def gallery-print fidelity, dark gothic-horror action-game promotional-art quality, NOT photoreal NOT film-still NOT 35mm NOT photo-realistic CGI NOT plain-anime NOT shonen NOT moe NOT cute',
     gothic_architecture:
       'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, Castlevania-environment concept-art, moonlit stone and stained-glass atmosphere',
     // Subject-agnostic rewrite — stripped all character/face/makeup/expression
@@ -288,7 +295,7 @@ module.exports = {
       ],
     },
     // Optional: skip two-pass on specific paths
-    skipPaths: ['dark-landscape', 'gothic-vista'],
+    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture'],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
