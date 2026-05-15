@@ -74,11 +74,13 @@ export function BotsHorizontalPager({
     currentIndexRef.current = targetIndex;
   }, [selectedBotId, pages]);
 
-  // Page-driven sync: when a horizontal swipe settles on a new page,
-  // notify the parent so the pill row highlights + scrolls to it. The
-  // handler reference must be STABLE across renders (FlatList rejects
-  // changes to onViewableItemsChanged at runtime), but it needs to read
-  // the LATEST pages + callback, so we wrap them in refs.
+  // Page-driven sync: when a horizontal swipe carries the user past the
+  // halfway point of a new page, notify the parent so the pill row
+  // highlights + scrolls to it. Using onScroll (not onViewableItemsChanged)
+  // because onViewableItemsChanged's 60% visibility threshold made the
+  // pill feel sluggish — it only fires once the swipe is nearly complete.
+  // onScroll at scrollEventThrottle=16 gives 60fps updates during the
+  // gesture, and Math.round on the offset means we flip at the 50% mark.
   const pagesRef = useRef(pages);
   const onSelectedBotChangeRef = useRef(onSelectedBotChange);
   useEffect(() => {
@@ -88,21 +90,33 @@ export function BotsHorizontalPager({
     onSelectedBotChangeRef.current = onSelectedBotChange;
   }, [onSelectedBotChange]);
 
-  const handleViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: { index: number | null }[] }) => {
-      const settled = viewableItems.find((v) => v.index != null);
-      if (!settled || settled.index == null) return;
-      const idx = settled.index;
-      if (idx === currentIndexRef.current) return;
-      currentIndexRef.current = idx;
-      const targetBotId = pagesRef.current[idx]?.botId ?? null;
-      onSelectedBotChangeRef.current(targetBotId);
-    }
-  ).current;
+  // Track last offset so we can flip only in the DIRECTION the user is
+  // actively swiping. Without this, hovering at the 25% threshold zone
+  // makes the pager flip back-and-forth between adjacent pages because
+  // each "threshold" frame triggers a flip in the opposite direction.
+  const lastOffsetRef = useRef(0);
 
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 60,
-  }).current;
+  const handleScroll = useCallback((e: { nativeEvent: { contentOffset: { x: number } } }) => {
+    const offsetX = e.nativeEvent.contentOffset.x;
+    const lastOffset = lastOffsetRef.current;
+    lastOffsetRef.current = offsetX;
+    const fraction = offsetX / SCREEN_WIDTH;
+    const current = currentIndexRef.current;
+    // Forward swipe: flip once fraction has carried 25% past current.
+    // Backward swipe: flip once fraction has carried 25% back from current.
+    // No-motion frames (offsetX === lastOffset) never trigger a flip,
+    // so hovering at the threshold is stable.
+    let next = current;
+    if (offsetX > lastOffset && fraction > current + 0.25) {
+      next = Math.ceil(fraction);
+    } else if (offsetX < lastOffset && fraction < current - 0.25) {
+      next = Math.floor(fraction);
+    }
+    if (next === current) return;
+    currentIndexRef.current = next;
+    const targetBotId = pagesRef.current[next]?.botId ?? null;
+    onSelectedBotChangeRef.current(targetBotId);
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: { item: PageDescriptor }) => (
@@ -132,8 +146,8 @@ export function BotsHorizontalPager({
       showsHorizontalScrollIndicator={false}
       initialScrollIndex={initialIndex}
       getItemLayout={getItemLayout}
-      onViewableItemsChanged={handleViewableItemsChanged}
-      viewabilityConfig={viewabilityConfig}
+      onScroll={handleScroll}
+      scrollEventThrottle={16}
       renderItem={renderItem}
       // Virtualize aggressively — only the visible + adjacent pages mount
       windowSize={3}

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, useDeferredValue } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
@@ -9,7 +9,8 @@ import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
@@ -140,11 +141,30 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((s) => s.user);
+  const queryClient = useQueryClient();
+  const feedSeed = useFeedStore((s) => s.feedSeed);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
   const { data: botUsers } = useBotUsers();
+
+  // Prebuffer the three top-level feeds on mount: warms the TanStack
+  // cache for tab-switch latency, then prefetches the first 5 image bytes
+  // of each via expo-image so the cards render shimmer-free. Fire-and-
+  // forget — best-effort, silent on failure.
+  useEffect(() => {
+    if (!user) return;
+    prefetchDreamFeed(queryClient, 'following', user.id, feedSeed);
+    prefetchDreamFeed(queryClient, 'forYou', user.id, feedSeed);
+    prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
+  }, [user, feedSeed, queryClient]);
+  // activeTab updates synchronously for the pill highlight (instant tap
+  // feedback); useDreamFeed reads the deferred copy so the (expensive)
+  // feed refetch + remount lags behind the pill animation by a frame or
+  // two instead of blocking it. Pill highlight feels snappy.
+  const deferredTab = useDeferredValue(activeTab);
+  const deferredBotId = useDeferredValue(selectedBotId);
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isRefetching } =
-    useDreamFeed(activeTab, activeTab === 'bots' ? selectedBotId : undefined);
+    useDreamFeed(deferredTab, deferredTab === 'bots' ? deferredBotId : undefined);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
