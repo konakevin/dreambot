@@ -2,315 +2,246 @@
 
 ## Session Startup
 
-**Before doing anything else, read this entire file.** You are a senior principal engineer on this project. Jump straight into whatever Kevin needs.
+**Read this entire file before doing anything else.** You are a senior principal engineer on this project. Jump straight into whatever Kevin needs.
 
-Do NOT auto-start the dev environment. Let Kevin know he can run `/dream` to spin up the dev tools.
+Do NOT auto-start the dev environment. Tell Kevin he can run `/dream` to spin up the dev tools.
 
 ---
 
 ## What This App Is
 
-DreamBot is an AI-powered dream image generator for iOS. Users set up a "Vibe Profile" during onboarding (aesthetics, art styles, interests, mood sliders, personal anchors, spirit companion), and the app generates unique AI dreams personalized to their taste. Users can also fuse dreams genetically, twin dreams, set dream wishes, and share/comment/like in a social feed. Dark, high-energy aesthetic. Built for fun and delight.
+DreamBot is an AI-powered dream image generator for iOS. Users build a "Vibe Profile" during onboarding (art styles, aesthetics, mood sliders, personal locations + objects, dream cast photos), and the app generates personalized AI dreams. Dark, high-energy aesthetic. Built for fun and delight.
 
 **Key features:**
 
-- Personality-driven AI image generation via a two-pass prompt engine
-- 7 prompt modes (Dream Me, Chaos, Cinematic, Minimal, Nature, Character, Nostalgia)
-- Photo reimagining (upload → AI transforms while keeping the subject)
-- Re-dream: iteratively feed generated images back through the engine
-- Genetic dream fusion (merge two users' recipes)
-- Dream twinning (create variations)
-- Dream wishes (request specific dream subjects)
-- Nightly automatic dream generation with bot messages
-- Social feed with likes, comments, shares, friend system
-- Sparkle currency (in-app purchases via RevenueCat)
-- Lightweight wordlist-based text moderation (no external API)
+- Personalized AI image generation via Sonnet brief → Flux render pipeline
+- Multiple creation modes (Dream Me, Chaos, Cinematic, Minimal, Nature, Character, Nostalgia, photo restyle, photo reimagine, Dream Like This, custom prompt)
+- Dream Cast — face-swap your real photo (self + plus_one) into stylized dreams
+- Nightly automatic dreams with bot messages from DreamBot
+- 16 image-generation bots posting to a public feed 2× daily
+- Social feed with likes, comments, shares, follows, friends, share-to-friend
+- Sparkle currency (in-app purchases via RevenueCat) + Pro subscription for HQ downloads
+- Lightweight wordlist text moderation (no external API; Flux handles image NSFW)
 
 ---
 
 ## Stack
 
 - **Framework:** React Native + Expo SDK 54, Expo Router v4 (file-based routing)
-- **Styling:** NativeWind v4 (Tailwind CSS) — always use className, never StyleSheet
-- **State:** Zustand (client state), TanStack Query (server/async state)
-- **Backend:** Supabase (Postgres, auth, storage, realtime, Edge Functions)
-- **AI Image Gen:** Replicate API (Flux Dev for text-to-image, Flux Kontext Pro for photo-to-image)
-- **AI Prompt Engine:** Anthropic API (Claude Haiku 4.5) — two-pass concept generator + prompt polisher
-- **Moderation:** Local wordlist filter for text only (no external API). Generated images rely on Flux's built-in safety.
-- **Payments:** RevenueCat (sparkle currency IAP)
-- **Auth:** Supabase Auth (email/password, Google, Apple, Facebook OAuth)
+- **Styling:** NativeWind v4 (Tailwind) preferred for new code; existing `StyleSheet.create` files are fine — match each file's existing style
+- **State:** Zustand (client) + TanStack Query (server/async)
+- **Backend:** Supabase (Postgres, auth, storage, realtime, Edge Functions on Deno)
+- **AI Image Gen:** Replicate (Flux Dev, Flux 1.1 Pro / Pro Ultra, Flux Kontext Pro / Max)
+- **AI Text:** Anthropic Claude Sonnet (briefs) + Haiku (vision, polishing, bot messages)
+- **Payments:** RevenueCat (sparkle IAP + Pro subscription)
+- **Auth:** Supabase Auth (email + Google + Apple + Facebook OAuth)
 - **Animations:** Reanimated 3 + Gesture Handler
-- **Images:** expo-image (not react-native-fast-image)
-- **Language:** TypeScript strict mode — no `any`, no `// @ts-ignore`
+- **Images:** `expo-image` (NEVER React Native `Image`)
+- **Language:** TypeScript strict — no `any`, no `// @ts-ignore`, no `as any` / `as Function` / `as unknown as <type>` to bypass types
 
 ---
 
-## The Vibe Engine — How Dreams Are Generated
+## Generation Architecture (Current)
 
-### Vibe Profile (types/vibeProfile.ts)
+The dream engine has evolved beyond the legacy two-pass `vibeEngine.ts`. Current flow for user-initiated dreams (the `generate-dream` Edge Function):
 
-Every user has a `VibeProfile` (version: 2) with:
+1. **Resolve medium + vibe** from `dream_mediums` / `dream_vibes` DB tables (`_shared/dreamStyles.ts` with caching).
+2. **Resolve cast + dream seeds** — load the user's `dream_cast` rows (self / plus_one photos + descriptions) and `dream_seeds.places[] / things[]` (curated location + object selections).
+3. **Roll the scene** (`_shared/dreamAlgorithm.ts:rollDream()`) — picks one of three composition paths based on context (cast+location, location/object only, cast in random scene). Pulls biome config (`_shared/biomeAxes.ts`) for time/weather/camera/phenomena axes per medium+vibe.
+4. **Detect intent** — `selfInsertDetector` ("put me in...") and `dualActionDetector` (multi-character) route to specialized brief builders (`dualBriefBuilder` for two-person renders).
+5. **Build a Sonnet brief** (`_shared/recipeBuilder.ts` + `sceneEngine.ts`) — structured prompt that includes scene DNA, axes, character slots, medium directive, vibe directive, personal anchors, optional chaos layer.
+6. **Sonnet writes the Flux prompt** (`_shared/llm.ts:callSonnet()`) — short, comma-separated, ~50–90 words. Sanitized (`sanitize.ts`) and post-processed (`promptCompiler.ts:postProcessPrompt()`).
+7. **Flux renders** (`_shared/generateImage.ts`) — model picked per-medium by `modelPicker.ts`, with NSFW retry.
+8. **Face swap** (`_shared/faceSwap.ts` for single, `dualSwapDispatch.ts` → `face-swap-dual` Edge Function for dual) when the medium has `face_swaps=true` and user has cast photos.
+9. **Persist** — upload to Supabase Storage, dedup via `aHashHex()`, insert `uploads` row, log to `ai_generation_log`.
 
-- **aesthetics[]** — cyberpunk, cozy, liminal, dreamy, etc. (20 options, min 3)
-- **art_styles[]** — anime, watercolor, 35mm, oil painting, etc. (19 options, min 2)
-- **interests[]** — nature, space, fantasy, animals, etc. (20 options, min 3)
-- **moods** — 4 bipolar sliders (0-1): peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal
-- **personal_anchors** — free text: places you love, objects you love, eras you vibe with, how your dreams should feel
-- **avoid[]** — things to never include (text, watermarks, etc.)
-- **spirit_companion** — one of 12 creatures (fox, cat, owl, dragon, etc.)
+**Photo restyle path** (`restyle-photo` Edge Function) — separate Kontext-based transformation for "upload photo + pick medium" flow. Uses per-medium `MEDIUM_CONFIGS` in `_shared/photoPrompts.ts`.
 
-### Two-Pass Prompt Engine (lib/vibeEngine.ts)
+**Nightly dreams** (`nightly-dreams` Edge Function, GitHub Actions cron 1am MST + jitter) — same scene engine, runs once per active user. Three composition paths roll 40/30/30: cast+anchor, anchor-only, cast-in-random-scene.
 
-**Pass 1 — Concept Generator:** Haiku receives the user's vibe profile + prompt mode config + weighting rules. It invents a unique "scene angle" (creative constraint) per dream to prevent repetition. Outputs structured JSON concept with: subject, environment, lighting, camera, style, palette, twist, composition, mood.
+**First dream** (`generate-first-dream` Edge Function) — persona-locked medium/vibe picking for guaranteed-banger first-render quality. See `FIRST_DREAM_BANGER_SPEC.md`.
 
-**Pass 2 — Prompt Polisher:** Takes the concept JSON and formats it into an optimized 50-70 word Flux prompt. Comma-separated phrases, starts with art style, ends with quality terms.
+**Async queue + worker** (`dream-queue-worker`, `dream_queue` table) — see Scaling Initiative section below.
 
-**Fallbacks:** If Pass 1 fails (bad JSON), `buildFallbackConcept()` constructs mechanically from arrays. If Pass 2 fails, `buildFallbackFluxPrompt()` concatenates concept fields.
+### Vibe Profile (`types/vibeProfile.ts`)
 
-### 7 Prompt Modes (constants/promptModes.ts)
+Stored as JSONB in `user_recipes.recipe`. Version: 2. Keys:
 
-| Mode      | User/Surprise | Description                   |
-| --------- | ------------- | ----------------------------- |
-| Dream Me  | 70/30         | Personalized to taste         |
-| Chaos     | 30/70         | Wild and unpredictable        |
-| Cinematic | 70/30         | Movie poster vibes            |
-| Minimal   | 80/20         | One subject, one mood         |
-| Nature    | 60/40         | Pure landscape, no characters |
-| Character | 70/30         | Creature or figure focus      |
-| Nostalgia | 80/20         | Warm memories, golden tones   |
+- `aesthetics[]` (vibes — min 3) | `art_styles[]` (mediums — min 2) | `interests[]` (min 3)
+- `moods` — 4 bipolar sliders (peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal)
+- `personal_anchors` — free text: places, objects, eras, dream vibe
+- `avoid[]` | `spirit_companion`
 
-### Photo Reimagining
-
-When user uploads a photo, the same two-pass engine runs with an additional constraint: "KEEP THE MAIN SUBJECT — whatever or whoever is in the photo MUST remain the focus. Reimagine everything AROUND the subject."
-
-### Re-Dream
-
-Users can check "Re-dream this image" to feed a generated dream back into Flux Kontext as input, creating iterative creative chains. Each re-dream gets a fresh scene angle.
+VibeProfile v2 is the only supported format. Legacy v1 `Recipe` engine + migration helper were deleted 2026-04-30. The runtime `isVibeProfile()` type guard lives at `types/vibeProfile.ts`.
 
 ### Personal Anchors
 
-Places, objects, eras, and dream vibe are included in ~40% of dreams (randomly gated per anchor to prevent overuse). Dream vibe (the creative north star) is always included.
-
-### Nightly User Dreams
-
-Every night, each active user receives one personalized dream. The system uses **slotted seed templates** from the `nightly_seeds` DB table (8 pools × 100 seeds each). Three paths roll at 40/30/30:
-
-- **Path 1 (40%):** Cast photo (face swap) + personal location/object/both
-- **Path 2 (30%):** Personal location/object/both, no cast
-- **Path 3 (30%):** Cast photo (face swap) in a completely random scene
-
-The runtime maps the roll to a seed category (`nightly_char`, `nightly_char_loc`, `nightly_obj`, etc.), picks a random seed, fills `${character}/${place}/${thing}` slots with the user's actual data, then feeds to Sonnet + medium directive + vibe. Face swap pastes real photo onto the rendered character for face-swap mediums (self/+1 only, not pets).
-
-See `BOTS.md` for the full architecture, all 8 seed pools, face swap rules, and the database table structure.
-
-### Dual Character Face Swap (Two People in One Scene)
-
-When a user has both self + plus_one cast photos, the nightly engine can render both people in a single scene with both faces swapped. This is a 7-layer system — every layer must align or the render breaks.
-
-**The 7 Layers:**
-
-1. **Composition path** (`_shared/pools/dual_composition.ts`) — 6 camera presets (candid, portrait, cinematic, intimate, environmental, editorial) controlling framing/angle. Prepended to the Flux prompt.
-2. **Action pool** (`_shared/pools/dual_actions.ts`) — 200+ companion poses + 17 partner poses (Sonnet-seeded). Each describes BOTH characters' body language. Rules: side-by-side, stationary, body-only, scene-neutral.
-3. **Flux fragment override** (`FACE_SWAP_FLUX_OVERRIDES` in nightly-dreams) — runtime override of the medium's art style prefix ONLY when face swap is active. Strips stylized character design language, adds face realism.
-4. **Directive override** (same record) — overrides the STYLE GUIDE paragraph Sonnet reads. Must agree with the flux fragment.
-5. **Sonnet brief** (nightly-dreams ~line 657) — structured instructions telling Sonnet how to write the prompt: mandatory face-lock phrase, left/right separation, face realism rule, action injection.
-6. **Post-processing prepend** — composition path's camera string prepended after Sonnet writes.
-7. **Face swap execution** (`dualFaceSwap()`) — crop left 55% → crop right 55% → swap each in parallel → stitch at midpoint. Retries up to 3× before fallback.
-
-**The Recipe for Great Dual Renders:**
-
-- **Flux fragment:** Front-load face realism ("realistic human face with normal sized eyes") BEFORE any style language. Flux early-token weighting makes this critical.
-- **Style separation:** Apply style modifiers to the WORLD, not the characters. "Illustration set in a fairy tale world" NOT "fairy tale animation style." This is the single most important insight.
-- **Explicit negatives:** "NOT cartoon eyes, NOT anime eyes, NOT Disney princess eyes" — weak alone but help as reinforcement.
-- **Eyebrow fix:** "thin subtle eyebrows" in flux fragment + "Do NOT draw thick or prominent eyebrows" in Sonnet brief. Prevents animated character's drawn brows from bleeding through the face swap.
-- **Max tokens:** `isDualFaceSwap ? 300 : 200` — dual prompts need more room or the second character description gets truncated (causes both-male renders).
-- **Medium shot enforcement:** "Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot." — characters too small = face swap can't detect faces.
-- **Three-quarter toward viewer:** "both angled slightly toward the VIEWER, like a candid movie still" — critical for face swap to have a clean face to work with.
-
-**QA Iteration Process (for tuning any medium's face swap):**
-
-1. Run 5 renders with `force_medium` + `force_cast_role: 'dual'`
-2. Grade every image: eye proportions, eyebrows, genders, face integration, swap applied
-3. Identify which LAYER is causing the artifact
-4. Make ONE change to that layer
-5. Deploy, run another 5, grade
-6. Repeat until 3 consecutive 5/5 perfect rounds
-
-**Current FACE_SWAP_FLUX_OVERRIDES:** fairytale, storybook, pencil. The DB `dream_mediums` entries are UNCHANGED — overrides are runtime-only so generic (non-face-swap) renders keep their original style.
-
-### Automated QA feedback loop
-
-Kevin's standing protocol when he says "run an automated QA loop on path X" or "auto-tune path X" — Claude does the **entire** loop without human review. Kevin sets the goal and walks away.
-
-**The loop:**
-
-1. **Tag the run** — every render in this loop is force-posted with a unique caption like `auto-qa: <path-name> R<round>` (e.g., `auto-qa: staggered-depth R3`). Kevin can later filter `uploads.caption` to find them and heart the ones he likes.
-2. **Run a batch of 5** — use `force_*` body params on the relevant Edge Function (typically nightly-dreams) so the path under test fires deterministically. Force-post to feed via `is_posted=true`. Always 5 per round; never larger.
-3. **Pull the renders + prompts back from the DB** — `uploads` row gives `image_url`, `ai_prompt`, `dream_medium`, `dream_vibe`, `output_phash`. Use the Read tool on the JPEG to actually look at each image.
-4. **Self-grade each render** — score 0–5 on the dimensions that matter for the path under test. For dual cast: character placement, face swap landed, face quality (no seams/artifacts), scene quality, overall. Be brutal. 5/5 means you'd ship it. 3/5 means visible problems.
-5. **Identify the failing layer** — composition prepend? Sonnet brief? action pool? medium directive? swap pipeline? Read the prompt to confirm what Sonnet wrote vs what Flux rendered. Pick ONE layer to change.
-6. **Make ONE change** — never multi-variate. One layer per round, so the next round's grade tells you whether that single change helped. Document the change in a memory file (`project_auto_qa_<path>.md`) under a "Round N" heading: what was changed, why, what you expected.
-7. **Deploy + run round N+1** — same 5-render batch, new caption tag (`R<N+1>`).
-8. **Stop conditions:**
-   - **Success:** 3 consecutive rounds where all 5 images grade 4.5+/5 → declare path production-ready, write summary to memory, stop.
-   - **Cap:** 20 rounds max. If still not converging, stop and report the failure mode + best-attempt config.
-   - **User interrupt:** Kevin says stop, you stop.
-9. **Cross-reference with Kevin's hearts** — periodically (every ~5 rounds) query `likes` joined to `uploads` filtered by the auto-qa caption pattern to find which renders Kevin actually hearted. Compare those prompts/configs against the ones you scored highly. Mismatch = your grader is miscalibrated; recalibrate self-grading rubric to match Kevin's taste.
-
-**Memory protocol:** while the loop runs, maintain `memory/project_auto_qa_<path>.md` with:
-- Round-by-round log: what was changed, what improved, what regressed
-- Running config (current prepend / brief / pool entries / hard constraints)
-- "Hearted by Kevin" list — IDs of renders Kevin liked, with their prompts inline so commonalities surface
-- Final production config when the loop converges
-
-**Caption taxonomy** (so it's queryable):
-- `auto-qa: <path> R<N>` — round tag during iteration
-- `auto-qa: <path> FINAL` — after convergence, the production config's representative renders
-
-**Why "automated":** Kevin doesn't grade. Claude grades. Kevin only intervenes by hearting renders that surfaced in his feed — those hearts are the ground-truth signal that calibrates Claude's grader against actual user taste. The loop runs unattended.
-
-**Don't fake-converge.** If 3 rounds in a row score 4.5+ but you suspect your grader is being lenient, run another round with stricter criteria before declaring victory. Better to admit "I can't tell if this is good" than to ship something Kevin will reject.
-
-### Bot Dreams
-
-Bots post 2x daily via GitHub Actions cron. Each bot has curated seed prompts in the `bot_seeds` DB table with `used_at` tracking and auto-regeneration. See `BOTS.md` for the complete bot training process, all 19 active image bots + 2 content bots.
+Places, objects, eras, and dream vibe are gated per anchor (~40% inclusion) to prevent overuse. Dream vibe (the creative north star) is always included.
 
 ### Bot Messages
 
-Each nightly dream gets a short whimsical message from DreamBot via a dedicated Haiku call. The bot has a personality — playful, warm, a little weird. Messages reference the dream's content and occasionally recall past dreams/wishes.
-
-### Legacy Support
-
-VibeProfile v2 is the only supported format. The legacy v1 `Recipe` engine + migration helper were deleted 2026-04-30 after a DB audit confirmed zero remaining v1 users. All `user_recipes.recipe` rows are v2. The runtime `isVibeProfile()` type guard lives at `types/vibeProfile.ts`.
+Each nightly dream gets a short whimsical message from DreamBot via a dedicated Haiku call. Personality-tuned, references the dream content, occasionally recalls past dreams/wishes.
 
 ---
 
-## Sparkle Economy
+## Bot System (16 image-generation bots)
+
+> **STOP — read this before any bot work.** ANY task that touches bot config, path files, pools, seeds, brief composition, archetypes, render quality, or even just *answers a question* about how a specific bot works (DragonBot, GothBot, StarBot, SteamBot, MechBot, DinoBot, BrickBot, BloomBot, ChibiBot, FaeBot, MangaBot, PixelBot, RetroBot, TinyBot, ToyBot, EarthBot) REQUIRES re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain for the bot pipeline — its bar (every render = 10/10 poster-worthy frame), its 8 components of memorable scenes, its per-bot Round-N iteration logs, its cross-bot lessons table, and its failure-mode catalog are how this system stays coherent across 16 bots and dozens of paths. Skipping it produces one-off fixes that contradict prior lessons. **And: UPDATE the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
+
+Bots post 2× daily via GitHub Actions cron through `scripts/generate-bot-dreams.js`. Each bot is a self-contained module under `scripts/bots/<botname>/`:
+
+- **`index.js`** — bot config (username, mediums, vibes, allowedModels, modelByPath, vibesByPath, mediumByPath, mediumStyles, enhancement layer toggles, `rollSharedDNA()` + `buildBrief()` entry points).
+- **`paths/*.js`** — one file per creative path (e.g., `dark-landscape.js`, `goth-closeup.js`). Each path declares either an inline brief or an archetype (`builder.archetype`) consumed by `scripts/lib/brief-composer.js`.
+- **`pools.js`** — bespoke axis pools (lighting, atmosphere, era, accessory, etc.) drawn during `rollSharedDNA()`.
+- **`seeds/*.json`** — generated seed rows that get loaded into the `bot_seeds` DB table by `scripts/generate-bot-seeds.js`.
+- **`paths/legacy/`** — superseded path implementations (DragonBot, StarBot, GothBot have these). Don't edit; reference only.
+
+EarthBot is a stub. All others have full path/pool/seed implementations.
+
+**Shared infrastructure (`scripts/lib/`):**
+
+- `botEngine.js` — orchestrator. `runBot()` rolls path/vibe/medium, fetches directives, calls `bot.rollSharedDNA()` + `bot.buildBrief()`, invokes Sonnet → Flux → upload → DB insert. Standalone (no coupling to `generate-dream`).
+- `brief-composer.js` — archetype-based brief builder for paths using the declarative `builder.archetype` shape.
+- `chaosLayer.js` — perception-distortion layer (geometry, reflection, scale, framing, secondary-light) at ~70% probability. Per-bot config: `chaos: { enabled, skipPaths, allowSubjectChaosPaths }`.
+- `sensoryAnchors.js` — non-visual sensory enhancement (smell, sound, touch, temp, weight, air). Per-bot pools by context (female / male / scene) × channel.
+- `twoPassPolish.js` — Sonnet (~150 words) → Haiku (~65–90 words) compression. Per-bot config: `twoPassPolish: { enabled, conceptWords, polishedWords, polishedWordsByPath, preservePhrasesByPath, skipPaths }`.
+- `modelPicker.js` — intersects `dream_mediums.allowed_models` with `bot.allowedModels` + per-path overrides via `bot.modelByPath`.
+- `seed-generator.js` — auto-regenerates a bot's pool when exhausted (`used_at` lifecycle).
+- `archetype-templates.js` — brief templates extracted from path files for archetype migration parity.
+
+**Bot iteration entry points:**
+
+- `scripts/iter-bot.js` — dev iteration. `--bot, --count, --mode random|mixed|<path>, --vibe, --label, --post, --dry-run`. Default count = **5** and you must `--post` for renders to land in Kevin's feed (`/tmp` only is useless).
+- `scripts/run-bot.js` — single-bot run; fails loud (no swallowed errors, unlike iter-bot).
+- `scripts/generate-bot-dreams.js` — production cron entry; picks unused `bot_seeds`, auto-regenerates when exhausted.
+- `scripts/gen-<bot>-pool.js` — regenerates seed pools for a specific bot.
+
+### Bot scene quality — CRITICAL workflow
+
+`BOT_SCENE_QUALITY_PLAYBOOK.md` is the canonical reference for everything bot-render-quality. **It is not optional reading — re-read it BEFORE proposing any path migration or pool change, and UPDATE it with every new lesson learned (don't wait to be asked).** Building a repeatable cross-bot algorithm is the goal — not one-off fixes.
+
+**The bar:** every bot render must be a 10/10 poster-worthy frame. Not "pretty but empty" — visible story, multi-tier depth, an entity in the scene, genre-coded specificity, material/atmospheric richness. If you wouldn't save it to a folder or screenshot it, the pools need more iteration.
+
+**The 8 components of a memorable scene** (full detail in the playbook): monumental anchor, multi-tier composition (4+ depth layers), scale provers, narrative beat, readable focus, material truth, light drama, emotional DNA.
+
+**Per-bot iteration logs live in the playbook's per-bot sections.** Add Round-N entries as you tune; surface anti-patterns to the cross-bot lessons table at the top so the pattern compounds.
+
+**Bot axis refactor plan** lives at `BOT_AXIS_REFACTOR_PLAN.md` — extracts 6 archetypes + shared composer from hand-written paths. Phase 0 not started.
+
+---
+
+## Sparkle Economy + Pro Subscription
 
 ### Costs
 
-- **1 sparkle** per dream (all types: Dream Me, photo, twin, re-dream, custom prompt)
+- **1 sparkle** per dream (Dream Me, photo, twin, re-dream, custom prompt)
 - **3 sparkles** per fusion
-- **Free:** nightly dreams (server-side), weekly free dream (future)
-- **25 sparkles** welcome bonus on onboarding
+- **Free:** nightly dreams (server-side), first-dream banger (server-side)
+- **25 sparkles** welcome bonus on onboarding completion
 
-### IAP Packs (via RevenueCat)
+### IAP Packs
 
-Product IDs centralized in `constants/sparklePacks.ts`:
+4 sparkle packs (25 / 50 / 100 / 500). Product IDs in `constants/sparklePacks.ts` (source of truth — bundle prefix `com.konakevin.radorbad.sparkles.*`).
 
-- `com.konakevin.radorbad.sparkles.25` → 25 sparkles ($2.99)
-- `com.konakevin.radorbad.sparkles.50` → 50 sparkles ($4.99)
-- `com.konakevin.radorbad.sparkles.100__` → 100 sparkles ($7.99)
-- `com.konakevin.radorbad.sparkles.500` → 500 sparkles ($24.99)
+### Pro Subscription
+
+Long-press save-to-photos for HQ downloads (and other future Pro features). Setup details in `PRO_SUBSCRIPTION_SETUP.md` and `SPARKLE_PAYMENTS_SETUP.md`. Pricing strategy in `SPARKLE_PRICING_STRATEGY.md`.
 
 ### Purchase Flow
 
-App → RevenueCat SDK → Apple payment → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC → balance updated → client refreshes.
+App → RevenueCat SDK → Apple payment → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC (or pro flag flip) → balance/entitlement updated → client refreshes.
 
-**RevenueCat key:** Production iOS key (`appl_`) in `lib/revenuecat.ts`.
-**Webhook secret:** `REVENUECAT_WEBHOOK_SECRET` in Supabase Edge Function secrets.
-
-### Balance Display
-
-Sparkle pill (tappable → sparkle store) on Dream screen pick/reveal/photo headers. "Not enough sparkles" alert with "Get Sparkles" button when balance = 0.
+- RevenueCat key: production iOS in `lib/revenuecat.ts`
+- Webhook secret: `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets)
+- Refund path: `refund-self-moderation` Edge Function refunds sparkle when client-side text moderation rejects a prompt before server invocation.
 
 ---
 
 ## Onboarding (8 steps)
 
-1. **Welcome** — intro screen, "Get Started" CTA
-2. **Mediums** — pick art styles (min 2) from pill grid, fetched from `dream_mediums` DB
-3. **Vibes** — pick aesthetics (min 3) from pill grid, fetched from `dream_vibes` DB
-4. **Mood Sliders** — 4 bipolar sliders (peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal)
-5. **Choose Locations** — curated picker from 63 pre-built location cards. Starter packs, category filters, sticky chips. Min 3, max 10. Stored as `dream_seeds.places[]`.
-6. **Choose Objects** — curated 2-column grid from 58 pre-built object cards. Starter packs, category filters. Min 3, max 10. Stored as `dream_seeds.things[]`.
-7. **Dream Cast** — photo upload for self + plus_one (pet removed). Llama Vision generates descriptions. Relationship picker for +1.
-8. **Reveal** — generate first dream, post it, 25 sparkle welcome, welcome notification
+1. **Welcome** — intro
+2. **Mediums** — pick art styles (min 2) from DB-driven pill grid (`dream_mediums`)
+3. **Vibes** — pick aesthetics (min 3) from DB-driven pill grid (`dream_vibes`)
+4. **Mood Sliders** — 4 bipolar sliders
+5. **Locations** — curated 63 location cards (`location_cards` DB table). Starter packs, category filters. Min 3, max 10. Stored as `dream_seeds.places[]`.
+6. **Objects** — curated 58 object cards (`object_cards`). Min 3, max 10. Stored as `dream_seeds.things[]`.
+7. **Dream Cast** — photo upload for self + plus_one. Llama Vision (`describe-photo` Edge Function) generates descriptions. Relationship picker for +1.
+8. **Reveal** — first-dream banger generation, post, 25-sparkle welcome, welcome notification.
 
-**Key architecture rule:** locations and objects are selected from pre-curated lists with pre-generated essence cards. No free-text input. Every selection maps to a card in the DB with 50 fusion settings (locations) or 20 fusion forms (objects). The dream engine picks randomly from the user's selections — no smart selection logic in the engine.
+**Architecture rule:** locations and objects are selected from pre-curated cards with rich essence data (palette, atmosphere, architecture, light signature, fusion settings, iconic spots). NEVER free-text. The dream engine picks randomly from the user's selections — no smart selection logic in the engine.
 
-Profile saves on first dream generation (not just on post). Welcome notification sent from DreamBot with emojis.
+Profile saves on first dream generation (not just on post).
 
 ---
 
-## Architecture & File Structure
+## File Structure (high-level)
 
 ```
-app/                              # Expo Router (file-based routing)
-  _layout.tsx                     # Root — providers, auth init, push, realtime
-  (auth)/                         # Auth screens (login, signup)
-  (onboarding)/                   # 7-step vibe profile builder
-  (tabs)/                         # Main app — 5 tabs
-    index.tsx                     # Home feed (forYou, following, dreamers)
-    top.tsx                       # Top posts grid with category pills
-    upload.tsx                    # Dream generation screen (modes, custom prompts, re-dream)
-    inbox.tsx                     # Notifications (comments, shares, likes, bot messages)
-    profile.tsx                   # User profile + settings
-  photo/[id].tsx                  # Full-screen dream detail
-  user/[userId].tsx               # Other user profiles
-  fusion.tsx                      # Dream fusion interface
-  sparkleStore.tsx                # Sparkle shop (IAP)
-  comments.tsx                    # Comment thread (legacy route)
-  search.tsx                      # User search (fullscreen)
-  settings.tsx                    # Account settings
+app/                 Expo Router routes
+  (auth)/            login, signup, OAuth
+  (onboarding)/      8-step vibe profile builder
+  (tabs)/            5 tabs: index, top, create, inbox, profile
+  settings/          11 settings sub-screens (advanced-mode, vibes, mood, dream-cast, etc.)
+  dream/             loading, newPost, reveal
+  photo/[id], post/[id], user/[userId]   detail routes
+  comments, dreamLikeThis, sharePost, sparkleStore, proStore, dreamTest
 
-components/
-  DreamCard.tsx                   # Full-screen image card (double-tap, swipe, pinch)
-  FullScreenFeed.tsx              # Vertical scrolling feed container
-  CommentOverlay.tsx              # Inline comment pane (image slides to thumbnail)
-  DreamFamilySheet.tsx            # Twin/fusion overlay (same slide-up pattern)
-  DreamWishBadge.tsx              # Wish status button
-  DreamWishSheet.tsx              # Wish form
-  onboarding/*.tsx                # 7 onboarding step components
+components/          ~44 components: DreamCard, FullScreenFeed, CommentOverlay,
+                     onboarding/*, sheets, bot UI, themed primitives
 
-hooks/                            # TanStack Query hooks (58+ hooks)
-store/                            # Zustand stores (auth, onboarding, feed, fusion, album)
+hooks/               ~48 TanStack Query hooks grouped by domain
+                     (dream, feed, social, sparkles, auth, profile, gestures/)
 
-lib/
-  supabase.ts                     # Supabase client
-  vibeEngine.ts                   # Two-pass concept generator + prompt polisher
-  dreamApi.ts                     # Edge Function client (generateDream, generateFromVibeProfile, etc.)
-  moderation.ts                   # Local wordlist text moderation
-  revenuecat.ts                   # RevenueCat IAP setup
-  dreamPost.ts                    # Insert dream into uploads, pin to feed
-  geneticMerge.ts                 # Genetic recipe fusion
+store/               Zustand stores: auth, dream, onboarding, feed, album, explore
+
+lib/                 Engine glue + utilities
+  supabase.ts        Supabase client (Expo SecureStore for tokens)
+  dreamApi.ts        Edge Function client
+  dreamAlgorithm.ts  Medium/vibe resolution + prompt mode config (mirror of _shared/)
+  dreamPost.ts       Insert dream → uploads, pin to feed
+  revenuecat.ts      RevenueCat SDK setup
+  moderation.ts      Local wordlist text moderation
+  appleAuth/googleAuth/facebookAuth.ts
+  imageLongPress.ts  Pro feature: long-press save-to-photos
+  feedDiversity.ts, feedHelpers.ts, balancedMix.ts
+  curatedBots.ts, botProfiles.ts
 
 types/
-  vibeProfile.ts                  # VibeProfile, MoodAxes, PersonalAnchors, ConceptRecipe, PromptMode + isVibeProfile() guard
-  database.ts                     # Supabase auto-generated DB types
+  vibeProfile.ts     VibeProfile v2 + isVibeProfile() guard
+  database.ts        Supabase auto-generated DB types (regen after schema change)
+  firstDream.ts
 
 constants/
-  promptModes.ts                  # 7 prompt mode configs + tiles
-  sparklePacks.ts                 # IAP product IDs (source of truth)
-  onboarding.ts                   # Aesthetic, art style, interest, companion tile definitions
-  theme.ts                        # Fire palette, dark backgrounds, semantic colors
+  promptModes.ts     7 modes + UI tiles
+  sparklePacks.ts    IAP product IDs (source of truth)
+  proPlan.ts         Pro entitlement features
+  theme.ts           Dark palette
+  onboarding.ts, gestures.ts, grid.ts, layout.ts, mascots.ts, etc.
 
 supabase/
-  migrations/                     # 72+ SQL migrations
-  functions/
-    generate-dream/index.ts       # Main dream generation (two-pass + legacy paths)
-    nightly-dreams/index.ts       # Scheduled Edge Function (3am UTC)
-    revenuecat-webhook/index.ts   # Purchase event handler
-    moderate-content/index.ts     # Content moderation
-    send-push/index.ts            # Expo Push API dispatcher
-    _shared/                      # Shared types + engine for Edge Functions
-      vibeProfile.ts              # Deploy copy of types/vibeProfile.ts
-      vibeEngine.ts               # Deploy copy of lib/vibeEngine.ts
+  migrations/        170 SQL migrations (highest prefix: 171)
+  functions/         13 Edge Functions (full list under "Deploying Edge Functions" below)
+    _shared/         37 shared modules (scene engine, casting, LLM, image,
+                     persistence, face swap, prompt compiler, etc.)
 
 scripts/
-  nightly-dreams.js               # Node.js version for GitHub Actions cron
-  seed.js                         # Main seed (wipes + recreates test data)
+  bots/<botname>/    16 self-contained bots (index.js, paths/, pools.js, seeds/)
+  lib/               Shared bot infra (botEngine, brief-composer, chaos, etc.)
+  generate-bot-dreams.js, iter-bot.js, run-bot.js, nightly-dreams.js (cron)
+  gen-*.js, test-*.js, qa-*.js  pool gen + testing scripts
+
+__tests__/           24 jest test files (~3.8K LOC) — engine, bots, hooks, utils
 ```
 
 ---
 
 ## Adding New Mediums/Styles
 
-A "medium" is an art style (e.g., "Anime", "Gothic", "Twilight"). The `dream_mediums` DB table is the single source of truth for medium identity, but **5 places outside the DB MUST also be updated** or the photo restyle path silently breaks.
+A "medium" is an art style. The `dream_mediums` DB row is the single source of truth, but **the photo restyle path silently breaks if you skip step 2**.
 
-**Critical rule: `key` MUST equal `label.toLowerCase().replace(/ /g, '_')`.** Legacy mismatches caused the big rename of April 2026 — never create new ones.
+**Critical naming rule: `key` MUST equal `label.toLowerCase().replace(/ /g, '_')`.** Legacy mismatches caused the April 2026 rename — don't create new ones.
 
-### Step 1 — Insert DB row in `dream_mediums`
+### Step 1 — Insert DB row
 
 ```sql
 INSERT INTO public.dream_mediums (
@@ -318,42 +249,40 @@ INSERT INTO public.dream_mediums (
   is_active, is_bot_only, is_character_only, face_swaps, character_render_mode,
   sort_order
 ) VALUES (
-  'newmedium', 'NewMedium',                       -- key MUST match snake_case label
+  'newmedium', 'NewMedium',
   '...tight ~120-150 word directive...',
   '...compact comma-separated flux phrase...',
   true, false, false, false, 'natural', 99
 );
 ```
 
-**Directive rules** (all learned from real bugs):
-- **Cap at ~120-150 words** — long directives dilute the user's subject and hamper Sonnet creativity.
-- **Front-load identity rules** (gender preservation, no horns, no Jack Skellington bans).
-- **Avoid horns/demons** as defaults — AI gravitates there. Push for varied accessories (hair, hats, masks, jewelry, tattoos, scars).
-- **Avoid female-coded language** if the medium should render any gender: ban "shojo", "gowns", "veils", "delicate jewelry" — they skew Flux/Kontext feminine. Use neutral terms or split by "if male: X / if female: Y".
-- **No camera/composition language** — conflicts with user photos.
+**Directive rules** (all from real bugs):
 
-**Classification flag meanings (DB columns that exist today):**
+- Cap at ~120–150 words. Long directives dilute the user's subject and hamper Sonnet creativity.
+- Front-load identity rules (gender preservation, no horns, no Jack Skellington bans).
+- Avoid horns/demons defaults — Flux gravitates there. Push for varied accessories (hair, hats, masks, jewelry, tattoos, scars).
+- Avoid female-coded language for any-gender mediums: ban "shojo", "gowns", "veils", "delicate jewelry". Use neutral terms or split "if male: X / if female: Y".
+- No camera/composition language — conflicts with user photos.
+
+**Active classification flags:**
 
 | Flag | Effect |
 |---|---|
-| `is_active` | Visible in user picker (mediums screen). `false` hides it but engine can still resolve. |
-| `is_bot_only` | Set with `is_active=false` for bot-only mediums (resolver finds them, picker doesn't show them). |
+| `is_active` | Visible in user picker. `false` hides but engine can still resolve. |
+| `is_bot_only` | Pair with `is_active=false` so picker hides but resolver finds it. |
 | `is_character_only` | Always uses character composition path (LEGO, Claymation, Vinyl). |
 | `face_swaps` | Photo path will face-swap from user's cast thumb. |
-| `character_render_mode` | `'natural'` = face-swap onto stylized rendering. `'embodied'` = medium IS the body (LEGO Minifig). |
+| `character_render_mode` | `'natural'` = swap onto stylized rendering. `'embodied'` = medium IS the body (LEGO Minifig). |
 
-**Flags CLAUDE.md used to claim existed but DON'T:**
+**Flags that don't exist (despite older docs):** `is_scene_only`, `nightly_skip`. The only hardcoded medium classification today is `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `nightly-dreams/index.ts:216`. To ban another medium from nightly, add it there OR ship the `nightly_skip` column refactor in `memory/project_medium_flags_audit.md`.
 
-- `is_scene_only` — never been a column. Currently no way to enforce "render scene-only, never include a character" at the algorithm level. See `memory/project_medium_flags_audit.md` for the open work to add this.
-- `nightly_skip` — never been a column. Today there's a single inline `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `nightly-dreams/index.ts:216`. Same memory file covers replacing this with a column.
+### Step 2 — `_shared/photoPrompts.ts` MEDIUM_CONFIGS (CRITICAL — never skip)
 
-### Step 2 — `supabase/functions/_shared/photoPrompts.ts` MEDIUM_CONFIGS (CRITICAL — never skip)
-
-**This is the most-forgotten step and causes the worst bugs.** Without an entry, the photo restyle path falls through to a generic 1-liner (`generate-dream/index.ts:~943`) that ignores the directive entirely. Result: zero gender preservation, Kontext defaults to "young woman in dress" regardless of subject. (Twilight Apr 2026.)
+Without an entry, photo restyle falls through to a generic 1-liner that ignores the directive entirely → zero gender preservation, Kontext defaults to "young woman in dress" regardless of subject (Twilight April 2026).
 
 ```typescript
 newmedium: {
-  model: 'kontext-max',  // 'flux-dev' only for full rebuild like LEGO
+  model: 'kontext-max',  // 'flux-dev' for full rebuild like LEGO
   buildPrompt: (_photo, vibe, hint) =>
     `COMPLETELY transform this photo into [style description].
 
@@ -366,36 +295,26 @@ ${vibe.slice(0, 200)}${hint ? `\n${hint}` : ''}`,
 },
 ```
 
-**Required elements in every photo config:**
-1. `COMPLETELY transform this photo into [X]` opening
-2. CRITICAL identity preservation block with explicit gender lock
-3. Element-by-element transformation rules (skin, hair, clothing, background, lighting)
-4. Mood via "Express the mood through X and Y: [vibe]" — never just append vibe at the end
-5. `Portrait 9:16`
-6. Hint inclusion: `${hint ? '\n' + hint : ''}`
+**Required elements:** `COMPLETELY transform` opener, identity/gender lock, element-by-element rules, `Express the mood through X and Y: [vibe]` (never just append vibe), `Portrait 9:16`, hint inclusion.
 
-**After adding, grep the file for the key to confirm there are no duplicates.** Duplicate keys silently let the LATER definition win — caused Claymation to render as Sack Boy and Neon to render as cyberpunk cybernetics in Apr 2026.
+**After adding, grep the file for the key to confirm no duplicates.** Duplicate keys silently let the LATER definition win (Claymation rendered as Sack Boy, Neon as cyberpunk cybernetics, April 2026).
 
-### Step 3 — (deprecated)
+### Step 3 — `__tests__/lib/photoPrompts.test.ts`
 
-This step used to require mirroring `SCENE_ONLY_MEDIUMS` / `CHARACTER_MEDIUMS` / `NIGHTLY_SKIP_MEDIUMS` Sets across `_shared/dreamAlgorithm.ts`, `lib/dreamAlgorithm.ts`, and `scripts/nightly-dreams.js`. **None of those Sets exist anymore** — the algorithm reads `medium.isCharacterOnly`, `medium.faceSwaps`, and `medium.characterRenderMode` straight from the resolver. Adding a new medium = step 1 (DB row) and step 2 (photoPrompts.ts).
+Add the new key to the `ACTIVE_MEDIUMS` list. The test fails if you forget step 2.
 
-The one still-hardcoded medium classification is `NIGHTLY_BANNED_MEDIUMS = new Set(['photography'])` at `supabase/functions/nightly-dreams/index.ts:216`. If you need to ban another medium from nightly, add it there OR (preferred) ship the `nightly_skip` column refactor described in `memory/project_medium_flags_audit.md`.
+### Step 4 — Bot config (optional)
 
-### Step 4 — Bot config (`scripts/generate-bot-dreams.js`)
-
-If a bot should post in this style, add the new key to that bot's `mediums` array:
-```javascript
-gothbot: { mediums: ['gothic', 'twilight', 'anime', 'canvas'], ... },
-```
+If a bot should post in this style, add the key to that bot's `mediums` array in `scripts/bots/<botname>/index.js`.
 
 ### Step 5 — Deploy
 
 ```bash
 supabase functions deploy generate-dream --no-verify-jwt
+supabase functions deploy restyle-photo --no-verify-jwt
 ```
 
-### Verification (run after every add)
+### Verification
 
 ```sql
 -- Should return 0 rows
@@ -403,231 +322,219 @@ SELECT key, label FROM dream_mediums
 WHERE is_active = true AND key != lower(replace(label, ' ', '_'));
 ```
 
-**Smoke test all 5 user paths** before declaring done:
+**Smoke test all 5 user paths:**
 1. Create + medium + no hint + no photo → renders a scene that showcases the medium
-2. Create + medium + text prompt → renders the user's subject in this medium's style
-3. Create + medium + self-reference text ("put me in...") → user appears as themselves with correct gender
-4. Create + medium + photo upload (restyle) → renders YOU in the medium without gender swap
+2. Create + medium + text prompt → user's subject in this medium
+3. Create + medium + self-reference text ("put me in...") → user appears with correct gender
+4. Create + medium + photo upload (restyle) → renders YOU in the medium, no gender swap
 5. Create + medium + photo + prompt → reimagines using both inputs
 
-If any path renders generic / wrong gender → you missed step 2 (photoPrompts.ts).
+If any path renders generic/wrong gender → you missed step 2.
 
-### What does NOT need updating (auto-derived)
+### What does NOT need updating
 
-- **UI tiles** — `MediumVibeSelector` queries `dream_mediums` directly via the `get_dream_mediums` RPC. New active mediums appear automatically.
-- **`ArtStyle` type** — defined as `string`, no union to maintain.
-- **`constants/dreamEngine.ts`** — gutted; medium data lives only in the DB.
-- **`supabase/functions/_shared/dreamEngine.ts`** — gutted; only helper functions remain.
-- **Tests** — iterate exported sets, pick up changes automatically.
+UI tiles (`MediumVibeSelector` queries `get_dream_mediums` RPC), `ArtStyle` type (string, no union), `constants/dreamEngine.ts` (gutted; DB-only).
 
-### Edge Function Gotcha: No Optional Chaining in Top-Level Code
+### Edge Function Gotcha — No Optional Chaining in Top-Level Code
 
-**NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts`. Deno Edge runtime crashes (BOOT_ERROR). Use explicit null checks instead:
+**NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts`. Deno Edge runtime crashes (BOOT_ERROR). Use explicit null checks:
+
 ```typescript
-// BAD — causes BOOT_ERROR:
+// BAD — BOOT_ERROR:
 export const X = arr.filter(m => m.foo?.length);
-
 // GOOD:
 export const X = arr.filter(m => m.foo && m.foo.length > 0);
 ```
 
 ---
 
-## 3rd Party Services
+## Dual Character Face Swap
 
-### Supabase (Backend)
+When a user has both self + plus_one cast photos, the engine renders both in a single scene with both faces swapped. **7-layer system — every layer must align or the render breaks.** Full QA history in commit log.
 
-- **Client:** `lib/supabase.ts`, auth tokens in Expo SecureStore
-- **Env vars:** `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`
-- **Key RPCs:** `get_feed`, `get_comments`, `spend_sparkles`, `grant_sparkles`
+**The 7 layers:**
+1. **Composition path** — 6 camera presets (candid, portrait, cinematic, environmental, editorial; `intimate` was removed) controlling framing/angle. Prepended to the Flux prompt.
+2. **Action pool** — Sonnet-seeded poses describing BOTH characters' body language. Rules: side-by-side, stationary, body-only, scene-neutral.
+3. **Flux fragment override** (`_shared/faceSwapFluxOverrides.ts`) — runtime override of medium's art-style prefix ONLY when face swap is active. Strips stylized character design language, adds face realism.
+4. **Directive override** — overrides the STYLE GUIDE paragraph Sonnet reads. Must agree with the flux fragment.
+5. **Sonnet brief** (`_shared/dualBriefBuilder.ts`) — mandatory face-lock phrase, left/right separation, face realism rule, action injection.
+6. **Post-processing prepend** — composition path's camera string prepended after Sonnet writes.
+7. **Face swap execution** (`dualFaceSwap()` via `dualSwapDispatch` → `face-swap-dual` Edge Function) — crop left 55% → crop right 55% → swap each in parallel → stitch at midpoint. Retries 3× before fallback.
 
-### Replicate (AI Image Generation)
+**Recipe for great dual renders:**
+- Front-load face realism in flux fragment BEFORE any style language (Flux early-token weighting).
+- **Style separation:** apply style modifiers to the WORLD, not the characters. "Illustration set in a fairy tale world" NOT "fairy tale animation style." Single most important insight.
+- Explicit negatives ("NOT cartoon eyes, NOT anime eyes") — weak alone, useful as reinforcement.
+- Eyebrow fix: "thin subtle eyebrows" in flux fragment + "Do NOT draw thick or prominent eyebrows" in Sonnet brief.
+- `isDualFaceSwap ? 300 : 200` max tokens — dual prompts need room or second character truncates (both-male renders).
+- Medium shot, waist-up, filling the frame (small characters = face swap can't detect faces).
+- Three-quarter toward viewer — clean face for swap.
 
-- **Flux Dev** — text-to-image, ~$0.03/image
-- **Flux Kontext Pro** — photo-to-image reimagining
-- All generation goes through `generate-dream` Edge Function
+**Current FACE_SWAP_FLUX_OVERRIDES:** fairytale, storybook, pencil. DB `dream_mediums` rows are unchanged — overrides are runtime-only so non-face-swap renders keep their original style.
 
-### Anthropic (Prompt Engine)
+### Automated QA feedback loop
 
-- **Haiku 4.5** — concept generator (Pass 1) + prompt polisher (Pass 2) + bot messages
-- ~$0.002 per dream for both passes
-- All calls server-side in Edge Functions
+When Kevin says "run an automated QA loop on path X" — Claude does the **entire** loop without human review. Detailed protocol:
 
-### RevenueCat (In-App Purchases)
+1. **Tag the run** — every render force-posted with `auto-qa: <path-name> R<round>` caption. Kevin filters and hearts later.
+2. **Run a batch of 5** — use `force_*` body params on the relevant Edge Function. `is_posted=true`. Always 5 per round.
+3. **Pull renders from DB** — `uploads.image_url, ai_prompt, dream_medium, dream_vibe, output_phash`. Use Read tool on the JPEG to actually look.
+4. **Self-grade 0–5** on dimensions that matter for the path. 5/5 = ship it. 3/5 = visible problems. Be brutal.
+5. **Identify the failing layer** — composition prepend? Sonnet brief? action pool? medium directive? swap pipeline? Pick ONE.
+6. **Make ONE change** — never multi-variate. Document in `memory/project_auto_qa_<path>.md` under "Round N".
+7. **Deploy + run round N+1**.
+8. **Stop conditions:** 3 consecutive 4.5+/5 rounds → production-ready, summary to memory; 20 rounds cap; Kevin says stop.
+9. **Cross-reference Kevin's hearts** every ~5 rounds — query `likes` joined to `uploads` filtered by caption pattern. Mismatch with your scoring = grader miscalibrated; recalibrate.
 
-- Production iOS key in `lib/revenuecat.ts`
-- Webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC
-- Product IDs in `constants/sparklePacks.ts`
+**Memory protocol:** `memory/project_auto_qa_<path>.md` with round-by-round log, running config, hearted IDs + their prompts, final config when converged.
 
-### Moderation (Local Wordlist)
+**Caption taxonomy:** `auto-qa: <path> R<N>` during iteration; `auto-qa: <path> FINAL` after convergence.
 
-- Text-only moderation via `lib/moderation.ts` — small wordlist of slurs
-- No external API, no per-call cost
-- Generated images rely on Flux Dev's built-in NSFW filters
-- Used by: useAddComment, useDreamWish, settings (username), signup
+**Don't fake-converge.** If 3 rounds score 4.5+ but you suspect leniency, run another with stricter criteria. "I can't tell if this is good" beats shipping something Kevin will reject.
 
 ---
 
-## Database Schema (Key Tables)
+## Database (170 migrations, key tables)
 
 ### Core
 
-- **`users`** — id, email, username, avatar_url, sparkle_balance, last_active_at
-- **`uploads`** — id, user_id, image_url, ai_prompt, bot_message, from_wish, is_ai_generated, is_approved, comment_count, like_count
-- **`user_recipes`** — user_id, recipe (JSONB — VibeProfile or legacy Recipe), onboarding_completed, ai_enabled, dream_wish
+- **`users`** — id, email, username, avatar_url, sparkle_balance, pro_subscription, first_dream_completed_at, last_active_at
+- **`uploads`** — id, user_id, image_url, ai_prompt, caption, dream_medium, dream_vibe, is_ai_generated, is_posted, is_first_dream, comment_count, like_count, created_at
+- **`user_recipes`** — user_id (PK), recipe (JSONB VibeProfile v2), onboarding_completed, ai_enabled, dream_wish, created_at, updated_at
+- **`push_tokens`** — Expo push tokens
+
+### Dream system
+
+- **`dream_mediums`** — art style definitions (key, label, directive, flux_fragment, kontext_directive, is_active, is_bot_only, is_character_only, face_swaps, character_render_mode, sort_order, allowed_models)
+- **`dream_vibes`** — vibe definitions (key, label, directive, sort_order, is_active)
+- **`dream_cast`** — user's cast photos (cast_role, photo_url, description, relationship)
+- **`dream_seeds`** — user's selected places + things (text[])
+- **`location_cards`** — 63 curated locations (palette, atmosphere, architecture, light_signature, texture_details, cinematic_phrases, fusion_settings, biome_config, is_approved)
+- **`location_iconic_spots`** — per-location signature spots
+- **`object_cards`** — 58 curated objects (visual_forms, material_textures, signature_details, scale_contexts, role_options, soft_presence_forms, faceswap_forbidden)
+- **`bot_seeds`** — bot-specific seeds with `used_at` lifecycle
+- **`nightly_seeds`** — 8 pools × 100 slotted templates for user nightly dreams. Permanent, no usage tracking.
+- **`dream_templates`** — LEGACY (not read by any code, will be dropped)
+
+### Generation infrastructure
+
+- **`ai_generation_log`** — audit trail (recipe_snapshot, rolled_axes, enhanced_prompt, model_used, cost_cents, status)
+- **`ai_generation_budget`** — daily per-user cost
+- **`dream_jobs`** — legacy in-flight tracking (status: processing/done/failed/nsfw)
+- **`dream_queue`** — async queue (queued → in_progress → completed/failed → dead_letter; SELECT FOR UPDATE SKIP LOCKED on pending index)
 
 ### Social
 
-- **`likes`**, **`favorites`**, **`follows`**, **`friendships`**, **`comments`**, **`post_shares`**, **`blocked_users`**
+- `likes`, `favorites`, `follows`, `follow_requests`, `friendships`, `comments`, `comment_likes`, `post_shares`, `post_impressions`, `blocked_users`, `reports`
 
-### System
+### Notifications + economy
 
-- **`notifications`** — recipient_id, actor_id, type, body (prefixed: dream:/wish:/welcome:)
-- **`sparkle_transactions`** — user_id, amount, reason (spend/grant audit log)
-- **`ai_generation_log`** — recipe_snapshot, enhanced_prompt, model_used, cost_cents
-- **`ai_generation_budget`** — daily per-user generation tracking
+- **`notifications`** — recipient_id, actor_id, type (`dream:*`, `wish:*`, `welcome:*`, etc.), upload_id, comment_id, body, is_read
+- **`sparkle_transactions`** — spend/grant audit log
+
+### Notable RPCs
+
+`get_feed`, `get_friends_feed`, `get_following_feed`, `get_inbox`, `get_comments`, `get_public_profile`, `spend_sparkles`, `grant_sparkles`, `refund_sparkles` (idempotent), `record_impression`, `get_dream_mediums`, `get_dream_vibes`, `get_bot_thumbnails`, `get_vibe_stats`, `approve_follow_request`, `block_user`, `finalize_nightly_upload`, `delete_own_account`, `admin_delete_upload`, `claim_dream_queue_job`.
 
 ---
 
 ## Design System
 
-### Colors
+- **Background:** `#0F0F1A` | **Surface:** `#1A1A2E` | **Border:** `#2D2D44`
+- **Text primary:** `#FFFFFF` | **Text secondary:** `#9CA3AF`
+- **Accent (purple):** `colors.accent` | **Like (red):** `colors.like`
 
-- Background: `#0F0F1A` | Surface: `#1A1A2E` | Border: `#2D2D44`
-- Accent (purple): `colors.accent` | Like (red): `colors.like`
-- Text primary: `#FFFFFF` | Text secondary: `#9CA3AF`
-
-### Key Rules
-
-1. **Styling:** NativeWind `className` is preferred for new components, but the existing codebase uses `StyleSheet.create` extensively (53+ files) — both are acceptable. Don't bulk-migrate one to the other; match the file's existing style.
-2. Never use `any` type
-3. Always handle loading and error states in UI
-4. Supabase queries go in TanStack Query hooks inside `hooks/`
-5. Keep screens thin — logic in hooks, UI in components
-6. Dark-mode only — no light theme
-7. Use `expo-image` not React Native's Image
+**Rules:**
+1. NativeWind `className` preferred for new components; existing `StyleSheet.create` (53+ files) is fine — match the file's existing style. Don't bulk-migrate.
+2. Never `any`.
+3. Always handle loading and error states in UI.
+4. Supabase queries go in TanStack Query hooks under `hooks/`.
+5. Keep screens thin — logic in hooks, UI in components.
+6. Dark-mode only — no light theme.
+7. `expo-image`, never RN `Image`.
 
 ---
 
 ## GitHub & CI/CD
 
-**Repo:** `konakevin/dreambot` on GitHub. `main` is the trunk.
+**Repo:** `konakevin/dreambot`. `main` is the trunk.
 
-**Branching policy (always — no exceptions):**
-1. Before starting any task, check out a fresh feature branch off latest `main`. Name it after the task (e.g., `dlt-photo-dual-cast`, `medium-flags-refactor`).
-2. Commit work onto that branch as you go. Use fixup commits (`git commit --fixup=<sha>`) and `git rebase -i --autosquash` to keep history clean.
-3. When the task is fully ready (tests pass, smoke tested, Kevin signs off), merge the branch back into `main`.
-4. **Feature branches are short-lived** — a single task or a tightly-scoped bundle. If a branch starts living for more than a couple of sessions or growing across multiple unrelated tasks, that's a signal to land what's done and start a new branch.
-5. Never commit directly to `main` once on a feature branch. Never let two unrelated tasks share a branch.
+**Workflow:** all agents (Claude included) commit directly to `main`. No feature branches. Kevin keeps concurrent agents on different areas of the code so collisions are rare; when they happen, resolve conflicts in real time. The one rule that still holds: **don't edit files outside your task's scope** — if another agent has WIP staged or unstaged in the working tree, leave their files alone (edit in place if you must touch the same file, never stash or revert their work).
 
-**Concurrent agents — git worktrees (always — no exceptions):**
-
-Two Claude Code sessions running in the same project directory share ONE working tree. If one agent runs `git checkout other-branch`, the filesystem flips for both agents — silently. Recent commits have landed on the wrong branch because of this.
-
-When you want concurrent agents on different branches, give each its own worktree:
-
-```bash
-# From the main repo dir
-git worktree add ../dreambot-<task> <branch-name>
-```
-
-Then `cd` the second agent into the new worktree directory and start `claude` there. Each worktree has its own checked-out branch, its own working files, and its own state for `npm` / `node` / `supabase` commands. They share the underlying `.git/objects`, so it's cheap.
-
-When the branch merges to `main`:
-
-```bash
-git worktree remove ../dreambot-<task>
-git push origin --delete <branch-name>   # if pushed
-```
-
-Single-agent work can stay in the main repo dir. Multi-agent work MUST split worktrees — otherwise two agents will keep stepping on each other's checkouts.
-
-**CI pipeline** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
-
-**Nightly dreams** (`.github/workflows/nightly-dreams.yml`): GitHub Actions cron at 1am MST + random delay. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
-
----
-
-## Team
-
-Kevin is the sole human developer. Claude is the other dev. No team, no PR review process — feature branches still exist, but they're for cleanliness/atomicity, not approval. Land them via merge once ready.
+**CI** (`.github/workflows/ci.yml`): tsc, lint, prettier, jest on every push.
+**Nightly cron** (`.github/workflows/nightly-dreams.yml`): 1am MST + jitter. Secrets: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
 
 ---
 
 ## Pre-Commit Checklist
 
-**A husky pre-commit hook auto-runs `npm run check` on every `git commit`.** It runs prettier → lint → tsc → jest in sequence and blocks the commit if any fails. This prevents the "green locally, red on GitHub" failure mode.
+A husky pre-commit hook auto-runs `npm run check` (prettier → lint → tsc → jest) and blocks the commit on any failure.
 
-**Manual invocation:**
 ```bash
-npm run check   # same thing the hook runs — use before pushing
-npm run fix     # auto-fix prettier + lint issues
-```
-
-**Individual steps (if you need to debug one in isolation):**
-```bash
+npm run check          # full pre-commit gate
+npm run fix            # auto-fix prettier + lint
 npm run format:check   # prettier --check
 npm run lint           # expo lint
 npm run typecheck      # tsc --noEmit
 npm run test           # jest
 ```
 
-**To bypass the hook in an emergency:** `git commit --no-verify`. Don't abuse this — every bypassed commit has historically broken CI.
+Bypass: `git commit --no-verify`. Don't abuse — every bypass has historically broken CI.
 
 ---
 
-## After-Change Checklist (READ THIS — bug classes that have bitten us)
+## After-Change Checklist (READ — bug classes that have bitten us)
 
-The April 2026 audit found 14 issues, several silently broken for months. The pattern: a step that needed to happen elsewhere when X was added got forgotten, and nothing in CI caught it. This checklist exists so it stops happening. See `memory/feedback_audit_lessons.md` for the full root-cause writeup.
+April 2026 audit found 14 silently-broken issues. Pattern: a step needed elsewhere when X was added got forgotten, CI didn't catch it. Full root-cause writeup in `memory/feedback_audit_lessons.md`.
 
 ### After adding/changing a Supabase table, column, or RPC
 
-1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`. Forgetting this leads to `(supabase.from as Function)('table_name')` workarounds that bypass the type system entirely.
-2. **For UPDATE policies on user-writable tables:** verify a `WITH CHECK` clause OR an UPDATE trigger freezes sensitive columns (`is_approved`, `user_id`, etc.). Postgres does NOT require WITH CHECK on UPDATE policies — you have to remember. Reference pattern: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.
-3. **Smoke-test new RPCs** — especially fire-and-forget ones. `record_impression` was broken for the entire app's lifetime (boolean = integer crash) and silently returned errors that nobody saw because clients didn't `.catch`.
+1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`. Skipping this leads to `(supabase.from as Function)('table_name')` workarounds that bypass the type system.
+2. **For UPDATE policies on user-writable tables:** verify `WITH CHECK` clause OR an UPDATE trigger freezes sensitive columns (`is_approved`, `user_id`). Postgres does NOT require `WITH CHECK` on UPDATE — you have to remember. Reference: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.
+3. **Smoke-test new RPCs** — especially fire-and-forget. `record_impression` was broken for the app's lifetime (boolean = integer crash) because clients didn't `.catch`.
 
 ### After adding a migration file
 
-1. `ls supabase/migrations/ | grep ^NNN` to check for prefix collisions before saving.
-2. `npx jest __tests__/lib/migrations.test.ts` to verify hygiene (this test enforces unique numeric prefixes).
-3. If you must add a follow-up to an existing number, use `NNNa_`, `NNNb_` suffixes — alphabetical order will resolve them deterministically.
-4. Run the migration in the Supabase SQL editor (DDL can't go through the JS client).
+1. `ls supabase/migrations/ | grep ^NNN` to check for prefix collisions.
+2. `npx jest __tests__/lib/migrations.test.ts` enforces unique numeric prefixes.
+3. Need a follow-up to existing number? Use `NNNa_`, `NNNb_` suffixes — alphabetical order resolves them deterministically.
+4. Run via Supabase dashboard SQL editor (DDL can't go through JS client).
 
 ### After adding a medium to `dream_mediums`
 
-1. Update `__tests__/lib/photoPrompts.test.ts` `ACTIVE_MEDIUMS` list.
-2. Add the matching `MEDIUM_CONFIGS` entry in `supabase/functions/_shared/photoPrompts.ts`. The test will fail if you forget.
-3. See the full medium-add checklist in the "Adding New Mediums/Styles" section above.
+1. Update `__tests__/lib/photoPrompts.test.ts` `ACTIVE_MEDIUMS`.
+2. Add `MEDIUM_CONFIGS` entry in `_shared/photoPrompts.ts`. Test fails if forgotten.
+3. Full medium-add checklist above in "Adding New Mediums/Styles".
 
 ### After ripping out a feature
 
-1. Audit DB columns it owned — write a cleanup migration for vestigial columns. (SightEngine removal left `is_moderated`/`is_approved` as confusing dead state for months.)
-2. Search for hanging RLS references, triggers, RPCs that read those columns.
-3. Search for type definitions that mention the feature.
+1. Audit DB columns it owned — write cleanup migration for vestigial columns. (SightEngine removal left `is_moderated`/`is_approved` as confusing dead state for months.)
+2. Search hanging RLS references, triggers, RPCs that read those columns.
+3. Search type definitions that mention the feature.
 
-### Seed tables — `bot_seeds` and `nightly_seeds` (SEPARATE tables, never cross-contaminate)
+### Seed tables — `bot_seeds` and `nightly_seeds` (SEPARATE; never cross-contaminate)
 
-Bot dreams and nightly user dreams use **separate DB tables** to prevent accidental cross-deletion:
+- **`bot_seeds`** — bot-specific, `used_at` lifecycle. Used by `scripts/generate-bot-dreams.js`. Auto-regenerates when exhausted.
+- **`nightly_seeds`** — 8 pools of slotted templates for user dreams. Used by Edge Function nightly path. Permanent, random pick.
+- **`dream_templates`** — LEGACY, no readers, will be dropped.
 
-- **`bot_seeds`** — bot-specific seeds with `used_at` lifecycle tracking. Used by `scripts/generate-bot-dreams.js`. Auto-regenerates when exhausted.
-- **`nightly_seeds`** — 8 pools of slotted templates for user dreams. Used by `generate-dream` Edge Function nightly path. Permanent pool, random pick, no usage tracking.
-- **`dream_templates`** — LEGACY table, still exists but no longer read by any code. Will be dropped.
-
-**The April 2026 incident:** An unscoped delete on the old shared `dream_templates` table wiped ALL bot seeds AND all nightly templates in one command. Both systems broke. Bot seeds were partially recovered from a Supabase backup, nightly templates had to be redesigned from scratch. This incident is why the tables were split.
+**The April 2026 incident:** unscoped delete on the old shared `dream_templates` wiped ALL bot seeds + ALL nightly templates in one command. Bot seeds partially recovered from backup; nightly templates redesigned from scratch. This is why the tables were split.
 
 **Hard rules:**
-- NEVER run unscoped deletes on either seed table
-- Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped to one bot
-- Nightly seed refresh: run `node scripts/generate-nightly-seeds.js` — regenerates all 8 pools
-- Always query first: `SELECT category, count(*) GROUP BY category` before any delete operation
+- NEVER unscoped deletes on either seed table.
+- Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped to one bot.
+- Nightly seed refresh: `node scripts/generate-nightly-seeds.js` — regenerates all 8 pools.
+- ALWAYS `SELECT category, count(*) GROUP BY category` BEFORE any delete.
 
 ### Hard rules (no exceptions)
 
-- **NEVER run unscoped deletes on `bot_seeds` or `nightly_seeds`.** Always scope by category prefix. The April 2026 incident destroyed all bot seeds + nightly templates in one unscoped delete. Query `SELECT category, count(*) GROUP BY category` BEFORE any delete.
-- **NEVER comment out a rate limit, security check, or RLS policy "for now".** If you need to disable, delete it AND create a follow-up task. Comments rot.
-- **NEVER use `as Function`, `as any`, or `as unknown as <type>` to bypass types.** If a table isn't in the generated types, regenerate the types instead.
-- **NEVER fire-and-forget critical RPCs without a `.catch` that logs in dev mode.** Silent failures lived for months.
+- **NEVER unscoped deletes on `bot_seeds` or `nightly_seeds`.** Scope by category prefix. Query GROUP BY first.
+- **NEVER comment out a rate limit, security check, or RLS policy "for now".** Delete it AND create a follow-up task. Comments rot.
+- **NEVER use `as Function`, `as any`, `as unknown as <type>` to bypass types.** Regenerate types instead.
+- **NEVER fire-and-forget critical RPCs without `.catch` that logs in dev.** Silent failures lived for months.
 - **NEVER write a SQL migration without checking `ls supabase/migrations/` for the next free number.**
+- **NEVER edit another agent's WIP files** when worktrees exist. Edit only files in your task's scope.
+- **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and update it with every new lesson — don't wait to be asked.
 
 ---
 
@@ -649,11 +556,13 @@ export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>
 supabase functions deploy <function-name> --no-verify-jwt
 ```
 
-**Always use `--no-verify-jwt`.** Deploy immediately after editing — don't wait to be asked. Active functions: `generate-dream`, `nightly-dreams`, `send-push`, `revenuecat-webhook`, `moderate-content`, `describe-photo`, `extract-style`.
+**Always `--no-verify-jwt`. Deploy immediately after editing — don't wait to be asked.**
+
+Active functions: `generate-dream`, `generate-first-dream`, `nightly-dreams`, `dream-queue-worker`, `face-swap-dual`, `restyle-photo`, `describe-photo`, `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`, `refund-stuck-jobs`.
 
 ### Dev Build
 
-Uses native modules — must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
+Native modules — must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
 
 ### Database Migrations
 
@@ -665,137 +574,61 @@ Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor. 
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node scripts/nightly-dreams.js
 ```
 
-Reads keys from `.env.local` automatically. Clear budget first if testing specific users.
+Reads keys from `.env.local`. Clear budget first if testing specific users.
 
 ### Setting Sparkle Balance
 
-```bash
-export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && SUPABASE_SERVICE_ROLE_KEY=$(grep SUPABASE_SERVICE_ROLE_KEY .env.local | cut -d= -f2) node -e "const{createClient}=require('@supabase/supabase-js');const sb=createClient('https://jimftynwrinwenonjrlj.supabase.co',process.env.SUPABASE_SERVICE_ROLE_KEY);(async()=>{await sb.from('users').update({sparkle_balance:25}).eq('id','eab700d8-f11a-4f47-a3a1-addda6fb67ec');console.log('Done')})();"
-```
+Inline node one-liner using `SUPABASE_SERVICE_ROLE_KEY` from `.env.local` → `users.update({sparkle_balance:N}).eq('id', kevinUserId)`. Project URL: `https://jimftynwrinwenonjrlj.supabase.co`.
 
 ### Kevin's User ID
 
 `eab700d8-f11a-4f47-a3a1-addda6fb67ec`
 
+### Team
+
+Kevin is the sole human developer. Claude is the other dev. No PR review — feature branches exist for cleanliness/atomicity. Land via merge once ready.
+
 ---
 
-## Future Scaling Initiative
+## Scaling Initiative (read before touching dream-generation hot path)
 
-This section captures everything we know about the system's scaling ceilings, the architectural work already done to push them higher, and the playbook for the next refactor when we actually need it. Read this before proposing anything that touches the dream-generation hot path.
+The dual face-swap pipeline previously hit HTTP **546 (`WORKER_LIMIT_EXCEEDED`)** during open-prompt dual-cast renders — Supabase Pro per-invocation budget is ~150 MB memory / ~2 s CPU / 150 s wall. Three things stacked: longer Sonnet briefs, variable Replicate latency (15–43s), rapid test cadence.
 
-### Background — the 2026-04-30 compute-limit incident
+**Phase 1 (shipped) — memory hygiene in `_shared/faceSwap.ts`** — three load-bearing fixes:
+1. `perturbSourceImage` uploads to temp storage instead of returning a 5–7 MB base64 URI; caller cleans up in `finally`.
+2. Sequential post-swap downloads (was `Promise.all`) — costs ~500ms wall, halves the memory window.
+3. Eagerly null buffers after last use (`imgData`, `leftPixels`/`rightPixels`, `leftSwapData`/`rightSwapData`).
 
-The dual face-swap pipeline started intermittently failing with HTTP **546 (`WORKER_LIMIT_EXCEEDED`)** during open-prompt dual-cast renders ("me kissing my wife", "me giving my wife a piggyback", etc.). Specific failure mode: function isolate exceeded Supabase Pro's per-invocation budget (~150 MB memory, ~2 s CPU time, 150 s wall-clock), got killed mid-execution, no DB row was ever written.
+Net: ~10–15 MB peak savings. Helped, not enough alone.
 
-**Why it surfaced exactly when it did** — three things stacked together that didn't stack during the previous night's predefined-action testing:
+**Phase 2 (shipped, dormant) — function split via `DUAL_SWAP_FANOUT` env flag.** New `face-swap-dual` Edge Function owns the entire `dualFaceSwap` body in its own 150 MB isolate. Callers route through `_shared/dualSwapDispatch.ts:dispatchDualFaceSwap()`:
 
-1. **Brief size grew.** Open-prompt dual-cast briefs now include the full user-prompt SACRED block + the swap-breaking-action reframe block (~500 chars) + the face-decoration ban paragraph (~300 chars). Sonnet takes longer to respond, the function lives longer, resource accounting accumulates the entire time.
-2. **Replicate latency varies wildly under load** — observed dual-face-swap step ranging from 15s to 43s on identical work. When Replicate is slow, the function lives 30s+ longer holding all pixel state in memory.
-3. **Rapid-fire test cadence** — 8 dual renders in 5 minutes contended for Supabase's worker pool, tightening per-isolate budgets.
+- `DUAL_SWAP_FANOUT=true` → `supabase.functions.invoke('face-swap-dual', ...)`
+- unset → in-process `dualFaceSwap()` (current default)
 
-The **fundamental issue**: the dual face-swap pipeline was always operating right at the edge of the per-invocation ceiling. The exact pixel work hadn't changed — when conditions (1)+(2)+(3) stacked on a single invocation, it crossed over.
+Activate: `supabase secrets set DUAL_SWAP_FANOUT=true`. Roll back: unset. Zero code change.
 
-### What the dual face-swap pipeline holds in memory
+Single-cast face swap is NOT split — light enough to stay in-process.
 
-The dualFaceSwap path in `_shared/faceSwap.ts` holds 6+ image buffers concurrently:
+**Async queue + workers (shipped earlier in 2026):** `dream_queue` table + `dream-queue-worker` Edge Function (cron every 15s, atomic claim via SELECT FOR UPDATE SKIP LOCKED, exponential backoff, dead_letter after 5 attempts). Per-source dispatch (first_dream / nightly / create / dlt). `refund-stuck-jobs` sweeps orphans. Full plan: `QUEUE_WORKERS_REFACTOR.md` and `DREAM_QUEUE_PLAN.md`.
 
-1. Cast photo 1 (downloaded for face-swap source)
-2. Cast photo 2 (downloaded for face-swap source)
-3. Flux render output (downloaded — 1024×1664 JPEG ~1-2 MB, ~5 MB RGBA after decode)
-4. Left 55% crop (~2.8 MB RGBA)
-5. Right 55% crop (~2.8 MB RGBA)
-6. Swapped left half (downloaded back from Replicate)
-7. Swapped right half (downloaded back from Replicate)
-8. Stitched final image (~5 MB RGBA + ~500 KB JPEG)
+**Signals to escalate further** (Replicate enterprise tier, Anthropic higher tier, or full async UI):
+- Replicate queue >30s consistently
+- Anthropic 429s in `ai_generation_log.fallback_reasons`
+- `generate-dream` invocation queue depth grows
+- >200 concurrent users / >10 dreams/sec sustained
+- Compute errors return despite Phase 2
+- Daily renders >5,000
 
-Peak pixel data alone: ~47-50 MB. Plus V8/Deno baseline (~30-40 MB), parent-scope state (Sonnet payloads, prompt strings, supabase client), and base64 strings if the perturb path is buffering. That can spike past 90-100 MB out of 150 MB.
+**Hard rules:**
+- Don't disable Phase 1 memory hygiene "as just optimization." Each fix is load-bearing.
+- Don't add new pixel work to `dualFaceSwap` in-process. New steps go in a separate Edge Function in the fanout path.
+- Don't introduce another base64 data URI in the swap pipeline. Always upload to temp storage and pass URLs.
+- Don't run heavy decode/encode/stitch in `generate-dream` directly. Delegate to Edge Functions.
+- Don't pre-build new scaling architecture until at least one signal above fires.
 
-### Phase 1 (shipped) — in-place memory hygiene in `_shared/faceSwap.ts`
+---
 
-Three targeted fixes, no new function, no API changes. See commit history for `_shared/faceSwap.ts`.
+## Reference Docs (in repo root)
 
-1. **`perturbSourceImage` uploads to temp storage instead of returning base64.** Earlier versions returned a ~5-7 MB base64 data URI per call; with two parallel dual-swap calls that pushed the function past the ceiling. Now uploads the perturbed JPEG to `temp/${userId}/perturbed-...jpg` and returns the public URL. Caller cleans up in a `finally` block.
-2. **Sequential post-swap downloads.** Replaced `Promise.all` on the two swap-result downloads with a sequential `for`-style flow. Costs ~500 ms wall-clock, halves the memory window where 2 JPEG buffers + 2 RGBA arrays are simultaneously live.
-3. **Eagerly null buffers after last use.** `imgData` (target RGBA) nulled after cropping; `leftPixels`/`rightPixels` nulled after JPEG encode; `leftSwapData`/`rightSwapData` nulled after stitch. Each step gives V8 a GC hint before the next allocation.
-
-**Net memory savings**: ~10-15 MB peak across the pipeline. Helped, but wasn't enough on its own — compute errors persisted under rapid testing. Phase 2 was the durable fix.
-
-### Phase 2 (shipped, dormant) — function split via `DUAL_SWAP_FANOUT` env flag
-
-A new Edge Function `face-swap-dual` (`supabase/functions/face-swap-dual/index.ts`) owns the entire `dualFaceSwap` body. It accepts `{ targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs }`, returns `{ swappedUrl }`. Each invocation gets its own fresh 150 MB memory + ~2 s CPU budget, isolated from the orchestrator.
-
-Callers (`generate-dream` + `nightly-dreams`) route through `_shared/dualSwapDispatch.ts:dispatchDualFaceSwap()`, which checks the `DUAL_SWAP_FANOUT` env var:
-
-- **`DUAL_SWAP_FANOUT=true`** → uses `supabase.functions.invoke('face-swap-dual', ...)` for memory-isolated dual swap
-- **unset / anything else** → uses in-process `dualFaceSwap()` (current behavior, kept as fallback)
-
-After Phase 2 with the flag on:
-- **generate-dream** is lightweight (Sonnet brief + Flux gen + invoke + logging, ~20-30 MB peak, <1 s CPU)
-- **face-swap-dual** holds the pixel work in its own isolate (~80-100 MB peak, ~1-1.5 s CPU)
-
-To activate: `supabase secrets set DUAL_SWAP_FANOUT=true`. To roll back: unset the secret. Zero code change either way.
-
-**Single-cast face swap is NOT split** — it's lightweight enough (~25-30 MB peak, no cropping/stitching) that it stays in-process. Same `_shared/faceSwap.ts` file, same `faceSwap()` function, same callers.
-
-### What's NOT solved by Phase 2 — the actual scaling ceilings
-
-Phase 2 fixes per-invocation reliability. It does NOT increase the ceilings on upstream services. At ~100-1000 concurrent users we'd hit different walls in this order:
-
-1. **Replicate concurrent prediction quota** — first wall. Default plans allow ~5-25 concurrent predictions. 1000 users firing dreams = 1000+ predictions queued, average wait time blows out from 8 s to several minutes. **Fix**: upgrade Replicate plan (their enterprise tier is custom-quoted) or move to a queue/worker pattern.
-2. **Anthropic Sonnet rate limits** — Tier 2 is ~4000 RPM (~67/sec) and ~80K input TPM. 1000 concurrent dream generations = ~1000 Sonnet calls in seconds → 429s. **Fix**: higher Anthropic tier, or batch/queue.
-3. **Supabase Edge Function invocation rate** — Pro has generous limits but 1000 simultaneous long-running (~30-45s) invocations is a lot of in-flight isolates. Cold-start latency and possible throttling. **Fix**: Supabase support ticket if hit, or queue+worker pattern.
-4. **Postgres connection pool** — sudden burst could exhaust the pool. **Fix**: Postgres compute upgrade.
-5. **Storage upload throughput** — usually fine, but worth monitoring.
-
-### The eventual scaling architecture — async queue + workers
-
-When Phase 2 is no longer enough (signals below), the durable refactor is to move from synchronous "user waits while everything happens" to async queue + workers:
-
-1. User taps "generate" → Edge Function inserts a queued-dream row, returns `{status: 'queued', dreamId}` in <500 ms
-2. **Worker pool** pulls from the queue, runs Sonnet + Flux + face swap. Workers can be:
-   - Edge Functions triggered on a cron (cheapest, ~1-2 min latency floor)
-   - Vercel Functions with higher memory limits (~30 s latency floor, more reliable)
-   - A dedicated worker pool on Fly.io / Railway / Modal (best for high throughput)
-3. Client subscribes to Supabase Realtime on the `uploads` row → pushed when ready
-4. Failed jobs get retried automatically with exponential backoff
-5. **Rate-limit downstream services per-worker** (Replicate, Anthropic) so we don't 429 even at 1000 concurrent users
-
-**Benefits at scale:**
-- User request returns in <500 ms (vs current ~30-45 s)
-- Demand can be buffered without crashing — burst absorbed by the queue
-- Worker count scales independently of user count
-- Per-worker rate limits keep upstream services happy
-- Failed renders retry automatically, no user re-submit needed
-
-**Cost of the refactor:** 1-2 weeks. Adds: queue table + RPC, worker function, retry/dead-letter logic, realtime subscription on the client, "queued" / "in progress" / "failed" UI states. The Phase 2 split is most of the way there — `face-swap-dual` becomes a worker, `generate-dream` becomes the dispatcher.
-
-### Signals that it's time to refactor to queue+workers
-
-Don't pre-build the queue architecture — premature for current scale. Watch for these signals and refactor when one or more starts firing:
-
-- **Replicate queue times exceed 30 s** consistently (currently 5-15 s on Flux Dev) — your renders are competing for Replicate capacity
-- **Anthropic 429s** showing up in `ai_generation_log.fallback_reasons` — Sonnet rate limit hit
-- **`generate-dream` invocation queue depth grows** in Supabase logs — Edge Function workers are saturated
-- **User complaints about long wait times** during peak hours — perceived slowness from any of the above
-- **More than ~200 concurrent users** or **more than ~10 dreams/sec sustained** — likely one of the above is about to hit
-- **Concurrent compute errors return** despite Phase 2 — Supabase per-project caps
-- **Daily renders > 5,000** — costs and capacity start to matter as a business problem
-
-Until one of these signals fires, **Phase 2 with the flag on is the right architecture for current scale**. We're not painting ourselves into a corner — the next refactor builds on what we already have.
-
-### Critical files for this initiative
-
-- `supabase/functions/_shared/faceSwap.ts` — the dual face swap pipeline. Both `faceSwap()` (single) and `dualFaceSwap()` live here. Phase 1 changes are in this file.
-- `supabase/functions/_shared/dualSwapDispatch.ts` — the flag-gated dispatcher. Phase 2 entry point.
-- `supabase/functions/face-swap-dual/index.ts` — the new isolated Edge Function created in Phase 2.
-- `supabase/functions/generate-dream/index.ts` — calls `dispatchDualFaceSwap()` for dual-cast swaps, in-process `faceSwap()` for single-cast.
-- `supabase/functions/nightly-dreams/index.ts` — same pattern. Two call sites: regular flow + dup-detect retry.
-
-### Hard rules (no exceptions)
-
-- **Don't disable Phase 1 memory hygiene** thinking it's "just optimization." Each item (perturb upload, sequential downloads, null buffers) is load-bearing. They prevent a fragile pipeline from being even more fragile.
-- **Don't add new pixel work to `dualFaceSwap` in-process.** If you need another image step (e.g., color correction, face refinement), add it as a separate Edge Function in the fanout path. The in-process pipeline is at the edge of viability already.
-- **Don't introduce another base64 data URI for image data anywhere in the swap pipeline.** Always upload to temp storage and pass URLs. The base64 path was a 10-14 MB heap hog at peak.
-- **Don't run heavy work (decode/encode/stitch) in `generate-dream` directly.** Delegate to Edge Functions. The orchestrator should stay light.
-- **Don't pre-build the queue+worker architecture** until at least one of the scaling signals above fires. Premature scaling work is the second most common way to break a working system.
-
+`BOTS.md` (bot system + seed tables), `BOT_SCENE_QUALITY_PLAYBOOK.md` (path migration + 10/10 bar), `BOT_AXIS_REFACTOR_PLAN.md`, `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_QA_HANDOFF.md`, `QUEUE_WORKERS_REFACTOR.md` + `DREAM_QUEUE_PLAN.md`, `FIRST_DREAM_BANGER_SPEC.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`, `SPARKLE_PAYMENTS_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`, `PRO_SUBSCRIPTION_SETUP.md`, `AUTH_PROVIDERS.md`, `MEDIUMS_FAQ.md`, `BUNDLE_ID_MIGRATION.md`, `DREAMBOT.md` + `DREAMBOT_CHARACTER.md` (personality).
