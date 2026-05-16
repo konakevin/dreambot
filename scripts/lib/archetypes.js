@@ -305,6 +305,21 @@ const ARCHETYPES = {
     anchorScaleRange: ['LARGE'],
   },
 
+  GOTHBOT_VAMPIRE_GIRLS_2: {
+    description:
+      "PATH-BESPOKE — GothBot vampire-girls-2 path (2026-05-15 migration). STRICT VAMPIRE bust portraits — DEAD-PALE corpse-skin, HEAVY DARK GOTH MAKEUP, GLOWING eyes radiating inhuman light, DEMONIC tell (fang / clawed fingertip / slit pupil). Stylized dark-fantasy splash painting / gothic horror character art aesthetic. NOT old-master oil, NOT museum patina, NOT smooth-digital, NOT pretty-girl-in-dress. Gender-locked FEMALE. Solo only. Character at LARGE anchor (bust 40-50% of frame). Reuses 9 existing production-scale vampire pools (compositions / menace_features / settings / killer_details / hair / wardrobe / archetypes / ethnicities / lighting — already at 100 entries each). Unique TEMPLATE: weaves ethnicity + makeup + glow + hair + wardrobe + posture into ONE UNIFIED vampire description (no separate fields for Sonnet to summarize away).",
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      characterDnaAxes: ['archetype', 'ethnicity', 'hair', 'wardrobe', 'menace_feature'],
+      path: ['composition', 'scene', 'hero_element', 'lighting'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: ['LARGE'],
+  },
+
   GOTHBOT_GOTH_CLOSEUP: {
     description:
       "PATH-BESPOKE — GothBot goth-closeup path (2026-05-15 migration). HAUNTINGLY BEAUTIFUL dark-seductress closeups — SEXY + SULTRY + EVIL + FEISTY gothic women in tight frame (face + throat + one shoulder). Castlevania / Crimson Peak / Bloodborne / Devil-May-Cry dark-beauty lineage. Gender-locked FEMALE. Solo only. Character at LARGE anchor (face fills upper half of frame). Candid-moment energy, not posed. NSFW-clean (no nipple/cleavage emphasis). 10 path-bespoke axes (archetype / skin / eyes / hair_color / hairstyle / makeup / wardrobe / accessory / candid_moment / camera_perspective) + universal lighting + atmosphere.",
@@ -523,13 +538,13 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
-  MECHBOT_MECH_CREATURES: {
+  MECHBOT_ALIEN_BIOMECHS: {
     description:
-      'PATH-BESPOKE — MechBot mech-creatures path (2026-05-15 migration; pivoted from alien-biomechs after Giger flesh-fusion intent collapsed under Flux render-medium prior). PURE MECHANICAL creature is the SUBJECT — body-plan AND scale variance from small mech-fauna (1-3m mech-wolf/raptor/cat) to medium walkers (3-8m quadrupeds/bipeds) to aerial (mech-bird, drone-falcon) to aquatic (mech-cephalopod) to COLOSSAL kaiju-walkers (50m-1km+ with tiny humans as scale provers). Boston Dynamics + Horizon Zero Dawn + Pacific Rim + Edge of Tomorrow + Bayonetta-Cherubim + Titanfall lineage. NO flesh, NO organic tissue, NO Giger. Direct mirror of DRAGON_SCENE shape: subject + action + landscape + drama (40% gated phenomenon) + surprise_element. Canonical-LITE — MechBot uses its locked `render` medium so Sonnet body leads with pure-mech specifics.',
+      'PATH-BESPOKE — MechBot alien-biomechs path (2026-05-15 migration to declarative composer; pure-mech pivot REVERTED after legacy-comparison batch beat R4 on color/surreal/painterly quality). FLESH-AND-MACHINE FUSION ALIEN ORGANISM at creature scale. H.R. Giger biomechanical horror + Bloodborne body-horror beauty + Annihilation Shimmer organic strangeness + Scorn machine-organism intimacy + Hollow Knight infected uncanny. Translucent flesh over piston-bone, hydraulic intercostals, exposed coolant-pumps, weeping spiracle-vents, bioluminescent organ-glow, chitin-and-piston blends. NOT pure mech, NOT humanoid cyborg, NOT vehicle. Restored legacy 151-subject + 200-action + 200-setting pools. 5 axes: subject + action + landscape + new path-bespoke lighting (ground-based variety, overrides cosmic bot default) + new 40%-gated biomech drama.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['subject', 'action', 'landscape', 'surprise_element'],
+      path: ['subject', 'action', 'landscape'],
     },
     pickN: {},
     conditionalLayer: { slot: 'drama', gate: 0.4 },
@@ -670,6 +685,20 @@ const ARCHETYPES = {
     },
     pickN: { ornate_flourish: 3 },
     conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_STEAMPUNK_SCENE: {
+    description:
+      'PATH-BESPOKE — SteamBot steampunk-scene path (2026-05-15 migration). CHARACTER INTEGRATED INTO EPIC STEAMPUNK SCENE — a role-based steampunk figure (clockwork magistrate / sky-nomad / weather-prognosticator / etc. — gender-agnostic, persona-driven) AT MEDIUM scale (15-25% frame) standing inside a wildly imaginative steampunk landscape (Big-Ben-clockwork-opened / gear-waterfall / floating-metropolis / mechanical-jungle / brass-cathedral / etc.). The LANDSCAPE is the co-hero. Cinematic feature-film concept render with photoreal physical light. 3 path-bespoke axes (character / landscape / surprise_element) + conditional event 40%-gated + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['character', 'landscape', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'event', gate: 0.4 },
     framingModes: null,
     anchorScaleRange: null,
   },

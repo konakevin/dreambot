@@ -68,7 +68,7 @@ module.exports = {
     'goth-male-closeup': 'black-forest-labs/flux-1.1-pro',
     'goth-male-full-body': 'black-forest-labs/flux-1.1-pro-ultra',
     // Vampire paths
-    'vampire-girls-2': 'black-forest-labs/flux-1.1-pro-ultra',
+    'vampire-girls-2': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro-ultra',
     'vampire-assassin-male': 'black-forest-labs/flux-1.1-pro-ultra',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro-ultra',

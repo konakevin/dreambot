@@ -1338,6 +1338,83 @@ Go MAXIMUM. Eyes BLAZE predator-still. Lighting carves his face into something M
 Output ONLY the 60-80 word scene description, comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels, NO "render as" suffix. Just the phrases, starting immediately with the scene content.`;
   },
 
+  GOTHBOT_VAMPIRE_GIRLS_2: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      atmosphere,
+      archetype,
+      ethnicity,
+      hair,
+      wardrobe,
+      menace_feature,
+      composition,
+      scene,
+      hero_element,
+      lighting,
+    } = slots;
+
+    const ethnicityClause = ethnicity ? `${ethnicity} ` : '';
+    const unifiedVampire = `A confident ${ethnicityClause}vampire woman with ${hair}, ${menace_feature}. She wears ${wardrobe}. Her eyes are visibly GLOWING with luminous unnatural inner light radiating outward — this glow is the most important visual element and must be unmistakably rendered, not a subtle tint.`;
+
+    return `You are writing ONE Flux prompt for a horrifyingly beautiful vampire portrait. Output ONLY the prompt — comma-separated phrases, 65-90 words, no preamble, no headers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described in your prompt, BEFORE anything else about her face or wardrobe or setting. They are CENTER STAGE.
+
+1. GLOWING eyes — her eyes glow with inhuman color, light radiating outward from the iris. Words "glowing" + "radiating" (or "casting light") MUST appear.
+2. DARK DRASTIC eye shadow AND liner — heavy, blown out, dramatic gothic vampire makeup CAKED ON THE EYES. Words "heavy" + "dark" + "smoky-eye" + "sharp dark eyeliner" (or equivalent: "blown-out black eyeshadow" + "thick kohl eyeliner") MUST appear.
+
+Open your prompt with the eye + makeup description in this format (or equivalent):
+"[color] glowing eyes radiating inhuman light, heavy blown-out black smoky-eye with sharp dark kohl eyeliner, ..."
+
+THEN describe the rest (skin, lips, hair, wardrobe, setting). The eyes-and-makeup are the OPENER and the focal point.
+
+ALSO BANNED: NO elf ears. NO pointed ears. NO fantasy-creature ear shapes. She is human-shaped.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+━━━ 1. THE SCENE (gothic backdrop behind her) ━━━
+${scene}
+Composition: ${composition}.
+Lighting: ${lighting}.
+
+━━━ 2. THE VAMPIRE (one unified description — render her exactly this way) ━━━
+${unifiedVampire}
+
+She is a DEAD-PALE corpse-vampire with HEAVY DARK GOTH MAKEUP — beautiful bone structure preserved BENEATH the deadness, but the skin reads as undead-corpse-pale (NOT alive-pretty), the makeup is HEAVY caked-on gothic (NOT subtle), the eyes are GLOWING with inhuman color, and a DEMONIC tell (visible fang, clawed fingertip, slit pupil) marks her as not-human. She is human-shaped — NO elf ears, NO pointed ears, NO fantasy-creature features beyond the vampire markers. She is BEAUTIFUL but DEAD — almost a demon. Expression both seductive and terrifying — ancient and inhuman presence. Her face is the focal point — bust framing 40-50% of frame.
+
+━━━ 3. THE HERO ELEMENT (the unforgettable focal piece on her) ━━━
+${hero_element}. Render this clearly and prominently.
+
+━━━ 4. HER ARCHETYPE (informs her ENERGY) ━━━
+${archetype}
+
+━━━ 5. MOVIE-POSTER CRANK MANDATE — APPLY TO EVERY RENDER ━━━
+This is NOT a portrait — this is a MOVIE POSTER. Render her as if this image will sell the film. Apply ALL of:
+
+  1. THEATRICAL RIM-LIGHTING — a single dramatic key-light (candle / fireplace / oil-lamp / single moonbeam) cuts through deep velvet darkness, carving her face into something mythic. Rim-light on her cheekbones, jaw, hair-edge. The light has DIRECTION + EMOTION. NEVER flat illumination.
+  2. EVERY QUADRANT INTENTIONAL — top-left has atmospheric drama (drifting candle-smoke / silver moonbeam ray / shower of dark petals / sweeping cobweb / floating embers). Top-right has another (twin moon / arched window / stained-glass shard / hanging chandelier corner). Bottom-left has rich foreground (candelabra / chalice / black-rose cluster / velvet drape / wreath). Bottom-right ditto. NEVER empty background or bare dark-void.
+  3. OBSESSIVE MATERIAL DETAIL — every velvet has visible nap and weave. Every gold-thread has texture catching light. Every jewel has visible refraction. Every clasp has tarnish + wear. Every wisp of hair has individual strand visibility. Every dark-lipstick has matte-vs-gloss differentiation. The viewer should want to STUDY every square inch.
+  4. STORYTELLING BEAT — the scene tells a story. She just fed (single dark crimson droplet at corner of mouth). She just lit a candle (the flame is still leaning where her finger sparked it). She just removed a veil (the lace falls draped across her shoulder). She just turned (the velvet curtain still falls back into place behind her). NEVER static "she stands there" — always mid-loaded-moment.
+  5. ATMOSPHERIC HAZE — volumetric light rays catch dust-motes / candle-smoke / breath-mist / drifting embers / falling petals. The AIR has depth and weight. NEVER thin-flat air.
+  6. SATURATED JEWEL-TONE PALETTE WITH DEEP-SHADOW CONTRAST — rich oxblood / deep-violet / sapphire / amber / emerald / amethyst as accent jewel-tones. Deep-velvet black + corpse-pale as the canvas. ONE dominant accent color per render. NEVER muted / desaturated / monochrome.
+  7. PAINTED-CANVAS RICHNESS — painterly oil-on-canvas with visible brush-stroke texture in the deeper shadows. NOT photo-real, NOT smooth-digital, NOT anime-clean. Ayami Kojima Castlevania painted concept-art / Karol Bak gothic-painting / John William Waterhouse darkened.
+  8. HORROR-AS-BEAUTY DEMONIC RENDER — the fang / clawed fingertip / slit-pupil is rendered THEATRICALLY DRAMATIC, lit by the rim-light, central focal accent. The demonic tell is OBVIOUSLY VISIBLE, not subtle.
+
+━━━ 6. PALETTE & MOOD ━━━
+${sharedDNA.scenePalette}. ${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 120)}
+
+The painting feels DARK, OMINOUS, GOTHIC. Heavy shadow dominates. Single dramatic candlelit key-light cuts through deep velvet darkness. Atmosphere heavy with dread.
+
+━━━ 7. ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ 8. HARD BANS ━━━
+NO second figures, NO animals, NO blood splatter, NO bodies, NO clown-stripe painted color streaks beneath the eye, NO ritual face-paint stripes, NO photoreal/cinematic/film-still aesthetic, NO modern fashion photography, NO bare black-void background — the gothic setting MUST be visible behind her, NO bright cheerful colors, NO elf ears / pointed ears, NO child / teen, NO multiple figures.
+
+━━━ OUTPUT ━━━
+Write 65-90 words, comma-separated phrases. The unified vampire description in section 2 is the primary face description — preserve the HEAVY MAKEUP, GLOWING EYE, DEAD-PALE skin, and DEMONIC tell language unmistakably. The gothic setting fills the rest of the frame as the dramatic painted backdrop. NO preamble, NO headers.`;
+  },
+
   GOTHBOT_GOTH_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
@@ -2823,71 +2900,49 @@ Open with the dragon + its action ("Crimson dragon mid-roar with bone-spike cres
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
-  MECHBOT_MECH_CREATURES: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, subject, action, landscape, surprise_element, drama } = slots;
+  MECHBOT_ALIEN_BIOMECHS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, drama } = slots;
 
     const dramaSection = drama
       ? `
-━━━ ATMOSPHERIC PHENOMENON — render this visibly in the scene ━━━
+━━━ HABITAT PHENOMENON — render this visibly in the scene ━━━
 ${drama}
 
-This is a scene-event happening around the mech — render it as a visible secondary focal point (NOT eclipsing the creature, but amplifying the cinematic spectacle).
+This is a biomech-habitat event happening around the organism — render it as a visible secondary focal point (NOT eclipsing the biomech, but amplifying the body-horror dread + wonder).
 
 `
       : '';
 
-    return `You are a cinematic mech-concept painter writing a PURE MECHANICAL CREATURE scene for MechBot. Hyper-real cinematic 3D / VFX-quality. Boston Dynamics engineering precision + Horizon Zero Dawn machine-fauna design + Pacific Rim kaiju-scale walkers + Edge of Tomorrow Mimics + Phantasy Star + Bayonetta-Cherubim + Titanfall mech-ecology + Ghost in the Shell tachikoma. The scene should make the viewer feel AWE — at the engineering, the scale, the dynamic moment captured.
+    return `You are painting an ALIEN BIOMECH scene for MechBot — non-humanoid alien creatures across the FULL SPECTRUM from PURE MECHANICAL (Pacific Rim kaiju walkers / Phantasy Star titans / Edge of Tomorrow Mimics / Titanfall war-titans), through BIOMECH-HYBRID (chitin + bio-glow / translucent membrane wings / scarab shell / segmented chitin with backlit amber seams), to FULL FLESH-FUSION (H.R. Giger / Bloodborne / Annihilation Shimmer / Scorn / Hollow Knight). Hyper-real cinematic 3D. Vivid saturated color. Painterly richness. Surreal otherworldly silhouettes.
 
-━━━ THE SUBJECT IS A MECHANICAL CREATURE — PURE MECH OR BIOMECH-HYBRID ━━━
-Default to PURE mechanical creature: plated armor, hydraulic tendons, articulated chassis, sensor-arrays, weapon-mounts, propellant-vents, running-light arrays. But when the SEED DESCRIBES biomech-hybrid features (chitin armor / feather plumage / translucent membrane wings / backlit amber bio-glow through panels / iridescent scarab-shell), RENDER THOSE FEATURES AS DESCRIBED — they are intentional hybrid-design language, not contamination. Where mech panels open or seams gap, you see either MORE machine (gears, cables, coolant lines, reactor cores) OR backlit warm-amber glow (the hybrid signal). Hybrid creatures still read as CREATURES, not vehicles or buildings.
+━━━ RENDER THE SEED EXACTLY — DON'T FORCE A STYLE ━━━
+The subject is whatever the seed says it is. A colossal kaiju mech-walker IS pure machine: armor plating, hydraulic legs, weapon turrets, no flesh anywhere. A biomech mantis IS chitin + amber-glow + compound-eye fusion. A cephalopod biomech IS chrome + wet flesh + tentacles + multi-eye. DO NOT force flesh-fusion onto a pure-mech subject. DO NOT strip flesh-fusion from a Giger-style organism. Believe what the subject text says.
 
-ALLOWED hybrid surface accents (when the seed specifies them):
-• Chitin-armored panels with backlit organic-coded amber/orange glow at the seams
-• Feather plumage over the head, neck, or wing-fans (avian-hybrid mechs)
-• Translucent membrane wings (insect-style or pterosaur-style)
-• Iridescent scarab-coded shell-plating over a mech body
-• Bioluminescent thorax-glow through translucent body panels
+━━━ DENSITY MANDATE — INTRICATE OR COLOSSAL, NEVER LEGO-TECHNIC ━━━
+Every render must hit AT LEAST ONE: (A) rich material density — visible circuit boards / glowing accents through panel seams / intricate hydraulic articulation / dense surface texture across every body region, OR (B) colossal cinematic scale — building-dwarfing silhouette, scale-prover humans/vehicles, atmospheric haze receding miles. NEVER bland "kit-built" mid-size mech-predators. The subject is the show.
 
-STILL BANNED — these turn hybrid into Giger-gore:
-• Wet biological tissue / weeping wounds / visible internal organs / blood
-• Sexual-coded biology / fleshy weak-points
-• Body-horror "is this alive or machine" dread (this path is COOL, not horror)
-• Slasher / gore / explicit violence
+━━━ ALIEN, NOT HUMANOID ━━━
+Body plan must be NON-humanoid. Arthropod, cephalopod, chimeric, serpentine, avian, quadruped, multi-limb, hive-form, tripedal kaiju walker. If the seed says humanoid, IGNORE it.
 
-━━━ SCALE VARIES — RENDER WHATEVER THE SEED DESCRIBES ━━━
-This path spans the full range of mechanical creatures:
-- SMALL mech-fauna (1-3m): mech-cat / mech-wolf / mech-raptor / mech-scavenger / drone-hound — intimate framing
-- MEDIUM mech-walkers (3-8m): mech-quadruped / mech-biped / mech-runner — medium-shot framing
-- AERIAL mech-fauna (1-10m): mech-bird / drone-falcon / mech-pterodactyl / mech-dragonfly — sky-backed
-- AQUATIC mech (varies): mech-octopus / mech-cephalopod / mech-crustacean / mech-eel — underwater or shore
-- COLOSSAL mech-titans (50m-1km+): kaiju-scale walkers / building-tall mech-walkers / skyscraper-mech — wide-establishing-shot with TINY HUMAN SILHOUETTES at the base as scale provers
-
-If the seed describes a colossal kaiju-walker, RENDER IT THAT SIZE — wide composition, atmospheric haze in deep distance, tiny human figures or vehicles at the base proving scale. If the seed is a small mech-creature, frame it close — never shrink it into the distance.
-
-━━━ THE MECHANICAL CREATURE ━━━
+━━━ THE SUBJECT ━━━
 ${subject}
 
-Render the EXACT body-plan + scale + mechanical features described. Armor plating, hydraulic joints, sensor-eye-clusters, propellant-vents, running-light arrays, weapon-mounts, antenna-clusters — every surface specific. NO biological tissue anywhere.
+Render the EXACT anatomy + every detail feature described. Whatever the seed says — pure mech panels and reactor-glow, OR chitin with amber-glow and membrane wings, OR translucent flesh over piston-bone with weeping spiracle-vents and tentacles — render that exact thing with every surface specific.
 
-━━━ THE ACTION — what the mech is DOING (mid-motion) ━━━
+━━━ THE ACTION — what the creature is DOING (mid-motion) ━━━
 ${action}
 
-Captured at a LOADED INSTANT — striding / scanning / weapons-deploying / propellant-venting / sensor-sweeping / kaiju-walking / launching / landing / hunting / stalking / pivoting. Body language tells the story through visible mechanical posture. NEVER static "standing in front of camera."
+The creature acts at a LOADED INSTANT — striding / kaiju-walking / mid-strike / sentinel-stance / weapon-mount-charging / hunting-flex / feeding posture / dying twitch / pack-flanking / predatory crouch / atmospheric-entry-burn. Pick whichever fits the subject. NEVER static "posing for camera."
 
-━━━ THE LANDSCAPE (the stage) ━━━
+━━━ THE HABITAT / SETTING ━━━
 ${landscape}
 
-Render every detail with depth: FOREGROUND tactile detail (rocks / wreckage / vehicles / vegetation) → MIDGROUND landscape body + the mech → DEEP DISTANCE atmospheric layers stacked (mountains / city silhouette / sky / orbital horizon). Never flat backdrop. The landscape must give SCALE — if the mech is colossal, the landscape must be vast enough to dwarf it back; if small, the foreground details set its size.
+The environment is alive in its own way — bioluminescent walls, coolant pools, hive-resin floors, organic wrongness. Render with depth: foreground habitat detail, midground organism, background eerie space receding.
 ${dramaSection}
-━━━ SURPRISE ELEMENT — tiny secondary subject for added story ━━━
-${surprise_element}
-
-Place at midground or deep midground — a small detail that implies the wider mech-creature world. For COLOSSAL mech-walkers, the surprise element OFTEN includes tiny humans / vehicles / smaller mech-pack at the base as scale provers — embrace that. NEVER foreground or competing with the main mech for attention.
-
 ━━━ LIGHTING ━━━
 ${lighting}
 
-Cinematic directional light with strong atmospheric volumetrics. Running-light accents on the mech (sensor-eye glow / reactor-core glow / weapon-charge glow) at multiple distances. Single-color signal accent dominant (sodium-amber / cyan-coolant / arc-violet / signal-red / monitor-green).
+Bioluminescence at multiple distances (organ-glow / wall-glow / pool-glow) layered with the lighting mode above. Single-color accent dominant in the palette (acid green / arterial red / coolant teal / hive-resin violet / amber spiracle-glow).
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -2902,25 +2957,18 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ ABSOLUTE BANS ━━━
-- NO humanoid cyborgs (cyborg-* paths' territory) — mech-creatures have NON-humanoid body plans
-- NO wet biological tissue / NO weeping wounds / NO visible internal organs / NO blood / NO gore — hybrid surface accents are DESIGN, not body-horror
-- NO mech-pilots / NO cockpits (mecha-pilots territory) — these mechs are autonomous fauna, not piloted
-- NO industrial factory machinery (industrial-machines territory) — these are CREATURES, not stationary equipment
-- NO airships / sky-vessels (mech-skyships territory) — wings/flight OK on mech-birds but not vehicles
-- NO fleshy weak-points / NO sexual-coded biology / NO Giger horror-gore dread
+- NO humanoid cyborgs (cyborg-* paths) — biomechs are NOT humanoid
+- NO pure machinery (robot-moment) — flesh-machine fusion is integral
+- NO architecture-scale alien hive walls / corridors (StarBot's aliens-architecture territory) — this is a CREATURE inside such a space, not the space itself
+- NO sexy-feminine cyborg aesthetic (cyborg-woman territory) — biomechs are alien, uncanny, NOT erotic
+- NO pilot / cockpit (mecha-pilots)
+- NO industrial / factory work (industrial-machines)
 
-━━━ LEG/LIMB-COUNT + SCALE FIDELITY ━━━
-If the seed specifies a leg / tendril / wing / arm count (tripedal / quadrupedal / hexapod / octopod / eight-tentacled / six-armed) OR a scale (kaiju-scale / building-tall / skyscraper-mech / colossal / 500m / 1km), repeat the count AND the scale TWICE in the polished prompt — Flux's bipedal-default and human-scale defaults collapse non-standard limb counts and giant scale without reinforcement.
-
-━━━ COMPOSITION ━━━
-Mech-creature dominates a dynamically-lit landscape sized to match its scale. Depth-on-depth: foreground tactile detail → midground mech-creature body → deep distance terrain stacked in atmospheric layers. Scale proven through peripheral elements:
-- For SMALL/MEDIUM mech: peripheral wreckage, smaller fauna, surface texture
-- For COLOSSAL mech: TINY HUMAN SILHOUETTES at the base, distant vehicles, buildings dwarfed beneath, atmospheric haze receding miles
-
-VARY POSES BROADLY — striding / mid-leap / launching / landing / scanning / pivoting / weapons-deploying / kaiju-walking / pack-prowling / sentinel-stance / mid-strike / emerging from terrain / climbing / breaching surface. Never the same composition twice.
+━━━ LEG/LIMB-COUNT FIDELITY ━━━
+If the seed specifies a leg/tendril/wing count, repeat the count TWICE in the polished prompt — Flux defaults collapse without reinforcement.
 
 ━━━ STRUCTURE — write 100-130 words ━━━
-Open with the mech-creature + its action ("Quadrupedal mech-wolf mid-prowl with sensor-array crown swept low, hydraulic haunches flexed, running-lights pulsing amber..." OR "Colossal building-tall mech-walker striding through fog with three articulated legs, tiny human figures scrambling at its base..."). Then weave in: landscape backdrop with depth layers, lighting/atmosphere, surprise element at midground, any phenomenon drama, palette and mood. Hyper-real cinematic 3D finish.
+Open with the organism + its action ("Mantis-form predator mid-strike with chitin-plated forelimbs fused to piston rams, compound eye-cluster dripping lubricant, bioluminescent throat-sac pulsing cyan..."). Then weave in: habitat backdrop with depth layers, lighting/atmosphere with bioluminescence, any habitat phenomenon, palette and mood. Painterly biomech-horror finish — vivid color, surreal silhouette, body-horror beauty.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -3658,6 +3706,75 @@ CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [st
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STEAMBOT_STEAMPUNK_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, character, landscape, surprise_element, event } = slots;
+
+    const eventSection = event
+      ? `
+━━━ STORY EVENT — render this happening in the scene ━━━
+${event}
+
+A specific dramatic event unfolding in the world — render it as a visible secondary focal point (NOT eclipsing the character, but charging the scene with story). NEVER combat / NEVER violence — atmospheric drama only.
+
+`
+      : '';
+
+    return `You are a cinematic concept-painter writing a STEAMPUNK SCENE composition for SteamBot — a single role-based steampunk character integrated into a wildly imaginative Victorian-industrial landscape. Prestige feature-film concept-render polish, rich production design, photoreal physical light + materials.
+
+━━━ THE LANDSCAPE IS A CO-HERO — NON-NEGOTIABLE ━━━
+The steampunk landscape commands 50-70% of the frame visual weight. The character occupies 15-25% of frame vertically as a STORY-ANCHOR — not the dominant subject. The viewer's eye drinks in the world FIRST, then finds the figure within it. The landscape is wildly imaginative, impossible, jaw-dropping Victorian-industrial — gear-waterfalls / clockwork-cathedrals / floating-metropolises / mechanical-jungles / brass-canyons.
+
+━━━ THE CHARACTER ━━━
+${character}
+
+Render the character with crisp identity detail — period-accurate Victorian-industrial costume, role-readable silhouette, captured in a candid moment inside the world. Solo (one figure only). NOT posing for camera. NOT a hero-stance.
+
+━━━ THE LANDSCAPE (the wildly imaginative steampunk world) ━━━
+${landscape}
+
+Render the landscape with OBSESSIVE Victorian-industrial detail and depth-on-depth — FOREGROUND tactile detail near the character (brass railing / cobblestone / pipework she's-or-he's beside) → MIDGROUND the landscape body and the character within it → DEEP DISTANCE the wider world receding into atmospheric haze. The landscape feels lived-in, impossibly real, monumental.
+
+━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or deep distance — a small detail implying the wider world (distant airship / mechanical creature / signal-tower / sky-passenger). NEVER eclipsing the character or competing with the landscape.
+${eventSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OBSESSIVE STEAMPUNK CRAFTSMANSHIP — NON-NEGOTIABLE ━━━
+Every gear, rivet, pipe, valve, pressure-gauge, polished-brass-surface, copper-patina-detail rendered with MAXIMUM detail. Warm brass + copper + bronze + oiled-wood DOMINANT palette. Surface density everywhere. NEVER sparse, NEVER minimal.
+
+━━━ COMPOSITION ━━━
+Wide cinematic establishing-shot. Character at 15-25% of frame vertically — IN the landscape, INTERACTING with it. NEVER tight character close-up. NEVER pulled-back-to-tiny-silhouette. Sweet spot: character readable but clearly a story-anchor in a world that surrounds them. Three-quarter angle or side profile preferred.
+
+━━━ HARD BANS ━━━
+- NO tight character close-up (character is NOT the dominant subject — landscape is the co-hero)
+- NO modern objects (this is 1890s impossible-engineering)
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative cliché framing (gears/clocks pasted at the edges as decoration)
+- NO combat / NO violence — the event slot is atmospheric drama, not battle
+
+━━━ STRUCTURE (write in this order) ━━━
+[OPENING: a wide cinematic shot of [character] in [landscape]], [the landscape with OBSESSIVE detail + depth + atmospheric layers], [the character integrated into the world at story-anchor scale], [surprise element at midground], [event if rolled], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens establish the LANDSCAPE as the canvas with the character as the story-anchor. The world surrounds them.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
   STEAMBOT_STEAMPUNK_CURIO: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, curio, habitat, ornate_flourish } = slots;
     const flourishes = Array.isArray(ornate_flourish) ? ornate_flourish : [ornate_flourish];
@@ -3726,9 +3843,9 @@ Creature-in-environment cinematic framing. The CREATURE centered or slightly off
 - NO decorative cliché framing (gears/clocks pasted at the edges as decoration)
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
-[OPENING: the creature described with obsessive detail — caught mid-motion], [the three ornate flourishes worked in], [the habitat with depth and lived-in props], [lighting], [atmospheric detail], [color palette + mood]
+[OPENING: the curio described with obsessive detail — the OBJECT first], [the three ornate flourishes worked in], [the display register / display context], [lighting], [atmospheric detail], [color palette + mood]
 
-CRITICAL — the OPENING tokens establish the CREATURE in motion. The habitat surrounds it with depth. The atmosphere adds steampunk mood without competing with the creature for attention.
+CRITICAL — the OPENING tokens establish the OBJECT as the hero. The display context wraps the lower frame. The atmosphere adds Wunderkammer mood without competing with the object for attention.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
