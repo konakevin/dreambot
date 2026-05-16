@@ -1234,6 +1234,31 @@ Per-bot subsections live below. Each bot's path-by-path iteration history is her
 
 ## MechBot
 
+### mech-skyships (MechBot) — engagement-pool unlocks multi-actor narrative 2026-05-16
+
+Second MechBot path on the declarative composer. **Production-ready in 2 rounds.**
+
+**Key insight: for ship paths, an ALWAYS-ON engagement pool (multi-actor combat narrative beat) is what separates a movie-poster moment from a "hero ship in pretty sky" beauty shot.** R1 used the same architecture as titan-war (vertigo composition + path-bespoke lighting + 40%-gated drama) and produced 4.9/5 renders — but Kevin's feedback was "one-dimensional ... not just some ship flying ... layered dynamic action." Adding a `mech_skyships_engagement` path-bespoke pool that fires on EVERY render (not 40%-gated like drama) with multi-actor combat narratives (DOGFIGHT TANGLE / SQUADRON STRIKE / ESCORT DEFENSE / CHASE PURSUIT / ARRIVAL DESCENT / AMBUSH FROM CLOUDS / etc.) immediately solved it. R2 prompts now name 2-4 other actors per render (allied wingmen with named call-signs like CASTOR / VETH-2, enemy interceptors retreating, ground AA emplacements firing, escort formations circling) and Flux renders the inter-ship action.
+
+**Why this pattern matters cross-bot:** any path where the subject is a vehicle/ship/walker that lives in an active combat or transit world benefits from an engagement pool that forces the SCENE to include other actors. This is what makes a Star Wars X-wing trench-run feel like a movie poster instead of a beauty shot of a single X-wing. The pattern applies to:
+- Any spaceship/skyship/airship path
+- Any kaiju-walker path (titan-war already has this implicit in the action pool but could benefit from making it explicit)
+- Any vehicle path (mecha-pilots / mech-skyships / etc.)
+- NOT needed for character paths (the character's action verb already drives the narrative)
+
+**Pool design pattern for engagement (40-80 word entries):**
+- Format: `"ENGAGEMENT TYPE CAPS — hero subject + 2-4 other actors named + their interaction + scale-provers if relevant"`
+- 30-60 entries
+- Categories: dogfight / strike / escort / pursuit / arrival / ambush / bombing / drop / intercept / kill-confirmed / deep-strike / pincer / cover-fire / etc.
+- HARD BAN on solo-hero entries in the recipe (or Sonnet will default to "ship in pretty sky")
+
+**Files:**
+- `scripts/bots/mechbot/paths/mech-skyships.js` (declarative, 6 axes)
+- `scripts/bots/mechbot/paths/legacy/mech-skyships.js` (function-form preserved)
+- `MECHBOT_SKYSHIPS` archetype + template (vertigo + movie-poster + multi-actor narrative + "TURNED UP TO 11" + "NO modern military" preserved from legacy)
+- 4 new path-bespoke pools: composition (20 sky-vertigo angles), lighting (~40 aerial), engagement (~60 multi-actor combat scenes, ALWAYS-ON), drama (~50 sky-combat phenomena, 40%-gated)
+- Reuses legacy 200-entry subject + action + setting pools
+
 ### titan-war-machines (MechBot) — vertigo-composition-pool + movie-poster-crank win 2026-05-15
 
 First MechBot path migrated to the declarative composer. **Production-ready in 2 rounds.**

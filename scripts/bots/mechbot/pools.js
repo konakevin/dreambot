@@ -115,9 +115,15 @@ module.exports = {
   ALIEN_BIOMECH_ACTIONS: load('alien_biomech_actions'),
   ALIEN_BIOMECH_SETTINGS: load('alien_biomech_settings'),
   // Mech-skyships path — flying sci-fi mech-vessels in epic skies
+  // (migrated to declarative axis system 2026-05-15 — adds composition /
+  // lighting / drama path-bespoke pools, reuses legacy subject/action/setting)
   MECH_SKYSHIPS_SUBJECTS: load('mech_skyships_subjects'),
   MECH_SKYSHIPS_ACTIONS: load('mech_skyships_actions'),
   MECH_SKYSHIPS_SETTINGS: load('mech_skyships_settings'),
+  MECH_SKYSHIPS_LIGHTING: load('mech_skyships_lighting'),
+  MECH_SKYSHIPS_COMPOSITION: load('mech_skyships_composition'), // sky vertigo angles
+  MECH_SKYSHIPS_ENGAGEMENT: load('mech_skyships_engagement'), // ALWAYS-ON multi-actor combat scene
+  MECH_SKYSHIPS_DRAMA: load('mech_skyships_drama'), // 40% gated sky-combat phenomenon
 
   // Settings — robot-moment uses CHARACTER_INTERIOR (50%) + PLANET_SETTING (50%)
   // for variety. Kept as merge pools matching StarBot's behavior so the path's

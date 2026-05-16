@@ -2983,6 +2983,103 @@ Open with the vertigo camera angle + the titan + its action ("Worm's-eye-view up
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MECHBOT_SKYSHIPS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, engagement, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ SKY-COMBAT PHENOMENON — render this visibly in the scene ━━━
+${drama}
+
+This is a sky-event happening across the airspace — render it as a visible secondary focal point that AMPLIFIES the spectacle (NOT eclipsing the skyship, but contextualizing the scale of aerial warfare).
+
+`
+      : '';
+
+    return `You are a sci-fi cinematographer writing a MECH SKYSHIP scene for MechBot — a flying sci-fi vessel with predatory DNA, in an epic sky environment. Hyper-real cinematic 3D / VFX-quality.
+
+━━━ ABSOLUTE BAN — NO MODERN MILITARY REFERENCES ━━━
+NEVER use: aircraft carrier, dreadnought, battleship, destroyer, frigate, cruiser, submarine, gunship, bomber, fighter, jet, helicopter, naval, navy. These pull literal Earth-military reference into the render. The world is SCI-FI — sleek, advanced, ruthless.
+
+━━━ AESTHETIC LANGUAGE — PREDATORY SCI-FI ━━━
+Same DNA as MechBot's combat robots and mechs:
+- Asymmetric predatory silhouettes — fang prows, blade fins, spike rams, arrow bows
+- Glowing power conduits visible across the hull
+- Insectoid / arachnid / serpentine / blade flying forms — NOT box-shaped warships
+- Ornate machinery details (fluted plating, exposed cooling fins, bristling weapon mounts)
+- Built to KILL — every line of the ship reads as predatory
+
+━━━ NON-NEGOTIABLE — VERTIGO COMPOSITION ━━━
+${composition}
+
+The chosen vertigo angle DRIVES the framing — render it precisely as described. The skyship dominates the frame at its rolled scale; the camera position makes the viewer FEEL the air, the altitude, the speed through perspective.
+
+━━━ NON-NEGOTIABLE — MOVIE POSTER MANDATE ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — the kind of vista that stops the viewer mid-scroll and makes them GASP. EVERY QUADRANT of the frame has something striking — NO quiet corners. The eye should land on AT LEAST 4 distinct striking details across the frame.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+  1. THE HERO SKYSHIP at the chosen vertigo angle, dominating its quadrant
+  2. ACTIVE FLIGHT/COMBAT — banking / firing / contrails / exhaust-glow / weapon-discharge / shield-rippling
+  3. MULTI-DISTANCE SHIP STAGING — hero in foreground, smaller fleet specks at vanishing point. The sky should feel OCCUPIED, not empty
+  4. SKY-WEATHER PHENOMENON in its own quadrant — multi-altitude clouds / volumetric god-rays / lightning / storm-cells / aurora / heat-shimmer / atmospheric haze layers
+  5. SATURATED THEATRICAL SKY — never bland grey overcast. Dawn pink-purple, dusk fire-orange, electric-violet storm, blood-red sunset, aurora-coded EM-warfare, twilight-gradient, nuclear-orange horizon, neon-cyberpunk underlit cloud, etc.
+  6. GROUND-DETAIL FAR BELOW or FOREGROUND CLOUD-DETAIL anchoring depth — ant-scale ground action / mountain peaks piercing cloud-deck / cloud-architecture in the foreground / distant fleet specks for scale
+
+THINK Star Wars X-wing trench-run / 40K Imperial fleet engagement / Mass Effect Sovereign descent / Pacific Rim Jaeger drop-pod / Edge of Tomorrow drop-ship deployment / Independence Day mothership-over-city / Avatar Hallelujah-Mountains airship / Macross Plus dogfight key-art.
+
+━━━ NON-NEGOTIABLE — MULTI-ACTOR NARRATIVE BEAT (NOT just "hero ship flying") ━━━
+${engagement}
+
+This is the STORY playing out in the frame — render the hero skyship + the OTHER actors described, in interaction. NEVER a solo hero-ship-in-pretty-sky frame. Multiple ships, weapons exchange, defensive reactions, debris from kills, targets reacting, ground engagement when relevant. The viewer must be able to read what is HAPPENING in 2 seconds. The MULTI-ACTOR engagement is what separates a movie-poster moment from a beauty shot of a single ship.
+
+━━━ THE SKYSHIP (the seeded subject) ━━━
+${subject}
+
+━━━ THE ACTION (mid-motion in the air) ━━━
+${action}
+
+━━━ THE SKY + ENVIRONMENT BELOW ━━━
+${landscape}
+${dramaSection}
+━━━ TURNED UP TO 11 — NON-NEGOTIABLE ATMOSPHERIC STACK ━━━
+Every render must layer: multi-altitude clouds (foreground / mid / far) + volumetric god-rays or sun-shafts + color-gradient sky (dawn / dusk / storm / aurora / twilight) + weather element (wind / rain / lightning / heat-shimmer / ice-glitter) + scale staging (huge cloud architecture, distant fleet specks, ground micro-detail).
+
+━━━ ACTION BELOW (when applicable) ━━━
+If the setting includes a ground biome (titan-warzone / industrial / rust-wasteland / alien-biomech / mecha-pilot-field / power-armor-zone), include visible motion or activity at ground level — squad watching from a ridge, scavenger rig kicking dust, alien creatures reacting to the shadow, refinery workers looking up, titan walking far below. The ground is alive too.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Layer the rolled lighting mode above with COMBAT-INTENSITY accents — muzzle-flash hot-spots / engine-glow trails / power-conduit pulse along hull / running-light arrays / shield-impact discharge.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ ABSOLUTE BANS ━━━
+- NO modern aircraft / military terminology (called out above)
+- NO box-shaped Earth-warship hulls — predatory blade-shapes only
+- NO ground-only scene without a skyship (the ship is the subject)
+- NO single-layer flat sky — multi-layer atmospheric depth is non-negotiable
+- NO realistic-photograph framing of a modern jet — this is sci-fi concept-art
+
+━━━ SCALE STAGING ━━━
+Stage ships at multiple distances when possible. Hero ship in foreground, smaller fleet specks at vanishing point. The sky should feel ENORMOUS and OCCUPIED.
+
+━━━ STRUCTURE — write 100-130 words ━━━
+Open with the vertigo camera angle + the skyship + its action ("Over-the-wing-POV of a blade-prow interceptor banking hard through storm-cloud canyon walls, contrails spiraling behind..."). Then weave in: sky environment with multi-altitude clouds, multi-distance ship staging, any sky-combat phenomenon, lighting/atmosphere, palette and mood. Hyper-real cinematic 3D finish.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
@@ -3715,6 +3812,7 @@ CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [st
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
   STEAMBOT_STEAM_TRANSPORT: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, transport, terrain_drama, surprise_element, phenomenon } = slots;
 
@@ -3783,7 +3881,6 @@ CRITICAL — the OPENING tokens establish VEHICLE + DRAMATIC TERRAIN as the subj
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
-
 
   STEAMBOT_STEAMPUNK_SPECTACLE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, event, crowd_detail, surprise_element, escalation } = slots;

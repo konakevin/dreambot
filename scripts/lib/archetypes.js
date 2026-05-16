@@ -552,6 +552,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_SKYSHIPS: {
+    description:
+      'PATH-BESPOKE — MechBot mech-skyships path (2026-05-15 migration to declarative composer; second MechBot path after titan-war-machines). Flying sci-fi mech-vessels in epic skies — predatory blade silhouettes, fang prows, spike rams, glowing power conduits. NOT modern military (no aircraft carrier / dreadnought / jet / helicopter). Reuses production-grade legacy 200-entry subject/action/setting pools. Adds 4 path-bespoke pools: composition (SKY vertigo angles), lighting (aerial flight overrides cosmic bot default), engagement (ALWAYS-ON multi-actor combat narrative beat — dogfight / strike / pursuit / drop / arrival / etc.), drama (40%-gated sky-combat phenomena). VERTIGO + MOVIE POSTER MANDATE + MULTI-ACTOR NARRATIVE + "TURNED UP TO 11" multi-layer atmospheric stack.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'composition', 'engagement'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',

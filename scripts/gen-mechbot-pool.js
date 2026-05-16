@@ -57,6 +57,210 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
+  // ─── mech-skyships path: composition (sky vertigo angles) ───
+  mech_skyships_composition: {
+    format: 'simple',
+    theme: `SKY-VERTIGO CAMERA ANGLES for the mech-skyships path — each entry specifies a camera position + framing that makes the viewer FEEL the air, the altitude, and the speed of the predatory sci-fi skyship through perspective alone. Each entry 25-50 words.
+
+⚠️ MANDATORY — every entry must convey VERTIGO + AERIAL spectacle. The viewer's gut reaction must be "I feel the altitude" or "I feel the speed."
+
+✓ SKY-VERTIGO ANGLE CATEGORIES (vary across):
+  • WORM'S-EYE FROM GROUND — camera at ground level looking straight up as the skyship roars overhead, hull filling the upper sky-frame
+  • OVER-THE-WING POV — camera mounted on the skyship's wing looking forward toward a target / horizon, blade-wing filling foreground edge
+  • COCKPIT/CANOPY-POV — looking through forward-facing canopy at the target ahead, reticle / HUD elements visible at frame edge
+  • GOD'S-EYE FROM HIGHER ALTITUDE — camera at higher altitude looking down at skyship + ground far below, multiple cloud-layers between
+  • THROUGH-CLOUD-LAYER BREAK — skyship piercing through a cloud-deck from above or below, vapor-cone bursting off prow
+  • MOUNTAIN-PASS THREADING — skyship banking hard through narrow gap between snow-capped peaks, peaks framing the frame
+  • LOW-PASS OVER CITY — camera at street-level / rooftop as skyship roars past tower-tops, windows reflecting hull-glow
+  • CHEEK-TO-CHEEK PARALLEL — camera alongside skyship at matching speed, hull filling right or left half of frame, contrails behind
+  • FORMATION-FLYBY — camera leading the formation, ships in V or wedge behind, exhaust-trails trailing
+  • DOGFIGHT-BANK PURSUIT — camera locked on skyship banking hard through cloud-cover in pursuit, motion-blur on wingtips
+  • CARRIER-LAUNCH — skyship deploying from a larger sky-vessel (mothership-class), scale-prover smaller ships visible
+  • ATMOSPHERIC RE-ENTRY BURN — skyship descending through fire with thermal-shield glowing white-hot, atmospheric burn-trail
+  • VERTICAL CLIMB — skyship climbing straight up through cloud layers, exhaust-cone trailing below, sun-glare ahead
+  • DIVE-BOMB DESCENT — camera tracking skyship in steep dive toward ground target, ground rushing up
+  • HOVER-OVER-WASTELAND — skyship suspended motionless over visible ground action, ground figures looking up
+  • UNDER-THE-BELLY — camera directly beneath skyship as it passes overhead, weapon-mounts and exhaust-vents visible
+  • TILT-BACK-FROM-SHADOW — camera on the ground in the moving shadow of the skyship overhead, sun blocked by hull silhouette
+  • ABOVE THE CLOUD DECK — wide aerial shot at cloud-bank altitude, skyship piercing the cloud-deck with upper hull in sun and lower in shadow
+  • THROUGH-DEBRIS-CLOUD — camera tracking skyship through a debris field / explosion aftermath, hull weaving through tumbling wreckage`,
+    touchpoints: [
+      'WORM\'S-EYE FROM GROUND — camera flush against cracked desert hardpan looking straight up as the skyship roars overhead, blade-hull filling the upper frame, exhaust-cone trailing white-hot vapor, ground figures sprinting in the foreground silhouetted against the sun',
+      'OVER-THE-WING POV — camera mounted on the skyship\'s starboard blade-wing looking forward toward a distant target spire, wing dominating the lower-left of frame, target ship banking away across cumulus cloud-cover',
+      'CANOPY-POV PURSUIT — looking through forward canopy at the target skyship banking away in pursuit, reticle elements glowing red at frame edge, instrument-glow reflected on the canopy glass, sun-glare across the top',
+      'GOD\'S-EYE FROM HIGHER ALTITUDE — high-aerial view looking down at the skyship gliding between two cloud-layers, ground far below visible through a break in the lower cloud-deck, multiple ship-specks at vanishing point',
+      'THROUGH-CLOUD-LAYER BREAK — skyship in the act of piercing the cloud-deck from above, hull half-emerging into open sky, vapor-cone bursting off prow, sun-shafts breaking through the cloud-tear',
+      'MOUNTAIN-PASS THREADING — skyship banking hard through a narrow gap between snow-capped peaks, peaks framing the left and right edges of frame, blade-wings nearly grazing rock, contrails curling',
+      'LOW-PASS OVER MEGACITY — camera at rooftop level as the skyship roars past tower-tops, neon signage reflecting off the hull-plating, downwash visible kicking debris from rooftops, distant skyline lit in dusk-orange',
+      'CHEEK-TO-CHEEK PARALLEL — camera alongside the skyship at matching speed, hull filling the right half of the frame from prow to stern, contrails trailing behind, distant fleet specks visible at vanishing point left',
+      'FORMATION-FLYBY — camera leading the formation at jet altitude, three ships in V-formation behind, exhaust-trails braiding, sun behind the formation casting silhouette, distant carrier-airship at horizon',
+      'DOGFIGHT-BANK PURSUIT — camera locked on the skyship banking hard through dense cumulus in pursuit of an off-frame target, motion-blur on wingtips, missile-launch flare from underside, contrail spiraling',
+      'CARRIER-LAUNCH DEPLOYMENT — skyship deploying from a larger mothership-class carrier visible at frame-top, scale-prover smaller ships in the distance, atmospheric haze separating altitudes, sun-shafts',
+      'ATMOSPHERIC RE-ENTRY BURN — skyship descending through fire with thermal-shield glowing white-hot at prow, atmospheric burn-trail crossing the upper sky, ground far below partially visible through plasma-glare',
+      'VERTICAL CLIMB — skyship climbing straight up through three cloud-layers, exhaust-cone trailing below in a vapor-pillar, sun-glare ahead at the apex of climb, smaller ships specks lower in formation',
+      'DIVE-BOMB DESCENT — camera tracking the skyship in steep dive toward a ground target, ground rushing up below, weapon-mounts charging visibly, motion-blur on the hull, debris already in the air',
+      'HOVER-OVER-WASTELAND — skyship suspended motionless above visible ground action, ground figures with rifles looking up, dust-cloud kicked up by downwash, multiple smaller ships circling at altitude',
+      'UNDER-THE-BELLY PASS — camera directly beneath the skyship as it passes overhead, weapon-mounts and exhaust-vents visible against the sky, sun-glare at edge, ground rushing in the foreground motion-blur',
+      'TILT-BACK FROM SHADOW — camera on a hilltop in the moving shadow of the skyship overhead, sun blocked by hull silhouette above, ground figures shielding eyes, skyship hull edge-lit by sun-rim',
+      'ABOVE CLOUD-DECK PIERCE — wide aerial shot at cloud-bank altitude, skyship piercing the cloud-deck with upper hull in golden sun and lower half in deep cloud-shadow, smaller ships visible at the cloud-line',
+      'THROUGH-DEBRIS-CLOUD WEAVE — camera tracking the skyship as it weaves through a tumbling debris field aftermath of an explosion, hull dodging chunks of wreckage, lens-flare from a distant fire',
+      'OVER-THE-SHOULDER FROM PILOT — POV behind a tiny pilot figure standing on a tower-top watching the skyship pass overhead, pilot in foreground silhouetted, skyship dominating midground at full scale',
+    ],
+    instructions: `Each entry is ONE specific sky-vertigo camera-angle preset, 25-50 words. Format: "ANGLE NAME CAPS — camera position + what dominates the frame + aerial/scale-prover reference". Vary across the 15+ angle categories. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── mech-skyships path: lighting (aerial flight) ───
+  mech_skyships_lighting: {
+    format: 'simple',
+    theme: `AERIAL FLIGHT LIGHTING for the mech-skyships path. Each entry is ONE specific cinematic lighting setup for sky-based action. Each entry 20-40 words.
+
+⚠️ STRICT BAN — NO "volumetric haze / generic atmospheric fog" as the PRIMARY lighting language. Volumetric god-rays are OK as a sky element but not the primary lighting mode. Lighting must specify SOURCE + DIRECTION + COLOR + behavior.
+
+🚫 ALSO BANNED:
+• NO cosmic/astronomy vocabulary (K-type dwarfs / nebula light / wrong fit for aerial flight)
+• NO daylight-resort-vista cheerful flat-sky
+• NO ground-cave/interior lighting modes
+
+✓ MANDATORY VARIETY — distribute roughly evenly across:
+  A. **GOLDEN HOUR HIGH-ALTITUDE** (~15%): warm low-angle sun glancing across hull-tops, long shadows on cloud-deck
+  B. **DAWN ABOVE THE CLOUD-DECK** (~15%): cold blue ambient + first warm orange touching upper hull surfaces, dual-color contrast
+  C. **DUSK BLOOD-RED HORIZON** (~10%): sun at horizon bleeding crimson across the entire sky, ships silhouetted edge-red
+  D. **STORM-CELL LIGHTNING FLASH** (~10%): pre-storm dark with actinic-white lightning forks briefly silhouetting ship and clouds
+  E. **NIGHT WITH ENGINE-GLOW + RUNNING-LIGHTS** (~10%): cold moonlight base + ship's own engine-glow + chassis running-lights as primary illumination
+  F. **SUNSET PURPLE-GOLD GRADIENT** (~10%): sky purple at zenith / gold at horizon, ships backlit edge-amber
+  G. **ATMOSPHERIC RE-ENTRY THERMAL BURN** (~5%): white-hot plasma-shield at prow, atmospheric burn-trail providing primary illumination
+  H. **MUZZLE-FLASH WEAPONS-DISCHARGE** (~10%): combat scene where weapon-discharge from the ship provides strobing primary light against darker background
+  I. **NEON-CYBERPUNK CITY-GLOW UPLIGHT** (~5%): low-altitude over a neon megacity, multi-color sign-lights uplighting the ship's underside
+  J. **ORBITAL TWILIGHT TERMINATOR** (~5%): high-altitude shot at the day/night terminator-line, half hull in sun + half in shadow
+  K. **AURORA EM-WARFARE INTERFERENCE** (~5%): high-altitude with aurora-coded electromagnetic warfare distorting the sky in green/violet curtains`,
+    touchpoints: [
+      'GOLDEN HOUR HIGH-ALTITUDE — warm low-angle sun glancing across hull-tops casting long amber shadows down onto the cloud-deck below, clear air, every panel of the skyship crisp in the backlight',
+      'DAWN ABOVE CLOUD-DECK — cold blue ambient with first warm orange touching only the upper hull surfaces of the skyship, dual-color contrast, cloud-deck below glowing pink from horizon-line sun',
+      'DUSK BLOOD-RED HORIZON — sun at horizon bleeding deep crimson across the entire sky, the skyship silhouetted edge-red against the burning sky, hard shadows cast on the cloud-deck below',
+      'STORM-CELL LIGHTNING FLASH — pre-storm dark with actinic-white lightning forks branching between charged cloud-banks, briefly silhouetting the skyship in stark white-on-black, deep shadow between flashes',
+      'NIGHT ENGINE-GLOW PRIMARY — cold moonlight base ambient with the skyship\'s own engine-glow and chassis running-lights providing primary illumination, hull self-lit in amber/cyan against deep cobalt sky',
+      'SUNSET PURPLE-GOLD GRADIENT — sky transitioning purple at zenith to gold at horizon, skyship backlit edge-amber, cloud-deck below catching gold from horizon-side, shadows long and stretched',
+      'ATMOSPHERIC RE-ENTRY THERMAL — white-hot plasma-shield at the skyship\'s prow providing primary illumination, atmospheric burn-trail crossing the upper sky behind, hull glowing orange-white from heat',
+      'MUZZLE-FLASH STROBE — combat scene with weapon-discharge from the skyship providing strobing primary light against deep storm-darkness, sharp shadow contrast pulsing in firing-rhythm',
+      'NEON-CYBERPUNK CITY-GLOW UPLIGHT — low-altitude over a neon megacity at night, magenta and cyan sign-lights from below uplighting the skyship\'s underside hull, hard upward shadows',
+      'ORBITAL TWILIGHT TERMINATOR — high-altitude shot at the day/night terminator-line, half the skyship hull in golden sun and half in cobalt shadow, atmospheric blue curve visible at horizon',
+      'AURORA EM-WARFARE INTERFERENCE — high-altitude with aurora-coded electromagnetic distortion curtaining the sky in green-violet ribbons, skyship hull faintly reflecting the aurora-color',
+      'HARSH MIDDAY ABOVE-CLOUD — overhead white sun with razor-edged shadows on the skyship hull, cloud-deck below bleached pale, heat-shimmer visible at distance',
+      'OVERCAST BATTLEFIELD SKY — uniform blanket-cloud diffuse light, low contrast, skyship reading in muted tones, ground far below visible through atmospheric haze',
+      'VOLCANIC UPLIGHT FROM BELOW — flying over an active volcanic region with orange lava-glow uplighting the skyship\'s underside hull in warm orange-red, smoke-columns from below',
+      'TWIN-SUN ALIEN SKY — alien-planet sky with two suns of different colors casting overlapping double-shadows on the skyship hull, atmospheric tint pulled toward unusual color',
+    ],
+    instructions: `Each entry is ONE specific aerial flight lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + sky context]". Distribute across the 11 buckets. NO "volumetric haze / generic atmospheric fog" as PRIMARY mode. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── mech-skyships path: engagement (ALWAYS-ON multi-actor combat scene) ───
+  mech_skyships_engagement: {
+    format: 'simple',
+    theme: `MULTI-ACTOR COMBAT NARRATIVE BEATS for the mech-skyships path — each entry describes a SCENE with the hero skyship + 2-4 OTHER actors in active interaction. NOT a solo hero ship flying. Each entry 40-80 words.
+
+⚠️ MANDATORY — every entry must include MULTIPLE actors in the scene with INTERACTION between them. The hero ship is engaged with: other ships (enemy / allied / fleet) AND/OR ground forces AND/OR a target structure AND/OR a city/installation reacting AND/OR debris/wreckage from prior kills. The viewer must read the STORY in 2 seconds.
+
+🚫 BANNED — NO solo hero-ship-flying-through-clouds entries. NO peaceful cruise. NO empty sky. If the entry could be summed up as "ship in pretty sky," it FAILS the gate.
+
+✓ ENGAGEMENT TYPES — vary across:
+  A. **DOGFIGHT TANGLE** (~15%): 2-4 enemy ships locked in pursuit pattern with hero, missile-trails crossing, one already smoking from hits
+  B. **SQUADRON STRIKE** (~15%): wing of ships diving in formation toward target convoy / installation / city below, AA-fire rising
+  C. **ESCORT DEFENSE** (~10%): hero ship shielding larger carrier-class vessel from incoming attackers, weapons firing forward
+  D. **CHASE PURSUIT** (~10%): hero ship in stern-chase of fleeing target ship, target throwing debris/countermeasures back, contrails braided
+  E. **ARRIVAL / DESCENT** (~10%): hero ship breaking atmosphere over a ground target, ground troops scattering, AA-emplacements rotating up
+  F. **AMBUSH-FROM-CLOUDS** (~10%): hero ship bursting out of cloud-cover to engage unsuspecting enemy formation, weapons opening up
+  G. **BOMBING-RUN** (~10%): hero ship in low-pass over target releasing ordnance, multiple explosions blooming behind, allied wingmen following
+  H. **DROP-DEPLOYMENT** (~5%): hero ship hovering low while smaller drop-pods / drones deploy from chassis-bays toward ground
+  I. **INTERCEPT** (~5%): hero ship banking hard to intercept incoming threat (missile-swarm / kamikaze ship / boarding pod), threat visible at vanishing point
+  J. **KILL-CONFIRMED** (~5%): hero ship banking away from a fresh kill, target ship spiraling down in flames, allied formation in deep distance
+  K. **DEEP-STRIKE** (~5%): hero ship in low-altitude attack run between buildings, target rooftop / installation in sight, ground AA tracking it
+
+Each entry must:
+• Name the engagement TYPE in the first 6 words
+• Identify the hero ship + the OTHER actors (2-4 named: "enemy interceptors" / "carrier-class vessel" / "ground AA emplacements" / "drop-pods" / "wingmen formation" / "target convoy" / "boarding swarm" / etc.)
+• Describe the INTERACTION (weapons-fire / pursuit / defensive maneuver / target reaction / debris / explosions)
+• Add 1-2 scale-prover details when appropriate (ground forces, dwarfed buildings, distant fleet specks)`,
+    touchpoints: [
+      'DOGFIGHT TANGLE — hero skyship banking hard pursued by three enemy interceptors in tight formation, missile-trails braiding between all four ships, one enemy already trailing smoke from a clean hit, contrails crossing the cloud-layer in tight loops, sun-glare lens-flaring across the engagement',
+      'SQUADRON STRIKE — wing of five hero ships in V-formation diving toward an enemy convoy crawling across the wasteland below, lead ship releasing first ordnance with bloom-explosion already blooming on a target vehicle, AA-tracer rising from the convoy in colored arcs',
+      'ESCORT DEFENSE — hero skyship positioned in front of a larger carrier-class vessel, weapons firing forward at incoming enemy formation, shield-impact discharge rippling across the hero ship\'s prow, allied fighters launching from the carrier behind',
+      'CHASE PURSUIT — hero ship in stern-chase of a fleeing enemy ship, target throwing countermeasure-flares back in a spray of decoys, both ships banked hard through cloud-cover, hero ship\'s weapon-mount charging glowing red',
+      'ARRIVAL DESCENT — hero ship breaking atmospheric re-entry over a defended ground installation, ground AA emplacements visibly rotating to track it, troops scattering for cover, dust and debris kicked up by downwash, allied dropships descending in formation behind',
+      'AMBUSH FROM CLOUDS — hero ship bursting up out of a cumulus cloud-bank to engage an unsuspecting enemy formation at altitude, weapons opening up mid-emerge, enemy ships visibly reacting with hard banks',
+      'BOMBING RUN OVER CITY — hero ship in low-pass over an enemy megacity releasing ordnance, multiple bloom-explosions in the city streets behind it, allied wingmen following in echelon, AA-fire rising from rooftops',
+      'DROP DEPLOYMENT — hero ship hovering low above a ground target, multiple smaller drop-pods deploying from chassis-bays in sequence, pods firing retro-thrusters toward landing zones, ground figures visible below preparing to engage',
+      'INTERCEPT FROM ALTITUDE — hero ship banking hard from cruise altitude to intercept an incoming missile-swarm, missile contrails visible spiraling toward the hero, point-defense weapons firing tracer-streams',
+      'KILL CONFIRMED BANK-AWAY — hero ship banking away from a fresh kill, target enemy ship spiraling down in flames trailing black smoke, allied formation visible in deep distance continuing engagement',
+      'DEEP STRIKE BETWEEN BUILDINGS — hero ship in low-altitude attack run threading between tower-tops of an enemy megacity, target installation visible ahead with weapons charging, ground AA-fire tracking from rooftops',
+      'CARRIER STRIKE — hero ship launching torpedo run against a colossal enemy carrier-class vessel, torpedo contrails extending forward, carrier point-defense lighting up in counter-fire, allied wingmen flanking',
+      'WAVE-ATTACK SWARM — hero ship leading a wave of smaller drone-craft toward a larger enemy target, drones spreading into attack formation, target rotating defensive guns to track the wave',
+      'WINGMAN-DOWN MOMENT — hero ship banking past a fellow ship spiraling down in flames, looking back at the dying wingman, enemy ship visible at vanishing point peeling away from the kill',
+      'PINCER MOVEMENT — hero ship closing on enemy target from one flank while allied ship visible closing from opposite flank, target ship caught between, hero\'s weapons charging for the kill-shot',
+      'BOARDING REPEL — hero ship engaging incoming boarding-pods from enemy formation, point-defense lighting up the swarm of pods, debris from destroyed pods raining downward through cloud-layer',
+      'RESCUE EXTRACTION — hero ship dropping low over a downed friendly ship in burning wreckage, deployment-bay open, ground figures running toward extraction, enemy ships closing at distance',
+      'COVER-FIRE ADVANCE — hero ship laying suppressive fire upward at enemy formation while allied gunship advances behind it toward target, multiple weapon-flashes from hero\'s mounts, enemy ships scattering',
+      'HIGH-G EVASION — hero ship pulling extreme maneuver through cloud-canyon to evade multiple incoming missiles, missiles tracking in trailing contrails, enemy ship visible at deep distance that launched them',
+      'DRAGON-DESCENT OVER CITY — hero ship descending vertically toward a megacity target, AA-streams from below tracking it, target buildings already burning, allied formation circling at higher altitude',
+      'FRIENDLY-FORMATION INBOUND — hero ship leading a wedge of allied ships inbound to engagement zone visible at deep distance, distant flashes from ongoing combat, hero\'s weapons charging for the engagement',
+    ],
+    instructions: `Each entry is ONE multi-actor combat narrative beat, 40-80 words. Format: "ENGAGEMENT TYPE CAPS — hero ship + 2-4 other actors + their interaction + scale-provers if relevant". STRICT mandate: MULTIPLE actors interacting visibly. NO solo hero-ship-flying. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── mech-skyships path: drama (40%-gated sky-combat phenomena) ───
+  mech_skyships_drama: {
+    format: 'simple',
+    theme: `40%-GATED SKY-COMBAT PHENOMENA for the mech-skyships path — a sky-event that amplifies the spectacle of aerial warfare. Each entry 25-50 words.
+
+⚠️ STRICT — each phenomenon must amplify SKY-COMBAT spectacle. Star Wars trench-run + 40K Imperial fleet + Mass Effect orbital + Independence Day + Battle of Endor lineage. NO peaceful nature, NO biomech, NO fantasy.
+
+✓ SKY-COMBAT PHENOMENA — distribute across:
+  • TRACER-ROUND ARCS streaking across the sky in colored lines
+  • MISSILE-LAUNCH from ship's underside with launch-flare and contrail
+  • SHIELD-IMPACT DISCHARGE energy-shield rippling visibly under incoming fire
+  • ORBITAL-STRIKE BEAM descending from above the atmosphere onto a ground target
+  • DROPSHIP-DEPLOYMENT smaller craft launching from the skyship's chassis-bays
+  • ATMOSPHERIC-RE-ENTRY BURN STREAK something descending from orbit through fire
+  • FORMATION OF DISTANT SHIPS visible at vanishing point engaging unseen target
+  • DOGFIGHT TANGLE multiple skyship silhouettes locked in pursuit across the sky
+  • SONIC-BOOM SHOCKWAVE visible atmospheric ring from supersonic flyover
+  • EXPLOSION-BLOOM from a destroyed ship visible at distance, debris-cloud expanding
+  • CARRIER-AIRSHIP LOOMING vast carrier-class vessel in upper background deploying ships
+  • DEBRIS-FIELD FOREGROUND wreckage tumbling through the air from a recent kill
+  • SEARCHLIGHT-BEAMS from anti-air positions sweeping the sky tracking the skyship
+  • LIGHTNING-STORM ELECTROMAGNETIC arc-discharges branching between charged cloud-banks
+  • CONTRAIL TANGLE multiple ships' contrails crisscrossing the sky in dogfight patterns
+  • DEPLOYED SWARM-DRONES launching from the skyship's hangar-bays in formation
+  • PLASMA-DISCHARGE FROM HULL energy bleeding visibly between hull-plates after impact
+  • CITY-BELOW-ON-FIRE distant city ablaze visible through cloud-breaks
+  • CRASHED-SHIP-FIREBALL fresh impact-crater with rising flames at ground level visible
+  • EMP-PULSE-DAMPENED HULL hull running-lights stuttering offline after EMP-burst
+  • COMET-LIKE METEOR-STRIKE incoming kinetic-rod or asteroid impact across the upper sky`,
+    touchpoints: [
+      'TRACER-ROUND ARCS — colored tracer-round streaks crossing the sky in arcing lines from anti-air positions tracking the skyship, briefly illuminating the air around the hull',
+      'MISSILE-LAUNCH FROM UNDERSIDE — skyship releasing a missile from its underside with launch-flare bloom and white-hot contrail spiraling toward an off-frame target',
+      'SHIELD-IMPACT DISCHARGE — energy-shield rippling visibly under heavy incoming fire, hexagonal cells lighting up where rounds strike, electromagnetic discharge bleeding outward in arcs',
+      'ORBITAL-STRIKE BEAM DESCENT — single column of focused energy descending vertically from above the atmosphere onto a distant ground target, accompanied by ground-flash visible through cloud-break',
+      'DROPSHIP DEPLOYMENT — smaller craft launching in sequence from the skyship\'s chassis-bays, each dropship with its own engine-glow, deploying toward the ground far below',
+      'ATMOSPHERIC-RE-ENTRY BURN STREAK — long re-entry streak crossing the upper sky with white-hot leading edge, something descending toward the battlefield from orbit, burn-trail visible for miles',
+      'DISTANT FORMATION ENGAGING — formation of ships visible at vanishing point engaging an unseen target with weapon-flashes, smoke-columns rising from kills',
+      'DOGFIGHT TANGLE — multiple skyship silhouettes locked in pursuit across the upper sky, contrails crisscrossing in tight loops, weapon-flashes between them',
+      'SONIC-BOOM SHOCKWAVE — visible atmospheric shockwave ring expanding outward from a supersonic ship-flyby, briefly distorting the air, dual-vapor-cone in the wake',
+      'EXPLOSION-BLOOM AT DISTANCE — bright orange explosion-bloom from a destroyed ship visible at deep distance, debris-cloud expanding outward, fireball still rolling',
+      'CARRIER-AIRSHIP LOOMING ABOVE — vast carrier-class mothership in the upper background deploying smaller ships in waves, scale-prover for the hero ship',
+      'DEBRIS-FIELD FOREGROUND — tumbling wreckage in the foreground from a recent kill, the hero skyship weaving through hull-fragments, dust and burning debris in the air',
+      'SEARCHLIGHT BEAMS SWEEPING — multiple anti-air searchlights from ground positions sweeping the sky tracking the skyship, beams crossing through clouds',
+      'LIGHTNING ELECTROMAGNETIC STORM — sky filled with branching electromagnetic arc-discharges between charged cloud-banks, occasional strikes hitting the skyship\'s antenna-arrays',
+      'CONTRAIL TANGLE — multiple ships\' contrails crisscrossing the sky in tight dogfight patterns, sun lighting the white trails against deep blue, the spectacle of aerial battle visible in the trails alone',
+      'DEPLOYED SWARM-DRONES — swarm of small combat drones launching from the skyship\'s hangar-bays in coordinated formation, engine-trails braiding behind them',
+      'PLASMA-DISCHARGE FROM HULL — visible plasma-arc bleeding between damaged hull-plates after an impact, energy crackling across the chassis seams',
+      'CITY-BELOW-ON-FIRE — distant city ablaze visible through breaks in the cloud-deck far below, multiple smoke-columns rising from the burning blocks',
+      'CRASHED-SHIP FIREBALL — fresh impact-crater visible at ground level through a cloud-break, recently-downed ship with rising flames and smoke',
+      'EMP-PULSE DAMPENED HULL — skyship\'s running-lights stuttering offline sequentially after an EMP-burst, hull going dark in cascade, engine-glow flickering',
+      'COMET-LIKE METEOR-STRIKE — incoming kinetic-rod or meteor-strike crossing the upper sky with white-hot leading edge, contrail visible for miles, impending impact',
+    ],
+    instructions: `Each entry is ONE specific sky-combat phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + aerial/atmospheric note". STRICT sky-combat aesthetic — NO peaceful, NO biomech, NO fantasy. Amplifies aerial-warfare spectacle. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── titan-war-machines path: composition (vertigo angles) ───
   titan_war_composition: {
     format: 'simple',
