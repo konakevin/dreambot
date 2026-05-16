@@ -281,6 +281,26 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  GOTHBOT_COZY_GOTH: {
+    description:
+      "PATH-BESPOKE — GothBot cozy-goth path (2026-05-15 migration, R3 figure-accent added). LAYERED WITCH'S-LAIR / WIZARD'S-WORKROOM / OCCULT-APOTHECARY interiors — warm-dark gothic spaces with a TWIST OF MAGIC, ALWAYS inhabited by a small mysterious-feminine figure (gypsy fortune-teller / vampire-noblewoman / mysterious-witch / cloaked-mystic / dark-baroness) at deep midground 8-15% of frame as SCALE-PROVER ONLY. Interior stays the hero at 80%+ visual weight. GOTH + TWIST OF MAGIC + small mysterious witness. 5 path-bespoke axes (interior_space / magical_glow_item pickN:3 / occult_artifact pickN:3 / figure_accent / ambient_atmosphere) + universal lighting + atmosphere.",
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'interior_space',
+        'magical_glow_item',
+        'occult_artifact',
+        'figure_accent',
+        'ambient_atmosphere',
+      ],
+    },
+    pickN: { magical_glow_item: 3, occult_artifact: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GOTHBOT_CASTLEVANIA_SCENE: {
     description:
       "PATH-BESPOKE — GothBot castlevania-scene path (2026-05-15 migration). STRICT KONAMI CASTLEVANIA aesthetic — Dracula's-castle / Symphony-of-the-Night / Bloodlines / Lords-of-Shadow / Order-of-Ecclesia visual canon. Ayami-Kojima painted concept-art lineage. STRUCTURE IS THE HERO — the Castlevania building dominates the frame with art-nouveau ornate gothic detail. BOLD + LUSH + FULL-COLOR-SATURATED palette (royal violet / deep crimson / sapphire / gold-leaf / emerald / amber). 6 path-bespoke axes (structure / architectural_detail pickN:3 / inner_light / accent_creature 80%-gated / spice_decoration / sky_layer) + universal lighting + atmosphere. Differentiator vs gothic-architecture: STRICTLY Castlevania-game-coded — Wallachian / Vlad-Tepes-coded / Bram-Stoker-Dracula-coded — NOT Bloodborne, NOT generic-gothic, NOT Hammer-horror.",
@@ -455,9 +475,9 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
-  MECHBOT_ALIEN_BIOMECHS: {
+  MECHBOT_MECH_CREATURES: {
     description:
-      'PATH-BESPOKE — MechBot alien-biomechs path (2026-05-15 migration). Flesh-machine alien organism (creature scale — between human-sized and rhino-sized) is the SUBJECT in a biomech habitat. NO humanoid cyborgs, NO vehicles, NO architecture-scale hive walls, NO pilots. H.R. Giger / Bloodborne / Annihilation Shimmer / Scorn / Hollow Knight body-horror beauty. Direct mirror of DRAGON_SCENE shape: subject + action + landscape + drama (40% gated phenomenon) + surprise_element. Canonical-LITE — MechBot uses its locked `render` medium so Sonnet body leads with biomech-horror specifics.',
+      'PATH-BESPOKE — MechBot mech-creatures path (2026-05-15 migration; pivoted from alien-biomechs after Giger flesh-fusion intent collapsed under Flux render-medium prior). PURE MECHANICAL creature is the SUBJECT — body-plan AND scale variance from small mech-fauna (1-3m mech-wolf/raptor/cat) to medium walkers (3-8m quadrupeds/bipeds) to aerial (mech-bird, drone-falcon) to aquatic (mech-cephalopod) to COLOSSAL kaiju-walkers (50m-1km+ with tiny humans as scale provers). Boston Dynamics + Horizon Zero Dawn + Pacific Rim + Edge of Tomorrow + Bayonetta-Cherubim + Titanfall lineage. NO flesh, NO organic tissue, NO Giger. Direct mirror of DRAGON_SCENE shape: subject + action + landscape + drama (40% gated phenomenon) + surprise_element. Canonical-LITE — MechBot uses its locked `render` medium so Sonnet body leads with pure-mech specifics.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
@@ -542,6 +562,29 @@ const ARCHETYPES = {
         'skin',
         'eyes',
         'makeup',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
+      path: ['persona', 'landscape', 'action'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_STEAMPUNK_MAN: {
+    description:
+      'PATH-BESPOKE — SteamBot steampunk-man path (2026-05-15 rewrite to canonical character-path shape, mirror of STEAMBOT_STEAMPUNK_WOMAN). Single steampunk MAN at 25-40% frame, FULL BODY, in a candid mid-action moment in a Victorian-industrial setting. HANDSOME / DASHING / RUGGED / INTENT / CAPABLE — never sexy/seductive. Oil-painted illustration on canvas (Frazetta / Brom / Vallejo painted-fantasy-cover lineage). Strict male DNA (skin / eyes / facial_hair / hair_color / hairstyle / outfit / accessory) — never cross-polluted with female vocab. 7 character DNA axes + 3 path-bespoke (persona / landscape / action) + 2 universal (lighting / atmosphere).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'skin',
+        'eyes',
+        'facial_hair',
         'hair_color',
         'hairstyle',
         'outfit',

@@ -70,6 +70,12 @@ module.exports = {
   GOTHBOT_GOTHIC_VISTA_PHENOMENON: load('gothbot_gothic_vista_phenomenon'),
   GOTHBOT_GOTHIC_VISTA_SURPRISE_ELEMENT: load('gothbot_gothic_vista_surprise_element'),
   GOTHBOT_GOTHIC_VISTA_SKY: load('gothbot_gothic_vista_sky'),
+  // ─── cozy-goth path (2026-05-15 migration — layered witch's-lair / wizard's-workroom, magical-glow + figure-accent)
+  GOTHBOT_COZY_GOTH_INTERIOR_SPACE: loadOptional('gothbot_cozy_goth_interior_space'),
+  GOTHBOT_COZY_GOTH_MAGICAL_GLOW_ITEM: loadOptional('gothbot_cozy_goth_magical_glow_item'),
+  GOTHBOT_COZY_GOTH_OCCULT_ARTIFACT: loadOptional('gothbot_cozy_goth_occult_artifact'),
+  GOTHBOT_COZY_GOTH_FIGURE_ACCENT: loadOptional('gothbot_cozy_goth_figure_accent'),
+  GOTHBOT_COZY_GOTH_AMBIENT_ATMOSPHERE: loadOptional('gothbot_cozy_goth_ambient_atmosphere'),
   // ─── castlevania-scene path (2026-05-15 migration — Konami Castlevania, Ayami Kojima painted)
   GOTHBOT_CASTLEVANIA_SCENE_STRUCTURE: loadOptional('gothbot_castlevania_scene_structure'),
   GOTHBOT_CASTLEVANIA_SCENE_DETAIL: loadOptional('gothbot_castlevania_scene_detail'),

@@ -1232,6 +1232,119 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+  GOTHBOT_COZY_GOTH: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      interior_space,
+      magical_glow_item,
+      occult_artifact,
+      figure_accent,
+      ambient_atmosphere,
+    } = slots;
+
+    const magicList = Array.isArray(magical_glow_item) ? magical_glow_item : [magical_glow_item];
+    const occultList = Array.isArray(occult_artifact) ? occult_artifact : [occult_artifact];
+
+    return `You are a gothic-interior painter writing LAYERED WITCH'S-LAIR / WIZARD'S-WORKROOM scenes for GothBot. Warm-dark gothic interiors with a TWIST OF MAGIC — densely packed with GLOWING potions, RUNED artifacts, MYSTICAL crystal orbs, grimoires with luminous text, and occult curios — inhabited by a SMALL mysterious-goth-feminine figure at deep midground as ATMOSPHERIC SCALE-PROVER ONLY. GOTH + MAGIC, never grim-death-cabinet. Painterly oil-on-canvas aesthetic — Practical Magic apothecary, Hocus Pocus witch-house, Studio Ghibli Howl's-Moving-Castle workroom, Pan's Labyrinth magical study, Harry Potter Hogwarts-divination-tower.
+
+━━━ INTERIOR IS THE HERO — ABSOLUTE FIRST RULE ━━━
+The room and its layered curio-cabinet contents fill 80%+ of visual weight. The single mysterious-goth-feminine figure is SCALE-PROVER ONLY at 8-15% of frame, positioned at DEEP MIDGROUND or MIDGROUND CORNER (never foreground, never centered, never the subject). The viewer's eye lands on the room first, the magical trinkets second, and only then notices the figure as a small atmospheric witness. SOLO — only ONE figure ever. NO faces in close-up — figure is small, often partially turned away, partly silhouetted by candlelight.
+
+━━━ NO BODIES / ORGANS / CADAVERS — ABSOLUTE BAN ━━━
+NO anatomical models, NO skeleton displays, NO cadaver-art, NO organ-in-jar specimens, NO body-part imagery, NO mortuary-coded oddities. The aesthetic is MAGICAL not MORBID. Skulls allowed only as small accent (one skull-on-shelf max, not center-frame). Bones allowed only as occult-ritual tools (rune-carved bone-dice / bone-handle athame), not as anatomy displays.
+
+━━━ THE ROOM IS THE HERO — INTIMATE MID-CLOSE FRAME ━━━
+Mid or mid-close intimate frame, looking INTO a corner / alcove / shelf-cluster of the interior. The space FILLS 80%+ of the frame. Camera at eye-level or slightly elevated, looking at a richly-furnished section of the room — never a wide empty hall, always a CORNER PACKED WITH STUFF. The viewer should want to study every square inch.
+
+━━━ DENSELY LAYERED — THIS IS THE SIGNATURE ━━━
+EVERY SURFACE IS LAYERED. Books piled on books, glowing potion-jars stacked on shelves, hanging dried herbs in bundles overlapping, candles in melted clusters, magical artifacts crammed into every nook. 5+ depth layers from foreground to back-shelf, with stuff at every layer. Wonder-cabinet density of MAGICAL curios.
+
+━━━ THREE MAGICAL GLOWING ITEMS — render visibly in the frame ━━━
+  • MAGIC 1: ${magicList[0] || ''}
+  • MAGIC 2: ${magicList[1] || ''}
+  • MAGIC 3: ${magicList[2] || ''}
+
+━━━ THREE OCCULT ARTIFACTS — render visibly in the frame ━━━
+  • OCCULT 1: ${occultList[0] || ''}
+  • OCCULT 2: ${occultList[1] || ''}
+  • OCCULT 3: ${occultList[2] || ''}
+
+PLUS layer additional cozy-gothic items throughout to achieve curio-cabinet density:
+• ANTIQUE BOOKS piled high, leather-bound spines, gilt titles
+• APOTHECARY JARS with hand-written labels, mysterious contents
+• MELTED CANDLES in brass candelabras and wrought-iron stands, wax pools
+• DRIED HERBS hanging in bundles from rafters
+• PRESSED-FLOWER frames and botanical illustrations on walls
+• BRASS INSTRUMENTS — astrolabes, sextants, pendulums, magnifying lenses
+• VELVET cloth draped over surfaces, gold-tassel trim
+• PARCHMENT scrolls partially unfurled
+• ANTIQUE MAPS pinned to walls
+• CRYSTAL clusters and geodes on shelves, faint glow
+• ANTIQUE GLASS BOTTLES with colored contents
+• WROUGHT-IRON sconces, lanterns
+• COBWEBS at cornices, dust on top shelves
+
+━━━ WARM-DARK COZY PALETTE ━━━
+WARM AMBER PRIMARY — candle-amber, hearth-glow, oil-lamp gold. Deep mahogany and burgundy wood-tones. Rich-velvet plum, burgundy, forest-green secondary surfaces. Brass-and-bronze accents. Aged-parchment yellow. Deep-violet and indigo in shadows. ACCENT jewel-tones in stained-glass, crystal, potion-bottles (sapphire / emerald / amethyst / ruby / amber-honey). NEVER cold-blue dominant, NEVER stark-white, NEVER neon. Picture an oil painting of an 1860s alchemist's study at midnight.
+
+━━━ LIGHTING — WARM POOLS, DEEP SHADOWS ━━━
+Multiple WARM LIGHT SOURCES create pools of amber illumination — candles, oil lamps, fireplace embers, stained-glass with warm light behind. Light is SOFT and INTIMATE. Deep shadows in corners and under shelves. Volumetric warm-light rays catching dust-motes.
+
+━━━ MOOD — HAUNTINGLY COZY ━━━
+WARM + INTIMATE + OBSESSIVELY LAYERED + PEACEFUL + slightly EERIE without scary. A witch-scholar-collector's space inhabited for centuries with a story behind every object.
+
+━━━ STRICT GOTHBOT COZY-GOTH ━━━
+🚫 NO multiple figures — SOLO only (one feminine figure max)
+🚫 NO foreground figure / NO centered figure / NO portrait framing — figure is SCALE-PROVER at 8-15% frame, deep midground
+🚫 NO bodies / organs / cadavers / anatomical-models / skeleton-displays / mortuary oddities — MAGICAL not MORBID
+🚫 NO sexualized / cheesecake / lingerie — sleek-gothic-mysterious, not pin-up
+🚫 NO sci-fi / modern / cyberpunk / neon
+🚫 NO real-world ethnic codes (gothic-romanticized only — no actual folk costumes)
+🚫 NO bright daylight — always candle-and-firelight + magical-glow
+🚫 NO cold-blue dominant — warm-amber primary
+🚫 NO sterile / sparse — DENSELY LAYERED mandatory
+🚫 NO outdoor scenes — pure interior
+🚫 NO grim death-cabinet — peaceful magical warmth
+✓ Practical Magic / Hocus Pocus / Howl's Moving Castle / Pan's Labyrinth / Harry Potter / 19th-c alchemist's study engravings visual lineage
+
+━━━ THE INTERIOR SPACE ━━━
+${interior_space}
+
+━━━ THE MYSTERIOUS-GOTH-FEMININE FIGURE — DEEP MIDGROUND SCALE-PROVER ━━━
+${figure_accent}
+
+She is SMALL in the frame (8-15% of visual weight), positioned at deep midground or midground corner, partly absorbed into the warm-shadow of the room. SOLO — only one figure. Often partially turned away, partly silhouetted by candlelight. She belongs in the space — she is part of the atmospheric inventory, not its subject.
+
+━━━ AMBIENT ATMOSPHERE ━━━
+${ambient_atmosphere}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION — INTIMATE MID-CLOSE, DENSELY LAYERED ━━━
+MID or MID-CLOSE intimate frame. Looking INTO a corner/alcove/shelf-cluster — never wide empty hall. 5+ depth layers from foreground tabletop / shelf-edge through midground shelves of stuff / deeper shelves and walls / back wall with hanging items / ambient air with dust-motes and candle-smoke. Curio-cabinet density throughout.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: the interior space described], [three magical glowing items visible at varied depth], [three occult artifacts visible at varied depth], [layered cozy-gothic items filling surrounding surfaces — books, candles, jars, herbs, instruments], [the small mysterious-goth-feminine figure at deep midground as scale-prover], [ambient atmosphere — dust-motes / candle-smoke / etc.], [warm-amber lighting with deep-shadow contrast], [warm-dark palette with jewel-tone accents], [hauntingly cozy mood]
+
+DRAMATIC VISUALS: DENSELY LAYERED. CURIO-CABINET DENSITY. WARM-AMBER. Interior is hero, figure is small scale-prover. Painterly oil-on-canvas.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   GOTHBOT_CASTLEVANIA_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
@@ -2499,6 +2612,95 @@ Open with the dragon + its action ("Crimson dragon mid-roar with bone-spike cres
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MECHBOT_MECH_CREATURES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, surprise_element, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render this visibly in the scene ━━━
+${drama}
+
+This is a scene-event happening around the mech — render it as a visible secondary focal point (NOT eclipsing the creature, but amplifying the cinematic spectacle).
+
+`
+      : '';
+
+    return `You are a cinematic mech-concept painter writing a PURE MECHANICAL CREATURE scene for MechBot. Hyper-real cinematic 3D / VFX-quality. Boston Dynamics engineering precision + Horizon Zero Dawn machine-fauna design + Pacific Rim kaiju-scale walkers + Edge of Tomorrow Mimics + Phantasy Star + Bayonetta-Cherubim + Titanfall mech-ecology + Ghost in the Shell tachikoma. The scene should make the viewer feel AWE — at the engineering, the scale, the dynamic moment captured.
+
+━━━ NON-NEGOTIABLE — IT IS A PURE MECHANICAL CREATURE ━━━
+The subject is a MACHINE shaped like a creature — wholly built, NOT grown. Plated armor, hydraulic tendons, articulated chassis, sensor-arrays, weapon-mounts, propellant-vents, running-light arrays. NO flesh, NO organic tissue, NO translucent skin over piston-bone, NO biological organs, NO Giger. Where panels open or seams gap, what you see is MORE machine — gears, cables, coolant lines, glowing reactor cores — never wet tissue.
+
+━━━ SCALE VARIES — RENDER WHATEVER THE SEED DESCRIBES ━━━
+This path spans the full range of mechanical creatures:
+- SMALL mech-fauna (1-3m): mech-cat / mech-wolf / mech-raptor / mech-scavenger / drone-hound — intimate framing
+- MEDIUM mech-walkers (3-8m): mech-quadruped / mech-biped / mech-runner — medium-shot framing
+- AERIAL mech-fauna (1-10m): mech-bird / drone-falcon / mech-pterodactyl / mech-dragonfly — sky-backed
+- AQUATIC mech (varies): mech-octopus / mech-cephalopod / mech-crustacean / mech-eel — underwater or shore
+- COLOSSAL mech-titans (50m-1km+): kaiju-scale walkers / building-tall mech-walkers / skyscraper-mech — wide-establishing-shot with TINY HUMAN SILHOUETTES at the base as scale provers
+
+If the seed describes a colossal kaiju-walker, RENDER IT THAT SIZE — wide composition, atmospheric haze in deep distance, tiny human figures or vehicles at the base proving scale. If the seed is a small mech-creature, frame it close — never shrink it into the distance.
+
+━━━ THE MECHANICAL CREATURE ━━━
+${subject}
+
+Render the EXACT body-plan + scale + mechanical features described. Armor plating, hydraulic joints, sensor-eye-clusters, propellant-vents, running-light arrays, weapon-mounts, antenna-clusters — every surface specific. NO biological tissue anywhere.
+
+━━━ THE ACTION — what the mech is DOING (mid-motion) ━━━
+${action}
+
+Captured at a LOADED INSTANT — striding / scanning / weapons-deploying / propellant-venting / sensor-sweeping / kaiju-walking / launching / landing / hunting / stalking / pivoting. Body language tells the story through visible mechanical posture. NEVER static "standing in front of camera."
+
+━━━ THE LANDSCAPE (the stage) ━━━
+${landscape}
+
+Render every detail with depth: FOREGROUND tactile detail (rocks / wreckage / vehicles / vegetation) → MIDGROUND landscape body + the mech → DEEP DISTANCE atmospheric layers stacked (mountains / city silhouette / sky / orbital horizon). Never flat backdrop. The landscape must give SCALE — if the mech is colossal, the landscape must be vast enough to dwarf it back; if small, the foreground details set its size.
+${dramaSection}
+━━━ SURPRISE ELEMENT — tiny secondary subject for added story ━━━
+${surprise_element}
+
+Place at midground or deep midground — a small detail that implies the wider mech-creature world. For COLOSSAL mech-walkers, the surprise element OFTEN includes tiny humans / vehicles / smaller mech-pack at the base as scale provers — embrace that. NEVER foreground or competing with the main mech for attention.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Cinematic directional light with strong atmospheric volumetrics. Running-light accents on the mech (sensor-eye glow / reactor-core glow / weapon-charge glow) at multiple distances. Single-color signal accent dominant (sodium-amber / cyan-coolant / arc-violet / signal-red / monitor-green).
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ ABSOLUTE BANS ━━━
+- NO humanoid cyborgs (cyborg-* paths' territory) — mech-creatures have NON-humanoid body plans
+- NO flesh / NO organic tissue / NO translucent skin over piston-bone / NO weeping spiracle-vents / NO bioluminescent organ-glow — this is PURE machine
+- NO mech-pilots / NO cockpits (mecha-pilots territory) — these mechs are autonomous fauna, not piloted
+- NO industrial factory machinery (industrial-machines territory) — these are CREATURES, not stationary equipment
+- NO airships / sky-vessels (mech-skyships territory) — wings/flight OK on mech-birds but not vehicles
+- NO gore / NO biological violence
+
+━━━ LEG/LIMB-COUNT + SCALE FIDELITY ━━━
+If the seed specifies a leg / tendril / wing / arm count (tripedal / quadrupedal / hexapod / octopod / eight-tentacled / six-armed) OR a scale (kaiju-scale / building-tall / skyscraper-mech / colossal / 500m / 1km), repeat the count AND the scale TWICE in the polished prompt — Flux's bipedal-default and human-scale defaults collapse non-standard limb counts and giant scale without reinforcement.
+
+━━━ COMPOSITION ━━━
+Mech-creature dominates a dynamically-lit landscape sized to match its scale. Depth-on-depth: foreground tactile detail → midground mech-creature body → deep distance terrain stacked in atmospheric layers. Scale proven through peripheral elements:
+- For SMALL/MEDIUM mech: peripheral wreckage, smaller fauna, surface texture
+- For COLOSSAL mech: TINY HUMAN SILHOUETTES at the base, distant vehicles, buildings dwarfed beneath, atmospheric haze receding miles
+
+VARY POSES BROADLY — striding / mid-leap / launching / landing / scanning / pivoting / weapons-deploying / kaiju-walking / pack-prowling / sentinel-stance / mid-strike / emerging from terrain / climbing / breaching surface. Never the same composition twice.
+
+━━━ STRUCTURE — write 100-130 words ━━━
+Open with the mech-creature + its action ("Quadrupedal mech-wolf mid-prowl with sensor-array crown swept low, hydraulic haunches flexed, running-lights pulsing amber..." OR "Colossal building-tall mech-walker striding through fog with three articulated legs, tiny human figures scrambling at its base..."). Then weave in: landscape backdrop with depth layers, lighting/atmosphere, surprise element at midground, any phenomenon drama, palette and mood. Hyper-real cinematic 3D finish.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
@@ -3126,6 +3328,108 @@ ALLOWED Victorian-fashion vocabulary (use freely): corset, corseted, structured 
 [OPENING: "a [ethnicity-coded] WOMAN [doing exact action] in [steampunk setting]" — woman comes before persona], [her couture outfit with OBSESSIVE LAYERED material detail — every visible layer + every brass clasp / lace cuff / embroidered sleeve / jeweled brooch], [signature accessory visible], [her face: skin tone + eyes + makeup + hair from DNA slots], [the steampunk setting with depth + atmospheric layers], [lighting + atmosphere], [color palette + mood]
 
 CRITICAL — the OPENING tokens are "[ethnicity-coded woman] [DOING ACTION] in [steampunk setting]". She fills 25-40% of frame, FULL-BODY. The OUTFIT gets the most word-budget — that's where the obsessive material detail lives.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  STEAMBOT_STEAMPUNK_MAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      persona,
+      skin,
+      eyes,
+      facial_hair,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+    } = slots;
+
+    return `You are a cinematic illustration painter writing a CANDID STEAMPUNK SCENE for SteamBot — a single handsome MAN caught mid-action inside a fully-realized Victorian-industrial world. Lush vivid painted illustration register — finished animation key-art / luxe production-painting feel (BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle / Treasure-Planet lineage). THE OUTFIT IS THE MAIN SHOW. The setting is his STAGE — a specific, lived-in, sock-blowing steampunk world. Solo. Candid. Tasteful. Sock-blowing.
+
+━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
+The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "captain", "engineer", "mechanic", "explorer", "gentleman", "rogue", or any gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [ethnicity-coded] MAN [doing action] in [setting]..." — "man" comes BEFORE his persona/role. Use he/his/him throughout.
+
+━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
+The steampunk man is the MAIN SUBJECT. His face, the OUTFIT, persona, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette. NOT a centered head-portrait. MEDIUM scale where outfit / face / hair / facial hair / accessory all CLEARLY READABLE. THE OUTFIT IS THE MAIN SHOW — every layer must read.
+
+━━━ THE OUTFIT IS THE MAIN SHOW — NON-NEGOTIABLE ━━━
+Render the OUTFIT with OBSESSIVE craftsmanship detail — this is what the viewer is here to see. Victorian-industrial steampunk, super ornate, super layered, period-accurate gentleman's attire. NEVER SIMPLE — never plain shirt, never plain pants, never minimal. The outfit silhouette varies wildly across renders — could be a tailored frock-coat, or a military officer's coat-and-breeches, or a leather aviator coat + flight gear, or a riding-coat with brass clasps over waistcoat + trousers, or an alchemist's apron over shirt + waistcoat + breeches, or a engineer's vest + rolled sleeves + work-trousers, or a gentleman explorer's khaki kit + boots, or a dandy's brocade frock-coat + cravat + trousers. Whatever silhouette the wardrobe pool rolls — render it as ORNATE, LAYERED, AND DETAILED. Every brass button, every leather strap, every layer named.
+
+━━━ SOLO CHARACTER ONLY ━━━
+EXACTLY ONE character. No companions, no second figures, no crowds, no women. He is ALONE in his moment.
+
+━━━ HANDSOME THROUGH ACTION — NOT POSED — NEVER SEDUCTIVE ━━━
+He is HANDSOME, DASHING, RUGGED, INTENT, CAPABLE, WEATHERED — the appeal reads through his action, his weathered features, his craftsmanship, his confident stance. NEVER through pose-for-camera, NEVER through seductive/smoldering/come-hither energy. NEVER bare-chested. NEVER shirtless. NEVER open-shirt-for-sex-appeal. He is FULLY DRESSED at all times — rolled sleeves over a workbench are fine (that's working, not undressing). Think Errol Flynn / Cary Grant / Robert Downey Jr's Sherlock / BioShock-Infinite Booker / Treasure-Planet Captain Amelia's male crew counterparts / Around-the-World-in-80-Days Phileas Fogg.
+
+━━━ THE STEAMPUNK SETTING — HIS STAGE — BLOW SOCKS OFF ━━━
+${landscape}
+
+This setting is HIS WORLD. Render it as a FULLY-REALIZED steampunk environment with depth-on-depth — FOREGROUND tactile detail near him (workbench surface, ship railing, console knobs, alchemy table, pipework he's leaning against) → MIDGROUND him + the immediate environment (the room/space he stands in) → DEEP DISTANCE the wider world (corridor extending back, sky beyond the porthole, factory floor receding, balcony view, conservatory glass roof). Never a flat backdrop. Never decorative-clutter framing of clocks/gears/pipes pasted around his edges — the setting is LIVED IN, FUNCTIONAL, real.
+
+━━━ HIS PERSONA (his role / energy — informs how he carries himself) ━━━
+${persona}
+
+━━━ HIS COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
+A ${skin.split(',')[0]}, with ${eyes.split(',')[0]} eyes, ${facial_hair.split(',')[0]}, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory}.
+
+(All eight DNA elements — ethnicity/skin / eyes / facial hair / hair color / hairstyle / outfit / accessory / persona — should be discernible in the render. Face fully visible — he's not in a sealed helmet.)
+
+━━━ FACIAL HAIR MANDATE — DETAILED + PERIOD-ACCURATE ━━━
+Render his facial hair with OBSESSIVE specificity AND period-Victorian vocabulary. NEVER generic stubble unless the pool says so. Always rendered exactly — waxed handlebar mustache / full mutton-chop sideburns / Van Dyke goatee / clean-shaven sharp jaw / three-day stubble / iron-grey beard / Imperial mustache / chinstrap beard / pomaded-down beard / sailor's full beard / soot-flecked stubble. Whatever the facial-hair pool says — render it visibly and period-accurate.
+
+━━━ ACCESSORY MANDATE — DETAILED + STEAMPUNK-CODED ━━━
+The accessory he carries / wears must be rendered with OBSESSIVE mechanical detail and steampunk specificity. Brass + copper + leather + steel + gemstone + clockwork. Every gear visible, every rivet shown, every patina rendered. Multi-part mechanical accessories preferred over single-piece tools.
+
+━━━ THE CANDID ACTION — what he is doing RIGHT NOW (caught mid-moment) ━━━
+${action}
+
+GROUNDED — feet planted, body weight visible, captured at a loaded instant of doing the action. He is NOT posing for the camera — the camera caught him mid-task. Hands and body engaged with what he is doing.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Three-quarter angle or side profile so we see his face, body, and ornate outfit. NEVER posing for the camera. NEVER walking head-on toward camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near him (object he's interacting with). MIDGROUND: HIM, full body, mid-action, 25-40% of frame. BACKGROUND: the steampunk setting extending into depth with atmospheric haze. The frame is composed like BioShock-Infinite key art — character + his world, harmoniously balanced.
+
+━━━ ALLOWED VOCABULARY (use often) ━━━
+handsome, dashing, rugged, intent, capable, weathered, refined, distinguished, gentlemanly, aristocratic, commanding, stoic, watchful, tailored, structured, ornamental, brass-trimmed, leather-bound, mechanical, period-accurate, Victorian gentleman, painterly gaze, confident posture, opulent, opulent, theatrical, dramatic silhouette.
+
+━━━ FORBIDDEN VOCABULARY — DO NOT WRITE ━━━
+- sexy, sensual, seductive, sultry, smoldering, come-hither, alluring (in seductive sense), provocative
+- shirtless, bare-chested, open-shirt, exposed torso, beefcake, oiled-pecs, sleeveless
+- ANY female-coded vocabulary: décolletage, cleavage, bodice, gown, dress, skirt, lace cuff, makeup, kohl, eyeliner, jewelry-collar, choker, jewel-trim (he wears Victorian gentleman's attire ONLY)
+- moisture/heat-on-skin imagery: wet, sweat, beads, flushed, glistening
+- decorative-cliché framing: "brass piping at frame edges", "gears at frame edges", "clockwork ornaments framing"
+
+Do NOT cross-pollute with female vocabulary. He is male. His outfit is male Victorian-industrial attire. His features are male.
+
+━━━ HARD BANS — COMPOSITION ━━━
+- NO second person in frame — he is ALONE
+- NO modern dress (this is Victorian-industrial fantasy)
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative clutter framing (clocks/gears/pipes pasted around the edges as decoration)
+- NO shirtless or open-shirt-for-sex-appeal
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING: "a [ethnicity-coded] MAN [doing exact action] in [steampunk setting]" — man comes before persona], [his outfit with OBSESSIVE LAYERED material detail — every visible layer + every brass button / leather strap / waistcoat lapel / coat-cuff / boot-buckle], [signature accessory visible], [his face: skin tone + eyes + facial hair + hair from DNA slots], [the steampunk setting with depth + atmospheric layers], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [steampunk setting]". He fills 25-40% of frame, FULL-BODY. The OUTFIT gets the most word-budget — that's where the obsessive material detail lives.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
