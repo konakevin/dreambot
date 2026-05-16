@@ -281,6 +281,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  GOTHBOT_CASTLEVANIA_SCENE: {
+    description:
+      "PATH-BESPOKE — GothBot castlevania-scene path (2026-05-15 migration). STRICT KONAMI CASTLEVANIA aesthetic — Dracula's-castle / Symphony-of-the-Night / Bloodlines / Lords-of-Shadow / Order-of-Ecclesia visual canon. Ayami-Kojima painted concept-art lineage. STRUCTURE IS THE HERO — the Castlevania building dominates the frame with art-nouveau ornate gothic detail. BOLD + LUSH + FULL-COLOR-SATURATED palette (royal violet / deep crimson / sapphire / gold-leaf / emerald / amber). 6 path-bespoke axes (structure / architectural_detail pickN:3 / inner_light / accent_creature 80%-gated / spice_decoration / sky_layer) + universal lighting + atmosphere. Differentiator vs gothic-architecture: STRICTLY Castlevania-game-coded — Wallachian / Vlad-Tepes-coded / Bram-Stoker-Dracula-coded — NOT Bloodborne, NOT generic-gothic, NOT Hammer-horror.",
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['structure', 'architectural_detail', 'inner_light', 'spice_decoration', 'sky_layer'],
+    },
+    pickN: { architectural_detail: 3 },
+    conditionalLayer: { slot: 'accent_creature', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GOTHBOT_GOTHIC_ARCHITECTURE: {
     description:
       'PATH-BESPOKE — GothBot gothic-architecture path (2026-05-15 bespoke migration). STRUCTURE IS THE HERO with MASSIVE VERTICAL EPIC SCALE — towering, clawing upward, dwarfing everything. Inner dark-magic light glows from within. Ornate architectural detail porn. Two accent layers: accent_creature (80%-gated dark-wildlife) + spice_decoration (100% small atmospheric flourish — vivid moons, lanterns, wisps, sigils). Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls lineage. Exterior-only. 6 path-bespoke axes (structure / architectural_detail pickN:3 / inner_light / accent_creature 80%-gated / spice_decoration / sky_layer) + universal lighting + atmosphere.',
@@ -434,6 +448,20 @@ const ARCHETYPES = {
       universal: ['lighting', 'atmosphere'],
       bot: [],
       path: ['dragon', 'action', 'landscape', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MECHBOT_ALIEN_BIOMECHS: {
+    description:
+      'PATH-BESPOKE — MechBot alien-biomechs path (2026-05-15 migration). Flesh-machine alien organism (creature scale — between human-sized and rhino-sized) is the SUBJECT in a biomech habitat. NO humanoid cyborgs, NO vehicles, NO architecture-scale hive walls, NO pilots. H.R. Giger / Bloodborne / Annihilation Shimmer / Scorn / Hollow Knight body-horror beauty. Direct mirror of DRAGON_SCENE shape: subject + action + landscape + drama (40% gated phenomenon) + surprise_element. Canonical-LITE — MechBot uses its locked `render` medium so Sonnet body leads with biomech-horror specifics.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'surprise_element'],
     },
     pickN: {},
     conditionalLayer: { slot: 'drama', gate: 0.4 },

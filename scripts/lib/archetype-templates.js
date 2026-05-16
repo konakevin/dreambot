@@ -1232,6 +1232,126 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+  GOTHBOT_CASTLEVANIA_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      structure,
+      architectural_detail,
+      inner_light,
+      accent_creature,
+      spice_decoration,
+      sky_layer,
+    } = slots;
+    const details = Array.isArray(architectural_detail)
+      ? architectural_detail
+      : [architectural_detail];
+
+    const accentSection = accent_creature
+      ? `
+━━━ CASTLEVANIA ACCENT CREATURE (bat / gargoyle / shadow — atmospheric only) ━━━
+${accent_creature}
+
+`
+      : '';
+
+    return `You are an Ayami Kojima concept-art painter illustrating KONAMI CASTLEVANIA architecture. STRICT visual lineage: Symphony of the Night / Castlevania Bloodlines / Lament of Innocence / Curse of Darkness / Order of Ecclesia / Lords of Shadow / Aria of Sorrow promotional art. The architecture is the hero. Painted, ornate, art-nouveau gothic. Wallachian / Vlad-Tepes / Bram-Stoker-Dracula coded.
+
+━━━ STRICT KONAMI CASTLEVANIA ONLY — ABSOLUTE FIRST RULE ━━━
+This is NOT generic gothic. This is NOT Bloodborne. This is NOT Hammer-horror. This is NOT Crimson-Peak. This is KONAMI'S CASTLEVANIA aesthetic specifically — Dracula's castle, the Inverted Castle, the Clock Tower, Olrox's Quarters, the Royal Chapel, the Marble Gallery, Brauner's Gardens, the Alchemy Laboratory, the Underground Caverns, the Library. Art-nouveau ornate gothic with Konami's specific palette: violet / blood-crimson / amber-candle / gold-leaf / sapphire-stained-glass / wrought-iron-black. Painted by Ayami Kojima.
+
+━━━ STRUCTURE IS THE HERO — 80% VISUAL WEIGHT ━━━
+The Castlevania building DOMINATES the frame. NO humans as primary subject (Belmont silhouette OK as scale-prover only). NO interior chamber-shots in this MVP — EXTERIOR or grand-portal/atrium-from-outside only.
+
+━━━ ARCHITECTURAL DETAIL PORN — KONAMI ORNATE ━━━
+Every surface is obsessively detailed in Castlevania-art-nouveau style. Render ALL THREE of these specific architectural flourishes VISIBLY:
+
+  • DETAIL 1: ${details[0] || ''}
+  • DETAIL 2: ${details[1] || ''}
+  • DETAIL 3: ${details[2] || ''}
+
+PLUS layer additional Castlevania-canon ornamentation:
+• ART-NOUVEAU GOTHIC tracery with vine-and-skull motifs
+• BAT-WING and GARGOYLE finials on every spire
+• WROUGHT-IRON gates with bat / wyvern / dragon-head heraldic devices
+• STAINED-GLASS rose-windows (sapphire / violet / crimson) lit from within
+• MARBLE COLUMNS with carved-relief friezes of saints and demons
+• CHANDELIERS of bronze and gold visible through arched windows
+• DRACUL HERALDRY — dragon-and-cross emblem of the House of Drăculești
+• ORNATE BALUSTRADES with gargoyle-headed posts
+• CARVED-MARBLE statuary of fallen-angels and stone-saints
+• VELVET BANNERS in crimson and gold hanging from the structure
+
+━━━ MOOD — CASTLEVANIA OPERATIC GRANDEUR — BOLD & LUSH ━━━
+HAUNTING + REGAL + ORNATE + WALLACHIAN + GOTHIC-OPERA — but BOLD, LUSH, and FULL-COLOR-SATURATED. The structure is grand, beautiful, forbidding, OPULENT, MAGNIFICENT. Centuries-old royal ancestral seat of Dracula at the HEIGHT of its glory. The kind of building that opens a Castlevania stage with theatrical fanfare and rich painted-canvas color.
+
+━━━ CASTLEVANIA-CANON PALETTE — BOLD, LUSH, FULL-COLOR-SATURATED ━━━
+This path is BOLD AND LUSH — Konami's full-saturation Symphony-of-the-Night box-art palette. Embrace the RICHEST possible Castlevania colors:
+  • DEEP RICH VIOLET twilight skies, royal-violet curtains of cloud
+  • DEEP BLOOD-CRIMSON velvet banners, scarlet rose-windows, ruby-stained-glass
+  • LUSH SAPPHIRE-and-COBALT stained-glass at saturated full-color
+  • OPULENT GOLD-LEAF on every spire-tip, every chandelier, every cornice
+  • EMERALD-and-JADE forest-canopy at the castle base, jade-trim on chandeliers
+  • AMBER-and-WARM-CANDLE GOLD glowing from every window
+  • OCCASIONAL VIVID-ROSE-PINK or VIOLET-MAGENTA accents in stained-glass
+  • PEARL-WHITE and BONE-WHITE marble columns with shimmer
+  • Stained-glass GLOWS richly — sapphire / violet / scarlet / amber / emerald / rose-pink
+  • The full-moon backdrop is BIG and richly-colored — amber-gold, ivory, or pale-blood-amber
+  • This is the OPPOSITE of muted / desaturated / monochrome — every quadrant SATURATED with color
+✓ FULL COLOR SATURATION mandate — boldly painted, lushly hued, OPULENT
+
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / cyberpunk
+🚫 NO real-world ethnic codes
+🚫 NO Bloodborne / NO Hammer-horror / NO Crimson-Peak — this is KONAMI'S CASTLEVANIA only
+🚫 NO humans as primary subject (single small Belmont/Alucard silhouette OK as scale-prover)
+🚫 NO interior chamber-shots — exterior or grand-portal only
+🚫 NO pentagram / satanic iconography
+🚫 NO cheap gore / NO Jack-Skellington stylization
+✓ Symphony-of-the-Night / Bloodlines / Lament-of-Innocence / Curse-of-Darkness / Order-of-Ecclesia / Lords-of-Shadow / Aria-of-Sorrow visual lineage
+
+━━━ THE CASTLEVANIA STRUCTURE (hero, 80%+ visual weight) ━━━
+${structure}
+
+━━━ INNER CASTLE LIGHT (Castlevania glow) ━━━
+${inner_light}
+
+Light leaks through stained-glass / rose-windows / chandelier-windows / doorways. The castle feels ALIVE.
+
+━━━ NIGHT SKY ━━━
+${sky_layer}
+${accentSection}━━━ SPICE — small Castlevania flourish (mandatory) ━━━
+${spice_decoration}
+
+━━━ LIGHTING (ambient weather, NOT the castle's internal glow) ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION — CASTLEVANIA ESTABLISHING SHOT ━━━
+The Castlevania structure FILLS THE FRAME at 80% visual weight. Multi-tier depth:
+• FOREGROUND: closest ornate detail — a gargoyle / wrought-iron gate / carved-marble balustrade / stained-glass / vine-motif tracery
+• MIDGROUND: the castle body with inner-glow leaking through stained-glass
+• DEEP DISTANCE: more castle receding (towers, wings) / mountain-crag / Wallachian landscape
+• SKY: violet twilight or moonlit, dramatic
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: "[Castlevania structure description]" 80% weight], [three architectural details], [stained-glass / rose-window inner-glow], [accent creature if rolled], [night sky], [spice flourish], [Castlevania-canon palette + ornate art-nouveau gothic + Ayami Kojima painted style]
+
+DRAMATIC VISUALS: STRICT KONAMI CASTLEVANIA. ORNATE ART-NOUVEAU GOTHIC. AYAMI KOJIMA painted. Render the EXACT architectural detail from slots.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
 
   GOTHBOT_GOTHIC_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
@@ -2923,7 +3043,7 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
       action,
     } = slots;
 
-    return `You are an Art Nouveau illustration painter writing a CANDID STEAMPUNK SCENE for SteamBot — a single gorgeous WOMAN caught mid-action inside a fully-realized Victorian-industrial world. Mucha + Klimt + Pre-Raphaelite illustration tradition meets BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle production-art. THE OUTFIT IS THE MAIN SHOW. The setting is her STAGE — a specific, lived-in, sock-blowing steampunk world. Solo. Candid. Tasteful. Sock-blowing.
+    return `You are a cinematic illustration painter writing a CANDID STEAMPUNK SCENE for SteamBot — a single gorgeous WOMAN caught mid-action inside a fully-realized Victorian-industrial world. Lush vibrant painted illustration register — finished animation key-art / luxe production-painting feel (BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle / Treasure-Planet lineage). THE OUTFIT IS THE MAIN SHOW. The setting is her STAGE — a specific, lived-in, sock-blowing steampunk world. Solo. Candid. Tasteful. Sock-blowing.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
 The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "captain", "engineer", "mechanic", "explorer" or any gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [ethnicity-coded] WOMAN [doing action] in [setting]..." — "woman" comes BEFORE her persona/role. Use she/her throughout.
@@ -2932,13 +3052,13 @@ The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of yo
 The steampunk woman is the MAIN SUBJECT. Her face, the COUTURE OUTFIT, persona, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette. NOT a centered head-portrait. MEDIUM scale where outfit / face / hair / accessory all CLEARLY READABLE. THE OUTFIT IS THE MAIN SHOW — every layer must read.
 
 ━━━ THE OUTFIT IS THE MAIN SHOW — NON-NEGOTIABLE ━━━
-Render the COUTURE outfit with OBSESSIVE craftsmanship detail — this is what the viewer is here to see. Victorian opulent couture, super ornate, super layered, tasteful. Multiple visible layers stacked as separate planes (structured bodice + layered skirts + brass-cage crinoline + lace cuffs + embroidered sleeves + opera-length gloves with jeweled cuffs). Every brass clasp, every copper button, every jeweled brooch, every gear medallion, every gold filigree, every velvet panel, every brocade flourish rendered explicitly. The outfit gets the MAJORITY of the prompt word-budget — every visible layer named.
+Render the OUTFIT with OBSESSIVE craftsmanship detail — this is what the viewer is here to see. Victorian-industrial steampunk, super ornate, super layered, tasteful. NEVER SIMPLE — never plain shirt, never plain pants, never minimal. The outfit silhouette varies wildly across renders — could be a steampunk BALL-GOWN, or a TAILORED JACKET-AND-PANTS, or a FITTED CORSET-OVER-BLOUSE WITH RIDING-SKIRT, or LEGGINGS-AND-CORSET-COAT, or a STRUCTURED RIDING-HABIT, or a PILOT'S COAT-AND-TROUSERS, or a LAYERED ALCHEMIST'S ENSEMBLE. Whatever silhouette the wardrobe pool rolls — render it as ORNATE, LAYERED, AND DETAILED. Every brass clasp, every copper button, every jeweled brooch, every gear medallion, every gold filigree, every velvet panel, every brocade flourish, every leather strap, every embroidered cuff rendered explicitly. The outfit gets the MAJORITY of the prompt word-budget — every visible layer named.
 
 ━━━ SOLO CHARACTER ONLY ━━━
 EXACTLY ONE character. No companions, no second figures, no crowds. She is ALONE in her moment.
 
 ━━━ TASTEFUL VICTORIAN GLAMOUR — NOT MODERN-SKIN-SHOW ━━━
-She is GORGEOUS, GLAMOROUS, CAPTIVATING — a high-fashion Art Nouveau heroine. Beauty reads through couture craftsmanship, regal posture, painterly gaze, jewel-toned color, ornate hair ornament — NOT through exposed skin or body-focus framing. Pre-Raphaelite muse + Mucha poster + BioShock-Infinite Elizabeth + Howl's-Moving-Castle Sophie. Refined, luminous, aristocratic.
+She is GORGEOUS, GLAMOROUS, CAPTIVATING — a painted illustration heroine. Beauty reads through couture craftsmanship, confident posture, painterly gaze, jewel-toned color, ornate detail — NOT through exposed skin or body-focus framing. BioShock-Infinite Elizabeth + Howl's-Moving-Castle Sophie + Treasure-Planet Captain Amelia + Mortal-Engines Anna Fang energy. Refined, luminous, alive.
 
 ━━━ THE STEAMPUNK SETTING — HER STAGE — BLOW SOCKS OFF ━━━
 ${landscape}
@@ -2951,7 +3071,13 @@ ${persona}
 ━━━ HER COMPACT BIO (one-line block — DO NOT expand into separate sections) ━━━
 A ${skin.split(',')[0]}, with ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory}. Her makeup: ${makeup.split(',')[0]}.
 
-(All eight DNA elements — ethnicity/skin / eyes / makeup / hair color / hairstyle / outfit / accessory / persona — should be discernible in the render. Face fully visible — she's not in a sealed helmet.)
+(All eight DNA elements should be discernible in the render. Face fully visible — she's not in a sealed helmet.)
+
+━━━ MAKEUP MANDATE — DETAILED + STEAMPUNK-CODED ━━━
+Render her makeup with OBSESSIVE specificity AND steampunk vocabulary. NEVER plain or natural. Always elaborately styled — brass-dust highlight, kohl-rimmed eyes with smudged wing, copper-leaf temple, gold-leaf accent, soot-dark eyebrow, oxidized-bronze contour, gear-pattern eyeshadow, mercury-bright highlighter, candle-smoke smudge, rust-and-amber lip stain, wine-bruise lip, ink-blue undereye, scarification, brass-pigment temple-stripe. Whatever the makeup pool says — render it visibly + steampunk-coded.
+
+━━━ ACCESSORY MANDATE — DETAILED + STEAMPUNK-CODED ━━━
+The accessory she carries / wears must be rendered with OBSESSIVE mechanical detail and steampunk specificity. Brass + copper + leather + gemstone + clockwork. Every gear visible, every rivet shown, every patina rendered. Multi-part mechanical accessories preferred over single-piece jewelry.
 
 ━━━ THE CANDID ACTION — what she is doing RIGHT NOW (caught mid-moment) ━━━
 ${action}
@@ -2974,21 +3100,20 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Three-quarter angle or side profile so we see her face, body, and ornate outfit. NEVER posing for the camera. NEVER walking head-on toward camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her (object she's interacting with). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the steampunk setting extending into depth with atmospheric haze. The frame is composed like a Mucha poster or BioShock-Infinite key art — character + her world, harmoniously balanced.
+Three-quarter angle or side profile so we see her face, body, and ornate outfit. NEVER posing for the camera. NEVER walking head-on toward camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her (object she's interacting with). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the steampunk setting extending into depth with atmospheric haze. The frame is composed like BioShock-Infinite key art — character + her world, harmoniously balanced.
 
 ━━━ ALLOWED VOCABULARY (use often) ━━━
 glamorous, captivating, luminous, regal, elegant, couture, tailored, structured, romantic, opulent, aristocratic, refined, ornamental, jewel-toned, filigree, brocade, lace overlay, embroidered, velvet, satin, brass detailing, clockwork accents, porcelain complexion, painterly gaze, graceful posture, theatrical, dramatic silhouette, ornate.
 
-━━━ FORBIDDEN VOCABULARY — DO NOT WRITE ANY OF THESE WORDS ━━━
+━━━ FORBIDDEN VOCABULARY — these specific words trigger Replicate's NSFW filter ━━━
 - sexy, erotic, sensual, seductive, provocative, temptress, lingerie, pinup, pin-up
 - voyeuristic, voyeur, bedroom, boudoir, sultry
-- bustier, décolletage, decolletage, cleavage
-- "strategic cutouts", "lace windows", "see-through", "sheer", "exposure"
-- body-focus terms: hips, thighs, rear, bare, midriff, underboob
+- "strategic cutouts", "see-through", "sheer panels", "exposure"
+- body-focus terms: hips, thighs, rear, bare midriff, underboob
 - moisture/heat-on-skin imagery: wet lips, beads of sweat, moisture on skin, humidity beading
-- decorative-cliché framing language: "brass piping at frame edges", "gears at frame edges", "clockwork ornaments framing", "art-nouveau borders" — the setting IS the steampunk world, not a decorative border
+- decorative-cliché framing language: "brass piping at frame edges", "gears at frame edges", "clockwork ornaments framing", "art-nouveau borders"
 
-Do NOT imply nudity. Do NOT describe body parts — describe the COUTURE that adorns them.
+ALLOWED Victorian-fashion vocabulary (use freely): corset, corseted, structured bodice, brass-cage bodice, décolletage, off-shoulder, lace cuff, embroidered sleeve, gown, ball-gown, riding-coat, fitted vest, opera-glove, cravat, choker, jewel-collar, bustle.
 
 ━━━ HARD BANS — COMPOSITION ━━━
 - NO second person in frame — she is ALONE

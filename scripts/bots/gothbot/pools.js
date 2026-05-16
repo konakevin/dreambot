@@ -70,6 +70,13 @@ module.exports = {
   GOTHBOT_GOTHIC_VISTA_PHENOMENON: load('gothbot_gothic_vista_phenomenon'),
   GOTHBOT_GOTHIC_VISTA_SURPRISE_ELEMENT: load('gothbot_gothic_vista_surprise_element'),
   GOTHBOT_GOTHIC_VISTA_SKY: load('gothbot_gothic_vista_sky'),
+  // ─── castlevania-scene path (2026-05-15 migration — Konami Castlevania, Ayami Kojima painted)
+  GOTHBOT_CASTLEVANIA_SCENE_STRUCTURE: loadOptional('gothbot_castlevania_scene_structure'),
+  GOTHBOT_CASTLEVANIA_SCENE_DETAIL: loadOptional('gothbot_castlevania_scene_detail'),
+  GOTHBOT_CASTLEVANIA_SCENE_INNER_LIGHT: loadOptional('gothbot_castlevania_scene_inner_light'),
+  GOTHBOT_CASTLEVANIA_SCENE_ACCENT_CREATURE: loadOptional('gothbot_castlevania_scene_accent_creature'),
+  GOTHBOT_CASTLEVANIA_SCENE_SPICE: loadOptional('gothbot_castlevania_scene_spice'),
+  GOTHBOT_CASTLEVANIA_SCENE_SKY: loadOptional('gothbot_castlevania_scene_sky'),
   // ─── gothic-architecture path (2026-05-15, bespoke axis migration with STRUCTURE-IS-HERO)
   GOTHBOT_GOTHIC_ARCHITECTURE_STRUCTURE: load('gothbot_gothic_architecture_structure'),
   GOTHBOT_GOTHIC_ARCHITECTURE_DETAIL: load('gothbot_gothic_architecture_detail'),

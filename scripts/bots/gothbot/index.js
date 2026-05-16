@@ -22,7 +22,6 @@ const pathBuilders = {
   'cozy-goth': require('./paths/cozy-goth'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
   'gothic-vista': require('./paths/gothic-vista'),
-  'gothic-darklands': require('./paths/gothic-darklands'),
   'vampire-assassin-female': require('./paths/vampire-assassin-female'),
   'vampire-assassin-male': require('./paths/vampire-assassin-male'),
   'vampire-assassin-combat': require('./paths/vampire-assassin-combat'),
@@ -62,7 +61,6 @@ module.exports = {
     'castlevania-scene': 'black-forest-labs/flux-1.1-pro-ultra',
     'cozy-goth': 'black-forest-labs/flux-1.1-pro-ultra',
     'gothic-vista': 'black-forest-labs/flux-1.1-pro-ultra',
-    'gothic-darklands': 'black-forest-labs/flux-1.1-pro-ultra',
     'horror-creature': 'black-forest-labs/flux-1.1-pro-ultra',
     // Character paths
     'goth-closeup': 'black-forest-labs/flux-1.1-pro-ultra',
@@ -93,7 +91,6 @@ module.exports = {
     'castlevania-scene': ['dark', 'nightshade', 'macabre'],
     'cozy-goth': ['dark', 'nightshade', 'macabre'],
     'gothic-vista': ['dark', 'nightshade', 'macabre'],
-    'gothic-darklands': ['dark', 'nightshade', 'macabre'],
     'horror-creature': ['dark', 'nightshade', 'macabre'],
     // Vampire-assassin paths locked to the dark triad.
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
@@ -115,7 +112,6 @@ module.exports = {
     'castlevania-scene': 'anime',
     'cozy-goth': 'anime',
     'gothic-vista': 'anime',
-    'gothic-darklands': 'anime',
     'horror-creature': 'anime',
     // Vampire-assassin paths locked to anime medium for the trial.
     'vampire-assassin-female': 'anime',
@@ -253,7 +249,6 @@ module.exports = {
       'dark-landscape': 'scene',
       'gothic-architecture': 'scene',
       'gothic-vista': 'scene',
-      'gothic-darklands': 'scene',
       'castlevania-scene': 'scene',
       'cozy-goth': 'scene',
     },
@@ -295,7 +290,7 @@ module.exports = {
       ],
     },
     // Optional: skip two-pass on specific paths
-    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture'],
+    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene'],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
@@ -337,7 +332,6 @@ module.exports = {
     'cozy-goth',
     'vampire-girls-2',
     'gothic-vista',
-    'gothic-darklands',
     'vampire-assassin-female',
     'vampire-assassin-male',
     'vampire-assassin-combat',
