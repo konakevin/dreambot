@@ -41,7 +41,10 @@ module.exports = {
     landscape: 'MECH_SKYSHIPS_SETTINGS',
     lighting: 'MECH_SKYSHIPS_LIGHTING',
     composition: 'MECH_SKYSHIPS_COMPOSITION',
-    engagement: 'MECH_SKYSHIPS_ENGAGEMENT', // ALWAYS-ON multi-actor combat scene
     drama: 'MECH_SKYSHIPS_DRAMA', // 40% gated conditional
+    // 2026-05-16: engagement pool removed from always-on (Kevin's hearts
+    // gravitated to SOLO BEAUTIFUL SHIP aesthetic, not multi-actor combat).
+    // Seed file MECH_SKYSHIPS_ENGAGEMENT still registered in pools.js
+    // for future re-enable but not wired into the path config.
   },
 };

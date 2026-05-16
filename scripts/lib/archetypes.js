@@ -554,11 +554,11 @@ const ARCHETYPES = {
 
   MECHBOT_SKYSHIPS: {
     description:
-      'PATH-BESPOKE — MechBot mech-skyships path (2026-05-15 migration to declarative composer; second MechBot path after titan-war-machines). Flying sci-fi mech-vessels in epic skies — predatory blade silhouettes, fang prows, spike rams, glowing power conduits. NOT modern military (no aircraft carrier / dreadnought / jet / helicopter). Reuses production-grade legacy 200-entry subject/action/setting pools. Adds 4 path-bespoke pools: composition (SKY vertigo angles), lighting (aerial flight overrides cosmic bot default), engagement (ALWAYS-ON multi-actor combat narrative beat — dogfight / strike / pursuit / drop / arrival / etc.), drama (40%-gated sky-combat phenomena). VERTIGO + MOVIE POSTER MANDATE + MULTI-ACTOR NARRATIVE + "TURNED UP TO 11" multi-layer atmospheric stack.',
+      'PATH-BESPOKE — MechBot mech-skyships path (2026-05-15 migration; 2026-05-16 simplified after Kevin\'s heart-calibration revealed the path should produce SOLO BEAUTIFUL SHIPS in dramatic atmospheric skies, not multi-actor combat scenes). Flying sci-fi mech-vessels with predatory blade silhouettes, fang prows, glowing power conduits. NOT modern military. Reuses legacy 200-entry subject/action/setting pools + 3 path-bespoke pools: composition (SKY vertigo angles), lighting (aerial flight overrides cosmic bot default), drama (40%-gated sky-combat phenomena). VERTIGO COMPOSITION + simplified movie-poster mandate (every-quadrant-striking, multi-tier depth, saturated theatrical sky) + "TURNED UP TO 11" multi-layer atmospheric stack. NO forced multi-actor / engagement / named-call-signs / peak-DNA mandates — let the SHIP be the show.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['subject', 'action', 'landscape', 'composition', 'engagement'],
+      path: ['subject', 'action', 'landscape', 'composition'],
     },
     pickN: {},
     conditionalLayer: { slot: 'drama', gate: 0.4 },
@@ -730,6 +730,7 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
   STEAMBOT_COZY_STEAMPUNK: {
     description:
       'PATH-BESPOKE — SteamBot cozy-steampunk path (2026-05-15 resurrection + axis migration). Dreamy ethereal cozy Victorian-industrial INTERIORS — pretty rooms with steampunk furniture, beds, flower arrangements, ornate fixtures, AND a beautiful window view (sunset / rainstorm aqua sky / distant airships / cloudtops). Multi-layered: pretty room + pretty window view together. Comforting + surreally beautiful + intricate. 4 path-bespoke axes (room / flora pickN:3 / window_view / intricate_detail pickN:2) + 1 conditional 40%-gated (quiet_moment) + universal lighting + atmosphere.',

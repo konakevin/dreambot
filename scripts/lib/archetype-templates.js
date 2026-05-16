@@ -2984,7 +2984,7 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
   },
 
   MECHBOT_SKYSHIPS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, subject, action, landscape, composition, engagement, drama } = slots;
+    const { lighting, atmosphere, subject, action, landscape, composition, drama } = slots;
 
     const dramaSection = drama
       ? `
@@ -3017,20 +3017,15 @@ The chosen vertigo angle DRIVES the framing — render it precisely as described
 ━━━ NON-NEGOTIABLE — MOVIE POSTER MANDATE ━━━
 Every render is a MOVIE POSTER PROMOTIONAL FRAME — the kind of vista that stops the viewer mid-scroll and makes them GASP. EVERY QUADRANT of the frame has something striking — NO quiet corners. The eye should land on AT LEAST 4 distinct striking details across the frame.
 
-OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
-  1. THE HERO SKYSHIP at the chosen vertigo angle, dominating its quadrant
-  2. ACTIVE FLIGHT/COMBAT — banking / firing / contrails / exhaust-glow / weapon-discharge / shield-rippling
-  3. MULTI-DISTANCE SHIP STAGING — hero in foreground, smaller fleet specks at vanishing point. The sky should feel OCCUPIED, not empty
-  4. SKY-WEATHER PHENOMENON in its own quadrant — multi-altitude clouds / volumetric god-rays / lightning / storm-cells / aurora / heat-shimmer / atmospheric haze layers
-  5. SATURATED THEATRICAL SKY — never bland grey overcast. Dawn pink-purple, dusk fire-orange, electric-violet storm, blood-red sunset, aurora-coded EM-warfare, twilight-gradient, nuclear-orange horizon, neon-cyberpunk underlit cloud, etc.
-  6. GROUND-DETAIL FAR BELOW or FOREGROUND CLOUD-DETAIL anchoring depth — ant-scale ground action / mountain peaks piercing cloud-deck / cloud-architecture in the foreground / distant fleet specks for scale
+EVERY-QUADRANT-STRIKING MANDATE — every render must have:
+  1. THE HERO SHIP at the chosen vertigo angle, dominating its quadrant — the ship IS the show
+  2. MULTI-TIER atmospheric depth — multi-altitude cloud-architecture / volumetric god-rays / weather layers receding into the distance
+  3. SATURATED THEATRICAL SKY — never bland grey overcast. Dawn pink-purple, dusk fire-orange, electric-violet storm, blood-red sunset, aurora-coded EM-warfare, twilight-gradient, nuclear-orange horizon, neon-cyberpunk underlit cloud, golden-cloud-cathedral, etc.
+  4. FOREGROUND or DEEP-DISTANCE depth anchor — mountain peaks piercing cloud-deck / canyon walls framing the ship / cloud-architecture in the foreground / distant horizon-curve / ground silhouette far below
 
-THINK Star Wars X-wing trench-run / 40K Imperial fleet engagement / Mass Effect Sovereign descent / Pacific Rim Jaeger drop-pod / Edge of Tomorrow drop-ship deployment / Independence Day mothership-over-city / Avatar Hallelujah-Mountains airship / Macross Plus dogfight key-art.
+The SHIP is the SUBJECT, the SKY is the STAGE. NO mandatory wingmen / dogfight / multi-actor combat / named call-signs / forced damage / forced surreal-impossible-detail. If the ship + the sky + the vertigo angle + the saturated palette together create a gasp-frame, that's enough. Don't force narrative complexity over the cinematic moment.
 
-━━━ NON-NEGOTIABLE — MULTI-ACTOR NARRATIVE BEAT (NOT just "hero ship flying") ━━━
-${engagement}
-
-This is the STORY playing out in the frame — render the hero skyship + the OTHER actors described, in interaction. NEVER a solo hero-ship-in-pretty-sky frame. Multiple ships, weapons exchange, defensive reactions, debris from kills, targets reacting, ground engagement when relevant. The viewer must be able to read what is HAPPENING in 2 seconds. The MULTI-ACTOR engagement is what separates a movie-poster moment from a beauty shot of a single ship.
+THINK Macross Plus solo-fighter cloud-pass / Pacific Rim Jaeger drop-pod cloud-burst / Avatar Banshee-flight key-art / Star Wars Falcon-banking-into-sunset / Macross Frontier solo-cruise / Eve Online cinematic ship-art / Drew Struzan movie-poster ship reveals.
 
 ━━━ THE SKYSHIP (the seeded subject) ━━━
 ${subject}
@@ -3950,6 +3945,7 @@ CRITICAL — the OPENING tokens establish the EVENT as the subject. The crowd is
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
 
   STEAMBOT_COZY_STEAMPUNK: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, room, flora, window_view, intricate_detail, quiet_moment } = slots;
