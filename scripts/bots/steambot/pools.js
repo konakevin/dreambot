@@ -66,6 +66,9 @@ module.exports = {
   STEAMPUNK_MEN_WARDROBE: load('steampunk_men_wardrobe'),
   STEAMPUNK_MEN_ACCESSORIES: load('steampunk_men_accessories'),
   STEAMPUNK_MEN_CANDID_MOMENTS: load('steampunk_men_candid_moments'),
+  STEAMPUNK_MEN_OUTDOOR_MOMENTS: load('steampunk_men_outdoor_moments'),
+  STEAMPUNK_MEN_SETTINGS: load('steampunk_men_settings'),
+  STEAMPUNK_MEN_WARDROBE_AMPLIFIED: load('steampunk_men_wardrobe_amplified'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

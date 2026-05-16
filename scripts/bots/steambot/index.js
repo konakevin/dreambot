@@ -43,6 +43,14 @@ const STEAMBOT_HYPERREAL_STYLE =
 const STEAMBOT_PAINTED_WOMAN_STYLE =
   'oil-painted illustration on canvas, visible painterly brushwork and brush texture, traditional painted character illustration in the style of Frazetta and Brom and Boris Vallejo painted-fantasy-cover heroines, lush saturated jewel-toned oil pigment, dramatic cinematic lighting with golden-hour rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT art-nouveau decorative border';
 
+// Bespoke medium for steampunk-man — same oil-painted-illustration register
+// as the female path but with its own named medium so the male path stays
+// architecturally isolated (no cross-pollution). Frazetta / Brom / Vallejo
+// painted-fantasy-cover lineage; tuned for handsome / dashing / rugged
+// gentleman portraits, never seductive.
+const STEAMBOT_PAINTED_MAN_STYLE =
+  'oil-painted illustration on canvas, visible painterly brushwork and brush texture, traditional painted character illustration in the style of Frazetta and Brom and Boris Vallejo painted-fantasy-cover heroes, lush saturated jewel-toned oil pigment, dramatic cinematic lighting with golden-hour rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT art-nouveau decorative border';
+
 module.exports = {
   username: 'steambot',
   displayName: 'SteamBot',
@@ -71,20 +79,24 @@ module.exports = {
 
   mediumByPath: {
     'sexy-steampunk-woman': 'steambot-painted-woman',
+    'steampunk-man': 'steambot-painted-man',
   },
 
   mediumStyles: {
     'steambot-hyperreal': STEAMBOT_HYPERREAL_STYLE,
     'steambot-painted-woman': STEAMBOT_PAINTED_WOMAN_STYLE,
+    'steambot-painted-man': STEAMBOT_PAINTED_MAN_STYLE,
   },
 
   promptPrefixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_PREFIX,
     'steambot-painted-woman': blocks.PROMPT_PREFIX,
+    'steambot-painted-man': blocks.PROMPT_PREFIX,
   },
   promptSuffixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_SUFFIX,
     'steambot-painted-woman': blocks.PROMPT_SUFFIX,
+    'steambot-painted-man': blocks.PROMPT_SUFFIX,
   },
 
   // Single-vibe lock for scene paths. Female path overrides with vibesByPath.
@@ -96,6 +108,11 @@ module.exports = {
       'ethereal', 'arcane', 'ancient', 'enchanted', 'fierce', 'coquette',
       'voltage', 'nightshade', 'macabre', 'shimmer', 'surreal',
     ],
+    'steampunk-man': [
+      'cinematic', 'dark', 'epic', 'nostalgic', 'peaceful', 'whimsical',
+      'ethereal', 'arcane', 'ancient', 'enchanted', 'fierce',
+      'voltage', 'nightshade', 'macabre', 'shimmer', 'surreal',
+    ],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -103,14 +120,11 @@ module.exports = {
 
   // Per-path overrides — keep tiny. Long prefixes shove Sonnet's ethnicity
   // tokens past Flux's attention zone; main proves short stack = diversity.
-  promptPrefixByPath: {
-    'steampunk-man':
-      'diverse cast steampunk character study, distinctive identity-anchored portrait, specific ethnicity and features rendered exactly',
-  },
-  promptSuffixByPath: {
-    'steampunk-man':
-      'render the EXACT skin tone and ethnicity, render the EXACT hair color, render the EXACT facial hair style — NOT a generic white European stubbled craftsman, NOT centered hand-on-hip stance, NOT runway model strut',
-  },
+  // 2026-05-15 — emptied steampunk-man wrapper after migration to canonical
+  // composer (per playbook wrapper-strip lesson; the new template handles
+  // ethnicity/feature locking via the gender-locked compact bio).
+  promptPrefixByPath: {},
+  promptSuffixByPath: {},
 
   paths: [
     'steampunk-scene',
@@ -137,11 +151,11 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    // sexy-steampunk-woman skips polish — Haiku compression was stripping
-    // skin/eyes/makeup/hair DNA in 4/5 renders, leaving only the ethnicity
-    // noun. Single-pass Sonnet preserves the full DNA stack so Flux renders
-    // varied complexions/hair/eyes/makeup instead of a brunette default.
-    skipPaths: ['sexy-steampunk-woman'],
+    // sexy-steampunk-woman + steampunk-man skip polish — Haiku compression
+    // was stripping skin/eyes/makeup/hair DNA, leaving only the ethnicity
+    // noun. Single-pass Sonnet preserves the full DNA stack. Per playbook
+    // 2026-05-15 lesson: two-pass polish OFF for all new-axis paths.
+    skipPaths: ['sexy-steampunk-woman', 'steampunk-man'],
     polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [
@@ -180,7 +194,9 @@ module.exports = {
       // ~40% of renders. Scene context uses environment-coded sensory
       // (steam-heat / brass-cold / etc.) — clean.
       'sexy-steampunk-woman': 'scene',
-      'steampunk-man': 'male',
+      // steampunk-man also routed to 'scene' 2026-05-15 to avoid body-coded
+      // male-touch sensory anchors potentially feeding NSFW filter triggers.
+      'steampunk-man': 'scene',
       'steampunk-scene': 'scene',
       'airship-skies': 'scene', 'steampunk-curio': 'scene',
       'steampunk-spectacle': 'scene', 'steam-transport': 'scene',
