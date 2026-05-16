@@ -1232,6 +1232,111 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+  GOTHBOT_GOTH_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      makeup,
+      wardrobe,
+      accessory,
+      candid_moment,
+      camera_perspective,
+    } = slots;
+
+    return `You are a gothic dark-manga concept-art painter writing HAUNTINGLY BEAUTIFUL gothic woman closeups for GothBot. SEXY, SULTRY, EVIL, FEISTY dark seductresses with corrupted beauty and dangerous power. Camera catches her candidly close-up in a loaded moment. Castlevania / Crimson-Peak / Bloodborne / Devil-May-Cry dark-beauty lineage.
+
+━━━ ONE WOMAN ALONE — ABSOLUTE FIRST RULE ━━━
+ONE woman. SOLO. No companions, no lovers, no second figure, no hands belonging to anyone but her. She is ALONE and DANGEROUS. She is a woman (she/her), adult, never child.
+
+━━━ TIGHT CLOSEUP FRAMING — FACE FILLS UPPER HALF ━━━
+Tight frame — face + throat + one shoulder at most. Face fills the upper half of the frame. Camera is TOO CLOSE for comfort. She is NOT posing — she was caught in the middle of the candid moment described below.
+
+━━━ CAMERA PERSPECTIVE (use this EXACT angle) ━━━
+${camera_perspective}
+
+━━━ SHE MUST LOOK LIKE SHE EXISTS — OBSESSIVE DETAIL ━━━
+Render her with obsessive detail. She must feel REAL and DEVASTATING:
+• FACE: every pore visible, cheekbones catching light like carved marble, dark circles that look intentional — power and centuries in her gaze
+• SKIN: render the EXACT skin description from her pool — how light hits it, how shadow pools in her collarbones, how it catches candlelight or moonlight
+• EYES: the HERO of the frame — glowing, supernatural, impossibly vivid. They radiate light onto the skin around them. The iris is a universe
+• MAKEUP: BOLD and DRAMATIC — dark glamour she CHOSE. Sharp where it's sharp, smudged where it's smudged. Devastating intentional dark beauty
+• HAIR: wild, wind-caught, rain-damp, tangled with pins or chains or dead flowers — never salon-perfect, always gorgeous in its chaos
+• BODY LANGUAGE: predatory confidence. She knows she's watched and doesn't care. Or she does care, and that's worse
+
+━━━ HER CORE IDENTITY (informs her ENERGY) ━━━
+${archetype}
+
+━━━ HER SKIN ━━━
+${skin}
+
+━━━ HER EYES ━━━
+${eyes}
+
+━━━ HER MAKEUP ━━━
+${makeup}
+
+━━━ HER HAIR ━━━
+${hair_color}, ${hairstyle}
+
+━━━ WARDROBE (visible at frame edge — neckline / shoulder / collar) ━━━
+${wardrobe}
+
+━━━ HER SIGNATURE ACCESSORY (close-frame detail — collarbone / neckline / hand) ━━━
+${accessory}
+
+━━━ CANDID MOMENT (she was caught doing THIS) ━━━
+${candid_moment}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ VAMPIRESS / WOMAN-OF-THE-NIGHT MANDATE — APPLY TO EVERY RENDER ━━━
+Every render leans VAMPIRESS / DARK-SEDUCTRESS / WOMAN-OF-THE-NIGHT — corrupted-beauty aristocrat of the gothic night. Even if her archetype reads as witch or sorceress, the AESTHETIC is vampiress:
+• DEEP SMOKEY EYE SHADOW MANDATORY — heavy smudgy dark-charcoal / dark-plum / dark-burgundy / kohl-and-coal pulled down from the lid into half-circles beneath the eyes — a "sleepless aristocrat" look. NEVER clean / minimal eye makeup. Eye shadow EXTENDS dramatically below and beside the eye, smudged not graphic.
+• VAMPIRE PALLOR or VAMPIRE FLUSH — skin reads CORRUPTED, paler than human-natural or warmly-unnatural. A faint dark-violet undertone beneath her eyes. The skin of someone who has not seen morning in a long time.
+• DARK STAINED LIPS — every render has dark-burgundy / oxblood / deep-plum / matte-black / wine-stained lips. NEVER nude / pink / natural-tone lips.
+• WOMAN-OF-THE-NIGHT BODY LANGUAGE — gazing out a velvet-curtained window, sipping from a crystal goblet, kissing a pendant, hands at her own throat, dragging her fingers through her hair, half-lidded knowing eyes. Languid not energetic. She has all the time in the world.
+• CANDLE / FIREPLACE / OIL-LAMP warm-amber light mixing with cool moonlight on her face — atmospheric, intimate.
+• OPULENT VAMPIRE-GOTH wardrobe — velvet, silk, black-lace, brocade — NEVER modern, NEVER plain.
+
+━━━ DRAMATIC VISUALS — CRANK IT ━━━
+Go MAXIMUM. Eyes BLAZE. Makeup is DEVASTATING smokey-deep eye shadow. Lighting carves her face into something MYTHIC. Every element cranked to jaw-dropping visual impact. Painterly oil-on-canvas. Castlevania-Symphony-of-the-Night vampire-portrait energy.
+
+━━━ HARD BANS ━━━
+🚫 NO multiple figures / NO second person / NO additional hands — she is ALONE
+🚫 NO devil horns / NO pentagrams / NO satanic symbols
+🚫 NO anime-smooth / NO Halloween costume / NO cosplay
+🚫 NO magazine editorial / NO fashion photography / NO glamour-shot energy
+🚫 NO nipples / NO bare-cleavage emphasis / NO lingerie — NSFW-clean
+🚫 NO posing / "editorial" / "fashion shoot" / "glamour shot" language
+🚫 NO modern / cyberpunk / sci-fi
+🚫 NO real-world ethnic codes (gothic-fantasy archetypes only)
+🚫 NO child / teen / pubescent figures
+🚫 NO cheap gore / NO blood-on-her-mouth as default (only if rolled in candid_moment)
+
+━━━ STRUCTURE (write in this order) ━━━
+[camera perspective], [her face — skin + eyes + makeup], [her hair color + hairstyle], [the candid moment — what she's doing], [wardrobe visible at frame edge], [accessory close-frame detail], [lighting carving her features], [atmosphere at edges], [color palette]
+
+Output ONLY the 60-80 word scene description, comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels, NO "render as" suffix. Just the phrases, starting immediately with the scene content.`;
+  },
+
   GOTHBOT_COZY_GOTH: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
@@ -2627,8 +2732,21 @@ This is a scene-event happening around the mech — render it as a visible secon
 
     return `You are a cinematic mech-concept painter writing a PURE MECHANICAL CREATURE scene for MechBot. Hyper-real cinematic 3D / VFX-quality. Boston Dynamics engineering precision + Horizon Zero Dawn machine-fauna design + Pacific Rim kaiju-scale walkers + Edge of Tomorrow Mimics + Phantasy Star + Bayonetta-Cherubim + Titanfall mech-ecology + Ghost in the Shell tachikoma. The scene should make the viewer feel AWE — at the engineering, the scale, the dynamic moment captured.
 
-━━━ NON-NEGOTIABLE — IT IS A PURE MECHANICAL CREATURE ━━━
-The subject is a MACHINE shaped like a creature — wholly built, NOT grown. Plated armor, hydraulic tendons, articulated chassis, sensor-arrays, weapon-mounts, propellant-vents, running-light arrays. NO flesh, NO organic tissue, NO translucent skin over piston-bone, NO biological organs, NO Giger. Where panels open or seams gap, what you see is MORE machine — gears, cables, coolant lines, glowing reactor cores — never wet tissue.
+━━━ THE SUBJECT IS A MECHANICAL CREATURE — PURE MECH OR BIOMECH-HYBRID ━━━
+Default to PURE mechanical creature: plated armor, hydraulic tendons, articulated chassis, sensor-arrays, weapon-mounts, propellant-vents, running-light arrays. But when the SEED DESCRIBES biomech-hybrid features (chitin armor / feather plumage / translucent membrane wings / backlit amber bio-glow through panels / iridescent scarab-shell), RENDER THOSE FEATURES AS DESCRIBED — they are intentional hybrid-design language, not contamination. Where mech panels open or seams gap, you see either MORE machine (gears, cables, coolant lines, reactor cores) OR backlit warm-amber glow (the hybrid signal). Hybrid creatures still read as CREATURES, not vehicles or buildings.
+
+ALLOWED hybrid surface accents (when the seed specifies them):
+• Chitin-armored panels with backlit organic-coded amber/orange glow at the seams
+• Feather plumage over the head, neck, or wing-fans (avian-hybrid mechs)
+• Translucent membrane wings (insect-style or pterosaur-style)
+• Iridescent scarab-coded shell-plating over a mech body
+• Bioluminescent thorax-glow through translucent body panels
+
+STILL BANNED — these turn hybrid into Giger-gore:
+• Wet biological tissue / weeping wounds / visible internal organs / blood
+• Sexual-coded biology / fleshy weak-points
+• Body-horror "is this alive or machine" dread (this path is COOL, not horror)
+• Slasher / gore / explicit violence
 
 ━━━ SCALE VARIES — RENDER WHATEVER THE SEED DESCRIBES ━━━
 This path spans the full range of mechanical creatures:
@@ -2679,11 +2797,11 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ ABSOLUTE BANS ━━━
 - NO humanoid cyborgs (cyborg-* paths' territory) — mech-creatures have NON-humanoid body plans
-- NO flesh / NO organic tissue / NO translucent skin over piston-bone / NO weeping spiracle-vents / NO bioluminescent organ-glow — this is PURE machine
+- NO wet biological tissue / NO weeping wounds / NO visible internal organs / NO blood / NO gore — hybrid surface accents are DESIGN, not body-horror
 - NO mech-pilots / NO cockpits (mecha-pilots territory) — these mechs are autonomous fauna, not piloted
 - NO industrial factory machinery (industrial-machines territory) — these are CREATURES, not stationary equipment
 - NO airships / sky-vessels (mech-skyships territory) — wings/flight OK on mech-birds but not vehicles
-- NO gore / NO biological violence
+- NO fleshy weak-points / NO sexual-coded biology / NO Giger horror-gore dread
 
 ━━━ LEG/LIMB-COUNT + SCALE FIDELITY ━━━
 If the seed specifies a leg / tendril / wing / arm count (tripedal / quadrupedal / hexapod / octopod / eight-tentacled / six-armed) OR a scale (kaiju-scale / building-tall / skyscraper-mech / colossal / 500m / 1km), repeat the count AND the scale TWICE in the polished prompt — Flux's bipedal-default and human-scale defaults collapse non-standard limb counts and giant scale without reinforcement.
@@ -3430,6 +3548,83 @@ Do NOT cross-pollute with female vocabulary. He is male. His outfit is male Vict
 [OPENING: "a [ethnicity-coded] MAN [doing exact action] in [steampunk setting]" — man comes before persona], [his outfit with OBSESSIVE LAYERED material detail — every visible layer + every brass button / leather strap / waistcoat lapel / coat-cuff / boot-buckle], [signature accessory visible], [his face: skin tone + eyes + facial hair + hair from DNA slots], [the steampunk setting with depth + atmospheric layers], [lighting + atmosphere], [color palette + mood]
 
 CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [steampunk setting]". He fills 25-40% of frame, FULL-BODY. The OUTFIT gets the most word-budget — that's where the obsessive material detail lives.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  STEAMBOT_AIRSHIP_SKIES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, scene, sky_layer, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render this visibly in the sky ━━━
+${phenomenon}
+
+A sky-event happening in the world around the vessel — render it as a visible secondary focal point (NOT eclipsing the airship, but amplifying the drama). Adds awe and scale to the frame.
+
+`
+      : '';
+
+    return `You are a cinematic concept painter writing a MOVIE-POSTER AIRSHIP SKIES scene for SteamBot — Victorian-industrial dirigibles, sky-galleons, packet-ships, sky-clippers, gun-ships caught in vertigo-inducing dramatic sky moments. Mortal-Engines / Treasure-Planet / Howl's-Moving-Castle / Last-Exile / Atlantis-lost-empire / Skies-of-Arcadia / Final-Fantasy-airship-cutscene visual lineage. The frame should make the viewer GASP at the scale and beauty.
+
+━━━ MOVIE-POSTER MANDATE — STACK 3+ STRIKING ELEMENTS ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ simultaneously-visible elements:
+  1. THE AIRSHIP (or fleet) at vertigo-inducing scale — multi-tier depth mandatory
+  2. SKY LAYER dominating its quadrant (cloud bank / storm front / aurora / twin moons / sunset blaze)
+  3. ATMOSPHERIC PHENOMENON if rolled (lightning / meteor / sky-eddy / magnetic-storm / cloud-cascade)
+  4. SECONDARY SUBJECT giving scale (distant vessel / mooring tower / cliff-top lighthouse / sky-island)
+  5. SATURATED THEATRICAL LIGHT (golden-hour rim / lightning underglow / sunset blaze / dawn copper-and-amber)
+
+━━━ NO CHARACTERS — ABSOLUTE ━━━
+NO primary human figure. Tiny crew silhouettes visible on deck or in rigging are OK as scale-provers (pinprick scale only) — never foreground characters, never named figures, never a hero-pose.
+
+━━━ VICTORIAN-INDUSTRIAL VESSEL DETAIL — NON-NEGOTIABLE ━━━
+The airship rendered with OBSESSIVE Victorian-industrial detail — riveted brass hull plating, copper-clad gondolas, ribbed envelope panels, exposed steam-pipework, brass propellers and turbines, gaslit ship-windows glowing amber, weathered wood-decking, brass mooring-rings, ornate prow figureheads, glass-domed observation lounges, paddle-wheels and balloon-rotors. NEVER modern aircraft, NEVER spaceships, NEVER pure-fantasy fae-ships. 1890s-impossible-engineering aesthetic.
+
+━━━ THE AIRSHIP SCENE (the hero frame — vessel + scene context) ━━━
+${scene}
+
+Render the vessel as DESCRIBED with depth-on-depth — FOREGROUND tactile detail (envelope fabric / brass railing / propeller-blade-edge) → MIDGROUND the vessel body + immediate sky → DEEP DISTANCE the wider sky-world with atmospheric layers.
+
+━━━ SKY LAYER (the world overhead and around) ━━━
+${sky_layer}
+
+The sky is HALF the painting. Render it with painterly atmospheric depth — multi-tier cloud layers, sunset gradients, weather fronts, light-shafts breaking through, distant horizons.
+${phenomenonSection}
+━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
+${surprise_element}
+
+Place at midground or deep distance — a small detail implying the wider sky-world (distant dirigible silhouette / mooring spire / sky-island / lighthouse-rock / vessel debris / migrating creatures). NEVER eclipsing the hero ship.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Wide cinematic sky frame — vessel occupies 30-50% of frame as the hero subject. Multi-tier depth: FOREGROUND tactile vessel detail / brass-rail / propeller / mooring line → MIDGROUND the airship body in full glory → DEEP DISTANCE the sky-world receding into atmospheric layers. NOT a tight close-up on hull rivets. NOT a tiny silhouette in distant landscape. Sweet spot: airship reads at clear scale with the sky-world wrapping around it. THINK movie-poster establishing shot — every quadrant earning its space.
+
+━━━ HARD BANS ━━━
+- NO primary human figure in frame (tiny crew silhouettes OK at scale-prover scale only)
+- NO modern aircraft / NO spaceships / NO pure-fantasy fae-ships
+- NO ground / city / harbor as primary subject — this is a SKY scene
+- NO decorative cliché framing (clocks/gears pasted at frame edges)
+- NO substituting your own descriptions for the pool entries
+
+━━━ STRUCTURE — write the prompt in this exact order ━━━
+[OPENING: "[airship scene from the scene slot — the hero vessel + its immediate context]"], [the SKY LAYER from the sky slot dominating background], [PHENOMENON if rolled, rendered as visible drama], [SURPRISE ELEMENT at midground or deep distance], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens establish the airship as the hero. The sky-world wraps around it. Every quadrant of the frame has something striking. THINK Mortal-Engines or Treasure-Planet establishing shot.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },

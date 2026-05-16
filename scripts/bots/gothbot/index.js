@@ -63,7 +63,7 @@ module.exports = {
     'gothic-vista': 'black-forest-labs/flux-1.1-pro-ultra',
     'horror-creature': 'black-forest-labs/flux-1.1-pro-ultra',
     // Character paths
-    'goth-closeup': 'black-forest-labs/flux-1.1-pro-ultra',
+    'goth-closeup': 'black-forest-labs/flux-1.1-pro',
     'goth-full-body': 'black-forest-labs/flux-1.1-pro-ultra',
     'goth-male-closeup': 'black-forest-labs/flux-1.1-pro-ultra',
     'goth-male-full-body': 'black-forest-labs/flux-1.1-pro-ultra',

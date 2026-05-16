@@ -281,6 +281,30 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  GOTHBOT_GOTH_CLOSEUP: {
+    description:
+      "PATH-BESPOKE — GothBot goth-closeup path (2026-05-15 migration). HAUNTINGLY BEAUTIFUL dark-seductress closeups — SEXY + SULTRY + EVIL + FEISTY gothic women in tight frame (face + throat + one shoulder). Castlevania / Crimson Peak / Bloodborne / Devil-May-Cry dark-beauty lineage. Gender-locked FEMALE. Solo only. Character at LARGE anchor (face fills upper half of frame). Candid-moment energy, not posed. NSFW-clean (no nipple/cleavage emphasis). 10 path-bespoke axes (archetype / skin / eyes / hair_color / hairstyle / makeup / wardrobe / accessory / candid_moment / camera_perspective) + universal lighting + atmosphere.",
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      characterDnaAxes: [
+        'archetype',
+        'skin',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'makeup',
+        'wardrobe',
+        'accessory',
+      ],
+      path: ['candid_moment', 'camera_perspective'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: ['LARGE'],
+  },
+
   GOTHBOT_COZY_GOTH: {
     description:
       "PATH-BESPOKE — GothBot cozy-goth path (2026-05-15 migration, R3 figure-accent added). LAYERED WITCH'S-LAIR / WIZARD'S-WORKROOM / OCCULT-APOTHECARY interiors — warm-dark gothic spaces with a TWIST OF MAGIC, ALWAYS inhabited by a small mysterious-feminine figure (gypsy fortune-teller / vampire-noblewoman / mysterious-witch / cloaked-mystic / dark-baroness) at deep midground 8-15% of frame as SCALE-PROVER ONLY. Interior stays the hero at 80%+ visual weight. GOTH + TWIST OF MAGIC + small mysterious witness. 5 path-bespoke axes (interior_space / magical_glow_item pickN:3 / occult_artifact pickN:3 / figure_accent / ambient_atmosphere) + universal lighting + atmosphere.",
@@ -593,6 +617,34 @@ const ARCHETYPES = {
       path: ['persona', 'landscape', 'action'],
     },
     pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_AIRSHIP_SKIES: {
+    description:
+      'PATH-BESPOKE — SteamBot airship-skies path (2026-05-15 migration from function-based form). MOVIE-POSTER airship scenes — dirigibles, sky-galleons, packet-ships, sky-clippers in vertigo-inducing dramatic-sky moments. NO ground, NO city — pure sky-world. Mortal-Engines / Treasure-Planet / Howl\'s-Moving-Castle / Last-Exile / Atlantis-lost-empire / Skies-of-Arcadia visual lineage. 4 path-bespoke axes (scene / sky_layer / surprise_element / phenomenon 70%-gated) + universal lighting + atmosphere. NO CHARACTERS as primary subject.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['scene', 'sky_layer', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.7 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_STEAMPUNK_CURIO: {
+    description:
+      'PATH-BESPOKE — SteamBot steampunk-curio path (2026-05-15 migration from function-based form). OBJECT-AS-HERO at small scale — a single fantastical steampunk artifact presented in museum-display / Sotheby\'s-catalog framing. Cabinet-of-curiosities / impossible-artifacts-of-the-Victorian-age energy. NO PRIMARY HUMAN FIGURE — pure object portrait. Mechanical creatures / alchemical specimens / brass automata / impossible jewelry / Faberge-coded objects / clockwork dioramas. 3 path-bespoke axes (curio / display_register / ornate_flourish pickN:3) + universal lighting + atmosphere. Reuses production-scale 100-entry STEAMPUNK_CURIOS pool.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['curio', 'display_register', 'ornate_flourish'],
+    },
+    pickN: { ornate_flourish: 3 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
