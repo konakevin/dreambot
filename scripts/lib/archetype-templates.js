@@ -1232,6 +1232,112 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE
 
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+  GOTHBOT_GOTH_MALE_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      archetype,
+      skin,
+      eyes,
+      hair_color,
+      hairstyle,
+      face_detail,
+      wardrobe,
+      accessory,
+      candid_moment,
+      camera_perspective,
+    } = slots;
+
+    return `You are a gothic dark-manga concept-art painter writing MYSTERIOUS, OMINOUS, DEADLY dark-aristocrat male closeups for GothBot. Vampire lords, dark princes, shadow assassins, dark warlocks, death gods, dark hunters — predatory aristocrats of the gothic night. Castlevania / Bloodborne / Crimson-Peak / Witcher / Devil-May-Cry dark-male-aristocrat lineage. Camera catches him candidly close-up in a loaded moment.
+
+━━━ ONE MAN ALONE — ABSOLUTE FIRST RULE ━━━
+ONE man. SOLO. No companions, no enemies, no second figure, no hands belonging to anyone but him. He is ALONE and DEADLY. He is a man (he/his), adult, never child. NEVER feminine — gender-locked male throughout. Strong jawline, masculine bone structure, broad shoulders, masculine hands.
+
+━━━ TIGHT CLOSEUP FRAMING — FACE FILLS UPPER HALF ━━━
+Tight frame — face + throat + one shoulder at most. Face fills the upper half of the frame. Camera is TOO CLOSE for comfort. He is NOT posing — he was caught in the middle of the candid moment described below.
+
+━━━ CAMERA PERSPECTIVE (use this EXACT angle) ━━━
+${camera_perspective}
+
+━━━ HE MUST LOOK LIKE HE EXISTS — OBSESSIVE DETAIL ━━━
+Render him with obsessive detail. He must feel REAL and LETHAL:
+• FACE: every pore visible, sharp masculine cheekbones cutting shadow, sleepless dark-circles, scar-traces — power and centuries in his gaze
+• SKIN: render the EXACT skin description from his pool — how candlelight catches the high planes of his face, how shadow pools in his hollows
+• EYES: the HERO of the frame — glowing, supernatural, predatory. They radiate light onto the skin around them. The iris is a universe. The gaze cuts.
+• FACE DETAIL: weathered + masculine + deadly. Stubble, scars, sleepless dark-circles, kohl-rim if any, faint dirt-streaks. NEVER makeup-clean. NEVER feminine.
+• HAIR: short-cropped / pulled-back / wild-undone / wind-blown — masculine, never salon-perfect
+• BODY LANGUAGE: predatory stillness. He is the calm before the kill. He watches without blinking. Power held in restraint.
+
+━━━ HIS CORE IDENTITY (informs his ENERGY — MYSTERIOUS / OMINOUS / DEADLY) ━━━
+${archetype}
+
+━━━ HIS SKIN ━━━
+${skin}
+
+━━━ HIS EYES ━━━
+${eyes}
+
+━━━ HIS FACE DETAIL ━━━
+${face_detail}
+
+━━━ HIS HAIR ━━━
+${hair_color}, ${hairstyle}
+
+━━━ WARDROBE (visible at frame edge — neckline / shoulder / collar) ━━━
+${wardrobe}
+
+━━━ HIS SIGNATURE ACCESSORY (close-frame detail — collarbone / neckline / hand) ━━━
+${accessory}
+
+━━━ CANDID MOMENT (he was caught doing THIS) ━━━
+${candid_moment}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ VAMPIRE-LORD / MAN-OF-THE-NIGHT MANDATE — APPLY TO EVERY RENDER ━━━
+Every render leans VAMPIRE-LORD / DARK-PRINCE / DEADLY-ARISTOCRAT — mysterious-corrupted aristocrat of the gothic night. Even if his archetype reads as warlock or assassin, the AESTHETIC is vampire-lord:
+• DEEP SHADOWED UNDER-EYES MANDATORY — sleepless predator-look, dark-circles or kohl-rim pulled into half-circles beneath the eyes — the look of a being who has not slept in centuries. NEVER clean / well-rested face.
+• VAMPIRE PALLOR or VAMPIRE-WARM — skin reads CORRUPTED, paler than human-natural or warmly-unnatural. A faint dark-violet undertone beneath his eyes. The skin of someone who has not seen morning in a long time.
+• MASCULINE STRONG-JAWED FEATURES — strong jawline, sharp cheekbones, hollow-cheeked, masculine bone structure. NEVER soft / feminine / androgynous-feminine.
+• DEADLY BODY LANGUAGE — weighing a dagger, sipping wine slowly, gazing out a velvet-curtained window, hand at his own throat, fingertip lit by spell-flame, tilting his head with predator patience. Languid not energetic. He has all the time in the world.
+• CANDLE / FIREPLACE / OIL-LAMP warm-amber light mixing with cool moonlight on his face — atmospheric, intimate.
+• OPULENT VAMPIRE-LORD wardrobe — velvet, silk, leather, brocade, gothic-armor, high-collared coats — NEVER modern, NEVER plain.
+
+━━━ DRAMATIC VISUALS — CRANK IT ━━━
+Go MAXIMUM. Eyes BLAZE predator-still. Lighting carves his face into something MYTHIC. Every element cranked to jaw-dropping visual impact. Painterly oil-on-canvas. Castlevania-Symphony-of-the-Night vampire-lord-portrait energy.
+
+━━━ HARD BANS ━━━
+🚫 NO multiple figures / NO second person / NO additional hands — he is ALONE
+🚫 NO feminine features / NO androgynous-feminine / NO traditional makeup (kohl-rim and sleepless-dark-circles OK)
+🚫 NO devil horns / NO pentagrams / NO satanic symbols
+🚫 NO anime-smooth / NO Halloween costume / NO cosplay
+🚫 NO magazine editorial / NO fashion photography / NO glamour-shot energy
+🚫 NO nipples / NO bare-chest emphasis — NSFW-clean (clothed neckline only)
+🚫 NO posing / "editorial" / "fashion shoot" / "glamour shot" language
+🚫 NO modern / cyberpunk / sci-fi
+🚫 NO real-world ethnic codes (gothic-fantasy archetypes only)
+🚫 NO child / teen / pubescent figures
+🚫 NO cheap gore / NO blood-on-his-mouth as default (only if rolled in candid_moment)
+
+━━━ STRUCTURE (write in this order) ━━━
+[camera perspective], [his face — skin + eyes + face_detail], [his hair color + hairstyle], [the candid moment — what he's doing], [wardrobe visible at frame edge], [accessory close-frame detail], [lighting carving his features], [atmosphere at edges], [color palette]
+
+Output ONLY the 60-80 word scene description, comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bold labels, NO "render as" suffix. Just the phrases, starting immediately with the scene content.`;
+  },
+
   GOTHBOT_GOTH_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
@@ -3548,6 +3654,78 @@ Do NOT cross-pollute with female vocabulary. He is male. His outfit is male Vict
 [OPENING: "a [ethnicity-coded] MAN [doing exact action] in [steampunk setting]" — man comes before persona], [his outfit with OBSESSIVE LAYERED material detail — every visible layer + every brass button / leather strap / waistcoat lapel / coat-cuff / boot-buckle], [signature accessory visible], [his face: skin tone + eyes + facial hair + hair from DNA slots], [the steampunk setting with depth + atmospheric layers], [lighting + atmosphere], [color palette + mood]
 
 CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [steampunk setting]". He fills 25-40% of frame, FULL-BODY. The OUTFIT gets the most word-budget — that's where the obsessive material detail lives.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  STEAMBOT_STEAMPUNK_CURIO: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, curio, display_register, ornate_flourish } = slots;
+    const flourishes = Array.isArray(ornate_flourish) ? ornate_flourish : [ornate_flourish];
+
+    return `You are a museum-catalog illustrator writing a STEAMPUNK CURIO scene for SteamBot — a single fantastical Victorian-industrial artifact presented in obsessive Sotheby's-catalog detail. Cabinet-of-curiosities / impossible-artifacts-of-the-Victorian-age / Faberge-coded jewelry-house / clockwork-automaton-display / Wunderkammer aesthetic. The object is the HERO of the frame.
+
+━━━ OBJECT IS THE HERO — NON-NEGOTIABLE ━━━
+The curio fills 50-70% of the frame as the primary subject. Composition is centered-or-three-quarter-turned product-photography framing — like a Sotheby's auction catalog illustration. The viewer's eye lands on the ROBOT CREATURE first, no distractions.
+
+━━━ ALIVE IN MOTION — NON-NEGOTIABLE ━━━
+The curio is a STEAMPUNK ROBOT — a little mechanical creature mimicking a real living thing (animal / insect / bird / sea-creature) OR a novel mechanical organism (chimera / impossible-anatomy / abstract-animate-form). ALWAYS rendered in a moment of motion / animation / alive-looking pose. Mid-stalking / mid-fluttering / mid-feeding / mid-step / mid-curl / wings half-spread / breathing visibly through chest-bellows / eyes tracking. The viewer feels it could move at any second. NEVER static-decorative, NEVER frozen-pose. Articulated joints visibly active. Internal mechanisms (gears / springs / pistons / clockwork-heart) visibly working.
+
+━━━ NEVER JEWELRY / CROWN / CLOCK / DECORATIVE-OBJECT — ABSOLUTE ━━━
+NO crowns, NO tiaras, NO jewelry / brooches / pendants / necklaces, NO Faberge eggs, NO clocks / pocket-watches / chronographs as subject, NO monocles, NO ceremonial cups / decorative vases, NO weapons, NO scrolls / books. The curio is ALWAYS a mechanical creature / organism — never an ornamental object.
+
+━━━ NO PRIMARY HUMAN FIGURE ━━━
+NO people, NO hands holding the creature, NO figures in frame. Pure object portrait. The robot creature stands alone in its display context.
+
+━━━ THE CURIO (the hero artifact) ━━━
+${curio}
+
+Render the object with OBSESSIVE Victorian-industrial detail — every brass rivet, every gear-tooth, every engraved-plate flourish, every patina-stain, every articulation-joint, every glass-dome surface, every leather-strap, every clockwork-mechanism visible at SCALE.
+
+━━━ DISPLAY REGISTER (how the object is presented) ━━━
+${display_register}
+
+Render the display context exactly as described — pedestal / cushion / vitrine / cabinet / catalog-page-mount / glass-bell-jar / brass-shelf / etc. The display elevates the object as a museum-quality artifact.
+
+━━━ ORNATE FLOURISHES — render ALL THREE on the object ━━━
+- ${flourishes[0] || ''}
+- ${flourishes[1] || ''}
+- ${flourishes[2] || ''}
+
+These are micro-details that obsessively saturate the object's surface. EVERY one must be visible.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Lighting is curated like museum-gallery illumination — single hero spotlight or top-down catalog light, with secondary fill catching the surface details. Dramatic contrast between lit surfaces and shadowed recesses.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OBSESSIVE STEAMPUNK CRAFTSMANSHIP — NON-NEGOTIABLE ━━━
+Brass + copper + bronze + oiled-wood + glass dominant. Every visible surface is hand-tooled, hand-engraved, hand-fabricated. NEVER mass-produced-looking. NEVER plastic. NEVER modern.
+
+━━━ COMPOSITION ━━━
+Wide product-photography or three-quarter-turn catalog framing. The OBJECT centered or slightly offset. Display context (pedestal / cushion / vitrine) wraps the lower frame; backdrop fades into atmospheric depth. NEVER a tight close-up that crops the object. NEVER a wide-shot where the object becomes small. Sweet spot: object reads at clear scale with display context grounding it.
+
+━━━ HARD BANS ━━━
+- NO primary human figure (no people, no hands, no faces)
+- NO modern objects (no plastic, no LEDs, no electronics — this is 1890s impossible-engineering)
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative cliché framing (gears/clocks pasted at the edges as decoration)
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING: the curio described with obsessive detail — the OBJECT first], [the three ornate flourishes worked in], [the display register / display context], [lighting], [atmospheric detail], [color palette + mood]
+
+CRITICAL — the OPENING tokens establish the OBJECT as the hero. The display context wraps the lower frame. The atmosphere adds Wunderkammer mood without competing with the object for attention.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },

@@ -70,6 +70,17 @@ module.exports = {
   GOTHBOT_GOTHIC_VISTA_PHENOMENON: load('gothbot_gothic_vista_phenomenon'),
   GOTHBOT_GOTHIC_VISTA_SURPRISE_ELEMENT: load('gothbot_gothic_vista_surprise_element'),
   GOTHBOT_GOTHIC_VISTA_SKY: load('gothbot_gothic_vista_sky'),
+  // ─── goth-male-closeup path (2026-05-15 migration — male dark-aristocrat closeup, bespoke pools)
+  GOTHBOT_GOTH_MALE_CLOSEUP_ARCHETYPE: loadOptional('gothbot_goth_male_closeup_archetype'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_SKIN: loadOptional('gothbot_goth_male_closeup_skin'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_EYES: loadOptional('gothbot_goth_male_closeup_eyes'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_HAIR_COLOR: loadOptional('gothbot_goth_male_closeup_hair_color'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_HAIRSTYLE: loadOptional('gothbot_goth_male_closeup_hairstyle'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_FACE_DETAIL: loadOptional('gothbot_goth_male_closeup_face_detail'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_WARDROBE: loadOptional('gothbot_goth_male_closeup_wardrobe'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_ACCESSORY: loadOptional('gothbot_goth_male_closeup_accessory'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_CANDID_MOMENT: loadOptional('gothbot_goth_male_closeup_candid_moment'),
+  GOTHBOT_GOTH_MALE_CLOSEUP_CAMERA_PERSPECTIVE: loadOptional('gothbot_goth_male_closeup_camera_perspective'),
   // ─── goth-closeup path (2026-05-15 migration — female dark-seductress closeup, bespoke pools)
   GOTHBOT_GOTH_CLOSEUP_ARCHETYPE: loadOptional('gothbot_goth_closeup_archetype'),
   GOTHBOT_GOTH_CLOSEUP_SKIN: loadOptional('gothbot_goth_closeup_skin'),
