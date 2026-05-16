@@ -4329,6 +4329,138 @@ CRITICAL — the OPENING tokens establish the airship as the hero. The sky-world
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
+  // BloomBot landscape — NOT IN USE 2026-05-16 (migration attempted + REVERTED;
+  // legacy compose.js outperforms). Template preserved for reference / future
+  // re-attempt. See memory file project_bloombot_landscape_kept_legacy.md.
+  BLOOMBOT_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { landform, scale_prover, surprise_element, sky, phenomenon } = slots;
+    const phenomenonSection = phenomenon
+      ? `\n━━━ ATMOSPHERIC PHENOMENON — render visibly ━━━\n${phenomenon}\n\n`
+      : '';
+    return `You are a fine-art floral landscape painter writing AWE-INDUCING SCENE DESCRIPTIONS for BloomBot. Output is a 70-100 word comma-separated phrase string for Flux.
+
+━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
+NO humans, NO figures, NO silhouettes. (Tiny scale-prover wildlife OK.)
+
+━━━ THE BLOOM-CARPET IS THE HERO ━━━
+The LANDFORM is the canvas, the BLOOMS are the hero. Multi-tier scale.
+
+━━━ LANDFORM ━━━
+${landform}
+
+━━━ SCALE-PROVER ━━━
+${scale_prover}
+${phenomenonSection}━━━ SKY ━━━
+${sky}
+
+━━━ SURPRISE ELEMENT ━━━
+${surprise_element}
+
+━━━ PALETTE ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES ━━━
+${sharedDNA.roster}
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+Output 70-100 words. Comma-separated phrases. NO headers, NO bullets. Just the prose.`;
+  },
+
+  // BloomBot closeup — MACRO VIEW pressing into a dense bloom wall in its
+  // natural outdoor environment. 2026-05-16 R4 (locked): heart-DNA from
+  // cf57b7eb + shape-agnostic hero + 8 poster-grade composition modes.
+  BLOOMBOT_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
+    const { bloom_wall_type, growing_context, macro_phenomenon } = slots;
+
+    const phenomenonSection = macro_phenomenon
+      ? `
+━━━ MACRO MAGIC MOMENT — render visibly in the foreground ━━━
+${macro_phenomenon}
+
+`
+      : '';
+
+    return `You are a fine-art floral macro painter writing JEWEL-TONE CLOSEUP scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ ABSOLUTELY FORBIDDEN ━━━
+• cut flowers, bouquet, arrangement, vase, basket
+• dark studio backdrop, neutral backdrop, "on a wooden surface"
+• still-life, florist composition, table-top
+• picked flowers, gathered stems, harvested blooms, freshly-cut
+• humans, figures, faces, silhouettes, hands holding flowers
+
+━━━ REQUIRED — MACRO VIEW pressing INTO living blooms GROWING IN PLACE ━━━
+A macro closeup pressing INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. Stand close enough to count petals on the front-most blooms; shallow focal plane; bloom-mass fills frame edge-to-edge receding into softly-blurred bokeh. NEVER a dark photo studio.
+
+━━━ HERO BLOOM AMONGST MANY — NON-NEGOTIABLE COMPOSITION ━━━
+ONE specific HERO species DOMINATES the frame at its OWN natural form and scale. Hero silhouette is whatever the rolled species naturally is — broad face, deep cup, pompom dome, hanging raceme, umbel, trumpet, ruffled rosette, daisy-face, or tall spike. The hero pushes into the foreground focal plane. The other 2-3 species act as SUPPORTING CAST at SMALLER visual weight — carpeting gaps, threading through, drifting in midground softness — NEVER competing with the hero.
+
+⚠️ CRITICAL — DO NOT default the hero to tall spires / vertical towers / tall spike-shaped blooms every render. Vary by what the rolled roster offers:
+  • Broad-faced (peony / dahlia / sunflower / gerbera / cosmos / poppy) → FACE fills foreground
+  • Deep-cup (tulip / magnolia / lotus / crocus) → CUP-MOUTH dominates, light pools inside
+  • Pompom / dome (allium / hydrangea / dahlia / chrysanthemum) → round mass as sphere of florets
+  • Hanging cluster (wisteria / fuchsia / bleeding-heart / orchid) → pendant blooms AT viewer level
+  • Umbel (queen-annes-lace / agapanthus) → parasol-cluster fills foreground
+  • Trumpet (lily / daffodil / morning-glory / brugmansia) → open trumpet-mouth frontal
+  • Tall spike (foxglove / delphinium / lupine / snapdragon) → spires rise ONLY when species naturally is
+
+━━━ DRAMATIC LIGHTING HIERARCHY — WARM HERO / COOL BACKGROUND ━━━
+SINGLE DOMINANT light source catches HERO blooms WARM in foreground; supporting cast and receding bloom-mass sit COOLER ambient or BLUE-SHADOW. NEVER flat even illumination. NEVER cool-on-cool or warm-on-warm.
+
+━━━ MOVIE-POSTER COMPOSITION — POSTER-GRADE FRAMING ━━━
+Every render is POSTER-GRADE. Every quadrant earns its space, eye lands on 4+ striking details, framing feels INTENTIONAL. NEVER a flat eye-level center snapshot.
+
+Pick ONE framing mode per render (vary):
+  A. LOW-ANGLE HERO — hero blooms rising into upper frame from strong lower anchor
+  B. OVERHEAD CANOPY — looking UP at hanging blooms, pendant clusters at viewer level
+  C. THROUGH-THE-ARCHWAY — natural archway from bloom-wall structure framing the opening
+  D. DIAGONAL LEAD-LINE — supporting threads as diagonal lead-line to hero at rule-of-thirds
+  E. RIM-LIGHT SILHOUETTE-EDGE — hero back-lit at frame edge with translucent petal-glow
+  F. SHALLOW DEPTH TUNNEL — front hero in razor focus, mass receding into deep bokeh
+  G. OFF-CENTER HERO + NEGATIVE SPACE — hero at rule-of-thirds, opposite quadrant bokeh-quiet
+  H. DAPPLED LIGHT-DRAMA — broken light through canopy, hero catching sun-spots
+
+━━━ MATERIAL POETRY at petal-scale ━━━
+"Petals countable and cold to the touch", "waxy surfaces catching slanted light", "pollen-dust on the anthers", "fine fuzz on stems", "dew-beads on leaves", "stamen-shadows on petals", "translucent veining lit from behind".
+
+━━━ THE BLOOM-WALL ━━━
+${bloom_wall_type}
+
+━━━ THE GROWING CONTEXT ━━━
+${growing_context}
+${phenomenonSection}━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 3-4 species from the roster — ONE as HERO, others as SUPPORTING CAST. Mass them at the palette's named colors.
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ DEFAULTS TO RESIST ━━━
+- NO pink/rose/blush/coral as dominant palette unless palette names it
+- NO roses/peonies/hydrangeas/lavender unless in the roster
+- NO "studio backdrop", "dark background", "isolated against"
+- NO equal-weight species — there IS a hero
+
+━━━ MOOD ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[poster-grade composition mode], [macro closeup pressing INTO [bloom-wall type] where [HERO SPECIES] dominates at its OWN natural silhouette], [supporting species carpeting/threading], [growing context implied through blur], [warm-hero/cool-background lighting]${macro_phenomenon ? ', [the macro magic moment as a specific small detail]' : ''}, [material poetry at petal-scale]
+
+CRITICAL — establish POSTER-COMPOSITION + HERO + SUPPORTING CAST. NEVER "a bouquet of" or "an arrangement". NEVER a flat eye-level garden photo. Hero shape follows the rolled species — DO NOT default to tall spires.
+
+Output ONLY 85-115 words. Comma-separated. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
 };
 
 module.exports = TEMPLATES;

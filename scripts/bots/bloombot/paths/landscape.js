@@ -1,12 +1,29 @@
 /**
- * BloomBot landscape — vast epic floral landscape, the dramatic-scenery flagship.
- * The geographic feature is recognizable and grand; flowers carpet every plane.
+ * BloomBot landscape — declarative axis-system form (2026-05-16 migration).
+ *
+ * Pure-scenery epic floral landscape. The LANDFORM is the canvas, the
+ * BLOOM-CARPET is the hero. NO HUMANS, NO FIGURES. Multi-tier depth
+ * (foreground microflowers + midground statement blooms + receding
+ * bloom-fields). Hyperreal CGI register, jewel-toned cinematic, named
+ * regional species from sharedDNA.roster.
+ *
+ * Legacy compositional version preserved at paths/legacy/landscape.js.
+ *
+ * Axes (5 path-bespoke + sharedDNA-injected palette/lighting/roster):
+ *   - landform (200): the dominant terrain (canvas for the bloom-carpet)
+ *   - scale_prover (150): tiny element that proves epic scale
+ *   - surprise_element (150): small unexpected secondary detail
+ *   - sky (100): atmospheric upper-frame
+ *   - phenomenon (50, 80%-gated): dramatic "wow moment"
  */
-const compose = require('../compose');
 
-const SCENE = `A vast EPIC FLORAL LANDSCAPE. Pick one specific dramatic landform: alpine meadow valley below jagged snow peaks, desert canyon split by a winding stream, coastal cliff above crashing ocean, rolling hills receding into distant blue mountains, ancient glacial valley, or volcanic plateau caldera. The landform is recognizable and grand — wide cinematic vista, deep recession into the distance.
-
-Flowers BLANKET the entire foreground, midground, and background. The landform reads as recognizable terrain (not generic "field"); the flowers are the carpet on it. Layered scale: tiny microflowers in the immediate foreground, mid-size statement blooms in the middle, distant bloom-fields receding into atmospheric haze.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_LANDSCAPE',
+  pools: {
+    landform: 'BLOOMBOT_LANDSCAPE_LANDFORM',
+    scale_prover: 'BLOOMBOT_LANDSCAPE_SCALE_PROVER',
+    surprise_element: 'BLOOMBOT_LANDSCAPE_SURPRISE_ELEMENT',
+    sky: 'BLOOMBOT_LANDSCAPE_SKY',
+    phenomenon: 'BLOOMBOT_LANDSCAPE_PHENOMENON',
+  },
+};

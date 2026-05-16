@@ -1,23 +1,27 @@
 /**
- * BloomBot closeup — macro view INTO a dense bloom wall in its natural environment.
+ * BloomBot closeup — declarative axis-system form (2026-05-16 migration).
  *
- * CRITICAL: this path's failure mode in the prior version was Sonnet drifting
- * to "studio bouquet on a dark background" or "florist arrangement on a wooden
- * plate". Anti-bouquet language is FRONT-LOADED in the scene.
+ * MACRO VIEW INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT.
+ * Anti-bouquet / anti-still-life baked into the template (legacy failure
+ * mode was Sonnet drifting to "studio bouquet on a dark background").
+ *
+ * Legacy compositional version preserved at paths/legacy/closeup.js.
+ *
+ * Axes (2 path-bespoke + 60%-gated phenomenon, palette/lighting/roster
+ * via sharedDNA):
+ *   - bloom_wall_type (200): the kind of macro bloom-mass (vine wall /
+ *     hedgerow / cliff cascade / pergola underside / etc.)
+ *   - growing_context (150): the natural environment behind the
+ *     shallow-DOF blur (cottage garden / wild meadow / woodland edge)
+ *   - macro_phenomenon (50, 60%-gated): the small foreground magic
+ *     moment (dewdrop / pollinator / sun-flare / spider-web)
  */
-const compose = require('../compose');
 
-const SCENE = `A MACRO CLOSEUP looking INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. The viewer is standing close enough to count the petals on the front-most blooms; the focal plane is shallow but the wall of flowers fills the entire frame and recedes into a softly-blurred bloom mass behind.
-
-ABSOLUTELY FORBIDDEN — do NOT write any of these:
-  • cut flowers, bouquet, arrangement, vase, basket, plate, bowl, tray, shelf
-  • dark studio backdrop, neutral backdrop, "on a wooden surface", "against dark wall"
-  • still-life, florist composition, table-top, gift-shop scene
-  • picked flowers, gathered stems, harvested blooms
-
-REQUIRED: this is a macro view into LIVING flowers GROWING IN PLACE — on a vine, on a bush, in a wild meadow, in a cottage garden, climbing a wall, blanketing a hillside, lining a path. The background is the rest of the bloom field receding into shallow-DOF blur, NOT a dark photo studio.
-
-Pick one growing context: hedgerow wall of climbing blooms, wildflower meadow at petal-level, garden border with hovering bee, cottage path with cascading vines, jungle understory carpet, pond's edge with water-flower mass.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_CLOSEUP',
+  pools: {
+    bloom_wall_type: 'BLOOMBOT_CLOSEUP_BLOOM_WALL_TYPE',
+    growing_context: 'BLOOMBOT_CLOSEUP_GROWING_CONTEXT',
+    macro_phenomenon: 'BLOOMBOT_CLOSEUP_MACRO_PHENOMENON',
+  },
+};

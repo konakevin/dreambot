@@ -772,6 +772,34 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_LANDSCAPE: {
+    description:
+      'PATH-BESPOKE — BloomBot landscape path. NOT IN USE (2026-05-16 migration attempted + REVERTED; legacy compose.js outperforms). Archetype + template + pools preserved for reference / future re-attempt. See memory file project_bloombot_landscape_kept_legacy.md for the over-stuffed-brief diagnosis.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['landform', 'scale_prover', 'surprise_element', 'sky'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_CLOSEUP: {
+    description:
+      'PATH-BESPOKE — BloomBot closeup path (2026-05-16 migration). MACRO VIEW pressing into a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. HERO BLOOM AMONGST MANY composition mandate (heart-DNA from 2026-05-16 cf57b7eb): one specific hero species dominates the foreground at its OWN natural silhouette and scale — broad face / deep cup / pompom / hanging raceme / umbel / trumpet / spike depending on rolled species, NOT defaulting to tall spires. Supported by 2-3 species carpeting the crevices and threading the gaps. Dramatic single-source lighting hierarchy — warm hero / cool background. Material poetry at petal-scale. 8 poster-grade composition modes (low-angle / overhead-canopy / through-archway / diagonal lead-line / rim-light silhouette / shallow-depth tunnel / off-center hero / dappled light-drama) — vary across them. Anti-bouquet / anti-still-life front-loaded. 2 path-bespoke axes (bloom_wall_type / growing_context) + 60%-gated macro_phenomenon. Palette + lighting + regional flora roster via sharedDNA. 85-115 words.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['bloom_wall_type', 'growing_context'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'macro_phenomenon', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

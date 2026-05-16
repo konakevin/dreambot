@@ -19,9 +19,13 @@
 
 const pools = require('./pools');
 const blocks = require('./shared-blocks');
+const { REGION_KEYS_GENERAL, regionRosterPrompt } = require('./species-roster');
 
 const pathBuilders = {
-  landscape: require('./paths/landscape'),
+  // 2026-05-16: landscape migration attempted + REVERTED — legacy compose.js
+  // outperformed the new declarative archetype. Declarative version preserved
+  // at paths/landscape.js for reference, legacy stays canonical.
+  landscape: require('./paths/legacy/landscape'),
   closeup: require('./paths/closeup'),
   cozy: require('./paths/cozy'),
   'garden-walk': require('./paths/garden-walk'),
@@ -97,6 +101,10 @@ module.exports = {
     polishedWordsByPath: {
       closeup: '85-115',
     },
+    // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
+    // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
+    // richness; Haiku compression drops bespoke vocabulary to hit word count.
+    skipPaths: ['landscape', 'closeup'],
   },
 
   sensoryAnchors: {
@@ -111,17 +119,56 @@ module.exports = {
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
-  rollSharedDNA({ picker }) {
+  // Bot-level pool defaults for declarative axis paths. Lighting + palette
+  // also live on sharedDNA (rolled once per render in rollSharedDNA); these
+  // entries exist for the brief-composer's bot-slot resolution path.
+  defaultPools: {
+    lighting: 'LIGHTING',
+    palette: 'PALETTES',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`BloomBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
+  rollSharedDNA({ path, picker }) {
+    // tropical-paradise locks region to 'tropical'; all other paths roll
+    // from the general region rotation. Migration-in-progress: legacy paths
+    // also read sharedDNA.region via compose.js, so this keeps both shapes
+    // working.
+    const region = path === 'tropical-paradise'
+      ? 'tropical'
+      : picker.pickWithRecency(REGION_KEYS_GENERAL, 'region');
     return {
       palette: picker.pickWithRecency(pools.PALETTES, 'palette'),
       lighting: picker.pickWithRecency(pools.LIGHTING, 'lighting'),
+      region,
+      roster: regionRosterPrompt(region),
     };
   },
 
   buildBrief({ path, sharedDNA, vibeDirective, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`BloomBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, picker });
+    // Declarative axis-system paths export an object { archetype, pools }.
+    // Legacy compositional paths export a function. Dispatch on shape.
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, picker });
+    }
+    throw new Error(`BloomBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {
