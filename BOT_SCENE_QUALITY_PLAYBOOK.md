@@ -1232,6 +1232,47 @@ These are reference points Sonnet should be able to draw from when authoring sce
 
 Per-bot subsections live below. Each bot's path-by-path iteration history is here. Add Round N entries with what was changed, what improved, what regressed. Anything reusable across bots migrates up into the cross-bot tables.
 
+## MechBot
+
+### titan-war-machines (MechBot) — vertigo-composition-pool + movie-poster-crank win 2026-05-15
+
+First MechBot path migrated to the declarative composer. **Production-ready in 2 rounds.**
+
+**Key insight: vertigo-composition pool as a NEW pattern.** Most scene paths use a generic camera framing axis. For BIBLICAL-SCALE paths (titan-war-machines, kaiju-scale walkers, megastructures, any path where "the scale is the subject"), a path-bespoke composition pool of vertigo angles produces materially better renders than relying on the brief's "WIDE shots favored" admonition. The 15-entry composition pool for titan-war-machines includes:
+- WORM'S-EYE up the leg
+- FLY-BETWEEN-LEGS perspective
+- KAIJU-STEP-DESCENDING (foot coming at camera)
+- AERIAL-ORBIT-AROUND-HEAD
+- DWARFED-SKYLINE-ESTABLISHING
+- SLOT-CANYON-BETWEEN-BUILDINGS
+- CRACKED-PAVEMENT-FOREGROUND (low POV)
+- HELICOPTER-PASS alongside torso
+- CLIFF-EDGE-VANTAGE
+- MID-FALL-CAMERA POV
+- SCRAPING-CLOUD-LAYER
+- OVER-THE-SHOULDER-FROM-SOLDIER
+- STREET-LEVEL-WITH-DEBRIS
+- AERIAL-WIDE-WITH-JETS-IN-FOREGROUND
+- BENEATH-THE-FALLING-FOOT
+
+Each entry specifies camera-position + what-dominates-frame + scale-prover. Pool only needs 15-25 entries (vertigo angles are a small conceptual space). Wire it as a path slot, inject into the template's mandatory composition section.
+
+**Apply this pattern to:** any scene path where SCALE is the subject — megastructure / kaiju-walker / colossal-anomaly / city-as-hero / mountain-as-hero / cosmic-vista paths. Not needed for character paths (their composition is bounded by the figure).
+
+**Movie poster crank — template-only — works:** R1 (vertigo composition only) scored 4.9/5 avg with strong composition diversity but slightly grey atmospheric palette. R2 added the MOVIE POSTER MANDATE block to the template (no pool changes) — still 4.9/5 numerically but the renders became *qualitatively spectacular*: dramatic sky saturation (fire-orange / blood-red / electric-violet), multi-quadrant action density, multiple scale-provers in different parts of frame. Kevin: "wow, yes, scale this and commit."
+
+**Files:**
+- `scripts/bots/mechbot/paths/titan-war-machines.js` (declarative)
+- `scripts/bots/mechbot/paths/legacy/titan-war-machines.js` (function-form preserved)
+- `scripts/lib/archetypes.js` — `MECHBOT_TITAN_WAR` archetype
+- `scripts/lib/archetype-templates.js` — `MECHBOT_TITAN_WAR` template w/ vertigo + movie-poster mandate
+- `scripts/bots/mechbot/seeds/titan_war_lighting.json` (100), `titan_war_drama.json` (50, 40%-gated), `titan_war_composition.json` (25 vertigo angles)
+- Reuses legacy 200-entry subject + action + setting pools (already production-grade)
+
+### alien-biomechs (MechBot) — MIGRATION ABANDONED 2026-05-15
+
+Spent ~7 rounds trying to migrate. Pivot to "pure mech creatures" lost the surreal Giger/Bloodborne biomech aesthetic the legacy was producing. Restore-to-legacy + new-architecture also tested — beat legacy on lighting variety but didn't justify the complexity. Reverted entirely. **Lesson:** legacy biomech-horror brief is already strong; don't migrate paths where the legacy renders already convert well. Calibration lesson saved at [[mechbot-intricate-or-colossal]].
+
 ## StarBot
 
 ### alien-city (StarBot)

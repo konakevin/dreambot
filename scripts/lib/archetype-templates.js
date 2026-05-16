@@ -2900,49 +2900,60 @@ Open with the dragon + its action ("Crimson dragon mid-roar with bone-spike cres
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
-  MECHBOT_ALIEN_BIOMECHS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, subject, action, landscape, drama } = slots;
+  MECHBOT_TITAN_WAR: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, drama } = slots;
 
     const dramaSection = drama
       ? `
-━━━ HABITAT PHENOMENON — render this visibly in the scene ━━━
+━━━ COMBAT PHENOMENON — render this visibly in the scene ━━━
 ${drama}
 
-This is a biomech-habitat event happening around the organism — render it as a visible secondary focal point (NOT eclipsing the biomech, but amplifying the body-horror dread + wonder).
+This is a war-event happening across the battlefield — render it as a visible secondary focal point that AMPLIFIES the titan's biblical scale (NOT eclipsing the titan, but contextualizing the scale of warfare around it).
 
 `
       : '';
 
-    return `You are painting an ALIEN BIOMECH scene for MechBot — non-humanoid alien creatures across the FULL SPECTRUM from PURE MECHANICAL (Pacific Rim kaiju walkers / Phantasy Star titans / Edge of Tomorrow Mimics / Titanfall war-titans), through BIOMECH-HYBRID (chitin + bio-glow / translucent membrane wings / scarab shell / segmented chitin with backlit amber seams), to FULL FLESH-FUSION (H.R. Giger / Bloodborne / Annihilation Shimmer / Scorn / Hollow Knight). Hyper-real cinematic 3D. Vivid saturated color. Painterly richness. Surreal otherworldly silhouettes.
+    return `You are a sci-fi cinematographer writing a TITAN WAR MACHINE scene for MechBot — a kilometer-scale combat machine in mid-engagement. Pure spectacle. Pacific Rim / 40K Imperator titans / AT-AT / Attack on Titan colossus / Edge of Tomorrow / Battlestar Galactica lineage. Hyper-real cinematic 3D / VFX-quality.
 
-━━━ RENDER THE SEED EXACTLY — DON'T FORCE A STYLE ━━━
-The subject is whatever the seed says it is. A colossal kaiju mech-walker IS pure machine: armor plating, hydraulic legs, weapon turrets, no flesh anywhere. A biomech mantis IS chitin + amber-glow + compound-eye fusion. A cephalopod biomech IS chrome + wet flesh + tentacles + multi-eye. DO NOT force flesh-fusion onto a pure-mech subject. DO NOT strip flesh-fusion from a Giger-style organism. Believe what the subject text says.
+━━━ NON-NEGOTIABLE — BIBLICAL SCALE ━━━
+The titan is kilometer-tall, skyscraper-scale. NEVER smaller. The scale IS the subject. Tiny humans / vehicles / aircraft / dwarfed buildings MUST appear in the frame as scale-provers. The viewer's gut reaction must be "holy shit it's enormous."
 
-━━━ DENSITY MANDATE — INTRICATE OR COLOSSAL, NEVER LEGO-TECHNIC ━━━
-Every render must hit AT LEAST ONE: (A) rich material density — visible circuit boards / glowing accents through panel seams / intricate hydraulic articulation / dense surface texture across every body region, OR (B) colossal cinematic scale — building-dwarfing silhouette, scale-prover humans/vehicles, atmospheric haze receding miles. NEVER bland "kit-built" mid-size mech-predators. The subject is the show.
+━━━ NON-NEGOTIABLE — VERTIGO COMPOSITION ━━━
+${composition}
 
-━━━ ALIEN, NOT HUMANOID ━━━
-Body plan must be NON-humanoid. Arthropod, cephalopod, chimeric, serpentine, avian, quadruped, multi-limb, hive-form, tripedal kaiju walker. If the seed says humanoid, IGNORE it.
+The chosen vertigo angle DRIVES the framing — render it precisely as described. The titan dominates the frame at biblical scale; the camera position makes the viewer FEEL the scale through perspective.
 
-━━━ THE SUBJECT ━━━
+━━━ NON-NEGOTIABLE — MOVIE POSTER MANDATE ━━━
+Every render is a MOVIE POSTER PROMOTIONAL FRAME — the kind of vista that stops the viewer mid-scroll and makes them GASP. EVERY QUADRANT of the frame has something striking — NO quiet corners. The eye should land on AT LEAST 4 distinct striking details across the frame, then follow a clear visual path.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+  1. THE TITAN at vertigo-inducing scale (the composition angle handles this — render it cranked)
+  2. ACTIVE COMBAT visible — weapons firing / shields rippling / explosions blooming / collapsing infrastructure
+  3. SCALE PROVERS in multiple quadrants — tiny humans / vehicles / aircraft / dwarfed skyscrapers (NOT just one — at LEAST TWO scale anchors in different parts of the frame)
+  4. ATMOSPHERIC PHENOMENON in its own quadrant — smoke columns / fire-glow / muzzle-flash light / sonic-boom shockwave / orbital-strike beam / artillery flashes on horizon
+  5. SATURATED THEATRICAL SKY — NEVER bland grey overcast. Dawn pink-purple, dusk fire-orange, blood-red sunset, electric-violet storm, nuclear-orange horizon glow, neon-cyberpunk underlit cloud, aurora-coded EM-warfare interference, etc.
+  6. FOREGROUND TACTILE DETAIL anchoring depth — cracked pavement / debris / overturned vehicle / fallen banner / spent shell-casings / shattered glass / steaming impact-crater
+
+THINK Pacific Rim establishing-shot / 40K Imperator titan reveal-card / Attack on Titan colossus intro-frame / AT-AT Hoth-invasion vista / Edge of Tomorrow Mimic-attack splash / Battlestar Galactica heavy-cruiser reveal / Mass Effect Reaper-landing key-art / Independence Day "ship over city" gasp-frame.
+
+━━━ NON-NEGOTIABLE — ACTIVE WAR ━━━
+War is happening RIGHT NOW. The titan is firing / striding / clashing / shielding / collapsing — NEVER idle. Mid-action freeze-frame.
+
+━━━ THE TITAN ━━━
 ${subject}
 
-Render the EXACT anatomy + every detail feature described. Whatever the seed says — pure mech panels and reactor-glow, OR chitin with amber-glow and membrane wings, OR translucent flesh over piston-bone with weeping spiracle-vents and tentacles — render that exact thing with every surface specific.
-
-━━━ THE ACTION — what the creature is DOING (mid-motion) ━━━
+━━━ THE ACTION (what the titan is DOING in this combat moment) ━━━
 ${action}
 
-The creature acts at a LOADED INSTANT — striding / kaiju-walking / mid-strike / sentinel-stance / weapon-mount-charging / hunting-flex / feeding posture / dying twitch / pack-flanking / predatory crouch / atmospheric-entry-burn. Pick whichever fits the subject. NEVER static "posing for camera."
-
-━━━ THE HABITAT / SETTING ━━━
+━━━ THE BATTLEFIELD / SETTING ━━━
 ${landscape}
 
-The environment is alive in its own way — bioluminescent walls, coolant pools, hive-resin floors, organic wrongness. Render with depth: foreground habitat detail, midground organism, background eerie space receding.
+The setting is half the storytelling. Smoke columns, fire, debris, broken architecture, atmospheric context — render every detail. Tiny humans / vehicles / aircraft for scale.
 ${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
-Bioluminescence at multiple distances (organ-glow / wall-glow / pool-glow) layered with the lighting mode above. Single-color accent dominant in the palette (acid green / arterial red / coolant teal / hive-resin violet / amber spiracle-glow).
+Layer the rolled lighting mode above with COMBAT-INTENSITY accents — muzzle-flash hot-spots / fire-glow uplighting / sparks raining from impact-zones / running-light arrays along titan chassis ridges pulsing alert-pattern.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -2957,18 +2968,17 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ ABSOLUTE BANS ━━━
-- NO humanoid cyborgs (cyborg-* paths) — biomechs are NOT humanoid
-- NO pure machinery (robot-moment) — flesh-machine fusion is integral
-- NO architecture-scale alien hive walls / corridors (StarBot's aliens-architecture territory) — this is a CREATURE inside such a space, not the space itself
-- NO sexy-feminine cyborg aesthetic (cyborg-woman territory) — biomechs are alien, uncanny, NOT erotic
-- NO pilot / cockpit (mecha-pilots)
-- NO industrial / factory work (industrial-machines)
+- NO character-scale or vehicle-scale machines (robot-moment / mecha-pilots / industrial-machines / rust-apocalypse territories)
+- NO peaceful idle / between-battles framing — combat is HAPPENING
+- NO pilot-cockpit-focus framing (mecha-pilots territory)
+- NO wasteland-scavenger / Mad Max DNA (rust-apocalypse)
+- NO industrial work language — these are WAR machines
 
-━━━ LEG/LIMB-COUNT FIDELITY ━━━
-If the seed specifies a leg/tendril/wing count, repeat the count TWICE in the polished prompt — Flux defaults collapse without reinforcement.
+━━━ LEG-COUNT FIDELITY (NON-NEGOTIABLE) ━━━
+If the titan description specifies a leg count (quadrupedal / hexapedal / four-legged / six-legged / serpentine / centaur-base / tripedal), the polished prompt MUST repeat the count TWICE (once near start, once mid-prompt). Flux defaults to bipedal — leg counts collapse without heavy reinforcement.
 
 ━━━ STRUCTURE — write 100-130 words ━━━
-Open with the organism + its action ("Mantis-form predator mid-strike with chitin-plated forelimbs fused to piston rams, compound eye-cluster dripping lubricant, bioluminescent throat-sac pulsing cyan..."). Then weave in: habitat backdrop with depth layers, lighting/atmosphere with bioluminescence, any habitat phenomenon, palette and mood. Painterly biomech-horror finish — vivid color, surreal silhouette, body-horror beauty.
+Open with the vertigo camera angle + the titan + its action ("Worm's-eye-view up the leg of a kilometer-tall bipedal humanoid mid-firing twin dorsal railguns over a shattered downtown..."). Then weave in: battlefield with depth + scale-provers, combat phenomenon if rolled, lighting/atmosphere, palette and mood. Hyper-real cinematic 3D finish.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
@@ -3707,7 +3717,8 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
   },
 
   STEAMBOT_STEAMPUNK_SPECTACLE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, event, crowd_detail, surprise_element, escalation } = slots;
+    const { lighting, atmosphere, event, crowd_detail, surprise_element, beauty_accent, escalation } = slots;
+    const beautyAccents = Array.isArray(beauty_accent) ? beauty_accent : [beauty_accent];
 
     const escalationSection = escalation
       ? `
@@ -3738,6 +3749,16 @@ Render the crowd as a textured living mass — specific clothing details visible
 ${surprise_element}
 
 Place at midground or deep distance — a small detail amplifying the moment (press photographer crouched, distant airship hovering to witness, signal beacon, escaped automaton, vendor cart at frame edge). NEVER eclipsing the event.
+
+━━━ DREAMLIKE BEAUTY ACCENTS — render ALL THREE in the scene ━━━
+- ${beautyAccents[0] || ''}
+- ${beautyAccents[1] || ''}
+- ${beautyAccents[2] || ''}
+
+These are BEAUTY-AMPLIFIERS that lift the scene into dreamlike-pretty register. Flower arrangements / god-light shafts / prismatic-glass color / pearl-strung tier ornaments / cascading petals / jewel-tone draperies / hanging garden bowers. Every one MUST be visible in the frame. They turn an event-scene into a "deep-breath, just admire" moment.
+
+━━━ SATURATED + VIVID DREAM-QUALITY MANDATE ━━━
+This render must read as a DREAM of a steampunk event — not a documentary. Colors are SATURATED + JEWEL-TONED + VIVID. Light is OPULENT and CINEMATIC, not flat or grey. God-light shafts pour through high glass. Color rims everything. Atmosphere has just-the-right haze. The viewer should sigh at how pretty it is. NEVER muddy, NEVER washed-out, NEVER grimy-grey realism. ALWAYS opulent jewel-tone dream-state.
 ${escalationSection}
 ━━━ LIGHTING ━━━
 ${lighting}

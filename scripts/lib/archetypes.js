@@ -538,13 +538,13 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
-  MECHBOT_ALIEN_BIOMECHS: {
+  MECHBOT_TITAN_WAR: {
     description:
-      'PATH-BESPOKE — MechBot alien-biomechs path (2026-05-15 migration to declarative composer; pure-mech pivot REVERTED after legacy-comparison batch beat R4 on color/surreal/painterly quality). FLESH-AND-MACHINE FUSION ALIEN ORGANISM at creature scale. H.R. Giger biomechanical horror + Bloodborne body-horror beauty + Annihilation Shimmer organic strangeness + Scorn machine-organism intimacy + Hollow Knight infected uncanny. Translucent flesh over piston-bone, hydraulic intercostals, exposed coolant-pumps, weeping spiracle-vents, bioluminescent organ-glow, chitin-and-piston blends. NOT pure mech, NOT humanoid cyborg, NOT vehicle. Restored legacy 151-subject + 200-action + 200-setting pools. 5 axes: subject + action + landscape + new path-bespoke lighting (ground-based variety, overrides cosmic bot default) + new 40%-gated biomech drama.',
+      'PATH-BESPOKE — MechBot titan-war-machines path (2026-05-15 migration to declarative composer). Kilometer-scale combat machines in mid-engagement, biblical scale, Pacific Rim / 40K Imperator / AT-AT / Attack on Titan colossus lineage. REUSES legacy 200-entry subject/action/setting pools. Adds 3 path-bespoke pools: lighting (ground-based combat, overrides cosmic bot default), composition (vertigo-inducing camera angles — worm\'s-eye / fly-between-legs / kaiju-step-on-camera / aerial-orbit / dwarfed-skyline), and 40%-gated drama (orbital-strike / EMP-burst / artillery flashes / sonic-boom shockwaves / kaiju-footfall pressure-waves). VERTIGO + BIBLICAL SCALE are mandatory.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['subject', 'action', 'landscape'],
+      path: ['subject', 'action', 'landscape', 'composition'],
     },
     pickN: {},
     conditionalLayer: { slot: 'drama', gate: 0.4 },
@@ -691,13 +691,13 @@ const ARCHETYPES = {
 
   STEAMBOT_STEAMPUNK_SPECTACLE: {
     description:
-      'PATH-BESPOKE — SteamBot steampunk-spectacle path (2026-05-15 migration). GRAND EVENTS / CEREMONIES / FESTIVALS / PERFORMANCES / UPRISINGS in Victorian-industrial worlds. CROWD-driven scenes — tiny figures against massive machinery, packed balconies, sea of top-hats and goggles. THE EVENT IS THE SUBJECT — never a single person. Wide cinematic establishing shots or dramatic crowd-level angles. 3 path-bespoke axes (event / crowd_detail / surprise_element) + 1 conditional 40%-gated (escalation) + universal lighting + atmosphere. Reuses production-scale 199-entry SPECTACLE_EVENTS pool.',
+      'PATH-BESPOKE — SteamBot steampunk-spectacle path (2026-05-15 migration + dream-beauty pass). GRAND EVENTS / CEREMONIES / FESTIVALS / PERFORMANCES / UPRISINGS in Victorian-industrial worlds with DREAMLIKE BEAUTY register — ornate flower arrangements, god-light shafts, saturated jewel-tone colors, the kind of pretty that makes you breathe deep. CROWD-driven scenes — tiny figures against massive machinery, packed balconies, sea of top-hats and goggles. THE EVENT IS THE SUBJECT. Wide cinematic establishing shots or dramatic crowd-level angles. 4 path-bespoke axes (event / crowd_detail / surprise_element / beauty_accent pickN:3) + 1 conditional 40%-gated (escalation) + universal lighting + atmosphere.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['event', 'crowd_detail', 'surprise_element'],
+      path: ['event', 'crowd_detail', 'surprise_element', 'beauty_accent'],
     },
-    pickN: {},
+    pickN: { beauty_accent: 3 },
     conditionalLayer: { slot: 'escalation', gate: 0.4 },
     framingModes: null,
     anchorScaleRange: null,

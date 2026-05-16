@@ -88,10 +88,16 @@ module.exports = {
   MECHA_PILOT_SUBJECTS: load('mecha_pilot_subjects'),
   MECHA_PILOT_ACTIONS: load('mecha_pilot_actions'),
   MECHA_PILOT_SETTINGS: load('mecha_pilot_settings'),
-  // Titan-war-machines path
+  // Titan-war-machines path (migrated to declarative axis system 2026-05-15)
+  // Reuses legacy 200-entry subject/action/setting pools.
+  // Adds 3 path-bespoke pools: lighting (ground-based combat), drama
+  // (40%-gated combat phenomena), composition (vertigo angles).
   TITAN_WAR_SUBJECTS: load('titan_war_subjects'),
   TITAN_WAR_ACTIONS: load('titan_war_actions'),
   TITAN_WAR_SETTINGS: load('titan_war_settings'),
+  TITAN_WAR_LIGHTING: load('titan_war_lighting'),
+  TITAN_WAR_DRAMA: load('titan_war_drama'), // 40% gated combat phenomenon
+  TITAN_WAR_COMPOSITION: load('titan_war_composition'), // vertigo angles
   // Power-armor-infantry path
   POWER_ARMOR_SUBJECTS: load('power_armor_subjects'),
   POWER_ARMOR_ACTIONS: load('power_armor_actions'),

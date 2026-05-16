@@ -96,6 +96,9 @@ module.exports = {
     'cyborg-man':
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+    // 2026-05-15: bespoke-axis migration. Empty per playbook
+    // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
+    'titan-war-machines': '',
   },
 
   // Per-medium prompt injection — MechBot's dialect for the `render` medium.
@@ -150,10 +153,13 @@ module.exports = {
   },
 
   // Two-pass Sonnet→Haiku polish.
+  // Per playbook lesson #6 (2026-05-15): new-axis-system paths skip polish —
+  // Haiku compression drops path-bespoke DNA / vocabulary / detail.
   twoPassPolish: {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
+    skipPaths: ['titan-war-machines'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
@@ -233,10 +239,37 @@ module.exports = {
     return base;
   },
 
+  // Bot-level pool defaults for the new composer architecture (2026-05-15).
+  // Universal axes resolve from these when a path doesn't override.
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'ATMOSPHERES',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`MechBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`MechBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`MechBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {
