@@ -1,45 +1,23 @@
 /**
- * SteamBot airship-skies path — airships in dramatic sky scenes.
+ * SteamBot airship-skies — declarative composer form.
+ *
+ * Migrated 2026-05-15 to canonical scene-path shape. MOVIE-POSTER airship
+ * scenes — dirigibles, sky-galleons, packet-ships in vertigo-inducing
+ * dramatic-sky moments. Mortal-Engines / Treasure-Planet / Howl's-Moving-
+ * Castle / Last-Exile / Atlantis-lost-empire visual lineage.
+ *
+ * 5-axis split: 3 path-bespoke (scene / sky_layer / surprise_element) + 1
+ * conditional 70%-gated (phenomenon) + 2 universal (lighting / atmosphere).
+ *
+ * Pre-rewrite preserved at paths/legacy/airship-skies.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.AIRSHIP_SCENES, 'airship_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.STEAMPUNK_ATMOSPHERES, 'atmosphere');
-
-  return `You are a cinematic concept-RENDER artist writing AIRSHIP SKIES scenes for SteamBot. Airships in dramatic sky moments. Output wraps with style prefix + suffix.
-
-${blocks.STEAMPUNK_OBSESSIVE_DETAIL_BLOCK}
-
-${blocks.VICTORIAN_INDUSTRIAL_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE AIRSHIP SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Wide dramatic sky frame. Airship focal. Cloud-drama + gaslight ship-windows + steam-trail. Victorian-industrial hull detail.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'STEAMBOT_AIRSHIP_SKIES',
+  pools: {
+    scene: 'AIRSHIP_SCENES',
+    sky_layer: 'AIRSHIP_SKY_LAYER',
+    surprise_element: 'AIRSHIP_SURPRISE_ELEMENT',
+    phenomenon: 'AIRSHIP_PHENOMENON',
+  },
 };
