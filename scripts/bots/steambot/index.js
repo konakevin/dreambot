@@ -23,6 +23,7 @@ const pathBuilders = {
   'steampunk-man': require('./paths/steampunk-man'),
   'steampunk-spectacle': require('./paths/steampunk-spectacle'),
   'steam-transport': require('./paths/steam-transport'),
+  'cozy-steampunk': require('./paths/cozy-steampunk'),
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -70,6 +71,7 @@ module.exports = {
     'steampunk-man':         { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-spectacle':   { 'black-forest-labs/flux-1.1-pro': 100 },
     'steam-transport':       { 'black-forest-labs/flux-1.1-pro': 100 },
+    'cozy-steampunk':        { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -80,6 +82,11 @@ module.exports = {
   mediumByPath: {
     'sexy-steampunk-woman': 'steambot-painted-woman',
     'steampunk-man': 'steambot-painted-man',
+    // Cozy-steampunk reuses the painted-woman medium — same oil-painted-
+    // illustration register fits the dreamy ethereal cozy-room intent
+    // better than the hyperreal CG default. Medium content is gender-
+    // neutral (just describes the painterly register).
+    'cozy-steampunk': 'steambot-painted-woman',
   },
 
   mediumStyles: {
@@ -134,6 +141,7 @@ module.exports = {
     'steampunk-man',
     'steampunk-spectacle',
     'steam-transport',
+    'cozy-steampunk',
   ],
 
   pathWeights: {
@@ -144,6 +152,7 @@ module.exports = {
     'steampunk-man': 2,
     'steampunk-spectacle': 1,
     'steam-transport': 2,
+    'cozy-steampunk': 2,
   },
 
   chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['steampunk-scene','airship-skies','steampunk-curio','steampunk-spectacle','steam-transport'] },
@@ -155,7 +164,7 @@ module.exports = {
     // was stripping skin/eyes/makeup/hair DNA, leaving only the ethnicity
     // noun. Single-pass Sonnet preserves the full DNA stack. Per playbook
     // 2026-05-15 lesson: two-pass polish OFF for all new-axis paths.
-    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport'],
+    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk'],
     polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [

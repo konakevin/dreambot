@@ -730,6 +730,19 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+  STEAMBOT_COZY_STEAMPUNK: {
+    description:
+      'PATH-BESPOKE — SteamBot cozy-steampunk path (2026-05-15 resurrection + axis migration). Dreamy ethereal cozy Victorian-industrial INTERIORS — pretty rooms with steampunk furniture, beds, flower arrangements, ornate fixtures, AND a beautiful window view (sunset / rainstorm aqua sky / distant airships / cloudtops). Multi-layered: pretty room + pretty window view together. Comforting + surreally beautiful + intricate. 4 path-bespoke axes (room / flora pickN:3 / window_view / intricate_detail pickN:2) + 1 conditional 40%-gated (quiet_moment) + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['room', 'flora', 'window_view', 'intricate_detail'],
+    },
+    pickN: { flora: 3, intricate_detail: 2 },
+    conditionalLayer: { slot: 'quiet_moment', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 
   STEAMBOT_STEAMPUNK_SCENE: {
     description:

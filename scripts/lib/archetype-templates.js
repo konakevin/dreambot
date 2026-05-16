@@ -3951,6 +3951,88 @@ CRITICAL — the OPENING tokens establish the EVENT as the subject. The crowd is
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STEAMBOT_COZY_STEAMPUNK: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, room, flora, window_view, intricate_detail, quiet_moment } = slots;
+    const floraArr = Array.isArray(flora) ? flora : [flora];
+    const detailArr = Array.isArray(intricate_detail) ? intricate_detail : [intricate_detail];
+
+    const quietSection = quiet_moment
+      ? `
+━━━ QUIET MOMENT — render this comforting detail ━━━
+${quiet_moment}
+
+A small comforting human-trace detail — a book left open on the bed, a teacup cooling on the side-table, a cat curled on a velvet chair, an unfinished letter on the writing desk. Adds the feeling that someone JUST WAS HERE. Place at midground, NEVER eclipsing the room or window.
+
+`
+      : '';
+
+    return `You are a cinematic interior painter writing a COZY STEAMPUNK ROOM scene for SteamBot — a dreamy, ethereal, comforting Victorian-industrial interior with a beautiful window view. The room itself is BEAUTIFUL (pretty steampunk furniture, flower arrangements, plants, ornate fixtures), AND the window view is BEAUTIFUL (sunset / rainstorm aqua sky / distant airships / cloudtops). Multi-layered: the pretty room + the pretty window view TOGETHER make the frame. The viewer should feel the urge to step in, sit down, and look out the window.
+
+━━━ THE FEELING — NON-NEGOTIABLE ━━━
+DREAMY. ETHEREAL. COMFORTING. SURREALLY BEAUTIFUL. The kind of room you'd want to spend a quiet afternoon in. Soft, warm, intricate, lived-in. Not a documentary photograph — a painted dream of a place that doesn't quite exist.
+
+━━━ MULTI-LAYERED COMPOSITION — NON-NEGOTIABLE ━━━
+TWO HEROES side-by-side: (1) the cozy steampunk INTERIOR and (2) the beautiful WINDOW VIEW visible through tall windows / glass doors / a glass-and-iron conservatory wall. Both must read clearly. Compose so the room fills 60-70% of the frame and the window view occupies the remaining 30-40% as a glowing portal into the outside world. The window is a focal element of the room — large, ornate, framing a vista.
+
+━━━ THE ROOM (the cozy steampunk interior) ━━━
+${room}
+
+Render the room with depth-on-depth — FOREGROUND tactile detail (bedpost edge, cushion corner, side-table surface) → MIDGROUND the room's central furniture and the figure-of-the-space → BACKGROUND the window-wall with its view. Period-accurate Victorian-industrial — brass beds, velvet drapes, mahogany side-tables, leather chairs, copper sconces, oriental rugs, hand-tooled fixtures. Lived-in, warm, intricate.
+
+━━━ FLORA — render ALL THREE in the scene ━━━
+- ${floraArr[0] || ''}
+- ${floraArr[1] || ''}
+- ${floraArr[2] || ''}
+
+Flowers and plants fill the room with life — fresh-cut blooms in crystal vases, climbing vines around the window, potted ferns on side-tables, hanging gardens, brass-banded planters. EVERY one must be visible. They soften the steampunk industrial edges into something tender.
+
+━━━ THE WINDOW VIEW (the beautiful outside) ━━━
+${window_view}
+
+Render the view through the tall ornate window as a CLEAR, RICHLY-COLORED scene — the viewer can see the sunset / sky / airships / cloudtops / distant city. The window is a portal into wonder. Subtle atmospheric haze where it makes sense, but never a fog-bath — the view is READABLE.
+
+━━━ INTRICATE DETAILS — render BOTH on the room's fixtures ━━━
+- ${detailArr[0] || ''}
+- ${detailArr[1] || ''}
+
+These are the ornate steampunk touches that saturate the room with craftsmanship — every brass fitting, every copper hinge, every clockwork ornament, every carved wood-panel. Render with OBSESSIVE detail.
+${quietSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ DREAMY ETHEREAL RENDER QUALITY ━━━
+The render reads PAINTED + WARM + SOFT. NOT documentary photoreal, NOT cold-CGI, NOT gritty-realism. Painterly cinematic with rich saturated jewel-tone color. The light streaming through the window kisses the room's surfaces gently. Atmospheric depth without volumetric soup. Every layer — room foreground, room midground, window view — reads CLEARLY.
+
+━━━ COMPOSITION ━━━
+Wide interior establishing-shot — slight three-quarter angle from inside the room, looking past the furniture-and-flora foreground/midground toward the window-and-view. NO single human figure as the subject (the room and view are the subject; tiny silhouette of someone seated at a chair from behind is fine as scale-prover). The room INVITES the viewer in.
+
+━━━ HARD BANS ━━━
+- NO single human figure dominating (the room itself is the subject)
+- NO modern objects (this is 1890s impossible-engineering)
+- NO gritty / muddy / industrial-slum register (this is DREAMY-COZY)
+- NO heavy volumetric fog smothering detail
+- NO empty/austere/minimalist room — must be lived-in, intricate, filled with flora and fixtures
+- NO substituting your own descriptions for the pool entries — render what's locked
+
+━━━ STRUCTURE (write in this order) ━━━
+[OPENING: a wide interior establishing-shot of a cozy dreamy steampunk room with a beautiful window view], [the room with its furniture and depth layers], [the three flora elements woven in], [the two intricate details on fixtures], [the window view as a glowing portal into wonder], [the quiet moment if rolled], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens establish the COZY ROOM + WINDOW VIEW together. The viewer takes a deep breath and wants to step inside.
+
+Output ONLY the raw 120-160 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
 
   STEAMBOT_STEAMPUNK_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, character, landscape, surprise_element, event } = slots;

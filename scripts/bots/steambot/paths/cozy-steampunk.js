@@ -1,45 +1,25 @@
 /**
- * SteamBot cozy-steampunk path — warm cozy steampunk pockets.
+ * SteamBot cozy-steampunk — declarative composer form.
+ *
+ * Resurrected + migrated 2026-05-15 to canonical multi-layered room+view
+ * shape. Dreamy ethereal cozy Victorian-industrial interiors with beautiful
+ * window views. The room (steampunk furniture + flora) AND the window view
+ * (sunset / rainstorm sky / airships / cloudtops) are both heroes.
+ *
+ * 7-axis split: 4 path-bespoke (room / flora pickN:3 / window_view /
+ * intricate_detail pickN:2) + 1 conditional 40%-gated (quiet_moment)
+ * + 2 universal (lighting / atmosphere).
+ *
+ * Pre-resurrection function-form preserved at paths/legacy/cozy-steampunk.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const setting = picker.pickWithRecency(pools.COZY_STEAMPUNK_SETTINGS, 'cozy_steampunk_setting');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.STEAMPUNK_ATMOSPHERES, 'atmosphere');
-
-  return `You are a cinematic concept-RENDER artist writing COZY STEAMPUNK scenes for SteamBot — warm cozy pockets. Brass/copper/leather/gaslight warmth. Output wraps with style prefix + suffix.
-
-${blocks.STEAMPUNK_OBSESSIVE_DETAIL_BLOCK}
-
-${blocks.VICTORIAN_INDUSTRIAL_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE COZY STEAMPUNK SETTING ━━━
-${setting}
-
-━━━ LIGHTING (gaslight / forge / warm preferred) ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Mid or mid-close warm intimate frame. Brass + copper + leather + warm-gaslight. Setting is hero. Cozy mechanical detail.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'STEAMBOT_COZY_STEAMPUNK',
+  pools: {
+    room: 'COZY_STEAMPUNK_ROOM',
+    flora: 'COZY_STEAMPUNK_FLORA',
+    window_view: 'COZY_STEAMPUNK_WINDOW_VIEW',
+    intricate_detail: 'COZY_STEAMPUNK_INTRICATE_DETAIL',
+    quiet_moment: 'COZY_STEAMPUNK_QUIET_MOMENT',
+  },
 };
