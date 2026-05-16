@@ -767,6 +767,26 @@ async function runBot(opts) {
     const vibeDirective = await fetchVibeDirective(sb, vibeKey);
     const mediumFluxFragment = await fetchMediumFluxFragment(sb, medium);
 
+    // NSFW-recovery loop: if Flux flags the prompt as NSFW after its own
+    // internal same-prompt retries (2 attempts), re-roll all pool picks and
+    // rebuild the brief from scratch. Up to 3 outer recoveries × 3 inner
+    // flux attempts = up to 9 total flux calls per render before giving up.
+    // Used by iter-bot, run-bot, generate-bot-dreams, and nightly via the
+    // shared runBot pipeline.
+    let fluxUrl;
+    let recipe; // built inside while, used after it
+    let textContent = null; // built inside while, used in postProcess after
+    let chaosProfile = { intensity: 0, injections: [], channelKey: null };
+    let sensoryProfile = { anchors: [], channelKeys: [], context: null };
+    let nsfwRecoveryAttempt = 0;
+    const MAX_NSFW_RECOVERY = 3;
+    while (true) {
+      if (nsfwRecoveryAttempt > 0) {
+        console.warn(
+          `  🔄 NSFW recovery #${nsfwRecoveryAttempt}/${MAX_NSFW_RECOVERY}: re-rolling all pool picks`
+        );
+      }
+
     // 2. Create picker (pre-loads recency window)
     errorStage = 'picker-init';
     picker = await createPicker({ botName: bot.username, windowDays: 5, sb });
@@ -778,7 +798,7 @@ async function runBot(opts) {
       : {};
 
     // 4. Optional text content (HumanBot/GlowBot thinking-bot pattern)
-    let textContent = null;
+    textContent = null;
     if (bot.generateTextContent) {
       errorStage = 'text-content';
       textContent = await bot.generateTextContent({
@@ -802,8 +822,10 @@ async function runBot(opts) {
     });
 
     let middle;
-    let chaosProfile = { intensity: 0, injections: [], channelKey: null };
-    let sensoryProfile = { anchors: [], channelKeys: [], context: null };
+    // Reset chaosProfile and sensoryProfile each NSFW retry — outer-scoped
+    // so they survive after the while loop exits.
+    chaosProfile = { intensity: 0, injections: [], channelKey: null };
+    sensoryProfile = { anchors: [], channelKeys: [], context: null };
     const isDirectPrompt = briefResult && typeof briefResult === 'object' && briefResult.direct;
 
     // briefMeta — optional path-builder-supplied recipe enrichment.
@@ -1076,7 +1098,7 @@ async function runBot(opts) {
     // See docs/DLT_RECIPE_PLAN.md for full architecture. Stored on the
     // upload row as JSONB; replayed at DLT time to reproduce source's
     // medium + look against a new user's subject/cast.
-    const recipe = buildRecipe({
+    recipe = buildRecipe({
       model: renderModel,
       mediumKey: medium,
       vibeKey,
@@ -1117,13 +1139,27 @@ async function runBot(opts) {
     }
 
     // 9. Replicate render — uses the renderModel + inputOverrides resolved above.
+    // Wrapped in NSFW-recovery try/catch: on safety-filter trip (after flux's
+    // own internal same-prompt retries), re-roll picker + rebuild brief.
     errorStage = 'flux';
-    const fluxUrl = await flux({
-      prompt: finalPrompt,
-      aspectRatio: '9:16',
-      model: renderModel,
-      inputOverrides: renderInputOverrides,
-    });
+    try {
+      fluxUrl = await flux({
+        prompt: finalPrompt,
+        aspectRatio: '9:16',
+        model: renderModel,
+        inputOverrides: renderInputOverrides,
+      });
+      break; // success — exit NSFW-recovery loop
+    } catch (err) {
+      const isNsfw =
+        err && err.message && /NSFW|sensitive|flagged|safety|E005/i.test(err.message);
+      if (isNsfw && nsfwRecoveryAttempt < MAX_NSFW_RECOVERY) {
+        nsfwRecoveryAttempt++;
+        continue; // back to top of while — re-creates picker + re-rolls
+      }
+      throw err;
+    }
+    } // end NSFW-recovery while
 
     // 10. Download
     errorStage = 'download';

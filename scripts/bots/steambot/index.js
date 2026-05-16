@@ -32,6 +32,17 @@ const pathBuilders = {
 const STEAMBOT_HYPERREAL_STYLE =
   'crisp vivid cinematic rendering, rich saturated color, sharp focused detail across all depth layers, dramatic feature-film production design, painterly-rich character illustration with photographic clarity';
 
+// Bespoke medium for sexy-steampunk-woman — vivid painted character
+// illustration. Modern digital painted character art lineage (Artgerm / WLOP
+// / Loish / Stanley Lau / Sakimichan / Jia Xing) — lush saturated painterly
+// finish, soft painterly brushwork on skin with cinematic lighting, full
+// tonal range. NOT hyperreal CGI (CG-precision precision is what we DON'T
+// want), NOT watercolor on paper, NOT Mucha/art-nouveau decorative borders,
+// NOT anime. Painted character art with idealized proportions + ornate
+// detail + saturated jewel-tones + dramatic cinematic light.
+const STEAMBOT_PAINTED_WOMAN_STYLE =
+  'oil-painted illustration on canvas, visible painterly brushwork and brush texture, traditional painted character illustration in the style of Frazetta and Brom and Boris Vallejo painted-fantasy-cover heroines, lush saturated jewel-toned oil pigment, dramatic cinematic lighting with golden-hour rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT art-nouveau decorative border';
+
 module.exports = {
   username: 'steambot',
   displayName: 'SteamBot',
@@ -43,32 +54,37 @@ module.exports = {
     'steampunk-scene':       { 'black-forest-labs/flux-1.1-pro': 100 },
     'airship-skies':         { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-curio':       { 'black-forest-labs/flux-1.1-pro': 100 },
-    // Female path stays on main's two-model rotation — proven to give
-    // face-geometry diversity. Other paths keep hyperreal lock.
-    'sexy-steampunk-woman':  ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    // Female path locked to flux-1.1-pro 2026-05-15. Two-model rotation
+    // (flux-dev + flux-1.1-pro) produced inconsistent register — flux-dev
+    // anime/cartoony, flux-1.1-pro photoreal-painterly. Single-model lock
+    // matches the rest of the bot.
+    'sexy-steampunk-woman':  { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-man':         { 'black-forest-labs/flux-1.1-pro': 100 },
     'steampunk-spectacle':   { 'black-forest-labs/flux-1.1-pro': 100 },
     'steam-transport':       { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
-  // SteamBot's ONE custom medium key for SCENE paths. Bot-internal — does
-  // NOT exist in dream_mediums DB. Female path overrides with mediumByPath.
+  // SteamBot's custom medium keys. Bot-internal — do NOT exist in
+  // dream_mediums DB. Scene paths use steambot-hyperreal; female path uses
+  // steambot-painted-woman (painterly-photographic character portraiture).
   mediums: ['steambot-hyperreal'],
 
   mediumByPath: {
-    // Female path hardcoded to render (testing).
-    'sexy-steampunk-woman': 'render',
+    'sexy-steampunk-woman': 'steambot-painted-woman',
   },
 
   mediumStyles: {
     'steambot-hyperreal': STEAMBOT_HYPERREAL_STYLE,
+    'steambot-painted-woman': STEAMBOT_PAINTED_WOMAN_STYLE,
   },
 
   promptPrefixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_PREFIX,
+    'steambot-painted-woman': blocks.PROMPT_PREFIX,
   },
   promptSuffixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_SUFFIX,
+    'steambot-painted-woman': blocks.PROMPT_SUFFIX,
   },
 
   // Single-vibe lock for scene paths. Female path overrides with vibesByPath.
@@ -121,6 +137,11 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
+    // sexy-steampunk-woman skips polish — Haiku compression was stripping
+    // skin/eyes/makeup/hair DNA in 4/5 renders, leaving only the ethnicity
+    // noun. Single-pass Sonnet preserves the full DNA stack so Flux renders
+    // varied complexions/hair/eyes/makeup instead of a brunette default.
+    skipPaths: ['sexy-steampunk-woman'],
     polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [
@@ -153,13 +174,32 @@ module.exports = {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
-      'sexy-steampunk-woman': 'female',
+      // Switched 'female'→'scene' 2026-05-15 to escape body-coded sensory
+      // anchors ("tight around her throat", "corset constricting her ribs",
+      // "weight on her hips") that were triggering Replicate NSFW filter on
+      // ~40% of renders. Scene context uses environment-coded sensory
+      // (steam-heat / brass-cold / etc.) — clean.
+      'sexy-steampunk-woman': 'scene',
       'steampunk-man': 'male',
       'steampunk-scene': 'scene',
       'airship-skies': 'scene', 'steampunk-curio': 'scene',
       'steampunk-spectacle': 'scene', 'steam-transport': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
+  },
+
+  // Bot-level pool defaults for declarative axis paths (composer reads these
+  // when a path config doesn't override the slot).
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'STEAMPUNK_ATMOSPHERES',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`SteamBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
   },
 
   rollSharedDNA({ vibeKey, picker }) {
@@ -172,7 +212,20 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`SteamBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`SteamBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {
