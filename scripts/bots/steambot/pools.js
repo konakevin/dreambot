@@ -43,6 +43,9 @@ module.exports = {
   TRANSPORT_SCENES: load('transport_scenes'),
   STEAMPUNK_ATMOSPHERES: load('steampunk_atmospheres'),
   STEAMPUNK_CURIOS: load('steampunk_curios'),
+  STEAMPUNK_ANIMATE_CURIOS: load('steampunk_animate_curios'),
+  STEAMPUNK_CURIO_HABITAT: load('steampunk_curio_habitat'),
+  STEAMPUNK_CURIO_ORNATE_FLOURISH: load('steampunk_curio_ornate_flourish'),
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
   // Slot-pool DNA for sexy-steampunk-woman path (mirrors GothBot pattern)

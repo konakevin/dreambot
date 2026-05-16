@@ -662,11 +662,11 @@ const ARCHETYPES = {
 
   STEAMBOT_STEAMPUNK_CURIO: {
     description:
-      'PATH-BESPOKE — SteamBot steampunk-curio path (2026-05-15 migration from function-based form). OBJECT-AS-HERO at small scale — a single fantastical steampunk artifact presented in museum-display / Sotheby\'s-catalog framing. Cabinet-of-curiosities / impossible-artifacts-of-the-Victorian-age energy. NO PRIMARY HUMAN FIGURE — pure object portrait. Mechanical creatures / alchemical specimens / brass automata / impossible jewelry / Faberge-coded objects / clockwork dioramas. 3 path-bespoke axes (curio / display_register / ornate_flourish pickN:3) + universal lighting + atmosphere. Reuses production-scale 100-entry STEAMPUNK_CURIOS pool.',
+      'PATH-BESPOKE — SteamBot steampunk-curio path (2026-05-15 migration, refined to animate-creature-in-habitat). OBJECT-AS-HERO — a single ANIMATE steampunk robot creature (mimicking a real living thing OR a novel mechanical organism) caught mid-motion in an IMMERSIVE Victorian-industrial habitat (workshop / conservatory / library / observatory / atelier / airship interior / etc.). NEVER jewelry, NEVER crowns, NEVER clocks-as-subject, NEVER museum-display framing. NO PRIMARY HUMAN FIGURE. 3 path-bespoke axes (curio / habitat / ornate_flourish pickN:3) + universal lighting + atmosphere.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['curio', 'display_register', 'ornate_flourish'],
+      path: ['curio', 'habitat', 'ornate_flourish'],
     },
     pickN: { ornate_flourish: 3 },
     conditionalLayer: null,

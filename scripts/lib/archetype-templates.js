@@ -3659,13 +3659,13 @@ Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO 
   },
 
   STEAMBOT_STEAMPUNK_CURIO: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, curio, display_register, ornate_flourish } = slots;
+    const { lighting, atmosphere, curio, habitat, ornate_flourish } = slots;
     const flourishes = Array.isArray(ornate_flourish) ? ornate_flourish : [ornate_flourish];
 
-    return `You are a museum-catalog illustrator writing a STEAMPUNK CURIO scene for SteamBot — a single fantastical Victorian-industrial artifact presented in obsessive Sotheby's-catalog detail. Cabinet-of-curiosities / impossible-artifacts-of-the-Victorian-age / Faberge-coded jewelry-house / clockwork-automaton-display / Wunderkammer aesthetic. The object is the HERO of the frame.
+    return `You are a cinematic illustration painter writing a STEAMPUNK CURIO scene for SteamBot — a single ANIMATE little steampunk robot creature in an IMMERSIVE Victorian-industrial habitat. The creature is the HERO of the frame; the habitat is its lived-in environment, NOT a museum display.
 
-━━━ OBJECT IS THE HERO — NON-NEGOTIABLE ━━━
-The curio fills 50-70% of the frame as the primary subject. Composition is centered-or-three-quarter-turned product-photography framing — like a Sotheby's auction catalog illustration. The viewer's eye lands on the ROBOT CREATURE first, no distractions.
+━━━ CREATURE IS THE HERO — NON-NEGOTIABLE ━━━
+The animate robot creature fills 40-60% of the frame as the primary subject. Composition is creature-in-environment — the camera caught it in its world. The viewer's eye lands on the ROBOT CREATURE first, with the steampunk habitat wrapping around it.
 
 ━━━ ALIVE IN MOTION — NON-NEGOTIABLE ━━━
 The curio is a STEAMPUNK ROBOT — a little mechanical creature mimicking a real living thing (animal / insect / bird / sea-creature) OR a novel mechanical organism (chimera / impossible-anatomy / abstract-animate-form). ALWAYS rendered in a moment of motion / animation / alive-looking pose. Mid-stalking / mid-fluttering / mid-feeding / mid-step / mid-curl / wings half-spread / breathing visibly through chest-bellows / eyes tracking. The viewer feels it could move at any second. NEVER static-decorative, NEVER frozen-pose. Articulated joints visibly active. Internal mechanisms (gears / springs / pistons / clockwork-heart) visibly working.
@@ -3673,18 +3673,21 @@ The curio is a STEAMPUNK ROBOT — a little mechanical creature mimicking a real
 ━━━ NEVER JEWELRY / CROWN / CLOCK / DECORATIVE-OBJECT — ABSOLUTE ━━━
 NO crowns, NO tiaras, NO jewelry / brooches / pendants / necklaces, NO Faberge eggs, NO clocks / pocket-watches / chronographs as subject, NO monocles, NO ceremonial cups / decorative vases, NO weapons, NO scrolls / books. The curio is ALWAYS a mechanical creature / organism — never an ornamental object.
 
-━━━ NO PRIMARY HUMAN FIGURE ━━━
-NO people, NO hands holding the creature, NO figures in frame. Pure object portrait. The robot creature stands alone in its display context.
+━━━ NEVER MUSEUM-DISPLAY FRAMING — ABSOLUTE ━━━
+NO museum vitrines, NO Sotheby's-catalog backdrops, NO velvet-cushion pedestals, NO glass bell-jars, NO neutral catalog paper, NO "displayed on" / "presented on" framing. The creature is in a LIVED-IN STEAMPUNK SPACE — not on display. The habitat surrounds it.
 
-━━━ THE CURIO (the hero artifact) ━━━
+━━━ NO PRIMARY HUMAN FIGURE ━━━
+NO people, NO hands, NO faces. Pure creature-in-environment portrait. The robot creature stands alone in its habitat.
+
+━━━ THE CURIO (the hero creature) ━━━
 ${curio}
 
-Render the object with OBSESSIVE Victorian-industrial detail — every brass rivet, every gear-tooth, every engraved-plate flourish, every patina-stain, every articulation-joint, every glass-dome surface, every leather-strap, every clockwork-mechanism visible at SCALE.
+Render the creature with OBSESSIVE Victorian-industrial detail — every brass rivet, every gear-tooth, every articulation-joint, every glass-eye, every leather-strap, every clockwork-mechanism visible. Captured at a loaded instant of motion.
 
-━━━ DISPLAY REGISTER (how the object is presented) ━━━
-${display_register}
+━━━ THE HABITAT (the lived-in steampunk environment) ━━━
+${habitat}
 
-Render the display context exactly as described — pedestal / cushion / vitrine / cabinet / catalog-page-mount / glass-bell-jar / brass-shelf / etc. The display elevates the object as a museum-quality artifact.
+Render the habitat with depth-on-depth — FOREGROUND tactile detail near the creature (workbench surface / book-spine / brass railing / instrument it's perched on) → MIDGROUND surrounding props (tools, books, plants, glassware) → DEEP DISTANCE the wider room receding into atmospheric haze. The space feels lived-in, functional, real — not a display.
 
 ━━━ ORNATE FLOURISHES — render ALL THREE on the object ━━━
 - ${flourishes[0] || ''}
@@ -3696,7 +3699,7 @@ These are micro-details that obsessively saturate the object's surface. EVERY on
 ━━━ LIGHTING ━━━
 ${lighting}
 
-Lighting is curated like museum-gallery illumination — single hero spotlight or top-down catalog light, with secondary fill catching the surface details. Dramatic contrast between lit surfaces and shadowed recesses.
+Lighting is environmental — the habitat's natural light source (gas-lamp / candlelit / sunlit through glass / forge-red glow / moonlit / amber lamp-pool) catches the creature's metallic surfaces. Cinematic but not museum-spotlit.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -3714,7 +3717,7 @@ ${vibeDirective.slice(0, 200)}
 Brass + copper + bronze + oiled-wood + glass dominant. Every visible surface is hand-tooled, hand-engraved, hand-fabricated. NEVER mass-produced-looking. NEVER plastic. NEVER modern.
 
 ━━━ COMPOSITION ━━━
-Wide product-photography or three-quarter-turn catalog framing. The OBJECT centered or slightly offset. Display context (pedestal / cushion / vitrine) wraps the lower frame; backdrop fades into atmospheric depth. NEVER a tight close-up that crops the object. NEVER a wide-shot where the object becomes small. Sweet spot: object reads at clear scale with display context grounding it.
+Creature-in-environment cinematic framing. The CREATURE centered or slightly offset, mid-motion. Habitat wraps around and behind — foreground tactile prop near the creature → midground surrounding environment → deep distance receding into atmospheric haze. NEVER a tight close-up that crops the creature. NEVER a wide-shot where the creature becomes small. Sweet spot: creature reads at clear scale with the lived-in steampunk world grounding it.
 
 ━━━ HARD BANS ━━━
 - NO primary human figure (no people, no hands, no faces)
@@ -3723,9 +3726,9 @@ Wide product-photography or three-quarter-turn catalog framing. The OBJECT cente
 - NO decorative cliché framing (gears/clocks pasted at the edges as decoration)
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
-[OPENING: the curio described with obsessive detail — the OBJECT first], [the three ornate flourishes worked in], [the display register / display context], [lighting], [atmospheric detail], [color palette + mood]
+[OPENING: the creature described with obsessive detail — caught mid-motion], [the three ornate flourishes worked in], [the habitat with depth and lived-in props], [lighting], [atmospheric detail], [color palette + mood]
 
-CRITICAL — the OPENING tokens establish the OBJECT as the hero. The display context wraps the lower frame. The atmosphere adds Wunderkammer mood without competing with the object for attention.
+CRITICAL — the OPENING tokens establish the CREATURE in motion. The habitat surrounds it with depth. The atmosphere adds steampunk mood without competing with the creature for attention.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
