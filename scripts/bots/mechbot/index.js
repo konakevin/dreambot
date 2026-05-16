@@ -101,6 +101,7 @@ module.exports = {
     'titan-war-machines': '',
     'mech-skyships': '',
     'mecha-pilots': '',
+    'power-armor-infantry': '',
   },
 
   // Per-medium prompt injection — MechBot's dialect for the `render` medium.
@@ -161,7 +162,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots'],
+    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders

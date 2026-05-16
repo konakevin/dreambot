@@ -101,10 +101,19 @@ module.exports = {
   TITAN_WAR_LIGHTING: load('titan_war_lighting'),
   TITAN_WAR_DRAMA: load('titan_war_drama'), // 40% gated combat phenomenon
   TITAN_WAR_COMPOSITION: load('titan_war_composition'), // vertigo angles
-  // Power-armor-infantry path
+  // Power-armor-infantry path (migrated to declarative axis system 2026-05-16)
+  // Subject + action pools regen'd with MEAN KILL-TEAM DNA recipe (legacy
+  // was 11%+ procedural / Tom-Clancy SWAT realism — Kevin's diagnosis).
+  // Reuses legacy 200-entry POWER_ARMOR_SETTINGS (already strong urban
+  // rubble / war-torn / bunker DNA). Adds 3 path-bespoke pools.
   POWER_ARMOR_SUBJECTS: load('power_armor_subjects'),
   POWER_ARMOR_ACTIONS: load('power_armor_actions'),
   POWER_ARMOR_SETTINGS: load('power_armor_settings'),
+  POWER_ARMOR_COMPOSITION: load('power_armor_composition'), // squad-combat vertigo angles
+  POWER_ARMOR_LIGHTING: load('power_armor_lighting'), // battlefield combat
+  POWER_ARMOR_ENGAGEMENT: load('power_armor_engagement'), // ALWAYS-ON multi-actor combat narrative
+  POWER_ARMOR_ALLIED_TECH: load('power_armor_allied_tech'), // ALWAYS-ON friendly combat-bot/drone/walker
+  POWER_ARMOR_DRAMA: load('power_armor_drama'), // 40% gated battlefield phenomenon
   // Industrial-machines path
   INDUSTRIAL_SUBJECTS: load('industrial_subjects'),
   INDUSTRIAL_ACTIONS: load('industrial_actions'),

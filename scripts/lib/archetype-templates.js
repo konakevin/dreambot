@@ -3154,6 +3154,132 @@ Open with the vertigo camera angle + pilot + mech context ("Worm's-eye-up-the-le
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MECHBOT_POWER_ARMOR_INFANTRY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, engagement, allied_tech, drama } = slots;
+
+    // allied_tech is an array (pickN: 2) — format as 2 distinct allied machines fighting alongside
+    const alliedTechBlock = Array.isArray(allied_tech)
+      ? allied_tech.map((t, i) => `Ally #${i + 1}: ${t}`).join('\n\n')
+      : allied_tech;
+
+    const dramaSection = drama
+      ? `
+━━━ BATTLEFIELD PHENOMENA — render multiple simultaneous violence-events in the scene ━━━
+${drama}
+
+ALSO: additional simultaneous violent events happening elsewhere in the frame — fires raging at midground / smoke columns rising in deep distance / debris-cloud expanding from another impact / secondary explosions chaining / muzzle-flashes blooming everywhere / tracer-rounds crossing in multiple directions / burning vehicle wrecks. MULTIPLE eruptions and impacts at once — the battlefield is FULLY OVERWHELMED with violence.
+
+`
+      : '';
+
+    return `You are a war cinematographer writing a POWER ARMOR INFANTRY scene for MechBot — a MEAN KILL-TEAM squad of 8-12 power-armored predator-soldiers + 2-4 allied combat-bots/drones/walkers (FULL MAN+MACHINE vs MACHINE) MID-FIREFIGHT in maximum-density battlefield chaos against multiple enemy actors. Hyper-real cinematic 3D / VFX-quality. HELLDIVERS 2 cinematic + Guard-Dog rovers / WARHAMMER 40K Tactical Squad + Dreadnought + Servitor / ALIENS Colonial Marines + Power-Loader + APC / MASS EFFECT squad + LOKI mechs / STARCRAFT Marines + Goliath + Siege Tank / AVATAR Marines + AMP-suits / DOOM Eternal cutscene / STARSHIP TROOPERS Mobile Infantry + Marauder mech / KILLZONE Helghast / EDGE OF TOMORROW Jacket-armor.
+
+🚫 STAR WARS / HALO HARD BAN — NEVER write Stormtrooper / Imperial / Mandalorian / beskar / T-visor / Boba / Mando / Halo / ODST / Spartan / MJOLNIR / UNSC / R2-D2 / BB-8 / battle droid / Clone Trooper / AT-AT / AT-ST. The aesthetic these IPs represent is fine — but NEVER name them.
+
+━━━ NON-NEGOTIABLE — MAN + MACHINE vs MACHINE ━━━
+This is full man+machine combat. The marines fight ALONGSIDE friendly combat-bots / drones / walkers — these allied machines are PART of the squad, mid-fire alongside the marines, NOT background flavor. Helldivers Guard-Dog rovers / 40K Dreadnoughts / Aliens APC/Power-Loader / Mass Effect LOKI / Starcraft Goliath / Avatar AMP-suit lineage. Both the human marines AND the friendly machines are mid-violence simultaneously.
+
+━━━ NON-NEGOTIABLE — MEAN KILL-TEAM, NEVER PROCEDURAL ━━━
+This squad is HUNTING and KILLING. They are MEAN, aggressive, scarred, weathered, predator-stanced. NOT Tom-Clancy SWAT. NOT "professional military procedural." NOT "tactically scanning." They are BADASS SPACE MARINES OUT TO KILL — fighting WITH their robot allies.
+
+❌ BANNED LANGUAGE: "professional unit / tactical formation / breach team / stacked at entry / point-man / hand-signals / overwatch / spotter / fire-team suppressing / bounding overwatch / scanning / surveying / careful / measured / cautious / observation"
+
+✓ MANDATORY LANGUAGE: "mid-charge / mid-blast / mid-fire / mid-execute / mid-strike / mid-roar / mid-stride / kicking-down / dragging / leaping / hunting / stalking / predator-stance / snarl-behind-visor / weathered / scarred / blood-spattered / kill-streak / war-trophy"
+
+━━━ NON-NEGOTIABLE — MAXIMUM-DENSITY HORDE + ALLIED MACHINES ━━━
+8-12 figures from the seeded squad must be VISIBLE in frame (the seed names the count — render that many AT LEAST). PLUS many additional friendly reinforcements visible behind/flanking/in mid-distance (more marines than you can count individually). PLUS 2-4 allied combat-bots/drones/walkers fighting alongside (multiple distinct machine-types). So FULL FIGURE COUNT reads as 15-25 armored marines + 2-4 friendly machines in or around the engagement. MAXIMUM DENSITY — a literal HORDE of friendly marines + their robot/walker allies fighting together. Think Helldivers cinematic with full squad + Guard-Dogs + walker + tank-bot all in frame.
+
+━━━ NON-NEGOTIABLE — MAXIMUM COMMOTION (NOT POSED) ━━━
+The squad is MID-FIREFIGHT in maximum-chaos. The scene is FULL OF SIMULTANEOUS VIOLENCE. NEVER a hero-shot of a squad standing aggressively. Every render must have AT LEAST 5-7 simultaneous things happening across the frame:
+  • Multiple marines mid-fire with weapons discharging
+  • Multiple allied machines mid-fire alongside
+  • Multiple enemy combatants reacting (mid-fall / mid-return-fire / mid-flee)
+  • Multiple muzzle-flashes and weapon-discharge effects
+  • Multiple smoke columns / fires / explosions across the frame
+  • Multiple debris-clouds / dust-plumes / shockwave-rings
+  • Tracer-rounds crossing in multiple directions
+  • Burning vehicle-wrecks in midground
+  • Brass-rain and shell-casings scattered in foreground
+
+━━━ THE ENGAGEMENT BEAT (what's HAPPENING in the wider scene) ━━━
+${engagement}
+
+The squad is mid-engagement with MULTIPLE OTHER ACTORS visible — enemy combatants, allied units, vehicles, civilians, hostile creatures, aerial support. The OTHER actors are doing things VISIBLY (firing back, fleeing, dying, exploding, charging in).
+
+━━━ THE ALLIED COMBAT MACHINES (multiple — fighting WITH the squad, render BOTH visibly) ━━━
+${alliedTechBlock}
+
+BOTH allied machines are alongside the marines mid-fire — NOT distant units, NOT background flavor. Render them ACTIVELY engaged, weapons firing, alongside the human marines, at DIFFERENT positions in the frame (one foreground-left and one foreground-right / one with squad and one flanking / one mid-stride past and one stationary firing). The marines AND multiple machines fight as one war-pack.
+
+━━━ NON-NEGOTIABLE — VERTIGO/DYNAMIC COMPOSITION ━━━
+${composition}
+
+The chosen angle DRIVES the framing — render it precisely as described.
+
+━━━ EVERY-QUADRANT-STRIKING MANDATE — make it a movie-poster firefight at maximum density ━━━
+Every render MUST have ALL of these simultaneously visible:
+  1. THE SQUAD HORDE as dominant focal subject (8-12 visible figures + reinforcements behind/flanking, 15-25 total marines, all mid-aggressive-action)
+  2. MULTIPLE ALLIED COMBAT MACHINES (2-4 visible — drone + walker / walker + mech / dreadnought + gun-platform / mech + tank-bot — at different frame positions, all firing or mid-action)
+  3. MULTIPLE ENEMY ACTORS visible (enemy combatants mid-return-fire / mid-fall / mid-flee / vehicles mid-explode / creatures swarming — at least 3-5 enemy figures in frame)
+  4. WEATHERED ARMOR DETAIL — scuffed plates, scratched paint, blood-spatter, dust-caked, kill-streak tally marks, war-trophies on every marine and machine
+  5. MULTI-TIER DEPTH — foreground squad+allies / midground enemy+vehicle-wrecks+combat-debris / deep distance battlefield receding with structural detail
+  6. MULTIPLE FIRES / EXPLOSIONS / SMOKE COLUMNS — 2-3 distinct fires across the frame, multiple smoke columns rising at different depths, at least 1 active explosion-bloom
+  7. MULTIPLE MUZZLE-FLASHES + WEAPON-DISCHARGE everywhere — from BOTH marines AND allied machines, mid-fire across the entire scene
+  8. SATURATED THEATRICAL COMBAT LIGHTING — muzzle-flash strobe, explosion-backlit edge-orange, dawn-cold grim, dusk-blood-red, plasma-bolt tracer-walls
+  9. ENVIRONMENTAL VIOLENCE TEXTURE — spent brass / smoking weapons / kill-trail / debris / blood-spatter / smoke-trails / dust-clouds / scorch-marks / shell-casings carpeting the ground
+  10. AIRBORNE CHAOS EVERYWHERE — airborne debris / smoke-plumes / multiple muzzle-flares / crisscrossing tracers / falling embers / dust-clouds / shockwave rings / spent shell-casings still falling
+
+THINK Helldivers 2 cinematic + Guard-Dog rover / Warhammer 40K Marines + Dreadnought marketing / Aliens Colonial Marines + APC reveal / Mass Effect Krogan + LOKI mech / Starcraft Marines + Goliath / Avatar Marines + AMP-suit / Doom Eternal cutscene.
+
+━━━ THE SQUAD (the seeded subject) ━━━
+${subject}
+
+━━━ THE ACTION (what the squad members are DOING) ━━━
+${action}
+
+The squad is mid-violence. Every member is mid-action (mid-fire / mid-charge / mid-execute / mid-strike / mid-leap / mid-blast). NEVER static positioning.
+
+━━━ SETTING ━━━
+${landscape}
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Layer the rolled lighting mode above with combat-specific accents — muzzle-flash strobes, weapon-mount charging glow (from BOTH marines AND allied machines), helmet-floodlamp cones, fire-glow from nearby burning wrecks.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ ABSOLUTE BANS ━━━
+- NO solo hero shot — full horde (8-12 visible marines + reinforcements + 2-4 allied machines) is non-negotiable
+- NO small fire-team — always 15-25 total marines + multiple machines in frame
+- NO missing allied machines — MULTIPLE allied bots/drones/walkers MUST be visible at different positions
+- NO single explosion/fire — multiple simultaneous violent events required
+- NO clean scene — battlefield must read OVERWHELMED by violence (smoke, fires, brass, debris everywhere)
+- NO pilot-in-cockpit framing (mecha-pilots territory)
+- NO giant-mech scale on the ally (titans territory) — allied machines are HUMAN-SCALE-TO-2X marine
+- NO cyborg integration on marines — they are fully human under armor
+- NO scrappy improvised armor (rust-apoc territory) — heavy professional kits
+- NO industrial mining work (industrial-machines)
+- NO procedural-military Tom-Clancy SWAT realism
+- NO clean newly-issued armor — every armor set WEATHERED, scarred, lived-in
+- NO Star Wars / Halo IP names (Stormtrooper / Imperial / Mandalorian / beskar / Halo / ODST / Spartan / MJOLNIR)
+
+━━━ STRUCTURE — write 180-240 words ━━━
+Open with the vertigo camera angle + squad+allies+engagement context ("Low-forward mid-charge as ten Blood-Angel Space Marines in cracked crimson ceramite sprint at the lens flanked by a waist-high quadruped walker-bot mid-fire underslung rotary cannon AND a chest-high tracked weapon-platform deployed firing in sweeping arc..."). Then weave in: BOTH allied combat machines alongside (at different positions), the engagement beat with multiple enemy actors, setting with multi-tier depth, multiple simultaneous battlefield phenomena, lighting/atmosphere, palette and mood. The render MUST feel like FULL MAN+MACHINE combat at MAXIMUM-DENSITY — a literal war-pack mid-firefight with multiple explosions, fires, smoke, brass-rain, allied machines all in frame.
+
+Output ONLY the raw 180-240 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

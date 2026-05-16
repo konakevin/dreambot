@@ -580,6 +580,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_POWER_ARMOR_INFANTRY: {
+    description:
+      'PATH-BESPOKE — MechBot power-armor-infantry path (2026-05-16 migration; fourth MechBot path). MEAN KILL-TEAM squads of 8-12 marines + 2-4 allied combat-bots/drones/walkers in heavy power armor. FULL MAN+MACHINE vs MACHINE combat at maximum-density commotion (per Kevin 2026-05-16). Helldivers 2 + Guard-Dog rovers / WH40K Tactical Squad + Dreadnought + Servitor / Aliens Colonial Marines + Power-Loader + APC / Mass Effect squad + LOKI mechs / Starcraft Marines + Goliath / Avatar Marines + AMP-suits lineage (Star Wars + Halo IP names BANNED — see gen recipe banlist). Hard pivot from legacy "professional military procedural" framing — these must read as MEAN, aggressive, scarred, predator-killers fighting WITH multiple friendly machines amid multiple simultaneous explosions/fires/smoke. 6 path-bespoke pools: composition (squad-combat vertigo angles), lighting (battlefield combat overrides cosmic bot default), engagement (ALWAYS-ON multi-actor combat narrative — per mech-skyships engagement-pool lesson), allied_tech (ALWAYS-ON x2 friendly combat-bots/drones/walkers — added 2026-05-16 for man+machine DNA, pickN:2 for multiple machine-types per render), drama (ALWAYS-ON battlefield phenomena — gate raised 0.4→1.0 for max-density). Reuses legacy 200-entry POWER_ARMOR_SETTINGS.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'composition', 'engagement', 'allied_tech'],
+    },
+    pickN: { allied_tech: 2 },
+    conditionalLayer: { slot: 'drama', gate: 1.0 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',

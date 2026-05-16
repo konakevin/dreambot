@@ -550,6 +550,387 @@ Each entry must:
     ],
     instructions: `Each entry is ONE specific combat phenomenon for a titan-war scene, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + scale or atmospheric note". STRICT war-cinema aesthetic — NO peaceful, NO Giger, NO fantasy. Amplifies the titan's biblical scale. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ─── power-armor-infantry path: subjects (MEAN KILL-TEAM, regen 2026-05-16) ───
+  power_armor_subjects: {
+    format: 'simple',
+    theme: `MEAN KILL-TEAM SQUADS for the power-armor-infantry path — 2-5 figures of brutally aggressive, gritty, lived-in, BADASS space-marine troopers in heavy power armor. Each entry 30-60 words.
+
+⚠️ THE BAR: every entry must read like a key-art still from HELLDIVERS 2 / WARHAMMER 40K Space Marines / ALIENS Colonial Marines / DOOM Eternal / STARSHIP TROOPERS Mobile Infantry / KILLZONE Helghast / MASS EFFECT Krogan strike teams / EDGE OF TOMORROW Jacket-armor. MEAN. AGGRESSIVE. SCARRED. PREDATORY. KILLERS who ENJOY the work.
+
+🚫 STAR WARS / HALO HARD BAN — NEVER write any of these words in any entry: "Stormtrooper / Imperial / chest-eagle / Mandalorian / beskar / T-visor / jetpack-mercenary / Boba / Mando / Clone Trooper / Republic / Empire / Sith / Jedi / Star Wars / Halo / ODST / Spartan / Master Chief / MJOLNIR / UNSC / Marathon / Reach / Bungie". Flux renders these as recognizable IP characters. The aesthetic these IPs represent (heavy power-armor / drop-troopers / mercenary kill-teams) is welcome — but describe it WITHOUT naming the IP. Use generic substitutions:
+  • "Mandalorian-mercenary" → "hard-mercenary kill-squad" (no T-visor, no beskar, no jetpack-as-defining-trait)
+  • "Imperial Stormtrooper" → no substitute — DROP this archetype entirely; the bone-and-charcoal palette is fine but the chest-eagle / Imperial coding always reads as stormtrooper
+  • "Halo ODST" → "drop-predator special-forces" (matte-black drop-armor + amber visor aesthetic is fine without the name)
+  • "Spartan / MJOLNIR" → "heavy assault armor" (no Halo-specific naming)
+
+🚫 ABSOLUTE BANS — these are SWAT / Tom-Clancy procedural realism markers that KILL the badass tone:
+• NO "tactical formation / breach team / lead trooper / riot shield / overwatch / spotter / hand-signals / professional unit / military procedural / cover formation"
+• NO "scanning / surveying / careful approach / observation post / reconnaissance pair"
+• NO "olive drab / standard issue / regulation" — these are CUSTOM rigs not regulation gear
+• NO clean-newly-issued armor — every armor set is WEATHERED, scuffed, scratched, dented, blood-spattered, dust-caked, mud-caked, oil-stained, smoke-blackened
+• NO standing-at-ease — these troopers are ALWAYS in predator posture (mid-firing / mid-charge / kill-stance / dragging-trophy / brace-and-snarl)
+
+✓ MANDATORY DNA — every entry has 3-5 of these elements:
+• KILL-STREAK insignia / war-trophy / skull-trophy / enemy-helmet-hung-from-belt / tally-marks-painted-on-pauldron
+• HEAVY chassis (40K-Marine-scale 8-foot towering / Helldivers stomp / ODST drop-bulk) NOT thin/lithe
+• PREDATOR stance (leaned forward, weapon up, scanning for kills, snarl through visor)
+• WEATHERED — scuffed plates, scratched paint exposing under-metal, blood splatter, dust, mud, oil, soot
+• MEAN VISUAL DETAIL — skull masks / fanged helm grilles / red glowing visor / spiked pauldrons / aggressive armor silhouette
+• HEAVY ORDNANCE — visible heavy-weapon (autocannon / plasma-cannon / smartgun / heavy bolter / grenade-launcher / beam-cannon / rotary-cannon)
+
+✓ KILL-TEAM ARCHETYPE DISTRIBUTION (vary across):
+  • **40K SPACE-MARINE TOWERING** (~25%) — 8-foot armored predators, ceramite plating, skull-and-scroll insignia, bolter weaponry, hard contrast paint (Blood Angel red / Ultramarine deep blue / Death Guard rotted-green / Black Templar charcoal-and-bone)
+  • **HELLDIVERS HEAVY-DROP** (~20%) — diving-suit aesthetic, white-and-red Super-Earth markings scuffed grey, smoking shotgun / heavy MG, dust-caked plates from atmospheric entry
+  • **ALIENS COLONIAL-MARINE GRIZZLED** (~15%) — Vasquez/Hudson/Drake archetype, smartgun rigs, M41A pulse-rifles, sweat-shiny scarred faces visible behind cracked visors, dog-tags, flame-decals, "kill or be killed" energy
+  • **MANDALORIAN HARD-MERCENARY** (~10%) — beskar-coded mismatched plates, jetpacks, vibroblades, helmet-T-visor, weathered cloak/cape, trophy-rings, kill-streak tally
+  • **DOOM-SLAYER STYLE BRUTE** (~10%) — bulked-out praetor-suit lineage, glowing chest-core, oversized super-shotgun / chain-cannon, the rage-stomp posture
+  • **HALO ODST DROP-PREDATOR** (~10%) — matte-black drop-armor, helmet visor amber-glow, scuffed by drop-pod entry, silenced-SMG, lean predator silhouette
+  • **KILLZONE HELGHAST INDUSTRIAL** (~10%) — fascist industrial-yellow / charcoal armor, gas-mask helmets with glowing red goggles, mean MG-42-style heavy weapons, sinister silhouette`,
+    touchpoints: [
+      '5 Blood-Angel Space Marines in cracked crimson ceramite power-armor, skull-and-bone insignia tally-counted across pauldrons, lead marine cradling heavy bolter spent shell-casings smoking at his feet, second marine dragging a vanquished enemy by the throat, third advancing weapon-leveled forward with snarl-visible through grilled helm, ceramite scratched bone-deep through paint to gunmetal underneath',
+      '4 Helldivers in scuffed white-and-red Super-Earth heavy drop armor, dust still coming off plates from atmospheric entry, lead trooper kicking down a steel door with shotgun raised, second mid-stride sprinting through breach with assault rifle leveled, third backlit through smoke unloading rotary MG sideways, fourth following with flame-thrower flaring, kill-streak tally painted across helmet visors',
+      '3 Aliens Colonial Marines in weathered olive-and-charcoal hardsuit armor, smartgun harness on lead Marine slung at hip mid-strafe firing into shadow, two flanking with M41A pulse-rifles leveled, sweat-shiny scarred face visible behind cracked visor of lead operator, flame-decals scorched across pauldrons, dog-tags hanging outside collar, blood streaked across forearm-plates from prior kill',
+      '4 Mandalorian-style mercenaries in mismatched beskar plates (one charcoal, one rust-orange, one cobalt, one charcoal-green), all helmet-T-visored, lead trooper mid-jetpack-ignite weapon up firing, second blade-arm extended toward target, third grenade-cocked overhead mid-pitch, fourth dragging an enemy combatant by the ankle, war-trophy skull rings clinking on belts',
+      '5 Doom-Slayer-style praetor-suit brutes in heavy obsidian armor with glowing emerald chest-cores and shoulder-vents, lead brute mid-execution swinging chain-blade overhead toward off-frame enemy, two flanking with oversized super-shotguns mid-blast smoke-pluming, two rear unloading rotary-cannons sideways, blood-spatter across visors and chest-plates',
+      '4 Halo-ODST drop-predators in matte-charcoal drop-armor with amber-glow helmet visors, lead operator mid-crouch unloading silenced SMG into close-range enemy with snarl behind visor, two flanking weapons-raised through smoke from drop-pod still venting plasma behind them, fourth dragging captive backward by collar through ash, atmospheric-entry burn-marks streaking armor',
+      '3 Killzone-Helghast industrial-yellow heavy infantry in charcoal-and-rust ledge-armor with gas-mask helmets glowing red-goggle eyes, lead trooper mid-fire MG-42 belt-fed weapon spitting brass across pavement, second wielding flame-thrower mid-flare against off-frame enemy, third reloading mag with snarl-behind-mask, war-banner pole strapped to back catching wind',
+      '5 mercenary kill-team in mismatched scavenged power-armor pieces (one Stryker-class plate, one alien-tech shoulder, one improvised-welded chestplate, one stolen Imperial chest-eagle), lead mercenary in predator-stalk forward with auto-pistol leveled, second with energy-cleaver mid-swing, third firing heavy lascannon braced on hip, kill-tally marks scratched across all plates',
+      '4 Warhammer Death-Guard-style rotted-green power-armor brutes in pitted plagued ceramite, lead brute hefting flamer-cannon mid-purification-burn, two flanking with corroded bolters raised, fourth dragging chain-wrapped captive forward, swollen-skull insignia carved into pauldrons, dripping-corruption aesthetic, smoke and rot in the air around them',
+      '3 Edge-of-Tomorrow Jacket-armor exo-troopers in heavy-machined plate frames, lead trooper mid-blast gatling-cannon mounted on shoulder belching brass, second with massive blade-arm raised over fallen enemy, third with grenade-launcher mid-fire arc visible, jackets battered to bare metal underneath, scratched kill-streak tallies climbing arm-plates',
+      '4 Imperial Stormtrooper-style heavy assault in scuffed bone-and-charcoal armor (the Halo Marathon / Iron Halo aesthetic), lead trooper mid-stride forward firing bolter from hip, second with energy-shield raised deflecting incoming fire (shield itself sparking), third in mid-execute over kneeling captive, fourth rear-covering with rotary-cannon, all carrying trophy-skulls at belt',
+      '5 Veteran Krogan-style heavy strike team in massive forge-plate armor, lead krogan-warrior mid-roar weapon overhead in war-cry pose, two flanking firing heavy shotguns mid-blast, two rear-covering with grenade-launchers, all bearing kill-streak ladders carved into chest-plates, mean predator silhouette, scarred and battle-hardened',
+      '3 Mass-Effect Cerberus phantom assault in charcoal-and-orange power-armor, lead phantom mid-blade-strike sword-extended toward off-frame target, second mid-cloak phasing in with pistol raised, third providing heavy-weapon support with rotary-cannon braced, kill-tally stenciled across pauldrons, mean professional-killer energy',
+      '4 Helldivers second-wave heavy assault in soot-blackened white-armor (smoke-stained from prior engagement), lead trooper mid-charge with bayonet-fixed assault rifle raised, second mid-fire with heavy MG belt-feeding from backpack, third with grenade-cocked overhead, fourth rear-covering with rotary-cannon, blood and dirt streaked across armor',
+      '5 Warhammer Black-Templar marines in matte-black-and-bone armor with cross-and-skull insignia, lead chaplain-style figure mid-righteous-execute with crozius raised overhead toward kneeling captive, three flanking with bolters raised firing into off-frame target, fifth rear-guard with heavy weapon raised, oath-papers nailed to pauldrons',
+      '3 Aliens-style smartgun heavy hunter team in weathered grey-and-orange hardsuit, lead operator hip-firing smartgun in wide arc with brass-spraying, second mid-execute over downed enemy with pistol leveled at head, third covering 90-degree arc with pulse-rifle, sweat-and-blood-streaked faces visible behind cracked visors',
+      '4 mercenary execution squad in scavenged predator-aesthetic plates (skull-mask helmets, spike-pauldrons, trophy-belts), lead executioner with chain-blade mid-swing overhead, two flanking with energy-cleaver and plasma-pistol mid-strike, fourth dragging trophy-head by hair, kill-streak counts painted bone-white across all plates',
+      '5 Doom-Marine-style praetor heavies in red-and-charcoal armor with glowing-amber chest-core, lead marine mid-charge with super-shotgun leveled, two flanking with chain-cannons mid-blast, two rear unloading plasma-cannons sideways, blood-spatter across visors, hellfire-rage posture, smoke trailing behind from kills',
+      '4 ODST drop-killers in matte-charcoal drop-armor still venting atmospheric-entry plasma, lead operator mid-stride sprinting forward silenced-SMG raised, second crouched mid-firing pistol-and-MG combo, third with thermite-charge mid-pitch toward off-frame target, fourth rear-covering with sniper-rifle, kill-tally marks on visors',
+      '3 Warhammer Space-Wolves heavy assault in steel-blue-and-bone armor with wolf-pelts draped over pauldrons, lead Long-Fang mid-roar with chainsword raised overhead, two flanking with bolt-pistols and chainaxes mid-strike, all bearing wolf-skull insignia and rune-etched plates, savage predator energy',
+    ],
+    instructions: `Each entry is ONE 2-5 figure MEAN KILL-TEAM squad, 30-60 words. Format: "[N] [archetype-coded] squad in [armor with weathered/mean DNA], lead trooper mid-[AGGRESSIVE-VERB], second [AGGRESSIVE-POSTURE], third [AGGRESSIVE-INTERACTION-WITH-TARGET-OR-ENEMY], [optional 4th/5th], with [kill-streak / war-trophy / blood-spatter / battle-damage detail]". Vary across the 7 archetype distributions. STRICT BAN on procedural/SWAT language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── power-armor-infantry path: actions (AGGRESSIVE verbs, regen 2026-05-16) ───
+  power_armor_actions: {
+    format: 'simple',
+    theme: `AGGRESSIVE COMBAT ACTIONS for the power-armor-infantry path — what the MEAN KILL-TEAM squad is DOING in mid-action. Each entry 35-65 words.
+
+⚠️ THE BAR: every action describes the squad MID-VIOLENCE — charging, kicking, executing, dragging, leaping, mid-strike, hunting. Helldivers cinematic / 40K marketing key-art / Doom Eternal cutscene / Edge of Tomorrow training-yard energy. The squad is HUNTING and KILLING.
+
+🚫 ABSOLUTE BANS — these are procedural-realism kill-words that KILL the badass tone:
+• NO "stacked at entry / breach formation / point-man priming / second covering / third watching rear"
+• NO "bounding overwatch / fire team suppressing / maneuver element"
+• NO "ridge deployment / squad prone / spotter calling ranges / scanning / surveying"
+• NO "casualty extraction / wounded by harness / suppressive wall"
+• NO "ICOM relay / mission patches / professional procedural"
+• NO "careful / measured / cautious / hand-signals / professional"
+
+✓ AGGRESSIVE VERB CATEGORIES (distribute across):
+  A. **MID-FIRE BARRAGE** (~25%) — lead trooper mid-blast with heavy weapon, two flanking unloading, third reloading mid-snarl, brass-spraying, smoke trailing
+  B. **CHARGE-AND-EXECUTE** (~15%) — squad mid-charge across no-man's-land, lead trooper bayonet-extended, second mid-execute over kneeling enemy
+  C. **DOOR-KICK BREACH** (~10%) — lead trooper mid-kick to door / hatch / wall, squad behind weapons raised mid-firing into the just-opened space
+  D. **DROP-POD DEPLOY** (~10%) — squad mid-emerge from steaming drop-pods, lead trooper mid-burst out of door, weapons up, atmospheric burn fresh
+  E. **PURSUIT MID-RUN** (~10%) — squad mid-sprint chasing fleeing enemy, lead trooper mid-shot at runner, second leaping over rubble, third mid-grenade-throw
+  F. **HUNT-AND-COVER** (~10%) — squad stalking through war-torn ground, lead trooper in predator-stalk forward weapon up, second flanking through smoke, third with kill already at belt
+  G. **HOLD-AND-MURDER** (~10%) — squad holding position against incoming, lead trooper mid-mag-dump, second behind cover unloading rotary, third throwing grenade overhead
+  H. **TROPHY-TAKE** (~5%) — squad mid-action with one trooper grabbing trophy from kill (helmet / weapon / banner / head), others covering, kill freshly bleeding
+  I. **VEHICLE-DISMOUNT ASSAULT** (~5%) — squad mid-emerge from mid-flight dropship / APC / tank, lead trooper mid-leap to ground, weapons up firing
+
+Each entry MUST:
+• Open with the squad mid-action (NOT static positioning)
+• Use predator-coded verbs: charging / kicking / executing / dragging / leaping / mid-shot / mid-strike / mid-burst / hunting / stalking / mid-roar
+• Reference 2-3 squad members each doing something AGGRESSIVE (NOT one doing it while others "observe")
+• Reference the kill / target / enemy / debris explicitly (this is COMBAT not patrol)`,
+    touchpoints: [
+      'Mid-fire barrage at entry-point, lead trooper unloading heavy bolter spent shell-casings smoking at his feet, second mid-pump-action shotgun blast at off-frame target, third reloading mag with snarl behind grilled visor, brass spent casings carpeting around their boots, smoke trailing from all three weapons, kill-shot already taken',
+      'Squad mid-charge across blasted concrete plaza, lead trooper bayonet-fixed assault rifle leveled mid-stride sprinting forward, second mid-execute pistol pressed to kneeling enemy temple with trigger-pull moment caught, third mid-bound over fallen body with chain-blade raised overhead, dust kicking up from boots',
+      'Lead trooper mid-kick to reinforced steel hatch with boot driving it open, squad behind weapons raised mid-firing into the just-opened space, second trooper unloading rotary cannon sideways through doorway, third with grenade mid-pitch overhead toward inside, fourth covering rear with bolter raised',
+      'Squad mid-emerge from steaming drop-pods just touched down on enemy ground, lead trooper mid-burst out of pod-door weapon-leveled firing first volley, second behind half-out-of-pod with heavy MG already firing, third leaping over pod-edge to ground with chain-cannon spooled up, drop-pod plasma still venting',
+      'Mid-pursuit sprint chasing fleeing enemy across rubble field, lead trooper mid-shot pistol leveled at fleeing target with muzzle-flare frozen, second mid-leap over collapsed beam with assault rifle raised, third mid-grenade-throw arc visible reaching toward distant cover where target is heading, smoke trailing',
+      'Squad in predator-stalk through ruined city street, lead trooper forward in low-crouch stride with weapon up scanning for kills, second flanking through dissipating smoke with shotgun ready, third dragging severed enemy helmet by chin-strap as trophy at hip, fourth rear-covering with rotary, mean energy palpable',
+      'Squad holding fixed position against incoming wave, lead trooper mid-mag-dump heavy bolter belt-fed weapon spitting brass, second behind concrete barricade unloading rotary-cannon in sweeping arc, third standing fully exposed mid-grenade-throw overhead, fourth reloading with snarl-behind-visor, kill-pile already at perimeter',
+      'Squad mid-action with one trooper grabbing fresh trophy from kill, lead trooper crouching to wrench enemy helmet from severed neck, second covering with weapon raised toward off-frame threat, third holstering chain-blade still dripping, fourth rear-covering with shotgun, kill bleeding freshly on the ground beneath',
+      'Squad mid-emerge from dropship hovering above LZ, lead trooper mid-leap to ground from open ramp weapons up firing into the LZ, second mid-rope-descend with MG hanging from harness, third still in dropship door mid-blast laying covering fire, dropship engines roaring overhead kicking dust',
+      'Lead trooper mid-execute over kneeling enemy, gauntleted hand grabbing enemy by collar pulling them up, other hand pistol pressed under jaw trigger-moment caught, second trooper at his back mid-fire at off-frame target, third standing watch with weapon up scanning, fourth rear-covering, blood pooling beneath',
+      'Squad mid-charge into enemy trench line, lead trooper mid-vault over earthen lip with chain-blade raised overhead, second mid-fire bolter at trench-defenders below, third mid-grenade-drop into the trench, fourth following close behind with shotgun raised, dust and debris exploding upward from grenade-bloom',
+      'Squad mid-assault on enemy bunker, lead trooper mid-blast plasma-cannon at bunker door from braced stance, second mid-throw thermite-charge arc visible toward bunker wall, third firing heavy MG in suppressing burst at firing-slit, fourth rear-covering with rotary, bunker scorch-marked from prior hits',
+      'Squad mid-clearing of urban rubble pocket, lead trooper mid-stride forward firing assault rifle in three-round burst at off-frame target visible only as silhouette, second mid-pivot to flank with shotgun raised, third mid-execute over crawling enemy with pistol-shot, fourth rear-covering, kill-trail behind',
+      'Squad mid-mounted assault dismounting from APC ramp, lead trooper mid-leap to ground weapons up firing immediately on landing, second mid-emerge from ramp with rotary-cannon already firing in arc, third behind firing pistol-and-MG combo, fourth still on ramp with heavy weapon raised covering, APC engines roaring',
+      'Squad mid-engagement with enemy strike team, lead trooper mid-firing assault rifle in three-round burst at incoming target, second mid-grenade-throw arc visible overhead, third mid-fire heavy MG in suppressing burst from braced stance, fourth mid-charge forward with chain-blade raised overhead, multiple enemy down already',
+      'Squad mid-pursuit of fleeing enemy through ruined city block, lead trooper mid-sprint with rifle raised firing at fleeing target ahead, second mid-leap over rubble-pile with shotgun raised, third mid-blast rotary-cannon at sniper-position high above, fourth mid-throw grenade up toward enemy position, dust kicking up',
+      'Squad mid-execute on enemy command-tent, lead trooper just-finished cutting through tent-flap with chain-blade still raised dripping, second mid-fire shotgun blast into the tent interior, third pressing into tent with assault rifle raised firing, fourth rear-covering tent entrance with rotary, enemy bodies already strewn',
+      'Squad mid-charge across no-man\'s-land toward enemy position, lead trooper mid-stride sprinting forward with rifle raised firing at running target, second mid-leap over fallen body chain-blade extended overhead, third mid-grenade-throw arc visible toward enemy hardpoint, fourth firing heavy MG in suppressing burst from hip',
+      'Squad mid-assault on alien-tech installation, lead trooper mid-blast plasma-cannon at installation door, second mid-fire heavy MG at defenders pouring out of installation, third mid-execute over a fallen alien defender pistol leveled at head, fourth covering with rotary-cannon, alien-tech sparking and bleeding',
+      'Squad mid-hunt through war-torn forest, lead trooper in predator-stalk weapon up scanning treetops for snipers, second mid-execute over an enemy scout caught crawling away, third mid-fire shotgun blast at off-frame moving target, fourth rear-covering with rotary, dawn-cold light, breath fogging behind visors',
+    ],
+    instructions: `Each entry is ONE specific AGGRESSIVE squad combat action, 35-65 words. Format: "[opening verb-phrase], lead trooper mid-[VERB], second mid-[VERB], third mid-[VERB], [optional 4th/5th member], [kill / smoke / blood / debris / scale-prover]". Use ONLY predator/combat verbs (charging/kicking/executing/dragging/leaping/mid-fire/mid-strike/mid-blast/hunting/stalking/mid-roar). STRICT BAN on procedural/SWAT/Tom-Clancy verbs (stacked/overwatch/scanning/observing/hand-signals). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── power-armor-infantry path: composition (squad combat vertigo angles) ───
+  power_armor_composition: {
+    format: 'simple',
+    theme: `SQUAD COMBAT CAMERA ANGLES for the power-armor-infantry path. Each entry specifies a camera position + framing that makes the squad's AGGRESSION viscerally legible. 25-50 words.
+
+⚠️ MANDATORY — every entry must convey AGGRESSION / DYNAMIC ACTION through the angle. Static observational shots FAIL — the angle must show kill-team energy in motion.
+
+✓ ANGLE CATEGORIES (vary across):
+  • **LOW-FORWARD MID-CHARGE** — camera at ground level looking up as squad runs straight at camera, lead trooper filling frame, others behind in V-formation
+  • **OVER-THE-SHOULDER MID-FIRE** — camera behind lead trooper looking down their weapon-sight at the off-frame target, weapon-flash blooming forward
+  • **HELMET-CAM-COMBAT POV** — POV through cracked HUD-helmet glass, reticle visible at frame center, weapon-barrel in lower frame
+  • **DOOR-KICK FROM INSIDE** — camera inside breached room looking outward as lead trooper kicks the door inward, others visible behind with weapons up
+  • **DROP-POD HATCH-BURST** — camera outside drop-pod as lead trooper bursts through hatch weapon-leveled, plasma-vent steam billowing around them
+  • **WORM'S-EYE FROM DOWNED-ENEMY** — camera at ground from POV of fallen enemy looking up at squad standing over them, lead trooper aiming weapon down
+  • **SIDE-PROFILE MID-STRIDE** — camera 90-degree to squad as they sprint through frame left-to-right, all members frozen mid-stride, motion-blur on background
+  • **ROOFTOP-DOWN COMBAT** — high-angle from rooftop looking down at squad clearing courtyard below, kill-zone visible, brass scattered
+  • **THROUGH-SMOKE EMERGE** — camera at midground level as squad emerges through wall of smoke firing weapons, silhouettes resolving into figures
+  • **BEHIND-LEAD MID-BREACH** — camera behind lead trooper as they enter a room weapon-up firing, second/third visible flanking through doorway
+  • **DUTCH-ANGLE FIREFIGHT** — frame tilted to convey chaos, squad mid-firefight, debris falling, muzzle-flashes lighting figures
+  • **HERO-SHOT LOW-3/4 BACKLIT** — squad backlit by explosion behind them, low 3/4 angle showing weapons raised, smoke and embers in foreground
+  • **LEAD-TROOPER-FILL-FRAME** — extreme close on lead trooper's snarling visor-and-weapon, squad members behind in soft focus
+  • **VEHICLE-DISMOUNT FROM ABOVE** — overhead 3/4 shot of squad mid-leap from dropship ramp to ground, ramp visible at top of frame
+  • **EXECUTE-OVER-KNEEL** — squad standing over kneeling captured enemy, lead trooper with weapon down at enemy head, others covering perimeter
+  • **MID-CHARGE-WIDE-DRONE** — high-altitude drone-shot of squad mid-charge across open ground toward enemy position, kill-zone visible
+  • **THROUGH-DEBRIS-BURST** — camera at squad-level as they burst through curtain of falling debris (collapsing wall / explosion-dust), weapons-up emerging
+  • **EXTREME-CLOSE PAULDRON** — extreme close on a weathered armored pauldron with kill-streak tally marks, squad action soft-focused in background
+  • **MID-EXECUTE FOREGROUND** — execute-moment in tight foreground (weapon to enemy head, trigger-pull caught), other squad members visible mid-distance covering perimeter
+  • **NIGHT-MUZZLE-FLASH-STROBE** — squad in dark mid-night combat lit only by their own muzzle-flashes, brief silhouettes resolving against blackness
+
+Each entry must specify:
+• Camera position + height + angle (specific, not vague)
+• What dominates the frame (which trooper / weapon / kill-shot / explosion)
+• Where the OTHER squad members are visible (formation / depth)
+• Specific aggressive action being captured`,
+    touchpoints: [
+      'LOW-FORWARD MID-CHARGE — camera at ground level looking straight up the assault-line as the squad runs at the lens, lead trooper boots filling the lower half of frame mid-stride, two flanking troopers visible in mid-distance weapons raised firing past camera',
+      'OVER-THE-SHOULDER MID-FIRE — camera behind the lead trooper looking down the barrel of their bolter mid-blast, muzzle-flash blooming in the foreground frame-center, off-frame target hit visible in distant smoke, squad members partially visible left/right flanking',
+      'HELMET-CAM COMBAT POV — point-of-view through the cracked HUD-helmet glass of the lead trooper, amber reticle visible at frame center, weapon-barrel in lower foreground frame, second trooper visible at frame-right mid-charge, blood-spatter on visor edge',
+      'DOOR-KICK FROM INSIDE — camera inside the breached room looking outward toward the door as the lead trooper\'s boot kicks it inward, door splintering mid-frame, two squad members visible behind in the corridor weapons raised firing past lead into the room',
+      'DROP-POD HATCH-BURST — camera positioned outside the drop-pod as the lead trooper bursts through the hatch weapon-leveled mid-blast, plasma-vent steam billowing around the pod-rim, second trooper visible behind in pod still firing through hatch',
+      'WORM\'S-EYE FROM DOWNED-ENEMY — camera at ground level looking up as if from the POV of a fallen enemy, lead trooper standing over the lens with weapon angled down toward camera ready to finish, two squad members visible at frame-edges covering perimeter',
+      'SIDE-PROFILE MID-STRIDE — camera positioned 90-degrees to the squad as they sprint through the frame left-to-right, all four troopers frozen mid-stride at different stride phases, motion-blur streaking the background, weapons all leveled forward',
+      'ROOFTOP-DOWN COMBAT — high-angle camera from rooftop looking down at the squad clearing the courtyard below, lead trooper visible mid-execute over fallen enemy, brass scattered across the pavement, two other troopers covering perimeter, kill-trail of bodies',
+      'THROUGH-SMOKE EMERGE — camera positioned at midground level as the squad emerges through a wall of dissipating smoke firing weapons, lead trooper resolving from silhouette into visible armor mid-blast, second/third still emerging muzzle-flashes lighting through smoke',
+      'BEHIND-LEAD MID-BREACH — camera positioned behind the lead trooper as they enter a room weapon-up firing, second and third visible flanking through the doorway behind them, ceiling and walls visible left/right, room-interior lit by muzzle-flashes',
+      'DUTCH-ANGLE FIREFIGHT — frame tilted 15-degrees to convey chaos, squad mid-firefight with debris falling from above, lead trooper mid-fire shotgun-blast, second mid-grenade-throw, muzzle-flashes lighting figures from below, urgency reading',
+      'HERO-SHOT LOW-3/4 BACKLIT — squad backlit by massive explosion behind them, low 3/4 angle showing all weapons raised mid-aim, smoke and embers visible in foreground, every figure silhouetted edge-lit hot, slow-motion key-art quality',
+      'LEAD-TROOPER-FILL-FRAME — extreme close-up on lead trooper\'s snarling visor (cracked, blood-spattered) and weapon mid-blast, squad members visible in defocused background mid-action, the lead trooper\'s aggression filling the entire frame',
+      'VEHICLE-DISMOUNT FROM ABOVE — overhead 3/4 camera positioned above dropship as the squad mid-leaps from the open ramp to the ground below, ramp visible at top of frame, ground-impact dust kicking up below, weapons raised mid-jump',
+      'EXECUTE-OVER-KNEEL — wide shot of squad standing over kneeling captured enemy, lead trooper with weapon down pointed at enemy\'s head trigger-pull moment, two squad members covering perimeter weapons raised outward, blood-pool already at enemy\'s feet',
+      'MID-CHARGE WIDE-DRONE — high-altitude drone shot showing the squad in mid-charge across open ground toward an enemy position visible at deep distance, kill-zone with brass and bodies behind them, dust-trail kicking up, enemy hardpoint smoking ahead',
+      'THROUGH-DEBRIS-BURST — camera at squad-level as they burst through a curtain of falling debris (collapsing wall above them), weapons-up emerging through dust and chunks of concrete, lead trooper mid-stride, dust catching backlight',
+      'EXTREME-CLOSE PAULDRON — extreme close-up on the weathered armored pauldron of a squad-member with painted kill-streak tally marks (50+ visible), other squad members in soft-focused background mid-firefight, the pauldron-detail dominating composition',
+      'MID-EXECUTE FOREGROUND — execute-moment in tight foreground (lead trooper\'s weapon pressed to kneeling enemy\'s head with trigger-pull caught), other squad members visible in mid-distance covering perimeter, blood-pool spreading at feet, kill-confirmed energy',
+      'NIGHT-MUZZLE-FLASH-STROBE — squad in deep-night combat lit only by their own muzzle-flashes as they fire, brief silhouettes resolving against blackness, lead trooper\'s mag-dump throwing white light across the frame, others visible only by their own flashes',
+    ],
+    instructions: `Each entry is ONE specific squad-combat camera angle, 25-50 words. Format: "ANGLE NAME CAPS — camera position + height + what dominates frame + squad-formation depth + specific aggressive action captured". Every entry conveys AGGRESSION via angle (not static observation). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── power-armor-infantry path: lighting (battlefield combat) ───
+  power_armor_lighting: {
+    format: 'simple',
+    theme: `BATTLEFIELD COMBAT LIGHTING for the power-armor-infantry path. Each entry is ONE specific lighting setup for active squad combat scenes. Each entry 20-40 words.
+
+⚠️ STRICT BAN — NO cosmic / astronomy vocabulary (wrong fit for ground combat). NO daylight-resort flat-sky cheerful. NO peaceful nature lighting. NO industrial-hangar (mecha-pilots territory). NO aerial-flight (mech-skyships territory).
+
+✓ MANDATORY VARIETY — distribute across:
+  A. **MUZZLE-FLASH STROBE PRIMARY** (~15%) — squad's own weapons-fire providing strobing primary light, hard shadow contrast pulsing in firing-rhythm, hot-white flash light, ambient deep-dark
+  B. **EXPLOSION-BACKLIT SILHOUETTE** (~15%) — distant or mid-range explosion bloom backlighting the squad, every figure edge-lit hot-orange against the fireball, embers in foreground
+  C. **PLASMA-BOLT TRACER-WALL** (~10%) — neon-cyan or hot-orange plasma-bolt streaks crisscrossing the frame, tracer-fire walls casting moving color across armor, war-light
+  D. **DAWN-COLD GRIM ASSAULT** (~10%) — pre-sunrise cold blue ambient + first warm hint at horizon, mean troopers reading in cool dread-tones, scene-mood somber assault
+  E. **DUSK BLOOD-RED HORIZON** (~10%) — sun at horizon bleeding crimson across the battle-sky, squad silhouetted edge-red, kill-energy mood
+  F. **NIGHT WITH HELMET-FLOODLAMPS** (~10%) — deep-dark ambient with the squad\'s own helmet-mounted flood-lamps cutting beams through smoke, cones of light catching dust
+  G. **SMOKE-PIERCED-BY-SPOTLIGHT** (~10%) — squad moving through dense battle-smoke with single-source spotlight (sun-shaft / searchlight / vehicle-headlights) cutting through, god-rays through smoke
+  H. **EMERGENCY-STROBE BATTLEFIELD** (~5%) — emergency red strobes pulsing across a damaged-installation battlefield, urgency reading, intermittent light
+  I. **DISTANT-FIRE-GLOW MID-DISTANCE** (~5%) — distant fires from burning buildings providing warm orange uplight on squad, smoke-trails rising, post-apocalypse mood
+  J. **WHITE-PHOSPHORUS BURN** (~5%) — chemical-burn white-and-orange light from white-phosphorus or magnesium-flare, scene briefly over-exposed in zones, harsh shadow contrast
+  K. **OVERCAST WAR-GREY** (~5%) — overcast battle-sky with diffuse cold-grey light, low contrast, muted tones, somber mid-engagement mood`,
+    touchpoints: [
+      'MUZZLE-FLASH STROBE PRIMARY — squad\'s own heavy weapons-fire providing strobing primary illumination, hard shadow contrast pulsing in firing-rhythm, hot-white flash-light briefly illuminating armor-detail and surrounding rubble, ambient mode deep-dark between flashes',
+      'EXPLOSION-BACKLIT SILHOUETTE — massive mid-range explosion bloom backlighting the squad from behind, every trooper edge-lit hot-orange against the fireball, embers and smoke visible in the foreground, scene briefly bleached in firelight',
+      'PLASMA-BOLT TRACER-WALL — neon-cyan and hot-orange plasma-bolt streaks crisscrossing the frame in arcing lines, tracer-fire walls casting moving colored light across armor plates, war-energy palpable, scene-mode high-contrast',
+      'DAWN-COLD GRIM ASSAULT — pre-sunrise cold blue ambient with first warm-orange hint touching only the upper horizon-line, mean troopers reading in cool dread-tones with hard shadows beneath armor-overhangs, mood somber assault',
+      'DUSK BLOOD-RED HORIZON — sun at horizon bleeding crimson across the entire battle-sky, squad silhouetted edge-red against the burning sky, hard shadows cast across the battlefield, kill-energy mood, hero-shot atmospheric',
+      'NIGHT HELMET-FLOODLAMPS — deep-dark ambient with the squad\'s own helmet-mounted flood-lamps cutting beams through smoke, cones of light catching airborne dust and brass, target areas illuminated only where lamps point',
+      'SMOKE-PIERCED-BY-SPOTLIGHT — squad moving through dense battle-smoke with single-source bright spotlight cutting through (sun-shaft through clouds / vehicle-headlights / search-light), god-rays through smoke catching figures in motion',
+      'EMERGENCY-STROBE BATTLEFIELD — emergency red strobes pulsing across a damaged-installation battlefield, urgency reading immediate, intermittent light moments illuminating the squad mid-action then plunging them back into shadow',
+      'DISTANT-FIRE-GLOW MID-DISTANCE — distant fires from burning buildings providing warm orange uplight on the squad from one side, smoke-trails rising in the deep distance, post-apocalypse atmospheric mood, low key fill',
+      'WHITE-PHOSPHORUS BURN — chemical-burn white-and-orange light from white-phosphorus rounds or magnesium-flare igniting nearby, scene briefly over-exposed in zones close to the burn, harsh shadow contrast across armor',
+      'OVERCAST WAR-GREY — overcast battle-sky with diffuse cold-grey light, low contrast, muted tones across armor, somber mid-engagement mood with no sun, blood reading dark red against grey ground',
+      'TRACER-FIRE NIGHT-SKY — squad in night combat with multiple colored tracer-rounds streaking across the sky (red enemy / green friendly), traces lighting figures briefly as they pass, dark ambient ground',
+      'BURNING-WRECK FOREGROUND — wreckage of recently-destroyed enemy vehicle burning in the foreground providing warm orange uplight on squad behind, fire-haze rising and distorting the air, embers in motion',
+      'SEARCHLIGHT-CUT FROM ABOVE — enemy searchlight from a tower-top sweeping across the squad\'s position, beam cutting through battle-smoke in a defined cone, squad caught in or out of the beam, hard light vs deep shadow',
+      'PLASMA-IMPACT FLARE — plasma-bolt impact-flare bursting against nearby cover sending ionized white-blue light across the squad, brief over-exposure on impact-side, scene-mode high-contrast electric',
+    ],
+    instructions: `Each entry is ONE specific battlefield combat lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + battle context]". Distribute across the 11 buckets. STRICT BAN on cosmic / daylight-resort / industrial-hangar / aerial-flight modes. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── power-armor-infantry path: engagement (ALWAYS-ON multi-actor combat scene) ───
+  power_armor_engagement: {
+    format: 'simple',
+    theme: `MULTI-ACTOR BATTLEFIELD ENGAGEMENT BEATS for the power-armor-infantry path — each entry describes a SCENE with the kill-team squad + 2-5 OTHER actors in active interaction (enemy forces / civilian chaos / allied units / hostile environment). NOT a squad standing aggressively. Each entry 50-90 words.
+
+⚠️ MANDATORY — every entry must include MULTIPLE actors with VISIBLE INTERACTION. The squad is engaged with: enemy combatants firing back / fleeing civilians / collapsing structures / allied units flanking in / vehicles exploding / hostile creatures swarming / aerial support arriving. The viewer must read the FULL STORY in 2 seconds — not a posed shot but mid-firefight.
+
+🚫 STAR WARS / HALO HARD BAN: NEVER name Stormtrooper / Imperial / Mandalorian / beskar / T-visor / Boba / Halo / ODST / Spartan / MJOLNIR / UNSC. Describe the aesthetic without the IP name.
+
+🚫 BANNED — NO solo squad / no peaceful patrol / no "scanning for threats" / no "professional movement." If the entry could be summed up as "squad walking through ruins," it FAILS the gate.
+
+✓ ENGAGEMENT TYPES — vary across:
+  A. **WAVE-DEFENSE HORDE** (~10%) — squad holding line against incoming enemy wave (charging infantry / running figures / closing horde), multiple enemies dropping mid-charge, brass-rain everywhere
+  B. **HOT-LZ ASSAULT** (~10%) — squad mid-emerge from dropship/pods into actively defended landing zone, defenders firing back, AA-tracers crossing sky, multiple drop-points landing simultaneously
+  C. **URBAN-CLEARANCE FIREFIGHT** (~10%) — squad mid-block-by-block clearance, snipers from windows above firing down, defenders in alleys mid-return-fire, rubble bursting from impacts
+  D. **TRENCH-CHARGE MASSACRE** (~10%) — squad mid-leap into enemy trench-line, defenders mid-rise mid-fire, bayonets and chain-blades in mid-strike against multiple enemies
+  E. **BREACH-AND-CLEAR HARDPOINT** (~10%) — squad just breached enemy bunker/hardpoint, defenders inside mid-fall, smoke pouring out, allied units stacked behind ready for next room
+  F. **VEHICLE-AMBUSH** (~10%) — squad mid-execution of enemy convoy ambush, tanks/APCs burning, crews mid-bail, secondary explosions chaining
+  G. **DROP-POD ASSAULT-MULTIPLE** (~5%) — multiple friendly drop-pods slamming down across the LZ, squad mid-emerge under fire, defenders mid-retreat or mid-counterattack
+  H. **CREATURE-SWARM REPEL** (~10%) — squad mid-firing into closing alien creature horde, multiple creatures down mid-charge, others still closing, flame-throwers wide
+  I. **PURSUIT-EXECUTION-RUN** (~5%) — squad chasing fleeing enemy through ruins, multiple enemies down already mid-flight (kill-trail behind), lead squad members mid-firing at runners ahead
+  J. **DEFENSIVE-OVERWATCH-WITH-VEHICLES** (~5%) — squad mid-fire from elevated position, allied tanks/walkers visible below also engaged, enemy formation incoming, suppressing-fire walls in all directions
+  K. **CIVILIAN-EXTRACTION UNDER FIRE** (~5%) — squad covering fleeing civilians while engaging pursuing enemy force, multiple civilians mid-run past squad, lead squad members mid-fire at pursuers behind
+  L. **AERIAL-SUPPORT INBOUND** (~5%) — squad mid-firefight as friendly gunship roars overhead opening up on enemy position, multiple weapon-flashes from above and below, ground enemies caught in crossfire
+  M. **BUILDING-COLLAPSE COMBAT** (~5%) — squad mid-firefight as a nearby building collapses from artillery, defenders inside mid-fall, dust-cloud blocking part of frame, allied units visible in deep distance
+
+Each entry MUST:
+• Name the engagement TYPE in the first 6 words
+• Identify the squad + 2-5 OTHER named actors (enemy infantry / vehicle / alien creature / civilian / allied unit / aerial gunship / etc.)
+• Describe the INTERACTION (weapons-fire crossing both directions / pursuit / multiple actions simultaneous / kill-chains)
+• Include 2-3 scale-prover or texture details (smoke columns, debris-clouds, ground-impact-zones, secondary fires, brass-rain, blood-spatter zones)
+• Emphasize COMMOTION + DENSITY — multiple things happening simultaneously across the frame`,
+    touchpoints: [
+      'WAVE-DEFENSE HORDE — squad holding firing-line behind concrete barricade against charging enemy infantry-wave, 30+ enemy figures visible mid-charge across the open ground beyond, lead trooper mid-mag-dump heavy bolter spitting brass-rain, second mid-grenade-throw arc visible overhead, third mid-fire rotary-cannon in sweeping arc, multiple enemies dropping mid-charge, blood-spatter zones expanding, bodies piling at the barricade-line, smoke rising from prior kills',
+      'HOT-LZ ASSAULT — squad mid-emerge from steaming drop-pods into actively defended landing zone, 4-6 enemy defenders mid-return-fire from elevated positions firing rifles down at the squad, AA-tracers crossing the sky above, two more friendly drop-pods slamming down at midground, lead trooper mid-blast shotgun at closest defender, second mid-leap from pod weapons-up, dust kicking up across the LZ',
+      'URBAN-CLEARANCE FIREFIGHT — squad mid-block-by-block clearance through ruined urban street, enemy sniper visible in third-floor window above mid-return-fire, two more defenders in alley mid-fall from squad\'s suppressing barrage, lead trooper mid-fire bolter up at sniper, second mid-leap behind cover, third mid-fire rotary at alley-defenders, rubble bursting from sniper-rounds impacting around them',
+      'TRENCH-CHARGE MASSACRE — squad mid-leap into enemy trench-line, 5-7 defenders mid-rise from trench mid-firing back, lead trooper mid-vault over trench-edge chain-blade raised overhead with first defender already mid-fall, second mid-grenade-drop into trench bottom with bloom-bursting, third mid-fire heavy MG at flanking defenders, fourth mid-execute pistol on rising defender, blood-spray and dirt erupting',
+      'BREACH-AND-CLEAR HARDPOINT — squad just breached enemy bunker through blown door, 3-4 defenders inside mid-fall from squad\'s opening blast, smoke pouring out of the breach in volume, two more friendly squads visible flanking the bunker from sides, lead trooper mid-stride through smoke firing assault rifle, second mid-grenade-throw deeper into bunker, third covering entrance with rotary against incoming reinforcements',
+      'VEHICLE-AMBUSH EXECUTION — squad mid-execution of enemy armored convoy ambush, 3 enemy tanks visible — one mid-fireball-explosion in foreground, one mid-bail (crew mid-leap from hatches), one mid-rotate-turret toward squad position, lead trooper mid-fire RPG at the turret, second mid-fire heavy MG at bailing crews, third mid-throw thermite at fuel-stores, secondary explosions chaining',
+      'DROP-POD ASSAULT MULTIPLE — three friendly drop-pods slamming down simultaneously across the enemy LZ, squad mid-emerge from lead pod under fire, 5-6 enemy defenders mid-retreat as more pods land behind them, lead trooper mid-blast shotgun at closest retreater, second mid-leap from adjacent pod with rotary already firing, third squad visible mid-emerge from deep-distance pod, dust-clouds rising from each landing',
+      'CREATURE-SWARM REPEL — squad mid-firing into closing alien creature horde, 8-12 alien creatures visible mid-charge with multiple already down mid-scuttle, lead trooper mid-fire flame-thrower in wide arc engulfing front-line creatures, second mid-fire heavy MG sweeping the flank, third mid-execute pistol on a creature that broke through, fourth mid-grenade-throw at creature-cluster behind, chitin-armor visible on creatures',
+      'PURSUIT-EXECUTION RUN — squad chasing fleeing enemy infantry through ruined urban street, 4-5 enemy figures mid-flight ahead through doorways and around corners, 2 enemies already dropped mid-flight with bodies sprawled on cobblestones, lead trooper mid-sprint firing assault rifle at running enemy ahead, second mid-leap over fallen body chain-blade raised, third mid-fire shotgun at flanker breaking sideways',
+      'OVERWATCH WITH VEHICLES — squad mid-fire from elevated rooftop position, two allied tanks visible on street below also mid-fire engaging enemy formation in mid-distance, 6-8 enemy infantry visible mid-charge toward tanks with multiple already dropping from squad\'s overwatch fire, lead trooper mid-fire sniper-rifle from prone, second mid-fire heavy MG belt-fed, third spotting/calling targets',
+      'CIVILIAN-EXTRACTION UNDER FIRE — squad covering fleeing civilians while engaging pursuing enemy force, 5-7 civilian figures mid-flight past squad position toward extraction point, 4-5 enemy combatants visible mid-pursuit from behind mid-return-fire, lead trooper mid-fire shotgun at closest pursuer, second mid-fire rotary at pursuers behind, third dragging slow civilian forward, civilian-screaming-faces visible',
+      'AERIAL-SUPPORT INBOUND — squad mid-firefight as friendly gunship roars overhead opening up on enemy position with weapon-flashes from above, ground enemies mid-fall from above-fire and squad\'s ground-fire simultaneously, lead trooper mid-fire bolter up at remaining enemies, second mid-fire heavy MG, brass from gunship raining down past squad, exhaust-trail crossing upper frame',
+      'BUILDING-COLLAPSE COMBAT — squad mid-firefight as nearby building collapses from artillery-strike, 3-4 defenders inside mid-fall through collapsing structure, dust-cloud expanding outward blocking part of frame, allied units visible in deep distance also mid-engagement, lead trooper mid-fire heavy bolter, second mid-leap away from falling debris, third mid-execute kneeling captive in foreground',
+      'STREET-AMBUSH FROM BOTH SIDES — squad mid-execution of urban ambush from both sides of street, enemy patrol caught mid-stride between, 4-5 enemy infantry mid-fall from crossfire, lead trooper mid-fire from rooftop position above, second mid-fire from alley to opposite side, third mid-execute survivor mid-flee, brass cascading from elevated positions, smoke rising from prior grenades',
+      'BOARDING-VEHICLE ASSAULT — squad mid-board of enemy APC at full sprint, lead trooper mid-leap onto APC roof with chain-blade raised to plunge through hatch, second mid-fire shotgun at hatch where crew rising to defend, third mid-fire heavy MG at second APC closing in support, secondary friendly squad visible mid-charge across street, smoke from prior tank-kill rising behind',
+      'BUNKER-SIEGE FROM BOTH SIDES — squad mid-siege of enemy bunker complex, 8-10 defenders visible in firing-slits mid-return-fire, multiple weapon-flashes from inside the bunker, allied squad visible flanking bunker from opposite side also mid-fire, lead trooper mid-fire plasma-cannon at bunker door, second mid-throw thermite-charge onto roof, dust columns rising from impacts across bunker',
+      'NIGHT-RAID MASSACRE — squad mid-night-raid on enemy encampment, 6-8 enemy figures mid-wake from sleeping-bags mid-flight mid-fight, lead trooper mid-execute pistol on rising enemy, second mid-fire shotgun at fleeing enemy through tent-canvas, third mid-fire silenced-MG sweeping the camp, fires igniting from incendiary across the camp, surprise-attack chaos with enemy in various states of half-armored response',
+      'ROOFTOP-OVERWATCH CITY-BATTLE — squad mid-fire from rooftop position over city-battle below, 12+ figures visible in street-level combat below (mix of allied and enemy units), multiple vehicles burning in mid-distance, lead trooper mid-fire sniper-rifle at distant target, second mid-call-targets while firing pistol at closer rooftop-enemy that just appeared, third mid-fire heavy MG sweeping the street, brass cascading off the rooftop edge',
+      'FOG-WAR FLANK-AMBUSH — squad mid-flank-ambush of enemy patrol through battlefield smoke, 4-5 enemy patrol figures visible mid-stride caught from side, lead trooper mid-fire shotgun blast at closest enemy at point-blank, second mid-leap from smoke with chain-blade raised, third mid-fire heavy MG into smoke at retreating enemies, smoke and muzzle-flash strobing the scene, allied unit visible in deep distance flanking from opposite side',
+      'AERIAL-DROP-AND-FIGHT — squad mid-aerial rappel-drop from gunship hovering above, multiple troopers mid-rope-descend with weapons raised, 3-4 enemy ground-defenders mid-fire up at descending squad, lead trooper just-touched-down mid-fire shotgun at closest defender, second still mid-descent firing pistol down, third covering descent from rope mid-rotary-fire, dust kicking up below from downwash',
+    ],
+    instructions: `Each entry is ONE multi-actor battlefield engagement beat, 50-90 words. Format: "ENGAGEMENT TYPE CAPS — squad + 2-5 other named actors + their interactions + multiple simultaneous actions + 2-3 scale-prover/texture details". STRICT mandate: MULTIPLE actors interacting with COMMOTION density. STRICT BAN on Star Wars/Halo IP names. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── power-armor-infantry path: allied_tech (ALWAYS-ON friendly combat bots / drones / walkers) ───
+  power_armor_allied_tech: {
+    format: 'simple',
+    theme: `ALLIED COMBAT TECH for the power-armor-infantry path — one friendly robot / drone / walker / war-mech fighting ALONGSIDE the marine squad in active combat. Each entry 35-65 words.
+
+⚠️ THE BAR: this is FULL MAN+MACHINE vs MACHINE combat — Helldivers 2 squad + Guard-Dog rovers / 40K Tactical Squad + Dreadnought walker / Aliens Colonial Marines + APC/Power-Loader / Mass Effect squad + LOKI mech / Starcraft Marines + Goliath walker / Avatar Marines + AMP-suit. The allied tech is a FRIENDLY COMBAT UNIT mid-fire alongside the squad, NOT background flavor.
+
+🚫 STAR WARS / HALO HARD BAN — NEVER write Stormtrooper / Imperial / Mandalorian / beskar / T-visor / Boba / Halo / ODST / Spartan / MJOLNIR / UNSC / R2-D2 / BB-8 / battle droid / Clone Trooper / AT-AT / AT-ST. The aesthetic these IPs represent is fine — but NEVER name them.
+
+🚫 OTHER BANS:
+• NO titan-class mech (those are titan-war territory — these are HUMAN-SCALE-TO-2X allies, not biblical-scale)
+• NO pilot-in-cockpit framing (mecha-pilots territory)
+• NO cyborg-integrated combat (those are cyborg-* territory)
+• NO peaceful service-bot / repair-drone / hospitality unit — these are COMBAT-armed
+• NO generic floating-sphere drone (read as drone-photography, not combat)
+
+✓ ALLIED COMBAT TECH CATEGORIES — distribute across:
+  A. **HOVER COMBAT-DRONES** (~15%) — small armed hover-drones with weapon-mounts, following squad in formation, mid-fire at enemy
+  B. **WALKER-BOTS (4-LEGGED)** (~15%) — quadrupedal combat walker (head-height to human, dog-sized or larger), weapon-mount on back, mid-stride with squad
+  C. **BIPED COMBAT MECH (1.5-2x HUMAN)** (~15%) — smaller-than-titan biped mech (4-7 meters tall), weapon-arms, walking alongside marines, mid-fire
+  D. **SPIDER-WALKER / 6-8 LEGGED** (~10%) — multi-legged combat walker (waist-to-chest height), low slung weapon-platform, mid-action with squad
+  E. **TRACKED COMBAT-BOT** (~10%) — tracked weapon-platform (tank-bot, knee-to-chest height), mid-fire alongside, brass cascading
+  F. **SERVITOR-MECH (40K-style)** (~10%) — cybernetic walking weapon-platform, half-human-shape with weapon-arms, mid-fire
+  G. **ARMORED COMBAT-DOG** (~10%) — armored quadruped attack-bot (dog-sized, weapon-mount on harness), mid-pounce on enemy, alongside squad
+  H. **WAR-WALKER DREADNOUGHT** (~5%) — towering 3-4m bipedal walker with heavy weapons, mid-fire over squad's heads, signature wide-stance
+  I. **GUN-DRONE TURRET** (~5%) — automated turret-platform deployed on ground, 360-rotating cannon, mid-fire in sweeping arc
+  J. **POWER-LOADER COMBAT** (~5%) — exosuit/loader-frame piloted but reading as machine-ally, weapon-arms mid-strike (Aliens Power-Loader lineage)
+
+Each entry MUST:
+• Name the tech TYPE in first 6 words
+• Specify its SCALE relative to marines (knee-height / chest-height / head-height / 2x-marine / 3x-marine)
+• Specify its WEAPON (rotary cannon / plasma-bolter / chain-cannon / missile-pod / heavy MG / beam-cannon / lascannon)
+• Describe its MID-ACTION (mid-fire / mid-stride / mid-pounce / mid-strike / mid-sweep / mid-deploy)
+• Reference 1-2 visual DETAILS (scorch-marks / kill-streak markings / hydraulic-hiss / weapon-mount glow / dust under treads)`,
+    touchpoints: [
+      'HOVER COMBAT-DRONE GUARD-DOG — chest-height armored hover-drone floating at lead marine\'s shoulder, twin rotary-cannon underslung mid-fire spitting brass in sweeping arc at off-frame enemy, glowing-red sensor-eye sweeping perimeter, scorch-marks across hull-plating from prior engagements, kill-streak tally scratched on side',
+      'QUADRUPEDAL WALKER-BOT WAIST-HIGH — waist-height four-legged armored walker-bot striding alongside marines mid-pace, dorsal weapon-mount (heavy MG) belt-fed mid-fire at distant target, sand-and-dust kicked up from articulated paws, mission-tag bolted to neck-armor, hydraulic-hiss with each stride',
+      'BIPED COMBAT MECH 2X-MARINE — 4-meter biped combat mech walking alongside marine squad with rotary-cannon arm mid-fire, second arm holding chain-blade, scratched matte-charcoal plating with skull-and-bones unit-marking on chest-pectoral, mid-step pivoting toward closer enemy, hydraulic-actuator visible in joints',
+      'SPIDER-WALKER 6-LEGGED — chest-height six-legged spider-walker mid-stride alongside marines through rubble, central body housing twin plasma-cannon mid-fire in flanking sweep, multiple sensor-eyes blinking amber, leg-tips kicking up dust with each placement, mid-pivot to engage flank threat',
+      'TRACKED COMBAT-BOT THIGH-HIGH — thigh-high tracked weapon-platform rolling alongside marines, top-mounted rotary cannon mid-fire spitting brass cascading into spent-shell pile behind it, scratched bone-white paint with red unit-stripe, mid-turret-rotate toward next target',
+      'SERVITOR-MECH CYBERNETIC — half-human-height cybernetic walking weapon-platform with two weapon-arms (one heavy bolter mid-fire, one plasma-pistol raised), exposed mechanical leg-actuators below skirt-armor, glowing-amber eye-sensor, mid-stride alongside marine lead, oath-paper nailed to chest',
+      'ARMORED COMBAT-DOG ATTACK — dog-sized quadruped armored attack-bot mid-pounce onto downed enemy, weapon-mounted harness with twin-pistol auto-firing, scratched matte-black plating with kill-streak tally, mid-pounce-leap with all four legs extended, snarl-LED display on face-plate',
+      'WAR-WALKER DREADNOUGHT — towering 3.5-meter bipedal war-walker striding behind marine squad, twin heavy-weapon arms (left rotary-cannon mid-fire / right chain-cannon mid-spin-up), wide-stance pose absorbing recoil, scratched bone-and-charcoal plating with unit-skull insignia, smoke trailing from previous shots',
+      'GUN-DRONE TURRET DEPLOYED — knee-high automated turret-platform deployed on cracked pavement at marine\'s feet, 360-rotating dual-cannon mid-fire in sweeping arc, brass spraying outward, glowing-blue targeting-sensor active, scorch-marks across base-plate from incoming fire, marines arrayed in defensive perimeter around it',
+      'POWER-LOADER EXOSUIT COMBAT — chest-high power-loader exosuit (piloted, visible operator in cockpit-cradle) mid-strike with weapon-mounted arm-cannon firing at off-frame target, hydraulic-amber lighting in joints, scratched safety-yellow paint over charcoal plating, mid-pivot alongside marine squad',
+      'PATROL-WALKER 4-LEG — head-height four-legged patrol-walker striding alongside marines, dorsal twin-pulse-cannons mid-fire in alternating burst, scratched olive-and-charcoal plating with unit number stenciled, leg-tips kicking up dust, glowing-amber LIDAR sensor on raised mast',
+      'COMBAT-FLOATER ARMED SHIELD-PLATFORM — chest-height armored hover-platform deploying riot-shield forward while top-mounted heavy MG mid-fires over the shield-edge, glowing-blue repulsor-lights underneath, scorch-marks on shield-face from absorbed rounds, marines stacking behind it for cover',
+      'BIPED MECH AVATAR-STYLE — 4-meter exo-frame mech alongside marines (AMP-suit lineage but not named), twin weapon-arms (left chain-gun mid-fire / right grappler), scratched gunmetal plating with safety-orange unit-stripes, mid-pivot tracking enemy, dust kicked up from foot-impact',
+      'WALKER-BOT 6-LEGGED CHEST-HIGH — chest-height six-legged combat walker striding alongside marines, dorsal weapon-pod mid-fire with twin missile-launchers blooming exhaust-trails, articulated leg-tips picking through rubble, mission-patch bolted to side-armor, mid-pivot toward fresh target',
+      'COMBAT-BOT TRIPEDAL — waist-height three-legged combat-bot striding alongside marines with central weapon-mount (rotary cannon mid-fire), three legs pumping in alternating rhythm, scratched matte-black plating with red kill-streak ladder, mid-stride dust-kick from three feet simultaneously',
+      'DREADNOUGHT 40K-STYLE — towering 4-meter walking sarcophagus dreadnought (the kind containing a fallen marine\'s body, weapon-arms grafted to chassis), twin heavy-bolters mid-fire, ornate sarcophagus-chest with iconography, mid-stride alongside marines, hydraulic-thunder reading',
+      'HOVER GUN-PLATFORM SQUAD-LEAD — head-height hover gun-platform leading marine squad through ruined street, underslung quad-cannon mid-fire sweeping the street ahead in walking suppression, glowing-blue repulsor-pads under hull, scratched bone-white-and-red paint, brass cascading onto pavement below',
+    ],
+    instructions: `Each entry is ONE specific allied combat tech unit (robot / drone / walker / war-mech) fighting alongside the marine squad, 35-65 words. Format: "TECH TYPE CAPS + SCALE — physical description + weapon + mid-action + relationship-to-squad + visual detail". Vary across the 10 categories. STRICT BAN on Star Wars / Halo IP names AND titan-class scale. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── power-armor-infantry path: drama (40%-gated battlefield phenomena) ───
+  power_armor_drama: {
+    format: 'simple',
+    theme: `40%-GATED BATTLEFIELD COMBAT PHENOMENA for the power-armor-infantry path — a combat event that amplifies the squad's aggressive moment. Each entry 25-50 words.
+
+⚠️ STRICT — each phenomenon must amplify GROUND combat spectacle. Helldivers 2 cinematic / 40K marketing key-art / Aliens / Doom Eternal / Starship Troopers / Edge of Tomorrow lineage. NO peaceful nature. NO industrial hangar work. NO aerial-flight phenomena (skyships).
+
+✓ BATTLEFIELD COMBAT PHENOMENA — distribute across:
+  • **RPG-IMPACT BLOOM** — fresh RPG/rocket impact bursting against cover near squad, debris-cloud expanding outward
+  • **BREACHING-CHARGE DETONATION** — squad-placed breaching charge mid-detonation against wall, door blowing inward in slow-motion
+  • **SUPPRESSING-FIRE TRACER-WALLS** — opposing fire-curtains crossing the frame as squad advances under them, tracers in colored arcs
+  • **DISTANT-VEHICLE EXPLOSION** — enemy tank or APC just destroyed in mid-distance, secondary explosions chaining, smoke-column rising
+  • **DROP-POD ATMOSPHERIC IMPACT** — friendly drop-pod just slammed into the ground nearby, dust-cloud expanding, troopers emerging
+  • **MORTAR WALKS GROUND** — sequential mortar-impacts walking across the open ground past the squad's position, dust columns rising
+  • **PLASMA-STORM OVERHEAD** — enemy plasma-artillery storm overhead, plasma-bolts streaking across the sky, ground impacts visible at distance
+  • **BUILDING-COLLAPSE BEHIND** — a building just collapsed behind the squad from artillery, dust-cloud rolling outward, debris falling
+  • **WALL-OF-FIRE FOREGROUND** — wall of flames from a flame-thrower (squad's or enemy's) bursting across foreground, squad backlit edge-orange
+  • **AERIAL-STRAFE OVERHEAD** — friendly gunship strafing run pass overhead, weapon-flashes visible from above, brass falling from sky
+  • **GROUND-CRACK FROM TITAN-FOOTFALL** — distant titan footfall sending ground-shock through the squad's position, ground-crack splitting outward at distance
+  • **GRENADE-BLOOM MIDGROUND** — fresh grenade-bloom bursting at midground between squad and enemy, frag-spread frozen mid-burst
+  • **CHEMICAL-CLOUD ROLLING** — chemical-warfare cloud rolling across the battlefield, squad in respirator helms wading through it
+  • **CARRIER-AIRSHIP LOOMING** — friendly carrier-airship looming in upper background deploying additional dropships, scale-prover
+  • **VEHICLE-WRECK FIREBALL** — fresh tank-wreck fireball burning in midground, secondary munitions cooking off, black smoke column rising
+  • **ALIEN-CREATURE SWARM CLOSING** — alien-creature swarm visible closing at distance, scuttling shapes resolving from smoke, squad bracing
+  • **AIRBORNE-DEBRIS RAIN** — debris from prior explosion still raining down across the squad's position, chunks of concrete and metal falling
+  • **SNIPER-ROUND IMPACT** — incoming sniper-round impact on cover near lead trooper, sparks and dust spraying, near-miss energy
+  • **DROP-SHIP DEPLOYMENT OVERHEAD** — friendly drop-ship deploying additional troopers above the squad, rappel-lines extending downward
+  • **SMOKE-GRENADE BLOOM** — friendly smoke-grenade bloom filling lower half of frame, squad emerging through, concealment cover`,
+    touchpoints: [
+      'RPG-IMPACT BLOOM — fresh RPG-rocket impact bursting against a piece of cover near the squad, debris-cloud expanding outward in slow-motion, lead trooper bracing as shrapnel passes, secondary fires igniting nearby',
+      'BREACHING-CHARGE DETONATION — squad-placed breaching-charge mid-detonation against a reinforced wall, door blowing inward in slow-motion frame-freeze, debris and dust expanding outward, squad members behind already weapons-up',
+      'SUPPRESSING-FIRE TRACER-WALLS — opposing enemy fire-curtains crossing the frame in colored tracer-arcs as the squad advances under them, hot-white and red-orange tracers, squad heads-down mid-advance through the fire-walls',
+      'DISTANT-VEHICLE EXPLOSION — enemy tank just destroyed in mid-distance behind the squad, secondary explosions chaining out from the wreck, black smoke-column rising into the sky, ammunition cooking off audibly',
+      'DROP-POD ATMOSPHERIC IMPACT — friendly drop-pod just slammed into the ground 50 meters from the squad, dust-cloud expanding outward, troopers visibly emerging from the pod-hatches still venting plasma',
+      'MORTAR WALKS GROUND — sequential enemy mortar-impacts walking across the open ground past the squad\'s position, dust-columns rising in a line, the squad bracing for the next impact in sequence',
+      'PLASMA-STORM OVERHEAD — enemy plasma-artillery storm overhead, plasma-bolts streaking across the sky in arcing lines, ground impacts visible at distance throwing dust-columns, squad heads-down advancing through the storm',
+      'BUILDING-COLLAPSE BEHIND — a building just collapsed behind the squad from artillery-strike, dust-cloud rolling outward toward camera, chunks of concrete and rebar falling from the collapse-zone, debris in the air',
+      'WALL-OF-FIRE FOREGROUND — wall of flames from a flame-thrower (squad\'s or enemy\'s) bursting across the foreground, squad backlit edge-orange against the flame-wall, heat-shimmer distorting the air above',
+      'AERIAL-STRAFE OVERHEAD — friendly gunship strafing pass overhead, weapon-flashes visible from above the squad, brass falling from sky in motion-blur streaks, exhaust-trails crossing the upper frame',
+      'GROUND-CRACK FROM TITAN — distant titan-class mech footfall sending ground-shock through the squad\'s position, visible ground-crack splitting outward across the pavement, dust escaping from the crack at distance',
+      'GRENADE-BLOOM MIDGROUND — fresh grenade-bloom bursting at midground between the squad and an enemy position, frag-spread frozen mid-burst with dust expanding, target-area briefly over-exposed',
+      'CHEMICAL-CLOUD ROLLING — chemical-warfare cloud (greenish-yellow / purple-violet) rolling across the battlefield, squad in respirator-helms wading through it weapons-up, distant figures barely visible through the haze',
+      'CARRIER-AIRSHIP LOOMING — friendly carrier-airship looming in the upper background of the battle-zone, visible deploying additional dropships from chassis-bays, scale-prover for the operational scope',
+      'VEHICLE-WRECK FIREBALL — fresh tank-wreck fireball burning in midground behind the squad, secondary munitions cooking off audibly, black smoke-column rising into the sky, fire-glow uplighting the squad',
+      'ALIEN-CREATURE SWARM CLOSING — alien-creature swarm visible closing at distance, scuttling shapes (or biped-runners) resolving from smoke, squad bracing weapons-up against the incoming charge, urgency reading immediate',
+      'AIRBORNE-DEBRIS RAIN — debris from a prior explosion still raining down across the squad\'s position, chunks of concrete and metal-fragments falling in slow-motion, squad members visibly tracking debris with eyes',
+      'SNIPER-ROUND IMPACT — incoming sniper-round impact on cover immediately next to the lead trooper, sparks and dust spraying from the impact-point, near-miss energy palpable, lead trooper visibly reacting',
+      'DROP-SHIP DEPLOYMENT OVERHEAD — friendly drop-ship deploying additional troopers above the squad, rappel-lines extending downward from the open ramp, troopers visible mid-descent on the lines, dust kicked up below',
+      'SMOKE-GRENADE BLOOM — friendly smoke-grenade bloom filling the lower half of frame, squad emerging through the smoke weapons-up, concealment-cover for the advance, gray smoke-tendrils rising',
+    ],
+    instructions: `Each entry is ONE specific battlefield combat phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + squad-reaction-or-scale-prover". STRICT battlefield combat aesthetic — NO peaceful, NO industrial hangar, NO aerial-flight. Amplifies the squad's aggressive moment. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];
