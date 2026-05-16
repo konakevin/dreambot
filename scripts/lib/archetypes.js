@@ -566,6 +566,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_MECHA_PILOTS: {
+    description:
+      'PATH-BESPOKE — MechBot mecha-pilots path (2026-05-16 migration; third MechBot path). Pilot + giant mech with scale-relationship as the punchline (Gundam / Evangelion / Pacific Rim / Iron Giant / Titanfall). Pilot tiny, mech enormous, mid-action moment of boarding / climbing / repairing / deploying — NOT active battlefield. Pilot biology = anything goes. Reuses legacy 200-entry subject/action/setting pools + 3 path-bespoke pools: composition (30 full-body-mech vertigo angles across 15+ environments), lighting (hangar/silo/dawn-deployment overrides cosmic bot default), drama (40%-gated deployment phenomena). MECH FILLS 50-100% OF FRAME BODY (no fragments — head-to-foot silhouette mandatory).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',

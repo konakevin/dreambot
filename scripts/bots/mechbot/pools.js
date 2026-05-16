@@ -84,10 +84,13 @@ module.exports = {
   ROBOT_TYPES: load('robot_types'),
   TRANQUIL_MOMENTS: load('tranquil_moments'),
 
-  // Mecha-pilots path
+  // Mecha-pilots path (migrated to declarative axis system 2026-05-16)
   MECHA_PILOT_SUBJECTS: load('mecha_pilot_subjects'),
   MECHA_PILOT_ACTIONS: load('mecha_pilot_actions'),
   MECHA_PILOT_SETTINGS: load('mecha_pilot_settings'),
+  MECHA_PILOTS_COMPOSITION: load('mecha_pilots_composition'), // pilot+mech vertigo angles
+  MECHA_PILOTS_LIGHTING: load('mecha_pilots_lighting'),
+  MECHA_PILOTS_DRAMA: load('mecha_pilots_drama'), // 40% gated phenomenon
   // Titan-war-machines path (migrated to declarative axis system 2026-05-15)
   // Reuses legacy 200-entry subject/action/setting pools.
   // Adds 3 path-bespoke pools: lighting (ground-based combat), drama

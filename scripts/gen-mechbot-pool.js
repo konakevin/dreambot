@@ -57,6 +57,156 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
+  // ─── mecha-pilots path: composition (pilot+mech vertigo angles) ───
+  mecha_pilots_composition: {
+    format: 'simple',
+    theme: `PILOT+MECH SCALE-RELATIONSHIP CAMERA ANGLES for the mecha-pilots path. Each entry specifies a camera position + framing that makes the SCALE GAP between tiny pilot and enormous mech viscerally legible. Each entry 25-50 words.
+
+⚠️ MANDATORY — every entry must convey the SCALE GAP through composition. Pilot is ALWAYS tiny relative to mech. Both must be visible (or mech-fragment + pilot, like a hand cradling them).
+
+✓ ANGLE CATEGORIES — vary across:
+  • WORM'S-EYE-UP-THE-LEG — pilot mid-climb on access ladder, camera at ground looking up the towering leg, mech receding upward into perspective
+  • PILOT IN MECH'S OPEN PALM — mech kneeling, holding pilot in open hand at eye-level (Iron Giant moment)
+  • PILOT ON SHOULDER — looking out from atop the mech's shoulder, pilot in foreground edge, vast deployment-bay/sky beyond
+  • GANTRY-CATWALK CROSS — pilot walking on catwalk that crosses between mech's chest and the wall, mech filling 70% of frame
+  • DEEP-HANGAR WIDE-SHOT — pilot small in foreground walking toward mech that fills the deep tunnel, ranks of other mechs flanking
+  • COCKPIT-INTERIOR POV — over-pilot's-shoulder at HUD displays, canopy showing world beyond, instrument-glow on pilot's helmet
+  • PILOT MID-LEAP TOWARD HATCH — suspended between catwalk and cockpit opening, mech-chest filling background
+  • ASYMMETRIC TWO-SHOT — pilot bottom-left small, mech filling rest of frame (the 1:50 scale-shot)
+  • MECH KNEELING FOR BOARDING — mech in subordinate boarding stance, pilot ascending leg-step, deployment-bay framing
+  • SHUTTLE-EXIT TOWARD-MECH — pilot stepping out of drop-shuttle toward waiting mech in deployment-bay, shuttle-glow behind
+  • PILOT REPAIR ON SHOULDER — pilot on suspended platform working at mech's shoulder seam, hangar gantry behind
+  • PILOT-RUNNING-TOWARD-COLLAPSED-MECH — rescue moment, fallen mech in mid-distance, pilot mid-stride toward it through debris
+  • UNDER-THE-FOOT EMERGENCY — pilot directly beneath as mech foot descends/lifts above them, blast doors opening
+  • CRANE-DEPLOYMENT GANTRY — mech being lowered by overhead crane into launch-position, pilot at control panel, gantry receding overhead
+  • CRADLE-IN-FRAME — mech in vertical launch cradle, pilot ascending side-walkway, silo-walls receding upward
+  • THROUGH-HATCH WIDE — camera at the open cockpit hatch looking out, pilot's hand on the rim, vast hangar beyond
+  • PILOT WALKING AWAY POST-LAUNCH — pilot small foreground walking away from just-deployed mech that's already rising, smoke and steam
+  • TWO-PILOTS BRIEFING — pilots in foreground exchanging gestures, mech being prepped in midground, hangar-deck below
+  • PILOT REFLECTED IN CHEST-PLATE — pilot's reflection in the polished mech chassis, mech-fragment dominating, pilot small in reflection
+  • RAIN-WET DEPLOYMENT-PAD — pilot crossing wet hangar floor at night toward backlit mech, reflections doubling the scale
+
+Each entry must:
+• Name the angle TYPE in first 6 words
+• Specify pilot position (foreground / on catwalk / on shoulder / under leg / inside cockpit)
+• Specify what mech-fragment dominates (leg / hand / shoulder / chest / full silhouette / cockpit-interior)
+• Reference the deployment-context (hangar / silo / launch-cradle / shuttle-bay / catwalk-network)`,
+    touchpoints: [
+      'WORM\'S-EYE UP THE LEG — camera flush against hangar-deck looking straight up the leg of a kneeling mech, pilot mid-climb on access ladder one-third up the leg, mech receding into impossible perspective overhead with deployment-rig framing the upper edges',
+      'PILOT IN MECH\'S OPEN PALM — mech kneeling in deployment-bay, holding the pilot in its open hand at eye-level, pilot small but clearly readable against the colossal palm, hangar-amber lighting from behind framing the moment, Iron Giant tenderness',
+      'PILOT ON SHOULDER VANTAGE — camera positioned on the mech\'s shoulder behind the pilot, pilot in foreground edge looking outward, vast deployment-bay opening up below them, gantry catwalks visible far below at multiple levels',
+      'GANTRY-CATWALK CROSS — pilot walking confidently across catwalk that crosses the deployment-bay at mid-chest height of the mech, the mech filling 70% of the frame as wall of chassis with seam-glow, catwalk receding behind',
+      'DEEP-HANGAR WIDE-SHOT — pilot small in foreground walking toward the hero mech that fills the deep tunnel-of-mechs flanking left and right, hangar lights receding into vanishing point, the hero mech amber-backlit at the end',
+      'COCKPIT-INTERIOR POV — over-pilot\'s-shoulder at multi-screen HUD displays bathed in cyan/amber, canopy showing the world beyond, instrument-glow reflected on the pilot\'s helmet visor, control-stick foreground',
+      'PILOT MID-LEAP TOWARD HATCH — pilot frozen mid-jump suspended between catwalk and open cockpit hatch, mech-chest filling background, hatch-glow framing the landing zone, hands outstretched',
+      'ASYMMETRIC 1-TO-50 TWO-SHOT — pilot bottom-left of frame at full body height, mech filling the rest of the frame towering upward and out of frame, scale-ratio approximately 1:50 immediately legible',
+      'MECH KNEELING FOR BOARDING — mech in subordinate boarding stance with one knee on the deck, pilot ascending the leg-step toward the open chest cockpit, deployment-bay framing left/right, amber emergency lighting',
+      'SHUTTLE-EXIT TOWARD MECH — pilot stepping out of drop-shuttle silhouetted in the shuttle-doorway-glow, walking toward the waiting mech in the deployment-bay, shuttle-engine-amber backlight, mech-blue-eye-glow ahead',
+      'PILOT REPAIR ON SHOULDER PLATFORM — pilot on suspended maintenance-platform working at the mech\'s shoulder-seam with sparks flying, hangar gantry receding behind them at multiple levels, sodium-amber industrial light',
+      'PILOT RUNNING TOWARD COLLAPSED MECH — rescue moment, fallen damaged mech smoking in mid-distance, pilot mid-stride sprinting toward it through debris and smoke, dawn-cold-blue light, urgency reading in the figure',
+      'UNDER-THE-FOOT EMERGENCY — pilot directly beneath as mech\'s foot descends OR lifts above them, blast doors opening in the ceiling overhead, pilot looking up shielding face, dust kicked up',
+      'CRANE-DEPLOYMENT GANTRY — mech being lowered by overhead deployment-crane into launch-position, pilot at the control panel in the foreground operating it, gantry receding overhead with hydraulic struts, cyan operational-lights',
+      'VERTICAL CRADLE-IN-FRAME — mech locked in vertical launch cradle filling the frame, pilot ascending the side-walkway toward the cockpit, silo-walls receding upward and downward, alert-strobes pulsing red',
+      'THROUGH-HATCH WIDE-LOOKOUT — camera positioned at the open cockpit hatch looking outward, pilot\'s gloved hand on the rim of the hatch in foreground, vast hangar-deck beyond with multiple mechs in different states',
+      'PILOT WALKING AWAY POST-LAUNCH — pilot small in the foreground walking away from a just-deployed mech that\'s already rising on launch-thrust, smoke and steam billowing, sunset light raking across',
+      'TWO-PILOTS BRIEFING ON DECK — two pilots in the foreground exchanging hand-gestures, mech being prepped in midground by maintenance crew, deployment-deck below visible through gantry-grating, industrial light',
+      'PILOT REFLECTED IN MECH CHEST-PLATE — pilot\'s reflection visible in the polished mech-chassis surface, mech-fragment dominating the frame, pilot reading small in the reflection, hangar-amber backlight',
+      'RAIN-WET DEPLOYMENT-PAD NIGHT — pilot crossing wet hangar floor at night toward backlit mech, neon-amber and emergency-red reflections doubling on the puddles, scale-ratio massive, atmospheric haze',
+    ],
+    instructions: `Each entry is ONE specific pilot+mech scale-relationship camera angle, 25-50 words. Format: "ANGLE NAME CAPS — camera position + pilot position + dominant mech-fragment + deployment context". Always make the scale-gap legible. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── mecha-pilots path: lighting (hangar / silo / dawn-deployment) ───
+  mecha_pilots_lighting: {
+    format: 'simple',
+    theme: `MECHA-DEPLOYMENT LIGHTING for the mecha-pilots path. Each entry is ONE specific lighting setup for hangar / launch-silo / deployment-bay / shuttle-interior / dawn-deployment / repair-deck. Each entry 20-40 words.
+
+⚠️ STRICT BAN — NO "volumetric haze / generic atmospheric fog" as PRIMARY. NO cosmic/astronomy vocabulary (wrong fit for industrial mecha-deployment scenes). NO daylight-resort lighting.
+
+✓ MANDATORY VARIETY — distribute across:
+  A. **HANGAR-AMBER SODIUM** (~20%): warm orange industrial floodlight wash, hard yellow shadows, after-image of cooler distant cyan accents
+  B. **EMERGENCY-RED STROBE** (~15%): pulsing red emergency-strobes across the scene, hard shadow contrast pulsing in rhythm, urgency reading
+  C. **DAWN-DEPLOYMENT DUAL-COLOR** (~15%): cold pre-sunrise blue + first warm orange touching upper mech-surfaces, dramatic dual-color contrast
+  D. **LAUNCH-SILO PULSING-ORANGE** (~10%): rotating amber alert-strobes inside a vertical silo, walls catching warm-pulse rhythm, lower shadow zones cold
+  E. **NIGHT WITH MECH-RUNNING-LIGHTS** (~10%): cold cobalt ambient + the mech\'s own chassis running-lights and cockpit-interior glow providing primary illumination
+  F. **NEON-CYBERPUNK URBAN HANGAR** (~10%): magenta + cyan sign-lights bleeding into open hangar, wet floor reflecting, dramatic uplight on mech underside
+  G. **DUSK FIRE-GLOW POST-COMBAT** (~5%): warm fire-glow from burning installation uplighting the mech and pilot, atmospheric haze, end-of-mission mood
+  H. **OVERCAST DEPLOYMENT-FIELD** (~5%): diffuse soft light, low contrast, mechs lined up in formation reading in muted tones
+  I. **HARD KEY-LIGHT INSPECTION** (~5%): single intense spotlight on the mech for inspection, pilot in shadow, harsh shadow boundaries
+  J. **RAIN-WET NIGHT PAD** (~5%): cold night ambient with rain backlighting from a single source, wet hangar-deck reflections, atmospheric drama`,
+    touchpoints: [
+      'HANGAR-AMBER SODIUM WASH — warm orange industrial floodlight wash from elevated mast positions, hard yellow shadows cast across the deployment-bay floor, distant cyan accent-lights from control-panel banks providing cool-warm contrast',
+      'EMERGENCY-RED STROBE PULSING — emergency-red rotating beacons across the scene pulsing in rhythm, hard shadow contrast pulsing with them, urgency reading immediate, the mech briefly silhouetted in alert-red between flashes',
+      'DAWN-DEPLOYMENT DUAL-COLOR — pre-sunrise cold blue base ambient with first warm orange touching only the upper surfaces of the mech, dual-color contrast, deep blue shadow in the lower frame, every chassis-detail readable',
+      'LAUNCH-SILO PULSING-ORANGE — rotating amber alert-strobes inside the vertical launch silo, silo walls catching the warm-pulse rhythm in concentric ring-patterns, lower shadow zones cold cobalt, vertical drama',
+      'NIGHT MECH-RUNNING-LIGHTS — cold cobalt-moonlight ambient base, the mech\'s own chassis running-lights and cockpit-interior glow providing primary illumination, hull self-lit in amber/cyan against deep sky',
+      'NEON-CYBERPUNK URBAN HANGAR — magenta and cyan sign-lights bleeding into the open hangar from the city outside, wet floor reflecting the colors in puddles, dramatic uplight on the mech\'s underside',
+      'DUSK FIRE-GLOW POST-COMBAT — warm fire-glow from a burning installation uplighting the mech and pilot from below, atmospheric haze backlit by distant flames, end-of-mission mood weight in the air',
+      'OVERCAST DEPLOYMENT-FIELD — uniform blanket-cloud diffuse light, low contrast, mechs lined up in formation reading in muted tones, ground bouncing fill-light upward into chassis shadows',
+      'HARD KEY-LIGHT INSPECTION — single intense spotlight on the mech for pre-launch inspection, pilot reading in deep shadow at the mech\'s feet, harsh shadow boundaries, theatrical drama',
+      'RAIN-WET NIGHT PAD — cold night ambient with rain backlighting from a single elevated source, wet hangar-deck reflections doubling the figures, atmospheric drama, droplets catching specular',
+      'SUNRISE-OVER-DEPLOYMENT-FIELD — pink-purple gradient sky with the sun cresting the horizon, mech silhouetted edge-lit gold against the rising sun, pilot small in deep foreground shadow, hopeful operational mood',
+      'BLAST-DOORS-OPENING LIGHT-FLOOD — beam of bright outside light flooding through opening blast doors into the dim deployment-bay, mech and pilot silhouetted against the rectangle of escaping light, dramatic key-source',
+      'COCKPIT-INTERIOR HUD GLOW — cyan and amber multi-screen HUD displays providing primary illumination, pilot\'s face lit cool from below, instrument-glow reflected on visor, tactile and intimate',
+      'SHUTTLE-INTERIOR DEPLOYMENT-BAY — rotating warning-yellow lights inside a drop-shuttle bay, mech locked in cradle, pilot at the door framed by amber strobe, industrial drop-mission lighting',
+      'WINTER-DAWN ARCTIC DEPLOYMENT — cold blue-white arctic dawn with snow accumulating on chassis, mech reading in cool tones, pilot in heavy gear small in foreground, breath visible',
+    ],
+    instructions: `Each entry is ONE specific mecha-deployment lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + deployment context]". STRICT industrial/hangar/silo/deployment context — NO cosmic, NO daylight-resort. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── mecha-pilots path: drama (40%-gated deployment phenomena) ───
+  mecha_pilots_drama: {
+    format: 'simple',
+    theme: `40%-GATED ENVIRONMENTAL DRAMA for the mecha-pilots path — a hangar/deployment/launch event that amplifies the boarding-or-deployment moment. Each entry 25-50 words.
+
+⚠️ STRICT — each phenomenon must amplify the SCALE/DRAMA of the pilot+mech boarding/deployment moment. NO active battlefield combat (that's titan-war territory). NO industrial mining work (industrial-machines).
+
+✓ DEPLOYMENT/HANGAR PHENOMENA — distribute across:
+  • EMERGENCY-LAUNCH STROBES PULSING across the deployment-bay
+  • BLAST-DOORS-OPENING with outside light flooding in
+  • GANTRY-CRANE LOWERING the mech into launch-position overhead
+  • COOLANT-VAPOR BILLOWING from the mech\'s cooling vents
+  • PRE-LAUNCH IGNITION-FLARE building at the mech\'s feet
+  • HYDRAULIC-RAM LOCKS RELEASING in sequence with steam-jets
+  • WEAPON-MOUNT CHARGING-GLOW building visibly along the mech\'s armaments
+  • COCKPIT-HATCH SEALING with mechanical pneumatic-hiss
+  • SHUTTLE-DROP DEPLOYMENT VECTOR opening below the pilot
+  • RAIN POURING THROUGH OPEN BLAST-DOORS onto the deck
+  • SUNRISE CRESTING horizon framing the deployment-pad
+  • GROUND-CREW SCATTERING from the impending launch
+  • TARGETING-RETICLE BLOOMING across the cockpit canopy as systems come online
+  • CRADLE-RELEASE LATCHES SNAPPING OPEN in launch-sequence
+  • DROP-POD ATMOSPHERIC-ENTRY visible through observation port
+  • DISTANT-ALERT-LIGHTS PULSING across the deployment-deck horizon
+  • CRACKED-GLASS-VIEWING-PANEL with weather behind it
+  • COMM-TOWER FAR-DISTANT BEACON pulsing on the deployment-field horizon
+  • REFUELING-UMBILICAL DETACHING with vapor-spray
+  • TARP-SHEET BLOWING AWAY revealing the mech beneath`,
+    touchpoints: [
+      'EMERGENCY-LAUNCH STROBES PULSING — rotating amber-and-red emergency strobes pulsing across the entire deployment-bay in rhythmic alert pattern, casting flickering shadows that pulse across the mech and pilot, urgency reading immediately',
+      'BLAST-DOORS-OPENING LIGHT-FLOOD — massive blast-doors at the deployment-bay ceiling parting in mid-motion, outside light flooding through the widening gap, mech and pilot silhouetted against the rectangle of escaping brightness',
+      'GANTRY-CRANE LOWERING MECH — overhead deployment-crane visibly lowering the mech into launch-position, hydraulic struts extended, the mech suspended mid-descent, gantry-cables tensioned, control-station active in foreground',
+      'COOLANT-VAPOR BILLOWING — pressurized coolant-vapor jetting from the mech\'s cooling-vents in volumetric plumes, partially obscuring the lower hemisphere of the mech in white mist, frozen-on-warm-metal aesthetic',
+      'PRE-LAUNCH IGNITION-FLARE — bright white-orange ignition flare building visibly at the mech\'s feet, sparks raining outward, the surrounding deck briefly lit hot-white from below, the launch sequence beginning',
+      'HYDRAULIC-LOCKS RELEASING — sequence of hydraulic-ram locks releasing along the mech\'s launch-cradle with audible-implied pneumatic-hiss and steam-jets, the mech preparing to detach, each lock-release flashing briefly',
+      'WEAPON-MOUNT CHARGING-GLOW — visible energy-conduit glow building along the mech\'s primary weapon-mounts as systems come online, conduits illuminating sequentially, the mech\'s power-up cycle visible',
+      'COCKPIT-HATCH SEALING — the open cockpit hatch in mid-motion of sealing closed mechanically, pneumatic-actuator visible, the pilot just-locked-in moment, the seal beginning around the perimeter',
+      'SHUTTLE-DROP DEPLOYMENT VECTOR — drop-shuttle\'s deployment-vector opening as a rectangular hole in the floor below the pilot, mech visible in the cradle below ready to drop, wind-rush implied',
+      'RAIN POURING THROUGH OPEN BLAST-DOORS — heavy rain pouring through the open ceiling blast-doors onto the deployment-deck, puddles forming on the metal floor, the pilot and mech soaked, atmospheric drama',
+      'SUNRISE CRESTING HORIZON — sun cresting the horizon of the deployment-field visible through open hangar doors, pink-purple gradient sky, the mech edge-lit gold against the rising sun, hopeful operational mood',
+      'GROUND-CREW SCATTERING — ground-crew figures scattering away from the impending launch in foreground, hand-signals visible, the urgency reading in their motion, leaving the mech and pilot alone in the cradle',
+      'TARGETING-RETICLE BLOOMING — multiple targeting-reticles blooming across the cockpit canopy in sequence as systems come online, amber reticle-glow reflecting on pilot\'s visor, the targeting-lock cascade beginning',
+      'CRADLE-RELEASE LATCHES — sequence of cradle-release latches snapping open along the mech\'s launch-cradle, each latch sparking briefly as it releases, the mech beginning to free of its restraints',
+      'DROP-POD ATMOSPHERIC-ENTRY — atmospheric-entry burn visible through an observation port, white-hot leading edge crossing the upper view, the pilot watching their imminent drop-mission begin',
+      'DISTANT-ALERT-LIGHTS PULSING — chain of distant alert-lights pulsing across the deployment-deck horizon in synchronized rhythm, multiple deployment-bays activating in coordinated launch-sequence',
+      'CRACKED-GLASS VIEWING-PANEL — large viewing-panel with hairline-cracks across it providing the pilot\'s view of the world beyond, weather (storm / rain / dust) visible behind it, fractured-glass refractions',
+      'COMM-TOWER BEACON FAR-DISTANT — communication-tower beacon pulsing rhythmically on the far horizon of the deployment-field, contextualizing the wider operational network the deployment is part of',
+      'REFUELING-UMBILICAL DETACHING — refueling-umbilical detaching from the mech\'s side-port with vapor-spray and a brief flash of escaping coolant, the umbilical retracting toward its mount, the mech now free',
+      'TARP-SHEET BLOWING AWAY — protective tarp-sheet blowing away from the mech revealing the chassis beneath, wind-rush implied, the mech now exposed and ready for boarding, dramatic reveal moment',
+    ],
+    instructions: `Each entry is ONE specific deployment/hangar/launch environmental phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + deployment context". STRICT deployment/boarding context — NO active battlefield combat, NO industrial mining. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── mech-skyships path: composition (sky vertigo angles) ───
   mech_skyships_composition: {
     format: 'simple',

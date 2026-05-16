@@ -3075,6 +3075,85 @@ Open with the vertigo camera angle + the skyship + its action ("Over-the-wing-PO
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MECHBOT_MECHA_PILOTS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ HANGAR/DEPLOYMENT PHENOMENON — render this visibly in the scene ━━━
+${drama}
+
+This is an environmental event amplifying the pilot+mech moment (NOT eclipsing them — contextualizing the drama of boarding/launching/deploying).
+
+`
+      : '';
+
+    return `You are a sci-fi cinematographer writing a MECHA PILOT scene for MechBot — a pilot + their giant mech, with the SCALE RELATIONSHIP as the punchline. Hyper-real cinematic 3D / VFX-quality. Gundam / Evangelion / Pacific Rim drift-pod boarding / The Iron Giant / Titanfall pilot-jumping-into-mech.
+
+━━━ NON-NEGOTIABLE — PILOT VISIBLE & TINY ━━━
+The pilot MUST be visible in frame. The mech MUST be visible. Scale: the pilot is dwarfed by the machine — small enough to be a scale ruler. NEVER a portrait of the pilot filling the frame. NEVER mech-only with no pilot reference.
+
+━━━ PILOT BIOLOGY — ANYTHING GOES ━━━
+The seed specifies pilot biology (human / cyborg / alien / android / hybrid). Render whatever the seed says. NO defaulting to humanoid-male-pilot every time.
+
+━━━ NON-NEGOTIABLE — VERTIGO COMPOSITION ━━━
+${composition}
+
+The chosen vertigo angle DRIVES the framing — render it precisely as described. The composition makes the SCALE GAP between pilot and mech viscerally legible.
+
+━━━ EVERY-QUADRANT-STRIKING MANDATE — make it a movie-poster moment ━━━
+Every render must have:
+  1. **THE FRAME SHOWS 50-100% OF THE MECH'S FULL BODY** — NON-NEGOTIABLE. Head-to-foot silhouette (most renders), OR near-full body (e.g., feet to mid-chest with head implied just above frame). NEVER a fragment-only shot — NO leg-alone, NO hand-alone, NO shoulder-alone, NO chest-only, NO cockpit-interior wraparound. NEVER a wide-shot where the mech is a small mid-distance silhouette. NEVER a pilot-portrait with the mech absent or only suggested. The mech is the recognizable, full-body visual subject.
+  2. THE PILOT (tiny but clearly visible) at the chosen vertigo angle, anchoring the scale-reading — pilot reads as 1-5% of frame against the mech's full body
+  3. MULTI-TIER DEPTH — hangar / silo / deployment-bay / launch-cradle / shuttle-interior receding into deep distance with structural detail at every depth
+  4. SATURATED THEATRICAL LIGHTING — never bland office-fluorescent. Emergency-red strobe, dawn-deployment cold-blue + warm-orange dual-source, hangar-amber sodium, launch-silo pulsing-orange, deep-cobalt-night with warm engine-glow accents, etc.
+  5. ENVIRONMENTAL TEXTURE — pipes / cables / gantry-catwalks / hydraulic struts / chassis-seams / coolant-vapor / ladder-rungs / hatch-mechanisms — the world feels lived-in and functional
+
+THINK Gundam Wing hangar-deck boarding sequence / Evangelion entry-plug pilot drop / Pacific Rim Drift-pod climb / Titanfall titan-fall-and-board / The Iron Giant Hogarth-finds-the-giant key-art / Aliens Power Loader hangar reveal.
+
+━━━ PILOT + MECH (the seeded subject) ━━━
+${subject}
+
+━━━ THE ACTION (what the pilot is DOING in relation to the mech) ━━━
+${action}
+
+The pilot is mid-motion. The mech is part of the action — being climbed, ridden, occupied, repaired, deployed. NEVER a static portrait pose.
+
+━━━ SETTING ━━━
+${landscape}
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Layer the rolled lighting mode above with mech-specific accents — running-lights pulsing along the mech chassis, cockpit-interior glow spilling from open hatch, weapon-mount charging glow, hydraulic seams catching key-light.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ ABSOLUTE BANS ━━━
+- NO active battlefield with combat happening (titan-war-machines territory)
+- NO pilot-less mech alone (robot-moment territory)
+- NO squad of armored soldiers (power-armor-infantry territory)
+- NO pilot fused into the mech (cyborg-* territory) — pilot is SEPARATE, OPERATING the mech
+- NO mining / construction / industrial work (industrial-machines territory)
+- NO scrappy wasteland scavenger rig (post-apoc-rust-tech territory)
+- NO portrait-only pilot framing without mech reference
+
+━━━ STRUCTURE — write 100-130 words ━━━
+Open with the vertigo camera angle + pilot + mech context ("Worm's-eye-up-the-leg as a half-cyborg pilot in matte-black bodysuit grips the third rung of a 30-meter access ladder, blast doors groaning open above..."). Then weave in: setting with multi-tier depth, any deployment-phenomenon drama, lighting/atmosphere, palette and mood. Hyper-real cinematic 3D finish.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
