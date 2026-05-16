@@ -3706,6 +3706,75 @@ CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [st
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STEAMBOT_STEAMPUNK_SPECTACLE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, event, crowd_detail, surprise_element, escalation } = slots;
+
+    const escalationSection = escalation
+      ? `
+━━━ ESCALATION — render this dramatic intensification ━━━
+${escalation}
+
+A dramatic escalation of the event — render as a visible focal point amplifying the crowd's reaction. Adds heightened drama. NEVER mass violence, NEVER gore — atmospheric/mechanical/social drama only.
+
+`
+      : '';
+
+    return `You are a cinematic concept-painter writing a STEAMPUNK SPECTACLE scene for SteamBot — a grand Victorian-industrial event / ceremony / festival / performance / uprising with crowd energy and drama. The EVENT is the subject. Wide cinematic establishing shot or dramatic crowd-level angle. Prestige feature-film concept-render polish.
+
+━━━ THE EVENT IS THE SUBJECT — NON-NEGOTIABLE ━━━
+The event commands the frame. NEVER a single hero figure. The crowd, the spectacle, the moment — all of it together is the subject. Tiny figures against massive machinery, packed balconies, sea of top-hats and goggles, multi-tier spectators.
+
+━━━ THE EVENT (the moment captured) ━━━
+${event}
+
+Render the event with OBSESSIVE Victorian-industrial detail and depth-on-depth — FOREGROUND figures (a few prominent characters in the closest tier) → MIDGROUND the event-action and its main participants → DEEP DISTANCE wider crowd extending into atmospheric haze. The event feels MASSIVE and ALIVE.
+
+━━━ CROWD DETAIL — the human-energy texture ━━━
+${crowd_detail}
+
+Render the crowd as a textured living mass — specific clothing details visible (top-hats / corsets / brass-goggles / waistcoats / parasols / military uniforms / labor-aprons / urchin caps). Mixed Victorian society — the crowd composition tells the story.
+
+━━━ SURPRISE ELEMENT — secondary detail adding story ━━━
+${surprise_element}
+
+Place at midground or deep distance — a small detail amplifying the moment (press photographer crouched, distant airship hovering to witness, signal beacon, escaped automaton, vendor cart at frame edge). NEVER eclipsing the event.
+${escalationSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OBSESSIVE STEAMPUNK CRAFTSMANSHIP — NON-NEGOTIABLE ━━━
+Every gear, rivet, pipe, valve, pressure-gauge, polished-brass-surface, copper-patina-detail rendered with MAXIMUM detail. Warm brass + copper + bronze + oiled-wood DOMINANT palette. Surface density everywhere. NEVER sparse, NEVER minimal.
+
+━━━ COMPOSITION ━━━
+Wide cinematic establishing shot OR dramatic crowd-level angle. Multi-tier depth: FOREGROUND tactile crowd-detail → MIDGROUND event-action with main participants → DEEP DISTANCE wider crowd + atmospheric layers receding. NEVER tight close-up on one face. NEVER pulled-back to where the crowd becomes pinpricks. Sweet spot: spectacle reads with epic scope, individual figures readable as story-anchors.
+
+━━━ HARD BANS ━━━
+- NO single hero figure dominating (event is the subject — not a person)
+- NO modern objects (this is 1890s impossible-engineering)
+- NO mass violence / blood / gore — drama is mechanical / social / atmospheric
+- NO substituting your own descriptions for the pool entries — render what's locked
+- NO decorative cliché framing (gears/clocks pasted at the edges as decoration)
+
+━━━ STRUCTURE (write in this order) ━━━
+[OPENING: wide cinematic establishing-shot of THE EVENT], [the event-action with detailed unfolding], [the crowd detail texture], [surprise element at midground], [escalation if rolled], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens establish the EVENT as the subject. The crowd is the human texture. The atmosphere amplifies.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
   STEAMBOT_STEAMPUNK_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, character, landscape, surprise_element, event } = slots;
 
