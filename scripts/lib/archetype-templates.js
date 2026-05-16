@@ -4627,8 +4627,10 @@ The vegetation scaffolds the bloom hero — palms / banana / banyan / philodendr
 ${creatureSection}━━━ TROPICAL ATMOSPHERIC PERSPECTIVE ━━━
 Foreground saturated and crisp, midground progressively softening, deep distance hazed. The TYPE of atmospheric haze MATCHES the setting: jungle scenes have humid green mist with beaded condensation on broad leaves; beach/coast/lagoon scenes have warm salt-haze over open water + turquoise-blue depth-recession; waterfall scenes have spray-mist clouding the lower frame. NEVER dry / NEVER clear-air / NEVER alpine.
 
-━━━ WIDE CINEMATIC FRAMING — POSTER-GRADE ━━━
-Every render is a wide cinematic establishing shot. Pick ONE deliberate composition per render (vary across them — match the framing to whatever the setting slot describes):
+━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
+Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE the way a fine-art print or magazine cover does. NEVER a flat eye-level center-of-frame snapshot. The viewer should GASP / stop mid-scroll / want to save the image / want to print and frame it.
+
+Pick ONE deliberate framing mode per render (vary across them — match the framing to whatever the setting slot describes):
   A. **PALM-FRINGED BEACH WIDE** — palm-fringed white-sand beach in golden-hour light with bloom-laden coastal vegetation at one frame edge, turquoise water filling the open frame, distant island silhouette
   B. **LAGOON-EDGE REFLECTION** — turquoise lagoon foreground with bloom-laden inner shore reflecting in the still water, distant coastal cliff or atoll edge in soft salt-haze
   C. **WATERFALL-PLUNGE-POOL** — tropical waterfall plunging into a bloom-ringed pool, bloom-laden mossy boulders at viewer level, spray-mist rising
@@ -4642,7 +4644,15 @@ Every render is a wide cinematic establishing shot. Pick ONE deliberate composit
   K. **TIDE-POOL EDGE** — tropical tide-pool foreground with reflected sky, bloom-clusters massing at the rock-edge behind, ocean horizon line in distance
   L. **COVE OVERLOOK** — overlook of a hidden tropical cove ringed by bloom-cliffs, turquoise water below, palms at the rim
 
-Every quadrant earns its space. THINK Hawaiian / Tahitian / Bali / Maldivian paradise photography + Avatar Way-of-Water + Planet Earth tropical-coast scenes + Endless Summer cinematography (without surfers) + Princess Mononoke ocean + Roger Deakins tropical wides.
+DELIBERATE COMPOSITION CRAFT:
+- Rule-of-thirds: hero element at a rule-of-thirds intersection, not centered (unless intentional symmetry like a path leading dead-center)
+- Lead-lines: path / stream / palm-trunk / wave-line / vine-curtain pulling the eye INTO the deep frame
+- Multi-tier depth: tactile foreground detail (bloom cluster / wet sand / petal-strewn path / dew-beaded leaf) → midground scene → deep distance hazed
+- Intentional negative space: one quadrant has bokeh-quiet / salt-haze / sky-glow breathing room as counterweight to the bloom-dense quadrant
+- Light hierarchy: warm hero blooms in golden / amber / rim light, cooler ambient / blue shadow in the deep distance
+- Depth recession: foreground saturated and crisp, midground softening, deep distance progressively hazed
+
+THINK Hawaiian / Tahitian / Bali / Maldivian / Polynesian fine-art tropical photography + Avatar Way-of-Water establishing shots + Planet Earth tropical-coast slow-zoom-out + Endless Summer cinematography (without surfers) + Princess Mononoke ocean + Roger Deakins tropical wides + National Geographic cover shots + travel-magazine fine-art prints. Every render = the COVER SHOT, not a snapshot. The kind of image someone would print poster-size and hang on a wall.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
