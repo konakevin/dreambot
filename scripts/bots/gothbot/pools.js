@@ -152,6 +152,9 @@ module.exports = {
   // Combat path pools (added 2026-05-08).
   COMBAT_FOE: load('combat_foe'),
   COMBAT_MOMENT: load('combat_moment'),
+  // Vampire-vs-vampire duel pools (added 2026-05-16) — humanoid-only foe.
+  VAMPIRE_FOE: loadOptional('vampire_foe'),
+  VAMPIRE_DUEL_MOMENT: loadOptional('vampire_duel_moment'),
   // Monster-prowl path pools (added 2026-05-08).
   CREATURE_ARCHETYPE: load('creature_archetype'),
   CREATURE_WILD_ACTION: load('creature_wild_action'),

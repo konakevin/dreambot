@@ -80,6 +80,16 @@ const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ HAUNTINGLY BEAUTIFUL — WALL-POSTER 
 
 Every render is HAUNTINGLY BEAUTIFUL — gorgeous in its darkness, gorgeous in its terror, gorgeous in its corruption. Dark-manga-horror-game-cover quality. The kind of illustration that would sell a PS2-era Castlevania game, a Devil-May-Cry manga volume, or a WoW-undead-warlock class-art-poster. Stylized, inked, high-contrast, dramatic. Wall-poster worthy. Every render reads "hauntingly beautiful — I need this on my wall." Beauty + dread + allure are inseparable. Never just-dark, never just-pretty — always HAUNTINGLY BEAUTIFUL.`;
 
+const NO_FLOATING_BLOCK = `━━━ FEET ON THE GROUND — NO FLOATING / NO LEVITATING ━━━
+
+The character is PLANTED in the world. Both feet (or one foot if mid-step) are firmly on a solid surface — cobblestones, gravestones, flagstones, dirt path, balcony rail, cathedral roof, courtyard tiles, fortress wall, cliff edge — with VISIBLE GROUND CONTACT and body weight transferred into the surface. Stance reads grounded: heel-toe pressure, slight knee-bend, leather boot pressed into the earth, dust or fog disturbed at the heel.
+
+ABSOLUTELY BANNED: weightless-levitation pose, character drifting an inch off the ground for no reason, ghost-legs trailing into mist with no feet visible, character hovering with no clear ground contact, dangling-feet, magic-carpet-stance, no-ground-anchor, feet cut-off-by-fog-that-erases-the-floor, weightless-T-pose-mid-air.
+
+UNLESS the action EXPLICITLY calls for mid-air (mid-leap from a roof, mid-pounce from a balcony, mid-flight on visible wings, mid-aerial-strike) — and even then, render a CLEAR PHYSICAL CAUSE: the gravestone they pushed off, the wall they kicked off from, the open wings carrying them, the edge they just leapt from — so the viewer sees the takeoff point and reads it as motion, not levitation.
+
+Cast a VISIBLE SHADOW on the ground beneath the character's feet. Show ground-debris (dust, ash, fog-mist, snow, ember-sparks) reacting to body weight. The character has MASS and gravity in this world.`;
+
 const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — GO TO 11 ━━━
 
 This bot is Castlevania + Devil-May-Cry + Berserk + vampire-goth-manga-horror + WoW-undead-warlock art on STEROIDS. 11/10 stylized dark-manga-horror scenes. Stack hard: dynamic pose + twilight color + moonlight or occult-glow + heavy-ink shadow + sharp-angular baroque detail + mist-or-fog-or-smoke + crimson or fel-green or violet accents + velvet-leather-lace-iron textures + architectural grandeur or blood-moon landscape. The stylized-manga-horror aesthetic is the CANVAS, not the ceiling. Amp every element to 11. Make the viewer stop scrolling.`;
@@ -111,6 +121,7 @@ module.exports = {
   CINEMATIC_COMPOSITION_BLOCK,
   SOLO_COMPOSITION_BLOCK,
   IMPOSSIBLE_BEAUTY_BLOCK,
+  NO_FLOATING_BLOCK,
   BLOW_IT_UP_BLOCK,
   PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY,
   PAINTED_GOTHIC_FANTASY_MEDIUM,

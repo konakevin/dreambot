@@ -179,6 +179,8 @@ ${blocks.NO_CHEAP_GORE_BLOCK}
 
 ${blocks.NO_SATANIC_BLOCK}
 
+${blocks.NO_FLOATING_BLOCK}
+
 ━━━ LIGHTING ━━━
 ${lighting}
 

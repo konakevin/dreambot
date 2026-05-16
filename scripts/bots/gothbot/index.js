@@ -45,36 +45,34 @@ module.exports = {
   allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
 
   // Per-path model override — takes precedence over pickModel (medium pool).
-  // Every path locked to a specific model — no path falls through to the
-  // medium-level allowed_models picker. Default is flux-1.1-pro-ultra for
-  // every path (Kevin's call 2026-05-09: more native detail on the
-  // anime+gothic combo than 1.1-pro standard).
+  // Every path locked to flux-1.1-pro (Kevin's call 2026-05-16: PNG output
+  // solved the resolution issue that originally drove the move to ultra, and
+  // pro handles multi-subject combat scenes better than ultra — ultra
+  // collapses two-subject prompts to single dominant subject).
   //
   // KNOWN RISK: vampire-girls-2 was previously locked to flux-dev because
-  // 1.1-pro's E005 safety filter tripped on its dark vampire imagery.
-  // Ultra shares the same filter pipeline, so this path may fail until
-  // the seeds are tuned. If renders fail, fall this single path back to
-  // flux-dev — keep the rest on Ultra.
+  // 1.1-pro's E005 safety filter tripped on its dark vampire imagery. If
+  // any path renders fail on E005, fall that single path back to flux-dev.
   modelByPath: {
     // Scene / landscape / architecture paths
-    'dark-landscape': 'black-forest-labs/flux-1.1-pro-ultra',
-    'gothic-architecture': 'black-forest-labs/flux-1.1-pro-ultra',
-    'castlevania-scene': 'black-forest-labs/flux-1.1-pro-ultra',
-    'cozy-goth': 'black-forest-labs/flux-1.1-pro-ultra',
-    'gothic-vista': 'black-forest-labs/flux-1.1-pro-ultra',
-    'horror-creature': 'black-forest-labs/flux-1.1-pro-ultra',
+    'dark-landscape': 'black-forest-labs/flux-1.1-pro',
+    'gothic-architecture': 'black-forest-labs/flux-1.1-pro',
+    'castlevania-scene': 'black-forest-labs/flux-1.1-pro',
+    'cozy-goth': 'black-forest-labs/flux-1.1-pro',
+    'gothic-vista': 'black-forest-labs/flux-1.1-pro',
+    'horror-creature': 'black-forest-labs/flux-1.1-pro',
     // Character paths
     'goth-closeup': 'black-forest-labs/flux-1.1-pro',
-    'goth-full-body': 'black-forest-labs/flux-1.1-pro-ultra',
+    'goth-full-body': 'black-forest-labs/flux-1.1-pro',
     'goth-male-closeup': 'black-forest-labs/flux-1.1-pro',
-    'goth-male-full-body': 'black-forest-labs/flux-1.1-pro-ultra',
+    'goth-male-full-body': 'black-forest-labs/flux-1.1-pro',
     // Vampire paths
     'vampire-girls-2': 'black-forest-labs/flux-1.1-pro',
-    'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro-ultra',
-    'vampire-from-a-distance': 'black-forest-labs/flux-1.1-pro-ultra',
-    'vampire-assassin-male': 'black-forest-labs/flux-1.1-pro-ultra',
-    'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro-ultra',
-    'monster-prowl': 'black-forest-labs/flux-1.1-pro-ultra',
+    'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro',
+    'vampire-from-a-distance': 'black-forest-labs/flux-1.1-pro',
+    'vampire-assassin-male': 'black-forest-labs/flux-1.1-pro',
+    'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro',
+    'monster-prowl': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Per-path vibe restriction — vampire-girls-2 only renders well with
