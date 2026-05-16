@@ -23,6 +23,7 @@ const pathBuilders = {
   'vampire-girls-2': require('./paths/vampire-girls-2'),
   'gothic-vista': require('./paths/gothic-vista'),
   'vampire-assassin-female': require('./paths/vampire-assassin-female'),
+  'vampire-from-a-distance': require('./paths/vampire-from-a-distance'),
   'vampire-assassin-male': require('./paths/vampire-assassin-male'),
   'vampire-assassin-combat': require('./paths/vampire-assassin-combat'),
   'monster-prowl': require('./paths/monster-prowl'),
@@ -70,6 +71,7 @@ module.exports = {
     // Vampire paths
     'vampire-girls-2': 'black-forest-labs/flux-1.1-pro',
     'vampire-assassin-female': 'black-forest-labs/flux-1.1-pro-ultra',
+    'vampire-from-a-distance': 'black-forest-labs/flux-1.1-pro-ultra',
     'vampire-assassin-male': 'black-forest-labs/flux-1.1-pro-ultra',
     'vampire-assassin-combat': 'black-forest-labs/flux-1.1-pro-ultra',
     'monster-prowl': 'black-forest-labs/flux-1.1-pro-ultra',
@@ -94,6 +96,7 @@ module.exports = {
     'horror-creature': ['dark', 'nightshade', 'macabre'],
     // Vampire-assassin paths locked to the dark triad.
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
+    'vampire-from-a-distance': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-male': ['dark', 'nightshade', 'macabre'],
     'vampire-assassin-combat': ['dark', 'nightshade', 'macabre'],
     'monster-prowl': ['dark', 'nightshade', 'macabre'],
@@ -115,6 +118,7 @@ module.exports = {
     'horror-creature': 'anime',
     // Vampire-assassin paths locked to anime medium for the trial.
     'vampire-assassin-female': 'anime',
+    'vampire-from-a-distance': 'anime',
     'vampire-assassin-male': 'anime',
     'vampire-assassin-combat': 'anime',
     'monster-prowl': 'anime',
@@ -333,6 +337,7 @@ module.exports = {
     'vampire-girls-2',
     'gothic-vista',
     'vampire-assassin-female',
+    'vampire-from-a-distance',
     'vampire-assassin-male',
     'vampire-assassin-combat',
     'monster-prowl',
