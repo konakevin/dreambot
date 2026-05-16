@@ -33,6 +33,8 @@ const VIBE_COLOR = {
 module.exports = {
   STEAMPUNK_CHARACTERS: load('steampunk_characters'),
   STEAMPUNK_LANDSCAPES: load('steampunk_landscapes'),
+  STEAMPUNK_SCENE_SURPRISE_ELEMENT: load('steampunk_scene_surprise_element'),
+  STEAMPUNK_SCENE_EVENT: load('steampunk_scene_event'),
   AIRSHIP_SCENES: load('airship_scenes'),
   AIRSHIP_SKY_LAYER: load('steampunk_airship_sky_layer'),
   AIRSHIP_SURPRISE_ELEMENT: load('steampunk_airship_surprise_element'),
