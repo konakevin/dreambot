@@ -3715,10 +3715,78 @@ CRITICAL — the OPENING tokens are "[ethnicity-coded man] [DOING ACTION] in [st
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+  STEAMBOT_STEAM_TRANSPORT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, transport, terrain_drama, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render this visibly in the scene ━━━
+${phenomenon}
+
+A dramatic atmospheric event amplifying the journey — render as a visible focal point charging the scene. Heightens the "impossible geography" mandate.
+
+`
+      : '';
+
+    return `You are a cinematic concept-painter writing a STEAM TRANSPORT scene for SteamBot — a Victorian-industrial vehicle conquering DRAMATIC TERRAIN. Locomotives, submarines, walking-machines, paddleboats, steam-carriages, mine-cages, clockwork-creatures-as-transport. The machine + the landscape create the drama TOGETHER. The frame should make the viewer feel the SCALE and AUDACITY of crossing impossible geography. Mortal-Engines / Snowpiercer / 20,000-Leagues / Wild-Wild-West-loco / Howl's-Moving-Castle / Ghibli-train-from-Spirited-Away visual lineage.
+
+━━━ VEHICLE IS FOCAL — TERRAIN IS THE STAGE ━━━
+The vehicle is the central subject, but the landscape is what makes it dramatic. NEVER a vehicle on flat boring track. ALWAYS the vehicle in a setting that AMPLIFIES — canyon bridge in a storm, mountain pass with avalanche, deep-sea trench with bioluminescent creatures, desert dune-field at sunset, ice-shelf with calving icebergs, jungle valley with vine-covered ruins, sky-rail across a chasm.
+
+━━━ THE TRANSPORT SCENE (vehicle + immediate setting) ━━━
+${transport}
+
+Render the vehicle with OBSESSIVE Victorian-industrial detail — every rivet, every steam-vent, every brass pipe, every weathered plate. The vehicle's MATERIALITY is the signature.
+
+━━━ TERRAIN DRAMA — the geography that makes the scene epic ━━━
+${terrain_drama}
+
+Render the terrain DRAMATICALLY with depth-on-depth — FOREGROUND tactile detail (rail-tie / hull-plate / vehicle-edge near camera) → MIDGROUND the vehicle traversing the dramatic geography → DEEP DISTANCE the impossible landscape stretching beyond. The terrain dwarfs and amplifies the vehicle simultaneously.
+
+━━━ SURPRISE ELEMENT — secondary detail adding story ━━━
+${surprise_element}
+
+Place at midground or deep distance — a small detail implying the wider world (distant signal-tower, second vehicle on parallel track, scattered crew on observation deck, mechanical wildlife). NEVER eclipsing the hero vehicle.
+${phenomenonSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ OBSESSIVE STEAMPUNK CRAFTSMANSHIP — NON-NEGOTIABLE ━━━
+Every gear, rivet, pipe, valve, pressure-gauge, polished-brass-surface, copper-patina-detail rendered with MAXIMUM detail. Warm brass + copper + bronze + oiled-wood DOMINANT palette. Steam trails, smoke plumes, headlamp beams cutting through weather. NEVER sparse, NEVER minimal.
+
+━━━ COMPOSITION ━━━
+Wide cinematic establishing-shot. Vehicle at 25-50% of frame as the focal subject. Multi-tier depth — FOREGROUND tactile (rail / hull / track-edge) → MIDGROUND the vehicle traversing the terrain → DEEP DISTANCE the impossible landscape with atmospheric layers. Show SCALE — the machine vs the landscape. Steam trails / smoke plumes / headlamp beams / wake-spray cut through the air. Three-quarter angle preferred so the vehicle's silhouette reads.
+
+━━━ HARD BANS ━━━
+- NO vehicle on flat boring track / NO vehicle in empty space — terrain MUST amplify drama
+- NO primary human figure (tiny crew silhouettes OK as scale-provers)
+- NO modern vehicles (this is 1890s impossible-engineering)
+- NO decorative cliché framing (gears/clocks pasted at the edges)
+- NO substituting your own descriptions for the pool entries — render what's locked
+
+━━━ STRUCTURE (write in this order) ━━━
+[OPENING: wide cinematic shot of the VEHICLE conquering the dramatic terrain — vehicle + terrain in one image], [the vehicle's Victorian-industrial detail], [the terrain drama amplifying the journey], [surprise element at midground], [phenomenon if rolled], [lighting + atmosphere], [color palette + mood]
+
+CRITICAL — the OPENING tokens establish VEHICLE + DRAMATIC TERRAIN as the subject. The machine and the landscape together make the frame epic.
+
+Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
 
   STEAMBOT_STEAMPUNK_SPECTACLE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, event, crowd_detail, surprise_element, beauty_accent, escalation } = slots;
-    const beautyAccents = Array.isArray(beauty_accent) ? beauty_accent : [beauty_accent];
+    const { lighting, atmosphere, event, crowd_detail, surprise_element, escalation } = slots;
 
     const escalationSection = escalation
       ? `
@@ -3749,16 +3817,6 @@ Render the crowd as a textured living mass — specific clothing details visible
 ${surprise_element}
 
 Place at midground or deep distance — a small detail amplifying the moment (press photographer crouched, distant airship hovering to witness, signal beacon, escaped automaton, vendor cart at frame edge). NEVER eclipsing the event.
-
-━━━ DREAMLIKE BEAUTY ACCENTS — render ALL THREE in the scene ━━━
-- ${beautyAccents[0] || ''}
-- ${beautyAccents[1] || ''}
-- ${beautyAccents[2] || ''}
-
-These are BEAUTY-AMPLIFIERS that lift the scene into dreamlike-pretty register. Flower arrangements / god-light shafts / prismatic-glass color / pearl-strung tier ornaments / cascading petals / jewel-tone draperies / hanging garden bowers. Every one MUST be visible in the frame. They turn an event-scene into a "deep-breath, just admire" moment.
-
-━━━ SATURATED + VIVID DREAM-QUALITY MANDATE ━━━
-This render must read as a DREAM of a steampunk event — not a documentary. Colors are SATURATED + JEWEL-TONED + VIVID. Light is OPULENT and CINEMATIC, not flat or grey. God-light shafts pour through high glass. Color rims everything. Atmosphere has just-the-right haze. The viewer should sigh at how pretty it is. NEVER muddy, NEVER washed-out, NEVER grimy-grey realism. ALWAYS opulent jewel-tone dream-state.
 ${escalationSection}
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -3795,6 +3853,7 @@ CRITICAL — the OPENING tokens establish the EVENT as the subject. The crowd is
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
 
   STEAMBOT_STEAMPUNK_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, character, landscape, surprise_element, event } = slots;

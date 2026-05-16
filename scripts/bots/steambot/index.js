@@ -155,7 +155,7 @@ module.exports = {
     // was stripping skin/eyes/makeup/hair DNA, leaving only the ethnicity
     // noun. Single-pass Sonnet preserves the full DNA stack. Per playbook
     // 2026-05-15 lesson: two-pass polish OFF for all new-axis paths.
-    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle'],
+    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport'],
     polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [

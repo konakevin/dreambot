@@ -691,14 +691,28 @@ const ARCHETYPES = {
 
   STEAMBOT_STEAMPUNK_SPECTACLE: {
     description:
-      'PATH-BESPOKE — SteamBot steampunk-spectacle path (2026-05-15 migration + dream-beauty pass). GRAND EVENTS / CEREMONIES / FESTIVALS / PERFORMANCES / UPRISINGS in Victorian-industrial worlds with DREAMLIKE BEAUTY register — ornate flower arrangements, god-light shafts, saturated jewel-tone colors, the kind of pretty that makes you breathe deep. CROWD-driven scenes — tiny figures against massive machinery, packed balconies, sea of top-hats and goggles. THE EVENT IS THE SUBJECT. Wide cinematic establishing shots or dramatic crowd-level angles. 4 path-bespoke axes (event / crowd_detail / surprise_element / beauty_accent pickN:3) + 1 conditional 40%-gated (escalation) + universal lighting + atmosphere.',
+      'PATH-BESPOKE — SteamBot steampunk-spectacle path (2026-05-15 migration). GRAND EVENTS / CEREMONIES / FESTIVALS / PERFORMANCES / UPRISINGS in Victorian-industrial worlds. CROWD-driven scenes — tiny figures against massive machinery, packed balconies, sea of top-hats and goggles. THE EVENT IS THE SUBJECT — never a single person. Wide cinematic establishing shots or dramatic crowd-level angles. 3 path-bespoke axes (event / crowd_detail / surprise_element) + 1 conditional 40%-gated (escalation) + universal lighting + atmosphere. Reuses production-scale 199-entry SPECTACLE_EVENTS pool.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['event', 'crowd_detail', 'surprise_element', 'beauty_accent'],
+      path: ['event', 'crowd_detail', 'surprise_element'],
     },
-    pickN: { beauty_accent: 3 },
+    pickN: {},
     conditionalLayer: { slot: 'escalation', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_STEAM_TRANSPORT: {
+    description:
+      'PATH-BESPOKE — SteamBot steam-transport path (2026-05-15 migration). Non-airship Victorian-industrial vehicles (locomotives / submarines / walking-machines / paddleboats / steam-carriages / mine-cages / clockwork-creatures-as-transport) in DRAMATIC TERRAIN. The vehicle and the landscape create the drama TOGETHER — a train is boring on flat track, epic crossing a canyon bridge in a storm. SHOW THE MACHINE CONQUERING IMPOSSIBLE GEOGRAPHY. 3 path-bespoke axes (transport / terrain_drama / surprise_element) + 1 conditional 50%-gated (phenomenon) + universal lighting + atmosphere. Reuses production-scale 200-entry TRANSPORT_SCENES pool.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['transport', 'terrain_drama', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.5 },
     framingModes: null,
     anchorScaleRange: null,
   },
