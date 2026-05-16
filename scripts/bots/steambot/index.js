@@ -52,6 +52,17 @@ const STEAMBOT_PAINTED_WOMAN_STYLE =
 const STEAMBOT_PAINTED_MAN_STYLE =
   'oil-painted illustration on canvas, visible painterly brushwork and brush texture, traditional painted character illustration in the style of Frazetta and Brom and Boris Vallejo painted-fantasy-cover heroes, lush saturated jewel-toned oil pigment, dramatic cinematic lighting with golden-hour rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT art-nouveau decorative border';
 
+// Bespoke medium for cozy-steampunk path — same lush painted-illustration
+// register as the painted-woman medium, but tuned for INTERIORS not
+// female-figure-on-cover. Swaps the Frazetta/Brom/Vallejo lineage (which
+// bakes in pin-up/cheesecake bias) for painters with the same opulent
+// painted-fantasy atmosphere on INTERIORS / WORLDS: Maxfield Parrish
+// (golden atmospheric), James Gurney Dinotopia (lush painted worldbuilding
+// of fantasy interiors and architecture), James Christensen (ornate
+// intricate fantasy detail), N.C. Wyeth (classic illustration depth).
+const STEAMBOT_PAINTED_INTERIOR_STYLE =
+  'oil-painted illustration on canvas, visible painterly brushwork and brush texture, lush painted-interior illustration in the style of Maxfield Parrish (golden atmospheric beauty) and James Gurney Dinotopia (lush painted worldbuilding) and James Christensen (ornate intricate fantasy detail) and N.C. Wyeth (classic illustration depth), saturated jewel-toned oil pigment, dramatic cinematic lighting with directional rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT a pin-up cover, NOT a cheesecake-cover heroine';
+
 module.exports = {
   username: 'steambot',
   displayName: 'SteamBot',
@@ -82,28 +93,27 @@ module.exports = {
   mediumByPath: {
     'sexy-steampunk-woman': 'steambot-painted-woman',
     'steampunk-man': 'steambot-painted-man',
-    // Cozy-steampunk reuses the painted-woman medium — same oil-painted-
-    // illustration register fits the dreamy ethereal cozy-room intent
-    // better than the hyperreal CG default. Medium content is gender-
-    // neutral (just describes the painterly register).
-    'cozy-steampunk': 'steambot-painted-woman',
+    'cozy-steampunk': 'steambot-painted-interior',
   },
 
   mediumStyles: {
     'steambot-hyperreal': STEAMBOT_HYPERREAL_STYLE,
     'steambot-painted-woman': STEAMBOT_PAINTED_WOMAN_STYLE,
     'steambot-painted-man': STEAMBOT_PAINTED_MAN_STYLE,
+    'steambot-painted-interior': STEAMBOT_PAINTED_INTERIOR_STYLE,
   },
 
   promptPrefixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_PREFIX,
     'steambot-painted-woman': blocks.PROMPT_PREFIX,
     'steambot-painted-man': blocks.PROMPT_PREFIX,
+    'steambot-painted-interior': blocks.PROMPT_PREFIX,
   },
   promptSuffixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_SUFFIX,
     'steambot-painted-woman': blocks.PROMPT_SUFFIX,
     'steambot-painted-man': blocks.PROMPT_SUFFIX,
+    'steambot-painted-interior': blocks.PROMPT_SUFFIX,
   },
 
   // Single-vibe lock for scene paths. Female path overrides with vibesByPath.
