@@ -1,14 +1,26 @@
 /**
- * BloomBot tropical-paradise — dense rainforest/jungle understory or canopy.
- * Locked to the TROPICAL species roster.
+ * BloomBot tropical-paradise — declarative axis-system form (2026-05-16 migration).
+ *
+ * DENSE TROPICAL JUNGLE FLORAL SCENE. Region locked to "tropical" in
+ * BloomBot.rollSharedDNA (path-conditional). Wide cinematic depth-recession
+ * with humid atmospheric perspective. Massive showy tropical flowers
+ * (torch ginger / heliconia / plumeria / jade vine / orchid / bird-of-
+ * paradise) at jungle scale.
+ *
+ * Legacy compositional version preserved at paths/legacy/tropical-paradise.js.
+ *
+ * Axes (2 path-bespoke + 60%-gated creature):
+ *   - tropical_setting (200): the specific tropical biome
+ *   - vegetation_anchor (150): the jungle scaffolding (palms / banyan /
+ *     banana / philodendron / ferns)
+ *   - surprise_creature (50, 60%-gated): tropical wildlife at peripheral scale
  */
-const compose = require('../compose');
 
-const SCENE = `A TROPICAL JUNGLE FLORAL SCENE — dense rainforest understory or canopy. Pick one specific setting: rainforest understory with shafts of light cutting through the canopy, jungle pool surrounded by hanging vines and giant leaves, volcanic-island cliff above turquoise lagoon, banyan tree clearing with strangler-fig roots, mangrove tidal swamp with floating blooms, cloud-forest waterfall with mossy boulders, banana-grove path with broad green leaves arching overhead.
-
-The setting is identifiably tropical — palms, banana leaves, philodendron, banyan roots, ferns, moss, humid atmospheric haze. The flowers are MASSIVE and SHOWY — torch ginger, heliconia, plumeria, jade vine cascades, cattleya orchids — at jungle scale.
-
-Wide cinematic shot showing depth — humid atmospheric perspective receding into hazy green distance, foreground saturated and crisp, middle and far layers progressively misted.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker, regionKey: 'tropical' });
+module.exports = {
+  archetype: 'BLOOMBOT_TROPICAL_PARADISE',
+  pools: {
+    tropical_setting: 'BLOOMBOT_TROPICAL_PARADISE_TROPICAL_SETTING',
+    vegetation_anchor: 'BLOOMBOT_TROPICAL_PARADISE_VEGETATION_ANCHOR',
+    surprise_creature: 'BLOOMBOT_TROPICAL_PARADISE_SURPRISE_CREATURE',
+  },
+};

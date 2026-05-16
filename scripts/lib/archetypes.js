@@ -800,6 +800,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_TROPICAL_PARADISE: {
+    description:
+      'PATH-BESPOKE — BloomBot tropical-paradise path (2026-05-16 migration). DENSE TROPICAL JUNGLE FLORAL SCENE. Region locked to "tropical" via BloomBot.rollSharedDNA. Wide cinematic shot showing depth + humid atmospheric perspective. MASSIVE showy tropical flowers (torch ginger / heliconia / plumeria / jade vine / cattleya orchid / bird-of-paradise) at jungle scale. Identifiably tropical vegetation scaffolding (palms / banana / banyan / philodendron / fern). 3 path-bespoke axes (tropical_setting / vegetation_anchor / surprise_creature 60%-gated). Palette + lighting + tropical roster via sharedDNA. 85-115 words.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['tropical_setting', 'vegetation_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'surprise_creature', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

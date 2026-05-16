@@ -34,6 +34,10 @@ module.exports = {
   BLOOMBOT_CLOSEUP_BLOOM_WALL_TYPE: loadIfExists('bloombot_closeup_bloom_wall_type'),
   BLOOMBOT_CLOSEUP_GROWING_CONTEXT: loadIfExists('bloombot_closeup_growing_context'),
   BLOOMBOT_CLOSEUP_MACRO_PHENOMENON: loadIfExists('bloombot_closeup_macro_phenomenon'),
+  // ─── tropical-paradise path: declarative axis-system pools (2026-05-16 migration) ───
+  BLOOMBOT_TROPICAL_PARADISE_TROPICAL_SETTING: loadIfExists('bloombot_tropical_paradise_tropical_setting'),
+  BLOOMBOT_TROPICAL_PARADISE_VEGETATION_ANCHOR: loadIfExists('bloombot_tropical_paradise_vegetation_anchor'),
+  BLOOMBOT_TROPICAL_PARADISE_SURPRISE_CREATURE: loadIfExists('bloombot_tropical_paradise_surprise_creature'),
   SENSORY_POOLS: {
     scene: {
       lightcolor: load('sensory_lightcolor'),

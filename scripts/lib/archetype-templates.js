@@ -4461,6 +4461,93 @@ CRITICAL — establish POSTER-COMPOSITION + HERO + SUPPORTING CAST. NEVER "a bou
 
 Output ONLY 85-115 words. Comma-separated. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
+
+  // BloomBot tropical-paradise — DENSE TROPICAL JUNGLE FLORAL SCENE.
+  // Wide cinematic depth-recession, humid atmospheric perspective, massive
+  // showy tropical flowers (torch ginger / heliconia / plumeria / jade vine
+  // / orchid / bird-of-paradise) at jungle scale. Region locked to tropical
+  // via BloomBot.rollSharedDNA. 2026-05-16 R1.
+  BLOOMBOT_TROPICAL_PARADISE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { tropical_setting, vegetation_anchor, surprise_creature } = slots;
+
+    const creatureSection = surprise_creature
+      ? `
+━━━ SURPRISE CREATURE — render at peripheral scale ━━━
+${surprise_creature}
+
+The creature is SMALL relative to the scene — never the primary subject. Place at midground or deep distance as a scale-prover / second-look reward.
+
+`
+      : '';
+
+    return `You are a fine-art tropical landscape painter writing JUNGLE-SCENE descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
+NO humans, NO figures, NO silhouettes, NO shadows of people, NO travelers, NO explorers. The jungle is the subject. (Small wildlife — toucan / butterfly / poison-frog / monkey / iguana — only when the surprise_creature slot calls for it.)
+
+━━━ TROPICAL PARADISE — NON-NEGOTIABLE ━━━
+This is a TROPICAL PARADISE scene — beach + lagoon + coastal cove + waterfall pool + atoll + rainforest + cloud-forest are ALL valid registers. RENDER WHATEVER THE SETTING SLOT BELOW NAMES — if the setting is a palm-fringed white-sand beach, that's the scene; if it's a turquoise lagoon, that's the scene; if it's a rainforest understory, that's the scene. The setting is identifiably tropical — palms / coconut grove / hibiscus / plumeria / frangipani / banana / banyan / heliconia / sea-grass / mangrove / ferns / moss / vines, plus open water / coastal sand / atoll edge when called for. Wide cinematic shot showing DEPTH: foreground saturated and crisp, midground softening, deep distance hazed (humid jungle haze OR salt-haze over open water OR mist around waterfalls). This is NEVER a temperate meadow, NEVER an alpine landscape, NEVER a desert, NEVER an urban scene.
+
+━━━ MASSIVE SHOWY TROPICAL FLOWERS — THE HERO ━━━
+The flowers are MASSIVE and SHOWY at tropical-paradise scale — torch ginger, heliconia, plumeria, jade vine cascades, cattleya orchid, bird-of-paradise (strelitzia), passion-flower, anthurium, hibiscus, frangipani, ylang-ylang, bougainvillea, plumeria cascade, lotus, water-lily. Use the roster's named species — never generic "tropical flowers". The blooms dominate the foreground at saturated, vivid scale; supporting blooms thread through the vegetation behind or carpet the coastal sand or ring the lagoon edge.
+
+━━━ THE TROPICAL SETTING (the biome canvas) ━━━
+${tropical_setting}
+
+━━━ THE VEGETATION ANCHOR (the paradise scaffolding) ━━━
+${vegetation_anchor}
+
+The vegetation scaffolds the bloom hero — palms / banana / banyan / philodendron / ferns / vines / hibiscus / plumeria / sea-grape / mangrove — never replacing the blooms as the subject, but giving the paradise its identifiable structure.
+${creatureSection}━━━ TROPICAL ATMOSPHERIC PERSPECTIVE ━━━
+Foreground saturated and crisp, midground progressively softening, deep distance hazed. The TYPE of atmospheric haze MATCHES the setting: jungle scenes have humid green mist with beaded condensation on broad leaves; beach/coast/lagoon scenes have warm salt-haze over open water + turquoise-blue depth-recession; waterfall scenes have spray-mist clouding the lower frame. NEVER dry / NEVER clear-air / NEVER alpine.
+
+━━━ WIDE CINEMATIC FRAMING — POSTER-GRADE ━━━
+Every render is a wide cinematic establishing shot. Pick ONE deliberate composition per render (vary across them — match the framing to whatever the setting slot describes):
+  A. **PALM-FRINGED BEACH WIDE** — palm-fringed white-sand beach in golden-hour light with bloom-laden coastal vegetation at one frame edge, turquoise water filling the open frame, distant island silhouette
+  B. **LAGOON-EDGE REFLECTION** — turquoise lagoon foreground with bloom-laden inner shore reflecting in the still water, distant coastal cliff or atoll edge in soft salt-haze
+  C. **WATERFALL-PLUNGE-POOL** — tropical waterfall plunging into a bloom-ringed pool, bloom-laden mossy boulders at viewer level, spray-mist rising
+  D. **CANOPY-LIGHT SHAFTS** — vertical sun-shafts cutting through rainforest canopy onto specific bloom patches below
+  E. **POOL-EDGE REFLECTION** — jungle pool or stream foreground reflecting bloom-laden canopy above
+  F. **THROUGH-THE-VINE-CURTAIN** — natural archway from hanging vines and lianas framing a clearing beyond
+  G. **BANYAN-ROOT TUNNEL** — banyan / strangler-fig root-curtain in foreground framing the deep scene beyond
+  H. **CLIFF-ABOVE-LAGOON** — volcanic-island cliff descending to turquoise water below, bloom-laden cliff-edge
+  I. **MANGROVE-TIDAL** — mangrove tidal-swamp with floating blooms and stilt-roots
+  J. **BROAD-LEAF-OVERHEAD** — broad banana / heliconia / philodendron leaves arching overhead, bloom-floor below
+  K. **TIDE-POOL EDGE** — tropical tide-pool foreground with reflected sky, bloom-clusters massing at the rock-edge behind, ocean horizon line in distance
+  L. **COVE OVERLOOK** — overlook of a hidden tropical cove ringed by bloom-cliffs, turquoise water below, palms at the rim
+
+Every quadrant earns its space. THINK Hawaiian / Tahitian / Bali / Maldivian paradise photography + Avatar Way-of-Water + Planet Earth tropical-coast scenes + Endless Summer cinematography (without surfers) + Princess Mononoke ocean + Roger Deakins tropical wides.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+Render the palette EXACTLY as named — those are the only colors in the scene. The deep-green humid tropical ambient is the foundation; the named bloom colors overlay.
+
+━━━ FLOWER SPECIES — STRICT TROPICAL ROSTER ━━━
+${sharedDNA.roster}
+
+Use the actual species names. Pick 3-4 species that fit the palette — ONE as HERO at MASSIVE jungle scale, the others as SUPPORTING CAST threading through the vegetation. Mass them at the palette's named colors.
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ DEFAULTS TO RESIST ━━━
+- Do NOT default to pink / rose / blush as the dominant palette unless the palette names it.
+- Do NOT default to "soft pastels" / "cottagecore" / "english garden" — this is JUNGLE.
+- Do NOT show people, hands, figures, silhouettes.
+- Do NOT use temperate / alpine / desert / arctic vocabulary.
+- Do NOT skip the humid-haze depth recession — it's the tropical signature.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[wide cinematic framing mode (canopy-shafts / pool-reflection / vine-archway / banyan-tunnel / cliff-lagoon / waterfall / mangrove / broad-leaf-overhead)], [the tropical setting + vegetation anchor establishing the dense jungle], [3-4 named tropical species in the palette colors with HERO + SUPPORTING distribution], [humid atmospheric perspective with foreground saturated and deep distance hazed]${surprise_creature ? ', [surprise creature at peripheral scale]' : ''}, [lighting bringing the canopy + bloom-mass to life]
+
+CRITICAL — every render reads as TROPICAL JUNGLE — palms / banana / banyan / ferns visible, humid haze depth-recession, massive showy named tropical blooms. NEVER temperate, NEVER alpine, NEVER desert.
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the framing + setting.`;
+  },
 };
 
 module.exports = TEMPLATES;
