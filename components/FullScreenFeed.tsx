@@ -98,7 +98,12 @@ export function FullScreenFeed({
   const insets = useSafeAreaInsets();
   const internalRef = useRef<FlatList>(null);
   const ref = listRef ?? internalRef;
-  const currentIndex = useRef(0);
+  // Seed with initialIndex so the post-interaction re-snap below doesn't yank
+  // to index 0 on first mount when image-cache cold delays onViewableItemsChanged
+  // past the navigation transition. Bug: tapping a non-first album tile loaded
+  // the latest post on the first navigation; subsequent navigations worked because
+  // image cache was warm and the viewability event fired in time.
+  const currentIndex = useRef(initialIndex);
   const impressionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
