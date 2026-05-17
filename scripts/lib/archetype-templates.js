@@ -3567,8 +3567,25 @@ Every render must include AT LEAST 3 of these "sci-fi spice" elements (the thing
 ━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
 Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical), real lips, expressive features. NO helmet, NO visor, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly.
 
-━━━ MACHINE DEEPLY EMBEDDED INTO HER FACE (mandatory — the true-hybrid look) ━━━
-The face must read as a TRUE FUSION of flesh and machine — not just one little integration on an otherwise organic face. Embed mechanical structures DEEPLY into the face. Pick 2-3 DIFFERENT face/head integrations per render from this menu (vary across renders — no single integration should dominate the look across the batch):
+━━━ EXPOSED INNER WORKINGS — THE CORE OF THE LOOK (non-negotiable, applies head-to-toe) ━━━
+This is the heart of the cyborg-woman aesthetic: VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — exposed through translucent skin / open chassis panels / cracked seams / lifted plates ACROSS multiple body parts. The viewer should be able to SEE INSIDE her at multiple locations on her body — head, face, neck, shoulder, arm, hand, chest, stomach, hip. Each visible inner-workings location should expose something different: rotating servo gears in one spot, glowing circuit-trace pattern in another, capacitor banks behind a translucent panel in another, a cable-bundle exiting a chassis seam in another.
+
+REQUIRED per render — describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct body locations from this list:
+  • FACE — subdermal circuitry / translucent jaw panel / mechanical iris ring / chrome temple seam / etc. (face exposure is MANDATORY — see next section)
+  • HEAD — translucent crown panel / exposed cranial mechanism / temple-disc / wire-bundle exit at the nape
+  • NECK — translucent throat-channel / vertebrae chrome plates / exposed neck cable-bundles / clavicle-port array
+  • SHOULDER — open shoulder-mount with visible servo-mechanism / cable-bundle exits / mounting brackets
+  • ARM — translucent forearm panel revealing fiber-optic cables / hydraulic-fluid / servo-pistons / chrome bicep chassis with exposed cable
+  • HAND — mechanical finger-joints with visible servo-mechanism / translucent palm panel
+  • CHEST — translucent sternum-panel revealing power-core / capacitor banks / hologram-projector pulsing
+  • STOMACH — translucent abdominal section revealing internal mechanism (synaptic mesh / capacitor banks / coolant fluid) glowing softly
+  • HIP — chrome hip-joint mechanism with exposed gimbal / gear-train / hydraulic system visible
+  • SPINE / BACK — visible spinal-segment chrome with glowing channels / exposed dorsal cable run
+
+These visible inner-workings are what make her CYBORG instead of "woman with chrome accents." The MORE locations show their inner workings, the stronger the cyborg-fusion read. The references (IMG_8122 / IMG_8204 / IMG_8835) all show 5+ visible inner-workings locations simultaneously.
+
+━━━ MACHINE DEEPLY EMBEDDED INTO HER FACE (mandatory — FACE always shows cyborg) ━━━
+The face MUST read as a TRUE FUSION of flesh and machine — not just one little integration on an otherwise organic face. Per Kevin: the face and head MUST show circuitry / cyborg integration in every render. Pick 2-3 DIFFERENT face/head integrations per render from this menu (vary across renders — no single integration should dominate the look across the batch):
   • CHEEKBONE-PLATE SEAMS — chrome plates running along the cheekbone with visible seam-lines
   • MECHANICAL BROW RIDGE — chrome supraorbital arc replacing one organic brow
   • PARTIAL CHROME JAW / MANDIBLE — half-jaw mechanical replacement with visible hinge
@@ -3581,11 +3598,10 @@ The face must read as a TRUE FUSION of flesh and machine — not just one little
   • EXPOSED CABLE-BUNDLES exiting the side of the neck into the cheek
   • SUBDERMAL CIRCUITRY across half the face — visible circuit-trace pattern under the skin
   • CHROME EYE-ARRAY — concentric mechanical iris with multiple lens-tiers
-  • ORNATE CONCENTRIC-RING TEMPLE GEAR-DISC — one signature option from the references: a mechanical disc-piece at the temple / ear with concentric glowing rings (use sparingly — one option among many, not the default)
-  • DUAL TEMPLE GEAR-DISCS — BOTH temples have separate mechanical pieces, often in DIFFERENT colors / patterns (e.g., purple mandala on one side + green concentric rings on the other). Striking when paired with bald-chrome-skull variant.
-  • MANDALA / SACRED-GEOMETRY TEMPLE PATTERN — flower-of-life / hexagonal-lattice / tribal-geometric / aztec-pattern glowing inside a chrome disc at the temple (alternative to plain concentric rings — more decorative, more ornate)
-  • HEADPHONE-STYLE EAR APPARATUS — chunky over-ear mechanical "headphone" covering the entire ear, large round chrome disc with central LED ring, distinct from a gear-disc (gear-disc is flat against the temple — headphones jut outward over the ear). Often paired with cable-bundles trailing back from the unit.
   • ORNATE GOLD / SILVER FACE FILIGREE — decorative metal scrollwork / tribal patterns / aztec-geometric across the brow / cheekbone / temple-line, sometimes with a single ornate forehead jewel
+
+OCCASIONAL flourish options (use SPARINGLY — 1-in-10 max each, NOT defaults — variety options only):
+  • Ornate concentric-ring temple gear-disc, dual temple gear-discs in different colors/patterns, mandala/sacred-geometry temple pattern, or chunky headphone-style ear apparatus. These appear in some hearted references but are NOT the central look. The core look is the multi-location EXPOSED INNER WORKINGS above — these temple flourishes are occasional spice, not the standard.
 Vary across renders — sometimes mechanical brow + jaw combo, sometimes a chrome cheek-plate + neural-jack array, sometimes subdermal circuitry across half the face + an eye-array, sometimes the gear-disc + a small sub-orbital sensor. Variety is the goal.
 
 NEVER render a fully organic 100%-flesh face on a cyborg body — that reads as "regular woman with mechanical limbs", not as cyborg. The face must signal cyborg as much as the body does.

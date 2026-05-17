@@ -27,7 +27,14 @@ const CYBORG_GLOW_COLORS = load('cyborg_glow_colors');
 // CYBORG-WOMAN POOLS
 // ─────────────────────────────────────────────────────────────
 
-const CYBORG_HAIR_STYLES = load('cyborg_female_hair');
+// CYBORG_HAIR_STYLES: 200 organic hair entries + 20 bald-chrome-skull variants
+// (2026-05-17). Bald variants mix in at ~10% rate when rolled. Per Kevin's
+// Attachments (5) IMG_8122 reference — bald chrome head is a striking
+// occasional alternative to hair, not a default.
+const CYBORG_HAIR_STYLES = [
+  ...load('cyborg_female_hair'),
+  ...load('cyborg_bald_chrome_skull'),
+];
 const CYBORG_BODY_TYPES = load('cyborg_female_body_types');
 
 // ─────────────────────────────────────────────────────────────
@@ -65,7 +72,11 @@ module.exports = {
   CYBORG_EYE_STYLES,
   CYBORG_INTERNAL_EXPOSURE,
   CYBORG_GLOW_COLORS,
-  CYBORG_FEATURES: load('cyborg_features'),
+  // CYBORG_FEATURES: 200 body-distributed entries + 40 head/temple variant entries
+  // (2026-05-17). Head variants (dual gear-discs / mandala / headphone / wired-up /
+  // face filigree) mix in at ~15% rate when rolled. Per Kevin's Attachments (5)
+  // references — head/temple mechanisms are variety options, not the default.
+  CYBORG_FEATURES: [...load('cyborg_features'), ...load('cyborg_head_variants')],
   CYBORG_CLOSEUP_FRAMINGS: load('cyborg_closeup_framings'),
   // Cyborg-woman pools
   CYBORG_HAIR_STYLES,

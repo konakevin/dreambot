@@ -1801,6 +1801,77 @@ The opening of each entry: NEVER start with "Chest-up shot..." or "Waist-up fram
     ],
     instructions: `Each entry is ONE specific cyborg-woman MID-BODY framing, 20-35 words. Write each as a FULL DESCRIPTIVE SENTENCE describing what dominates the frame + which body parts are visible + which cyborg mechanisms are showcased. VARIETY MANDATE — vary opening words (sometimes subject-first, sometimes environment-first, sometimes mechanism-first), body-part focus, environmental anchor, mood beat. Roughly 60% chest-up / 40% waist-up. Mix body parts focused on (shoulder-mount / clavicle-port / chest-core / sternum-panel / forearm-chassis / mechanical-hand / hip-joint / abdominal-panel / spine-channel / neck-fluid). Mix camera angles (front-on / three-quarter / side-profile / atmospheric-distant). Mix moods (contemplative / mid-action / stalking / mid-emerging). STRICT BAN on bikini-pose / pinup-arched-back / butt-shot / cleavage-focal / smooth-bodysuit-only / head-on-modeling framings. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ─── cyborg-woman path: HEAD VARIANTS (dual gear-discs / mandala / headphone / wired-up) — Attachments (5) DNA ───
+  cyborg_head_variants: {
+    format: 'simple',
+    theme: `HEAD/TEMPLE MECHANISM variants for a CYBORG WOMAN — dominant mechanical features positioned ON THE HEAD/TEMPLE/EAR area. Each entry 25-45 words. Inspired by Attachments (5) references (IMG_8122 / IMG_8124 / IMG_8179 / IMG_8204 / IMG_8835) — striking ornate temple/ear mechanisms that become the visual signature of the render.
+
+⚠️ THE BAR — every entry showcases a TEMPLE/EAR/HEAD mechanism with PRECISION DETAIL — visible mandala patterns, dual gear-discs in different colors, chunky headphone-style ear apparatus, wired-up glowing strand-bundles, ornate gold/silver face filigree. NOT generic "neural port" — these are MEMORABLE silhouettes.
+
+🚫 BANS:
+• NO full-body descriptions — these are HEAD/TEMPLE features
+• NO generic "chrome partial skull plate" without ornate pattern detail
+• NO bare-arms-only descriptions (this pool is HEAD-area)
+• NO weapons / armor / tactical-tech (this is ornate beautiful cyborg, not military)
+
+✓ ENTRY DISTRIBUTION (vary across):
+  • 25% DUAL TEMPLE GEAR-DISCS — BOTH temples have separate mechanical pieces in DIFFERENT colors / patterns
+  • 25% MANDALA / SACRED-GEOMETRY TEMPLE PATTERN — flower-of-life / hexagonal-lattice / tribal-geometric / aztec-pattern glowing in temple-disc
+  • 20% HEADPHONE-STYLE EAR APPARATUS — chunky over-ear mechanical headphone (NOT a thin temple gear-disc — large round chrome unit jutting outward over the ear)
+  • 15% WIRED-UP GLOW — exposed glowing wire-bundles trailing from nape / temple / behind the ear, draping over shoulders
+  • 15% ORNATE GOLD/SILVER FACE FILIGREE — decorative metal scrollwork / tribal patterns / aztec-geometric across brow / cheekbone, often with single ornate forehead jewel`,
+    touchpoints: [
+      'Dual temple gear-discs — purple sacred-geometry mandala glowing on left temple (12 concentric petal-rings) opposite a green concentric-aperture ring-array on right temple with rotating servo-cogs, polished chrome cranium between them, ornate dual-color signature',
+      'Massive HEADPHONE-style ear apparatus covering the entire right ear — large round chrome disc 8cm diameter with central glowing orange LED ring and three concentric outer rings, fiber-optic cable-bundles trailing back from the unit down the neck',
+      'Sacred mandala glowing in the right temple-disc — twelve-petal flower-of-life pattern in violet light, surrounding hexagonal lattice frame in chrome, sub-pattern of micro-LEDs pulsing slowly inside each petal',
+      'Wired-up exposed bundle of glowing fiber-optic filaments emerging from the nape of the neck and trailing forward over the right shoulder, the wires pulsing in her glow-color, framing the side of her face like luminous tresses',
+      'Ornate gold filigree scrollwork tracing across both eyebrows and cheekbones in tribal-aztec geometric pattern, single ornate forehead jewel embedded above the third-eye position, decorative metal patterns gleaming against organic skin',
+      'Dual gear-disc system — left temple a deep-pink concentric ring-array with rotating servos, right temple a cyan honeycomb-lattice pattern, the two patterns visually mirror-asymmetric, chrome skull plate visible across the top of the head',
+      'Cyan hexagonal-lattice mandala pattern glowing across the right temple-disc, the geometric grid extending into subdermal traces across the cheekbone, a small gold forehead pendant centered above the brow',
+      'Headphone-style ear unit — chunky over-ear chrome shell with a glowing pink central iris and four small rotating cogs visible at the edges, the unit jutting outward 3cm from the side of the head, distinct silhouette',
+      'Exposed wire-strand "hair" — twenty glowing fiber-optic filaments emerging from the scalp instead of (or alongside) organic hair, draped around the face like luminous tresses pulsing in her glow-color',
+      'Gold scrollwork ornate filigree across the forehead and brow ridge, a single emerald-cut jewel set in the center of the forehead, decorative metal tribal-geometric pattern extending down the cheekbone toward the jaw',
+      'Dual asymmetric temple pieces — left temple a rotating six-pointed star pattern in violet light, right temple a flat chrome panel inscribed with glowing micro-text in amber, polished cranium between them',
+      'Massive headphone apparatus over both ears connected by an arched chrome headband across the top of the cranium, central LED rings glowing in coordinating colors (left amber + right amber), cable-bundles trailing back to the shoulders',
+      'Flower-of-life sacred geometry mandala glowing in violet across the right temple-disc, the petals slowly rotating, surrounding chrome frame inscribed with ornate hexagonal lattice border',
+      'Cascade of glowing wire-bundles trailing from behind both ears down the neck and over the shoulders like a wire-mane, each wire pulsing in her glow-color, the strands floating slightly outward as if statically charged',
+      'Gold tribal-geometric face filigree across the forehead, both temples, and the cheekbones — intricate aztec-pattern scrollwork in polished gold against organic skin, with a single ornate jewel above the third-eye position',
+    ],
+    instructions: `Each entry is ONE specific HEAD/TEMPLE/EAR mechanism for a cyborg woman, 25-45 words. Write each as a FULL DESCRIPTIVE SENTENCE describing what the mechanism IS + where it's positioned + its visual signature. VARIETY MANDATE — distribute across the 5 categories (dual gear-discs / mandala / headphone / wired-up / face filigree). Vary colors (no all-purple, no all-cyan). Vary patterns (concentric rings, mandala, hexagonal lattice, flower-of-life, aztec-geometric, tribal-scrollwork). STRICT BAN on weapons / armor / tactical-tech / full-body descriptions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── cyborg-woman path: BALD CHROME SKULL hair variants (~15% of hair pool when this fires) ───
+  cyborg_bald_chrome_skull: {
+    format: 'simple',
+    theme: `BALD CHROME SKULL hair variants for a CYBORG WOMAN — replacing organic hair with a HAIRLESS CHROME CRANIUM PLATE. Each entry 15-25 words. Inspired by IMG_8122 reference — bald chrome head as a canvas for ornate temple mechanisms.
+
+⚠️ THE BAR — every entry describes a SHINY POLISHED CHROME (or related material) HAIRLESS CRANIUM with some surface detail. The bald head should feel STRIKING and OTHERWORLDLY, not stark or generic. Pairs with dual temple gear-discs or mandala temple patterns.
+
+🚫 BANS:
+• NO actual hair / no fuzz / no stubble
+• NO horns / no antlers
+• NO helmet / no visor (this is the CRANIUM itself, not headwear)
+
+✓ ENTRY DISTRIBUTION (vary across):
+  • 40% Smooth polished chrome cranium with subtle reflection
+  • 25% Chrome cranium with ornate geometric engraving (mandala / hexagonal / aztec / tribal)
+  • 20% Chrome cranium with embedded micro-LED inlay constellations
+  • 15% Chrome cranium with translucent crown sections revealing internal mechanism beneath`,
+    touchpoints: [
+      'Hairless polished chrome cranium plate, mirror-smooth surface reflecting the ambient light, no organic hair anywhere on the head',
+      'Bald chrome skull with subtle hexagonal-lattice engraving across the crown, micro-LED studs pulsing softly within the geometric pattern',
+      'Hairless cranium of brushed titanium with a single ornate gold scrollwork pattern circling the crown like a baroque crown-engraving',
+      'Polished bald chrome head with translucent crown section revealing the glowing internal capacitor-banks beneath the cranial plate',
+      'Smooth chrome cranium with a constellation of pinprick LED studs scattered across the surface, glowing softly in her glow-color',
+      'Hairless head of polished obsidian-black chrome with subtle aztec-geometric engraving across the back of the cranium',
+      'Bald chrome cranium with a single sacred-mandala pattern engraved across the crown in delicate filigree-line work',
+      'Smooth white-pearl ceramic hairless cranium with a thin spine-channel of glowing wire visible running from forehead to nape',
+      'Hairless chrome head with translucent acrylic panels at the top of the cranium revealing the rotating servo-mechanism beneath',
+      'Polished bald rose-gold cranium with tribal scrollwork engraving running from the forehead back to the nape',
+    ],
+    instructions: `Each entry is ONE specific BALD CHROME SKULL variant for a cyborg woman, 15-25 words. Write each as a FULL DESCRIPTIVE SENTENCE. VARIETY MANDATE — vary surface treatment (polished chrome / brushed titanium / obsidian-black / white-pearl / rose-gold), engraving pattern (none, hexagonal, mandala, aztec, tribal), micro-LED inlay (none, scattered, constellation, spine-channel). STRICT BAN on organic hair / fuzz / stubble / horns / helmet / visor. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];
