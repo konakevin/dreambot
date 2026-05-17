@@ -70,6 +70,43 @@ ABSOLUTELY BANNED:
 
 Output: ONE family-accent per line. No numbering. No quotes.`,
 
+  dinobot_herd_migration_surprise_element: `Generate SMALL HERD-ACCENT descriptions for DinoBot's herd-migration path. Each is ONE comma-separated line, 15-30 words, describing a small secondary accent in or around the colossal migrating herd — trailing juvenile / fallen tree the herd parts around / pterosaur flock above / dust-rising / mud-track-detail / atmospheric scale-prover.
+
+The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds depth and scale-prover energy to the migration scene.
+
+Variety mandate (rotate widely):
+- ~20% Trailing juvenile dinosaur at the herd's flank/rear (smaller-scale silhouette running to keep up)
+- ~15% Pterosaur flock circling above the herd (size-prover, marine-air contrast)
+- ~10% Dust-cloud or vapor-cloud rising from the herd's footfalls (massive-scale atmospheric)
+- ~10% Fallen mega-tree the herd is parting around / stepping over (epic-obstacle scale-prover)
+- ~10% Deep mud-print rim / three-clawed dinosaur tracks at foreground (anatomy-prover)
+- ~10% Herd-stragglers visible at far vanishing-point silhouette (depth-prover)
+- ~10% Foreground bone / fossil / weathered-trail-marker the herd passes over (deep-time)
+- ~5% Small pterosaur skimming low across the herd (action-scale-prover)
+- ~5% Atmospheric Meganeura or primordial insect-swarm (scale-prover small life)
+- ~5% Mother-dinosaur with juvenile-on-flank moment within the herd-mass (intimacy beat)
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant background)
+- ONE SPECIFIC DETAIL (mid-action / catching light / posture / scale-prover)
+
+GOOD examples:
+- A trailing juvenile Parasaurolophus at the herd's right flank, smaller-crest catching light, running to keep up with the adults ahead
+- A flock of twenty pterosaurs circling the herd above, vast wingspans casting brief shadows across the moving backs
+- A massive fallen Araucaria trunk in the midground foreground, the herd parting around it like water around a stone
+- Three-clawed dinosaur footprints in deep mud at foreground, each print holding a pool of rainwater catching the sky
+- Distant vanishing-point silhouettes of the herd-stragglers receding into the haze, scale-staggered
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no fences / no tools
+- NO modern mammals (no wildebeest / no bison / no elephants)
+- NO modern birds (pterosaurs OK)
+- NO combat / no kill-shot / no gore / no predator-attack-on-herd
+- NO duplicate-style entries
+
+Output: ONE herd-accent per line. No numbering. No quotes.`,
+
   dinobot_ocean_reptiles_ocean_scene: `Generate STRICT MESOZOIC OPEN-OCEAN scene descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 30-50 words, describing the OCEAN setting — open marine water, underwater, surface-break, deep-abyss, reef, continental-shelf.
 
 ⚠️ STRICT OCEAN IDENTITY — NEVER river / swamp / lake / mud-flat / pond / wetland. ALWAYS pelagic open-ocean / deep blue water / coral reef / underwater light-shafts / surface-break / storm-tossed waves. NO land visible primary (a distant land silhouette at deep horizon is OK at most).

@@ -6581,6 +6581,108 @@ DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a T
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+
+  DINOBOT_HERD_MIGRATION: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, herd_scene, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event elevating the scene — volcano at distance / storm-front / god-rays / mist-bank / pterosaur flock / dust-storm / etc.
+
+`
+      : '';
+
+    return `You are a BBC wildlife cinematographer writing COLOSSAL DINOSAUR HERD MIGRATION scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. BBC-Planet-Earth / Prehistoric-Planet / Walking-with-Dinosaurs / National-Geographic herd-on-the-move cinematography.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern zoo, NEVER as the African savanna, NEVER as Yellowstone, NEVER as modern wildebeest migration. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora at the edges. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — DINOSAUR HERD, NOT MAMMAL HERD ⚠️⚠️⚠️
+The silhouettes MUST read as DINOSAURS, not wildebeest or bison or zebra or any mammal. Use UNMISTAKABLE dinosaur silhouette cues throughout the herd:
+• LONG S-CURVE NECKS rising above the crowd like masts (sauropods)
+• DUCK-BILLED CRESTED HEADS bobbing in waves (hadrosaurs — Parasaurolophus / Edmontosaurus / Corythosaurus)
+• HORNED FRILLS catching light from above (ceratopsians — Triceratops / Styracosaurus / Centrosaurus)
+• PLATE-ROWS UNDULATING across backs (stegosaurs)
+• SPIKE-TAILS visible above the mass (ankylosaurs)
+• THREE-CLAWED FOOTPRINTS visible in mud-prints
+
+If the herd silhouettes look like wildebeest / bison / zebra, the render has FAILED. The dinosaur identity MUST be unmistakable from silhouette alone.
+
+━━━ THE SCENE — HERO DINOSAURS + COLOSSAL HERD + MESOZOIC LANDSCAPE ━━━
+Composition:
+• HERO FOREGROUND DINOSAURS (35-55% of frame): 1-3 anatomically detailed dinosaurs leading or pausing in front, photoreal wildlife photography quality
+• MASSIVE HERD (50-200 animals): supporting backdrop behind/around the heroes, scale-staggered from midground mass to vanishing-point silhouettes through atmospheric haze
+• MESOZOIC LANDSCAPE (the stage): alien-Mesozoic biome — sauropod-trampled mud-plains / cycad savanna / volcanic floodplain / cretaceous prairie / wet alluvial fan / etc.
+
+⚠️ COMPOSITIONAL RULES:
+• HERO + HERD framing — eye lands first on the foreground hero dinosaur, then reads the massive herd as supporting context
+• NEVER a wide pure-herd shot with no clear foreground hero (renders as wildebeest)
+• NEVER "thousands" — say "hundred-strong herd" or "vast herd" (50-200 range)
+• Silhouettes in the herd MUST scream DINOSAUR (neck/frill/crest/plate/spike cues — explicit in the prompt)
+• Mid-movement — never posed, never frontal-facing-camera
+• Documentary framing — wide / mid (NEVER tight close-up)
+• Atmospheric haze pulls the deep distance into pale color
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals (no wildebeest / no bison / no zebra / no elephants — the silhouettes are DINOSAURS)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass-prairie of modern type)
+🚫 NO modern birds (pterosaurs OK)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO combat / no kill-shot / no gore / no fallen-juvenile / no predator-attack
+🚫 NO close-up portrait of single dinosaur head (the herd is the subject)
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / BBC Planet Earth / Prehistoric Planet visual lineage
+
+━━━ THE HERD SCENE (focal subject — hero dinosaurs leading colossal herd) ━━━
+${herd_scene}
+
+This is the FOCAL SCENE. Hero foreground dinosaurs (35-55% of frame) anchor the eye; the massive herd extends behind them into atmospheric haze. Mid-movement. Recognizable dinosaur silhouettes throughout.
+
+━━━ THE MESOZOIC BIOME (alien primordial landscape) ━━━
+${biome}
+
+The biome is the stage for the migration. Alien-Mesozoic — sauropod-trampled mud-plains / cycad savanna / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
+${phenomenonSection}━━━ SECONDARY ACCENT (small herd-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric herd-detail — trailing juvenile / fallen tree the herd parts around / pterosaur flock above / dust-cloud rising / mud-print rim / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC HERD ON THE MOVE ━━━
+Wildlife-documentary cinematic framing of a colossal Mesozoic dinosaur herd in mid-migration. Hero foreground dinosaurs (35-55% frame) + massive 50-200 strong herd behind them. Alien-Mesozoic biome around them. Atmospheric haze into pale distance.
+
+━━━ STRUCTURE (write the prompt in this order — HERO DINOSAURS + DINOSAUR HERD first) ━━━
+[OPENING: explicitly name the HERO foreground dinosaur(s) by species (e.g. "a Parasaurolophus matriarch and two flanking adults at the head of a hundred-strong herd of Parasaurolophus..." / "a lone Triceratops bull pausing while his hundred-strong herd of Triceratops thunders past..." / "a sauropod adult with S-curve neck above a 150-strong herd of long-necked Brachiosaurus") — hero(es) + species-named herd + biome setting in the FIRST 30-40 words], [the herd's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small herd-accent — trailing juvenile / pterosaurs above / dust-cloud / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly name the species (sauropod / hadrosaur / ceratopsian / etc.) AND count the herd ("hundred-strong" / "vast herd of 100+" / "150-strong") so Flux locks on the dinosaur identity and scale.
+
+⚠️ FAILURE CONDITION: if the rendered image shows wildebeest-shaped silhouettes or any mammalian herd, the render has FAILED. Dinosaur identity must be unmistakable from silhouette throughout.
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a COLOSSAL DINOSAUR HERD on the move (50-200 strong) led by 1-3 hero foreground dinosaurs, in an alien-Mesozoic biome, with atmospheric haze into pale distance. National-Geographic real, never cartoon, never staged, never modern-mammalian.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
 };
 
 module.exports = TEMPLATES;
