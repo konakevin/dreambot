@@ -33,6 +33,146 @@ if (!POOL) {
 const OUT = path.resolve(__dirname, 'bots/dinobot/seeds', `${POOL}.json`);
 
 const RECIPES = {
+  dinobot_swamp_river_water_scene: `Generate MESOZOIC SWAMP / RIVER / WATERWAY scene descriptions for DinoBot's swamp-river path. Each is ONE comma-separated line, 30-50 words, describing the WATER-CENTRIC prehistoric setting — the swamp, river, marshland, mud-flat, or aquatic-edge that anchors the scene.
+
+⚠️ WATER IS THE SETTING — every entry features water prominently: tannin-dark rivers, foggy swamps, lily-pad marshes, muddy banks, mangrove-like primordial roots in water, fern-edged riverbanks, mist over the water surface, reflective stillness.
+
+⚠️ STRICT MESOZOIC IDENTITY — NEVER read as modern wetland marsh / Atlantic coastal / English bog / Pacific-Northwest rainforest. Always ancient prehistoric Earth — Mesozoic-coded with mega-flora at the water's edge.
+
+Variety mandate (rotate across water-types):
+- ~20% Tannin-dark prehistoric river with mega-flora banks (river-of-history reflective black water + tree-fern-and-cycad packed shores)
+- ~15% Foggy swamp at dawn (low ground-fog over still water, gnarled aerial roots, atmospheric haze)
+- ~15% Mud-flat / muddy bank at river bend (wide muddy shoreline + footprints implied + mega-flora at the back)
+- ~10% Lily-pad marsh (giant prehistoric water-plants + still reflective water + atmospheric depth)
+- ~10% Mangrove-like primordial root-tangle (aerial-root tangle rising from black water + golden hazy light)
+- ~10% Wide river-bend through Mesozoic jungle (river curving through mega-flora-packed jungle banks + atmospheric haze)
+- ~10% Misted lake-edge (calm lake with mist-shrouded distant shore + cycad-fringe + reflective)
+- ~5% Shallow inland-sea (warm primordial shallow sea + cycad-palm-fringed shoreline + distant mountains)
+- ~5% Rain-soaked swamp (active rain falling on water + mist + dripping mega-flora)
+
+EVERY entry includes:
+- THE WATER FEATURE TYPE (tannin-dark river / foggy swamp / mud-flat / lily-marsh / etc.)
+- BANK / SHORE FLORA (Mesozoic mega-flora at the edge — tree-ferns, cycads, horsetails, primordial-roots)
+- WATER QUALITY (tannin-dark / reflective / muddy / mist-shrouded / lily-covered / etc.)
+- ATMOSPHERIC TOUCH (rolling mist / golden god-rays / dripping vines / vapor rising)
+
+GOOD examples:
+- A tannin-dark Mesozoic river curving through dense tree-fern banks, surface mirror-still reflecting the canopy, golden god-rays shafting through the mega-flora, atmospheric haze receding into deep distance
+- A foggy primordial swamp at dawn, low ground-fog rolling over reflective black water, gnarled aerial roots of mega-conifers rising from the shallows, distant atmospheric haze in warm amber
+- A wide muddy river-bend at sunrise, tannin-rich water reflecting the warm sky, cycads packed along both banks 30ft tall, mist rolling along the surface
+- A lily-pad marsh with giant prehistoric water-plants 6ft across, still reflective water between, horsetails clustering at the edges, warm afternoon haze
+
+ABSOLUTELY BANNED:
+- NO modern wetland / Atlantic-marsh / English-bog / sandy-coast
+- NO modern animals / no human-trace
+- NO temperate-deciduous trees at water-edge
+- NO grass / lawn / golf-course
+- NO cold-monochrome / washed-out palette
+- NO frozen / icy / arctic
+
+Output: ONE water-scene per line. No numbering. No quotes.`,
+
+  dinobot_swamp_river_dino: `Generate SEMI-AQUATIC DINOSAUR descriptions for DinoBot's swamp-river path. Each is ONE comma-separated line, 25-40 words, describing a dinosaur (or aquatic reptile / pterosaur) interacting with WATER in the prehistoric scene.
+
+The dinosaur is a MEANINGFUL element of the scene — 25-40% of the frame. Photoreal living animal mid-water-behavior. National-Geographic-cinematic candid moment.
+
+Variety mandate (rotate widely across aquatic + dino types):
+- ~20% SPINOSAURID fishing (Spinosaurus / Baryonyx / Suchomimus mid-fishing, head submerged or jaw clamped on a silver fish, sail rising)
+- ~15% SAUROPOD wading or drinking (Brachiosaurus / Apatosaurus / Argentinosaurus wading mid-river, water at shoulder, neck arched to drink)
+- ~15% HADROSAUR drinking (Parasaurolophus / Edmontosaurus / Maiasaura at water's edge, head lowered, water dripping from duck-bill)
+- ~10% CROCODILIAN MEGA-PREDATOR (Deinosuchus / Sarcosuchus / Postosuchus floating with only eye-ridges + nostrils above black water, motionless)
+- ~10% CERATOPSIAN at watering hole (Triceratops / Styracosaurus / Pachyrhinosaurus drinking at muddy edge, head lowered)
+- ~10% MOSASAUR or PLESIOSAUR breaching (long-necked plesiosaur surface mid-rise / mosasaur head breaching with spray)
+- ~8% PTEROSAUR skimming (Quetzalcoatlus / Pteranodon skimming water surface with bill open, wingtip touching water)
+- ~7% AMPHIBIOUS MEGA-CRAB / GIANT INVERTEBRATE (rare — giant primordial freshwater creature partially emerged)
+- ~5% THEROPOD drinking (large theropod cautiously lowering head to water, eyes still scanning)
+
+EVERY entry includes:
+- THE DINOSAUR SPECIES (scientifically named)
+- THE WATER INTERACTION (fishing / wading / drinking / floating / breaching / skimming / etc.)
+- POSITION (mid-river / at the bank / in the shallows / partially submerged / at the water-edge)
+- ONE WATER-SPECIFIC DETAIL (water dripping / ripples spreading / fish in jaws / wake behind / spray rising / etc.)
+- ATMOSPHERIC INTEGRATION (golden light on hide / mist at its feet / haze in distance)
+
+GOOD examples:
+- A massive Spinosaurus mid-fishing in a tannin-dark river, head submerged to the eyes, sail rising 10ft from the water, ripples spreading outward, mist curling around its shoulders
+- A Brachiosaurus sauropod wading mid-river with water at shoulder height, long neck arched 40ft to drink, golden afternoon light catching its mottled hide, cycads packed along both banks
+- A pair of Parasaurolophus hadrosaurs at the muddy river-edge drinking, water dripping from their duck-bills, dust visible in the wet earth around their feet
+- A massive Deinosuchus crocodilian floating motionless in dark water, only nostrils and eye-ridges visible, a single dragonfly landing on its barnacled snout
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern animals
+- NO close-up portrait (dino is INTEGRATED into water scene, not a head-fills-frame portrait)
+- NO combat / no kill-shot / no gore
+- NO weapons / tools / artifacts
+
+Output: ONE aquatic dinosaur per line. No numbering. No quotes.`,
+
+  dinobot_swamp_river_surprise: `Generate TINY SECONDARY SUBJECT descriptions for DinoBot's swamp-river path (60%-gated). Each is ONE comma-separated line, 15-25 words, describing a small water-coded accent — dragonfly, fish-jump, pterosaur skimming, crocodilian eye, water-bird, aquatic plant detail.
+
+The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds life and atmosphere to the water scene.
+
+Variety mandate:
+- ~25% Giant Meganeura dragonfly hovering / landing on lily-pad / catching light
+- ~15% Single fish-jump or splash mid-air
+- ~15% Pterosaur skimming surface at deep midground (silhouette + reflection)
+- ~10% Crocodilian-eye-and-nostrils-only above water at midground
+- ~10% Distant water-bird-pterosaur (Pteranodon perched on snag / fishing)
+- ~10% Aquatic mega-plant detail (giant water-lily / floating fern-mat / aquatic horsetail)
+- ~10% Mist-ripple / vapor-curl / water-disturbance at midground edge
+- ~5% Tadpole-cluster / school of fish visible through clear water
+
+EVERY entry includes:
+- THE ELEMENT TYPE (dragonfly / fish-jump / pterosaur-skim / etc.)
+- POSITION (foreground edge / midground / mid-air / on a lily-pad / etc.)
+- ONE SPECIFIC DETAIL (wings catching light / silver flash / silhouetted / mid-bite / etc.)
+
+GOOD examples:
+- A giant Meganeura dragonfly hovering above a lily-pad at foreground midground, iridescent wings catching the golden god-ray
+- A silver fish caught mid-jump at midground, water-droplets frozen in the air around its arc, single concentric ripple below
+- A pterosaur skimming the water surface at deep midground in profile silhouette, bill open, wingtip just touching the surface
+- A crocodilian eye-and-nostrils-only above the black water at midground edge, single dragonfly perched on the snout
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern animals
+- NO weapons / tools
+- NO duplicate-style entries
+
+Output: ONE surprise element per line. No numbering. No quotes.`,
+
+  dinobot_swamp_river_phenomenon: `Generate ATMOSPHERIC PHENOMENON descriptions for DinoBot's swamp-river path (80%-gated). Each is ONE comma-separated line, 20-35 words, describing an atmospheric event over the water scene — fog, mist, rain, god-rays, golden light, storm.
+
+Variety mandate:
+- ~25% Low ground-fog rolling along the water (knee-height mist, hiding lower banks)
+- ~20% Golden god-rays through the canopy (specific shafts hitting the water)
+- ~15% Mist banks at deep distance (atmospheric haze receding)
+- ~10% Active rain falling on water (rain-rings on the surface, dripping mega-flora)
+- ~10% Vapor rising from warm water in cool morning air (steam-vapor curls)
+- ~10% Storm-front building at deep distance (thunderhead wall + sheet-lightning + rain-curtain)
+- ~5% Distant volcanic activity (smoke plume on the horizon)
+- ~5% Aurora / atmospheric-glow over swamp (rare strange Mesozoic sky-glow)
+
+EVERY entry includes:
+- THE PHENOMENON TYPE
+- A SPECIFIC visual detail
+- POSITION (rolling across the water / above the canopy / at deep distance / etc.)
+
+GOOD examples:
+- Low ground-fog rolling along the water surface at knee-height, hiding the lower banks, only the upper mega-flora visible above
+- Golden god-rays slanting through the tree-fern canopy in three parallel shafts hitting the river surface, illuminating drifting pollen
+- Active rain falling steadily on the water, concentric rain-rings spreading across the surface, mega-flora dripping at the edges
+- Steam-vapor curling from the warm tannin-dark water in cool morning air, ribbons rising 6ft, atmospheric haze beyond
+
+ABSOLUTELY BANNED:
+- NO modern lightning bolts (sheet-lightning OK)
+- NO sci-fi / cosmic / aliens
+- NO contrails / no rainbows
+- NO human-trace
+
+Output: ONE phenomenon per line. No numbering. No quotes.`,
+
   dinobot_paleo_landscape_biome: `Generate ALIEN-MESOZOIC BIOME descriptions for DinoBot's paleo-landscape path. Each is ONE comma-separated line, 30-50 words, describing the OVERALL biome/landscape — the ancient prehistoric Earth setting that anchors the scene.
 
 ⚠️ STRICT IDENTITY LOCK — every entry must read as UNMISTAKABLY ALIEN-MESOZOIC. NEVER read as modern Earth. NEVER read as Iceland / Pacific-Northwest / Atlantic-coastal-marsh / modern Alpine / English wetland. ALWAYS ancient-world primordial Mesozoic Earth — Pandora-Skull-Island-Land-of-the-Lost coded.

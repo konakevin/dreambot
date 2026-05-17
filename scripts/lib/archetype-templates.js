@@ -5927,6 +5927,94 @@ DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID DINOSAUR (20-30
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DINOBOT_SWAMP_RIVER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, water_scene, dino, surprise, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric event that elevates the swamp/river scene. Render it prominently — rolling fog / god-rays / rain on water / steam-vapor / storm-front at distance / etc.
+
+`
+      : '';
+
+    return `You are a wildlife-documentary cinematographer writing MESOZOIC SWAMP / RIVER WORLD scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. National-Geographic / Prehistoric-Planet / Walking-with-Dinosaurs / Jurassic-Park-Isla-Sorna visual lineage.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans in this world. Do NOT render people, hikers, explorers, tribesmen, silhouetted figures, anything humanoid. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only. Dinosaurs, pterosaurs, giant insects, mega-flora — NEVER PEOPLE.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as modern Earth wetland, NEVER Atlantic-coastal-marsh, NEVER English-bog, NEVER Pacific-Northwest-rainforest. The vegetation at the water's edge is PRIMORDIAL — tree-ferns 80ft tall / cycads 30ft wide / Araucaria mega-conifers / hanging vine-cathedrals / horsetail clusters like cathedral pillars. NOT modern oaks / maples / mangroves / palms-of-modern-Earth.
+
+━━━ THE SCENE — WATER IS THE SETTING, DINOSAUR IS THE FOCAL SUBJECT ━━━
+This is a CANDID water-interaction scene. The composition is:
+• WATER + BANK SETTING: 55-65% of frame — tannin-dark river / foggy swamp / lily-marsh / mud-flat / mangrove-root-tangle / etc., framed with Mesozoic mega-flora at the banks
+• SEMI-AQUATIC DINOSAUR: 25-40% of frame — actively interacting with water (fishing / wading / drinking / floating / breaching / skimming / submerging)
+• ATMOSPHERIC HAZE: rolling fog / mist / vapor / god-rays / rain
+
+The dinosaur is integrated INTO the water scene — fishing mid-strike with fish in jaw, wading mid-river with water at shoulder, drinking with water dripping from duck-bill, surfacing with spray rising. NEVER a portrait, NEVER posing, NEVER combat-set-piece.
+
+⚠️ COMPOSITIONAL RULES:
+• The dinosaur is mid-water-behavior at the MIDGROUND — interacting with water visibly
+• The water surface shows the interaction — ripples / wake / splash / spray / mirror-reflection
+• Mega-flora frames the scene — tree-ferns / cycads / hanging vines at the banks
+• ONE dinosaur (or small pair, e.g. two hadrosaurs drinking together) — never a herd as primary subject, never combat
+
+━━━ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no human-figures / no human-trace / no tools / no artifacts (66 million years pre-human)
+🚫 NO modern animals (no mammals, no modern birds — pterosaurs and primordial-coded only)
+🚫 NO modern jungle plants (palms / banana / banyan / modern-mangrove — too modern). Modern-coded palm forms only if mega-cycads
+🚫 NO temperate-deciduous trees (oak / maple / beech)
+🚫 NO grasslands / lawn / savanna (Cretaceous predates grasslands)
+🚫 NO modern coniferous forest (pine / spruce / fir)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO portrait close-up of dino (head fills frame is BANNED)
+🚫 NO combat / no kill-shot / no gore
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / National-Geographic / Prehistoric-Planet / Walking-with-Dinosaurs visual lineage
+
+━━━ THE CANDID DINOSAUR (focal subject — render mid-water-behavior) ━━━
+${dino}
+
+The dinosaur is a photoreal living animal mid-action. Render obsessive material detail — leathery scarred biological hide, water dripping/streaming, ripples / wake / splash, scale-and-fold detail, eye catching light, atmospheric integration with the surrounding water and mega-flora.
+
+━━━ THE WATER SCENE (setting that anchors the Mesozoic identity) ━━━
+${water_scene}
+
+The water + bank setting frames the dinosaur. Multi-tier depth — foreground tactile water-edge / midground water-and-dino / deep distance receding into atmospheric haze. Mega-flora at the banks (tree-ferns / cycads / horsetails / hanging vines) — never modern trees.
+${phenomenonSection}━━━ SECONDARY ACCENT (atmospheric small detail) ━━━
+${surprise}
+
+A small water-coded life detail — dragonfly / fish-jump / pterosaur skimming / crocodilian eye-and-nostrils / etc. 2-5% of frame, positioned at midground or foreground edge.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — WIDE WATERWAY ESTABLISHING SHOT WITH CANDID DINO ━━━
+Wide cinematic establishing-shot of a Mesozoic waterway with a candid dinosaur mid-water-behavior at midground. The water is the setting; the dino is the focal action. Multi-tier depth packed with mega-flora at the banks. Atmospheric haze receding into deep distance.
+
+━━━ STRUCTURE (write the prompt in this order — DINOSAUR + WATER-INTERACTION first) ━━━
+[OPENING: name the SEMI-AQUATIC DINOSAUR mid-water-behavior (fishing / wading / drinking / floating / breaching) in the SPECIFIC water scene (tannin-river / foggy swamp / lily-marsh / mud-bank / etc.) — the dino + the water-setting together in the FIRST 30-40 words], [the water-scene details — banks with mega-flora / water surface quality / mist / atmospheric depth], [the atmospheric phenomenon if rolled — fog / rain / god-rays / steam], [the secondary accent — dragonfly / fish-jump / pterosaur / etc.], [foreground tactile water-edge detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — the OPENING ESTABLISHES DINO-WATER-INTERACTION + MESOZOIC WATER SETTING together in the first 30-40 words. Front-load both so Flux doesn't drop either.
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID SEMI-AQUATIC DINOSAUR (25-40% of frame) mid-water-behavior in a SIGNATURE MESOZOIC WATERWAY (55-65% of frame) with Mesozoic mega-flora at the banks, atmospheric haze, 35mm-film clarity.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
 };
 
 module.exports = TEMPLATES;

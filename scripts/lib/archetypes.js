@@ -996,6 +996,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+
+  DINOBOT_SWAMP_RIVER: {
+    description:
+      'PATH-BESPOKE — DinoBot swamp-river path (2026-05-17 axis-system migration from legacy function-form). MESOZOIC SWAMP / RIVER / WATERWAY with a SEMI-AQUATIC DINOSAUR interacting with the water. Spinosaur fishing / sauropod wading / hadrosaur drinking / mosasaur breaching / crocodilian floating / pterosaur skimming. Water is the setting; dino is the candid focal subject (25-40% frame). NO humans. National-Geographic-cinematic candid moment. 3 path-bespoke axes (water_scene / dino / surprise) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['water_scene', 'dino', 'surprise'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

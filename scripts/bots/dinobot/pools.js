@@ -49,6 +49,11 @@ module.exports = {
   DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
   DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),
   DINOBOT_PALEO_LANDSCAPE_SKY: load('dinobot_paleo_landscape_sky'),
+  // Swamp-river path-bespoke pools (added 2026-05-17 — axis-system migration)
+  DINOBOT_SWAMP_RIVER_WATER_SCENE: load('dinobot_swamp_river_water_scene'),
+  DINOBOT_SWAMP_RIVER_DINO: load('dinobot_swamp_river_dino'),
+  DINOBOT_SWAMP_RIVER_SURPRISE: load('dinobot_swamp_river_surprise'),
+  DINOBOT_SWAMP_RIVER_PHENOMENON: load('dinobot_swamp_river_phenomenon'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {
