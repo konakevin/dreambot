@@ -1,16 +1,24 @@
 /**
- * BloomBot cozy — interior space that has been overgrown by flowers.
- * Window/sill/sunroom/breakfast nook with climbing florals everywhere.
+ * BloomBot cozy — declarative axis-system form (2026-05-16 migration).
+ *
+ * COZY INTERIOR OVERGROWN BY FLOWERS. Warm humble domestic space —
+ * sunroom / breakfast nook / writing desk / arched window / attic dormer
+ * — NEVER palace / ballroom / grand interior. The architecture is the
+ * scaffold the bloom-mass cascades through and over.
+ *
+ * Legacy compositional version preserved at paths/legacy/cozy.js.
+ *
+ * Axes (2 path-bespoke + 60%-gated moment):
+ *   - interior_setting (200): the cozy room canvas
+ *   - furniture_anchor (150): the structural tactile piece
+ *   - atmospheric_moment (50, 60%-gated): the warm-domestic magic moment
  */
-const compose = require('../compose');
 
-const SCENE = `A COZY INTERIOR overgrown by flowers. Pick one specific architectural setting: a tall arched window with stone sill, a sunroom with white wicker chair, a breakfast nook with checkered tablecloth, a stairwell landing with carved wooden banister, a writing desk under a leaded-glass window, an attic dormer with brass hooks.
-
-Flowers cascade from the ceiling, climb the walls, drape across furniture, fill every vase + jug + bowl. Vines in profusion across every horizontal and vertical surface. The interior architecture is visible and recognizable but the flowers are CLEARLY the dominant subject — half the frame is bloom, the architecture is the framework holding it up.
-
-Light pours in through the window at a dramatic angle, chosen to match the lighting block.
-
-Cozy = warm humble domestic space. NOT formal, NOT grand, NOT a palace, NOT a ballroom. Think: someone's beloved home that the garden has consumed.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_COZY',
+  pools: {
+    interior_setting: 'BLOOMBOT_COZY_INTERIOR_SETTING',
+    furniture_anchor: 'BLOOMBOT_COZY_FURNITURE_ANCHOR',
+    atmospheric_moment: 'BLOOMBOT_COZY_ATMOSPHERIC_MOMENT',
+  },
+};

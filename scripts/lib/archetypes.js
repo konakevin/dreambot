@@ -828,6 +828,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_COZY: {
+    description:
+      'PATH-BESPOKE — BloomBot cozy path (2026-05-16 migration). COZY INTERIOR OVERGROWN BY FLOWERS. Warm humble domestic space — sunroom / breakfast nook / writing desk / arched window / attic dormer / stairwell landing — NEVER palace / ballroom / grand interior. The architecture is the scaffold the bloom-mass cascades through and over. HERO bloom species at the foreground focal plane + supporting cast carpeting / threading / draping the furniture. Dramatic single-source warm light through the window catches the hero blooms; supporting mass and the room beyond sit cooler. POSTCARD / MOVIE-STILL / GALLERY-PIECE framing mandate. 2 path-bespoke axes (interior_setting / furniture_anchor) + 60%-gated atmospheric_moment. Palette + lighting + roster via sharedDNA. 85-115 words.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['interior_setting', 'furniture_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_moment', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };
