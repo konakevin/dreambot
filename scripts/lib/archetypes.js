@@ -636,6 +636,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_CYBORG_WOMAN: {
+    description:
+      'PATH-BESPOKE — MechBot cyborg-woman path (2026-05-17 migration; eighth MechBot path; 2026-05-17 evening update — added cyborg_material axis + alien-hybrid framing). Half-human half-machine being. Ex Machina / Alita / Ghost in the Shell / Blade Runner 2049 / Westworld lineage. Beautiful + terrifying. Character DNA (characterBase / skin / bodyType / eyes / hair / internal / glowColor) continues from bot.rollSharedDNA(cyborg-woman). 5 path-bespoke pools (cyborg_feature / cyborg_material / action / landscape / composition) + 1 conditional drama (40%-gated). Composition pool mixes 60% closeup detail-shots + 40% full-body framings. Material pool dedicated axis for finish variety (chrome / brass / pearl-ivory / xenomaterial / dichroic / etc.) — alien-hybrid skin tones welcome. Template preserves legacy identity guards: face MUST show cyborg, multi-cyborg-reveal mandate (3-4 distinct reveals), full-body cyborg-detail mandate (5-7 body parts) to prevent the "bikini" failure mode, solo composition, banned imagery.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['cyborg_feature', 'cyborg_material', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',

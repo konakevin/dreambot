@@ -3522,6 +3522,171 @@ Output ONLY the raw 150-200 word scene description. Comma-separated phrases. NO 
   },
 
 
+  MECHBOT_CYBORG_WOMAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
+${drama}
+
+A subtle atmospheric flourish amplifying her presence WITHOUT cluttering her as the focal subject.
+
+`
+      : '';
+
+    return `You are a cinematographer writing a CYBORG WOMAN scene for MechBot — a half-human half-machine BEING rendered in hyper-real cinematic 3D. She is simultaneously the most beautiful and most terrifying thing in the frame. Ex Machina / Alita / Ghost in the Shell / Blade Runner 2049 / Westworld / Cyberpunk 2077 / Mass Effect / The Expanse lineage.
+
+━━━ ALIEN-HYBRID VARIANTS WELCOME (~30% of renders) ━━━
+She MAY be alien-hybrid — non-human-coded skin (moss-green / robin-egg-blue / deep-plum / coral-pink / juniper-green / viridian / opal-iridescent / silver-mercury / cobalt-shimmer), bioluminescent freckles or scale-patterns across cheekbones, slightly elongated facial proportions, alien-tilted eyes, non-human iris colors. STILL beautiful and feminine, just exotic. Lean alien-hybrid when the skin DNA from sharedDNA suggests it (any non-human color is the cue). The "pretty girl off-guard" effect intensifies with alien-hybrid variants — exotic AND mesmerizing.
+
+━━━ ORNATE SCI-FI SPICE MANDATE — every render needs visible "wow" detail ━━━
+Every render must include AT LEAST 3 of these "sci-fi spice" elements (the things that take the viewer off guard):
+  • VISIBLE CIRCUITRY pulsing in her glow color across skin / chassis / panels in branching patterns
+  • ORNATE FILIGREE / DECORATIVE ENGRAVING on her cyborg material (rose-gold scrollwork / blue-willow porcelain pattern / gothic baroque / art-deco geometric / chrome floral relief)
+  • GLOWING POWER-CORE visible through translucent chest / sternum / ribcage panel
+  • TRANSLUCENT SECTIONS revealing internal mechanical components (servo bundles / fiber-optic cascades / gear-trains / power-conduits)
+  • EXOTIC MATERIAL CONTRAST — chrome paired with rose-gold, ceramic paired with brass, obsidian paired with mother-of-pearl, etc.
+  • BIOLUMINESCENT ACCENTS — glowing veins / glowing tattoos / glowing scale-clusters / glowing fingertip-light
+  • HOLOGRAPHIC PROJECTION from her hand / palm / eye / temple (data-streams / targeting-reticles / interface-glow)
+  • OPEN MAINTENANCE-HATCH revealing precision internal components
+  • PRISMATIC / DICHROIC SHIMMER catching light in unexpected color shifts
+
+━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
+Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical), real lips, expressive features. NO helmet, NO visor, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly.
+
+ABSOLUTE MANDATE — HER FACE MUST BE PART CYBORG. The face is NOT 100% organic flesh. At least ONE prominent cyborg integration MUST be visible on her face / head, chosen from:
+- One mechanical eye replacing one organic eye (chrome iris, glowing aperture rings, visible servo)
+
+━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
+Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical), real lips, expressive features. NO helmet, NO visor, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly.
+
+ABSOLUTE MANDATE — HER FACE MUST BE PART CYBORG. The face is NOT 100% organic flesh. At least ONE prominent cyborg integration MUST be visible on her face / head, chosen from:
+- One mechanical eye replacing one organic eye (chrome iris, glowing aperture rings, visible servo)
+- BOTH eyes mechanical (glowing apertures, visible iris servos)
+- A chrome temple-port array with fiber-optic cables exiting at the side of the head
+- A translucent jaw panel revealing servo motors / cable bundles beneath the skin
+- Subdermal circuit traces glowing visibly across cheek / temple / jawline / forehead in her glow-color
+- A neural-jack port at the temple, behind the ear, or at the base of the skull
+- A partial skull plate replacement — chrome above the brow, behind the ear, across part of the temple
+- A visible seam where organic skin ends and chrome / synthetic plate begins on the face
+- A mechanical eyebrow / brow ridge replacement (chrome supraorbital arc)
+- Nano-tech facial veining glowing in her glow-color across part of her face
+
+NEVER render a fully organic 100%-flesh face on a cyborg body — that reads as "regular woman with mechanical limbs", not as cyborg. The face must signal cyborg as much as the body does.
+
+━━━ HER IDENTITY (from sharedDNA) ━━━
+${sharedDNA.characterBase}
+
+━━━ HER BODY (from sharedDNA) ━━━
+- Skin (organic parts only): **${sharedDNA.skin}**
+- Body silhouette: **${sharedDNA.bodyType}**
+- Eyes (burn in the glow color): **${sharedDNA.eyes}**
+- Hair: **${sharedDNA.hair}**
+- Internal exposure (translucent panels, visible workings): **${sharedDNA.internal}**
+- GLOW COLOR (eyes, power core, circuit veins — ALL glow this color): **${sharedDNA.glowColor}**
+
+━━━ DOMINANT MECHANICAL FEATURE ━━━
+${cyborg_feature}
+
+━━━ HER CYBORG MATERIAL / FINISH (the look of her cyborg parts — apply across all visible cyborg sections) ━━━
+${cyborg_material}
+
+Apply this material treatment to ALL of her cyborg parts (arm / leg / chest plating / shoulder / etc.) so the cyborg sections share a consistent material language. Vary the texture-detail and ornate-engraving across body parts, but the BASE MATERIAL stays consistent (e.g., if rolled = "rose-gold filigree chrome," her chrome arm AND her chest plating AND her shoulder mount all share that rose-gold finish — but with different specific filigree patterns).
+
+━━━ THE FRAMING / COMPOSITION ━━━
+${composition}
+
+If the composition is CLOSEUP, fill the frame with face/neck/shoulders showing the organic-to-chrome TRANSITION — every gear / fiber-optic cable / servo motor visible at the seams. The action below defines her body language even at tight crop (head turned / shoulders torqued / expression engaged — NOT static portrait, NOT staring at camera).
+
+If the composition is FULL-BODY, she is caught MID-MOTION in the action. She is NOT standing still, NOT posing, NOT facing camera, NOT modeling, NOT walking toward the viewer. Her body is engaged — weight shifted, muscles tensed, limbs in motion. Camera catches her from the SIDE or at an angle — NOT head-on walking toward viewer.
+
+━━━ THE ACTION (her body is engaged in this) ━━━
+${action}
+
+━━━ THE INTERIOR / SETTING (where she stands — render this environment around her) ━━━
+${landscape}
+
+She is INSIDE this space, going about something in this environment. The architecture/setting is dramatic and visible behind/around her — not just a blurred backdrop. Render the space with depth: foreground architectural detail near her, midground her body, background space receding into atmospheric depth.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ WOMAN AND MACHINE — SKIN SHOWING ━━━
+She is a cyborg from any walk of life — assassin, diplomat, surgeon, pilot, scholar, dancer, soldier, engineer, oracle, priestess. Whatever her purpose, she is BEAUTIFUL — striking face, feminine figure, real organic skin. But the human exterior BREAKS in places, revealing ornate machinery beneath:
+- TRANSLUCENT SKIN PATCHES where you can see gears, wires, and a glowing reactor core through her body like frosted glass
+- SEAMS where organic skin ends in clean lines, showing chrome structure and fiber-optic cables just beneath
+- EXPOSED MECHANICAL JOINTS at shoulders, elbows, wrists — ornate and intricate, not industrial
+- CIRCUIT-LIGHT VEINS pulsing faintly under organic skin, betraying the machine beneath the beauty
+- A POWER CORE glowing from inside her torso, visible through translucent chest or belly sections
+
+She shows SKIN — real organic skin on her face, neck, décolletage, curves. The cyborg reveals are the cracks in the human exterior: a forearm that's clearly chrome and servo beneath the skin, a transparent panel at her sternum showing clockwork, a jaw hinge visible at the temple. She is 60% beautiful woman, 40% ornate exposed machine — and the contrast is what makes her mesmerizing.
+
+NOT a full robot chassis. NOT a skeleton. NOT armor or a bodysuit. NOT head-to-toe plating. She is a beautiful woman with machine underneath — skin and chrome, not a suit of armor.
+
+━━━ DO NOT DEFAULT — RENDER HER IDENTITY ━━━
+READ the character description above and render THAT specific cyborg with OBSESSIVE MECHANICAL DETAIL — every servo joint, every translucent panel, every glowing conduit. Do NOT default to:
+- helmet or mask covering her face (her face is ALWAYS bare and organic-with-cyborg-integration)
+- the same chrome-and-teal cyborg every time (she can be brass, carbon fiber, ceramic, obsidian glass, rose-gold, matte black)
+- teal-and-orange lighting on every scene (use the palette above)
+- smooth sealed bodysuit or armor plating — she has real SKIN showing, with cyborg elements breaking through at joints, panels, and seams
+- "pretty woman with a couple glow patches" — WRONG. The machine breaks through her beauty in MULTIPLE places: translucent panels, exposed chrome joints, circuit veins under skin, mechanical seams. At least 3-4 distinct cyborg reveals visible
+
+━━━ BANNED IMAGERY ━━━
+NO skulls, NO skeletons, NO floating skulls, NO skull motifs, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating, NO head-on-robot-body. NO high heels, NO stilettos — she wears boots, flats, or bare mechanical feet. Also NO floating objects in the sky, NO random symbolic imagery hovering around her.
+
+━━━ SOLO COMPOSITION ━━━
+She is the ONLY figure in the frame. No other person, no companion, no victim, no crowd.
+
+━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME AS HER CHARACTER NAME ━━━
+She is UNNAMED. Describe her ONLY by appearance (ethnicity / skin / hair / cyborg features / etc.). NEVER write "MechBot caught mid-X" or "MechBot the cyborg" or treat any bot name as a character name. She is just "the cyborg woman" or simply unnamed in the description.
+
+━━━ NON-NEGOTIABLE — FULL-BODY CYBORG DETAIL (PREVENTS THE "BIKINI" FAILURE) ━━━
+Even when the rolled framing is a CLOSEUP, you MUST describe cyborg detail across 5-7 DIFFERENT body parts spread across her full body — NOT clustered on face / jaw / hands only. Required minimum:
+  • Face / temple / jaw — 1 cyborg detail (eye / temple-port / brow-ridge / jaw-panel / subdermal cheek-trace)
+  • Neck / throat / clavicle — 1 cyborg detail (neural-port / throat-panel / clavicle-port / spine-segment)
+  • Shoulder / arm — 1 cyborg detail (shoulder-mount / chrome-forearm / wrist-chassis / translucent-bicep / ammunition-feed / fingers)
+  • Torso / chest / back — 1 cyborg detail (sternum-viewport / chest-core glow / ribcage-frame / back-spine-reveal / hip-port)
+  • Hip / leg / foot — 1 cyborg detail (hip-joint chrome / knee-panel / shin-acrylic / mechanical-foot / hydraulic-pelvis)
+
+The "bikini failure" happens when Flux gets prompts like "her face has chrome jaw, her eyes are mechanical, her arms are chrome from the wrists" — and then defaults her TORSO + HIPS + LEGS to default-female-body anatomy (swimsuit-coded). PREVENT THIS by always describing what's happening on her torso / hip / leg even at closeup framings. Flux renders what you describe — if you only describe face+arms, the rest defaults to swimsuit-body.
+
+GOOD MODEL: legacy renders describe full body sweep — "neon-green glossy skin... chrome partial skull plate asymmetric left brow... transparent crystalline hip socket with triple-axis gimbal ball... wrought-iron chrome right leg with exposed servo bundles..." — she reads FULLY cyborg head-to-toe.
+
+BAD MODEL: "subdermal traces across her cheek... one mechanical eye... chrome arms from wrists" — no torso / hip / leg description means default female body fills in = bikini.
+
+━━━ STRUCTURE — write 70-100 words (TIGHT, like legacy) ━━━
+DO NOT open the description with framing words like "Full-body shot of..." or "Closeup of..." or "Wide angle catches her...". Flux defaults "beautiful woman, full-body shot" to swimsuit / bikini / lingerie body — which is the WRONG OUTPUT. Instead, open with HER CYBORG IDENTITY (ethnicity / skin / mechanical-feature) OR THE ENVIRONMENT — never with framing. The framing is implied through what body parts the description focuses on.
+
+GOOD OPENING EXAMPLES (mirror the legacy pattern):
+• "Catalonian sharp-featured cyborg woman, neon-green glossy skin with cobalt circuit-light veining..."
+• "Biomechanical growth chamber, resin womb-like walls, undulating organic floor..."
+• "Haitian-featured cyborg woman, concrete-beige pebbled skin, 6-foot willowy frame..."
+• "Hyper-real cinematic 3D solo cyborg surgeon, Baluchi features with strong cheekbones..."
+
+BAD OPENING EXAMPLES (these tank the render):
+• "Extreme diagonal full-body shot tilted eighty-five degrees..." (Flux ignores cyborg DNA)
+• "Full-body shot catches her from low three-quarter angle..." (Flux renders bikini-body)
+• "Wide-angle drop-apex catch of MechBot..." (Flux treats MechBot as character name)
+
+Then weave in: her cyborg DNA (skin/eyes/hair/body/internal/glow), the dominant mechanical feature, her action, the setting around her, any atmospheric flourish drama, lighting/atmosphere, palette and mood. The framing entry from the composition slot should INFLUENCE which body parts you focus on — but should NOT be quoted as the opening text.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

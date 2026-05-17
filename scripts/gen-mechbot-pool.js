@@ -1604,6 +1604,163 @@ Each entry must specify:
     ],
     instructions: `Each entry is ONE specific visual flourish phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + atmospheric detail + relationship-to-robot". Amplifies the robot\'s moment WITHOUT cluttering the focal subject. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ─── cyborg-woman path: composition (mixed closeup + full-body cyborg-woman framings) ───
+  cyborg_woman_composition: {
+    format: 'simple',
+    theme: `CINEMATIC CAMERA ANGLES for a CYBORG WOMAN (half-human half-machine, FEMALE, beautiful + terrifying). Each entry 25-50 words. Mix of CLOSEUP detail-shots (camera tight on face/neck/shoulders showing the organic-to-chrome transition) AND FULL-BODY action-framing (showing her engaged mid-motion in the wider scene).
+
+⚠️ THE BAR — every angle conveys the woman + machine TRANSITION (organic skin breaking to mechanical reveals). Ex Machina / Alita / Ghost in the Shell / Blade Runner 2049 / Westworld lineage. Hyper-real cinematic 3D / VFX-quality.
+
+🚫 BANS:
+• NO portrait closeups on a 100%-organic face (her face MUST show cyborg integration)
+• NO head-on walking-toward-camera modeling pose
+• NO sexy-pinup framing (this is cinematic concept-art, not glamour)
+• NO multiple figures — she is SOLO
+
+✓ DISTRIBUTION (target ~60% CLOSEUP / ~40% FULL-BODY):
+  A. **CLOSEUP DETAIL FRAMINGS (~60%)** — tight on face/neck/shoulders so the organic-to-chrome TRANSITION is the entire composition. Show: temple-port array detail / fiber-optic cables exiting at neck / translucent jaw panel revealing servos / chrome iris with aperture rings / subdermal circuit-veining glowing across cheek / neural-jack port behind ear / partial skull-plate replacement / one mechanical eye + one organic eye / mechanical brow-ridge / clavicle-port array. Camera close enough to see individual servos and glowing fiber-bundles.
+  B. **FULL-BODY ACTION FRAMINGS (~40%)** — wide enough to show her standing / mid-stride / mid-action with environment around her. Body engaged in motion, not posing. Camera angles: low-angle hero-shot / side-profile mid-stride / three-quarter mid-action / over-the-shoulder from environment / silhouetted backlit wide / atmospheric vista with her in mid-distance.
+
+CRITICAL: closeup entries should describe FRAMING + WHAT to focus on (which cyborg feature dominates the frame, what scene-context bleeds in at edges). Full-body entries should describe CAMERA POSITION + her POSE + how the environment frames her.`,
+    touchpoints: [
+      'CLOSEUP — extreme tight on the LEFT TEMPLE-PORT ARRAY filling left third of frame, four fiber-optic cables exiting backward into a translucent jaw-panel revealing the servo-motors beneath, her left eye visible in upper-right corner with chrome aperture-rings rotating slow, atmospheric haze behind',
+      'CLOSEUP — three-quarter face composition with one organic eye and one mechanical chrome-iris eye both in sharp focus, subdermal circuit-veining glowing faint along the cheekbone in her glow-color, the translucent jaw-panel hinged open revealing fiber bundles, soft rim-light from behind',
+      'CLOSEUP — over-the-shoulder rear-of-head shot showing the NEURAL-JACK PORT at the base of the skull (chrome flange with multiple data-ports), back of neck visible with subdermal circuit-veins glowing, a wisp of her hair caught against the chrome',
+      'CLOSEUP — front-on jawline-to-collarbone composition framed tight, a translucent skin-patch at the throat revealing the larynx-replacement chrome assembly and a glowing power-conduit, organic chest-decolletage visible at bottom-edge',
+      'CLOSEUP — extreme close on the chrome iris of her mechanical right eye, the aperture-rings visibly rotating, micro-servos at the inner corner adjusting focus, faint reflection of the room visible in the chrome surface, soft atmospheric mood',
+      'CLOSEUP — three-quarter view showing the partial skull-plate replacement across her forehead and right temple in mirror-chrome, hair swept to one side revealing the seam where organic skin meets chrome, glowing fiber-conduits running back into the hair',
+      'CLOSEUP — profile composition with the mechanical brow-ridge dominating the silhouette (chrome supraorbital arc with multi-iris sensor cluster), eye downcast with long lashes, exposed servo-pistons visible at the temple, atmospheric backlight',
+      'CLOSEUP — front-on shoulders-up composition with both clavicle-port arrays visible (chrome flanges with data-ports along the collarbone), translucent skin between revealing a glowing power-core in the upper chest, hair tied back, expression contemplative',
+      'CLOSEUP — looking down at her own forearm from her POV (subjective angle), the translucent skin revealing chrome bones / servo-pistons / fiber-cables glowing in her glow-color, the gesture of her articulated mechanical hand reaching toward something off-frame',
+      'CLOSEUP — under-chin upward angle showing the underside of her jaw with the translucent jaw-panel hinged open revealing internal servos, throat visible with cyborg larynx-assembly chrome, atmospheric mood',
+      'FULL-BODY — three-quarter angle mid-stride through an atmospheric interior corridor, her cyborg-mechanical leg-joints visible through chrome panels at the hip and knee, organic torso visible above, head turned mid-motion, environment receding behind',
+      'FULL-BODY — low-angle hero-shot looking up at her standing 1.7m tall, full body visible with mechanical reveals at shoulders / hips / wrists / temples, atmospheric vista receding behind, dramatic backlit cinematic framing',
+      'FULL-BODY — side-profile mid-action with her arm extended forward (mechanical wrist + chrome forearm visible beneath organic skin), full body in frame from feet to top of head, motion-blur on background, cinematic',
+      'FULL-BODY — silhouetted backlit wide shot of her standing at the threshold of a doorway / window / structural opening, full body visible with mechanical reveals glowing in her glow-color through her organic skin, environment beyond glowing dramatically',
+      'FULL-BODY — high-3/4-angle from above-front looking down at her, full body visible from above-perspective, mechanical reveals at shoulders / spine / hips visible through translucent skin patches, environment radiating around her',
+      'FULL-BODY — over-the-shoulder from a partial environmental silhouette in foreground (machinery / pillar / instrument-console), her full body visible in midground, cyborg reveals across multiple body parts catching the light',
+      'FULL-BODY — three-quarter mid-pose seated on an environmental element (low wall / console / ledge), one leg extended with chrome-knee visible through translucent panel, organic torso leaning forward, contemplative pose, environment depth behind',
+      'FULL-BODY — atmospheric wide-vista with her small in midground at maybe 30% of frame height, environmental scale dominant around her, mechanical reveals still visible glowing through the chassis-organic blend, scale-prover composition',
+      'FULL-BODY — mid-action freeze-frame caught mid-motion (mid-leap / mid-strike / mid-deploy / mid-recoil), full body in dynamic motion, mechanical reveals visible through the motion-blur on her organic limbs',
+      'FULL-BODY — three-quarter angle mid-stride forward through atmospheric haze (mist / steam / smoke), full body emerging from the haze, mechanical reveals visible glowing through the diffusion, cinematic atmospheric mood',
+    ],
+    instructions: `Each entry is ONE specific cyborg-woman cinematic framing, 25-50 words. Write each as a FULL DESCRIPTIVE SENTENCE describing the camera angle + what dominates the frame + her pose + environmental context. VARIETY MANDATE — vary opening words, body-part focus, environmental anchor, mood beat. Roughly 60% closeup detail-shots / 40% full-body action-framings. Mix cyborg body-parts focused on (temple / jaw / neck / shoulders / chest / forearm / leg-joint / spine / clavicle / hip-joint). Mix camera angles (low / high / side / 3/4 / over-shoulder / from-above / from-below). Mix moods (contemplative / mid-action / stalking / mid-emerging / mid-arrival). STRICT BAN on 100%-organic-face closeups / head-on-modeling-walking / sexy-pinup framings. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── cyborg-woman path: drama (40%-gated atmospheric flourishes) ───
+  cyborg_woman_drama: {
+    format: 'simple',
+    theme: `40%-GATED ATMOSPHERIC FLOURISHES for the cyborg-woman path. Each entry 25-50 words. A subtle environmental or cyborg-tech flourish that amplifies the moment WITHOUT cluttering her focal subject.
+
+⚠️ MANDATORY — every flourish supports HER as the focal subject. NEVER competes for attention. Ex Machina / Alita / Ghost in the Shell / Blade Runner 2049 lineage.
+
+🚫 BANS:
+• NO additional figures (she is SOLO)
+• NO weapons in her hand (her hand may have a tool, but NO combat-weaponry as drama flourish)
+• NO grotesque body-horror (mechanical reveals are ORNATE not body-horror)
+
+✓ FLOURISH CATEGORIES (vary across):
+  • **HOLOGRAPHIC HUD-INTERFACE** — translucent holographic display floating in mid-air, data-streams visible
+  • **POWER-CORE PULSE-GLOW** — visible glow from her power-core through translucent chest-section pulsing
+  • **FIBER-OPTIC CABLE LIGHT-TRACE** — fiber-optic cables glowing in her glow-color tracing visible paths through her body
+  • **NANO-TECH GLOW UNDER SKIN** — subdermal nano-tech glowing in her glow-color in webs / patterns across visible skin
+  • **CHROMATIC ABERRATION HALO** — subtle chromatic-aberration halo around her in the glow-color
+  • **STEAM-VENT FROM JOINT** — tiny coolant-vapor venting from a joint (shoulder / wrist / hip)
+  • **DUST-MOTES IN LIGHT-SHAFT** — atmospheric dust-motes catching a light-shaft cutting across the scene
+  • **REFLECTION-DOUBLE** — her reflection visible in a chrome surface / glass / wet floor doubling her presence
+  • **DRIFTING PARTICULATE** — sci-fi particulate drifting through the scene (data-fragments / cherry-blossom / snow / ash)
+  • **WINDOW VIEW DISTANT** — a vista visible through a window in the background (cityscape / starfield / planetscape)
+  • **DRONE-EYE WATCHING** — a tiny drone hovering in the deep background watching her (no interaction)
+  • **CIRCUIT-DIAGRAM PROJECTION** — a circuit-diagram or schematic holographic-projection in the scene
+  • **LIGHT-RIPPLE FROM HER MOTION** — light visibly rippling outward from her motion as if disturbing the air
+  • **GLITCH-ARTIFACT MICRO-FLASH** — micro-glitch artifacts flickering briefly around her edges
+  • **POLLEN / SPORE / ASH DRIFT** — soft particulate drifting through the scene atmospherically
+  • **FALLING WATER / STEAM-COLUMN** — atmospheric water-feature or steam-column in the background
+  • **NEON-SIGN COLOR-BLEED** — colored neon-light bleeding into the scene from off-frame source
+  • **HOLO-FRAGMENT OF MEMORY** — translucent holographic memory-fragment fading at the edge of frame
+  • **MECHANICAL-BIRD ALIGHTING** — a small mechanical bird or sci-fi creature alighting near her at the periphery
+  • **CONDENSATION ON CHROME** — visible condensation droplets on her chrome surfaces catching the light`,
+    touchpoints: [
+      'HOLOGRAPHIC HUD-INTERFACE — translucent multi-layer holographic display floating in mid-air near her shoulder, data-streams rotating slow in cyan and amber, atmospheric haze catching the projection, technical sci-fi mood',
+      'POWER-CORE PULSE-GLOW — visible glow from her chest power-core pulsing slow through a translucent chest-section in her glow-color, soft illumination spilling out onto her organic skin around the edges of the translucent panel',
+      'FIBER-OPTIC CABLE LIGHT-TRACE — fiber-optic cables visible exiting from her neck / temple / wrist tracing glowing paths through the air in her glow-color, the cables ending at off-frame connections, sci-fi technological',
+      'NANO-TECH GLOW UNDER SKIN — subdermal nano-tech glowing in her glow-color in delicate web-patterns across her exposed cheek / temple / forearm, the patterns slowly shifting and pulsing, ethereal beauty',
+      'CHROMATIC ABERRATION HALO — subtle chromatic-aberration halo visible around her silhouette in her glow-color, a soft technological aura suggesting her cyborg-nature distorting the air around her',
+      'STEAM-VENT FROM JOINT — tiny coolant-vapor venting from a shoulder / wrist / hip joint in a small visible plume, white mist briefly silhouetting against her body, momentary technical detail',
+      'DUST-MOTES IN LIGHT-SHAFT — atmospheric dust-motes catching a single dramatic light-shaft cutting across the scene, the shaft passing through her partly silhouetting her chrome reveals',
+      'REFLECTION-DOUBLE — her reflection visible in a chrome surface / glass / wet floor doubling her presence in the frame, the reflection slightly distorted at the edges, atmospheric mood',
+      'DRIFTING PARTICULATE — sci-fi particulate drifting slowly through the scene (data-fragments / cherry-blossom / snow / ash) catching the light, soft atmospheric quality',
+      'WINDOW VIEW DISTANT — vast vista visible through a window in the background (futuristic cityscape / starfield / planetscape / atmospheric landscape), her standing silhouetted against the vista, scale-prover',
+      'DRONE-EYE WATCHING — a tiny drone hovering in the deep background watching her without interaction, single glowing optic-eye on the drone, surveillance-tech atmosphere',
+      'CIRCUIT-DIAGRAM PROJECTION — circuit-diagram or schematic holographic-projection floating in the scene at midground, displaying her own bio-mechanical anatomy, soft cyan glow',
+      'LIGHT-RIPPLE FROM HER MOTION — visible light-ripples emanating outward from her motion as if her cyborg-nature disturbs the surrounding air, soft chromatic halo following her movement',
+      'GLITCH-ARTIFACT MICRO-FLASH — micro-glitch artifacts flickering briefly around her edges (pixel-displacement / chromatic-aberration / digital-static), suggesting cyborg-perception distorting reality at her edges',
+      'POLLEN-SPORE DRIFT — soft pollen / spore / ash particulate drifting through the scene atmospherically, catching the rim-light, atmospheric beauty',
+      'FALLING WATER ATMOSPHERIC — water-feature in the background (cascading fountain / cliff-spring / dripping rain), the water catching the lighting and adding atmospheric depth',
+      'NEON-SIGN COLOR-BLEED — colored neon-light bleeding into the scene from an off-frame source (magenta / cyan / amber), the color washing over her chrome surfaces',
+      'HOLO-FRAGMENT OF MEMORY — translucent holographic memory-fragment / image fading at the edge of frame, suggesting cyborg memory-streams visible to the viewer but ephemeral',
+      'CONDENSATION ON CHROME — visible condensation droplets on her chrome surfaces catching the light beautifully, suggesting cool environment or temperature differential, tactile detail',
+      'MECHANICAL-MOTH ALIGHTING — a small mechanical-moth or sci-fi micro-creature with translucent wings alighting near her shoulder at the periphery of frame, delicate detail',
+    ],
+    instructions: `Each entry is ONE specific cyborg-woman atmospheric flourish, 25-50 words. Format: "FLOURISH NAME CAPS — primary visual action + atmospheric detail + relationship-to-her". Amplifies her presence WITHOUT cluttering. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── cyborg-woman path: material/finish (the cyborg parts' material story) ───
+  cyborg_woman_material: {
+    format: 'simple',
+    theme: `CYBORG MATERIAL/FINISH for the cyborg-woman path — ONE specific material + finish describing what her cyborg parts are made of. Each entry 20-40 words.
+
+⚠️ THE BAR — variety. Move BEYOND default chrome+steel. Mix premium / exotic / industrial / antique / alien / composite materials. Each entry describes ONE material treatment with specific color + texture + finish details.
+
+🚫 BANS:
+• NO description of which body part (that's other axes' job — the material applies wherever her cyborg parts are)
+• NO action / pose / setting description
+• NO duplicate "chrome" entries — variety mandatory
+
+✓ MATERIAL CATEGORIES (vary across):
+  A. **METALS** — chrome, brushed titanium, polished brass, antique copper, mirror-silver, gunmetal-black, blackened steel, oxidized bronze, rose-gold, platinum-pearl, oil-slick iridescent chrome, satin pewter, hammered gold-leaf
+  B. **CERAMICS / COMPOSITES** — pearl-ivory ceramic, mother-of-pearl iridescent ceramic, blue-and-white porcelain, bone-china glaze with painted blue-willow circuitry, matte-black carbon-fiber weave, kevlar-mesh composite, glass-fiber resin, lacquer-finish lacquered enamel
+  C. **GLASSY / TRANSPARENT** — obsidian-glass, smoky quartz panels, frosted crystal, fossilized-amber resin with embedded mechanical components, dichroic glass, sea-glass green translucent, prismatic dichroic-shimmer
+  D. **EXOTIC / ALIEN-TECH** — xenomaterial alien-hull plating with shifting iridescence, fossilized-resin from alien biotech, bioluminescent-coral plating, mother-of-mantis chitinous lacquer, crystalline rare-earth alloy, antimatter-coated mirror surface, otherworldly opal-shimmer
+  E. **STEAMPUNK / INDUSTRIAL** — brass + copper steampunk plating, weathered ironclad blue-steel, wrought-iron filigree, gilt-and-mahogany inlay, hammered-pewter armor, riveted bronze plate
+  F. **ORGANIC-CODED** — bone-white ivory chrome, jade-green stone-inlay plating, marble-veined polished stone, coral-pink ceramic with marine textures
+  G. **NEON / FUTURIST** — neon-magenta plastic with embedded LED grids, glow-acrylic neon-yellow translucent, holographic-foil chrome, prismatic plastic dichroic-iridescence, fluorescent-resin material
+  H. **WEATHERED / LIVED-IN** — desert-sand worn brass, rain-stained patina chrome, mossy ancient-tech with bioluminescent growth, war-torn scarred titanium, oxidized verdigris-copper
+
+Each entry must specify:
+• Primary material name (chrome / brass / pearl-ivory / etc.)
+• Color/finish nuance (warm / cold / iridescent / matte / polished / hammered)
+• Texture or detail (filigree / etched pattern / embedded LEDs / smooth / hammered)`,
+    touchpoints: [
+      'Rose-gold filigree chrome with floral-engraved scrollwork etched across every panel, warm metallic surface catching light in soft golden-pink reflections, fine ornate detailing in the seams.',
+      'Mother-of-pearl iridescent ceramic with cool blue-violet shimmer shifting across the surface, smooth matte porcelain finish, tiny rainbow-glints catching every angle of light.',
+      'Oil-slick iridescent chrome cycling through magenta-cyan-amber rainbow blooms across the surface, mirror-polished but constantly shifting hue, otherworldly dichroic finish.',
+      'Brushed titanium-silver with subtle horizontal grain, cool matte finish, no reflection but every panel catching ambient light with even soft glow, military precision.',
+      'Antique copper-and-brass steampunk plating with green-verdigris weathering in the seams, hammered hand-finish, rivets visible along every joint, lived-in industrial elegance.',
+      'Pearl-ivory ceramic with hand-painted blue-willow circuitry traced delicately across every panel, smooth glaze finish, Wedgwood porcelain aesthetic.',
+      'Obsidian-glass plating with deep volcanic-black surface flecked with embedded gold dust, polished mirror-smooth, glossy and predatory.',
+      'Xenomaterial alien-hull plating with shifting bioluminescent iridescence cycling through deep purples and electric teals, organic-tech curves blending with crystalline facets.',
+      'Matte-black carbon-fiber weave with visible twill texture, light-absorbing surface contrasted by glowing energy-conduit seams in cyan running between panels.',
+      'Hammered-pewter armor with intricate gothic filigree, dark gunmetal finish accented with silver-leaf inlay along the edges, ornate and theatrical.',
+      'Fossilized amber resin with mechanical components visibly preserved like prehistoric specimens inside the translucent honey-gold material, otherworldly artifact aesthetic.',
+      'Neon-magenta translucent plastic with embedded LED grid pulsing in pink-and-cyan patterns under the surface, glow-acrylic finish, retro-futurist cyberpunk.',
+      'Mirror-silver chrome with mother-of-pearl iridescent overlay, the surface alternating between sharp mirror reflection and soft prismatic shimmer, premium aesthetic.',
+      'Bone-white ivory chrome with delicate gold-leaf engraving along every seam, ceremonial aesthetic, smooth polished finish with restrained decorative inlay.',
+      'Smoky quartz translucent panels revealing internal mechanical components through the gray-violet semi-transparent surface, polished gem-cut faceted edges.',
+      'Dichroic glass plating shifting through rainbow spectrums depending on viewing angle, smooth polished finish with otherworldly color-shift quality.',
+      'Wrought-iron blackened steel with intricate baroque scrollwork etched into every panel, weathered dark gunmetal finish, gothic ornate aesthetic.',
+      'Champagne-gold chrome with electric-blue conduit inlay running between the panels, warm metallic finish with glowing accents tracing structural seams.',
+      'Bioluminescent-coral organic plating with marine-life texture, pulsing soft pink-and-amber glow from within the coral-like structures, organic-tech alien aesthetic.',
+      'Prismatic plastic with dichroic-iridescence shimmering across the surface, translucent neon-yellow underlit by internal LED grid, holographic futurist finish.',
+      'Aged jade-green stone-inlay plating with veining of copper-leaf threading through the surface, organic-tech meets ancient-artifact aesthetic.',
+      'Mirror-finish platinum with carved deco geometric patterns etched across every panel, smooth liquid-mercury reflectiveness, art-deco luxury aesthetic.',
+      'Holographic-foil chrome with rainbow oil-slick refraction, prismatic dichroic surface constantly shifting through magenta-cyan-amber, otherworldly synthetic finish.',
+      'Lacquer-finish enamel in deep burgundy with hand-painted gold scrollwork, glossy automotive-grade depth, decorative aristocratic aesthetic.',
+      'Crystalline rare-earth alloy with internal lattice-structure visible through semi-transparent panels, faintly glowing blue-white at the lattice intersections, alien-tech elegance.',
+    ],
+    instructions: `Each entry is ONE specific cyborg-material/finish, 20-40 words. Format: "[material name] with [color + finish nuance], [texture or detail]". Vary across the 8 material categories. STRICT BAN on duplicate chrome-only entries. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

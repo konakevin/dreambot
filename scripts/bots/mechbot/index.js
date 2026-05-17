@@ -111,6 +111,9 @@ module.exports = {
     'power-armor-infantry': '',
     'post-apoc-rust-tech': '',
     'humanoid-robots': '',
+    // cyborg-woman keeps its legacy prefix (defined above) since it's the
+    // load-bearing "beautiful woman with cybernetic breakthroughs integrated
+    // into human body" coherence cue — preserved during axis migration.
   },
 
   // Per-medium prompt injection — MechBot's dialect for the `render` medium.
@@ -173,7 +176,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots'],
+    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
