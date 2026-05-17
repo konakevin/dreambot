@@ -4348,6 +4348,141 @@ CRITICAL — the OPENING tokens establish the COZY ROOM + WINDOW VIEW together. 
 Output ONLY the raw 120-160 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
+  STEAMBOT_STEAMPUNK_LABS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, lab_space, centerpiece, apparatus, electrical, scientist } = slots;
+    const details = Array.isArray(apparatus) ? apparatus : [apparatus];
+
+    const electricalSection = electrical
+      ? `
+━━━ ELECTRICAL PHENOMENON (mandatory — Tesla-coded lab energy) ━━━
+${electrical}
+
+This electrical event adds dramatic experimental energy to the lab. It surrounds, accompanies, or originates from the centerpiece experiment. Render it visibly and prominently in the scene — branching arcs, plasma glow, static haze, or sparking discharge. The electrical glow contributes ONE of the mandatory 4+ glow colors.
+
+`
+      : '';
+
+    const scientistSection = scientist
+      ? `
+━━━ TINY SCIENTIST FIGURE (scale-prover only — NEVER the focal subject) ━━━
+${scientist}
+
+A TINY lab-coated figure at midground edge, 5-10% of frame at most. The figure makes the experiment feel impossibly large by proximity. NEVER frontal-facing, NEVER posing for the camera, NEVER the focal subject.
+
+`
+      : '';
+
+    return `You are a steampunk concept-art painter writing a MAD-SCIENCE LABORATORY scene for SteamBot. This is a FRANKENSTEIN-meets-TESLA mad-science laboratory PACKED WITH MULTI-COLORED GLOWING EXPERIMENTS — emerald potion-vessels + hot-pink sigil-circles + electric-blue Tesla-lightning + amber gas-lamp warmth + violet plasma-orbs, all visible simultaneously in the same frame. The lab BLAZES with experimental energy in a rainbow of saturated colors. Inspired by Tesla's Wardenclyffe lab / Frankenstein's reanimation tower / Nemo's Nautilus / Doc-Brown's-DeLorean-workshop / The-Time-Machine / Bioshock-Rapture-laboratory. The architecture is Victorian-industrial (brass-and-mahogany, arched-glass ceiling, gas-lamps) but the SCENE IDENTITY IS MAD-SCIENCE GLOWING CHAOS, not a quiet Victorian library.
+
+⚠️ MANDATORY — MULTIPLE SIMULTANEOUS GLOW COLORS (NON-NEGOTIABLE) ━━━
+This is THE defining feature of the path. EVERY render packs the frame with MULTIPLE GLOWING EXPERIMENTS in DIFFERENT colors visible SIMULTANEOUSLY. NEVER a single-color-dominant render. ALWAYS a rainbow of distinct glow-colors across the frame.
+
+⚠️ MINIMUM 4 DIFFERENT GLOW COLORS visible simultaneously — use AT LEAST 4 of these in every render:
+• EMERALD GREEN — bioluminescent potion-vessels, witch-fire glow
+• ELECTRIC BLUE — Tesla-coil arcs, energy plasma, ice-experiments
+• HOT PINK / MAGENTA — pulsing sigil-circles, ruby crystals
+• AMBER / GOLDEN — alchemical fire, gas-lamp warmth, sulfur
+• VIOLET / PURPLE — magical fields, levitation chambers, lightning
+• CRIMSON / RUBY — blood-experiments, ruby-light apparatus
+• AQUA / TEAL — frost-vessels, plasma-globes, mercury-vapor
+• POISON YELLOW — toxic-experiments, alchemical sulfur
+• SILVER-WHITE — moon-essence, mercury-vessels
+
+Front and center: a glowing centerpiece + 2-3 other glowing apparatus + visible Tesla-coil-lightning OR plasma-discharge + a glowing sigil-circle on the floor or workbench — ALL DIFFERENT COLORS. The reference image has emerald-green potion-globe + hot-pink sigil-circle + electric-blue Tesla-lightning + amber gas-lamp warmth + violet smaller orbs, ALL in the same frame, ALL different colors. THAT is the target density and palette-mix.
+
+⚠️ STRUCTURAL DENSITY MANDATE — minimum 5-8 distinct glowing things across the frame:
+• 1 large CENTERPIECE experiment glowing brightly (use the centerpiece slot's color)
+• 3+ smaller glowing potion-vessels around the room (each in a DIFFERENT color than the centerpiece AND each other)
+• 1+ Tesla-coil lightning / plasma-glow / electrical-arc phenomenon crackling visibly
+• 1+ glowing sigil-circle etched into the floor — pulsing with magical light in yet ANOTHER color
+• Multiple smaller glowing accents — pulsing crystals, lit-up vials on shelving, glowing ports on apparatus, runic patterns etched into brass
+
+The room is ALIVE with saturated glow in 4-6 DIFFERENT COLORS simultaneously. Frankenstein's-creature-reanimation-scene + Doc-Brown's-DeLorean-workshop + Tesla's-Wardenclyffe energy. Every shelf has glowing things, every workbench has glowing things, every wall has glowing things. NEVER a quiet Victorian library / brewery / observatory feel. NEVER a single-color-dominant render. ALWAYS mad-science MULTI-COLORED glowing chaos.
+
+⚠️ ABSOLUTE BAN — NO single-color-dominant render. NO subtle-glow render. NO empty-of-experiments render. NO mostly-amber-monochromatic. NO mostly-violet-monochromatic. The frame contains at LEAST FOUR DIFFERENT GLOW COLORS visible at once.
+
+━━━ THE COMPOSITION — RICH LAYERED LAB INTERIOR ━━━
+WIDE CINEMATIC INTERIOR SHOT. Multi-tier depth mandatory:
+• FOREGROUND: tactile lab details — workbench edges, peripheral apparatus, glowing sigil-circles on the floor (different color from centerpiece), glowing potion-vessels in close detail (each in a DIFFERENT color)
+• MIDGROUND: THE CENTERPIECE EXPERIMENT — the major glowing apparatus that anchors the scene (the viewer's eye lands here FIRST)
+• DEEP DISTANCE: the lab architecture rises around and beyond — shelving climbing the walls covered in glowing vials in MIXED colors, balconies, the arched-glass ceiling above
+• SKY/CEILING: arched-glass overhead OR vaulted-brick OR timber rafters — Tesla-lightning OR plasma-glow crackling across the upper space
+
+Camera angle options: eye-level looking into the centerpiece / low-angle looking up at the soaring ceiling / three-quarter establishing-shot showing both depth and height. NEVER head-on portrait. NEVER a tight close-up.
+
+━━━ RICH VICTORIAN-INDUSTRIAL DETAIL — NON-NEGOTIABLE ━━━
+EVERY SURFACE IS PACKED WITH DETAIL — Victorian-industrial intricate. Every shelf has GLOWING glassware (different colors), every wall has mounted glowing instruments, every workbench has glowing apparatus + scattered diagrams, every cornice has brass-clockwork ornament. The room is BUSY + LIVED-IN + INTRICATE + GLOWING — never sterile, never quiet.
+
+Render ALL THREE of these specific apparatus details VISIBLY in the frame (each in a DIFFERENT glow color from the centerpiece):
+
+  • APPARATUS 1: ${details[0] || ''}
+  • APPARATUS 2: ${details[1] || ''}
+  • APPARATUS 3: ${details[2] || ''}
+
+PLUS layer additional Victorian-industrial detail throughout — mahogany floor-to-ceiling shelving packed with multi-colored glowing glassware, brass-railed mezzanines, gas-lamp sconces every few feet, copper-pipe rigging overhead, mosaic-tile sigil-patterns on the floor, hanging chains and pulleys, brass-rimmed leaded-glass cabinets with glowing specimens.
+
+━━━ STRICT STEAMBOT MAD-SCIENCE ━━━
+🚫 NO modern / digital / electric-bulb / LED / fluorescent / computer
+🚫 NO clinical / sterile / empty / minimalist / quiet
+🚫 NO horror / no skulls / no specimen-jars-of-organs / no dismemberment / no gore
+🚫 NO sci-fi / cyberpunk / neon-cyberpunk
+🚫 NO factory / warehouse / industrial-scaffold / no brewery
+🚫 NO Victorian library / observatory / drawing-room (this is a MAD-SCIENCE LAB)
+🚫 NO weaponry / no destruction
+🚫 NO single-tier flat composition — always multi-level + arched + vaulted
+🚫 NO single-color-dominant glow — always 4+ different glow colors
+🚫 NO primary human figure (scientist is a TINY scale-prover only)
+✓ Tesla's Wardenclyffe / Frankenstein's tower-lab / Nemo's Nautilus / Doc-Brown's-DeLorean-workshop / The-Time-Machine / Bioshock-Rapture-laboratory / Royal Society
+
+━━━ THE LAB SPACE (the room — backdrop and stage) ━━━
+${lab_space}
+
+The space anchors the scene's Victorian-industrial identity. Multi-tier architecture. Brass-and-mahogany shelving (packed with multi-colored glowing glassware). Gas-lamps casting warm amber light into the room — but the SATURATED color comes from the EXPERIMENTS, not the gas-lamps.
+
+━━━ THE CENTERPIECE EXPERIMENT (THE FOCAL POINT — render BIG and PROMINENT) ━━━
+${centerpiece}
+
+This is THE focal point of the image. Position it in the midground at the center-ish of the frame. It is the glowing thing the viewer's eye lands on first. Render it with obsessive material detail — every brass fitting, every glass curve, every glowing-liquid swirl, every wisp of vapor, every spark. The centerpiece occupies 20-35% of the frame. Its glow is the DOMINANT glow color in the render — but NEVER the only one.
+${electricalSection}${scientistSection}━━━ LIGHTING ━━━
+${lighting}
+
+Combined with WARM gas-lamp ambient AND the SATURATED multi-color experiment glow. MANY light sources at once — gas-lamps soft amber, centerpiece glow as one dominant saturated accent, 3+ apparatus glows as secondary accents in different colors, electrical phenomenon arcing in another color. The room is a rainbow of saturated glow.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+Steampunk-coded — steam-curls from open valves, copper-pipe condensation, ozone-mist around electrical apparatus, dust-of-ages in shaft-of-light, smoke from gas-lamps, vapor curling from active experiments. The vapor catches the multi-colored glow from nearby experiments.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MOVIE-POSTER CRANK MANDATE — APPLY TO EVERY RENDER ━━━
+This is NOT a still photograph — this is a MOVIE-POSTER PROMOTIONAL FRAME from a feature film about a mad-scientist's laboratory. Render as if this image will sell the film. Apply ALL of:
+
+  1. THEATRICAL RIM-LIGHTING — single dramatic key-light source (the centerpiece's glow OR Tesla-arc OR shaft of moonlight through the arched glass ceiling) carves the lab apparatus into mythic silhouettes. Rim-light on every brass edge, on glass curves, on the scientist's coat if rolled.
+  2. EVERY QUADRANT INTENTIONAL — each quadrant has its own striking glowing element. Top-left: arched-ceiling drama (Tesla-arc / vaulted-brass / leaded-glass dome with stars). Top-right: another (hanging brass-chandelier / overhead pipe-rigging / second-story balcony with glowing vials). Bottom-left: foreground apparatus (close-detail brass instrument / glowing potion-vessel close to camera). Bottom-right: ditto (sigil-circle / workbench corner / glowing crystal). NEVER an empty quadrant.
+  3. OBSESSIVE MATERIAL DETAIL — every brass fitting catches a different reflection, every glass curve shows the apparatus inside, every wooden surface shows grain, every glowing-liquid has visible swirl/vapor/condensation, every spark of electricity branches with multi-arc detail, every gas-lamp shows mantle-glow + wick + reflective brass.
+  4. STORYTELLING BEAT — the frame tells a story mid-action. An experiment is ACTIVELY HAPPENING: liquid bubbling, vapor rising, Tesla-arcs frozen mid-discharge, sigil-circles pulsing mid-incantation, a beaker just spilled mid-pour, a notebook open on the workbench mid-equation. NEVER a static empty lab — always a frozen instant of mad-science IN PROGRESS.
+  5. ATMOSPHERIC HAZE WITH VOLUMETRIC LIGHT — gas-lamp light slices through ozone-mist / steam-curls / electrical-ionization-haze in visible god-rays. AIR has saturation and depth. Multi-colored glow bleeds INTO the surrounding atmosphere — emerald haze near the green vessel, pink haze near the sigil, electric-blue ionization near the Tesla-coil.
+  6. SATURATED MULTI-COLOR JEWEL-TONE PALETTE WITH DEEP-SHADOW CONTRAST — rich emerald + hot-pink + electric-blue + amber + violet jewel-tones blazing against deep mahogany shadow and inky brass-velvet darkness. The contrast is DRAMATIC — saturated lights against absolute dark. NEVER washed-out, NEVER pastel, NEVER muted.
+  7. CINEMATIC FEATURE-FILM PRODUCTION DESIGN — feels like a still from a tentpole feature film. Production design polish. Every prop placed deliberately. Every shelf curated. Every detail intentional. NOT amateur, NOT empty, NOT undesigned.
+  8. ESTABLISHING-SHOT DRAMA — the kind of wide cinematic shot that opens a film and makes the audience GASP at the mad-science world they're about to enter. Frankenstein-castle-lab-reveal / Doc-Brown's-DeLorean-garage-pull-back / Bioshock-Rapture-establishing-shot / Tesla-Wardenclyffe-entrance energy.
+
+━━━ STRUCTURE (write the prompt in this order for best results) ━━━
+[OPENING: a wide cinematic interior establishing-shot of a soaring steampunk mad-science laboratory PACKED WITH MULTI-COLORED GLOWING EXPERIMENTS — name the colors: emerald + electric-blue + hot-pink + amber + violet all visible], [the centerpiece experiment glowing dramatically in the midground], [the electrical phenomenon if rolled — Tesla arcs / plasma-glow], [the three apparatus details around the room — each in a DIFFERENT glow color from the centerpiece], [the scientist figure if rolled — TINY scale-prover at midground edge], [foreground tactile detail with rim-light], [lighting fills the room — gas-lamps + multi-color experiment glow + theatrical key-light], [atmospheric vapor / steam / ozone in volumetric god-rays], [color palette and mood]
+
+CRITICAL — every render is a MOVIE-POSTER PROMOTIONAL FRAME. MAD-SCIENCE GLOWING CHAOS in 4+ DIFFERENT COLORS. Every quadrant intentional. Story mid-action. Saturated jewel-tones against deep shadow. The kind of shot that opens a feature film.
+
+Output ONLY the raw 120-160 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+
   STEAMBOT_STEAMPUNK_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, character, landscape, surprise_element, event } = slots;
 

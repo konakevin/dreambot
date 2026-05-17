@@ -24,6 +24,7 @@ const pathBuilders = {
   'steampunk-spectacle': require('./paths/steampunk-spectacle'),
   'steam-transport': require('./paths/steam-transport'),
   'cozy-steampunk': require('./paths/cozy-steampunk'),
+  'steampunk-labs': require('./paths/steampunk-labs'),
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -83,6 +84,7 @@ module.exports = {
     'steampunk-spectacle':   { 'black-forest-labs/flux-1.1-pro': 100 },
     'steam-transport':       { 'black-forest-labs/flux-1.1-pro': 100 },
     'cozy-steampunk':        { 'black-forest-labs/flux-1.1-pro': 100 },
+    'steampunk-labs':        { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -94,6 +96,10 @@ module.exports = {
     'sexy-steampunk-woman': 'steambot-painted-woman',
     'steampunk-man': 'steambot-painted-man',
     'cozy-steampunk': 'steambot-painted-interior',
+    // steampunk-labs uses default hyperreal medium — painted-interior medium
+    // drowned the sci-fi mad-science energy with lush atmospheric-Victorian
+    // painter lineage (Parrish/Gurney/Christensen). Hyperreal lets the
+    // glowing experiments + sigils + Tesla arcs come through.
   },
 
   mediumStyles: {
@@ -152,6 +158,7 @@ module.exports = {
     'steampunk-spectacle',
     'steam-transport',
     'cozy-steampunk',
+    'steampunk-labs',
   ],
 
   pathWeights: {
@@ -163,9 +170,10 @@ module.exports = {
     'steampunk-spectacle': 1,
     'steam-transport': 2,
     'cozy-steampunk': 2,
+    'steampunk-labs': 2,
   },
 
-  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['steampunk-scene','airship-skies','steampunk-curio','steampunk-spectacle','steam-transport'] },
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['steampunk-scene','airship-skies','steampunk-curio','steampunk-spectacle','steam-transport','steampunk-labs'] },
   twoPassPolish: {
     enabled: true,
     conceptWords: 150,
@@ -174,7 +182,7 @@ module.exports = {
     // was stripping skin/eyes/makeup/hair DNA, leaving only the ethnicity
     // noun. Single-pass Sonnet preserves the full DNA stack. Per playbook
     // 2026-05-15 lesson: two-pass polish OFF for all new-axis paths.
-    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk'],
+    skipPaths: ['sexy-steampunk-woman', 'steampunk-man', 'airship-skies', 'steampunk-curio', 'steampunk-scene', 'steampunk-spectacle', 'steam-transport', 'cozy-steampunk', 'steampunk-labs'],
     polishedWordsByPath: { 'sexy-steampunk-woman': '80-110', 'steampunk-man': '80-110' },
     preservePhrasesByPath: {
       'steampunk-man': [
@@ -219,6 +227,7 @@ module.exports = {
       'steampunk-scene': 'scene',
       'airship-skies': 'scene', 'steampunk-curio': 'scene',
       'steampunk-spectacle': 'scene', 'steam-transport': 'scene',
+      'steampunk-labs': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

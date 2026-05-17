@@ -54,6 +54,12 @@ module.exports = {
   COZY_STEAMPUNK_WINDOW_VIEW: load('cozy_steampunk_window_view'),
   COZY_STEAMPUNK_INTRICATE_DETAIL: load('cozy_steampunk_intricate_detail'),
   COZY_STEAMPUNK_QUIET_MOMENT: load('cozy_steampunk_quiet_moment'),
+  // Steampunk-labs path bespoke pools (added 2026-05-16) — mad-science lab interior
+  STEAMPUNK_LABS_SPACE: load('steampunk_labs_space'),
+  STEAMPUNK_LABS_CENTERPIECE: load('steampunk_labs_centerpiece'),
+  STEAMPUNK_LABS_APPARATUS: load('steampunk_labs_apparatus'),
+  STEAMPUNK_LABS_ELECTRICAL: load('steampunk_labs_electrical'),
+  STEAMPUNK_LABS_SCIENTIST: load('steampunk_labs_scientist'),
   STEAMPUNK_ATMOSPHERES: load('steampunk_atmospheres'),
   STEAMPUNK_CURIOS: load('steampunk_curios'),
   STEAMPUNK_ANIMATE_CURIOS: load('steampunk_animate_curios'),
