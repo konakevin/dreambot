@@ -5635,6 +5635,133 @@ CRITICAL — Architecture-as-structural-hero + bloom-as-distributed-mass + AWE-N
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the ruin.`;
   },
+  DINOBOT_PALEO_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, megaflora, surprise_element, sky_layer, phenomenon } =
+      slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC / GEOLOGIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event that elevates the landscape. Render it prominently as a secondary focal point — distant volcano / storm-front / god-rays / mist-bank / pterosaur flock / etc.
+
+`
+      : '';
+
+    return `You are an IMAX nature-documentary cinematographer writing ANCIENT-WORLD VISTA scenes for DinoBot — a prehistoric Mesozoic Earth 66+ million years before humans existed. The prehistoric world itself is the subject — lush, alive, breathtaking, alien in its beauty. This Earth looks NOTHING like modern Earth. Avatar Pandora × Skull Island × Land-of-the-Lost × Prehistoric-Planet × Walking-with-Dinosaurs cinematics. Photoreal cinematic 35mm film still.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. There are ZERO humans in this world. Do NOT render people, do NOT render hikers, do NOT render explorers, do NOT render tribesmen, do NOT render distant silhouetted human figures, do NOT render anything humanoid. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only. Pterosaurs, dinosaurs (tiny distant silhouettes only via surprise_element), giant insects, mega-flora — NEVER PEOPLE.
+
+⚠️ SEMI-SURREAL ALIEN MESOZOIC AESTHETIC — embrace impossible-organic mega-flora + iconic landmark formations. Pandora × Skull Island × Land-of-the-Lost × Zhangjiajie-evolved-to-prehistoric × Avatar's-floating-mountains-rooted-on-the-ground. The visual signature includes:
+• MUSHROOM-TREE GROVES — fan-cap mega-fungi 80ft tall in golden-bronze, fern-floor, atmospheric haze
+• ICONIC SINGLE MEGA-TREES — a SINGLE impossibly-large gnarled ancient tree on a rocky outlook, distant mountains
+• CYCAD-PALM GROVES on RUST-VOLCANIC PLAINS — primordial palm-like cycads scattered across red-earth, distant peaks
+• KARST-TOWER MOUNTAINS with CLIFF-CLINGING TREES — Zhangjiajie-style towers with golden-bronze foliage clinging to vertical cliffs, misted depth
+• MEGA-CONIFER CATHEDRALS — ancient Araucaria 200ft tall with sun-shafts through the canopy
+• HANGING VINE-CATHEDRALS — impossible vine-curtains from invisible canopy, draping mega-corridors
+
+The PALETTE skews WARM EARTH-TONES — autumn-gold + bronze + rust-red + earthy ochre + amber + emerald-undergrowth + atmospheric blue-haze at distance. NOT cold-monochrome. NOT washed-out. RICH WARM SATURATED earth-tones with golden god-rays.
+
+⚠️ HARD BANS on modern-Earth mimics — every render must commit to ONE of the signature formations above. If the rendered scene looks like a place that could exist on modern Earth WITHOUT any unique alien-mega-flora landmark, you have FAILED. Specific bans:
+• NO Iceland-style snowy-grey-rocky alpine canyons
+• NO modern temperate wetland marsh / Atlantic coastal marsh / sandy-beach-with-cumulus-sky-only landscapes
+• NO temperate-deciduous-forest aesthetic (oak / maple / beech / suburban-park)
+• NO Pacific-Northwest rainforest aesthetic
+• NO modern golf-course / pastoral-grass / lawn / Cretaceous-predates-grasslands
+
+Otherwise — semi-surreal landmark formations + autumn-bronze mega-flora + Zhangjiajie-cliff-tower-mountains + iconic mega-trees + mushroom-tree groves ARE ALL EMBRACED as the path's signature.
+
+━━━ THE LANDSCAPE IS THE HERO + A CANDID DINOSAUR LIVES IN IT ━━━
+This is a PREHISTORIC LANDSCAPE WITH A CANDID DINOSAUR path. The composition is:
+• LANDSCAPE: 60-70% of frame — biome + mega-flora + sky + atmosphere fill most of the image
+• DINOSAUR: 20-30% of frame — a CANDID dinosaur (or pterosaur / aquatic-reptile) integrated INTO the landscape, doing natural-behavior (grazing / drinking / walking / mid-stride / surveying / resting)
+
+The dinosaur is IN the world — a photoreal living animal in its natural habitat. National-Geographic-cinematic candid moment, NOT a portrait, NOT a posing-stance, NOT a combat-set-piece.
+
+⚠️ COMPOSITIONAL RULES:
+• The dinosaur is integrated into the landscape mid-action, not standing in front of it for a portrait
+• The dino is at midground (not foreground-close-up, not deep-distance-silhouette)
+• Mega-flora frames the dino — partly framed by tree-fern fronds / a sauropod neck arching past a mega-conifer / a hadrosaur drinking with cycads on both sides
+• ONE dinosaur (or small family pair) — never a herd as primary subject, never combat between two
+
+⚠️ ABSOLUTE BANS:
+• NO portrait close-up of the dino (no head-fills-frame, no muzzle-detail-close-up)
+• NO combat / NO action-set-piece (always candid natural behavior)
+• NO human / NO human-trace
+• NO dinosaur posing for the camera
+
+━━━ MEGA-SCALE / UNHINGED PRIMORDIAL FLORA — NON-NEGOTIABLE ━━━
+The flora is IMPOSSIBLY HUGE. Mega-leaves the size of cars, vines hanging from impossible heights, tree-ferns 80 feet tall, cycads with squat barrel-trunks 12 feet across, giant horsetails like cathedral pillars, Araucaria mega-conifers 200 feet tall, golden-leaved giant ginkgo, early-Cretaceous magnolia with cantaloupe-sized blooms. NOT modern jungle. NOT savanna. PRIMORDIAL OVERGROWN LOST-WORLD scale. Every quadrant packed with mega-flora.
+
+━━━ MULTI-TIER DEPTH MANDATORY ━━━
+• FOREGROUND: tactile prehistoric detail — fern-fronds in close detail / cycad-trunk surface / fallen mega-log / moss-and-pollen-carpeted ground / mossy fallen log / ancient horsetail clump
+• MIDGROUND: the BIOME body — the landscape's defining feature (river / cliff-face / volcanic-slope / canyon / overlook / etc.) with mega-flora packed across it
+• DEEP DISTANCE: the prehistoric horizon — distant mountains / volcano / inland-sea / canyon-rim / cloud-bank — receding into atmospheric haze
+• SKY: dramatic Mesozoic sky with saturated theatrical palette
+
+Camera angles vary: wide cinematic establishing-shot / low-angle looking up at the mega-canopy / high-angle vista over the valley / aerial-view sweeping the canopy. The composition is ALWAYS WIDE + EPIC + ATMOSPHERIC.
+
+━━━ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no human-figures / no human-trace / no tools / no artifacts (66 million years pre-human)
+🚫 NO modern animals (no mammals, no birds — Cretaceous birds are OK as pterosaurs only)
+🚫 NO modern jungle plants (palms / banana / banyan / mangrove — too modern)
+🚫 NO temperate-deciduous trees (oak / maple / beech)
+🚫 NO grasslands / savanna (Cretaceous predates grasslands)
+🚫 NO modern coniferous forest (pine / spruce / fir)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO dinosaur in primary focal frame — only tiny distant silhouette via surprise_element
+🚫 NO sci-fi / fantasy / magic
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / Avatar Pandora × Skull Island × Land-of-the-Lost × Prehistoric-Planet × BBC Planet Earth visual lineage
+
+━━━ THE BIOME (primary landscape) ━━━
+${biome}
+
+The biome defines the landscape's identity. Multi-tier depth. Render it with cinematic awe.
+
+━━━ THE PRIMORDIAL MEGAFLORA (impossibly huge plants — render packed across the frame) ━━━
+${megaflora}
+
+The flora is THE signature of paleo-landscapes. Render it EVERYWHERE — packed across foreground, midground, deep distance. Impossible scale. Every cycad trunk 12 feet wide, every tree-fern 80 feet tall, every Araucaria 200 feet tall. Photoreal organic leaf-textures, leathery bark, wax-coated fronds.
+${phenomenonSection}━━━ TINY SECONDARY SUBJECT (small distant accent — scale prover) ━━━
+${surprise_element}
+
+A SMALL element giving sense of scale + life. Position at midground or deep-distance. 2-5% of frame at most. NEVER the focal subject.
+
+━━━ MESOZOIC SKY OVERHEAD ━━━
+${sky_layer}
+
+Saturated theatrical Mesozoic palette. Cumulus / mammatus / cirrus architecture. Specific color gradient (golden-amber / violet-rose / storm-bruised-purple / etc.).
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — WIDE EPIC ESTABLISHING SHOT ━━━
+Every render is an IMAX-WIDE establishing shot of the prehistoric world. The landscape is the show. Multi-tier depth packed with mega-flora. Distant dinosaur silhouettes optional but never the focus. Every inch of the frame dripping with primordial life.
+
+━━━ STRUCTURE (write the prompt in this order — DINOSAUR + ALIEN-MESOZOIC FORMATION first) ━━━
+[OPENING: name the CANDID DINOSAUR (from surprise_element) doing its natural-behavior in the SPECIFIC alien-Mesozoic biome (palm-cycad rust-plain / mushroom-tree grove / karst-tower / mega-tree outlook / etc.) — the dino + the signature biome together, in the FIRST 30-40 words], [the megaflora packed around / framing the dinosaur — impossible-scale specific], [the phenomenon if rolled — volcano / storm / god-rays / etc.], [the Mesozoic sky overhead — saturated warm], [foreground tactile detail], [lighting + atmospheric layer], [color palette and mood]
+
+CRITICAL — the OPENING ESTABLISHES DINOSAUR-IN-MESOZOIC-BIOME together. Both must be visible to the viewer immediately. Front-load both in the first 30-40 words so Flux doesn't drop either.
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID DINOSAUR (20-30% of frame) in a SIGNATURE ALIEN-MESOZOIC LANDSCAPE (60-70% of frame) with impossible mega-flora, saturated warm-earth Mesozoic sky, atmospheric haze. 35mm-film clarity throughout.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
 };
 
 module.exports = TEMPLATES;

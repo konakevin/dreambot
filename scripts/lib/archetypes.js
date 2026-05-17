@@ -968,6 +968,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+  DINOBOT_PALEO_LANDSCAPE: {
+    description:
+      'PATH-BESPOKE — DinoBot paleo-landscape path (2026-05-17 axis-system migration from legacy function-form). PURE PREHISTORIC LANDSCAPE — Mesozoic / Jurassic / Cretaceous IMAX-scale ancient world vistas. NO dinosaurs as primary subject (only tiny distant silhouettes via surprise_element). The PRIMORDIAL WORLD itself is the hero — mega-flora, alien Earth, lush, alive. Avatar Pandora × Skull Island × Land-of-the-Lost overgrown jungle cinematics. Reuses PREHISTORIC_SETTINGS (200) as biome. 5 path-bespoke axes (biome / megaflora / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'megaflora', 'surprise_element', 'sky_layer'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 };
 
 module.exports = { ARCHETYPES };

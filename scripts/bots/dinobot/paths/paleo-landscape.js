@@ -1,59 +1,34 @@
 /**
- * DinoBot paleo-landscape — pure prehistoric landscape. Ancient world
- * vistas at IMAX scale. Lush, alive, breathtaking. Dinos as distant
- * silhouettes only.
+ * DinoBot paleo-landscape — declarative composer form (2026-05-17 migration).
+ *
+ * PURE PREHISTORIC LANDSCAPE — Mesozoic / Jurassic / Cretaceous IMAX-scale
+ * ancient world vistas. NO dinosaurs as primary subject (only tiny distant
+ * silhouettes via surprise_element). The PRIMORDIAL WORLD itself is the hero —
+ * mega-flora, alien Earth, lush, alive.
+ *
+ * Avatar Pandora × Skull Island × Land-of-the-Lost × Prehistoric-Planet
+ * × Walking-with-Dinosaurs cinematics. Photoreal cinematic 35mm film still.
+ *
+ * Reuses PREHISTORIC_SETTINGS (200 entries) as the biome.
+ *
+ * Path-bespoke pools:
+ *   - DINOBOT_PALEO_LANDSCAPE_MEGAFLORA (mega-cycads / tree-ferns / Araucaria)
+ *   - DINOBOT_PALEO_LANDSCAPE_PHENOMENON (80%-gated dramatic atmospheric event)
+ *   - DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT (tiny distant dino silhouette / pterosaur / herd)
+ *   - DINOBOT_PALEO_LANDSCAPE_SKY (saturated Mesozoic sky)
+ *
+ * Universal: LIGHTING + PREHISTORIC_ATMOSPHERES.
+ *
+ * Pre-migration function-form at paths/legacy/paleo-landscape.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
-
-  return `You are an IMAX nature documentary cinematographer writing ANCIENT WORLD VISTA scenes for DinoBot. The prehistoric world itself is the subject — lush, alive, breathtaking, alien in its beauty. This Earth looks nothing like ours. Distant dinosaur silhouettes for scale only. Output wraps with style prefix + suffix.
-${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
-
-${blocks.ENVIRONMENT_STORYTELLING_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE LANDSCAPE ━━━
-${setting}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.VOLUMETRIC_LIGHT_BLOCK}
-
-${blocks.WET_WORLD_BLOCK}
-${blocks.EPIC_SCALE_BLOCK}
-
-${blocks.VAST_TERRAIN_BLOCK}
-
-${blocks.SURPRISING_WEATHER_BLOCK}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ CAMERA / FRAMING ━━━
-${camera}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Epic wide establishing shot. The prehistoric world at maximum scale and lushness. Distant dinosaur silhouettes optional but never the focus. Every inch of the frame dripping with prehistoric life.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DINOBOT_PALEO_LANDSCAPE',
+  pools: {
+    biome: 'DINOBOT_PALEO_LANDSCAPE_BIOME',
+    megaflora: 'DINOBOT_PALEO_LANDSCAPE_MEGAFLORA',
+    phenomenon: 'DINOBOT_PALEO_LANDSCAPE_PHENOMENON',
+    surprise_element: 'DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT',
+    sky_layer: 'DINOBOT_PALEO_LANDSCAPE_SKY',
+  },
 };

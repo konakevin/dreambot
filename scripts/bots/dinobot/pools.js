@@ -43,6 +43,12 @@ module.exports = {
   AERIAL_ACTIONS: load('aerial_actions'),
   AERIAL_SETTINGS: load('aerial_settings'),
   CAMERA_ANGLES: load('camera_angles'),
+  // Paleo-landscape path-bespoke pools (added 2026-05-17 — axis-system migration)
+  DINOBOT_PALEO_LANDSCAPE_BIOME: load('dinobot_paleo_landscape_biome'),
+  DINOBOT_PALEO_LANDSCAPE_MEGAFLORA: load('dinobot_paleo_landscape_megaflora'),
+  DINOBOT_PALEO_LANDSCAPE_PHENOMENON: load('dinobot_paleo_landscape_phenomenon'),
+  DINOBOT_PALEO_LANDSCAPE_SURPRISE_ELEMENT: load('dinobot_paleo_landscape_surprise_element'),
+  DINOBOT_PALEO_LANDSCAPE_SKY: load('dinobot_paleo_landscape_sky'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

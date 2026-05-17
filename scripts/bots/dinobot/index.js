@@ -126,7 +126,7 @@ module.exports = {
   },
 
   chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','volcanic-apocalypse','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack','aerial-perspectives'] },
-  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-portrait': '80-110','dino-action': '80-110','dino-pack': '80-110' }, preservePhrasesByPath: {} },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-portrait': '80-110','dino-action': '80-110','dino-pack': '80-110' }, preservePhrasesByPath: {}, skipPaths: ['paleo-landscape'] },
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
@@ -148,10 +148,37 @@ module.exports = {
     };
   },
 
+  // Bot-level pool defaults for declarative axis paths (composer reads these
+  // when a path config doesn't override the slot).
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'PREHISTORIC_ATMOSPHERES',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`DinoBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`DinoBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    throw new Error(`DinoBot: path "${path}" has invalid export shape`);
   },
 
   bannedPhrases: ['human', 'person', 'people', 'man ', 'woman', 'child', 'hunter', 'explorer', 'scientist', 'ranger', 'tourist'],
