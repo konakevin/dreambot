@@ -286,7 +286,7 @@ module.exports = {
       ],
     },
     // Optional: skip two-pass on specific paths
-    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth'],
+    skipPaths: ['dark-landscape', 'gothic-vista', 'gothic-architecture', 'castlevania-scene', 'cozy-goth', 'monster-prowl'],
   },
 
   // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
