@@ -1150,6 +1150,172 @@ Channel: Kew Gardens interior atmospheric moments + estate-conservatory golden-h
     instructions: `Each entry is ONE specific CONSERVATORY ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in conservatory + light/depth note". Vary across the 12 categories. NO humans. NO architectural duplicates. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── city-flowers path: city_setting (the urban canvas) ───
+  bloombot_city_flowers_city_setting: {
+    format: 'simple',
+    theme: `URBAN-OVERGROWN-BY-FLOWERS SETTINGS for the BloomBot city-flowers path. Each entry is ONE specific real-world historic urban setting where the city's signature architecture is HALF-CONSUMED by floral overgrowth. Each entry 25-50 words.
+
+⚠️ MANDATORY — every entry is a recognizable HISTORIC / PICTURESQUE / WEATHERED urban setting. The city's specific style is UNMISTAKABLE. Wide street-photography composition with pedestrian POV.
+
+🚫 STRICT BANS:
+  • NO modern / contemporary / corporate / sleek architecture
+  • NO American urban / Manhattan / LA / suburban
+  • NO interiors / rooms (cozy)
+  • NO landscapes / vistas / open countryside (landscape / tropical)
+  • NO conservatory / glass-and-iron greenhouse (conservatory)
+  • NO archways/passages as the FRAMING (garden-walk) — but city archways as PART of the urban scene are FINE
+  • NO ruins / abandoned (reclaim)
+  • NO humans / pedestrians / figures in the scene
+  • NO surreal / impossible
+
+✓ CITY-SETTING CATEGORIES:
+  A. **MEDITERRANEAN** — Cinque Terre cliff-village stairway / Amalfi coast village / Greek-island white-and-blue / Provence stone-village / Italian hill-town
+  B. **PARISIAN HAUSSMANN** — Paris cobblestone street / Haussmann boulevard / Montmartre stairway / Marais alley / Saint-Germain courtyard
+  C. **PORTUGUESE / LISBON** — Lisbon tile-fronted staircase / Alfama alley / Porto azulejo-clad street
+  D. **MOORISH / MARRAKECH** — Marrakech blue-painted courtyard / Andalusian whitewashed alley / Chefchaouen blue town / Granada Albaicín alley
+  E. **VENETIAN / CANAL CITY** — Venetian canal-side palazzo / Bruges canal / Amsterdam canal-house / Annecy canal-edge
+  F. **CUBAN / COLONIAL** — Havana old-town colonial street / colonial Caribbean / Cartagena Colombian
+  G. **TOKYO BACK-STREET** — Tokyo wooden-and-paper back-street / Kyoto Gion-district lane / Hanoi narrow alley
+  H. **BRITISH COTTAGE** — Cotswolds stone-cottage village / Cornish fishing-village / Welsh slate-roof lane
+  I. **SCANDINAVIAN** — Stockholm Gamla Stan alley / Bergen wooden-house wharf / Copenhagen colored-house row
+  J. **TUSCAN / UMBRIAN** — Tuscan hill-town alley / Umbrian medieval village / San Gimignano
+  K. **PUEBLO / SOUTHWEST** — Santa Fe adobe street / Mexican colonial town / New Mexico pueblo
+  L. **NORTH AFRICAN** — Fez medina alley / Casablanca old-quarter / Tunis souk-edge
+  M. **INDIAN PALACE-TOWN** — Jaipur pink-city alley / Udaipur palace-town / Jodhpur blue-city
+  N. **EAST ASIAN VILLAGE** — Hoi An Vietnamese lantern-street / Bagan Burmese village / Luang Prabang Laos
+  O. **MEDIEVAL EUROPEAN** — German half-timber town / Czech medieval village / French medieval cité
+
+Lineage to channel: National Geographic city-street photography + Travel + Leisure cover shots + Pinterest "European cities" boards + Studio Ghibli "Kiki's Delivery Service" old-world cities + Wes Anderson European set design.`,
+    touchpoints: [
+      'CINQUE TERRE CLIFFSIDE STAIRWAY — pastel-painted Cinque Terre cliff-village stairway climbing between tile-roof houses, bloom-cascades from every windowsill, sea visible far below at the cliff-edge, golden-hour light',
+      'PARISIAN HAUSSMANN BALCONY STREET — narrow Parisian Haussmann street with cream-stone facades, iron Juliet balconies tier upon tier on both sides, bloom-cascades from every railing, cobblestone street below',
+      'LISBON AZULEJO STAIRCASE — Lisbon staircase climbing between azulejo-tile-fronted houses, blue-and-white tile patterns visible through climbing-bloom vines, brass street-lamp, sun-bleached white plaster',
+      'MARRAKECH BLUE COURTYARD — Marrakech / Chefchaouen blue-painted courtyard with central fountain or well, bloom-cascade from upper balconies on all sides, deep ultramarine walls, geometric tile floor',
+      'VENETIAN CANAL PALAZZO — Venetian canal-side palazzo with weathered stone-and-stucco facade, bloom-cascades from arched-window balconies, dark canal water in the foreground reflecting the architecture',
+      'HAVANA OLD-TOWN STREET — Havana old-town colonial street with peeling pastel-painted walls, ornate iron grilles at the windows, bloom-cascades from every balcony, classic-car-style cobblestone street',
+      'TOKYO WOODEN BACK-STREET — Tokyo wooden-and-paper back-street with sliding doors and lanterns, bloom-cluster pots at every doorstep, weathered wood walls, paper-lantern glow at dusk',
+      'COTSWOLDS STONE-COTTAGE LANE — Cotswolds stone-cottage village lane with honey-colored stone walls, climbing roses on every cottage, thatched roofs, dry-stone walls, sun-warmed gravel road',
+      'STOCKHOLM GAMLA STAN ALLEY — Stockholm Gamla Stan medieval alley with cobblestone street rising between tall colored-stucco houses (ochre / red / yellow), shutters and iron-lamps, climbing-bloom vines',
+      'TUSCAN HILL-TOWN ALLEY — Tuscan hill-town alley with sun-baked terracotta walls, weathered wooden shutters, climbing wisteria from every window, stone steps rising into the village',
+      'SANTA FE ADOBE STREET — Santa Fe / New Mexico adobe-street with sun-bleached pink-and-tan walls, blue-painted doors and shutters, climbing-bougainvillea cascade, weathered wooden vigas overhead',
+      'FEZ MEDINA ALLEY — Fez medina narrow alley with ochre-and-amber plaster walls, ornate carved-wood doors, brass lanterns, climbing-bloom vines, distant minaret silhouette',
+      'JAIPUR PINK-CITY ALLEY — Jaipur Old City pink-stucco alley with carved-stone windows (jharokhas), ornate balconies, climbing-bloom cascades from upper-story windows, dusty street below',
+      'HOI AN LANTERN STREET — Hoi An Vietnamese ancient-town street with hanging silk-lanterns of every color, bloom-pot clusters at every shop entry, weathered yellow plaster walls, cobblestone',
+      'BRUGES CANAL EDGE — Bruges canal-edge street with stepped-gable houses on the opposite bank, swans on the water, bloom-cascades from every balcony, weathered brick-and-stone facades',
+      'CHEFCHAOUEN BLUE-CITY ALLEY — Chefchaouen Moroccan blue-city alley with ALL walls painted ultramarine, climbing-rose cascades on the blue walls, white-painted stone steps, weathered wooden doors',
+      'AMALFI COAST VILLAGE — Amalfi coast village stairway climbing between yellow-and-orange painted houses, sea visible far below, ceramic-tile street signs, climbing-bougainvillea cascade',
+      'BAGAN VILLAGE STREET — Bagan Burmese village street with golden-stupa silhouette in distance, weathered teak-wood houses with bloom-vine-covered porches, dusty unpaved street',
+      'GREEK ISLAND ALLEY — Greek-island whitewashed alley with vivid blue-painted doors and shutters, bougainvillea-cascade in fuchsia tumbling over the white walls, paving-stone street',
+      'KYOTO GION LANE — Kyoto Gion-district lane with traditional wooden machiya houses, bamboo blinds (sudare) at every window, bloom-pot clusters at every door, paper lanterns glowing at dusk',
+    ],
+    instructions: `Each entry is ONE specific HISTORIC URBAN SETTING with signature architecture, 25-50 words. Format: "CITY SETTING NAME CAPS — primary architectural style + city-signature detail + bloom-overgrowth note". Vary across the 15 categories. ALWAYS historic / picturesque / weathered. NEVER modern / corporate / American. NO people. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── city-flowers path: architectural_detail (the city's signature element) ───
+  bloombot_city_flowers_architectural_detail: {
+    format: 'simple',
+    theme: `CITY ARCHITECTURAL SIGNATURE DETAILS for the BloomBot city-flowers path. Each entry is ONE specific architectural element typical of historic urban settings — rendered with hyperreal precision and wrapped/draped in bloom-mass. Each entry 20-40 words.
+
+⚠️ MANDATORY — every entry is a TACTILE WEATHERED architectural detail typical of historic urban architecture. The detail is what the bloom-cascade wraps around / drapes over / climbs.
+
+🚫 STRICT BANS:
+  • NO modern / contemporary / corporate elements
+  • NO duplicate of city_setting (this is specific PIECES, not the whole street)
+  • NO humans / figures / hands
+  • NO interior elements (cozy territory)
+
+✓ ARCHITECTURAL-DETAIL CATEGORIES:
+  A. **BALCONY / RAILING** — wrought-iron Juliet balcony / iron Parisian railing / ornate Mughal jharokha / Andalusian wood-railed balcony
+  B. **WINDOW** — weathered wooden shutters / leaded-glass casement / azulejo-tiled window-frame / carved-stone Moorish window
+  C. **DOOR** — weathered wooden door with brass knocker / blue-painted Greek door / ornate Moorish carved door / pueblo blue door
+  D. **STAIRCASE** — Lisbon tile-fronted staircase / Mediterranean stone steps / Andalusian whitewashed steps / Italian terracotta steps
+  E. **ARCH / GATEWAY** — Moorish horseshoe arch / Italian Renaissance arch / cobblestone arched alley / wooden Vietnamese gate
+  F. **WALL** — sun-bleached plaster wall / azulejo-tiled wall / weathered brick wall / adobe wall with viga ends
+  G. **FOUNTAIN / WELL** — Mediterranean central fountain / Andalusian patio fountain / Moroccan tiled well / Italian marble fountain
+  H. **STREET LIGHT** — Parisian gas-lamp / Italian wrought-iron lamp-bracket / Moroccan brass-lantern / Japanese paper-lantern
+  I. **PAVEMENT** — cobblestone street / terracotta-tile pavement / azulejo-tile floor / sandstone-cobble / patterned-stone plaza
+  J. **AWNING / OVERHANG** — striped fabric awning / wooden-board overhang / canvas market-awning / paper-and-wood eaves
+  K. **DETAIL** — brass doorknob / cast-iron grille / wooden-trellis / weathered street-sign / chipped wall-mosaic
+  L. **PLANTER / POT** — weathered terracotta pot / hand-painted ceramic planter / wooden window-box / wrought-iron planter
+
+Channel: National Geographic city-detail photography + Wes Anderson set props + Travel + Leisure architecture shots + estate-sale European antiques.`,
+    touchpoints: [
+      'WROUGHT-IRON JULIET BALCONY — wrought-iron Juliet balcony with curling Victorian scrollwork, climbing-rose vines completely wrapped around the railings, paint-flaking dark-green, French casement-windows behind',
+      'WEATHERED WOODEN SHUTTERS — pair of weathered louvered wooden shutters partially closed across a window, paint-peeling sage-green or sun-bleached blue, climbing-bloom vines threading the louvers',
+      'BLUE-PAINTED GREEK DOOR — vivid blue-painted wooden Greek-island door with white-painted stone frame, brass knocker tarnished, climbing-bougainvillea in fuchsia cascade around the doorway',
+      'LISBON AZULEJO STAIRCASE — Lisbon tile-fronted staircase with blue-and-white azulejo tiles in geometric patterns, climbing-jasmine vines softening the edges of the steps',
+      'MOORISH HORSESHOE ARCH — carved-stone Moorish horseshoe-arch entry to a courtyard, intricate geometric carving, climbing-bloom vines on both sides, sun-glow visible through the arch',
+      'AZULEJO-TILED WALL — wall of blue-and-white azulejo tiles with intricate hand-painted patterns, weathered with age, climbing-bloom vines partially covering the tiles, a few tiles cracked',
+      'ANDALUSIAN PATIO FOUNTAIN — small octagonal Andalusian patio fountain with blue-and-yellow tiled basin, water bubbling gently, climbing-bloom vines on the courtyard walls behind',
+      'PARISIAN GAS-LAMP — black wrought-iron Parisian gas-lamp post with curling top, glass globe warm-amber, climbing-bloom vines spiraling up the post, evening glow on cobblestones',
+      'COBBLESTONE STREET — wet cobblestone street with petals scattered in the joints, individual rounded stones polished smooth by centuries, soft puddles reflecting the sky',
+      'STRIPED-FABRIC AWNING — striped red-and-white fabric awning above a small shop-front, weathered and slightly torn, climbing-bloom vines on the building wall behind the awning',
+      'BRASS DOORKNOB ON WEATHERED DOOR — antique brass doorknob on a weathered wooden door, tarnish-patina, a single bloom-petal stuck to the brass, the door slightly ajar',
+      'WEATHERED TERRACOTTA POT — large weathered terracotta planter on a stone doorstep, climbing-bloom mass overflowing the pot in a thick cascade, hairline cracks in the terracotta',
+      'CHEFCHAOUEN BLUE WALL — ultramarine-blue painted stone wall (Chefchaouen-style) with bloom-cascade in fuchsia tumbling down the wall, white-painted stone steps at the base',
+      'CARVED-STONE JHAROKHA — Indian jharokha (overhanging enclosed balcony) of carved pink sandstone with intricate latticework, climbing-bloom vines softening the carving',
+      'WROUGHT-IRON GRILLE — wrought-iron security-grille on a narrow window, ornate scrollwork, climbing-jasmine vines threading the bars, weathered Spanish colonial style',
+      'PAPER LANTERN HANGING — single red-and-yellow Japanese paper lantern hanging from a weathered wooden eave, soft glow at dusk, climbing-bloom vines on the surrounding wood',
+      'PUEBLO BLUE DOOR — sky-blue painted wooden door in a sun-bleached adobe wall, weathered wood, climbing-bougainvillea in coral cascade around the door-frame',
+      'CINQUE TERRE PASTEL FACADE — section of a Cinque Terre pastel-painted house facade (peach / coral / butter-yellow) with green wooden shutters, bloom-cascade from a small balcony',
+      'BRASS BISTRO TABLE — small wrought-iron bistro table on a Mediterranean cobblestone street, two bentwood chairs, china-cup left behind, climbing-bloom on the wall behind',
+      'STONE WELL-EDGE — old stone well-edge in a Mediterranean courtyard, sun-bleached limestone with moss-and-lichen in the cracks, climbing-bloom vines on the surrounding wall',
+    ],
+    instructions: `Each entry is ONE specific CITY ARCHITECTURAL SIGNATURE DETAIL wrapped in bloom, 20-40 words. Format: "DETAIL NAME CAPS — primary architectural element + material/weathering + bloom-interaction". Vary across the 12 categories. NEVER modern / contemporary. NO duplicate of city_setting. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── city-flowers path: atmospheric_phenomenon (60%-gated city magic) ───
+  bloombot_city_flowers_atmospheric_phenomenon: {
+    format: 'simple',
+    theme: `60%-GATED CITY ATMOSPHERIC PHENOMENA for the BloomBot city-flowers path. Each entry is ONE specific magic-moment element rendered within the historic city street scene. Each entry 20-40 words.
+
+⚠️ MANDATORY — every phenomenon amplifies the city's atmosphere (lived-in / picturesque / atmospheric). Renders as a visible element within the urban frame.
+
+🚫 STRICT BANS:
+  • NO humans / pedestrians / figures
+  • NO architectural elements (those are city_setting / architectural_detail)
+  • NO duplicate of urban content
+
+✓ PHENOMENON CATEGORIES:
+  A. **LIGHT MAGIC** — golden-hour rake across the city alley / lamp-glow on cobblestones / sunset light pouring down the staircase / dappled light through awning
+  B. **SLEEPING ANIMAL** — sleeping cat curled on a doorstep / dog asleep in a sun-patch / pigeon cluster on a cobblestone / cat on a windowsill
+  C. **PARKED OBJECT** — vintage bicycle leaning against a wall / weathered scooter / wooden cart / classic Vespa / old wooden boat (canal city)
+  D. **CITY-LIFE-IMPLIED** — laundry hung between balconies / linens on a clothesline / open shutters / market-stall awaiting / cafe-chairs and umbrellas
+  E. **WEATHER** — after-rain wet cobblestones reflecting the lights / morning mist in the alley / dew on the bloom-cascades / soft snow on the rooftops
+  F. **SOUND IMPLIED** — fountain bubbling visibly / shop-bell hanging silent / wind-chime / phonograph music spilling from an open window
+  G. **WINDOW-LIFE** — songbird at a windowsill / canary in a brass cage / open window with curtain breath / bloom on a windowsill from inside
+  H. **PETAL / POLLEN** — fallen petals on the cobblestones / petal-trail down a staircase / pollen-cloud in the side-light / petal-fall from a balcony
+  I. **REFLECTION** — wet street reflecting the bloom-laden facades / puddle reflecting the architecture / canal reflection / window-glass reflection
+  J. **WAITING MOMENT** — bistro table set for two outdoors / market-stall mid-set-up / chair pulled up to a step / two bicycles leaning together
+  K. **EVENING-WARM** — golden lantern-glow / candle in a window / cafe-string-light / Vespa headlamp glow at dusk
+  L. **POLLINATOR** — solitary hummingbird at a balcony bloom / butterfly in the sunbeam / bee at a windowsill flower
+
+Channel: Wes Anderson set-prop moments + Studio Ghibli Kiki's Delivery Service city details + Pinterest "European charm" boards + Singer Sargent city paintings + Doisneau street-photography moments.`,
+    touchpoints: [
+      'GOLDEN-HOUR RAKE DOWN ALLEY — late-afternoon golden-hour sunlight raking down the city alley at a low angle, individual cobblestones casting long shadows, bloom-cascades catching the warm glow',
+      'SLEEPING CAT ON DOORSTEP — solitary tabby cat curled asleep on a weathered stone doorstep, sun-warmed patch under it, brass doorknob just above it, bloom-cascade around the door-frame',
+      'VINTAGE BICYCLE LEANING — single vintage Italian bicycle with woven basket leaning against a sun-bleached pastel wall, climbing-bloom vines on the wall behind it, cobblestones below',
+      'LAUNDRY BETWEEN BALCONIES — colorful laundry hanging on a clothesline strung between two balconies across the alley, gentle breeze implied, bloom-cascades from both balconies',
+      'AFTER-RAIN WET COBBLESTONES — wet cobblestones reflecting the bloom-laden facades and warm street-lamp glow, individual stones glistening, soft puddles in the joints',
+      'FOUNTAIN BUBBLING VISIBLY — small Mediterranean / Andalusian fountain bubbling water visibly in the courtyard center, ripples on the basin surface, blooms around the rim',
+      'SONGBIRD AT WINDOWSILL — solitary songbird (warbler / sparrow / European robin) perched on a windowsill in a pause, head tilted, looking at the street below, blooms in a pot beside it',
+      'PETAL-TRAIL DOWN STAIRCASE — trail of fallen petals scattered down a Lisbon-tile staircase, individual petals visible on each tread, a few stuck to the riser-tiles',
+      'WET-STREET REFLECTION — wet cobblestone street reflecting the bloom-laden facade and warm gas-lamp glow, the reflection slightly blurred by puddle ripples, atmospheric',
+      'BISTRO TABLE SET FOR TWO — small bistro table on the cobblestones outside a cafe, two bentwood chairs, espresso cups on the table, bloom-cascade from the wall behind',
+      'GOLDEN LANTERN GLOW AT DUSK — single Parisian / Moroccan / Japanese lantern glowing warm-amber against the dusk-blue sky, bloom-cascade around the lantern bracket',
+      'HUMMINGBIRD AT BALCONY BLOOM — solitary jewel-iridescent hummingbird hovering at a bloom-cluster spilling from a wrought-iron balcony, wings a transparent blur',
+      'PIGEON CLUSTER ON COBBLES — small cluster of pigeons gathered in a sun-patch on the cobblestones, individual birds slightly out of focus, the rest of the street empty',
+      'OPEN WINDOW WITH CURTAIN BREATH — open window with a lace curtain stirring gently in the breeze, glimpse of interior beyond, bloom-cluster on the windowsill in foreground',
+      'CLASSIC VESPA PARKED — classic mint-green Vespa scooter parked at the edge of a Mediterranean cobblestone street, weathered chrome details, bloom-cascade from the wall behind',
+      'WOODEN BOAT IN CANAL — small weathered wooden boat moored at the bottom of a Venetian / Bruges canal-side staircase, water reflecting the bloom-cascaded palazzo above',
+      'MORNING MIST IN ALLEY — soft morning mist hanging low in the city alley between bloom-laden walls, atmospheric depth softening the deep end, sun starting to break through',
+      'CAT ON WINDOWSILL — solitary cat sitting on a window-sill watching the empty street below, ears alert, sun-warmed patch on the sill, bloom-pot beside the cat',
+      'WIND-CHIME IN SUN — wind-chime hanging from a wooden-eave catching the sun, soft tinkle implied, bloom-cascade from the eave around it',
+      'TWO BICYCLES LEANING TOGETHER — two vintage bicycles leaning against each other propped against a sun-bleached plaster wall, climbing-bloom vines on the wall behind',
+    ],
+    instructions: `Each entry is ONE specific CITY ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in city scene + lighting/sensory detail". Vary across the 12 categories. NO humans. NO architectural duplicates. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── tropical-paradise path: tropical_setting (the biome canvas) ───
   bloombot_tropical_paradise_tropical_setting: {
     format: 'simple',

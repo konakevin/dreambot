@@ -34,6 +34,10 @@ module.exports = {
   BLOOMBOT_CLOSEUP_BLOOM_WALL_TYPE: loadIfExists('bloombot_closeup_bloom_wall_type'),
   BLOOMBOT_CLOSEUP_GROWING_CONTEXT: loadIfExists('bloombot_closeup_growing_context'),
   BLOOMBOT_CLOSEUP_MACRO_PHENOMENON: loadIfExists('bloombot_closeup_macro_phenomenon'),
+  // ─── city-flowers path: declarative axis-system pools (2026-05-16 migration) ───
+  BLOOMBOT_CITY_FLOWERS_CITY_SETTING: loadIfExists('bloombot_city_flowers_city_setting'),
+  BLOOMBOT_CITY_FLOWERS_ARCHITECTURAL_DETAIL: loadIfExists('bloombot_city_flowers_architectural_detail'),
+  BLOOMBOT_CITY_FLOWERS_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_city_flowers_atmospheric_phenomenon'),
   // ─── conservatory path: declarative axis-system pools (2026-05-16 migration) ───
   BLOOMBOT_CONSERVATORY_CONSERVATORY_TYPE: loadIfExists('bloombot_conservatory_conservatory_type'),
   BLOOMBOT_CONSERVATORY_STRUCTURAL_ANCHOR: loadIfExists('bloombot_conservatory_structural_anchor'),

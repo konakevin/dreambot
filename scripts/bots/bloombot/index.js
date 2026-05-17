@@ -104,7 +104,7 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory'],
+    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers'],
   },
 
   sensoryAnchors: {
