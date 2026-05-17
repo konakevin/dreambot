@@ -1841,6 +1841,41 @@ The opening of each entry: NEVER start with "Chest-up shot..." or "Waist-up fram
     instructions: `Each entry is ONE specific HEAD/TEMPLE/EAR mechanism for a cyborg woman, 25-45 words. Write each as a FULL DESCRIPTIVE SENTENCE describing what the mechanism IS + where it's positioned + its visual signature. VARIETY MANDATE — distribute across the 5 categories (dual gear-discs / mandala / headphone / wired-up / face filigree). Vary colors (no all-purple, no all-cyan). Vary patterns (concentric rings, mandala, hexagonal lattice, flower-of-life, aztec-geometric, tribal-scrollwork). STRICT BAN on weapons / armor / tactical-tech / full-body descriptions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── cyborg-woman path: COLOR-VARIED FEATURES — dilute the chrome bias in cyborg_features pool (2026-05-17) ───
+  cyborg_features_color_varied: {
+    format: 'simple',
+    theme: `DOMINANT MECHANICAL FEATURES for a CYBORG WOMAN — color-VARIED material entries to dilute the existing chrome bias in the cyborg_features pool. Each entry 25-50 words. Same structural format as the existing 200-entry cyborg_features pool (translucent panels revealing internal mechanism / exposed servo joints / chrome-NOT entries), but VARIED across material/color spectrum: brass, copper, bronze, gold, pearl, ivory, ceramic, jade, obsidian, lacquer, coral, amber, oxblood, rose-gold, verdigris, mother-of-pearl, opal-iridescent, xenomaterial.
+
+⚠️ THE BAR — every entry showcases EXPOSED INNER WORKINGS at a specific body location (arm / leg / spine / shoulder / forearm / chest / hip / forearm / etc.) with a NON-CHROME material as the chassis material. Body part with visible internal mechanism.
+
+🚫 STRICT BANS:
+• NO "chrome" — use any other material word (brass / copper / bronze / gold / pearl / ivory / ceramic / jade / obsidian / lacquer / coral / amber / oxblood / rose-gold / verdigris / mother-of-pearl / opal / xenomaterial / etc.)
+• NO "silver" — too close to chrome
+• NO generic "metal" — be SPECIFIC about color
+• NO armor / no weapons / no tactical
+
+✓ ENTRY STRUCTURE (mirror existing pool): Body part + material + exposed inner mechanism + glow detail
+  Example: "Brass-and-bronze right forearm with exposed servo musculature visible through amber-resin translucent panel, glowing fluid circulating through copper conduits, every gear and cable visible beneath warm-tinted glass skin."`,
+    touchpoints: [
+      'Brass-and-copper right arm with exposed hydraulic pistons in burnished bronze, articulated servo fingers catching amber light, visible cable-bundle actuators running along forearm length under warm rose-gold filigree.',
+      'Transparent amber-resin forearm revealing burnished-brass skeletal framework, glowing topaz-orange fluid circulating through copper-alloy pistons, every mechanical tendon visible beneath honey-tinted skin.',
+      'Segmented oxblood-lacquer spine visible through dorsal translucent ruby-glass plate, each vertebra independently rotating brass servo unit with copper fiber-optic connections threading between discs.',
+      'Pearl-ivory ceramic right shoulder mount with exposed dark-bronze servo mechanism inside, gold-leaf scrollwork tracing the rim, micro-LED studs pulsing soft amber within the porcelain panel.',
+      'Obsidian-black hip joint with exposed dark-gold gimbal mechanism inside translucent smoky-quartz panel, three-axis gear-train visible rotating slowly, ruby-red conduit-fluid glowing within.',
+      'Verdigris-copper forearm chassis with hand-painted indigo circuitry traced in fine brushwork across every weathered patina panel, exposed servo mechanism visible at the elbow joint beneath botanical-tech detail.',
+      'Rose-gold filigree right thigh-plate with exposed mechanical knee-joint beneath, translucent amber section revealing internal hydraulic system glowing soft peach, every piston catching the warm light.',
+      'Mother-of-pearl iridescent chest plate with exposed power-core visible through translucent opal-shell panel, internal capacitor banks glowing soft violet, pearlescent surface shifting color in the light.',
+      'Jade-green ceramic shoulder mount with exposed dark-bronze mechanism inside, gold scrollwork rim, glowing emerald micro-LED cluster pulsing soft within the porcelain panel.',
+      'Antique-bronze left forearm with exposed copper servo musculature visible through translucent amber-resin panel, ruby-glass conduits glowing warm orange, ornate scrollwork engraved into the bronze plating.',
+      'Lacquer-deep-burgundy right hip-joint with exposed gold gimbal-mechanism inside translucent ruby panel, three-axis gear-train rotating slowly, internal honey-amber fluid glowing.',
+      'Coral-pink ceramic chest panel with translucent abdomen section revealing internal capacitor banks glowing soft pink, gold-leaf circuitry traced across the smooth glaze surface.',
+      'Xenomaterial alien-hull right arm with shifting bioluminescent iridescence cycling teal into purple, exposed servo joints visible at every articulation, organic-tech crystalline micro-facets along the surface.',
+      'Pearl-white ceramic spine plate with exposed brass vertebrae mechanism visible through translucent porcelain crown panel at the nape, gold-filigree circuitry running across the surface.',
+      'Burnished-copper forearm with exposed dark-bronze servo bundles visible at the wrist seam, translucent amber-resin panel revealing internal hydraulic fluid glowing soft orange.',
+    ],
+    instructions: `Each entry is ONE specific cyborg-woman dominant mechanical feature, 25-50 words. Same format as the existing cyborg_features pool — body part + material + exposed inner mechanism + glow detail. STRICT BAN on "chrome" / "silver" / generic "metal" — use specific colorful materials (brass / copper / bronze / gold / pearl / ivory / ceramic / jade / obsidian / lacquer / coral / amber / oxblood / rose-gold / verdigris / mother-of-pearl / opal / xenomaterial / etc.). VARIETY MANDATE — vary body part (arm / leg / spine / shoulder / forearm / chest / hip / hand / abdomen), vary material color, vary internal mechanism (servo / hydraulic / capacitor / fiber-optic / gear-train). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── cyborg-woman path: BALD CHROME SKULL hair variants (~15% of hair pool when this fires) ───
   cyborg_bald_chrome_skull: {
     format: 'simple',

@@ -72,11 +72,17 @@ module.exports = {
   CYBORG_EYE_STYLES,
   CYBORG_INTERNAL_EXPOSURE,
   CYBORG_GLOW_COLORS,
-  // CYBORG_FEATURES: 200 body-distributed entries + 40 head/temple variant entries
-  // (2026-05-17). Head variants (dual gear-discs / mandala / headphone / wired-up /
-  // face filigree) mix in at ~15% rate when rolled. Per Kevin's Attachments (5)
-  // references — head/temple mechanisms are variety options, not the default.
-  CYBORG_FEATURES: [...load('cyborg_features'), ...load('cyborg_head_variants')],
+  // CYBORG_FEATURES: 200 body-distributed entries + 40 head/temple variant entries +
+  // 80 color-varied entries (2026-05-17). The original 200-entry pool was ~50% chrome-
+  // mentioning, biasing renders toward white/chrome chassis. The 80 color-varied
+  // entries explicitly use brass / copper / bronze / gold / pearl / ivory / ceramic /
+  // jade / obsidian / lacquer / coral / amber / oxblood / rose-gold / verdigris /
+  // mother-of-pearl / opal / xenomaterial to dilute chrome bias from ~50% → ~30%.
+  CYBORG_FEATURES: [
+    ...load('cyborg_features'),
+    ...load('cyborg_head_variants'),
+    ...load('cyborg_features_color_varied'),
+  ],
   CYBORG_CLOSEUP_FRAMINGS: load('cyborg_closeup_framings'),
   // Cyborg-woman pools
   CYBORG_HAIR_STYLES,
