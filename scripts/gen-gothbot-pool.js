@@ -1708,6 +1708,7 @@ const POOL_RECIPES = {
     ],
     instructions: `Each entry is ONE gothic twilight sky, 15-30 words. SATURATED + THEATRICAL + GOTHIC. NEVER cheerful blue / NEVER clean daylight. STRICT GothBot dark-fantasy. NO sci-fi / cosmic / LOTR vocabulary. Use blood-moon sparingly. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
+
 };
 
 const recipe = POOL_RECIPES[POOL];

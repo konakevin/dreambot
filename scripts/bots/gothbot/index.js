@@ -17,7 +17,6 @@ const pathBuilders = {
   'goth-full-body': require('./paths/goth-full-body'),
   'goth-male-closeup': require('./paths/goth-male-closeup'),
   'goth-male-full-body': require('./paths/goth-male-full-body'),
-  'horror-creature': require('./paths/horror-creature'),
   'castlevania-scene': require('./paths/castlevania-scene'),
   'cozy-goth': require('./paths/cozy-goth'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
@@ -60,7 +59,6 @@ module.exports = {
     'castlevania-scene': 'black-forest-labs/flux-1.1-pro',
     'cozy-goth': 'black-forest-labs/flux-1.1-pro',
     'gothic-vista': 'black-forest-labs/flux-1.1-pro',
-    'horror-creature': 'black-forest-labs/flux-1.1-pro',
     // Character paths
     'goth-closeup': 'black-forest-labs/flux-1.1-pro',
     'goth-full-body': 'black-forest-labs/flux-1.1-pro',
@@ -91,7 +89,6 @@ module.exports = {
     'castlevania-scene': ['dark', 'nightshade', 'macabre'],
     'cozy-goth': ['dark', 'nightshade', 'macabre'],
     'gothic-vista': ['dark', 'nightshade', 'macabre'],
-    'horror-creature': ['dark', 'nightshade', 'macabre'],
     // Vampire-assassin paths locked to the dark triad.
     'vampire-assassin-female': ['dark', 'nightshade', 'macabre'],
     'vampire-from-a-distance': ['dark', 'nightshade', 'macabre'],
@@ -113,7 +110,6 @@ module.exports = {
     'castlevania-scene': 'anime',
     'cozy-goth': 'anime',
     'gothic-vista': 'anime',
-    'horror-creature': 'anime',
     // Vampire-assassin paths locked to anime medium for the trial.
     'vampire-assassin-female': 'anime',
     'vampire-from-a-distance': 'anime',
@@ -204,15 +200,14 @@ module.exports = {
   // scene description naturally.
   //
   // skipPaths: face-dominant paths where perception distortion would fight
-  // the face-swap aesthetic or muddy a portrait. horror-creature is opted out
-  // because the creature itself IS the chaos — adding more dilutes it.
+  // the face-swap aesthetic or muddy a portrait.
   //
   // allowSubjectChaosPaths: only paths with a figure IN an environment (not
   // face-dominant) get subject-chaos channel enabled. Pure scenery paths
   // also benefit (figure becomes optional landmark).
   chaos: {
     enabled: true,
-    skipPaths: ['goth-closeup', 'goth-male-closeup', 'horror-creature'],
+    skipPaths: ['goth-closeup', 'goth-male-closeup'],
     allowSubjectChaosPaths: ['goth-full-body', 'goth-male-full-body'],
   },
 
@@ -247,7 +242,6 @@ module.exports = {
       'goth-full-body': 'female',
       'goth-male-closeup': 'male',
       'goth-male-full-body': 'male',
-      'horror-creature': 'scene',
       'dark-landscape': 'scene',
       'gothic-architecture': 'scene',
       'gothic-vista': 'scene',
@@ -329,7 +323,6 @@ module.exports = {
     'goth-full-body',
     'goth-male-closeup',
     'goth-male-full-body',
-    'horror-creature',
     'castlevania-scene',
     'cozy-goth',
     'vampire-girls-2',
