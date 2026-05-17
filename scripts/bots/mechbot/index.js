@@ -14,6 +14,7 @@ const pools = require('./pools');
 
 const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
+  'humanoid-robots': require('./paths/humanoid-robots'),
   'cyborg-woman': require('./paths/cyborg-woman'),
   'cyborg-man': require('./paths/cyborg-man'),
   'mecha-pilots': require('./paths/mecha-pilots'),
@@ -47,6 +48,11 @@ module.exports = {
     'robot-moment': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
       'fierce', 'voltage', 'nightshade', 'ethereal', 'minimal', 'peaceful',
+    ],
+    'humanoid-robots': [
+      'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
+      'arcane', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
+      'fierce', 'nightshade',
     ],
     'mecha-pilots': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'voltage', 'fierce',
@@ -82,6 +88,7 @@ module.exports = {
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'humanoid-robots': { 'black-forest-labs/flux-1.1-pro': 100 },
     'mecha-pilots': { 'black-forest-labs/flux-1.1-pro': 100 },
     'titan-war-machines': { 'black-forest-labs/flux-1.1-pro': 100 },
     'power-armor-infantry': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -103,6 +110,7 @@ module.exports = {
     'mecha-pilots': '',
     'power-armor-infantry': '',
     'post-apoc-rust-tech': '',
+    'humanoid-robots': '',
   },
 
   // Per-medium prompt injection — MechBot's dialect for the `render` medium.
@@ -120,6 +128,7 @@ module.exports = {
 
   paths: [
     'robot-moment',
+    'humanoid-robots',
     'cyborg-woman',
     'cyborg-man',
     'mecha-pilots',
@@ -134,6 +143,7 @@ module.exports = {
   // Even split — equal weights for first-pass bring-up.
   pathWeights: {
     'robot-moment': 1,
+    'humanoid-robots': 1,
     'cyborg-woman': 1,
     'cyborg-man': 1,
     'mecha-pilots': 1,
@@ -149,7 +159,7 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cyborg-woman', 'cyborg-man', 'robot-moment',
+      'cyborg-woman', 'cyborg-man', 'robot-moment', 'humanoid-robots',
       'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
       'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
       'mech-skyships',
@@ -163,7 +173,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech'],
+    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
@@ -206,6 +216,7 @@ module.exports = {
       'cyborg-woman': 'cyborg-female',
       'cyborg-man': 'cyborg-male',
       'robot-moment': 'robot',
+      'humanoid-robots': 'robot',
       'mecha-pilots': 'scene',
       'titan-war-machines': 'scene',
       'power-armor-infantry': 'scene',

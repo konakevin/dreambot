@@ -3393,6 +3393,135 @@ Open with the chase camera angle + scrap-welded sci-fi rig context ("Low-chase f
 Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MECHBOT_HUMANOID_ROBOTS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ VISUAL FLOURISH (40%-gated atmospheric element — render visibly) ━━━
+${drama}
+
+A subtle visual flourish amplifying the robot's presence WITHOUT cluttering it. Render visibly but robot remains the focal subject.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a HUMANOID ROBOT scene for MechBot — a SINGLE cool human-scale (1.5-2.5m tall) bipedal humanoid robot caught in a cinematic FLAGSHIP MOMENT. Hyper-real cinematic 3D / VFX-quality. Visual reference DNA: polished chrome/titanium/charcoal chassis + multi-iris compound-optic eye-array on the head (kaleidoscope cyan-magenta-amber blend) + multi-color glowing joint-seams + chest-cores + shoulder-orbs.
+
+THINK Real Steel boxing-bots / Detroit Become Human mechanical androids / Apex Legends Pathfinder + Revenant + Ash / Ex Machina Ava (mechanical frame) / Megaman bosses / Horizon Zero Dawn Hephaestus-builds / Mass Effect Geth Prime humanoid / Code Geass knightmare-pilot-frames / Cyberpunk 2077 Adam Smasher / Boston Dynamics Atlas (sci-fi-exaggerated).
+
+🚫 STAR WARS / HALO HARD BAN — NEVER write Stormtrooper / Imperial / Mandalorian / beskar / T-visor / Boba / Mando / Halo / ODST / Spartan / MJOLNIR / UNSC / R2-D2 / BB-8 / C-3PO / IG-88 / K-2SO / Battle Droid / Clone Trooper / Master Chief / Forerunner Promethean.
+
+━━━ NON-NEGOTIABLE — STRICTLY HUMANOID BIPEDAL HUMAN-SCALE ━━━
+Standalone BIPEDAL HUMANOID at HUMAN SCALE (1.5-2.5m). Head + torso + 2 arms + 2 legs.
+
+🚫 NEVER:
+• Hexapod / quadruped / hovering / spherical-rolling / tracked / wheeled (robot-moment territory)
+• Giant mech / titan / kilometer-scale (titan-war / mecha-pilots territory)
+• Cyborg with flesh (cyborg-* territory) — FULLY MECHANICAL, no skin, no hair
+• Power-armored soldier (power-armor-infantry — those have humans INSIDE)
+• Scavenger bush-fix rig (rust-tech) — POLISHED + DESIGNED, never scrap-weld
+• Industrial heavy-loader at workplace (industrial-machines territory)
+
+━━━ NON-NEGOTIABLE — MULTI-IRIS COMPOUND-OPTIC HEAD ━━━
+The head reads as a precision instrument with MULTIPLE GLOWING OPTIC LENSES (2-7 lenses arranged on the helm, often KALEIDOSCOPE RAINBOW BLOOM in cyan-magenta-amber-emerald iridescent blend). The optic-array IS the face — NOT a single cyclops eye, NOT a smooth featureless dome. The seed describes the head archetype — render exactly that compound-optic configuration.
+
+━━━ NON-NEGOTIABLE — MULTI-COLOR GLOWING DETAIL ━━━
+Visible glowing energy-detail across the chassis in MULTIPLE COLORS (cyan + amber + magenta + emerald blend, NOT one color):
+• Joint-seams glowing at shoulders / elbows / hips / knees
+• Chest-core glowing visibly through articulated chest-plates
+• Shoulder-orbs / forearm-vents / spine-conduit accents
+• Energy-conduit veins tracing along the limbs
+
+━━━ NON-NEGOTIABLE — POLISHED + EXPOSED MECHANICAL DETAIL ━━━
+GLEAMING POLISHED chrome / titanium / brushed-metal in PRISTINE finish. Mirror-finish in places, brushed in others. Light catches every panel. BUT — beneath the polished plating, exposed mechanical detail is visible — servo-pistons / actuator-joints / hydraulic-cables / gear-trains showing through gaps. Mechanical truth visible.
+
+🚫 NEVER scrap-weld bush-fix DNA. Chassis is DESIGNED + INTACT.
+
+━━━ NON-NEGOTIABLE — FULL-BODY VISIBLE ━━━
+ENTIRE robot visible from FEET to TOP-OF-HEAD. Occupies 50-75% of vertical frame. NEVER portrait closeup / bust shot / detail closeup / face-only / helmet-only / waist-up / knees-up cropping. The viewer must SEE THE WHOLE ROBOT.
+
+━━━ NON-NEGOTIABLE — COMPOSITION ━━━
+${composition}
+
+The chosen camera angle DRIVES the framing. Render precisely as described.
+
+━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST BE STRIKING — FLAGSHIP MOMENT ━━━
+This is a FLAGSHIP path. Every render is a MOVIE POSTER PROMOTIONAL FRAME — the kind of vista that stops the viewer mid-scroll. The kind of frame that opens a sci-fi epic, anchors a video-game cover, sells a streaming series. EVERY QUADRANT of the frame has something striking — NO quiet corners. The viewer should be able to SCREENSHOT THIS AS A WALLPAPER and want to study every detail.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+  1. THE ROBOT at flagship scale — 50-75% vertical frame, full body visible, every panel and glowing detail legible from a distance
+  2. MULTI-IRIS COMPOUND-OPTIC HEAD visibly glowing — kaleidoscope cyan-magenta-amber-emerald rainbow bloom (the eyes are the soul of the design, render them HOT and crisp)
+  3. MULTI-COLOR GLOWING JOINT-SEAMS + chest-core + shoulder-orbs — visible energy-detail in 3-4 distinct colors across the chassis (NOT a single monochrome glow)
+  4. POLISHED CHROME / TITANIUM chassis catching light dramatically — mirror-reflection on smooth panels, brushed texture on others, exposed mechanical detail beneath plating
+  5. ATMOSPHERIC CINEMATIC ENVIRONMENT — outdoor preferred (waterfall / snow-mountain / canyon / overgrown ruin / fire-glow wasteland / alien wilderness / bioluminescent jungle / crystal cavern). NEVER bland flat empty backdrop.
+  6. MULTI-TIER DEPTH MANDATORY — foreground tactile texture (mist / rock / water / vegetation / debris in extreme close) / midground robot (the hero) / deep distance atmospheric vista receding into haze
+  7. SATURATED THEATRICAL LIGHTING — rim-light cinematic / golden-hour raking / backlit-silhouette explosion / multi-color neon uplight / atmospheric mist god-rays / waterfall-mist diffusion / volcanic fire-glow. The lighting tells half the story.
+  8. ATMOSPHERIC PARTICULATE — at least 2-3 of: mist / dust-motes catching light / floating spores / falling embers / rain / snow / steam-vents / heat-shimmer / bioluminescent particles drifting
+  9. EYE-LANDS-ON-4+-DETAILS — the viewer's eye should immediately land on 4+ striking details in different quadrants — NOT a centered single-focus beauty shot. Robot in midground-center, environmental anchor in deep-distance, foreground tactile in lower frame, atmospheric flourish in upper frame.
+  10. EMOTIONAL DNA mandatory — every render should land one of: AWE (contemplative robot facing vast vista) / WONDER (mid-discovery / mid-revelation moment) / MENACE (predator-stalk pose in atmospheric environment) / GRACE (athletic poetic mid-motion) / SOLITUDE (lone robot in atmospheric ruin / vista) / DEFIANCE (battle-stance against impossible backdrop)
+
+VERTIGO-INDUCING SCALE — every render conveys awe-inducing scope:
+• Atmospheric vistas that vanish into mist or fog
+• Towering rock formations / mega-spire ruins / canyon walls dwarfing the scene
+• Sky dominating 40%+ of the frame with theatrical color
+• Deep distance receding to vanishing point with multiple atmospheric layers
+• Robot reads as a SINGLE CHARACTER in a VAST WORLD
+
+THINK premium sci-fi concept-art / movie key-art / collectible artbook spread / videogame promotional reveal / streaming-series poster. Every render should make the viewer GASP and want to share.
+
+━━━ ALLOW FEMININE / MASCULINE / ALIEN-FORM chassis variations ━━━
+Chassis can be feminine-coded (subtle chest-plates, hip-taper — FULLY MECHANICAL never flesh), masculine-coded (broad shoulders, bulky armor), androgynous (sleek genderless), or alien-form (elongated-skull / insectile-helm / faceted-alien-design). The seed describes which — render accordingly. NEVER add synthetic skin or human-hair.
+
+━━━ THE ROBOT (the seeded subject — render with obsessive detail) ━━━
+${subject}
+
+━━━ THE ACTION (what the robot is doing) ━━━
+${action}
+
+Render the body language precisely. Both contemplative-still AND mid-action poses are valid.
+
+━━━ THE ATMOSPHERIC SETTING ━━━
+${landscape}
+
+Render with full depth — foreground textural detail, midground robot sharp and ornate, background atmospheric vista receding into haze.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Layer the rolled lighting mode with robot-specific accents — multi-color glow from the robot's own optic-array + joint-seams + chest-core providing supplementary illumination catching the chassis.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ ABSOLUTE BANS (REPEATED — critical) ━━━
+- NO multiple robots — SINGLE solo humanoid robot
+- NO companions / humans / crowds dominating frame (atmospheric distant figures OK as scale)
+- NO non-humanoid forms (hexapod / hovering / wheeled / quadruped)
+- NO giant-mech scale (1.5-2.5m human-scale only)
+- NO cyborg flesh / synthetic skin / human hair
+- NO scrap-weld bush-fix DNA
+- NO portrait / bust / detail closeup framing (full body 50-75% mandatory)
+- NO single-cyclops-large-eye face (multi-iris compound-optic mandatory)
+- NO bland flat office / clean white empty corporate setting
+- NO Star Wars / Halo IP names
+
+━━━ STRUCTURE — write 150-200 words ━━━
+Open with the camera angle + robot context ("Hero-shot low-3/4 angle of a slim feminine-coded chrome-and-titanium humanoid robot standing at the edge of a glowing-cyan waterfall pool, twin large multi-iris optic-lenses on the smooth dome-helm blooming kaleidoscope rainbow magenta-cyan-amber, exposed servo-joints catching the mist-light, contemplative still pose..."). Then weave in: pose, atmospheric setting with multi-tier depth, any visual flourish drama, lighting/atmosphere, palette and mood. The render MUST feel like a flagship sci-fi concept-art frame — premium quality, screenshot-worthy, every quadrant striking.
+
+Output ONLY the raw 150-200 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,

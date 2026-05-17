@@ -1273,6 +1273,337 @@ Each entry must specify:
     ],
     instructions: `Each entry is ONE specific Mad Max wasteland phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + wasteland-context". STRICT Mad Max aesthetic — NO clean industrial work, NO pristine nature, NO fantasy. Amplifies the chase/scavenger moment. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ─── humanoid-robots path: subjects (FAR-FUTURE cool humanoid robots, 2026-05-17, calibrated to Kevin's reference DNA) ───
+  humanoid_robots_subject: {
+    format: 'simple',
+    theme: `COOL HUMANOID ROBOTS for the humanoid-robots path — a SINGLE standalone humanoid robot (bipedal, head + torso + 2 arms + 2 legs, HUMAN-SCALE 1.5-2.5m tall). Each entry 35-65 words.
+
+⚠️ THE BAR: every entry must read like a piece of premium concept-art for a polished cinematic sci-fi humanoid robot character. Visual reference: gleaming chrome/titanium/charcoal chassis with multi-iris kaleidoscope eye-arrays in the head, multi-color glowing joint-seams / chest-cores / shoulder-orbs (cyan/amber/magenta/emerald), exposed mechanical detail visible beneath polished armor plating. REAL STEEL boxing-bots / DETROIT BECOME HUMAN combat androids (mechanical-only chassis) / EX MACHINA Ava (mechanical frame) / APEX LEGENDS Pathfinder + Revenant + Ash / I, ROBOT NS-5 / MEGAMAN-X bosses / HORIZON ZERO DAWN Hephaestus-builds / Boston Dynamics Atlas (sci-fi-exaggerated) / Code Geass knightmare-pilot-frames / Cyberpunk 2077 Adam Smasher / Mass Effect Geth Prime humanoid.
+
+🚫 ABSOLUTE BANS:
+• NOT a hexapod / quadruped / hovering / spherical-rolling / tracked / wheeled robot — STRICTLY BIPEDAL HUMANOID FORM (head + torso + 2 arms + 2 legs)
+• NOT a giant mech (titan-war / mecha-pilots territory) — HUMAN-SCALE 1.5-2.5m tall
+• NOT a cyborg with flesh (cyborg-woman / cyborg-man territory) — FULLY MECHANICAL, no flesh, no organic skin, no hair
+• NOT a synthetic android with realistic human skin (this is the MECHANICAL version)
+• NOT scavenger bush-fix rig (rust-tech territory) — POLISHED + DESIGNED, never jury-rigged scrap-weld
+• NOT a battlefield power-armored soldier (power-armor-infantry — those have humans INSIDE)
+
+🚫 IP HARD BAN — NEVER name: Stormtrooper / Mandalorian / beskar / Halo / ODST / Spartan / MJOLNIR / UNSC / Star Wars / R2-D2 / BB-8 / C-3PO / IG-88 / K-2SO / Battle Droid / Clone Trooper / Master Chief / Forerunner Promethean. The aesthetic these IPs share is welcome — but NEVER name the IP.
+
+✓ SIGNATURE VISUAL DNA — bake AT LEAST 3 of these into EVERY entry:
+• **MULTI-IRIS COMPOUND OPTIC HEAD** — multiple glowing eye-lenses on the helm (2-7 lenses, often kaleidoscopic rainbow-bloom / iridescent / cyan-magenta-amber blend). The head reads like a precision instrument with several glowing optic-arrays, NOT a single cyclops eye.
+• **MULTI-COLOR GLOWING JOINT-SEAMS** — energy-conduit glow visible at joint-articulations (shoulders / elbows / hips / knees) and along spine/chest, in multi-color (cyan + amber + magenta blend, NOT one color). Like circuitry pulsing.
+• **GLOWING CHEST-CORE or SHOULDER-ORBS** — visible reactor-core / power-pack glowing through chest-plate (single large lens or multi-port array, often multi-color)
+• **POLISHED CHROME / TITANIUM / BRUSHED-METAL chassis** — gleaming finish, NOT weathered scrap. Mirror-finish in places, brushed in others. Light catches every panel.
+• **EXPOSED MECHANICAL DETAIL beneath armor plating** — visible servos / actuator-pistons / hydraulic-cables / gear-trains showing through gaps in the polished plating, mechanical truth
+• **SCALE-RUST 0-30% optional** — minor wear at lower legs / dust on chassis / scratched-paint on a shoulder is fine if the entry needs it, but DEFAULT is gleaming-polished
+
+✓ ALSO BAKE 1-2 OF (additional flourish):
+• ELONGATED / ALIEN-TILTED HEAD-SHAPE (insectile / stretched-skull / faceted-faceplate) — humanoid head shapes can drift toward alien-tech-design
+• SIGNATURE TOOL/WEAPON visible — energy-blade / pulse-pistol / scanner-array / repair-arm / climbing-claws / data-jack / heavy ordnance
+• ASYMMETRIC SIGNATURE ELEMENT — one shoulder oversized / asymmetric arm / spine-mounted communication-array / drapery (cloak / scarf / sash)
+• MEMORABLE COLOR ACCENT — emerald / cobalt / amber / crimson / rose / gold as the standout color of the design
+
+✓ ARCHETYPE / BODY-TYPE DISTRIBUTION — vary across (FEMININE + MASCULINE + ANDROGYNOUS + ALIEN-FORM all welcome):
+  A. **SLIM ATHLETIC FRAME** (~20%) — lean humanoid silhouette, often expressionless smooth chassis with multi-iris optic-array head, courier/assassin/scout-coded
+  B. **HEAVY ARMORED FRAME** (~15%) — bulked-out combat chassis, broad shoulders, often with weapon-mounts, Adam-Smasher / Real-Steel-Zeus / Mass-Effect-Geth-Prime coded
+  C. **FEMININE-CODED ATHLETIC** (~15%) — chassis with subtle chest-plates / hip-taper / waist-narrowing, sleek hourglass-silhouette but FULLY MECHANICAL (NEVER flesh), polished chrome + exposed mechanical detail. Kevin reference IMG_8869 / Screenshot 12.13.14.
+  D. **WORKER/INDUSTRIAL HEAVY** (~10%) — bulky working chassis, scarves or cloth-drape over shoulders, polished but utilitarian, color-blocked design. Kevin reference IMG_8945.
+  E. **CONTEMPLATIVE / NARRATIVE FRAME** (~10%) — designed for a quiet character moment, gentler proportions, kneeling-friendly silhouette. Kevin reference IMG_8964 (waterfall-bot).
+  F. **CEREMONIAL / ORNATE** (~10%) — gold/chrome decorated, formal-coded, often robed/cloaked. Kevin reference Screenshot 12.11.42 (tall robed-helm-figure).
+  G. **ALIEN-FORM / EXOTIC SILHOUETTE** (~10%) — elongated skull-head / unusual proportions / faceted alien-tech chassis. Kevin reference Screenshot 12.11.19 (yellow-eyed mantis-helm).
+  H. **PREDATOR-STALK / FELINE-CODED** (~5%) — crouched humanoid, asymmetric reach, athletic-quadruped-tilted bipedal. Kevin reference IMG_8958 (crouched canyon-stalker).
+  I. **AVATAR-STYLE FRAME** (~5%) — Real-Steel boxing-bot or training-droid feel, broad-shouldered presentation-pose`,
+    touchpoints: [
+      'Slim feminine-coded chrome-and-titanium humanoid frame 1.8 meters tall, dome-helm with TWO LARGE GLOWING MULTI-IRIS OPTIC LENSES (rainbow-bloom kaleidoscope iridescent magenta-cyan-amber), exposed mechanical cable-bundles visible at the neck, polished chest-plates with central emerald reactor-core glowing, brass-gear-accents at the hips, contemplative still pose',
+      'Sleek slim androgynous humanoid 1.7 meters tall, faceted alien-tilted smooth-domed helm with MULTI-IRIS OPTIC array (3 lenses, kaleidoscope cyan-magenta bloom), pristine gleaming brushed-titanium chassis, glowing emerald spine-conduit visible along the back, asymmetric shoulder-orb pulsing amber, contemplative mid-stride pose',
+      'Heavy worker-bot 2.3 meters tall in polished white-and-orange industrial chassis, dome-helm with multiple amber-glowing optic-arrays clustered like compound eyes, OVERSIZED orange ceremonial scarf draped across shoulders, gripper-claw hands hanging at sides, glowing emerald shoulder-orb visible, scuffed lower-legs from rough terrain, contemplative standing pose',
+      'Predator-stalk humanoid 1.9 meters tall in matte-charcoal-and-black chassis, sleek smooth alien-form helm with one large central round optic glowing hot-amber, exposed mechanical claw-fingers, lean athletic proportions, antenna-mast extending from the back, crouched ready pose with one hand braced on ground',
+      'Contemplative narrative-frame humanoid 1.8 meters tall in gleaming chrome with cobalt accents, smooth dome-helm with FOUR-IRIS COMPOUND OPTIC ARRAY (kaleidoscope rainbow blend: magenta + cyan + amber + emerald), glowing cyan chest-core visible through articulated plates, exposed servo-joints at shoulders, kneeling reverent pose',
+      'Tall ornate ceremonial humanoid 2.2 meters tall in gleaming-chrome chassis under a black flowing ceremonial robe, alien-form elongated-skull helm with one large purple-magenta central optic surrounded by smaller amber accent-lenses, exposed mechanical wrist-joints visible at the cuff, dignified formal pose',
+      'Mantis-form alien-tilted humanoid 1.9 meters tall in chrome-and-charcoal chassis with elongated mantis-shaped helm, dual GLOWING-AMBER COMPOUND EYES (multi-faceted insectile lens-clusters), gold-leaf filigree details on the chestplate, cape draped from one shoulder, asymmetric blade-mounted forearm, predator stance',
+      'Athletic feminine-coded humanoid 1.7 meters tall in polished chrome with brass-and-emerald accent-details, smooth dome-helm with TWO LARGE MULTI-IRIS OPTIC LENSES (kaleidoscope bloom magenta-cyan-amber), articulated chest-plates with central emerald reactor visible, exposed servo-pistons at joints, mid-stride athletic pose',
+      'Heavy boxing combat-bot 2.1 meters tall (Real-Steel-coded), articulated red-and-chrome competition chassis with massive shoulder-pads, dome-helm with TWO HORIZONTAL VISOR-LENSES glowing red (compound optic array), exposed chest-core pulsing amber, gleaming polished surfaces, weight on back foot ready for next strike',
+      'Slim courier-bot 1.7 meters tall in brushed-titanium chassis with cyan accent-strips along the limbs, antenna-crown helm with MULTIPLE COMPACT OPTIC LENSES (4-iris cluster, cyan-magenta blend) and integrated comm-dish above, holographic-display projector arm raised mid-message, mid-stride athletic pose',
+      'Adam-Smasher-coded heavy assault frame 2.5 meters tall, bulked-out matte-charcoal chassis with red-accent kill-stripes, faceplate with diagonal HORIZONTAL VISOR glowing red (3-iris compound array along the slit), asymmetric oversized right-arm cannon, scarred chest-plate with exposed engine-block on the back glowing amber',
+      'Insectoid-form scout humanoid 1.7 meters tall in chrome-and-emerald chassis, alien-tilted faceted helm with MULTI-IRIS COMPOUND OPTIC ARRAY (6 small lenses arranged like an insect compound eye, glowing emerald-and-amber), exposed servo-pistons at joints, athletic crouch ready to leap',
+      'Detroit-Become-Human-coded combat-android 1.8 meters tall, slim athletic MECHANICAL-ONLY chassis (NO synthetic skin, exposed servo-joints / actuator-pistons / segmented panels), brushed-aluminum body with cyan energy-conduit veins glowing along the spine, dome-helm with MULTI-IRIS OPTIC ARRAY (3 lenses cyan-bloom)',
+      'Megaman-coded boss-droid 2.0 meters tall, brightly colored cobalt-and-crimson armored chassis with oversized shoulder-pauldrons and gauntlet-blasters, dome-helm with central forward-facing optic glowing gold + secondary side-lenses (3-iris head array), signature theme-color glow at chest and gauntlets, dramatic ready-pose',
+      'Apex-Pathfinder-coded scout-courier 1.9 meters tall, exposed mechanical-frame chassis (skeletal humanoid, NO armor plating — all servo-pistons / actuator-joints / cabling visible), large round optic-screen on the head displaying expressive face-pattern, grappling-hook-arm extended, athletic mid-action pose',
+      'Mass-Effect-Geth-Prime-coded armored combat-droid 2.4 meters tall, layered-plate humanoid chassis, central FACETED ALIEN-FORM HELM with MULTI-IRIS COMPOUND OPTIC ARRAY (5 lenses, cyan bloom), heavy assault rifle gripped two-handed, internal blue energy-conduits glowing through panel-seams, predator-stalk stance',
+      'Scientific-research droid 1.8 meters tall, slim white-and-cyan medical-coded chassis, dome-helm with SIX-IRIS COMPOUND-SENSOR ARRAY (kaleidoscope cyan-amber blend), multi-tool armatures extending from back and hip mounts, holographic-display projector on top of helm, calibration-arm raised mid-scan, polished surfaces',
+      'Ornate gold-and-chrome ceremonial royal-guard humanoid 2.0 meters tall, deep engraved filigree along chest-plate and pauldrons, antlered crown-helm with central glowing-emerald optic + 4 satellite-lens accents (multi-iris royal optic array), ceremonial energy-glaive held vertical at parade-rest, scarlet ceremonial-sash draped',
+      'Exploration-survey droid 1.9 meters tall, rugged outdoor-coded chassis with utility-vest of climbing-claws and survival-tools, asymmetric MULTI-IRIS OPTIC ARRAY on the helm (one larger main optic plus 3-4 small sensor-dots clustered, amber-cyan blend), exposed engine-block on the back with cooling-fins, dust-coated lower legs',
+      'Code-Geass-coded knightmare-pilot-frame humanoid 2.2 meters tall, cobalt-and-silver elegant armored chassis with oversized angular shoulder-pauldrons, full helm with HORIZONTAL VISOR GLOWING ELECTRIC-CYAN (4-lens array along the visor slit), ceremonial cape draped across one shoulder, sword-handle at hip, regal warrior stance',
+    ],
+    instructions: `Each entry is ONE specific cool humanoid robot, 35-65 words. Format: "[archetype] [color/material chassis description], [scale 1.5-2.5m], [head/helm/optic detail], [signature tool/weapon if applicable], [body language pose]". Vary across the 9 archetype distributions. STRICT BAN on cyborg-flesh / giant-mech / quadruped / hover / wheeled / non-humanoid forms. STRICT BAN on IP names. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── humanoid-robots path: actions (what the robot is doing) ───
+  humanoid_robots_action: {
+    format: 'simple',
+    theme: `WHAT THE HUMANOID ROBOT IS DOING for the humanoid-robots path. Each entry 25-50 words. The robot is mid-ACTION — a freeze-frame of meaningful movement or behavior.
+
+⚠️ MANDATORY — the robot is mid-ACTION (NOT static showpiece pose). The action conveys CHARACTER + PURPOSE. Reads as a still from a sci-fi movie.
+
+🚫 BANS:
+• NO group-action / no companion robots — SINGLE robot
+• NO giant-mech actions (titan-war territory) — human-scale movement only
+• NO bush-fix scavenger actions (post-apoc-rust-tech territory)
+• NO squad combat (power-armor-infantry territory)
+
+✓ ACTION CATEGORIES (vary across):
+  A. **MID-COMBAT** (~20%) — mid-fire / mid-strike / mid-block / mid-charge with weapon raised
+  B. **STEALTH/STALK** (~10%) — predator-stalk forward / cloaking-mid-fade / mid-strike from cover
+  C. **WORK/UTILITY** (~15%) — mid-hauling cargo / mid-welding / mid-repairing / mid-scanning / mid-mining
+  D. **MID-RUN/PURSUIT** (~10%) — mid-sprint / mid-leap / mid-vault / mid-grapple-fire
+  E. **CEREMONIAL/PRESENT** (~10%) — formal ceremonial pose / mid-announcement / mid-message-projection
+  F. **SCIENTIFIC/ANALYTICAL** (~10%) — mid-scan / mid-sample-collection / holographic-display reading / mid-recalibration
+  G. **DRAMATIC POSE** (~10%) — battle-stance ready / hero-pose silhouetted against light / contemplative-still in dramatic frame
+  H. **DOMESTIC/SERVICE** (~5%) — mid-cooking / mid-serving / mid-greeting / mid-assistance gesture
+  I. **EMOTIONAL MOMENT** (~5%) — looking at sunset / kneeling beside damaged ally / hand-on-window-of-spaceship / cradling object
+  J. **MID-DEPLOY** (~5%) — mid-launch from drop-pod / mid-rappel from ship / mid-emergence from charging station
+
+Each entry must specify:
+• Opening action-verb (mid-fire / mid-stride / mid-pose / mid-scan / mid-leap / etc.)
+• Body language (which arm raised / weight distribution / head-angle)
+• Specific OBJECT or TARGET being interacted with (weapon / cargo / scanner / display / enemy / cargo / friend)
+• Environmental detail (sparks / dust / energy-discharge / debris)`,
+    touchpoints: [
+      'Mid-combat stance with right energy-blade extended forward and left arm raised in guard position, weight on rear leg ready to lunge, sparks raining from the blade where it just deflected an off-frame strike, head tilted slightly tracking the target',
+      'Mid-stride sprint across an open plaza, both arms swinging in opposition to legs, single optic locked forward on a fleeing target, asymmetric heel-strike kicking up dust, holographic targeting-reticle visible across the helm',
+      'Mid-haul lift of a massive cargo container above the head with both arms, knees slightly bent under the load, balance-sensors visibly active with stabilization-thrusters firing micro-bursts at the hips, dust scattered around the boot-impact point',
+      'Mid-scan with right arm extended forward palm-up emitting a cone of blue scanner-light, head tilted reading the holographic display projected from the palm, left hand on chin in contemplative gesture, soft ambient mood',
+      'Predator-stalk forward through ruined corridor, body bent low and weight forward, dual energy-daggers held reverse-grip at hips, faceless helm tracking left then right scanning for movement, cloaking-field micro-distortion shimmering across the chassis',
+      'Mid-grapple-launch as the grapple-hook fires from the wrist toward an off-frame anchor-point, body crouched ready to be pulled, free arm raised in counterbalance, expressive face-screen display flashing excitement, dust kicking up behind the boots',
+      'Ceremonial parade-rest pose with energy-glaive held vertical in right hand and left hand at the small of the back, head held high with chin slightly elevated, scarlet ceremonial-sash perfectly draped, gleaming polished surfaces catching the light',
+      'Mid-fire pulse-rifle two-handed grip raised to shoulder, head tilted slightly to align with the integrated optic-sight, muzzle-flash blooming forward, brass-equivalent of energy-cells ejecting from the side, weight forward into the shot',
+      'Mid-strike with right armored fist swinging through the air toward an off-frame target, body torqued at the hips for power transfer, exposed knuckle-spikes catching light, dust trail behind the punch, predator-snarl posture',
+      'Mid-welding kneeling on one knee beside a panel, plasma-torch extended from the right forearm cutting through metal in a shower of bright sparks, left hand bracing the panel steady, head tilted reading the work with the helm-mounted scanner',
+      'Looking out across a vast landscape with hands clasped behind back, body in contemplative-still posture, head slightly tilted in observation, soft sunset light raking across the chassis, a moment of mechanical-poetry',
+      'Mid-emergence from charging-cradle as the cradle-arms retract back into the wall, body just-coming-online with optic-eyes flickering active for the first time, holographic boot-up sequence projected across the helm visor',
+      'Mid-leap over a railing or obstacle with both legs tucked, hands ready to catch the landing, body torqued slightly in mid-air, motion-blur on the surrounding scene, athletic acrobatic posture',
+      'Mid-mining operation with plasma-drill extended from right arm grinding into rock face, left arm bracing against the wall for stability, dust-cloud erupting from the drill-point, headlamp on the helm cutting through the dust',
+      'Mid-research analytical pose seated on a stool with multiple instrument-arms extending from back-mounts examining a small sample held in main hands, holographic data-displays floating around the head showing readouts, intellectual concentration in body language',
+      'Mid-domestic serving extending a tray with both hands toward an off-frame recipient, friendly body-language with slight forward bow, expressive face-display showing welcoming demeanor, soft ambient interior-light',
+      'Mid-grappler-deploy with the grappling-hook arm extended forward and the spool visibly unspooling cable, body crouched for the launch, free arm raised behind for balance, target structure visible in mid-distance',
+      'Mid-charge forward into combat with shoulder lowered as a battering ram, both arms pulled back as fists, head tracking forward, predator-roar implied through body language, surrounding debris flying',
+      'Mid-deploy from a drop-pod with the pod-hatch just opening, body emerging crouched ready to leap out, weapons already in hand, atmospheric-entry steam still venting from the pod surfaces around them',
+      'Mid-strike with energy-weapon overhead in a downward arc toward an off-frame opponent, body torqued for maximum impact, weight transferred forward, energy-trail glowing behind the weapon path',
+    ],
+    instructions: `Each entry is ONE specific humanoid robot mid-action, 25-50 words. Format: "[action-verb] [body language detail], [object/target interaction], [environmental detail]". Vary across the 10 action categories. STRICT BAN on group / giant-mech / scavenger / squad-combat actions. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── humanoid-robots path: landscape (ATMOSPHERIC sci-fi environments, calibrated to Kevin's reference DNA) ───
+  humanoid_robots_landscape: {
+    format: 'simple',
+    theme: `WHERE THE HUMANOID ROBOT IS for the humanoid-robots path. Each entry 25-50 words. The setting is ATMOSPHERIC + CINEMATIC.
+
+⚠️ THE BAR — every setting reads as a cinematic frame from a sci-fi film. Kevin's reference DNA leans HEAVILY toward atmospheric outdoor environments (waterfall canyon / snow-mountain ridge / alien wilderness / overgrown ruin / fire-glow wasteland / canyon-pass with mist) and dramatic cinematic ruins. NOT corporate-clean interior. NOT urban-busy. NOT empty white spaces.
+
+🚫 BANS:
+• NO present-day 21st-century street / suburban / highway / gas-station / shopping mall
+• NO modern industrial infrastructure rendered as functional
+• NO clean white corporate-lab interior (boring — leave those for stock-photo)
+• NO post-apoc bush-fix wasteland (rust-tech territory)
+• NO active battlefield (power-armor / titan-war territory)
+• NO busy crowds dominating the frame
+
+✓ SETTING CATEGORIES (lean HEAVY on atmospheric outdoor):
+  A. **ALIEN WILDERNESS — exotic biome** (~20%) — bioluminescent jungle / crystal-stalk forest / red-desert / acid-pool / glowing-mushroom-canyon, alien sky overhead
+  B. **MOUNTAIN / CANYON — ATMOSPHERIC** (~15%) — snow-capped mountain cliffside / deep rocky canyon-pass / mist-shrouded ravine / red-rock canyon at sunset
+  C. **WATERFALL / RIVER — sci-fi** (~10%) — cascading waterfall against alien-rock cliff / rapids in a glowing-crystal river / mist-shrouded pool below a waterfall
+  D. **OVERGROWN RUIN — vine-and-tech** (~15%) — sci-fi ruin overtaken by alien flora / vine-wrapped temple / collapsed orbital-debris half-buried in jungle / ancient mechanical-structure with bioluminescent moss
+  E. **FIRE-GLOW WASTELAND** (~10%) — distant volcanic-glow on the horizon / lava-channel cutting across rocky terrain / glowing-amber rift in the ground / fire-edge mountains
+  F. **SCI-FI STRUCTURE EXTERIOR — ATMOSPHERIC** (~10%) — towering exotic-architecture structure rising from mist / glowing geometric monolith in alien wilderness / vast sci-fi gateway in canyon
+  G. **CINEMATIC RUIN INTERIOR** (~10%) — vast ruined alien-temple interior with shafts of light / collapsed station-corridor with vegetation creeping in / mossy underground alien-cavern with crystalline structures
+  H. **ATMOSPHERIC ORBITAL / STATION** (~5%) — observation-deck with vast cosmic vista / station-corridor in dramatic chiaroscuro / docking-bay open to space with planet below
+  I. **NIGHT-LIT URBAN — moody dystopian** (~5%) — rain-streaked alien-city alley / glowing-neon rooftop at high altitude / moody cyberpunk-tinted street with atmospheric haze (used sparingly)
+
+Each entry must specify:
+• The setting type (atmospheric outdoor leaning heavy)
+• Time-of-day or atmospheric quality (golden-hour / dawn / dusk / twilight / overcast / mist / fire-glow / etc.)
+• 2-3 atmospheric / textural details (mist-rolling / bioluminescent-flora / water-cascading / vine-growth / fire-glow / alien-sky / etc.)`,
+    touchpoints: [
+      'Cascading waterfall against an alien-rock cliff at midday, water tumbling into a glowing-cyan pool below, moss-covered boulders in the foreground, bioluminescent flora clinging to the rock-face, atmospheric mist rising from the water-impact zone',
+      'Snow-capped mountain ridge at golden hour, the rocky peak rising into a sci-fi sky with distant alien-moons visible, snow swirling in the wind, sheer cliff-face dropping away below, atmospheric blue-shadow on the leeward side',
+      'Deep rocky canyon-pass at twilight with sheer red-stone walls reaching up on both sides, atmospheric mist rolling along the floor, distant glowing-rift visible at the far end of the canyon, dramatic vertical scale',
+      'Overgrown alien-temple ruin at sunset, ancient sci-fi structure half-consumed by bioluminescent vines, glowing-cyan moss covering every weathered surface, vast tree-roots cracking through the floor, mist drifting through the columns',
+      'Bioluminescent alien jungle at twilight, towering crystal-stalk trees rising into a violet sky, drifting magenta-and-cyan spore-particles catching the light, distant glowing-creature silhouette visible in the deep distance, atmospheric mood',
+      'Volcanic wasteland at dusk, distant lava-flow glowing amber on the horizon, jagged obsidian-rock formations in mid-distance, fire-glow uplighting the underside of low clouds, atmospheric haze tinted orange-red',
+      'Cinematic vast ruined alien-temple interior with dramatic shafts of light streaming through collapsed ceiling, mossy floor with bioluminescent fungi, crystalline-growths emerging from cracked walls, atmospheric mist drifting through the columns at multiple levels',
+      'Snowy frozen alien-tundra at dawn, the first warm sun touching the upper rocks while the lower terrain stays cold-blue, breath-fog visible, distant ice-formations rising like spires, atmospheric mist drifting low across the snow',
+      'Wide red-rock canyon at golden hour, dramatic sandstone-style cliff-faces glowing warm-amber in the late sun, atmospheric blue-shadow in the recesses, distant rock-spire pillars visible at the canyon mouth, mist rising from below',
+      'Mist-shrouded ravine at twilight, towering moss-covered rock walls on both sides, glowing-cyan crystalline outcroppings embedded in the rocks, atmospheric mist rolling along the bottom, sense of mysterious depth',
+      'Alien beach at sunset, glowing bioluminescent-cyan waves lapping a black-sand shore, two alien moons rising above the horizon, distant crystal-spire formations in the deep water, atmospheric warm sky tinted magenta-and-amber',
+      'Towering exotic-sci-fi structure rising from atmospheric mist at dawn, monolithic geometric design with glowing-cyan accent-lines visible, the surrounding terrain a barren rocky plain, atmospheric blue ambient with first warm sun cresting',
+      'Glowing-mushroom alien-cavern interior with massive bioluminescent fungi in cyan-and-magenta lighting the space, dripping moisture from the ceiling, crystalline-water pools on the floor, drifting spore-particles catching the glow',
+      'High-altitude mountain ridge at twilight with sheer drop on both sides, atmospheric clouds rolling below, distant snow-capped peaks visible at horizon-line, dramatic perspective with the ridge as a knife-edge, mood contemplative',
+      'Vine-wrapped collapsed orbital-debris half-buried in alien jungle at midday, vast ancient sci-fi-structure fragments choked with bioluminescent vines and roots, dappled light filtering through tree-canopy above, atmospheric mood',
+      'Mossy underground crystalline-cavern with multi-color bioluminescent crystals embedded in the rock walls glowing cyan-magenta-amber, a glowing-cyan pool of crystal-water at the center, vaulted ceiling lost in shadow, atmospheric otherworldly',
+      'Cyberpunk-tinted rain-streaked rooftop at night, towering arcology-building rising into the deep distance, neon-holographic signage glowing magenta-and-cyan across the wet surfaces, distant traffic of flying vehicles streaming between towers',
+      'Atmospheric sci-fi observation-deck at twilight with floor-to-ceiling viewport showing a vast cosmic vista of stars and distant nebula-clouds, soft amber ambient interior lighting, contemplative quiet mood, deep cinematic depth',
+      'Alien rocky cliffside at dawn with the rising sun cresting behind distant mountain-spires, sheer drop into a mist-shrouded valley below, rocky terrain in foreground with glowing-cyan crystalline outcroppings, atmospheric mood',
+      'Cinematic ancient sci-fi gateway in deep canyon, monumental geometric structure carved into the canyon-wall with glowing-cyan glyph-lines, atmospheric mist drifting around the base, dramatic vertical scale, the gateway leads somewhere unseen',
+    ],
+    instructions: `Each entry is ONE specific ATMOSPHERIC sci-fi setting, 25-50 words. Format: "[setting type] at [time of day], [2-3 atmospheric details]". Lean HEAVY on outdoor cinematic / atmospheric ruin / alien wilderness over clean-corporate-interior. STRICT BAN on present-day Earth / clean-empty corporate space / post-apoc-wasteland / active-battlefield. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── humanoid-robots path: composition (full-body humanoid robot vertigo angles) ───
+  humanoid_robots_composition: {
+    format: 'simple',
+    theme: `FULL-BODY HUMANOID ROBOT CAMERA ANGLES for the humanoid-robots path. Each entry 25-50 words. The composition makes the robot's DESIGN immediately legible — head-to-toe visible, environment supporting.
+
+⚠️ MANDATORY — every angle is FULL-BODY framing (head + torso + legs visible). NEVER portrait closeup / bust shot / detail closeup / waist-up cropping. The robot fills 50-75% of the vertical frame from feet to head.
+
+🚫 BANS:
+• NO portrait closeup / NO bust shot (head-and-shoulders only)
+• NO detail closeup (single hand / single foot filling frame)
+• NO face-only / helmet-only shot
+• NO waist-up / knees-up cropping
+
+✓ FULL-BODY ANGLE CATEGORIES (vary across):
+  • **CINEMATIC FULL-BODY EYE-LEVEL** — camera at robot's chest-height looking straight on, full body centered
+  • **HERO-SHOT LOW-3/4 ANGLE** — camera below knee-level looking up at full body, robot looming hero-style
+  • **WORM'S-EYE LOW** — camera at ground level looking up, full body extending into upper frame
+  • **OVER-THE-SHOULDER FROM ENVIRONMENT** — POV from a partial silhouette in foreground looking at the robot in midground
+  • **WIDE ESTABLISHING-SHOT** — wide vista with robot at midground as one element among many in the environment
+  • **THREE-QUARTER MID-DISTANCE** — robot at 25-40% of frame, environment surrounding, classic concept-art framing
+  • **GOD'S-EYE ANGLED-DOWN** — camera above looking down at the robot from above-front, full body visible from above-angle
+  • **SILHOUETTE BACKLIT WIDE** — wide shot with robot silhouetted against bright background (sunset / window / explosion), full body shape readable
+  • **WALKING-AWAY FROM CAMERA** — robot mid-stride walking away from camera into the scene, full body from rear
+  • **SIDE-PROFILE MID-STRIDE** — camera 90-degrees to robot mid-stride, motion-blur on background, full body in motion
+  • **STAIRWELL/CORRIDOR DEEP-PERSPECTIVE** — robot at end of long corridor or top of stairwell, deep perspective leading the eye
+  • **WINDOW-FRAME WIDE** — robot framed by a window or doorway in foreground or midground, full body visible through frame
+  • **REFLECTION-SURFACE** — robot's reflection visible in a mirror / window / wet floor, both the robot and reflection in frame
+  • **REVOLVING-PLATFORM WIDE** — robot standing on a circular platform with environment radiating outward, dramatic cinematic
+  • **MID-ACTION FREEZE-FRAME** — robot mid-leap / mid-strike / mid-fire caught in freeze-frame, full body in dynamic motion
+  • **LONE-FIGURE WIDE-LANDSCAPE** — robot small in midground against vast landscape, scale-prover for the environment
+  • **DOORWAY-EMERGENCE** — robot mid-step through a doorway / hatch / hangar-door, full body visible silhouetted in the opening
+  • **HERO-POSE BACKLIT** — robot in dramatic hero-pose silhouetted against bright explosion / sun / energy-discharge in background
+  • **THREE-QUARTER WITH ENVIRONMENT DEPTH** — three-quarter angle on robot with deep multi-tier environment visible behind
+  • **OVERHEAD-DRONE ANGLE** — drone-perspective looking down at robot at angle, full body visible from above-3/4
+
+Each entry must specify:
+• Camera position + height + angle
+• Full-body visibility (always head to feet)
+• What dominates the frame (the robot's silhouette + key environmental detail)`,
+    touchpoints: [
+      'CINEMATIC FULL-BODY EYE-LEVEL — camera positioned at robot\'s chest-height looking straight on, full body centered in the frame from feet on lower edge to top of helm at upper third, environment receding equally on both sides, classic museum-piece composition',
+      'HERO-SHOT LOW-3/4 ANGLE — camera positioned below knee-level looking up at the robot from 3/4 angle, full body extending into upper frame, robot looming hero-style with shoulders and helm dominant in upper half, environment visible at sides',
+      'WORM\'S-EYE LOW LOOKING UP — camera flush against the ground looking straight up at the robot, full body extending vertically into upper frame, sky or ceiling visible behind the robot\'s head, dramatic upward perspective',
+      'OVER-THE-SHOULDER FROM ENVIRONMENT — POV from behind a partial silhouette in extreme foreground (another figure / equipment / doorframe) looking at the robot in midground, full body framed by the foreground element',
+      'WIDE ESTABLISHING-SHOT — wide vista with the robot at midground as one element among many in the environment, full body visible at maybe 30% of frame height, multi-tier depth around them, the world is half the story',
+      'THREE-QUARTER MID-DISTANCE — robot at three-quarter angle to camera at 25-40% of vertical frame, environment receding to deep distance behind, classic sci-fi concept-art framing with character + world balanced',
+      'GOD\'S-EYE ANGLED-DOWN — camera positioned above the robot looking down at angle (not straight-down), full body visible from above-front perspective, head and shoulders prominent in foreground, legs in midground',
+      'SILHOUETTE BACKLIT WIDE — wide shot with robot silhouetted black against bright background (sunset sky / window / explosion / energy-discharge), full body silhouette readable, environment glowing behind',
+      'WALKING-AWAY FROM CAMERA — robot mid-stride walking away from camera into the deeper scene, full body visible from rear, head at upper-frame, feet at lower-frame, the destination ahead of them visible',
+      'SIDE-PROFILE MID-STRIDE — camera positioned 90-degrees to robot mid-stride at chest-height, motion-blur on background, full body in dynamic motion from one side, every joint articulation visible',
+      'STAIRWELL DEEP-PERSPECTIVE — robot at top of long stairwell or end of a deep corridor with strong perspective leading the eye, full body framed at the vanishing-point destination, dramatic geometric composition',
+      'WINDOW-FRAME WIDE — robot framed by a window or doorway in foreground or midground, full body visible through the frame, the frame itself creating compositional interest, environment visible beyond',
+      'REFLECTION-SURFACE FULL-BODY — robot\'s full body reflection visible in a mirror / window / wet floor / glass-table-surface, both the robot and the reflection in the frame, doubling the figure',
+      'REVOLVING-PLATFORM WIDE-CIRCULAR — robot standing on a circular platform with environment radiating outward around them, full body visible centered on the platform, dramatic cinematic angle',
+      'MID-ACTION FREEZE-FRAME — robot mid-leap / mid-strike / mid-fire / mid-charge caught in a freeze-frame moment, full body in dynamic motion captured at the peak of action, motion-blur on background',
+      'LONE-FIGURE WIDE-LANDSCAPE — robot small in midground at maybe 15% of frame height against a vast environmental landscape, scale-prover for the world, the figure tiny but readable as the focal subject',
+      'DOORWAY-EMERGENCE — robot mid-step through a doorway / hatch / hangar-door / blast-door, full body visible silhouetted in the opening, the environment beyond visible past them',
+      'HERO-POSE BACKLIT EXPLOSION — robot in dramatic hero-pose silhouetted against a bright background explosion / sun / energy-discharge, full body silhouette readable, theatrical action-movie composition',
+      'THREE-QUARTER WITH DEEP ENVIRONMENT — three-quarter angle on robot at 30-40% of frame height with multi-tier deep environment visible behind (foreground floor / midground robot / deep distance world)',
+      'OVERHEAD-DRONE ANGLE — drone-perspective looking down at robot from above at a 60-70 degree angle, full body visible from above-3/4, environment visible spreading out below them, hero-shot from above',
+    ],
+    instructions: `Each entry is ONE specific FULL-BODY humanoid robot camera angle, 25-50 words. Format: "ANGLE NAME CAPS — camera position + height + angle + what dominates the frame + environmental context". STRICT BAN on portrait / bust / detail closeups / waist-up cropping. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── humanoid-robots path: lighting (theatrical / mood-driven) ───
+  humanoid_robots_lighting: {
+    format: 'simple',
+    theme: `THEATRICAL LIGHTING for the humanoid-robots path. Each entry 20-40 words. Lighting that makes the robot's DESIGN sing — every panel, every glow, every accent legible.
+
+⚠️ STRICT BAN — NO bland flat office lighting. NO 21st-century practical / mundane. NO blank empty backgrounds.
+
+✓ MANDATORY VARIETY:
+  A. **CINEMATIC RIM-LIGHT** (~15%) — strong directional rim-light catching the robot's silhouette edges, hard shadow in body-mass with bright edge-line
+  B. **DRAMATIC THREE-POINT** (~15%) — classical cinematography three-point lighting with key / fill / rim, robot rendering as a sculpted museum-piece
+  C. **NEON CYBERPUNK MULTI-COLOR** (~15%) — neon signage in multiple colors uplighting / sidelighting the robot, magenta + cyan + amber blend
+  D. **GOLDEN-HOUR ROBOT-PORTRAIT** (~10%) — warm golden-hour sun raking across the chassis, long shadows, atmospheric beauty
+  E. **EXPLOSION-BACKLIT SILHOUETTE** (~10%) — distant explosion or energy-discharge backlighting the robot, silhouette edge-orange-amber
+  F. **SOFT INTERIOR AMBIENT** (~10%) — clean diffuse interior lighting from above (laboratory / corporate / station), shadowless precision
+  G. **STORMY DRAMATIC SKY** (~5%) — overcast or thunderstorm sky with intermittent lightning briefly silhouetting the robot
+  H. **HOLOGRAPHIC PROJECTION GLOW** (~10%) — robot lit primarily by holographic-displays / data-streams floating around it
+  I. **DAWN COLD-BLUE PRE-MISSION** (~5%) — pre-sunrise cold blue ambient with warm accent from robot\'s own glowing chest-core or energy-conduits
+  J. **NIGHT WITH ROBOT\'S OWN GLOW** (~5%) — deep-dark scene with the robot\'s own glowing eyes / chest-core / energy-conduits as primary light source`,
+    touchpoints: [
+      'CINEMATIC RIM-LIGHT — strong directional rim-light catching the robot\'s silhouette edges in bright cyan-white from behind-left, hard shadow on the body-mass with bright edge-line tracing every joint and panel, dramatic cinematic separation from background',
+      'DRAMATIC THREE-POINT — classical cinematography three-point lighting: warm key from front-left, cool fill from front-right, bright rim from behind, robot rendering as a sculpted museum-piece with every panel and surface texture readable',
+      'NEON CYBERPUNK MULTI-COLOR — neon signage in magenta and cyan and amber uplighting / sidelighting the robot in multiple direction, color blending across the chassis, wet pavement reflections doubling the colors',
+      'GOLDEN-HOUR ROBOT-PORTRAIT — warm golden-hour sun raking across the chassis at low angle, long shadows stretching across the ground, atmospheric haze gold, every surface detail catching the warm light beautifully',
+      'EXPLOSION-BACKLIT SILHOUETTE — distant explosion or energy-discharge backlighting the robot from behind, silhouette edge-orange-amber against the bright bloom, smoke and embers floating in front of the robot adding depth',
+      'SOFT INTERIOR AMBIENT — clean diffuse interior lighting from above (laboratory / corporate / station overhead LED arrays), shadowless precision, robot rendering in cool clean tones, technical mood',
+      'STORMY DRAMATIC SKY — overcast thunderstorm sky with intermittent lightning flashes briefly silhouetting the robot in stark white-on-dark, deep shadow between flashes, dramatic atmospheric tension',
+      'HOLOGRAPHIC PROJECTION GLOW — robot lit primarily by holographic-displays and data-streams floating around it in cyan and amber and magenta, soft accent lighting from multiple angles, technical sci-fi atmosphere',
+      'DAWN COLD-BLUE PRE-MISSION — pre-sunrise cold blue ambient ground-light with warm accent from the robot\'s own glowing chest-core / energy-conduits / running-lights, dual-color contrast, mission-readiness mood',
+      'NIGHT ROBOT-SELF-LIT — deep-dark scene with the robot\'s own glowing eyes / chest-core / energy-conduits as primary illumination, hard dramatic shadows on the surrounding environment, mysterious mood',
+      'SUNSET BACKLIT WITH ATMOSPHERIC HAZE — sun at horizon behind the robot with warm-orange atmospheric haze diffusing the light, robot silhouetted edge-amber, contemplative mood',
+      'OVERHEAD KEY WITH SHADOW POOL — strong overhead directional key-light casting hard shadow pool around the robot\'s feet, body in high contrast, theatrical museum-piece composition',
+      'WINDOWED-INTERIOR WITH LIGHT-SHAFTS — clean interior lit by sun-shafts streaming through tall windows at angle, light-shafts catching airborne dust, robot positioned in the shaft for hero-moment',
+      'INDUSTRIAL SODIUM-AMBER WITH STROBE-ACCENT — sci-fi industrial sodium-amber overhead with intermittent strobing red emergency-light, hard shadow contrast pulsing in rhythm, urgency mood',
+      'CRYSTAL-CAVE BIOLUMINESCENT GLOW — bioluminescent crystals or alien-flora providing primary glow in cyan or magenta from multiple angles, ethereal otherworldly lighting, alien mood',
+    ],
+    instructions: `Each entry is ONE specific theatrical lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + mood/context]". Distribute across the 10 buckets. STRICT BAN on bland flat office / 21st-century practical / blank empty backgrounds. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── humanoid-robots path: drama (40%-gated visual flourishes) ───
+  humanoid_robots_drama: {
+    format: 'simple',
+    theme: `40%-GATED VISUAL FLOURISH PHENOMENA for the humanoid-robots path — a visual element that amplifies the robot\'s moment. Each entry 25-50 words.
+
+⚠️ STRICT — each phenomenon adds visual interest WITHOUT cluttering the robot subject. The robot remains the focal point.
+
+✓ VISUAL FLOURISH CATEGORIES (vary across):
+  • **HOLOGRAPHIC INTERFACE FLOATING** — holographic data-display or interface floating in mid-air near the robot
+  • **ENERGY-DISCHARGE PARTICLE-SHOWER** — sparks or energy-particles cascading from a weapon-discharge or activation
+  • **COOLANT-VAPOR JET** — pressurized coolant-vapor venting from a joint or panel in a visible plume
+  • **DEBRIS-FIELD MID-AIR** — chunks of debris floating mid-air from a recent impact (slow-motion effect)
+  • **ATMOSPHERIC LIGHT-SHAFT** — dramatic shaft of light cutting through the scene illuminating the robot
+  • **SECONDARY ROBOT-COMPANION DISTANT** — a second robot visible in the deep distance (NOT competing for focus)
+  • **PASSING-VEHICLE STREAK** — sci-fi vehicle streaking past in the background as motion-blur
+  • **CROWD-OF-FIGURES DISTANT** — silhouettes of human figures or crowd in the deep distance (background life)
+  • **WEATHER-EFFECT — rain / snow / mist** — atmospheric weather element across the scene
+  • **PROJECTILE-IN-FLIGHT** — a projectile (bullet / energy-bolt / arrow) caught mid-flight in frame
+  • **EXPLOSION-FAR-DISTANT** — explosion in the deep distance providing scale and energy
+  • **DRONE-CAMERA SWARM** — small camera-drones hovering around the robot
+  • **PUDDLES-AND-REFLECTIONS** — wet ground or reflective surface doubling the robot\'s presence
+  • **POWER-CABLE BUNDLES** — bundles of glowing power-cables snaking through the scene
+  • **STEAM-VENT IN GROUND** — steam erupting from a grate or vent in the floor near the robot
+  • **GLOWING ENERGY-FIELD AROUND ROBOT** — visible energy-field / shield / aura around the robot
+  • **FALLING CONFETTI / PETAL** — particulate falling through the scene (snow / ash / petals / data-fragments)
+  • **DISTANT-CITY-SKYLINE LIT** — futuristic city skyline glowing in the distance as backdrop
+  • **PASSING-AIRSHIP OVERHEAD** — sci-fi airship or shuttle passing overhead at distance
+  • **ELECTRICAL-DISCHARGE FROM EQUIPMENT** — equipment in the scene visibly arcing or discharging electricity`,
+    touchpoints: [
+      'HOLOGRAPHIC INTERFACE FLOATING — translucent holographic data-display projecting in mid-air near the robot\'s outstretched hand, multi-layer information panels rotating slow with cyan-and-amber text, atmospheric haze catching the projection',
+      'ENERGY-DISCHARGE PARTICLE-SHOWER — sparks and energy-particles cascading downward from a recently-fired weapon or activation, glowing trails arcing through the air, brief over-exposure where particles are densest',
+      'COOLANT-VAPOR JET — pressurized coolant-vapor venting from a joint at the robot\'s shoulder or hip in a visible white plume, hot-air shimmer distorting the air around the vent, characteristic hiss-implied',
+      'DEBRIS-FIELD MID-AIR — chunks of debris floating mid-air around the robot in slow-motion freeze-frame, dust and fragments suspended at various heights, frozen-moment-of-impact composition',
+      'ATMOSPHERIC LIGHT-SHAFT — dramatic god-ray shaft of light cutting diagonally through the scene illuminating the robot from above-side, dust-motes catching the light, theatrical cinematic mood',
+      'SECONDARY ROBOT-COMPANION DISTANT — a second humanoid robot visible in the deep distance behind the hero robot, smaller and out-of-focus (NOT competing for focus), suggesting a wider world of robots',
+      'PASSING-VEHICLE STREAK — sci-fi hovering or flying vehicle streaking past in the background as motion-blur, light-trail extending behind, suggesting a busy futuristic world',
+      'CROWD-OF-FIGURES DISTANT — silhouettes of human figures or crowd in the deep distance going about their lives, providing scale and social-context, the hero robot in foreground/midground',
+      'WEATHER-EFFECT RAIN — heavy sci-fi rain falling across the scene, all surfaces reflecting any light sources, the robot mid-action in the deluge, water cascading off chassis-panels',
+      'PROJECTILE-IN-FLIGHT — an energy-bolt or projectile caught mid-flight crossing the frame near the robot, glowing trail extending behind it, freeze-frame moment of action',
+      'EXPLOSION-FAR-DISTANT — explosion in the deep distance providing fire-glow on the horizon, smoke-column rising into the sky, the hero robot in mid-distance silhouetted against the orange glow',
+      'DRONE-CAMERA SWARM — small camera-drones hovering around the robot at multiple altitudes filming or scanning, drones with glowing optic-eyes facing inward toward the subject, technological surveillance mood',
+      'PUDDLES-AND-REFLECTIONS — wet ground / reflective floor / glass surface doubling the robot\'s presence in mirror-reflection, both the robot and its reflection in frame composition',
+      'POWER-CABLE BUNDLES — bundles of glowing power-cables (cyan or amber energy visible through translucent sheaths) snaking through the scene connecting various equipment, scale-prover textural detail',
+      'STEAM-VENT IN GROUND — pressurized steam erupting from a grate or vent in the floor near the robot in a vertical plume, the robot partially obscured at lower-body level by the steam',
+      'GLOWING ENERGY-FIELD AROUND ROBOT — visible energy-field / shield / aura glowing softly around the robot, multi-color (cyan / amber) shimmer at the field-edge, sci-fi defensive system active',
+      'FALLING PARTICULATE — particulate falling through the scene (sci-fi-snow / ash / cherry-blossom-equivalent / data-fragments), drifting in soft motion across the frame, contemplative atmospheric mood',
+      'DISTANT CITY-SKYLINE — futuristic city skyline glowing in the deep distance as backdrop, towers with neon-signage and flying-vehicle traffic visible as distant motion-blur, sci-fi world context',
+      'PASSING-AIRSHIP OVERHEAD — sci-fi airship / shuttle / dropship passing overhead at high altitude in the deep distance, its silhouette against the sky, providing world-scale context',
+      'ELECTRICAL-DISCHARGE FROM EQUIPMENT — equipment in the scene (console / generator / control-panel) visibly arcing or discharging electricity, bright sparks contained to that equipment, scientific drama',
+    ],
+    instructions: `Each entry is ONE specific visual flourish phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + atmospheric detail + relationship-to-robot". Amplifies the robot\'s moment WITHOUT cluttering the focal subject. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

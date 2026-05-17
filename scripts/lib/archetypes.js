@@ -622,6 +622,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_HUMANOID_ROBOTS: {
+    description:
+      'PATH-BESPOKE — MechBot humanoid-robots path (2026-05-17 NEW PATH, not a migration). Sister to legacy robot-moment (kept untouched) for SPECIFICALLY HUMAN-SCALE BIPEDAL HUMANOID ROBOTS only. Calibrated to Kevin\'s 10 reference images 2026-05-17: polished chrome/titanium/brushed-metal chassis (NOT scrap-weld), multi-iris compound-optic head-arrays (kaleidoscope rainbow eye-lenses), multi-color glowing joint-seams + chest-cores + shoulder-orbs (cyan/amber/magenta/emerald blend), atmospheric cinematic outdoor settings (waterfall/snow-mountain/canyon/overgrown ruin/fire-glow wasteland) over urban-corporate. Allows feminine + masculine + androgynous + alien-form chassis. Both contemplative-still AND mid-action poses welcome. MOVIE POSTER MANDATE baked into template — every render a flagship concept-art frame. 6 path-bespoke pools.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',

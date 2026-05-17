@@ -129,6 +129,13 @@ module.exports = {
   RUST_APOC_COMPOSITION: load('rust_apoc_composition'), // Mad Max chase angles
   RUST_APOC_LIGHTING: load('rust_apoc_lighting'), // Fury Road wasteland lighting
   RUST_APOC_DRAMA: load('rust_apoc_drama'), // 40% gated wasteland phenomenon
+  // Humanoid-robots path (NEW 2026-05-17 — sister to robot-moment)
+  HUMANOID_ROBOTS_SUBJECT: load('humanoid_robots_subject'),
+  HUMANOID_ROBOTS_ACTION: load('humanoid_robots_action'),
+  HUMANOID_ROBOTS_LANDSCAPE: load('humanoid_robots_landscape'),
+  HUMANOID_ROBOTS_COMPOSITION: load('humanoid_robots_composition'),
+  HUMANOID_ROBOTS_LIGHTING: load('humanoid_robots_lighting'),
+  HUMANOID_ROBOTS_DRAMA: load('humanoid_robots_drama'), // 40% gated visual flourish
   // Alien-biomechs path
   ALIEN_BIOMECH_SUBJECTS: load('alien_biomech_subjects'),
   ALIEN_BIOMECH_ACTIONS: load('alien_biomech_actions'),
