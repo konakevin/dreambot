@@ -1,17 +1,23 @@
 /**
- * BloomBot conservatory — Victorian glass-and-iron greenhouse interior overgrown.
- * The architecture (glass panes + iron framework) is visible but the flowers
- * have consumed every surface.
+ * BloomBot conservatory — declarative axis-system form (2026-05-16 migration).
+ *
+ * VICTORIAN GLASS-AND-IRON CONSERVATORY interior fully OVERGROWN.
+ * Half-architectural / half-jungle. Wide-angle interior with volumetric
+ * god-rays through the glass.
+ *
+ * Legacy compositional version preserved at paths/legacy/conservatory.js.
+ *
+ * Axes (2 path-bespoke + 60%-gated phenomenon):
+ *   - conservatory_type (150): the Victorian glass-and-iron architectural shell
+ *   - structural_anchor (100): the central focal piece
+ *   - atmospheric_phenomenon (50, 60%-gated): magic-moment element
  */
-const compose = require('../compose');
 
-const SCENE = `A VICTORIAN GLASS-AND-IRON CONSERVATORY interior fully overgrown. The architecture is visible: arched glass dome above, white-painted or rust-patinaed iron framework, wrought-iron columns, geometric leaded-glass panes, a tile or flagstone floor, perhaps a central fountain or pond.
-
-But the conservatory is OVERGROWN — flowers have climbed every iron column, draped every arch, hung from every rafter, blanketed every flagstone, filled every planter to overflowing. Vines spill from upper rafters in cascading curtains. The interior looks half-architectural / half-jungle.
-
-Wide-angle interior shot showing the conservatory's depth — viewer stands inside looking down the central axis or up at the dome. Diagonal sun-shafts pour through the glass at the lighting-block-specified angle, hitting the bloom-clouds in volumetric god-rays.
-
-Pick one specific structural element to anchor: a curving iron staircase, a circular reflecting pool with lily pads, a stone bench under the dome, a tall sundial, an ornate bird cage suspended from the ceiling.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_CONSERVATORY',
+  pools: {
+    conservatory_type: 'BLOOMBOT_CONSERVATORY_CONSERVATORY_TYPE',
+    structural_anchor: 'BLOOMBOT_CONSERVATORY_STRUCTURAL_ANCHOR',
+    atmospheric_phenomenon: 'BLOOMBOT_CONSERVATORY_ATMOSPHERIC_PHENOMENON',
+  },
+};

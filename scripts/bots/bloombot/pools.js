@@ -34,6 +34,10 @@ module.exports = {
   BLOOMBOT_CLOSEUP_BLOOM_WALL_TYPE: loadIfExists('bloombot_closeup_bloom_wall_type'),
   BLOOMBOT_CLOSEUP_GROWING_CONTEXT: loadIfExists('bloombot_closeup_growing_context'),
   BLOOMBOT_CLOSEUP_MACRO_PHENOMENON: loadIfExists('bloombot_closeup_macro_phenomenon'),
+  // ─── conservatory path: declarative axis-system pools (2026-05-16 migration) ───
+  BLOOMBOT_CONSERVATORY_CONSERVATORY_TYPE: loadIfExists('bloombot_conservatory_conservatory_type'),
+  BLOOMBOT_CONSERVATORY_STRUCTURAL_ANCHOR: loadIfExists('bloombot_conservatory_structural_anchor'),
+  BLOOMBOT_CONSERVATORY_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_conservatory_atmospheric_phenomenon'),
   // ─── dreamscape path: declarative axis-system pools (2026-05-16 migration) ───
   BLOOMBOT_DREAMSCAPE_IMPOSSIBILITY_TYPE: loadIfExists('bloombot_dreamscape_impossibility_type'),
   BLOOMBOT_DREAMSCAPE_WORLD_ELEMENT: loadIfExists('bloombot_dreamscape_world_element'),

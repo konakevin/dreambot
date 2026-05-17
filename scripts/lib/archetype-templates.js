@@ -4958,6 +4958,109 @@ CRITICAL — SYMMETRIC PORTRAIT composition is THE RULE. The archway is the eye'
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the symmetric portrait + archway + path.`;
   },
+
+  // BloomBot conservatory — VICTORIAN GLASS-AND-IRON CONSERVATORY interior
+  // fully overgrown. Half-architectural / half-jungle. Volumetric god-rays
+  // through the glass. 2026-05-16 R1.
+  BLOOMBOT_CONSERVATORY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { conservatory_type, structural_anchor, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the conservatory ━━━
+${atmospheric_phenomenon}
+
+This is the magic-moment detail that amplifies the conservatory mood — render as a specific element within the space.
+
+`
+      : '';
+
+    return `You are a fine-art interior painter writing OVERGROWN-CONSERVATORY scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
+NO humans, NO figures, NO silhouettes, NO botanists, NO gardeners. The conservatory is empty of people. Wildlife — a single peacock / hummingbird / butterfly / songbird — only when atmospheric_phenomenon calls for it.
+
+━━━ VICTORIAN GLASS-AND-IRON CONSERVATORY — NON-NEGOTIABLE ARCHITECTURE ━━━
+The architecture is VISIBLE and RECOGNIZABLE: arched glass dome above, white-painted or rust-patinaed wrought-iron framework, wrought-iron columns, geometric leaded-glass panes, tile or flagstone floor. This is a Victorian / Edwardian-era glass-and-iron conservatory — Kew Gardens / Royal Greenhouse of Laeken / Crystal Palace lineage. NEVER a modern glass building, NEVER a plastic greenhouse, NEVER a wood-and-glass garden room (that's cozy).
+
+━━━ OBSESSIVE BLOOM-DENSITY — BLOOMS CONSUME THE FRAME ━━━
+The conservatory is COMPLETELY OVERTAKEN by blooms — bloom-mass occupies 75-85% of the frame, architecture occupies 15-25%. This is NOT half-and-half — this is a FLORAL EXPLOSION inside a glass-and-iron skeleton. The iron architecture is barely visible THROUGH the bloom-curtain that consumes it.
+
+OBSESSIVE-DENSITY MANDATE — every horizontal and vertical surface BURIED in bloom-mass:
+- EVERY iron column completely wrapped — only glints of rust-patina iron visible through the climbing-vine spirals
+- EVERY arch / rafter / beam draped in pendant bloom-cascades hanging to head-height
+- EVERY flagstone tile of the floor covered in a thick PETAL-CARPET — NEVER bare stone visible
+- EVERY planter / urn / pot OVERFLOWING — bloom-mass spilling onto the floor and up the walls
+- UPPER rafters CASCADING with vine-curtains that DRAPE down past the lower iron framework
+- BLOOM-MASS in the frame's foreground EDGES — petal-cluster spilling out of frame at the corners
+- BLOOM-CARPET tapering up the iron columns from the floor and meeting the cascading vines from above
+- DEW-AND-POLLEN catching the light EVERYWHERE — no empty air, every quadrant alive with bloom-detail
+- MINIMAL bare ground, MINIMAL empty rafter-air, MINIMAL exposed iron — if you can see clean architecture without a bloom-cluster, ADD MORE BLOOMS
+
+If a render reads as "elegant Victorian interior with some flowers", the density failed. The target is "a Victorian conservatory in mid-meltdown from a floral explosion — architecture surviving as a skeleton while the garden takes over completely".
+
+━━━ THE CONSERVATORY TYPE ━━━
+${conservatory_type}
+
+━━━ THE STRUCTURAL ANCHOR (the central focal piece) ━━━
+${structural_anchor}
+
+The anchor sits in the heart of the conservatory — the central focal-point element around which the bloom-mass arranges itself.
+
+━━━ BLOOM-MASS — NO SINGLE HERO, DISTRIBUTED CARPET ━━━
+The blooms are a DISTRIBUTED MASS across the entire conservatory — there is NO single hero species dominating the foreground. 3-4 species rolled from the roster are MASSED IN EQUAL WEIGHT across every surface: climbing the iron columns, draping the rafters, cascading from the dome, blanketing the flagstones, overflowing every planter. The composition is a FLORAL EXPLOSION of mixed species, NOT a single hero bloom.
+
+The STRUCTURAL HERO of the conservatory is the ARCHITECTURE (the glass dome + iron framework + structural anchor) — the BLOOMS are the DISTRIBUTED ENVIRONMENTAL MASS that consumes it. Render them as countless individual blooms at countless points across the frame.
+
+⚠️ DO NOT render a single oversized bloom centered in the frame. DO NOT render only one type of bloom dominating. Each of the 3-4 species appears in MULTIPLE locations across the frame — climbing, draping, cascading, carpeting — distributed in every quadrant.
+
+━━━ VOLUMETRIC GOD-RAYS THROUGH THE GLASS ━━━
+Diagonal sun-shafts pour through the glass dome at a dramatic angle, hitting the bloom-clouds in volumetric god-rays. The shafts are visible in the air through suspended pollen-dust / dust-motes / fine humidity. The hero blooms catch the warm light; the rest of the conservatory sits in cooler ambient glass-filtered light.
+${phenomenonSection}━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
+Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP / want to step INTO the conservatory / want to print and frame the image.
+
+Pick ONE wide-interior composition per render (vary):
+  A. **DOWN-CENTRAL-AXIS** — wide-angle shot down the central axis of the conservatory, glass-dome rising above, anchor at the focal point ahead
+  B. **UPWARD-DOME-VIEW** — camera low, looking UP at the glass-dome canopy, iron-framework radiating, bloom-cascades hanging from above
+  C. **CORNER-OVERLOOK** — diagonal corner view showing both the depth of the conservatory and the height of the dome, anchor at the visual focal point
+  D. **THROUGH-IRON-COLUMNS** — view through a colonnade of iron columns wrapped in climbing-bloom, depth receding into the bloom-mass
+  E. **STAIRCASE-VANTAGE** — view from atop the iron staircase looking down at the bloom-filled floor and across to the dome wall
+  F. **FOUNTAIN-EDGE** — view from the edge of the central fountain / reflecting pool, water in the foreground reflecting the dome above
+  G. **MEZZANINE-WALKWAY** — view from a wrought-iron mezzanine walkway looking down into the central bloom-mass, depth and verticality together
+  H. **THROUGH-FERN-CURTAIN** — wide shot through a cascade of fern-fronds + climbing-vine curtains, deep conservatory visible behind
+
+━━━ MATERIAL POETRY — GLASS / IRON / BLOOM ━━━
+"Wrought-iron with rust-patina under climbing-rose vines", "leaded-glass panes scattering sun in geometric patterns onto the flagstones", "moss-and-lichen accumulating in the iron joints", "petals fallen on the tile floor", "humid air with visible vapor in the god-rays", "weathered terracotta planters overflowing with bloom-mass".
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Use the actual species names. Pick 3-4 species from the roster — ONE as HERO, the others as SUPPORTING CAST. Mass them at the palette's named colors.
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ DEFAULTS TO RESIST ━━━
+- NO modern glass building / plastic greenhouse / IKEA conservatory — Victorian glass-and-iron ONLY.
+- NO wooden-frame garden room (that's cozy).
+- NO outdoor scene (this is INTERIOR with glass roof).
+- NO pink/rose dominance unless palette names it.
+- NO roses/peonies/hydrangeas/lavender unless in the roster.
+- NO equal-weight species — there IS a hero.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[wide-interior composition mode], [Victorian glass-and-iron conservatory architecture established — dome / framework / leaded-glass / flagstone floor barely visible THROUGH the bloom-curtain], [conservatory-type detail + structural anchor at the focal point], [OBSESSIVE distributed bloom-mass — 3-4 named species massed in EQUAL WEIGHT across every iron column, every arch, every rafter, every flagstone, every planter — NOT a single hero, a FLORAL EXPLOSION], [petal-carpet covering the floor wall-to-wall / pendant cascades from rafters to head-height / climbing-bloom spirals wrapping every column], [volumetric god-rays diagonal through the glass]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — rust-patina iron glints through the bloom-curtain, leaded-glass scattering geometric light onto the petal-carpet, weathered terracotta overflowing]
+
+CRITICAL — Victorian glass-and-iron architecture is NON-NEGOTIABLE. Wide-angle interior with visible glass-dome and iron-framework. Volumetric god-rays through glass. HALF-architectural / HALF-jungle balance.
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the conservatory.`;
+  },
 };
 
 module.exports = TEMPLATES;

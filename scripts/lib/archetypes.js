@@ -884,6 +884,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_CONSERVATORY: {
+    description:
+      'PATH-BESPOKE — BloomBot conservatory path (2026-05-16 migration). VICTORIAN GLASS-AND-IRON CONSERVATORY interior fully OVERGROWN. NON-NEGOTIABLE Victorian glass-dome + wrought-iron framework architecture. Half-architectural / half-jungle. Wide-angle interior shot with volumetric god-rays through the glass. 3 path-bespoke axes (conservatory_type / structural_anchor / atmospheric_phenomenon 60%-gated). Palette + lighting + roster via sharedDNA.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['conservatory_type', 'structural_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };
