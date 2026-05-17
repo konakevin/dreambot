@@ -137,19 +137,12 @@ module.exports = {
   HUMANOID_ROBOTS_LIGHTING: load('humanoid_robots_lighting'),
   HUMANOID_ROBOTS_DRAMA: load('humanoid_robots_drama'), // 40% gated visual flourish
   // Cyborg-woman path (migrated to declarative axis system 2026-05-17)
-  // Composition uses LEGACY pool (CYBORG_CLOSEUP_FRAMINGS, 200 entries at ~143
-  // chars avg) for 70% closeup-flavored framings + CAMERA_ANGLES (the bot's
-  // general camera-angle pool) for 30% full-body. Per Kevin's R1 feedback,
-  // a verbose path-bespoke composition pool drowned the cyborg DNA blocks
-  // — legacy's short framing entries leave Flux room to honor the cyborg-
-  // fusion mandate.
-  CYBORG_WOMAN_COMPOSITION: [
-    ...load('cyborg_closeup_framings'),
-    ...load('cyborg_closeup_framings'),
-    ...load('cyborg_closeup_framings'),
-    ...load('camera_angles'),
-    ...load('camera_angles'),
-  ],
+  // Composition uses LEGACY pool (CYBORG_CLOSEUP_FRAMINGS) only. Camera-angles
+  // 20% slot stripped 2026-05-17 — per Kevin's 8-image reference re-review,
+  // the hearted references are 100% closeup / 3-quarter portrait, no full-body
+  // in the set. The camera_angles slot was the source of recurring bikini /
+  // full-body failure renders.
+  CYBORG_WOMAN_COMPOSITION: load('cyborg_closeup_framings'),
   CYBORG_WOMAN_DRAMA: load('cyborg_woman_drama'), // 40% gated atmospheric flourish
   CYBORG_WOMAN_MATERIAL: load('cyborg_woman_material'), // 2026-05-17: dedicated material/finish axis for variety
   // Alien-biomechs path

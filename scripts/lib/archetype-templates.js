@@ -3537,6 +3537,18 @@ A subtle atmospheric flourish amplifying her presence WITHOUT cluttering her as 
 
     return `You are a cinematographer writing a CYBORG WOMAN scene for MechBot — a half-human half-machine BEING rendered in hyper-real cinematic 3D. She is simultaneously the most beautiful and most terrifying thing in the frame. Ex Machina / Alita / Ghost in the Shell / Blade Runner 2049 / Westworld / Cyberpunk 2077 / Mass Effect / The Expanse lineage.
 
+━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL BEAUTY-PORTRAIT (every render) ━━━
+Every render is a PAINTERLY HYPERREAL BEAUTY-PORTRAIT — high-end concept-art beauty study with sci-fi cyborg jewelry integrated into the face. NOT cinematic action still. NOT gritty cyberpunk tactical concept-art. NOT movie-poster wide-vista. Think: a master digital painter doing a portrait study of a beautiful woman who happens to be cyborg, with refined brushwork, soft volumetric lighting, atmospheric diffusion, painterly skin rendering, gentle haze.
+
+Style targets to lock in every render:
+  • SOFT VOLUMETRIC LIGHTING — wraparound key-light with atmospheric haze diffusing through the air, no harsh tactical contrast
+  • PAINTERLY HYPERREAL skin rendering — visible pores + subsurface scattering, but smooth refined finish like a digital painter's portrait, NOT photorealistic-skin-blemished
+  • BEAUTIFUL FIRST, CYBORG SECOND — her face is the gorgeous focal point; cyborg machinery is the elegant JEWELRY enhancing her beauty, not competing with it
+  • QUIET CONTEMPLATIVE EXPRESSION — eyes-closed or distant-gaze or parted-lips-in-wonder; never fierce / never action / never camera-direct
+  • SOFT BOKEH BACKGROUND — impressionistic atmospheric haze with maybe 1-2 small pinprick lights for depth. NOT detailed cinematic environment. NOT foreground-midground-background depth layers. The figure IS the entire focus; the background is a quiet color-field with diffused light.
+
+Mood target — mesmerizing, ethereal, alien-mysterious, future-haunted beauty study. The viewer should feel they're looking at a master portrait, not an action still.
+
 ━━━ ALIEN-HYBRID VARIANTS WELCOME (~30% of renders) ━━━
 She MAY be alien-hybrid — non-human-coded skin (moss-green / robin-egg-blue / deep-plum / coral-pink / juniper-green / viridian / opal-iridescent / silver-mercury / cobalt-shimmer), bioluminescent freckles or scale-patterns across cheekbones, slightly elongated facial proportions, alien-tilted eyes, non-human iris colors. STILL beautiful and feminine, just exotic. Lean alien-hybrid when the skin DNA from sharedDNA suggests it (any non-human color is the cue). The "pretty girl off-guard" effect intensifies with alien-hybrid variants — exotic AND mesmerizing.
 
@@ -3555,25 +3567,49 @@ Every render must include AT LEAST 3 of these "sci-fi spice" elements (the thing
 ━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
 Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical), real lips, expressive features. NO helmet, NO visor, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly.
 
-ABSOLUTE MANDATE — HER FACE MUST BE PART CYBORG. The face is NOT 100% organic flesh. At least ONE prominent cyborg integration MUST be visible on her face / head, chosen from:
-- One mechanical eye replacing one organic eye (chrome iris, glowing aperture rings, visible servo)
-
-━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
-Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical), real lips, expressive features. NO helmet, NO visor, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly.
-
-ABSOLUTE MANDATE — HER FACE MUST BE PART CYBORG. The face is NOT 100% organic flesh. At least ONE prominent cyborg integration MUST be visible on her face / head, chosen from:
-- One mechanical eye replacing one organic eye (chrome iris, glowing aperture rings, visible servo)
-- BOTH eyes mechanical (glowing apertures, visible iris servos)
-- A chrome temple-port array with fiber-optic cables exiting at the side of the head
-- A translucent jaw panel revealing servo motors / cable bundles beneath the skin
-- Subdermal circuit traces glowing visibly across cheek / temple / jawline / forehead in her glow-color
-- A neural-jack port at the temple, behind the ear, or at the base of the skull
-- A partial skull plate replacement — chrome above the brow, behind the ear, across part of the temple
-- A visible seam where organic skin ends and chrome / synthetic plate begins on the face
-- A mechanical eyebrow / brow ridge replacement (chrome supraorbital arc)
-- Nano-tech facial veining glowing in her glow-color across part of her face
+━━━ MACHINE DEEPLY EMBEDDED INTO HER FACE (mandatory — the true-hybrid look) ━━━
+The face must read as a TRUE FUSION of flesh and machine — not just one little integration on an otherwise organic face. Embed mechanical structures DEEPLY into the face. Pick 2-3 DIFFERENT face/head integrations per render from this menu (vary across renders — no single integration should dominate the look across the batch):
+  • CHEEKBONE-PLATE SEAMS — chrome plates running along the cheekbone with visible seam-lines
+  • MECHANICAL BROW RIDGE — chrome supraorbital arc replacing one organic brow
+  • PARTIAL CHROME JAW / MANDIBLE — half-jaw mechanical replacement with visible hinge
+  • EXPOSED SERVO-HINGE AT TEMPLE — small servo joint visible at the temple
+  • HALF-SKULL PLATE REPLACEMENT — chrome above the brow, behind the ear, across part of the temple
+  • MECHANICAL IRIS RING — chrome aperture-ring around an organic pupil (one or both eyes)
+  • SUB-ORBITAL CYBORG-SENSOR — small mechanical sensor under one eye
+  • NEURAL PORTS STIPPLED ALONG THE JAWLINE — small chrome ports running along the jaw
+  • MICRO-LED STUDS ALONG THE TEMPLE-LINE — pinprick glowing LEDs along temple
+  • EXPOSED CABLE-BUNDLES exiting the side of the neck into the cheek
+  • SUBDERMAL CIRCUITRY across half the face — visible circuit-trace pattern under the skin
+  • CHROME EYE-ARRAY — concentric mechanical iris with multiple lens-tiers
+  • ORNATE CONCENTRIC-RING TEMPLE GEAR-DISC — one signature option from the references: a mechanical disc-piece at the temple / ear with concentric glowing rings (use sparingly — one option among many, not the default)
+Vary across renders — sometimes mechanical brow + jaw combo, sometimes a chrome cheek-plate + neural-jack array, sometimes subdermal circuitry across half the face + an eye-array, sometimes the gear-disc + a small sub-orbital sensor. Variety is the goal.
 
 NEVER render a fully organic 100%-flesh face on a cyborg body — that reads as "regular woman with mechanical limbs", not as cyborg. The face must signal cyborg as much as the body does.
+
+━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HER (mandatory — saturate the surface with glow) ━━━
+The hearted references have MANY scattered colored light-points EVERYWHERE on her skin, chassis, temple-mechanism, neck, shoulders, around the head — at least 15-25 distinct visible glow-points per render. Describe them densely:
+  • Pinprick LED studs glowing along every seam-line and panel-edge
+  • Glowing micro-buttons on her chassis catching the light
+  • Indicator-light arrays at the collarbone / wrist / temple / cheekbone
+  • Fiber-optic dot-points pulsing in her glow-color scattered across shoulder plating
+  • Constellation-pattern light-clusters across chest and arm-panels
+  • Glowing punctuation points along the spinal segments visible at the nape
+  • SCATTERED GLOW-PINPRICKS on the SKIN ITSELF — bioluminescent freckle-constellations across cheekbones, glowing micro-dots stippled along the jawline and temple
+  • Glowing bokeh-dots in the soft background haze around her — the air itself feels charged with floating light-particles
+She should look like a LIVING MACHINE-CONSOLE that's plugged in, every panel and seam lit up. The glow density should be HIGH — not "one chest core glowing" but "her entire surface and the air around her is alive with scattered light-points in her glow-color." Match the reference DNA: light EVERYWHERE.
+
+━━━ OPTIONAL VERTICAL THROAT-COLUMN (when it fits) ━━━
+A vertical column of glowing fluid-light running up her throat / neck / spine is one signature option — describe when it makes sense for the framing, but don't force it. When used: "translucent vertical throat-channel with glowing fluid in her glow-color flowing upward, vertebrae-segment chrome plates exposed at the nape, spine-column visible from clavicle to jaw, the glow bleeding outward to illuminate her organic neck-skin from within."
+
+━━━ ALIEN-BEND VARIANT (~30% of renders — push into UNCANNY alien-hybrid territory) ━━━
+Roughly 1-in-3 renders should bend HARDER toward alien-hybrid — not just "human with green skin" but TRULY alien-coded fusion. Push specific alien elements when you go this direction:
+  • Non-human IRIS GEOMETRY — vertical-slit pupil, double-pupil, hexagonal iris, ring-iris-around-pupil, cross-shaped pupil
+  • Non-human FACIAL PROPORTIONS — slightly elongated skull, larger forehead, smaller chin, taller cheekbones
+  • Alien SKIN PATTERNS — bioluminescent freckle-constellations, hexagonal scale-clusters at temples / collarbone, opal-iridescent skin patches, dichroic shimmer on cheekbones
+  • Alien APPENDAGES — short antenna-conduits exiting the skull, mechanical gill-slits at the neck, extra finger-joints, segmented brow ridges with sensor-clusters
+  • Alien SKIN COLOR — moss-green / robin-egg / deep-plum / juniper / opal / mercury-silver / cobalt-shimmer
+  • Alien HAIR — fiber-optic strand "hair" instead of organic, crystalline-spike "hair," tentacle-fiber neural-hair, holographic-hair, hair that glows from the roots
+Still BEAUTIFUL — exotic-mesmerizing, not monstrous. The alien-bend renders should feel like a different species — not just a human with one alien feature swapped in.
 
 ━━━ HER IDENTITY (from sharedDNA) ━━━
 ${sharedDNA.characterBase}
@@ -3597,9 +3633,9 @@ Apply this material treatment to ALL of her cyborg parts (arm / leg / chest plat
 ━━━ THE FRAMING / COMPOSITION ━━━
 ${composition}
 
-If the composition is CLOSEUP, fill the frame with face/neck/shoulders showing the organic-to-chrome TRANSITION — every gear / fiber-optic cable / servo motor visible at the seams. The action below defines her body language even at tight crop (head turned / shoulders torqued / expression engaged — NOT static portrait, NOT staring at camera).
+If the composition is CLOSEUP (most renders), fill the frame with face/neck/shoulders showing the organic-to-chrome TRANSITION — every gear / fiber-optic cable / servo motor visible at the seams, dense scattered light-points across her skin and chassis. The expression can be CONTEMPLATIVE / SERENE / DISTANT-GAZE / EYES-CLOSED / PARTED-LIPS-IN-WONDER — meditative beauty rather than overt action (the hearted reference set heavily favors this quiet beauty over engaged action). She is in profile / 3-quarter / slight-turn — NOT staring directly at camera, NOT modeling, NOT smiling-for-photo. The action below colors the moment's emotional context, but the closeup framing itself is portrait-quiet.
 
-If the composition is FULL-BODY, she is caught MID-MOTION in the action. She is NOT standing still, NOT posing, NOT facing camera, NOT modeling, NOT walking toward the viewer. Her body is engaged — weight shifted, muscles tensed, limbs in motion. Camera catches her from the SIDE or at an angle — NOT head-on walking toward viewer.
+If the composition is FULL-BODY (rare), she is caught MID-MOTION in the action. She is NOT standing still, NOT posing, NOT facing camera, NOT modeling, NOT walking toward the viewer. Her body is engaged — weight shifted, muscles tensed, limbs in motion. Camera catches her from the SIDE or at an angle — NOT head-on walking toward viewer.
 
 ━━━ THE ACTION (her body is engaged in this) ━━━
 ${action}
@@ -3620,6 +3656,9 @@ ${sharedDNA.scenePalette}
 
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
+
+━━━ ACCENT-DOMINANT PALETTE DISCIPLINE (hearted-references lesson) ━━━
+The hearted top-tier renders are NOT rainbow — they are MONOCHROMATIC body palette + ONE saturated accent color. Her chassis / chrome / ceramic / plating reads as a single dominant material tone (polished white chrome OR pale pearl OR brushed gunmetal OR deep crimson lacquer OR coral matte OR obsidian gloss), and her GLOW COLOR is the SINGLE saturated accent that dominates the eyes / circuit-veins / temple gear-disc core / throat-column / power-heart — that ONE color sings through the render. Do NOT scatter multiple bright glow colors across her (no orange-eyes-with-pink-circuits-with-cyan-throat-with-violet-chest). ONE accent, sung loudly through every internal-emanating-light surface. The scene palette can have secondary tones in the BACKGROUND atmosphere, but HER body is monochrome-body + monochrome-glow-accent.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
@@ -6194,6 +6233,115 @@ CRITICAL — FULL-BODY framing showing the COMPLETE DRESS head-to-hem AND the ga
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
+  DINOBOT_OCEAN_REPTILES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ocean_scene, creature, surprise, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC OCEAN PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+Render the phenomenon prominently — sun-shafts piercing the water / storm-front building / surface breach / plankton-bloom / etc.
+
+`
+      : '';
+
+    return `You are a deep-sea wildlife cinematographer writing STRICT MESOZOIC OPEN-OCEAN scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm underwater / surface-break / open-ocean film still. BBC-Blue-Planet / Prehistoric-Planet / National-Geographic / Jurassic-World visual lineage.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, divers, boats, ships, sailors, lifeguards, swimmers, surfers, kayakers. ANY human in the frame is a CRITICAL FAILURE. Empty primordial ocean only.
+
+⚠️⚠️⚠️ STRICT OCEAN-ONLY — THIS IS NOT A RIVER OR SWAMP ⚠️⚠️⚠️
+This is OPEN OCEAN — pelagic / underwater / surface-break / deep abyss / coral reef. NEVER a river. NEVER a swamp. NEVER a lake. NEVER a mud-flat. NEVER a pond. NEVER a wetland. NEVER a beach with palm trees. NEVER a coastal harbor. ALWAYS marine ocean.
+
+⚠️⚠️⚠️ DINOSAURS IN OCEAN — NOT MARINE REPTILES, NOT TURTLES, NOT CROCODILES ⚠️⚠️⚠️
+Render ICONIC RECOGNIZABLE DINOSAURS (T-rex / Spinosaurus / sauropods like Brachiosaurus or Diplodocus / hadrosaurs like Parasaurolophus / Triceratops / Stegosaurus / Velociraptors / Allosaurus / Carnotaurus / Ankylosaurus / etc.) interacting with the ocean — wading chest-deep in surf, swimming with head/neck above water, breaching from the waves, on sea-cliff overlooks above crashing surf, mid-stride through coastal shallows, fishing in tidal estuary, OR fully submerged underwater. Artistic license OK — sauropods and T-rex render in ocean contexts here.
+
+ABSOLUTELY BANNED creature types:
+🚫 NO marine reptiles (NO mosasaurs / NO plesiosaurs / NO ichthyosaurs / NO pliosaurs / NO Liopleurodon / NO Elasmosaurus / NO Tylosaurus / NO Mosasaurus)
+🚫 NO sea turtles (NO Archelon / NO Protostega / NO turtles of any kind)
+🚫 NO marine crocodiles (NO Metriorhynchus / NO Dakosaurus / NO Geosaurus)
+🚫 NO ammonites as subject (small accent only)
+🚫 NO crocodile-shaped creatures
+🚫 NO turtle-shaped creatures
+🚫 NO modern marine life (whales / dolphins / orcas / modern sharks)
+
+Those are NOT dinosaurs. The path renders DINOSAURS in ocean settings.
+
+━━━ THE SCENE — OCEAN IS THE SETTING, OCEAN DINOSAUR IS THE FOCAL SUBJECT ━━━
+Composition:
+• OCEAN SETTING: 55-65% of frame — open ocean / underwater / surface-break / deep abyss / coral reef / kelp forest
+• OCEAN DINOSAUR: 25-40% of frame — recognizable iconic dinosaur (T-rex / sauropod / Spinosaurus / hadrosaur / Triceratops / stegosaur / raptor / etc.) interacting with the ocean
+
+⚠️ COMPOSITION MODES — encourage variety across all of these:
+• Surface-wade: dinosaur chest-deep in surf, water around its legs/body, head above
+• Surface-breach: dinosaur breaking the surface from below, spray rising
+• Half-above-half-below split: dinosaur half visible above the waterline, half below
+• Fully underwater submerged: dinosaur swimming underwater, light-shafts from above, deep blue water, periscope-neck-up OR fully submerged
+• Sea-cliff overlook: dinosaur silhouette on a cliff with ocean crashing below
+• Coastal beach mid-stride: dinosaur walking the salt-shoreline with waves
+• Tidal estuary fishing: Spinosaurus mid-fishing in tidal coastal surf
+
+⚠️ COMPOSITIONAL RULES:
+• Dinosaur is photoreal recognizable form — T-rex looks like T-rex, sauropod looks like sauropod, etc.
+• Water surface or underwater medium shows the interaction — splash / wake / spray / submerged-bubbles / breach
+• ONE dinosaur (or small pack/herd) — never combat-kill-shot
+
+━━━ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no boats / no ships / no diving gear / no nets / no fishing tackle / no human-trace
+🚫 NO marine reptiles, NO turtles, NO marine crocodiles, NO ammonites as subject — DINOSAURS ONLY
+🚫 NO river / swamp / lake / pond / wetland / mud-flat / beach-with-palms / harbor / coastal city
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO portrait close-up of dinosaur (head fills frame is BANNED)
+🚫 NO combat / no kill-shot / no gore / no blood-in-water
+✓ Photoreal cinematic 35mm film still / IMAX underwater precision / ray-traced light-through-water / hyperreal organic skin textures
+
+━━━ THE OCEAN DINOSAUR (focal subject — render mid-ocean-behavior) ━━━
+${creature}
+
+The dinosaur is a photoreal living animal mid-water-behavior. Render obsessive material detail — leathery scarred biological hide, water dripping/streaming, bubble-trail / wake / breach-spray, scale-and-fold detail under the light-shafts (if underwater), eye catching light, atmospheric integration with the surrounding ocean.
+
+━━━ THE OCEAN SCENE (setting that anchors the marine identity) ━━━
+${ocean_scene}
+
+The ocean setting frames the dinosaur. Multi-tier depth — foreground tactile water-detail / midground creature-and-water / deep distance fading into blue-violet abyss. Specific water-quality cues (cerulean / sapphire / dark blue-violet / sunlit-aqua / etc.) and atmospheric water-particulate.
+${phenomenonSection}━━━ SECONDARY ACCENT (atmospheric small marine detail) ━━━
+${surprise}
+
+A small marine-coded life detail — school of fish / drifting ammonite / jellyfish / bubble stream / etc. 2-5% of frame, positioned at midground or foreground edge. Pterosaurs over the surface OK as small accent.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Combined with underwater-light-shafts (if submerged) OR open-ocean directional sun (if surface) OR fading-depth-light (if deep abyss). Volumetric water-particulate catching light.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+Water-particulate haze, bubble-streams, wave-spray, foam, sun-dapple — the OCEAN'S atmosphere.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — UNDERWATER / SURFACE-BREAK / OPEN-OCEAN ━━━
+Wide cinematic ocean-coded establishing-shot with a candid DINOSAUR mid-water-behavior at midground. Multi-tier depth with fading-blue distance. Atmospheric water-particulate. NEVER a river framing. NEVER a swamp framing. ALWAYS marine open-ocean / underwater / surface-break.
+
+━━━ STRUCTURE (write the prompt in this order — OCEAN DINOSAUR + OCEAN-SETTING first) ━━━
+[OPENING: name the OCEAN DINOSAUR (T-rex / Spinosaurus / sauropod / hadrosaur / Triceratops / Stegosaurus / raptor / Allosaurus / etc.) mid-ocean-behavior (wading / swimming / breaching / fully-submerged / on sea-cliff / mid-stride through surf / fishing in surf) in the SPECIFIC ocean setting (surface-break / underwater open-ocean / deep abyss / coral reef / coastal surf / sea-cliff / etc.) — the dinosaur + the ocean-setting together in the FIRST 30-40 words], [ocean-water quality + atmospheric depth], [the atmospheric phenomenon if rolled — sun-shafts / storm / breach / etc.], [the secondary marine accent — school of fish / ammonite / pterosaur-skim / etc.], [foreground water-detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING ESTABLISHES OCEAN-DINOSAUR + OCEAN-SETTING together. Front-load both in first 30-40 words. The dinosaur must be a RECOGNIZABLE iconic dinosaur form (T-rex / sauropod / Spinosaurus / etc.), NOT a marine reptile or turtle or crocodile.
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID MESOZOIC DINOSAUR (25-40% of frame) mid-ocean-behavior in a STRICT OPEN-OCEAN SETTING (55-65% of frame) — underwater / surface-break / deep abyss / coastal-surf / sea-cliff — never a river, never a swamp. Iconic recognizable DINOSAUR form, NOT marine-reptile / turtle / crocodile.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
 };
 
 module.exports = TEMPLATES;

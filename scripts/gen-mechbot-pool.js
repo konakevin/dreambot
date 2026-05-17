@@ -1761,6 +1761,46 @@ Each entry must specify:
     ],
     instructions: `Each entry is ONE specific cyborg-material/finish, 20-40 words. Format: "[material name] with [color + finish nuance], [texture or detail]". Vary across the 8 material categories. STRICT BAN on duplicate chrome-only entries. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ─── cyborg-woman path: MID-BODY framings (chest-up / waist-up — bridge between portrait and full-body) ───
+  cyborg_mid_body_framings: {
+    format: 'simple',
+    theme: `CHEST-UP and WAIST-UP CINEMATIC FRAMINGS for a CYBORG WOMAN — the bridge between portrait-closeup and full-body. Each entry 20-35 words. Camera positioned to SHOW her cyborg chassis from face down through shoulders, arms, torso, hips. The goal: showcase visible WIRING / CIRCUITRY / GLOWING PANELS / EXPOSED MECHANISM across multiple body parts, not just face. Ex Machina / Alita / Ghost in the Shell / Westworld lineage.
+
+⚠️ THE BAR — every framing reveals 3-5 body parts with visible cyborg detail. Mid-body framings are NOT bikini-pinup shots — they are CINEMATIC CONCEPT-ART showcasing the woman+machine fusion across chest/arms/torso/hips. Visible CIRCUITRY, exposed GEARS, glowing PANELS, internal LIGHT bleeding through translucent sections.
+
+🚫 STRICT BANS:
+• NO bikini / two-piece / lingerie / cleavage-focal framings — this is concept-art, not glamour
+• NO full-body walking-toward-camera modeling pose
+• NO head-on symmetric stand-and-pose framings
+• NO smooth-bodysuit chrome catsuit framings (must show CHASSIS DETAIL not smooth surface)
+• NO sexy-pinup-pose framings (kneeling-arched-back, hand-on-hip-sashay, butt-shots)
+• NO multiple figures — she is SOLO
+
+✓ FRAMING DISTRIBUTION:
+  • 60% CHEST-UP — face + shoulders + upper-chest + upper-arms visible, showing cyborg detail across shoulders / chest panels / clavicle-ports / collar mechanism / arm chassis to bicep
+  • 40% WAIST-UP — face + shoulders + chest + torso + hands visible, showing cyborg detail across the longer body span including chest core + torso panels + forearms + hand mechanism + hip transition
+
+The opening of each entry: NEVER start with "Chest-up shot..." or "Waist-up framing..." — start with the SUBJECT or ENVIRONMENT (e.g., "Her cyborg silhouette caught against..." or "Inside the data-vault chamber, she..." or "Atmospheric haze diffusing around..."). The framing is implied by WHICH body parts the description focuses on.`,
+    touchpoints: [
+      'Her left side three-quarter turn reveals shoulder-mount mechanism with exposed servo-pistons, translucent forearm-panel showing fiber-optic cables glowing in her glow-color, chest-core pulsing through sternum-window, atmospheric mid-distance backlight separating her silhouette',
+      'Front-on chest-up composition with both clavicle-port arrays catching the rim-light, translucent skin-patch at the sternum revealing a glowing power-core, exposed micro-LED studs running along the shoulder-seams, soft mid-range backlight',
+      'Three-quarter angle showing her from the collarbone to the top of the head, the right shoulder-mount fully visible with exposed hydraulic actuators and a glowing indicator-cluster, organic décolletage transitioning into chrome chassis at the upper chest',
+      'Waist-up composition with her arms slightly extended forward revealing chrome forearm-chassis and articulated mechanical hands with visible servo-joints, translucent abdomen-panel showing internal capacitor banks glowing softly, sternum-core pulsing in her glow-color',
+      'Side-profile chest-up with the spine-channel running visibly up the back of her neck, shoulder-blade mechanism exposed in chrome plating with glowing seam-lines, organic upper-arm transitioning into mechanical bicep with visible cable-bundles',
+      'Atmospheric three-quarter turn showing her from the hip-line up, the hip-joint chrome catching reflective light, translucent abdominal panel revealing internal hard-light projector glowing, chest panel split open revealing the power-core, arms relaxed at her sides showing forearm-chassis detail',
+      'Chest-up composition with her looking away in three-quarter profile, the right side of her body showing exposed cable-bundles exiting the shoulder into the upper-back, fiber-optic strands glowing in her glow-color tracing down toward the elbow',
+      'Waist-up framing with one mechanical hand raised to her own jaw in a contemplative gesture, the forearm-chassis fully visible with exposed servo-pistons and glowing micro-LED studs, the other arm at her side, chest-panel power-core pulsing softly',
+      'Her cyborg torso emerging from atmospheric haze, the chest-panel translucent revealing internal mechanism (capacitor banks / hologram-projector / synaptic mesh) glowing in her glow-color, shoulder-mounts catching the haze-diffused light, organic face visible above',
+      'Front-on chest-up with her arms folded across her chest, the forearm-chassis mechanism crossing the upper torso revealing translucent panels with internal glow, both shoulder-mount mechanisms visible at the edges, jawline-to-clavicle showing organic-chrome seam',
+      'Three-quarter waist-up with her body turned slightly toward camera, the visible side showing hip-joint chrome / abdominal-panel translucency revealing internal tech / chest-core glow / shoulder-mount mechanism — five distinct cyborg reveals across the body span',
+      'Atmospheric chest-up framing with her standing in front of a glowing technological backdrop, the rim-light catching the shoulder-mount mechanism in silhouette, translucent neck-channel revealing fluid-light flowing upward, sternum-core glow bleeding outward through chest-panel',
+      'Waist-up composition with her hands resting on a chest-high environmental element (console / railing / instrument-pedestal), the forearm-chassis fully visible, chest-panel translucency revealing internal mechanism, jawline showing organic-chrome seam at the temple',
+      'Chest-up three-quarter angle showing her from the upper-arm to the top of the head, the visible shoulder-mount with exposed hydraulic-pistons and glowing seam-lines, the upper-chest panel showing translucent sections with internal capacitor-bank glow, organic face in soft focus above',
+      'Her cyborg silhouette in atmospheric mid-distance with the chest-core glow visible through translucent chest-panel illuminating the surrounding chassis, shoulder-mounts catching rim-light, chrome forearm visible at her side, mid-range backlight separating her from environment',
+    ],
+    instructions: `Each entry is ONE specific cyborg-woman MID-BODY framing, 20-35 words. Write each as a FULL DESCRIPTIVE SENTENCE describing what dominates the frame + which body parts are visible + which cyborg mechanisms are showcased. VARIETY MANDATE — vary opening words (sometimes subject-first, sometimes environment-first, sometimes mechanism-first), body-part focus, environmental anchor, mood beat. Roughly 60% chest-up / 40% waist-up. Mix body parts focused on (shoulder-mount / clavicle-port / chest-core / sternum-panel / forearm-chassis / mechanical-hand / hip-joint / abdominal-panel / spine-channel / neck-fluid). Mix camera angles (front-on / three-quarter / side-profile / atmospheric-distant). Mix moods (contemplative / mid-action / stalking / mid-emerging). STRICT BAN on bikini-pose / pinup-arched-back / butt-shot / cleavage-focal / smooth-bodysuit-only / head-on-modeling framings. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];
