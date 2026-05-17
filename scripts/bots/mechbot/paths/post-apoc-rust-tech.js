@@ -1,68 +1,54 @@
 /**
- * MechBot post-apoc-rust-tech path — scavenger machines + crews in wasteland.
- * Mad Max: Fury Road / Borderlands / Horizon Zero Dawn rebel encampments / Tank Girl.
- * The rig is RUNNING. Crew is VISIBLE. Function-over-form scavenger ingenuity.
+ * MechBot post-apoc-rust-tech path — declarative form (2026-05-16).
+ *
+ * Sixth MechBot path on the declarative composer. Mad Max BUSH-FIX scavenger
+ * rigs + crews running across post-apoc wasteland. Mad Max: Fury Road / The
+ * Doof Wagon / Gigahorse / Borderlands / Tank Girl / Death Stranding (wasteland
+ * subset) / Twisted Metal / Carmageddon / Fallout-raider tech lineage. The rig
+ * is RUNNING (or being bush-fixed mid-action) and the crew is VISIBLE.
+ *
+ * Heavy "BUSH-FIX" DNA mandate — jury-rigged scrap-welded chimera held
+ * together with wire / chains / prayer / spite. Mismatched salvaged parts,
+ * antenna forests, war-trophies, ram prows, exhaust stacks, license-plate
+ * armor, rope-bound fuel cans.
+ *
+ * Pools (5 path-bespoke + 2 universal):
+ *   - subject: reuses production-grade 200-entry RUST_APOC_SUBJECTS (scavenger
+ *     rigs / walkers / hover-skiffs / wheeled / tracked — already strong bush-fix DNA)
+ *   - action: reuses 200-entry RUST_APOC_ACTIONS (rigs roaring through scrap,
+ *     pit-stops, chase action)
+ *   - landscape: reuses 151-entry RUST_APOC_SETTINGS (cracked hardpan, salvage
+ *     yards, post-collapse ruins)
+ *   - composition: NEW Mad Max chase angles (low-pursuit, drone-aerial, over-
+ *     bonnet, parallel-run, gunner-roof-POV, dust-trail-behind, etc.)
+ *   - lighting: NEW wasteland (Fury Road golden-hour, sandstorm-orange, fire-
+ *     glow, dawn blood-red — overrides cosmic bot default)
+ *   - drama: NEW 40%-gated wasteland phenomena (dust-devil, sandstorm wall,
+ *     wreck-fireball, molotov, vultures, fuel-spill, ram-impact)
+ *
+ * Identity preserved from legacy:
+ *   - RIG IS ALIVE & MOVING (or actively bush-fixed mid-action)
+ *   - CREW VISIBLE (1-5 figures on/around the rig)
+ *   - FUNCTION-OVER-FORM bush-fix scavenger ingenuity
+ *   - Sun-bleached paint over rust
+ *   - NOT clean industrial / NOT pristine military / NOT ceremonial
+ *
+ * Pre-migration function-form brief preserved at paths/legacy/post-apoc-rust-tech.js.
+ *
+ * See:
+ *   - scripts/lib/archetypes.js          (MECHBOT_POST_APOC_RUST_TECH slots)
+ *   - scripts/lib/archetype-templates.js (MECHBOT_POST_APOC_RUST_TECH brief)
+ *   - BOT_SCENE_QUALITY_PLAYBOOK.md      (vertigo-composition + bush-fix DNA reference)
  */
 
-const pools = require('../pools');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const subject = picker.pickWithRecency(pools.RUST_APOC_SUBJECTS, 'rust_apoc_subject');
-  const action = picker.pickWithRecency(pools.RUST_APOC_ACTIONS, 'rust_apoc_action');
-  const setting = picker.pickWithRecency(pools.RUST_APOC_SETTINGS, 'rust_apoc_setting');
-  const cameraAngle = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are a wasteland cinematographer writing a POST-APOC RUST TECH scene for MechBot — a scavenger rig with its crew, running across a wasteland. Mad Max road-warrior energy. Hyper-real cinematic 3D. Output wraps with style prefix + suffix.
-
-━━━ NON-NEGOTIABLE — RIG IS ALIVE & MOVING ━━━
-The machinery is RUNNING (or actively being worked on by its crew). NEVER abandoned, NEVER decay-pathos. Crew is visible (1-5 figures on/around the rig).
-
-━━━ AESTHETIC LANGUAGE ━━━
-Function over form. Scavenger ingenuity. Mismatched salvaged parts welded together. Spike plates, ram prows, exhaust forests, fuel-can lashings, chains, war-trophies dangling. Sun-bleached paint over rust. Mad Max: Fury Road / Borderlands / Tank Girl DNA.
-
-━━━ THE RIG + CREW ━━━
-${subject}
-
-━━━ THE ACTION (what's happening — rig running, crew engaged) ━━━
-${action}
-
-━━━ THE WASTELAND SETTING ━━━
-${setting}
-
-The wasteland environment is half the story. Heat shimmer, dust storms, sun-bleached terrain, wreckage in distance. Render with depth: foreground terrain detail, midground rig + crew, background wasteland vista.
-
-━━━ CAMERA / FRAMING ━━━
-${cameraAngle}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-Golden-hour and dust-orange hues favored — Mad Max sunset palette. Even at night, sodium-orange or fire-glow accents.
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ ABSOLUTE BANS ━━━
-- NO clean / pristine / well-maintained machinery (industrial-machines territory)
-- NO abandoned-decay / no-crew / pathos-elegy mood — these rigs are RUNNING
-- NO professional military uniforms (power-armor-infantry) — crews are ragged scavengers
-- NO giant-titan scale (titans) — these are vehicle/walker scale
-- NO pilot-in-glass-cockpit (mecha-pilots) — drivers are exposed or in open hatches
-- NO ceremonial / ornate (robot-moment)
-
-━━━ CREW IS VISIBLE ━━━
-The crew (driver, gunner, lookouts, scavengers) MUST be visible in the frame. Their bodies tell the story alongside the rig — leaning out hatches, perched on roofs, racing across the chassis.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases.`;
+module.exports = {
+  archetype: 'MECHBOT_POST_APOC_RUST_TECH',
+  pools: {
+    subject: 'RUST_APOC_SUBJECTS',
+    action: 'RUST_APOC_ACTIONS',
+    landscape: 'RUST_APOC_SETTINGS',
+    lighting: 'RUST_APOC_LIGHTING',
+    composition: 'RUST_APOC_COMPOSITION',
+    drama: 'RUST_APOC_DRAMA', // 40% gated conditional
+  },
 };

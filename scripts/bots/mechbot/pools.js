@@ -119,10 +119,16 @@ module.exports = {
   INDUSTRIAL_SUBJECTS: load('industrial_subjects'),
   INDUSTRIAL_ACTIONS: load('industrial_actions'),
   INDUSTRIAL_SETTINGS: load('industrial_settings'),
-  // Post-apoc-rust-tech path
+  // Post-apoc-rust-tech path (migrated to declarative axis system 2026-05-16)
+  // Reuses production-grade legacy subject/action pools (200/200) + 151
+  // settings pool. Adds 3 path-bespoke pools for Mad Max chase composition,
+  // wasteland lighting, 40%-gated wasteland phenomena.
   RUST_APOC_SUBJECTS: load('rust_apoc_subjects'),
   RUST_APOC_ACTIONS: load('rust_apoc_actions'),
   RUST_APOC_SETTINGS: load('rust_apoc_settings'),
+  RUST_APOC_COMPOSITION: load('rust_apoc_composition'), // Mad Max chase angles
+  RUST_APOC_LIGHTING: load('rust_apoc_lighting'), // Fury Road wasteland lighting
+  RUST_APOC_DRAMA: load('rust_apoc_drama'), // 40% gated wasteland phenomenon
   // Alien-biomechs path
   ALIEN_BIOMECH_SUBJECTS: load('alien_biomech_subjects'),
   ALIEN_BIOMECH_ACTIONS: load('alien_biomech_actions'),

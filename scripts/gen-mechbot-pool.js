@@ -931,6 +931,348 @@ Each entry MUST:
     ],
     instructions: `Each entry is ONE specific battlefield combat phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + squad-reaction-or-scale-prover". STRICT battlefield combat aesthetic — NO peaceful, NO industrial hangar, NO aerial-flight. Amplifies the squad's aggressive moment. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ─── post-apoc-rust-tech path: subjects (FAR-FUTURE sci-fi BUSH-FIX rigs, regen 2026-05-16) ───
+  rust_apoc_subjects: {
+    format: 'simple',
+    theme: `FAR-FUTURE SCI-FI BUSH-FIX SCAVENGER RIGS for the post-apoc-rust-tech path — a scrap-welded chimera rig + visible crew. Each entry 30-60 words.
+
+⚠️ THE BAR: every entry must read like a key-art still from MAD MAX FURY ROAD (sci-fi-tilted variant) / BORDERLANDS Pandora bandit-tech / TANK GIRL / WARHAMMER 40K ORK-LOOTED VEHICLES / DUNE Sardaukar-thopter / DEATH STRANDING off-Earth / CYBERPUNK 2077 Nomad-clan / HORIZON ZERO DAWN rebel-tech / FALLOUT-RAIDER Highwayman / TWISTED METAL / STAR WARS Jawa Sandcrawler (sci-fi scavenger DNA, NOT recognizable IP). FAR-FUTURE bush-fix scrap-welded — JURY-RIGGED with wire/chains/prayer/spite from salvaged ALIEN-TECH and POST-COLLAPSE FUTURE-METAL.
+
+🚫 HARD BAN — NEVER 21st-century Earth equipment:
+• NO recognizable present-day truck / 18-wheeler / big-rig / Peterbilt / Kenworth / Mack / semi-truck / box-truck / pickup-truck / Mustang / Camaro / motorcycle / VW van / camper / RV / bulldozer / cement mixer / construction equipment as the silhouette
+• NO Mad Max 1981 Toecutter buggy / Australian outback-roadster aesthetic
+• NO "diesel engine" / "gasoline" / "petrol" — sci-fi power: fusion-cell / plasma-drive / thermal-cell / reactor-core / arc-reactor
+• NO Earth-recognizable brand-name (Caterpillar / John Deere / etc.)
+• NO clean / pristine / military-issue (industrial-machines + power-armor territory)
+
+🚫 IP HARD BAN — NEVER name: Stormtrooper / Imperial / Mandalorian / beskar / T-visor / Boba / Halo / ODST / Spartan / MJOLNIR / UNSC. The Mad Max + sci-fi aesthetic is welcome — but NEVER name the IP.
+
+✓ FAR-FUTURE SCI-FI CUES — bake at least 2-3 of these into every entry:
+• FUSION-CELL / PLASMA-DRIVE / THERMAL-CELL / REACTOR-CORE engines
+• ALIEN-TECH SALVAGE welded into the build (xenomaterial chunks, glowing alien-conduits, scavenged orbital-debris panels)
+• HOVER-SKIRT / REPULSOR-PAD AUGMENTATION (rig hovering 1m off ground OR retro-fit hover-strips along chassis)
+• GLOWING ENERGY-CONDUIT VEINS visibly running through the chassis (cyan / amber / magenta / fel-green energy)
+• POWER-PACK lashings on the deck (visibly-glowing battery packs / capacitor stacks / fuel-rods)
+• RADIATION SYMBOLS / hazard-stencils on the chassis
+• PULSE-CANNON / PLASMA-RIFLE / ARC-WEAPON mounts (where modern would have an MG / cannon)
+• SCAVENGED-FROM-FALLEN-ORBITAL salvage (cracked drop-pod fragments, twisted antenna-arrays from a downed satellite, alien-spaceship hull-plates)
+• GLOWING REACTOR-CORE visible in the gut of the rig
+
+✓ BUSH-FIX SCRAP DNA — also bake in EVERY entry:
+• MISMATCHED salvaged body panels (alien-hull plates / drop-pod fragments / road-sign offcuts / locker-doors / oil-drum sheets / refrigerator-door slabs / cargo-container flanks — welded chaotically)
+• ANTENNA FOREST rising from the roof (twisted comms-rods, war-banner poles, signal-mirror masts, scrap-totem)
+• EXHAUST STACKS belching glowing-plasma or black smoke (multiple chimneys)
+• RAM PROW or SPIKE PLATE on the front (welded scrap-iron spikes, hood-ornament skull, cattle-catcher prong)
+• ROPE-BOUND POWER-CELLS / fuel-pods lashed to chassis (visible-glowing power packs with frayed ropes)
+• WAR-TROPHIES dangling (alien-skulls, captured enemy-tech, severed weapon-parts, chains, banners with hand-painted symbols / radiation-marks)
+• SUN-BLEACHED PAINT over rust (faded colors barely visible through oxidation)
+• WIRE-MESH CAGES around driver / crew positions
+• EXPOSED ENGINE BLOCKS (fusion-cells / plasma-coils / reactor-rods visible through hull gaps)
+• DRAGGING CHAINS / SPIKES behind
+
+✓ ARCHETYPE DISTRIBUTION (vary across):
+  A. **WHEELED SCAVENGER RIG** (~25%) — 6-12 oversized off-road wheels, scrap-armor body, exposed fusion-cell engine, crew in open hatches. (Mad Max War Rig / Gigahorse / Doof Wagon sci-fi-tilted variant.)
+  B. **TRACKED SCRAPPER** (~20%) — wide tracked chassis, armored deck, crew on top platforms. (Death Stranding mule / WH40K Ork-Trukk / Dune harvester.)
+  C. **HOVER-SKIFF / REPULSOR-RIG** (~15%) — hovering 1-2m off ground via repulsor-pad augmentation, scrap-armor patched body. (Star Wars Jawa-style scavenger, Dune ornithopter-but-grounded.)
+  D. **WALKER-RIG (2-LEG / 4-LEG / 6-LEG)** (~15%) — legged scavenger walker, scrap-armor torso, driver in open cockpit, gunner on top. (BLAME!-aesthetic walker, Death-Stranding-walker.)
+  E. **CARAVAN-CONVOY** (~10%) — prime-mover + 2-3 linked haul-pods (NOT semi-truck silhouette — sci-fi prime-mover with hover-pods or tracked-trailers), crew on each.
+  F. **MULTI-MODE HYBRID** (~10%) — wheels + treads + hover-pads on a single rig (impossibly cobbled together), crew everywhere.
+  G. **TUNNELLER / DRILL-RIG** (~5%) — front-mounted drill-bit, tracked or wheeled, crew in armored cab. (post-collapse mining + raid hybrid.)
+
+CREW LANGUAGE: 1-5 visible crew (driver / gunner / lookout / scavenger / mechanic). War-painted faces, goggles, leather-harnesses, scarves over mouths, mismatched scavenger gear, scarred skin, ragged hair, lashed-on gear. NEVER pristine soldiers / NEVER clean uniforms.`,
+    touchpoints: [
+      '8-wheeled scavenger war-rig with mismatched alien-hull plate armor over a fusion-cell drive-pod chassis, glowing cyan power-conduits visible through welded gaps, ram-prow bristling with scrap-iron spikes and a captured alien-skull hood-ornament, antenna forest of twisted comms-rods and hand-painted war-banners, four crew in war-paint and goggles bungee-lashed to rooftop pulse-cannon mounts',
+      'Tracked scrapper-rig welded from drop-pod fragments and cargo-container flanks, exposed plasma-drive engine glowing amber through hull-gaps, armored cab with wire-mesh viewport, three crew on dorsal platforms manning a scavenged arc-cannon mount, dragging chains spitting sparks off cracked salt-pan, exhaust stacks belching glowing-orange smoke straight up',
+      'Hover-skiff jury-rigged from gutted xenomaterial casing and lashed-on repulsor-pads humming cyan, mismatched panels of stop-sign offcuts and refrigerator-door slabs riveted in chaotic layers, driver leaning out the open canopy with a captured pulse-rifle, two gunners rope-tied to rear plasma-cannon mounts, sun-bleached war-paint over rust-orange chassis',
+      'Two-legged walker-rig striding on hydraulic-piston legs, scrap-welded torso of locker-doors and orbital-debris hull-fragments, driver in an open-cage cockpit with glowing reactor-core visible behind their seat, two gunners perched on shoulder-platforms manning rotary pulse-cannons, war-banner with radiation-mark snapping from a roof-spire',
+      'Caravan-convoy with a fusion-cell prime-mover and three linked hover-pod trailers, commander on the lead roof signaling with a captured holo-mirror, four guards with scavenged arc-weapons at trailer junctions, alien-tech salvage lashed to every available surface with bungee and chain',
+      '6-wheeled raider buggy welded from scavenged shuttle hull-plates and a stolen plasma-converter engine, exposed energy-conduit veins glowing magenta through the chassis, driver and two gunners in stitched-hide ponchos and goggles, antenna spines bristling from the roof with skull-trophies hanging on every mast',
+      '4-legged walker-scrapper with wide-base feet for soft sand, scrap-welded body from orbital-debris hull fragments, glowing reactor-core in the gut visible through a wire-mesh chest-plate, driver in an exposed open cockpit at the head with goggles fogged and war-paint streaked, single gunner rope-tied to a dorsal pulse-mortar',
+      'Tracked tunneller-rig with front-mounted scavenged plasma-drill rotating slow, armored cab welded from drop-pod fragments and license-plate slabs, two crew in dust-masks at the controls behind the drill, captured alien-conduit power-pack lashed to the rear-deck visibly glowing cyan',
+      'Hover-skiff with mismatched paint panels and a humming repulsor-array along the underbelly, jet-intakes salvaged from a downed orbital scout welded to the rear, single nomad pilot in a hide-cloak flying low-altitude recon over cracked hardpan, captured pulse-pistol holstered at hip',
+      'War-rig with eight oversized off-road wheels and a forest of antenna spines bristling from a scrap-welded cab, fusion-cell engine exposed through gaps in the hull glowing orange, four cultists in radiation-mark-painted ash-wraps chanting from rope-harnessed roof positions, war-banners streaming behind in the wind',
+      'Multi-mode hybrid rig with wheels + hover-strips + crawler-treads on a single impossibly-cobbled chassis, plasma-drive exhausts belching black smoke through six stacks, driver in an exposed open hatch with goggles and bandana, two gunners on roof manning a scavenged Gauss-rifle and a chain-whip',
+      'Tracked salvage rig with hydraulic-piston shear-jaws on the front, rust-streaked orange hull patched with alien-hull plates, cable-winches coiled on the rear deck, billboard-sized scrap-plate ram-shield, three crew in scavenger gear manning the side-mounted plasma-torches mid-cutting',
+      '6-legged walker-rig with insectoid hexapedal stride, scrap-welded body of orbital-debris fragments and welded cargo-container ribs, glowing energy-conduit veins visible running along the spine, driver in a wire-mesh cage cockpit at the front, two gunners on flanks manning scavenged arc-mortars',
+      'Wheeled raider chase-buggy with a Frankenstein engine welded together from two fusion-cells and a salvaged thermal-converter, exposed power-pack lashed behind the driver, ram-prong bristling with scrap-iron spikes, two crew (driver and rear-gunner) in war-paint and goggles, antenna spines whipping above',
+      'Hover-skiff with salvaged alien-tech panels mismatched to civilian-junk panels, glowing alien-conduit running like veins across the chassis, two-person crew (driver and gunner) in stitched-hide armor and goggles, captured pulse-cannon mounted on a swivel at the rear with bungee-tied gunner',
+      'Tracked scavenger walker on quadrupedal hydraulic legs (NOT 2-legged biped), wide-base treaded feet, scrap-welded body, glowing fusion-cell visible in the gut through gaps in the armor, driver and gunner in open cockpits with bandanas and goggles, drag-chains sparking behind',
+      'Wheeled war-rig with a captured alien-spaceship-hull-section bolted to the side as armor, glowing magenta xenomaterial seam visible, four-wheel-drive chassis with oversized off-road tires, three crew with mismatched scavenger gear and war-paint, pulse-cannon mounted on a roof-totem with skulls',
+      'Caravan-convoy with hovering prime-mover (repulsor-pad augmented) and four tethered haul-pods following on long cables, commander on lead roof with captured holo-mirror, six guards on the haul-pods manning arc-weapons, captured fuel-pods lashed to every available surface',
+      'Insectoid 6-legged walker-rig with mantis-style scythe-arms welded from scrap-iron, scrap-armor body, plasma-drive engine exposed at the rear, driver in a wire-mesh cage at the chest, two crew on shoulder-mounted gunner-positions with rope-harnesses',
+      '8-wheeled prime-mover hauling a lashed-down captured orbital-drop-pod (still smoking from atmospheric entry) as cargo, exposed fusion-cell engine, four crew (driver, gunner, two guards) in scavenger gear mid-action, ram-prow with welded scrap-iron spikes, antenna spines bristling',
+    ],
+    instructions: `Each entry is ONE 1-5 crew + FAR-FUTURE SCI-FI BUSH-FIX rig, 30-60 words. Format: "[archetype: wheeled/tracked/hover/walker/caravan/hybrid/tunneller] rig with [sci-fi tech + bush-fix scrap detail], [crew description with action-verb], [war-trophy / antenna / palette detail]". Vary across the 7 archetype distributions. STRICT BAN on 21st-century Earth vehicle silhouettes / IP names. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── post-apoc-rust-tech path: actions (FAR-FUTURE wasteland verbs, regen 2026-05-16) ───
+  rust_apoc_actions: {
+    format: 'simple',
+    theme: `WHAT THE BUSH-FIX RIG + CREW ARE DOING for the post-apoc-rust-tech path. Each entry 35-65 words. The rig is MID-MOTION across the wasteland OR being BUSH-FIXED mid-action by its crew.
+
+⚠️ MANDATORY — every entry conveys MOTION/ACTION + CREW ENGAGEMENT. Mad Max Fury Road convoy chase / Borderlands bandit ambush / Death Stranding mule-stop / Cyberpunk Nomad clan / Warhammer 40K Ork-raid lineage. Sci-fi-tilted ALWAYS.
+
+🚫 HARD BAN — NEVER 21st-century Earth scenes:
+• NO "stopped at gas station" / "stopped at refinery" / "racing down highway" / "navigating freeway" / "on the interstate" / "mounting sidewalk"
+• NO "diesel straining" / "gasoline pump" — sci-fi power language: fusion-cell straining / plasma-drive belching / reactor-core spooling up
+• NO modern road / parking lot / city street / strip mall / shopping district
+• NO modern oil refinery / pipeline / aquifer / industrial plant as still-functional
+• NO IP-named locations / IP-named factions
+
+🚫 IP HARD BAN — NEVER name Stormtrooper / Imperial / Mandalorian / beskar / Halo / ODST / Spartan / MJOLNIR.
+
+✓ ACTION CATEGORIES (vary across):
+  A. **HIGH-SPEED CHASE** (~20%) — rig roaring across cracked hardpan / salt-flat / dust-canyon at full speed, dust-trail behind, pursuit closing
+  B. **BUSH-FIX PIT-STOP** (~15%) — rig stopped in a hidden gulch / salvage gulley / abandoned ruin, crew mid-weld / mid-cell-swap / mid-tire-change / mid-engine-repair
+  C. **AMBUSH / RAID** (~15%) — rig mid-attack on enemy convoy / settlement / scrap-cache, crew firing weapons, debris flying
+  D. **SCAVENGE MOMENT** (~10%) — rig parked at a crash-site / ruin / wreckage, crew dismounted hauling salvage onto the deck
+  E. **CONVOY FORMATION** (~10%) — rig running with 2-4 other rigs in convoy formation across wasteland, all kicking dust
+  F. **JUMP / LAUNCH** (~10%) — rig caught mid-launch off a dune-crest / ramp / cliff-edge, all wheels off ground
+  G. **CRASH-EVASION** (~10%) — rig swerving / mounting an obstacle / dodging incoming fire / sliding sideways
+  H. **DEFENSIVE CIRCLE** (~5%) — rig parked in defensive position with crew manning gun-mounts against an off-frame threat
+  I. **WATER-FIND / OASIS** (~5%) — rig stopped at a found water-source / fuel-pool / alien-tech crash-site, crew refilling / harvesting
+
+Each entry MUST:
+• Open with action verb (roaring / sliding / hammering / pit-stopping / mid-welding / ambushing / scavenging / launching / circling)
+• Reference the rig's specific tech (fusion-cell / plasma-drive / hover-pad / walker-stride) — sci-fi cue mandatory
+• Describe what 2-3 crew members are doing mid-action (driver / gunner / lookout / scavenger)
+• Reference the wasteland environment context (cracked hardpan / salt-flat / dust-canyon / ruined city-skeleton / canyon-pass / sand-dune crest / acid-flat / wasteland-spine)`,
+    touchpoints: [
+      'Rig roaring at full plasma-drive across cracked salt-flat, driver leaning hard into a wide turn with one hand on the wheel and one on the manual override, two gunners on the rear deck firing pulse-cannons at a pursuit-buggy closing through the dust-cloud behind, antenna spines whipping in the wind',
+      'Rig pit-stopped in a hidden dust-gulch behind collapsed rust-spires, three crew mid-bush-fix — one welding a cracked fusion-cell housing with sparks raining, one hand-cranking a plasma-pump to refill the reactor-core, one on lookout-watch atop the cab with a captured pulse-rifle scanning the horizon',
+      'Rig mid-ambush on an enemy raider-convoy in a canyon-pass, ram-prong slammed into the lead enemy buggy mid-impact with debris flying, two crew firing arc-weapons from rooftop mounts at the secondary enemy rigs scattering, third crew dropping a captured plasma-grenade off the rear deck',
+      'Rig parked at a fresh orbital-drop-pod crash-site smoking in a dust-bowl, four crew dismounted hauling alien-tech salvage onto the rear deck with rope-pulleys and bungee straps, driver still in the cab scanning surroundings with binocs, war-banners snapping in the dry wind',
+      'Convoy of four mismatched rigs running in loose wedge formation across cracked desert hardpan, hero rig at centre with fusion-cell engine roaring, all four kicking massive dust-trails braiding behind, crew on each rig coordinating with hand-signals and signal-mirrors across the gaps',
+      'Rig caught mid-launch off a dune-crest with all six wheels off the ground in mid-arc, dust trailing behind from take-off, crew braced inside with goggles fogged and hands gripping the roll-cage, the landing-flat of cracked salt-pan visible below glowing in late-sunset amber',
+      'Rig swerving hard to evade an incoming pulse-cannon salvo from an off-frame pursuer, driver hauling on the manual override with both hands, the rear-gunner mid-return-fire with their own scavenged arc-weapon, sparks flying from where a glancing shot grazed the side-armor',
+      'Rig stopped in defensive circle-formation with three other allied rigs, all crews mid-firing at an unseen off-frame raider-horde closing across the dust-flat, fusion-cell power-cores glowing visibly hot from the sustained engagement, war-banners snapping above',
+      'Rig stopped at a found water-pool in a hidden crater oasis, two crew refilling jerrycans by hand-pump while a third stands lookout-watch on the rooftop with pulse-rifle ready, driver still in the cab with the plasma-drive idling at low hum, surrounding wasteland silent',
+      'Rig sliding sideways across acid-flat with the rear wheels kicking up corrosive spray, driver leaning into the slide with grin visible behind goggles, two crew bungee-lashed to roof mounts firing scavenged Gauss-rifles back at an off-frame pursuer, exhaust stacks belching plasma-glow',
+      'Rig hammering hard up a steep canyon-slope on tracked-treads, fusion-cell engine straining audibly, three crew leaning forward to counterweight the climb, salvage-cargo lashed down on the rear deck visibly straining at its bungee-cord restraints, dust avalanching down behind',
+      'Rig pit-stopped in the shadow of a collapsed rust-spire, two crew mid-tire-change replacing a shredded scrap-tire with a salvaged spare while a third crew member welds a cracked spike-plate back onto the ram-prong, driver still in the cab keeping the plasma-drive at low-hum',
+      'Rig mid-raid on an enemy settlement in a canyon-bowl, ram-prong crashing through the wooden palisade with debris flying, two crew leaping from the deck with pulse-rifles raised, driver still gunning the fusion-cell to keep momentum through the breach',
+      'Rig parked at a scavenge-find — half-buried alien-tech wreckage in a dust-dune, four crew dismounted excavating with shovels and salvaged power-tools, hauling glowing alien-conduit chunks back to the rig on rope-pulleys, single lookout on roof with binocs',
+      'Convoy of three rigs running in column formation along a wasteland-spine ridge, hero rig in the lead with antenna spines bristling, dust-trails braiding behind all three, crew on each waving back-and-forth with signal-mirrors across the gaps, distant ruined mega-spire on horizon',
+      'Rig mid-launch off a ramp built from salvaged debris, all four wheels off the ground mid-arc, crew braced inside with hands gripping the cage, driver leaning forward with goggles flashing, plasma-drive exhaust trailing behind in a bright orange tail',
+      'Rig roaring through a dust-storm with the headlight-cones cutting through the orange haze, driver leaning forward to read the obscured path, two crew on rooftop scanning for off-frame threats with goggles fogged and bandanas pulled tight, the whole rig coated in a layer of settling dust',
+      'Rig parked at a fuel-cache with two crew mid-refill — one hauling a glowing plasma-cell from the cache to the rig\'s engine-block, the other operating a hand-pump to transfer thermal-fluid into the auxiliary tank, lookout on roof scanning with pulse-rifle ready',
+      'Rig mid-pursuit closing on an enemy raider-rig ahead, hero driver leaning forward over the controls, two crew on the rooftop firing scavenged Gauss-cannons at the pursued vehicle, the gap closing visibly with each second, dust-cloud kicked up filling the space between them',
+      'Rig pit-stopped at a rust-tower graveyard with three crew mid-bush-fix repair on the front spike-plate, one welding a cracked spike back, one hammering bent rebar straight, one hand-cranking the fusion-cell into a higher charge state, lookout on roof with binocs',
+    ],
+    instructions: `Each entry is ONE specific FAR-FUTURE wasteland action, 35-65 words. Format: "[action-verb] [rig with sci-fi tech], [crew member 1 doing X], [crew member 2 doing Y], [optional crew 3], [environmental context]". Vary across the 9 action categories. STRICT BAN on 21st-century Earth scenes / modern industrial settings. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── post-apoc-rust-tech path: settings (FAR-FUTURE wasteland environments, regen 2026-05-16) ───
+  rust_apoc_settings: {
+    format: 'simple',
+    theme: `FAR-FUTURE WASTELAND ENVIRONMENTS for the post-apoc-rust-tech path. Each entry 25-50 words.
+
+⚠️ MANDATORY — every entry must read as POST-COLLAPSE FAR-FUTURE wasteland, NOT 21st-century Earth. Mad Max Fury Road wasteland / Borderlands Pandora / Cyberpunk 2077 Badlands / Fallout post-apoc / Dune desert-and-ruins / Death Stranding off-Earth landscape lineage.
+
+🚫 HARD BAN — NEVER 21st-century Earth recognizable settings:
+• NO modern street / highway / overpass / asphalt / sidewalk / crosswalk / parking lot / shopping mall / gas station / strip mall / suburban
+• NO modern oil refinery / pipeline / aquifer / industrial plant / power plant / chemical plant rendered as RECOGNIZABLY MODERN (rust-tower graveyards are fine, but post-collapse SKELETON BONE-YARDS, never functioning facility)
+• NO recognizable real-world city (NO present-day New York / LA / Chicago / Dubai etc.)
+• NO modern military base / present-day army camp
+
+✓ FAR-FUTURE WASTELAND CATEGORIES (vary across):
+  A. **CRACKED DESERT HARDPAN / SALT-FLAT** (~20%) — vast empty wasteland with cracked earth, distant mesas, dust-devils, heat-shimmer
+  B. **RUST-TOWER GRAVEYARD** (~15%) — post-collapse skeletal industrial bone-yard, rusted spires reaching skyward, decades of decay
+  C. **SALVAGE-YARD GRAVEYARD** (~15%) — vast junkyards of crashed orbital-debris / wrecked rigs / scrapped alien-tech, scavengers picking through
+  D. **DUST-CANYON / SLOT-CANYON** (~10%) — narrow rocky passages, sun-bleached walls, dust-haze, dramatic vertical scale
+  E. **COLLAPSED MEGA-CITY RUINS** (~10%) — far-future skyscraper SKELETONS half-buried in dust, ruined skyline at horizon (NEVER present-day-recognizable city)
+  F. **ACID-FLAT / TOXIC POOLS** (~10%) — chemical-stained terrain with toxic pools reflecting weird colors, rust formations, hazardous beauty
+  G. **CRASHED ORBITAL DEBRIS-FIELD** (~5%) — fallen satellites / drop-pods / spacecraft hulks half-buried, smoke still rising, scavengers approaching
+  H. **DUNE-SEA** (~5%) — endless rolling sand-dunes, rig crossing between crests, the horizon a wave of sand
+  I. **HIDDEN GULCH / CANYON-OASIS** (~5%) — small enclosed gully with hidden water-source / fuel-cache / safe-haven, refuge from the open wasteland
+  J. **WASTELAND-SPINE RIDGE** (~5%) — long rocky ridge running across the landscape, dramatic vista from the high ground
+
+Each entry MUST:
+• Open with the wasteland-type
+• Specify TIME OF DAY (dawn / morning / midday / golden-hour / dusk / twilight / night / pre-storm)
+• Reference 2-3 atmospheric / textural details (heat-shimmer / dust-haze / wreckage / decay / vegetation-mutation / etc.)
+• Be UNMISTAKABLY post-collapse far-future — no modern Earth recognizable elements`,
+    touchpoints: [
+      'Cracked desert hardpan at golden hour, heat-shimmer rising in waves from the salt-glazed crust, distant rust-tower silhouettes on the horizon glowing edge-amber, dust-devils spinning across the flats, a half-buried crashed drop-pod foreground-left',
+      'Rust-tower graveyard at midday, decades of decay turning the skeletal spires to bone-white-and-orange in the harsh sun, scrap-shrines welded by passing scavengers visible at the base of each tower, dust-haze rolling through the colonnade',
+      'Salvage-yard graveyard at twilight, fields of crashed orbital-debris and wrecked rig-skeletons stretching to the horizon, single oil-fire burning in the deep distance, raider-tent encampments visible between the wreckage piles',
+      'Dust-canyon at dawn, narrow rocky passage with sun-bleached walls reaching up on both sides, mist clinging to the canyon floor, distant pulse-flash visible far ahead, the path forward winding into shadow',
+      'Collapsed mega-city ruins at dusk, far-future skyscraper-skeletons half-buried in dust-drifts dominating the horizon, the skyline a jagged silhouette against the burning sunset, vegetation-mutations climbing the lower levels',
+      'Acid-flat with toxic pools reflecting iridescent magenta and cyan, rust-formations growing organically from the chemical sludge, steam rising slow off the surface, a single skeletal rust-spire reflecting in a still pool',
+      'Crashed orbital debris-field at dawn, fallen satellites and drop-pods half-buried in sand smoking from atmospheric entry, scavenger figures visible in the deep distance approaching cautiously, dawn-blue ambient with first warm orange at horizon',
+      'Endless dune-sea at midday, rolling sand-dunes stretching to every horizon, the lone rig\'s tracks visible as a single line across the crest of the foreground dune, sun bleaching everything pale-yellow, a sandstorm wall building in the distance',
+      'Hidden gulch oasis at twilight, narrow rocky gulley with a small fuel-pool reflecting the violet sky, scavenger-tent encampment tucked against the wall, fire-pit smoke rising straight up, refuge from the wasteland beyond',
+      'Wasteland-spine ridge at golden hour, long rocky spine running across the landscape, dramatic vista from high ground showing dust-canyons and salvage-yards far below, the rig small on the ridge silhouetted against the burning sky',
+      'Cracked desert hardpan during sandstorm at twilight, orange particulate filling the upper sky and dimming the sun to a dull red disk, visibility limited to mid-distance, the rig small in the storm-haze with headlights cutting through',
+      'Rust-tower graveyard at night, the rusted spires reaching up into deep-cobalt sky, single moon overhead casting pale silver light, scavenger fire-pits glowing amber at the base of distant towers, dust-haze softening every silhouette',
+      'Salvage-yard graveyard during a magenta dust-storm, debris piles emerging through the haze in silhouette, raider-tents huddled in the gaps, lightning flashes briefly silhouetting the wreckage in stark white-on-magenta',
+      'Mountain-pass canyon at dawn with rust-streaked rock walls, narrow road carved through ancient post-collapse landscape, dust-drifts piled against the walls, distant rust-tower skeleton visible at the canyon mouth',
+      'Acid-flat at sunset, toxic pools reflecting blood-orange and crimson, rust-stalactites hanging from a collapsed gantry-skeleton overhead, chemical-haze hanging low, beauty hiding lethality',
+      'Open mesa-plain at midday, flat hardpan stretching for kilometres with isolated wind-carved rock-pillars rising at intervals, mirage-shimmer at distance, dust-cloud from approaching pursuit visible at the deep horizon',
+      'Crashed orbital habitat-ring section at dusk, massive curved structure embedded in cracked desert, rusted and decayed for decades, scavenger-camps visible in the structure\'s shadow, dusk-sky tinted violet behind',
+      'Dune-sea at dawn with frost on the windward sand, sun cresting the horizon casting long blue-shadow on the leeward, the rig\'s tracks visible as twin lines across the foreground dune, distant rust-tower silhouette at horizon',
+      'Salvage-yard graveyard with a fresh raider-encampment, captured rigs being stripped for parts, fires burning in scrap-barrels, war-banners hanging from the wreckage, dust-haze rolling through in the late afternoon light',
+      'Wasteland-spine ridge during a thunderstorm, dramatic clouds rolling overhead with intermittent lightning flashes briefly illuminating the spine, the rig small on the ridge silhouetted against the storm-front, dust whipping in the wind',
+    ],
+    instructions: `Each entry is ONE specific FAR-FUTURE wasteland environment, 25-50 words. Format: "[wasteland-type] at [time of day], [2-3 atmospheric/textural details], [optional scale-prover element]". Vary across the 10 wasteland categories. STRICT BAN on 21st-century Earth settings / modern infrastructure rendered functional. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── post-apoc-rust-tech path: composition (Mad Max chase angles) ───
+  rust_apoc_composition: {
+    format: 'simple',
+    theme: `MAD MAX CHASE CAMERA ANGLES for the post-apoc-rust-tech path. Each entry specifies a camera position + framing that makes the SCAVENGER RIG'S motion, scrap-welded character, and crew visible. Each entry 25-50 words.
+
+⚠️ MANDATORY — every entry must convey BUSH-FIX SCRAP DNA + MOTION. The rig is roaring across a wasteland or being worked on mid-action. Mad Max: Fury Road / Borderlands / Tank Girl / Death Stranding chase-cam energy.
+
+🚫 BANS:
+• NO clean industrial framing (industrial-machines territory)
+• NO portrait of stationary crew (the rig is alive and moving or being repaired mid-action)
+• NO ceremonial / curated framing — these are SCRAPPY, FUNCTIONAL, OFF-KILTER angles
+
+✓ MAD MAX ANGLE CATEGORIES (vary across):
+  • **LOW-CHASE FROM ROAD** — camera at ground/wheel level as rig roars past, dust-cloud kicked up, rear of rig dominant
+  • **OVER-THE-BONNET POV** — camera mounted on the rig's hood/prow looking forward at oncoming wasteland, hood-ornament / spike-array in frame
+  • **AERIAL DRONE FOLLOW** — overhead helicopter shot tracking the rig from above, dust-trail behind, distant wasteland vista
+  • **PARALLEL-RUN-WITH-RIG** — camera car alongside rig at matching speed, crew leaning out hatches firing/shouting, side-armor in detail
+  • **DRIVER-OUT-WINDOW** — driver leaning out side window or roof hatch mid-drive, hand on wheel, eyes on the road
+  • **GUNNER-ON-ROOF POV** — POV from the rig's roof-gunner position firing at off-frame target, weapon-barrel in foreground
+  • **REAR-OF-RIG ASCENDING** — camera at rear of rig as smaller pursuit vehicles close in behind, smoke and dust behind
+  • **CRASHED-VS-RUNNING WIDE** — wide vista with running rig in midground and wrecked pursuer in foreground/distance
+  • **TOTEM-ANTENNA FOREGROUND** — antenna spines / war-banner pole / totem-pole in foreground, rig body extending behind
+  • **GANG OF RIGS CONVOY** — wide convoy of multiple rigs in formation across wasteland, hero rig at centre or leading
+  • **CHASING-LEAD POV** — POV from a pursuing rig closing on the hero rig, road dust between them
+  • **PIT-CREW MID-REPAIR** — rig stopped with crew swarming over it mid-repair (jacking up wheel / welding chassis / fueling), dust-storm rolling
+  • **JUMP-MID-AIR** — rig caught mid-launch off a ramp/dune-crest, all four wheels off ground, dust trailing
+  • **DUSK-SILHOUETTE WIDE** — rig silhouetted edge-amber against burning sunset sky, dust-trail dominant
+  • **NIGHT-FIRE-LIT** — night scene with rig lit only by its own fire / torch / muzzle-flash, crew in shadow
+  • **WHIRLWIND CIRCLE** — rig at center of swirling sandstorm/dust-devil, crew bracing against wind
+  • **GUN-MOUNT REVERSE** — camera at rear of rig looking forward across the deck, gun-mount and crew silhouettes against forward landscape
+  • **WIDE-VALLEY APPROACH** — rig descending into a valley / canyon / salvage yard from a high vantage, wide vista beyond
+  • **CHASE-RAM IMPACT** — moment of two rigs impacting (ramming / spike-plates locking / pit-maneuver), dust + debris exploding
+  • **SUNSET-OVER-THE-FLATS** — wide flat horizon at sunset, rig small in deep distance with massive dust-trail behind
+
+Each entry must specify:
+• Camera position + height + angle (specific, not vague)
+• What dominates the frame (rig body / driver / gunner / dust-trail / convoy)
+• Bush-fix visual detail (scrap-armor / antenna-pole / spike-plate / lashed-fuel-can in view)
+• Motion or activity (roaring / pursuit / repair / convoy / jump)`,
+    touchpoints: [
+      'LOW-CHASE FROM ROAD — camera flush against cracked desert hardpan as the rig roars past at speed, rear of rig dominating upper frame with welded scrap-armor plating, dust-cloud kicked up by rear wheels filling lower frame, exhaust pipes belching smoke upward',
+      'OVER-THE-BONNET POV — camera mounted on the rig\'s spike-ram prow looking forward at oncoming wasteland, hood-ornament (welded scrap-metal skull) in lower foreground, the road stretching ahead with another rig at vanishing point being pursued',
+      'AERIAL DRONE FOLLOW — overhead helicopter-shot tracking the rig from above-left, dust-trail extending behind across the cracked salt-flat, distant wasteland vista of wrecked cars and burning oil-derricks',
+      'PARALLEL-RUN-WITH-RIG — camera car alongside the rig at matching speed, three crew leaning out side-hatches firing improvised weapons at off-frame pursuer, side-armor in detail (welded license plates and oil-drum panels), motion-blur on the ground beneath',
+      'DRIVER-OUT-WINDOW — driver leaning halfway out the side window mid-drive, war-painted face and goggles, one hand white-knuckled on the wheel through the open frame, scrap-armor inches from their elbow, the wasteland streaking past in motion-blur',
+      'GUNNER-ON-ROOF POV — POV from the rig\'s roof-gunner position firing a welded-together heavy-MG at an off-frame pursuer, weapon-barrel and brass-rain in lower foreground, the rig\'s antenna-pole forest visible at frame-edge, ground-haze below',
+      'REAR-OF-RIG ASCENDING — camera at the rear of the hero rig as three smaller pursuit-buggies close in from behind across the dust-cloud, brass casings raining from a roof-mounted gunner firing back, smoke and grit filling the space between',
+      'CRASHED-VS-RUNNING WIDE — wide wasteland vista with the hero rig running in midground at speed, a wrecked-and-burning pursuer in deep foreground silhouetted black against the smoke, distant skyline of post-apoc ruin',
+      'TOTEM-ANTENNA FOREGROUND — towering totem-pole/war-banner-pole rising from the rig\'s rear deck in extreme foreground, mounted with skulls and trophies, rig body extending behind dominated by the antenna spines, crew on deck below',
+      'GANG OF RIGS CONVOY — wide convoy of 4-5 mismatched scrap-welded rigs in loose formation across cracked desert hardpan, hero rig leading at centre, dust-trails braiding behind all of them, single sun overhead',
+      'CHASING-LEAD POV — POV from a pursuing rig closing on the hero rig ahead, road dust between them, hero rig\'s exhaust-smoke trailing back toward camera, pursuit-gunner\'s weapon-barrel visible at frame edge',
+      'PIT-CREW MID-REPAIR — rig stopped in a hidden gulch with 4 crew swarming over it mid-bush-fix repair (welding a cracked chassis, jacking up a wheel, hand-cranking fuel-pump, replacing a broken antenna), dust-storm rolling in deep distance',
+      'JUMP-MID-AIR — rig caught mid-launch off a dune-crest, all four wheels off the ground in mid-arc, dust trailing behind from take-off, crew braced inside, the landing strip of cracked dust visible below',
+      'DUSK-SILHOUETTE WIDE — hero rig silhouetted edge-amber against a burning Mad Max sunset sky, massive dust-trail dominating the lower frame, antenna-spines reading black against the orange',
+      'NIGHT-FIRE-LIT RIG — night scene with the rig lit only by its own torch-flame / improvised flame-thrower / fire-pit on the rear deck, crew silhouettes against the firelight, wasteland deep-dark around them',
+      'WHIRLWIND CIRCLE — rig at the center of a swirling sandstorm / dust-devil, crew bracing against the wind with arms raised, antenna-poles bending, sand visibly streaming past in vortex motion',
+      'GUN-MOUNT REVERSE POV — camera at the rear of the rig looking forward across the deck, the welded gun-mount and crew silhouettes against the forward wasteland landscape, the driver\'s helmet visible far ahead through the cab-frame',
+      'WIDE-VALLEY APPROACH — hero rig descending into a wide salvage-yard valley from a high vantage, wrecked vehicles and scrap-piles scattered across the floor below, smoke columns rising from distant fires, the rig small at the entry',
+      'CHASE-RAM IMPACT — frozen moment of two rigs impacting in mid-chase (ramming / spike-plates locking / pit-maneuver), dust and debris exploding outward, both crews braced and shouting, motion-blur in the surrounding wasteland',
+      'SUNSET-OVER-THE-FLATS — wide flat horizon at burning sunset with the rig small in deep distance, a massive dust-trail extending across the entire frame behind it, sky filling 2/3 of the frame with theatrical color',
+    ],
+    instructions: `Each entry is ONE specific Mad Max chase camera angle, 25-50 words. Format: "ANGLE NAME CAPS — camera position + what dominates the frame + bush-fix detail + motion/activity". Every entry has SCRAP-DNA + MOTION. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── post-apoc-rust-tech path: lighting (Fury Road sunset / sandstorm / fire-glow) ───
+  rust_apoc_lighting: {
+    format: 'simple',
+    theme: `MAD MAX WASTELAND LIGHTING for the post-apoc-rust-tech path. Each entry is ONE specific cinematic lighting setup for scrap-welded rigs roaring across post-apoc wasteland. Each entry 20-40 words.
+
+⚠️ STRICT BAN — NO cosmic / astronomy vocabulary. NO clean industrial sodium-amber (industrial-machines territory). NO clean military combat lighting (power-armor-infantry territory). NO peaceful nature. NO interior LED facility.
+
+✓ MANDATORY VARIETY — distribute across:
+  A. **GOLDEN-HOUR SUNSET ORANGE** (~20%) — Fury Road signature warm-orange sunset, rig silhouetted edge-amber, dust kicked up in the warm light
+  B. **DUST-STORM ORANGE FILTERED** (~15%) — sun filtered through dust-storm haze, everything tinted orange-sepia, low contrast, atmospheric
+  C. **NOON HARSH WHITE-BLEACHED** (~10%) — midday sun bleaching the wasteland, hard shadows, sun-glare on chrome and dust, high-contrast desert
+  D. **NIGHT FIRE-GLOW** (~10%) — night scene with rig lit only by torch / flame-thrower / fire-pit on the deck, deep-dark wasteland around
+  E. **SANDSTORM SEPIA WALL** (~10%) — sandstorm wall in the deep distance dominating sky, rig in foreground reading in cool tones against the wall
+  F. **DAWN BLOOD-RED HORIZON** (~10%) — pre-sunrise red horizon bleeding into deep-violet sky, rig silhouetted edge-red, urgency mood
+  G. **NEON-CYBERPUNK URBAN SCAVENGER** (~5%) — abandoned urban ruin with broken neon signs uplighting the rig, multicolored bleed
+  H. **HEADLIGHTS-IN-DUST CONES** (~5%) — rig\'s own headlights cutting through dust as primary light, hard cones of yellow-white visible
+  I. **MOLOTOV-IGNITION FOREGROUND** (~5%) — molotov cocktail or thermite-charge mid-ignition in foreground, bright orange uplight on rig and crew
+  J. **STORM-CELL LIGHTNING FLASH** (~5%) — pre-storm dark with actinic-white lightning forks briefly silhouetting the rig, deep shadow between flashes
+  K. **DAWN COLD-BLUE WITH FIRE-PIT** (~5%) — pre-sunrise cold-blue ambient with the rig's own fire-pit / torch providing warm accent, dual-color contrast`,
+    touchpoints: [
+      'GOLDEN-HOUR SUNSET ORANGE — Fury Road signature warm-orange sun raking across the wasteland at low angle, rig silhouetted edge-amber against the sky, dust kicked up by wheels glowing in the warm light, long shadows stretched',
+      'DUST-STORM ORANGE FILTERED — sun filtered through dust-storm haze, everything tinted orange-sepia in the diffused light, low contrast across the scene, atmospheric mood of approaching weather, visibility limited to mid-distance',
+      'NOON HARSH WHITE-BLEACHED — midday sun bleaching the wasteland in harsh white light, hard-edged shadows beneath the rig, sun-glare reflecting off chrome and dust-cloud, high-contrast desert mood',
+      'NIGHT FIRE-GLOW PRIMARY — night scene with the rig lit only by its own torch-flame / improvised flame-thrower / fire-pit on the rear deck, deep-dark wasteland around them, crew silhouettes against the firelight',
+      'SANDSTORM SEPIA WALL — massive sandstorm wall dominating the deep distance and upper-frame sky in orange-sepia, rig in foreground reading in cool tones against the wall, crew bracing for the incoming weather',
+      'DAWN BLOOD-RED HORIZON — pre-sunrise blood-red horizon bleeding into deep-violet sky overhead, rig silhouetted edge-red against the burning band, urgency mood, hard shadows still long',
+      'NEON-CYBERPUNK URBAN SCAVENGER — abandoned urban ruin with broken neon signs uplighting the rig from below in cyan-magenta bleed, wet pavement reflecting the colors, hard color contrast against the ruined backdrop',
+      'HEADLIGHTS-IN-DUST CONES — rig\'s own headlights cutting through dust as primary light source, hard cones of yellow-white visible projecting forward, the rig itself partially silhouetted, beyond-cone wasteland in shadow',
+      'MOLOTOV-IGNITION FOREGROUND — molotov cocktail or thermite-charge mid-ignition in extreme foreground, bright orange uplight on the rig and crew, scene briefly over-exposed where flame is, hard shadow contrast',
+      'STORM-CELL LIGHTNING FLASH — pre-storm dark wasteland with actinic-white lightning forks branching between charged storm-clouds, briefly silhouetting the rig in stark white-on-black, deep shadow between flashes',
+      'DAWN COLD-BLUE WITH FIRE-PIT — pre-sunrise cold-blue ambient across the wasteland with the rig\'s own fire-pit / torch providing warm accent, dual-color contrast between cold sky and warm rig',
+      'OVERCAST APOC-GREY — overcast post-apoc sky providing diffuse cold-grey light, low contrast, muted tones across the rig and wasteland, somber post-collapse mood',
+      'GAS-FLARE GLOW DISTANT — distant gas-flare or burning oil-derrick in deep distance providing warm orange glow on the horizon, rig in foreground catching some of the warm-side light',
+      'SUNSET BLOOD-ORANGE EXTREME — sun at horizon bleeding maximum-saturation blood-orange across the entire sky, rig silhouetted full-black against the burning sky, post-apoc operatic finale energy',
+      'TWILIGHT WITH WAR-TORCHES — twilight sky with rig-mounted war-torches and crew torches kicking on, intermediate dual-color contrast between failing daylight and incandescent flame',
+    ],
+    instructions: `Each entry is ONE specific Mad Max wasteland lighting setup, 20-40 words. Format: "LIGHTING MODE CAPS — [source + direction + color + shadow character + wasteland context]". Distribute across the 11 buckets. STRICT BAN on cosmic / clean-industrial / clean-military / interior modes. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── post-apoc-rust-tech path: drama (40%-gated wasteland phenomena) ───
+  rust_apoc_drama: {
+    format: 'simple',
+    theme: `40%-GATED WASTELAND PHENOMENA for the post-apoc-rust-tech path — an environmental event amplifying the chase/scavenger moment. Each entry 25-50 words.
+
+⚠️ STRICT — each phenomenon must amplify MAD MAX wasteland spectacle. Fury Road / Borderlands / Tank Girl / Death Stranding lineage. NO clean industrial work, NO pristine nature, NO fantasy.
+
+✓ WASTELAND PHENOMENA — distribute across:
+  • **DUST-DEVIL SPIRAL** — dust-devil spiral on the horizon or near the rig
+  • **SANDSTORM WALL APPROACHING** — massive sandstorm wall rolling in from the horizon
+  • **VEHICLE-WRECK FIREBALL** — fresh wrecked pursuer fireball in midground
+  • **MOLOTOV-EXPLOSION** — molotov cocktail exploding mid-air or impacting nearby
+  • **OIL-DERRICK BURNING DISTANT** — burning oil-derrick or fuel-depot in deep distance, smoke-column rising
+  • **WRECKAGE-SCATTERED FOREGROUND** — wrecks of prior crashes scattered across the foreground terrain
+  • **VULTURES-CIRCLING OVERHEAD** — flock of vultures or carrion-birds circling overhead
+  • **ROAD-DEBRIS-SCATTER** — chunks of wreckage / barbed-wire / spikes scattered on the road ahead
+  • **MIRAGE-HEAT-SHIMMER** — heat-shimmer rising from the road creating a mirage-distortion in mid-distance
+  • **DUST-CLOUD-OVERTAKE** — massive dust-cloud kicked up by pursuit overtaking the hero rig from behind
+  • **FUEL-SPILL TRAIL** — leaking fuel-can trail behind the rig with sparks dangerously close
+  • **CONVOY-FLARE OVERHEAD** — signal-flare arcing overhead from a friendly or enemy convoy
+  • **SUPPRESSION-FIRE TRACER** — incoming tracer-rounds from a pursuer's MG creating colored arcs in the air
+  • **CHAIN-WHIP CRACK** — heavy chain mid-swing from a chain-mounted weapon impacting an enemy vehicle
+  • **DUNE-CREST LAUNCH** — dune-crest mid-launch as the rig comes off the rise, dust trailing
+  • **ROAD-WARRIOR HORDE INCOMING** — horde of pursuit-vehicles visible at the deep horizon closing in
+  • **THUNDERSTORM ROLLING** — thunderstorm rolling across the wasteland in distance with lightning flashes
+  • **WATER-OASIS REVELATION** — sudden glimpse of green water-oasis ahead amid the desolation
+  • **ENGINE-FIRE COMPLICATION** — rig's own engine catching fire mid-drive, smoke pouring from hood, crew trying to put it out
+  • **RAM-PRONG IMPACT-MOMENT** — rig's ram-prong impacting another vehicle, debris and crew flying`,
+    touchpoints: [
+      'DUST-DEVIL SPIRAL — towering dust-devil spiral on the horizon at midground level, the dust-column extending up into the sky, the rig\'s path likely intersecting it within seconds, atmospheric drama',
+      'SANDSTORM WALL APPROACHING — massive sandstorm wall rolling in from the deep horizon dominating the upper third of the frame in orange-sepia, the rig in foreground silhouetted against the wall, ominous',
+      'VEHICLE-WRECK FIREBALL — fresh wrecked pursuer vehicle fireball in midground behind the hero rig, secondary explosions chaining out, black smoke-column rising into the sky',
+      'MOLOTOV-EXPLOSION MID-AIR — molotov cocktail exploding mid-air or impacting against a pursuer\'s windshield, bright orange fireball mid-bloom, glass shattering, hands releasing the throw still visible',
+      'OIL-DERRICK BURNING DISTANT — burning oil-derrick or fuel-depot in deep distance with massive smoke-column rising into the sky, the rig speeding past in foreground silhouetted against the orange backdrop',
+      'WRECKAGE-SCATTERED FOREGROUND — wrecks of prior crashes scattered across the foreground terrain (burned-out car-shells, twisted metal, abandoned scrap), the rig threading between them at speed',
+      'VULTURES-CIRCLING OVERHEAD — flock of vultures or carrion-birds circling overhead in the upper-frame sky, eyeing the wasteland for fresh kills, atmospheric memento-mori',
+      'ROAD-DEBRIS-SCATTER — chunks of wreckage / barbed-wire / spike-trap scattered on the road ahead of the rig, the driver hauling the wheel to dodge, mid-evasive-action moment',
+      'MIRAGE-HEAT-SHIMMER — heat-shimmer rising from the cracked desert hardpan creating a mirage-distortion in mid-distance, the pursuer at the heat-line dissolving into rippling air',
+      'DUST-CLOUD-OVERTAKE — massive dust-cloud kicked up by pursuit closing in from behind, partially obscuring the rear of the hero rig, pursuit-vehicles emerging through the cloud',
+      'FUEL-SPILL TRAIL — leaking fuel-can trail behind the rig with sparks dangerously close from the rear gun-mount, the spill ignition risk imminent, gunner glancing back',
+      'CONVOY-FLARE OVERHEAD — signal-flare arcing overhead from a friendly or enemy convoy in the deep distance, the flare\'s smoke-trail crossing the upper frame, message-implied',
+      'SUPPRESSION-FIRE TRACER — incoming tracer-rounds from a pursuer\'s MG creating colored arcs in the air around the hero rig, near-misses sparking off the welded-armor plating',
+      'CHAIN-WHIP CRACK — heavy chain mid-swing from a chain-mounted weapon impacting an enemy vehicle\'s windshield, glass shattering, the enemy driver visibly recoiling',
+      'DUNE-CREST LAUNCH — dune-crest mid-launch as the rig comes off the rise mid-arc, all four wheels off the ground, dust trailing behind from take-off, the landing-flat visible below',
+      'ROAD-WARRIOR HORDE INCOMING — horde of pursuit-vehicles visible at the deep horizon closing in across the wasteland, multiple silhouettes at distance, dust-trails braiding behind them',
+      'THUNDERSTORM ROLLING — thunderstorm rolling across the wasteland in deep distance with intermittent lightning flashes briefly illuminating the rig, the storm-front extending across the horizon',
+      'WATER-OASIS REVELATION — sudden glimpse of a green water-oasis ahead amid the desolation, water glistening, the rig\'s crew visibly reacting in surprise, brief beauty in the wasteland',
+      'ENGINE-FIRE COMPLICATION — rig\'s own engine catching fire mid-drive, smoke pouring from the hood, crew leaning out with fire-extinguisher or jacket to smother it, drive continuing',
+      'RAM-PRONG IMPACT-MOMENT — rig\'s ram-prong impacting another vehicle in frozen moment, debris and crew flying from the impacted vehicle, the hero rig\'s prow visibly buckling',
+    ],
+    instructions: `Each entry is ONE specific Mad Max wasteland phenomenon, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visual action + secondary detail + wasteland-context". STRICT Mad Max aesthetic — NO clean industrial work, NO pristine nature, NO fantasy. Amplifies the chase/scavenger moment. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

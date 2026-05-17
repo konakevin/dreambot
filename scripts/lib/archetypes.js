@@ -608,6 +608,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_POST_APOC_RUST_TECH: {
+    description:
+      'PATH-BESPOKE — MechBot post-apoc-rust-tech path (2026-05-16 migration; sixth MechBot path). FAR-FUTURE sci-fi BUSH-FIX scavenger rigs + crews running across post-apoc wasteland. Mad Max Fury Road (sci-fi-tilted) / Borderlands Pandora / WH40K Ork-Looted / Dune Sardaukar-thopter / Cyberpunk 2077 Nomad-clan / Horizon Zero Dawn rebel-tech / Death Stranding off-Earth lineage. Subject/action/setting pools FULLY REGENERATED 2026-05-16 with sci-fi-tilt + bush-fix mandate baked in (legacy 200-entry pools had present-day-truck / modern-refinery / 21st-century-Earth DNA that surgical word-replace patches couldn\'t fix at the concept level). New 30-entry MVP pools — fusion-cell engines, plasma-drives, alien-tech salvage, hover-skirts, glowing energy-conduits, scavenged orbital-debris. 3 path-bespoke pools added: composition (Mad Max chase angles), lighting (Fury Road wasteland), drama (40%-gated wasteland phenomena).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',
@@ -787,6 +801,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  STEAMBOT_STEAMPUNK_LABS: {
+    description:
+      'PATH-BESPOKE — SteamBot steampunk-labs path (2026-05-16 axis-system migration). VICTORIAN-INDUSTRIAL MAD-SCIENCE LABORATORY INTERIOR — soaring arched-glass ceilings, two-story balconies, brass-and-mahogany shelving, gas-lamps, mosaic-tile floors with embedded sigil-patterns. A MAJOR GLOWING EXPERIMENT centerpiece (containment-sphere / Tesla-coil / distillation-column / etc.) anchors the scene. 80%-gated Tesla-coil electrical phenomena and 60%-gated tiny lab-coated scientist scale-prover figure. Inspired by Tesla\'s Wardenclyffe / Frankenstein\'s tower-lab / Nemo\'s Nautilus / Royal Society. Varied palette across renders — architecture is wood-brass-glass, color comes from experiment glow (green/blue/amber/violet/pink/etc.). 4 path-bespoke axes (lab_space / centerpiece / apparatus pickN:3 / electrical 80%-gated) + 60%-gated scientist + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['lab_space', 'centerpiece', 'apparatus', 'electrical'],
+    },
+    pickN: { apparatus: 3 },
+    conditionalLayer: { slot: 'scientist', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   STEAMBOT_STEAMPUNK_SCENE: {
     description:
       'PATH-BESPOKE — SteamBot steampunk-scene path (2026-05-15 migration). CHARACTER INTEGRATED INTO EPIC STEAMPUNK SCENE — a role-based steampunk figure (clockwork magistrate / sky-nomad / weather-prognosticator / etc. — gender-agnostic, persona-driven) AT MEDIUM scale (15-25% frame) standing inside a wildly imaginative steampunk landscape (Big-Ben-clockwork-opened / gear-waterfall / floating-metropolis / mechanical-jungle / brass-cathedral / etc.). The LANDSCAPE is the co-hero. Cinematic feature-film concept render with photoreal physical light. 3 path-bespoke axes (character / landscape / surprise_element) + conditional event 40%-gated + universal lighting + atmosphere.',
@@ -892,6 +920,20 @@ const ARCHETYPES = {
       universal: [],
       bot: [],
       path: ['conservatory_type', 'structural_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_CITY_FLOWERS: {
+    description:
+      'PATH-BESPOKE — BloomBot city-flowers path (2026-05-16 migration). URBAN ARCHITECTURE HALF-CONSUMED BY FLOWERS. Wide street-photography composition with pedestrian-level POV + leading-lines into city depth. Architecture is the STRUCTURAL HERO; blooms are DISTRIBUTED MASS across balconies / window-boxes / iron grilles / staircases. 3 path-bespoke axes (city_setting / architectural_detail / atmospheric_phenomenon 60%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['city_setting', 'architectural_detail'],
     },
     pickN: {},
     conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },

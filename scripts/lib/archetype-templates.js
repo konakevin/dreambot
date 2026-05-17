@@ -3280,6 +3280,107 @@ Open with the vertigo camera angle + squad+allies+engagement context ("Low-forwa
 Output ONLY the raw 180-240 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MECHBOT_POST_APOC_RUST_TECH: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ WASTELAND PHENOMENON — render this visibly in the scene ━━━
+${drama}
+
+An environmental wasteland event amplifying the chase / scavenger / bush-fix moment (dust-devil / sandstorm wall / wreck-fireball / molotov / vultures / fuel-spill / ram-impact / etc.). Render it visibly.
+
+`
+      : '';
+
+    return `You are a sci-fi wasteland cinematographer writing a POST-APOC RUST TECH scene for MechBot — a SCRAP-WELDED BUSH-FIX FAR-FUTURE scavenger rig + visible crew running across the wasteland (or being bush-fixed mid-action). Hyper-real cinematic 3D / VFX-quality. MAD MAX FURY ROAD (sci-fi-tilted variant) / DOOF WAGON / GIGAHORSE / WAR RIG / BORDERLANDS PANDORA BANDIT / TANK GIRL / DEATH STRANDING off-Earth / TWISTED METAL / WARHAMMER 40K ORK-LOOTED / DUNE Sardaukar-thopter / CYBERPUNK 2077 NOMAD-CLAN / HORIZON ZERO DAWN rebel-tech / FALLOUT-RAIDER lineage. Sci-fi-tilted RETROFUTURIST, JURY-RIGGED, lived-in, off-kilter, scary, gleefully unsafe.
+
+🚫 SCI-FI MANDATORY — NOT 21st-CENTURY EARTH ━━━
+The rig is a FAR-FUTURE post-apoc machine, NOT a present-day Earth vehicle. NEVER render anything that reads as a contemporary truck / 18-wheeler / big-rig / Peterbilt / Kenworth / semi-truck / box-truck / pickup-truck / motorcycle / VW van / camper / RV / construction equipment / 1981-Mad-Max-Toecutter-buggy. The rig is FAR-FUTURE — alien-world / post-collapse Earth / Pandora / Mars-colony / asteroid-mining-zone / cyberpunk-dystopia-wasteland. Mandatory sci-fi cues (render 2-3 per render visibly): fusion-cell engines / plasma-drive exhaust / alien-tech salvage welded into the build / hover-skirt augmentation / glowing energy-conduit veins through the chassis / power-pack lashings / radiation symbols / xenomaterial fittings / scavenged orbital-debris hull-plates / pulse-cannon mounts / glowing reactor-core in the gut of the rig.
+
+━━━ NON-NEGOTIABLE — BUSH-FIX SCRAP DNA ━━━
+This rig is a SCRAP-WELDED CHIMERA held together with wire / chains / prayer / spite. NEVER a clean factory-built vehicle. NEVER military-issue. NEVER pristine. EVERY surface shows bush-mechanic ingenuity:
+• MISMATCHED salvaged body panels (alien-hull plates / drop-pod fragments / road-sign offcuts / locker-doors / oil-drum sheets / refrigerator-door slabs / cargo-container flanks welded chaotically)
+• ANTENNA FOREST rising from the roof (twisted comms-rods, war-banner poles, signal-mirror masts, scrap-totem)
+• EXHAUST STACKS (multiple chimneys belching plasma-glow or black smoke)
+• RAM PROW or SPIKE PLATE on the front (welded scrap-iron spikes, hood-ornament alien-skull, cattle-catcher prong)
+• ROPE-BOUND POWER-CELLS / fuel-pods lashed to chassis (visibly-glowing power packs with frayed ropes)
+• WAR-TROPHIES dangling (alien-skulls, captured enemy-tech, severed weapon-parts, chains, banners with hand-painted radiation symbols)
+• SUN-BLEACHED PAINT over rust
+• WIRE-MESH CAGES around driver / crew positions
+• EXPOSED ENGINE BLOCKS (fusion-cells / plasma-coils / reactor-rods visible through hull gaps)
+• DRAGGING CHAINS / SPIKES behind
+
+🚫 ABSOLUTE BANS:
+• NO clean / pristine / well-maintained machinery (industrial-machines territory)
+• NO professional military uniforms (power-armor-infantry territory) — crews are RAGGED scavengers
+• NO giant-titan scale (titan-war territory) — VEHICLE / WALKER scale (2-5x crew height)
+• NO pilot-in-glass-cockpit (mecha-pilots territory) — drivers EXPOSED in open hatches / wire-mesh cages
+• NO ceremonial / ornate / showpiece robot (robot-moment territory)
+• NO abandoned / decay-pathos / no-crew — rigs are RUNNING, crew is VISIBLE
+• NO Star Wars / Halo IP names
+• 🚫 HARD BAN — NO PRESENT-DAY EARTH SETTING. NEVER a recognizable 21st-century street / suburban road / highway / overpass / asphalt city-block / parking lot / shopping mall / gas station / regular intersection / pedestrian sidewalk. Setting is ALWAYS post-apoc WASTELAND or POST-COLLAPSE RUIN.
+• 🚫 HARD BAN — NO MODERN INDUSTRIAL INFRASTRUCTURE rendered as still-functional. NEVER a working oil refinery / modern pipeline / present-day power plant / chemical plant / nuclear cooling-tower. Even "rust-tower graveyards" must render as POST-COLLAPSE BONE-YARDS — rusted skeletal frames decayed for decades, never present-day operation.
+
+━━━ NON-NEGOTIABLE — CREW IS VISIBLE & ENGAGED ━━━
+1-5 crew MUST be visible on/around the rig: driver in open hatch / gunners perched on roof / scavengers leaning out side hatches / lookouts on chassis / mechanics swarming during bush-fix. Crew aesthetic: war-painted faces, goggles, leather harnesses, scarves over mouths, mismatched scavenger gear, scarred skin, ragged hair, lashed-on gear.
+
+━━━ NON-NEGOTIABLE — RIG IS ALIVE & MOVING (or BUSH-FIXED MID-ACTION) ━━━
+The rig is RUNNING (roaring / racing / chasing / pursuing) OR being BUSH-FIXED mid-action (crew mid-weld / pit-stop refuel / wheel-change in a hidden gulch). Dust kicked up by wheels / treads / leg-impacts. Plasma-drive exhaust trailing. Engine-roar implied.
+
+━━━ NON-NEGOTIABLE — MAD MAX CHASE COMPOSITION ━━━
+${composition}
+
+The chosen camera angle DRIVES the framing — render it precisely as described. The composition makes the rig's SCRAP CHARACTER + MOTION + crew immediately legible.
+
+━━━ EVERY-QUADRANT-STRIKING MANDATE — movie-poster sci-fi wasteland moment ━━━
+Every render must have:
+  1. THE RIG as dominant focal subject (scrap-welded sci-fi chimera filling 50-70% of frame, recognizable bush-fix + sci-fi DNA)
+  2. THE VISIBLE CREW (1-5 figures on/around rig — driver / gunner / lookout / scavenger / mechanic — each doing something mid-action)
+  3. MOTION OR ACTION (dust-trail / motion-blur / pursuit / pit-repair / convoy formation)
+  4. SCI-FI CUE — at least 2-3 of: glowing energy-conduit / fusion-cell engine / plasma-drive exhaust / alien-tech salvage / hover-skirt / xenomaterial fitting / radiation symbol / pulse-cannon mount
+  5. SCRAP-WELDED DETAIL — at minimum 4 of: antenna forest / mismatched body panels / lashed fuel/power-cells / war-trophies / ram prow / exhaust stacks / improvised weapons / wire-mesh cages
+  6. MULTI-TIER DEPTH — foreground rig + crew / midground wasteland action / deep distance wasteland vista (mesas / ruined sci-fi spires / dust-canyon / sunset)
+  7. SATURATED THEATRICAL WASTELAND LIGHTING — Fury Road sunset orange / sandstorm-sepia / dawn blood-red / fire-glow / dust-cone headlight
+
+THINK Mad Max Fury Road sci-fi-tilted / Borderlands bandit-camp ambush / Death Stranding off-Earth mule / WH40K Ork Looted-Trukk raid / Dune harvester-and-thopter / Cyberpunk 2077 Nomad-clan road / Horizon Zero Dawn raider-tech / Fallout Highwayman key-art.
+
+━━━ THE RIG + CREW (the seeded subject) ━━━
+${subject}
+
+━━━ THE ACTION (rig running, crew engaged, or pit-stop bush-fix) ━━━
+${action}
+
+Render the rig MID-MOTION or MID-BUSH-FIX. The crew is engaged. NEVER static showpiece-pose.
+
+━━━ THE WASTELAND SETTING ━━━
+${landscape}
+
+Render the wasteland environment as half the story — heat-shimmer, dust storms, sun-bleached terrain, wreckage scattered, desolate vista in distance. Multi-tier depth: foreground terrain detail / midground rig + crew / background wasteland vista.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Golden-hour and dust-orange hues favored — Mad Max sunset palette. Even at night, sodium-orange / fire-glow / molotov-uplight accents. Layer the rolled lighting mode with wasteland-specific accents — rig-mounted plasma-torch / exhaust-smoke catching light / dust-cloud catching backlight.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ STRUCTURE — write 130-170 words ━━━
+Open with the chase camera angle + scrap-welded sci-fi rig context ("Low-chase from the salt-flat as an 8-wheeled scavenger rig welded from drop-pod hull-fragments and refrigerator-door slabs roars past at full plasma-drive, twin fusion-cell engine glowing amber through gut-gaps, four crew in war-paint bungee-lashed to roof-mounted pulse-cannon mounts..."). Then weave in: visible crew engaged, wasteland setting with multi-tier depth, any wasteland-phenomenon drama, lighting/atmosphere, palette and mood. The render MUST feel like a sci-fi-tilted Mad Max key-art moment.
+
+Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
@@ -5060,6 +5161,103 @@ ${vibeDirective.slice(0, 200)}
 CRITICAL — Victorian glass-and-iron architecture is NON-NEGOTIABLE. Wide-angle interior with visible glass-dome and iron-framework. Volumetric god-rays through glass. HALF-architectural / HALF-jungle balance.
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the conservatory.`;
+  },
+
+  // BloomBot city-flowers — URBAN ARCHITECTURE half-consumed by flowers.
+  // Wide street-photography composition with pedestrian POV + leading-lines.
+  // Architecture-as-structural-hero + bloom-as-distributed-mass (lesson
+  // from conservatory R3). 2026-05-16 R1.
+  BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { city_setting, architectural_detail, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the city scene ━━━
+${atmospheric_phenomenon}
+
+This is the magic-moment detail that elevates the city scene — render as a specific element within the frame.
+
+`
+      : '';
+
+    return `You are a fine-art street-photography painter writing URBAN-OVERGROWN-BY-FLOWERS scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
+NO humans, NO figures, NO silhouettes, NO shadows of people, NO pedestrians. The empty city street is the subject. (A sleeping cat / songbird / pigeon-cluster / parked bicycle / scooter — only when atmospheric_phenomenon calls for it.)
+
+━━━ URBAN ARCHITECTURE — NON-NEGOTIABLE ━━━
+This is a specific REAL-WORLD URBAN setting — Mediterranean alleyway / Parisian Haussmann street / Tokyo back-street / Lisbon tile-fronted staircase / Marrakech blue-painted courtyard / Venetian canal-side / Cinque Terre cliff-village / Cuban old-town colonial / etc. The city's signature architectural style is UNMISTAKABLE — pastel-plaster walls / iron balcony railings / sliding wooden doors / azulejo tiles / blue-painted walls / canal palazzi / cliff houses / colonial facades.
+
+━━━ HALF-CONSUMED BY FLORAL OVERGROWTH — BLOOM-MASS DISTRIBUTED ━━━
+The architecture is HALF-CONSUMED by flowers — blooms CASCADE off every balcony, CLIMB every wall, SPILL from every window-box, DRAPE across every iron grille, FILL every planter, OVERFLOW every cracked pavement crack. The city's specific style is visible THROUGH the bloom-curtain that consumes it.
+
+The blooms are a DISTRIBUTED MASS — 3-4 species from the roster massed IN EQUAL WEIGHT across every architectural feature (balcony / window-box / iron grille / planter / pavement crack / staircase / canal-edge). There is NO single hero bloom. The ARCHITECTURE is the structural hero; the BLOOMS are the environmental overflow.
+
+⚠️ DO NOT default to one giant bloom dominating. DO NOT concentrate all blooms in one corner. DISTRIBUTE the bloom-mass across every quadrant of the frame.
+
+━━━ THE CITY SETTING ━━━
+${city_setting}
+
+━━━ THE ARCHITECTURAL DETAIL (the city's signature element) ━━━
+${architectural_detail}
+
+The architectural detail is the city's signature — render it with hyperreal precision so the city is unmistakable. The bloom-cascade wraps and drapes the detail without obscuring its identity.
+${phenomenonSection}━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
+Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP / want to print and frame the image.
+
+Pick ONE wide street-photography composition per render (vary):
+  A. **ALLEY VANISHING-POINT** — pedestrian-level POV down a Mediterranean / Lisbon / Cuban alleyway, walls cascading bloom on both sides, vanishing-point at far end with sunlit glow
+  B. **STAIRCASE RISING** — pedestrian-level POV of a stone / tile-fronted staircase rising between bloom-laden walls, vanishing toward sky-glow or arched gate at top
+  C. **CANAL EDGE** — Venetian / Bruges / Amsterdam canal in foreground with bloom-laden palazzo facades on opposite side, water reflecting blooms and architecture
+  D. **BALCONY-TIER LOOKUP** — looking UP at a Parisian / Cuban / Italian balcony-tier from below, bloom-cascades pouring from iron railings overhead, sky-glow at top
+  E. **COURTYARD INTERIOR** — small Marrakech / Andalusian / Spanish courtyard with central fountain or well, bloom-cascade from upper balconies on all sides
+  F. **CLIFFSIDE VILLAGE** — wide view of a Cinque Terre / Amalfi / Greek-island village clinging to a cliff, pastel houses bloom-draped, sea-edge below
+  G. **PLAZA WITH FOUNTAIN** — small European plaza with central fountain, bloom-draped buildings ringing the square, pavement leading to the fountain
+  H. **CORNER STREET-VIEW** — diagonal corner-view of a Cuban / Parisian / Tokyo street corner, two facades visible at angle, bloom-cascades from both
+  I. **THROUGH-AN-ARCHWAY** — view through a Mediterranean / Andalusian stone archway into the city street beyond, bloom-laden arch in foreground
+  J. **BRIDGE OVER CANAL** — small stone bridge over a Venetian / Bruges canal with bloom-draped railings, view down the canal in either direction
+  K. **TOKYO BACK-STREET** — wide shot of a Tokyo back-street with wooden-and-paper architecture, bicycles parked, vending machines glowing, blooms in pot-clusters at every door
+  L. **MARKET STALL** — small empty market-stall in a Mediterranean square with bloom-cascade from the awning and surrounding walls
+
+DELIBERATE COMPOSITION CRAFT — wide street-photography:
+- Strong LEAD-LINES into city depth (alley vanishing-point / staircase rise / canal recede / pavement converging)
+- Pedestrian-level POV — eye at street-level, not aerial
+- Architecture FRAMES the shot on both sides (walls / balconies / buildings creating natural frame)
+- Multi-tier depth: tactile foreground (cracked pavement / cobblestones / petal-strewn step) → midground architectural mass → deep distance hazed warm
+- Warm hero light at the destination end (sun glow / lantern / sunset spilling INTO the alley)
+- One quadrant has intentional negative-space breathing room (sky / open canal / empty wall section)
+
+━━━ MATERIAL POETRY — URBAN TEXTURES ━━━
+"Sun-bleached plaster wall with cracks visible through climbing-bloom vines", "azulejo tiles with hand-painted blue-and-white patterns peeking through cascading petals", "rust-patinaed iron balcony railing wrapped in flowering vines", "cobblestone pavement with petals fallen in the joints", "weathered wooden shutters partially closed with bloom-vines climbing the louvers", "weathered brass doorknob with a single petal stuck to it".
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Use the actual species names. Pick 3-4 species from the roster, mass them in EQUAL WEIGHT across every architectural feature (balconies / window-boxes / iron grilles / pavement / staircases / canal-edges).
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ DEFAULTS TO RESIST ━━━
+- NO modern / contemporary / corporate architecture — historic / weathered / picturesque only.
+- NO American urban / Manhattan / LA / suburban — European / Mediterranean / North African / Asian / colonial only.
+- NO people / pedestrians / bicycles-being-ridden — empty street.
+- NO pink/rose/blush dominance unless palette names it.
+- NO roses/peonies/hydrangeas/lavender unless in the roster.
+- NO single hero bloom — DISTRIBUTE the bloom-mass.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[wide street-photography composition mode], [specific city setting + signature architectural detail rendered with hyperreal precision], [bloom-mass DISTRIBUTED across every architectural feature — balconies / window-boxes / iron grilles / planters / pavement cracks / 3-4 species in equal weight], [pedestrian-level POV with leading-lines into city depth], [warm destination glow at the vanishing point]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible city detail]' : ''}, [material poetry — sun-bleached plaster, azulejo tiles, cobblestone joints, weathered shutters]
+
+CRITICAL — wide street-photography composition. Architecture is the STRUCTURAL HERO, blooms are DISTRIBUTED MASS. NEVER a flat eye-level snapshot, NEVER a single hero bloom dominating.
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the city.`;
   },
 };
 
