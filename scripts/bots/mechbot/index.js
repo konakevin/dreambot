@@ -189,7 +189,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman'],
+    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman', 'cyborg-female-legacy'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
