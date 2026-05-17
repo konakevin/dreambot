@@ -33,6 +33,43 @@ if (!POOL) {
 const OUT = path.resolve(__dirname, 'bots/dinobot/seeds', `${POOL}.json`);
 
 const RECIPES = {
+  dinobot_nesting_ground_surprise_element: `Generate SMALL FAMILY-MOMENT ACCENT descriptions for DinoBot's nesting-ground path. Each is ONE comma-separated line, 15-30 words, describing a small secondary accent in the family-scene — additional juvenile / distant adult / nest-detail / hatching-egg / scattered debris / family-trace.
+
+The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds depth and family-life context.
+
+Variety mandate (rotate widely):
+- ~20% Additional juvenile / hatchling in the foreground edge (smaller scale-prover, peeking out of fern / play-pawing)
+- ~15% Distant adult watching from cliff-edge / treeline / midground (guardian-coded)
+- ~10% Hatching egg with crack opening / shell-fragment scattered (life-cycle moment)
+- ~10% Discarded nest debris (broken eggshells / arranged twigs / down-feathers)
+- ~10% Sibling further off mid-action (running / pouncing / drinking at distance)
+- ~10% Parent feeding moment (regurgitating / passing food / nuzzling)
+- ~10% Juvenile-and-parent mirror gesture (both heads turned same direction / both watching skies)
+- ~5% Communal-nursery sense (multiple nest mounds visible at deep distance)
+- ~5% Small dinosaur footprint / juvenile tracks in mud / juvenile-tail-drag pattern
+- ~5% Atmospheric small life (giant dragonfly Meganeura, primordial bird in flight, etc.)
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant background)
+- ONE SPECIFIC DETAIL (mid-action / catching light / posture / etc.)
+
+GOOD examples:
+- A second juvenile hatchling in the foreground edge, head emerging from fern fronds, eye reflecting the golden light
+- A distant adult Triceratops watching from a cliff-edge at deep midground, silhouette against the sky, frill catching sunset light
+- A hatching egg in the foreground at midground edge, crack opening with a tiny snout visible inside, shell-fragments scattered around
+- Scattered eggshell fragments and arranged twigs in foreground, the nest aftermath
+- A juvenile Maiasaura sibling further off mid-pounce on a stick, mid-air leap captured
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern animals
+- NO combat / no kill-shot / no gore / no dead-juvenile / no parent-attacked
+- NO weapons / tools / artifacts
+- NO duplicate-style entries
+
+Output: ONE family-accent per line. No numbering. No quotes.`,
+
   dinobot_ocean_reptiles_ocean_scene: `Generate STRICT MESOZOIC OPEN-OCEAN scene descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 30-50 words, describing the OCEAN setting — open marine water, underwater, surface-break, deep-abyss, reef, continental-shelf.
 
 ⚠️ STRICT OCEAN IDENTITY — NEVER river / swamp / lake / mud-flat / pond / wetland. ALWAYS pelagic open-ocean / deep blue water / coral reef / underwater light-shafts / surface-break / storm-tossed waves. NO land visible primary (a distant land silhouette at deep horizon is OK at most).

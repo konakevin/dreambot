@@ -59,6 +59,8 @@ module.exports = {
   DINOBOT_OCEAN_REPTILES_CREATURE: load('dinobot_ocean_reptiles_creature'),
   DINOBOT_OCEAN_REPTILES_SURPRISE: load('dinobot_ocean_reptiles_surprise'),
   DINOBOT_OCEAN_REPTILES_PHENOMENON: load('dinobot_ocean_reptiles_phenomenon'),
+  // Nesting-ground path-bespoke pool (added 2026-05-17 — axis-system migration)
+  DINOBOT_NESTING_GROUND_SURPRISE_ELEMENT: load('dinobot_nesting_ground_surprise_element'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

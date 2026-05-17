@@ -1038,6 +1038,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  DINOBOT_NESTING_GROUND: {
+    description:
+      'PATH-BESPOKE — DinoBot nesting-ground path (2026-05-17 axis-system migration). MESOZOIC FAMILY-LIFE scenes — hatchlings tumbling, parents teaching juveniles, siblings play-fighting, families migrating, communal nurseries. The full spectrum of dinosaur family behavior (not just egg-sitting). Reuses NESTING_SCENES (200 fat-seed family-life scenes) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for family-specific small accents. National-Geographic-cinematic tender prehistoric family moments. 3 path-bespoke axes (biome / family_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'family_scene', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

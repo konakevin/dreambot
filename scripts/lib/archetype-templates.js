@@ -6490,6 +6490,97 @@ DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID MESOZOIC DINOSA
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DINOBOT_NESTING_GROUND: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, family_scene, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event elevating the scene — volcano at distance / storm-front / god-rays / mist-bank / pterosaur flock / etc.
+
+`
+      : '';
+
+    return `You are a wildlife documentary cinematographer writing MESOZOIC DINOSAUR FAMILY-LIFE scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. National-Geographic / Prehistoric-Planet / Walking-with-Dinosaurs / BBC-Planet-Earth tender-family-moment cinematography.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, anything humanoid. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only. The family moment is rendered as a wildlife documentary observing wild animals — no humans observing.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern zoo, NEVER as a modern wildlife sanctuary, NEVER as a farm. ALWAYS ancient primordial Mesozoic wilderness with mega-flora at the surrounding biome. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — TWO OR MORE DINOSAURS VISIBLE IN THE FRAME ⚠️⚠️⚠️
+This is THE defining feature of nesting-ground. EVERY render shows MULTIPLE dinosaurs in a family-activity moment — NEVER a solo dinosaur. Minimum 2 dinosaurs visible, often more (parent + 2-3 juveniles, sibling cluster, family-on-move with 3-5 individuals, communal nursery with multiple families).
+
+If only ONE dinosaur appears in the rendered frame, the render has FAILED. The family activity REQUIRES multiple dinosaurs interacting with each other — never a single dinosaur alone in the landscape.
+
+━━━ THE SCENE — FAMILY LIFE IS THE FOCAL ACTIVITY, MESOZOIC BIOME IS THE STAGE ━━━
+Composition:
+• FAMILY-LIFE SCENE (mandatory MULTI-DINOSAUR): the focal activity — parent teaching juvenile / hatchlings tumbling / siblings play-fighting / family migrating / parent defending / juveniles discovering / communal nursery. ALWAYS multiple dinosaurs interacting.
+• MESOZOIC BIOME: 50-60% of frame as the stage — alien-Mesozoic landscape with mega-flora at the surrounding banks / cliff-faces / canopy
+• ATMOSPHERIC HAZE: receding atmospheric depth into golden distance
+
+⚠️ COMPOSITIONAL RULES:
+• MINIMUM 2 dinosaurs visible in the frame (parent+juvenile, sibling pair, etc.) — front-load this in the prompt so Flux locks on multiplicity
+• Multi-dinosaur INTERACTION visible — touching / watching / mid-action together / mirrored gesture / parent-feeding / sibling-tumbling
+• The family activity is mid-action — never posed, never frontal-facing-camera, never static
+• Cinematic documentary framing — wide / mid (NEVER tight close-up of single head) vary per render
+• TENDER quality — protective parent, curious juvenile, playful sibling — but never sentimental cartoon. National-Geographic-real.
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no human-trace / no tools / no artifacts / no fences / no enclosures
+🚫 NO modern animals (no mammals, no modern birds — pterosaurs OK)
+🚫 NO modern flora (no palms / oak / maple / suburban-park / lawn / grass)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO combat / no kill-shot / no gore / no dead-juvenile / no parent-attacked / no predation imagery
+🚫 NO close-up portrait of single dinosaur head (family activity is the subject)
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / National-Geographic / Prehistoric-Planet / Walking-with-Dinosaurs visual lineage
+
+━━━ THE FAMILY ACTIVITY (focal subject — multi-dinosaur tender moment) ━━━
+${family_scene}
+
+This is the FOCAL ACTIVITY. Multiple dinosaurs visible (parent + juveniles, OR sibling cluster, OR family unit). Mid-action moment captured cinematically. Wide / mid / close-up framing varies.
+
+━━━ THE MESOZOIC BIOME (alien primordial setting) ━━━
+${biome}
+
+The biome stages the family activity. Mega-flora at the surrounding edges — tree-ferns / cycads / Araucaria / mushroom-trees / karst-cliffs / etc. NEVER modern Earth landscape. Multi-tier depth.
+${phenomenonSection}━━━ SECONDARY ACCENT (small family-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric detail — additional juvenile / distant adult watching / hatching egg / nest debris / sibling further off / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC FAMILY MOMENT ━━━
+Wildlife-documentary cinematic framing of a tender Mesozoic family-life moment. Multiple dinosaurs interacting. Alien-Mesozoic biome around them. Atmospheric depth into golden distance.
+
+━━━ STRUCTURE (write the prompt in this order — MULTI-DINOSAUR FAMILY ACTIVITY first) ━━━
+[OPENING: explicitly name MULTIPLE DINOSAURS (e.g. "an adult Maiasaura and three tumbling hatchlings" / "two juvenile Triceratops siblings play-fighting while a parent watches" / "a family group of Parasaurolophus — adult and four juveniles crossing the river-bend" — count the dinosaurs out loud) doing the family activity in the SPECIFIC alien-Mesozoic biome (cycad-palm valley / mushroom-tree grove / Araucaria cathedral / karst-cliff / mega-tree outlook / etc.) — multi-dino-count + activity + biome setting together in the FIRST 30-40 words], [the biome mega-flora packed around], [the atmospheric phenomenon if rolled], [the small family-moment accent — additional juvenile / distant adult / hatching egg / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly count the dinosaurs (TWO theropods / a parent and three hatchlings / four sibling juveniles / a family of five) so Flux can't drop them. The family activity REQUIRES multiple dinosaurs interacting.
+
+⚠️ FAILURE CONDITION: if the rendered image shows only ONE dinosaur, the render has FAILED. Multi-dinosaur multiplicity is mandatory for this path.
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a TENDER MESOZOIC FAMILY MOMENT with MULTIPLE DINOSAURS INTERACTING (parent + juveniles, siblings, family group), in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
 };
 
 module.exports = TEMPLATES;
