@@ -6342,6 +6342,115 @@ DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID MESOZOIC DINOSA
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DINOBOT_OCEAN_REPTILES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, ocean_scene, creature, surprise, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC OCEAN PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+Render the phenomenon prominently — sun-shafts piercing the water / storm-front building / surface breach / plankton-bloom / etc.
+
+`
+      : '';
+
+    return `You are a deep-sea wildlife cinematographer writing STRICT MESOZOIC OPEN-OCEAN scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm underwater / surface-break / open-ocean film still. BBC-Blue-Planet / Prehistoric-Planet / National-Geographic / Jurassic-World visual lineage.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, divers, boats, ships, sailors, lifeguards, swimmers, surfers, kayakers. ANY human in the frame is a CRITICAL FAILURE. Empty primordial ocean only.
+
+⚠️⚠️⚠️ STRICT OCEAN-ONLY — THIS IS NOT A RIVER OR SWAMP ⚠️⚠️⚠️
+This is OPEN OCEAN — pelagic / underwater / surface-break / deep abyss / coral reef. NEVER a river. NEVER a swamp. NEVER a lake. NEVER a mud-flat. NEVER a pond. NEVER a wetland. NEVER a beach with palm trees. NEVER a coastal harbor. ALWAYS marine ocean.
+
+⚠️⚠️⚠️ DINOSAURS IN OCEAN — NOT MARINE REPTILES, NOT TURTLES, NOT CROCODILES ⚠️⚠️⚠️
+Render ICONIC RECOGNIZABLE DINOSAURS (T-rex / Spinosaurus / sauropods like Brachiosaurus or Diplodocus / hadrosaurs like Parasaurolophus / Triceratops / Stegosaurus / Velociraptors / Allosaurus / Carnotaurus / Ankylosaurus / etc.) interacting with the ocean — wading chest-deep in surf, swimming with head/neck above water, breaching from the waves, on sea-cliff overlooks above crashing surf, mid-stride through coastal shallows, fishing in tidal estuary, OR fully submerged underwater. Artistic license OK — sauropods and T-rex render in ocean contexts here.
+
+ABSOLUTELY BANNED creature types:
+🚫 NO marine reptiles (NO mosasaurs / NO plesiosaurs / NO ichthyosaurs / NO pliosaurs / NO Liopleurodon / NO Elasmosaurus / NO Tylosaurus / NO Mosasaurus)
+🚫 NO sea turtles (NO Archelon / NO Protostega / NO turtles of any kind)
+🚫 NO marine crocodiles (NO Metriorhynchus / NO Dakosaurus / NO Geosaurus)
+🚫 NO ammonites as subject (small accent only)
+🚫 NO crocodile-shaped creatures
+🚫 NO turtle-shaped creatures
+🚫 NO modern marine life (whales / dolphins / orcas / modern sharks)
+
+Those are NOT dinosaurs. The path renders DINOSAURS in ocean settings.
+
+━━━ THE SCENE — OCEAN IS THE SETTING, OCEAN DINOSAUR IS THE FOCAL SUBJECT ━━━
+Composition:
+• OCEAN SETTING: 55-65% of frame — open ocean / underwater / surface-break / deep abyss / coral reef / kelp forest
+• OCEAN DINOSAUR: 25-40% of frame — recognizable iconic dinosaur (T-rex / sauropod / Spinosaurus / hadrosaur / Triceratops / stegosaur / raptor / etc.) interacting with the ocean
+
+⚠️ COMPOSITION MODES — encourage variety across all of these:
+• Surface-wade: dinosaur chest-deep in surf, water around its legs/body, head above
+• Surface-breach: dinosaur breaking the surface from below, spray rising
+• Half-above-half-below split: dinosaur half visible above the waterline, half below
+• Fully underwater submerged: dinosaur swimming underwater, light-shafts from above, deep blue water, periscope-neck-up OR fully submerged
+• Sea-cliff overlook: dinosaur silhouette on a cliff with ocean crashing below
+• Coastal beach mid-stride: dinosaur walking the salt-shoreline with waves
+• Tidal estuary fishing: Spinosaurus mid-fishing in tidal coastal surf
+
+⚠️ COMPOSITIONAL RULES:
+• Dinosaur is photoreal recognizable form — T-rex looks like T-rex, sauropod looks like sauropod, etc.
+• Water surface or underwater medium shows the interaction — splash / wake / spray / submerged-bubbles / breach
+• ONE dinosaur (or small pack/herd) — never combat-kill-shot
+
+━━━ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no boats / no ships / no diving gear / no nets / no fishing tackle / no human-trace
+🚫 NO marine reptiles, NO turtles, NO marine crocodiles, NO ammonites as subject — DINOSAURS ONLY
+🚫 NO river / swamp / lake / pond / wetland / mud-flat / beach-with-palms / harbor / coastal city
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO portrait close-up of dinosaur (head fills frame is BANNED)
+🚫 NO combat / no kill-shot / no gore / no blood-in-water
+✓ Photoreal cinematic 35mm film still / IMAX underwater precision / ray-traced light-through-water / hyperreal organic skin textures
+
+━━━ THE OCEAN DINOSAUR (focal subject — render mid-ocean-behavior) ━━━
+${creature}
+
+The dinosaur is a photoreal living animal mid-water-behavior. Render obsessive material detail — leathery scarred biological hide, water dripping/streaming, bubble-trail / wake / breach-spray, scale-and-fold detail under the light-shafts (if underwater), eye catching light, atmospheric integration with the surrounding ocean.
+
+━━━ THE OCEAN SCENE (setting that anchors the marine identity) ━━━
+${ocean_scene}
+
+The ocean setting frames the dinosaur. Multi-tier depth — foreground tactile water-detail / midground creature-and-water / deep distance fading into blue-violet abyss. Specific water-quality cues (cerulean / sapphire / dark blue-violet / sunlit-aqua / etc.) and atmospheric water-particulate.
+${phenomenonSection}━━━ SECONDARY ACCENT (atmospheric small marine detail) ━━━
+${surprise}
+
+A small marine-coded life detail — school of fish / drifting ammonite / jellyfish / bubble stream / etc. 2-5% of frame, positioned at midground or foreground edge. Pterosaurs over the surface OK as small accent.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Combined with underwater-light-shafts (if submerged) OR open-ocean directional sun (if surface) OR fading-depth-light (if deep abyss). Volumetric water-particulate catching light.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+Water-particulate haze, bubble-streams, wave-spray, foam, sun-dapple — the OCEAN'S atmosphere.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — UNDERWATER / SURFACE-BREAK / OPEN-OCEAN ━━━
+Wide cinematic ocean-coded establishing-shot with a candid DINOSAUR mid-water-behavior at midground. Multi-tier depth with fading-blue distance. Atmospheric water-particulate. NEVER a river framing. NEVER a swamp framing. ALWAYS marine open-ocean / underwater / surface-break.
+
+━━━ STRUCTURE (write the prompt in this order — OCEAN DINOSAUR + OCEAN-SETTING first) ━━━
+[OPENING: name the OCEAN DINOSAUR (T-rex / Spinosaurus / sauropod / hadrosaur / Triceratops / Stegosaurus / raptor / Allosaurus / etc.) mid-ocean-behavior (wading / swimming / breaching / fully-submerged / on sea-cliff / mid-stride through surf / fishing in surf) in the SPECIFIC ocean setting (surface-break / underwater open-ocean / deep abyss / coral reef / coastal surf / sea-cliff / etc.) — the dinosaur + the ocean-setting together in the FIRST 30-40 words], [ocean-water quality + atmospheric depth], [the atmospheric phenomenon if rolled — sun-shafts / storm / breach / etc.], [the secondary marine accent — school of fish / ammonite / pterosaur-skim / etc.], [foreground water-detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING ESTABLISHES OCEAN-DINOSAUR + OCEAN-SETTING together. Front-load both in first 30-40 words. The dinosaur must be a RECOGNIZABLE iconic dinosaur form (T-rex / sauropod / Spinosaurus / etc.), NOT a marine reptile or turtle or crocodile.
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID MESOZOIC DINOSAUR (25-40% of frame) mid-ocean-behavior in a STRICT OPEN-OCEAN SETTING (55-65% of frame) — underwater / surface-break / deep abyss / coastal-surf / sea-cliff — never a river, never a swamp. Iconic recognizable DINOSAUR form, NOT marine-reptile / turtle / crocodile.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
 };
 
 module.exports = TEMPLATES;

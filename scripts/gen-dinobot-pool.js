@@ -33,6 +33,168 @@ if (!POOL) {
 const OUT = path.resolve(__dirname, 'bots/dinobot/seeds', `${POOL}.json`);
 
 const RECIPES = {
+  dinobot_ocean_reptiles_ocean_scene: `Generate STRICT MESOZOIC OPEN-OCEAN scene descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 30-50 words, describing the OCEAN setting — open marine water, underwater, surface-break, deep-abyss, reef, continental-shelf.
+
+⚠️ STRICT OCEAN IDENTITY — NEVER river / swamp / lake / mud-flat / pond / wetland. ALWAYS pelagic open-ocean / deep blue water / coral reef / underwater light-shafts / surface-break / storm-tossed waves. NO land visible primary (a distant land silhouette at deep horizon is OK at most).
+
+⚠️ COMPOSITION MODES (rotate widely — encourage underwater and breach shots):
+- ~30% UNDERWATER OPEN-OCEAN — submerged perspective looking through blue water, sunlight shafts cutting down from the surface above, particulate-haze, vast emptiness extending beyond
+- ~20% MID-OCEAN BREACH / SURFACE-BREAK — half-above-half-below water-line, marine reptile breaching with spray and waves, dramatic action moment
+- ~15% DEEP ABYSS — dark blue-violet deep water, fading light from above, atmospheric water-particulate, sense of impossible depth
+- ~10% UNDERWATER REEF / CORAL-CANYON — primordial reef with corals, sponges, sea-lilies (crinoids), light filtering from above
+- ~10% STORM-TOSSED SURFACE — wave-tossed open ocean with whitecaps, marine reptile partly visible in wave-crest, storm sky overhead
+- ~5% CONTINENTAL SHELF / SHALLOW REEF — sunlit shallow water with marine life visible, sand bottom, light dappling
+- ~5% UNDERWATER KELP / PRIMORDIAL ALGAE FOREST — towering sea-plant forest with light filtering through, particulate
+- ~5% DAWN / SUNSET OCEAN HORIZON — wide open-ocean horizon with marine reptile surfacing or breaching, dramatic sky
+
+EVERY entry includes:
+- THE OCEAN SETTING TYPE (underwater open-ocean / surface-break / deep abyss / reef / storm-tossed / etc.)
+- WATER QUALITY (cerulean / sapphire-blue / turquoise / cobalt / dark blue-violet / sunlit-aqua / etc.)
+- ATMOSPHERIC DEPTH cue (light-shafts from above / particulate-haze / fading depth / wave-tossed / etc.)
+- ONE specific detail (bubble streams / kelp swaying / coral structure / wave-spray / sun-dappled bottom)
+
+GOOD examples:
+- A vast underwater open-ocean perspective in deep cerulean blue, sunlight shafts cutting down from the surface 60ft above in parallel beams, particulate-haze drifting, vast emptiness fading to deep blue-violet in every direction
+- A mid-ocean surface-break composition split half-above-half-below the waterline, storm-grey sky above, dark blue-green water below with foam and bubble-streams from a breach, distant horizon
+- A primordial reef in sunlit shallow water 20ft deep, ancient corals and sponges across the sand-bottom, schools of small fish darting between, light dappling the sea-floor in moving patterns
+- A storm-tossed open-ocean surface with whitecaps under a bruised-violet sky, towering wave-crests with foam streaming off the tops, sheet-lightning at deep horizon
+
+ABSOLUTELY BANNED:
+- NO rivers / no swamps / no mud-flats / no lakes / no ponds / no marshes
+- NO modern beach / no tropical-vacation / no Caribbean coastal
+- NO modern fish / no modern marine life (no whales / no dolphins / no sharks unless megalodon-coded primordial)
+- NO humans / no boats / no human-trace
+- NO modern coastal city / no harbor
+
+Output: ONE ocean scene per line. No numbering. No quotes.`,
+
+  dinobot_ocean_reptiles_creature: `Generate OCEAN-DINOSAUR descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 25-40 words, describing a recognizable DINOSAUR in an OCEAN context — wading in coastal surf, swimming, breaching the surface, on a sea-cliff with ocean below, fishing in tidal estuary, etc.
+
+⚠️ CRITICAL — RENDER ACTUAL DINOSAURS, NOT MARINE REPTILES. Use ICONIC DINOSAUR FORMS the viewer immediately recognizes as dinosaurs: T-rex, Spinosaurus, sauropods (Brachiosaurus / Diplodocus / Argentinosaurus / Apatosaurus / Mamenchisaurus), hadrosaurs (Parasaurolophus / Edmontosaurus), Triceratops, Stegosaurus, raptors (Velociraptor / Utahraptor / Deinonychus), Allosaurus, Carnotaurus, Therizinosaurus, Ankylosaurus, Pachycephalosaurus.
+
+⚠️ ABSOLUTELY BANNED: NO marine reptiles (NO mosasaurs / NO plesiosaurs / NO ichthyosaurs / NO pliosaurs / NO marine crocodiles / NO marine pterosaurs over ocean). NO sea turtles. NO ammonites as the subject. NO modern marine life. Those are NOT dinosaurs.
+
+⚠️ ARTISTIC LICENSE is OK — even if a sauropod or T-rex wasn't pelagic in real life, render them IN ocean contexts. The goal is "dinosaur in ocean" not paleontological-accuracy.
+
+Variety mandate (rotate widely across DINOSAUR types + ocean-interaction modes — including FULLY UNDERWATER scenes):
+
+ABOVE-SURFACE / WADING (~65% of pool):
+- ~15% SPINOSAURUS / BARYONYX / SUCHOMIMUS — semi-aquatic theropod mid-fishing in tidal surf / breaching from the waves / wading chest-deep in salt water with sail above
+- ~15% SAUROPOD (Brachiosaurus / Diplodocus / Apatosaurus / Argentinosaurus / Mamenchisaurus) — wading in coastal shallows with long neck extending above the waves / breaching in inland sea with neck arching skyward
+- ~10% T-REX / Carnotaurus / Allosaurus / Giganotosaurus — chest-deep in coastal surf scanning the shoreline / mid-stride through ocean shallows / silhouette on sea-cliff with ocean breaking below
+- ~10% HADROSAUR (Parasaurolophus / Edmontosaurus / Maiasaura) — wading delta-into-surf / mid-stride along the salt shoreline
+- ~5% CERATOPSIAN (Triceratops / Styracosaurus) on coastal beach mid-stride / drinking at sea-edge / silhouette against ocean horizon
+- ~5% STEGOSAUR / ANKYLOSAUR on sea-cliff overlook with ocean crashing below / wading shallow surf
+- ~5% RAPTOR pod splashing through coastal tidepools / running coastal sand-edge as waves wash up
+
+⚠️ FULLY UNDERWATER DINOSAURS (~35% of pool — artistic license, dinosaurs SWIMMING SUBMERGED below the surface):
+- ~10% SPINOSAURUS fully underwater paddling through deep blue water, sail breaking the surface above OR fully submerged, tail propelling, fish scattering around it, light-shafts from above
+- ~10% SAUROPOD fully submerged underwater with long neck arching periscope-style above the surface OR fully under with neck extended forward, four legs paddling, light-shafts cutting across its mottled hide
+- ~5% HADROSAUR underwater swimming submerged with head pointed forward, webbed-hand strokes, bubble-trail behind, light shafts through deep blue water
+- ~5% T-REX or large theropod underwater mid-swim with body fully submerged, head turning, doggy-paddle leg motion, light-shafts from above catching scarred hide
+- ~3% RAPTOR pod underwater mid-swim, feathers slicked back, all paddling in formation, deep blue water around
+- ~2% Other dinosaur SUBMERGED — pachycephalosaur / therizinosaur / etc. mid-swim through deep water
+
+EVERY entry includes:
+- THE DINOSAUR SPECIES (scientifically-named, recognizable iconic dinosaur)
+- THE OCEAN-INTERACTION ACTION (wading / swimming / breaching / mid-stride-in-surf / fishing / silhouette on cliff above ocean)
+- POSITION (chest-deep in surf / mid-swim with head above water / on coastal sand / on sea-cliff / mid-delta / etc.)
+- ONE SPECIFIC DETAIL (water streaming off hide / wake behind / spray rising / waves crashing around legs / silhouette against sunset ocean / etc.)
+
+GOOD examples:
+- A massive Spinosaurus mid-fishing in tidal coastal surf, sail rising 10ft above the waves, head submerged to the eyes, fish flashing in the foam, distant ocean horizon behind
+- A Brachiosaurus sauropod wading chest-deep in coastal shallow water, 40-foot neck arching above the waves to scan the horizon, water streaming off its massive hide, distant sea-stacks at the horizon
+- A T-rex mid-stride through coastal surf at sunset, chest-deep in glowing-gold waves, head turned to scan the shoreline, water sheeting off its scarred hide
+- A pair of Parasaurolophus hadrosaurs mid-swim across a Mesozoic inland sea, crests visible above the water, gentle wake spreading behind, distant coastline silhouetted
+- A Triceratops mid-stride along a wide Mesozoic beach at low tide, waves washing across its feet, frill catching the golden sunset light, ocean horizon stretching beyond
+- Three Velociraptors mid-run along the coastal sand-edge as waves wash up around their feet, feathers rippling, head-feathers raised, all three in tight formation
+
+UNDERWATER (artistic license) examples:
+- A massive Spinosaurus fully submerged paddling through deep blue water, sail breaking the surface above into the air, tail undulating, schools of silver fish scattering around it, parallel light-shafts cutting down from the surface 40ft overhead
+- A Brachiosaurus sauropod underwater fully submerged with long neck arching periscope-style up through the surface 30ft above, four legs paddling in slow rhythm, mottled hide catching the underwater light-shafts, bubble trails rising
+- A Parasaurolophus hadrosaur swimming submerged in deep blue water, crest streamlined, webbed-hand strokes propelling forward, bubble-trail rising from snout, distant light-shafts overhead
+- A T-rex underwater mid-swim with body fully submerged but head turned, doggy-paddle leg motion, scarred hide catching the light-shafts from the distant surface above, deep blue void around
+- A pod of three Velociraptors underwater mid-swim in synchronized formation, feathers slicked back, all paddling forward, deep blue water enveloping them, light-shafts catching their banks
+
+ABSOLUTELY BANNED:
+- NO marine reptiles (NO mosasaurs / plesiosaurs / ichthyosaurs / pliosaurs / marine crocodiles / Metriorhynchus / Dakosaurus)
+- NO sea turtles (NO Archelon / NO Protostega)
+- NO ammonites as subject
+- NO modern marine life (whales / dolphins / orcas / modern sharks)
+- NO humans / no boats / no human-trace
+- NO close-up portrait
+- NO combat-kill-shot / no gore
+
+Output: ONE ocean-dinosaur per line. No numbering. No quotes.`,
+
+  dinobot_ocean_reptiles_surprise: `Generate MARINE ACCENT descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 15-25 words, describing a small marine accent — school of fish, ammonite, jellyfish, marine pterosaur, plankton-glow, etc.
+
+The element is SMALL — 2-5% of the frame. Adds life and atmosphere to the ocean scene.
+
+Variety mandate:
+- ~20% School of small primordial fish (silver flash, mid-darting, formation)
+- ~15% Drifting ammonite (single or pair, spiral shell visible, tentacles trailing)
+- ~10% Translucent jellyfish drifting (single or cluster, bioluminescent edge)
+- ~10% Marine pterosaur in flight above water (Pteranodon / Nyctosaurus skimming surface)
+- ~10% Bubble stream rising from depth (single or cluster, catching light)
+- ~10% Sea-lily (crinoid) cluster on rock or floating
+- ~5% Belemnite squid mid-jet (primordial squid)
+- ~5% Trilobite-relative on bottom (primordial benthic creature)
+- ~5% Hammerhead-shape primordial shark silhouette at distance
+- ~5% Sunbeam shaft through water (volumetric light-shaft)
+
+EVERY entry includes:
+- THE ELEMENT TYPE
+- POSITION in the frame (foreground / midground / at depth / surface above / etc.)
+- ONE SPECIFIC DETAIL (silver flash / mid-drift / wingtip touching / bioluminescent edge / etc.)
+
+GOOD examples:
+- A school of small silver primordial fish at midground darting in unison, formation tight, scales catching the light-shafts
+- A single drifting ammonite at midground edge, 2-foot spiral shell pattern visible, tentacles trailing in the current
+- A pair of translucent jellyfish drifting at foreground midground, bioluminescent edges glowing pale-aqua
+- A Pteranodon marine pterosaur skimming the surface at deep midground above the water-line in silhouette
+
+ABSOLUTELY BANNED:
+- NO humans / no boats / no human-trace
+- NO modern marine life
+- NO weapons / tools / artifacts
+- NO duplicate-style entries
+
+Output: ONE marine accent per line. No numbering. No quotes.`,
+
+  dinobot_ocean_reptiles_phenomenon: `Generate ATMOSPHERIC OCEAN PHENOMENON descriptions for DinoBot's ocean-reptiles path (80%-gated). Each is ONE comma-separated line, 20-35 words, describing an atmospheric event in/over the ocean — light-shafts, storm, plankton-bloom, breach-event, etc.
+
+Variety mandate:
+- ~25% Sun-shafts from above piercing the water column (specific parallel beams cutting down)
+- ~15% Storm-front building over the surface (thunderhead wall / sheet-lightning at deep horizon)
+- ~10% Surface breach event (massive splash + spray + ripples)
+- ~10% Plankton-bloom bioluminescence (glowing-green or pale-blue tide)
+- ~10% Whale-fall-style nutrient-bloom on sea-floor (rare — primordial decomposition)
+- ~10% Deep current creating particulate stream (visible water-motion)
+- ~5% Volcanic vent / underwater geothermal column (smoker)
+- ~5% Mass migration silhouettes (distant herd-of-marine-reptiles at deep horizon)
+- ~5% Sunset / dawn-color sky over surface (deep amber / molten-rose / etc.)
+- ~5% Underwater rainfall (above-surface rain creating ripple pattern from below)
+
+EVERY entry includes:
+- THE PHENOMENON TYPE
+- A SPECIFIC visual detail
+- POSITION in the frame (above / below / at surface / deep horizon / etc.)
+
+GOOD examples:
+- Sun-shafts piercing the water column from above in parallel beams 60ft long, catching every bubble and particulate as they fade into deep blue
+- A storm-front building at deep horizon with sheet-lightning illuminating the thunderhead wall, rain-curtain descending on the dark sea below
+- A massive surface-breach explosion at midground with spray rising 30ft, concentric ripples spreading, foam streaming off
+- A plankton-bloom bioluminescence glowing pale-blue across the dark underwater scene, illuminating the silhouettes of marine reptiles in the distance
+
+ABSOLUTELY BANNED:
+- NO modern lightning (sheet-lightning OK)
+- NO sci-fi / orbital / cosmic
+- NO contrails / no rainbows
+- NO human-trace
+
+Output: ONE phenomenon per line. No numbering. No quotes.`,
+
   dinobot_swamp_river_water_scene: `Generate MESOZOIC SWAMP / RIVER / WATERWAY scene descriptions for DinoBot's swamp-river path. Each is ONE comma-separated line, 30-50 words, describing the WATER-CENTRIC prehistoric setting — the swamp, river, marshland, mud-flat, or aquatic-edge that anchors the scene.
 
 ⚠️ WATER IS THE SETTING — every entry features water prominently: tannin-dark rivers, foggy swamps, lily-pad marshes, muddy banks, mangrove-like primordial roots in water, fern-edged riverbanks, mist over the water surface, reflective stillness.

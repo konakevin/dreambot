@@ -1,67 +1,32 @@
 /**
- * DinoBot ocean-reptiles — marine reptiles of the Mesozoic.
- * Plesiosaurs, mosasaurs, ichthyosaurs, giant sea turtles.
- * Underwater + surface shots of prehistoric oceans.
+ * DinoBot ocean-reptiles — declarative composer form (2026-05-17 migration).
+ *
+ * STRICT MESOZOIC OPEN OCEAN with a MARINE REPTILE (mosasaur / plesiosaur /
+ * ichthyosaur / pliosaur / marine crocodile / Archelon sea-turtle / ammonite /
+ * marine pterosaur over ocean). Underwater + mid-ocean breach + surface-break
+ * encouraged. NEVER river / swamp / lake. ONLY actual ocean dinosaurs (no
+ * land dinos). 25-40% marine reptile + 55-65% ocean-scene.
+ *
+ * BBC Blue Planet × Prehistoric Planet × Jurassic-World-Mosasaur-tank-but-wild
+ * underwater cinematography lineage.
+ *
+ * 4 path-bespoke pools:
+ *   - DINOBOT_OCEAN_REPTILES_OCEAN_SCENE (underwater / surface-break / abyss / reef)
+ *   - DINOBOT_OCEAN_REPTILES_CREATURE (mosasaur / plesiosaur / ichthyosaur / pliosaur / etc.)
+ *   - DINOBOT_OCEAN_REPTILES_SURPRISE (school of fish / ammonite / jellyfish / etc.)
+ *   - DINOBOT_OCEAN_REPTILES_PHENOMENON (80%-gated — sun-shafts / storm / breach / plankton-bloom)
+ *
+ * Universal: LIGHTING + PREHISTORIC_ATMOSPHERES.
+ *
+ * Pre-migration function-form at paths/legacy/ocean-reptiles.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.OCEAN_SCENES, 'ocean_scene');
-  const species = picker.pickWithRecency(pools.DINO_SPECIES, 'ocean_species');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
-
-  return `You are a deep-sea wildlife cinematographer writing PREHISTORIC OCEAN scenes for DinoBot. Marine reptiles of the Mesozoic — plesiosaurs gliding through kelp forests, mosasaurs hunting in open water, ichthyosaurs breaching the surface, ammonites drifting in currents. The prehistoric ocean is as alive and terrifying as the land. Output wraps with style prefix + suffix.
-
-${blocks.NO_HUMANS_BLOCK}
-
-${blocks.DINOSAUR_IS_HERO_BLOCK}
-
-${blocks.SPECIES_ACCURATE_BLOCK}
-${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE MARINE REPTILE ━━━
-${species}
-
-━━━ THE OCEAN SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.VOLUMETRIC_LIGHT_BLOCK}
-
-${blocks.WET_WORLD_BLOCK}
-${blocks.EPIC_SCALE_BLOCK}
-
-${blocks.VAST_TERRAIN_BLOCK}
-
-${blocks.SURPRISING_WEATHER_BLOCK}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ CAMERA / FRAMING ━━━
-${camera}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Underwater or half-submerged framing. The prehistoric ocean is vast, deep, alive. Marine reptiles move through water with grace and power. Light filters from above. The deep is beautiful and alien.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DINOBOT_OCEAN_REPTILES',
+  pools: {
+    ocean_scene: 'DINOBOT_OCEAN_REPTILES_OCEAN_SCENE',
+    creature: 'DINOBOT_OCEAN_REPTILES_CREATURE',
+    surprise: 'DINOBOT_OCEAN_REPTILES_SURPRISE',
+    phenomenon: 'DINOBOT_OCEAN_REPTILES_PHENOMENON',
+  },
 };

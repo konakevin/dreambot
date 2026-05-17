@@ -1024,6 +1024,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  DINOBOT_OCEAN_REPTILES: {
+    description:
+      'PATH-BESPOKE — DinoBot ocean-reptiles path (2026-05-17 axis-system migration from legacy function-form). STRICT MESOZOIC OPEN OCEAN with a MARINE REPTILE (mosasaur / plesiosaur / ichthyosaur / pliosaur / marine crocodile / Archelon sea-turtle / ammonite / marine pterosaur over ocean). Underwater scenes + mid-ocean breach + surface-break encouraged. NEVER river / swamp / lake. ONLY actual ocean dinosaurs (NO land dinos). 25-40% marine reptile + 55-65% ocean-scene (open water / underwater / breach / abyss / reef). 3 path-bespoke axes (ocean_scene / creature / surprise) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['ocean_scene', 'creature', 'surprise'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

@@ -54,6 +54,11 @@ module.exports = {
   DINOBOT_SWAMP_RIVER_DINO: load('dinobot_swamp_river_dino'),
   DINOBOT_SWAMP_RIVER_SURPRISE: load('dinobot_swamp_river_surprise'),
   DINOBOT_SWAMP_RIVER_PHENOMENON: load('dinobot_swamp_river_phenomenon'),
+  // Ocean-reptiles path-bespoke pools (added 2026-05-17 — axis-system migration, strict marine)
+  DINOBOT_OCEAN_REPTILES_OCEAN_SCENE: load('dinobot_ocean_reptiles_ocean_scene'),
+  DINOBOT_OCEAN_REPTILES_CREATURE: load('dinobot_ocean_reptiles_creature'),
+  DINOBOT_OCEAN_REPTILES_SURPRISE: load('dinobot_ocean_reptiles_surprise'),
+  DINOBOT_OCEAN_REPTILES_PHENOMENON: load('dinobot_ocean_reptiles_phenomenon'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {
