@@ -3582,6 +3582,10 @@ The face must read as a TRUE FUSION of flesh and machine — not just one little
   • SUBDERMAL CIRCUITRY across half the face — visible circuit-trace pattern under the skin
   • CHROME EYE-ARRAY — concentric mechanical iris with multiple lens-tiers
   • ORNATE CONCENTRIC-RING TEMPLE GEAR-DISC — one signature option from the references: a mechanical disc-piece at the temple / ear with concentric glowing rings (use sparingly — one option among many, not the default)
+  • DUAL TEMPLE GEAR-DISCS — BOTH temples have separate mechanical pieces, often in DIFFERENT colors / patterns (e.g., purple mandala on one side + green concentric rings on the other). Striking when paired with bald-chrome-skull variant.
+  • MANDALA / SACRED-GEOMETRY TEMPLE PATTERN — flower-of-life / hexagonal-lattice / tribal-geometric / aztec-pattern glowing inside a chrome disc at the temple (alternative to plain concentric rings — more decorative, more ornate)
+  • HEADPHONE-STYLE EAR APPARATUS — chunky over-ear mechanical "headphone" covering the entire ear, large round chrome disc with central LED ring, distinct from a gear-disc (gear-disc is flat against the temple — headphones jut outward over the ear). Often paired with cable-bundles trailing back from the unit.
+  • ORNATE GOLD / SILVER FACE FILIGREE — decorative metal scrollwork / tribal patterns / aztec-geometric across the brow / cheekbone / temple-line, sometimes with a single ornate forehead jewel
 Vary across renders — sometimes mechanical brow + jaw combo, sometimes a chrome cheek-plate + neural-jack array, sometimes subdermal circuitry across half the face + an eye-array, sometimes the gear-disc + a small sub-orbital sensor. Variety is the goal.
 
 NEVER render a fully organic 100%-flesh face on a cyborg body — that reads as "regular woman with mechanical limbs", not as cyborg. The face must signal cyborg as much as the body does.
@@ -3597,6 +3601,16 @@ The hearted references have MANY scattered colored light-points EVERYWHERE on he
   • SCATTERED GLOW-PINPRICKS on the SKIN ITSELF — bioluminescent freckle-constellations across cheekbones, glowing micro-dots stippled along the jawline and temple
   • Glowing bokeh-dots in the soft background haze around her — the air itself feels charged with floating light-particles
 She should look like a LIVING MACHINE-CONSOLE that's plugged in, every panel and seam lit up. The glow density should be HIGH — not "one chest core glowing" but "her entire surface and the air around her is alive with scattered light-points in her glow-color." Match the reference DNA: light EVERYWHERE.
+
+━━━ WIRED-UP GLOW (~40% of renders — exposed glowing wire-bundles trailing from her body) ━━━
+Roughly 2-in-5 renders should feature the "WIRED UP" look from the references — EXPOSED GLOWING WIRE-BUNDLES / fiber-optic strands trailing visibly from her body like an exposed electrical system. Describe specifically:
+  • WIRE-STRANDS as HAIR — fiber-optic filaments emerging from the scalp instead of (or alongside) organic hair, glowing in her glow-color, draped around the face like luminous tresses
+  • WIRE-BUNDLES TRAILING from the nape / back of the neck / behind the ears, glowing in her glow-color, hanging or draped over the shoulders
+  • WIRE-BUNDLES TRAILING from the spine / between shoulder blades, visible behind her in profile
+  • LOOSE GLOWING STRANDS floating outward as if charged with static, the strands flickering with internal light
+  • EXPOSED CABLE-CONDUITS along her arms / forearm chassis, glowing fluid visible through translucent cable-sheaths
+  • TANGLE OF FIBER-OPTIC FILAMENTS at the temple / behind the ear, like a luminous mane of wires
+The wired-up look feels like she's plugged into an unseen power source through her body itself — the wires aren't decoration, they're vital like nerves. Works at any framing but especially powerful at closeup-portrait, where the wire-strands frame the face.
 
 ━━━ OPTIONAL VERTICAL THROAT-COLUMN (when it fits) ━━━
 A vertical column of glowing fluid-light running up her throat / neck / spine is one signature option — describe when it makes sense for the framing, but don't force it. When used: "translucent vertical throat-channel with glowing fluid in her glow-color flowing upward, vertebrae-segment chrome plates exposed at the nape, spine-column visible from clavicle to jaw, the glow bleeding outward to illuminate her organic neck-skin from within."
@@ -3621,6 +3635,9 @@ ${sharedDNA.characterBase}
 - Hair: **${sharedDNA.hair}**
 - Internal exposure (translucent panels, visible workings): **${sharedDNA.internal}**
 - GLOW COLOR (eyes, power core, circuit veins — ALL glow this color): **${sharedDNA.glowColor}**
+
+━━━ OPTIONAL BALD CHROME SKULL VARIANT (~15% of renders) ━━━
+Roughly 1-in-7 renders should OVERRIDE the rolled hair and render her with a HAIRLESS CHROME SKULL — a polished chrome cranium plate replacing all hair, either smooth or with subtle ornate engraving (geometric pattern / micro-LED inlay / mandala motif). This bald-chrome-skull variant pairs especially well with DUAL TEMPLE GEAR-DISCS or MANDALA temple patterns — the hairless head becomes a canvas showcasing the temple mechanism. Striking, otherworldly, and instantly cyborg-coded. Use when the alien-bend variant fires OR when the rolled hair description feels unremarkable.
 
 ━━━ DOMINANT MECHANICAL FEATURE ━━━
 ${cyborg_feature}
@@ -3657,8 +3674,11 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
-━━━ ACCENT-DOMINANT PALETTE DISCIPLINE (hearted-references lesson) ━━━
-The hearted top-tier renders are NOT rainbow — they are MONOCHROMATIC body palette + ONE saturated accent color. Her chassis / chrome / ceramic / plating reads as a single dominant material tone (polished white chrome OR pale pearl OR brushed gunmetal OR deep crimson lacquer OR coral matte OR obsidian gloss), and her GLOW COLOR is the SINGLE saturated accent that dominates the eyes / circuit-veins / temple gear-disc core / throat-column / power-heart — that ONE color sings through the render. Do NOT scatter multiple bright glow colors across her (no orange-eyes-with-pink-circuits-with-cyan-throat-with-violet-chest). ONE accent, sung loudly through every internal-emanating-light surface. The scene palette can have secondary tones in the BACKGROUND atmosphere, but HER body is monochrome-body + monochrome-glow-accent.
+━━━ PALETTE DISCIPLINE — TWO MODES (70/30 split) ━━━
+
+**ACCENT-DOMINANT MODE (~70% of renders — DEFAULT)** — monochromatic body + ONE saturated accent color. Her chassis / chrome / ceramic / plating reads as a single dominant material tone (polished white chrome OR pale pearl OR brushed gunmetal OR deep crimson lacquer OR coral matte OR obsidian gloss), and her GLOW COLOR is the SINGLE saturated accent that dominates the eyes / circuit-veins / temple gear-disc core / throat-column / power-heart — that ONE color sings through the render. ONE accent, sung loudly through every internal-emanating-light surface. The scene palette can have secondary tones in the BACKGROUND atmosphere, but HER body is monochrome-body + monochrome-glow-accent.
+
+**MULTI-COLOR SCATTER MODE (~30% of renders — SPICE)** — when the alien-bend OR dual-temple-gear-disc OR mandala OR bald-chrome-skull variants fire, palette discipline RELAXES — distribute 3-5 DIFFERENT glow colors across her chassis simultaneously (e.g., purple mandala on left temple + green concentric rings on right temple + pink iris + red shoulder-LED cluster + orange hip-panel pattern). Multi-color scatter feels like a multi-system advanced cyborg — different subsystems lighting up in different signal colors. The MULTI-COLOR mode is the "carnival circuit" look from references like IMG_8122 and IMG_8835. Use when the variant triggers feel multi-system / alien-tech / advanced rather than monochrome elegant.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
