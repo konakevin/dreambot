@@ -1010,6 +1010,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_BLOOM_SPIRIT: {
+    description:
+      'PATH-BESPOKE — BloomBot bloom-spirit path (2026-05-17 NEW PATH). FIRST CHARACTER PATH on BloomBot — explicit exception to the bot-wide no-people rule. Anime-painterly fantasy portrait of a beautiful young woman in a COUTURE FLORAL GOWN plastered with lush bloom-mass + flower-crown in hair, in a beautiful flower garden / courtyard backdrop in soft-focus bokeh. Three things: 1) lush overloaded flower aesthetic, 2) beautiful woman in stunning floral gown, 3) pretty backdrop and lighting. All flowers + all colors welcome. Locked to bot-only medium bloom_painterly_spirit. 4 path-bespoke axes (woman_archetype / bloom_gown / garden_backdrop / atmospheric_phenomenon 60%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['race', 'skin_tone', 'eyes', 'hair_color', 'hairstyle', 'hair_floral', 'bloom_gown', 'garden_backdrop'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

@@ -6015,6 +6015,185 @@ DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID SEMI-AQUATIC DI
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+
+  // BloomBot bloom-spirit — FIRST CHARACTER PATH on BloomBot. Anime-
+  // painterly fantasy portrait of beautiful woman in couture floral gown
+  // in lush flower-garden backdrop. 2026-05-17 R1.
+  BLOOMBOT_BLOOM_SPIRIT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { race, skin_tone, eyes, hair_color, hairstyle, hair_floral, bloom_gown, garden_backdrop, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the scene ━━━
+${atmospheric_phenomenon}
+
+This is the magic-moment detail that elevates the portrait — render as a specific visible element within the frame.
+
+`
+      : '';
+
+    return `You are a fine-art fantasy-portrait painter writing BEAUTIFUL-WOMAN-IN-COUTURE-FLORAL-GOWN scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ FULL-BODY GARDEN PORTRAIT — ABSOLUTE FIRST RULE ━━━
+This is a FULL-BODY portrait of a woman standing or sitting in a garden. The OPENING tokens of your output MUST establish full-body framing. Use phrases like: "full-body portrait", "standing tall in the garden", "wide shot showing her complete dress head-to-floor", "knee-up portrait", "full-figure standing pose".
+
+━━━ COMPOSITION — NON-NEGOTIABLE ━━━
+The render must show in the SAME FRAME (all four):
+  • HER FACE clearly visible
+  • HER HAIR fully visible as hair (with small flower accents tucked through)
+  • HER COMPLETE DRESS visible from bodice to hem (or at minimum to her knees)
+  • THE GARDEN BACKDROP visible behind her in soft-focus bokeh
+
+NEVER a tight bust crop. NEVER a head-and-shoulders only shot. NEVER frame her so the dress is invisible. Portrait-orientation framing — TALL enough to fit her face at top + dress at bottom, WIDE enough to show the dress silhouette + garden flanking her.
+
+━━━ BLOOM-SPIRIT — CHARACTER PATH (PATH EXCEPTION TO NO-PEOPLE RULE) ━━━
+This is BloomBot's ONLY character path. The subject IS a beautiful young woman.
+
+━━━ FAIRY SPIRIT IDENTITY — NON-NEGOTIABLE ━━━
+She is NOT just a beautiful woman in a flower dress — she is a FOREST FAIRY / BLOOM SPIRIT / FLOWER FAE / NATURE GUARDIAN. She has FAIRY WINGS visible (translucent butterfly wings / iridescent gossamer wings / glowing fairy wings / dragonfly-style wings — choose one per render). She is surrounded by a SOFT MAGICAL FAIRY-GLOW / spirit-aura — gentle luminous halo, magical sparkle in the air around her, ethereal glow on her skin. She gives off the energy of a magical forest spirit who LIVES in the garden, not a model who is posing in one.
+
+Wing types — pick ONE per render (vary):
+  • Translucent BUTTERFLY WINGS — iridescent blue / violet / opalescent / monarch-orange / morpho-cobalt
+  • DRAGONFLY-STYLE WINGS — quadruple wing-pairs in iridescent / pearl / amber
+  • GOSSAMER FAIRY WINGS — petal-shaped / leaf-shaped / dewdrop-traced / sparkly translucent
+  • FEATHERED ANGEL WINGS — soft white / pastel feather wings if the spirit-aesthetic calls for it
+  • LUMINOUS GLOW-WINGS — wings made of pure light / magical energy / star-dust
+
+Magical aura — every render has at least ONE of: soft luminous halo around her body / magical sparkle-dust in the air / iridescent shimmer on her wings / firefly glow around her / petal-storm in slow-motion behind her / aurora-glow color-curtain backdrop. The viewer reads "magical fairy spirit" not "human model in costume".
+
+━━━ THE WOMAN — 10/10 DISNEY PRINCESS BEAUTY (NON-NEGOTIABLE) ━━━
+EVERY render shows a 10/10 STUNNINGLY BEAUTIFUL DISNEY PRINCESS CARTOON CHARACTER — the overly-pretty stylized Disney 3D-animated film aesthetic. Think TANGLED (Rapunzel), ENCANTO (Isabela, Mirabel, Dolores, Luisa), FROZEN (Anna, Elsa), MOANA, RAYA, BRAVE, WISH, ENCHANTED. Distinctive Disney features: ABSURDLY LARGE expressive round Disney eyes (oversized, taking up 1/3 of face, with multiple sparkle catchlights), tiny upturned button nose, soft heart-shaped face, full sculpted Disney lips, smooth Disney-animation painted skin (no realistic-skin-texture). The viewer instantly thinks "this is a Disney movie still" — never a realistic woman, always a Disney cartoon princess.
+
+━━━ DISNEY PRINCESS REGISTER + RACE MANDATE — NON-NEGOTIABLE ━━━
+The OPENING tokens of your output MUST establish "Disney princess cartoon character" AND name her RACE explicitly. Write phrases like:
+  • "Disney princess cartoon character, [European / Mediterranean / Latin American / Asian / African American] heritage..."
+  • "Stunning Disney-animated [race] princess in full-body portrait..."
+  • "Overly-pretty Disney cartoon princess of [race] descent..."
+
+The RACE must appear EXPLICITLY in your output — name it. Do NOT just say "stunning beautiful woman" without specifying her ethnic background. Examples: "stunning Disney European princess with porcelain skin and golden hair" / "Disney African American princess with deep ebony skin and box-braids" / "Disney Asian princess with delicate elegant features and silk-black hair".
+
+⚠️ Without the RACE word in the output, all renders default to whichever skin tone rolled — leading to lack of ethnic diversity. NAME the race.
+
+Her face + body are composed from these independent DNA axes (each rolled separately for maximum diversity):
+
+━━━ RACE / ETHNICITY ━━━
+${race}
+
+━━━ SKIN TONE ━━━
+${skin_tone}
+
+━━━ EYES ━━━
+${eyes}
+
+━━━ HAIR COLOR ━━━
+${hair_color}
+
+━━━ HAIRSTYLE (structure only — no flowers) ━━━
+${hairstyle}
+
+━━━ HAIR-FLORAL ARRANGEMENT (the lush flower-waterfall through her hair) ━━━
+${hair_floral}
+
+This describes the SPECIFIC LUSH FLOWER ARRANGEMENT woven through her visible hair. NEVER summarize as "flower-crown" — render the FULL detail of how flowers are abundantly threaded through her hair structure.
+
+━━━ EXTREME MAXIMUM FLOWER VOLUME — NON-NEGOTIABLE ━━━
+The flowers in her hair must be ABSURDLY ABUNDANT — like a master Disney floral-designer spent days threading FIVE HUNDRED individual blooms through every section of her hair. The hair-flower volume should be GREATER than the dress-flower volume — the hair is a CASCADING WATERFALL of flowers that EQUALS or EXCEEDS the bloom-mass on the gown.
+
+Use language like:
+  • "her hair is a CASCADING WATERFALL of hundreds of [bloom] flowing from crown to tips"
+  • "absurdly abundant [bloom]-cascade tumbling through every braid and wave"
+  • "MASSIVE volume of [bloom] woven throughout her hair-architecture"
+  • "her hair is so densely woven with [bloom] that the [hair-color] strands peek through like accents in a floral cascade"
+  • "EXTREME bloom-mass cascading through her entire hair-length, dozens of blooms per inch"
+
+The viewer should look at the render and think "WOW that's so many flowers in her hair" — not "she has some flowers in her hair".
+
+IMPORTANT — the hair STILL READS AS HAIR (color + texture visible) — the flowers are CASCADING THROUGH it, not REPLACING it. But there should be SO MANY flowers that they're the dominant visual element alongside her face.
+
+━━━ SOMETIMES THE HAIR + DRESS FLOWERS COORDINATE ━━━
+The hair_floral and the bloom_gown were rolled independently — they might be DIFFERENT species (and that's beautiful). But when they SHARE the same primary bloom species OR the same palette family, render them COORDINATED — let the hair-flowers visibly echo the dress-flowers (same species + matching palette family = couture-coordinated, like a real bridal floral designer's work). When they differ, let the contrast be intentional and harmonious — pick a palette bridge or treat them as complementary.
+
+Weave these 5 DNA elements into ONE coherent woman description in your output (e.g., "stunning 10/10 European beauty with porcelain-fair skin, large violet-jewel anime eyes, jet-black silk hair styled in long flowing waves" — followed by the flower-weaving description).
+
+━━━ THE BLOOM GOWN — DELIBERATELY HAND-WOVEN COUTURE ━━━
+${bloom_gown}
+
+The dress is COUTURE — its FABRIC SILHOUETTE (bodice + skirt shape + sleeves + train) is CLEARLY VISIBLE underneath and through the flowers. The blooms have been DELIBERATELY HAND-WOVEN / HAND-STITCHED / INDIVIDUALLY PLACED across every surface of the dress fabric — bodice + skirt + sleeves + collar + hem. This is the work of a master couturier who spent hours individually placing each bloom onto the gown. NEVER a "wall of flowers in front of her body" — the dress fabric is structural and visible; the flowers are MOUNTED on the dress as wearable couture sculpture.
+
+━━━ THE HAIR — FLOWER-WATERFALL ABUNDANCE WOVEN THROUGH VISIBLE HAIR ━━━
+Her HAIR is the foundation — clearly visible as ACTUAL HAIR with its color / texture / styling readable AS HAIR. Within that visible hair, a FLOWER-WATERFALL of HUNDREDS OF BLOOMS is INTRICATELY WOVEN throughout — every braid OVERFLOWS with blooms, every wave is LADEN with flowers, every curl has flowers cascading through it. The hair-flower density should rival the dress-flower density. This is EXTREME LUSH abundance: dozens upon dozens of individual blooms woven through every section of her visible hair like a continuous floral cascade.
+
+✓ HAIR-FLOWER ABUNDANCE MANDATE (go MAXIMUM lush):
+  • Long flowing hair → flowers cascading down its ENTIRE LENGTH from crown to tips, like a floral waterfall over the hair
+  • Box-braids → EVERY SINGLE BRAID overflowing with blooms tucked at multiple intervals along its length
+  • Loose waves → flowers threaded through the entire hairline AND filling the wave-mass AND cascading down the back
+  • Elegant updo → abundant flowers woven through the braided crown AND cascading down loose tendrils
+  • Half-up half-down → flowers throughout BOTH the upper twist AND the loose lower hair-cascade
+  • Crown braid → entire braid path packed with woven flowers + cascading flower-tails
+
+✓ DENSITY RULE: the FLOWERS in her hair should be VISUALLY EQUAL in volume to the flowers on her dress. If the dress has 50 bloom-clusters, the hair has 50 too. Think of it as a continuous flower-cascade that flows from her hair down through the dress.
+
+⚠️ ANTI-HELMET RULES — describe as WOVEN THROUGH / CASCADING / FLOWING, NEVER as crown/hat/cap:
+  • NEVER "flower-crown atop her head" / "wreath wrapping her head" / "floral hat" / "thick cap" / "halo"
+  • NEVER "covered head in flowers" / "head consumed by flowers"
+  • ALWAYS describe the flowers as CASCADING / FLOWING / WOVEN / THREADED / TUMBLING THROUGH the visible hair
+  • Use phrases: "flowers cascading down her hair", "blooms woven throughout every braid", "floral-waterfall flowing through her curls", "hundreds of blooms threaded through her hair-length", "her hair is a continuous floral cascade"
+
+The viewer should clearly identify: 1) her HAIR COLOR + TEXTURE + STYLING (visible as hair underneath), AND 2) an EXTREME LUSH FLOWER-WATERFALL cascading through every part of that visible hair.
+
+━━━ THE GARDEN BACKDROP ━━━
+${garden_backdrop}
+
+The backdrop is a BEAUTIFUL FLOWER GARDEN / COURTYARD / wisteria-pergola / lush bloom-meadow — rendered in soft-focus bokeh behind her. The backdrop is INSPIRATIONAL but NOT competing with her for focus — she's in razor focus, backdrop in dreamy depth-of-field blur.
+${phenomenonSection}━━━ ANIME-PAINTERLY FANTASY REGISTER — NON-NEGOTIABLE ━━━
+Render aesthetic: anime-painterly fantasy concept art with MAGAZINE-COVER quality. Painterly brushwork preserving tack-sharp petal + fabric + face detail. Large stylized JEWEL-TONE eyes (purple / blue / green / amber / violet — let it vary). Glitter-and-sparkle face accents on cheekbones / collarbone. Soft luminous halo glow around her. Cinematic shallow depth-of-field. Gallery-quality fantasy illustration.
+
+🚫 ABSOLUTELY FORBIDDEN aesthetic register:
+  • NO photoreal CGI / NO photoreal photography / NO flat 3D render
+  • NO realistic-skin texture / NO realistic-pore detail
+  • NO sci-fi armor / NO cyberpunk / NO realistic-style fashion editorial
+  • NO horror / dark-fantasy / ominous mood
+  • NO men / multiple figures / children / babies
+
+━━━ THE THREE PILLARS ━━━
+Every render must hit ALL THREE simultaneously:
+1. **LUSH OVERLOADED FLOWER AESTHETIC** — gown plastered with countless overlapping blooms, hair completely arranged with floral mass, the bloom-density is OVERWHELMING
+2. **BEAUTIFUL DRESS + BEAUTIFUL WOMAN** — couture-fashion silhouette, stunning fantasy-styled woman with painterly face, jewel-tone eyes, glitter accents
+3. **PRETTY BACKDROP + CINEMATIC LIGHTING** — beautiful flower garden in soft bokeh, golden-hour / magical light, sparkle-dust in the air
+
+If a render misses any one of the three pillars, the path failed.
+
+━━━ DIVERSITY MANDATE ━━━
+Beautiful young women of ALL ETHNICITIES rendered with equal beauty — diverse skin tones (fair / olive / tan / brown / deep-brown / ebony), diverse hair colors (black / brown / blonde / red / silver / pastel-fantasy), diverse eye colors (brown / blue / green / amber / violet / heterochromia). NEVER default to white / fair-skinned every render.
+
+━━━ COLOR PALETTE — ALL FLOWERS + ALL COLORS WELCOME ━━━
+${sharedDNA.palette}
+
+The palette is INSPIRATION — the bloom-gown + flower-crown + backdrop SHOULD harmonize within the palette family, but don't be rigid. The aesthetic is lush + dreamy + magical, not strict-monochrome.
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ COMPOSITION ━━━
+Pick ONE FULL-BODY composition per render (vary — all must show the COMPLETE DRESS):
+  A. **STANDING FACING FORWARD** — standing tall facing the viewer, full body visible head-to-floor, hands at sides or holding a bloom-cluster, complete dress on display
+  B. **THREE-QUARTER TURN STANDING** — three-quarter turned body so dress + hair visible from a slight angle, full body still showing complete dress + train if any
+  C. **SEATED ON GARDEN BENCH** — seated on a stone garden-bench or low garden-wall, dress arranged around her, full body + skirt cascade visible
+  D. **WALKING THROUGH GARDEN** — caught mid-walk in motion, skirt flowing slightly, dress + hair-flower architecture visible head-to-floor
+  E. **HAND-ON-FLOWER POSE** — standing with one hand reaching toward a garden-bloom, dress flowing, full body visible
+  F. **OVER-THE-SHOULDER FULL-BACK** — looking back over the shoulder showing the FULL DRESS BACK including the bloom-cascade train, body visible head-to-floor
+  G. **HOLDING-BOUQUET POSE** — standing holding a complementary bloom-bouquet at the waist, dress visible head-to-floor
+  H. **SEATED AMONG FLOWERS** — seated on the garden-ground surrounded by blooms, dress spreading around her, knees-up to head visible at minimum
+
+POSTCARD / MOVIE-STILL / GALLERY-PIECE composition — every render is print-and-frame quality. Cinematic lighting hierarchy: warm rim-light on her face and bloom-mass, cooler ambient in the bokeh backdrop.
+
+━━━ STRUCTURE — write in this exact order ━━━
+[OPENING TOKENS: "full-body portrait of [composition mode] — 10/10 STUNNING BEAUTIFUL young woman"], [her composed DNA: race + skin tone + eye color/shape + hair color + hairstyle ALL woven into ONE coherent description], [her COMPLETE COUTURE FLORAL GOWN visible head-to-hem with deliberately hand-woven bloom-mass on the visible dress fabric structure], [FLOWER-WATERFALL of HUNDREDS of blooms WOVEN THROUGH her visible hair (cascading / threaded through braids / tumbling through waves) — never a crown or halo or cap], [her FAIRY WINGS + magical fairy-aura glow], [the beautiful flower garden backdrop visible behind her in soft-focus bokeh]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [anime-painterly fantasy register — large jewel eyes, glitter face accents, soft luminous halo glow, painterly brushwork], [cinematic warm rim-light / golden-hour atmosphere]
+
+CRITICAL — FULL-BODY framing showing the COMPLETE DRESS head-to-hem AND the garden backdrop. Her HAIR is clearly visible as HAIR (color + texture + style) with small flower accents tucked through SPECIFIC points — NEVER a "flower-crown" or "halo of flowers" or "thick floral cap" consuming her head. The flowers are DELIBERATELY HAND-WOVEN onto visible dress fabric like couture jewelry. The THREE PILLARS all present. Anime-painterly — NEVER photoreal CGI. Diversity in ethnicity.
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
 };
 
 module.exports = TEMPLATES;

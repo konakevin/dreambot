@@ -34,6 +34,7 @@ const pathBuilders = {
   'tropical-paradise': require('./paths/tropical-paradise'),
   'city-flowers': require('./paths/city-flowers'),
   reclaim: require('./paths/reclaim'),
+  'bloom-spirit': require('./paths/bloom-spirit'),
 };
 
 module.exports = {
@@ -41,6 +42,12 @@ module.exports = {
   displayName: 'BloomBot',
 
   mediums: ['bloom_hyperreal_cgi'],
+
+  mediumByPath: {
+    // bloom-spirit is the only path with a bespoke painterly-anime medium —
+    // all other paths use bloom_hyperreal_cgi via the bot-wide mediums list.
+    'bloom-spirit': 'bloom_painterly_spirit',
+  },
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-1.1-pro'],
@@ -54,10 +61,22 @@ module.exports = {
     'tropical-paradise': { 'black-forest-labs/flux-1.1-pro': 100 },
     'city-flowers': { 'black-forest-labs/flux-1.1-pro': 100 },
     reclaim: { 'black-forest-labs/flux-1.1-pro': 100 },
+    'bloom-spirit': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
+
+  // Per-medium overrides — bloom-spirit uses anime register, not the
+  // photoreal-CGI prefix/suffix that drives the other 9 paths.
+  promptPrefixByMedium: {
+    bloom_painterly_spirit:
+      'soft oil-painting detailed fantasy illustration, Pre-Raphaelite oil painting register, Waterhouse Rossetti Mucha Parrish lineage, romantic-fantasy book-cover illustration, beautiful young woman painted portrait with rich oil-on-canvas texture, soft luminous painted glow, romantic ethereal painterly brushwork',
+  },
+  promptSuffixByMedium: {
+    bloom_painterly_spirit:
+      'classical romantic oil-painting register, Pre-Raphaelite painted illustration, soft luminous painterly brushwork preserving petal-and-fabric detail, romantic ethereal painted glow, NOT photoreal NOT photograph NOT realistic 3D NOT CGI NOT cartoon NOT anime NOT Disney — classical oil painting / detailed fantasy illustration, no text, no words, no watermarks',
+  },
 
   vibes: ['cinematic'],
 
@@ -71,6 +90,7 @@ module.exports = {
     'tropical-paradise',
     'city-flowers',
     'reclaim',
+    'bloom-spirit',
   ],
 
   pathWeights: {
@@ -83,6 +103,7 @@ module.exports = {
     'tropical-paradise': 2,
     'city-flowers': 1,
     reclaim: 1,
+    'bloom-spirit': 2,
   },
 
   chaos: {
@@ -91,6 +112,7 @@ module.exports = {
     allowSubjectChaosPaths: [
       'landscape', 'cozy', 'garden-walk', 'dreamscape',
       'conservatory', 'tropical-paradise', 'city-flowers', 'reclaim',
+      'bloom-spirit',
     ],
   },
 
@@ -104,7 +126,7 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'reclaim'],
+    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'reclaim', 'bloom-spirit'],
   },
 
   sensoryAnchors: {
@@ -115,6 +137,7 @@ module.exports = {
       'garden-walk': 'scene', dreamscape: 'scene',
       conservatory: 'scene', 'tropical-paradise': 'scene',
       'city-flowers': 'scene', reclaim: 'scene',
+      'bloom-spirit': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
