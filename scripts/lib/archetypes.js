@@ -940,6 +940,20 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_RECLAIM: {
+    description:
+      'PATH-BESPOKE — BloomBot reclaim path (2026-05-17 migration). ABANDONED HUMAN STRUCTURES reclaimed by flowers. Awe + melancholy + triumphant-nature mood (NEVER horror). Wide cinematic composition with sun-shafts through broken architecture. Architecture is the STRUCTURAL HERO (in deep disrepair but RECOGNIZABLE); blooms are DISTRIBUTED MASS consuming every column, fallen stone, broken arch, cracked masonry. 3 path-bespoke axes (ruin_type / decay_anchor / atmospheric_phenomenon 60%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['ruin_type', 'decay_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
 
 module.exports = { ARCHETYPES };

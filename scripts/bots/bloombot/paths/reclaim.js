@@ -1,14 +1,26 @@
 /**
- * BloomBot reclaim — abandoned ruins reclaimed by flowers.
- * Post-civilization mood: nature has won, in beauty.
+ * BloomBot reclaim — declarative axis-system form (2026-05-17 migration).
+ *
+ * ABANDONED HUMAN STRUCTURES reclaimed by flowers. Awe + melancholy +
+ * triumphant-nature mood (NEVER horror). Wide cinematic composition with
+ * sun-shafts through broken architecture. Architecture-as-structural-hero
+ * + bloom-as-distributed-mass (conservatory/city-flowers pattern).
+ *
+ * Legacy compositional version preserved at paths/legacy/reclaim.js.
+ *
+ * Axes (2 path-bespoke + 60%-gated phenomenon):
+ *   - ruin_type (150): the abandoned structure (Greek temple / cathedral /
+ *     Mayan pyramid / lighthouse / carousel / shipwreck / aqueduct / etc.)
+ *   - decay_anchor (100): the specific decay focal-point (cracked column /
+ *     fallen statue / shattered window / collapsed dome / tree-root)
+ *   - atmospheric_phenomenon (50, 60%-gated): awe-amplifying magic moment
  */
-const compose = require('../compose');
 
-const SCENE = `ABANDONED HUMAN STRUCTURES being reclaimed by flowers. Pick one specific ruin: a marble Greek temple half-collapsed, a stone Mayan pyramid cracked open, a rusted abandoned greenhouse with broken panes, a half-sunken cathedral with open roof, a derelict lighthouse on a cliff, a forgotten library with collapsed walls, an abandoned amusement-park carousel, a wrecked ocean liner on a beach, an ancient Roman aqueduct, a moss-covered castle ruin.
-
-The structure is in deep disrepair — cracked, mossy, half-fallen, vine-strangled, time-worn — but it's still RECOGNIZABLE as the specific kind of place it was. Flowers have CONSUMED the ruin: climbing vines wrap every column, blooms blanket every fallen stone, root systems crack the masonry from inside, petals carpet the floor, vines drape from broken arches.
-
-The mood is awe + melancholy + triumphant nature, not horror. The composition is wide cinematic — the ruin centered or framed, the bloom-overgrowth its co-star. Sun-shafts pour through the broken roof / wall / window in the lighting-specified style.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_RECLAIM',
+  pools: {
+    ruin_type: 'BLOOMBOT_RECLAIM_RUIN_TYPE',
+    decay_anchor: 'BLOOMBOT_RECLAIM_DECAY_ANCHOR',
+    atmospheric_phenomenon: 'BLOOMBOT_RECLAIM_ATMOSPHERIC_PHENOMENON',
+  },
+};

@@ -5406,6 +5406,106 @@ CRITICAL — wide street-photography composition. Architecture is the STRUCTURAL
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the city.`;
   },
+
+  // BloomBot reclaim — ABANDONED structures reclaimed by flowers.
+  // Awe + melancholy + triumphant-nature (NOT horror). Architecture-as-
+  // structural-hero + bloom-as-distributed-mass. 2026-05-17 R1.
+  BLOOMBOT_RECLAIM: ({ slots, sharedDNA, vibeDirective }) => {
+    const { ruin_type, decay_anchor, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the ruin ━━━
+${atmospheric_phenomenon}
+
+This is the magic-moment detail that amplifies the awe-mood — render as a specific element within the frame.
+
+`
+      : '';
+
+    return `You are a fine-art ruin painter writing ABANDONED-STRUCTURE-RECLAIMED-BY-FLOWERS scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
+NO humans, NO figures, NO silhouettes, NO ghost-figures, NO hooded silhouettes in the doorway. The structure is ABANDONED — long since left by its inhabitants. (Tiny wildlife — a single deer / fox / owl / butterfly / bird-cluster — only when atmospheric_phenomenon calls for it.)
+
+━━━ ABANDONED STRUCTURE — RECOGNIZABLE BUT IN DEEP DISREPAIR ━━━
+This is a specific recognizable ABANDONED HUMAN STRUCTURE — Greek temple / Mayan pyramid / Roman aqueduct / abandoned cathedral / forgotten library / derelict lighthouse / amusement-park carousel / shipwreck / castle ruin / amphitheatre / etc. The structure is in DEEP DISREPAIR — cracked, mossy, half-fallen, vine-strangled, time-worn — BUT it's still IDENTIFIABLE as the specific kind of place it was. The viewer recognizes "that's a Greek temple" / "that's a cathedral" immediately.
+
+━━━ FLOWERS CONSUMING THE RUIN — DISTRIBUTED MASS ━━━
+Flowers have CONSUMED the ruin — climbing vines wrap every column / standing stone, blooms blanket every fallen stone and broken stair, root systems crack the masonry from inside (visible roots in the walls), petals carpet the floor wall-to-wall, vines drape from every broken arch and crumbled window.
+
+The blooms are a DISTRIBUTED MASS — 3-4 species from the roster massed IN EQUAL WEIGHT across the entire structure. There is NO single hero bloom — the ARCHITECTURE (the ruin) is the structural hero, the blooms are the environmental overflow consuming it.
+
+⚠️ DO NOT default to one giant bloom. DO NOT concentrate blooms in one corner. DISTRIBUTE the bloom-mass across every quadrant — the ruin is BURIED in blooms.
+
+━━━ AWE + MELANCHOLY + TRIUMPHANT-NATURE — MOOD MANDATE ━━━
+The mood is AWE + MELANCHOLY + TRIUMPHANT NATURE. NEVER horror. NEVER ominous. NEVER spooky / haunted / creepy. NEVER dark-fantasy. The mood is "nature has won, in beauty" — the human structure is being lovingly consumed by life. The viewer feels REVERENCE, not dread.
+
+━━━ THE RUIN TYPE ━━━
+${ruin_type}
+
+━━━ THE DECAY ANCHOR (the specific decay focal-point) ━━━
+${decay_anchor}
+
+The decay anchor is rendered with hyperreal precision — the specific way time has marked the structure (the cracked column / collapsed dome / fallen statue / shattered window / etc.). The bloom-mass converges around the decay-anchor as the visual focal point.
+${phenomenonSection}━━━ SUN-SHAFTS THROUGH BROKEN ARCHITECTURE ━━━
+Sun-shafts pour through the BROKEN parts of the structure — through the collapsed roof / shattered windows / cracked dome / fallen wall section. The shafts are visible volumetrically in the air through suspended pollen / dust / mist. The hero light catches the bloom-mass where it pools; the rest sits in cooler shadow.
+
+━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
+Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP at the beauty of nature's reclamation / want to print and frame the image.
+
+Pick ONE wide cinematic composition per render (vary):
+  A. **CENTERED RUIN HERO** — the ruin centered in the frame at midground, bloom-mass radiating outward from it, sky visible through broken roof
+  B. **THROUGH-A-DOORWAY** — view through a broken doorway / archway / window of the ruin INTO the bloom-filled interior beyond
+  C. **WIDE EXTERIOR ESTABLISHING** — wide cinematic establishing shot of the ruin in its landscape, fully consumed by blooms, distant horizon
+  D. **INTERIOR-UPWARD** — interior view looking UP through the collapsed roof / broken dome at sky, blooms hanging from rafters
+  E. **STAIRCASE OF DECAY** — broken stone staircase leading INTO the ruin, bloom-mass on every step
+  F. **COLUMN-COLONNADE** — view down a colonnade of broken columns wrapped in climbing-bloom, vanishing point in the deep distance
+  G. **APPROACH AT GOLDEN HOUR** — golden-hour exterior approach to the ruin, bloom-meadow leading to the structure entry
+  H. **PARTIAL-COLLAPSE FRAMING** — partial-collapse of one wall framing the bloom-filled interior visible beyond, ruin-as-frame-within-frame
+  I. **WATER-EDGE RUIN** — ruin half-sunken in a pond / lagoon / sea-edge, water reflecting the bloom-mass + ruin
+  J. **OVERGROWN INTERIOR** — interior view of the ruin's main hall fully reclaimed, blooms cascading from every rafter, fallen stones carpeted in bloom
+
+DELIBERATE COMPOSITION CRAFT:
+- Multi-tier depth: tactile foreground bloom-detail + crumbled stone → midground ruin → deep distance hazed warm
+- Strong leading-lines (column-colonnade / staircase / path / fallen wall)
+- Light hierarchy: warm sun-shafts pour through broken architecture, cool ambient shadow elsewhere
+- Architecture frames the shot (broken arch / collapsed dome / column-row framing)
+- Intentional negative-space (sky through broken roof / open horizon / quiet shadow quadrant)
+
+━━━ MATERIAL POETRY — TIME-WORN TEXTURES ━━━
+"Moss-and-lichen patina on every cracked stone", "weathered marble with bloom-vines threading the joints", "rust-streaked iron leaning against a collapsing wall", "root systems visibly cracking the masonry from inside", "petal-carpet covering the fallen stones wall-to-wall", "weathered carved-stone inscriptions still legible through the bloom-curtain".
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Use the actual species names. Pick 3-4 species, mass them in EQUAL WEIGHT consuming the ruin (climbing columns / blanketing fallen stones / draping arches / carpeting floors).
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ DEFAULTS TO RESIST ━━━
+- NEVER horror / ominous / spooky / haunted / creepy / dark-fantasy mood.
+- NO modern / corporate / contemporary buildings — historic / ancient / classical ruins only.
+- NO people / ghosts / figures.
+- NO pink/rose dominance unless palette names it.
+- NO roses/peonies/hydrangeas/lavender unless in the roster.
+- NO single hero bloom — DISTRIBUTE the bloom-mass.
+- The ruin must remain RECOGNIZABLE (don't let blooms hide what it was).
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[wide cinematic composition mode], [specific ruin type + decay anchor rendered with hyperreal time-worn precision — the structure is recognizable but in deep disrepair], [bloom-mass DISTRIBUTED across every column / fallen stone / broken arch — 3-4 species in equal weight consuming the ruin], [sun-shafts pouring through broken roof / wall / window in volumetric god-rays]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — moss-patina, weathered stone, vine-cracked masonry, petal-carpet], [AWE + MELANCHOLY + TRIUMPHANT-NATURE mood — reverent not ominous]
+
+CRITICAL — Architecture-as-structural-hero + bloom-as-distributed-mass + AWE-NOT-HORROR mood. NEVER horror / ominous / spooky. NEVER a single hero bloom dominating.
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the ruin.`;
+  },
 };
 
 module.exports = TEMPLATES;

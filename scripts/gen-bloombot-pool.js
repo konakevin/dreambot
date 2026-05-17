@@ -1065,7 +1065,7 @@ Lineage to channel: Kew Gardens Palm House + Royal Greenhouse of Laeken + Crysta
   E. **BIRD CAGE / VOLIERE** — ornate Victorian birdcage suspended from rafters / large wrought-iron voliere / golden birdcage hanging
   F. **PLANTER / URN** — colossal Victorian terracotta urn at the center / ornate planter with cascading bloom / stone-carved urn with overflow
   G. **CENTRAL TREE** — a single ancient palm / tree-fern / banana-tree as the central anchor, towering toward the dome
-  H. **POTTING BENCH** — long wrought-iron potting-bench with terracotta pots / Victorian gardener\\'s table with copper watering-cans
+  H. **POTTING BENCH** — long wrought-iron potting-bench with terracotta pots / Victorian gardeners table with copper watering-cans
   I. **CHANDELIER / LANTERN** — Victorian crystal chandelier hanging from the dome / cast-iron lantern hanging at center / brass-and-glass pendant
   J. **WROUGHT-IRON ARCH** — central wrought-iron archway draped in climbing-bloom inside the conservatory, smaller-arch-within-the-larger-dome
   K. **TIERED FOUNTAIN** — Victorian tiered fountain with multiple basins, water cascading down through bloom-edged tiers
@@ -1314,6 +1314,176 @@ Channel: Wes Anderson set-prop moments + Studio Ghibli Kiki's Delivery Service c
       'TWO BICYCLES LEANING TOGETHER — two vintage bicycles leaning against each other propped against a sun-bleached plaster wall, climbing-bloom vines on the wall behind',
     ],
     instructions: `Each entry is ONE specific CITY ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in city scene + lighting/sensory detail". Vary across the 12 categories. NO humans. NO architectural duplicates. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── reclaim path: ruin_type (abandoned structure being reclaimed) ───
+  bloombot_reclaim_ruin_type: {
+    format: 'simple',
+    theme: `ABANDONED-STRUCTURE RECLAIM SETTINGS for the BloomBot reclaim path. Each entry is ONE specific historic / ancient ABANDONED HUMAN STRUCTURE in deep disrepair, being consumed by flowers. Mood is AWE + MELANCHOLY + TRIUMPHANT NATURE — NEVER horror. Each entry 25-50 words.
+
+⚠️ MANDATORY — every entry is a RECOGNIZABLE abandoned structure (the viewer instantly knows what it WAS) in deep disrepair. NEVER ominous / spooky / horror — the mood is reverent / awe-struck / nature-has-won-in-beauty.
+
+🚫 STRICT BANS:
+  • NO modern / corporate / sleek buildings
+  • NO ominous / spooky / haunted / horror / dark-fantasy vocabulary
+  • NO active / inhabited buildings (these are ABANDONED)
+  • NO conservatory glass-and-iron (conservatory)
+  • NO living cities (city-flowers)
+  • NO interiors that aren't ruined (cozy)
+  • NO landscapes without architecture (landscape)
+  • NO archways/passages as the FRAMING (garden-walk) — but ruin-archways as the SCENE are FINE
+  • NO surreal / impossible
+  • NO humans / ghosts / hooded figures
+
+✓ RUIN-TYPE CATEGORIES:
+  A. **CLASSICAL TEMPLE / TEMPLE-RUIN** — Greek temple half-collapsed / Roman temple / Egyptian colonnade
+  B. **CATHEDRAL / ABBEY** — half-sunken Gothic cathedral / abandoned abbey / roofless chapel
+  C. **MAYAN / KHMER / ANGKOR** — Mayan pyramid cracked open / Angkor temple / Khmer jungle temple
+  D. **CASTLE / FORTRESS** — moss-covered castle ruin / abandoned tower / collapsed keep
+  E. **GREENHOUSE / CONSERVATORY (rusted)** — rusted abandoned greenhouse with broken panes / collapsed Victorian glasshouse
+  F. **LIBRARY / SCHOOL** — forgotten library with collapsed walls / abandoned schoolhouse with overgrown desks
+  G. **AMUSEMENT / CARNIVAL** — abandoned amusement-park carousel / overgrown ferris-wheel / abandoned theatre
+  H. **MARITIME** — wrecked ocean liner on a beach / shipwreck on rocks / abandoned lighthouse on a cliff
+  I. **INDUSTRIAL** — abandoned factory / overgrown train station / Soviet-era industrial complex / abandoned bridge
+  J. **AQUEDUCT / INFRASTRUCTURE** — Roman aqueduct / abandoned viaduct / overgrown stone bridge
+  K. **PALACE / MANSION** — abandoned palace / forgotten mansion / overgrown stately home
+  L. **AMPHITHEATRE / COLISEUM** — overgrown Roman amphitheatre / abandoned Greek theatre
+  M. **VILLAGE / TOWN** — abandoned medieval village / overgrown stone-village / forgotten hamlet
+  N. **WATCHTOWER / OBSERVATORY** — abandoned watchtower / overgrown observatory / forgotten beacon
+  O. **MILL / WINDMILL** — abandoned stone mill / overgrown windmill / forgotten gristmill
+
+Lineage to channel: Studio Ghibli "Castle in the Sky" reveal + Ta Prohm jungle temple (Angkor) + Pripyat Chernobyl reclamation (without the disaster mood) + Greek archaeological-photography + Roman ruin paintings by Piranesi + cottagecore-meets-ruin Pinterest boards.`,
+    touchpoints: [
+      'GREEK MARBLE TEMPLE HALF-COLLAPSED — half-collapsed Greek marble temple with three columns still standing and the pediment broken, climbing-rose vines consuming the columns, fallen drum-segments scattered in a bloom-meadow',
+      'ANGKOR-STYLE JUNGLE TEMPLE — Angkor-style stone temple with massive strangler-fig roots embracing the carved-stone walls, climbing-bloom vines softening the apsara-carvings, sunlight streaming through cracked tower-roof',
+      'MAYAN PYRAMID CRACKED OPEN — Mayan stepped-pyramid with one wall collapsed showing the interior, climbing-bloom vines spilling from the crack, jungle-mass at the base, sun-shafts through the opening',
+      'HALF-SUNKEN GOTHIC CATHEDRAL — Gothic cathedral with the roof collapsed and the eastern wall fallen, climbing-bloom vines wrapping the remaining columns and arches, sky visible through the open roof',
+      'RUSTED ABANDONED GREENHOUSE — Victorian-era greenhouse with rusted iron framework, many glass panes shattered or missing, bloom-mass having consumed the interior and spilled out through the broken panes',
+      'FORGOTTEN LIBRARY WITH COLLAPSED WALLS — forgotten library with two walls collapsed, books still on the shelves visible through bloom-cascades, fallen books on the floor, climbing-vines on the remaining shelves',
+      'ABANDONED CAROUSEL — abandoned amusement-park carousel with the horses still on it but rust-streaked, the canopy fabric tattered, climbing-bloom vines wrapping every horse, bloom-mass at the base',
+      'WRECKED OCEAN LINER ON BEACH — wrecked early-20th-century ocean liner half-sunk in beach-sand, hull rust-streaked and barnacle-encrusted, climbing-bloom vines on the upper decks, dune-grass at the base',
+      'ABANDONED LIGHTHOUSE ON CLIFF — abandoned stone lighthouse on a cliff-edge, the upper structure cracked, climbing-bloom vines spiraling up the tower, sea-mist around the base, gulls overhead',
+      'ROMAN AQUEDUCT IN BLOOM-MEADOW — section of Roman aqueduct stretching across a sunlit bloom-meadow, several arches collapsed, climbing-bloom vines on the standing arches, sun-shafts through the gaps',
+      'MOSS-COVERED CASTLE RUIN — moss-covered medieval castle ruin with one tower still standing tall, walls partially collapsed, climbing-bloom vines on the stone, drawbridge gone',
+      'ROOFLESS ABANDONED ABBEY — abandoned abbey with the roof completely gone but the nave-columns still standing, climbing-bloom vines on the columns, sky visible above, fallen stones on the floor',
+      'OVERGROWN ROMAN AMPHITHEATRE — overgrown Roman amphitheatre with the seating-tiers cracked and bloom-mass filling the rows, the arena-floor a bloom-meadow, sky visible above the open structure',
+      'ABANDONED STONE MILL — abandoned stone mill with the waterwheel half-rotted, climbing-bloom vines on the mill-stone walls, stream still flowing past the silent wheel, bloom-meadow surrounding',
+      'FORGOTTEN PALACE INTERIOR — forgotten palace interior with collapsed ceiling, bloom-mass cascading from above, chandelier still hanging twisted, ornate floor-tiles visible through petal-carpet',
+      'OVERGROWN WATCHTOWER — abandoned medieval stone watchtower with the upper crenellations crumbled, climbing-bloom vines spiraling up the tower-walls, sky visible through arrow-slits',
+      'ABANDONED MEDIEVAL VILLAGE — abandoned medieval stone-village with several houses still standing in disrepair, cobblestone street overgrown, climbing-bloom vines on every house',
+      'SHIPWRECK ON ROCKS — wooden-hulled shipwreck on rocks with sea-mist around the hull, climbing-vines on the deck visible above the waterline, sun-shafts through broken sails-rigging',
+      'KHMER VINE-CURTAINED TEMPLE — Khmer-style stone temple with vine-curtains entirely covering the carvings, strangler-fig roots embracing the structure, jungle-mass closing in',
+      'OVERGROWN VICTORIAN MANSION — abandoned Victorian mansion with the roof partially collapsed, climbing-bloom vines on the ornate facade, broken windows with bloom-cascades spilling out',
+    ],
+    instructions: `Each entry is ONE specific ABANDONED HUMAN STRUCTURE being reclaimed by flowers, 25-50 words. Format: "RUIN NAME CAPS — primary structure + decay signature + bloom-consumption note + awe-mood". Vary across the 15 categories. ALWAYS reverent / awe-struck mood, NEVER ominous / horror. NO humans. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── reclaim path: decay_anchor (specific decay focal-point) ───
+  bloombot_reclaim_decay_anchor: {
+    format: 'simple',
+    theme: `DECAY ANCHORS for the BloomBot reclaim path. Each entry is ONE specific decay focal-point detail within an abandoned structure — rendered with hyperreal time-worn precision. Each entry 20-40 words.
+
+⚠️ MANDATORY — every entry is a TACTILE DECAY DETAIL typical of long-abandoned structures. The detail is the bloom-mass's visual focal-point convergence.
+
+🚫 STRICT BANS:
+  • NO humans / figures / skeletons / corpses (this is NOT horror)
+  • NO active human presence (no fresh trash / vandalism / modern objects)
+  • NO duplicate of ruin_type content (this is specific DETAIL not whole structure)
+  • NO ominous / spooky / horror elements (no gravestones, no skulls in the foreground)
+
+✓ DECAY-ANCHOR CATEGORIES:
+  A. **CRACKED COLUMN** — broken marble column / cracked stone pillar / collapsed Doric column with capital fallen beside
+  B. **FALLEN STATUE** — weathered marble statue toppled on its side / broken angel sculpture / weathered carving partial
+  C. **SHATTERED WINDOW** — empty stained-glass window-frame with no glass / shattered Gothic rose-window / broken arched window
+  D. **CRACKED-OPEN DOME** — collapsed dome with sky visible / cracked vaulted ceiling / shattered cupola
+  E. **GROWING-IN-MASONRY ROOTS** — visible roots cracking the masonry from inside / tree-root splitting a stone wall / fig-root strangling a column
+  F. **WEATHERED INSCRIPTION** — barely-legible carved-stone inscription / weathered Latin text / faded carved-name
+  G. **OVERTURNED FURNITURE** — overturned wooden chair / collapsed library shelf with books / fallen chandelier / rotted bench
+  H. **RUSTED METAL** — rusted iron gate hanging on one hinge / rust-streaked metal railing / weathered iron grille
+  I. **CRACKED FLAGSTONES** — cracked-flagstone floor with bloom-mass growing through the cracks / broken mosaic floor / weathered tile-pattern emerging
+  J. **CRUMBLED ARCH** — half-collapsed arch with the keystone fallen / partial arch with broken voussoirs / Roman arch in decay
+  K. **STAIRCASE OF DECAY** — broken stone staircase with risers crumbled / spiral-staircase missing treads / collapsed mezzanine stairs
+  L. **HOLLOW OBJECT** — empty rusted bell / silent pipe-organ pipes / rusted machinery / weathered statue niche
+  M. **WEATHERED RELIEF** — high-relief carving worn smooth by centuries / bas-relief with bloom-vines softening the figures / weathered frieze
+
+Channel: Piranesi etchings of Roman ruins + Caspar David Friedrich romantic-ruin paintings + Studio Ghibli ruin-detail framing + cottagecore-meets-archaeology Pinterest details.`,
+    touchpoints: [
+      'BROKEN MARBLE COLUMN — single broken Doric marble column with the capital fallen beside it, weathered chunks scattered, climbing-rose vines wrapping the standing portion, bloom-meadow surrounding',
+      'TOPPLED MARBLE STATUE — weathered marble statue (classical female / cherub / muse) toppled on its side in the foreground, half-buried in bloom-mass, face still serene and intact',
+      'EMPTY ROSE-WINDOW FRAME — empty Gothic rose-window with no glass remaining, climbing-rose vines threading the stone tracery, sky visible through the opening, sun-shafts pouring through',
+      'COLLAPSED DOME WITH SKY — cracked-open dome of the structure with sky visible through the gap, climbing-bloom vines spilling from the broken ribs of the dome',
+      'TREE-ROOT SPLITTING STONE — visible massive tree-root splitting a stone wall from inside, the masonry cracked outward by the root pressure, climbing-bloom vines around the crack',
+      'WEATHERED LATIN INSCRIPTION — weathered carved-stone Latin inscription on a stone block, the letters barely legible through moss and bloom-vines, the rest of the block half-buried',
+      'OVERTURNED WOODEN CHAIR — overturned weathered wooden chair in the ruins interior, half-buried in petal-carpet, climbing-bloom vines threading the legs',
+      'RUSTED IRON GATE — rusted wrought-iron gate hanging on one hinge at the ruins entrance, climbing-rose vines on the bars, the gate frozen mid-swing',
+      'CRACKED-FLAGSTONE FLOOR — broken-flagstone floor of the ruin with bloom-mass growing through the cracks between stones, individual flagstones rendered with hyperreal weathering',
+      'HALF-COLLAPSED ARCH — half-collapsed stone arch with the keystone fallen and visible on the ground, broken voussoirs in the bloom-mass, climbing-vines on the remaining portion',
+      'BROKEN STAIRCASE — broken stone staircase with several risers crumbled or missing, climbing-bloom vines on every standing step, fallen stones at the base',
+      'EMPTY RUSTED BELL — empty rusted bronze bell hanging silent in a broken belltower, climbing-vines threading the bell-mouth, sun-shafts through the broken belltower roof',
+      'WEATHERED FRIEZE — high-relief carved frieze worn smooth by centuries, bloom-vines softening the figures, the carving still legible enough to recognize the subject',
+      'COLLAPSED LIBRARY SHELF — collapsed wooden library shelf with books fallen in a pile, several books still on the floor with bloom-vines threading them, weathered leather bindings',
+      'PARTIAL-MOSAIC FLOOR — partial mosaic floor emerging through the bloom-mass and dirt, intricate tile-pattern visible in patches, climbing-bloom vines softening the edges',
+      'FALLEN BELL — single fallen bronze bell on the cobblestones beside the broken belltower, the bell cracked open from the fall, bloom-vines around it',
+      'CHANDELIER TWISTED ON FLOOR — collapsed crystal chandelier twisted on the ruined floor of a palace interior, individual crystals still glinting, climbing-bloom vines threading the frame',
+      'RUSTED MACHINERY HALF-BURIED — rusted abandoned industrial machinery half-buried in the bloom-overgrowth, individual gears and pipes visible through the green-and-bloom mass',
+      'WEATHERED STATUE NICHE EMPTY — empty stone wall-niche where a statue once stood, now occupied by a thick bloom-cluster overflowing, the niche-frame weathered and cracked',
+      'COLLAPSED WOODEN BEAM — fallen weathered wooden roof-beam lying diagonal across the ruins interior, climbing-bloom vines on the beam, mossy at the joints',
+    ],
+    instructions: `Each entry is ONE specific TACTILE DECAY DETAIL within a ruin, 20-40 words. Format: "DECAY ANCHOR NAME CAPS — primary decay element + material/weathering + bloom-interaction note". Vary across the 13 categories. ALWAYS reverent (never horror). NO humans / skeletons. NO active vandalism. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── reclaim path: atmospheric_phenomenon (60%-gated magic) ───
+  bloombot_reclaim_atmospheric_phenomenon: {
+    format: 'simple',
+    theme: `60%-GATED RECLAIM ATMOSPHERIC PHENOMENA for the BloomBot reclaim path. Each entry is ONE specific awe-amplifying magic-moment element rendered within the ruin scene. Each entry 20-40 words.
+
+⚠️ MANDATORY — every phenomenon amplifies the AWE + MELANCHOLY + TRIUMPHANT-NATURE mood. Never ominous / horror. The reclaiming life is the subject.
+
+🚫 STRICT BANS:
+  • NO humans / figures / ghosts
+  • NO architectural elements (those are ruin_type / decay_anchor territory)
+  • NO ominous / spooky / horror elements
+  • NO duplicate of ruin content
+  • NO surreal physics
+
+✓ PHENOMENON CATEGORIES:
+  A. **GOD-RAYS THROUGH BROKEN ROOF** — volumetric sun-shafts pouring through the collapsed dome / broken roof onto specific bloom-patches
+  B. **MIST / VAPOR** — soft morning mist in the ruin interior / vapor rising from the bloom-mass / atmospheric haze
+  C. **PEACEFUL WILDLIFE** — single deer grazing in the ruin / fox sleeping in a sun-patch / owl in a broken window / butterfly on a fallen statue
+  D. **POLLINATOR** — hummingbird hovering at a column-bloom / bee-cluster at a fallen stone / butterfly migration through the broken arch
+  E. **FIREFLY-CLOUD** — soft cloud of fireflies at dusk in the ruin interior / glow-cloud
+  F. **GOLDEN-HOUR-DRAMA** — late-afternoon golden-hour light setting the ruin ablaze / sunset light through broken windows
+  G. **TWILIGHT-MOON** — full moon rising visible through the broken roof / first stars through the open dome
+  H. **PETAL-FALL** — petal-fall drifting from the upper bloom-cascades into the ruin interior
+  I. **POLLEN-CLOUD** — golden pollen-cloud dispersing in the god-ray sun-shafts
+  J. **REFLECTION** — water-pool reflection in the ruin interior reflecting the bloom-laden architecture
+  K. **DEW-CASCADE** — fine dewdrops on every petal of the climbing-bloom cascades around the ruin, sun catching them
+  L. **SEED-DOWN DRIFT** — seed-pod fluff (dandelion / cottonwood / milkweed) drifting through the ruin in slow-motion
+
+Channel: Studio Ghibli "Castle in the Sky" ruin-reveal moments + Caspar David Friedrich romantic-ruin painting atmosphere + Tarkovsky "Stalker" wonder-not-dread + David Attenborough nature-reclamation footage.`,
+    touchpoints: [
+      'VERTICAL GOD-RAYS THROUGH COLLAPSED ROOF — multiple vertical sun-shafts pouring through the collapsed roof of the ruin onto specific bloom-patches below, vapor-laden beams visible in the still air',
+      'MORNING MIST IN RUIN INTERIOR — soft morning mist coiling through the ruin interior in still air, vapor softening the depth, sun starting to break through the broken roof',
+      'SINGLE DEER GRAZING IN RUIN — single solitary deer grazing in the ruins nave / interior, head down on the bloom-meadow floor, peaceful, the only living motion in the frame',
+      'OWL IN BROKEN WINDOW — solitary owl perched in a broken arched window of the ruin, eyes facing the viewer, head tilted, blooms cascading around the window-frame',
+      'FIREFLY CLOUD AT DUSK — soft cloud of fireflies suspended at dusk within the ruin interior, hundreds of green-pulse lights at every depth between the columns',
+      'GOLDEN-HOUR FIRE-LIGHT — late-afternoon golden-hour light setting the ruins remaining walls ablaze with warm-amber glow, every weathered stone catching gold',
+      'FULL MOON THROUGH BROKEN ROOF — full silver moon visible through the broken roof of the ruin, soft moonlight bathing the bloom-mass below, the rest in cool blue-shadow',
+      'PETAL-FALL DRIFTING INSIDE — drifting petal-fall from the upper climbing-bloom cascades into the ruins interior, petals suspended at every depth in the still air',
+      'POLLEN-CLOUD IN GOD-RAYS — golden pollen-cloud dispersing in the volumetric god-ray sun-shafts, individual pollen-motes visible in the warm light',
+      'WATER-POOL REFLECTION INTERIOR — small water-pool in the ruins interior reflecting the bloom-laden architecture above, mirror-still surface broken by a single drop',
+      'DEW-CASCADE EVERYWHERE — fine dewdrops on every petal of the climbing-bloom cascades wrapping the ruin, the entire structure scintillating with reflected morning light',
+      'SEED-DOWN DRIFT — cottonwood / dandelion seed-down drifting through the ruin in slow-motion, hundreds of seed-fluff suspended in the air',
+      'HUMMINGBIRD AT COLUMN-BLOOM — solitary jewel-iridescent hummingbird hovering at a bloom-cluster on a ruined column, wings a transparent blur',
+      'BUTTERFLY ON FALLEN STATUE — solitary butterfly perched on the cheek of a fallen marble statue half-buried in bloom, wings catching the sun',
+      'SOFT-VAPOR FROM POOL — soft vapor rising from a small reflecting pool in the ruin interior, the steam curling through the volumetric light',
+      'FOX ASLEEP IN SUN-PATCH — solitary red fox curled asleep in a sun-warmed patch on the ruins floor, surrounded by bloom-mass, ears relaxed',
+      'TWILIGHT FIRST-STAR — first star of evening visible through the open broken dome of the ruin, twilight sky filling the opening, blooms below in cool shadow',
+      'BUTTERFLY CLOUD THROUGH ARCH — cloud of butterflies passing through a broken arch of the ruin in soft fluttering motion, wings catching the back-light',
+      'POLLEN-MOTE GALAXY — vast suspended pollen-mote galaxy filling the entire ruin interior, dust-motes individually visible in slanting light, dreamlike density',
+      'BIRD-FLOCK ROOSTING — small flock of small birds (sparrows / starlings) roosting on the upper ledge of a broken wall, evening light, the rest of the ruin quiet',
+    ],
+    instructions: `Each entry is ONE specific RECLAIM ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in ruin + lighting note". Vary across the 12 categories. ALWAYS reverent (never horror / spooky). NO humans / ghosts. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
   // ─── tropical-paradise path: tropical_setting (the biome canvas) ───
