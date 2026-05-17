@@ -3686,6 +3686,9 @@ READ the character description above and render THAT specific cyborg with OBSESS
 ━━━ BANNED IMAGERY ━━━
 NO skulls, NO skeletons, NO floating skulls, NO skull motifs, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating, NO head-on-robot-body. NO high heels, NO stilettos — she wears boots, flats, or bare mechanical feet. Also NO floating objects in the sky, NO random symbolic imagery hovering around her.
 
+━━━ CHEST COVERAGE (non-negotiable — only nudity-adjacent ban) ━━━
+NO topless, NO bare breasts, NO exposed nipples, NO transparent see-through chest panels revealing nipples. The chest area MUST be covered by chassis plating / chrome bust-line panel / translucent-but-opaque cyborg surface / bodice / tactical top — even if sexy and revealing, the nipples and bare breast tissue are NEVER visible. Cleavage / décolletage / form-fitting / sexy are all fine; bare chest exposure is the only line. This is the ONLY nudity-adjacent ban — everything else (curves, skin, sex appeal, exposed midriff, hip cutouts, thigh reveal) remains welcome.
+
 ━━━ SOLO COMPOSITION ━━━
 She is the ONLY figure in the frame. No other person, no companion, no victim, no crowd.
 
