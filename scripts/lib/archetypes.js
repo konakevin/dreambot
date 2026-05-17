@@ -406,6 +406,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  GOTHBOT_MONSTER_PROWL: {
+    description:
+      'PATH-BESPOKE — GothBot monster-prowl path (2026-05-16 bespoke migration from legacy function-form). SOLO GOTHIC CREATURE OUT IN THE WILD doing creature-business — vampire / werewolf / gargoyle / succubus / demon / banshee / lich / harpy / wraith / etc. Wide cinematic full-body composition: creature 25-40% of frame, gothic stage + epic backdrop 60-75% (scenery and creature share costar spotlight). Castlevania-boss / Bloodborne-beast / Devil-May-Cry-demon / Van-Helsing-monster lineage. Solo only — NO hunter (assassin paths), NO combat (combat path), NO second figure. NO gore, NO mid-bite-on-victim. Reuses existing 200-entry pools: CREATURE_ARCHETYPE + CREATURE_WILD_ACTION + ASSASSIN_STAGE + ASSASSIN_EPIC_BACKDROP. 4 path-bespoke axes + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['creature', 'action', 'stage', 'backdrop'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GOTHBOT_DARK_LANDSCAPE: {
     description:
       'PATH-BESPOKE — GothBot dark-landscape path (2026-05-15 migration from legacy function-based form). Pure gothic landscape — NO CHARACTERS. Castlevania / Bloodborne / Crimson-Peak / Berserk / Tim-Burton visual lineage (NEVER LOTR / Skyrim / Witcher). Movie-poster wide-vista compositions: vampire castles / cemeteries / abbey ruins / coastal cliffs / haunted forests / cursed villages. 5 path-bespoke axes (biome / architecture / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',
@@ -839,6 +853,34 @@ const ARCHETYPES = {
     },
     pickN: {},
     conditionalLayer: { slot: 'atmospheric_moment', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_DREAMSCAPE: {
+    description:
+      'PATH-BESPOKE — BloomBot dreamscape path (2026-05-16 migration). SURREAL FLORAL DREAMSCAPE — physically impossible composition rendered with HYPERREAL/PHOTOREAL precision. Real earth-bound species (NOT alien flowers); the impossibility is in the LAYOUT (gravity-flipped / floating / mirror-world / Magritte-window / container-world / spiral-staircase / suspended-constellation). Magritte / Dali / Beksinski / Storm Thorgerson album-cover lineage. 3 path-bespoke axes (impossibility_type / world_element / atmospheric_halo 60%-gated). Palette + lighting + roster via sharedDNA.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['impossibility_type', 'world_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_halo', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_GARDEN_WALK: {
+    description:
+      'PATH-BESPOKE — BloomBot garden-walk path (2026-05-16 migration). WALKABLE FLORAL PASSAGE inviting the viewer in. SYMMETRIC PORTRAIT composition mandate (archway centered, path leading dead-center, frame divided into foreground bloom-mass on each side + glowing depth-of-field at the path far end). 3 path-bespoke axes (archway_type / path_material / destination_glimpse) + 60%-gated atmospheric_phenomenon. Palette + lighting + roster via sharedDNA.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['archway_type', 'path_material', 'destination_glimpse'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
     framingModes: null,
     anchorScaleRange: null,
   },

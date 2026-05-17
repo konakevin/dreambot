@@ -1,14 +1,26 @@
 /**
- * BloomBot garden-walk — walkable bloom-tunnel/archway/path inviting the viewer in.
- * The viewer is at the entrance about to walk through.
+ * BloomBot garden-walk — declarative axis-system form (2026-05-16 migration).
+ *
+ * WALKABLE FLORAL PASSAGE inviting the viewer in. Symmetric portrait
+ * composition mandate (archway centered, path dead-center, foreground
+ * bloom-mass on each side, glowing depth-of-field at the path far end).
+ *
+ * Legacy compositional version preserved at paths/legacy/garden-walk.js.
+ *
+ * Axes (3 path-bespoke + 60%-gated phenomenon):
+ *   - archway_type (200): the architectural framing entity (stone arch /
+ *     pergola / iron arbor / temple ruin / branch arch / vine curtain)
+ *   - path_material (100): the path surface leading dead-center
+ *   - destination_glimpse (100): what lies beyond the arch
+ *   - atmospheric_phenomenon (50, 60%-gated): magic-moment element
  */
-const compose = require('../compose');
 
-const SCENE = `A WALKABLE FLORAL PASSAGE inviting the viewer in. Pick one architectural framing: stone gothic archway smothered in climbing blooms, gnarled wisteria pergola tunnel with hanging racemes, ivy-and-rose covered stone gateway, weathered iron arbor in an overgrown garden, mossy forest path framed by flowering branches, ancient temple ruin with vine-curtained doorway.
-
-The PATH itself is visible — flagstone, mossy steps, packed earth, a carpet of fallen petals, a stream stepping-stones — and leads INTO the frame, drawing the eye through. Beyond the archway is more bloom-field receding into atmospheric depth — never just a blank backdrop.
-
-Composition is symmetric portrait — the archway centered, frame divided into a foreground bloom-mass on each side and a glowing depth-of-field at the path's far end. Light streams through the opening like a doorway to somewhere magical.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_GARDEN_WALK',
+  pools: {
+    archway_type: 'BLOOMBOT_GARDEN_WALK_ARCHWAY_TYPE',
+    path_material: 'BLOOMBOT_GARDEN_WALK_PATH_MATERIAL',
+    destination_glimpse: 'BLOOMBOT_GARDEN_WALK_DESTINATION_GLIMPSE',
+    atmospheric_phenomenon: 'BLOOMBOT_GARDEN_WALK_ATMOSPHERIC_PHENOMENON',
+  },
+};

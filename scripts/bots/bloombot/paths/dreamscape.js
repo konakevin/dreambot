@@ -1,12 +1,26 @@
 /**
- * BloomBot dreamscape — surreal, impossible, gravity-defying floral scene.
- * Earth-bound species, but composed in physically impossible arrangements.
+ * BloomBot dreamscape — declarative axis-system form (2026-05-16 migration).
+ *
+ * SURREAL FLORAL DREAMSCAPE — physically impossible composition rendered
+ * with HYPERREAL/PHOTOREAL precision. Real earth-bound species (NOT alien
+ * flowers); the impossibility is in the LAYOUT. Magritte / Dali /
+ * Beksinski / Storm Thorgerson lineage.
+ *
+ * Legacy compositional version preserved at paths/legacy/dreamscape.js.
+ *
+ * Axes (2 path-bespoke + 60%-gated halo):
+ *   - impossibility_type (200): the physics break (floating / inverted /
+ *     mirror-world / Magritte-window / container-world / spiral / portal)
+ *   - world_element (100): the hyperreal physical object the impossibility
+ *     breaks (sphere / staircase / lake / window / picture-frame / etc.)
+ *   - atmospheric_halo (50, 60%-gated): surreal-lighting element
  */
-const compose = require('../compose');
 
-const SCENE = `A SURREAL FLORAL DREAMSCAPE — physically impossible composition rendered with hyperreal precision. Pick one impossible-arrangement type: blooms suspended in mid-air at multiple altitudes like a constellation, flowers growing OUT from a floating sphere of stone or water, a river flowing UPWARD through the air carrying blooms with it, gravity-flipped flowers rooted in the sky raining down, a spiral helical bloom-staircase ascending into nothing, a Magritte-style window opening onto a bloom-storm, a lake reflecting a different bloom-scene than the one above it, a single oversized bloom inside which a smaller bloom-world exists.
-
-Earth-bound species (real flowers) but the COMPOSITION breaks physics. The render technique is hyperreal/photoreal — the impossibility is in the LAYOUT, not in any "alien flower" detail. Treat it like a fine-art painting that happens to be impossible.`;
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) =>
-  compose({ scene: SCENE, sharedDNA, vibeDirective, picker });
+module.exports = {
+  archetype: 'BLOOMBOT_DREAMSCAPE',
+  pools: {
+    impossibility_type: 'BLOOMBOT_DREAMSCAPE_IMPOSSIBILITY_TYPE',
+    world_element: 'BLOOMBOT_DREAMSCAPE_WORLD_ELEMENT',
+    atmospheric_halo: 'BLOOMBOT_DREAMSCAPE_ATMOSPHERIC_HALO',
+  },
+};

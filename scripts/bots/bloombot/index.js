@@ -29,7 +29,7 @@ const pathBuilders = {
   closeup: require('./paths/closeup'),
   cozy: require('./paths/legacy/cozy'),
   'garden-walk': require('./paths/garden-walk'),
-  dreamscape: require('./paths/dreamscape'),
+  dreamscape: require('./paths/legacy/dreamscape'),
   conservatory: require('./paths/conservatory'),
   'tropical-paradise': require('./paths/tropical-paradise'),
   'city-flowers': require('./paths/city-flowers'),
@@ -104,7 +104,7 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy'],
+    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape'],
   },
 
   sensoryAnchors: {
