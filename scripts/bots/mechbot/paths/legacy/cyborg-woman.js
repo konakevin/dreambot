@@ -4,7 +4,7 @@
  * 40% closeup detail shots, 60% full-body action shots.
  */
 
-const pools = require('../pools');
+const pools = require('../../pools');
 
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const cyborgFeature = picker.pickWithRecency(pools.CYBORG_FEATURES, 'cyborg_feature');

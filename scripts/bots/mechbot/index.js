@@ -16,6 +16,11 @@ const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
   'humanoid-robots': require('./paths/humanoid-robots'),
   'cyborg-woman': require('./paths/cyborg-woman'),
+  // 2026-05-17: per Kevin — keep the legacy function-form cyborg-woman path
+  // ACTIVE alongside the new declarative-axis cyborg-woman path, so both
+  // styles ship in rotation. Same identity (cyborg-woman) but different
+  // builder + framing distribution + brief construction.
+  'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
   'cyborg-man': require('./paths/cyborg-man'),
   'mecha-pilots': require('./paths/mecha-pilots'),
   'titan-war-machines': require('./paths/titan-war-machines'),
@@ -38,6 +43,10 @@ module.exports = {
   // cyborg-man the colder/fiercer set, robot-moment a broad cinematic mix.
   vibesByPath: {
     'cyborg-woman': [
+      'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
+      'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
+    ],
+    'cyborg-female-legacy': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
       'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
     ],
@@ -86,6 +95,7 @@ module.exports = {
 
   modelByPath: {
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-female-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
     'humanoid-robots': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -103,6 +113,7 @@ module.exports = {
     'cyborg-man':
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+    'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -133,6 +144,7 @@ module.exports = {
     'robot-moment',
     'humanoid-robots',
     'cyborg-woman',
+    'cyborg-female-legacy',
     'cyborg-man',
     'mecha-pilots',
     'titan-war-machines',
@@ -148,6 +160,7 @@ module.exports = {
     'robot-moment': 1,
     'humanoid-robots': 1,
     'cyborg-woman': 1,
+    'cyborg-female-legacy': 1,
     'cyborg-man': 1,
     'mecha-pilots': 1,
     'titan-war-machines': 1,
@@ -162,7 +175,7 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cyborg-woman', 'cyborg-man', 'robot-moment', 'humanoid-robots',
+      'cyborg-woman', 'cyborg-female-legacy', 'cyborg-man', 'robot-moment', 'humanoid-robots',
       'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
       'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
       'mech-skyships',
@@ -217,6 +230,7 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       'cyborg-woman': 'cyborg-female',
+      'cyborg-female-legacy': 'cyborg-female',
       'cyborg-man': 'cyborg-male',
       'robot-moment': 'robot',
       'humanoid-robots': 'robot',
@@ -236,7 +250,7 @@ module.exports = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
-    if (path === 'cyborg-woman') {
+    if (path === 'cyborg-woman' || path === 'cyborg-female-legacy') {
       base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
       base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
