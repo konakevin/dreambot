@@ -18,6 +18,7 @@ const pathBuilders = {
   'fairy-court': require('./paths/fairy-court'),
   'enchanted-vista': require('./paths/enchanted-vista'),
   'fae-village': require('./paths/fae-village'),
+  'flower-fairy': require('./paths/flower-fairy'),
 };
 
 module.exports = {
@@ -30,12 +31,24 @@ module.exports = {
   // the look via Phase 2.2c synthesis from recipe.medium_style_override.
   defaultMedium: 'painted_fantasy_novel',
 
+  // flower-fairy uses painted_fantasy_novel (FaeBot's default) so it
+  // matches the soft painterly look of the other FaeBot paths
+  // (Manchess + Giancola + Bonner painted-fantasy lineage).
+  // mediumByPath omitted — flower-fairy falls through to defaultMedium.
+
   // Override the DB flux_fragment for this medium key with the locked
   // painted-fantasy-novel directive (Manchess + Giancola + Bonner + Wyeth
   // + Frazetta painted-fantasy lineage). Visible brush strokes + painted
   // edges + romantic painted atmosphere. NOT ink-outlined, NOT animation.
   mediumStyles: {
     painted_fantasy_novel: blocks.PAINTED_FANTASY_NOVEL_MEDIUM,
+  },
+
+  // Per-medium prompt prefix overrides for flower-fairy: lead with painterly
+  // + fae register so Flux lands on the soft ethereal style FaeBot wants.
+  promptPrefixByMedium: {
+    painted_fantasy_novel:
+      'soft ethereal painterly fantasy illustration, visible oil-brushwork, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, dreamy atmospheric painted glow, NOT photoreal NOT polished CGI',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -45,7 +58,7 @@ module.exports = {
   // (from dream_vibes DB) which Sonnet uses for mood context.
   vibes: ['peaceful', 'enchanted', 'ethereal', 'nostalgic', 'whimsical'],
 
-  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'fairy-court', 'enchanted-vista', 'fae-village'],
+  paths: ['forest-fairy-scene', 'dryad-portrait', 'tiny-fae', 'fairy-court', 'enchanted-vista', 'fae-village', 'flower-fairy'],
   pathWeights: {
     'forest-fairy-scene': 1,
     'dryad-portrait': 1,
@@ -53,6 +66,7 @@ module.exports = {
     'fairy-court': 1,
     'enchanted-vista': 1,
     'fae-village': 1,
+    'flower-fairy': 2,
   },
 
   // Use flux-dev for painterly / illustrative looks (better than 1.1-pro
@@ -65,6 +79,7 @@ module.exports = {
     'fairy-court': 'black-forest-labs/flux-1.1-pro',
     'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
     'fae-village': 'black-forest-labs/flux-1.1-pro',
+    'flower-fairy': 'black-forest-labs/flux-dev',
   },
 
   // Disable chaos + sensory anchors for POC — keep the prompt clean and
@@ -78,6 +93,18 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
+    // Per playbook: new-axis-system paths skip polish (Haiku compression
+    // drops bespoke vocabulary; single-pass Sonnet preserves slot richness)
+    skipPaths: ['flower-fairy'],
+  },
+
+  // Bot-level pool defaults for declarative composer (flower-fairy path)
+  defaultPools: {},
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`FaeBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
   },
 
   rollSharedDNA({ vibeKey }) {
@@ -89,7 +116,22 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`FaeBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Declarative axis-system paths export an object { archetype, pools }.
+    // Legacy function-form paths export a function. Dispatch on shape.
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    throw new Error(`FaeBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

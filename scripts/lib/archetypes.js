@@ -1066,6 +1066,21 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  FAEBOT_FLOWER_FAIRY: {
+    description:
+      'PATH-BESPOKE — FaeBot flower-fairy path (2026-05-17 R4 FaeBot-native rebuild). Mythic-fae-creature portrait (NOT human-model) with stacked otherworldly features: pointed elf-ears + fae-glowing skin + subtle fae-markings + plant-merged details + magical signature + dramatic flower-wings spread wide. Organic flower-woven attire (fae-grown, never couture). Caught-on-camera-candid mid-action moment (never posed, never direct eye-contact). FaeBot painted_fantasy_novel medium register (Manchess/Giancola/Bonner/Froud lineage). 4 path-bespoke axes (fairy_creature / floral_attire / wings / candid_action) + 60%-gated magical_signature.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['fairy_creature', 'floral_attire', 'wings', 'candid_action'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'magical_signature', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 };
 
 module.exports = { ARCHETYPES };

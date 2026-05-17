@@ -6683,6 +6683,96 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
 
+
+  FAEBOT_FLOWER_FAIRY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { fairy_creature, floral_attire, wings, candid_action, magical_signature } = slots;
+
+    const COMPOSITIONS = [
+      'three-quarter portrait, fairy off-center via rule-of-thirds, head + shoulders + bodice + wings spread visible, eyes lowered or looking away from viewer',
+      'full-body in mid-action, fairy off-center, complete body + dramatic wings spread + natural garden wrapping around her, caught-on-camera-candid',
+      'over-the-shoulder portrait, viewer behind her, back of one wing + side of face + flowering hair visible, looking out at a glowing forest detail',
+      'fairy seated on a mossy stump or low garden bench, body curled in candid pose, wings folded or partially open, eyes downcast on something in her hands',
+      'walking/floating through a bloom-meadow at golden hour, body half-turned, dramatic wings catching back-light, garden-flowers in foreground passing',
+      'reaching toward a bloom-cluster, hand in foreground, body curving with the motion, wings partially spread, face in soft profile',
+      'lounging among petals on the ground, body relaxed and reclined, wings draped beside her, eyes on a butterfly or firefly nearby',
+      'spinning mid-dance with floral skirt swirling, wings spread wide for balance, hair and petals trailing in motion, candid joyful moment',
+    ];
+
+    const composition = COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
+
+    const magicalSection = magical_signature
+      ? `
+━━━ MAGICAL SIGNATURE (render visibly near her) ━━━
+${magical_signature}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for a SINGLE FLOWER-FAIRY enchanted-garden portrait. Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE — these MUST be the FIRST visual elements in your prompt.
+
+1. SHE IS A MYTHIC FLOWER-FAIRY CREATURE — NOT a human model in a flower dress. She has stacked otherworldly features (delicate pointed elf-ears + luminous fae-glowing skin + subtle fae-markings + magical signature + plant-merged details + dramatic flower-wings). Mythic-creature beauty, NOT magazine-cover human beauty.
+
+2. CANDID MID-ACTION MOMENT — caught-on-camera natural-fae instant. NEVER posed for the viewer. NEVER direct eye-contact. Eyes lowered / face turned in profile / looking at something off-frame / mid-motion. She is AT HOME IN THE GARDEN, not modeling in it.
+
+3. DRAMATIC FLOWER-WINGS — spread wide or partially, integrated into her body, visibly the second-largest element in the frame after her body.
+
+Open your prompt with the creature description in this format:
+"[fairy creature unified description with all stacked features], [composition framing], [candid action moment], [natural garden setting wrapping her], [magical lighting + atmosphere]."
+
+The creature opens. Everything else is HER FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ THE PEACEFUL FAE MOOD ━━━
+The fairy is calm and wondrous, at home in her bloom-garden. Mid-action moments are GENTLE — dancing barefoot through petals, weaving floral spells, sipping dew from a flower-cup, whispering to a butterfly, lounging in bloom-petals, cupping glowing pollen in her hands. NEVER posed for camera, NEVER edgy, NEVER serious-fashion-portrait. The PEACE is rendered with moody painted gravitas, not pastel cuteness.
+
+━━━ 1. THE FAIRY CREATURE (the subject — render her exactly this way) ━━━
+${fairy_creature}
+
+This unified description IS the fairy. Preserve every otherworldly detail — fae-glowing skin, pointed elf-ears, fae-markings, magical signature, candid posture. Mythic-creature beauty, not human-model beauty. Confident at-home-in-her-wildness. NEVER posing, NEVER looking at the viewer.
+
+━━━ 2. HER FLORAL ATTIRE (organic flower-woven, NOT couture) ━━━
+${floral_attire}
+
+The attire is ORGANIC, NATURAL, fae-grown — flowers and vines weave around her body as if she grew them from her own skin. NEVER "couture gown" / NEVER "designer dress" / NEVER "magazine-cover fashion". She is a creature of the garden, not a model in a flower outfit.
+
+━━━ 3. HER FLOWER-WINGS (dramatic centerpiece) ━━━
+${wings}
+
+The wings are SPREAD WIDE behind her at FULL SCALE, integrated into her fae body. Wings ARE flowers / CARRY flowers / TRANSFORM between flower and wing. Painted with visible Pre-Raphaelite oil-brushwork showing every petal-vein and translucent membrane.
+
+━━━ 4. CANDID ACTION ━━━
+${candid_action}
+
+This is what she is DOING in the candid caught-on-camera moment. NEVER static posing. NEVER direct gaze. Always mid-motion, mid-spell, mid-bloom-interaction.
+${magicalSection}━━━ 5. COMPOSITION ━━━
+${composition}.
+
+The garden WRAPS AROUND her like a frame — bloom-clusters in foreground, mossy garden-stones beside her, flowering trees behind. But SHE is what the eye lands on first. Caught-on-camera-candid, off-center, real moment.
+
+━━━ 6. GARDEN BACKDROP (her natural frame) ━━━
+Soft layered enchanted garden depth — foreground tactile floral detail (petals, dewdrops, fern-fronds, glowing pollen), midground holding her, background fading into soft painted bloom-mist or canopy. Atmospheric haze sells the depth. Never let the backdrop compete with her presence.
+
+━━━ 7. LIGHTING + ATMOSPHERE ━━━
+${sharedDNA.colorPalette || 'soft golden afternoon glow filtering through canopy, dappled warm calm'}. ${vibeDirective.slice(0, 150)}
+
+Soft golden-hour or moonlit-cool light catching her wings + hair + shoulders. Painted fantasy register — visible oil brushwork, dreamy painted atmosphere, NOT photoreal NOT polished CGI.
+
+━━━ 8. HARD BANS ━━━
+- NO posed-for-camera / NO direct eye-contact with viewer (eyes lowered, gaze elsewhere, face turned)
+- NO magazine-cover / NO fashion-editorial / NO Pinterest "model in dress" framing
+- NO 10/10 stunning beauty model language — mythic-creature beauty only
+- NO sexualized framing — focus is fae creature
+- NO modern objects, NO realistic non-magical humans
+- NO violence / NO scared expressions / NO edgy moods
+- NO additional figures
+- NO Disney 3D / NO anime / NO cartoon — painted fantasy ONLY
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. Lead with the fairy creature unified description from section 1 — preserve her stacked otherworldly features unmistakably. Composition and candid action follow. Wings and floral attire integrate. Garden wraps around her. Lighting and magic close. NO preamble, NO headers, NO ━━━ markers.`;
+  },
+
 };
 
 module.exports = TEMPLATES;
