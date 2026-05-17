@@ -3333,17 +3333,29 @@ ${composition}
 
 The chosen camera angle DRIVES the framing — render it precisely as described. The composition makes the rig's SCRAP CHARACTER + MOTION + crew immediately legible.
 
-━━━ EVERY-QUADRANT-STRIKING MANDATE — movie-poster sci-fi wasteland moment ━━━
-Every render must have:
-  1. THE RIG as dominant focal subject (scrap-welded sci-fi chimera filling 50-70% of frame, recognizable bush-fix + sci-fi DNA)
-  2. THE VISIBLE CREW (1-5 figures on/around rig — driver / gunner / lookout / scavenger / mechanic — each doing something mid-action)
-  3. MOTION OR ACTION (dust-trail / motion-blur / pursuit / pit-repair / convoy formation)
-  4. SCI-FI CUE — at least 2-3 of: glowing energy-conduit / fusion-cell engine / plasma-drive exhaust / alien-tech salvage / hover-skirt / xenomaterial fitting / radiation symbol / pulse-cannon mount
-  5. SCRAP-WELDED DETAIL — at minimum 4 of: antenna forest / mismatched body panels / lashed fuel/power-cells / war-trophies / ram prow / exhaust stacks / improvised weapons / wire-mesh cages
-  6. MULTI-TIER DEPTH — foreground rig + crew / midground wasteland action / deep distance wasteland vista (mesas / ruined sci-fi spires / dust-canyon / sunset)
-  7. SATURATED THEATRICAL WASTELAND LIGHTING — Fury Road sunset orange / sandstorm-sepia / dawn blood-red / fire-glow / dust-cone headlight
+━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST BE STRIKING — FLAGSHIP MOMENT ━━━
+This is a FLAGSHIP path. Every render is a MOVIE POSTER PROMOTIONAL FRAME — the kind of vista that stops the viewer mid-scroll. EVERY QUADRANT of the frame has something striking — NO quiet corners. The viewer should be able to SCREENSHOT THIS AS A WALLPAPER and want to study it.
 
-THINK Mad Max Fury Road sci-fi-tilted / Borderlands bandit-camp ambush / Death Stranding off-Earth mule / WH40K Ork Looted-Trukk raid / Dune harvester-and-thopter / Cyberpunk 2077 Nomad-clan road / Horizon Zero Dawn raider-tech / Fallout Highwayman key-art.
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+  1. THE RIG at vertigo-inducing scale — fills 50-70% of frame as a scrap-welded sci-fi chimera, recognizable bush-fix + sci-fi DNA, every panel of the chassis legible from a distance
+  2. THE VISIBLE CREW (2-5 figures on/around rig) all in mid-action — driver leaning out hatch / gunner mid-fire on roof / lookout scanning / scavenger / mechanic mid-bush-fix — no static poses, every body in motion or engaged
+  3. MOTION OR ACTION (dust-trail trailing across frame / motion-blur on ground / pursuit close behind / pit-repair sparks flying / convoy formation receding into distance)
+  4. SCI-FI CUE — at least 3-4 of: glowing energy-conduit veins / fusion-cell engine pulsing through chassis gaps / plasma-drive exhaust trailing GLOWING SMOKE / alien-tech salvage panel / hover-skirt humming / xenomaterial fitting glowing / radiation symbol stenciled / pulse-cannon mount mid-charge / reactor-core visible in the gut
+  5. SCRAP-WELDED DETAIL — at minimum 5 of: antenna forest with war-banners snapping / mismatched body panels (drop-pod fragments + locker-doors + license-plates + alien-hull) / lashed fuel/power-cells visibly glowing / war-trophies dangling / ram prow with welded scrap-iron spikes / 4+ exhaust stacks belching glowing-plasma / improvised pulse-weapons / wire-mesh cages / dragging chains
+  6. MULTI-TIER DEPTH MANDATORY — foreground tactile texture (cracked salt-pan / dust-cloud / scrap-shard / wreckage in extreme close) / midground rig + crew (the hero subject) / deep distance wasteland vista (ruined sci-fi mega-spires / collapsed orbital-debris pylons / dust-canyon receding / sandstorm wall building / sunset horizon)
+  7. SATURATED THEATRICAL SKY — never bland or empty. Fury Road BURNING ORANGE sunset / blood-red dawn / sandstorm SEPIA WALL filling upper third / plasma-storm electric-violet / DUAL-COLOR contrast (cold upper sky + warm lower horizon). The sky is HALF the poster.
+  8. AIRBORNE CHAOS EVERYWHERE — at least 2-3 of: airborne debris / dust-plumes / flame-flickers / glowing-plasma exhaust trails / sparks from welding or impact / atmospheric haze cones / floating scrap / vultures circling / sandstorm particulate / heat-shimmer distortion
+  9. EYE-LANDS-ON-4+-DETAILS — the viewer's eye should immediately land on 4+ striking details in different quadrants — NOT a centered single-focus beauty shot. Wreckage in foreground-left, hero rig in midground-center, distant convoy in deep-right, sandstorm wall in upper-frame, etc.
+  10. EMOTIONAL DNA mandatory — every render should land one of: AWE (vertigo-scale wasteland reveal) / DREAD (the world has ended and these are the survivors) / DEFIANCE (the crew fights on against impossible odds) / ELATION (catching air mid-jump, war-banners snapping) / KILL-ENERGY (mid-raid moment, crew teeth-bared)
+
+VERTIGO-INDUCING SCALE — every render conveys awe-inducing scope:
+• Wasteland horizons that vanish into mist or sandstorm
+• Towering ruined sci-fi mega-spires looming in the deep distance
+• Dust-canyons dropping a thousand meters below the rig
+• Convoys stretching across the entire frame
+• Sky dominating 50%+ of the frame with theatrical color
+
+THINK MAD MAX FURY ROAD theatrical-release promotional-frame / WH40K Ork Looted-Trukk RAID key-art / Dune Sardaukar-thopter establishing-shot / BORDERLANDS bandit-camp marketing reveal / DEATH STRANDING off-Earth E3-trailer frame / CYBERPUNK 2077 NOMAD-CLAN cinematic / HORIZON ZERO DAWN raider-tech promotional / FALLOUT key-art Highwayman silhouette against ruined-city / BLADE RUNNER 2049 wasteland-vehicle approach-shot. Every render should make the viewer GASP.
 
 ━━━ THE RIG + CREW (the seeded subject) ━━━
 ${subject}
