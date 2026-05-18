@@ -279,6 +279,22 @@ module.exports = {
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
+  // Bot-level pool defaults for declarative axis paths.
+  // Universal slots (camera_angle, scenario, staging) resolve to these
+  // unless a path overrides via pools: { slot: 'PATH_BESPOKE_POOL' }.
+  defaultPools: {
+    camera_angle: 'TOYBOT_CAMERA_ANGLES',
+    scenario: 'TOYBOT_TOY_SCENARIOS',
+    staging: 'TOYBOT_STAGING_AXIS',
+  },
+
+  poolByName(name) {
+    if (!(name in pools)) {
+      throw new Error(`ToyBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   rollSharedDNA({ vibeKey, path, picker }) {
     // 50/50 classic vs world. Vinyl + monster-boss-battle don't have
     // path-native classic SCENES pools (vinyl was rebuilt for Funko slice-of-
@@ -301,7 +317,22 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`ToyBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Declarative axis-system paths export an object { archetype, pools }.
+    // Legacy function-form paths export a function. Dispatch on shape.
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    throw new Error(`ToyBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {

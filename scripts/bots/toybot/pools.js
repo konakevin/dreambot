@@ -125,4 +125,13 @@ module.exports = {
       lightcolor: load('sensory_scene_lightcolor'),
     },
   },
+  // ─── model-train-world (R0 axis-system migration, 2026-05-17) ───
+    // Top-level pool refs for the declarative composer. Reuses existing
+    // seed JSONs; renamed with TOYBOT_ prefix for archetype slot resolution.
+    TOYBOT_MODEL_TRAIN_SCENE: load('toybot_model_train_scene'),
+    TOYBOT_TRAIN_CONSISTS: load('train_consists'),
+    TOYBOT_TRAIN_WEATHER: load('train_weather'),
+    TOYBOT_CAMERA_ANGLES: load('camera_angles'),
+    TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
+    TOYBOT_STAGING_AXIS: load('staging_axis'),
 };

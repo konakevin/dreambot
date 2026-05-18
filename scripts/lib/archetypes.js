@@ -1193,6 +1193,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_MICRO_DETAIL: {
+    description:
+      'PATH-BESPOKE — DinoBot micro-detail path (2026-05-17 axis-system migration). EXTREME MACRO close-up of a single dinosaur anatomical feature — eye / scale-pattern / feather-barb / tooth-serration / claw-callus / hide-texture. Razor-sharp focus + ultra-shallow depth of field. Texture IS the subject. Reuses DINO_SPECIES (200) + MICRO_DETAILS (200 fat-seed texture descriptions) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 bokeh context). Adds new path-bespoke pool for macro-specific accents (dust-particulate in light / dew-bead / hide-flake / etc.). 4 path-bespoke axes (biome / species / detail / surprise_element) + universal lighting + atmosphere. NO phenomenon — macro framing doesnt benefit from atmospheric events.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'species', 'detail', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 
 };
 
