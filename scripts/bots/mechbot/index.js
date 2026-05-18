@@ -16,11 +16,9 @@ const pathBuilders = {
   'robot-moment': require('./paths/robot-moment'),
   'humanoid-robots': require('./paths/humanoid-robots'),
   'cyborg-woman': require('./paths/cyborg-woman'),
-  // 2026-05-17: per Kevin — keep the legacy function-form cyborg-woman path
-  // ACTIVE alongside the new declarative-axis cyborg-woman path, so both
-  // styles ship in rotation. Same identity (cyborg-woman) but different
-  // builder + framing distribution + brief construction.
-  'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
+  // 2026-05-17: DISABLED per Kevin — only the axis cyborg-woman path fires now.
+  // Legacy function-form preserved at paths/legacy/cyborg-woman.js for reference.
+  // 'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
   // 2026-05-17: per Kevin — third cyborg-female path with assassin slant
   // (killer / rogue / mysterious / capable / violent). Same axis system as
   // cyborg-woman, different template that pulls her into predator territory.
@@ -168,7 +166,7 @@ module.exports = {
     'robot-moment',
     'humanoid-robots',
     'cyborg-woman',
-    'cyborg-female-legacy',
+    // 'cyborg-female-legacy',  // 2026-05-17 DISABLED — see pathBuilders comment
     'droid-assassin',
     // 'cyborg-man',  // 2026-05-17 DISABLED — see pathBuilders comment
     'cyborg-male-legacy',
@@ -186,7 +184,7 @@ module.exports = {
     'robot-moment': 1,
     'humanoid-robots': 1,
     'cyborg-woman': 1,
-    'cyborg-female-legacy': 1,
+    // 'cyborg-female-legacy': 1,  // 2026-05-17 DISABLED
     'droid-assassin': 1,
     // 'cyborg-man': 1,  // 2026-05-17 DISABLED
     'cyborg-male-legacy': 1,
