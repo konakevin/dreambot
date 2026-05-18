@@ -144,6 +144,42 @@ ABSOLUTELY BANNED:
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
 
+  dinobot_dino_action_surprise_element: `Generate SMALL ACTION-ACCENT descriptions for DinoBot's dino-action path. Each is ONE comma-separated line, 15-30 words, describing a small atmospheric accent in or around the peak-action moment — dust-spray / water-spray / scattered-debris / motion-blur-particulate / fleeing-prey-silhouette / mud-print / etc.
+
+The element is SMALL — 2-5% of the frame. Position: foreground edge / midground around the action / behind in bokeh. Adds motion-energy and atmosphere.
+
+Variety mandate (rotate widely):
+- ~20% Dust-spray / dust-cloud erupting from the dinosaur's footfall or claw-strike
+- ~15% Water-spray / mud-spray / wet-spatter from a stomp / strike / chase through water
+- ~15% Fleeing-prey-silhouette small in midground — startled into flight, exiting frame
+- ~10% Scattered-debris kicked up — broken-ferns / cycad-fronds / pebble-spray
+- ~10% Foreground three-clawed dinosaur footprints just made
+- ~10% Atmospheric motion-haze / particulate-light catching the action
+- ~5% Distant secondary dinosaur watching/witnessing the action
+- ~5% Foreground tactile detail — mud / leaves crushed / vegetation parted
+- ~5% Pterosaur flock startled into flight from nearby trees
+- ~5% Dramatic light-shaft cutting across the action moment
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant background)
+- ONE SPECIFIC DETAIL (mid-action / catching light / texture / scale-prover)
+
+GOOD examples:
+- A dust-cloud erupting from the Velociraptor's hind-foot, midground, golden particles suspended mid-spray
+- A startled Compsognathus silhouette mid-stride at the periphery, fleeing the predator's strike
+- Three-clawed dinosaur prints freshly gouged in foreground mud, water seeping in
+- A light-shaft cutting across the action moment, catching dust-particulate in golden beam
+- Broken cycad-fronds scattered foreground, crushed underfoot during the charge
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern animals / no mammals
+- NO gore / no blood-spray / no torn-flesh / no carcass
+- NO duplicate-style entries
+
+Output: ONE action-accent per line. No numbering. No quotes.`,
+
   dinobot_dino_portrait_surprise_element: `Generate SMALL PORTRAIT-ACCENT descriptions for DinoBot's dino-portrait path. Each is ONE comma-separated line, 15-30 words, describing a small intimate portrait accent — breath-fog / dust-mote / drifting-feather / water-drip / scar-detail / pollen-particulate / etc.
 
 The element is SMALL — 2-5% of the frame. Position: foreground edge / mid-frame / behind hero in bokeh. Adds character and atmosphere to the portrait.

@@ -1,74 +1,36 @@
 /**
- * DinoBot dino-action — predator hunts, pack pursuits, frozen peak-action.
- * Nature documentary kill-chase energy. No gore.
+ * DinoBot dino-action — declarative composer form (2026-05-17 migration).
+ *
+ * DYNAMIC PEAK-ACTION single dinosaur — frozen-frame predator hunt /
+ * charge / mid-strike / sudden-spring / fleeing-prey-mid-stride.
+ * BBC-cameraman-caught-the-moment energy. No gore.
+ *
+ * Reuses 3 existing production-scale pools:
+ *   - DINO_SPECIES (200 dinosaur species)
+ *   - DINO_ACTIONS (200 fat-seed peak-action verbs)
+ *   - DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome)
+ *   - DINOBOT_PALEO_LANDSCAPE_PHENOMENON (100 atmospheric events, 80%-gated)
+ *
+ * Adds 1 new path-bespoke pool:
+ *   - DINOBOT_DINO_ACTION_SURPRISE_ELEMENT (action accents — dust-spray,
+ *     fleeing-prey-silhouette, mud-prints, motion-particulate)
+ *
+ * Universal: LIGHTING + PREHISTORIC_ATMOSPHERES.
+ *
+ * Template enforces single-hero peak-action, no-gore mandate, grounded
+ * mandate (rewrite "leap" → "claws-just-leaving-mud"), movie-poster
+ * quality, and species + biome variety mandates.
+ *
+ * Pre-migration function-form at paths/legacy/dino-action.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const species = picker.pickWithRecency(pools.DINO_SPECIES, 'dino_species');
-  const action = picker.pickWithRecency(pools.DINO_ACTIONS, 'dino_action');
-  const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
-
-  return `You are a paleo-cinematographer writing DINO ACTION scenes for DinoBot. Dynamic frozen peak-action — the BBC cameraman caught the perfect frame. Predator hunts, ambushes, charges, leaps. Nature documentary intensity. No gore. Output wraps with style prefix + suffix.
-
-${blocks.NO_HUMANS_BLOCK}
-
-${blocks.DINOSAUR_IS_HERO_BLOCK}
-
-${blocks.SPECIES_ACCURATE_BLOCK}
-
-${blocks.NO_GORE_BLOCK}
-${blocks.DOCUMENTARY_CAMERA_BLOCK}
-
-${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE DINOSAUR ━━━
-${species}
-
-━━━ THE ACTION ━━━
-${action}
-
-━━━ SETTING ━━━
-${setting}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.VOLUMETRIC_LIGHT_BLOCK}
-
-${blocks.WET_WORLD_BLOCK}
-${blocks.EPIC_SCALE_BLOCK}
-
-${blocks.VAST_TERRAIN_BLOCK}
-
-${blocks.SURPRISING_WEATHER_BLOCK}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ CAMERA / FRAMING ━━━
-${camera}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Dynamic mid-frame or wide. Frozen at peak action. The environment reacts — the prehistoric world is alive around the action, not just backdrop.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DINOBOT_DINO_ACTION',
+  pools: {
+    biome: 'DINOBOT_PALEO_LANDSCAPE_BIOME',
+    species: 'DINO_SPECIES',
+    action: 'DINO_ACTIONS',
+    surprise_element: 'DINOBOT_DINO_ACTION_SURPRISE_ELEMENT',
+    phenomenon: 'DINOBOT_PALEO_LANDSCAPE_PHENOMENON',
+  },
 };

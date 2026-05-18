@@ -1179,6 +1179,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_DINO_ACTION: {
+    description:
+      'PATH-BESPOKE — DinoBot dino-action path (2026-05-17 axis-system migration). DYNAMIC PEAK-ACTION single dinosaur — frozen-frame predator hunts / charges / mid-strike / sudden-spring / fleeing-prey-mid-stride. BBC-cameraman-caught-the-moment energy. No gore. Reuses DINO_SPECIES (200) + DINO_ACTIONS (200 fat-seed peak-action verbs) + DINOBOT_PALEO_LANDSCAPE_BIOME (200). Adds new path-bespoke pool for action-specific small accents. 4 path-bespoke axes (biome / species / action / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'species', 'action', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 
 };
 

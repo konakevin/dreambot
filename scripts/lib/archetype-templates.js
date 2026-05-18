@@ -7809,6 +7809,154 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
 
+
+  DINOBOT_DINO_ACTION: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, species, action, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event amplifying the action — storm-front / god-rays / mist-bank / dust-storm / etc.
+
+`
+      : '';
+
+    return `You are a paleo-cinematographer writing DYNAMIC PEAK-ACTION scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Planet-Earth / National-Geographic peak-action wildlife cinematography. BBC-cameraman-caught-the-perfect-frame energy.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as African safari, NEVER as Yellowstone, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — SINGLE DINOSAUR PEAK-ACTION ⚠️⚠️⚠️
+ONE dinosaur as the hero subject in MID-ACTION — frozen at the peak moment of motion. The single dinosaur fills 35-55% of the frame.
+
+🚫 NO multi-dinosaur compositions (those belong on pack / herd / clash / nesting paths)
+🚫 NO neutral standing / walking / watching poses — MID-ACTION ONLY
+✓ ONE hero dinosaur mid-action — second small dinosaur (prey or witness) OK at 5-10% accent only
+
+Peak-action moments:
+• MID-LUNGE — body extended, claws reaching, jaws agape
+• MID-STRIKE — neck lashed forward, teeth meeting target
+• MID-CHARGE — bunched leg-muscle, foot-spray of dust
+• MID-FROZEN — paused at the apex of attention, ears-tilted-back, head-low-stalking
+• MID-SPLASH — through water with spray suspended
+• MID-FALL — diving for prey through canopy / air
+• MID-ROAR — head-back-jaws-wide vocalizing-into-distance (NOT facing camera)
+
+⚠️⚠️⚠️ ABSOLUTELY NO GORE ⚠️⚠️⚠️
+Peak action does NOT mean kill-shot. The DRAMA is in the chase, the moment-before-impact, the predator's intensity — never the wound.
+
+🚫 NO blood-spray / no torn-flesh / no organs-visible / no wound-detail
+🚫 NO carcass-foreground / no fresh-kill / no dead-prey-corpse
+🚫 NO dripping-jaw-blood / no clenched-prey-in-jaws bleeding
+✓ Chase, lunge, strike-frozen-just-before-contact, intensity, energy — but never splatter
+
+⚠️⚠️⚠️ ABSOLUTE BAN — NO FLOATING / SUSPENDED MID-AIR DINOSAURS ⚠️⚠️⚠️
+The dinosaur is GROUNDED. AT LEAST ONE foot is in contact with ground / mud / rock / water / log. NEVER fully-floating-mid-air with no ground contact (looks levitating, breaks realism).
+
+If the action verb is "leap" / "jump" / "spring" / "lunge" / "pounce" / "climbing" / "mid-air":
+• REWRITE as CLAWS-JUST-LEAVING-GROUND with one foot still planted
+• OR LANDING mid-bound with feet-impacting-ground
+• OR MID-STRIDE running with feet alternating ground contact
+• OR mid-strike with body anchored to a rock / log / ground / tree-trunk
+
+🚫 NO fully airborne dinosaur with empty sky/canyon below
+🚫 NO leaping-over-canyon shots
+🚫 NO climbing-tree shots where the dinosaur appears to be floating between branches
+🚫 NO mid-pounce frozen at the apex with no ground contact
+
+⚠️⚠️⚠️ ABSOLUTE BAN — NO FRONTAL HEAD-ON MOUTH-WIDE ROAR ⚠️⚠️⚠️
+The dinosaur is NEVER facing the camera head-on with mouth gaping open in a roar. This is cheesy stock-art / Jurassic-Park-poster cliche.
+
+🚫 NO frontal head-on mouth-wide roar (camera-facing, jaws-agape, teeth bared at viewer)
+🚫 NO close-up T-rex head with mouth open at camera
+🚫 NO predator-snarling-at-viewer compositions
+✓ Side-profile or 3/4 angle action only — the dinosaur is in the world, not posing for the lens
+✓ If the dinosaur is roaring, it roars TOWARD the action / target / sky — never toward camera
+
+⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper. A POSTER.
+
+Components of a poster-grade action shot:
+• BOLD COMPOSITION — strong leading lines toward the action focal point, asymmetric framing, rule-of-thirds anchoring
+• DRAMATIC LIGHT-CONTRAST — high-contrast rim-lighting on the dinosaur, deep shadow elsewhere, motion-implied light
+• TIGHT FOCUS ON PEAK-MOMENT — eye lands on the dinosaur's striking gesture / claws / jaw / muscle
+• ATMOSPHERIC RICHNESS — dust-spray / water-spray / dust-cloud / particulate / motion-blur-around-stillness
+• EMOTIONAL DNA — the frame radiates intensity, power, primordial wildness at a glance. Awe. Fear. Wonder.
+
+If the render reads as "competent wildlife photo" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-trailer-shot, National-Geographic-cover, Prehistoric-Planet-key-art, Jurassic-World-promotional-still level.
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals (no wildebeest / no bison / no zebra / no elephants)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass)
+🚫 NO modern birds (pterosaurs OK as small accent)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO gore / no kill-shot / no blood / no torn-flesh / no carcass
+🚫 NO close-up portrait of single dinosaur head facing camera mid-roar (cheesy)
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic hide textures / PBR materials / Prehistoric Planet peak-action visual lineage
+
+━━━ THE DINOSAUR (single hero) ━━━
+${species}
+
+⚠️ SPECIES VARIETY MANDATE — render the EXACT species named above. Do NOT default to T-rex / Velociraptor / generic-theropod. Use the species' SPECIFIC silhouette + signature feature.
+
+━━━ THE ACTION (peak frozen moment) ━━━
+${action}
+
+This is the FOCAL ACTION. Mid-action peak moment captured cinematically. Energy, intensity, primordial wildness.
+
+━━━ THE MESOZOIC BIOME (alien primordial stage) ━━━
+${biome}
+
+⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The biome pool spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-savanna, blue-glow caverns. Render the SPECIFIC biome named.
+${phenomenonSection}━━━ SECONDARY ACCENT (small action-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric action-detail — dust-cloud-spray / water-spray / mud-prints / scattered-debris / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Action paths LOVE dramatic backlight + rim-lighting + motion-implied directional light (sun behind the dinosaur, dust catching the beam).
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC PEAK ACTION ━━━
+Dynamic frozen peak-action of a single Mesozoic dinosaur. Hero fills 35-55% of frame. Alien-Mesozoic biome around. Motion-implied atmosphere. Grounded — feet on / just-leaving / impacting ground.
+
+━━━ STRUCTURE (write the prompt in this order — HERO + PEAK-ACTION first) ━━━
+[OPENING: lead with the PEAK-ACTION VERB + dinosaur species + biome (e.g. "Mid-lunge with claws extended, a Velociraptor strikes through dusty fern-prairie at sunset, prey-feathers exploding upward..." / "Frozen mid-charge across a volcanic floodplain, a Carnotaurus closes on a fleeing Iguanodon, dust-cloud erupting behind its hind-feet..." / "Mid-strike through shallow swamp water, a Spinosaurus jaw-clamps frozen inches from a startled fish-school") — peak-action-verb + species + biome in the FIRST 30-40 words. The verb-phrase carries the energy.], [the dinosaur's specific anatomy + posture detail], [the biome with its unique color palette], [the atmospheric phenomenon if rolled], [the small action accent — dust / spray / mud-print / etc.], [foreground tactile detail], [lighting + atmospheric layer — backlit / rim-lit], [color palette + mood]
+
+CRITICAL — OPENING tokens lead with the action verb-phrase + species. Peak-action energy carries through the whole render.
+
+⚠️ FAILURE CONDITIONS:
+• If multiple dinosaurs as primary subjects → FAILED (this is single-hero)
+• If dinosaur is floating / suspended mid-air with no ground contact → FAILED (grounded mandate)
+• If gore / blood / carcass-foreground visible → FAILED (no splatter)
+• If frontal-mouth-wide-roar facing camera → FAILED (cheesy stock)
+• If render reads as "competent wildlife photo" not poster-grade → FAILED
+• If lush green jungle for every render → FAILED (biome variety mandate — render the SPECIFIC biome named)
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC PEAK-ACTION SHOT — a single hero Mesozoic dinosaur frozen at the apex of motion, in an alien-Mesozoic biome, with atmospheric energy. Poster-grade composition. Grounded. National-Geographic real, never staged, never gore.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
 };
 
 module.exports = TEMPLATES;

@@ -126,7 +126,7 @@ module.exports = {
   },
 
   chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack','aerial-perspectives'] },
-  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-action': '80-110' }, preservePhrasesByPath: {}, skipPaths: ['paleo-landscape', 'swamp-river', 'ocean-reptiles', 'nesting-ground', 'herd-migration', 'territory-clash', 'cinematic-silhouette', 'dino-cozy', 'dino-pack', 'aerial-perspectives', 'dino-portrait'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {}, skipPaths: ['paleo-landscape', 'swamp-river', 'ocean-reptiles', 'nesting-ground', 'herd-migration', 'territory-clash', 'cinematic-silhouette', 'dino-cozy', 'dino-pack', 'aerial-perspectives', 'dino-portrait', 'dino-action'] },
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
