@@ -76,6 +76,57 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
+  faebot_flower_fairy_atmospheric_phenomenon: {
+    format: 'simple',
+    theme: `ETHEREAL MAGIC-CREATURE ATMOSPHERIC PHENOMENA for the FaeBot flower-fairy path (R9). Each entry is ONE specific PRETTY/MAGICAL/ETHEREAL element that surrounds the fairy — focused on GLOWING CREATURES + magical light + petal-rain + sparkle. Each entry 20-40 words.
+
+⚠️ FOCUS — every entry tilts the scene toward ETHEREAL PRETTY:
+  Glowing butterflies / dragonflies / fireflies / hummingbirds (60% of entries)
+  Magical light (auroras / halos / sun-shafts / sparkle-dust / pollen-glow) (20%)
+  Floating petal-storm / cherry-blossom rain (10%)
+  Tiny fae creatures (sprites / will-o-wisps / glowing seeds / pixie-dust) (10%)
+
+⚠️ COLOR & GLOW MANDATE — every creature/phenomenon GLOWS or sparkles or shimmers. Saturated jewel-tone wings on butterflies/dragonflies. Glowing fireflies. Iridescent hummingbirds.
+
+🚫 STRICT BANS:
+  • NO simple rim-light / NO bokeh-circles / NO simple halos (those are weak — needs LIVING creatures or rich petal-storms)
+  • NO mention of dress / gown / fairy body
+  • NO mood description — describe the PHENOMENON only`,
+    touchpoints: [
+      'GLOWING JEWEL BUTTERFLY SWARM — dozens of iridescent butterflies in saturated jewel-tones (cobalt blue, emerald green, magenta, golden amber) circling around her in slow motion, each wing glowing with magical luminescence',
+      'GLOWING DRAGONFLY CLOUD — half a dozen iridescent dragonflies hovering near her shoulders with translucent wings catching the light, glowing emerald-and-sapphire bodies, magical motion-blur trails',
+      'FIREFLY STORM — hundreds of fireflies floating around her at twilight, soft green-gold pulse-glows at every depth of the frame, dreamy luminous magical haze',
+      'IRIDESCENT HUMMINGBIRD AT BLOOM — jewel-green hummingbird hovering at a bloom near her hand, wings a transparent motion-blur with magical iridescent shimmer, warm gold side-light',
+      'GLOWING SPRITE CLOUD — tiny glowing fae sprites floating in a cloud around her, each one a soft luminous pinpoint with sparkle-trail, ethereal magical swarm',
+      'WILL-O-WISP HALO — half a dozen will-o-wisp light-orbs floating in a halo around her shoulders, glowing soft pearl-and-violet, ethereal magical lanterns',
+      'PETAL-RAIN STORM — gentle torrential rose-petal rain drifting from above, hundreds of petals suspended in slow-motion through the golden ambient light',
+      'GOLDEN POLLEN-CLOUD — visible warm golden pollen-cloud dispersing around her shoulders, glowing motes catching the late-afternoon light like scattered starlight',
+      'CHERRY-BLOSSOM SNOW — soft pink and white cherry-blossom petals falling like magical snow, suspended in slow-motion ethereal painted air',
+      'MONARCH BUTTERFLY SWARM — saturated orange-and-black monarch butterflies orbiting her in slow dance, dozens of wings catching the sunlight in stained-glass brilliance',
+      'BLUE MORPHO BUTTERFLY CLOUD — iridescent cobalt-blue morpho butterflies in a magical cloud around her, wings shimmering with otherworldly metallic blue glow',
+      'MAGENTA BUTTERFLY HALO — pink-magenta butterflies forming a delicate crown of motion around her head, each wing radiating soft glow',
+      'EMERALD DRAGONFLY TRAIL — emerald-green dragonflies leaving glowing trails of light behind their wings as they fly past her in slow motion, magical motion-streaks',
+      'RAINBOW BUTTERFLY EXPLOSION — explosion of rainbow-iridescent butterflies bursting outward from her in every direction, magical chromatic swarm',
+      'PIXIE-DUST SPARKLE STORM — heavy magical pixie-dust sparkle suspended in the air around her, every particle glowing gold and silver and pink',
+      'GLOWING SEED CASCADE — handfuls of glowing magical seeds drifting around her body, each one a tiny pulse of warm-amber light',
+      'TWILIGHT MOTH SWARM — saturated indigo-and-violet luna moths floating around her at dusk, translucent wings glowing pearl-white in moonlight',
+      'JEWEL DRAGONFLY ON HER FINGER — iridescent rainbow-sheen dragonfly perched on her fingertip, wings catching the painted light in stained-glass color',
+      'GOLD BUTTERFLY HALO — golden-yellow butterflies dancing in a halo around her crown, magical glow on every wing',
+      'AURORA MAGIC-LIGHT — soft aurora-like color-glow painting the upper backdrop above her in luminous magenta + cobalt + emerald watercolor wash',
+      'FAE LANTERN ORBS — half a dozen floating amber fae-lanterns drifting in the air around her, warm magical light source-points',
+      'CRYSTAL PRISM-LIGHT FRAGMENTS — magical rainbow prism light-fragments scattered around her, ethereal jewel-tone color-shards in suspended motion',
+      'MOONBEAM CASCADE — single magical moonbeam falling on her face from above, the rest of the scene in cool twilight blue',
+      'BUMBLEBEE ON BLOOM — saturated yellow-and-black bumblebee on a flower near her hand, magical motion-frozen detail in golden light',
+      'LADYBUG ON FINGERTIP — bright red ladybug perched on her fingertip, magical macro-detail in soft painted glow',
+      'SAPPHIRE BEETLE PROCESSION — line of iridescent sapphire scarab beetles walking along a vine near her, jewel-tone magical detail',
+      'MAGIC-RUNE SIGIL — softly glowing painted-fantasy magic-rune sigil tracing in the air beside her hand, ethereal symbol of fae spellwork',
+      'GLOWING MUSHROOM RING — small glowing fae mushrooms in a ring at her feet, soft pearl-and-violet bioluminescence',
+      'STAR-DUST CASCADE — heavy magical star-dust sparkle cascading down from the canopy around her, glowing pinpoints in every depth',
+      'OPALESCENT FAE-MIST — soft magical opalescent mist drifting around her ankles, ethereal iridescent fog catching the painted light',
+    ],
+    instructions: `Each entry is ONE ETHEREAL MAGIC-CREATURE / MAGICAL LIGHT phenomenon, 20-40 words. Format: "CREATURE/PHENOMENON NAME CAPS — description with [creature type + color + glow + motion]". Focus on glowing butterflies, dragonflies, fireflies, hummingbirds, sprites, will-o-wisps, pollen-clouds, petal-rain. Every entry has GLOW or SPARKLE or MAGICAL LIGHT. Output as a NUMBERED list, one per line.`,
+  },
+
   // ─── flower-fairy R7: bloom_gown rewritten as SOLID FLOWER-WALL (no fabric, no silhouette names) ───
   faebot_flower_fairy_bloom_gown: {
     format: 'simple',

@@ -1083,14 +1083,14 @@ const ARCHETYPES = {
 
   FAEBOT_FLOWER_FAIRY: {
     description:
-      'PATH-BESPOKE — FaeBot flower-fairy path (2026-05-17 R6). "She IS flowers, not wears flowers" reframe — dress, hair, wings are made FROM flowers (no plain fabric, no plain hair-strands). Tight mad-libs template (Sonnet fills slots, no word-budget compression of density keywords). Wings = saturated jewel-tone gossamer (NOT flowers — frees flower-budget for dress+hair). FaeBot candid mid-action pose (head-bowed / side-profile / mid-interaction). Rendered in painted_fantasy_novel (Manchess/Giancola/Bonner/Froud). 10 path slots + 60%-gated atmospheric_phenomenon.',
+      'PATH-BESPOKE — FaeBot flower-fairy path (2026-05-17 R9). Combines R5 flower-plastered dress structural anchor + R6 FaeBot candid pose + R5 bold jewel-tone color + R9 always-on ethereal magic-creature phenomenon (glowing butterflies/dragonflies/fireflies/sprites/petal-storms — pumps the pretty-ethereal register). 10 path slots + 100%-gated atmospheric_phenomenon (always present).',
     slots: {
       universal: [],
       bot: [],
       path: ['race', 'skin_tone', 'eyes', 'hair_color', 'hairstyle', 'hair_floral', 'bloom_gown', 'wings', 'garden_backdrop', 'candid_action'],
     },
     pickN: {},
-    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 1.0 },
     framingModes: null,
     anchorScaleRange: null,
   },
@@ -1119,6 +1119,20 @@ const ARCHETYPES = {
     },
     pickN: {},
     conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  DINOBOT_DINO_COZY: {
+    description:
+      'PATH-BESPOKE — DinoBot dino-cozy path (2026-05-17 axis-system migration). TENDER DINOSAUR VIGNETTES — nesting / grooming / sleeping / nursing / playing / nuzzling-hatchlings / parent-and-juvenile-intimacy. The warm peaceful side of prehistoric life. Wildlife-documentary cozy-moment cinematography. Reuses DINO_SPECIES (200 dinosaur species) + COZY_DINO_ACTIONS (200 fat-seed cozy actions) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for cozy-specific small accents (hatchlings nearby / soft-light-detail / nest-debris / etc.). 4 path-bespoke axes (biome / species / cozy_action / surprise_element) + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'species', 'cozy_action', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
   },

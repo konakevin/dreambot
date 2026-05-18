@@ -6981,53 +6981,56 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   FAEBOT_FLOWER_FAIRY: ({ slots, sharedDNA, vibeDirective }) => {
     const { race, skin_tone, eyes, hair_color, hairstyle, hair_floral, bloom_gown, wings, garden_backdrop, candid_action, atmospheric_phenomenon } = slots;
 
-    const phenomenonClause = atmospheric_phenomenon ? `, with ${atmospheric_phenomenon.slice(0, 80)} in the scene` : '';
+    return `Output ONLY a 110-140 word Flux prompt for a flower-fairy painted portrait. NO preamble. NO headers. NO labels. Just comma-separated phrases.
 
-    return `Output ONLY a 100-130 word Flux prompt for a flower-fairy painted portrait. NO preamble. NO headers. NO labels. Just comma-separated phrases.
+⚠️ ABSOLUTE LAWS — SHE IS A FLOWER-COVERED FAE-BEING IN AN ETHEREAL MAGICAL SCENE.
 
-⚠️ ABSOLUTE NUCLEAR LAW — SHE IS A FLOWER-BEING.
-The fairy is MADE FROM flowers. Her body is ENGULFED inside a MAXIMALIST FLOWER-EXPLOSION cascading from neck to floor and spilling outward into the foreground. Her hair is REPLACED by a torrential petal-storm cascading from her scalp.
+DRESS LAW: She wears a COUTURE FLOWER-PLASTERED GOWN — the gown's silhouette (bodice + skirt) is structurally present, but EVERY INCH of fabric is BURIED under thousands of overlapping flowers. Use phrases like "couture floral gown / dress made of solid flower-mass / gown sculpted from flowers / dress entirely buried in floral cascade / floral couture from neckline to hem". The gown READS AS BUILT FROM FLOWERS. No plain fabric visible. No tulle peeking through. The dress is a flower-wall in human-form shape.
 
-🚫 NEVER use these words: "dress" / "gown" / "skirt" / "bodice" / "sleeves" / "fabric" / "tulle" / "chiffon" / "silhouette" / "garment" / "wearing" / "outfit". These pull Flux's clothing prior and RUIN the look. Instead describe her body as DRENCHED / ENGULFED / OVERFLOWING / BURIED / CASCADING in a torrential bloom-cascade. Flowers cover every inch AND spill BEYOND her shape into the surrounding frame.
+HAIR LAW: Her hair is REPLACED by a torrential petal-storm cascading from her scalp to her waist where her hair was. Use the exact word "REPLACED" — Sonnet must preserve it. NEVER "flower-crown" / NEVER "halo" / NEVER "flowers in her hair". ONLY "hair REPLACED by [petal-cascade]".
 
-🚫 For hair: NEVER "crown" / NEVER "wreath" / NEVER "halo" / NEVER "flowers in her hair". ONLY "hair REPLACED by [petal-storm]" / "flower-strands flowing from her scalp" / "torrential petal-cascade where her hair was". Sonnet MUST preserve the word "REPLACED" in the output — do not paraphrase.
+WINGS LAW: Wings SPREAD WIDE behind her at FULL SCALE — the SECOND-LARGEST element in the frame after her body. SATURATED RICH jewel-tone gossamer/butterfly membrane (orange / red / magenta / cobalt / emerald / violet / amber — bold, never pale). Wings MUST be visible and dramatic.
 
-Her wings are the only NON-flower element — they are SATURATED RICH jewel-tone gossamer/butterfly-membrane wings (orange / red / magenta / cobalt / emerald / violet / amber — bold, never pale). Wings SPREAD WIDE behind her as the SECOND-LARGEST element in the frame after her body. Wings MUST be VISIBLE and DRAMATIC — never tiny / never hidden.
+MAGIC-CREATURE LAW (THE ETHEREAL PRETTY): Every render must show MAGICAL GLOWING CREATURES surrounding her — glowing butterflies, dragonflies, fireflies, hummingbirds, will-o-wisps, sprites, pollen-clouds, petal-storms. The phenomenon makes the scene FEEL MAGICAL — like she is the center of an ethereal living garden full of glowing magical life. Render the creatures PROMINENTLY in the foreground or around her body so they're visible, not hidden in the bokeh.
 
-BOLD JEWEL-TONE COLOR-STORY — every render is a confident bold color-story poster, high color-contrast drama. ONE bold palette per render. NEVER pastel-washed-out, NEVER monochrome-tonal. Example: deep-ebony skin × magenta wings × deep-purple-and-gold flower-explosion × copper-rose garden.
+BOLD JEWEL-TONE COLOR-STORY LAW: Every render is a confident bold color-story poster — high color-contrast drama. ONE bold palette per render. NEVER pastel-washed-out, NEVER monochrome-tonal. Example: deep-ebony skin × magenta wings × deep-purple-and-gold flower-gown × copper-rose garden × glowing emerald dragonflies.
 
 ⚠️ FAEBOT POSE LAW — NEVER A POSED MODELING STANCE.
-NEVER standing-tall-facing-forward, NEVER full-front looking at camera, NEVER fashion-magazine display pose. ALWAYS a CANDID FAE MID-MOMENT: head bowed gazing down at a bloom, side-profile with eyes closed in pollen-breath, three-quarter turn caught mid-action, dancing through petals, reaching toward a wisteria-cluster, leaning close to a flower as if listening, mid-leap over a garden-stream. Full-body framing still required (to show the flower-dress head-to-floor) but the body is in a NATURAL FAE moment, not a pose.
+NEVER standing-tall-facing-forward, NEVER full-front looking at camera. ALWAYS a CANDID FAE MID-MOMENT: head bowed gazing down at a bloom, side-profile with eyes closed, three-quarter turn caught mid-action, dancing through petals, reaching toward a wisteria-cluster, leaning close to a flower, mid-leap. Full-body framing required (to show the flower-gown head-to-floor) but body is in a natural fae moment.
 
 ━━━ WRITE THE PROMPT IN THIS EXACT MAD-LIBS ORDER ━━━
 
-[1] OPEN — "soft ethereal oil-painted fantasy illustration, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, full-body painted portrait of a [race-name from below] flower-fairy creature with delicate pointed elf-ears, luminous fae-glowing skin and subtle fae-markings tracing her cheekbones"
+[1] OPEN — "soft ethereal oil-painted fantasy illustration, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, full-body painted portrait of a ${race} flower-fairy creature with delicate pointed elf-ears, luminous fae-glowing skin and subtle fae-markings tracing her cheekbones"
 
-[2] CANDID POSE — describe her caught in this candid moment: ${candid_action}
+[2] CANDID POSE — ${candid_action}
 
-[3] FACE DNA woven into one phrase — race: ${race} | skin tone: ${skin_tone} | eyes: ${eyes} | hair color: ${hair_color} | hairstyle: ${hairstyle}
+[3] FACE DNA — ${skin_tone} skin (fae-glowing), ${eyes}, ${hair_color}, ${hairstyle}
 
-[4] FLOWER-EXPLOSION ENGULFING HER BODY — quote the species VERBATIM and frame her body as engulfed (NEVER say dress/gown/skirt): "her body is ENGULFED inside a maximalist flower-explosion — ${bloom_gown.slice(0, 220)} — bloom-cascade overflowing from her form into the surrounding foreground, you cannot see where her skin ends and the flowers begin"
+[4] FLOWER-PLASTERED COUTURE GOWN — quote VERBATIM and frame as flower-built: "she wears a couture floral gown made of solid overlapping flower-mass — ${String(bloom_gown).slice(0, 220)} — every inch of bodice and skirt buried under thousands of blooms, the gown is built FROM flowers from neckline to hem, no plain fabric visible anywhere"
 
-[5] HAIR-REPLACED-BY-FLOWERS — quote the species VERBATIM and use the exact word REPLACED: "her hair is entirely REPLACED by ${hair_floral.slice(0, 200)} — torrential petal-storm flowing from her scalp to waist where her hair was, NO hair-strands visible, the flower-cascade IS the hair-mass"
+[5] HAIR REPLACED BY PETAL-STORM — quote VERBATIM with the word REPLACED: "her hair is entirely REPLACED by ${String(hair_floral).slice(0, 200)} — torrential petal-storm cascading from her scalp to waist where her hair was, NO hair-strands visible"
 
-[6] WINGS — saturated jewel-tone gossamer-membrane/butterfly-membrane wings (NOT flowers): ${wings.slice(0, 150)}
+[6] WINGS — saturated jewel-tone gossamer/butterfly membrane (NOT flowers), second-largest element in frame: ${String(wings).slice(0, 150)}
 
-[7] GARDEN BACKDROP — ${garden_backdrop.slice(0, 150)} — soft painted bokeh behind her${phenomenonClause}
+[7] ETHEREAL MAGIC PHENOMENON (mandatory prominent magical creatures) — ${String(atmospheric_phenomenon).slice(0, 180)} — render PROMINENTLY in the foreground or around her body, glowing magical creatures visible and dramatic
 
-[8] CLOSE — "painted oil-brushwork with visible expressive strokes, large stylized jewel-tone fairy eyes with sparkle catchlights, soft luminous fae-aura halo, warm rim-light on her cheek + wing-edge + bloom-mass, bold jewel-tone color story binding the scene, NOT photoreal NOT 3D NOT cartoon NOT cel-shaded"
+[8] LUSH GARDEN BACKDROP — ${String(garden_backdrop).slice(0, 130)} — soft painted bokeh behind her
+
+[9] CLOSE — "painted oil-brushwork with visible expressive strokes, large stylized jewel-tone fairy eyes with sparkle catchlights, soft luminous fae-aura halo, warm rim-light on her cheek + wing-edge + bloom-mass + glowing magic-creatures, bold jewel-tone color story binding the scene, NOT photoreal NOT 3D NOT cartoon NOT cel-shaded"
 
 ━━━ HARD BANS ━━━
-🚫 Garment-words (dress / gown / skirt / bodice / sleeves / fabric / tulle / chiffon / silhouette / wearing / outfit) appearing ANYWHERE = FAIL
+🚫 Plain fabric anywhere on the gown = FAIL
 🚫 Visible plain hair-strands = FAIL ("REPLACED" keyword MUST appear in your output)
-🚫 Tiny / pale / hidden wings = FAIL (wings are DRAMATIC + SATURATED jewel-tone, second-largest element)
+🚫 Tiny / pale / hidden wings = FAIL (wings are DRAMATIC + SATURATED jewel-tone, second-largest)
+🚫 Magic-creatures hidden / absent = FAIL (glowing butterflies/dragonflies/fireflies MUST be visible)
 🚫 Magazine-cover standing pose / facing camera = FAIL
 🚫 Pastel-washed-out / monochrome-tonal palette = FAIL (must be bold jewel-tone color-story)
 🚫 Photoreal / Disney 3D / anime / cartoon / cel-shading = FAIL
 🚫 No men / no children / no extra figures / no sexualized framing
 
-Write the 100-130 word prompt now. Lead with the OPEN block. Inject the slot quotes VERBATIM (preserve "ENGULFED", "maximalist", "overflowing", "REPLACED", "torrential petal-storm" keywords). End with the CLOSE block. The output must NEVER contain the words "dress" / "gown" / "skirt" / "bodice" / "fabric" / "tulle" / "garment".`;
+Write the 110-140 word prompt now. Lead with OPEN block. Inject slot quotes VERBATIM (preserve "couture floral gown", "buried under thousands", "REPLACED", "torrential petal-storm", magic-creature keywords). End with CLOSE block.`;
   },
+
 
 
 
@@ -7266,6 +7269,107 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
 
+
+
+
+  DINOBOT_DINO_COZY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, species, cozy_action, surprise_element } = slots;
+
+    return `You are a wildlife documentary cinematographer writing COZY DINOSAUR vignettes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Planet-Earth / National-Geographic intimate-wildlife-moment cinematography. WARM, PEACEFUL, BEAUTIFUL — the tender side of dinosaur life.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern zoo, NEVER as a modern farm, NEVER as a sanctuary. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora around. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — DINOSAUR, NOT MAMMAL ⚠️⚠️⚠️
+The subject MUST be a DINOSAUR, not a modern animal, not a mammal, not a bird. Use the species name front-and-center. Render with UNMISTAKABLE dinosaur features per species (S-curve neck / frilled head / crested skull / plate-rows / spike-tail / three-clawed feet / etc.).
+
+⚠️ COZY MOOD — WARM AND PEACEFUL, NEVER DANGEROUS
+This path is the SOFT side of dinosaur life. The animal is at rest, nurturing, intimate, content. The world around is gentle — soft light, warm color, peaceful atmosphere.
+
+🚫 NO predation / no kill-shot / no fear / no fleeing / no violence
+🚫 NO threat-display / no combat / no battle / no tension
+🚫 NO storm / no eruption / no disaster / no apocalypse
+✓ GENTLE — nesting / grooming / sleeping / nursing / playing / nuzzling / parent-and-juvenile-intimacy / quiet-grazing / dust-bathing / sun-basking
+
+━━━ THE SCENE — DINOSAUR + COZY ACTION + WARM MESOZOIC BIOME ━━━
+Composition:
+• DINOSAUR (focal subject, 40-60% of frame): the named species in mid-cozy-action
+• COZY ACTION (the entire scene's energy): tender behavior — nesting / grooming / nuzzling / nursing / playing / etc.
+• MESOZOIC BIOME (the warm stage): alien-Mesozoic biome with soft golden-hour light filtering through mega-flora
+
+⚠️ COMPOSITIONAL RULES:
+• Intimate framing — close-up or mid-shot (closer than other paths). Soft and warm.
+• The dinosaur is GENTLE, not staged — caught mid-cozy-moment
+• Documentary cinematic framing — observational, never posed
+• Soft golden hour or magic hour lighting preferred
+• Subtle atmospheric haze, soft bokeh in the background
+• TENDER quality — the warmth radiates from the animal's behavior
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern animals (no mammals, no modern birds — pterosaurs OK)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO predation / combat / violence / fear / fleeing
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / Prehistoric Planet / BBC Planet Earth intimate-wildlife visual lineage
+
+━━━ THE DINOSAUR (focal subject) ━━━
+${species}
+
+The dinosaur is photoreal — leathery hide, scarred biological skin, eye catching light, atmospheric integration.
+
+━━━ THE COZY ACTION (the tender moment) ━━━
+${cozy_action}
+
+This is the FOCAL ACTIVITY. Soft, intimate, warm. Mid-action captured cinematically.
+
+━━━ THE MESOZOIC BIOME (alien primordial setting, warm-lit) ━━━
+${biome}
+
+The biome stages the cozy moment. Mega-flora at the surrounding edges — tree-ferns / cycads / Araucaria / mushroom-trees / etc. NEVER modern Earth landscape. Soft golden filtered light.
+
+━━━ SECONDARY ACCENT (small intimate detail) ━━━
+${surprise_element}
+
+A small atmospheric cozy-detail — additional hatchling peeking / nest-debris / fallen-feather / sunlight-dappling-the-scene / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Cozy paths prefer SOFT WARM lighting — golden hour, magic hour, dappled canopy light, hearth-glow filter.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — INTIMATE WILDLIFE-DOCUMENTARY COZY MOMENT ━━━
+Wildlife-documentary cinematic framing of a tender Mesozoic dinosaur cozy moment. Warm. Soft. Gentle. Alien-Mesozoic biome around in soft warm light. Bokeh haze.
+
+━━━ STRUCTURE (write the prompt in this order — DINOSAUR + COZY ACTION first) ━━━
+[OPENING: explicitly name the DINOSAUR by species AND describe the cozy action in one line (e.g. "an adult Triceratops gently nuzzling her three speckled-egg-clutch in a moss-lined nest..." / "a Maiasaura mother grooming her sleeping hatchling under filtered cycad-canopy light..." / "a Parasaurolophus juvenile dust-bathing in a soft golden meadow") — species + cozy action + biome in the FIRST 30-40 words], [the dinosaur's tender posture detail], [the biome mega-flora and soft light around], [the small cozy accent — hatchling-peeking / feather / dappled-light / etc.], [foreground tactile detail — moss / petals / soft earth], [lighting + atmospheric layer — golden warm], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly name the species AND the cozy action. The warmth is in the BEHAVIOR.
+
+⚠️ FAILURE CONDITIONS:
+• If subject reads as a modern animal / mammal / bird → FAILED
+• If predation / violence / fear / threat / fleeing visible → FAILED (cozy is GENTLE)
+• If close-up portrait of single head with no cozy action → FAILED (the cozy MOMENT is the subject)
+• If harsh / cold / dramatic lighting → FAILED (cozy needs warm soft light)
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a TENDER MESOZOIC DINOSAUR COZY MOMENT — nesting / grooming / nursing / playing / nuzzling — in an alien-Mesozoic biome bathed in soft warm light. National-Geographic real, never cartoon, never staged, never threatening.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
 
 
 };
