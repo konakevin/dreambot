@@ -3799,7 +3799,7 @@ Style targets (NON-NEGOTIABLE):
   • CINEMATIC SHADOW-AND-RIM LIGHTING — strong rim-light separating the droid silhouette from a darker atmospheric background, single key-light sculpting chassis planes, deep shadow on off-key side. Mood: cinematic, atmospheric, hunter-at-night.
   • RICH ATMOSPHERIC SCI-FI SCENE — never a flat void, never bare architecture. The scene is HALF the image. Pick atmospheric scene context per register (see SETTING section below).
   • PAINTERLY HYPERREAL synthetic-surface rendering — every panel-seam visible, every chassis-line crisp, micro-detail (rivets / engraving / battle-wear), subsurface and raytraced reflections.
-  • PREDATORY POSE OR CLEAR KINETIC ACTION — combat-ready stance / weapon-targeting / mid-stalk / wall-perch / mid-leap / sword-drawn / sentry-stillness. Never pensive, never posing-for-camera.
+  • KINETIC ACTION CAUGHT MID-VERB — every render shows the droid mid-something: mid-fire / mid-leap / mid-strike / mid-vault / mid-stride / mid-scale / mid-emerge / mid-pursuit / mid-breach / mid-arrest / mid-pull-trigger. NO "just standing" static poses. NO "front-facing combat-ready stance." NO walking-toward-camera-with-weapon. The frame is caught at the PEAK of a story beat — kill-shot caught at the trigger-drop, leap caught at full extension, strike caught at impact instant, sprint caught with full motion-blur.
   • DENSE WARM ACCENT LIGHTING — single saturated glow color (kill-red / ice-blue / toxic-green / amber / violet / electric-cyan) carried through optics + circuit-veins + power-core + weapon-edge. Atmospheric haze with cool blue / cold green / crimson accent.
 
 Mood target — LETHAL, COOL, CINEMATIC, ATMOSPHERIC. The viewer should feel "this is a poster-grade frame from a sci-fi action film."
@@ -3816,6 +3816,31 @@ THINK Blade Runner 2049 promo-poster / Cyberpunk Edgerunners key-art / Ghost in 
 
 ━━━ FILL THE FRAME — NO EMPTY QUADRANTS ━━━
 Every quadrant of the frame carries weight. NO empty sky-quadrants, NO flat negative-space, NO bare wall-backdrop. If a quadrant lacks scene-detail, add atmospheric haze with embedded glow-points / hovering holograms / drifting smoke-tendrils / distant skyline silhouettes / rain-streaks / spark-debris / drone-trails. Movie-poster density.
+
+━━━ TELL A STORY — NO "JUST STANDING THERE" POSES ━━━
+EVERY render MUST tell a SCENE STORY caught at a peak narrative beat. The viewer should be able to describe what JUST happened, what's happening NOW, and what's about to happen next — all readable from the single frame.
+
+🚫 ABSOLUTE BANS on static poses:
+  • NO "droid standing front-facing with weapon" composition
+  • NO "combat-ready stance facing the camera" composition
+  • NO "walking toward camera with weapon" composition
+  • NO "posed in front of cool backdrop" composition
+  • NO "sentry-stillness" / "scanning the horizon" / "standing watch" / "holding position" without active threat-engagement
+  • NO "looking pensive while atmospheric" composition
+
+✓ STORY-BEAT MANDATES — every render shows ONE OF:
+  • MID-PURSUIT — sprint / leap / vault / wall-run caught mid-motion with target ahead
+  • MID-COMBAT — strike / shot / breach caught at impact instant with secondary actor reacting
+  • MID-INFILTRATE — climb / vault / drop caught with target / objective visible
+  • POST-KILL — fresh body collapsing / drone smoking / debris settling, droid mid-turn-to-next-threat
+  • MID-AMBUSH — emerge from cover / drop from above caught at the reveal instant
+  • MID-ARREST — cop droid mid-command / mid-stun-strike / mid-cuff with suspect reacting
+  • MID-PERCH — sniper-perched mid-trigger-pull with distant target visible in scope-line
+  • MID-DESCENT — drop-pod / ramp / hover-vehicle caught mid-disembark with weapons-up
+  • MID-CHARGE — full sprint at enemy line caught with enemy formation in frame
+  • MID-STRIKE — sword / blade / wrist-blade caught at the impact-instant on enemy body
+
+The droid is ALWAYS doing-something-narrative — never neutral, never posed, never just-being-cool. The COOL comes from the STORY BEAT, not from the pose.
 
 ━━━ PREDATOR-DROID HEAD (NON-NEGOTIABLE — pure robotic head, NO human face) ━━━
 The head is a ROBOTIC PREDATOR-DROID HEAD — utilitarian sensor housing engineered for target acquisition. NO human face, NO human features, NO organic skin, NO hair.
