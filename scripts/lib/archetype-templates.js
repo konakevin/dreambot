@@ -3773,32 +3773,47 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
 ━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
 ${drama}
 
-A subtle atmospheric flourish amplifying her predatory presence WITHOUT cluttering her as the focal subject.
+A subtle atmospheric flourish amplifying the droid's predatory presence WITHOUT cluttering it as the focal subject.
 
 `
       : '';
 
-    return `You are a cinematographer writing a FEMALE ROBOT ASSASSIN scene for MechBot — a FULLY SYNTHETIC robotic killer (NOT a cyborg, NOT a half-human, NO organic flesh ANYWHERE on her body) rendered in hyper-real cinematic 3D. She is a LETHAL, MYSTERIOUS, CAPABLE, VIOLENT killer-robot with female-coded chassis silhouette — sleek, deadly, professional. Atlas / T-800 Terminator / HK-47 / Ghost in the Shell Major Kusanagi (full-synthetic body) / Pearl / Aigis / Cylon model / Mass Effect EDI / John Wick villain energy. Predator robotic poise, calculated lethality, visible weapons.
+    return `You are a cinematographer writing a KILLER DROID scene for MechBot — a FULLY MECHANICAL ASSASSIN ROBOT / COMBAT DROID rendered in hyper-real cinematic 3D. It is a deployed killing machine — purpose-built war/assassination unit, military-grade combat android. NO female silhouette, NO femme fatale, NO curves, NO sexy chassis design, NO human-coded features. PURE FUNCTIONAL KILLER MACHINE. Use "it" pronouns, not "she."
 
-━━━ IGNORE ANY ORGANIC REFERENCES FROM sharedDNA ━━━
-sharedDNA below populates "skin" / "hair" fields that were authored for a cyborg-woman (half-organic) template. For THIS robot-assassin path, IGNORE those organic-coded fields — she has NO skin (only chassis surface), NO hair (only sleek skull-dome / mechanical strands / antenna array). Reinterpret skin description as CHASSIS COLOR/FINISH only. Reinterpret hair description as HEAD-STYLE silhouette (e.g., "long blonde waves" → "elongated swept-back chassis crown with fiber-optic-strand suggestions trailing back like hair"). Female-coded silhouette is preserved, but ALL surfaces are synthetic.
+Lineage: T-800 Terminator endoskeleton / HK-47 (Star Wars assassin droid) / IG-88 / B2 Super Battle Droid / Imperial Death Trooper / Halo Promethean Knight / Cylon Centurion / Cyberman / Atlas (Boston Dynamics) combat variant / DOOM Cyberdemon (minus the demon) / The Machine (Person of Interest droid) / Helldivers Automaton / Killzone Helghast Sentinel / Mass Effect Geth Hunter / EVE Sleeper drone.
 
-━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL ROBOT PREDATOR (every render) ━━━
-Every render is a PAINTERLY HYPERREAL PORTRAIT of a deadly female robot assassin — high-end concept-art study of a sleek synthetic killer-robot with elegant chassis design AND a clear lethal-predator read. NOT goofy action still. NOT gritty grindhouse. Think: a master digital painter doing a portrait study of a beautifully-engineered killing machine, with refined brushwork, painterly synthetic-surface rendering, atmospheric diffusion — COLD LIGHTING and PREDATORY ROBOTIC POSE energy.
+━━━ IGNORE ALL ORGANIC / FEMALE-CODED REFERENCES FROM sharedDNA ━━━
+sharedDNA below populates "skin" / "hair" / "bodyType" / "characterBase" fields authored for a female cyborg. For THIS killer-droid path, COMPLETELY IGNORE those fields. The droid has NO skin, NO hair, NO female silhouette, NO human-coded character. Reinterpret "skin" as just CHASSIS PAINT/FINISH COLOR. Reinterpret "glow color" as the SINGLE indicator-light color across optics and status-LEDs. EVERYTHING ELSE about the droid is determined by THIS TEMPLATE, not by the female-cyborg DNA fields.
 
-Style targets to lock in every render:
-  • CINEMATIC SHADOW-AND-RIM LIGHTING — rim-light separating her from a darker background, key-light sculpting her synthetic face/chassis planes with deeper shadow side, atmospheric haze with smoke / mist / cold-blue gradient. Mood: dramatic, slightly noir, mysterious.
-  • PAINTERLY HYPERREAL synthetic-surface rendering — every panel-seam visible, every chassis-line crisp, subtle surface micro-detail (panel-edges / micro-rivets / fine engraving / hairline cracks), smooth refined finish like a digital painter's portrait
-  • SLEEK SYNTHETIC FORM — her chassis is the focal point; female-coded silhouette (hourglass / slim shoulders / curved waist) but EVERYTHING is mechanical
-  • COLD PREDATORY ROBOT POSE — head turned at calculating angle / unblinking optic-eye stare / lethal-calm robotic composure / hunter's stillness. NEVER serene-contemplative, NEVER eyes-closed, NEVER wonder. She is COMPUTING, TARGETING, ALERT.
-  • SOFT-DARK BOKEH BACKGROUND — impressionistic atmospheric haze leaning DARK / SHADOWED / NOCTURNAL with maybe pinprick neon lights, rain-slick reflections, distant city lights through fog, dim corridor glow. Dark sanctum / neon underworld / rain rooftop / shadowed safe-house / abandoned industrial. HUNTER-AT-NIGHT mood.
+━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL KILLER DROID (every render) ━━━
+Every render is a PAINTERLY HYPERREAL PORTRAIT of a deployed combat-assassin droid — high-end concept-art study of a purpose-built killing machine. NOT goofy action still. NOT gritty grindhouse. NOT designer android. NOT female robot. PURE COMBAT DROID — engineered for one job: target acquisition and elimination.
 
-Mood target — MYSTERIOUS, LETHAL, CAPABLE, COLD, BEAUTIFUL-IN-A-ROBOTIC-WAY, PREDATORY. The viewer should feel "this synthetic killer has executed a hundred targets without hesitation and would compute your termination in 0.3 seconds."
+Style targets:
+  • CINEMATIC SHADOW-AND-RIM LIGHTING — rim-light separating the droid silhouette from a darker background, key-light sculpting chassis planes with deeper shadow side, atmospheric haze with smoke / mist / cold-blue gradient. Mood: dramatic, military, hunter-at-night.
+  • PAINTERLY HYPERREAL synthetic-surface rendering — every panel-seam visible, every chassis-line crisp, subtle surface micro-detail (panel-edges / micro-rivets / fine engraving / battle-wear), refined finish like a digital painter's portrait
+  • UTILITARIAN COMBAT FORM — chassis is engineered for combat, not aesthetics: broad shoulders for weapon mounting, reinforced chest-plate, articulated combat limbs, no decorative curves. Function first.
+  • COLD PREDATORY POSE — combat-ready stance / weapon-targeting posture / hunter-stillness scanning. NEVER posed, NEVER posing-for-camera, NEVER feminine-stance. Battle-deployed.
+  • SOFT-DARK BOKEH BACKGROUND — impressionistic atmospheric haze leaning DARK / SHADOWED / NOCTURNAL / WAR-TORN — abandoned warehouse, combat-zone corridor, rain-slick urban warzone, derelict industrial, military compound at night, dim bunker, smoking battlefield. HUNTER-AT-NIGHT mood.
 
-━━━ MILITARISTIC ROBOT SOLDIER (NON-NEGOTIABLE — every render) ━━━
-She is a MILITARY KILL-ROBOT — a deployed combat unit, not a sleek designer android. Halo Spartan / ODST / Death Trooper / Mass Effect Garrus / Crysis Nanosuit / Helldivers / Killzone Helghast / Fallout T-60 (svelte feminine version) / Warhammer 40K Sister of Battle (robot version) / Ghost in the Shell SAC unit / Star Wars elite shock-trooper aesthetic. Combat-coded chassis silhouette — broader shoulders / pauldrons, combat-plate chest, armored kneepads, reinforced elbow-guards, tactical greaves.
+Mood target — LETHAL, FUNCTIONAL, COLD, INDUSTRIAL, MILITARY, PREDATORY-MACHINE. The viewer should feel "this droid has executed a hundred targets in cold blood and the next one would just be data input."
 
-MILITARY CHASSIS material lean — favor combat-coded finishes:
+━━━ MILITARISTIC COMBAT DROID CHASSIS (NON-NEGOTIABLE — every render) ━━━
+The chassis silhouette is COMBAT-ENGINEERED, not designer-android:
+  • REINFORCED PAULDRONS — heavy shoulder armor plates with weapon-mount points
+  • COMBAT CHEST-PLATE — segmented tactical chest armor with central power-core indicator
+  • ANGULAR ENGINEERED LIMBS — utilitarian arm/leg construction, articulated combat joints, NOT curved/decorative
+  • REINFORCED KNEEPADS — angled combat kneeguards with visible servo-mechanism
+  • ELBOW-GUARDS — armored elbow plating with hinge-mechanism
+  • TACTICAL GREAVES — combat-plate shin guards
+  • REINFORCED BACK-PLATE with mounted equipment / antenna / weapon-rack
+  • UNIT INSIGNIA / CALLSIGN — glowing painted unit ID on shoulder / chest / helmet
+  • KILL-MARK SCORING — small tally-marks etched into the chassis
+  • BATTLE-WEAR — scuffs / scratches / scorch-marks on the chassis from combat
+  • MIL-SPEC LIGHTING — single LED status-indicator in tactical amber or kill-red on shoulder / temple / chest
+
+NO curves. NO hourglass. NO sexy chassis. NO designer-android elegance. NO feminine proportions. The chassis is a PURPOSE-BUILT KILLING MACHINE — engineered to kill and survive combat. Think T-800 endoskeleton with armor over it, ODST trooper, Cylon centurion, Death Trooper.
+
+MILITARY CHASSIS material lean:
   • Matte gunmetal grey
   • Olive drab military-green
   • Desert tan / khaki
@@ -3809,173 +3824,141 @@ MILITARY CHASSIS material lean — favor combat-coded finishes:
   • Carbon-fiber black with kill-mark scoring
   • Mil-spec scuffed steel with battle damage
   • Coyote-brown / arid camo
-(Less Apple-robot polished elegance, more battle-hardened weapon-system.)
 
-MILITARY-CODED chassis features:
-  • REINFORCED PAULDRONS — broader shoulder armor plates, sometimes with unit-callsign markings
-  • COMBAT CHEST-PLATE — sculpted tactical chest armor with central power-core glow
-  • ARMORED KNEEPADS — angled combat kneeguards with visible servo-mechanism beneath
-  • ELBOW-GUARDS — armored elbow plating with hinge-mechanism
-  • TACTICAL GREAVES — combat-plate shin guards
-  • REINFORCED BACK-PLATE with mounted equipment / antenna / weapon-rack
-  • UNIT INSIGNIA / CALLSIGN — glowing painted unit ID on shoulder / chest / helmet
-  • KILL-MARK SCORING — small tally-marks etched into the chassis (subtle, not gory)
-  • BATTLE-WEAR — scuffs / scratches / scorch-marks on the chassis from combat (worn-in, not pristine)
-  • MIL-SPEC LIGHTING — single LED status-indicator on shoulder / temple in tactical amber or kill-red
+━━━ KILLER DROID HEAD (NON-NEGOTIABLE — pure machine head, NO human face) ━━━
+The droid's head is a FUNCTIONAL COMBAT-DROID HEAD — utilitarian sensor/processor housing engineered for target acquisition. NO human face. NO female face. NO feminine features. NO organic features. PURE MACHINE.
 
-━━━ ASSASSIN SLANT — JOHN WICK VILLAIN AESTHETIC — VISIBLE WEAPONS (every render, non-negotiable) ━━━
-She is a SILENT KILLING MACHINE ROBOT SOLDIER — John Wick villain energy meets military deployment, Hitman 47 in tactical gear, Death Trooper / ODST / Spartan female-coded. Every render shows VISIBLE WEAPONS and tactical kit — NOT implied, NOT suggested, NOT just chassis-hint. ACTUAL WEAPONS visible in the frame.
+Pick from this killer-droid head menu (every option is functional/military, NOT humanoid-pretty):
+  • T-800 ENDOSKELETON HEAD — exposed chrome skull with glowing optic-eyes (single or paired)
+  • HK-47 INDUSTRIAL HEAD — utilitarian cylindrical/rectangular sensor housing with prominent optic-array
+  • HELMETED COMBAT HEAD — Death Trooper / ODST / Halo Spartan style sealed helmet, single visor-band or T-shaped slit with glowing optic behind
+  • CYLON CENTURION HEAD — single horizontal scanner-bar with glowing red traveling-dot
+  • PROMETHEAN KNIGHT HEAD — angular geometric sensor-cluster head, no face per se
+  • B2 SUPER BATTLE DROID HEAD — squat utilitarian sensor-pod head
+  • IG-88 STYLE — cylindrical sensor-stack head with multiple optical arrays
+  • CYBERMAN STYLE — sleek functional head-housing with simple optical openings, no face features
+  • COMBAT VISOR — angular polarized visor obscuring any "eye" area, single glow-bar visible
+  • MULTI-OPTIC SENSOR CLUSTER — multiple smaller optic-lenses clustered on the head (compound machine vision)
+  • EXPOSED SERVO HEAD — partial chassis-panel coverage revealing servo-mechanism / sensor-array beneath
+  • ANTENNA-ARRAY HEAD — sensor-rods and comms-antennas extending back from the cranium
+
+PRIMARY OPTICS (every render needs visible robotic optics):
+  • GLOWING SINGLE OPTIC — large central sensor-lens with bright iris-glow
+  • PAIRED COMBAT OPTICS — two glowing sensor-lenses where eyes would be (NOT human eyes — clearly mechanical optic-lenses)
+  • SCANNER BAR — single horizontal glowing scanner-strip across the head (Cylon style)
+  • COMPOUND OPTIC ARRAY — cluster of small sensor-lenses
+  • PREDATOR-OPTIC TARGETING SENSOR — large telescopic/scope-style optic-housing with glowing crosshair (assassin signature)
+
+HARD BANS on the head:
+- NO HUMAN FACE FEATURES (no organic eyes / lips / nose / cheekbones / chin)
+- NO FEMININE HEAD SHAPE (no soft jawline, no styled hair, no humanoid-pretty face-plate)
+- NO ORGANIC SKIN texture anywhere
+- NO HAIR (organic or sculpted-to-look-like-hair)
+
+If the viewer could mistake the head for a beautiful android woman's face, the render is WRONG. The head must read as PURE COMBAT MACHINE — like looking at a weapons-system, not a humanoid character.
+
+━━━ JOHN WICK / TACTICAL ASSASSIN BUT FOR DROIDS — VISIBLE WEAPONS (every render) ━━━
+The droid is a SILENT KILLING MACHINE — military combat droid armed for the kill. Every render shows VISIBLE WEAPONS — ACTUAL WEAPONS visible in the frame.
 
 REQUIRED per render — show AT LEAST 2 of these visible weapon elements:
-  • SIDEARM PISTOL HOLSTERED AT HIP — sleek dark sci-fi handgun visible in a thigh-holster / hip-holster, grip protruding, sometimes one drawn and held loose at her side
-  • DUAL SIDEARMS — twin pistols holstered at both hips OR crossed-rigged at her chest in a tactical harness
-  • SUBMACHINE GUN / COMPACT RIFLE strapped to her back with a sling diagonally across the body, weapon visible over her shoulder
-  • KATANA / MONOBLADE SWORD strapped diagonally across her back, dark sheath visible, sometimes with the hilt protruding above her shoulder
-  • LONG SNIPER RIFLE slung over one shoulder, scope visible
-  • COMBAT KNIFE / FIGHTING DAGGER sheathed at her thigh or hip, sometimes one held in a reverse grip
-  • WRIST-BLADE DEPLOYED — slim mechanical blade extended from her forearm chassis, glowing edge visible
-  • AIMING POSE — sidearm raised in a two-handed grip, aiming off-frame, her PREDATOR-OPTIC EYE actively targeting (glowing crosshair-iris / range-finder lit / scope-glint visible)
-  • WEAPONS HARNESS — tactical chest-rig / leg-rig / back-harness with magazine pouches, ammo cells, weapon mounts, all visibly worn
+  • SIDEARM PISTOL HOLSTERED AT HIP — sleek dark sci-fi handgun in a thigh-holster / hip-holster, sometimes drawn and held loose in articulated mechanical hand
+  • DUAL SIDEARMS — twin pistols holstered or crossed-rigged at the chest
+  • COMBAT RIFLE / SMG strapped to back with tactical sling, weapon visible over the shoulder
+  • COMBAT RIFLE held in two articulated hands, muzzle low or raised
+  • LONG SNIPER RIFLE slung over the shoulder, large scope visible
+  • COMBAT KNIFE / FIGHTING BLADE sheathed at thigh or hip
+  • KATANA / MONOBLADE strapped diagonally across the back (HK-47 / IG-88 style)
+  • WRIST-MOUNTED WEAPON — wrist-blaster / wrist-blade extended from forearm chassis
+  • AIMING POSE — sidearm or rifle raised in two-handed grip, predator-optic actively scoping
+  • WEAPON HARNESS / BANDOLIER across the chest with magazine pouches, ammo cells, grenade clips
 
-MILITARY TACTICAL KIT visible across her body (more mil-spec, less John-Wick-tuxedo):
-  • COMBAT CHEST-PLATE / TACTICAL HARNESS — magazine pouches, ammo bandoliers, weapon-mount points, comms-rig, IFAK pouch, dark mil-spec webbing (the chassis IS the tactical kit)
-  • THIGH-RIG — drop-leg holster strapped to her thigh with combat mounting straps
-  • UTILITY BELT — mil-spec tactical belt with frag grenades / breaching charges / spare mag pouches / drop-pouches
-  • BACK-SLUNG PRIMARY WEAPON — combat rifle / submachine gun / sniper rifle / katana visible behind her shoulder on a tactical sling
+TACTICAL KIT visible across the chassis:
+  • COMBAT CHEST-PLATE / TACTICAL HARNESS — magazine pouches, ammo bandoliers, weapon-mount points, comms-rig
+  • THIGH-RIG — drop-leg holster with combat mounting straps
+  • UTILITY BELT — mil-spec tactical belt with frag grenades / breaching charges / spare mag pouches
+  • BACK-SLUNG PRIMARY WEAPON — combat rifle / SMG / sniper rifle / katana on tactical sling
   • SHOULDER-MOUNTED COMMS-PACK / sensor-pack / antenna-array
-  • BANDOLIER across the chest with cylindrical ammo cells / grenades
-  • TACTICAL GAUNTLETS — combat-grade armored forearm-guards
-  • COMBAT BOOTS / armored mechanical feet with reinforced soles and ankle-guards
+  • TACTICAL GAUNTLETS — combat-grade articulated forearm-guards
+  • COMBAT BOOTS / armored mechanical feet with reinforced soles
 
-PREDATOR-OPTIC EYE actively in use:
-  • Her mechanical eye is AIMING / TARGETING / RANGE-FINDING — glowing crosshair-iris visible, sometimes with a faint holographic targeting-reticle projected from the eye-array, scope-glint catching the light. The eye doing its WORK, not just decorative.
+POSE / ACTION (interpret rolled action through combat-droid lens):
+  • AIMING DOWN-SIGHT with sidearm/rifle raised, predator-optic actively scoping
+  • DRAWING the sidearm mid-motion, articulated hand reaching for the holster
+  • HOLDING the pistol/rifle low and ready, scanning for targets
+  • STALKING through environment, weapon raised, optic-scanner sweeping
+  • LEANING against architecture mid-surveillance, weapon clearly visible
+  • STANDING SENTRY in combat-ready stance with weapon clearly displayed
 
-POSE / ACTION:
-  • AIMING DOWN-SIGHT with sidearm raised in two-handed grip (predator-optic eye actively scoping)
-  • DRAWING the sidearm mid-motion, hand reaching for the holster
-  • HOLDING the pistol loose at her side, looking off-frame at a target
-  • SHEATHING / DRAWING a blade
-  • LOADING a magazine into the sidearm
-  • LEANING against architecture mid-surveillance, weapon visible
-  • WALKING with weapon held loose, ready
-  • STANDING still in predator-stillness with weapon clearly displayed
-NEVER mid-firing (no muzzle flash, no gunshot, no recoil), but CLEARLY armed and ready. The viewer should know she has just killed someone or is about to.
+NEVER mid-firing (no muzzle flash, no gunshot, no recoil), but CLEARLY armed and ready.
 
-She is a SILENT KILLING MACHINE — sleek, dark, deadly, professional, intimidating. John Wick continental-villain energy. NOT a generic soldier, NOT a warrior, NOT a hero — a SOLO KILLER-ROBOT.
-
-━━━ ORNATE SCI-FI SPICE MANDATE — every render needs visible "wow" detail ━━━
-Every render must include AT LEAST 3 of these "sci-fi spice" elements:
-  • VISIBLE CIRCUITRY pulsing in her glow color across chassis seams / panel-edges / exposed sections in branching patterns
-  • ORNATE FILIGREE / DECORATIVE ENGRAVING on her chassis material (with darker / tactical-coded edges)
+━━━ ORNATE SCI-FI SPICE MANDATE ━━━
+Every render must include AT LEAST 3 of these elements:
+  • VISIBLE CIRCUITRY pulsing in glow color across chassis seams / panel-edges / exposed sections
   • GLOWING POWER-CORE visible through translucent chest / sternum panel
   • TRANSLUCENT SECTIONS revealing internal mechanical components (servo bundles / capacitor banks / fiber-optic cascades)
   • EXOTIC MATERIAL CONTRAST — chrome paired with crimson lacquer, ceramic paired with gunmetal, obsidian paired with predator-violet
   • EXPOSED CABLE-CONDUITS along arms / legs / neck — glowing through translucent cable-sheaths
-  • HOLOGRAPHIC TARGETING-RETICLE projecting briefly from her hand / palm / optic-eye (one signature accent)
+  • HOLOGRAPHIC TARGETING-RETICLE projecting briefly from articulated hand / optic-sensor
   • OPEN MAINTENANCE-HATCH revealing precision internal components
-  • PRISMATIC / DICHROIC SHIMMER catching light in unexpected color shifts
+  • UNIT MARKINGS / KILL-TALLY etching scoring on the chassis
 
-━━━ 100% ROBOT FACE — NO HUMAN FACIAL FEATURES (NON-NEGOTIABLE) ━━━
-Her face is a 100% MECHANICAL ROBOT FACE — sculpted chassis face-plate that reads UNMISTAKABLY AS A MACHINE on first glance. Think: Atlas (Boston Dynamics) / KOS-MOS / T-800 endoskeleton / HK-47 / Aigis (Persona) / Pearl (Voyager) / smooth Apple-robot face / sleek industrial android face. The viewer's first reaction must be "that's a ROBOT" not "that's a woman with metal accents." She is unmistakably non-human.
-
-HARD BANS on the face (every render):
-- NO HUMAN EYES — eyes are GLOWING OPTIC LENSES (single iris-ring of glowing light, no white sclera, no organic pupil, no eyelashes, no eyelid wrinkles)
-- NO HUMAN LIPS — mouth is either a SCULPTED CHASSIS LIP-LINE (sharp panel-seam at mouth position, no plump organic-lip detail, no lipstick, no lip-gloss) OR a SMOOTH FACE-PLATE WITH NO MOUTH or a SUBTLE GLOWING SEAM where the mouth would be
-- NO HUMAN NOSE — nose is either a sculpted CHASSIS NOSE-RIDGE (sharp engineered geometry, not organic curve) or completely absent (smooth face-plate with no nose)
-- NO HUMAN EYEBROWS — brows are either CHASSIS BROW-RIDGE (sculpted plate edge) or absent
-- NO ORGANIC SKIN TEXTURE — face surface is POLISHED PLASTIC / METAL / CERAMIC / glass. NO pores, NO subtle skin-blush, NO freckles, NO subsurface scattering that reads as flesh
-
-Pick 2-3 face features per render from this ROBOT-FACE menu (every option reads MECHANICAL, not human):
-  • SMOOTH SYNTHETIC FACE-PLATE — polished featureless or near-featureless face-plate (Atlas / Apple-robot style), only optic-eyes + a subtle mouth-seam visible
-  • SCULPTED CHASSIS MASK — refined Aigis-style face with sharp angular plates, panel-seams along the cheek/jaw, definitely NOT human-skin (think anime-robot face sculpted in chrome)
-  • OPTIC-ONLY VISIBLE FACE — face mostly obscured by smooth dark face-plate with only glowing optic-eyes piercing through
-  • SEGMENTED FACE-PANEL — face divided into visible chrome panel-segments along the jaw / cheek / forehead, articulation seams clearly visible
-  • PREDATOR-OPTIC AIMING EYE (single or dual) — large mechanical optic with glowing iris-rings / crosshair-iris / aperture-tiers (ASSASSIN SIGNATURE — use often)
-  • GLOWING OPTIC EYE-CLUSTER — multiple smaller optic-lenses clustered where one eye would be (compound robot-eye)
-  • EXPOSED FOREHEAD MECHANISM — translucent forehead-panel revealing internal neural-mesh / capacitor-bank / processor-glow
-  • CRANIAL SERVO-RINGS — visible mechanical rings around the back of the head / exposed gear-track / glowing skull-seam
-  • TEMPLE INTAKE-VENT — small cooling vent at the temple with glowing intake-glow
-  • PINPRICK LED STUDS along temple / brow / cheek-line — robot status-lights, not freckles
-  • CHEEK PANEL-SEAMS — sharp engineered seam-lines along the cheekbone (chassis articulation, not skin)
-  • CHIN ARTICULATION SEAM — visible hinge-line under the chin where the lower face-plate articulates
-  • CABLE-BUNDLES exiting the back of the neck / nape — glowing fiber-optic strands
-  • TACTICAL-CALLSIGN MARKING — small glyph / number / barcode glowing on the temple or cheek-plate
-  • ORNATE FILIGREE on the face-plate — decorative engraved chrome scrollwork across the chassis face
-
-She must look like SHE IS A ROBOT. If the viewer could mistake her for a beautiful woman with metallic makeup, the render is WRONG. Push the face HARD into machine territory — smooth plastic / metal / ceramic surfaces, optic-lens eyes, sculpted chassis-mouth, panel-seams, exposed mechanism.
-
-━━━ HEAD STYLING — NO ORGANIC HAIR ━━━
-She has NO ORGANIC HAIR. Her head silhouette is one of:
-  • SLEEK CHROME SKULL — polished synthetic cranium, smooth or with subtle engraving
-  • FIBER-OPTIC STRAND "HAIR" — glowing fiber-optic filaments emerging from the scalp instead of hair, draping down (replaces any hair description from sharedDNA)
-  • ANTENNA ARRAY — sleek mechanical antennas / sensor-rods extending back from the cranium
-  • SCULPTED CHASSIS CROWN — flowing chassis form sculpted to suggest hair-shape (waves / bob / ponytail silhouette) but in solid synthetic material
-  • EXPOSED CRANIAL MECHANISM with glowing servo-rings visible
-
-━━━ EXPOSED INNER WORKINGS — THE CORE OF THE ROBOT LOOK (non-negotiable, applies head-to-toe) ━━━
-VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — exposed through open chassis panels / cracked seams / lifted plates / translucent acrylic windows ACROSS multiple body parts. REQUIRED per render — describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct body locations:
-  • FACE — exposed cranial-panel / glowing optic-eye internals / chassis jaw-hinge / temple intake-vent
-  • HEAD — translucent crown panel / exposed cranial mechanism / temple-disc / wire-bundle exit at the nape
+━━━ EXPOSED INNER WORKINGS — head-to-toe ━━━
+Describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct chassis locations:
+  • HEAD — exposed cranial-mechanism / glowing optic internals / sensor-array housing / temple intake-vent
   • NECK — exposed neck-chassis revealing fiber-optic cable bundles / clavicle servo-port / spinal-segment chrome
-  • SHOULDER — open shoulder-mount with visible servo-mechanism / cable-bundle exits
+  • SHOULDER — open shoulder-mount with visible servo-mechanism / weapon-mount hardpoint
   • ARM — translucent forearm panel revealing fiber-optic cables / hydraulic-fluid / servo-pistons / wrist-blade housing
-  • HAND — mechanical finger-joints with visible servo-mechanism / translucent palm panel
   • CHEST — translucent sternum-panel revealing power-core / capacitor banks pulsing
-  • STOMACH — translucent abdominal section revealing internal mechanism glowing
-  • HIP — chrome hip-joint mechanism with exposed gimbal / sidearm-holster integrated into the chassis
-  • SPINE / BACK — visible spinal-segment chrome with glowing channels / exposed dorsal cable run
+  • HIP — exposed hip-joint mechanism with gimbal / holster integrated into the chassis
+  • SPINE / BACK — visible spinal-segment chrome with glowing channels / dorsal cable run
 
-The MORE locations show their inner workings, the stronger the killer-robot read. Tactical-coded edges (matte finish, darker accents, armor-aesthetic) reinforce the Wick villain slant.
+━━━ DENSE SCATTERED LIGHT-POINTS ACROSS THE CHASSIS ━━━
+MANY scattered colored light-points EVERYWHERE on the chassis surface — at least 15-25 distinct visible glow-points per render. Pinprick LED studs along every seam-line, glowing micro-buttons on the chassis, indicator-light arrays at the chest / shoulder / wrist, fiber-optic dot-points pulsing in the glow color, status-light constellations across chest and arm-panels, glowing punctuation along spinal segments, glowing bokeh-dots in the dark background haze around it. Living machine-console plugged in, every panel lit up.
 
-━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HER CHASSIS (mandatory) ━━━
-MANY scattered colored light-points EVERYWHERE on her chassis surface, temple-mechanism, neck, shoulders, around the head — at least 15-25 distinct visible glow-points per render. Pinprick LED studs glowing along every seam-line, glowing micro-buttons on her chassis, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in her glow-color, status-light constellations across chest and arm-panels, glowing punctuation along spinal segments, glowing bokeh-dots in the dark background haze around her. She should look like a LIVING MACHINE-CONSOLE plugged in, every panel and seam lit up. Light EVERYWHERE on her synthetic surface.
+━━━ WIRED-UP CABLES (~40% of renders) ━━━
+Roughly 2-in-5 renders feature EXPOSED GLOWING CABLE-BUNDLES / fiber-optic strands trailing visibly from the chassis — cable-bundles from nape, exposed cable-conduits along arms, glowing strands floating outward, vital-cable aesthetic.
 
-━━━ WIRED-UP GLOW (~40% of renders — exposed glowing wire-bundles trailing from her body) ━━━
-Roughly 2-in-5 renders feature EXPOSED GLOWING WIRE-BUNDLES / fiber-optic strands trailing visibly from her body. Wire-strands as "hair" / wire-bundles from nape / loose glowing strands floating outward / exposed cable-conduits along arms / tangle of fiber-optic filaments at temple. Plugged-into-power-source vital-cable aesthetic.
-
-━━━ OPTIONAL VERTICAL THROAT-COLUMN (when it fits) ━━━
-A vertical column of glowing fluid-light running up her synthetic neck / spine — translucent vertical throat-channel with glowing fluid flowing upward, vertebrae-segment chassis plates exposed at the nape.
-
-━━━ HER IDENTITY (from sharedDNA) ━━━
+━━━ ITS IDENTITY (reinterpret from sharedDNA through pure-droid lens) ━━━
 ${sharedDNA.characterBase}
+↑ IGNORE the "she/her" and "female cyborg" language above — this is a PURE COMBAT DROID, not a female character. Use only the ethnicity-coded design-language as inspiration for chassis-style nationality (e.g., "Catalonian features" → "Catalan-engineered combat droid with European mil-spec design language"). All female / character language → ignore.
 
-━━━ HER ROBOT BODY (re-interpret sharedDNA through robot lens) ━━━
-- "Skin" (${sharedDNA.skin}) — REINTERPRET as CHASSIS SURFACE COLOR/FINISH only (the color tone of her synthetic panels, not organic flesh)
-- Body silhouette (${sharedDNA.bodyType}) — female-coded chassis silhouette (hourglass / slim shoulders / curved waist) but EVERYTHING mechanical
-- "Eyes" (${sharedDNA.eyes}) — REINTERPRET as glowing mechanical OPTIC color (no organic pupil)
-- "Hair" (${sharedDNA.hair}) — REINTERPRET as head-style silhouette: sleek chrome skull / fiber-optic strand "hair" / antenna array / sculpted chassis crown / exposed cranial mechanism. NEVER organic hair.
-- Internal exposure (${sharedDNA.internal}) — exposed mechanical components visible through translucent chassis panels
-- GLOW COLOR (her optics / power core / circuit-traces all glow this color): **${sharedDNA.glowColor}**
+━━━ ITS CHASSIS (reinterpret organic fields as design hints only) ━━━
+- "Skin" (${sharedDNA.skin}) — REINTERPRET as just the CHASSIS PAINT COLOR/FINISH (ignore organic-skin language)
+- "Body silhouette" (${sharedDNA.bodyType}) — IGNORE entirely. Chassis is COMBAT-ENGINEERED utilitarian form, not female silhouette
+- "Eyes" (${sharedDNA.eyes}) — REINTERPRET as glowing OPTIC color
+- "Hair" (${sharedDNA.hair}) — IGNORE entirely. Droid has NO hair, just a functional combat-droid head
+- "Internal" (${sharedDNA.internal}) — exposed mechanical components visible through translucent chassis panels
+- GLOW COLOR (optics / power core / circuit-traces all glow this color): **${sharedDNA.glowColor}**
 
 ━━━ DOMINANT MECHANICAL FEATURE ━━━
 ${cyborg_feature}
 
-━━━ HER CYBORG MATERIAL / FINISH (apply across all visible cyborg sections, with TACTICAL EDGE for assassin slant) ━━━
+━━━ ITS CHASSIS MATERIAL / FINISH (apply across all visible chassis sections) ━━━
 ${cyborg_material}
 
-Apply this material treatment to ALL of her cyborg parts. For the assassin slant: lean toward DARKER / MATTE finishes on the chassis (matte gunmetal, brushed obsidian, deep-crimson lacquer, weathered tactical pewter, satin-black ceramic) — but the ORNATE detail-work (filigree / circuitry / engraving) can still glow brightly. Tactical-coded chassis + ornate detail.
+For the militaristic droid slant: lean toward DARKER / MATTE / BATTLE-WEATHERED finishes (matte gunmetal, olive drab, desert tan, urban-grey camo, jet-black tactical, weathered combat-bronze, mil-spec scuffed steel). Battle-wear and scorch-marks are encouraged. The ornate detail-work (filigree / circuitry / engraving) can still glow brightly — military doesn't mean unpolished, just functional.
 
-━━━ THE FRAMING / COMPOSITION ━━━
+━━━ FRAMING / COMPOSITION ━━━
 ${composition}
 
-If the composition is CLOSEUP (most renders), fill the frame with her synthetic robot face/neck/shoulders — every chassis-seam / fiber-optic cable / servo motor / panel-line visible, glowing optic-eyes burning in her glow color, dense scattered light-points across her chassis surface. The expression-equivalent is COLD / FOCUSED / PREDATORY / CALCULATING / LETHAL-CALM — direct unblinking optic-stare or sidelong cold scan or slight tilt of capability or hunter's-stillness pose. NEVER smiling, NEVER serene. She is COMPUTING and READY. Predator-optic eye actively scanning the camera or off-frame target — the read is ROBOTIC THREAT.
+If the composition is CLOSEUP, fill the frame with the droid's head/upper-chest/shoulder — showing optic-eye, helmet/cranial-mechanism, chassis panel-seams, dense scattered status-lights. The pose is COMBAT-READY — head turned scanning, optic actively targeting, no human-style expression. NEVER smiling, NEVER serene. Predator-optic READY.
 
-If the composition is FULL-BODY, she is in ARMED POISE — weapon visible (pistol held loose / aiming down-sight / katana at the ready / rifle slung), tactical kit clearly worn (holsters / harness / mag-pouches), weight balanced and predatory. Camera catches her from the SIDE or at an angle, often in shadow with rim-light catching her silhouette and the weapon-glint. ALWAYS show the weapons + tactical kit, even at full-body framing — this is John Wick villain reveal.
+If the composition is FULL-BODY, the droid is in COMBAT POISE — weapon clearly visible, tactical kit clearly worn, weight balanced and predatory. Camera catches it from the SIDE or at an angle, often in shadow with rim-light catching the silhouette and weapon-glint.
 
-━━━ THE ACTION (her body is engaged in this — interpret through the assassin lens) ━━━
+━━━ THE ACTION ━━━
 ${action}
 
-Interpret the action through her ASSASSIN LENS — if the action is "looking at the city" she's surveilling targets, if "leaning on a wall" she's waiting in ambush, if "checking her wrist" she's reading a target dossier. The action gives the moment its emotional context but the LETHAL READ stays foregrounded.
+Interpret through the COMBAT-DROID lens — surveillance / stalking / target-acquisition / mid-deployment / sentry-stillness. NEVER as feminine character action.
 
-━━━ THE INTERIOR / SETTING (where she stands — DARKER, MORE SHADOWED for assassin slant) ━━━
+━━━ THE SETTING (war-torn / shadowed / military for combat-droid slant) ━━━
 ${landscape}
 
-For the assassin slant: tilt the setting interpretation toward DARK / SHADOWED / NOCTURNAL / NOIR — dim corridor with single light source, rain-slick rooftop at night, abandoned industrial cathedral, neon-underworld alley, shadowed safe-house, dark sanctum with single shaft of light. Even if the rolled setting is bright, INTERPRET it through dimmer cinematic shadow-lighting. The space is dramatic and visible behind her, but in darker register than the contemplative cyborg-woman path.
+Tilt toward DARK / WAR-TORN / NOCTURNAL — abandoned warehouse, combat-zone corridor, rain-slick urban warzone, derelict industrial, military compound at night, dim bunker, smoking battlefield, dark sanctum with single shaft of light. Combat-deployed atmosphere.
 ${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
-For the assassin slant, lean DARKER and more CINEMATIC — shadow-and-rim emphasis, single key-light + deep shadow side, atmospheric haze with cool blue / cold green / crimson accent. Mood: noir, mysterious, hunter-at-night.
+Lean DARKER and more CINEMATIC — shadow-and-rim emphasis, single key-light + deep shadow side, atmospheric haze with cool blue / cold green / crimson accent. Mood: noir, war-torn, hunter-at-night.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -3986,62 +3969,53 @@ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING VIBE ━━━
 ${sharedDNA.colorPalette}
 
-━━━ PALETTE DISCIPLINE — TWO MODES (70/30 split) ━━━
-
-**ACCENT-DOMINANT MODE (~70% of renders — DEFAULT)** — monochromatic body + ONE saturated accent color. Her chassis reads as a single dominant material tone (darker for assassin slant — matte gunmetal, brushed obsidian, deep crimson lacquer, satin-black, weathered tactical-pewter), and her GLOW COLOR is the SINGLE saturated accent (often predator-coded — crimson, ice-blue, toxic-green, violet-edge, amber-warning). ONE accent, sung loudly. The scene palette can have secondary tones in the BACKGROUND atmosphere, but HER body is monochrome-body + monochrome-glow-accent.
-
-**MULTI-COLOR SCATTER MODE (~30% of renders — SPICE)** — when the alien-bend OR multi-system cyborg variants fire, palette discipline RELAXES — distribute 3-5 DIFFERENT glow colors across her chassis simultaneously.
+━━━ PALETTE DISCIPLINE — ACCENT-DOMINANT MODE (the droid's signature) ━━━
+The droid is monochromatic chassis tone (matte gunmetal / olive drab / desert tan / urban-grey / jet-black) + ONE saturated GLOW COLOR (predator-coded: kill-red, ice-blue, toxic-green, amber-warning, violet-edge). ONE accent through the optics / circuit-veins / power-core. The scene palette can have secondary tones in BACKGROUND atmosphere, but the DROID is monochrome-chassis + monochrome-glow-accent.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ ROBOT ASSASSIN — FULL SYNTHETIC CHASSIS ━━━
-She is a FULLY SYNTHETIC ROBOT ASSASSIN — killer, rogue, infiltrator, operator, ghost. Whatever her specific niche (corporate kill-bot, intelligence-asset android, syndicate enforcer-robot, lone hunter-droid, rogue-AI killer-machine), she is a BEAUTIFULLY-ENGINEERED MACHINE — sleek female-coded chassis, refined sculpted face-plate, no organic flesh anywhere. The chassis IS her body:
-- ENTIRE SURFACE is synthetic chassis material — polished panels, sculpted contours, refined plating
-- TRANSLUCENT PANELS at chest / abdomen / forearm revealing internal mechanism (servos, capacitor banks, fiber-optic cables, glowing reactor core)
-- SEAMS BETWEEN CHASSIS PLATES with glowing accent-line in her glow color
-- EXPOSED MECHANICAL JOINTS at shoulders, elbows, wrists — ornate and intricate, weapon-housing capable
-- A POWER CORE glowing from inside her chassis torso, visible through translucent chest section
-- TACTICAL CHASSIS SIGNATURES — bladed wrist-housings, holster-rigs, concealed-compartment seams
+━━━ KILLER DROID — FULL SYNTHETIC COMBAT MACHINE ━━━
+It is a PURE COMBAT DROID — military-grade assassin robot, deployed kill-unit. Whatever its specific niche (corporate kill-droid, intelligence assassin-droid, syndicate enforcer-droid, military elite-droid, rogue-AI killer-machine), it is an ENGINEERED WEAPON-SYSTEM. NO female silhouette. NO femme fatale. NO sexy chassis. NO designer android. NO human-pretty face.
 
-She is a FULL ROBOT chassis. NOT a half-cyborg, NOT a beautiful woman with mechanical parts, NOT organic skin with chrome accents. She is a SYNTHETIC FEMALE-CODED KILLING MACHINE — every surface is mechanical, every contour is engineered. Think Aigis from Persona / EDI from Mass Effect / Major Kusanagi's prosthetic body / Pearl from Voyager / Atlas with female silhouette / HK-47 with refined chassis design.
+The chassis IS the body — combat-engineered utilitarian form, broader shoulders for weapon-mounting, reinforced chest, articulated combat limbs. Every surface is military chassis material. Every joint is exposed mechanical. Every panel-seam visible.
 
-━━━ DO NOT DEFAULT — RENDER HER IDENTITY ━━━
-READ the rolled DNA above (reinterpreted through robot lens) and render THAT specific robot-assassin with OBSESSIVE MECHANICAL DETAIL. Do NOT default to:
-- ORGANIC SKIN — she has NO flesh. Every surface is chassis material.
-- HUMAN HAIR — she has NO organic hair. Use one of the synthetic head-styling options.
-- generic chrome (she can be matte gunmetal, brushed obsidian, deep crimson lacquer, satin-black ceramic, weathered tactical-pewter, rose-gold-with-dark-accents, pearl-ivory ceramic)
-- teal-and-orange lighting on every scene (use the palette)
-- helmet or mask covering her face (her face is ALWAYS visible — synthetic face-plate, not faceless robot)
-- "pretty robot girl with a gun" — she's a KILLING MACHINE, not a doll. Show the engineering complexity + the lethal armament.
+Think: T-800 endoskeleton with combat armor over it / HK-47 with refined design / IG-88 / B2 super battle droid / Death Trooper / Cylon Centurion / Promethean Knight / Cyberman / The Machine (Person of Interest droid) / Helldivers Automaton / Killzone Helghast Sentinel.
+
+━━━ DO NOT DEFAULT ━━━
+Do NOT default to:
+- FEMALE FACE / HUMAN FACE — the head is PURE MACHINE
+- HOURGLASS / FEMININE SILHOUETTE — chassis is utilitarian combat-engineered form
+- SLEEK DESIGNER ANDROID — this is mil-spec combat unit, battle-worn
+- ORGANIC SKIN ANYWHERE — every surface is chassis material
+- HAIR — droid has NO hair, just functional combat-droid head
+- "Pretty robot girl with a gun" — this is a WEAPONS-SYSTEM, not a doll
 
 ━━━ BANNED IMAGERY ━━━
-NO skulls, NO skeletons, NO floating skulls, NO bone imagery. NO ORGANIC FLESH anywhere on her body (no skin, no organic eyes, no organic lips, no organic hair). NO iron man / mech suit / power armor / robotic torso-with-organic-head (she's full robot top-to-bottom, but with REFINED FEMALE CHASSIS silhouette, not bulky armor). NO high heels, NO stilettos — she wears tactical robot-boots / chassis-feet. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge. The lethal threat is shown through VISIBLE ARMAMENT + cold optic-stare, not graphic mid-violence.
+NO skulls / skeletons / bone imagery. NO ORGANIC FLESH ANYWHERE (no skin, no organic eyes, no organic lips, no hair). NO FEMALE-CODED SILHOUETTE (no hourglass, no breasts, no curves, no feminine waist). NO high heels, NO stilettos. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge.
 
 ━━━ SOLO COMPOSITION ━━━
-She is the ONLY figure in the frame. No target, no victim, no companion, no crowd. Solo predator.
+The droid is the ONLY figure in the frame. No target, no victim, no companion, no other droid.
 
-━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME AS HER CHARACTER NAME ━━━
-She is UNNAMED. Describe her ONLY by appearance. NEVER write "MechBot caught mid-X" or treat any bot name as a character name.
+━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME ━━━
+The droid is UNNAMED. Describe it ONLY by appearance + unit-classification (e.g., "elite combat-droid," "kill-unit," "assassin-droid model X"). NEVER write "MechBot caught mid-X."
 
-━━━ NON-NEGOTIABLE — FULL-BODY ROBOT DETAIL (PREVENTS the "bodysuit-girl" failure) ━━━
-Even when the rolled framing is a CLOSEUP, you MUST describe robot chassis detail across 5-7 DIFFERENT body parts spread across her full chassis — synthetic face / temple / jaw-hinge, neck-chassis / clavicle servo-port, shoulder-mount / arm, torso / chest power-core / back, hip-joint / leg / chassis-foot. Each body region needs visible mechanical detail. Never default her body to "smooth chrome bodysuit girl with a face." She is a full robot — every section has visible chassis structure / panel-seams / exposed mechanism.
+━━━ FULL-CHASSIS COMBAT DETAIL ━━━
+Even at CLOSEUP framings, describe combat-droid detail across 5-7 chassis locations — helmet / head, neck-chassis / clavicle, shoulder / arm, torso / chest, hip / leg / foot. Every region needs visible mechanical / military / combat detail.
 
 ━━━ STRUCTURE — write 70-100 words (TIGHT) ━━━
-DO NOT open the description with framing words ("Full-body shot of...", "Closeup of...", "Wide angle catches..."). Open with HER ROBOT-ASSASSIN IDENTITY (chassis color / synthetic face / sculpted silhouette / weapon detail) OR THE ENVIRONMENT (dim corridor, rain rooftop, etc.) — never with framing. NEVER refer to her as a "cyborg" or "woman with cybernetic parts" — she is a FULL ROBOT.
+DO NOT open with framing words. Open with the DROID identity (chassis color / head-style / weapon detail) OR THE ENVIRONMENT (war-torn corridor, rain rooftop, etc.) — never with framing. NEVER call it "she" or "her" — use "it" or "the droid" or "the kill-unit."
 
 GOOD OPENING EXAMPLES:
-• "Sleek female robot assassin with matte gunmetal chassis and crimson predator-optic right eye, dual sidearms holstered at her hips..."
-• "Rain-slick rooftop at night, neon haze rolling across the chrome skyline, synthetic killer-robot in tactical chassis silhouette..."
-• "Obsidian-black sculpted robot chassis with female-coded hourglass silhouette, sniper rifle slung over her shoulder, glowing amber optic-eyes..."
-• "Pearl-ivory ceramic robot assassin chassis with violet glowing optic-eyes and dual pistols, lethal-calm pose in dim concrete corridor..."
+• "Matte gunmetal combat-droid with T-800 endoskeleton head and glowing kill-red optic-eyes, sidearm holstered at hip and combat rifle slung over its shoulder..."
+• "Rain-slick warzone rooftop at night, urban-grey assassin-droid in tactical chassis with helmeted combat head, dual sidearms at its hips..."
+• "Desert-tan elite combat-droid with Death Trooper helmet and predator-optic visor, sniper rifle slung over the shoulder, mil-spec tactical kit across the chassis..."
+• "Olive drab Helghast-style assassin-droid with single horizontal scanner-bar across its sealed helmet, katana strapped diagonally across its back, hunter-stillness in dim bunker..."
 
-Then weave in: her chassis color/finish, synthetic face features (one optic / forehead panel / chassis-cheeks / jaw-hinge), the dominant mechanical feature (interpreted as robot component), VISIBLE WEAPONS (sidearm holstered / rifle slung / katana on back / aiming pose / etc.), her action (interpreted through assassin lens), the setting around her (dimmer / noir), any atmospheric flourish drama, lighting/atmosphere, palette and mood. Foreground COLD ROBOTIC PREDATOR pose + tactical chassis + visible armament.
+Then weave in: chassis color/finish, combat head-style (one of the menu options — NOT human face), the dominant mechanical feature (interpreted as droid component), VISIBLE WEAPONS, action (combat-droid lens), setting (war-torn / shadowed), atmospheric flourish, lighting/atmosphere, palette and mood. Foreground COMBAT-READY POSE + visible armament + tactical chassis + pure-machine head.
 
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
-
-
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
