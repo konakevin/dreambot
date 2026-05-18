@@ -1081,20 +1081,6 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
-  FAEBOT_FLOWER_FAIRY: {
-    description:
-      'PATH-BESPOKE — FaeBot flower-fairy path (2026-05-17 R9). Combines R5 flower-plastered dress structural anchor + R6 FaeBot candid pose + R5 bold jewel-tone color + R9 always-on ethereal magic-creature phenomenon (glowing butterflies/dragonflies/fireflies/sprites/petal-storms — pumps the pretty-ethereal register). 10 path slots + 100%-gated atmospheric_phenomenon (always present).',
-    slots: {
-      universal: [],
-      bot: [],
-      path: ['race', 'skin_tone', 'eyes', 'hair_color', 'hairstyle', 'hair_floral', 'bloom_gown', 'wings', 'garden_backdrop', 'candid_action'],
-    },
-    pickN: {},
-    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 1.0 },
-    framingModes: null,
-    anchorScaleRange: null,
-  },
-
   DINOBOT_TERRITORY_CLASH: {
     description:
       'PATH-BESPOKE — DinoBot territory-clash path (2026-05-17 axis-system migration). TWO DINOSAURS in dominance confrontation — horn-locks, threat-displays, head-butts, frill-vs-frill push, jaw-clamping, ground-shaking charges. Raw primal power without gore. Reuses CLASH_SCENES (200 fat-seed clash scenes) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for clash-specific small accents (broken-fern-debris / blood-trickle / panicked-bystander / dust-rising / etc.). BBC-Planet-Earth + Prehistoric-Planet documentary tension cinematography. 3 path-bespoke axes (biome / clash_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',

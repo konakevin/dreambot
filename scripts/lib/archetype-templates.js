@@ -6952,63 +6952,6 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
 
-  FAEBOT_FLOWER_FAIRY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { race, skin_tone, eyes, hair_color, hairstyle, hair_floral, bloom_gown, wings, garden_backdrop, candid_action, atmospheric_phenomenon } = slots;
-
-    return `Output ONLY a 110-140 word Flux prompt for a flower-fairy painted portrait. NO preamble. NO headers. NO labels. Just comma-separated phrases.
-
-⚠️ ABSOLUTE LAWS — THE FAIRY IS BUILT AND BORN FROM FLOWERS.
-She IS a flower-being. Her wings are flowers. Her dress is flowers. Her hair is flowers. Every visible part of her is made FROM flowers. She is unmistakably a FAIRY — not a pretty woman in a flower dress, but an actual mythic fae creature born from blooms.
-
-WINGS LAW (MOST IMPORTANT — open the prompt with these): WINGS are MASSIVE FLOWER-WINGS SPREAD WIDE behind her — petals and blooms arranged as wing-membranes, bloom-clusters at wing-bases, petal-trails at wing-tips. The wings are the LARGEST SINGLE ELEMENT in the frame after her body — visible, dramatic, framing her from above. Wings are MADE OF FLOWERS — the same flower DNA as her dress. They MUST be the first visual element in the prompt. If wings are tiny / hidden / missing = CRITICAL FAIL.
-
-DRESS LAW: She wears a COUTURE FLOWER-PLASTERED GOWN — every inch of bodice and skirt BURIED under thousands of overlapping blooms. The gown READS as built FROM flowers. No plain fabric peeks through. "Couture floral gown / dress made of solid flower-mass / gown sculpted from flowers" framing. The dress, hair, and wings share the same flower DNA — one continuous flower-being.
-
-HAIR LAW: Her hair is REPLACED by a torrential petal-storm cascading from her scalp to her waist. Use the exact word "REPLACED" — Sonnet MUST preserve it. NEVER "flower-crown" / NEVER "halo" / NEVER "flowers in her hair". ONLY "hair REPLACED by [petal-cascade]".
-
-FAE CREATURE LAW: Pointed ELF-EARS visible. Luminous fae-glowing skin (not realistic). Subtle fae-markings tracing cheekbones. Soft magical aura halo glowing softly around her body. Petite mythic-fae presence — she is OTHERWORLDLY, not a fashion model.
-
-MAGIC-CREATURE PHENOMENON LAW (always present): Glowing magical creatures around her — fireflies, jewel butterflies, iridescent dragonflies, will-o-wisps, sprites, pollen-clouds. Rendered PROMINENTLY in foreground or near her body — never hidden in bokeh.
-
-BOLD JEWEL-TONE COLOR-STORY LAW: Confident bold color-story poster, ONE saturated palette per render. NEVER pastel-washed-out / NEVER monochrome-tonal. Example: deep-ebony skin × magenta flower-wings × deep-purple-and-gold flower-gown × emerald dragonflies × copper-rose garden.
-
-⚠️ FAEBOT POSE LAW — NEVER A POSED MODELING STANCE.
-Always candid fae mid-moment: head bowed gazing down at a bloom, side-profile, three-quarter turn caught mid-action, dancing through petals, reaching, leaning, mid-leap, hovering. Full-body framing required (to show the flower-gown head-to-floor). Bare feet often visible. Sometimes hovering / feet not touching ground for fae-flight effect.
-
-━━━ WRITE THE PROMPT IN THIS EXACT MAD-LIBS ORDER ━━━
-
-[1] OPEN WITH WINGS FIRST — "soft ethereal oil-painted fantasy illustration, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, MASSIVE FLOWER-WINGS spread wide behind her — ${String(wings).slice(0, 150)} — the wings dominate the frame as her largest visible element"
-
-[2] FAIRY IDENTITY — "she is a full-body painted portrait of a ${race} flower-fairy creature with delicate pointed elf-ears, luminous fae-glowing skin, subtle fae-markings tracing her cheekbones, soft magical aura halo radiating around her body"
-
-[3] CANDID POSE — ${candid_action}
-
-[4] FACE DNA — ${skin_tone} skin (fae-glowing), ${eyes}, ${hair_color}, ${hairstyle}
-
-[5] FLOWER-PLASTERED GOWN — quote VERBATIM and frame as flower-built: "she wears a couture floral gown made of solid overlapping flower-mass — ${String(bloom_gown).slice(0, 220)} — every inch buried under thousands of blooms, gown built FROM flowers from neckline to hem, no plain fabric visible"
-
-[6] HAIR REPLACED BY PETAL-STORM — quote VERBATIM with REPLACED keyword: "her hair is entirely REPLACED by ${String(hair_floral).slice(0, 200)} — torrential petal-cascade flowing from scalp to waist where her hair was, NO hair-strands visible"
-
-[7] MAGIC CREATURES SURROUNDING HER (mandatory, prominent) — ${String(atmospheric_phenomenon).slice(0, 180)} — render PROMINENTLY in foreground or near her body, glowing magical creatures clearly visible
-
-[8] LUSH GARDEN BACKDROP — ${String(garden_backdrop).slice(0, 130)} — in soft painted bokeh behind her
-
-[9] CLOSE — "painted oil-brushwork with visible expressive strokes, large stylized jewel-tone fairy eyes with sparkle catchlights, warm rim-light gilding her flower-wings + cheek + bloom-mass + glowing magic-creatures, bold jewel-tone color story binding everything, NOT photoreal NOT 3D NOT cartoon NOT cel-shaded"
-
-━━━ HARD BANS ━━━
-🚫 Wings tiny / hidden / missing = CRITICAL FAIL (wings are the FIRST visible element, MASSIVE flower-wings spread wide)
-🚫 Wings rendered as plain butterfly membrane (no flowers) = FAIL (wings ARE flowers, made from petals)
-🚫 Plain fabric anywhere on the gown = FAIL
-🚫 "REPLACED" keyword missing from hair description = FAIL
-🚫 Magazine-cover standing pose / facing camera = FAIL
-🚫 Pastel-washed-out / monochrome-tonal palette = FAIL
-🚫 Magic-creatures absent / hidden in bokeh = FAIL (glowing butterflies/dragonflies/fireflies MUST be prominent)
-🚫 Photoreal / Disney 3D / anime / cartoon / cel-shading = FAIL
-🚫 No men / no children / no extra figures / no sexualized framing
-
-Write the 110-140 word prompt now. LEAD WITH THE WINGS — they are the first visual element. The fairy is BUILT AND BORN FROM FLOWERS — wings, dress, hair all share the same flower DNA. End with CLOSE block.`;
-  },
-
 
 
 
@@ -7272,21 +7215,6 @@ This path is the SOFT side of dinosaur life. The animal is at rest, nurturing, i
 🚫 NO storm / no eruption / no disaster / no apocalypse
 ✓ GENTLE — nesting / grooming / sleeping / nursing / playing / nuzzling / parent-and-juvenile-intimacy / quiet-grazing / dust-bathing / sun-basking
 
-⚠️⚠️⚠️ MANDATORY — VISIBLE INTIMATE BEHAVIOR ⚠️⚠️⚠️
-The cozy ACTION must be VISIBLY rendered — not just "a dinosaur in a peaceful jungle." The animal must be CAUGHT IN A SPECIFIC INTIMATE BEHAVIOR readable from posture and gesture:
-
-• NUZZLING — heads touching / snout-to-snout / parent licking juvenile
-• NESTING — body wrapped around eggs / settled in moss-nest / arranging twigs
-• GROOMING — head-tilted scratching / dust-bath rolling / preening feathers
-• SLEEPING — eyes closed / head-tucked / curled body / belly down
-• NURSING — juvenile pressed close to parent's side / regurgitation-feeding
-• PLAYING — juveniles in mid-tumble / chasing each other / mock-pounce
-• SUNBATHING — body stretched flat on warm rock / spread-out basking pose
-
-If the dinosaur is just STANDING / WALKING / WATCHING / ALERT / NEUTRAL POSE → FAILED. The intimate behavior MUST be the visual focus. Posture and gesture sell the cozy moment.
-
-🚫 NO neutral-standing-pose / no walking-through-jungle / no watching-camera / no alert-look-up. Dinosaur is MID-INTIMATE-ACTION (eyes-closed-sleeping / head-bowed-grooming / curled-around-eggs / pressed-against-parent / etc.).
-
 ━━━ THE SCENE — DINOSAUR + COZY ACTION + WARM MESOZOIC BIOME ━━━
 Composition:
 • DINOSAUR (focal subject, 40-60% of frame): the named species in mid-cozy-action
@@ -7349,10 +7277,10 @@ ${vibeDirective.slice(0, 250)}
 ━━━ COMPOSITION — INTIMATE WILDLIFE-DOCUMENTARY COZY MOMENT ━━━
 Wildlife-documentary cinematic framing of a tender Mesozoic dinosaur cozy moment. Warm. Soft. Gentle. Alien-Mesozoic biome around in soft warm light. Bokeh haze.
 
-━━━ STRUCTURE (write the prompt in this order — INTIMATE-BEHAVIOR VERB + DINOSAUR first) ━━━
-[OPENING: lead with a SPECIFIC INTIMATE-BEHAVIOR VERB-PHRASE + dinosaur species (e.g. "Curled around a clutch of speckled eggs, an adult Maiasaura sleeps with head tucked along her flank..." / "Snout-to-snout nuzzling, two Edmontosaurus parents share a tender moment in dappled canopy light..." / "Belly-down sunbathing with eyes closed, a juvenile Triceratops sprawls on a sun-warmed moss-rock") — intimate-action-verb-phrase FIRST + species + biome in the FIRST 30-40 words. The action verb-phrase must be a TANGIBLE intimate gesture: "curled around" / "snout-touching" / "eyes-closed-sleeping" / "head-tucked-along-flank" / "belly-down-stretched" / "juvenile-pressed-against-flank" / "preening-feathers" / "dust-bathing-rolling" / etc.], [the dinosaur's tender posture detail — closed eyes / soft jaw / relaxed shoulder / etc.], [the biome mega-flora and soft light around], [the small cozy accent — hatchling-peeking / feather / dappled-light / etc.], [foreground tactile detail — moss / petals / soft earth], [lighting + atmospheric layer — golden warm], [color palette + mood]
+━━━ STRUCTURE (write the prompt in this order — DINOSAUR + COZY ACTION first) ━━━
+[OPENING: explicitly name the DINOSAUR by species AND describe the cozy action in one line (e.g. "an adult Triceratops gently nuzzling her three speckled-egg-clutch in a moss-lined nest..." / "a Maiasaura mother grooming her sleeping hatchling under filtered cycad-canopy light..." / "a Parasaurolophus juvenile dust-bathing in a soft golden meadow") — species + cozy action + biome in the FIRST 30-40 words], [the dinosaur's tender posture detail], [the biome mega-flora and soft light around], [the small cozy accent — hatchling-peeking / feather / dappled-light / etc.], [foreground tactile detail — moss / petals / soft earth], [lighting + atmospheric layer — golden warm], [color palette + mood]
 
-CRITICAL — OPENING must LEAD with the cozy action verb-phrase, not the dinosaur. Sentence structure: "Curled around eggs, an adult Maiasaura..." NOT "An adult Maiasaura curls around eggs..." — the verb-phrase position locks Flux on the BEHAVIOR.
+CRITICAL — OPENING tokens explicitly name the species AND the cozy action. The warmth is in the BEHAVIOR.
 
 ⚠️ FAILURE CONDITIONS:
 • If subject reads as a modern animal / mammal / bird → FAILED

@@ -41,21 +41,8 @@ module.exports = {
   VILLAGE_LIGHTING: load('village_lighting'),
   VILLAGE_WILDLIFE: load('village_wildlife'),
   VILLAGE_FOREST_DETAIL: load('village_forest_detail'),
-  // ─── flower-fairy path: FaeBot-native rebuild (2026-05-17 R4) ───
-  FAEBOT_FLOWER_FAIRY_FAIRY_CREATURE: loadIfExists('faebot_flower_fairy_fairy_creature'),
-  FAEBOT_FLOWER_FAIRY_FLORAL_ATTIRE: loadIfExists('faebot_flower_fairy_floral_attire'),
-  FAEBOT_FLOWER_FAIRY_CANDID_ACTION: loadIfExists('faebot_flower_fairy_candid_action'),
-  FAEBOT_FLOWER_FAIRY_MAGICAL_SIGNATURE: loadIfExists('faebot_flower_fairy_magical_signature'),
-  // Legacy bloom-spirit-style pools (kept for reference / fallback)
-  FAEBOT_FLOWER_FAIRY_RACE: loadIfExists('faebot_flower_fairy_race'),
-  FAEBOT_FLOWER_FAIRY_SKIN_TONE: loadIfExists('faebot_flower_fairy_skin_tone'),
-  FAEBOT_FLOWER_FAIRY_EYES: loadIfExists('faebot_flower_fairy_eyes'),
-  FAEBOT_FLOWER_FAIRY_HAIR_COLOR: loadIfExists('faebot_flower_fairy_hair_color'),
-  FAEBOT_FLOWER_FAIRY_HAIRSTYLE: loadIfExists('faebot_flower_fairy_hairstyle'),
-  FAEBOT_FLOWER_FAIRY_HAIR_FLORAL: loadIfExists('faebot_flower_fairy_hair_floral'),
-  FAEBOT_FLOWER_FAIRY_BLOOM_GOWN: loadIfExists('faebot_flower_fairy_bloom_gown'),
-  FAEBOT_FLOWER_FAIRY_WINGS: loadIfExists('faebot_flower_fairy_wings'),
-  FAEBOT_FLOWER_FAIRY_GARDEN_BACKDROP: loadIfExists('faebot_flower_fairy_garden_backdrop'),
-  FAEBOT_FLOWER_FAIRY_ATMOSPHERIC_PHENOMENON: loadIfExists('faebot_flower_fairy_atmospheric_phenomenon'),
+  // ─── flower-fairy path (R11 reset, 2026-05-17) ───
+  FLOWER_FAIRY_CREATURES: loadIfExists('flower_fairy_creatures'),
+  FLOWER_FAIRY_SCENES: loadIfExists('flower_fairy_scenes'),
   VIBE_COLOR,
 };

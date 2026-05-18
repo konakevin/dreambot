@@ -76,379 +76,123 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
-  faebot_flower_fairy_atmospheric_phenomenon: {
+  // ─── flower-fairy path (R11 reset): creature DNA + scene setting ───
+  flower_fairy_creatures: {
     format: 'simple',
-    theme: `ETHEREAL MAGIC-CREATURE ATMOSPHERIC PHENOMENA for the FaeBot flower-fairy path (R9). Each entry is ONE specific PRETTY/MAGICAL/ETHEREAL element that surrounds the fairy — focused on GLOWING CREATURES + magical light + petal-rain + sparkle. Each entry 20-40 words.
+    theme: `FLOWER-FAE CREATURE DESCRIPTIONS for the FaeBot flower-fairy path. Each entry is ONE unified mythic fae creature whose entire body is made-of / merged-with / built-from FLOWERS. Same vibe + structure as FOREST_CREATURES (dryad / naiad / fox-spirit) but here every creature is a FLOWER-fae. Each entry 40-80 words, comma-separated descriptive clauses.
 
-⚠️ FOCUS — every entry tilts the scene toward ETHEREAL PRETTY:
-  Glowing butterflies / dragonflies / fireflies / hummingbirds (60% of entries)
-  Magical light (auroras / halos / sun-shafts / sparkle-dust / pollen-glow) (20%)
-  Floating petal-storm / cherry-blossom rain (10%)
-  Tiny fae creatures (sprites / will-o-wisps / glowing seeds / pixie-dust) (10%)
+⚠️ MANDATORY (stack 4+ exotic flower-fae features per entry):
+  • Skin-tone made of flowers (petal-skin, blossom-tinted, pollen-dusted, dewdrop-translucent)
+  • Hair made of flowers (rose-cascade hair, wisteria-trail hair, peony-bloom hair, etc.)
+  • Garment / wrap made of flowers (petal-bodice, leaf-skirt of woven blooms, vine-and-flower wrap)
+  • Wings made of flowers (butterfly-wings of poppy petals, gossamer-wings of jasmine blooms, etc.) OR fae-antennae of stamens / fae-horns of bloom-clusters
+  • Eye color (jewel-tone — amber, violet, emerald, sapphire, pearl-white, glowing) + pointed elf-ears
+  • Magical signature near her (glowing pollen-cloud, firefly-trail, will-o-wisp, drifting petals, glow-veins under skin)
+  • Candid posture caught mid-action (sipping nectar, weaving petals, cupping pollen, perched on a stamen, kneeling among blooms, etc.)
 
-⚠️ COLOR & GLOW MANDATE — every creature/phenomenon GLOWS or sparkles or shimmers. Saturated jewel-tone wings on butterflies/dragonflies. Glowing fireflies. Iridescent hummingbirds.
+⚠️ POOL VARIETY — distribute across:
+  Different flower-types per creature (rose-fae / wisteria-fae / poppy-fae / lily-fae / sunflower-fae / cherry-blossom-fae / lotus-fae / morning-glory-fae / tulip-fae / orchid-fae / jasmine-fae / marigold-fae / dahlia-fae / iris-fae / chrysanthemum-fae / sweet-pea-fae / etc.)
+  Different ethnicities (European / Mediterranean / Latin-American / Asian / African-American — distribute evenly)
+  Different color palettes (sunset-coral / twilight-purple / blush-pink / monochrome-white / rainbow / etc.)
 
 🚫 STRICT BANS:
-  • NO simple rim-light / NO bokeh-circles / NO simple halos (those are weak — needs LIVING creatures or rich petal-storms)
-  • NO mention of dress / gown / fairy body
-  • NO mood description — describe the PHENOMENON only`,
-    touchpoints: [
-      'GLOWING JEWEL BUTTERFLY SWARM — dozens of iridescent butterflies in saturated jewel-tones (cobalt blue, emerald green, magenta, golden amber) circling around her in slow motion, each wing glowing with magical luminescence',
-      'GLOWING DRAGONFLY CLOUD — half a dozen iridescent dragonflies hovering near her shoulders with translucent wings catching the light, glowing emerald-and-sapphire bodies, magical motion-blur trails',
-      'FIREFLY STORM — hundreds of fireflies floating around her at twilight, soft green-gold pulse-glows at every depth of the frame, dreamy luminous magical haze',
-      'IRIDESCENT HUMMINGBIRD AT BLOOM — jewel-green hummingbird hovering at a bloom near her hand, wings a transparent motion-blur with magical iridescent shimmer, warm gold side-light',
-      'GLOWING SPRITE CLOUD — tiny glowing fae sprites floating in a cloud around her, each one a soft luminous pinpoint with sparkle-trail, ethereal magical swarm',
-      'WILL-O-WISP HALO — half a dozen will-o-wisp light-orbs floating in a halo around her shoulders, glowing soft pearl-and-violet, ethereal magical lanterns',
-      'PETAL-RAIN STORM — gentle torrential rose-petal rain drifting from above, hundreds of petals suspended in slow-motion through the golden ambient light',
-      'GOLDEN POLLEN-CLOUD — visible warm golden pollen-cloud dispersing around her shoulders, glowing motes catching the late-afternoon light like scattered starlight',
-      'CHERRY-BLOSSOM SNOW — soft pink and white cherry-blossom petals falling like magical snow, suspended in slow-motion ethereal painted air',
-      'MONARCH BUTTERFLY SWARM — saturated orange-and-black monarch butterflies orbiting her in slow dance, dozens of wings catching the sunlight in stained-glass brilliance',
-      'BLUE MORPHO BUTTERFLY CLOUD — iridescent cobalt-blue morpho butterflies in a magical cloud around her, wings shimmering with otherworldly metallic blue glow',
-      'MAGENTA BUTTERFLY HALO — pink-magenta butterflies forming a delicate crown of motion around her head, each wing radiating soft glow',
-      'EMERALD DRAGONFLY TRAIL — emerald-green dragonflies leaving glowing trails of light behind their wings as they fly past her in slow motion, magical motion-streaks',
-      'RAINBOW BUTTERFLY EXPLOSION — explosion of rainbow-iridescent butterflies bursting outward from her in every direction, magical chromatic swarm',
-      'PIXIE-DUST SPARKLE STORM — heavy magical pixie-dust sparkle suspended in the air around her, every particle glowing gold and silver and pink',
-      'GLOWING SEED CASCADE — handfuls of glowing magical seeds drifting around her body, each one a tiny pulse of warm-amber light',
-      'TWILIGHT MOTH SWARM — saturated indigo-and-violet luna moths floating around her at dusk, translucent wings glowing pearl-white in moonlight',
-      'JEWEL DRAGONFLY ON HER FINGER — iridescent rainbow-sheen dragonfly perched on her fingertip, wings catching the painted light in stained-glass color',
-      'GOLD BUTTERFLY HALO — golden-yellow butterflies dancing in a halo around her crown, magical glow on every wing',
-      'AURORA MAGIC-LIGHT — soft aurora-like color-glow painting the upper backdrop above her in luminous magenta + cobalt + emerald watercolor wash',
-      'FAE LANTERN ORBS — half a dozen floating amber fae-lanterns drifting in the air around her, warm magical light source-points',
-      'CRYSTAL PRISM-LIGHT FRAGMENTS — magical rainbow prism light-fragments scattered around her, ethereal jewel-tone color-shards in suspended motion',
-      'MOONBEAM CASCADE — single magical moonbeam falling on her face from above, the rest of the scene in cool twilight blue',
-      'BUMBLEBEE ON BLOOM — saturated yellow-and-black bumblebee on a flower near her hand, magical motion-frozen detail in golden light',
-      'LADYBUG ON FINGERTIP — bright red ladybug perched on her fingertip, magical macro-detail in soft painted glow',
-      'SAPPHIRE BEETLE PROCESSION — line of iridescent sapphire scarab beetles walking along a vine near her, jewel-tone magical detail',
-      'MAGIC-RUNE SIGIL — softly glowing painted-fantasy magic-rune sigil tracing in the air beside her hand, ethereal symbol of fae spellwork',
-      'GLOWING MUSHROOM RING — small glowing fae mushrooms in a ring at her feet, soft pearl-and-violet bioluminescence',
-      'STAR-DUST CASCADE — heavy magical star-dust sparkle cascading down from the canopy around her, glowing pinpoints in every depth',
-      'OPALESCENT FAE-MIST — soft magical opalescent mist drifting around her ankles, ethereal iridescent fog catching the painted light',
-    ],
-    instructions: `Each entry is ONE ETHEREAL MAGIC-CREATURE / MAGICAL LIGHT phenomenon, 20-40 words. Format: "CREATURE/PHENOMENON NAME CAPS — description with [creature type + color + glow + motion]". Focus on glowing butterflies, dragonflies, fireflies, hummingbirds, sprites, will-o-wisps, pollen-clouds, petal-rain. Every entry has GLOW or SPARKLE or MAGICAL LIGHT. Output as a NUMBERED list, one per line.`,
-  },
-
-  // ─── flower-fairy R7: bloom_gown rewritten as SOLID FLOWER-WALL (no fabric, no silhouette names) ───
-  faebot_flower_fairy_bloom_gown: {
-    format: 'simple',
-    theme: `FLOWER-EXPLOSION ENGULFING HER BODY for the FaeBot flower-fairy path (R8). Each entry describes a MAXIMALIST FLOWER-BLAST drenching her body from neck to floor and spilling outward into the foreground. NEVER use the words "dress" / "gown" / "skirt" / "silhouette" / "bodice" / "sleeves" / "fabric" / "wall" / "garment" — those pull Flux's clothing prior. Just describe her body as ENGULFED / OVERFLOWING / DRENCHED / BURIED / CASCADING in maximalist flowers. Each entry 30-60 words.
-
-⚠️ FRAMING LANGUAGE (use these verbs/phrases):
-  • "MAXIMALIST FLOWER-EXPLOSION engulfing her body neck to floor"
-  • "torrential bloom-cascade drenching her from collarbone to feet"
-  • "her body OVERFLOWING with [flowers] spilling outward into the foreground"
-  • "petal-storm CASCADING from her neck, her arms, her hips, her thighs"
-  • "her form is BURIED inside a maximalist bloom-storm"
-  • "FLOWER-BLAST covering every inch of her body and overflowing beyond her shape"
-  • "she stands at the center of a flower-explosion that engulfs her entirely"
-
-⚠️ MULTI-SPECIES + COLOR THEME — 3-6 named flower species in ONE bold coordinated color palette.
-
-⚠️ COLOR THEMES (distribute):
-  SUNSET (red/orange/pink/coral/gold) | TWILIGHT PURPLES | BLUSH PINKS | MONOCHROME WHITE
-  RAINBOW EXPLOSION | DEEP BURGUNDY + WINE | GOLD + AMBER + COPPER | OCEAN COOL
-  EMERALD FOREST | PASTEL CANDY | TROPICAL BOLD | AUTUMN HARVEST | DUSK FIRE
-  BLUE + WHITE | PINK + GOLD | VIOLET + CREAM | NAVY + BURGUNDY | MAGENTA + ORANGE
-
-🚫 STRICT BANS:
-  • NO words: dress / gown / skirt / silhouette / bodice / sleeves / fabric / cloth / garment / tulle / chiffon / satin / silk / wall / wearing
-  • NO single-species
-  • NO hair references
-  • NO mention of clothing-style or garment-shape`,
-    touchpoints: [
-      'SUNSET FLOWER-BLAST — maximalist flower-explosion engulfing her body neck to floor with red roses + coral peonies + orange ranunculus + golden marigolds + amber dahlias, blooms cascade down her arms her hips her thighs and spill outward into the foreground bouquet, her body buried inside a torrential sunset bloom-storm',
-      'TWILIGHT PURPLE EXPLOSION — her body engulfed and overflowing with lavender wisteria + violet anemones + indigo iris + periwinkle sweet-pea + deep-purple dahlias drenching her from collarbone to feet, petal-storm cascading from her form into the foreground',
-      'BLUSH PINK ENGULFING-STORM — torrential bloom-cascade drenching her body with soft pink peonies + blush garden roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses, every inch buried under maximalist blush-pink flower-explosion overflowing beyond her shape',
-      'MONOCHROME WHITE FLOWER-BLAST — her form completely engulfed in maximalist white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore, a snow-white bloom-storm cascading from her neck out into the foreground',
-      'RAINBOW FLOWER-EXPLOSION — maximalist bloom-blast engulfing her body with red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones, rainbow petal-storm overflowing her form in every direction',
-      'CORAL TROPICAL ENGULFING-BLAST — her body drenched and engulfed by coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds, tropical bloom-cascade overflowing from neck to feet into the foreground',
-      'BURGUNDY WINE FLOWER-STORM — torrential bloom-explosion drenching her body with burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla, dark wine-spectrum petals cascading and overflowing beyond her form',
-      'GOLD AMBER FLOWER-BLAST — her body engulfed by maximalist explosion of golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums, metallic bloom-storm cascading and spilling outward',
-      'OCEAN COOL ENGULFING-STORM — her form buried inside torrential cascade of aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses, cool ocean-spectrum bloom-explosion overflowing her body',
-      'EMERALD FOREST FLOWER-BLAST — her body engulfed and overflowing with green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents, maximalist forest bloom-storm cascading neck to floor',
-      'PASTEL CANDY EXPLOSION — torrential cascade of pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms engulfing her body, cotton-candy flower-storm drenching her form and spilling into foreground',
-      'TROPICAL BOLD FLOWER-BLAST — her body buried inside maximalist explosion of hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger, bold tropical bloom-storm overflowing her form',
-      'AUTUMN HARVEST ENGULFING-STORM — her body drenched and engulfed by rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos, autumn bloom-cascade overflowing from collarbone to feet',
-      'DUSK FIRE FLOWER-BLAST — her form completely engulfed by torrential cascade of deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias, dusk-fire bloom-explosion overflowing beyond her shape',
-      'BLUE + WHITE COASTAL ENGULFING-BLAST — her body drenched and engulfed in sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue, coastal bloom-storm cascading from neck to floor',
-      'PINK + GOLD ROMANTIC BLAST — her body engulfed by maximalist cascade of soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea, romantic bloom-explosion overflowing her form',
-      'VIOLET + CREAM FLOWER-STORM — torrential cascade of violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea engulfing her body neck to floor',
-      'CHERRY-BLOSSOM EXPLOSION — her form buried inside maximalist explosion of pink + white cherry blossom petals + pink camellias + cream magnolias, cherry-blossom storm cascading and overflowing from her body',
-      'RED + BURGUNDY BLAST — her body engulfed and drenched in deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus, maximalist crimson bloom-storm overflowing her form',
-      'YELLOW MEADOW SUN-EXPLOSION — her body completely engulfed by yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums, maximalist sun bloom-cascade overflowing her form',
-      'LILAC + BABY-BLUE SPRING BLAST — torrential cascade of lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots engulfing her body, spring bloom-storm cascading neck to floor',
-      'TEAL + ROSE-GOLD VINTAGE BLAST — her body buried inside maximalist explosion of teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies, vintage bloom-storm overflowing her form',
-      'BLACK ROSE + WHITE GOTH BLAST — her body engulfed by torrential cascade of dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore, gothic bloom-storm cascading and overflowing',
-      'PEACH + CREAM SOFT BLAST — her body drenched and engulfed by peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias, soft bloom-cascade overflowing her form',
-      'MAGENTA + ORANGE BOLD BLAST — her body buried inside maximalist explosion of hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea, bold bloom-storm overflowing her form',
-      'MINT + WHITE FRESH BLAST — her body completely engulfed in mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus, fresh bloom-cascade overflowing her form',
-      'BUTTER YELLOW + BLUSH BLAST — her body drenched and engulfed by butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums, soft bloom-storm overflowing',
-      'INDIGO + VIOLET DEEP BLAST — her body engulfed by torrential cascade of indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias, deep-purple bloom-storm overflowing her form',
-      'ORANGE + CORAL TROPICAL BLAST — her body buried inside maximalist explosion of bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea, tropical bloom-storm overflowing',
-      'AMBER + COPPER METALLIC BLAST — her body engulfed and drenched in amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses, metallic bloom-storm overflowing her form',
-    ],
-    instructions: `Each entry is ONE FLOWER-EXPLOSION engulfing her body, 30-60 words. Format: "COLOR-THEME NAME BLAST/EXPLOSION/STORM — her body engulfed/buried/drenched by [3-6 named species], bloom-cascade overflowing/spilling beyond her form". NEVER use words: dress / gown / skirt / silhouette / bodice / fabric / wall / garment. ALWAYS use engulfing/overflowing/cascading verbs. MULTI-SPECIES + COLOR-THEMED. Output as a NUMBERED list, one per line.`,
-  },
-
-
-  // ─── flower-fairy R7: hair_floral rewritten — flowers REPLACE the hair-mass ───
-  faebot_flower_fairy_hair_floral: {
-    format: 'simple',
-    theme: `HAIR-REPLACED-BY-FLOWERS for the FaeBot flower-fairy path. Each entry is ONE specific HAIR-REPLACEMENT cascade where flowers REPLACE the hair-strands themselves — not "flowers threaded through hair" but "flowers AS the hair-mass". The hair appears to BE a flower-cascade flowing from her scalp like hair would. Each entry 30-50 words.
-
-⚠️ FRAMING: the flowers REPLACE the hair-strands. Describe the cascade as if you can't see any hair-strand at all — only flower-strands flowing from her scalp down to waist/back like a flower-waterfall. Lead with phrases like "hair entirely REPLACED by", "cascading FLOWER-HAIR of", "flower-strands flowing from her scalp", "flower-waterfall in place of hair".
-
-⚠️ MULTI-SPECIES + COLOR THEME — 3-6 named species per entry in ONE bold coordinated palette.
-
-🚫 STRICT BANS:
-  • NO "flower-crown" / NO "wreath" / NO "halo of flowers"
-  • NO "woven through" / NO "tucked in" / NO "small floral accents"
-  • NO single-species
-  • NO mention of hair-color showing through (hair-color is in separate axis)
-  • NO mention of dress / fabric / face / eyes`,
-    touchpoints: [
-      'SUNSET FLOWER-HAIR REPLACEMENT — hair entirely REPLACED by a waist-length cascade of red roses + coral peonies + orange ranunculus + golden marigolds + amber dahlias flowing like flower-strands from her scalp, no hair-strands visible, pure sunset flower-waterfall',
-      'TWILIGHT PURPLE FLOWER-HAIR — flower-strands of lavender wisteria + violet anemones + indigo iris + periwinkle sweet-pea + deep-purple dahlias flowing from her scalp to waist, hair entirely replaced by purple flower-cascade',
-      'BLUSH PINK FLOWER-HAIR — hair entirely REPLACED by cascade of soft pink peonies + blush garden roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses flowing from scalp to waist, pure blush flower-waterfall',
-      'MONOCHROME WHITE FLOWER-HAIR — flower-strands of white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore flowing from her scalp like hair, no actual hair visible, snow-white flower-waterfall',
-      'RAINBOW FLOWER-HAIR — hair entirely REPLACED by rainbow cascade of red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones flowing from scalp like flower-strands',
-      'CORAL TROPICAL FLOWER-HAIR — flower-cascade of coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds replacing hair-mass entirely, pure flower-waterfall',
-      'BURGUNDY WINE FLOWER-HAIR — hair REPLACED by waterfall of burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla, no hair-strands visible',
-      'GOLD AMBER FLOWER-HAIR — flower-strands of golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums flowing from scalp, hair entirely replaced',
-      'OCEAN COOL FLOWER-HAIR — hair entirely REPLACED by cascade of aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses flowing from scalp',
-      'EMERALD FOREST FLOWER-HAIR — flower-cascade of green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents replacing hair entirely',
-      'PASTEL CANDY FLOWER-HAIR — flower-strands of pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms flowing from scalp, cotton-candy flower-waterfall replacing hair',
-      'TROPICAL BOLD FLOWER-HAIR — hair REPLACED by hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger flowing from scalp',
-      'AUTUMN HARVEST FLOWER-HAIR — flower-cascade of rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos replacing hair-mass entirely',
-      'DUSK FIRE FLOWER-HAIR — hair entirely REPLACED by waterfall of deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias, dusk-fire flower-waterfall',
-      'BLUE + WHITE COASTAL FLOWER-HAIR — flower-strands of sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue flowing from scalp like hair',
-      'PINK + GOLD ROMANTIC FLOWER-HAIR — hair REPLACED by cascade of soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea',
-      'VIOLET + CREAM FLOWER-HAIR — flower-cascade of violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea replacing hair entirely',
-      'CHERRY-BLOSSOM FLOWER-HAIR — hair entirely REPLACED by pink + white cherry blossom petals + pink camellias + cream magnolias flowing from scalp like cherry-blossom hair-strands',
-      'RED + BURGUNDY FLOWER-HAIR — flower-strands of deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus flowing from scalp, hair entirely replaced',
-      'YELLOW MEADOW FLOWER-HAIR — hair REPLACED by waterfall of yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums',
-      'LILAC + BABY-BLUE SPRING FLOWER-HAIR — flower-cascade of lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots flowing from scalp',
-      'TEAL + ROSE-GOLD VINTAGE FLOWER-HAIR — hair entirely REPLACED by teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies',
-      'BLACK ROSE + WHITE GOTH FLOWER-HAIR — flower-strands of dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore replacing hair',
-      'PEACH + CREAM FLOWER-HAIR — hair REPLACED by cascade of peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias',
-      'MAGENTA + ORANGE BOLD FLOWER-HAIR — flower-strands of hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea flowing from scalp',
-      'MINT + WHITE FRESH FLOWER-HAIR — flower-cascade of mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus replacing hair entirely',
-      'BUTTER YELLOW + BLUSH FLOWER-HAIR — hair entirely REPLACED by butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums',
-      'INDIGO + VIOLET DEEP FLOWER-HAIR — flower-strands of indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias flowing from scalp, deep-purple flower-waterfall',
-      'ORANGE + CORAL TROPICAL FLOWER-HAIR — hair REPLACED by bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea',
-      'AMBER + COPPER METALLIC FLOWER-HAIR — flower-cascade of amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses replacing hair-mass',
-    ],
-    instructions: `Each entry is ONE HAIR-REPLACED-BY-FLOWERS cascade, 30-50 words. Format: "COLOR-THEME NAME FLOWER-HAIR — hair entirely REPLACED by cascade of [3-6 named flower species] flowing from scalp to waist". NEVER "woven through" / NEVER "crown" / NEVER "wreath". ALWAYS "REPLACED" / "flower-strands flowing from scalp" / "flower-cascade replacing hair". MULTI-SPECIES + COLOR-THEMED. Output as a NUMBERED list, one per line.`,
-  },
-
-  // ─── flower-fairy DNA: fairy_creature (unified mythic-fae description) ───
-  faebot_flower_fairy_fairy_creature: {
-    format: 'simple',
-    theme: `MYTHIC FLOWER-FAIRY CREATURES for the FaeBot flower-fairy path. Each entry is ONE unified mythic-fae creature description — 50-90 words per entry — combining ethnicity-essence + skin-glow + hair + fae-features + plant-merged details + magical signature. NEVER a human-model description. ALWAYS an otherworldly fae being.
-
-⚠️ MANDATORY FEATURES per entry (stack these):
-  • Race/ethnicity essence (European-fae / Mediterranean-fae / Latin-American-fae / Asian-fae / African-American-fae — distribute evenly across all 5)
-  • Luminous fae-glowing skin (specify tone: porcelain-glowing / olive-glowing / amber-glowing / pearl-glowing / bronze-glowing / etc.)
-  • Delicate pointed elf-ears (always — defining fae feature)
-  • Subtle fae markings (luminescent runes / golden tattoo-traces / petal-pattern markings on cheekbones, brow, or collarbone)
-  • Hair (color + texture + length) integrated with floral elements
-  • Large stylized expressive jewel-tone eyes (color varies)
-  • Plant-merged feature (vines threaded through hair / leaf-cluster crown / bloom-petals growing from temples / mossy-skin patches / glowing pollen on cheekbones)
-  • Magical signature (visible glowing veins / sparkle-dust on skin / firefly-glow around her / luminescent freckles)
-
-🚫 STRICT BANS:
-  • NO "10/10 stunning beauty" / NO model-language / NO magazine-cover / NO Pinterest beauty
-  • NO realistic-skin-texture / NO photoreal-pore description
+  • NO human-model language (no "stunning" / "beautiful" / "model")
   • NO sexual / suggestive language
-  • NO modern / human / mundane references
-
-✓ MOOD: peaceful confident at-home-in-her-wildness. She is a magical garden-creature, calm and wondrous.
-
-Channel: Brian Froud fae paintings + Pre-Raphaelite Persephone / Flora / Spring Goddess oil paintings + Alphonse Mucha art-nouveau fairy panels + Disney Tinker Bell × Tolkien elf-queen lineage. Diverse ethnicities + diverse hair colors + diverse magical signatures.
-
-Each entry 50-90 words.`,
+  • NO posed-for-camera (always candid posture)
+  • NO mention of plain fabric / tulle / silk`,
     touchpoints: [
-      'EUROPEAN FLOWER-FAIRY with luminous porcelain-glowing skin and subtle golden fae-markings tracing her cheekbones, long platinum-blonde waves cascading with tiny baby-breath woven through, delicate pointed elf-ears, large stylized violet-jewel eyes with star-shaped catchlights, soft sparkle-dust drifting from her temples, calm wondrous expression, mythic Pre-Raphaelite fae register',
-      'MEDITERRANEAN FLOWER-FAIRY with luminous olive-toast-glowing skin and copper fae-markings on her brow, long auburn curly hair cascading with rosebuds woven through, delicate pointed elf-ears, large stylized hazel-amber eyes with multiple catchlights, faint glowing pollen dusting her shoulders, wild confident garden-creature presence',
-      'LATIN AMERICAN FLOWER-FAIRY with luminous warm-amber-glowing skin and bronze fae-markings tracing her collarbone, long dark-brown wavy hair with cosmos-blooms woven throughout, delicate pointed elf-ears, large stylized chocolate-amber eyes with sparkle-glow, faint glowing veins under her skin pulsing gently, mythic-creature beauty in candid moment',
-      'ASIAN FLOWER-FAIRY with luminous pearl-white-glowing skin and silver fae-markings on her temples, sleek jet-black long-wavy hair with cherry-blossom petals tucked throughout, delicate pointed elf-ears, large stylized violet-jewel eyes with multiple star-catchlights, soft firefly-glow halo around her body, otherworldly serene fae presence',
-      'AFRICAN AMERICAN FLOWER-FAIRY with luminous deep-bronze-and-gold-glowing skin and gold fae-markings tracing her cheekbones and brow, long box-braids with foxglove-and-lily-of-the-valley woven through every braid, delicate pointed elf-ears, large stylized emerald-green eyes with golden inner glow, regal at-home-in-her-wildness presence',
-      'EUROPEAN FAE with porcelain-glowing skin tinted soft rose, long honey-blonde voluminous curls with daisies + cosmos + wildflowers woven throughout, pointed elf-ears, large stylized sky-blue eyes with crystal catchlights, faint glow-vines pulsing under her wrists and collarbone, dreamy wondrous garden-being',
-      'MEDITERRANEAN FAE with warm-olive-glowing skin and amber fae-markings on her cheeks, long chestnut wavy hair with rose-and-jasmine woven through, pointed elf-ears, large stylized hazel-green eyes with golden flecks, soft glowing pollen dusting her shoulders and arms, wild garden-spirit at-home in bloom-meadow',
-      'BRAZILIAN FAE with golden-brown-glowing skin and bronze fae-markings tracing her temples, long voluminous dark-brown curls with bird-of-paradise + tropical orchid woven through, pointed elf-ears, large stylized chocolate-brown eyes with amber glow, soft firefly-cloud around her, tropical sun-fae presence',
-      'KOREAN FAE with luminous pearl-fair skin and silver fae-markings on her cheekbones, sleek straight black hair with cherry-blossom petals scattered throughout, pointed elf-ears, large stylized doe-brown eyes with pink-glow catchlights, soft silver pollen-dust drifting around her, ethereal moon-fae serenity',
-      'PERSIAN FAE with luminous warm-olive-amber-glowing skin and gold fae-markings under her brow, long dark wavy hair with sweet-pea + lilac woven through, pointed elf-ears, large stylized amber-jewel eyes with depth and sparkle, faint glowing pulse-lines visible on her temples, wild romantic fae spirit',
-      'WEST AFRICAN FAE with luminous deep-ebony-and-gold-glowing skin and gold fae-markings tracing her cheekbones, intricate cornrow braids with jasmine-cascade woven throughout, pointed elf-ears, large stylized amber eyes with golden inner light, regal magical-creature beauty',
-      'POLYNESIAN FAE with luminous golden-tan-glowing skin and white-pearl fae-markings on her brow, long jet-black wavy hair with plumeria-and-tiare woven through, pointed elf-ears, large stylized chocolate-amber eyes with sparkle catchlights, soft pearl-glow halo around her, tropical island-fae serenity',
-      'SCANDINAVIAN FAE with porcelain-fair-glowing skin and pale-silver fae-markings on her temples, long wheat-blonde braided hair with forget-me-nots + bluebells woven through, pointed elf-ears, large stylized ice-blue eyes with crystal catchlights, faint silver glow-veins under her skin, cool moonlit-fae register',
-      'INDIAN FAE with luminous caramel-glowing skin and gold fae-markings on her forehead (subtle henna-style), long wavy black hair with marigold + jasmine + rose woven throughout, pointed elf-ears, large stylized warm-amber eyes with depth, soft golden glow-veins under her skin, regal jewel-fae spirit',
-      'IRISH FAE with pale-rose-glowing skin and faint freckles + green fae-markings on her cheeks, long red-copper curls with bluebells + wild violets + clover woven through, pointed elf-ears, large stylized emerald-green eyes with golden inner glow, soft firefly-cloud around her, wild-meadow-fae presence',
-      'ETHIOPIAN FAE with luminous medium-brown-glowing skin and gold fae-markings tracing her brow, tall slender stature, long dark hair in braided crown with star-shaped white-jasmine woven through, pointed elf-ears, large stylized golden-amber eyes with star catchlights, soft glow-vines pulsing on her arms',
-      'FILIPINO FAE with luminous golden-tan-glowing skin and copper fae-markings on her cheekbones, long dark-brown wavy hair with sampaguita + ylang-ylang + frangipani woven through, pointed elf-ears, large stylized chocolate-brown eyes with warm catchlights, faint glowing pollen dusting her, tropical garden-fae',
-      'GREEK FAE with olive-glowing skin and bronze fae-markings on her cheeks, long chestnut waves with daphne + olive-blossom + crocus woven through, pointed elf-ears, large stylized warm-hazel eyes with golden glow, soft glow-veins under her wrists, classical garden-fae presence',
-      'EGYPTIAN FAE with warm-olive-amber-glowing skin and gold fae-markings tracing her almond-shaped eyes (Cleopatra-style), long dark hair in elegant updo with lotus + papyrus woven through, pointed elf-ears, large stylized dark-amber eyes with gold inner light, regal desert-bloom fae spirit',
-      'INDONESIAN FAE with luminous golden-tan-glowing skin and pearl fae-markings on her temples, long dark wavy hair with tiare + hibiscus + plumeria woven through, pointed elf-ears, large stylized warm-brown eyes with soft pink-glow catchlights, gentle firefly-cloud around her, tropical-island fae',
-      'AFRICAN AMERICAN FAE with luminous medium-brown-glowing skin and copper fae-markings on her cheekbones, voluminous afro curls with peonies + dahlias + roses woven throughout, pointed elf-ears, large stylized amber eyes with golden glow, soft pollen-dust drifting around her, regal magical-creature beauty',
-      'NIGERIAN FAE with luminous deep-ebony-glowing skin and gold fae-markings tracing her cheekbones and brow, intricate locs cascading with hibiscus + bird-of-paradise + tropical orchids woven through, pointed elf-ears, large stylized golden-amber eyes with star catchlights, regal warrior-fae spirit',
-      'MEXICAN FAE with luminous warm-tan-glowing skin and copper fae-markings on her cheeks, long dark-brown wavy hair with marigold + dahlia + cosmos woven throughout, pointed elf-ears, large stylized chocolate-brown eyes with warm catchlights, soft glow-veins on her temples, sun-warmed fae spirit',
-      'JAPANESE FAE with luminous pearl-pale-glowing skin and silver fae-markings on her cheeks, sleek long black hair in elegant flowing updo with cherry-blossom petals woven throughout, pointed elf-ears, large stylized violet-jewel eyes with star catchlights, soft sparkle-dust drifting around her, ethereal sakura-fae serenity',
-      'PUERTO RICAN FAE with luminous golden-tan-glowing skin and amber fae-markings on her brow, long dark wavy hair with hibiscus + bougainvillea woven through, pointed elf-ears, large stylized warm-amber eyes with sunset-glow catchlights, faint glowing veins under her wrists, tropical fae spirit',
-      'NORTHERN EUROPEAN FAE with porcelain-fair-glowing skin and pale-blue fae-markings on her temples, long platinum-blonde waves with snowdrops + lily-of-the-valley woven through, pointed elf-ears, large stylized cornflower-blue eyes with silver catchlights, faint silver glow-mist around her, ethereal winter-spring fae',
-      'MAORI FAE with warm-golden-brown-glowing skin and bronze fae-markings tracing her cheekbones in subtle traditional pattern, long dark wavy hair with kowhai-blossom + harakeke woven through, pointed elf-ears, large stylized dark-brown eyes with copper catchlights, soft glow-pollen drifting around her',
-      'EUROPEAN FAIRY with porcelain-glowing skin and rose fae-markings on her cheeks, long flowing red waves with garden-rose petals woven throughout, pointed elf-ears, large stylized emerald-green eyes with crystal catchlights, faint glow-vines pulsing on her temples, wild rose-garden fae spirit',
-      'ASIAN FAIRY with luminous pale-fair skin and pearl fae-markings on her temples, sleek long black hair half-up with peony-blooms woven through, pointed elf-ears, large stylized aqua-blue eyes with sparkle catchlights, soft pearl-pollen drifting around her, lake-fae serenity',
-      'AFRICAN AMERICAN FAIRY with luminous bronze-and-gold-glowing skin and gold fae-markings on her cheekbones, long box-braids with hibiscus + tropical orchid + plumeria woven through every braid, pointed elf-ears, large stylized amber-and-gold eyes with star catchlights, regal tropical-fae presence',
-      'LATIN AMERICAN FAIRY with luminous golden-tan-glowing skin and bronze fae-markings on her temples, long voluminous dark-brown curls with bougainvillea + hibiscus woven through, pointed elf-ears, large stylized warm-amber eyes with sunset-glow, faint glowing pulse-veins on her wrists, vibrant garden-fae',
+      'A rose-fae with petal-soft pink-blushed skin and waist-long hair of cascading garden-rose blooms, wearing a bodice of woven crimson petals and skirt of overlapping rose-leaves, butterfly-wings constructed entirely of layered red-rose petals spread wide, pointed elf-ears, large jewel-violet eyes with sparkle catchlights, kneeling among wild roses with cupped palms catching drifting petals, soft golden-pollen cloud halo around her.',
+      'A wisteria-sprite with lavender-glowing skin and trailing hair of cascading purple wisteria racemes, draped petal-shawl of pale-violet blossoms over a vine-and-leaf bodice, gossamer wings of stitched wisteria petals, pointed elf-ears, large amber eyes with golden inner light, perched on a vine-swing weaving a small wisteria-crown with her fingertips, soft silver pollen drifting around her.',
+      'A poppy-fae with sun-warmed skin tinted coral-blush and hair of cascading red-poppy blooms threaded with black-anemone centers, vine-wrap bodice of woven poppy petals, dramatic butterfly-wings made of alternating red-poppy and black-anemone petals, pointed elf-ears, large saturated-amber eyes, standing waist-deep in a poppy-field with hands lifted catching golden pollen-cloud rising from her palms.',
+      'A cherry-blossom-fae with pale porcelain-glowing skin and silk-black hair threaded with hundreds of pink-and-white cherry-blossom petals, petal-soft wrap of overlapping sakura blooms, translucent wings of woven pink-cherry-petals, pointed elf-ears, large jewel-violet eyes, seated on a giant cherry-blossom branch with petals falling around her in slow snow, soft luminous halo from her body.',
+      'A morning-glory-fae with translucent skin showing tiny blue constellations beneath and hair of cascading blue-and-purple morning-glory trumpets, draped petal-shawl of indigo morning-glory blooms over a vine-leaf bodice, gossamer wings of stitched indigo petals, pointed elf-ears, large emerald-jewel eyes, sipping dewdrop nectar from a giant morning-glory cup, glowing fireflies in slow orbit around her shoulders.',
+      'A sunflower-fae with golden-bronze skin dusted with sun-gold pollen and hair of vibrant yellow-and-amber sunflower-petals woven through, woven petal-bodice of golden sunflower-rays and brown-seed-center detail, large butterfly-wings of layered golden-sunflower-petals spread wide, pointed elf-ears, large saturated amber-jewel eyes, kneeling at the base of a giant sunflower-stalk with one palm pressed to its trunk, golden pollen-cloud halo glowing around her.',
+      'A lotus-fae with dewdrop-translucent skin glowing pearl-pink and hair of cascading pink-and-white lotus-petals flowing past her waist, petal-wrap bodice of pale-pink lotus blooms over a leaf-skirt of jade water-leaves, gossamer wings of woven pink-lotus petals, pointed elf-ears, large pearl-white eyes radiating gentle light, seated cross-legged on a giant lotus-pad with cupped palms holding glowing dewdrop, soft golden pollen drifting around her.',
+      'A tulip-fae with porcelain-blush skin and hair of cascading multi-color tulip blooms in coral + yellow + magenta + violet, woven petal-bodice of overlapping tulip-petals in coordinated rainbow palette, large butterfly-wings of layered tulip-petals, pointed elf-ears, large jewel-violet eyes with sparkle catchlights, kneeling inside a giant tulip-bell as if it were a room, glowing fireflies in slow orbit around her.',
+      'An orchid-fae with deep-bronze-glowing skin and hair of cascading deep-purple-and-magenta orchid blooms, petal-wrap bodice of velvety orchid blooms in dramatic plum-and-pearl gradient, gossamer wings of stitched orchid-petals, pointed elf-ears, large amber-and-gold eyes, perched on a mossy orchid-branch with one hand lifted weaving a magical sigil, drifting pollen-cloud halo and small purple-glow will-o-wisps floating around her.',
+      'A daisy-fae with peach-cream skin and white-blonde hair threaded with cascading white-daisy blooms and small yellow stamens, petal-bodice of overlapping white-daisy petals over a leaf-skirt, butterfly-wings made of layered daisy-petals with golden-pollen wing-tips, pointed elf-ears, large sky-blue eyes with crystal catchlights, dancing barefoot through a meadow of daisies with skirt swirling, drifting petals trailing behind her.',
+      'A peony-fae with warm-olive-glowing skin and hair of cascading blush-pink peony blooms threaded with cream-roses, petal-wrap bodice of pale-pink peony-petals over a leaf-skirt, large butterfly-wings of overlapping pink-peony-petals spread wide, pointed elf-ears, large hazel-amber eyes, seated on a giant peony-bloom as if it were a throne, soft silver pollen-cloud halo around her.',
+      'A marigold-fae with warm-bronze-glowing skin and hair of cascading orange-and-gold marigold-blooms, woven petal-bodice of orange-and-gold marigold-petals, large butterfly-wings made of layered marigold-petals in fire-and-amber palette, pointed elf-ears, large saturated-amber eyes, kneeling in a marigold-meadow with cupped palms releasing a golden pollen-explosion, fireflies in slow orbit.',
+      'A jasmine-fae with luminous pearl-fair skin and silver-white hair threaded with cascading white-jasmine blooms, gossamer wings of stitched jasmine-petals with pearl-glow, pointed elf-ears, large violet-jewel eyes, draped petal-shawl of white-jasmine blooms, kneeling under a jasmine-vine-arbor sipping nectar from a tiny jasmine-cup, soft moonlight-cool atmosphere with silver pollen drifting.',
+      'A dahlia-fae with deep-ebony-and-gold-glowing skin and hair of cascading deep-magenta-and-burgundy dahlia blooms in dense cluster, woven petal-bodice of overlapping wine-burgundy dahlia-petals, large butterfly-wings of layered magenta-dahlia-petals spread wide, pointed elf-ears, large golden-amber eyes with star catchlights, dancing through a dahlia-field at twilight with petals trailing behind, glowing fireflies around her.',
+      'An iris-fae with cool olive-glowing skin and hair of cascading deep-purple-and-blue iris blooms threaded with golden-yellow stamens, petal-wrap bodice of velvety violet-and-cobalt iris-petals, gossamer wings of stitched iris-petals with golden vein-glow, pointed elf-ears, large emerald-green eyes with crystal catchlights, perched on a mossy log among iris-clumps with one palm catching drifting golden pollen.',
+      'A chrysanthemum-fae with warm-caramel-glowing skin and hair of cascading rust-and-bronze chrysanthemum blooms in massive volume, woven petal-bodice of overlapping rust-russet chrysanthemum-petals, large butterfly-wings of layered chrysanthemum-petals in autumn-amber palette, pointed elf-ears, large warm-hazel eyes, seated on a moss-and-bloom stump weaving a flower-spell with her fingertips, drifting autumn petals.',
+      'A sweet-pea-fae with porcelain-blush skin and hair of cascading pastel-pink-and-lavender sweet-pea blooms in fluttering clusters, draped petal-wrap of soft-pink sweet-pea blooms, gossamer wings of stitched sweet-pea petals with pearl-glow, pointed elf-ears, large sky-blue eyes with sparkle catchlights, sipping dewdrop from a sweet-pea-flower with butterflies circling her shoulders.',
+      'A lily-fae with luminous fair-porcelain skin and hair of cascading white-tiger-lily blooms threaded with orange-stamen accents, woven petal-bodice of overlapping white-and-orange lily-petals, large butterfly-wings of layered white-lily petals with orange-pollen tips, pointed elf-ears, large violet-jewel eyes, kneeling beside a pond of giant water-lilies with one finger trailing through the water, dragonflies hovering near.',
+      'A magnolia-fae with caramel-glowing skin and hair of cascading cream-and-pink magnolia blooms in soft volume, draped petal-shawl of pale-cream magnolia-petals, gossamer wings of stitched magnolia-petals in pearl-glow, pointed elf-ears, large hazel-amber eyes, seated under a magnolia-tree-canopy with petals falling around her, fireflies in slow orbit.',
+      'A hibiscus-fae with deep-bronze-glowing skin and hair of cascading hot-pink hibiscus blooms with yellow stamens, woven petal-bodice of overlapping hibiscus-petals in tropical hot-pink, large butterfly-wings of layered hibiscus-petals with magenta-and-gold gradient, pointed elf-ears, large saturated-amber eyes, dancing in a tropical-bloom meadow with arms outstretched, glowing fireflies trailing.',
+      'A foxglove-fae with sun-warmed skin and hair of cascading purple-and-cream foxglove bells with cream-throat detail, vine-wrap bodice of woven foxglove-stems with foxglove-bells, gossamer wings of foxglove-petals with delicate purple-glow, pointed elf-ears, large amber eyes, perched on a foxglove-tower with one foxglove-bell in her cupped palm, drifting pollen-cloud halo.',
+      'A bluebell-fae with translucent skin showing tiny blue constellations beneath and silver-white hair threaded with cascading blue-bluebell-clusters, draped petal-shawl of blue bluebell-blooms, gossamer wings of stitched bluebell-petals with silver-glow, pointed elf-ears, large emerald-jewel eyes, kneeling in a bluebell-forest understory with one palm lifted catching falling bluebell-petals, magical silver-glow halo.',
+      'A buttercup-fae with cream-fair skin and golden-blonde hair threaded with cascading yellow-buttercup blooms in dense clusters, woven petal-bodice of overlapping yellow-buttercup petals, butterfly-wings of layered yellow-buttercup-petals with sunshine-glow, pointed elf-ears, large sky-blue eyes with crystal catchlights, dancing through a buttercup-meadow with skirt swirling, drifting golden pollen around her.',
+      'A camellia-fae with porcelain-fair skin and silk-black hair threaded with cascading deep-red-and-pink camellia blooms, petal-wrap bodice of velvety red-camellia petals, gossamer wings of stitched camellia-petals with crimson-glow, pointed elf-ears, large jewel-violet eyes with sparkle catchlights, seated on a camellia-branch with cupped palms holding glowing dewdrop, fireflies in slow orbit.',
+      'A snapdragon-fae with warm-olive-glowing skin and hair of cascading multi-color snapdragon blooms in coral-pink-and-yellow rainbow, woven petal-bodice of overlapping snapdragon-petals in vibrant palette, large butterfly-wings of layered snapdragon-petals in rainbow gradient, pointed elf-ears, large warm-hazel eyes, perched on a giant snapdragon-stalk with one hand lifted weaving a magical sigil, drifting pollen halo.',
+      'A cosmos-fae with deep-bronze-glowing skin and hair of cascading deep-magenta-and-pink cosmos blooms with yellow centers, draped petal-shawl of magenta cosmos blooms, gossamer wings of stitched cosmos-petals with pink-glow, pointed elf-ears, large amber-and-gold eyes, kneeling in a cosmos-meadow at golden-hour with cupped palms releasing a pink pollen-storm, butterflies circling.',
+      'A dandelion-seed-fae with translucent pale skin and silver-white hair fragmenting at the edges into drifting seed-clocks, draped soft-petal wrap of cream-yellow dandelion blooms, gossamer wings of dandelion-clock-membrane with seeds visibly detaching, pointed elf-ears, large pearl-white eyes, blowing on a dandelion-clock with one hand, magical seed-cloud trailing into the air around her.',
+      'A pansy-fae with porcelain-blush skin and dark-brown hair threaded with cascading multi-color pansy blooms in deep-violet-yellow-and-orange palette, woven petal-bodice of overlapping velvety pansy-petals, gossamer wings of stitched pansy-petals with vivid-jewel glow, pointed elf-ears, large saturated-amber eyes, perched on a moss-and-pansy stump with one finger tracing a magical sigil in the air, glowing fireflies.',
+      'An anemone-fae with luminous cool-fair skin and silver-white hair threaded with cascading purple-and-pearl anemone blooms with black centers, draped petal-shawl of velvety violet-anemone petals, butterfly-wings of layered anemone-petals with black-center detail and silver-glow, pointed elf-ears, large emerald-green eyes, seated on a moss-bench in an anemone-meadow with petals falling around her, magical silver-glow halo.',
+      'A ranunculus-fae with warm-bronze-glowing skin and hair of cascading soft-pink-and-cream ranunculus blooms in dense layered clusters, woven petal-bodice of overlapping pink ranunculus-petals, gossamer wings of stitched ranunculus-petals with pearl-blush glow, pointed elf-ears, large warm-hazel eyes with golden catchlights, kneeling in a ranunculus-meadow at golden-hour with hands cupping a glowing seed, fireflies trailing.',
     ],
-    instructions: `Each entry is ONE MYTHIC FLOWER-FAIRY CREATURE unified description, 50-90 words. Format: "ETHNIC ESSENCE CAPS + features: skin glow + fae markings + hair + elf-ears + eyes + plant-merge + magical signature, all woven into one paragraph". DISTRIBUTE across all 5 races (European / Mediterranean / Latin American / Asian / African American). ALWAYS pointed elf-ears, ALWAYS luminous fae-glowing skin, ALWAYS fae markings, ALWAYS magical signature. NEVER human-model language. Output as a NUMBERED list, one per line.`,
+    instructions: `Each entry is ONE FLOWER-FAE creature unified description, 40-80 words. Format: "A [flower-type]-fae with [skin-tone] skin and [hair-color] hair of [cascading specific flowers], [petal-bodice / vine-wrap garment], [wing-type made of specific flower petals], [pointed elf-ears], [eye-color], [candid pose interacting with their flower-environment], [magical signature]". Stack 4+ exotic flower-fae features per entry. Distribute across 30+ flower-types and 5 ethnicities. Output as a NUMBERED list, one per line.`,
   },
 
-  // ─── flower-fairy DNA: floral_attire (organic flower-woven natural attire) ───
-  faebot_flower_fairy_floral_attire: {
+  flower_fairy_scenes: {
     format: 'simple',
-    theme: `ORGANIC FLOWER-WOVEN FAIRY ATTIRE for the FaeBot flower-fairy path. NOT couture, NOT designer, NOT fashion — ORGANIC fae-grown attire where flowers + vines + leaves + petals weave around her body as if she GREW them from her own skin. Each entry 30-60 words.
+    theme: `FLOWER-FAIRY SCENE SETTINGS for the FaeBot flower-fairy path. Each entry describes ONE specific fairy-in-flowers setting where she fills 40-55% of the frame. Same vibe + structure as FOREST_FAIRY_SCENES (Hamadryad emerging from oak, Leshy leaning against birch trunk) but here every scene is FLOWER-saturated. Each entry 30-60 words.
 
-⚠️ MANDATORY:
-  • ORGANIC / NATURAL / FAE-GROWN — never "couture gown" / never "designer dress"
-  • Lush abundant flower coverage — same volume as bloom-spirit but described as natural-organic
-  • COLOR-THEMED (sunset / twilight / blush / monochrome / rainbow / etc.)
-  • MULTI-SPECIES flowers woven together
+⚠️ MANDATORY — every scene establishes:
+  • The fairy interacting with flowers (emerging from a giant bloom, perched on a stamen, dancing in a flower-field, sipping from a bloom-cup, sleeping on a lotus-pad, etc.)
+  • The flower-environment wrapping around her (field of wildflowers, wisteria-pergola, lotus-pond, cherry-blossom grove, peony-cluster, etc.)
+  • Atmospheric depth (foreground tactile bloom-detail / midground fairy / background fading bloom-mist)
+  • Magic creature/light element (fireflies, drifting petals, glowing pollen, will-o-wisps)
+
+⚠️ POOL VARIETY — distribute across these scene types:
+  Field-of-flowers (wildflowers / poppies / lavender / sunflowers / daisies / cosmos)
+  Garden architecture (wisteria-pergola / rose-arch / lotus-pond / cherry-blossom grove)
+  Living-in-flowers (inside giant tulip-bell / peeking from peony / curled in lotus-pad / perched on stamen)
+  Bloom-interaction (sipping nectar / weaving petal-crown / cupping pollen / blowing dandelion-seeds)
+  Magical bloom-event (giant bloom opening for her / petal-storm carrying her / glowing-bloom sharing nectar)
 
 🚫 STRICT BANS:
-  • NO "couture" / NO "designer" / NO "fashion" / NO "magazine-cover gown"
-  • NO mention of hair (hair is in fairy_creature)
-  • NO single-species attire
-
-✓ FORMS to vary:
-  Petal-dress (made of overlapping petals like scales) | Vine-bodice + cascading petal-skirt | Bloom-cluster gown grown from her body | Leaf-and-vine garment with bloom accents | Floral-cape draped from shoulders | Bloom-tutu / petal-skirt | Flowing organic-floral wraps | Vine-corset with bloom-skirt | Petal-cascade gown grown from waist
-
-Channel: Brian Froud fae attire + Pre-Raphaelite Flora + Mucha art-nouveau flower-women + Disney Tinker Bell organic-leaf-dress × × Pre-Raphaelite Persephone.`,
+  • NO modern / urban / industrial setting
+  • NO ruins / abandoned (different territory)
+  • NO interior rooms (different territory)
+  • NO additional human figures
+  • NO violent / scary / edgy mood`,
     touchpoints: [
-      'ORGANIC SUNSET PETAL-CASCADE attire — flower-and-petal garment that has GROWN naturally from her body in sunset-colors of red roses + coral peonies + orange ranunculus + golden marigolds, layers of overlapping petals draping like a natural fae-gown from shoulder to bare feet',
-      'TWILIGHT VINE-AND-BLOOM ATTIRE — lavender + violet wisteria vines woven across her torso into a bodice + cascading purple iris + bluebell petals forming a skirt, organic fae-grown floral wrap',
-      'BLUSH PETAL-DRESS — soft pink peony + blush rose + cream ranunculus + ivory jasmine + pale-blush cabbage rose petals overlapping like scales forming an organic gown that flows around her',
-      'MONOCHROME WHITE BLOOM-WRAP — white roses + cream gardenias + ivory peonies + pearl-white jasmine grown together as a flowing fae-wrap, ethereal snow-white organic attire',
-      'RAINBOW WILDFLOWER GARMENT — red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones woven naturally around her body, rainbow wildflower fae-attire',
-      'CORAL TROPICAL FAE-DRESS — coral peonies + peach roses + apricot ranunculus + warm sunset dahlias + golden marigolds growing organically around her in cascading tropical layers',
-      'BURGUNDY WINE BLOOM-CASCADE — burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla petals draping naturally as a wine-spectrum fae attire',
-      'GOLD AMBER COPPER LEAF-GARMENT — golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums woven naturally as a metallic fae-attire',
-      'OCEAN COOL BLOOM-WRAP — aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses cascading naturally as a cool ocean fae-attire',
-      'EMERALD FOREST VINE-AND-LEAF GARMENT — green hellebore + leaves + pale-yellow primrose + lavender sweet-pea + emerald succulents woven naturally around her as forest-fae attire',
-      'PASTEL CANDY PETAL-WRAP — pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms grown together as an organic candy-cotton fae-attire',
-      'TROPICAL BOLD BLOOM-CLOTH — hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger growing organically around her',
-      'AUTUMN HARVEST BLOOM-DRAPE — rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos in autumn organic-attire cascade',
-      'BLUE + WHITE COASTAL BLOOM-WRAP — sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue growing naturally around her',
-      'PINK + GOLD ROMANTIC PETAL-GROWTH — soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea organically draping her body',
-      'VIOLET + CREAM ETHEREAL PETAL-CASCADE — violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea growing as fae-attire',
-      'CHERRY-BLOSSOM PETAL-DRESS — pink and white cherry blossom petals overlapping in scale-like layers forming an organic fae-gown grown from her body',
-      'YELLOW MEADOW SUN-CLOTH — yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums woven naturally as sun-fae attire',
-      'LILAC + BABY-BLUE SPRING WRAP — lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots grown as an organic spring-fae attire',
-      'TEAL + ROSE-GOLD VINTAGE BLOOM-ATTIRE — teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies organically woven around her',
-      'BLACK ROSE + WHITE GOTH PETAL-WRAP — dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore organically draping her',
-      'PEACH + CREAM SOFT BLOOM-ROBE — peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias as a gentle fae-attire',
-      'MAGENTA + ORANGE BOLD GROWTH — hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea organically woven',
-      'COOL MINT + WHITE FRESH ATTIRE — mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus growing naturally around her',
-      'BUTTER YELLOW + BLUSH SOFT CLOTH — butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums organically draping',
-      'INDIGO + VIOLET DEEP WRAP — indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias growing as deep-purple fae attire',
-      'ORANGE + CORAL TROPICAL ROBE — bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea organically grown',
-      'BLUSH + DUSTY-PINK ROMANCE WRAP — soft blush garden roses + dusty-pink peonies + pale pink ranunculus + cream-blush cabbage roses + baby-pink sweet-pea organically draping',
-      'AMBER + COPPER METALLIC GROWTH — amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses woven naturally around her',
-      'IRIDESCENT FAIRY PASTEL ATTIRE — iridescent pastel mix of mint + lavender + baby-blue + cream-yellow + pearl-pink organic blooms growing as ethereal fairy-cascade attire',
+      'fairy half-emerged from a giant blooming peony as if it were her home, fingers pressed to glowing pollen-runes on the petals, soft golden pollen-motes drifting around her face, fern-fronds and rose-vines cascading over the ground',
+      'fairy perched on a giant sunflower stamen as if it were a balcony, one foot dangling over the bloom-disk, glowing pollen catching the warm sunlight, vine-curtain hanging from above, drifting butterflies',
+      'fairy wading waist-deep in a field of wild poppies that comes up to her waist, hands brushing the bloom-tops, butterflies trailing past her in slow motion, soft golden-hour light',
+      'fairy nestled inside a giant tulip-bell as if it were her bedroom, head resting against the curl of the petal, soft pearl-glow from her body lighting the inner-bell, fireflies in slow orbit outside',
+      'fairy seated cross-legged on a giant lotus-pad floating on a moonlit pond, cupped palms holding glowing liquid-starlight, surrounding pond surface dotted with smaller lotus-pads and water-lilies',
+      'fairy dancing barefoot through a meadow of buttercups and daisies, skirt and petals swirling outward, drifting golden pollen trailing behind her in slow-motion',
+      'fairy kneeling beneath a wisteria-pergola in full lavender bloom, hanging racemes brushing her shoulders, one palm reaching upward to catch a falling cluster, soft violet-twilight glow',
+      'fairy emerging from the heart of a giant blooming rose as if born from it, head tilted back with eyes closed, petals fragmenting at the edges of her form into drifting petal-snow',
+      'fairy curled up sleeping on the cupped surface of a giant magnolia bloom, hair cascading over the petal-edge, soft pearl-glow halo, dewdrops on every nearby leaf',
+      'fairy whispering to a small fae-creature (mouse / butterfly / hummingbird) perched on her finger, body tilted close, soft glow from her cheek lighting the creature',
+      'fairy walking through a cherry-blossom grove at peak bloom, pink-and-white petals raining down around her in slow motion, body in soft 3/4 turn with one hand lifted to catch petals',
+      'fairy kneeling at the edge of a hidden pond ringed with iris and water-lily, fingers trailing in the water, magical glowing rings spreading outward where she touches',
+      'fairy seated on a moss-and-bloom stump in a clearing of wildflowers, weaving a flower-crown with her fingertips, drifting golden pollen halo, small butterflies in slow orbit',
+      'fairy hovering just above the bloom-tops of a sunflower field at golden hour, wings fully spread, hands cupped releasing a golden pollen-cloud, body in candid mid-flight pose',
+      'fairy peeking from behind a curtain of hanging foxglove-bells, only her face + one hand visible, candid playful moment, glowing fireflies drifting nearby',
+      'fairy seated at the base of a giant blooming dahlia as if she were sheltering under it, head tilted up to gaze into the petals, magical glow from her halo lighting the underside of the bloom',
+      'fairy mid-leap over a flower-stream of cascading blooms, body airborne with wings flared, drifting petals trailing behind her, soft warm side-light gilding the scene',
+      'fairy curled up inside a giant lotus-bloom as if it were her bed, one hand draped over the petal-edge holding a glowing dewdrop, soft pearl-glow halo, fireflies hovering above',
+      'fairy walking through a tunnel of climbing-roses on a stone trellis, blooms hanging in cascade above + beside her, dappled rose-petal-light on her face and shoulders, drifting petals',
+      'fairy seated on a giant blooming chrysanthemum at twilight, soft violet-purple glow lighting her face from below, fireflies in dense orbit around her, drifting petals trailing into the air',
+      'fairy crouched beside a magical bloom that has opened to release a stream of glowing pollen-stars rising into the air around her face, candid wonder, soft pearl-glow halo',
+      'fairy dancing through a field of cosmos blooms at golden hour, body in mid-spin with skirt and petals swirling, drifting pink pollen trailing behind her in a slow ribbon',
+      'fairy perched on a giant blooming snapdragon as if it were her swing, one hand lifted catching a drifting butterfly, soft warm side-light, fireflies in slow orbit',
+      'fairy half-hidden inside the bell of a giant morning-glory at dawn, only her face + cupped palms visible, glowing dewdrop held in her hands, soft warm-pink light spilling from the bloom',
+      'fairy walking knee-deep through a bluebell-forest understory with vertical sun-shafts piercing the canopy above, drifting bluebell-petals trailing behind her, magical silver-glow halo',
+      'fairy kneeling among a thicket of wild orchids weaving a magical sigil in the air with her fingertip, soft purple-glow trail following her motion, fireflies in slow orbit nearby',
+      'fairy seated on a moss-cushioned root inside a hidden garden-grove, surrounded by walls of blooming wildflowers, head bowed gazing down at a small magical seed in her cupped palms, soft golden-glow halo',
+      'fairy mid-flight just above a pond of giant water-lilies with wings fully spread, body in candid hover-pose, glowing pollen-cloud trailing from her body, fireflies in slow orbit around her',
+      'fairy emerging through a curtain of cascading wisteria in full bloom, one hand parting the racemes, body in soft 3/4 turn, drifting violet-petals trailing in the air around her',
+      'fairy curled around the trunk of a flowering cherry tree at peak bloom, body wrapped between branches, head resting against the bark, pink-petals raining down in slow-motion around her',
     ],
-    instructions: `Each entry is ONE ORGANIC FLOWER-WOVEN FAE ATTIRE, 30-60 words. Format: "COLOR-THEME NAME CAPS — fae-attire form + 3-6 named flower species in color theme + organic-growing description". MULTI-SPECIES + COLOR-THEMED + ORGANIC (never couture). NEVER mention hair. Output as a NUMBERED list, one per line.`,
+    instructions: `Each entry is ONE FLOWER-FAIRY SCENE SETTING, 30-60 words. Format: "fairy [verb] [interacting with specific flower or environment], [atmospheric detail], [magical element]". Distribute across field-of-flowers / garden-architecture / living-in-flowers / bloom-interaction / magical-bloom-event scene types. Output as a NUMBERED list, one per line.`,
   },
 
-  // ─── flower-fairy DNA: candid_action (candid mid-action fae moments) ───
-  faebot_flower_fairy_candid_action: {
-    format: 'simple',
-    theme: `CANDID MID-ACTION FAIRY MOMENTS for the FaeBot flower-fairy path. Each entry is ONE specific candid caught-on-camera moment of a flower-fairy at peace in her garden. Each entry 15-30 words.
-
-⚠️ MANDATORY — every action is GENTLE / PEACEFUL / WONDROUS / MAGICAL. NEVER posing for camera. NEVER direct eye-contact. Caught-on-camera-candid feel.
-
-🚫 STRICT BANS:
-  • NO posing / NO modeling / NO direct eye-contact
-  • NO violence / NO conflict
-  • NO sexualized actions
-
-✓ MOMENT TYPES:
-  • Bloom-interaction (cupping nectar, weaving petal-spell, sipping dew, kissing petal)
-  • Movement (dancing through petals, twirling barefoot, walking through meadow, leaping over a stream)
-  • Stillness (lounging in petals, seated on stone, resting against tree, peeking from behind blooms)
-  • Conversation with garden-life (whispering to butterfly, listening to a flower, watching a firefly, smiling at a bee)
-  • Spell-casting (palms cupping glowing pollen, fingers tracing magical sigil, conjuring petal-storm)
-  • Discovery (reaching for a bloom, gazing at glow-pollen, examining a leaf, gently touching dew)`,
-    touchpoints: [
-      'dancing barefoot through a meadow of petals, hair flowing behind her, wings spread for balance, eyes lowered to the ground in joyful focus',
-      'cupping a small glowing pollen-cloud in her palms, head tilted down to watch it pulse, soft smile, eyes lowered to her hands',
-      'reaching toward a hanging bloom with one delicate finger, body curved with the motion, wings partially spread, face in soft profile',
-      'seated on a mossy stone weaving a flower-spell with her fingers, eyes on her work, hair falling forward, candid quiet moment',
-      'lounging on a bed of fallen petals, body relaxed and reclined, one hand trailing in the petals, eyes on a butterfly nearby',
-      'twirling mid-spin with floral skirt swirling outward, wings spread wide, hair and petals trailing in motion, candid joyful moment',
-      'whispering to a small bird perched on her wrist, head tilted toward it, smile of recognition, eyes meeting the bird not viewer',
-      'kneeling beside a bloom-cluster, head bent close as if smelling them, hair cascading forward, candid peaceful moment',
-      'walking through a wisteria-tunnel, head turned to watch the hanging blossoms, body half-profile, wings folded behind her',
-      'tracing a magical sigil in the air with one finger, glowing trail following the motion, eyes on her finger-tip not viewer',
-      'leaping over a small garden-stream mid-motion, body airborne, wings flared, hair streaming, eyes ahead on her landing',
-      'sipping dew from a flower-cup held in both hands, eyes downcast on the dew, lips lightly touching the petal-rim, peaceful moment',
-      'peeking out from behind a bloom-cluster with one eye visible, playful candid moment, wings partially hidden by foliage',
-      'gently touching a glowing firefly that has landed on her finger-tip, eyes on the firefly, wings still, soft wonder',
-      'spinning in slow-motion through golden-hour glow, arms outstretched, head tilted back with eyes closed, ecstatic peaceful joy',
-      'resting against a tree-trunk with one arm braced, gazing out into the deep garden, candid contemplative moment',
-      'wading ankle-deep through a bloom-meadow, hand brushing the bloom-tops, body half-turned, wings catching back-light',
-      'cradling a small forest-creature (mouse / chick / froglet) in her cupped palms, head bent toward it, smile of tenderness',
-      'plucking a bloom and tucking it into her hair with one hand, body in soft three-quarter, eyes on the bloom not viewer',
-      'spinning a single petal in mid-air with magical telekinesis, finger pointed toward it, eyes following the petals motion',
-      'tipping her head back to laugh, eyes closed with the joy, wings spread wide, candid unselfconscious moment',
-      'kneeling in a bloom-patch examining a glowing-vein leaf, finger-tip resting on it, completely absorbed in the moment',
-      'walking through a soft falling petal-rain, head tilted up to feel them, wings partially open, candid peaceful moment',
-      'crouching to plant a glowing seed in the soil, fingers gentle in the earth, eyes on the seed, candid ritual moment',
-      'reaching up to pluck a hanging bloom from a vine, body stretched on tiptoes, candid graceful moment',
-      'sitting cross-legged on a moss-patch with a butterfly resting on her knee, gazing at it with reverent attention',
-      'leaning into a wisteria-cascade and pressing her face into the blooms, eyes closed in the fragrance, peaceful moment',
-      'spinning a small petal-storm around her with magical gestures, wings spread, head turned within the petal-swirl',
-      'wading through tall grass with bloom-stalks brushing her shoulders, hand trailing through the meadow-tops, candid moment',
-      'kneeling beside a bubbling spring to whisper a fae-blessing over the water, hands cupped above the surface',
-    ],
-    instructions: `Each entry is ONE specific CANDID MID-ACTION MOMENT, 15-30 words. NEVER posing / NEVER direct eye-contact / always mid-motion or peaceful candid moment. Eyes elsewhere (lowered / on object / in profile / closed). Output as a NUMBERED list, one per line.`,
-  },
-
-  // ─── flower-fairy DNA: magical_signature (60%-gated visible magic) ───
-  faebot_flower_fairy_magical_signature: {
-    format: 'simple',
-    theme: `MAGICAL SIGNATURES for the FaeBot flower-fairy path. Each entry is ONE specific visible magic element rendered near her — glowing pollen, sparkle-dust, firefly-cloud, etc. Each entry 15-30 words.`,
-    touchpoints: [
-      'soft glowing pollen-dust cloud floating around her shoulders in suspended sparkle-particles, gold-and-pearl glints catching the painted light',
-      'small swarm of fireflies floating around her at twilight, dozens of green-pulse lights at every depth, magical glow',
-      'soft luminous halo glow outlining her silhouette from behind, ethereal back-light creating a magical-aura',
-      'petals raining down around her in slow-motion, individual petals suspended in the painted light',
-      'glowing magical-vines pulsing softly on her arms and temples, faint luminescent pattern under her skin',
-      'crystal-prism light fragments scattered across her wings from an off-frame magical source, rainbow-glints',
-      'cloud of tiny butterflies fluttering around her in the soft painted air, dreamy swarm-detail',
-      'visible magical sigil traced in glowing light in the air beside her, half-fading, candid spell-moment',
-      'fine dewdrops on every petal and on her skin catching the light in glittering points',
-      'soft moonbeam falling on her face from above, the rest of the scene in cool twilight blue',
-      'warm fae-lantern glow from a nearby floating lantern catching one side of her face in amber',
-      'small bumblebee or jewel-tone insect circling near her hand, wings caught mid-buzz in painted detail',
-      'sparkle-dust scattered through her hair and across her wing-arc, individual glitter-points catching light',
-      'single petal frozen mid-fall in front of her face in the foreground, motion-frozen painted detail',
-      'soft ethereal mist drifting around her ankles, the upper body in clear painted detail',
-      'single warm golden-hour fire-ray slanting from the upper-left across her face, jewel-tone glow on her cheek',
-      'vast suspended magical-dust galaxy around her with thousands of tiny sparkle-points at every depth, dreamlike',
-      'solitary white-moth perched on a bloom in her hair at night, wings translucent in moonlight',
-      'aurora-like color-glow in the upper backdrop above her, ethereal magic-light register, painted',
-      'glowing pollen-storm dispersing in side-light around her, golden particles catching the warm painted light',
-      'fae-orb of soft warm light hovering near her shoulder, glowing softly like a captured firefly',
-      'rainbow-shimmer iridescent magic-veil floating behind her wings, prismatic light-effect',
-      'glowing vine-rune wrapping around her arm in a magical pattern, soft luminous trace',
-      'small swirling tornado of petals beside her, magical motion suspended in the painted frame',
-      'glowing pearl-mist halo around her wings, magical wing-glow catching the painted brushwork',
-      'fae-light snowflakes (impossible-petal-snow) falling slowly around her, magical winter-spring fae-detail',
-      'glowing magical bloom-bud opening in time-lapse near her hand, painted transformation moment',
-      'small swarm of dragonflies hovering near her wings in jewel-tone iridescence, candid garden-life',
-      'twin moons hanging in the painted sky behind her, magical fae-world atmosphere',
-      'glow-vines snaking through the foreground around her body, painted magical detail',
-    ],
-    instructions: `Each entry is ONE specific MAGICAL SIGNATURE rendered visibly near the fairy, 15-30 words. Always magical / dreamy / soft / painted register. Output as a NUMBERED list, one per line.`,
-  },
 
   // ─── flower-fairy path: wings (the centerpiece — flower-fairy wings) ───
   faebot_flower_fairy_wings: {

@@ -79,7 +79,7 @@ module.exports = {
     'fairy-court': 'black-forest-labs/flux-1.1-pro',
     'enchanted-vista': 'black-forest-labs/flux-1.1-pro',
     'fae-village': 'black-forest-labs/flux-1.1-pro',
-    'flower-fairy': 'black-forest-labs/flux-dev',
+    'flower-fairy': 'black-forest-labs/flux-1.1-pro',
   },
 
   // Disable chaos + sensory anchors for POC — keep the prompt clean and
@@ -93,9 +93,9 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
-    // Per playbook: new-axis-system paths skip polish (Haiku compression
-    // drops bespoke vocabulary; single-pass Sonnet preserves slot richness)
-    skipPaths: ['flower-fairy'],
+    // R11 reset: flower-fairy is now function-form (cloned from
+    // forest-fairy-scene) — uses two-pass polish like the parent path.
+    skipPaths: [],
   },
 
   // Bot-level pool defaults for declarative composer (flower-fairy path)
