@@ -7369,16 +7369,16 @@ REPLACE "herd" / "group of" / "pack of" WITH:
 Always anchor with SPECIES NAME + COUNT + NEUTRAL group word (gathering / procession / mass / cluster / pack [theropods only] — NEVER "herd"). The species name is the strongest dinosaur anchor.
 
 ⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
-Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper. A POSTER.
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper, not a "nice render." A POSTER.
 
 Components of a poster-grade pack shot:
-• BOLD COMPOSITION — strong leading lines, depth-staggered group receding to vanishing point, asymmetric framing
-• DRAMATIC LIGHT-CONTRAST — high-contrast rim-lighting on foreground hero dinosaurs, atmospheric haze pulling distant group into pale color
-• HERO + PACK FRAMING — eye lands first on 1-3 foreground hero dinosaurs, then reads the massive group behind as supporting context
-• ATMOSPHERIC RICHNESS — dust-cloud / mist / particulate / depth-pull-into-haze
-• EMOTIONAL DNA — the frame radiates power, scale, coordinated wildness at a glance
+• BOLD COMPOSITION — strong leading lines, depth-staggered group receding to vanishing point, asymmetric framing, dramatic foreground-anchor element
+• DRAMATIC LIGHT-CONTRAST — high-contrast rim-lighting on foreground hero dinosaurs, deep shadow elsewhere, atmospheric haze pulling distant group into pale color, god-rays cutting through dust
+• HERO + PACK FRAMING — eye lands first on 1-3 foreground hero dinosaurs, then reads the massive group behind as supporting context. Asymmetric placement (rule-of-thirds) — never centered head-on
+• ATMOSPHERIC RICHNESS — dust-cloud rising from footfalls / mist / particulate light / sky drama / depth-pull-into-haze
+• EMOTIONAL DNA — the frame radiates power, scale, coordinated wildness at a glance. Awe. Movement. Primordial gravity.
 
-If the render reads as "competent wildlife photography" rather than "IMAX-trailer-shot" → not poster-grade. Aim for the Prehistoric-Planet-key-art level.
+If the render reads as "competent wildlife photography" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-trailer-shot, National-Geographic-cover, Prehistoric-Planet-key-art, Jurassic-World-promotional-still level.
 
 ━━━ THE SCENE — HERO DINOSAURS + 100+ SAME-SPECIES + MESOZOIC BIOME ━━━
 Composition:
