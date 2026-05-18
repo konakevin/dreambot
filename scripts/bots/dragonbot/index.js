@@ -13,6 +13,9 @@ const pathBuilders = {
   landscape: require('./paths/landscape'),
   'fantasy-scene': require('./paths/fantasy-scene'),
   'epic-moment': require('./paths/epic-moment'),
+  // 2026-05-17: NEW majestic castle path — 100% castle-as-hero, distinct
+  // from epic-moment (50/50 castle + event). Pure establishing-shot energy.
+  castle: require('./paths/castle'),
   'dragon-scene': require('./paths/dragon-scene'),
   'female-adventurer': require('./paths/female-adventurer'),
   'female-action-scenes': require('./paths/female-action-scenes'),
@@ -89,6 +92,9 @@ module.exports = {
     // EMPTY by design — epic-moment (epic castle scenes) wide-shot path.
     // Sonnet's castle+event body must lead.
     'epic-moment': '',
+    // EMPTY by design — castle path (100% castle-as-hero establishing shot).
+    // Sonnet's castle + biome + sky body must lead.
+    castle: '',
     // EMPTY by design — iconic-landscape merged path. Sonnet's stylized-biome
     // body must lead.
     'iconic-landscape': '',
@@ -117,6 +123,7 @@ module.exports = {
     landscape: 'black-forest-labs/flux-1.1-pro',
     'fantasy-scene': 'black-forest-labs/flux-1.1-pro',
     'epic-moment': 'black-forest-labs/flux-1.1-pro',
+    castle: 'black-forest-labs/flux-1.1-pro',
     'dragon-scene': 'black-forest-labs/flux-1.1-pro',
     'female-adventurer': 'black-forest-labs/flux-1.1-pro',
     'female-action-scenes': 'black-forest-labs/flux-1.1-pro',
@@ -206,6 +213,20 @@ module.exports = {
       'nightshade',
       'shimmer',
       'surreal',
+    ],
+    castle: [
+      'cinematic',
+      'epic',
+      'dark',
+      'nostalgic',
+      'arcane',
+      'ancient',
+      'ethereal',
+      'enchanted',
+      'shimmer',
+      'surreal',
+      'nightshade',
+      'cozy',
     ],
     'cozy-arcane': [
       'cinematic',
@@ -315,6 +336,7 @@ module.exports = {
     'landscape',
     'fantasy-scene',
     'epic-moment',
+    'castle',
     'dragon-scene',
     'female-adventurer',
     'female-action-scenes',
@@ -340,6 +362,7 @@ module.exports = {
     landscape: 5,
     'fantasy-scene': 3,
     'epic-moment': 3,
+    castle: 4,
     'dragon-scene': 4,
     'female-adventurer': 5,
     'female-action-scenes': 5,
@@ -367,6 +390,7 @@ module.exports = {
       'landscape',
       'fantasy-scene',
       'epic-moment',
+      'castle',
       'dragon-scene',
       'cozy-arcane',
       'arcane-halls',
@@ -398,6 +422,10 @@ module.exports = {
       'dark-realm',
       'arcane-halls',
       'arcane-spaces',
+      // 2026-05-17 — castle is on the new axis system, skip polish per
+      // playbook (Haiku compression drops path-bespoke DNA + occasionally
+      // refuses the task when sensory-anchor mandates conflict with biome)
+      'castle',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -428,6 +456,7 @@ module.exports = {
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',
+      castle: 'scene',
       'cozy-arcane': 'scene',
       'arcane-halls': 'scene',
       'arcane-spaces': 'scene',

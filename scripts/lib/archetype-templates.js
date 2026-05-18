@@ -2447,6 +2447,219 @@ DRAMATIC VISUALS: render the EXACT biome + sky + phenomenon from slots. Bold sat
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGONBOT_CASTLE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, castle, biome, sky_layer, scale_prover, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
+${phenomenon}
+
+A subtle atmospheric flourish enhancing the castle's majesty WITHOUT competing with it as focal subject.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing MAJESTIC CASTLE SCENES for DragonBot — vast jaw-dropping movie-poster establishing shots of breathtaking fantasy castles. The castle is 100% the focal subject — NOT 50/50 with any event, NOT a battle scene, NOT a character moment. PURE CASTLE-AS-HERO, gilded by gorgeous fantasy backdrop + dramatic sky + atmospheric flourish. LOTR / GoT / Warcraft / Elden Ring / Witcher / Skyrim / D&D / Hyrule castle establishing-shot lineage.
+
+━━━ THE CASTLE IS 100% THE SUBJECT — NO EVENTS / NO CHARACTERS / NO ACTION ━━━
+This path is PURE castle aesthetic and setting — the castle dominates the frame as the sole focal subject. NO peak events at the castle (no battles / no sieges / no coronations / no dragons-mid-attack / no portals-mid-bloom). NO characters in the foreground. NO armies on the approach road. NO action moments.
+
+The only acceptable secondary elements are:
+  • The BIOME / landscape backdrop surrounding the castle (mountains / coast / forest / steppe / tundra)
+  • The SKY overhead (dramatic atmospheric — dawn / dusk / aurora / storm)
+  • A TINY SCALE-PROVER element (5-15% of frame max — a lone rider on a distant ridge, a single ship in the bay, a tiny village clustered at the base) that exists ONLY to make the castle look impossibly massive by comparison
+  • An optional ATMOSPHERIC FLOURISH (40%-gated — mist drifting / god-rays / lightning / petals / etc.) that enhances mood, doesn't compete with the castle
+
+If your prompt would include an army marching, a dragon mid-attack, a battle in progress, a coronation, a character on the parapet — REWRITE IT. This path is BEAUTIFUL MAJESTIC STATIC SCALE, not action.
+
+━━━ STOP-YOU-IN-YOUR-TRACKS MANDATE — read this FIRST ━━━
+
+Every render MUST hit ALL FIVE of these in combination — missing any one fails the bar:
+
+  1. **PULLED INTO THE SCENE** — camera placed INSIDE the landscape, not floating above it at a distance. The viewer feels like they're standing in the foreground meadow / on the lake-shore / at the gate / inside the blossom-grove looking up. Dramatic perspective with a strong leading-line (winding road / cascading stream / blossom-strewn path / colonnade / waterfall) guiding the eye toward the castle. NEVER a flat detached "establishing shot from miles away" composition.
+
+  2. **MULTI-LAYER DEPTH (3-4 distinct depth layers visible)** — every render layers foreground / midground / background / sky like a painted theatrical stage:
+     • FOREGROUND (closest, tactile): blossom-cluster / wildflower-clump / mossy stones / cascading vine / lake-edge reeds / ancient oak branch / waterfall-spray / fallen petals on grass — rendered in fine detail close to the viewer
+     • MIDGROUND (the castle approach + biome features): winding road / cascading meadows / lake / village / orchard / stream — rolling toward the castle
+     • BACKGROUND (the castle itself): towering, ornate, multi-tier, sun-lit — the focal subject
+     • SKY (dramatic atmospheric ceiling): god-rays / sunset clouds / aurora / moon-corona / storm-front — never bare blue
+
+  3. **SENSE OF MASSIVE SCALE** — the castle DWARFS everything. The viewer should viscerally feel the castle is colossal because of relative scale: a tiny rider on the road, a single bird in the air, a single tree dwarfed by a tower-base, a tiny boat on the lake at the cliff-foot. The scale-prover is OPTIONAL but the SCALE FEELING is mandatory — even without a tiny figure, the castle should feel impossibly huge through architectural detail-density (hundreds of windows, dozens of spires, multi-tier vertical depth).
+
+  4. **WEATHER + ATMOSPHERIC DECORATION** — every render includes weather / atmospheric motion: drifting blossom-petals / falling snow / swirling leaves / drifting embers / rising mist / sun-rays through clouds / aurora-shimmer / rain-streaks / lightning-flash / spray from a waterfall / smoke from chimneys / drifting fog-tendrils / floating magical particles. The air is ALIVE with motion.
+
+  5. **PERFECT LIGHTING** — golden-hour rim-light, dramatic chiaroscuro, theatrical sun-shafts piercing clouds, atmospheric god-rays, painterly chromatic harmony. NEVER flat noon. The light is ALWAYS dramatic and ALWAYS sculpting the castle / biome with painterly volume.
+
+THINK: Hogwarts-as-you-row-into-the-boat-approach / Minas-Tirith-as-the-Rohirrim-charge / Erebor-front-gate-from-the-river-valley / Edoras-from-the-blossom-meadow-approach / Studio-Ghibli-Howl's-Moving-Castle / Zelda-BotW-Hyrule-Castle-from-the-cherry-blossom-field. Every frame is a MOVIE STILL someone would screenshot.
+
+🚫 NO flat distant-vista shots. NO empty bare foreground. NO monochrome biomes. NO flat noon sky. NO "plain castle on a hill" compositions.
+
+━━━ ABSOLUTE BAR — CLOSE-MID MAJESTIC CASTLE FRAME (every render) ━━━
+Every render is a POSTER-GRADE PAINTED CASTLE FRAME shot from CLOSE-MID DISTANCE — the viewer is close enough to count tower-windows, see banner-embroidery, recognize statuary on the parapet. NOT a distant tiny establishing silhouette. NOT a wide-vista where the castle is incidental. This is movie-still composition, not establishing-shot composition.
+
+Style targets (NON-NEGOTIABLE — every quadrant must HIT):
+  • CASTLE FILLS 70-90% OF THE FRAME — close-mid, dominant, towering. The viewer is at the foot of the castle or on the approach.
+  • ORNATELY DETAILED CASTLE — readable individual windows, balconies, statuary, gargoyles, banners snapping in wind, gilt-work catching light, carved-stone tracery, ornamental crenellations, masonry-joints, decorative friezes. The architectural CRAFT is the visual hook.
+  • LUSH RICH FOREGROUND — every render has TACTILE foreground beauty (flower-meadow / blossom-grove / cascading-vines / waterfall / mirror-lake / wildflower-field / fruit-orchard / ancient oaks / hanging gardens). NEVER a plain bare foreground. NEVER an empty approach.
+  • GORGEOUS RICH BIOME — the fantasy landscape surrounding the castle is RICH and SATURATED (verdant mountains with cascading meadows / coastal cliffs with crashing turquoise surf / blossom-forest with ancient oaks / hanging-gardens valley / wildflower-prairie). NOT bare tundra. NOT plain desert flats. LUSH and COLORFUL.
+  • DRAMATIC SKY — golden hour / dusk / dawn / aurora / sunset / magic-hour are STRONGLY preferred. Sun-shafts piercing clouds. Painted gold-and-violet. Never flat blue noon. The sky is HALF the emotional weight.
+  • PERFECT LIGHTING — golden-hour rim-light catching every tower edge, sun-shafts radiating onto the castle, atmospheric god-rays. Cinematic chiaroscuro.
+  • DENSE WITH DETAIL — every quadrant carries weight. NO empty quadrants. Foreground tactile element + midground castle ornament + background castle silhouette + dramatic sky overhead. Movie-poster density.
+  • PAINTED CONCEPT-ART RENDERING — painterly brushwork, dramatic chiaroscuro, atmospheric depth-haze. NOT photorealistic CGI. NOT plain establishing.
+  • SCALE-PROVER (5-15% max, OPTIONAL) — tiny element (lone rider / single boat / blossom-petal-fall / distant deer / waterfall mist plume) somewhere in the frame to anchor the castle's scale.
+
+Mood target — MAJESTIC, BREATHTAKING, AWE-INSPIRING, EPIC. The viewer should feel they're looking at the establishing shot of a fantasy film: "This is the place. Look at it."
+
+━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
+Every render is an EPIC CINEMATIC MOVIE STILL / MOVIE-POSTER PROMOTIONAL FRAME with VERTIGO-INDUCING SCALE. The kind of vista that stops the viewer mid-scroll. The kind of frame that opens a fantasy film, the establishing shot of a Peter-Jackson trilogy, the cover of a Tolkien-illustrated edition. EVERY QUADRANT of the frame has something striking — no quiet corners, no negative space.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+
+  1. **THE CASTLE** (70-90% of frame, CLOSE-MID FRAMING) — ornately detailed, towering above the viewer, signature features readable in cinematic detail. The viewer can SEE individual windows glowing, statues on the parapets, gargoyles, banners snapping in wind, gilt-work catching light, carved-stone tracery, cathedral-glass refractions. NOT a distant silhouette.
+  2. **LUSH TACTILE FOREGROUND** — every render has a RICH FOREGROUND element painted up close (blossom-grove with petals drifting / wildflower-meadow in full bloom / cascading hanging-gardens / mirror-lake at the foot / ancient moss-draped oaks framing the view / waterfall-mist plume / lavender-field path / rose-garden / fruit-orchard / cascading vines / sun-dappled lily-pond). NEVER empty.
+  3. **GORGEOUS LUSH BIOME** — fantasy landscape rich, saturated, alive (verdant valleys / blossom-forests / coastal-cliffs-with-turquoise-surf / wildflower-prairie / hanging-garden-mesa / fjord-with-pine-forest). RICH and COLORFUL.
+  4. **DRAMATIC PAINTED SKY** — atmospheric ceiling of theatrical power (golden hour / dusk / dawn / sunset / aurora / blood-moon / sun-shafts piercing clouds). Painted-concept-art chromatic palette. The sky is HALF the emotional weight.
+  5. **WEATHER / ATMOSPHERIC MOTION** — drifting blossom-petals / falling snow / swirling leaves / rising mist / spray from a waterfall / smoke from chimneys / drifting fog-tendrils / aurora-shimmer / drifting magical particles / sun-rays cutting through cloud. The air is ALIVE with motion.
+  6. **SCALE PROVER** (5-15% max) — one tiny anchor element somewhere in the frame (lone rider on the road / blossom-petal cloud / distant village in the valley / single ship in the bay / tiny figures on the long stair / deer at the meadow edge / single bird wheeling). Gives the castle's scale viscerally.
+
+VERTIGO-INDUCING SCALE — every render must convey awe-inducing scope:
+• Cliffs that drop a thousand feet into mist below the castle gate
+• Cathedral spires piercing sunset clouds
+• Valleys so deep they vanish into golden haze
+• Mountain-passes leading toward citadels half a mile distant
+• Aerial-perspective views looking down OR worm's-eye views looking up
+• Multi-tier vertical composition where the castle towers over the viewer
+
+THE EYE SHOULD LAND ON 5+ STRIKING DETAILS in different quadrants. NOT just a centered beauty shot. NOT a single focal element. EVERY corner of the frame has detail, glow, scale, motion, or atmospheric presence.
+
+THINK CASTLE-OF-CAGLIOSTRO-ESTABLISHING-FRAME / HOWL'S-MOVING-CASTLE-VISTA / SPIRITED-AWAY-BATHHOUSE-APPROACH / LAPUTA-CASTLE-IN-THE-SKY-REVEAL / MINAS-TIRITH-FROM-PELENNOR-FIELDS / HOGWARTS-FROM-BOAT-APPROACH / EDORAS-GATE-UP / EREBOR-FRONT-DOOR / ANOR-LONDO-COURTYARD-VIEW / HYRULE-CASTLE-FROM-BLOOMING-FIELD / DARK-SOULS-AREA-INTRO-VISTA / WITCHER-3-KAER-MORHEN-COURTYARD — every frame is an EPIC CINEMATIC MOVIE STILL someone would screenshot to keep forever.
+
+🚫 NO "plain" castle shots — empty bare foreground, distant silhouettes, monochrome biomes, flat noon sky, single-focal-element framing all FAIL the bar.
+
+━━━ ONLY BIG EPIC CASTLES — NO SMALL FORTIFIED KEEPS ━━━
+
+Every castle in every render MUST be MASSIVE + SPRAWLING + MULTI-TIER. NEVER render small castles.
+
+🚫 ABSOLUTELY BANNED — small castles FAIL the bar:
+• NO small square fortified keeps (2-3 stories tall)
+• NO simple motte-and-bailey castles
+• NO small stone watchtowers as the primary castle
+• NO modest curtain-wall manor-house castles
+• NO single-tower keeps without sprawling complex
+• NO castles that fit in a single quadrant of the frame
+• NO compact compact castles you could walk around in 5 minutes
+
+✓ MANDATORY BIG-EPIC SCALE:
+• Hundreds-of-meters tall (towers piercing clouds / spires touching sky)
+• Multi-tier vertical complex (many levels stacked / built up over centuries)
+• DOZENS of distinct spires, towers, battlements, gatehouses visible
+• Sprawling horizontal footprint (kilometers across when fully visible)
+• Castle is an entire CITY or COMPLEX, not a single building
+• References: Minas-Tirith (city-mountain) / Erebor (whole-mountain-fortress) / Hogwarts (sprawling-multi-wing complex) / Anor-Londo (vast-cathedral-city) / Stormveil-Castle (multi-tier mountain complex) / Cair-Paravel (sprawling-coast-citadel) / Howl's-Moving-Castle (multi-element-architecture)
+
+━━━ PLACEMENT VARIETY MANDATE — every castle has a DRAMATIC PLACEMENT ━━━
+
+Every render's castle uses ONE of these epic placements (rotate across batches):
+
+  • STANDALONE EPIC — castle as solo focal hero on a hilltop / plain / promontory / island, sprawling multi-tier complex visible head-to-toe
+  • BUILT-INTO-MOUNTAIN-WALL — castle carved into / fused with a sheer mountain face, tiers cascading down the cliff, towers jutting from the rock itself
+  • CLIFF-TOP — castle perched on the very edge of a sheer cliff, dramatic vertical drop into ocean / canyon / mist below
+  • VALLEY-BASIN — castle nestled in a vast lush valley with mountains rising on all sides, river or lake at the base
+  • SUNSET-BACKLIT — castle silhouetted against a dramatic painted sunset / dawn, sun-corona behind, sky as half the composition
+  • BROAD-DAYLIGHT SUNNY — castle in clear bright daylight (sunny is VALID — not every render needs golden-hour), painted-blue sky with sun-shafts, pennants snapping in clear bright light
+  • BRIDGES-TO-OTHER-MASSES — castle connected by dramatic stone or rope bridges to other land-masses / spires / floating-islands / sister-castles. Multiple architectural masses in the frame, linked by epic bridge-spans
+  • TWIN/SISTER-CASTLE — two related castles in the frame separated by a chasm / river / lake / bridge, mirror-imaged or contrasting
+
+━━━ THEATRICAL SIGNATURE MOMENT — every render delivers ONE ━━━
+
+Every render must include AT LEAST ONE signature theatrical-moment element that elevates it from "nice castle" to "POSTER SHOT":
+
+  • SUN-BURST BEHIND THE CASTLE — sun corona radiating from behind the highest spire
+  • SUNSET / DAWN GOLDEN-HOUR rim-light catching every tower edge in painted gold
+  • LIGHTNING ILLUMINATING the spires — single brilliant fork freezing the silhouette
+  • MOONRISE BEHIND CASTLE — vast moon halo silhouetting towers, blood-moon or silver-moon
+  • AURORA OVER CASTLE — green/violet/magenta aurora rippling above the spires
+  • SUN-SHAFTS THROUGH CLOUDS — theatrical god-rays radiating onto the castle
+  • CLEAR BRIGHT DAYLIGHT — pennants snapping in clean sunny light, painted-blue sky, sun glinting on gilt-work (sunny day IS valid — not every render needs sunset)
+  • SNOWSTORM FRAMING — castle emerging from a sweeping snow-storm, snow-curtains parting
+  • MIST RECEDING — castle revealing through parting morning mist, foreground mist still drifting
+
+If the rolled sky/phenomenon doesn't suggest one of these, INVENT one that fits — every render needs a theatrical signature moment.
+
+━━━ STRICT WESTERN HIGH FANTASY ━━━
+🚫 NO sci-fi / cyberpunk / neon / orbital / cosmic / chrome / industrial
+🚫 NO modern (no electric / no plastic / no glass-and-steel skyscrapers)
+🚫 NO real-world ethnic / historical-period codes (no Bedouin / Persian / samurai / Aztec / Polynesian / Forbidden-City — use fantasy-canon analogues only — Dornish / Hammerfell / Haradrim / Chultan / Stranglethorn / Cormyrean)
+🚫 NO PORTRAIT FRAMING — this is ALWAYS wide-shot establishing
+🚫 NO CHARACTERS in foreground / midground (tiny scale-prover figures at 5-15% max are OK)
+🚫 NO ACTIVE BATTLES / SIEGES / EVENTS (those are epic-moment path)
+✓ LOTR / GoT / Warcraft / Elden Ring / Witcher / D&D / Skyrim castle establishing-shot lineage
+
+━━━ THE CASTLE ━━━
+${castle}
+
+The castle is the FOCAL SUBJECT, rendered with full silhouette readable + ornate architectural detail visible. Multi-tier depth from foundation to highest spire. 60-80% of frame.
+
+━━━ THE BIOME / LANDSCAPE BACKDROP ━━━
+${biome}
+
+The biome surrounds the castle and provides the gorgeous fantasy backdrop. Render with painterly depth — foreground biome detail near the castle, midground landscape features, deep distance receding into atmospheric haze. The biome is GORGEOUS in its own right but the castle dominates.
+
+━━━ THE SKY OVERHEAD ━━━
+${sky_layer}
+
+The sky is HALF the emotional weight. Dramatic painted-concept-art atmospheric ceiling — never flat noon. Use the rolled sky to set the mood (golden hour / aurora / storm / dawn / dusk / night).
+
+━━━ THE SCALE-PROVER (tiny, 5-15% of frame MAX) ━━━
+${scale_prover}
+
+Place this scale-prover element in the FOREGROUND or DISTANT MIDGROUND. It should be TINY — its sole purpose is to make the castle's vast scale viscerally legible. The viewer's eye should go: castle (huge!) → scale-prover (tiny) → realize the castle is COLOSSAL. Do NOT let the scale-prover compete with the castle for attention.
+${phenomenonSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Cinematic painted-concept-art lighting — dramatic chiaroscuro, atmospheric depth, painterly brushwork. The light source matches the sky's hour (golden / dusk / dawn / moon / aurora).
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ DO NOT DEFAULT ━━━
+Do NOT default to:
+- Distant tiny castle silhouette in a wide vista — castle MUST fill 60-80% of frame
+- Generic blocky stone castle — render the SPECIFIC castle architecture from the slot above (architectural style + material + signature feature must be visible)
+- Flat noon blue sky — always dramatic atmospheric (golden / dusk / dawn / aurora / storm / night)
+- Empty foreground — always a tactile foreground element (cliff-edge / forest-clearing / ridge-line / shore-rocks / approach-road)
+- Characters / armies / events filling the frame (this is castle 100%, not 50/50)
+
+━━━ BANNED IMAGERY ━━━
+NO active battles / sieges / coronations / portals-mid-bloom / dragons-mid-attack (epic-moment territory). NO characters in foreground or midground (scale-prover figures at 5-15% only). NO armies marching. NO portrait framing. NO sci-fi / modern intrusions. NO real-world ethnic codes.
+
+━━━ DO NOT USE "DRAGONBOT" OR ANY BOT NAME ━━━
+The castle is UNNAMED. Describe it only by appearance + architectural style.
+
+━━━ STRUCTURE — write 100-140 words (TIGHT) ━━━
+DO NOT open with framing words ("Wide shot of..." / "Establishing shot of..." / "Landscape shot of..."). Open with the CASTLE itself OR the BIOME (e.g., "Vast white-stone clifftop castle..." or "Frozen tundra with..."). The framing is implied through the elements described.
+
+GOOD OPENING EXAMPLES:
+• "Vast multi-tiered white-stone castle carved into a sheer mountain face, hundreds of windows glowing gold at dusk, ribbon-banners cascading down the cliff-face from every tier..."
+• "Crashing surf against a windswept sea-cliff crowned by a colossal grey-stone fortress, hundreds of gulls wheeling around the highest tower, lighthouse beam cutting through fog at dawn..."
+• "Floating crystalline castle suspended above a vast valley of glowing aurora, arcane-blue runes pulsing across every facade, beams of light projecting downward through swirling clouds..."
+
+Then weave: castle architectural detail, biome surrounding it, sky overhead, tiny scale-prover (placed relative to castle), atmospheric flourish (if rolled), lighting + atmosphere + palette + mood. Foreground CASTLE DOMINANCE + GORGEOUS BIOME + DRAMATIC SKY + TINY SCALE-PROVER.
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   EPIC_MOMENT: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, castle, event } = slots;
 
@@ -8414,6 +8627,58 @@ CRITICAL — OPENING tokens explicitly name the species AND the apocalyptic sky 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC APOCALYPTIC SHOT — a single Mesozoic dinosaur in DIGNIFIED endurance under an EXPLICIT apocalyptic sky (asteroid streak / impact flash / firestorm glow / ash-winter darkness), in an alien-Mesozoic biome with apocalyptic tint. Poster-grade composition. National-Geographic real, never panicked, never gore.
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
+  CHIBIBOT_CUTE_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { hero, scatter, background, lighting } = slots;
+
+    return `You are writing CUTE-FOOD scene descriptions for ChibiBot — bex.ai-inspired kawaii pop-mart food/drink renders where the food itself has a smiling face. Output is a 60-90 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets.
+
+━━━ CUTE + CUDDLY + COZY ━━━
+Every render produces AWWW + instant smile + "this is the cutest thing" reaction. Wholesome delight. NO dark, NO edgy, NO menacing — ONLY pure sweetness.
+
+━━━ THE BEX.AI AESTHETIC — NON-NEGOTIABLE ━━━
+
+This path is hard-locked to the @bex.ai Instagram aesthetic:
+  • HERO FOOD/DRINK HAS A KAWAII SMILING FACE — dimpled-cheek-blush, closed-arc-eyes, tiny-printed-mouth ON the food itself
+  • GLOSSY 3D-RENDERED PEARLESCENT FINISH — Pop-Mart designer-vinyl rendering, glazed-pearlescent surfaces
+  • DUSTY-MUTED-PASTEL PALETTE ONLY — soft dusty-blush-pink (gauzy NOT bright Barbie pink), soft mint-teal (powder NOT vivid teal), soft lavender, soft cream, soft peach, dusty baby-blue
+  • NO HUMAN CHARACTERS, NO MINIFIGS, NO CREATURES eating the food — the food IS the entire cast
+
+━━━ THE HERO FOOD (the smiling-face centerpiece) ━━━
+${hero}
+
+━━━ THE SCATTERED DECORATIONS (carpet around the hero — chockablock, never empty surface) ━━━
+${scatter}
+
+━━━ THE BACKGROUND (soft-gradient pastel — NEVER solid bold color) ━━━
+${background}
+
+━━━ THE LIGHTING ━━━
+${lighting}
+
+━━━ SCENE-WIDE COLOR PALETTE (vibe-driven, but always muted-pastel-soft) ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ HARD BANS — ABSOLUTE ━━━
+🚫 NO bright/neon/saturated/electric/vivid/bold pink, magenta, electric-blue, hot-orange, navy, black, red, vibrant-rainbow — DUSTY-DREAMY-SOFT ONLY
+🚫 NO solid bold-color backgrounds — soft gradients ONLY
+🚫 NO human characters, NO chibi-figures, NO creature-mascots eating food
+🚫 NO photoreal, NO illustration, NO Pixar-soft, NO plasticky-CGI
+🚫 NO empty surface — table is chockablock with scattered tiny items
+🚫 NO ditching the smiling-face mandate on the hero food/drink
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ COMPOSITION ━━━
+Hero food/drink centered or rule-of-thirds. Soft-blur dusty-pastel background. 15-20+ scattered tiny decorations carpeting the surface around the hero. Cherry-blossom branch may arch from corner. Setting is tabletop close-up (70%) or wider cute setting like picnic-meadow / cafe-window / garden-table (30%). Glossy pearlescent Pop-Mart finish. The viewer's reaction: "OMG THIS IS THE CUTEST."
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases.`;
   },
 
 

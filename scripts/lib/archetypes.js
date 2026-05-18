@@ -538,6 +538,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DRAGONBOT_CASTLE: {
+    description:
+      'PATH-BESPOKE — DragonBot castle path (2026-05-17 NEW). Majestic epic beautiful castle views — castles are 100% the focal subject, set amongst gorgeous fantasy backdrops with massive sense of scale. Distinct from epic-moment (50/50 castle + event) — this is pure castle-as-hero, movie-poster establishing shot energy. 5 path-bespoke pools: castle (architectural subject) + biome (gorgeous fantasy backdrop) + sky_layer (dramatic sky) + scale_prover (tiny element proving scale) + phenomenon (40%-gated atmospheric flourish). Lineage: Helms-Deep / Minas-Tirith / Edoras / Erebor / Anor-Londo establishing-shot.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['castle', 'biome', 'sky_layer', 'scale_prover'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_SCENE: {
     description:
       'PATH-BESPOKE — DragonBot dragon-scene path. Traditional Western dragon (4 legs + 2 wings + horned reptilian skull) is the SUBJECT in a jaw-dropping fantasy landscape. NO characters/riders/humans. Path-bespoke pools for dragon (anatomy) + action (mid-action moment) + landscape (epic biome) + drama (40% gated environmental event) + surprise_element (tiny secondary subject). Canonical-LITE — DragonBot uses minimal wrapper layer so Sonnet body leads.',
@@ -1231,6 +1245,21 @@ const ARCHETYPES = {
     },
     pickN: {},
     conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_CUTE_FOOD: {
+    description:
+      'PATH-BESPOKE — ChibiBot cute-food path (2026-05-17 bespoke-axis rebuild). Kawaii pop-mart-style food/drink scenes where the food ITSELF has a smiling face (bex.ai Instagram aesthetic). 4 path-bespoke axes (hero / scatter / background / lighting). Background pool hard-locks the dusty-muted-pastel palette in every entry, eliminating Flux-default vivid drift. Locked medium: chibibot_food (via ChibiBot mediumByPath).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['hero', 'scatter', 'background', 'lighting'],
+    },
+    pickN: {},
+    conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
   },
