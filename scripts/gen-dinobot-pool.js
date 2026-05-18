@@ -144,6 +144,43 @@ ABSOLUTELY BANNED:
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
 
+  dinobot_dino_cozy_surprise_element: `Generate SMALL COZY-MOMENT ACCENT descriptions for DinoBot's dino-cozy path. Each is ONE comma-separated line, 15-30 words, describing a small intimate accent in or around the cozy scene — additional hatchling / soft-light-dapple / nest-debris / dropped-feather / soft-petal-floating / etc.
+
+The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds warmth and intimacy to the cozy scene.
+
+Variety mandate (rotate widely):
+- ~20% Additional juvenile / hatchling peeking from the periphery (smaller scale-prover)
+- ~15% Soft-light-dapple — sunbeams filtering through canopy onto the scene
+- ~10% Dropped feather / hatchling-down / soft-fluff catching light (delicate texture)
+- ~10% Nest-debris — moss arrangement / soft eggshells / arranged twigs (cozy-craft)
+- ~10% Foreground petal / leaf / berry resting on the ground (intimate detail)
+- ~10% Atmospheric small life — butterfly / dragonfly / Meganeura hovering peacefully nearby
+- ~5% Soft mist or dew on foreground fronds (cozy moisture)
+- ~5% Sleeping smaller dinosaur in the deep background (multi-scene warmth)
+- ~5% Bird-like small theropod silhouette resting on a branch (peaceful periphery)
+- ~10% Foreground tactile cozy detail — moss / soft soil / arranged stones / etc.
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant background)
+- ONE SPECIFIC DETAIL (mid-action / catching light / posture / scale-prover)
+
+GOOD examples:
+- A tiny hatchling Maiasaura peeking from under the mother's tail, eye reflecting golden light, soft and curious
+- Dappled sunlight filtering through cycad fronds overhead, painting golden patches across the scene
+- A single iridescent feather drifting in foreground midair, catching warm backlight
+- Foreground moss-and-stone arrangement at the nest edge, soft tactile detail
+- A Meganeura dragonfly hovering peacefully in the midground, wings catching diffused light
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern animals (no mammals, no modern birds)
+- NO predation / violence / fear / fleeing / threat
+- NO harsh / cold / dramatic-disaster details
+- NO duplicate-style entries
+
+Output: ONE cozy-accent per line. No numbering. No quotes.`,
+
   dinobot_cinematic_silhouette_surprise_element: `Generate SMALL SILHOUETTE-ACCENT descriptions for DinoBot's cinematic-silhouette path. Each is ONE comma-separated line, 15-30 words, describing a small secondary silhouette accent in or around the dinosaur — pterosaur-silhouette / sun-or-moon-disk-positioning / meteor-streak / bird-flock / atmospheric small element / etc.
 
 The element is SMALL — 2-5% of the frame. Position: foreground edge / midground / sky. Adds drama to the silhouette composition.

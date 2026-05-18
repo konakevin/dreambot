@@ -1,75 +1,33 @@
 /**
- * DinoBot dino-cozy — tender prehistoric vignettes. Nesting, grooming,
- * sleeping, nursing, playing. The warm side of dinosaur life.
+ * DinoBot dino-cozy — declarative composer form (2026-05-17 migration).
+ *
+ * TENDER DINOSAUR VIGNETTES — nesting / grooming / sleeping / nursing /
+ * playing / nuzzling-hatchlings / parent-and-juvenile-intimacy. The warm
+ * peaceful side of prehistoric life. Wildlife-documentary cozy-moment
+ * cinematography.
+ *
+ * Reuses 3 existing production-scale pools:
+ *   - DINO_SPECIES (200 dinosaur species)
+ *   - COZY_DINO_ACTIONS (200 fat-seed cozy actions)
+ *   - DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome)
+ *
+ * Adds 1 new path-bespoke pool:
+ *   - DINOBOT_DINO_COZY_SURPRISE_ELEMENT (cozy-specific small accents)
+ *
+ * Universal: LIGHTING + PREHISTORIC_ATMOSPHERES.
+ *
+ * No phenomenon — cozy intimate scenes don't want dramatic atmospheric
+ * events overpowering the warmth.
+ *
+ * Pre-migration function-form at paths/legacy/dino-cozy.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const species = picker.pickWithRecency(pools.DINO_SPECIES, 'dino_species');
-  const action = picker.pickWithRecency(pools.COZY_DINO_ACTIONS, 'cozy_dino_action');
-  const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
-
-  return `You are a wildlife documentary cinematographer writing COZY DINOSAUR scenes for DinoBot. Tender prehistoric family moments — nesting, grooming, sleeping, nursing, playing. The camera caught a quiet, intimate moment in these animals' lives. Warm, peaceful, beautiful. Output wraps with style prefix + suffix.
-
-${blocks.NO_HUMANS_BLOCK}
-
-${blocks.DINOSAUR_IS_HERO_BLOCK}
-
-${blocks.SPECIES_ACCURATE_BLOCK}
-${blocks.DOCUMENTARY_CAMERA_BLOCK}
-
-${blocks.ENVIRONMENT_STORYTELLING_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE DINOSAUR ━━━
-${species}
-
-━━━ THE COZY MOMENT ━━━
-${action}
-
-━━━ SETTING ━━━
-${setting}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.VOLUMETRIC_LIGHT_BLOCK}
-
-${blocks.WET_WORLD_BLOCK}
-
-${blocks.LUSH_PRIMORDIAL_BLOCK}
-
-${blocks.EPIC_SCALE_BLOCK}
-
-${blocks.VAST_TERRAIN_BLOCK}
-
-${blocks.SURPRISING_WEATHER_BLOCK}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ CAMERA / FRAMING ━━━
-${camera}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Intimate framing — close-up or mid-shot. The world is soft and warm around the subject. NO predation, NO violence, NO fear. This is the peaceful side of prehistoric life. Cozy lighting, gentle atmosphere.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DINOBOT_DINO_COZY',
+  pools: {
+    biome: 'DINOBOT_PALEO_LANDSCAPE_BIOME',
+    species: 'DINO_SPECIES',
+    cozy_action: 'COZY_DINO_ACTIONS',
+    surprise_element: 'DINOBOT_DINO_COZY_SURPRISE_ELEMENT',
+  },
 };

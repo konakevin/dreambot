@@ -7215,6 +7215,33 @@ This path is the SOFT side of dinosaur life. The animal is at rest, nurturing, i
 🚫 NO storm / no eruption / no disaster / no apocalypse
 ✓ GENTLE — nesting / grooming / sleeping / nursing / playing / nuzzling / parent-and-juvenile-intimacy / quiet-grazing / dust-bathing / sun-basking
 
+⚠️⚠️⚠️ MANDATORY — VISIBLE INTIMATE BEHAVIOR ⚠️⚠️⚠️
+The cozy ACTION must be VISIBLY rendered — not just "a dinosaur in a peaceful jungle." The animal must be CAUGHT IN A SPECIFIC INTIMATE BEHAVIOR readable from posture and gesture:
+
+• NUZZLING — heads touching / snout-to-snout / parent licking juvenile
+• NESTING — body wrapped around eggs / settled in moss-nest / arranging twigs
+• GROOMING — head-tilted scratching / dust-bath rolling / preening feathers
+• SLEEPING — eyes closed / head-tucked / curled body / belly down
+• NURSING — juvenile pressed close to parent's side / regurgitation-feeding
+• PLAYING — juveniles in mid-tumble / chasing each other / mock-pounce
+• SUNBATHING — body stretched flat on warm rock / spread-out basking pose
+
+If the dinosaur is just STANDING / WALKING / WATCHING / ALERT / NEUTRAL POSE → FAILED. The intimate behavior MUST be the visual focus.
+
+🚫 NO neutral-standing-pose / no walking-through-jungle / no watching-camera / no alert-look-up. Dinosaur is MID-INTIMATE-ACTION.
+
+⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper, not a "nice render." A POSTER.
+
+Components of a poster-grade cozy shot:
+• BOLD COMPOSITION — strong negative space, leading lines drawing the eye to the intimate gesture, rule-of-thirds anchoring, asymmetric framing
+• DRAMATIC LIGHT-CONTRAST — high-contrast golden rim-lighting on the dinosaur, deep shadow elsewhere, light-shafts cutting through canopy
+• TIGHT-FOCUS ON THE INTIMATE GESTURE — eye lands instantly on the nuzzle / sleeping head / egg-clutch / nursing juvenile / etc.
+• ATMOSPHERIC RICHNESS — bokeh / spore-mist / particulate-pollen / dappled-canopy-light / depth-pull-into-haze
+• EMOTIONAL DNA — the frame radiates cozy feeling at a glance. Tenderness. Warmth. Stillness.
+
+If the render reads as "competent wildlife photography" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-trailer-shot, National-Geographic-cover, Prehistoric-Planet-key-art level.
+
 ━━━ THE SCENE — DINOSAUR + COZY ACTION + WARM MESOZOIC BIOME ━━━
 Composition:
 • DINOSAUR (focal subject, 40-60% of frame): the named species in mid-cozy-action

@@ -67,6 +67,8 @@ module.exports = {
   DINOBOT_TERRITORY_CLASH_SURPRISE_ELEMENT: load('dinobot_territory_clash_surprise_element'),
   // Cinematic-silhouette path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_CINEMATIC_SILHOUETTE_SURPRISE_ELEMENT: load('dinobot_cinematic_silhouette_surprise_element'),
+  // Dino-cozy path-bespoke pool (added 2026-05-17 — axis-system migration)
+  DINOBOT_DINO_COZY_SURPRISE_ELEMENT: load('dinobot_dino_cozy_surprise_element'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {
