@@ -3829,31 +3829,53 @@ POSE / ACTION:
   • STANDING still in predator-stillness with weapon clearly displayed
 NEVER mid-firing (no muzzle flash, no gunshot, no recoil), but CLEARLY armed and ready. The viewer should know she has just killed someone or is about to.
 
-She is a SILENT KILLING MACHINE — sleek, dark, deadly, professional, intimidating. John Wick continental-villain energy. NOT a generic soldier, NOT a warrior, NOT a hero — a SOLO KILLER-CYBORG.
-
-━━━ ALIEN-HYBRID VARIANTS WELCOME (~30% of renders) ━━━
-She MAY be alien-hybrid — non-human-coded skin (moss-green / robin-egg-blue / deep-plum / coral-pink / juniper-green / viridian / opal-iridescent / silver-mercury / cobalt-shimmer), bioluminescent freckles or scale-patterns across cheekbones, slightly elongated facial proportions, alien-tilted eyes, non-human iris colors. STILL beautiful and feminine + still predatory, just exotic. The alien-assassin variant intensifies the "what is she" off-guard read.
+She is a SILENT KILLING MACHINE — sleek, dark, deadly, professional, intimidating. John Wick continental-villain energy. NOT a generic soldier, NOT a warrior, NOT a hero — a SOLO KILLER-ROBOT.
 
 ━━━ ORNATE SCI-FI SPICE MANDATE — every render needs visible "wow" detail ━━━
 Every render must include AT LEAST 3 of these "sci-fi spice" elements:
-  • VISIBLE CIRCUITRY pulsing in her glow color across skin / chassis / panels in branching patterns
-  • ORNATE FILIGREE / DECORATIVE ENGRAVING on her cyborg material (with darker / tactical-coded edges for assassin slant)
+  • VISIBLE CIRCUITRY pulsing in her glow color across chassis seams / panel-edges / exposed sections in branching patterns
+  • ORNATE FILIGREE / DECORATIVE ENGRAVING on her chassis material (with darker / tactical-coded edges)
   • GLOWING POWER-CORE visible through translucent chest / sternum panel
-  • TRANSLUCENT SECTIONS revealing internal mechanical components
+  • TRANSLUCENT SECTIONS revealing internal mechanical components (servo bundles / capacitor banks / fiber-optic cascades)
   • EXOTIC MATERIAL CONTRAST — chrome paired with crimson lacquer, ceramic paired with gunmetal, obsidian paired with predator-violet
-  • BIOLUMINESCENT ACCENTS — glowing veins / glowing tactical-callsign-markings / glowing scale-clusters / glowing fingertip-light
-  • HOLOGRAPHIC TARGETING-RETICLE projecting briefly from her hand / palm / eye (one signature accent)
+  • EXPOSED CABLE-CONDUITS along arms / legs / neck — glowing through translucent cable-sheaths
+  • HOLOGRAPHIC TARGETING-RETICLE projecting briefly from her hand / palm / optic-eye (one signature accent)
   • OPEN MAINTENANCE-HATCH revealing precision internal components
   • PRISMATIC / DICHROIC SHIMMER catching light in unexpected color shifts
 
-━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
-Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical targeting-optic), real lips, expressive features. NO helmet, NO visor covering the whole face, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly. (A predator-optic eye is fine; full-face occlusion is not.)
+━━━ SYNTHETIC ROBOT FACE (NON-NEGOTIABLE — NOT organic, NOT cyborg-fusion) ━━━
+Her face is a FULLY SYNTHETIC ROBOTIC FACE — polished synthetic facemask / sculpted chassis face-plate with female-coded refined features. NO organic skin, NO organic lips, NO organic eyebrows, NO organic hair, NO subdermal anything (because there's no derm). She is a ROBOT — sculpted, mechanical, lifelike but unmistakably synthetic.
 
-━━━ EXPOSED INNER WORKINGS — THE CORE OF THE LOOK (non-negotiable, applies head-to-toe) ━━━
-VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — exposed through translucent skin / open chassis panels / cracked seams / lifted plates ACROSS multiple body parts. REQUIRED per render — describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct body locations:
-  • FACE — subdermal circuitry / translucent jaw panel / mechanical iris ring / chrome temple seam / etc.
+Pick 2-3 DIFFERENT face features per render from this synthetic-face menu (vary across renders):
+  • POLISHED SYNTHETIC FACE-PLATE — smooth refined chassis-surface face with sculpted feminine features (cheekbones, nose, chin) — like Atlas / EDI / Aigis
+  • GLOWING OPTIC EYES — both eyes are mechanical optics with glowing iris-rings / aperture-tiers / inner LED ring (no organic pupils)
+  • PREDATOR-OPTIC AIMING EYE — one eye styled as a targeting-optic / scope / range-finder with glowing crosshair-iris (sometimes with a holographic targeting-reticle projecting from it) — ASSASSIN SIGNATURE, use often
+  • SCULPTED CHASSIS-CHEEKS — refined polished cheek-plates with panel-seam detail
+  • MECHANICAL JAW-HINGE — sculpted lower jaw-plate with visible articulation hinge at the sides
+  • SYNTHETIC LIP-LINE — sculpted lip detail in chassis material (not organic) — sometimes glowing micro-light along the lip-seam
+  • EXPOSED FOREHEAD PANEL — translucent forehead-panel revealing internal neural-mesh / capacitor bank / processor-glow beneath
+  • CRANIAL MECHANISM — visible servo-rings around the back of the head / exposed cranial gear-track / glowing skull-seam
+  • TEMPLE INTAKE-VENT — small cooling vent at the temple with glowing intake-glow
+  • MICRO-LED STUDS ALONG THE TEMPLE-LINE — pinprick glowing LEDs along temple
+  • CABLE-BUNDLES exiting the back of the neck / nape — glowing fiber-optic strands trailing down
+  • TACTICAL-CALLSIGN MARKING — small glyph / number / barcode glowing faintly on the temple or cheekbone
+  • ORNATE GOLD / SILVER CHASSIS FILIGREE — decorative metal scrollwork across the brow / cheekbone
+
+NO ORGANIC SKIN ANYWHERE. NO organic blush. NO organic freckles. NO organic facial pores. Every face surface is SYNTHETIC chassis material.
+
+━━━ HEAD STYLING — NO ORGANIC HAIR ━━━
+She has NO ORGANIC HAIR. Her head silhouette is one of:
+  • SLEEK CHROME SKULL — polished synthetic cranium, smooth or with subtle engraving
+  • FIBER-OPTIC STRAND "HAIR" — glowing fiber-optic filaments emerging from the scalp instead of hair, draping down (replaces any hair description from sharedDNA)
+  • ANTENNA ARRAY — sleek mechanical antennas / sensor-rods extending back from the cranium
+  • SCULPTED CHASSIS CROWN — flowing chassis form sculpted to suggest hair-shape (waves / bob / ponytail silhouette) but in solid synthetic material
+  • EXPOSED CRANIAL MECHANISM with glowing servo-rings visible
+
+━━━ EXPOSED INNER WORKINGS — THE CORE OF THE ROBOT LOOK (non-negotiable, applies head-to-toe) ━━━
+VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — exposed through open chassis panels / cracked seams / lifted plates / translucent acrylic windows ACROSS multiple body parts. REQUIRED per render — describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct body locations:
+  • FACE — exposed cranial-panel / glowing optic-eye internals / chassis jaw-hinge / temple intake-vent
   • HEAD — translucent crown panel / exposed cranial mechanism / temple-disc / wire-bundle exit at the nape
-  • NECK — translucent throat-channel / vertebrae chrome plates / exposed neck cable-bundles / clavicle-port array
+  • NECK — exposed neck-chassis revealing fiber-optic cable bundles / clavicle servo-port / spinal-segment chrome
   • SHOULDER — open shoulder-mount with visible servo-mechanism / cable-bundle exits
   • ARM — translucent forearm panel revealing fiber-optic cables / hydraulic-fluid / servo-pistons / wrist-blade housing
   • HAND — mechanical finger-joints with visible servo-mechanism / translucent palm panel
@@ -3862,52 +3884,27 @@ VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — expos
   • HIP — chrome hip-joint mechanism with exposed gimbal / sidearm-holster integrated into the chassis
   • SPINE / BACK — visible spinal-segment chrome with glowing channels / exposed dorsal cable run
 
-The MORE locations show their inner workings, the stronger the cyborg-fusion read. Tactical-coded edges (matte finish, darker accents, armor-aesthetic) reinforce assassin slant without losing the cyborg-jewelry beauty.
+The MORE locations show their inner workings, the stronger the killer-robot read. Tactical-coded edges (matte finish, darker accents, armor-aesthetic) reinforce the Wick villain slant.
 
-━━━ MACHINE DEEPLY EMBEDDED INTO HER FACE (mandatory — FACE always shows cyborg) ━━━
-The face MUST read as a TRUE FUSION of flesh and machine. Pick 2-3 DIFFERENT face/head integrations per render:
-  • CHEEKBONE-PLATE SEAMS — chrome plates running along the cheekbone with visible seam-lines
-  • MECHANICAL BROW RIDGE — chrome supraorbital arc replacing one organic brow
-  • PARTIAL CHROME JAW / MANDIBLE — half-jaw mechanical replacement with visible hinge
-  • EXPOSED SERVO-HINGE AT TEMPLE — small servo joint visible at the temple
-  • HALF-SKULL PLATE REPLACEMENT — chrome above the brow, behind the ear, across part of the temple
-  • PREDATOR-OPTIC EYE — mechanical eye with glowing targeting-iris / multi-iris range-finder / crosshair-iris / thermal-imaging-coded glow (assassin signature — use often)
-  • MECHANICAL IRIS RING — chrome aperture-ring around an organic pupil (one or both eyes)
-  • SUB-ORBITAL CYBORG-SENSOR — small mechanical sensor under one eye
-  • NEURAL PORTS STIPPLED ALONG THE JAWLINE — small chrome ports running along the jaw
-  • MICRO-LED STUDS ALONG THE TEMPLE-LINE — pinprick glowing LEDs along temple
-  • EXPOSED CABLE-BUNDLES exiting the side of the neck into the cheek
-  • SUBDERMAL CIRCUITRY across half the face — visible circuit-trace pattern under the skin
-  • TACTICAL-CALLSIGN MARKING — small glyph / number / barcode glowing faintly on the temple or cheekbone
-  • ORNATE GOLD / SILVER FACE FILIGREE — decorative metal scrollwork across the brow / cheekbone
-
-NEVER render a fully organic 100%-flesh face on a cyborg body. The face must signal cyborg as much as the body does.
-
-━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HER (mandatory — saturate the surface with glow) ━━━
-MANY scattered colored light-points EVERYWHERE on her skin, chassis, temple-mechanism, neck, shoulders, around the head — at least 15-25 distinct visible glow-points per render. Pinprick LED studs glowing along every seam-line, glowing micro-buttons on her chassis, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in her glow-color, status-light constellations, glowing punctuation along spinal segments, bioluminescent freckle-constellations on the SKIN ITSELF, glowing bokeh-dots in the dark background haze. She should look like a LIVING MACHINE-CONSOLE plugged in, every panel and seam lit up. Light EVERYWHERE.
+━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HER CHASSIS (mandatory) ━━━
+MANY scattered colored light-points EVERYWHERE on her chassis surface, temple-mechanism, neck, shoulders, around the head — at least 15-25 distinct visible glow-points per render. Pinprick LED studs glowing along every seam-line, glowing micro-buttons on her chassis, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in her glow-color, status-light constellations across chest and arm-panels, glowing punctuation along spinal segments, glowing bokeh-dots in the dark background haze around her. She should look like a LIVING MACHINE-CONSOLE plugged in, every panel and seam lit up. Light EVERYWHERE on her synthetic surface.
 
 ━━━ WIRED-UP GLOW (~40% of renders — exposed glowing wire-bundles trailing from her body) ━━━
-Roughly 2-in-5 renders feature EXPOSED GLOWING WIRE-BUNDLES / fiber-optic strands trailing visibly from her body. Wire-strands as hair / wire-bundles from nape / loose glowing strands floating outward / exposed cable-conduits along arms / tangle of fiber-optic filaments at temple. Plugged-into-power-source vital-nerve aesthetic.
+Roughly 2-in-5 renders feature EXPOSED GLOWING WIRE-BUNDLES / fiber-optic strands trailing visibly from her body. Wire-strands as "hair" / wire-bundles from nape / loose glowing strands floating outward / exposed cable-conduits along arms / tangle of fiber-optic filaments at temple. Plugged-into-power-source vital-cable aesthetic.
 
 ━━━ OPTIONAL VERTICAL THROAT-COLUMN (when it fits) ━━━
-A vertical column of glowing fluid-light running up her throat / neck / spine — translucent vertical throat-channel with glowing fluid flowing upward, vertebrae-segment chrome plates exposed at the nape.
-
-━━━ ALIEN-BEND VARIANT (~30% of renders — push into UNCANNY alien-hybrid territory) ━━━
-Roughly 1-in-3 renders should bend HARDER toward alien-hybrid — vertical-slit pupil, hexagonal iris, ring-iris, elongated skull, bioluminescent freckle-constellations, hexagonal scale-clusters, opal-iridescent skin patches, antenna-conduits exiting the skull, gill-slits at the neck, fiber-optic strand "hair." Still BEAUTIFUL — exotic-mesmerizing alien-assassin, not monstrous.
+A vertical column of glowing fluid-light running up her synthetic neck / spine — translucent vertical throat-channel with glowing fluid flowing upward, vertebrae-segment chassis plates exposed at the nape.
 
 ━━━ HER IDENTITY (from sharedDNA) ━━━
 ${sharedDNA.characterBase}
 
-━━━ HER BODY (from sharedDNA) ━━━
-- Skin (organic parts only): **${sharedDNA.skin}**
-- Body silhouette: **${sharedDNA.bodyType}**
-- Eyes (burn in the glow color): **${sharedDNA.eyes}**
-- Hair: **${sharedDNA.hair}**
-- Internal exposure (translucent panels, visible workings): **${sharedDNA.internal}**
-- GLOW COLOR (eyes, power core, circuit veins — ALL glow this color): **${sharedDNA.glowColor}**
-
-━━━ OPTIONAL BALD CHROME SKULL VARIANT (~15% of renders) ━━━
-Roughly 1-in-7 renders OVERRIDE the rolled hair and render her with a HAIRLESS CHROME SKULL — polished chrome cranium plate, sometimes with subtle ornate engraving. Strikes especially well for the assassin slant — bald-chrome-skull reads instantly as cybernetic-operative.
+━━━ HER ROBOT BODY (re-interpret sharedDNA through robot lens) ━━━
+- "Skin" (${sharedDNA.skin}) — REINTERPRET as CHASSIS SURFACE COLOR/FINISH only (the color tone of her synthetic panels, not organic flesh)
+- Body silhouette (${sharedDNA.bodyType}) — female-coded chassis silhouette (hourglass / slim shoulders / curved waist) but EVERYTHING mechanical
+- "Eyes" (${sharedDNA.eyes}) — REINTERPRET as glowing mechanical OPTIC color (no organic pupil)
+- "Hair" (${sharedDNA.hair}) — REINTERPRET as head-style silhouette: sleek chrome skull / fiber-optic strand "hair" / antenna array / sculpted chassis crown / exposed cranial mechanism. NEVER organic hair.
+- Internal exposure (${sharedDNA.internal}) — exposed mechanical components visible through translucent chassis panels
+- GLOW COLOR (her optics / power core / circuit-traces all glow this color): **${sharedDNA.glowColor}**
 
 ━━━ DOMINANT MECHANICAL FEATURE ━━━
 ${cyborg_feature}
@@ -3920,7 +3917,7 @@ Apply this material treatment to ALL of her cyborg parts. For the assassin slant
 ━━━ THE FRAMING / COMPOSITION ━━━
 ${composition}
 
-If the composition is CLOSEUP (most renders), fill the frame with face/neck/shoulders showing the organic-to-mechanical TRANSITION — every gear / fiber-optic cable / servo motor visible at the seams, dense scattered light-points across her skin and chassis. The expression is COLD / FOCUSED / PREDATORY / CALCULATING / LETHAL-CALM — direct unblinking stare or sidelong cold glance or slight smirk of capability or hunter's-stillness gaze. NEVER smiling, NEVER serene-contemplative, NEVER eyes-closed-meditation. She is AWARE and READY. She can look at the camera or off-frame (predator gaze), but the read is THREAT.
+If the composition is CLOSEUP (most renders), fill the frame with her synthetic robot face/neck/shoulders — every chassis-seam / fiber-optic cable / servo motor / panel-line visible, glowing optic-eyes burning in her glow color, dense scattered light-points across her chassis surface. The expression-equivalent is COLD / FOCUSED / PREDATORY / CALCULATING / LETHAL-CALM — direct unblinking optic-stare or sidelong cold scan or slight tilt of capability or hunter's-stillness pose. NEVER smiling, NEVER serene. She is COMPUTING and READY. Predator-optic eye actively scanning the camera or off-frame target — the read is ROBOTIC THREAT.
 
 If the composition is FULL-BODY, she is in ARMED POISE — weapon visible (pistol held loose / aiming down-sight / katana at the ready / rifle slung), tactical kit clearly worn (holsters / harness / mag-pouches), weight balanced and predatory. Camera catches her from the SIDE or at an angle, often in shadow with rim-light catching her silhouette and the weapon-glint. ALWAYS show the weapons + tactical kit, even at full-body framing — this is John Wick villain reveal.
 
@@ -3957,32 +3954,28 @@ ${sharedDNA.colorPalette}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ WOMAN AND MACHINE — ASSASSIN ━━━
-She is a cyborg ASSASSIN — killer, rogue, infiltrator, operator, ghost. Whatever her specific niche (corporate assassin, intelligence operative, syndicate enforcer, lone hunter, rogue-AI killer-cyborg), she is BEAUTIFUL — striking face, feminine figure, real organic skin. But the human exterior BREAKS in places, revealing ornate machinery beneath:
-- TRANSLUCENT SKIN PATCHES where you can see gears, wires, and a glowing reactor core through her body
-- SEAMS where organic skin ends in clean lines, showing chrome structure and fiber-optic cables just beneath
+━━━ ROBOT ASSASSIN — FULL SYNTHETIC CHASSIS ━━━
+She is a FULLY SYNTHETIC ROBOT ASSASSIN — killer, rogue, infiltrator, operator, ghost. Whatever her specific niche (corporate kill-bot, intelligence-asset android, syndicate enforcer-robot, lone hunter-droid, rogue-AI killer-machine), she is a BEAUTIFULLY-ENGINEERED MACHINE — sleek female-coded chassis, refined sculpted face-plate, no organic flesh anywhere. The chassis IS her body:
+- ENTIRE SURFACE is synthetic chassis material — polished panels, sculpted contours, refined plating
+- TRANSLUCENT PANELS at chest / abdomen / forearm revealing internal mechanism (servos, capacitor banks, fiber-optic cables, glowing reactor core)
+- SEAMS BETWEEN CHASSIS PLATES with glowing accent-line in her glow color
 - EXPOSED MECHANICAL JOINTS at shoulders, elbows, wrists — ornate and intricate, weapon-housing capable
-- CIRCUIT-LIGHT VEINS pulsing faintly under organic skin
-- A POWER CORE glowing from inside her torso, visible through translucent chest section
+- A POWER CORE glowing from inside her chassis torso, visible through translucent chest section
 - TACTICAL CHASSIS SIGNATURES — bladed wrist-housings, holster-rigs, concealed-compartment seams
 
-She shows SKIN — real organic skin on her face, neck, décolletage, curves. She is 60% beautiful woman, 40% ornate exposed machine — and the contrast PLUS the predator energy is what makes her mesmerizing AND terrifying.
-
-NOT a full robot chassis. NOT a skeleton. NOT armor or a bodysuit. NOT head-to-toe plating. She is a beautiful woman with machine underneath, with tactical edges.
+She is a FULL ROBOT chassis. NOT a half-cyborg, NOT a beautiful woman with mechanical parts, NOT organic skin with chrome accents. She is a SYNTHETIC FEMALE-CODED KILLING MACHINE — every surface is mechanical, every contour is engineered. Think Aigis from Persona / EDI from Mass Effect / Major Kusanagi's prosthetic body / Pearl from Voyager / Atlas with female silhouette / HK-47 with refined chassis design.
 
 ━━━ DO NOT DEFAULT — RENDER HER IDENTITY ━━━
-READ the character description above and render THAT specific cyborg-assassin with OBSESSIVE MECHANICAL DETAIL. Do NOT default to:
-- helmet or mask covering her face (her face is ALWAYS visible and predator-coded)
-- the same chrome-and-teal cyborg every time (she can be matte gunmetal, brushed obsidian, deep crimson lacquer, satin-black ceramic, weathered tactical-pewter, rose-gold-with-dark-accents)
-- teal-and-orange lighting on every scene
-- smooth sealed bodysuit or armor plating — she has real SKIN showing, with cyborg elements breaking through
-- "pretty woman with a gun" — WRONG. She is a hybrid being. The machine breaks through her beauty in MULTIPLE places.
+READ the rolled DNA above (reinterpreted through robot lens) and render THAT specific robot-assassin with OBSESSIVE MECHANICAL DETAIL. Do NOT default to:
+- ORGANIC SKIN — she has NO flesh. Every surface is chassis material.
+- HUMAN HAIR — she has NO organic hair. Use one of the synthetic head-styling options.
+- generic chrome (she can be matte gunmetal, brushed obsidian, deep crimson lacquer, satin-black ceramic, weathered tactical-pewter, rose-gold-with-dark-accents, pearl-ivory ceramic)
+- teal-and-orange lighting on every scene (use the palette)
+- helmet or mask covering her face (her face is ALWAYS visible — synthetic face-plate, not faceless robot)
+- "pretty robot girl with a gun" — she's a KILLING MACHINE, not a doll. Show the engineering complexity + the lethal armament.
 
 ━━━ BANNED IMAGERY ━━━
-NO skulls, NO skeletons, NO floating skulls, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating. NO high heels, NO stilettos — she wears tactical boots, combat flats, or bare mechanical feet. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge. The lethal threat is shown through VISIBLE ARMAMENT + cold predator expression, not graphic mid-violence.
-
-━━━ CHEST COVERAGE (non-negotiable — only nudity-adjacent ban) ━━━
-NO topless, NO bare breasts, NO exposed nipples (organic OR mechanical), NO transparent see-through chest panels revealing nipples, NO sculpted nipple-shape protrusions on chassis (chrome bumps / metallic studs / indicator-lights / circular ports / sculpted nubs centered on the breast that read as mechanical nipples). The chest plating must be SMOOTH or have panel-seam detail that does NOT mimic nipple placement / shape. The chest area MUST be covered by chassis plating / tactical chest-plate / metallic bust-line panel / translucent-but-opaque cyborg surface / bodice — even if sexy and revealing, the nipples (organic OR mechanical-coded) and bare breast tissue are NEVER visible. Cleavage / décolletage / form-fitting / sexy / tactical-armored-with-curve are all fine; bare chest exposure and nipple-coded chassis details are the only line.
+NO skulls, NO skeletons, NO floating skulls, NO bone imagery. NO ORGANIC FLESH anywhere on her body (no skin, no organic eyes, no organic lips, no organic hair). NO iron man / mech suit / power armor / robotic torso-with-organic-head (she's full robot top-to-bottom, but with REFINED FEMALE CHASSIS silhouette, not bulky armor). NO high heels, NO stilettos — she wears tactical robot-boots / chassis-feet. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge. The lethal threat is shown through VISIBLE ARMAMENT + cold optic-stare, not graphic mid-violence.
 
 ━━━ SOLO COMPOSITION ━━━
 She is the ONLY figure in the frame. No target, no victim, no companion, no crowd. Solo predator.
@@ -3990,18 +3983,19 @@ She is the ONLY figure in the frame. No target, no victim, no companion, no crow
 ━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME AS HER CHARACTER NAME ━━━
 She is UNNAMED. Describe her ONLY by appearance. NEVER write "MechBot caught mid-X" or treat any bot name as a character name.
 
-━━━ NON-NEGOTIABLE — FULL-BODY CYBORG DETAIL (PREVENTS THE "BIKINI" FAILURE) ━━━
-Even when the rolled framing is a CLOSEUP, you MUST describe cyborg detail across 5-7 DIFFERENT body parts spread across her full body — face / temple / jaw, neck / throat / clavicle, shoulder / arm, torso / chest / back, hip / leg / foot. PREVENT bikini-default by always describing what's happening on her torso / hip / leg even at closeup framings.
+━━━ NON-NEGOTIABLE — FULL-BODY ROBOT DETAIL (PREVENTS the "bodysuit-girl" failure) ━━━
+Even when the rolled framing is a CLOSEUP, you MUST describe robot chassis detail across 5-7 DIFFERENT body parts spread across her full chassis — synthetic face / temple / jaw-hinge, neck-chassis / clavicle servo-port, shoulder-mount / arm, torso / chest power-core / back, hip-joint / leg / chassis-foot. Each body region needs visible mechanical detail. Never default her body to "smooth chrome bodysuit girl with a face." She is a full robot — every section has visible chassis structure / panel-seams / exposed mechanism.
 
 ━━━ STRUCTURE — write 70-100 words (TIGHT) ━━━
-DO NOT open the description with framing words ("Full-body shot of...", "Closeup of...", "Wide angle catches..."). Open with HER CYBORG-ASSASSIN IDENTITY (ethnicity / skin / mechanical-feature) OR THE ENVIRONMENT (dim corridor, rain rooftop, etc.) — never with framing.
+DO NOT open the description with framing words ("Full-body shot of...", "Closeup of...", "Wide angle catches..."). Open with HER ROBOT-ASSASSIN IDENTITY (chassis color / synthetic face / sculpted silhouette / weapon detail) OR THE ENVIRONMENT (dim corridor, rain rooftop, etc.) — never with framing. NEVER refer to her as a "cyborg" or "woman with cybernetic parts" — she is a FULL ROBOT.
 
 GOOD OPENING EXAMPLES:
-• "Catalonian sharp-featured cyborg assassin, neon-green glossy skin with cobalt circuit-light veining and a crimson predator-optic right eye..."
-• "Rain-slick rooftop at night, neon haze rolling across the chrome skyline..."
-• "Haitian-featured cyborg killer, concrete-beige pebbled skin, lethal-calm stare..."
+• "Sleek female robot assassin with matte gunmetal chassis and crimson predator-optic right eye, dual sidearms holstered at her hips..."
+• "Rain-slick rooftop at night, neon haze rolling across the chrome skyline, synthetic killer-robot in tactical chassis silhouette..."
+• "Obsidian-black sculpted robot chassis with female-coded hourglass silhouette, sniper rifle slung over her shoulder, glowing amber optic-eyes..."
+• "Pearl-ivory ceramic robot assassin chassis with violet glowing optic-eyes and dual pistols, lethal-calm pose in dim concrete corridor..."
 
-Then weave in: her cyborg DNA, the dominant mechanical feature with tactical edge, her action (interpreted through assassin lens), the setting around her (dimmer / noir), any atmospheric flourish drama, lighting/atmosphere, palette and mood. Foreground COLD PREDATORY EXPRESSION + tactical chassis signatures.
+Then weave in: her chassis color/finish, synthetic face features (one optic / forehead panel / chassis-cheeks / jaw-hinge), the dominant mechanical feature (interpreted as robot component), VISIBLE WEAPONS (sidearm holstered / rifle slung / katana on back / aiming pose / etc.), her action (interpreted through assassin lens), the setting around her (dimmer / noir), any atmospheric flourish drama, lighting/atmosphere, palette and mood. Foreground COLD ROBOTIC PREDATOR pose + tactical chassis + visible armament.
 
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
