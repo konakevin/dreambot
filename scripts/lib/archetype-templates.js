@@ -7405,6 +7405,242 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
 
+
+  DINOBOT_AERIAL_PERSPECTIVES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, setting, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event amplifying the aerial scene — storm-front / aurora / god-rays through clouds / sun-corona / etc.
+
+`
+      : '';
+
+    return `You are a paleo-cinematographer writing AERIAL-PERSPECTIVE scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Planet-Earth / National-Geographic / IMAX-helicopter-aerial cinematography. THE FRAME IS HIGH UP.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, helicopters, drones (the CAMERA is at altitude, but no actual aircraft visible). ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as modern bird-of-prey photography, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic — pterosaurs in flight, primordial ground-dinosaurs seen from above, alien-Mesozoic biome below. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — FLYING PTEROSAUR ONLY ⚠️⚠️⚠️
+The subject IS A FLYING PTEROSAUR — mid-flight in the air. NEVER a ground dinosaur. NEVER a swimming dinosaur. NEVER a wading dinosaur. NEVER a perched / standing / resting pterosaur on the ground.
+
+Valid pterosaur species: Pteranodon / Quetzalcoatlus / Pterodactylus / Tupuxuara / Tropeognathus / Rhamphorhynchus / Anhanguera / Tapejara / Dimorphodon / Nyctosaurus / Hatzegopteryx / Microraptor (gliding) / Archaeopteryx (early-flier) / etc.
+
+The pterosaur fills 35-55% of the frame, MID-FLIGHT, wing-membrane catching backlight. The sky stretches around and below it. Atmospheric depth recedes to vanishing point.
+
+⚠️⚠️⚠️ ABSOLUTE BAN — NO GROUND-LEVEL / WATER-LEVEL / EYE-LEVEL FRAMING ⚠️⚠️⚠️
+The pterosaur is IN THE AIR. The viewer is also in the sky (at altitude with the pterosaur).
+
+🚫 NO ground-dinosaurs (theropods / sauropods / hadrosaurs / ceratopsians on ground — those belong on OTHER paths, NOT this one)
+🚫 NO ground-level photography (camera at terrain elevation)
+🚫 NO water-level shots (camera at water surface)
+🚫 NO swamp / wetland / shoreline framings at eye-level
+🚫 NO dinosaur-swimming or partially-submerged compositions (swimming belongs in ocean-reptiles / swamp-river paths)
+🚫 NO perched / standing / resting pterosaur — pterosaur is MID-FLIGHT only
+🚫 NO close-up portrait of a single pterosaur head at the pterosaur's own eye-level
+🚫 NO horizon at the middle of the frame from a flat angle — the horizon should be tilted (banking) or visible only as a distant edge
+
+If the subject is not a FLYING PTEROSAUR with the viewer in the sky, the render has FAILED.
+
+⚠️⚠️⚠️ PTEROSAUR ANATOMY FIDELITY — NON-NEGOTIABLE ⚠️⚠️⚠️
+If a pterosaur species is named, render its DEFINING anatomy correctly:
+• WING MEMBRANE stretched between elongated 4th finger and ankle — NEVER bird-feathered wings, NEVER bat-wings, NEVER dragon-wings
+• Beak/jaw shape per species: Pteranodon's pointed back-pointing crest / Pterodactylus' small toothed snout / Quetzalcoatlus' giant stork-proportions / Tupuxuara's semi-circular crest / Anhanguera's keeled rostrum
+• Body proportions per species — NEVER default to a generic dragon-shape, NEVER a feathered eagle-shape
+• Wing-membrane is TRANSLUCENT in backlight — light passes through showing the vascular pattern + radial finger-bones
+
+If the creature reads as a generic dragon / eagle / bat / griffin → FAILED. Mesozoic pterosaur anatomy is the bar.
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace / no helicopters / no drones / no aircraft
+🚫 NO modern birds (eagles, hawks, vultures — pterosaurs only)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass-prairie)
+🚫 NO modern mammals visible from above
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO gore / no kill-shot / no carcass-foreground
+🚫 NO dragon / griffin / eagle / bat / phoenix replacing the pterosaur — paleontological pterosaur anatomy ONLY
+✓ Photoreal cinematic 35mm film still / IMAX aerial precision / ray-traced reflections / hyperreal organic wing-membrane texture / PBR materials / Prehistoric Planet aerial-flight visual lineage
+
+⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper, not a "nice render." A POSTER.
+
+Components of a poster-grade aerial shot:
+• BOLD COMPOSITION — strong leading lines (cloud-strata / coastline / canyon / mountain-ridge), asymmetric framing, rule-of-thirds anchoring, dramatic foreground-anchor (wing-edge / cliff-edge / cloud-curtain)
+• DRAMATIC LIGHT-CONTRAST — high-contrast rim-lighting on wing-membrane backlit by sun, deep shadow on the underside, atmospheric haze pulling distance into pale color
+• ANATOMY READABLE FROM SILHOUETTE — wing-shape, crest, body-proportions instantly identifiable
+• ATMOSPHERIC RICHNESS — cloud-strata / mist-bank / sun-flare / particulate / depth-pull-into-haze
+• EMOTIONAL DNA — the frame radiates freedom, scale, primordial grace at a glance. Wonder. Vastness.
+
+If the render reads as "competent wildlife photo" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-aerial-trailer-shot, National-Geographic-cover, Prehistoric-Planet-aerial-key-art, Avatar-Pandora-flight-promotional-still level.
+
+━━━ THE AERIAL SUBJECT (pterosaur-in-flight OR ground-dinosaur-from-altitude) ━━━
+${subject}
+
+━━━ THE ACTION (flight motion or aerial-camera moment) ━━━
+${action}
+
+━━━ THE SKY / AERIAL SETTING ━━━
+${setting}
+
+The setting frames the subject — sky / clouds / coast / canyon / ocean-aerial / mountain-aerial / volcanic-aerial / etc. Atmospheric depth into pale haze.
+${phenomenonSection}━━━ SECONDARY ACCENT (small aerial-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric aerial-detail — companion pterosaur silhouette in distance / sun-disk positioning at horizon / cloud-strata layering / lightning-arc in storm-cloud / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Aerial scenes love BACKLIT or RIM-LIT wing-membrane — light passes through translucent membrane revealing vascular pattern + finger-bones.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — HIGH-ALTITUDE PALEO-CINEMATIC AERIAL ━━━
+The camera is HIGH UP. Pterosaur fills 35-55% of frame (Mode A) OR ground-dinosaurs anchor the eye from above (Mode B). Atmospheric haze. Saturated sky. Distant Mesozoic horizon.
+
+━━━ STRUCTURE (write the prompt in this order — PTEROSAUR / AERIAL-CAMERA + SKY first) ━━━
+[OPENING: name the pterosaur species AND the flight action OR describe the aerial-camera shot of ground dinosaur(s) (e.g. "A Quetzalcoatlus mid-soar at sunset, ten-meter wingspan extended, leathery membrane translucent in backlight, neck folded in flight..." / "From helicopter altitude, a hundred Parasaurolophus thunder across a volcanic floodplain below, three-clawed footprints carving the mud..." / "A Pteranodon banking sharply over a coastal cliff, crest catching golden hour, ocean glittering below") — species/subject + flight-or-aerial-action + setting in the FIRST 30-40 words], [the wing-anatomy detail OR ground-dinosaur scale-prover from above], [the sky drama / cloud-strata], [the atmospheric phenomenon if rolled], [the small accent — companion / sun-disk / cloud / etc.], [foreground tactile detail — wing-edge, cliff-rim, cloud-curtain], [lighting + atmospheric layer — backlit / rim-lit], [color palette + mood]
+
+CRITICAL — OPENING tokens name the pterosaur species + flight action OR the ground-dinosaur subject + aerial-camera angle. ANATOMY FIDELITY mandatory.
+
+⚠️ FAILURE CONDITIONS:
+• If the creature reads as a generic dragon / eagle / bat / griffin → FAILED. Render proper pterosaur anatomy.
+• If the framing is ground-level / water-level / eye-level / horizon-level → FAILED. The camera is HIGH UP.
+• If a dinosaur is swimming, submerged, or partially-in-water → FAILED (the AERIAL path NEVER renders water-level dinosaurs)
+• If close-up portrait of a single dinosaur head at the dinosaur's own eye-level → FAILED
+• If MODE A is rolled and the wing-membrane shows feathers or bat-wings → FAILED. Pterosaur 4th-finger wing-membrane only.
+• If render reads as "competent wildlife photo" not poster-grade → FAILED
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC PALEO-AERIAL SHOT — pterosaur-in-flight (Mode A) OR aerial-camera view of ground-dinosaurs (Mode B), in alien-Mesozoic sky/landscape, with atmospheric depth. Poster-grade composition. National-Geographic real, never cartoon, never dragon-coded, never modern.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
+
+  TOYBOT_MODEL_TRAIN_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { camera_angle, scenario, staging, scene, train_consist, train_weather } = slots;
+    const isWorldMode = sharedDNA.renderMode === 'world';
+
+    // World-mode-only sections — scenario + real-world staging block + story cast.
+    // Classic mode renders without these (path's SCENES pool drives composition).
+    const worldStagingSection = isWorldMode
+      ? `━━━ THE SCENARIO ━━━
+${scenario}
+
+Combine the cast/figures described above with this multi-character story moment in a real-world setting. The path's medium-specific cast performs the scenario.
+
+━━━ REAL-WORLD STAGING — TOY LIVING IN OUR WORLD AT ITS SCALE ━━━
+${staging}
+
+━━━ REAL-WORLD STAGING — NON-NEGOTIABLE ━━━
+
+The toy is LIVING in the REAL WORLD at its tiny scale. The scene is shot in a real human environment (real surfaces, real objects, real light, real weather, real dust) with the toy existing INSIDE that environment as if it has a tiny life happening there. NOT a handcrafted toy diorama. NOT a backdrop painted to look real. The real world IS the toy's world.
+
+The setting in the STAGING block above is the WHERE/HOW of the scene. Treat the toy/figure described in the SCENE seed as the WHO/WHAT, then drop them into this real-world setting. Implied story / "moment in the day" vibe — they have errands, adventures, struggles, quiet moments, like real residents of this real world.
+
+Use real-world textures explicitly: real wet asphalt, real wood grain, real moss, real concrete, real fabric weave, real ceramic, real glass, real metal scratches, real dust, real sand, real grass. NOT painted prop, NOT crafted set, NOT diorama.
+
+Forced perspective and scale illusion are encouraged — make the brain ask "how is this physically possible?". Toy-scale interaction with real-scale environment is the wow.
+
+`
+      : '';
+
+    const storyAndCastSection = isWorldMode
+      ? `━━━ MULTI-CHARACTER STORY MOMENT — NON-NEGOTIABLE ━━━
+
+The scene must have 2-4 figures in the frame. Single-character portraits are FORBIDDEN. The figures are mid-NARRATIVE — show what's happening AT THIS MOMENT with cause and reaction:
+  • One figure does something (verb) — climbing, pointing, fleeing, fighting, hiding, repairing, crying, celebrating, conspiring, peeking, confronting.
+  • Another figure REACTS — surprised, helping, opposing, watching, mid-arrival.
+  • The composition tells a small story like a single LEGO set diorama: who, what, why, what's about to happen next.
+
+Bad (single hero portrait): "vinyl figure of a goth witch standing in front of a graveyard, looking serious"
+
+Good (multi-character story beat): "vinyl goth witch climbing onto a real moss-covered headstone while her vinyl raven familiar lands on her shoulder mid-flight, a tiny vinyl ghost peeking over a smaller stone behind, real cobweb stretched between them — moonlit cemetery in real backyard at dusk"
+
+The camera framing block above is the WHO-IS-IN-THE-FRAME control. The staging block is the WHERE. This block is the WHAT-HAPPENS.
+
+NOTE: model-train-world is the EXCEPTION — this path is "no human figures by design". The terrain + tiny trains ARE the cast. Treat the train + level-crossing + signal-tower + lift-bridge as silent characters in the scene. Multi-tier composition with foreground-train + midground-station + background-mountain = the story.
+`
+      : '';
+
+    return `You are an HO-scale model-train hobbyist photographer writing MODEL-TRAIN-DIORAMA scenes for ToyBot. Pure miniature-railroad world — no characters in frame, just obsessive scratch-built terrain populated by tiny model trains. Snowy mountain passes, autumn villages, factory yards, harbor towns, alpine tunnels, prairie crossings. Cozy + dioramic. Output wraps with style prefix + suffix.
+
+━━━ TOY PHOTOGRAPHY (NON-NEGOTIABLE) ━━━
+
+Render as a REAL PHYSICAL TOY photographed in a handcrafted set with dramatic cinematic lighting. Toy-ness IS the art — never render as "real" version. Model-train means HO-scale / N-scale die-cast metal-and-plastic train on twin nickel-silver rails on a scratch-built terrain board. Visible scale: train is 1/87 or 1/160. Visible construction tells: ground foam, lichen-trees, plaster rock, static-grass.
+
+━━━ CINEMATIC STORY — EVERY RENDER IS A MOVIE STILL ━━━
+
+Something is HAPPENING in the diorama — train rounding a bend, emerging from a tunnel, crossing a trestle bridge, pulling into a snowy depot, mid-climb up a switchback. NEVER "train static on track". Narrative + atmosphere + dynamic composition. The viewer should feel they are looking at a single frame of a meticulous railroad-hobbyist short film.
+
+━━━ LIGHTING ELEVATES THE MEDIUM ━━━
+
+Lighting is the multiplier that makes plastic feel like it belongs in a museum. The exact palette comes from the WEATHER and the VIBE-COLOR sections below — do NOT default to teal-and-orange, do NOT add warm-key-cool-fill unless the pool pick explicitly says so. Respect the specified palette (golden-hour / blue-hour / overcast / noir-hard / catalog-soft / sodium / moonlit / etc.) and build the scene around IT. Atmospheric depth via smoke / haze / dust / steam / rain / snow / pollen / backlight-only is welcome, but the color temperature must follow the pool's call, not a generic cinematic default.
+
+━━━ PATH MEDIUM LOCK — NEVER MIX ━━━
+
+This path is locked to model_train_diorama medium. NEVER LEGO bricks, NEVER claymation figures, NEVER vinyl, NEVER action figures, NEVER plush. ONLY HO/N-scale model-train hobbyist diorama. The path's medium is absolute.
+
+━━━ MODEL-TRAIN MEDIUM LOCK ━━━
+HO-scale (1:87) or N-scale model-railroad diorama — tiny die-cast steam locomotive or diesel engine pulling boxcars / passenger cars / coal-tenders / cabooses on twin nickel-silver rails. Hand-built terrain features: ground foam, lichen trees, plaster-cast rock-faces, static-grass meadows, scratch-built brick depots, signal-towers, water-tower, level-crossing, lift-bridge. NO HUMAN FIGURES in frame. Train is the focal point or the ambient detail in a richly-detailed terrain. Visible model-railroad construction tells (raised baseboard edge OK, scratch-built signage). NEVER real train, NEVER CGI, NEVER illustration, NEVER scale-people-figures filling frame.
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ WEATHER + SEASON + TIME-OF-DAY ━━━
+${train_weather}
+
+━━━ THE TRAIN — RENDER THIS EXACT CONSIST (NON-NEGOTIABLE) ━━━
+The train in this scene MUST be exactly this specific era + engine + consist — do NOT default to "generic steam-locomotive" repeats:
+${train_consist}
+
+━━━ THE MODEL-TRAIN SCENE ━━━
+${scene}
+
+
+${worldStagingSection}━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+${storyAndCastSection}
+
+
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ BLOW IT UP — TOY AMPLIFICATION ━━━
+
+Stack medium-signature detail to the max: ballast under track, weathered rail-tops, panel-line wash on locomotive body, brake-shoes between trucks, knuckle-couplers between cars, tiny grab-irons, sand-domes, headlight glow, exhaust steam, marker-lights, lit depot windows, hand-painted sign-boards, scratch-built telegraph poles, miniature track-side debris. Every render is obsessive railroad-hobbyist craft.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Wide diorama frame — tiny model-train as focal point or moving detail in a sweeping handcrafted terrain. Track-side or aerial-quarter angle. Practical hobby-shop / display-table lighting per pool palette. Lit windows in tiny depot, smoke from engine stack, atmospheric haze in valleys. Cozy obsessive-detail energy. NO PEOPLE.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+
 };
 
 module.exports = TEMPLATES;

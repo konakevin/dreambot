@@ -144,6 +144,85 @@ ABSOLUTELY BANNED:
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
 
+  dinobot_aerial_perspectives_surprise_element: `Generate SMALL AERIAL-ACCENT descriptions for DinoBot's aerial-perspectives path. Each is ONE comma-separated line, 15-30 words, describing a small secondary aerial accent — companion pterosaur silhouette / sun-disk-positioning / cloud-strata / lightning-arc / atmospheric small detail.
+
+The element is SMALL — 2-5% of the frame. Position: sky / foreground edge / distant horizon. Adds aerial drama and depth.
+
+Variety mandate (rotate widely):
+- ~15% Companion pterosaur silhouette in distance, formation flight or wingtip-mirror
+- ~15% Sun-disk positioning — partially behind clouds / on horizon / corona-flare
+- ~10% Moon-disk in day-sky or full-moon at night
+- ~10% Cloud-strata layering — anvil-cumulus / mares-tail / mist-band horizon
+- ~10% Lightning-arc cracking through storm-cloud distant
+- ~10% Distant flock of pterosaurs in V-formation receding
+- ~10% Volcanic-ash plume in deep background sky
+- ~5% Meteor streak across the sky
+- ~5% Aurora ribbon in night sky
+- ~5% Sundog / parhelion / cloud-iridescence atmospheric phenomenon
+- ~5% Distant ground-detail visible from above — river-bend / volcanic-cone / canyon-shadow
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant sky / horizon)
+- ONE SPECIFIC DETAIL (mid-action / catching light / posture / scale-prover)
+
+GOOD examples:
+- A flock of seven distant Pteranodon silhouettes in V-formation deep behind, wingtips catching backlight
+- The sun-disk half-set on the horizon with corona-flare, atmospheric haze layering the sky
+- A volcanic-ash plume on the deep horizon, drifting orange against pale blue
+- A lightning-arc cracking blue-white through a distant storm-cloud, illuminating the cloud-strata
+- A meteor streak arcing across the deep sky, blue-white tail
+
+ABSOLUTELY BANNED:
+- NO humans / no aircraft / no helicopters / no drones / no human-trace
+- NO modern birds (eagles, hawks — pterosaurs only)
+- NO modern animals
+- NO duplicate-style entries
+
+Output: ONE aerial-accent per line. No numbering. No quotes.`,
+
+  aerial_subjects: `Generate FLYING PTEROSAUR descriptions for DinoBot's aerial-perspectives path. Each is ONE comma-separated line, 20-35 words, describing a specific pterosaur (or early-flying-dinosaur) species MID-FLIGHT in the air.
+
+The pterosaur is MID-FLIGHT — never perched, never on the ground, never resting, never swimming. Wing-membrane stretched across elongated 4th-finger to ankle (paleontologically accurate, NOT bird-feathered, NOT bat, NOT dragon).
+
+Valid species (rotate widely across the pool):
+- Pteranodon (back-pointing crest, large wingspan, marine)
+- Quetzalcoatlus (giant, stork-proportions, ten-meter wingspan)
+- Pterodactylus (small, toothed snout, slender)
+- Tupuxuara (semi-circular crest)
+- Tropeognathus (keeled rostrum)
+- Rhamphorhynchus (long vane-tipped tail, needle teeth)
+- Anhanguera (keeled rostrum, marine, fish-hunter)
+- Tapejara (elaborate forward-curved crest)
+- Dimorphodon (puffin-like beak, short wings)
+- Nyctosaurus (Y-shaped head crest, soaring)
+- Hatzegopteryx (robust skull, terror of Romania)
+- Microraptor (four-winged glider — feathered)
+- Archaeopteryx (early feathered dinosaur, primitive flight)
+
+EVERY entry includes:
+- THE SPECIES NAME (explicitly)
+- THE FLIGHT ACTION (soaring / banking / diving / hovering / circling / gliding / climbing / mid-flap / wingtip-grazing-water)
+- ONE DEFINING ANATOMY DETAIL (crest shape / wingspan / membrane translucency / beak shape)
+
+GOOD examples:
+- Quetzalcoatlus mid-soar at sunset, ten-meter wingspan extended, leathery membrane translucent in backlight, neck folded back in flight
+- Pteranodon banking hard right over open ocean, distinctive backward-pointing crest catching golden hour, wings tilted in deep stall
+- Tapejara gliding over volcanic plain, elaborate forward-curved crest visible in profile, wings angled steeply in descending spiral
+- Anhanguera mid-dive with long tooth-lined jaws extended, snatching silvery fish from glassy ocean surface, wingtips inches from water
+- Microraptor gliding between conifer canopies, four iridescent feathered wings spread wide, long tail-vane acting as rudder mid-flight
+
+ABSOLUTELY BANNED:
+- NO ground dinosaurs (no theropods / sauropods / hadrosaurs / ceratopsians on ground)
+- NO "aerial perspective of [ground dinosaur]" — this path is PTEROSAURS IN FLIGHT only
+- NO perched / standing / resting pterosaurs — MID-FLIGHT only
+- NO swimming dinosaurs
+- NO dragon / eagle / bat / griffin coding — paleontological pterosaur anatomy only
+- NO humans / no aircraft / no human-trace
+- NO duplicate-style entries
+
+Output: ONE flying-pterosaur entry per line. No numbering. No quotes.`,
+
   dinobot_dino_pack_surprise_element: `Generate SMALL PACK / GROUP ACCENT descriptions for DinoBot's dino-pack path. Each is ONE comma-separated line, 15-30 words, describing a small secondary pack accent — sentinel-individual / trailing-juvenile / pack-leader-pose / scattered-prey-bones / pterosaur-above / dust-cloud / etc.
 
 The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds depth and pack-life energy.

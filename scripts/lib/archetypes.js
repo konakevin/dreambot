@@ -1137,6 +1137,35 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_AERIAL_PERSPECTIVES: {
+    description:
+      'PATH-BESPOKE — DinoBot aerial-perspectives path (2026-05-17 axis-system migration). FLYING PTEROSAURS in their element OR sky-altitude aerial-camera views of ground dinosaurs. The frame is HIGH UP. Two modes: pterosaur-in-flight (70%) or bird-eye-view-of-ground-dinosaurs (30%). Wing-membrane anatomy fidelity per species. Reuses AERIAL_SUBJECTS (200 pterosaur subjects) + AERIAL_ACTIONS (200 flight behaviors) + AERIAL_SETTINGS (200 sky/aerial environments). Adds one new path-bespoke pool for aerial-specific small accents (companion-flock / sun-disk-positioning / cloud-bank / etc.). Paleo-cinematographer high-altitude framing. 4 path-bespoke axes (subject / action / setting / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'setting', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  TOYBOT_MODEL_TRAIN_WORLD: {
+    description:
+      'PATH-BESPOKE — ToyBot model-train-world path (2026-05-17 R0 axis-system migration). HO-scale (1:87) or N-scale model-railroad diorama. NO HUMAN FIGURES by design — handcrafted terrain + tiny model trains ARE the subject. Locked medium: model_train_diorama. Universal axes (camera_angle / scenario / staging) resolve to bot.defaultPools. Path-bespoke axes (scene / train_consist / train_weather) live in path-bespoke pools. Template branches on sharedDNA.renderMode for scenario+staging injection.',
+    slots: {
+      universal: ['camera_angle', 'scenario', 'staging'],
+      bot: [],
+      path: ['scene', 'train_consist', 'train_weather'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
 };
 
 module.exports = { ARCHETYPES };
