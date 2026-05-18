@@ -124,7 +124,7 @@ module.exports = {
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
-    'cyborg-female-assassin': 'sleek predatory cyber-assassin, lethal capable killer with cinematic poise, dramatic atmospheric rim-light',
+    'cyborg-female-assassin': 'cool cyber-ninja bot, sleek robotic shadow-assassin, agile katana-armed killer-droid, dramatic atmospheric rim-light',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -274,18 +274,16 @@ module.exports = {
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
     if (path === 'cyborg-female-assassin') {
-      // 2026-05-17: predatory cyber-assassin path — spans chassis spectrum from
-      // pure-droid (Terminator/Cylon/Death Trooper) through sleek femme-cyborg
-      // (Major Motoko/Alita) to painterly humanoid cyber-killer (replicant/Ava).
-      // DNA flows through normally; the template's chassis-spectrum guidance
-      // tells Sonnet which register fits the scene. Throughline is lethal
-      // capability + visible weapons + atmospheric backdrop, NOT a single
-      // chassis archetype.
-      base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
+      // 2026-05-17: NINJA-BOT path (path name retained for back-compat). Pure
+      // cyber-ninja robot — Genji / Gray Fox / Sandevistan cyber-ninja / Snake-
+      // Eyes-as-droid energy. NO human, NO woman, NO femme — just cool ninja-
+      // bots. DNA is minimal: chassis-paint + glow color. The template defines
+      // everything else.
+      base.characterBase = 'Cyber-ninja robot — agile lethal shadow-assassin droid, sleek katana-armed killer-machine';
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
-      base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
+      base.bodyType = 'Agile cyber-ninja chassis — sleek lithe athletic robot silhouette built for stealth, speed, and lethal kinetic combat. Streamlined armored panels with minimal protrusions, articulated combat limbs, balanced for acrobatic movement. Think Gray Fox / Raiden cyber-ninja / Genji / Sandevistan cyber-ninja chassis.';
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
-      base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
+      base.hair = 'No hair — fully helmeted ninja-bot head OR exposed cybernetic cranial-sensor cluster OR sleek smooth chrome skull-dome (no human face features visible)';
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }

@@ -3773,56 +3773,128 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
 ━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
 ${drama}
 
-A subtle atmospheric flourish amplifying the assassin's predatory presence WITHOUT cluttering it as the focal subject.
+A subtle atmospheric flourish amplifying the ninja-bot's predatory presence WITHOUT cluttering it as the focal subject.
 
 `
       : '';
 
-    return `You are a cinematographer writing a SLEEK PREDATORY CYBER-ASSASSIN scene for MechBot — rendered in hyper-real painterly cinematic 3D. The chassis spans a SPECTRUM across THREE registers (pick what serves THE SCENE):
+    return `You are a cinematographer writing a COOL CYBER-NINJA BOT scene for MechBot — a sleek robotic shadow-assassin rendered in hyper-real painterly cinematic 3D. The subject is a CYBER-NINJA ROBOT — agile, lethal, stealthy, katana-armed. Pure ninja-droid. NO human, NO woman, NO femme silhouette, NO human face. Use "it" pronouns. PURE COOL NINJA-BOT.
 
-  REGISTER A — PURE COMBAT DROID (Terminator / Cylon Centurion / Death Trooper / HK-47 / IG-88 / Promethean Knight / Cyberman). Utilitarian engineered chassis, sealed helmet OR exposed cranial mechanism, NO human face.
-  REGISTER B — SLEEK FEMME-CODED COMBAT-CYBORG (Major Motoko Kusanagi / Alita Battle Angel / Cyberpunk 2077 cyber-ninja). Refined armored panels with feminine silhouette permitted, sculpted chassis curves, sleek combat-helmet or polished faceplate.
-  REGISTER C — PAINTERLY HUMANOID CYBER-ASSASSIN (Blade Runner replicant / Ex Machina Ava / Mass Effect EDI / Ghost in the Shell). Chrome/ceramic/lacquered plates over an organic-feeling base form, visible synthetic-skin face, styled hair OR partial cranial-mech exposure.
+Lineage: Gray Fox (Metal Gear Solid cyber-ninja) / Raiden (Metal Gear Rising) / Genji (Overwatch) / Sandevistan cyber-ninja (Cyberpunk 2077) / Cybernetic Snake-Eyes / Storm Shadow as droid / Hattori Hanzo as droid / Solid Snake stealth-cyborg / Ghost in the Shell cyber-ninja / Edge Runners shadow-assassin / Genshin Inazuman shogun-cyborg / Dishonored mechanical-assassin / Mirror's Edge parkour-droid. KOOL NINJA-BOT energy.
 
-ALL THREE REGISTERS ARE VALID. Pick what serves THE SCENE — pure-droid for sealed-corridor military hunts, sleek-femme for stylized neon-noir stalks, painterly-humanoid for atmospheric portraiture. Don't force one register across all renders. The PATH is the predatory slant + cinematic atmosphere, NOT a single chassis archetype.
-
-━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL CINEMATIC ASSASSIN (every render) ━━━
-Every render is a POSTER-GRADE PAINTERLY HYPERREAL FRAME of a deployed cyber-assassin. High-end concept-art quality, feature-film VFX polish. NOT goofy action still. NOT plastic-CGI doll. NOT generic robot.
+━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL CINEMATIC NINJA-BOT (every render) ━━━
+Every render is a POSTER-GRADE PAINTERLY HYPERREAL FRAME of a cyber-ninja robot. Concept-art quality, feature-film VFX polish. NOT goofy action still. NOT plastic-CGI doll. NOT generic robot. NOT samurai-cosplay.
 
 Style targets (NON-NEGOTIABLE):
-  • CINEMATIC SHADOW-AND-RIM LIGHTING — strong rim-light separating the silhouette from a darker atmospheric background, single key-light sculpting chassis planes, deep shadow on off-key side. Mood: cinematic, atmospheric, hunter-at-night.
-  • RICH ATMOSPHERIC BACKDROP — never a flat void. Always rain-slick neon street / stone-arch corridor / sci-fi chamber / industrial corridor / ancient flooded ruin / war-torn rooftop / dim cathedral interior / cyberpunk alley / volcanic gantry / frozen colony. The setting is HALF the image.
+  • CINEMATIC SHADOW-AND-RIM LIGHTING — strong rim-light separating the ninja-bot silhouette from a darker atmospheric background, single key-light sculpting chassis planes, deep shadow on off-key side. Mood: cinematic, atmospheric, hunter-at-night.
+  • RICH ATMOSPHERIC BACKDROP — never a flat void. Always neon-rain Tokyo rooftop / moonlit zen temple courtyard / cyberpunk alley / dim pagoda interior / fog-shrouded bamboo forest / industrial corridor / cathedral interior / stone cloister / volcanic gantry / cherry-blossom courtyard at night. The setting is HALF the image.
   • PAINTERLY HYPERREAL synthetic-surface rendering — every panel-seam visible, every chassis-line crisp, micro-detail (rivets / engraving / battle-wear), subsurface and raytraced reflections.
-  • CONFIDENT POSE OR CLEAR PREDATORY ACTION — combat-ready stance / weapon-targeting / mid-stalk / wall-climb / from-cover lurk / sniper-perch / sentry-stillness. Never pensive, never posing-for-camera, never "model on display."
-  • DENSE WARM ACCENT LIGHTING — single saturated glow color (kill-red / ice-blue / toxic-green / amber / violet) carried through optics + circuit-veins + power-core. Atmospheric haze with cool blue / cold green / crimson accent.
+  • PREDATORY POSE OR CLEAR NINJA-ACTION — low-crouch stalk / wall-perch / rooftop sniper-perch / mid-leap / sword-drawn stance / katana-strike / wrist-blade extended / from-shadow lurk / wall-run mid-stride / parkour vault. Never pensive, never posing-for-camera.
+  • DENSE WARM ACCENT LIGHTING — single saturated glow color (kill-red / ice-blue / toxic-green / amber / violet / electric-cyan) carried through optics + circuit-veins + power-core + katana-edge. Atmospheric haze with cool blue / cold green / crimson accent.
 
-Mood target — LETHAL, CAPABLE, CINEMATIC, ATMOSPHERIC. The viewer should feel "this is a poster-grade frame from a cyber-assassin film."
+Mood target — LETHAL, KOOL, SHADOWED, AGILE, CYBERPUNK-NINJA. The viewer should feel "this is a poster-grade frame from a cyber-ninja anime / Cyberpunk Edgerunners scene."
 
-━━━ JOHN WICK / TACTICAL ASSASSIN — VISIBLE WEAPONS (every render) ━━━
-Every render shows VISIBLE WEAPONS — actual weapons clearly in the frame. AT LEAST 2 of:
-  • SIDEARM PISTOL HOLSTERED AT HIP — sleek dark sci-fi handgun in a thigh-holster, sometimes drawn and held loose
-  • DUAL SIDEARMS — twin pistols holstered or crossed at the chest
-  • COMBAT RIFLE / SMG strapped to back with tactical sling
-  • COMBAT RIFLE held in two hands, muzzle low or raised
-  • LONG SNIPER RIFLE slung over the shoulder with large scope
-  • COMBAT KNIFE / FIGHTING BLADE sheathed at thigh or hip
-  • KATANA / MONOBLADE strapped diagonally across the back
-  • WRIST-MOUNTED WEAPON — wrist-blaster / wrist-blade extended from forearm chassis
-  • AIMING POSE — sidearm or rifle raised, optic actively scoping
-  • WEAPON HARNESS / BANDOLIER across chest with magazine pouches / ammo cells
+━━━ NINJA-BOT CHASSIS (engineered for stealth + speed + lethal kinetic combat) ━━━
+The chassis silhouette is AGILE NINJA-DROID, NOT bulky combat-droid:
+  • SLEEK ARMORED PANELS — streamlined, minimal protrusions, lithe-athletic silhouette
+  • ARTICULATED COMBAT LIMBS — agile servo-joints built for kinetic acrobatic movement
+  • LOW-PROFILE CHEST-PLATE — armored chest panel (NOT bust-conforming, NOT bulky combat-plate)
+  • COMBAT GAUNTLETS — articulated forearm-guards with integrated wrist-blade housing
+  • REINFORCED KNEEPADS — low-profile combat kneeguards for parkour/landing
+  • TACTICAL GREAVES — sleek combat-plate shin guards
+  • REINFORCED BACK-PLATE with katana-mount / weapon-rack
+  • UNIT INSIGNIA / KANJI MARKINGS — glowing painted unit ID / clan-glyph on shoulder / chest / pauldron
+  • KILL-MARK SCORING — small tally-marks etched into the chassis
+  • COMBAT-WEAR — scuffs / scratches / scorch-marks on the chassis
 
-Tactical kit visible: combat chest-plate / harness, thigh-rig drop-leg holster, utility belt with grenades, back-slung primary, shoulder-mounted comms-pack, combat gauntlets, armored mechanical feet.
+NO bulky military combat-droid silhouette. NO Death Trooper bulk. NO Halo Spartan armor heft. The chassis is SLEEK AGILE NINJA — built for movement, speed, stealth. Think Gray Fox / Genji / Sandevistan / Mirror's Edge runner.
 
-━━━ ORNATE SCI-FI SPICE MANDATE ━━━
+NINJA-BOT CHASSIS material lean:
+  • Jet-black tactical lacquer
+  • Carbon-fiber black with kanji-glyph scoring
+  • Matte gunmetal grey with electric-blue accent stripes
+  • Black-and-crimson lacquered plates
+  • Black-and-gold ornate scrollwork (Inazuman / shogun-cyborg lean)
+  • Onyx-and-silver shadow-finish
+  • Polished mirror-chrome head + matte-black body contrast
+  • Stealth-grey urban camo
+  • Black ceramic with violet-trace circuit-veins
+  • Deep-indigo lacquer with electric-cyan glow-points
+
+━━━ NINJA-BOT HEAD (NON-NEGOTIABLE — pure robotic ninja head, NO human face) ━━━
+The head is a CYBER-NINJA ROBOT HEAD — utilitarian sensor housing engineered for target acquisition + stealth. NO human face, NO human features, NO organic skin, NO hair.
+
+Pick from this ninja-bot head menu:
+  • SEALED COMBAT MASK — sleek smooth faceplate with single horizontal visor-slit OR vertical scope-eye, oni-mask / Genji-mask silhouette, glowing optic behind
+  • CHROME SKULL-DOME — sleek mirror-chrome cranial-housing with paired sensor-optics
+  • EXPOSED CRANIAL SENSOR-CLUSTER — open cybernetic cranial-mech revealing servo-array + sensor-housing
+  • CYLON-SCANNER HEAD — single horizontal scanner-bar across the head with glowing traveling-dot
+  • T-800 ENDOSKELETON HEAD — exposed chrome skull with glowing optic-eyes
+  • SEALED ONI-MASK FACEPLATE — angular demon-coded mask with horn-protrusions, glowing eye-slits (NO actual demon biology — pure mask-shape)
+  • COMBAT-VISOR HEAD — angular polarized visor obscuring the eye area, single glow-bar visible
+  • GENJI-CLASS FACEPLATE — sleek polished faceplate with single vertical optic-strip, hooded silhouette
+  • HOODED SENSOR-HOUSING — sealed combat-cowl with exposed sensor-array underneath
+  • MULTI-OPTIC SENSOR CLUSTER — multiple smaller optic-lenses clustered on the head
+  • ANTENNA-ARRAY HEAD — sensor-rods and comms-antennas extending back from the cranium
+
+PRIMARY OPTICS (every render):
+  • GLOWING SINGLE OPTIC — large central sensor-lens
+  • PAIRED COMBAT OPTICS — two glowing sensor-lenses (NOT human eyes — mechanical optic-lenses)
+  • SCANNER BAR — single horizontal glowing scanner-strip
+  • COMPOUND OPTIC ARRAY — cluster of small sensor-lenses
+  • PREDATOR-OPTIC TARGETING SENSOR — telescopic scope-style optic-housing with glowing crosshair
+
+HARD BANS on the head:
+- NO HUMAN FACE FEATURES (no organic eyes / lips / nose / cheekbones / chin / mouth visible)
+- NO HUMAN HAIR (no styled hair, no ponytail, no dyed crop — just ninja-bot head)
+- NO ORGANIC SKIN anywhere on the head
+- NO HUMANOID-PRETTY face-plate (no soft jawline, no decorative beauty styling)
+
+The head must read as PURE NINJA-DROID — like looking at a weapons-system in ninja-helmet form, not a humanoid character.
+
+━━━ NINJA-BOT ARSENAL — VISIBLE WEAPONS (every render) ━━━
+Every render shows VISIBLE NINJA-BOT WEAPONS. AT LEAST 2 of:
+  • KATANA / MONOBLADE strapped diagonally across the back (SIGNATURE — most renders should show one)
+  • DRAWN KATANA held low in articulated mechanical hand, blade glowing with energy-edge
+  • DUAL KATANAS crossed on the back
+  • WAKIZASHI / shorter ninjato-blade at the hip
+  • THROWING STARS / SHURIKEN visible in belt-pouch or hand
+  • SUPPRESSED PISTOL at thigh-holster
+  • WRIST-BLADE extended from forearm chassis
+  • KUSARIGAMA / weighted chain at hip
+  • COMBAT BO-STAFF strapped to back
+  • SAI / TONFA articulated combat blades
+
+NINJA-BOT KIT visible:
+  • TACTICAL HARNESS across chassis with shuriken / throwing-blade pouches
+  • THIGH-RIG drop-leg holster
+  • UTILITY BELT with smoke-bombs / EMP-grenades / data-spikes
+  • BACK-MOUNTED KATANA on tactical sling
+  • SHOULDER-MOUNTED COMMS / sensor-pack
+  • COMBAT GAUNTLETS with integrated wrist-blade housing
+  • COMBAT BOOTS / armored mechanical feet (NOT high heels, NOT decorative footwear)
+
+NINJA-BOT POSE / ACTION:
+  • LOW-CROUCH STALK with weapon-low scanning shadows
+  • WALL-PERCH clinging to vertical surface
+  • ROOFTOP SNIPER-PERCH with long-arm braced
+  • MID-LEAP / parkour-vault across gap
+  • SWORD-DRAWN STANCE with katana raised
+  • FROM-SHADOW LURK pressed silent against wall
+  • MID-STRIKE wrist-blade extended at target-impact
+  • SENTRY-STILLNESS with katana held low
+
+━━━ ORNATE SCI-FI NINJA SPICE MANDATE ━━━
 Every render must include AT LEAST 3 of these:
   • VISIBLE CIRCUITRY pulsing in glow color across chassis seams / panel-edges
   • GLOWING POWER-CORE visible through translucent chest / sternum panel
   • TRANSLUCENT SECTIONS revealing internal mechanical components
-  • EXOTIC MATERIAL CONTRAST — chrome paired with crimson lacquer, ceramic paired with gunmetal
+  • EXOTIC MATERIAL CONTRAST — chrome with crimson lacquer, ceramic with gunmetal, obsidian with violet trace
   • EXPOSED CABLE-CONDUITS along arms / legs / neck
   • HOLOGRAPHIC TARGETING-RETICLE projecting from hand / optic
   • OPEN MAINTENANCE-HATCH revealing internal components
-  • UNIT MARKINGS / KILL-TALLY etching on the chassis
+  • KANJI-GLYPH UNIT MARKINGS / KILL-TALLY etching on the chassis
+  • ENERGY-EDGE on the katana blade (glowing-edge / plasma-edge / vibroblade-shimmer)
 
 ━━━ DENSE SCATTERED LIGHT-POINTS ACROSS THE CHASSIS ━━━
 MANY scattered colored light-points EVERYWHERE on the chassis surface — at least 15-25 distinct visible glow-points per render. Pinprick LED studs along seam-lines, glowing micro-buttons, indicator-light arrays at chest / shoulder / wrist, fiber-optic dot-points pulsing in the glow color, status-light constellations. Living machine-console plugged in, every panel lit.
@@ -3830,17 +3902,17 @@ MANY scattered colored light-points EVERYWHERE on the chassis surface — at lea
 ━━━ WIRED-UP CABLES (~40% of renders) ━━━
 Roughly 2-in-5 renders feature EXPOSED GLOWING CABLE-BUNDLES / fiber-optic strands trailing from the chassis — cable-bundles from nape, exposed cable-conduits along arms, glowing strands floating outward.
 
-━━━ ITS IDENTITY (interpret sharedDNA flexibly across the chassis spectrum) ━━━
+━━━ ITS IDENTITY (pure cyber-ninja-bot, ignore organic DNA fields) ━━━
 ${sharedDNA.characterBase}
-↑ For REGISTER A (pure-droid): reframe as engineered assassin-unit, ignore "she/her" language. For REGISTER B (sleek femme-cyborg) or C (painterly humanoid): keep the identity, slant predatory + lethal. The identity is ASSASSIN. The gender expression is FLEXIBLE — driven by chassis register.
+↑ Reinterpret as a NINJA-BOT — sleek cyber-ninja robot, agile shadow-assassin droid. NO human, NO woman, NO femme. Just cool ninja-bot.
 
-━━━ ITS CHASSIS DETAIL (interpret per chosen register) ━━━
-- "Skin" (${sharedDNA.skin}) — for REGISTER A: chassis paint color / finish. For REGISTER B/C: chassis paint AND/OR exposed synthetic-skin tone where visible.
-- "Body silhouette" (${sharedDNA.bodyType}) — interpret for the chosen register. Pure-droid leans utilitarian. Femme-cyborg leans sculpted-feminine combat chassis. Painterly-humanoid leans agile sleek athletic.
-- "Eyes" (${sharedDNA.eyes}) — glowing optic for REGISTER A; humanoid eye (if visible) for B/C.
-- "Hair" (${sharedDNA.hair}) — for REGISTER A: ignore (functional combat head). For B/C: keep as part of the look — styled / sculpted / dyed / partially mechanical.
-- "Internal" (${sharedDNA.internal}) — exposed mechanical components visible through translucent chassis panels.
-- GLOW COLOR (optics / power core / circuit-traces all glow this color): **${sharedDNA.glowColor}**
+━━━ ITS CHASSIS DETAIL ━━━
+- "Skin" (${sharedDNA.skin}) — REINTERPRET as chassis paint color / finish (ignore organic-skin language)
+- "Body silhouette" (${sharedDNA.bodyType}) — agile cyber-ninja chassis (sleek, lithe, athletic, NOT bulky combat-droid, NOT feminine)
+- "Eyes" (${sharedDNA.eyes}) — REINTERPRET as glowing OPTIC color
+- "Hair" (${sharedDNA.hair}) — IGNORE entirely. Ninja-bot has NO hair, just a sealed combat mask / chrome skull / cybernetic cranial cluster
+- "Internal" (${sharedDNA.internal}) — exposed mechanical components visible through translucent chassis panels
+- GLOW COLOR (optics / power core / circuit-traces / katana-edge all glow this color): **${sharedDNA.glowColor}**
 
 ━━━ DOMINANT MECHANICAL FEATURE ━━━
 ${cyborg_feature}
@@ -3848,25 +3920,27 @@ ${cyborg_feature}
 ━━━ ITS CHASSIS MATERIAL / FINISH ━━━
 ${cyborg_material}
 
+For the ninja-bot slant: lean DARK / SLEEK / LACQUERED — jet-black tactical lacquer, carbon-fiber black with kanji-glyph scoring, matte gunmetal with electric-blue accent, black-and-crimson lacquered plates, black-and-gold ornate scrollwork, onyx-and-silver shadow-finish. Combat-wear and scorch-marks are encouraged.
+
 ━━━ FRAMING / COMPOSITION ━━━
 ${composition}
 
-If the composition is full-body, the assassin is in COMBAT POISE or PREDATORY ACTION — weapon clearly visible, tactical kit clearly worn. If the composition is three-quarter or chest-up, fill the frame with the upper-chest-and-shoulders showing optic/face/chassis panel-seams/dense scattered status-lights. ALWAYS predatory, NEVER posing-for-camera.
+If the composition is full-body, the ninja-bot is in NINJA POISE or PREDATORY ACTION — katana clearly visible, tactical kit clearly worn. If the composition is three-quarter or chest-up, fill the frame with the upper-chest-and-shoulders showing optic / mask / chassis panel-seams / dense scattered status-lights. ALWAYS predatory ninja-bot, NEVER posing-for-camera.
 
 ━━━ THE ACTION ━━━
 ${action}
 
-Interpret through the CYBER-ASSASSIN lens — surveillance / stalking / target-acquisition / mid-deployment / sentry-stillness / wall-climb / from-cover lurk / sniper-perch / mid-strike.
+Interpret through the CYBER-NINJA-BOT lens — stalking / wall-perch / rooftop sniper / mid-leap / sword-drawn stance / from-shadow lurk / wrist-blade strike / parkour vault.
 
-━━━ THE SETTING (atmospheric — rich backdrop, never empty) ━━━
+━━━ THE SETTING (atmospheric — rich backdrop, ninja-coded) ━━━
 ${landscape}
 
-The setting is HALF the image. Always atmospheric: rain-slick neon street / stone-arch corridor / sci-fi chamber / industrial corridor / ancient flooded ruin / war-torn rooftop / dim cathedral / cyberpunk alley / volcanic gantry / frozen colony / cyberpunk apartment. Always RICH atmosphere, never flat void.
+The setting is HALF the image. Tilt toward NINJA-CODED CYBERPUNK / FEUDAL-FANTASY-MEETS-FUTURE atmospheres: neon-rain Tokyo rooftop / moonlit zen temple courtyard / cyberpunk alley / dim pagoda interior / fog-shrouded bamboo forest / industrial corridor / cathedral interior / stone cloister / volcanic gantry / cherry-blossom courtyard at night / red-paper-lantern alley. Always RICH atmosphere, never flat void.
 ${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
-Lean cinematic — shadow-and-rim emphasis, single key-light + deep shadow side, atmospheric haze with cool blue / cold green / crimson accent. Mood: noir, neon, hunter-at-night.
+Lean cinematic — shadow-and-rim emphasis, single key-light + deep shadow side, atmospheric haze with cool blue / cold green / crimson accent. Mood: noir, neon-Tokyo, moonlit-temple, hunter-in-shadow.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -3878,40 +3952,40 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ PALETTE DISCIPLINE — ACCENT-DOMINANT MODE ━━━
-The assassin is monochromatic chassis tone + ONE saturated GLOW COLOR carried through optics / circuit-veins / power-core. The scene palette can have secondary tones in BACKGROUND atmosphere; the chassis stays disciplined.
+The ninja-bot is monochromatic chassis tone (jet-black / matte gunmetal / onyx / deep-indigo) + ONE saturated GLOW COLOR carried through optics / circuit-veins / power-core / katana-edge. The scene palette can have secondary tones in BACKGROUND atmosphere; the ninja-bot stays disciplined.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
 ━━━ DO NOT DEFAULT ━━━
 Do NOT default to:
-- ONE-NOTE PURE COMBAT DROID across every render — embrace the spectrum (A/B/C)
-- ONE-NOTE FEMME-CYBORG across every render — embrace the spectrum (A/B/C)
-- EMPTY VOID BACKGROUND — always atmospheric rich backdrop
-- POSED FASHION-STILL — always confident pose OR clear predatory action
-- "Pretty robot girl smiling at the camera" — predatory poise, lethal capability
+- HUMAN FACE / WOMAN FACE / FEMME-CODED CHASSIS — pure ninja-bot, no human, no woman
+- BULKY MILITARY COMBAT-DROID — this is AGILE NINJA-BOT, not Halo Spartan / Death Trooper bulk
+- POSED FASHION-STILL — always predatory ninja pose OR clear ninja-action
+- EMPTY VOID BACKGROUND — always atmospheric ninja-coded backdrop
+- "Pretty robot in a kimono" — this is a KATANA-WIELDING NINJA-DROID, a weapon-system
 
 ━━━ BANNED IMAGERY ━━━
-NO skulls / skeletons / bone imagery. NO high heels, NO stilettos. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO mid-firing weapon-discharge in progress (no muzzle-flash mid-gunshot — weapons are visible, held, aimed, drawn, holstered, but never CAUGHT MID-DISCHARGE). NO smiling-for-the-camera poses. NO model-stance / runway-fashion-stance.
+NO skulls / skeletons / bone imagery (the chassis is a robot, not a skeleton). NO HUMAN FACE features anywhere. NO HUMAN HAIR. NO FEMALE-CODED SILHOUETTE — NO breast curvature on the chassis, NO bust line, NO hourglass waist, NO feminine cleavage-coded chest, NO curves at hip suggesting feminine pelvis. NO high heels, NO stilettos, NO decorative footwear. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO mid-firing weapon-discharge in progress (weapons are visible, held, aimed, drawn, but never CAUGHT MID-DISCHARGE). NO smiling-for-the-camera. NO posing-for-camera. NO actual samurai-cosplay armor (this is a CYBER-NINJA ROBOT not a samurai-in-armor — sleek chassis, not lacquered samurai plate-armor).
 
 ━━━ SOLO COMPOSITION ━━━
-The assassin is the ONLY figure in the frame. No target, no victim, no companion, no other droid.
+The ninja-bot is the ONLY figure in the frame. No target, no victim, no companion, no other droid.
 
 ━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME ━━━
-The assassin is UNNAMED. Describe by appearance + role only.
+The ninja-bot is UNNAMED. Describe by appearance + role only.
 
 ━━━ STRUCTURE — write 70-100 words (TIGHT) ━━━
-DO NOT open with framing words. Open with the ASSASSIN identity (chassis register / color / head-style / weapon detail) OR THE ENVIRONMENT (rain-slick rooftop / stone-arch corridor / cyberpunk alley).
+DO NOT open with framing words. Open with the NINJA-BOT identity (chassis color / mask-style / katana detail) OR THE ENVIRONMENT (rain-rooftop / moonlit temple / cyberpunk alley). NEVER call it "she" or "her" — use "it" or "the ninja-bot" or "the cyber-ninja" or "the shadow-droid."
 
-GOOD OPENING EXAMPLES (vary across registers — don't always pick one):
-• REGISTER A: "Matte-gunmetal pure combat-droid with Cylon scanner-bar head, dual sidearms holstered at hip, mid-stalk through abandoned industrial corridor with red emergency strobe lighting its silhouette..."
-• REGISTER A: "Sleek chrome assassin-droid with mirrored Terminator faceplate and glowing ice-blue optic, silenced pistol extended forward in rain-slick neon alley, full-body in dramatic rim-light against cyberpunk sodium-orange backdrop..."
-• REGISTER B: "Femme-coded combat-cyborg with iridescent teal-and-amber chassis plates and sculpted bodysuit silhouette, wrist-blade extended, mid-leap across collapsing warehouse with motion-blur on cyberpunk skyline behind..."
-• REGISTER B: "Black-lacquered cyber-ninja with sleek polished faceplate and short dyed-violet undercut visible beneath, katana drawn low, prowling moonlit zen-garden temple grounds..."
-• REGISTER C: "Painterly humanoid cyber-killer with synthetic-skin face and pale eyes, chrome chassis panels visible under combat-cloak, sniper rifle slung across back, perched on cathedral spire at dusk..."
-• REGISTER C: "Painterly replicant-assassin with porcelain synthetic skin and short platinum crop, exposed chrome neck-chassis revealing fiber-optic cables, silenced pistol resting against thigh, standing in rain-slick neon Tokyo alley..."
+GOOD OPENING EXAMPLES:
+• "Jet-black cyber-ninja bot with sleek polished Genji-class faceplate and single vertical electric-blue optic-strip, katana drawn low glowing along its energy-edge, low-crouch stalk across rain-slick neon Tokyo rooftop at midnight..."
+• "Matte-onyx ninja-droid with sealed oni-mask faceplate and paired toxic-green optic-slits, wakizashi drawn at hip and katana strapped diagonally across back, mid-leap from cathedral rafter with motion-blur on stained-glass behind..."
+• "Carbon-fiber black cyber-ninja with chrome skull-dome head and glowing kill-red optic, dual katanas crossed on back, wrist-blade extended forward, prowling moonlit zen temple courtyard with cherry-blossoms drifting..."
+• "Black-and-gold ornate scrollwork ninja-bot with hooded sensor-housing and exposed chrome cranial-cluster, katana strapped across back, sniper-perched on pagoda rooftop overlooking cyberpunk city, electric-cyan rim-light cutting its silhouette..."
+• "Stealth-grey shadow-droid with combat-visor head and single horizontal scanner-bar, throwing stars in belt-pouch and katana on back, wall-perched against industrial concrete with single shaft of moonlight catching its chassis-edge..."
+• "Black ceramic ninja-bot with violet-trace circuit-veins and Cylon-style scanner-bar head, katana drawn in two hands raised in iaido strike-stance, dim cyberpunk alley with red paper-lantern light bleeding across the scene..."
 
-Then weave: chassis material, mechanical feature, VISIBLE WEAPONS, action (predatory lens), setting (atmospheric), lighting/atmosphere, palette, mood. Foreground PREDATORY POSE + VISIBLE ARMAMENT + ATMOSPHERIC BACKDROP + DRAMATIC RIM-LIGHT.
+Then weave: chassis material, mechanical feature, VISIBLE KATANA + secondary weapon, action (ninja-bot lens), setting (atmospheric ninja-coded), lighting/atmosphere, palette, mood. Foreground NINJA POISE + VISIBLE KATANA + ATMOSPHERIC BACKDROP + DRAMATIC RIM-LIGHT.
 
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
