@@ -124,7 +124,7 @@ module.exports = {
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
-    'cyborg-female-assassin': 'cool cyber-ninja bot, sleek robotic shadow-assassin, agile katana-armed killer-droid, dramatic atmospheric rim-light',
+    'cyborg-female-assassin': 'cool predator-droid (ninja / combat / cyber-cop / military / hunter), sleek robotic killer with cinematic poise, dramatic atmospheric rim-light',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -279,9 +279,9 @@ module.exports = {
       // Eyes-as-droid energy. NO human, NO woman, NO femme — just cool ninja-
       // bots. DNA is minimal: chassis-paint + glow color. The template defines
       // everything else.
-      base.characterBase = 'Cyber-ninja robot — agile lethal shadow-assassin droid, sleek katana-armed killer-machine';
+      base.characterBase = 'Predator-droid spread — pick from 5 archetypes per render: cyber-ninja (sleek shadow-assassin) / combat-droid (heavy assault killer) / cyber-cop (police enforcer) / military-droid (uniformed soldier) / hunter-droid (lone tracker). Cool lethal robot, NO human, NO woman, NO femme.';
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
-      base.bodyType = 'Agile cyber-ninja chassis — sleek lithe athletic robot silhouette built for stealth, speed, and lethal kinetic combat. Streamlined armored panels with minimal protrusions, articulated combat limbs, balanced for acrobatic movement. Think Gray Fox / Raiden cyber-ninja / Genji / Sandevistan cyber-ninja chassis.';
+      base.bodyType = 'Predator-droid chassis spectrum — ranges from sleek-lithe ninja chassis (Gray Fox / Genji / Sandevistan) through tactical mid-build (cyber-cop / military-soldier) to heavy combat-assault chassis (Death Trooper / ODST / Helldivers Automaton). The chassis register matches the archetype the template picks for the scene.';
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
       base.hair = 'No hair — fully helmeted ninja-bot head OR exposed cybernetic cranial-sensor cluster OR sleek smooth chrome skull-dome (no human face features visible)';
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
