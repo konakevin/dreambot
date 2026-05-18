@@ -26,6 +26,12 @@ const pathBuilders = {
   // cyborg-woman, different template that pulls her into predator territory.
   'cyborg-female-assassin': require('./paths/cyborg-female-assassin'),
   'cyborg-man': require('./paths/cyborg-man'),
+  // 2026-05-17: per Kevin — keep the legacy cyborg-man function-form brief
+  // ACTIVE alongside the new axis path. Same identity (cyborg-man) but
+  // different builder + framing distribution + brief construction. The new
+  // 5-render axis batches landed pretty-boy too often; legacy stays in
+  // rotation to balance the feed.
+  'cyborg-male-legacy': require('./paths/legacy/cyborg-man'),
   'mecha-pilots': require('./paths/mecha-pilots'),
   'titan-war-machines': require('./paths/titan-war-machines'),
   'power-armor-infantry': require('./paths/power-armor-infantry'),
@@ -60,6 +66,10 @@ module.exports = {
       'nostalgic', 'arcane', 'surreal', 'epic',
     ],
     'cyborg-man': [
+      'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
+      'fierce', 'voltage', 'nightshade', 'macabre', 'surreal',
+    ],
+    'cyborg-male-legacy': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
       'fierce', 'voltage', 'nightshade', 'macabre', 'surreal',
     ],
@@ -107,6 +117,7 @@ module.exports = {
     'cyborg-female-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-female-assassin': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-male-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
     'humanoid-robots': { 'black-forest-labs/flux-1.1-pro': 100 },
     'mecha-pilots': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -121,6 +132,8 @@ module.exports = {
   // Per-path prefix — injected BEFORE style prefix so it's the first tokens Flux sees.
   promptPrefixByPath: {
     'cyborg-man':
+      'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
+    'cyborg-male-legacy':
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
@@ -158,6 +171,7 @@ module.exports = {
     'cyborg-female-legacy',
     'cyborg-female-assassin',
     'cyborg-man',
+    'cyborg-male-legacy',
     'mecha-pilots',
     'titan-war-machines',
     'power-armor-infantry',
@@ -175,6 +189,7 @@ module.exports = {
     'cyborg-female-legacy': 1,
     'cyborg-female-assassin': 1,
     'cyborg-man': 1,
+    'cyborg-male-legacy': 1,
     'mecha-pilots': 1,
     'titan-war-machines': 1,
     'power-armor-infantry': 1,
@@ -188,7 +203,7 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cyborg-woman', 'cyborg-female-legacy', 'cyborg-female-assassin', 'cyborg-man', 'robot-moment', 'humanoid-robots',
+      'cyborg-woman', 'cyborg-female-legacy', 'cyborg-female-assassin', 'cyborg-man', 'cyborg-male-legacy', 'robot-moment', 'humanoid-robots',
       'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
       'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
       'mech-skyships',
@@ -246,6 +261,7 @@ module.exports = {
       'cyborg-female-legacy': 'cyborg-female',
       'cyborg-female-assassin': 'cyborg-female',
       'cyborg-man': 'cyborg-male',
+      'cyborg-male-legacy': 'cyborg-male',
       'robot-moment': 'robot',
       'humanoid-robots': 'robot',
       'mecha-pilots': 'scene',
@@ -287,7 +303,7 @@ module.exports = {
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
-    if (path === 'cyborg-man') {
+    if (path === 'cyborg-man' || path === 'cyborg-male-legacy') {
       base.characterBase = picker.pickWithRecency(pools.CYBORG_MALE_CHARACTERS, 'cyborg_male_character');
       base.skin = picker.pickWithRecency(pools.CYBORG_MALE_SKIN_TONES, 'cyborg_male_skin');
       base.bodyType = picker.pick(pools.CYBORG_MALE_BODY_TYPES);
