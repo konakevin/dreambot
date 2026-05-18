@@ -89,6 +89,10 @@ module.exports = {
   CYBORG_BODY_TYPES,
   CYBORG_FEMALE_CHARACTERS: load('cyborg_female_characters'),
   CYBORG_ACTIONS: load('cyborg_actions'),
+  // Killer-droid (cyborg-female-assassin path) — genderless predatory actions
+  KILLER_DROID_ACTIONS: load('killer_droid_actions'),
+  // Killer-droid action-cinematic camera angles (full-body, NOT closeup portraits)
+  KILLER_DROID_COMPOSITION: load('killer_droid_composition'),
   // Cyborg-man pools
   CYBORG_MALE_HAIR_STYLES,
   CYBORG_MALE_BODY_TYPES,

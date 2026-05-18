@@ -668,6 +668,108 @@ Each entry MUST:
     instructions: `Each entry is ONE specific AGGRESSIVE squad combat action, 35-65 words. Format: "[opening verb-phrase], lead trooper mid-[VERB], second mid-[VERB], third mid-[VERB], [optional 4th/5th member], [kill / smoke / blood / debris / scale-prover]". Use ONLY predator/combat verbs (charging/kicking/executing/dragging/leaping/mid-fire/mid-strike/mid-blast/hunting/stalking/mid-roar). STRICT BAN on procedural/SWAT/Tom-Clancy verbs (stacked/overwatch/scanning/observing/hand-signals). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── cyborg-female-assassin path: SOLO killer-droid predatory actions (2026-05-17) ───
+  killer_droid_actions: {
+    format: 'simple',
+    theme: `SOLO PREDATORY ACTIONS for the cyborg-female-assassin (killer-droid) path — ONE genderless robotic assassin caught MID-ACTION in a predatory beat. Each entry 30-55 words.
+
+⚠️ THE BAR: every action puts the SOLE killer-droid in mid-violence or mid-stalk. John Wick assassin / Terminator hunter / Ghost in the Shell black-ops / Edge Runners cyberpunk-killer / Mass Effect SPECTRE / Halo Spartan-ONI energy. The droid is HUNTING, FIRING, CLIMBING, STRIKING, LURKING, AMBUSHING — never standing still posing.
+
+🚫 ABSOLUTE BANS — these kill the assassin tone:
+• NO "She / her / woman / female / feminine" — this is a genderless killer-DROID, not a cyborg-woman
+• NO "stands, poses, leans, watches, examines, contemplates, gazes, looks pensive, holds artifact"
+• NO "strides through neon street, scans for threats, calibrates circuits, jacks into terminal"
+• NO procedural/SWAT verbs (stacked, overwatch, scanning, hand-signals, hold position)
+• NO romantic/seductive framing — this is a killing machine, not a femme fatale
+
+✓ ACTION CATEGORIES — distribute across:
+  A. **MID-FIRE BARRAGE** (~20%) — droid mid-fire long-rifle / sniper / heavy cannon / dual-pistols, muzzle-flash blooming, brass spraying, target off-frame, kill-shot caught mid-trigger
+  B. **WALL-CLIMB / VERTICAL-INFILTRATE** (~15%) — droid mid-scale of sheer wall / cliff / tower / ship-hull / industrial pipe-stack, articulated hands clamped to surface, gear strapped to back, target somewhere above
+  C. **MELEE-STRIKE / CHAIN-BLADE** (~15%) — droid mid-strike with wrist-blade extended / chain-blade overhead / combat-knife mid-thrust, enemy mid-impact, blood mist, mechanical grip on throat or limb
+  D. **LURKING-STALK** (~15%) — droid in low-crouch predator-stalk through smoke / shadow / rain / corridor, weapon-low, optic-glow cutting darkness, kill not yet visible but coming
+  E. **AMBUSH-EMERGE** (~10%) — droid mid-emerge from cover (rubble / vent / drop-pod / shadow / above), weapon already firing as it appears, target reacting too slowly
+  F. **EXECUTE-STANCE** (~10%) — droid standing over a fresh kill or kneeling target, weapon pressed to head, trigger-moment caught, kill-tally being etched into pauldron
+  G. **PERCH-AND-AIM** (~10%) — droid sniper-perched on rooftop / steel beam / cliff-ledge / cathedral-spire, long-arm braced, scope-eye glowing, distant target framed in scope-line
+  H. **CHASE-PURSUIT** (~5%) — droid mid-leap rooftop-to-rooftop / mid-sprint after fleeing target / mid-vault over debris, coat-flares-and-cables streaming, kinetic urgency frozen
+
+Each entry MUST:
+• Open with the droid mid-action (NOT static positioning)
+• Use ONLY genderless nouns: "the killer-droid" / "the assassin-droid" / "the kill-unit" / "the combat-unit" / "the droid" / "the murder-unit" / "the hunter-droid"
+• Use predator-coded verbs: firing / climbing / striking / lurking / stalking / ambushing / executing / hunting / leaping / mid-blast / mid-thrust / mid-scale / mid-crouch
+• Reference the WEAPON explicitly (rifle / pistol / blade / cannon / sniper / wrist-blade / chain-blade)
+• Reference the TARGET or KILL explicitly (target off-frame / fresh body at feet / kill-tally / scope-line on distant figure / enemy mid-fall)
+• Reference ONE specific environmental detail (smoke / rain / muzzle-flash / shattered glass / blood-mist / spent brass / dust / debris)`,
+    touchpoints: [
+      'Mid-fire barrage from open rooftop edge, the killer-droid in braced kneeling stance unloading heavy long-rifle, muzzle-flash strobing white across its mirror-faceplate, spent brass arcing past its shoulder, scope-eye locked on a target collapsing three blocks distant, smoke trailing from the barrel-vents',
+      'Mid-scale of a rain-slicked cathedral wall, the assassin-droid clamped to weathered stone by all four articulated limbs, combat-rifle strapped diagonal across its back, scope-eye glinting upward through the storm, target somewhere on the parapet above, lightning-flash freezing its silhouette against carved gargoyles',
+      'Mid-strike with wrist-blade fully extended, the kill-unit driving its bladed forearm clean through a guard\'s armored chest from behind, the guard mid-jerk-and-spasm, droid\'s other hand clamped over the guard\'s mouth, blood-mist hanging in the corridor\'s emergency-red strobe',
+      'Lurking advance through dissipating tear-gas in a wrecked subway corridor, the hunter-droid in low predator-stalk weapon-low, optic-cluster glowing cold cyan through the haze, gun-flash from a panicked guard ahead lighting its chassis edge for one frame, the kill already inevitable',
+      'Ambush mid-emerge from beneath a crashed transport, the murder-unit erupting up through a torn hull-plate firing dual-pistols in overlapping arcs, two security guards mid-fall with chest-wounds blooming, the droid\'s shoulder-armor still flecked with crash-debris and oil',
+      'Execute-stance over a kneeling corporate exec, the killer-droid pressing a silenced pistol to the back of the man\'s skull, the trigger-moment caught at the instant the firing-pin drops, the exec\'s mouth open in mid-protest, the droid\'s other hand etching a fresh kill-mark into its left pauldron',
+      'Sniper-perch atop a 200-floor tower edge, the assassin-droid prone behind a long-barreled rail-rifle, scope-eye glowing red-hot through the optical sight, the city sprawled below in neon haze, distant target framed in the crosshair on a balcony 1.4km out, breath-vents motionless',
+      'Mid-leap rooftop-to-rooftop pursuit, the kill-unit caught full-extension across a 12-meter gap with combat-rifle still firing in mid-air at a fleeing courier ahead, cyberpunk skyline below scrolling in motion-blur, holo-billboards bleeding magenta across its underside',
+      'Mid-fire dual-pistol sweep across an open warehouse floor, the killer-droid spinning mid-crouch with both pistols extended outward firing at four converging guards, brass cascading in twin arcs, three guards mid-fall already, fluorescent overheads strobing through gun-smoke',
+      'Wall-climbing infiltration of a brutalist concrete bunker exterior, the assassin-droid scaling sheer rebar-exposed wall via embedded climbing-spikes in its palms and soles, sniper-rifle slung across its back, surveillance-cam below sweeping past obliviously, night-vision-amber glowing its optics',
+      'Mid-thrust combat-knife strike, the kill-unit driving a serrated combat-blade up under a sentry\'s jaw from a crouched flanking position, sentry mid-collapse with eyes wide, droid\'s other hand catching the dropping rifle before it can clatter, silenced kill in a marble corridor',
+      'Predator-stalk through knee-deep flooded sewer, the hunter-droid wading silent with rifle held above waterline, optic-cluster sweeping the tunnel curve ahead, distant target-voices echoing off the concrete, single drop falling from a rusted overhead pipe lit by its eye-glow',
+      'Ambush from above as the kill-unit drops from a ceiling vent onto a meeting-table, executive figures mid-recoil-and-rise, the droid landing in a hunter-crouch already firing pistols outward in two directions, glass-conference-walls shattering behind from cross-shots, papers exploding into the air',
+      'Execute-pose over a fresh kill in a snowed-in alpine cabin, the killer-droid standing motionless beside a slumped diplomat in an armchair, silenced pistol still raised, blood pooling onto the rug, the droid\'s thermal vents melting snow in a halo on the floorboards',
+      'Sniper-perch wedged in the rafters of a derelict cathedral, the assassin-droid braced between two oak beams with anti-material rifle along one arm, scope-eye glowing cold green through the optical sight, the high altar 80 meters distant framed in crosshair, dust falling through stained-glass shafts',
+      'Mid-sprint pursuit through a neon-flooded night market, the kill-unit shoving past vendors with combat-rifle leveled forward firing in bursts at a fleeing target ahead, market-stalls exploding into sparks behind it, holo-signs in three languages reflecting in its mirror-faceplate, target stumbling under fire',
+      'Mid-blast plasma-cannon firing from waist-level brace, the murder-unit unloading a sustained beam into an armored door, door-metal glowing white and warping inward, shielded heat-haze distorting the air, kill-tally marks fresh-scored down the cannon-housing',
+      'Lurking outside a bathhouse window in pouring monsoon rain, the hunter-droid pressed flat against the lacquered exterior wall, suppressed pistol drawn at thigh, scope-eye watching through a translucent paper screen at a target shadowed within, water sluicing down its chassis seams',
+      'Mid-emerge from underwater drop, the assassin-droid breaching the surface of a moonlit canal in a hunter-crouch already raising silenced pistol at a dockside target, water cascading off its chassis-plates, scope-eye locking on the target\'s back, kill-shot one second away',
+      'Mid-strike chain-blade overhead, the kill-unit bringing a vibro-saw down in a two-handed arc on a heavily armored opponent\'s clavicle, sparks exploding outward, opponent mid-stagger backward, droid\'s posture set for the follow-through, the duel framed against a burning warehouse interior',
+    ],
+    instructions: `Each entry is ONE specific SOLO killer-droid predatory action, 30-55 words. Format: "[opening verb-phrase action], the [droid-noun] mid-[VERB] with [weapon], [target/kill detail], [one environmental detail]". Use ONLY genderless droid-nouns (killer-droid / assassin-droid / kill-unit / combat-unit / hunter-droid / murder-unit / the droid) — NEVER she/her/woman/female. Use predator/combat verbs (firing/climbing/striking/lurking/stalking/ambushing/executing/hunting/mid-blast/mid-thrust). STRICT BAN on contemplative verbs (stands/poses/leans/watches/examines/contemplates). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── cyborg-female-assassin path: action-cinematic composition angles (2026-05-17) ───
+  killer_droid_composition: {
+    format: 'simple',
+    theme: `ACTION-CINEMATIC CAMERA ANGLES for the cyborg-female-assassin (killer-droid) path. Each entry specifies a camera position + framing that makes the SOLO killer-droid's PREDATORY ACTION viscerally legible. 25-50 words.
+
+⚠️ MANDATORY — every entry must convey AGGRESSION / DYNAMIC ACTION through the angle. Static chest-up portraits FAIL. The frame must SHOW the droid in motion / firing / scaling / striking / lurking. Full-body or three-quarter — NEVER face-filling closeup.
+
+🚫 ABSOLUTE BANS:
+• NO closeup chest-up portraits ("face filling frame", "extreme closeup of eye", "throat closeup")
+• NO "she / her / woman" pronouns — this is a genderless DROID
+• NO static "standing observed in low light", "contemplative posture", "pensive turn"
+• NO romantic/feminine-coded framing (over-shoulder seductive, three-quarter beauty turn)
+
+✓ ANGLE CATEGORIES (vary across):
+  A. **LOW-FORWARD MID-CHARGE** — camera at ground level looking up as droid runs / leaps / strides straight at camera, full-body filling frame, weapon-raised
+  B. **OVER-SHOULDER MID-FIRE** — camera behind droid looking down its weapon-sight at off-frame target, muzzle-flash blooming forward, hand-and-pauldron in frame
+  C. **HELMET-CAM / SCOPE-EYE POV** — POV through cracked HUD-faceplate, reticle visible center, weapon-barrel in lower frame, target framed in crosshair
+  D. **WORM'S-EYE FROM DOWNED-TARGET** — camera at ground from POV of fallen kill looking up at droid standing over them with weapon pointed down
+  E. **SIDE-PROFILE MID-LEAP** — camera 90-degree as droid sprints/leaps left-to-right across frame, motion-blur on background, full-body silhouette
+  F. **HIGH-ANGLE PERCH-DOWN** — high-angle from droid's sniper-perch looking down at target zone below, droid silhouette dominant in foreground edge
+  G. **THROUGH-SMOKE EMERGE** — camera midground as droid emerges through wall of smoke / steam / rain firing weapons, silhouette resolving
+  H. **DUTCH-ANGLE FIREFIGHT** — frame tilted to convey chaos, droid mid-firefight, debris falling, muzzle-flashes lighting silhouette
+  I. **WALL-CLIMB UPWARD-LOOK** — camera below looking up sheer surface as droid scales toward sky, gear strapped to back, target somewhere above
+  J. **MID-STRIKE INTIMATE COMBAT** — wide enough to show full body of droid AND target mid-impact, blade-strike/throat-grip caught at impact instant
+  K. **THROUGH-WINDOW EXTERIOR LURK** — camera inside a lit room looking out a window at the droid pressed silent against exterior wall, weapon drawn
+  L. **FROM-COVER REVEAL** — camera at the cover-edge as droid leans/emerges firing, half body in frame, other half hidden behind wall/crate/rubble`,
+    touchpoints: [
+      'LOW-FORWARD MID-CHARGE — camera at ground level looking up as the killer-droid sprints straight at lens, full-body filling frame, combat-rifle raised muzzle-flash strobing, motion-blur dragging the corridor behind, the kill imminent',
+      'OVER-SHOULDER MID-FIRE — camera tight behind the assassin-droid\'s right pauldron looking down the long-rifle barrel at distant off-frame target, muzzle-flash blooming forward into the dark, brass spraying past the lens',
+      'SCOPE-EYE POV — view through cracked HUD-faceplate of the kill-unit, red reticle crosshair locked on a small distant figure on a balcony 1.4km out, weapon-barrel in lower frame, breath-vent audio implied still',
+      'WORM\'S-EYE FROM DOWNED-TARGET — camera flat on the asphalt from a fallen kill\'s POV looking straight up at the killer-droid standing over them with silenced pistol still extended at the lens, neon billboards reflecting in its mirror-faceplate',
+      'SIDE-PROFILE MID-LEAP — camera 90-degree to the assassin-droid as it leaps left-to-right across a 12-meter rooftop gap, full-body frozen mid-flight, motion-blur on the cyberpunk skyline behind, weapons still firing in mid-air',
+      'HIGH-ANGLE PERCH-DOWN — camera from the killer-droid\'s sniper-perch on a tower edge, droid silhouette dominant in foreground left, the city target-zone sprawled 200 floors below in neon haze, distant target framed in scope-line',
+      'THROUGH-SMOKE EMERGE — camera midground level as the murder-unit emerges from a wall of tear-gas smoke firing dual pistols outward, silhouette resolving into chassis-detail, muzzle-flashes lighting its faceplate from below',
+      'DUTCH-ANGLE FIREFIGHT — frame tilted 18-degrees right to convey chaos, the kill-unit mid-firefight in a wrecked transit depot, debris falling from severed overhead conduit, muzzle-flashes lighting its torso from three directions',
+      'WALL-CLIMB UPWARD-LOOK — camera at the wall base looking straight up as the assassin-droid scales a sheer brutalist concrete face, articulated limbs gripping rebar exposed plate edges, sniper-rifle strapped diagonal across its back against the sky',
+      'MID-STRIKE INTIMATE COMBAT — wide frame showing the killer-droid driving its wrist-blade through a sentry\'s armored chest from a flanking position, sentry mid-jerk-and-spasm, blood-mist hanging in the emergency-red strobe',
+      'THROUGH-WINDOW EXTERIOR LURK — camera inside a lit penthouse looking out a rain-streaked window at the hunter-droid pressed silent against the exterior wall ledge, silenced pistol drawn at thigh, scope-eye glowing cold cyan through the glass',
+      'FROM-COVER REVEAL — camera at the cover-edge as the kill-unit leans out from behind a crashed transport firing combat-rifle in three-round bursts, half-body in frame, other half hidden behind twisted hull-plating',
+      'OVER-SHOULDER STAIRWELL DESCENT — camera tight behind the assassin-droid descending a spiral fire-stair in low-crouch with suppressed weapon weapon-low, scope-eye sweeping the dark below, the kill on the floor beneath',
+      'LOW-WIDE PURSUIT — camera ground-level wide-angle as the killer-droid sprints down a neon night-market alley after a fleeing target, market-stalls exploding into sparks behind it, full-body in motion-blur',
+      'HIGH-ANGLE TROPHY-STANCE — high-angle looking down at the kill-unit standing over a fresh kill in a snowed-in alpine cabin, silenced pistol still raised, body slumped in armchair, thermal-vents melting a halo in the snow at its feet',
+    ],
+    instructions: `Each entry is ONE specific action-cinematic camera angle for a SOLO killer-droid, 25-50 words. Format: "ANGLE NAME CAPS — camera position + height + what dominates frame + the droid mid-[VERB] + 1-2 environmental details". Use ONLY genderless droid-nouns (killer-droid / assassin-droid / kill-unit / hunter-droid / murder-unit) — NEVER she/her/woman. The frame must convey AGGRESSION through angle — full-body or three-quarter, NEVER face-filling portrait. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── power-armor-infantry path: composition (squad combat vertigo angles) ───
   power_armor_composition: {
     format: 'simple',

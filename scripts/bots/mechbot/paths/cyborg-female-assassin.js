@@ -23,9 +23,9 @@ module.exports = {
   pools: {
     cyborg_feature: 'CYBORG_FEATURES',
     cyborg_material: 'CYBORG_WOMAN_MATERIAL',
-    action: 'CYBORG_ACTIONS',
+    action: 'KILLER_DROID_ACTIONS',
     landscape: 'CHARACTER_INTERIOR',
-    composition: 'CYBORG_WOMAN_COMPOSITION',
+    composition: 'KILLER_DROID_COMPOSITION',
     drama: 'CYBORG_WOMAN_DRAMA',
   },
 };
