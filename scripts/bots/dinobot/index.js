@@ -19,7 +19,6 @@ const pathBuilders = {
   'swamp-river': require('./paths/swamp-river'),
   'ocean-reptiles': require('./paths/ocean-reptiles'),
   'cinematic-silhouette': require('./paths/cinematic-silhouette'),
-  'micro-detail': require('./paths/micro-detail'),
   'extinction-event': require('./paths/extinction-event'),
   'dino-cozy': require('./paths/dino-cozy'),
   'dino-pack': require('./paths/dino-pack'),
@@ -79,8 +78,6 @@ module.exports = {
     // pool's variety. Portrait now inherits the global setting-neutral
     // PROMPT_PREFIX and lets the biome slot dictate the environment.
     // 'dino-portrait': (removed),
-    'micro-detail':
-      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
   },
 
   useModelPicker: true,
@@ -101,7 +98,6 @@ module.exports = {
     'swamp-river',
     'ocean-reptiles',
     'cinematic-silhouette',
-    'micro-detail',
     'extinction-event',
     'dino-cozy',
     'dino-pack',
@@ -118,14 +114,13 @@ module.exports = {
     'swamp-river': 1,
     'ocean-reptiles': 1,
     'cinematic-silhouette': 1,
-    'micro-detail': 1,
     'extinction-event': 1,
     'dino-cozy': 1,
     'dino-pack': 1,
     'aerial-perspectives': 1,
   },
 
-  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack','aerial-perspectives'] },
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','cinematic-silhouette','extinction-event','dino-cozy','dino-pack','aerial-perspectives'] },
   twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {}, skipPaths: ['paleo-landscape', 'swamp-river', 'ocean-reptiles', 'nesting-ground', 'herd-migration', 'territory-clash', 'cinematic-silhouette', 'dino-cozy', 'dino-pack', 'aerial-perspectives', 'dino-portrait', 'dino-action'] },
   sensoryAnchors: {
     enabled: true,
@@ -134,7 +129,7 @@ module.exports = {
       'dino-portrait': 'dinosaur','dino-action': 'dinosaur','dino-pack': 'dinosaur',
       'paleo-landscape': 'scene','herd-migration': 'dinosaur','territory-clash': 'dinosaur',
       'nesting-ground': 'dinosaur','swamp-river': 'scene','ocean-reptiles': 'dinosaur',
-      'cinematic-silhouette': 'dinosaur','micro-detail': 'scene',
+      'cinematic-silhouette': 'dinosaur',
       'extinction-event': 'scene','dino-cozy': 'scene',
       'aerial-perspectives': 'dinosaur',
     },
