@@ -782,13 +782,28 @@ Distribute EXACTLY 10 entries per register across a batch of 50.
 
 The prefix HARD-LOCKS the chassis archetype downstream — Sonnet reads "REGISTER: <ARCHETYPE>" and renders the droid as that archetype, NOT cyber-ninja default.
 
+━━━ HARD MANDATE — SECONDARY ACTOR / KINETIC THREAT IN FRAME (every entry) ━━━
+
+Every entry MUST place a SECONDARY VISIBLE ACTOR or KINETIC THREAT explicitly in the frame alongside the droid. The droid is NEVER alone in the composition — Flux defaults to "cool droid in atmospheric backdrop" when no other actor is named, producing static hero-shots. To force kinetic story renders, EVERY scene names a specific other-entity in a specific position:
+
+  • A specific FLEEING TARGET ("a data-courier mid-leap two rooftops ahead" / "a corporate exec mid-stumble around the corner")
+  • A specific CRUMPLING ENEMY ("two security-guards mid-fall with chest-wounds blooming" / "a sentry collapsing at the foreground edge")
+  • A specific ENGAGING ENEMY ("a chrome-masked kill-unit silhouetted ten meters distant in opposing stance" / "three combat-marines mid-return-fire from doorway")
+  • A specific DISABLED THREAT ("a smoking security-drone toppling at the foreground edge" / "a smashed mech-leg crashing past the lens")
+  • A specific FRIENDLY ACTOR ("two squad-mates flanking through atmospheric haze" / "a hover-spinner descending behind with searchlight on")
+  • A specific CIVILIAN ("two suited civilians diving for cover behind the holo-desk" / "a kneeling cyberpunk suspect at the lens with hands up")
+  • A specific KINETIC THREAT IN MOTION ("muzzle-flash from off-frame enemy cutting across the scene" / "a hover-spinner mid-descent with landing-gear extending")
+
+The secondary actor must be: SPECIFIC (named role + count + position), VISIBLE IN FRAME (not "off-frame"), KINETIC (mid-something — falling / fleeing / firing / collapsing / descending / engaging).
+
 Each entry MUST:
-• Open with the EXACT register prefix tag
+• Open with the EXACT register prefix tag + UNIQUE SCENE-NAME
 • Then describe the SCENE / setting in 5-15 words
-• Reference the DROID by its archetype noun matching the register: "the cyber-ninja" / "the combat-droid" / "the cyber-cop droid" / "the military-soldier droid" / "the hunter-droid"
+• Reference the DROID by its archetype noun matching the register (the cyber-ninja / the combat-droid / the cyber-cop droid / the military-soldier droid / the hunter-droid)
+• Place the droid IN the scene with a clear KINETIC VERB (mid-leap / mid-strike / mid-fire / mid-vault / mid-charge / mid-breach / mid-arrest / mid-strike-impact / mid-trigger-pull / mid-emerge)
+• **NAME the SECONDARY ACTOR + ITS POSITION + ITS KINETIC STATE** (per the mandate above) — this is the single most important element of every entry
 • Include AT LEAST 2 sci-fi context elements (holograms / drones / mechs / neon-billboards / plasma / mag-rails / data-streams / hover-spinners / aurora / smoke / war-debris)
-• Reference AT LEAST 1 secondary actor or threat (drone / guard / civilian / squad / prey / kill / fleeing target / disabled mech) OR a kinetic element (rain / sparks / motion-blur / strobing alarm / steam / dust-storm)
-• Place the droid IN the scene with a kinetic verb (mid-leap / mid-strike / mid-stalk / mid-perch / mid-breach / mid-patrol / mid-arrest / mid-fire)
+• Include AT LEAST 1 kinetic environmental element in the air (rain-streaks / sparks / smoke-tendrils / muzzle-flash / motion-blur / spinning holo-projection / falling debris / dust-cloud)
 • Use atmospheric cinematic language`,
     touchpoints: [
       'REGISTER: NINJA / NEON-TOKYO ROOFTOP PURSUIT — the cyber-ninja mid-sprint across rain-slick wet glass under cascading holo-billboard light, distant fleeing data-courier leaping the next rooftop two blocks away, three search-drones strobing white-blue across the cyberpunk sky, hover-traffic streaming through the canyons 80 floors below',
@@ -807,7 +822,11 @@ Each entry MUST:
       'REGISTER: HUNTER-DROID / FOG-FOREST STALK — the hunter-droid mid-stalk through dense bioluminescent mist with vibroblade drawn low, bioluminescent moss-patches glowing electric-blue across exposed roots, distant prey-creature silhouette barely visible through the haze, scope-eye glinting cold through the fog',
       'REGISTER: HUNTER-DROID / WASTELAND TRACK — the hunter-droid mid-vault over a scorched-earth crater rim with sniper-rifle slung across back, rusted hover-wreckage in foreground with skeletal struts protruding, distant dust-storm wall rolling toward the horizon, the prey-trail fresh in the ash',
     ],
-    instructions: `Each entry is ONE specific sci-fi action scene, 45-75 words. EVERY entry MUST start with the format: "REGISTER: <ARCHETYPE> / <UNIQUE-SCENE-NAME-CAPS> — <full scene description>". The five archetypes: NINJA / COMBAT-ASSAULT / CYBER-COP / MILITARY-SOLDIER / HUNTER-DROID. DISTRIBUTE EXACTLY 10 entries per archetype across a batch of 50. SCENE-NAMES must be UNIQUE per entry (dedup uses pre-em-dash text). The "REGISTER:" tag HARD-LOCKS the chassis archetype. Reference the droid by archetype noun matching the register. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+    instructions: `Each entry is ONE specific sci-fi action scene, 50-85 words. EVERY entry MUST start with the format: "REGISTER: <ARCHETYPE> / <UNIQUE-SCENE-NAME-CAPS> — <full scene description>". The five archetypes: NINJA / COMBAT-ASSAULT / CYBER-COP / MILITARY-SOLDIER / HUNTER-DROID. DISTRIBUTE EXACTLY proportional entries per archetype across the batch. SCENE-NAMES must be UNIQUE per entry (dedup uses pre-em-dash text).
+
+⚠️ MANDATORY in EVERY entry: a SPECIFIC NAMED SECONDARY ACTOR visible in frame (fleeing target / crumpling enemy / engaging opponent / disabled threat / friendly squad-mate / civilian / kinetic threat in motion). Without this, Flux renders a static hero-shot.
+
+The "REGISTER:" tag HARD-LOCKS the chassis archetype. Reference the droid by archetype noun matching the register. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
   // ─── cyborg-female-assassin path: action-cinematic composition angles (2026-05-17) ───
