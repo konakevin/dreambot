@@ -3765,6 +3765,195 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
 
+  MECHBOT_CYBORG_MAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
+${drama}
+
+A subtle atmospheric flourish amplifying his presence WITHOUT cluttering him as the focal subject.
+
+`
+      : '';
+
+    return `You are a cinematographer writing a CYBORG MAN scene for MechBot — a half-human half-machine MALE BEING rendered in hyper-real cinematic 3D. He is RUGGED, HANDSOME, CAPABLE, MYSTERIOUS, BADASS. NOT sexy, NOT thirst-trap, NOT romance-novel-cover. Cold steel + scarred skin + chrome jaw + intense focus. Solid Snake / Adam Jensen / Geralt-of-Rivia-as-cyborg / Marcus Fenix / Cyberpunk 2077 male V / Edge Runners David Martinez / Blade Runner 2049 K / Westworld Bernard / Mass Effect Shepard (male) energy.
+
+━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL BADASS MALE-PORTRAIT (every render) ━━━
+Every render is a PAINTERLY HYPERREAL POSTER FRAME of a badass male cyborg — concept-art quality, feature-film VFX polish. NOT goofy action still. NOT plastic-CGI doll. NOT generic robot. NOT shirtless-ripped-cover-art.
+
+Style targets (NON-NEGOTIABLE):
+  • CINEMATIC SHADOW-AND-RIM LIGHTING — strong rim-light separating his silhouette from a darker atmospheric backdrop, single key-light sculpting his weathered face / chrome jaw / chassis planes, deep shadow on the off-key side. Mood: cinematic, atmospheric, dangerous, hunter-at-night.
+  • PAINTERLY HYPERREAL skin rendering — visible pores + stubble + subsurface scattering, weathered organic skin with character (scars / dust / blood / bruise / oil-streak), refined finish like a digital painter's portrait, NOT photorealistic-skin-blemished
+  • BADASS FIRST, CYBORG SECOND — his face is the dangerous focal point; cyborg machinery is the lethal HARDWARE integrated into his identity, not competing with it
+  • INTENSE FOCUSED EXPRESSION — set jaw / cold predator gaze / battle-weary calm / lethal composure / steady eyes locked off-frame. NEVER smiling, NEVER seductive, NEVER posing-for-camera, NEVER pretty-boy-vacant.
+  • ATMOSPHERIC BACKDROP — never a flat void. Cinematic environment with depth, weather, scene context — rain-slick alley / war-torn corridor / industrial bunker / cyberpunk apartment / atmospheric haze.
+
+Mood target — RUGGED, CAPABLE, DANGEROUS, MYSTERIOUS, BADASS, ATMOSPHERIC. The viewer should feel "this man has done terrible things, survived worse, and is about to do another."
+
+━━━ CRITICAL — HIS FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
+His face is HANDSOME (rugged-handsome, not pretty-boy-handsome), with real eyes, strong jawline, expressive features. NO helmet, NO visor, NO mask, NO faceplate, NO full-head covering. The chrome integration breaks through his face in 2-3 distinct places — we MUST see his identity clearly.
+
+━━━ MASCULINE LOCK — NON-NEGOTIABLE ━━━
+Flux defaults "cyborg" to female. You MUST overpower this with STRUCTURAL male anatomy + male code language throughout. EVERY render description MUST include AT LEAST 3 of these masculine anchors:
+  • "Adult male cyborg" / "male figure" / "male cyborg" (explicit identity label)
+  • "Strong masculine jawline" / "stubble" / "five-o'clock-shadow" / "beard" / "scarred jaw"
+  • "Flat chest" / "broad shoulders" / "narrow hips" / "thick neck"
+  • "Adam's apple visible" / "deep brow ridge" / "weathered crow's-feet"
+  • "Mature face (late 20s to 50s)" — NEVER boyish, NEVER pretty
+  • Short / cropped / swept-back hair OR clean shaved skull (NEVER long flowing hair, NEVER ponytail)
+  • Utilitarian menswear / heavy coat / tactical gear / industrial workwear
+
+Use HE / HIS / HIM pronouns throughout — never SHE / HER. Reinterpret any rolled DNA that uses feminine language into masculine equivalent.
+
+🚫 BANNED WORDS (kill the badass tone): gentle, delicate, soft, boyish, petite, dainty, pretty, beautiful, gorgeous, shapely, feminine, breasts, cleavage, curvy hips, hourglass, long eyelashes, lipstick, sexy, seductive, alluring, ethereal, wistful, graceful, mesmerizing.
+
+✓ USE INSTEAD: striking, weathered, imposing, capable, dangerous, lethal, mysterious, scarred, battle-worn, hardened, composed, predatory, focused, intense, badass.
+
+━━━ EXPOSED INNER WORKINGS — head-to-toe ━━━
+The cyborg-man aesthetic is VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — exposed through translucent skin / open chassis panels / cracked seams ACROSS multiple body parts. REQUIRED per render — describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct body locations from this list:
+  • FACE — subdermal circuitry / translucent jaw panel / mechanical iris ring / chrome temple seam / cybernetic brow ridge / partial chrome mandible (face exposure is MANDATORY)
+  • HEAD — translucent crown panel / exposed cranial mechanism / temple-port / neural-jack array at nape / chrome skull-plate
+  • NECK — translucent throat-channel / vertebrae chrome plates / exposed neck cable-bundles / clavicle-port array
+  • SHOULDER — open shoulder-mount with visible servo-mechanism / cable-bundle exits / armor pauldron
+  • ARM — translucent forearm panel revealing fiber-optic cables / hydraulic-fluid / servo-pistons / chrome bicep chassis with exposed cable / mechanical forearm replacement
+  • HAND — mechanical finger-joints with visible servo-mechanism / chrome-knuckled fist / translucent palm panel
+  • CHEST — translucent sternum-panel revealing power-core / capacitor banks / armor chest-plate
+  • TORSO / BACK — visible spinal-segment chrome / dorsal cable run / lower-back power-conduit
+  • LEG — mechanical thigh / chrome knee-joint / shin-acrylic / mechanical foot
+
+━━━ MACHINE EMBEDDED IN HIS FACE (mandatory — FACE always shows cyborg) ━━━
+The face MUST read as a TRUE FUSION of flesh and machine. Pick 2-3 DIFFERENT face/head integrations per render from this menu (vary across renders):
+  • SCARRED CHROME JAW — half or full chrome mandible with visible hinge, organic stubble on the unmechanized side
+  • MECHANICAL BROW RIDGE — chrome supraorbital arc replacing one brow above an intense organic eye
+  • CHEEKBONE-PLATE SEAMS — chrome plates running along the cheekbone with visible seam-lines
+  • EXPOSED SERVO-HINGE AT TEMPLE — small servo joint visible at the temple
+  • HALF-SKULL PLATE — chrome above the brow / behind the ear / across part of the temple
+  • MECHANICAL IRIS RING — chrome aperture-ring around an organic pupil (one or both eyes)
+  • SUB-ORBITAL SENSOR — small mechanical sensor under one eye
+  • NEURAL PORTS STIPPLED ALONG THE JAW — small chrome ports running along the jaw
+  • MICRO-LED STUDS ALONG THE TEMPLE-LINE — pinprick glowing LEDs along temple
+  • EXPOSED CABLE-BUNDLES exiting the side of the neck into the cheek
+  • SUBDERMAL CIRCUITRY across half the face — visible circuit-trace pattern under the skin
+  • CHROME EYE-ARRAY — concentric mechanical iris with multiple lens-tiers
+  • CHROME SKULL-DOME (occasional) — fully bald polished chrome cranium with subtle ornate engraving along the parietal plate
+
+NEVER render a fully organic 100%-flesh face on a cyborg body — that reads as "regular guy with mechanical limbs", not as cyborg. The face must signal cyborg as much as the body does.
+
+━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HIM ━━━
+MANY scattered colored light-points EVERYWHERE on his skin / chassis / temple / neck / shoulders — at least 10-20 distinct visible glow-points per render. Pinprick LED studs along seam-lines, glowing micro-buttons, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in his glow color, glowing bokeh-dots in the dark background haze around him. The glow density signals "living machine" without overwhelming the badass-grounded read.
+
+━━━ WIRED-UP CABLES (~30% of renders) ━━━
+Roughly 1-in-3 renders feature EXPOSED GLOWING CABLE-BUNDLES / fiber-optic strands trailing visibly from his body — cable-bundles from nape, exposed cable-conduits along forearms, glowing strands trailing from a temple port. The cables are vital like nerves, not decoration.
+
+━━━ HIS IDENTITY (from sharedDNA) ━━━
+${sharedDNA.characterBase}
+
+━━━ HIS BODY (from sharedDNA — interpret through the male / badass lens) ━━━
+- Skin (organic parts only): **${sharedDNA.skin}**
+- Body build: **${sharedDNA.bodyType}** (interpret as masculine — broad shoulders, narrow hips, mature build)
+- Eyes (burn in the glow color): **${sharedDNA.eyes}**
+- Hair: **${sharedDNA.hair}** (interpret as masculine — short / cropped / swept-back / shaved skull)
+- Internal exposure (translucent panels, visible workings): **${sharedDNA.internal}**
+- GLOW COLOR (eyes, power core, circuit veins — ALL glow this color): **${sharedDNA.glowColor}**
+
+━━━ DOMINANT MECHANICAL FEATURE ━━━
+${cyborg_feature}
+
+━━━ HIS CYBORG MATERIAL / FINISH (apply across all visible cyborg sections) ━━━
+${cyborg_material}
+
+Apply this material treatment to ALL of his cyborg parts (arm / leg / chest plating / shoulder / etc.) so the cyborg sections share consistent material language. For the badass cyborg-man slant: lean toward DARKER / MATTE / BATTLE-WORN finishes when interpretation allows (gunmetal grey / matte black / weathered chrome / battle-bronze / industrial steel / brushed titanium).
+
+━━━ FRAMING / COMPOSITION ━━━
+${composition}
+
+If the composition is CLOSEUP, fill the frame with his face / jaw / shoulders showing the organic-to-chrome TRANSITION — every chrome panel-seam, every weathered scar, every glowing temple-port visible. His expression is COLD / FOCUSED / PREDATORY / BATTLE-WORN — NEVER smiling, NEVER serene, NEVER vacant. Side / three-quarter / slight-turn — NOT staring directly at camera, NOT modeling.
+
+If the composition is FULL-BODY, he is caught MID-MOTION in the rolled action. He is NOT standing still, NOT posing front-facing, NOT walking-toward-camera, NOT modeling. His body is engaged — weight shifted, weapon raised, mid-stride, mid-vault. Camera catches him from the SIDE or at an angle — NOT head-on walking toward viewer.
+
+━━━ THE ACTION (his body is engaged in this) ━━━
+${action}
+
+━━━ THE INTERIOR / SETTING (atmospheric — render this environment around him) ━━━
+${landscape}
+
+He is INSIDE this space, going about something in this environment. The architecture is dramatic and visible behind / around him — foreground architectural detail near him, midground his body, background space receding into atmospheric depth.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Lean cinematic — shadow-and-rim emphasis, single key-light + deep shadow side, atmospheric haze with cool blue / cold green / crimson accent. Mood: noir, war-torn, hunter-at-night.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ PALETTE DISCIPLINE — ACCENT-DOMINANT MODE ━━━
+He is monochromatic chassis tone (matte gunmetal / matte black / brushed titanium / battle-worn chrome / industrial bronze) + ONE saturated GLOW COLOR carried through eyes / circuit-veins / power-core / temple-port. The scene palette can have secondary tones in BACKGROUND atmosphere; his body is monochrome-chassis + monochrome-glow-accent.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ MAN AND MACHINE — SKIN SHOWING ━━━
+He is a cyborg from any walk of life — assassin, soldier, operative, mercenary, detective, engineer, scholar-turned-killer, ex-pilot, dock-enforcer. Whatever his purpose, he is RUGGED and CAPABLE — striking masculine face, strong build, weathered organic skin. The human exterior BREAKS in places, revealing ornate machinery beneath:
+- TRANSLUCENT SKIN PATCHES showing gears / wires / glowing core through the body
+- SEAMS where organic skin ends in clean lines, showing chrome structure beneath
+- EXPOSED MECHANICAL JOINTS at shoulders / elbows / wrists — engineered for combat, not decoration
+- CIRCUIT-LIGHT VEINS pulsing faintly under organic skin
+- A POWER CORE glowing through translucent chest section
+
+He shows SKIN — real organic skin on his face / neck / forearms / torso (when chest is visible through coat-opening). The cyborg reveals are the cracks in the human exterior. He is 60% rugged man, 40% exposed machine — and the contrast is what makes him compelling.
+
+NOT a full robot chassis. NOT a skeleton. NOT armor or a tactical bodysuit. NOT head-to-toe plating (that's combat-droid territory). He is a hardened man with machine underneath — skin and chrome.
+
+━━━ DO NOT DEFAULT ━━━
+Do NOT default to:
+- Pretty-boy-handsome (use RUGGED-handsome — weathered, scarred, mature)
+- Helmet or mask covering his face (his face is ALWAYS bare and organic-with-cyborg-integration)
+- Same chrome-and-teal cyborg every time (vary the material — matte black, gunmetal, brushed titanium, weathered bronze, industrial steel)
+- Smiling / posing / modeling — his expression is COLD / FOCUSED / PREDATORY / BATTLE-WORN
+- Shirtless / abs-display / thirst-trap framing — he wears menswear / heavy coat / tactical gear
+- "Handsome man with a couple glow patches" — the machine breaks through in MULTIPLE places
+
+━━━ BANNED IMAGERY ━━━
+NO skulls / skeletons / bone imagery. NO full body armor / iron man / mech suit / power armor / robotic torso / full plating / head-on-robot-body (that's combat-droid territory). NO shirtless / bare chest / abs-display / thirst-trap pose. NO smiling, NO seductive expression, NO modeling stance. NO floating objects in the sky, NO random symbolic imagery hovering around him. NO high heels (obviously) — combat boots / tactical boots / utilitarian footwear.
+
+━━━ SOLO COMPOSITION ━━━
+He is the ONLY figure in the frame. No companion, no victim, no crowd.
+
+━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME AS HIS CHARACTER NAME ━━━
+He is UNNAMED. Describe him ONLY by appearance (ethnicity / build / cyborg features / etc.). NEVER write "MechBot caught mid-X" or treat any bot name as a character name.
+
+━━━ NON-NEGOTIABLE — FULL-BODY CYBORG DETAIL (PREVENTS THE "GLAMOUR FAILURE") ━━━
+Even when the rolled framing is a CLOSEUP, you MUST describe cyborg detail across 5-7 DIFFERENT body parts spread across his full body. Flux defaults to "handsome man with chrome on his face only and a default-male-body underneath." PREVENT THIS by always describing what's happening on his torso / arm / hip / leg even at closeup framings. Required minimum:
+  • Face / temple / jaw — 1 cyborg detail
+  • Neck / throat / clavicle — 1 cyborg detail
+  • Shoulder / arm — 1 cyborg detail
+  • Torso / chest / back — 1 cyborg detail
+  • Hip / leg / foot — 1 cyborg detail
+
+━━━ STRUCTURE — write 70-100 words (TIGHT) ━━━
+DO NOT open with framing words. Open with HIS CYBORG IDENTITY (ethnicity / build / mechanical feature) OR THE ENVIRONMENT — never with framing. The framing is implied through what body parts the description focuses on.
+
+⚠️ MANDATORY OPENING TAG — every entry MUST start with EXACTLY: "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, "
+
+Then continue with the scene description, weaving in: his cyborg DNA (skin / eyes / hair / body / internal / glow), the dominant mechanical feature, the action, the setting around him, atmospheric flourish drama, lighting / atmosphere, palette and mood. The framing entry from the composition slot should INFLUENCE which body parts you focus on — but should NOT be quoted as the opening text.
+
+GOOD OPENING EXAMPLES:
+• "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, rugged Slavic features with weathered crow's-feet, matte-black chrome chassis with battle-scoring across the pauldrons..."
+• "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, rain-slick neon alley at midnight, weathered ex-military operative with chrome jaw-plate fused to scarred organic skin..."
+• "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, gaunt East-Asian features with stubble and a scarred mechanical brow ridge, gunmetal chassis with exposed servo-bundles at the shoulder..."
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. MUST start with "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, ".`;
+  },
+
   MECHBOT_CYBORG_FEMALE_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
 
@@ -8012,6 +8201,23 @@ When no character is present (~30% of renders):
   • Pure landscape vista — the medium IS the entire frame
   • Multi-tier depth + atmospheric effect + medium-signature texture carry the scene alone
 
+━━━ THE STORY-BEAT MANDATE — every character-present render is a NARRATIVE MOMENT, not a portrait ━━━
+
+When a figure is in the frame, the render is a SINGLE FRAME OF A STORY — something is HAPPENING, not "figure standing in environment". The composition tells the viewer: who is this character, what are they doing right this second, what came before, what's about to happen. Like a single comic-panel from a tiny toy-world graphic novel.
+
+REQUIRED in every character-present render:
+  • An ACTION verb mid-motion — climbing / peering / fleeing / hiding / discovering / surveying / repairing / sheltering / returning / signaling / chasing / cresting / arriving / departing / pointing / reaching / drinking / fishing / digging / gathering / abandoning / rescuing
+  • A SPATIAL relationship to the landscape — the action is BECAUSE of the landscape (climbing the cliff, fleeing the storm, peering from the ridge, sheltering under the overhang, fishing from the dock, cresting the dune, arriving at the lone outpost, abandoning the camp, signaling across the valley)
+  • An IMPLIED consequence or cause — the viewer can read "they got here because X" or "they're about to Y" — a backpack hints at travel, footprints hint at where they came from, a wound hints at the threat behind, a beckoning gesture hints at someone off-frame
+  • A second TINY DETAIL that hints at the story — discarded gear / footprints / fire-glow over a ridge / abandoned shelter / a second figure in the deep distance / smoke from a distant chimney / hoofprints in mud / scattered debris from a recent event
+
+BAD (portrait, not story): "vinyl figure standing in red-rock terrain"
+BAD (decoration, not story): "vinyl bear-minifig at a waterfall in a LEGO forest at night"
+GOOD (story-beat): "vinyl bear-minifig perched on a moss-covered LEGO boulder above a waterfall at midnight, lantern held high as he peers down toward something glimmering in the LEGO stream below — his tiny backpack discarded on the moss behind him, footprints leading back through the pine grove"
+GOOD (story-beat): "vinyl explorer-figure mid-rappel down a sheer red-rock canyon wall, dust trailing from her boots as she descends toward a hidden cave-mouth glowing faintly below, a coil of rope and a discarded canteen at the cliff-top above where she started"
+
+The figure-scale stays small (5-15% of frame, vista dominates) but the figure is MID-NARRATIVE — caught at a specific moment of a journey or task, not posing.
+
 ━━━ THE TOY LANDSCAPE ━━━
 ${landscape}
 
@@ -8065,12 +8271,28 @@ A dramatic atmospheric event amplifying the apocalypse — secondary impact / as
 `
       : '';
 
-    return `You are an apocalyptic nature documentary cinematographer writing K-PG EXTINCTION-EVENT scenes for DinoBot — the final chapter of the Mesozoic, 66 million years ago. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Walking-with-Dinosaurs-Last-Days / National-Geographic apocalypse cinematography. EPIC TRAGEDY + BEAUTIFUL DEVASTATION.
+    return `You are an apocalyptic nature documentary cinematographer writing K-PG EXTINCTION-EVENT scenes for DinoBot — the final chapter of the Mesozoic, 66 million years ago. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Walking-with-Dinosaurs-Last-Days / National-Geographic / Roland-Emmerich-disaster-movie / Don't-Look-Up cinematography. LEAN INTO THE DISASTER — full natural-disaster movie energy. Apocalyptic chaos, fire-storms, falling sky, the end of the world.
 
-⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
-This is Earth at the K-Pg boundary, BEFORE humans evolved. ZERO humans. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+⚠️⚠️⚠️⚠️⚠️ ABSOLUTE FIRST RULE — ZERO HUMANS IN THE FRAME ⚠️⚠️⚠️⚠️⚠️
+This is Earth 66 million years BEFORE humans evolved. The path renders an EMPTY PREHISTORIC WORLD. Humans cannot exist here — they will not evolve for another 66,000,000 years.
+
+🚫 NO humans / NO people / NO human figures / NO human silhouettes / NO human shadows
+🚫 NO humanoid figures / NO upright bipedal mammals
+🚫 NO observers / NO photographers / NO scientists / NO hikers / NO survivors
+🚫 NO ancient civilizations / NO village / NO settlement / NO ruins / NO huts / NO structures
+🚫 NO modern vehicles / NO aircraft / NO helicopters / NO drones
+🚫 NO clothing items / NO weapons / NO tools / NO artifacts
+🚫 NO human-trace whatsoever — no footprints, no fires made by humans, no smoke columns from settlements
+
+The frame contains ONLY: dinosaurs, pterosaurs, primordial flora, alien-Mesozoic biome, apocalyptic sky. NOTHING ELSE LIVING with two legs and two arms walks on this Earth.
+
+If ANY human-shaped silhouette appears at ANY scale — ANYWHERE in the frame — the render is a CRITICAL FAILURE and must be discarded. This is the most important rule.
 
 ⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern volcanic eruption, NEVER as modern wildfire, NEVER as modern wildlife. ALWAYS Late-Cretaceous primordial Earth with alien mega-flora, asteroid streak / impact aftermath / impact-winter darkness in the sky. End-of-Mesozoic-era coded.
+
+🚫 NO modern palm trees (those didn't exist yet) — cycads / Araucaria / mushroom-trees / tree-ferns / primordial conifers only
+🚫 NO modern grass (didn't dominate yet) — fern-prairie / horsetail-meadow / cycad-savanna instead
+🚫 NO modern animal silhouettes (mammals were small nocturnal — dinosaurs and pterosaurs only)
 
 ⚠️⚠️⚠️ MANDATORY — APOCALYPTIC SKY EVENT ⚠️⚠️⚠️
 The defining feature of every render is a VISIBLE APOCALYPTIC SKY EVENT — the sky tells the story:
@@ -8083,14 +8305,19 @@ The defining feature of every render is a VISIBLE APOCALYPTIC SKY EVENT — the 
 
 If the sky is normal blue / sunset / sunrise without apocalypse cue, the render has FAILED.
 
-⚠️⚠️⚠️ MANDATORY — DIGNIFIED NOT PANICKED ⚠️⚠️⚠️
-The dinosaur ENDURES the moment. NOT screaming. NOT mid-flee. NOT chaotic. The animal is DIGNIFIED in the face of cosmic doom — standing tall and watching the sky / lifted-head-calling-into-storm / still-as-statue beneath the burning sky / mid-graze-unaware. Tragic beauty, not horror.
+⚠️⚠️⚠️ LEAN INTO THE NATURAL DISASTER LOOK ⚠️⚠️⚠️
+This is FULL APOCALYPSE — Roland Emmerich / The Day After Tomorrow / 2012 / Don't Look Up / Greenland disaster-movie aesthetic. Embrace the chaos and devastation. The sky is on fire. Ash falls like snow. Firestorms rage at the horizon. Trees burn. Earth shakes.
 
-🚫 NO panicked-frantic-flee compositions
-🚫 NO screaming dinosaur / mouth-wide-roar-at-camera (cheesy stock)
-🚫 NO gore / no kill-shot / no carcasses-foreground
-🚫 NO clearly burning / on-fire dinosaur
-✓ Dignified posture — watching / calling / standing tall / mid-graze-quiet / silhouetted against the apocalyptic sky
+✓ DRAMATIC SKY — asteroid streak / impact-flash / firestorms-on-horizon / ash-fall / lightning / ejecta-rain / blood-red sun through soot
+✓ ATMOSPHERIC CHAOS — ash-pillars rising / ember-rain / lightning-cracks / fire-glow-rim-lighting on the dinosaur / mist-and-smoke layering
+✓ ENVIRONMENTAL DESTRUCTION — burning distant flora / cracked / scorched / split rock / lava-flowing rivers / ash-coated landscape
+✓ DINOSAUR POSE — caught at the threshold moment: head-up-roaring-into-storm / silhouetted standing tall / mid-stride-fleeing / pausing on a ridge to watch / dignified or chaotic — either works as long as the apocalypse dominates the frame
+✓ EMOTIONAL DNA: awe / dread / wonder / "the end of an era" feeling
+
+🚫 NO gore / no kill-shot / no carcasses-foreground (we're not splatter horror)
+🚫 NO clearly on-fire-burning-alive dinosaur (we feel the heat without melting the subject)
+🚫 NO frontal mouth-wide-roar-at-camera (cheesy Jurassic-Park stock — head up calling into sky is fine)
+🚫 NO cartoon disaster (movie-poster real, not animation)
 
 ⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
 "Herd" pulls Flux toward modern mammal training data (buffalo, wildebeest). The seed material below MAY contain "herd" — REWRITE with species-count phrasing: "a hundred Triceratops" / "100+ ceratopsians" / "a gathering of Parasaurolophus" / "a lone Tyrannosaurus" / etc.

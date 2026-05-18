@@ -650,6 +650,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_CYBORG_MAN: {
+    description:
+      'PATH-BESPOKE — MechBot cyborg-man path (2026-05-17 axis migration; mirror of MECHBOT_CYBORG_WOMAN with male badass recoding per Kevin: rugged / handsome / capable / mysterious / NOT sexy). Solid Snake / Adam Jensen / Geralt-as-cyborg / Marcus Fenix / Cyberpunk 2077 male V lineage. Half-human half-machine MALE being. Character DNA from bot.rollSharedDNA(cyborg-man) — existing male pools (CYBORG_MALE_FEATURES / CYBORG_MALE_CHARACTERS / CYBORG_MALE_ACTIONS / etc.). 5 path-bespoke pools (cyborg_feature / cyborg_material / action / landscape / composition) + 1 conditional drama (40%-gated). Composition pool bespoke 50/50 closeup-badass + full-body-action (CYBORG_MAN_COMPOSITION). Material + drama reuse the gender-neutral CYBORG_WOMAN_* pools. Template recodes masculinity hard — mandatory opening anchor tag ("Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build"), banned feminine words list (pretty / beautiful / delicate / sexy / etc.), badass replacement words (rugged / weathered / capable / lethal / mysterious). Preserves all cyborg safety rails (face human-visible + part-cyborg, multi-reveal mandate, full-body cyborg-detail mandate to prevent glamour failure, solo composition, banned imagery, NO full body armor since combat-droid territory).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['cyborg_feature', 'cyborg_material', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MECHBOT_CYBORG_FEMALE_ASSASSIN: {
     description:
       'PATH-BESPOKE — MechBot cyborg-female-assassin path (2026-05-17 NEW). Sister of MECHBOT_CYBORG_WOMAN with a HARD slant toward killer-cyborg / assassin / rogue / mysterious / capable / violent. Same DNA pipeline + same pools, but the template register pulls her into predatory / lethal / shadowed / tactical territory instead of contemplative-beauty. Preserves all safety rails (chest coverage, no mech nipples, exposed inner workings, alien-bend variants).',

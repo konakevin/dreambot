@@ -143,6 +143,43 @@ ABSOLUTELY BANNED:
 - NO duplicate-style entries
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
+
+  dinobot_extinction_event_surprise_element: `Generate SMALL APOCALYPTIC-ACCENT descriptions for DinoBot's extinction-event path. Each is ONE comma-separated line, 15-30 words, describing a small atmospheric accent in or around the K-Pg extinction moment — ember-fall / ash-flake / glowing-impact-particulate / startled pterosaur / distant secondary impact glow / etc.
+
+The element is SMALL — 2-5% of the frame. Position: foreground edge / midground / horizon background. Adds apocalyptic atmosphere.
+
+Variety mandate (rotate widely):
+- ~20% Ember / glowing-pumice particulate falling from the sky in slow arcs
+- ~15% Ash-flake drifting / settling on the dinosaur's hide or foreground rock
+- ~10% Distant impact-flash secondary on the deep horizon (multi-strike Chicxulub event)
+- ~10% Startled pterosaur silhouette fleeing low through the ash-darkened sky
+- ~10% Foreground rock cracked / split / scorched by impact thermal wave
+- ~10% Smoke-pillar / firestorm-column on the deep horizon
+- ~5% Auroral disturbance / atmospheric-energy ripple in the upper sky
+- ~5% Falling glowing tektite / impact-ejecta arcing through the sky
+- ~5% Ash-dimmed blood-red sun-disk at the horizon
+- ~10% Atmospheric crepuscular ash-rays cutting through the dimming sky
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / deep horizon / upper sky)
+- ONE SPECIFIC DETAIL (mid-action / catching light / atmospheric / scale-prover)
+
+GOOD examples:
+- A drift of glowing-pumice embers falling in slow arcs at midground, each catching the impact-glow
+- A startled pterosaur silhouette fleeing low through the ash-darkened sky, distant midground
+- An ash-dimmed blood-red sun-disk at the deep horizon, atmospheric particulate veil layered before it
+- A smoke-pillar firestorm on the deep horizon, orange-red glow against the darkening sky
+- A falling glowing tektite arcing through the upper sky, blue-white tail trailing
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no aircraft
+- NO modern wildfire imagery (modern trees burning / modern animals fleeing)
+- NO gore / no burning-alive-dinosaur / no charred-flesh
+- NO duplicate-style entries
+
+Output: ONE apocalyptic-accent per line. No numbering. No quotes.`,
+
   dinobot_dino_action_surprise_element: `Generate SMALL ACTION-ACCENT descriptions for DinoBot's dino-action path. Each is ONE comma-separated line, 15-30 words, describing a small atmospheric accent in or around the peak-action moment — dust-spray / water-spray / scattered-debris / motion-blur-particulate / fleeing-prey-silhouette / mud-print / etc.
 
 The element is SMALL — 2-5% of the frame. Position: foreground edge / midground around the action / behind in bokeh. Adds motion-energy and atmosphere.
