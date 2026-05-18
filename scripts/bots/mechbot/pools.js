@@ -89,7 +89,7 @@ module.exports = {
   CYBORG_BODY_TYPES,
   CYBORG_FEMALE_CHARACTERS: load('cyborg_female_characters'),
   CYBORG_ACTIONS: load('cyborg_actions'),
-  // Killer-droid (cyborg-female-assassin path) — genderless predatory actions
+  // Killer-droid (droid-assassin path) — genderless predatory actions
   KILLER_DROID_ACTIONS: load('killer_droid_actions'),
   // Cyborg-man path — badass male framings (50% closeup + 50% full-body action)
   CYBORG_MAN_COMPOSITION: load('cyborg_man_composition'),

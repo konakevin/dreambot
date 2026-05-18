@@ -668,10 +668,10 @@ Each entry MUST:
     instructions: `Each entry is ONE specific AGGRESSIVE squad combat action, 35-65 words. Format: "[opening verb-phrase], lead trooper mid-[VERB], second mid-[VERB], third mid-[VERB], [optional 4th/5th member], [kill / smoke / blood / debris / scale-prover]". Use ONLY predator/combat verbs (charging/kicking/executing/dragging/leaping/mid-fire/mid-strike/mid-blast/hunting/stalking/mid-roar). STRICT BAN on procedural/SWAT/Tom-Clancy verbs (stacked/overwatch/scanning/observing/hand-signals). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
-  // ─── cyborg-female-assassin path: SOLO killer-droid predatory actions (2026-05-17) ───
+  // ─── droid-assassin path: SOLO killer-droid predatory actions (2026-05-17) ───
   killer_droid_actions: {
     format: 'simple',
-    theme: `SOLO PREDATORY ACTIONS for the cyborg-female-assassin (killer-droid) path — ONE genderless robotic assassin caught MID-ACTION in a predatory beat. Each entry 30-55 words.
+    theme: `SOLO PREDATORY ACTIONS for the droid-assassin (killer-droid) path — ONE genderless robotic assassin caught MID-ACTION in a predatory beat. Each entry 30-55 words.
 
 ⚠️ THE BAR: every action puts the SOLE killer-droid in mid-violence or mid-stalk. John Wick assassin / Terminator hunter / Ghost in the Shell black-ops / Edge Runners cyberpunk-killer / Mass Effect SPECTRE / Halo Spartan-ONI energy. The droid is HUNTING, FIRING, CLIMBING, STRIKING, LURKING, AMBUSHING — never standing still posing.
 
@@ -724,7 +724,7 @@ Each entry MUST:
     instructions: `Each entry is ONE specific SOLO killer-droid predatory action, 30-55 words. Format: "[opening verb-phrase action], the [droid-noun] mid-[VERB] with [weapon], [target/kill detail], [one environmental detail]". Use ONLY genderless droid-nouns (killer-droid / assassin-droid / kill-unit / combat-unit / hunter-droid / murder-unit / the droid) — NEVER she/her/woman/female. Use predator/combat verbs (firing/climbing/striking/lurking/stalking/ambushing/executing/hunting/mid-blast/mid-thrust). STRICT BAN on contemplative verbs (stands/poses/leans/watches/examines/contemplates). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
-  // ─── cyborg-female-assassin (predator-droid spread) path: sci-fi action SCENES (2026-05-17) ───
+  // ─── droid-assassin (predator-droid spread) path: sci-fi action SCENES (2026-05-17) ───
   // 2026-05-17 expansion: original 25 entries were ninja-only. New entries cover combat-assault /
   // cyber-cop / military-soldier / hunter-droid scenes for the 5-archetype spread.
   ninja_bot_scenes: {
@@ -890,10 +890,10 @@ Each entry MUST:
     instructions: `Each entry is ONE specific BADASS MALE cyborg framing, 25-50 words. Format: "FRAMING-NAME CAPS — camera position + framing + ONE badass detail (weathered / scarred / blood / dust / stubble / coat / weapon-stance)". Use ONLY male / masculine pronouns (he / his / man / male figure). DISTRIBUTE 50% closeup framings + 50% full-body action framings per batch. STRICT BAN on feminine / delicate / beautiful / wistful / thirst-trap language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
-  // ─── cyborg-female-assassin path: action-cinematic composition angles (2026-05-17) ───
+  // ─── droid-assassin path: action-cinematic composition angles (2026-05-17) ───
   killer_droid_composition: {
     format: 'simple',
-    theme: `ACTION-CINEMATIC CAMERA ANGLES for the cyborg-female-assassin (killer-droid) path. Each entry specifies a camera position + framing that makes the SOLO killer-droid's PREDATORY ACTION viscerally legible. 25-50 words.
+    theme: `ACTION-CINEMATIC CAMERA ANGLES for the droid-assassin (killer-droid) path. Each entry specifies a camera position + framing that makes the SOLO killer-droid's PREDATORY ACTION viscerally legible. 25-50 words.
 
 ⚠️ MANDATORY — every entry must convey AGGRESSION / DYNAMIC ACTION through the angle. Static chest-up portraits FAIL. The frame must SHOW the droid in motion / firing / scaling / striking / lurking. Full-body or three-quarter — NEVER face-filling closeup.
 

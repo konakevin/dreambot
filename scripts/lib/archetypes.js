@@ -664,9 +664,9 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
-  MECHBOT_CYBORG_FEMALE_ASSASSIN: {
+  MECHBOT_DROID_ASSASSIN: {
     description:
-      'PATH-BESPOKE — MechBot cyborg-female-assassin path (2026-05-17 NEW). Sister of MECHBOT_CYBORG_WOMAN with a HARD slant toward killer-cyborg / assassin / rogue / mysterious / capable / violent. Same DNA pipeline + same pools, but the template register pulls her into predatory / lethal / shadowed / tactical territory instead of contemplative-beauty. Preserves all safety rails (chest coverage, no mech nipples, exposed inner workings, alien-bend variants).',
+      'PATH-BESPOKE — MechBot droid-assassin path (2026-05-17 NEW). Sister of MECHBOT_CYBORG_WOMAN with a HARD slant toward killer-cyborg / assassin / rogue / mysterious / capable / violent. Same DNA pipeline + same pools, but the template register pulls her into predatory / lethal / shadowed / tactical territory instead of contemplative-beauty. Preserves all safety rails (chest coverage, no mech nipples, exposed inner workings, alien-bend variants).',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],

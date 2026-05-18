@@ -24,13 +24,13 @@ const pathBuilders = {
   // 2026-05-17: per Kevin — third cyborg-female path with assassin slant
   // (killer / rogue / mysterious / capable / violent). Same axis system as
   // cyborg-woman, different template that pulls her into predator territory.
-  'cyborg-female-assassin': require('./paths/cyborg-female-assassin'),
-  'cyborg-man': require('./paths/cyborg-man'),
-  // 2026-05-17: per Kevin — keep the legacy cyborg-man function-form brief
-  // ACTIVE alongside the new axis path. Same identity (cyborg-man) but
-  // different builder + framing distribution + brief construction. The new
-  // 5-render axis batches landed pretty-boy too often; legacy stays in
-  // rotation to balance the feed.
+  'droid-assassin': require('./paths/droid-assassin'),
+  // 2026-05-17: DISABLED per Kevin — the new axis cyborg-man path consistently
+  // rendered pretty-boy models even after grit-mandate iteration. Legacy
+  // function-form is the only active male-cyborg path now. Files kept for
+  // reference (paths/cyborg-man.js, CYBORG_MAN_COMPOSITION pool,
+  // MECHBOT_CYBORG_MAN archetype + template).
+  // 'cyborg-man': require('./paths/cyborg-man'),
   'cyborg-male-legacy': require('./paths/legacy/cyborg-man'),
   'mecha-pilots': require('./paths/mecha-pilots'),
   'titan-war-machines': require('./paths/titan-war-machines'),
@@ -60,7 +60,7 @@ module.exports = {
       'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
       'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
     ],
-    'cyborg-female-assassin': [
+    'droid-assassin': [
       // Skewed darker / cooler / more lethal — drop the peaceful/enchanted/shimmer ones
       'cinematic', 'dark', 'fierce', 'nightshade', 'macabre', 'voltage',
       'nostalgic', 'arcane', 'surreal', 'epic',
@@ -115,7 +115,7 @@ module.exports = {
   modelByPath: {
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-female-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
-    'cyborg-female-assassin': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'droid-assassin': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-male-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -137,7 +137,7 @@ module.exports = {
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
-    'cyborg-female-assassin': 'cool predator-droid (ninja / combat / cyber-cop / military / hunter), sleek robotic killer with cinematic poise, dramatic atmospheric rim-light',
+    'droid-assassin': 'cool predator-droid (ninja / combat / cyber-cop / military / hunter), sleek robotic killer with cinematic poise, dramatic atmospheric rim-light',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -169,8 +169,8 @@ module.exports = {
     'humanoid-robots',
     'cyborg-woman',
     'cyborg-female-legacy',
-    'cyborg-female-assassin',
-    'cyborg-man',
+    'droid-assassin',
+    // 'cyborg-man',  // 2026-05-17 DISABLED — see pathBuilders comment
     'cyborg-male-legacy',
     'mecha-pilots',
     'titan-war-machines',
@@ -187,8 +187,8 @@ module.exports = {
     'humanoid-robots': 1,
     'cyborg-woman': 1,
     'cyborg-female-legacy': 1,
-    'cyborg-female-assassin': 1,
-    'cyborg-man': 1,
+    'droid-assassin': 1,
+    // 'cyborg-man': 1,  // 2026-05-17 DISABLED
     'cyborg-male-legacy': 1,
     'mecha-pilots': 1,
     'titan-war-machines': 1,
@@ -203,7 +203,7 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cyborg-woman', 'cyborg-female-legacy', 'cyborg-female-assassin', 'cyborg-man', 'cyborg-male-legacy', 'robot-moment', 'humanoid-robots',
+      'cyborg-woman', 'cyborg-female-legacy', 'droid-assassin', 'cyborg-man', 'cyborg-male-legacy', 'robot-moment', 'humanoid-robots',
       'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
       'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
       'mech-skyships',
@@ -217,7 +217,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman', 'cyborg-female-assassin'],
+    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman', 'droid-assassin'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
@@ -259,7 +259,7 @@ module.exports = {
     pathContext: {
       'cyborg-woman': 'cyborg-female',
       'cyborg-female-legacy': 'cyborg-female',
-      'cyborg-female-assassin': 'cyborg-female',
+      'droid-assassin': 'cyborg-female',
       'cyborg-man': 'cyborg-male',
       'cyborg-male-legacy': 'cyborg-male',
       'robot-moment': 'robot',
@@ -289,7 +289,7 @@ module.exports = {
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
-    if (path === 'cyborg-female-assassin') {
+    if (path === 'droid-assassin') {
       // 2026-05-17: NINJA-BOT path (path name retained for back-compat). Pure
       // cyber-ninja robot — Genji / Gray Fox / Sandevistan cyber-ninja / Snake-
       // Eyes-as-droid energy. NO human, NO woman, NO femme — just cool ninja-

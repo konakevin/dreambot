@@ -3965,7 +3965,7 @@ GOOD OPENING EXAMPLES:
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. MUST start with "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, ".`;
   },
 
-  MECHBOT_CYBORG_FEMALE_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {
+  MECHBOT_DROID_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
 
     const dramaSection = drama

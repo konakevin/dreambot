@@ -1,5 +1,5 @@
 /**
- * MechBot cyborg-female-assassin path — declarative form (2026-05-17).
+ * MechBot droid-assassin path — declarative form (2026-05-17).
  *
  * Sister path to cyborg-woman with a HARD slant toward KILLER CYBORG / ASSASSIN /
  * ROGUE / MYSTERIOUS / CAPABLE / VIOLENT energy. Same DNA pipeline (rollSharedDNA
@@ -19,7 +19,7 @@
  */
 
 module.exports = {
-  archetype: 'MECHBOT_CYBORG_FEMALE_ASSASSIN',
+  archetype: 'MECHBOT_DROID_ASSASSIN',
   pools: {
     cyborg_feature: 'CYBORG_FEATURES',
     cyborg_material: 'CYBORG_WOMAN_MATERIAL',
