@@ -829,6 +829,67 @@ Each entry MUST:
 The "REGISTER:" tag HARD-LOCKS the chassis archetype. Reference the droid by archetype noun matching the register. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── cyborg-man path: badass male framings (2026-05-17) ───
+  cyborg_man_composition: {
+    format: 'simple',
+    theme: `BADASS MALE CYBORG framings for the cyborg-man path — mixed full-body action + tight badass closeup angles for a RUGGED HANDSOME CAPABLE MYSTERIOUS male cyborg. 25-50 words per entry.
+
+⚠️ THE BAR: every framing reads as BADASS — capable / dangerous / mysterious / weathered / lethal. Cold steel + scarred skin + chrome jaw + intense focus. NOT sexy, NOT thirst-trap, NOT shirtless-romance-novel-cover. The vibe is Solid Snake / Adam Jensen / Cole Phelps (cyborg variant) / Geralt-of-Rivia-as-cyborg / Marcus Fenix / Cyberpunk 2077 male V / Eddy Hewlett.
+
+🚫 ABSOLUTE BANS — these kill the badass tone:
+• NO "her" / "she" / "feminine" / "delicate" — pure male language
+• NO "delicate lips parted" / "wistful gaze" / "ethereal" / "graceful"
+• NO shirtless-ripped-abs poses, NO thirst-trap glamour shot
+• NO "beautiful" — use "striking" / "weathered" / "imposing" / "menacing"
+• NO smiling, NO seductive expression, NO modeling pose
+
+✓ FRAMING CATEGORIES — distribute 50/50 closeup vs full-body action:
+
+  CLOSEUP BADASS FRAMINGS (50%):
+  • SCARRED-JAW CLOSEUP — closeup of chrome-jaw transition, stubble + battle-scar on the organic half, intense focused expression
+  • MECHANICAL BROW + WEATHERED EYE — closeup of cybernetic brow ridge above an organic intense eye, dust / blood / oil-streak across the cheekbone
+  • TEMPLE-PORT PROFILE — side profile showing temple sensor-array + organic ear + scarred cheek transitioning into chrome cranial plate
+  • CHROME-SKULL PROFILE — bald chrome cranial dome with neural-port array exposed, side profile angle, organic neck visible
+  • OVER-SHOULDER COMBAT PROFILE — over-shoulder behind him as he scans an off-frame threat, chrome neck-plate visible, jaw set hard
+  • THROAT-TO-JAW SEAM — closeup of organic throat transitioning into chrome jaw-hinge, segmented neck-plate visible, stubble-and-chrome contrast
+  • BRUISED-AND-CHROMED FACE — three-quarter face closeup, fresh bruise / bloodstain on the organic side, chrome panel-line bisecting the face vertically
+  • EYE-SOCKET CHROME APERTURE — extreme closeup of a mechanical iris-aperture eye with weathered organic crow's-feet at the corner, lashes-and-chrome contrast
+
+  FULL-BODY BADASS ACTION (50%):
+  • LOW-ANGLE WIDE-STANCE — camera at hip level looking up at him standing wide-stance with weapon ready, full-body silhouette
+  • SIDE-PROFILE MID-STRIDE — camera 90-degrees as he strides past with combat-rifle at his side, motion-blur on backdrop
+  • OVER-SHOULDER MID-FIRE — camera behind his right pauldron looking down weapon-sight at off-frame target
+  • THREE-QUARTER WEAPON-DRAWN — three-quarter back-angle as he draws a sidearm mid-pivot, coat-flares streaming behind
+  • FROM-COVER REVEAL — camera at cover-edge as he leans out firing, half-body in frame
+  • MID-VAULT KINETIC — full-body caught mid-vault over debris with weapon raised, motion-blur background
+  • PERCH-DOWN PREDATOR — high-angle from his perch looking down at target zone, his silhouette dominant in foreground edge
+  • RAIN-SLICK STAND — low-angle wide-stance in rain-slick street, coat heavy with rain, neon backdrop bleeding behind him
+
+Each entry MUST:
+• Use only male / masculine language (he / his / man / male cyborg / male figure / etc.)
+• Describe the framing + ONE specific badass detail (weathered skin / scarred / blood / dust / stubble / coat / weapon-stance)
+• 25-50 words
+• NEVER use "she" / "her" / "feminine" / "delicate" / "beautiful"`,
+    touchpoints: [
+      'SCARRED-JAW CLOSEUP — tight three-quarter face shot, chrome jaw-plate seamlessly bonded to weathered organic skin, day-old stubble across the unmechanized side, fresh battle-scar curving across the chrome-flesh boundary, his intense focused eyes locked off-frame on something approaching',
+      'TEMPLE-PORT PROFILE — strict side profile, his organic ear flush against a chrome temple-port array bristling with three neural-jack receptacles, weathered skin across the cheek transitioning cleanly into engraved chrome cranial plate, set jaw',
+      'LOW-ANGLE WIDE-STANCE — camera at ankle level looking up as he stands wide-stance on rain-slick concrete, combat-rifle held diagonal across his chest, coat heavy and dripping, full silhouette against an exploding neon sign behind',
+      'OVER-SHOULDER MID-FIRE — camera tight behind his right pauldron looking down the barrel of a suppressed carbine at a distant fleeing target, his chrome-knuckled hand wrapped firm around the grip, brass ejecting past the lens',
+      'MID-VAULT KINETIC — full-body caught mid-vault over a smashed cyberpunk barricade with pistol drawn at full-extension, coat-flare and cables streaming behind, urban skyline scrolling in motion-blur, kinetic urgency frozen',
+      'CHROME-SKULL PROFILE — strict side profile of his bald polished chrome cranium with subtle ornate engraving along the parietal plate, organic neck visible below the chrome-flesh seam, stubbled jaw, weathered organic eye, gaunt focused expression',
+      'BRUISED-AND-CHROMED FACE — three-quarter face shot, fresh bruise blooming purple across his organic cheekbone, chrome panel-line bisecting the face from temple to jawline, dried blood at the temple, set jaw, cold focused eyes',
+      'FROM-COVER REVEAL — camera at the alley cover-edge as he leans out firing a heavy sidearm in two-handed grip, half-body in frame with the other half hidden behind shattered drywall, muzzle-flash strobing his weathered face',
+      'EYE-SOCKET CHROME APERTURE — extreme closeup of his mechanical iris-aperture eye, weathered crow\'s-feet at the corner, organic lashes contrasting with chrome shutter-petals, dust on the surrounding skin, focused intensity',
+      'THREE-QUARTER WEAPON-DRAWN — three-quarter back-angle as he draws a sidearm from a thigh-rig mid-pivot, his coat-flares streaming behind, chrome jaw set hard, weathered organic eye visible over the pauldron, kinetic motion frozen',
+      'PERCH-DOWN PREDATOR — high-angle from his crane-perch looking down at a target plaza forty floors below, his silhouette crouched dominant in the foreground right edge, anti-material rifle braced steady, scope-eye glinting cold',
+      'SIDE-PROFILE MID-STRIDE — camera 90-degrees as he strides past at full speed with combat-rifle held at his side, his weathered coat heavy with motion, chrome jaw visible in profile, motion-blur on the cyberpunk corridor behind',
+      'THROAT-TO-JAW SEAM — extreme closeup of the chrome neck-plate transitioning into his organic jaw-hinge, segmented chrome cervical vertebrae exposed, dark stubble across the organic chin, faint fiber-optic glow threading from a clavicle port',
+      'MECHANICAL BROW + WEATHERED EYE — closeup of his cybernetic brow ridge above an organic intense weathered eye, fresh oil-streak across his cheekbone, chrome forehead-plate engraved with faint unit-callsign markings, focused predator gaze',
+      'RAIN-SLICK STAND — low-angle wide-stance shot in a rain-slicked cyberpunk alley, his heavy coat soaked through, dual sidearms holstered at his hips, chrome arm visible beneath the rolled sleeve, neon sign bleeding magenta across his weathered face',
+    ],
+    instructions: `Each entry is ONE specific BADASS MALE cyborg framing, 25-50 words. Format: "FRAMING-NAME CAPS — camera position + framing + ONE badass detail (weathered / scarred / blood / dust / stubble / coat / weapon-stance)". Use ONLY male / masculine pronouns (he / his / man / male figure). DISTRIBUTE 50% closeup framings + 50% full-body action framings per batch. STRICT BAN on feminine / delicate / beautiful / wistful / thirst-trap language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── cyborg-female-assassin path: action-cinematic composition angles (2026-05-17) ───
   killer_droid_composition: {
     format: 'simple',

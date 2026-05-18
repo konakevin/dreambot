@@ -3841,11 +3841,22 @@ The face MUST read as a TRUE FUSION of flesh and machine. Pick 2-3 DIFFERENT fac
 
 NEVER render a fully organic 100%-flesh face on a cyborg body — that reads as "regular guy with mechanical limbs", not as cyborg. The face must signal cyborg as much as the body does.
 
-━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HIM ━━━
-MANY scattered colored light-points EVERYWHERE on his skin / chassis / temple / neck / shoulders — at least 10-20 distinct visible glow-points per render. Pinprick LED studs along seam-lines, glowing micro-buttons, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in his glow color, glowing bokeh-dots in the dark background haze around him. The glow density signals "living machine" without overwhelming the badass-grounded read.
+━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HIM (MANDATORY — match cyborg-woman intensity) ━━━
+MANY scattered colored light-points EVERYWHERE on his skin / chassis / temple / neck / shoulders — at least 20-30 distinct visible glow-points per render. Pinprick LED studs along seam-lines, glowing micro-buttons, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in his glow color, glowing bokeh-dots in the dark background haze around him, constellation-pattern light-clusters across chest and arm-panels, glowing punctuation points along spinal segments visible at the nape, scattered glow-pinpricks on the SKIN ITSELF (bioluminescent stippled freckles along jawline and temple). He should look like a LIVING MACHINE-CONSOLE plugged in — every panel, seam, and skin-patch lit up with dense light-points. The grizzled badass IS the cyborg — they reinforce, not subtract from, each other.
 
-━━━ WIRED-UP CABLES (~30% of renders) ━━━
-Roughly 1-in-3 renders feature EXPOSED GLOWING CABLE-BUNDLES / fiber-optic strands trailing visibly from his body — cable-bundles from nape, exposed cable-conduits along forearms, glowing strands trailing from a temple port. The cables are vital like nerves, not decoration.
+━━━ TEMPLE-MECHANISM MANDATE (every render needs head-gear) ━━━
+Every render MUST include AT LEAST ONE prominent temple/head mechanism — pick from:
+  • ORNATE TEMPLE GEAR-DISC — concentric chrome ring-mechanism set into the temple, rotating with internal glow
+  • DUAL TEMPLE GEAR-DISCS — both temples carry mechanism-discs in matching or contrasting glow colors
+  • MANDALA TEMPLE PATTERN — sacred-geometry mechanical disc at the temple-line
+  • CHUNKY EAR-APPARATUS — over-ear cybernetic housing with cable-bundle exits, neural-port array, indicator LEDs
+  • CRANIAL-PORT ARRAY — multiple neural-jack receptacles stippled along the temple / behind the ear
+  • TEMPLE-WINDOW — clear acrylic panel at temple revealing microprocessor arrays in coolant
+  • HEMISPHERE SKULL-MECHANISM — half the cranium replaced with engraved chrome dome bearing visible mechanism / sensor cluster
+The temple-mechanism is the SIGNATURE detail of the cyborg-man identity — never absent.
+
+━━━ WIRED-UP CABLES (~50% of renders) ━━━
+Roughly half of renders feature EXPOSED GLOWING CABLE-BUNDLES / fiber-optic strands trailing visibly from his body — cable-bundles from nape, exposed cable-conduits along forearms, glowing strands trailing from a temple port, neural-jack tethers draped down his neck. The cables are vital like nerves, not decoration.
 
 ━━━ HIS IDENTITY (from sharedDNA) ━━━
 ${sharedDNA.characterBase}
@@ -3942,16 +3953,16 @@ Even when the rolled framing is a CLOSEUP, you MUST describe cyborg detail acros
 ━━━ STRUCTURE — write 70-100 words (TIGHT) ━━━
 DO NOT open with framing words. Open with HIS CYBORG IDENTITY (ethnicity / build / mechanical feature) OR THE ENVIRONMENT — never with framing. The framing is implied through what body parts the description focuses on.
 
-⚠️ MANDATORY OPENING TAG — every entry MUST start with EXACTLY: "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, "
+⚠️ MANDATORY OPENING TAG — every entry MUST start with EXACTLY: "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, "
 
 Then continue with the scene description, weaving in: his cyborg DNA (skin / eyes / hair / body / internal / glow), the dominant mechanical feature, the action, the setting around him, atmospheric flourish drama, lighting / atmosphere, palette and mood. The framing entry from the composition slot should INFLUENCE which body parts you focus on — but should NOT be quoted as the opening text.
 
 GOOD OPENING EXAMPLES:
-• "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, rugged Slavic features with weathered crow's-feet, matte-black chrome chassis with battle-scoring across the pauldrons..."
-• "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, rain-slick neon alley at midnight, weathered ex-military operative with chrome jaw-plate fused to scarred organic skin..."
-• "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, gaunt East-Asian features with stubble and a scarred mechanical brow ridge, gunmetal chassis with exposed servo-bundles at the shoulder..."
+• "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, rugged Slavic features with deep blade-scar across the cheekbone, matte-black chrome chassis with battle-scoring across the pauldrons, dense glowing amber circuit-traces threading across face..."
+• "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, rain-slick neon alley at midnight, weathered ex-military operative late-40s with iron-grey beard, chrome jaw-plate fused to scarred organic skin..."
+• "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, gaunt East-Asian features with thick salt-and-pepper stubble and a scarred mechanical brow ridge, gunmetal chassis with exposed servo-bundles at shoulder..."
 
-Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. MUST start with "Adult male cyborg (NOT female), strong jawline, broad shoulders, narrow hips, adult masculine build, ".`;
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. MUST start with "Weathered grizzled adult male cyborg (NOT female NOT young pretty model), heavy beard or thick stubble, deeply scarred face, weathered crow's-feet, 40-55 years old, strong jawline, broad shoulders, narrow hips, ornate dense cyborg circuitry across face and chassis, glowing temple-mechanism with cable bundles, ".`;
   },
 
   MECHBOT_CYBORG_FEMALE_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {

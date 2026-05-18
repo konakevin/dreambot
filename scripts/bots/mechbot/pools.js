@@ -91,6 +91,8 @@ module.exports = {
   CYBORG_ACTIONS: load('cyborg_actions'),
   // Killer-droid (cyborg-female-assassin path) — genderless predatory actions
   KILLER_DROID_ACTIONS: load('killer_droid_actions'),
+  // Cyborg-man path — badass male framings (50% closeup + 50% full-body action)
+  CYBORG_MAN_COMPOSITION: load('cyborg_man_composition'),
   // Killer-droid action-cinematic camera angles (full-body, NOT closeup portraits)
   KILLER_DROID_COMPOSITION: load('killer_droid_composition'),
   // Ninja-bot SCENES — sci-fi action context, NOT empty architecture backdrop
