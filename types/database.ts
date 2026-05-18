@@ -906,6 +906,7 @@ export type Database = {
           architecture: string[];
           atmosphere: string[];
           biome: string | null;
+          biome_config: Json | null;
           cinematic_phrases: string[];
           created_at: string;
           display_name: string | null;
@@ -930,6 +931,7 @@ export type Database = {
           architecture?: string[];
           atmosphere?: string[];
           biome?: string | null;
+          biome_config?: Json | null;
           cinematic_phrases?: string[];
           created_at?: string;
           display_name?: string | null;
@@ -954,6 +956,7 @@ export type Database = {
           architecture?: string[];
           atmosphere?: string[];
           biome?: string | null;
+          biome_config?: Json | null;
           cinematic_phrases?: string[];
           created_at?: string;
           display_name?: string | null;
@@ -1417,6 +1420,8 @@ export type Database = {
           height: number | null;
           id: string;
           image_url: string;
+          image_url_hq: string | null;
+          image_url_hq_generated_at: string | null;
           is_active: boolean;
           is_ai_generated: boolean;
           is_approved: boolean | null;
@@ -1458,6 +1463,8 @@ export type Database = {
           height?: number | null;
           id?: string;
           image_url: string;
+          image_url_hq?: string | null;
+          image_url_hq_generated_at?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
           is_approved?: boolean | null;
@@ -1499,6 +1506,8 @@ export type Database = {
           height?: number | null;
           id?: string;
           image_url?: string;
+          image_url_hq?: string | null;
+          image_url_hq_generated_at?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
           is_approved?: boolean | null;
