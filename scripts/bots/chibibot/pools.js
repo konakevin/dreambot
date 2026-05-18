@@ -34,6 +34,8 @@ module.exports = {
 
   // Scene pools — heart of each path
   HEARTWARMING_ACTIVITIES: load('heartwarming_activities'),
+  // cute-food path (2026-05-17, bex.ai-inspired kawaii pop-mart food)
+  CUTE_FOOD_SCENES: (() => { try { return load('cute_food_scenes'); } catch { return []; } })(),
   COZY_MINIATURE_WORLDS: load('cozy_miniature_worlds'),
   PLUSHIE_SCENES: load('plushie_scenes'),
   PORTRAIT_FEATURES: load('portrait_features'),

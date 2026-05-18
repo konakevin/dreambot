@@ -44,6 +44,8 @@ const pathBuilders = {
   'night-meadow': require('./paths/night-meadow'),
   'sunny-pair': require('./paths/sunny-pair'),
   'cozy-interior': require('./paths/cozy-interior'),
+  // cute-food (2026-05-17, bex.ai-inspired kawaii pop-mart food)
+  'cute-food': require('./paths/cute-food'),
   // 6 village paths
   'cottagecore-village': require('./paths/cottagecore-village'),
   'aquatic-village': require('./paths/aquatic-village'),
@@ -70,6 +72,17 @@ module.exports = {
   mediumStyles: {
     chibibot_render: blocks.CHIBI_RENDER_MEDIUM,
     chibibot_pixar: blocks.CHIBI_PIXAR_MEDIUM,
+    chibibot_food: blocks.CHIBI_FOOD_MEDIUM,
+  },
+
+  // Per-path medium lock — cute-food gets its own bespoke medium directive
+  // (chibibot_food) where the FOOD is the cast (smiling faces ON the food
+  // itself, no human/chibi/creature characters in the frame). Same Pop-Mart
+  // glossy-pearlescent rendering as chibibot_render but food-centric, not
+  // character-centric — matches the bex.ai Instagram aesthetic.
+  // Other paths fall through to the bot.mediums 60/40 rotation above.
+  mediumByPath: {
+    'cute-food': 'chibibot_food',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -117,6 +130,8 @@ module.exports = {
     'night-meadow',
     'sunny-pair',
     'cozy-interior',
+    // cute-food
+    'cute-food',
     // 6 village
     'cottagecore-village',
     'aquatic-village',
@@ -146,6 +161,7 @@ module.exports = {
     'night-meadow': 1,
     'sunny-pair': 1,
     'cozy-interior': 1,
+    'cute-food': 2,
     'cottagecore-village': 1,
     'aquatic-village': 1,
     'arctic-village': 1,
@@ -218,6 +234,7 @@ module.exports = {
       'rainy-interior': 'scene',
       'fireplace-cabin': 'scene',
       'bookish-sanctuary': 'scene',
+      'cute-food': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
@@ -235,7 +252,9 @@ module.exports = {
     const result = builder({ sharedDNA, vibeDirective, vibeKey, picker });
     // chibibot_render: append the 1–3 character-count rule so renders
     // aren't all solo portraits. Pixar renders skip this entirely.
-    if (medium === 'chibibot_render') {
+    // EXCEPTION: cute-food path has "food IS the cast, no characters" —
+    // appending the character-count block would override that mandate.
+    if (medium === 'chibibot_render' && path !== 'cute-food') {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);
       if (result && typeof result.brief === 'string') return { ...result, brief: append(result.brief) };
