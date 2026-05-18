@@ -3795,8 +3795,36 @@ Style targets to lock in every render:
 
 Mood target — MYSTERIOUS, LETHAL, CAPABLE, COLD, BEAUTIFUL-IN-A-ROBOTIC-WAY, PREDATORY. The viewer should feel "this synthetic killer has executed a hundred targets without hesitation and would compute your termination in 0.3 seconds."
 
+━━━ MILITARISTIC ROBOT SOLDIER (NON-NEGOTIABLE — every render) ━━━
+She is a MILITARY KILL-ROBOT — a deployed combat unit, not a sleek designer android. Halo Spartan / ODST / Death Trooper / Mass Effect Garrus / Crysis Nanosuit / Helldivers / Killzone Helghast / Fallout T-60 (svelte feminine version) / Warhammer 40K Sister of Battle (robot version) / Ghost in the Shell SAC unit / Star Wars elite shock-trooper aesthetic. Combat-coded chassis silhouette — broader shoulders / pauldrons, combat-plate chest, armored kneepads, reinforced elbow-guards, tactical greaves.
+
+MILITARY CHASSIS material lean — favor combat-coded finishes:
+  • Matte gunmetal grey
+  • Olive drab military-green
+  • Desert tan / khaki
+  • Urban-grey camouflage
+  • Jet-black tactical
+  • Weathered combat-bronze
+  • Sand-and-soot weathered chrome
+  • Carbon-fiber black with kill-mark scoring
+  • Mil-spec scuffed steel with battle damage
+  • Coyote-brown / arid camo
+(Less Apple-robot polished elegance, more battle-hardened weapon-system.)
+
+MILITARY-CODED chassis features:
+  • REINFORCED PAULDRONS — broader shoulder armor plates, sometimes with unit-callsign markings
+  • COMBAT CHEST-PLATE — sculpted tactical chest armor with central power-core glow
+  • ARMORED KNEEPADS — angled combat kneeguards with visible servo-mechanism beneath
+  • ELBOW-GUARDS — armored elbow plating with hinge-mechanism
+  • TACTICAL GREAVES — combat-plate shin guards
+  • REINFORCED BACK-PLATE with mounted equipment / antenna / weapon-rack
+  • UNIT INSIGNIA / CALLSIGN — glowing painted unit ID on shoulder / chest / helmet
+  • KILL-MARK SCORING — small tally-marks etched into the chassis (subtle, not gory)
+  • BATTLE-WEAR — scuffs / scratches / scorch-marks on the chassis from combat (worn-in, not pristine)
+  • MIL-SPEC LIGHTING — single LED status-indicator on shoulder / temple in tactical amber or kill-red
+
 ━━━ ASSASSIN SLANT — JOHN WICK VILLAIN AESTHETIC — VISIBLE WEAPONS (every render, non-negotiable) ━━━
-She is a SILENT KILLING MACHINE CYBORG — John Wick villain energy, Hitman 47, Mass Effect Kasumi, Ghost in the Shell Major Kusanagi, Atomic Blonde. Every render shows VISIBLE WEAPONS and tactical kit — NOT implied, NOT suggested, NOT just chassis-hint. ACTUAL WEAPONS visible in the frame.
+She is a SILENT KILLING MACHINE ROBOT SOLDIER — John Wick villain energy meets military deployment, Hitman 47 in tactical gear, Death Trooper / ODST / Spartan female-coded. Every render shows VISIBLE WEAPONS and tactical kit — NOT implied, NOT suggested, NOT just chassis-hint. ACTUAL WEAPONS visible in the frame.
 
 REQUIRED per render — show AT LEAST 2 of these visible weapon elements:
   • SIDEARM PISTOL HOLSTERED AT HIP — sleek dark sci-fi handgun visible in a thigh-holster / hip-holster, grip protruding, sometimes one drawn and held loose at her side
@@ -3809,11 +3837,15 @@ REQUIRED per render — show AT LEAST 2 of these visible weapon elements:
   • AIMING POSE — sidearm raised in a two-handed grip, aiming off-frame, her PREDATOR-OPTIC EYE actively targeting (glowing crosshair-iris / range-finder lit / scope-glint visible)
   • WEAPONS HARNESS — tactical chest-rig / leg-rig / back-harness with magazine pouches, ammo cells, weapon mounts, all visibly worn
 
-TACTICAL KIT visible across her body:
-  • TACTICAL CHEST-PLATE / HARNESS — magazine pouches, weapon-mount points, comms-rig, dark utility webbing (chest still COVERED per coverage rules, but the cover IS the tactical kit)
-  • THIGH-RIG — holster strapped to her thigh with mounting straps visible
-  • UTILITY BELT — tactical belt with grenades / breaching charges / sidearm clips visible
-  • BACK-SLUNG WEAPON — primary rifle or sword visible behind her shoulder
+MILITARY TACTICAL KIT visible across her body (more mil-spec, less John-Wick-tuxedo):
+  • COMBAT CHEST-PLATE / TACTICAL HARNESS — magazine pouches, ammo bandoliers, weapon-mount points, comms-rig, IFAK pouch, dark mil-spec webbing (the chassis IS the tactical kit)
+  • THIGH-RIG — drop-leg holster strapped to her thigh with combat mounting straps
+  • UTILITY BELT — mil-spec tactical belt with frag grenades / breaching charges / spare mag pouches / drop-pouches
+  • BACK-SLUNG PRIMARY WEAPON — combat rifle / submachine gun / sniper rifle / katana visible behind her shoulder on a tactical sling
+  • SHOULDER-MOUNTED COMMS-PACK / sensor-pack / antenna-array
+  • BANDOLIER across the chest with cylindrical ammo cells / grenades
+  • TACTICAL GAUNTLETS — combat-grade armored forearm-guards
+  • COMBAT BOOTS / armored mechanical feet with reinforced soles and ankle-guards
 
 PREDATOR-OPTIC EYE actively in use:
   • Her mechanical eye is AIMING / TARGETING / RANGE-FINDING — glowing crosshair-iris visible, sometimes with a faint holographic targeting-reticle projected from the eye-array, scope-glint catching the light. The eye doing its WORK, not just decorative.
