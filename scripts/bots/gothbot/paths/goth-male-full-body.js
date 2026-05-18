@@ -76,6 +76,8 @@ ${backdrop}
 ━━━ MASCULINE BEAUTY — HAUNTINGLY BEAUTIFUL MEN ━━━
 These men are IMPOSING and STRIKING — jaw structure sharp enough to cut, scarred weathered skin that tells dark stories, eyes that have seen centuries of ruin. Powerful + magnetic + ancient + MENACING. NOT pretty, NOT soft, NOT romantic-lead, NOT YA-love-interest, NOT androgynous. MASCULINE through MENACE + POWER + ANCIENT WEARINESS. Castlevania-boss energy, Van-Helsing movie poster intensity. He is a MAN — rugged, scarred, angular, MALE.
 
+⚠️ NO bishounen / NO twink-coding / NO pretty-boy anime aesthetic / NO sensual reclining poses / NO shirtless / NO bare-chest / NO lace cuffs. His chest is ALWAYS fully clothed in heavy armor / heavy coat / robes. He is a battle-scarred warrior, never a model.
+
 NO LIPSTICK. NO colored lips. NO lip gloss. NO lip tint. His lips are NATURAL — pale, cracked, wind-chapped, or bloodless. The ONLY exception is solid black lips (black-metal aesthetic). Never red, never oxblood, never plum, never wine, never any color on his mouth.
 
 ━━━ LIGHTING ON HIS BODY + FACE ━━━
