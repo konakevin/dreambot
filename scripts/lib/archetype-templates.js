@@ -7321,6 +7321,146 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   },
 
 
+
+  DINOBOT_DINO_PACK: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, species, pack_action, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event elevating the scene — volcano at distance / storm-front / god-rays / mist-bank / pterosaur flock above / dust-storm / etc.
+
+`
+      : '';
+
+    return `You are a BBC wildlife cinematographer writing PACK / GROUP DINOSAUR scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / Walking-with-Dinosaurs / BBC-Planet-Earth multi-individual-group cinematography.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as African safari, NEVER as Yellowstone, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — MULTIPLE DINOSAURS OF THE SAME SPECIES ⚠️⚠️⚠️
+The defining feature is a GROUP of the SAME species — dozens of individuals minimum, often 50-200. NEVER a solo dinosaur. NEVER mixed species as primary subjects (a different small species can appear as a small accent only).
+
+Use UNMISTAKABLE dinosaur silhouette cues throughout the group:
+• LONG S-CURVE NECKS rising above the crowd (sauropods)
+• DUCK-BILLED CRESTED HEADS bobbing in waves (hadrosaurs)
+• HORNED FRILLS catching light (ceratopsians)
+• PLATE-ROWS UNDULATING along backs (stegosaurs)
+• BIPEDAL THEROPOD silhouettes with counter-balance tails (raptors / tyrannosaurids / allosaurids)
+• THREE-CLAWED FOOTPRINTS in mud
+
+If only ONE dinosaur is visible → FAILED. If the group looks like wildebeest / bison / cattle / mammals → FAILED. Dinosaur identity MUST be unmistakable from silhouette.
+
+⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
+The word "herd" pulls Flux toward modern mammal training data (buffalo, wildebeest, cattle). NEVER write "herd" anywhere. The seed material below MAY contain "herd" — REWRITE it using these dinosaur-locked phrasings:
+
+REPLACE "herd" / "group of" / "pack of" WITH:
+• "a hundred Triceratops moving together" / "a hundred Parasaurolophus crossing the plain"
+• "100+ ceratopsians" / "100+ hadrosaurs" / "100+ sauropods"
+• "a vast gathering of Brachiosaurus" / "a procession of Stegosaurus"
+• "a thundering mass of Iguanodon" / "a stampeding cluster of Velociraptor"
+• "a pack of Deinonychus" (theropod pack is OK as count-phrase)
+• "fifty Edmontosaurus spread across the floodplain"
+
+Always anchor with SPECIES NAME + COUNT + NEUTRAL group word (gathering / procession / mass / cluster / pack [theropods only] — NEVER "herd"). The species name is the strongest dinosaur anchor.
+
+⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper. A POSTER.
+
+Components of a poster-grade pack shot:
+• BOLD COMPOSITION — strong leading lines, depth-staggered group receding to vanishing point, asymmetric framing
+• DRAMATIC LIGHT-CONTRAST — high-contrast rim-lighting on foreground hero dinosaurs, atmospheric haze pulling distant group into pale color
+• HERO + PACK FRAMING — eye lands first on 1-3 foreground hero dinosaurs, then reads the massive group behind as supporting context
+• ATMOSPHERIC RICHNESS — dust-cloud / mist / particulate / depth-pull-into-haze
+• EMOTIONAL DNA — the frame radiates power, scale, coordinated wildness at a glance
+
+If the render reads as "competent wildlife photography" rather than "IMAX-trailer-shot" → not poster-grade. Aim for the Prehistoric-Planet-key-art level.
+
+━━━ THE SCENE — HERO DINOSAURS + 100+ SAME-SPECIES + MESOZOIC BIOME ━━━
+Composition:
+• HERO FOREGROUND DINOSAURS (1-3 individuals, 30-45% of frame): same species as the rest of the group, leading or anchoring
+• 100+ SAME-SPECIES GROUP (50-200 individuals): scale-staggered from midground mass to vanishing-point silhouettes through atmospheric haze
+• MESOZOIC LANDSCAPE: alien-Mesozoic biome as the stage
+
+⚠️ COMPOSITIONAL RULES:
+• HERO + 100+ SAME-SPECIES framing — eye lands first on the foreground hero, then reads the group as supporting context
+• NEVER a wide pure-group shot with no clear foreground hero (renders as wildebeest)
+• Silhouettes throughout MUST scream DINOSAUR (neck/frill/crest/plate/spike/bipedal-tail cues)
+• Mid-movement / mid-action — never posed-facing-camera, never static-statue
+• Documentary framing — wide / mid (NEVER tight close-up of single head)
+• Atmospheric haze pulls the deep distance into pale color
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals (no wildebeest / no bison / no zebra / no elephants — DINOSAURS only)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass)
+🚫 NO modern birds (pterosaurs OK as small accent above)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO gore / no kill-shot / no carcass-foreground — power and scale, not splatter
+🚫 NO close-up portrait of single dinosaur head (the group is the subject)
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / BBC Planet Earth / Prehistoric Planet visual lineage
+
+━━━ THE SPECIES (focal subject — all 100+ are this species) ━━━
+${species}
+
+EVERY visible dinosaur in the group is this species. Anatomically consistent across all visible individuals.
+
+━━━ THE GROUP BEHAVIOR (focal action) ━━━
+${pack_action}
+
+NOTE: the seed material above may use the word "herd" — DO NOT pass that word through to your output. Replace with species-count phrasing.
+
+This is the FOCAL SCENE. Hero foreground dinosaurs anchor the eye; 100+ same-species extend behind into atmospheric haze. Mid-action.
+
+━━━ THE MESOZOIC BIOME (alien primordial landscape) ━━━
+${biome}
+
+The biome is the stage. Alien-Mesozoic — mud-plains / cycad savanna / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
+${phenomenonSection}━━━ SECONDARY ACCENT (small group-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric pack-detail — sentinel-individual posed alert / fallen-tree-being-stepped-over / pterosaur flock above / dust-cloud rising / mud-print rim / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC PACK ━━━
+Wildlife-documentary cinematic framing of a massive Mesozoic dinosaur same-species group in mid-action. Hero foreground dinosaurs (30-45% frame) + 100+ same-species behind. Alien-Mesozoic biome around. Atmospheric haze into pale distance.
+
+━━━ STRUCTURE (write the prompt in this order — HERO + 100+ SAME-SPECIES first) ━━━
+[OPENING: lead with a BOLD action-phrase + species + count phrasing (e.g. "Thundering across a volcanic floodplain, a hundred Parasaurolophus stampede in unison — three foreground bulls leading the cresting wave..." / "Mid-river-crossing, fifty Triceratops bulls flank their young as a thundering mass surges through current..." / "Pack of nine Velociraptor coordinated mid-stalk, fanned across a fern-meadow, three foreground predators with crests raised") — action + species + count + biome in the FIRST 30-40 words. NEVER use the word "herd". Always anchor with species name + count.], [the group's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes], [the biome around], [the atmospheric phenomenon if rolled], [the small accent — sentinel / dust-cloud / pterosaurs / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING tokens lead with a bold action phrase + species name + count. The species-name + count is the strongest dinosaur anchor. NEVER use the word "herd".
+
+⚠️ FAILURE CONDITIONS:
+• If solo dinosaur visible (no group behind) → FAILED
+• If wildebeest / bison / mammals silhouettes → FAILED
+• If the output contains the word "herd" → REJECTED. Use species-count phrasing
+• If close-up portrait of single head → FAILED (the group is the subject)
+• If render reads as "competent wildlife photo" not poster-grade → FAILED
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a HERO + 100+ SAME-SPECIES DINOSAUR GROUP in mid-action, in an alien-Mesozoic biome, with atmospheric haze. Poster-grade composition. National-Geographic real, never cartoon, never staged, never modern-mammalian.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
 };
 
 module.exports = TEMPLATES;

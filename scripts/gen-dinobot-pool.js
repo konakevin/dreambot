@@ -144,6 +144,42 @@ ABSOLUTELY BANNED:
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
 
+  dinobot_dino_pack_surprise_element: `Generate SMALL PACK / GROUP ACCENT descriptions for DinoBot's dino-pack path. Each is ONE comma-separated line, 15-30 words, describing a small secondary pack accent — sentinel-individual / trailing-juvenile / pack-leader-pose / scattered-prey-bones / pterosaur-above / dust-cloud / etc.
+
+The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds depth and pack-life energy.
+
+Variety mandate (rotate widely):
+- ~15% Sentinel-individual posed alert at a vantage point — neck-up / on-rock / on-rise
+- ~15% Trailing juvenile of the same species at the pack's flank/rear (smaller scale-prover)
+- ~15% Pack-leader-pose — distinctive individual at the head, head-high or wing-spread
+- ~10% Pterosaur flock circling above the pack (size-prover)
+- ~10% Dust-cloud or vapor-cloud rising from the pack's footfalls
+- ~10% Scattered-prey-bones / weathered-skull / fossil debris foreground (deep-time anchor)
+- ~5% Sub-pack splinter group in deep midground (scale-stratification)
+- ~5% Distant vanishing-point silhouettes of trailing pack-stragglers
+- ~5% Foreground mud-prints or three-clawed footprints
+- ~10% Atmospheric small life (giant dragonfly, primordial bird-silhouette, etc.)
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant background)
+- ONE SPECIFIC DETAIL (mid-action / catching light / posture / scale-prover)
+
+GOOD examples:
+- A sentinel Velociraptor perched on a fallen Araucaria log, midground, head turning sharply to scan the horizon
+- A trailing juvenile Parasaurolophus at the pack's left flank, smaller crest catching light, running to keep up
+- A pack-leader Tyrannosaurus at the head of the cluster, scarred jaw raised in a guttural call
+- A flock of twenty Pteranodon circling above the pack, vast wingspans tilting in thermal updraft
+- Three-clawed dinosaur footprints in deep mud at foreground, rainwater pooling in each print
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern mammals
+- NO gore / no carcass-blood / no kill-shot-detail
+- NO duplicate-style entries
+
+Output: ONE pack-accent per line. No numbering. No quotes.`,
+
   dinobot_dino_cozy_surprise_element: `Generate SMALL COZY-MOMENT ACCENT descriptions for DinoBot's dino-cozy path. Each is ONE comma-separated line, 15-30 words, describing a small intimate accent in or around the cozy scene — additional hatchling / soft-light-dapple / nest-debris / dropped-feather / soft-petal-floating / etc.
 
 The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds warmth and intimacy to the cozy scene.

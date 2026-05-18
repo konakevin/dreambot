@@ -1,72 +1,36 @@
 /**
- * DinoBot dino-pack — herds, flocks, pods, packs. Multi-animal compositions
- * at wildlife-documentary scale. BBC Planet Earth energy.
+ * DinoBot dino-pack — declarative composer form (2026-05-17 migration).
+ *
+ * MULTI-DINOSAUR same-species GROUP behaviors — pack-hunting / waterhole-
+ * gathering / river-crossing / nesting-colony / migration-cluster /
+ * defensive-formation. Dozens-to-hundreds of the same species.
+ * Wildlife-documentary group-life cinematography.
+ *
+ * Reuses 3 existing production-scale pools:
+ *   - DINO_SPECIES (200 dinosaur species)
+ *   - PACK_DINO_ACTIONS (200 fat-seed group behaviors)
+ *   - DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome)
+ *   - DINOBOT_PALEO_LANDSCAPE_PHENOMENON (100 atmospheric events, 80%-gated)
+ *
+ * Adds 1 new path-bespoke pool:
+ *   - DINOBOT_DINO_PACK_SURPRISE_ELEMENT (pack-specific accents)
+ *
+ * Universal: LIGHTING + PREHISTORIC_ATMOSPHERES.
+ *
+ * Template bans the word "herd" + enforces poster-quality framing
+ * + species-anchored count phrasing (same lessons as herd-migration R2
+ * and cozy R2).
+ *
+ * Pre-migration function-form at paths/legacy/dino-pack.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const species = picker.pickWithRecency(pools.DINO_SPECIES, 'dino_species');
-  const action = picker.pickWithRecency(pools.PACK_DINO_ACTIONS, 'pack_dino_action');
-  const setting = picker.pickWithRecency(pools.PREHISTORIC_SETTINGS, 'prehistoric_setting');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
-
-  return `You are a BBC wildlife cinematographer writing PACK/HERD scenes for DinoBot. Massive groups of a single species moving, hunting, nesting, or migrating together. The scale is the story — dozens to hundreds of this species, stretching across the landscape. Output wraps with style prefix + suffix.
-
-${blocks.NO_HUMANS_BLOCK}
-
-CRITICAL: READ the species below. The scene shows a GROUP of THIS species — multiple individuals of the SAME kind. Render their species-accurate anatomy across every visible animal.
-
-${blocks.DINOSAUR_IS_HERO_BLOCK}
-
-${blocks.SPECIES_ACCURATE_BLOCK}
-${blocks.SCALE_AND_ATMOSPHERE_BLOCK}
-
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE SPECIES ━━━
-${species}
-
-━━━ THE GROUP BEHAVIOR ━━━
-${action}
-
-━━━ SETTING ━━━
-${setting}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.VOLUMETRIC_LIGHT_BLOCK}
-
-${blocks.WET_WORLD_BLOCK}
-${blocks.EPIC_SCALE_BLOCK}
-
-${blocks.VAST_TERRAIN_BLOCK}
-
-${blocks.SURPRISING_WEATHER_BLOCK}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ CAMERA / FRAMING ━━━
-${camera}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Wide epic frame. Multiple individuals at multiple distances from foreground to horizon. The herd/pack/flock DOMINATES the frame. The prehistoric landscape is lush and alive around them. Scale is everything.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DINOBOT_DINO_PACK',
+  pools: {
+    biome: 'DINOBOT_PALEO_LANDSCAPE_BIOME',
+    species: 'DINO_SPECIES',
+    pack_action: 'PACK_DINO_ACTIONS',
+    surprise_element: 'DINOBOT_DINO_PACK_SURPRISE_ELEMENT',
+    phenomenon: 'DINOBOT_PALEO_LANDSCAPE_PHENOMENON',
+  },
 };

@@ -1123,6 +1123,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_DINO_PACK: {
+    description:
+      'PATH-BESPOKE — DinoBot dino-pack path (2026-05-17 axis-system migration). MULTI-DINOSAUR group behaviors — pack-hunting / waterhole-gathering / river-crossing / nesting-colony / migration-cluster / defensive-formation. Same-species groups of dozens-to-hundreds. Wildlife-documentary group-life cinematography. Reuses DINO_SPECIES (200 dinosaur species) + PACK_DINO_ACTIONS (200 fat-seed group behaviors) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for pack-specific small accents (lookout-sentinel / scattered-prey-bones / pack-leader-pose / etc.). 4 path-bespoke axes (biome / species / pack_action / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'species', 'pack_action', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 };
 
 module.exports = { ARCHETYPES };
