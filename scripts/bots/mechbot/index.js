@@ -124,7 +124,7 @@ module.exports = {
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
-    'cyborg-female-assassin': 'gender-neutral robotic killer-droid, fully mechanical assassin chassis (NOT a cyborg, NOT human flesh, NO female silhouette), genderless military combat unit',
+    'cyborg-female-assassin': 'sleek predatory cyber-assassin, lethal capable killer with cinematic poise, dramatic atmospheric rim-light',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -274,15 +274,18 @@ module.exports = {
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
     if (path === 'cyborg-female-assassin') {
-      // 2026-05-17: gender-neutral killer-droid path — explicitly do NOT use
-      // female cyborg DNA. Per Kevin: "no boobs." Genderless tactical chassis,
-      // no female silhouette. The template ignores characterBase/bodyType/hair
-      // and renders combat droid based on its own mandates.
-      base.characterBase = 'Combat-engineered killer droid — military assassination unit, no gender, no human silhouette';
+      // 2026-05-17: predatory cyber-assassin path — spans chassis spectrum from
+      // pure-droid (Terminator/Cylon/Death Trooper) through sleek femme-cyborg
+      // (Major Motoko/Alita) to painterly humanoid cyber-killer (replicant/Ava).
+      // DNA flows through normally; the template's chassis-spectrum guidance
+      // tells Sonnet which register fits the scene. Throughline is lethal
+      // capability + visible weapons + atmospheric backdrop, NOT a single
+      // chassis archetype.
+      base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
-      base.bodyType = 'Combat-engineered utilitarian chassis silhouette — broad armored shoulders, FLAT tactical chest-plate (NO breast curvature, NO bust line, NO feminine waist), reinforced kneepads / elbow-guards / tactical greaves, articulated combat limbs. T-800 endoskeleton with armor over it. NOT female, NOT male — genderless military combat unit.';
+      base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
-      base.hair = 'No hair — fully helmeted combat head OR exposed cranial mechanism OR sleek chrome skull-dome';
+      base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
