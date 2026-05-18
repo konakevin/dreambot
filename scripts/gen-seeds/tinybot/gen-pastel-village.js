@@ -2,13 +2,13 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/tinybot/seeds/pastel_village.json',
-  total: 50,
+  total: 200,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} BEX.AI-AESTHETIC PASTEL VILLAGE scene descriptions for TinyBot — handmade-resin-diorama-scale fairytale architectures in soft pink / lavender / magenta / lilac / pearl-white palettes with warm-golden window-glow contrast. "Soft little world to escape into" — Instagram bex.ai dreamy-pastel-cottagecore aesthetic.
+  metaPrompt: (n) => `You are writing ${n} PASTEL FAIRY-TALE VILLAGE scene descriptions for TinyBot — handmade-resin-diorama-scale fairytale architectures in soft pink / lavender / magenta / lilac / pearl-white palettes with warm-golden window-glow contrast. Dreamy pastel-cottagecore aesthetic — a soft little world to escape into.
 
 Each entry: 20-35 words. ONE specific pastel-fairytale scene with cherry-blossom-coded setting + golden-window-glow contrast + architectural fairy-tale hero.
 
-━━━ THE BEX.AI VISUAL DNA (ALL ENTRIES) ━━━
+━━━ THE PASTEL-VILLAGE VISUAL DNA (ALL ENTRIES) ━━━
 • COLOR LOCK — soft pink / blush / dusty rose / lavender / lilac / magenta / mauve / periwinkle / pearl-white. NEVER browns. NEVER grass-green dominating. NEVER blue sky. Warm GOLDEN window-glow is the focal contrast.
 • ARCHITECTURE — fairy-tale cottages, turreted spires, conical-roofed mushroom-houses, lavender treehouse-tiers, painted pastel shingles, stained-glass-style golden windows, wraparound balconies. Hand-modeled diorama feel — like resin-cast handmade miniatures.
 • SETTING — cherry blossom groves with falling petals, floating cloud-islands, soft moss banks, pastel mist, dreamy bokeh background, sparkle particulate, twilight / dusk / golden-hour timing.

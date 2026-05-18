@@ -4,10 +4,10 @@ const blocks = require('../shared-blocks');
 module.exports = ({ sharedDNA, vibeDirective, picker }) => {
   const scene = picker.pickWithRecency(pools.PASTEL_VILLAGE, 'pastel_village');
   const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-  const includeCreature = Math.random() < 0.4;
+  const includeCreature = Math.random() < 0.55;
   const creature = includeCreature ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature') : null;
 
-  return `You are a master diorama-artist writing BEX.AI-CODED PASTEL VILLAGE scenes for TinyBot. Handmade-resin-diorama-scale fairy-tale architectures in soft PINK / LAVENDER / MAGENTA / LILAC / PEARL-WHITE palette with WARM-GOLDEN WINDOW-GLOW as the focal contrast. "Soft little world to escape into" — dreamy snow-globe Instagram bex.ai pastel-cottagecore aesthetic. Output wraps with style prefix + suffix.
+  return `You are a master diorama-artist writing PASTEL FAIRY-TALE VILLAGE scenes for TinyBot. Handmade-resin-diorama-scale fairy-tale architectures in soft PINK / LAVENDER / MAGENTA / LILAC / PEARL-WHITE palette with WARM-GOLDEN WINDOW-GLOW as the focal contrast. Dreamy snow-globe pastel-cottagecore aesthetic — a soft little world to escape into. Output wraps with style prefix + suffix.
 
 ⚠️⚠️⚠️⚠️⚠️ ABSOLUTE WHOLE-FRAME PASTEL-BATH MANDATE ⚠️⚠️⚠️⚠️⚠️
 EVERY PIXEL of the frame is tinted soft-pink / lavender / lilac / magenta / pearl-white. NOT just the architecture — the SKY, the GROUND, the FOREGROUND, the BACKGROUND BOKEH, the AMBIENT AIR are ALL bathed in the pastel-pink atmospheric wash.
@@ -34,7 +34,7 @@ This is a handmade resin diorama — glossy painted-with-affection finish, hand-
 ⚠️⚠️⚠️ DREAMY BOKEH BACKGROUND — PINK SATURATED TO THE EDGES ⚠️⚠️⚠️
 The background is ALWAYS dreamy-soft-bokeh, but the bokeh is PINK / LAVENDER / MAGENTA SATURATED TO THE FRAME EDGES. NEVER grey bokeh. NEVER dark bokeh. NEVER green-forest bokeh. NEVER blue-sky bokeh. The architecture is the hero; the world dissolves into pink-pastel bokeh around it.
 
-⚠️ CHERRY BLOSSOM CODED — EVERY render includes cherry blossoms heavily — falling petals filling the air, blossoming branches framing the architecture in the foreground (50%+ of foreground edge has blossom branches), pink atmospheric tint from the petal-cloud. The "cherry blossom + warm window + magical bokeh" combo is the bex.ai signature. If no cherry blossoms visible, the render has FAILED.
+⚠️ CHERRY BLOSSOM CODED — EVERY render includes cherry blossoms heavily — falling petals filling the air, blossoming branches framing the architecture in the foreground (50%+ of foreground edge has blossom branches), pink atmospheric tint from the petal-cloud. The "cherry blossom + warm window + magical bokeh" combo is the signature. If no cherry blossoms visible, the render has FAILED.
 
 ${blocks.NO_HUMANS_BLOCK}
 

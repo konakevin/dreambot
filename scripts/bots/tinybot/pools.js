@@ -44,6 +44,8 @@ module.exports = {
   BORROWERS_SCENES: load('borrowers_scenes'),
   MUSHROOM_VILLAGE: load('mushroom_village'),
   PASTEL_VILLAGE: load('pastel_village'),
+  ENCHANTED_VILLAGE: load('enchanted_village'),
+  TINY_BEACH: load('tiny_beach'),
   TINY_FOOD_WORLD: load('tiny_food_world'),
   TINY_VEHICLES: load('tiny_vehicles'),
   TILT_SHIFT_LIGHTING: load('tilt_shift_lighting'),
