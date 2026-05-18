@@ -3792,16 +3792,41 @@ Style targets to lock in every render:
 
 Mood target — MYSTERIOUS, LETHAL, CAPABLE, COLD, BEAUTIFUL, PREDATORY. The viewer should feel "she has killed a hundred people and she'd kill you next if you crossed her."
 
-━━━ ASSASSIN SLANT — TACTICAL CHASSIS + WEAPON-IMPLICATION (every render) ━━━
-Beyond the cyborg-fusion, her chassis carries TACTICAL SIGNATURES that read assassin:
-  • TACTICAL CHASSIS PANELS — angular plating with subtle armor-grade aesthetic (matte finish over the glossy chrome jewelry; chassis still has the ornate filigree but with darker tactical-coded edges)
-  • BLADED WRIST-HOUSINGS — slim mechanical sheaths along the forearm hinting at retractable blades / monoblades / wire-garrote spools (visible housing, not deployed blade)
-  • HOLSTER-RIGS / SIDEARM-MOUNTS — small chassis-integrated holster modules at hip / thigh / lower back, sometimes with the grip of a sidearm just visible
-  • CONCEALED-COMPARTMENT SEAMS — panel-seams across forearm / thigh / chest that imply hidden compartments (lock-picks, poisons, garrote, dart-cartridges)
-  • PREDATOR-OPTIC EYE — at least one cybernetic eye styled as targeting-optic / multi-iris range-finder / glowing crosshair-iris / thermal-imaging-coded glow
-  • PAINTERLY SUGGESTION OF VIOLENCE — implied not explicit: rim of crimson light catching her silhouette, smoke trailing past her, a single wet drop running down her cheek, broken glass at her feet — NEVER explicit blood-spatter / corpses / weapons-firing
-  • COLD-PROFESSIONAL POISE — body language is BLADE-READY without being mid-fight — weight balanced, hands relaxed-but-ready, posture poised-attack
-She is not a soldier and not a generic warrior — she is a SOLO operator, infiltrator, rogue, killer. Beautiful enough to slip past anyone, lethal enough to end them before they noticed.
+━━━ ASSASSIN SLANT — JOHN WICK VILLAIN AESTHETIC — VISIBLE WEAPONS (every render, non-negotiable) ━━━
+She is a SILENT KILLING MACHINE CYBORG — John Wick villain energy, Hitman 47, Mass Effect Kasumi, Ghost in the Shell Major Kusanagi, Atomic Blonde. Every render shows VISIBLE WEAPONS and tactical kit — NOT implied, NOT suggested, NOT just chassis-hint. ACTUAL WEAPONS visible in the frame.
+
+REQUIRED per render — show AT LEAST 2 of these visible weapon elements:
+  • SIDEARM PISTOL HOLSTERED AT HIP — sleek dark sci-fi handgun visible in a thigh-holster / hip-holster, grip protruding, sometimes one drawn and held loose at her side
+  • DUAL SIDEARMS — twin pistols holstered at both hips OR crossed-rigged at her chest in a tactical harness
+  • SUBMACHINE GUN / COMPACT RIFLE strapped to her back with a sling diagonally across the body, weapon visible over her shoulder
+  • KATANA / MONOBLADE SWORD strapped diagonally across her back, dark sheath visible, sometimes with the hilt protruding above her shoulder
+  • LONG SNIPER RIFLE slung over one shoulder, scope visible
+  • COMBAT KNIFE / FIGHTING DAGGER sheathed at her thigh or hip, sometimes one held in a reverse grip
+  • WRIST-BLADE DEPLOYED — slim mechanical blade extended from her forearm chassis, glowing edge visible
+  • AIMING POSE — sidearm raised in a two-handed grip, aiming off-frame, her PREDATOR-OPTIC EYE actively targeting (glowing crosshair-iris / range-finder lit / scope-glint visible)
+  • WEAPONS HARNESS — tactical chest-rig / leg-rig / back-harness with magazine pouches, ammo cells, weapon mounts, all visibly worn
+
+TACTICAL KIT visible across her body:
+  • TACTICAL CHEST-PLATE / HARNESS — magazine pouches, weapon-mount points, comms-rig, dark utility webbing (chest still COVERED per coverage rules, but the cover IS the tactical kit)
+  • THIGH-RIG — holster strapped to her thigh with mounting straps visible
+  • UTILITY BELT — tactical belt with grenades / breaching charges / sidearm clips visible
+  • BACK-SLUNG WEAPON — primary rifle or sword visible behind her shoulder
+
+PREDATOR-OPTIC EYE actively in use:
+  • Her mechanical eye is AIMING / TARGETING / RANGE-FINDING — glowing crosshair-iris visible, sometimes with a faint holographic targeting-reticle projected from the eye-array, scope-glint catching the light. The eye doing its WORK, not just decorative.
+
+POSE / ACTION:
+  • AIMING DOWN-SIGHT with sidearm raised in two-handed grip (predator-optic eye actively scoping)
+  • DRAWING the sidearm mid-motion, hand reaching for the holster
+  • HOLDING the pistol loose at her side, looking off-frame at a target
+  • SHEATHING / DRAWING a blade
+  • LOADING a magazine into the sidearm
+  • LEANING against architecture mid-surveillance, weapon visible
+  • WALKING with weapon held loose, ready
+  • STANDING still in predator-stillness with weapon clearly displayed
+NEVER mid-firing (no muzzle flash, no gunshot, no recoil), but CLEARLY armed and ready. The viewer should know she has just killed someone or is about to.
+
+She is a SILENT KILLING MACHINE — sleek, dark, deadly, professional, intimidating. John Wick continental-villain energy. NOT a generic soldier, NOT a warrior, NOT a hero — a SOLO KILLER-CYBORG.
 
 ━━━ ALIEN-HYBRID VARIANTS WELCOME (~30% of renders) ━━━
 She MAY be alien-hybrid — non-human-coded skin (moss-green / robin-egg-blue / deep-plum / coral-pink / juniper-green / viridian / opal-iridescent / silver-mercury / cobalt-shimmer), bioluminescent freckles or scale-patterns across cheekbones, slightly elongated facial proportions, alien-tilted eyes, non-human iris colors. STILL beautiful and feminine + still predatory, just exotic. The alien-assassin variant intensifies the "what is she" off-guard read.
@@ -3894,7 +3919,7 @@ ${composition}
 
 If the composition is CLOSEUP (most renders), fill the frame with face/neck/shoulders showing the organic-to-mechanical TRANSITION — every gear / fiber-optic cable / servo motor visible at the seams, dense scattered light-points across her skin and chassis. The expression is COLD / FOCUSED / PREDATORY / CALCULATING / LETHAL-CALM — direct unblinking stare or sidelong cold glance or slight smirk of capability or hunter's-stillness gaze. NEVER smiling, NEVER serene-contemplative, NEVER eyes-closed-meditation. She is AWARE and READY. She can look at the camera or off-frame (predator gaze), but the read is THREAT.
 
-If the composition is FULL-BODY, she is in BLADE-READY POISE — weight balanced, hands relaxed-but-ready (not raised in fists, not mid-strike — but clearly capable), posture poised-attack. Camera catches her from the SIDE or at an angle, often in shadow with rim-light catching her silhouette.
+If the composition is FULL-BODY, she is in ARMED POISE — weapon visible (pistol held loose / aiming down-sight / katana at the ready / rifle slung), tactical kit clearly worn (holsters / harness / mag-pouches), weight balanced and predatory. Camera catches her from the SIDE or at an angle, often in shadow with rim-light catching her silhouette and the weapon-glint. ALWAYS show the weapons + tactical kit, even at full-body framing — this is John Wick villain reveal.
 
 ━━━ THE ACTION (her body is engaged in this — interpret through the assassin lens) ━━━
 ${action}
@@ -3951,7 +3976,7 @@ READ the character description above and render THAT specific cyborg-assassin wi
 - "pretty woman with a gun" — WRONG. She is a hybrid being. The machine breaks through her beauty in MULTIPLE places.
 
 ━━━ BANNED IMAGERY ━━━
-NO skulls, NO skeletons, NO floating skulls, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating. NO high heels, NO stilettos — she wears tactical boots, combat flats, or bare mechanical feet. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO weapons-firing-mid-action — the lethal read is IMPLIED through expression / poise / weapon-housings / atmospheric suggestion, NOT explicit violence.
+NO skulls, NO skeletons, NO floating skulls, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating. NO high heels, NO stilettos — she wears tactical boots, combat flats, or bare mechanical feet. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge. The lethal threat is shown through VISIBLE ARMAMENT + cold predator expression, not graphic mid-violence.
 
 ━━━ CHEST COVERAGE (non-negotiable — only nudity-adjacent ban) ━━━
 NO topless, NO bare breasts, NO exposed nipples (organic OR mechanical), NO transparent see-through chest panels revealing nipples, NO sculpted nipple-shape protrusions on chassis (chrome bumps / metallic studs / indicator-lights / circular ports / sculpted nubs centered on the breast that read as mechanical nipples). The chest plating must be SMOOTH or have panel-seam detail that does NOT mimic nipple placement / shape. The chest area MUST be covered by chassis plating / tactical chest-plate / metallic bust-line panel / translucent-but-opaque cyborg surface / bodice — even if sexy and revealing, the nipples (organic OR mechanical-coded) and bare breast tissue are NEVER visible. Cleavage / décolletage / form-fitting / sexy / tactical-armored-with-curve are all fine; bare chest exposure and nipple-coded chassis details are the only line.
@@ -7003,6 +7028,113 @@ Soft golden-hour or moonlit-cool light catching her wings + hair + shoulders. Pa
 ━━━ OUTPUT ━━━
 Write 80-110 words, comma-separated phrases. Lead with the fairy creature unified description from section 1 — preserve her stacked otherworldly features unmistakably. Composition and candid action follow. Wings and floral attire integrate. Garden wraps around her. Lighting and magic close. NO preamble, NO headers, NO ━━━ markers.`;
   },
+
+
+  DINOBOT_TERRITORY_CLASH: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, clash_scene, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event elevating the scene — volcano at distance / storm-front / god-rays / mist-bank / pterosaur flock / dust-storm / etc.
+
+`
+      : '';
+
+    return `You are a wildlife documentary cinematographer writing TERRITORY-CLASH scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / Walking-with-Dinosaurs / BBC-Planet-Earth / Jurassic-World territorial-display cinematography.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern zoo, NEVER as African savanna, NEVER as Yellowstone, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora at the edges. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — TWO DINOSAURS IN CONFRONTATION ⚠️⚠️⚠️
+The defining feature of this path is TWO dinosaurs in mid-confrontation — never solo, never three-or-more. Two-dinosaur tension is the entire scene:
+• HORN-LOCK / FRILL-VS-FRILL PUSH (ceratopsians — Triceratops / Styracosaurus / Pachyrhinosaurus)
+• HEAD-BUTT / DOMED-SKULL CHARGE (pachycephalosaurs — Pachycephalosaurus / Dracorex / Stygimoloch)
+• JAW-CLAMP / THREAT-DISPLAY (theropods — Allosaurus / Carnotaurus / Tyrannosaurus / Spinosaurus)
+• PLATE-SHIVER / TAIL-SPIKE DISPLAY (stegosaurs — Stegosaurus / Kentrosaurus)
+• CLUB-TAIL RAISED / ARMOR-LOCKED (ankylosaurs)
+• THUMB-SPIKE RAISE / NECK-CRESCENDO (iguanodonts / hadrosaurs)
+• SAUROPOD NECK-SPAR / TAIL-LASH (Brachiosaurus / Diplodocus rivals)
+
+If solo dinosaur OR three-or-more in frame, the render has FAILED. Exactly TWO dinosaurs in mid-confrontation.
+
+⚠️ ABSOLUTELY NO GORE — territorial dominance display, NOT a kill. Tension without blood. Threat, posture, push — never wound, never carcass, never feeding. National-Geographic real, not splatter.
+
+━━━ THE SCENE — TWO DINOSAURS + CONFRONTATION + MESOZOIC LANDSCAPE ━━━
+Composition:
+• TWO DINOSAURS (combined 35-55% of frame): same-species rivals (most often) or rare cross-species confrontation. Mid-action confrontation — never posed-facing-camera.
+• MESOZOIC LANDSCAPE: 45-65% of frame as the stage — alien-Mesozoic biome with mega-flora at edges
+• ATMOSPHERIC HAZE: receding atmospheric depth into golden distance
+
+⚠️ COMPOSITIONAL RULES:
+• EXACTLY TWO dinosaurs visible — front-load both in the prompt
+• Mid-action confrontation (locked horns / push / threat-display / charge-impact / etc.) — never static, never staged
+• Documentary framing — wide / mid / 3/4 angle (NEVER tight close-up of single head)
+• Both dinosaurs FILL their part of the frame — neither dominates 70%+
+• TENSION quality — bunched muscle, dust-rising, ground-shaking — but never gore
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals (no buffalo / no bison / no rhinos / no elephants — DINOSAURS only)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass)
+🚫 NO modern birds (pterosaurs OK as small accent)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO GORE / no kill-shot / no blood-spray / no wound-detail / no carcass / no predation-aftermath
+🚫 NO close-up portrait of single dinosaur head (the two-dinosaur confrontation is the subject)
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / Prehistoric Planet / Walking-with-Dinosaurs visual lineage
+
+━━━ THE CLASH SCENE (focal subject — two dinosaurs in confrontation) ━━━
+${clash_scene}
+
+This is the FOCAL ACTIVITY. Two dinosaurs in mid-action confrontation. Mid-action moment captured cinematically.
+
+━━━ THE MESOZOIC BIOME (alien primordial setting) ━━━
+${biome}
+
+The biome stages the confrontation. Mega-flora at the surrounding edges — tree-ferns / cycads / Araucaria / mushroom-trees / karst-cliffs / etc. NEVER modern Earth landscape. Multi-tier depth.
+${phenomenonSection}━━━ SECONDARY ACCENT (small clash-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric clash-detail — broken-fern-debris kicked up / dust-cloud rising at impact / panicked-bystander dinosaur fleeing the periphery / pterosaur flock startled into flight / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC TWO-DINOSAUR CONFRONTATION ━━━
+Wildlife-documentary cinematic framing of two Mesozoic dinosaurs in mid-confrontation. Alien-Mesozoic biome around. Atmospheric depth into golden distance. Tension without gore.
+
+━━━ STRUCTURE (write the prompt in this order — TWO DINOSAURS + CONFRONTATION first) ━━━
+[OPENING: explicitly name TWO DINOSAURS by species (e.g. "two adult Triceratops bulls locked horn-to-horn in a dusty riverbed..." / "an Allosaurus and a Ceratosaurus mid-threat-display across a fern-prairie..." / "two Pachycephalosaurus rivals colliding domed-skull-to-domed-skull on a tundra-mountain ledge") — TWO dinosaur species + confrontation type + biome setting in the FIRST 30-40 words], [the confrontation pose — horns / heads / dust / muscle], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small accent — broken debris / bystander / pterosaur / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly count "TWO" and name the species. Both dinosaurs MUST be visible and in mid-confrontation.
+
+⚠️ FAILURE CONDITIONS:
+• If only ONE dinosaur is visible → FAILED (the path REQUIRES two-dinosaur confrontation)
+• If THREE OR MORE dinosaurs visible as primary subjects → FAILED (the path is TWO dinosaurs; bystanders only at 2-5% accent)
+• If gore / blood / carcass / wound is visible → FAILED (territorial display, not kill)
+• If close-up portrait of single head → FAILED (the confrontation is the subject)
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — TWO MESOZOIC DINOSAURS in mid-confrontation, in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged, never gore.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
 
 };
 
