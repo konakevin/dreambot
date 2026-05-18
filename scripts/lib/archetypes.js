@@ -1193,6 +1193,35 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  TOYBOT_TOY_LANDSCAPE: {
+    description:
+      'PATH-BESPOKE — ToyBot toy-landscape path (2026-05-17 R0 axis-system migration). Epic toy-medium landscape vista. NO CHARACTERS by design — the landscape IS the subject. Medium rotates: claymation OR vinyl per render via ToyBot mediumByPath. Universal axes (camera_angle / scenario / staging) resolve to bot.defaultPools. Single path-bespoke axis: landscape (200 entries).',
+    slots: {
+      universal: ['camera_angle', 'scenario', 'staging'],
+      bot: [],
+      path: ['landscape'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  DINOBOT_EXTINCTION_EVENT: {
+    description:
+      'PATH-BESPOKE — DinoBot extinction-event path (2026-05-17 axis-system migration). K-Pg APOCALYPTIC scenes — asteroid streak across sky / impact-aftermath firestorms / impact-winter darkness / last-dinosaurs-in-dying-world. Epic tragedy + beautiful devastation. The end of the Mesozoic era. Reuses DINO_SPECIES (200) + EXTINCTION_SCENES (200 fat-seed) + DINOBOT_PALEO_LANDSCAPE_BIOME (200). Adds new path-bespoke pool for extinction-specific accents (ash-fall, ember-streams, distant-impact-glow, etc.). 4 path-bespoke axes (biome / species / extinction_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'species', 'extinction_scene', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
 };
 
 module.exports = { ARCHETYPES };

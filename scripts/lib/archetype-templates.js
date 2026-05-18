@@ -7964,6 +7964,221 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
 
+  TOYBOT_TOY_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { camera_angle, scenario, staging, landscape } = slots;
+    const isWorldMode = sharedDNA.renderMode === 'world';
+
+    const worldStagingSection = isWorldMode
+      ? `━━━ THE SCENARIO ━━━
+${scenario}
+
+Combine the landscape described above with this multi-character story moment in a real-world setting. The toy-medium landscape elements perform the scenario at toy scale.
+
+━━━ REAL-WORLD STAGING — TOY LIVING IN OUR WORLD AT ITS SCALE ━━━
+${staging}
+
+━━━ REAL-WORLD STAGING — NON-NEGOTIABLE ━━━
+
+The toy-landscape is LIVING in the REAL WORLD at its tiny scale. The scene is shot in a real human environment with the toy-landscape existing INSIDE that environment as if it has a tiny life happening there. NOT a handcrafted toy diorama on a backdrop. The real world IS the toy's world. Forced perspective and scale illusion are encouraged.
+
+`
+      : '';
+
+    return `You are a toy-landscape photographer writing TOY LANDSCAPE scenes for ToyBot. NO characters. Epic landscape entirely in one toy medium. Landscape is hero, toy-ness is the art. Output wraps with style prefix + suffix.
+
+━━━ TOY PHOTOGRAPHY (NON-NEGOTIABLE) ━━━
+
+Render as a REAL PHYSICAL TOY landscape photographed in a handcrafted set with dramatic cinematic lighting. Toy-ness IS the art — never render as "real" version. If clay, fingerprints + paint-strokes visible. If LEGO, bricks + studs visible. If vinyl, glossy matte sheen visible. The medium signature is loud in every textural detail.
+
+━━━ LIGHTING ELEVATES THE MEDIUM ━━━
+
+Lighting is the multiplier that makes plastic / clay / fabric feel like it belongs in a museum. The exact palette comes from the LIGHTING and VIBE-COLOR sections below — do NOT default to teal-and-orange. Respect the specified palette (monochrome / high-key / low-key / noon-flat / noir-hard / golden-hour / blue-hour / neon / sodium / etc.) and build the scene around IT. Atmospheric depth via smoke / haze / dust / steam / rain / snow / pollen / backlight is welcome, but the color temperature must follow the pool's call.
+
+━━━ PATH MEDIUM LOCK — NEVER MIX ━━━
+
+This path's medium for this render is locked to whatever ToyBot's medium-picker chose (claymation OR vinyl). NEVER mix LEGO bricks into a claymation landscape. NEVER put Funko vinyl figures into a clay landscape. The medium for this render is absolute — stay true.
+
+━━━ THE 30/70 LANDSCAPE-WITH-CHARACTERS MIX ━━━
+
+Toy-landscape paths follow a curated mix: ~30% PURE LANDSCAPE renders (no figures, terrain is the entire subject) and ~70% CHARACTER-IN-LANDSCAPE renders where a tiny minifigure / clay-person / vinyl-figure inhabits the toy-medium terrain at scale. The LANDSCAPE is always the dominant subject — the figure (if present) is small-scale within it, a story-beat or scale-prover, never a centered hero portrait.
+
+When a character is present:
+  • Body-shaping pose-first action — climbing, peering, trekking, surveying, reaching
+  • Tiny scale relative to the terrain (figure is 5-15% of frame, terrain fills the rest)
+  • Same medium as the landscape (LEGO minifig in LEGO landscape, clay-person in clay landscape, vinyl figure in vinyl landscape)
+  • NEVER a centered face-forward portrait — the figure is a denizen of the toy-world
+
+When no character is present (~30% of renders):
+  • Pure landscape vista — the medium IS the entire frame
+  • Multi-tier depth + atmospheric effect + medium-signature texture carry the scene alone
+
+━━━ THE TOY LANDSCAPE ━━━
+${landscape}
+
+━━━ CAMERA (the variety knob — apply EXACTLY) ━━━
+${camera_angle}
+
+${worldStagingSection}━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${sharedDNA.camera}
+
+
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ BLOW IT UP — TOY-LANDSCAPE AMPLIFICATION ━━━
+
+Stack medium-signature detail to the EXTREME across the landscape. Every surface texture is OBSESSIVE craft. If clay: fingerprints + thumbprints + tool-scrapes + paint-strokes visible across every cliff / tree / hill. If LEGO bricks: stud-tops + slope-brick curves + tile smooth-surfaces + transparent-brick water + connection-seams visible across every formation. If vinyl: glossy matte sheen + factory-perfect injection-molded surfaces visible across every peak / valley / shoreline.
+
+OBSESSIVE LANDSCAPE-DETAIL CATALOG — stack 5+ simultaneously:
+1. MULTI-TIER DEPTH (mandatory) — foreground tactile-medium detail + midground hero landform + far-distance atmospheric layer fading to haze
+2. WEATHER + ATMOSPHERE — smoke / mist / fog / rain / snow / dust appropriate to landscape
+3. WATER FEATURE (if appropriate) — transparent-brick river / clay pond / vinyl-glossy lake with reflective sheen
+4. VEGETATION — variety in medium (brick-trees / clay-trees / vinyl-flora) clustered for density, not isolated
+5. ARCHITECTURE-IN-LANDSCAPE (rare structures only, since no characters) — distant scratch-built ruined tower / abandoned lighthouse / lone shrine / faraway windmill
+6. SCALE PROVERS — small details that prove the bigness: tiny waterfall over giant cliff, tiny boat on enormous lake, scale-tree forest carpeting a vast plateau
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Wide toy-landscape vista. Medium-signature visible throughout. Cinematic practical-set lighting per pool palette. Multi-tier depth selling scale. Atmospheric haze in deep valleys. Awe at the craft. NO CHARACTERS.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+
+
+  DINOBOT_EXTINCTION_EVENT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, species, extinction_scene, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric event amplifying the apocalypse — secondary impact / ash-wall / firestorm-distant / aurora-of-impact / etc.
+
+`
+      : '';
+
+    return `You are an apocalyptic nature documentary cinematographer writing K-PG EXTINCTION-EVENT scenes for DinoBot — the final chapter of the Mesozoic, 66 million years ago. Photoreal cinematic 35mm film still. Prehistoric-Planet / BBC-Walking-with-Dinosaurs-Last-Days / National-Geographic apocalypse cinematography. EPIC TRAGEDY + BEAUTIFUL DEVASTATION.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth at the K-Pg boundary, BEFORE humans evolved. ZERO humans. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern volcanic eruption, NEVER as modern wildfire, NEVER as modern wildlife. ALWAYS Late-Cretaceous primordial Earth with alien mega-flora, asteroid streak / impact aftermath / impact-winter darkness in the sky. End-of-Mesozoic-era coded.
+
+⚠️⚠️⚠️ MANDATORY — APOCALYPTIC SKY EVENT ⚠️⚠️⚠️
+The defining feature of every render is a VISIBLE APOCALYPTIC SKY EVENT — the sky tells the story:
+• ASTEROID-STREAK across the sky — bright meteoric burn-trail blazing through the upper atmosphere
+• IMPACT-FLASH on the deep horizon — distant blinding flash from the Chicxulub crater
+• AFTERMATH FIRESTORM ON HORIZON — orange-red glow at the distant horizon, ash-plume rising
+• IMPACT WINTER DARKNESS — ash-darkened sky / blood-red sun through soot / pale ash-fall
+• EJECTA RAIN — debris falling from the sky as glowing streaks
+• AURORA OF IMPACT — atmospheric energy disturbance in the upper sky
+
+If the sky is normal blue / sunset / sunrise without apocalypse cue, the render has FAILED.
+
+⚠️⚠️⚠️ MANDATORY — DIGNIFIED NOT PANICKED ⚠️⚠️⚠️
+The dinosaur ENDURES the moment. NOT screaming. NOT mid-flee. NOT chaotic. The animal is DIGNIFIED in the face of cosmic doom — standing tall and watching the sky / lifted-head-calling-into-storm / still-as-statue beneath the burning sky / mid-graze-unaware. Tragic beauty, not horror.
+
+🚫 NO panicked-frantic-flee compositions
+🚫 NO screaming dinosaur / mouth-wide-roar-at-camera (cheesy stock)
+🚫 NO gore / no kill-shot / no carcasses-foreground
+🚫 NO clearly burning / on-fire dinosaur
+✓ Dignified posture — watching / calling / standing tall / mid-graze-quiet / silhouetted against the apocalyptic sky
+
+⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
+"Herd" pulls Flux toward modern mammal training data (buffalo, wildebeest). The seed material below MAY contain "herd" — REWRITE with species-count phrasing: "a hundred Triceratops" / "100+ ceratopsians" / "a gathering of Parasaurolophus" / "a lone Tyrannosaurus" / etc.
+
+⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot. A POSTER. The final goodbye to the dinosaurs.
+
+Components of a poster-grade extinction shot:
+• BOLD COMPOSITION — strong leading lines toward the apocalyptic sky event, asymmetric framing, dinosaur silhouetted as the anchor
+• DRAMATIC LIGHT-CONTRAST — atmospheric impact-glow rim-lighting on the dinosaur, ash-dimmed sky as canvas, ember-particulate catching directional light
+• SKY DOMINATES — 60-70% of frame is the apocalyptic sky drama
+• ATMOSPHERIC RICHNESS — ash-particulate / ember-fall / smoke-haze / depth-pull-into-darkness
+• EMOTIONAL DNA — the frame radiates EPIC TRAGEDY at a glance. Awe. Loss. End-of-an-era. Beautiful devastation.
+
+If the render reads as "competent wildlife photo" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-trailer-shot, National-Geographic-cover, Prehistoric-Planet-Last-Days-key-art, Walking-with-Dinosaurs-finale-still level.
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals (no wildebeest / no bison / no elephants)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn)
+🚫 NO modern birds (pterosaurs OK)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO gore / no kill-shot / no carcass-foreground / no burning-alive-detail
+🚫 NO panicked-stampede / no chaos-flee — DIGNIFIED endurance only
+🚫 NO frontal mouth-wide camera-facing roar
+🚫 NO floating / suspended-mid-air dinosaur (grounded mandate — feet on mud/rock/ash)
+✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic hide textures / PBR materials / Prehistoric Planet "Last Days" apocalyptic visual lineage
+
+━━━ THE DINOSAUR (focal subject — the survivor of the moment) ━━━
+${species}
+
+⚠️ SPECIES VARIETY MANDATE — render the EXACT species named. Use its SPECIFIC silhouette + signature feature. Don't default to T-rex.
+
+━━━ THE EXTINCTION SCENE (focal apocalyptic moment) ━━━
+${extinction_scene}
+
+NOTE: the seed material above may use "herd" — DO NOT pass that word through. Replace with species-count phrasing.
+
+This is the FOCAL SCENE. The dinosaur in a specific apocalyptic moment. Dignified. Caught at the threshold.
+
+━━━ THE MESOZOIC BIOME (the dying world) ━━━
+${biome}
+
+⚠️ BIOME VARIETY MANDATE — don't default to lush green jungle. The biome pool spans alien deserts, volcanic plains, snow-mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, primordial-tundra, ash-fall plains. Render the SPECIFIC biome named — now bathed in apocalyptic atmospheric tint (ash-grey filter / blood-red sky reflection / ember-amber haze).
+${phenomenonSection}━━━ SECONDARY ACCENT (small apocalyptic-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric extinction-detail — ember-fall / ash-flake / glowing-impact-particulate / startled pterosaur silhouette / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Extinction paths LOVE apocalyptic atmospheric backlight — impact-flash rim-lit dinosaur silhouette, ash-dimmed-blood-red sun, ember-particulate catching the directional light.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC EXTINCTION MOMENT ━━━
+Apocalyptic-cinematic framing of a Mesozoic dinosaur in the K-Pg extinction moment. Sky dominates (60-70%) with the apocalyptic event. Dinosaur as dignified silhouette anchor (25-35%). Alien-Mesozoic biome at horizon, atmospheric tint. Epic tragedy + beautiful devastation.
+
+━━━ STRUCTURE (write the prompt in this order — DINOSAUR + APOCALYPTIC SKY first) ━━━
+[OPENING: explicitly name the DINOSAUR by species AND describe the apocalyptic sky moment (e.g. "A Triceratops bull stands dignified on a volcanic ridge as a blazing asteroid streak tears across the twilight sky..." / "A Parasaurolophus lifts its crested head calling into the impact-darkened sky as distant firestorms glow at the horizon..." / "A lone Tyrannosaurus silhouetted against blood-red ash-dimmed sun, head bowed, listening to the end") — species + dignified-action + apocalyptic-sky in the FIRST 30-40 words. Sky-event must be EXPLICIT in opening.], [the dinosaur's dignified posture detail — head-up / silhouetted / standing-tall], [the biome with apocalyptic tint], [the atmospheric phenomenon if rolled], [the small accent — ember / ash / pterosaur / etc.], [foreground tactile detail], [lighting — impact-flash / ash-filtered / ember-glow], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly name the species AND the apocalyptic sky event. The sky carries the tragedy.
+
+⚠️ FAILURE CONDITIONS:
+• If sky is normal blue / sunset / sunrise without apocalypse cue → FAILED (path REQUIRES apocalyptic sky)
+• If dinosaur is panicked-flee / screaming / mouth-wide-camera-facing → FAILED (DIGNIFIED only)
+• If gore / blood / burning-alive / carcass-foreground → FAILED
+• If output contains "herd" → REJECTED (use species-count phrasing)
+• If render reads as modern volcanic eruption / wildfire → FAILED (Mesozoic-locked)
+• If dinosaur floating mid-air with no ground contact → FAILED (grounded mandate)
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC APOCALYPTIC SHOT — a single Mesozoic dinosaur in DIGNIFIED endurance under an EXPLICIT apocalyptic sky (asteroid streak / impact flash / firestorm glow / ash-winter darkness), in an alien-Mesozoic biome with apocalyptic tint. Poster-grade composition. National-Geographic real, never panicked, never gore.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
 };
 
 module.exports = TEMPLATES;

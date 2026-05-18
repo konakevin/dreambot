@@ -134,4 +134,6 @@ module.exports = {
     TOYBOT_CAMERA_ANGLES: load('camera_angles'),
     TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
     TOYBOT_STAGING_AXIS: load('staging_axis'),
+  // ─── toy-landscape (R0 axis-system migration, 2026-05-17) ───
+  TOYBOT_TOY_LANDSCAPES: load('toy_landscapes'),
 };
