@@ -3804,6 +3804,19 @@ Style targets (NON-NEGOTIABLE):
 
 Mood target — LETHAL, COOL, CINEMATIC, ATMOSPHERIC. The viewer should feel "this is a poster-grade frame from a sci-fi action film."
 
+━━━ MOVIE POSTER MANDATE — STACK THE ELEMENTS ━━━
+Every render MUST be a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ visually-arresting elements simultaneously:
+
+  1. **PRIMARY DROID** — the predator-droid as focal subject (matching the REGISTER tag from the scene) in clear PREDATORY POSE or KINETIC ACTION, weapon visible, full-body or three-quarter, dramatic rim-light separating silhouette from backdrop
+  2. **SCENE ANCHOR** — the sci-fi environment dominating its quadrant (neon megacity skyline / war-torn battlefield / rain-flooded precinct platform / alien-colony outpost / cryo-tundra ridge / cyberpunk alley canyon) — readable as ENVIRONMENT, never flat void
+  3. **KINETIC / DRAMATIC ELEMENT** — at least ONE per render: rain-fall streaking the air / sparks raining from severed conduit / smoke billowing from breach / muzzle-flash on a distant weapon / hover-spinner searchlight cutting through fog / motion-blur on background skyline / drone-strobe / aurora rippling / dust-storm wall / holographic alert-projection rotating
+  4. **SCALE PROVER / SECONDARY ACTOR** — at least ONE per render: distant fleeing target / collapsing enemy / disabled drone smoking at the foreground edge / hover-spinner descending / squad-mate silhouette in middle distance / kneeling civilian / holo-billboard face three stories tall / titan-mech towering at deep distance / search-drone strobing the sky / fresh kill at frame-edge
+
+THINK Blade Runner 2049 promo-poster / Cyberpunk Edgerunners key-art / Ghost in the Shell theatrical-release frame / Akira poster / Metal Gear Rising key-art / Helldivers cinematic / John Wick poster intensity. Every frame should make the viewer GASP at the COOL CINEMATIC LETHALITY.
+
+━━━ FILL THE FRAME — NO EMPTY QUADRANTS ━━━
+Every quadrant of the frame carries weight. NO empty sky-quadrants, NO flat negative-space, NO bare wall-backdrop. If a quadrant lacks scene-detail, add atmospheric haze with embedded glow-points / hovering holograms / drifting smoke-tendrils / distant skyline silhouettes / rain-streaks / spark-debris / drone-trails. Movie-poster density.
+
 ━━━ PREDATOR-DROID HEAD (NON-NEGOTIABLE — pure robotic head, NO human face) ━━━
 The head is a ROBOTIC PREDATOR-DROID HEAD — utilitarian sensor housing engineered for target acquisition. NO human face, NO human features, NO organic skin, NO hair.
 
