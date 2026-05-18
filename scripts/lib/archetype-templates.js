@@ -3896,15 +3896,20 @@ ${action}
 
 Interpret through the PREDATOR-DROID lens of the chosen register: ninja stalks/leaps/sword-draws, combat-assault charges/fires/breaches, cop arrests/raids/stuns, military patrols/holds-position/engages, hunter tracks/snipers/lurks.
 
-━━━ THE SCENE (atmospheric — rich sci-fi context, ALWAYS a scene with context) ━━━
+━━━ THE SCENE — REGISTER LOCK (READ THE TAG, RENDER THAT ARCHETYPE) ━━━
 ${landscape}
 
-The scene is HALF the image. Match scene context to chosen register:
-  • NINJA → neon-rain Tokyo rooftop / cyberpunk alley / moonlit zen-temple / data-vault corridor
-  • COMBAT-ASSAULT → war-torn battlefield / smoking ruin / breached bunker / mech-hangar combat / drop-pod LZ
-  • CYBER-COP → cyberpunk-precinct standoff / corporate-tower raid / riot-scene / neon-street arrest / Blade-Runner spinner approach
-  • MILITARY-SOLDIER → alien-colony outpost / orbital-drop-zone / war-torn city / military compound / battlefield perimeter
-  • HUNTER → frozen tundra / fog-shrouded forest / post-apoc wasteland / alien wilderness / arctic ice-shelf / dust-storm desert
+⚠️ THE SCENE ABOVE OPENS WITH A "REGISTER: <ARCHETYPE>" TAG. READ IT. RENDER THE DROID AS THAT EXACT ARCHETYPE — NOT cyber-ninja default. The five valid archetype outputs:
+
+  • "REGISTER: NINJA" → render a CYBER-NINJA DROID (sleek shadow-assassin, katana on back, sealed combat-mask / oni-mask / Genji-class faceplate). Lineage: Gray Fox / Genji / Sandevistan.
+  • "REGISTER: COMBAT-ASSAULT" → render a HEAVY COMBAT-ASSAULT DROID (bulkier chassis with reinforced pauldrons + combat chest-plate, helmeted combat head with single visor-slit or scanner-bar, heavy plasma-cannon / combat-rifle / chain-blade). Lineage: Death Trooper / Halo ODST / Helldivers Automaton / B2 Super Battle Droid.
+  • "REGISTER: CYBER-COP" → render a CYBER-COP / POLICE-ENFORCER DROID (riot-armor plating, glowing precinct-badge insignia on chest or pauldron, sealed riot-helmet with horizontal visor-strip, combat-shotgun + stun-baton + sidearm). Lineage: Blade Runner spinner-cop / Dredd judge / RoboCop / MaxTac. Blue-and-white law-enforcement OR full-black SWAT palette.
+  • "REGISTER: MILITARY-SOLDIER" → render a UNIFORMED MILITARY-SOLDIER DROID (faction insignia + unit-callsign markings on chest/pauldron, tactical loadout with magazine pouches + grenades + comms-pack, helmeted combat head with HUD-visor, standard combat-rifle in hands). Lineage: Halo Spartan / Cylon Centurion / Helghast Sentinel / Geth Hunter. Olive-drab / desert-tan / urban-grey palette.
+  • "REGISTER: HUNTER-DROID" → render a LONE-WOLF HUNTER-TRACKER DROID (scope-eye predator-optic dominant on the head, slung long-rifle / anti-material rifle, wilderness-camo or stealth-cloak chassis). Lineage: Predator (mechanical) / Mandalorian-style bounty-droid / Boba Fett tracker. Weathered ash-grey / forest-camo / desert-bronze / arctic-white.
+
+DO NOT render a cyber-ninja unless the tag is "REGISTER: NINJA". If it says "REGISTER: COMBAT-ASSAULT", you write "Matte-gunmetal combat-assault droid with..." (NOT cyber-ninja). If "REGISTER: CYBER-COP", you write "Urban-grey cyber-cop droid with sealed riot-helmet..." (NOT cyber-ninja). Same for MILITARY-SOLDIER and HUNTER. The tag is LOAD-BEARING.
+
+The scene is HALF the image — rich sci-fi backdrop with secondary context elements.
 ${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -7638,6 +7643,131 @@ ${vibeDirective.slice(0, 250)}
 Wide diorama frame — tiny model-train as focal point or moving detail in a sweeping handcrafted terrain. Track-side or aerial-quarter angle. Practical hobby-shop / display-table lighting per pool palette. Lit windows in tiny depot, smoke from engine stack, atmospheric haze in valleys. Cozy obsessive-detail energy. NO PEOPLE.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+
+
+  DINOBOT_DINO_PORTRAIT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, species, visual_cue, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric or geologic event amplifying the portrait — volcanic-glow on the dinosaur's hide / storm-light / god-rays / mist-bank / etc.
+
+`
+      : '';
+
+    return `You are a paleo-art wildlife photographer writing DINOSAUR PORTRAIT scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm telephoto film still. Prehistoric-Planet / National-Geographic / Sebastião Salgado / Nick Brandt wildlife-portrait cinematography. MUSEUM-GRADE PALEOART DETAIL.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as African safari, NEVER as zoo telephoto, NEVER as modern wildlife portrait. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — SINGLE DINOSAUR HERO PORTRAIT ⚠️⚠️⚠️
+The portrait focuses on ONE specific dinosaur as the hero subject. ONE animal — not a pack, not a herd, not a duo. The single dinosaur fills 50-70% of the frame.
+
+🚫 NO multi-dinosaur compositions (those belong on pack / herd / clash / nesting paths)
+🚫 NO crowds, groups, packs, herds
+✓ ONE hero dinosaur as the focal subject — second small dinosaur OK at 2-5% accent only
+
+The hero is photoreal — leathery scarred biological hide, eye catching light, mouth slightly open or closed (CANDID — not roaring at camera). NEVER posing, NEVER frontal-facing-camera, NEVER staged-portrait. Caught mid-existing.
+
+⚠️⚠️⚠️ TELEPHOTO WILDLIFE-PORTRAIT FRAMING ⚠️⚠️⚠️
+The camera is at the dinosaur's level or slightly below — eye-level wildlife telephoto. Background bokeh-blurred. The hero is in sharp focus, environment soft.
+
+Composition modes (rotate variety):
+• HEAD-AND-SHOULDERS — chest-up bust of the dinosaur in profile or 3/4 view (35-45% of frame)
+• FULL-BODY MID-DISTANCE — entire dinosaur visible, walking / drinking / surveying, environment behind (50-60% of frame)
+• LOW-ANGLE-LOOK-UP — camera below the dinosaur looking up (50-70% of frame, dramatic perspective)
+• HALF-BODY 3/4 — partial body in 3/4 angle showing depth of the animal (40-55% of frame)
+
+NEVER frontal head-on with mouth wide open in roar — that's cheesy stock-art.
+NEVER full close-up of one eye (use micro-detail path for that).
+
+⚠️⚠️⚠️ MOVIE-POSTER QUALITY MANDATE ⚠️⚠️⚠️
+Every render must be POSTER-WORTHY — a frame you'd screenshot, frame, hang on a wall. Not a wildlife snapshot, not a wallpaper. A POSTER.
+
+Components of a poster-grade portrait:
+• BOLD COMPOSITION — strong negative space, asymmetric placement (rule-of-thirds), dramatic foreground-anchor element
+• DRAMATIC LIGHT-CONTRAST — rim-lighting on the dinosaur's silhouette, deep shadow on opposite side, golden hour or magic hour ideal
+• TIGHT FOCUS ON THE HERO — eye lands instantly on the dinosaur's eye / face / signature anatomical feature
+• ATMOSPHERIC RICHNESS — bokeh-soft background, particulate-light, depth-pull-into-haze
+• EMOTIONAL DNA — the frame radiates this animal's personality at a glance. Power. Curiosity. Quietude. Watchfulness.
+
+If the render reads as "competent wildlife photography" rather than "I'd hang this on my wall" → not poster-grade. Aim for IMAX-trailer-shot, National-Geographic-cover, Prehistoric-Planet-key-art, Walking-With-Dinosaurs-promotional-still level.
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals / modern wildlife / modern birds (pterosaurs OK as small accent)
+🚫 NO modern flora (no palms / no oak / no maple / no suburban-park / no lawn / no grass)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO frontal-roaring stock pose
+🚫 NO gore / kill-shot / carcass-foreground
+🚫 NO crowds, packs, herds — single dinosaur only
+✓ Photoreal cinematic 35mm telephoto film still / IMAX precision / ray-traced reflections / hyperreal organic hide textures / PBR materials / Prehistoric Planet wildlife-portrait visual lineage
+
+━━━ THE DINOSAUR (single hero subject) ━━━
+${species}
+
+The hero dinosaur is photoreal — leathery scarred biological hide, weathered scale-pattern, eye catching light, atmospheric integration with the surrounding biome.
+
+⚠️ SPECIES VARIETY MANDATE — render the EXACT species named above. Do NOT default to T-rex / Triceratops / Velociraptor / generic-theropod. The DINO_SPECIES pool spans sauropods, hadrosaurs, ceratopsians, stegosaurs, ankylosaurs, theropods, ornithopods, pachycephalosaurs, dromaeosaurs. Preserve the SPECIFIC species silhouette + signature feature.
+
+⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The MESOZOIC BIOME spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-savanna, blue-glow caverns. Preserve the SPECIFIC biome below — render its UNIQUE color palette and landscape, not generic jungle.
+
+━━━ THE VISUAL CUE (atmospheric character beat) ━━━
+${visual_cue}
+
+A specific atmospheric beat tied to this dinosaur — breath-steam / dust-cloud / mud-prints / etc. Adds character and life to the portrait.
+
+━━━ THE MESOZOIC BIOME (alien primordial backdrop) ━━━
+${biome}
+
+The biome stages the portrait — bokeh-soft mega-flora at the surrounding edges, atmospheric haze pulling depth. NEVER modern Earth landscape. Multi-tier soft depth.
+${phenomenonSection}━━━ SECONDARY ACCENT (small portrait-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric portrait-detail — drifting feather / dust-mote / breath-fog at jawline / drip-of-water / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+Portrait paths love GOLDEN-HOUR rim-light or MAGIC-HOUR backlight — dramatic edge-light on the dinosaur's silhouette + deep shadow on the opposite side.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — TELEPHOTO PALEO-WILDLIFE-PORTRAIT ━━━
+Telephoto cinematic wildlife portrait of a single Mesozoic dinosaur. Hero fills 50-70% of frame. Bokeh-soft alien-Mesozoic biome behind. Rim-light. Candid mid-existing-moment.
+
+━━━ STRUCTURE (write the prompt in this order — SINGLE HERO + CANDID MOMENT first) ━━━
+[OPENING: explicitly name the DINOSAUR by species AND describe the candid moment in one line (e.g. "A solitary Tyrannosaurus rex pauses mid-stride at the edge of a fern-prairie, breath-steam pluming in the dawn cold..." / "An adult Brachiosaurus reaches her long S-neck up into Araucaria canopy, eye reflecting morning sun..." / "A Triceratops bull rests on a moss-rock, horned-frill catching evening light, jaw relaxed") — species + candid moment + biome in the FIRST 30-40 words. ALWAYS CANDID — never roaring at camera, never posed.], [the dinosaur's specific anatomy detail visible — hide texture / eye / scale-pattern / specific signature feature], [the biome bokeh around], [the atmospheric phenomenon if rolled], [the small portrait accent — feather / dust / breath / etc.], [foreground tactile detail — moss / mud / dust-particulate], [lighting + atmospheric layer — rim-light, golden hour], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly name the species AND a CANDID action verb (never posing). The personality is in the BEHAVIOR captured.
+
+⚠️ FAILURE CONDITIONS:
+• If multiple dinosaurs visible as primary subjects → FAILED (this is single-hero portrait)
+• If dinosaur is roaring frontal-at-camera → FAILED (cheesy stock pose)
+• If close-up of one eye filling frame → FAILED (micro-detail path territory)
+• If render reads as "competent wildlife photo" not poster-grade → FAILED
+• If modern wildlife / mammal / bird → FAILED
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC TELEPHOTO WILDLIFE-PORTRAIT — a single hero Mesozoic dinosaur in a candid mid-existing-moment, in an alien-Mesozoic biome bokeh-soft, with rim-lit cinematic light. Poster-grade composition. National-Geographic real, never staged, never roaring at camera.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
 
