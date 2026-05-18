@@ -6949,53 +6949,52 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   FAEBOT_FLOWER_FAIRY: ({ slots, sharedDNA, vibeDirective }) => {
     const { race, skin_tone, eyes, hair_color, hairstyle, hair_floral, bloom_gown, wings, garden_backdrop, candid_action, atmospheric_phenomenon } = slots;
 
-    const phenomenonClause = atmospheric_phenomenon
-      ? `, with ${String(atmospheric_phenomenon).slice(0, 80)} in the scene`
-      : '';
+    const phenomenonClause = atmospheric_phenomenon ? `, with ${atmospheric_phenomenon.slice(0, 80)} in the scene` : '';
 
     return `Output ONLY a 100-130 word Flux prompt for a flower-fairy painted portrait. NO preamble. NO headers. NO labels. Just comma-separated phrases.
 
-⚠️⚠️⚠️ ABSOLUTE NUCLEAR LAW — SHE IS A FLOWER-BEING.
-The fairy is MADE FROM flowers. Her dress IS flowers. Her hair IS flowers. Plain fabric / tulle / chiffon / satin / silhouette descriptions = CRITICAL FAIL.
+⚠️ ABSOLUTE NUCLEAR LAW — SHE IS A FLOWER-BEING.
+The fairy is MADE FROM flowers. Her body is ENGULFED inside a MAXIMALIST FLOWER-EXPLOSION cascading from neck to floor and spilling outward into the foreground. Her hair is REPLACED by a torrential petal-storm cascading from her scalp.
 
-DRESS RULE: The dress is a SOLID WALL OF FLOWERS sculpted into human-form shape. No tulle. No chiffon. No skirt-fabric showing. No "ball gown" or "mermaid" or "corset" wording. Every inch of body covered in solid overlapping bloom-mass. If you see fabric peeking through, the render failed.
+🚫 NEVER use these words: "dress" / "gown" / "skirt" / "bodice" / "sleeves" / "fabric" / "tulle" / "chiffon" / "silhouette" / "garment" / "wearing" / "outfit". These pull Flux's clothing prior and RUIN the look. Instead describe her body as DRENCHED / ENGULFED / OVERFLOWING / BURIED / CASCADING in a torrential bloom-cascade. Flowers cover every inch AND spill BEYOND her shape into the surrounding frame.
 
-HAIR RULE: The hair is REPLACED by flower-strands flowing from her scalp like hair would flow. No hair-strands visible. The cascade of flowers IS the hair-mass. "Flower-crown atop her head" = FAIL. "Flowers in her hair" = FAIL. ONLY "hair entirely replaced by flower-cascade" = PASS.
+🚫 For hair: NEVER "crown" / NEVER "wreath" / NEVER "halo" / NEVER "flowers in her hair". ONLY "hair REPLACED by [petal-storm]" / "flower-strands flowing from her scalp" / "torrential petal-cascade where her hair was". Sonnet MUST preserve the word "REPLACED" in the output — do not paraphrase.
 
-WINGS RULE: The wings are saturated jewel-tone gossamer/butterfly membrane — orange / red / magenta / cobalt / emerald / violet / amber — bold, never pale. Wings spread wide behind her. NOT made of flowers (the flower-budget is for dress + hair).
+Her wings are the only NON-flower element — they are SATURATED RICH jewel-tone gossamer/butterfly-membrane wings (orange / red / magenta / cobalt / emerald / violet / amber — bold, never pale). Wings SPREAD WIDE behind her as the SECOND-LARGEST element in the frame after her body. Wings MUST be VISIBLE and DRAMATIC — never tiny / never hidden.
+
+BOLD JEWEL-TONE COLOR-STORY — every render is a confident bold color-story poster, high color-contrast drama. ONE bold palette per render. NEVER pastel-washed-out, NEVER monochrome-tonal. Example: deep-ebony skin × magenta wings × deep-purple-and-gold flower-explosion × copper-rose garden.
 
 ⚠️ FAEBOT POSE LAW — NEVER A POSED MODELING STANCE.
-NEVER standing-tall-facing-forward, NEVER full-front looking at camera, NEVER fashion-magazine display pose. ALWAYS a CANDID FAE MID-MOMENT — head bowed, side-profile, three-quarter turn caught mid-action. Full-body framing still required (to show the flower-dress head-to-floor) but the body is in a natural fae moment, not a pose.
+NEVER standing-tall-facing-forward, NEVER full-front looking at camera, NEVER fashion-magazine display pose. ALWAYS a CANDID FAE MID-MOMENT: head bowed gazing down at a bloom, side-profile with eyes closed in pollen-breath, three-quarter turn caught mid-action, dancing through petals, reaching toward a wisteria-cluster, leaning close to a flower as if listening, mid-leap over a garden-stream. Full-body framing still required (to show the flower-dress head-to-floor) but the body is in a NATURAL FAE moment, not a pose.
 
 ━━━ WRITE THE PROMPT IN THIS EXACT MAD-LIBS ORDER ━━━
 
-[1] OPEN with this verbatim style block: "soft ethereal oil-painted fantasy illustration, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, full-body painted portrait of a ${race} flower-fairy creature with delicate pointed elf-ears, luminous fae-glowing skin, subtle fae-markings tracing her cheekbones"
+[1] OPEN — "soft ethereal oil-painted fantasy illustration, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, full-body painted portrait of a [race-name from below] flower-fairy creature with delicate pointed elf-ears, luminous fae-glowing skin and subtle fae-markings tracing her cheekbones"
 
-[2] CANDID POSE — ${candid_action}
+[2] CANDID POSE — describe her caught in this candid moment: ${candid_action}
 
-[3] FACE — weave her DNA: ${skin_tone} skin (fae-glowing), ${eyes}, ${hair_color}, ${hairstyle} (the structural style of her hair-cascade)
+[3] FACE DNA woven into one phrase — race: ${race} | skin tone: ${skin_tone} | eyes: ${eyes} | hair color: ${hair_color} | hairstyle: ${hairstyle}
 
-[4] DRESS-IS-FLOWERS — quote the species verbatim and frame the dress as the flowers: "her dress IS a solid wall of flowers sculpted into human-form — ${String(bloom_gown).slice(0, 220)} — no plain fabric anywhere, every inch of body covered in solid overlapping bloom-mass, the dress IS the flowers"
+[4] FLOWER-EXPLOSION ENGULFING HER BODY — quote the species VERBATIM and frame her body as engulfed (NEVER say dress/gown/skirt): "her body is ENGULFED inside a maximalist flower-explosion — ${bloom_gown.slice(0, 220)} — bloom-cascade overflowing from her form into the surrounding foreground, you cannot see where her skin ends and the flowers begin"
 
-[5] HAIR-IS-FLOWERS — quote the species verbatim and frame as REPLACEMENT: "her hair is entirely REPLACED by ${String(hair_floral).slice(0, 200)} — flower-strands flowing from her scalp to waist like a flower-waterfall in place of hair, NO hair-strands visible"
+[5] HAIR-REPLACED-BY-FLOWERS — quote the species VERBATIM and use the exact word REPLACED: "her hair is entirely REPLACED by ${hair_floral.slice(0, 200)} — torrential petal-storm flowing from her scalp to waist where her hair was, NO hair-strands visible, the flower-cascade IS the hair-mass"
 
-[6] WINGS (saturated gossamer, NOT flowers) — ${String(wings).slice(0, 150)}
+[6] WINGS — saturated jewel-tone gossamer-membrane/butterfly-membrane wings (NOT flowers): ${wings.slice(0, 150)}
 
-[7] GARDEN BACKDROP — ${String(garden_backdrop).slice(0, 150)} — in soft painted bokeh behind her${phenomenonClause}
+[7] GARDEN BACKDROP — ${garden_backdrop.slice(0, 150)} — soft painted bokeh behind her${phenomenonClause}
 
 [8] CLOSE — "painted oil-brushwork with visible expressive strokes, large stylized jewel-tone fairy eyes with sparkle catchlights, soft luminous fae-aura halo, warm rim-light on her cheek + wing-edge + bloom-mass, bold jewel-tone color story binding the scene, NOT photoreal NOT 3D NOT cartoon NOT cel-shaded"
 
 ━━━ HARD BANS ━━━
-🚫 Plain fabric / tulle / chiffon / satin / silk anywhere on dress = FAIL
-🚫 Silhouette names (ball gown / mermaid / corset / A-line / empire-waist / princess) = FAIL
-🚫 Visible plain hair-strands = FAIL
-🚫 "Flower-crown" / "wreath" / "halo of flowers" = FAIL
+🚫 Garment-words (dress / gown / skirt / bodice / sleeves / fabric / tulle / chiffon / silhouette / wearing / outfit) appearing ANYWHERE = FAIL
+🚫 Visible plain hair-strands = FAIL ("REPLACED" keyword MUST appear in your output)
+🚫 Tiny / pale / hidden wings = FAIL (wings are DRAMATIC + SATURATED jewel-tone, second-largest element)
 🚫 Magazine-cover standing pose / facing camera = FAIL
-🚫 Pale gossamer / washed-out wings = FAIL
-🚫 Photoreal / Disney 3D / anime / cel-shading = FAIL
+🚫 Pastel-washed-out / monochrome-tonal palette = FAIL (must be bold jewel-tone color-story)
+🚫 Photoreal / Disney 3D / anime / cartoon / cel-shading = FAIL
 🚫 No men / no children / no extra figures / no sexualized framing
 
-Write the 100-130 word prompt now. Lead with OPEN block. Inject slot quotes VERBATIM (preserve "IS the flowers", "no plain fabric", "REPLACED", "flower-strands flowing"). End with CLOSE block.`;
+Write the 100-130 word prompt now. Lead with the OPEN block. Inject the slot quotes VERBATIM (preserve "ENGULFED", "maximalist", "overflowing", "REPLACED", "torrential petal-storm" keywords). End with the CLOSE block. The output must NEVER contain the words "dress" / "gown" / "skirt" / "bodice" / "fabric" / "tulle" / "garment".`;
   },
 
 

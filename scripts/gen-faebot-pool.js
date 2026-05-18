@@ -79,58 +79,65 @@ const POOL_RECIPES = {
   // ─── flower-fairy R7: bloom_gown rewritten as SOLID FLOWER-WALL (no fabric, no silhouette names) ───
   faebot_flower_fairy_bloom_gown: {
     format: 'simple',
-    theme: `SOLID FLOWER-WALL DRESSES for the FaeBot flower-fairy path. Each entry is ONE color-themed multi-species dress where the dress IS A WALL OF SOLID FLOWERS sculpted into human-form. NOT "a gown with flowers on it" — the dress IS pure flower-mass. Each entry 30-60 words.
+    theme: `FLOWER-EXPLOSION ENGULFING HER BODY for the FaeBot flower-fairy path (R8). Each entry describes a MAXIMALIST FLOWER-BLAST drenching her body from neck to floor and spilling outward into the foreground. NEVER use the words "dress" / "gown" / "skirt" / "silhouette" / "bodice" / "sleeves" / "fabric" / "wall" / "garment" — those pull Flux's clothing prior. Just describe her body as ENGULFED / OVERFLOWING / DRENCHED / BURIED / CASCADING in maximalist flowers. Each entry 30-60 words.
 
-⚠️ ABSOLUTE: the dress IS the flowers. Don't describe fabric. Don't name silhouettes like "ball gown" / "corset" / "mermaid" / "A-line" / "empire-waist" / "princess" / "tulle". These pull Flux's tulle-gown prior and ruin the render. Just describe the dress as "SOLID FLOWER-MASS" / "WALL OF FLOWERS" / "FLOWER-WALL DRESS" / "DRESS SCULPTED FROM SOLID FLOWERS" / "GOWN OF PURE FLOWER-MASS" / "FLORAL WALL FORMING THE DRESS ENTIRELY" — then name the species and color.
+⚠️ FRAMING LANGUAGE (use these verbs/phrases):
+  • "MAXIMALIST FLOWER-EXPLOSION engulfing her body neck to floor"
+  • "torrential bloom-cascade drenching her from collarbone to feet"
+  • "her body OVERFLOWING with [flowers] spilling outward into the foreground"
+  • "petal-storm CASCADING from her neck, her arms, her hips, her thighs"
+  • "her form is BURIED inside a maximalist bloom-storm"
+  • "FLOWER-BLAST covering every inch of her body and overflowing beyond her shape"
+  • "she stands at the center of a flower-explosion that engulfs her entirely"
 
-⚠️ MULTI-SPECIES MANDATE — 3-6 different flower species per entry in ONE bold coordinated color theme.
+⚠️ MULTI-SPECIES + COLOR THEME — 3-6 named flower species in ONE bold coordinated color palette.
 
-⚠️ COLOR THEMES — distribute across:
+⚠️ COLOR THEMES (distribute):
   SUNSET (red/orange/pink/coral/gold) | TWILIGHT PURPLES | BLUSH PINKS | MONOCHROME WHITE
   RAINBOW EXPLOSION | DEEP BURGUNDY + WINE | GOLD + AMBER + COPPER | OCEAN COOL
   EMERALD FOREST | PASTEL CANDY | TROPICAL BOLD | AUTUMN HARVEST | DUSK FIRE
   BLUE + WHITE | PINK + GOLD | VIOLET + CREAM | NAVY + BURGUNDY | MAGENTA + ORANGE
 
 🚫 STRICT BANS:
-  • NO fabric / NO tulle / NO chiffon / NO satin / NO silk / NO cloth / NO weave
-  • NO silhouette names (ball gown / corset / mermaid / A-line / empire-waist / princess / strapless / off-shoulder)
+  • NO words: dress / gown / skirt / silhouette / bodice / sleeves / fabric / cloth / garment / tulle / chiffon / satin / silk / wall / wearing
+  • NO single-species
   • NO hair references
-  • NO single-species dresses
-  • NO "decorated with flowers" / "covered in flowers" — ONLY "IS flowers" / "wall of flowers" / "sculpted from flowers"`,
+  • NO mention of clothing-style or garment-shape`,
     touchpoints: [
-      'SUNSET FLOWER-WALL DRESS — solid floor-length wall of red roses + coral peonies + orange ranunculus + golden marigolds + amber dahlias forming the entire dress, the dress IS the flowers sculpted into human-form, every inch is pure flower-mass, no fabric anywhere',
-      'TWILIGHT PURPLE FLOWER-WALL — solid wall of lavender wisteria + violet anemones + indigo iris + periwinkle sweet-pea + deep-purple dahlias forming the dress entirely, dress sculpted from pure flower-mass, NO fabric visible',
-      'BLUSH FLOWER-MASS GOWN — dress sculpted ENTIRELY from soft pink peonies + blush garden roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses, solid floral-wall dress, pure flower-mass body',
-      'MONOCHROME WHITE FLOWER-WALL — dress IS a solid wall of white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore, no fabric beneath, pure floral-mass dress',
-      'RAINBOW FLOWER-WALL — dress sculpted from a solid rainbow wall of red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones, vibrant pure flower-mass',
-      'CORAL TROPICAL FLOWER-WALL — dress IS solid coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds, the entire dress is pure flower-wall, no fabric',
-      'BURGUNDY WINE FLOWER-WALL — solid wall of burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla forming the dress entirely',
-      'GOLD AMBER FLOWER-WALL — dress IS a solid mass of golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums, pure metallic flower-wall',
-      'OCEAN COOL FLOWER-WALL — dress sculpted from solid aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses, pure flower-wall',
-      'EMERALD FOREST FLOWER-WALL — dress IS pure wall of green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents, solid flower-mass',
-      'PASTEL CANDY FLOWER-WALL — dress is a solid wall of pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms, cotton-candy pure flower-mass',
-      'TROPICAL BOLD FLOWER-WALL — dress IS solid hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger, pure flower-mass dress',
-      'AUTUMN HARVEST FLOWER-WALL — dress sculpted from rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos, solid autumn flower-mass',
-      'DUSK FIRE FLOWER-WALL — solid wall of deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias forming the dress, pure flower-mass',
-      'BLUE + WHITE COASTAL FLOWER-WALL — dress IS pure wall of sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue, no fabric',
-      'PINK + GOLD ROMANTIC FLOWER-WALL — solid floral-wall of soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea forming the entire dress',
-      'VIOLET + CREAM FLOWER-WALL — dress is pure wall of violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea, solid flower-mass',
-      'CHERRY-BLOSSOM FLOWER-WALL — dress IS solid pink + white cherry blossom petals + pink camellias + cream magnolias, solid cherry-blossom flower-mass dress',
-      'RED + BURGUNDY FLOWER-WALL — solid wall of deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus forming the dress entirely',
-      'YELLOW MEADOW SUN-WALL — dress IS pure flower-wall of yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums',
-      'LILAC + BABY-BLUE SPRING-WALL — dress sculpted from lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots, solid spring flower-mass',
-      'TEAL + ROSE-GOLD VINTAGE FLOWER-WALL — dress IS solid wall of teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies, pure flower-mass',
-      'BLACK ROSE + WHITE GOTH FLOWER-WALL — dress is solid dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore, gothic flower-mass dress',
-      'PEACH + CREAM FLOWER-WALL — dress IS pure peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias, solid soft flower-mass',
-      'MAGENTA + ORANGE BOLD FLOWER-WALL — dress sculpted from hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea, pure flower-mass',
-      'MINT + WHITE FRESH FLOWER-WALL — dress is solid mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus, pure flower-mass',
-      'BUTTER YELLOW + BLUSH FLOWER-WALL — dress IS pure wall of butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums',
-      'INDIGO + VIOLET DEEP FLOWER-WALL — dress sculpted from solid indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias, pure deep-purple flower-mass',
-      'ORANGE + CORAL TROPICAL FLOWER-WALL — dress IS solid bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea, pure flower-mass',
-      'AMBER + COPPER METALLIC FLOWER-WALL — dress is solid wall of amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses, pure flower-mass',
+      'SUNSET FLOWER-BLAST — maximalist flower-explosion engulfing her body neck to floor with red roses + coral peonies + orange ranunculus + golden marigolds + amber dahlias, blooms cascade down her arms her hips her thighs and spill outward into the foreground bouquet, her body buried inside a torrential sunset bloom-storm',
+      'TWILIGHT PURPLE EXPLOSION — her body engulfed and overflowing with lavender wisteria + violet anemones + indigo iris + periwinkle sweet-pea + deep-purple dahlias drenching her from collarbone to feet, petal-storm cascading from her form into the foreground',
+      'BLUSH PINK ENGULFING-STORM — torrential bloom-cascade drenching her body with soft pink peonies + blush garden roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses, every inch buried under maximalist blush-pink flower-explosion overflowing beyond her shape',
+      'MONOCHROME WHITE FLOWER-BLAST — her form completely engulfed in maximalist white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore, a snow-white bloom-storm cascading from her neck out into the foreground',
+      'RAINBOW FLOWER-EXPLOSION — maximalist bloom-blast engulfing her body with red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones, rainbow petal-storm overflowing her form in every direction',
+      'CORAL TROPICAL ENGULFING-BLAST — her body drenched and engulfed by coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds, tropical bloom-cascade overflowing from neck to feet into the foreground',
+      'BURGUNDY WINE FLOWER-STORM — torrential bloom-explosion drenching her body with burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla, dark wine-spectrum petals cascading and overflowing beyond her form',
+      'GOLD AMBER FLOWER-BLAST — her body engulfed by maximalist explosion of golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums, metallic bloom-storm cascading and spilling outward',
+      'OCEAN COOL ENGULFING-STORM — her form buried inside torrential cascade of aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses, cool ocean-spectrum bloom-explosion overflowing her body',
+      'EMERALD FOREST FLOWER-BLAST — her body engulfed and overflowing with green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents, maximalist forest bloom-storm cascading neck to floor',
+      'PASTEL CANDY EXPLOSION — torrential cascade of pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms engulfing her body, cotton-candy flower-storm drenching her form and spilling into foreground',
+      'TROPICAL BOLD FLOWER-BLAST — her body buried inside maximalist explosion of hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger, bold tropical bloom-storm overflowing her form',
+      'AUTUMN HARVEST ENGULFING-STORM — her body drenched and engulfed by rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos, autumn bloom-cascade overflowing from collarbone to feet',
+      'DUSK FIRE FLOWER-BLAST — her form completely engulfed by torrential cascade of deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias, dusk-fire bloom-explosion overflowing beyond her shape',
+      'BLUE + WHITE COASTAL ENGULFING-BLAST — her body drenched and engulfed in sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue, coastal bloom-storm cascading from neck to floor',
+      'PINK + GOLD ROMANTIC BLAST — her body engulfed by maximalist cascade of soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea, romantic bloom-explosion overflowing her form',
+      'VIOLET + CREAM FLOWER-STORM — torrential cascade of violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea engulfing her body neck to floor',
+      'CHERRY-BLOSSOM EXPLOSION — her form buried inside maximalist explosion of pink + white cherry blossom petals + pink camellias + cream magnolias, cherry-blossom storm cascading and overflowing from her body',
+      'RED + BURGUNDY BLAST — her body engulfed and drenched in deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus, maximalist crimson bloom-storm overflowing her form',
+      'YELLOW MEADOW SUN-EXPLOSION — her body completely engulfed by yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums, maximalist sun bloom-cascade overflowing her form',
+      'LILAC + BABY-BLUE SPRING BLAST — torrential cascade of lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots engulfing her body, spring bloom-storm cascading neck to floor',
+      'TEAL + ROSE-GOLD VINTAGE BLAST — her body buried inside maximalist explosion of teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies, vintage bloom-storm overflowing her form',
+      'BLACK ROSE + WHITE GOTH BLAST — her body engulfed by torrential cascade of dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore, gothic bloom-storm cascading and overflowing',
+      'PEACH + CREAM SOFT BLAST — her body drenched and engulfed by peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias, soft bloom-cascade overflowing her form',
+      'MAGENTA + ORANGE BOLD BLAST — her body buried inside maximalist explosion of hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea, bold bloom-storm overflowing her form',
+      'MINT + WHITE FRESH BLAST — her body completely engulfed in mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus, fresh bloom-cascade overflowing her form',
+      'BUTTER YELLOW + BLUSH BLAST — her body drenched and engulfed by butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums, soft bloom-storm overflowing',
+      'INDIGO + VIOLET DEEP BLAST — her body engulfed by torrential cascade of indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias, deep-purple bloom-storm overflowing her form',
+      'ORANGE + CORAL TROPICAL BLAST — her body buried inside maximalist explosion of bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea, tropical bloom-storm overflowing',
+      'AMBER + COPPER METALLIC BLAST — her body engulfed and drenched in amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses, metallic bloom-storm overflowing her form',
     ],
-    instructions: `Each entry is ONE SOLID FLOWER-WALL DRESS, 30-60 words. Format: "COLOR-THEME NAME FLOWER-WALL — solid wall of [3-6 named flower species] forming the dress entirely, [reinforce 'IS the flowers' or 'pure flower-mass']". NEVER mention fabric / tulle / cloth / silhouette names (ball gown / corset / mermaid / etc.). MULTI-SPECIES + COLOR-THEMED. Output as a NUMBERED list, one per line.`,
+    instructions: `Each entry is ONE FLOWER-EXPLOSION engulfing her body, 30-60 words. Format: "COLOR-THEME NAME BLAST/EXPLOSION/STORM — her body engulfed/buried/drenched by [3-6 named species], bloom-cascade overflowing/spilling beyond her form". NEVER use words: dress / gown / skirt / silhouette / bodice / fabric / wall / garment. ALWAYS use engulfing/overflowing/cascading verbs. MULTI-SPECIES + COLOR-THEMED. Output as a NUMBERED list, one per line.`,
   },
+
 
   // ─── flower-fairy R7: hair_floral rewritten — flowers REPLACE the hair-mass ───
   faebot_flower_fairy_hair_floral: {
