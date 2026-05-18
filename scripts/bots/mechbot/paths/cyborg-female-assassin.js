@@ -24,7 +24,7 @@ module.exports = {
     cyborg_feature: 'CYBORG_FEATURES',
     cyborg_material: 'CYBORG_WOMAN_MATERIAL',
     action: 'KILLER_DROID_ACTIONS',
-    landscape: 'CHARACTER_INTERIOR',
+    landscape: 'NINJA_BOT_SCENES',
     composition: 'KILLER_DROID_COMPOSITION',
     drama: 'CYBORG_WOMAN_DRAMA',
   },

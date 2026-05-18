@@ -724,6 +724,59 @@ Each entry MUST:
     instructions: `Each entry is ONE specific SOLO killer-droid predatory action, 30-55 words. Format: "[opening verb-phrase action], the [droid-noun] mid-[VERB] with [weapon], [target/kill detail], [one environmental detail]". Use ONLY genderless droid-nouns (killer-droid / assassin-droid / kill-unit / combat-unit / hunter-droid / murder-unit / the droid) — NEVER she/her/woman/female. Use predator/combat verbs (firing/climbing/striking/lurking/stalking/ambushing/executing/hunting/mid-blast/mid-thrust). STRICT BAN on contemplative verbs (stands/poses/leans/watches/examines/contemplates). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── cyborg-female-assassin (ninja-bot) path: sci-fi action SCENES (2026-05-17) ───
+  ninja_bot_scenes: {
+    format: 'simple',
+    theme: `SCI-FI ACTION SCENES for the ninja-bot path — cinematic CYBERPUNK / SCI-FI scenes the ninja-bot is OPERATING IN. The ninja-bot is the focal subject in EACH scene, but the scene itself is RICH with sci-fi context — secondary actors / threats / sci-fi tech / cinematic action moment. NOT empty architectural backdrop. 40-70 words per scene.
+
+⚠️ THE BAR: every scene reads like a still from Blade Runner 2049 / Ghost in the Shell / Cyberpunk Edgerunners / Akira / The Matrix / Dredd / Altered Carbon / Black Mirror. Cinematic. Atmospheric. RICH WITH SCI-FI ELEMENTS. The ninja-bot is doing-something-in-the-scene, not posing in front of a backdrop.
+
+🚫 ABSOLUTE BANS:
+• NO empty architectural backdrop ("ancient stone hall", "industrial corridor" alone — must have scene context layered in)
+• NO portrait-grade settings (NO peaceful zen-garden, NO pristine museum-interior)
+• NO actual samurai-Japan historical settings (this is CYBERPUNK ninja-bot — neon/holo/sci-fi context required)
+• NO "ninja-bot standing in [setting]" framings — describe the SCENE the ninja-bot is operating in
+
+✓ SCENE CATEGORIES (vary across):
+  A. **CYBERPUNK CITY PURSUIT** (~15%) — neon-rain Tokyo / Hong-Kong / Night-City rooftop chase scene, hover-traffic streaming below, holo-billboards bleeding light across wet glass, distant target fleeing across adjacent rooftop, search-drones strobing the sky
+  B. **CORPORATE INFILTRATION** (~15%) — sky-tower atrium with floating logo-holograms, security-drones patrolling, biometric-scanner gates, glass walkways over neon-lit hangar 200 floors below, fresh kill of corporate guard at edge of frame
+  C. **DATA-VAULT HEIST** (~10%) — server-farm corridor with bio-luminescent data-streams flowing through fiber-optic columns, red alarm-strobes pulsing, hovering security-drone debris smoking on the floor, holographic alert-warnings projecting all around
+  D. **MEGA-MECH HANGAR** (~10%) — towering titan-mechs in deep background half-assembled in gantry-cradles, holographic schematics rotating, mechanic-drones swarming, the ninja-bot moving between mech-feet in the foreground
+  E. **NEON ALLEY DUEL** (~10%) — narrow cyberpunk alley with overhead hover-traffic, red-paper-lantern light bleeding, another cyber-ninja silhouetted in opposing distance OR fresh-cut enemy collapsing in foreground rain-puddle
+  F. **HOVER-VEHICLE COMBAT** (~5%) — mid-leap from a hover-bike / hover-car / mag-train onto a moving target, motion-blur on cyberpunk skyline, plasma-fire crossing the air
+  G. **ARCOLOGY ROOFTOP** (~10%) — perched on edge of a 500-floor arcology tower looking out over a sprawling cyberpunk megacity below, distant arc-lightning between buildings, search-beams cutting through fog
+  H. **HOLO-PROJECTION HEIST** (~5%) — surrounded by floating holographic blueprints / target-data / map-overlays projecting in mid-air around the ninja-bot, infiltrating a digital-vault
+  I. **VOLCANIC GANTRY** (~5%) — narrow plasma-conduit walkway over a glowing magma-reactor core, scattered hostile mech-drones disabled around, fire-suppression systems venting steam
+  J. **FROZEN COLONY OUTPOST** (~5%) — abandoned arctic colony exterior with aurora overhead, snow-buried hovercraft wreckage in the background, breath-vents misting from the ninja-bot, distant searchlight scanning the ice
+  K. **SUBWAY-TUNNEL HUNT** (~5%) — cyberpunk maglev-subway tunnel with sparks raining from severed power-conduits, dead security-drone smoking on the rail, holographic emergency-warnings strobing red across tile walls
+  L. **CYBER-BRIDGE CROSSING** (~5%) — narrow energy-bridge over a plasma-river / data-stream / void-chasm, the ninja-bot mid-crossing with weapon-drawn, distant tower-targets visible across the chasm
+
+Each entry MUST:
+• Open with the SCENE / setting (NOT the ninja-bot)
+• Include AT LEAST 2 sci-fi context elements (holograms / drones / mechs / neon-billboards / plasma / mag-rails / arcology-skyline / data-streams / security-tech / energy-bridges)
+• Reference AT LEAST 1 secondary actor or threat (drone / corp-guard / opposing ninja / fleeing target / disabled mech / enemy silhouette) OR a kinetic action element (rain / sparks / motion-blur / strobing alarm / collapsing structure)
+• Place the ninja-bot IN the scene with a kinetic verb (mid-leap / mid-strike / mid-stalk / mid-perch / mid-pursuit / mid-infiltrate / mid-vault)
+• Use atmospheric cinematic language — never flat / generic / static`,
+    touchpoints: [
+      'Neon-rain Tokyo rooftop pursuit scene, the ninja-bot mid-sprint across wet glass under cascading holo-billboard light, distant fleeing target leaping the next rooftop two blocks away, three search-drones strobing white-blue across the cyberpunk sky, hover-traffic streaming through the canyons 80 floors below, sodium-orange sodium-pink sky reflecting in every puddle',
+      'Corporate sky-tower atrium infiltration, the ninja-bot mid-vault over a glass walkway under a rotating floating MEGACORP hologram, two security-drones strobing red alert-cones across the marble floor below, a fresh-cut corporate guard collapsing at the edge of frame, biometric-scanner gates sparking offline, 300-floor neon-lit hangar opening beneath the walkway',
+      'Server-farm data-vault heist, the ninja-bot mid-crouch behind a bio-luminescent fiber-optic column with data-streams flowing electric-cyan through the glass, red alarm-strobes pulsing in three-second intervals across the hexagonal-grid floor, hovering security-drone smoking on its side, holographic ALERT warnings projecting in the air around in three rotating panels',
+      'Mega-mech hangar floor, the ninja-bot moving silent between the feet of towering half-assembled titan-mechs suspended in gantry-cradles 80 meters overhead, rotating holographic schematics projecting blueprint-grids across the hangar dome, mechanic-drones swarming the titan-shoulders, sparks raining from arc-welders, the ninja-bot dwarfed in scale and infiltrating',
+      'Narrow cyberpunk neon alley duel, the ninja-bot mid-strike with katana drawn against another cyber-ninja silhouetted ten meters distant in opposing stance, overhead hover-traffic streaming red-and-white through the alley canyon above, red paper-lantern light bleeding across the wet pavement, holographic ramen-shop signs blinking in three languages',
+      'Mid-leap from a streaking hover-bike onto a moving mag-train roof, the ninja-bot caught full-extension in mid-air with katana drawn, plasma-fire crossing the air from disabled security-drones pursuing, cyberpunk skyline scrolling in motion-blur, search-beams cutting through low-altitude fog',
+      'Arcology rooftop perched on the edge of a 500-floor mega-tower, the ninja-bot in sniper-crouch overlooking the sprawling cyberpunk megacity below, distant arc-lightning crackling between the tallest spires, search-beams sweeping through low fog-bank, holographic skyline-advertisements projecting kilometers across the dome',
+      'Holo-projection heist scene, the ninja-bot at the center of floating holographic target-blueprints / map-overlays / facial-recognition data-streams rotating in mid-air at every angle around the chassis, infiltrating a digital-vault with one articulated hand jacked into a glowing data-spike, the room itself dim with only the holograms providing illumination',
+      'Volcanic gantry plasma-bridge crossing, the ninja-bot mid-stride along a narrow walkway suspended over a glowing magma-reactor core 40 meters below, three disabled hostile mech-drones smoking against the gantry rails, fire-suppression systems venting white CO2-steam in pillars, the reactor light bleeding orange-amber across the chassis',
+      'Frozen colony outpost exterior, the ninja-bot mid-stalk between rusted snow-buried hovercraft wreckage, aurora rippling green-violet overhead, distant searchlight scanning the ice-shelf horizon, breath-vents misting white from the chassis, a fresh-cut sentry collapsed in the snow with weapon dropped, glow-color reflecting blue-cyan on the ice',
+      'Cyberpunk maglev-subway tunnel hunt, the ninja-bot mid-vault over a smoking dead security-drone on the rail, sparks raining from severed power-conduits overhead, holographic emergency-warnings strobing red across tile walls in twenty languages, the approaching mag-train headlight blinding from the tunnel-end, eight seconds before impact',
+      'Cyber-bridge over a plasma-river, the ninja-bot mid-crossing of a narrow energy-bridge with katana drawn low, distant tower-targets glittering across the chasm at three positions, the plasma below flowing electric-violet, holographic mile-markers projecting in the air at intervals along the bridge railing',
+      'Cyberpunk apartment-tower facade scene, the ninja-bot wall-perched against a 60-floor neon-glass facade outside a target apartment window, suppressed pistol drawn at thigh, target silhouette visible through the rain-streaked glass meeting two corporate handlers, hover-traffic below at 40 floors, distant arcology lights bleeding through fog',
+      'Bio-luminescent fungal-spore corporate research lab interior, the ninja-bot infiltrating through a vat-grown specimen wing with glowing alien-blue spore-clouds hanging in the air, two suited researchers fleeing in the background, holographic specimen-data rotating in mid-air, security-drone smoking on the floor with optic-eye cracked',
+      'Cyber-temple ruin scene, a ruined ancient pagoda half-claimed by glowing neon-graffiti and tangled fiber-optic cable-vines, the ninja-bot mid-strike with katana extended against an off-frame target, holographic incense-smoke drifting in the air, electric-cyan glow leaking from a cracked ceiling-conduit, ruined torii-gate silhouetted against neon skyline',
+    ],
+    instructions: `Each entry is ONE specific sci-fi action scene the ninja-bot is operating IN, 40-70 words. Format: "[scene/setting opener], the ninja-bot mid-[VERB] [posed in scene], [2+ sci-fi context elements], [secondary actor/threat OR kinetic element], [atmospheric detail]". Use ONLY genderless ninja-bot nouns (ninja-bot / cyber-ninja / shadow-droid / kill-unit / the droid). Setting MUST be cyberpunk / sci-fi / cinematic — never just architecture, always SCENE WITH CONTEXT. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── cyborg-female-assassin path: action-cinematic composition angles (2026-05-17) ───
   killer_droid_composition: {
     format: 'simple',

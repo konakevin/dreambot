@@ -93,6 +93,8 @@ module.exports = {
   KILLER_DROID_ACTIONS: load('killer_droid_actions'),
   // Killer-droid action-cinematic camera angles (full-body, NOT closeup portraits)
   KILLER_DROID_COMPOSITION: load('killer_droid_composition'),
+  // Ninja-bot SCENES — sci-fi action context, NOT empty architecture backdrop
+  NINJA_BOT_SCENES: load('ninja_bot_scenes'),
   // Cyborg-man pools
   CYBORG_MALE_HAIR_STYLES,
   CYBORG_MALE_BODY_TYPES,
