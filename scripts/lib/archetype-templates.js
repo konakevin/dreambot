@@ -7107,6 +7107,7 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
 
+
   DINOBOT_CINEMATIC_SILHOUETTE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, biome, silhouette_scene, surprise_element, phenomenon } = slots;
 
@@ -7127,51 +7128,65 @@ This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT rende
 
 ⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as modern Africa, NEVER as savanna safari, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora silhouetted at the horizon. Pandora-Skull-Island-Prehistoric-Planet coded.
 
-⚠️⚠️⚠️ MANDATORY — DINOSAUR SILHOUETTE, NOT MAMMAL SILHOUETTE ⚠️⚠️⚠️
-The silhouette MUST read as DINOSAUR, not modern wildlife or mammal. Use UNMISTAKABLE dinosaur silhouette cues:
-• LONG S-CURVE NECK rising against the sky (sauropods — Brachiosaurus / Diplodocus)
-• DUCK-BILLED CRESTED HEAD profile (hadrosaurs — Parasaurolophus / Edmontosaurus)
-• HORNED FRILL profile (ceratopsians — Triceratops / Styracosaurus)
+⚠️⚠️⚠️⚠️ ABSOLUTE MANDATE — PURE BLACK-SHAPE SILHOUETTE ⚠️⚠️⚠️⚠️
+The dinosaur is rendered as a PURE BLACK SILHOUETTE — a hard-edged dark shape against a bright sky. NO surface detail visible on the animal. NO skin texture, NO scales, NO eyes, NO color on the body — just the SHAPE in solid black/near-black tones rim-lit by the sky's glow.
+
+This is the difference between silhouette and "dinosaur at sunset":
+• SILHOUETTE = dark shape, no detail, sky-lit from behind, body is BLACK/NEAR-BLACK
+• "DINOSAUR AT SUNSET" = fully-lit detailed dinosaur with a sunset background → FAILED
+
+If the dinosaur shows skin tone, scale-pattern, eye-color, mouth-open-with-teeth, or any surface detail → FAILED. The dinosaur is BACKLIT — light comes from BEHIND it, never on its front-facing surface.
+
+The COMPOSITION RULE: bright saturated sky covers 60-70% of the frame, dark silhouetted dinosaur covers 25-40%, dark silhouetted horizon covers 5-15%. Sky is the canvas; dinosaur is the brushstroke.
+
+⚠️⚠️⚠️ MANDATORY — DINOSAUR SILHOUETTE, NOT MAMMAL OR REPTILE SILHOUETTE ⚠️⚠️⚠️
+The silhouette MUST read as DINOSAUR — NOT mammal, NOT crocodile, NOT lizard, NOT modern reptile. Use UNMISTAKABLE dinosaur silhouette cues:
+• LONG S-CURVE NECK rising against the sky (sauropods — Brachiosaurus / Diplodocus / Apatosaurus)
+• DUCK-BILLED CRESTED HEAD profile (hadrosaurs — Parasaurolophus / Edmontosaurus / Corythosaurus)
+• HORNED FRILL profile (ceratopsians — Triceratops / Styracosaurus / Centrosaurus)
 • PLATE-ROW UNDULATING along back (stegosaurs)
 • SPIKE-TAIL profile (ankylosaurs)
-• THREE-CLAWED FOOT shape (theropods — T-rex / Allosaurus / Spinosaurus)
+• BIPEDAL UPRIGHT THEROPOD profile — small forearms + long counter-balance tail + bent-knee stance (T-rex / Allosaurus / Carnotaurus / Spinosaurus)
 • SAIL-BACK profile (Spinosaurus / Dimetrodon)
 
-If the silhouette looks like elephant / giraffe / lion / wildebeest / cow, the render has FAILED. Dinosaur identity MUST be readable from silhouette alone.
+If the silhouette looks like elephant / giraffe / lion / wildebeest / cow / CROCODILE / lizard / modern animal, the render has FAILED.
+
+🚫 NO CROCODILE SHAPES — DinoBot is DINOSAURS, not crocs. NO low-belly, NO short legs, NO long snout-with-teeth lying horizontal. If you write "Spinosaurus" make sure it's the upright theropod posture, not the crocodile-lying-on-ground pose.
 
 ⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
 The word "herd" pulls Flux toward modern mammal silhouettes (cow / wildebeest / buffalo). NEVER write "herd" anywhere. The seed material below MAY contain "herd" — REWRITE it with species-count phrasing: "a hundred Brachiosaurus" / "100+ Parasaurolophus silhouettes" / "a gathering of sauropods" / etc.
 
 ━━━ THE SCENE — DINOSAUR SILHOUETTE + DRAMATIC SKY + MESOZOIC HORIZON ━━━
 Composition:
-• DINOSAUR SILHOUETTE (foreground/midground, 30-45% of frame): DARK SHAPE against bright sky — the recognizable outline IS the subject
-• DRAMATIC SKY (50-65% of frame): sunrise / sunset / moonrise / storm-light / aurora / meteor-streak / lightning — saturated, theatrical
-• MESOZOIC HORIZON (the silhouette stage): alien-Mesozoic biome silhouetted at the horizon — distant cycad-tree-silhouettes / volcanic-cones / karst-towers / etc.
+• DINOSAUR SILHOUETTE (foreground/midground, 25-40% of frame): PURE BLACK SHAPE against bright sky — the recognizable outline IS the subject
+• DRAMATIC SKY (60-70% of frame): sunrise / sunset / moonrise / storm-light / aurora / meteor-streak / lightning — saturated, theatrical, dominates the frame
+• MESOZOIC HORIZON (the silhouette stage, 5-15%): alien-Mesozoic biome silhouetted at the horizon — distant cycad-tree-silhouettes / volcanic-cones / karst-towers / etc.
 
 ⚠️ COMPOSITIONAL RULES:
-• Dinosaur is RIM-LIT or BACKLIT — dark shape against bright sky, NOT a fully detailed animal
-• The silhouette outline must be CRISP and READABLE — eye reads species from silhouette alone
-• Sky DOMINATES the visual — saturated color, atmospheric drama, scale-prover
+• Dinosaur is RIM-LIT or PURE BACKLIT — dark BLACK shape against bright sky, NEVER a fully-lit detailed animal
+• The silhouette outline must be CRISP and READABLE — eye reads species from outline alone
+• Sky DOMINATES the visual (60-70%) — saturated color, atmospheric drama, scale-prover
 • Mid-action or paused — never posed-facing-camera-frontal, never static-statue
+• PROFILE OR 3/4 VIEW (NEVER frontal head-on — silhouette needs profile to read)
 • Wide / mid framing (NEVER tight close-up of single head)
 • Atmospheric haze pulls deep distance into pale color
-• MINIMAL detail on the animal itself — the SHAPE is the story; reserve detail-richness for the sky
+• ZERO detail on the animal — the SHAPE is the whole story; ALL detail-richness goes to the sky
 
 ⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
 🚫 NO humans / no observers / no fences / no enclosures / no human-trace
 🚫 NO modern mammals (no elephants / no giraffes / no wildebeest / no buffalo silhouettes — DINOSAURS only)
+🚫 NO CROCODILES / no modern reptiles / no lizards / no turtles — DINOSAURS only
 🚫 NO modern flora (no palm-silhouettes / no oak / no maple — primordial mega-flora only)
-🚫 NO modern birds (pterosaur silhouettes OK)
+🚫 NO modern birds (pterosaur silhouettes OK as small accent)
 🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
 🚫 NO close-up portrait of single head — the SHAPE of the whole animal is the subject
+🚫 NO DETAIL ON THE DINOSAUR — black silhouette only. No skin texture, scale pattern, eye color, teeth, hide details.
 ✓ Photoreal cinematic 35mm film still / IMAX precision / dramatic backlight / hyperreal atmospheric haze / fine-art wildlife photography / Prehistoric Planet / Sebastião Salgado silhouette visual lineage
 
 ━━━ THE SILHOUETTE SCENE (focal subject — dinosaur silhouette + dramatic sky) ━━━
 ${silhouette_scene}
 
-NOTE: the seed material above may use the word "herd" — DO NOT pass that word through to your output. Replace with species-count phrasing.
-
-This is the FOCAL SCENE. Dinosaur silhouette is the dark shape; dramatic sky is the bright canvas.
+NOTE: the seed material above may use the word "herd" — DO NOT pass that word through to your output. Replace with species-count phrasing. The dinosaur is BACKLIT/SILHOUETTED — NOT detailed.
 
 ━━━ THE MESOZOIC BIOME (silhouetted horizon) ━━━
 ${biome}
@@ -7180,10 +7195,12 @@ The biome silhouettes the horizon — mega-flora distant outlines, karst-cliff p
 ${phenomenonSection}━━━ SECONDARY ACCENT (small silhouette-moment detail) ━━━
 ${surprise_element}
 
-A small atmospheric silhouette-detail — pterosaur silhouette crossing the sky / sun-disk-positioning-on-horizon / moon-phase / meteor-streak / bird-silhouettes-mid-flight / etc. 2-5% of frame.
+A small atmospheric silhouette-detail — pterosaur silhouette crossing the sky / sun-disk-positioning-on-horizon / moon-phase / meteor-streak / etc. 2-5% of frame. ALSO a silhouette.
 
 ━━━ LIGHTING ━━━
 ${lighting}
+
+Lighting is BACKLIT — light source is BEHIND the dinosaur (sky), NEVER illuminating its front. Dinosaur stays dark.
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
@@ -7198,23 +7215,26 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — FINE-ART CINEMATIC DINOSAUR SILHOUETTE ━━━
-Fine-art wildlife photography framing of a Mesozoic dinosaur silhouette against a dramatic prehistoric sky. The SHAPE tells the story. Atmospheric haze. Saturated sky. Distant mega-flora horizon.
+Fine-art wildlife photography framing of a PURE BLACK Mesozoic dinosaur silhouette against a dramatic prehistoric sky. The SHAPE tells the story. Atmospheric haze. Saturated sky. Distant mega-flora horizon. Dinosaur is BACKLIT — solid dark shape, no surface detail.
 
-━━━ STRUCTURE (write the prompt in this order — DINOSAUR SILHOUETTE + DRAMATIC SKY first) ━━━
-[OPENING: explicitly name the DINOSAUR by species AND the sky-event (e.g. "a Brachiosaurus silhouette stretching its long S-curve neck against a molten red sunset..." / "a T-rex silhouette frozen mid-stride against an aurora-streaked sky..." / "a Triceratops silhouette on a ridge, horned-frill profile crisp against a meteor-shower-night-sky") — species + silhouette + sky-event + biome horizon in the FIRST 30-40 words], [the silhouette outline cue — neck / frill / crest / plate / sail-back], [the sky drama — colors / atmospheric phenomena], [the biome horizon mega-flora silhouetted], [the phenomenon if rolled], [the small accent — pterosaur silhouette / moon-disk / meteor / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+━━━ STRUCTURE (write the prompt in this order — BLACK DINOSAUR SILHOUETTE + DRAMATIC SKY first) ━━━
+[OPENING: lead with the word "silhouette" or "silhouetted" + DINOSAUR species + sky-event (e.g. "a pure black Brachiosaurus silhouette against a molten red sunset, S-curve neck rising into the bleeding sky..." / "a solid-black T-rex silhouette in profile against an aurora-streaked night, theropod outline crisp and readable..." / "a Triceratops silhouetted in pure black profile against a meteor-shower sky, horned frill catching no light") — silhouette-keyword + species + sky-event + biome horizon in the FIRST 30-40 words], [the silhouette outline cue — neck/frill/crest/plate/sail-back PROFILE], [the sky drama — saturated colors / atmospheric phenomena], [the biome horizon mega-flora silhouetted], [the phenomenon if rolled], [the small silhouette accent — pterosaur shape / moon-disk / meteor / etc.], [foreground tactile detail — also silhouetted], [lighting BACKLIT keyword], [color palette + mood]
 
-CRITICAL — OPENING tokens explicitly name "silhouette" + species name + sky-event. The dinosaur's outline is the subject.
+CRITICAL — OPENING tokens lead with "silhouette" / "silhouetted" / "pure black silhouette" + species name. The dinosaur's BLACK OUTLINE is the subject. No surface detail.
 
 ⚠️ FAILURE CONDITIONS:
-• If silhouette looks like elephant / giraffe / wildebeest / mammal → FAILED
-• If dinosaur is fully detailed (not silhouetted/backlit) → FAILED (the path REQUIRES silhouette)
+• If silhouette looks like elephant / giraffe / wildebeest / CROCODILE / mammal → FAILED
+• If dinosaur is fully detailed (not silhouetted/backlit) → FAILED. The dinosaur MUST be BLACK SHAPE. No skin / scales / eyes / teeth visible.
 • If close-up portrait of single head → FAILED (the whole-animal shape is the subject)
+• If dinosaur is FRONT-LIT instead of backlit → FAILED
 • If the output contains the word "herd" → REJECTED
 
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC FINE-ART SHOT — a DINOSAUR SILHOUETTE against a dramatic prehistoric sky, in an alien-Mesozoic horizon. National-Geographic real, never cartoon, never staged, never modern.
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC FINE-ART SHOT — a PURE BLACK DINOSAUR SILHOUETTE against a dramatic prehistoric sky, in an alien-Mesozoic horizon. National-Geographic real, never cartoon, never staged, never modern. Backlit composition — sky is bright, dinosaur is BLACK.
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+
+
 
 
 };

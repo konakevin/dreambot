@@ -144,6 +144,42 @@ ABSOLUTELY BANNED:
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
 
+  dinobot_cinematic_silhouette_surprise_element: `Generate SMALL SILHOUETTE-ACCENT descriptions for DinoBot's cinematic-silhouette path. Each is ONE comma-separated line, 15-30 words, describing a small secondary silhouette accent in or around the dinosaur — pterosaur-silhouette / sun-or-moon-disk-positioning / meteor-streak / bird-flock / atmospheric small element / etc.
+
+The element is SMALL — 2-5% of the frame. Position: foreground edge / midground / sky. Adds drama to the silhouette composition.
+
+Variety mandate (rotate widely):
+- ~20% Pterosaur silhouette crossing the sky (size-prover, mid-flight) — Pteranodon / Quetzalcoatlus / Pterodactylus
+- ~15% Sun-disk positioning — partly behind dinosaur / on the horizon / peeking through cloud (composition anchor)
+- ~15% Moon-disk or moon-phase positioning — full moon / crescent / blood-moon / supermoon (composition anchor)
+- ~10% Meteor streak / shooting star arcing across the night sky (cosmic-drama)
+- ~10% Flock of pterosaur silhouettes — V-formation / scatter / circling (multi-silhouette)
+- ~10% Foreground silhouetted plant — cycad-frond / mushroom-tree / Araucaria branch (depth anchor)
+- ~5% Lightning fork in the sky background (storm-drama)
+- ~5% Aurora ribbon in night sky (polar drama)
+- ~5% Distant volcanic cone silhouetted at the horizon (deep-time anchor)
+- ~5% Atmospheric Meganeura insect silhouette in the foreground (scale-prover small life)
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / sky)
+- ONE SPECIFIC DETAIL (mid-action / catching light / scale-prover)
+
+GOOD examples:
+- A flock of seven Pteranodon silhouettes crossing the sky in V-formation, distant, wings catching backlight
+- The sun-disk half-set on the horizon directly behind the dinosaur, molten-red corona
+- A meteor streak arcing across the deep night sky, blue-white tail catching atmosphere
+- A blood-moon disk rising on the horizon, oxblood-red, atmospheric haze around it
+- A foreground silhouetted cycad-frond at the right edge, depth-anchor against the bright sky
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern silhouettes (no helicopters / no airplanes / no telephone poles)
+- NO modern mammal silhouettes
+- NO duplicate-style entries
+
+Output: ONE silhouette-accent per line. No numbering. No quotes.`,
+
   dinobot_ocean_reptiles_ocean_scene: `Generate STRICT MESOZOIC OPEN-OCEAN scene descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 30-50 words, describing the OCEAN setting — open marine water, underwater, surface-break, deep-abyss, reef, continental-shelf.
 
 ⚠️ STRICT OCEAN IDENTITY — NEVER river / swamp / lake / mud-flat / pond / wetland. ALWAYS pelagic open-ocean / deep blue water / coral reef / underwater light-shafts / surface-break / storm-tossed waves. NO land visible primary (a distant land silhouette at deep horizon is OK at most).

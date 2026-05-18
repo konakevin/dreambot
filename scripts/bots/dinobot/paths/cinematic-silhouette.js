@@ -1,65 +1,30 @@
 /**
- * DinoBot cinematic-silhouette — dinosaurs as dramatic silhouettes.
- * Sunrise, sunset, moonrise, stormlight. The shape of the animal
- * against an epic prehistoric sky.
+ * DinoBot cinematic-silhouette — declarative composer form (2026-05-17 migration).
+ *
+ * DINOSAUR SILHOUETTES against breathtaking prehistoric skies — sunrise / sunset /
+ * moonrise / lightning-storm / aurora / meteor-shower. The SHAPE of the animal IS
+ * the subject. Fine-art wildlife-photography poster-worthy cinematography.
+ *
+ * Reuses 2 existing production-scale pools:
+ *   - SILHOUETTE_SCENES (200 fat-seed silhouette scenes)
+ *   - DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome — silhouetted horizon)
+ *   - DINOBOT_PALEO_LANDSCAPE_PHENOMENON (100 atmospheric events, 80%-gated)
+ *
+ * Adds 1 new path-bespoke pool:
+ *   - DINOBOT_CINEMATIC_SILHOUETTE_SURPRISE_ELEMENT (pterosaur silhouettes,
+ *     sun/moon disk positioning, meteor streaks, etc.)
+ *
+ * Universal: LIGHTING + PREHISTORIC_ATMOSPHERES.
+ *
+ * Pre-migration function-form at paths/legacy/cinematic-silhouette.js.
  */
 
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
-
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const scene = picker.pickWithRecency(pools.SILHOUETTE_SCENES, 'silhouette_scene');
-  const species = picker.pickWithRecency(pools.DINO_SPECIES, 'silhouette_species');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const camera = picker.pickWithRecency(pools.CAMERA_ANGLES, 'camera_angle');
-  const atmosphere = picker.pickWithRecency(pools.PREHISTORIC_ATMOSPHERES, 'atmosphere');
-
-  return `You are a fine-art wildlife photographer writing CINEMATIC SILHOUETTE scenes for DinoBot. Dinosaurs as dramatic dark shapes against breathtaking prehistoric skies — sunrise, sunset, moonrise, lightning storms, meteor showers. The SHAPE of the animal is the subject. Iconic, poster-worthy compositions. Output wraps with style prefix + suffix.
-
-${blocks.NO_HUMANS_BLOCK}
-
-${blocks.DINOSAUR_IS_HERO_BLOCK}
-
-${blocks.SPECIES_ACCURATE_BLOCK}
-${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
-
-━━━ THE DINOSAUR ━━━
-${species}
-
-━━━ THE SILHOUETTE SCENE ━━━
-${scene}
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.VOLUMETRIC_LIGHT_BLOCK}
-
-${blocks.WET_WORLD_BLOCK}
-${blocks.EPIC_SCALE_BLOCK}
-
-${blocks.VAST_TERRAIN_BLOCK}
-
-${blocks.SURPRISING_WEATHER_BLOCK}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ CAMERA / FRAMING ━━━
-${camera}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-The dinosaur is a SILHOUETTE — dark shape against a spectacular sky. The recognizable outline of the species tells the story. Epic scale, minimal detail on the animal, maximum drama in the sky and light.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'DINOBOT_CINEMATIC_SILHOUETTE',
+  pools: {
+    biome: 'DINOBOT_PALEO_LANDSCAPE_BIOME',
+    silhouette_scene: 'SILHOUETTE_SCENES',
+    surprise_element: 'DINOBOT_CINEMATIC_SILHOUETTE_SURPRISE_ELEMENT',
+    phenomenon: 'DINOBOT_PALEO_LANDSCAPE_PHENOMENON',
+  },
 };
