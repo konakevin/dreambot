@@ -1095,6 +1095,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_TERRITORY_CLASH: {
+    description:
+      'PATH-BESPOKE — DinoBot territory-clash path (2026-05-17 axis-system migration). TWO DINOSAURS in dominance confrontation — horn-locks, threat-displays, head-butts, frill-vs-frill push, jaw-clamping, ground-shaking charges. Raw primal power without gore. Reuses CLASH_SCENES (200 fat-seed clash scenes) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for clash-specific small accents (broken-fern-debris / blood-trickle / panicked-bystander / dust-rising / etc.). BBC-Planet-Earth + Prehistoric-Planet documentary tension cinematography. 3 path-bespoke axes (biome / clash_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'clash_scene', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 };
 
 module.exports = { ARCHETYPES };

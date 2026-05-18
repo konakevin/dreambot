@@ -107,6 +107,43 @@ ABSOLUTELY BANNED:
 
 Output: ONE herd-accent per line. No numbering. No quotes.`,
 
+  dinobot_territory_clash_surprise_element: `Generate SMALL CLASH-ACCENT descriptions for DinoBot's territory-clash path. Each is ONE comma-separated line, 15-30 words, describing a small secondary accent in or around the two-dinosaur confrontation — broken-debris / dust-rising / panicked-bystander / atmospheric small life / etc.
+
+The element is SMALL — 2-5% of the frame. Position: midground or foreground edge. Adds tension and atmosphere to the clash.
+
+Variety mandate (rotate widely):
+- ~20% Broken fern-frond / cycad-tree-debris kicked up at the impact point (mid-air debris-spray)
+- ~15% Dust-cloud or vapor-cloud rising at the contact-zone (massive-impact atmospheric)
+- ~15% Panicked-bystander dinosaur fleeing the periphery — wrong species, small, in flight-stride
+- ~10% Pterosaur flock startled into flight above the clash (size-prover, lift-off)
+- ~10% Deep three-clawed dinosaur tracks already gouged in the foreground mud / dirt
+- ~10% Small ground-shake atmospheric — pebbles bouncing / mud-spray / hoofprint-puddle rippling
+- ~5% Watching juvenile dinosaur at deep midground silhouette (witness to the clash)
+- ~5% Foreground bone / fossil / weathered-skull from a previous clash (deep-time anchor)
+- ~5% Atmospheric Meganeura or primordial insect-swarm disturbed (scale-prover small life)
+- ~5% Streak of light-ray catching the dust at the impact moment (cinematic god-ray)
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / distant background)
+- ONE SPECIFIC DETAIL (mid-action / catching light / posture / scale-prover)
+
+GOOD examples:
+- A spray of broken fern-fronds catching backlight in the impact zone, midground, debris suspended mid-air
+- A panicked Compsognathus fleeing from the periphery, tiny bipedal silhouette mid-stride, dust pluming behind
+- A dust-cloud rising at the contact-zone, midground, refracting amber light into suspended particulate
+- Three-clawed dinosaur prints gouged in foreground mud, each print holding a rainwater pool catching the sky
+- A watching juvenile Triceratops silhouette at deep midground, frill catching distant light, witnessing the clash
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no fences / no tools
+- NO modern mammals / no buffalo / no bison / no rhinos
+- NO modern birds (pterosaurs OK)
+- NO gore / blood / carcass / wound / kill-shot detail
+- NO duplicate-style entries
+
+Output: ONE clash-accent per line. No numbering. No quotes.`,
+
   dinobot_ocean_reptiles_ocean_scene: `Generate STRICT MESOZOIC OPEN-OCEAN scene descriptions for DinoBot's ocean-reptiles path. Each is ONE comma-separated line, 30-50 words, describing the OCEAN setting — open marine water, underwater, surface-break, deep-abyss, reef, continental-shelf.
 
 ⚠️ STRICT OCEAN IDENTITY — NEVER river / swamp / lake / mud-flat / pond / wetland. ALWAYS pelagic open-ocean / deep blue water / coral reef / underwater light-shafts / surface-break / storm-tossed waves. NO land visible primary (a distant land silhouette at deep horizon is OK at most).
