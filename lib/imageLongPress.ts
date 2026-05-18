@@ -37,22 +37,20 @@ async function fetchHqUrl(uploadId: string): Promise<string | null> {
   }
 }
 
-async function saveToPhotos(id: string, imageUrl: string, isOwnPost: boolean) {
+async function saveToPhotos(id: string, imageUrl: string, upscale: boolean) {
   const { status } = await MediaLibrary.requestPermissionsAsync();
   if (status !== 'granted') {
     showAlert('Permission needed', 'Allow access to save images.');
     return;
   }
 
-  // ── HQ pathway (Pro user saving someone else's post) ──────────────────
-  // Pro users saving someone else's content get a 4× upscale. The first
-  // request for any given post incurs ~15-25s wait; subsequent requests
-  // return instantly thanks to the image_url_hq cache.
-  //
-  // Own-post saves still use the original-res image (Pro is about saving
-  // _other people's_ dreams — users always have full access to their own).
+  // ── HQ pathway (Pro users) ────────────────────────────────────────────
+  // Pro users get a 4× Real-ESRGAN upscale on every save (own posts or
+  // others'). The first request for any given post incurs ~15-25s wait;
+  // subsequent requests return instantly thanks to the image_url_hq
+  // cache on the uploads row.
   let urlToSave = imageUrl;
-  if (!isOwnPost) {
+  if (upscale) {
     UpscaleOverlay.show();
     try {
       const hqUrl = await fetchHqUrl(id);
@@ -84,7 +82,7 @@ async function saveToPhotos(id: string, imageUrl: string, isOwnPost: boolean) {
     // "Asset couldn't be saved to photo library: Unknown error" on iOS 18+.
     await MediaLibrary.createAssetAsync(downloaded.uri);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Toast.show(isOwnPost ? 'Saved to photos' : 'Saved in 4K', 'checkmark-circle');
+    Toast.show(upscale ? 'Saved in 4K' : 'Saved to photos', 'checkmark-circle');
   } catch (err) {
     if (__DEV__) console.warn('[saveToPhotos] failed', err);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -95,13 +93,15 @@ async function saveToPhotos(id: string, imageUrl: string, isOwnPost: boolean) {
 /**
  * Standard long-press handler for images.
  *
- * Save-to-Photos is gated by ownership + Pro entitlement:
- *   - Your own post (or you're admin) → callers pass `onDelete`. Save is
- *     unrestricted; menu shows Save + Delete.
- *   - Someone else's post (bot or other user) → callers omit `onDelete`.
- *     Save requires `isPro` (active Pro subscription). If not Pro, the
- *     long-press shows an upsell prompt routing to /proStore instead of
- *     saving the image.
+ * Two orthogonal gates: ownership/admin (delete affordance) and Pro
+ * entitlement (4K upscale).
+ *   - `onDelete` set: caller is owner OR admin → shows Delete in menu.
+ *   - `isPro`: caller has active Pro subscription → save triggers a
+ *     Real-ESRGAN 4× upscale (cached server-side after first request).
+ *
+ * Free user + not-own post → upsell only (no save).
+ * Free user + own post (no Pro) → original-res save unrestricted.
+ * Pro user (any post) → 4K upscale save.
  */
 export function handleImageLongPress(opts: {
   id: string;
@@ -111,15 +111,17 @@ export function handleImageLongPress(opts: {
 }) {
   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-  if (opts.onDelete) {
-    // Own post (or admin) — always unrestricted save + delete.
-    // Own-post saves keep the original-res image (no upscale — users
-    // already have full access to their own renders).
+  const { isPro } = useAuthStore.getState();
+  const canDelete = !!opts.onDelete;
+  const saveLabel = isPro ? 'Save in 4K' : 'Save to Photos';
+
+  if (canDelete) {
+    // Owner or admin — show Save + Delete.
     showAlert('Options', '', [
       { text: 'Cancel', style: 'cancel' },
       {
-        text: 'Save to Photos',
-        onPress: () => saveToPhotos(opts.id, opts.imageUrl, true),
+        text: saveLabel,
+        onPress: () => saveToPhotos(opts.id, opts.imageUrl, isPro),
       },
       {
         text: 'Delete',
@@ -130,19 +132,16 @@ export function handleImageLongPress(opts: {
     return;
   }
 
-  // Someone else's content — gate save on Pro entitlement.
-  // Pro users get a 4× upscale on first save of any given post; the
-  // backend caches it so subsequent saves are instant.
-  const { isPro } = useAuthStore.getState();
+  // Not owner/admin — Pro-only save with upscale, or upsell.
   if (isPro) {
     showAlert('Save in 4K', 'Upscale to 4K and save? This usually takes 15-25 seconds.', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl, false) },
+      { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl, true) },
     ]);
     return;
   }
 
-  // Free user — show upsell instead of save
+  // Free user, not own post — show upsell instead of save.
   showAlert(
     'Pro Feature',
     'Saving dreams from other creators is a Pro feature. Subscribe for unlimited HQ downloads.',
