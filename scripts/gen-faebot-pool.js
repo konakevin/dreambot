@@ -76,6 +76,112 @@ if (!POOL) {
 // ─────────────────────────────────────────────────────────────
 
 const POOL_RECIPES = {
+  // ─── flower-fairy R7: bloom_gown rewritten as SOLID FLOWER-WALL (no fabric, no silhouette names) ───
+  faebot_flower_fairy_bloom_gown: {
+    format: 'simple',
+    theme: `SOLID FLOWER-WALL DRESSES for the FaeBot flower-fairy path. Each entry is ONE color-themed multi-species dress where the dress IS A WALL OF SOLID FLOWERS sculpted into human-form. NOT "a gown with flowers on it" — the dress IS pure flower-mass. Each entry 30-60 words.
+
+⚠️ ABSOLUTE: the dress IS the flowers. Don't describe fabric. Don't name silhouettes like "ball gown" / "corset" / "mermaid" / "A-line" / "empire-waist" / "princess" / "tulle". These pull Flux's tulle-gown prior and ruin the render. Just describe the dress as "SOLID FLOWER-MASS" / "WALL OF FLOWERS" / "FLOWER-WALL DRESS" / "DRESS SCULPTED FROM SOLID FLOWERS" / "GOWN OF PURE FLOWER-MASS" / "FLORAL WALL FORMING THE DRESS ENTIRELY" — then name the species and color.
+
+⚠️ MULTI-SPECIES MANDATE — 3-6 different flower species per entry in ONE bold coordinated color theme.
+
+⚠️ COLOR THEMES — distribute across:
+  SUNSET (red/orange/pink/coral/gold) | TWILIGHT PURPLES | BLUSH PINKS | MONOCHROME WHITE
+  RAINBOW EXPLOSION | DEEP BURGUNDY + WINE | GOLD + AMBER + COPPER | OCEAN COOL
+  EMERALD FOREST | PASTEL CANDY | TROPICAL BOLD | AUTUMN HARVEST | DUSK FIRE
+  BLUE + WHITE | PINK + GOLD | VIOLET + CREAM | NAVY + BURGUNDY | MAGENTA + ORANGE
+
+🚫 STRICT BANS:
+  • NO fabric / NO tulle / NO chiffon / NO satin / NO silk / NO cloth / NO weave
+  • NO silhouette names (ball gown / corset / mermaid / A-line / empire-waist / princess / strapless / off-shoulder)
+  • NO hair references
+  • NO single-species dresses
+  • NO "decorated with flowers" / "covered in flowers" — ONLY "IS flowers" / "wall of flowers" / "sculpted from flowers"`,
+    touchpoints: [
+      'SUNSET FLOWER-WALL DRESS — solid floor-length wall of red roses + coral peonies + orange ranunculus + golden marigolds + amber dahlias forming the entire dress, the dress IS the flowers sculpted into human-form, every inch is pure flower-mass, no fabric anywhere',
+      'TWILIGHT PURPLE FLOWER-WALL — solid wall of lavender wisteria + violet anemones + indigo iris + periwinkle sweet-pea + deep-purple dahlias forming the dress entirely, dress sculpted from pure flower-mass, NO fabric visible',
+      'BLUSH FLOWER-MASS GOWN — dress sculpted ENTIRELY from soft pink peonies + blush garden roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses, solid floral-wall dress, pure flower-mass body',
+      'MONOCHROME WHITE FLOWER-WALL — dress IS a solid wall of white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore, no fabric beneath, pure floral-mass dress',
+      'RAINBOW FLOWER-WALL — dress sculpted from a solid rainbow wall of red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones, vibrant pure flower-mass',
+      'CORAL TROPICAL FLOWER-WALL — dress IS solid coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds, the entire dress is pure flower-wall, no fabric',
+      'BURGUNDY WINE FLOWER-WALL — solid wall of burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla forming the dress entirely',
+      'GOLD AMBER FLOWER-WALL — dress IS a solid mass of golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums, pure metallic flower-wall',
+      'OCEAN COOL FLOWER-WALL — dress sculpted from solid aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses, pure flower-wall',
+      'EMERALD FOREST FLOWER-WALL — dress IS pure wall of green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents, solid flower-mass',
+      'PASTEL CANDY FLOWER-WALL — dress is a solid wall of pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms, cotton-candy pure flower-mass',
+      'TROPICAL BOLD FLOWER-WALL — dress IS solid hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger, pure flower-mass dress',
+      'AUTUMN HARVEST FLOWER-WALL — dress sculpted from rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos, solid autumn flower-mass',
+      'DUSK FIRE FLOWER-WALL — solid wall of deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias forming the dress, pure flower-mass',
+      'BLUE + WHITE COASTAL FLOWER-WALL — dress IS pure wall of sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue, no fabric',
+      'PINK + GOLD ROMANTIC FLOWER-WALL — solid floral-wall of soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea forming the entire dress',
+      'VIOLET + CREAM FLOWER-WALL — dress is pure wall of violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea, solid flower-mass',
+      'CHERRY-BLOSSOM FLOWER-WALL — dress IS solid pink + white cherry blossom petals + pink camellias + cream magnolias, solid cherry-blossom flower-mass dress',
+      'RED + BURGUNDY FLOWER-WALL — solid wall of deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus forming the dress entirely',
+      'YELLOW MEADOW SUN-WALL — dress IS pure flower-wall of yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums',
+      'LILAC + BABY-BLUE SPRING-WALL — dress sculpted from lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots, solid spring flower-mass',
+      'TEAL + ROSE-GOLD VINTAGE FLOWER-WALL — dress IS solid wall of teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies, pure flower-mass',
+      'BLACK ROSE + WHITE GOTH FLOWER-WALL — dress is solid dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore, gothic flower-mass dress',
+      'PEACH + CREAM FLOWER-WALL — dress IS pure peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias, solid soft flower-mass',
+      'MAGENTA + ORANGE BOLD FLOWER-WALL — dress sculpted from hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea, pure flower-mass',
+      'MINT + WHITE FRESH FLOWER-WALL — dress is solid mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus, pure flower-mass',
+      'BUTTER YELLOW + BLUSH FLOWER-WALL — dress IS pure wall of butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums',
+      'INDIGO + VIOLET DEEP FLOWER-WALL — dress sculpted from solid indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias, pure deep-purple flower-mass',
+      'ORANGE + CORAL TROPICAL FLOWER-WALL — dress IS solid bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea, pure flower-mass',
+      'AMBER + COPPER METALLIC FLOWER-WALL — dress is solid wall of amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses, pure flower-mass',
+    ],
+    instructions: `Each entry is ONE SOLID FLOWER-WALL DRESS, 30-60 words. Format: "COLOR-THEME NAME FLOWER-WALL — solid wall of [3-6 named flower species] forming the dress entirely, [reinforce 'IS the flowers' or 'pure flower-mass']". NEVER mention fabric / tulle / cloth / silhouette names (ball gown / corset / mermaid / etc.). MULTI-SPECIES + COLOR-THEMED. Output as a NUMBERED list, one per line.`,
+  },
+
+  // ─── flower-fairy R7: hair_floral rewritten — flowers REPLACE the hair-mass ───
+  faebot_flower_fairy_hair_floral: {
+    format: 'simple',
+    theme: `HAIR-REPLACED-BY-FLOWERS for the FaeBot flower-fairy path. Each entry is ONE specific HAIR-REPLACEMENT cascade where flowers REPLACE the hair-strands themselves — not "flowers threaded through hair" but "flowers AS the hair-mass". The hair appears to BE a flower-cascade flowing from her scalp like hair would. Each entry 30-50 words.
+
+⚠️ FRAMING: the flowers REPLACE the hair-strands. Describe the cascade as if you can't see any hair-strand at all — only flower-strands flowing from her scalp down to waist/back like a flower-waterfall. Lead with phrases like "hair entirely REPLACED by", "cascading FLOWER-HAIR of", "flower-strands flowing from her scalp", "flower-waterfall in place of hair".
+
+⚠️ MULTI-SPECIES + COLOR THEME — 3-6 named species per entry in ONE bold coordinated palette.
+
+🚫 STRICT BANS:
+  • NO "flower-crown" / NO "wreath" / NO "halo of flowers"
+  • NO "woven through" / NO "tucked in" / NO "small floral accents"
+  • NO single-species
+  • NO mention of hair-color showing through (hair-color is in separate axis)
+  • NO mention of dress / fabric / face / eyes`,
+    touchpoints: [
+      'SUNSET FLOWER-HAIR REPLACEMENT — hair entirely REPLACED by a waist-length cascade of red roses + coral peonies + orange ranunculus + golden marigolds + amber dahlias flowing like flower-strands from her scalp, no hair-strands visible, pure sunset flower-waterfall',
+      'TWILIGHT PURPLE FLOWER-HAIR — flower-strands of lavender wisteria + violet anemones + indigo iris + periwinkle sweet-pea + deep-purple dahlias flowing from her scalp to waist, hair entirely replaced by purple flower-cascade',
+      'BLUSH PINK FLOWER-HAIR — hair entirely REPLACED by cascade of soft pink peonies + blush garden roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses flowing from scalp to waist, pure blush flower-waterfall',
+      'MONOCHROME WHITE FLOWER-HAIR — flower-strands of white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore flowing from her scalp like hair, no actual hair visible, snow-white flower-waterfall',
+      'RAINBOW FLOWER-HAIR — hair entirely REPLACED by rainbow cascade of red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones flowing from scalp like flower-strands',
+      'CORAL TROPICAL FLOWER-HAIR — flower-cascade of coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds replacing hair-mass entirely, pure flower-waterfall',
+      'BURGUNDY WINE FLOWER-HAIR — hair REPLACED by waterfall of burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla, no hair-strands visible',
+      'GOLD AMBER FLOWER-HAIR — flower-strands of golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums flowing from scalp, hair entirely replaced',
+      'OCEAN COOL FLOWER-HAIR — hair entirely REPLACED by cascade of aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses flowing from scalp',
+      'EMERALD FOREST FLOWER-HAIR — flower-cascade of green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents replacing hair entirely',
+      'PASTEL CANDY FLOWER-HAIR — flower-strands of pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms flowing from scalp, cotton-candy flower-waterfall replacing hair',
+      'TROPICAL BOLD FLOWER-HAIR — hair REPLACED by hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger flowing from scalp',
+      'AUTUMN HARVEST FLOWER-HAIR — flower-cascade of rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos replacing hair-mass entirely',
+      'DUSK FIRE FLOWER-HAIR — hair entirely REPLACED by waterfall of deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias, dusk-fire flower-waterfall',
+      'BLUE + WHITE COASTAL FLOWER-HAIR — flower-strands of sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue flowing from scalp like hair',
+      'PINK + GOLD ROMANTIC FLOWER-HAIR — hair REPLACED by cascade of soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea',
+      'VIOLET + CREAM FLOWER-HAIR — flower-cascade of violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea replacing hair entirely',
+      'CHERRY-BLOSSOM FLOWER-HAIR — hair entirely REPLACED by pink + white cherry blossom petals + pink camellias + cream magnolias flowing from scalp like cherry-blossom hair-strands',
+      'RED + BURGUNDY FLOWER-HAIR — flower-strands of deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus flowing from scalp, hair entirely replaced',
+      'YELLOW MEADOW FLOWER-HAIR — hair REPLACED by waterfall of yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums',
+      'LILAC + BABY-BLUE SPRING FLOWER-HAIR — flower-cascade of lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots flowing from scalp',
+      'TEAL + ROSE-GOLD VINTAGE FLOWER-HAIR — hair entirely REPLACED by teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies',
+      'BLACK ROSE + WHITE GOTH FLOWER-HAIR — flower-strands of dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore replacing hair',
+      'PEACH + CREAM FLOWER-HAIR — hair REPLACED by cascade of peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias',
+      'MAGENTA + ORANGE BOLD FLOWER-HAIR — flower-strands of hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea flowing from scalp',
+      'MINT + WHITE FRESH FLOWER-HAIR — flower-cascade of mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus replacing hair entirely',
+      'BUTTER YELLOW + BLUSH FLOWER-HAIR — hair entirely REPLACED by butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums',
+      'INDIGO + VIOLET DEEP FLOWER-HAIR — flower-strands of indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias flowing from scalp, deep-purple flower-waterfall',
+      'ORANGE + CORAL TROPICAL FLOWER-HAIR — hair REPLACED by bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea',
+      'AMBER + COPPER METALLIC FLOWER-HAIR — flower-cascade of amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses replacing hair-mass',
+    ],
+    instructions: `Each entry is ONE HAIR-REPLACED-BY-FLOWERS cascade, 30-50 words. Format: "COLOR-THEME NAME FLOWER-HAIR — hair entirely REPLACED by cascade of [3-6 named flower species] flowing from scalp to waist". NEVER "woven through" / NEVER "crown" / NEVER "wreath". ALWAYS "REPLACED" / "flower-strands flowing from scalp" / "flower-cascade replacing hair". MULTI-SPECIES + COLOR-THEMED. Output as a NUMBERED list, one per line.`,
+  },
+
   // ─── flower-fairy DNA: fairy_creature (unified mythic-fae description) ───
   faebot_flower_fairy_fairy_creature: {
     format: 'simple',

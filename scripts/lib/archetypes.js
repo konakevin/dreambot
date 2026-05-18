@@ -1083,14 +1083,14 @@ const ARCHETYPES = {
 
   FAEBOT_FLOWER_FAIRY: {
     description:
-      'PATH-BESPOKE — FaeBot flower-fairy path (2026-05-17 R4 FaeBot-native rebuild). Mythic-fae-creature portrait (NOT human-model) with stacked otherworldly features: pointed elf-ears + fae-glowing skin + subtle fae-markings + plant-merged details + magical signature + dramatic flower-wings spread wide. Organic flower-woven attire (fae-grown, never couture). Caught-on-camera-candid mid-action moment (never posed, never direct eye-contact). FaeBot painted_fantasy_novel medium register (Manchess/Giancola/Bonner/Froud lineage). 4 path-bespoke axes (fairy_creature / floral_attire / wings / candid_action) + 60%-gated magical_signature.',
+      'PATH-BESPOKE — FaeBot flower-fairy path (2026-05-17 R6). "She IS flowers, not wears flowers" reframe — dress, hair, wings are made FROM flowers (no plain fabric, no plain hair-strands). Tight mad-libs template (Sonnet fills slots, no word-budget compression of density keywords). Wings = saturated jewel-tone gossamer (NOT flowers — frees flower-budget for dress+hair). FaeBot candid mid-action pose (head-bowed / side-profile / mid-interaction). Rendered in painted_fantasy_novel (Manchess/Giancola/Bonner/Froud). 10 path slots + 60%-gated atmospheric_phenomenon.',
     slots: {
       universal: [],
       bot: [],
-      path: ['fairy_creature', 'floral_attire', 'wings', 'candid_action'],
+      path: ['race', 'skin_tone', 'eyes', 'hair_color', 'hairstyle', 'hair_floral', 'bloom_gown', 'wings', 'garden_backdrop', 'candid_action'],
     },
     pickN: {},
-    conditionalLayer: { slot: 'magical_signature', gate: 0.6 },
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.6 },
     framingModes: null,
     anchorScaleRange: null,
   },
@@ -1102,6 +1102,20 @@ const ARCHETYPES = {
       universal: ['lighting', 'atmosphere'],
       bot: [],
       path: ['biome', 'clash_scene', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  DINOBOT_CINEMATIC_SILHOUETTE: {
+    description:
+      'PATH-BESPOKE — DinoBot cinematic-silhouette path (2026-05-17 axis-system migration). DINOSAURS as dramatic dark silhouettes against breathtaking prehistoric skies — sunrise / sunset / moonrise / lightning-storm / meteor-shower / aurora. The SHAPE of the animal is the subject. Iconic poster-worthy compositions. Reuses SILHOUETTE_SCENES (200 fat-seed silhouette scenes) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for silhouette-specific small accents (pterosaur silhouette / sun-disk-positioning / moon-phase / etc.). Fine-art wildlife-photography cinematography. 3 path-bespoke axes (biome / silhouette_scene / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'silhouette_scene', 'surprise_element'],
     },
     pickN: {},
     conditionalLayer: { slot: 'phenomenon', gate: 0.8 },

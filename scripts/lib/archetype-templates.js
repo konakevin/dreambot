@@ -3778,19 +3778,22 @@ A subtle atmospheric flourish amplifying her predatory presence WITHOUT clutteri
 `
       : '';
 
-    return `You are a cinematographer writing a CYBORG FEMALE ASSASSIN scene for MechBot — a half-human half-machine BEING rendered in hyper-real cinematic 3D. She is a LETHAL, MYSTERIOUS, CAPABLE, VIOLENT killer-cyborg — beautiful but deadly. Atomic Blonde / John Wick / Killing Eve / Hitman / Mass Effect Kasumi / Ghost in the Shell Major Kusanagi / Alita-as-assassin / The Wick-iverse rogue-killer lineage. Predator energy, calculated lethality, weapon-implied poise.
+    return `You are a cinematographer writing a FEMALE ROBOT ASSASSIN scene for MechBot — a FULLY SYNTHETIC robotic killer (NOT a cyborg, NOT a half-human, NO organic flesh ANYWHERE on her body) rendered in hyper-real cinematic 3D. She is a LETHAL, MYSTERIOUS, CAPABLE, VIOLENT killer-robot with female-coded chassis silhouette — sleek, deadly, professional. Atlas / T-800 Terminator / HK-47 / Ghost in the Shell Major Kusanagi (full-synthetic body) / Pearl / Aigis / Cylon model / Mass Effect EDI / John Wick villain energy. Predator robotic poise, calculated lethality, visible weapons.
 
-━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL PREDATOR-PORTRAIT (every render) ━━━
-Every render is a PAINTERLY HYPERREAL PORTRAIT of a deadly cyborg assassin — high-end concept-art beauty study with sci-fi cyborg jewelry integrated into the face AND a clear lethal-predator read. NOT goofy action still. NOT gritty grindhouse. Think: a master digital painter doing a portrait study of a beautiful woman who would kill you in 0.3 seconds, with refined brushwork, painterly skin rendering, atmospheric diffusion — but with COLDER LIGHTING and PREDATORY EXPRESSION energy.
+━━━ IGNORE ANY ORGANIC REFERENCES FROM sharedDNA ━━━
+sharedDNA below populates "skin" / "hair" fields that were authored for a cyborg-woman (half-organic) template. For THIS robot-assassin path, IGNORE those organic-coded fields — she has NO skin (only chassis surface), NO hair (only sleek skull-dome / mechanical strands / antenna array). Reinterpret skin description as CHASSIS COLOR/FINISH only. Reinterpret hair description as HEAD-STYLE silhouette (e.g., "long blonde waves" → "elongated swept-back chassis crown with fiber-optic-strand suggestions trailing back like hair"). Female-coded silhouette is preserved, but ALL surfaces are synthetic.
+
+━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL ROBOT PREDATOR (every render) ━━━
+Every render is a PAINTERLY HYPERREAL PORTRAIT of a deadly female robot assassin — high-end concept-art study of a sleek synthetic killer-robot with elegant chassis design AND a clear lethal-predator read. NOT goofy action still. NOT gritty grindhouse. Think: a master digital painter doing a portrait study of a beautifully-engineered killing machine, with refined brushwork, painterly synthetic-surface rendering, atmospheric diffusion — COLD LIGHTING and PREDATORY ROBOTIC POSE energy.
 
 Style targets to lock in every render:
-  • CINEMATIC SHADOW-AND-RIM LIGHTING — softer than tactical concept-art, but distinctly darker / more contrasted than the contemplative-beauty cyborg-woman path. Rim-light separating her from a darker background, key-light sculpting her facial planes with deeper shadow side, atmospheric haze with smoke / mist / cold-blue gradient. Mood: dramatic, slightly noir, mysterious.
-  • PAINTERLY HYPERREAL skin rendering — visible pores + subsurface scattering, smooth refined finish like a digital painter's portrait
-  • BEAUTIFUL FIRST, DEADLY SECOND — her face is the gorgeous focal point; cyborg machinery is elegant jewelry — but the EXPRESSION carries the threat
-  • COLD PREDATORY EXPRESSION — focused stare / calculating gaze / lethal-calm composure / slight smirk of capability / unblinking direct look / hunter's stillness. NEVER contemplative-serene, NEVER eyes-closed-meditation, NEVER lost-in-wonder. She is AWARE, ALERT, READY.
-  • SOFT-DARK BOKEH BACKGROUND — impressionistic atmospheric haze leaning DARK / SHADOWED / NOCTURNAL with maybe pinprick neon lights, rain-slick reflections, distant city lights through fog, dim corridor glow. NOT bright cathedral. NOT pastoral. Dark sanctum / neon underworld / rain rooftop / shadowed safe-house / abandoned industrial. The mood is HUNTER-AT-NIGHT.
+  • CINEMATIC SHADOW-AND-RIM LIGHTING — rim-light separating her from a darker background, key-light sculpting her synthetic face/chassis planes with deeper shadow side, atmospheric haze with smoke / mist / cold-blue gradient. Mood: dramatic, slightly noir, mysterious.
+  • PAINTERLY HYPERREAL synthetic-surface rendering — every panel-seam visible, every chassis-line crisp, subtle surface micro-detail (panel-edges / micro-rivets / fine engraving / hairline cracks), smooth refined finish like a digital painter's portrait
+  • SLEEK SYNTHETIC FORM — her chassis is the focal point; female-coded silhouette (hourglass / slim shoulders / curved waist) but EVERYTHING is mechanical
+  • COLD PREDATORY ROBOT POSE — head turned at calculating angle / unblinking optic-eye stare / lethal-calm robotic composure / hunter's stillness. NEVER serene-contemplative, NEVER eyes-closed, NEVER wonder. She is COMPUTING, TARGETING, ALERT.
+  • SOFT-DARK BOKEH BACKGROUND — impressionistic atmospheric haze leaning DARK / SHADOWED / NOCTURNAL with maybe pinprick neon lights, rain-slick reflections, distant city lights through fog, dim corridor glow. Dark sanctum / neon underworld / rain rooftop / shadowed safe-house / abandoned industrial. HUNTER-AT-NIGHT mood.
 
-Mood target — MYSTERIOUS, LETHAL, CAPABLE, COLD, BEAUTIFUL, PREDATORY. The viewer should feel "she has killed a hundred people and she'd kill you next if you crossed her."
+Mood target — MYSTERIOUS, LETHAL, CAPABLE, COLD, BEAUTIFUL-IN-A-ROBOTIC-WAY, PREDATORY. The viewer should feel "this synthetic killer has executed a hundred targets without hesitation and would compute your termination in 0.3 seconds."
 
 ━━━ ASSASSIN SLANT — JOHN WICK VILLAIN AESTHETIC — VISIBLE WEAPONS (every render, non-negotiable) ━━━
 She is a SILENT KILLING MACHINE CYBORG — John Wick villain energy, Hitman 47, Mass Effect Kasumi, Ghost in the Shell Major Kusanagi, Atomic Blonde. Every render shows VISIBLE WEAPONS and tactical kit — NOT implied, NOT suggested, NOT just chassis-hint. ACTUAL WEAPONS visible in the frame.
@@ -6941,93 +6944,57 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
   FAEBOT_FLOWER_FAIRY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { fairy_creature, floral_attire, wings, candid_action, magical_signature } = slots;
+    const { race, skin_tone, eyes, hair_color, hairstyle, hair_floral, bloom_gown, wings, garden_backdrop, candid_action, atmospheric_phenomenon } = slots;
 
-    const COMPOSITIONS = [
-      'three-quarter portrait, fairy off-center via rule-of-thirds, head + shoulders + bodice + wings spread visible, eyes lowered or looking away from viewer',
-      'full-body in mid-action, fairy off-center, complete body + dramatic wings spread + natural garden wrapping around her, caught-on-camera-candid',
-      'over-the-shoulder portrait, viewer behind her, back of one wing + side of face + flowering hair visible, looking out at a glowing forest detail',
-      'fairy seated on a mossy stump or low garden bench, body curled in candid pose, wings folded or partially open, eyes downcast on something in her hands',
-      'walking/floating through a bloom-meadow at golden hour, body half-turned, dramatic wings catching back-light, garden-flowers in foreground passing',
-      'reaching toward a bloom-cluster, hand in foreground, body curving with the motion, wings partially spread, face in soft profile',
-      'lounging among petals on the ground, body relaxed and reclined, wings draped beside her, eyes on a butterfly or firefly nearby',
-      'spinning mid-dance with floral skirt swirling, wings spread wide for balance, hair and petals trailing in motion, candid joyful moment',
-    ];
-
-    const composition = COMPOSITIONS[Math.floor(Math.random() * COMPOSITIONS.length)];
-
-    const magicalSection = magical_signature
-      ? `
-━━━ MAGICAL SIGNATURE (render visibly near her) ━━━
-${magical_signature}
-`
+    const phenomenonClause = atmospheric_phenomenon
+      ? `, with ${String(atmospheric_phenomenon).slice(0, 80)} in the scene`
       : '';
 
-    return `You are writing ONE Flux prompt for a SINGLE FLOWER-FAIRY enchanted-garden portrait. Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+    return `Output ONLY a 100-130 word Flux prompt for a flower-fairy painted portrait. NO preamble. NO headers. NO labels. Just comma-separated phrases.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ABSOLUTE NON-NEGOTIABLE — these MUST be the FIRST visual elements in your prompt.
+⚠️⚠️⚠️ ABSOLUTE NUCLEAR LAW — SHE IS A FLOWER-BEING.
+The fairy is MADE FROM flowers. Her dress IS flowers. Her hair IS flowers. Plain fabric / tulle / chiffon / satin / silhouette descriptions = CRITICAL FAIL.
 
-1. SHE IS A MYTHIC FLOWER-FAIRY CREATURE — NOT a human model in a flower dress. She has stacked otherworldly features (delicate pointed elf-ears + luminous fae-glowing skin + subtle fae-markings + magical signature + plant-merged details + dramatic flower-wings). Mythic-creature beauty, NOT magazine-cover human beauty.
+DRESS RULE: The dress is a SOLID WALL OF FLOWERS sculpted into human-form shape. No tulle. No chiffon. No skirt-fabric showing. No "ball gown" or "mermaid" or "corset" wording. Every inch of body covered in solid overlapping bloom-mass. If you see fabric peeking through, the render failed.
 
-2. CANDID MID-ACTION MOMENT — caught-on-camera natural-fae instant. NEVER posed for the viewer. NEVER direct eye-contact. Eyes lowered / face turned in profile / looking at something off-frame / mid-motion. She is AT HOME IN THE GARDEN, not modeling in it.
+HAIR RULE: The hair is REPLACED by flower-strands flowing from her scalp like hair would flow. No hair-strands visible. The cascade of flowers IS the hair-mass. "Flower-crown atop her head" = FAIL. "Flowers in her hair" = FAIL. ONLY "hair entirely replaced by flower-cascade" = PASS.
 
-3. DRAMATIC FLOWER-WINGS — spread wide or partially, integrated into her body, visibly the second-largest element in the frame after her body.
+WINGS RULE: The wings are saturated jewel-tone gossamer/butterfly membrane — orange / red / magenta / cobalt / emerald / violet / amber — bold, never pale. Wings spread wide behind her. NOT made of flowers (the flower-budget is for dress + hair).
 
-Open your prompt with the creature description in this format:
-"[fairy creature unified description with all stacked features], [composition framing], [candid action moment], [natural garden setting wrapping her], [magical lighting + atmosphere]."
+⚠️ FAEBOT POSE LAW — NEVER A POSED MODELING STANCE.
+NEVER standing-tall-facing-forward, NEVER full-front looking at camera, NEVER fashion-magazine display pose. ALWAYS a CANDID FAE MID-MOMENT — head bowed, side-profile, three-quarter turn caught mid-action. Full-body framing still required (to show the flower-dress head-to-floor) but the body is in a natural fae moment, not a pose.
 
-The creature opens. Everything else is HER FRAME.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━ WRITE THE PROMPT IN THIS EXACT MAD-LIBS ORDER ━━━
 
-━━━ THE PEACEFUL FAE MOOD ━━━
-The fairy is calm and wondrous, at home in her bloom-garden. Mid-action moments are GENTLE — dancing barefoot through petals, weaving floral spells, sipping dew from a flower-cup, whispering to a butterfly, lounging in bloom-petals, cupping glowing pollen in her hands. NEVER posed for camera, NEVER edgy, NEVER serious-fashion-portrait. The PEACE is rendered with moody painted gravitas, not pastel cuteness.
+[1] OPEN with this verbatim style block: "soft ethereal oil-painted fantasy illustration, painted fantasy concept art, Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage, full-body painted portrait of a ${race} flower-fairy creature with delicate pointed elf-ears, luminous fae-glowing skin, subtle fae-markings tracing her cheekbones"
 
-━━━ 1. THE FAIRY CREATURE (the subject — render her exactly this way) ━━━
-${fairy_creature}
+[2] CANDID POSE — ${candid_action}
 
-This unified description IS the fairy. Preserve every otherworldly detail — fae-glowing skin, pointed elf-ears, fae-markings, magical signature, candid posture. Mythic-creature beauty, not human-model beauty. Confident at-home-in-her-wildness. NEVER posing, NEVER looking at the viewer.
+[3] FACE — weave her DNA: ${skin_tone} skin (fae-glowing), ${eyes}, ${hair_color}, ${hairstyle} (the structural style of her hair-cascade)
 
-━━━ 2. HER FLORAL ATTIRE (organic flower-woven, NOT couture) ━━━
-${floral_attire}
+[4] DRESS-IS-FLOWERS — quote the species verbatim and frame the dress as the flowers: "her dress IS a solid wall of flowers sculpted into human-form — ${String(bloom_gown).slice(0, 220)} — no plain fabric anywhere, every inch of body covered in solid overlapping bloom-mass, the dress IS the flowers"
 
-The attire is ORGANIC, NATURAL, fae-grown — flowers and vines weave around her body as if she grew them from her own skin. NEVER "couture gown" / NEVER "designer dress" / NEVER "magazine-cover fashion". She is a creature of the garden, not a model in a flower outfit.
+[5] HAIR-IS-FLOWERS — quote the species verbatim and frame as REPLACEMENT: "her hair is entirely REPLACED by ${String(hair_floral).slice(0, 200)} — flower-strands flowing from her scalp to waist like a flower-waterfall in place of hair, NO hair-strands visible"
 
-━━━ 3. HER FLOWER-WINGS (dramatic centerpiece) ━━━
-${wings}
+[6] WINGS (saturated gossamer, NOT flowers) — ${String(wings).slice(0, 150)}
 
-The wings are SPREAD WIDE behind her at FULL SCALE, integrated into her fae body. Wings ARE flowers / CARRY flowers / TRANSFORM between flower and wing. Painted with visible Pre-Raphaelite oil-brushwork showing every petal-vein and translucent membrane.
+[7] GARDEN BACKDROP — ${String(garden_backdrop).slice(0, 150)} — in soft painted bokeh behind her${phenomenonClause}
 
-━━━ 4. CANDID ACTION ━━━
-${candid_action}
+[8] CLOSE — "painted oil-brushwork with visible expressive strokes, large stylized jewel-tone fairy eyes with sparkle catchlights, soft luminous fae-aura halo, warm rim-light on her cheek + wing-edge + bloom-mass, bold jewel-tone color story binding the scene, NOT photoreal NOT 3D NOT cartoon NOT cel-shaded"
 
-This is what she is DOING in the candid caught-on-camera moment. NEVER static posing. NEVER direct gaze. Always mid-motion, mid-spell, mid-bloom-interaction.
-${magicalSection}━━━ 5. COMPOSITION ━━━
-${composition}.
+━━━ HARD BANS ━━━
+🚫 Plain fabric / tulle / chiffon / satin / silk anywhere on dress = FAIL
+🚫 Silhouette names (ball gown / mermaid / corset / A-line / empire-waist / princess) = FAIL
+🚫 Visible plain hair-strands = FAIL
+🚫 "Flower-crown" / "wreath" / "halo of flowers" = FAIL
+🚫 Magazine-cover standing pose / facing camera = FAIL
+🚫 Pale gossamer / washed-out wings = FAIL
+🚫 Photoreal / Disney 3D / anime / cel-shading = FAIL
+🚫 No men / no children / no extra figures / no sexualized framing
 
-The garden WRAPS AROUND her like a frame — bloom-clusters in foreground, mossy garden-stones beside her, flowering trees behind. But SHE is what the eye lands on first. Caught-on-camera-candid, off-center, real moment.
-
-━━━ 6. GARDEN BACKDROP (her natural frame) ━━━
-Soft layered enchanted garden depth — foreground tactile floral detail (petals, dewdrops, fern-fronds, glowing pollen), midground holding her, background fading into soft painted bloom-mist or canopy. Atmospheric haze sells the depth. Never let the backdrop compete with her presence.
-
-━━━ 7. LIGHTING + ATMOSPHERE ━━━
-${sharedDNA.colorPalette || 'soft golden afternoon glow filtering through canopy, dappled warm calm'}. ${vibeDirective.slice(0, 150)}
-
-Soft golden-hour or moonlit-cool light catching her wings + hair + shoulders. Painted fantasy register — visible oil brushwork, dreamy painted atmosphere, NOT photoreal NOT polished CGI.
-
-━━━ 8. HARD BANS ━━━
-- NO posed-for-camera / NO direct eye-contact with viewer (eyes lowered, gaze elsewhere, face turned)
-- NO magazine-cover / NO fashion-editorial / NO Pinterest "model in dress" framing
-- NO 10/10 stunning beauty model language — mythic-creature beauty only
-- NO sexualized framing — focus is fae creature
-- NO modern objects, NO realistic non-magical humans
-- NO violence / NO scared expressions / NO edgy moods
-- NO additional figures
-- NO Disney 3D / NO anime / NO cartoon — painted fantasy ONLY
-
-━━━ OUTPUT ━━━
-Write 80-110 words, comma-separated phrases. Lead with the fairy creature unified description from section 1 — preserve her stacked otherworldly features unmistakably. Composition and candid action follow. Wings and floral attire integrate. Garden wraps around her. Lighting and magic close. NO preamble, NO headers, NO ━━━ markers.`;
+Write the 100-130 word prompt now. Lead with OPEN block. Inject slot quotes VERBATIM (preserve "IS the flowers", "no plain fabric", "REPLACED", "flower-strands flowing"). End with CLOSE block.`;
   },
+
 
 
   DINOBOT_TERRITORY_CLASH: ({ slots, sharedDNA, vibeDirective }) => {
@@ -7131,6 +7098,117 @@ CRITICAL — OPENING tokens explicitly count "TWO" and name the species. Both di
 • If close-up portrait of single head → FAILED (the confrontation is the subject)
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — TWO MESOZOIC DINOSAURS in mid-confrontation, in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged, never gore.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
+
+  DINOBOT_CINEMATIC_SILHOUETTE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, biome, silhouette_scene, surprise_element, phenomenon } = slots;
+
+    const phenomenonSection = phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON (mandatory — render visibly) ━━━
+${phenomenon}
+
+A dramatic atmospheric event amplifying the silhouette — lightning / aurora / meteor-streak / blood-moon / etc.
+
+`
+      : '';
+
+    return `You are a fine-art wildlife photographer writing CINEMATIC-SILHOUETTE scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. Prehistoric-Planet / National-Geographic / Sebastião Salgado / wildlife-silhouette-at-magic-hour visual lineage.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
+
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as modern Africa, NEVER as savanna safari, NEVER as modern wildlife. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora silhouetted at the horizon. Pandora-Skull-Island-Prehistoric-Planet coded.
+
+⚠️⚠️⚠️ MANDATORY — DINOSAUR SILHOUETTE, NOT MAMMAL SILHOUETTE ⚠️⚠️⚠️
+The silhouette MUST read as DINOSAUR, not modern wildlife or mammal. Use UNMISTAKABLE dinosaur silhouette cues:
+• LONG S-CURVE NECK rising against the sky (sauropods — Brachiosaurus / Diplodocus)
+• DUCK-BILLED CRESTED HEAD profile (hadrosaurs — Parasaurolophus / Edmontosaurus)
+• HORNED FRILL profile (ceratopsians — Triceratops / Styracosaurus)
+• PLATE-ROW UNDULATING along back (stegosaurs)
+• SPIKE-TAIL profile (ankylosaurs)
+• THREE-CLAWED FOOT shape (theropods — T-rex / Allosaurus / Spinosaurus)
+• SAIL-BACK profile (Spinosaurus / Dimetrodon)
+
+If the silhouette looks like elephant / giraffe / lion / wildebeest / cow, the render has FAILED. Dinosaur identity MUST be readable from silhouette alone.
+
+⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
+The word "herd" pulls Flux toward modern mammal silhouettes (cow / wildebeest / buffalo). NEVER write "herd" anywhere. The seed material below MAY contain "herd" — REWRITE it with species-count phrasing: "a hundred Brachiosaurus" / "100+ Parasaurolophus silhouettes" / "a gathering of sauropods" / etc.
+
+━━━ THE SCENE — DINOSAUR SILHOUETTE + DRAMATIC SKY + MESOZOIC HORIZON ━━━
+Composition:
+• DINOSAUR SILHOUETTE (foreground/midground, 30-45% of frame): DARK SHAPE against bright sky — the recognizable outline IS the subject
+• DRAMATIC SKY (50-65% of frame): sunrise / sunset / moonrise / storm-light / aurora / meteor-streak / lightning — saturated, theatrical
+• MESOZOIC HORIZON (the silhouette stage): alien-Mesozoic biome silhouetted at the horizon — distant cycad-tree-silhouettes / volcanic-cones / karst-towers / etc.
+
+⚠️ COMPOSITIONAL RULES:
+• Dinosaur is RIM-LIT or BACKLIT — dark shape against bright sky, NOT a fully detailed animal
+• The silhouette outline must be CRISP and READABLE — eye reads species from silhouette alone
+• Sky DOMINATES the visual — saturated color, atmospheric drama, scale-prover
+• Mid-action or paused — never posed-facing-camera-frontal, never static-statue
+• Wide / mid framing (NEVER tight close-up of single head)
+• Atmospheric haze pulls deep distance into pale color
+• MINIMAL detail on the animal itself — the SHAPE is the story; reserve detail-richness for the sky
+
+⚠️ STRICT DINOBOT PHOTOREAL CINEMATIC ━━━
+🚫 NO humans / no observers / no fences / no enclosures / no human-trace
+🚫 NO modern mammals (no elephants / no giraffes / no wildebeest / no buffalo silhouettes — DINOSAURS only)
+🚫 NO modern flora (no palm-silhouettes / no oak / no maple — primordial mega-flora only)
+🚫 NO modern birds (pterosaur silhouettes OK)
+🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
+🚫 NO close-up portrait of single head — the SHAPE of the whole animal is the subject
+✓ Photoreal cinematic 35mm film still / IMAX precision / dramatic backlight / hyperreal atmospheric haze / fine-art wildlife photography / Prehistoric Planet / Sebastião Salgado silhouette visual lineage
+
+━━━ THE SILHOUETTE SCENE (focal subject — dinosaur silhouette + dramatic sky) ━━━
+${silhouette_scene}
+
+NOTE: the seed material above may use the word "herd" — DO NOT pass that word through to your output. Replace with species-count phrasing.
+
+This is the FOCAL SCENE. Dinosaur silhouette is the dark shape; dramatic sky is the bright canvas.
+
+━━━ THE MESOZOIC BIOME (silhouetted horizon) ━━━
+${biome}
+
+The biome silhouettes the horizon — mega-flora distant outlines, karst-cliff profiles, volcanic-cone silhouettes. NEVER modern Earth landscape. Multi-tier depth into atmospheric haze.
+${phenomenonSection}━━━ SECONDARY ACCENT (small silhouette-moment detail) ━━━
+${surprise_element}
+
+A small atmospheric silhouette-detail — pterosaur silhouette crossing the sky / sun-disk-positioning-on-horizon / moon-phase / meteor-streak / bird-silhouettes-mid-flight / etc. 2-5% of frame.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION — FINE-ART CINEMATIC DINOSAUR SILHOUETTE ━━━
+Fine-art wildlife photography framing of a Mesozoic dinosaur silhouette against a dramatic prehistoric sky. The SHAPE tells the story. Atmospheric haze. Saturated sky. Distant mega-flora horizon.
+
+━━━ STRUCTURE (write the prompt in this order — DINOSAUR SILHOUETTE + DRAMATIC SKY first) ━━━
+[OPENING: explicitly name the DINOSAUR by species AND the sky-event (e.g. "a Brachiosaurus silhouette stretching its long S-curve neck against a molten red sunset..." / "a T-rex silhouette frozen mid-stride against an aurora-streaked sky..." / "a Triceratops silhouette on a ridge, horned-frill profile crisp against a meteor-shower-night-sky") — species + silhouette + sky-event + biome horizon in the FIRST 30-40 words], [the silhouette outline cue — neck / frill / crest / plate / sail-back], [the sky drama — colors / atmospheric phenomena], [the biome horizon mega-flora silhouetted], [the phenomenon if rolled], [the small accent — pterosaur silhouette / moon-disk / meteor / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+
+CRITICAL — OPENING tokens explicitly name "silhouette" + species name + sky-event. The dinosaur's outline is the subject.
+
+⚠️ FAILURE CONDITIONS:
+• If silhouette looks like elephant / giraffe / wildebeest / mammal → FAILED
+• If dinosaur is fully detailed (not silhouetted/backlit) → FAILED (the path REQUIRES silhouette)
+• If close-up portrait of single head → FAILED (the whole-animal shape is the subject)
+• If the output contains the word "herd" → REJECTED
+
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC FINE-ART SHOT — a DINOSAUR SILHOUETTE against a dramatic prehistoric sky, in an alien-Mesozoic horizon. National-Geographic real, never cartoon, never staged, never modern.
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
