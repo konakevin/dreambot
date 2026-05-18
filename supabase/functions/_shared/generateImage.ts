@@ -1,35 +1,60 @@
 /**
- * Replicate image generation — submit prediction + poll until result.
- * NSFW error surfaces with a distinct `NSFW_CONTENT:` prefix so callers can
- * branch on it. Used by all three pipelines (V4, nightly, restyle-photo).
+ * Multi-provider image generation. Dispatches by model-name prefix:
+ *   • openai/*        → OpenAI Images API (GPT Image 1/2)
+ *   • google/*        → Google Gemini API (Nano Banana Pro / 2)
+ *   • (everything else) → Replicate (Flux family, SDXL, Kontext, etc.)
  *
- * Ship 2.5: the top-level `generateImage` now retries up to 2x on NSFW flags
- * with a fresh Replicate call (same prompt, new stochastic seed). Flux's
- * safety filter is non-deterministic enough that a legitimate prompt flagged
- * once usually passes on the second try. `nsfwRetries` is surfaced in the
- * result for observability.
+ * NSFW handling: each provider throws errors starting with `NSFW_CONTENT:` so
+ * the top-level retry loop fires regardless of provider. `generateImage`
+ * retries up to 2x on NSFW flags with a fresh provider call.
+ *
+ * Used by all four pipelines (V4 generate-dream, nightly, restyle-photo,
+ * first-dream queue worker).
  */
 
 import { pickModel } from './modelPicker.ts';
+import { generateOpenAIImage, isOpenAIModel } from './providers/openai.ts';
+import { generateGeminiImage, isGeminiModel } from './providers/gemini.ts';
 
 export interface GenerateImageResult {
   url: string;
   predictionId: string;
   /** Number of NSFW retries that occurred before success. 0 = passed on first try. */
   nsfwRetries?: number;
+  /** Which provider/model produced this render — for observability + sparkle pricing. */
+  provider?: 'replicate' | 'openai' | 'gemini';
+  model?: string;
+}
+
+export interface GenerateImageCredentials {
+  replicateToken: string;
+  openaiKey?: string;
+  geminiKey?: string;
 }
 
 const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
 const NSFW_MAX_RETRIES = 2;
 
+/**
+ * Backwards-compatible signature: callers can pass either a plain replicate
+ * token (existing call sites) or a credentials object with all three keys.
+ */
+function asCredentials(arg: string | GenerateImageCredentials): GenerateImageCredentials {
+  if (typeof arg === 'string') {
+    return { replicateToken: arg };
+  }
+  return arg;
+}
+
 export async function generateImage(
   mode: string,
   prompt: string,
   inputImage: string | undefined,
-  replicateToken: string,
+  credentials: string | GenerateImageCredentials,
   modelOverride?: string,
   outputFormat: 'png' | 'jpg' = 'png'
 ): Promise<GenerateImageResult> {
+  const creds = asCredentials(credentials);
   let lastErr: Error | null = null;
   for (let attempt = 0; attempt <= NSFW_MAX_RETRIES; attempt++) {
     try {
@@ -37,7 +62,7 @@ export async function generateImage(
         mode,
         prompt,
         inputImage,
-        replicateToken,
+        creds,
         modelOverride,
         outputFormat
       );
@@ -61,13 +86,29 @@ async function generateImageOnce(
   mode: string,
   prompt: string,
   inputImage: string | undefined,
-  replicateToken: string,
+  creds: GenerateImageCredentials,
   modelOverride?: string,
   outputFormat: 'png' | 'jpg' = 'png'
 ): Promise<GenerateImageResult> {
   const picked = await pickModel(mode, prompt);
   const model = modelOverride || picked.model;
   const inputOverrides = modelOverride ? {} : picked.inputOverrides;
+
+  // ── Provider dispatch by model-name prefix ────────────────────────────
+  if (isOpenAIModel(model)) {
+    const r = await generateOpenAIImage(model, prompt, creds.openaiKey ?? '');
+    return { url: r.url, predictionId: r.predictionId, provider: 'openai', model };
+  }
+  if (isGeminiModel(model)) {
+    const r = await generateGeminiImage(model, prompt, creds.geminiKey ?? '');
+    return { url: r.url, predictionId: r.predictionId, provider: 'gemini', model };
+  }
+
+  // ── Default: Replicate ────────────────────────────────────────────────
+  const replicateToken = creds.replicateToken;
+  if (!replicateToken) {
+    throw new Error('REPLICATE_API_TOKEN missing');
+  }
   const isSDXL = model === 'sdxl';
 
   const input: Record<string, unknown> = {
@@ -120,7 +161,7 @@ async function generateImageOnce(
     const json = await res.json();
     const retryAfter = json.retry_after ?? 6;
     await new Promise((r) => setTimeout(r, retryAfter * 1000));
-    return generateImageOnce(mode, prompt, inputImage, replicateToken, modelOverride);
+    return generateImageOnce(mode, prompt, inputImage, creds, modelOverride);
   }
 
   if (!res.ok) {
@@ -143,7 +184,7 @@ async function generateImageOnce(
     const pollData = await pollRes.json();
     if (pollData.status === 'succeeded') {
       const outUrl = typeof pollData.output === 'string' ? pollData.output : pollData.output?.[0];
-      if (outUrl) return { url: outUrl, predictionId: data.id };
+      if (outUrl) return { url: outUrl, predictionId: data.id, provider: 'replicate', model };
     }
     if (pollData.status === 'failed' || pollData.status === 'canceled') {
       const errMsg = pollData.error ?? 'unknown';

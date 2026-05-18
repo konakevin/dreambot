@@ -119,7 +119,11 @@ export async function processFirstDreamJob(args: FirstDreamDispatcherArgs): Prom
     'flux-dev',
     finalPrompt,
     undefined,
-    replicateToken,
+    {
+      replicateToken,
+      openaiKey: Deno.env.get('OPENAI_API_KEY'),
+      geminiKey: Deno.env.get('GEMINI_API_KEY'),
+    },
     renderModel
   );
   imageUrl = genResult.url;

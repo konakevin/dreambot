@@ -115,6 +115,10 @@ Deno.serve(async (req) => {
 
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
   const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
+  // Optional — only required when the picked model is an openai/* or google/* one.
+  // Replicate-only paths still work without these.
+  const OPENAI_KEY = Deno.env.get('OPENAI_API_KEY');
+  const GEMINI_KEY = Deno.env.get('GEMINI_API_KEY');
 
   if (!REPLICATE_TOKEN) {
     return new Response(
@@ -967,7 +971,7 @@ Output ONLY the prompt.`;
       effectiveMode,
       finalPrompt,
       effectiveInputImage,
-      REPLICATE_TOKEN,
+      { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
       pickedModel,
       willDualFaceSwap ? 'jpg' : 'png'
     );

@@ -1,14 +1,18 @@
 /**
- * Settings → Advanced Mode — power-user Flux model preference.
+ * Settings → Advanced Mode — power-user image model preference.
  *
- * Lets the user choose which Flux model their Create-screen "Advanced Mode"
- * renders use. Reads/writes users.pro_mode_flux_model (column name kept for
- * back-compat — was named before the user-facing rename Pro Mode → Advanced
- * Mode). Default is flux-1.1-pro (set by migration 149).
+ * Lets the user choose which model their Create-screen "Advanced Mode"
+ * renders use. Reads/writes users.pro_mode_flux_model (column name kept
+ * for back-compat — predates the rename Pro Mode → Advanced Mode and
+ * predates non-Flux providers). Default is flux-1.1-pro.
  *
- * Advanced Mode is FREE — anyone can use it, costs one sparkle per render
- * same as a normal dream. The Pro subscription (separate, see /proStore) is
- * about unlimited downloads + bonus sparkles + nightly dreams.
+ * Advanced Mode itself is FREE to toggle on — but premium models charge
+ * more sparkles per render (3 for Premium, 5 for Premium+).
+ *
+ * Models grouped by tier:
+ *   • Standard (1 sparkle) — Replicate Flux baseline
+ *   • Premium (3 sparkles) — Flux 2 Max, GPT Image 2, Nano Banana 2, Flux Krea
+ *   • Premium+ (5 sparkles) — Flux 1.1 Pro Ultra, GPT Image 1 HD, Nano Banana Pro
  */
 
 import { useEffect, useState } from 'react';
@@ -19,35 +23,25 @@ import { ScreenLayout } from '@/components/ScreenLayout';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
+import { IMAGE_MODELS, DEFAULT_MODEL_ID, type ImageModel } from '@/constants/imageModels';
 
-const MODEL_OPTIONS: { key: string; label: string; sub: string }[] = [
-  {
-    key: 'black-forest-labs/flux-dev',
-    label: 'Flux 1 Dev',
-    sub: 'Cheaper and faster. Good for iterating.',
-  },
-  {
-    key: 'black-forest-labs/flux-1.1-pro',
-    label: 'Flux 1.1 Pro',
-    sub: 'Default. Sharpest detail and prompt fidelity on Flux 1.',
-  },
-  {
-    key: 'black-forest-labs/flux-2-dev',
-    label: 'Flux 2 Dev',
-    sub: 'Newer architecture. Different look — try it on prompts that under-render on Flux 1.',
-  },
-  {
-    key: 'black-forest-labs/flux-2-pro',
-    label: 'Flux 2 Pro',
-    sub: 'Newest, highest-quality Flux 2 tier.',
-  },
-];
+const TIER_LABELS: Record<ImageModel['tier'], string> = {
+  standard: 'Standard',
+  premium: 'Premium',
+  'premium-plus': 'Premium+',
+};
 
-const DEFAULT_MODEL = 'black-forest-labs/flux-1.1-pro';
+const PROVIDER_LABELS: Record<ImageModel['provider'], string> = {
+  replicate: 'Replicate',
+  openai: 'OpenAI',
+  gemini: 'Google',
+};
 
-export default function SettingsProModeScreen() {
+const TIER_ORDER: ImageModel['tier'][] = ['standard', 'premium', 'premium-plus'];
+
+export default function SettingsAdvancedModeScreen() {
   const user = useAuthStore((s) => s.user);
-  const [selected, setSelected] = useState<string>(DEFAULT_MODEL);
+  const [selected, setSelected] = useState<string>(DEFAULT_MODEL_ID);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -83,9 +77,9 @@ export default function SettingsProModeScreen() {
     <ScreenLayout title="Advanced Mode">
       <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
-          When Advanced Mode is on (Create tab), your prompt is sent verbatim to Flux — no AI
-          enhancement, no medium or vibe directives, no face swap. Pick which Flux model handles
-          those renders.
+          When Advanced Mode is on (Create tab), your prompt is sent verbatim to the model — no AI
+          enhancement, no medium or vibe directives, no face swap. Pick which model handles those
+          renders. Premium models cost more sparkles per render.
         </Text>
       </View>
       {loading ? (
@@ -93,57 +87,91 @@ export default function SettingsProModeScreen() {
           <ActivityIndicator color={colors.accent} />
         </View>
       ) : (
-        <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
-          {MODEL_OPTIONS.map((opt) => {
-            const isSelected = opt.key === selected;
+        <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
+          {TIER_ORDER.map((tier) => {
+            const tierModels = IMAGE_MODELS.filter((m) => m.tier === tier);
+            if (tierModels.length === 0) return null;
             return (
-              <TouchableOpacity
-                key={opt.key}
-                onPress={() => handleSelect(opt.key)}
-                activeOpacity={0.7}
-                style={[
-                  styles.option,
-                  {
-                    backgroundColor: isSelected ? colors.accent + '22' : colors.surface,
-                    borderColor: isSelected ? colors.accent : colors.border,
-                  },
-                ]}
-              >
-                <View style={{ flex: 1, marginRight: 12 }}>
-                  <Text
-                    style={{
-                      color: colors.textPrimary,
-                      fontSize: 15,
-                      fontWeight: '600',
-                    }}
-                  >
-                    {opt.label}
+              <View key={tier} style={{ marginTop: 16 }}>
+                <View style={styles.tierHeader}>
+                  <Text style={[styles.tierLabel, { color: colors.textPrimary }]}>
+                    {TIER_LABELS[tier]}
                   </Text>
-                  <Text
-                    style={{
-                      color: colors.textSecondary,
-                      fontSize: 12,
-                      marginTop: 2,
-                      lineHeight: 17,
-                    }}
-                  >
-                    {opt.sub}
+                  <Text style={[styles.tierCost, { color: colors.textSecondary }]}>
+                    {tierModels[0].sparkleCost === 1
+                      ? '1 sparkle / render'
+                      : `${tierModels[0].sparkleCost} sparkles / render`}
                   </Text>
                 </View>
-                <View
-                  style={{
-                    width: 22,
-                    height: 22,
-                    borderRadius: 11,
-                    borderWidth: 2,
-                    borderColor: isSelected ? colors.accent : colors.border,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {isSelected && <Ionicons name="checkmark" size={14} color={colors.accent} />}
-                </View>
-              </TouchableOpacity>
+                {tierModels.map((opt) => {
+                  const isSelected = opt.id === selected;
+                  return (
+                    <TouchableOpacity
+                      key={opt.id}
+                      onPress={() => handleSelect(opt.id)}
+                      activeOpacity={0.7}
+                      style={[
+                        styles.option,
+                        {
+                          backgroundColor: isSelected ? colors.accent + '22' : colors.surface,
+                          borderColor: isSelected ? colors.accent : colors.border,
+                        },
+                      ]}
+                    >
+                      <View style={{ flex: 1, marginRight: 12 }}>
+                        <View style={styles.optionTitleRow}>
+                          <Text
+                            style={{
+                              color: colors.textPrimary,
+                              fontSize: 15,
+                              fontWeight: '600',
+                            }}
+                          >
+                            {opt.label}
+                          </Text>
+                          <View
+                            style={[
+                              styles.providerBadge,
+                              { borderColor: colors.border, backgroundColor: colors.background },
+                            ]}
+                          >
+                            <Text
+                              style={[styles.providerBadgeText, { color: colors.textSecondary }]}
+                            >
+                              {PROVIDER_LABELS[opt.provider]}
+                            </Text>
+                          </View>
+                        </View>
+                        <Text
+                          style={{
+                            color: colors.textSecondary,
+                            fontSize: 12,
+                            marginTop: 4,
+                            lineHeight: 17,
+                          }}
+                        >
+                          {opt.description}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: 22,
+                          height: 22,
+                          borderRadius: 11,
+                          borderWidth: 2,
+                          borderColor: isSelected ? colors.accent : colors.border,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {isSelected && (
+                          <Ionicons name="checkmark" size={14} color={colors.accent} />
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
             );
           })}
         </View>
@@ -157,6 +185,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
+  tierHeader: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    paddingHorizontal: 4,
+    marginBottom: 8,
+  },
+  tierLabel: {
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+  },
+  tierCost: {
+    fontSize: 12,
+  },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -165,5 +209,21 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     marginBottom: 10,
+  },
+  optionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  providerBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    borderWidth: 1,
+  },
+  providerBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
 });

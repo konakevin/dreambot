@@ -1276,7 +1276,11 @@ Output ONLY the prompt.`;
       'flux-dev',
       finalPrompt,
       undefined,
-      REPLICATE_TOKEN,
+      {
+        replicateToken: REPLICATE_TOKEN,
+        openaiKey: Deno.env.get('OPENAI_API_KEY'),
+        geminiKey: Deno.env.get('GEMINI_API_KEY'),
+      },
       pickedModel,
       // Force JPEG when this dream will go through the dual-face-swap
       // pipeline — preserves the 2026-05-09 HTTP 546 fix. Otherwise PNG.

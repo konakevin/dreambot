@@ -291,7 +291,11 @@ Deno.serve(async (req) => {
       effectiveMode,
       finalPrompt,
       effectiveInputImage,
-      REPLICATE_TOKEN,
+      {
+        replicateToken: REPLICATE_TOKEN,
+        openaiKey: Deno.env.get('OPENAI_API_KEY'),
+        geminiKey: Deno.env.get('GEMINI_API_KEY'),
+      },
       pickedModel
     );
     replicatePredictionId = genResult.predictionId;

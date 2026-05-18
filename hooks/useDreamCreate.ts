@@ -19,6 +19,7 @@ import { cropToPortrait } from '@/lib/cropPhoto';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance, useSpendSparkles } from '@/hooks/useSparkles';
+import { getSparkleCost } from '@/constants/imageModels';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { moderateText } from '@/lib/moderation';
@@ -63,11 +64,13 @@ export function useDreamCreate() {
   }, [user]);
 
   const trySpendSparkle = useCallback(
-    async (jobId: string): Promise<boolean> => {
-      if (sparkleBalance < 1) {
+    async (jobId: string, modelId: string | null): Promise<boolean> => {
+      const cost = getSparkleCost(modelId);
+      if (sparkleBalance < cost) {
+        const sparkleWord = cost === 1 ? 'sparkle' : 'sparkles';
         showAlert(
           'Not enough sparkles',
-          'You need 1 sparkle to dream. Get more sparkles to keep dreaming!',
+          `You need ${cost} ${sparkleWord} to dream with this model. Get more sparkles to keep dreaming!`,
           [
             { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
             { text: 'Cancel', style: 'cancel' },
@@ -78,10 +81,11 @@ export function useDreamCreate() {
       try {
         // Pass jobId as referenceId so refund_sparkles can correlate the
         // spend with any later refund for the same job (idempotent).
-        await spendSparkles({ amount: 1, reason: 'dream', referenceId: jobId });
+        await spendSparkles({ amount: cost, reason: 'dream', referenceId: jobId });
         return true;
       } catch {
-        showAlert('Not enough sparkles', 'You need 1 sparkle to dream.', [
+        const sparkleWord = cost === 1 ? 'sparkle' : 'sparkles';
+        showAlert('Not enough sparkles', `You need ${cost} ${sparkleWord} to dream.`, [
           { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
           { text: 'Cancel', style: 'cancel' },
         ]);
@@ -162,7 +166,7 @@ export function useDreamCreate() {
       });
       useDreamStore.getState().setActiveJobId(jobId);
 
-      if (!(await trySpendSparkle(jobId))) return 'error';
+      if (!(await trySpendSparkle(jobId, config.forceModel))) return 'error';
       busy.current = true;
 
       try {
