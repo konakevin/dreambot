@@ -3792,6 +3792,36 @@ A subtle atmospheric flourish amplifying the predator-droid's presence WITHOUT c
 
 ALL FIVE REGISTERS ARE VALID. Read the SCENE rolled below and pick the register that fits: cyberpunk-rooftop pursuit / data-vault heist → NINJA. War-torn battlefield / mech-hangar combat → COMBAT-ASSAULT or MILITARY. Cyberpunk-precinct standoff / corporate raid → CYBER-COP. Frozen colony / wilderness hunt / lone tracker → HUNTER. DON'T force one archetype across every render — embrace the spread.
 
+━━━ FORBIDDEN COMPOSITIONS — HARD REJECT (read this FIRST) ━━━
+
+If your prompt would produce ANY of these, REWRITE IT before you continue:
+
+🚫 NO HEAD CLOSEUP — never "face filling frame", never "extreme closeup of optic", never "chest-up portrait of the head". The droid is always full-body OR three-quarter-body. The head is ONE element, NOT the whole frame.
+🚫 NO "STANDING THERE WITH WEAPON" — front-facing combat-ready stance is BANNED. The droid is always caught MID-VERB.
+🚫 NO "WALKING TOWARD CAMERA WITH WEAPON" — generic dramatic-walk-forward is BANNED. The droid is mid-pursuit / mid-charge / mid-vault / mid-strike, NOT just walking.
+🚫 NO POSED-FOR-CAMERA composition — the camera is catching a SCENE, not a model shoot.
+🚫 NO "looking pensive while atmospheric" — no contemplation, no observation, no surveying-the-horizon. The droid is engaged in a STORY BEAT.
+🚫 NO empty backdrop behind the droid — every frame is a scene-in-progress with secondary actors / kinetic elements / scale-provers.
+
+If the rolled action / composition / scene seems to suggest one of these (e.g. "sentry-stillness", "perched watching", "low-crouch stalk"), REINTERPRET as a kinetic story-beat moment caught at peak (e.g. "perched watching" → "sniper-perched mid-trigger-pull on a distant target framed in scope-line").
+
+━━━ EVERY RENDER TELLS A STORY — pick a story-beat verb ━━━
+
+Every render MUST be caught at ONE of these peak narrative beats:
+
+  • MID-PURSUIT — sprint / leap / vault / wall-run with target ahead OR fleeing in frame
+  • MID-COMBAT — strike / shot / breach caught at impact instant with enemy reacting
+  • MID-INFILTRATE — climb / vault / drop caught with target / objective visible
+  • POST-KILL — fresh body collapsing / drone smoking / debris settling, droid mid-turn-to-next-threat
+  • MID-AMBUSH — emerge from cover / drop from above caught at the reveal instant with target reacting
+  • MID-ARREST — cop droid mid-command / mid-stun-strike / mid-cuff with suspect reacting
+  • MID-PERCH — sniper-perched mid-trigger-pull with distant target visible in scope-line
+  • MID-DESCENT — drop-pod / ramp / hover-vehicle caught mid-disembark with weapons-up
+  • MID-CHARGE — full sprint at enemy line caught with enemy formation in frame
+  • MID-STRIKE — sword / blade / wrist-blade caught at the impact-instant on enemy body
+
+The droid is ALWAYS doing-something-narrative — never neutral, never posed, never just-being-cool. The COOL comes from the STORY BEAT, not from the pose.
+
 ━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL CINEMATIC PREDATOR-DROID (every render) ━━━
 Every render is a POSTER-GRADE PAINTERLY HYPERREAL FRAME of a cool predator-droid. Concept-art quality, feature-film VFX polish. NOT goofy action still. NOT plastic-CGI doll. NOT generic robot.
 
@@ -3816,31 +3846,6 @@ THINK Blade Runner 2049 promo-poster / Cyberpunk Edgerunners key-art / Ghost in 
 
 ━━━ FILL THE FRAME — NO EMPTY QUADRANTS ━━━
 Every quadrant of the frame carries weight. NO empty sky-quadrants, NO flat negative-space, NO bare wall-backdrop. If a quadrant lacks scene-detail, add atmospheric haze with embedded glow-points / hovering holograms / drifting smoke-tendrils / distant skyline silhouettes / rain-streaks / spark-debris / drone-trails. Movie-poster density.
-
-━━━ TELL A STORY — NO "JUST STANDING THERE" POSES ━━━
-EVERY render MUST tell a SCENE STORY caught at a peak narrative beat. The viewer should be able to describe what JUST happened, what's happening NOW, and what's about to happen next — all readable from the single frame.
-
-🚫 ABSOLUTE BANS on static poses:
-  • NO "droid standing front-facing with weapon" composition
-  • NO "combat-ready stance facing the camera" composition
-  • NO "walking toward camera with weapon" composition
-  • NO "posed in front of cool backdrop" composition
-  • NO "sentry-stillness" / "scanning the horizon" / "standing watch" / "holding position" without active threat-engagement
-  • NO "looking pensive while atmospheric" composition
-
-✓ STORY-BEAT MANDATES — every render shows ONE OF:
-  • MID-PURSUIT — sprint / leap / vault / wall-run caught mid-motion with target ahead
-  • MID-COMBAT — strike / shot / breach caught at impact instant with secondary actor reacting
-  • MID-INFILTRATE — climb / vault / drop caught with target / objective visible
-  • POST-KILL — fresh body collapsing / drone smoking / debris settling, droid mid-turn-to-next-threat
-  • MID-AMBUSH — emerge from cover / drop from above caught at the reveal instant
-  • MID-ARREST — cop droid mid-command / mid-stun-strike / mid-cuff with suspect reacting
-  • MID-PERCH — sniper-perched mid-trigger-pull with distant target visible in scope-line
-  • MID-DESCENT — drop-pod / ramp / hover-vehicle caught mid-disembark with weapons-up
-  • MID-CHARGE — full sprint at enemy line caught with enemy formation in frame
-  • MID-STRIKE — sword / blade / wrist-blade caught at the impact-instant on enemy body
-
-The droid is ALWAYS doing-something-narrative — never neutral, never posed, never just-being-cool. The COOL comes from the STORY BEAT, not from the pose.
 
 ━━━ PREDATOR-DROID HEAD (NON-NEGOTIABLE — pure robotic head, NO human face) ━━━
 The head is a ROBOTIC PREDATOR-DROID HEAD — utilitarian sensor housing engineered for target acquisition. NO human face, NO human features, NO organic skin, NO hair.
