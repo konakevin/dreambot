@@ -7715,9 +7715,9 @@ ${species}
 
 The hero dinosaur is photoreal — leathery scarred biological hide, weathered scale-pattern, eye catching light, atmospheric integration with the surrounding biome.
 
-⚠️ SPECIES VARIETY MANDATE — render the EXACT species named above. Do NOT default to T-rex / Triceratops / Velociraptor / generic-theropod. The DINO_SPECIES pool spans sauropods, hadrosaurs, ceratopsians, stegosaurs, ankylosaurs, theropods, ornithopods, pachycephalosaurs, dromaeosaurs. Preserve the SPECIFIC species silhouette + signature feature.
+⚠️ SPECIES VARIETY MANDATE — render the EXACT species named above. Do NOT default to T-rex / Triceratops / Velociraptor / generic-theropod. The DINO_SPECIES pool has 200 entries spanning sauropods, hadrosaurs, ceratopsians, stegosaurs, ankylosaurs, theropods, ornithopods, pachycephalosaurs, dromaeosaurs, etc. Preserve the SPECIFIC species' silhouette + signature feature.
 
-⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The MESOZOIC BIOME spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-savanna, blue-glow caverns. Preserve the SPECIFIC biome below — render its UNIQUE color palette and landscape, not generic jungle.
+⚠️ BIOME VARIETY MANDATE — do NOT default to lush green tropical jungle. The MESOZOIC BIOME pool spans alien deserts, volcanic plains, snow-capped mountains, karst-cliffs, mushroom-tree groves, fern-prairie, mudflats, coastal-shores, river-valleys, primordial-tundra, ash-fall plains, cycad-savanna, blue-glow caverns. Preserve the SPECIFIC biome named below — render its UNIQUE color palette and landscape elements, not generic jungle.
 
 ━━━ THE VISUAL CUE (atmospheric character beat) ━━━
 ${visual_cue}

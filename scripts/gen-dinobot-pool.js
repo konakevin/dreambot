@@ -144,6 +144,42 @@ ABSOLUTELY BANNED:
 
 Output: ONE clash-accent per line. No numbering. No quotes.`,
 
+  dinobot_dino_portrait_surprise_element: `Generate SMALL PORTRAIT-ACCENT descriptions for DinoBot's dino-portrait path. Each is ONE comma-separated line, 15-30 words, describing a small intimate portrait accent — breath-fog / dust-mote / drifting-feather / water-drip / scar-detail / pollen-particulate / etc.
+
+The element is SMALL — 2-5% of the frame. Position: foreground edge / mid-frame / behind hero in bokeh. Adds character and atmosphere to the portrait.
+
+Variety mandate (rotate widely):
+- ~15% Breath-fog / steam plume at the dinosaur's jaw (cold-air or dawn atmosphere)
+- ~15% Drifting feather / down-fluff (foreground particulate)
+- ~10% Pollen-particulate or dust-mote suspended in light-shaft
+- ~10% Water-drip / sweat-drop / muddy-flecks on hide (texture)
+- ~10% Foreground tactile detail — moss / fern-frond / mud / arranged-pebbles
+- ~10% Old scar / wound-trace / weather-mark on hide (story-detail)
+- ~10% Distant secondary dinosaur silhouette at deep bokeh-soft midground (scale-prover)
+- ~5% Insect / Meganeura hovering nearby (small life accent)
+- ~5% Pterosaur silhouette in deep distance sky-bokeh
+- ~10% Light-shaft / god-ray catching the dinosaur's eye or specific feature
+
+EVERY entry includes:
+- THE ACCENT TYPE
+- POSITION (foreground edge / midground / behind in bokeh)
+- ONE SPECIFIC DETAIL (mid-action / catching light / texture / posture)
+
+GOOD examples:
+- A plume of breath-steam at the Tyrannosaurus's lower jaw, catching dawn light, suspended in the cold air
+- A single iridescent feather drifting in the foreground midair, catching warm rim-light
+- A distant Brachiosaurus silhouette in deep bokeh-soft background, scale-prover for the hero
+- Pollen-particulate suspended in a god-ray cutting across the scene, golden-amber glow
+- An old scar across the dinosaur's flank, weathered ridge-line catching low-angle light
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace
+- NO modern animals
+- NO gore / blood / wound-fresh
+- NO duplicate-style entries
+
+Output: ONE portrait-accent per line. No numbering. No quotes.`,
+
   dinobot_aerial_perspectives_surprise_element: `Generate SMALL AERIAL-ACCENT descriptions for DinoBot's aerial-perspectives path. Each is ONE comma-separated line, 15-30 words, describing a small secondary aerial accent — companion pterosaur silhouette / sun-disk-positioning / cloud-strata / lightning-arc / atmospheric small detail.
 
 The element is SMALL — 2-5% of the frame. Position: sky / foreground edge / distant horizon. Adds aerial drama and depth.

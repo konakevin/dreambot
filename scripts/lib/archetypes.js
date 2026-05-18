@@ -1165,6 +1165,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  DINOBOT_DINO_PORTRAIT: {
+    description:
+      'PATH-BESPOKE — DinoBot dino-portrait path (2026-05-17 axis-system migration). SINGLE DINOSAUR hero telephoto wildlife portrait — the camera catches one specific dinosaur in a candid moment. Museum-grade paleoart detail. Single subject fills 50-70% of frame. Reuses DINO_SPECIES (200 dinosaur species) + DINO_VISUAL_CUES (200 atmospheric cues) + DINOBOT_PALEO_LANDSCAPE_BIOME (200 alien-Mesozoic biome). Adds one new path-bespoke pool for portrait-specific accents (breath-fog / feather-drift / dust-cloud / etc.). Paleo-art wildlife-photography telephoto cinematography. 4 path-bespoke axes (biome / species / visual_cue / surprise_element) + 80%-gated phenomenon + universal lighting + atmosphere.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['biome', 'species', 'visual_cue', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 
 };
 

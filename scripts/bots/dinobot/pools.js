@@ -73,6 +73,8 @@ module.exports = {
   DINOBOT_DINO_PACK_SURPRISE_ELEMENT: load('dinobot_dino_pack_surprise_element'),
   // Aerial-perspectives path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_AERIAL_PERSPECTIVES_SURPRISE_ELEMENT: load('dinobot_aerial_perspectives_surprise_element'),
+  // Dino-portrait path-bespoke pool (added 2026-05-17 — axis-system migration)
+  DINOBOT_DINO_PORTRAIT_SURPRISE_ELEMENT: load('dinobot_dino_portrait_surprise_element'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

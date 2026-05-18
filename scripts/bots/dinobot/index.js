@@ -74,8 +74,11 @@ module.exports = {
       'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
     'swamp-river':
       'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world riparian wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle along tannin-dark waters, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
-    'dino-portrait':
-      'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
+    // dino-portrait wrapper REMOVED 2026-05-17 — the legacy stuffed wrapper
+    // forced every render to "dense Mesozoic jungle" overriding the biome
+    // pool's variety. Portrait now inherits the global setting-neutral
+    // PROMPT_PREFIX and lets the biome slot dictate the environment.
+    // 'dino-portrait': (removed),
     'micro-detail':
       'NO HUMANS — 66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision, 8K detail',
   },
@@ -123,7 +126,7 @@ module.exports = {
   },
 
   chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['paleo-landscape','herd-migration','territory-clash','nesting-ground','swamp-river','ocean-reptiles','cinematic-silhouette','micro-detail','extinction-event','dino-cozy','dino-pack','aerial-perspectives'] },
-  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-portrait': '80-110','dino-action': '80-110' }, preservePhrasesByPath: {}, skipPaths: ['paleo-landscape', 'swamp-river', 'ocean-reptiles', 'nesting-ground', 'herd-migration', 'territory-clash', 'cinematic-silhouette', 'dino-cozy', 'dino-pack', 'aerial-perspectives'] },
+  twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: { 'dino-action': '80-110' }, preservePhrasesByPath: {}, skipPaths: ['paleo-landscape', 'swamp-river', 'ocean-reptiles', 'nesting-ground', 'herd-migration', 'territory-clash', 'cinematic-silhouette', 'dino-cozy', 'dino-pack', 'aerial-perspectives', 'dino-portrait'] },
   sensoryAnchors: {
     enabled: true,
     requiredChannels: ['lightcolor'],
