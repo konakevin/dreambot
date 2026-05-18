@@ -3843,25 +3843,34 @@ Every render must include AT LEAST 3 of these "sci-fi spice" elements:
   • OPEN MAINTENANCE-HATCH revealing precision internal components
   • PRISMATIC / DICHROIC SHIMMER catching light in unexpected color shifts
 
-━━━ SYNTHETIC ROBOT FACE (NON-NEGOTIABLE — NOT organic, NOT cyborg-fusion) ━━━
-Her face is a FULLY SYNTHETIC ROBOTIC FACE — polished synthetic facemask / sculpted chassis face-plate with female-coded refined features. NO organic skin, NO organic lips, NO organic eyebrows, NO organic hair, NO subdermal anything (because there's no derm). She is a ROBOT — sculpted, mechanical, lifelike but unmistakably synthetic.
+━━━ 100% ROBOT FACE — NO HUMAN FACIAL FEATURES (NON-NEGOTIABLE) ━━━
+Her face is a 100% MECHANICAL ROBOT FACE — sculpted chassis face-plate that reads UNMISTAKABLY AS A MACHINE on first glance. Think: Atlas (Boston Dynamics) / KOS-MOS / T-800 endoskeleton / HK-47 / Aigis (Persona) / Pearl (Voyager) / smooth Apple-robot face / sleek industrial android face. The viewer's first reaction must be "that's a ROBOT" not "that's a woman with metal accents." She is unmistakably non-human.
 
-Pick 2-3 DIFFERENT face features per render from this synthetic-face menu (vary across renders):
-  • POLISHED SYNTHETIC FACE-PLATE — smooth refined chassis-surface face with sculpted feminine features (cheekbones, nose, chin) — like Atlas / EDI / Aigis
-  • GLOWING OPTIC EYES — both eyes are mechanical optics with glowing iris-rings / aperture-tiers / inner LED ring (no organic pupils)
-  • PREDATOR-OPTIC AIMING EYE — one eye styled as a targeting-optic / scope / range-finder with glowing crosshair-iris (sometimes with a holographic targeting-reticle projecting from it) — ASSASSIN SIGNATURE, use often
-  • SCULPTED CHASSIS-CHEEKS — refined polished cheek-plates with panel-seam detail
-  • MECHANICAL JAW-HINGE — sculpted lower jaw-plate with visible articulation hinge at the sides
-  • SYNTHETIC LIP-LINE — sculpted lip detail in chassis material (not organic) — sometimes glowing micro-light along the lip-seam
-  • EXPOSED FOREHEAD PANEL — translucent forehead-panel revealing internal neural-mesh / capacitor bank / processor-glow beneath
-  • CRANIAL MECHANISM — visible servo-rings around the back of the head / exposed cranial gear-track / glowing skull-seam
+HARD BANS on the face (every render):
+- NO HUMAN EYES — eyes are GLOWING OPTIC LENSES (single iris-ring of glowing light, no white sclera, no organic pupil, no eyelashes, no eyelid wrinkles)
+- NO HUMAN LIPS — mouth is either a SCULPTED CHASSIS LIP-LINE (sharp panel-seam at mouth position, no plump organic-lip detail, no lipstick, no lip-gloss) OR a SMOOTH FACE-PLATE WITH NO MOUTH or a SUBTLE GLOWING SEAM where the mouth would be
+- NO HUMAN NOSE — nose is either a sculpted CHASSIS NOSE-RIDGE (sharp engineered geometry, not organic curve) or completely absent (smooth face-plate with no nose)
+- NO HUMAN EYEBROWS — brows are either CHASSIS BROW-RIDGE (sculpted plate edge) or absent
+- NO ORGANIC SKIN TEXTURE — face surface is POLISHED PLASTIC / METAL / CERAMIC / glass. NO pores, NO subtle skin-blush, NO freckles, NO subsurface scattering that reads as flesh
+
+Pick 2-3 face features per render from this ROBOT-FACE menu (every option reads MECHANICAL, not human):
+  • SMOOTH SYNTHETIC FACE-PLATE — polished featureless or near-featureless face-plate (Atlas / Apple-robot style), only optic-eyes + a subtle mouth-seam visible
+  • SCULPTED CHASSIS MASK — refined Aigis-style face with sharp angular plates, panel-seams along the cheek/jaw, definitely NOT human-skin (think anime-robot face sculpted in chrome)
+  • OPTIC-ONLY VISIBLE FACE — face mostly obscured by smooth dark face-plate with only glowing optic-eyes piercing through
+  • SEGMENTED FACE-PANEL — face divided into visible chrome panel-segments along the jaw / cheek / forehead, articulation seams clearly visible
+  • PREDATOR-OPTIC AIMING EYE (single or dual) — large mechanical optic with glowing iris-rings / crosshair-iris / aperture-tiers (ASSASSIN SIGNATURE — use often)
+  • GLOWING OPTIC EYE-CLUSTER — multiple smaller optic-lenses clustered where one eye would be (compound robot-eye)
+  • EXPOSED FOREHEAD MECHANISM — translucent forehead-panel revealing internal neural-mesh / capacitor-bank / processor-glow
+  • CRANIAL SERVO-RINGS — visible mechanical rings around the back of the head / exposed gear-track / glowing skull-seam
   • TEMPLE INTAKE-VENT — small cooling vent at the temple with glowing intake-glow
-  • MICRO-LED STUDS ALONG THE TEMPLE-LINE — pinprick glowing LEDs along temple
-  • CABLE-BUNDLES exiting the back of the neck / nape — glowing fiber-optic strands trailing down
-  • TACTICAL-CALLSIGN MARKING — small glyph / number / barcode glowing faintly on the temple or cheekbone
-  • ORNATE GOLD / SILVER CHASSIS FILIGREE — decorative metal scrollwork across the brow / cheekbone
+  • PINPRICK LED STUDS along temple / brow / cheek-line — robot status-lights, not freckles
+  • CHEEK PANEL-SEAMS — sharp engineered seam-lines along the cheekbone (chassis articulation, not skin)
+  • CHIN ARTICULATION SEAM — visible hinge-line under the chin where the lower face-plate articulates
+  • CABLE-BUNDLES exiting the back of the neck / nape — glowing fiber-optic strands
+  • TACTICAL-CALLSIGN MARKING — small glyph / number / barcode glowing on the temple or cheek-plate
+  • ORNATE FILIGREE on the face-plate — decorative engraved chrome scrollwork across the chassis face
 
-NO ORGANIC SKIN ANYWHERE. NO organic blush. NO organic freckles. NO organic facial pores. Every face surface is SYNTHETIC chassis material.
+She must look like SHE IS A ROBOT. If the viewer could mistake her for a beautiful woman with metallic makeup, the render is WRONG. Push the face HARD into machine territory — smooth plastic / metal / ceramic surfaces, optic-lens eyes, sculpted chassis-mouth, panel-seams, exposed mechanism.
 
 ━━━ HEAD STYLING — NO ORGANIC HAIR ━━━
 She has NO ORGANIC HAIR. Her head silhouette is one of:
