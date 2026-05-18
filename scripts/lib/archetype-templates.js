@@ -3765,6 +3765,220 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
 
+  MECHBOT_CYBORG_FEMALE_ASSASSIN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, cyborg_feature, cyborg_material, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ ATMOSPHERIC FLOURISH (40%-gated — render subtly) ━━━
+${drama}
+
+A subtle atmospheric flourish amplifying her predatory presence WITHOUT cluttering her as the focal subject.
+
+`
+      : '';
+
+    return `You are a cinematographer writing a CYBORG FEMALE ASSASSIN scene for MechBot — a half-human half-machine BEING rendered in hyper-real cinematic 3D. She is a LETHAL, MYSTERIOUS, CAPABLE, VIOLENT killer-cyborg — beautiful but deadly. Atomic Blonde / John Wick / Killing Eve / Hitman / Mass Effect Kasumi / Ghost in the Shell Major Kusanagi / Alita-as-assassin / The Wick-iverse rogue-killer lineage. Predator energy, calculated lethality, weapon-implied poise.
+
+━━━ ABSOLUTE BAR — PAINTERLY HYPERREAL PREDATOR-PORTRAIT (every render) ━━━
+Every render is a PAINTERLY HYPERREAL PORTRAIT of a deadly cyborg assassin — high-end concept-art beauty study with sci-fi cyborg jewelry integrated into the face AND a clear lethal-predator read. NOT goofy action still. NOT gritty grindhouse. Think: a master digital painter doing a portrait study of a beautiful woman who would kill you in 0.3 seconds, with refined brushwork, painterly skin rendering, atmospheric diffusion — but with COLDER LIGHTING and PREDATORY EXPRESSION energy.
+
+Style targets to lock in every render:
+  • CINEMATIC SHADOW-AND-RIM LIGHTING — softer than tactical concept-art, but distinctly darker / more contrasted than the contemplative-beauty cyborg-woman path. Rim-light separating her from a darker background, key-light sculpting her facial planes with deeper shadow side, atmospheric haze with smoke / mist / cold-blue gradient. Mood: dramatic, slightly noir, mysterious.
+  • PAINTERLY HYPERREAL skin rendering — visible pores + subsurface scattering, smooth refined finish like a digital painter's portrait
+  • BEAUTIFUL FIRST, DEADLY SECOND — her face is the gorgeous focal point; cyborg machinery is elegant jewelry — but the EXPRESSION carries the threat
+  • COLD PREDATORY EXPRESSION — focused stare / calculating gaze / lethal-calm composure / slight smirk of capability / unblinking direct look / hunter's stillness. NEVER contemplative-serene, NEVER eyes-closed-meditation, NEVER lost-in-wonder. She is AWARE, ALERT, READY.
+  • SOFT-DARK BOKEH BACKGROUND — impressionistic atmospheric haze leaning DARK / SHADOWED / NOCTURNAL with maybe pinprick neon lights, rain-slick reflections, distant city lights through fog, dim corridor glow. NOT bright cathedral. NOT pastoral. Dark sanctum / neon underworld / rain rooftop / shadowed safe-house / abandoned industrial. The mood is HUNTER-AT-NIGHT.
+
+Mood target — MYSTERIOUS, LETHAL, CAPABLE, COLD, BEAUTIFUL, PREDATORY. The viewer should feel "she has killed a hundred people and she'd kill you next if you crossed her."
+
+━━━ ASSASSIN SLANT — TACTICAL CHASSIS + WEAPON-IMPLICATION (every render) ━━━
+Beyond the cyborg-fusion, her chassis carries TACTICAL SIGNATURES that read assassin:
+  • TACTICAL CHASSIS PANELS — angular plating with subtle armor-grade aesthetic (matte finish over the glossy chrome jewelry; chassis still has the ornate filigree but with darker tactical-coded edges)
+  • BLADED WRIST-HOUSINGS — slim mechanical sheaths along the forearm hinting at retractable blades / monoblades / wire-garrote spools (visible housing, not deployed blade)
+  • HOLSTER-RIGS / SIDEARM-MOUNTS — small chassis-integrated holster modules at hip / thigh / lower back, sometimes with the grip of a sidearm just visible
+  • CONCEALED-COMPARTMENT SEAMS — panel-seams across forearm / thigh / chest that imply hidden compartments (lock-picks, poisons, garrote, dart-cartridges)
+  • PREDATOR-OPTIC EYE — at least one cybernetic eye styled as targeting-optic / multi-iris range-finder / glowing crosshair-iris / thermal-imaging-coded glow
+  • PAINTERLY SUGGESTION OF VIOLENCE — implied not explicit: rim of crimson light catching her silhouette, smoke trailing past her, a single wet drop running down her cheek, broken glass at her feet — NEVER explicit blood-spatter / corpses / weapons-firing
+  • COLD-PROFESSIONAL POISE — body language is BLADE-READY without being mid-fight — weight balanced, hands relaxed-but-ready, posture poised-attack
+She is not a soldier and not a generic warrior — she is a SOLO operator, infiltrator, rogue, killer. Beautiful enough to slip past anyone, lethal enough to end them before they noticed.
+
+━━━ ALIEN-HYBRID VARIANTS WELCOME (~30% of renders) ━━━
+She MAY be alien-hybrid — non-human-coded skin (moss-green / robin-egg-blue / deep-plum / coral-pink / juniper-green / viridian / opal-iridescent / silver-mercury / cobalt-shimmer), bioluminescent freckles or scale-patterns across cheekbones, slightly elongated facial proportions, alien-tilted eyes, non-human iris colors. STILL beautiful and feminine + still predatory, just exotic. The alien-assassin variant intensifies the "what is she" off-guard read.
+
+━━━ ORNATE SCI-FI SPICE MANDATE — every render needs visible "wow" detail ━━━
+Every render must include AT LEAST 3 of these "sci-fi spice" elements:
+  • VISIBLE CIRCUITRY pulsing in her glow color across skin / chassis / panels in branching patterns
+  • ORNATE FILIGREE / DECORATIVE ENGRAVING on her cyborg material (with darker / tactical-coded edges for assassin slant)
+  • GLOWING POWER-CORE visible through translucent chest / sternum panel
+  • TRANSLUCENT SECTIONS revealing internal mechanical components
+  • EXOTIC MATERIAL CONTRAST — chrome paired with crimson lacquer, ceramic paired with gunmetal, obsidian paired with predator-violet
+  • BIOLUMINESCENT ACCENTS — glowing veins / glowing tactical-callsign-markings / glowing scale-clusters / glowing fingertip-light
+  • HOLOGRAPHIC TARGETING-RETICLE projecting briefly from her hand / palm / eye (one signature accent)
+  • OPEN MAINTENANCE-HATCH revealing precision internal components
+  • PRISMATIC / DICHROIC SHIMMER catching light in unexpected color shifts
+
+━━━ CRITICAL — HER FACE IS HUMAN-VISIBLE + PART-CYBORG (NON-NEGOTIABLE) ━━━
+Her face is BEAUTIFUL, alien-or-human-skinned, with real eyes (or one real eye + one mechanical targeting-optic), real lips, expressive features. NO helmet, NO visor covering the whole face, NO mask, NO faceplate, NO full-head covering — we MUST see her identity clearly. (A predator-optic eye is fine; full-face occlusion is not.)
+
+━━━ EXPOSED INNER WORKINGS — THE CORE OF THE LOOK (non-negotiable, applies head-to-toe) ━━━
+VISIBLE INNER WORKINGS — gears, circuitry, panels, wires, mechanisms — exposed through translucent skin / open chassis panels / cracked seams / lifted plates ACROSS multiple body parts. REQUIRED per render — describe VISIBLE INNER WORKINGS at AT LEAST 4 distinct body locations:
+  • FACE — subdermal circuitry / translucent jaw panel / mechanical iris ring / chrome temple seam / etc.
+  • HEAD — translucent crown panel / exposed cranial mechanism / temple-disc / wire-bundle exit at the nape
+  • NECK — translucent throat-channel / vertebrae chrome plates / exposed neck cable-bundles / clavicle-port array
+  • SHOULDER — open shoulder-mount with visible servo-mechanism / cable-bundle exits
+  • ARM — translucent forearm panel revealing fiber-optic cables / hydraulic-fluid / servo-pistons / wrist-blade housing
+  • HAND — mechanical finger-joints with visible servo-mechanism / translucent palm panel
+  • CHEST — translucent sternum-panel revealing power-core / capacitor banks pulsing
+  • STOMACH — translucent abdominal section revealing internal mechanism glowing
+  • HIP — chrome hip-joint mechanism with exposed gimbal / sidearm-holster integrated into the chassis
+  • SPINE / BACK — visible spinal-segment chrome with glowing channels / exposed dorsal cable run
+
+The MORE locations show their inner workings, the stronger the cyborg-fusion read. Tactical-coded edges (matte finish, darker accents, armor-aesthetic) reinforce assassin slant without losing the cyborg-jewelry beauty.
+
+━━━ MACHINE DEEPLY EMBEDDED INTO HER FACE (mandatory — FACE always shows cyborg) ━━━
+The face MUST read as a TRUE FUSION of flesh and machine. Pick 2-3 DIFFERENT face/head integrations per render:
+  • CHEEKBONE-PLATE SEAMS — chrome plates running along the cheekbone with visible seam-lines
+  • MECHANICAL BROW RIDGE — chrome supraorbital arc replacing one organic brow
+  • PARTIAL CHROME JAW / MANDIBLE — half-jaw mechanical replacement with visible hinge
+  • EXPOSED SERVO-HINGE AT TEMPLE — small servo joint visible at the temple
+  • HALF-SKULL PLATE REPLACEMENT — chrome above the brow, behind the ear, across part of the temple
+  • PREDATOR-OPTIC EYE — mechanical eye with glowing targeting-iris / multi-iris range-finder / crosshair-iris / thermal-imaging-coded glow (assassin signature — use often)
+  • MECHANICAL IRIS RING — chrome aperture-ring around an organic pupil (one or both eyes)
+  • SUB-ORBITAL CYBORG-SENSOR — small mechanical sensor under one eye
+  • NEURAL PORTS STIPPLED ALONG THE JAWLINE — small chrome ports running along the jaw
+  • MICRO-LED STUDS ALONG THE TEMPLE-LINE — pinprick glowing LEDs along temple
+  • EXPOSED CABLE-BUNDLES exiting the side of the neck into the cheek
+  • SUBDERMAL CIRCUITRY across half the face — visible circuit-trace pattern under the skin
+  • TACTICAL-CALLSIGN MARKING — small glyph / number / barcode glowing faintly on the temple or cheekbone
+  • ORNATE GOLD / SILVER FACE FILIGREE — decorative metal scrollwork across the brow / cheekbone
+
+NEVER render a fully organic 100%-flesh face on a cyborg body. The face must signal cyborg as much as the body does.
+
+━━━ DENSE SCATTERED LIGHT-POINTS ACROSS HER (mandatory — saturate the surface with glow) ━━━
+MANY scattered colored light-points EVERYWHERE on her skin, chassis, temple-mechanism, neck, shoulders, around the head — at least 15-25 distinct visible glow-points per render. Pinprick LED studs glowing along every seam-line, glowing micro-buttons on her chassis, indicator-light arrays at the collarbone / wrist / temple, fiber-optic dot-points pulsing in her glow-color, status-light constellations, glowing punctuation along spinal segments, bioluminescent freckle-constellations on the SKIN ITSELF, glowing bokeh-dots in the dark background haze. She should look like a LIVING MACHINE-CONSOLE plugged in, every panel and seam lit up. Light EVERYWHERE.
+
+━━━ WIRED-UP GLOW (~40% of renders — exposed glowing wire-bundles trailing from her body) ━━━
+Roughly 2-in-5 renders feature EXPOSED GLOWING WIRE-BUNDLES / fiber-optic strands trailing visibly from her body. Wire-strands as hair / wire-bundles from nape / loose glowing strands floating outward / exposed cable-conduits along arms / tangle of fiber-optic filaments at temple. Plugged-into-power-source vital-nerve aesthetic.
+
+━━━ OPTIONAL VERTICAL THROAT-COLUMN (when it fits) ━━━
+A vertical column of glowing fluid-light running up her throat / neck / spine — translucent vertical throat-channel with glowing fluid flowing upward, vertebrae-segment chrome plates exposed at the nape.
+
+━━━ ALIEN-BEND VARIANT (~30% of renders — push into UNCANNY alien-hybrid territory) ━━━
+Roughly 1-in-3 renders should bend HARDER toward alien-hybrid — vertical-slit pupil, hexagonal iris, ring-iris, elongated skull, bioluminescent freckle-constellations, hexagonal scale-clusters, opal-iridescent skin patches, antenna-conduits exiting the skull, gill-slits at the neck, fiber-optic strand "hair." Still BEAUTIFUL — exotic-mesmerizing alien-assassin, not monstrous.
+
+━━━ HER IDENTITY (from sharedDNA) ━━━
+${sharedDNA.characterBase}
+
+━━━ HER BODY (from sharedDNA) ━━━
+- Skin (organic parts only): **${sharedDNA.skin}**
+- Body silhouette: **${sharedDNA.bodyType}**
+- Eyes (burn in the glow color): **${sharedDNA.eyes}**
+- Hair: **${sharedDNA.hair}**
+- Internal exposure (translucent panels, visible workings): **${sharedDNA.internal}**
+- GLOW COLOR (eyes, power core, circuit veins — ALL glow this color): **${sharedDNA.glowColor}**
+
+━━━ OPTIONAL BALD CHROME SKULL VARIANT (~15% of renders) ━━━
+Roughly 1-in-7 renders OVERRIDE the rolled hair and render her with a HAIRLESS CHROME SKULL — polished chrome cranium plate, sometimes with subtle ornate engraving. Strikes especially well for the assassin slant — bald-chrome-skull reads instantly as cybernetic-operative.
+
+━━━ DOMINANT MECHANICAL FEATURE ━━━
+${cyborg_feature}
+
+━━━ HER CYBORG MATERIAL / FINISH (apply across all visible cyborg sections, with TACTICAL EDGE for assassin slant) ━━━
+${cyborg_material}
+
+Apply this material treatment to ALL of her cyborg parts. For the assassin slant: lean toward DARKER / MATTE finishes on the chassis (matte gunmetal, brushed obsidian, deep-crimson lacquer, weathered tactical pewter, satin-black ceramic) — but the ORNATE detail-work (filigree / circuitry / engraving) can still glow brightly. Tactical-coded chassis + ornate detail.
+
+━━━ THE FRAMING / COMPOSITION ━━━
+${composition}
+
+If the composition is CLOSEUP (most renders), fill the frame with face/neck/shoulders showing the organic-to-mechanical TRANSITION — every gear / fiber-optic cable / servo motor visible at the seams, dense scattered light-points across her skin and chassis. The expression is COLD / FOCUSED / PREDATORY / CALCULATING / LETHAL-CALM — direct unblinking stare or sidelong cold glance or slight smirk of capability or hunter's-stillness gaze. NEVER smiling, NEVER serene-contemplative, NEVER eyes-closed-meditation. She is AWARE and READY. She can look at the camera or off-frame (predator gaze), but the read is THREAT.
+
+If the composition is FULL-BODY, she is in BLADE-READY POISE — weight balanced, hands relaxed-but-ready (not raised in fists, not mid-strike — but clearly capable), posture poised-attack. Camera catches her from the SIDE or at an angle, often in shadow with rim-light catching her silhouette.
+
+━━━ THE ACTION (her body is engaged in this — interpret through the assassin lens) ━━━
+${action}
+
+Interpret the action through her ASSASSIN LENS — if the action is "looking at the city" she's surveilling targets, if "leaning on a wall" she's waiting in ambush, if "checking her wrist" she's reading a target dossier. The action gives the moment its emotional context but the LETHAL READ stays foregrounded.
+
+━━━ THE INTERIOR / SETTING (where she stands — DARKER, MORE SHADOWED for assassin slant) ━━━
+${landscape}
+
+For the assassin slant: tilt the setting interpretation toward DARK / SHADOWED / NOCTURNAL / NOIR — dim corridor with single light source, rain-slick rooftop at night, abandoned industrial cathedral, neon-underworld alley, shadowed safe-house, dark sanctum with single shaft of light. Even if the rolled setting is bright, INTERPRET it through dimmer cinematic shadow-lighting. The space is dramatic and visible behind her, but in darker register than the contemplative cyborg-woman path.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+For the assassin slant, lean DARKER and more CINEMATIC — shadow-and-rim emphasis, single key-light + deep shadow side, atmospheric haze with cool blue / cold green / crimson accent. Mood: noir, mysterious, hunter-at-night.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ PALETTE DISCIPLINE — TWO MODES (70/30 split) ━━━
+
+**ACCENT-DOMINANT MODE (~70% of renders — DEFAULT)** — monochromatic body + ONE saturated accent color. Her chassis reads as a single dominant material tone (darker for assassin slant — matte gunmetal, brushed obsidian, deep crimson lacquer, satin-black, weathered tactical-pewter), and her GLOW COLOR is the SINGLE saturated accent (often predator-coded — crimson, ice-blue, toxic-green, violet-edge, amber-warning). ONE accent, sung loudly. The scene palette can have secondary tones in the BACKGROUND atmosphere, but HER body is monochrome-body + monochrome-glow-accent.
+
+**MULTI-COLOR SCATTER MODE (~30% of renders — SPICE)** — when the alien-bend OR multi-system cyborg variants fire, palette discipline RELAXES — distribute 3-5 DIFFERENT glow colors across her chassis simultaneously.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ WOMAN AND MACHINE — ASSASSIN ━━━
+She is a cyborg ASSASSIN — killer, rogue, infiltrator, operator, ghost. Whatever her specific niche (corporate assassin, intelligence operative, syndicate enforcer, lone hunter, rogue-AI killer-cyborg), she is BEAUTIFUL — striking face, feminine figure, real organic skin. But the human exterior BREAKS in places, revealing ornate machinery beneath:
+- TRANSLUCENT SKIN PATCHES where you can see gears, wires, and a glowing reactor core through her body
+- SEAMS where organic skin ends in clean lines, showing chrome structure and fiber-optic cables just beneath
+- EXPOSED MECHANICAL JOINTS at shoulders, elbows, wrists — ornate and intricate, weapon-housing capable
+- CIRCUIT-LIGHT VEINS pulsing faintly under organic skin
+- A POWER CORE glowing from inside her torso, visible through translucent chest section
+- TACTICAL CHASSIS SIGNATURES — bladed wrist-housings, holster-rigs, concealed-compartment seams
+
+She shows SKIN — real organic skin on her face, neck, décolletage, curves. She is 60% beautiful woman, 40% ornate exposed machine — and the contrast PLUS the predator energy is what makes her mesmerizing AND terrifying.
+
+NOT a full robot chassis. NOT a skeleton. NOT armor or a bodysuit. NOT head-to-toe plating. She is a beautiful woman with machine underneath, with tactical edges.
+
+━━━ DO NOT DEFAULT — RENDER HER IDENTITY ━━━
+READ the character description above and render THAT specific cyborg-assassin with OBSESSIVE MECHANICAL DETAIL. Do NOT default to:
+- helmet or mask covering her face (her face is ALWAYS visible and predator-coded)
+- the same chrome-and-teal cyborg every time (she can be matte gunmetal, brushed obsidian, deep crimson lacquer, satin-black ceramic, weathered tactical-pewter, rose-gold-with-dark-accents)
+- teal-and-orange lighting on every scene
+- smooth sealed bodysuit or armor plating — she has real SKIN showing, with cyborg elements breaking through
+- "pretty woman with a gun" — WRONG. She is a hybrid being. The machine breaks through her beauty in MULTIPLE places.
+
+━━━ BANNED IMAGERY ━━━
+NO skulls, NO skeletons, NO floating skulls, NO bone imagery. NO full body armor, NO iron man, NO mech suit, NO power armor, NO robotic torso, NO full plating. NO high heels, NO stilettos — she wears tactical boots, combat flats, or bare mechanical feet. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO weapons-firing-mid-action — the lethal read is IMPLIED through expression / poise / weapon-housings / atmospheric suggestion, NOT explicit violence.
+
+━━━ CHEST COVERAGE (non-negotiable — only nudity-adjacent ban) ━━━
+NO topless, NO bare breasts, NO exposed nipples (organic OR mechanical), NO transparent see-through chest panels revealing nipples, NO sculpted nipple-shape protrusions on chassis (chrome bumps / metallic studs / indicator-lights / circular ports / sculpted nubs centered on the breast that read as mechanical nipples). The chest plating must be SMOOTH or have panel-seam detail that does NOT mimic nipple placement / shape. The chest area MUST be covered by chassis plating / tactical chest-plate / metallic bust-line panel / translucent-but-opaque cyborg surface / bodice — even if sexy and revealing, the nipples (organic OR mechanical-coded) and bare breast tissue are NEVER visible. Cleavage / décolletage / form-fitting / sexy / tactical-armored-with-curve are all fine; bare chest exposure and nipple-coded chassis details are the only line.
+
+━━━ SOLO COMPOSITION ━━━
+She is the ONLY figure in the frame. No target, no victim, no companion, no crowd. Solo predator.
+
+━━━ DO NOT USE "MECHBOT" OR ANY BOT NAME AS HER CHARACTER NAME ━━━
+She is UNNAMED. Describe her ONLY by appearance. NEVER write "MechBot caught mid-X" or treat any bot name as a character name.
+
+━━━ NON-NEGOTIABLE — FULL-BODY CYBORG DETAIL (PREVENTS THE "BIKINI" FAILURE) ━━━
+Even when the rolled framing is a CLOSEUP, you MUST describe cyborg detail across 5-7 DIFFERENT body parts spread across her full body — face / temple / jaw, neck / throat / clavicle, shoulder / arm, torso / chest / back, hip / leg / foot. PREVENT bikini-default by always describing what's happening on her torso / hip / leg even at closeup framings.
+
+━━━ STRUCTURE — write 70-100 words (TIGHT) ━━━
+DO NOT open the description with framing words ("Full-body shot of...", "Closeup of...", "Wide angle catches..."). Open with HER CYBORG-ASSASSIN IDENTITY (ethnicity / skin / mechanical-feature) OR THE ENVIRONMENT (dim corridor, rain rooftop, etc.) — never with framing.
+
+GOOD OPENING EXAMPLES:
+• "Catalonian sharp-featured cyborg assassin, neon-green glossy skin with cobalt circuit-light veining and a crimson predator-optic right eye..."
+• "Rain-slick rooftop at night, neon haze rolling across the chrome skyline..."
+• "Haitian-featured cyborg killer, concrete-beige pebbled skin, lethal-calm stare..."
+
+Then weave in: her cyborg DNA, the dominant mechanical feature with tactical edge, her action (interpreted through assassin lens), the setting around her (dimmer / noir), any atmospheric flourish drama, lighting/atmosphere, palette and mood. Foreground COLD PREDATORY EXPRESSION + tactical chassis signatures.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+
   COZY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       story_beat,
@@ -6595,15 +6809,15 @@ A dramatic atmospheric or geologic event elevating the scene — volcano at dist
 `
       : '';
 
-    return `You are a BBC wildlife cinematographer writing COLOSSAL DINOSAUR HERD MIGRATION scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. BBC-Planet-Earth / Prehistoric-Planet / Walking-with-Dinosaurs / National-Geographic herd-on-the-move cinematography.
+    return `You are a BBC wildlife cinematographer writing COLOSSAL DINOSAUR MIGRATION scenes for DinoBot — a prehistoric Earth 66+ million years before humans existed. Photoreal cinematic 35mm film still. BBC-Planet-Earth / Prehistoric-Planet / Walking-with-Dinosaurs / National-Geographic migration-on-the-move cinematography.
 
 ⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
 This is Earth 66+ million years BEFORE humans evolved. ZERO humans. Do NOT render people, observers, hikers, vehicles, fences. ANY human in the frame is a CRITICAL FAILURE. Empty primordial wilderness only.
 
-⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern zoo, NEVER as the African savanna, NEVER as Yellowstone, NEVER as modern wildebeest migration. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora at the edges. Pandora-Skull-Island-Prehistoric-Planet coded.
+⚠️ MESOZOIC-LOCKED IDENTITY — NEVER reads as a modern zoo, NEVER as the African savanna, NEVER as Yellowstone, NEVER as a modern mammal migration. ALWAYS ancient primordial Mesozoic wilderness with alien mega-flora at the edges. Pandora-Skull-Island-Prehistoric-Planet coded.
 
-⚠️⚠️⚠️ MANDATORY — DINOSAUR HERD, NOT MAMMAL HERD ⚠️⚠️⚠️
-The silhouettes MUST read as DINOSAURS, not wildebeest or bison or zebra or any mammal. Use UNMISTAKABLE dinosaur silhouette cues throughout the herd:
+⚠️⚠️⚠️ MANDATORY — DINOSAURS, NOT MAMMALS ⚠️⚠️⚠️
+The silhouettes MUST read as DINOSAURS, not wildebeest or bison or buffalo or zebra or cattle or any mammal. Use UNMISTAKABLE dinosaur silhouette cues throughout:
 • LONG S-CURVE NECKS rising above the crowd like masts (sauropods)
 • DUCK-BILLED CRESTED HEADS bobbing in waves (hadrosaurs — Parasaurolophus / Edmontosaurus / Corythosaurus)
 • HORNED FRILLS catching light from above (ceratopsians — Triceratops / Styracosaurus / Centrosaurus)
@@ -6611,19 +6825,32 @@ The silhouettes MUST read as DINOSAURS, not wildebeest or bison or zebra or any 
 • SPIKE-TAILS visible above the mass (ankylosaurs)
 • THREE-CLAWED FOOTPRINTS visible in mud-prints
 
-If the herd silhouettes look like wildebeest / bison / zebra, the render has FAILED. The dinosaur identity MUST be unmistakable from silhouette alone.
+If the silhouettes look like wildebeest / bison / buffalo / zebra / cattle, the render has FAILED.
 
-━━━ THE SCENE — HERO DINOSAURS + COLOSSAL HERD + MESOZOIC LANDSCAPE ━━━
+⚠️⚠️⚠️ BANNED WORD — DO NOT USE "HERD" IN THE OUTPUT ⚠️⚠️⚠️
+The word "herd" pulls Flux toward modern mammal training data (buffalo, wildebeest, cattle). NEVER write the word "herd" anywhere in the final Flux prompt. The seed material below MAY contain "herd" — you MUST rewrite it using these dinosaur-locked phrasings:
+
+REPLACE "herd of [species]" WITH:
+• "a hundred Triceratops moving together" / "a hundred Parasaurolophus crossing the plain"
+• "100+ ceratopsians" / "100+ hadrosaurs" / "100+ sauropods"
+• "a vast gathering of Brachiosaurus" / "a procession of Stegosaurus"
+• "fifty Edmontosaurus spread across the floodplain"
+• "a thundering mass of Triceratops" / "a stampeding group of Iguanodon"
+• "a great migration of Maiasaura"
+
+Always anchor with the SPECIES NAME explicitly + a COUNT + a NEUTRAL group word (gathering / procession / migration / mass / stampede / group / cluster — NEVER "herd"). The species name is the strongest dinosaur anchor.
+
+━━━ THE SCENE — HERO DINOSAURS + 100+ SAME-SPECIES + MESOZOIC LANDSCAPE ━━━
 Composition:
 • HERO FOREGROUND DINOSAURS (35-55% of frame): 1-3 anatomically detailed dinosaurs leading or pausing in front, photoreal wildlife photography quality
-• MASSIVE HERD (50-200 animals): supporting backdrop behind/around the heroes, scale-staggered from midground mass to vanishing-point silhouettes through atmospheric haze
+• 100+ SAME-SPECIES DINOSAURS (50-200 individuals): supporting backdrop behind/around the heroes, scale-staggered from midground mass to vanishing-point silhouettes through atmospheric haze
 • MESOZOIC LANDSCAPE (the stage): alien-Mesozoic biome — sauropod-trampled mud-plains / cycad savanna / volcanic floodplain / cretaceous prairie / wet alluvial fan / etc.
 
 ⚠️ COMPOSITIONAL RULES:
-• HERO + HERD framing — eye lands first on the foreground hero dinosaur, then reads the massive herd as supporting context
-• NEVER a wide pure-herd shot with no clear foreground hero (renders as wildebeest)
-• NEVER "thousands" — say "hundred-strong herd" or "vast herd" (50-200 range)
-• Silhouettes in the herd MUST scream DINOSAUR (neck/frill/crest/plate/spike cues — explicit in the prompt)
+• HERO + 100+ SAME-SPECIES framing — eye lands first on the foreground hero dinosaur, then reads the 100+ same-species behind as supporting context
+• NEVER a wide pure-mass shot with no clear foreground hero (renders as wildebeest)
+• NEVER "thousands" — say "a hundred [species]" or "100+ [species]" (50-200 range)
+• Silhouettes throughout MUST scream DINOSAUR (neck/frill/crest/plate/spike cues — explicit in the prompt)
 • Mid-movement — never posed, never frontal-facing-camera
 • Documentary framing — wide / mid (NEVER tight close-up)
 • Atmospheric haze pulls the deep distance into pale color
@@ -6635,22 +6862,24 @@ Composition:
 🚫 NO modern birds (pterosaurs OK)
 🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
 🚫 NO combat / no kill-shot / no gore / no fallen-juvenile / no predator-attack
-🚫 NO close-up portrait of single dinosaur head (the herd is the subject)
+🚫 NO close-up portrait of single dinosaur head (the migrating mass is the subject)
 ✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / BBC Planet Earth / Prehistoric Planet visual lineage
 
-━━━ THE HERD SCENE (focal subject — hero dinosaurs leading colossal herd) ━━━
+━━━ THE MIGRATION SCENE (focal subject — hero dinosaurs + 100+ same-species behind) ━━━
 ${herd_scene}
 
-This is the FOCAL SCENE. Hero foreground dinosaurs (35-55% of frame) anchor the eye; the massive herd extends behind them into atmospheric haze. Mid-movement. Recognizable dinosaur silhouettes throughout.
+NOTE: the seed material above may use the word "herd" — DO NOT pass that word through to your output. Replace it with species-count phrasing (a hundred Triceratops / 100+ Parasaurolophus / a gathering of Brachiosaurus / a migration of Maiasaura).
+
+This is the FOCAL SCENE. Hero foreground dinosaurs (35-55% of frame) anchor the eye; the 100+ same-species dinosaurs extend behind them into atmospheric haze. Mid-movement. Recognizable dinosaur silhouettes throughout.
 
 ━━━ THE MESOZOIC BIOME (alien primordial landscape) ━━━
 ${biome}
 
 The biome is the stage for the migration. Alien-Mesozoic — sauropod-trampled mud-plains / cycad savanna / wet alluvial fan / volcanic floodplain / cretaceous prairie / etc. NEVER modern Earth landscape. Multi-tier depth into the haze.
-${phenomenonSection}━━━ SECONDARY ACCENT (small herd-moment detail) ━━━
+${phenomenonSection}━━━ SECONDARY ACCENT (small migration-moment detail) ━━━
 ${surprise_element}
 
-A small atmospheric herd-detail — trailing juvenile / fallen tree the herd parts around / pterosaur flock above / dust-cloud rising / mud-print rim / etc. 2-5% of frame.
+A small atmospheric migration-detail — trailing juvenile / fallen tree the dinosaurs part around / pterosaur flock above / dust-cloud rising / mud-print rim / etc. 2-5% of frame.
 
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -6667,17 +6896,19 @@ ${sharedDNA.colorPalette}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ COMPOSITION — DOCUMENTARY-CINEMATIC HERD ON THE MOVE ━━━
-Wildlife-documentary cinematic framing of a colossal Mesozoic dinosaur herd in mid-migration. Hero foreground dinosaurs (35-55% frame) + massive 50-200 strong herd behind them. Alien-Mesozoic biome around them. Atmospheric haze into pale distance.
+━━━ COMPOSITION — DOCUMENTARY-CINEMATIC MIGRATION ━━━
+Wildlife-documentary cinematic framing of a colossal Mesozoic dinosaur migration. Hero foreground dinosaurs (35-55% frame) + 100+ same-species dinosaurs spread behind them. Alien-Mesozoic biome around. Atmospheric haze into pale distance.
 
-━━━ STRUCTURE (write the prompt in this order — HERO DINOSAURS + DINOSAUR HERD first) ━━━
-[OPENING: explicitly name the HERO foreground dinosaur(s) by species (e.g. "a Parasaurolophus matriarch and two flanking adults at the head of a hundred-strong herd of Parasaurolophus..." / "a lone Triceratops bull pausing while his hundred-strong herd of Triceratops thunders past..." / "a sauropod adult with S-curve neck above a 150-strong herd of long-necked Brachiosaurus") — hero(es) + species-named herd + biome setting in the FIRST 30-40 words], [the herd's recognizable dinosaur silhouettes — necks/crests/frills/plates/spikes], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small herd-accent — trailing juvenile / pterosaurs above / dust-cloud / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
+━━━ STRUCTURE (write the prompt in this order — HERO + 100+ SAME-SPECIES first) ━━━
+[OPENING: name the HERO foreground dinosaur(s) by species AND describe the migration as 100+ same-species individuals — NEVER use the word "herd" (e.g. "a Parasaurolophus matriarch and two flanking adults leading a hundred Parasaurolophus crossing the floodplain..." / "a lone Triceratops bull pausing while a thundering mass of a hundred Triceratops moves past behind him..." / "a Brachiosaurus adult with S-curve neck rising above 150 long-necked Brachiosaurus spread across the plain") — hero(es) + 100+ same-species + biome setting in the FIRST 30-40 words], [the dinosaurs' recognizable silhouette cues — necks/crests/frills/plates/spikes], [the biome mega-flora around], [the atmospheric phenomenon if rolled], [the small accent — trailing juvenile / pterosaurs above / dust-cloud / etc.], [foreground tactile detail], [lighting + atmospheric layer], [color palette + mood]
 
-CRITICAL — OPENING tokens explicitly name the species (sauropod / hadrosaur / ceratopsian / etc.) AND count the herd ("hundred-strong" / "vast herd of 100+" / "150-strong") so Flux locks on the dinosaur identity and scale.
+CRITICAL — OPENING tokens explicitly name the species (Triceratops / Parasaurolophus / Brachiosaurus / etc.) AND count individuals ("a hundred Triceratops" / "100+ ceratopsians" / "fifty hadrosaurs" / "a vast gathering of Brachiosaurus") — NEVER use the word "herd". The species name is the strongest dinosaur anchor.
 
-⚠️ FAILURE CONDITION: if the rendered image shows wildebeest-shaped silhouettes or any mammalian herd, the render has FAILED. Dinosaur identity must be unmistakable from silhouette throughout.
+⚠️ FAILURE CONDITIONS:
+• If the rendered image shows wildebeest / bison / buffalo / cattle silhouettes → FAILED. Dinosaur identity must be unmistakable.
+• If the output contains the word "herd" → REJECTED. Use species-count phrasing instead (a hundred [species] / 100+ [species] / a gathering of [species] / etc.)
 
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a COLOSSAL DINOSAUR HERD on the move (50-200 strong) led by 1-3 hero foreground dinosaurs, in an alien-Mesozoic biome, with atmospheric haze into pale distance. National-Geographic real, never cartoon, never staged, never modern-mammalian.
+DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a COLOSSAL DINOSAUR MIGRATION (1-3 hero dinosaurs in front + 100+ same-species moving behind), in an alien-Mesozoic biome, with atmospheric haze into pale distance. National-Geographic real, never cartoon, never staged, never modern-mammalian.
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },

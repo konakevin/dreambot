@@ -21,6 +21,10 @@ const pathBuilders = {
   // styles ship in rotation. Same identity (cyborg-woman) but different
   // builder + framing distribution + brief construction.
   'cyborg-female-legacy': require('./paths/legacy/cyborg-woman'),
+  // 2026-05-17: per Kevin — third cyborg-female path with assassin slant
+  // (killer / rogue / mysterious / capable / violent). Same axis system as
+  // cyborg-woman, different template that pulls her into predator territory.
+  'cyborg-female-assassin': require('./paths/cyborg-female-assassin'),
   'cyborg-man': require('./paths/cyborg-man'),
   'mecha-pilots': require('./paths/mecha-pilots'),
   'titan-war-machines': require('./paths/titan-war-machines'),
@@ -49,6 +53,11 @@ module.exports = {
     'cyborg-female-legacy': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'psychedelic', 'ethereal',
       'arcane', 'enchanted', 'voltage', 'shimmer', 'surreal', 'peaceful', 'minimal',
+    ],
+    'cyborg-female-assassin': [
+      // Skewed darker / cooler / more lethal — drop the peaceful/enchanted/shimmer ones
+      'cinematic', 'dark', 'fierce', 'nightshade', 'macabre', 'voltage',
+      'nostalgic', 'arcane', 'surreal', 'epic',
     ],
     'cyborg-man': [
       'cinematic', 'dark', 'epic', 'nostalgic', 'arcane', 'ancient',
@@ -96,6 +105,7 @@ module.exports = {
   modelByPath: {
     'cyborg-woman': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-female-legacy': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+    'cyborg-female-assassin': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'cyborg-man': ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
     'robot-moment': { 'black-forest-labs/flux-1.1-pro': 100 },
     'humanoid-robots': { 'black-forest-labs/flux-1.1-pro': 100 },
@@ -114,6 +124,7 @@ module.exports = {
       'handsome adult male man (NOT female NOT woman), masculine face, narrow hips, torso clad in cyborg shell — synth-mesh / composite panels / chrome underweave / mechanical mesh covering chest and abdomen as integrated cyborg anatomy (NOT bare skin, NOT a shirt, NOT fabric clothing — this material IS his body covering), cybernetic breakthroughs across face / neck / forearms / hands, not a full robotic chassis',
     'cyborg-woman': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'cyborg-female-legacy': 'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+    'cyborg-female-assassin': 'beautiful cyborg assassin, killer-cyborg with predatory poise, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     // 2026-05-15: bespoke-axis migration. Empty per playbook
     // "stuffed-wrappers gridlock diversity" lesson. Sonnet body leads.
     'titan-war-machines': '',
@@ -145,6 +156,7 @@ module.exports = {
     'humanoid-robots',
     'cyborg-woman',
     'cyborg-female-legacy',
+    'cyborg-female-assassin',
     'cyborg-man',
     'mecha-pilots',
     'titan-war-machines',
@@ -161,6 +173,7 @@ module.exports = {
     'humanoid-robots': 1,
     'cyborg-woman': 1,
     'cyborg-female-legacy': 1,
+    'cyborg-female-assassin': 1,
     'cyborg-man': 1,
     'mecha-pilots': 1,
     'titan-war-machines': 1,
@@ -175,7 +188,7 @@ module.exports = {
     enabled: true,
     skipPaths: [],
     allowSubjectChaosPaths: [
-      'cyborg-woman', 'cyborg-female-legacy', 'cyborg-man', 'robot-moment', 'humanoid-robots',
+      'cyborg-woman', 'cyborg-female-legacy', 'cyborg-female-assassin', 'cyborg-man', 'robot-moment', 'humanoid-robots',
       'mecha-pilots', 'titan-war-machines', 'power-armor-infantry',
       'industrial-machines', 'post-apoc-rust-tech', 'alien-biomechs',
       'mech-skyships',
@@ -189,7 +202,7 @@ module.exports = {
     enabled: true,
     conceptWords: 150,
     polishedWords: '80-110',
-    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman'],
+    skipPaths: ['titan-war-machines', 'mech-skyships', 'mecha-pilots', 'power-armor-infantry', 'post-apoc-rust-tech', 'humanoid-robots', 'cyborg-woman', 'cyborg-female-assassin'],
     preservePhrasesByPath: {
       // Force Haiku polish to keep leg-count tokens — Flux's bipedal-default
       // bias collapses tripedal/hexapod/quadrupedal seeds to 2-legged renders
@@ -231,6 +244,7 @@ module.exports = {
     pathContext: {
       'cyborg-woman': 'cyborg-female',
       'cyborg-female-legacy': 'cyborg-female',
+      'cyborg-female-assassin': 'cyborg-female',
       'cyborg-man': 'cyborg-male',
       'robot-moment': 'robot',
       'humanoid-robots': 'robot',
@@ -250,7 +264,7 @@ module.exports = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
-    if (path === 'cyborg-woman' || path === 'cyborg-female-legacy') {
+    if (path === 'cyborg-woman' || path === 'cyborg-female-legacy' || path === 'cyborg-female-assassin') {
       base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
       base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');

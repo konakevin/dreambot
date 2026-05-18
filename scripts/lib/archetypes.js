@@ -650,6 +650,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  MECHBOT_CYBORG_FEMALE_ASSASSIN: {
+    description:
+      'PATH-BESPOKE — MechBot cyborg-female-assassin path (2026-05-17 NEW). Sister of MECHBOT_CYBORG_WOMAN with a HARD slant toward killer-cyborg / assassin / rogue / mysterious / capable / violent. Same DNA pipeline + same pools, but the template register pulls her into predatory / lethal / shadowed / tactical territory instead of contemplative-beauty. Preserves all safety rails (chest coverage, no mech nipples, exposed inner workings, alien-bend variants).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['cyborg_feature', 'cyborg_material', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   COZY_INTERIOR: {
     description:
       'Intentionally minimalist canonical-LITE — narrative universal axes only (story_beat / composition_frame / emotional_dna / lighting). Skips scale_provers / surprise_element / weather_particulate / sky_layer (these would over-stuff intimate scenes). 3 path-bespoke pools: interior (fat-seed primary) + cozy_moment (40% gated drama) + warmth_source (intimate framing axis).',
