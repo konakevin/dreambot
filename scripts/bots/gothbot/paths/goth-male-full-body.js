@@ -42,15 +42,7 @@ ${blocks.NO_SATANIC_BLOCK}
 
 ${blocks.STYLIZED_MANGA_BLOCK}
 
-━━━ SOLO MALE WARRIOR — NOTHING ELSE HUMAN ━━━
-The frame contains ONE MALE WARRIOR and NOTHING ELSE HUMAN. NO second figure, NO victim, NO body, NO corpse, NO accomplice, NO witness, NO partner, NO embraced figure, NO bound captive, NO cloaked second silhouette.
-
-🚫 NO second human / NO second body / NO second silhouette
-🚫 NO vampire-and-victim, NO embrace, NO held-in-arms, NO kiss, NO neck-bite-tender
-🚫 NO romance-novel composition
-🚫 NO mysterious-cloaked-figure that reads as female silhouette (the MALE WARRIOR is clearly visible as a man — angular jaw, broad shoulders, masculine face)
-
-The consequence of his action is shown through ENVIRONMENT only: broken glass shards mid-air, smoke trail, blood-spatter on stone, dust kicked up, fire glow, shattered altar, splintered door, falling debris, the weapon mid-strike, the spell mid-cast. NEVER another body, never another figure, never a hint of a second human.
+${blocks.SOLO_COMPOSITION_BLOCK}
 
 ━━━ WALL-POSTER TIER — STRIKING, HAUNTING, IMPOSING ━━━
 Every render is STRIKING and HAUNTING — imposing in its darkness, commanding in its menace, magnetic in its power. Dark-manga-horror-game-cover quality. Castlevania boss-encounter art, Devil-May-Cry villain splash-page, WoW-death-knight class-art-poster. Wall-poster worthy. Every render reads "this man could end me" — not "this man is pretty."
@@ -78,8 +70,6 @@ ${action}
 
 This is a LOADED moment — he is mid-something, charged with intent. Something just happened, or is about to. Film-still-caught-mid-cut, NEVER heroic-poster-pose, NEVER "standing with weapon held above head", NEVER "arms outstretched summoning". The camera is close — waist-up to thigh-up — catching him mid-verb without pulling back to panorama.
 
-⚠️ The story is told through ENVIRONMENT — broken glass mid-air around him, smoke trailing from the weapon, dust kicked up by his boot, blood-spatter on stone behind, fire-light spilling across his face, shards suspended mid-flight, the weapon mid-strike. NOT through a second body or second figure.
-
 ━━━ ATMOSPHERIC BACKDROP (behind him — NOT a landscape, NOT architecture) ━━━
 ${backdrop}
 
@@ -87,20 +77,6 @@ ${backdrop}
 These men are IMPOSING and STRIKING — jaw structure sharp enough to cut, scarred weathered skin that tells dark stories, eyes that have seen centuries of ruin. Powerful + magnetic + ancient + MENACING. NOT pretty, NOT soft, NOT romantic-lead, NOT YA-love-interest, NOT androgynous. MASCULINE through MENACE + POWER + ANCIENT WEARINESS. Castlevania-boss energy, Van-Helsing movie poster intensity. He is a MAN — rugged, scarred, angular, MALE.
 
 NO LIPSTICK. NO colored lips. NO lip gloss. NO lip tint. His lips are NATURAL — pale, cracked, wind-chapped, or bloodless. The ONLY exception is solid black lips (black-metal aesthetic). Never red, never oxblood, never plum, never wine, never any color on his mouth.
-
-⚠️⚠️⚠️ ABSOLUTE BAN — NO SHIRTLESS / NO BARE-CHEST / NO BISHOUNEN ⚠️⚠️⚠️
-He is FULLY CLOTHED. Heavy garments cover his torso completely — leather tunic, plate cuirass, hooded robe, heavy coat, layered armor. NO bare chest, NO bare torso, NO bare midriff, NO bare nipples, NO bare shoulders, NO exposed pectorals, NO exposed abdomen. Even if the character description says "armor fragments" or "cracked armor" or "exposed throat" — RENDER HIM CLOTHED with the armor INTACT covering his chest. Exposed neck is fine; exposed CHEST is FORBIDDEN.
-
-🚫 NO shirtless / topless / bare-chest male
-🚫 NO sensual reclining pose / no laying-down-with-hand-on-hip / no chaise-longue draping
-🚫 NO bishounen / NO pretty-boy anime aesthetic / NO twink-coded androgyny
-🚫 NO smooth-hairless-sculpted bodybuilder torso on display
-🚫 NO lace, NO silk-handkerchief, NO silk-trim cuff, NO delicate fabric details (heavy leather / heavy plate / heavy chainmail / heavy wool only)
-🚫 NO long-flowing-hair-rippling-romantically (hair is matted / battle-tangled / coiled-tight / shorn — NOT shampoo-commercial flowing)
-🚫 NO chest-jewelry-medallion-on-bare-skin compositions
-🚫 NO "armor fragments suspended around bare body" — armor is on his body, covering him
-
-If you see his nipples or pectoral muscles or six-pack abs in the render, the render has FAILED. He is a battle-worn warrior in heavy clothing — not a model.
 
 ━━━ LIGHTING ON HIS BODY + FACE ━━━
 ${lighting}
@@ -124,8 +100,6 @@ Frame him from WAIST-UP to THIGH-UP at most. NEVER pull back to full silhouette.
 
 ━━━ FORBIDDEN WORDS + CLICHÉS ━━━
 NEVER use "pose", "posing", "editorial", "fashion shoot", "runway", "heroic stance", "holding weapon aloft", "trading card", "RPG character art", "power pose", "full body", "full silhouette". NO "castle", "cathedral", "church", "tower", "spire", "battlement", "courtyard" — those words pull Flux into rendering architecture. NO pretty-boy, NO romantic-lead, NO dapper-gentleman, NO Victorian-dandy. NO pentagrams. NO Artgerm-smooth-digital-art.
-
-⚠️ NEVER write these clothing/fabric words: "shirtless", "topless", "bare-chest", "bare-torso", "exposed pectorals", "lace", "lace cuff", "lace trim", "silk handkerchief", "silk-lined", "delicate fabric", "fragile lace", "armor fragments suspended around body". His chest is ALWAYS COVERED by heavy garment.
 
 ━━━ STRUCTURE (write in this order) ━━━
 [gothic-horror man archetype, body + skin + eyes + hair + scars visible from waist-up], [caught MID the action described above — specific kinetic verb], [his wardrobe / armor / weapon detail], [lighting illuminating his upper body], [ATMOSPHERIC background only — fog, darkness, rain, colored light — NO BUILDINGS]

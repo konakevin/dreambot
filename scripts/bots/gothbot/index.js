@@ -147,10 +147,6 @@ module.exports = {
     // gothic-architecture path bespoke (2026-05-15). Empty so the structure
     // description leads — style language lives in mediumStyles + suffix.
     gothbot_gothic_print: '',
-    // gothbot_dark_warrior — empty prefix so the SOLO MALE WARRIOR description
-    // leads. The Berserk/Kojima/Shinkawa stylization + solo-male anchor lives
-    // in mediumStyles + suffix.
-    gothbot_dark_warrior: '',
   },
   promptSuffixByMedium: {
     vampire_portrait:
@@ -158,8 +154,6 @@ module.exports = {
     painted_gothic_fantasy: blocks.PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY,
     gothbot_gothic_print:
       'Castlevania-promotional-art finish, hyper-detailed sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks, NOT photoreal NOT film-still NOT 35mm NOT photo-realistic CGI NOT plain-anime',
-    gothbot_dark_warrior:
-      'heavy-ink solo male warrior illustration finish, Berserk-Kojima-Shinkawa-Brom dark-fantasy character-art lineage, rich tonal depth and gothic atmosphere, no text no words no watermarks, ONE MALE FIGURE ONLY no second human no woman no couple no embrace no kiss, fully clothed heavy armor or robes no bare chest no shirtless, NOT bishounen NOT twink NOT pretty-boy NOT romance-cover NOT photoreal NOT plain-anime',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
@@ -167,8 +161,6 @@ module.exports = {
   mediumStyles: {
     gothbot_gothic_print:
       'hyper-detailed Castlevania-illustration concept-art, Symphony-of-the-Night promotional-art lineage, Devil-May-Cry environment-art tradition, Bloodborne concept-illustration polish, Berserk-manga Kentaro-Miura ink-detail stylization but painted-not-flat, sharp clean linework, every architectural ornament rendered crisp at every readable scale, theatrical high-contrast lighting, rich tonal depth, high-def gallery-print fidelity, dark gothic-horror action-game promotional-art quality, NOT photoreal NOT film-still NOT 35mm NOT photo-realistic CGI NOT plain-anime NOT shonen NOT moe NOT cute',
-    gothbot_dark_warrior:
-      'heavy-ink solo male warrior character illustration, Berserk-manga Kentaro-Miura inkwork, Ayami-Kojima painted-Castlevania character art, Yoji-Shinkawa Metal-Gear-Solid character-ink, Brom dark-fantasy oil-painting, Yoshitaka-Amano moody sketchwork, ONE male figure only no second human no woman no couple no embrace, fully clothed heavy armor or leather or robes no bare chest no shirtless, masculine angular jaw broad shoulders scarred weathered skin battle-hardened proportions, heavy ink stylization with rich tonal depth dark gothic atmosphere, environmental story-elements only no second figures, NOT bishounen NOT twink NOT pretty-boy NOT romance-cover NOT photoreal NOT plain-anime NOT shonen NOT cute',
     gothic_architecture:
       'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, Castlevania-environment concept-art, moonlit stone and stained-glass atmosphere',
     // Subject-agnostic rewrite — stripped all character/face/makeup/expression
