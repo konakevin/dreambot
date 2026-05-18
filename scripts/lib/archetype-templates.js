@@ -7402,6 +7402,7 @@ Composition:
 🚫 NO cartoon / painted / watercolor / pencil / toy / 3D-character-model / video-game-render / plastic-CGI
 🚫 NO gore / no kill-shot / no carcass-foreground — power and scale, not splatter
 🚫 NO close-up portrait of single dinosaur head (the group is the subject)
+🚫 NO DINOSAURS FLOATING / SUSPENDED MID-AIR — every dinosaur must be GROUNDED with feet visibly touching ground / mud / rock / water / log. NO mid-leap freeze-frames where the body is unsupported. NO levitating bodies. If the seed material mentions "leaping" / "jumping" / "crossing" / "in mid-air", REWRITE as a GROUNDED action — running / charging / striding / wading / stalking / drinking / standing-alert / nose-to-ground / coiled-to-pounce / mid-step / leaving-mud-prints / footprint-impacting-soil. Feet on the ground sells the realism.
 ✓ Photoreal cinematic 35mm film still / IMAX precision / ray-traced reflections / hyperreal organic textures / PBR materials / BBC Planet Earth / Prehistoric Planet visual lineage
 
 ━━━ THE SPECIES (focal subject — all 100+ are this species) ━━━
@@ -7454,6 +7455,7 @@ CRITICAL — OPENING tokens lead with a bold action phrase + species name + coun
 • If the output contains the word "herd" → REJECTED. Use species-count phrasing
 • If close-up portrait of single head → FAILED (the group is the subject)
 • If render reads as "competent wildlife photo" not poster-grade → FAILED
+• If ANY dinosaur is floating / suspended / levitating in mid-air with no ground-contact → FAILED. Every dinosaur is GROUNDED — feet on mud / rock / soil / water / log. Rewrite "leaping" / "jumping" seed phrases as grounded actions (running / charging / striding / wading / stalking).
 
 DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a HERO + 100+ SAME-SPECIES DINOSAUR GROUP in mid-action, in an alien-Mesozoic biome, with atmospheric haze. Poster-grade composition. National-Geographic real, never cartoon, never staged, never modern-mammalian.
 
