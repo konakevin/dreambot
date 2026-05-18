@@ -3992,7 +3992,7 @@ Do NOT default to:
 - "Pretty robot girl with a gun" — this is a WEAPONS-SYSTEM, not a doll
 
 ━━━ BANNED IMAGERY ━━━
-NO skulls / skeletons / bone imagery. NO ORGANIC FLESH ANYWHERE (no skin, no organic eyes, no organic lips, no hair). NO FEMALE-CODED SILHOUETTE (no hourglass, no breasts, no curves, no feminine waist). NO high heels, NO stilettos. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge.
+NO skulls / skeletons / bone imagery. NO ORGANIC FLESH ANYWHERE (no skin, no organic eyes, no organic lips, no hair). NO FEMALE-CODED SILHOUETTE — specifically NO breast curvature on the chassis, NO bust line, NO hourglass waist, NO sculpted feminine cleavage-coded chest, NO curves at hip suggesting feminine pelvis. The chest is a FLAT TACTICAL CHEST-PLATE — straight horizontal slab of combat armor across the front (think Death Trooper / Cylon / Spartan chest-plate, NOT bust-conforming). The waist is a STRAIGHT ARMORED MIDSECTION, not curved. The hips are FUNCTIONAL JOINT-MOUNTING, not feminine. NO high heels, NO stilettos. NO floating objects in the sky. NO explicit blood-spatter, NO corpses, NO muzzle-flash / gunshot-in-progress / mid-firing — weapons are VISIBLE and held / aimed / drawn / holstered, but never mid-discharge.
 
 ━━━ SOLO COMPOSITION ━━━
 The droid is the ONLY figure in the frame. No target, no victim, no companion, no other droid.

@@ -264,12 +264,25 @@ module.exports = {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
     };
-    if (path === 'cyborg-woman' || path === 'cyborg-female-legacy' || path === 'cyborg-female-assassin') {
+    if (path === 'cyborg-woman' || path === 'cyborg-female-legacy') {
       base.characterBase = picker.pickWithRecency(pools.CYBORG_FEMALE_CHARACTERS, 'cyborg_female_character');
       base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
       base.bodyType = picker.pickWithRecency(pools.CYBORG_BODY_TYPES, 'cyborg_body');
       base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
       base.hair = picker.pick(pools.CYBORG_HAIR_STYLES);
+      base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
+      base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
+    }
+    if (path === 'cyborg-female-assassin') {
+      // 2026-05-17: gender-neutral killer-droid path — explicitly do NOT use
+      // female cyborg DNA. Per Kevin: "no boobs." Genderless tactical chassis,
+      // no female silhouette. The template ignores characterBase/bodyType/hair
+      // and renders combat droid based on its own mandates.
+      base.characterBase = 'Combat-engineered killer droid — military assassination unit, no gender, no human silhouette';
+      base.skin = picker.pickWithRecency(pools.CYBORG_SKIN_TONES, 'cyborg_skin');
+      base.bodyType = 'Combat-engineered utilitarian chassis silhouette — broad armored shoulders, FLAT tactical chest-plate (NO breast curvature, NO bust line, NO feminine waist), reinforced kneepads / elbow-guards / tactical greaves, articulated combat limbs. T-800 endoskeleton with armor over it. NOT female, NOT male — genderless military combat unit.';
+      base.eyes = picker.pick(pools.CYBORG_EYE_STYLES);
+      base.hair = 'No hair — fully helmeted combat head OR exposed cranial mechanism OR sleek chrome skull-dome';
       base.internal = picker.pickWithRecency(pools.CYBORG_INTERNAL_EXPOSURE, 'cyborg_internal');
       base.glowColor = picker.pickWithRecency(pools.CYBORG_GLOW_COLORS, 'cyborg_glow');
     }
