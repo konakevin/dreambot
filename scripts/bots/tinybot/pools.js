@@ -25,6 +25,9 @@ const VIBE_COLOR = {
   enchanted: 'cool bioluminescent cyan-green glow on all surfaces, NO warm fill anywhere',
   shimmer: 'iridescent holographic rainbow sheen, oil-slick prismatic, hard white key',
   surreal: 'clashing impossible color pairings (lime-green sky + hot-pink ground), saturated-flat',
+  // bex.ai-coded soft-pastel aesthetic — pink/lavender/lilac/magenta/pearl
+  // with warm golden window-glow as focal contrast. Cherry-blossom-coded.
+  'pastel-dream': 'soft pastel pink + lavender + lilac + magenta + pearl-white, warm golden window-glow focal contrast, cherry-blossom atmospheric tint, dreamy bokeh ambient, NO browns NO greens NO blues',
 };
 
 module.exports = {
@@ -40,6 +43,7 @@ module.exports = {
   COTTAGE_VILLAGE: load('cottage_village'),
   BORROWERS_SCENES: load('borrowers_scenes'),
   MUSHROOM_VILLAGE: load('mushroom_village'),
+  PASTEL_VILLAGE: load('pastel_village'),
   TINY_FOOD_WORLD: load('tiny_food_world'),
   TINY_VEHICLES: load('tiny_vehicles'),
   TILT_SHIFT_LIGHTING: load('tilt_shift_lighting'),

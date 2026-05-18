@@ -20,6 +20,7 @@ const pathBuilders = {
   'cottage-village': require('./paths/cottage-village'),
   borrowers: require('./paths/borrowers'),
   'mushroom-village': require('./paths/mushroom-village'),
+  'pastel-village': require('./paths/pastel-village'),
   'tiny-food-world': require('./paths/tiny-food-world'),
   'tiny-vehicles': require('./paths/tiny-vehicles'),
 };
@@ -47,6 +48,8 @@ module.exports = {
     'enchanted',
     'shimmer',
     'surreal',
+    // 'pastel-dream' — VIBE_COLOR registered in pools.js but NOT in DB
+    // dream_vibes table. To activate, insert row into dream_vibes first.
   ],
 
   paths: [
@@ -61,6 +64,7 @@ module.exports = {
     'cottage-village',
     'borrowers',
     'mushroom-village',
+    'pastel-village',
     'tiny-food-world',
     'tiny-vehicles',
   ],
@@ -77,11 +81,12 @@ module.exports = {
     'cottage-village': 1,
     borrowers: 1,
     'mushroom-village': 1,
+    'pastel-village': 1,
     'tiny-food-world': 1,
     'tiny-vehicles': 1,
   },
 
-  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['diorama','miniature-landscape','macro-nature','miniature-urban','tiny-cozy','contained-worlds','micro-fantasy','miniature-industry','cottage-village','borrowers','mushroom-village','tiny-food-world','tiny-vehicles'] },
+  chaos: { enabled: true, skipPaths: [], allowSubjectChaosPaths: ['diorama','miniature-landscape','macro-nature','miniature-urban','tiny-cozy','contained-worlds','micro-fantasy','miniature-industry','cottage-village','borrowers','mushroom-village','pastel-village','tiny-food-world','tiny-vehicles'] },
   twoPassPolish: { enabled: true, conceptWords: 150, polishedWords: '65-90', polishedWordsByPath: {}, preservePhrasesByPath: {} },
   sensoryAnchors: {
     enabled: true,
@@ -89,7 +94,7 @@ module.exports = {
     pathContext: {
       diorama: 'scene','miniature-landscape': 'scene','macro-nature': 'scene','miniature-urban': 'scene',
       'tiny-cozy': 'scene','contained-worlds': 'scene','micro-fantasy': 'scene','miniature-industry': 'scene','cottage-village': 'scene',
-      borrowers: 'scene','mushroom-village': 'scene','tiny-food-world': 'scene','tiny-vehicles': 'scene',
+      borrowers: 'scene','mushroom-village': 'scene','pastel-village': 'scene','tiny-food-world': 'scene','tiny-vehicles': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
