@@ -1825,6 +1825,7 @@ export type Database = {
           height: number;
           id: string;
           image_url: string;
+          image_url_hq: string;
           like_count: number;
           posted_at: string;
           user_id: string;
