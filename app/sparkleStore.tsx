@@ -54,6 +54,7 @@ function PackCard({
   };
   const isBestValue = info.label === 'Best Value';
   const isPopular = info.label === 'Popular';
+  const badgeLabel = isBestValue ? 'BEST VALUE' : isPopular ? 'POPULAR' : null;
 
   return (
     <TouchableOpacity
@@ -61,28 +62,37 @@ function PackCard({
       onPress={() => onSelect(pkg)}
       activeOpacity={0.85}
     >
-      {(isBestValue || isPopular) && (
-        <View style={[s.badge, { backgroundColor: isBestValue ? colors.accent : colors.warning }]}>
-          <Text style={[s.badgeText, !isBestValue && { color: '#000' }]}>
-            {isBestValue ? 'BEST VALUE' : 'POPULAR'}
-          </Text>
-        </View>
-      )}
-
-      <View style={s.iconCircle}>
+      {/* Left: icon */}
+      <View style={s.packIcon}>
         <Ionicons
           name={info.icon as keyof typeof Ionicons.glyphMap}
-          size={26}
+          size={22}
           color={colors.accent}
         />
       </View>
 
-      <Text style={s.packSparkles}>{info.sparkles}</Text>
-      <Text style={s.packLabel}>sparkles</Text>
+      {/* Middle: sparkles count + price */}
+      <View style={{ flex: 1 }}>
+        <View style={s.packTitleRow}>
+          <Text style={s.packSparkles}>{info.sparkles}</Text>
+          <Text style={s.packSparklesLabel}> sparkles</Text>
+          {badgeLabel && (
+            <View
+              style={[
+                s.inlineBadge,
+                { backgroundColor: isBestValue ? colors.accent : colors.warning },
+              ]}
+            >
+              <Text style={[s.inlineBadgeText, !isBestValue && { color: '#000' }]}>
+                {badgeLabel}
+              </Text>
+            </View>
+          )}
+        </View>
+        <Text style={s.packPrice}>{product.priceString}</Text>
+      </View>
 
-      <Text style={s.packPrice}>{product.priceString}</Text>
-
-      {/* Selection indicator — radio dot at the bottom */}
+      {/* Right: radio dot */}
       <View style={[s.packRadio, isSelected && s.packRadioSelected]}>
         {isSelected && <View style={s.packRadioInner} />}
       </View>
@@ -222,10 +232,10 @@ export default function SparkleStoreScreen() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  // Tighter bottom padding because the sticky footer takes up its own
-  // ~120px of screen space; need to leave room above it so scrolled
-  // content (Restore button) doesn't get hidden behind the footer.
-  scroll: { paddingHorizontal: 16, paddingBottom: 24 },
+  // Bottom padding sized for the sticky footer height (helper line +
+  // CTA + paddings ≈ 130-150px) plus a buffer so the Restore link
+  // can still be scrolled into view above the footer.
+  scroll: { paddingHorizontal: 16, paddingBottom: 180 },
 
   // Pinned footer — selection copy + primary CTA, always visible
   // above the keyboard / fold regardless of scroll position.
@@ -282,70 +292,77 @@ const s = StyleSheet.create({
     marginBottom: 16,
   },
 
-  // Pack grid
+  // Pack list — vertical stack of compact pack cards (matches proStore's
+  // tier list pattern). Each card is a single row: icon + sparkle count
+  // + price + radio. Fits 4 packs comfortably above the sticky footer.
   packGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    columnGap: 12,
-    rowGap: 20,
-    justifyContent: 'center',
+    gap: 10,
   },
   packCard: {
-    width: '46%',
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 14,
     backgroundColor: colors.surface,
-    borderRadius: 18,
+    borderRadius: 14,
     borderWidth: 1.5,
     borderColor: colors.border,
-    paddingTop: 24,
-    paddingBottom: 14,
-    paddingHorizontal: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
   },
   packCardSelected: {
     borderColor: colors.accent,
     backgroundColor: 'rgba(139,123,238,0.08)',
   },
-  badge: {
-    position: 'absolute',
-    top: -11,
+  packIcon: {
+    width: 40,
+    height: 40,
     borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-  },
-  iconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(139,123,238,0.08)',
+    backgroundColor: 'rgba(139,123,238,0.10)',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  packTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 0,
+    flexWrap: 'wrap',
+  },
   packSparkles: {
     color: colors.textPrimary,
-    fontSize: 28,
-    fontWeight: '900',
-    letterSpacing: -1,
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.5,
   },
-  packLabel: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
-  packPrice: {
+  packSparklesLabel: {
     color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '700',
-    marginTop: 8,
+    fontSize: 14,
+    fontWeight: '600',
   },
-  // Selection radio at bottom of each card
+  // Inline badge — replaces the old absolute-positioned overlay badge
+  // so it lays out within the row flow.
+  inlineBadge: {
+    marginLeft: 8,
+    borderRadius: 6,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+  },
+  inlineBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.6,
+  },
+  packPrice: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  // Right-edge selection radio
   packRadio: {
-    marginTop: 10,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
     borderWidth: 2,
     borderColor: colors.border,
     alignItems: 'center',
@@ -355,9 +372,9 @@ const s = StyleSheet.create({
     borderColor: colors.accent,
   },
   packRadioInner: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: colors.accent,
   },
 

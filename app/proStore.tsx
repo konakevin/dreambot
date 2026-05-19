@@ -88,118 +88,142 @@ export default function ProStoreScreen() {
 
   return (
     <ScreenLayout header="back" title="Get Pro">
-      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        {/* Hero */}
-        <LinearGradient
-          colors={['rgba(139,123,238,0.18)', 'rgba(139,123,238,0.04)', 'transparent']}
-          style={s.hero}
-        >
-          <View style={s.heroGlow}>
-            <Ionicons name="diamond" size={36} color={colors.accent} />
-          </View>
-          <Text style={s.heroTitle}>DreamBot Pro</Text>
-          <Text style={s.heroSub}>
-            {isPaidPro
-              ? "You're already Pro. Thanks for supporting DreamBot."
-              : isOnTrial
-                ? "You're on the free trial. Lock it in below."
-                : trialExpired
-                  ? 'Your trial ended. Subscribe to keep Pro.'
-                  : 'Unlock the full app.'}
-          </Text>
-        </LinearGradient>
-
-        {/* Trial countdown banner — only shows during active trial */}
-        {isOnTrial && daysLeft !== null && (
-          <View style={s.trialBanner}>
-            <View style={s.trialBannerIcon}>
-              <Ionicons name="time-outline" size={18} color={colors.accent} />
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+          {/* Hero */}
+          <LinearGradient
+            colors={['rgba(139,123,238,0.18)', 'rgba(139,123,238,0.04)', 'transparent']}
+            style={s.hero}
+          >
+            <View style={s.heroGlow}>
+              <Ionicons name="diamond" size={36} color={colors.accent} />
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={s.trialBannerTitle}>
-                {daysLeft === 0
-                  ? 'Last day of your free trial'
-                  : daysLeft === 1
-                    ? '1 day left in your free trial'
-                    : `${daysLeft} days left in your free trial`}
-              </Text>
-              <Text style={s.trialBannerSub}>
-                Subscribe now to keep Pro features and avoid losing access.
-              </Text>
-            </View>
-          </View>
-        )}
+            <Text style={s.heroTitle}>DreamBot Pro</Text>
+            <Text style={s.heroSub}>
+              {isPaidPro
+                ? "You're already Pro. Thanks for supporting DreamBot."
+                : isOnTrial
+                  ? "You're on the free trial. Lock it in below."
+                  : trialExpired
+                    ? 'Your trial ended. Subscribe to keep Pro.'
+                    : 'Unlock the full app.'}
+            </Text>
+          </LinearGradient>
 
-        {/* Perks */}
-        <View style={s.perks}>
-          {PRO_PERKS.map((perk) => (
-            <View key={perk.title} style={s.perkRow}>
-              <View style={s.perkIcon}>
-                <Ionicons
-                  name={perk.icon as keyof typeof Ionicons.glyphMap}
-                  size={20}
-                  color={colors.accent}
-                />
+          {/* Trial countdown banner — only shows during active trial */}
+          {isOnTrial && daysLeft !== null && (
+            <View style={s.trialBanner}>
+              <View style={s.trialBannerIcon}>
+                <Ionicons name="time-outline" size={18} color={colors.accent} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={s.perkTitle}>{perk.title}</Text>
-                <Text style={s.perkSub}>{perk.sub}</Text>
+                <Text style={s.trialBannerTitle}>
+                  {daysLeft === 0
+                    ? 'Last day of your free trial'
+                    : daysLeft === 1
+                      ? '1 day left in your free trial'
+                      : `${daysLeft} days left in your free trial`}
+                </Text>
+                <Text style={s.trialBannerSub}>
+                  Subscribe now to keep Pro features and avoid losing access.
+                </Text>
               </View>
             </View>
-          ))}
-        </View>
+          )}
 
-        {/* Plan tiles */}
-        <Text style={s.sectionTitle}>Choose your plan</Text>
+          {/* Perks */}
+          <View style={s.perks}>
+            {PRO_PERKS.map((perk) => (
+              <View key={perk.title} style={s.perkRow}>
+                <View style={s.perkIcon}>
+                  <Ionicons
+                    name={perk.icon as keyof typeof Ionicons.glyphMap}
+                    size={20}
+                    color={colors.accent}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.perkTitle}>{perk.title}</Text>
+                  <Text style={s.perkSub}>{perk.sub}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
 
-        {isLoading ? (
-          <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 24 }} />
-        ) : (
-          <>
-            <View style={s.tierStack}>
-              {PRO_TIERS.map((tier) => {
-                const pkg = findPackage(packages, tier.packageId);
-                // Fall back to displayPrice when StoreKit hasn't loaded the
-                // real localized price.
-                const price = pkg?.product.priceString ?? tier.displayPrice;
-                const isSelected = tier.productId === selectedTierId;
-                return (
-                  <TouchableOpacity
-                    key={tier.productId}
-                    style={[s.tierCard, isSelected && s.tierCardSelected]}
-                    activeOpacity={0.85}
-                    disabled={isPaidPro}
-                    onPress={() => {
-                      Haptics.selectionAsync();
-                      setSelectedTierId(tier.productId);
-                    }}
-                  >
-                    {tier.savingsBadge && (
-                      <View style={s.savingsBadge}>
-                        <Text style={s.savingsBadgeText}>{tier.savingsBadge}</Text>
+          {/* Plan tiles */}
+          <Text style={s.sectionTitle}>Choose your plan</Text>
+
+          {isLoading ? (
+            <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 24 }} />
+          ) : (
+            <>
+              <View style={s.tierStack}>
+                {PRO_TIERS.map((tier) => {
+                  const pkg = findPackage(packages, tier.packageId);
+                  // Fall back to displayPrice when StoreKit hasn't loaded the
+                  // real localized price.
+                  const price = pkg?.product.priceString ?? tier.displayPrice;
+                  const isSelected = tier.productId === selectedTierId;
+                  return (
+                    <TouchableOpacity
+                      key={tier.productId}
+                      style={[s.tierCard, isSelected && s.tierCardSelected]}
+                      activeOpacity={0.85}
+                      disabled={isPaidPro}
+                      onPress={() => {
+                        Haptics.selectionAsync();
+                        setSelectedTierId(tier.productId);
+                      }}
+                    >
+                      {tier.savingsBadge && (
+                        <View style={s.savingsBadge}>
+                          <Text style={s.savingsBadgeText}>{tier.savingsBadge}</Text>
+                        </View>
+                      )}
+                      <View style={{ flex: 1 }}>
+                        <Text style={s.tierLabel}>{tier.label}</Text>
+                        <Text style={s.tierPrice}>
+                          {price}
+                          <Text style={s.tierPeriod}> / {tier.period}</Text>
+                        </Text>
                       </View>
-                    )}
-                    <View style={{ flex: 1 }}>
-                      <Text style={s.tierLabel}>{tier.label}</Text>
-                      <Text style={s.tierPrice}>
-                        {price}
-                        <Text style={s.tierPeriod}> / {tier.period}</Text>
-                      </Text>
-                    </View>
-                    <View style={[s.tierRadio, isSelected && s.tierRadioSelected]}>
-                      {isSelected && <View style={s.tierRadioInner} />}
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                      <View style={[s.tierRadio, isSelected && s.tierRadioSelected]}>
+                        {isSelected && <View style={s.tierRadioInner} />}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </>
+          )}
 
-            {/* Plan-specific marketing copy under the tier stack — swaps based on selection. */}
+          <Text style={s.fineprint}>
+            Auto-renews until cancelled. Manage or cancel anytime in your App Store account
+            settings. Restoring will re-link a previous purchase to this account.
+          </Text>
+
+          <TouchableOpacity
+            style={s.restoreButton}
+            onPress={() =>
+              restore(undefined, {
+                onSuccess: () => Toast.show('Purchases restored', 'checkmark-circle'),
+                onError: () => Toast.show('Restore failed', 'close-circle'),
+              })
+            }
+            activeOpacity={0.7}
+            disabled={restoring}
+          >
+            <Text style={s.restoreText}>{restoring ? 'Restoring…' : 'Restore Purchases'}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+
+        {/* Pinned footer — plan-specific helper copy + primary CTA, always
+            visible above the fold regardless of scroll position. */}
+        {!isLoading && (
+          <View style={s.stickyFooter}>
             <Text style={s.tierDetail}>
               {TIER_DETAIL_COPY[selectedTier.period === 'year' ? 'yearly' : 'monthly']}
             </Text>
-
-            {/* Primary CTA — single action button that triggers the purchase of the selected tier. */}
             <TouchableOpacity
               style={[
                 s.primaryCta,
@@ -222,34 +246,28 @@ export default function ProStoreScreen() {
                 </Text>
               )}
             </TouchableOpacity>
-          </>
+          </View>
         )}
-
-        <Text style={s.fineprint}>
-          Auto-renews until cancelled. Manage or cancel anytime in your App Store account settings.
-          Restoring will re-link a previous purchase to this account.
-        </Text>
-
-        <TouchableOpacity
-          style={s.restoreButton}
-          onPress={() =>
-            restore(undefined, {
-              onSuccess: () => Toast.show('Purchases restored', 'checkmark-circle'),
-              onError: () => Toast.show('Restore failed', 'close-circle'),
-            })
-          }
-          activeOpacity={0.7}
-          disabled={restoring}
-        >
-          <Text style={s.restoreText}>{restoring ? 'Restoring…' : 'Restore Purchases'}</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      </View>
     </ScreenLayout>
   );
 }
 
 const s = StyleSheet.create({
-  scroll: { paddingHorizontal: 16, paddingBottom: 60 },
+  // Bottom padding sized for the sticky footer height (helper line +
+  // CTA + paddings ≈ 130-150px) plus a buffer so the Restore link can
+  // still be scrolled into view above the footer.
+  scroll: { paddingHorizontal: 16, paddingBottom: 180 },
+
+  // Pinned footer — plan-specific copy + primary CTA, always visible.
+  stickyFooter: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 20,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+  },
 
   // Hero
   hero: {
