@@ -8,13 +8,20 @@ interface AuthState {
   session: Session | null;
   user: User | null;
   isAdmin: boolean;
-  /** Pro-subscription entitlement — true when the user has an active Pro
-   *  subscription AND its expiry timestamp is in the future. Gates
-   *  long-press Save-to-Photos and future paid features. The webhook is
-   *  the authoritative writer of pro_subscription + pro_subscription_expires_at;
-   *  we still re-validate the timestamp on every read so a missed
-   *  EXPIRATION webhook can't leave a user with permanent Pro access. */
+  /** Pro-subscription entitlement — true when the user has Pro perks
+   *  RIGHT NOW. Covers both paid subscribers (active+unexpired) AND new
+   *  users within their 14-day trial. Gates long-press Save-to-Photos +
+   *  pre-upscale + nightly cadence. The webhook is the authoritative
+   *  writer of pro_subscription + pro_subscription_expires_at; we still
+   *  re-validate the timestamp on every read so a missed EXPIRATION
+   *  webhook can't leave a user with permanent Pro access. */
   isPro: boolean;
+  /** True ONLY for actual paid subscribers — false for trial users. Use
+   *  to differentiate trial vs paid in UI ("upgrade" vs "manage"). */
+  isPaidPro: boolean;
+  /** ISO timestamp when the 14-day trial ends, or null if no trial set
+   *  or already on paid. Use to render trial countdown copy. */
+  proTrialEndsAt: string | null;
   initialized: boolean;
   setSession: (session: Session | null) => void;
   signOut: () => Promise<void>;
@@ -33,26 +40,31 @@ interface EntitlementRow {
 
 const TRIAL_DURATION_DAYS = 14;
 
+/** Has an active PAID subscription right now? */
+function isPaidProActive(row: EntitlementRow | null): boolean {
+  if (!row?.pro_subscription) return false;
+  const expiresAt = row.pro_subscription_expires_at;
+  if (!expiresAt) return true;
+  return new Date(expiresAt).getTime() > Date.now();
+}
+
+/** When the user's 14-day trial ends, or null if no trial. Doesn't care
+ *  whether the trial is still active — just returns the absolute moment. */
+function trialEndsAt(row: EntitlementRow | null): string | null {
+  if (!row?.pro_trial_started_at) return null;
+  const end =
+    new Date(row.pro_trial_started_at).getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
+  return new Date(end).toISOString();
+}
+
 /** Resolve the effective Pro state from a DB row. Three paths:
  *   1. Active paid subscription (pro_subscription=true + not expired)
  *   2. Within 14-day Pro-features trial (pro_trial_started_at within window)
- *  Treat an expired timestamp as not-Pro on the client (in case
- *  RevenueCat EXPIRATION event ever misses).
  *  Mirrors the server-side is_pro_active() Postgres function. */
 function isProActive(row: EntitlementRow | null): boolean {
-  if (!row) return false;
-  // Paid subscription path
-  if (row.pro_subscription) {
-    const expiresAt = row.pro_subscription_expires_at;
-    if (!expiresAt) return true;
-    if (new Date(expiresAt).getTime() > Date.now()) return true;
-  }
-  // Trial path
-  if (row.pro_trial_started_at) {
-    const trialEnd =
-      new Date(row.pro_trial_started_at).getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
-    if (trialEnd > Date.now()) return true;
-  }
+  if (isPaidProActive(row)) return true;
+  const trialEndIso = trialEndsAt(row);
+  if (trialEndIso && new Date(trialEndIso).getTime() > Date.now()) return true;
   return false;
 }
 
@@ -64,6 +76,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAdmin: false,
   isPro: false,
+  isPaidPro: false,
+  proTrialEndsAt: null,
   initialized: false,
 
   setSession: (session) => {
@@ -77,10 +91,15 @@ export const useAuthStore = create<AuthState>((set) => ({
         .single()
         .then(({ data }) => {
           const row = data as unknown as EntitlementRow | null;
-          set({ isAdmin: !!row?.is_admin, isPro: isProActive(row) });
+          set({
+            isAdmin: !!row?.is_admin,
+            isPro: isProActive(row),
+            isPaidPro: isPaidProActive(row),
+            proTrialEndsAt: trialEndsAt(row),
+          });
         });
     } else {
-      set({ isAdmin: false, isPro: false });
+      set({ isAdmin: false, isPro: false, isPaidPro: false, proTrialEndsAt: null });
     }
   },
 
@@ -114,7 +133,12 @@ export const useAuthStore = create<AuthState>((set) => ({
         .single()
         .then(({ data }) => {
           const row = data as unknown as EntitlementRow | null;
-          set({ isAdmin: !!row?.is_admin, isPro: isProActive(row) });
+          set({
+            isAdmin: !!row?.is_admin,
+            isPro: isProActive(row),
+            isPaidPro: isPaidProActive(row),
+            proTrialEndsAt: trialEndsAt(row),
+          });
         });
     };
 
@@ -133,7 +157,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } = supabase.auth.onAuthStateChange((_event, session) => {
       set({ session, user: session?.user ?? null, initialized: true });
       if (session?.user) checkEntitlements(session.user.id);
-      else set({ isAdmin: false, isPro: false });
+      else set({ isAdmin: false, isPro: false, isPaidPro: false, proTrialEndsAt: null });
     });
 
     return () => subscription.unsubscribe();

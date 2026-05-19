@@ -32,11 +32,28 @@ function findPackage(packages: PurchasesPackage[], packageId: string) {
   return packages.find((p) => p.identifier === packageId);
 }
 
+/** Days remaining in the trial, floored (4.7 days → "4 days"). Returns
+ *  null if no trial set OR trial ended. Caller decides what to render. */
+function trialDaysLeft(proTrialEndsAt: string | null): number | null {
+  if (!proTrialEndsAt) return null;
+  const msLeft = new Date(proTrialEndsAt).getTime() - Date.now();
+  if (msLeft <= 0) return null;
+  return Math.max(0, Math.floor(msLeft / (24 * 60 * 60 * 1000)));
+}
+
 export default function ProStoreScreen() {
   const isPro = useAuthStore((s) => s.isPro);
+  const isPaidPro = useAuthStore((s) => s.isPaidPro);
+  const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   const { data: packages = [], isLoading } = useProPackages();
   const { mutate: purchase, isPending: purchasing } = usePurchasePro();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
+
+  // Trial status: user has Pro perks via trial but hasn't paid yet.
+  // Show countdown banner so they know they need to subscribe.
+  const isOnTrial = isPro && !isPaidPro;
+  const daysLeft = isOnTrial ? trialDaysLeft(proTrialEndsAt) : null;
+  const trialExpired = !isPro && !isPaidPro && proTrialEndsAt !== null;
 
   function handlePurchase(pkg: PurchasesPackage) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -65,9 +82,36 @@ export default function ProStoreScreen() {
           </View>
           <Text style={s.heroTitle}>DreamBot Pro</Text>
           <Text style={s.heroSub}>
-            {isPro ? "You're already Pro. Thanks for supporting DreamBot." : 'Unlock the full app.'}
+            {isPaidPro
+              ? "You're already Pro. Thanks for supporting DreamBot."
+              : isOnTrial
+                ? "You're on the free trial. Lock it in below."
+                : trialExpired
+                  ? 'Your trial ended. Subscribe to keep Pro.'
+                  : 'Unlock the full app.'}
           </Text>
         </LinearGradient>
+
+        {/* Trial countdown banner — only shows during active trial */}
+        {isOnTrial && daysLeft !== null && (
+          <View style={s.trialBanner}>
+            <View style={s.trialBannerIcon}>
+              <Ionicons name="time-outline" size={18} color={colors.accent} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={s.trialBannerTitle}>
+                {daysLeft === 0
+                  ? 'Last day of your free trial'
+                  : daysLeft === 1
+                    ? '1 day left in your free trial'
+                    : `${daysLeft} days left in your free trial`}
+              </Text>
+              <Text style={s.trialBannerSub}>
+                Subscribe now to keep Pro features and avoid losing access.
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* Perks */}
         <View style={s.perks}>
@@ -110,7 +154,7 @@ export default function ProStoreScreen() {
                   key={tier.productId}
                   style={[s.tierCard, isYearly && s.tierCardFeatured]}
                   activeOpacity={0.85}
-                  disabled={!pkg || purchasing || isPro}
+                  disabled={!pkg || purchasing || isPaidPro}
                   onPress={() => pkg && handlePurchase(pkg)}
                 >
                   {tier.savingsBadge && (
@@ -190,6 +234,41 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 14,
     marginTop: 4,
+  },
+
+  // Trial banner
+  trialBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: 'rgba(139,123,238,0.10)',
+    borderColor: 'rgba(139,123,238,0.35)',
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginTop: 4,
+    marginBottom: 8,
+  },
+  trialBannerIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: 'rgba(139,123,238,0.20)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
+  },
+  trialBannerTitle: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  trialBannerSub: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 2,
   },
 
   // Perks

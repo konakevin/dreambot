@@ -28,6 +28,10 @@ export interface ProPlanTier {
  *  preserving healthy margin across the 1-2-3 sparkle tiers. */
 export const PRO_SPARKLE_BUNDLE = 75;
 
+/** Length of the free Pro-features trial granted to every new account.
+ *  Mirrored in is_pro_active() Postgres function + store/auth.ts. */
+export const PRO_TRIAL_DAYS = 14;
+
 /** Nightly-dreams included in Pro. Used by the nightly-dreams Edge Function
  *  to gate the auto-render frequency for free vs pro users.
  *  Pro = 1 nightly dream per night (~30/month). Free = 2/week if active in
