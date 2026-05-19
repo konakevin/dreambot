@@ -74,6 +74,13 @@ module.exports = {
   HEARTWARMING_SURPRISE_ELEMENTS: load('heartwarming_surprise_elements'),
   HEARTWARMING_PHENOMENA: load('heartwarming_phenomena'),
 
+  // Bath-time path-bespoke axes (2026-05-19 full-bespoke migration)
+  BATH_TIME_SETTINGS: load('bath_time_settings'),
+  BATH_TIME_ACTIVITIES: load('bath_time_activities'),
+  BATH_TIME_AMENITIES: load('bath_time_amenities'),
+  BATH_TIME_SURPRISE_ELEMENTS: load('bath_time_surprise_elements'),
+  BATH_TIME_PHENOMENA: load('bath_time_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each

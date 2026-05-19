@@ -1471,6 +1471,29 @@ Result: settings now NAMEABLE in every render (cottage kitchen / candlelit windo
 - Watch for phenomenon-fire visibility — at 60% gate it should land on ~3/5 renders
 - Pattern is ready to clone for next 23 ChibiBot paths
 
+### bath-time (ChibiBot) — wild-settings + skip-two-pass-polish unlocked setting-as-co-hero 2026-05-19
+
+Second ChibiBot path migrated. **Production-ready in 3 rounds.**
+
+**R0 (full-bespoke 11-axis from the start):** 50-MVP pools, 11 axes (lighting + atmosphere + weather universal + reused time_of_day + 6 path-bespoke: creature_1, activity, setting, amenity pickN:2, surprise_element, phenomenon + 70%-gated creature_2). Avg 3.8/5 — Kevin's verdict: "all feel like they were made on the same stage ... just looks like intimate moment path, in a tub." Settings pool was too tame — 25% "classic-bathroom" + cottage/sink/cozy-interior dominated. Tight intimate-portrait framing.
+
+**R1 (wild-settings dominant + wider composition mandate):** Regenned the settings pool with the WILD-LOCATIONS recipe — 25% sky/cloud/aerial + 20% nautical/underwater + 15% magical-realm + 10% biome-extreme + 10% steampunk/unusual-vessel + only 5% domestic-classic-bathroom (down from 25%). Added "SETTING IS A CO-HERO" composition mandate pushing wider establishing framing. Avg 3.9/5 — settings became varied (cabin porch in snow / coral reef / Roman villa / forest with conch shell), but framing STILL felt close-cropped. Two-pass polish was compressing 150 → 65-90 words and stripping setting language first.
+
+**R2 (skip two-pass-polish):** Added `bath-time` to `twoPassPolish.skipPaths`. With Sonnet's full 150-word concept reaching Flux intact, setting context survives. Avg 4.8/5 — Roman-villa atrium with columns + tropical vines / lily-pad on forest stream / coral-reef-at-sunset / alpine cabin with mountain window / candlelit dark-forest pool. Setting + creature both clearly readable in every frame.
+
+**Cross-bot lesson (added to cross-bot list):** When a path's SETTING is a co-hero (not just intimate-moment), two-pass polish compression is net-negative — it strips location language because Sonnet's polish-pass treats setting prose as fluff. Add the path to `twoPassPolish.skipPaths`. Applies to any path where the WHERE matters as much as the WHO.
+
+**Config (current production):**
+- Path file: `scripts/bots/chibibot/paths/bath-time.js` (declarative, 11 axes)
+- Legacy: `scripts/bots/chibibot/paths/legacy/bath-time.js`
+- Universal axes: lighting + atmosphere + weather (via `bot.defaultPools`)
+- Reused: time_of_day → HEARTWARMING_TIME_OF_DAY
+- Path-bespoke: setting, activity, creature_1, amenity (pickN:2), surprise_element, phenomenon
+- Conditional creature_2 (composer 70%-gate)
+- Template-gated phenomenon (60%)
+- twoPassPolish.skipPaths: ['bath-time']
+- 5 new pools sized: settings 200, activities 200, amenities 100, surprise_elements 150, phenomena 50
+
 ---
 
 ## The iteration loop (per path)
@@ -1500,6 +1523,7 @@ Result: settings now NAMEABLE in every render (cottage kitchen / candlelit windo
 - **Helmets and face-coverings are environmental, not absolute.** Gate face visibility through the BIOME-APPROPRIATE OUTFIT block: vacuum/toxic = sealed visor, glacial = hood, desert = optional face wrap, **temperate/habitable = face fully visible.** Kevin's preference: when the biome is breathable, prefer face-visible compositions so character DNA reads.
 - **Pool DNA dominates brief admonitions, EVERY time.** (StarBot space-opera R1.) When a ship pool entry uses "cathedral / fortress / citadel / temple / Gothic Revival / stained-glass / flying-buttress" language, Flux renders the prompt as a planetary temple — no brief-level "NOT a building, this is a STARSHIP" guard overrides it. The fix is to strip the offending language from BOTH the seed entries AND the gen-recipe's silhouette / scale / example / instruction text, then regenerate. Brief stays lean.
 - **Ban building-coded vocabulary in any spaceship pool.** `cathedral`, `cathedral-class`, `cathedral-stack`, `fortress`, `fortress-citadel`, `citadel`, `temple`, `temple-ship`, `monastery`, `Gothic Revival`, `stained-glass`, `rose window`, `flying buttresses`, `bell housings`, `vertical city-spire`, `mosque`, `minaret`, `pagoda`, `ziggurat`. Vertical / tower silhouettes are still fine — describe them as `segmented-worm`, `obelisk-vessel`, `totem-hull`, `stacked-modules`, `spire-needle vessel`. Never as architecture.
+- **Two-pass polish strips setting context on setting-as-co-hero paths.** (ChibiBot bath-time R1→R2.) When the WHERE matters as much as the WHO (bath-time / outdoor-adventure / cozy-landscape / village paths), the Sonnet→Haiku polish compression (150 → 65-90 words) strips location language first because the polisher reads setting prose as descriptive fluff and prioritizes subject + action verbs. Symptom: pool entries are richly described locations ("clawfoot tub on pirate-ship deck overlooking Caribbean horizon") but renders come back as intimate close-ups with generic backdrop. Fix: add the path to `twoPassPolish.skipPaths` so Sonnet's full 150-word concept reaches Flux intact. Bath-time R1 avg 3.9/5 → R2 avg 4.8/5 with this single change. Likely applies to every ChibiBot scene-heavy path, ToyBot outdoor paths, BloomBot landscape, etc. — when reviewing renders, ask "does the setting feel half the magic or just a backdrop?" If just backdrop, check skipPaths.
 - **Template wording with a fixed color cast OVERRIDES pool variety.** (ChibiBot heartwarming-scene R1→R2.) "warm volumetric glow" / "soft warm light" / "golden hour" embedded ANYWHERE in the brief (BLOW IT UP block, COMPOSITION block, even the cuteness amplification section) will cause Flux to render warm-golden lighting regardless of what the time-of-day or lighting pool entry says. When a path has a time-of-day axis, lighting amplification phrases MUST tie to the axis with explicit per-time examples ("silvery-blue at moonlit, indigo-pink at blue hour, peach-amber at golden, pearl-grey at dawn, cool-overcast at soft daylight — NOT forced warm-golden when the axis says otherwise"). Removing the header-clamp `(warm soft only)` is not enough — the cuteness-amplification body text needs the same surgery.
 - **Character path briefs MUST be gender-locked, never gender-neutral.** (StarBot female-explorer composer regression 2026-05-12.) Flux uses pronouns and gendered nouns as primary gender-rendering signals. A brief with "the character / they / them / explorer" softens Flux's commitment to render a specific gender. Female-explorer briefs MUST use "she / her / woman / female explorer" consistently. Male-explorer briefs MUST use "he / his / man / male explorer". The compact bio line MUST include the literal gendered noun ("A {race} **woman** with..." or "A {race} **man** with..."). When designing a character archetype that serves both genders, parametrize gender via path config (`gender: 'female'` or `'male'`) and inject the gendered words into the template — never share one gender-neutral template across genders. Or: ship two sibling archetypes (FEMALE_EXPLORER + MALE_EXPLORER), each gender-locked. Both are valid; one-template-two-genders is NOT.
 
