@@ -121,7 +121,12 @@ export const useAuthStore = create<AuthState>((set) => ({
       .eq('id', userId)
       .single();
     const row = data as unknown as EntitlementRow | null;
-    set({ isAdmin: !!row?.is_admin, isPro: isProActive(row) });
+    set({
+      isAdmin: !!row?.is_admin,
+      isPro: isProActive(row),
+      isPaidPro: isPaidProActive(row),
+      proTrialEndsAt: trialEndsAt(row),
+    });
   },
 
   initialize: () => {
