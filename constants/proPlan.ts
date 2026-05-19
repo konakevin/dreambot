@@ -22,11 +22,20 @@ export interface ProPlanTier {
   savingsBadge?: string;
 }
 
-/** Bundled sparkles granted on each successful Pro INITIAL_PURCHASE + RENEWAL.
- *  Server-side enforcement lives in revenuecat-webhook. 75 chosen to beat
- *  OpenArt Basic ($9.99 → 87 standard renders) on a comparable price while
- *  preserving healthy margin across the 1-2-3 sparkle tiers. */
+/** Bundled sparkles granted on each successful Pro INITIAL_PURCHASE + RENEWAL
+ *  for the MONTHLY product. Server-side enforcement lives in
+ *  revenuecat-webhook. 75 chosen to beat OpenArt Basic ($9.99 → 87 standard
+ *  renders) on a comparable price while preserving healthy margin across
+ *  the 1-2-3 sparkle tiers. */
 export const PRO_SPARKLE_BUNDLE = 75;
+
+/** Bundled sparkles granted on each successful Pro INITIAL_PURCHASE + RENEWAL
+ *  for the YEARLY product. 12× the monthly bundle — paid in one lump sum
+ *  so the user gets "a year's worth" immediately rather than a trickle.
+ *  Refund risk: if a user spends all 900 and then refunds, we eat the
+ *  marginal cost (~$54). Apple refund rate on IAP is ~2% historically,
+ *  so expected loss is ~$1/yearly-subscriber — well within margin. */
+export const PRO_YEARLY_SPARKLE_BUNDLE = PRO_SPARKLE_BUNDLE * 12;
 
 /** Length of the free Pro-features trial granted to every new account.
  *  Mirrored in is_pro_active() Postgres function + store/auth.ts. */

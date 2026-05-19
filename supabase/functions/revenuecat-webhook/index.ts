@@ -25,17 +25,25 @@ const SPARKLE_PACKS: Record<string, number> = {
 
 // Pro subscription product IDs. Match these in App Store Connect /
 // Google Play and attach to the "pro" entitlement in RevenueCat.
-const PRO_SUBSCRIPTION_PRODUCTS = new Set([
-  // Use radorbad prefix to match the app's actual bundle identifier
-  // (com.konakevin.radorbad). Sparkles use the same prefix above —
-  // Apple requires IAP product IDs to share the app's bundle prefix.
-  'com.konakevin.radorbad.pro.monthly',
-  'com.konakevin.radorbad.pro.yearly',
-]);
+// Use radorbad prefix to match the app's actual bundle identifier
+// (com.konakevin.radorbad). Sparkles use the same prefix above —
+// Apple requires IAP product IDs to share the app's bundle prefix.
+const PRO_MONTHLY_PRODUCT = 'com.konakevin.radorbad.pro.monthly';
+const PRO_YEARLY_PRODUCT = 'com.konakevin.radorbad.pro.yearly';
+const PRO_SUBSCRIPTION_PRODUCTS = new Set([PRO_MONTHLY_PRODUCT, PRO_YEARLY_PRODUCT]);
 
 // Bundled sparkles granted with each Pro INITIAL_PURCHASE + RENEWAL.
-// SOURCE OF TRUTH: constants/proPlan.ts:PRO_SPARKLE_BUNDLE — keep in sync.
-const PRO_SPARKLE_BUNDLE = 75;
+// SOURCE OF TRUTH: constants/proPlan.ts:PRO_SPARKLE_BUNDLE (monthly) and
+// PRO_YEARLY_SPARKLE_BUNDLE (yearly = 12× monthly). Keep in sync.
+const PRO_MONTHLY_SPARKLE_BUNDLE = 75;
+const PRO_YEARLY_SPARKLE_BUNDLE = PRO_MONTHLY_SPARKLE_BUNDLE * 12; // 900
+
+/** Returns the right sparkle grant for a given Pro product ID. Yearly
+ *  subscribers receive 12× the monthly bundle in one lump sum at each
+ *  billing cycle. */
+function proBundleSize(productId: string): number {
+  return productId === PRO_YEARLY_PRODUCT ? PRO_YEARLY_SPARKLE_BUNDLE : PRO_MONTHLY_SPARKLE_BUNDLE;
+}
 
 // Subscription events that should trigger the bundled-sparkle grant.
 // PRODUCT_CHANGE / UNCANCELLATION extend access but don't grant new sparkles —
@@ -189,11 +197,15 @@ Deno.serve(async (req) => {
         }
 
         // Grant the bundled sparkles on INITIAL_PURCHASE + each RENEWAL.
-        // Idempotent on transactionId — if the same renewal event is
-        // delivered twice, the second grant is skipped.
+        // Monthly subscribers get PRO_MONTHLY_SPARKLE_BUNDLE per billing
+        // cycle. Yearly subscribers get PRO_YEARLY_SPARKLE_BUNDLE (12×)
+        // in one lump sum per yearly billing cycle.
+        // Idempotent on transactionId — if the same event is delivered
+        // twice, the second grant is skipped.
         let sparklesGranted = 0;
         if (PRO_SPARKLE_GRANT_EVENTS.has(eventType)) {
           const reason = `pro_bundle:${transactionId}`;
+          const bundleAmount = proBundleSize(productId);
           const { data: existing } = await supabase
             .from('sparkle_transactions')
             .select('id')
@@ -204,7 +216,7 @@ Deno.serve(async (req) => {
           } else {
             const { error: grantError } = await supabase.rpc('grant_sparkles', {
               p_user_id: appUserId,
-              p_amount: PRO_SPARKLE_BUNDLE,
+              p_amount: bundleAmount,
               p_reason: reason,
             });
             if (grantError) {
@@ -212,9 +224,9 @@ Deno.serve(async (req) => {
               // Don't fail the whole webhook — entitlement already set,
               // sparkle grant retry can be handled separately.
             } else {
-              sparklesGranted = PRO_SPARKLE_BUNDLE;
+              sparklesGranted = bundleAmount;
               console.log(
-                `[RevenueCat] Granted ${PRO_SPARKLE_BUNDLE} bundled sparkles to ${appUserId}`
+                `[RevenueCat] Granted ${bundleAmount} bundled sparkles to ${appUserId} (${productId === PRO_YEARLY_PRODUCT ? 'yearly' : 'monthly'})`
               );
             }
           }
