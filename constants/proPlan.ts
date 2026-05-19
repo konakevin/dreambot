@@ -23,43 +23,57 @@ export interface ProPlanTier {
 }
 
 /** Bundled sparkles granted on each successful Pro INITIAL_PURCHASE + RENEWAL.
- *  Server-side enforcement lives in revenuecat-webhook. */
-export const PRO_SPARKLE_BUNDLE = 60;
+ *  Server-side enforcement lives in revenuecat-webhook. 75 chosen to beat
+ *  OpenArt Basic ($9.99 → 87 standard renders) on a comparable price while
+ *  preserving healthy margin across the 1-2-3 sparkle tiers. */
+export const PRO_SPARKLE_BUNDLE = 75;
 
 /** Nightly-dreams included in Pro. Used by the nightly-dreams Edge Function
- *  to gate the auto-render frequency for free vs pro users. */
+ *  to gate the auto-render frequency for free vs pro users.
+ *  Pro = 1 nightly dream per night (~30/month). Free = 2/week if active in
+ *  the prior 3-day window. */
 export const PRO_NIGHTLY_DREAMS_PER_MONTH = 30;
+
+/** HQ download monthly cap — "unlimited" in marketing copy, capped server-
+ *  side at this number to block bot/scraper abuse without affecting any
+ *  real user (a 500/mo cap = ~17 unique posts/day every single day). */
+export const PRO_HQ_DOWNLOADS_PER_MONTH = 500;
 
 /** Pro perk list — surface in the Get Pro screen + any "what is Pro?" copy.
  *  Ordered by what users care about most. */
 export const PRO_PERKS = [
   {
     icon: 'download-outline',
-    title: 'Unlimited HQ downloads',
-    sub: 'Save any dream — yours, bots, or other creators — to your photos in full quality.',
+    title: 'Unlimited 4K downloads',
+    sub: 'Save any dream — yours, bots, or other creators — to your photos in 4K.',
   },
   {
     icon: 'sparkles',
     title: `${PRO_SPARKLE_BUNDLE} bonus sparkles every month`,
-    sub: 'On top of any sparkles you already have. Refills automatically with each renewal.',
+    sub: 'Spend on any model — Flux 2, GPT Image 1, Nano Banana Pro, and more. Refills automatically with each renewal.',
   },
   {
     icon: 'moon',
-    title: `${PRO_NIGHTLY_DREAMS_PER_MONTH} nightly dreams per month`,
-    sub: 'Personalized dreams generated for you nightly while you sleep.',
+    title: 'A new dream every night',
+    sub: 'Personalized AI dreams generated for you while you sleep — every single night.',
   },
 ] as const;
 
+// Product IDs use the radorbad bundle prefix because the app's actual
+// CFBundleIdentifier is com.konakevin.radorbad (the legacy bundle name
+// kept post-launch — see BUNDLE_ID_MIGRATION.md). Apple requires IAP
+// product IDs to share the app's bundle prefix. Sparkles follow the
+// same convention (com.konakevin.radorbad.sparkles.*).
 export const PRO_TIERS: ProPlanTier[] = [
   {
-    productId: 'com.konakevin.dreambot.pro.monthly',
+    productId: 'com.konakevin.radorbad.pro.monthly',
     packageId: '$rc_monthly',
     label: 'Monthly',
     displayPrice: '$9.99',
     period: 'month',
   },
   {
-    productId: 'com.konakevin.dreambot.pro.yearly',
+    productId: 'com.konakevin.radorbad.pro.yearly',
     packageId: '$rc_annual',
     label: 'Yearly',
     displayPrice: '$79.99',

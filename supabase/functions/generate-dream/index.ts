@@ -41,6 +41,7 @@ import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
+import { getCostCents } from '../_shared/modelPricing.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
@@ -1103,7 +1104,7 @@ Output ONLY the prompt.`;
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
-        cost_cents: 3,
+        cost_cents: getCostCents(pickedModel),
         status: 'completed',
         sonnet_brief: sonnetBrief,
         sonnet_raw_response: sonnetRawResponse,

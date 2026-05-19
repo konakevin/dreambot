@@ -24,6 +24,7 @@ import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
+import { getCostCents } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 
@@ -321,7 +322,7 @@ Deno.serve(async (req) => {
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
-        cost_cents: 3,
+        cost_cents: getCostCents(pickedModel),
         status: 'completed',
         sonnet_brief: sonnetBrief,
         sonnet_raw_response: sonnetRawResponse,

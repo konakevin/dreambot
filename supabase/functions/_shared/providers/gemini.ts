@@ -2,17 +2,21 @@
  * Google Gemini image generation provider (Nano Banana family).
  *
  * Model identifiers:
- *   - google/gemini-3-image-preview  → Nano Banana Pro (20cr tier — 4K + character consistency)
- *   - google/gemini-2-image          → Nano Banana 2 (5cr tier — 4K Gemini 3.1 Flash)
+ *   - google/gemini-3-image-preview  → Nano Banana Pro (resolution-priced)
+ *   - google/gemini-2-image          → Nano Banana 2 (Gemini 2.5 Flash)
  *
  * API: POST https://generativelanguage.googleapis.com/v1beta/models/<model>:generateContent
- *   Body: { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseModalities: ['IMAGE'] } }
+ *   Body: { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio, ... } } }
  *
  * Response: inline base64 image in `candidates[0].content.parts[].inlineData.data`
  *
- * Pricing (rough, check Google AI Studio for current):
- *   gemini-3-image-preview: ~$0.03-0.05/image
- *   gemini-2-image: ~$0.02-0.03/image
+ * Pricing (verified 2026-05-18, ai.google.dev/pricing):
+ *   gemini-3-image-preview at 1K: $0.067, 2K: $0.101, 4K: $0.151
+ *   gemini-2.5-flash-image: $0.039 (1024×1024 baseline)
+ *
+ * We pin Nano Banana Pro to 1K to keep margin healthy at the 3-sparkle
+ * tier — bumping to 2K+ would push us to $0.10+ per render and erode
+ * the margin headroom we have.
  *
  * NSFW: Gemini's safety system returns finishReason='SAFETY' or similar.
  *   We re-throw with NSFW_CONTENT: prefix so upstream retry kicks in.
@@ -47,6 +51,11 @@ export async function generateGeminiImage(
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`;
 
+  // Nano Banana Pro is resolution-priced ($0.067/1K, $0.101/2K, $0.151/4K).
+  // We pin to 1K to keep cost basis at ~$0.07/render — anything higher
+  // erodes margin on the 3-sparkle tier.
+  const isNanoBananaPro = modelId === 'google/gemini-3-image-preview';
+
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -54,8 +63,15 @@ export async function generateGeminiImage(
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         responseModalities: ['IMAGE'],
-        // 9:16 portrait aspect ratio nudge — Gemini doesn't take an
-        // aspect_ratio param directly, prompt-level hint is the move.
+        // imageConfig is the Nano Banana Pro knob for resolution + aspect.
+        // The field is only honored on gemini-3-image-preview; Gemini
+        // 2.5 Flash ignores it and renders at its baseline.
+        ...(isNanoBananaPro && {
+          imageConfig: {
+            aspectRatio: '9:16',
+            resolution: '1K',
+          },
+        }),
       },
     }),
   });

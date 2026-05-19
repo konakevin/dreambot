@@ -31,6 +31,7 @@ import { persistToStorage } from '../../_shared/persistence.ts';
 import { insertGenerationLog } from '../../_shared/logging.ts';
 import { FIRST_DREAM_BANNED_PHRASES, FirstDreamPersona } from '../../_shared/firstDream.ts';
 import { upscaleAndCache } from '../../_shared/upscaleClarity.ts';
+import { getCostCents } from '../../_shared/modelPricing.ts';
 
 interface FirstDreamPayload {
   persona: FirstDreamPersona;
@@ -205,7 +206,7 @@ export async function processFirstDreamJob(args: FirstDreamDispatcherArgs): Prom
     fallback_reasons: fallbackReasons,
     replicate_prediction_id: replicatePredictionId,
     model_used: renderModel,
-    cost_cents: 5,
+    cost_cents: getCostCents(renderModel),
     status: 'completed',
   });
 

@@ -10,7 +10,7 @@
  *   - show the model name on the post detail screen
  */
 
-export type ModelTier = 'standard' | 'premium' | 'premium-plus';
+export type ModelTier = 'standard' | 'mid' | 'premium';
 
 export interface ImageModel {
   /** Stable identifier — matches MODEL_SPARKLE_COSTS keys server-side. */
@@ -28,8 +28,7 @@ export interface ImageModel {
 }
 
 export const IMAGE_MODELS: ImageModel[] = [
-  // ── Standard (1 sparkle) — Flux 1 family ──────────────────────────────
-  // (Flux 2 has no Schnell tier — fastest Flux 2 is `flex`, which lives in Premium.)
+  // ── Tier 1: Standard (1 sparkle) — Flux 1 family ──────────────────────
   {
     id: 'black-forest-labs/flux-schnell',
     label: 'Flux 1 Schnell',
@@ -55,87 +54,87 @@ export const IMAGE_MODELS: ImageModel[] = [
     description: 'Our default — fast, balanced quality.',
   },
 
-  // ── Premium (3 sparkles) — Flux 2 Flex/Dev/Pro + new providers ────────
+  // ── Tier 2: Mid (2 sparkles) — Flux 2 mid + non-flagship providers ────
   {
     id: 'black-forest-labs/flux-2-flex',
     label: 'Flux 2 Flex',
     provider: 'replicate',
-    sparkleCost: 3,
-    tier: 'premium',
+    sparkleCost: 2,
+    tier: 'mid',
     description: 'Flux 2 fast tier — improved fidelity over Flux 1.',
   },
   {
     id: 'black-forest-labs/flux-2-dev',
     label: 'Flux 2 Dev',
     provider: 'replicate',
-    sparkleCost: 3,
-    tier: 'premium',
+    sparkleCost: 2,
+    tier: 'mid',
     description: 'Flux 2 open-weight — artistic, expressive.',
   },
   {
     id: 'black-forest-labs/flux-2-pro',
     label: 'Flux 2 Pro',
     provider: 'replicate',
-    sparkleCost: 3,
-    tier: 'premium',
+    sparkleCost: 2,
+    tier: 'mid',
     description: 'Flux 2 mid-tier — strong quality, balanced cost.',
   },
   {
     id: 'black-forest-labs/flux-krea-dev',
     label: 'Flux Krea',
     provider: 'replicate',
-    sparkleCost: 3,
-    tier: 'premium',
+    sparkleCost: 2,
+    tier: 'mid',
     description: 'Artistic diffusion — natural aesthetic & high detail.',
   },
   {
     id: 'openai/gpt-image-2',
     label: 'GPT Image 2',
     provider: 'openai',
-    sparkleCost: 3,
-    tier: 'premium',
+    sparkleCost: 2,
+    tier: 'mid',
     description: 'OpenAI — strong prompt fidelity & text rendering.',
   },
   {
     id: 'google/gemini-2-image',
     label: 'Nano Banana 2',
     provider: 'gemini',
-    sparkleCost: 3,
-    tier: 'premium',
-    description: 'Google Gemini 3.1 Flash — 4K output, fast.',
+    sparkleCost: 2,
+    tier: 'mid',
+    description: 'Google Gemini 2.5 Flash — fast, high-quality.',
   },
 
-  // ── Premium+ (5 sparkles) — top tiers ──────────────────────────────────
+  // ── Tier 3: Premium (3 sparkles) — flagships of every provider ────────
   {
     id: 'black-forest-labs/flux-1.1-pro-ultra',
     label: 'Flux 1.1 Pro Ultra',
     provider: 'replicate',
-    sparkleCost: 5,
-    tier: 'premium-plus',
+    sparkleCost: 3,
+    tier: 'premium',
     description: 'Flux 1 photoreal 2K — raw mode, natural aesthetics.',
   },
   {
     id: 'black-forest-labs/flux-2-max',
     label: 'Flux 2 Max',
     provider: 'replicate',
-    sparkleCost: 5,
-    tier: 'premium-plus',
+    sparkleCost: 3,
+    tier: 'premium',
     description: 'Flux 2 flagship — top prompt fidelity & style.',
   },
   {
     id: 'openai/gpt-image-1',
-    label: 'GPT Image 1 (HD)',
+    label: 'GPT Image 1',
     provider: 'openai',
-    sparkleCost: 5,
-    tier: 'premium-plus',
+    sparkleCost: 3,
+    tier: 'premium',
     description: 'OpenAI flagship — high-fidelity creative.',
   },
   {
     id: 'google/gemini-3-image-preview',
     label: 'Nano Banana Pro',
     provider: 'gemini',
-    sparkleCost: 5,
-    tier: 'premium-plus',
+    sparkleCost: 3,
+    tier: 'premium',
     description: 'Google flagship — hyper-realistic, character consistency.',
   },
 ];
@@ -154,6 +153,6 @@ export function getSparkleCost(id: string | null | undefined): number {
 
 export const MODELS_BY_TIER: Record<ModelTier, ImageModel[]> = {
   standard: IMAGE_MODELS.filter((m) => m.tier === 'standard'),
+  mid: IMAGE_MODELS.filter((m) => m.tier === 'mid'),
   premium: IMAGE_MODELS.filter((m) => m.tier === 'premium'),
-  'premium-plus': IMAGE_MODELS.filter((m) => m.tier === 'premium-plus'),
 };

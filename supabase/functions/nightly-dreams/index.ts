@@ -25,6 +25,7 @@ import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
+import { getCostCents } from '../_shared/modelPricing.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
@@ -1478,7 +1479,7 @@ Output ONLY the prompt.`;
         rolled_axes: { ...logAxes, timings, observability },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
-        cost_cents: 3,
+        cost_cents: getCostCents(pickedModel),
         status: 'completed',
         sonnet_brief: sonnetBrief,
         sonnet_raw_response: sonnetRawResponse,

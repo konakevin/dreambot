@@ -26,7 +26,7 @@ const PRO_SUBSCRIPTION_PRODUCTS = new Set([
 
 // Bundled sparkles granted with each Pro INITIAL_PURCHASE + RENEWAL.
 // SOURCE OF TRUTH: constants/proPlan.ts:PRO_SPARKLE_BUNDLE — keep in sync.
-const PRO_SPARKLE_BUNDLE = 60;
+const PRO_SPARKLE_BUNDLE = 75;
 
 // Subscription events that should trigger the bundled-sparkle grant.
 // PRODUCT_CHANGE / UNCANCELLATION extend access but don't grant new sparkles —

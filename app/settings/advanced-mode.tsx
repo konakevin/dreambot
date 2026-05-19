@@ -6,13 +6,13 @@
  * for back-compat — predates the rename Pro Mode → Advanced Mode and
  * predates non-Flux providers). Default is flux-1.1-pro.
  *
- * Advanced Mode itself is FREE to toggle on — but premium models charge
- * more sparkles per render (3 for Premium, 5 for Premium+).
+ * Advanced Mode itself is FREE to toggle on — but mid/premium models
+ * charge more sparkles per render (2 for Mid, 3 for Premium).
  *
  * Models grouped by tier:
- *   • Standard (1 sparkle) — Replicate Flux baseline
- *   • Premium (3 sparkles) — Flux 2 Max, GPT Image 2, Nano Banana 2, Flux Krea
- *   • Premium+ (5 sparkles) — Flux 1.1 Pro Ultra, GPT Image 1 HD, Nano Banana Pro
+ *   • Standard (1 sparkle) — Flux 1 family
+ *   • Mid (2 sparkles) — Flux 2 family, Flux Krea, GPT Image 2, Nano Banana 2
+ *   • Premium (3 sparkles) — Flux 1.1 Pro Ultra, Flux 2 Max, GPT Image 1, Nano Banana Pro
  */
 
 import { useEffect, useState } from 'react';
@@ -34,8 +34,8 @@ import { IMAGE_MODELS, DEFAULT_MODEL_ID, type ImageModel } from '@/constants/ima
 
 const TIER_LABELS: Record<ImageModel['tier'], string> = {
   standard: 'Standard',
+  mid: 'Mid',
   premium: 'Premium',
-  'premium-plus': 'Premium+',
 };
 
 const PROVIDER_LABELS: Record<ImageModel['provider'], string> = {
@@ -44,7 +44,7 @@ const PROVIDER_LABELS: Record<ImageModel['provider'], string> = {
   gemini: 'Google',
 };
 
-const TIER_ORDER: ImageModel['tier'][] = ['standard', 'premium', 'premium-plus'];
+const TIER_ORDER: ImageModel['tier'][] = ['standard', 'mid', 'premium'];
 
 export default function SettingsAdvancedModeScreen() {
   const user = useAuthStore((s) => s.user);
