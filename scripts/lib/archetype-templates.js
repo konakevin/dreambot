@@ -6354,7 +6354,13 @@ A specific atmospheric moment within the tunnel that supports (doesn't compete w
 
 ━━━ THE CORE AESTHETIC — FLOWERS LOOK UNMISTAKABLY LIT UP ━━━
 
-The unifying mandate: EVERY visible flower in the frame looks LIT UP — vivid saturated petals + clearly visible warm-glowing CORE / HEART / THROAT / INTERIOR that reads like a tiny candle-flame, paper-lantern interior, or ember-core. The flowers radiate their own soft warm light. NEVER flat / dull / non-glowing.
+The unifying mandate: EVERY visible flower in the frame IS A SWITCHED-ON BLOOM-LAMP — each flower visibly glows like a turned-on light-bulb in the exact shape of that flower. The petals are TRANSLUCENT and brightly lit from a glowing-bulb CORE inside, the way a lit lamp's shade looks: the bloom itself reads as illuminated, the petals appear backlit and luminous, every bloom unmistakably ON.
+
+Think of it like this (do not write 'Christmas lights' in the output — that confuses Flux): imagine someone replaced every flower in the scene with a translucent ornamental light-bulb shaped exactly like that flower, and turned them all on. The petals glow from inside. The flower IS the lamp. The flower IS the bulb. Each bloom in the frame is unmistakably a SELF-ILLUMINATED FLOWER-LAMP.
+
+Each flower's CORE / HEART / THROAT / INTERIOR is the bright bulb-center; the petals around it are translucent, backlit, glowing from within. Like Tiffany-style stained-glass lamps in the shape of flowers, or paper-lantern flowers, or fiber-optic-flower fixtures — but rendered naturalistically as actual translucent self-illuminated blooms.
+
+NEVER flat / dull / non-glowing / opaque-petals / mere bright-color. EVERY visible flower in the foreground and midground is clearly a switched-on flower-lamp with translucent backlit petals.
 
 Two register-options for the OVERALL composition — pick whichever fits the rolled tunnel_setting:
 
@@ -6378,7 +6384,7 @@ Two register-options for the OVERALL composition — pick whichever fits the rol
 
 ━━━ HARD MANDATES (every render, BOTH registers) ━━━
 
-1. **EVERY FLOWER HAS A GLOWING CORE** — describe explicitly per species: marigold-core glowing warm-amber like a candle-flame, foxglove-bell glowing warm-amber from within like a paper-lantern, rose-core glowing warm-pink-amber like an ember-heart, dahlia-heart glowing warm-gold, hibiscus-center glowing warm-orange, lily-throat glowing warm-amber, etc.
+1. **EVERY FLOWER IS A SWITCHED-ON FLOWER-LAMP** — describe each species AS A LIT LAMP IN THE SHAPE OF THAT FLOWER: marigold-lamp with warm-amber lit bulb-core making petals translucent and backlit from within, foxglove-bell-LAMP with warm-amber lit bulb glowing through the translucent bell like a paper-lantern, rose-LAMP with warm-pink-amber lit core making layered petals glow translucent from within, dahlia-LAMP with warm-gold lit center making the petal-spiral backlit and glowing, hibiscus-LAMP with warm-orange lit core making the petals translucent and luminous, lily-LAMP with warm-amber lit throat-bulb making the trumpet-shape glow from inside. The flower IS the lamp. The flower IS the bulb. EVERY bloom in the frame is clearly a self-illuminated bloom-lamp with translucent backlit petals — not a flower 'with glow,' but a flower THAT IS A GLOWING LAMP.
 
 2. **FOREGROUND FLOWERS BRILLIANTLY LIT** — the closest blooms to the camera are vivid saturated bright with visibly glowing cores. The foreground is the brightest area of the render.
 
@@ -6392,6 +6398,10 @@ Two register-options for the OVERALL composition — pick whichever fits the rol
    - Floor-edge: candle-cluster flowers along the path (marigold / dahlia / zinnia / hibiscus / poppy)
 
 🚫 ABSOLUTE BANS (these break the aesthetic):
+  • NO 'flowers with a subtle glow' — every flower MUST be visibly a switched-on flower-lamp
+  • NO opaque-petaled flowers — petals must be TRANSLUCENT and backlit from a bright core
+  • NO 'flowers with a small bright center' — the entire flower must read as a lit-up lamp shaped like that flower, not a flower with a tiny glow-spot
+  • NO 'pretty flowers in pretty light' — these are LAMPS not lit flowers
   • NO bright sun-shaft / god-rays / sci-fi exit-glow at vanishing point (warm-magical glow OR deep-dark recession — NEVER a bright sun-beam or magic-portal-flash)
   • NO scary / ominous / threatening / foreboding mood (Register B is DRAMATIC not SCARY — flowers FIGHT and WIN against the dark)
   • NO bioluminescent magical / electric-cyan / will-o-wisps / fairy-dust / sci-fi-glow
@@ -8227,6 +8237,76 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
 
+  TOYBOT_TOYBOX_STORYTELLING: ({ slots, sharedDNA }) => {
+    const { camera_angle, scene } = slots;
+
+    // Mixed-medium toy-mischief storytelling scene. The seed (scene) is a
+    // 6-slot DNA entry containing the FULL story: real surface + story
+    // setup; protagonist + dramatic absurd action; 3-5 supporting cast
+    // across brand families; absurd visual gag prop; warm play light;
+    // overhead/floating chaos element. Sonnet's only job is to render
+    // it as ONE comma-separated Flux prompt that preserves ALL six slots.
+    // Path skips chaos / two-pass polish / sensory anchors — seeds are
+    // pre-tuned, downstream layers strip slots or contradict the
+    // populated-mischief-scene intent.
+    return `You are a kid's-playroom photographer capturing a TOY-MISCHIEF MOMENT for ToyBot. The scene below is a fully-specified absurd toy-story — a packed comedy beat with multiple toy mediums coexisting. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the FUN energy, and reads as a populated mischief scene with the story playing out.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "tilt-shift" / "model railroad" — this is REAL kid playtime, not a hobbyist diorama.
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / monsoon / storm / dark / moonlit / horror / nightmare / grim. The vibe is FUN + WARM + SILLY + SLAPSTICK.
+NEVER unify the toys' art style — each toy stays in its OWN native medium (LEGO stays LEGO with visible studs, plush stays plush with fabric texture, vinyl Funko stays cube-headed glossy, action-figures stay articulated, Hot Wheels stay die-cast chrome, army-men stay olive-green molded plastic, Calico Critter stays flocked-velvet).
+
+━━━ THE MISCHIEF SCENE (fully specified — preserve ALL six slots) ━━━
+${scene}
+
+This 6-part scene has these mandatory slots in order:
+  1. REAL surface + the STORY SETUP (what's happening — heist / wedding / talent show / rescue / etc.)
+  2. PROTAGONIST + their dramatic absurd action
+  3. 3-5 SUPPORTING CAST characters across different toy-brand families, each with a distinct action
+  4. ABSURD VISUAL GAG / comedy prop detail
+  5. WARM PLAY LIGHT (lamp / window sun / fairy lights / etc.)
+  6. OVERHEAD / FLOATING CHAOS ELEMENT suspended above or drifting through
+
+ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
+
+━━━ MIXED-MEDIUM TOY-ENSEMBLE RULES ━━━
+Every render shows 4-6+ DIFFERENT toy mediums coexisting in ONE scene at their REAL real-world physical sizes. Scale mismatches are THE POINT — a 4-inch action-figure next to a 1.5-inch Hot Wheels next to a 12-inch plush teddy next to a tiny LEGO minifig — as it would actually look on a real floor.
+
+Each toy gets rendered in its OWN native medium:
+  • LEGO minifig — visible studs + blocky limbs + clutch-pose hands
+  • plush stuffed animal — visible fabric texture + button or embroidered eyes + sewn seams
+  • Funko Pop vinyl — oversized cube head + small stocky body + solid black dot eyes + glossy finish
+  • 3.75-inch action figure — visible ball-joint articulation + painted detail wash + sculpted gear
+  • Barbie / fashion doll — articulated plastic + molded glossy hair + painted face
+  • Hot Wheels / Micro Machines — 1:64 die-cast with chrome accents + oversized wheels
+  • Olive-green army-man — solid-color molded plastic + visible vertical mold-seam + oval base + fixed pose
+  • Calico Critter / Sylvanian Family — flocked velvet-textured small-animal figurine + tiny cloth outfit
+  • Vintage Kenner 3.75-inch — sandy hand-paint detail + period-correct accessory
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ COMPOSITION ━━━
+- Toy-eye-level OR overhead macro frame — toy-photography energy
+- The FRAME IS PACKED — 5-8 visible toy figures + props + the story playing out
+- A SPECIFIC STORY IS HAPPENING — narrative beat readable from one glance
+- Real-world surface textures: real wood grain / real fabric weave / real grass / real concrete
+- FUN energy — silly, slapstick, sitcom, toys-dicking-off vibe
+- The protagonist is the COMPOSITIONAL HERO but supporting cast fills the frame
+- The gag prop is visible somewhere in the frame
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+- The overhead chaos element is visible in the upper third
+
+⚠️ FAILURE CONDITIONS
+• If render shows only ONE toy medium (all LEGO / all plush / all Funko) → FAILED. Must MIX.
+• If any of the 6 slots is dropped → FAILED.
+• If winter / snow / night / storm / horror tokens appear → FAILED.
+• If scene reads as serious or grim → FAILED. MUST be fun + silly.
+• If the frame is empty / sparse / only the protagonist visible → FAILED. PACKED is the point.
+
+Output ONLY the raw scene description as comma-separated phrases (80-120 words). NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+  },
+
   TOYBOT_MODEL_TRAIN_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       camera_angle,
@@ -8316,77 +8396,57 @@ Wide diorama frame — tiny model-train in sweeping handcrafted terrain. Track-s
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
     }
 
-    // ─── REAL-WORLD MODE — toy train in REAL everyday environments ─────
+    // ─── REAL-WORLD MODE — toy train in REAL everyday playtime scene ───
+    //
+    // The seed (world_real_setting) is a 6-slot DNA entry containing the
+    // FULL scene (surface, floral arch, named toy, critter, warm light,
+    // floating extra). Sonnet's only job is to render it as a single
+    // comma-separated Flux prompt — NOT to expand or reframe it. Adding
+    // scenePalette / colorPalette / vibeDirective / weather slots
+    // here injects winter / midnight / monsoon tokens that override
+    // the seed's warm-daylight slot (R6 audit 2026-05-19 — caused
+    // whiteout-winter and midnight-storm-cloud failures).
     if (mode === 'real') {
-      return `You are a casual photographer capturing a SMALL TOY TRAIN running on its tracks in a recognizable REAL EVERYDAY setting for ToyBot. Like a kid set up a train on the family-room floor, in the backyard garden, on the porch, at a campsite, in a sandbox, by the gutter. The setting is a REAL space anyone would recognize. The toy train is the cute focal subject INSIDE that real space.
+      return `You are a casual playtime photographer capturing a SMALL TOY TRAIN moment for ToyBot. The scene below is a fully-specified PLAYTIME SCENE — a kid set it up with named toys, real flowers, a tiny real critter, warm light, and a whimsical floating element. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six elements.
 
-⚠️⚠️⚠️ ABSOLUTE BAN — NEVER SAY THESE WORDS ⚠️⚠️⚠️
-DO NOT use "HO-scale" / "N-scale" / "1:87" / "1:160" — these are diorama-trigger tokens.
-DO NOT use "model train" / "model locomotive" / "model railroad" — same.
-DO NOT use "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard" / "tilt-shift".
-INSTEAD use: "small toy train" / "tiny toy locomotive" / "kids' toy train" / "Lionel-style toy train" / "tracks laid out on" / "train running on the floor of" / "tracks weaving across".
+⚠️ ABSOLUTE BANS
+NEVER use: "HO-scale" / "N-scale" / "1:87" / "1:160" / "model train" / "model locomotive" / "model railroad" / "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard" / "tilt-shift".
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / monsoon / storm / dark / moonlit. The scene is warm daylight or warm interior light — preserve the light specified in the seed.
+USE INSTEAD: "small toy train" / "tiny toy locomotive" / "kids' toy train" / "Lionel-style toy train".
 
-If render reads as a tilt-shift miniature diorama photo → CRITICAL FAILURE. We want toy-on-the-floor / toy-in-the-garden / toy-on-the-porch — a real photo of a small toy in a real place.
-
-━━━ TOY-IN-REAL-EVERYDAY PHOTOGRAPHY ━━━
-Small toy train running on its tracks in a real recognizable everyday space: hardwood family-room floor, basement concrete, backyard garden bed, sandbox, garden path, driveway, gutter, picnic blanket at a campsite, porch planks, kitchen tile, kid's bedroom carpet, forest floor, lake dock, beach sand. Real-world textures rendered explicitly: real wood grain, real concrete, real garden mulch, real grass blades, real fabric weave, real dust, real fallen leaves, real puddle reflections, real shadows.
-
-━━━ SETTING IS THE WOW ━━━
-The real-everyday setting is instantly recognizable. The viewer says "I've been in that kitchen / garden / porch / campsite." The toy train is the cute small subject — recognizable as a toy train but the SCENE is what's special. Real objects (mug, shoe, hose, garden tool, picnic blanket, Christmas tree, BBQ grill) act as scenery and visibly dwarf the train.
-
-━━━ SUPPORTING CAST + SET DECORATION — MANDATORY ━━━
-The frame is POPULATED, not lonely. Every render must include 2-3 SUPPORTING ELEMENTS visible alongside the train:
-  • OTHER LITTLE TOYS waiting / watching / interacting — plastic dinosaurs lined up, G.I. Joe figures crouched, LEGO minifigures with conductor caps, Polly Pockets waving from a sandcastle station, Hot Wheels at a crossing, stuffed teddy bear as a 'passenger', plastic farm animals grazing
-  • FLOWERS / NATURAL DECORATION — real daisies tucked between rail ties, real petals scattered as confetti, real ivy creeping over a tunnel-mouth, real lavender lining the tracks, real cherry blossoms drifting onto the train roof, real fern fronds curling overhead
-  • DRESSED-UP HOUSEHOLD PROPS as scenery — stacked wood blocks as skyline, real coffee mug as skyscraper, real cereal boxes as billboards, real ribbon spool as water tower, real Christmas ornaments as celestial bodies, real Lego bricks as construction debris
-  • SMALL CRITTERS at real scale — real ladybug crossing the rails, real ant trail climbing the locomotive, real curious cat batting from above, real garden snail crossing slow, real songbird on a stick "telegraph pole"
-
-Without supporting cast, renders feel like "a lonely train on tracks in a real space" — which is the failure mode. WITH supporting cast, renders feel like "a kid set up an elaborate playtime scene for their toy train" — rich, story-loaded, populated.
-
-━━━ THE TRAIN ━━━
-${train_consist}
-
-Treat the consist above as a SMALL TOY train (not a model-railroad scale-claim). Render with toy-grade charm — a Lionel-style or Brio-style small toy train, NOT a hobbyist scale model layout.
-
-━━━ WEATHER + TIME OF DAY ━━━
-${train_weather}
-
-━━━ THE REAL-EVERYDAY SETTING ━━━
+━━━ THE PLAYTIME SCENE (fully specified — preserve ALL six slots) ━━━
 ${world_real_setting}
 
-This is the WHERE. The setting must be RECOGNIZABLE as a real everyday space — family room, garden, sandbox, porch, etc. Render real-world textures and real-world lighting (window light / dappled sunlight / lamp glow / overcast / golden hour over the backyard). The toy train sits on or runs along its tracks IN this real space.
+This 6-part scene has these mandatory slots in order:
+  1. Real playtime surface (rug / beach / sandbox / picnic blanket / etc.)
+  2. Real floral architecture along the tracks (lavender hedgerow / daisy fenceposts / etc.)
+  3. Named specific toy character + action beside the rails (Barbie / LEGO / G.I. Joe / Funko / etc.)
+  4. Tiny real critter at real scale on/near the rails (ladybug / ant / butterfly / etc.)
+  5. Warm natural light (golden hour / dappled sun / window light / etc.)
+  6. Whimsical floating/atmospheric extra overhead (UFO toy / paper airplane / balloons / etc.)
+
+ALL six MUST appear in your output. If a slot is missing, the render is REJECTED.
+
+━━━ THE TRAIN ━━━
+Render the train as a SMALL TOY train — Lionel-style or Brio-style or Thomas-style, a few inches long, visibly a toy in a kid's playtime scene. NEVER a hobbyist scale model.
 
 ━━━ CAMERA ━━━
 ${camera_angle}
 
-━━━ CAMERA FRAMING ━━━
-${sharedDNA.camera}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION RULES ━━━
-- The TRAIN is small and toy-like — Lionel-style / Brio-style / Thomas-style, a few inches long
-- The SETTING is the dominant visual — real recognizable everyday space, 1:1 real-world textures
-- LIGHTING is real-world: real window light / real outdoor sun / real lamp glow / real shadow patterns
-- One specific real-world object visibly dwarfs the train (mug / shoe / watering can / picnic basket / cat)
-- Real human elements OK at real scale — a kid's hand at frame edge, a person walking past in soft-focus, a dropped sneaker
-- The vibe is casual everyday photography — like a parent snapping a phone pic of their kid's train setup
+━━━ COMPOSITION ━━━
+- The TRAIN is small and toy-like (a few inches long)
+- The SCENE is the wow — populated kid's-playtime moment, NOT a lonely train
+- The named toy character + flowers + critter + floating extra are equally important to the train
+- Real-world textures: real wood grain / real fabric weave / real grass / real sand / real petals
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
 
 ⚠️ FAILURE CONDITIONS
-• If render reads as a tilt-shift miniature / model-railroad-enthusiast diorama photo → FAILED
-• If scenery is handcrafted scratch-built terrain → FAILED
-• If "HO-scale" / "model train" wording appears anywhere → FAILED
-• If the train is 1:1 (real-size locomotive) → FAILED. Train stays small/toy.
-• If no real everyday object visibly contextualizes the train → FAILED
+• If render reads as a tilt-shift / HO-scale / hobbyist diorama → FAILED
+• If any of the 6 slots is dropped → FAILED
+• If winter / snow / night / storm tokens appear → FAILED
+• If the train is 1:1 real-size → FAILED
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
+Output ONLY the raw scene description as comma-separated phrases (60-100 words). NO preamble, NO ━━━ markers, NO bullet lists.`;
     }
 
     // ─── THEMED-CINEMATIC MODE — train as hero in genre-coded world ────
@@ -9244,6 +9304,34 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
 
 This is NOT a quick snapshot. EVERY render must be poster-worthy — a single frame that someone would screenshot, save to their wallpaper folder, and stare at. The pair-bond moment must be the EMOTIONAL CENTER of a composition you'd see in a Pixar / Studio Ghibli / Finding Nemo / Studio Laika movie poster. Composition: deliberate rule-of-thirds or perfect centered symmetry. Light: dramatic and intentional (caustic light-shafts, golden god-rays through water, bioluminescent halo, rim-light along creature silhouettes). Color: saturated and harmonious (the scene palette + time-of-day cast working together). Depth: foreground anchor + midground heroes + atmospheric far-distance haze. EVERY render makes the viewer go AWWW AND ALSO WOW.
 
+━━━ STORY BEAT — every render tells a STORY, never a pose ━━━
+
+CRITICAL: This is NOT a posed product shot of two figurines standing nose-to-nose. EVERY render must show a NARRATIVE EVENT — the viewer reads in 2 seconds what JUST happened or what's ABOUT TO happen. Think Lego Masters: every build "has to tell a story". Same bar here.
+
+A scene WITH story (PASS):
+- "Both creatures wide-eyed at a meteor streaking across the sky, paws raised mid-point"
+- "One scrambling to catch a firefly that just escaped the jar, the other laughing"
+- "Just opened a storybook on the grass, both eyes huge at what's on the page"
+- "Mid-toast with thimble teacups, eyes squeezed shut in 'cheers'"
+- "One comforting the other after the rain just stopped, paw on its shoulder"
+- "Discovering the mushroom-house door is unlocked, peering inside with cautious excitement"
+- "Mid-handoff of a wrapped present, recipient's eyes lighting up"
+
+A scene WITHOUT story (FAIL — DO NOT render this):
+- "Two creatures standing nose-to-nose smiling"
+- "Sitting close together looking at each other"
+- "Pressed cheek-to-cheek with closed eyes"
+- "Both standing side-by-side facing the camera"
+- "Holding paws and posing"
+
+Indicators of story:
+- Active VERBS happening (catching / discovering / pointing / scrambling / hugging-because / sharing-mid-bite / startled-by / reaching-for)
+- Implied PREVIOUS or NEXT moment (something just happened OR is about to)
+- Body language showing REACTION (wide eyes, open mouth, raised paw, leaning-in, recoiling-with-surprise, mid-laugh, mid-yawn)
+- An EVENT or OBJECT they're responding to (a meteor, a present, an open book, an escaped firefly, a tipping lantern, a found-treasure)
+
+The interaction axis already named the story beat. Render that as a MOMENT, not a pose. The viewer should be able to ask "what's happening here?" and answer in one sentence within 2 seconds.
+
 ━━━ SPARKLE STACK — MAXIMUM ADORABLE EFFECTS ━━━
 
 Layer ALL of these atmospheric effects on EVERY render (not optional — stack them ALL):
@@ -9328,6 +9416,150 @@ ${vibeDirective.slice(0, 250)}
 The cuddling pair AND the aquatic habitat are equal co-heroes — NOT a tight close-up portrait of the pair with a generic-water backdrop. Pull the camera back so the viewer can SEE WHERE this is happening: tropical reef with coral towers, kelp cathedral with light-shafts, arctic ice-edge with submerged blue walls, mangrove-root tangle with sun-dapples, sunken pirate ship interior with treasure, lily-pad raft on a koi pond with cherry-blossom petals on the surface. The habitat is half the magic — frame it as such.
 
 Wider establishing frame with the pair as focal point (40-50% of frame) and the AQUATIC HABITAT VISTA filling the rest (50-60% of frame). The two creatures clearly TOGETHER with visible contact / interaction — not separated. Viewer should name BOTH (1) what the two creatures are doing together AND (2) what kind of aquatic habitat they're in in one glance. Time-of-day color cast honest through the water. Surprise element tucked where the eye finds it second.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+
+
+  CHIBIBOT_NIGHT_MEADOW: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_1,
+      creature_2,
+      interaction,
+      setting,
+      time_of_night,
+      prop,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+
+    const propList = Array.isArray(prop) ? prop : [prop];
+    const propBlock = propList.filter(Boolean).map((p, i) => `${i + 1}. ${p}`).join('\n');
+
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing NIGHT-MEADOW scenes for ChibiBot — a PAIR of impossibly cute critters at twilight/night in a deliberately-chosen outdoor setting, under a specific time-of-night, with stacked cozy props${phenomenonFires ? ', and a magical celestial or atmospheric phenomenon transforming the frame' : ''}. Stargazing fox kits, fireflies in mason jars, glow-worm tea parties, comet-watching bunnies, moonlit picnics, owl + hedgehog under a starry blanket. Pixar/Sanrio/Ghibli/Beatrix-Potter-twilight aesthetic. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
+
+━━━ HARD RULE: BOTH CREATURES VISIBLE — NEVER SOLO ━━━
+
+This path renders a PAIR of creatures interacting. The final frame MUST show TWO distinct creatures, both visibly present with bodies and faces readable, both actively engaged in the story-beat together. NEVER render a solo creature. NEVER render one creature with the other reduced to a tiny silhouette. Both creatures get equal visual weight.
+
+━━━ MOVIE POSTER MOMENT — every shot must be a frame-worthy still ━━━
+
+This is NOT a quick snapshot. EVERY render must be poster-worthy — a single frame that someone would screenshot, save to their wallpaper folder, and stare at. The pair-bond night-time moment must be the EMOTIONAL CENTER of a composition you'd see in a Pixar / Studio Ghibli / Beatrix Potter twilight book illustration. Composition: deliberate rule-of-thirds or perfect centered symmetry. Light: dramatic and intentional (lantern-warm-pool against indigo sky, moon as deliberate light source, firefly-halo, rim-light on creature silhouettes). Color: cool indigo/violet sky + warm point-light (lantern/firefly) creating perfect color contrast. Depth: foreground anchor + midground heroes + atmospheric starry-far-distance. EVERY render makes the viewer go AWWW AND ALSO WOW.
+
+━━━ STORY BEAT — every render tells a STORY, never a pose ━━━
+
+CRITICAL: This is NOT a posed product shot of two figurines standing nose-to-nose. EVERY render must show a NARRATIVE EVENT — the viewer reads in 2 seconds what JUST happened or what's ABOUT TO happen. Think Lego Masters: every build "has to tell a story". Same bar here.
+
+A scene WITH story (PASS):
+- "Both creatures wide-eyed at a meteor streaking across the sky, paws raised mid-point"
+- "One scrambling to catch a firefly that just escaped the jar, the other laughing"
+- "Just opened a storybook on the grass, both eyes huge at what's on the page"
+- "Mid-toast with thimble teacups, eyes squeezed shut in 'cheers'"
+- "One comforting the other after the rain just stopped, paw on its shoulder"
+- "Discovering the mushroom-house door is unlocked, peering inside with cautious excitement"
+- "Mid-handoff of a wrapped present, recipient's eyes lighting up"
+
+A scene WITHOUT story (FAIL — DO NOT render this):
+- "Two creatures standing nose-to-nose smiling"
+- "Sitting close together looking at each other"
+- "Pressed cheek-to-cheek with closed eyes"
+- "Both standing side-by-side facing the camera"
+- "Holding paws and posing"
+
+Indicators of story:
+- Active VERBS happening (catching / discovering / pointing / scrambling / hugging-because / sharing-mid-bite / startled-by / reaching-for)
+- Implied PREVIOUS or NEXT moment (something just happened OR is about to)
+- Body language showing REACTION (wide eyes, open mouth, raised paw, leaning-in, recoiling-with-surprise, mid-laugh, mid-yawn)
+- An EVENT or OBJECT they're responding to (a meteor, a present, an open book, an escaped firefly, a tipping lantern, a found-treasure)
+
+The interaction axis already named the story beat. Render that as a MOMENT, not a pose. The viewer should be able to ask "what's happening here?" and answer in one sentence within 2 seconds.
+
+━━━ SPARKLE STACK — MAXIMUM ADORABLE NIGHT-TIME EFFECTS ━━━
+
+Layer ALL of these atmospheric effects on EVERY render (not optional — stack them ALL):
+- Visible stars across the sky (hundreds of pinpoints, Milky Way band if applicable)
+- Drifting fireflies / glow-worms (clustered groups + lone wanderers across the frame)
+- Warm-glow halo around lanterns / jars / candles (visible volumetric warmth)
+- Sparkle / star-burst flares around BOTH creatures' eyes (multi-catchlight twinkle)
+- Dewdrop / water-pearl highlights on grass / leaves / flowers
+- Subtle bokeh-orbs in the background atmospheric haze
+- Pollen / dust / dandelion-seed particles drifting tinted to time-of-night cast
+- Aurora wisps OR moonbeam shafts OR meteor streaks (one of these in the sky)
+- Heart-shaped glow-orbs / floating wishing-pearls between the creatures (3-5 visible)
+- Glowing-flower clusters / phosphorescent moss patches in the scene
+- Glow-halo around the cuddling pair (cute aura visible)
+- Reflective dew on every blade of grass catching star-light
+
+If the render doesn't have AT LEAST 6 of these effects visible, the cute-amplification FAILED. Stack obsessively. Cuteness is the canvas — sparkles are the layered paint.
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Every render must produce: AWWW + instant smile + "I want to hug them both" instinct. If the render has even a whisper of dark / edgy / scary / haunted-forest — it FAILED. Night is COZY here, never scary. Lighting + weather + phenomenon should match the SCENE naturally — moonlit darkness reads as silver-magical, not menacing.
+
+━━━ RENDERED CGI — NEVER PHOTOREAL, NEVER PAINTED ━━━
+
+Never photoreal. NEVER documentary-nature. Never flat illustration. Render as polished 3D CGI in the designer-collectible / Pop-Mart-vinyl register: glossy materials with subsurface scattering, ultra-clean form language with crisp surface definition, dewy highlights. Creatures render with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes catching star-glow, tiny stubby paws, round chubby bodies, blushing cheeks lit warm by lantern/firefly point-light, fluffy soft textures. Setting + props + sky render with the SAME glossy crisp CGI register. Stars are crisp pinpoints (not blurry smudges). Fireflies are jewel-bright glowing orbs.
+
+━━━ NO HUMANS (except the CHILD-tagged unified pool entries) ━━━
+
+The creature pool may include chibi human children (CHILD-tagged) — kawaii kids with diverse cultures. When children are picked, render them at chibi proportions matching the other creatures (oversized head, big dewy eyes, blushing cheeks). NEVER render adult humans, NEVER render realistic-proportioned humans. Children render as kawaii-chibi-kids.
+
+━━━ THE CUDDLY PAIR (both creatures ALWAYS present) ━━━
+
+${creature_1}
+${creature_2}
+
+The TWO creatures should be visibly TOGETHER — equal prominence, equal sharpness, both clearly readable. Different species/sizes OK; the cuteness comes from the pair bond.
+
+━━━ THE TWILIGHT INTERACTION (what they're doing TOGETHER right now) ━━━
+${interaction}
+
+━━━ THE OUTDOOR NIGHT SETTING (the stage) ━━━
+${setting}
+
+━━━ TIME OF NIGHT (drives sky color, moon phase, ambient luminance — render honestly) ━━━
+${time_of_night}
+
+━━━ STACKED COZY PROPS (TWO specific objects in the scene) ━━━
+${propBlock}
+
+━━━ WEATHER (clear night unless otherwise specified) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL (drifting fireflies, dewdrops, pollen-particles, ambient charm) ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail the eye finds AFTER the pair) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ IMPOSSIBLE BEAUTY ━━━
+
+Wall-poster quality. NOT dramatic-beautiful (that's GlowBot) — CUTE-beautiful. Composition balanced and charming. Every element rendered with love — the kind of image a kid pins above their bed and looks at every night before sleep.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (SETTING + SKY ARE CO-HEROES WITH THE PAIR) ━━━
+
+The pair-bond is the emotional center, but the SKY (stars / moon / aurora / Milky Way) and the SETTING (meadow / glade / cliff / etc.) are equal co-heroes. Pull the camera back to show all three layers: foreground creatures with their cozy props, midground setting (meadow grass / mushroom-cluster / cliff-edge), background sky filling the upper half of the frame with full star-density + moon + phenomenon if firing. Mid-wide or wide establishing frame. Both creatures clearly in contact/interaction. Two props visible without crowding. The SKY-as-co-hero is what makes this a night-meadow scene, not a meadow scene — frame it that way.
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },

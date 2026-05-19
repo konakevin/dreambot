@@ -13,11 +13,13 @@
  *   Conditional 60%-gated: phenomenon (drama / magical event)
  */
 
+// heartwarming-scene accepts any cute creature (no biome filter) — kids,
+// land animals, fantasy, marine, etc. all fit the "heart-melting moment" mood.
 module.exports = {
   archetype: 'CHIBIBOT_HEARTWARMING_SCENE',
   pools: {
-    creature_1: 'CUTE_CREATURES',
-    creature_2: 'CUTE_CREATURES',
+    creature_1: { name: 'CUTE_CREATURES_UNIFIED' },
+    creature_2: { name: 'CUTE_CREATURES_UNIFIED' },
     activity: 'HEARTWARMING_ACTIVITIES',
     setting: 'HEARTWARMING_SETTINGS',
     time_of_day: 'HEARTWARMING_TIME_OF_DAY',

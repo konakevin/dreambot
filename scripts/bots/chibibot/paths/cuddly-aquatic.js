@@ -20,11 +20,14 @@
  * co-hero, polish compression strips habitat language.
  */
 
+// cuddly-aquatic filters the unified creature pool to MARINE-tagged creatures
+// (children + magical-realm with ANY tag also match). FANTASY+MARINE entries
+// like sea-dragons / mermaids land in the marine bucket via their MARINE tag.
 module.exports = {
   archetype: 'CHIBIBOT_CUDDLY_AQUATIC',
   pools: {
-    creature_1: 'AQUATIC_CREATURES',
-    creature_2: 'AQUATIC_CREATURES',
+    creature_1: { name: 'CUTE_CREATURES_UNIFIED', tags: ['MARINE'] },
+    creature_2: { name: 'CUTE_CREATURES_UNIFIED', tags: ['MARINE'] },
     interaction: 'CUDDLY_AQUATIC_INTERACTIONS',
     setting: 'CUDDLY_AQUATIC_SETTINGS',
     time_of_day: 'HEARTWARMING_TIME_OF_DAY',

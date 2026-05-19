@@ -68,6 +68,13 @@ module.exports = {
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
 
+  // Unified tagged creature pool (2026-05-19) — replaces CUTE_CREATURES +
+  // AQUATIC_CREATURES across migrated paths. Entries are objects
+  // { tags: ['LAND'|'MARINE'|'ARCTIC'|'JUNGLE'|'BIRD'|'FANTASY'|'CHILD'|'ANY'], description: '...' }
+  // Paths filter via { name: 'CUTE_CREATURES_UNIFIED', tags: [...] }. 'ANY'-tagged
+  // entries (children + magical-realm) always match.
+  CUTE_CREATURES_UNIFIED: load('cute_creatures_unified'),
+
   // Heartwarming-scene path-bespoke axes (2026-05-19 full-bespoke migration)
   HEARTWARMING_SETTINGS: load('heartwarming_settings'),
   HEARTWARMING_TIME_OF_DAY: load('heartwarming_time_of_day'),
@@ -87,6 +94,14 @@ module.exports = {
   CUDDLY_AQUATIC_SURPRISE_ELEMENTS: load('cuddly_aquatic_surprise_elements'),
   CUDDLY_AQUATIC_PHENOMENA: load('cuddly_aquatic_phenomena'),
   CUDDLY_AQUATIC_CREATURES_MARINE: load('cuddly_aquatic_creatures_marine'),
+
+  // Night-meadow path-bespoke axes (2026-05-19 full-bespoke migration)
+  NIGHT_MEADOW_SETTINGS: load('night_meadow_settings'),
+  NIGHT_MEADOW_INTERACTIONS: load('night_meadow_interactions'),
+  NIGHT_MEADOW_TIME_OF_NIGHT: load('night_meadow_time_of_night'),
+  NIGHT_MEADOW_PROPS: load('night_meadow_props'),
+  NIGHT_MEADOW_SURPRISE_ELEMENTS: load('night_meadow_surprise_elements'),
+  NIGHT_MEADOW_PHENOMENA: load('night_meadow_phenomena'),
 
   VIBE_COLOR,
 

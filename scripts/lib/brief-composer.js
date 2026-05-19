@@ -67,16 +67,22 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   }
 
   // 3. Path-level axes — always path-bespoke (no fallback)
+  // pathConfig.pools[slot] is either:
+  //   (a) a string pool name (legacy) — picks from pool directly, entries are strings
+  //   (b) { name, tags } — filtered pool spec; filter pool to entries matching
+  //       any of the tags (entries tagged 'ANY' always included). Pool entries
+  //       must be objects { tags: [], description: '' }; the picker receives
+  //       the .description string after filtering.
   for (const slot of arch.slots.path) {
-    const poolName = pathConfig.pools?.[slot];
-    if (!poolName) {
+    const spec = pathConfig.pools?.[slot];
+    if (!spec) {
       throw new Error(
         `composeBrief: path missing required pool for slot "${slot}" (archetype: ${pathConfig.archetype})`
       );
     }
-    const pool = bot.poolByName(poolName);
+    const pool = resolveSpecPool(spec, bot);
     if (!pool || pool.length === 0) {
-      throw new Error(`composeBrief: pool "${poolName}" is empty or missing`);
+      throw new Error(`composeBrief: pool spec for slot "${slot}" resolved to empty pool`);
     }
     const n = arch.pickN?.[slot];
     slots[slot] = n ? pickN(pool, n, picker, slot) : picker.pickWithRecency(pool, slot);
@@ -99,11 +105,11 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
         }
       }
     } else {
-      // Single-pool conditional (legacy shape)
+      // Single-pool conditional (legacy shape) — also supports tagged-pool spec
       const slot = arch.conditionalLayer.slot;
-      const poolName = pathConfig.pools?.[slot];
-      if (poolName) {
-        const pool = bot.poolByName(poolName);
+      const spec = pathConfig.pools?.[slot];
+      if (spec) {
+        const pool = resolveSpecPool(spec, bot);
         if (pool && pool.length > 0) {
           slots[slot] = picker.pickWithRecency(pool, slot);
         }
@@ -120,10 +126,50 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
   return TEMPLATES[pathConfig.archetype]({ slots, sharedDNA, vibeDirective });
 }
 
+/**
+ * Resolve a path's pool spec to an array of string entries the picker can
+ * draw from. Spec is either:
+ *   string  — name of a pool registered on the bot. Pool entries used as-is.
+ *   { name, tags? }  — tagged-pool filtered access. Pool entries must be
+ *                      objects { tags: [...], description: '...' }. Returns
+ *                      .description for entries where (a) tags omitted, or
+ *                      (b) entry has at least one matching tag, or
+ *                      (c) entry has the 'ANY' tag (wildcard).
+ */
+function resolveSpecPool(spec, bot) {
+  if (typeof spec === 'string') {
+    return bot.poolByName(spec);
+  }
+  if (spec && typeof spec === 'object' && spec.name) {
+    const raw = bot.poolByName(spec.name);
+    if (!raw) throw new Error(`resolveSpecPool: pool "${spec.name}" not found on bot`);
+    if (!spec.tags || spec.tags.length === 0) {
+      // No filter — extract .description if entries are objects, else use as-is
+      return raw.map((e) => (typeof e === 'string' ? e : e.description));
+    }
+    const allowed = new Set(spec.tags);
+    return raw
+      .filter((e) => {
+        if (typeof e === 'string') return true; // unfiltered if not tagged
+        if (!Array.isArray(e.tags)) return false;
+        if (e.tags.includes('ANY')) return true;
+        return e.tags.some((t) => allowed.has(t));
+      })
+      .map((e) => (typeof e === 'string' ? e : e.description));
+  }
+  throw new Error(`resolveSpecPool: invalid spec ${JSON.stringify(spec)}`);
+}
+
 function resolvePool(slot, pathConfig, bot) {
   // Path override
   if (pathConfig.pools?.[slot]) {
     const poolName = pathConfig.pools[slot];
+    if (typeof poolName === 'object' && poolName.name) {
+      // Tagged-pool spec — use resolveSpecPool to filter
+      const pool = resolveSpecPool(poolName, bot);
+      if (pool && pool.length > 0) return pool;
+      throw new Error(`composeBrief: path-override tagged pool "${poolName.name}" empty/missing for slot "${slot}"`);
+    }
     const pool = bot.poolByName(poolName);
     if (pool && pool.length > 0) return pool;
     throw new Error(`composeBrief: path-override pool "${poolName}" empty/missing for slot "${slot}"`);

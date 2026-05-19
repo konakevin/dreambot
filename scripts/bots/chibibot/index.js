@@ -198,7 +198,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;

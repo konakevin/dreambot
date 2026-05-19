@@ -1193,6 +1193,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  TOYBOT_TOYBOX_STORYTELLING: {
+    description:
+      'PATH-BESPOKE — ToyBot toybox-chaos path (2026-05-19 axis-system rewrite). MIXED-MEDIUM STORYTELLING — every render is a single-frame comedy moment from a longer absurd toy-story (heist / wedding crash / talent show / mosh pit / rescue mission / tea party crashed / courtroom drama / magic show / construction disaster / etc.). 4-6+ different toy mediums coexist in one densely populated mischief scene on a real-world surface. Six-slot seed DNA: real surface + story setup; protagonist + dramatic absurd action; 3-5 supporting cast across brand families; absurd visual gag prop detail; warm play light; overhead/floating chaos element. Each seed bakes all 6 slots semicolon-separated. Skips chaos / two-pass polish / sensory anchors (seeds are pre-tuned 6-slot DNA — downstream layers strip slots or inject incompatible tokens).',
+    slots: {
+      universal: ['camera_angle'],
+      bot: [],
+      path: ['scene'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   TOYBOT_MODEL_TRAIN_WORLD: {
     description:
       'PATH-BESPOKE — ToyBot model-train-world path. THREE RENDER MODES branched at template level by sharedDNA.renderMode + a roll: (1) classic-diorama [renderMode!=world]: handcrafted HO-scale model-railroad terrain, uses scene + drama_moment + 35% unusual_cargo; (2) real-world [renderMode==world AND world-roll<0.65]: tiny train running through actual real environments (kitchen table, sleeping cat, forest moss, sandbox), scale-tension wow; (3) themed-cinematic [renderMode==world AND world-roll>=0.65]: train as hero in genre-coded immersive worlds (Western / fantasy / Mad Max / Polar Express / cyberpunk / Studio Ghibli / etc.). All four scene-source pools picked per render; template selects which to inject based on mode + roll.',
@@ -1325,6 +1339,21 @@ const ARCHETYPES = {
       path: ['creature_1', 'creature_2', 'interaction', 'setting', 'time_of_day', 'surprise_element', 'phenomenon'],
     },
     pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_NIGHT_MEADOW: {
+    description:
+      'PATH-BESPOKE — ChibiBot night-meadow path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). Pair of impossibly cute critters at twilight/night in a meadow/glade/forest-clearing under the stars. Stargazing fox kits, fireflies in mason jars, glow-worm tea parties, comet-watching bunnies, moonlit picnics. Pixar/Sanrio/Ghibli/Beatrix-Potter-twilight aesthetic. creature_2 is ALWAYS-ON — pair-bond identity. 11 axes: 3 universal (lighting + atmosphere + weather) + 8 path-bespoke (creature_1 + creature_2 + interaction + setting + time_of_night + prop pickN:2 + surprise_element + phenomenon) + 1 template-gated phenomenon 60%.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature_1', 'creature_2', 'interaction', 'setting', 'time_of_night', 'prop', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { prop: 2 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,

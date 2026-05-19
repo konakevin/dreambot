@@ -17,11 +17,13 @@
  * (rubber duck + candle / towel + soap / etc.).
  */
 
+// bath-time accepts any cute creature — kids, land animals, fantasy, marine.
+// All can take a bath. No biome filter on creatures.
 module.exports = {
   archetype: 'CHIBIBOT_BATH_TIME',
   pools: {
-    creature_1: 'CUTE_CREATURES',
-    creature_2: 'CUTE_CREATURES',
+    creature_1: { name: 'CUTE_CREATURES_UNIFIED' },
+    creature_2: { name: 'CUTE_CREATURES_UNIFIED' },
     activity: 'BATH_TIME_ACTIVITIES',
     setting: 'BATH_TIME_SETTINGS',
     time_of_day: 'HEARTWARMING_TIME_OF_DAY',
