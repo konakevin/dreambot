@@ -6345,63 +6345,116 @@ Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO �
 
     const phenomenonSection = atmospheric_phenomenon
       ? `
-━━━ ATMOSPHERIC PHENOMENON — render visibly in the city scene ━━━
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the bloom-city scene ━━━
 ${atmospheric_phenomenon}
 
-This is the magic-moment detail that elevates the city scene — render as a specific element within the frame.
+A magical atmospheric detail that elevates the scene — render as a specific element within the frame.
 
 `
       : '';
 
-    return `You are a fine-art street-photography painter writing URBAN-OVERGROWN-BY-FLOWERS scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+    return `You are a fantasy concept-art painter writing MAGICAL BLOOM-CITY scene descriptions for BloomBot. Output is an 95-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ FLOWERS FIRST AND FOREMOST — read this FIRST ━━━
+
+EVERY render is OVERWHELMINGLY FLOWERS — scale, density, color, amount, variety. Flowers do ALL the heavy lifting. The flowers ARE the city. Architecture is barely visible scaffolding, dwarfed and consumed by the bloom-mass.
+
+🚫 ABSOLUTELY BANNED — NO compensating with light spectacles / sci-fi effects:
+  • NO glowing power-cores / radiating bloom-cores / pulsing magical inner-glow
+  • NO bioluminescent blooms / bioluminescent moss / bioluminescent anything
+  • NO will-o-wisps / faerie-lights / floating magical orbs / drifting light-particles
+  • NO sci-fi god-rays / theatrical sun-shafts cutting through scenes
+  • NO crystalline-prismatic refraction / rainbow-light arcs / spectrum effects
+  • NO aurora-curtains / aurora-bloom megacities
+  • NO impossible double-suns / fantasy twin-moons / starflower-skies
+  • NO floating pollen-motes / magical fairy-dust / glowing seed-floats
+  • NO magic-mist / iridescent volumetric haze / glowing rune-bark
+  • NO neon-bloom / electric-cyan / glowing-magenta accents
+  • NO sci-fi underwater coral-cities (too techy/glowing)
+
+✓ LET THE FLOWERS DO THE WORK — the heavy lifting comes from:
+  • SCALE — kilometer-tall flower-walls, building-sized single blossoms, hundred-meter rose-cascades
+  • DENSITY — packed so thick you can't see the architecture underneath, layered hundreds of flowers deep
+  • AMOUNT — millions of blooms in frame, every quadrant filled with blossom
+  • VARIETY — many flower species in painterly equal weight, rich color stacking
+  • COLOR — saturated jewel-tones across the full spectrum, painterly chromatic richness
+  • NATURAL CINEMATIC LIGHT — golden hour / dawn / dusk / soft daylight / gentle backlight (NOT magical glow)
+
+🚫 NO REAL-WORLD TOURIST CITIES — Mediterranean alleyways, Parisian boulevards, Lisbon staircases, Marrakech courtyards, Tokyo back-streets, Cinque Terre, Venice, Cuba, Greek islands, Cotswolds, Stockholm, Tuscany, Pueblo, Jaipur, Hoi An, Kyoto — EXPLICITLY BANNED.
+
+✓ FANTASY FLOWER-CITY LINEAGE — but the FLOWERS dominate, not the architecture:
+  • Mountains of cascading flowers with fantasy spires barely poking through
+  • Kilometer-high flower-cliffs with hint of carved architecture half-buried in bloom
+  • Endless flower-meadows stretching to fantasy spires on the horizon
+  • Flower-canyons with walls of bloom hundreds of meters tall
+  • Mallorn-tree fantasy citadels SO consumed by flowers the trees are barely visible
+  • Sky-floating fantasy spires SO bloom-covered they read as floating bouquets
+  • Fantasy ruins SO claimed by flowers they read as flower-mountains
+  • Endless cherry-blossom forests with fantasy spires emerging from the canopy
+  • Vine-cathedrals of overlapping wisteria-cascades draped from kilometer-tall fantasy spires
+  • Flower-flooded valleys where blooms drown everything except distant fantasy spires
+
+━━━ BLOOMS ARE 80-90% OF THE FRAME — FLOWERS DO ALL THE WORK ━━━
+
+This is NOT a fantasy-city with flowers as decoration. This IS flowers — flowers as the entire visible world, with hints of fantasy-architecture half-buried in the bloom-mass. Blooms fill 80-90% of every render. Every quadrant is packed dense with blossom — building-scale petal-cascades, mountain-scale flower-cliffs, sky-filling petal-storms, valley-deep flower-canyons.
+
+The fantasy-architecture is BARELY VISIBLE — a spire-tip emerging from the bloom-mountain, a hint of a tower-window through cascading petals, a fantasy bridge half-buried in blossom-snow. The flowers OVERWHELM, the architecture is a small clue that this is a city.
+
+FLOWER-SCALE EXAMPLES (push every entry toward this scale):
+  • Kilometer-tall flower-cliffs of overlapping rose-cascades pouring hundreds of meters
+  • Building-sized single peonies the size of cathedrals
+  • Sky-filling cherry-blossom canopy spanning the entire upper-frame
+  • Mountain-scale wisteria-curtains draping from invisible spires above
+  • Flower-canyons where you can't see the walls for the blooms
+  • Mountains of blossom obscuring everything beneath
+  • Endless meadows of waist-high blooms stretching to the horizon
+
+🚫 NO "flower-decoration on architecture." The flowers ARE the scene. Architecture is a glimpse, not a stage.
 
 ━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
-NO humans, NO figures, NO silhouettes, NO shadows of people, NO pedestrians. The empty city street is the subject. (A sleeping cat / songbird / pigeon-cluster / parked bicycle / scooter — only when atmospheric_phenomenon calls for it.)
+NO humans, NO figures, NO silhouettes, NO shadows of people, NO pedestrians. The empty fantasy bloom-city is the subject. (A sleeping faerie-creature / sleeping pixie-flock / distant elven-spirit at scale-prover scale — only when atmospheric_phenomenon calls for it.)
 
-━━━ URBAN ARCHITECTURE — NON-NEGOTIABLE ━━━
-This is a specific REAL-WORLD URBAN setting — Mediterranean alleyway / Parisian Haussmann street / Tokyo back-street / Lisbon tile-fronted staircase / Marrakech blue-painted courtyard / Venetian canal-side / Cinque Terre cliff-village / Cuban old-town colonial / etc. The city's signature architectural style is UNMISTAKABLE — pastel-plaster walls / iron balcony railings / sliding wooden doors / azulejo tiles / blue-painted walls / canal palazzi / cliff houses / colonial facades.
-
-━━━ HALF-CONSUMED BY FLORAL OVERGROWTH — BLOOM-MASS DISTRIBUTED ━━━
-The architecture is HALF-CONSUMED by flowers — blooms CASCADE off every balcony, CLIMB every wall, SPILL from every window-box, DRAPE across every iron grille, FILL every planter, OVERFLOW every cracked pavement crack. The city's specific style is visible THROUGH the bloom-curtain that consumes it.
-
-The blooms are a DISTRIBUTED MASS — 3-4 species from the roster massed IN EQUAL WEIGHT across every architectural feature (balcony / window-box / iron grille / planter / pavement crack / staircase / canal-edge). There is NO single hero bloom. The ARCHITECTURE is the structural hero; the BLOOMS are the environmental overflow.
-
-⚠️ DO NOT default to one giant bloom dominating. DO NOT concentrate all blooms in one corner. DISTRIBUTE the bloom-mass across every quadrant of the frame.
-
-━━━ THE CITY SETTING ━━━
+━━━ THE FANTASY BLOOM-CITY SETTING ━━━
 ${city_setting}
 
-━━━ THE ARCHITECTURAL DETAIL (the city's signature element) ━━━
+━━━ THE ARCHITECTURAL DETAIL (the fantasy city's signature element) ━━━
 ${architectural_detail}
 
-The architectural detail is the city's signature — render it with hyperreal precision so the city is unmistakable. The bloom-cascade wraps and drapes the detail without obscuring its identity.
-${phenomenonSection}━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
-Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP / want to print and frame the image.
+The architectural detail is the fantasy city's signature — render it with painterly precision so the impossible-fantasy-city style is unmistakable. The bloom-cascade GROWS FROM / WRAPS / DRAPES the detail as if the detail itself is made of flowers.
+${phenomenonSection}━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
+Every render is a JAW-DROPPING EPIC CINEMATIC MOVIE-POSTER / GALLERY-PIECE FRAME. Every quadrant earns its space. Stack 5+ visually-arresting elements simultaneously:
 
-Pick ONE wide street-photography composition per render (vary):
-  A. **ALLEY VANISHING-POINT** — pedestrian-level POV down a Mediterranean / Lisbon / Cuban alleyway, walls cascading bloom on both sides, vanishing-point at far end with sunlit glow
-  B. **STAIRCASE RISING** — pedestrian-level POV of a stone / tile-fronted staircase rising between bloom-laden walls, vanishing toward sky-glow or arched gate at top
-  C. **CANAL EDGE** — Venetian / Bruges / Amsterdam canal in foreground with bloom-laden palazzo facades on opposite side, water reflecting blooms and architecture
-  D. **BALCONY-TIER LOOKUP** — looking UP at a Parisian / Cuban / Italian balcony-tier from below, bloom-cascades pouring from iron railings overhead, sky-glow at top
-  E. **COURTYARD INTERIOR** — small Marrakech / Andalusian / Spanish courtyard with central fountain or well, bloom-cascade from upper balconies on all sides
-  F. **CLIFFSIDE VILLAGE** — wide view of a Cinque Terre / Amalfi / Greek-island village clinging to a cliff, pastel houses bloom-draped, sea-edge below
-  G. **PLAZA WITH FOUNTAIN** — small European plaza with central fountain, bloom-draped buildings ringing the square, pavement leading to the fountain
-  H. **CORNER STREET-VIEW** — diagonal corner-view of a Cuban / Parisian / Tokyo street corner, two facades visible at angle, bloom-cascades from both
-  I. **THROUGH-AN-ARCHWAY** — view through a Mediterranean / Andalusian stone archway into the city street beyond, bloom-laden arch in foreground
-  J. **BRIDGE OVER CANAL** — small stone bridge over a Venetian / Bruges canal with bloom-draped railings, view down the canal in either direction
-  K. **TOKYO BACK-STREET** — wide shot of a Tokyo back-street with wooden-and-paper architecture, bicycles parked, vending machines glowing, blooms in pot-clusters at every door
-  L. **MARKET STALL** — small empty market-stall in a Mediterranean square with bloom-cascade from the awning and surrounding walls
+  1. **THE FANTASY BLOOM-CITY** as the dominant hero — impossible architecture overgrown / consumed / formed BY flowers
+  2. **OVERWHELMING BLOOM-MASS** — building-scale cascades, sky-filling petal-storms, vine-bridges, flower-cathedrals
+  3. **DRAMATIC FANTASY SKY** — aurora / sunset / dawn / cloud-layers / impossible double-sun / starfield / floating moon
+  4. **MAGICAL ATMOSPHERIC LAYER** — drifting petal-snow / glowing pollen-motes / bioluminescent spores / magical mist / golden god-rays
+  5. **SENSE OF VAST SCALE** — multi-tier vertical depth from foreground bloom-cascade to deep-distance fantasy spires receding into atmospheric haze
 
-DELIBERATE COMPOSITION CRAFT — wide street-photography:
-- Strong LEAD-LINES into city depth (alley vanishing-point / staircase rise / canal recede / pavement converging)
-- Pedestrian-level POV — eye at street-level, not aerial
-- Architecture FRAMES the shot on both sides (walls / balconies / buildings creating natural frame)
-- Multi-tier depth: tactile foreground (cracked pavement / cobblestones / petal-strewn step) → midground architectural mass → deep distance hazed warm
-- Warm hero light at the destination end (sun glow / lantern / sunset spilling INTO the alley)
-- One quadrant has intentional negative-space breathing room (sky / open canal / empty wall section)
+THINK: Tolkien-illustrated-edition / Pre-Raphaelite painted-bloom-fields / Studio-Ghibli cherry-blossom-canopy / Lothlorien-from-Fellowship (the FLOWERS, not the architecture) / Brian-Froud-faerie-realm painted-flower-density / classical-painted "Garden of Earthly Delights" flower-mass / Monet-water-lily-immersive panels (BUT fantasy scale).
 
-━━━ MATERIAL POETRY — URBAN TEXTURES ━━━
-"Sun-bleached plaster wall with cracks visible through climbing-bloom vines", "azulejo tiles with hand-painted blue-and-white patterns peeking through cascading petals", "rust-patinaed iron balcony railing wrapped in flowering vines", "cobblestone pavement with petals fallen in the joints", "weathered wooden shutters partially closed with bloom-vines climbing the louvers", "weathered brass doorknob with a single petal stuck to it".
+Pick ONE composition per render (FLOWER-DOMINATED, vary):
+  A. **FLOWER-CANYON DEPTH** — walls of cascading flowers hundreds of meters tall on both sides, narrow path winding through, fantasy spires hint at the canyon-end
+  B. **KILOMETER-CASCADE WALL** — wall of overlapping rose / peony / wisteria cascades pouring down from above, fantasy architecture barely glimpsed at the top
+  C. **BLOOM-MOUNTAIN VISTA** — mountain made entirely of flowers, fantasy spires barely emerging from the bloom-mass, dawn/dusk light
+  D. **ENDLESS FLOWER-MEADOW** — vast painted-meadow stretching to a fantasy citadel on the distant horizon, foreground is waist-high blooms in every direction
+  E. **CHERRY-BLOSSOM CANOPY** — looking up at endless cherry-blossom canopy filling 80%+ of frame, fantasy spire-tips poking through at the top
+  F. **VINE-CATHEDRAL FROM BELOW** — looking up at overlapping wisteria-cascades draping kilometer-deep from invisible fantasy structures above
+  G. **FLOWER-FLOODED VALLEY** — fantasy spires emerging from a valley flooded knee-deep in floating blossoms, painted-gold light
+  H. **BLOSSOM-DROWNED RUIN** — fantasy ruins so claimed by flowers they read as flower-mountains, only the tip of a spire visible
+  I. **PETAL-SNOW DEPTH** — fantasy spires barely visible through dense falling petal-snow filling the entire frame
+  J. **BLOOM-AVENUE TUNNEL** — viewer inside a tunnel of overlapping bloom-cascades, fantasy spire-tips poking through at the far end
+  K. **FLOWER-CLIFF HORIZON** — sheer flower-cliff dominating the frame, hint of fantasy architecture half-buried near the top, soft natural light
+  L. **MALLORN-CANOPY OVERWHELM** — golden mallorn-tree fantasy citadel SO covered in flowers the trees are barely visible, painted-gold light
+
+DELIBERATE COMPOSITION CRAFT — FLOWER-DOMINATED CINEMATIC SHOT:
+- Strong LEAD-LINES into flower-depth (bloom-canyon recede / cherry-canopy verticality / flower-cliff horizon-line)
+- CINEMATIC POV — fantasy scale, NOT pedestrian
+- Multi-tier depth: foreground tactile bloom-detail → midground bloom-mass → deep-distance fantasy spires barely visible through atmospheric bloom-haze
+- NATURAL CINEMATIC LIGHT ONLY — golden-hour sun / dawn / dusk / soft daylight / gentle backlight. NEVER magical glow / bioluminescence / sci-fi god-rays.
+- Sky is small or implied — the FLOWERS fill the frame, not a dramatic sky
+
+━━━ MATERIAL POETRY — FLOWER-DOMINATED TEXTURES ━━━
+"Hundred-meter rose-cascade pouring down a hidden cliff-face in overlapping petal-waves", "wall of cherry-blossoms so dense the trunks are invisible behind the bloom-mass", "thousands of overlapping peonies stacked deep enough to drown a spire", "cascading wisteria-curtains hanging hundreds of meters from invisible structures above", "valley flooded knee-deep in floating blossoms with only a spire-tip visible", "endless meadow of layered wildflowers stretching to the horizon".
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -6409,28 +6462,50 @@ ${sharedDNA.palette}
 ━━━ FLOWER SPECIES — STRICT ━━━
 ${sharedDNA.roster}
 
-Use the actual species names. Pick 3-4 species from the roster, mass them in EQUAL WEIGHT across every architectural feature (balconies / window-boxes / iron grilles / pavement / staircases / canal-edges).
+Use the actual species names. Pick 3-4 species from the roster — mass them at FANTASY SCALE across the bloom-city (building-scale cascades, sky-filling storms, full-facade waterfalls of blossom).
 
 ━━━ LIGHTING ━━━
 ${sharedDNA.lighting}
 
-━━━ DEFAULTS TO RESIST ━━━
-- NO modern / contemporary / corporate architecture — historic / weathered / picturesque only.
-- NO American urban / Manhattan / LA / suburban — European / Mediterranean / North African / Asian / colonial only.
-- NO people / pedestrians / bicycles-being-ridden — empty street.
-- NO pink/rose/blush dominance unless palette names it.
-- NO roses/peonies/hydrangeas/lavender unless in the roster.
-- NO single hero bloom — DISTRIBUTE the bloom-mass.
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO real-world tourist cities (Mediterranean / Parisian / Lisbon / Marrakech / Tokyo / Venetian / Cinque Terre / Cuban / Tuscan / Pueblo / Indian / Vietnamese / Kyoto)
+- 🚫 NO real-world historic architecture (Haussmann / azulejo / adobe / canal-palazzo / colonial / half-timber)
+- 🚫 NO "postcard with extra flowers" energy
+- 🚫 NO pedestrian-level tourist-eye POV
+- 🚫 NO cobblestone / weathered-plaster / chipped-paint pedestrian textures
+- 🚫 NO modern / contemporary / corporate architecture
+- 🚫 NO people / pedestrians / bicycles / vespas / vintage-cars / market-stalls
+
+🚫 NO SCI-FI / MAGIC-LIGHT EFFECTS COMPENSATING FOR THE SCENE:
+- 🚫 NO glowing power-cores / pulsing inner-bloom-glow / radiating cores
+- 🚫 NO bioluminescent blooms / bioluminescent moss / bioluminescent ANYTHING
+- 🚫 NO will-o-wisps / faerie-lights / floating magical orbs / drifting light-particles
+- 🚫 NO theatrical god-rays as the main impact / sun-shafts as the wow-element
+- 🚫 NO crystalline-prismatic refraction / rainbow-light arcs / spectrum effects
+- 🚫 NO aurora-curtains / aurora-bloom megacities
+- 🚫 NO double-suns / twin-moons / starflower-skies / impossible celestial bodies
+- 🚫 NO floating pollen-motes / fairy-dust / glowing seeds-floats
+- 🚫 NO magic-mist / iridescent volumetric haze / glowing rune-bark
+- 🚫 NO neon-bloom / electric-cyan / glowing-magenta accents
+- 🚫 NO underwater bloom-cities (too sci-fi-glowing)
+
+🚫 ARCHITECTURE-DECORATION TRAP:
+- 🚫 NO architectural HERO with blooms-as-decoration — FLOWERS are 80-90% of frame, fantasy-architecture is BARELY VISIBLE scaffolding glimpsed through bloom-mass
+- 🚫 NO well-defined fantasy-spire as the focal subject — flowers should dwarf and consume the architecture
+
+OTHER:
+- 🚫 NO pink/rose/blush dominance unless palette names it
+- 🚫 NO species outside the roster
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[wide street-photography composition mode], [specific city setting + signature architectural detail rendered with hyperreal precision], [bloom-mass DISTRIBUTED across every architectural feature — balconies / window-boxes / iron grilles / planters / pavement cracks / 3-4 species in equal weight], [pedestrian-level POV with leading-lines into city depth], [warm destination glow at the vanishing point]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible city detail]' : ''}, [material poetry — sun-bleached plaster, azulejo tiles, cobblestone joints, weathered shutters]
+[cinematic fantasy-bloom-city composition mode], [specific fantasy bloom-city setting + signature fantasy architectural detail rendered with painterly precision], [OVERWHELMING bloom-mass at fantasy scale — building-scale cascades, sky-filling petal-storms, vine-bridges, multi-species in equal weight, 60-70% of frame], [cinematic establishing POV with multi-tier depth into fantasy distance], [dramatic fantasy sky + magical atmospheric layer]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible magical detail]' : ''}, [material poetry — mallorn-bark / crystalline bloom / bioluminescent moss / vine-grown rampart]
 
-CRITICAL — wide street-photography composition. Architecture is the STRUCTURAL HERO, blooms are DISTRIBUTED MASS. NEVER a flat eye-level snapshot, NEVER a single hero bloom dominating.
+CRITICAL — cinematic fantasy-bloom-city establishing shot. BLOOMS are the OVERWHELMING SUBJECT (60-70% of frame), fantasy-architecture is SCAFFOLD. NO real-world tourist cities. NEVER a pedestrian eye-level snapshot.
 
-Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the city.`;
+Output ONLY 95-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the fantasy bloom-city.`;
   },
 
   // BloomBot reclaim — ABANDONED structures reclaimed by flowers.
@@ -7995,8 +8070,42 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
   TOYBOT_MODEL_TRAIN_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
-    const { camera_angle, scenario, staging, scene, train_consist, train_weather } = slots;
+    const {
+      camera_angle,
+      scenario,
+      staging,
+      scene,
+      train_consist,
+      train_weather,
+      drama_moment,
+      unusual_cargo,
+    } = slots;
     const isWorldMode = sharedDNA.renderMode === 'world';
+
+    // Drama-moment block — always injected. Fixes "average trainset"
+    // failure mode by forcing a "what's happening?" beat in every render.
+    const dramaMomentSection = drama_moment
+      ? `
+━━━ THE DRAMATIC BEAT — MANDATORY ACTION ━━━
+${drama_moment}
+
+This beat IS the story of the frame. Render it as frozen mid-action: kinetic motion, dust/spray/sparks where appropriate, scale-perfect detail on every actor. NEVER ignore this beat for a generic "train rolls through pretty terrain" composition — the beat ABOVE the scene is what makes the frame a movie-still instead of a catalog photo.
+
+`
+      : '';
+
+    // Unusual cargo — conditional ~35%. Surprise wow-factor cargo that
+    // creates scale tension or narrative hook. When firing, the cargo IS
+    // visible on a flat/open/specialized car within the consist.
+    const unusualCargoSection = unusual_cargo
+      ? `
+━━━ UNUSUAL CARGO — VISIBLE ON THE TRAIN ━━━
+${unusual_cargo}
+
+Place this cargo on a flat / gondola / specialized car within the consist. The cargo MUST be visible in the rendered frame — scale-perfect, story-loaded, and the reason a viewer's eye snaps to "wait, what is that?". This pool fires occasionally for surprise — when it does, the cargo is THE secondary subject after the train itself.
+
+`
+      : '';
 
     // World-mode-only sections — scenario + real-world staging block + story cast.
     // Classic mode renders without these (path's SCENES pool drives composition).
@@ -8074,7 +8183,7 @@ ${train_consist}
 ━━━ THE MODEL-TRAIN SCENE ━━━
 ${scene}
 
-
+${dramaMomentSection}${unusualCargoSection}
 ${worldStagingSection}━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
 ${sharedDNA.camera}
 
@@ -8679,6 +8788,99 @@ ${vibeDirective.slice(0, 200)}
 Hero food/drink centered or rule-of-thirds. Soft-blur dusty-pastel background. 15-20+ scattered tiny decorations carpeting the surface around the hero. Cherry-blossom branch may arch from corner. Setting is tabletop close-up (70%) or wider cute setting like picnic-meadow / cafe-window / garden-table (30%). Glossy pearlescent Pop-Mart finish. The viewer's reaction: "OMG THIS IS THE CUTEST."
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases.`;
+  },
+
+
+  CHIBIBOT_HEARTWARMING_SCENE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_1,
+      creature_2,
+      activity,
+      setting,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const isGroup = !!creature_2;
+    // phenomenon is template-gated at 60% — pool always picks (cheap), template
+    // decides to render the section. Composer's conditionalLayer is already
+    // used by creature_2 (70% group gate).
+    const phenomenonFires = Math.random() < 0.6;
+
+    const creatureBlock = isGroup
+      ? `A SMALL GROUP (3-5) of adorable creatures together — led by: ${creature_1}, joined by: ${creature_2} and a few others. Different species, different sizes, all equally cute, doing the activity together.`
+      : `${creature_1} — solo, doing something heart-melting.`;
+
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing HEARTWARMING CREATURE SCENES for ChibiBot — ${isGroup ? 'a little group of adorable creatures' : 'one adorable creature'} doing something heart-melting, staged inside a deliberately-chosen storybook setting at a deliberately-chosen time of day with deliberate weather${phenomenonFires ? ' and a magical phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / menacing — it FAILED. The reaction is wholesome delight — big eyes, soft shapes, infectious cuteness. Lighting + weather + phenomenon should match the SCENE naturally — rainy ≠ stormy, snowy ≠ blizzard, night ≠ scary — wholesome filter on everything.
+
+━━━ RENDERED CGI — NEVER PHOTOREAL, NEVER PAINTED ━━━
+
+Never photoreal. Never documentary-wildlife. Never flat illustration or painted artwork. Render as polished 3D CGI in the designer-collectible / Pop-Mart-vinyl register: glossy materials with subsurface scattering, ultra-clean form language with crisp surface definition, graphic-design crisp pattern work, dewy highlights. Creatures render with chibi proportions (oversized head, massive glassy reflective eyes, tiny stubby body). Settings + props render with the SAME glossy crisp CGI register. Let the MEDIUM tag control the specific render style.
+
+━━━ NO DARK / NO INTENSE / NO CREEPY ━━━
+
+Absolutely no menace, no threat, no horror, no creepy undertones, no "uncanny cute" disturbing vibes. Safe + wholesome + approachable. The tone is kind and gentle, not Tim-Burton-stop-motion. Lighting follows the time-of-day axis honestly — if it's blue hour, render blue hour; if it's golden hour, render golden hour; if it's moonlit, render silvery moonlit. DO NOT force everything to "warm golden" — variety is the goal.
+
+━━━ NO HUMANS ━━━
+
+No human figures, no faces, no hands. All subjects are creatures (real-exaggerated or fantasy-cute). If a setting would normally include a person, reimagine it without — the creature does the activity alone or with another creature, or uses the human's props (teacup / book / lantern) without the human present.
+
+━━━ IMPOSSIBLE BEAUTY ━━━
+
+Wall-poster quality. NOT dramatic-beautiful (that's GlowBot) — CUTE-beautiful. The composition is balanced and charming. Every element is rendered with love — the kind of image a kid pins above their bed and looks at every night.
+
+━━━ THE CUTE CREATURE(S) ━━━
+${creatureBlock}
+
+━━━ THE HEART-MELTING ACTIVITY ━━━
+${activity}
+
+━━━ THE STORYBOOK SETTING (the stage) ━━━
+${setting}
+
+━━━ TIME OF DAY (drives light + color cast — render honestly) ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL (drifting particles, ambient charm) ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail the eye finds AFTER the hero) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ BLOW IT UP — CUTENESS AMPLIFICATION ━━━
+
+Cuteness is the canvas, not the ceiling. Stack cute-elements: glossy dewy surfaces with subsurface scattering + volumetric glow tinted to MATCH the time-of-day axis above (silvery-blue at moonlit night, indigo-pink at blue hour, peach-amber at golden hour, pearl-grey at dawn, cool-overcast at soft daylight — NOT forced warm-golden when the axis says otherwise) + sparkles + layered atmospheric charm + dense storybook micro-details (tiny mushrooms, floating hearts, cozy accessories, fairy-lights, wildflowers, whimsical incidental life). For creatures specifically, also stack: massive dewy glassy eyes with multi-layer catchlights + fluffy textured surfaces + blushing cheeks. For settings, stack environmental cuteness: dense magical detail in every corner, glowing windows (when night/dusk), blooming flora, atmospheric haze, postcard-pretty composition. Obsessive detail in service of wholesome delight.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+${isGroup ? 'Mid-wide frame with the group as heroes doing the activity together in the setting. 3-5 creatures visible, each contributing — one leading, others helping or reacting. Different heights and species for visual variety.' : 'Mid-close frame with creature as hero doing the activity inside the setting.'} The setting is unmistakable — viewer should be able to name WHERE this happens. The time-of-day color cast is honest (not always warm-golden). Surprise element tucked into the composition where the eye finds it second.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
 

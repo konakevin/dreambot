@@ -1181,14 +1181,14 @@ const ARCHETYPES = {
 
   TOYBOT_MODEL_TRAIN_WORLD: {
     description:
-      'PATH-BESPOKE — ToyBot model-train-world path (2026-05-17 R0 axis-system migration). HO-scale (1:87) or N-scale model-railroad diorama. NO HUMAN FIGURES by design — handcrafted terrain + tiny model trains ARE the subject. Locked medium: model_train_diorama. Universal axes (camera_angle / scenario / staging) resolve to bot.defaultPools. Path-bespoke axes (scene / train_consist / train_weather) live in path-bespoke pools. Template branches on sharedDNA.renderMode for scenario+staging injection.',
+      'PATH-BESPOKE — ToyBot model-train-world path. HO-scale (1:87) or N-scale model-railroad diorama. NO HUMAN FIGURES outside the diorama (tiny scale-figures integral to the beat are fine). Locked medium: model_train_diorama. Universal axes (camera_angle / scenario / staging) from bot.defaultPools. Path-bespoke: scene / train_consist / train_weather / drama_moment (always — narrative beat that fixes the "average picture of a trainset" failure mode) + unusual_cargo (35% conditional — surprise scale-tension cargo).',
     slots: {
       universal: ['camera_angle', 'scenario', 'staging'],
       bot: [],
-      path: ['scene', 'train_consist', 'train_weather'],
+      path: ['scene', 'train_consist', 'train_weather', 'drama_moment'],
     },
     pickN: {},
-    conditionalLayer: null,
+    conditionalLayer: { slot: 'unusual_cargo', gate: 0.35 },
     framingModes: null,
     anchorScaleRange: null,
   },
@@ -1260,6 +1260,21 @@ const ARCHETYPES = {
     },
     pickN: {},
     conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_HEARTWARMING_SCENE: {
+    description:
+      'PATH-BESPOKE — ChibiBot heartwarming-scene path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). The "OMG IT\'S TOO CUTE. I CAN\'T." cuddle moment — adorable creature(s) doing something heart-melting in a deliberately-chosen storybook setting under a deliberately-chosen time-of-day with deliberate weather and an optional environmental phenomenon. 10 axes: 3 universal (lighting + atmosphere + weather, via bot.defaultPools) + 5 path-bespoke (setting + time_of_day + creature_1 + activity + surprise_element) + 1 conditional creature_2 70%-gated + 1 template-gated phenomenon 60%.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature_1', 'activity', 'setting', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'creature_2', gate: 0.7 },
     framingModes: null,
     anchorScaleRange: null,
   },

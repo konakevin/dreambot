@@ -131,9 +131,14 @@ module.exports = {
     TOYBOT_MODEL_TRAIN_SCENE: load('toybot_model_train_scene'),
     TOYBOT_TRAIN_CONSISTS: load('train_consists'),
     TOYBOT_TRAIN_WEATHER: load('train_weather'),
+    // Drama-moment pool: always fires. The "what's happening?" beat that
+    // turns "pretty diorama" into "movie-still." 50 seeds at v1 — scale
+    // to 200 after iteration converges.
+    TOYBOT_TRAIN_DRAMA_MOMENT: load('train_drama_moments'),
+    // Unusual-cargo pool: conditional-layer (~35% of renders). Surprise
+    // cargo wow-factor without overload. 50 seeds at v1.
+    TOYBOT_TRAIN_UNUSUAL_CARGO: load('train_unusual_cargo'),
     TOYBOT_CAMERA_ANGLES: load('camera_angles'),
     TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
     TOYBOT_STAGING_AXIS: load('staging_axis'),
-  // ─── toy-landscape (R0 axis-system migration, 2026-05-17) ───
-  TOYBOT_TOY_LANDSCAPES: load('toy_landscapes'),
 };
