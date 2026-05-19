@@ -1436,6 +1436,43 @@ Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops the
 
 ---
 
+## ChibiBot
+
+### heartwarming-scene (ChibiBot) — parity migration regressed lighting variety; full-bespoke 10-axis + time-of-day-tinted-glow recovered it 2026-05-19
+
+First ChibiBot path migrated to declarative composer. **Production-ready in 3 rounds.**
+
+**R0 (parity migration — DON'T DO THIS):** I cloned the legacy 5-axis architecture verbatim (lighting + atmosphere + creature_1 + creature_2 70%-gated + activity). Renders were 4.8/5 — looked identical to legacy, but Kevin flagged "lighting and scenes look repetitive." **The mistake: skipping the playbook's full-bespoke mandate.** A character-led scene path needs 8-10 path-bespoke axes, not 5. Parity migrations regress on diversity even when they score well.
+
+**R1 (full-bespoke 10-axis):** Added 4 new path-bespoke pools + 1 new universal pool wire:
+- `setting` (HEARTWARMING_SETTINGS, 50→200) — the storybook stage (cottage interiors / forest hollows / meadows / treehouse rooms / fairy-ring clearings)
+- `time_of_day` (HEARTWARMING_TIME_OF_DAY, 50) — dawn / blue-hour / golden-hour / candlelit-night / overcast / moonlit / aurora-time
+- `surprise_element` (HEARTWARMING_SURPRISE_ELEMENTS, 50→150) — second-tier detail the eye finds AFTER the hero
+- `phenomenon` (HEARTWARMING_PHENOMENA, 50, template-gated at 60%) — magical/seasonal event transforming the frame
+- `weather` (SCENE_WEATHER, existing 200, NEW wire to bot.defaultPools)
+
+Result: settings now NAMEABLE in every render (cottage kitchen / candlelit window / owl workshop / flower archway / rose garden). Phenomenon gate fired in 1 of 5 (cherry-blossom storm transformed that render). avg 4.6/5 — but lighting still warm-golden-dominant 3 of 5 despite the new time-of-day axis.
+
+**R2 (single-variable fix — template-clamp removal):** The `(warm soft only)` header was already removed. The remaining lighting-clamp was in the BLOW IT UP block: `"warm volumetric glow + ..."` — that single phrase was overriding the time-of-day pool variety. Changed to `"volumetric glow tinted to MATCH the time-of-day axis above (silvery-blue at moonlit night, indigo-pink at blue hour, peach-amber at golden hour, pearl-grey at dawn, cool-overcast at soft daylight — NOT forced warm-golden when the axis says otherwise)"`. Renders broke out of the warm-golden default — 5/5 with diverse light: cool-blue misty / soft-green-pink daylight / midday-white / window-warm / diffuse-green. avg 4.8/5.
+
+**Key cross-bot lesson (added to cross-bot list):** template wording with a fixed color cast ("warm volumetric glow", "soft warm light", "always golden hour") will OVERRIDE pool variety even when the pool entry says otherwise. When a path has a time-of-day axis, the template's lighting amplification phrases MUST tie to the axis ("tinted to MATCH the time-of-day" with explicit per-time examples) or the pool diversity dies. Verified for character-led scene paths; likely applies to any scene path with a time/light axis.
+
+**Config (current production):**
+- Path file: `scripts/bots/chibibot/paths/heartwarming-scene.js` (declarative, 10 axes)
+- Legacy: `scripts/bots/chibibot/paths/legacy/heartwarming-scene.js` (function-form preserved)
+- Universal axes: lighting + atmosphere + weather (all via `bot.defaultPools`)
+- Path-bespoke: setting, time_of_day, creature_1, activity, surprise_element, phenomenon
+- Conditional creature_2 (composer 70%-gate) — group vs solo
+- Template-gated phenomenon (60% in template) — drama event
+- 4 new pools sized: settings 200, time_of_day 50 (ceiling), surprise_elements 150, phenomena 50 (intentionally small)
+
+### heartwarming-scene next steps
+- Audit LIGHTING pool for cozy-skew (sample showed heavy night/moonlit/foggy bias; midday/sun underrepresented)
+- Watch for phenomenon-fire visibility — at 60% gate it should land on ~3/5 renders
+- Pattern is ready to clone for next 23 ChibiBot paths
+
+---
+
 ## The iteration loop (per path)
 
 1. **Diagnose** — render 3, look honestly, name the failure modes (centered figure / no density / generic palette / etc.)
@@ -1463,6 +1500,7 @@ Kevin: "we still want the hairstyle/skin/eyes expansions ... if sonnet drops the
 - **Helmets and face-coverings are environmental, not absolute.** Gate face visibility through the BIOME-APPROPRIATE OUTFIT block: vacuum/toxic = sealed visor, glacial = hood, desert = optional face wrap, **temperate/habitable = face fully visible.** Kevin's preference: when the biome is breathable, prefer face-visible compositions so character DNA reads.
 - **Pool DNA dominates brief admonitions, EVERY time.** (StarBot space-opera R1.) When a ship pool entry uses "cathedral / fortress / citadel / temple / Gothic Revival / stained-glass / flying-buttress" language, Flux renders the prompt as a planetary temple — no brief-level "NOT a building, this is a STARSHIP" guard overrides it. The fix is to strip the offending language from BOTH the seed entries AND the gen-recipe's silhouette / scale / example / instruction text, then regenerate. Brief stays lean.
 - **Ban building-coded vocabulary in any spaceship pool.** `cathedral`, `cathedral-class`, `cathedral-stack`, `fortress`, `fortress-citadel`, `citadel`, `temple`, `temple-ship`, `monastery`, `Gothic Revival`, `stained-glass`, `rose window`, `flying buttresses`, `bell housings`, `vertical city-spire`, `mosque`, `minaret`, `pagoda`, `ziggurat`. Vertical / tower silhouettes are still fine — describe them as `segmented-worm`, `obelisk-vessel`, `totem-hull`, `stacked-modules`, `spire-needle vessel`. Never as architecture.
+- **Template wording with a fixed color cast OVERRIDES pool variety.** (ChibiBot heartwarming-scene R1→R2.) "warm volumetric glow" / "soft warm light" / "golden hour" embedded ANYWHERE in the brief (BLOW IT UP block, COMPOSITION block, even the cuteness amplification section) will cause Flux to render warm-golden lighting regardless of what the time-of-day or lighting pool entry says. When a path has a time-of-day axis, lighting amplification phrases MUST tie to the axis with explicit per-time examples ("silvery-blue at moonlit, indigo-pink at blue hour, peach-amber at golden, pearl-grey at dawn, cool-overcast at soft daylight — NOT forced warm-golden when the axis says otherwise"). Removing the header-clamp `(warm soft only)` is not enough — the cuteness-amplification body text needs the same surgery.
 - **Character path briefs MUST be gender-locked, never gender-neutral.** (StarBot female-explorer composer regression 2026-05-12.) Flux uses pronouns and gendered nouns as primary gender-rendering signals. A brief with "the character / they / them / explorer" softens Flux's commitment to render a specific gender. Female-explorer briefs MUST use "she / her / woman / female explorer" consistently. Male-explorer briefs MUST use "he / his / man / male explorer". The compact bio line MUST include the literal gendered noun ("A {race} **woman** with..." or "A {race} **man** with..."). When designing a character archetype that serves both genders, parametrize gender via path config (`gender: 'female'` or `'male'`) and inject the gendered words into the template — never share one gender-neutral template across genders. Or: ship two sibling archetypes (FEMALE_EXPLORER + MALE_EXPLORER), each gender-locked. Both are valid; one-template-two-genders is NOT.
 
 ---

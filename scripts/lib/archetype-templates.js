@@ -6382,6 +6382,34 @@ EVERY render is OVERWHELMINGLY FLOWERS — scale, density, color, amount, variet
 
 🚫 NO REAL-WORLD TOURIST CITIES — Mediterranean alleyways, Parisian boulevards, Lisbon staircases, Marrakech courtyards, Tokyo back-streets, Cinque Terre, Venice, Cuba, Greek islands, Cotswolds, Stockholm, Tuscany, Pueblo, Jaipur, Hoi An, Kyoto — EXPLICITLY BANNED.
 
+━━━ LIGHTING / WEATHER / TIME-OF-DAY VARIETY — MANDATORY ━━━
+
+The rolled lighting axis is the AUTHORITY for the scene's light/weather/time. Render it FAITHFULLY. Do NOT default to "soft painted golden-hour mist with atmospheric haze" on every render — that's the homogenization trap.
+
+USE THE FULL LIGHTING SPECTRUM (the lighting axis rotates across these — RENDER what it rolls):
+  • Bright clear noon — sharp midday daylight, deep shadow, crisp clean color, sunny day, NO mist
+  • Sharp golden-hour rake — low-angle warm-sun cutting horizontal across scene, long crisp shadows, NO haze
+  • Blue-hour twilight — cool deep-blue light just before dawn or after dusk, no mist, soft moody clarity
+  • Night / moonlit — silver moonlight on the blooms, blue-violet shadows, starlit-clear
+  • Stormy / dramatic — heavy storm-clouds overhead, single sun-shaft breaking through, dark moody chiaroscuro
+  • Overcast diffuse — flat soft cloudy daylight, no shadows, even color across the scene
+  • Crisp dawn-pink — sharp pink-coral dawn light, clear air, no fog
+  • Hot afternoon glare — bright sun overhead, blooms in full color saturation, crisp shadows
+  • Rain — fresh rain wetting every petal, glistening surfaces, light through rain-streaks
+  • Snow — fresh snow drifting onto blossom-mass, cold bright clarity
+  • Chiaroscuro Rembrandt — directional light from one side, deep velvet shadow on the opposite, dramatic
+  • Dappled canopy — leaf-shadows fragmenting light into shifting patches on bloom-carpet
+  • Magic-hour painted glow — warm late-afternoon backlight (the OLD default — use SPARINGLY, 1-in-5 max)
+  • Foggy atmospheric — soft mist softening depth (the OLD default — use SPARINGLY, 1-in-5 max)
+
+⚠️ Render whatever the lighting axis ROLLED. Do NOT default to atmospheric haze / painted-gold mist / soft natural light EVERY render. Use the FULL spectrum — across a batch of 5 renders we should see at least 3-4 distinct lighting/weather/time-of-day modes.
+
+🚫 BANNED FALLBACK LANGUAGE in your output prompt (these are the homogenization defaults):
+  • "atmospheric haze" / "painted-gold mist" / "soft painted glow" / "golden-hour mist drifting"
+  • "atmospheric depth-haze" / "soft natural side-light"
+  • Defaulting EVERY scene to magic-hour / golden-hour painted-gold
+  • Defaulting EVERY scene to "soft mist drifting between spires"
+
 ✓ FANTASY FLOWER-CITY LINEAGE — but the FLOWERS dominate, not the architecture:
   • Mountains of cascading flowers with fantasy spires barely poking through
   • Kilometer-high flower-cliffs with hint of carved architecture half-buried in bloom

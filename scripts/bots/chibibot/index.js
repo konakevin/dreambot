@@ -171,7 +171,7 @@ module.exports = {
   },
 
   useModelPicker: true,
-  allowedModels: ['black-forest-labs/flux-dev', 'black-forest-labs/flux-1.1-pro'],
+  allowedModels: ['black-forest-labs/flux-dev'],
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
   // distort the cute silhouette). Village + scenery + storybook +
@@ -239,6 +239,23 @@ module.exports = {
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
 
+  // Bot-level pool defaults for declarative axis paths.
+  // Universal slots (lighting, atmosphere) resolve here when a declarative
+  // path declares them. Path-bespoke axes always override.
+  defaultPools: {
+    lighting: 'LIGHTING',
+    atmosphere: 'ATMOSPHERES',
+    weather: 'SCENE_WEATHER',
+  },
+
+  poolByName(name) {
+    const pools = require('./pools');
+    if (!(name in pools)) {
+      throw new Error(`ChibiBot.poolByName: unknown pool "${name}"`);
+    }
+    return pools[name];
+  },
+
   rollSharedDNA({ vibeKey, picker }) {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
@@ -249,7 +266,23 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, medium, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`ChibiBot: unknown path "${path}"`);
-    const result = builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Declarative axis-system paths export an object { archetype, pools }.
+    // Legacy function-form paths export a function. Dispatch on shape.
+    let result;
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      result = composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    } else if (typeof builder === 'function') {
+      result = builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    } else {
+      throw new Error(`ChibiBot: path "${path}" has invalid export shape`);
+    }
     // chibibot_render: append the 1–3 character-count rule so renders
     // aren't all solo portraits. Pixar renders skip this entirely.
     // EXCEPTION: cute-food path has "food IS the cast, no characters" —

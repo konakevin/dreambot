@@ -68,6 +68,12 @@ module.exports = {
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
 
+  // Heartwarming-scene path-bespoke axes (2026-05-19 full-bespoke migration)
+  HEARTWARMING_SETTINGS: load('heartwarming_settings'),
+  HEARTWARMING_TIME_OF_DAY: load('heartwarming_time_of_day'),
+  HEARTWARMING_SURPRISE_ELEMENTS: load('heartwarming_surprise_elements'),
+  HEARTWARMING_PHENOMENA: load('heartwarming_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each
