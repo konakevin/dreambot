@@ -106,6 +106,10 @@ Deno.serve(async (req) => {
     // RevenueCat puts the entitlement expiration timestamp in expiration_at_ms
     // for subscription events. Used to set users.pro_subscription_expires_at.
     const expirationAtMs: number | undefined = event.expiration_at_ms;
+    // Cancel reason is set on CANCELLATION events. CUSTOMER_SUPPORT means
+    // Apple processed a refund — we need to claw back any sparkles that
+    // were granted at INITIAL_PURCHASE / RENEWAL for this transaction.
+    const cancelReason: string | undefined = event.cancel_reason;
 
     console.log(
       `[RevenueCat] ${eventType} | user=${appUserId} | product=${productId} | env=${environment}`
@@ -147,6 +151,96 @@ Deno.serve(async (req) => {
     // Determine whether this event is for sparkle packs or Pro subscription.
     const isSparklePack = SPARKLE_PACKS[productId] !== undefined;
     const isProSubscription = PRO_SUBSCRIPTION_PRODUCTS.has(productId);
+
+    // ── APPLE REFUND CLAWBACK ──────────────────────────────────────────
+    // When Apple Support refunds a purchase, RC sends CANCELLATION with
+    // cancel_reason=CUSTOMER_SUPPORT. We need to revoke whatever sparkles
+    // we granted at the original transactionId so users can't keep the
+    // value after getting their money back. Apple handles the dollar-side
+    // clawback automatically (deducted from your next payout); we just
+    // need to handle the sparkle-side clawback.
+    //
+    // Idempotent: if the same refund event is delivered twice, we only
+    // claw back once (checked via the `refund:pro_bundle:<txid>` or
+    // `refund:purchase:<txid>` row in sparkle_transactions).
+    if (eventType === 'CANCELLATION' && cancelReason === 'CUSTOMER_SUPPORT') {
+      let originalReason: string | null = null;
+      if (isProSubscription) {
+        originalReason = `pro_bundle:${transactionId}`;
+      } else if (isSparklePack) {
+        originalReason = `purchase:${transactionId}`;
+      }
+
+      if (originalReason) {
+        const refundReason = `refund:${originalReason}`;
+
+        // Idempotency check — has this refund already been processed?
+        const { data: alreadyRefunded } = await supabase
+          .from('sparkle_transactions')
+          .select('id')
+          .eq('reason', refundReason)
+          .limit(1);
+        if (alreadyRefunded && alreadyRefunded.length > 0) {
+          console.log(`[RevenueCat] Duplicate refund event, skipping: ${refundReason}`);
+          return new Response(JSON.stringify({ message: 'Already refunded' }), { status: 200 });
+        }
+
+        // Find the original grant amount. If no grant row exists, it
+        // means we never credited this transaction in the first place
+        // (could happen if the webhook fix landed AFTER the purchase).
+        // Skip with a warning rather than fail.
+        const { data: grantRow } = await supabase
+          .from('sparkle_transactions')
+          .select('amount')
+          .eq('user_id', appUserId)
+          .eq('reason', originalReason)
+          .maybeSingle();
+        const clawbackAmount = grantRow?.amount ?? 0;
+
+        if (clawbackAmount > 0) {
+          // grant_sparkles accepts negative amounts — passing -75/-900 etc
+          // subtracts from sparkle_balance and records a negative row in
+          // sparkle_transactions for the audit trail. Users with positive
+          // balance go down to (potentially) negative; spend_sparkles
+          // already rejects spends when balance < amount so they can't
+          // dig deeper into the hole.
+          const { error: clawbackErr } = await supabase.rpc('grant_sparkles', {
+            p_user_id: appUserId,
+            p_amount: -clawbackAmount,
+            p_reason: refundReason,
+          });
+          if (clawbackErr) {
+            console.error(`[RevenueCat] Sparkle clawback failed:`, clawbackErr);
+            // Don't fail the webhook — Apple's already refunded the user.
+            // We'll have a stale credit but it's better than blocking RC's retries.
+          } else {
+            console.log(
+              `[RevenueCat] Refund clawback: revoked ${clawbackAmount} sparkles from ${appUserId} (${refundReason})`
+            );
+          }
+        } else {
+          console.warn(
+            `[RevenueCat] Refund event with no matching grant row for ${originalReason} — skipping clawback`
+          );
+        }
+
+        // For Pro refunds, also flip pro_subscription off immediately.
+        // (Normal CANCELLATION leaves access until EXPIRATION; refunds
+        // should be instant since the user got their money back.)
+        if (isProSubscription) {
+          await supabase.from('users').update({ pro_subscription: false }).eq('id', appUserId);
+        }
+
+        return new Response(
+          JSON.stringify({
+            refunded: true,
+            sparkles_revoked: clawbackAmount,
+            entitlement_revoked: isProSubscription,
+          }),
+          { status: 200 }
+        );
+      }
+    }
 
     // ── SPARKLE PACK PURCHASE (consumable) ─────────────────────────────
     if (SPARKLE_PURCHASE_EVENTS.has(eventType) && isSparklePack) {
