@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -21,17 +22,29 @@ import {
 } from '@/hooks/useSparkles';
 import { PACK_INFO } from '@/constants/sparklePacks';
 
-const CARD_BORDER = colors.border;
-const CARD_BG = colors.card;
+/** Flavor copy per sparkle pack — appears under the grid when selected.
+ *  Maps the pack's sparkle count to a short marketing line. */
+function getPackCopy(sparkles: number): string {
+  if (sparkles <= 25) {
+    return 'Try it out — enough for a quick burst of dreams. About 25 standard renders.';
+  }
+  if (sparkles <= 50) {
+    return 'Casual use — covers a week or two of regular dreaming. About 50 standard renders.';
+  }
+  if (sparkles <= 100) {
+    return 'Most popular — a month of regular use at the best per-sparkle value.';
+  }
+  return 'Power user — months of renders with room to spare for premium models.';
+}
 
 function PackCard({
   pkg,
-  onPurchase,
-  purchasing,
+  isSelected,
+  onSelect,
 }: {
   pkg: PurchasesPackage;
-  onPurchase: (pkg: PurchasesPackage) => void;
-  purchasing: boolean;
+  isSelected: boolean;
+  onSelect: (pkg: PurchasesPackage) => void;
 }) {
   const product = pkg.product;
   const info = PACK_INFO[product.identifier] ?? {
@@ -44,10 +57,9 @@ function PackCard({
 
   return (
     <TouchableOpacity
-      style={s.packCard}
-      onPress={() => onPurchase(pkg)}
-      activeOpacity={0.7}
-      disabled={purchasing}
+      style={[s.packCard, isSelected && s.packCardSelected]}
+      onPress={() => onSelect(pkg)}
+      activeOpacity={0.85}
     >
       {(isBestValue || isPopular) && (
         <View style={[s.badge, { backgroundColor: isBestValue ? colors.accent : colors.warning }]}>
@@ -68,12 +80,11 @@ function PackCard({
       <Text style={s.packSparkles}>{info.sparkles}</Text>
       <Text style={s.packLabel}>sparkles</Text>
 
-      <View style={[s.priceButton, isBestValue && s.priceButtonFeatured]}>
-        {purchasing ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
-        ) : (
-          <Text style={s.priceText}>{product.priceString}</Text>
-        )}
+      <Text style={s.packPrice}>{product.priceString}</Text>
+
+      {/* Selection indicator — radio dot at the bottom */}
+      <View style={[s.packRadio, isSelected && s.packRadioSelected]}>
+        {isSelected && <View style={s.packRadioInner} />}
       </View>
     </TouchableOpacity>
   );
@@ -91,12 +102,29 @@ export default function SparkleStoreScreen() {
     return (aInfo?.sparkles ?? 0) - (bInfo?.sparkles ?? 0);
   });
 
-  function handlePurchase(pkg: PurchasesPackage) {
+  // Default selection = "Best Value" pack (or middle pack as fallback).
+  const [selectedPkgId, setSelectedPkgId] = useState<string | null>(null);
+  useEffect(() => {
+    if (selectedPkgId || sorted.length === 0) return;
+    const bestValue = sorted.find((p) => PACK_INFO[p.product.identifier]?.label === 'Best Value');
+    setSelectedPkgId((bestValue ?? sorted[Math.floor(sorted.length / 2)]).identifier);
+  }, [sorted, selectedPkgId]);
+
+  const selectedPkg = sorted.find((p) => p.identifier === selectedPkgId) ?? null;
+  const selectedInfo = selectedPkg ? PACK_INFO[selectedPkg.product.identifier] : null;
+
+  function handleSelect(pkg: PurchasesPackage) {
+    Haptics.selectionAsync();
+    setSelectedPkgId(pkg.identifier);
+  }
+
+  function handlePurchase() {
+    if (!selectedPkg) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    purchase(pkg, {
+    purchase(selectedPkg, {
       onSuccess: () => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        const info = PACK_INFO[pkg.product.identifier];
+        const info = PACK_INFO[selectedPkg.product.identifier];
         Toast.show(`${info?.sparkles ?? ''} sparkles added!`, 'sparkles');
       },
       onError: (err) => {
@@ -133,16 +161,39 @@ export default function SparkleStoreScreen() {
             <Text style={s.emptySub}>Packs will appear here once the store is configured</Text>
           </View>
         ) : (
-          <View style={s.packGrid}>
-            {sorted.map((pkg) => (
-              <PackCard
-                key={pkg.identifier}
-                pkg={pkg}
-                onPurchase={handlePurchase}
-                purchasing={purchasing}
-              />
-            ))}
-          </View>
+          <>
+            <View style={s.packGrid}>
+              {sorted.map((pkg) => (
+                <PackCard
+                  key={pkg.identifier}
+                  pkg={pkg}
+                  isSelected={pkg.identifier === selectedPkgId}
+                  onSelect={handleSelect}
+                />
+              ))}
+            </View>
+
+            {/* Selected-pack flavor copy */}
+            {selectedInfo && <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>}
+
+            {/* Primary CTA — buys the selected pack */}
+            <TouchableOpacity
+              style={[s.primaryCta, (!selectedPkg || purchasing) && s.primaryCtaDisabled]}
+              activeOpacity={0.85}
+              disabled={!selectedPkg || purchasing}
+              onPress={handlePurchase}
+            >
+              {purchasing ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={s.primaryCtaText}>
+                  {selectedPkg
+                    ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles — ${selectedPkg.product.priceString}`
+                    : 'Select a pack'}
+                </Text>
+              )}
+            </TouchableOpacity>
+          </>
         )}
 
         {/* Restore */}
@@ -166,14 +217,6 @@ export default function SparkleStoreScreen() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  title: { color: colors.textPrimary, fontSize: 18, fontWeight: '700' },
   scroll: { paddingHorizontal: 16, paddingBottom: 60 },
 
   // Balance hero
@@ -232,8 +275,12 @@ const s = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.border,
     paddingTop: 24,
-    paddingBottom: 16,
+    paddingBottom: 14,
     paddingHorizontal: 12,
+  },
+  packCardSelected: {
+    borderColor: colors.accent,
+    backgroundColor: 'rgba(139,123,238,0.08)',
   },
   badge: {
     position: 'absolute',
@@ -263,19 +310,62 @@ const s = StyleSheet.create({
     letterSpacing: -1,
   },
   packLabel: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
-  priceButton: {
-    backgroundColor: colors.accent,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginTop: 4,
-    minWidth: 90,
+  packPrice: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
+    marginTop: 8,
+  },
+  // Selection radio at bottom of each card
+  packRadio: {
+    marginTop: 10,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 2,
+    borderColor: colors.border,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  priceButtonFeatured: {
-    backgroundColor: colors.accentDark,
+  packRadioSelected: {
+    borderColor: colors.accent,
   },
-  priceText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
+  packRadioInner: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.accent,
+  },
+
+  // Selected-pack flavor copy
+  packDetail: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: 'center',
+    marginTop: 18,
+    marginBottom: 14,
+    paddingHorizontal: 12,
+  },
+
+  // Primary CTA
+  primaryCta: {
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  primaryCtaDisabled: {
+    opacity: 0.5,
+  },
+  primaryCtaText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '800',
+    letterSpacing: 0.2,
+  },
 
   // Empty
   emptyWrap: { alignItems: 'center', gap: 8, paddingVertical: 40 },

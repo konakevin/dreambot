@@ -9,6 +9,7 @@
  * client state on success.
  */
 
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -41,6 +42,12 @@ function trialDaysLeft(proTrialEndsAt: string | null): number | null {
   return Math.max(0, Math.floor(msLeft / (24 * 60 * 60 * 1000)));
 }
 
+/** Plan-specific marketing copy shown under the selected tier card. */
+const TIER_DETAIL_COPY: Record<string, string> = {
+  monthly: 'Billed monthly. Cancel anytime in App Store settings.',
+  yearly: 'Best value — save 33% vs monthly. Billed once a year.',
+};
+
 export default function ProStoreScreen() {
   const isPro = useAuthStore((s) => s.isPro);
   const isPaidPro = useAuthStore((s) => s.isPaidPro);
@@ -49,11 +56,21 @@ export default function ProStoreScreen() {
   const { mutate: purchase, isPending: purchasing } = usePurchasePro();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
 
+  // Default selection = yearly (better deal, recommended). Tap to switch.
+  const [selectedTierId, setSelectedTierId] = useState<string>(
+    PRO_TIERS.find((t) => t.period === 'year')?.productId ?? PRO_TIERS[0].productId
+  );
+
   // Trial status: user has Pro perks via trial but hasn't paid yet.
   // Show countdown banner so they know they need to subscribe.
   const isOnTrial = isPro && !isPaidPro;
   const daysLeft = isOnTrial ? trialDaysLeft(proTrialEndsAt) : null;
   const trialExpired = !isPro && !isPaidPro && proTrialEndsAt !== null;
+
+  // Resolve the currently-selected tier + its package for the primary CTA.
+  const selectedTier = PRO_TIERS.find((t) => t.productId === selectedTierId) ?? PRO_TIERS[0];
+  const selectedPkg = findPackage(packages, selectedTier.packageId);
+  const selectedPrice = selectedPkg?.product.priceString ?? selectedTier.displayPrice;
 
   function handlePurchase(pkg: PurchasesPackage) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -138,46 +155,71 @@ export default function ProStoreScreen() {
         {isLoading ? (
           <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 24 }} />
         ) : (
-          <View style={s.tierStack}>
-            {PRO_TIERS.map((tier) => {
-              const pkg = findPackage(packages, tier.packageId);
-              // Fall back to displayPrice when StoreKit hasn't loaded the
-              // real localized price (e.g., before App Store Connect +
-              // RevenueCat are fully wired). Lets the Get Pro screen
-              // render its tier cards even without a live store config.
-              const price = pkg?.product.priceString ?? tier.displayPrice;
-              const isYearly = tier.period === 'year';
-              return (
-                <TouchableOpacity
-                  key={tier.productId}
-                  style={[s.tierCard, isYearly && s.tierCardFeatured]}
-                  activeOpacity={0.85}
-                  disabled={!pkg || purchasing || isPaidPro}
-                  onPress={() => pkg && handlePurchase(pkg)}
-                >
-                  {tier.savingsBadge && (
-                    <View style={s.savingsBadge}>
-                      <Text style={s.savingsBadgeText}>{tier.savingsBadge}</Text>
-                    </View>
-                  )}
-                  <View style={{ flex: 1 }}>
-                    <Text style={s.tierLabel}>{tier.label}</Text>
-                    <Text style={s.tierPrice}>
-                      {price}
-                      <Text style={s.tierPeriod}> / {tier.period}</Text>
-                    </Text>
-                  </View>
-                  <View style={s.tierCta}>
-                    {purchasing ? (
-                      <ActivityIndicator size="small" color="#FFFFFF" />
-                    ) : (
-                      <Ionicons name="chevron-forward" size={18} color="#FFFFFF" />
+          <>
+            <View style={s.tierStack}>
+              {PRO_TIERS.map((tier) => {
+                const pkg = findPackage(packages, tier.packageId);
+                // Fall back to displayPrice when StoreKit hasn't loaded the
+                // real localized price.
+                const price = pkg?.product.priceString ?? tier.displayPrice;
+                const isSelected = tier.productId === selectedTierId;
+                return (
+                  <TouchableOpacity
+                    key={tier.productId}
+                    style={[s.tierCard, isSelected && s.tierCardSelected]}
+                    activeOpacity={0.85}
+                    disabled={isPaidPro}
+                    onPress={() => {
+                      Haptics.selectionAsync();
+                      setSelectedTierId(tier.productId);
+                    }}
+                  >
+                    {tier.savingsBadge && (
+                      <View style={s.savingsBadge}>
+                        <Text style={s.savingsBadgeText}>{tier.savingsBadge}</Text>
+                      </View>
                     )}
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={s.tierLabel}>{tier.label}</Text>
+                      <Text style={s.tierPrice}>
+                        {price}
+                        <Text style={s.tierPeriod}> / {tier.period}</Text>
+                      </Text>
+                    </View>
+                    <View style={[s.tierRadio, isSelected && s.tierRadioSelected]}>
+                      {isSelected && <View style={s.tierRadioInner} />}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            {/* Plan-specific marketing copy under the tier stack — swaps based on selection. */}
+            <Text style={s.tierDetail}>
+              {TIER_DETAIL_COPY[selectedTier.period === 'year' ? 'yearly' : 'monthly']}
+            </Text>
+
+            {/* Primary CTA — single action button that triggers the purchase of the selected tier. */}
+            <TouchableOpacity
+              style={[
+                s.primaryCta,
+                (!selectedPkg || purchasing || isPaidPro) && s.primaryCtaDisabled,
+              ]}
+              activeOpacity={0.85}
+              disabled={!selectedPkg || purchasing || isPaidPro}
+              onPress={() => selectedPkg && handlePurchase(selectedPkg)}
+            >
+              {purchasing ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={s.primaryCtaText}>
+                  {isPaidPro
+                    ? "You're Pro"
+                    : `Subscribe — ${selectedPrice} / ${selectedTier.period}`}
+                </Text>
+              )}
+            </TouchableOpacity>
+          </>
         )}
 
         <Text style={s.fineprint}>
@@ -324,8 +366,56 @@ const s = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 18,
   },
-  tierCardFeatured: {
+  tierCardSelected: {
     borderColor: colors.accent,
+    backgroundColor: 'rgba(139,123,238,0.08)',
+  },
+  // Radio indicator (right side of each tier card)
+  tierRadio: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tierRadioSelected: {
+    borderColor: colors.accent,
+  },
+  tierRadioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: colors.accent,
+  },
+  // Plan-specific helper line under the tier stack
+  tierDetail: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: 'center',
+    marginTop: 14,
+    marginBottom: 16,
+    paddingHorizontal: 12,
+  },
+  // Primary CTA button
+  primaryCta: {
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  primaryCtaDisabled: {
+    opacity: 0.5,
+  },
+  primaryCtaText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '800',
+    letterSpacing: 0.2,
   },
   savingsBadge: {
     position: 'absolute',
