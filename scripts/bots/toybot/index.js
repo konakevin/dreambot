@@ -65,7 +65,7 @@ module.exports = {
     'model-train-world': 'model_train_diorama',
     'plush-world': 'plush_fabric',
     'mech-toy-rampage': 'mech_toys',
-    'toybox-chaos': ['action_figure', 'plush_fabric', 'hot_wheels', 'barbie_figures', 'army_men'],
+    'toybox-chaos': 'toybox_chaos_mixed',
     'space-saga-figures': 'space_saga_figures',
     // monster-boss-battle rotates across the full toy-medium roster so the
     // boss + heroes can land in any toy world (vinyl Funko vs kaiju, action
@@ -137,6 +137,14 @@ module.exports = {
       'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR or KNIT TEXTURE, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, optional tiny knit sweaters or cloth bandanas, fully-dressed handcrafted miniature sets (forest campsite, sailboat, picnic meadow, attic bedroom, treehouse), warm firelight / lantern-glow / golden-hour / moonlit-window practical lighting, storybook warmth — NOT LBP burlap-with-zipper (that is Sackboy) NOT real animal NOT CGI NOT illustration',
     mech_toys:
       'articulated mech-toys — robot-toys / Gundam-style model-kits / transforming-mech-toys with visible ball-joint articulation at neck / shoulders / elbows / wrists / hips / knees / ankles, chrome-plated paneling and armor plates, visible transformation seams (line-cuts where panels would fold/flip), cockpit-canopy with glowing tinted plastic, hand-painted weathering / battle-damage / panel-line wash, snap-on weapon accessories (energy-sword / plasma-rifle / shield / shoulder-cannon / missile-pod), 1/144 to 1/100 collector scale, real-physical-toys on a handcrafted set, chrome reflections, cockpit-glow, sparks-flying, missile-trail haze — NEVER IP-named NEVER CGI NEVER illustration',
+    // 2026-05-19 axis-system rewrite: toybox-chaos was rotating ONE medium per
+    // render, which Flux locked onto and rendered as a single-medium scene
+    // (defeating the path's mixed-medium chaos intent). Replaced with a
+    // short multi-medium ensemble directive that front-loads "EVERY toy in
+    // its OWN native medium". Pairs with the 6-slot toybox_storytelling
+    // seed pool which bakes the story DNA.
+    toybox_chaos_mixed:
+      'MIXED-MEDIUM TOY-PHOTOGRAPHY ENSEMBLE — multiple toy types coexisting in ONE chaotic action-packed kid-playroom scene, EACH toy rendered in its OWN native medium (NEVER unified style): LEGO minifigs (visible studs + blocky limbs + clutch-pose hands), plush stuffed animals (visible plush-fiber fur / fabric / button or embroidered eyes / sewn seams), Funko Pop vinyl (oversized cube heads + small stocky bodies + solid black dot eyes + glossy finish), 3.75-inch articulated action-figures (visible ball-joint articulation + sculpted gear + painted detail wash), Barbie fashion-dolls (11.5-inch articulated + molded glossy hair + painted face), Hot Wheels die-cast cars (1:64-scale chrome + oversized wheels + racing decals), olive-green plastic army-men (solid-color molded + visible mold-seam + oval base + fixed single-pose), Calico Critter / Sylvanian Family figurines (flocked-velvet small-animals + tiny cloth outfits at dollhouse scale), plastic toy dinosaurs and farm animals — toys photographed at their REAL physical sizes (scale mismatch IS the point — 4-inch action-figure beside 1.5-inch Hot Wheels beside 12-inch plush teddy beside tiny LEGO minifig, as a real kid dumped a real toybox on a real floor) — NEVER unified-style toys, NEVER CGI, NEVER illustration, NEVER digital render',
     // Vintage Kenner 3.75-inch space-saga action-figures (rebels / imperials /
     // hooded-monks / smugglers / bounty-hunters / droids / aliens). Bot-only.
     // Archetype-only — bans IP names (no Star Wars / Lucasfilm).
@@ -234,33 +242,45 @@ module.exports = {
   },
 
   // Chaos layer — subject-level distortions (silhouette/echo) ON for ALL paths.
+  // model-train-world + toybox-chaos skip: 6-slot seed DNA is precisely tuned
+  // and chaos injects incompatible tokens (tilt-shift / studio-strobe /
+  // whiteout winter) that scramble the populated-scene intent. R6+R8 audits.
   chaos: {
     enabled: true,
-    skipPaths: [],
+    skipPaths: ['model-train-world', 'toybox-chaos'],
     allowSubjectChaosPaths: [
       'claymation', 'vinyl', 'sackboy', 'toy-landscape',
       'shortcake-scene', 'barbie-scene', 'gi-joe-missions',
       'green-army-warzone', 'miniature-dungeon', 'collector-shelf-epic',
       'epic-hero-bucket', 'dollhouse-life', 'hotwheels-city',
-      'model-train-world', 'plush-world', 'mech-toy-rampage', 'toybox-chaos',
+      'plush-world', 'mech-toy-rampage',
       'space-saga-figures',
     ],
   },
 
   // Two-pass Sonnet→Haiku polish for tighter Flux-ready prompts.
+  // model-train-world + toybox-chaos skip polish: seeds are 6-slot
+  // structured DNA — Haiku compression strips story slots (supporting
+  // cast / gag prop / floating element) and sometimes refuses on phantom
+  // mandatory-phrase mismatches. Let Sonnet's pass-1 flow straight to Flux.
   twoPassPolish: {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
+    skipPaths: ['model-train-world', 'toybox-chaos'],
   },
 
   // Sensory anchors — lightcolor required, additional channels rolled.
   // pathContext: 'figure' for paths where toys are the subject, 'scene' for
   // pure-scenery paths (toy-landscape, model-train-world).
+  // model-train-world skips: scene-sensory pools contain tilt-shift /
+  // lichen-tree / studio-strobe / cabinet-LED tokens that directly
+  // contradict the path's warm-daylight playtime-scene DNA. R6 audit.
   sensoryAnchors: {
     enabled: true,
+    skipPaths: ['model-train-world', 'toybox-chaos'],
     requiredChannels: ['lightcolor'],
     pathContext: {
       // Figure-centric (toys are the subject)

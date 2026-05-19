@@ -72,7 +72,8 @@ module.exports = {
   PLUSH_LANDSCAPES: load('plush_landscapes'),
   MECH_TOY_SCENES: load('mech_toy_scenes'),
   MECH_TOY_LANDSCAPES: load('mech_toy_landscapes'),
-  TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // mixed-medium, single pool
+  TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // legacy — kept for backref, no longer wired
+  TOYBOT_TOYBOX_STORYTELLING_SCENES: load('toybox_storytelling'),
   SPACE_SAGA_SCENES: load('space_saga_scenes'),
   SPACE_SAGA_LANDSCAPES: load('space_saga_landscapes'),
   SPACE_SAGA_FIGURES: load('space_saga_figures'),
