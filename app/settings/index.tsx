@@ -59,9 +59,21 @@ function SettingsRow({
   );
 }
 
+function trialDaysLeftLabel(proTrialEndsAt: string): string {
+  const msLeft = new Date(proTrialEndsAt).getTime() - Date.now();
+  if (msLeft <= 0) return 'Trial ended';
+  const days = Math.max(0, Math.floor(msLeft / (24 * 60 * 60 * 1000)));
+  if (days === 0) return 'Last day';
+  if (days === 1) return '1 day left';
+  return `${days} days left`;
+}
+
 export default function SettingsScreen() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
+  const isPro = useAuthStore((s) => s.isPro);
+  const isPaidPro = useAuthStore((s) => s.isPaidPro);
+  const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   useEffect(() => {
@@ -392,6 +404,22 @@ export default function SettingsScreen() {
         </View>
 
         {/* Sparkles */}
+        <Text style={styles.sectionHeader}>SUBSCRIPTION</Text>
+        <View style={styles.section}>
+          <SettingsRow
+            icon="diamond"
+            label={isPaidPro ? 'Manage Pro' : isPro ? 'Lock in Pro' : 'Get Pro'}
+            trailing={
+              isPaidPro ? (
+                <Text style={styles.trailingSummary}>Active</Text>
+              ) : isPro && proTrialEndsAt ? (
+                <Text style={styles.trailingSummary}>{trialDaysLeftLabel(proTrialEndsAt)}</Text>
+              ) : null
+            }
+            onPress={() => nav.push('/proStore')}
+          />
+        </View>
+
         <Text style={styles.sectionHeader}>SPARKLES</Text>
         <View style={styles.section}>
           <SettingsRow

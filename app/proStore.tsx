@@ -137,16 +137,14 @@ export default function ProStoreScreen() {
 
         {isLoading ? (
           <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 24 }} />
-        ) : packages.length === 0 ? (
-          <View style={s.emptyWrap}>
-            <Ionicons name="bag-outline" size={44} color={colors.textSecondary} />
-            <Text style={s.emptyText}>Pro not available yet</Text>
-            <Text style={s.emptySub}>Subscriptions will appear once the store is configured.</Text>
-          </View>
         ) : (
           <View style={s.tierStack}>
             {PRO_TIERS.map((tier) => {
               const pkg = findPackage(packages, tier.packageId);
+              // Fall back to displayPrice when StoreKit hasn't loaded the
+              // real localized price (e.g., before App Store Connect +
+              // RevenueCat are fully wired). Lets the Get Pro screen
+              // render its tier cards even without a live store config.
               const price = pkg?.product.priceString ?? tier.displayPrice;
               const isYearly = tier.period === 'year';
               return (
