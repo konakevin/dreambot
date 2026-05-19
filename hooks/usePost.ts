@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 export interface PostDetail {
   id: string;
   image_url: string;
+  image_url_hq: string | null;
   width: number | null;
   height: number | null;
   caption: string | null;
@@ -17,7 +18,7 @@ export async function fetchPost(id: string): Promise<PostDetail> {
   const { data, error } = await supabase
     .from('uploads')
     .select(
-      'id, image_url, width, height, caption, categories, created_at, user_id, comment_count, users(username, avatar_url)'
+      'id, image_url, image_url_hq, width, height, caption, categories, created_at, user_id, comment_count, users(username, avatar_url)'
     )
     .eq('id', id)
     .single();

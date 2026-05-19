@@ -9,9 +9,9 @@ import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 
 /**
- * Fetches the HQ URL for a given upload — runs Real-ESRGAN 4× upscale
- * via the upscale-image Edge Function. Caches the result on the row, so
- * subsequent calls for the same upload short-circuit and return instantly.
+ * Fetches the HQ URL for a given upload — invokes the upscale-image
+ * Edge Function which runs Clarity Upscaler 4× and caches the result
+ * on uploads.image_url_hq. Subsequent calls short-circuit instantly.
  *
  * Returns null on failure (caller falls back to the original-res URL).
  */
@@ -37,7 +37,12 @@ async function fetchHqUrl(uploadId: string): Promise<string | null> {
   }
 }
 
-async function saveToPhotos(id: string, imageUrl: string, upscale: boolean) {
+async function saveToPhotos(
+  id: string,
+  imageUrl: string,
+  upscale: boolean,
+  cachedHqUrl: string | null = null
+) {
   const { status } = await MediaLibrary.requestPermissionsAsync();
   if (status !== 'granted') {
     showAlert('Permission needed', 'Allow access to save images.');
@@ -45,13 +50,19 @@ async function saveToPhotos(id: string, imageUrl: string, upscale: boolean) {
   }
 
   // ── HQ pathway (Pro users) ────────────────────────────────────────────
-  // Pro users get a 4× Clarity Upscaler 4K upscale on every save
-  // (own posts or others'). The first request for any given post
-  // incurs ~25-35s wait; subsequent requests return instantly thanks
-  // to the image_url_hq cache on the uploads row. Bot-generated posts
-  // are pre-upscaled at render time so the cache is hot from day one.
+  // Three subcases:
+  //   1. Pre-cached HQ (cachedHqUrl provided) — instant save, no overlay
+  //   2. Pro + no cache — show overlay, invoke upscale-image, ~25-35s wait
+  //   3. Free user — original-res URL, no upscale path
+  //
+  // Bot posts are pre-upscaled at render time so case 1 covers most
+  // bot saves. Pro user creates are pre-upscaled in the background so
+  // case 1 also covers most "save your own dream" flows once the
+  // background upscale has had a chance to finish.
   let urlToSave = imageUrl;
-  if (upscale) {
+  if (cachedHqUrl) {
+    urlToSave = cachedHqUrl;
+  } else if (upscale) {
     UpscaleOverlay.show();
     try {
       const hqUrl = await fetchHqUrl(id);
@@ -98,15 +109,22 @@ async function saveToPhotos(id: string, imageUrl: string, upscale: boolean) {
  * entitlement (4K upscale).
  *   - `onDelete` set: caller is owner OR admin → shows Delete in menu.
  *   - `isPro`: caller has active Pro subscription → save triggers a
- *     Real-ESRGAN 4× upscale (cached server-side after first request).
+ *     Clarity Upscaler 4× upscale (cached server-side after first request).
+ *
+ * `imageUrlHq` is read from the post object (DreamPostItem.image_url_hq)
+ * — the feed RPC and direct uploads SELECTs already carry it, so we
+ * never need a DB roundtrip at long-press time. When present, the
+ * cached HQ is used directly (no overlay, no upscale call). When null,
+ * Pro users get the "this will take ~30s" confirm + post-tap overlay.
  *
  * Free user + not-own post → upsell only (no save).
  * Free user + own post (no Pro) → original-res save unrestricted.
- * Pro user (any post) → 4K upscale save.
+ * Pro user (any post) → 4K save (instant if cached, else ~30s wait).
  */
 export function handleImageLongPress(opts: {
   id: string;
   imageUrl: string;
+  imageUrlHq?: string | null;
   onDelete?: () => void;
   onDreamLikeThis?: () => void;
 }) {
@@ -114,6 +132,7 @@ export function handleImageLongPress(opts: {
 
   const { isPro } = useAuthStore.getState();
   const canDelete = !!opts.onDelete;
+  const cachedHqUrl = isPro ? (opts.imageUrlHq ?? null) : null;
   const saveLabel = isPro ? 'Save in 4K' : 'Save to Photos';
 
   if (canDelete) {
@@ -122,7 +141,7 @@ export function handleImageLongPress(opts: {
       { text: 'Cancel', style: 'cancel' },
       {
         text: saveLabel,
-        onPress: () => saveToPhotos(opts.id, opts.imageUrl, isPro),
+        onPress: () => saveToPhotos(opts.id, opts.imageUrl, isPro, cachedHqUrl),
       },
       {
         text: 'Delete',
@@ -135,9 +154,16 @@ export function handleImageLongPress(opts: {
 
   // Not owner/admin — Pro-only save with upscale, or upsell.
   if (isPro) {
+    // Cached HQ → instant save. Skip the alert entirely; saves a tap
+    // and matches the "feels free" UX of pre-upscaled bot posts.
+    if (cachedHqUrl) {
+      saveToPhotos(opts.id, opts.imageUrl, true, cachedHqUrl);
+      return;
+    }
+    // No cache → show the wait warning.
     showAlert('Save in 4K', 'Upscale to 4K and save? This usually takes 25-35 seconds.', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl, true) },
+      { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl, true, null) },
     ]);
     return;
   }

@@ -167,6 +167,7 @@ export const PostTile = memo(function PostTile({
     handleImageLongPress({
       id: item.id,
       imageUrl: item.image_url,
+      imageUrlHq: item.image_url_hq ?? null,
       onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
     });
   }

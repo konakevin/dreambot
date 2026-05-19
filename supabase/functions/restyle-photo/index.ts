@@ -23,6 +23,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 
@@ -373,6 +374,36 @@ Deno.serve(async (req) => {
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;
     if (uploadResult.error) {
       console.error('[restyle-photo] Failed to create draft upload:', uploadResult.error.message);
+    }
+
+    // Pre-upscale for Pro users — background via waitUntil so the
+    // user's photo restyle response isn't delayed by the ~30s upscale.
+    if (uploadId && imageUrl) {
+      try {
+        const { data: callerProfile } = await supabase
+          .from('users')
+          .select('pro_subscription')
+          .eq('id', userId)
+          .maybeSingle();
+        if (callerProfile?.pro_subscription) {
+          const upscaleTask = upscaleAndCache(
+            supabase,
+            REPLICATE_TOKEN,
+            uploadId,
+            imageUrl,
+            userId
+          );
+          // deno-lint-ignore no-explicit-any
+          const er = (globalThis as any).EdgeRuntime;
+          if (er?.waitUntil) {
+            er.waitUntil(upscaleTask);
+          } else {
+            upscaleTask.catch(() => {});
+          }
+        }
+      } catch (err) {
+        console.warn('[restyle-photo] pro upscale gate failed:', (err as Error).message);
+      }
     }
 
     // ── Job update + notification in parallel ─────────────────────────

@@ -48,6 +48,11 @@ export interface DreamPostItem {
   id: string;
   user_id: string;
   image_url: string;
+  /** 4× upscaled HQ version, populated lazily by upscale-image Edge Function
+   * or pre-populated by bot pipeline / Pro user pre-upscale. NULL until first
+   * upscale completes. Used by long-press to skip the "this will take ~30s"
+   * confirm dialog when HQ is already cached. */
+  image_url_hq?: string | null;
   caption: string | null;
   username: string;
   avatar_url: string | null;
@@ -354,7 +359,12 @@ export const DreamCard = memo(function DreamCard({
   }
 
   function handleLongPress() {
-    handleImageLongPress({ id: item.id, imageUrl: item.image_url, onDelete });
+    handleImageLongPress({
+      id: item.id,
+      imageUrl: item.image_url,
+      imageUrlHq: item.image_url_hq ?? null,
+      onDelete,
+    });
   }
 
   // Gestures composed by useCardGestures above — swipe-left, pinch, two-finger pan.

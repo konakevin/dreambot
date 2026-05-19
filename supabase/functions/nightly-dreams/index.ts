@@ -24,6 +24,7 @@ import { getLocationCard, normalizeName } from '../_shared/essenceCards.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
+import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
@@ -1583,6 +1584,35 @@ Output ONLY the prompt.`;
         .catch(() => {
           /* swallow — graceful fallback */
         });
+
+      // Pre-upscale for Pro users in background. Nightly dreams run
+      // overnight via cron — even a synchronous upscale would be fine
+      // here, but we keep waitUntil for consistency with generate-dream.
+      try {
+        const { data: callerProfile } = await supabase
+          .from('users')
+          .select('pro_subscription')
+          .eq('id', userId)
+          .maybeSingle();
+        if (callerProfile?.pro_subscription) {
+          const upscaleTask = upscaleAndCache(
+            supabase,
+            REPLICATE_TOKEN,
+            targetUploadId,
+            imageUrl,
+            userId
+          );
+          // deno-lint-ignore no-explicit-any
+          const er = (globalThis as any).EdgeRuntime;
+          if (er?.waitUntil) {
+            er.waitUntil(upscaleTask);
+          } else {
+            upscaleTask.catch(() => {});
+          }
+        }
+      } catch (err) {
+        console.warn('[nightly-dreams] pro upscale gate failed:', (err as Error).message);
+      }
     }
 
     lap('total');
