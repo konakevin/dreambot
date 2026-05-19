@@ -99,6 +99,18 @@ KODAMA / TREE-SPIRITS (occasional):
 - Fewer than 4 stacked exotic features per entry
 - Entries without a magic-signature element
 
+━━━ HARD BANNED CREATURE TYPES (these break FaeBot DNA — NEVER generate) ━━━
+- NO bat-fae / bat-wings / bat-spirits — bats are gothic / vampiric, not painterly-forest-fae
+- NO vampire-fae / vampire-anything / fangs / blood-themed creatures
+- NO demon-fae / devil-fae / horned-demon imagery
+- NO membranous bat-style wings — wings are translucent dragonfly / damselfly / butterfly / moth / luna-moth / fairy-style only
+- NO "perched upside-down" / "hanging upside-down" / "inverted perch" posture (bat behavior)
+- NO clawed hands / talon-fingers (raptor-bird coded — replace with delicate / luminous / glowing fingers)
+- NO fang-displays / vampire-fangs / pointed-fangs
+- NO undead / wraith / banshee / ghost-fae — keep creatures alive and warm
+- NO insect-warrior creatures (mantis-fae / wasp-fae / hornet-fae) — too aggressive for FaeBot's peaceful painterly DNA
+- NO scorpion-fae / spider-warrior-fae — spider-fae is OK if web-themed and gentle, NOT predator-coded
+
 ━━━ OUTPUT ━━━
 Output ONLY a valid JSON array of ${n} strings. Each string is one complete creature description (35-55 words). No preamble, no commentary, no markdown code fences.`,
 }).catch((e) => { console.error('Fatal:', e.message); process.exit(1); });
