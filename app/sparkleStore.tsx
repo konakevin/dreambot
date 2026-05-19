@@ -105,12 +105,13 @@ function PackCard({
   );
 }
 
-// ⚠️ TEMPORARY: hardcoded packs for App Store Connect review screenshot.
-// Set to `true` to render the 5-pack lineup without needing RevenueCat to
-// have synced the products yet. Set back to `false` before shipping so
-// the screen pulls real localized prices from StoreKit again.
-// Search for USE_MOCK_PACKS_FOR_SCREENSHOT to find and revert this flag.
-const USE_MOCK_PACKS_FOR_SCREENSHOT = true;
+// Toggle to `true` to render the hardcoded MOCK_PACKAGES below instead of
+// fetching from RevenueCat. Useful for App Store Connect review
+// screenshots when StoreKit / RC sync hasn't completed yet (e.g., right
+// after creating new IAP products on the Apple side). Must be `false`
+// for production — mock packages can't actually be purchased through
+// StoreKit (they'll error out at purchase time).
+const USE_MOCK_PACKS_FOR_SCREENSHOT = false;
 
 const MOCK_PACKAGES: PurchasesPackage[] = [
   {
