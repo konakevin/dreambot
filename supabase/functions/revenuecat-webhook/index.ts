@@ -20,8 +20,11 @@ const SPARKLE_PACKS: Record<string, number> = {
 // Pro subscription product IDs. Match these in App Store Connect /
 // Google Play and attach to the "pro" entitlement in RevenueCat.
 const PRO_SUBSCRIPTION_PRODUCTS = new Set([
-  'com.konakevin.dreambot.pro.monthly',
-  'com.konakevin.dreambot.pro.yearly',
+  // Use radorbad prefix to match the app's actual bundle identifier
+  // (com.konakevin.radorbad). Sparkles use the same prefix above —
+  // Apple requires IAP product IDs to share the app's bundle prefix.
+  'com.konakevin.radorbad.pro.monthly',
+  'com.konakevin.radorbad.pro.yearly',
 ]);
 
 // Bundled sparkles granted with each Pro INITIAL_PURCHASE + RENEWAL.
