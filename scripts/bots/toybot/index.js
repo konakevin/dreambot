@@ -125,7 +125,14 @@ module.exports = {
     hot_wheels:
       'Hot Wheels / Micro Machines die-cast toy cars — 1:64-scale (~3-inch) die-cast metal-and-plastic toy cars with chrome accents, glossy paint, oversized hot-rod-style wheels, racing-stripes or flame-decals, visible mold-seam underneath, real-world-surface practical-set photography (kitchen counter / driveway / bedroom rug / garage floor / picnic blanket / coffee table / patio), speed-blur on tires, dust-puff under wheels, headlight cones cutting through shadow, bright die-cast-car-commercial energy — NOT real car NOT 1:18-scale collector NOT CGI NOT illustration',
     model_train_diorama:
-      'HO-scale (1:87) or N-scale model-railroad diorama — tiny die-cast steam locomotive or diesel engine pulling boxcars / passenger cars / coal-tenders / cabooses on twin nickel-silver rails, hand-built terrain features (ground foam, lichen trees, plaster-cast rock-faces, static-grass meadows, scratch-built brick depots, signal-towers, water-tower, level-crossing, lift-bridge), NO HUMAN FIGURES in frame, visible model-railroad construction tells (raised baseboard edge OK), lit windows in tiny depot, smoke from engine stack, atmospheric haze in valleys, cozy obsessive-detail energy — NEVER real train NEVER CGI NEVER illustration NEVER scale-people-figures filling frame',
+      // Stripped "HO-scale" / "model locomotive" / "panel-line wash" /
+      // "knuckle-couplers" — those are Flux's diorama-trigger tokens.
+      // "HO-scale model train" in Flux's training set = tilt-shift
+      // miniature diorama photo trope. To break out we have to NOT use
+      // those words anywhere in the prompt. Setting context comes from
+      // the template — classic mode re-adds diorama language inline,
+      // world mode adds real-world language.
+      'small toy train — tiny toy locomotive (steam-engine with brass stack and lit headlamp / diesel-engine with chrome trim) pulling toy train cars (boxcars / passenger cars / coal-tender / caboose) on twin metal rails, ~3-inch overall scale, visible toy-train aesthetic — NEVER real-scale train, NEVER CGI, NEVER illustration',
     plush_fabric:
       'plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR or KNIT TEXTURE, embroidered or button eyes, stitched mouth, sewn-on muzzle, soft floppy limbs, fiberfill pudgy bodies, optional tiny knit sweaters or cloth bandanas, fully-dressed handcrafted miniature sets (forest campsite, sailboat, picnic meadow, attic bedroom, treehouse), warm firelight / lantern-glow / golden-hour / moonlit-window practical lighting, storybook warmth — NOT LBP burlap-with-zipper (that is Sackboy) NOT real animal NOT CGI NOT illustration',
     mech_toys:
@@ -296,10 +303,11 @@ module.exports = {
   },
 
   rollSharedDNA({ vibeKey, path, picker }) {
-    // 50/50 classic vs world. Vinyl + monster-boss-battle don't have
-    // path-native classic SCENES pools (vinyl was rebuilt for Funko slice-of-
-    // life, boss-battle is new in 2026-05) — force them to world mode.
-    const noClassicMode = new Set(['vinyl', 'monster-boss-battle']);
+    // 50/50 classic vs world. Vinyl + monster-boss-battle + model-train-world
+    // don't fall back to classic — model-train-world's classic mode produces
+    // the boring "model railroad diorama" failure mode (the entire reason for
+    // the world-mode rewrite); force world to make every render real-everyday.
+    const noClassicMode = new Set(['vinyl', 'monster-boss-battle', 'model-train-world']);
     const renderMode = noClassicMode.has(path)
       ? 'world'
       : Math.random() < 0.5

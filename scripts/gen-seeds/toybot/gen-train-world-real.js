@@ -4,76 +4,83 @@ generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_world_real.json',
   total: 50,
   batch: 25,
-  metaPrompt: (n) => `You are writing ${n} TOY-TRAIN-IN-REAL-WORLD seed entries for ToyBot's model-train-world path. Each seed describes ONE moment of a tiny HO-scale or N-scale model train running through a REAL human environment — NOT a handcrafted diorama. The wow is scale tension: the train is toy-sized, but the SETTING is real (real wood, real moss, real coffee mug, real cat, real kitchen counter). Recognizing real-world objects at toy-train scale is the magic.
+  metaPrompt: (n) => `You are writing ${n} TOY-TRAIN-IN-EVERYDAY-LIFE seed entries for ToyBot's model-train-world path. Each seed describes ONE specific moment of a SMALL TOY TRAIN running on tracks laid out in a recognizable REAL household, yard, or outdoor situation. Like a kid set up the train on the family room floor, in the backyard garden, on the porch, in a sandbox, at a camp site. The setting is the WOW — instantly recognizable everyday spaces.
 
-Each entry: 22-32 words. ONE specific real-world setting where a tiny model train runs on its tracks. Real surfaces, real lighting, real textures — the toy is INSIDE our world at its tiny scale.
+Each entry: 22-32 words. ONE specific real-everyday setting where a toy train is set up on tracks.
 
-━━━ CRITICAL: REAL WORLD, NOT DIORAMA ━━━
-This is NOT scratch-built terrain / ground-foam / plaster-rock. This IS real kitchen surfaces, real moss, real grass, real fabric, real coffee mugs, real cats, real children's hands. The toy train is a small object in a normal-sized human environment. Forced perspective + scale tension is the entire point.
+⚠️⚠️⚠️ ABSOLUTE BAN ⚠️⚠️⚠️
+- DO NOT say "HO-scale" / "N-scale" / "1:87" / "1:160" — these are Flux's diorama-trigger tokens
+- DO NOT say "model train" / "model locomotive" / "model railroad"
+- DO NOT say "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard"
+- DO NOT say "miniature world" — the world is REAL, the TRAIN is small
 
-━━━ REAL-WORLD SETTINGS (rotate aggressively) ━━━
+INSTEAD say: "small toy train", "tiny toy locomotive", "kids' toy train set", "Lionel-style toy train", "tracks laid out on", "train running on the floor of", "tracks weaving across"
 
-KITCHEN / HOME SURFACES
-- Tracks across real wooden kitchen table at morning, train weaving between a real coffee mug (skyscraper-tall) and sugar bowl, warm sunlight from real window
-- Train circling the rim of a real ceramic cereal bowl, milk lake within, granola boulders, real spoon overhang casting shadow
-- Tracks laid across real granite countertop with crumbs as boulders, real pancake stack rising like mountains, syrup river running beside
-- Train running along edge of real wooden cutting board, real avocado the size of a hillside, real knife resting nearby like a fallen tree
-- Tracks weaving across real piano keyboard, train threading between white keys, real human hand mid-chord overhead
-- Train passing beside real Christmas tree base, real evergreen needles like fallen logs, real wrapped present towering behind
-- Tracks running across real stack of paperback books on shelf, train balanced on spines, gold-leaf titles like billboards
+━━━ REAL-EVERYDAY SETTINGS (rotate aggressively) ━━━
 
-BEDROOM / KID-ROOM
-- Train tracks laid across a real rumpled bedsheet, pillows form mountain peaks, real alarm clock tower in BG, dawn light through curtains
-- Tracks running across real carpet shag with strands like grassland, train approaches a real plastic toy dinosaur in scale, real toy cars scattered
-- Train passing real sleeping cat curled up — cat fills entire background, scale-perfect whisker macro, train navigates carpet "valley"
-- Tracks looping around real LEGO castle on a child's play-rug, real LEGO minifigures wave from castle wall, scale-mismatch wonder
-- Train running across real bath-towel river bed, real rubber duck the size of a building, real bath toys scattered as villages
-- Tracks weaving through real bookshelf interior, train between real hardcover spines, real bookmark cliff overhanging
+FAMILY-ROOM / INDOORS
+- Tracks laid out across a real family-room hardwood floor, real area rug pushed aside, real toy box overflowing in BG, late-afternoon sunlight from real window
+- Toy train running on tracks across real basement concrete floor, real cardboard boxes stacked like skyscrapers, single bare bulb light, real workbench in BG
+- Train tracks set up on a real kitchen tile floor, real refrigerator looming like a skyscraper, real dropped pencil and pet kibble scattered as obstacles
+- Toy train circling beneath a real Christmas tree, real wrapped presents looming, real twinkly lights overhead, real ornaments hanging at sky height
+- Tracks running along real wooden window sill, real potted plants as a forest, real condensation on the window pane, golden hour streaming in
+- Train laid out across a real coffee table on a quiet evening, real opened book and steaming mug nearby, real lamp casting warm pool of light
+- Tracks running through real living-room carpet shag (strands towering like grass), real couch cushion fortresses, dropped toys forming obstacle course
+- Toy train circling a real wooden dining table, real plates and mug as buildings, real placemat as grassland, afternoon backlight from real curtains
+- Train on tracks across a real hallway runner, real pair of shoes kicked aside as boulders, real coat-rack tower beyond
 
-OUTDOOR / NATURE (REAL)
-- Train tracks running across REAL forest floor, real moss as grass, real pine cones as boulders, real dappled sunlight, real ladybug crossing rail
-- Tracks laid through REAL grass lawn, single blades towering, real morning dew on rails, real ant approaching with curiosity
-- Train running on top of a real tree stump, real growth-rings as terraced fields, real lichen as forest patches, real chipmunk peering
-- Tracks weaving between real mushrooms in real forest moss-bed, mushrooms the size of trees, real fairy-ring composition
-- Train passing real seashells on real beach sand, conch shells as caves, real waves in background, scale-perfect grain of sand
-- Tracks running across real garden soil between real tomato plants, train as harvesting freight, real ladybug as cargo inspector
-- Train approaching real bonsai tree — bonsai IS the forest, real desk surface, real Japanese sand-garden gravel as ballast
+GARDEN / YARD / OUTDOORS
+- Tracks weaving through a real backyard garden bed, real tomato plants towering as forest trees, real garden mulch as ballast, real watering hose coiled nearby like a snake
+- Toy train running through real flower garden in spring, real tulips and daffodils as trees, real garden gnome statue in distance, dew on petals
+- Tracks laid out across a real driveway, real gravel as boulder field, real grass tufts breaking through asphalt cracks, real dropped rake nearby
+- Train tracks running along the edge of a real concrete porch step, real welcome mat as scenery, real garden visible beyond railing, golden hour light
+- Toy train circling a real backyard sandbox, real plastic shovel and bucket as buildings, real toy dinosaurs scattered as obstacles, sand dunes as mountains
+- Tracks weaving across a real wooden front porch, real planks visible underfoot, real watering can like a water tower, real flower pots as villages
+- Train running through a real backyard veggie patch, real lettuce as treetops, real wooden trellis as bridge, real garden hose snaking past
+- Toy train on tracks across a real backyard deck, real outdoor furniture as scenery, real BBQ grill looming like factory, sunset over real fence
+- Train running along a real garden path of stepping stones, real moss between cracks, real ferns overhanging like jungle canopy
+- Tracks running across a real backyard lawn, real grass blades towering, real dandelion as colossal tree, real soccer ball as moon
 
-PLAY / HOBBY ENVIRONMENTS
-- Tracks running through real sandbox, real toy soldiers + plastic dinosaurs scattered, sand dunes as mountains, real plastic shovel as a bridge
-- Train tracks across real ping-pong table green, train mid-game-action, real ping-pong balls as floating moons, real paddle as cliff
-- Tracks running across real chessboard, train between bishop and knight, scale-perfect black-and-white pattern, real chess pieces as guardian statues
-- Train circling a real coffee mug on a real desk, mug as the central skyscraper, steam rising as fog clouds, real laptop in background
-- Tracks weaving between real Hot Wheels cars on a child's track, cars as 1:1 vehicles compared to train, scale-mismatch wonder
-- Train tracks across real puzzle in progress, train circling completed sections, scattered puzzle pieces as boulder fields
+OUTDOOR-ADVENTURE / NATURE
+- Toy train set up on tracks across a real picnic blanket at a campsite, real campfire ring nearby, real tent in BG, real pine needles on tracks
+- Tracks running across real forest floor in a hike, real moss bed as grass, real pine cones as boulders, real dappled sunlight through real branches
+- Train running along the edge of a real creek bank, real wet stones, real fallen leaves floating in water, real fern fronds curling overhead
+- Tracks laid out across a real beach in real wet sand, real seashells as buildings, real tideline as river, real driftwood as fallen trees
+- Toy train tracks set up on a real mountain-cabin porch railing, real pine trees beyond, real rocking chair shadow falling across rails
+- Train running through real wildflower meadow, real daisies and clover towering, real bumblebee in flight, real golden afternoon light
+- Tracks across a real real-rain gutter beside a driveway, real water flowing alongside, real fallen leaves as obstacles, overcast sky
+- Toy train on a real tree stump in the woods, real lichen as forest patches, real moss as grass, real squirrel watching from a real branch
+- Train running across a real lakeside dock at sunset, real worn wooden planks, real fishing rod leaning, real water lapping below
+- Tracks running along the edge of a real backyard fire pit, real glowing embers as cargo, real folding chairs as silhouettes, real stars above
 
-REFLECTIVE / TRANSPARENT
-- Train tracks on real glass coffee table with view of carpet below, real plant overhead like a forest canopy, light catching real edge bevel
-- Tracks running across surface of real fishtank lid, real fish swimming below as if underwater creatures, real plant ferns as forest
-- Train passing real mirror laid flat, train's reflection visible below as another train, surreal infinite-loop visual
+KID / PLAY ROOM
+- Train tracks set up across a real kid's bedroom carpet, real LEGO castle nearby, real action figures scattered as crew, real toy box tower in BG
+- Toy train circling around a real rug-fortress pillow tower in a real kid's room, real stuffed animals as audience, real nightlight glow
+- Tracks running between real building blocks stacked as skyscrapers, real dropped crayons as boulders, real construction paper as billboards
+- Train running across a real kid's play mat with road graphics, tracks weaving with the painted roads, real Hot Wheels cars passing alongside
+- Tracks on a real kid's small picnic table, real plastic tea-set cups as buildings, real teddy bear as colossal observer, real sunshine streaming
 
-SEASONAL / EVENT
-- Train tracks laid out beneath a real Christmas tree, real ornaments dangling as celestial bodies, real wrapped presents as cargo destinations
-- Tracks running across real Thanksgiving table runner, real pumpkins as mountains, real candles as towering lighthouses
-- Train passing real Halloween decorations — real plastic skeleton as ancient ruins, real pumpkin as glowing orb, real spider-webs as flora
-- Tracks weaving through real Easter-basket grass with real plastic eggs as boulders, real chocolate bunny standing sentinel
+GUTTERS / EDGES / UTILITARIAN
+- Toy train running through a real driveway storm gutter, real water flowing alongside, real fallen leaves dammed against rails, real puddle reflections
+- Tracks laid out along a real curb edge with real fallen acorns as cargo, real ant trail crossing tracks, real cracked sidewalk concrete
+- Train running along a real garage workbench, real tools and screws scattered, real coffee can as cylinder factory, real fluorescent light buzzing
+- Tracks weaving through a real shoe rack at the front door, real shoes towering as buildings, real welcome mat as plaza, late afternoon light
 
 ━━━ MUST-HAVE FOR EVERY ENTRY ━━━
-- Train must be EXPLICITLY described as tiny HO-scale or N-scale (1:87 or 1:160)
-- Setting must be REAL (real wood, real moss, real cat, real coffee mug) — never "scratch-built", never "scale-built", never "diorama"
-- Specific real-world object identified at human-scale that DWARFS the train (the wow)
-- Real textures: real grain, real fiber, real dust, real reflection, real condensation
-- Real lighting: real window light, real lamp glow, real outdoor sun, real overhead fluorescent
+- "small toy train" / "tiny toy locomotive" / "kids' toy train" — NEVER "HO-scale" / "model train"
+- Specific REAL household / yard / outdoor environment named explicitly
+- REAL objects (real mug / real shoe / real garden hose / real LEGO / real tomato plant) acting as scenery at human scale
+- Real-world textures: real grass, real wood, real concrete, real fabric, real sand, real water
+- One specific real-world object that visibly dwarfs the train (the mug, the shoe, the watering can, the cat)
 
 ━━━ BANNED LANGUAGE ━━━
-- NO "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" — those are diorama words
-- NO "diorama" / "model railroad layout" / "model train layout" / "track on baseboard"
-- NO scale-figures inside the train environment as people — humans appear at REAL scale (hand visible, person walking past) or not at all
-- NO CGI / illustration / digital-render language
-- NO real trademarks (no "Crayola box", "Apple laptop" — generic forms only)
+- "HO-scale" / "N-scale" / "1:87" / "1:160" / "scale-figure"
+- "model train" / "model locomotive" / "model railroad" / "diorama"
+- "scratch-built" / "ground-foam" / "lichen" / "plaster-rock" / "static-grass" / "baseboard"
+- "tilt-shift" / "miniature photography"
 
 ━━━ OUTPUT ━━━
-JSON array of ${n} strings. No preamble, no numbering. Each string is one toy-train-in-real-world scene description.`,
+JSON array of ${n} strings. No preamble, no numbering. Each string describes one toy-train-in-real-life scenario.`,
 }).catch((e) => {
   console.error('Fatal:', e.message);
   process.exit(1);

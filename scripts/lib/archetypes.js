@@ -1316,6 +1316,21 @@ const ARCHETYPES = {
   },
 
 
+  CHIBIBOT_CUDDLY_AQUATIC: {
+    description:
+      'PATH-BESPOKE — ChibiBot cuddly-aquatic path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). Pair of adorable cuddly baby aquatic creatures in underwater / surface-water habitats — sea otter pups holding paws, axolotl tea-room scenes, baby seals on ice, jellyfish blanket octopuses. Pixar/Sanrio/Ghibli/Finding-Nemo cuteness. UNLIKE other ChibiBot paths, creature_2 is ALWAYS-ON (no 70% gate) — this path\'s identity IS the cuddling pair. 10 axes: 3 universal (lighting + atmosphere + weather, via bot.defaultPools) + 6 path-bespoke (creature_1 + creature_2 + interaction + setting + time_of_day + surprise_element + phenomenon) + 1 template-gated phenomenon 60%.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature_1', 'creature_2', 'interaction', 'setting', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
 };
 
 module.exports = { ARCHETYPES };

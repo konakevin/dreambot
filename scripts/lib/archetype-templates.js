@@ -6345,81 +6345,100 @@ BLOOMBOT_FLOWER_TUNNELS: ({ slots, sharedDNA, vibeDirective }) => {
 ━━━ ATMOSPHERIC PHENOMENON — render visibly in the tunnel scene ━━━
 ${atmospheric_phenomenon}
 
-A specific atmospheric moment within the tunnel that supports (doesn't compete with) the glowing-flower-cores aesthetic.
+A specific atmospheric moment within the tunnel that supports (doesn't compete with) the lit-flower-cores aesthetic.
 
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing POV-THROUGH-A-DARK-FLOWER-TUNNEL scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+    return `You are a fantasy concept-art painter writing POV-DOWN-A-FLOWER-TUNNEL scene descriptions for BloomBot. The flowers themselves are LIT UP — each visible flower has a vivid warm-glowing core radiating soft light. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
 
-━━━ THE CORE AESTHETIC — FLOWER CORES ARE LITERAL LIGHT SOURCES ━━━
+━━━ THE CORE AESTHETIC — FLOWERS LOOK UNMISTAKABLY LIT UP ━━━
 
-The viewer is inside a DARK / DIM tunnel made entirely of flowers. The tunnel ambient is NEAR-BLACK / very dim / shadowed. The ONLY visible light in the scene comes from the FLOWERS THEMSELVES — specifically each flower's CENTER glows warm like a tiny lantern-flame, radiating soft warm-amber light outward across its own petals and into the surrounding darkness.
+The unifying mandate: EVERY visible flower in the frame looks LIT UP — vivid saturated petals + clearly visible warm-glowing CORE / HEART / THROAT / INTERIOR that reads like a tiny candle-flame, paper-lantern interior, or ember-core. The flowers radiate their own soft warm light. NEVER flat / dull / non-glowing.
 
-THIS IS THE EXACT LOOK — REPEAT ACROSS EVERY FLOWER IN THE FRAME:
-- Each marigold has a glowing warm-amber CENTER lit like a candle-flame, the petals around it backlit / catching the glow
-- Each foxglove-bell has a glowing warm-amber INTERIOR like a tiny paper-lantern
-- Each rose has a glowing warm-pink-amber CORE radiating outward
-- Each dahlia has a glowing warm-gold HEART pulsing soft light through its petal-spiral
-- Each hibiscus has a glowing warm-orange CENTER like a lit torch-flame
-- Each lily has a glowing warm-amber TROAT lit from within
-- Each sunflower has a glowing warm-gold DISC-CENTER
-- Each peony has a glowing warm CORE buried in its petal-mass radiating outward
+Two register-options for the OVERALL composition — pick whichever fits the rolled tunnel_setting:
 
-The flowers function as LANTERNS, CHANDELIERS, CANDLE-FLAMES, FAIRY-LIGHTS — but the light is INSIDE each flower's center, NOT external glow. Hundreds of glowing flower-cores spread across the tunnel walls, ceiling, and floor — like a constellation of tiny warm lanterns making up the entire visible light story.
+  REGISTER A — WHIMSICAL ENCHANTED WARM TUNNEL (fairytale Studio-Ghibli):
+  - Warm-amber bright flowers framing the entrance arch (marigolds / torch-ginger / orange dahlias / sunflowers / bauhinia) reading as a wreath of paper-lanterns
+  - Vibrant pink-coral-warm flowers (peonies / azaleas / tree-peony / poppies / zinnias) packing the foreground floor — bright welcoming
+  - Wisteria-bell strands / honeysuckle / jasmine peppering the tunnel-walls and ceiling as a constellation of warm-amber fairy-light dots
+  - A hanging chandelier-cluster of warm-glowing flowers (brugmansia / lotus / trumpet-vine / waratah) midway down
+  - Soft warm-magical destination-glow at the vanishing-point — warm rosewater-cream-amber, surrounded by silhouettes of more flowers, NOT a bright sun-beam or sci-fi portal-light
+  - Mood: enchanted Studio-Ghibli fairytale INVITATION — welcoming, awe-inspiring, a place you WANT to walk into
 
-━━━ HARD MANDATES (every render) ━━━
+  REGISTER B — DRAMATIC DARK TUNNEL WITH BRILLIANTLY-LIT FOREGROUND BLOOMS:
+  - Near-dark / cave-charcoal-violet / deep-forest-dark middle and far depth
+  - FOREGROUND blooms super-saturated and brilliantly lit (passiflora / brugmansia / fuchsia / rhododendron / echinacea / hibiscus / coneflower / evening primrose) — petals BRIGHT, cores OBVIOUSLY GLOWING, the contrast against the dark makes them look unmistakably self-illuminating
+  - Mid-depth tunnel-walls packed with smaller flower-cores constellating as a trail-of-lanterns receding into the deep dark
+  - NO bright destination-glow at the vanishing-point — the tunnel-end recedes into deep unlit dark (just dark, nothing threatening, no scary portal)
+  - The unlit darkness BACKGROUNDS the brilliantly-lit flowers — the flowers POP as the entire light story
+  - Mood: dramatic-magical — the brilliant flowers fight the dark and win, the constellation of cores feels protective / enchanted / heroic, NOT ominous
 
-1. **DARK / DIM AMBIENT** — the tunnel itself is near-black, deep shadow, dim cave/grotto/night-darkness. NO bright lighting, NO daylight, NO sun-shafts. The flowers are the ONLY illuminated elements.
+⚠️ Both registers REQUIRE: every visible flower has a clearly glowing core. The flowers look LIT UP. The unifying signature is vivid saturated foreground blooms with obvious warm-glowing centers.
 
-2. **GLOWING FLOWER CORES** — every visible flower has a clearly warm-glowing CENTER / HEART / INTERIOR. Use phrases like "glowing warm-amber center," "lit-from-within core," "lantern-flame heart," "petals backlit by their own glowing core," "candle-flame center."
+━━━ HARD MANDATES (every render, BOTH registers) ━━━
 
-3. **NO BRIGHT EXIT-GLOW AT THE VANISHING POINT** — the tunnel does NOT terminate in a bright light, sun-shaft, magic-portal, glowing-orb, or exit-light. The deep distance recedes into darkness. The flower-cores throughout the tunnel ARE the entire light story.
+1. **EVERY FLOWER HAS A GLOWING CORE** — describe explicitly per species: marigold-core glowing warm-amber like a candle-flame, foxglove-bell glowing warm-amber from within like a paper-lantern, rose-core glowing warm-pink-amber like an ember-heart, dahlia-heart glowing warm-gold, hibiscus-center glowing warm-orange, lily-throat glowing warm-amber, etc.
 
-4. **NO SCI-FI / MAGIC effects** — NO bioluminescent magical glow / will-o-wisps / fairy-dust / electric-cyan / neon. The glow is naturalistic — flower-centers lit like wax candle-flames, paper-lantern interiors, ember-cores.
+2. **FOREGROUND FLOWERS BRILLIANTLY LIT** — the closest blooms to the camera are vivid saturated bright with visibly glowing cores. The foreground is the brightest area of the render.
 
-5. **FLOWERS PACKED DENSE** — every visible surface of the tunnel (walls / ceiling / floor / path-edge) is packed thick with flowers, hundreds of glowing-cores constellating across the frame.
+3. **FLOWERS PACKED DENSE ON EVERY VISIBLE SURFACE** — walls / ceiling / floor / archway all overflowing with flowers (no bare cave-wall sections, no bare bark sections, no empty surfaces — flowers blanket EVERYTHING in the foreground and midground).
 
-6. **POV INSIDE THE TUNNEL** — viewer is standing inside the tunnel, looking down the passage. Tunnel walls converge toward a deep-distance vanishing point that RECEDES INTO DARKNESS (not into light).
+4. **POV INSIDE / DOWN THE TUNNEL** — viewer standing inside the tunnel looking toward a vanishing point. Tunnel walls converge into the deep distance.
 
-🚫 ABSOLUTE BANS:
-  • NO bright exit-glow / sun-glow / portal-light / magic-orb at the vanishing point — the tunnel-end is DARK, the flowers are the lights
-  • NO sun-shafts / god-rays / theatrical light beams
-  • NO bioluminescent / sci-fi / will-o-wisps / fairy-dust / electric glow
-  • NO actual lamps / lanterns / candles / electric-lights visible in frame — the FLOWER-CENTERS are the lanterns
-  • NO bright daylight / clear noon / overcast / dawn — the tunnel is DIM / DARK
-  • NO real-world tourist tunnels (NO cobblestone Tuscan alleys / Parisian boulevards / etc.)
-  • NO empty surfaces — every wall / ceiling / floor area packed with glowing-cored flowers
-  • NO humans / pedestrians / figures (a distant silhouette OK at deep distance)
+5. **CHANDELIER + WALL-SCONCE + FLOOR-CANDLE DISTRIBUTION** — flower-lanterns distributed like a real lighting installation:
+   - Ceiling: hanging-cluster chandelier-flowers (trumpet-vine / brugmansia / wisteria / hanging dahlias)
+   - Walls: flower-cluster sconces at intervals (foxglove / hollyhock / fuchsia / lupine)
+   - Floor-edge: candle-cluster flowers along the path (marigold / dahlia / zinnia / hibiscus / poppy)
 
-✓ AMBIENT MOOD: subterranean-cave-dim / moonless-night-forest / dark-grotto / unlit-cathedral-interior / lava-tube-darkness / shadowy-cellar — the darkness MAKES the flower-cores shine.
+🚫 ABSOLUTE BANS (these break the aesthetic):
+  • NO bright sun-shaft / god-rays / sci-fi exit-glow at vanishing point (warm-magical glow OR deep-dark recession — NEVER a bright sun-beam or magic-portal-flash)
+  • NO scary / ominous / threatening / foreboding mood (Register B is DRAMATIC not SCARY — flowers FIGHT and WIN against the dark)
+  • NO bioluminescent magical / electric-cyan / will-o-wisps / fairy-dust / sci-fi-glow
+  • NO actual lamps / electric-lights / candles visible — FLOWER-CORES are the only lights
+  • NO real-world tourist-tunnels (no cobblestone Tuscan / Parisian)
+  • NO bright midday daylight / overcast / clear noon
+  • NO empty tunnel surfaces — every surface packed with flowers
+  • NO flat / dull / non-glowing flowers — every visible flower has a glowing core
+  • NO humans in midground (tiny silhouette at vanishing-point optional)
+
+━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
+Every render is an EPIC CINEMATIC MOVIE POSTER / GALLERY-PIECE FRAME — the kind of magical-garden establishing-shot that opens a Studio Ghibli film, the cover of a Tolkien-illustrated fairytale edition, the centerpiece of a Pinterest 'magical flower tunnel' board. EVERY QUADRANT of the frame carries weight — no empty quadrants, no quiet corners.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+
+  1. **FLOWERS PACKED 80-90% OF FRAME** — every visible surface of the tunnel (walls / ceiling / floor / archway / path-edges) overflows with dense flower-mass, hundreds of glowing flower-cores constellating across every quadrant
+  2. **BRILLIANT FOREGROUND BLOOM-POP** — closest flowers to the camera are vivid saturated bright with VIVID glowing cores — the foreground feels alive with light
+  3. **CHANDELIER + SCONCE + CANDLE DISTRIBUTION** — hanging chandelier-cluster midway down + wall-sconce flower-clusters at intervals + floor-candle-cluster blooms along the path edges
+  4. **CONSTELLATION-DEPTH RECESSION** — flower-cores get smaller and dimmer toward the deep distance, creating multi-tier vertical depth from packed-foreground to fading-distance
+  5. **ATMOSPHERIC TEXTURE** — drifting petal-fall / soft mist / mossy path / wet-stone reflection / lateral petal-drift / subtle atmospheric haze adding visual richness without competing with the flower-cores
+
+THINK: Studio Ghibli Howl's-Moving-Castle-garden-establishing-frame / Spirited-Away-spirit-realm-corridor / Princess-Mononoke-forest-path / Tim-Burton Alice-in-Wonderland enchanted-garden-tunnel / Brian-Froud faerie-realm-passage / Pinterest 'most-beautiful-flower-tunnel-Pinterest-board' / Magic-the-Gathering 'Cocoon of Avacyn' art / Disney-Princess secret-garden discovery / Tolkien-illustrated edition fairytale-passage.
+
+The viewer should GASP at the magical density. Every frame is a still someone would screenshot and want to step into.
+
+🚫 NO empty bare surfaces, NO sparse petals-on-stone, NO single hero bloom dominating — DENSITY across every quadrant.
 
 ━━━ THE TUNNEL SETTING ━━━
 ${tunnel_setting}
 
-━━━ THE FLOWER-LANTERNS — flower-centers that visually function as lights ━━━
+━━━ THE FLOWER-LANTERNS — flowers whose CORES function as the light fixtures ━━━
 ${flower_lanterns}
 
-These are the species whose CORES are glowing across the tunnel. EVERY flower in the frame has a warm-glowing center / heart / interior radiating soft warm light outward through its petals into the surrounding darkness.
-${phenomenonSection}━━━ COMPOSITION CRAFT — POV-DOWN-A-DARK-TUNNEL ━━━
+EVERY flower in the frame has a warm-glowing CENTER / HEART / INTERIOR / THROAT radiating soft warm light through its petals into the surrounding ambient.
+${phenomenonSection}━━━ COMPOSITION CRAFT — POV-DOWN-A-FLOWER-TUNNEL ━━━
 
-  • Strong vanishing-point perspective — tunnel walls + ceiling converge toward a deep DARK distance (NOT a light)
-  • Leading-line along the path / floor — drawing the eye DEEPER INTO THE DARK with the flower-cores like trail-of-lanterns
-  • Foreground tunnel-walls + ceiling packed close to the viewer with detailed glowing-core flowers
-  • Multi-tier depth: foreground bloom-detail with brightest glowing cores → midground tunnel-mass with smaller glowing cores → deep-distance fading into darkness
-
-━━━ FLOWER-CORE DISTRIBUTION — LANTERN CONSTELLATION ━━━
-
-The glowing-cored flowers are distributed across the tunnel like a real lighting installation:
-  • CEILING — overlapping hanging cascades with glowing-core flowers acting as chandelier-clusters (foxgloves with glowing throats, fuchsia with lit interiors, trumpet-flowers with glowing inner-cones)
-  • WALLS — flower-clusters at intervals with glowing centers acting as sconces (hibiscus with lit cores, dahlias with glowing hearts, hollyhock with glowing centers)
-  • FLOOR — clusters along the path with glowing cores acting as candle-flames (marigolds with lit centers, zinnias with glowing hearts, poppies with lit cores)
-  • RECEDING INTO DARK — the cores get smaller and dimmer toward the vanishing-point, where they fade into deep shadow
+  • Strong vanishing-point perspective — tunnel walls + ceiling converge toward a deep-distance point
+  • Leading-line along the path — drawing the eye DEEPER through the flower-tunnel with each glowing flower-core as a guide-marker
+  • Foreground: BRILLIANT vivid warm-color blooms (Register A: warm-amber / coral / pink whimsical / Register B: super-saturated foreground blooms popping against dark)
+  • Midground: tunnel-walls packed with smaller fairy-light cluster-flowers (wisteria-strands / jasmine / honeysuckle / foxgloves)
+  • Midground center: HANGING CHANDELIER flower-cluster
+  • Deep distance: EITHER soft warm-magical destination-glow surrounded by flower-silhouettes (Register A) OR deep dark recession with cores fading smaller and dimmer into unlit depth (Register B)
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting to support the dark-tunnel + glowing-flower-cores aesthetic. The ambient must be DIM enough that the flower-cores are the visible light story.
+Reinterpret the rolled lighting to support whichever register the tunnel_setting suggests. The flower-cores provide the WARM light story across both registers — the ambient supports it.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -6427,30 +6446,31 @@ ${sharedDNA.palette}
 ━━━ FLOWER SPECIES — STRICT ━━━
 ${sharedDNA.roster}
 
-Pick 3-4 species from the roster — each rendered with a clearly glowing warm-amber / warm-orange / warm-gold CENTER lit like a candle-flame, petals backlit from their own core.
+Pick 3-5 species from the roster. EVERY species rendered with a clearly glowing warm-amber / warm-orange / warm-gold / warm-pink CENTER lit like a candle-flame, petals backlit / catching the glow.
 
 ━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO bright exit-glow / sun-glow / portal-light / magic-orb at vanishing point — tunnel-end is DARK
-- 🚫 NO sun-shafts / god-rays / external light beams
-- 🚫 NO bioluminescent / sci-fi / will-o-wisps / fairy-dust / electric-cyan
-- 🚫 NO actual lamps / lanterns / candles / electric-lights — FLOWER-CENTERS are the only lights
-- 🚫 NO bright daylight / clear noon / dawn — DIM tunnel only
+- 🚫 NO bright sun-shaft / god-rays / sci-fi exit-glow / magic-portal-flash at vanishing-point
+- 🚫 NO scary / ominous / foreboding mood (Register B is dramatic-magical, NOT threatening)
+- 🚫 NO bioluminescent / electric-cyan / will-o-wisps / fairy-dust effects
+- 🚫 NO actual lamps / electric-lights / candles — FLOWER-CORES are the lights
 - 🚫 NO real-world tourist tunnels
-- 🚫 NO empty tunnel surfaces — every visible surface PACKED with glowing-cored flowers
+- 🚫 NO bright daylight / clear noon
+- 🚫 NO empty tunnel surfaces — every surface packed with flowers
+- 🚫 NO flat / dull / non-glowing flowers — every visible flower has a glowing core
 - 🚫 NO species outside the roster
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[POV-down-DARK-tunnel composition with vanishing-point receding into darkness], [the specific dark tunnel setting + 2-3 specific flower species packing its walls and ceiling], [GLOWING WARM-AMBER FLOWER-CORES as the light source — explicitly describe each species' center glowing like a lantern-flame / candle / lit paper-lantern], [flower-core constellation distribution — ceiling-chandelier-cores + wall-sconce-cores + floor-candle-cores receding into deep dark], [near-black ambient making the cores POP]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the glowing-cores aesthetic]' : ''}, [tunnel-end fading into DARKNESS not light]
+[POV-down-flower-tunnel composition], [the specific tunnel setting + 3-5 specific flower species packing every surface], [GLOWING WARM-AMBER FLOWER-CORES as the entire light source — explicitly describe each species' center glowing like a candle / paper-lantern / ember-core], [flower-lantern constellation distribution — ceiling chandelier + wall sconces + floor candles], [REGISTER A or B ambient — warm enchanted whimsical OR dramatic-dark with brilliant foreground bloom-pop]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the lit-flowers aesthetic]' : ''}, [vanishing-point — soft warm-magical destination-glow OR deep dark recession, NEVER a bright sun-beam or sci-fi portal-flash]
 
-CRITICAL — the FLOWER-CORES are LITERALLY the light source. Dark tunnel + glowing flower-centers = the look. NO bright exit-glow, NO sun-shaft, NO sci-fi glow, NO external light. Each flower in frame has a visibly glowing warm center radiating outward through its petals.
+CRITICAL — every visible flower has a clearly glowing core. The flowers look UNMISTAKABLY LIT UP. Both whimsical-warm AND dramatic-dark registers are valid as long as foreground flowers pop brilliantly with glowing cores. NEVER a bright sun-beam exit. NEVER ominous.
 
-Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the dark-tunnel composition + the tunnel setting.`;
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
-    BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+      BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { city_setting, architectural_detail, atmospheric_phenomenon } = slots;
 
     const phenomenonSection = atmospheric_phenomenon
@@ -8220,14 +8240,19 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
     } = slots;
 
     // RENDER MODE BRANCHING — three modes:
-    //   1. classic-diorama   → handcrafted HO-scale terrain (existing)
-    //   2. real-world        → tiny train in REAL environments
+    //   1. classic-diorama   → handcrafted diorama terrain (existing)
+    //   2. real-world        → toy train in REAL everyday environments
+    //                          (family room floor, garden, sandbox,
+    //                          porch, camp site, gutter, kid's bedroom)
     //   3. themed-cinematic  → train in genre-coded immersive worlds
+    //
     // World-mode fires when sharedDNA.renderMode === 'world'.
-    // Inside world-mode: ~65% real-world, ~35% themed-cinematic.
+    // Inside world-mode: 100% real-world for now (themed mode dialed
+    // to 0% while we focus on real-everyday quality — bump back up
+    // when real-world converges).
     const isWorldMode = sharedDNA.renderMode === 'world';
     const worldRoll = Math.random();
-    const mode = !isWorldMode ? 'classic' : worldRoll < 0.65 ? 'real' : 'themed';
+    const mode = !isWorldMode ? 'classic' : worldRoll < 1.0 ? 'real' : 'themed';
 
     // ─── CLASSIC DIORAMA MODE ──────────────────────────────────────────
     if (mode === 'classic') {
@@ -8291,29 +8316,36 @@ Wide diorama frame — tiny model-train in sweeping handcrafted terrain. Track-s
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
     }
 
-    // ─── REAL-WORLD MODE — toy train IN actual real environments ───────
+    // ─── REAL-WORLD MODE — toy train in REAL everyday environments ─────
     if (mode === 'real') {
-      return `You are a hobby-photographer documenting a TINY MODEL TRAIN running through REAL HUMAN ENVIRONMENTS for ToyBot. NOT a handcrafted diorama. The toy train is INSIDE our real world at its tiny scale. The wow is scale tension: train is 1/87, the kitchen table / sleeping cat / forest moss / sandbox is 1:1 REAL.
+      return `You are a casual photographer capturing a SMALL TOY TRAIN running on its tracks in a recognizable REAL EVERYDAY setting for ToyBot. Like a kid set up a train on the family-room floor, in the backyard garden, on the porch, at a campsite, in a sandbox, by the gutter. The setting is a REAL space anyone would recognize. The toy train is the cute focal subject INSIDE that real space.
 
-⚠️⚠️⚠️ ABSOLUTE RULE — REAL WORLD, NOT DIORAMA ⚠️⚠️⚠️
-This is NOT scratch-built terrain. NOT ground-foam. NOT lichen-trees. NOT plaster-rock. NOT static-grass. The setting IS a REAL kitchen surface / REAL moss / REAL grass / REAL bed sheet / REAL coffee mug / REAL cat / REAL children's hands. The train is a tiny physical object existing INSIDE our human-scale world. If render reads as "model railroad diorama" → CRITICAL FAILURE.
+⚠️⚠️⚠️ ABSOLUTE BAN — NEVER SAY THESE WORDS ⚠️⚠️⚠️
+DO NOT use "HO-scale" / "N-scale" / "1:87" / "1:160" — these are diorama-trigger tokens.
+DO NOT use "model train" / "model locomotive" / "model railroad" — same.
+DO NOT use "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard" / "tilt-shift".
+INSTEAD use: "small toy train" / "tiny toy locomotive" / "kids' toy train" / "Lionel-style toy train" / "tracks laid out on" / "train running on the floor of" / "tracks weaving across".
 
-━━━ TOY-IN-REAL-WORLD PHOTOGRAPHY ━━━
-HO-scale (1:87) or N-scale die-cast model train, tracks laid out on / through / across REAL household, garden, or natural surfaces. Real-world textures rendered explicitly: real wood grain, real fabric weave, real moss, real grass blades towering, real dust, real morning light through a real window, real shadow patterns from real objects, real dew, real condensation.
+If render reads as a tilt-shift miniature diorama photo → CRITICAL FAILURE. We want toy-on-the-floor / toy-in-the-garden / toy-on-the-porch — a real photo of a small toy in a real place.
 
-━━━ THE SCALE TENSION IS THE WOW ━━━
-Real-world objects act as the SCENERY at human scale. A coffee mug is a skyscraper. A sleeping cat is a mountain range. A pancake stack is a butte. A book is a library tower. A bonsai is a forest. The brain reads it twice: first as "miniature world", then as "wait — that's REAL coffee, REAL cat, REAL grass" — scale revelation is the entire point.
+━━━ TOY-IN-REAL-EVERYDAY PHOTOGRAPHY ━━━
+Small toy train running on its tracks in a real recognizable everyday space: hardwood family-room floor, basement concrete, backyard garden bed, sandbox, garden path, driveway, gutter, picnic blanket at a campsite, porch planks, kitchen tile, kid's bedroom carpet, forest floor, lake dock, beach sand. Real-world textures rendered explicitly: real wood grain, real concrete, real garden mulch, real grass blades, real fabric weave, real dust, real fallen leaves, real puddle reflections, real shadows.
 
-━━━ THE TRAIN — EXACT CONSIST ━━━
+━━━ SETTING IS THE WOW ━━━
+The real-everyday setting is instantly recognizable. The viewer says "I've been in that kitchen / garden / porch / campsite." The toy train is the cute small subject — recognizable as a toy train but the SCENE is what's special. Real objects (mug, shoe, hose, garden tool, picnic blanket, Christmas tree, BBQ grill) act as scenery and visibly dwarf the train.
+
+━━━ THE TRAIN ━━━
 ${train_consist}
+
+Treat the consist above as a SMALL TOY train (not a model-railroad scale-claim). Render with toy-grade charm — a Lionel-style or Brio-style small toy train, NOT a hobbyist scale model layout.
 
 ━━━ WEATHER + TIME OF DAY ━━━
 ${train_weather}
 
-━━━ THE REAL-WORLD SETTING ━━━
+━━━ THE REAL-EVERYDAY SETTING ━━━
 ${world_real_setting}
 
-This is the WHERE. The setting must be RECOGNIZABLE as a real human environment / object. Render real-world textures explicitly: real grain / real moss / real fabric / real glass / real dust / real reflection / real natural light. The toy train weaves through, around, or across this real environment.
+This is the WHERE. The setting must be RECOGNIZABLE as a real everyday space — family room, garden, sandbox, porch, etc. Render real-world textures and real-world lighting (window light / dappled sunlight / lamp glow / overcast / golden hour over the backyard). The toy train sits on or runs along its tracks IN this real space.
 
 ━━━ CAMERA ━━━
 ${camera_angle}
@@ -8331,18 +8363,19 @@ ${sharedDNA.colorPalette}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION RULES ━━━
-- The TRAIN is 1/87 or 1/160 — tiny, identifiable, intricate detail (panel-line wash, knuckle-couplers, lit headlamp)
-- The ENVIRONMENT is 1:1 — real-world scale, recognizable real objects, real textures
-- Real-world LIGHTING — window light, lamp glow, dappled sunlight, kitchen overhead, real shadows
-- One specific real-world object visibly dwarfs the train (the coffee mug, the cat, the bonsai, the pancake)
-- Real human elements OK at real scale — a hand visible at frame edge, a person walking past in soft-focus background, a child's blurry silhouette
-- NO scratch-built scenery, NO ground foam, NO baseboards, NO "model railroad layout" language
+- The TRAIN is small and toy-like — Lionel-style / Brio-style / Thomas-style, a few inches long
+- The SETTING is the dominant visual — real recognizable everyday space, 1:1 real-world textures
+- LIGHTING is real-world: real window light / real outdoor sun / real lamp glow / real shadow patterns
+- One specific real-world object visibly dwarfs the train (mug / shoe / watering can / picnic basket / cat)
+- Real human elements OK at real scale — a kid's hand at frame edge, a person walking past in soft-focus, a dropped sneaker
+- The vibe is casual everyday photography — like a parent snapping a phone pic of their kid's train setup
 
 ⚠️ FAILURE CONDITIONS
-• If render reads as a model-railroad diorama / hobbyist setup → FAILED
-• If scenery is handcrafted (ground-foam / lichen / plaster) instead of REAL textures → FAILED
-• If the train is 1:1 (real-size) → FAILED. Train stays TINY.
-• If no real-world object visibly dwarfs the train → FAILED. Scale tension is mandatory.
+• If render reads as a tilt-shift miniature / model-railroad-enthusiast diorama photo → FAILED
+• If scenery is handcrafted scratch-built terrain → FAILED
+• If "HO-scale" / "model train" wording appears anywhere → FAILED
+• If the train is 1:1 (real-size locomotive) → FAILED. Train stays small/toy.
+• If no real everyday object visibly contextualizes the train → FAILED
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
     }
@@ -9174,6 +9207,134 @@ ${isGroup ? 'Wider establishing frame with the group + the SPECTACULAR location 
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
+
+  CHIBIBOT_CUDDLY_AQUATIC: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_1,
+      creature_2,
+      interaction,
+      setting,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    // phenomenon template-gated at 60%
+    const phenomenonFires = Math.random() < 0.6;
+
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing CUDDLY AQUATIC scenes for ChibiBot — a PAIR of impossibly cute baby aquatic creatures cuddling together in their underwater / surface-water habitat. Sea otter pups holding paws, baby seals on ice, hermit-crab anemone villages, jellyfish-blanket octopuses, axolotl tea rooms, dumbo octopuses with bonnets. Pixar / Sanrio / Studio Ghibli / Finding Nemo cuteness${phenomenonFires ? ', with a magical aquatic phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG THEY ARE TOO CUTE TOGETHER. I CAN'T." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY: TWO CREATURES, BOTH VISIBLE, EQUAL SCALE ━━━
+
+FORBIDDEN: solo-creature renders. BOTH creature_1 AND creature_2 must appear in the final frame, both visibly present, both with VISIBLE BODIES AND FACES. NOT one creature with a tiny silhouette of another. NOT one big creature dwarfing a tiny creature (no whale-with-clownfish-dwarf-pairing). The pair must be COMPARABLE SCALE — both creatures sized similarly so the eye reads them as PEERS / a PAIR / equals. If the picked species naturally differ in size, render them at chibi-comparable scale (baby whale and baby seal both at toy-figurine proportions, not literal-anatomy proportions). The two creatures must be VISIBLY TOUCHING or CLEARLY INTERACTING — paws/flippers touching, cheeks pressed, both facing each other mid-interaction. THIS IS A PAIR-BOND PATH — solo renders FAIL the path identity.
+
+━━━ MANDATORY: FULLY UNDERWATER OR FULLY SURFACE — NEVER MIXED ━━━
+
+The setting axis specifies one habitat type. Render it STRICTLY. If the setting is UNDERWATER (coral reef / kelp forest / deep-sea / abyssal / sunken-architecture / mermaid grotto / midwater / cathedral-of-light-shafts), render it FULLY SUBMERGED — NO water surface visible, NO sky visible, NO land visible, NO river-running-through, NO mixed surface-and-deep. All light is filtered through water (caustic light-play, bubble trails, sun-shafts cutting through water column). Even at sunset/sunrise, light reaches the scene THROUGH the water — color cast tinted by depth, not sky. If the setting is SURFACE (lily-pad pond / cattail marsh / floating-on-water / surface-island), render it with WATER SURFACE clearly visible — creatures on or just above the surface, sky/cloud above. If the setting is TIDE POOL or ICE EDGE, render it with the specific shoreline / ice mass visible. NO mixed scenes. NO underwater-with-sunset-sky-visible. NO lily-pond-with-deep-sea-coral-below. Pick the habitat once and commit to it.
+
+━━━ MANDATORY: ONLY MARINE CREATURES (the pool guarantees this — DO NOT add land creatures) ━━━
+
+The creature pool is STRICTLY-MARINE — fish, sharks, dolphins, whales, sea turtles, octopus, jellies, crabs, sea stars, seahorses, manta rays, eels, anemones, sea-lions, manatees, baby sharks, etc. DO NOT add land animals like cats, dogs, foxes, rabbits, mice, bears, raccoons, etc. — they don't live underwater. DO NOT add ducks / otters / penguins / beavers — those are filtered out of the marine pool for this path. The two picked creatures are ALWAYS marine. Render them as marine.
+
+━━━ MOVIE POSTER MOMENT — every shot must be a frame-worthy still ━━━
+
+This is NOT a quick snapshot. EVERY render must be poster-worthy — a single frame that someone would screenshot, save to their wallpaper folder, and stare at. The pair-bond moment must be the EMOTIONAL CENTER of a composition you'd see in a Pixar / Studio Ghibli / Finding Nemo / Studio Laika movie poster. Composition: deliberate rule-of-thirds or perfect centered symmetry. Light: dramatic and intentional (caustic light-shafts, golden god-rays through water, bioluminescent halo, rim-light along creature silhouettes). Color: saturated and harmonious (the scene palette + time-of-day cast working together). Depth: foreground anchor + midground heroes + atmospheric far-distance haze. EVERY render makes the viewer go AWWW AND ALSO WOW.
+
+━━━ SPARKLE STACK — MAXIMUM ADORABLE EFFECTS ━━━
+
+Layer ALL of these atmospheric effects on EVERY render (not optional — stack them ALL):
+- Caustic light-play dancing across creatures and habitat surfaces
+- Sun-shafts / god-rays cutting through the water column in visible parallel beams
+- Rising bubble-trails of jewel-iridescent translucent spheres in varied sizes
+- Plankton-sparkle particles drifting through the water column (thousands of tiny pin-points of light)
+- Sparkle / star-burst flares around BOTH creatures' eyes (multi-catchlight glints)
+- Bioluminescent ambient glow around magical features (anemones, jellyfish, glow-coral)
+- Dewdrop / water-pearl highlights on creatures' fur / scales / skin
+- Ripple-rings on the water surface OR refraction-lens distortion in the water
+- Subtle lens flares / bokeh-orbs in the background atmospheric haze
+- Pollen-like floating particles tinted to time-of-day color cast
+- Heart-shaped bubbles / floating-heart particles drifting between the creatures (5-10 visible)
+- Glow-halo around the cuddling-pair (cute aura visible)
+
+If the render doesn't have AT LEAST 6 of these effects visible, the cute-amplification FAILED. Stack obsessively. Cuteness is the canvas — sparkles are the layered paint.
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Every render must produce: AWWW + instant smile + "I want to hug them both" instinct. If the render has even a whisper of dark / edgy / predator-prey / shark-with-teeth — it FAILED. The reaction is wholesome aquatic-pair-bliss. Lighting + weather + phenomenon match the SCENE naturally — underwater darkness reads as cozy bioluminescent magic, not scary deep-sea.
+
+━━━ RENDERED CGI — NEVER PHOTOREAL, NEVER DOCUMENTARY ━━━
+
+Never photoreal. NEVER documentary-wildlife. Never flat illustration. Render as polished 3D CGI in the designer-collectible / Pop-Mart-vinyl register: glossy materials with subsurface scattering, ultra-clean form language with crisp surface definition, dewy highlights. Creatures render with chibi proportions — oversized head, massive glassy reflective multi-catchlight eyes, tiny stubby flippers/paws, round chubby bodies, blushing cheeks, soft fluffy or jelly-soft textures, picture-book clarity. Water has caustic light-play, dreamy bubble-trails, sparkle particles. Coral / kelp / anemones / ice render glossy-crisp + bright-saturated, never murky-documentary. Let the MEDIUM tag control the specific render style.
+
+━━━ NO DARK / NO INTENSE / NO PREDATOR-PREY ━━━
+
+Absolutely no menace, no sharks-with-teeth, no orcas-hunting, no chase-scenes, no documentary-ocean-realism, no scary-deep, no eerie-glow. Safe + wholesome + pair-bond-bliss. Tone is kind and gentle. Lighting follows the time-of-day axis honestly — sunlit-surface = bright-aqua-glow, deep = cozy-bioluminescent-magical, dawn-pond = pink-pearl, moonlit-surface = silver-blue, golden-hour = peach-amber through the water. DO NOT force everything to "warm sunlit" — variety is the goal.
+
+━━━ NO HUMANS ━━━
+
+No human figures, no faces, no hands. All subjects are aquatic creatures (real-exaggerated or fantasy-cute). If a setting would normally include a diver / swimmer / sailor, reimagine it without — the creatures own the underwater world entirely.
+
+━━━ IMPOSSIBLE BEAUTY ━━━
+
+Wall-poster quality. NOT dramatic-beautiful (that's GlowBot) — CUTE-beautiful. Composition balanced and charming. Every element rendered with love — the kind of image a kid pins above their bed.
+
+━━━ THE CUDDLY PAIR (both creatures ALWAYS present) ━━━
+
+${creature_1}
+${creature_2}
+
+The TWO creatures should be visibly TOGETHER — not separated, not in different zones of the frame. Equal prominence, equal sharpness, both clearly readable. Different species/sizes OK; the cuteness comes from the pair bond.
+
+━━━ THE CUDDLE INTERACTION (what they're doing TOGETHER right now) ━━━
+${interaction}
+
+━━━ THE AQUATIC HABITAT (the stage) ━━━
+${setting}
+
+━━━ TIME OF DAY (drives light + color cast — render honestly through the water) ━━━
+${time_of_day}
+
+━━━ WEATHER (affects surface scenes and water-clarity) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL (drifting bubbles, plankton sparkles, caustics, ambient charm) ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail the eye finds AFTER the pair) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ BLOW IT UP — AQUATIC CUTENESS AMPLIFICATION ━━━
+
+Cuteness is the canvas, not the ceiling. Stack aquatic-cute-elements: jewel-iridescent rising bubble-trails + caustic light-play across creatures and habitat + glossy dewy surfaces with subsurface scattering + volumetric glow tinted to MATCH the time-of-day axis above (silvery-blue at moonlit, indigo-pink at blue hour, peach-amber through the water at golden hour, pearl-grey at dawn, cool-overcast in soft daylight, bioluminescent-aqua-magical in deep-sea — NOT forced warm-golden when the axis says otherwise) + plankton sparkles drifting + sun-shaft-caustic-dapples + layered atmospheric charm. For creatures, stack: massive dewy glassy eyes with multi-layer catchlights + jelly-soft / fluffy / soaked-soft textured surfaces + blushing cheeks + paws/flippers visibly INTERLOCKED or CONTACT-touching + relational body posture. For aquatic setting, stack environmental cuteness: dense coral/kelp/anemone detail in every corner, glowing sea-features, blooming aquatic flora, dappled water-light, postcard-pretty underwater composition. Obsessive detail in service of wholesome pair-bliss delight.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (SETTING IS A CO-HERO + PAIR IS THE HEART) ━━━
+
+The cuddling pair AND the aquatic habitat are equal co-heroes — NOT a tight close-up portrait of the pair with a generic-water backdrop. Pull the camera back so the viewer can SEE WHERE this is happening: tropical reef with coral towers, kelp cathedral with light-shafts, arctic ice-edge with submerged blue walls, mangrove-root tangle with sun-dapples, sunken pirate ship interior with treasure, lily-pad raft on a koi pond with cherry-blossom petals on the surface. The habitat is half the magic — frame it as such.
+
+Wider establishing frame with the pair as focal point (40-50% of frame) and the AQUATIC HABITAT VISTA filling the rest (50-60% of frame). The two creatures clearly TOGETHER with visible contact / interaction — not separated. Viewer should name BOTH (1) what the two creatures are doing together AND (2) what kind of aquatic habitat they're in in one glance. Time-of-day color cast honest through the water. Surprise element tucked where the eye finds it second.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
 
 
 };

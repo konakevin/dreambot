@@ -6,8 +6,15 @@
  * Toy-ness is the art; dramatic lighting elevates the medium to cinematic.
  */
 
+// Removed "in a handcrafted practical set" from the prefix on 2026-05-19:
+// the early-token weight was forcing every toybot render into a diorama
+// look, overriding world-mode paths that place toys in REAL environments
+// (kitchen tables, sleeping cats, cinematic genre worlds). Each path's
+// medium and/or template now declares its own world-context language —
+// classic dioramas still add "handcrafted practical set" inline, but
+// world-mode paths are free to render real environments.
 const PROMPT_PREFIX =
-  'toy photography in a handcrafted practical set, action-packed toy-world storytelling, toy-ness elevated as the subject';
+  'toy photography, real physical toys, action-packed toy-world storytelling, toy-ness elevated as the subject';
 
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, hyper detailed, masterpiece quality';
 
