@@ -16,7 +16,14 @@
  */
 
 import { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenLayout } from '@/components/ScreenLayout';
@@ -75,107 +82,112 @@ export default function SettingsAdvancedModeScreen() {
 
   return (
     <ScreenLayout title="Advanced Mode">
-      <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
-        <Text style={[styles.intro, { color: colors.textSecondary }]}>
-          When Advanced Mode is on (Create tab), your prompt is sent verbatim to the model — no AI
-          enhancement, no medium or vibe directives, no face swap. Pick which model handles those
-          renders. Premium models cost more sparkles per render.
-        </Text>
-      </View>
-      {loading ? (
-        <View style={{ paddingTop: 40, alignItems: 'center' }}>
-          <ActivityIndicator color={colors.accent} />
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 48 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+          <Text style={[styles.intro, { color: colors.textSecondary }]}>
+            When Advanced Mode is on (Create tab), your prompt is sent verbatim to the model — no AI
+            enhancement, no medium or vibe directives, no face swap. Pick which model handles those
+            renders. Premium models cost more sparkles per render.
+          </Text>
         </View>
-      ) : (
-        <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-          {TIER_ORDER.map((tier) => {
-            const tierModels = IMAGE_MODELS.filter((m) => m.tier === tier);
-            if (tierModels.length === 0) return null;
-            return (
-              <View key={tier} style={{ marginTop: 16 }}>
-                <View style={styles.tierHeader}>
-                  <Text style={[styles.tierLabel, { color: colors.textPrimary }]}>
-                    {TIER_LABELS[tier]}
-                  </Text>
-                  <Text style={[styles.tierCost, { color: colors.textSecondary }]}>
-                    {tierModels[0].sparkleCost === 1
-                      ? '1 sparkle / render'
-                      : `${tierModels[0].sparkleCost} sparkles / render`}
-                  </Text>
-                </View>
-                {tierModels.map((opt) => {
-                  const isSelected = opt.id === selected;
-                  return (
-                    <TouchableOpacity
-                      key={opt.id}
-                      onPress={() => handleSelect(opt.id)}
-                      activeOpacity={0.7}
-                      style={[
-                        styles.option,
-                        {
-                          backgroundColor: isSelected ? colors.accent + '22' : colors.surface,
-                          borderColor: isSelected ? colors.accent : colors.border,
-                        },
-                      ]}
-                    >
-                      <View style={{ flex: 1, marginRight: 12 }}>
-                        <View style={styles.optionTitleRow}>
+        {loading ? (
+          <View style={{ paddingTop: 40, alignItems: 'center' }}>
+            <ActivityIndicator color={colors.accent} />
+          </View>
+        ) : (
+          <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
+            {TIER_ORDER.map((tier) => {
+              const tierModels = IMAGE_MODELS.filter((m) => m.tier === tier);
+              if (tierModels.length === 0) return null;
+              return (
+                <View key={tier} style={{ marginTop: 16 }}>
+                  <View style={styles.tierHeader}>
+                    <Text style={[styles.tierLabel, { color: colors.textPrimary }]}>
+                      {TIER_LABELS[tier]}
+                    </Text>
+                    <Text style={[styles.tierCost, { color: colors.textSecondary }]}>
+                      {tierModels[0].sparkleCost === 1
+                        ? '1 sparkle / render'
+                        : `${tierModels[0].sparkleCost} sparkles / render`}
+                    </Text>
+                  </View>
+                  {tierModels.map((opt) => {
+                    const isSelected = opt.id === selected;
+                    return (
+                      <TouchableOpacity
+                        key={opt.id}
+                        onPress={() => handleSelect(opt.id)}
+                        activeOpacity={0.7}
+                        style={[
+                          styles.option,
+                          {
+                            backgroundColor: isSelected ? colors.accent + '22' : colors.surface,
+                            borderColor: isSelected ? colors.accent : colors.border,
+                          },
+                        ]}
+                      >
+                        <View style={{ flex: 1, marginRight: 12 }}>
+                          <View style={styles.optionTitleRow}>
+                            <Text
+                              style={{
+                                color: colors.textPrimary,
+                                fontSize: 15,
+                                fontWeight: '600',
+                              }}
+                            >
+                              {opt.label}
+                            </Text>
+                            <View
+                              style={[
+                                styles.providerBadge,
+                                { borderColor: colors.border, backgroundColor: colors.background },
+                              ]}
+                            >
+                              <Text
+                                style={[styles.providerBadgeText, { color: colors.textSecondary }]}
+                              >
+                                {PROVIDER_LABELS[opt.provider]}
+                              </Text>
+                            </View>
+                          </View>
                           <Text
                             style={{
-                              color: colors.textPrimary,
-                              fontSize: 15,
-                              fontWeight: '600',
+                              color: colors.textSecondary,
+                              fontSize: 12,
+                              marginTop: 4,
+                              lineHeight: 17,
                             }}
                           >
-                            {opt.label}
+                            {opt.description}
                           </Text>
-                          <View
-                            style={[
-                              styles.providerBadge,
-                              { borderColor: colors.border, backgroundColor: colors.background },
-                            ]}
-                          >
-                            <Text
-                              style={[styles.providerBadgeText, { color: colors.textSecondary }]}
-                            >
-                              {PROVIDER_LABELS[opt.provider]}
-                            </Text>
-                          </View>
                         </View>
-                        <Text
+                        <View
                           style={{
-                            color: colors.textSecondary,
-                            fontSize: 12,
-                            marginTop: 4,
-                            lineHeight: 17,
+                            width: 22,
+                            height: 22,
+                            borderRadius: 11,
+                            borderWidth: 2,
+                            borderColor: isSelected ? colors.accent : colors.border,
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
-                          {opt.description}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: 11,
-                          borderWidth: 2,
-                          borderColor: isSelected ? colors.accent : colors.border,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        {isSelected && (
-                          <Ionicons name="checkmark" size={14} color={colors.accent} />
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            );
-          })}
-        </View>
-      )}
+                          {isSelected && (
+                            <Ionicons name="checkmark" size={14} color={colors.accent} />
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </ScrollView>
     </ScreenLayout>
   );
 }

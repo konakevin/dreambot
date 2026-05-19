@@ -1,36 +1,35 @@
 /**
- * Edge Function: upscale-image — 2× HD upscale of a posted dream via
- * Real-ESRGAN (nightmareai/real-esrgan). Pro-gated. Caches the result
- * onto uploads.image_url_hq so subsequent requests skip the upscale.
+ * Edge Function: upscale-image — 4× HD upscale of a posted dream via
+ * Clarity Upscaler (philz1337x/clarity-upscaler). Pro-gated. Caches
+ * the result onto uploads.image_url_hq so subsequent requests skip
+ * the upscale.
  *
  * POST /functions/v1/upscale-image
  * Auth: Bearer <user JWT>
  * Body: { upload_id: string }
  * Response 200: { image_url_hq: string, cached: boolean }
  *
- * Why scale=2 (not 4): 4× over-hallucinates tiny features — small
- * character eyes (only 10-15px in the original 768x1344 source) get
- * rebuilt with photo-realistic priors that mangle stylized art like
- * TinyBot's cartoon characters. 2× output is 1536×2688 (~4 MP) which
- * is plenty for save-to-photos / phone screens.
+ * Why Clarity (not Real-ESRGAN): Real-ESRGAN's general model is
+ * trained primarily on photographs — tiny illustrated features (e.g.
+ * 10-15px character eyes in TinyBot/ChibiBot/BloomBot renders) get
+ * rebuilt with photo-realistic priors and mangled. Clarity is an
+ * SDXL-based diffusion upscaler that respects the source style
+ * across both photoreal and illustrated content. With low creativity
+ * (0.2) + high resemblance (1.5) it adds detail without reimagining.
  *
- * Why face_enhance=false: Real-ESRGAN's optional GFPGAN pass rebuilds
- * faces aggressively and would drift face-swap identity. We trust
- * Flux's original face — only upscale the canvas.
+ * Output: 3072×5376 (4× of 768×1344 source) — ~16 MP poster-quality.
  *
- * Latency: ~5-10s at scale=2. The client shows a full-screen overlay
- * during the wait.
+ * Latency: ~25-35s. Client shows a fullscreen overlay during wait.
+ * Cost: ~$0.008 per upscale on Replicate.
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { persistToStorage } from '../_shared/persistence.ts';
+import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const REAL_ESRGAN_MODEL = 'nightmareai/real-esrgan';
 
 interface RequestBody {
   upload_id: string;
@@ -100,93 +99,21 @@ Deno.serve(async (req) => {
     return json({ image_url_hq: uploadRow.image_url_hq, cached: true }, 200);
   }
 
-  // ── Run Real-ESRGAN 4× via Replicate ───────────────────────────────────
+  // ── Run Clarity Upscaler 4× via shared helper ─────────────────────────
   console.log(
     `[upscale-image] user=${user.id.slice(0, 8)} upload=${body.upload_id.slice(0, 8)} starting upscale`
   );
 
-  const submitRes = await fetch(
-    `https://api.replicate.com/v1/models/${REAL_ESRGAN_MODEL}/predictions`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${replicateToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        input: {
-          image: uploadRow.image_url,
-          scale: 2,
-          face_enhance: false,
-        },
-      }),
-    }
+  const persistedUrl = await upscaleAndCache(
+    supabase,
+    replicateToken,
+    body.upload_id,
+    uploadRow.image_url,
+    user.id
   );
-
-  if (!submitRes.ok) {
-    const text = await submitRes.text();
-    console.error(`[upscale-image] Replicate submit failed (${submitRes.status}): ${text}`);
-    return json({ error: `Upscale submit failed (${submitRes.status})` }, 502);
+  if (!persistedUrl) {
+    return json({ error: 'Upscale failed' }, 502);
   }
-
-  const submitData = await submitRes.json();
-  if (!submitData.id) {
-    return json({ error: 'No prediction ID from Replicate' }, 502);
-  }
-
-  // Poll — Real-ESRGAN typically completes in 15-25s. We allow up to 60s.
-  const maxPolls = 30;
-  const intervalMs = 2000;
-  let upscaledTempUrl: string | null = null;
-
-  for (let i = 0; i < maxPolls; i++) {
-    await new Promise((r) => setTimeout(r, intervalMs));
-    const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${submitData.id}`, {
-      headers: { Authorization: `Bearer ${replicateToken}` },
-    });
-    const pollData = await pollRes.json();
-    if (pollData.status === 'succeeded') {
-      upscaledTempUrl =
-        typeof pollData.output === 'string' ? pollData.output : pollData.output?.[0];
-      break;
-    }
-    if (pollData.status === 'failed' || pollData.status === 'canceled') {
-      const errMsg = pollData.error ?? 'unknown';
-      console.error(`[upscale-image] Replicate ${pollData.status}: ${errMsg}`);
-      return json({ error: `Upscale ${pollData.status}: ${errMsg}` }, 502);
-    }
-  }
-
-  if (!upscaledTempUrl) {
-    return json({ error: 'Upscale timed out (>60s)' }, 504);
-  }
-
-  // ── Persist to Supabase Storage ────────────────────────────────────────
-  let persistedUrl: string;
-  try {
-    persistedUrl = await persistToStorage(upscaledTempUrl, user.id, supabase);
-  } catch (err) {
-    console.error(`[upscale-image] Persist failed: ${(err as Error).message}`);
-    return json({ error: `Persist failed: ${(err as Error).message}` }, 500);
-  }
-
-  // ── Update uploads row with cached HQ URL ──────────────────────────────
-  const { error: updateErr } = await supabase
-    .from('uploads')
-    .update({
-      image_url_hq: persistedUrl,
-      image_url_hq_generated_at: new Date().toISOString(),
-    })
-    .eq('id', body.upload_id);
-
-  if (updateErr) {
-    // Non-fatal — we still return the URL to the user, just won't be cached.
-    console.warn(`[upscale-image] DB update failed: ${updateErr.message}`);
-  }
-
-  console.log(
-    `[upscale-image] user=${user.id.slice(0, 8)} upload=${body.upload_id.slice(0, 8)} done -> ${persistedUrl}`
-  );
 
   return json({ image_url_hq: persistedUrl, cached: false }, 200);
 });

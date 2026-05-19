@@ -24,7 +24,7 @@ type Listener = (state: OverlayState) => void;
 let listener: Listener | null = null;
 
 export const UpscaleOverlay = {
-  show(message = 'Upscaling to HD…', subMessage = 'This usually takes 5-10 seconds.') {
+  show(message = 'Upscaling to 4K…', subMessage = 'This usually takes 25-35 seconds.') {
     listener?.({ visible: true, message, subMessage });
   },
   hide() {
@@ -33,10 +33,10 @@ export const UpscaleOverlay = {
 };
 
 const SECONDARY_TIPS = [
-  'This usually takes 5-10 seconds.',
+  'This usually takes 25-35 seconds.',
   'Sharpening every pixel…',
+  'Refining textures…',
   'Almost there…',
-  'Adding finishing detail…',
 ];
 
 export function UpscaleOverlayHost() {

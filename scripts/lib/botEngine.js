@@ -38,6 +38,7 @@ const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
 const { distillStyle } = require('./styleDistiller');
+const { upscaleAndCache } = require('./upscaleClarity');
 const { buildRecipe } = require('./recipeBuilder');
 const { SONNET, HAIKU } = require('./models');
 
@@ -646,6 +647,25 @@ async function postAsBot({
     }
   } catch (err) {
     console.warn(`  ⚠️ style_summary distill failed: ${err.message}`);
+  }
+
+  // 4K pre-upscale via Clarity Upscaler. Bot posts dominate the feed
+  // and rack up the most saves by Pro users — pre-upscaling means every
+  // Pro long-press is instant (cache hit) rather than paying the ~30s
+  // upscale wait on first save. ~$0.008/render × 32 bot posts/day ≈
+  // $5-6/month. Failure here is non-fatal — the on-demand upscale-image
+  // Edge Function remains as a fallback for Pro long-presses.
+  try {
+    const replicateToken = getKey('REPLICATE_API_TOKEN');
+    const hqStart = Date.now();
+    const hqUrl = await upscaleAndCache(sb, replicateToken, uploadId, publicUrl, userId);
+    if (hqUrl) {
+      console.log(`  ✨ 4K HQ cached in ${((Date.now() - hqStart) / 1000).toFixed(1)}s`);
+    } else {
+      console.warn(`  ⚠️ 4K upscale skipped/failed (on-demand path will kick in)`);
+    }
+  } catch (err) {
+    console.warn(`  ⚠️ 4K upscale threw: ${err.message}`);
   }
 
   return publicUrl;

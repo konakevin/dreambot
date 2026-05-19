@@ -45,10 +45,11 @@ async function saveToPhotos(id: string, imageUrl: string, upscale: boolean) {
   }
 
   // ── HQ pathway (Pro users) ────────────────────────────────────────────
-  // Pro users get a 2× Real-ESRGAN HD upscale on every save (own posts
-  // or others'). The first request for any given post incurs ~5-10s
-  // wait; subsequent requests return instantly thanks to the
-  // image_url_hq cache on the uploads row.
+  // Pro users get a 4× Clarity Upscaler 4K upscale on every save
+  // (own posts or others'). The first request for any given post
+  // incurs ~25-35s wait; subsequent requests return instantly thanks
+  // to the image_url_hq cache on the uploads row. Bot-generated posts
+  // are pre-upscaled at render time so the cache is hot from day one.
   let urlToSave = imageUrl;
   if (upscale) {
     UpscaleOverlay.show();
@@ -82,7 +83,7 @@ async function saveToPhotos(id: string, imageUrl: string, upscale: boolean) {
     // "Asset couldn't be saved to photo library: Unknown error" on iOS 18+.
     await MediaLibrary.createAssetAsync(downloaded.uri);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Toast.show(upscale ? 'Saved in HD' : 'Saved to photos', 'checkmark-circle');
+    Toast.show(upscale ? 'Saved in 4K' : 'Saved to photos', 'checkmark-circle');
   } catch (err) {
     if (__DEV__) console.warn('[saveToPhotos] failed', err);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -113,7 +114,7 @@ export function handleImageLongPress(opts: {
 
   const { isPro } = useAuthStore.getState();
   const canDelete = !!opts.onDelete;
-  const saveLabel = isPro ? 'Save in HD' : 'Save to Photos';
+  const saveLabel = isPro ? 'Save in 4K' : 'Save to Photos';
 
   if (canDelete) {
     // Owner or admin — show Save + Delete.
@@ -134,7 +135,7 @@ export function handleImageLongPress(opts: {
 
   // Not owner/admin — Pro-only save with upscale, or upsell.
   if (isPro) {
-    showAlert('Save in HD', 'Upscale to HD and save? This usually takes 5-10 seconds.', [
+    showAlert('Save in 4K', 'Upscale to 4K and save? This usually takes 25-35 seconds.', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Save', onPress: () => saveToPhotos(opts.id, opts.imageUrl, true) },
     ]);
