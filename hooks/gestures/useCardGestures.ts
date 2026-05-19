@@ -71,6 +71,13 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   // ~8px of leftward travel, ~50ms after touch). The user sees the profile
   // begin sliding in within that frame instead of waiting for finger-up.
   //
+  // maxPointers(1) is critical: when the user begins a pinch, the first
+  // finger lands milliseconds before the second. Without this constraint,
+  // any incidental leftward drift on finger #1 before finger #2 arrives
+  // would trip the 8px activation threshold and navigate away before the
+  // pinch even starts. Restricting to one finger makes the swipe FAIL as
+  // soon as a 2nd pointer touches down, handing control to the pinch.
+  //
   // No card translation: we tried tracking the finger with a Reanimated
   // shared value, but UIKit's native push animation snapshotted the home
   // hierarchy while Reanimated was actively transforming it — concurrent
@@ -78,6 +85,8 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   // sliding in within ~50ms IS the feedback; we don't need a second motion
   // competing with it.
   const swipeGesture = Gesture.Pan()
+    .minPointers(1)
+    .maxPointers(1)
     .activeOffsetX(-8)
     .failOffsetX(8)
     .failOffsetY([-15, 15])
