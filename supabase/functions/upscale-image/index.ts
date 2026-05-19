@@ -72,14 +72,13 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // Pro gate: only Pro users can call this. We verify against the users
-  // table rather than trusting the client.
-  const { data: callerRow } = await supabase
-    .from('users')
-    .select('pro_subscription')
-    .eq('id', user.id)
-    .maybeSingle();
-  if (!callerRow?.pro_subscription) {
+  // Pro gate: only Pro users (paid OR trial) can call this. The
+  // is_pro_active() SQL function checks pro_subscription + expires_at +
+  // pro_trial_started_at in one shot.
+  const { data: proCheck } = await supabase.rpc('is_pro_active', {
+    p_user_id: user.id,
+  });
+  if (!proCheck) {
     return json({ error: 'Pro subscription required' }, 403);
   }
 
@@ -95,8 +94,36 @@ Deno.serve(async (req) => {
   }
 
   // Cache hit — skip upscale, return existing HQ URL.
+  // Don't count cache hits against the monthly cap (the upscale already
+  // happened; we're just serving the URL).
   if (uploadRow.image_url_hq) {
     return json({ image_url_hq: uploadRow.image_url_hq, cached: true }, 200);
+  }
+
+  // Monthly HQ download abuse cap (500/month per Pro user — matches
+  // PRO_HQ_DOWNLOADS_PER_MONTH constant). Only counts cache MISSES (i.e.
+  // unique posts the user has triggered an upscale for this month).
+  const monthStart = new Date();
+  monthStart.setUTCDate(1);
+  monthStart.setUTCHours(0, 0, 0, 0);
+  const { count: downloadsThisMonth } = await supabase
+    .from('pro_hq_downloads_log')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .gte('created_at', monthStart.toISOString());
+
+  const HQ_CAP_PER_MONTH = 500;
+  if ((downloadsThisMonth ?? 0) >= HQ_CAP_PER_MONTH) {
+    console.warn(
+      `[upscale-image] user=${user.id.slice(0, 8)} hit ${HQ_CAP_PER_MONTH}/mo HQ cap (count=${downloadsThisMonth})`
+    );
+    return json(
+      {
+        error: 'monthly_cap_reached',
+        message: `You've hit the ${HQ_CAP_PER_MONTH}/month HQ download limit. Resets the 1st of next month.`,
+      },
+      429
+    );
   }
 
   // ── Run Clarity Upscaler 4× via shared helper ─────────────────────────
@@ -114,6 +141,18 @@ Deno.serve(async (req) => {
   if (!persistedUrl) {
     return json({ error: 'Upscale failed' }, 502);
   }
+
+  // Log this successful upscale against the user's monthly count.
+  // Non-fatal: if logging fails the user still gets their HQ render —
+  // they just won't count toward the cap (acceptable for now).
+  await supabase
+    .from('pro_hq_downloads_log')
+    .insert({ user_id: user.id, upload_id: body.upload_id })
+    .then(
+      () => {},
+      (err: { message?: string }) =>
+        console.warn(`[upscale-image] log insert failed: ${err?.message ?? 'unknown'}`)
+    );
 
   return json({ image_url_hq: persistedUrl, cached: false }, 200);
 });

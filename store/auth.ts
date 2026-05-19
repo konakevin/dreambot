@@ -28,20 +28,36 @@ interface EntitlementRow {
   is_admin?: boolean;
   pro_subscription?: boolean;
   pro_subscription_expires_at?: string | null;
+  pro_trial_started_at?: string | null;
 }
 
-/** Resolve the effective Pro state from a DB row. The boolean alone is
- *  not enough — if a RevenueCat EXPIRATION event ever misses, the column
- *  could stay `true` past the expiry date. Treat an expired timestamp as
- *  not-Pro on the client. */
+const TRIAL_DURATION_DAYS = 14;
+
+/** Resolve the effective Pro state from a DB row. Three paths:
+ *   1. Active paid subscription (pro_subscription=true + not expired)
+ *   2. Within 14-day Pro-features trial (pro_trial_started_at within window)
+ *  Treat an expired timestamp as not-Pro on the client (in case
+ *  RevenueCat EXPIRATION event ever misses).
+ *  Mirrors the server-side is_pro_active() Postgres function. */
 function isProActive(row: EntitlementRow | null): boolean {
-  if (!row?.pro_subscription) return false;
-  const expiresAt = row.pro_subscription_expires_at;
-  if (!expiresAt) return true;
-  return new Date(expiresAt).getTime() > Date.now();
+  if (!row) return false;
+  // Paid subscription path
+  if (row.pro_subscription) {
+    const expiresAt = row.pro_subscription_expires_at;
+    if (!expiresAt) return true;
+    if (new Date(expiresAt).getTime() > Date.now()) return true;
+  }
+  // Trial path
+  if (row.pro_trial_started_at) {
+    const trialEnd =
+      new Date(row.pro_trial_started_at).getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000;
+    if (trialEnd > Date.now()) return true;
+  }
+  return false;
 }
 
-const ENTITLEMENT_COLUMNS = 'is_admin, pro_subscription, pro_subscription_expires_at';
+const ENTITLEMENT_COLUMNS =
+  'is_admin, pro_subscription, pro_subscription_expires_at, pro_trial_started_at';
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,

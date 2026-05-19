@@ -294,10 +294,15 @@ async function processDream(user) {
 
   const today = new Date().toISOString().slice(0, 10);
 
-  // Fetch eligible users with email
+  // Fetch eligible users — onboarded + ai_enabled. Joins users to pull
+  // pro_subscription, pro_subscription_expires_at, pro_trial_started_at,
+  // last_active_at for the cohort gating below.
   const { data: users, error } = await sb
     .from('user_recipes')
-    .select('user_id, recipe, dream_wish, wish_modifiers, wish_recipient_ids, users!inner(email)')
+    .select(
+      `user_id, recipe, dream_wish, wish_modifiers, wish_recipient_ids,
+       users!inner(email, last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at)`
+    )
     .eq('onboarding_completed', true)
     .eq('ai_enabled', true);
 
@@ -305,16 +310,79 @@ async function processDream(user) {
     console.error('DB error:', error.message);
     process.exit(1);
   }
-  console.log(`Found ${users.length} eligible users`);
+  console.log(`Found ${users.length} onboarded users`);
 
-  // Filter already-dreamed
+  // Filter already-dreamed today.
   const { data: todayBudgets } = await sb
     .from('ai_generation_budget')
     .select('user_id')
     .eq('date', today);
   const alreadyDreamed = new Set((todayBudgets ?? []).map((b) => b.user_id));
-  const eligible = users.filter((u) => !alreadyDreamed.has(u.user_id));
-  console.log(`${eligible.length} haven't dreamed today\n`);
+  let pool = users.filter((u) => !alreadyDreamed.has(u.user_id));
+
+  // ── Cohort gating ──────────────────────────────────────────────────────
+  // Pro users (paid OR within 14-day trial) → eligible every night.
+  // Free users → eligible if (a) active in last 3 days AND (b) fewer than
+  // 2 nightly dreams in the prior 7-day rolling window.
+  const now = Date.now();
+  const threeDaysAgo = now - 3 * 24 * 60 * 60 * 1000;
+  const fourteenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
+  const sevenDaysAgo = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  function isProActive(u) {
+    const paid =
+      u.pro_subscription === true &&
+      (!u.pro_subscription_expires_at ||
+        new Date(u.pro_subscription_expires_at).getTime() > now);
+    const trial =
+      u.pro_trial_started_at &&
+      new Date(u.pro_trial_started_at).getTime() > fourteenDaysAgo;
+    return paid || trial;
+  }
+
+  // Count nightly dreams in the prior 7 days per user. One query, grouped.
+  const userIds = pool.map((u) => u.user_id);
+  const { data: weeklyCounts } = await sb
+    .from('uploads')
+    .select('user_id')
+    .in('user_id', userIds.length ? userIds : ['00000000-0000-0000-0000-000000000000'])
+    .gte('created_at', sevenDaysAgo);
+  const weeklyCountByUser = new Map();
+  for (const row of weeklyCounts ?? []) {
+    weeklyCountByUser.set(row.user_id, (weeklyCountByUser.get(row.user_id) ?? 0) + 1);
+  }
+
+  let proKept = 0;
+  let freeKept = 0;
+  let freeInactive = 0;
+  let freeQuotaHit = 0;
+
+  pool = pool.filter((u) => {
+    const user = u.users;
+    if (isProActive(user)) {
+      proKept++;
+      return true;
+    }
+    // Free path: must be active in last 3 days
+    const lastActive = user.last_active_at ? new Date(user.last_active_at).getTime() : 0;
+    if (lastActive < threeDaysAgo) {
+      freeInactive++;
+      return false;
+    }
+    // Free path: max 2 in prior 7 days
+    const count = weeklyCountByUser.get(u.user_id) ?? 0;
+    if (count >= 2) {
+      freeQuotaHit++;
+      return false;
+    }
+    freeKept++;
+    return true;
+  });
+
+  console.log(
+    `${pool.length} eligible: ${proKept} Pro/trial + ${freeKept} active-free | filtered: ${freeInactive} inactive, ${freeQuotaHit} hit weekly cap\n`
+  );
+  const eligible = pool;
 
   if (DRY_RUN) {
     eligible.forEach((u) =>
