@@ -10,7 +10,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -148,17 +147,14 @@ export default function SparkleStoreScreen() {
     <ScreenLayout header="back" title="Get Sparkles">
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Balance hero */}
-          <LinearGradient
-            colors={['rgba(139,123,238,0.15)', 'rgba(139,123,238,0.03)', 'transparent']}
-            style={s.balanceHero}
-          >
-            <View style={s.balanceGlow}>
-              <Ionicons name="sparkles" size={40} color={colors.accent} />
-            </View>
+          {/* Balance — compact inline "✨ {N} sparkles" header. The big
+              circle-icon + 44pt count was eating ~140px of vertical
+              real-estate for no informational gain. */}
+          <View style={s.balanceRow}>
+            <Ionicons name="sparkles" size={18} color={colors.accent} />
             <Text style={s.balanceAmount}>{balance}</Text>
             <Text style={s.balanceLabel}>sparkles available</Text>
-          </LinearGradient>
+          </View>
 
           {/* Section header */}
           <Text style={s.sectionTitle}>Choose a Pack</Text>
@@ -239,10 +235,12 @@ const s = StyleSheet.create({
 
   // Pinned footer — selection copy + primary CTA, always visible
   // above the keyboard / fold regardless of scroll position.
+  // paddingBottom 32 clears the home indicator on notched phones so
+  // the CTA's bottom corners don't get truncated.
   stickyFooter: {
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 32,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
@@ -253,33 +251,25 @@ const s = StyleSheet.create({
     gap: 12,
   },
 
-  // Balance hero
-  balanceHero: {
-    alignItems: 'center',
-    paddingVertical: 20,
-    marginHorizontal: -16,
-    marginBottom: 4,
-  },
-  balanceGlow: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(139,123,238,0.12)',
+  // Balance — inline single-line row showing "✨ {N} sparkles available"
+  balanceRow: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
+    gap: 6,
+    paddingVertical: 14,
+    marginBottom: 4,
   },
   balanceAmount: {
     color: colors.textPrimary,
-    fontSize: 44,
-    fontWeight: '900',
-    letterSpacing: -2,
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.3,
   },
   balanceLabel: {
     color: colors.textSecondary,
     fontSize: 14,
     fontWeight: '600',
-    marginTop: 2,
   },
 
   // Section

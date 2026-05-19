@@ -254,10 +254,13 @@ const s = StyleSheet.create({
   scroll: { paddingHorizontal: 16, paddingBottom: 180 },
 
   // Pinned footer — plan-specific copy + primary CTA, always visible.
+  // paddingBottom 32 clears the home indicator (~34pt) on phones with
+  // a notch/Dynamic Island so the CTA's bottom corners don't get
+  // truncated by the gesture area.
   stickyFooter: {
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 32,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
