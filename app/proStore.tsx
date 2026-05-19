@@ -20,7 +20,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { Toast } from '@/components/Toast';
@@ -90,14 +89,9 @@ export default function ProStoreScreen() {
     <ScreenLayout header="back" title="Get Pro">
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Hero */}
-          <LinearGradient
-            colors={['rgba(139,123,238,0.18)', 'rgba(139,123,238,0.04)', 'transparent']}
-            style={s.hero}
-          >
-            <View style={s.heroGlow}>
-              <Ionicons name="diamond" size={36} color={colors.accent} />
-            </View>
+          {/* Hero — title + state-aware subtitle. Diamond icon removed for
+              real-estate; the header bar already says "Get Pro". */}
+          <View style={s.hero}>
             <Text style={s.heroTitle}>DreamBot Pro</Text>
             <Text style={s.heroSub}>
               {isPaidPro
@@ -108,7 +102,7 @@ export default function ProStoreScreen() {
                     ? 'Your trial ended. Subscribe to keep Pro.'
                     : 'Unlock the full app.'}
             </Text>
-          </LinearGradient>
+          </View>
 
           {/* Trial countdown banner — only shows during active trial */}
           {isOnTrial && daysLeft !== null && (
@@ -269,32 +263,25 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
   },
 
-  // Hero
+  // Hero — compact text-only header (no icon, no gradient — header bar
+  // already says "Get Pro"; this just lays out the brand + state hint).
   hero: {
     alignItems: 'center',
-    paddingVertical: 24,
-    marginHorizontal: -16,
-    marginBottom: 8,
-  },
-  heroGlow: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(139,123,238,0.14)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
+    paddingTop: 12,
+    paddingBottom: 14,
   },
   heroTitle: {
     color: colors.textPrimary,
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '900',
     letterSpacing: -0.5,
   },
   heroSub: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: 13,
     marginTop: 4,
+    textAlign: 'center',
+    paddingHorizontal: 16,
   },
 
   // Trial banner
