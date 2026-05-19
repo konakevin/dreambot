@@ -538,6 +538,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_FLOWER_TUNNELS: {
+    description:
+      'PATH-BESPOKE — BloomBot flower-tunnels path (2026-05-19 NEW). POV-through-tunnels-of-flowers where flowers are BOTH the dominant visual AND the light source (saturated color caught in dim ambient reads as lanterns / chandeliers / fairy-lights). Variants: wisteria-cathedral cascades, forest tree-canopy paths, lava-tube with Hawaiian flowers, spiraling flower-wormholes, flower-portals to other dimensions, bloom-caves, cherry-blossom archways. 3 path-bespoke pools (tunnel_setting / flower_lanterns / atmospheric_phenomenon-40%-gated) + universal lighting/atmosphere. Inspired by user-hearted bloom-tunnel render where marigolds + wisteria-strands visually functioned as lanterns through saturated petal-color in dim torch-warm ambient.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['tunnel_setting', 'flower_lanterns'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGONBOT_CASTLE: {
     description:
       'PATH-BESPOKE — DragonBot castle path (2026-05-17 NEW). Majestic epic beautiful castle views — castles are 100% the focal subject, set amongst gorgeous fantasy backdrops with massive sense of scale. Distinct from epic-moment (50/50 castle + event) — this is pure castle-as-hero, movie-poster establishing shot energy. 5 path-bespoke pools: castle (architectural subject) + biome (gorgeous fantasy backdrop) + sky_layer (dramatic sky) + scale_prover (tiny element proving scale) + phenomenon (40%-gated atmospheric flourish). Lineage: Helms-Deep / Minas-Tirith / Edoras / Erebor / Anor-Londo establishing-shot.',
@@ -1181,11 +1195,18 @@ const ARCHETYPES = {
 
   TOYBOT_MODEL_TRAIN_WORLD: {
     description:
-      'PATH-BESPOKE — ToyBot model-train-world path. HO-scale (1:87) or N-scale model-railroad diorama. NO HUMAN FIGURES outside the diorama (tiny scale-figures integral to the beat are fine). Locked medium: model_train_diorama. Universal axes (camera_angle / scenario / staging) from bot.defaultPools. Path-bespoke: scene / train_consist / train_weather / drama_moment (always — narrative beat that fixes the "average picture of a trainset" failure mode) + unusual_cargo (35% conditional — surprise scale-tension cargo).',
+      'PATH-BESPOKE — ToyBot model-train-world path. THREE RENDER MODES branched at template level by sharedDNA.renderMode + a roll: (1) classic-diorama [renderMode!=world]: handcrafted HO-scale model-railroad terrain, uses scene + drama_moment + 35% unusual_cargo; (2) real-world [renderMode==world AND world-roll<0.65]: tiny train running through actual real environments (kitchen table, sleeping cat, forest moss, sandbox), scale-tension wow; (3) themed-cinematic [renderMode==world AND world-roll>=0.65]: train as hero in genre-coded immersive worlds (Western / fantasy / Mad Max / Polar Express / cyberpunk / Studio Ghibli / etc.). All four scene-source pools picked per render; template selects which to inject based on mode + roll.',
     slots: {
       universal: ['camera_angle', 'scenario', 'staging'],
       bot: [],
-      path: ['scene', 'train_consist', 'train_weather', 'drama_moment'],
+      path: [
+        'scene',
+        'train_consist',
+        'train_weather',
+        'drama_moment',
+        'world_real_setting',
+        'world_themed_setting',
+      ],
     },
     pickN: {},
     conditionalLayer: { slot: 'unusual_cargo', gate: 0.35 },
@@ -1274,6 +1295,21 @@ const ARCHETYPES = {
       path: ['creature_1', 'activity', 'setting', 'time_of_day', 'surprise_element', 'phenomenon'],
     },
     pickN: {},
+    conditionalLayer: { slot: 'creature_2', gate: 0.7 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_BATH_TIME: {
+    description:
+      'PATH-BESPOKE — ChibiBot bath-time path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). Adorable creature(s) in tiny cozy baths — bubbles, rubber ducks, foam on noses, towel turbans, steamy spa-day-for-tiny-creatures bliss. 11 axes: 3 universal (lighting + atmosphere + weather, via bot.defaultPools) + 6 path-bespoke (setting + activity + creature_1 + amenity pickN:2 + surprise_element + phenomenon) + 1 reused time_of_day (HEARTWARMING_TIME_OF_DAY) + 1 conditional creature_2 70%-gated + 1 template-gated phenomenon 60%. Amenity pickN:2 because bath cuteness amplifies with stacked props (rubber duck + candle, towel + soap, etc.).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature_1', 'activity', 'setting', 'time_of_day', 'amenity', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { amenity: 2 },
     conditionalLayer: { slot: 'creature_2', gate: 0.7 },
     framingModes: null,
     anchorScaleRange: null,

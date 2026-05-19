@@ -27,5 +27,8 @@ module.exports = {
     train_weather: 'TOYBOT_TRAIN_WEATHER',
     drama_moment: 'TOYBOT_TRAIN_DRAMA_MOMENT',
     unusual_cargo: 'TOYBOT_TRAIN_UNUSUAL_CARGO',
+    // World-mode pools — picked when sharedDNA.renderMode === 'world':
+    world_real_setting: 'TOYBOT_TRAIN_WORLD_REAL',
+    world_themed_setting: 'TOYBOT_TRAIN_WORLD_THEMED',
   },
 };

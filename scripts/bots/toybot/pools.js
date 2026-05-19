@@ -131,13 +131,20 @@ module.exports = {
     TOYBOT_MODEL_TRAIN_SCENE: load('toybot_model_train_scene'),
     TOYBOT_TRAIN_CONSISTS: load('train_consists'),
     TOYBOT_TRAIN_WEATHER: load('train_weather'),
-    // Drama-moment pool: always fires. The "what's happening?" beat that
-    // turns "pretty diorama" into "movie-still." 50 seeds at v1 — scale
-    // to 200 after iteration converges.
+    // Drama-moment pool: fires in diorama mode. The "what's happening?"
+    // beat. 50 seeds at v1.
     TOYBOT_TRAIN_DRAMA_MOMENT: load('train_drama_moments'),
     // Unusual-cargo pool: conditional-layer (~35% of renders). Surprise
-    // cargo wow-factor without overload. 50 seeds at v1.
+    // cargo wow-factor. 50 seeds at v1.
     TOYBOT_TRAIN_UNUSUAL_CARGO: load('train_unusual_cargo'),
+    // Real-world settings: toy train running through ACTUAL real
+    // environments (kitchen table, sandbox, sleeping cat, forest moss).
+    // Fires in world-mode ~65% of the time. The "scale-tension wow."
+    TOYBOT_TRAIN_WORLD_REAL: load('train_world_real'),
+    // Cinematic themed worlds: train as hero in genre-coded settings
+    // (Western / fantasy / sci-fi / cyberpunk / Polar Express / etc.).
+    // Fires in world-mode ~35% of the time. Movie-still vibe.
+    TOYBOT_TRAIN_WORLD_THEMED: load('train_world_themed'),
     TOYBOT_CAMERA_ANGLES: load('camera_angles'),
     TOYBOT_TOY_SCENARIOS: load('toy_scenarios'),
     TOYBOT_STAGING_AXIS: load('staging_axis'),

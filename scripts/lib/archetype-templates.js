@@ -693,9 +693,6 @@ Place at midground or deep midground — a small detail implying the wider world
 ━━━ LIGHTING ━━━
 ${lighting}
 
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
 
@@ -6340,7 +6337,120 @@ Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO �
   // Wide street-photography composition with pedestrian POV + leading-lines.
   // Architecture-as-structural-hero + bloom-as-distributed-mass (lesson
   // from conservatory R3). 2026-05-16 R1.
-  BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+BLOOMBOT_FLOWER_TUNNELS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, tunnel_setting, flower_lanterns, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the tunnel scene ━━━
+${atmospheric_phenomenon}
+
+A specific atmospheric moment within the tunnel that supports (doesn't compete with) the glowing-flower-cores aesthetic.
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing POV-THROUGH-A-DARK-FLOWER-TUNNEL scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — FLOWER CORES ARE LITERAL LIGHT SOURCES ━━━
+
+The viewer is inside a DARK / DIM tunnel made entirely of flowers. The tunnel ambient is NEAR-BLACK / very dim / shadowed. The ONLY visible light in the scene comes from the FLOWERS THEMSELVES — specifically each flower's CENTER glows warm like a tiny lantern-flame, radiating soft warm-amber light outward across its own petals and into the surrounding darkness.
+
+THIS IS THE EXACT LOOK — REPEAT ACROSS EVERY FLOWER IN THE FRAME:
+- Each marigold has a glowing warm-amber CENTER lit like a candle-flame, the petals around it backlit / catching the glow
+- Each foxglove-bell has a glowing warm-amber INTERIOR like a tiny paper-lantern
+- Each rose has a glowing warm-pink-amber CORE radiating outward
+- Each dahlia has a glowing warm-gold HEART pulsing soft light through its petal-spiral
+- Each hibiscus has a glowing warm-orange CENTER like a lit torch-flame
+- Each lily has a glowing warm-amber TROAT lit from within
+- Each sunflower has a glowing warm-gold DISC-CENTER
+- Each peony has a glowing warm CORE buried in its petal-mass radiating outward
+
+The flowers function as LANTERNS, CHANDELIERS, CANDLE-FLAMES, FAIRY-LIGHTS — but the light is INSIDE each flower's center, NOT external glow. Hundreds of glowing flower-cores spread across the tunnel walls, ceiling, and floor — like a constellation of tiny warm lanterns making up the entire visible light story.
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **DARK / DIM AMBIENT** — the tunnel itself is near-black, deep shadow, dim cave/grotto/night-darkness. NO bright lighting, NO daylight, NO sun-shafts. The flowers are the ONLY illuminated elements.
+
+2. **GLOWING FLOWER CORES** — every visible flower has a clearly warm-glowing CENTER / HEART / INTERIOR. Use phrases like "glowing warm-amber center," "lit-from-within core," "lantern-flame heart," "petals backlit by their own glowing core," "candle-flame center."
+
+3. **NO BRIGHT EXIT-GLOW AT THE VANISHING POINT** — the tunnel does NOT terminate in a bright light, sun-shaft, magic-portal, glowing-orb, or exit-light. The deep distance recedes into darkness. The flower-cores throughout the tunnel ARE the entire light story.
+
+4. **NO SCI-FI / MAGIC effects** — NO bioluminescent magical glow / will-o-wisps / fairy-dust / electric-cyan / neon. The glow is naturalistic — flower-centers lit like wax candle-flames, paper-lantern interiors, ember-cores.
+
+5. **FLOWERS PACKED DENSE** — every visible surface of the tunnel (walls / ceiling / floor / path-edge) is packed thick with flowers, hundreds of glowing-cores constellating across the frame.
+
+6. **POV INSIDE THE TUNNEL** — viewer is standing inside the tunnel, looking down the passage. Tunnel walls converge toward a deep-distance vanishing point that RECEDES INTO DARKNESS (not into light).
+
+🚫 ABSOLUTE BANS:
+  • NO bright exit-glow / sun-glow / portal-light / magic-orb at the vanishing point — the tunnel-end is DARK, the flowers are the lights
+  • NO sun-shafts / god-rays / theatrical light beams
+  • NO bioluminescent / sci-fi / will-o-wisps / fairy-dust / electric glow
+  • NO actual lamps / lanterns / candles / electric-lights visible in frame — the FLOWER-CENTERS are the lanterns
+  • NO bright daylight / clear noon / overcast / dawn — the tunnel is DIM / DARK
+  • NO real-world tourist tunnels (NO cobblestone Tuscan alleys / Parisian boulevards / etc.)
+  • NO empty surfaces — every wall / ceiling / floor area packed with glowing-cored flowers
+  • NO humans / pedestrians / figures (a distant silhouette OK at deep distance)
+
+✓ AMBIENT MOOD: subterranean-cave-dim / moonless-night-forest / dark-grotto / unlit-cathedral-interior / lava-tube-darkness / shadowy-cellar — the darkness MAKES the flower-cores shine.
+
+━━━ THE TUNNEL SETTING ━━━
+${tunnel_setting}
+
+━━━ THE FLOWER-LANTERNS — flower-centers that visually function as lights ━━━
+${flower_lanterns}
+
+These are the species whose CORES are glowing across the tunnel. EVERY flower in the frame has a warm-glowing center / heart / interior radiating soft warm light outward through its petals into the surrounding darkness.
+${phenomenonSection}━━━ COMPOSITION CRAFT — POV-DOWN-A-DARK-TUNNEL ━━━
+
+  • Strong vanishing-point perspective — tunnel walls + ceiling converge toward a deep DARK distance (NOT a light)
+  • Leading-line along the path / floor — drawing the eye DEEPER INTO THE DARK with the flower-cores like trail-of-lanterns
+  • Foreground tunnel-walls + ceiling packed close to the viewer with detailed glowing-core flowers
+  • Multi-tier depth: foreground bloom-detail with brightest glowing cores → midground tunnel-mass with smaller glowing cores → deep-distance fading into darkness
+
+━━━ FLOWER-CORE DISTRIBUTION — LANTERN CONSTELLATION ━━━
+
+The glowing-cored flowers are distributed across the tunnel like a real lighting installation:
+  • CEILING — overlapping hanging cascades with glowing-core flowers acting as chandelier-clusters (foxgloves with glowing throats, fuchsia with lit interiors, trumpet-flowers with glowing inner-cones)
+  • WALLS — flower-clusters at intervals with glowing centers acting as sconces (hibiscus with lit cores, dahlias with glowing hearts, hollyhock with glowing centers)
+  • FLOOR — clusters along the path with glowing cores acting as candle-flames (marigolds with lit centers, zinnias with glowing hearts, poppies with lit cores)
+  • RECEDING INTO DARK — the cores get smaller and dimmer toward the vanishing-point, where they fade into deep shadow
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Reinterpret the rolled lighting to support the dark-tunnel + glowing-flower-cores aesthetic. The ambient must be DIM enough that the flower-cores are the visible light story.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 3-4 species from the roster — each rendered with a clearly glowing warm-amber / warm-orange / warm-gold CENTER lit like a candle-flame, petals backlit from their own core.
+
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO bright exit-glow / sun-glow / portal-light / magic-orb at vanishing point — tunnel-end is DARK
+- 🚫 NO sun-shafts / god-rays / external light beams
+- 🚫 NO bioluminescent / sci-fi / will-o-wisps / fairy-dust / electric-cyan
+- 🚫 NO actual lamps / lanterns / candles / electric-lights — FLOWER-CENTERS are the only lights
+- 🚫 NO bright daylight / clear noon / dawn — DIM tunnel only
+- 🚫 NO real-world tourist tunnels
+- 🚫 NO empty tunnel surfaces — every visible surface PACKED with glowing-cored flowers
+- 🚫 NO species outside the roster
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[POV-down-DARK-tunnel composition with vanishing-point receding into darkness], [the specific dark tunnel setting + 2-3 specific flower species packing its walls and ceiling], [GLOWING WARM-AMBER FLOWER-CORES as the light source — explicitly describe each species' center glowing like a lantern-flame / candle / lit paper-lantern], [flower-core constellation distribution — ceiling-chandelier-cores + wall-sconce-cores + floor-candle-cores receding into deep dark], [near-black ambient making the cores POP]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the glowing-cores aesthetic]' : ''}, [tunnel-end fading into DARKNESS not light]
+
+CRITICAL — the FLOWER-CORES are LITERALLY the light source. Dark tunnel + glowing flower-centers = the look. NO bright exit-glow, NO sun-shaft, NO sci-fi glow, NO external light. Each flower in frame has a visibly glowing warm center radiating outward through its petals.
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the dark-tunnel composition + the tunnel setting.`;
+  },
+
+    BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { city_setting, architectural_detail, atmospheric_phenomenon } = slots;
 
     const phenomenonSection = atmospheric_phenomenon
@@ -8100,103 +8210,53 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
   TOYBOT_MODEL_TRAIN_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       camera_angle,
-      scenario,
-      staging,
       scene,
       train_consist,
       train_weather,
       drama_moment,
       unusual_cargo,
+      world_real_setting,
+      world_themed_setting,
     } = slots;
-    const isWorldMode = sharedDNA.renderMode === 'world';
 
-    // Drama-moment block — always injected. Fixes "average trainset"
-    // failure mode by forcing a "what's happening?" beat in every render.
-    const dramaMomentSection = drama_moment
-      ? `
+    // RENDER MODE BRANCHING — three modes:
+    //   1. classic-diorama   → handcrafted HO-scale terrain (existing)
+    //   2. real-world        → tiny train in REAL environments
+    //   3. themed-cinematic  → train in genre-coded immersive worlds
+    // World-mode fires when sharedDNA.renderMode === 'world'.
+    // Inside world-mode: ~65% real-world, ~35% themed-cinematic.
+    const isWorldMode = sharedDNA.renderMode === 'world';
+    const worldRoll = Math.random();
+    const mode = !isWorldMode ? 'classic' : worldRoll < 0.65 ? 'real' : 'themed';
+
+    // ─── CLASSIC DIORAMA MODE ──────────────────────────────────────────
+    if (mode === 'classic') {
+      const dramaMomentSection = drama_moment
+        ? `
 ━━━ THE DRAMATIC BEAT — MANDATORY ACTION ━━━
 ${drama_moment}
 
-This beat IS the story of the frame. Render it as frozen mid-action: kinetic motion, dust/spray/sparks where appropriate, scale-perfect detail on every actor. NEVER ignore this beat for a generic "train rolls through pretty terrain" composition — the beat ABOVE the scene is what makes the frame a movie-still instead of a catalog photo.
+Render this beat as frozen mid-action: kinetic motion, dust/spray/sparks where appropriate. NEVER ignore this beat for a generic "train rolls through pretty terrain" composition.
 
 `
-      : '';
-
-    // Unusual cargo — conditional ~35%. Surprise wow-factor cargo that
-    // creates scale tension or narrative hook. When firing, the cargo IS
-    // visible on a flat/open/specialized car within the consist.
-    const unusualCargoSection = unusual_cargo
-      ? `
+        : '';
+      const unusualCargoSection = unusual_cargo
+        ? `
 ━━━ UNUSUAL CARGO — VISIBLE ON THE TRAIN ━━━
 ${unusual_cargo}
 
-Place this cargo on a flat / gondola / specialized car within the consist. The cargo MUST be visible in the rendered frame — scale-perfect, story-loaded, and the reason a viewer's eye snaps to "wait, what is that?". This pool fires occasionally for surprise — when it does, the cargo is THE secondary subject after the train itself.
+Place this cargo on a flat / gondola / specialized car. The cargo MUST be visible in the frame.
 
 `
-      : '';
+        : '';
 
-    // World-mode-only sections — scenario + real-world staging block + story cast.
-    // Classic mode renders without these (path's SCENES pool drives composition).
-    const worldStagingSection = isWorldMode
-      ? `━━━ THE SCENARIO ━━━
-${scenario}
-
-Combine the cast/figures described above with this multi-character story moment in a real-world setting. The path's medium-specific cast performs the scenario.
-
-━━━ REAL-WORLD STAGING — TOY LIVING IN OUR WORLD AT ITS SCALE ━━━
-${staging}
-
-━━━ REAL-WORLD STAGING — NON-NEGOTIABLE ━━━
-
-The toy is LIVING in the REAL WORLD at its tiny scale. The scene is shot in a real human environment (real surfaces, real objects, real light, real weather, real dust) with the toy existing INSIDE that environment as if it has a tiny life happening there. NOT a handcrafted toy diorama. NOT a backdrop painted to look real. The real world IS the toy's world.
-
-The setting in the STAGING block above is the WHERE/HOW of the scene. Treat the toy/figure described in the SCENE seed as the WHO/WHAT, then drop them into this real-world setting. Implied story / "moment in the day" vibe — they have errands, adventures, struggles, quiet moments, like real residents of this real world.
-
-Use real-world textures explicitly: real wet asphalt, real wood grain, real moss, real concrete, real fabric weave, real ceramic, real glass, real metal scratches, real dust, real sand, real grass. NOT painted prop, NOT crafted set, NOT diorama.
-
-Forced perspective and scale illusion are encouraged — make the brain ask "how is this physically possible?". Toy-scale interaction with real-scale environment is the wow.
-
-`
-      : '';
-
-    const storyAndCastSection = isWorldMode
-      ? `━━━ MULTI-CHARACTER STORY MOMENT — NON-NEGOTIABLE ━━━
-
-The scene must have 2-4 figures in the frame. Single-character portraits are FORBIDDEN. The figures are mid-NARRATIVE — show what's happening AT THIS MOMENT with cause and reaction:
-  • One figure does something (verb) — climbing, pointing, fleeing, fighting, hiding, repairing, crying, celebrating, conspiring, peeking, confronting.
-  • Another figure REACTS — surprised, helping, opposing, watching, mid-arrival.
-  • The composition tells a small story like a single LEGO set diorama: who, what, why, what's about to happen next.
-
-Bad (single hero portrait): "vinyl figure of a goth witch standing in front of a graveyard, looking serious"
-
-Good (multi-character story beat): "vinyl goth witch climbing onto a real moss-covered headstone while her vinyl raven familiar lands on her shoulder mid-flight, a tiny vinyl ghost peeking over a smaller stone behind, real cobweb stretched between them — moonlit cemetery in real backyard at dusk"
-
-The camera framing block above is the WHO-IS-IN-THE-FRAME control. The staging block is the WHERE. This block is the WHAT-HAPPENS.
-
-NOTE: model-train-world is the EXCEPTION — this path is "no human figures by design". The terrain + tiny trains ARE the cast. Treat the train + level-crossing + signal-tower + lift-bridge as silent characters in the scene. Multi-tier composition with foreground-train + midground-station + background-mountain = the story.
-`
-      : '';
-
-    return `You are an HO-scale model-train hobbyist photographer writing MODEL-TRAIN-DIORAMA scenes for ToyBot. Pure miniature-railroad world — no characters in frame, just obsessive scratch-built terrain populated by tiny model trains. Snowy mountain passes, autumn villages, factory yards, harbor towns, alpine tunnels, prairie crossings. Cozy + dioramic. Output wraps with style prefix + suffix.
+      return `You are an HO-scale model-train hobbyist photographer writing MODEL-TRAIN-DIORAMA scenes for ToyBot. Pure miniature-railroad world — obsessive scratch-built terrain populated by tiny model trains. Cozy + dioramic.
 
 ━━━ TOY PHOTOGRAPHY (NON-NEGOTIABLE) ━━━
+Render as a REAL PHYSICAL TOY photographed in a handcrafted set with dramatic cinematic lighting. Toy-ness IS the art. Model-train means HO-scale / N-scale die-cast train on twin nickel-silver rails on a scratch-built terrain board. Visible scale: 1/87 or 1/160. Construction tells: ground foam, lichen-trees, plaster rock, static-grass.
 
-Render as a REAL PHYSICAL TOY photographed in a handcrafted set with dramatic cinematic lighting. Toy-ness IS the art — never render as "real" version. Model-train means HO-scale / N-scale die-cast metal-and-plastic train on twin nickel-silver rails on a scratch-built terrain board. Visible scale: train is 1/87 or 1/160. Visible construction tells: ground foam, lichen-trees, plaster rock, static-grass.
-
-━━━ CINEMATIC STORY — EVERY RENDER IS A MOVIE STILL ━━━
-
-Something is HAPPENING in the diorama — train rounding a bend, emerging from a tunnel, crossing a trestle bridge, pulling into a snowy depot, mid-climb up a switchback. NEVER "train static on track". Narrative + atmosphere + dynamic composition. The viewer should feel they are looking at a single frame of a meticulous railroad-hobbyist short film.
-
-━━━ LIGHTING ELEVATES THE MEDIUM ━━━
-
-Lighting is the multiplier that makes plastic feel like it belongs in a museum. The exact palette comes from the WEATHER and the VIBE-COLOR sections below — do NOT default to teal-and-orange, do NOT add warm-key-cool-fill unless the pool pick explicitly says so. Respect the specified palette (golden-hour / blue-hour / overcast / noir-hard / catalog-soft / sodium / moonlit / etc.) and build the scene around IT. Atmospheric depth via smoke / haze / dust / steam / rain / snow / pollen / backlight-only is welcome, but the color temperature must follow the pool's call, not a generic cinematic default.
-
-━━━ PATH MEDIUM LOCK — NEVER MIX ━━━
-
-This path is locked to model_train_diorama medium. NEVER LEGO bricks, NEVER claymation figures, NEVER vinyl, NEVER action figures, NEVER plush. ONLY HO/N-scale model-train hobbyist diorama. The path's medium is absolute.
-
-━━━ MODEL-TRAIN MEDIUM LOCK ━━━
-HO-scale (1:87) or N-scale model-railroad diorama — tiny die-cast steam locomotive or diesel engine pulling boxcars / passenger cars / coal-tenders / cabooses on twin nickel-silver rails. Hand-built terrain features: ground foam, lichen trees, plaster-cast rock-faces, static-grass meadows, scratch-built brick depots, signal-towers, water-tower, level-crossing, lift-bridge. NO HUMAN FIGURES in frame. Train is the focal point or the ambient detail in a richly-detailed terrain. Visible model-railroad construction tells (raised baseboard edge OK, scratch-built signage). NEVER real train, NEVER CGI, NEVER illustration, NEVER scale-people-figures filling frame.
+━━━ PATH MEDIUM LOCK ━━━
+Locked to model_train_diorama medium. NEVER LEGO, claymation, vinyl, action figures, plush. ONLY HO/N-scale hobbyist diorama.
 
 ━━━ CAMERA ━━━
 ${camera_angle}
@@ -8204,20 +8264,14 @@ ${camera_angle}
 ━━━ WEATHER + SEASON + TIME-OF-DAY ━━━
 ${train_weather}
 
-━━━ THE TRAIN — RENDER THIS EXACT CONSIST (NON-NEGOTIABLE) ━━━
-The train in this scene MUST be exactly this specific era + engine + consist — do NOT default to "generic steam-locomotive" repeats:
+━━━ THE TRAIN — EXACT CONSIST ━━━
 ${train_consist}
 
 ━━━ THE MODEL-TRAIN SCENE ━━━
 ${scene}
 
-${dramaMomentSection}${unusualCargoSection}
-${worldStagingSection}━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
+${dramaMomentSection}${unusualCargoSection}━━━ CAMERA FRAMING ━━━
 ${sharedDNA.camera}
-
-${storyAndCastSection}
-
-
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -8226,16 +8280,126 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ BLOW IT UP — TOY AMPLIFICATION ━━━
-
-Stack medium-signature detail to the max: ballast under track, weathered rail-tops, panel-line wash on locomotive body, brake-shoes between trucks, knuckle-couplers between cars, tiny grab-irons, sand-domes, headlight glow, exhaust steam, marker-lights, lit depot windows, hand-painted sign-boards, scratch-built telegraph poles, miniature track-side debris. Every render is obsessive railroad-hobbyist craft.
+Ballast, weathered rail-tops, panel-line wash, brake-shoes, knuckle-couplers, grab-irons, sand-domes, headlight glow, exhaust steam, marker-lights, lit depot windows. Obsessive railroad-hobbyist craft.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
-Wide diorama frame — tiny model-train as focal point or moving detail in a sweeping handcrafted terrain. Track-side or aerial-quarter angle. Practical hobby-shop / display-table lighting per pool palette. Lit windows in tiny depot, smoke from engine stack, atmospheric haze in valleys. Cozy obsessive-detail energy. NO PEOPLE.
+Wide diorama frame — tiny model-train in sweeping handcrafted terrain. Track-side or aerial-quarter angle. Lit windows, smoke, atmospheric haze. NO PEOPLE.
 
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
+    }
+
+    // ─── REAL-WORLD MODE — toy train IN actual real environments ───────
+    if (mode === 'real') {
+      return `You are a hobby-photographer documenting a TINY MODEL TRAIN running through REAL HUMAN ENVIRONMENTS for ToyBot. NOT a handcrafted diorama. The toy train is INSIDE our real world at its tiny scale. The wow is scale tension: train is 1/87, the kitchen table / sleeping cat / forest moss / sandbox is 1:1 REAL.
+
+⚠️⚠️⚠️ ABSOLUTE RULE — REAL WORLD, NOT DIORAMA ⚠️⚠️⚠️
+This is NOT scratch-built terrain. NOT ground-foam. NOT lichen-trees. NOT plaster-rock. NOT static-grass. The setting IS a REAL kitchen surface / REAL moss / REAL grass / REAL bed sheet / REAL coffee mug / REAL cat / REAL children's hands. The train is a tiny physical object existing INSIDE our human-scale world. If render reads as "model railroad diorama" → CRITICAL FAILURE.
+
+━━━ TOY-IN-REAL-WORLD PHOTOGRAPHY ━━━
+HO-scale (1:87) or N-scale die-cast model train, tracks laid out on / through / across REAL household, garden, or natural surfaces. Real-world textures rendered explicitly: real wood grain, real fabric weave, real moss, real grass blades towering, real dust, real morning light through a real window, real shadow patterns from real objects, real dew, real condensation.
+
+━━━ THE SCALE TENSION IS THE WOW ━━━
+Real-world objects act as the SCENERY at human scale. A coffee mug is a skyscraper. A sleeping cat is a mountain range. A pancake stack is a butte. A book is a library tower. A bonsai is a forest. The brain reads it twice: first as "miniature world", then as "wait — that's REAL coffee, REAL cat, REAL grass" — scale revelation is the entire point.
+
+━━━ THE TRAIN — EXACT CONSIST ━━━
+${train_consist}
+
+━━━ WEATHER + TIME OF DAY ━━━
+${train_weather}
+
+━━━ THE REAL-WORLD SETTING ━━━
+${world_real_setting}
+
+This is the WHERE. The setting must be RECOGNIZABLE as a real human environment / object. Render real-world textures explicitly: real grain / real moss / real fabric / real glass / real dust / real reflection / real natural light. The toy train weaves through, around, or across this real environment.
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ CAMERA FRAMING ━━━
+${sharedDNA.camera}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION RULES ━━━
+- The TRAIN is 1/87 or 1/160 — tiny, identifiable, intricate detail (panel-line wash, knuckle-couplers, lit headlamp)
+- The ENVIRONMENT is 1:1 — real-world scale, recognizable real objects, real textures
+- Real-world LIGHTING — window light, lamp glow, dappled sunlight, kitchen overhead, real shadows
+- One specific real-world object visibly dwarfs the train (the coffee mug, the cat, the bonsai, the pancake)
+- Real human elements OK at real scale — a hand visible at frame edge, a person walking past in soft-focus background, a child's blurry silhouette
+- NO scratch-built scenery, NO ground foam, NO baseboards, NO "model railroad layout" language
+
+⚠️ FAILURE CONDITIONS
+• If render reads as a model-railroad diorama / hobbyist setup → FAILED
+• If scenery is handcrafted (ground-foam / lichen / plaster) instead of REAL textures → FAILED
+• If the train is 1:1 (real-size) → FAILED. Train stays TINY.
+• If no real-world object visibly dwarfs the train → FAILED. Scale tension is mandatory.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
+    }
+
+    // ─── THEMED-CINEMATIC MODE — train as hero in genre-coded world ────
+    return `You are a cinematic-still photographer capturing a TINY MODEL TRAIN as the hero in an IMMERSIVE GENRE-CODED WORLD for ToyBot. NOT a diorama. NOT a real kitchen. A movie-still or video-game-screenshot vibe where the train is the protagonist in a recognizable cinematic environment.
+
+⚠️⚠️⚠️ ABSOLUTE RULE — IMMERSIVE WORLD, NOT DIORAMA ⚠️⚠️⚠️
+This is NOT scratch-built terrain. NOT ground-foam. NOT lichen-trees. NOT plaster-rock. This IS a fully-realized cinematic environment — Hollywood-grade location, genre-coded setting, atmospheric and lived-in. The toy train stays tiny in scale, but the world looms huge and immersive around it. If render reads as "handcrafted hobbyist diorama" → CRITICAL FAILURE.
+
+━━━ TOY-IN-CINEMATIC-WORLD PHOTOGRAPHY ━━━
+HO-scale (1:87) or N-scale die-cast model train preserves its toy-ness (visible scale, panel-line wash, brass detail, knuckle couplers). The WORLD around it is movie-set-grade — photoreal cinematic environment from a recognizable genre. Like a National-Geographic shot of a tiny train inserted into a real Hollywood-scale themed world.
+
+━━━ THE TRAIN — EXACT CONSIST ━━━
+${train_consist}
+
+━━━ WEATHER + TIME OF DAY ━━━
+${train_weather}
+
+━━━ THE THEMED-CINEMATIC SETTING ━━━
+${world_themed_setting}
+
+This is the WHERE. The setting must be CINEMATIC and GENRE-CODED — Western dust-canyon / fantasy magical-forest / cyberpunk neon-city / Polar Express deep-snow midnight / Mad Max post-apoc wasteland / Studio Ghibli watercolor-dreamscape / underwater coral-reef / etc. Lighting + atmosphere appropriate to the genre. The world is HUGE around the toy-scale train.
+
+━━━ SCALE TENSION ━━━
+The train stays toy-scale (visible 1/87 detail at macro). The cinematic world is at world-scale — a dinosaur is real-scale to the world, a castle is full-scale, an armored car beside the train is at train-scale. The collision of toy-train + real-world-cinematic-scenery is the wow.
+
+━━━ CAMERA ━━━
+${camera_angle}
+
+━━━ CAMERA FRAMING ━━━
+${sharedDNA.camera}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION RULES ━━━
+- Cinematic FRAMING — wide establishing shot, rule-of-thirds, leading lines, dramatic foreground-anchor
+- The TRAIN is tiny but readable — viewer's eye finds it as the hero
+- The WORLD is immersive — atmospheric depth, layered backgrounds, lived-in feeling
+- Lighting is genre-appropriate — aurora for Polar Express, dust haze for Western, neon glow for cyberpunk, watercolor pastels for Ghibli, blood-red sunset for Mad Max
+- Atmospheric particulate (dust / mist / snow / spark / fog) where appropriate to genre
+
+⚠️ FAILURE CONDITIONS
+• If render reads as a model-railroad diorama / hobbyist setup → FAILED
+• If world reads as scratch-built / hobbyist-handcrafted instead of cinematic → FAILED
+• If world reads as a generic real kitchen / sandbox instead of genre-coded → FAILED (that's real-world mode, not themed)
+• If the train is 1:1 (real-size) → FAILED. Train stays TINY.
+• If genre is unclear / generic / undecided → FAILED. Lean hard into the named genre.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO ━━━ markers.`;
   },
 
 
@@ -8907,6 +9071,106 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
 ${isGroup ? 'Mid-wide frame with the group as heroes doing the activity together in the setting. 3-5 creatures visible, each contributing — one leading, others helping or reacting. Different heights and species for visual variety.' : 'Mid-close frame with creature as hero doing the activity inside the setting.'} The setting is unmistakable — viewer should be able to name WHERE this happens. The time-of-day color cast is honest (not always warm-golden). Surprise element tucked into the composition where the eye finds it second.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+  },
+
+
+  CHIBIBOT_BATH_TIME: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_1,
+      creature_2,
+      activity,
+      setting,
+      time_of_day,
+      amenity,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const isGroup = !!creature_2;
+    const phenomenonFires = Math.random() < 0.6;
+
+    const amenityList = Array.isArray(amenity) ? amenity : [amenity];
+    const amenityBlock = amenityList.filter(Boolean).map((a, i) => `${i + 1}. ${a}`).join('\n');
+
+    const creatureBlock = isGroup
+      ? `A SMALL GROUP (3-5) of adorable creatures together — led by: ${creature_1}, joined by: ${creature_2} and a few others. Different species, different sizes, all squeezed into the bath together or doing spa activities side by side. Squeezed-in-together energy.`
+      : `${creature_1} — solo bath time bliss.`;
+
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing BATH TIME scenes for ChibiBot — ${isGroup ? 'a group of adorable creatures' : 'an adorable creature'} enjoying a tiny cozy bath inside a deliberately-chosen bath vessel + location at a deliberately-chosen time of day with deliberate weather${phenomenonFires ? ' and a magical phenomenon transforming the bath frame' : ''}. Bubbles, foam, steamy warmth, tiny accessories stacked. Spa-day-for-tiny-creatures bliss. The viewer's reaction: "OMG IT'S TOO CUTE. I CAN'T." Output wraps with style prefix + suffix.
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / scary — it FAILED. The reaction is wholesome bath-bliss — closed-eye contentment, foam-mustache joy, splashing delight. Lighting + weather + phenomenon should match the SCENE naturally — rainy ≠ stormy, outdoor-night ≠ scary, candlelit ≠ creepy — wholesome filter on everything.
+
+━━━ RENDERED CGI — NEVER PHOTOREAL, NEVER PAINTED ━━━
+
+Never photoreal. Never documentary-wildlife. Never flat illustration or painted artwork. Render as polished 3D CGI in the designer-collectible / Pop-Mart-vinyl register: glossy materials with subsurface scattering, ultra-clean form language with crisp surface definition, graphic-design crisp pattern work, dewy highlights. Creatures render with chibi proportions (oversized head, massive glassy reflective eyes, tiny stubby body). Bath vessel + amenities + setting render with the SAME glossy crisp CGI register. Bubbles are JEWEL-LIKE iridescent translucent spheres with rainbow refractions. Foam is fluffy + opaque with marshmallow texture. Water is clear with caustic light-play on surfaces below. Let the MEDIUM tag control the specific render style.
+
+━━━ NO DARK / NO INTENSE / NO CREEPY ━━━
+
+Absolutely no menace, no threat, no horror, no creepy undertones, no "uncanny cute" disturbing vibes, no slipping-falling-distress moments. Safe + wholesome + spa-bliss. The tone is kind and gentle. Lighting follows the time-of-day axis honestly — if it's blue hour, render blue hour; if it's golden hour, render golden hour; if it's moonlit, render silvery moonlit; if it's overcast soft daylight, render cool diffuse. DO NOT force everything to "warm steamy golden" — variety is the goal even though baths feel warm.
+
+━━━ NO HUMANS ━━━
+
+No human figures, no faces, no hands. All bathers are creatures (real-exaggerated or fantasy-cute). If a setting would normally include a person, reimagine it without — the creature uses the human-scale props at tiny scale, or no person is in the room. Human-coded items (towels, candles, soap) appear as STAGE PROPS, not as belonging to anyone.
+
+━━━ IMPOSSIBLE BEAUTY ━━━
+
+Wall-poster quality. NOT dramatic-beautiful (that's GlowBot) — CUTE-beautiful. The composition is balanced and charming. Every element rendered with love — the kind of image a kid pins above their bed.
+
+━━━ THE CUTE CREATURE(S) ━━━
+${creatureBlock}
+
+━━━ THE BATH-TIME ACTIVITY (what the creature is DOING right now) ━━━
+${activity}
+
+━━━ THE BATH VESSEL + LOCATION (the stage) ━━━
+${setting}
+
+━━━ STACKED BATH AMENITIES (TWO specific props amplify the cuteness) ━━━
+${amenityBlock}
+
+━━━ TIME OF DAY (drives light + color cast — render honestly) ━━━
+${time_of_day}
+
+━━━ WEATHER (especially affects outdoor bath settings) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL (steam swirls, drifting bubbles, ambient charm) ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail the eye finds AFTER the hero) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ BLOW IT UP — BATH CUTENESS AMPLIFICATION ━━━
+
+Cuteness is the canvas, not the ceiling. Stack bath-cute-elements: jewel-iridescent translucent bubbles + fluffy marshmallow foam mounds + steam wisps curling upward + glossy dewy surfaces with subsurface scattering + volumetric glow tinted to MATCH the time-of-day axis above (silvery-blue at moonlit night, indigo-pink at blue hour, peach-amber at golden hour, pearl-grey at dawn, cool-overcast at soft daylight, warm-amber-candlelit at evening interior — NOT forced warm-golden when the axis says otherwise) + sparkles drifting in the steam + layered atmospheric charm. For creatures, also stack: massive dewy glassy eyes with multi-layer catchlights + soaked-fluffy fur clumping in soft points + blushing cheeks + foam crowns / mustaches / beard sculptures + paws raised in bath-joy. For bath setting, stack environmental cuteness: TWO amenities prominently visible (rubber duck, candle, glass shampoo bottle, fluffy towels — whatever was picked above), thick stacked bubble mounds inside the tub, water with light-play caustics, dense magical detail in every corner. Obsessive detail in service of wholesome bath-bliss delight.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (SETTING IS A CO-HERO, NOT JUST A STAGE) ━━━
+
+The bath LOCATION must be visibly half the magic — NOT a tight intimate portrait with a generic backdrop. Pull the camera back so the viewer can SEE WHERE this bath is happening: pirate-ship deck visible behind the tub, mountain peaks above the hot spring, aurora dancing over the cloud-island plunge pool, lighthouse balcony railing framing the soak, submarine porthole showing fish swimming past, underwater coral surrounding the bubble dome, Roman-villa columns around the marble pool, tropical reef visible from the conch-shell rim. The location is half the magic — frame it as such.
+
+${isGroup ? 'Wider establishing frame with the group + the SPECTACULAR location both clearly readable. 3-5 creatures bathing together in the foreground/midground; the location vista (sky / sea / canopy / cave / volcano / aurora / etc.) fills 50%+ of the frame. Squeezed-in-together energy among the creatures, location-dominant scale around them.' : 'Wider establishing frame — creature in the bath at midground/foreground (still clearly the focal point), the dramatic LOCATION filling 50%+ of the frame. Think postcard-from-an-epic-bath-vacation, not bathroom selfie. Show what makes this place a destination.'} Viewer should be able to name BOTH (1) the specific bath vessel AND (2) the spectacular destination in one glance ("ohhh, creature bathing on a PIRATE SHIP / IN A CLOUD / AT A VOLCANIC HOT SPRING / IN A LIGHTHOUSE / UNDERWATER / ON A TREEHOUSE VERANDA"). Name the two amenities present without crowding the location. Time-of-day color cast honest. Surprise element tucked where the eye finds it second.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
