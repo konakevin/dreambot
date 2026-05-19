@@ -210,7 +210,10 @@ export default function ProStoreScreen() {
               onPress={() => selectedPkg && handlePurchase(selectedPkg)}
             >
               {purchasing ? (
-                <ActivityIndicator color="#FFFFFF" />
+                <View style={s.ctaConnecting}>
+                  <ActivityIndicator color="#FFFFFF" />
+                  <Text style={s.primaryCtaText}>Connecting to App Store…</Text>
+                </View>
               ) : (
                 <Text style={s.primaryCtaText}>
                   {isPaidPro
@@ -416,6 +419,11 @@ const s = StyleSheet.create({
     fontSize: 16,
     fontWeight: '800',
     letterSpacing: 0.2,
+  },
+  ctaConnecting: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   savingsBadge: {
     position: 'absolute',

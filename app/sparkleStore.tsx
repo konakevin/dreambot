@@ -136,32 +136,32 @@ export default function SparkleStoreScreen() {
 
   return (
     <ScreenLayout header="back" title="Get Sparkles">
-      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        {/* Balance hero */}
-        <LinearGradient
-          colors={['rgba(139,123,238,0.15)', 'rgba(139,123,238,0.03)', 'transparent']}
-          style={s.balanceHero}
-        >
-          <View style={s.balanceGlow}>
-            <Ionicons name="sparkles" size={40} color={colors.accent} />
-          </View>
-          <Text style={s.balanceAmount}>{balance}</Text>
-          <Text style={s.balanceLabel}>sparkles available</Text>
-        </LinearGradient>
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+          {/* Balance hero */}
+          <LinearGradient
+            colors={['rgba(139,123,238,0.15)', 'rgba(139,123,238,0.03)', 'transparent']}
+            style={s.balanceHero}
+          >
+            <View style={s.balanceGlow}>
+              <Ionicons name="sparkles" size={40} color={colors.accent} />
+            </View>
+            <Text style={s.balanceAmount}>{balance}</Text>
+            <Text style={s.balanceLabel}>sparkles available</Text>
+          </LinearGradient>
 
-        {/* Section header */}
-        <Text style={s.sectionTitle}>Choose a Pack</Text>
+          {/* Section header */}
+          <Text style={s.sectionTitle}>Choose a Pack</Text>
 
-        {isLoading ? (
-          <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 40 }} />
-        ) : sorted.length === 0 ? (
-          <View style={s.emptyWrap}>
-            <Ionicons name="bag-outline" size={48} color={colors.textSecondary} />
-            <Text style={s.emptyText}>Store not available yet</Text>
-            <Text style={s.emptySub}>Packs will appear here once the store is configured</Text>
-          </View>
-        ) : (
-          <>
+          {isLoading ? (
+            <ActivityIndicator size="large" color={colors.accent} style={{ marginTop: 40 }} />
+          ) : sorted.length === 0 ? (
+            <View style={s.emptyWrap}>
+              <Ionicons name="bag-outline" size={48} color={colors.textSecondary} />
+              <Text style={s.emptyText}>Store not available yet</Text>
+              <Text style={s.emptySub}>Packs will appear here once the store is configured</Text>
+            </View>
+          ) : (
             <View style={s.packGrid}>
               {sorted.map((pkg) => (
                 <PackCard
@@ -172,11 +172,28 @@ export default function SparkleStoreScreen() {
                 />
               ))}
             </View>
+          )}
 
-            {/* Selected-pack flavor copy */}
+          {/* Restore */}
+          <TouchableOpacity
+            style={s.restoreButton}
+            onPress={() =>
+              restore(undefined, {
+                onSuccess: () => Toast.show('Purchases restored', 'checkmark-circle'),
+                onError: () => Toast.show('Restore failed', 'close-circle'),
+              })
+            }
+            activeOpacity={0.7}
+            disabled={restoring}
+          >
+            <Text style={s.restoreText}>{restoring ? 'Restoring...' : 'Restore Purchases'}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+
+        {/* Pinned footer — selection copy + primary CTA, always visible. */}
+        {sorted.length > 0 && (
+          <View style={s.stickyFooter}>
             {selectedInfo && <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>}
-
-            {/* Primary CTA — buys the selected pack */}
             <TouchableOpacity
               style={[s.primaryCta, (!selectedPkg || purchasing) && s.primaryCtaDisabled]}
               activeOpacity={0.85}
@@ -184,7 +201,10 @@ export default function SparkleStoreScreen() {
               onPress={handlePurchase}
             >
               {purchasing ? (
-                <ActivityIndicator color="#FFFFFF" />
+                <View style={s.ctaConnecting}>
+                  <ActivityIndicator color="#FFFFFF" />
+                  <Text style={s.primaryCtaText}>Connecting to App Store…</Text>
+                </View>
               ) : (
                 <Text style={s.primaryCtaText}>
                   {selectedPkg
@@ -193,31 +213,35 @@ export default function SparkleStoreScreen() {
                 </Text>
               )}
             </TouchableOpacity>
-          </>
+          </View>
         )}
-
-        {/* Restore */}
-        <TouchableOpacity
-          style={s.restoreButton}
-          onPress={() =>
-            restore(undefined, {
-              onSuccess: () => Toast.show('Purchases restored', 'checkmark-circle'),
-              onError: () => Toast.show('Restore failed', 'close-circle'),
-            })
-          }
-          activeOpacity={0.7}
-          disabled={restoring}
-        >
-          <Text style={s.restoreText}>{restoring ? 'Restoring...' : 'Restore Purchases'}</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      </View>
     </ScreenLayout>
   );
 }
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  scroll: { paddingHorizontal: 16, paddingBottom: 60 },
+  // Tighter bottom padding because the sticky footer takes up its own
+  // ~120px of screen space; need to leave room above it so scrolled
+  // content (Restore button) doesn't get hidden behind the footer.
+  scroll: { paddingHorizontal: 16, paddingBottom: 24 },
+
+  // Pinned footer — selection copy + primary CTA, always visible
+  // above the keyboard / fold regardless of scroll position.
+  stickyFooter: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 20,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+  },
+  ctaConnecting: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
 
   // Balance hero
   balanceHero: {
