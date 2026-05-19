@@ -13,12 +13,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SPARKLE_PACKS: Record<string, number> = {
   // Locked 2026-05-18 per SPARKLE_PRICING_STRATEGY.md. All tiers
   // profitable at 15% Apple Small Business cut + $0.06/sparkle cost.
+  // _v2 suffix because Apple reserves the original .25 / .50 / .100__ /
+  // .500 product IDs from the earlier lineup — they can't be reused.
   // Keep in sync with constants/sparklePacks.ts.
-  'com.konakevin.radorbad.sparkles.15': 15,
-  'com.konakevin.radorbad.sparkles.40': 40,
-  'com.konakevin.radorbad.sparkles.90': 90,
-  'com.konakevin.radorbad.sparkles.200': 200,
-  'com.konakevin.radorbad.sparkles.500': 500,
+  'com.konakevin.radorbad.sparkles.15_v2': 15,
+  'com.konakevin.radorbad.sparkles.40_v2': 40,
+  'com.konakevin.radorbad.sparkles.90_v2': 90,
+  'com.konakevin.radorbad.sparkles.200_v2': 200,
+  'com.konakevin.radorbad.sparkles.500_v2': 500,
 };
 
 // Pro subscription product IDs. Match these in App Store Connect /

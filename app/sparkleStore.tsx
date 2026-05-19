@@ -22,18 +22,24 @@ import {
 import { PACK_INFO } from '@/constants/sparklePacks';
 
 /** Flavor copy per sparkle pack — appears under the grid when selected.
- *  Maps the pack's sparkle count to a short marketing line. */
+ *  Uses the actual sparkle count so the copy never gets out of sync with
+ *  the pack lineup. premium-render math uses /3 (3 sparkles per premium
+ *  model render — Flux 2 Max / GPT Image 1 / Nano Banana Pro). */
 function getPackCopy(sparkles: number): string {
-  if (sparkles <= 25) {
-    return 'Try it out — enough for a quick burst of dreams. About 25 standard renders.';
+  const premium = Math.floor(sparkles / 3);
+  if (sparkles <= 20) {
+    return `A quick top-up — ${sparkles} standard renders or ${premium} premium.`;
   }
   if (sparkles <= 50) {
-    return 'Casual use — covers a week or two of regular dreaming. About 50 standard renders.';
+    return `Casual use — ${sparkles} standard renders or ${premium} premium. A couple weeks of dreaming.`;
   }
   if (sparkles <= 100) {
-    return 'Most popular — a month of regular use at the best per-sparkle value.';
+    return `Most popular — about a month of regular renders. ${sparkles} standard or ${premium} premium.`;
   }
-  return 'Power user — months of renders with room to spare for premium models.';
+  if (sparkles <= 250) {
+    return `Best value — months of renders with room for premium models. ${sparkles} standard or ${premium} premium.`;
+  }
+  return `Power user — half a year of renders, plenty for premium models. ${sparkles} standard or ${premium} premium.`;
 }
 
 function PackCard({
@@ -99,11 +105,47 @@ function PackCard({
   );
 }
 
+// ⚠️ TEMPORARY: hardcoded packs for App Store Connect review screenshot.
+// Set to `true` to render the 5-pack lineup without needing RevenueCat to
+// have synced the products yet. Set back to `false` before shipping so
+// the screen pulls real localized prices from StoreKit again.
+// Search for USE_MOCK_PACKS_FOR_SCREENSHOT to find and revert this flag.
+const USE_MOCK_PACKS_FOR_SCREENSHOT = true;
+
+const MOCK_PACKAGES: PurchasesPackage[] = [
+  {
+    identifier: 'pack_15',
+    product: { identifier: 'com.konakevin.radorbad.sparkles.15_v2', priceString: '$1.99' },
+  },
+  {
+    identifier: 'pack_40',
+    product: { identifier: 'com.konakevin.radorbad.sparkles.40_v2', priceString: '$4.99' },
+  },
+  {
+    identifier: 'pack_90',
+    product: { identifier: 'com.konakevin.radorbad.sparkles.90_v2', priceString: '$9.99' },
+  },
+  {
+    identifier: 'pack_200',
+    product: { identifier: 'com.konakevin.radorbad.sparkles.200_v2', priceString: '$19.99' },
+  },
+  {
+    identifier: 'pack_500',
+    product: { identifier: 'com.konakevin.radorbad.sparkles.500_v2', priceString: '$49.99' },
+  },
+  // deno-lint-ignore no-explicit-any
+] as unknown as PurchasesPackage[];
+
 export default function SparkleStoreScreen() {
   const { data: balance = 0 } = useSparkleBalance();
-  const { data: packages = [], isLoading } = useSparklePackages();
+  const { data: livePackages = [], isLoading: liveIsLoading } = useSparklePackages();
   const { mutate: purchase, isPending: purchasing } = usePurchaseSparkles();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
+
+  // Screenshot mode bypasses the live RC data so the new lineup renders
+  // even before App Store Connect + RC have synced the new products.
+  const packages = USE_MOCK_PACKS_FOR_SCREENSHOT ? MOCK_PACKAGES : livePackages;
+  const isLoading = USE_MOCK_PACKS_FOR_SCREENSHOT ? false : liveIsLoading;
 
   const sorted = [...packages].sort((a, b) => {
     const aInfo = PACK_INFO[a.product.identifier];

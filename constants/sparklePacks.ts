@@ -29,33 +29,37 @@ export interface SparklePack {
   icon: string;
 }
 
+// Product IDs use the `_v2` suffix because Apple permanently reserves
+// the original .25 / .50 / .100__ / .500 identifiers from earlier
+// lineups — even after deletion, those IDs can't be reused. New lineup
+// gets a clean _v2 suffix so the entire set is consistent.
 export const SPARKLE_PACKS: SparklePack[] = [
   {
-    productId: 'com.konakevin.radorbad.sparkles.15',
+    productId: 'com.konakevin.radorbad.sparkles.15_v2',
     sparkles: 15,
     label: 'Impulse',
     icon: 'sparkles-outline',
   },
   {
-    productId: 'com.konakevin.radorbad.sparkles.40',
+    productId: 'com.konakevin.radorbad.sparkles.40_v2',
     sparkles: 40,
     label: 'Starter',
     icon: 'star',
   },
   {
-    productId: 'com.konakevin.radorbad.sparkles.90',
+    productId: 'com.konakevin.radorbad.sparkles.90_v2',
     sparkles: 90,
     label: 'Popular',
     icon: 'sparkles',
   },
   {
-    productId: 'com.konakevin.radorbad.sparkles.200',
+    productId: 'com.konakevin.radorbad.sparkles.200_v2',
     sparkles: 200,
     label: 'Best Value',
     icon: 'diamond',
   },
   {
-    productId: 'com.konakevin.radorbad.sparkles.500',
+    productId: 'com.konakevin.radorbad.sparkles.500_v2',
     sparkles: 500,
     label: 'Whale',
     icon: 'rocket',
