@@ -1471,6 +1471,44 @@ Result: settings now NAMEABLE in every render (cottage kitchen / candlelit windo
 - Watch for phenomenon-fire visibility — at 60% gate it should land on ~3/5 renders
 - Pattern is ready to clone for next 23 ChibiBot paths
 
+### cuddly-aquatic (ChibiBot) — sparkle + poster mandates land; verbose guards push Flux into generic-chibi-toy mode 2026-05-19
+
+Third ChibiBot path migrated. **Production-ready in 5 rounds.**
+
+**R0 (full-bespoke 10-axis with skipPaths from start):** Reused HEARTWARMING_TIME_OF_DAY, built 4 new pools (settings 50 / interactions 50 / surprise_elements 50 / phenomena 50), creature_1 + creature_2 ALWAYS-ON (no 70% gate — pair-bond is the path identity). Avg 4.4/5 — three 5/5s and one solo-creature failure + one whale-with-clownfish-scale-mismatch.
+
+**R1 (pair-guard + strict-underwater + marine-only-creatures filter):** Added 3 hefty MANDATORY guards to template top and filtered AQUATIC_CREATURES → CUDDLY_AQUATIC_CREATURES_MARINE (excluded otter/penguin/duck etc). Avg 4.1/5 — pair-bond fixed, but renders started slipping toward flower-forests and surface-ponds (settings pool freshwater/lily-pad categories still leaking).
+
+**R2 (50/50 medium gate test on broken state):** Rebalanced bot's medium array to 1:1 chibibot_render : chibibot_pixar (was 6:4). Distribution validated. Quality regressed to 3.4/5 — verbose guards + sparkle amplification combining to push Flux into "generic kawaii toy" mode (bears / cats / mice rendered instead of marine species).
+
+**R3 (added MOVIE POSTER MOMENT + SPARKLE STACK blocks):** Visual quality went WAY up (every render now a poster with 6+ stacked sparkle/effect layers — caustic light, bubbles, plankton sparkles, eye-flares, bioluminescent halos, heart-bubbles, lens flares, pollen particles). But species anatomy regressed hard: 2.7/5 — Be@rbricks, bear-mice, foxes instead of marine. The added text amplified Flux's chibi-toy-figure centroid.
+
+**R4 (reverted the 3 verbose guards + creature pool; KEPT poster + sparkle):** Removed pair-guard + underwater-guard + marine-only-guard. Repointed pool back to AQUATIC_CREATURES (broader). Avg 4.2/5 — sparkle + poster do the work without verbose guards diluting the prompt. Tradeoff: 2 of 5 are off-path (foxes in canyon, dragons in canyon), 3 of 5 are on-path bangers.
+
+**Cross-bot lessons (added to cross-bot list):**
+
+1. **Verbose mandatory guards stuff the prompt and push Flux to its generic centroid.** When 3+ hefty `━━━ MANDATORY: X ━━━` blocks are stacked at the prompt top, the cumulative weight pushes Flux toward its training-data centroid for "kawaii chibi" → generic-mammal-toy rendering regardless of species name in the pool. Long mandates dilute pool DNA. Prefer short, surgical constraints (one sentence each) over multi-paragraph guards.
+
+2. **MOVIE POSTER MOMENT mandate is a reusable visual amplifier** (proven on MechBot titan-war-machines + ChibiBot cuddly-aquatic). Adding "every render must be a poster-worthy frame — Pixar/Ghibli/Finding-Nemo movie still — deliberate composition, dramatic light, atmospheric haze" elevates cute renders to wallpaper-worthy without changing any other axis.
+
+3. **SPARKLE STACK pattern** for cuteness paths — explicitly list 10-12 atmospheric effects (caustic light, rising bubbles, plankton sparkles, eye-flares, bioluminescent halo, dewdrop highlights, lens flares, pollen particles, heart-bubbles, etc.) and demand "stack AT LEAST 6 visible per render". This is the cute-amplification version of MechBot's "TURNED UP TO 11".
+
+**Config (current production):**
+- Path file: `scripts/bots/chibibot/paths/cuddly-aquatic.js` (declarative, 10 axes)
+- Legacy: `scripts/bots/chibibot/paths/legacy/cuddly-aquatic.js`
+- Universal axes: lighting + atmosphere + weather (via `bot.defaultPools`)
+- Reused: time_of_day → HEARTWARMING_TIME_OF_DAY
+- Path-bespoke: creature_1 + creature_2 (BOTH always-on) + interaction + setting + surprise_element + phenomenon
+- Template includes: MOVIE POSTER MOMENT block + SPARKLE STACK block (kept after R4 revert)
+- Template-gated phenomenon (60%)
+- twoPassPolish.skipPaths: ['bath-time', 'cuddly-aquatic']
+- 4 new pools sized: settings 200, interactions 200, surprise_elements 150, phenomena 50
+- Also created (currently unused — kept for future option): CUDDLY_AQUATIC_CREATURES_MARINE (603 entries, AQUATIC_CREATURES filtered to exclude otter/penguin/duck/etc.)
+
+### cuddly-aquatic next steps
+- Path identity loose — ~60% on-path, ~40% drift to land-creatures/non-underwater. May iterate later with tighter setting pool (purge freshwater/lily-pad) OR re-introduce a SHORT (one-sentence) pair+marine guard that doesn't stuff the prompt
+- Marine creature pool ready to deploy if Kevin wants stricter underwater identity later
+
 ### bath-time (ChibiBot) — wild-settings + skip-two-pass-polish unlocked setting-as-co-hero 2026-05-19
 
 Second ChibiBot path migrated. **Production-ready in 3 rounds.**
@@ -1523,6 +1561,8 @@ Second ChibiBot path migrated. **Production-ready in 3 rounds.**
 - **Helmets and face-coverings are environmental, not absolute.** Gate face visibility through the BIOME-APPROPRIATE OUTFIT block: vacuum/toxic = sealed visor, glacial = hood, desert = optional face wrap, **temperate/habitable = face fully visible.** Kevin's preference: when the biome is breathable, prefer face-visible compositions so character DNA reads.
 - **Pool DNA dominates brief admonitions, EVERY time.** (StarBot space-opera R1.) When a ship pool entry uses "cathedral / fortress / citadel / temple / Gothic Revival / stained-glass / flying-buttress" language, Flux renders the prompt as a planetary temple — no brief-level "NOT a building, this is a STARSHIP" guard overrides it. The fix is to strip the offending language from BOTH the seed entries AND the gen-recipe's silhouette / scale / example / instruction text, then regenerate. Brief stays lean.
 - **Ban building-coded vocabulary in any spaceship pool.** `cathedral`, `cathedral-class`, `cathedral-stack`, `fortress`, `fortress-citadel`, `citadel`, `temple`, `temple-ship`, `monastery`, `Gothic Revival`, `stained-glass`, `rose window`, `flying buttresses`, `bell housings`, `vertical city-spire`, `mosque`, `minaret`, `pagoda`, `ziggurat`. Vertical / tower silhouettes are still fine — describe them as `segmented-worm`, `obelisk-vessel`, `totem-hull`, `stacked-modules`, `spire-needle vessel`. Never as architecture.
+- **MOVIE POSTER MOMENT + SPARKLE STACK is a reusable cute-amplification pair.** (ChibiBot cuddly-aquatic R3.) For any cute-amplification path: (1) a MOVIE POSTER MOMENT block mandating "every render must be a frame-worthy still" with deliberate composition + light + atmospheric depth, and (2) a SPARKLE STACK block listing 10-12 atmospheric effects (caustic light, rising bubbles, plankton sparkles, eye-flares, bioluminescent halo, dewdrop highlights, lens flares, pollen particles, heart-bubbles, etc.) with "stack AT LEAST 6 visible per render" requirement. This is the cute-amplification version of MechBot's MOVIE POSTER MANDATE — same pattern, different vocabulary. Both blocks are short, scannable, and don't dilute pool DNA the way verbose multi-paragraph MANDATORY guards do.
+- **Verbose mandatory guards stuff the prompt and push Flux to its generic centroid.** (ChibiBot cuddly-aquatic R1→R3→R4.) When 3+ hefty `━━━ MANDATORY: X ━━━` blocks are stacked at the prompt top, the cumulative weight pushes Flux toward its training-data centroid for the medium register — for ChibiBot's chibi-vinyl that's generic-mammal-toy rendering (bears/cats/mice with chibi proportions) regardless of species name in the pool. Long mandates dilute pool DNA. Prefer short, surgical one-sentence constraints over multi-paragraph guards. If you find yourself stacking 3+ verbose guards, the per-render token budget for actual scene content shrinks and Flux defaults harder.
 - **Two-pass polish strips setting context on setting-as-co-hero paths.** (ChibiBot bath-time R1→R2.) When the WHERE matters as much as the WHO (bath-time / outdoor-adventure / cozy-landscape / village paths), the Sonnet→Haiku polish compression (150 → 65-90 words) strips location language first because the polisher reads setting prose as descriptive fluff and prioritizes subject + action verbs. Symptom: pool entries are richly described locations ("clawfoot tub on pirate-ship deck overlooking Caribbean horizon") but renders come back as intimate close-ups with generic backdrop. Fix: add the path to `twoPassPolish.skipPaths` so Sonnet's full 150-word concept reaches Flux intact. Bath-time R1 avg 3.9/5 → R2 avg 4.8/5 with this single change. Likely applies to every ChibiBot scene-heavy path, ToyBot outdoor paths, BloomBot landscape, etc. — when reviewing renders, ask "does the setting feel half the magic or just a backdrop?" If just backdrop, check skipPaths.
 - **Template wording with a fixed color cast OVERRIDES pool variety.** (ChibiBot heartwarming-scene R1→R2.) "warm volumetric glow" / "soft warm light" / "golden hour" embedded ANYWHERE in the brief (BLOW IT UP block, COMPOSITION block, even the cuteness amplification section) will cause Flux to render warm-golden lighting regardless of what the time-of-day or lighting pool entry says. When a path has a time-of-day axis, lighting amplification phrases MUST tie to the axis with explicit per-time examples ("silvery-blue at moonlit, indigo-pink at blue hour, peach-amber at golden, pearl-grey at dawn, cool-overcast at soft daylight — NOT forced warm-golden when the axis says otherwise"). Removing the header-clamp `(warm soft only)` is not enough — the cuteness-amplification body text needs the same surgery.
 - **Character path briefs MUST be gender-locked, never gender-neutral.** (StarBot female-explorer composer regression 2026-05-12.) Flux uses pronouns and gendered nouns as primary gender-rendering signals. A brief with "the character / they / them / explorer" softens Flux's commitment to render a specific gender. Female-explorer briefs MUST use "she / her / woman / female explorer" consistently. Male-explorer briefs MUST use "he / his / man / male explorer". The compact bio line MUST include the literal gendered noun ("A {race} **woman** with..." or "A {race} **man** with..."). When designing a character archetype that serves both genders, parametrize gender via path config (`gender: 'female'` or `'male'`) and inject the gendered words into the template — never share one gender-neutral template across genders. Or: ship two sibling archetypes (FEMALE_EXPLORER + MALE_EXPLORER), each gender-locked. Both are valid; one-template-two-genders is NOT.

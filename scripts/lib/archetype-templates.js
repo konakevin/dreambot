@@ -8334,6 +8334,15 @@ Small toy train running on its tracks in a real recognizable everyday space: har
 ━━━ SETTING IS THE WOW ━━━
 The real-everyday setting is instantly recognizable. The viewer says "I've been in that kitchen / garden / porch / campsite." The toy train is the cute small subject — recognizable as a toy train but the SCENE is what's special. Real objects (mug, shoe, hose, garden tool, picnic blanket, Christmas tree, BBQ grill) act as scenery and visibly dwarf the train.
 
+━━━ SUPPORTING CAST + SET DECORATION — MANDATORY ━━━
+The frame is POPULATED, not lonely. Every render must include 2-3 SUPPORTING ELEMENTS visible alongside the train:
+  • OTHER LITTLE TOYS waiting / watching / interacting — plastic dinosaurs lined up, G.I. Joe figures crouched, LEGO minifigures with conductor caps, Polly Pockets waving from a sandcastle station, Hot Wheels at a crossing, stuffed teddy bear as a 'passenger', plastic farm animals grazing
+  • FLOWERS / NATURAL DECORATION — real daisies tucked between rail ties, real petals scattered as confetti, real ivy creeping over a tunnel-mouth, real lavender lining the tracks, real cherry blossoms drifting onto the train roof, real fern fronds curling overhead
+  • DRESSED-UP HOUSEHOLD PROPS as scenery — stacked wood blocks as skyline, real coffee mug as skyscraper, real cereal boxes as billboards, real ribbon spool as water tower, real Christmas ornaments as celestial bodies, real Lego bricks as construction debris
+  • SMALL CRITTERS at real scale — real ladybug crossing the rails, real ant trail climbing the locomotive, real curious cat batting from above, real garden snail crossing slow, real songbird on a stick "telegraph pole"
+
+Without supporting cast, renders feel like "a lonely train on tracks in a real space" — which is the failure mode. WITH supporting cast, renders feel like "a kid set up an elaborate playtime scene for their toy train" — rich, story-loaded, populated.
+
 ━━━ THE TRAIN ━━━
 ${train_consist}
 
@@ -9230,18 +9239,6 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       : '';
 
     return `You are writing CUDDLY AQUATIC scenes for ChibiBot — a PAIR of impossibly cute baby aquatic creatures cuddling together in their underwater / surface-water habitat. Sea otter pups holding paws, baby seals on ice, hermit-crab anemone villages, jellyfish-blanket octopuses, axolotl tea rooms, dumbo octopuses with bonnets. Pixar / Sanrio / Studio Ghibli / Finding Nemo cuteness${phenomenonFires ? ', with a magical aquatic phenomenon transforming the frame' : ''}. The viewer's reaction: "OMG THEY ARE TOO CUTE TOGETHER. I CAN'T." Output wraps with style prefix + suffix.
-
-━━━ MANDATORY: TWO CREATURES, BOTH VISIBLE, EQUAL SCALE ━━━
-
-FORBIDDEN: solo-creature renders. BOTH creature_1 AND creature_2 must appear in the final frame, both visibly present, both with VISIBLE BODIES AND FACES. NOT one creature with a tiny silhouette of another. NOT one big creature dwarfing a tiny creature (no whale-with-clownfish-dwarf-pairing). The pair must be COMPARABLE SCALE — both creatures sized similarly so the eye reads them as PEERS / a PAIR / equals. If the picked species naturally differ in size, render them at chibi-comparable scale (baby whale and baby seal both at toy-figurine proportions, not literal-anatomy proportions). The two creatures must be VISIBLY TOUCHING or CLEARLY INTERACTING — paws/flippers touching, cheeks pressed, both facing each other mid-interaction. THIS IS A PAIR-BOND PATH — solo renders FAIL the path identity.
-
-━━━ MANDATORY: FULLY UNDERWATER OR FULLY SURFACE — NEVER MIXED ━━━
-
-The setting axis specifies one habitat type. Render it STRICTLY. If the setting is UNDERWATER (coral reef / kelp forest / deep-sea / abyssal / sunken-architecture / mermaid grotto / midwater / cathedral-of-light-shafts), render it FULLY SUBMERGED — NO water surface visible, NO sky visible, NO land visible, NO river-running-through, NO mixed surface-and-deep. All light is filtered through water (caustic light-play, bubble trails, sun-shafts cutting through water column). Even at sunset/sunrise, light reaches the scene THROUGH the water — color cast tinted by depth, not sky. If the setting is SURFACE (lily-pad pond / cattail marsh / floating-on-water / surface-island), render it with WATER SURFACE clearly visible — creatures on or just above the surface, sky/cloud above. If the setting is TIDE POOL or ICE EDGE, render it with the specific shoreline / ice mass visible. NO mixed scenes. NO underwater-with-sunset-sky-visible. NO lily-pond-with-deep-sea-coral-below. Pick the habitat once and commit to it.
-
-━━━ MANDATORY: ONLY MARINE CREATURES (the pool guarantees this — DO NOT add land creatures) ━━━
-
-The creature pool is STRICTLY-MARINE — fish, sharks, dolphins, whales, sea turtles, octopus, jellies, crabs, sea stars, seahorses, manta rays, eels, anemones, sea-lions, manatees, baby sharks, etc. DO NOT add land animals like cats, dogs, foxes, rabbits, mice, bears, raccoons, etc. — they don't live underwater. DO NOT add ducks / otters / penguins / beavers — those are filtered out of the marine pool for this path. The two picked creatures are ALWAYS marine. Render them as marine.
 
 ━━━ MOVIE POSTER MOMENT — every shot must be a frame-worthy still ━━━
 

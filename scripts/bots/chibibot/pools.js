@@ -81,6 +81,13 @@ module.exports = {
   BATH_TIME_SURPRISE_ELEMENTS: load('bath_time_surprise_elements'),
   BATH_TIME_PHENOMENA: load('bath_time_phenomena'),
 
+  // Cuddly-aquatic path-bespoke axes (2026-05-19 full-bespoke migration)
+  CUDDLY_AQUATIC_SETTINGS: load('cuddly_aquatic_settings'),
+  CUDDLY_AQUATIC_INTERACTIONS: load('cuddly_aquatic_interactions'),
+  CUDDLY_AQUATIC_SURPRISE_ELEMENTS: load('cuddly_aquatic_surprise_elements'),
+  CUDDLY_AQUATIC_PHENOMENA: load('cuddly_aquatic_phenomena'),
+  CUDDLY_AQUATIC_CREATURES_MARINE: load('cuddly_aquatic_creatures_marine'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each

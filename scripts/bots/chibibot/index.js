@@ -59,15 +59,11 @@ module.exports = {
   username: 'chibibot',
   displayName: 'ChibiBot',
 
-  // 60/40 rotation between two medium identities:
-  //   chibibot_render — hyper-cute 3D CGI / Pop-Mart designer-vinyl register (2026-05-07) — 6×
-  //   chibibot_pixar  — modern Pixar/Disney/DreamWorks animated-feature register (pre-2026-05-07) — 4×
-  // Repeated entries weight the random pick by botEngine.resolveMedium.
-  mediums: [
-    'chibibot_render', 'chibibot_render', 'chibibot_render',
-    'chibibot_render', 'chibibot_render', 'chibibot_render',
-    'chibibot_pixar', 'chibibot_pixar', 'chibibot_pixar', 'chibibot_pixar',
-  ],
+  // 50/50 rotation between two medium identities (2026-05-19):
+  //   chibibot_render — "funko cute": hyper-detailed 3D CGI / Pop-Mart designer-vinyl register
+  //   chibibot_pixar  — "pixar cute": modern Pixar/Disney/DreamWorks animated-feature register
+  // Equal counts → equal probability via botEngine.resolveMedium.
+  mediums: ['chibibot_render', 'chibibot_pixar'],
 
   mediumStyles: {
     chibibot_render: blocks.CHIBI_RENDER_MEDIUM,
@@ -202,7 +198,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time'],
+    skipPaths: ['bath-time', 'cuddly-aquatic'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;
