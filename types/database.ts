@@ -1288,6 +1288,42 @@ export type Database = {
           },
         ];
       };
+      pro_hq_downloads_log: {
+        Row: {
+          created_at: string;
+          id: string;
+          upload_id: string | null;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          upload_id?: string | null;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          upload_id?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'pro_hq_downloads_log_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'pro_hq_downloads_log_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       push_tokens: {
         Row: {
           created_at: string;
@@ -1639,6 +1675,7 @@ export type Database = {
           pro_mode_flux_model: string;
           pro_subscription: boolean;
           pro_subscription_expires_at: string | null;
+          pro_trial_started_at: string | null;
           sparkle_balance: number;
           username: string;
         };
@@ -1656,6 +1693,7 @@ export type Database = {
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
+          pro_trial_started_at?: string | null;
           sparkle_balance?: number;
           username: string;
         };
@@ -1673,6 +1711,7 @@ export type Database = {
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
+          pro_trial_started_at?: string | null;
           sparkle_balance?: number;
           username?: string;
         };
@@ -1897,6 +1936,7 @@ export type Database = {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
       };
+      is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
       record_impression: {
         Args: { p_upload_id: string; p_user_id: string };
         Returns: undefined;
