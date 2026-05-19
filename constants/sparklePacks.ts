@@ -3,6 +3,23 @@
  * Used by: sparkleStore UI, revenuecat-webhook, and anywhere packs are referenced.
  *
  * Product IDs must match EXACTLY what's in App Store Connect + RevenueCat.
+ *
+ * Pricing locked 2026-05-18 per PRO_SUBSCRIPTION_SETUP.md + SPARKLE_PRICING_
+ * STRATEGY.md analysis. Assumes 15% Apple Small Business cut. All tiers
+ * profitable at $0.06/sparkle fully-loaded cost (Replicate + Sonnet/Haiku
+ * + storage). Margins: 47% → 43% → 36% → 29% → 29% (slides toward floor
+ * at the higher tiers to give power users a real volume incentive).
+ *
+ * Per-sparkle stepladder:
+ *   Impulse  15 / $1.99  → $0.133/sparkle (highest, smallest pack)
+ *   Starter  40 / $4.99  → $0.125
+ *   Popular  90 / $9.99  → $0.111
+ *   Value    200 / $19.99 → $0.100 (cleanly better than Popular per unit)
+ *   Whale    500 / $49.99 → $0.100 (flat at floor — sells on volume)
+ *
+ * Popular at $9.99 deliberately collides with Pro subscription at $9.99.
+ * Forces the user to compare Popular (75 sparkles one-time, no extras) vs
+ * Pro (75 sparkles/mo + nightly + 4K + recurring) — Pro is clearly better.
  */
 
 export interface SparklePack {
@@ -14,22 +31,33 @@ export interface SparklePack {
 
 export const SPARKLE_PACKS: SparklePack[] = [
   {
-    productId: 'com.konakevin.radorbad.sparkles.25',
-    sparkles: 25,
-    label: 'Starter',
+    productId: 'com.konakevin.radorbad.sparkles.15',
+    sparkles: 15,
+    label: 'Impulse',
     icon: 'sparkles-outline',
   },
-  { productId: 'com.konakevin.radorbad.sparkles.50', sparkles: 50, label: 'Popular', icon: 'star' },
   {
-    productId: 'com.konakevin.radorbad.sparkles.100__',
-    sparkles: 100,
+    productId: 'com.konakevin.radorbad.sparkles.40',
+    sparkles: 40,
+    label: 'Starter',
+    icon: 'star',
+  },
+  {
+    productId: 'com.konakevin.radorbad.sparkles.90',
+    sparkles: 90,
+    label: 'Popular',
+    icon: 'sparkles',
+  },
+  {
+    productId: 'com.konakevin.radorbad.sparkles.200',
+    sparkles: 200,
     label: 'Best Value',
     icon: 'diamond',
   },
   {
     productId: 'com.konakevin.radorbad.sparkles.500',
     sparkles: 500,
-    label: 'Mega Pack',
+    label: 'Whale',
     icon: 'rocket',
   },
 ];
