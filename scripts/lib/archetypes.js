@@ -552,6 +552,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_FLOWER_FRIENDS: {
+    description:
+      'PATH-BESPOKE — BloomBot flower-friends path (2026-05-19 NEW). CLOSE-UP FLOWER + PLEASANT POLLINATOR pairing renders — beautiful butterfly / bumblebee / dragonfly / ladybug / firefly / moth co-hero with a hero bloom in a soft magical close-up scene with bouquet-cluster foreground + dreamy bokeh background + optional pollen-dust / fairy-light particles. All flower colors welcome. 3 path-bespoke pools (flower_focal_cluster / hero_pollinator / magical_particles-40%-gated) + universal lighting. Inspired by 6 user-hearted IG cozy-insect-on-flower references.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['flower_focal_cluster', 'hero_pollinator'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'magical_particles', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: {
     description:
       'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are strongly backlit / rim-lit — petal edges blazing in warm sun-rim-light against a soft pretty golden-hour sky over a wide gorgeous landscape. Naturalistic photography register (hibiscus / cosmos / cherry-blossom / dandelion / azalea / wisteria / tulip against mountains / hills / lakes / forests / coast). 4 path-bespoke pools (hero_flower / landscape_backdrop / sunset_sky / sun_position) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',
@@ -1207,6 +1221,34 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  TOYBOT_BARBIE_STORYTELLING: {
+    description:
+      'PATH-BESPOKE — ToyBot barbie-scene path (2026-05-19 axis-system rewrite). BARBIE-PLAYTIME MISCHIEF — every render is a single-frame kid-playroom story moment featuring Mattel-style 11.5-inch fashion-dolls (Barbie / Ken / sisters / Bratz-style) acting out absurd unexpected scenarios (black-market lip-gloss empire, Ken intervention, Barbie courtroom drama, sister-summit, campaign rally, cooking-show meltdown, etc.). NOT a Barbie movie poster. 4-6 dolls coexist in one densely populated playtime scene with multilayered real-prop set decoration. Six-slot seed DNA. Skips chaos / two-pass polish / sensory anchors. Uses path-bespoke wide narrative-action camera pool + playroom-diorama prompt prefix override.',
+    slots: {
+      universal: ['camera_angle'],
+      bot: [],
+      path: ['scene'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  TOYBOT_PLUSH_STORYTELLING: {
+    description:
+      'PATH-BESPOKE — ToyBot plush-world path (2026-05-19 axis-system rewrite). PLUSH-STORYBOOK MISCHIEF — every render is a single-frame storybook moment from an UNEXPECTED plush-stuffed-animal scenario (black-market honey trade, underground knit-off finals, plush comedy club, plush gondola taxi in the bath suds, plush acupuncture clinic, plush courtroom drama, fire-extinguisher emergency, etc.). Beatrix Potter meets Pooh meets Coraline-set-build meets cozy mischief. 4-6+ different plush archetypes coexist in one densely populated storybook scene with multilayered real-prop set decoration. Six-slot seed DNA: real surface + unexpected story setup; protagonist plush + specific action; 3-5 supporting cast across plush archetypes; multilayered real-prop set decoration; warm cozy storybook light; overhead/floating chaos element. Skips chaos / two-pass polish / sensory anchors. Uses path-bespoke wide narrative-action camera pool + storybook-diorama prompt prefix override.',
+    slots: {
+      universal: ['camera_angle'],
+      bot: [],
+      path: ['scene'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   TOYBOT_TOYBOX_STORYTELLING: {
     description:
       'PATH-BESPOKE — ToyBot toybox-chaos path (2026-05-19 axis-system rewrite). MIXED-MEDIUM STORYTELLING — every render is a single-frame comedy moment from a longer absurd toy-story (heist / wedding crash / talent show / mosh pit / rescue mission / tea party crashed / courtroom drama / magic show / construction disaster / etc.). 4-6+ different toy mediums coexist in one densely populated mischief scene on a real-world surface. Six-slot seed DNA: real surface + story setup; protagonist + dramatic absurd action; 3-5 supporting cast across brand families; absurd visual gag prop detail; warm play light; overhead/floating chaos element. Each seed bakes all 6 slots semicolon-separated. Skips chaos / two-pass polish / sensory anchors (seeds are pre-tuned 6-slot DNA — downstream layers strip slots or inject incompatible tokens).',
@@ -1389,6 +1431,36 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+
+
+  CHIBIBOT_RAINY_INTERIOR: {
+    description:
+      'PATH-BESPOKE — ChibiBot rainy-interior path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). OUTDOOR RAINY-DAY path: creatures playing OUT IN the rain — splashing puddles, holding polka-dot umbrellas, mud-stomping in boots, racing paper boats, catching raindrops in cupped paws, picking wet flowers, sharing umbrellas under trees. Cottagecore wet-fun joy. Pixar storybook painterly register. UNLIKE pair-bond paths, NO creature_2. 10 axes: 3 universal (lighting + atmosphere + weather) + 7 path-bespoke (creature + resident_activity + setting + setting_detail pickN:3 + time_of_day + surprise_element + phenomenon). Template-gated phenomenon 60%. Pixar-medium locked. Two-pass-polish skipped.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature_group', 'group_activity', 'setting', 'setting_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { setting_detail: 3, creature_group: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_RAINY_DAY_COZY: {
+    description:
+      'PATH-BESPOKE — ChibiBot rainy-day-cozy path (2026-05-19 full-bespoke migration). GROUP-OF-FRIENDS SHELTERED-FROM-RAIN cozy moments: 2-4 chibi friends huddled together in cozy outdoor shelters (mushroom caps / porches / under umbrellas / hollow logs / stone arches) during rain. Sister path to rainy-interior (which is friends OUT IN the rain playing actively); this one is friends SHELTERED warmly with rain visibly falling around the shelter. Warm-cozy shelter glow vs cool-blue-grey rainy world. Pixar-medium-locked. 10 axes: 3 universal + 7 path-bespoke (creature_group pickN:3 + huddle_activity + shelter + detail pickN:3 + time_of_day + surprise_element + phenomenon).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature_group', 'huddle_activity', 'shelter', 'detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { detail: 3, creature_group: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 
 };
 

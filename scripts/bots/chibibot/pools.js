@@ -121,6 +121,16 @@ module.exports = {
   RAINY_INTERIOR_SURPRISE_ELEMENTS: load('rainy_interior_surprise_elements'),
   RAINY_INTERIOR_PHENOMENA: load('rainy_interior_phenomena'),
 
+  // Rainy-day-cozy path-bespoke axes (2026-05-19 full-bespoke migration)
+  // Group-of-friends SHELTERED-FROM-RAIN cozy moments (sister path to
+  // rainy-interior which is creatures OUT IN the rain playing actively).
+  RAINY_DAY_COZY_SHELTERS: load('rainy_day_cozy_shelters'),
+  RAINY_DAY_COZY_HUDDLES: load('rainy_day_cozy_huddles'),
+  RAINY_DAY_COZY_DETAILS: load('rainy_day_cozy_details'),
+  RAINY_DAY_COZY_TIME_OF_DAY: load('rainy_day_cozy_time_of_day'),
+  RAINY_DAY_COZY_SURPRISE: load('rainy_day_cozy_surprise'),
+  RAINY_DAY_COZY_PHENOMENA: load('rainy_day_cozy_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each

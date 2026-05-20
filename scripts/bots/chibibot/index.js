@@ -84,6 +84,8 @@ module.exports = {
     'cozy-landscape': 'chibibot_pixar',
     // rainy-interior — same painterly storybook register as cozy-landscape
     'rainy-interior': 'chibibot_pixar',
+    // rainy-day-cozy — same painterly storybook register
+    'rainy-day-cozy': 'chibibot_pixar',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -203,7 +205,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;

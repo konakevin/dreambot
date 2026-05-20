@@ -6480,6 +6480,108 @@ CRITICAL — every visible flower has a clearly glowing core. The flowers look U
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_FLOWER_FRIENDS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, flower_focal_cluster, hero_pollinator, magical_particles } = slots;
+
+    const particlesSection = magical_particles
+      ? `
+━━━ MAGICAL PARTICLES — render visibly in the scene ━━━
+${magical_particles}
+
+A specific atmospheric detail adding magic-pretty texture (NOT competing with the insect or flower).
+
+`
+      : '';
+
+    return `You are a fantasy-realism concept-art painter writing CLOSE-UP FLOWER + COZY POLLINATOR scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — A BEAUTIFUL INSECT ON A BEAUTIFUL FLOWER ━━━
+
+The unifying mandate: a CLOSE-UP scene where a pleasant pollinator (butterfly / bumblebee / dragonfly / ladybug / firefly / moth / etc.) is interacting with a HERO FLOWER cluster — landing on a petal, hovering at the bloom, drinking nectar, perched on a leaf. The INSECT is CO-HERO with the flower. Around them: a soft bouquet-cluster of supporting blooms in the foreground, dreamy bokeh background, sometimes magical particles floating in the air.
+
+THE LOOK — IG-cozy-flower-friend / Pinterest-magical-pollinator / Beatrix-Potter-meets-photoreal:
+- ONE specific pleasant insect at the center of the scene, interacting with the hero flower (clearly visible, recognizable species, beautifully rendered)
+- ONE HERO FLOWER as the focal anchor (large, in-focus, gorgeously detailed)
+- A SUPPORTING BOUQUET-CLUSTER of 3-5+ sister blooms around the hero (slightly softer focus, supporting the hero, giving the scene fullness)
+- DREAMY BOKEH BACKGROUND — soft out-of-focus floral mass behind, shallow DOF, painterly blur
+- SOFT MAGICAL LIGHT — pretty warm pastel light bathing the scene, sometimes with magical-pretty particles drifting
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **ONE HERO INSECT INTERACTING WITH THE HERO FLOWER** — explicitly name the insect species and describe how it's interacting (landing on the bloom-center / hovering at a petal / drinking nectar / perched on a leaf / wings spread on the bloom). The insect is clearly visible, beautifully rendered, naturalistically posed. Make the insect species + interaction the spine of every render.
+
+2. **PLEASANT INSECTS ONLY** — bumblebees / honeybees / carpenter-bees / monarch butterflies / swallowtail butterflies / blue morpho butterflies / painted lady butterflies / pink-purple butterflies / fritillary butterflies / luna moths / hummingbird hawkmoths / dragonflies (blue / green / red) / damselflies / ladybugs / fireflies / lacewings. NEVER spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / any creepy-crawly. Pleasant cottagecore insects ONLY.
+
+3. **HERO FLOWER + BOUQUET-CLUSTER SUPPORTING** — describe the hero flower species (dahlia / zinnia / cosmos / peony / hibiscus / etc.) + a supporting bouquet-cluster of 3-5+ sister blooms around it (similar palette or contrasting palette, varied species creates richness). The hero is the anchor; the cluster fills the foreground beautifully.
+
+4. **CLOSE-UP COMPOSITION — NOT MACRO** — the framing is intimate close-up where the hero flower fills the lower 50-60% of the frame and the insect is at upper-middle, clearly visible. NOT extreme macro (that's the closeup path) — close enough to see the insect's wing-patterns and the flower's petal-veins, but the SCENE is the subject not a single petal.
+
+5. **DREAMY BOKEH BACKGROUND** — the background is soft out-of-focus floral mass (more blooms / leaves / sky / soft-color wash) in shallow DOF. Painterly soft blur. The HERO FLOWER + INSECT are sharp; everything behind is dreamy.
+
+6. **SOFT MAGICAL LIGHT** — warm soft golden-hour or magical-pretty pastel ambient light bathing the scene. NOT harsh sunset / NOT dramatic / NOT moody-dark. Cottagecore IG-magical-hour soft warm pretty.
+
+🚫 ABSOLUTE BANS:
+  • 🚫 NO ugly / creepy insects — NO spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / anything creepy-crawly
+  • 🚫 NO interior / vase / cut-flower framing — flowers growing in the wild
+  • 🚫 NO extreme macro INTO the bloom-wall (that's the closeup path)
+  • 🚫 NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
+  • 🚫 NO ruins / abandoned structures / urban architecture
+  • 🚫 NO archways / tunnels / passages / engulfment
+  • 🚫 NO epic-landscape wide / dramatic-sunset (sunset-flowers' territory)
+  • 🚫 NO harsh / moody / dark / dramatic lighting — soft magical pretty only
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS anywhere in frame 🚫🚫🚫
+
+━━━ THE FLOWER FOCAL CLUSTER (hero bloom + supporting cluster) ━━━
+${flower_focal_cluster}
+
+━━━ THE HERO POLLINATOR (specific pleasant insect + interaction) ━━━
+${hero_pollinator}
+
+The insect is at the visual center of the scene, clearly interacting with the hero flower. Render its species accurately — wing-patterns, body, posing.
+${particlesSection}━━━ COMPOSITION CRAFT — CLOSE-UP FLOWER + INSECT PAIRING ━━━
+
+  • FOREGROUND: hero flower-cluster fills lower 50-60% of frame — hero bloom large and in-focus, supporting bouquet around it
+  • MIDDLE: the insect is at upper-middle of frame, clearly visible, interacting with the hero flower
+  • BACKGROUND: dreamy bokeh — soft out-of-focus floral mass / leaves / sky-wash, shallow DOF, painterly blur
+  • DEPTH: clear sharp-foreground / sharp-insect / soft-dreamy-background separation
+  • COLOR: rich saturated foreground (any flower colors allowed), dreamy soft bokeh background
+  • SCALE: close enough to see the insect's wing-patterns + the flower's petal-veins, but NOT extreme macro
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Reinterpret the rolled lighting as SOFT MAGICAL PRETTY light bathing the scene — warm pastel ambient, gentle warm-pink or warm-amber or soft-cream wash. The light is gentle and pretty, NOT harsh / dramatic / moody / dark. Think IG magical-hour cottagecore golden-hour soft warm.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 2-4 species from the roster — ONE hero + 1-3 supporting in the bouquet cluster. The hero flower is large and in-focus; supporting flowers fill the foreground around it.
+
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO ugly / creepy / scary insects — pleasant pollinators ONLY
+- 🚫 NO extreme macro INTO the bloom-wall
+- 🚫 NO interior / vase / cut-flower
+- 🚫 NO surreal / impossible / floating
+- 🚫 NO urban / ruins / archways
+- 🚫 NO epic-landscape / dramatic-sunset
+- 🚫 NO harsh / moody / dark lighting
+- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / hands / body parts
+- 🚫 NO species outside the roster (for flowers)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[CLOSE-UP composition with HERO FLOWER large and in-focus filling lower 50-60% of frame + supporting bouquet-cluster around it], [the specific hero pollinator + how it's interacting with the hero flower — wings, body, pose explicit], [supporting bouquet-cluster of 3-5+ sister blooms in foreground around the hero], [dreamy bokeh background of soft out-of-focus floral mass]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft magical pretty warm pastel ambient light bathing the scene], [shallow DOF, painterly soft-blur, IG-magical-hour cottagecore aesthetic]
+
+CRITICAL — the COZY INSECT on the HERO FLOWER is the WHOLE POINT. Beautiful pollinator + beautiful bloom in a soft magical close-up scene. Pleasant insects ONLY. ABSOLUTE HARD BAN ON HUMANS.
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, hero_flower, landscape_backdrop, sunset_sky, sun_position, atmospheric_phenomenon } = slots;
 
@@ -6614,7 +6716,7 @@ CRITICAL — the SUN is VISIBLE IN FRAME and NATURALLY RIM-LIGHTING THE FLOWER P
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
-  BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+      BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { city_setting, architectural_detail, atmospheric_phenomenon } = slots;
 
     const phenomenonSection = atmospheric_phenomenon
@@ -8371,6 +8473,160 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
 
 
 
+  TOYBOT_BARBIE_STORYTELLING: ({ slots, sharedDNA }) => {
+    const { camera_angle, scene } = slots;
+
+    // Barbie-playroom mischief scene. The seed (scene) is a 6-slot DNA
+    // entry containing the FULL story: real surface + unexpected story
+    // setup; protagonist Barbie/Ken + absurd action; 3-5 supporting
+    // dolls mixing Barbie/Ken/sister/Bratz; multilayered real-prop
+    // set decoration; warm playroom light; overhead chaos element.
+    // Skips chaos / two-pass polish / sensory anchors.
+    return `You are a kid's-playroom-diorama photographer capturing a BARBIE-PLAYTIME-MISCHIEF MOMENT for ToyBot. The scene below is a fully-specified UNEXPECTED kid-playroom scenario — a packed action beat with multiple Mattel-style fashion-dolls coexisting in a multilayered real-prop set. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the FUN absurd kid-playtime energy, and reads as a populated playroom scene with the story playing out.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "tilt-shift" / "model railroad" — although the scene IS staged like a diorama, do not name it as such.
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / dark / cold / monsoon / storm / moonlit / horror / nightmare / grim. The vibe is FUN + WARM + BRIGHT KID-PLAYROOM + SLIGHTLY-ABSURD.
+NEVER render real women — every doll is a MATTEL-style 11.5-inch articulated fashion-doll (glossy plastic, molded hair, painted-makeup face, fashion-doll proportions).
+NEVER render Barbie-movie promotional posters / red-carpet shots / static product displays.
+NEVER include LEGO / Lego / brick-built / studded / blocky-limb minifigs — separate bot.
+NEVER include plush stuffed-animals or burlap-Sackboy — those are separate paths.
+
+━━━ THE PLAYROOM-MISCHIEF SCENE (fully specified — preserve ALL six slots) ━━━
+${scene}
+
+This 6-part scene has these mandatory slots in order:
+  1. REAL surface + the UNEXPECTED BARBIE STORY SETUP (lip-gloss empire / intervention / courtroom / Olympic disaster / etc.)
+  2. PROTAGONIST Barbie/Ken + their specific absurd action
+  3. 3-5 SUPPORTING CAST dolls mixing Barbies + Kens + sisters + Bratz-style
+  4. MULTILAYERED REAL-PROP SET DECORATION (kid-playroom found household objects)
+  5. WARM BRIGHT KID-PLAYROOM LIGHT
+  6. WHIMSICAL OVERHEAD / FLOATING CHAOS ELEMENT
+
+ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
+
+━━━ DOLL AESTHETIC — MATTEL-STYLE 11.5-INCH FASHION-DOLLS ━━━
+Every doll character is an articulated MATTEL-style 11.5-inch fashion-doll — glossy plastic body, molded hair (mix of blonde / brunette / redhead / black / pastel-dyed across the cast), oversized head with painted-glossy-makeup, fashion-forward outfits varying per role, articulated joints, spike-heel or sneaker plastic shoes. The cast comes ENTIRELY from the scene seed above — DO NOT add or substitute dolls. The aesthetic is what to lock: GLOSSY-PLASTIC ARTICULATED FASHION-DOLLS in kid-playroom playtime.
+
+Anti-list: NOT real women, NOT CGI, NOT illustration, NOT Barbie-movie poster, NOT red-carpet glamour shot, NOT promotional static product display.
+
+━━━ CAMERA — MEDIUM-WIDE NARRATIVE-ACTION FRAMING ━━━
+${camera_angle}
+
+Medium-wide cinematic playroom-diorama still — NOT a posed Barbie-movie poster, NOT a tight close-up portrait. The hero doll is mid-action as the compositional anchor; supporting dolls are in distinct individual mini-actions, NOT facing camera in a glamour lineup. Deep-focus throughout so every doll's outfit + hair-color + accessory is readable. NEVER unify dolls into a "Barbie product-shot" style — each doll stays distinct in her own outfit + role.
+
+━━━ ACTION ≠ POSED LINEUP — NON-NEGOTIABLE ━━━
+The scene captures a STORY MOMENT mid-progression. Hero doll mid-action. Supporting cast each captured mid-DISTINCT-action (one shocked, one mid-shouting, one fleeing, one laughing, one mid-grab, one taking notes). NEVER: dolls facing camera arranged in rows / lineups / group-portrait poses. NEVER: glamour-shoot "gathered Barbies looking at camera." Always: playroom-mischief in motion.
+
+━━━ COMPOSITION ━━━
+- Medium-wide narrative-action shot — hero doll mid-action dominates 30-40% of frame
+- Supporting dolls in distinct mid-action poses arrayed around at various depths
+- The FRAME IS PACKED — 4-6 visible dolls all DOING DISTINCT things
+- A SPECIFIC UNEXPECTED STORY IS HAPPENING — narrative beat readable in one glance
+- Real-prop scene-dressing visible throughout — multilayered set decoration
+- FUN + ABSURD + KID-PLAYROOM-MISCHIEF energy — sitcom not glamour
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+- The overhead chaos element is visible in the upper third
+- Deep-focus throughout — every doll + prop readable, outfits sharply distinct
+
+⚠️ FAILURE CONDITIONS
+• If render is a POSED GLAMOUR LINEUP / Barbie-movie poster / dolls facing camera in a row → FAILED.
+• If render is a TIGHT CLOSE-UP / macro / shallow-DOF on one doll → FAILED.
+• If real women / CGI / illustration appears → FAILED.
+• If any of the 6 slots is dropped → FAILED.
+• If winter / snow / night / storm / horror tokens appear → FAILED.
+• If scene reads as serious or grim → FAILED. MUST be fun + silly + kid-playroom.
+• If the frame is empty / sparse / only the protagonist visible → FAILED.
+• If no STORY ACTION is happening (static dolls, no motion) → FAILED. Action mid-progression.
+• If real-prop set decoration is missing / sparse → FAILED. The scene must be DRESSED.
+
+Output ONLY the raw scene description as comma-separated phrases (90-130 words). Lead with the STORY ACTION + setting + props, not the doll cast list. NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+  },
+
+  TOYBOT_PLUSH_STORYTELLING: ({ slots, sharedDNA }) => {
+    const { camera_angle, scene } = slots;
+
+    // Plush-storybook mischief scene. The seed (scene) is a 6-slot DNA
+    // entry containing the FULL story: real surface + unexpected story
+    // setup; protagonist plush + specific action; 3-5 supporting cast
+    // across plush archetypes; multilayered real-prop set decoration;
+    // warm cozy storybook light; overhead/floating chaos element.
+    // Sonnet's only job is to render it as ONE comma-separated Flux
+    // prompt that preserves ALL six story slots, captures the cozy-
+    // mischief energy, and reads as a populated storybook scene with
+    // the story playing out. Path skips chaos / two-pass polish /
+    // sensory anchors — seeds are pre-tuned, downstream layers strip
+    // slots or contradict the storybook-diorama intent.
+    return `You are a children's-storybook-diorama photographer capturing a PLUSH-STORYBOOK MOMENT for ToyBot. The scene below is a fully-specified UNEXPECTED storybook scenario — a packed cozy-mischief beat with multiple plush characters coexisting in a multilayered real-prop set. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the cute-cozy-mischief energy, and reads as a populated storybook scene with the story playing out.
+
+⚠️ ABSOLUTE BANS
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "tilt-shift" / "model railroad" — although the scene IS staged like a diorama, do not name it as such.
+NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / dark / cold / monsoon / storm / moonlit / horror / nightmare / grim. The vibe is COZY + WARM + STORYBOOK + SLIGHTLY-ABSURD.
+NEVER include LEGO / Lego / brick-built / studded / blocky-limb minifigs — separate bot.
+NEVER include Sackboy burlap-with-zipper aesthetic — different ToyBot path. This is HUGGABLE PLUSH-FABRIC.
+NEVER render needle-felted Etsy handcraft creatures, NOT small felt cutouts, NOT craft-y figurines — every plush is a CUTE Squishmallow-style fluffy huggable plushie (oversized round-pudgy fiberfill body, soft visible plush-fur, big embroidered eyes).
+NEVER unify the plush characters' fur-colors — each plush has its OWN distinct fur color + archetype, but ALL render with the same fluffy-fiberfill huggable plush-fur quality.
+NEVER render real animals or CGI — these are SOFT-FABRIC FLUFFY stuffed-animal characters.
+
+━━━ THE STORYBOOK SCENE (fully specified — preserve ALL six slots) ━━━
+${scene}
+
+This 6-part scene has these mandatory slots in order:
+  1. REAL surface + the UNEXPECTED STORY SETUP (what's happening — black-market honey trade / knit-off / comedy club / etc.)
+  2. PROTAGONIST plush + their specific action
+  3. 3-5 SUPPORTING CAST plush across DIFFERENT plush archetypes, each with a distinct action
+  4. MULTILAYERED REAL-PROP SET DECORATION (kid-found household objects dressing the scene)
+  5. WARM COZY STORYBOOK LIGHT
+  6. WHIMSICAL OVERHEAD / FLOATING CHAOS ELEMENT
+
+ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
+
+━━━ PLUSH AESTHETIC ━━━
+Every plush character in the scene is a CUTE Squishmallow-style fluffy huggable plushie — oversized round-pudgy fiberfill body, soft visible plush-fur coating, floppy limbs, big embroidered or button eyes, sewn-on muzzle. The plush cast (which specific animals appear) comes ENTIRELY from the scene seed above — DO NOT add or substitute animals. The aesthetic is what to lock: CUTE + ROUND + FLUFFY + HUGGABLE.
+
+Anti-list: NOT needle-felted Etsy creatures, NOT small felt cutouts, NOT craft-figurines, NOT Sylvanian / Calico Critter flocked figurines, NOT Pop-Mart collectibles, NOT realistic stuffed-animal collector pieces.
+
+━━━ MULTILAYERED REAL-PROP SET DECORATION (NON-NEGOTIABLE) ━━━
+The scene is DRESSED. Beyond the plush cast there are 3-4 visible real-world kid-found household objects acting as scenery: real coffee mugs, real coins, real twigs, real moss, real petals, real autumn leaves, real ribbons, real teacups, real candy wrappers, real Post-it notes, real chalk, real glass jars, real wooden blocks, real fabric scraps, real spoons, real corks, real buttons, real string-lights, real lavender sprigs, real seashells. The PROPS BUILD THE WORLD around the plush characters.
+
+━━━ CAMERA — MEDIUM-WIDE STORYBOOK-DIORAMA FRAMING ━━━
+${camera_angle}
+
+Medium-wide cinematic storybook-diorama still — NOT a posed group photo, NOT a tight close-up macro. The hero plush is mid-action as the compositional anchor; supporting plush is in distinct individual mini-actions, NOT facing camera in a lineup. Deep-focus throughout so every plush's NATIVE fabric/knit/felt texture is readable. NEVER unify plush characters into a "cute Pop-Mart plushie" cartoon look — each plush stays distinct in its native plush-fiber medium.
+
+━━━ ACTION ≠ POSED LINEUP — NON-NEGOTIABLE ━━━
+The scene captures a STORY MOMENT mid-progression. Hero plush mid-action. Supporting cast each captured mid-DISTINCT-action (one shocked, one mid-stir, one fleeing, one laughing, one mid-grab, one taking notes). NEVER: plush facing camera arranged in rows / lineups / group-portrait poses. NEVER: cute static "gathered plushies looking at camera." Always: storybook-mischief in motion.
+
+━━━ COMPOSITION ━━━
+- Medium-wide narrative-action shot — hero plush mid-action dominates 30-40% of frame
+- Supporting plush in distinct mid-action poses arrayed around at various depths
+- The FRAME IS PACKED — 4-6 visible plush figures all DOING DISTINCT things
+- A SPECIFIC UNEXPECTED STORY IS HAPPENING — narrative beat readable in one glance
+- Each plush renders in its OWN plush-fiber type — NEVER unified style
+- Real-prop scene-dressing visible throughout — multilayered set decoration
+- COZY + WARM + STORYBOOK energy — cute-fluffy plush mischief mood
+- The light specified in the seed is the ONLY light — no chaos, no winter, no night
+- The overhead chaos element is visible in the upper third
+- Deep-focus throughout — every plush + prop readable, textures sharply distinct
+
+⚠️ FAILURE CONDITIONS
+• If render is a POSED LINEUP / group portrait / plushies facing camera in a row → FAILED.
+• If render is a TIGHT CLOSE-UP / macro / shallow-DOF on one plush → FAILED.
+• If all plush render in UNIFIED CUTE-POP-MART style (all same texture) → FAILED. Textures MUST stay distinct.
+• If plush render as NEEDLE-FELTED Etsy-handcraft creatures / small felt cutouts / craft-figurines → FAILED. They must be FLUFFY HUGGABLE FULL-BODIED stuffed animals.
+• If any LEGO / Lego / brick-built figure appears → FAILED. Wrong bot.
+• If any Sackboy burlap-with-zipper appears → FAILED. Wrong path.
+• If real animals or CGI rendering appears → FAILED.
+• If any of the 6 slots is dropped → FAILED.
+• If winter / snow / night / storm / horror tokens appear → FAILED.
+• If scene reads as serious or grim → FAILED. MUST be cozy + storybook + slightly absurd.
+• If the frame is empty / sparse / only the protagonist visible → FAILED.
+• If no STORY ACTION is happening (static plush, no motion) → FAILED. Action mid-progression.
+• If real-prop set decoration is missing / sparse → FAILED. The scene must be DRESSED.
+
+Output ONLY the raw scene description as comma-separated phrases (90-130 words). Lead with the STORY ACTION + setting + props, not the plush cast list. NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+  },
+
   TOYBOT_TOYBOX_STORYTELLING: ({ slots, sharedDNA }) => {
     const { camera_angle, scene } = slots;
 
@@ -9821,6 +10077,262 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
   },
 
 
+
+
+  CHIBIBOT_RAINY_INTERIOR: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_group,
+      group_activity,
+      setting,
+      setting_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(setting_detail) ? setting_detail : [setting_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const creatureList = Array.isArray(creature_group) ? creature_group : [creature_group];
+    const creatureBlock = creatureList.filter(Boolean).map((c, i) => `Friend ${i + 1}: ${c}`).join('\n\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing GROUP-OF-FRIENDS rainy-day scenes for ChibiBot — 2-4 adorable chibi friends playing TOGETHER outside in the rain. Splashing each other, sharing umbrellas, mud-fights, running side-by-side, building stick-dams in puddles, sliding through mud in a chain. Calvin-and-Hobbes-with-friends / Studio-Ghibli-kids-in-the-rain / Beatrix-Potter-group-romp aesthetic. The viewer's reaction: "I want to be playing in the rain with my friends right now!" Output wraps with style prefix + suffix.
+
+━━━ HARD RULE: MULTIPLE FRIENDS PLAYING TOGETHER — NEVER SOLO ━━━
+
+The frame contains 2-4 CHIBI FRIENDS playing TOGETHER in the rain. ALL friends are visibly present, interacting with each other (splashing each other, holding hands, sharing umbrella, in a pile, in a chain). NEVER a single solo creature staring at the camera. NEVER lined up posing. The group is MID-INTERACTION, doing something together.
+
+━━━ MANDATORY: CAPTURED MID-MOMENT — NEVER HEAD-ON PORTRAIT ━━━
+
+This is a CANDID PHOTOGRAPH caught a fraction of a second into the action. Camera angle: THREE-QUARTER from the side, OVER-THE-SHOULDER, LOW-ANGLE-LOOKING-UP, DUTCH-TILT, ACTION-SIDE-PROFILE. NEVER head-on portrait framing. NEVER creatures lined up facing the camera. The friends are interacting with EACH OTHER and the rain, not the viewer.
+
+━━━ MANDATORY: CHARACTERS ARE OUTSIDE IN THE RAIN ━━━
+
+The friends are OUTDOORS in the rain — not sheltered indoors. NO indoor scenes. NO window framings. NO sheltered-from-rain. They're IN it together, having fun.
+
+━━━ MANDATORY: RAIN IS HEAVY AND DOMINANT IN THE FRAME ━━━
+
+The RAIN itself is a co-hero of the composition. NOT light decorative streaks. NOT subtle atmospheric hint. Render the rain as VISIBLY HEAVY across the entire frame:
+- Thick silver streaks of rain visible everywhere (diagonal, dense, in-frame)
+- Steady downpour sheeting visible against any dark background
+- Rain bouncing off every wet surface in visible splash-pops
+- Puddles VISIBLY rippling from constant raindrops hitting
+- Friends' fur/hair clumping wet, water beading and dripping from whiskers/noses/ears
+- Atmospheric haze from rain density creating a "you can SEE the rain" effect
+- Wet light scatter — every surface has glossy wet sheen
+- Soaked clothing/raincoats with visible water-drips streaming off
+- Big drops in foreground (motion-blurred or slow-mo) to anchor depth
+- Sheets of rain sweeping across the background visible as silver curtains
+
+Think Pixar "Up" rain sequences / Studio Ghibli "Totoro" bus-stop rain / Spirited-Away river-spirit rain — DRAMATIC, VISIBLE, DENSE rain. The viewer should immediately see "this is heavy rain", not "this is a drizzle".
+
+━━━ THE GROUP OF FRIENDS (THREE chibi friends, all present) ━━━
+
+${creatureBlock}
+
+━━━ THE GROUP ACTIVITY (what they're doing TOGETHER right now) ━━━
+${group_activity}
+
+━━━ THE OUTDOOR RAINY SETTING (the wet stage) ━━━
+${setting}
+
+━━━ THREE RAINY-SETTING DETAILS (populate the scene with wet lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame caught mid-action. Pixar / Studio Ghibli group-romp framings. The friends mid-shared-fun are the EMOTIONAL CENTER. Composition: three-quarter or over-shoulder, NEVER head-on. The friends are interacting with each other, not the camera. Saturated cozy palette. Warm rim-light on creatures contrasted with cool blue-grey rain ambient.
+
+━━━ STORY BEAT — every render tells a STORY, never a pose ━━━
+
+The friends are MID-ACTION — splashing each other, mid-mud-throw, mid-chain-slide, mid-pile-on, mid-laugh, mid-umbrella-handoff. NEVER posing facing camera. NEVER static. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM WET-COZY GROUP EFFECTS ━━━
+
+Layer ALL of these on EVERY render:
+- Visible rain falling (silver streaks, droplets in motion blur, slow-motion fat raindrops)
+- Wet surfaces gleaming with reflection (cobblestones, leaves, fur, raincoats)
+- Splash effects between friends (water crowns, mud-splatter exchanges, droplet halos)
+- Multiple puddles with concentric ripples and reflections
+- Drips falling from umbrellas, eaves, leaves
+- Wet group dynamics — friends' fur/clothing soaked in motion
+- Atmospheric mist or fog drifting in low layers
+- Wet bokeh (warm-amber reflection orbs in puddles, cool-grey haze in distance)
+- Wet flora details (rain beading on petals, drooping leaves, glistening grass)
+- Cool blue-grey ambient light from overcast sky
+- Warm rim-light or pop-of-color from creatures' umbrellas / raincoats / boots
+- Action-evidence frozen mid-flight (water arcs, mud sprays, hair whipped sideways)
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Every render must produce JOY at friends sharing rainy fun. ALL the friends are HAPPY, having a delightful time TOGETHER. NEVER shivering, miserable, scared, fighting-with-malice, sad. Wholesome wet-cottagecore-friendship-joy.
+
+━━━ RENDERED CGI — Pixar painterly storybook register ━━━
+
+Polished 3D CGI in the modern Pixar / Disney / DreamWorks / Studio Ghibli-translated-to-CGI register. Painterly subsurface scattering, soft volumetric god-rays through rain, painterly bokeh, jewel-bright cozy saturation. Creatures with chibi proportions, big dewy eyes, blushed cheeks. Friends visibly DIFFERENT species/sizes for variety.
+
+━━━ NO DARK / NO STORM-DAMAGE / NO ADULT HUMANS ━━━
+
+No menace, no flooding-disaster, no creature-in-distress. Children OK from unified pool — render at chibi proportions, also IN the rain having group fun.
+
+━━━ TIME OF DAY (drives ambient light through rain) ━━━
+${time_of_day}
+
+━━━ WEATHER (rain is the baseline — this axis adds nuance) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (group mid-fun in rain) ━━━
+
+THREE-QUARTER or OVER-SHOULDER angle. NEVER head-on. The friends are visibly INTERACTING with each other — touching, splashing, holding hands, pile-on, side-by-side. They are NOT lined up facing the viewer. Three-act depth: FOREGROUND friends mid-group-action, MIDGROUND wet rainy setting, BACKGROUND atmospheric rain/mist. Rain visibly falling everywhere.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with EXACTLY this structure: "[Group structure phrase like 'Three chibi friends' or 'A pair and a third'] [shared activity verb-phrase IN the rain], at/on/in [outdoor setting], rain visibly streaking/sheeting/pattering..."
+
+Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the group of friends.`;
+  },
+
+
+  CHIBIBOT_RAINY_DAY_COZY: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_group,
+      huddle_activity,
+      shelter,
+      detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(detail) ? detail : [detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const creatureList = Array.isArray(creature_group) ? creature_group : [creature_group];
+    const creatureBlock = creatureList.filter(Boolean).map((c, i) => `Friend ${i + 1}: ${c}`).join('\n\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing GROUP-COZY-SHELTER scenes for ChibiBot rainy-day-cozy — 2-4 adorable chibi friends huddled TOGETHER in a cozy outdoor shelter (mushroom cap / porch / under umbrella / hollow log / stone arch) while RAIN visibly falls around them. Sharing cocoa, wrapped in blankets, piled together, sleepy nap-pile, mid-story-laugh. Studio Ghibli "Totoro bus-stop" / Calvin-Hobbes-under-porch / Charlie-Brown-Snoopy-huddle aesthetic. The viewer's reaction: "I want to be huddled in that shelter with my friends right now!" Output wraps with style prefix + suffix.
+
+━━━ HARD RULE: MULTIPLE FRIENDS HUDDLED TOGETHER — NEVER SOLO ━━━
+
+2-4 chibi friends visibly together IN the cozy shelter, INTERACTING (touching, sharing cocoa, wrapped in shared blanket, pile-on, heads stacked sleeping). NEVER solo. NEVER lined up posing facing camera.
+
+━━━ MANDATORY: CAPTURED COZY-INTIMATE MOMENT — NEVER HEAD-ON PORTRAIT ━━━
+
+Camera angle: THREE-QUARTER from the side / OVER-SHOULDER / SIDE-PROFILE / DUTCH-TILT. NEVER head-on. The friends are interacting with EACH OTHER, not the camera.
+
+━━━ MANDATORY: SHELTERED FROM RAIN — RAIN VISIBLE AROUND SHELTER ━━━
+
+The friends are inside an OUTDOOR SHELTER (mushroom cap, porch, under umbrella, hollow log, stone arch). They stay dry inside; the RAIN visibly falls AROUND the shelter — silver streaks beyond the shelter edge, water dripping from the shelter's roof/eaves/umbrella-tip, wet world beyond. The CONTRAST is the magic: warm-amber inside shelter vs cool-blue-grey wet beyond.
+
+━━━ THE GROUP OF FRIENDS (THREE chibi friends, all present) ━━━
+
+${creatureBlock}
+
+━━━ THE COZY-HUDDLE ACTIVITY (what they're doing TOGETHER in the shelter) ━━━
+${huddle_activity}
+
+━━━ THE COZY SHELTER (the warm pocket in the rainy world) ━━━
+${shelter}
+
+━━━ THREE COZY-SHELTER DETAILS (props that make the shelter feel lived-in) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Single frame caught mid-cozy-moment. Pixar / Studio Ghibli "Totoro" framing. Friends mid-shared-warmth are the EMOTIONAL CENTER. Three-quarter or over-shoulder. Warm-glow shelter contrasted with cool-blue-grey rain world beyond.
+
+━━━ STORY BEAT — every render tells a STORY, never a pose ━━━
+
+Friends are MID-COZY-MOMENT — sipping cocoa together, mid-laugh, mid-yawn, mid-blanket-wrap, mid-story, mid-bite of shared biscuit. NEVER posing facing camera. NEVER static.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-SHELTER + RAIN-AROUND EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- WARM amber/honey glow from inside the shelter (lantern / candles / window-glow if porch / mug-steam catching warm light)
+- Cool blue-grey rain falling visibly AROUND the shelter (not inside it)
+- Visible rain streaks beyond the shelter edge
+- Water dripping from the shelter's roof/eaves/umbrella-edge in streams
+- Puddles beyond the shelter rippling from rain
+- Steam from cocoa/teapots/mugs visibly curling up inside
+- Soft warm bokeh inside the shelter
+- Cool blue-grey haze outside the shelter (rain density visible)
+- Wet surfaces gleaming with reflection (just outside the shelter)
+- Reflections of warm shelter-glow in puddles outside
+- Drips from umbrella forming tiny ripples in puddle below
+- Atmospheric depth — foreground friends in shelter, midground shelter edge, background rainy world
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Friends are HAPPY, intimate, warm, content. Wholesome rainy-day-friendship. NEVER shivering, sad, scared.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar / Disney / DreamWorks register. Painterly subsurface scattering, warm volumetric god-rays from shelter lights, painterly bokeh. Chibi proportions. Friends visibly DIFFERENT species/sizes for variety.
+
+━━━ NO ADULT HUMANS (children OK from unified pool) ━━━
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (friends inside shelter + rain visible around) ━━━
+
+THREE-QUARTER or OVER-SHOULDER angle. Friends in foreground/midground INSIDE the shelter (warm amber light pooling on them, body-language of cozy intimacy). Shelter edge visible (umbrella rim / porch eaves / mushroom cap / log opening). Rainy outdoor world VISIBLE beyond (rain streaks, wet ground, puddles, dim blue-grey). The contrast frame: WARM INSIDE vs COOL OUTSIDE.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[Group structure like 'Three chibi friends' or 'A pair and a third'] [cozy-huddle verb-phrase IN the shelter], inside [shelter setting], rain visibly falling around them..."
+
+Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the friends in the shelter.`;
+  },
 
 
 };
