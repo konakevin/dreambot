@@ -170,6 +170,124 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 ---
 
+## How to seed pools — full canonical workflow (2026-05-19)
+
+Every bot's pool-generation script (`scripts/gen-<bot>-pool.js`) follows the same shape. Future agents: this is the canonical pattern — read carefully before authoring a new pool recipe.
+
+### CLI invocation
+
+```bash
+node scripts/gen-<bot>-pool.js --pool <pool_name> --count 25 [--target 200] [--max-iter 15] [--dry-run]
+```
+
+| Flag | Purpose |
+|---|---|
+| `--pool` | Required. Pool name matching a key in `POOL_RECIPES` (e.g. `bloombot_flower_fantasy_scale_form`) |
+| `--count` | Batch size per Sonnet call (default 30). Use **25 for iteration**, **50 for production scale-up** |
+| `--target` | Final pool size goal. Script iterates until reached or `--max-iter` exhausted. Without `--target`, generates exactly `--count` new entries |
+| `--max-iter` | Safety cap on iteration loop (default 15) |
+| `--dry-run` | Generates + dedups but does NOT write the JSON. Use to preview |
+
+### Output
+
+Writes `scripts/bots/<bot>/seeds/<pool_name>.json` — a flat JSON array of strings (one string per pool entry). On overwrite, the previous JSON is backed up to `<pool>.json.bak-<timestamp>`.
+
+### Recipe shape (`POOL_RECIPES` const in the gen script)
+
+```js
+const POOL_RECIPES = {
+  bloombot_flower_fantasy_scale_form: {
+    format: 'simple',
+    theme: `<the Sonnet system prompt — long, structured:
+      • THE BAR — one paragraph on what every entry must produce
+      • VARIETY MANDATE — distribute the 25 entries across N categories with explicit counts
+      • STRICT BANS — things Flux will default to that we explicitly forbid
+      • LANGUAGE PATTERNS — example phrasings Sonnet should use (or AVOID)
+      • MOOD / register>`,
+    touchpoints: [
+      'EXAMPLE 1 — body of an example entry',
+      'EXAMPLE 2 — body of an example entry',
+      // 5-25 example entries Sonnet anchors to
+    ],
+    instructions: `<short format spec: "Each entry is ONE X, 30-50 words. Format: 'NAME CAPS — body'. Output as a NUMBERED list. NO internal newlines.">`,
+  },
+};
+```
+
+The `theme` is the heavy lift — long, structured, includes category distribution mandates + ban language + example-phrasings. The `touchpoints` are example entries Sonnet learns the format and tone from. The `instructions` is the short closing format spec.
+
+### The full pipeline (what happens when you run the script)
+
+1. **Build the prompt** — `theme + touchpoints + instructions + "Output N numbered list entries"`
+2. **Call Sonnet** — `claude-sonnet-4-6`, `max_tokens: 16000`, 15-min timeout
+3. **Parse output** — split on `1. ... 2. ...` regex, strip code fences and quotes, filter entries 20-1200 chars
+4. **Dedup the batch** — two layers:
+   - **Title** — exact-match the text before ` — ` (the CAPS prefix) against existing entries → drop
+   - **Body signature** — extract first 12 unique non-stopword tokens >4 chars from the body, alphabetize, hash → drop on match
+5. **Append unique survivors** to the pool
+6. **Loop** if `--target` set and not reached — each iteration overgenerates to absorb dedup losses
+7. **Write JSON** — atomic write with timestamped backup of the previous file
+
+### Iteration pattern (canonical for new paths)
+
+This is how I (Claude) iterate on every new bot path with Kevin. Follow this exact pattern:
+
+1. **Author the recipe** (theme + touchpoints + instructions) — get the structure right
+2. **`--count 25`** — generate the first 25 entries (cheap iteration size)
+3. **Wire the path** — register archetype, template, pool loader, path file
+4. **Render 5 with `iter-bot.js`**:
+   ```bash
+   node scripts/iter-bot.js --bot <bot> --mode <path-name> --count 5 --label "auto-qa: <path> R<round>" --post
+   ```
+5. **Review the renders** — identify what landed, what didn't
+6. **Iterate the recipe** — strengthen mandates, add specific examples, refine ban language. Wipe the pool (`mv` to `/tmp` backup), regenerate at 25
+7. **Repeat 4-6 until 5/5 renders consistently land the look**
+8. **Scale to production**: `--target 200 --count 50` once Kevin approves the iteration
+9. **Commit** — full path scaffolding + final-state pools
+
+**Why iterate at 25 not 200:** generating 200 takes 4-8 iterations × ~40s each = 5-10 minutes. Generating 25 takes one call ≈ 40s. When the recipe needs work, you'll burn 10x the time scaling 200 prematurely.
+
+### Pool size capping — real-world expectation
+
+Pools commonly settle 120-180 of a 200 target due to dedup hitting the semantic ceiling. The script logs `Final: X/200 entries` honestly. **Don't fight this** — if Sonnet can only generate 130 unique entries on a given recipe, that's the path's natural variety ceiling. Take the 130.
+
+If you genuinely need more variety: split the pool into multiple bespoke pools (e.g., `forest_scene` + `mushroom_scene` separately instead of one `scale_form`) so each has more semantic room.
+
+### Recipe authoring rules (from hard-earned experience)
+
+**Do:**
+- Distribute variety with explicit counts (`~5 of category A, ~4 of category B`)
+- Front-load the "bar" — what every entry must produce
+- Quote example phrasings Sonnet should use
+- Quote example phrasings Sonnet must AVOID (these are the bigger wins — Sonnet defaults to certain wordings even when banned)
+- 5-25 touchpoint examples — vary across the categories
+- Specify entry word count + format
+
+**Don't:**
+- Write recipes longer than ~200 lines — Sonnet gets diluted past that
+- Write 50+ stacked constraints — the first 5-10 carry the brief; more becomes noise (feedback `feedback_dont_over_engineer_sonnet_prompts.md` in memory)
+- Mix multiple semantic axes into one recipe — split into multiple pools instead
+- Skip the touchpoints array — Sonnet anchors to the examples for tone/format
+
+### Common failure modes + fixes
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Pool capped at 25/200 | Recipe semantic space too narrow | Split into 2+ pools by sub-category |
+| Same theme appears 5×/25 | Variety mandate too weak | Add explicit category distribution with counts |
+| Sonnet keeps generating banned content | Ban language too soft | Add explicit "NEVER X — that triggers Y in Flux" with the failure mode named |
+| Generated entries don't match touchpoint format | Instructions section too short | Make `instructions` more explicit on format + word count |
+| Apostrophes in entries break gen script | JSON-escaping bug in recipe | Strip possessive apostrophes from species names (Anna's → Anna) — don't try to escape |
+
+### When to wipe vs. append
+
+- **Wipe** (`mv <pool>.json /tmp/backup-<ts>.json`) — when you've changed the recipe structure / mandates and existing entries don't reflect them
+- **Append** (`--target N` with existing file present) — when you're scaling a locked recipe to production size
+
+The script auto-detects existing file presence and appends with cross-batch dedup. To force regeneration, wipe first.
+
+---
+
 ## CANONICAL REFERENCE — DragonBot dragon-scene (2026-05-14 first clean win)
 
 After the 2026-05-13 franchise-path massacre (next section), the same bespoke biome+axes system applied to DragonBot's `dragon-scene` path produced **5/5 hearted renders on the first batch** with no iteration. This is the reference migration. Clone this pattern for every future path overhaul.

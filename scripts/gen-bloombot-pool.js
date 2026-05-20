@@ -1985,6 +1985,216 @@ The other 1-3 supporting hummingbirds are smaller / further back / hovering at o
     instructions: `Each entry is ONE specific MAGICAL PARTICLE effect for the hummingbird path, 20-40 words. Format: "PARTICLE NAME CAPS — primary effect + position in scene + how it catches light / interacts with the ambient". Vary across the 11 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO additional creatures (no insects). Subtle magical-pretty atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── flower-fantasy path (2026-05-19) — surreal scale-inversion flower landscapes ───
+  bloombot_flower_fantasy_scale_form: {
+    format: 'simple',
+    theme: `SURREAL SCALE-INVERSION FLOWER-FORM for the BloomBot flower-fantasy path. Each entry describes ONE specific HERO surreal flower-construction or scale-inverted flower-element that dominates a landscape scene. NO animals, NO humans, NO manmade objects, NO waterfalls — natural landscape forms only (trees, mushrooms, hills, mountains, rivers-of-petals, valleys, glades). Each entry 35-65 words.
+
+⚠️ THE BAR: every entry produces a render where (a) the hero is a SURREAL FLOWER-CONSTRUCTION or SCALE-INVERTED FLOWER (e.g., giant flower-mushroom, forest of flower-trees, river of petals replacing water), (b) the form is at LANDSCAPE SCALE (NOT macro close-up), (c) the natural landscape context is clear (forest / valley / meadow / glade / riverbed / hillside / mountainside), (d) the form is CONSTRUCTED FROM FLOWERS or scale is wildly inverted in a way the viewer notices instantly.
+
+⚠️ FORM TYPE VARIETY MANDATE — distribute the 25 entries across these scale-inversion categories (RE-WEIGHTED toward Kevin-favored forests + trees-made-of-flowers):
+  • ~7 FOREST OF OVERSIZED-FLOWER-TREES — multiple oversized overgrown flowers acting as forest trees forming a dense forest, NOT a single tree. CRITICAL — diverse tree SILHOUETTES across the forest (NOT just upright spires), pick from:
+      • UPRIGHT FLOWER-SPIRES — lupines / hollyhocks / delphiniums / foxgloves / snapdragons / iris-spires grown to 30-60 ft tall, vertical spire-trees
+      • SPRAWLING BRANCHY OAK-LIKE FLOWER-TREES — oak-shaped trees with splaying branches all made of flowers, gnarled organic silhouettes
+      • WEEPING-CASCADE FLOWER-TREES — willow-shaped trees with cascading branches of flowers hanging down
+      • SPINDLY GNARLED FLOWER-TREES — twisted bonsai-like trees with sparse flower-covered branches
+      • BROAD-CANOPY FLOWER-TREES — sycamore / maple-shaped trees with spreading flower-covered branches
+      • UMBRELLA-ACACIA FLOWER-TREES — flat-spreading umbrella canopies of flowers
+      • TALL SLENDER FLOWER-COLUMNS — cypress / poplar-shaped narrow tall trees with flowers along their length
+    Mix multiple silhouettes in the same forest for visual variety. Vary species + biome (alpine / temperate / tropical / forest-edge).
+  • ~6 SINGLE TREE MADE OF FLOWERS — one big tree whose trunk and canopy are entirely constructed from hundreds/thousands of small flowers. CRITICAL — diverse tree SILHOUETTES (NOT just round-canopy "muffin-top" trees), pick from:
+      • BRANCHY OAK / BANYAN — lots of splaying branches covered in flowers, organic gnarled silhouette
+      • WEEPING WILLOW — cascading branches of flowers hanging down to the ground
+      • SPINDLY GNARLED BONSAI — twisted, sparse branches with flowers blooming along each branch
+      • TALL SLENDER BIRCH / ASPEN — narrow trunk + sparse high-canopy with flowers as leaves
+      • UMBRELLA ACACIA — flat-spreading umbrella canopy of flowers
+      • CYPRESS / POPLAR — tall narrow column tree with flowers covering its length
+      • BAOBAB — thick trunk + sparse top-canopy branches with flowers
+      • MAPLE / SYCAMORE — broad spreading branches with abundant flower-leaves
+      • CHERRY-BLOSSOM — graceful spreading branches with cascading flower-clusters
+      • DRAGON BLOOD / MULTI-BRANCH — gnarled multi-fork branch structure with flowers on every branch
+    The trunk + branches + canopy are ALL made of flowers. AVOID always defaulting to "round ball canopy on trunk" — vary the tree silhouette wildly.
+  • ~5 GIANT FLOWER-MUSHROOMS — single mushroom-shaped flower-construction (cap = dense bloom-mass, stem = stacked flowers cascading) standing alone in a meadow
+  • ~3 PINE-TREES-OF-FLOWERS — conifer-shaped trees whose needles are entirely tiny flowers (lavender-pine / cosmos-pine / wisteria-pine)
+  • ~2 RIVER OF PETALS — a winding river through a glade where the "water" is REPLACED by flowing petals — the river is ENTIRELY petals from edge to edge, NO water visible anywhere (no blue water / no liquid surface / no splash / no spray — only flowing petals)
+  • ~1 HILLSIDE / MOUNTAIN OF FLOWERS — rolling hills or mountains where the entire mass is made of flowers or carpeted dense bloom-mass at impossibly steep slopes
+  • ~1 EXTRA OVERSIZED-FLOWER form — a single massive flower (peony / dahlia / hibiscus / sunflower / iris) scaled to landscape-form size — 50-80 ft tall — standing alone in a meadow as the surreal hero (NOT a tree-of-flowers; it's literally one giant individual flower scaled to tree-size).
+
+🚫 WATERFALL OF FLOWERS — REMOVED. Flux consistently renders waterfall entries as water-waterfalls (with white water spray) regardless of "petals replace water" mandate. DO NOT generate any waterfall entries in this pool.
+
+⚠️ INDIVIDUAL-FLOWER VISIBILITY MANDATE (CRITICAL — avoids "colored-leaves" trap):
+The trees / mushrooms / forms must look like they are COVERED IN HUNDREDS OF INDIVIDUAL VISIBLE FLOWERS, not like trees with monochrome colored leaves. Every entry MUST explicitly state:
+  - "hundreds of individual visible [species] blooms cover every branch / every needle / every surface"
+  - "each [species] flower is clearly visible and distinct — NOT a monochrome canopy of colored leaves"
+  - "the tree silhouette is made of countless distinct individual flower-heads, with each bloom showing recognizable petals + center + form"
+
+🚫 NEVER describe flowers as "colored leaves / colored foliage / colored canopy / red-leaved tree / pink-leaved tree" — that triggers Flux to render colored monochrome leaves, NOT visible flowers.
+🚫 NEVER describe pine-trees-of-flowers as "needles colored pink" or "yellow-needled pine" — describe them as "EVERY needle is a tiny individual visible cosmos / lavender / wisteria flower, you can see the distinct flower-shape of each one."
+🚫 NEVER let the canopy read as a solid wash of color — the canopy should be a DENSE MASS OF DISTINCT INDIVIDUAL BLOOMS where you can count many separate flowers.
+
+✓ MANDATORY language patterns: "covered in countless individual cherry-blossoms — each blossom distinct and recognizable" / "every branch dense with hundreds of visible cosmos flowers" / "trunk built from densely stacked individual daisies — each daisy clearly visible" / "needles are entirely individual tiny lavender florets — each floret visibly recognizable as a lavender bloom."
+
+⚠️ CONSTRUCTION DETAIL MANDATE — every entry MUST explicitly describe HOW the flower-construction looks. Examples:
+  • "giant flower-mushroom 40 feet tall — cap made of densely packed coral peony blooms forming the rounded dome silhouette, stem made of cascading pale-pink roses spiraling down the column"
+  • "forest where every tree is a giant lupine 50 feet tall — purple-and-white floret-spires towering up like pine trees, with thousands of individual lupine flowers stacked along each spire"
+  • "single oak-shaped tree 60 feet tall — trunk made of densely stacked stems of small white daisies, canopy made of thousands of small white daisies forming the leafy oak silhouette"
+  • "single weeping-willow-shaped tree — cascading branches made entirely of strands of pale-lavender wisteria blooms, trunk made of stacked violet phlox"
+  • "single cherry-blossom-shaped tree — trunk made of hundreds of densely stacked pink cherry-blossoms, canopy made of thousands more cherry-blossoms forming the leafy mass"
+
+⚠️ PETAL-RIVER — STRICT NO-WATER MANDATE:
+For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO water visible anywhere. NEVER describe "water," "blue water," "liquid surface," "rippling water," "stream of water," "splashing water," "water surface" — ONLY describe flowing petals. The river-bed has flowing petals where water would be. The viewer must see "river" silhouette but "petals all the way through" — no water on the surface.
+
+🚫 STRICT BANS:
+  • 🚫 NO ANIMALS in any form — no flower-deer, flower-rabbit, flower-fox, flower-bear, NO wildlife of any kind (no real animals either)
+  • 🚫 NO HUMANS / faces / figures / silhouettes / hands
+  • 🚫 NO MANMADE OBJECTS — no flower-houses, flower-arches, flower-cathedrals, flower-clocks, flower-vases, flower-vehicles, NO buildings of any kind
+  • 🚫 NO macro / extreme closeup — landscape scale needed
+  • 🚫 NO single-bloom-without-supporting-meadow — the supporting floor-carpet is mandatory (described in separate axis)
+  • 🚫 NO interior / urban / ruins
+  • 🚫 NO sci-fi / cyberpunk / electric / neon
+
+✓ NATURAL LANDSCAPE CONTEXT — the hero form lives in a recognizable natural landscape (forest / valley / meadow / glade / hillside / riverbed / mountainside). The landscape grounds the surreal-magical-realism.
+
+✓ MOOD — surreal-magical-realism, dreamy, naturalistic-but-impossible. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape.`,
+    touchpoints: [
+      'GIANT PINK FLOWER-MUSHROOM — 40-foot tall flower-mushroom standing alone in a pastel meadow, cap made of densely packed coral peony and pink rose blooms forming the rounded dome silhouette, stem made of cascading pale-pink roses spiraling down the column, surreal-magical-realism register',
+      'WHITE PEONY MUSHROOM FOREST — three giant flower-mushrooms 30-50 feet tall scattered across a misty meadow, caps made of dense ivory peony blooms, stems made of cascading pale-cream roses, smaller flower-mushrooms hazy in the distance',
+      'CORAL DAHLIA MUSHROOM — single oversized flower-mushroom 35 feet tall in a pastel valley glade, cap made of densely packed coral and peach dahlia blooms forming the rounded silhouette, stem made of stacked cream peonies, dreamy soft misty light',
+      'GIANT FUCHSIA-BLOOM MUSHROOM — surreal 40-foot flower-mushroom in a pastel meadow, cap made of dense hot-pink fuchsia bells cascading downward to form the dome, stem made of stacked magenta roses, soft surreal-magical-realism light',
+      'LAVENDER PHLOX MUSHROOM CLUSTER — five flower-mushrooms 20-35 feet tall clustered across a misty meadow, caps made of dense pale-lavender phlox blooms forming dome silhouettes, stems of stacked pale-lilac sweet-peas, dreamy haze',
+      'LUPINE-TREE FOREST — surreal forest where every tree is a 50-foot tall oversized lupine, towering purple-and-white floret-spires standing like pine trees, thousands of individual lupine florets stacked along each spire, supporting meadow carpet below',
+      'HOLLYHOCK-TREE FOREST — surreal forest of oversized hollyhocks grown to 45-foot trees, towering spires of pink-and-coral hollyhock blooms stacked up the trunks, smaller hollyhock-trees hazy in distance, dreamy meadow forest setting',
+      'SUNFLOWER-TREE FOREST — towering 60-foot oversized sunflowers as forest trees, massive disc-heads facing the sun at tree-canopy level, golden-yellow ray-petals as canopy foliage, supporting meadow of smaller wildflowers below, surreal scale',
+      'DELPHINIUM-TREE FOREST — forest of 50-foot oversized delphiniums as forest trees, towering blue-violet spires of stacked delphinium florets, smaller delphinium-trees fading into misty distance, dreamy pastel light',
+      'FOXGLOVE-TREE FOREST — surreal forest of oversized foxgloves grown to 40-foot trees, towering pink-and-white bell-spires acting as forest trunks, dreamy meadow forest with supporting smaller wildflowers below',
+      'GIANT CHERRY-BLOSSOM TREE OF FLOWERS — single oversized tree 60 feet tall whose entire trunk is made of hundreds of stacked tiny pink cherry-blossoms, and canopy spreading wide with thousands more cherry-blossoms forming the leafy mass, standing alone in a pastel meadow',
+      'OAK TREE OF FLOWERS — single oversized oak-shaped tree where the trunk is made of stacked stems of small white daisies, and canopy is thousands of tiny daisies forming the leafy oak silhouette, surreal-magical-realism meadow setting',
+      'WILLOW TREE OF FLOWERS — single weeping-willow-shaped tree whose cascading branches are entirely strands of pale-lavender wisteria blooms, trunk made of stacked violet phlox, smaller wisteria-willows in misty distance, soft pastel light',
+      'RIVER OF PINK-AND-WHITE PETALS — winding river of flowing pink-and-white cherry-blossom petals replacing water through a pastel meadow glade, banks of supporting pale wildflowers on each side, surreal-magical-realism',
+      'RIVER OF CORAL ROSE PETALS — winding ribbon of flowing coral-and-blush rose petals replacing water through a forest glade, banks of supporting small wildflowers on each side, dreamy soft pastel light, smaller petal-rivers visible in distance',
+      'RIVER OF MULTI-COLOR PETALS — gentle stream of flowing multi-color pastel petals (pink, blue, yellow, white, lavender) through a meadow valley, replacing water, banks of supporting wildflowers, surreal-magical-realism register',
+      'HILLSIDE OF DENSE BLOOM-MASS — rolling hills of dense pale-pink and lavender bloom-mass at impossibly steep slopes, every inch of the hillside covered in tightly-packed flowers forming the rolling topography, surreal scale inversion',
+      'MOUNTAIN OF TULIP-BLOOMS — distant mountain whose entire mass is constructed from densely packed pastel tulip blooms in pink, yellow, white forming the peaks and slopes, supporting meadow of smaller wildflowers in foreground, surreal-magical-realism',
+      'TULIP-MOUNTAIN RANGE — far-off mountain range made of densely packed pastel tulip blooms forming peaks in pink-yellow-white-purple, supporting foreground meadow of smaller wildflowers, dreamy misty haze, surreal scale-inversion',
+      'GIANT SINGLE DAHLIA OVERSIZED — a single 60-foot tall coral dahlia standing alone in a meadow, every petal scaled up to landscape size, the entire flower magnified to tree-form scale, supporting carpet of smaller wildflowers below, surreal-magical-realism scale-inversion',
+      'GIANT SINGLE PEONY OVERSIZED — a single massive pale-pink peony scaled to landscape size, 70 feet tall standing alone in a glade, every layered petal individually visible at landscape scale, supporting wildflower meadow carpeting the ground below',
+      'GIANT SINGLE HIBISCUS OVERSIZED — a single 50-foot vivid hibiscus blossom scaled to landscape size standing alone in a tropical meadow, every petal visible at tree-form scale, stamens like tree-branches, supporting carpet of smaller tropical wildflowers below',
+      'LAVENDER-PINE FOREST — surreal forest where every tree is shaped like a tall conifer but the needles are entirely tiny pale-lavender flowers, towering lavender-pines forming the forest canopy, supporting wildflower meadow below, dreamy haze',
+      'COSMOS-PINE FOREST — surreal forest of conifer-shaped trees whose needles are entirely tiny pale-pink cosmos blooms, towering cosmos-pines forming the forest, smaller cosmos-pines fading into misty distance, surreal-magical-realism',
+      'WISTERIA-PINE FOREST — surreal forest of cascading conifer-shaped trees made entirely of hanging pale-violet wisteria strands, towering wisteria-pines with vines hanging from every branch, soft pastel dreamy light, supporting meadow',
+    ],
+    instructions: `Each entry is ONE specific SURREAL SCALE-INVERSION FLOWER-FORM, 35-65 words. Format: "FORM NAME CAPS — explicit description of the surreal flower-construction or scale-inverted flower-element + specific flower species making it up + scale + landscape context implied + surreal-magical-realism register". MANDATORY — (a) scale-inversion or flower-construction explicit, (b) specific flower species making up the form, (c) scale at landscape level (NOT macro), (d) natural landscape context. NO animals, NO humans, NO manmade objects. NO macro / closeup. NO floor-carpet description (separate axis). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_fantasy_floor_carpet: {
+    format: 'simple',
+    theme: `SUPPORTING FLOOR-CARPET MEADOW for the BloomBot flower-fantasy path. Each entry describes ONE specific carpet of smaller wildflowers covering the ground around the hero surreal flower-form. This is the "flowers everywhere" supporting foundation. Each entry 25-45 words.
+
+⚠️ THE BAR: every entry describes a dense MEADOW CARPET of smaller wildflowers covering the foreground/midground ground, mixed species, varied colors, providing the supporting bloom-foundation around the hero surreal flower-form (described in separate axis).
+
+⚠️ FLOOR-CARPET CATEGORIES — distribute across:
+  • Soft pastel mixed wildflower meadow (cosmos / daisies / forget-me-nots / phlox / yarrow)
+  • Pink-and-cream tone carpet (pink camellias / cream peonies / pale-pink daisies)
+  • Multi-color rainbow wildflower carpet
+  • Single-species dense carpet (sea of pink poppies / sea of white daisies / sea of pale-blue forget-me-nots)
+  • Lavender-and-violet mixed carpet
+  • Yellow-and-cream meadow carpet
+  • Orange-and-coral wildflower carpet
+  • Moss-and-small-flower forest-floor carpet
+  • Riverbank wildflower carpet
+  • Mountainside wildflower carpet
+
+🚫 STRICT BANS:
+  • NO description of the hero scale-form (separate axis)
+  • NO animals / humans / manmade objects
+  • NO grass-only / leaf-only — must be FLOWERS dominant
+  • NO sci-fi / dark / harsh
+
+✓ The carpet supports and grounds the surreal hero form — softens the scene, provides bloom-saturation in the foreground.`,
+    touchpoints: [
+      'SOFT-PINK-AND-CREAM WILDFLOWER CARPET — dense carpet of pale-pink cosmos + cream daisies + pale-blue forget-me-nots + small white sweet-peas covering the meadow floor in the foreground, mixed species creating soft watercolor texture',
+      'PASTEL RAINBOW MEADOW CARPET — dense mixed wildflower meadow carpet of pale-blue cornflowers + soft-lavender asters + pale buttercup daisies + soft-peach ranunculus + delicate pink cosmos + ivory tulips covering the ground in the foreground',
+      'SEA OF PINK POPPY-PETALS — dense single-species carpet of pale-pink poppies covering every inch of the foreground meadow floor, soft watercolor pastel register',
+      'SOFT-LAVENDER ASTER CARPET — dense carpet of soft-lavender asters + pale-violet phlox + small ivory daisies + delicate pale-lilac sweet-peas covering the ground in the foreground, dreamy pastel meadow',
+      'WHITE-DAISY MEADOW CARPET — dense carpet of pure-white daisies + cream chamomile + pale-yellow primrose + soft white sweet-peas covering the foreground meadow floor, fresh ivory tone',
+      'BABY-BLUE FORGET-ME-NOT CARPET — dense carpet of pale-blue forget-me-nots + soft baby-blue cornflowers + delicate pale-cream daisies covering the foreground ground, soft watercolor pastel',
+      'BUTTERCUP-YELLOW MEADOW CARPET — dense carpet of soft buttercup-yellow daisies + pale-gold ranunculus + cream-yellow primroses + small ivory chamomile covering the ground in foreground',
+      'CORAL-AND-PEACH WILDFLOWER CARPET — dense carpet of soft coral ranunculus + pale-peach roses + dusty-orange poppies + delicate cream daisies covering the foreground meadow floor, soft pastel tones',
+      'MOSS-AND-PASTEL FOREST-FLOOR CARPET — dense forest-floor carpet of soft green moss + pale-pink trilliums + small white daisies + delicate violet forget-me-nots covering the foreground ground in a dreamy forest setting',
+      'RIVERBANK WILDFLOWER CARPET — dense riverbank carpet of pale-pink phlox + soft-blue cornflowers + delicate ivory daisies + small lavender forget-me-nots covering the banks alongside the hero form',
+      'MOUNTAINSIDE WILDFLOWER CARPET — dense alpine wildflower carpet of pale-pink alpine asters + soft-lavender heather + delicate cream-yellow buttercups + small white edelweiss covering the steep slope below the hero form',
+      'PINK-AND-WHITE PEONY-AND-DAISY CARPET — dense carpet of soft pink peonies + ivory daisies + cream-pink camellias + delicate pale-cream sweet-peas covering the foreground meadow floor',
+      'PASTEL-MIXED-COSMOS CARPET — dense carpet of pale-pink cosmos + pale-violet cosmos + white cosmos + soft-yellow daisies covering the meadow ground in the foreground, dreamy watercolor',
+      'LAVENDER-AND-CREAM PHLOX CARPET — dense carpet of soft-lavender phlox + cream-yellow yarrow + ivory daisies + delicate pale-lilac sweet-peas covering the foreground ground',
+      'MIXED-COLORED TULIP CARPET — dense carpet of mixed pastel tulips (soft-pink + cream + pale-yellow + pale-purple) covering the meadow floor in the foreground around the hero form',
+      'SOFT-WHITE CHRYSANTHEMUM CARPET — dense carpet of soft-white chrysanthemums + cream chamomile + pale-yellow daisies + delicate ivory sweet-peas covering the ground in foreground',
+      'PALE-PINK CHERRY-BLOSSOM PETAL-CARPET — dense carpet of fallen pale-pink cherry-blossom petals covering the meadow floor in the foreground, plus small white daisies and ivory peonies peeking through',
+      'DREAMY MIXED PASTEL CARPET — dense carpet of soft pastel mixed wildflowers (pale blue, pale lavender, pale pink, cream, soft buttercup, pale peach) covering the foreground ground in a dreamy meadow setting',
+      'CARPET OF PALE BLUEBELLS — dense carpet of pale-blue bluebells + delicate violet forget-me-nots + soft white daisies + small cream-yellow primroses covering the forest-floor ground',
+      'CARPET OF PASTEL ANEMONES — dense carpet of pale-pink anemones + soft-cream anemones + delicate pale-violet anemones + small white daisies covering the foreground meadow ground',
+      'CARPET OF PALE-PEACH-AND-WHITE ROSES — dense carpet of soft pale-peach roses + ivory roses + cream sweet-peas + delicate pale-pink daisies covering the foreground meadow floor',
+      'GLADE-WILDFLOWER CARPET — dense carpet of soft-mixed glade wildflowers (pale-pink trilliums + cream-yellow buttercups + delicate ivory daisies + small white sweet-peas) in a dreamy forest-glade setting',
+      'MEADOW OF MIXED PASTEL ZINNIAS — dense carpet of pastel zinnias (soft-pink + pale-cream + delicate pale-yellow + soft-coral) covering the foreground meadow ground',
+      'CARPET OF SOFT-PINK CAMELLIAS — dense carpet of soft-pink camellias + cream-pink peonies + ivory daisies + delicate pale-pink sweet-peas covering the foreground meadow floor',
+      'CARPET OF DREAMY MIXED WILDFLOWERS — dense carpet of dreamy mixed wildflowers (pale-blue cornflowers + soft-violet asters + cream daisies + pale-pink cosmos + delicate ivory sweet-peas) covering the foreground meadow ground',
+    ],
+    instructions: `Each entry is ONE specific FLOOR-CARPET MEADOW description, 25-45 words. Format: "CARPET NAME CAPS — dense carpet of [specific small wildflower species] + [supporting species] covering the foreground meadow ground". MANDATORY — flowers dominant (not grass / leaves), pastel watercolor tones, supporting the hero scale-form (not competing). NO description of hero form. NO animals / humans / manmade. NO sci-fi / dark. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_fantasy_atmospheric_magic: {
+    format: 'simple',
+    theme: `40%-GATED ATMOSPHERIC MAGIC for the BloomBot flower-fantasy path. Each entry describes ONE specific atmospheric magic-pretty detail amplifying the surreal-magical-realism mood — mist drift / drifting petals / golden-hour rays / dewdrops / fallen petals on water / pollen-dust / dappled sunlight. Each entry 20-40 words.
+
+⚠️ MANDATORY — every effect AMPLIFIES the dreamy surreal-magical-realism mood. Does NOT compete with the hero form.
+
+🚫 STRICT BANS:
+  • NO sci-fi / electric / neon / aurora
+  • NO scary / dark / ominous
+  • NO humans / hands / body parts
+  • NO animals / wildlife
+  • NO additional flower-forms (separate axis handles hero)
+
+✓ ATMOSPHERIC CATEGORIES:
+  A. **MIST DRIFT** — soft pastel mist drifting through the scene, especially in the deep distance
+  B. **DRIFTING PETAL-FALL** — petals drifting horizontally through the air around the hero form
+  C. **GOLDEN-HOUR RAYS** — soft warm sun-rays slanting through the canopy / forest gaps
+  D. **DEWDROPS** — fresh dew clinging to every visible bloom catching ambient light
+  E. **FALLEN PETALS ON WATER / PATH** — petals carpeting the ground or floating on a surface
+  F. **POLLEN-DUST** — soft pollen-motes drifting through the warm ambient light
+  G. **DAPPLED SUNLIGHT** — dappled warm light through a flower-tree canopy onto the ground
+  H. **SOFT WARM HAZE** — warm atmospheric haze softening the bokeh background
+  I. **PETAL CASCADE** — petals cascading down from the hero form like gentle snow
+  J. **BACKLIT FLOWERS** — soft warm backlight catching the hero form from behind`,
+    touchpoints: [
+      'SOFT PASTEL MIST DRIFT — gentle pastel pink-and-cream mist drifting through the deep-distance background of the scene, smaller flower-forms barely visible through the haze, surreal-magical-realism atmospheric',
+      'PINK PETAL-FALL DRIFT — soft pink cherry-blossom petals drifting horizontally through the entire scene around the hero form, gentle motion, dreamy magical-realism atmospheric',
+      'GOLDEN-HOUR SUN-RAYS THROUGH CANOPY — soft warm golden sun-rays slanting through the upper-frame canopy of the hero flower-tree-form, dappled warm light on the foreground meadow carpet',
+      'FRESH DEWDROPS ON BLOOMS — fresh dew droplets clinging to every visible bloom on the hero form and the carpet, catching warm ambient light as tiny prismatic flares, naturalistic wet shimmer',
+      'FALLEN-PETAL FOREGROUND — fallen pale-pink petals carpeting the foreground meadow floor around the hero form, mixed with the wildflower carpet, drifting more petals through the air',
+      'GOLDEN POLLEN-DUST — soft golden-yellow pollen-motes drifting through the warm ambient light around the hero form, atmospheric pollinator-magic supporting the surreal-magical-realism',
+      'DAPPLED WARM CANOPY LIGHT — dappled warm golden light filtering through the upper canopy of the hero flower-tree-form onto the foreground meadow carpet, soft sunbeam pools',
+      'WARM PASTEL ATMOSPHERIC HAZE — soft warm-amber pastel atmospheric haze softening the deep-distance background, smaller flower-forms fading dreamily into the haze',
+      'PETAL CASCADE FROM HERO — soft pale-pink petals cascading down from the hero flower-form like gentle snow, drifting gracefully through the air around it',
+      'SOFT BACKLIT HERO — soft warm sunset light catching the hero form from behind, creating a warm backlit silhouette with golden-hour ambient',
+      'WHITE PETAL-FALL DRIFT — soft white cherry-blossom petals drifting horizontally through the scene around the hero form, gentle slow motion, dreamy soft pastel atmospheric',
+      'IRIDESCENT MORNING-DEW — fresh morning dewdrops on every visible bloom catching soft pastel light as iridescent rainbow flares, naturalistic magical wet-shimmer',
+      'SOFT MIST IN VALLEY-DEPTH — soft pastel pink-cream mist filling the deep-distance valley behind the hero form, smaller flower-forms barely visible through the haze',
+      'GOLDEN-HOUR HAZE ENVELOPING — warm golden-amber haze enveloping the entire scene, soft warm pastel atmospheric bath, smaller flower-forms warmly hazy in distance',
+      'COSMOS-PETAL DRIFT — soft pale-pink-and-white cosmos petals drifting through the entire air around the hero form, gentle slow motion, dreamy surreal',
+      'CHERRY-BLOSSOM FOREGROUND CARPET — dense carpet of fallen pale-pink cherry-blossom petals covering the foreground meadow floor around the hero form, drifting more petals through the air',
+      'DAYBREAK SOFT MIST — soft pearlescent morning mist filling the deep-distance background of the scene, smaller flower-forms fading into the haze, dreamy daybreak atmospheric',
+      'DRIFTING POLLEN-AND-PETALS — both golden pollen-motes and soft white-and-pink petals drifting through the warm ambient light around the hero form, dense atmospheric magic-pretty',
+      'BACKLIT WARM-AMBER HAZE — soft warm-amber backlight from the upper-frame edge catching the hero form outline, gentle pastel haze softening the bokeh distance',
+      'WET-PATH-PETAL REFLECTION — soft wet meadow floor reflecting the bloom-canopy of the hero form above, fallen petals scattered, dreamy soft reflection',
+      'PEARL-MORNING-HAZE — pearl-iridescent morning haze softening the deep-distance background, smaller flower-forms warmly silhouetted in the haze',
+      'WARM-PINK BOKEH-WASH — soft warm-pink fairy-light bokeh-wash filling the deep-distance background, dreamy magical-realism atmospheric supporting depth',
+      'DRIFTING WISTERIA-PETALS — soft pale-violet wisteria petals drifting through the air around the hero form, gentle slow motion, dreamy soft pastel atmospheric',
+      'GOLDEN-HOUR SOFT-BATH — warm soft golden-hour ambient light enveloping the entire scene from above, warm pastel atmospheric bath softening every element',
+      'PETAL-CARPET-AND-DRIFT — combined fallen-petal carpet covering the foreground floor + drifting petals through the air around the hero form, dense petal-magic-pretty atmospheric',
+    ],
+    instructions: `Each entry is ONE specific ATMOSPHERIC MAGIC effect, 20-40 words. Format: "EFFECT NAME CAPS — primary detail + position in scene + how it amplifies the surreal-magical-realism mood". Vary across the 10 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO animals. NO additional flower-forms. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   bloombot_sunset_flowers_hero_flower: {
     format: 'simple',

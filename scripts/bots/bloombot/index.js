@@ -37,6 +37,7 @@ const pathBuilders = {
   'sunset-flowers': require('./paths/sunset-flowers'),
   'flower-friends': require('./paths/flower-friends'),
   'flower-humming-birds': require('./paths/flower-humming-birds'),
+  'flower-fantasy': require('./paths/flower-fantasy'),
   reclaim: require('./paths/reclaim'),
   'bloom-spirit': require('./paths/bloom-spirit'),
 };
@@ -68,6 +69,7 @@ module.exports = {
     'sunset-flowers': { 'black-forest-labs/flux-1.1-pro': 100 },
     'flower-friends': { 'black-forest-labs/flux-1.1-pro': 100 },
     'flower-humming-birds': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'flower-fantasy': { 'black-forest-labs/flux-1.1-pro': 100 },
     reclaim: { 'black-forest-labs/flux-1.1-pro': 100 },
     'bloom-spirit': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
@@ -101,6 +103,7 @@ module.exports = {
     'sunset-flowers',
     'flower-friends',
     'flower-humming-birds',
+    'flower-fantasy',
     'reclaim',
     'bloom-spirit',
   ],
@@ -118,6 +121,7 @@ module.exports = {
     'sunset-flowers': 2,
     'flower-friends': 2,
     'flower-humming-birds': 2,
+    'flower-fantasy': 2,
     reclaim: 1,
     'bloom-spirit': 2,
   },
@@ -127,7 +131,7 @@ module.exports = {
     skipPaths: [],
     allowSubjectChaosPaths: [
       'landscape', 'cozy', 'garden-walk', 'dreamscape',
-      'conservatory', 'tropical-paradise', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'reclaim',
+      'conservatory', 'tropical-paradise', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'reclaim',
       'bloom-spirit',
     ],
   },
@@ -142,7 +146,7 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'reclaim', 'bloom-spirit'],
+    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'reclaim', 'bloom-spirit'],
   },
 
   sensoryAnchors: {
@@ -152,7 +156,7 @@ module.exports = {
       landscape: 'scene', closeup: 'scene', cozy: 'scene',
       'garden-walk': 'scene', dreamscape: 'scene',
       conservatory: 'scene', 'tropical-paradise': 'scene',
-      'city-flowers': 'scene', 'flower-tunnels': 'scene', 'sunset-flowers': 'scene', 'flower-friends': 'scene', 'flower-humming-birds': 'scene', reclaim: 'scene',
+      'city-flowers': 'scene', 'flower-tunnels': 'scene', 'sunset-flowers': 'scene', 'flower-friends': 'scene', 'flower-humming-birds': 'scene', 'flower-fantasy': 'scene', reclaim: 'scene',
       'bloom-spirit': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
