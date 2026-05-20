@@ -154,6 +154,38 @@ module.exports = {
   COZY_INTERIOR_SURPRISE: load('cozy_interior_surprise'),
   COZY_INTERIOR_PHENOMENA: load('cozy_interior_phenomena'),
 
+  // Aquatic-village path-bespoke axes (2026-05-19 full-bespoke migration)
+  AQUATIC_VILLAGE_ACTIVITIES: load('aquatic_village_activities'),
+  AQUATIC_VILLAGE_SETTINGS: load('aquatic_village_settings'),
+  AQUATIC_VILLAGE_DETAILS: load('aquatic_village_details'),
+  AQUATIC_VILLAGE_TIME_OF_DAY: load('aquatic_village_time_of_day'),
+  AQUATIC_VILLAGE_SURPRISE: load('aquatic_village_surprise'),
+  AQUATIC_VILLAGE_PHENOMENA: load('aquatic_village_phenomena'),
+
+  // Cottagecore-village path-bespoke axes (2026-05-19 full-bespoke migration)
+  COTTAGECORE_VILLAGE_ACTIVITIES: load('cottagecore_village_activities'),
+  COTTAGECORE_VILLAGE_SETTINGS: load('cottagecore_village_settings'),
+  COTTAGECORE_VILLAGE_DETAILS: load('cottagecore_village_details'),
+  COTTAGECORE_VILLAGE_TIME_OF_DAY: load('cottagecore_village_time_of_day'),
+  COTTAGECORE_VILLAGE_SURPRISE: load('cottagecore_village_surprise'),
+  COTTAGECORE_VILLAGE_PHENOMENA: load('cottagecore_village_phenomena'),
+
+  // Sunny-village path-bespoke axes (2026-05-19 full-bespoke migration)
+  SUNNY_VILLAGE_ACTIVITIES: load('sunny_village_activities'),
+  SUNNY_VILLAGE_SETTINGS: load('sunny_village_settings'),
+  SUNNY_VILLAGE_DETAILS: load('sunny_village_details'),
+  SUNNY_VILLAGE_TIME_OF_DAY: load('sunny_village_time_of_day'),
+  SUNNY_VILLAGE_SURPRISE: load('sunny_village_surprise'),
+  SUNNY_VILLAGE_PHENOMENA: load('sunny_village_phenomena'),
+
+  // Twilight-village path-bespoke axes (2026-05-19 full-bespoke migration)
+  TWILIGHT_VILLAGE_ACTIVITIES: load('twilight_village_activities'),
+  TWILIGHT_VILLAGE_SETTINGS: load('twilight_village_settings'),
+  TWILIGHT_VILLAGE_DETAILS: load('twilight_village_details'),
+  TWILIGHT_VILLAGE_TIME_OF_DAY: load('twilight_village_time_of_day'),
+  TWILIGHT_VILLAGE_SURPRISE: load('twilight_village_surprise'),
+  TWILIGHT_VILLAGE_PHENOMENA: load('twilight_village_phenomena'),
+
   // Arctic-village path-bespoke axes (2026-05-19 full-bespoke migration)
   ARCTIC_VILLAGE_ACTIVITIES: load('arctic_village_activities'),
   ARCTIC_VILLAGE_SETTINGS: load('arctic_village_settings'),

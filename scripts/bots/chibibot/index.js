@@ -93,6 +93,10 @@ module.exports = {
     // miniature-feast — locked to Pop-Mart glossy chibi register (NOT pixar)
     'miniature-feast': 'chibibot_render',
     'arctic-village': 'chibibot_pixar',
+    'aquatic-village': 'chibibot_pixar',
+    'cottagecore-village': 'chibibot_pixar',
+    'sunny-village': 'chibibot_pixar',
+    'twilight-village': 'chibibot_pixar',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -102,6 +106,15 @@ module.exports = {
   // chibibot_render falls through to bot.promptPrefix above.
   promptPrefixByMedium: {
     chibibot_pixar: blocks.PROMPT_PREFIX_PIXAR,
+  },
+
+  // Per-path prefix override — prepended BEFORE the medium style prefix as
+  // the FIRST tokens Flux sees. Use case: aquatic-village needs cool-teal-water
+  // context to override the warm-amber-jungle-palette baked into PROMPT_PREFIX_PIXAR
+  // (which causes Flux to render coastal scenes as warm-cottage villages).
+  promptPrefixByPath: {
+    'aquatic-village':
+      'UNDERWATER OR COASTAL OCEAN SCENE — cool teal-cyan-aqua water-caustic light dappling every surface, deep-blue ocean-water filling the scene, drifting bubble-streams rising through water, swirling fish-schools visible in background, bioluminescent coral-glow accents, water-reflection on architecture, palette of TEAL + CYAN + AQUA + CORAL-PINK + PEARL-VIOLET (cool aquatic palette, NOT warm tropical jungle palette), submerged underwater village OR coastal tidepool village always with VISIBLE WATER',
   },
 
   // Cute-forward vibes (banned: dark, fierce, macabre, nightshade,
@@ -212,7 +225,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'miniature-feast', 'arctic-village'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'miniature-feast', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;
