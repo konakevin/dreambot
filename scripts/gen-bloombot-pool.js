@@ -1153,167 +1153,376 @@ Channel: Kew Gardens interior atmospheric moments + estate-conservatory golden-h
   // ─── city-flowers path: city_setting (the urban canvas) ───
   bloombot_city_flowers_city_setting: {
     format: 'simple',
-    theme: `URBAN-OVERGROWN-BY-FLOWERS SETTINGS for the BloomBot city-flowers path. Each entry is ONE specific real-world historic urban setting where the city's signature architecture is HALF-CONSUMED by floral overgrowth. Each entry 25-50 words.
+    theme: `FANTASY BLOOM-CITY SETTINGS for the BloomBot city-flowers path. Each entry is ONE specific IMPOSSIBLE FANTASY BLOOM-CITY — floating bloom-islands, kilometer-high flower-cathedrals, elven bloom-citadels, coral-bloom underwater-cities, mushroom-megacities, sky-temples-of-blossoms, faerie-realm flower-spires. Each entry 30-55 words.
 
-⚠️ MANDATORY — every entry is a recognizable HISTORIC / PICTURESQUE / WEATHERED urban setting. The city's specific style is UNMISTAKABLE. Wide street-photography composition with pedestrian POV.
+⚠️ THE BAR: every entry is JAW-DROPPING + IMPOSSIBLE + MAGICAL. Studio-Ghibli-Castle-in-the-Sky / Lothlorien / Avatar-Pandora / Mononoke-Forest-Spirit-realm / Magic-the-Gathering-Bant-Selesnya / Brian-Froud-faerie-realm lineage. BLOOMS are the overwhelming hero (60-70% of frame), fantasy-architecture is the SCAFFOLD that flowers grow from / hang on / drape.
 
-🚫 STRICT BANS:
-  • NO modern / contemporary / corporate / sleek architecture
-  • NO American urban / Manhattan / LA / suburban
+🚫 ABSOLUTELY BANNED — real-world tourist cities that violate BloomBot DNA:
+  • NO Mediterranean / Italian / Cinque Terre / Amalfi / Tuscan / Greek-island settings
+  • NO Parisian / Haussmann / Montmartre settings
+  • NO Lisbon / Portuguese / Alfama settings
+  • NO Marrakech / Moroccan / Andalusian / Chefchaouen settings
+  • NO Venetian / Bruges / Amsterdam canal settings
+  • NO Cuban / Havana / colonial settings
+  • NO Tokyo / Kyoto / Japanese back-street settings
+  • NO Cotswolds / British / Cornish settings
+  • NO Scandinavian / Stockholm settings
+  • NO Pueblo / Santa Fe / Southwest settings
+  • NO North African / Fez / Tunis settings
+  • NO Indian / Jaipur / Udaipur settings
+  • NO Vietnamese / Hoi An settings
+  • NO German / Czech / medieval European real-town settings
+  • NO real-world architectural styles (Haussmann / azulejo / adobe / colonial / half-timber)
+  • NO cobblestones / weathered plaster / sun-bleached stucco / postcard textures
+  • NO modern / contemporary / corporate architecture
+  • NO American urban
   • NO interiors / rooms (cozy)
   • NO landscapes / vistas / open countryside (landscape / tropical)
   • NO conservatory / glass-and-iron greenhouse (conservatory)
-  • NO archways/passages as the FRAMING (garden-walk) — but city archways as PART of the urban scene are FINE
   • NO ruins / abandoned (reclaim)
   • NO humans / pedestrians / figures in the scene
-  • NO surreal / impossible
 
-✓ CITY-SETTING CATEGORIES:
-  A. **MEDITERRANEAN** — Cinque Terre cliff-village stairway / Amalfi coast village / Greek-island white-and-blue / Provence stone-village / Italian hill-town
-  B. **PARISIAN HAUSSMANN** — Paris cobblestone street / Haussmann boulevard / Montmartre stairway / Marais alley / Saint-Germain courtyard
-  C. **PORTUGUESE / LISBON** — Lisbon tile-fronted staircase / Alfama alley / Porto azulejo-clad street
-  D. **MOORISH / MARRAKECH** — Marrakech blue-painted courtyard / Andalusian whitewashed alley / Chefchaouen blue town / Granada Albaicín alley
-  E. **VENETIAN / CANAL CITY** — Venetian canal-side palazzo / Bruges canal / Amsterdam canal-house / Annecy canal-edge
-  F. **CUBAN / COLONIAL** — Havana old-town colonial street / colonial Caribbean / Cartagena Colombian
-  G. **TOKYO BACK-STREET** — Tokyo wooden-and-paper back-street / Kyoto Gion-district lane / Hanoi narrow alley
-  H. **BRITISH COTTAGE** — Cotswolds stone-cottage village / Cornish fishing-village / Welsh slate-roof lane
-  I. **SCANDINAVIAN** — Stockholm Gamla Stan alley / Bergen wooden-house wharf / Copenhagen colored-house row
-  J. **TUSCAN / UMBRIAN** — Tuscan hill-town alley / Umbrian medieval village / San Gimignano
-  K. **PUEBLO / SOUTHWEST** — Santa Fe adobe street / Mexican colonial town / New Mexico pueblo
-  L. **NORTH AFRICAN** — Fez medina alley / Casablanca old-quarter / Tunis souk-edge
-  M. **INDIAN PALACE-TOWN** — Jaipur pink-city alley / Udaipur palace-town / Jodhpur blue-city
-  N. **EAST ASIAN VILLAGE** — Hoi An Vietnamese lantern-street / Bagan Burmese village / Luang Prabang Laos
-  O. **MEDIEVAL EUROPEAN** — German half-timber town / Czech medieval village / French medieval cité
+✓ FLOWER-DOMINATED FANTASY CATEGORIES (the FLOWERS are the scene, architecture barely visible):
+  A. **FLOWER-CANYON DEPTH** — narrow canyon-path winding through hundred-meter walls of cascading rose / wisteria / peony, fantasy spire-tips emerge faintly at the canyon-end
+  B. **KILOMETER FLOWER-CASCADE CLIFF** — sheer cliff dominated by overlapping flower-cascades pouring hundreds of meters from above, hint of fantasy citadel half-buried at the top
+  C. **BLOOM-MOUNTAIN VISTA** — mountain made entirely of flowers (mound of layered cherry / magnolia / peony / lilac), fantasy spires barely emerge from the bloom-mass
+  D. **ENDLESS FLOWER-MEADOW** — vast painted meadow of waist-high wildflowers stretching to fantasy spires on the distant horizon, foreground packed with bloom-detail
+  E. **CHERRY-BLOSSOM CANOPY OVERWHELM** — looking up at endless cherry-blossom canopy filling 85% of frame, fantasy spire-tips poking through at the top, soft daylight
+  F. **VINE-CATHEDRAL CASCADE** — overlapping wisteria / laburnum cascades draping hundreds of meters from invisible fantasy structures above, viewer beneath the cascade-fall
+  G. **FLOWER-FLOODED VALLEY** — valley flooded waist-deep in floating blossoms, fantasy spires barely emerging from the bloom-flood, painted-gold natural light
+  H. **BLOSSOM-DROWNED FANTASY RUIN** — fantasy ruins SO claimed by flowers they read as flower-mountains, only a spire-tip or arch fragment visible through the bloom
+  I. **PETAL-SNOW DEPTH** — fantasy spires barely visible through dense falling petal-snow filling the frame, no magic lights — just the petals doing the work
+  J. **BLOOM-AVENUE TUNNEL** — viewer inside a tunnel of overlapping flowering-vines (wisteria / rose / honeysuckle), fantasy spire-tips visible at the far end
+  K. **FLOWER-CLIFF HORIZON** — sheer flower-cliff dominates the frame, hint of fantasy architecture half-buried at the top, soft natural light
+  L. **MALLORN-CANOPY OVERWHELM** — golden-mallorn fantasy citadel SO blanketed in flowers the trees are barely visible, dawn/dusk light
+  M. **HANGING-GARDEN MEGACITY** — fantasy hanging-garden city where every tier is overgrown in bloom-cascades so dense the architecture is glimpsed only at edges
+  N. **POPPY-FIELD VISTA** — endless rolling field of poppies / wildflowers in painterly equal-weight density, fantasy citadel silhouette on distant horizon
+  O. **OVERGROWN FLOWER-COURTYARD** — fantasy courtyard SO consumed by flowers (climbing-roses, hanging wisteria, ground-cover blooms) the architecture is glimpses
 
-Lineage to channel: National Geographic city-street photography + Travel + Leisure cover shots + Pinterest "European cities" boards + Studio Ghibli "Kiki's Delivery Service" old-world cities + Wes Anderson European set design.`,
+Lineage to channel: Tolkien-illustrated-edition flower-densities / Pre-Raphaelite painted bloom-fields / Studio Ghibli cherry-blossom-canopy / Lothlorien (the FLOWERS, not the architecture) / Brian Froud-faerie-realm painted-flower-density / classical Garden-of-Earthly-Delights flower-mass / Monet water-lily-immersive panels.`,
     touchpoints: [
-      'CINQUE TERRE CLIFFSIDE STAIRWAY — pastel-painted Cinque Terre cliff-village stairway climbing between tile-roof houses, bloom-cascades from every windowsill, sea visible far below at the cliff-edge, golden-hour light',
-      'PARISIAN HAUSSMANN BALCONY STREET — narrow Parisian Haussmann street with cream-stone facades, iron Juliet balconies tier upon tier on both sides, bloom-cascades from every railing, cobblestone street below',
-      'LISBON AZULEJO STAIRCASE — Lisbon staircase climbing between azulejo-tile-fronted houses, blue-and-white tile patterns visible through climbing-bloom vines, brass street-lamp, sun-bleached white plaster',
-      'MARRAKECH BLUE COURTYARD — Marrakech / Chefchaouen blue-painted courtyard with central fountain or well, bloom-cascade from upper balconies on all sides, deep ultramarine walls, geometric tile floor',
-      'VENETIAN CANAL PALAZZO — Venetian canal-side palazzo with weathered stone-and-stucco facade, bloom-cascades from arched-window balconies, dark canal water in the foreground reflecting the architecture',
-      'HAVANA OLD-TOWN STREET — Havana old-town colonial street with peeling pastel-painted walls, ornate iron grilles at the windows, bloom-cascades from every balcony, classic-car-style cobblestone street',
-      'TOKYO WOODEN BACK-STREET — Tokyo wooden-and-paper back-street with sliding doors and lanterns, bloom-cluster pots at every doorstep, weathered wood walls, paper-lantern glow at dusk',
-      'COTSWOLDS STONE-COTTAGE LANE — Cotswolds stone-cottage village lane with honey-colored stone walls, climbing roses on every cottage, thatched roofs, dry-stone walls, sun-warmed gravel road',
-      'STOCKHOLM GAMLA STAN ALLEY — Stockholm Gamla Stan medieval alley with cobblestone street rising between tall colored-stucco houses (ochre / red / yellow), shutters and iron-lamps, climbing-bloom vines',
-      'TUSCAN HILL-TOWN ALLEY — Tuscan hill-town alley with sun-baked terracotta walls, weathered wooden shutters, climbing wisteria from every window, stone steps rising into the village',
-      'SANTA FE ADOBE STREET — Santa Fe / New Mexico adobe-street with sun-bleached pink-and-tan walls, blue-painted doors and shutters, climbing-bougainvillea cascade, weathered wooden vigas overhead',
-      'FEZ MEDINA ALLEY — Fez medina narrow alley with ochre-and-amber plaster walls, ornate carved-wood doors, brass lanterns, climbing-bloom vines, distant minaret silhouette',
-      'JAIPUR PINK-CITY ALLEY — Jaipur Old City pink-stucco alley with carved-stone windows (jharokhas), ornate balconies, climbing-bloom cascades from upper-story windows, dusty street below',
-      'HOI AN LANTERN STREET — Hoi An Vietnamese ancient-town street with hanging silk-lanterns of every color, bloom-pot clusters at every shop entry, weathered yellow plaster walls, cobblestone',
-      'BRUGES CANAL EDGE — Bruges canal-edge street with stepped-gable houses on the opposite bank, swans on the water, bloom-cascades from every balcony, weathered brick-and-stone facades',
-      'CHEFCHAOUEN BLUE-CITY ALLEY — Chefchaouen Moroccan blue-city alley with ALL walls painted ultramarine, climbing-rose cascades on the blue walls, white-painted stone steps, weathered wooden doors',
-      'AMALFI COAST VILLAGE — Amalfi coast village stairway climbing between yellow-and-orange painted houses, sea visible far below, ceramic-tile street signs, climbing-bougainvillea cascade',
-      'BAGAN VILLAGE STREET — Bagan Burmese village street with golden-stupa silhouette in distance, weathered teak-wood houses with bloom-vine-covered porches, dusty unpaved street',
-      'GREEK ISLAND ALLEY — Greek-island whitewashed alley with vivid blue-painted doors and shutters, bougainvillea-cascade in fuchsia tumbling over the white walls, paving-stone street',
-      'KYOTO GION LANE — Kyoto Gion-district lane with traditional wooden machiya houses, bamboo blinds (sudare) at every window, bloom-pot clusters at every door, paper lanterns glowing at dusk',
+      'FLOWER-CANYON DEPTH — narrow path winding through a flower-canyon, walls hundreds of meters tall of overlapping cascading rose / peony / wisteria / cherry blooms, fantasy spire-tips barely emerging at the canyon-end',
+      'KILOMETER FLOWER-CASCADE CLIFF — sheer cliff face dominated by overlapping flower-cascades pouring hundreds of meters down (rose / peony / wisteria / magnolia stacked deep), hint of fantasy citadel half-buried at the top',
+      'BLOOM-MOUNTAIN VISTA — entire mountain composed of layered flowers (cherry / magnolia / peony / lilac packed mountain-thick), fantasy spire-tips barely emerging from the bloom-mass',
+      'ENDLESS WILDFLOWER MEADOW HORIZON — vast painted meadow of waist-high wildflowers (poppies / cornflowers / lupines / daisies) stretching to a distant fantasy citadel silhouette on the horizon, foreground packed bloom-detail',
+      'CHERRY-BLOSSOM CANOPY OVERWHELM — looking up at an endless cherry-blossom canopy filling 85% of the frame, individual fantasy spire-tips poking through at the top, falling petals',
+      'VINE-CATHEDRAL WISTERIA CASCADE — viewer beneath hundreds of meters of cascading wisteria and laburnum chains hanging from invisible fantasy structures above, soft painted backlight through the bloom-curtain',
+      'FLOWER-FLOODED VALLEY — fantasy valley flooded knee-deep in floating blossoms (pink / lavender / cream), fantasy spires barely emerging from the bloom-flood at the deep distance',
+      'BLOSSOM-DROWNED FANTASY RUIN — fantasy ruins SO claimed by flowers (rose-mass / honeysuckle / wisteria) they read as flower-mountains, only a spire-tip and broken arch visible through the bloom',
+      'PETAL-SNOW DEPTH — distant fantasy spires barely visible through dense falling petal-snow filling every quadrant of the frame, painted soft natural daylight, no magic',
+      'BLOOM-AVENUE TUNNEL — viewer standing inside a tunnel of overlapping flowering-vines (climbing roses, wisteria, honeysuckle layered deep), fantasy spire-tips visible at the far end',
+      'FLOWER-CLIFF HORIZON DOMINANT — sheer cliff-face entirely covered in cascading flowers dominates the frame, hint of fantasy stone architecture half-buried at the top',
+      'MALLORN-CANOPY OVERWHELM — golden-mallorn fantasy citadel SO blanketed in cascading flowers (gold mallorn-blossoms / cherry / magnolia) the trees themselves are barely visible',
+      'HANGING-GARDEN MEGACITY — fantasy hanging-garden tier-city where every level is so overgrown in bloom-cascades the architecture is glimpsed only at edges, layered jasmine / rose / wisteria depth',
+      'POPPY-FIELD VISTA — endless rolling field of poppies (red / pink / coral / white) in painterly equal-weight density to the horizon, distant fantasy spire silhouettes barely visible',
+      'OVERGROWN FLOWER-COURTYARD — fantasy courtyard SO consumed by flowers (climbing-roses, hanging wisteria, ground-cover bluebells, tall foxgloves) the architecture is mostly glimpses through bloom-curtains',
+      'WISTERIA-DRAPED RUINED CITY — fantasy ruined city with hundreds of meters of cascading wisteria draping every visible surface, the architecture barely visible through the lavender-and-violet bloom-curtain',
+      'GIANT-PEONY GROVE — grove of building-sized peonies (each bloom several stories tall) packed in a fantasy valley, fantasy spire silhouettes glimpsed between the colossal blossoms',
+      'MAGNOLIA-FOREST CITADEL — fantasy citadel deep in a magnolia-forest at full bloom, ten thousand cream-and-pink magnolia blossoms filling the canopy, fantasy spires barely visible through the trees',
+      'CASCADING ROSE-MOUNTAIN — fantasy mountainside SO covered in cascading climbing-roses (crimson / coral / cream / blush) the slope is invisible beneath the bloom-waterfall, fantasy spire poking through at the summit',
+      'LAVENDER-FIELD CITADEL HORIZON — endless rolling lavender-field stretching to a fantasy citadel silhouette on the horizon, foreground packed with lavender-spikes and wildflowers',
     ],
-    instructions: `Each entry is ONE specific HISTORIC URBAN SETTING with signature architecture, 25-50 words. Format: "CITY SETTING NAME CAPS — primary architectural style + city-signature detail + bloom-overgrowth note". Vary across the 15 categories. ALWAYS historic / picturesque / weathered. NEVER modern / corporate / American. NO people. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+    instructions: `Each entry is ONE specific FANTASY BLOOM-CITY SETTING, 30-55 words. Format: "FANTASY-CITY NAME CAPS — fantasy-architecture style + signature impossible-fantasy detail + overwhelming bloom-mass note + magical atmosphere". Vary across the 15 categories. NEVER real-world tourist cities. NEVER pedestrian / postcard. BLOOMS are the hero (60-70% of frame), fantasy-architecture is scaffold. NO people. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
   // ─── city-flowers path: architectural_detail (the city's signature element) ───
   bloombot_city_flowers_architectural_detail: {
     format: 'simple',
-    theme: `CITY ARCHITECTURAL SIGNATURE DETAILS for the BloomBot city-flowers path. Each entry is ONE specific architectural element typical of historic urban settings — rendered with hyperreal precision and wrapped/draped in bloom-mass. Each entry 20-40 words.
+    theme: `FANTASY-BLOOM-CITY SIGNATURE DETAILS for the BloomBot city-flowers path. Each entry is ONE specific FANTASY architectural element typical of impossible bloom-cities — rendered with painterly precision and ORGANICALLY GROWN FROM / DRAPED IN bloom-mass. Each entry 20-40 words.
 
-⚠️ MANDATORY — every entry is a TACTILE WEATHERED architectural detail typical of historic urban architecture. The detail is what the bloom-cascade wraps around / drapes over / climbs.
+⚠️ MANDATORY — every entry is a SPECIFIC FANTASY-IMPOSSIBLE architectural detail (NEVER real-world tourist architecture). The detail is the SCAFFOLD blooms grow from / hang on / drape over.
 
 🚫 STRICT BANS:
+  • NO real-world tourist architectural details (cobblestones / Juliet balconies / azulejo tiles / Moorish horseshoe arches / Parisian gas-lamps / shop-awnings / bistro tables / pueblo doors / Tuscan shutters / Japanese paper-lanterns / Vietnamese-quarter elements)
+  • NO weathered-plaster / sun-bleached-stucco / weathered-cobblestone / aged-paint textures
   • NO modern / contemporary / corporate elements
-  • NO duplicate of city_setting (this is specific PIECES, not the whole street)
+  • NO duplicate of city_setting
   • NO humans / figures / hands
-  • NO interior elements (cozy territory)
+  • NO interior elements
 
-✓ ARCHITECTURAL-DETAIL CATEGORIES:
-  A. **BALCONY / RAILING** — wrought-iron Juliet balcony / iron Parisian railing / ornate Mughal jharokha / Andalusian wood-railed balcony
-  B. **WINDOW** — weathered wooden shutters / leaded-glass casement / azulejo-tiled window-frame / carved-stone Moorish window
-  C. **DOOR** — weathered wooden door with brass knocker / blue-painted Greek door / ornate Moorish carved door / pueblo blue door
-  D. **STAIRCASE** — Lisbon tile-fronted staircase / Mediterranean stone steps / Andalusian whitewashed steps / Italian terracotta steps
-  E. **ARCH / GATEWAY** — Moorish horseshoe arch / Italian Renaissance arch / cobblestone arched alley / wooden Vietnamese gate
-  F. **WALL** — sun-bleached plaster wall / azulejo-tiled wall / weathered brick wall / adobe wall with viga ends
-  G. **FOUNTAIN / WELL** — Mediterranean central fountain / Andalusian patio fountain / Moroccan tiled well / Italian marble fountain
-  H. **STREET LIGHT** — Parisian gas-lamp / Italian wrought-iron lamp-bracket / Moroccan brass-lantern / Japanese paper-lantern
-  I. **PAVEMENT** — cobblestone street / terracotta-tile pavement / azulejo-tile floor / sandstone-cobble / patterned-stone plaza
-  J. **AWNING / OVERHANG** — striped fabric awning / wooden-board overhang / canvas market-awning / paper-and-wood eaves
-  K. **DETAIL** — brass doorknob / cast-iron grille / wooden-trellis / weathered street-sign / chipped wall-mosaic
-  L. **PLANTER / POT** — weathered terracotta pot / hand-painted ceramic planter / wooden window-box / wrought-iron planter
+✓ FANTASY-DETAIL CATEGORIES:
+  A. **BLOOM-GROWN BRIDGE** — vine-bridge of woven flowering tendrils / petal-rope walkway / bloom-arch spanning sky-chasm / glowing root-bridge
+  B. **VEGETAL TOWER-SPIRE** — fantasy spire grown from living mallorn-bark / orchid-tower hundreds of meters tall / mushroom-pillar with bloom-cap / crystalline-bloom-spire with prismatic facets
+  C. **AERIAL TERRACE** — sky-floating bloom-terrace with cascading wisteria-curtains / crystal-railed observation-deck of an elven citadel
+  D. **FANTASY GATEWAY** — towering arch of woven bloom-vines / shimmering bloom-portal in fantasy spire-base / glowing root-arch threshold
+  E. **FAERIE-PILLAR** — fantasy pillar of woven crystal-bloom / pillar of intertwining glowing-vines / pillar of carved mallorn-wood with petal-leaves
+  F. **WALL OF LIVING BLOOMS** — fantasy wall grown entirely from flowering vines / living petal-curtain wall / bioluminescent-bloom wall pulsing soft light
+  G. **MAGIC FOUNTAIN** — fantasy bloom-fountain with petals floating in glowing water / waterfall pouring upward into bloom-clouds / crystal-pool with floating lily-pads
+  H. **GLOWING BLOOM-LANTERN** — colossal fantasy bloom-lantern hanging from a vine-bridge / luminescent orchid-globe lamp / will-o-wisp-cluster fixture
+  I. **CRYSTAL-BLOOM FLOOR** — fantasy floor of inlaid crystal-blossoms / mirror-lake-water-floor with lily-pads / mossy-stone path with luminescent moss-spots
+  J. **AERIAL WALKWAY** — fantasy walkway suspended on woven vines / petal-paved skybridge / crystal-stair rising between fantasy spires
+  K. **VEGETAL FAERIE-DETAIL** — fantasy carved-vine sigil / glowing rune-bark / faerie-stone with embedded blooms / bioluminescent moss-cluster
+  L. **PETAL-STORM SHELTER** — fantasy bloom-eave with cascading petals / vine-grown canopy / hanging-garden balustrade
 
-Channel: National Geographic city-detail photography + Wes Anderson set props + Travel + Leisure architecture shots + estate-sale European antiques.`,
+Channel: Studio-Ghibli Castle-in-the-Sky architectural details / Lothlorien fantasy-detail / Avatar-Pandora bioluminescent-detail / Cocoon-of-Avacyn-MtG art / Brian-Froud faerie-realm details.`,
     touchpoints: [
-      'WROUGHT-IRON JULIET BALCONY — wrought-iron Juliet balcony with curling Victorian scrollwork, climbing-rose vines completely wrapped around the railings, paint-flaking dark-green, French casement-windows behind',
-      'WEATHERED WOODEN SHUTTERS — pair of weathered louvered wooden shutters partially closed across a window, paint-peeling sage-green or sun-bleached blue, climbing-bloom vines threading the louvers',
-      'BLUE-PAINTED GREEK DOOR — vivid blue-painted wooden Greek-island door with white-painted stone frame, brass knocker tarnished, climbing-bougainvillea in fuchsia cascade around the doorway',
-      'LISBON AZULEJO STAIRCASE — Lisbon tile-fronted staircase with blue-and-white azulejo tiles in geometric patterns, climbing-jasmine vines softening the edges of the steps',
-      'MOORISH HORSESHOE ARCH — carved-stone Moorish horseshoe-arch entry to a courtyard, intricate geometric carving, climbing-bloom vines on both sides, sun-glow visible through the arch',
-      'AZULEJO-TILED WALL — wall of blue-and-white azulejo tiles with intricate hand-painted patterns, weathered with age, climbing-bloom vines partially covering the tiles, a few tiles cracked',
-      'ANDALUSIAN PATIO FOUNTAIN — small octagonal Andalusian patio fountain with blue-and-yellow tiled basin, water bubbling gently, climbing-bloom vines on the courtyard walls behind',
-      'PARISIAN GAS-LAMP — black wrought-iron Parisian gas-lamp post with curling top, glass globe warm-amber, climbing-bloom vines spiraling up the post, evening glow on cobblestones',
-      'COBBLESTONE STREET — wet cobblestone street with petals scattered in the joints, individual rounded stones polished smooth by centuries, soft puddles reflecting the sky',
-      'STRIPED-FABRIC AWNING — striped red-and-white fabric awning above a small shop-front, weathered and slightly torn, climbing-bloom vines on the building wall behind the awning',
-      'BRASS DOORKNOB ON WEATHERED DOOR — antique brass doorknob on a weathered wooden door, tarnish-patina, a single bloom-petal stuck to the brass, the door slightly ajar',
-      'WEATHERED TERRACOTTA POT — large weathered terracotta planter on a stone doorstep, climbing-bloom mass overflowing the pot in a thick cascade, hairline cracks in the terracotta',
-      'CHEFCHAOUEN BLUE WALL — ultramarine-blue painted stone wall (Chefchaouen-style) with bloom-cascade in fuchsia tumbling down the wall, white-painted stone steps at the base',
-      'CARVED-STONE JHAROKHA — Indian jharokha (overhanging enclosed balcony) of carved pink sandstone with intricate latticework, climbing-bloom vines softening the carving',
-      'WROUGHT-IRON GRILLE — wrought-iron security-grille on a narrow window, ornate scrollwork, climbing-jasmine vines threading the bars, weathered Spanish colonial style',
-      'PAPER LANTERN HANGING — single red-and-yellow Japanese paper lantern hanging from a weathered wooden eave, soft glow at dusk, climbing-bloom vines on the surrounding wood',
-      'PUEBLO BLUE DOOR — sky-blue painted wooden door in a sun-bleached adobe wall, weathered wood, climbing-bougainvillea in coral cascade around the door-frame',
-      'CINQUE TERRE PASTEL FACADE — section of a Cinque Terre pastel-painted house facade (peach / coral / butter-yellow) with green wooden shutters, bloom-cascade from a small balcony',
-      'BRASS BISTRO TABLE — small wrought-iron bistro table on a Mediterranean cobblestone street, two bentwood chairs, china-cup left behind, climbing-bloom on the wall behind',
-      'STONE WELL-EDGE — old stone well-edge in a Mediterranean courtyard, sun-bleached limestone with moss-and-lichen in the cracks, climbing-bloom vines on the surrounding wall',
+      'BLOOM-GROWN VINE-BRIDGE — fantasy walkway-bridge entirely woven from glowing flowering vines, suspended over a sky-chasm between two fantasy spires, blossoms hanging from every cross-strand',
+      'KILOMETER-TALL ORCHID-SPIRE — fantasy spire grown FROM a single colossal orchid-form, hundreds of meters tall, petal-spirals forming each tier, bioluminescent core glowing from within',
+      'AERIAL BLOOM-TERRACE — fantasy sky-floating bloom-terrace with crystal-railed observation deck, cascading wisteria-curtains pouring off every side into open sky, glowing pollen-motes drifting',
+      'TOWERING VINE-ARCH GATEWAY — fantasy gateway arch made of woven flowering tendrils, twice the height of a city-tower, glowing pollen-motes in the air around it, magic-hour light radiating',
+      'CRYSTALLINE FAERIE-PILLAR — fantasy pillar of multi-faceted crystal-bloom (each facet refracting prismatic light), blooms growing from every crystal joint, painted dawn-gold sky behind',
+      'LIVING PETAL-CURTAIN WALL — fantasy wall composed entirely of living woven flowering vines forming a vertical petal-curtain, breeze rippling through it, glowing soft-bioluminescent veins',
+      'MAGIC LILY-FOUNTAIN — fantasy fountain with water cascading UPWARD into a hovering bloom-cloud, floating lily-pad-platforms in the basin, mirror-pool reflecting the entire fantasy-city above',
+      'COLOSSAL BLOOM-LANTERN — vast fantasy bloom-lantern (city-block sized) hanging from a vine-bridge, luminescent orchid-globe filling its center, will-o-wisps swarming around it',
+      'CRYSTAL-BLOOM INLAID FLOOR — fantasy floor of inlaid crystal-blossoms (mosaic of prismatic-bloom-tiles), reflecting the bloom-cascades overhead, painted-gold magic-hour glow',
+      'AERIAL CRYSTAL-STAIR — fantasy stair rising between two sky-spires, made of solid crystalline-bloom-stone, glowing vine-balustrades on both sides, cloud-layer hanging below',
+      'GLOWING-RUNE BARK — fantasy mallorn-bark spire-wall with carved-rune sigils traced in living golden moss, bloom-cascades pouring down between the runes, magic-hour gold light',
+      'PETAL-STORM EAVE — fantasy spire-eave with continuous cascade of falling petals (rose-and-violet), cresting wave of bloom-cascade pouring off the edge into a sky-chasm below',
+      'VINE-GROWN RAMPART — fantasy rampart entirely composed of intertwining bloom-vines and woven petals, fortified curtain wall of LIVING vegetation, glowing bioluminescent-blooms at intervals',
+      'FAERIE-STONE WITH EMBEDDED BLOOMS — fantasy carved-stone with embedded crystal-blooms in its surface, glowing soft-violet, will-o-wisps drifting around it, mossy fantasy-cobble around',
+      'BIOLUMINESCENT MOSS-CLUSTER — fantasy moss-cluster on a vine-bridge railing, glowing electric-cyan from within, surrounding bloom-cascade catching its light, atmospheric mist softening',
+      'SKY-FLOATING LILY-PAD PLATFORM — fantasy giant lily-pad-platform suspended in sky on glowing tendrils, fantasy-city spire-cluster rising from its center, mirror-water held in its concave',
+      'WATERFALL-PETAL EAVE — fantasy spire-eave with cascading waterfall AND bloom-cascade pouring off it simultaneously, mist-and-petal rising from below, painted-gold light',
+      'GLOWING-ROOT BRIDGE — fantasy bridge of glowing roots arching between two sky-spires, bioluminescent blue from within the root-fibers, fantasy floating-island moss below',
+      'COLOSSAL CHERRY-BLOOM CANOPY — fantasy canopy-roof entirely of giant cherry-blossom trees grown laterally, ten thousand pink-and-white blossoms, sun-shafts piercing through',
+      'FAERIE BLOOM-CHANDELIER — fantasy chandelier (city-block sized) of cascading bioluminescent orchids hanging from the underside of a sky-floating bloom-island, glowing soft-violet',
     ],
-    instructions: `Each entry is ONE specific CITY ARCHITECTURAL SIGNATURE DETAIL wrapped in bloom, 20-40 words. Format: "DETAIL NAME CAPS — primary architectural element + material/weathering + bloom-interaction". Vary across the 12 categories. NEVER modern / contemporary. NO duplicate of city_setting. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+    instructions: `Each entry is ONE specific FANTASY-BLOOM-CITY architectural detail, 20-40 words. Format: "DETAIL NAME CAPS — fantasy architectural element + fantasy material / scale / glow + bloom-interaction". Vary across the 12 fantasy categories. NEVER real-world tourist architecture (NO cobblestones / azulejo / Juliet / Parisian / Moorish / pueblo / Tuscan / Japanese-paper-lantern). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
   // ─── city-flowers path: atmospheric_phenomenon (60%-gated city magic) ───
   bloombot_city_flowers_atmospheric_phenomenon: {
     format: 'simple',
-    theme: `60%-GATED CITY ATMOSPHERIC PHENOMENA for the BloomBot city-flowers path. Each entry is ONE specific magic-moment element rendered within the historic city street scene. Each entry 20-40 words.
+    theme: `60%-GATED FANTASY ATMOSPHERIC MAGIC for the BloomBot city-flowers (fantasy bloom-city) path. Each entry is ONE specific magic-moment element rendered within the impossible fantasy-bloom-city scene. Each entry 20-40 words.
 
-⚠️ MANDATORY — every phenomenon amplifies the city's atmosphere (lived-in / picturesque / atmospheric). Renders as a visible element within the urban frame.
+⚠️ MANDATORY — every phenomenon amplifies the fantasy / magical / awe atmosphere of the bloom-city. Renders as a visible magical element within the fantasy frame.
 
 🚫 STRICT BANS:
+  • NO real-world urban objects (NO vintage bicycles / Vespa scooters / Parisian gas-lamps / bistro tables / market-stalls / laundry-lines / cobblestone-puddles / paper lanterns)
   • NO humans / pedestrians / figures
   • NO architectural elements (those are city_setting / architectural_detail)
-  • NO duplicate of urban content
+  • NO real-world tourist textures (NO cobblestones / azulejo-tiles / weathered-plaster)
 
-✓ PHENOMENON CATEGORIES:
-  A. **LIGHT MAGIC** — golden-hour rake across the city alley / lamp-glow on cobblestones / sunset light pouring down the staircase / dappled light through awning
-  B. **SLEEPING ANIMAL** — sleeping cat curled on a doorstep / dog asleep in a sun-patch / pigeon cluster on a cobblestone / cat on a windowsill
-  C. **PARKED OBJECT** — vintage bicycle leaning against a wall / weathered scooter / wooden cart / classic Vespa / old wooden boat (canal city)
-  D. **CITY-LIFE-IMPLIED** — laundry hung between balconies / linens on a clothesline / open shutters / market-stall awaiting / cafe-chairs and umbrellas
-  E. **WEATHER** — after-rain wet cobblestones reflecting the lights / morning mist in the alley / dew on the bloom-cascades / soft snow on the rooftops
-  F. **SOUND IMPLIED** — fountain bubbling visibly / shop-bell hanging silent / wind-chime / phonograph music spilling from an open window
-  G. **WINDOW-LIFE** — songbird at a windowsill / canary in a brass cage / open window with curtain breath / bloom on a windowsill from inside
-  H. **PETAL / POLLEN** — fallen petals on the cobblestones / petal-trail down a staircase / pollen-cloud in the side-light / petal-fall from a balcony
-  I. **REFLECTION** — wet street reflecting the bloom-laden facades / puddle reflecting the architecture / canal reflection / window-glass reflection
-  J. **WAITING MOMENT** — bistro table set for two outdoors / market-stall mid-set-up / chair pulled up to a step / two bicycles leaning together
-  K. **EVENING-WARM** — golden lantern-glow / candle in a window / cafe-string-light / Vespa headlamp glow at dusk
-  L. **POLLINATOR** — solitary hummingbird at a balcony bloom / butterfly in the sunbeam / bee at a windowsill flower
+✓ FANTASY-PHENOMENON CATEGORIES:
+  A. **MAGICAL LIGHT-SHAFTS** — god-rays piercing fantasy-cathedral-canopy / fantasy aurora-light pouring through bloom-arches / sunbeams refracting through crystal-blooms / bioluminescent-glow rising from petal-clusters
+  B. **DRIFTING MAGIC** — glowing pollen-motes drifting in the air / swirling bioluminescent spores / floating magical particles / luminous fairy-dust
+  C. **PETAL-STORM** — falling petal-snow drifting horizontally / cascading rose-petal cascade / petal-curtain rippling like rain / pollen-cloud caught in sun-shaft
+  D. **FANTASY WEATHER** — fantasy aurora-curtain rippling overhead / impossible double-sun sky / starflower-night-sky / drifting cloud-layer hanging between spires
+  E. **FAERIE CREATURES (scale-prover)** — distant tiny faerie-spirit flying / tiny pixie-flock swirling around a spire / butterfly-drift / luminescent moth-cluster
+  F. **MAGIC-MIST** — drifting iridescent mist / volumetric god-rays through bloom-fog / mirror-pool with rising magical vapor / golden-hour mist parting around fantasy spires
+  G. **GLOWING-PHENOMENA** — bioluminescent blooms pulsing soft-violet / glowing core-light radiating from a fantasy spire / luminescent root-glow from below / will-o-wisp swarm
+  H. **REFLECTION-MAGIC** — mirror-lake reflecting the entire bloom-megacity / crystal-floor reflection doubling the bloom-cascades / fantasy water mirror with parallel sky
+  I. **RAINBOW / PRISMATIC** — prismatic refraction through crystal-bloom facades / rainbow-light arcing between two fantasy spires / spectrum-shift across the scene
+  J. **FALLING-LIGHT MAGIC** — drifting light-particles falling like snow / luminous-leaf-fall from mallorn-canopy / glowing seed-floats drifting upward
+  K. **SCALE-PROVER FANTASY-WILDLIFE** — distant dragon arcing through fantasy sky / great phoenix wheeling between spires / tiny glowing fish drifting through coral-bloom-city
+  L. **MAGICAL-CASCADE** — fantasy waterfall cascading through bloom-curtains / vine-cascade pouring down a sky-chasm / petal-cascade pouring upward defying gravity
 
-Channel: Wes Anderson set-prop moments + Studio Ghibli Kiki's Delivery Service city details + Pinterest "European charm" boards + Singer Sargent city paintings + Doisneau street-photography moments.`,
+Channel: Studio-Ghibli Castle-in-the-Sky atmospheric moments / Mononoke forest-spirit magic / Avatar-Pandora bioluminescent night / Cocoon-of-Avacyn MtG ambient magic / Lothlorien-Fellowship Lothlorien-atmosphere.`,
     touchpoints: [
-      'GOLDEN-HOUR RAKE DOWN ALLEY — late-afternoon golden-hour sunlight raking down the city alley at a low angle, individual cobblestones casting long shadows, bloom-cascades catching the warm glow',
-      'SLEEPING CAT ON DOORSTEP — solitary tabby cat curled asleep on a weathered stone doorstep, sun-warmed patch under it, brass doorknob just above it, bloom-cascade around the door-frame',
-      'VINTAGE BICYCLE LEANING — single vintage Italian bicycle with woven basket leaning against a sun-bleached pastel wall, climbing-bloom vines on the wall behind it, cobblestones below',
-      'LAUNDRY BETWEEN BALCONIES — colorful laundry hanging on a clothesline strung between two balconies across the alley, gentle breeze implied, bloom-cascades from both balconies',
-      'AFTER-RAIN WET COBBLESTONES — wet cobblestones reflecting the bloom-laden facades and warm street-lamp glow, individual stones glistening, soft puddles in the joints',
-      'FOUNTAIN BUBBLING VISIBLY — small Mediterranean / Andalusian fountain bubbling water visibly in the courtyard center, ripples on the basin surface, blooms around the rim',
-      'SONGBIRD AT WINDOWSILL — solitary songbird (warbler / sparrow / European robin) perched on a windowsill in a pause, head tilted, looking at the street below, blooms in a pot beside it',
-      'PETAL-TRAIL DOWN STAIRCASE — trail of fallen petals scattered down a Lisbon-tile staircase, individual petals visible on each tread, a few stuck to the riser-tiles',
-      'WET-STREET REFLECTION — wet cobblestone street reflecting the bloom-laden facade and warm gas-lamp glow, the reflection slightly blurred by puddle ripples, atmospheric',
-      'BISTRO TABLE SET FOR TWO — small bistro table on the cobblestones outside a cafe, two bentwood chairs, espresso cups on the table, bloom-cascade from the wall behind',
-      'GOLDEN LANTERN GLOW AT DUSK — single Parisian / Moroccan / Japanese lantern glowing warm-amber against the dusk-blue sky, bloom-cascade around the lantern bracket',
-      'HUMMINGBIRD AT BALCONY BLOOM — solitary jewel-iridescent hummingbird hovering at a bloom-cluster spilling from a wrought-iron balcony, wings a transparent blur',
-      'PIGEON CLUSTER ON COBBLES — small cluster of pigeons gathered in a sun-patch on the cobblestones, individual birds slightly out of focus, the rest of the street empty',
-      'OPEN WINDOW WITH CURTAIN BREATH — open window with a lace curtain stirring gently in the breeze, glimpse of interior beyond, bloom-cluster on the windowsill in foreground',
-      'CLASSIC VESPA PARKED — classic mint-green Vespa scooter parked at the edge of a Mediterranean cobblestone street, weathered chrome details, bloom-cascade from the wall behind',
-      'WOODEN BOAT IN CANAL — small weathered wooden boat moored at the bottom of a Venetian / Bruges canal-side staircase, water reflecting the bloom-cascaded palazzo above',
-      'MORNING MIST IN ALLEY — soft morning mist hanging low in the city alley between bloom-laden walls, atmospheric depth softening the deep end, sun starting to break through',
-      'CAT ON WINDOWSILL — solitary cat sitting on a window-sill watching the empty street below, ears alert, sun-warmed patch on the sill, bloom-pot beside the cat',
-      'WIND-CHIME IN SUN — wind-chime hanging from a wooden-eave catching the sun, soft tinkle implied, bloom-cascade from the eave around it',
-      'TWO BICYCLES LEANING TOGETHER — two vintage bicycles leaning against each other propped against a sun-bleached plaster wall, climbing-bloom vines on the wall behind',
+      'GOLDEN GOD-RAYS THROUGH CATHEDRAL-CANOPY — dramatic golden god-rays piercing down through a fantasy bloom-cathedral-canopy, individual sun-shafts visible in the volumetric haze, bloom-cascades catching the warm glow',
+      'DRIFTING BIOLUMINESCENT POLLEN — glowing soft-violet pollen-motes drifting through the air at fantasy-spire midheight, magical-mist around them, distant fantasy-spires softened by atmospheric depth',
+      'HORIZONTAL PETAL-STORM — pink-and-white petal-snow drifting horizontally across the fantasy-bloom-city, sky-filling petal-fall blanketing every visible quadrant, soft golden-hour backlight',
+      'AURORA-CURTAIN OVERHEAD — fantasy aurora-curtain rippling magenta-violet-green across the night sky above the bloom-megacity, fantasy-spires silhouetted against the curtain',
+      'DISTANT PIXIE-FLOCK SWIRLING — tiny luminescent pixie-flock swarming around the tip of a kilometer-tall fantasy bloom-spire, individual pixies as glowing dots, magical mist softening',
+      'IRIDESCENT MIST PARTING — fantasy iridescent mist (rainbow-shimmering) parting around a fantasy bloom-spire to reveal its full silhouette, golden-hour light pouring through the gap',
+      'BIOLUMINESCENT BLOOM-CORE PULSE — fantasy bloom-spire core pulsing soft-violet bioluminescence from within, the glow radiating outward through translucent crystal-bloom facets',
+      'MIRROR-LAKE BLOOM-CITY REFLECTION — still mirror-lake at the foot of the fantasy bloom-megacity perfectly reflecting the entire vertical composition, doubling the visual impact',
+      'PRISMATIC RAINBOW ARC — prismatic rainbow arcing between two fantasy crystal-bloom spires, spectrum visible across the sky, light refracting through crystal-bloom facets',
+      'LUMINOUS LEAF-FALL FROM MALLORN — drifting glowing golden leaf-fall cascading from the canopy of a Lothlorien-mallorn fantasy spire, individual luminous leaves visible in the air',
+      'DISTANT DRAGON ARCING SKY — distant silhouetted dragon arcing through the fantasy-bloom-city sky, wings outstretched, sun-glinting along its spine, scale-prover for the bloom-megacity',
+      'PETAL-CASCADE DEFYING GRAVITY — fantasy petal-cascade pouring UPWARD from a sky-island bloom-megacity into a hovering bloom-cloud overhead, breath-taking impossible motion',
+      'WILL-O-WISP SWARM BETWEEN SPIRES — swarm of will-o-wisps drifting between two fantasy bloom-spires, individual wisps as soft-glowing orbs, faerie-realm Brian-Froud atmosphere',
+      'GLOWING TINY FISH SCHOOL — fantasy luminescent tiny-fish school drifting between coral-bloom underwater-city spires, glowing soft-cyan in the deep-blue water',
+      'SUN-SHAFT REFRACTING CRYSTAL — single golden sun-shaft cutting through the volumetric mist and refracting prismatic light through a fantasy crystal-bloom facade',
+      'DUAL-MOON FANTASY SKY — twin moons low on the fantasy horizon (one silver, one crimson) silhouetting the bloom-megacity spires, painted-violet sky behind',
+      'FANTASY WATERFALL-CASCADE — fantasy waterfall cascading down through bloom-curtains of a sky-spire, mist plume rising hundreds of meters, light refracting through the spray',
+      'STARFLOWER NIGHT-SKY — fantasy night sky filled with luminous starflower-blossoms instead of stars, sky-filling soft-glow, fantasy-spires silhouetted dramatically',
+      'PHOENIX WHEELING BETWEEN SPIRES — distant silhouetted fantasy phoenix wheeling between two fantasy bloom-spires, fire-feathers trailing soft light, scale-prover for the megacity',
+      'FAIRY-DUST CASCADE — fantasy fairy-dust cascade drifting from a sky-floating bloom-island, luminous golden particles falling in a glittering vertical curtain, magic-hour glow',
     ],
-    instructions: `Each entry is ONE specific CITY ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in city scene + lighting/sensory detail". Vary across the 12 categories. NO humans. NO architectural duplicates. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+    instructions: `Each entry is ONE specific FANTASY ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary magical element + position in fantasy-bloom-city scene + lighting / fantasy-sensory detail". Vary across the 12 fantasy categories. NO humans. NO real-world urban objects (NO bicycles / Vespa / gas-lamps / bistro tables / cobblestones). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  // ─── flower-tunnels path (2026-05-19 R2 rebuild) — DARK tunnel + GLOWING-FLOWER-CORE lanterns
+  // The flower CENTERS literally glow like lantern-flames — flowers ARE the light source.
+  bloombot_flower_tunnels_tunnel_setting: {
+    format: 'simple',
+    theme: `POV-INSIDE-A-FLOWER-WORMHOLE setting for the BloomBot flower-tunnels path. The viewer is ENGULFED by flowers — wrapped 360° in a wormhole made ENTIRELY of flowers + climbing-vines + green leaves. NO architecture. NO archways. NO cathedral. NO stone walls. NO cobblestone path. The wormhole structure IS bloom-mass. Each entry 35-65 words.
+
+⚠️ THE BAR: every entry produces a render where (a) the viewer is INSIDE a flower-wormhole engulfed by flowers on every side, (b) the walls / ceiling / floor of the wormhole are ALL flowers + vines + green leaves (no architecture), (c) every visible flower IS A SWITCHED-ON FLOWER-LAMP (translucent backlit petals + warm-amber bulb-core), (d) the deep distance recedes into MORE FLOWERS, not into a bright light, (e) the FLOWERS dominate every quadrant — never a focal exit-glow.
+
+⚠️ COLOR DISTRIBUTION MANDATE (CRITICAL):
+The pool MUST have a balanced spread of dominant flower-color across categories. Distribute the 25 entries roughly:
+  • ~4 BLUE-DOMINANT (cobalt agapanthus / blue hydrangea / wisteria / forget-me-not / blue Himalayan poppy / cornflower / delphinium)
+  • ~4 VIOLET / PURPLE-DOMINANT (jacaranda / lavender / lilac / clematis / heliotrope / iris / morning glory / lupine / amethyst orchid)
+  • ~4 WHITE / CREAM-DOMINANT (magnolia / cherry-blossom-white / lily / gardenia / camellia / moonflower / jasmine)
+  • ~4 YELLOW / GOLD-DOMINANT (sunflower / daffodil / chrysanthemum / golden marigold / yellow rose / forsythia)
+  • ~4 PINK / RED / CORAL-DOMINANT (rose / peony / hibiscus / azalea / camellia / tulip / dahlia)
+  • ~3 MIXED-RAINBOW (full-spectrum wormhole with many colored species in roughly equal mass)
+  • ~2 ORANGE-DOMINANT (marigold / nasturtium / poppy / orange dahlia / zinnia)
+
+In every entry the GLOW inside each flower stays warm-amber (regardless of petal color).
+
+🚫 ABSOLUTE BANS:
+  • NO architecture — no archways / cathedral / vault / columns / stone walls / rock / brick / wood structure
+  • NO cobblestone path / paved walkway (a soft moss / petal-strewn / blossom-carpet floor is OK)
+  • NO bright destination-glow at the vanishing-point — recedes into MORE flowers, not into light
+  • NO real-world tourist tunnels
+  • NO sci-fi portal-flash / electric-cyan / will-o-wisps
+  • NO empty bare surfaces — every quadrant packed with flowers + vines + green leaves
+  • NO sun-shaft / god-rays / spotlights — flower-lamps are the light source
+
+✓ WORMHOLE CATEGORIES (every entry is FLOWERS engulfing the viewer):
+
+  CASCADING WISTERIA-VINE WORMHOLE (~2)
+  CLIMBING-ROSE TUNNEL OF VINES (~2)
+  CHERRY-BLOSSOM BRANCH-CANOPY WORMHOLE (~2)
+  HANGING-VINE BLOOM-CASCADE WORMHOLE (~2)
+  SPIRALING FLOWER-WORMHOLE VORTEX (~2)
+  ENGULFING FLOWER-MEADOW WRAPAROUND (~2)
+  DENSE FOREST-CANOPY OF FLOWERS (~2)
+  HIBISCUS-TROPICAL JUNGLE-WRAPAROUND (~2)
+  MIXED-SPECIES SPECTRUM ENGULFMENT (~2)
+  MAGNOLIA-PETAL OVERWHELM (~2)
+  CAMELLIA-CLOUD WORMHOLE (~2)
+  GERBERA-DAISY ENGULFMENT (~2)
+
+EVERY entry MUST:
+- 35-65 words
+- The viewer is ENGULFED — 360° wraparound flower-mass
+- Walls / ceiling / floor are ALL flowers + vines + green leaves (NO architecture)
+- 2-3 specific flower species WITH EXPLICIT COLORS
+- Each flower IS A SWITCHED-ON FLOWER-LAMP (translucent + warm-amber bulb-core)
+- The deep distance recedes into MORE FLOWERS (not into bright light)`,
+    touchpoints: [
+      'BLUE AGAPANTHUS WORMHOLE ENGULFMENT — viewer engulfed inside a wormhole of cobalt-blue agapanthus globes and pale-blue wisteria strands, every globe-flower lit from within by warm-amber bulb-core, climbing-vine green leaves filling every gap, the deep distance receding into MORE blue agapanthus blooms',
+      'BLUE-HYDRANGEA CLOUD WORMHOLE — viewer wrapped 360° in dense cobalt-and-violet hydrangea-mopheads with climbing-vine leaves between, every floret-center glowing warm-amber from within, the wormhole receding deeper into more hydrangea-mass',
+      'BLUE HIMALAYAN POPPY WRAPAROUND — viewer engulfed in vibrant cobalt-blue Himalayan poppy-cups packed wall-to-wall-to-ceiling-to-floor, every cup-interior glowing warm-orange from within, deep distance fading into more blue-poppy mass',
+      'BLUE DELPHINIUM SPIRE FOREST — viewer engulfed in a wormhole of tall cobalt-and-royal-blue delphinium spires reaching from floor to ceiling on all sides, every cup-flower on the spires lit warm-amber from within, deep distance into more delphinium',
+      'VIOLET JACARANDA CANOPY WORMHOLE — viewer engulfed in dense violet jacaranda branches wrapping 360°, every five-petal flower lit from within by warm-gold bulb-core, climbing-vine leaves between, deep distance receding into more violet bloom-mass',
+      'PURPLE CLEMATIS-AND-MORNING-GLORY ENGULFMENT — viewer wrapped in dense purple clematis and deep-violet morning-glory trumpets, every flower-throat blazing warm-amber from within, green vines threading throughout, deep distance into more purple bloom-mass',
+      'LAVENDER-AND-LILAC OVERWHELM — viewer engulfed in dense lavender-spires and lilac-clusters wrapping 360°, every floret backlit by warm-amber bulb-core, green-vine leaves between, deep distance receding into more lavender-violet mass',
+      'PURPLE LUPINE SPIRE-FOREST — viewer engulfed in tall purple-lupine spires in violet and indigo on every side, every floret along the spires lit warm-amber from within, leaves between, deep distance into more lupine',
+      'WHITE MAGNOLIA OVERWHELM — viewer engulfed in dense cream-white magnolia branches wrapping 360°, every translucent ivory petal backlit by warm-cream bulb-core, glossy green leaves throughout, deep distance receding into more magnolia mass',
+      'CREAM MOONFLOWER WORMHOLE — viewer wrapped in dense cream moonflower and white cereus blossoms wall-to-ceiling-to-floor, every translucent ivory petal backlit by warm-amber bulb-core, green vines threading, deep distance into more moonflower-mass',
+      'WHITE LILY-AND-GARDENIA ENGULFMENT — viewer engulfed in pure-white trumpet-lily blossoms and cream gardenias wrapping 360°, every trumpet-throat lit from within by warm-amber, dark-green leaves between, deep distance into more white-bloom mass',
+      'WHITE CHERRY-BLOSSOM WORMHOLE — viewer engulfed in dense overlapping white cherry-blossom branches forming the wormhole 360°, every blossom translucent and backlit by warm-cream bulb-core, drifting petals filling the air, deep distance into more cherry-blossom mass',
+      'YELLOW SUNFLOWER WRAPAROUND — viewer engulfed in giant yellow sunflowers turning inward on every side, every disc-center radiating warm-gold like a switched-on sun-disc-lamp, green leaves throughout, deep distance into more sunflower-heads',
+      'GOLDEN DAFFODIL-AND-MARIGOLD WORMHOLE — viewer wrapped in golden daffodils and yellow marigolds, every trumpet-throat blazing warm-amber from within, green-vine leaves between, deep distance into more golden-bloom mass',
+      'GOLDEN CHRYSANTHEMUM ORB-WORMHOLE — viewer engulfed in dense golden chrysanthemum spheres wrapping 360°, every petal-spiral backlit by warm-gold from within, green leaves between, deep distance into more chrysanthemum-mass',
+      'YELLOW DAHLIA-AND-FORSYTHIA ENGULFMENT — viewer engulfed in yellow dahlias and cascading golden forsythia, every petal-spiral backlit by warm-gold bulb-cores, green leaves throughout, deep distance into more yellow-bloom mass',
+      'PINK CHERRY-BLOSSOM WORMHOLE — viewer engulfed in dense overlapping pink cherry-blossom branches forming the wormhole, every blossom backlit by warm-amber bulb-core, green leaves throughout, deep distance into more pink cherry-blossom mass',
+      'CORAL ROSE-AND-PEONY OVERWHELM — viewer wrapped in coral roses and blush peonies wrapping 360°, every rose-core glowing warm-pink-amber from within, dark-green vines between, deep distance into more coral-rose-mass',
+      'RED HIBISCUS-AND-AZALEA TROPICAL — viewer engulfed in red hibiscus and crimson azaleas wrapping 360°, every hibiscus-center blazing warm-orange-amber from within like torch-flames, tropical green leaves throughout, deep distance into more red-bloom mass',
+      'CRIMSON DAHLIA-AND-DAISY ENGULFMENT — viewer engulfed in crimson dahlias and red gerbera-daisies wrapping 360°, every dahlia-heart glowing warm-gold from within, green leaves between, deep distance into more crimson-bloom mass',
+      'ORANGE MARIGOLD-AND-NASTURTIUM WRAPAROUND — viewer engulfed in bright orange marigolds and warm-orange nasturtiums on every side, every flower-center radiating warm-amber from within, green leaves throughout, deep distance into more orange-bloom mass',
+      'ORANGE BIRD-OF-PARADISE TROPICAL JUNGLE — viewer engulfed in dense tropical jungle of vivid-orange bird-of-paradise and red-and-orange heliconia, every flower-core blazing warm-amber from within, green tropical leaves filling gaps, deep distance into more tropical-bloom mass',
+      'MIXED RAINBOW WORMHOLE — viewer engulfed in a wormhole mixing blue agapanthus + violet jacaranda + white magnolia + yellow daffodil + pink rose + red hibiscus in roughly equal mass, every flower lit from within by warm-amber bulb-core, the wormhole a rainbow of glowing flower-lamps',
+      'RAINBOW SPIRAL WORMHOLE — spiraling wormhole engulfing the viewer mixing wisteria-blue + jacaranda-violet + magnolia-cream + sunflower-gold + rose-pink + hibiscus-red, every bloom translucent and backlit by warm-amber bulb-cores, green-vine leaves throughout',
+      'PURPLE-AND-WHITE FOREST OVERWHELM — viewer engulfed in dense deep-purple lupine spires and pure-white moonflower trumpets wrapping 360°, every individual flower lit from within by warm-amber bulb-core, green leaves filling gaps, deep distance into more purple-and-white mass',
+    ],
+    instructions: `Each entry is ONE specific POV-INSIDE-A-FLOWER-WORMHOLE setting, 35-65 words. Format: 'WORMHOLE NAME CAPS — viewer ENGULFED 360° in [2-3 specific flower species with explicit colors] + green vines/leaves throughout, every flower IS A SWITCHED-ON LAMP with translucent petals + warm-amber bulb-core, deep distance receding into MORE FLOWERS (not into bright light)'. NO architecture. NO archways. NO cathedral. NO stone walls. COLOR DISTRIBUTION MANDATORY — across 25 entries, distribute roughly 4 blue / 4 violet-purple / 4 white-cream / 4 yellow-gold / 4 pink-red-coral / 3 mixed-rainbow / 2 orange. The GLOW stays warm-amber regardless of petal color. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_tunnels_flower_lanterns: {
+    format: 'simple',
+    theme: `SWITCHED-ON FLOWER-LAMP elements for the BloomBot flower-tunnels path. Each entry describes ONE specific flower species (or cluster) that IS A LIT LAMP IN THE SHAPE OF THAT FLOWER — translucent petals backlit from a bright warm-amber bulb-core. Each entry 20-40 words.
+
+⚠️ THE BAR: every entry names a flower species and EXPLICITLY describes it AS A SWITCHED-ON LAMP — translucent petals + warm-amber bulb-core making the bloom look unmistakably illuminated. The FLOWER IS the lamp, the FLOWER IS the bulb.
+
+⚠️ COLOR DISTRIBUTION MANDATE (CRITICAL):
+Distribute the 25 entries across the FULL SPECTRUM of flower colors:
+  • ~4 BLUE flower-lamps (agapanthus / blue hydrangea / blue Himalayan poppy / cornflower / forget-me-not / morning glory blue)
+  • ~4 VIOLET/PURPLE flower-lamps (jacaranda / lavender / lilac / lupine / iris / wisteria-violet / heliotrope / clematis)
+  • ~4 WHITE/CREAM flower-lamps (magnolia / lily / gardenia / moonflower / dogwood / camellia / orchid / cherry-blossom white)
+  • ~4 YELLOW/GOLD flower-lamps (sunflower / daffodil / chrysanthemum / yellow rose / golden marigold / forsythia / mimosa / yellow lily)
+  • ~4 PINK/RED/CORAL flower-lamps (rose / peony / hibiscus / azalea / tulip / dahlia / camellia / hibiscus / fuchsia)
+  • ~3 ORANGE flower-lamps (marigold / nasturtium / poppy / orange dahlia / bird-of-paradise / torch-ginger)
+  • ~2 MULTI-COLOR / EXOTIC (orchid / pansy / lantana / mixed dahlia)
+
+For EVERY color, the GLOW inside stays WARM-AMBER (a blue agapanthus has a warm-amber lit core, a white magnolia has a warm-cream lit core, a yellow daffodil has a warm-gold lit core). The petal color varies, the glow stays warm.
+
+🚫 STRICT BANS:
+  • NO sci-fi bioluminescent magical glow / will-o-wisps / electric-cyan
+  • NO actual lamps / lanterns / candles — the FLOWER IS the lamp
+  • NO 'flowers with subtle glow' — every flower MUST look unmistakably ON
+  • NO opaque-petaled flowers — petals must be TRANSLUCENT and backlit
+
+✓ FLOWER-LAMP CATEGORIES (variety mandatory):
+
+  HANGING CHANDELIER FLOWERS — bell/pendant flowers with translucent walls + warm bulb-cores (foxglove, fuchsia, trumpet-vine, brugmansia, wisteria, honeysuckle, lily-of-the-valley)
+  CANDLE-CLUSTER FLOWERS — upward-facing translucent flowers with warm bulb-cores (marigold, dahlia, zinnia, hibiscus, peony, lily, tulip, rose)
+  DISC FLOWERS — large flat translucent flowers with bright bulb-centers (sunflower, gerbera-daisy, dahlia, coneflower, black-eyed-susan)
+  CLUSTER ORBS — dense bloom-cluster orbs each glowing as a single lantern (hydrangea, lilac, allium, agapanthus, mophead, snowball)
+  EXOTIC TROPICAL — exotic blooms reading as exotic lanterns (orchid, hibiscus, bird-of-paradise, torch-ginger, plumeria, ohia-lehua)`,
+    touchpoints: [
+      'BLUE AGAPANTHUS GLOBE-LANTERNS — clusters of cobalt-blue agapanthus globes lining the tunnel walls, every individual blue floret in the globe-cluster lit from within by a warm-amber bulb-core, the BLUE petals translucent and backlit, reading as glowing blue-and-amber orb-lanterns',
+      'BLUE-HYDRANGEA GLOWING-ORBS — large cobalt-and-violet hydrangea-mopheads clustered along the tunnel walls, every tiny floret-center glowing warm-amber from within, the whole cluster a glowing globe-lantern',
+      'BLUE HIMALAYAN POPPY LAMPS — bright cobalt-blue Himalayan poppy-cups lining the path, each cup-interior glowing warm-orange from within like a switched-on cup-shaped lamp, blue petals translucent',
+      'BLUE DELPHINIUM SPIRE-TORCHES — tall delphinium spires in deep cobalt and royal blue, every individual cup-flower on the spires lit from within by a warm-amber bulb-core, reading as upright torches',
+      'VIOLET JACARANDA LANTERN-CLUSTERS — cascading violet jacaranda blossoms in the canopy, every five-petal flower translucent and backlit by warm-gold bulb-cores, the violet petals glowing from within',
+      'LAVENDER SPIRE-LAMPS — tall lavender-spires lining the path, every tiny floret on the spires lit from within by warm-amber, the whole spire reading as a lavender-and-amber torch',
+      'PURPLE CLEMATIS PORTAL-LAMPS — large purple clematis blossoms mounted at intervals along tunnel-walls, every six-petal flower translucent and lit from within by warm-amber, the purple petals glowing',
+      'LUPINE PURPLE-TORCH SPIRES — tall purple-lupine spires in violet and indigo, every individual floret along the spire lit from within by warm-amber bulb-core, upright torch-lanterns',
+      'WHITE MAGNOLIA PEARL-LAMPS — large cream-white magnolia blossoms hanging from the canopy, every translucent ivory petal backlit by a warm-cream bulb-core, reading as a row of soft glowing pearl-lanterns',
+      'WHITE TRUMPET-LILY HORN-LANTERNS — fragrant pure-white trumpet-lily flowers hanging from vines, every trumpet-throat lit from within by warm-amber, white petals translucent and glowing soft pearl-warm',
+      'CREAM MOONFLOWER PAPER-LANTERNS — large white moonflower-trumpets hanging at intervals, every trumpet-throat glowing warm-cream from within like a Chinese paper-lantern, ivory petals backlit',
+      'WHITE GARDENIA CLUSTER-LAMPS — clusters of cream gardenias along the tunnel walls, every translucent petal backlit by warm-cream bulb-core, soft pearl-warm glow radiating outward',
+      'YELLOW SUNFLOWER DISC-LAMPS — massive yellow sunflower-heads turning toward the viewer, every disc-center radiating warm-gold like a switched-on sun-disc-lamp, ray-petals translucent gold',
+      'GOLDEN DAFFODIL HORN-LAMPS — clusters of golden daffodils lining the tunnel path, every trumpet-throat blazing warm-amber from within like horn-lanterns, yellow petals translucent and glowing',
+      'YELLOW MARIGOLD CANDLE-FLAMES — clusters of bright yellow-and-gold marigolds along the path, every petal-spiral backlit by warm-amber bulb-cores, reading as upright candle-flames',
+      'GOLDEN CHRYSANTHEMUM ORB-LAMPS — dense golden chrysanthemum spheres clustered along walls, every petal-spiral backlit by warm-gold from within, glowing orb-lanterns',
+      'PINK CHERRY-BLOSSOM LANTERN-STRANDS — cascading cherry-blossom branches with every pink blossom backlit by warm-amber bulb-core, translucent petals glowing soft pink-warm',
+      'CORAL ROSE EMBER-LAMPS — coral and warm-pink climbing-rose clusters with every rose-core glowing warm-pink-amber like an ember-heart, layered petals backlit',
+      'PINK PEONY ORB-LAMPS — large coral and blush peonies with every layered-petal-mass backlit by warm-coral-amber bulb-cores, glowing orb-lanterns',
+      'RED HIBISCUS TORCH-FLAMES — large red hibiscus blossoms along the walls with warm-orange glowing centers like torch-flames at the heart of each, petals backlit',
+      'CRIMSON DAHLIA HEART-LAMPS — large crimson dahlias along the path, every petal-spiral backlit by warm-gold from within, reading as glowing rose-and-amber heart-lamps',
+      'ORANGE MARIGOLD CANDLE-CLUSTERS — clusters of orange marigolds with warm-amber bulb-cores radiating outward through petals, reading as orange candle-flames',
+      'ORANGE NASTURTIUM CUP-LAMPS — bright-orange nasturtium-cups lining the path, every cup-interior glowing warm-amber from within, translucent orange petals glowing',
+      'BIRD-OF-PARADISE FLAME-LANTERNS — exotic orange-and-blue bird-of-paradise flowers with warm-orange glowing cores reading as exotic flame-shaped lanterns',
+      'TROPICAL ORCHID EXOTIC-LAMPS — pale orchid blossoms with translucent petals and warm-amber bulb-cores, reading as exotic ornamental flower-lamps',
+    ],
+    instructions: `Each entry is ONE specific SWITCHED-ON FLOWER-LAMP, 20-40 words. Format: 'FLOWER NAME LAMP-TYPE CAPS — specific flower species WITH EXPLICIT COLOR + translucent petals + warm-amber bulb-core inside making the flower look unmistakably ON'. COLOR DISTRIBUTION MANDATORY — across 25 entries, distribute roughly 4 blue / 4 violet-purple / 4 white-cream / 4 yellow-gold / 4 pink-red-coral / 3 orange / 2 multi-color. The GLOW stays warm-amber regardless of petal color. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_tunnels_atmospheric_phenomenon: {
+    format: 'simple',
+    theme: `40%-GATED TUNNEL ATMOSPHERIC PHENOMENA for the BloomBot flower-tunnels path. Each entry is ONE specific atmospheric magic-moment element rendered within the flower-tunnel scene. Each entry 20-40 words.
+
+⚠️ MANDATORY — every phenomenon AMPLIFIES the flower-as-light aesthetic. Does NOT compete with the flowers — supports them.
+
+🚫 STRICT BANS:
+  • NO sci-fi glow / bioluminescent / will-o-wisps / fairy-dust / electric-cyan
+  • NO actual lamps / lanterns / candles / electric-lights (flowers are the lights)
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO ROBED FIGURES, NO PEDESTRIANS, NO TRAVELERS, NO EXPLORERS, NO HUMANOID ANYWHERE in the frame — foreground OR distant OR vanishing-point. The flower-wormhole is COMPLETELY empty of human presence 🚫🚫🚫
+  • NO duplicate of tunnel architectural elements
+
+✓ TUNNEL-PHENOMENON CATEGORIES:
+  A. **PETAL-FALL** — drifting petal-snow filling the tunnel air / cherry-blossom-fall through the canopy / drifting wisteria-petals
+  B. **WATER ELEMENTS** — stream winding through the tunnel floor / mirror-pool at the deep end / dripping water from ceiling vines
+  C. **MIST / FOG DRIFT** — soft mist drifting through the tunnel deep-end / morning fog parting around the flower-walls / drifting smoke
+  D. **NON-HUMAN SCALE-PROVER (WILDLIFE ONLY)** — lone deer crossing the path / single white stag at far end / solitary fox / lone owl perched / NEVER a human figure
+  E. **WARM LIGHT-GLOW BEYOND** — warm exit-glow at the deep end of the tunnel / sunset glow visible through the far opening / fire-warmth from beyond
+  F. **FALLEN-PETAL CARPET** — fallen petals carpeting the tunnel floor / petal-strewn cobblestones / blossom-thick path
+  G. **REFLECTION** — wet floor reflecting the bloom-canopy / mirror-pool doubling the tunnel-walls / dewdrop-reflections on petals
+  H. **CREATURE / WILDLIFE** — single butterfly drifting through / single moth at a flower-lantern / single hummingbird at a hanging flower
+  I. **BREEZE-MOTION** — gentle wind moving the cascading flowers / wisteria-strands swaying / fallen petals being lifted
+  J. **DEW / RAIN** — fresh rain on the flowers / dewdrops catching ambient light / wet petals glistening
+  K. **NIGHT-STAR THROUGH GAP** — single bright star visible through a gap in the tunnel-canopy / moon-glow through the bloom-overhang
+  L. **SMOKE / INCENSE** — soft drifting smoke from somewhere beyond / incense curl winding through`,
+    touchpoints: [
+      'CHERRY-BLOSSOM PETAL-FALL — soft pink-and-white cherry-blossom petals drifting through the entire tunnel air, individual petals catching the ambient flower-light, dense petal-fall filling every quadrant',
+      'STREAM WINDING THROUGH FLOOR — narrow silver stream winding through the center of the tunnel floor, water reflecting the bloom-canopy overhead, gentle current carrying fallen petals',
+      'MORNING MIST AT TUNNEL DEEP-END — soft white morning mist drifting through the deep-end of the tunnel, atmospheric depth softening the bloom-walls toward the vanishing-point',
+      'LONE FOX AT VANISHING-POINT — single small fox standing at the tunnel deep-end, the fox-silhouette barely visible against the warm bloom-glow, providing scale without any human presence',
+      'WARM SUNSET EXIT-GLOW — warm orange-and-gold sunset glow visible at the deep end of the tunnel, the warm light backlighting the bloom-walls at the vanishing-point',
+      'FALLEN-PETAL CARPET — thick carpet of fallen pink-and-white petals covering the tunnel floor, individual petals visible at the viewer feet, blossom-thick path receding into the deep distance',
+      'WET-PATH BLOOM-REFLECTION — wet stone path reflecting the bloom-canopy overhead, the reflection slightly blurred, doubling the visual impact of the flower-lanterns above',
+      'SINGLE BUTTERFLY DRIFTING — single iridescent butterfly drifting through the tunnel air at midground height, wings catching the warm flower-uplight, the rest of the tunnel quiet',
+      'WISTERIA SWAYING IN BREEZE — gentle breeze making the cascading wisteria-strands sway in unison, motion-blur on the swaying strands, falling petals lifted upward by the breeze',
+      'FRESH RAIN ON PETALS — fresh rain droplets on every visible petal, individual blooms glistening with caught light, wet leaves reflecting the dim ambient',
+      'MOON-GLOW THROUGH CANOPY-GAP — pale silver moon-glow visible through a gap in the bloom-canopy overhead, single shaft of moonlight cutting down to the tunnel floor',
+      'INCENSE-SMOKE DRIFTING — soft warm-amber incense smoke curling through the tunnel air, drifting upward through the bloom-canopy, atmospheric depth softening',
+      'HUMMINGBIRD AT HANGING FLOWER — single iridescent hummingbird hovering at a hanging foxglove or trumpet-lily flower-lantern, wings a motion-blur of jewel-color',
+      'DEWDROPS ON SPIDERWEB — dewdrops catching dim ambient on a spiderweb stretched between two hanging-flower-lanterns, each droplet a tiny prism, atmospheric',
+      'PETAL-CASCADE DRIFTING UPWARD — petal-snow drifting horizontally then upward in a gentle thermal, defying gravity for a moment, magic-implied without sci-fi-glow',
+      'WARM CANDLE-AMBIENT BEYOND DOORWAY — warm candle-amber ambient glow visible through a doorway-archway beyond the tunnel deep-end, suggesting a flower-shrine just past the threshold',
+      'DEER STANDING AT FAR END — single white stag standing still at the tunnel deep-end, silhouetted against the warm exit-glow, the deer giving scale',
+      'TORCH-AMBIENT GROUND-GLOW — warm torch-ambient glow emanating from below the floor-level marigold-clusters, casting uplight onto the underside of hanging blooms above',
+      'DRIFTING BLOSSOM-FALL — soft cherry-blossom-fall drifting horizontally through the tunnel, painted-petal-motion filling the air, soft natural daylight',
+      'MIRROR-POOL AT TUNNEL DEEP-END — still mirror-pool of water at the tunnel deep-end, perfect reflection doubling the bloom-canopy, lotus floating in the foreground reflection',
+    ],
+    instructions: `Each entry is ONE specific FLOWER-TUNNEL ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in tunnel scene + light/sensory detail". Vary across the 12 categories. NO sci-fi glow. NO actual lamps. ABSOLUTE HARD BAN ON HUMANS — no people / no figures / no silhouettes / no pedestrians anywhere (wildlife scale-provers like deer / stag / fox / owl are fine). The phenomenon supports the flowers-as-lights aesthetic. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
   // ─── reclaim path: ruin_type (abandoned structure being reclaimed) ───

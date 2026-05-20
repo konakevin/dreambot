@@ -54,6 +54,10 @@ module.exports = {
   BLOOMBOT_CITY_FLOWERS_CITY_SETTING: loadIfExists('bloombot_city_flowers_city_setting'),
   BLOOMBOT_CITY_FLOWERS_ARCHITECTURAL_DETAIL: loadIfExists('bloombot_city_flowers_architectural_detail'),
   BLOOMBOT_CITY_FLOWERS_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_city_flowers_atmospheric_phenomenon'),
+  // ─── flower-tunnels path (2026-05-19) — POV through bloom-tunnels w/ flowers as light source ───
+  BLOOMBOT_FLOWER_TUNNELS_TUNNEL_SETTING: loadIfExists('bloombot_flower_tunnels_tunnel_setting'),
+  BLOOMBOT_FLOWER_TUNNELS_FLOWER_LANTERNS: loadIfExists('bloombot_flower_tunnels_flower_lanterns'),
+  BLOOMBOT_FLOWER_TUNNELS_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_flower_tunnels_atmospheric_phenomenon'),
   // ─── conservatory path: declarative axis-system pools (2026-05-16 migration) ───
   BLOOMBOT_CONSERVATORY_CONSERVATORY_TYPE: loadIfExists('bloombot_conservatory_conservatory_type'),
   BLOOMBOT_CONSERVATORY_STRUCTURAL_ANCHOR: loadIfExists('bloombot_conservatory_structural_anchor'),

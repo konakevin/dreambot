@@ -33,6 +33,7 @@ const pathBuilders = {
   conservatory: require('./paths/conservatory'),
   'tropical-paradise': require('./paths/tropical-paradise'),
   'city-flowers': require('./paths/city-flowers'),
+  'flower-tunnels': require('./paths/flower-tunnels'),
   reclaim: require('./paths/reclaim'),
   'bloom-spirit': require('./paths/bloom-spirit'),
 };
@@ -60,6 +61,7 @@ module.exports = {
     conservatory: { 'black-forest-labs/flux-1.1-pro': 100 },
     'tropical-paradise': { 'black-forest-labs/flux-1.1-pro': 100 },
     'city-flowers': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'flower-tunnels': { 'black-forest-labs/flux-1.1-pro': 100 },
     reclaim: { 'black-forest-labs/flux-1.1-pro': 100 },
     'bloom-spirit': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
@@ -89,6 +91,7 @@ module.exports = {
     'conservatory',
     'tropical-paradise',
     'city-flowers',
+    'flower-tunnels',
     'reclaim',
     'bloom-spirit',
   ],
@@ -102,6 +105,7 @@ module.exports = {
     conservatory: 2,
     'tropical-paradise': 2,
     'city-flowers': 1,
+    'flower-tunnels': 2,
     reclaim: 1,
     'bloom-spirit': 2,
   },
@@ -111,7 +115,7 @@ module.exports = {
     skipPaths: [],
     allowSubjectChaosPaths: [
       'landscape', 'cozy', 'garden-walk', 'dreamscape',
-      'conservatory', 'tropical-paradise', 'city-flowers', 'reclaim',
+      'conservatory', 'tropical-paradise', 'city-flowers', 'flower-tunnels', 'reclaim',
       'bloom-spirit',
     ],
   },
@@ -126,7 +130,7 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'reclaim', 'bloom-spirit'],
+    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'flower-tunnels', 'reclaim', 'bloom-spirit'],
   },
 
   sensoryAnchors: {
@@ -136,7 +140,7 @@ module.exports = {
       landscape: 'scene', closeup: 'scene', cozy: 'scene',
       'garden-walk': 'scene', dreamscape: 'scene',
       conservatory: 'scene', 'tropical-paradise': 'scene',
-      'city-flowers': 'scene', reclaim: 'scene',
+      'city-flowers': 'scene', 'flower-tunnels': 'scene', reclaim: 'scene',
       'bloom-spirit': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
