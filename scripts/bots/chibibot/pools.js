@@ -169,6 +169,8 @@ module.exports = {
   CREATURE_PORTRAIT_ACCESSORIES: load('creature_portrait_accessories'),
   CREATURE_PORTRAIT_BACKGROUNDS: load('creature_portrait_backgrounds'),
   CREATURE_PORTRAIT_TIME_OF_DAY: load('creature_portrait_time_of_day'),
+  CREATURE_PORTRAIT_OUTFITS: load('creature_portrait_outfits'),
+  CREATURE_PORTRAIT_SET_DECORATIONS: load('creature_portrait_set_decorations'),
 
   // Cute-food path-bespoke axes (2026-05-20 full-bespoke migration)
   CUTE_FOOD_HERO: load('cute_food_hero'),

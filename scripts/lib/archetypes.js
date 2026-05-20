@@ -1552,13 +1552,13 @@ const ARCHETYPES = {
 
   CHIBIBOT_CREATURE_PORTRAIT: {
     description:
-      'PATH-BESPOKE — ChibiBot creature-portrait (2026-05-20 full-bespoke). CREATURE-AS-HERO solo tight portrait. OPPOSITE of village paths: creature FILLS 60-80% of the frame, dreamy soft-bokeh background ~20-30%, no village/setting competing. Hyper-cute marshmallow proportions, oversized dewy eyes, blush cheeks. 10 axes: 3 universal + 7 path-bespoke (creature + pose + expression + portrait_feature pickN:2 + accessory + background_mood + time_of_day).',
+      'PATH-BESPOKE — ChibiBot creature-portrait (2026-05-20 full-bespoke). SOLO CREATURE-AS-HERO tight portrait MAXED with cute outfit + visible accessory + 3 scattered set-decorations. Creature FILLS 60-80% of the frame, dreamy soft-bokeh background ~20-30%. Hyper-cute marshmallow proportions. 12 axes: 3 universal + 9 path-bespoke (creature + pose + expression + portrait_feature pickN:2 + outfit + accessory + set_decoration pickN:3 + background_mood + time_of_day).',
     slots: {
       universal: ['lighting', 'atmosphere', 'weather'],
       bot: [],
-      path: ['creature', 'pose', 'expression', 'portrait_feature', 'accessory', 'background_mood', 'time_of_day'],
+      path: ['creature', 'pose', 'expression', 'portrait_feature', 'outfit', 'accessory', 'set_decoration', 'background_mood', 'time_of_day'],
     },
-    pickN: { portrait_feature: 2 },
+    pickN: { portrait_feature: 2, set_decoration: 3 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
@@ -1669,6 +1669,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  PIXELBOT_SIDE_SCROLLER_WORLD: {
+    description:
+      'PATH-BESPOKE — PixelBot side-scroller-world path (2026-05-20 axis-system migration). 16-BIT SIDE-SCROLLING PLATFORMER GAMEPLAY SCREENSHOTS — Castlevania IV / Super Metroid / Donkey Kong Country / Mega Man X / Owlboy / Hollow Knight pixel / Dead Cells / Ori / Celeste. HORIZONTAL SIDE-VIEW camera, 5 mandatory elements (horizontal frame + foreground platform + player-sprite + middle parallax + far backdrop). 3 path-bespoke pools + 40%-gated atmospheric_phenomenon.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['biome_setting', 'platform_geography', 'hero_action'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   PIXELBOT_DUNGEON_DEPTH: {
     description:
       'PATH-BESPOKE — PixelBot dungeon-depth path (2026-05-20 axis-system migration). 16-BIT TOP-DOWN DUNGEON-CRAWLER GAMEPLAY SCREENSHOTS — Diablo I/II / Hades / Hyper Light Drifter / Children of Morta / Moonlighter / Heroes of Hammerwatch. Top-down or 3/4-iso camera, hero adventurer pixel-sprite + monster encounter mid-action + Diablo-style loot/props + visible tile-floor. 3 path-bespoke pools + 40%-gated loot_detail.',
@@ -1699,11 +1713,11 @@ const ARCHETYPES = {
 
   EARTHBOT_EPIC_VISTA: {
     description:
-      'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration, first migrated EarthBot path). Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. Identity-corrected from legacy "stack 3+ phenomena per frame" mandate which drifted into AI-fake territory. Composition discipline: ONE hero subject + ONE scale-anchor + supporting clean light/atmosphere/sky. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
+      'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration). Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. Identity-corrected from legacy "stack 3+ phenomena per frame" mandate which drifted into AI-fake territory. Composition discipline: ONE hero subject + supporting clean light/atmosphere/sky + 3-tier depth (NEAR foreground anchor → MID vista → FAR scale prover). R1 adds foreground_anchor axis + template "MOMENT IN MOTION" + "PEAK LIGHT MOMENT" + phenomenon-lighting compatibility. 7 axes: 6 always-on path-bespoke (subject, lighting, atmosphere, foreground_anchor, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
     slots: {
       universal: [],
       bot: [],
-      path: ['subject', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer'],
+      path: ['subject', 'lighting', 'atmosphere', 'foreground_anchor', 'hero_feature', 'sky_layer'],
     },
     pickN: {},
     conditionalLayer: { slot: 'phenomenon', gate: 0.3 },

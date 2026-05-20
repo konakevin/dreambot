@@ -11082,7 +11082,9 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
       pose,
       expression,
       portrait_feature,
+      outfit,
       accessory,
+      set_decoration,
       background_mood,
       time_of_day,
       lighting,
@@ -11091,14 +11093,18 @@ Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-s
     } = slots;
     const featureList = Array.isArray(portrait_feature) ? portrait_feature : [portrait_feature];
     const featureBlock = featureList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const decorList = Array.isArray(set_decoration) ? set_decoration : [set_decoration];
+    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
 
-    return `You are writing CHIBI CREATURE PORTRAITS for ChibiBot — a tight close-up of ONE impossibly cute creature filling the frame. The viewer cannot look away from the cuteness. Pixar / Sanrio / Pop-Mart designer-vinyl meets storybook-illustration. Output wraps with style prefix + suffix.
+    return `You are writing CHIBI CREATURE PORTRAITS for ChibiBot — a tight close-up of ONE impossibly cute creature filling the frame, MAXED with a cute outfit, accessory, and scattered set-decorations. The viewer cannot look away from the cuteness. Pixar / Sanrio / Pop-Mart designer-vinyl meets storybook-illustration. Output wraps with style prefix + suffix.
 
-━━━ ⚠ HARD RULE #1: CREATURE FILLS THE FRAME ━━━
+━━━ ⚠ HARD RULE #1: SOLO CREATURE FILLS THE FRAME ━━━
 
-This is OPPOSITE of setting-as-hero paths — the CREATURE is the hero. Creature fills 60-80% of the frame. Tight close-up or mid-close portrait crop. NOT wide-shot. NOT establishing-shot. NOT a tiny anchor with village behind. Background is a soft dreamy bokeh-blur — pretty but ~20-30% of frame, never competing with the creature.
+ONE creature only — never a pair, never a duo, never a group. Creature is the SOLO hero. Creature fills 60-80% of the frame. Tight close-up or mid-close portrait crop. NOT wide-shot. NOT establishing-shot. NOT a tiny anchor with village behind. Background is a soft dreamy bokeh-blur — pretty but ~20-30% of frame, never competing with the creature.
 
-ABSOLUTE FRAMING: tight head-and-shoulders portrait, OR close-up with paws-up-to-cheeks, OR extreme-close of just the face with eyes filling the frame. Creature dominates. The viewer's eye is LOCKED on the cuteness.
+⚠ HARD BAN: TWO creatures, pair-bonds, multiple subjects. SOLO only.
+
+ABSOLUTE FRAMING: tight head-and-shoulders portrait, OR close-up with paws-up-to-cheeks, OR mid-close 3/4-body view. Creature dominates. The viewer's eye is LOCKED on the cuteness.
 
 ━━━ ⚠ HARD RULE #2: HYPER-CUTE PROPORTIONS — NON-NEGOTIABLE ━━━
 
@@ -11111,6 +11117,15 @@ Push IMPOSSIBLY ROUND AND SOFT:
 - Tiny pink nose / mouth — minimal but present
 - Cute round ears / appendages (if applicable to species)
 
+━━━ ⚠ HARD RULE #3: MAX THE SPICE — VISIBLE OUTFIT + ACCESSORY + 3 SET DECORATIONS ━━━
+
+NOT a minimalist portrait. EVERY render MUST show:
+1. A visible CUTE OUTFIT on the creature (knit-sweater / dress / overalls / kimono / scarf-tied — see outfit slot below)
+2. A visible ACCESSORY held or worn (bow / crown / flower / balloon — see accessory slot below)
+3. Three SCATTERED SET-DECORATIONS in the soft-bokeh foreground around the creature (floating hearts / scattered flowers / stack of books / mini tea-set / pastel ribbons — see set_decoration slot below)
+
+The render must feel ABUNDANT and LAYERED — not empty. The creature is the hero but the frame is FULL of cute supporting elements.
+
 ━━━ THE CHIBI CREATURE ━━━
 ${creature}
 
@@ -11120,11 +11135,17 @@ ${pose}
 ━━━ EXPRESSION — emotional state ━━━
 ${expression}
 
-━━━ TWO PORTRAIT FEATURES (amplify the cuteness) ━━━
+━━━ TWO PORTRAIT FEATURES (amplify the cuteness on the creature's body) ━━━
 ${featureBlock}
 
-━━━ ACCESSORY OR PROP (held / worn / nearby — small charm) ━━━
+━━━ ⚠ CUTE OUTFIT (creature is WEARING this — make it visible) ━━━
+${outfit}
+
+━━━ ⚠ ACCESSORY (visible held or worn on the creature) ━━━
 ${accessory}
+
+━━━ ⚠ THREE SCATTERED SET-DECORATIONS (foreground or floating around the creature, in the soft-bokeh-blur) ━━━
+${decorBlock}
 
 ━━━ BACKGROUND MOOD (soft dreamy bokeh, NOT a setting) ━━━
 ${background_mood}
@@ -11172,13 +11193,15 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION ━━━
 
-TIGHT CLOSE-UP PORTRAIT. Creature fills 60-80% of frame. Centered or rule-of-thirds. Background is a soft dreamy bokeh-melt — pretty colors, not a recognizable setting. The creature's POSE + EXPRESSION + FEATURES dominate. Push impossibly-cute proportions. NOT a tiny creature with village behind. NOT an establishing shot. NOT environmental. Just the creature, in a portrait crop, hyper-cute, jewelry-quality.
+TIGHT CLOSE-UP or MID-CLOSE PORTRAIT. Creature fills 60-80% of frame. Centered or rule-of-thirds. Background is a soft dreamy bokeh-melt — pretty colors, not a recognizable setting. The creature is WEARING the cute outfit and HOLDING/WEARING the accessory. Set-decorations are scattered in the soft-bokeh-blur foreground or floating around the creature. NOT a tiny creature with village behind. NOT an establishing shot. SOLO only — never a pair.
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
-Open with: "[creature description with impossibly-cute proportions] [pose + expression], [portrait features visible], dreamy soft-bokeh background, [time-of-day lighting register]..."
+Open with: "[solo creature description with impossibly-cute proportions] [pose + expression], wearing [cute outfit], with [visible accessory], [portrait features visible], surrounded by [scattered set-decorations in the soft bokeh-blur], dreamy soft-bokeh [background-mood] background, [time-of-day lighting register]..."
 
-Then unfold the sparkle-stack, accessory, and any atmospheric details. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The CREATURE is the hero — background is secondary mood only.`;
+⚠ The outfit + accessory + 3 decorations MUST appear in the brief — never minimalist / sparse.
+
+Then unfold the sparkle-stack and atmospheric details. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The CREATURE is the hero (SOLO) — frame is MAXED with outfit + accessory + scattered decor.`;
   },
 
 
@@ -12028,6 +12051,96 @@ Open with: "[creature description] [jungle-activity verb-phrase], [village descr
 Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
   },
 
+  PIXELBOT_SIDE_SCROLLER_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { biome_setting, platform_geography, hero_action, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `\n\n━━━ ATMOSPHERIC PHENOMENON / PARALLAX-MAGIC ACCENT ━━━\n${atmospheric_phenomenon}\n\nA specific atmospheric detail amplifying the parallax-layer magic.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART SIDE-SCROLLING PLATFORMER GAMEPLAY SCREENSHOT for PixelBot. The frame must read INSTANTLY as an in-game side-scroller moment — the player is mid-stride on a platform, parallax layers receding behind. NOT concept art. NOT a key-art poster. NOT a vista painting. A screenshot from a SNES-era 2D platformer.
+
+Genre lineage: Castlevania IV / Super Metroid / Donkey Kong Country / Mega Man X / Owlboy / Hollow Knight pixel / Dead Cells / Ori / Celeste / Trine / Salt and Sanctuary.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+
+The camera is HORIZONTAL SIDE-VIEW — character-perspective sliced FLAT across the world. Look at the world from the SIDE, NOT from above, NOT from in front, NOT from behind. The frame is read LEFT-TO-RIGHT.
+
+🚫 NEVER:
+  - Top-down view (no looking down at floor)
+  - 3/4 isometric (no angled-down floor)
+  - First-person view (no looking through hero's eyes)
+  - Frontal 4th-wall view (no looking AT a building facade or hall interior from the door)
+  - Vertical-portrait composition (no looming-tower / vertical-chasm / staircase-down)
+  - Vista paintings (no atmospheric scenes without playable platforms)
+
+━━━ MANDATORY ELEMENTS (every render must include all 5) ━━━
+
+1. HORIZONTAL FRAME — the eye reads left-to-right. The "playable corridor" extends horizontally.
+2. FOREGROUND PLATFORMING SURFACE — clear ground / ledge / platform / floor running across the bottom-third of the frame. The terrain the player CAN STAND ON.
+3. PLAYER-SPRITE on the foreground platforming surface — a single hero sprite (small) standing or mid-stride. Visible silhouette: cape / sword / cloak / hood / staff. Tiny scale relative to the world.
+4. MIDDLE PARALLAX LAYER — terrain receding behind the foreground platform. Different depth, slightly desaturated, more silhouetted. Additional platforms / hills / structures / biome-trees.
+5. FAR BACKDROP — sky / horizon / distant peaks / ocean / cosmic-void / cavern-wall. Furthest layer with atmospheric haze.
+
+━━━ THE BIOME / SETTING ━━━
+${biome_setting}
+
+━━━ THE FOREGROUND PLATFORM GEOGRAPHY ━━━
+${platform_geography}
+
+━━━ HERO + ENEMY ACTION (mid-stride / mid-combat) ━━━
+${hero_action}
+
+The hero player-sprite is on the foreground platform mid-action. Often 1-2 enemies are also present — patrolling, charging, or hovering — making the moment feel like ACTIVE gameplay, not a static vista.
+${phenomenonSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading.
+2. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises.
+3. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, HUDs, button prompts.
+4. **CHUNKY 16-BIT PIXEL GRID** — visible pixel grid on every surface. Platform tiles clearly tiled.
+5. **HORIZONTAL SIDE-VIEW MANDATORY** — NEVER top-down / iso / first-person / frontal / vertical-portrait.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal — pixel art ONLY
+  • NO top-down / iso / first-person / frontal / vertical-portrait camera
+  • NO IP references
+  • NO UI / HUD / menus
+  • NO sexualized content
+  • NO modern setting (unless the path's biome explicitly allows)
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — HORIZONTAL SIDE-SCROLLER PLATFORMER ━━━
+
+  • HORIZONTAL SIDE-VIEW camera — eye reads left-to-right
+  • FOREGROUND: platformable surface running across the bottom-third (stone-tile / ledge / branch / walkway)
+  • PLAYER-SPRITE on the platform mid-stride / mid-action, small relative to the world
+  • 1-2 ENEMIES on the platform or hovering — patrolling, charging, attacking
+  • MIDGROUND PARALLAX: terrain at different depth (more platforms / hills / structures), slightly desaturated
+  • BACKGROUND: sky / horizon / distant peaks / cosmic-void with atmospheric haze
+  • DEPTH: clear three-tier parallax separation
+  • Particles in motion (drifting petals / pollen / snow / embers / rain / mist)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[HORIZONTAL SIDE-VIEW pixel-art side-scroller composition with three-tier parallax], [the biome / setting — specific style of biome (lava-castle / ice-cavern / forest-canopy / etc.)], [the foreground platform geography — specific platformable terrain], [hero pixel-sprite + 1-2 enemies mid-action on the foreground platform], [middle parallax layer of terrain at different depth, slightly desaturated], [far backdrop sky / horizon / atmospheric distance]${atmospheric_phenomenon ? ', [atmospheric particles in motion]' : ''}, [chunky 16-bit pixel grid throughout]
+
+CRITICAL — HORIZONTAL SIDE-VIEW (NEVER top-down / iso / first-person / frontal). PIXEL ART ONLY. All 5 mandatory elements present.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   PIXELBOT_DUNGEON_DEPTH: ({ slots, sharedDNA, vibeDirective }) => {
     const { dungeon_chamber, dungeon_biome, hero_encounter, loot_detail } = slots;
 
@@ -12184,9 +12297,9 @@ Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO hea
 
 
   EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
-    const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
+    const { subject, lighting, atmosphere, foreground_anchor, hero_feature, sky_layer, phenomenon } = slots;
     const phenomenonBlock = phenomenon
-      ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}`
+      ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}\n\nCRITICAL — PHENOMENON-LIGHTING COMPATIBILITY: If this phenomenon physically contradicts the rolled lighting time-of-day (e.g., total eclipse corona cannot co-exist with golden hour or daylight; aurora cannot appear in midday sun; green flash only happens at the exact moment the sunset disc disappears; sun pillars/sun-dogs/halos need the sun visible so can't appear at night), DROP THE PHENOMENON entirely from the render and just render the clean lighting + sky + scene. Restrained truth beats forced impossibility every single time.`
       : '';
 
     return `You are a landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. The viewer's reaction: "is this real? I want to book a flight there." Output wraps with style prefix + suffix.
@@ -12209,7 +12322,7 @@ This is REAL geography, REAL weather, REAL light. Larger-than-life is fine — E
 
 ━━━ COMPOSITION DISCIPLINE — RESTRAINT IS THE SIGNATURE ━━━
 
-ONE hero subject + ONE scale-anchor + supporting clean light/atmosphere/sky. NOT five phenomena stacked. Most legendary landscape photographs have ONE clear thing happening — the storm break, the lone weathered tree at cliff-edge, the ribbon waterfall, the alpenglow on the summit. The signature of EarthBot quality is RESTRAINT — resist the urge to layer rainbows + aurora + sun-dogs + crepuscular rays + mammatus all into the same frame. When the PHENOMENON section below fires (only ~30% of renders), ONE phenomenon, woven naturally — never added as an extra checkbox layer.
+ONE hero subject + supporting clean light/atmosphere/sky + 3-tier depth (NEAR foreground anchor → MID vista → FAR scale prover). NOT five phenomena stacked. Most legendary landscape photographs have ONE clear thing happening — the storm break, the lone weathered tree at cliff-edge, the ribbon waterfall, the alpenglow on the summit. The signature of EarthBot quality is RESTRAINT — resist the urge to layer rainbows + aurora + sun-dogs + crepuscular rays + mammatus all into the same frame. When the PHENOMENON section below fires (only ~30% of renders), ONE phenomenon, woven naturally — never added as an extra checkbox layer.
 
 ━━━ THE VISTA SUBJECT (the location + its core geology, the hero of the frame) ━━━
 ${subject}
@@ -12217,14 +12330,25 @@ ${subject}
 ━━━ LIGHTING (one clean signature light condition) ━━━
 ${lighting}
 
+━━━ PEAK LIGHT MOMENT — render the MAGIC MOMENT, not the generic version ━━━
+
+The lighting above is a category — render the EXACT PEAK MOMENT of that category. Not generic "golden hour" — render the precise 90-second window when the alpenglow is at its absolute brightest, when the rake-light is at its most chromatic red-orange-gold. Not generic "storm break" — render the 30 seconds when the sun shaft is wide-open through the cloud tear and the lit area glows like stage spotlighting. Not generic "blue hour" — render the precise minute the sky reads deepest indigo while the snow still holds a whisper of warm rose. The MAGIC moment of the light, not the average. The light is doing its most dramatic version of itself, NOW.
+
 ━━━ ATMOSPHERE (default is crisp clear air; particulate only when scene-natural) ━━━
 ${atmosphere}
 
 ━━━ SKY LAYER (what the sky is doing above the vista) ━━━
 ${sky_layer}
 
-━━━ HERO FEATURE (the ONE scale-prover anchoring the bigness) ━━━
+━━━ NEAR-FOREGROUND ANCHOR (the compositional element at the FRONT of the frame — eye lands here first) ━━━
+${foreground_anchor}
+
+━━━ FAR HERO FEATURE (the distant scale-prover anchoring the bigness) ━━━
 ${hero_feature}${phenomenonBlock}
+
+━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
+
+Great landscape photographs catch a SECOND in time, not a frozen still. Every render must imply ONE specific physical motion the scene is producing RIGHT NOW: wind tearing the snow plume off a knife-edge ridge, fog pouring through the saddle, surf curl exploding at the base of the sea-stack, shelf cloud advancing across the horizon, aspen leaves shimmering in the breeze, spindrift catching the low light, waterfall mist breathing upward, banner cloud streaming from the summit, cornice on the verge of collapse, river braiding the silver delta, blowing sand racing across the dune crest, last leaves drifting from autumn aspens, a wave just curling, a glacier just calving, ground-blizzard sweeping across the plateau, dust-devil twisting across the desert floor. NOT new phenomena — physical motion the scene IMPLIES. ONE beat of motion, not five.
 
 ━━━ SCENE-WIDE PALETTE ━━━
 ${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'cinematic deeply-saturated color, hyperreal but never artificial, naturalistic Earth-pigment range'}
@@ -12235,9 +12359,9 @@ ${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ COMPOSITION ━━━
+━━━ COMPOSITION — 3-TIER DEPTH ━━━
 
-Wide sweeping panoramic vista — horizon prominent, scale monumental, depth in multiple receding planes (foreground anchor / midground vista / deep distance / sky). The viewer's eye lands on the SUBJECT first, follows to the HERO_FEATURE for scale-proving, then registers the lighting/atmosphere/sky as supporting layers. Photographic, hyperreal, alive. Wallpaper-worthy single frame.
+Wide sweeping panoramic vista with explicit 3-tier depth: NEAR foreground anchor (eye lands here first) → MID vista subject (the hero geology) → FAR scale prover (proves the bigness) → SKY (above it all). Horizon prominent, scale monumental. The viewer's eye reads NEAR → MID → FAR, registering depth at each layer. Photographic, hyperreal, alive — captured at the PEAK moment of light, with one beat of motion implied. Wallpaper-worthy single frame.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
