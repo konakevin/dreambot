@@ -1477,6 +1477,21 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+
+  CHIBIBOT_JUNGLE_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot jungle-village path (2026-05-19 full-bespoke). SETTING-AS-HERO village in a jungle/rainforest. Treehouse villages, mushroom-house clearings, leaf-roof huts, vine-bridge connectors. Architecture + jungle atmosphere are the hero; SOLO peripheral resident creature (JUNGLE-tagged from unified pool) adds story. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village aesthetic. 10 axes: 3 universal + 7 path-bespoke.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'village', 'village_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { village_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 };
 
 module.exports = { ARCHETYPES };

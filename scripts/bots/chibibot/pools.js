@@ -139,6 +139,12 @@ module.exports = {
   SLEEPY_NAPTIME_TIME_OF_DAY: load('sleepy_naptime_time_of_day'),
   SLEEPY_NAPTIME_SURPRISE: load('sleepy_naptime_surprise'),
   SLEEPY_NAPTIME_PHENOMENA: load('sleepy_naptime_phenomena'),
+  JUNGLE_VILLAGE_SETTINGS: load('jungle_village_settings'),
+  JUNGLE_VILLAGE_ACTIVITIES: load('jungle_village_activities'),
+  JUNGLE_VILLAGE_DETAILS: load('jungle_village_details'),
+  JUNGLE_VILLAGE_TIME_OF_DAY: load('jungle_village_time_of_day'),
+  JUNGLE_VILLAGE_SURPRISE: load('jungle_village_surprise'),
+  JUNGLE_VILLAGE_PHENOMENA: load('jungle_village_phenomena'),
 
   VIBE_COLOR,
 

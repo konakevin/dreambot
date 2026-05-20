@@ -88,6 +88,7 @@ module.exports = {
     'rainy-day-cozy': 'chibibot_pixar',
     // sleepy-naptime — painterly storybook for peak-cute sleeping moments
     'sleepy-naptime': 'chibibot_pixar',
+    'jungle-village': 'chibibot_pixar',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -207,7 +208,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;

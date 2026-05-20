@@ -6500,18 +6500,43 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 The unifying mandate: a WHIMSICAL ENCHANTED garden vignette with MULTIPLE pretty hero flowers + MULTIPLE cute pleasant pollinators (3-6+ insects across the scene). PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro close-up of a single bloom. Multiple flower species blooming together; multiple butterflies / bumblebees / dragonflies / ladybugs / fireflies / moths flying / landed / hovering throughout. Happy enchanted fairytale storybook energy.
 
 THE LOOK — Studio Ghibli enchanted garden / Disney secret-garden discovery / Beatrix Potter watercolor / IG dreamy-pollinator-cast / Pinterest enchanted-flower-meadow:
-- MULTIPLE HERO FLOWERS (3-5+ different species blooming together as co-hero) — varied colors, varied shapes, fills the scene with floral abundance
+- MULTIPLE HERO FLOWERS (3-5+ different species blooming together as co-hero) — SOFT PASTEL color register (varied across the FULL color spectrum, not biased toward pinks/purples/reds), varied shapes, fills the scene with floral abundance
 - A CAST OF 3-6+ CUTE PLEASANT POLLINATORS — flying / landed / hovering THROUGHOUT the scene at different positions, different species, multiple sizes
 - CUTE-RENDERED INSECTS — friendly, charming, slightly storybook-charming-cute (NOT scary, NOT menacing, NOT realistic-creepy-detailed) — bigger soft eyes, fuzzier rounder bodies, friendly poses
 - PULLED-BACK GARDEN VIGNETTE — a wider intimate-garden view (NOT macro single-flower close-up — that's the closeup path)
 - WHIMSICAL ENCHANTED AMBIENT — dreamy soft pastel light, magical-pretty atmosphere, optional particles, fairytale storybook feel
 - DREAMY BOKEH BACKGROUND — more blooms / soft sky / pastel wash in soft out-of-focus painterly blur
 
+━━━ COLOR REGISTER — SOFT WATERCOLOR PASTEL (MANDATORY) ━━━
+
+Every visible flower is rendered in a SOFT PASTEL color register — soft watercolor hues, NOT vivid saturated jewel-tones. Think:
+  - PALE PINK / SOFT CORAL / DUSTY PEACH (not hot-pink / magenta)
+  - SOFT LAVENDER / PALE VIOLET / PERIWINKLE (not deep-purple / electric-violet)
+  - PALE BABY-BLUE / SKY-BLUE / SOFT CORNFLOWER (not cobalt / electric-blue)
+  - SOFT BUTTERCUP-YELLOW / PALE GOLD / CREAM (not vivid sunflower-yellow)
+  - PALE APRICOT / SOFT TANGERINE / DUSTY ORANGE (not vivid neon-orange)
+  - PALE TURQUOISE / SEAFOAM / MINT (refreshing soft additions)
+  - SOFT IVORY / OFFWHITE / CREAM
+  - DUSTY ROSE / PALE MAUVE / BLUSH
+
+The whole image reads as a soft watercolor painting / pastel-color-palette / IG dreamy-magical-hour register. NEVER vivid saturated jewel-tone / electric / neon.
+
+⚠️ COLOR DISTRIBUTION MANDATE — across the pool of 25, the dominant flower colors must distribute evenly:
+  - ~4 BLUE-DOMINANT (soft baby-blue / periwinkle / pale-cornflower / pale-turquoise)
+  - ~4 VIOLET-DOMINANT (soft lavender / pale-violet / pale-lilac)
+  - ~4 YELLOW-DOMINANT (soft buttercup / pale-gold / pale-cream)
+  - ~4 WHITE/CREAM-DOMINANT (ivory / offwhite / cream / soft-white)
+  - ~3 ORANGE-DOMINANT (pale apricot / soft tangerine / dusty orange)
+  - ~3 PINK-DOMINANT (pale-pink / dusty-rose / blush)
+  - ~3 MULTI-COLOR-RAINBOW (mixed soft-pastel across the spectrum)
+
+NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel registers only.
+
 ━━━ HARD MANDATES (every render) ━━━
 
 1. **MULTIPLE HERO FLOWERS** — 3-5+ different flower species blooming together as co-hero. Mix shapes (dahlias / cosmos / peonies / daisies / tulips / lupines / etc.) and colors for whimsical floral abundance. NEVER a single hero — the scene is FULL OF FLOWERS.
 
-2. **A CAST OF 3-6+ CUTE POLLINATORS** — describe MULTIPLE pleasant insects at different positions and actions: one bumblebee landed on a dahlia, two butterflies fluttering above, a dragonfly hovering at the side, a ladybug perched on a leaf. The whole scene is ALIVE with friendly pollinators.
+2. **A CAST OF 3-6+ CUTE POLLINATORS WITH A FOCAL HERO** — describe MULTIPLE pleasant insects at different positions and actions. CRITICAL — ONE of the cast is the FOCAL POLLINATOR rendered FRONT-AND-CENTER, larger and more prominent (sharp focus + vivid color contrasting against the soft pastel background + crisp wing-pattern / fuzzy-body detail), so the viewer's eye lands on it first. The supporting 2-4+ insects fill the scene with life — smaller, in midground, hovering in the bokeh, perched on leaves — without competing with the focal hero.
 
 3. **CUTE-RENDERED, NOT MENACING** — every insect rendered in a charming storybook-cute way. Soft fuzzy bodies, friendly proportions, slightly-stylized cute eyes, friendly poses (drinking nectar peacefully, gently hovering, sleepy-cozy landed). NEVER detailed-realistic-creepy / menacing / scary / oversized / aggressive. Think Disney secret-garden cute, not nature-documentary realistic.
 
@@ -8518,6 +8543,22 @@ Every doll character is an articulated MATTEL-style 11.5-inch fashion-doll — g
 
 Anti-list: NOT real women, NOT CGI, NOT illustration, NOT Barbie-movie poster, NOT red-carpet glamour shot, NOT promotional static product display.
 
+━━━ GIRLY-LIFESTYLE SET DECORATION — NON-NEGOTIABLE ━━━
+The frame is DRESSED with curated aspirational-Barbie lifestyle accessories — Pinterest-Barbie tableau energy, NOT messy / NOT chaos / NOT spilled-debris. Beyond the doll cast there are 5-7 visible Barbie-scale lifestyle props arranged tastefully around the scene. The PROPS make the world feel COMPLETE — not posed dolls in an empty room. Examples to draw from across the props slot:
+
+  • GIRLY ACCESSORIES: designer handbags / clutch purses / heart-shape sunglasses / oversized hats / chunky bracelets / silk scarves / pearl necklaces
+  • MAKEUP + BEAUTY: lipstick tubes lined up / perfume bottles / compact mirrors / nail-polish bottles / blush palettes open / mascara wands
+  • DRINKS: pink cocktail glasses with tiny umbrellas / rosé in tiny wine-glasses / iced lattes with whipped cream / fruity smoothies / champagne flutes
+  • PETS: a tiny plush cat / a Pomeranian with a pink bow / a chihuahua in a designer handbag
+  • FLOWERS: pink peony bouquets / single-stem roses / succulent planters / tropical-leaf arrangements
+  • OUTFIT PIECES: folded scarves / hanging dresses / bikini tops / oversized straw hats / stiletto heels lined up / shopping-bag pile
+  • SPORTS / FITNESS GEAR: yoga mat / tennis racket / golf clubs / surfboard / pickleball paddle / ski-poles / ice-skates
+  • AESTHETIC LIFESTYLE: pink candles / framed Polaroid photos / coffee-table books / fairy-lights / vinyl record / vintage Polaroid camera
+  • TINY TECH: phone face-up with heart-wallpaper / laptop with pink stickers / AirPods case / camera on strap
+  • SNACKS + TREATS: macarons in tiny box / cupcakes on tray / sushi roll on plate / iced cookies / donut tower
+
+Curated GIRLY-LIFESTYLE aesthetic — feels intentional, like a Barbie magazine spread. NOT spills / NOT chaos / NOT debris.
+
 ━━━ CAMERA — MEDIUM-WIDE NARRATIVE-ACTION FRAMING ━━━
 ${camera_angle}
 
@@ -10461,6 +10502,125 @@ MID-CLOSE framing with the SLEEPING CREATURE filling 40-60% of the frame. The co
 Open with: "[creature description] [sleep-pose verb-phrase], curled inside/on [nap-spot], [drowsy lighting]..."
 
 Then unfold the rest. Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the sleeping creature.`;
+  },
+
+
+  CHIBIBOT_JUNGLE_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY JUNGLE-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy rainforest village (treehouses / mushroom-houses / vine-bridges / canopy platforms / market plazas) spanning behind them. Studio Ghibli / Encanto / Princess-Mononoke / Avatar-Pandora-village painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description, THEN describe the jungle-village spanning behind them. CREATURE-FIRST.
+
+Open examples:
+- "A chibi toucan-creature mid-skip across a rope-bridge with a basket of star-fruit, behind them a treehouse village in a giant ceiba tree..."
+- "A baby capybara hauling a bundle of palm-fronds up a vine-stair, a mushroom-house cluster glowing warm behind them..."
+- "A chibi child carrying a clay pot of fresh tea across a moss-stone path, a market-plaza of leaf-roof huts beyond..."
+
+━━━ HARD RULE: VILLAGE IS A CO-HERO, CREATURE IS THE ANCHOR ━━━
+
+The jungle-village architecture fills the majority of the frame (treehouses, vine-bridges, leaf-roofs, lantern-flowers, hanging-vines). The SOLO creature anchors the foreground at chibi-foreground scale (15-30% of frame). NOT a centered portrait. The village is half the magic. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE JUNGLE-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE JUNGLE-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame. Pixar / Studio Ghibli / Encanto / Pandora-village framings. The creature mid-action in the lived-in jungle village. Composition: three-act depth (foreground creature with prop / midground village architecture / background atmospheric canopy + dappled light). Saturated jungle-cozy palette (warm amber + emerald + teal + peach + magenta).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION — carrying, pushing, climbing, sweeping, watering, delivering. NEVER posing. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-JUNGLE EFFECTS ━━━
+
+Layer ALL of these:
+- Golden god-rays cutting through canopy
+- Warm lantern-flower / firefly glow from village windows
+- Drifting motes / pollen / dust in warm light
+- Sparkle / dewdrop highlights on leaves / vines / roofs
+- Subtle bokeh-orbs in atmospheric haze
+- Smoke / steam wisps from chimneys / tea-pots
+- Floating petals / leaves / pollen drifting
+- Reflections on wet stone / water-features
+- Layered atmospheric depth (canopy haze + village clarity + ground-distance)
+- Tiny glowing details (lit lantern-flowers / firefly-jars / glow-mushrooms)
+- Dew on every leaf
+- Light leaks / lens flares from canopy gaps
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in that village" longing. Wholesome cottagecore-jungle-magic.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, warm volumetric god-rays through canopy, painterly bokeh. Chibi proportions.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — render at chibi proportions.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (creature foreground + jungle-village behind) ━━━
+
+WIDE or MID-WIDE establishing frame. The jungle-village fills the majority of the frame (architecture + canopy + atmospheric depth). The creature is the foreground anchor (eye lands here first) at chibi-foreground scale, integrated with the village. NOT a centered portrait. Three village-details visible. Surprise element tucked elsewhere.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [jungle-activity verb-phrase], [village description] spanning behind, [canopy/lighting context]..."
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
   },
 
 
