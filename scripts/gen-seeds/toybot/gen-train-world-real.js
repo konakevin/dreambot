@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/toybot/seeds/train_world_real.json',
-  total: 200,
+  total: 30,
   batch: 10,
   maxTokens: 4000,
   metaPrompt: (n) => `You are writing ${n} TOY-TRAIN-PLAYTIME-SCENE seed entries for ToyBot's model-train-world path.

@@ -74,6 +74,11 @@ module.exports = {
   MECH_TOY_LANDSCAPES: load('mech_toy_landscapes'),
   TOYBOX_CHAOS_SCENES: load('toybox_chaos_scenes'), // legacy — kept for backref, no longer wired
   TOYBOT_TOYBOX_STORYTELLING_SCENES: load('toybox_storytelling'),
+  TOYBOT_TOYBOX_STORYTELLING_CAMERAS: load('toybox_storytelling_cameras'),
+  TOYBOT_PLUSH_STORYTELLING_SCENES: load('plush_storytelling'),
+  TOYBOT_PLUSH_STORYTELLING_CAMERAS: load('plush_storytelling_cameras'),
+  TOYBOT_BARBIE_STORYTELLING_SCENES: load('barbie_storytelling'),
+  TOYBOT_BARBIE_STORYTELLING_CAMERAS: load('barbie_storytelling_cameras'),
   SPACE_SAGA_SCENES: load('space_saga_scenes'),
   SPACE_SAGA_LANDSCAPES: load('space_saga_landscapes'),
   SPACE_SAGA_FIGURES: load('space_saga_figures'),

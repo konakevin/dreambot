@@ -54,7 +54,7 @@ module.exports = {
     sackboy: 'stitched',
     'toy-landscape': ['claymation', 'vinyl'],
     'shortcake-scene': 'shortcake_figures',
-    'barbie-scene': 'barbie_figures',
+    'barbie-scene': 'barbie_storytelling_mixed',
     'gi-joe-missions': 'gi_joe_figures',
     'green-army-warzone': 'army_men',
     'miniature-dungeon': 'tabletop_minis',
@@ -63,7 +63,7 @@ module.exports = {
     'dollhouse-life': 'dollhouse_figures',
     'hotwheels-city': 'hot_wheels',
     'model-train-world': 'model_train_diorama',
-    'plush-world': 'plush_fabric',
+    'plush-world': 'plush_storytelling_mixed',
     'mech-toy-rampage': 'mech_toys',
     'toybox-chaos': 'toybox_chaos_mixed',
     'space-saga-figures': 'space_saga_figures',
@@ -89,6 +89,33 @@ module.exports = {
   promptPrefixByPath: {
     vinyl:
       'photograph of authentic Funko Pop vinyl collectible figures with signature oversized SQUARE CUBE heads, small stocky bodies, tiny legs, large round solid-black dot eyes (no pupils), glossy matte vinyl, classic Funko Pop boxed-collectible look',
+  },
+
+  // Per-medium prefix REPLACES the bot-wide PROMPT_PREFIX (not stacks).
+  // toybox_chaos_mixed: anchor Flux to "stop-motion film still" anchor
+  // instead of the bot-wide "toy photography" prefix, which triggers
+  // Pop-Mart / Sonny-Angel collection-photo defaults and ignores the
+  // scene's actual story content (props, setting, mid-action poses).
+  // The stop-motion-film anchor unlocks practical props (real cake,
+  // real toilet bowl, real courtroom bench) and dynamic mid-action.
+  // R2 audit 2026-05-19.
+  //
+  // plush_storytelling_mixed: same pattern as toybox-chaos. Anchor to
+  // "children's storybook diorama film still" so Flux renders practical
+  // props + multi-character storybook scenes instead of the bot-wide
+  // "toy photography" default that collapses plush ensembles into a
+  // posed plush-collection lineup. R0 plush-world rewrite 2026-05-19.
+  promptPrefixByMedium: {
+    toybox_chaos_mixed:
+      'cinematic stop-motion film still from a behind-the-scenes toy diorama, real-world practical-prop set built from kid-found household objects (real wooden blocks, real food packaging, real fabric, real coins, real cardboard, real tape), mixed-medium toy cast captured mid-story-beat with visible action playing out across the scene — NOT a Pop Mart toy collection, NOT a static product display, NOT a posed lineup',
+    plush_storytelling_mixed:
+      'cinematic children\'s-storybook-diorama film still — CUTE Squishmallow-style fluffy huggable plushies (oversized round-pudgy fiberfill bodies, soft visible plush-fur, big embroidered eyes, floppy limbs) acting out the scene below in a multilayered real-prop set built from kid-found household objects (real coffee mugs, real twigs, real moss, real coins, real ribbons, real wooden blocks, real teacups, real Post-it notes), plush cast captured mid-storybook-beat — NOT needle-felted Etsy handcraft creatures, NOT small felt figurines, NOT Pop-Mart plushies, NOT static product display, NOT a posed lineup',
+    // 2026-05-19 barbie-scene rewrite — anchors Flux to "playroom-diorama
+    // film still" so Mattel-style fashion-dolls act out kid-playtime
+    // scenarios with practical-prop scene dressing, instead of defaulting
+    // to Barbie-movie promotional posters / red-carpet glamour shots.
+    barbie_storytelling_mixed:
+      'cinematic kid-playroom-diorama film still — Mattel-style 11.5-inch articulated fashion-dolls (Barbie / Ken / sisters / Bratz-style — glossy plastic, molded hair, painted-glossy-makeup faces, fashion-doll proportions) acting out the scene below in a multilayered real-prop kid-playroom set built from kid-found household objects (real coffee mugs, real Post-it notes, real wooden blocks, real coins, real cardboard, real tape, real fabric scraps), fashion-doll cast captured mid-story-beat — NOT a Barbie movie poster, NOT a red-carpet glamour shot, NOT a static product display, NOT a posed lineup, NEVER real women NEVER CGI',
   },
 
   // Per-medium prompt injection — ToyBot's dialect for each toy medium.
@@ -143,8 +170,26 @@ module.exports = {
     // short multi-medium ensemble directive that front-loads "EVERY toy in
     // its OWN native medium". Pairs with the 6-slot toybox_storytelling
     // seed pool which bakes the story DNA.
+    // 2026-05-19 R2 audit: aggressive shortening from 1500 → ~250 chars.
+    // The long enumeration of 11 toy types was front-loading Flux's
+    // attention budget with toy-vocabulary, which collapsed every scene
+    // into a static Pop-Mart-style cute-toy lineup before the story
+    // content registered. Trust the seed (which names each toy with its
+    // medium inline) to do the heavy lifting per render.
     toybox_chaos_mixed:
-      'MIXED-MEDIUM TOY-PHOTOGRAPHY ENSEMBLE — multiple toy types coexisting in ONE chaotic action-packed kid-playroom scene, EACH toy rendered in its OWN native medium (NEVER unified style): LEGO minifigs (visible studs + blocky limbs + clutch-pose hands), plush stuffed animals (visible plush-fiber fur / fabric / button or embroidered eyes / sewn seams), Funko Pop vinyl (oversized cube heads + small stocky bodies + solid black dot eyes + glossy finish), 3.75-inch articulated action-figures (visible ball-joint articulation + sculpted gear + painted detail wash), Barbie fashion-dolls (11.5-inch articulated + molded glossy hair + painted face), Hot Wheels die-cast cars (1:64-scale chrome + oversized wheels + racing decals), olive-green plastic army-men (solid-color molded + visible mold-seam + oval base + fixed single-pose), Calico Critter / Sylvanian Family figurines (flocked-velvet small-animals + tiny cloth outfits at dollhouse scale), plastic toy dinosaurs and farm animals — toys photographed at their REAL physical sizes (scale mismatch IS the point — 4-inch action-figure beside 1.5-inch Hot Wheels beside 12-inch plush teddy beside tiny LEGO minifig, as a real kid dumped a real toybox on a real floor) — NEVER unified-style toys, NEVER CGI, NEVER illustration, NEVER digital render',
+      'mixed-medium toy diorama scene — each toy renders in its OWN distinct native material (plush=fabric, vinyl=cube-head, action-figure=articulated, die-cast=chrome, fashion-doll=glossy painted, army-men=olive-green plastic, Calico-Critter=flocked-velvet) — never a unified Pop-Mart cute-collectible style — ABSOLUTELY NO LEGO',
+    // 2026-05-19 R0 plush-world rewrite — short directive (~250 chars)
+    // anchoring "plush distinct per character" without front-loading
+    // attention. Trust the seed (which names each plush + texture
+    // inline) to do the heavy lifting. Pairs with the storybook-
+    // diorama prompt prefix override above.
+    plush_storytelling_mixed:
+      'CUTE Squishmallow-style fluffy huggable plushies — oversized round-pudgy fiberfill bodies with visible plush-fur, soft floppy limbs, big embroidered or button eyes, sewn-on muzzles, optional tiny outfits — NOT needle-felted handcraft, NOT small felt figurines, NOT Sylvanian / Calico Critter flocked figurines, NOT LBP-Sackboy burlap-with-zipper, NEVER real animals, NEVER CGI — the plush cast comes from the seed; the aesthetic is cute-fluffy-huggable plush-toy quality',
+    // 2026-05-19 barbie-scene rewrite — short directive (~250 chars).
+    // Anchors Mattel-style 11.5-inch fashion-doll aesthetic without
+    // enumerating outfits or hair-colors (the seed names those per scene).
+    barbie_storytelling_mixed:
+      'Mattel-style 11.5-inch articulated fashion-dolls — glossy plastic bodies with molded hair (mix of blonde / brunette / redhead / black / pastel across the cast), oversized heads with painted-glossy-makeup faces, fashion-forward outfits varying per role, articulated joints, spike-heel or sneaker plastic shoes — NOT real women, NOT CGI, NOT illustration, NOT Barbie-movie promotional poster — doll cast comes from the seed; the aesthetic is GLOSSY-PLASTIC kid-playroom fashion-doll',
     // Vintage Kenner 3.75-inch space-saga action-figures (rebels / imperials /
     // hooded-monks / smugglers / bounty-hunters / droids / aliens). Bot-only.
     // Archetype-only — bans IP names (no Star Wars / Lucasfilm).
@@ -247,13 +292,13 @@ module.exports = {
   // whiteout winter) that scramble the populated-scene intent. R6+R8 audits.
   chaos: {
     enabled: true,
-    skipPaths: ['model-train-world', 'toybox-chaos'],
+    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
     allowSubjectChaosPaths: [
       'claymation', 'vinyl', 'sackboy', 'toy-landscape',
-      'shortcake-scene', 'barbie-scene', 'gi-joe-missions',
+      'shortcake-scene', 'gi-joe-missions',
       'green-army-warzone', 'miniature-dungeon', 'collector-shelf-epic',
       'epic-hero-bucket', 'dollhouse-life', 'hotwheels-city',
-      'plush-world', 'mech-toy-rampage',
+      'mech-toy-rampage',
       'space-saga-figures',
     ],
   },
@@ -269,7 +314,7 @@ module.exports = {
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
-    skipPaths: ['model-train-world', 'toybox-chaos'],
+    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
   },
 
   // Sensory anchors — lightcolor required, additional channels rolled.
@@ -280,7 +325,7 @@ module.exports = {
   // contradict the path's warm-daylight playtime-scene DNA. R6 audit.
   sensoryAnchors: {
     enabled: true,
-    skipPaths: ['model-train-world', 'toybox-chaos'],
+    skipPaths: ['model-train-world', 'toybox-chaos', 'plush-world', 'barbie-scene'],
     requiredChannels: ['lightcolor'],
     pathContext: {
       // Figure-centric (toys are the subject)

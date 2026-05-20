@@ -35,15 +35,28 @@ function loadEnv() {
 async function callWithRetry(body, anthropicKey) {
   const delays = [2000, 6000, 15000, 30000];
   for (let i = 0; i <= delays.length; i++) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+    let res;
+    try {
+      res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': anthropicKey,
+          'anthropic-version': '2023-06-01',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      // Transient network failure (fetch failed / ECONNRESET / timeout).
+      // Retry like a 5xx — Anthropic's streaming-long-response endpoint can
+      // hiccup on very large outputs.
+      if (i < delays.length) {
+        console.log(`  ⏳ fetch error (${err.message}) — retry ${i + 1}/${delays.length} in ${delays[i] / 1000}s`);
+        await new Promise((r) => setTimeout(r, delays[i]));
+        continue;
+      }
+      throw err;
+    }
     if (res.ok) return await res.json();
     const text = (await res.text()).slice(0, 200);
     if ((res.status === 529 || res.status === 429 || res.status >= 500) && i < delays.length) {

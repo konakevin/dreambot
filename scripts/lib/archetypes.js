@@ -1136,7 +1136,6 @@ const ARCHETYPES = {
     framingModes: null,
     anchorScaleRange: null,
   },
-
   DINOBOT_OCEAN_REPTILES: {
     description:
       'PATH-BESPOKE — DinoBot ocean-reptiles path (2026-05-17 axis-system migration from legacy function-form). STRICT MESOZOIC OPEN OCEAN with a MARINE REPTILE (mosasaur / plesiosaur / ichthyosaur / pliosaur / marine crocodile / Archelon sea-turtle / ammonite / marine pterosaur over ocean). Underwater scenes + mid-ocean breach + surface-break encouraged. NEVER river / swamp / lake. ONLY actual ocean dinosaurs (NO land dinos). 25-40% marine reptile + 55-65% ocean-scene (open water / underwater / breach / abyss / reef). 3 path-bespoke axes (ocean_scene / creature / surprise) + 80%-gated phenomenon + universal lighting + atmosphere.',
@@ -1530,6 +1529,66 @@ const ARCHETYPES = {
       path: ['food_hero', 'scene_setting', 'creature_group', 'chibi_food_activity', 'food_decoration', 'kawaii_atmosphere', 'time_of_day', 'camera_angle'],
     },
     pickN: { creature_group: 4, food_decoration: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_AQUATIC_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot aquatic-village path (2026-05-19 full-bespoke). SETTING-AS-HERO underwater/coastal village. Coral-tower villages, kelp-forest cottages, pearl-shell hamlets, submarine-ports, tidepool villages, sea-cave dwellings, floating lily-pad clusters, kraken-shell cottages, bioluminescent grottos, starfish-bridge towns, shipwreck-coral hamlets. Architecture + ocean atmosphere are hero; MARINE-tagged peripheral resident creature (+ ANY wildcard). Studio Ghibli / Ponyo / Atlantis / Finding-Nemo painterly storybook. 10 axes.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'village', 'village_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { village_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_COTTAGECORE_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot cottagecore-village path (2026-05-19 full-bespoke). SETTING-AS-HERO English-countryside / cottagecore village. Thatched-roof clusters, windmill villages, lavender-field cottages, apple-orchard hamlets, wisteria-tunnel villages, cobblestone lanes, canal-side cottages, bee-skep villages, mushroom-cottage clusters (Smurfs-style), fairy-glade hamlets, stone-bridge cottages. Architecture + cottagecore atmosphere are hero; LAND/FANTASY peripheral resident (+ ANY wildcard). Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter / Whisper-of-the-Heart. 10 axes.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'village', 'village_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { village_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_SUNNY_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot sunny-village path (2026-05-19 full-bespoke). SETTING-AS-HERO Mediterranean / sun-drenched village. Bougainvillea-clad cottages, Mediterranean white-cottages on cliffs, terracotta-roof clusters, cliff-side villages (Santorini), desert-oasis hamlets, sun-bleached pueblos, fishing-port cottages, orchard-grove villages, mosaic-tile villages, palm-fringed hamlets, Tuscan olive-grove villages. Architecture + golden-hour atmosphere are hero; LAND/BIRD peripheral resident (+ ANY wildcard). Studio Ghibli / Kiki-Delivery-Service / Porco-Rosso / Luca / Spirited-Away. 10 axes.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'village', 'village_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { village_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_TWILIGHT_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot twilight-village path (2026-05-19 full-bespoke). SETTING-AS-HERO dusk/lantern/firefly-time village. Lantern-lane villages, firefly-meadow cottages, moonlit-bridge towns, dusk-window-glow clusters, paper-lantern-festival villages, Japanese-paper-lantern towns (Spirited-Away), nightingale-grove cottages, star-lit-spire villages, bioluminescent-garden clusters, glowworm-cave hamlets, moonflower-meadow villages. Architecture + twilight-magic atmosphere are hero; LAND/FANTASY peripheral resident (+ ANY wildcard). Studio Ghibli / Spirited-Away / Whisper-of-the-Heart / Howl-Moving-Castle / Tangled-lanterns. 10 axes.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'village', 'village_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { village_detail: 3 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,

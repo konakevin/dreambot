@@ -22,5 +22,11 @@ module.exports = {
   archetype: 'TOYBOT_TOYBOX_STORYTELLING',
   pools: {
     scene: 'TOYBOT_TOYBOX_STORYTELLING_SCENES',
+    // Path-bespoke camera pool — wide / deep-focus / ensemble framings only.
+    // The bot's default TOYBOT_CAMERA_ANGLES leans macro / shallow-DOF /
+    // single-hero-focus, which crops most cast out of frame. Toybox-chaos
+    // needs WIDE establishing shots so the full ensemble + story plays
+    // out edge-to-edge. R0 audit 2026-05-19.
+    camera_angle: 'TOYBOT_TOYBOX_STORYTELLING_CAMERAS',
   },
 };

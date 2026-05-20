@@ -1,63 +1,32 @@
-const pools = require('../pools');
-const blocks = require('../shared-blocks');
+/**
+ * ToyBot barbie-scene path — declarative axis-system (2026-05-19 rewrite).
+ *
+ * BARBIE-PLAYTIME MISCHIEF — every render is a single-frame kid-playroom
+ * story moment featuring Mattel-style 11.5-inch fashion-dolls (Barbie /
+ * Ken / sisters / Bratz-style) acting out absurd unexpected scenarios.
+ * NOT a Barbie movie poster. NOT a fashion-shoot. A populated kid-
+ * playtime story-beat captured mid-action with multilayered real-prop
+ * set decoration.
+ *
+ * Axes:
+ *   - Universal: camera_angle (path-bespoke wide narrative-action pool)
+ *   - Path-bespoke:
+ *       scene — 6-slot DNA seed (real surface + unexpected story setup;
+ *               protagonist doll + absurd action; 3-5 supporting dolls
+ *               mixing Barbie/Ken/sister/Bratz; multilayered real-prop
+ *               set decoration; warm playroom light; overhead chaos)
+ *
+ * Locked medium: barbie_storytelling_mixed (short directive).
+ * Path-bespoke prompt prefix replaces bot-wide "toy photography" with
+ * "playroom-diorama film still" anchor.
+ * Skips chaos / twoPassPolish / sensoryAnchors — the 6-slot seed is the
+ * source of truth.
+ */
 
-module.exports = ({ sharedDNA, vibeDirective, picker }) => {
-  const useLandscape = Math.random() < 0.3;
-  const scene = useLandscape
-    ? picker.pickWithRecency(pools.BARBIE_LANDSCAPES, 'barbie_landscape')
-    : picker.pickWithRecency(pools.BARBIE_SCENES, 'barbie_scene');
-  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
-  const scenario =
-    sharedDNA.renderMode === 'world'
-      ? picker.pickWithRecency(pools.TOY_SCENARIOS, 'toy_scenario')
-      : null;
-  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
-
-  return `You are a Barbie-movie-style toy cinematographer writing fashion-doll dioramas for ToyBot. Classic 11.5-inch Mattel-scale fashion-dolls on hand-built DreamHouse / boutique / beach / runway playsets. Pink-dominant palette, glossy-plastic sheen, cinematic framing like a Barbie-film still. Output wraps with style prefix + suffix.
-
-${blocks.TOY_PHOTOGRAPHY_BLOCK}
-
-${blocks.CINEMATIC_STORY_BLOCK}
-
-${blocks.DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK}
-
-${blocks.PATH_MEDIUM_LOCK_BLOCK}
-
-${blocks.ACTION_FIGURE_ANTI_HUMAN_LEAK_BLOCK}
-
-━━━ BARBIE-FIGURES MEDIUM LOCK ━━━
-EVERY character is an 11.5-inch articulated Mattel-scale fashion-doll — plastic body, molded hair, oversized head with glossy painted-makeup (winged-liner, pink-lip), fashion-forward mini-wardrobe (gown / swimsuit / power-suit / astronaut / chef / rockstar / ballerina / vet), spike-heel plastic shoes. Environment is a fully-dressed DreamHouse / boutique / rooftop-pool / runway / convertible-pink-car playset. Pink-dominant signature palette. Cinematic Barbie-film framing. NEVER real woman, NEVER CGI-render, NEVER illustration.
-
-━━━ THE BARBIE SCENE ━━━
-${scene}
-
-${blocks.worldStagingSection({ renderMode: sharedDNA.renderMode, scenario, staging: sharedDNA.staging })}
-━━━ CAMERA FRAMING — VARY THE ZOOM ━━━
-${sharedDNA.camera}
-
-${blocks.storyCastSection(sharedDNA.renderMode)}
-
-
-
-━━━ LIGHTING ━━━
-${lighting}
-
-━━━ ATMOSPHERIC DETAIL ━━━
-${atmosphere}
-
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
-
-${blocks.BLOW_IT_UP_BLOCK}
-
-━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
-
-━━━ COMPOSITION ━━━
-Mid-close fashion-doll-diorama frame. Mattel-scale fashion-doll mid-action in fully-appointed playset. Studio soft-box or golden-hour lighting. Glossy-plastic sheen. Cinematic Barbie-film composition.
-
-Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+module.exports = {
+  archetype: 'TOYBOT_BARBIE_STORYTELLING',
+  pools: {
+    scene: 'TOYBOT_BARBIE_STORYTELLING_SCENES',
+    camera_angle: 'TOYBOT_BARBIE_STORYTELLING_CAMERAS',
+  },
 };

@@ -7605,8 +7605,6 @@ DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID SEMI-AQUATIC DI
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
-
-
   DINOBOT_OCEAN_REPTILES: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, ocean_scene, creature, surprise, phenomenon } = slots;
 
@@ -10955,6 +10953,508 @@ Open with: "[outdoor kawaii scene setting — picnic blanket on a meadow / sandy
 ⚠ THE FRAME IS FULL — multiple chibis, multiple kawaii smiling-face foods, scattered decorations everywhere. Never a sparse / minimalist composition.
 
 Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases.`;
+  },
+
+
+  CHIBIBOT_AQUATIC_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY AQUATIC-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy underwater/coastal village spanning behind them. Studio Ghibli / Ponyo / Atlantis / Finding-Nemo painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description, THEN describe the aquatic-village spanning behind them. CREATURE-FIRST.
+
+Open examples:
+- "A chibi seahorse-creature mid-drift past a pearl-bead lantern-post, behind them a coral-tower village glowing pink-and-violet through teal water..."
+- "A baby otter on a lily-pad-bridge with a kelp-basket of seaweed, a floating lily-pad village glowing warm-amber against blue-green water..."
+- "A chibi fish-child swimming past a starfish-bridge with a satchel of pearls, a submarine-port hamlet with brass-portholes glowing beyond..."
+
+━━━ ⚠ HARD RULE #1: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
+
+The aquatic-village architecture fills 70-85% of the frame — many coral-towers / kelp-cottages / pearl-shell-buildings / submarine-port / sea-cave-dwellings / lily-pad-platforms / starfish-bridges / bioluminescent-grotto all visible across foreground / midground / background. WIDE ESTABLISHING SHOT showing the whole village ecosystem. The SOLO creature is a SMALL anchor (8-15% of frame) somewhere in the composition — NOT the focal hero of the frame. The viewer's eye first lands on the WHOLE VILLAGE, then discovers the tiny creature as a delightful detail. NOT a portrait. NOT close-up. NOT 30% of frame. The creature is a SCALE PROVER, not a centered subject. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame, but small. HARD BAN: creature occupying more than 20% of frame, portrait crops, chest-up framing, centered close-ups.
+
+━━━ ⚠ HARD RULE #2: WATER MUST BE VISIBLE IN EVERY RENDER ━━━
+
+The setting is UNDERWATER (coral-tower / kelp-forest / submarine-port / grotto / sea-cave) OR COASTAL (tidepool / shore-village / lily-pad-cluster on water). Either way WATER + OCEAN-BIOME must read INSTANTLY at first glance — NOT a "village with coral accents."
+
+EXPLICIT WATER MANDATES (every render):
+- WATER FILLS the lower half of the frame OR fills the BACKGROUND, OR the WHOLE FRAME is underwater
+- COOL TEAL / CYAN / DEEP-BLUE / AQUA palette dominates — NOT warm-amber-jungle palette (warm-amber appears only as small interior cottage-light accent points contrasted against the cool water)
+- VISIBLE OCEAN-SIGNATURES: drifting bubble-streams, swirling fish-schools, dappled water-caustic light on every surface, water-reflections, swaying kelp-fronds, bioluminescent coral-glow, distant jellyfish silhouettes
+- THE SCENE IS WATER-IMMERSIVE — the viewer sees water FIRST, then the village in/on/beside the water
+
+⚠ HARD BAN: rendering this as a "cozy kawaii village with coral accents and lantern-glow" without visible water dominance. If a viewer can't immediately tell it's aquatic from a 1-second glance, the render has FAILED. Water is the signature, not a decoration.
+
+⚠ HARD BAN: warm-amber-tropical-jungle palette. Replace warm tropical light with cool aqua-water-caustic dapple. Warm-amber appears only as small point-source accents from cottage-windows.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE AQUATIC-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE AQUATIC-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame. Studio Ghibli / Ponyo / Atlantis / Finding-Nemo framings. The creature mid-action in the lived-in aquatic village. Composition: three-act depth (foreground creature with prop / midground village architecture / background atmospheric teal/cyan water-light + coral-pink + pearl-violet + warm-amber-glow inside).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION. NEVER posing. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-AQUATIC EFFECTS ━━━
+
+Layer ALL of these:
+- Drifting fish-schools in the deep midground/background
+- Bubble-streams rising from architecture and creatures
+- Sun-shafts dappling through water onto the village
+- Bioluminescent-glow from coral / kelp / lanterns
+- Pearl-shimmer / iridescent-shell-light
+- Kelp-fronds drifting in gentle currents
+- Coral-sway with the water
+- Dappled water-caustic light on every surface
+- Floating glitter / sand-particles in water
+- Drifting jellyfish silhouettes in deep background
+- Pastel coral-bloom colors throughout
+- Tiny starfish / sea-anemones tucked into architecture
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in that village" longing. Wholesome cottagecore-aquatic-magic.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — render at chibi proportions.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (WIDE establishing shot — village fills frame, creature is small scale-prover) ━━━
+
+WIDE ESTABLISHING SHOT. Camera pulled WAY back. The aquatic-village fills 70-85% of the frame — multiple coral-towers / kelp-cottages / pearl-shell-buildings / submarine-port / sea-cave-dwellings / lily-pad-platforms / starfish-bridges / bioluminescent-grotto visible at varying depths (foreground / midground / background). The creature is SMALL (8-15% of frame). NOT close-up. NOT centered portrait. NOT 30% of frame. The eye reads VILLAGE FIRST, then discovers the tiny creature. Three village-details visible across the architecture. Surprise element tucked in the deep midground.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [activity verb-phrase], [aquatic-village description] spanning behind, [biome-specific lighting context]..."
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
+  },
+
+
+  CHIBIBOT_COTTAGECORE_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY COTTAGECORE-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy English-countryside cottagecore village spanning behind them. Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter / Whisper-of-the-Heart painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description, THEN describe the cottagecore-village spanning behind them. CREATURE-FIRST.
+
+Open examples:
+- "A chibi rabbit-child mid-skip down a cobblestone lane carrying a basket of wildflowers, behind them a thatched-roof cottage cluster nestled in a lavender field..."
+- "A baby hedgehog hauling a wheelbarrow of apples toward a stone-bridge, a wisteria-tunnel village with cottage-smoke curling beyond..."
+- "A chibi mouse-creature watering window-box geraniums on a half-timbered cottage porch, a windmill village with golden-wheat-fields spreading behind..."
+
+━━━ ⚠ HARD RULE #1: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
+
+The cottagecore-village architecture fills 70-85% of the frame — many thatched-roof cottages / windmills / lavender-field cottages / apple-orchard hamlets / wisteria-tunnel villages / cobblestone lanes / canal-side cottages / mushroom-cottage clusters / fairy-glade hamlets / stone-bridge cottages all visible across foreground / midground / background. WIDE ESTABLISHING SHOT showing the whole village ecosystem. The SOLO creature is a SMALL anchor (8-15% of frame) somewhere in the composition — NOT the focal hero of the frame. The viewer's eye first lands on the WHOLE VILLAGE, then discovers the tiny creature as a delightful detail. NOT a portrait. NOT close-up. NOT 30% of frame. The creature is a SCALE PROVER, not a centered subject. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame, but small. HARD BAN: creature occupying more than 20% of frame, portrait crops, chest-up framing, centered close-ups.
+
+━━━ ⚠ HARD RULE #2: COTTAGECORE COUNTRYSIDE — LUSH GREEN / FLOWERS / OLD-WORLD CHARM ━━━
+
+The setting is LUSH-GREEN countryside / cottagecore — thatched-roofs, half-timbered walls, stone-bridges, flower-laden cottages, climbing roses, windmills, lavender-fields, apple-orchards, wisteria-tunnels. Old-world Beatrix-Potter charm. ALWAYS lush green / flower-laden / summer-into-early-autumn warm season. NEVER snow, NEVER underwater, NEVER tropical.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE COTTAGECORE-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE COTTAGECORE-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame. Studio Ghibli / Howl-Moving-Castle / Beatrix-Potter / Whisper-of-the-Heart framings. The creature mid-action in the lived-in cottagecore village. Composition: three-act depth (foreground creature with prop / midground village architecture / background atmospheric sage-green + sage + warm-amber + butter-yellow + soft-pink + lavender + cream).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION. NEVER posing. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-COTTAGECORE EFFECTS ━━━
+
+Layer ALL of these:
+- Golden-hour-glow pouring across the village
+- Cottage-garden roses climbing every wall
+- Wisteria-petal-drift or cherry-blossom-petal-drift in the air
+- Honeybees and butterflies darting between flowers
+- Wildflower-meadow carpeting around the cottages
+- Cottage-window-box blooms (geraniums / petunias / lavender)
+- Warm cottage-smoke from stone chimneys
+- Dragonflies and damselflies over a stream
+- Sheep / chickens / honeybees as tiny village-life background
+- Stone-pavement weathered with moss between cracks
+- Lace-curtains in cottage windows, warm-amber interior glow
+- Hanging laundry on a clothesline, soft pastel fabrics
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in that village" longing. Wholesome cottagecore-cottagecore-magic.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — render at chibi proportions.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (WIDE establishing shot — village fills frame, creature is small scale-prover) ━━━
+
+WIDE ESTABLISHING SHOT. Camera pulled WAY back. The cottagecore-village fills 70-85% of the frame — multiple thatched-roof cottages / windmills / lavender-field cottages / apple-orchard hamlets / wisteria-tunnel villages / cobblestone lanes / canal-side cottages / mushroom-cottage clusters / fairy-glade hamlets / stone-bridge cottages visible at varying depths (foreground / midground / background). The creature is SMALL (8-15% of frame). NOT close-up. NOT centered portrait. NOT 30% of frame. The eye reads VILLAGE FIRST, then discovers the tiny creature. Three village-details visible across the architecture. Surprise element tucked in the deep midground.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [activity verb-phrase], [cottagecore-village description] spanning behind, [biome-specific lighting context]..."
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
+  },
+
+
+  CHIBIBOT_SUNNY_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY SUNNY-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy Mediterranean / sun-drenched village spanning behind them. Studio Ghibli / Kiki-Delivery-Service / Porco-Rosso / Luca / Spirited-Away painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description, THEN describe the sunny-village spanning behind them. CREATURE-FIRST.
+
+Open examples:
+- "A chibi cat-creature mid-step down a Santorini-style cliff-village stair with a basket of lemons, behind them white-cottages cascading toward a blue Aegean sea..."
+- "A baby donkey hauling a small wood-cart of olives down a cobblestone lane, a terracotta-roof Tuscan village with cypress-trees beyond..."
+- "A chibi bird-child carrying laundry up a bougainvillea-draped staircase, a Mediterranean cliff-village glowing in golden-hour spreading behind..."
+
+━━━ ⚠ HARD RULE #1: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
+
+The sunny-village architecture fills 70-85% of the frame — many bougainvillea-clad cottages / white-cottages on cliffs / terracotta-roof clusters / Santorini-style cliff-villages / desert-oasis hamlets / sun-bleached pueblos / fishing-port cottages / palm-fringed hamlets / olive-grove villages all visible across foreground / midground / background. WIDE ESTABLISHING SHOT showing the whole village ecosystem. The SOLO creature is a SMALL anchor (8-15% of frame) somewhere in the composition — NOT the focal hero of the frame. The viewer's eye first lands on the WHOLE VILLAGE, then discovers the tiny creature as a delightful detail. NOT a portrait. NOT close-up. NOT 30% of frame. The creature is a SCALE PROVER, not a centered subject. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame, but small. HARD BAN: creature occupying more than 20% of frame, portrait crops, chest-up framing, centered close-ups.
+
+━━━ ⚠ HARD RULE #2: MEDITERRANEAN SUN-DRENCHED — WHITE-WASHED / TERRACOTTA / BOUGAINVILLEA ━━━
+
+The setting is BRIGHT MEDITERRANEAN / SUN-DRENCHED — white-washed walls, terracotta-roofs, bougainvillea-cascade, stone-pavement, cliff-side perches over blue-sea, palm-trees, olive-groves, sun-bleached pastels. Studio Ghibli Luca / Porco-Rosso vibes. ALWAYS warm summer-light, NEVER overcast, NEVER snow.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE SUNNY-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE SUNNY-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame. Studio Ghibli / Kiki-Delivery-Service / Porco-Rosso / Luca / Spirited-Away framings. The creature mid-action in the lived-in sunny village. Composition: three-act depth (foreground creature with prop / midground village architecture / background atmospheric warm-white + terracotta-orange + bougainvillea-magenta + olive-green + sky-blue + ochre).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION. NEVER posing. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-SUNNY EFFECTS ━━━
+
+Layer ALL of these:
+- Golden-hour or hot-noon warmth on white-washed walls
+- Bougainvillea-petal drift in warm breeze
+- Palm-shadows dappling on stone-pavement
+- Sun-bleached textures with painterly weathering
+- Hot-stone-glow reflecting upward
+- Cicadas-suggestion via shimmering-air-heat
+- Wash hanging on clotheslines between balconies, soft pastel fabrics
+- Sunflower-pots and geranium-pots on terracotta steps
+- Distant blue-sea visible behind the cottages (for cliff/coastal subtypes)
+- Vines (grape / ivy) wrapping stone-walls
+- Terracotta-roof tiles with warm patina
+- Olive-tree silhouettes in soft haze
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in that village" longing. Wholesome cottagecore-sunny-magic.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — render at chibi proportions.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (WIDE establishing shot — village fills frame, creature is small scale-prover) ━━━
+
+WIDE ESTABLISHING SHOT. Camera pulled WAY back. The sunny-village fills 70-85% of the frame — multiple bougainvillea-clad cottages / white-cottages on cliffs / terracotta-roof clusters / Santorini-style cliff-villages / desert-oasis hamlets / sun-bleached pueblos / fishing-port cottages / palm-fringed hamlets / olive-grove villages visible at varying depths (foreground / midground / background). The creature is SMALL (8-15% of frame). NOT close-up. NOT centered portrait. NOT 30% of frame. The eye reads VILLAGE FIRST, then discovers the tiny creature. Three village-details visible across the architecture. Surprise element tucked in the deep midground.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [activity verb-phrase], [sunny-village description] spanning behind, [biome-specific lighting context]..."
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
+  },
+
+
+  CHIBIBOT_TWILIGHT_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY TWILIGHT-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy twilight / lantern-lit / firefly-magic village spanning behind them. Studio Ghibli / Spirited-Away / Whisper-of-the-Heart / Howl-Moving-Castle / Tangled-lanterns painterly storybook aesthetic. The viewer's reaction: "I want to live in that village." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description, THEN describe the twilight-village spanning behind them. CREATURE-FIRST.
+
+Open examples:
+- "A chibi raccoon-creature mid-walk down a lantern-lit lane with a paper-lantern dangling from a stick, behind them a Spirited-Away-style paper-lantern village spilling warm-amber against deep-violet dusk sky..."
+- "A baby owl on a stone-bridge with a glowworm-jar, a moonlit-village with paper-lanterns and rim-lit rooftops shimmering blue-cyan beyond..."
+- "A chibi child mid-skip across a firefly-meadow cottage path with a lit candle-jar, dusk-glow cottages with warm-amber windows spreading into a magenta-dusk horizon..."
+
+━━━ ⚠ HARD RULE #1: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
+
+The twilight-village architecture fills 70-85% of the frame — many lantern-lane cottages / firefly-meadow cottages / moonlit-bridge towns / dusk-window-glow clusters / paper-lantern-festival villages / Japanese-paper-lantern-towns / nightingale-grove cottages / star-lit-spire villages / bioluminescent-garden clusters / glowworm-cave hamlets / moonflower-meadow villages all visible across foreground / midground / background. WIDE ESTABLISHING SHOT showing the whole village ecosystem. The SOLO creature is a SMALL anchor (8-15% of frame) somewhere in the composition — NOT the focal hero of the frame. The viewer's eye first lands on the WHOLE VILLAGE, then discovers the tiny creature as a delightful detail. NOT a portrait. NOT close-up. NOT 30% of frame. The creature is a SCALE PROVER, not a centered subject. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame, but small. HARD BAN: creature occupying more than 20% of frame, portrait crops, chest-up framing, centered close-ups.
+
+━━━ ⚠ HARD RULE #2: TWILIGHT / DUSK / LANTERN-LIT — MAGIC-HOUR ATMOSPHERE ━━━
+
+The setting is at TWILIGHT — dusk / blue-hour / lantern-lit-night. Warm-amber lantern-glow / paper-lantern-strings / firefly-trails / moonlit-rim-light dominate. Sky is deep-violet-blue or magenta-dusk. NEVER bright noon, NEVER overcast-gray. Magic-hour atmosphere with first stars / fireflies / lanterns lit.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE TWILIGHT-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE TWILIGHT-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame. Studio Ghibli / Spirited-Away / Whisper-of-the-Heart / Howl-Moving-Castle / Tangled-lanterns framings. The creature mid-action in the lived-in twilight village. Composition: three-act depth (foreground creature with prop / midground village architecture / background atmospheric deep-violet-blue + warm-amber lantern-glow + magenta-dusk + soft-pink-cloud + moonlit-cyan).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION. NEVER posing. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-TWILIGHT EFFECTS ━━━
+
+Layer ALL of these:
+- Warm-amber lantern-glow from paper-lanterns / oil-lamps / candle-windows
+- Firefly-trails drifting through the air
+- Moonlit-rim-light on architecture
+- Deep-violet-blue or magenta dusk sky
+- Paper-lantern strings hung across the village
+- Starlit-haze in the sky overhead
+- Soft purple-blue shadows contrasting warm-amber light
+- Candle-window-glow from every cottage
+- Twilight-mist drifting low through the streets
+- Distant glowworms / bioluminescent-blossoms / glow-mushrooms
+- Light spill across cobblestone or wooden-platforms
+- Reflections of lantern-light on water (canals / ponds / wet-stone)
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in that village" longing. Wholesome cottagecore-twilight-magic.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, painterly bokeh. Chibi proportions.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — render at chibi proportions.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (WIDE establishing shot — village fills frame, creature is small scale-prover) ━━━
+
+WIDE ESTABLISHING SHOT. Camera pulled WAY back. The twilight-village fills 70-85% of the frame — multiple lantern-lane cottages / firefly-meadow cottages / moonlit-bridge towns / dusk-window-glow clusters / paper-lantern-festival villages / Japanese-paper-lantern-towns / nightingale-grove cottages / star-lit-spire villages / bioluminescent-garden clusters / glowworm-cave hamlets / moonflower-meadow villages visible at varying depths (foreground / midground / background). The creature is SMALL (8-15% of frame). NOT close-up. NOT centered portrait. NOT 30% of frame. The eye reads VILLAGE FIRST, then discovers the tiny creature. Three village-details visible across the architecture. Surprise element tucked in the deep midground.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [activity verb-phrase], [twilight-village description] spanning behind, [biome-specific lighting context]..."
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
   },
 
 
