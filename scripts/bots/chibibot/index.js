@@ -1,23 +1,24 @@
 /**
  * ChibiBot — the bot-engine contract.
  *
+ * 2026-05-20 — Cut 7 redundant paths (bookish-sanctuary, fireplace-cabin,
+ * outdoor-adventure, snowy-arctic, jungle-canopy, sunny-pair, storybook-page)
+ * after migration audit; covered by cozy-interior / arctic-village /
+ * jungle-village / cozy-landscape / night-meadow / heartwarming-scene.
+ *
  * 2026-05-07 — Toy-photography paths (plushie-life, dollhouse-life) removed;
- * those live in ToyBot now. ChibiBot is now a single locked visual register:
- * hyper-cute 3D character render (chibibot_render medium) — designer-vinyl
- * collectible CGI aesthetic across all 24 paths.
+ * those live in ToyBot now.
  *
  * 2026-05-06 — CuddleBot merged into ChibiBot.
  *
- * Path inventory (24):
- *   3 ChibiBot-original indoor paths: rainy-interior / fireplace-cabin /
- *     bookish-sanctuary
- *   15 paths from CuddleBot: heartwarming-scene / cozy-landscape /
- *     creature-portrait / sleepy-naptime / rainy-day-cozy /
- *     miniature-feast / bath-time / outdoor-adventure / storybook-page /
- *     cuddly-aquatic / jungle-canopy / snowy-arctic / night-meadow /
- *     sunny-pair / cozy-interior
- *   6 village paths: cottagecore-village / aquatic-village /
- *     arctic-village / jungle-village / twilight-village / sunny-village
+ * Path inventory (18):
+ *   Indoor: rainy-interior / cozy-interior
+ *   Creature-focused: heartwarming-scene / creature-portrait / sleepy-naptime /
+ *                     bath-time / cuddly-aquatic
+ *   Outdoor-scene: cozy-landscape / rainy-day-cozy / night-meadow
+ *   Food: miniature-feast / cute-food
+ *   Villages (6): aquatic-village / arctic-village / cottagecore-village /
+ *                 jungle-village / sunny-village / twilight-village
  */
 
 const pools = require('./pools');
@@ -26,8 +27,6 @@ const blocks = require('./shared-blocks');
 const pathBuilders = {
   // 3 ChibiBot-original indoor paths
   'rainy-interior': require('./paths/rainy-interior'),
-  'fireplace-cabin': require('./paths/fireplace-cabin'),
-  'bookish-sanctuary': require('./paths/bookish-sanctuary'),
   // 15 paths from CuddleBot (plushie-life + dollhouse-life moved to ToyBot)
   'heartwarming-scene': require('./paths/heartwarming-scene'),
   'cozy-landscape': require('./paths/cozy-landscape'),
@@ -36,13 +35,8 @@ const pathBuilders = {
   'rainy-day-cozy': require('./paths/rainy-day-cozy'),
   'miniature-feast': require('./paths/miniature-feast'),
   'bath-time': require('./paths/bath-time'),
-  'outdoor-adventure': require('./paths/outdoor-adventure'),
-  'storybook-page': require('./paths/storybook-page'),
   'cuddly-aquatic': require('./paths/cuddly-aquatic'),
-  'jungle-canopy': require('./paths/jungle-canopy'),
-  'snowy-arctic': require('./paths/snowy-arctic'),
   'night-meadow': require('./paths/night-meadow'),
-  'sunny-pair': require('./paths/sunny-pair'),
   'cozy-interior': require('./paths/cozy-interior'),
   // cute-food (2026-05-17, bex.ai-inspired kawaii pop-mart food)
   'cute-food': require('./paths/cute-food'),
@@ -135,8 +129,6 @@ module.exports = {
   paths: [
     // 3 ChibiBot-original indoor (weighted 2× to balance vs the 21 others)
     'rainy-interior',
-    'fireplace-cabin',
-    'bookish-sanctuary',
     // 15 from CuddleBot
     'heartwarming-scene',
     'cozy-landscape',
@@ -145,13 +137,8 @@ module.exports = {
     'rainy-day-cozy',
     'miniature-feast',
     'bath-time',
-    'outdoor-adventure',
-    'storybook-page',
     'cuddly-aquatic',
-    'jungle-canopy',
-    'snowy-arctic',
     'night-meadow',
-    'sunny-pair',
     'cozy-interior',
     // cute-food
     'cute-food',
@@ -167,8 +154,6 @@ module.exports = {
   // Path weights — 2× indoor boost; everything else 1×.
   pathWeights: {
     'rainy-interior': 2,
-    'fireplace-cabin': 2,
-    'bookish-sanctuary': 2,
     'heartwarming-scene': 1,
     'cozy-landscape': 1,
     'creature-portrait': 1,
@@ -176,13 +161,8 @@ module.exports = {
     'rainy-day-cozy': 1,
     'miniature-feast': 1,
     'bath-time': 1,
-    'outdoor-adventure': 1,
-    'storybook-page': 1,
     'cuddly-aquatic': 1,
-    'jungle-canopy': 1,
-    'snowy-arctic': 1,
     'night-meadow': 1,
-    'sunny-pair': 1,
     'cozy-interior': 1,
     'cute-food': 2,
     'cottagecore-village': 1,
@@ -205,7 +185,6 @@ module.exports = {
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
-      'storybook-page',
       'night-meadow',
       'aquatic-village',
       'jungle-village',
@@ -215,8 +194,6 @@ module.exports = {
       'cottagecore-village',
       'cozy-interior',
       'rainy-interior',
-      'fireplace-cabin',
-      'bookish-sanctuary',
     ],
   },
 
@@ -237,16 +214,11 @@ module.exports = {
       'creature-portrait': 'creature',
       'sleepy-naptime': 'creature',
       'bath-time': 'creature',
-      'outdoor-adventure': 'creature',
       'miniature-feast': 'creature',
       'cuddly-aquatic': 'creature',
-      'jungle-canopy': 'creature',
-      'snowy-arctic': 'creature',
-      'sunny-pair': 'creature',
       'heartwarming-scene': 'scene',
       'cozy-landscape': 'scene',
       'rainy-day-cozy': 'scene',
-      'storybook-page': 'scene',
       'night-meadow': 'scene',
       'aquatic-village': 'scene',
       'jungle-village': 'scene',
@@ -256,8 +228,6 @@ module.exports = {
       'cozy-interior': 'scene',
       'cottagecore-village': 'scene',
       'rainy-interior': 'scene',
-      'fireplace-cabin': 'scene',
-      'bookish-sanctuary': 'scene',
       'cute-food': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
