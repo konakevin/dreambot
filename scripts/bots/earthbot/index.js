@@ -21,11 +21,16 @@
 
 const earthPools = require('./earth/pools');
 const beachPools = require('./beach/pools');
+// Flat top-level pools registry for axis-system migrated paths.
+// Legacy paths keep loading from earth/pools.js or beach/pools.js until
+// they migrate. Both registries can coexist.
+const axisPools = require('./pools');
 
-// Path builders — copied verbatim from each source bot's paths/ dir.
+// Path builders — function-form for legacy paths, declarative
+// { archetype, pools } object for axis-system migrated paths.
 const pathBuilders = {
-  // Earth paths (10 active in source)
-  'epic-vista': require('./earth/paths/epic-vista'),
+  // Earth paths
+  'epic-vista': require('./paths/epic-vista'), // axis-system (2026-05-20)
   'weather-drama': require('./earth/paths/weather-drama'),
   'hidden-corner': require('./earth/paths/hidden-corner'),
   'dramatic-sky': require('./earth/paths/dramatic-sky'),
@@ -170,19 +175,27 @@ module.exports = {
   // subject-chaos (allowSubjectChaosPaths: []) because there's no human
   // subject to deform. Beach allowed subject-chaos on all paths. For zero
   // drift, only Beach paths get subject-chaos here.
+  // 2026-05-20: epic-vista skipPaths-added — perception-distortion
+  // (geometry / reflection / scale / framing) actively fights the
+  // real-Earth identity. As each Earth path migrates to axis-system,
+  // add it here.
   chaos: {
     enabled: true,
-    skipPaths: [],
+    skipPaths: ['epic-vista'],
     allowSubjectChaosPaths: [...BEACH_PATHS],
   },
 
   // Two-pass polish — both bots use identical config.
+  // 2026-05-20: epic-vista skipPaths-added — setting-as-hero scene path,
+  // polish compression strips location/geography language. As each Earth
+  // path migrates to axis-system, add it here.
   twoPassPolish: {
     enabled: true,
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
+    skipPaths: ['epic-vista'],
   },
 
   // Sensory anchors — both bots use 'scene' as the sole context, but their
@@ -217,10 +230,40 @@ module.exports = {
     };
   },
 
+  // Pool lookup for axis-system paths (reads from the flat pools.js registry).
+  // Legacy function-form paths don't call this — they import their pools
+  // directly from earth/pools.js or beach/pools.js.
+  poolByName(name) {
+    if (!(name in axisPools)) {
+      throw new Error(`EarthBot.poolByName: unknown pool "${name}"`);
+    }
+    return axisPools[name];
+  },
+
+  // No bot-level default pools — every axis-system path on EarthBot
+  // declares its own bespoke pools. Empty defaultPools mean the composer
+  // requires path-supplied pool for every axis the archetype declares.
+  defaultPools: {},
+
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`EarthBot: unknown path "${path}"`);
-    return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    // Declarative axis-system paths export { archetype, pools }.
+    // Legacy paths export a function. Dispatch on shape.
+    if (builder && typeof builder === 'object' && builder.archetype) {
+      const { composeBrief } = require('../../lib/brief-composer');
+      return composeBrief({
+        bot: module.exports,
+        pathConfig: builder,
+        sharedDNA,
+        vibeDirective,
+        picker,
+      });
+    }
+    if (typeof builder === 'function') {
+      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    }
+    throw new Error(`EarthBot: path "${path}" has invalid export shape`);
   },
 
   caption({ path }) {
