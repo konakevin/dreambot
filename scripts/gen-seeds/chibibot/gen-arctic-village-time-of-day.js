@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_time_of_day.json',
-  total: 50,
+  total: 100,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} TIME-OF-DAY descriptions for ChibiBot arctic-village — the lighting time across an arctic-village scene. Always WARM-cozy contrast against cool snow despite the cold biome.
 

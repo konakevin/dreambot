@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_details.json',
-  total: 50,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE DETAILS for ChibiBot arctic-village — small lived-in details scattered across the snowy village that make it feel inhabited. Template picks 3 per render.
 

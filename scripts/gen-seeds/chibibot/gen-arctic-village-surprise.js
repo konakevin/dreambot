@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_surprise.json',
-  total: 50,
+  total: 100,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} SURPRISE-ELEMENT descriptions for ChibiBot arctic-village — tiny second-tier details the eye finds after the village + foreground creature.
 

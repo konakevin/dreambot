@@ -2,7 +2,7 @@
 const { generatePool } = require('../../lib/seedGenHelper');
 generatePool({
   outPath: 'scripts/bots/chibibot/seeds/arctic_village_activities.json',
-  total: 50,
+  total: 200,
   batch: 25,
   metaPrompt: (n) => `You are writing ${n} ARCTIC-VILLAGE ACTIVITIES for ChibiBot arctic-village — what a small peripheral creature is doing in the snow-village foreground. Story-beat actions that make the scene feel lived-in.
 
