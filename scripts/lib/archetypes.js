@@ -552,6 +552,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_SUNSET_FLOWERS: {
+    description:
+      'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are backlit / rim-lit — translucent petals catching golden-hour light against a dramatic sunset sky over a wide gorgeous landscape. Real-world naturalistic register (hibiscus / cosmos / cherry-blossom / dandelion / azalea against mountains / hills / lakes / forests / coast). 3 path-bespoke pools (hero_flower / landscape_backdrop / sun_drama) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['hero_flower', 'landscape_backdrop', 'sun_drama'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGONBOT_CASTLE: {
     description:
       'PATH-BESPOKE — DragonBot castle path (2026-05-17 NEW). Majestic epic beautiful castle views — castles are 100% the focal subject, set amongst gorgeous fantasy backdrops with massive sense of scale. Distinct from epic-moment (50/50 castle + event) — this is pure castle-as-hero, movie-poster establishing shot energy. 5 path-bespoke pools: castle (architectural subject) + biome (gorgeous fantasy backdrop) + sky_layer (dramatic sky) + scale_prover (tiny element proving scale) + phenomenon (40%-gated atmospheric flourish). Lineage: Helms-Deep / Minas-Tirith / Edoras / Erebor / Anor-Londo establishing-shot.',
