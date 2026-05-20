@@ -82,6 +82,8 @@ module.exports = {
     // cozy-landscape — locked to pixar medium (storybook painterly rendering
     // works better for setting-as-hero than the Pop-Mart vinyl register)
     'cozy-landscape': 'chibibot_pixar',
+    // rainy-interior — same painterly storybook register as cozy-landscape
+    'rainy-interior': 'chibibot_pixar',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -201,7 +203,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;

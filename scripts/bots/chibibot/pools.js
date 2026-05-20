@@ -112,6 +112,15 @@ module.exports = {
   COZY_LANDSCAPE_SURPRISE_ELEMENTS: load('cozy_landscape_surprise_elements'),
   COZY_LANDSCAPE_PHENOMENA: load('cozy_landscape_phenomena'),
 
+  // Rainy-interior path-bespoke axes (2026-05-19 full-bespoke migration)
+  // SETTING-AS-HERO indoor path with mandatory rainy-window contrast.
+  RAINY_INTERIOR_ROOMS: load('rainy_interior_rooms'),
+  RAINY_INTERIOR_ROOM_DETAILS: load('rainy_interior_room_details'),
+  RAINY_INTERIOR_TIME_OF_DAY: load('rainy_interior_time_of_day'),
+  RAINY_INTERIOR_RESIDENT_ACTIVITIES: load('rainy_interior_resident_activities'),
+  RAINY_INTERIOR_SURPRISE_ELEMENTS: load('rainy_interior_surprise_elements'),
+  RAINY_INTERIOR_PHENOMENA: load('rainy_interior_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each
