@@ -1525,6 +1525,223 @@ For EVERY color, the GLOW inside stays WARM-AMBER (a blue agapanthus has a warm-
     instructions: `Each entry is ONE specific FLOWER-TUNNEL ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in tunnel scene + light/sensory detail". Vary across the 12 categories. NO sci-fi glow. NO actual lamps. ABSOLUTE HARD BAN ON HUMANS — no people / no figures / no silhouettes / no pedestrians anywhere (wildlife scale-provers like deer / stag / fox / owl are fine). The phenomenon supports the flowers-as-lights aesthetic. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── flower-friends path (2026-05-19) — close-up flower + pleasant pollinator pairing ───
+  bloombot_flower_friends_flower_focal_cluster: {
+    format: 'simple',
+    theme: `WHIMSICAL ENCHANTED MULTI-FLOWER GARDEN VIGNETTE for the BloomBot flower-friends path. Each entry describes ONE specific PULLED-BACK garden scene with 3-5+ different hero flower species blooming together as co-hero — a whimsical floral abundance, NOT a single hero. Each entry 30-55 words.
+
+⚠️ THE BAR: every entry produces a render where (a) 3-5+ DIFFERENT flower species bloom together as co-hero (NEVER a single hero), (b) the scene is FULL of whimsical floral abundance, (c) the framing is PULLED-BACK garden vignette (NOT macro close-up), (d) dreamy bokeh background of more blooms / soft sky / pastel wash implied behind, (e) enchanted happy fairytale storybook mood, (f) SOFT WATERCOLOR PASTEL color register (NOT vivid saturated jewel-tone).
+
+⚠️ MULTI-FLOWER MANDATE — every entry MUST describe AT LEAST 3 different specific flower species blooming together as co-hero. NEVER a single dominant hero. The whole composition is the abundance — mix varied shapes (large layered bloom + medium disc + delicate single + tall spire) and varied colors for the whimsical-garden look.
+
+⚠️ SOFT PASTEL COLOR REGISTER — every flower color described in SOFT WATERCOLOR PASTEL tone:
+  • PALE PINK / SOFT CORAL / DUSTY PEACH (NOT hot-pink / magenta / red)
+  • SOFT LAVENDER / PALE VIOLET / PERIWINKLE (NOT deep-purple / electric-violet)
+  • PALE BABY-BLUE / SKY-BLUE / SOFT CORNFLOWER (NOT cobalt / electric-blue)
+  • SOFT BUTTERCUP-YELLOW / PALE GOLD / CREAM (NOT vivid sunflower-yellow)
+  • PALE APRICOT / SOFT TANGERINE / DUSTY ORANGE (NOT vivid neon-orange)
+  • PALE TURQUOISE / SEAFOAM / MINT
+  • SOFT IVORY / OFFWHITE / CREAM
+  • DUSTY ROSE / PALE MAUVE / BLUSH
+
+⚠️ COLOR DISTRIBUTION MANDATE — distribute the 25 entries evenly across the FULL color spectrum (DO NOT bias toward pink/purple/red):
+  • ~4 BLUE-DOMINANT entries (soft baby-blue / periwinkle / pale-cornflower / pale-turquoise as the dominant palette)
+  • ~4 VIOLET-DOMINANT entries (soft lavender / pale-violet / pale-lilac as the dominant palette)
+  • ~4 YELLOW-DOMINANT entries (soft buttercup / pale-gold / pale-cream as the dominant palette)
+  • ~4 WHITE/CREAM-DOMINANT entries (ivory / offwhite / cream / soft-white as the dominant palette)
+  • ~3 ORANGE-DOMINANT entries (pale apricot / soft tangerine / dusty orange as the dominant palette)
+  • ~3 PINK-DOMINANT entries (pale-pink / dusty-rose / blush as the dominant palette)
+  • ~3 MULTI-COLOR-RAINBOW entries (mixed soft-pastel across the spectrum)
+
+⚠️ FLOWER SPECIES PALETTE — pick freely from:
+  Dahlia / Peony / Zinnia / Cosmos / Hibiscus / Sunflower / Lily / Rose / Tulip / Daisy / Aster / Magnolia / Marigold / Anemone / Ranunculus / Chrysanthemum / Camellia / Poppy / Lotus / Iris / Larkspur / Lupine / Delphinium / Snapdragon / Foxglove / Sweet-pea / Bellflower / Cornflower / Geranium / Pansy / Forget-me-not / Bachelor-button / Hollyhock / Bluebell / Hydrangea / Periwinkle / Phlox / Aquilegia / Statice / Yarrow / Scabiosa / Wisteria
+
+🚫 STRICT BANS:
+  • 🚫 NO single-hero composition — 3+ species mandatory
+  • 🚫 NO extreme macro INTO a single petal (that's closeup's territory)
+  • 🚫 NO single-bloom-filling-frame composition
+  • 🚫 NO vase / cut-flower / interior framing
+  • 🚫 NO empty foreground — the cluster fills the foreground
+  • 🚫 NO insect description (insect comes from hero_pollinator axis)
+  • 🚫 NO humans / hands / body parts
+  • 🚫 NO archways / tunnels / engulfment / urban / ruins
+  • 🚫 NO sci-fi / surreal / floating
+
+✓ NATURALISTIC PRETTY FLOWERS GROWING IN THE WILD — enchanted garden / meadow / forest-edge / wildflower-glade implied. The multi-flower cluster is the natural foreground; bokeh behind.
+
+✓ MOOD — whimsical, enchanted, happy, fairytale-storybook, peaceful, magical-pretty. Studio Ghibli + Disney secret-garden + Beatrix Potter + IG dreamy-magical-hour.`,
+    touchpoints: [
+      // BLUE-DOMINANT (~4)
+      'PALE-BLUE PERIWINKLE DREAMSCAPE — pale baby-blue periwinkles + soft cornflower-blue bachelor-buttons + pale-blue forget-me-nots + soft white daisies + delicate ivory cosmos blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'SOFT-BLUE HYDRANGEA GLADE — soft baby-blue hydrangea cluster + pale-blue delphinium spires + soft periwinkle phlox + ivory daisies + delicate pale-blue forget-me-nots blooming together as co-hero in pulled-back enchanted vignette, soft watercolor pastel register, dreamy bokeh behind',
+      'PALE-TURQUOISE-AND-CREAM MEADOW — pale turquoise scabiosa + soft seafoam aquilegia + pale-blue cornflowers + cream sweet-peas + ivory daisies blooming together as co-hero in pulled-back enchanted meadow vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'POWDER-BLUE WILDFLOWER GARDEN — powder-blue larkspur + pale-blue bellflowers + soft cornflowers + delicate pale-cream daisies + ivory yarrow blooming together as co-hero in pulled-back enchanted garden vignette, soft watercolor pastel register, dreamy bokeh behind',
+      // VIOLET-DOMINANT (~4)
+      'SOFT-LAVENDER ENCHANTED VIGNETTE — soft-lavender lupines + pale-violet phlox + pale-lilac asters + delicate cream cosmos + ivory daisies blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PALE-VIOLET PHLOX GLADE — pale-violet phlox cluster + soft-lavender wisteria strands + pale-lilac larkspur + soft ivory roses + cream daisies blooming together as co-hero in pulled-back enchanted glade vignette, soft watercolor pastel register, dreamy bokeh behind',
+      'LILAC-DREAM ENCHANTED GARDEN — soft pale-lilac aquilegia + pale-violet aster + soft-lavender sweet-pea + delicate cream peonies + ivory cosmos blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PALE-PURPLE WISTERIA-AND-IRIS — soft pale-purple wisteria cascade + pale-lilac irises + soft-lavender bellflowers + delicate cream tulips + ivory daisies blooming together as co-hero in pulled-back enchanted vignette, soft pastel watercolor register, dreamy bokeh behind',
+      // YELLOW-DOMINANT (~4)
+      'SOFT-BUTTERCUP MEADOW GLADE — soft buttercup-yellow daisies + pale-gold ranunculus + soft cream sunflowers + delicate pale-yellow marigolds + ivory cosmos blooming together as co-hero in pulled-back enchanted meadow vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PALE-GOLD CHAMOMILE DREAMSCAPE — pale-gold chamomile daisies + soft buttercup daffodils + cream-yellow ranunculus + delicate ivory roses + soft pale-cream cosmos blooming together as co-hero in pulled-back enchanted vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'SOFT-LEMON GARDEN VIGNETTE — soft lemon-yellow tulips + pale-gold daffodils + cream-yellow primroses + delicate pale-cream daisies + ivory peonies blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'BUTTERCUP-AND-CREAM ENCHANTED MEADOW — pale buttercup yarrow + soft-yellow snapdragons + cream-gold pansies + delicate ivory daisies + soft pale-pink cosmos blooming together as co-hero in pulled-back enchanted meadow vignette, soft pastel watercolor register, dreamy bokeh behind',
+      // WHITE/CREAM-DOMINANT (~4)
+      'IVORY-AND-CREAM ROMANTIC GARDEN — ivory peonies + soft cream roses + pale-ivory magnolias + cream daisies + delicate pale-cream sweet-peas blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PALE-WHITE COSMOS GLADE — pale-white cosmos + soft ivory daisies + cream-white anemones + delicate pale-white phlox + soft pale-blue forget-me-nots blooming together as co-hero in pulled-back enchanted glade vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'CREAM-AND-OFFWHITE ENCHANTED MEADOW — soft cream roses + ivory tulips + pale-cream daisies + delicate offwhite anemones + soft pale-yellow sweet-peas blooming together as co-hero in pulled-back enchanted meadow vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PURE-WHITE FAIRYTALE GARDEN — pale-white peonies + ivory lilies + soft-white roses + cream daisies + delicate pale-pink cosmos blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      // ORANGE-DOMINANT (~3)
+      'PALE-APRICOT ENCHANTED MEADOW — pale apricot ranunculus + soft tangerine marigolds + dusty-orange dahlias + delicate cream daisies + ivory sweet-peas blooming together as co-hero in pulled-back enchanted meadow vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'SOFT-PEACH GARDEN VIGNETTE — soft peach roses + pale-apricot tulips + dusty-orange zinnias + delicate cream cosmos + soft ivory daisies blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PALE-TANGERINE WILDFLOWER GLADE — pale-tangerine marigolds + soft apricot poppies + dusty-orange snapdragons + delicate cream daisies + ivory yarrow blooming together as co-hero in pulled-back enchanted glade vignette, soft pastel watercolor register, dreamy bokeh behind',
+      // PINK-DOMINANT (~3)
+      'DUSTY-ROSE ENCHANTED GARDEN — dusty-rose peonies + pale-pink ranunculus + blush dahlias + delicate cream sweet-peas + ivory daisies blooming together as co-hero in pulled-back enchanted garden vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'BLUSH-PINK SPRING MEADOW — soft blush cherry-blossoms + pale-pink magnolias + dusty-rose camellias + delicate cream peonies + ivory daisies blooming together as co-hero in pulled-back enchanted spring meadow, soft pastel watercolor register, dreamy bokeh behind',
+      'PALE-PINK COSMOS DREAMSCAPE — pale-pink cosmos + soft blush sweet-peas + dusty-rose anemones + delicate cream daisies + ivory phlox blooming together as co-hero in pulled-back enchanted dreamscape vignette, soft pastel watercolor register, dreamy bokeh behind',
+      // MULTI-COLOR RAINBOW (~3)
+      'SOFT-PASTEL RAINBOW MEADOW — pale baby-blue cornflowers + soft lavender asters + pale buttercup daisies + soft peach ranunculus + delicate blush cosmos + ivory tulips blooming together as co-hero in pulled-back enchanted meadow vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'WATERCOLOR PASTEL GARDEN — soft pale-pink peonies + pale-violet phlox + soft buttercup snapdragons + delicate pale-blue forget-me-nots + ivory daisies + soft-coral roses blooming together as co-hero in pulled-back enchanted vignette, soft pastel watercolor register, dreamy bokeh behind',
+      'PASTEL-RAINBOW WILDFLOWER GLADE — pale-turquoise scabiosa + soft-lavender bellflowers + pale-yellow yarrow + soft-peach poppies + delicate pale-pink cosmos + ivory daisies blooming together as co-hero in pulled-back enchanted glade vignette, soft pastel watercolor register, dreamy bokeh behind',
+    ],
+    instructions: `Each entry is ONE specific WHIMSICAL MULTI-FLOWER ENCHANTED GARDEN VIGNETTE, 30-55 words. Format: "VIGNETTE NAME / PASTEL-PALETTE CAPS — 3-5+ co-hero flower species blooming together in a pulled-back enchanted garden vignette + soft pastel watercolor register + dreamy bokeh implied". MANDATORY — (a) AT LEAST 3 different flower species + co-hero composition (NEVER single hero), (b) PULLED-BACK garden vignette framing, (c) SOFT WATERCOLOR PASTEL color register (NEVER vivid saturated jewel-tone), (d) explicit pastel-color words (pale / soft / dusty / blush / ivory / cream / pale-baby / soft-lavender / etc.), (e) dreamy bokeh implied, (f) whimsical enchanted mood. NEVER bias toward pink/purple/red — distribute across the FULL color spectrum (BLUE / VIOLET / YELLOW / WHITE / ORANGE / PINK / RAINBOW). NO insect description. NO macro / extreme closeup. NO vase / interior. NO humans. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_friends_hero_pollinator: {
+    format: 'simple',
+    theme: `POLLINATOR CAST — 3-6+ CUTE PLEASANT INSECTS for the BloomBot flower-friends path. Each entry describes a CAST OF 3-6+ different cute pleasant pollinators positioned at different spots throughout the enchanted-garden scene — bumblebees / butterflies / dragonflies / ladybugs / fireflies / moths flying / landed / hovering. The insects are CUTE-rendered (charming storybook-friendly, NOT realistic-creepy). Each entry 30-55 words.
+
+⚠️ THE BAR: every entry describes a CAST of 3-6+ insects positioned throughout the scene — multiple species, multiple positions (some on flowers, some hovering, some flying / drifting in midground). Each insect rendered in a CUTE storybook-friendly way (fuzzy soft bodies, friendly proportions, slightly-stylized cute eyes, peaceful poses). NEVER single hero insect — multi-cast mandatory.
+
+⚠️ FOCAL POLLINATOR MANDATE (CRITICAL — makes insects POP) — every entry MUST nominate ONE focal pollinator from the cast that's rendered PROMINENTLY:
+  - Positioned FRONT-AND-CENTER (large, clearly visible, in sharp focus)
+  - Notably BIGGER than the supporting cast members
+  - With CONTRASTING color that pops against the soft-pastel flower background (vivid wings against pale petals, e.g., orange monarch against pale-blue meadow)
+  - Crisp wing-pattern / fuzzy-body detail clearly visible
+  - The viewer's eye goes to this focal insect FIRST
+
+The other 2-4+ supporting cast members are smaller / further back / hovering in the bokeh — they fill the scene with life without competing.
+
+⚠️ INSECT CAST COMPOSITION MANDATE — every entry MUST describe AT LEAST 3 different specific pleasant pollinators positioned at different spots in the scene. Mix species. Vary positions (landed on a flower / hovering at a petal / flying mid-air / drifting in the bokeh / perched on a leaf).
+
+⚠️ FOCAL SPECIES ROTATION MANDATE (anti-bumblebee-dominance) — distribute the 25 entries so the FOCAL pollinator rotates across all species (NOT always bumblebee as anchor):
+  - ~6 BUTTERFLY-FOCAL entries (monarch / swallowtail / blue morpho / painted lady / fritillary / pink-purple / cabbage-white / red admiral / common-tiger as the front-and-center hero)
+  - ~5 BUMBLEBEE-FOCAL entries (fuzzy bumblebee / carpenter bee / honeybee as the front-and-center hero)
+  - ~4 DRAGONFLY-FOCAL entries (blue / green / red darter / emerald / damselfly as the front-and-center hero)
+  - ~3 MOTH-FOCAL entries (luna moth / hummingbird hawkmoth / rosy maple moth as the front-and-center hero)
+  - ~3 LADYBUG-FOCAL entries (red ladybug / orange ladybug rendered larger and more prominent as the front-and-center hero — NOT just a tiny accent)
+  - ~2 FIREFLY-FOCAL entries (glowing-abdomen firefly at dusk as the front-and-center hero)
+  - ~2 LACEWING-FOCAL entries (delicate pale-green lacewing as the front-and-center hero)
+
+⚠️ CUTE-RENDERING MANDATE — every insect described in a CHARMING STORYBOOK-CUTE register:
+  • Fuzzy soft bodies (especially bumblebees) — emphasize fuzziness
+  • Friendly stylized proportions — slightly bigger soft eyes, rounder bodies
+  • Peaceful poses — drinking nectar peacefully, gently hovering, sleepy-cozy landed
+  • Storybook-charming, NOT realistic-creepy / detailed-photoreal / menacing
+  • Think Disney secret-garden cute, NOT nature-documentary realistic
+
+⚠️ PLEASANT INSECT PALETTE — pick freely from:
+  • BUMBLEBEES (fuzzy bumblebee / honeybee / carpenter-bee / yellow-and-black bumblebee / brown bumblebee)
+  • BUTTERFLIES (monarch / swallowtail / blue morpho / painted lady / pink-purple iridescent / fritillary / common-tiger / red admiral / cabbage white)
+  • MOTHS (luna moth / hummingbird hawkmoth / rosy maple moth — pretty moths only)
+  • DRAGONFLIES (blue dragonfly / green dragonfly / red darter / emerald / damselfly)
+  • LADYBUGS (red-with-black-spots / orange-with-black-spots)
+  • FIREFLIES (glowing-abdomen firefly with soft warm light — dusk variant)
+  • LACEWINGS (delicate pale-green lacewing)
+
+🚫 STRICT BANS:
+  • 🚫 NO single hero insect — multi-cast (3+) mandatory
+  • 🚫 NO realistic-creepy / detailed-photoreal / menacing / scary / aggressive insect rendering — cute storybook-charming only
+  • 🚫🚫🚫 NO UGLY / CREEPY species — NO spiders, NO wasps, NO hornets, NO flies, NO mosquitoes, NO centipedes, NO earwigs, NO cockroaches, NO beetles (other than ladybugs), NO ticks, NO any creepy-crawly 🚫🚫🚫
+  • 🚫 NO sci-fi insects / fantasy bugs / glowing-magical insects (other than naturalistic fireflies)
+  • 🚫 NO humans / hands / body parts
+
+✓ MANDATORY — every entry describes the WHOLE CAST of insects in one scene, varied species + varied positions, all rendered in storybook-cute charming register.`,
+    touchpoints: [
+      'BUMBLEBEE-BUTTERFLY CAST — two fuzzy yellow-and-black bumblebees landed on different blooms, a monarch butterfly hovering above with wings spread, a small pink-purple butterfly fluttering at the edge of frame, all rendered cute storybook-charming',
+      'BUTTERFLY-DRAGONFLY TRIO — a monarch butterfly landed on one flower drinking nectar, a blue dragonfly hovering above the foreground blooms, a pale-pink butterfly fluttering in the bokeh space, plus a small ladybug on a petal, all cute storybook-charming',
+      'BUMBLEBEE QUARTET ENCHANTED — four fuzzy bumblebees positioned at different flowers (two landed drinking nectar, two hovering in flight), plus a delicate cabbage-white butterfly drifting through, all rendered cute storybook-charming with fuzzy soft bodies',
+      'MONARCH-AND-DRAGONFLY DUET — a large monarch butterfly with wings half-spread landed on a flower, a vivid blue dragonfly perched on a petal nearby, a small fuzzy bumblebee on another bloom, plus a tiny ladybug on a leaf, all cute storybook-charming',
+      'PINK-BUTTERFLY GARDEN CAST — three delicate pink-and-purple butterflies at different positions (one landed, two hovering), plus a fuzzy bumblebee on the foreground bloom and a small ladybug on a leaf, all rendered cute storybook-charming',
+      'LUNA-MOTH ENCHANTED CAST — a large pale-green luna moth with wings spread perched on a flower, a fuzzy bumblebee landed on another bloom, a small yellow-and-black butterfly fluttering above, plus a tiny dragonfly hovering, all storybook-charming',
+      'WHITE-AND-PINK BUTTERFLY CAST — three white cabbage-butterflies fluttering at different heights (one landed, two hovering), a fuzzy bumblebee on the foreground bloom, plus a delicate pink butterfly drifting through, all cute storybook-charming',
+      'DRAGONFLY-AND-LADYBUG MIX — a vivid blue dragonfly hovering above the flowers, a green dragonfly perched on a petal, two ladybugs on different leaves, plus a small bumblebee landed on a bloom, all rendered cute storybook-charming',
+      'BUTTERFLY SWARM CAST — five small colorful butterflies (pink, yellow, blue, orange, white) fluttering at different heights throughout the scene, plus one fuzzy bumblebee on the foreground bloom, all rendered cute storybook-charming',
+      'BEE-AND-BUTTERFLY ABUNDANCE — three fuzzy bumblebees at different flowers, two pink-and-purple butterflies hovering above, plus one small ladybug on a leaf, all rendered cute storybook-charming with friendly proportions',
+      'SWALLOWTAIL-AND-MOTH CAST — a yellow-and-black swallowtail butterfly with wings spread landed on a flower, a rosy maple moth on another bloom, two fuzzy bumblebees drifting between, plus a small dragonfly hovering, all storybook-charming',
+      'EMERALD-DRAGONFLY GARDEN — two vivid emerald dragonflies hovering above the flowers, a fuzzy bumblebee landed on the foreground bloom, plus a small pink butterfly fluttering through and a ladybug on a petal, all rendered cute storybook-charming',
+      'PAINTED-LADY GARDEN CAST — a large painted-lady butterfly with wings spread drinking nectar from a flower, two fuzzy bumblebees on different blooms, a small dragonfly hovering above, plus a tiny ladybug on a leaf, all cute storybook-charming',
+      'FIREFLY-DUSK CAST — three fireflies with softly glowing abdomens hovering through the dusk garden, a fuzzy bumblebee on a foreground bloom, plus a delicate pale-pink butterfly drifting, all rendered cute storybook-charming',
+      'HUMMINGBIRD-HAWKMOTH CAST — a fuzzy hummingbird-hawkmoth hovering at a flower with rapid wing-blur, two fuzzy bumblebees on different blooms, plus a small pink butterfly fluttering above and a ladybug on a leaf, all cute storybook-charming',
+      'BUMBLEBEE-PAIR-AND-FRIENDS — a pair of fuzzy bumblebees landed side-by-side on the same hero bloom, a monarch butterfly hovering above with wings spread, a small blue dragonfly perched on a leaf, plus a tiny ladybug, all storybook-charming',
+      'BLUE-MORPHO ENCHANTED CAST — a vivid blue morpho butterfly with iridescent wings spread hovering above the flowers, two fuzzy bumblebees on different blooms, plus a small white cabbage-butterfly fluttering and a tiny dragonfly, all storybook-charming',
+      'CARPENTER-BEE GARDEN CAST — two large fuzzy carpenter bees landed on different blooms, a delicate pink butterfly hovering above, a small dragonfly perched on a leaf, plus a tiny ladybug on a petal, all rendered cute storybook-charming',
+      'FRITILLARY-AND-BUMBLEBEE CAST — a fritillary butterfly with checkerboard wings landed on a flower, two fuzzy bumblebees on different blooms, a small pink-purple butterfly hovering above, plus a tiny ladybug, all cute storybook-charming',
+      'LADYBUG-AND-BEE CAST — three ladybugs on different leaves and petals, two fuzzy bumblebees on different blooms, plus a small pale-pink butterfly fluttering above and a tiny dragonfly hovering, all rendered cute storybook-charming',
+      'DAMSELFLY-AND-BUTTERFLY CAST — two slim cobalt damselflies perched on different petals, a monarch butterfly hovering above with wings spread, plus a fuzzy bumblebee on the foreground bloom and a small ladybug on a leaf, all storybook-charming',
+      'ROSY-MAPLE-MOTH GARDEN — a small pink-and-yellow rosy maple moth landed on a flower, two fuzzy bumblebees on different blooms, a delicate pink butterfly hovering above, plus a tiny ladybug on a leaf, all cute storybook-charming',
+      'WHITE-CABBAGE-BUTTERFLY CAST — four white cabbage-butterflies fluttering at different heights throughout the scene, plus one fuzzy bumblebee landed on the foreground bloom and a small ladybug, all rendered cute storybook-charming',
+      'MULTI-COLOR BUTTERFLY ABUNDANCE — six small colorful butterflies (varied colors — pink, blue, yellow, orange, white, purple) fluttering at different heights throughout the scene, plus one fuzzy bumblebee on a foreground bloom, all storybook-charming',
+      'LACEWING-AND-DRAGONFLY CAST — a delicate pale-green lacewing perched on a flower-petal, a vivid blue dragonfly hovering above, two fuzzy bumblebees on different blooms, plus a small pink butterfly fluttering through, all cute storybook-charming',
+    ],
+    instructions: `Each entry is ONE specific POLLINATOR CAST of 3-6+ cute pleasant insects, 30-55 words. Format: "CAST NAME CAPS — explicit description of 3-6+ different insect species + their positions throughout the scene + all rendered cute storybook-charming". MULTI-CAST MANDATORY — at least 3 different specific insects, varied species, varied positions (landed / hovering / flying / perched). CUTE STORYBOOK-CHARMING RENDERING — fuzzy soft bodies, friendly proportions, peaceful poses, NOT realistic-creepy. ABSOLUTE BAN on spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / non-ladybug beetles / any creepy-crawly. NO humans / hands / body parts. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_friends_magical_particles: {
+    format: 'simple',
+    theme: `40%-GATED MAGICAL PARTICLES for the BloomBot flower-friends path. Each entry describes ONE specific atmospheric magic-pretty particle effect drifting in the scene — pollen-dust, fairy-light bokeh-orbs, sparkle dust, dewdrops on petals, falling petals, iridescent shimmer, mist haze. Each entry 20-40 words.
+
+⚠️ MANDATORY — every particle effect AMPLIFIES the cozy magical-pretty aesthetic. Does NOT compete with the insect or flower. Subtle atmospheric magic.
+
+🚫 STRICT BANS:
+  • NO sci-fi glow / electric / neon / aurora
+  • NO scary / dark / ominous particles
+  • NO humans / hands / body parts
+  • NO additional creatures / animals (focal pollinator handles that)
+  • NO ugly / creepy particles (no bugs, no debris, no dirt)
+
+✓ PARTICLE CATEGORIES:
+  A. **POLLEN-DUST** — drifting pollen-motes catching ambient light, golden-yellow drift
+  B. **FAIRY-LIGHT BOKEH-ORBS** — soft warm bokeh-orbs floating in the air (the magical kind from IG nature feeds)
+  C. **SPARKLE DUST** — tiny iridescent sparkle particles drifting (subtle, not glitter-heavy)
+  D. **DEWDROPS ON PETALS** — fresh dew droplets clinging to petals catching ambient light as prismatic flares
+  E. **FALLING PETALS** — soft petals drifting horizontally through the scene (pink / white / cherry-blossom)
+  F. **IRIDESCENT SHIMMER** — soft iridescent shimmer in the air (rainbow-pearlescent gentle wash)
+  G. **MIST HAZE** — soft warm haze softening the bokeh background, atmospheric depth
+  H. **BUBBLE DRIFT** — soft translucent bubbles drifting (rare, magical-pretty register)
+  I. **FLOATING LEAVES** — small soft leaves drifting horizontally through the scene
+  J. **WATER-SPRAY MIST** — soft fine water-mist droplets catching ambient light
+  K. **SUN-RAY STREAMERS** — soft warm sun-ray streamers slanting through the scene, very gentle`,
+    touchpoints: [
+      'GOLDEN POLLEN-DUST DRIFT — soft golden-yellow pollen-motes drifting through the air around the hero flower and pollinator, catching the warm ambient light, atmospheric magical-pretty texture',
+      'WARM BOKEH-ORBS FLOATING — soft warm-amber and pink fairy-light bokeh-orbs floating in the air behind the hero flower, soft out-of-focus magical-pretty atmospheric',
+      'SPARKLE DUST SHIMMER — tiny iridescent pearl-pink sparkle particles drifting through the air around the scene, subtle magical shimmer catching the warm light',
+      'DEWDROPS ON PETALS WITH FLARES — fresh dew droplets clinging to the hero flower petals catching the warm ambient light as tiny prismatic flares, naturalistic wet shimmer',
+      'PINK CHERRY-BLOSSOM PETAL-FALL — soft pink cherry-blossom petals drifting horizontally through the scene around the hero flower and pollinator, gentle motion-blur',
+      'IRIDESCENT RAINBOW SHIMMER — soft iridescent rainbow-pearlescent shimmer in the air around the scene, gentle wash of magic-pretty color',
+      'WARM ATMOSPHERIC HAZE — soft warm-amber atmospheric haze softening the bokeh background, deep dreamy depth, magical-pretty ambient',
+      'TRANSLUCENT BUBBLE DRIFT — soft translucent bubbles drifting through the scene catching the warm ambient light as rainbow prismatic flares, charming magical-pretty',
+      'SOFT FALLING LEAVES — small soft green and golden leaves drifting horizontally through the scene around the hero flower and pollinator, gentle autumn touch',
+      'WATER-SPRAY MIST SHIMMER — soft fine water-mist droplets catching the warm ambient light around the scene, gentle atmospheric magic-pretty shimmer',
+      'SOFT SUN-RAY STREAMERS — soft warm golden sun-ray streamers slanting gently through the scene from the upper-frame edge, magical-pretty atmospheric',
+      'WHITE-ROSE PETAL-FALL — soft white rose petals drifting horizontally through the scene, gentle motion-blur, romantic magical-pretty',
+      'BUMBLEBEE-DUST POLLEN — golden pollen-dust drifting around the hero pollinator, catching warm ambient light, atmospheric pollinator-magic register',
+      'LAVENDER-POLLEN SPARKLE — pale-lavender and pink sparkle pollen drifting around the hero flower, subtle magical-pretty shimmer',
+      'DEW-LACED BOUQUET — fresh dew droplets clinging to every visible petal and leaf, catching the warm ambient light as tiny prismatic shimmer, naturalistic wet-glisten',
+      'SOFT WARM-PINK BOKEH-ORBS — large soft warm-pink fairy-light bokeh-orbs floating in the deep bokeh background, magical-pretty atmospheric',
+      'GENTLE GOLDEN-DUST CASCADE — gentle golden-dust cascade drifting downward through the scene around the hero flower, warm magical-pretty atmospheric',
+      'PINK-AND-WHITE PETAL DRIFT — soft pink-and-white petals drifting through the air around the hero flower and pollinator, gentle motion, romantic magical-pretty',
+      'PEARL-SHEEN MIST — soft pearl-iridescent mist drifting through the deep bokeh background, magical-pretty atmospheric depth',
+      'GOLDEN-AMBER POLLEN — golden-amber pollen-dust drifting around the hero flower and pollinator, catching warm light, atmospheric pollinator-magic',
+      'SOFT BLUE-AND-GOLD BOKEH — soft cobalt-blue and golden bokeh-orbs floating in the bokeh background, magical-pretty atmospheric',
+      'FRESH MORNING DEW — fresh morning dewdrops clinging to every petal, leaf, and the pollinator wings, catching ambient light as prismatic shimmer, naturalistic wet-magic',
+      'SOFT CORAL PETAL-FALL — soft coral petals drifting horizontally through the scene, gentle motion-blur, romantic magical-pretty',
+      'IRIDESCENT WING-DUST — fine iridescent wing-dust drifting around the hero pollinator (especially butterfly wings), catching warm light as gentle shimmer',
+      'GENTLE FAIRY-LIGHT WASH — gentle warm fairy-light bokeh-orb wash filling the deep bokeh background, magical-pretty atmospheric depth',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL PARTICLE effect, 20-40 words. Format: "PARTICLE NAME CAPS — primary effect + position in scene + how it catches light / interacts with the ambient". Vary across the 11 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO additional creatures. NO ugly particles. Subtle magical-pretty atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   bloombot_sunset_flowers_hero_flower: {
     format: 'simple',

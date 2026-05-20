@@ -58,6 +58,10 @@ module.exports = {
   BLOOMBOT_FLOWER_TUNNELS_TUNNEL_SETTING: loadIfExists('bloombot_flower_tunnels_tunnel_setting'),
   BLOOMBOT_FLOWER_TUNNELS_FLOWER_LANTERNS: loadIfExists('bloombot_flower_tunnels_flower_lanterns'),
   BLOOMBOT_FLOWER_TUNNELS_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_flower_tunnels_atmospheric_phenomenon'),
+  // ─── flower-friends path (2026-05-19) — close-up flower + pleasant pollinator pairing ───
+  BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER: loadIfExists('bloombot_flower_friends_flower_focal_cluster'),
+  BLOOMBOT_FLOWER_FRIENDS_HERO_POLLINATOR: loadIfExists('bloombot_flower_friends_hero_pollinator'),
+  BLOOMBOT_FLOWER_FRIENDS_MAGICAL_PARTICLES: loadIfExists('bloombot_flower_friends_magical_particles'),
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   BLOOMBOT_SUNSET_FLOWERS_HERO_FLOWER: loadIfExists('bloombot_sunset_flowers_hero_flower'),
   BLOOMBOT_SUNSET_FLOWERS_LANDSCAPE_BACKDROP: loadIfExists('bloombot_sunset_flowers_landscape_backdrop'),
