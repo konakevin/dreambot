@@ -131,6 +131,15 @@ module.exports = {
   RAINY_DAY_COZY_SURPRISE: load('rainy_day_cozy_surprise'),
   RAINY_DAY_COZY_PHENOMENA: load('rainy_day_cozy_phenomena'),
 
+  // Sleepy-naptime path-bespoke axes (2026-05-19 full-bespoke migration)
+  // SOLO creature dozing in an impossibly cozy nap-spot. Mid-close framing.
+  SLEEPY_NAPTIME_SPOTS: load('sleepy_naptime_spots'),
+  SLEEPY_NAPTIME_POSES: load('sleepy_naptime_poses'),
+  SLEEPY_NAPTIME_DETAILS: load('sleepy_naptime_details'),
+  SLEEPY_NAPTIME_TIME_OF_DAY: load('sleepy_naptime_time_of_day'),
+  SLEEPY_NAPTIME_SURPRISE: load('sleepy_naptime_surprise'),
+  SLEEPY_NAPTIME_PHENOMENA: load('sleepy_naptime_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each

@@ -1462,6 +1462,21 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+
+  CHIBIBOT_SLEEPY_NAPTIME: {
+    description:
+      'PATH-BESPOKE — ChibiBot sleepy-naptime path (2026-05-19 full-bespoke migration). SOLO creature dozing in an impossibly cozy nap-spot. Peak-cute sleeping moment. Mid-close framing with the creature as the focal hero. NOT a group path. The viewer melts and whispers "shhh don\'t wake it". 10 axes: 3 universal + 7 path-bespoke (creature + sleep_pose + nap_spot + detail pickN:3 + time_of_day + surprise_element + phenomenon).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'sleep_pose', 'nap_spot', 'detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
 };
 
 module.exports = { ARCHETYPES };

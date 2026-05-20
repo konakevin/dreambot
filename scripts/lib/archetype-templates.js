@@ -6493,64 +6493,70 @@ A specific atmospheric detail adding magic-pretty texture (NOT competing with th
 `
       : '';
 
-    return `You are a fantasy-realism concept-art painter writing CLOSE-UP FLOWER + COZY POLLINATOR scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+    return `You are a fantasy-realism concept-art painter writing WHIMSICAL ENCHANTED FLOWER + CUTE POLLINATOR-CAST scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
 
-━━━ THE CORE AESTHETIC — A BEAUTIFUL INSECT ON A BEAUTIFUL FLOWER ━━━
+━━━ THE CORE AESTHETIC — ENCHANTED MULTI-FLOWER GARDEN WITH A CAST OF CUTE INSECTS ━━━
 
-The unifying mandate: a CLOSE-UP scene where a pleasant pollinator (butterfly / bumblebee / dragonfly / ladybug / firefly / moth / etc.) is interacting with a HERO FLOWER cluster — landing on a petal, hovering at the bloom, drinking nectar, perched on a leaf. The INSECT is CO-HERO with the flower. Around them: a soft bouquet-cluster of supporting blooms in the foreground, dreamy bokeh background, sometimes magical particles floating in the air.
+The unifying mandate: a WHIMSICAL ENCHANTED garden vignette with MULTIPLE pretty hero flowers + MULTIPLE cute pleasant pollinators (3-6+ insects across the scene). PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro close-up of a single bloom. Multiple flower species blooming together; multiple butterflies / bumblebees / dragonflies / ladybugs / fireflies / moths flying / landed / hovering throughout. Happy enchanted fairytale storybook energy.
 
-THE LOOK — IG-cozy-flower-friend / Pinterest-magical-pollinator / Beatrix-Potter-meets-photoreal:
-- ONE specific pleasant insect at the center of the scene, interacting with the hero flower (clearly visible, recognizable species, beautifully rendered)
-- ONE HERO FLOWER as the focal anchor (large, in-focus, gorgeously detailed)
-- A SUPPORTING BOUQUET-CLUSTER of 3-5+ sister blooms around the hero (slightly softer focus, supporting the hero, giving the scene fullness)
-- DREAMY BOKEH BACKGROUND — soft out-of-focus floral mass behind, shallow DOF, painterly blur
-- SOFT MAGICAL LIGHT — pretty warm pastel light bathing the scene, sometimes with magical-pretty particles drifting
+THE LOOK — Studio Ghibli enchanted garden / Disney secret-garden discovery / Beatrix Potter watercolor / IG dreamy-pollinator-cast / Pinterest enchanted-flower-meadow:
+- MULTIPLE HERO FLOWERS (3-5+ different species blooming together as co-hero) — varied colors, varied shapes, fills the scene with floral abundance
+- A CAST OF 3-6+ CUTE PLEASANT POLLINATORS — flying / landed / hovering THROUGHOUT the scene at different positions, different species, multiple sizes
+- CUTE-RENDERED INSECTS — friendly, charming, slightly storybook-charming-cute (NOT scary, NOT menacing, NOT realistic-creepy-detailed) — bigger soft eyes, fuzzier rounder bodies, friendly poses
+- PULLED-BACK GARDEN VIGNETTE — a wider intimate-garden view (NOT macro single-flower close-up — that's the closeup path)
+- WHIMSICAL ENCHANTED AMBIENT — dreamy soft pastel light, magical-pretty atmosphere, optional particles, fairytale storybook feel
+- DREAMY BOKEH BACKGROUND — more blooms / soft sky / pastel wash in soft out-of-focus painterly blur
 
 ━━━ HARD MANDATES (every render) ━━━
 
-1. **ONE HERO INSECT INTERACTING WITH THE HERO FLOWER** — explicitly name the insect species and describe how it's interacting (landing on the bloom-center / hovering at a petal / drinking nectar / perched on a leaf / wings spread on the bloom). The insect is clearly visible, beautifully rendered, naturalistically posed. Make the insect species + interaction the spine of every render.
+1. **MULTIPLE HERO FLOWERS** — 3-5+ different flower species blooming together as co-hero. Mix shapes (dahlias / cosmos / peonies / daisies / tulips / lupines / etc.) and colors for whimsical floral abundance. NEVER a single hero — the scene is FULL OF FLOWERS.
 
-2. **PLEASANT INSECTS ONLY** — bumblebees / honeybees / carpenter-bees / monarch butterflies / swallowtail butterflies / blue morpho butterflies / painted lady butterflies / pink-purple butterflies / fritillary butterflies / luna moths / hummingbird hawkmoths / dragonflies (blue / green / red) / damselflies / ladybugs / fireflies / lacewings. NEVER spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / any creepy-crawly. Pleasant cottagecore insects ONLY.
+2. **A CAST OF 3-6+ CUTE POLLINATORS** — describe MULTIPLE pleasant insects at different positions and actions: one bumblebee landed on a dahlia, two butterflies fluttering above, a dragonfly hovering at the side, a ladybug perched on a leaf. The whole scene is ALIVE with friendly pollinators.
 
-3. **HERO FLOWER + BOUQUET-CLUSTER SUPPORTING** — describe the hero flower species (dahlia / zinnia / cosmos / peony / hibiscus / etc.) + a supporting bouquet-cluster of 3-5+ sister blooms around it (similar palette or contrasting palette, varied species creates richness). The hero is the anchor; the cluster fills the foreground beautifully.
+3. **CUTE-RENDERED, NOT MENACING** — every insect rendered in a charming storybook-cute way. Soft fuzzy bodies, friendly proportions, slightly-stylized cute eyes, friendly poses (drinking nectar peacefully, gently hovering, sleepy-cozy landed). NEVER detailed-realistic-creepy / menacing / scary / oversized / aggressive. Think Disney secret-garden cute, not nature-documentary realistic.
 
-4. **CLOSE-UP COMPOSITION — NOT MACRO** — the framing is intimate close-up where the hero flower fills the lower 50-60% of the frame and the insect is at upper-middle, clearly visible. NOT extreme macro (that's the closeup path) — close enough to see the insect's wing-patterns and the flower's petal-veins, but the SCENE is the subject not a single petal.
+4. **PLEASANT INSECTS ONLY** — bumblebees / honeybees / carpenter-bees / monarch butterflies / swallowtail butterflies / blue morpho butterflies / painted lady butterflies / pink-purple butterflies / fritillary butterflies / luna moths / hummingbird hawkmoths / dragonflies (blue / green / red) / damselflies / ladybugs / fireflies / lacewings. NEVER spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / any creepy-crawly.
 
-5. **DREAMY BOKEH BACKGROUND** — the background is soft out-of-focus floral mass (more blooms / leaves / sky / soft-color wash) in shallow DOF. Painterly soft blur. The HERO FLOWER + INSECT are sharp; everything behind is dreamy.
+5. **PULLED-BACK GARDEN VIGNETTE — NOT MACRO** — the framing is a wider intimate-garden view where you can see multiple flower clusters and multiple insects all in the same scene. NOT extreme macro (that's closeup's territory) — pulled back enough to see a full whimsical multi-flower multi-insect tableau.
 
-6. **SOFT MAGICAL LIGHT** — warm soft golden-hour or magical-pretty pastel ambient light bathing the scene. NOT harsh sunset / NOT dramatic / NOT moody-dark. Cottagecore IG-magical-hour soft warm pretty.
+6. **DREAMY BOKEH BACKGROUND** — soft out-of-focus floral mass / sky / pastel wash behind, painterly soft blur.
+
+7. **ENCHANTED HAPPY MOOD** — fairytale storybook joy. Soft pastel magical light bathing everything. Happy, peaceful, welcoming, magical-pretty. NEVER moody / dark / dramatic / harsh / scary.
 
 🚫 ABSOLUTE BANS:
-  • 🚫 NO ugly / creepy insects — NO spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / anything creepy-crawly
+  • 🚫 NO single-flower-with-single-insect macro — MULTIPLE flowers + MULTIPLE insects mandatory
+  • 🚫 NO extreme macro / single-petal framing — pulled-back garden vignette
+  • 🚫 NO ugly / creepy / menacing / scary / aggressive / realistic-creepy-detailed insects — cute storybook-charming only
+  • 🚫 NO ugly insect species — NO spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / anything creepy-crawly
   • 🚫 NO interior / vase / cut-flower framing — flowers growing in the wild
-  • 🚫 NO extreme macro INTO the bloom-wall (that's the closeup path)
   • 🚫 NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
   • 🚫 NO ruins / abandoned structures / urban architecture
   • 🚫 NO archways / tunnels / passages / engulfment
   • 🚫 NO epic-landscape wide / dramatic-sunset (sunset-flowers' territory)
-  • 🚫 NO harsh / moody / dark / dramatic lighting — soft magical pretty only
+  • 🚫 NO harsh / moody / dark / dramatic lighting — soft enchanted magical-pretty only
   • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS anywhere in frame 🚫🚫🚫
 
-━━━ THE FLOWER FOCAL CLUSTER (hero bloom + supporting cluster) ━━━
+━━━ THE MULTI-FLOWER FOCAL SCENE (3-5+ hero flowers + supporting cluster) ━━━
 ${flower_focal_cluster}
 
-━━━ THE HERO POLLINATOR (specific pleasant insect + interaction) ━━━
+━━━ THE POLLINATOR CAST (3-6+ cute pleasant insects at different positions) ━━━
 ${hero_pollinator}
 
-The insect is at the visual center of the scene, clearly interacting with the hero flower. Render its species accurately — wing-patterns, body, posing.
-${particlesSection}━━━ COMPOSITION CRAFT — CLOSE-UP FLOWER + INSECT PAIRING ━━━
+The insects are CUTE-rendered (charming storybook-friendly, NOT realistic-creepy), positioned throughout the scene (landed / hovering / flying / perched), each interacting with flowers or air around them.
+${particlesSection}━━━ COMPOSITION CRAFT — WHIMSICAL ENCHANTED GARDEN VIGNETTE ━━━
 
-  • FOREGROUND: hero flower-cluster fills lower 50-60% of frame — hero bloom large and in-focus, supporting bouquet around it
-  • MIDDLE: the insect is at upper-middle of frame, clearly visible, interacting with the hero flower
-  • BACKGROUND: dreamy bokeh — soft out-of-focus floral mass / leaves / sky-wash, shallow DOF, painterly blur
-  • DEPTH: clear sharp-foreground / sharp-insect / soft-dreamy-background separation
-  • COLOR: rich saturated foreground (any flower colors allowed), dreamy soft bokeh background
-  • SCALE: close enough to see the insect's wing-patterns + the flower's petal-veins, but NOT extreme macro
+  • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
+  • FOREGROUND: 3-5+ different flower species clustered together as co-hero, filling the lower 50-65% of frame
+  • MIDDLE/AROUND: 3-6+ cute pollinators positioned at different spots in the scene (some on flowers, some hovering, some flying in the bokeh space)
+  • BACKGROUND: dreamy bokeh of more blooms / soft sky / pastel wash in painterly blur
+  • DEPTH: foreground-sharp flowers + sharp insects in middle / soft dreamy bokeh background
+  • COLOR: rich saturated multi-color foreground (mix flower colors freely), dreamy soft pastel bokeh
+  • MOOD: enchanted happy fairytale storybook — whimsical, peaceful, welcoming, magical-pretty
 
 ━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting as SOFT MAGICAL PRETTY light bathing the scene — warm pastel ambient, gentle warm-pink or warm-amber or soft-cream wash. The light is gentle and pretty, NOT harsh / dramatic / moody / dark. Think IG magical-hour cottagecore golden-hour soft warm.
+Reinterpret the rolled lighting as SOFT ENCHANTED MAGICAL light bathing the scene — warm pastel ambient, gentle warm-pink or warm-amber or soft-cream or pale-lavender wash. The light is whimsical and fairytale-pretty, NOT harsh / dramatic / moody / dark. Think Studio Ghibli enchanted garden + Disney secret-garden discovery + IG dreamy-magical-hour.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -6558,11 +6564,13 @@ ${sharedDNA.palette}
 ━━━ FLOWER SPECIES — STRICT ━━━
 ${sharedDNA.roster}
 
-Pick 2-4 species from the roster — ONE hero + 1-3 supporting in the bouquet cluster. The hero flower is large and in-focus; supporting flowers fill the foreground around it.
+Pick 3-5 species from the roster as multi-hero blooming together. Mix shapes (large bloom + medium bloom + delicate bloom) and colors freely for whimsical floral abundance.
 
 ━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO ugly / creepy / scary insects — pleasant pollinators ONLY
-- 🚫 NO extreme macro INTO the bloom-wall
+- 🚫 NO single-flower-with-single-insect — MULTI mandatory
+- 🚫 NO macro / extreme closeup
+- 🚫 NO ugly / creepy / menacing / realistic-creepy insects — cute storybook-charming only
+- 🚫 NO ugly insect species (no spiders / wasps / hornets / flies / mosquitoes / etc.)
 - 🚫 NO interior / vase / cut-flower
 - 🚫 NO surreal / impossible / floating
 - 🚫 NO urban / ruins / archways
@@ -6575,9 +6583,9 @@ Pick 2-4 species from the roster — ONE hero + 1-3 supporting in the bouquet cl
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[CLOSE-UP composition with HERO FLOWER large and in-focus filling lower 50-60% of frame + supporting bouquet-cluster around it], [the specific hero pollinator + how it's interacting with the hero flower — wings, body, pose explicit], [supporting bouquet-cluster of 3-5+ sister blooms in foreground around the hero], [dreamy bokeh background of soft out-of-focus floral mass]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft magical pretty warm pastel ambient light bathing the scene], [shallow DOF, painterly soft-blur, IG-magical-hour cottagecore aesthetic]
+[WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with 3-5+ multi-species flowers blooming together filling lower 50-65% of frame], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting dreamy bokeh background of more soft blooms / pastel sky-wash]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical pastel ambient light bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, painterly soft-blur, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG dreamy-magical-hour]
 
-CRITICAL — the COZY INSECT on the HERO FLOWER is the WHOLE POINT. Beautiful pollinator + beautiful bloom in a soft magical close-up scene. Pleasant insects ONLY. ABSOLUTE HARD BAN ON HUMANS.
+CRITICAL — MULTIPLE pretty flowers + MULTIPLE cute storybook insects in a PULLED-BACK enchanted-garden VIGNETTE. Happy welcoming whimsical mood. CUTE not menacing insects. ABSOLUTE HARD BAN ON HUMANS.
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
@@ -10332,6 +10340,127 @@ THREE-QUARTER or OVER-SHOULDER angle. Friends in foreground/midground INSIDE the
 Open with: "[Group structure like 'Three chibi friends' or 'A pair and a third'] [cozy-huddle verb-phrase IN the shelter], inside [shelter setting], rain visibly falling around them..."
 
 Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the friends in the shelter.`;
+  },
+
+
+  CHIBIBOT_SLEEPY_NAPTIME: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      sleep_pose,
+      nap_spot,
+      detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(detail) ? detail : [detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (gentle event drifting around the sleeper) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing SLEEPY-NAPTIME scenes for ChibiBot — ONE adorable chibi creature dozing in an impossibly cozy nap-spot. Peak-cute peaceful sleeping moment. The viewer's reaction: "shhh don't wake it." Pixar / Studio Ghibli / Beatrix-Potter / sleeping-puppy-stockphoto-cute aesthetic. Output wraps with style prefix + suffix.
+
+━━━ MANDATORY: SOLO SLEEPING CREATURE — ONE CREATURE ONLY ━━━
+
+ONE creature only. This is a SOLO sleepy path. The creature is the focal hero — mid-close framing showing the cute sleeping pose. NOT a group. NOT a pair. NEVER multiple creatures in the same nap-spot (though tiny background creature surprise-elements are fine, in their own separate nap-spot).
+
+━━━ MANDATORY: THE CREATURE IS ASLEEP / DOZING ━━━
+
+The creature is ACTIVELY ASLEEP — eyes closed or half-lidded, body relaxed, in the sleeping pose specified. NOT awake. NOT looking at camera. NOT alert. The pose is captured mid-sleep — a moment of peaceful drowsing. Dream-detail optional (Zzz, dream-bubbles, paw-twitches).
+
+━━━ MANDATORY: NEVER HEAD-ON PORTRAIT — INTIMATE SLEEPING ANGLES ━━━
+
+Camera angle: SIDE-PROFILE / OVER-THE-SHOULDER PEEK / TOP-DOWN LOOKING-DOWN-AT-SLEEPER / THREE-QUARTER from above. NEVER head-on portrait. The viewer is GENTLY OBSERVING a sleeping creature, not being stared at.
+
+━━━ THE SLEEPING CREATURE ━━━
+${creature}
+
+━━━ THE SLEEPING POSE (captured mid-nap) ━━━
+${sleep_pose}
+
+━━━ THE IMPOSSIBLY COZY NAP-SPOT ━━━
+${nap_spot}
+
+━━━ THREE COZY-PERSONAL-ACCENTS — the sleeper's favorite things arranged around them (ALL THREE MUST BE VISIBLE in the frame) ━━━
+
+These are the sleeper's personal touches — favorite stuffed animal, colorful patterned blanket, candle in a jar, open storybook, sleeping pet companion, slippers tucked nearby. ALL THREE must be RENDERED VISIBLY in the frame, not just hinted. They make the scene feel FULL and personal.
+
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Single frame of peak-cute sleeping. Pixar / Beatrix-Potter / Studio-Ghibli sleeping-creature framings. The sleeping pose + cozy nap-spot are the EMOTIONAL CENTER. Light: warm drowsy honey-amber light pooling on the sleeper. Color: saturated cozy palette (warm amber + soft pink + sage green + cream). Depth: foreground sleep-details + midground sleeper + background soft-blur dreamy bokeh.
+
+━━━ STORY BEAT — the SLEEPING is the story ━━━
+
+Sleep IS the story moment. The pose is mid-dream. Implied: just fell asleep, dreaming of something cute, peaceful breathing rhythm visible in the body's slow rise-fall. The viewer can almost hear the soft snore.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-DROWSY EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- WARM drowsy amber light pooling on the sleeper
+- Soft dust-motes drifting through warm light beams
+- Dream-bubble / Zzz / dream-particle (one floating above the sleeper if drowsing)
+- Soft fluff visible (fur, feathers, fluffy texture)
+- Cozy blanket-detail (pull, drape, knit-detail)
+- Soft pillow indentation where the sleeper's head rests
+- Tiny breath-visible-as-soft-wisp if cold
+- Soft bokeh background (heavy depth-of-field)
+- Tiny glowing accents (firefly, lantern-glow, candle)
+- Warm color tinting (golden-hour or candle-amber pooling everywhere)
+- Subtle reflection in a polished surface
+- One signature dream-detail (drool-spot, paw-twitch, ear-flick, smile-in-sleep)
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Maximum cute = peaceful sleeping animal. The viewer melts. NEVER scary / sad / nightmare / shivering.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, warm drowsy god-rays, painterly bokeh, jewel-bright cozy saturation. Chibi proportions. Closed/half-lidded eyes (NEVER big bright open eyes — this is SLEEPING).
+
+━━━ NO ADULT HUMANS (children OK from unified pool) ━━━
+
+Children render asleep at chibi proportions, also in the cozy nap-spot.
+
+━━━ TIME OF DAY (drowsy / golden / candlelit) ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (gentle detail that doesn't wake the sleeper) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (mid-close on sleeping creature in cozy nap-spot) ━━━
+
+MID-CLOSE framing with the SLEEPING CREATURE filling 40-60% of the frame. The cozy nap-spot wraps around them (vessel/bed/pillow visible). Camera angle: side-profile / over-the-shoulder peek / top-down / three-quarter from above — NEVER head-on. Warm drowsy light pools on the sleeper. Soft-blur background. Three nap-details visible (blanket / pillow / dream-bubble / nightlight). Surprise element tucked elsewhere.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [sleep-pose verb-phrase], curled inside/on [nap-spot], [drowsy lighting]..."
+
+Then unfold the rest. Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the sleeping creature.`;
   },
 
 
