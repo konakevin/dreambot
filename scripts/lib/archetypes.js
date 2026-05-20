@@ -1535,6 +1535,51 @@ const ARCHETYPES = {
   },
 
 
+  CHIBIBOT_OUTDOOR_ADVENTURE: {
+    description:
+      'PATH-BESPOKE — ChibiBot outdoor-adventure (2026-05-20 full-bespoke). CREATURE IN THE WILD/OPEN WORLD — pure wilderness scene with NO village/architecture. Forest / mountain / cave / canyon / river / cliff / lake / hill / desert / coastline / canyon / glacier / jungle-floor / etc. Creature mid-adventure-pose (climbing / wading / hiking / mid-leap / discovering / cresting-ridge). Studio Ghibli / Spirited-Away wilderness / Pokemon-overworld / Pixar-adventure painterly storybook. 10 axes: 3 universal + 7 path-bespoke (creature + adventure_activity + wilderness_setting + wilderness_detail pickN:3 + adventure_prop + time_of_day + surprise_element).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'adventure_activity', 'wilderness_setting', 'wilderness_detail', 'adventure_prop', 'time_of_day', 'surprise_element'],
+    },
+    pickN: { wilderness_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_CREATURE_PORTRAIT: {
+    description:
+      'PATH-BESPOKE — ChibiBot creature-portrait (2026-05-20 full-bespoke). CREATURE-AS-HERO solo tight portrait. OPPOSITE of village paths: creature FILLS 60-80% of the frame, dreamy soft-bokeh background ~20-30%, no village/setting competing. Hyper-cute marshmallow proportions, oversized dewy eyes, blush cheeks. 10 axes: 3 universal + 7 path-bespoke (creature + pose + expression + portrait_feature pickN:2 + accessory + background_mood + time_of_day).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'pose', 'expression', 'portrait_feature', 'accessory', 'background_mood', 'time_of_day'],
+    },
+    pickN: { portrait_feature: 2 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_CUTE_FOOD_FULLBESPOKE: {
+    description:
+      'PATH-BESPOKE — ChibiBot cute-food (2026-05-20 full-bespoke). FOOD-AS-CAST kawaii smiling-face food/drink centerpiece — Pop-Mart bex.ai aesthetic. NO creatures, NO chibis. Smiling food IS the cast. Glossy pearlescent designer-vinyl rendering. chibibot_food medium-locked. 10 axes: 3 universal + 7 path-bespoke (food_hero + food_pose + food_setting + scattered_accent pickN:3 + kawaii_atmosphere + time_of_day + camera_angle).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['food_hero', 'food_pose', 'food_setting', 'scattered_accent', 'kawaii_atmosphere', 'time_of_day', 'camera_angle'],
+    },
+    pickN: { scattered_accent: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
   CHIBIBOT_AQUATIC_VILLAGE: {
     description:
       'PATH-BESPOKE — ChibiBot aquatic-village path (2026-05-19 full-bespoke). SETTING-AS-HERO underwater/coastal village. Coral-tower villages, kelp-forest cottages, pearl-shell hamlets, submarine-ports, tidepool villages, sea-cave dwellings, floating lily-pad clusters, kraken-shell cottages, bioluminescent grottos, starfish-bridge towns, shipwreck-coral hamlets. Architecture + ocean atmosphere are hero; MARINE-tagged peripheral resident creature (+ ANY wildcard). Studio Ghibli / Ponyo / Atlantis / Finding-Nemo painterly storybook. 10 axes.',
@@ -1620,6 +1665,48 @@ const ARCHETYPES = {
     },
     pickN: { village_detail: 3 },
     conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_DUNGEON_DEPTH: {
+    description:
+      'PATH-BESPOKE — PixelBot dungeon-depth path (2026-05-20 axis-system migration). 16-BIT TOP-DOWN DUNGEON-CRAWLER GAMEPLAY SCREENSHOTS — Diablo I/II / Hades / Hyper Light Drifter / Children of Morta / Moonlighter / Heroes of Hammerwatch. Top-down or 3/4-iso camera, hero adventurer pixel-sprite + monster encounter mid-action + Diablo-style loot/props + visible tile-floor. 3 path-bespoke pools + 40%-gated loot_detail.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['dungeon_chamber', 'dungeon_biome', 'hero_encounter'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'loot_detail', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_COZY_RPG_TOWN: {
+    description:
+      'PATH-BESPOKE — PixelBot cozy-rpg-town path (2026-05-20 axis-system migration). COZY PIXEL-RPG TOWN HUBS — Stardew Valley + Octopath Traveler HD-2D + Sea of Stars + Eastward + Children of Morta town hubs. Half-timbered houses, warm tavern light, market stalls, NPCs going about their day, cobblestone paths winding between shops. The town is INHABITED. 4 path-bespoke pools (town_locale / town_biome / npc_life / atmospheric_phenomenon-40%-gated). Reference migration for PixelBot axis-system transition.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['town_locale', 'town_biome', 'npc_life'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  EARTHBOT_EPIC_VISTA: {
+    description:
+      'PATH-BESPOKE — EarthBot epic-vista (2026-05-20 axis-system migration, first migrated EarthBot path). Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. Identity-corrected from legacy "stack 3+ phenomena per frame" mandate which drifted into AI-fake territory. Composition discipline: ONE hero subject + ONE scale-anchor + supporting clean light/atmosphere/sky. 6 axes: 5 always-on path-bespoke (subject, lighting, atmosphere, hero_feature, sky_layer) + 1 conditional 30%-gated phenomenon. NO sci-fi, NO fantasy, NO bioluminescence, NO multi-moons, NO galaxies-above-sunset, NO humans, NO floating-islands.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['subject', 'lighting', 'atmosphere', 'hero_feature', 'sky_layer'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
     framingModes: null,
     anchorScaleRange: null,
   },

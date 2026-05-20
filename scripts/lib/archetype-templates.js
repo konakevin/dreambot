@@ -10956,6 +10956,338 @@ Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated 
   },
 
 
+  CHIBIBOT_OUTDOOR_ADVENTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      adventure_activity,
+      wilderness_setting,
+      wilderness_detail,
+      adventure_prop,
+      time_of_day,
+      surprise_element,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const detailList = Array.isArray(wilderness_detail) ? wilderness_detail : [wilderness_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing OUTDOOR-ADVENTURE scenes for ChibiBot — a SOLO chibi creature out in the WILD/OPEN WORLD doing an adventurous activity. Pure wilderness — NO villages, NO architecture, NO cottages. Studio Ghibli wilderness / Pokemon-overworld / Pixar-adventure painterly storybook aesthetic. The viewer's reaction: "look at that little adventurer!" Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ADVENTURING ━━━
+
+The output MUST open with the creature + adventure-activity description IN the wilderness setting. CREATURE-FIRST, but the wilderness is the second hero.
+
+Open examples:
+- "A chibi fox-creature mid-leap across mossy stepping-stones over a sparkling forest stream, behind them a dense fern-glade with sunbeams piercing the canopy..."
+- "A baby red panda mid-climb up a vine-draped rock-cliff with a leaf-knapsack, behind them a vast jungle canyon dropping into mist..."
+- "A chibi child explorer wading knee-deep in a glassy mountain-lake with a butterfly-net, snow-capped peaks rising in the distance..."
+
+━━━ ⚠ HARD RULE #1: WILDERNESS — NO VILLAGES, NO ARCHITECTURE ━━━
+
+The setting is PURE WILDERNESS — forest / mountain / cave / canyon / river / cliff / lake / hill / desert / coastline / canyon / glacier / jungle-floor / meadow-vista / waterfall / etc. NO cottages, NO buildings, NO huts, NO bridges-with-buildings. Just nature — rocks, water, trees, terrain, sky, atmosphere. The creature is OUT in the open world, NOT in a village.
+
+⚠ HARD BAN: rendering this as a "creature near a cottage" or "creature in a village" — those are other paths. This path is WILD nature only.
+
+━━━ ⚠ HARD RULE #2: ADVENTURE-POSE — STORY BEAT ━━━
+
+The creature is MID-ACTION in an ADVENTURE pose: climbing / wading / hiking / mid-leap / cresting-a-ridge / discovering-something / pushing-through-foliage / mid-paddle / mid-skip-across-stones / peeking-over-a-cliff-edge / cresting-a-snowdrift. NEVER posing-still. NEVER just-sitting. The story-beat IS the adventure.
+
+━━━ ⚠ HARD RULE #3: WIDE OR MID-WIDE COMPOSITION — WILDERNESS IS THE CO-HERO ━━━
+
+The wilderness landscape fills 50-70% of the frame — the creature is a small-to-medium scale prover in it (15-30% of frame). Mid-wide composition. The eye sees the WILD landscape AND the tiny adventurer simultaneously. The scale of nature vs. tiny creature is the emotional hook. NOT a portrait crop. NOT a full wide-shot-village-style. A balanced mid-wide adventure-shot.
+
+━━━ THE CHIBI CREATURE ━━━
+${creature}
+
+━━━ THE ADVENTURE ACTIVITY ━━━
+${adventure_activity}
+
+━━━ THE WILDERNESS SETTING ━━━
+${wilderness_setting}
+
+━━━ THREE WILDERNESS DETAILS (lived-in nature richness) ━━━
+${detailBlock}
+
+━━━ ADVENTURE PROP (worn or held — small charm) ━━━
+${adventure_prop}
+
+━━━ SURPRISE ELEMENT (tucked-away detail) ━━━
+${surprise_element}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ MOVIE POSTER MOMENT — every render is a Pixar-adventure poster ━━━
+
+Pixar / Studio Ghibli / Pokemon-overworld / Adventure-Time painterly framings. The creature mid-adventure in vast nature. Three-act depth (creature foreground / wilderness midground / atmospheric vista background).
+
+━━━ SPARKLE STACK — MAXIMUM WILDERNESS EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- Volumetric god-rays through trees / clouds / mist
+- Dewdrops on every leaf / blade of grass / mossy stone
+- Drifting petals / leaves / pollen / dandelion-seeds in the air
+- Subtle bokeh-orbs in atmospheric haze
+- Reflections on water / wet-stone / shiny surfaces
+- Floating motes / dust catching warm light
+- Layered atmospheric depth (foreground sharp / midground depth / background hazy)
+- Tiny glowing details (mushroom-glow / firefly-glow / sparkle-on-water)
+- Painterly subsurface scattering on creature's fur / scales
+- Wind-tousled vegetation (leaves bending / grass swaying / petals lifting)
+- Soft volumetric haze in deep distance
+- Catchlight in creature's eyes
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering, warm volumetric light, painterly bokeh. Chibi proportions on the creature.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — chibi proportions, adventure-themed clothing.
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (MID-WIDE adventure shot — wilderness + small creature) ━━━
+
+MID-WIDE COMPOSITION. Wilderness landscape fills 50-70% of the frame. Creature is small-to-medium (15-30% of frame) mid-adventure-pose somewhere in the composition. The scale-contrast of vast nature vs tiny adventurer is the emotional hook. NOT close-up. NOT portrait. NOT establishing-shot. A balanced mid-wide adventure-shot like a Pixar movie still. Three depth-layers visible (foreground / midground / background atmospheric vista).
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [adventure-activity verb-phrase] in/across/through [wilderness setting], [time-of-day lighting context]..."
+
+Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature in mid-adventure.`;
+  },
+
+
+  CHIBIBOT_CREATURE_PORTRAIT: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      pose,
+      expression,
+      portrait_feature,
+      accessory,
+      background_mood,
+      time_of_day,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const featureList = Array.isArray(portrait_feature) ? portrait_feature : [portrait_feature];
+    const featureBlock = featureList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing CHIBI CREATURE PORTRAITS for ChibiBot — a tight close-up of ONE impossibly cute creature filling the frame. The viewer cannot look away from the cuteness. Pixar / Sanrio / Pop-Mart designer-vinyl meets storybook-illustration. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: CREATURE FILLS THE FRAME ━━━
+
+This is OPPOSITE of setting-as-hero paths — the CREATURE is the hero. Creature fills 60-80% of the frame. Tight close-up or mid-close portrait crop. NOT wide-shot. NOT establishing-shot. NOT a tiny anchor with village behind. Background is a soft dreamy bokeh-blur — pretty but ~20-30% of frame, never competing with the creature.
+
+ABSOLUTE FRAMING: tight head-and-shoulders portrait, OR close-up with paws-up-to-cheeks, OR extreme-close of just the face with eyes filling the frame. Creature dominates. The viewer's eye is LOCKED on the cuteness.
+
+━━━ ⚠ HARD RULE #2: HYPER-CUTE PROPORTIONS — NON-NEGOTIABLE ━━━
+
+Push IMPOSSIBLY ROUND AND SOFT:
+- Oversized dewy GLISTENING reflective multi-catchlight EYES (taking up half the face)
+- Tiny stubby paws / hooves / fins (relative to body)
+- Marshmallow / mochi proportions — chunky soft-cloud body
+- Exaggerated head-to-body ratio (head is 50-60% of total volume)
+- BLUSH CHEEKS mandatory (rosy pink dabs on the cheeks)
+- Tiny pink nose / mouth — minimal but present
+- Cute round ears / appendages (if applicable to species)
+
+━━━ THE CHIBI CREATURE ━━━
+${creature}
+
+━━━ POSE — what the creature is doing ━━━
+${pose}
+
+━━━ EXPRESSION — emotional state ━━━
+${expression}
+
+━━━ TWO PORTRAIT FEATURES (amplify the cuteness) ━━━
+${featureBlock}
+
+━━━ ACCESSORY OR PROP (held / worn / nearby — small charm) ━━━
+${accessory}
+
+━━━ BACKGROUND MOOD (soft dreamy bokeh, NOT a setting) ━━━
+${background_mood}
+
+━━━ TIME OF DAY (sets the lighting register) ━━━
+${time_of_day}
+
+━━━ MOVIE POSTER MOMENT — every render is a wallpaper-worthy portrait ━━━
+
+The viewer's reaction: "I need this as my phone wallpaper." Pop-Mart designer-vinyl portrait meets storybook-illustration. Single hero creature dominating the frame, perfect rim-light, painterly bokeh background.
+
+━━━ SPARKLE STACK — MAXIMUM PORTRAIT EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- Soft painterly subsurface scattering on creature's fur / scales / skin / plush
+- Backlit rim-light or hair-light catching every edge of the silhouette
+- Warm-amber catchlight in BOTH eyes (multi-catchlight glassy dewy reflection)
+- Soft dreamy bokeh background (pretty but never competing)
+- Floating tiny sparkle-particles around the creature (petals / pollen / dust-motes / pastel-confetti)
+- Pearlescent / iridescent micro-highlights on the body
+- Blush gradient on cheeks (rosy-pink mochi-blush)
+- Volumetric soft-warm light wrapping the creature
+- Pretty bokeh-orbs in pastel colors in deep background
+- Iridescent shimmer in eye-reflections
+- Soft-focus depth pull (creature SHARP, background MELTED)
+- Magical glow around the silhouette
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ WEATHER (subtle hint via bokeh — not a setting) ━━━
+${weather}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+
+TIGHT CLOSE-UP PORTRAIT. Creature fills 60-80% of frame. Centered or rule-of-thirds. Background is a soft dreamy bokeh-melt — pretty colors, not a recognizable setting. The creature's POSE + EXPRESSION + FEATURES dominate. Push impossibly-cute proportions. NOT a tiny creature with village behind. NOT an establishing shot. NOT environmental. Just the creature, in a portrait crop, hyper-cute, jewelry-quality.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description with impossibly-cute proportions] [pose + expression], [portrait features visible], dreamy soft-bokeh background, [time-of-day lighting register]..."
+
+Then unfold the sparkle-stack, accessory, and any atmospheric details. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. The CREATURE is the hero — background is secondary mood only.`;
+  },
+
+
+  CHIBIBOT_CUTE_FOOD_FULLBESPOKE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      food_hero,
+      food_pose,
+      food_setting,
+      scattered_accent,
+      kawaii_atmosphere,
+      time_of_day,
+      camera_angle,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const accentList = Array.isArray(scattered_accent) ? scattered_accent : [scattered_accent];
+    const accentBlock = accentList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    return `You are writing CUTE-FOOD bex.ai-inspired kawaii pop-mart food/drink renders for ChibiBot — the HERO FOOD has a smiling face. The food IS the cast. NO chibi creatures, NO human characters, NO animals. Pop-Mart designer-vinyl glossy-pearlescent rendering. Output wraps with style prefix + suffix.
+
+━━━ ⚠ HARD RULE #1: THE FOOD HAS A SMILING FACE ━━━
+
+The hero food/drink centerpiece has a literal kawaii smiling face printed on it — dimpled-blush cheeks, closed-arc-eyes, tiny printed mouth. Boba cup, sundae, pancake-stack, mochi-tray, cake, taiyaki, cereal-bowl, donut, parfait — whatever the food hero, it's anthropomorphized with a sweet smiling face. This is the bex.ai aesthetic non-negotiable.
+
+━━━ ⚠ HARD RULE #2: NO CREATURES / NO CHARACTERS — THE FOOD IS THE CAST ━━━
+
+NO chibi creatures, NO chibi children, NO animals, NO humans, NO minifigs, NO peripheral characters of any kind. The kawaii-faced food and its scattered kawaii accents (mini-faces, fruits-with-faces, etc.) are the ENTIRE cast. Sister path is miniature-feast which has chibis + food; THIS PATH is food-only.
+
+━━━ ⚠ HARD RULE #3: POP-MART DESIGNER-VINYL FINISH ━━━
+
+Glossy pearlescent 3D-rendered Pop-Mart designer-vinyl quality. Pearl-iridescent surfaces. Soft-pastel palette (blush pink, lavender, mint, peach, cream, baby-blue). Glazed-pearlescent finish on every surface. Designer-collectible-vinyl aesthetic.
+
+━━━ THE KAWAII FOOD HERO (smiling-face centerpiece) ━━━
+${food_hero}
+
+━━━ FOOD POSE / PRESENTATION ━━━
+${food_pose}
+
+━━━ SETTING (kawaii product-shot backdrop) ━━━
+${food_setting}
+
+━━━ THREE SCATTERED KAWAII ACCENTS (around the hero food) ━━━
+${accentBlock}
+
+━━━ KAWAII ATMOSPHERE LAYER ━━━
+${kawaii_atmosphere}
+
+━━━ CAMERA ANGLE ━━━
+${camera_angle}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER (subtle hint, e.g. window-light variations) ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SPARKLE STACK — MAXIMUM CUTE-FOOD EFFECTS ━━━
+
+Layer ALL on EVERY render:
+- Glossy pearlescent 3D-rendered Pop-Mart designer-vinyl finish on the hero food
+- Soft-pastel palette (blush pink / lavender / mint / peach / cream / baby-blue)
+- Soft bokeh-pastel background
+- Scattered tiny sprinkles / star-confetti / petal-blossoms throughout the frame
+- Mini smiling-face accents on some of the scattered decorations (mini fruits / hearts / stars)
+- Cherry-blossom or pastel-floral branches as accents (arching from a corner)
+- Steam-curl wisps from the food hero (if hot food) with tiny smiling-face hints
+- Rainbow accents welcomed (rainbow soft-serve / rainbow milk / rainbow-sparkle dust)
+- Pastel cream / icing / glaze drips on the food hero
+- Tiny pearl-beads or sugar-glitter dust around the food hero
+- Warm soft-pastel ambient light
+- Designer-vinyl glossy surfaces with pearlescent sheen
+- Pastel cherry-blossom-petal-drift in the air
+
+━━━ MOVIE POSTER MOMENT — every render reads "OMG THE CUTEST" ━━━
+
+bex.ai Instagram aesthetic. Pop-Mart designer-vinyl quality. The viewer's reaction: "OMG THIS IS THE CUTEST" — peak kawaii cute-maxxing on a product-shot quality frame.
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ HARD BANS ━━━
+- NO chibi creatures, NO children, NO animals, NO humans — the food IS the cast
+- NO realistic / photoreal rendering — must be glossy Pop-Mart vinyl
+- NO dark / moody / saturated-deep lighting — soft pastel only
+- NO scary / weird food — only kawaii sweet-treats and cute drinks
+- The food MUST have a smiling face — never plain food
+- The scene MUST have scattered kawaii decor — never sparse / minimalist
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[kawaii smiling-face food hero centerpiece with anthropomorphized face description], [food pose / presentation detail], [setting backdrop], scattered kawaii decorations around it, pastel Pop-Mart glossy pearlescent rendering, [soft pastel light]..."
+
+Then unfold the sparkle-stack. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases.`;
+  },
+
+
   CHIBIBOT_AQUATIC_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       creature,
@@ -11694,6 +12026,220 @@ WIDE ESTABLISHING SHOT. Camera pulled WAY back. The jungle-village fills 70-85% 
 Open with: "[creature description] [jungle-activity verb-phrase], [village description] spanning behind, [canopy/lighting context]..."
 
 Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
+  },
+
+  PIXELBOT_DUNGEON_DEPTH: ({ slots, sharedDNA, vibeDirective }) => {
+    const { dungeon_chamber, dungeon_biome, hero_encounter, loot_detail } = slots;
+
+    const lootSection = loot_detail
+      ? `\n\n━━━ DIABLO-STYLE LOOT / DUNGEON PROPS ACCENT ━━━\n${loot_detail}\n\nA specific loot or dungeon-prop detail amplifying the dungeon-crawler feel.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART DIABLO-STYLE TOP-DOWN DUNGEON-CRAWLER GAMEPLAY SCREENSHOT for PixelBot. The frame must read INSTANTLY as a level from a classic Diablo-style top-down dungeon-crawler — looking DOWN at the dungeon floor from above, hero adventurer pixel-sprite small in the center, treasure chambers, ambush corridors, monster encounters, loot piles.
+
+Genre lineage: Diablo (and Diablo II) pixel-style + Hades chamber-reveals (top-down) + Hyper Light Drifter (top-down ruins) + Children of Morta (top-down) + Death's Gambit + Moonlighter (top-down dungeon) + Eitr + Heroes of Hammerwatch (top-down dungeon).
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+
+TOP-DOWN OR NEAR-TOP-DOWN 3/4 ISOMETRIC — the camera looks DOWN at the dungeon floor. The viewer sees:
+  - The TILE FLOOR clearly (stone tiles, cracked-flagstone, mossy-stone, bone-tile, magma-cracked, blood-stained)
+  - HERO ADVENTURER pixel-sprite from ABOVE-AND-BEHIND — small armored figure with sword/staff/bow, walking the dungeon floor
+  - WALLS / COLUMNS / CORRIDOR EDGES framing the play space
+  - DUNGEON PROPS scattered on the floor
+
+🚫 NEVER side-scrolling (foreground-platform horizontal layout). NEVER first-person. NEVER vertical-portrait dramatic key-art. NEVER cinematic close-up of single boss.
+
+━━━ MANDATORY ELEMENTS (every render must include all 4) ━━━
+
+1. TOP-DOWN OR 3/4-ISO TILE FLOOR clearly visible — the play-floor is the dominant element
+2. HERO ADVENTURER pixel-sprite small on the floor — armored knight, robed mage, hooded ranger, dual-wielding rogue, plate-armored paladin, leather-clad assassin — mid-stride or mid-action
+3. MONSTER ENCOUNTER OR DUNGEON THREAT in the chamber — patrolling skeleton, charging zombie, bat-cluster, lich casting, demon-imp, slime-pile, undead-knight, spider-queen, mimic-chest. Mid-action.
+4. DIABLO-STYLE LOOT / DUNGEON PROPS — treasure chest with overflowing gold, scattered coins / gems, glowing weapon on the floor, runic-altar, dripping candelabra, blood-pool, skeletal remains, bone-piles, urns, magic-rune glow on tiles
+
+━━━ THE DUNGEON CHAMBER ━━━
+${dungeon_chamber}
+
+━━━ THE DUNGEON BIOME / VISUAL REGISTER ━━━
+${dungeon_biome}
+
+━━━ THE HERO + MONSTER ENCOUNTER (mid-action) ━━━
+${hero_encounter}
+
+The hero adventurer + monster are BOTH visible in the same chamber, mid-action — combat, casting, sneak-attack, charge, ambush. NEVER static portraits.
+${lootSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era / Diablo-pixel. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading, limited dark gothic palette.
+2. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises.
+3. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, HUDs, button prompts, mini-maps.
+4. **CHUNKY 16-BIT PIXEL GRID** — visible pixel grid on every surface.
+5. **SATURATED DARK GOTHIC PALETTE** — deep stone-grays / blood-reds / candle-orange / sickly-green poison / magic-violet / blue-black shadow.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal — pixel art ONLY
+  • NO side-scrolling / NO first-person / NO portrait-key-art camera
+  • NO IP references
+  • NO UI / HUD / menus
+  • NO sexualized content
+  • NO modern setting
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — TOP-DOWN DUNGEON-CRAWLER GAMEPLAY ━━━
+
+  • TOP-DOWN OR 3/4-ISO camera — viewer looks DOWN at the play floor
+  • TILE FLOOR is the dominant surface (>40% of frame)
+  • HERO adventurer pixel-sprite at lower-center mid-stride
+  • MONSTER encounter in mid-action across the chamber from hero
+  • LOOT / props scattered on the tile floor — chests, coins, bone-piles, rune-circles, candelabras
+  • WALLS / COLUMNS framing the chamber edges
+  • Animated particles (dust motes / dripping water / drifting smoke / glow-spore / firefly-glow / breath-mist)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[TOP-DOWN or 3/4-ISO Diablo-style dungeon chamber framed with tile floor as dominant surface], [the specific dungeon chamber (treasure room / altar / corridor / crypt / etc.) + visual register of the chamber], [the dungeon biome — tile material / wall texture / atmospheric quality (stone-tile / lava-cracked / bone-tile / icy-crystal / etc.)], [HERO adventurer pixel-sprite + monster encounter mid-action — both visible in the chamber], [Diablo-style loot/props on the tile floor — chests / coins / glowing weapons / bone-piles / rune-circles]${loot_detail ? ', [specific loot detail accent]' : ''}, [chunky 16-bit pixel grid throughout + saturated dark gothic palette]
+
+CRITICAL — TOP-DOWN OR 3/4-ISO CAMERA (NEVER side-view). PIXEL ART ONLY. All 4 mandatory elements: tile-floor + hero + monster + loot.
+
+Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  PIXELBOT_COZY_RPG_TOWN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { town_locale, town_biome, npc_life, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `\n\n━━━ ATMOSPHERIC MAGIC ━━━\n${atmospheric_phenomenon}\n\nA specific atmospheric detail amplifying the cozy-town magic (NOT competing with the town).`
+      : '';
+
+    return `You are a pixel-art game-art director writing a COZY RPG TOWN scene for PixelBot. Genre lineage: Stardew Valley + Octopath Traveler HD-2D + Sea of Stars + Eastward + Children of Morta town hubs. The kind of cozy pixel-RPG town the player returns to between adventures — half-timbered houses, warm tavern light, market-stalls, NPCs going about their day, cobblestone paths winding between shops.
+
+━━━ THE TOWN LOCALE ━━━
+${town_locale}
+
+━━━ THE TOWN BIOME / CHARACTER ━━━
+${town_biome}
+
+━━━ INHABITED LIFE — NPCS AND DAILY-LIFE DETAIL ━━━
+${npc_life}
+
+This town is ALIVE. Signs of inhabitance everywhere: NPCs in motion, market vendors, children, animals, smoke from chimneys, lit windows, drying laundry, signs above doors, fountains, lanterns.
+${phenomenonSection}
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era / HD-2D pixel art. NEVER smooth illustration, NEVER 3D render, NEVER photoreal. Crunchy individual visible pixels, dithered shading, limited palette.
+2. **NO IP REFERENCES** — no specific game characters / logos / recognizable franchises. The bot's identity IS the medium + the genre.
+3. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, HUDs, button prompts, mini-maps, text-overlays. Pure scene only.
+4. **NORTH STAR** — every render is "a screenshot from a game I desperately wish existed." Frame it as a cinematic-pixel-art moment, not a casual screenshot.
+5. **INHABITED FEEL** — the town reads ALIVE. NPC movement implied, signs of daily life everywhere, never an empty ghost-town.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal — pixel art ONLY
+  • NO IP references (no Mario / Pokemon / Zelda / specific characters)
+  • NO UI / HUD / dialogue boxes / health bars / button prompts / menus
+  • NO modern setting — fantasy-RPG era only
+  • NO empty / desolate / abandoned — the town is INHABITED
+  • NO single-NPC closeup — wide cozy-scene framing
+  • NO sci-fi / cyberpunk / horror — those are separate paths
+  • NO sexualized / inappropriate content
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ COMPOSITION CRAFT — INHABITED COZY TOWN HUB ━━━
+
+  • FOREGROUND: cobblestone path / wooden boardwalk / market-stall edge with inhabited detail
+  • MIDGROUND: the focal town buildings — half-timbered shops, tavern with glowing window, market square, fountain, signs above doors
+  • BACKGROUND: more buildings receding with depth, rooftops, smoke-curl from chimneys, distant town features (church spire / castle tower / mountain backdrop)
+  • DEPTH: HD-2D-style multi-tier depth — sharp foreground / sharp midground / atmospheric distance
+  • LIGHTING: warm tavern-window glow in middle distance, lit lanterns, signs of inhabitance from light alone
+  • LIFE: NPCs in motion, market vendors, children, animals, smoke, laundry, signs — the town BREATHES
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the SPECIFIC town locale (tavern street / market square / cottage row / etc.) framed in cinematic-pixel-art composition], [the town biome character (half-timbered European / coastal / mountain / desert oasis / forest village / etc.)], [the INHABITED LIFE — NPCs, market vendors, children, animals, signs of daily life], [warm tavern-window glow + lanterns + smoke + signs creating the cozy-inhabited atmosphere]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the cozy-magic feel]' : ''}, [HD-2D-style multi-tier depth — Stardew Valley + Octopath Traveler + Sea of Stars register], [16-bit pixel-art register with crunchy individual visible pixels and dithered shading]
+
+CRITICAL — PIXEL ART ONLY (NEVER smooth illustration). The town is INHABITED. Cozy-RPG-town key-art quality — Octopath HD-2D depth, warm tavern lights glowing in middle distance, animated NPCs and signs of life everywhere.
+
+Output ONLY 65-90 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+
+  EARTHBOT_EPIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
+    const { subject, lighting, atmosphere, hero_feature, sky_layer, phenomenon } = slots;
+    const phenomenonBlock = phenomenon
+      ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are a landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. Wide panoramic real-Earth landscape at maximum jaw-dropping beauty — larger than life, but every element grounded in something that actually exists on Earth. The viewer's reaction: "is this real? I want to book a flight there." Output wraps with style prefix + suffix.
+
+━━━ NON-NEGOTIABLE — REAL EARTH, NEVER SCI-FI, NEVER AI-FAKE ━━━
+
+This is REAL geography, REAL weather, REAL light. Larger-than-life is fine — Earth genuinely produces alpenglow on Himalayan peaks, sun pillars in Arctic air, double rainbows across canyons, mammatus storm-cells lit by sunset, fjord cliffs plunging straight into the sea. But every render must look like something a photographer could have captured on the BEST possible day at that location. Never AI-fake. Never combinatorial impossibility. The viewer should think "this is real — but I've never seen a photo quite this magnificent."
+
+━━━ ABSOLUTELY BANNED (these break EarthBot identity instantly) ━━━
+
+- NO multi-moons / twin-suns / triple-moons (Earth has ONE of each)
+- NO cloud-leviathans / whale-shaped clouds / dragon-shaped clouds / serpentine sky-creatures
+- NO time-suspension language ("frozen forever", "suspended in time", "eternal")
+- NO arcane / magical / mystical / enchanted / ethereal / supernatural / otherworldly vocabulary
+- NO bioluminescent fungi / glowworms / phosphorescent moss / glowing-anything-landscape
+- NO floating-islands / impossible-physics geometry / Pandora-style alien biomes
+- NO galaxies "above sunset" — stars + sunset don't co-exist on Earth (Milky Way only over pure-night sky)
+- NO human figures / hikers / climbers / silhouettes-on-ridges
+- NO structures-as-subject (rare distant scale-prover huts OK as hero_feature, but never the focal subject)
+
+━━━ COMPOSITION DISCIPLINE — RESTRAINT IS THE SIGNATURE ━━━
+
+ONE hero subject + ONE scale-anchor + supporting clean light/atmosphere/sky. NOT five phenomena stacked. Most legendary landscape photographs have ONE clear thing happening — the storm break, the lone weathered tree at cliff-edge, the ribbon waterfall, the alpenglow on the summit. The signature of EarthBot quality is RESTRAINT — resist the urge to layer rainbows + aurora + sun-dogs + crepuscular rays + mammatus all into the same frame. When the PHENOMENON section below fires (only ~30% of renders), ONE phenomenon, woven naturally — never added as an extra checkbox layer.
+
+━━━ THE VISTA SUBJECT (the location + its core geology, the hero of the frame) ━━━
+${subject}
+
+━━━ LIGHTING (one clean signature light condition) ━━━
+${lighting}
+
+━━━ ATMOSPHERE (default is crisp clear air; particulate only when scene-natural) ━━━
+${atmosphere}
+
+━━━ SKY LAYER (what the sky is doing above the vista) ━━━
+${sky_layer}
+
+━━━ HERO FEATURE (the ONE scale-prover anchoring the bigness) ━━━
+${hero_feature}${phenomenonBlock}
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'cinematic deeply-saturated color, hyperreal but never artificial, naturalistic Earth-pigment range'}
+
+━━━ SECONDARY COLOR VIBE ━━━
+${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+
+Wide sweeping panoramic vista — horizon prominent, scale monumental, depth in multiple receding planes (foreground anchor / midground vista / deep distance / sky). The viewer's eye lands on the SUBJECT first, follows to the HERO_FEATURE for scale-proving, then registers the lighting/atmosphere/sky as supporting layers. Photographic, hyperreal, alive. Wallpaper-worthy single frame.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
 
 

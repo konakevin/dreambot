@@ -154,6 +154,31 @@ module.exports = {
   COZY_INTERIOR_SURPRISE: load('cozy_interior_surprise'),
   COZY_INTERIOR_PHENOMENA: load('cozy_interior_phenomena'),
 
+  // Outdoor-adventure path-bespoke axes (2026-05-20 full-bespoke migration)
+  OUTDOOR_ADVENTURE_ACTIVITIES: load('outdoor_adventure_activities'),
+  OUTDOOR_ADVENTURE_WILDERNESS: load('outdoor_adventure_wilderness'),
+  OUTDOOR_ADVENTURE_DETAILS: load('outdoor_adventure_details'),
+  OUTDOOR_ADVENTURE_PROPS: load('outdoor_adventure_props'),
+  OUTDOOR_ADVENTURE_TIME_OF_DAY: load('outdoor_adventure_time_of_day'),
+  OUTDOOR_ADVENTURE_SURPRISE: load('outdoor_adventure_surprise'),
+
+  // Creature-portrait path-bespoke axes (2026-05-20 full-bespoke migration)
+  CREATURE_PORTRAIT_POSES: load('creature_portrait_poses'),
+  CREATURE_PORTRAIT_EXPRESSIONS: load('creature_portrait_expressions'),
+  CREATURE_PORTRAIT_FEATURES: load('creature_portrait_features'),
+  CREATURE_PORTRAIT_ACCESSORIES: load('creature_portrait_accessories'),
+  CREATURE_PORTRAIT_BACKGROUNDS: load('creature_portrait_backgrounds'),
+  CREATURE_PORTRAIT_TIME_OF_DAY: load('creature_portrait_time_of_day'),
+
+  // Cute-food path-bespoke axes (2026-05-20 full-bespoke migration)
+  CUTE_FOOD_HERO: load('cute_food_hero'),
+  CUTE_FOOD_POSES: load('cute_food_poses'),
+  CUTE_FOOD_SETTINGS: load('cute_food_settings'),
+  CUTE_FOOD_SCATTERED_ACCENTS: load('cute_food_scattered_accents'),
+  CUTE_FOOD_ATMOSPHERE: load('cute_food_atmosphere'),
+  CUTE_FOOD_TIME_OF_DAY: load('cute_food_time_of_day'),
+  CUTE_FOOD_CAMERA_ANGLE: load('cute_food_camera_angle'),
+
   // Aquatic-village path-bespoke axes (2026-05-19 full-bespoke migration)
   AQUATIC_VILLAGE_ACTIVITIES: load('aquatic_village_activities'),
   AQUATIC_VILLAGE_SETTINGS: load('aquatic_village_settings'),

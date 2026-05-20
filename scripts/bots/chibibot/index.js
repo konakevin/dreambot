@@ -1,21 +1,22 @@
 /**
  * ChibiBot — the bot-engine contract.
  *
- * 2026-05-20 — Cut 7 redundant paths (bookish-sanctuary, fireplace-cabin,
- * outdoor-adventure, snowy-arctic, jungle-canopy, sunny-pair, storybook-page)
- * after migration audit; covered by cozy-interior / arctic-village /
- * jungle-village / cozy-landscape / night-meadow / heartwarming-scene.
+ * 2026-05-20 — Cut 6 redundant paths (bookish-sanctuary, fireplace-cabin,
+ * snowy-arctic, jungle-canopy, sunny-pair, storybook-page) after migration
+ * audit; covered by cozy-interior / arctic-village / jungle-village /
+ * cozy-landscape / night-meadow / heartwarming-scene. outdoor-adventure
+ * kept — covers wild/open-world creature scenes that nothing else does.
  *
  * 2026-05-07 — Toy-photography paths (plushie-life, dollhouse-life) removed;
  * those live in ToyBot now.
  *
  * 2026-05-06 — CuddleBot merged into ChibiBot.
  *
- * Path inventory (18):
+ * Path inventory (19):
  *   Indoor: rainy-interior / cozy-interior
  *   Creature-focused: heartwarming-scene / creature-portrait / sleepy-naptime /
  *                     bath-time / cuddly-aquatic
- *   Outdoor-scene: cozy-landscape / rainy-day-cozy / night-meadow
+ *   Outdoor-scene: cozy-landscape / rainy-day-cozy / night-meadow / outdoor-adventure
  *   Food: miniature-feast / cute-food
  *   Villages (6): aquatic-village / arctic-village / cottagecore-village /
  *                 jungle-village / sunny-village / twilight-village
@@ -37,6 +38,7 @@ const pathBuilders = {
   'bath-time': require('./paths/bath-time'),
   'cuddly-aquatic': require('./paths/cuddly-aquatic'),
   'night-meadow': require('./paths/night-meadow'),
+  'outdoor-adventure': require('./paths/outdoor-adventure'),
   'cozy-interior': require('./paths/cozy-interior'),
   // cute-food (2026-05-17, bex.ai-inspired kawaii pop-mart food)
   'cute-food': require('./paths/cute-food'),
@@ -91,6 +93,8 @@ module.exports = {
     'cottagecore-village': 'chibibot_pixar',
     'sunny-village': 'chibibot_pixar',
     'twilight-village': 'chibibot_pixar',
+    'outdoor-adventure': 'chibibot_pixar',
+    // creature-portrait: no medium lock — both chibibot_render + chibibot_pixar work
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -139,6 +143,7 @@ module.exports = {
     'bath-time',
     'cuddly-aquatic',
     'night-meadow',
+    'outdoor-adventure',
     'cozy-interior',
     // cute-food
     'cute-food',
@@ -163,6 +168,7 @@ module.exports = {
     'bath-time': 1,
     'cuddly-aquatic': 1,
     'night-meadow': 1,
+    'outdoor-adventure': 1,
     'cozy-interior': 1,
     'cute-food': 2,
     'cottagecore-village': 1,
@@ -202,7 +208,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'miniature-feast', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape', 'rainy-interior', 'rainy-day-cozy', 'sleepy-naptime', 'jungle-village', 'cozy-interior', 'miniature-feast', 'arctic-village', 'aquatic-village', 'cottagecore-village', 'sunny-village', 'twilight-village', 'outdoor-adventure', 'creature-portrait', 'cute-food'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;
@@ -220,6 +226,7 @@ module.exports = {
       'cozy-landscape': 'scene',
       'rainy-day-cozy': 'scene',
       'night-meadow': 'scene',
+      'outdoor-adventure': 'creature',
       'aquatic-village': 'scene',
       'jungle-village': 'scene',
       'arctic-village': 'scene',
