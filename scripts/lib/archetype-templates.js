@@ -10536,9 +10536,9 @@ Open examples:
 - "A baby capybara hauling a bundle of palm-fronds up a vine-stair, a mushroom-house cluster glowing warm behind them..."
 - "A chibi child carrying a clay pot of fresh tea across a moss-stone path, a market-plaza of leaf-roof huts beyond..."
 
-━━━ HARD RULE: VILLAGE IS A CO-HERO, CREATURE IS THE ANCHOR ━━━
+━━━ HARD RULE: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
 
-The jungle-village architecture fills the majority of the frame (treehouses, vine-bridges, leaf-roofs, lantern-flowers, hanging-vines). The SOLO creature anchors the foreground at chibi-foreground scale (15-30% of frame). NOT a centered portrait. The village is half the magic. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame.
+The jungle-village architecture fills 70-85% of the frame — many treehouses / huts / bridges / canopy-platforms / lantern-flowers all visible across foreground / midground / background. WIDE ESTABLISHING SHOT showing the whole village ecosystem. The SOLO creature is a SMALL anchor (8-15% of frame) somewhere in the composition — on a path, crossing a bridge, on a balcony, in the foreground but NOT the focal hero of the frame. The viewer's eye first lands on the WHOLE VILLAGE, then discovers the tiny creature as a delightful detail. NOT a portrait. NOT close-up. The creature is a SCALE PROVER for the village, not a centered subject. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame, but small.
 
 ━━━ THE FOREGROUND CREATURE ━━━
 ${creature}
@@ -10612,9 +10612,9 @@ ${sharedDNA.colorPalette}
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 250)}
 
-━━━ COMPOSITION (creature foreground + jungle-village behind) ━━━
+━━━ COMPOSITION (WIDE establishing shot — village fills frame, creature is small scale-prover) ━━━
 
-WIDE or MID-WIDE establishing frame. The jungle-village fills the majority of the frame (architecture + canopy + atmospheric depth). The creature is the foreground anchor (eye lands here first) at chibi-foreground scale, integrated with the village. NOT a centered portrait. Three village-details visible. Surprise element tucked elsewhere.
+WIDE ESTABLISHING SHOT. Camera pulled WAY back. The jungle-village fills 70-85% of the frame — multiple buildings / bridges / platforms visible at varying depths (foreground / midground / background), the canopy arching above. The creature is SMALL (8-15% of frame) somewhere in the composition — crossing a bridge, climbing a vine-ladder, on a balcony, on a market path. NOT close-up. NOT centered portrait. NOT 40% of frame. The eye reads VILLAGE FIRST, then discovers the tiny creature. Think Studio Ghibli wide-shots of Howl's-Moving-Castle's town / Spirited-Away bathhouse / Whisper-of-the-Heart village. Three village-details visible across the architecture. Surprise element tucked in the deep midground.
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
