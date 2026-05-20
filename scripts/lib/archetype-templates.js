@@ -6858,6 +6858,110 @@ CRITICAL — ONE surreal scale-inverted FLOWER-FORM is the hero. Natural landsca
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_DESERT_BLOOM: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, desert_anchor, bloom_explosion, atmospheric_magic } = slots;
+
+    const magicSection = atmospheric_magic
+      ? `
+━━━ ATMOSPHERIC MAGIC — render visibly in the scene ━━━
+${atmospheric_magic}
+
+A specific atmospheric detail amplifying the southwest-desert mood (NOT competing with the desert + bloom explosion).
+
+`
+      : '';
+
+    return `You are a desert-southwest concept-art painter writing CACTUS-AND-WILDFLOWER-EXPLOSION landscape scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — DESERT LANDSCAPE JUXTAPOSED WITH AN EXPLOSION OF WILDFLOWERS ━━━
+
+The unifying mandate: a vivid southwest-desert landscape (saguaro / joshua-tree / agave / mesa / red-rock / sand-dune) with a DRAMATIC SUPERBLOOM EXPLOSION of vivid wildflowers carpeting the desert floor, climbing the rocks, blooming between and through the cactus arms. Dry-desert texture + lush flower-abundance = the surreal juxtaposition that makes every render pop.
+
+THE LOOK — Sonoran-superbloom / Arizona-after-spring-rain / IG-magical-desert-magazine:
+- A RECOGNIZABLE southwest desert anchor (saguaro / joshua-tree / agave / yucca / prickly-pear / barrel-cacti / red-rock canyon / mesa / sand dunes)
+- A DRAMATIC EXPLOSION OF WILDFLOWERS carpeting the desert floor + rocky crevices + climbing around cactus bases — vivid saturated jewel-tone colors (red / orange / coral / magenta / vivid pink / yellow-gold / sapphire / royal-purple)
+- SOUTHWEST PALETTE — terracotta red-rock + golden-amber sand + deep cobalt desert sky + warm tan + vivid wildflower jewel-tones — NOT soft pastel
+- DRY-DESERT TEXTURE — visible saguaro ribs, agave-spike detail, sand-grain dunes, weathered red-rock surface (the desert reads as REAL desert)
+- MULTI-TIER DEPTH — sharp foreground bloom-explosion + midground desert anchors + deep distance with mesa / mountain silhouettes + atmospheric haze
+- VIVID NATURAL LIGHT — bright southwest sun, golden-hour or strong midday-amber, vivid saturated color story
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **DESERT ANCHOR IS RECOGNIZABLE** — explicitly name + describe the southwest desert anchor (e.g., "towering saguaro cacti 20-30 ft tall with visible vertical ribs and outstretched arms," "joshua-tree grove with spiky branched silhouettes," "agave-and-yucca field with bayonet-spike leaves," "red-rock canyon walls with sandstone striations"). The desert anchor reads as REAL desert geography.
+
+2. **DRAMATIC WILDFLOWER EXPLOSION** — describe a dense vivid carpet of wildflowers exploding around / between / through the desert anchor — specific desert-bloom species (desert-marigold / Indian-paintbrush / desert-mariposa / desert-globemallow / lupine / California-poppy / Ocotillo-bloom / Cholla-flower / desert-rose / Prickly-pear-flower / Cardinal-flower / desert-sage / brittlebush / penstemon / chuparosa / desert-bluebell / Mojave-aster). Vivid saturated colors.
+
+3. **VIVID SATURATED SOUTHWEST PALETTE** — terracotta + golden + deep-cobalt + warm-tan + vivid wildflower jewel-tones (red / coral / magenta / orange / pink / yellow / sapphire / purple). NOT soft-pastel (that's flower-friends' territory) — bold and saturated.
+
+4. **DRY-DESERT TEXTURE PRESERVED** — the desert anchors retain their desert nature — visible saguaro ribs, weathered red-rock striations, sand-grain dunes, agave bayonet-spikes, dusty texture. The wildflowers EXPLODE AROUND the dry desert, they don't transform it into a lush meadow.
+
+5. **MULTI-TIER DEPTH** — clear foreground (sharp bloom-explosion) + midground (desert anchors) + deep distance (mesa silhouettes / atmospheric haze).
+
+6. **VIVID NATURAL LIGHT** — bright southwest sun, golden-hour amber, or warm midday. NOT moody / dark / soft-pastel.
+
+🚫 ABSOLUTE BANS:
+  • 🚫 NO soft-pastel color register — vibrant saturated southwest jewel-tone for this path
+  • 🚫 NO lush-temperate-meadow setting — desert MUST be recognizable as desert (cacti / red-rock / sand)
+  • 🚫 NO interior / urban / ruins / manmade architecture
+  • 🚫 NO surreal flower-construction or scale-inversion (that's flower-fantasy's territory) — desert anchors stay desert
+  • 🚫 NO insects-as-focal / hummingbirds-as-focal (those are flower-friends / flower-humming-birds paths)
+  • 🚫 NO macro / extreme closeup — landscape scale needed
+  • 🚫 NO moody / dark / dramatic-storm lighting — vivid southwest sun only
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS, NO FACES anywhere in frame 🚫🚫🚫
+  • 🚫 NO animals (no real animals — distant bird silhouette in atmospheric pool OK)
+
+━━━ THE DESERT ANCHOR ━━━
+${desert_anchor}
+
+This is the recognizable southwest desert landform that grounds the scene.
+
+━━━ THE WILDFLOWER EXPLOSION ━━━
+${bloom_explosion}
+
+The dramatic vivid wildflower carpet that EXPLODES around / between / through the desert anchor. Specific species + vivid saturated colors.
+${magicSection}━━━ COMPOSITION CRAFT — SOUTHWEST DESERT + WILDFLOWER EXPLOSION ━━━
+
+  • FOREGROUND: dense bloom-explosion of vivid desert wildflowers carpeting the ground, climbing the rocks, blooming around the cactus bases
+  • MIDGROUND: the desert anchor (saguaro / joshua-tree / agave / red-rock / mesa) — recognizable, sharp, vivid
+  • BACKGROUND: distant mesa silhouettes / mountain ridges / sand dunes fading into atmospheric haze with deep cobalt sky above
+  • DEPTH: sharp bloom-foreground + sharp desert-midground + soft distant atmospheric depth
+  • COLOR: vivid saturated southwest palette — bold reds + corals + magentas + jewel-yellows + sapphire-blues against terracotta + golden desert
+  • MOOD: vibrant, dramatic, surprising — the joy of desert SUPERBLOOM after spring rain
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Reinterpret the rolled lighting as VIVID SOUTHWEST natural light — bright midday sun, golden-hour amber, or warm desert glow. NOT moody / dark / soft-pastel. Think Sonoran-superbloom / Arizona-after-spring-rain / IG-magical-desert-magazine.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 3-5 species from the roster — vivid saturated colors. Combine roster species with desert-specific bloom-types (desert-marigold / Indian-paintbrush / lupine / poppy / penstemon / cactus-blooms).
+
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO soft-pastel register
+- 🚫 NO lush-temperate-meadow setting
+- 🚫 NO interior / urban / ruins / manmade architecture
+- 🚫 NO surreal flower-construction or scale-inversion (flower-fantasy)
+- 🚫 NO macro / extreme closeup
+- 🚫 NO moody / dark / dramatic-storm lighting
+- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / hands / body parts / faces
+- 🚫 NO species outside the roster (for flowers)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the RECOGNIZABLE southwest desert anchor (saguaro / joshua-tree / agave / red-rock / mesa / dunes) dominating the midground — explicit dry-desert texture + species + features], [the DRAMATIC WILDFLOWER EXPLOSION carpeting the foreground around / between / through the desert anchor — specific desert-bloom species in vivid saturated jewel-tone colors], [multi-tier depth with distant mesa silhouettes / mountain ridges fading into atmospheric haze, deep cobalt desert sky above]${atmospheric_magic ? ', [atmospheric magic detail amplifying the southwest mood]' : ''}, [vivid bright southwest natural light bathing the scene — bright sun / golden-hour amber / warm desert glow], [vibrant Sonoran-superbloom / Arizona-magical-desert aesthetic — bold saturated southwest palette]
+
+CRITICAL — RECOGNIZABLE SOUTHWEST DESERT (cacti / red-rock / sand) + DRAMATIC WILDFLOWER EXPLOSION. Vivid saturated SOUTHWEST palette (NOT soft-pastel). ABSOLUTE HARD BAN ON HUMANS.
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, hero_flower, landscape_backdrop, sunset_sky, sun_position, atmospheric_phenomenon } = slots;
 
@@ -11029,6 +11133,126 @@ Open with: "[outdoor kawaii scene setting — picnic blanket on a meadow / sandy
 ⚠ THE FRAME IS FULL — multiple chibis, multiple kawaii smiling-face foods, scattered decorations everywhere. Never a sparse / minimalist composition.
 
 Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases.`;
+  },
+
+
+  CHIBIBOT_ARCTIC_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY ARCTIC-VILLAGE scenes for ChibiBot — a SOLO foreground creature doing a story-driven activity with a cozy snow/ice/arctic village (snow-cottage rows / igloo clusters / log-cabins under aurora / gingerbread-snow-fortresses / polar-station hamlets / mountain-chalets / fishing-villages on frozen lakes) spanning behind them. Studio Ghibli / Frozen / Arrietty-Borrowers / Polar-Express painterly storybook aesthetic. The viewer's reaction: "I want to live in that snow-village." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description, THEN describe the arctic-village spanning behind them. CREATURE-FIRST.
+
+Open examples:
+- "A chibi snow-fox kit mid-trot across a frozen-bridge with a knit-scarf trailing, behind them a snow-cottage village with warm-amber window-glow nestled in pine-trees..."
+- "A baby polar-bear cub carrying a tiny lantern through fresh snow, an igloo cluster glowing turquoise behind them under shimmering aurora..."
+- "A chibi child in a wool-coat hauling a sled stacked with firewood, a log-cabin hamlet with smoke curling from stone chimneys beyond..."
+
+━━━ HARD RULE: VILLAGE FILLS THE FRAME — CREATURE IS A SMALL ANCHOR ━━━
+
+The arctic-village architecture fills 70-85% of the frame — many cottages / igloos / log-cabins / snow-fortresses / lantern-posts all visible across foreground / midground / background. WIDE ESTABLISHING SHOT showing the whole snow-village ecosystem. The SOLO creature is a SMALL anchor (8-15% of frame) somewhere in the composition — on a snow-path, crossing a frozen-bridge, on a porch, in the foreground but NOT the focal hero of the frame. The viewer's eye first lands on the WHOLE VILLAGE, then discovers the tiny creature as a delightful detail. NOT a portrait. NOT close-up. The creature is a SCALE PROVER for the village, not a centered subject. ABSOLUTE REQUIREMENT: the creature MUST appear in the frame, but small.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE ARCTIC-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE ARCTIC-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every render must be a frame-worthy still ━━━
+
+Poster-worthy single frame. Pixar / Studio Ghibli / Frozen / Arrietty / Polar-Express framings. The creature mid-action in the lived-in arctic village. Composition: three-act depth (foreground creature with prop / midground snow-architecture / background atmospheric snow-haze + aurora or pine-trees). Saturated cozy-arctic palette (warm amber window-glow + cool snow-blue + aurora-violet/teal + soft cream-snow).
+
+━━━ STORY BEAT — every render tells a STORY ━━━
+
+The creature is MID-ACTION — pulling a sled, shoveling snow, carrying firewood, lighting a lantern, knocking snow from a roof, hauling a basket. NEVER posing. The story-beat is what makes it alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-ARCTIC EFFECTS ━━━
+
+Layer ALL of these:
+- Warm-amber WINDOW-GLOW from every cottage / cabin pouring out into the snow
+- Aurora-violet/teal SHIMMER in the sky (optional, ~50% of renders)
+- Fresh-snow texture catching light — sparkle, glitter, soft powder
+- Smoke / steam curling from stone chimneys
+- Frost-crystals on rooftops and trees
+- Fairy-light strands or candy-cane-fence lanterns between cottages
+- Drifting snowflakes catching light in warm window-rays
+- Footprint / paw-print trails leading into the village
+- Pine-bough wreaths on doors / jingle-bell garlands
+- Knit-blanket on a porch-swing / sled parked at a cabin / wood-stack covered in snow
+- Reflections of village lights on frozen-pond or icicle-strung roofs
+- Layered atmospheric depth (snow-haze background + sharp midground village + foreground creature)
+- Tiny glowing details (lit lanterns / candle-windows / glow-jars on porches)
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+"I want to live in that snow-village" longing. ALWAYS WARM-cozy despite the cold biome — warm amber window-glow beats cold exterior. Never grim, never bleak.
+
+━━━ RENDERED CGI — Pixar painterly storybook ━━━
+
+Modern Pixar register. Painterly subsurface scattering on snow, warm volumetric light from windows + aurora shimmer overhead, painterly bokeh. Chibi proportions.
+
+━━━ NO DARK / NO ADULT HUMANS ━━━
+
+Children OK from unified pool — render at chibi proportions, bundled in wool/knit winter-wear.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (WIDE establishing shot — village fills frame, creature is small scale-prover) ━━━
+
+WIDE ESTABLISHING SHOT. Camera pulled WAY back. The arctic-village fills 70-85% of the frame — multiple cottages / igloos / log-cabins / snow-fortresses visible at varying depths (foreground / midground / background), pine-trees or snowy-mountains framing. The creature is SMALL (8-15% of frame) somewhere in the composition — pulling a sled, crossing a frozen-bridge, on a porch, on a snow-path. NOT close-up. NOT centered portrait. NOT 40% of frame. The eye reads VILLAGE FIRST, then discovers the tiny creature. Think Studio Ghibli wide-shots of Howl's-Moving-Castle / Frozen-Arendelle-village / Polar-Express snow-towns. Three village-details visible across the architecture. Surprise element tucked in the deep midground.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open with: "[creature description] [arctic-activity verb-phrase], [arctic-village description] spanning behind, [snow/aurora/window-glow lighting context]..."
+
+Then unfold. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the phrases, opening with the creature.`;
   },
 
 

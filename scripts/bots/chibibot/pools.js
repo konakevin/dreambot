@@ -154,6 +154,14 @@ module.exports = {
   COZY_INTERIOR_SURPRISE: load('cozy_interior_surprise'),
   COZY_INTERIOR_PHENOMENA: load('cozy_interior_phenomena'),
 
+  // Arctic-village path-bespoke axes (2026-05-19 full-bespoke migration)
+  ARCTIC_VILLAGE_ACTIVITIES: load('arctic_village_activities'),
+  ARCTIC_VILLAGE_SETTINGS: load('arctic_village_settings'),
+  ARCTIC_VILLAGE_DETAILS: load('arctic_village_details'),
+  ARCTIC_VILLAGE_TIME_OF_DAY: load('arctic_village_time_of_day'),
+  ARCTIC_VILLAGE_SURPRISE: load('arctic_village_surprise'),
+  ARCTIC_VILLAGE_PHENOMENA: load('arctic_village_phenomena'),
+
   // Miniature-feast path-bespoke axes (2026-05-19 full-bespoke migration)
   MINIATURE_FEAST_FOOD_HERO: load('miniature_feast_food_hero'),
   MINIATURE_FEAST_SCENE_SETTING: load('miniature_feast_scene_setting'),

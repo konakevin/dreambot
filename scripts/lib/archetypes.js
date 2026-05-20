@@ -594,6 +594,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_DESERT_BLOOM: {
+    description:
+      'PATH-BESPOKE — BloomBot desert-bloom path (2026-05-19 NEW). SOUTHWEST DESERT LANDSCAPES juxtaposed with an EXPLOSION OF WILDFLOWERS — saguaro corridors, joshua-tree groves, agave fields, red-rock canyons, mesa silhouettes, sand dunes — paired with a vivid carpet of desert wildflowers exploding around / between / through the desert elements. Vivid saturated SOUTHWEST register (NOT soft-pastel). Inspired by Kevin-hearted bloombot post — saguaro corridor with vivid red/coral wildflower carpet. 3 path-bespoke pools (desert_anchor / bloom_explosion / atmospheric_magic-40%-gated) + universal lighting.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['desert_anchor', 'bloom_explosion'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_magic', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: {
     description:
       'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are strongly backlit / rim-lit — petal edges blazing in warm sun-rim-light against a soft pretty golden-hour sky over a wide gorgeous landscape. Naturalistic photography register (hibiscus / cosmos / cherry-blossom / dandelion / azalea / wisteria / tulip against mountains / hills / lakes / forests / coast). 4 path-bespoke pools (hero_flower / landscape_backdrop / sunset_sky / sun_position) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',
@@ -1530,6 +1544,21 @@ const ARCHETYPES = {
       path: ['food_hero', 'scene_setting', 'creature_group', 'chibi_food_activity', 'food_decoration', 'kawaii_atmosphere', 'time_of_day', 'camera_angle'],
     },
     pickN: { creature_group: 4, food_decoration: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
+  CHIBIBOT_ARCTIC_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot arctic-village path (2026-05-19 full-bespoke). SETTING-AS-HERO village in a snow/ice/arctic biome. Snow-cottage rows, igloo clusters, log-cabin villages under aurora, gingerbread-snow-fortresses, polar-station hamlets, mountain-chalet clusters, hot-spring villages, fishing-villages on frozen lakes. Architecture + arctic atmosphere are the hero; ARCTIC-tagged peripheral resident creature (from unified pool + ANY wildcard) adds story. Studio Ghibli / Frozen / Arrietty-Borrowers / Polar-Express painterly storybook aesthetic. 10 axes: 3 universal + 7 path-bespoke.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'village', 'village_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { village_detail: 3 },
     conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
