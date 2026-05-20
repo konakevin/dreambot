@@ -580,6 +580,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_FLOWER_FANTASY: {
+    description:
+      'PATH-BESPOKE — BloomBot flower-fantasy path (2026-05-19 NEW). SURREAL SCALE-INVERSION FLOWER SCENES — natural-world landscapes (forests, valleys, riverbeds, hills, mountainsides, glades) where natural elements are CONSTRUCTED FROM FLOWERS or scale is wildly inverted: giant flower-mushroom in a meadow, forest where every tree is an oversized overgrown flower, river of petals flowing through a glade, pine-trees-that-are-flowers, hillside of tulip-mountains. NO animals / NO humans / NO manmade objects — naturalistic landscape forms reimagined through flowers + unexpected scale. Surreal-magical-realism register. Inspired by Kevin-hearted bloombot post (giant pink flower-mushroom in misty meadow). 3 path-bespoke pools (scale_form / floor_carpet / atmospheric_magic-40%-gated) + universal lighting.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['scale_form', 'floor_carpet'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_magic', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: {
     description:
       'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are strongly backlit / rim-lit — petal edges blazing in warm sun-rim-light against a soft pretty golden-hour sky over a wide gorgeous landscape. Naturalistic photography register (hibiscus / cosmos / cherry-blossom / dandelion / azalea / wisteria / tulip against mountains / hills / lakes / forests / coast). 4 path-bespoke pools (hero_flower / landscape_backdrop / sunset_sky / sun_position) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',

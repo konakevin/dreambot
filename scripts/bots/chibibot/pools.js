@@ -146,6 +146,14 @@ module.exports = {
   JUNGLE_VILLAGE_SURPRISE: load('jungle_village_surprise'),
   JUNGLE_VILLAGE_PHENOMENA: load('jungle_village_phenomena'),
 
+  // Cozy-interior path-bespoke axes (2026-05-19 full-bespoke migration)
+  COZY_INTERIOR_ROOMS: load('cozy_interior_rooms'),
+  COZY_INTERIOR_ACTIVITIES: load('cozy_interior_activities'),
+  COZY_INTERIOR_DETAILS: load('cozy_interior_details'),
+  COZY_INTERIOR_TIME_OF_DAY: load('cozy_interior_time_of_day'),
+  COZY_INTERIOR_SURPRISE: load('cozy_interior_surprise'),
+  COZY_INTERIOR_PHENOMENA: load('cozy_interior_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each

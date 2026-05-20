@@ -6749,6 +6749,112 @@ CRITICAL — LARGE FOCAL HUMMINGBIRD primary hero (NOT a tiny dot lost in flower
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_FLOWER_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, scale_form, floor_carpet, atmospheric_magic } = slots;
+
+    const atmosphereSection = atmospheric_magic
+      ? `
+━━━ ATMOSPHERIC MAGIC — render visibly in the scene ━━━
+${atmospheric_magic}
+
+A specific atmospheric detail amplifying the surreal-magical-realism mood (NOT competing with the hero form).
+
+`
+      : '';
+
+    return `You are a surreal-magical-realism painter writing SCALE-INVERSION FLOWER-FANTASY landscape scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — NATURAL FORMS REIMAGINED THROUGH FLOWERS + INVERTED SCALE ━━━
+
+The unifying mandate: a surreal natural-world landscape (forest / valley / hillside / riverbed / glade / meadow) where the NATURAL ELEMENTS are CONSTRUCTED FROM FLOWERS or scale is wildly inverted. A giant flower-mushroom standing alone in a meadow, a forest where every tree is an oversized overgrown flower, a river of petals flowing through a glade, pine-trees-that-are-flowers, a hillside of tulip-mountains. The viewer's reaction: "wait, those trees are actually flowers" or "that mushroom is made of flowers."
+
+THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape:
+- ONE hero SURREAL FLOWER-FORM dominating the frame (giant flower-mushroom / forest of flower-trees / river of petals / hillside of bloom-mountains / etc.)
+- Naturalistic LANDSCAPE context — meadow, forest, valley, glade, riverbed, hillside, mountainside — but with the SCALE INVERSION as the wow-moment
+- SUPPORTING FLOOR-CARPET — meadow of smaller flowers carpeting the ground around the hero form, providing the supporting bloom-mass
+- DREAMY MISTY DEPTH — softly hazy background fading into pastel mist, often with smaller versions of the hero form visible in the deep distance (implying a whole world of these surreal flower-forms)
+- SOFT MAGICAL LIGHT — pretty pastel ambient, warm golden-hour or soft mist-light, surreal-dreamy register
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **ONE SURREAL FLOWER-FORM AS PRIMARY HERO** — describe the specific scale-inversion or flower-construction explicitly (e.g., "giant flower-mushroom 30 feet tall with a cap made entirely of pink rose blooms and a stem of cascading peonies" / "forest where every tree is an oversized overgrown lupine 50 feet tall" / "river of pink-and-white petals flowing through a glade replacing where water would be"). The form is the FOCAL SUBJECT.
+
+2. **CONSTRUCTED FROM FLOWERS OR SCALE-INVERTED** — every render's hero is EITHER (a) a natural form (tree / mushroom / hill / mountain / waterfall / etc.) constructed entirely from flowers, OR (b) a regular flower scaled up to landscape-form size (e.g., a single oversized cherry-blossom-tree-sized tulip), OR (c) a natural element replaced by flowers (river of petals / hill of blooms / lake of floating petals).
+
+3. **NATURAL-WORLD LANDSCAPE CONTEXT** — the scene is set in a recognizable natural landscape (forest / valley / meadow / glade / hillside / riverbed / mountainside) — NOT a manmade setting. The hero form lives in this natural context.
+
+4. **SUPPORTING FLOOR-CARPET OF SMALLER FLOWERS** — the ground around the hero form is carpeted with smaller flowers (wildflowers, mixed meadow blooms, cosmos / daisies / forget-me-nots / poppies / etc.) — providing the "flowers everywhere" foundation that supports the surreal scale-inversion.
+
+5. **DREAMY MISTY DEPTH** — softly hazy background fading into pastel mist. Smaller versions of the hero form often visible in the deep distance (e.g., 3-4 smaller flower-mushrooms hazy on the horizon implying a whole forest of them) — this reinforces the surreal-magical-realism that this is a WORLD of these flower-forms, not just one anomaly.
+
+6. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — natural landscape forms only (trees, mushrooms, hills, mountains, rivers, waterfalls, valleys, glades, meadows). NEVER include animals (no flower-deer, no flower-rabbit), humans, or manmade objects (no flower-houses, no flower-clocks, no flower-cathedrals).
+
+7. **SOFT SURREAL-DREAMY LIGHT** — warm pastel ambient, soft mist-light, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
+
+🚫 ABSOLUTE BANS:
+  • 🚫 NO ANIMALS in any form — no flower-deer / flower-rabbit / flower-fox / flower-bear / NO wildlife (no real animals either)
+  • 🚫 NO HUMANS / NO PEOPLE / NO FIGURES / NO SILHOUETTES / NO HANDS / NO BODY PARTS / NO FACES
+  • 🚫 NO MANMADE OBJECTS — no flower-houses / no flower-arches / no flower-cathedrals / no flower-clocks / no flower-vases / no flower-vehicles / no buildings of any kind
+  • 🚫 NO RUINS / no archways / no urban / no interior
+  • 🚫 NO macro / extreme closeup — the scale-inversion needs LANDSCAPE SCALE to read
+  • 🚫 NO single-bloom-without-supporting-meadow — the floor-carpet of smaller flowers is mandatory
+  • 🚫 NO harsh / moody / dark / dramatic lighting — soft surreal-dreamy only
+  • 🚫 NO sci-fi / cyberpunk / electric / neon
+  • 🚫 NO clearly-photorealistic register — this is surreal-magical-realism / painterly
+
+━━━ THE HERO SURREAL FLOWER-FORM ━━━
+${scale_form}
+
+This is the visual hero of the frame. The scale-inversion or flower-construction is the wow-moment.
+
+━━━ THE FLOOR-CARPET (supporting meadow of smaller flowers) ━━━
+${floor_carpet}
+
+A dense carpet of smaller wildflowers covers the ground around the hero form, providing the "flowers everywhere" foundation.
+${atmosphereSection}━━━ COMPOSITION CRAFT — SURREAL NATURAL LANDSCAPE WITH SCALE-INVERTED FLOWER-FORM ━━━
+
+  • HERO PLACEMENT — the surreal flower-form is the FOCAL SUBJECT, centered or off-center as the dominant landscape element
+  • SCALE — the hero form fills meaningful frame real-estate so the inversion reads instantly (NOT a tiny dot in the distance — but ALSO NOT macro close-up; landscape scale)
+  • FOREGROUND: floor-carpet of smaller wildflowers + supporting bloom-mass
+  • MIDGROUND: the hero surreal flower-form rising dominantly from the carpet
+  • BACKGROUND: dreamy misty pastel haze with smaller versions of the hero form visible in the deep distance, fading away
+  • DEPTH: clear foreground (sharp wildflower carpet) → midground (sharp hero form) → soft dreamy misty background
+  • MOOD: surreal-magical-realism — naturalistic but with a wow-moment of scale-inversion
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Reinterpret the rolled lighting as SOFT SURREAL-MAGICAL-REALISM light — warm pastel ambient, soft mist-light, golden-hour glow with dreamy depth. Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape register.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 2-4 species from the roster — ONE primary species that makes up the hero form + 1-3 supporting species for the floor-carpet.
+
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO ANIMALS in any form
+- 🚫 NO humans / people / figures / silhouettes / hands / body parts / faces
+- 🚫 NO manmade objects (houses / arches / cathedrals / clocks / vehicles)
+- 🚫 NO ruins / urban / interior
+- 🚫 NO macro / extreme closeup — landscape scale needed
+- 🚫 NO sci-fi / cyberpunk / electric / neon
+- 🚫 NO harsh / moody / dark lighting
+- 🚫 NO species outside the roster (for flowers)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the HERO SURREAL FLOWER-FORM dominating the frame — explicit scale-inversion or flower-construction (giant flower-mushroom / forest-of-flower-trees / river-of-petals / etc.) + made-from-flowers detail], [the natural-world landscape context (forest / valley / meadow / glade / riverbed / hillside) the form lives in], [the floor-carpet of smaller wildflowers carpeting the ground around it], [dreamy misty pastel background with smaller versions of the hero form fading into the haze, implying a whole world of these surreal flower-forms]${atmospheric_magic ? ', [atmospheric magic detail amplifying the surreal mood]' : ''}, [soft surreal-magical-realism pastel ambient light], [Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape aesthetic register]
+
+CRITICAL — ONE surreal scale-inverted FLOWER-FORM is the hero. Natural landscape context. Floor-carpet of smaller flowers. NO animals / NO humans / NO manmade objects. Soft surreal-magical-realism mood.
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, hero_flower, landscape_backdrop, sunset_sky, sun_position, atmospheric_phenomenon } = slots;
 
