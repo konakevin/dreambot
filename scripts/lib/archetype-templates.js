@@ -6362,25 +6362,24 @@ Each flower's CORE / HEART / THROAT / INTERIOR is the bright bulb-center; the pe
 
 NEVER flat / dull / non-glowing / opaque-petals / mere bright-color. EVERY visible flower in the foreground and midground is clearly a switched-on flower-lamp with translucent backlit petals.
 
-Two register-options for the OVERALL composition — pick whichever fits the rolled tunnel_setting:
 
-  REGISTER A — WHIMSICAL ENCHANTED WARM TUNNEL (fairytale Studio-Ghibli):
-  - Warm-amber bright flowers framing the entrance arch (marigolds / torch-ginger / orange dahlias / sunflowers / bauhinia) reading as a wreath of paper-lanterns
-  - Vibrant pink-coral-warm flowers (peonies / azaleas / tree-peony / poppies / zinnias) packing the foreground floor — bright welcoming
-  - Wisteria-bell strands / honeysuckle / jasmine peppering the tunnel-walls and ceiling as a constellation of warm-amber fairy-light dots
-  - A hanging chandelier-cluster of warm-glowing flowers (brugmansia / lotus / trumpet-vine / waratah) midway down
-  - Soft warm-magical destination-glow at the vanishing-point — warm rosewater-cream-amber, surrounded by silhouettes of more flowers, NOT a bright sun-beam or sci-fi portal-light
-  - Mood: enchanted Studio-Ghibli fairytale INVITATION — welcoming, awe-inspiring, a place you WANT to walk into
 
-  REGISTER B — DRAMATIC DARK TUNNEL WITH BRILLIANTLY-LIT FOREGROUND BLOOMS:
-  - Near-dark / cave-charcoal-violet / deep-forest-dark middle and far depth
-  - FOREGROUND blooms super-saturated and brilliantly lit (passiflora / brugmansia / fuchsia / rhododendron / echinacea / hibiscus / coneflower / evening primrose) — petals BRIGHT, cores OBVIOUSLY GLOWING, the contrast against the dark makes them look unmistakably self-illuminating
-  - Mid-depth tunnel-walls packed with smaller flower-cores constellating as a trail-of-lanterns receding into the deep dark
-  - NO bright destination-glow at the vanishing-point — the tunnel-end recedes into deep unlit dark (just dark, nothing threatening, no scary portal)
-  - The unlit darkness BACKGROUNDS the brilliantly-lit flowers — the flowers POP as the entire light story
-  - Mood: dramatic-magical — the brilliant flowers fight the dark and win, the constellation of cores feels protective / enchanted / heroic, NOT ominous
+THE COMPOSITION — ENGULFED IN A FLOWER WORMHOLE:
 
-⚠️ Both registers REQUIRE: every visible flower has a clearly glowing core. The flowers look LIT UP. The unifying signature is vivid saturated foreground blooms with obvious warm-glowing centers.
+The viewer is INSIDE a wormhole made ENTIRELY of flowers and green vines / leaves. Flower-mass wraps 360° around the viewer — flowers above, below, left, right, ahead. No architecture, no buildings, no archways, no walls, no columns, no cathedral, no stone, no rock, no cave. Just dense overlapping flowers, climbing vines, and green leaves forming the entire enclosed wormhole around the viewer.
+
+  - The viewer feels ENGULFED by the flowers — wrapped, surrounded, immersed in bloom-mass on every side
+  - Walls, ceiling, floor of the wormhole are ALL made of flowers + climbing-vines + green leaves
+  - Foreground is densely packed flowers close to the camera (within arm's reach)
+  - Midground is more flowers receding deeper, still wrapping 360° around
+  - Deep distance recedes into MORE FLOWERS (dimmer, smaller, dense) — NOT into a bright light, NOT into a destination-glow, NOT into a portal-flash
+  - The FLOWERS are the entire focal subject — the wormhole structure itself is bloom-mass, the vanishing-point is more bloom-mass
+  - Every flower has a glowing warm-amber bulb-core making it a switched-on flower-lamp
+
+🚫 NO architecture (NO archways / cathedral / vault / columns / cobblestone path / stone walls / rock / brick / wood structure)
+🚫 NO bright destination-light at the vanishing-point — the wormhole recedes into MORE FLOWERS
+🚫 NO empty wall sections — every square inch of the visible 360° wraparound is flowers + vines + green leaves
+🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO ROBED FIGURE WALKING AWAY, NO PEDESTRIAN, NO TRAVELER, NO EXPLORER, NO HUMANOID ANYWHERE. The wormhole is COMPLETELY empty of human presence. Flowers only 🚫🚫🚫
 
 ━━━ HARD MANDATES (every render, BOTH registers) ━━━
 
@@ -6410,7 +6409,7 @@ Two register-options for the OVERALL composition — pick whichever fits the rol
   • NO bright midday daylight / overcast / clear noon
   • NO empty tunnel surfaces — every surface packed with flowers
   • NO flat / dull / non-glowing flowers — every visible flower has a glowing core
-  • NO humans in midground (tiny silhouette at vanishing-point optional)
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO PEDESTRIANS, NO TRAVELERS, NO EXPLORERS, NO ROBED FIGURE WALKING AWAY, NO CHARACTER ANYWHERE IN THE FRAME, NO ANTHROPOMORPHIC SHAPE — under NO circumstances. The FLOWERS are the entire subject. The wormhole is empty of any human presence. If you describe any humanoid form, the render fails 🚫🚫🚫
 
 ━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
 Every render is an EPIC CINEMATIC MOVIE POSTER / GALLERY-PIECE FRAME — the kind of magical-garden establishing-shot that opens a Studio Ghibli film, the cover of a Tolkien-illustrated fairytale edition, the centerpiece of a Pinterest 'magical flower tunnel' board. EVERY QUADRANT of the frame carries weight — no empty quadrants, no quiet corners.
@@ -6468,14 +6467,15 @@ Pick 3-5 species from the roster. EVERY species rendered with a clearly glowing 
 - 🚫 NO empty tunnel surfaces — every surface packed with flowers
 - 🚫 NO flat / dull / non-glowing flowers — every visible flower has a glowing core
 - 🚫 NO species outside the roster
+- 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO ROBED FIGURES, NO PEDESTRIANS — the FLOWERS are the entire subject. NEVER include a humanoid form anywhere in the frame, foreground or distance. The wormhole is empty of any human presence 🚫🚫🚫
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[POV-down-flower-tunnel composition], [the specific tunnel setting + 3-5 specific flower species packing every surface], [GLOWING WARM-AMBER FLOWER-CORES as the entire light source — explicitly describe each species' center glowing like a candle / paper-lantern / ember-core], [flower-lantern constellation distribution — ceiling chandelier + wall sconces + floor candles], [REGISTER A or B ambient — warm enchanted whimsical OR dramatic-dark with brilliant foreground bloom-pop]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the lit-flowers aesthetic]' : ''}, [vanishing-point — soft warm-magical destination-glow OR deep dark recession, NEVER a bright sun-beam or sci-fi portal-flash]
+[POV-down-flower-tunnel composition with NO HUMAN PRESENCE], [the specific tunnel setting + 3-5 specific flower species packing every surface], [GLOWING WARM-AMBER FLOWER-CORES as the entire light source — explicitly describe each species' center glowing like a candle / paper-lantern / ember-core], [flower-lantern constellation distribution — ceiling chandelier + wall sconces + floor candles], [REGISTER A or B ambient — warm enchanted whimsical OR dramatic-dark with brilliant foreground bloom-pop]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the lit-flowers aesthetic]' : ''}, [vanishing-point — soft warm-magical destination-glow OR deep dark recession]
 
-CRITICAL — every visible flower has a clearly glowing core. The flowers look UNMISTAKABLY LIT UP. Both whimsical-warm AND dramatic-dark registers are valid as long as foreground flowers pop brilliantly with glowing cores. NEVER a bright sun-beam exit. NEVER ominous.
+CRITICAL — every visible flower has a clearly glowing core. The flowers look UNMISTAKABLY LIT UP. ABSOLUTE HARD BAN ON HUMANS / PEOPLE / FIGURES / SILHOUETTES anywhere in the frame.
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
@@ -8252,9 +8252,10 @@ Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO p
     return `You are a kid's-playroom photographer capturing a TOY-MISCHIEF MOMENT for ToyBot. The scene below is a fully-specified absurd toy-story — a packed comedy beat with multiple toy mediums coexisting. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six story slots, captures the FUN energy, and reads as a populated mischief scene with the story playing out.
 
 ⚠️ ABSOLUTE BANS
-NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "tilt-shift" / "model railroad" — this is REAL kid playtime, not a hobbyist diorama.
+NEVER use: "diorama" / "scratch-built" / "ground-foam" / "static-grass" / "cozy storybook" / "model railroad" — this is REAL kid playtime, not a hobbyist diorama.
 NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / monsoon / storm / dark / moonlit / horror / nightmare / grim. The vibe is FUN + WARM + SILLY + SLAPSTICK.
-NEVER unify the toys' art style — each toy stays in its OWN native medium (LEGO stays LEGO with visible studs, plush stays plush with fabric texture, vinyl Funko stays cube-headed glossy, action-figures stay articulated, Hot Wheels stay die-cast chrome, army-men stay olive-green molded plastic, Calico Critter stays flocked-velvet).
+NEVER include LEGO / Lego / brick-built / studded / blocky-limb minifigs — they belong to a separate bot. If the seed text mentions a "LEGO minifig" or any LEGO figure, SILENTLY SWAP it for a different toy-brand figure (Funko Pop, vintage action figure, Polly Pocket, plush, plastic dinosaur, Power Ranger, etc.) playing the same role. The output must contain NO LEGO references.
+NEVER unify the toys' art style — each toy stays in its OWN native medium (plush stays plush with fabric texture, vinyl Funko stays cube-headed glossy, action-figures stay articulated, Hot Wheels stay die-cast chrome, army-men stay olive-green molded plastic, Calico Critter stays flocked-velvet).
 
 ━━━ THE MISCHIEF SCENE (fully specified — preserve ALL six slots) ━━━
 ${scene}
@@ -8269,42 +8270,55 @@ This 6-part scene has these mandatory slots in order:
 
 ALL six MUST appear visibly in your output. If a slot is missing, the render is REJECTED.
 
-━━━ MIXED-MEDIUM TOY-ENSEMBLE RULES ━━━
-Every render shows 4-6+ DIFFERENT toy mediums coexisting in ONE scene at their REAL real-world physical sizes. Scale mismatches are THE POINT — a 4-inch action-figure next to a 1.5-inch Hot Wheels next to a 12-inch plush teddy next to a tiny LEGO minifig — as it would actually look on a real floor.
+━━━ MIXED-MEDIUM TOY-ENSEMBLE RULES (NO LEGO) ━━━
+Every render shows 4-6+ DIFFERENT toy mediums coexisting in ONE scene at their REAL real-world physical sizes. Scale mismatches are THE POINT — a 4-inch action-figure next to a 1.5-inch Hot Wheels next to a 12-inch plush teddy next to a tiny Calico Critter figurine — as it would actually look on a real floor.
 
-Each toy gets rendered in its OWN native medium:
-  • LEGO minifig — visible studs + blocky limbs + clutch-pose hands
+Each toy gets rendered in its OWN native medium (NO LEGO):
   • plush stuffed animal — visible fabric texture + button or embroidered eyes + sewn seams
   • Funko Pop vinyl — oversized cube head + small stocky body + solid black dot eyes + glossy finish
-  • 3.75-inch action figure — visible ball-joint articulation + painted detail wash + sculpted gear
-  • Barbie / fashion doll — articulated plastic + molded glossy hair + painted face
+  • 3.75-inch action figure (G.I. Joe / Power Ranger / Buzz Lightyear / Transformer style) — visible ball-joint articulation + painted detail wash + sculpted gear
+  • Barbie / Ken / Bratz / Lalaloopsy / fashion doll — articulated plastic + molded glossy hair + painted face
   • Hot Wheels / Micro Machines — 1:64 die-cast with chrome accents + oversized wheels
   • Olive-green army-man — solid-color molded plastic + visible vertical mold-seam + oval base + fixed pose
   • Calico Critter / Sylvanian Family — flocked velvet-textured small-animal figurine + tiny cloth outfit
   • Vintage Kenner 3.75-inch — sandy hand-paint detail + period-correct accessory
+  • Polly Pocket / Strawberry Shortcake / Shopkins / My Little Pony — period-correct visual signatures
+  • plastic toy dinosaur / farm animal / wrestler / superhero — molded plastic at toybox scale
+  • stitched-Sackboy with button-eyes (NOT LEGO)
 
-━━━ CAMERA ━━━
+━━━ CAMERA — MEDIUM-WIDE NARRATIVE-ACTION FRAMING ━━━
 ${camera_angle}
 
+Medium-wide cinematic action-still — NOT a posed group photo. The hero is mid-action as the compositional anchor; supporting cast is in distinct individual mini-actions, NOT facing camera in a lineup. Deep-focus throughout so every toy's NATIVE MATERIAL is readable (plush=fabric, vinyl=glossy cube-head, die-cast=chrome, articulated action-figure=ball-joints, fashion-doll=glossy painted face, army-man=olive-green plastic, Calico Critter=flocked velvet). NEVER unify into "cute cartoon toy" style — each toy STAYS distinct in its native medium.
+
+━━━ ACTION ≠ POSED LINEUP — NON-NEGOTIABLE ━━━
+The scene captures a STORY MOMENT mid-progression. Hero is mid-leap / mid-charge / mid-confrontation / mid-dramatic-beat. Supporting cast each captured mid-DISTINCT-action (one shocked, one fleeing, one laughing, one pointing, one mid-tackle, one taking notes). NEVER: toys facing camera arranged in rows / lineups / group-portrait poses. NEVER: cute static "gathered toys looking at camera." Always: chaos in motion.
+
 ━━━ COMPOSITION ━━━
-- Toy-eye-level OR overhead macro frame — toy-photography energy
-- The FRAME IS PACKED — 5-8 visible toy figures + props + the story playing out
+- Medium-wide narrative-action shot — hero mid-action dominates 30-40% of frame
+- Supporting cast in distinct mid-action poses arrayed around at various depths
+- The FRAME IS PACKED — 5-8 visible toy figures all DOING DISTINCT things
 - A SPECIFIC STORY IS HAPPENING — narrative beat readable from one glance
+- Each toy renders in its OWN native material — NEVER unified style
 - Real-world surface textures: real wood grain / real fabric weave / real grass / real concrete
 - FUN energy — silly, slapstick, sitcom, toys-dicking-off vibe
-- The protagonist is the COMPOSITIONAL HERO but supporting cast fills the frame
 - The gag prop is visible somewhere in the frame
 - The light specified in the seed is the ONLY light — no chaos, no winter, no night
 - The overhead chaos element is visible in the upper third
+- Deep-focus throughout — every cast member readable, materials sharply distinct
 
 ⚠️ FAILURE CONDITIONS
-• If render shows only ONE toy medium (all LEGO / all plush / all Funko) → FAILED. Must MIX.
+• If render is a POSED LINEUP / group portrait / toys facing camera in a row → FAILED.
+• If render is a TIGHT CLOSE-UP / macro / shallow-DOF on one toy → FAILED.
+• If all toys render in UNIFIED CUTE STYLE (all cube-headed / all cartoon-y) → FAILED. Materials MUST stay distinct.
+• If any LEGO / Lego / brick-built figure appears → FAILED. Wrong bot.
 • If any of the 6 slots is dropped → FAILED.
 • If winter / snow / night / storm / horror tokens appear → FAILED.
 • If scene reads as serious or grim → FAILED. MUST be fun + silly.
-• If the frame is empty / sparse / only the protagonist visible → FAILED. PACKED is the point.
+• If the frame is empty / sparse / only the protagonist visible → FAILED.
+• If no STORY ACTION is happening (static toys, no motion) → FAILED. Action mid-progression.
 
-Output ONLY the raw scene description as comma-separated phrases (80-120 words). NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
+Output ONLY the raw scene description as comma-separated phrases (90-130 words). Lead with the STORY ACTION, not the toys. NO preamble, NO ━━━ markers, NO bullet lists, NO titles.`;
   },
 
   TOYBOT_MODEL_TRAIN_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
@@ -8410,7 +8424,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       return `You are a casual playtime photographer capturing a SMALL TOY TRAIN moment for ToyBot. The scene below is a fully-specified PLAYTIME SCENE — a kid set it up with named toys, real flowers, a tiny real critter, warm light, and a whimsical floating element. Your job is to render it as ONE comma-separated Flux prompt that preserves ALL six elements.
 
 ⚠️ ABSOLUTE BANS
-NEVER use: "HO-scale" / "N-scale" / "1:87" / "1:160" / "model train" / "model locomotive" / "model railroad" / "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard" / "tilt-shift".
+NEVER use: "HO-scale" / "N-scale" / "1:87" / "1:160" / "model train" / "model locomotive" / "model railroad" / "diorama" / "scratch-built" / "ground-foam" / "lichen-tree" / "plaster-rock" / "static-grass" / "baseboard" / "cozy storybook".
 NEVER add: winter / snow / blizzard / ice / frost / midnight / nightfall / monsoon / storm / dark / moonlit. The scene is warm daylight or warm interior light — preserve the light specified in the seed.
 USE INSTEAD: "small toy train" / "tiny toy locomotive" / "kids' toy train" / "Lionel-style toy train".
 
@@ -8441,7 +8455,7 @@ ${camera_angle}
 - The light specified in the seed is the ONLY light — no chaos, no winter, no night
 
 ⚠️ FAILURE CONDITIONS
-• If render reads as a tilt-shift / HO-scale / hobbyist diorama → FAILED
+• If render reads as a cozy storybook / HO-scale / hobbyist diorama → FAILED
 • If any of the 6 slots is dropped → FAILED
 • If winter / snow / night / storm tokens appear → FAILED
 • If the train is 1:1 real-size → FAILED
@@ -9563,6 +9577,115 @@ The pair-bond is the emotional center, but the SKY (stars / moon / aurora / Milk
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
+
+
+
+  CHIBIBOT_COZY_LANDSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      world,
+      world_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+
+    const detailList = Array.isArray(world_detail) ? world_detail : [world_detail];
+    const detailBlock = detailList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
+
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack this on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `You are writing COZY-LANDSCAPE scenes for ChibiBot — a foreground CREATURE doing a story-driven activity with a cozy storybook world spanning behind them. Pixar / Studio Ghibli / Beatrix Potter painterly storybook aesthetic. Like the iconic "Ratatouille kitchen wide-shot" or "Up balloon-house morning" or "Studio Ghibli Kiki cottage" framings — a clear hero creature in the foreground, the rich world spanning behind. The viewer's reaction: "look at this little creature in this beautiful world — I want to live here." Output wraps with style prefix + suffix.
+
+━━━ MANDATORY OUTPUT STRUCTURE — OPEN WITH THE CREATURE ━━━
+
+The output MUST open with the creature + activity description (the hero in the foreground), THEN describe the world spanning behind them. NOT world-first. NOT atmospheric-detail-first. CREATURE-FIRST.
+
+Open the output exactly like these examples:
+- "A yellow chibi chick walking a sunflower-bordered cobblestone path with a tiny parcel under one arm, behind them a windmill village..."
+- "A small red ladybug-chibi pulling a wooden cart across a wooden bridge over a canal, cottages clustered behind..."
+- "A chibi mouse stirring a stew pot beside a treehouse cottage path, hanging lanterns and steam curling up behind..."
+
+This ordering is NON-NEGOTIABLE. Open with the creature. Then unfold the world behind.
+
+━━━ THE CREATURE (open the output describing THIS — foreground anchor, the hero) ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY (what they're doing in the foreground) ━━━
+${resident_activity}
+
+━━━ THE COZY STORYBOOK WORLD (spans BEHIND the creature — the second-tier layer) ━━━
+${world}
+
+━━━ THREE WORLD DETAILS (populate the world behind the creature with lived-in richness) ━━━
+${detailBlock}
+
+━━━ MOVIE POSTER MOMENT — every shot must be a frame-worthy still ━━━
+
+This is NOT a quick snapshot. EVERY render must be poster-worthy — a single frame that someone would save as wallpaper. The creature + world must compose into the EMOTIONAL CENTER of a composition you'd see in a Pixar / Studio Ghibli / Beatrix Potter / Up-opening-sequence movie poster. Light: dramatic and intentional. Color: saturated cozy palette. Depth: creature in foreground + midground world + atmospheric far-distance.
+
+━━━ STORY BEAT — the creature's activity tells a STORY, never a pose ━━━
+
+The creature is mid-action, doing something specific — carrying a parcel, pulling a cart, watering flowers, hanging laundry, kneading dough, reading a letter, mid-leap, mid-skip, mid-handoff. NEVER posing nose-to-camera. NEVER staring blankly. The story-beat is what makes the render alive.
+
+━━━ SPARKLE STACK — MAXIMUM COZY-WORLD AMBIENT EFFECTS ━━━
+
+Layer ALL of these atmospheric effects on EVERY render: golden god-rays cutting through atmosphere, warm window-glow from cottages, drifting motes/pollen/dust tinted to time-of-day, sparkle/dewdrop highlights on flora/cobblestone, subtle bokeh-orbs in the background haze, chimney smoke / steam wisps, floating petals / leaves / dandelion-seeds, reflections on water/wet stone/glass, layered atmospheric depth, tiny glowing details everywhere (lit windows, lanterns, fairy-lights), dew on every blade of grass, light leaks / lens flares. If the render doesn't have AT LEAST 6 effects visible, the cozy-amplification FAILED.
+
+━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
+
+Every render must produce "I want to live here" longing + warm-belly contentment + wholesome safety. If the render has even a whisper of dark / edgy / abandoned / haunted — it FAILED. The world is INVITING, the creature is ADORABLE, everything rendered with love.
+
+━━━ RENDERED CGI — Pixar storybook painterly register ━━━
+
+Polished 3D CGI in the modern Pixar / Disney / DreamWorks animated-feature register. Soft subsurface scattering, painterly bokeh, warm volumetric god-rays, jewel-bright saturation. Creatures with chibi proportions (oversized head, big dewy eyes, tiny stubby body). Architecture stylized cute. Trees and flora glossy-crisp + saturated.
+
+━━━ NO DARK / NO ABANDONED / NO ADULT HUMANS ━━━
+
+No menace, no decrepit, no creepy. Children OK from the unified pool — render at chibi proportions.
+
+━━━ TIME OF DAY (drives sky color + ambient light) ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail in the wider world) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION (creature foreground anchor + world behind) ━━━
+
+WIDE or MID-WIDE establishing frame. The creature is the foreground anchor (the eye lands there first), midground holds the cozy storybook world, background is atmospheric depth. The creature occupies 15-30% of the frame at chibi-foreground scale — big enough to read every cute detail, not so big that the world disappears. The world spans behind, populated by the three details + the time-of-day light + the weather + the surprise element. The viewer first sees the creature, then their eye travels to the world to discover its richness.
+
+━━━ OUTPUT FORMAT (MANDATORY) ━━━
+
+Open the output with: "[creature description] [activity verb-phrase], [world that spans behind]..."
+
+Then unfold the rest. Output ONLY the raw 90-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, opening immediately with the creature.`;
+  },
+
 
 
 

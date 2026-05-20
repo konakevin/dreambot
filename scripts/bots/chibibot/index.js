@@ -79,6 +79,9 @@ module.exports = {
   // Other paths fall through to the bot.mediums 60/40 rotation above.
   mediumByPath: {
     'cute-food': 'chibibot_food',
+    // cozy-landscape — locked to pixar medium (storybook painterly rendering
+    // works better for setting-as-hero than the Pop-Mart vinyl register)
+    'cozy-landscape': 'chibibot_pixar',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -198,7 +201,7 @@ module.exports = {
     conceptWords: 150,
     polishedWords: '65-90',
     preservePhrasesByPath: {},
-    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow'],
+    skipPaths: ['bath-time', 'cuddly-aquatic', 'night-meadow', 'cozy-landscape'],
   },
 
   // Sensory anchors — creature-centric paths use 'creature' context;

@@ -1360,6 +1360,22 @@ const ARCHETYPES = {
   },
 
 
+
+  CHIBIBOT_COZY_LANDSCAPE: {
+    description:
+      'PATH-BESPOKE — ChibiBot cozy-landscape path (2026-05-19 full-bespoke axis-system migration per BOT_SCENE_QUALITY_PLAYBOOK). SETTING-AS-HERO path: a magical miniature cozy world (mushroom village / acorn cottage / wildflower meadow / beach cove / market square / treehouse) is the hero; a SOLO tiny resident creature adds story without stealing focus. Pixar/Studio Ghibli/Beatrix Potter/tilt-shift cozy aesthetic. UNLIKE pair-bond paths, NO creature_2 — the resident is one creature, small in the frame. 11 axes: 3 universal (lighting + atmosphere + weather) + 7 path-bespoke (creature + resident_activity + world + world_detail pickN:3 + time_of_day + surprise_element + phenomenon). Template-gated phenomenon 60%. world_detail pickN:3 forces stacked architectural/nature details that make the cozy world feel lived-in.',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: ['creature', 'resident_activity', 'world', 'world_detail', 'time_of_day', 'surprise_element', 'phenomenon'],
+    },
+    pickN: { world_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+
 };
 
 module.exports = { ARCHETYPES };

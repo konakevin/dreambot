@@ -103,6 +103,15 @@ module.exports = {
   NIGHT_MEADOW_SURPRISE_ELEMENTS: load('night_meadow_surprise_elements'),
   NIGHT_MEADOW_PHENOMENA: load('night_meadow_phenomena'),
 
+  // Cozy-landscape path-bespoke axes (2026-05-19 full-bespoke migration)
+  // Setting-as-hero path, SOLO tiny resident, no pair.
+  COZY_LANDSCAPE_WORLDS: load('cozy_landscape_worlds'),
+  COZY_LANDSCAPE_WORLD_DETAILS: load('cozy_landscape_world_details'),
+  COZY_LANDSCAPE_TIME_OF_DAY: load('cozy_landscape_time_of_day'),
+  COZY_LANDSCAPE_RESIDENT_ACTIVITIES: load('cozy_landscape_resident_activities'),
+  COZY_LANDSCAPE_SURPRISE_ELEMENTS: load('cozy_landscape_surprise_elements'),
+  COZY_LANDSCAPE_PHENOMENA: load('cozy_landscape_phenomena'),
+
   VIBE_COLOR,
 
   // Sensory anchor pools — 2 contexts × 7 channels × 100 entries each
