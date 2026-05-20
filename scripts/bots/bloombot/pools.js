@@ -34,18 +34,6 @@ module.exports = {
   BLOOMBOT_CLOSEUP_BLOOM_WALL_TYPE: loadIfExists('bloombot_closeup_bloom_wall_type'),
   BLOOMBOT_CLOSEUP_GROWING_CONTEXT: loadIfExists('bloombot_closeup_growing_context'),
   BLOOMBOT_CLOSEUP_MACRO_PHENOMENON: loadIfExists('bloombot_closeup_macro_phenomenon'),
-  // ─── bloom-spirit path: NEW character path (2026-05-17) ───
-  BLOOMBOT_BLOOM_SPIRIT_WOMAN_ARCHETYPE: loadIfExists('bloombot_bloom_spirit_woman_archetype'),
-  // 5-axis DNA split (2026-05-17): replaces combined woman_archetype pool
-  BLOOMBOT_BLOOM_SPIRIT_RACE: loadIfExists('bloombot_bloom_spirit_race'),
-  BLOOMBOT_BLOOM_SPIRIT_SKIN_TONE: loadIfExists('bloombot_bloom_spirit_skin_tone'),
-  BLOOMBOT_BLOOM_SPIRIT_EYES: loadIfExists('bloombot_bloom_spirit_eyes'),
-  BLOOMBOT_BLOOM_SPIRIT_HAIR_COLOR: loadIfExists('bloombot_bloom_spirit_hair_color'),
-  BLOOMBOT_BLOOM_SPIRIT_HAIRSTYLE: loadIfExists('bloombot_bloom_spirit_hairstyle'),
-  BLOOMBOT_BLOOM_SPIRIT_HAIR_FLORAL: loadIfExists('bloombot_bloom_spirit_hair_floral'),
-  BLOOMBOT_BLOOM_SPIRIT_BLOOM_GOWN: loadIfExists('bloombot_bloom_spirit_bloom_gown'),
-  BLOOMBOT_BLOOM_SPIRIT_GARDEN_BACKDROP: loadIfExists('bloombot_bloom_spirit_garden_backdrop'),
-  BLOOMBOT_BLOOM_SPIRIT_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_bloom_spirit_atmospheric_phenomenon'),
   // ─── reclaim path: declarative axis-system pools (2026-05-17 migration) ───
   BLOOMBOT_RECLAIM_RUIN_TYPE: loadIfExists('bloombot_reclaim_ruin_type'),
   BLOOMBOT_RECLAIM_DECAY_ANCHOR: loadIfExists('bloombot_reclaim_decay_anchor'),
@@ -70,6 +58,12 @@ module.exports = {
   BLOOMBOT_FLOWER_FANTASY_SCALE_FORM: loadIfExists('bloombot_flower_fantasy_scale_form'),
   BLOOMBOT_FLOWER_FANTASY_FLOOR_CARPET: loadIfExists('bloombot_flower_fantasy_floor_carpet'),
   BLOOMBOT_FLOWER_FANTASY_ATMOSPHERIC_MAGIC: loadIfExists('bloombot_flower_fantasy_atmospheric_magic'),
+  // ─── desert-bloom path (2026-05-19) — southwest desert + wildflower explosion ───
+  BLOOMBOT_DESERT_BLOOM_DESERT_ANCHOR: loadIfExists('bloombot_desert_bloom_desert_anchor'),
+  BLOOMBOT_DESERT_BLOOM_BLOOM_EXPLOSION: loadIfExists('bloombot_desert_bloom_bloom_explosion'),
+  BLOOMBOT_DESERT_BLOOM_ATMOSPHERIC_MAGIC: loadIfExists('bloombot_desert_bloom_atmospheric_magic'),
+  // desert-safe lighting subset (filters out rainstorm/snowstorm/ice/underwater/etc.)
+  BLOOMBOT_DESERT_BLOOM_LIGHTING: loadIfExists('bloombot_desert_bloom_lighting'),
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   BLOOMBOT_SUNSET_FLOWERS_HERO_FLOWER: loadIfExists('bloombot_sunset_flowers_hero_flower'),
   BLOOMBOT_SUNSET_FLOWERS_LANDSCAPE_BACKDROP: loadIfExists('bloombot_sunset_flowers_landscape_backdrop'),

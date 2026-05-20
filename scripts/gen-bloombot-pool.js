@@ -2195,6 +2195,184 @@ For RIVER OF PETALS entries: the river is ENTIRELY petals from bank to bank, NO 
     instructions: `Each entry is ONE specific ATMOSPHERIC MAGIC effect, 20-40 words. Format: "EFFECT NAME CAPS — primary detail + position in scene + how it amplifies the surreal-magical-realism mood". Vary across the 10 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO animals. NO additional flower-forms. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── desert-bloom path (2026-05-19) — southwest desert + wildflower explosion ───
+  bloombot_desert_bloom_desert_anchor: {
+    format: 'simple',
+    theme: `RECOGNIZABLE SOUTHWEST DESERT ANCHOR for the BloomBot desert-bloom path. Each entry describes ONE specific southwest desert landform — saguaro cacti / joshua-trees / agave / yucca / barrel-cacti / prickly-pear / red-rock canyon / mesa / sand dunes / ocotillo / cholla — that grounds the scene as REAL SOUTHWEST DESERT. The wildflower explosion is a separate axis. Each entry 30-55 words.
+
+⚠️ THE BAR: every entry produces a render where the desert anchor reads as INSTANTLY RECOGNIZABLE southwest desert geography — texture, species, scale all explicit. Dry-desert quality preserved (visible saguaro ribs, weathered red-rock striations, sand-grain dunes, agave bayonet-spikes). Vivid Sonoran-superbloom register.
+
+⚠️ DESERT ANCHOR CATEGORIES — distribute the 25 entries roughly:
+  • ~5 SAGUARO FOREST / CORRIDOR — towering saguaro cacti 20-40 ft tall with visible vertical ribs and outstretched arms, forming a corridor or scattered grove
+  • ~4 JOSHUA-TREE GROVE — spiky branched joshua-tree silhouettes scattered across desert plain, with rosette-spike crowns
+  • ~3 AGAVE-AND-YUCCA FIELD — bayonet-spike leaves of agaves + yucca rosettes covering a desert slope
+  • ~3 PRICKLY-PEAR + CHOLLA — prickly-pear pads stacked + cholla cactus dense thickets
+  • ~3 RED-ROCK CANYON / SANDSTONE WALLS — sandstone canyon walls with vertical striations + scattered desert vegetation
+  • ~3 MESA / BUTTE BACKDROP — distant mesa or butte silhouette dominating the deep distance with desert foreground
+  • ~2 SAND DUNES — undulating sand dunes with sparse desert vegetation
+  • ~2 BARREL CACTI / OCOTILLO — barrel cacti clusters or ocotillo spires whip-branches reaching upward
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC desert species + count / density (e.g., "five towering saguaros 30 ft tall," "dense joshua-tree grove with 8-10 visible")
+  - DRY-DESERT TEXTURE detail (saguaro ribs / agave bayonet-spikes / sandstone striations / weathered surface / grainy sand)
+  - SCALE indication (ft tall / sprawling / dominating midground / distant)
+  - SOUTHWEST CONTEXT (Sonoran / Mojave / Chihuahuan / Arizona-style / Utah-red-rock / etc.)
+
+🚫 STRICT BANS:
+  • NO wildflower description (separate axis — bloom_explosion)
+  • NO lush green meadow / forest / temperate landscape — desert MUST read as desert
+  • NO interior / urban / manmade architecture
+  • NO surreal / floating / impossible
+  • NO macro / extreme closeup — landscape scale
+  • NO humans / animals
+  • NO soft-pastel — bold saturated southwest colors
+
+✓ DRY-DESERT QUALITY PRESERVED — the desert anchors look DRY and weathered (real desert), NOT lush.`,
+    touchpoints: [
+      'SAGUARO CORRIDOR — five towering Sonoran saguaro cacti 25-30 ft tall with visible vertical ribs and outstretched arms forming a natural corridor through the desert, weathered green-grey trunks, dusty terracotta sandy floor, distant Arizona mountain silhouettes',
+      'SAGUARO FOREST DENSE GROVE — eight to ten massive saguaro cacti 30-40 ft tall standing scattered across a sandy Sonoran desert plain with visible ribs and arms reaching upward, golden-amber sand floor, distant red-rock buttes',
+      'JOSHUA TREE PLAIN — sparse joshua-tree grove with six spiky branched silhouettes scattered across a Mojave plain, each with rosette-spike crown branching outward, golden-amber sand floor, distant mountain ridges',
+      'JOSHUA TREE GROVE WITH ROCK — dense joshua-tree grove with 8-12 trees visible across the midground, scattered red-rock boulders, dry desert pavement, distant Mojave mountain backdrop',
+      'AGAVE BAYONET FIELD — wide field of agave rosettes with bayonet-spike leaves radiating outward in dense clusters, mixed with smaller yucca, dry weathered Sonoran desert floor, distant mountain silhouettes',
+      'YUCCA SPIRE FIELD — desert plain with scattered yucca spires standing tall above their bayonet-leaf bases, sparse Mojave vegetation, golden sand-floor, distant red-rock mesa backdrop',
+      'PRICKLY-PEAR HILLSIDE — dense prickly-pear cactus thicket with stacked oval pads spreading across a rocky desert hillside, mixed with smaller cholla, dry weathered red-rock outcrops',
+      'CHOLLA-CACTUS FIELD — dense cholla cactus thicket with spiky branched silhouettes covering a desert plain, fluffy spine-cluster fuzz catching light, weathered Sonoran desert floor',
+      'PRICKLY-PEAR-AND-CHOLLA MIX — mixed desert with stacked prickly-pear pads + scattered cholla spiky thickets covering a sandy slope, dry desert texture, distant Sonoran mountain backdrop',
+      'RED-ROCK CANYON WALLS — towering sandstone canyon walls with vivid terracotta striations rising on both sides of a narrow gulch, weathered red-rock texture, scattered desert vegetation at the canyon floor',
+      'UTAH-STYLE RED-ROCK ARCH — natural sandstone arch with weathered red-rock striations rising 50 ft, terracotta-and-amber sandstone, sparse desert vegetation at the base, deep cobalt sky above',
+      'ZION-STYLE NARROW CANYON — narrow slot-canyon with vertical red-rock walls towering on both sides, weathered sandstone striations, dry sandy wash at the bottom, distant slice of cobalt sky above',
+      'MESA SILHOUETTE BACKDROP — towering flat-topped mesa silhouette dominating the deep distance with vertical red-rock cliff faces, weathered sandstone, foreground desert plain with sparse vegetation',
+      'BUTTE FIELD DISTANT — scattered distant buttes with flat-tops and vertical sandstone walls across a vast desert plain, golden-amber sand-floor in foreground, Sonoran sky above',
+      'MONUMENT-VALLEY-STYLE — distant Monument-Valley-style red-rock buttes scattered across an expansive desert plain, towering vertical sandstone cliffs, dry weathered foreground desert',
+      'SAND DUNE WAVES — undulating sand dunes with wind-rippled crests stretching toward the deep distance, golden-amber dune-mass, sparse desert vegetation at the foreground edge, distant mountain silhouettes',
+      'WHITE SAND DUNES — bright white gypsum sand dunes (White Sands New Mexico style) stretching to distant San Andres mountain backdrop, sparse desert vegetation peeking through, deep cobalt sky',
+      'GOLDEN-DUNE LANDSCAPE — golden desert dunes stretching across the midground with wind-rippled texture, sparse desert vegetation along the dune-edges, distant mountain silhouettes in atmospheric haze',
+      'BARREL-CACTI CLUSTER — cluster of barrel-cacti 3-5 ft tall with vivid red-orange spines covering rounded barrel-shapes, weathered Sonoran desert floor, distant mountain backdrop',
+      'OCOTILLO SPIRE FIELD — Sonoran ocotillo plant with multiple thin whip-branches reaching upward 15 ft, scattered across desert plain, distant mountain ridges, dry weathered ground',
+      'OCOTILLO-AND-SAGUARO MIX — mixed desert with tall ocotillo whip-branches + scattered saguaro cacti standing across a Sonoran plain, distant red-rock backdrop',
+      'AGAVE-AND-OCOTILLO DESERT — agave rosettes with bayonet leaves + ocotillo spires + scattered yucca across a Mojave-style desert plain, weathered desert floor',
+      'CHOLLA-AND-PRICKLY-PEAR DESERT — mixed cholla spiky thickets + prickly-pear pad-clusters across a rocky desert hillside, dry weathered Sonoran texture',
+      'YUCCA-AND-JOSHUA-TREE MIX — scattered yucca spires + joshua-tree silhouettes across a Mojave plain, sparse desert vegetation, distant mountain backdrop',
+      'DESERT VALLEY OVERLOOK — wide desert valley overlook with scattered saguaro / agave / yucca + winding dry-wash creek-bed + distant mesa silhouettes in atmospheric haze',
+    ],
+    instructions: `Each entry is ONE specific RECOGNIZABLE SOUTHWEST DESERT ANCHOR, 30-55 words. Format: "DESERT NAME CAPS — specific southwest desert anchor with explicit species + count / scale + dry-desert texture + southwest geographic context". MANDATORY — (a) specific southwest species (saguaro / joshua-tree / agave / etc.), (b) dry-desert texture detail, (c) scale indication, (d) southwest context (Sonoran / Mojave / Utah / Arizona). NO wildflower description (separate axis). NO lush meadow. NO interior / urban. NO macro. NO humans / animals. NO soft-pastel — bold southwest colors. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_desert_bloom_bloom_explosion: {
+    format: 'simple',
+    theme: `DRAMATIC WILDFLOWER EXPLOSION for the BloomBot desert-bloom path. Each entry describes ONE specific carpet/explosion of vivid wildflowers carpeting the desert floor, climbing rocks, blooming around / between / through cactus bases — a Sonoran superbloom or similar. The desert anchor is a separate axis. Each entry 30-55 words.
+
+⚠️ THE BAR: every entry produces a render where a dramatic SUPERBLOOM of vivid wildflowers explodes around the desert elements — desert floor carpeted in vivid blooms, flowers climbing rocky crevices, blossoms peeking between cactus arms. Vivid saturated jewel-tone colors (NOT soft pastel).
+
+⚠️ BLOOM-EXPLOSION CATEGORIES — distribute the 25 entries roughly:
+  • ~5 SUPERBLOOM CARPET — dense dramatic multi-species desert wildflower carpet covering the desert floor in vivid jewel-tones
+  • ~4 RED-AND-ORANGE EXPLOSION — vivid scarlet / coral / fiery-orange dominant bloom-explosion (Indian-paintbrush / desert-marigold / chuparosa / globemallow)
+  • ~4 MAGENTA-AND-PINK EXPLOSION — vivid magenta / hot-pink / coral dominant (penstemon / desert-rose / cactus-blooms / desert-mariposa)
+  • ~3 PURPLE-AND-BLUE EXPLOSION — vivid royal-purple / sapphire / cobalt dominant (lupine / desert-bluebell / Mojave-aster / desert-sage)
+  • ~3 YELLOW-AND-GOLD EXPLOSION — vivid yellow / golden dominant (brittlebush / California-poppy / desert-marigold / desert-sunflower)
+  • ~3 MULTI-COLOR JEWEL-RAINBOW — full-spectrum vivid mix
+  • ~3 CACTUS-FLOWERS FOCUS — vivid cactus-flowers (Prickly-pear-flower / Cholla-flower / Saguaro-bloom / Barrel-cactus-flower / Ocotillo-bloom) as the explosion, blooming directly on the cactus
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC desert-wildflower species names (desert-marigold / Indian-paintbrush / lupine / California-poppy / desert-mariposa / desert-globemallow / Mojave-aster / Ocotillo-bloom / Cholla-flower / Prickly-pear-flower / desert-rose / penstemon / brittlebush / chuparosa / desert-bluebell / cardinal-flower / desert-sage)
+  - VIVID SATURATED COLOR words (vivid red / scarlet / coral / magenta / hot-pink / fiery-orange / golden / sapphire / royal-purple) — NEVER soft-pastel
+  - POSITION/EXPLOSION detail (carpeting the floor / climbing rocky crevices / blooming around cactus bases / spilling between cactus arms / cascading down red-rock walls)
+  - DRAMATIC ABUNDANCE — "dramatic superbloom," "vivid carpet exploding," "dense wildflower mass"
+
+🚫 STRICT BANS:
+  • NO desert anchor description (separate axis — desert_anchor)
+  • NO soft-pastel — vivid saturated only
+  • NO lush green meadow species (no daisies / no temperate-meadow wildflowers)
+  • NO single-bloom or sparse — dramatic EXPLOSION mandatory
+  • NO humans / animals
+  • NO interior / urban
+
+✓ The wildflower explosion JUXTAPOSED with the dry desert is what makes this path pop. The flowers EXPLODE around the dry weathered desert anchor (described separately).`,
+    touchpoints: [
+      'SCARLET-AND-CORAL SUPERBLOOM CARPET — dramatic Sonoran superbloom of vivid scarlet Indian-paintbrush + coral desert-mariposa + fiery-orange desert-globemallow + warm-red chuparosa carpeting the desert floor in dense explosion, climbing between rocky crevices',
+      'GOLDEN BRITTLEBUSH BLOOM-EXPLOSION — dramatic carpet of vivid golden brittlebush + jewel-yellow California-poppy + warm-gold desert-marigold + sapphire lupine exploding across the desert floor in dense bloom-mass',
+      'MAGENTA PENSTEMON EXPLOSION — vivid magenta penstemon + hot-pink desert-rose + fuchsia cactus-blooms + coral chuparosa carpeting the desert floor and climbing rocky crevices in dramatic bloom-explosion',
+      'ROYAL-PURPLE LUPINE EXPLOSION — vivid royal-purple lupine + sapphire desert-bluebell + violet Mojave-aster + amethyst desert-sage carpeting the desert floor in dramatic bloom-explosion, scattered cactus-flowers',
+      'JEWEL-RAINBOW SONORAN SUPERBLOOM — full-spectrum Sonoran superbloom — scarlet Indian-paintbrush + golden brittlebush + sapphire lupine + magenta penstemon + coral desert-mariposa + violet aster — exploding across the desert floor in vivid carpet',
+      'FIERY-RED INDIAN-PAINTBRUSH CARPET — dramatic carpet of vivid scarlet Indian-paintbrush exploding across the desert floor + warm-coral desert-globemallow + fiery-orange chuparosa peppering the bloom-mass',
+      'YELLOW-AND-ORANGE DESERT-MARIGOLD CARPET — dense carpet of vivid yellow desert-marigold + golden California-poppy + warm-amber brittlebush + scattered scarlet chuparosa carpeting the dry desert floor',
+      'PINK-AND-MAGENTA DESERT-ROSE EXPLOSION — vivid hot-pink desert-rose + magenta penstemon + coral desert-mariposa + warm-pink prickly-pear-flower carpeting the desert floor in dramatic bloom-mass',
+      'SAPPHIRE-AND-PURPLE DESERT-BLUEBELL CARPET — vivid sapphire desert-bluebell + royal-purple lupine + violet Mojave-aster + amethyst desert-sage carpeting the dry desert floor in dense bloom-explosion',
+      'CACTUS-FLOWER EXPLOSION — dramatic cactus-bloom focus — vivid magenta prickly-pear-flowers + scarlet cholla-flowers + golden barrel-cactus-flowers + coral ocotillo-blooms blooming directly on the cactus + scattered wildflower carpet at the base',
+      'OCOTILLO-AND-CHUPAROSA RED — vivid scarlet ocotillo whip-blooms + warm-red chuparosa + coral desert-mariposa + golden brittlebush exploding around the desert floor in dramatic carpet',
+      'MOJAVE-ASTER-AND-LUPINE PURPLE — vivid violet Mojave-aster + royal-purple lupine + sapphire desert-bluebell + coral desert-mariposa carpeting the desert floor in dramatic purple-dominated bloom-mass',
+      'CALIFORNIA-POPPY GOLDEN-EXPLOSION — dramatic carpet of vivid golden California-poppy + warm-amber brittlebush + jewel-yellow desert-marigold + scattered scarlet Indian-paintbrush across the dry desert floor',
+      'PRICKLY-PEAR-FLOWER MAGENTA-FOCUS — vivid magenta and hot-pink prickly-pear cactus-flowers blooming directly on stacked cactus pads + carpet of desert-mariposa and desert-rose at the base, dramatic vivid color',
+      'CHOLLA-FLOWER SCARLET-FOCUS — vivid scarlet and magenta cholla-flowers blooming directly on the cactus + carpet of Indian-paintbrush and desert-globemallow at the base, dramatic scarlet-and-magenta bloom-mass',
+      'MULTI-COLOR-CACTUS-FLOWER MIX — vivid mixed cactus-flowers across saguaro and prickly-pear and cholla in magenta / scarlet / golden / coral + carpet of desert-wildflowers at the base, jewel-tone explosion',
+      'DESERT-MARIGOLD-AND-LUPINE MIX — vivid yellow desert-marigold + royal-purple lupine + coral desert-mariposa + sapphire desert-bluebell carpeting the dry desert in a multi-color explosion',
+      'GLOBEMALLOW-AND-PAINTBRUSH ORANGE-RED — vivid fiery-orange desert-globemallow + scarlet Indian-paintbrush + coral desert-mariposa + warm-gold brittlebush carpeting the desert floor in red-and-orange superbloom',
+      'CHUPAROSA-AND-PENSTEMON RED-MAGENTA — vivid warm-red chuparosa + magenta penstemon + coral desert-mariposa + scarlet Indian-paintbrush carpeting the dry desert floor in dramatic bloom-explosion',
+      'DESERT-SAGE-AND-ASTER BLUE-PURPLE — vivid royal-purple lupine + violet Mojave-aster + sapphire desert-sage + cobalt desert-bluebell carpeting the desert floor in cool jewel-tone bloom-mass',
+      'WHITE-AND-YELLOW DESERT-MARIPOSA MIX — vivid white desert-mariposa + golden brittlebush + jewel-yellow California-poppy + warm-coral desert-rose carpeting the dry desert floor in bright bloom-explosion',
+      'CARDINAL-FLOWER-AND-DESERT-ROSE — vivid scarlet cardinal-flower + hot-pink desert-rose + coral chuparosa + magenta penstemon carpeting the dry desert floor in vivid red-magenta bloom-mass',
+      'POPPY-AND-LUPINE GOLDEN-PURPLE — vivid golden California-poppy + royal-purple lupine + coral desert-mariposa + sapphire desert-bluebell carpeting the dry desert floor in dramatic golden-purple bloom-mass',
+      'TROPICAL-LIKE SUPERBLOOM — dense exuberant superbloom mixing vivid magenta + scarlet + golden + sapphire blooms across the dry desert floor, every species in vivid saturated jewel-tone, dramatic abundance',
+      'CACTUS-CLIMBING BLOOM-CASCADE — vivid wildflowers climbing rocky crevices + cascading down red-rock walls + carpeting around cactus bases — magenta + scarlet + golden + sapphire mix exploding around the dry desert anchor',
+    ],
+    instructions: `Each entry is ONE specific DRAMATIC WILDFLOWER EXPLOSION, 30-55 words. Format: "BLOOM EXPLOSION NAME CAPS — specific desert-wildflower species + vivid saturated jewel-tone colors + position/explosion detail + dramatic abundance language". MANDATORY — (a) specific desert-wildflower species, (b) vivid saturated colors (NEVER soft-pastel), (c) dramatic abundance, (d) position around the desert anchor. NO desert anchor description (separate axis). NO single-bloom or sparse. NO humans / animals. NO temperate-meadow species. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_desert_bloom_atmospheric_magic: {
+    format: 'simple',
+    theme: `40%-GATED ATMOSPHERIC MAGIC for the BloomBot desert-bloom path. Each entry describes ONE specific atmospheric detail amplifying the southwest-desert mood — golden-hour rays / dust motes / sun-flare / pollen drift / heat-shimmer / distant bird / scattered cloud / sand-blow. Each entry 20-40 words.
+
+⚠️ MANDATORY — every effect AMPLIFIES the vivid southwest-desert mood. Does NOT compete with the desert + bloom.
+
+🚫 STRICT BANS:
+  • NO sci-fi / electric / neon / aurora
+  • NO scary / dark / ominous / storm-dramatic
+  • NO humans / hands / body parts
+  • NO additional flower-forms (separate axis)
+  • NO water (this is dry desert)
+
+✓ ATMOSPHERIC CATEGORIES:
+  A. **GOLDEN-HOUR SUN-RAYS** — soft warm slanting rays through the desert air
+  B. **DUST MOTES** — fine dust drifting in warm desert light
+  C. **SUN-FLARE / LENS-FLARE** — bright sun-flare star-burst in the upper frame
+  D. **HEAT-SHIMMER** — atmospheric heat-shimmer above the desert floor
+  E. **POLLEN-DRIFT** — golden pollen-motes drifting around the wildflowers
+  F. **DISTANT BIRD SILHOUETTE** — single eagle / hawk / vulture silhouetted against the sky (no foreground animals)
+  G. **SCATTERED CLOUD** — soft scattered cumulus catching warm sunset light
+  H. **SAND-BLOW WIND** — gentle wind-blown sand drift through the dune-edges
+  I. **CACTUS-SHADOW PATTERN** — long warm cactus-shadows stretching across the desert floor
+  J. **PETAL DRIFT** — vivid wildflower petals drifting through the desert air
+  K. **DESERT VARNISH SHEEN** — sun catching the natural mineral varnish on red-rock surfaces`,
+    touchpoints: [
+      'GOLDEN-HOUR DESERT RAYS — soft warm golden-hour slanting rays through the desert air illuminating the cactus arms and bloom carpet, warm amber haze in the deep distance',
+      'WARM DUST MOTES — fine golden dust motes drifting in warm desert light around the saguaro cacti and bloom-explosion, atmospheric Sonoran haze',
+      'SUN-FLARE STAR-BURST — bright sun-flare star-burst in the upper frame with hex-flare ghosts scattered, warm desert light filling the scene',
+      'HEAT-SHIMMER FLOOR — atmospheric heat-shimmer rising from the desert floor blurring the deep distance, vivid bloom-foreground stays sharp',
+      'GOLDEN POLLEN-DRIFT — golden pollen-motes drifting around the desert wildflowers catching warm sunset light, atmospheric Sonoran magic',
+      'DISTANT EAGLE SILHOUETTE — single distant eagle silhouetted against the cobalt desert sky in the upper frame, gliding wide-winged, southwest atmospheric scale',
+      'DISTANT HAWK SOARING — single hawk silhouetted in the deep blue desert sky soaring high above the saguaro forest, southwest atmospheric depth',
+      'SCATTERED COTTON CLOUDS — soft scattered cumulus catching warm sunset light in the upper frame, deep cobalt sky between, southwest atmospheric depth',
+      'WIND-BLOWN SAND DRIFT — gentle wind-blown golden sand drifting along the dune-edges, atmospheric Sonoran wind, dry-desert texture',
+      'CACTUS-SHADOW PATTERN — long warm cactus-shadows stretching across the desert floor from the saguaros, golden-hour amber casting dramatic shadow-stripes',
+      'VIVID PETAL DRIFT — vivid magenta and scarlet wildflower petals drifting through the warm desert air, gentle wind motion, southwest atmospheric magic',
+      'RED-ROCK MINERAL SHEEN — sun catching the natural mineral varnish on red-rock surfaces creating warm bronze-and-amber glints, atmospheric southwest detail',
+      'GOLDEN MIDDAY HAZE — warm golden midday atmospheric haze softening the deep-distance mesa silhouettes, vivid sharp foreground',
+      'DUSTY GROUND-LEVEL HAZE — fine warm-amber dust drifting at ground level around the desert anchor, atmospheric Sonoran dust',
+      'WARM CACTUS-BACKLIGHT — soft warm backlight catching the saguaro cacti from behind, creating glowing translucent halos on the cactus arms and edges',
+      'DESERT SUNDOWN GLOW — soft warm sundown glow filling the deep distance behind the mesa silhouettes, vivid bloom-foreground stays bright',
+      'COTTONWOOD-FLUFF DRIFT — drifting white cottonwood-fluff seed-fluff through the warm desert air, atmospheric southwest detail',
+      'SOFT WARM EVENING HAZE — soft warm evening atmospheric haze enveloping the entire scene, golden-amber bath softening the deep distance',
+      'AMBER POLLEN-DRIFT — amber pollen-motes drifting through the warm desert air around the saguaro arms and wildflowers, gentle Sonoran magic',
+      'DISTANT VULTURE SOARING — single distant vulture silhouetted against the cobalt desert sky soaring slow, southwest atmospheric scale',
+      'GOLDEN-HOUR DESERT GLOW — entire scene bathed in warm golden-hour amber glow, vivid wildflowers and saguaros equally warmed, atmospheric Sonoran magic',
+      'SOFT WARM CIRRUS — soft warm-pink cirrus catching late-afternoon light across the upper-frame cobalt sky, vivid foreground bloom-carpet',
+      'WARM-AMBER MIST RIBBON — gentle warm-amber atmospheric mist ribbon drifting through the deep-distance valley behind the desert anchor',
+      'SOFT WIND-BLOWN PETAL CASCADE — gentle warm wind blowing vivid wildflower petals through the air around the desert anchor in soft cascade motion',
+      'COBALT-SKY DEEP — vivid deep-cobalt desert sky filling the upper frame with no clouds, intense saturated color contrast against the warm desert floor',
+    ],
+    instructions: `Each entry is ONE specific ATMOSPHERIC MAGIC effect for the desert-bloom path, 20-40 words. Format: "EFFECT NAME CAPS — primary detail + position in scene + how it amplifies the southwest mood". Vary across the 11 categories. NO sci-fi / electric / neon. NO scary / dark / storm-dramatic. NO humans / hands. NO additional flower-forms. NO water. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   bloombot_sunset_flowers_hero_flower: {
     format: 'simple',
@@ -2693,600 +2871,6 @@ Channel: Studio Ghibli "Castle in the Sky" ruin-reveal moments + Caspar David Fr
       'BIRD-FLOCK ROOSTING — small flock of small birds (sparrows / starlings) roosting on the upper ledge of a broken wall, evening light, the rest of the ruin quiet',
     ],
     instructions: `Each entry is ONE specific RECLAIM ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in ruin + lighting note". Vary across the 12 categories. ALWAYS reverent (never horror / spooky). NO humans / ghosts. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
-  },
-
-  // ─── bloom-spirit DNA: hair_floral (lush flower-waterfall through hair) ───
-  bloombot_bloom_spirit_hair_floral: {
-    format: 'simple',
-    theme: `COLOR-THEMED HAIR-FLORAL ARRANGEMENTS for the BloomBot bloom-spirit path. Each entry is ONE specific COLOR-THEMED MULTI-SPECIES floral arrangement OVERWHELMING her hair. Each entry 30-70 words.
-
-⚠️ ABSOLUTE VOLUME MANDATE — every entry describes an EXTREME LUSH OVERWHELMING quantity (HUNDREDS to THOUSANDS) of MULTIPLE different flower species in a coordinated COLOR THEME — like a master Pre-Raphaelite painter spent days arranging an entire flower-shop's worth of blooms into one woman's hair. The hair-flower volume EXCEEDS the dress-flower volume. The hair is a CASCADING FLOWER-WATERFALL.
-
-⚠️ MULTI-SPECIES MANDATE — every entry uses 3-6 DIFFERENT flower species woven together (NEVER a single-species entry like 'just dahlias'). Mix species for visual richness.
-
-⚠️ COLOR-THEME MANDATE — every entry has a clear COLOR THEME pulling the flowers together:
-  • SUNSET — red + orange + pink + coral + gold + amber
-  • TWILIGHT PURPLES — lavender + violet + blue + periwinkle + indigo
-  • BLUSH PINKS — soft pink + blush + cream + ivory + pale-rose
-  • MONOCHROME WHITE — white + cream + ivory + pearl + soft-blush hints
-  • RAINBOW EXPLOSION — full spectrum (red/orange/yellow/green/blue/purple) wildly mixed
-  • PINK + WHITE COTTAGE — soft pinks + whites + creams
-  • PURPLE + WHITE ROYAL — purples + whites + violet accents
-  • CORAL + PEACH PARADISE — corals + peaches + warm sunset tones
-  • DEEP BURGUNDY + WINE — burgundy + plum + maroon + dark crimson
-  • GOLD + AMBER + COPPER — golds + ambers + coppers + warm bronze
-  • OCEAN COOL — aqua + teal + ice-blue + seafoam + pearl-white
-  • EMERALD FOREST — green-flowers + white + pale-yellow + soft lavender
-  • MAGIC PASTEL CANDY — pastel pink + lilac + mint + butter-yellow + sky-blue
-  • TROPICAL BOLD — hot pink + tropical-orange + magenta + bright-yellow
-  • AUTUMN HARVEST — rust + russet + ochre + burnt-orange + ruby
-  • DUSK FIRE — deep red + orange + crimson + gold
-
-✓ EXAMPLE FORMAT:
-"SUNSET FIRE HAIR — OVERWHELMING cascade of hundreds of red roses, coral peonies, orange ranunculus, yellow daisies, and golden marigolds woven from crown to tips, sunset-spectrum cascading through every wave, hair barely visible under the warm tidal-wave of color"
-
-🚫 BANNED:
-  • Single-species arrangements (boring)
-  • The phrase "flower crown" / "halo" / "wreath" / "thick cap" / "floral hat" — all FORBIDDEN
-  • "Minimal" / "delicate" / "subtle" / "few" — FORBIDDEN
-  • Any language suggesting fewer than HUNDREDS of flowers
-
-Channel: Pre-Raphaelite Persephone-buried-in-flowers + Pinterest "extreme lush floral bridal hair" + multi-color floral-explosion editorial + Frida Kahlo headpieces × 100x volume.`,
-    touchpoints: [
-      'SUNSET FIRE OVERWHELMING — cascade of hundreds of red roses + coral peonies + orange ranunculus + yellow daisies + golden marigolds woven from crown to tips, sunset spectrum cascading through every wave, hair buried under warm tidal-wave',
-      'TWILIGHT PURPLE STORM — hundreds of lavender + violet wisteria + blue bluebells + periwinkle + indigo iris woven through every braid, deep twilight purple-blue tidal-wave cascading from crown to waist',
-      'BLUSH PINK CASCADE — overwhelming arrangement of soft pink peonies + blush roses + cream ranunculus + ivory jasmine + pale rose-cabbage roses cascading through every section, hair drenched in blush florals',
-      'MONOCHROME WHITE FLOOD — hundreds of white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore plastered through every wave, snow-white floral cascade',
-      'RAINBOW EXPLOSION — wild rainbow of hundreds of red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones + violet sweet-pea woven through every inch, full-spectrum mass cascade',
-      'PINK AND WHITE COTTAGE — soft pink garden roses + cream-white peonies + pale blush ranunculus + white jasmine + tiny pink gypsophila woven in extreme abundance from crown to tips',
-      'PURPLE AND WHITE ROYAL — hundreds of royal purple irises + white roses + violet anemones + pearl gardenias + lavender sweet-pea cascading through every braid, dramatic purple-and-white tidal-wave',
-      'CORAL PEACH PARADISE — overwhelming coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds woven through hair, warm tropical paradise cascade',
-      'DEEP BURGUNDY WINE STORM — hundreds of burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla cascading from crown to tips, dramatic wine-spectrum tidal-wave',
-      'GOLD AMBER COPPER FIRE — golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze-orange chrysanthemums woven in massive abundance through every wave',
-      'OCEAN COOL CASCADE — aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam-green hellebore + pearl-white roses plastered through hair, cool ocean-spectrum tidal-wave',
-      'EMERALD FOREST HAIR — green hellebore + white daisies + pale-yellow primrose + soft lavender sweet-pea + emerald-green succulents woven in extreme abundance, forest-spirit floral cascade',
-      'PASTEL CANDY EXPLOSION — pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms in OVERWHELMING density through every braid, soft cotton-candy floral cascade',
-      'TROPICAL BOLD STORM — hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger woven in tropical floral-storm density',
-      'AUTUMN HARVEST CASCADE — rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos in massive autumn cascade through hair',
-      'DUSK FIRE BLAZE — deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias woven in extreme dusk-fire spectrum cascade',
-      'BLUE AND WHITE COASTAL — sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue cascading in coastal-spectrum overwhelming mass',
-      'PINK AND GOLD ROMANCE — soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea woven in romantic overwhelming cascade',
-      'VIOLET AND CREAM ETHEREAL — violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea overwhelming through every section',
-      'CHERRY BLOSSOM EXPLOSION — pink + white cherry blossom petals in MASSIVE thousand-petal cascade through every wave, supplemented with rose-pink camellias + cream magnolias',
-      'RED AND BURGUNDY DRAMA — deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus woven in dramatic wine-cascade',
-      'YELLOW MEADOW SUN — yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine-yellow chrysanthemums in massive sun-spectrum cascade',
-      'LILAC AND BABY-BLUE SPRING — lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots woven in soft-pastel spring cascade through hair',
-      'TEAL AND ROSE-GOLD VINTAGE — teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies woven in vintage-romantic cascade',
-      'BLACK ROSE AND WHITE GOTH — dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore in dramatic goth-romance cascade',
-      'PEACH AND CREAM SOFT — peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias in extreme soft-peach cascade',
-      'MAGENTA AND ORANGE BOLD — hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea in extreme bold cascade',
-      'COOL MINT AND WHITE — mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus in cool mint cascade',
-      'BUTTER YELLOW AND BLUSH — butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums woven in soft pastel cascade',
-      'INDIGO AND VIOLET DEEP — indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias in dramatic deep-purple cascade',
-      'ORANGE AND CORAL TROPICAL — bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset-spectrum bougainvillea in tropical cascade',
-      'BLUSH AND DUSTY-PINK ROMANCE — soft blush garden roses + dusty-pink peonies + pale pink ranunculus + cream-blush cabbage roses + delicate baby-pink sweet-pea in romantic overwhelming cascade',
-      'WHITE AND CHAMPAGNE BRIDAL — white roses + cream peonies + champagne-blush ranunculus + ivory dahlias + pearl-white gardenias woven in bridal cascade with rose-gold highlights',
-      'EMERALD AND GOLD LUXE — emerald-green hellebore + golden marigolds + amber dahlias + cream-gold ranunculus + green-and-gold succulents in luxe cascade',
-      'PEACH AND LAVENDER DREAM — peach garden roses + lavender sweet-pea + apricot ranunculus + soft pale-purple anemones + cream-peach peonies in dreamy pastel cascade',
-      'CRIMSON AND BLACK DRAMATIC — crimson roses + dark-burgundy dahlias + black-purple anemones + deep red ranunculus + dark crimson peonies in dramatic crimson cascade',
-      'POWDER BLUE AND PINK FAIRY — powder-blue forget-me-nots + soft pink peonies + pale-rose ranunculus + cream-white roses + baby-blue hydrangeas in soft fairy cascade',
-      'AMBER AND COPPER METALLIC — amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses in metallic warm cascade',
-      'NEON PINK AND PURPLE — bright neon-pink garden roses + electric-purple anemones + magenta dahlias + hot-pink peonies + saturated-violet sweet-pea in vibrant neon cascade',
-      'CHARCOAL AND IVORY GOTHIC — charcoal-grey hellebore + ivory roses + black-violet anemones + cream-grey ranunculus + pale-ivory dahlias in gothic-romantic cascade',
-      'TURQUOISE AND CORAL TROPICAL — turquoise hydrangeas + coral hibiscus + aqua-blue forget-me-nots + warm coral peonies + bright sea-glass green succulents in tropical cascade',
-      'PALE PINK AND GREEN GARDEN — pale-pink garden roses + emerald-green hellebore + soft mint succulents + cream-pink peonies + leafy-green eucalyptus accents in fresh garden cascade',
-      'RUBY AND GOLD ROYAL — ruby-red roses + gold-amber dahlias + crimson ranunculus + warm-gold marigolds + dark-red peonies in royal cascade',
-      'MIDNIGHT BLUE AND SILVER — midnight-blue irises + silver-grey hellebore + dark-violet anemones + ice-blue forget-me-nots + pearl-silver ranunculus in mystical cascade',
-      'CANDY APPLE RED AND CREAM — candy-apple red roses + cream-white peonies + crimson ranunculus + ivory gardenias + pearl-pink sweet-pea in classic romance cascade',
-      'SUNRISE PEACH GOLD ROSE — sunrise-peach garden roses + golden-amber dahlias + rose-pink peonies + cream-white ranunculus + warm-peach plumeria in sunrise cascade',
-      'NAVY AND BURGUNDY AUTUMN — navy-blue irises + burgundy dahlias + dark-violet anemones + deep-crimson ranunculus + maroon peonies in autumn-evening cascade',
-      'BABY PINK AND CREAM SOFT — baby-pink roses + cream peonies + pale-blush ranunculus + ivory ranunculus + pearl-pink hellebore in soft cottage cascade',
-      'BRONZE AND PLUM AUTUMN — bronze-orange chrysanthemums + plum dahlias + ruby-wine cosmos + amber ranunculus + dark-russet peonies in deep autumn cascade',
-      'IRIDESCENT FAIRY PASTEL — iridescent pastel mix of mint + lavender + baby-blue + cream-yellow + pearl-pink in extreme fairy-cascade with hundreds of tiny glistening blooms',
-    ],
-    instructions: `Each entry is ONE COLOR-THEMED MULTI-SPECIES OVERWHELMING HAIR-FLORAL arrangement, 30-70 words. Format: "COLOR-THEME NAME CAPS — overwhelming cascade of [3-6 named flower species] in [color theme], cascading through every section of hair, hair buried under the floral mass". MULTI-SPECIES + COLOR-THEMED + OVERWHELMING density. Never single-species. The phrase "flower crown" is FORBIDDEN. Output as a NUMBERED list, one per line.`,
-  },
-
-  bloombot_bloom_spirit_skin_tone: {
-    format: 'simple',
-    theme: `SKIN TONE DESCRIPTORS for the BloomBot bloom-spirit path. Each entry is ONE specific skin tone description that can pair with any race. 15-30 words.
-
-⚠️ MANDATORY — full range from fair to ebony, anime-painterly register (cel-shaded painted skin treatment, glow accents allowed). NEVER realistic-photoreal-skin-pore description.
-
-🚫 STRICT BANS:
-  • NO photoreal-pore description
-  • NO race-specific (race is a separate axis)
-  • NO face-feature description (just SKIN tone)
-  • NO body-shape description
-
-✓ TONE RANGE — DISTRIBUTE EVENLY across the full spectrum:
-  • Fair: porcelain / ivory / rose-pale / cream
-  • Light: peach / wheat / warm-fair / cool-fair
-  • Olive: olive-warm / olive-cool / golden-olive
-  • Tan: warm-tan / golden-tan / sun-kissed
-  • Brown: caramel / cocoa / warm-brown / golden-brown
-  • Deep brown: rich-brown / espresso / mahogany / chestnut
-  • Ebony: deep-ebony / luminous-ebony / midnight-velvet
-
-Anime-painterly register: cel-shaded, soft glow accents, smooth painted treatment.`,
-    touchpoints: [
-      'PORCELAIN-FAIR — porcelain-fair skin with soft rose-undertones, anime-painterly cel-shading, gentle peach glow on cheekbones',
-      'CREAM-IVORY — cream-ivory skin with warm peach undertones, anime-painterly soft painted treatment, subtle glow accents',
-      'WARM-PEACH — warm-peach skin with golden undertones, anime cel-shaded register, soft glow on cheeks',
-      'ROSE-PALE — rose-pale skin with cool undertones, anime-painterly delicate cel-shading, pink-glow cheek accents',
-      'OLIVE-WARM — warm-olive skin with golden undertones, anime cel-shaded painted treatment, honey-glow accents',
-      'GOLDEN-OLIVE — golden-olive skin with sun-warmed undertones, anime-painterly soft cel-shading, amber glow accents',
-      'SUN-KISSED TAN — sun-kissed tan skin with warm bronze undertones, anime cel-shaded painted register, golden glow',
-      'WARM-CARAMEL — warm-caramel skin with honey undertones, anime-painterly soft cel-shading, golden-amber glow accents',
-      'COCOA-BROWN — cocoa-brown skin with rich undertones, anime cel-shaded painted register, copper glow accents',
-      'GOLDEN-BROWN — golden-brown skin with warm sun undertones, anime-painterly cel-shaded register, soft amber glow',
-      'RICH-BROWN — rich-brown skin with mahogany undertones, anime cel-shaded painted treatment, warm copper glow',
-      'CHESTNUT-BROWN — chestnut-brown skin with warm autumn undertones, anime-painterly cel-shading, glowing warm highlights',
-      'ESPRESSO-DARK — espresso-dark skin with depth, anime cel-shaded painted register, jewel-tone highlight accents',
-      'MAHOGANY-DEEP — mahogany-deep skin with rich red undertones, anime-painterly cel-shading, copper-gold accents',
-      'LUMINOUS-EBONY — luminous-ebony skin with deep midnight undertones, anime cel-shaded painted register, gold-and-pearl glow accents',
-      'DEEP-EBONY — deep-ebony skin with velvety smoothness, anime-painterly cel-shading, pearl-and-gold highlight accents',
-      'MIDNIGHT-VELVET — midnight-velvet ebony skin with iridescent undertones, anime cel-shaded register, jewel-tone glow accents',
-      'WHEAT-WARM — wheat-warm skin with subtle peach undertones, anime cel-shaded painted register, soft amber glow',
-      'FAIR-COOL — fair-cool skin with subtle blue undertones, anime-painterly cel-shading, pearl-glow cheek accents',
-      'PEACH-GOLD — peach-gold skin with warm sun undertones, anime cel-shaded painted register, golden glow accents',
-      'BRONZE-WARM — warm-bronze skin with golden undertones, anime-painterly cel-shading, amber-copper glow accents',
-      'HONEY-GOLDEN — honey-golden skin with warm autumn undertones, anime cel-shaded painted register, soft golden glow',
-      'AMBER-WARM — warm-amber skin with sun-kissed undertones, anime-painterly cel-shading, warm-bronze accents',
-      'OLIVE-COOL — cool-olive skin with subtle green undertones, anime cel-shaded painted register, soft pearl accents',
-      'TOAST-WARM — warm-toast skin with golden honey undertones, anime-painterly cel-shading, soft glow accents',
-      'COFFEE-MEDIUM — coffee-medium skin with warm undertones, anime cel-shaded painted register, golden-copper glow',
-      'CINNAMON-WARM — warm-cinnamon skin with rich autumn undertones, anime-painterly cel-shading, copper-amber accents',
-      'WALNUT-DEEP — walnut-deep skin with rich brown undertones, anime cel-shaded painted register, warm copper glow',
-      'TAUPE-WARM — warm-taupe skin with subtle olive undertones, anime-painterly cel-shading, soft golden accents',
-      'COPPER-RICH — rich-copper skin with metallic undertones, anime cel-shaded painted register, gold-and-amber glow accents',
-    ],
-    instructions: `Each entry is ONE specific skin tone descriptor, 15-30 words. Format: "TONE NAME CAPS — primary tone + undertone + anime cel-shading note + glow accent". DISTRIBUTE EVENLY across the full spectrum from porcelain to ebony. NEVER race-specific. NEVER photoreal-pore. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
-  },
-
-  // ─── bloom-spirit DNA: eyes (30 entries, all colors + shapes) ───
-  bloombot_bloom_spirit_eyes: {
-    format: 'simple',
-    theme: `EYE COLOR + SHAPE DESCRIPTORS for the BloomBot bloom-spirit path. Each entry is ONE specific anime-stylized eye description. 15-30 words.
-
-⚠️ MANDATORY — LARGE STYLIZED ANIME-PAINTERLY eyes (always). Variety across all natural colors + fantasy jewel-tone colors. NEVER photoreal eye description.
-
-🚫 STRICT BANS:
-  • NO photoreal eye-iris-detail description
-  • NO race-specific (race is a separate axis)
-  • NO duplicate of skin / hair content
-  • NO realistic-shape descriptions like "small" or "narrow" — always LARGE stylized anime
-
-✓ EYE COLOR CATEGORIES — DISTRIBUTE EVENLY:
-  Natural: brown / amber / hazel / green / blue / grey / black
-  Jewel-tone fantasy: violet / aqua / silver / pink / gold / mint / rose / lavender / sapphire
-  Heterochromia: two-different-colors
-
-Anime register: large + stylized + expressive + sparkly with star-shaped highlights / multiple light catchlights / jewel-glint.`,
-    touchpoints: [
-      'LARGE VIOLET-JEWEL — large stylized violet-jewel anime eyes with star-shaped highlights, sparkly fantasy register',
-      'LARGE AMBER-GOLD — large stylized amber-gold anime eyes with multiple catchlights, warm honey depth',
-      'LARGE EMERALD-GREEN — large stylized emerald-green anime eyes with jewel sparkle, expressive painterly',
-      'LARGE SAPPHIRE-BLUE — large stylized sapphire-blue anime eyes with bright catchlights, jewel-tone depth',
-      'LARGE CHOCOLATE-BROWN — large stylized chocolate-brown anime eyes with warm catchlights, soft expressive',
-      'LARGE ICE-BLUE — large stylized ice-blue anime eyes with silver catchlights, cool jewel depth',
-      'LARGE HAZEL-WARM — large stylized hazel anime eyes with green-amber gradient, warm catchlights',
-      'LARGE AQUA-TURQUOISE — large stylized aqua-turquoise anime eyes with bright sparkle, jewel register',
-      'LARGE DEEP-AMBER — large stylized deep-amber anime eyes with copper catchlights, intense gaze',
-      'LARGE LAVENDER-VIOLET — large stylized lavender-violet anime eyes with pearl catchlights, soft jewel',
-      'LARGE FOREST-GREEN — large stylized forest-green anime eyes with golden catchlights, deep wood',
-      'LARGE GOLDEN-AMBER — large stylized golden-amber anime eyes with sun-glint catchlights, warm gold',
-      'LARGE SILVER-GREY — large stylized silver-grey anime eyes with bright catchlights, moonlight depth',
-      'LARGE ROSE-PINK FANTASY — large stylized rose-pink fantasy anime eyes with jewel sparkle (fantasy color)',
-      'LARGE MINT-GREEN FANTASY — large stylized mint-green fantasy anime eyes with bright sparkle (fantasy)',
-      'LARGE ELECTRIC-BLUE — large stylized electric-blue anime eyes with intense glow, jewel-bright',
-      'LARGE COPPER-AMBER — large stylized copper-amber anime eyes with metallic glint, warm depth',
-      'LARGE STORMY-GREY — large stylized stormy-grey anime eyes with silver catchlights, expressive',
-      'LARGE ROYAL-PURPLE — large stylized royal-purple anime eyes with bright catchlights, jewel depth',
-      'LARGE OCEAN-BLUE — large stylized ocean-blue anime eyes with multi-tone gradient, deep sparkle',
-      'LARGE MOSS-GREEN — large stylized moss-green anime eyes with subtle gold flecks, warm depth',
-      'LARGE TIGER-AMBER — large stylized tiger-amber anime eyes with copper catchlights, intense gaze',
-      'LARGE BLACK-OBSIDIAN — large stylized obsidian-black anime eyes with bright catchlights, mysterious',
-      'LARGE PEARL-WHITE FANTASY — large stylized pearl-white fantasy anime eyes with iridescent shimmer',
-      'HETEROCHROMIA BLUE-GREEN — large stylized anime eyes with one blue and one green eye, jewel sparkle',
-      'HETEROCHROMIA AMBER-VIOLET — large stylized anime eyes with one amber and one violet eye, fantasy',
-      'LARGE TWILIGHT-PURPLE — large stylized twilight-purple anime eyes with star-shaped catchlights',
-      'LARGE CORAL-PINK FANTASY — large stylized coral-pink fantasy anime eyes with bright sparkle',
-      'LARGE SUNSET-AMBER — large stylized sunset-amber anime eyes with gradient color, warm catchlights',
-      'LARGE CRYSTAL-CLEAR FANTASY — large stylized crystal-clear fantasy anime eyes with iridescent prism-glow',
-    ],
-    instructions: `Each entry is ONE specific eye descriptor, 15-30 words. Format: "EYE NAME CAPS — large stylized [color] anime eyes with [catchlight/highlight] note". ALWAYS large + stylized + anime. DISTRIBUTE across natural + jewel-tone + heterochromia. Output as a NUMBERED list, one per line.`,
-  },
-
-  // ─── bloom-spirit DNA: hair_color (30 entries, natural + fantasy) ───
-  bloombot_bloom_spirit_hair_color: {
-    format: 'simple',
-    theme: `HAIR COLOR DESCRIPTORS for the BloomBot bloom-spirit path. Each entry is ONE specific hair color description. 10-25 words.
-
-⚠️ MANDATORY — full range of natural hair colors PLUS pastel-fantasy colors. NEVER photoreal-detail description (just color + tone notes).
-
-🚫 STRICT BANS:
-  • NO photoreal individual-strand description
-  • NO race-specific (race is separate axis)
-  • NO hairstyle description (hairstyle is separate axis)
-  • NO duplicate of other DNA axes
-
-✓ COLOR CATEGORIES — DISTRIBUTE EVENLY:
-  Natural: jet-black / dark-brown / chestnut / auburn / red-copper / honey-blonde / platinum-blonde / silver / wheat-blonde
-  Fantasy: silver-white / lavender / pastel-pink / mint-green / rose-gold / sky-blue / honey-amber / sunset-orange / ocean-teal / pearl / iridescent
-
-Anime-painterly register — soft painted color with subtle gradient.`,
-    touchpoints: [
-      'JET-BLACK SILK — jet-black anime-painterly hair with subtle blue-purple highlights',
-      'DARK-CHOCOLATE — dark-chocolate anime hair with warm caramel highlights, soft painted',
-      'RICH-CHESTNUT — rich-chestnut anime hair with auburn highlights, warm depth',
-      'AUBURN-COPPER — auburn-copper anime hair with golden-red highlights, warm autumn',
-      'RED-COPPER — vibrant red-copper anime hair with golden ember highlights, fiery painted',
-      'HONEY-BLONDE — honey-blonde anime hair with golden warm highlights, soft painted',
-      'PLATINUM-BLONDE — platinum-blonde anime hair with cool silver highlights, painterly',
-      'STRAWBERRY-BLONDE — strawberry-blonde anime hair with pink-rose-gold tones, soft painted',
-      'WHEAT-BLONDE — wheat-blonde anime hair with warm golden highlights, sun-kissed',
-      'SILVER-GREY — silver-grey anime hair with cool moonlight highlights, ethereal painted',
-      'WHITE-PEARL FANTASY — pearl-white fantasy anime hair with iridescent shimmer highlights',
-      'LAVENDER-PURPLE FANTASY — lavender-purple fantasy anime hair with violet highlights, painted',
-      'PASTEL-PINK FANTASY — pastel-pink fantasy anime hair with rose highlights, soft painted',
-      'MINT-GREEN FANTASY — mint-green fantasy anime hair with seafoam highlights, painted',
-      'ROSE-GOLD FANTASY — rose-gold fantasy anime hair with metallic warm highlights, painted',
-      'SKY-BLUE FANTASY — sky-blue fantasy anime hair with crystal highlights, painted',
-      'HONEY-AMBER FANTASY — honey-amber fantasy anime hair with golden glow, painted',
-      'SUNSET-ORANGE FANTASY — sunset-orange fantasy anime hair with red-gold gradient, painted',
-      'OCEAN-TEAL FANTASY — ocean-teal fantasy anime hair with aqua highlights, painted',
-      'IRIDESCENT FANTASY — iridescent rainbow-shimmer fantasy anime hair, painterly',
-      'COCOA-BROWN — cocoa-brown anime hair with warm caramel highlights, painted',
-      'ESPRESSO-DARK — espresso-dark anime hair with cool blue undertones, painted',
-      'MAHOGANY-RED — mahogany-red anime hair with deep auburn tones, warm painted',
-      'COOL-ASH BROWN — cool-ash-brown anime hair with subtle grey-undertone highlights',
-      'WARM-CARAMEL — warm-caramel anime hair with golden honey highlights, painted',
-      'CHARCOAL-BLACK — charcoal-black anime hair with subtle grey highlights, painted',
-      'TWILIGHT-VIOLET FANTASY — twilight-violet fantasy anime hair with star-shimmer highlights',
-      'PERIWINKLE FANTASY — periwinkle fantasy anime hair with crystal-blue tones, painted',
-      'BUTTER-YELLOW FANTASY — butter-yellow fantasy anime hair with cream-gold tones, painted',
-      'CORAL-PEACH FANTASY — coral-peach fantasy anime hair with rose-amber tones, painted',
-    ],
-    instructions: `Each entry is ONE specific hair color descriptor, 10-25 words. Format: "COLOR NAME CAPS — [color] anime-painterly hair with [highlight/tone] note". DISTRIBUTE across natural + pastel-fantasy. Output as a NUMBERED list, one per line.`,
-  },
-
-  // ─── bloom-spirit DNA: hairstyle (50 entries, length + texture + styling) ───
-  bloombot_bloom_spirit_hairstyle: {
-    format: 'simple',
-    theme: `HAIRSTYLE DESCRIPTORS for the BloomBot bloom-spirit path. Each entry is ONE specific hair length + texture + styling description. 15-30 words.
-
-⚠️ MANDATORY — describes hair STRUCTURE (length / texture / cut / styling) WITHOUT mentioning flowers (flowers are handled by template). The hair must read AS HAIR clearly visible.
-
-🚫 STRICT BANS:
-  • NO color description (hair_color is separate axis)
-  • NO race-specific
-  • NO flower / floral / bloom references (template handles that)
-  • NO hat / crown / wreath / cap mentions
-
-✓ HAIRSTYLE CATEGORIES — DISTRIBUTE across:
-  Length: pixie / chin-bob / shoulder-length / mid-back / waist-length / floor-length
-  Texture: straight / wavy / curly / coily / kinky / box-braided / cornrowed / loc'd
-  Styling: loose / half-up / updo / braided crown / side-swept / french-braid / fishtail / dutch-braid / waterfall-braid / chignon / messy bun / sleek / voluminous / topknot
-
-Anime-painterly register — hair painted with flowing dynamic motion, soft sheen, painterly highlights.`,
-    touchpoints: [
-      'LONG FLOWING WAVES — long mid-back flowing soft waves cascading freely, anime-painterly dynamic motion, soft sheen',
-      'WAIST-LENGTH STRAIGHT — sleek waist-length straight hair with soft anime painted sheen, flowing down her back',
-      'LONG CURLY MASS — long voluminous curly hair past shoulders, painted spiral curls in anime register',
-      'BOX-BRAIDS SHOULDER — long box-braided hair past shoulders, each braid individually painted, anime register',
-      'BOX-BRAIDS WAIST — long box-braided hair to the waist, each braid distinct, painted anime register',
-      'CORNROWS CROWN — intricate cornrow braids forming a crown pattern, painted anime register',
-      'LOCS LONG — long locs cascading past shoulders, individually painted twist-and-coil, anime register',
-      'AFRO ROUND — beautiful round afro hairstyle, voluminous painted curls, anime register',
-      'PIXIE CUT TEXTURED — chic pixie cut with textured side-sweep, painted anime register with soft sheen',
-      'CHIN BOB SLEEK — sleek chin-length bob with smooth sheen, painted anime register, soft flowing edges',
-      'SHOULDER BLUNT — shoulder-length blunt cut with subtle waves, painted anime register, smooth sheen',
-      'ELEGANT UPDO — elegant chignon updo with soft tendrils framing the face, painted anime register',
-      'BRAIDED CROWN UPDO — braided-crown updo with the braid wrapping the head, painted anime register',
-      'HALF-UP HALF-DOWN — half-up half-down style with twisted upper crown and flowing lower waves, painted anime',
-      'SIDE-SWEPT WAVES — side-swept long waves flowing over one shoulder, painted anime register, dynamic motion',
-      'FRENCH-BRAID — single French braid down the center back, anime painted register, structured',
-      'FISHTAIL-BRAID — long fishtail braid over one shoulder, intricately painted anime register',
-      'DUTCH-BRAID DOUBLE — two Dutch braids running parallel down both sides, painted anime register',
-      'WATERFALL-BRAID — waterfall-braid framing the face with loose ends cascading, painted anime register',
-      'MESSY BUN — soft messy bun atop the head with tendrils framing the face, painted anime register',
-      'TOPKNOT ELEGANT — elegant topknot with smooth pulled-back styling, painted anime register',
-      'VOLUMINOUS CURLS — voluminous curls past shoulders with bouncy dynamic painted motion, anime',
-      'TIGHT-COILS NATURAL — tight natural coils framing the face, voluminous painted anime register',
-      'BANTU KNOTS — Bantu knots styled across the crown, painted anime register, structured',
-      'SLEEK PONYTAIL LOW — sleek low ponytail flowing down the back, painted anime register, smooth',
-      'HIGH PONYTAIL VOLUMINOUS — high ponytail with voluminous waves cascading, painted anime register',
-      'CROWN BRAID INTRICATE — intricate crown braid wrapping around the head, painted anime register',
-      'PRINCESS UPDO — princess-style updo with twists and curls, painted anime register, elegant',
-      'LOOSE BEACH WAVES — loose beach waves flowing freely, painted anime register, soft windswept motion',
-      'STRAIGHT SLEEK MID-BACK — straight sleek hair to mid-back with glossy painted sheen, anime register',
-      'WAVY MID-BACK PARTED — wavy mid-back hair parted in the middle, painted anime register, soft motion',
-      'CURLY SHOULDER-LENGTH — shoulder-length curly hair with bounce, painted anime register',
-      'BRAIDED LOW BUN — low braided bun at the nape with elegant smooth styling, painted anime register',
-      'TWISTED-BACK — back-twisted style with loose tendrils framing the face, painted anime register',
-      'SLEEK MIDDLE-PART LONG — sleek middle-part long hair flowing down the back, painted anime register',
-      'CURLY UPDO TENDRILS — curly updo with cascading tendrils, painted anime register, soft and dynamic',
-      'BRAIDED HEADBAND — braided-headband style framing the hairline, rest flowing free, painted anime',
-      'TWO BRAIDS PIGTAIL — two long pigtail braids one on each side, painted anime register, sweet',
-      'CURLY HALF-UPDO — curly half-updo with the upper section twisted up, painted anime register',
-      'WAVY HIGH-PONYTAIL — wavy high-ponytail with bouncy painted curls cascading, anime register',
-      'SLEEK TOPKNOT — sleek high topknot with smooth pulled-back styling, painted anime register',
-      'BRAIDED PIGTAILS LOW — two low braided pigtails framing the face, painted anime register',
-      'LOOSE PARTED MID-BACK — loose middle-parted mid-back hair, painted anime register, soft and flowing',
-      'TWIST-OUT NATURAL — natural twist-out style with defined coils, painted anime register, voluminous',
-      'SIDE-PART LONG-WAVES — side-parted long-wavy hair flowing over one shoulder, painted anime register',
-      'CURLY ASYMMETRICAL — curly asymmetrical cut with one side longer, painted anime register, edgy',
-      'BRAIDED HALO — single thick braid wrapped around the crown like a halo (no flowers), painted anime',
-      'LOOSE WAVY UNDONE — loose wavy hair undone and free-flowing, painted anime register, romantic',
-      'STRAIGHT WITH WISPS — straight hair with face-framing wisps, painted anime register, soft',
-      'CURLY UPSWEPT — curly hair swept up on one side with cascading other side, painted anime register',
-    ],
-    instructions: `Each entry is ONE specific HAIRSTYLE descriptor (length + texture + styling), 15-30 words. Format: "STYLE NAME CAPS — [length] [texture] hair with [styling note], painted anime register". NEVER color / flower / race specific. Output as a NUMBERED list, one per line.`,
-  },
-
-  // ─── bloom-spirit path: woman_archetype (diverse beautiful young women) ───
-  // ─── bloom-spirit path: woman_archetype (diverse beautiful young women) ───
-  bloombot_bloom_spirit_woman_archetype: {
-    format: 'simple',
-    theme: `WOMAN ARCHETYPES for the BloomBot bloom-spirit path. Each entry is ONE specific beautiful young woman described by ethnicity / skin tone / hair color + texture / eye color + features — for an anime-painterly fantasy portrait. Each entry 20-40 words.
-
-⚠️ MANDATORY — DIVERSITY across all ethnicities, all skin tones, all hair colors (natural + pastel-fantasy), all eye colors (natural + jewel-tone fantasy), all hair textures. Every render is a beautiful YOUNG WOMAN — never men, never children, never elders.
-
-🚫 STRICT BANS:
-  • NO men / boys / male figures
-  • NO children / babies / toddlers / teens
-  • NO elders / old women
-  • NO multiple figures (always single solo subject)
-  • NO realistic-fashion-editorial register — this is fantasy painterly anime
-  • NO horror / dark-fantasy / ominous features
-  • NO specific real-people / celebrity references
-
-✓ ETHNICITY / SKIN-TONE CATEGORIES — DISTRIBUTE EVENLY (~8% each):
-  A. EAST ASIAN — Japanese / Korean / Chinese features, fair-to-tan skin
-  B. SOUTHEAST ASIAN — Thai / Vietnamese / Filipino / Indonesian features
-  C. SOUTH ASIAN — Indian / Pakistani / Bangladeshi features, olive-to-brown skin
-  D. MIDDLE EASTERN — Persian / Arab / Lebanese / Egyptian features
-  E. NORTH AFRICAN — Moroccan / Algerian / Egyptian features
-  F. WEST AFRICAN — Nigerian / Ghanaian / Senegalese features, deep-brown to ebony skin
-  G. EAST AFRICAN — Ethiopian / Eritrean / Somali features, tall + slender
-  H. MEDITERRANEAN — Italian / Spanish / Greek / Maltese features
-  I. NORTHERN EUROPEAN — Scandinavian / British / Irish / German features, fair skin
-  J. LATIN AMERICAN — Mexican / Colombian / Brazilian / Argentine features
-  K. PACIFIC ISLANDER — Polynesian / Hawaiian / Samoan / Maori features
-  L. MIXED / FANTASY — mixed-heritage or fantasy-styled with silver / lavender / pastel-pink hair
-
-✓ HAIR TEXTURE VARIETY — distribute across:
-  • Straight long / wavy long / curly long / box-braids / cornrows / locs / afro / sleek-bob / pixie-with-detail / updo / braided crown
-
-Anime-painterly fantasy register — describe each woman with stylized large jewel-tone eyes, glitter-and-sparkle face accents possible, painterly skin treatment, soft lush features.
-
-Channel: anime fantasy portrait painters + Disney concept art diversity + Pinterest 'diverse beauty' boards + romantic-fantasy book covers.`,
-    touchpoints: [
-      'JAPANESE-FEATURED LONG-WAVY — fair-skinned Japanese-featured young woman with jet-black long-wavy hair flowing, large stylized violet-jewel eyes, soft glitter on cheekbones, delicate anime-fantasy features',
-      'SOUTH ASIAN AMBER + CURLS — South Asian young woman with rich amber-tan skin, lustrous black long-curly hair, large stylized golden-amber eyes, gold-glitter on brow and collarbone',
-      'WEST AFRICAN BOX-BRAIDS — West African young woman with luminous deep-ebony skin, long box-braids cascading, large stylized emerald-green eyes, gold-jewel glitter on cheekbones, regal painterly',
-      'POLYNESIAN WAVY-BLACK — Polynesian young woman with golden-tan skin, long jet-black wavy hair with subtle warm-brown highlights, large stylized chocolate-amber eyes, pearl-glitter accents',
-      'MEDITERRANEAN AUBURN-CURLY — Mediterranean young woman with olive-toast skin, long auburn curly hair, large stylized hazel-green eyes, soft rose-glitter cheek accents',
-      'NORTHERN EUROPEAN PLATINUM — Northern European young woman with porcelain-fair skin, long platinum-blonde flowing hair, large stylized ice-blue eyes, silver-glitter face accents',
-      'KOREAN SLEEK-BLACK — fair-skinned Korean-featured young woman with sleek straight black bob, large stylized doe-brown eyes, soft pink-glitter cheek accents',
-      'PERSIAN DARK-WAVY — Persian young woman with warm olive-tan skin, long dark wavy hair, large stylized hazel-amber eyes with depth, gold-glitter on collarbone',
-      'MOROCCAN CURLY-BROWN — North African young woman with golden-tan skin, long dark-brown curly hair, large stylized hazel-green eyes, henna-style accents on temples',
-      'MEXICAN WAVY-CHOCOLATE — Latin American young woman with rich tan skin, long dark-brown wavy hair, large stylized chocolate-brown eyes, soft coral-glitter cheek accents',
-      'ETHIOPIAN BRAIDED-CROWN — East African young woman with luminous brown skin, tall + slender, dark hair in braided crown, large stylized dark-amber eyes, gold-glitter accents',
-      'FANTASY SILVER-WHITE — fantasy-styled young woman with porcelain skin, long silver-white flowing hair, large stylized violet-jewel eyes, silver-pearl glitter face accents',
-      'PASTEL-PINK FANTASY — fantasy-styled young woman with fair skin, long pastel-pink curly hair, large stylized aqua-blue eyes, pearl-pink glitter accents',
-      'SOUTH INDIAN DEEP-BROWN — South Indian young woman with deep-brown skin, long wavy black hair, large stylized amber-brown eyes, gold-tikka on forehead, henna accents',
-      'BRAZILIAN BIG-CURLY — Brazilian young woman with golden-brown skin, long voluminous curly dark-brown hair, large stylized hazel-green eyes, sunkissed glow',
-      'MAORI DARK-WAVY — Maori young woman with warm golden-brown skin, long dark wavy hair, large stylized dark-brown eyes, subtle traditional accents softly painted',
-      'SCANDINAVIAN WHEAT-BRAID — Scandinavian young woman with fair-rose skin, long wheat-blonde braided hair, large stylized cornflower-blue eyes, silver-glitter accents',
-      'EGYPTIAN ALMOND-DARK — Egyptian young woman with warm olive-amber skin, long dark hair with subtle waves, large stylized almond-shaped dark-amber eyes, gold-glitter on eyelids',
-      'INDONESIAN GOLDEN-TAN — Indonesian young woman with warm golden-tan skin, long dark wavy hair, large stylized chocolate-brown eyes, soft pink-pearl glitter accents',
-      'FANTASY LAVENDER-FLOWING — fantasy-styled young woman with porcelain skin, long flowing lavender-purple hair, large stylized violet-pink-jewel eyes, pearl-lavender glitter accents',
-      'NIGERIAN CORNROWS — Nigerian young woman with luminous ebony skin, intricate cornrow braids forming a crown, large stylized amber eyes, gold-jewel glitter accents',
-      'GREEK CHESTNUT-CURLY — Greek young woman with olive skin, long chestnut-curly hair, large stylized warm-hazel eyes, soft glitter on cheekbones',
-      'CHINESE STRAIGHT-BLACK-UPDO — fair-skinned Chinese-featured young woman with sleek black hair in elegant updo, large stylized doe-brown eyes, jade-green glitter accents',
-      'IRISH RED-CURLS — Irish young woman with pale-rose skin and freckles, long red-copper curls, large stylized emerald-green eyes, gold-glitter freckle-highlighting',
-      'SOMALI TALL-SLENDER — Somali young woman with luminous medium-brown skin, tall + slender, long dark hair in loose-curl crown, large stylized golden-amber eyes',
-      'JAMAICAN LOCS — Jamaican young woman with rich brown skin, long locs cascading, large stylized warm-amber eyes, soft pearl-glitter face accents',
-      'FILIPINO WAVY-DARK — Filipino young woman with golden-tan skin, long dark-brown wavy hair, large stylized warm-brown eyes, soft pink-pearl glitter accents',
-      'PUERTO-RICAN DARK-WAVY — Puerto-Rican young woman with golden-tan skin, long dark wavy hair, large stylized warm-amber eyes, sunset-glitter cheek accents',
-      'ICELANDIC PLATINUM-STRAIGHT — Icelandic young woman with porcelain-fair skin, long platinum-blonde straight hair, large stylized pale-blue-grey eyes, silver-frost glitter accents',
-      'INDIAN-WITH-HENNA — South Asian young woman with warm caramel skin, long dark wavy hair with floral accent, large stylized amber-brown eyes, henna-pattern on hands suggested',
-    ],
-    instructions: `Each entry is ONE specific beautiful young woman for the bloom-spirit portrait, 20-40 words. Format: "ETHNICITY/STYLE CAPS — primary ethnicity + skin tone + hair color/texture + eye color/feature + glitter accent". DISTRIBUTE EVENLY across the 12 ethnicity categories AND the 11 hair-texture types. Anime-painterly register. NEVER men / children / elders / multiple figures. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
-  },
-
-  // ─── bloom-spirit path: bloom_gown (couture floral dress + matching hair-floral) ───
-  bloombot_bloom_spirit_bloom_gown: {
-    format: 'simple',
-    theme: `COLOR-THEMED COUTURE FLORAL GOWNS for the BloomBot bloom-spirit path. Each entry is ONE COLOR-THEMED MULTI-SPECIES gown design where the entire dress is DRENCHED/PLASTERED/SUBMERGED in overwhelming bloom-mass. DESCRIBES ONLY THE DRESS. Each entry 30-70 words.
-
-⚠️ EXTREME OVERWHELMING DENSITY — every gown is so DRENCHED in flowers the fabric silhouette is BARELY VISIBLE beneath the floral mass. From neckline to hem to train — thousands of overlapping blooms.
-
-⚠️ MULTI-SPECIES MANDATE — every entry uses 3-6 DIFFERENT flower species mixed in a coordinated COLOR THEME (never a single-species gown).
-
-⚠️ COLOR-THEME MANDATE — use these themes:
-  • SUNSET (red/orange/pink/coral/gold) | TWILIGHT PURPLES | BLUSH PINKS | MONOCHROME WHITE
-  • RAINBOW EXPLOSION | PINK + WHITE COTTAGE | PURPLE + WHITE ROYAL | CORAL + PEACH PARADISE
-  • DEEP BURGUNDY + WINE | GOLD + AMBER + COPPER | OCEAN COOL | EMERALD FOREST
-  • MAGIC PASTEL CANDY | TROPICAL BOLD | AUTUMN HARVEST | DUSK FIRE
-  • BLUE + WHITE COASTAL | PINK + GOLD | VIOLET + CREAM | NAVY + BURGUNDY
-
-✓ GOWN SILHOUETTE VARIETY (rotate across):
-  Strapless ball / Off-shoulder / Halter-neck / Corset + layered skirt / A-line / Mermaid / Empire-waist / Backless / Caped overlay / Sleeved ball / High-neck choker / Princess full-skirt
-
-🚫 STRICT BANS:
-  • NO hair / hair-crown / matching hair references (hair is separate axis)
-  • NO single-species gowns
-  • NO modern / corporate / casual fashion
-  • NO 'some flowers on a dress' — every inch DRENCHED`,
-    touchpoints: [
-      'SUNSET BALL GOWN — strapless couture bodice DRENCHED with overlapping red roses + coral peonies + orange ranunculus + yellow daisies + golden marigolds, full ball-skirt cascading sunset-spectrum florals to the floor in extreme density',
-      'TWILIGHT PURPLE MERMAID — mermaid silhouette PLASTERED with lavender wisteria + violet anemones + blue bluebells + periwinkle iris + indigo sweet-pea, every inch of fabric buried beneath twilight floral cascade',
-      'BLUSH PINK PRINCESS — princess full-skirt gown DRENCHED in soft pink peonies + blush roses + cream ranunculus + ivory jasmine + pale-blush cabbage roses, fabric barely visible under blush cascade',
-      'MONOCHROME WHITE BRIDAL — strapless couture ball PLASTERED in white roses + cream gardenias + ivory peonies + pearl-white jasmine + pale-blush hellebore, snow-white floral overwhelming cascade',
-      'RAINBOW EXPLOSION GOWN — A-line gown DRENCHED with rainbow of red poppies + orange marigolds + yellow daisies + green hellebore + blue cornflowers + purple anemones, vibrant full-spectrum cascade',
-      'PINK + WHITE COTTAGE BALL — off-shoulder ball PLASTERED with soft pink garden roses + white peonies + pale blush ranunculus + jasmine + tiny pink gypsophila in cottage-romantic overwhelming cascade',
-      'PURPLE + WHITE ROYAL GOWN — backless gown DRENCHED in royal purple irises + white roses + violet anemones + pearl gardenias + lavender sweet-pea in dramatic purple-and-white cascade',
-      'CORAL PEACH PARADISE MERMAID — mermaid silhouette PLASTERED with coral peonies + peach garden roses + apricot ranunculus + warm sunset dahlias + golden marigolds in warm tropical cascade',
-      'BURGUNDY WINE BALL — corset + layered skirt DRENCHED in burgundy dahlias + plum cosmos + maroon roses + dark-crimson ranunculus + black-purple calla in dramatic wine-spectrum cascade',
-      'GOLD AMBER COPPER COUTURE — halter-neck gown PLASTERED with golden marigolds + amber rudbeckia + copper dahlias + warm yellow daisies + bronze chrysanthemums in massive metallic cascade',
-      'OCEAN COOL EMPIRE — empire-waist gown DRENCHED in aqua hydrangeas + teal sea-holly + ice-blue forget-me-nots + seafoam hellebore + pearl-white roses in cool ocean-spectrum cascade',
-      'EMERALD FOREST GOWN — A-line gown PLASTERED with green hellebore + white daisies + pale yellow primrose + lavender sweet-pea + emerald succulents in forest-spirit cascade',
-      'PASTEL CANDY EXPLOSION — princess full-skirt DRENCHED in pastel pink + lilac + mint + butter-yellow + sky-blue tiny blooms in cotton-candy overwhelming cascade',
-      'TROPICAL BOLD STORM GOWN — mermaid silhouette PLASTERED with hot pink hibiscus + tropical orange marigolds + magenta bougainvillea + bright yellow plumeria + saturated coral ginger',
-      'AUTUMN HARVEST GOWN — off-shoulder ball DRENCHED in rust chrysanthemums + russet dahlias + ochre marigolds + burnt-orange roses + ruby-wine cosmos in autumn cascade',
-      'DUSK FIRE COUTURE — strapless ball DRENCHED in deep red roses + orange peonies + crimson ranunculus + gold marigolds + warm-amber dahlias in dusk-fire spectrum cascade',
-      'BLUE + WHITE COASTAL — caped overlay gown PLASTERED with sky-blue hydrangeas + white roses + ice-blue forget-me-nots + pearl-white jasmine + soft cornflower-blue in coastal cascade',
-      'PINK + GOLD ROMANCE — corset gown DRENCHED in soft pink garden roses + gold-amber ranunculus + cream peonies + pale rose-gold dahlias + pearl-pink sweet-pea in romantic cascade',
-      'VIOLET + CREAM ETHEREAL — empire-waist gown PLASTERED with violet iris + cream-white roses + lavender peonies + pearl-white anemones + soft violet sweet-pea',
-      'CHERRY BLOSSOM PRINCESS — princess ball PLASTERED with pink + white cherry blossom petals + pink camellias + cream magnolias in cherry-blossom overwhelming cascade',
-      'RED + BURGUNDY DRAMA GOWN — corset gown DRENCHED in deep red roses + burgundy dahlias + crimson peonies + dark-wine cosmos + black-red ranunculus in dramatic cascade',
-      'YELLOW MEADOW SUN GOWN — A-line gown PLASTERED with yellow daisies + golden marigolds + butter-yellow ranunculus + cream-yellow daffodils + sunshine chrysanthemums',
-      'LILAC + BABY-BLUE SPRING — off-shoulder gown DRENCHED in lilac + baby-blue + pale-lavender + soft periwinkle + sky-blue forget-me-nots in soft-pastel spring cascade',
-      'TEAL + ROSE-GOLD VINTAGE — caped overlay gown PLASTERED with teal hydrangeas + rose-gold dahlias + dusty-pink roses + warm copper ranunculus + cream-white peonies',
-      'BLACK ROSE + WHITE GOTH — strapless corset DRENCHED in dark-burgundy black-roses + white roses + deep-violet anemones + ivory gardenias + pearl-pink hellebore',
-      'PEACH + CREAM SOFT — empire-waist gown PLASTERED with peach garden roses + cream peonies + soft apricot ranunculus + pearl-white jasmine + warm-cream camellias',
-      'MAGENTA + ORANGE BOLD — mermaid silhouette DRENCHED with hot magenta dahlias + bright orange marigolds + fuchsia peonies + coral ranunculus + saturated tropical bougainvillea',
-      'COOL MINT + WHITE — A-line gown PLASTERED with mint-green hellebore + white roses + pale-green succulents + ivory jasmine + soft seafoam ranunculus',
-      'BUTTER YELLOW + BLUSH — princess ball DRENCHED in butter-yellow daisies + blush garden roses + cream-yellow ranunculus + soft pink peonies + pearl-yellow chrysanthemums',
-      'INDIGO + VIOLET DEEP — corset gown PLASTERED with indigo irises + violet wisteria + deep-purple anemones + dark-violet sweet-pea + plum dahlias in dramatic deep-purple cascade',
-      'ORANGE + CORAL TROPICAL — halter-neck gown DRENCHED in bright orange marigolds + coral hibiscus + tropical-peach plumeria + warm orange-yellow ranunculus + sunset bougainvillea',
-      'BLUSH + DUSTY-PINK ROMANCE — caped overlay gown PLASTERED with soft blush garden roses + dusty-pink peonies + pale pink ranunculus + cream-blush cabbage roses + baby-pink sweet-pea',
-      'WHITE + CHAMPAGNE BRIDAL — strapless ball DRENCHED in white roses + cream peonies + champagne-blush ranunculus + ivory dahlias + pearl-white gardenias with rose-gold highlights',
-      'EMERALD + GOLD LUXE — empire-waist gown PLASTERED with emerald-green hellebore + golden marigolds + amber dahlias + cream-gold ranunculus + green-and-gold succulents',
-      'PEACH + LAVENDER DREAM — off-shoulder ball DRENCHED with peach garden roses + lavender sweet-pea + apricot ranunculus + soft pale-purple anemones + cream-peach peonies',
-      'CRIMSON + BLACK DRAMATIC — backless corset PLASTERED with crimson roses + dark-burgundy dahlias + black-purple anemones + deep red ranunculus + dark crimson peonies',
-      'POWDER BLUE + PINK FAIRY — princess ball DRENCHED in powder-blue forget-me-nots + soft pink peonies + pale-rose ranunculus + cream-white roses + baby-blue hydrangeas',
-      'AMBER + COPPER METALLIC — high-neck choker gown PLASTERED with amber dahlias + copper-orange chrysanthemums + warm-bronze ranunculus + gold-amber marigolds + russet roses',
-      'NEON PINK + PURPLE — mermaid silhouette DRENCHED in bright neon-pink garden roses + electric-purple anemones + magenta dahlias + hot-pink peonies + saturated violet sweet-pea',
-      'CHARCOAL + IVORY GOTHIC — empire-waist gown PLASTERED with charcoal-grey hellebore + ivory roses + black-violet anemones + cream-grey ranunculus + pale-ivory dahlias',
-      'TURQUOISE + CORAL TROPICAL — caped overlay DRENCHED with turquoise hydrangeas + coral hibiscus + aqua-blue forget-me-nots + warm coral peonies + bright sea-glass succulents',
-      'PALE PINK + GREEN GARDEN — A-line gown PLASTERED with pale-pink garden roses + emerald-green hellebore + soft mint succulents + cream-pink peonies + leafy eucalyptus',
-      'RUBY + GOLD ROYAL — corset + layered skirt DRENCHED in ruby-red roses + gold-amber dahlias + crimson ranunculus + warm-gold marigolds + dark-red peonies',
-      'MIDNIGHT BLUE + SILVER — strapless ball PLASTERED with midnight-blue irises + silver-grey hellebore + dark-violet anemones + ice-blue forget-me-nots + pearl-silver ranunculus',
-      'CANDY APPLE RED + CREAM — princess full-skirt DRENCHED in candy-apple red roses + cream-white peonies + crimson ranunculus + ivory gardenias + pearl-pink sweet-pea',
-      'SUNRISE PEACH GOLD ROSE — empire-waist gown PLASTERED with sunrise-peach garden roses + golden-amber dahlias + rose-pink peonies + cream-white ranunculus + warm-peach plumeria',
-      'NAVY + BURGUNDY AUTUMN — backless gown DRENCHED in navy-blue irises + burgundy dahlias + dark-violet anemones + deep-crimson ranunculus + maroon peonies',
-      'BABY PINK + CREAM SOFT — off-shoulder princess gown PLASTERED with baby-pink roses + cream peonies + pale-blush ranunculus + ivory ranunculus + pearl-pink hellebore',
-      'BRONZE + PLUM AUTUMN — corset gown DRENCHED with bronze-orange chrysanthemums + plum dahlias + ruby-wine cosmos + amber ranunculus + dark-russet peonies',
-      'IRIDESCENT FAIRY PASTEL — caped overlay gown PLASTERED with iridescent pastel mix of mint + lavender + baby-blue + cream-yellow + pearl-pink in extreme fairy-cascade',
-    ],
-    instructions: `Each entry is ONE COLOR-THEMED MULTI-SPECIES COUTURE FLORAL GOWN, 30-70 words. Format: "COLOR-THEME + SILHOUETTE NAME CAPS — gown silhouette DRENCHED/PLASTERED with [3-6 named flower species] in [color theme], fabric barely visible under floral cascade". MULTI-SPECIES + COLOR-THEMED + OVERWHELMING density. Never single-species. NEVER mention hair. Output as a NUMBERED list, one per line.`,
-  },
-
-  bloombot_bloom_spirit_garden_backdrop: {
-    format: 'simple',
-    theme: `BEAUTIFUL FLOWER-GARDEN BACKDROPS for the BloomBot bloom-spirit path. Each entry is ONE specific lush, magical, dreamy garden / courtyard / pergola setting that sits in SOFT-FOCUS BOKEH behind the portrait subject. Each entry 20-40 words.
-
-⚠️ MANDATORY — every backdrop is BEAUTIFUL + LUSH + dreamy. Rendered in SOFT-FOCUS BOKEH (shallow depth-of-field) so it inspires the mood without competing with the woman for focus.
-
-🚫 STRICT BANS:
-  • NO modern / corporate / urban backdrops
-  • NO horror / dark / morbid settings
-  • NO empty / desolate / minimalist
-  • NO ruins / abandoned structures (reclaim's territory)
-  • NO interiors / rooms (cozy's territory)
-  • NO additional humans / figures in the backdrop
-
-✓ BACKDROP CATEGORIES:
-  A. WISTERIA PERGOLA — hanging racemes overhead in soft bokeh
-  B. ROSE GARDEN — formal rose-garden cascading rose-walls
-  C. BLUEBELL FOREST — bluebell forest understory with shafts of light
-  D. CHERRY-BLOSSOM GROVE — full bloom, petals falling
-  E. LILAC GROVE — purple cone-clusters overhead
-  F. TROPICAL LAGOON GARDEN — palms + tropical-bloom edges
-  G. WALLED GARDEN — old walled-garden with climbing-bloom
-  H. MEADOW WILDFLOWER — wildflower meadow stretching back in golden bokeh
-  I. JAPANESE GARDEN — cherry blossom + koi pond
-  J. MOROCCAN COURTYARD — central fountain + bloom-mass on walls
-  K. MEDITERRANEAN VILLA — bougainvillea cascades + cypress
-  L. HYDRANGEA GARDEN — massive blue-and-pink blooms
-  M. MAGICAL FAIRY GLEN — soft-glowing bioluminescent-style blooms
-  N. DAHLIA GARDEN — massive blooms of all colors
-  O. JASMINE PERGOLA — white-cascade trailing
-
-All backdrops in DREAMY SOFT-FOCUS — never sharp / detailed, always blur-bokeh that suggests rather than declares.
-
-Channel: Pinterest 'fairy garden' boards + Studio Ghibli garden backdrops + bridal-photography garden venues + Pre-Raphaelite painted-garden backgrounds.`,
-    touchpoints: [
-      'WISTERIA-PERGOLA TUNNEL — wisteria-pergola tunnel with hanging purple racemes overhead in soft-bokeh blur, dappled light filtering through, romantic depth-of-field background',
-      'BLUEBELL-FOREST UNDERSTORY — bluebell-forest floor in soft-bokeh blur, vertical sun-shafts piercing the canopy, deep-blue carpet receding into dreamy haze',
-      'CHERRY-BLOSSOM GROVE — cherry-blossom tree grove in full pink-bloom, petals falling through the air in soft-bokeh, magical romantic backdrop',
-      'LILAC GROVE — lilac-tree grove with massive purple cone-clusters hanging overhead in soft-bokeh, dreamy lavender backdrop',
-      'TROPICAL LAGOON GARDEN — tropical lagoon edge with palm-fronds and tropical-bloom cascades in soft-bokeh haze, turquoise water glimpsed in deep blur',
-      'WALLED-GARDEN STONE — old walled-garden interior with climbing-rose mass on weathered stone walls in soft-bokeh, sun-warmed atmosphere',
-      'WILDFLOWER-MEADOW GOLDEN — wildflower meadow stretching into soft-golden bokeh behind, golden-hour light, dreamy depth-of-field',
-      'JAPANESE-GARDEN CHERRY + KOI — Japanese garden with cherry-blossom and koi-pond in soft-bokeh, traditional stone-lantern glimpse, magical hush',
-      'MOROCCAN COURTYARD FOUNTAIN — Moroccan courtyard with central tile-fountain and bougainvillea cascade on walls in soft-bokeh, warm amber atmosphere',
-      'MEDITERRANEAN BOUGAINVILLEA VILLA — Mediterranean villa with cascading magenta-bougainvillea + cypress silhouette in soft-bokeh, sun-warmed golden light',
-      'HYDRANGEA GARDEN MASS — formal hydrangea garden with massive blue-and-pink blooms in soft-bokeh blur, dreamy floral wall',
-      'MAGICAL FAIRY GLEN — soft-glowing magical fairy glen with bioluminescent-style blooms in soft-bokeh, fireflies, ethereal lighting',
-      'DAHLIA GARDEN MULTI-COLOR — dahlia garden with massive blooms of coral / amber / wine / cream in soft-bokeh, dreamy floral abundance',
-      'JASMINE PERGOLA TUNNEL — jasmine-pergola with white-jasmine cascades trailing overhead in soft-bokeh, romantic moonlit atmosphere',
-      'PEONY GARDEN ABUNDANCE — formal peony garden with massive cabbage-rose-style peonies in pink-and-white in soft-bokeh blur',
-      'TUSCAN HILL-GARDEN — Tuscan hill-garden with terraced bloom-beds and distant cypress in soft-bokeh, warm Italian-light',
-      'BRITISH COTTAGE-GARDEN — British cottage-garden with delphiniums + foxgloves + roses in soft-bokeh, romantic English-garden mood',
-      'GREEK ISLAND TERRACE — Greek-island terrace with whitewashed walls + bougainvillea cascade + sea-glimpse in soft-bokeh',
-      'BAMBOO-GROVE ZEN — bamboo-grove zen garden with dappled light through canes in soft-bokeh, serene atmosphere',
-      'AURORA NIGHT-GARDEN — magical night-garden under aurora-like color-curtain in soft-bokeh, glowing bioluminescent blooms',
-    ],
-    instructions: `Each entry is ONE specific BEAUTIFUL GARDEN / COURTYARD BACKDROP in soft-focus bokeh, 20-40 words. Format: "BACKDROP NAME CAPS — primary garden setting + lush bloom features + soft-bokeh / dreamy depth-of-field note". Vary across the 15 categories. ALWAYS dreamy / lush / magical mood. NO modern / urban / horror. NO additional figures. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
-  },
-
-  // ─── bloom-spirit path: atmospheric_phenomenon (60%-gated magic) ───
-  bloombot_bloom_spirit_atmospheric_phenomenon: {
-    format: 'simple',
-    theme: `60%-GATED BLOOM-SPIRIT ATMOSPHERIC PHENOMENA. Each entry is ONE specific magic-moment element rendered within the painted portrait. Each entry 20-40 words.
-
-⚠️ MANDATORY — every phenomenon AMPLIFIES the magical/dreamy mood. Sparkle / glitter / firefly / butterfly / petal-fall / pollen — never harsh or realistic-weather.
-
-🚫 STRICT BANS:
-  • NO humans / additional figures
-  • NO horror / ominous elements
-  • NO realistic-weather (rain / snow / wind) — too earthly
-  • NO duplicate of woman / gown / backdrop content
-  • NO cartoon / sticker / glitch effects
-
-✓ PHENOMENON CATEGORIES:
-  A. SPARKLE / GLITTER — floating around her / on her shoulders / magical-particle halo
-  B. BUTTERFLY — perched on shoulder / mid-flight near face / cluster in backdrop
-  C. HUMMINGBIRD — hovering at a bloom on her dress / flower in her hair
-  D. FIREFLY — floating around her at twilight / glow-cloud around her hair
-  E. PETAL-FALL — drifting around her / petal-rain from bloom-canopy
-  F. POLLEN-GLOW — golden pollen-cloud in the side-light
-  G. MAGICAL LIGHT-RIM — soft luminous halo glow / rim-light from behind
-  H. SOFT FOCUS BOKEH-LIGHT — soft bokeh-light circles in backdrop / magic-light
-  I. DEW-PETAL — fine dewdrops on the gown petals / morning-dew sparkle
-  J. AURORA GLOW — soft aurora-like color-glow in upper backdrop
-  K. MOONBEAM — soft moonbeam falling on her face / moonlight halo
-  L. FIRE-GLOW LANTERN — soft warm lantern-glow / candle-glow on face
-
-Channel: Disney 'Cinderella' magical-fairy-dust + Studio Ghibli 'Howl's Moving Castle' sparkle moments + Pinterest 'magical fantasy portrait' boards.`,
-    touchpoints: [
-      'SOFT GLITTER-CLOUD HALO — soft magical glitter-cloud floating around her in suspended sparkle-particles, individual gold-and-silver glints catching the cinematic light',
-      'BUTTERFLY ON SHOULDER — solitary jewel-iridescent butterfly perched delicately on her bare shoulder, wings catching the soft light, magical-realism moment',
-      'HUMMINGBIRD AT DRESS-BLOOM — solitary jewel-iridescent hummingbird hovering at a specific bloom on her gown, wings a transparent blur, intimate moment',
-      'FIREFLY CLOUD AT TWILIGHT — soft cloud of fireflies floating around her at twilight, hundreds of green-pulse lights at every depth, magical glow',
-      'PETAL-RAIN FROM ABOVE — gentle petal-rain drifting from a bloom-canopy above her, individual petals suspended in slow-motion through the soft light',
-      'GOLDEN POLLEN-CLOUD — visible golden pollen-cloud dispersing in side-light around her, individual pollen-motes catching the warm light',
-      'MAGICAL RIM-LIGHT HALO — soft luminous halo glow outlining her silhouette from behind, ethereal back-light creating a magical-aura',
-      'BOKEH-LIGHT CIRCLES — soft dreamy bokeh-light circles floating in the deep backdrop, depth-of-field magic-light pattern, romantic atmosphere',
-      'DEW-PETAL SPARKLE — fine morning-dewdrops on every petal of her bloom-gown catching the light in glittering points',
-      'AURORA COLOR-GLOW — soft aurora-like color-glow in the upper backdrop above her, ethereal magic-light register, painted register',
-      'MOONBEAM ON FACE — soft moonbeam falling on her face from above, the rest of the scene in cool twilight blue, moonlit-magic portrait',
-      'WARM LANTERN-GLOW — soft warm Moroccan-lantern glow from a nearby lantern catching one side of her face in amber, the other side in cool shadow',
-      'BUTTERFLY-CLUSTER BACKDROP — small cluster of butterflies in soft-bokeh the backdrop behind her, wings catching the light, magical realism',
-      'SPARKLE-DUST IN HAIR — sparkle-dust scattered through her hair-flower-mass, individual glitter-points catching the light at every wave',
-      'FROZEN PETAL MID-FALL — single petal frozen mid-fall in front of her face in the foreground, motion-frozen by the painter, romantic moment',
-      'ETHEREAL MIST DRIFT — soft ethereal mist drifting around her ankles / lower bodice in slow-motion, the upper portrait in clear focus',
-      'GOLDEN-HOUR FIRE-RAY — single warm golden-hour fire-ray slanting from the upper-left across her face, jewel-tone glow on her cheek',
-      'MAGICAL-DUST GALAXY — vast suspended magical-dust galaxy around her with thousands of tiny sparkle-points at every depth, dreamlike density',
-      'WHITE-MOTH NIGHT MOMENT — solitary white-moth perched on a bloom in her hair at night, wings translucent in the moonlight, intimate detail',
-      'CRYSTAL-PRISM LIGHT — small crystal-prism light fragments scattered across her face from an off-frame source, rainbow-glints',
-    ],
-    instructions: `Each entry is ONE specific MAGIC-MOMENT atmospheric phenomenon for the bloom-spirit portrait, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in scene + lighting note". Vary across the 12 categories. ALWAYS magical / dreamy / soft register. NO humans / horror / harsh weather. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
   // ─── tropical-paradise path: tropical_setting (the biome canvas) ───

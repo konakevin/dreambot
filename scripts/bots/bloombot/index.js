@@ -38,8 +38,8 @@ const pathBuilders = {
   'flower-friends': require('./paths/flower-friends'),
   'flower-humming-birds': require('./paths/flower-humming-birds'),
   'flower-fantasy': require('./paths/flower-fantasy'),
+  'desert-bloom': require('./paths/desert-bloom'),
   reclaim: require('./paths/reclaim'),
-  'bloom-spirit': require('./paths/bloom-spirit'),
 };
 
 module.exports = {
@@ -47,12 +47,6 @@ module.exports = {
   displayName: 'BloomBot',
 
   mediums: ['bloom_hyperreal_cgi'],
-
-  mediumByPath: {
-    // bloom-spirit is the only path with a bespoke painterly-anime medium —
-    // all other paths use bloom_hyperreal_cgi via the bot-wide mediums list.
-    'bloom-spirit': 'bloom_painterly_spirit',
-  },
 
   useModelPicker: true,
   allowedModels: ['black-forest-labs/flux-1.1-pro'],
@@ -70,23 +64,12 @@ module.exports = {
     'flower-friends': { 'black-forest-labs/flux-1.1-pro': 100 },
     'flower-humming-birds': { 'black-forest-labs/flux-1.1-pro': 100 },
     'flower-fantasy': { 'black-forest-labs/flux-1.1-pro': 100 },
+    'desert-bloom': { 'black-forest-labs/flux-1.1-pro': 100 },
     reclaim: { 'black-forest-labs/flux-1.1-pro': 100 },
-    'bloom-spirit': { 'black-forest-labs/flux-1.1-pro': 100 },
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
-
-  // Per-medium overrides — bloom-spirit uses anime register, not the
-  // photoreal-CGI prefix/suffix that drives the other 9 paths.
-  promptPrefixByMedium: {
-    bloom_painterly_spirit:
-      'soft oil-painting detailed fantasy illustration, Pre-Raphaelite oil painting register, Waterhouse Rossetti Mucha Parrish lineage, romantic-fantasy book-cover illustration, beautiful young woman painted portrait with rich oil-on-canvas texture, soft luminous painted glow, romantic ethereal painterly brushwork',
-  },
-  promptSuffixByMedium: {
-    bloom_painterly_spirit:
-      'classical romantic oil-painting register, Pre-Raphaelite painted illustration, soft luminous painterly brushwork preserving petal-and-fabric detail, romantic ethereal painted glow, NOT photoreal NOT photograph NOT realistic 3D NOT CGI NOT cartoon NOT anime NOT Disney — classical oil painting / detailed fantasy illustration, no text, no words, no watermarks',
-  },
 
   vibes: ['cinematic'],
 
@@ -104,8 +87,8 @@ module.exports = {
     'flower-friends',
     'flower-humming-birds',
     'flower-fantasy',
+    'desert-bloom',
     'reclaim',
-    'bloom-spirit',
   ],
 
   pathWeights: {
@@ -122,8 +105,8 @@ module.exports = {
     'flower-friends': 2,
     'flower-humming-birds': 2,
     'flower-fantasy': 2,
+    'desert-bloom': 2,
     reclaim: 1,
-    'bloom-spirit': 2,
   },
 
   chaos: {
@@ -131,8 +114,7 @@ module.exports = {
     skipPaths: [],
     allowSubjectChaosPaths: [
       'landscape', 'cozy', 'garden-walk', 'dreamscape',
-      'conservatory', 'tropical-paradise', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'reclaim',
-      'bloom-spirit',
+      'conservatory', 'tropical-paradise', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'desert-bloom', 'reclaim',
     ],
   },
 
@@ -146,7 +128,7 @@ module.exports = {
     // Per playbook (2026-05-15 + 2026-05-16): two-pass polish OFF for all
     // declarative axis-system paths. Single-pass Sonnet preserves slot-pool
     // richness; Haiku compression drops bespoke vocabulary to hit word count.
-    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'reclaim', 'bloom-spirit'],
+    skipPaths: ['landscape', 'closeup', 'tropical-paradise', 'cozy', 'garden-walk', 'dreamscape', 'conservatory', 'city-flowers', 'flower-tunnels', 'sunset-flowers', 'flower-friends', 'flower-humming-birds', 'flower-fantasy', 'desert-bloom', 'reclaim'],
   },
 
   sensoryAnchors: {
@@ -156,8 +138,7 @@ module.exports = {
       landscape: 'scene', closeup: 'scene', cozy: 'scene',
       'garden-walk': 'scene', dreamscape: 'scene',
       conservatory: 'scene', 'tropical-paradise': 'scene',
-      'city-flowers': 'scene', 'flower-tunnels': 'scene', 'sunset-flowers': 'scene', 'flower-friends': 'scene', 'flower-humming-birds': 'scene', 'flower-fantasy': 'scene', reclaim: 'scene',
-      'bloom-spirit': 'scene',
+      'city-flowers': 'scene', 'flower-tunnels': 'scene', 'sunset-flowers': 'scene', 'flower-friends': 'scene', 'flower-humming-birds': 'scene', 'flower-fantasy': 'scene', 'desert-bloom': 'scene', reclaim: 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
