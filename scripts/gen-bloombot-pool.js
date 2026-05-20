@@ -1525,6 +1525,336 @@ For EVERY color, the GLOW inside stays WARM-AMBER (a blue agapanthus has a warm-
     instructions: `Each entry is ONE specific FLOWER-TUNNEL ATMOSPHERIC magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in tunnel scene + light/sensory detail". Vary across the 12 categories. NO sci-fi glow. NO actual lamps. ABSOLUTE HARD BAN ON HUMANS — no people / no figures / no silhouettes / no pedestrians anywhere (wildlife scale-provers like deer / stag / fox / owl are fine). The phenomenon supports the flowers-as-lights aesthetic. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
+  bloombot_sunset_flowers_hero_flower: {
+    format: 'simple',
+    theme: `STRONGLY SUN-BACKLIT HERO FLOWER for the BloomBot sunset-flowers path. Each entry is ONE specific foreground/midground flower species (or cluster) with PETAL EDGES blazing in strong warm sun-rim-light from the visible sun behind — the whole bloom warm-bathed in pouring golden-hour backlight, naturalistic photography register (NOT internally-glowing bulbs). Each entry 25-50 words.
+
+⚠️ THE BAR: every entry names a flower species + describes the flowers as STRONGLY BACKLIT by the visible sun — petal edges BLAZING with warm rim-light, the whole bloom warm-bathed in golden-amber light pouring from the sun behind. Think National Geographic / IG backlit-hibiscus / National-Park golden-hour magazine-cover — the sun is OBVIOUSLY behind the bloom and the warm light FLOODS THROUGH it.
+
+⚠️ ONE THING TO AVOID — THE "BULB FLOWER" LOOK:
+The petals are not internally-lit lamps glowing from inside their own structure. The flowers are STRONGLY backlit by the visible sun behind them. So AVOID this exact phrase: "every petal a tiny lamp / bulb / lantern lit-from-within with bulb-core." Everything else about strong sun-backlight is GOOD.
+
+⚠️ USE THESE STRONG-BACKLIGHT PHRASES:
+  • "petal edges blazing with warm sun-rim-light"
+  • "the sun pouring its warm light through the bloom"
+  • "every petal-edge brilliantly outlined in golden warm-amber rim-glow"
+  • "the flower silhouette burning warm against the sun"
+  • "strong photographic backlight bathing the bloom in golden warmth"
+  • "the warm sun-light pouring through the petals making them glow"
+  • "the bloom warm-bathed in pouring sun-light from behind"
+  • "pronounced warm rim-light blazing along every petal-edge"
+  • "the sun behind floods the petals with warm golden-amber backlight"
+  • "every petal outlined in obvious warm rim-glow from the sun behind"
+
+⚠️ FLOWER VARIETY MANDATE — distribute the 25 entries across diverse species:
+  • Hibiscus (red / pink / white / yellow / coral) — large tropical bloom
+  • Cosmos (blue / pink / white / cobalt) — single delicate petals
+  • Cherry blossom (pink / white) — cascading branch cluster
+  • Dandelion seed-head (white) — gossamer wispy seed-globe (this one CAN have full backlight glow — that's how dandelions actually photograph)
+  • Azalea / Rhododendron (pink / coral / red / fuchsia) — cluster bush blooms
+  • Peony (pink / coral / white / cream) — layered petals
+  • Sunflower (yellow / gold) — disc + ray-petals
+  • Poppy (red / orange / yellow / pink) — papery crepe-petals
+  • Tulip (red / pink / white / yellow / purple) — cup-shaped
+  • Daisy (white / yellow / pink) — simple round petal-rays
+  • Lily (white / pink / orange / yellow) — trumpet bloom
+  • Lavender (purple) — spire cluster
+  • Bluebell (blue / violet) — bell-cluster
+  • Forget-me-not (blue) — tiny cluster
+  • Wildflower mixed-meadow cluster — varied wild species
+  • Mountain wildflower cluster (alpine) — paintbrush / lupine / aster
+  • Magnolia (white / pink) — large petals
+  • Rose (pink / red / coral / yellow / white) — layered petals
+  • Wisteria cascade (purple / white / pink) — hanging strands
+  • Bougainvillea (pink / magenta / coral / orange / white) — papery cluster
+
+🚫 STRICT BANS:
+  • 🚫 NO "every petal a tiny lamp/bulb/lantern with lit-from-within bulb-core" — that's the bulb-petal trigger
+  • 🚫 NO sci-fi bioluminescent / electric glow
+  • 🚫 NO closeup-only macro framing — the flower is foreground/midground, NOT extreme macro
+  • 🚫 NO species without explicit color
+  • 🚫 NO interior / vase / cut-flower framing — flowers growing in the wild
+  • 🚫 NO humans / hands / picking-the-flower
+
+✓ FRAMING — every entry implies a HERO foreground/midground cluster set against a wide landscape behind. The flower is the focal point, the landscape is implied.
+
+✓ STRONG STRONG SUN-BACKLIGHT IS THE WHOLE POINT — the sun is OBVIOUSLY behind the bloom and the warm light POURS THROUGH it. The petals are LIT UP by that backlight. Make it OBVIOUS in every entry.`,
+    touchpoints: [
+      'RED HIBISCUS STRONGLY BACKLIT — large red hibiscus blossom in foreground, the sun pouring its warm light through the bloom from behind, petal edges blazing with bright warm-amber rim-light, the whole flower warm-bathed in golden backlight, stamens silhouetted, pollen-dust catching the sunset rays',
+      'BLUE COSMOS BLAZING BACKLIGHT — single cobalt-blue cosmos in midframe, the sun cresting the horizon behind blazing strong warm-amber rim-light along every petal-edge, the bloom warm-bathed in golden-hour backlight pouring through',
+      'PINK CHERRY-BLOSSOM BACKLIT CASCADE — hanging cherry-blossom branch with pink blossoms in foreground, the sun behind blazing strong warm-amber rim-light along every petal-edge, golden-hour light pouring through the cluster, drifting petals catching warm edge-glow',
+      'DANDELION SEED-HEAD FULLY BACKLIT — single dandelion seed-globe silhouetted against the low sun, every gossamer seed-strand brilliantly rim-lit warm-gold, the whole sphere a halo of caught warm light pouring from the sun behind',
+      'CORAL AZALEA CLUSTER BACKLIT — coral and salmon azalea cluster bush in foreground, the sun behind blazing strong warm-amber rim-light along every petal-edge, golden-hour light pouring through the cluster, warm-amber edge-glow brilliantly outlining every blossom',
+      'WHITE PEONY BACKLIT — large white peony with layered petals in foreground, the sun behind pouring warm light through the layered petals, every petal-edge blazing with warm-amber rim-light, the whole bloom warm-bathed in golden backlight',
+      'WILDFLOWER MEADOW STRONGLY BACKLIT — mixed pink-orange-yellow wildflower meadow in foreground, the low sun behind blazing strong warm-amber rim-light along every petal-edge and grass-blade, the whole foreground warm-bathed in pouring golden-hour light',
+      'YELLOW SUNFLOWER BACKLIT — towering sunflower-head in foreground, the setting sun directly behind pouring warm light through the yellow ray-petals, every petal-edge blazing warm-gold rim-light, disc-center silhouetted dark against the bright backlight',
+      'PURPLE LUPINE SPIRE FIELD BACKLIT — purple lupine-spire wildflower field in foreground, the setting sun behind blazing strong warm-amber rim-light along every spire-floret edge, every leaf warm-bathed in pouring golden backlight',
+      'PINK BOUGAINVILLEA BACKLIT CASCADE — magenta-pink bougainvillea papery-bract cluster cascading in foreground, the sun behind pouring warm light through the papery bracts, every bract-edge blazing brilliant warm-amber rim-light',
+      'WHITE MAGNOLIA BACKLIT — large ivory magnolia blossom in foreground, the setting sun behind blazing strong warm-amber rim-light along every petal-edge, the whole bloom warm-bathed in pouring golden backlight',
+      'ALPINE PAINTBRUSH BACKLIT MEADOW — red-and-orange Indian-paintbrush mountain-meadow in foreground, the low sun cresting the ridge behind blazing strong warm-amber rim-light along every paintbrush-bract, the whole meadow warm-bathed in pouring golden backlight',
+      'PURPLE WISTERIA STRANDS BACKLIT — cascading violet wisteria-strands in foreground, the setting sun behind blazing strong warm-amber rim-light along every bell-floret edge, golden-hour light pouring through every cluster, warm-amber edge-glow throughout',
+      'RED POPPY FIELD BACKLIT — red and orange poppy field in foreground, the setting sun behind pouring warm light through the crepe-thin papery petals, every petal-edge blazing brilliant warm-amber rim-light, the whole field warm-bathed and glowing',
+      'WHITE DAISY CLUSTER BACKLIT — white daisies in foreground meadow, the sun behind blazing strong warm-amber rim-light along every petal-edge, yellow disc-centers silhouetted against the bright backlight, simple radiant happiness',
+      'BLUEBELL FOREST FLOOR BACKLIT — violet bluebell-cluster forest floor in foreground, the sun bursting through trees behind blazing strong warm-amber rim-light along every bell-bloom edge, golden-hour light pouring through',
+      'PINK TULIP FIELD BACKLIT — bright pink tulip-field in foreground, the setting sun behind blazing strong warm-amber rim-light along every cup-petal edge, the whole field warm-bathed in pouring golden backlight',
+      'ORANGE TIGER-LILY CLUSTER BACKLIT — orange tiger-lily cluster in foreground, the setting sun behind blazing strong warm-amber rim-light along every petal-edge, freckled stamens silhouetted against pouring golden backlight',
+      'PINK ROSE CLUSTER BACKLIT — climbing pink-rose cluster in foreground, the setting sun behind blazing strong warm-amber rim-light along every layered petal-edge, golden-hour light pouring through, dewdrops catching prismatic warm sun-flares',
+      'YELLOW DAFFODIL FIELD BACKLIT — bright golden daffodil field in foreground, the setting sun behind pouring warm light through every trumpet-bloom, every petal-edge blazing brilliant warm-amber rim-light, every leaf-blade warm-bathed',
+      'FUCHSIA HANGING-BELLS BACKLIT — fuchsia hanging bell-clusters in foreground, the setting sun behind blazing strong warm-amber rim-light along every purple-and-pink bell edge, golden-hour light pouring through every floret',
+      'PURPLE LAVENDER FIELD BACKLIT — purple lavender-spire field in foreground, the setting sun behind blazing strong warm-amber rim-light along every spire edge, the whole field warm-bathed in pouring golden backlight',
+      'WHITE FORGET-ME-NOT CARPET BACKLIT — pale-blue forget-me-not carpet in foreground, the low sun behind blazing warm-amber rim-light along every tiny floret edge, the whole carpet warm-bathed in pouring golden backlight',
+      'CORAL CAMELLIA BLOSSOMS BACKLIT — coral camellia blossoms in foreground, the setting sun behind blazing strong warm-amber rim-light along every layered petal-edge, the whole bloom warm-bathed in pouring golden backlight',
+      'MIXED-COLOR COSMOS MEADOW BACKLIT — mixed pink-white-cobalt cosmos meadow in foreground, the setting sun behind blazing strong warm-amber rim-light along every single-petal cosmos, the whole meadow warm-bathed in pouring golden backlight',
+    ],
+    instructions: `Each entry is ONE specific STRONGLY-BACKLIT FLOWER cluster, 25-50 words. Format: "FLOWER NAME COLOR + CLUSTER-TYPE BACKLIT CAPS — explicit description of (a) STRONG WARM SUN-RIM-LIGHT BLAZING along petal edges + (b) THE WHOLE BLOOM WARM-BATHED in pouring golden backlight from the sun behind". COLOR + STRONG-BACKLIGHT MANDATORY per entry. AVOID ONLY: "every petal a tiny lamp/bulb/lantern from within" (that triggers fake bulb-petals). STRONG sun-backlight where the sun is OBVIOUSLY behind = GOAL. NO closeup macro. NO sci-fi glow. NO humans. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_sunset_flowers_landscape_backdrop: {
+    format: 'simple',
+    theme: `EPIC LANDSCAPE BACKDROP for the BloomBot sunset-flowers path. Each entry is ONE specific WIDE GORGEOUS NATURAL LANDSCAPE that recedes behind the hero flowers — mountains / hills / forest / lake / coast / valley / meadow / canyon. Multi-tier depth implied. Each entry 30-55 words.
+
+⚠️ THE BAR: every entry produces a render where the LANDSCAPE BEHIND is GRAND, DEEP, BEAUTIFUL — mountains receding to atmospheric haze, hills rolling to horizon, forest spanning the midground, lake stretching to far shore, coastal cliffs falling to surf, meadow rolling to ridge. Multi-tier depth: midground terrain + receding distance + horizon line. NEVER flat / featureless / closeup.
+
+⚠️ LANDSCAPE VARIETY MANDATE — distribute the 25 entries across these categories (~2-3 per category):
+  A. **ALPINE MOUNTAIN RIDGE** — jagged peaks against sunset sky, snow-capped distant peaks, alpine valley with surrounding peaks
+  B. **ROLLING HILLS / DOWNLAND** — chalk downs receding to blue distance, patchwork-quilt farm hills, Tuscan-style hill rows
+  C. **FOREST EDGE / CONIFER STAND** — pine-forest meadow edge, redwood grove at distance, oak-forest hillside
+  D. **LAKE / RESERVOIR** — alpine lake reflecting the sunset, calm lake with mountain backdrop, mirror-still lake at twilight
+  E. **COASTAL CLIFFS / SEASIDE** — sea-cliff promontory with surf below, coastal headland against the ocean, dune-meadow above beach
+  F. **VALLEY / CANYON** — wide alpine valley with stream, canyon walls glowing in sunset, river-valley spreading below
+  G. **MEADOW SPREADING TO RIDGE** — wildflower meadow with mountain ridge in distance, grass-meadow spreading to forest line
+  H. **DESERT / BADLANDS** — desert mesa-and-canyon in sunset, badlands hoodoos glowing at golden hour, painted-desert spreading
+  I. **MOORLAND / HEATHLAND** — heather moorland with low rolling distance, Scottish glen at sunset
+  J. **VOLCANIC / GEOTHERMAL** — volcanic crater rim, caldera lake, lava-field meadow at sunset
+  K. **TROPICAL ISLAND / ARCHIPELAGO** — distant island silhouette across calm sea at sunset
+  L. **TUNDRA / ARCTIC** — northern tundra spreading to low ridge, midnight-sun meadow
+
+🚫 STRICT BANS:
+  • NO urban / city / village / streets / cobblestone
+  • NO interior / room / cozy
+  • NO ruins / abandoned structures
+  • NO humans / pedestrians / figures
+  • NO closeup macro — the landscape must SPAN BEHIND
+  • NO flat featureless backdrop — multi-tier depth mandatory
+  • NO archways / tunnels — the foreground is OPEN, the landscape SPANS
+
+✓ MANDATORY — every entry implies depth tiers: foreground (where the hero flower will go) + midground (terrain features) + receding distance (atmospheric haze, distant horizon).
+
+Lineage to channel: National Geographic golden-hour landscape photography + Ansel Adams scale + Roger Deakins location work + IG-magical-hour landscape feeds.`,
+    touchpoints: [
+      'ALPINE PEAK RIDGE AT SUNSET — jagged snow-capped alpine peak ridge spanning the midground-to-background, atmospheric haze in the deep valleys between ridges, forested foothills below at midground, the sunset glowing behind the highest peaks',
+      'ROLLING TUSCAN HILLS — patchwork rolling Tuscan-style hills with cypress-rows receding to the deep distance, golden meadow midground, blue-haze horizon at sunset',
+      'PINE-FOREST MEADOW EDGE — wide pine-forest line at midground edge, the forest spanning back into deep distance with atmospheric haze, grass-meadow opening at the foreground, mountains rising behind the forest line',
+      'CALM ALPINE LAKE — mirror-still alpine lake at midground stretching toward distant mountain backdrop, lake reflecting the sunset sky perfectly, pine-trees framing the lake-shore, snow-capped peaks rising behind',
+      'COASTAL CLIFF PROMONTORY — sea-cliff promontory falling to crashing surf below, the ocean spreading to a calm sunset horizon, distant headlands silhouetted in atmospheric haze',
+      'WIDE ALPINE VALLEY WITH STREAM — wide green alpine valley with a silver stream winding through the midground, towering snow-capped mountains rising on both sides, the valley opening toward the deep distance',
+      'WILDFLOWER MEADOW + MOUNTAIN RIDGE — wide wildflower meadow rolling toward a distant mountain ridge at sunset, midground forest line breaking the meadow-to-mountain transition, sky filling the upper frame',
+      'DESERT MESA-AND-CANYON — wide desert spread with mesas and canyon walls receding to deep distance, badlands hoodoos catching the golden-hour light, the sky glowing at the horizon',
+      'HEATHER MOORLAND GLEN — heather moorland spreading toward a distant Scottish glen, low rolling hills with patches of purple heather, atmospheric haze in the deep distance, sunset over the far ridge',
+      'VOLCANIC CRATER RIM — wide volcanic crater rim with caldera lake visible below at midground, snow-capped volcanic peak rising in the deep distance, sunset glow filling the basin',
+      'TROPICAL ISLAND ARCHIPELAGO — distant tropical island silhouettes scattered across a calm sunset sea, palm-fringed beach at midground, sunset glow on the water spanning to the islands',
+      'NORTHERN TUNDRA — northern tundra spreading toward a low ridge at midground, midnight-sun glow filling the sky, distant mountains in deep haze',
+      'REDWOOD GROVE EDGE — wide grass-meadow at foreground opening to towering redwood grove edge at midground, the grove spanning back into deep distance with atmospheric haze, sunset light filtering through trunks',
+      'WIDE LAVENDER VALLEY — wide Provençal lavender valley with rows receding to the deep distance, low rolling hills with farmhouse silhouettes at midground, sunset sky filling the upper frame',
+      'OCEAN CLIFF + DISTANT ISLAND — ocean cliff falling to surf below with a distant island silhouetted on the horizon, the calm sea stretching between, golden-hour sun on the water',
+      'PRAIRIE GRASSLAND + RIDGE — wide prairie grassland spreading toward a distant low ridge, scattered cottonwood trees at midground, golden-hour light raking across the grasses',
+      'MOUNTAIN LAKE WITH DOUBLE-PEAK — mountain lake at midground reflecting a double-peak mountain backdrop, conifer forest framing the lake-shore, sunset glowing between the peaks',
+      'FJORD CLIFF WITH WATERFALL — towering fjord cliff at midground with a thin waterfall ribboning down, dark water below stretching to a distant fjord-mouth, atmospheric haze',
+      'SAVANNA WITH ACACIA TREES — wide African savanna with scattered acacia tree silhouettes at midground, golden-hour light raking across the grass, distant mountains in deep haze',
+      'CANYON RIM AT SUNSET — wide canyon rim at midground with the canyon falling into deep shadow, distant canyon walls glowing in golden-hour light, sky filling the upper frame',
+      'CORNFIELD + STORM-CLOUD DISTANCE — wide cornfield spreading toward a distant horizon, dramatic storm-clouds catching the sunset in the deep distance, atmospheric depth',
+      'FOREST CLEARING + MOUNTAIN — large forest clearing opening toward a distant mountain, the surrounding forest framing the view, sunset glowing between the trees',
+      'COASTAL DUNE-MEADOW — wide coastal dune-meadow at midground spreading toward an ocean horizon, distant sea catching the sunset light, dune-grass swaying',
+      'TERRACED HILLSIDE FARMLAND — terraced agricultural hillside receding into the deep distance, every terrace catching warm-gold sunset light, distant mountain ridge in the haze',
+      'GLACIAL VALLEY MORAINE — glacial valley with moraine boulders at midground, retreating glacier visible in the deep distance, snow-capped peaks rising above, golden-hour light',
+    ],
+    instructions: `Each entry is ONE specific EPIC LANDSCAPE BACKDROP, 30-55 words. Format: "LANDSCAPE NAME CAPS — explicit description of multi-tier landscape with midground feature + receding distance + atmospheric depth, implied foreground for the hero flowers". MANDATORY — multi-tier depth. NO closeup / macro. NO urban / interior / ruins / archways / humans. The landscape SPANS BEHIND the hero flower. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_sunset_flowers_sunset_sky: {
+    format: 'simple',
+    theme: `PRETTY SOFT GOLDEN-HOUR / SUNSET SKY for the BloomBot sunset-flowers path. Each entry describes ONE specific SOFT and PRETTY golden-hour / sunset sky — warm naturalistic tones in the upper 30-45% of the frame. The sky SUPPORTS the flowers, NOT competes with them. Think pretty hiking golden-hour photograph / IG nature-feed soft-sunset / the 30-60 minutes before actual sundown when the light is just right. Each entry 25-50 words.
+
+⚠️ THE BAR: every entry produces a sky that feels SOFT, PRETTY, NATURALISTIC — like an actual golden-hour photograph. Warm gentle light, not burning fire. Pretty atmospheric clouds, not boiling drama. The sky is the WARM LIGHT SOURCE that bathes the flowers in glow, not a competition-grade scroll-stopper.
+
+⚠️ VARIETY MANDATE — distribute the 25 entries across these SOFT GOLDEN-HOUR REGISTERS:
+  • ~5 SOFT WARM AMBER — pale warm amber sky with gentle cumulus catching the warm light
+  • ~5 SOFT PINK-AND-PEACH — pretty pink-and-peach pastel sky with gentle clouds
+  • ~4 GOLDEN-CREAM — golden-cream warm sky with soft cirrus
+  • ~3 PALE-LAVENDER-AND-PEACH — soft lavender-and-peach twilight transition
+  • ~3 CORAL-WITH-WARM-CIRRUS — gentle coral cirrus streaks across pale warm sky
+  • ~3 HAZY GOLDEN-HOUR — atmospheric warm-amber haze softening the sky
+  • ~2 SOFT PALE PINK AFTERGLOW — pale pink afterglow with very gentle clouds
+
+⚠️ EVERY entry MUST include:
+  - SPECIFIC CLOUD-FORMATION (gentle cumulus / soft cirrus / scattered wisps / hazy stratus) — naturalistic, NOT painterly-boiling-drama
+  - WARM-BUT-SOFT COLOR — specific soft words like "warm amber," "soft pink," "peach," "coral," "pale lavender," "golden cream," "warm haze"
+  - THE FLOWERS-AS-HERO IMPLICATION — the sky is the warm light that makes the flowers glow, NOT a hero in its own right
+  - SOMETIMES (~30%): hazy / atmospheric / soft warm bath wrapping the whole scene
+  - SOMETIMES (~20%): gentle warm rays visible (subtle, not blazing god-rays)
+
+🚫 STRICT BANS:
+  • 🚫 NO fiery / burning / blood-red / apocalyptic / intense / cinematic-drama
+  • 🚫 NO hot-pink / magenta / vivid-saturated — soft pastels only
+  • 🚫 NO storm-clouds / boiling / dramatic / heavy / moody
+  • 🚫 NO "scroll-stopper" / "competition-grade" / "show-stopper" sky
+  • 🚫 NO bold-vivid-saturated-color — soft warm tones only
+  • 🚫 NO plain blue / overcast / clear noon — naturalistic golden-hour required
+  • 🚫 NO night / stars / moon — golden hour or soft pretty sunset only
+  • 🚫 NO sci-fi / fantasy / aurora
+  • 🚫 NO ground-level landscape detail — this entry is the SKY only
+
+✓ THIS POOL DESCRIBES THE SKY. The sun-position is a SEPARATE axis. Focus exclusively on (a) cloud-formation type + (b) SOFT WARM golden-hour color.`,
+    touchpoints: [
+      'SOFT WARM-AMBER WITH GENTLE CUMULUS — upper sky a soft warm-amber gradient with gentle scattered cumulus catching the golden-hour light from below, naturalistic atmospheric pretty-photograph feel',
+      'SOFT PINK-AND-PEACH PASTEL — upper sky in soft pink-and-peach pastel tones with gentle cirrus wisps, pretty golden-hour photograph feel, atmospheric warm soft light',
+      'GOLDEN-CREAM WITH SOFT CIRRUS — upper sky golden-cream gradient with gentle cirrus streaks high up, warm soft naturalistic golden-hour glow',
+      'PALE LAVENDER-AND-PEACH TWILIGHT — upper sky transitioning from soft peach near horizon up to pale lavender at the zenith, gentle stratocumulus catching the warm light, pretty soft twilight',
+      'CORAL CIRRUS ON PALE WARM SKY — pale warm sky with gentle coral cirrus wisps streaking across the upper third, soft naturalistic golden-hour, pretty atmospheric',
+      'WARM AMBER HAZE — upper sky wrapped in soft warm-amber atmospheric haze, gentle scattered cumulus barely visible through the haze, pretty soft golden-hour bath',
+      'SOFT PINK AFTERGLOW — upper sky in pale pink afterglow with very gentle cirrus wisps, atmospheric soft pretty-photograph feel, warm gentle bath',
+      'GOLDEN-HOUR AMBER WITH CIRRUS-WISPS — upper sky soft golden-amber with high gentle cirrus wisps catching warm light, naturalistic pretty-photograph register',
+      'WARM PEACH WITH SCATTERED CUMULUS — upper sky warm-peach gradient with gentle scattered cumulus catching the soft warm light, naturalistic pretty golden-hour',
+      'PALE GOLDEN WITH SOFT HAZE — pale golden sky softened by atmospheric haze, gentle cumulus barely defined through the warm haze, pretty soft photograph feel',
+      'SOFT CORAL-AND-CREAM — upper sky soft coral-and-cream gradient with gentle cumulus catching the warm sunset light, naturalistic pretty atmospheric',
+      'WARM-AMBER WITH GENTLE WARM RAYS — upper sky soft warm-amber with subtle warm rays radiating gently through the gentle cumulus, NOT blazing god-rays, soft pretty',
+      'SOFT PINK-CREAM PASTEL — upper sky pale pink-cream pastel tones with very gentle cirrus, pretty soft golden-hour photograph register',
+      'GOLDEN HAZE WITH SOFT WISPS — upper sky bathed in soft golden haze with very gentle cirrus wisps, pretty atmospheric soft warm bath',
+      'PEACH-AMBER GRADIENT — upper sky peach-amber gradient softening toward zenith, gentle scattered cumulus catching warm soft light, naturalistic pretty',
+      'WARM LAVENDER-PEACH TRANSITION — upper sky soft transition from warm peach near horizon to pale lavender at zenith, gentle scattered clouds, pretty soft twilight',
+      'SOFT CREAM WITH GENTLE CIRRUS — upper sky soft cream-and-pale-gold gradient with gentle cirrus catching warm light, naturalistic pretty-photograph register',
+      'PALE WARM AMBER — upper sky simply pale warm amber gradient with sparse gentle cirrus wisps, soft naturalistic pretty golden-hour atmospheric',
+      'PINK-AND-PEACH WITH SCATTERED CUMULUS — upper sky soft pink-and-peach with scattered gentle cumulus catching warm light from below, pretty atmospheric soft',
+      'GOLDEN-CREAM WITH WARM HAZE — upper sky golden-cream gradient softened by warm atmospheric haze, gentle scattered cumulus, pretty soft golden-hour photograph',
+      'SOFT CORAL WISPS — upper sky soft pale warm with gentle coral cirrus wisps streaking across the upper third, pretty atmospheric naturalistic',
+      'WARM PASTEL PINK — upper sky warm pastel pink gradient with very gentle cumulus, pretty soft afterglow feel, naturalistic atmospheric',
+      'AMBER-PEACH GRADIENT — upper sky amber-peach gradient with gentle scattered cumulus catching the warm sunset light, naturalistic pretty soft golden-hour',
+      'SOFT GOLDEN WITH ATMOSPHERIC HAZE — upper sky soft golden gradient wrapped in atmospheric warm haze, gentle clouds barely defined, pretty soft photograph register',
+      'PALE PINK-CREAM AFTERGLOW — upper sky pale pink-cream afterglow gradient with very gentle cirrus wisps, soft pretty atmospheric after-sunset glow',
+    ],
+    instructions: `Each entry is ONE specific SOFT GOLDEN-HOUR SKY (gentle clouds + soft warm color), 25-50 words. Format: "SKY NAME + SOFT WARM-COLOR CAPS — explicit description of GENTLE CLOUDS (cumulus / cirrus / stratus / wisps / scattered) + SOFT WARM COLOR (warm amber / soft pink / peach / coral / pale lavender / golden cream / warm haze) + naturalistic pretty-photograph feel". MANDATORY — both cloud-formation AND soft warm color must be explicit. NEVER vivid-saturated / fiery / burning / dramatic. NO sun-disc description (that comes from sun_position). NO ground-level detail. NO plain blue / overcast. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_sunset_flowers_sun_position: {
+    format: 'simple',
+    theme: `SOFT VISIBLE SUN POSITION for the BloomBot sunset-flowers path. Each entry describes ONE specific position for a SOFT GLOWING sun-disc in the frame — visible and warm but NOT a sharp burning sphere with blazing god-rays. Think naturalistic golden-hour photograph where you can clearly see the sun but it's softened by atmospheric haze. Each entry 20-40 words.
+
+⚠️ THE BAR: every entry produces a render where the SUN-DISC is clearly VISIBLE but SOFTENED — atmospheric haze, gentle warm glow, subtle lens-flare. NOT a tiny pinpoint dot, but ALSO not a blazing sharp blinding sphere. Naturalistic pretty-photograph register.
+
+⚠️ VARIETY MANDATE — distribute the 25 entries across these POSITION CATEGORIES:
+  • ~5 sun cresting a mountain ridge — soft disc just rising over the peak
+  • ~4 sun setting behind a hill / horizon — soft disc on the horizon line
+  • ~3 sun bursting through trees / forest gap — soft disc visible through forest gap
+  • ~3 sun sitting low on a flat horizon — soft disc just above flat horizon
+  • ~3 sun peeking over a ridge with gentle warm rays
+  • ~3 sun reflected on a lake / sea with soft golden reflection-path
+  • ~2 sun haloed by atmospheric haze with subtle warm halo
+  • ~2 sun setting into a sea / ocean horizon — soft disc touching the water
+
+⚠️ EVERY entry MUST include:
+  - SOFT GLOWING SUN-DISC — visible but softened by atmospheric haze (NOT a sharp burning sphere)
+  - SPECIFIC POSITION in the frame (cresting / behind / through / on horizon / etc.)
+  - SOME of: SUBTLE warm rays radiating gently, soft warm halo, gentle lens-flare, warm glow-aura
+  - SOMETIMES (~30%): reflected on water in the foreground/midground
+
+🚫 STRICT BANS:
+  • 🚫 NO blazing god-rays / dramatic god-rays / intense god-rays — gentle warm rays only
+  • 🚫 NO "fiery" / "burning" / "intense" / "dramatic" / "prominent star-burst lens-flare" — soft and naturalistic only
+  • 🚫 NO sharp burning sun sphere — softened by atmospheric haze
+  • 🚫 NO tiny pinpoint dot either — visibly present but soft-glowing
+  • NO sky color description (that comes from sunset_sky pool)
+  • NO ground-level landscape description (that comes from landscape_backdrop)
+  • NO multi-sun / sci-fi / alien
+  • NO night / moon — this is SUNSET sun specifically
+
+✓ THIS POOL DESCRIBES THE SUN. The sky-color is a SEPARATE axis. Focus on (a) sun-disc position + (b) SOFT WARM glow / subtle warm halo.`,
+    touchpoints: [
+      'SOFT SUN CRESTING JAGGED PEAK — soft glowing sun-disc just cresting a distant jagged mountain peak, softened by atmospheric haze, gentle warm halo radiating subtly across the surrounding sky',
+      'SOFT SUN ON HORIZON — soft warm sun-disc sitting directly on a distant flat horizon line, glowing through atmospheric haze, gentle warm halo around the disc',
+      'SOFT SUN THROUGH PINE-CANOPY — soft glowing sun-disc visible through a gap in a distant pine-forest line, gentle warm rays filtering through the trees, atmospheric softness',
+      'SOFT SUN LOW ON MEADOW HORIZON — soft warm sun-disc sitting just above a flat meadow horizon, gently glowing through warm atmospheric haze, subtle warm halo',
+      'SOFT SUN PEEKING OVER ALPINE RIDGE — soft glowing sun-disc just peeking over a distant alpine ridge, gentle warm rays radiating subtly across the surrounding sky, warm haze',
+      'SOFT SUN REFLECTED ON ALPINE LAKE — soft sun-disc sitting low on the lake-horizon with a gentle warm reflection-path on the still water leading to the foreground, atmospheric',
+      'SOFT SUN HALOED BY HAZE — soft glowing sun-disc softened by warm atmospheric haze with gentle warm halo radiating outward, naturalistic soft golden-hour',
+      'SOFT SUN TOUCHING OCEAN HORIZON — soft warm sun-disc touching the distant ocean horizon, glowing through atmospheric haze, gentle golden reflection-path on the water',
+      'SOFT SUN CRESTING SNOW-PEAK — soft glowing sun-disc just cresting a distant snow-capped peak, gentle warm rays radiating subtly, soft warm rim-light on the snow',
+      'SOFT SUN THROUGH STORM-GAP — soft glowing sun-disc visible through a gap between gentle clouds, subtle warm rays filtering downward, atmospheric softness',
+      'SOFT SUN ABOVE FOREST-LINE — soft glowing sun-disc sitting just above a distant forest-line at the midground, gentle warm halo, atmospheric haze, warm glow-aura',
+      'SOFT SUN PEEKING OVER ROLLING HILL — soft glowing sun-disc just peeking over a distant rolling hill, gentle warm rays subtly fanning across the landscape, warm halo',
+      'SOFT SUN ON DESERT HORIZON — soft warm sun-disc sitting on a flat desert horizon, glowing through atmospheric warm haze, gentle warm halo around the disc',
+      'SOFT SUN CRESTING CANYON RIM — soft glowing sun-disc just cresting a distant canyon rim, gentle warm rays subtly fanning across the canyon walls, warm rim-light',
+      'SOFT SUN BEHIND CIRRUS — soft glowing sun-disc behind feathery cirrus clouds with gentle warm halo, golden-amber glow-aura subtly surrounding',
+      'SOFT SUN REFLECTED ON SEA — soft sun-disc setting toward the distant ocean horizon with a gentle warm reflection-path on the calm sea, atmospheric haze, soft warm halo',
+      'SOFT SUN THROUGH AUTUMN-TREES — soft glowing sun-disc visible through a stand of distant autumn-color trees, gentle warm rays filtering through, soft warm halo',
+      'SOFT SUN BEHIND DISTANT RIDGE — soft warm sun-disc setting behind a distant ridge silhouette, glowing softly through atmospheric haze, gentle warm halo',
+      'SOFT SUN LOW ON PRAIRIE — soft warm sun-disc sitting just above a flat prairie horizon, glowing gently, soft warm rays raking subtly across the grasses, warm halo',
+      'SOFT SUN CRESTING WATERFALL TOP — soft glowing sun-disc just cresting the top of a distant waterfall ridge, gentle warm rays subtly fanning across the cliffs, warm halo',
+      'SOFT SUN BEHIND SINGLE-CLOUD — soft glowing sun-disc behind a single gentle cloud with subtle warm halo radiating outward, the cloud-edge gently backlit warm-amber',
+      'SOFT SUN SETTING INTO LAKE — soft sun-disc sitting low on the lake-horizon, gentle warm reflection-path on the water, soft halo, warm afterglow',
+      'SOFT SUN ABOVE ARCTIC RIDGE — soft midnight-sun sun-disc sitting just above the arctic ridge horizon, glowing gently through cool atmospheric haze, soft warm halo',
+      'SOFT SUN THROUGH JUNGLE — soft glowing sun-disc visible through a jungle-canopy gap, gentle warm rays filtering down through the tropical foliage, atmospheric',
+      'SOFT SUN ON SAVANNA HORIZON — soft warm sun-disc sitting low on the savanna horizon, glowing gently through warm atmospheric haze, soft warm halo, last gentle rays raking',
+    ],
+    instructions: `Each entry is ONE specific SOFT VISIBLE SUN POSITION, 20-40 words. Format: "SOFT SUN POSITION CAPS — explicit description of the soft sun-disc's position in frame + atmospheric haze softening + GENTLE warm halo or subtle warm rays". MANDATORY — sun-disc is SOFT and SOFTENED BY ATMOSPHERIC HAZE, NOT blazing god-rays. NO "dramatic" / "intense" / "fiery" / "prominent". NO sky-color description. NO ground-level detail. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_sunset_flowers_atmospheric_phenomenon: {
+    format: 'simple',
+    theme: `40%-GATED SUNSET-FLOWERS ATMOSPHERIC PHENOMENA — extra magic moments supporting the sun-backlit-flower aesthetic. Each entry 20-40 words.
+
+⚠️ MANDATORY — every phenomenon AMPLIFIES the sunset-flower aesthetic. Does NOT compete with the hero flower or the sun.
+
+🚫 STRICT BANS:
+  • NO sci-fi glow / bioluminescent / will-o-wisps / fairy-dust / electric-cyan
+  • NO actual lamps / lanterns / candles / electric-lights
+  • 🚫🚫🚫 ABSOLUTE HARD BAN ON HUMANS — no people / figures / silhouettes / pedestrians ANYWHERE 🚫🚫🚫
+  • NO night phenomena (this is sunset, not midnight)
+
+✓ PHENOMENON CATEGORIES:
+  A. **DRIFTING PETAL-FALL** — petals drifting through the golden-hour light
+  B. **WILDLIFE (NON-HUMAN)** — bee / butterfly / hummingbird / dragonfly / deer / fox / songbird at the flower or in the scene
+  C. **GOLDEN-HOUR DUST / POLLEN** — dust-motes / pollen catching sun-rays in air
+  D. **LENS-FLARE / GOD-RAYS** — sun-flare bursting from the visible sun
+  E. **MIST / FOG DRIFT** — soft mist drifting in valley / clinging to hills
+  F. **WET ELEMENTS** — dew on petals / fresh rain droplets / mist on grass
+  G. **DISTANT WILDLIFE** — flock of birds / single deer silhouette / cattle on hillside
+  H. **REFLECTION** — flowers reflected in dewdrop / lake / wet rock
+  I. **BREEZE-MOTION** — gentle wind moving the flowers / grass-blades swaying
+  J. **DRIFTING SEEDS / SPORES** — dandelion-seed drift / pollen-cloud / cottonwood fluff
+  K. **DISTANT WATER** — distant waterfall / stream / river catching sunset light
+  L. **MIST IN VALLEY** — soft mist filling the valley below
+  M. **CLOUD-SHADOW** — cloud-shadow moving across the landscape`,
+    touchpoints: [
+      'CHERRY-BLOSSOM PETAL-FALL — soft pink cherry-blossom petals drifting through the golden-hour light around the hero flowers, every petal rim-lit gold by the visible sun',
+      'BUMBLEBEE AT HERO FLOWER — single bumblebee hovering at the hero flower cluster in foreground, sun-backlit body glowing golden, fuzzy outline catching warm rim-light',
+      'POLLEN-DUST IN GOLDEN RAYS — pollen-dust and gentle dust-motes drifting through the golden-hour rays around the hero flowers, every particle catching warm sunset light',
+      'PROMINENT LENS-FLARE — prominent lens-flare star-burst radiating from the visible sun-disc, hex-flare ghosts scattered across the frame, atmospheric warm haze',
+      'SOFT VALLEY MIST — soft golden-hour mist drifting in the deep valley behind the hero flowers, mist catching warm sunset light, atmospheric depth',
+      'DEW ON HERO PETALS — fresh dew droplets clinging to the hero flower petals, every droplet catching the setting sun as tiny prismatic flares, golden-hour wet shimmer',
+      'FLOCK OF DISTANT BIRDS — flock of small distant birds silhouetted against the sunset sky in the upper frame, motion-blur on their wings, golden-hour silhouettes',
+      'FLOWERS REFLECTED IN DEW — single large dewdrop on a leaf reflecting the hero flowers and the sun behind them upside-down, prismatic golden flare',
+      'GENTLE BREEZE-MOTION — gentle breeze moving the hero flowers, motion-blur on the petals, grass-blades around the flowers leaning with the wind',
+      'DANDELION-SEED DRIFT — drifting dandelion-seeds and gossamer fluff floating through the golden-hour light around the hero flowers, every seed rim-lit warm-gold',
+      'DISTANT WATERFALL — distant waterfall ribbon falling between mountain ridges in the deep background, catching sunset light, atmospheric haze',
+      'CLOUD-SHADOW SWEEPING — large cloud-shadow sweeping across the midground landscape, contrast between shadowed terrain and warm-lit hero flowers',
+      'HUMMINGBIRD AT FLOWER — single iridescent hummingbird hovering at the hero flower, wings a motion-blur of jewel-color catching the sunset rim-light',
+      'GOLDEN-HOUR HAZE — atmospheric golden-hour haze softening the deep landscape, every distant element wrapped in warm soft-focus glow',
+      'BUTTERFLY DRIFTING — single Monarch butterfly drifting through the foreground near the hero flower, sun-backlit wings glowing translucent orange-amber',
+      'GRASS-BLADES BACKLIT — every grass-blade around the hero flower backlit by the setting sun, glowing translucent green-gold, sea of caught light',
+      'DRAGONFLY HOVERING — single iridescent dragonfly hovering near the hero flower, transparent wings catching sun-rim-light as prismatic flares',
+      'COTTONWOOD FLUFF DRIFT — cottonwood-fluff drifting through the air around the hero flowers, every fluff-cluster catching warm sunset light',
+      'DISTANT DEER ON RIDGE — single distant deer or stag silhouette on a midground ridge behind the hero flowers, golden-hour rim-light on the silhouette',
+      'STORM-CLOUD ON HORIZON — dramatic storm-cloud building on the horizon catching last sunset light, contrast between bright sunset foreground and dark distant storm',
+      'WIDE PETAL-FALL — wide soft petal-fall drifting horizontally through the entire scene, every petal catching warm sunset light',
+      'BIRDS BURSTING FROM TREE — small flock of songbirds bursting from a midground tree silhouette, motion-blur against the sunset sky',
+      'WARM ATMOSPHERIC HAZE — warm atmospheric haze softening every distant mountain ridge, golden-hour glow infusing the entire deep distance',
+      'SOFT RAINBOW IN HAZE — soft pastel rainbow arcing across the deep distance after rain, hero flowers in golden-hour light in foreground',
+      'CRICKET-MEADOW STILLNESS — implied evening cricket-stillness in the meadow, gentle breeze motion on the hero flowers, atmospheric quiet golden-hour',
+    ],
+    instructions: `Each entry is ONE specific SUNSET-FLOWERS atmospheric magic-moment, 20-40 words. Format: "PHENOMENON NAME CAPS — primary element + position in scene + light/sensory detail". Vary across the 13 categories. NO sci-fi glow. NO actual lamps. NO night phenomena. ABSOLUTE HARD BAN ON HUMANS — no people / no figures / no silhouettes / no pedestrians anywhere (wildlife OK). Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── reclaim path: ruin_type (abandoned structure being reclaimed) ───
   bloombot_reclaim_ruin_type: {
     format: 'simple',

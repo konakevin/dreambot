@@ -58,6 +58,12 @@ module.exports = {
   BLOOMBOT_FLOWER_TUNNELS_TUNNEL_SETTING: loadIfExists('bloombot_flower_tunnels_tunnel_setting'),
   BLOOMBOT_FLOWER_TUNNELS_FLOWER_LANTERNS: loadIfExists('bloombot_flower_tunnels_flower_lanterns'),
   BLOOMBOT_FLOWER_TUNNELS_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_flower_tunnels_atmospheric_phenomenon'),
+  // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
+  BLOOMBOT_SUNSET_FLOWERS_HERO_FLOWER: loadIfExists('bloombot_sunset_flowers_hero_flower'),
+  BLOOMBOT_SUNSET_FLOWERS_LANDSCAPE_BACKDROP: loadIfExists('bloombot_sunset_flowers_landscape_backdrop'),
+  BLOOMBOT_SUNSET_FLOWERS_SUNSET_SKY: loadIfExists('bloombot_sunset_flowers_sunset_sky'),
+  BLOOMBOT_SUNSET_FLOWERS_SUN_POSITION: loadIfExists('bloombot_sunset_flowers_sun_position'),
+  BLOOMBOT_SUNSET_FLOWERS_ATMOSPHERIC_PHENOMENON: loadIfExists('bloombot_sunset_flowers_atmospheric_phenomenon'),
   // ─── conservatory path: declarative axis-system pools (2026-05-16 migration) ───
   BLOOMBOT_CONSERVATORY_CONSERVATORY_TYPE: loadIfExists('bloombot_conservatory_conservatory_type'),
   BLOOMBOT_CONSERVATORY_STRUCTURAL_ANCHOR: loadIfExists('bloombot_conservatory_structural_anchor'),

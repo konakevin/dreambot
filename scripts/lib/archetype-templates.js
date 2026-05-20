@@ -6480,7 +6480,141 @@ CRITICAL — every visible flower has a clearly glowing core. The flowers look U
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
-      BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+  BLOOMBOT_SUNSET_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, hero_flower, landscape_backdrop, sunset_sky, sun_position, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the scene ━━━
+${atmospheric_phenomenon}
+
+A specific atmospheric moment supporting the sun-backlit-flower aesthetic.
+
+`
+      : '';
+
+    return `You are a fantasy-realism concept-art painter writing SUN-BACKLIT-FLOWER + EPIC-LANDSCAPE + SUNSET-SKY scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — SUN-BACKLIT FLOWERS AGAINST EPIC SUNSET LANDSCAPE ━━━
+
+The unifying mandate: the VISIBLE SUN in the frame backlights / rim-lights the foreground flowers — petal EDGES catch a gentle warm rim-light, the blooms are naturally lit from behind with soft golden-hour warmth — set against a wide gorgeous landscape that recedes into the distance under a soft pretty sunset sky. NATURALISTIC photography backlight — the flowers are NOT internally glowing bulbs. The viewer's reaction: "look at the way the sun is lighting up those flowers."
+
+THE LOOK — soft naturalistic golden-hour / pretty-sunset photograph:
+- The SUN is visible IN the frame (low disc cresting a horizon / setting behind a ridge / bursting through trees / peeking over hills / rising over a lake) — soft glowing, atmospheric, NOT a sharp burning sphere
+- The HERO FLOWERS in foreground/midground are NATURALLY BACKLIT / RIM-LIT by the sun — petal EDGES catch a gentle warm rim-light, soft natural backlight, photographic register — NOT internally-glowing bulbs — THIS IS THE STAR OF THE SHOW
+- A WIDE GORGEOUS LANDSCAPE recedes behind (mountains / hills / forest / lake / coast / meadow) — gives epic scale and depth
+- A PRETTY GOLDEN-HOUR / SUNSET SKY in soft warm tones (warm amber / soft pink / peach / coral / pale lavender / cream) — pretty and atmospheric, NOT burning-dramatic
+
+━━━ THE SUNSET SKY — SOFT GOLDEN-HOUR, NOT BURNING DRAMA ━━━
+
+The upper 30-45% of every render is a pretty golden-hour / sunset sky — warm, atmospheric, naturalistic. SOFT and PRETTY, not burning-fiery-competition-grade. The flowers are the hero; the sky is the pretty warm light source that makes them glow.
+
+RIGHT register:
+  - Soft warm cloud-bands (warm amber / soft pink / peach / coral / pale lavender / cream)
+  - Gentle cumulus or cirrus catching the warm light
+  - The sun-disc visibly present but SOFT — glowing through atmospheric haze, not a sharp burning sphere
+  - Subtle warm golden-hour rays + lens-flare are nice, not blazing god-rays
+  - Pretty, calm, atmospheric, "actual sunset photograph" feel
+  - The light WRAPS the scene in warm-gold ambient — petals glow softly, everything bathed in warm light
+
+WRONG register (what to avoid):
+  - 🚫 Fiery burning apocalyptic-beauty sunsets
+  - 🚫 Hot-pink-and-magenta saturated drama
+  - 🚫 Storm-clouds boiling, blood-orange burning, intense fire-red
+  - 🚫 Skies that compete with or dominate the flowers
+  - 🚫 Caribbean-cruise-ship-promo level drama
+  - 🚫 Dark / moody / heavy / overwrought / cinematic-apocalyptic
+
+Think: pretty golden-hour photograph from a hike / Instagram nature-feed soft-sunset / the moment 30-60 minutes before actual sundown when the warm light is just right and the flowers glow.
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **VISIBLE SUN IN FRAME** — the sun-disc / golden-hour rays / sunset-source is clearly visible in the frame. Describe its position explicitly (cresting the mountain ridge / setting behind the hill / peeking through pine canopy / sitting low on the meadow horizon / rising over the lake).
+
+2. **HERO FLOWERS STRONGLY BACKLIT BY THE SUN** — describe the foreground flowers as STRONGLY catching the warm sun-light from behind. The sun's light visibly FLOODS THROUGH the scene and BATHES the flowers in warm golden-amber backlight — the petal edges show a STRONG bright warm rim-glow, the whole bloom is warm-bathed and luminous, the back-lit-by-sun look is OBVIOUS and PRONOUNCED. Think National Geographic / IG backlit-hibiscus / National-Park golden-hour magazine-cover shots — the sun is BEHIND the flowers and they GLOW with the warmth flooding through them. Use phrases like "petal edges blazing with warm sun-rim-light," "the sun pouring its warm light through the bloom," "every petal-edge brilliantly outlined in golden warm-amber rim-glow," "the flower silhouette burning warm against the sun," "strong photographic backlight bathing the bloom in golden warmth," "the warm sun-light pouring through the petals making them glow." AVOID ONLY: "every petal a tiny lamp/bulb/lantern from within" — that triggers fake neon-bulb petals. STRONG sun-backlight where the sun is OBVIOUSLY behind the bloom is exactly the goal.
+
+3. **EPIC LANDSCAPE BACKDROP** — a wide gorgeous natural setting recedes behind (mountains / hills / forest / lake / coast / valley / canyon / cliffs / wildflower-meadow). Multi-tier depth: foreground flowers + midground terrain + receding distance. NEVER a flat or featureless backdrop.
+
+4. **PRETTY GOLDEN-HOUR SKY — 30-45% OF THE FRAME** — the upper 30-45% of the frame is filled with a soft pretty golden-hour / sunset sky in warm naturalistic tones (warm amber / soft pink / peach / coral / pale lavender / cream). Gentle cumulus or cirrus clouds catching the warm light, sun-disc visibly present but soft (glowing through atmospheric haze, NOT a sharp burning sphere). The sky SUPPORTS the flowers — it's the warm light source, not the hero. NEVER burning-fiery / storm-dramatic / hot-pink-saturated / cinematic-apocalyptic. NEVER plain blue / overcast / clear noon either. Aim for "pretty golden-hour photograph" not "competition-grade sunset banger."
+
+5. **NATURALISTIC REAL-WORLD REGISTER** — this is naturalistic nature-photography aesthetic, NOT surreal / magical-portal / sci-fi / cartoony. National Geographic golden-hour landscape photography meets Pinterest-magical-hour Instagram. Real flowers, real mountains, real sun.
+
+🚫 ABSOLUTE BANS:
+  • NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
+  • NO interior / cozy / room (cozy's territory)
+  • NO archways / tunnels / passages / engulfment (flower-tunnels' + garden-walk's territory)
+  • NO city streets / urban architecture (city-flowers' territory)
+  • NO ruins / abandoned structures (reclaim's territory)
+  • NO macro / closeup / extreme tight framing (closeup's territory)
+  • NO plain blue sky / overcast / clear midday noon — sunset sky mandatory
+  • NO flat featureless backdrop — wide gorgeous landscape mandatory
+  • NO flowers without visible sun-backlight — the sun MUST be lighting through the petals
+  • NO sci-fi bloom-glow / bioluminescent / fairy-dust / will-o-wisps
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO PEDESTRIANS, NO TRAVELERS, NO EXPLORERS, NO HUMANOIDS anywhere in frame 🚫🚫🚫
+
+━━━ THE HERO FLOWER (foreground / midground) ━━━
+${hero_flower}
+
+━━━ THE LANDSCAPE BACKDROP (wide gorgeous recession behind) ━━━
+${landscape_backdrop}
+
+━━━ THE GOLDEN-HOUR SKY — soft pretty sunset, upper 30-45% of the frame ━━━
+${sunset_sky}
+
+This is the warm-light support, NOT a burning showpiece. Render the sky soft, pretty, naturalistic — gentle cumulus or cirrus catching warm-amber / soft-pink / peach / coral light. The flowers are the hero — the sky bathes them in warmth.
+
+━━━ THE VISIBLE SUN POSITION ━━━
+${sun_position}
+
+The sun-disc must be VISIBLE in frame at this position — large enough to be unmistakable, glowing, with golden-hour rays / lens-flare radiating outward.
+${phenomenonSection}━━━ COMPOSITION CRAFT — HERO-FLOWER + EPIC-LANDSCAPE + SUNSET-SKY ━━━
+
+  • FOREGROUND: hero flower-cluster occupying the lower 40-60% of the frame — petal EDGES BLAZING with strong warm sun-rim-light, whole bloom WARM-BATHED in the sun's backlight pouring through (naturalistic photographic STRONG backlight, NOT bulb-like inner glow)
+  • MIDGROUND: wide gorgeous landscape (mountain ridges / forested hills / meadow / lake / coast) receding deeper
+  • UPPER FRAME: dramatic sunset sky filling 30-50% — orange / pink / gold cloud-bands
+  • SUN POSITION: visible in mid-to-upper frame — cresting ridge / setting behind hill / bursting through trees / peeking over hills / sitting low on horizon
+  • SUN-LIGHT TRANSMISSION: explicitly describe the sun-light SHINING THROUGH the foreground flowers — backlight, rim-light, petal-translucency, golden-hour glow on every visible bloom
+  • DEPTH: clear foreground/midground/background separation — multi-tier depth, atmospheric haze in the distance
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Reinterpret the rolled lighting to support GOLDEN-HOUR / SUNSET / MAGIC-HOUR — strong warm directional light from the visible sun POURING into the scene. The ENTIRE foreground/midground should be bathed in warm golden-amber sun-light — every petal-edge, every grass-blade, every leaf glowing with caught warmth. Pronounced lens-flare, warm haze, light-pouring-through-the-air. The sun is the primary light story; ambient amplifies it (warm haze / lens-flare / ray-streaks / soft cloud-filtered warmth flooding the whole frame).
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 1-2 species from the roster for the hero foreground — describe each with PETAL EDGES CATCHING WARM SUN-RIM-LIGHT from the sun behind/beside, naturalistic golden-hour photographic backlight (NOT internally-glowing bulbs).
+
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO surreal / floating / impossible
+- 🚫 NO interior / cozy / room
+- 🚫 NO archways / tunnels / passages / engulfment
+- 🚫 NO city / urban architecture
+- 🚫 NO ruins
+- 🚫 NO macro / closeup
+- 🚫 NO plain blue sky / overcast / clear midday
+- 🚫 NO flat featureless backdrop
+- 🚫 NO flowers without visible sun-backlight
+- 🚫 NO sci-fi / bioluminescent / fairy-dust
+- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / pedestrians
+- 🚫 NO species outside the roster
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[the hero foreground flower-cluster + PETAL EDGES CATCHING WARM SUN-RIM-LIGHT from the visible sun behind/beside — naturalistic photographic backlight, NOT internally-glowing bulb petals], [the wide gorgeous landscape recession behind — mountains / hills / forest / lake / coast], [the visible sun-disc position in frame — soft glowing through atmospheric haze], [soft pretty golden-hour sky in upper 30-45% — gentle cumulus / cirrus in warm-amber / soft-pink / peach / coral / pale-lavender], [warm golden-hour ambient wrapping the entire scene]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the soft-golden-hour aesthetic]' : ''}, [naturalistic real-world register — pretty golden-hour photograph, NOT cinematic-apocalyptic-burning-sunset, NOT bulb-glowing-flowers]
+
+CRITICAL — the SUN is VISIBLE IN FRAME and NATURALLY RIM-LIGHTING THE FLOWER PETAL EDGES (NOT internally-glowing bulbs). Wide gorgeous landscape behind. Soft pretty sunset sky above. ABSOLUTE HARD BAN ON HUMANS.
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  BLOOMBOT_CITY_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { city_setting, architectural_detail, atmospheric_phenomenon } = slots;
 
     const phenomenonSection = atmospheric_phenomenon

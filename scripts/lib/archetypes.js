@@ -554,11 +554,11 @@ const ARCHETYPES = {
 
   BLOOMBOT_SUNSET_FLOWERS: {
     description:
-      'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are backlit / rim-lit — translucent petals catching golden-hour light against a dramatic sunset sky over a wide gorgeous landscape. Real-world naturalistic register (hibiscus / cosmos / cherry-blossom / dandelion / azalea against mountains / hills / lakes / forests / coast). 3 path-bespoke pools (hero_flower / landscape_backdrop / sun_drama) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',
+      'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are strongly backlit / rim-lit — petal edges blazing in warm sun-rim-light against a soft pretty golden-hour sky over a wide gorgeous landscape. Naturalistic photography register (hibiscus / cosmos / cherry-blossom / dandelion / azalea / wisteria / tulip against mountains / hills / lakes / forests / coast). 4 path-bespoke pools (hero_flower / landscape_backdrop / sunset_sky / sun_position) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',
     slots: {
       universal: ['lighting'],
       bot: [],
-      path: ['hero_flower', 'landscape_backdrop', 'sun_drama'],
+      path: ['hero_flower', 'landscape_backdrop', 'sunset_sky', 'sun_position'],
     },
     pickN: {},
     conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.4 },
