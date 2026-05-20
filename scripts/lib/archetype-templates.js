@@ -6615,6 +6615,140 @@ CRITICAL — MULTIPLE pretty flowers + MULTIPLE cute storybook insects in a PULL
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
 
+  BLOOMBOT_FLOWER_HUMMING_BIRDS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, flower_focal_cluster, hummingbird_cast, magical_particles } = slots;
+
+    const particlesSection = magical_particles
+      ? `
+━━━ MAGICAL PARTICLES — render visibly in the scene ━━━
+${magical_particles}
+
+A specific atmospheric detail adding magic-pretty texture (NOT competing with the hummingbirds or flowers).
+
+`
+      : '';
+
+    return `You are a fantasy-realism concept-art painter writing VIBRANT ENCHANTED HUMMINGBIRD-AND-FLOWER scene descriptions for BloomBot. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ THE CORE AESTHETIC — VIBRANT ENCHANTED GARDEN WITH A CAST OF IRIDESCENT HUMMINGBIRDS ━━━
+
+The unifying mandate: a VIBRANT ENCHANTED garden vignette with MULTIPLE hummingbird-attracting flowers (trumpet vine, fuchsia, salvia, hibiscus, bee balm, columbine, butterfly bush, cardinal flower, lupine, foxglove, petunia, lantana, agastache, penstemon, etc.) + 2-4+ iridescent jewel-tone HUMMINGBIRDS positioned dynamically throughout the scene. PULLED-BACK framing — a wider garden-vignette view, NOT a tight macro. Vibrant saturated jewel-tone color register — the flowers and birds wear their natural bold colors.
+
+THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic hummingbird-magazine spread / IG dreamy-hummingbird-feeder / vibrant tropical-garden energy:
+- MULTIPLE HERO FLOWERS (3-5+ different hummingbird-attracting species blooming together) — vibrant saturated jewel-tone colors (red trumpet vine, fuchsia, vivid magenta bee balm, scarlet salvia, hot-pink fuchsia, bright orange hibiscus, deep purple lupine)
+- A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS — hovering / sipping nectar / mid-flight throughout the scene at different positions, varied species, varied poses
+- IRIDESCENT JEWEL-TONE PLUMAGE — ruby-throated / emerald-back / blue-violet crown / fiery-orange / magenta / metallic-green / sapphire — each hummingbird with a distinctive iridescent jewel-tone color story, wings often in motion-blur showing rapid flight
+- ONE FOCAL HUMMINGBIRD — front-and-center, larger, sharply rendered with crisp iridescent detail, the viewer's eye lands here first
+- PULLED-BACK GARDEN VIGNETTE — wider intimate-garden view (NOT extreme macro close-up — that's the closeup path)
+- DREAMY BOKEH BACKGROUND — soft out-of-focus floral mass / sky / leaves in shallow DOF
+- VIBRANT NATURAL LIGHT — warm sunlight / dappled light / golden-hour ambient with rich saturated color story
+
+━━━ HARD MANDATES (every render) ━━━
+
+1. **HUMMINGBIRDS ARE THE PRIMARY HERO — FLOWERS ARE SUPPORTING BACKDROP** — the hummingbirds are the focal subject of every render. The flowers are the supporting garden context they're interacting with. The viewer's eye lands on the FOCAL HUMMINGBIRD first, then notices the flowers second. NEVER make the flowers the visual subject with hummingbirds as tiny accents. Hummingbirds are FRONT-CENTER and large; flowers fill the foreground beautifully but as backdrop.
+
+2. **A CAST OF 2-4+ IRIDESCENT HUMMINGBIRDS WITH A LARGE FOCAL HERO** — describe 2-4+ hummingbirds at different positions and poses. CRITICAL — ONE is the FOCAL HUMMINGBIRD rendered FRONT-AND-CENTER, LARGE (occupying meaningful frame real estate — clearly visible and recognizable, NOT a tiny dot lost in flowers), sharply detailed with vivid iridescent jewel-tone plumage popping against the scene. Supporting hummingbirds in midground / hovering at other blooms / mid-flight in soft bokeh. The focal hummingbird is the FIRST thing the viewer sees.
+
+3. **HUMMINGBIRD-ATTRACTING FLOWERS AS SUPPORTING BACKDROP** — 3-5+ different hummingbird-magnet species in vibrant saturated jewel-tone colors (trumpet vine / fuchsia / salvia / hibiscus / bee balm / columbine / butterfly bush / cardinal flower / lupine / foxglove / petunia / lantana / agastache / penstemon / honeysuckle / morning glory). The flowers fill the foreground/midground as gorgeous garden context but DO NOT compete with the hummingbirds — they're the stage, not the star. NO soft-pastel — vibrant saturated jewel-tone colors.
+
+3. **IRIDESCENT JEWEL-TONE PLUMAGE** — describe each hummingbird's iridescent color story explicitly (ruby-throated / emerald-back / blue-violet crown / magenta-throat / metallic-green-and-fiery-orange / sapphire-throated / iridescent-coppery / etc.). Iridescent metallic shimmer is the signature.
+
+4. **DYNAMIC HUMMINGBIRD POSES** — hovering with wings in rapid motion-blur, sipping nectar from a tubular bloom with long beak inserted, hovering mid-flight, banking sideways, tail-feathers spread, beak-to-flower drinking. The scene is ALIVE with rapid hummingbird movement.
+
+5. **PULLED-BACK GARDEN VIGNETTE — NOT MACRO** — wider intimate-garden view where you can see multiple flower clusters and multiple hummingbirds all in the same scene. NOT extreme macro.
+
+6. **VIBRANT SATURATED JEWEL-TONE COLOR REGISTER** — vivid bold saturated colors throughout, NOT soft-pastel (that's flower-friends' territory). Audubon-painting + tropical-garden + IG-vibrant-hummingbird-feeder palette.
+
+7. **DREAMY BOKEH BACKGROUND** — soft out-of-focus floral mass / sky / leaves in shallow DOF.
+
+8. **NATURAL VIBRANT LIGHT** — warm sunlight / dappled light / golden-hour ambient with rich saturated color. Pretty and magical but NOT soft-pastel.
+
+🚫 ABSOLUTE BANS:
+  • 🚫 NO single-flower-with-single-hummingbird macro — MULTI mandatory
+  • 🚫 NO extreme macro / single-petal framing — pulled-back garden vignette
+  • 🚫 NO soft-pastel color register — vibrant saturated jewel-tone for this path
+  • 🚫 NO insects (that's flower-friends' territory) — HUMMINGBIRDS ONLY for this path
+  • 🚫 NO other birds (no songbirds / no doves / no birds-of-paradise / no parrots) — HUMMINGBIRDS specifically
+  • 🚫 NO interior / vase / cut-flower framing — flowers growing in the wild
+  • 🚫 NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
+  • 🚫 NO ruins / abandoned structures / urban architecture
+  • 🚫 NO archways / tunnels / passages / engulfment
+  • 🚫 NO epic-landscape wide / dramatic-sunset (sunset-flowers' territory)
+  • 🚫 NO harsh / moody / dark / dramatic lighting — pretty enchanted vibrant only
+  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS, NO FACES, NO WOMEN, NO MEN, NO CHILDREN, NO FAIRY-PRINCESS-PORTRAIT, NO TIARA-CROWN-WEARING-FIGURE, NO BUST-PORTRAIT — the garden is COMPLETELY empty of any human presence. If a face appears in the frame, the render FAILS 🚫🚫🚫
+
+━━━ 🚨 HUMMINGBIRD-PRESENCE MANDATE — THIS IS THE WHOLE POINT 🚨 ━━━
+
+Every render MUST contain AT LEAST 2 LARGE clearly-visible iridescent hummingbirds. ONE focal hummingbird is the PRIMARY hero of the frame — LARGE, FRONT-AND-CENTER, sharply rendered with crisp iridescent jewel-tone plumage detail visible. The viewer's eye lands on this focal hummingbird FIRST. The other 1-3 hummingbirds populate the scene at different positions.
+
+FAILURE CONDITIONS (render fails the brief if ANY of these):
+  🚨 NO visible hummingbird → render FAILS
+  🚨 Hummingbird is a tiny dot lost in the flowers → render FAILS (must be LARGE focal subject)
+  🚨 Insects rendered instead (bee, butterfly, dragonfly) → render FAILS
+  🚨 Fantasy bird with crown / tiara / non-naturalistic plumage → render FAILS (must be NATURALISTIC hummingbird species)
+  🚨 Other birds (parrot, kingfisher, songbird, bird-of-paradise) → render FAILS
+
+THE HUMMINGBIRD IS THE PRIMARY SUBJECT. The flowers are the supporting garden context. EVERY render leads with the hummingbird.
+
+━━━ NATURALISTIC HUMMINGBIRD MANDATE ━━━
+
+The hummingbird MUST be a recognizable real-world hummingbird species — naturalistic anatomy, naturalistic iridescent plumage, naturalistic proportions. NO fantasy crowns / NO oversized tail / NO unrealistic color combos / NO stylized cartoony rendering. Audubon-illustration level naturalism with painterly enchantment.
+
+━━━ THE MULTI-FLOWER FOCAL SCENE (3-5+ hummingbird-attracting blooms) ━━━
+${flower_focal_cluster}
+
+━━━ THE HUMMINGBIRD CAST (2-4+ iridescent hummingbirds with focal hero) ━━━
+${hummingbird_cast}
+
+The focal hummingbird is rendered FRONT-AND-CENTER with crisp iridescent jewel-tone detail. Supporting hummingbirds fill the scene at different positions.
+${particlesSection}━━━ COMPOSITION CRAFT — VIBRANT ENCHANTED HUMMINGBIRD GARDEN VIGNETTE ━━━
+
+  • PULLED-BACK GARDEN VIEW — wider intimate-garden vignette, NOT a tight macro close-up
+  • FOREGROUND: 3-5+ different hummingbird-attracting flower species in vibrant saturated jewel-tone colors filling the lower 50-65% of frame
+  • MIDDLE: 2-4+ iridescent hummingbirds positioned dynamically (focal hero front-and-center + supporting cast hovering / sipping / mid-flight)
+  • BACKGROUND: dreamy bokeh of more vibrant blooms / soft sky / leaves in painterly blur
+  • DEPTH: sharp foreground flowers + sharp focal hummingbird / soft dreamy background
+  • COLOR: rich vibrant saturated jewel-tone foreground (NOT soft-pastel), dreamy bokeh background
+  • MOOD: vibrant enchanted magical-pretty — Audubon-meets-Studio-Ghibli, lively, magical
+
+━━━ AMBIENT LIGHTING ━━━
+${lighting}
+
+Reinterpret the rolled lighting as VIBRANT WARM NATURAL light bathing the scene — warm sunlight / dappled light / golden-hour ambient with rich saturated color story. NOT harsh / dramatic / moody / dark. Think Audubon-painting + tropical-garden + IG-vibrant-hummingbird-feeder.
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Pick 3-5 hummingbird-attracting species from the roster as multi-hero blooming together. Vibrant saturated jewel-tone colors.
+
+━━━ DEFAULTS TO RESIST — HARD BANS ━━━
+- 🚫 NO single-flower-with-single-hummingbird — MULTI mandatory
+- 🚫 NO macro / extreme closeup
+- 🚫 NO soft-pastel register (vibrant saturated jewel-tone for this path)
+- 🚫 NO insects (that's flower-friends)
+- 🚫 NO other birds (HUMMINGBIRDS only)
+- 🚫 NO interior / vase / cut-flower
+- 🚫 NO surreal / impossible / floating
+- 🚫 NO urban / ruins / archways
+- 🚫 NO epic-landscape / dramatic-sunset
+- 🚫 NO harsh / moody / dark lighting
+- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / hands / body parts
+- 🚫 NO species outside the roster (for flowers)
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order (HUMMINGBIRDS LEAD) ━━━
+[the LARGE FOCAL HUMMINGBIRD front-and-center — primary hero of the frame — explicit species + iridescent jewel-tone plumage + dynamic pose (hovering / sipping / mid-flight) + wings in motion-blur + beak-to-flower or beak-extended detail — VIEWER'S EYE LANDS HERE FIRST], [the 1-3 supporting hummingbirds at different positions throughout the scene — hovering at other blooms / mid-flight in midground / banking sideways in bokeh — also with iridescent plumage], [the vibrant saturated jewel-tone hummingbird-attracting flowers as garden BACKDROP — 3-5+ species blooming together filling foreground/midground as supporting context (NOT competing with the hummingbirds)], [dreamy bokeh background of soft vibrant blooms / leaves]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [vibrant warm natural ambient light bathing the scene — golden-hour or dappled sunshine], [shallow DOF with hummingbirds in sharpest focus, painterly soft-blur, Audubon-meets-Studio-Ghibli aesthetic]
+
+CRITICAL — LARGE FOCAL HUMMINGBIRD primary hero (NOT a tiny dot lost in flowers) + 1-3 supporting hummingbirds + vibrant jewel-tone flowers as BACKDROP (not the hero). The hummingbird is the WHOLE POINT. Naturalistic hummingbird species — no fantasy crowns. ABSOLUTE HARD BAN ON HUMANS.
+
+Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, hero_flower, landscape_backdrop, sunset_sky, sun_position, atmospheric_phenomenon } = slots;
 

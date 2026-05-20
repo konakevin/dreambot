@@ -566,6 +566,20 @@ const ARCHETYPES = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_FLOWER_HUMMING_BIRDS: {
+    description:
+      'PATH-BESPOKE — BloomBot flower-humming-birds path (2026-05-19 NEW). VIBRANT enchanted-garden scenes with 2-4+ iridescent hummingbirds + 3-5+ hummingbird-attracting flowers (trumpet vine, fuchsia, salvia, hibiscus, bee balm, columbine, butterfly bush, cardinal flower, lupine, foxglove, petunia). NO soft-pastel restriction — vibrant saturated jewel-tone register. Hummingbirds rendered with iridescent jewel-tone plumage, wings in motion-blur, dynamic poses (hovering / sipping / mid-flight). 3 path-bespoke pools (flower_focal_cluster / hummingbird_cast / magical_particles-40%-gated) + universal lighting. Sister path to flower-friends.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['flower_focal_cluster', 'hummingbird_cast'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'magical_particles', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_SUNSET_FLOWERS: {
     description:
       'PATH-BESPOKE — BloomBot sunset-flowers path (2026-05-19 NEW). SUN-BACKLIT-FLOWER renders where the visible sun is the light source and foreground flowers are strongly backlit / rim-lit — petal edges blazing in warm sun-rim-light against a soft pretty golden-hour sky over a wide gorgeous landscape. Naturalistic photography register (hibiscus / cosmos / cherry-blossom / dandelion / azalea / wisteria / tulip against mountains / hills / lakes / forests / coast). 4 path-bespoke pools (hero_flower / landscape_backdrop / sunset_sky / sun_position) + universal lighting + 40%-gated atmospheric_phenomenon. Inspired by 7 user-hearted IG bloom-against-sunset renders.',

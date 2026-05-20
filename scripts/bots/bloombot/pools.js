@@ -62,6 +62,10 @@ module.exports = {
   BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER: loadIfExists('bloombot_flower_friends_flower_focal_cluster'),
   BLOOMBOT_FLOWER_FRIENDS_HERO_POLLINATOR: loadIfExists('bloombot_flower_friends_hero_pollinator'),
   BLOOMBOT_FLOWER_FRIENDS_MAGICAL_PARTICLES: loadIfExists('bloombot_flower_friends_magical_particles'),
+  // ─── flower-humming-birds path (2026-05-19) — vibrant hummingbird + flower scenes ───
+  BLOOMBOT_FLOWER_HUMMING_BIRDS_FLOWER_FOCAL_CLUSTER: loadIfExists('bloombot_flower_humming_birds_flower_focal_cluster'),
+  BLOOMBOT_FLOWER_HUMMING_BIRDS_HUMMINGBIRD_CAST: loadIfExists('bloombot_flower_humming_birds_hummingbird_cast'),
+  BLOOMBOT_FLOWER_HUMMING_BIRDS_MAGICAL_PARTICLES: loadIfExists('bloombot_flower_humming_birds_magical_particles'),
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   BLOOMBOT_SUNSET_FLOWERS_HERO_FLOWER: loadIfExists('bloombot_sunset_flowers_hero_flower'),
   BLOOMBOT_SUNSET_FLOWERS_LANDSCAPE_BACKDROP: loadIfExists('bloombot_sunset_flowers_landscape_backdrop'),

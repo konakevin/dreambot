@@ -1742,6 +1742,249 @@ The other 2-4+ supporting cast members are smaller / further back / hovering in 
     instructions: `Each entry is ONE specific MAGICAL PARTICLE effect, 20-40 words. Format: "PARTICLE NAME CAPS — primary effect + position in scene + how it catches light / interacts with the ambient". Vary across the 11 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO additional creatures. NO ugly particles. Subtle magical-pretty atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
 
+  // ─── flower-humming-birds path (2026-05-19) — vibrant hummingbird + flower scenes ───
+  bloombot_flower_humming_birds_flower_focal_cluster: {
+    format: 'simple',
+    theme: `VIBRANT MULTI-FLOWER HUMMINGBIRD-ATTRACTING GARDEN VIGNETTE for the BloomBot flower-humming-birds path. Each entry describes ONE specific PULLED-BACK garden scene with 3-5+ hummingbird-attracting flower species blooming together in VIBRANT SATURATED JEWEL-TONE colors — NOT soft-pastel. Each entry 30-55 words.
+
+⚠️ THE BAR: every entry produces a render where (a) 3-5+ DIFFERENT hummingbird-attracting flower species bloom together (NEVER a single hero), (b) VIBRANT SATURATED JEWEL-TONE colors (red, fuchsia, magenta, scarlet, hot-pink, orange, deep purple, sapphire blue, jewel-yellow — NOT pastel), (c) PULLED-BACK garden vignette framing (NOT macro), (d) dreamy bokeh background, (e) enchanted happy vibrant mood.
+
+⚠️ HUMMINGBIRD-ATTRACTING SPECIES PALETTE — pick freely from:
+  Trumpet vine (orange / red) / Fuchsia (hot-pink + purple) / Salvia (scarlet / blue / purple) / Hibiscus (red / orange / pink) / Bee balm (vivid magenta / red) / Columbine (red / yellow / purple) / Butterfly bush (purple / pink) / Cardinal flower (vivid red) / Lupine (purple / blue / pink) / Foxglove (purple / pink / cream) / Petunia (vivid pink / purple / red) / Lantana (orange-and-pink / yellow-and-red) / Agastache (purple / pink / orange) / Penstemon (red / pink / purple) / Honeysuckle (red / orange / yellow) / Morning glory (purple / blue / magenta) / Sage (red / blue / purple) / Lobelia (vivid red) / Crocosmia (vivid red-orange) / Tropical lily (orange / red / yellow) / Coral bells (red / pink) / Bottlebrush (vivid red) / Bird-of-paradise (orange + blue) / Canna lily (red / orange / yellow) / Zinnia (vivid colors) / Phlox (vivid pink / purple / red)
+
+⚠️ MULTI-FLOWER MANDATE — every entry MUST describe AT LEAST 3 different specific hummingbird-attracting flowers blooming together as co-hero. NEVER single hero. Mix shapes (tubular / trumpet / bell / spire / disc) and vibrant colors.
+
+⚠️ VIBRANT JEWEL-TONE COLOR REGISTER (CRITICAL — distinct from flower-friends' soft pastel):
+  - Deep RED, SCARLET, CRIMSON, RUBY
+  - Vivid FUCHSIA, MAGENTA, HOT-PINK
+  - Bright ORANGE, TANGERINE, FLAME
+  - Deep PURPLE, ROYAL VIOLET, AMETHYST
+  - Sapphire BLUE, ELECTRIC INDIGO, JEWEL TEAL
+  - Vivid YELLOW, JEWEL GOLD
+  - Multi-color VIVID JEWEL-TONE MIX
+
+⚠️ COLOR DISTRIBUTION MANDATE — across the 25 entries, distribute roughly:
+  - ~5 RED-DOMINANT (scarlet trumpet vine + cardinal flower + red salvia + bee balm + bottlebrush)
+  - ~4 FUCHSIA-MAGENTA-DOMINANT (fuchsia + hot-pink penstemon + magenta bee balm + vivid phlox)
+  - ~4 ORANGE-DOMINANT (trumpet vine + crocosmia + tropical lily + agastache + honeysuckle)
+  - ~3 PURPLE-DOMINANT (deep-purple butterfly bush + purple lupine + violet morning glory)
+  - ~3 BLUE-DOMINANT (sapphire salvia + blue columbine + indigo lobelia)
+  - ~3 YELLOW-DOMINANT (jewel-yellow honeysuckle + golden canna + vivid yellow columbine)
+  - ~3 MULTI-COLOR JEWEL-RAINBOW (vivid mixed)
+
+⚠️ COMPOSITION VARIETY MANDATE — across the 25 entries, distribute compositions roughly:
+  - ~14 UPRIGHT GARDEN-VIGNETTE (flowers blooming together in a pulled-back ground-level garden — the default "garden cluster" composition)
+  - ~6 CASCADING / HANGING VINE COMPOSITION — viny flowers cascading DOWN from above as the primary visual:
+      • HANGING WISTERIA-AND-FUCHSIA CASCADE — long purple wisteria strands + hot-pink fuchsia bells cascading from above
+      • TRUMPET-VINE ARCH — scarlet trumpet vines cascading down a natural arch, dangling tubular blooms
+      • MORNING-GLORY VINE-WALL — purple-blue morning glories climbing a trellis / wall, vines spilling down
+      • HONEYSUCKLE CASCADE — yellow-and-red honeysuckle vines cascading down, dangling tubular blooms
+      • BOUGAINVILLEA CASCADE — fuchsia-and-magenta bougainvillea papery cascade from above
+      • PASSIONFLOWER VINE — exotic purple-and-white passionflower vines climbing and dangling
+  - ~3 TROPICAL-CANOPY (orchids / hibiscus / heliconia hanging in a tropical-jungle-canopy composition with hummingbirds darting through)
+  - ~2 BIRD-FEEDER-GARDEN (suet-feeder-style hanging-flower-feeders that hummingbirds gather at — naturalistic, no actual man-made feeder structures)
+
+For CASCADING / HANGING / TROPICAL-CANOPY entries, the FLOWERS HANG / DRIP / CASCADE from above as the dominant visual — hummingbirds dart THROUGH the cascade or hover at dangling tubular blooms.
+
+🚫 STRICT BANS:
+  • 🚫 NO single-hero composition — 3+ species mandatory
+  • 🚫 NO soft-pastel colors (that is flower-friends' territory)
+  • 🚫 NO extreme macro / single-petal framing
+  • 🚫 NO vase / cut-flower / interior
+  • 🚫 NO hummingbird description (separate axis)
+  • 🚫 NO humans / hands / body parts
+  • 🚫 NO archways / tunnels / engulfment / urban / ruins
+  • 🚫 NO sci-fi / surreal / floating
+
+✓ ENCHANTED GARDEN GROWING IN THE WILD — pollinator-garden / tropical-meadow / wildflower-bank / forest-edge implied. Multi-flower foreground; bokeh behind.
+
+✓ MOOD — vibrant, enchanted, lively, magical — Audubon meets Studio Ghibli meets IG tropical-hummingbird-feeder.`,
+    touchpoints: [
+      'SCARLET TRUMPET-VINE-AND-BEE-BALM GARDEN — vivid scarlet trumpet vines + deep-red cardinal flowers + magenta bee balm + bright-red salvia + small orange honeysuckle blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh of more red blooms behind',
+      'FUCHSIA-AND-MAGENTA HOT-PINK ABUNDANCE — hot-pink fuchsia + vivid magenta bee balm + fuchsia penstemon + bright-pink phlox + small purple butterfly bush blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'ORANGE TROPICAL TROPICAL-PARADISE — vivid orange trumpet vines + bright-orange crocosmia + orange tropical lilies + flame-orange agastache + small red honeysuckle blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy tropical-foliage bokeh behind',
+      'DEEP-PURPLE BUTTERFLY-BUSH GARDEN — deep-purple butterfly bushes + violet salvia + amethyst lupine spires + royal-purple foxglove + small magenta penstemon blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'SAPPHIRE-BLUE SALVIA GLADE — sapphire-blue salvia + indigo lobelia + cobalt columbine + electric-blue morning glory + small purple lupine blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'JEWEL-YELLOW HONEYSUCKLE-AND-CANNA — vivid yellow honeysuckle + jewel-gold canna lilies + bright-yellow columbine + flame-orange crocosmia + small red bee balm blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'JEWEL-TONE RAINBOW GARDEN — vivid red trumpet vines + fuchsia bee balm + sapphire-blue salvia + jewel-yellow honeysuckle + deep-purple butterfly bush + bright-orange crocosmia blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'CRIMSON CARDINAL-FLOWER MEADOW — vivid crimson cardinal flowers + deep-red bee balm + scarlet salvia + ruby-red lobelia + small orange honeysuckle blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh of more red blooms behind',
+      'HOT-PINK PENSTEMON-AND-PHLOX — hot-pink penstemon + vivid pink phlox + fuchsia salvia + magenta bee balm + small purple agastache blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'FLAME-ORANGE TROPICAL CASCADE — flame-orange trumpet vines + vivid orange crocosmia + tangerine bird-of-paradise + bright-red canna lilies + small yellow honeysuckle blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy tropical bokeh behind',
+      'ROYAL-PURPLE FOXGLOVE GARDEN — royal-purple foxgloves + deep-violet butterfly bushes + amethyst lupine spires + magenta penstemon + small blue salvia blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'INDIGO LOBELIA-AND-SAGE — indigo lobelia + sapphire-blue sage + cobalt columbine + electric-blue salvia + small purple morning glory blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'GOLDEN CANNA-AND-COLUMBINE — jewel-gold canna lilies + bright-yellow columbine + vivid yellow honeysuckle + orange crocosmia + small red bee balm blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'TROPICAL-RED HIBISCUS MEADOW — vivid red hibiscus + scarlet salvia + crimson canna lilies + flame-orange trumpet vines + small fuchsia bougainvillea blooming together as co-hero in pulled-back vibrant tropical-hummingbird-garden vignette, dreamy tropical bokeh behind',
+      'MAGENTA BEE-BALM ABUNDANCE — vivid magenta bee balm + hot-pink fuchsia + fuchsia salvia + bright-pink penstemon + small purple butterfly bush blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'ORANGE-AND-RED FIRESTORM GARDEN — flame-orange trumpet vines + scarlet salvia + vivid orange crocosmia + crimson cardinal flowers + small red honeysuckle blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'AMETHYST LUPINE-AND-SALVIA — amethyst lupine spires + violet salvia + royal-purple foxgloves + magenta bee balm + small blue columbine blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'JEWEL-BLUE COLUMBINE GARDEN — sapphire-blue columbine + indigo lobelia + electric-blue salvia + cobalt morning glory + small purple agastache blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'TROPICAL JEWEL ABUNDANCE — bird-of-paradise (orange-and-blue) + vivid red canna lilies + fuchsia hibiscus + flame-orange crocosmia + small jewel-yellow honeysuckle blooming together as co-hero in pulled-back vibrant tropical-hummingbird-garden vignette, dreamy bokeh behind',
+      'CRIMSON-AND-FUCHSIA GLOW — crimson bottlebrush + fuchsia bee balm + scarlet trumpet vines + magenta penstemon + small purple butterfly bush blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'YELLOW-AND-ORANGE SUNBURST — jewel-yellow honeysuckle + flame-orange trumpet vines + bright-yellow canna + golden columbine + small red crocosmia blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'PURPLE-BLUE TWILIGHT JEWEL — deep-purple butterfly bush + sapphire salvia + indigo lobelia + amethyst foxgloves + small electric-blue morning glory blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'TROPICAL-MIXED JEWEL RAINBOW — vivid red hibiscus + fuchsia bougainvillea + sapphire salvia + jewel-yellow canna + flame-orange trumpet vines + small deep-purple butterfly bush blooming together as co-hero in pulled-back vibrant tropical-hummingbird-garden vignette, dreamy bokeh behind',
+      'SCARLET-AND-MAGENTA POWER — vivid scarlet trumpet vines + magenta bee balm + crimson cardinal flowers + hot-pink penstemon + small flame-orange crocosmia blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'VIVID JEWEL-RAINBOW MEADOW — vivid red salvia + fuchsia bee balm + sapphire columbine + jewel-yellow honeysuckle + deep-purple lupine + bright-orange trumpet vines blooming together as co-hero in pulled-back vibrant hummingbird-garden vignette, dreamy bokeh behind',
+      'WISTERIA-AND-FUCHSIA HANGING CASCADE — long purple wisteria strands and hot-pink fuchsia bells cascading down from above into the frame as the primary visual, hummingbirds darting through the hanging curtain of dangling tubular blooms, dreamy bokeh of more vines behind',
+      'SCARLET TRUMPET-VINE ARCH — scarlet trumpet vines cascading down a natural archway with dangling tubular blooms hanging into the frame, hummingbirds hovering at the trumpet-mouths, dreamy bokeh of more vines and warm sunlight behind',
+      'PURPLE MORNING-GLORY VINE-WALL — vivid purple-and-blue morning glory vines climbing and spilling down a natural trellis / wall, hummingbirds banking through the vine-curtain, dreamy bokeh of more vines behind',
+      'YELLOW-AND-RED HONEYSUCKLE CASCADE — yellow-and-red honeysuckle vines cascading down from above with dangling tubular blooms, hummingbirds darting at the trumpet-mouths, dreamy bokeh of warm-green leaves behind',
+      'FUCHSIA BOUGAINVILLEA CASCADE — vivid fuchsia-and-magenta bougainvillea papery bracts cascading down from above into the frame, hummingbirds hovering at the dense cluster, dreamy bokeh of pink-blooms behind',
+      'EXOTIC PASSIONFLOWER VINE-CURTAIN — exotic purple-and-white passionflower vines climbing and dangling in a vine-curtain, intricate passionflower blooms hanging into the frame, hummingbirds darting through, dreamy bokeh of more vines behind',
+      'TROPICAL ORCHID-CANOPY — exotic vivid orchid clusters hanging from a tropical-jungle-canopy of vines above, with bright hibiscus and heliconia spires, hummingbirds darting through the tropical canopy, dreamy bokeh of warm jungle-foliage behind',
+      'CORAL HIBISCUS-CANOPY — vivid coral and red hibiscus blossoms hanging from cascading tropical branches with orange heliconia spires nearby, hummingbirds hovering at the hanging tubular flowers, dreamy bokeh of warm tropical-foliage behind',
+    ],
+    instructions: `Each entry is ONE specific VIBRANT MULTI-FLOWER HUMMINGBIRD-ATTRACTING GARDEN COMPOSITION (mix UPRIGHT garden-vignettes + CASCADING/HANGING vine compositions + TROPICAL-CANOPY compositions), 30-55 words. Format: "VIGNETTE NAME / JEWEL-PALETTE CAPS — 3-5+ co-hero hummingbird-attracting flower species in vibrant saturated jewel-tone colors blooming together in a pulled-back enchanted garden vignette + dreamy bokeh implied". MANDATORY — (a) AT LEAST 3 different hummingbird-magnet species, (b) pulled-back garden vignette framing, (c) VIBRANT SATURATED JEWEL-TONE color register (NEVER soft-pastel — that is flower-friends), (d) explicit vivid color words (scarlet / fuchsia / magenta / sapphire / flame-orange / amethyst / etc.), (e) dreamy bokeh implied, (f) vibrant enchanted mood. Distribute color-dominance evenly across the 25 (red, fuchsia, orange, purple, blue, yellow, rainbow). NO hummingbird description. NO macro. NO vase / interior. NO humans. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_humming_birds_hummingbird_cast: {
+    format: 'simple',
+    theme: `HUMMINGBIRD CAST — 2-4+ IRIDESCENT JEWEL-TONE HUMMINGBIRDS for the BloomBot flower-humming-birds path. Each entry describes a CAST of 2-4+ hummingbirds positioned dynamically throughout the enchanted-garden scene — different species, different positions (hovering / sipping nectar / mid-flight / banking sideways). ONE is the FOCAL hummingbird rendered prominently front-and-center. Each entry 30-55 words.
+
+⚠️ THE BAR: every entry describes a CAST of 2-4+ hummingbirds — varied species, varied poses, ONE FOCAL hummingbird sharply rendered with crisp iridescent jewel-tone plumage and distinctive markings positioned front-and-center, supporting cast at different positions in midground / bokeh.
+
+⚠️ FOCAL HUMMINGBIRD MANDATE (CRITICAL — makes the hummingbird POP) — every entry MUST nominate ONE focal hummingbird rendered PROMINENTLY:
+  - Positioned FRONT-AND-CENTER (large, clearly visible, in sharp focus)
+  - Notably BIGGER than the supporting cast
+  - With iridescent jewel-tone plumage clearly visible (ruby-throat / emerald-back / sapphire crown / fiery-orange / magenta / metallic-green / etc.)
+  - Wings often in motion-blur showing rapid flight, beak at a tubular bloom drinking nectar OR hovering
+  - Crisp feather + iridescence detail
+  - The viewer's eye lands here FIRST
+
+The other 1-3 supporting hummingbirds are smaller / further back / hovering at other blooms / banking through the bokeh.
+
+⚠️ HUMMINGBIRD CAST COMPOSITION MANDATE — every entry MUST describe AT LEAST 2 different specific hummingbirds (focal + 1-3 supporting). Mix species and iridescent colors. Vary poses.
+
+⚠️ HUMMINGBIRD SPECIES PALETTE — pick freely from (each has distinctive iridescent jewel-tone plumage):
+  - Ruby-throated hummingbird (vivid ruby-red throat + emerald-green back)
+  - Anna hummingbird (iridescent magenta-pink crown + emerald-back)
+  - Broad-tailed hummingbird (iridescent ruby throat + green back)
+  - Costa hummingbird (iridescent violet crown + emerald-back)
+  - Allen hummingbird (iridescent copper-orange + emerald-back)
+  - Calliope hummingbird (rose-streak throat + green back)
+  - Magnificent hummingbird (iridescent emerald + violet crown)
+  - Black-chinned hummingbird (iridescent purple chin + green-back)
+  - Rufous hummingbird (vivid copper-orange overall)
+  - Sparkling violetear (iridescent emerald + purple ear-patch)
+  - Violet-crowned hummingbird (iridescent violet crown + white underside)
+  - Long-tailed sylph (iridescent emerald + long sapphire tail-streamers)
+  - Booted racket-tail (iridescent emerald + racket tail-feathers)
+  - Crowned woodnymph (iridescent purple crown + emerald)
+  - Bee hummingbird (tiny iridescent pink-and-blue)
+  - Buff-bellied hummingbird (iridescent emerald + buff-orange belly)
+  - Berylline hummingbird (iridescent emerald-green + rufous wings)
+  - Rivoli hummingbird (iridescent magenta crown + emerald)
+
+⚠️ DYNAMIC POSE PALETTE — every hummingbird is in a DYNAMIC pose (not perched-still):
+  - HOVERING — wings in rapid motion-blur (the classic hummingbird signature)
+  - SIPPING NECTAR — long thin beak inserted into a tubular bloom
+  - MID-FLIGHT — banking sideways or transitioning between blooms
+  - BEAK-TO-FLOWER — moments before drinking, beak almost at the bloom
+  - TAIL-FEATHERS SPREAD — for balance while hovering
+  - WING-FLUTTER — wings showing rapid blur even at rest
+
+⚠️ FOCAL SPECIES ROTATION (anti-ruby-throat-dominance) — distribute the 25 entries so the FOCAL hummingbird rotates:
+  - ~6 RUBY-THROAT / ANNAS / BROAD-TAILED-FOCAL (classic North American hummingbirds)
+  - ~5 IRIDESCENT-VIOLET-FOCAL (Costa / Crowned woodnymph / Violet-crowned / Sparkling violetear)
+  - ~5 RUFOUS / ALLENS / BERYLLINE-FOCAL (copper-orange / fiery-orange hummingbirds)
+  - ~4 MAGNIFICENT / RIVOLIS / MAGENTA-FOCAL (large magenta-crowned hummingbirds)
+  - ~3 SYLPH / RACKET-TAIL / EXOTIC-FOCAL (long-tailed exotic hummingbirds)
+  - ~2 BEE-HUMMINGBIRD / BUFF-BELLIED / SMALL-EXOTIC-FOCAL
+
+🚫 STRICT BANS:
+  • 🚫 NO single hummingbird — multi-cast (2+) mandatory
+  • 🚫 NO other birds (NO songbirds / NO doves / NO parrots / NO birds-of-paradise) — HUMMINGBIRDS specifically
+  • 🚫 NO insects (that is flower-friends' territory)
+  • 🚫 NO perched-still poses — DYNAMIC poses only (hovering / mid-flight / sipping)
+  • 🚫 NO humans / hands / body parts
+  • 🚫 NO sci-fi / fantasy / glowing-magical hummingbirds — naturalistic with iridescent plumage
+
+✓ MANDATORY — every entry describes the WHOLE CAST of hummingbirds in one scene with ONE focal hero, all in dynamic poses, all with iridescent jewel-tone plumage explicit.`,
+    touchpoints: [
+      'RUBY-THROATED-FOCAL CAST — a vivid ruby-throated hummingbird front-and-center hovering at a scarlet trumpet vine with wings in rapid motion-blur and beak inserted drinking nectar, an Anna hummingbird mid-flight in the midground with iridescent magenta crown flashing, a small ruby-throat sipping at another bloom in the bokeh, plus a calliope hovering at the edge of frame',
+      'IRIDESCENT-VIOLET COSTAS-FOCAL — a Costa hummingbird front-and-center with iridescent violet crown flaring outward as it hovers at a hot-pink fuchsia, a crowned woodnymph hovering at a deeper bloom in midground, plus a small violet-crowned hummingbird mid-flight in the bokeh, all wings in motion-blur',
+      'RUFOUS COPPER-FIRE FOCAL — a vivid copper-orange rufous hummingbird front-and-center hovering with wings in rapid motion-blur at a flame-orange crocosmia, an Allen hummingbird sipping nectar at a trumpet vine in midground, a berylline hummingbird mid-flight in the bokeh, plus a small rufous hovering at the edge',
+      'MAGNIFICENT MAGENTA-CROWN FOCAL — a magnificent hummingbird front-and-center with vivid iridescent magenta crown flaring as it hovers at a magenta bee balm with wings in motion-blur, a Rivoli hummingbird hovering at a salvia in midground, plus a small Anna mid-flight in the bokeh banking sideways',
+      'LONG-TAILED SYLPH EXOTIC FOCAL — a stunning long-tailed sylph front-and-center with iridescent emerald body and long sapphire tail-streamers trailing as it hovers at a tubular flower, a crowned woodnymph mid-flight in midground, plus a sparkling violetear hovering at the edge of frame',
+      'BEE-HUMMINGBIRD TINY-FOCAL CAST — a tiny bee hummingbird front-and-center hovering at a fuchsia bloom with wings in extremely-rapid motion-blur and beak inserted, two Anna hummingbirds at different positions in midground hovering at other blooms, plus a small rufous mid-flight in the bokeh',
+      'BROAD-TAILED BUZZ FOCAL — a broad-tailed hummingbird front-and-center with vivid iridescent ruby throat hovering at a scarlet salvia with wings in rapid motion-blur and crisp tail-fan, a calliope hovering at midground, plus a small ruby-throat sipping at another bloom',
+      'SPARKLING-VIOLETEAR EXOTIC FOCAL — a sparkling violetear hummingbird front-and-center with iridescent emerald body and brilliant violet ear-patch hovering at a hot-pink fuchsia, a black-chinned hummingbird mid-flight in midground with iridescent purple chin flashing, plus a small Anna at the edge',
+      'COSTAS-AND-RUBY DUET FOCAL — a Costa hummingbird front-and-center with iridescent violet crown hovering at a deep-purple butterfly bush, a ruby-throated hummingbird mid-flight in midground banking sideways toward another bloom, plus a small calliope hovering at the edge of frame, all wings in motion-blur',
+      'ALLENS COPPER-FLASH FOCAL — an Allen hummingbird front-and-center with vivid copper-orange body and iridescent emerald back hovering at a flame-orange honeysuckle, a rufous hummingbird sipping at another bloom in midground, plus a small berylline hovering at the edge',
+      'CROWNED-WOODNYMPH EXOTIC FOCAL — a crowned woodnymph hummingbird front-and-center with iridescent purple crown and emerald body hovering at a tubular bloom with wings in rapid motion-blur, a magnificent hummingbird mid-flight in midground, plus a small bee hummingbird at the edge',
+      'ANNAS MAGENTA-CROWN FOCAL — an Anna hummingbird front-and-center with brilliant iridescent magenta-pink crown flaring as it hovers at a magenta bee balm, a Costa hummingbird hovering at midground with violet crown, plus a small broad-tailed mid-flight in the bokeh',
+      'BERYLLINE-AND-BUFF FOCAL — a berylline hummingbird front-and-center with iridescent emerald-green body and rufous wings hovering at a vivid jewel-yellow honeysuckle, a buff-bellied hummingbird sipping at another bloom in midground, plus a small Allen mid-flight in the bokeh',
+      'CALLIOPE TINY-ROSE FOCAL — a calliope hummingbird front-and-center with distinctive rose-streak throat hovering at a magenta penstemon, an Anna hummingbird mid-flight banking sideways in midground, plus a small ruby-throated hovering at the edge, all wings in rapid motion-blur',
+      'BLACK-CHINNED IRIDESCENT-PURPLE FOCAL — a black-chinned hummingbird front-and-center with iridescent purple chin flashing in the light hovering at a sapphire-blue salvia with wings in rapid motion-blur, a Costa hummingbird hovering at another bloom in midground with violet crown, plus a small Anna mid-flight',
+      'VIOLET-CROWNED EXOTIC-FOCAL — a violet-crowned hummingbird front-and-center with iridescent violet crown and white underside hovering at a deep-purple butterfly bush, a Costa hummingbird mid-flight banking sideways in midground, plus a sparkling violetear at the edge of frame',
+      'RIVOLIS-MAGENTA EXOTIC FOCAL — a Rivoli hummingbird front-and-center with brilliant iridescent magenta crown and emerald body hovering at a vivid red trumpet vine with wings in rapid motion-blur, a magnificent hummingbird hovering at another bloom in midground, plus a small Anna mid-flight',
+      'BOOTED RACKET-TAIL EXOTIC FOCAL — a stunning booted racket-tail hummingbird front-and-center with distinctive emerald body and racket-shaped tail-feathers hovering at a tropical bloom, a crowned woodnymph hovering at midground, plus a small bee hummingbird mid-flight in the bokeh',
+      'RUFOUS-AND-BERYLLINE COPPER FOCAL — a vivid rufous hummingbird front-and-center with brilliant copper-orange body hovering at a scarlet salvia with wings in rapid motion-blur, a berylline hummingbird sipping at a honeysuckle in midground, plus a small Allen mid-flight in the bokeh',
+      'MAGNIFICENT-AND-RIVOLI MAGENTA-DUET — a magnificent hummingbird front-and-center with vivid magenta crown and emerald body hovering at a magenta bee balm, a Rivoli hummingbird mid-flight banking sideways with magenta crown flashing in midground, plus a small Anna hovering at the edge',
+      'BUFF-BELLIED BUFF-FOCAL — a buff-bellied hummingbird front-and-center with iridescent emerald back and buff-orange belly hovering at a vivid yellow honeysuckle with wings in motion-blur, a berylline hummingbird at another bloom in midground, plus a small Allen mid-flight in the bokeh',
+      'LONG-TAILED-SYLPH SAPPHIRE-TAIL FOCAL — a long-tailed sylph front-and-center with iridescent emerald body and brilliant sapphire-blue long tail-streamers hovering at a tubular bloom, a crowned woodnymph hovering at midground, plus a small black-chinned mid-flight in the bokeh',
+      'ANNAS-AND-COSTAS CROWN-DUET — an Anna hummingbird front-and-center with brilliant magenta-pink crown hovering at a fuchsia bloom, a Costa hummingbird mid-flight in midground with violet crown flaring, plus a small ruby-throated hovering at another bloom in the bokeh',
+      'CALLIOPE-AND-RUBY-THROAT GARDEN — a calliope hummingbird front-and-center with rose-streak throat hovering at a hot-pink penstemon, a ruby-throated hummingbird sipping nectar at a scarlet trumpet vine in midground, plus a small black-chinned mid-flight in the bokeh, all wings in motion-blur',
+      'BERYLLINE-EMERALD-FOCAL EXOTIC — a berylline hummingbird front-and-center with brilliant iridescent emerald-green body and rufous wing-edges hovering at a vivid red bee balm, a buff-bellied hummingbird hovering at another bloom in midground, plus a small Allen mid-flight in the bokeh',
+    ],
+    instructions: `Each entry is ONE specific HUMMINGBIRD CAST of 2-4+ iridescent hummingbirds, 30-55 words. Format: "CAST NAME / FOCAL-SPECIES CAPS — explicit description of focal hummingbird front-and-center + 1-3 supporting hummingbirds at different positions, all in DYNAMIC poses (hovering / sipping / mid-flight), all with iridescent jewel-tone plumage detail explicit". FOCAL + MULTI-CAST MANDATORY. SPECIES ROTATION — distribute focal across ruby-throat / Anna / Costa / rufous / magnificent / sylph / Allen / berylline / etc. (NOT always ruby-throat). DYNAMIC POSES ONLY — no perched-still. IRIDESCENT JEWEL-TONE PLUMAGE explicit. HUMMINGBIRDS ONLY — NO insects, NO other birds. NO humans / hands. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
+  bloombot_flower_humming_birds_magical_particles: {
+    format: 'simple',
+    theme: `40%-GATED MAGICAL PARTICLES for the BloomBot flower-humming-birds path. Each entry describes ONE specific atmospheric magic-pretty particle effect drifting in the vibrant hummingbird-garden scene — pollen-dust, fairy-light bokeh-orbs, sparkle dust, dewdrops, falling petals, iridescent shimmer, sun-ray streamers. Each entry 20-40 words.
+
+⚠️ MANDATORY — every particle effect AMPLIFIES the vibrant magical-pretty aesthetic. Does NOT compete with the hummingbirds or flowers. Subtle atmospheric magic that supports the jewel-tone vibrance.
+
+🚫 STRICT BANS:
+  • NO sci-fi glow / electric / neon / aurora
+  • NO scary / dark / ominous particles
+  • NO humans / hands / body parts
+  • NO additional creatures / insects (separate from hummingbird cast)
+  • NO ugly / creepy particles
+
+✓ PARTICLE CATEGORIES:
+  A. **POLLEN-DUST** — drifting pollen-motes catching ambient light, golden-yellow drift
+  B. **FAIRY-LIGHT BOKEH-ORBS** — soft warm bokeh-orbs floating in the air
+  C. **SPARKLE DUST** — tiny iridescent sparkle particles drifting
+  D. **DEWDROPS ON PETALS** — fresh dew droplets clinging to petals catching ambient light as prismatic flares
+  E. **FALLING PETALS** — soft petals drifting horizontally through the scene
+  F. **IRIDESCENT SHIMMER** — soft iridescent shimmer in the air supporting the hummingbird iridescence
+  G. **WARM ATMOSPHERIC HAZE** — soft warm haze softening the bokeh background
+  H. **SUN-RAY STREAMERS** — soft warm sun-ray streamers slanting through the scene
+  I. **NECTAR DROPLETS** — tiny nectar droplets glistening at flower-mouths
+  J. **WING-IRIDESCENCE SHIMMER** — subtle iridescent dust around hummingbird wings
+  K. **FLOATING LEAVES** — small soft leaves drifting horizontally through the scene`,
+    touchpoints: [
+      'GOLDEN POLLEN-DUST DRIFT — soft golden-yellow pollen-motes drifting through the air around the hummingbirds and flowers, catching the warm ambient light, atmospheric magical-pretty texture',
+      'WARM BOKEH-ORBS FLOATING — soft warm-amber and pink fairy-light bokeh-orbs floating in the air behind the scene, soft out-of-focus magical-pretty atmospheric',
+      'IRIDESCENT SPARKLE SHIMMER — tiny iridescent emerald-and-magenta sparkle particles drifting through the air around the scene, subtle magical shimmer catching warm light',
+      'DEWDROPS ON PETALS WITH FLARES — fresh dew droplets clinging to the flower petals catching warm ambient light as tiny prismatic flares, naturalistic wet shimmer',
+      'PINK PETAL-FALL — soft pink petals drifting horizontally through the scene around the hummingbirds and flowers, gentle motion-blur',
+      'IRIDESCENT RAINBOW SHIMMER — soft iridescent rainbow-pearlescent shimmer in the air around the scene supporting the hummingbird iridescence',
+      'WARM ATMOSPHERIC HAZE — soft warm-amber atmospheric haze softening the bokeh background, deep dreamy depth, magical-pretty ambient',
+      'GOLDEN SUN-RAY STREAMERS — soft warm golden sun-ray streamers slanting gently through the scene from the upper-frame edge, magical-pretty atmospheric',
+      'NECTAR DROPLETS GLISTENING — tiny nectar droplets glistening at the mouths of tubular blooms catching warm ambient light, naturalistic magical-pretty',
+      'WING-IRIDESCENCE DUST — subtle iridescent emerald-and-violet dust drifting around the hummingbird wings as they hover, supporting the iridescent plumage shimmer',
+      'SOFT GREEN LEAVES DRIFT — small soft green leaves drifting horizontally through the scene around the hummingbirds and flowers, gentle motion',
+      'AMBER POLLEN-DUST CASCADE — gentle amber-gold pollen-dust cascade drifting downward through the scene around the flowers, warm magical-pretty atmospheric',
+      'PRISMATIC DEW-FLARES — fresh dewdrops on every visible petal and leaf catching ambient light as prismatic rainbow flares, naturalistic wet shimmer',
+      'WARM-PINK BOKEH-ORBS — soft warm-pink fairy-light bokeh-orbs floating in the deep bokeh background, magical-pretty atmospheric',
+      'RED-AND-ORANGE PETAL DRIFT — soft red-and-orange petals drifting horizontally through the scene around the hummingbirds, gentle motion-blur',
+      'PEARL-SHEEN MIST — soft pearl-iridescent mist drifting through the deep bokeh background, magical-pretty atmospheric depth',
+      'GOLDEN-AMBER POLLEN — golden-amber pollen-dust drifting around the flowers, catching warm light, atmospheric pollinator-magic',
+      'SOFT VIOLET-AND-GOLD BOKEH — soft violet and golden bokeh-orbs floating in the bokeh background, magical-pretty atmospheric',
+      'FRESH MORNING DEW — fresh morning dewdrops clinging to every petal, leaf, and the hummingbird feathers, catching ambient light as prismatic shimmer',
+      'GENTLE GOLDEN HAZE — gentle warm-golden haze wrapping the entire scene, soft pretty golden-hour bath supporting the vibrant flowers',
+      'IRIDESCENT WING-TRAIL DUST — fine iridescent emerald wing-trail dust drifting in the air behind the hovering hummingbirds, subtle magic-pretty',
+      'WARM PEACH PETAL-FALL — soft peach petals drifting through the air around the hummingbirds and flowers, gentle motion, romantic magical-pretty',
+      'SAPPHIRE-AND-GOLD SHIMMER — soft sapphire-and-gold iridescent shimmer in the air around the scene, magical-pretty atmospheric',
+      'GLISTENING NECTAR-DROPS — tiny nectar droplets glistening at tubular flower-mouths and beak-tips, catching warm light as prismatic flares, naturalistic magical',
+      'WARM CINEMATIC HAZE — warm cinematic atmospheric haze softening every distant element, golden-hour glow infusing the deep distance',
+    ],
+    instructions: `Each entry is ONE specific MAGICAL PARTICLE effect for the hummingbird path, 20-40 words. Format: "PARTICLE NAME CAPS — primary effect + position in scene + how it catches light / interacts with the ambient". Vary across the 11 categories. NO sci-fi / electric / neon. NO scary / dark. NO humans / hands. NO additional creatures (no insects). Subtle magical-pretty atmospheric only. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
+  },
+
   // ─── sunset-flowers path (2026-05-19) — sun-backlit flowers against epic landscape + sunset sky ───
   bloombot_sunset_flowers_hero_flower: {
     format: 'simple',
